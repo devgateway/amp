@@ -1056,7 +1056,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			AmpFundingDetail fundItem;
 			AmpComponentFunding compFundItem;
 			AmpRegionalFunding regFundItem;
-			if (item instanceof AmpFundingDetail && (fundItem = (AmpFundingDetail) item).getTransactionAmount() != null) {
+			if (item instanceof AmpFundingDetail && (fundItem = (AmpFundingDetail) item).getTransactionAmount() != null
+					&& fundItem.getTransactionDate() != null) {
                 itemTransactionType = fundItem.getTransactionType();
                 amount = fundItem.getTransactionAmount();
                 exchangeRate = fundItem.getFixedExchangeRate();
@@ -1064,7 +1065,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 currencyDate = new java.sql.Date(fundItem.getTransactionDate().getTime());
                 //no necessary parent verification for Donor funding since
                 //funding details are extracted from AmpFunding
-            } else if (item instanceof AmpComponentFunding && (compFundItem = (AmpComponentFunding) item).getTransactionAmount() !=null) {
+            } else if (item instanceof AmpComponentFunding && (compFundItem = (AmpComponentFunding) item).getTransactionAmount() != null
+					&& compFundItem.getTransactionDate() != null) {
                 itemTransactionType = compFundItem.getTransactionType();
                 amount = compFundItem.getTransactionAmount();
                 exchangeRate = (compFundItem.getExchangeRate() == null ? null : compFundItem.getExchangeRate().doubleValue());
@@ -1072,7 +1074,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 currencyDate = new java.sql.Date(compFundItem.getTransactionDate().getTime());
                 if (!compFundItem.getComponent().equals(parent))
                     continue;
-            } else if (item instanceof AmpRegionalFunding && (regFundItem = (AmpRegionalFunding) item).getTransactionAmount() != null) {
+            } else if (item instanceof AmpRegionalFunding && (regFundItem = (AmpRegionalFunding) item).getTransactionAmount() != null
+					&& regFundItem.getTransactionDate() != null) {
                 itemTransactionType = regFundItem.getTransactionType();
                 amount = regFundItem.getTransactionAmount();
                 currency = regFundItem.getCurrency();

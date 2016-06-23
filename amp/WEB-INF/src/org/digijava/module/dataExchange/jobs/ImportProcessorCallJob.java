@@ -11,6 +11,7 @@ import com.mashape.unirest.http.HttpResponse;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.message.jobs.ConnectionCleaningJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
@@ -23,11 +24,11 @@ import org.quartz.StatefulJob;
  *
  */
 
-public class ImportProcessorCallJob implements StatefulJob{
+public class ImportProcessorCallJob extends ConnectionCleaningJob implements StatefulJob{
 	private static Logger logger = Logger.getLogger(ImportProcessorCallJob.class);
 
 	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		String url = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.IMPORT_PROCESSOR_URL);
         HttpResponse<JsonNode> jsonResponse = null;
         try {

@@ -158,17 +158,10 @@ public class Security {
 				ApiErrorResponse.reportForbiddenAccess(result);
 			}
 			final AmpTeam ampTeam = TeamUtil.getAmpTeam(new Long(workspaceId));
-			final Collection<AmpTeamMember> allAmpTeamMembersByUser = TeamMemberUtil.getTeamMembers(user.getEmail());
-			AmpTeamMember teamMember = null;
-			for (final AmpTeamMember atm :
-					allAmpTeamMembersByUser) {
-				if (atm.getAmpTeam().getAmpTeamId().equals(ampTeam.getAmpTeamId())) {
-					teamMember = atm;
-				}
-			}
+			final AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(username, workspaceId.longValue());
 
-			if (ampTeam == null || (teamMember == null && !user.isGlobalAdmin())) {
-				ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_REQUEST);
+			if (ampTeam == null || teamMember == null) {
+				ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_TEAM);
 			}
 			storeInSession(username, password, teamMember, user);
 

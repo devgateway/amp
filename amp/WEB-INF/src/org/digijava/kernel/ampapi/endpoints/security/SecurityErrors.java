@@ -31,4 +31,6 @@ public class SecurityErrors {
 	/** User is not part of any team */
 	public static final ApiErrorMessage NO_TEAM = new ApiErrorMessage(9, "User is not part of any team");
 
+	public static final ApiErrorMessage INVALID_TEAM = new ApiErrorMessage(10, "Invalid Team");
+
 }

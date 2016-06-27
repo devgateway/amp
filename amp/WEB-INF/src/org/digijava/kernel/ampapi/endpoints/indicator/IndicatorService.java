@@ -26,18 +26,22 @@ import java.util.Collection;
 public class IndicatorService {
 
 	protected static final Logger logger = Logger.getLogger(IndicatorService.class);
+    public static final String DEFAULT_INDICATOR_ORDER_FIELD = "created_on";
 
-    public static JsonBean getIndicators(Integer offset, Integer count) {
+    public static JsonBean getIndicators(Integer offset, Integer count, String orderBy, String sort ) {
+        orderBy = (orderBy!=null ? orderBy : DEFAULT_INDICATOR_ORDER_FIELD);
+        sort = (sort!=null ? sort : "");
+
         Collection<AmpIndicatorLayer> indicatorLayers = null;
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         if (tm == null) {
-            indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByAccessType(IndicatorEPConstants.ACCESS_TYPE_PUBLIC);
+            indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByAccessType(IndicatorEPConstants.ACCESS_TYPE_PUBLIC, orderBy, sort);
         } else if (IndicatorUtils.isAdmin()) {
-            indicatorLayers = DynLocationManagerUtil.getIndicatorLayers();
+            indicatorLayers = DynLocationManagerUtil.getIndicatorLayers(orderBy, sort);
         }
         else {
             AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-            indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByCreatedBy(ampTeamMember);
+            indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByCreatedBy(ampTeamMember, orderBy, sort);
         }
 
         if (indicatorLayers==null)

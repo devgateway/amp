@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.DatabaseWaver;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorService;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -57,8 +58,7 @@ public class DynLocationManagerUtil {
 	private static Logger logger = Logger
 			.getLogger(DynLocationManagerUtil.class);
 	
-	public static List<AmpCategoryValueLocations> regionsOfDefaultCountry = new ArrayList<AmpCategoryValueLocations>(); 
-
+	public static List<AmpCategoryValueLocations> regionsOfDefaultCountry = new ArrayList<AmpCategoryValueLocations>();
 	
 	public static void clearRegionsOfDefaultCountryCache() {
 		synchronized (DynLocationManagerUtil.regionsOfDefaultCountry) {
@@ -1161,30 +1161,36 @@ public class DynLocationManagerUtil {
 		return qry.list();
 	 
  }
- 
- public static List <AmpIndicatorLayer> getIndicatorLayers () {
+
+    public static List <AmpIndicatorLayer> getIndicatorLayers () {
+        return getIndicatorLayers(IndicatorService.DEFAULT_INDICATOR_ORDER_FIELD, "");
+
+    }
+
+    public static List <AmpIndicatorLayer> getIndicatorLayers (String orderBy, String sort) {
 		Session dbSession = PersistenceManager.getSession();
+
 		String queryString = "select ind from "
-				+ AmpIndicatorLayer.class.getName() + " ind";
+				+ AmpIndicatorLayer.class.getName() + " ind order by " + orderBy + " " + sort;
 		Query qry = dbSession.createQuery(queryString);
 		return qry.list();
 	 
 }
 
-    public static List <AmpIndicatorLayer> getIndicatorLayerByAccessType(long accessTypeId) {
+    public static List <AmpIndicatorLayer> getIndicatorLayerByAccessType(long accessTypeId, String orderBy, String sort) {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select ind from "
-                + AmpIndicatorLayer.class.getName() + " ind where accessType.id=:accessTypeId";
+                + AmpIndicatorLayer.class.getName() + " ind where accessType.id=:accessTypeId order by " + orderBy + " " + sort;
         Query qry = dbSession.createQuery(queryString);
         qry.setLong("accessTypeId", accessTypeId);
         return qry.list();
 
     }
 
-    public static List <AmpIndicatorLayer> getIndicatorLayerByCreatedBy (AmpTeamMember teamMember) {
+    public static List <AmpIndicatorLayer> getIndicatorLayerByCreatedBy (AmpTeamMember teamMember, String orderBy, String sort) {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select ind from "
-                + AmpIndicatorLayer.class.getName() + " ind where createdBy.ampTeamMemId=:teamMemberId";
+                + AmpIndicatorLayer.class.getName() + " ind where createdBy.ampTeamMemId=:teamMemberId order by " + orderBy + " " + sort;
         Query qry = dbSession.createQuery(queryString);
         qry.setLong("teamMemberId", teamMember.getAmpTeamMemId());
         return qry.list();

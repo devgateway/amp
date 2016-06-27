@@ -66,8 +66,8 @@ public class IndicatorEndPoints {
     @Path("/indicator-layer")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getIndicators", ui = false)
-    public JsonBean getIndicators(@QueryParam("offset") Integer offset, @QueryParam("count") Integer count) {
-        return IndicatorService.getIndicators(offset, count);
+    public JsonBean getIndicators(@QueryParam("offset") Integer offset, @QueryParam("count") Integer count, @QueryParam("orderby") String orderBy, @QueryParam("sort") String sort) {
+        return IndicatorService.getIndicators(offset, count, orderBy,sort );
     }
 
     /**

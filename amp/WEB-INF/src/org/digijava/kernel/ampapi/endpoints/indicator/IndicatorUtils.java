@@ -137,13 +137,13 @@ public class IndicatorUtils {
 
         offset = Math.min(indicatorLayers.size(), offset == null ? 0 : offset);
         count = (count == null ? IndicatorEPConstants.DEFAULT_COUNT : count);
-        int totalPageCount = Math.min(indicatorLayers.size() - offset, count);
+        int totalPageCount = (indicatorLayers.size() / count) + 1;
 
         JsonBean result = new JsonBean();
         JsonBean page = new JsonBean();
 
         Collection<JsonBean> indicatorLayerList = new ArrayList<JsonBean>();
-        Collection<AmpIndicatorLayer> col = new ArrayList<>(indicatorLayers).subList(offset, offset + totalPageCount);
+        Collection<AmpIndicatorLayer> col = new ArrayList<>(indicatorLayers).subList(offset, offset + Math.min(indicatorLayers.size() - offset, count));
 
         for (AmpIndicatorLayer indicator: col){
             JsonBean indicatorJson = IndicatorUtils.buildIndicatorLayerJson(indicator);

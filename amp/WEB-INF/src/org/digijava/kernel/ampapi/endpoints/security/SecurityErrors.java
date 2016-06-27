@@ -33,4 +33,8 @@ public class SecurityErrors {
 
 	public static final ApiErrorMessage INVALID_TEAM = new ApiErrorMessage(10, "Invalid Team");
 
+	public static final ApiErrorMessage INVALID_USER_PASSWORD = new ApiErrorMessage(11, "Username or password are invalid");
+
+	public static final ApiErrorMessage INVALID_WORKSPACE = new ApiErrorMessage(12, "Username or password are invalid");
+
 }

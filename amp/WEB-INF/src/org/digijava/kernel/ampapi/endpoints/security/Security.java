@@ -144,13 +144,16 @@ public class Security {
 		final String username = authentication.getString("username");
 		final String password = authentication.getString("password");
 		final Integer workspaceId = (Integer) authentication.get("workspaceId");
-		if (StringUtils.isBlank(username) || StringUtils.isBlank(password) || workspaceId == null) {
-			ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_REQUEST);
+		if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+			ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_USER_PASSWORD);
+		}
+		if(workspaceId == null) {
+			ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_WORKSPACE);
 		}
 		try {
 			final User user = UserUtils.getUserByEmail(username);
 			if (user == null || !user.getPassword().equals(password)) {
-				ApiErrorResponse.reportForbiddenAccess(SecurityErrors.INVALID_TOKEN);
+				ApiErrorResponse.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
 			}
 
 			final ApiErrorMessage result = ApiAuthentication.login(user, this.httpRequest);

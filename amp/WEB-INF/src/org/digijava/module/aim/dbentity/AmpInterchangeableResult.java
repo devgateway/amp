@@ -8,7 +8,7 @@ import java.sql.Date;
 public class AmpInterchangeableResult {
 
     public enum AmpResultStatus {
-        UPDATED, FAILED, FAILED_COMPLETE;
+        UPDATED, FAILED, FAILED_COMPLETE, INSERTED;
 
         public String getType() {
             return this.name().toLowerCase();

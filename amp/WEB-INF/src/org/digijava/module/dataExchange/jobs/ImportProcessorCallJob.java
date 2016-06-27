@@ -24,9 +24,7 @@ import org.quartz.StatefulJob;
 import java.sql.Date;
 
 import static java.lang.System.currentTimeMillis;
-import static org.digijava.module.aim.dbentity.AmpInterchangeableResult.AmpResultStatus.FAILED;
-import static org.digijava.module.aim.dbentity.AmpInterchangeableResult.AmpResultStatus.FAILED_COMPLETE;
-import static org.digijava.module.aim.dbentity.AmpInterchangeableResult.AmpResultStatus.UPDATED;
+import static org.digijava.module.aim.dbentity.AmpInterchangeableResult.AmpResultStatus.*;
 
 
 /**
@@ -56,6 +54,7 @@ public class ImportProcessorCallJob extends ConnectionCleaningJob implements Sta
             if(jsonResponse.getStatus() >= 200 && jsonResponse.getStatus() < 300) {
                 JsonNode body = jsonResponse.getBody();
                 logger.info(body);
+                saveResults(body, INSERTED);
                 saveResults(body, UPDATED);
                 saveResults(body, FAILED);
             } else {
@@ -79,6 +78,10 @@ public class ImportProcessorCallJob extends ConnectionCleaningJob implements Sta
     }
 
     private void saveResults(JsonNode body, AmpResultStatus status) {
+        if(body.getObject().get(status.getType()) == null) {
+            logger.info("Could not find type: " + status.getType());
+            return;
+        }
         JSONArray results = body.getObject().getJSONArray(status.getType());
         for (int i = 0; i < results.length(); i++) {
             JSONObject jsonObject = results.getJSONObject(i);

@@ -1,9 +1,9 @@
 package org.digijava.module.aim.dbentity;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
-
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
 
 
 public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicatorLayer> {
@@ -16,9 +16,11 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 	private AmpCategoryValue admLevel;
 	private Set <AmpLocationIndicatorValue> indicatorValues;
 	private String unit;
-	
-	
-	
+	private AmpIndicatorAccessType accessType;
+	private Date createdOn;
+	private Date updatedOn;
+	private AmpTeamMember createdBy;
+
 	public Long getId() {
 		return id;
 	}
@@ -102,8 +104,35 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 		this.unit = unit;
 	}
 
-	
-	
-	
+    public AmpIndicatorAccessType getAccessType() {
+        return accessType;
+    }
 
+    public void setAccessType(AmpIndicatorAccessType accessType) {
+        this.accessType = accessType;
+    }
+
+    public Date getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public AmpTeamMember getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(AmpTeamMember createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public void setUpdatedOn(Date updatedOn) {
+        this.updatedOn=updatedOn;
+    }
 }

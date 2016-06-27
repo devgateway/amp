@@ -1,20 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -35,9 +20,11 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpIndicatorAccessType;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.exception.DynLocationStructuralException;
 import org.digijava.module.aim.exception.DynLocationStructureStringException;
@@ -50,6 +37,21 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class DynLocationManagerUtil {
 	private static Logger logger = Logger
@@ -1168,7 +1170,40 @@ public class DynLocationManagerUtil {
 		return qry.list();
 	 
 }
- 
+
+    public static List <AmpIndicatorLayer> getIndicatorLayerByAccessType(long accessTypeId) {
+        Session dbSession = PersistenceManager.getSession();
+        String queryString = "select ind from "
+                + AmpIndicatorLayer.class.getName() + " ind where accessType.id=:accessTypeId";
+        Query qry = dbSession.createQuery(queryString);
+        qry.setLong("accessTypeId", accessTypeId);
+        return qry.list();
+
+    }
+
+    public static List <AmpIndicatorLayer> getIndicatorLayerByCreatedBy (AmpTeamMember teamMember) {
+        Session dbSession = PersistenceManager.getSession();
+        String queryString = "select ind from "
+                + AmpIndicatorLayer.class.getName() + " ind where createdBy.ampTeamMemId=:teamMemberId";
+        Query qry = dbSession.createQuery(queryString);
+        qry.setLong("teamMemberId", teamMember.getAmpTeamMemId());
+        return qry.list();
+
+    }
+
+    public static AmpIndicatorLayer getIndicatorLayerById (Long id) {
+        Session dbSession = PersistenceManager.getSession();
+        String queryString = "select ind from "
+                + AmpIndicatorLayer.class.getName() + " ind where id=:id";
+        Query qry = dbSession.createQuery(queryString);
+        qry.setLong("id", id);
+        if (qry.list().size()==1)
+            return (AmpIndicatorLayer) qry.list().get(0);
+        else
+            return null;
+
+    }
+
  public static List <AmpLocationIndicatorValue> getLocationIndicatorValueByLocation (AmpCategoryValueLocations location) {
 	 Session dbSession = PersistenceManager.getSession();
 		String queryString = "select value from "
@@ -1383,5 +1418,24 @@ public class DynLocationManagerUtil {
 		
 	}
 
+    public static AmpIndicatorAccessType getAmpIndicatorAccessTypeFromDb(Long valueId) {
+        if (valueId == null)
+            return null;
+        try
+        {
+            Session dbSession = PersistenceManager.getSession();
+            AmpIndicatorAccessType retVal = (AmpIndicatorAccessType) dbSession.get(AmpIndicatorAccessType.class, valueId);
+            return retVal;
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
+    }
+
+    public static List<AmpIndicatorAccessType> getAmpIndicatorAccessTypes() {
+        return PersistenceManager.getSession().createQuery("select indAccessType from "
+                + AmpIndicatorAccessType.class.getName() + " indAccessType").list();
+    }
 
 }

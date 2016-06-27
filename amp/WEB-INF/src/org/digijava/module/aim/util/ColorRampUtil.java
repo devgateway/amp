@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 
 public class ColorRampUtil {
@@ -130,6 +131,27 @@ public class ColorRampUtil {
         }
         classes = classes < MIN_CLASSES_INDEX ? MIN_CLASSES_INDEX  : classes;
         return colorRamps[index][(classes.intValue() - MIN_CLASSES_INDEX)];
+    }
+
+    public static String[][] getColors() {
+        String[][] colors = new String [colorRamps.length][IndicatorEPConstants.COLOR_RAMP_INDEX];
+        for (int i = 0; i < colorRamps.length; i++) {
+            colors[i] = colorRamps[i][IndicatorEPConstants.COLOR_RAMP_INDEX];
+        }
+
+        return colors;
+    }
+
+    public static long getColorId(String color) {
+        long colorId = 0;
+        String[][] colors = new String [colorRamps.length][8];
+        for (int i = 0; i < colorRamps.length; i++) {
+            if (color.equals(colorRamps[i][IndicatorEPConstants.COLOR_RAMP_INDEX][0])) {
+                colorId = i;
+                break;
+            }
+        }
+        return colorId;
     }
 
     public static int getIndexByColors(Set<AmpIndicatorColor> colorRamp) {

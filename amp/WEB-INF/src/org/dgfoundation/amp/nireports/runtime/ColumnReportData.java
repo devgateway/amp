@@ -61,7 +61,7 @@ public class ColumnReportData extends ReportData {
 		
 		Map<Long, Set<Long>> actIds = new HashMap<>(); // Map<entityId, Set<mainIds-which-have-this-value>>
 		Map<Long, List<NiCell>> splitterArrays = new HashMap<>(); // Map<entityId, entity_value>
-		Map<Long, Map<Long, Cell>> percentages = new HashMap<>(); // Map<entityId, Map<activityId, Percentage>> TODO: rename to splitters
+		Map<Long, Map<Long, Cell>> splitterCells = new HashMap<>(); // Map<entityId, Map<activityId, Cell>>
 		
 		public SplitDigest(NiReportColumn<?> schemaColumn, ColumnContents contents, Behaviour<?> behaviour, ColumnContents wholeColumn, Supplier<Set<Long>> allIds) {
 			this.contents = contents;
@@ -90,7 +90,7 @@ public class ColumnReportData extends ReportData {
 			long entityId = cell.entityId;
 			splitterArrays.computeIfAbsent(entityId, zz-> new ArrayList<>()).add(splitCell);
 			actIds.computeIfAbsent(entityId, zz -> new HashSet<>()).add(cell.activityId);
-			percentages.computeIfAbsent(entityId, zz -> new HashMap<>()).put(cell.activityId, splitCell.getCell());
+			splitterCells.computeIfAbsent(entityId, zz -> new HashMap<>()).put(cell.activityId, splitCell.getCell());
 		}
 		
 		public Map<Long, NiSplitCell> buildSplitters() {
@@ -130,7 +130,7 @@ public class ColumnReportData extends ReportData {
 			Map<CellColumn, ColumnContents> subContents = new HashMap<>();
 			for(CellColumn cc:contents.keySet()) {
 				ColumnContents oldContents = contents.get(cc);
-				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, splitDigest.percentages.get(catId), splitDigest.actIds.get(catId), acceptors, enqueueAcceptors);
+				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, splitDigest.splitterCells.get(catId), splitDigest.actIds.get(catId), acceptors, enqueueAcceptors);
 //				if (cc.getHierName().equals("RAW / Funding / 2006 / Actual Commitments"))
 //					System.err.format("splitting %s.%s by %s.%s; %d cells became %d: %s\n", this, cc.getHierName(), z.getHierName(), splitCell.toString(), oldContents.countCells(), newContents.countCells(), newContents);
 				subContents.put(cc, newContents);

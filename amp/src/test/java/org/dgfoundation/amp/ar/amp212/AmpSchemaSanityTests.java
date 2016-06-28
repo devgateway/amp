@@ -19,6 +19,7 @@ import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.testmodels.HardcodedActivities;
 import org.dgfoundation.amp.testmodels.NiReportModel;
+import org.dgfoundation.amp.testmodels.ReportModelGenerator;
 import org.digijava.module.aim.helper.DateConversion;
 import org.junit.Test;
 
@@ -93,15 +94,14 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				ColumnConstants.BUDGET_STRUCTURE, ColumnConstants.INDIRECT_ON_BUDGET, ColumnConstants.HUMANITARIAN_AID,
 				ColumnConstants.DISASTER_RESPONSE_MARKER);
 		
-		runNiTestCase(
-				buildSpecification("testcase with all unusual hierarchies", 
-						columns, 
-						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-						columns, 
-						GroupingCriteria.GROUPING_TOTALS_ONLY),
-				"en", 
-				new HardcodedActivities().getActNamesList(),
-				cor);
+		buildDigest(
+			buildSpecification("testcase with all unusual hierarchies", 
+				columns, 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+				columns, 
+				GroupingCriteria.GROUPING_TOTALS_ONLY), 
+			new HardcodedActivities().getActNamesList(),
+			new ReportModelGenerator());
 	}
 	
 	@Test
@@ -422,7 +422,18 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	@Test
 	public void test_AMP_18499_should_fail_for_now() {
 		// for running manually: open http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=73 OR http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/73
-		NiReportModel cor = null;
+		NiReportModel cor = new NiReportModel("AMP-18499")
+			.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 2))",
+				"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 1))",
+				"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+			     .withContents("Project Title", "", "Totals-Actual Commitments", "666,777")
+			     .withChildren(
+			       new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
+			       new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents"),
+			       new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Totals-Actual Commitments", "666,777")));
 		
 		runNiTestCase(
 				buildSpecification("AMP-18499", Arrays.asList(ColumnConstants.PROJECT_TITLE), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), null, GroupingCriteria.GROUPING_TOTALS_ONLY),
@@ -435,7 +446,18 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	public void test_AMP_18504_should_fail_for_now() {
 		// for running manually: http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=24 or http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/24
 		
-		NiReportModel cor = null;
+		NiReportModel cor = new NiReportModel("AMP-18504")
+			.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 14))",
+				"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Donor Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 10));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 12, colSpan: 2))",
+				"(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 2))",
+				"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Donor Agency", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,195,000", "Totals-Actual Disbursements", "522,000")
+		      .withChildren(
+		        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Donor Agency", "Ministry of Finance", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
+		        new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "USAID", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")      ));
 		
 		runNiTestCase(
 			buildSpecification("AMP-18504",
@@ -1346,6 +1368,48 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		        new ReportAreaForTests(new AreaOwner(39), "Project Title", "Real SSC Activity 1", "Donor Agency", "Finland, USAID, World Bank", "Funding-2012-Bilateral SSC Commitments", "12 000", "Funding-2012-Cumulated SSC Commitments", "12 000", "Funding-2013-Bilateral SSC Commitments", "35 000", "Funding-2013-Triangular SSC Commitments", "64 000", "Funding-2013-Cumulated SSC Commitments", "99 000", "Funding-2014-Official Development Aid Commitments", "150 000", "Totals-Official Development Aid Commitments", "150 000", "Totals-Bilateral SSC Commitments", "47 000", "Totals-Triangular SSC Commitments", "64 000", "Totals-Cumulated SSC Commitments", "111 000")      ));
 		
 		runNiTestCase(spec("AMP-16688-all-flat"), "en", sscActs, cor);
+	}
+	
+	@Test
+	public void testShowEmptyFundingRowsTransactionLevelHierarchies() {
+		// transaction-level-hierarchies should never show empty funding rows, even if "Date Filter Hides Project" is false
+		
+		NiReportModel cor = new NiReportModel("by-disaster-response")
+			.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+				"(Disaster Response Marker: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+				"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Disaster Response Marker", "", "Project Title", "", "Totals-Actual Commitments", "578,766")
+		      .withChildren(
+		        new ReportAreaForTests(new AreaOwner("Disaster Response Marker", "No", 2))
+		        .withContents("Project Title", "", "Totals-Actual Commitments", "317,222", "Disaster Response Marker", "No")
+		        .withChildren(
+		          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "33,000"),
+		          new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Commitments", "62,000"),
+		          new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response", "Totals-Actual Commitments", "222,222")        ),
+		        new ReportAreaForTests(new AreaOwner("Disaster Response Marker", "Yes", 1))
+		        .withContents("Project Title", "", "Totals-Actual Commitments", "211,444", "Disaster Response Marker", "Yes")
+		        .withChildren(
+		          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "67,000"),
+		          new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response", "Totals-Actual Commitments", "144,444")        ),
+		        new ReportAreaForTests(new AreaOwner("Disaster Response Marker", "Disaster Response Marker: Undefined", -999999999))
+		        .withContents("Project Title", "", "Totals-Actual Commitments", "50,100", "Disaster Response Marker", "Disaster Response Marker: Undefined")
+		        .withChildren(
+		          new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Totals-Actual Commitments", "100"),
+		          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "50,000")        )      ));	
+		
+		List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity with funded components");
+		
+		ReportSpecificationImpl spec = buildSpecification("by-disaster-response",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER), 
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+			Arrays.asList(ColumnConstants.DISASTER_RESPONSE_MARKER), 
+			GroupingCriteria.GROUPING_TOTALS_ONLY);
+		
+		spec.setDisplayEmptyFundingRows(true);
+		runNiTestCase(cor, spec, "en", someActs);
 	}
 	
 	@Override

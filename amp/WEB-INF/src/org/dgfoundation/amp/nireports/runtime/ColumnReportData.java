@@ -61,7 +61,7 @@ public class ColumnReportData extends ReportData {
 		
 		Map<Long, Set<Long>> actIds = new HashMap<>(); // Map<entityId, Set<mainIds-which-have-this-value>>
 		Map<Long, List<NiCell>> splitterArrays = new HashMap<>(); // Map<entityId, entity_value>
-		Map<Long, Map<Long, Cell>> percentages = new HashMap<>(); // Map<entityId, Map<activityId, Percentage>>
+		Map<Long, Map<Long, Cell>> percentages = new HashMap<>(); // Map<entityId, Map<activityId, Percentage>> TODO: rename to splitters
 		
 		public SplitDigest(NiReportColumn<?> schemaColumn, ColumnContents contents, Behaviour<?> behaviour, ColumnContents wholeColumn, Supplier<Set<Long>> allIds) {
 			this.contents = contents;
@@ -115,7 +115,7 @@ public class ColumnReportData extends ReportData {
 
 		IdsAcceptorsBuilder bld = context;
 		List<ColumnReportData> newChildren = new ArrayList<>();
-		boolean keepEmptyFundingRows = context.spec.isDisplayEmptyFundingRows();
+		boolean keepEmptyFundingRows = context.spec.isDisplayEmptyFundingRows() && (!context.schema.isTransactionLevelHierarchy(schemaColumn, context));
 		
 		for(long catId:orderedCatIds) {
 			//NiCell splitCell = splitters.get(catId).get(0); // choose any, because they all have the same coordinates

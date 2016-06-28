@@ -401,16 +401,14 @@ public abstract class ReportingTestCase extends AmpTestCase {
 		NiReportModel out = buildDigest(spec, activityNames, new ReportModelGenerator());
 		String delta = null;
 		AssertionError assertionError = null;
-		if (cor != null) {
-			try {delta = cor.compare(out);}
-			catch(Exception e) {
-				delta = e.getMessage();
-				if (delta == null || cor == null)
-					delta = "(null)";
-			}
-			catch(AssertionError ass) {
-				assertionError = ass;
-			}
+		try {delta = cor.compare(out);}
+		catch(Exception e) {
+			delta = e.getMessage();
+			if (delta == null || cor == null)
+				delta = "(null)";
+		}
+		catch(AssertionError ass) {
+			assertionError = ass;
 		}
 		if (delta != null || assertionError != null) {
 			if (delta != null)

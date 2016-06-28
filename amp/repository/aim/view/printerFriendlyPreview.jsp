@@ -1450,10 +1450,6 @@ body {background:none;}
                                                                        		<jsp:include page="activitypreview/previewActivityFundingArrears.jsp" />
                                                                         </module:display>
 
-                                                                        <feature:display module="Funding" name="Arrears">
-                                                                        	<jsp:include page="activitypreview/previewActivityFundingArrears.jsp" />
-                                                                        </feature:display>
-
                                                                         <feature:display module="Funding" name="Undisbursed Balance">
                                                                         	<jsp:include page="activitypreview/previewActivityFundingUndisbursedBalance.jsp" />
                                                                         </feature:display>

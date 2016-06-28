@@ -5,4 +5,10 @@ in case fetching a column/measure crashes -> remove said column/measure from rep
 lucene indexer
 refactor workspacefilter
 
-removing monet / mondrian engine:
+physically remove Mondrian-backed Saiku exports code (not used anymore)
+incremental caching for dates columns
+mondrian removal:
+-> delete mondrian_activity_fixed_texts.gov_agreement_number
+-> delete PPC
+-> group all hierarchies as levels under location / sectors
+

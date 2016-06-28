@@ -7,6 +7,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 
 
 /**
@@ -50,7 +51,7 @@ public class ReportEnvironment {
 		else {
 			TeamMember tm = request != null && request.getSession() != null ? (TeamMember) request.getSession().getAttribute("currentMember") : null;
 			AmpARFilter ar = request != null && request.getSession() != null ? (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER) : null;
-			workspaceFilter = new CompleteWorkspaceFilter(tm, ar);
+			workspaceFilter = TeamUtil.initCompleteTeamFilter(request == null ? null : request.getSession(true), tm, ar);
 		}
 		return new ReportEnvironment(TLSUtils.getEffectiveLangCode(), workspaceFilter, AmpARFilter.getDefaultCurrency().getCurrencyCode());
 	}

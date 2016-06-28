@@ -1953,8 +1953,18 @@ public class TeamUtil {
 		session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
 		session.setAttribute("currentMember", tm);
 		AmpARFilter arFilter = AmpTeam.initializeTeamFiltersSession(member, request, session);
-		session.setAttribute(Constants.COMPLETE_TEAM_FILTER, new CompleteWorkspaceFilter(tm, arFilter));
-        session.setMaxInactiveInterval(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.MAX_INACTIVE_SESSION_INTERVAL).intValue());
+		initCompleteTeamFilter(session, tm, arFilter);
 		return tm;
+    }
+    
+    public static CompleteWorkspaceFilter initCompleteTeamFilter(HttpSession session, TeamMember tm, AmpARFilter arFilter) {
+    	logger.info(String.format("creating a CompleteWorkspaceFilter for user %s", tm));
+    	CompleteWorkspaceFilter res = new CompleteWorkspaceFilter(tm, arFilter);
+    	if (session != null) {
+    		session.setAttribute(Constants.COMPLETE_TEAM_FILTER, res);
+    		try {session.setMaxInactiveInterval(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.MAX_INACTIVE_SESSION_INTERVAL).intValue());}
+    		catch(UnsupportedOperationException e) {}; // for testcases
+    	}
+        return res;
     }
 }

@@ -78,7 +78,7 @@ public class ImportProcessorCallJob extends ConnectionCleaningJob implements Sta
     }
 
     private void saveResults(JsonNode body, AmpResultStatus status) {
-        if(body.getObject().get(status.getType()) == null) {
+        if(!body.getObject().has(status.getType())) {
             logger.info("Could not find type: " + status.getType());
             return;
         }

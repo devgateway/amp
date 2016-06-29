@@ -414,7 +414,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 				group++;
 			}
 			if (group > 0) {
-				if (currLine.intValue() - group > 1) {
+				if (group > 1) {
 					summarySheet.addMergedRegion(new CellRangeAddress(currLine.intValue() - group, currLine.intValue() - 1, 0, 0));
 				}
 				summarySheet.getRow(currLine.intValue() - group).getCell(0).setCellStyle(template.getHierarchyStyle());

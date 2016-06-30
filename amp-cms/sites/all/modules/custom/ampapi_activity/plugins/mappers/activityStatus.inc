@@ -24,6 +24,11 @@ $plugin = array(
 
 class activityStatusMapper extends activityMapperBase {
   public static function optionsList($plugin) {
+    // Small sanity check.
+    if (!is_array($plugin)) {
+      $plugin = ampapi_get_mapper_by_property_name($plugin);
+    }
+
     $options = array();
     $langcode = $GLOBALS['language_content']->language;
     $cache_id = "amp:{$langcode}:activityStatusMapper:optionsList";

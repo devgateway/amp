@@ -1500,7 +1500,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setProjectImplUnitId(final Long projectImplUnitId) {
 			this.projectImplUnitId = projectImplUnitId;
 		}
-		
+
+		public void setFundingSourcesNumber(Integer fundingSourcesNumber) {
+			this.fundingSourcesNumber = fundingSourcesNumber;
+		}
+
 		@java.lang.Override
 		@java.lang.SuppressWarnings("all")
 		public boolean equals(final java.lang.Object o) {

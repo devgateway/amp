@@ -2724,7 +2724,8 @@ public class ExportActivityToPDF extends Action {
                 foIdCell1.addElement(p1);
                 fundingTable.addCell(foIdCell1);
 
-                PdfPCell foIdCell3 = new PdfPCell(new Paragraph(String.valueOf(myForm.getIdentification().getFundingSourcesNumber())));
+                Integer fundingSourcesNumber = myForm.getIdentification().getFundingSourcesNumber();
+                PdfPCell foIdCell3 = new PdfPCell(new Paragraph(fundingSourcesNumber != null ? fundingSourcesNumber.toString(): ""));
                 foIdCell3.setBorder(0);
                 foIdCell3.setColspan(2);
                 foIdCell3.setBackgroundColor(new Color(221,221,221));

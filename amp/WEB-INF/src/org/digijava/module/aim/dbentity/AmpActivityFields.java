@@ -677,7 +677,7 @@ LoggerIdentifiable, Cloneable {
 	protected AmpActivityVersion mergeSource1;
 	protected AmpActivityVersion mergeSource2;
 
-	@Interchangeable(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME, importable = true, fmPath = "/Activity Form/Funding/Total Number of Funding Sources")
+	@Interchangeable(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME, importable = true, fmPath = "/Activity Form/Funding/Overview Section/Total Number of Funding Sources")
     @VersionableFieldSimple(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME)
     protected Integer fundingSourcesNumber;
     

@@ -205,6 +205,7 @@ public class ShowActivityPrintPreview
                 eaForm.getIdentification().setCreatedDate(DateConversion
                                       .ConvertDateToString(activity.
                     getCreatedDate()));
+                eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
                 eaForm.getIdentification().setUpdatedDate(DateConversion
                         .ConvertDateToString(activity.
                         		getUpdatedDate()));

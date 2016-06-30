@@ -1663,7 +1663,33 @@ function collapseAll() {
 </fieldset>
 </module:display>
 <!-- END BUDGET STRUCTURE -->
-	
+<!--Total Number of Funding Sources STRUCTURE		-->
+<module:display name="/Activity Form/Funding/Overview Section/Total Number of Funding Sources"
+				parentModule="/Activity Form/Funding/Overview Section">
+	<fieldset>
+		<legend>
+		<span class=legend_label id="fundingSources" style="cursor: pointer;">
+			<digi:trn>Total Number of Funding Sources</digi:trn>
+		</span>
+		</legend>
+		<div class="toggleDiv">
+			<table cellspacing="1" cellpadding="3" bgcolor="#aaaaaa" width="100%">
+				<tr bgcolor="#f0f0f0">
+					<td style="width: 40%">
+						<digi:trn>Funding Sources</digi:trn>
+					</td>
+					<td bgcolor="#f0f0f0" align="left">
+						<c:if test="${aimEditActivityForm.identification.fundingSourcesNumber!=null}">
+							${aimEditActivityForm.identification.fundingSourcesNumber}
+						</c:if>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</fieldset>
+</module:display>
+<!-- END Total Number of Funding Sources SECTION -->
+
 	<module:display name="/Activity Form/Funding" parentModule="/Activity Form">
 		<fieldset>
 			<legend>

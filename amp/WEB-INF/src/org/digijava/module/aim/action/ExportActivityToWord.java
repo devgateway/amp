@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -535,6 +536,7 @@ public class ExportActivityToWord extends Action {
                 		"Proposed Project Cost", doc);
                 addProjectCostTables(myForm, request, ampContext, myForm.getFunding().getRevProjCost(), 
                 		"Revised Project Cost", doc);
+                addTotalNumberOfFundingSources(request, myForm, ampContext, doc);
 
                 List<Table> budgetStructureTables = getBudgetStructureTables(myForm, request, ampContext, activity);
                 for (Table tbl : budgetStructureTables) {
@@ -586,6 +588,17 @@ public class ExportActivityToWord extends Action {
         return null;
     }
 
+    private void addTotalNumberOfFundingSources(HttpServletRequest request, EditActivityForm myForm, ServletContext ampContext, com.lowagie.text.Document doc) throws DocumentException, WorkerException {
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Total Number of Funding Sources")) {
+            ExportSectionHelper eshTitle = new ExportSectionHelper("Total Number of Funding Sources", true).setWidth(100f).setAlign("left");
+            doc.add(createSectionTable(eshTitle, request, ampContext));
+            ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+            Integer total = myForm.getIdentification().getFundingSourcesNumber();
+            eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Total", null, null,  true).
+                    addRowData(total == null ? "" : total.toString()));
+            doc.add(createSectionTable(eshProjectCostTable, request, ampContext));
+        }
+    }
 
 
     private void addEffectivenessTable(com.lowagie.text.Document doc,List<String[]> aidEffectivenesToAdd) throws DocumentException {

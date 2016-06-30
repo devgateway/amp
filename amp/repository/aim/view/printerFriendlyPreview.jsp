@@ -2761,23 +2761,24 @@ body {background:none;}
                                                        </tr>
                                                     	</c:if>
                                                     	</module:display>
-                                                        <module:display name="/Activity Form/Funding/Total Number of Funding Sources" parentModule="/Activity Form/Funding">
-														 <tr bgcolor="#ffffff">
-														<td>
-															<digi:trn>Total Number of Funding Sources</digi:trn>
-														</td>
-                                                        <td bgcolor="#FFFFFF" align="left" width="150">
-                                                          <c:if test="${aimEditActivityForm.identification.fundingSourcesNumber!=null}">
-                                                             ${aimEditActivityForm.identification.fundingSourcesNumber}
-                                                         </c:if>
-                                                         </td>
-                                                       </tr>
-														</module:display>
+
                                               		</table>
                             				</c:if>										</td>
 									</tr>
 								  </module:display>
-								  
+								  <module:display name="/Activity Form/Funding/Overview Section/Total Number of Funding Sources"
+												  parentModule="/Activity Form/Funding/Overview Section">
+									<tr bgcolor="#ffffff">
+										<td>
+											<digi:trn>Total Number of Funding Sources</digi:trn>
+										</td>
+										<td bgcolor="#FFFFFF" align="left" width="150">
+											<c:if test="${aimEditActivityForm.identification.fundingSourcesNumber!=null}">
+												${aimEditActivityForm.identification.fundingSourcesNumber}
+											</c:if>
+										</td>
+									</tr>
+								  </module:display>
 								  <module:display name="/Activity Form/Funding/Overview Section/Revised Project Cost" parentModule="/Activity Form/Funding/Overview Section">
 								  	<tr>
 										<td class="field_name">

@@ -249,7 +249,7 @@ nv.models.heatMapChart = function() {
 			.attr("y", ((data.y - 1) * cubeSize))
 			.attr("rx", 4)
 			.attr("ry", 4)
-			.attr("class", "hour bordered")
+			.attr("class", "bordered")
 			.attr("width", cubeSize)
 			.attr("height", cubeSize)
 			.style("fill", noColor);

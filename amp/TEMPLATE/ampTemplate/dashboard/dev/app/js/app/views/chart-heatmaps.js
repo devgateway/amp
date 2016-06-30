@@ -6,6 +6,7 @@ var _ = require('underscore');
 module.exports = ChartViewBase.extend({
 
   uiDefaults: {
+	adjtype: 'FAKE',
     showTotal: false,
     showMeasuresSelector: true,
     showTopLegends: false,

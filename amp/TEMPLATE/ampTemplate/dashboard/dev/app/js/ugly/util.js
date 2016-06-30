@@ -149,7 +149,7 @@ function calculateChartHeight(length, isDownload, model) {
 			height = 1225;
 		}
 		bigN = '6';	
-	} else if(series >= 90) {
+	} else if(length >= 90) {
 		// Seriously????
 		if (isDownload === true) {
 			height = 1300;

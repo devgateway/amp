@@ -8,7 +8,8 @@ module.exports = ChartModel.extend({
 	defaults : {
 		title : '',
 		showPlannedDisbursements: true,
-		showActualDisbursements: true		
+		showActualDisbursements: true,
+		chartType: 'aidPredictability'
 	},
 
   _prepareTranslations: function() {

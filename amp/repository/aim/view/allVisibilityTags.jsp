@@ -56,6 +56,7 @@
 <feature:display name="Executing Agencies" module="/Dashboards"/>
 <feature:display name="Implementing Agencies" module="/Dashboards"/>
 <feature:display name="Peace-building and State-building Goals" module="/Dashboards"/>
+<feature:display name="Sector Fragmentation" module="/Dashboards"/>
 
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 

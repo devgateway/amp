@@ -151,9 +151,13 @@ function defaultClickHandler(/* context */) {
 
 
 function nvBindOthersCb(chart, data, specific, clickHandler) {
-  chart[specific.dispatchName].dispatch.on('elementClick', function(raw) {
-    clickHandler(getNiceContext(raw, data));
-  });
+  if (chart[specific.dispatchName] !== undefined) {
+	  chart[specific.dispatchName].dispatch.on('elementClick', function(raw) {
+		  clickHandler(getNiceContext(raw, data));
+	  });
+  }	else {
+	  console.warn("Cant find " + specific.dispatchName);
+  }
 }
 
 

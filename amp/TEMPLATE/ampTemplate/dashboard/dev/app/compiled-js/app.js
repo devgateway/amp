@@ -1,6 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 require('./ugly/lib-load-hacks');
 var jquery = require('jquery');
+var _ = require('underscore');
 var UserModel = require('./app/models/amp-user.js');
 var App = require('./app/app-class');
 var app = new App({ el: '#amp-dashboard' });
@@ -10,7 +11,7 @@ window.app = app;  // for debugging convenience
 app.state.saved.load();
 //app.render();
 
-},{"./app/app-class":2,"./app/models/amp-user.js":13,"./ugly/lib-load-hacks":38,"jquery":"jquery"}],2:[function(require,module,exports){
+},{"./app/app-class":2,"./app/models/amp-user.js":15,"./ugly/lib-load-hacks":43,"jquery":"jquery","underscore":"underscore"}],2:[function(require,module,exports){
 var _ = require('underscore');
 var Deferred = require('jquery').Deferred;
 var BackboneDash = require('./backbone-dash');
@@ -200,7 +201,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":12,"./models/amp-user.js":13,"./models/saved-dashes-collection.js":21,"./models/settings-collection":23,"./views/fail":32,"./views/main":34,"amp-filter/src/main":65,"amp-state/index":81,"amp-translate":82,"amp-url/index":83,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":14,"./models/amp-user.js":15,"./models/saved-dashes-collection.js":25,"./models/settings-collection":27,"./views/fail":37,"./views/main":39,"amp-filter/src/main":70,"amp-state/index":86,"amp-translate":87,"amp-url/index":88,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -378,7 +379,86 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":84,"../../ugly/util":42,"d3":"d3"}],5:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":89,"../../ugly/util":47,"d3":"d3"}],5:[function(require,module,exports){
+/*
+ * Drawing a bar chart in AMP? Please use ./chart.js instead.
+ */
+
+var barDebug = require('../../../../../../../reamp/tools/log')("amp:dashboards:charts:bar");
+
+var nv = window.nv;  // nvd3 is a pain
+var d3 = require('d3');
+var util = require('../../ugly/util');
+var heatMapChart = require('./customized/heatMapChart');
+var _ = require('underscore');
+
+function dataToNv(data) {
+	//console.log("_heatmap.dataToNv");
+  return data;
+}
+
+
+function countCategories(data) {
+	//console.log("_heatmap.countCategories");
+  // note: this takes regular data, not dataToNv data.
+  return data[0].values.length - 1;  // 1 for others...?
+}
+
+
+function chart(options, data) {
+	//console.log("_heatmap.chart");
+  //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
+  //will give me >400 px height
+  var height = options.height < 400 ? 300 : 400;
+  var calculatedHeight = util.calculateChartHeight(data[0].values.length, false, options.model);
+  if (calculatedHeight !== null) {
+	  height = calculatedHeight; 
+  }
+   
+  //TODO: Check if discreteBarChart is the best option.
+  var _chart = nv.models.heatMapChart().height(900);
+    /*.valueFormat(options.shortFormatter)
+    .showValues(true)
+    .showYAxis(false)
+    .showXAxis(false)
+    .height(height)
+    .margin({ top: 5, right: 10, bottom: 10, left: 10 });*/
+  return _chart;
+}
+
+
+function addLegend(svg, chart, nvData, trimLabels, width) {
+	//console.log("_heatmap.addLegend");
+  /*var legendHeight;
+
+  var legend = nv.models.legend()
+    .width(width || svg.clientWidth)
+    .margin({left: 20, right: 20})
+    .rightAlign(false)
+    .color(util.categoryColours(nvData[0].values.length))
+    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : util.formatShortText(85)(d.x); });
+
+  d3.select(svg)
+    .datum(nvData)
+    .append('g')
+      .attr('class', 'legend')
+      .datum(nvData[0].values)
+      .call(legend);
+
+  legendHeight = svg.querySelector('.legend').getBBox().height;
+  chart.margin({top: legendHeight + 15});*/
+}
+
+
+module.exports = {
+  dispatchName: 'heatmap',
+  countCategories: countCategories,
+  addLegend: addLegend,
+  dataToNv: dataToNv,
+  chart: chart
+};
+
+},{"../../../../../../../reamp/tools/log":89,"../../ugly/util":47,"./customized/heatMapChart":11,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
 /*
  * Drawing a multibar chart in AMP? Please use ./chart.js instead.
  */
@@ -439,7 +519,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":84,"./customized/multiBarChart.js":10}],6:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":89,"./customized/multiBarChart.js":12}],7:[function(require,module,exports){
 /*
  * Drawing a pie chart in AMP? Please use ./chart.js instead.
  */
@@ -530,7 +610,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../ugly/util":42,"./common":9,"./customized/pieChart.js":11,"underscore":"underscore"}],7:[function(require,module,exports){
+},{"../../ugly/util":47,"./common":10,"./customized/pieChart.js":13,"underscore":"underscore"}],8:[function(require,module,exports){
 
 var _ = require('underscore');
 var util = require('../../ugly/util');
@@ -591,7 +671,7 @@ module.exports = {
   charter: charter
 };
 
-},{"../../ugly/util":42,"./common":9,"underscore":"underscore"}],8:[function(require,module,exports){
+},{"../../ugly/util":47,"./common":10,"underscore":"underscore"}],9:[function(require,module,exports){
 
 var _ = require('underscore');
 var d3 = require('d3');
@@ -601,6 +681,7 @@ var barSpecific = require('./_bar');
 var multibarSpecific = require('./_multibar');
 var pieSpecific = require('./_pie');
 var table = require('./_table');
+var heatmap = require('./_heatmap');
 var defaultTTTemplate = _.template("<div class=\"panel panel-primary panel-popover\">\n  <% if (tt.heading) { %>\n    <div class=\"panel-heading\"><%= tt.heading %></div>\n  <% } %>\n  <div class=\"panel-body\">\n    <span class=\"dollaz\">\n      <% if (tt.bodyText) { %>\n        <%= tt.bodyText %>\n      <% } %>\n      <% if (tt.bodyList) { %>\n        <ul class=\"list-unstyled\">\n          <% _(tt.bodyList).each(function(item) { %>\n            <li><b><%= item.k %></b> <%= item.v %></li>\n          <% }) %>\n        </ul>\n      <% } %>\n    </span>\n  </div>\n  <% if (tt.footerText) { %>\n    <div class=\"panel-footer\">\n      <%= tt.footerText %>\n    </div>\n  <% } %>\n</div>\n");
 
 
@@ -608,6 +689,7 @@ var charters = {
   bar: common.nvCharter(barSpecific),
   pie: common.nvCharter(pieSpecific),
   multibar: common.nvCharter(multibarSpecific),
+  heatmap: common.nvCharter(heatmap),
   table: table.charter
 };
 
@@ -645,7 +727,7 @@ function chart(type, data, options) {
 
 module.exports = chart;
 
-},{"../../ugly/util":42,"./_bar":4,"./_multibar":5,"./_pie":6,"./_table":7,"./common":9,"d3":"d3","underscore":"underscore"}],9:[function(require,module,exports){
+},{"../../ugly/util":47,"./_bar":4,"./_heatmap":5,"./_multibar":6,"./_pie":7,"./_table":8,"./common":10,"d3":"d3","underscore":"underscore"}],10:[function(require,module,exports){
 var nv = window.nv;  // nvd3 is a pain
 var d3 = require('d3');
 var util = require('../../ugly/util');
@@ -799,9 +881,13 @@ function defaultClickHandler(/* context */) {
 
 
 function nvBindOthersCb(chart, data, specific, clickHandler) {
-  chart[specific.dispatchName].dispatch.on('elementClick', function(raw) {
-    clickHandler(getNiceContext(raw, data));
-  });
+  if (chart[specific.dispatchName] !== undefined) {
+	  chart[specific.dispatchName].dispatch.on('elementClick', function(raw) {
+		  clickHandler(getNiceContext(raw, data));
+	  });
+  }	else {
+	  console.warn("Cant find " + specific.dispatchName);
+  }
 }
 
 
@@ -874,7 +960,396 @@ module.exports = {
   formatNumber: formatNumber
 };
 
-},{"../../ugly/util":42,"d3":"d3","numeral":44,"underscore":"underscore"}],10:[function(require,module,exports){
+},{"../../ugly/util":47,"d3":"d3","numeral":49,"underscore":"underscore"}],11:[function(require,module,exports){
+nv.models.heatMapChart = function() {
+	"use strict";
+
+	//============================================================
+    // Public Variables with Default Settings
+    //------------------------------------------------------------	
+
+    //var pie = nv.models.pie();
+    //var legend = nv.models.legend().margin({top: 0, right: 0, bottom: 0, left: 0});
+
+    var margin = {top: 30, right: 20, bottom: 20, left: 20}
+    //var legendMargin = {top: 30, right: 20, bottom: 20, left: 20}
+    var width = null;
+	var height = null;
+    var showLegend = false;
+    var color = nv.utils.defaultColor();
+    var tooltips = true;
+    var tooltip = function(key, y, e, graph) {
+    	return '<h3 style="background-color: '
+        	+ e.color + '">' + key + '</h3>'
+            + '<p>' +  y + '</p>';
+        }
+    var	state = nv.utils.state();
+    var defaultState = null;
+    var noData = "No Data Available.";
+    var duration = 250;
+    var dispatch = d3.dispatch('tooltipShow', 'tooltipHide', 'stateChange', 'changeState','renderEnd');
+
+    //============================================================
+    // Private Variables
+    //------------------------------------------------------------
+
+    var showTooltip = function(e, offsetElement) {
+    	var tooltipLabel = pie.x()(e.point);
+        var left = e.pos[0] + ( (offsetElement && offsetElement.offsetLeft) || 0 );
+        var top = e.pos[1] + ( (offsetElement && offsetElement.offsetTop) || 0);
+        var y = pie.valueFormat()(pie.y()(e.point));
+        var content = tooltip(tooltipLabel, y, e, chart);
+        nv.tooltip.show([left, top], content, e.value < 0 ? 'n' : 's', null, offsetElement);
+    };
+
+    var renderWatch = nv.utils.renderWatch(dispatch);
+
+    var stateGetter = function(data) {
+    	return function(){
+    		return {
+    			active: data.map(function(d) { return !d.disabled })
+            };
+        }
+    };
+
+    var stateSetter = function(data) {
+        return function(state) {
+            if (state.active !== undefined) {
+                data.forEach(function (series, i) {
+                    series.disabled = !state.active[i];
+                });
+            }
+        }
+    };
+  
+    var shortenText = function(text) {
+    	var length = 17;
+    	if (text.length > length) {
+    		text = text.substring(0, length) + '...';
+    	}
+    	return text;
+    };
+
+    //============================================================
+    // Chart function
+    //------------------------------------------------------------
+
+    function chart(selection) {
+    	var _self = this;
+    	//console.log('heatMapChart.chart');
+        renderWatch.reset();
+        //renderWatch.models(pie);
+
+        selection.each(function(data) {//TODO: selection.each????
+        	var container = d3.select(this);
+            nv.utils.initSVG(container);
+
+            var that = this;
+            var availableWidth = (width || parseInt(container.style('width'), 10) || 960)
+                    - margin.left - margin.right;
+            var availableHeight = (height || parseInt(container.style('height'), 10) || 400)
+                    - margin.top - margin.bottom;
+
+            //chart.update = function() { container.transition().call(chart); }; //comented to avoid adding the chart again.
+            chart.container = this;
+
+            state.setter(stateSetter(data), chart.update)
+                .getter(stateGetter(data))
+                .update();
+
+            //set state.disabled
+            state.disabled = data.map(function(d) { return !!d.disabled });
+
+            if (!defaultState) {
+                var key;
+                defaultState = {};
+                for (key in state) {
+                    if (state[key] instanceof Array)
+                        defaultState[key] = state[key].slice(0);
+                    else
+                        defaultState[key] = state[key];
+                }
+            }
+
+            //TODO: move these definitions to top.
+            var innerMargin = {
+            		top : 120,
+        			right : 0,
+        			bottom : 100,
+        			left : 150
+            };
+        	var cubeSize = 30;
+        	var width = 1024 - innerMargin.left - innerMargin.right;
+        	var topSectionHeight = 180;
+        	var height = topSectionHeight + (cubeSize * data[0].values.y.length);
+        	var legendElementWidth = cubeSize * 2;
+        	//var colors = [ "#cb213d", "#fca530", "#0e8466" ]; // alternatively colorbrewer.YlGnBu[9]
+        	var noColor = '#FFFFFF';
+        	var categories = [{min: -1, max: 0, color: noColor},
+        	                  {min: 0, max: 1, color: "#D05151"},
+        	                  {min: 1, max: 5, color: "#e68787"}, 
+        	                  {min: 5, max: 10, color: "#e4883e"}, 
+        	                  {min: 10, max: 15, color: "#f6b277"}, 
+        	                  {min: 15, max: 20, color: "#adcd95"}, 
+        	                  {min: 20, max: 101, color: "#7ba05f"}];
+        	
+        	$(container[0]).attr('height', height).attr('class', 'dash-chart nvd3-svg heatmap-chart');
+        	
+        	var svg = container
+        		/*.select("#chart")*/
+        		.append("svg")
+        		/*.attr("width", width + innerMargin.left + innerMargin.right)*/
+        		/*.attr("height", height + innerMargin.top + innerMargin.bottom)*/
+        		.append("g")
+        		.attr("transform", "translate(" + innerMargin.left + "," + innerMargin.top + ")");
+
+        	// Rows container.
+        	var yAxisLabelsContainer = svg        	
+				.append("g")
+				.attr("class", "heatmap-yAxis-container");
+        	
+        	// Rows.
+        	var yLabels = yAxisLabelsContainer
+        		.selectAll(".yLabel")
+        		.data(data[0].values.y)
+        		.enter()
+        		.append("text")
+        		.text(function(d) {
+        			return shortenText(d);
+        		})
+        		.attr("x", 0)
+        		.attr("y", function(d, i) {
+        			return i * cubeSize;
+        		})
+        		.style("text-anchor", "end")
+        		.attr("transform", "translate(-6," + cubeSize / 1.5 + ")")
+        		.attr("class", function(d, i) {
+        							return "yLabel mono axis nv-series";
+        		})
+        		.attr('data-title', function(d) {
+        			return d;
+        		});
+        	
+        		// Add Totals special row.
+        		yAxisLabelsContainer.append("text")
+        			.text(app.translator.translateSync("TOTALS"))
+        			.attr("x", 0)
+        			.attr("y", (data[0].values.y.length * cubeSize))
+        			.attr("class", "yLabel mono axis nv-series heatmap-totals")
+        			.style("text-anchor", "end")
+        			.style("font-weight", "bold")
+            		.attr("transform", "translate(-6," + cubeSize / 1.5 + ")");
+
+        		// Columns container.
+        		var xAxisLabelsContainer = svg
+        			.append("g")
+        			.attr("transform", "translate(18.5, -5)")
+        			.attr("class", "heatmap-xAxis-container");
+
+        		// Columns
+        		var yAxisLabels = xAxisLabelsContainer
+        			.selectAll(".xLabel")
+        			.data(data[0].values.x)
+        			.enter()
+        			.append("text")
+        			.text(function(d) {
+        				return shortenText(d);
+        			})
+        			.attr("x", function(d, i) {
+        				return i * cubeSize;
+        			})
+        			.attr("y", 0)
+        			/*.style("text-anchor", "middle")*/
+        			.attr("transform", function(d, i) {
+        				return "rotate(270, " + (cubeSize * i) + ", 0)";
+        			})
+        			.attr("class", function(d, i) {
+        							return "xLabel mono axis nv-series";
+        			})
+        			.attr('data-title', function(d) {
+        				return d;
+        			});
+
+        		// Cubes
+        		var cubesContainer = svg
+    				.append("g")
+    				.attr("class", "heatmap-cubes-container");
+        		for (var i = 0; i < data[0].values.length; i++) {
+        			createCube(cubesContainer, data[0].values[i], cubeSize, noColor, categories);        			    				
+        		}        
+        		// Add total's row in the end.        		
+        		for (var i = 0; i < data[0].values.x.length; i++) {
+        			createCube(cubesContainer, {x: i + 1, y: data[0].values.y.length + 1, value: data[0].values.xPTotals[i], tooltip: data[0].values.xTotals[i]}, cubeSize, noColor, categories);
+        		}
+        		// Add total's column on the right side.
+        		for (var j = 0; j < data[0].values.y.length; j++) {
+        			createCube(cubesContainer, {x: data[0].values.x.length + 1 , y: j + 1, value: data[0].values.yPTotals[j], tooltip: data[0].values.yTotals[j]}, cubeSize, noColor, categories);
+        		}
+        		
+        		// Basic tooltips.
+				/*$(container[0]).on('.yLabel', function(e) {
+        	        e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
+        	        dispatch.tooltipShow(e);
+        	    });
+
+        		$(container[0]).on('tooltipShow', function(e) {
+        	        if (tooltips) showTooltip(e);
+        	    });
+
+        		$(container[0]).on('tooltipHide', function() {
+        	        if (tooltips) nv.tooltip.cleanup();
+        	    });*/
+        });
+
+        renderWatch.renderEnd('pieChart immediate');
+        return chart;
+    }
+    
+    function createCube(cubesContainer, data, cubeSize, noColor, categories) {
+    	var cube = cubesContainer
+			.append("rect")
+			.attr("x", ((data.x - 1) * cubeSize))
+			.attr("y", ((data.y - 1) * cubeSize))
+			.attr("rx", 4)
+			.attr("ry", 4)
+			.attr("class", "hour bordered")
+			.attr("width", cubeSize)
+			.attr("height", cubeSize)
+			.style("fill", noColor);
+		
+		cube.transition()
+			.duration(1000)
+			.style("fill", calculateColorFromCategories(data.value, categories, noColor));
+		
+		var text = cubesContainer.append("text"); 
+		text.attr('font-family', 'Arial')
+			.attr('font-size', '11px')
+			.attr("x", ((data.y - 1) * cubeSize))
+			.attr("y", ((data.y - 1) * cubeSize) + 19)
+			.attr("x", function() {
+				var d = data;
+				var auxVal = d.value;
+				if (auxVal > 0 && auxVal < 1) {
+					return ((d.x - 1) * cubeSize) + 4;
+				} else if (auxVal < 10) {
+					return ((d.x - 1) * cubeSize) + 8;
+				} else if (auxVal == 100) {
+					return ((d.x - 1) * cubeSize) + 1;	
+				} else {
+					return ((d.x - 1) * cubeSize) + 5;
+				}					
+			}).html(function() {
+				var d = data;
+				var auxVal = d.value;
+				if (auxVal > -1) {
+					if (auxVal > 0 && auxVal < 1) {
+						return '<1%';
+					} else {
+						return auxVal + '%';
+					}
+				} else {
+					return '';
+				}
+			});
+		if (data.tooltip) {
+			text.attr('data-title', data.tooltip)
+			.attr("class", "nv-series");
+		}
+    }
+    
+    function calculateColor(value, colors) {
+    	var color = "";
+    	var cutPoint = 100 / colors.length;
+    	for (var i = 0; i < colors.length ; i++) {
+    		if ((value >= (i * cutPoint)) && (value < ((i + 1) * cutPoint))) {
+    			color = colors[i];
+    			break;
+    		}
+    	}    	
+    	return color;
+    }
+    
+    function calculateColorFromCategories(value, categories, noColor) {
+    	var color = noColor;
+    	for (var i = 0; i < categories.length; i++) {
+    		if ((value >= categories[i].min) && (value < categories[i].max)) {
+    			color = categories[i].color;
+    			break;
+    		}
+    	}
+    	return color;
+    }
+
+    //============================================================
+    // Event Handling/Dispatching (out of chart's scope)
+    //------------------------------------------------------------
+
+    /*dispatch.on('elementMouseover.tooltip', function(e) {
+        e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
+        dispatch.tooltipShow(e);
+    });
+
+    dispatch.on('tooltipShow', function(e) {
+        if (tooltips) showTooltip(e);
+    });
+
+    dispatch.on('tooltipHide', function() {
+        if (tooltips) nv.tooltip.cleanup();
+    });*/
+
+    //============================================================
+    // Expose Public Variables
+    //------------------------------------------------------------
+
+    // expose chart's sub-components
+    chart.legend = {};/*legend;*/
+    chart.dispatch = dispatch;
+    chart.pie = {};/*pie;*/
+    chart.options = nv.utils.optionsFunc.bind(chart);
+
+    // use Object get/set functionality to map between vars and chart functions
+    chart._options = Object.create({}, {    	
+        // simple options, just get/set the necessary values
+        noData:         {get: function(){return noData;},         set: function(_){noData=_;}},
+        tooltipContent: {get: function(){return tooltip;},        set: function(_){tooltip=_;}},
+        tooltips:       {get: function(){return tooltips;},       set: function(_){tooltips=_;}},
+        showLegend:     {get: function(){return showLegend;},     set: function(_){showLegend=_;}},
+        defaultState:   {get: function(){return defaultState;},   set: function(_){defaultState=_;}},
+        // options that require extra logic in the setter
+        color: {get: function(){return color;}, set: function(_){
+            color = _;
+            /*legend.color(color);
+            pie.color(color);*/
+        }},
+        duration: {get: function(){return duration;}, set: function(_){
+            duration = _;
+            renderWatch.reset(duration);
+        }},
+        margin: {get: function(){return margin;}, set: function(_){
+            margin.top    = _.top    !== undefined ? _.top    : margin.top;
+            margin.right  = _.right  !== undefined ? _.right  : margin.right;
+            margin.bottom = _.bottom !== undefined ? _.bottom : margin.bottom;
+            margin.left   = _.left   !== undefined ? _.left   : margin.left;
+        }},
+        /*legendMargin: {get: function(){return legendMargin;}, set: function(_){
+        	legendMargin.top    = _.top    !== undefined ? _.top    : legendMargin.top;
+        	legendMargin.right  = _.right  !== undefined ? _.right  : legendMargin.right;
+        	legendMargin.bottom = _.bottom !== undefined ? _.bottom : legendMargin.bottom;
+        	legendMargin.left   = _.left   !== undefined ? _.left   : legendMargin.left;
+        }},*/
+    });
+    
+    chart.height = function(_) {
+        if (!arguments.length) return height;
+        height = _;
+        return chart;
+    };
+    
+    //nv.utils.inheritOptions(chart, pie);
+    nv.utils.initOptions(chart);
+    return chart;
+};
+},{}],12:[function(require,module,exports){
 
 nv.models.customizedMultiBarChart = function() {
   "use strict";
@@ -1419,7 +1894,7 @@ nv.models.customizedMultiBarChart = function() {
 
   return chart;
 }
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 
 nv.models.customizedPieChart = function() {
     "use strict";
@@ -1661,7 +2136,7 @@ nv.models.customizedPieChart = function() {
     nv.utils.initOptions(chart);
     return chart;
 };
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 function queryselector() {
   return !!document.querySelector;  // fails on oooooooooold IE
 }
@@ -1790,7 +2265,7 @@ module.exports = function() {
   return missingFeatures;
 };
 
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -1812,7 +2287,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],14:[function(require,module,exports){
+},{"backbone":"backbone"}],16:[function(require,module,exports){
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
 
@@ -1823,7 +2298,8 @@ module.exports = ChartModel.extend({
 	defaults : {
 		title : '',
 		showPlannedDisbursements: true,
-		showActualDisbursements: true		
+		showActualDisbursements: true,
+		chartType: 'aidPredictability'
 	},
 
   _prepareTranslations: function() {
@@ -1879,7 +2355,7 @@ module.exports = ChartModel.extend({
 
 });
 
-},{"./chart-model-base":16,"underscore":"underscore"}],15:[function(require,module,exports){
+},{"./chart-model-base":19,"underscore":"underscore"}],17:[function(require,module,exports){
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
 var common = require('../charts/common');
@@ -1892,7 +2368,8 @@ module.exports = ChartModel.extend({
     title: '',
     stacked: false,
     seriesToExclude: [],
-    yearTotals:{}
+    yearTotals:{},
+    chartType: 'fundingType'
   },
 
   _prepareTranslations: function() {
@@ -2045,7 +2522,112 @@ module.exports = ChartModel.extend({
 
 });
 
-},{"../charts/common":9,"./chart-model-base":16,"underscore":"underscore"}],16:[function(require,module,exports){
+},{"../charts/common":10,"./chart-model-base":19,"underscore":"underscore"}],18:[function(require,module,exports){
+var param = require('jquery').param;
+var _ = require('underscore');
+var ChartModel = require('./chart-model-base');
+var common = require('../charts/common');
+
+module.exports = ChartModel.extend({
+
+	defaults: {
+	    limit: 31,
+	    title: '',
+	    name: '',
+	    bigN: 0,
+	    alternativeContainerClass: 'heatmap-chart-wrap',
+	    values: [],
+	    chartType: 'fragmentation'
+	},
+
+	_prepareTranslations: function() {
+		var topBaseLanguage = {};
+
+	    /* Prepare the translations for the chart */
+	    var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
+	
+	    this.localizedTopChart = this.app.translator.translateList(topBaseLanguage)
+	    	.done(_(function(localizedTopChartKeyVal) {
+	    		this.localizedLookup = localizedTopChartKeyVal;
+	    	}).bind(this));
+	},
+
+	parse: function (data) {
+		var self = this;
+		self.values = new Array();
+		self.values.x = data.xDataSet;
+		self.values.y = data.yDataSet;
+		for (var i = 0; i < data.yDataSet.length; i++) {					
+			for (var j = 0; j < data.xDataSet.length; j++) {
+				if (data.matrix[i] !== null) {
+					var value = data.matrix[i][j] !== null ? data.matrix[i][j] : -1;
+					var row = {y: i + 1, x: j + 1, value: value/*, yname: data.yDataSet[i], xname: data.xDataSet[i]*/}; //name is for tooltip
+					self.values.push(row);
+				} else {
+					self.values.push({y: i + 1, x: j + 1, value: -1});
+				}
+			}
+		}
+				
+		// Normalize values.
+		// TODO: recalculate column percentages to sum 100%.
+		self.values = this.normalizeValues(self.values);
+		
+		// Add totals data.
+		self.values.xPTotals = this.normalizeValues(data.xPTotals);
+		self.values.yPTotals = this.normalizeValues(data.yPTotals);
+		self.values.xTotals = data.xTotals;
+		self.values.yTotals = data.yTotals;
+
+		if (!this.localizedLookup) {
+			// we can't procede if we don't have translations yet :(
+			// this code should now be unreachable, but y'never know...
+			this.app.report('Loading error', ['Translations for the application were not loaded before rendering']);
+		}
+		var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
+
+		data.processed = [{values: this.values}]; //TODO: processed???
+		data.values = this.values;
+		//console.log(data);
+		return data;
+	},
+	
+	normalizeValues: function(values) {
+		for (var i = 0; i < values.length; i++) {
+			var auxValue = values[i].value !== undefined ? values[i].value : values[i]; 
+			if (auxValue > 0 && auxValue < 1) {
+				//self.values[i].value = 1;
+			} else {
+				if (values[i].value !== undefined) {
+					values[i].value = Math.floor(auxValue);
+				} else {
+					values[i] = Math.floor(auxValue);
+				}
+			}			
+		}
+		return values;
+	},
+
+	fetch: function(options) {
+		//TODO: add code for saved dashboards!!!		
+		var self = this;
+		options = _.defaults(options || {}, { url: this.url + '?' + param(this.pick('limit')) });
+		
+		// Process params from heat-map/configs, in that EP we have defined each heatmap.
+		var configs = this.get('heatmap_config').models[0];
+		var thisChart = _.find(configs.get('charts', function() {return name === self.get('name')}));
+		var xColumn = configs.get('columns')[thisChart.xColumns[0]]; // First column is default.
+		var yColumn = configs.get('columns')[thisChart.yColumns[0]]; // First column is default.
+		var paramsForHeatMap = {count: self.get('limit'), xColumn: xColumn.origName, yColumn: yColumn.origName}; 		
+		//options.data = JSON.stringify($.extend({}, paramsForHeatMap, JSON.parse(options.data)));
+		paramsForHeatMap.filters =  JSON.parse(options.data);
+		options.data = JSON.stringify(paramsForHeatMap);
+		//TODO: add "measure" param!!!
+		
+		return ChartModel.prototype.fetch.call(this, options);
+	}
+});
+},{"../charts/common":10,"./chart-model-base":19,"jquery":"jquery","underscore":"underscore"}],19:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -2085,7 +2667,7 @@ module.exports = BackboneDash.Model.extend({
 
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],17:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],20:[function(require,module,exports){
 var param = require('jquery').param;
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
@@ -2097,7 +2679,8 @@ module.exports = ChartModel.extend({
   defaults: {
     limit: 5,
     title: '',
-    bigN: 0
+    bigN: 0,
+    chartType: 'top'
   },
 
   _prepareTranslations: function() {
@@ -2185,7 +2768,7 @@ module.exports = ChartModel.extend({
 
 });
 
-},{"../charts/common":9,"./chart-model-base":16,"jquery":"jquery","underscore":"underscore"}],18:[function(require,module,exports){
+},{"../charts/common":10,"./chart-model-base":19,"jquery":"jquery","underscore":"underscore"}],21:[function(require,module,exports){
 var BackboneDash = require('../backbone-dash');
 
 
@@ -2195,7 +2778,7 @@ module.exports = BackboneDash.Collection.extend({
   }
 });
 
-},{"../backbone-dash":3}],19:[function(require,module,exports){
+},{"../backbone-dash":3}],22:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 
@@ -2234,7 +2817,43 @@ var EnabledChartsCollection = Backbone.Collection.extend({
 });
 
 module.exports = EnabledChartsCollection;
-},{"backbone":"backbone","underscore":"underscore"}],20:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],23:[function(require,module,exports){
+var Backbone = require('backbone');
+var _ = require('underscore');
+
+var HeatmapsConfigModel = Backbone.Model.extend({
+
+});
+
+var HeatmapsConfigCollection = Backbone.Collection.extend({
+	model : HeatmapsConfigModel,
+	url : '/rest/dashboard/heat-map/configs',
+	fetchData : function() {
+		this.fetch({
+			type : 'GET',
+			async : false,
+			processData : false,
+			mimeType : 'application/json',
+			traditional : true,
+			headers : {
+				'Content-Type' : 'application/json',
+				'Cache-Control' : 'no-cache'
+			},
+			data : JSON.stringify(), // This is necessary due to
+											// incompatibilities with Jersey
+											// when receiving the params.
+			error : function(collection, response) {
+				console.error('error loading heatmap configs.');
+			},
+			success : function(collection, response) {
+				//console.log(response);
+			}
+		});
+	}
+});
+
+module.exports = HeatmapsConfigCollection;
+},{"backbone":"backbone","underscore":"underscore"}],24:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -2279,7 +2898,7 @@ module.exports = BackboneDash.Model.extend({
   }
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],21:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],25:[function(require,module,exports){
 var _ = require('underscore');
 var Deferred = require('jquery').Deferred;
 var BackboneDash = require('../backbone-dash');
@@ -2338,7 +2957,7 @@ module.exports = BackboneDash.Collection.extend({
     return deferred.promise();
    }
 });
-},{"../backbone-dash":3,"./saved-dash":20,"jquery":"jquery","underscore":"underscore"}],22:[function(require,module,exports){
+},{"../backbone-dash":3,"./saved-dash":24,"jquery":"jquery","underscore":"underscore"}],26:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -2426,7 +3045,7 @@ module.exports = BackboneDash.Model.extend({
 
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],23:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],27:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -2590,7 +3209,7 @@ module.exports = BackboneDash.Collection.extend({
   }
 
 });
-},{"../backbone-dash":3,"./setting":22,"jquery":"jquery","underscore":"underscore"}],24:[function(require,module,exports){
+},{"../backbone-dash":3,"./setting":26,"jquery":"jquery","underscore":"underscore"}],28:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
@@ -2600,7 +3219,11 @@ module.exports = ChartViewBase.extend({
 
   uiDefaults: {
     big: false,
-    view: 'multibar'
+    view: 'multibar',
+    showTotal: true,
+    showMeasuresSelector: true,
+    showTopLegends: true,
+    showCommonChartArea: true
   },
   events: function(){
       return _.extend({},ChartViewBase.prototype.events,{
@@ -2670,7 +3293,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-view-base":28,"d3":"d3","underscore":"underscore"}],25:[function(require,module,exports){
+},{"./chart-view-base":33,"d3":"d3","underscore":"underscore"}],29:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
@@ -2681,7 +3304,11 @@ module.exports = ChartViewBase.extend({
   uiDefaults: {
     big: true,
     adjtype: 'FAKE',
-    view: 'multibar'
+    view: 'multibar',
+    showTotal: true,
+    showMeasuresSelector: true,
+    showTopLegends: true,
+    showCommonChartArea: true
   },
   events: function(){
       return _.extend({},ChartViewBase.prototype.events,{
@@ -2752,7 +3379,75 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-view-base":28,"d3":"d3","underscore":"underscore"}],26:[function(require,module,exports){
+},{"./chart-view-base":33,"d3":"d3","underscore":"underscore"}],30:[function(require,module,exports){
+var d3 = require('d3');
+var ChartViewBase = require('./chart-view-base');
+var ModalView = require('./chart-tops-info-modal');
+var _ = require('underscore');
+
+module.exports = ChartViewBase.extend({
+
+  uiDefaults: {
+    showTotal: false,
+    showMeasuresSelector: true,
+    showTopLegends: false,
+    showCommonChartArea: false
+  },
+  
+  chartViews: [
+    'heatmap',
+    'table'    
+  ],
+  
+  modalView: undefined,
+  
+  //Dont try to call initialize here because it throws a 'Module initialization error' :((
+  /*initialize: function(options) {
+	  this.modalView = new ModalView({ app: options.app, collection: this.model.collection });
+  },*/
+
+  downloadChartOptions: {
+    trimLabels: false
+  },
+
+  getTTContent: function(context) {
+	var ofTotal = app.translator.translateSync("amp.dashboard:of-total","of total");
+	var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
+    var self = this;
+    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+    return {tt: {
+      heading: context.x.raw,
+      bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
+      footerText: '<b>' + d3.format('%')(context.y.raw / this.model.get('total')) + '</b>&nbsp<span>' + ofTotal + '</span>'
+    }};
+  },
+
+  chartClickHandler: function(context) {	  
+    // clicking on the "others" bar loads five more.
+    if (context.data[context.series.index]
+               .values[context.x.index].special === 'others') {
+      this.model.set('limit', this.model.get('limit') + 5);      
+        this.model.set('big', true);      
+    } else if (this.model.get('showCategoriesInfo') === true) {    	
+    	this.modalView = new ModalView({ app: app, context: context, model: this.model });
+    	this.openInfoWindow();    	    	
+    }
+  },
+  
+  openInfoWindow: function() {
+	  var specialClass = 'dash-settings-modal';
+	  this.app.modal('Category Detail', {
+		  specialClass: specialClass,
+	      bodyEl: this.modalView.render().el,
+	      i18nTitle: 'amp.dashboard:dashboard-chart-tops-info-modal'
+	  });	    
+	  // Translate modal popup.
+	  app.translator.translateDOM($("." + specialClass));
+  }
+
+});
+
+},{"./chart-tops-info-modal":31,"./chart-view-base":33,"d3":"d3","underscore":"underscore"}],31:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -2804,7 +3499,7 @@ module.exports = BackboneDash.View.extend({
 	},
 
 });
-},{"../backbone-dash":3,"underscore":"underscore"}],27:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],32:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var ModalView = require('./chart-tops-info-modal');
@@ -2813,8 +3508,18 @@ var _ = require('underscore');
 module.exports = ChartViewBase.extend({
 
   uiDefaults: {
-    adjtype: 'FAKE'    
+    adjtype: 'FAKE',
+    showTotal: true,
+    showMeasuresSelector: true,
+    showTopLegends: true,
+    showCommonChartArea: true    
   },
+  
+  chartViews: [
+	'bar',
+    'pie',
+    'table'    
+  ],
   
   modalView: undefined,
   
@@ -2864,7 +3569,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-tops-info-modal":26,"./chart-view-base":28,"d3":"d3","underscore":"underscore"}],28:[function(require,module,exports){
+},{"./chart-tops-info-modal":31,"./chart-view-base":33,"d3":"d3","underscore":"underscore"}],33:[function(require,module,exports){
 
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
@@ -2872,7 +3577,7 @@ var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
-var template = _.template("<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <span class=\"pull-right big-number\">\n        <b class=\"chart-total\"></b>\n        <span class=\"chart-currency\"></span>\n      </span>\n      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\n    </div>\n\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\">\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype')) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>\n\n");
+var template = _.template("<style>\nrect.bordered {\n\tstroke: #E6E6E6;\n\tstroke-width: 2px;\n}\n\ntext.mono {\n\tfont-size: 9pt;\n\tfont-family: Arial;\n\tfill: #000;\n}\n\ntext.axis-workweek {\n\tfill: #000;\n}\n\ntext.axis-worktime {\n\tfill: #000;\n}\n</style>\n\n<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <% if (model.get('showTotal') === true) { %>\n\t      <span class=\"pull-right big-number\">\n\t        <b class=\"chart-total\"></b>\n\t        <span class=\"chart-currency\"></span>\n\t      </span>\n      <% } %>\n      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\n    </div>\n\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                heatmap: 'stats',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\">\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>\n\n");
 
 
 var adjOptTemplate = _.template('<option value="<%=opt.id%>" ' +
@@ -2898,7 +3603,8 @@ module.exports = BackboneDash.View.extend({
   chartViews: [
     'bar',
     'pie',
-    'table'
+    'heatmap',
+    'table'    
   ],  
   
   initialize: function(options) {
@@ -3021,7 +3727,9 @@ module.exports = BackboneDash.View.extend({
     var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions(), this.model);
     this.chartContainer.html(chart.el);
 
-    this.renderNumbers();
+    if (this.model.get('view') !== 'heatmap') {
+    	this.renderNumbers();
+    }
     var limit = this.model.get('limit');
     if (limit) {
       this.$('.reset')[limit === this.model.defaults.limit ? 'hide' : 'show']();
@@ -3148,11 +3856,13 @@ module.exports = BackboneDash.View.extend({
 		  }
 	    
 		  // Now bind NV tooltip mechanism to hover event for each legend.
-		  if($(elem).data('data-title')) {
+		  if($(elem).data('data-title') || $(elem).data('title')) {
 			  $(elem).hover(function() {
-	    		var offset = $(this).offset();
+	    		var offset = $(this).offset();	    		
+	    		//TODO: Check the generation of heatMapChart.js and see if we can set the 'data' field the same way than other charts.
+	    		var title = $(elem).data('data-title') ? $(elem).data('data-title') : $(elem).data('title');
 	    		//TODO: Remove hardcoded html and use a template.
-	    	    nv.tooltip.show([offset.left, offset.top], "<div class='panel panel-primary panel-popover'><div class='panel-heading'>" + $(elem).data('data-title') + "</div></div>");
+	    	    nv.tooltip.show([offset.left, offset.top], "<div class='panel panel-primary panel-popover'><div class='panel-heading'>" + title + "</div></div>");
 	    	        
 	    	    // TODO: Find a way to trigger the mouseover on the bar.
 	    	    // $($(this).closest('svg').find(".nv-groups").find(".nv-bar")[i]).trigger('hover');
@@ -3165,15 +3875,17 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../../ugly/util":42,"../backbone-dash":3,"../charts/chart":8,"./download":31,"jquery":"jquery","underscore":"underscore"}],29:[function(require,module,exports){
+},{"../../ugly/util":47,"../backbone-dash":3,"../charts/chart":9,"./download":36,"jquery":"jquery","underscore":"underscore"}],34:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
 var Tops = require('../models/chart-tops');
 var Predictability = require('../models/chart-aid-predictability');
 var FundingType = require('../models/chart-funding-type');
+var HeatMapChart = require('../models/chart-heatmaps');
 
 var TopsChartView = require('./chart-tops');
+var HeatMapChartView = require('./chart-heatmaps');
 var PredictabilityChartView = require('./chart-aid-predictability');
 var FundingTypeChartView = require('./chart-funding-type');
 
@@ -3188,6 +3900,7 @@ module.exports = BackboneDash.View.extend({
       var ChartView = chart instanceof Tops ? TopsChartView
                     : chart instanceof Predictability ? PredictabilityChartView
                     : chart instanceof FundingType ? FundingTypeChartView
+                    : chart instanceof HeatMapChart ? HeatMapChartView
                     : null;
       return new ChartView({ model: chart, app: this.app });
     }, this);
@@ -3235,7 +3948,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":14,"../models/chart-funding-type":15,"../models/chart-tops":17,"./chart-aid-predictability":24,"./chart-funding-type":25,"./chart-tops":27,"underscore":"underscore"}],30:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"./chart-aid-predictability":28,"./chart-funding-type":29,"./chart-heatmaps":30,"./chart-tops":32,"underscore":"underscore"}],35:[function(require,module,exports){
 var BackboneDash = require('../backbone-dash');
 var Filters = require('./filters');
 var Settings = require('./settings');
@@ -3264,7 +3977,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"./filters":33,"./settings":36,"./share":37}],31:[function(require,module,exports){
+},{"../backbone-dash":3,"./filters":38,"./settings":41,"./share":42}],36:[function(require,module,exports){
 var _ = require('underscore');
 var baby = require('babyparse');
 var canvg = require('../../ugly/lib-load-hacks').canvg;
@@ -3275,7 +3988,7 @@ var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
-var template = _.template("<h4 data-i18n=\"amp.dashboard:download-preview\">Preview:</h4>\n\n<!-- This 'modal' div fixes AMP-19525: In FF when the chart is drawn (for less than a second) in 'svg-wrap', sometimes the mouse cursor is over one of the bars and triggers the tooltip,\nthat process is not fully performed thus resulting in incomplete html which is rejected by the browser :(  -->\n<div class=\"modal-preview-area\">\n</div>\n<div class=\"preview-area\">\n\t<div class=\"svg-wrap hidden\">\n  \t</div>\n  \t<div class=\"canvas-wrap hidden\">\n  \t</div>\n  \t<div class=\"table-wrap hidden\">\n  \t</div>\n</div>\n\n<div class=\"text-center\">\n  <a class=\"btn btn-success download-chart disabled\">\n    <span class=\"glyphicon glyphicon-download\"></span>\n    <span data-i18n=\"amp.dashboard:download-rendering\" class=\"word\">Rendering...</span>\n  </a>\n</div>\n");
+var template = _.template("<style>\nrect.bordered {\n\tstroke: #E6E6E6;\n\tstroke-width: 2px;\n}\n\ntext.mono {\n\tfont-size: 9pt;\n\tfont-family: Arial;\n\tfill: #000;\n}\n\ntext.axis-workweek {\n\tfill: #000;\n}\n\ntext.axis-worktime {\n\tfill: #000;\n}\n</style>\n\n<h4 data-i18n=\"amp.dashboard:download-preview\">Preview:</h4>\n\n<!-- This 'modal' div fixes AMP-19525: In FF when the chart is drawn (for less than a second) in 'svg-wrap', sometimes the mouse cursor is over one of the bars and triggers the tooltip,\nthat process is not fully performed thus resulting in incomplete html which is rejected by the browser :(  -->\n<div class=\"modal-preview-area\">\n</div>\n<div class=\"preview-area\">\n\t<div class=\"svg-wrap hidden\">\n  \t</div>\n  \t<div class=\"canvas-wrap hidden\">\n  \t</div>\n  \t<div class=\"table-wrap hidden\">\n  \t</div>\n</div>\n\n<div class=\"text-center\">\n  <a class=\"btn btn-success download-chart disabled\">\n    <span class=\"glyphicon glyphicon-download\"></span>\n    <span data-i18n=\"amp.dashboard:download-rendering\" class=\"word\">Rendering...</span>\n  </a>\n</div>\n");
 
 
 module.exports = BackboneDash.View.extend({
@@ -3542,7 +4255,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../../ugly/lib-load-hacks":38,"../../ugly/util":42,"../backbone-dash":3,"../charts/chart":8,"babyparse":43,"underscore":"underscore"}],32:[function(require,module,exports){
+},{"../../ugly/lib-load-hacks":43,"../../ugly/util":47,"../backbone-dash":3,"../charts/chart":9,"babyparse":48,"underscore":"underscore"}],37:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3564,7 +4277,7 @@ module.exports = BackboneDash.View.extend({
 });
 
 
-},{"../backbone-dash":3,"underscore":"underscore"}],33:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],38:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3695,7 +4408,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../../../../../../../reamp/tools/log":84,"../backbone-dash":3,"underscore":"underscore"}],34:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":89,"../backbone-dash":3,"underscore":"underscore"}],39:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3706,6 +4419,7 @@ var Controls = require('./controls');
 var ChartsView = require('./charts');
 var Charts = require('../models/charts-collection');
 var boilerplate = require('amp-boilerplate');
+var HeatMapChart = require('../models/chart-heatmaps');
 var TopsChart = require('../models/chart-tops');
 var PredictabilityChart = require('../models/chart-aid-predictability');
 var FundingTypeChart = require('../models/chart-funding-type');
@@ -3714,6 +4428,7 @@ var template = _.template("<div class=\"container\">\n</div>\n");
 var modalTemplate = _.template("<div class=\"modal fade\" id=\"<%= m.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n  <div class=\"modal-dialog <%= m.specialClass %>\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\n        <h4 class=\"modal-title text-<%= m.tone %>\" data-i18n=\"<%= m.i18nTitle %>\"><%= m.title %></h4>\n      </div>\n      <div class=\"modal-body\">\n        <% if (m.content) { %>\n          <%= m.content %>\n        <% } %>\n        <% if (m.messages) { %>\n          <% _(m.messages).each(function(message) { %>\n            <p><%= message %></p>\n          <% }) %>\n        <% } %>\n      </div>      \n    </div>\n  </div>\n</div>\n");
 
 var EnabledChartsCollection = require('../models/enabled-charts-collection');
+var HeatmapsConfigCollection = require('../models/heatmaps-config-collection');
 
 module.exports = BackboneDash.View.extend({
 
@@ -3728,6 +4443,10 @@ module.exports = BackboneDash.View.extend({
     // AMP-19545: We instantiate the collection of enabled charts (from FM) and use it to enable or not each chart.
     var enabledChartsFM = new EnabledChartsCollection();
     enabledChartsFM.fetchData();
+    
+    // Get config of all heatmaps from backend.
+    var heatmapsConfigs = new HeatmapsConfigCollection();
+    heatmapsConfigs.fetchData();
     
     if(enabledChartsFM.models[0].get('error') !== undefined) {
         // The same endpoint will send an error if 'DASHBOARDS' is not active in the Feature Manager.
@@ -3790,6 +4509,11 @@ module.exports = BackboneDash.View.extend({
     			{ name: 'Peace-building and State-building Goals', big: true, showCategoriesInfo: true, view: 'pie' },
     			{ app: this.app, url: '/rest/dashboard/tops/ndd' }));
     }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Sector Fragmentation'})) {
+    	col.push(new HeatMapChart(
+  	          { name: 'HeatMap by Sector and Donor Group', title: 'Sector Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { app: this.app, url: '/rest/dashboard/heat-map' }));
+    }
        
     var chartsCollection = new Charts(col, { app: this.app });
     this.charts = new ChartsView({
@@ -3827,7 +4551,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":14,"../models/chart-funding-type":15,"../models/chart-tops":17,"../models/charts-collection":18,"../models/enabled-charts-collection":19,"./charts":29,"./controls":30,"amp-boilerplate":46,"amp-state/index":81,"underscore":"underscore"}],35:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"../models/charts-collection":21,"../models/enabled-charts-collection":22,"../models/heatmaps-config-collection":23,"./charts":34,"./controls":35,"amp-boilerplate":51,"amp-state/index":86,"underscore":"underscore"}],40:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3907,7 +4631,7 @@ module.exports = BackboneDash.View.extend({
   }
 });
 
-},{"../../../../../../../reamp/tools/log":84,"../backbone-dash":3,"underscore":"underscore"}],36:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":89,"../backbone-dash":3,"underscore":"underscore"}],41:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3952,7 +4676,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"./settings-modal":35,"underscore":"underscore"}],37:[function(require,module,exports){
+},{"../backbone-dash":3,"./settings-modal":40,"underscore":"underscore"}],42:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -4009,7 +4733,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],38:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],43:[function(require,module,exports){
 // nvd3 goes global sigh... make sure d3 is already global
 /* TODO: in this version of nvd3 v1.7.1, main is not specified in package.json,
  if we ever upgrade to 1.8+, change this back to just require(nvd3) */
@@ -4027,7 +4751,7 @@ module.exports = {
   canvg: window.canvg
 };
 
-},{"../../../node_modules/nvd3/build/nv.d3":45,"./lib-src/canvg":39,"./lib-src/rgbcolor":40,"./underscore-transpose":41}],39:[function(require,module,exports){
+},{"../../../node_modules/nvd3/build/nv.d3":50,"./lib-src/canvg":44,"./lib-src/rgbcolor":45,"./underscore-transpose":46}],44:[function(require,module,exports){
 /*
  * canvg.js - Javascript SVG parser and renderer on Canvas
  * MIT Licensed 
@@ -6986,7 +7710,7 @@ if (typeof(CanvasRenderingContext2D) != 'undefined') {
     }
 }
 
-},{}],40:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 // dependency for canvg
 /**
  * A class to parse color values
@@ -7279,7 +8003,7 @@ function RGBColor(color_string)
 
 module.exports = RGBColor;
 
-},{}],41:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 var _ = require('underscore');
 
 _.mixin({
@@ -7288,7 +8012,7 @@ _.mixin({
   }
 });
 
-},{"underscore":"underscore"}],42:[function(require,module,exports){
+},{"underscore":"underscore"}],47:[function(require,module,exports){
 // hopefully not that ugly, but seemed as good a place as any for this stuff...
 
 var d3 = require('d3');
@@ -7440,7 +8164,7 @@ function calculateChartHeight(length, isDownload, model) {
 			height = 1225;
 		}
 		bigN = '6';	
-	} else if(series >= 90) {
+	} else if(length >= 90) {
 		// Seriously????
 		if (isDownload === true) {
 			height = 1300;
@@ -7468,7 +8192,7 @@ module.exports = {
   calculateChartHeight: calculateChartHeight
 };
 
-},{"d3":"d3"}],43:[function(require,module,exports){
+},{"d3":"d3"}],48:[function(require,module,exports){
 /*
 	Baby Parse
 	v0.2.1
@@ -8224,7 +8948,7 @@ module.exports = {
 
 }( typeof window !== 'undefined' ? window : this ));
 
-},{}],44:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 /*!
  * numeral.js
  * version : 1.5.3
@@ -8905,7 +9629,7 @@ module.exports = {
     }
 }).call(this);
 
-},{}],45:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 /* nvd3 version 1.7.1(https://github.com/novus/nvd3) 2015-02-05 */
 (function(){
 
@@ -20263,7 +20987,7 @@ nv.models.stackedAreaChart = function() {
 
 nv.version = "1.7.1";
 })();
-},{}],46:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -20342,7 +21066,7 @@ module.exports = {
 };
 window.boilerplate = Widget;
 
-},{"./src/views/header-footer-view.js":52,"./src/views/menu-view.js":53,"amp-translate":82,"backbone":"backbone","bootstrap/dist/js/bootstrap":47,"jquery":"jquery","underscore":"underscore"}],47:[function(require,module,exports){
+},{"./src/views/header-footer-view.js":57,"./src/views/menu-view.js":58,"amp-translate":87,"backbone":"backbone","bootstrap/dist/js/bootstrap":52,"jquery":"jquery","underscore":"underscore"}],52:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -22620,7 +23344,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],48:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 var Backbone = require('backbone');
 var MenuModel = require('../models/amp-menus-model.js');
 
@@ -22636,7 +23360,7 @@ module.exports = Backbone.Collection.extend({
 
 });
 
-},{"../models/amp-menus-model.js":50,"backbone":"backbone"}],49:[function(require,module,exports){
+},{"../models/amp-menus-model.js":55,"backbone":"backbone"}],54:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -22653,7 +23377,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],50:[function(require,module,exports){
+},{"backbone":"backbone"}],55:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -22671,7 +23395,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],51:[function(require,module,exports){
+},{"backbone":"backbone"}],56:[function(require,module,exports){
 
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -22701,13 +23425,13 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],52:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],57:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
 require('bootstrap/dist/js/bootstrap');
 
-var Template = "<style>\r\n    .footerText {\r\n    padding: 0;\r\n    font-family: arial;\r\n    font-size: 11px;\r\n    border: 0px;\r\n    }\r\n    .footer {\r\n    background-color: #8B8B8B;\r\n    color: #FFF;\r\n    margin-top: 0;\r\n    padding-bottom: 10px;\r\n    padding-top: 10px;\r\n    text-align: center;\r\n    }\r\n    .dgf_footer {\r\n    color: #8B8B8B;\r\n    line-height: 18px;\r\n    text-align: center;\r\n    background-color:white;\r\n    padding-top:10px;\r\n    }\r\n    .dgf_footer img {\r\n    line-height: 18px;\r\n    margin-bottom: 5px;\r\n    }\r\n    .loading{   \r\n      margin: 10px 20px 10px 20px;\r\n    }\r\n    \r\n</style>\r\n\r\n<div class=\"footer footerText\">\r\n    AMP <b><%=  properties.ampVersion %></b> build <b><%=  properties.buildDate %></b> - <%= properties.footerText %>\r\n    <% if(showAdminLinks == true  && properties.adminLinks != undefined) { %>\r\n    <a href='<%=  properties.adminLinks[0].url %>'><%=  properties.adminLinks[0].name %></a>\r\n    <a href='<%=  properties.adminLinks[1].url %>'><%=  properties.adminLinks[1].name %></digi:trn></a>\r\n    <% } %>\r\n</div>\r\n<% if(showDGFooter == true)  { %>\r\n<div class=\"dgf_footer footerText\">\r\n    <img src=\"/TEMPLATE/ampTemplate/img_2/dgf_logo_bottom.gif\" class=\"dgf_logo_footer\">\r\n    <br/>\r\n    Development Gateway\r\n    <br/>\r\n    1110 Vermont Ave, NW, Suite 500\r\n    <br/>\r\n    Washington, DC 20005 USA\r\n    <br/>\r\n    info@developmentgateway.org, Tel: +1.202.572.9200, Fax: +1 202.572.9290\r\n</div>\r\n<% } %>\r\n\r\n\r\n<div id=\"user-profile\" class=\"modal fade\" id=\"about-popup\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\r\n<div class=\"modal-dialog\">\r\n <div class=\"modal-content\">\r\n <div class=\"modal-header\">\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\r\n        <h4 class=\"modal-title text-primary\" data-i18n=\"amp.profile:modal.title\">Member Details</h4>\r\n </div>\r\n <div class=\"user-profile-content\">\r\n   <div class='loading' data-i18n=\"amp.profile:modal.loading\">Loading...</div>\r\n </div> \r\n </div>\r\n </div>\r\n </div>\r\n<% if(properties.trackingEnabled === true) { %>\r\n<!-- Piwik\r\nSite id can be checked here: http://stats.ampsite.net/index.php?module=SitesManager&action=index&idSite=1&period=range&date=last30\r\nAlso,the wiki for piwik: https://wiki.dgfoundation.org/display/AMPDOC/Integrating+AMP+with+Piwik\r\n-->\r\n<script type=\"text/javascript\">\r\n\t  var _paq = _paq || [];\r\n    if (window.PiwikAlreadyFetched === undefined ) {\r\n      _paq.push(['setUserId', \"<%= properties.email %>\"]);\r\n      _paq.push(['setCustomVariable',\r\n          1,\r\n          \"Workspace|WID\",\r\n          \"<%= properties.workspace %>|<%= properties.workspaceId %>\",\r\n          \"page\"]);\r\n  \t  _paq.push([\"trackPageView\"]);\r\n  \t  _paq.push([\"enableLinkTracking\"]);\r\n\r\n      /* TDK: keep track of whether we put the script DOM node on the page already\r\n       *   in case the page reparses this javascript on another modification.\r\n       */\r\n      window.PiwikAlreadyFetched = true;\r\n\r\n      /* Stock Piwik code: */\r\n  \t  (function() {\r\n  \t    var u=\"<%=  properties.trackingUrl %>\";\r\n  \t    _paq.push([\"setTrackerUrl\", u+\"piwik.php\"]);\r\n  \t    _paq.push([\"setSiteId\", \"<%=properties.siteId %>\"]);\r\n  \t    var d=document, g=d.createElement(\"script\"), s=d.getElementsByTagName(\"script\")[0]; g.type=\"text/javascript\";\r\n  \t    g.defer=true; g.async=true; g.src=u+\"piwik.js\"; s.parentNode.insertBefore(g,s);\r\n  \t  })();\r\n    }\r\n\t</script>\r\n<!-- End Piwik Code -->\r\n<% } %>\r\n";
+var Template = "<style>\r\n    .footerText {\r\n    padding: 0;\r\n    font-family: arial;\r\n    font-size: 11px;\r\n    border: 0px;\r\n    }\r\n    .footer {\r\n    background-color: #8B8B8B;\r\n    color: #FFF;\r\n    margin-top: 0;\r\n    padding-bottom: 10px;\r\n    padding-top: 10px;\r\n    text-align: center;\r\n    }\r\n    .dgf_footer {\r\n    color: #8B8B8B;\r\n    line-height: 18px;\r\n    text-align: center;\r\n    background-color:white;\r\n    padding-top:10px;\r\n    }\r\n    .dgf_footer img {\r\n    line-height: 18px;\r\n    margin-bottom: 5px;\r\n    }\r\n    .loading{   \r\n      margin: 10px 20px 10px 20px;\r\n    }\r\n    \r\n</style>\r\n\r\n<div class=\"footer footerText\">\r\n    AMP <b><%=  properties.ampVersion %></b> build <b><%=  properties.buildDate %></b> - <%= properties.footerText %>\r\n    <% if(showAdminLinks == true  && properties.adminLinks != undefined) { %>\r\n    <a href='<%=  properties.adminLinks[0].url %>'><%=  properties.adminLinks[0].name %></a>\r\n    <a href='<%=  properties.adminLinks[1].url %>'><%=  properties.adminLinks[1].name %></digi:trn></a>\r\n    <% } %>\r\n</div>\r\n<% if(showDGFooter == true)  { %>\r\n<div class=\"dgf_footer footerText\">\r\n    <img src=\"/TEMPLATE/ampTemplate/img_2/dgf_logo_bottom.gif\" class=\"dgf_logo_footer\">\r\n    <br/>\r\n    Development Gateway\r\n    <br/>\r\n    1110 Vermont Ave, NW, Suite 500\r\n    <br/>\r\n    Washington, DC 20005 USA\r\n    <br/>\r\n    info@developmentgateway.org, Tel: +1.202.572.9200, Fax: +1 202.572.9290\r\n</div>\r\n<% } %>\r\n\r\n\r\n<div id=\"user-profile\" class=\"modal fade\" id=\"about-popup\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\r\n<div class=\"modal-dialog\">\r\n <div class=\"modal-content\">\r\n <div class=\"modal-header\">\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\r\n        <h4 class=\"modal-title text-primary\" data-i18n=\"amp.profile:modal.title\">Member Details</h4>\r\n </div>\r\n <div class=\"user-profile-content\">\r\n   <div class='loading' data-i18n=\"amp.profile:modal.loading\"> Loading user profile...</div>\r\n </div> \r\n </div>\r\n </div>\r\n </div>\r\n<% if(properties.trackingEnabled === true) { %>\r\n<!-- Piwik\r\nSite id can be checked here: http://stats.ampsite.net/index.php?module=SitesManager&action=index&idSite=1&period=range&date=last30\r\nAlso,the wiki for piwik: https://wiki.dgfoundation.org/display/AMPDOC/Integrating+AMP+with+Piwik\r\n-->\r\n<script type=\"text/javascript\">\r\n\t  var _paq = _paq || [];\r\n    if (window.PiwikAlreadyFetched === undefined ) {\r\n      _paq.push(['setUserId', \"<%= properties.email %>\"]);\r\n      _paq.push(['setCustomVariable',\r\n          1,\r\n          \"Workspace|WID\",\r\n          \"<%= properties.workspace %>|<%= properties.workspaceId %>\",\r\n          \"page\"]);\r\n  \t  _paq.push([\"trackPageView\"]);\r\n  \t  _paq.push([\"enableLinkTracking\"]);\r\n\r\n      /* TDK: keep track of whether we put the script DOM node on the page already\r\n       *   in case the page reparses this javascript on another modification.\r\n       */\r\n      window.PiwikAlreadyFetched = true;\r\n\r\n      /* Stock Piwik code: */\r\n  \t  (function() {\r\n  \t    var u=\"<%=  properties.trackingUrl %>\";\r\n  \t    _paq.push([\"setTrackerUrl\", u+\"piwik.php\"]);\r\n  \t    _paq.push([\"setSiteId\", \"<%=properties.siteId %>\"]);\r\n  \t    var d=document, g=d.createElement(\"script\"), s=d.getElementsByTagName(\"script\")[0]; g.type=\"text/javascript\";\r\n  \t    g.defer=true; g.async=true; g.src=u+\"piwik.js\"; s.parentNode.insertBefore(g,s);\r\n  \t  })();\r\n    }\r\n\t</script>\r\n<!-- End Piwik Code -->\r\n<% } %>\r\n";
 var LayoutModel = require('../models/amp-layout-model.js');
 
 module.exports = Backbone.View.extend({
@@ -22786,7 +23510,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"../models/amp-layout-model.js":49,"backbone":"backbone","bootstrap/dist/js/bootstrap":47,"underscore":"underscore"}],53:[function(require,module,exports){
+},{"../models/amp-layout-model.js":54,"backbone":"backbone","bootstrap/dist/js/bootstrap":52,"underscore":"underscore"}],58:[function(require,module,exports){
 
 var Backbone = require('backbone');
 require('bootstrap/dist/js/bootstrap');
@@ -22891,7 +23615,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../collections/amp-menus-collection.js":48,"../models/amp-menus-model.js":50,"./about-view.js":51,"./submenu-compositeview.js":54,"backbone":"backbone","bootstrap/dist/js/bootstrap":47,"underscore":"underscore"}],54:[function(require,module,exports){
+},{"../collections/amp-menus-collection.js":53,"../models/amp-menus-model.js":55,"./about-view.js":56,"./submenu-compositeview.js":59,"backbone":"backbone","bootstrap/dist/js/bootstrap":52,"underscore":"underscore"}],59:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -22957,9 +23681,9 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","underscore":"underscore"}],55:[function(require,module,exports){
-module.exports=require(47)
-},{"C:\\Users\\gerald\\amp\\AMP_2_12_RELEASE\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":47}],56:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
+module.exports=require(52)
+},{"C:\\Users\\Gabriel\\workspace-luna2\\amp-2.12-release-3\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -23283,7 +24007,7 @@ $.extend( $.ui, {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],57:[function(require,module,exports){
+},{"jquery":"jquery"}],62:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 
@@ -25326,7 +26050,7 @@ $.datepicker.version = "1.10.4";
 
 })(jQuery);
 
-},{"./core":56,"jquery":"jquery"}],58:[function(require,module,exports){
+},{"./core":61,"jquery":"jquery"}],63:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 require('./mouse');
@@ -26291,7 +27015,7 @@ $.ui.plugin.add("draggable", "zIndex", {
 
 })(jQuery);
 
-},{"./core":56,"./mouse":59,"./widget":60,"jquery":"jquery"}],59:[function(require,module,exports){
+},{"./core":61,"./mouse":64,"./widget":65,"jquery":"jquery"}],64:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./widget');
 
@@ -26465,7 +27189,7 @@ $.widget("ui.mouse", {
 
 })(jQuery);
 
-},{"./widget":60,"jquery":"jquery"}],60:[function(require,module,exports){
+},{"./widget":65,"jquery":"jquery"}],65:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -26990,7 +27714,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],61:[function(require,module,exports){
+},{"jquery":"jquery"}],66:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 var $ = require('jquery');
@@ -27334,7 +28058,7 @@ module.exports = Backbone.Collection.extend({
 	}
 });
 
-},{"../models/generic-filter-model":67,"../models/org-role-filter-model":68,"../models/years-filter-model":70,"../models/years-only-filter-model":71,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],62:[function(require,module,exports){
+},{"../models/generic-filter-model":72,"../models/org-role-filter-model":73,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],67:[function(require,module,exports){
 
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
@@ -27347,7 +28071,7 @@ module.exports  = Backbone.Collection.extend({
 });
 
 
-},{"../models/setting":69,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],63:[function(require,module,exports){
+},{"../models/setting":74,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],68:[function(require,module,exports){
 /*! jQuery UI - v1.10.4 - 2014-01-17
 * http://jqueryui.com
 * Includes: [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object]
@@ -27355,7 +28079,7 @@ module.exports  = Backbone.Collection.extend({
 
 jQuery(function(e){e.datepicker.regional.af={closeText:"Selekteer",prevText:"Vorige",nextText:"Volgende",currentText:"Vandag",monthNames:["Januarie","Februarie","Maart","April","Mei","Junie","Julie","Augustus","September","Oktober","November","Desember"],monthNamesShort:["Jan","Feb","Mrt","Apr","Mei","Jun","Jul","Aug","Sep","Okt","Nov","Des"],dayNames:["Sondag","Maandag","Dinsdag","Woensdag","Donderdag","Vrydag","Saterdag"],dayNamesShort:["Son","Maa","Din","Woe","Don","Vry","Sat"],dayNamesMin:["So","Ma","Di","Wo","Do","Vr","Sa"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.af)}),jQuery(function(e){e.datepicker.regional["ar-DZ"]={closeText:"إغلاق",prevText:"&#x3C;السابق",nextText:"التالي&#x3E;",currentText:"اليوم",monthNames:["جانفي","فيفري","مارس","أفريل","ماي","جوان","جويلية","أوت","سبتمبر","أكتوبر","نوفمبر","ديسمبر"],monthNamesShort:["1","2","3","4","5","6","7","8","9","10","11","12"],dayNames:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],dayNamesShort:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],dayNamesMin:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],weekHeader:"أسبوع",dateFormat:"dd/mm/yy",firstDay:6,isRTL:!0,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["ar-DZ"])}),jQuery(function(e){e.datepicker.regional.ar={closeText:"إغلاق",prevText:"&#x3C;السابق",nextText:"التالي&#x3E;",currentText:"اليوم",monthNames:["كانون الثاني","شباط","آذار","نيسان","مايو","حزيران","تموز","آب","أيلول","تشرين الأول","تشرين الثاني","كانون الأول"],monthNamesShort:["1","2","3","4","5","6","7","8","9","10","11","12"],dayNames:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],dayNamesShort:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],dayNamesMin:["ح","ن","ث","ر","خ","ج","س"],weekHeader:"أسبوع",dateFormat:"dd/mm/yy",firstDay:6,isRTL:!0,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ar)}),jQuery(function(e){e.datepicker.regional.az={closeText:"Bağla",prevText:"&#x3C;Geri",nextText:"İrəli&#x3E;",currentText:"Bugün",monthNames:["Yanvar","Fevral","Mart","Aprel","May","İyun","İyul","Avqust","Sentyabr","Oktyabr","Noyabr","Dekabr"],monthNamesShort:["Yan","Fev","Mar","Apr","May","İyun","İyul","Avq","Sen","Okt","Noy","Dek"],dayNames:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"],dayNamesShort:["B","Be","Ça","Ç","Ca","C","Ş"],dayNamesMin:["B","B","Ç","С","Ç","C","Ş"],weekHeader:"Hf",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.az)}),jQuery(function(e){e.datepicker.regional.be={closeText:"Зачыніць",prevText:"&larr;Папяр.",nextText:"Наст.&rarr;",currentText:"Сёньня",monthNames:["Студзень","Люты","Сакавік","Красавік","Травень","Чэрвень","Ліпень","Жнівень","Верасень","Кастрычнік","Лістапад","Сьнежань"],monthNamesShort:["Сту","Лют","Сак","Кра","Тра","Чэр","Ліп","Жні","Вер","Кас","Ліс","Сьн"],dayNames:["нядзеля","панядзелак","аўторак","серада","чацьвер","пятніца","субота"],dayNamesShort:["ндз","пнд","аўт","срд","чцв","птн","сбт"],dayNamesMin:["Нд","Пн","Аў","Ср","Чц","Пт","Сб"],weekHeader:"Тд",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.be)}),jQuery(function(e){e.datepicker.regional.bg={closeText:"затвори",prevText:"&#x3C;назад",nextText:"напред&#x3E;",nextBigText:"&#x3E;&#x3E;",currentText:"днес",monthNames:["Януари","Февруари","Март","Април","Май","Юни","Юли","Август","Септември","Октомври","Ноември","Декември"],monthNamesShort:["Яну","Фев","Мар","Апр","Май","Юни","Юли","Авг","Сеп","Окт","Нов","Дек"],dayNames:["Неделя","Понеделник","Вторник","Сряда","Четвъртък","Петък","Събота"],dayNamesShort:["Нед","Пон","Вто","Сря","Чет","Пет","Съб"],dayNamesMin:["Не","По","Вт","Ср","Че","Пе","Съ"],weekHeader:"Wk",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.bg)}),jQuery(function(e){e.datepicker.regional.bs={closeText:"Zatvori",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Danas",monthNames:["Januar","Februar","Mart","April","Maj","Juni","Juli","August","Septembar","Oktobar","Novembar","Decembar"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],dayNames:["Nedelja","Ponedeljak","Utorak","Srijeda","Četvrtak","Petak","Subota"],dayNamesShort:["Ned","Pon","Uto","Sri","Čet","Pet","Sub"],dayNamesMin:["Ne","Po","Ut","Sr","Če","Pe","Su"],weekHeader:"Wk",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.bs)}),jQuery(function(e){e.datepicker.regional.ca={closeText:"Tanca",prevText:"Anterior",nextText:"Següent",currentText:"Avui",monthNames:["gener","febrer","març","abril","maig","juny","juliol","agost","setembre","octubre","novembre","desembre"],monthNamesShort:["gen","feb","març","abr","maig","juny","jul","ag","set","oct","nov","des"],dayNames:["diumenge","dilluns","dimarts","dimecres","dijous","divendres","dissabte"],dayNamesShort:["dg","dl","dt","dc","dj","dv","ds"],dayNamesMin:["dg","dl","dt","dc","dj","dv","ds"],weekHeader:"Set",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ca)}),jQuery(function(e){e.datepicker.regional.cs={closeText:"Zavřít",prevText:"&#x3C;Dříve",nextText:"Později&#x3E;",currentText:"Nyní",monthNames:["leden","únor","březen","duben","květen","červen","červenec","srpen","září","říjen","listopad","prosinec"],monthNamesShort:["led","úno","bře","dub","kvě","čer","čvc","srp","zář","říj","lis","pro"],dayNames:["neděle","pondělí","úterý","středa","čtvrtek","pátek","sobota"],dayNamesShort:["ne","po","út","st","čt","pá","so"],dayNamesMin:["ne","po","út","st","čt","pá","so"],weekHeader:"Týd",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.cs)}),jQuery(function(e){e.datepicker.regional["cy-GB"]={closeText:"Done",prevText:"Prev",nextText:"Next",currentText:"Today",monthNames:["Ionawr","Chwefror","Mawrth","Ebrill","Mai","Mehefin","Gorffennaf","Awst","Medi","Hydref","Tachwedd","Rhagfyr"],monthNamesShort:["Ion","Chw","Maw","Ebr","Mai","Meh","Gor","Aws","Med","Hyd","Tac","Rha"],dayNames:["Dydd Sul","Dydd Llun","Dydd Mawrth","Dydd Mercher","Dydd Iau","Dydd Gwener","Dydd Sadwrn"],dayNamesShort:["Sul","Llu","Maw","Mer","Iau","Gwe","Sad"],dayNamesMin:["Su","Ll","Ma","Me","Ia","Gw","Sa"],weekHeader:"Wy",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["cy-GB"])}),jQuery(function(e){e.datepicker.regional.da={closeText:"Luk",prevText:"&#x3C;Forrige",nextText:"Næste&#x3E;",currentText:"Idag",monthNames:["Januar","Februar","Marts","April","Maj","Juni","Juli","August","September","Oktober","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],dayNames:["Søndag","Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag"],dayNamesShort:["Søn","Man","Tir","Ons","Tor","Fre","Lør"],dayNamesMin:["Sø","Ma","Ti","On","To","Fr","Lø"],weekHeader:"Uge",dateFormat:"dd-mm-yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.da)}),jQuery(function(e){e.datepicker.regional.de={closeText:"Schließen",prevText:"&#x3C;Zurück",nextText:"Vor&#x3E;",currentText:"Heute",monthNames:["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],monthNamesShort:["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"],dayNames:["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],dayNamesShort:["So","Mo","Di","Mi","Do","Fr","Sa"],dayNamesMin:["So","Mo","Di","Mi","Do","Fr","Sa"],weekHeader:"KW",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.de)}),jQuery(function(e){e.datepicker.regional.el={closeText:"Κλείσιμο",prevText:"Προηγούμενος",nextText:"Επόμενος",currentText:"Τρέχων Μήνας",monthNames:["Ιανουάριος","Φεβρουάριος","Μάρτιος","Απρίλιος","Μάιος","Ιούνιος","Ιούλιος","Αύγουστος","Σεπτέμβριος","Οκτώβριος","Νοέμβριος","Δεκέμβριος"],monthNamesShort:["Ιαν","Φεβ","Μαρ","Απρ","Μαι","Ιουν","Ιουλ","Αυγ","Σεπ","Οκτ","Νοε","Δεκ"],dayNames:["Κυριακή","Δευτέρα","Τρίτη","Τετάρτη","Πέμπτη","Παρασκευή","Σάββατο"],dayNamesShort:["Κυρ","Δευ","Τρι","Τετ","Πεμ","Παρ","Σαβ"],dayNamesMin:["Κυ","Δε","Τρ","Τε","Πε","Πα","Σα"],weekHeader:"Εβδ",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.el)}),jQuery(function(e){e.datepicker.regional["en-AU"]={closeText:"Done",prevText:"Prev",nextText:"Next",currentText:"Today",monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],dayNamesShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],dayNamesMin:["Su","Mo","Tu","We","Th","Fr","Sa"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["en-AU"])}),jQuery(function(e){e.datepicker.regional["en-GB"]={closeText:"Done",prevText:"Prev",nextText:"Next",currentText:"Today",monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],dayNamesShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],dayNamesMin:["Su","Mo","Tu","We","Th","Fr","Sa"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["en-GB"])}),jQuery(function(e){e.datepicker.regional["en-NZ"]={closeText:"Done",prevText:"Prev",nextText:"Next",currentText:"Today",monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],dayNamesShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],dayNamesMin:["Su","Mo","Tu","We","Th","Fr","Sa"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["en-NZ"])}),jQuery(function(e){e.datepicker.regional.eo={closeText:"Fermi",prevText:"&#x3C;Anta",nextText:"Sekv&#x3E;",currentText:"Nuna",monthNames:["Januaro","Februaro","Marto","Aprilo","Majo","Junio","Julio","Aŭgusto","Septembro","Oktobro","Novembro","Decembro"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aŭg","Sep","Okt","Nov","Dec"],dayNames:["Dimanĉo","Lundo","Mardo","Merkredo","Ĵaŭdo","Vendredo","Sabato"],dayNamesShort:["Dim","Lun","Mar","Mer","Ĵaŭ","Ven","Sab"],dayNamesMin:["Di","Lu","Ma","Me","Ĵa","Ve","Sa"],weekHeader:"Sb",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.eo)}),jQuery(function(e){e.datepicker.regional.es={closeText:"Cerrar",prevText:"&#x3C;Ant",nextText:"Sig&#x3E;",currentText:"Hoy",monthNames:["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],monthNamesShort:["ene","feb","mar","abr","may","jun","jul","ogo","sep","oct","nov","dic"],dayNames:["domingo","lunes","martes","miércoles","jueves","viernes","sábado"],dayNamesShort:["dom","lun","mar","mié","juv","vie","sáb"],dayNamesMin:["D","L","M","X","J","V","S"],weekHeader:"Sm",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.es)}),jQuery(function(e){e.datepicker.regional.et={closeText:"Sulge",prevText:"Eelnev",nextText:"Järgnev",currentText:"Täna",monthNames:["Jaanuar","Veebruar","Märts","Aprill","Mai","Juuni","Juuli","August","September","Oktoober","November","Detsember"],monthNamesShort:["Jaan","Veebr","Märts","Apr","Mai","Juuni","Juuli","Aug","Sept","Okt","Nov","Dets"],dayNames:["Pühapäev","Esmaspäev","Teisipäev","Kolmapäev","Neljapäev","Reede","Laupäev"],dayNamesShort:["Pühap","Esmasp","Teisip","Kolmap","Neljap","Reede","Laup"],dayNamesMin:["P","E","T","K","N","R","L"],weekHeader:"näd",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.et)}),jQuery(function(e){e.datepicker.regional.eu={closeText:"Egina",prevText:"&#x3C;Aur",nextText:"Hur&#x3E;",currentText:"Gaur",monthNames:["urtarrila","otsaila","martxoa","apirila","maiatza","ekaina","uztaila","abuztua","iraila","urria","azaroa","abendua"],monthNamesShort:["urt.","ots.","mar.","api.","mai.","eka.","uzt.","abu.","ira.","urr.","aza.","abe."],dayNames:["igandea","astelehena","asteartea","asteazkena","osteguna","ostirala","larunbata"],dayNamesShort:["ig.","al.","ar.","az.","og.","ol.","lr."],dayNamesMin:["ig","al","ar","az","og","ol","lr"],weekHeader:"As",dateFormat:"yy-mm-dd",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.eu)}),jQuery(function(e){e.datepicker.regional.fa={closeText:"بستن",prevText:"&#x3C;قبلی",nextText:"بعدی&#x3E;",currentText:"امروز",monthNames:["فروردين","ارديبهشت","خرداد","تير","مرداد","شهريور","مهر","آبان","آذر","دی","بهمن","اسفند"],monthNamesShort:["1","2","3","4","5","6","7","8","9","10","11","12"],dayNames:["يکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه","شنبه"],dayNamesShort:["ی","د","س","چ","پ","ج","ش"],dayNamesMin:["ی","د","س","چ","پ","ج","ش"],weekHeader:"هف",dateFormat:"yy/mm/dd",firstDay:6,isRTL:!0,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.fa)}),jQuery(function(e){e.datepicker.regional.fi={closeText:"Sulje",prevText:"&#xAB;Edellinen",nextText:"Seuraava&#xBB;",currentText:"Tänään",monthNames:["Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"],monthNamesShort:["Tammi","Helmi","Maalis","Huhti","Touko","Kesä","Heinä","Elo","Syys","Loka","Marras","Joulu"],dayNamesShort:["Su","Ma","Ti","Ke","To","Pe","La"],dayNames:["Sunnuntai","Maanantai","Tiistai","Keskiviikko","Torstai","Perjantai","Lauantai"],dayNamesMin:["Su","Ma","Ti","Ke","To","Pe","La"],weekHeader:"Vk",dateFormat:"d.m.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.fi)}),jQuery(function(e){e.datepicker.regional.fo={closeText:"Lat aftur",prevText:"&#x3C;Fyrra",nextText:"Næsta&#x3E;",currentText:"Í dag",monthNames:["Januar","Februar","Mars","Apríl","Mei","Juni","Juli","August","September","Oktober","November","Desember"],monthNamesShort:["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Aug","Sep","Okt","Nov","Des"],dayNames:["Sunnudagur","Mánadagur","Týsdagur","Mikudagur","Hósdagur","Fríggjadagur","Leyardagur"],dayNamesShort:["Sun","Mán","Týs","Mik","Hós","Frí","Ley"],dayNamesMin:["Su","Má","Tý","Mi","Hó","Fr","Le"],weekHeader:"Vk",dateFormat:"dd-mm-yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.fo)}),jQuery(function(e){e.datepicker.regional["fr-CA"]={closeText:"Fermer",prevText:"Précédent",nextText:"Suivant",currentText:"Aujourd'hui",monthNames:["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"],monthNamesShort:["janv.","févr.","mars","avril","mai","juin","juil.","août","sept.","oct.","nov.","déc."],dayNames:["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],dayNamesShort:["dim.","lun.","mar.","mer.","jeu.","ven.","sam."],dayNamesMin:["D","L","M","M","J","V","S"],weekHeader:"Sem.",dateFormat:"yy-mm-dd",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["fr-CA"])}),jQuery(function(e){e.datepicker.regional["fr-CH"]={closeText:"Fermer",prevText:"&#x3C;Préc",nextText:"Suiv&#x3E;",currentText:"Courant",monthNames:["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"],monthNamesShort:["janv.","févr.","mars","avril","mai","juin","juil.","août","sept.","oct.","nov.","déc."],dayNames:["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],dayNamesShort:["dim.","lun.","mar.","mer.","jeu.","ven.","sam."],dayNamesMin:["D","L","M","M","J","V","S"],weekHeader:"Sm",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["fr-CH"])}),jQuery(function(e){e.datepicker.regional.fr={closeText:"Fermer",prevText:"Précédent",nextText:"Suivant",currentText:"Aujourd'hui",monthNames:["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"],monthNamesShort:["janv.","févr.","mars","avril","mai","juin","juil.","août","sept.","oct.","nov.","déc."],dayNames:["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],dayNamesShort:["dim.","lun.","mar.","mer.","jeu.","ven.","sam."],dayNamesMin:["D","L","M","M","J","V","S"],weekHeader:"Sem.",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.fr)}),jQuery(function(e){e.datepicker.regional.gl={closeText:"Pechar",prevText:"&#x3C;Ant",nextText:"Seg&#x3E;",currentText:"Hoxe",monthNames:["Xaneiro","Febreiro","Marzo","Abril","Maio","Xuño","Xullo","Agosto","Setembro","Outubro","Novembro","Decembro"],monthNamesShort:["Xan","Feb","Mar","Abr","Mai","Xuñ","Xul","Ago","Set","Out","Nov","Dec"],dayNames:["Domingo","Luns","Martes","Mércores","Xoves","Venres","Sábado"],dayNamesShort:["Dom","Lun","Mar","Mér","Xov","Ven","Sáb"],dayNamesMin:["Do","Lu","Ma","Mé","Xo","Ve","Sá"],weekHeader:"Sm",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.gl)}),jQuery(function(e){e.datepicker.regional.he={closeText:"סגור",prevText:"&#x3C;הקודם",nextText:"הבא&#x3E;",currentText:"היום",monthNames:["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"],monthNamesShort:["ינו","פבר","מרץ","אפר","מאי","יוני","יולי","אוג","ספט","אוק","נוב","דצמ"],dayNames:["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"],dayNamesShort:["א'","ב'","ג'","ד'","ה'","ו'","שבת"],dayNamesMin:["א'","ב'","ג'","ד'","ה'","ו'","שבת"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!0,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.he)}),jQuery(function(e){e.datepicker.regional.hi={closeText:"बंद",prevText:"पिछला",nextText:"अगला",currentText:"आज",monthNames:["जनवरी ","फरवरी","मार्च","अप्रेल","मई","जून","जूलाई","अगस्त ","सितम्बर","अक्टूबर","नवम्बर","दिसम्बर"],monthNamesShort:["जन","फर","मार्च","अप्रेल","मई","जून","जूलाई","अग","सित","अक्ट","नव","दि"],dayNames:["रविवार","सोमवार","मंगलवार","बुधवार","गुरुवार","शुक्रवार","शनिवार"],dayNamesShort:["रवि","सोम","मंगल","बुध","गुरु","शुक्र","शनि"],dayNamesMin:["रवि","सोम","मंगल","बुध","गुरु","शुक्र","शनि"],weekHeader:"हफ्ता",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.hi)}),jQuery(function(e){e.datepicker.regional.hr={closeText:"Zatvori",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Danas",monthNames:["Siječanj","Veljača","Ožujak","Travanj","Svibanj","Lipanj","Srpanj","Kolovoz","Rujan","Listopad","Studeni","Prosinac"],monthNamesShort:["Sij","Velj","Ožu","Tra","Svi","Lip","Srp","Kol","Ruj","Lis","Stu","Pro"],dayNames:["Nedjelja","Ponedjeljak","Utorak","Srijeda","Četvrtak","Petak","Subota"],dayNamesShort:["Ned","Pon","Uto","Sri","Čet","Pet","Sub"],dayNamesMin:["Ne","Po","Ut","Sr","Če","Pe","Su"],weekHeader:"Tje",dateFormat:"dd.mm.yy.",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.hr)}),jQuery(function(e){e.datepicker.regional.hu={closeText:"bezár",prevText:"vissza",nextText:"előre",currentText:"ma",monthNames:["Január","Február","Március","Április","Május","Június","Július","Augusztus","Szeptember","Október","November","December"],monthNamesShort:["Jan","Feb","Már","Ápr","Máj","Jún","Júl","Aug","Szep","Okt","Nov","Dec"],dayNames:["Vasárnap","Hétfő","Kedd","Szerda","Csütörtök","Péntek","Szombat"],dayNamesShort:["Vas","Hét","Ked","Sze","Csü","Pén","Szo"],dayNamesMin:["V","H","K","Sze","Cs","P","Szo"],weekHeader:"Hét",dateFormat:"yy.mm.dd.",firstDay:1,isRTL:!1,showMonthAfterYear:!0,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.hu)}),jQuery(function(e){e.datepicker.regional.hy={closeText:"Փակել",prevText:"&#x3C;Նախ.",nextText:"Հաջ.&#x3E;",currentText:"Այսօր",monthNames:["Հունվար","Փետրվար","Մարտ","Ապրիլ","Մայիս","Հունիս","Հուլիս","Օգոստոս","Սեպտեմբեր","Հոկտեմբեր","Նոյեմբեր","Դեկտեմբեր"],monthNamesShort:["Հունվ","Փետր","Մարտ","Ապր","Մայիս","Հունիս","Հուլ","Օգս","Սեպ","Հոկ","Նոյ","Դեկ"],dayNames:["կիրակի","եկուշաբթի","երեքշաբթի","չորեքշաբթի","հինգշաբթի","ուրբաթ","շաբաթ"],dayNamesShort:["կիր","երկ","երք","չրք","հնգ","ուրբ","շբթ"],dayNamesMin:["կիր","երկ","երք","չրք","հնգ","ուրբ","շբթ"],weekHeader:"ՇԲՏ",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.hy)}),jQuery(function(e){e.datepicker.regional.id={closeText:"Tutup",prevText:"&#x3C;mundur",nextText:"maju&#x3E;",currentText:"hari ini",monthNames:["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","Nopember","Desember"],monthNamesShort:["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agus","Sep","Okt","Nop","Des"],dayNames:["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"],dayNamesShort:["Min","Sen","Sel","Rab","kam","Jum","Sab"],dayNamesMin:["Mg","Sn","Sl","Rb","Km","jm","Sb"],weekHeader:"Mg",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.id)}),jQuery(function(e){e.datepicker.regional.is={closeText:"Loka",prevText:"&#x3C; Fyrri",nextText:"Næsti &#x3E;",currentText:"Í dag",monthNames:["Janúar","Febrúar","Mars","Apríl","Maí","Júní","Júlí","Ágúst","September","Október","Nóvember","Desember"],monthNamesShort:["Jan","Feb","Mar","Apr","Maí","Jún","Júl","Ágú","Sep","Okt","Nóv","Des"],dayNames:["Sunnudagur","Mánudagur","Þriðjudagur","Miðvikudagur","Fimmtudagur","Föstudagur","Laugardagur"],dayNamesShort:["Sun","Mán","Þri","Mið","Fim","Fös","Lau"],dayNamesMin:["Su","Má","Þr","Mi","Fi","Fö","La"],weekHeader:"Vika",dateFormat:"dd.mm.yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.is)}),jQuery(function(e){e.datepicker.regional.it={closeText:"Chiudi",prevText:"&#x3C;Prec",nextText:"Succ&#x3E;",currentText:"Oggi",monthNames:["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"],monthNamesShort:["Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"],dayNames:["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"],dayNamesShort:["Dom","Lun","Mar","Mer","Gio","Ven","Sab"],dayNamesMin:["Do","Lu","Ma","Me","Gi","Ve","Sa"],weekHeader:"Sm",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.it)}),jQuery(function(e){e.datepicker.regional.ja={closeText:"閉じる",prevText:"&#x3C;前",nextText:"次&#x3E;",currentText:"今日",monthNames:["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],monthNamesShort:["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],dayNames:["日曜日","月曜日","火曜日","水曜日","木曜日","金曜日","土曜日"],dayNamesShort:["日","月","火","水","木","金","土"],dayNamesMin:["日","月","火","水","木","金","土"],weekHeader:"週",dateFormat:"yy/mm/dd",firstDay:0,isRTL:!1,showMonthAfterYear:!0,yearSuffix:"年"},e.datepicker.setDefaults(e.datepicker.regional.ja)}),jQuery(function(e){e.datepicker.regional.ka={closeText:"დახურვა",prevText:"&#x3c; წინა",nextText:"შემდეგი &#x3e;",currentText:"დღეს",monthNames:["იანვარი","თებერვალი","მარტი","აპრილი","მაისი","ივნისი","ივლისი","აგვისტო","სექტემბერი","ოქტომბერი","ნოემბერი","დეკემბერი"],monthNamesShort:["იან","თებ","მარ","აპრ","მაი","ივნ","ივლ","აგვ","სექ","ოქტ","ნოე","დეკ"],dayNames:["კვირა","ორშაბათი","სამშაბათი","ოთხშაბათი","ხუთშაბათი","პარასკევი","შაბათი"],dayNamesShort:["კვ","ორშ","სამ","ოთხ","ხუთ","პარ","შაბ"],dayNamesMin:["კვ","ორშ","სამ","ოთხ","ხუთ","პარ","შაბ"],weekHeader:"კვირა",dateFormat:"dd-mm-yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ka)}),jQuery(function(e){e.datepicker.regional.kk={closeText:"Жабу",prevText:"&#x3C;Алдыңғы",nextText:"Келесі&#x3E;",currentText:"Бүгін",monthNames:["Қаңтар","Ақпан","Наурыз","Сәуір","Мамыр","Маусым","Шілде","Тамыз","Қыркүйек","Қазан","Қараша","Желтоқсан"],monthNamesShort:["Қаң","Ақп","Нау","Сәу","Мам","Мау","Шіл","Там","Қыр","Қаз","Қар","Жел"],dayNames:["Жексенбі","Дүйсенбі","Сейсенбі","Сәрсенбі","Бейсенбі","Жұма","Сенбі"],dayNamesShort:["жкс","дсн","ссн","срс","бсн","жма","снб"],dayNamesMin:["Жк","Дс","Сс","Ср","Бс","Жм","Сн"],weekHeader:"Не",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.kk)}),jQuery(function(e){e.datepicker.regional.km={closeText:"ធ្វើ​រួច",prevText:"មុន",nextText:"បន្ទាប់",currentText:"ថ្ងៃ​នេះ",monthNames:["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"],monthNamesShort:["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"],dayNames:["អាទិត្យ","ចន្ទ","អង្គារ","ពុធ","ព្រហស្បតិ៍","សុក្រ","សៅរ៍"],dayNamesShort:["អា","ច","អ","ពុ","ព្រហ","សុ","សៅ"],dayNamesMin:["អា","ច","អ","ពុ","ព្រហ","សុ","សៅ"],weekHeader:"សប្ដាហ៍",dateFormat:"dd-mm-yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.km)}),jQuery(function(e){e.datepicker.regional.ko={closeText:"닫기",prevText:"이전달",nextText:"다음달",currentText:"오늘",monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],monthNamesShort:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],dayNames:["일요일","월요일","화요일","수요일","목요일","금요일","토요일"],dayNamesShort:["일","월","화","수","목","금","토"],dayNamesMin:["일","월","화","수","목","금","토"],weekHeader:"Wk",dateFormat:"yy-mm-dd",firstDay:0,isRTL:!1,showMonthAfterYear:!0,yearSuffix:"년"},e.datepicker.setDefaults(e.datepicker.regional.ko)}),jQuery(function(e){e.datepicker.regional.ky={closeText:"Жабуу",prevText:"&#x3c;Мур",nextText:"Кий&#x3e;",currentText:"Бүгүн",monthNames:["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],monthNamesShort:["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"],dayNames:["жекшемби","дүйшөмбү","шейшемби","шаршемби","бейшемби","жума","ишемби"],dayNamesShort:["жек","дүй","шей","шар","бей","жум","ише"],dayNamesMin:["Жк","Дш","Шш","Шр","Бш","Жм","Иш"],weekHeader:"Жум",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ky)}),jQuery(function(e){e.datepicker.regional.lb={closeText:"Fäerdeg",prevText:"Zréck",nextText:"Weider",currentText:"Haut",monthNames:["Januar","Februar","Mäerz","Abrëll","Mee","Juni","Juli","August","September","Oktober","November","Dezember"],monthNamesShort:["Jan","Feb","Mäe","Abr","Mee","Jun","Jul","Aug","Sep","Okt","Nov","Dez"],dayNames:["Sonndeg","Méindeg","Dënschdeg","Mëttwoch","Donneschdeg","Freideg","Samschdeg"],dayNamesShort:["Son","Méi","Dën","Mët","Don","Fre","Sam"],dayNamesMin:["So","Mé","Dë","Më","Do","Fr","Sa"],weekHeader:"W",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.lb)}),jQuery(function(e){e.datepicker.regional.lt={closeText:"Uždaryti",prevText:"&#x3C;Atgal",nextText:"Pirmyn&#x3E;",currentText:"Šiandien",monthNames:["Sausis","Vasaris","Kovas","Balandis","Gegužė","Birželis","Liepa","Rugpjūtis","Rugsėjis","Spalis","Lapkritis","Gruodis"],monthNamesShort:["Sau","Vas","Kov","Bal","Geg","Bir","Lie","Rugp","Rugs","Spa","Lap","Gru"],dayNames:["sekmadienis","pirmadienis","antradienis","trečiadienis","ketvirtadienis","penktadienis","šeštadienis"],dayNamesShort:["sek","pir","ant","tre","ket","pen","šeš"],dayNamesMin:["Se","Pr","An","Tr","Ke","Pe","Še"],weekHeader:"SAV",dateFormat:"yy-mm-dd",firstDay:1,isRTL:!1,showMonthAfterYear:!0,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.lt)}),jQuery(function(e){e.datepicker.regional.lv={closeText:"Aizvērt",prevText:"Iepr.",nextText:"Nāk.",currentText:"Šodien",monthNames:["Janvāris","Februāris","Marts","Aprīlis","Maijs","Jūnijs","Jūlijs","Augusts","Septembris","Oktobris","Novembris","Decembris"],monthNamesShort:["Jan","Feb","Mar","Apr","Mai","Jūn","Jūl","Aug","Sep","Okt","Nov","Dec"],dayNames:["svētdiena","pirmdiena","otrdiena","trešdiena","ceturtdiena","piektdiena","sestdiena"],dayNamesShort:["svt","prm","otr","tre","ctr","pkt","sst"],dayNamesMin:["Sv","Pr","Ot","Tr","Ct","Pk","Ss"],weekHeader:"Ned.",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.lv)}),jQuery(function(e){e.datepicker.regional.mk={closeText:"Затвори",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Денес",monthNames:["Јануари","Февруари","Март","Април","Мај","Јуни","Јули","Август","Септември","Октомври","Ноември","Декември"],monthNamesShort:["Јан","Фев","Мар","Апр","Мај","Јун","Јул","Авг","Сеп","Окт","Ное","Дек"],dayNames:["Недела","Понеделник","Вторник","Среда","Четврток","Петок","Сабота"],dayNamesShort:["Нед","Пон","Вто","Сре","Чет","Пет","Саб"],dayNamesMin:["Не","По","Вт","Ср","Че","Пе","Са"],weekHeader:"Сед",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.mk)}),jQuery(function(e){e.datepicker.regional.ml={closeText:"ശരി",prevText:"മുന്നത്തെ",nextText:"അടുത്തത് ",currentText:"ഇന്ന്",monthNames:["ജനുവരി","ഫെബ്രുവരി","മാര്‍ച്ച്","ഏപ്രില്‍","മേയ്","ജൂണ്‍","ജൂലൈ","ആഗസ്റ്റ്","സെപ്റ്റംബര്‍","ഒക്ടോബര്‍","നവംബര്‍","ഡിസംബര്‍"],monthNamesShort:["ജനു","ഫെബ്","മാര്‍","ഏപ്രി","മേയ്","ജൂണ്‍","ജൂലാ","ആഗ","സെപ്","ഒക്ടോ","നവം","ഡിസ"],dayNames:["ഞായര്‍","തിങ്കള്‍","ചൊവ്വ","ബുധന്‍","വ്യാഴം","വെള്ളി","ശനി"],dayNamesShort:["ഞായ","തിങ്ക","ചൊവ്വ","ബുധ","വ്യാഴം","വെള്ളി","ശനി"],dayNamesMin:["ഞാ","തി","ചൊ","ബു","വ്യാ","വെ","ശ"],weekHeader:"ആ",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ml)}),jQuery(function(e){e.datepicker.regional.ms={closeText:"Tutup",prevText:"&#x3C;Sebelum",nextText:"Selepas&#x3E;",currentText:"hari ini",monthNames:["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"],monthNamesShort:["Jan","Feb","Mac","Apr","Mei","Jun","Jul","Ogo","Sep","Okt","Nov","Dis"],dayNames:["Ahad","Isnin","Selasa","Rabu","Khamis","Jumaat","Sabtu"],dayNamesShort:["Aha","Isn","Sel","Rab","kha","Jum","Sab"],dayNamesMin:["Ah","Is","Se","Ra","Kh","Ju","Sa"],weekHeader:"Mg",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ms)}),jQuery(function(e){e.datepicker.regional.nb={closeText:"Lukk",prevText:"&#xAB;Forrige",nextText:"Neste&#xBB;",currentText:"I dag",monthNames:["januar","februar","mars","april","mai","juni","juli","august","september","oktober","november","desember"],monthNamesShort:["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"],dayNamesShort:["søn","man","tir","ons","tor","fre","lør"],dayNames:["søndag","mandag","tirsdag","onsdag","torsdag","fredag","lørdag"],dayNamesMin:["sø","ma","ti","on","to","fr","lø"],weekHeader:"Uke",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.nb)
 }),jQuery(function(e){e.datepicker.regional["nl-BE"]={closeText:"Sluiten",prevText:"←",nextText:"→",currentText:"Vandaag",monthNames:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],monthNamesShort:["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"],dayNames:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"],dayNamesShort:["zon","maa","din","woe","don","vri","zat"],dayNamesMin:["zo","ma","di","wo","do","vr","za"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["nl-BE"])}),jQuery(function(e){e.datepicker.regional.nl={closeText:"Sluiten",prevText:"←",nextText:"→",currentText:"Vandaag",monthNames:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],monthNamesShort:["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"],dayNames:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"],dayNamesShort:["zon","maa","din","woe","don","vri","zat"],dayNamesMin:["zo","ma","di","wo","do","vr","za"],weekHeader:"Wk",dateFormat:"dd-mm-yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.nl)}),jQuery(function(e){e.datepicker.regional.nn={closeText:"Lukk",prevText:"&#xAB;Førre",nextText:"Neste&#xBB;",currentText:"I dag",monthNames:["januar","februar","mars","april","mai","juni","juli","august","september","oktober","november","desember"],monthNamesShort:["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"],dayNamesShort:["sun","mån","tys","ons","tor","fre","lau"],dayNames:["sundag","måndag","tysdag","onsdag","torsdag","fredag","laurdag"],dayNamesMin:["su","må","ty","on","to","fr","la"],weekHeader:"Veke",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.nn)}),jQuery(function(e){e.datepicker.regional.no={closeText:"Lukk",prevText:"&#xAB;Forrige",nextText:"Neste&#xBB;",currentText:"I dag",monthNames:["januar","februar","mars","april","mai","juni","juli","august","september","oktober","november","desember"],monthNamesShort:["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"],dayNamesShort:["søn","man","tir","ons","tor","fre","lør"],dayNames:["søndag","mandag","tirsdag","onsdag","torsdag","fredag","lørdag"],dayNamesMin:["sø","ma","ti","on","to","fr","lø"],weekHeader:"Uke",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.no)}),jQuery(function(e){e.datepicker.regional.pl={closeText:"Zamknij",prevText:"&#x3C;Poprzedni",nextText:"Następny&#x3E;",currentText:"Dziś",monthNames:["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"],monthNamesShort:["Sty","Lu","Mar","Kw","Maj","Cze","Lip","Sie","Wrz","Pa","Lis","Gru"],dayNames:["Niedziela","Poniedziałek","Wtorek","Środa","Czwartek","Piątek","Sobota"],dayNamesShort:["Nie","Pn","Wt","Śr","Czw","Pt","So"],dayNamesMin:["N","Pn","Wt","Śr","Cz","Pt","So"],weekHeader:"Tydz",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.pl)}),jQuery(function(e){e.datepicker.regional["pt-BR"]={closeText:"Fechar",prevText:"&#x3C;Anterior",nextText:"Próximo&#x3E;",currentText:"Hoje",monthNames:["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"],monthNamesShort:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],dayNames:["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"],dayNamesShort:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],dayNamesMin:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],weekHeader:"Sm",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["pt-BR"])}),jQuery(function(e){e.datepicker.regional.pt={closeText:"Fechar",prevText:"Anterior",nextText:"Seguinte",currentText:"Hoje",monthNames:["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"],monthNamesShort:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],dayNames:["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"],dayNamesShort:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],dayNamesMin:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],weekHeader:"Sem",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.pt)}),jQuery(function(e){e.datepicker.regional.rm={closeText:"Serrar",prevText:"&#x3C;Suandant",nextText:"Precedent&#x3E;",currentText:"Actual",monthNames:["Schaner","Favrer","Mars","Avrigl","Matg","Zercladur","Fanadur","Avust","Settember","October","November","December"],monthNamesShort:["Scha","Fev","Mar","Avr","Matg","Zer","Fan","Avu","Sett","Oct","Nov","Dec"],dayNames:["Dumengia","Glindesdi","Mardi","Mesemna","Gievgia","Venderdi","Sonda"],dayNamesShort:["Dum","Gli","Mar","Mes","Gie","Ven","Som"],dayNamesMin:["Du","Gl","Ma","Me","Gi","Ve","So"],weekHeader:"emna",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.rm)}),jQuery(function(e){e.datepicker.regional.ro={closeText:"Închide",prevText:"&#xAB; Luna precedentă",nextText:"Luna următoare &#xBB;",currentText:"Azi",monthNames:["Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie","Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"],monthNamesShort:["Ian","Feb","Mar","Apr","Mai","Iun","Iul","Aug","Sep","Oct","Nov","Dec"],dayNames:["Duminică","Luni","Marţi","Miercuri","Joi","Vineri","Sâmbătă"],dayNamesShort:["Dum","Lun","Mar","Mie","Joi","Vin","Sâm"],dayNamesMin:["Du","Lu","Ma","Mi","Jo","Vi","Sâ"],weekHeader:"Săpt",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ro)}),jQuery(function(e){e.datepicker.regional.ru={closeText:"Закрыть",prevText:"&#x3C;Пред",nextText:"След&#x3E;",currentText:"Сегодня",monthNames:["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],monthNamesShort:["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"],dayNames:["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"],dayNamesShort:["вск","пнд","втр","срд","чтв","птн","сбт"],dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],weekHeader:"Нед",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ru)}),jQuery(function(e){e.datepicker.regional.sk={closeText:"Zavrieť",prevText:"&#x3C;Predchádzajúci",nextText:"Nasledujúci&#x3E;",currentText:"Dnes",monthNames:["január","február","marec","apríl","máj","jún","júl","august","september","október","november","december"],monthNamesShort:["Jan","Feb","Mar","Apr","Máj","Jún","Júl","Aug","Sep","Okt","Nov","Dec"],dayNames:["nedeľa","pondelok","utorok","streda","štvrtok","piatok","sobota"],dayNamesShort:["Ned","Pon","Uto","Str","Štv","Pia","Sob"],dayNamesMin:["Ne","Po","Ut","St","Št","Pia","So"],weekHeader:"Ty",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.sk)}),jQuery(function(e){e.datepicker.regional.sl={closeText:"Zapri",prevText:"&#x3C;Prejšnji",nextText:"Naslednji&#x3E;",currentText:"Trenutni",monthNames:["Januar","Februar","Marec","April","Maj","Junij","Julij","Avgust","September","Oktober","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Avg","Sep","Okt","Nov","Dec"],dayNames:["Nedelja","Ponedeljek","Torek","Sreda","Četrtek","Petek","Sobota"],dayNamesShort:["Ned","Pon","Tor","Sre","Čet","Pet","Sob"],dayNamesMin:["Ne","Po","To","Sr","Če","Pe","So"],weekHeader:"Teden",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.sl)}),jQuery(function(e){e.datepicker.regional.sq={closeText:"mbylle",prevText:"&#x3C;mbrapa",nextText:"Përpara&#x3E;",currentText:"sot",monthNames:["Janar","Shkurt","Mars","Prill","Maj","Qershor","Korrik","Gusht","Shtator","Tetor","Nëntor","Dhjetor"],monthNamesShort:["Jan","Shk","Mar","Pri","Maj","Qer","Kor","Gus","Sht","Tet","Nën","Dhj"],dayNames:["E Diel","E Hënë","E Martë","E Mërkurë","E Enjte","E Premte","E Shtune"],dayNamesShort:["Di","Hë","Ma","Më","En","Pr","Sh"],dayNamesMin:["Di","Hë","Ma","Më","En","Pr","Sh"],weekHeader:"Ja",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.sq)}),jQuery(function(e){e.datepicker.regional["sr-SR"]={closeText:"Zatvori",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Danas",monthNames:["Januar","Februar","Mart","April","Maj","Jun","Jul","Avgust","Septembar","Oktobar","Novembar","Decembar"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Avg","Sep","Okt","Nov","Dec"],dayNames:["Nedelja","Ponedeljak","Utorak","Sreda","Četvrtak","Petak","Subota"],dayNamesShort:["Ned","Pon","Uto","Sre","Čet","Pet","Sub"],dayNamesMin:["Ne","Po","Ut","Sr","Če","Pe","Su"],weekHeader:"Sed",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["sr-SR"])}),jQuery(function(e){e.datepicker.regional.sr={closeText:"Затвори",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Данас",monthNames:["Јануар","Фебруар","Март","Април","Мај","Јун","Јул","Август","Септембар","Октобар","Новембар","Децембар"],monthNamesShort:["Јан","Феб","Мар","Апр","Мај","Јун","Јул","Авг","Сеп","Окт","Нов","Дец"],dayNames:["Недеља","Понедељак","Уторак","Среда","Четвртак","Петак","Субота"],dayNamesShort:["Нед","Пон","Уто","Сре","Чет","Пет","Суб"],dayNamesMin:["Не","По","Ут","Ср","Че","Пе","Су"],weekHeader:"Сед",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.sr)}),jQuery(function(e){e.datepicker.regional.sv={closeText:"Stäng",prevText:"&#xAB;Förra",nextText:"Nästa&#xBB;",currentText:"Idag",monthNames:["Januari","Februari","Mars","April","Maj","Juni","Juli","Augusti","September","Oktober","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],dayNamesShort:["Sön","Mån","Tis","Ons","Tor","Fre","Lör"],dayNames:["Söndag","Måndag","Tisdag","Onsdag","Torsdag","Fredag","Lördag"],dayNamesMin:["Sö","Må","Ti","On","To","Fr","Lö"],weekHeader:"Ve",dateFormat:"yy-mm-dd",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.sv)}),jQuery(function(e){e.datepicker.regional.ta={closeText:"மூடு",prevText:"முன்னையது",nextText:"அடுத்தது",currentText:"இன்று",monthNames:["தை","மாசி","பங்குனி","சித்திரை","வைகாசி","ஆனி","ஆடி","ஆவணி","புரட்டாசி","ஐப்பசி","கார்த்திகை","மார்கழி"],monthNamesShort:["தை","மாசி","பங்","சித்","வைகா","ஆனி","ஆடி","ஆவ","புர","ஐப்","கார்","மார்"],dayNames:["ஞாயிற்றுக்கிழமை","திங்கட்கிழமை","செவ்வாய்க்கிழமை","புதன்கிழமை","வியாழக்கிழமை","வெள்ளிக்கிழமை","சனிக்கிழமை"],dayNamesShort:["ஞாயிறு","திங்கள்","செவ்வாய்","புதன்","வியாழன்","வெள்ளி","சனி"],dayNamesMin:["ஞா","தி","செ","பு","வி","வெ","ச"],weekHeader:"Не",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ta)}),jQuery(function(e){e.datepicker.regional.th={closeText:"ปิด",prevText:"&#xAB;&#xA0;ย้อน",nextText:"ถัดไป&#xA0;&#xBB;",currentText:"วันนี้",monthNames:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],monthNamesShort:["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."],dayNames:["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"],dayNamesShort:["อา.","จ.","อ.","พ.","พฤ.","ศ.","ส."],dayNamesMin:["อา.","จ.","อ.","พ.","พฤ.","ศ.","ส."],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.th)}),jQuery(function(e){e.datepicker.regional.tj={closeText:"Идома",prevText:"&#x3c;Қафо",nextText:"Пеш&#x3e;",currentText:"Имрӯз",monthNames:["Январ","Феврал","Март","Апрел","Май","Июн","Июл","Август","Сентябр","Октябр","Ноябр","Декабр"],monthNamesShort:["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"],dayNames:["якшанбе","душанбе","сешанбе","чоршанбе","панҷшанбе","ҷумъа","шанбе"],dayNamesShort:["якш","душ","сеш","чор","пан","ҷум","шан"],dayNamesMin:["Як","Дш","Сш","Чш","Пш","Ҷм","Шн"],weekHeader:"Хф",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.tj)}),jQuery(function(e){e.datepicker.regional.tr={closeText:"kapat",prevText:"&#x3C;geri",nextText:"ileri&#x3e",currentText:"bugün",monthNames:["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"],monthNamesShort:["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"],dayNames:["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"],dayNamesShort:["Pz","Pt","Sa","Ça","Pe","Cu","Ct"],dayNamesMin:["Pz","Pt","Sa","Ça","Pe","Cu","Ct"],weekHeader:"Hf",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.tr)}),jQuery(function(e){e.datepicker.regional.uk={closeText:"Закрити",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Сьогодні",monthNames:["Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"],monthNamesShort:["Січ","Лют","Бер","Кві","Тра","Чер","Лип","Сер","Вер","Жов","Лис","Гру"],dayNames:["неділя","понеділок","вівторок","середа","четвер","п’ятниця","субота"],dayNamesShort:["нед","пнд","вів","срд","чтв","птн","сбт"],dayNamesMin:["Нд","Пн","Вт","Ср","Чт","Пт","Сб"],weekHeader:"Тиж",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.uk)}),jQuery(function(e){e.datepicker.regional.vi={closeText:"Đóng",prevText:"&#x3C;Trước",nextText:"Tiếp&#x3E;",currentText:"Hôm nay",monthNames:["Tháng Một","Tháng Hai","Tháng Ba","Tháng Tư","Tháng Năm","Tháng Sáu","Tháng Bảy","Tháng Tám","Tháng Chín","Tháng Mười","Tháng Mười Một","Tháng Mười Hai"],monthNamesShort:["Tháng 1","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"],dayNames:["Chủ Nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"],dayNamesShort:["CN","T2","T3","T4","T5","T6","T7"],dayNamesMin:["CN","T2","T3","T4","T5","T6","T7"],weekHeader:"Tu",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.vi)}),jQuery(function(e){e.datepicker.regional["zh-CN"]={closeText:"关闭",prevText:"&#x3C;上月",nextText:"下月&#x3E;",currentText:"今天",monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],dayNames:["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],dayNamesShort:["周日","周一","周二","周三","周四","周五","周六"],dayNamesMin:["日","一","二","三","四","五","六"],weekHeader:"周",dateFormat:"yy-mm-dd",firstDay:1,isRTL:!1,showMonthAfterYear:!0,yearSuffix:"年"},e.datepicker.setDefaults(e.datepicker.regional["zh-CN"])}),jQuery(function(e){e.datepicker.regional["zh-HK"]={closeText:"關閉",prevText:"&#x3C;上月",nextText:"下月&#x3E;",currentText:"今天",monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],dayNames:["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],dayNamesShort:["周日","周一","周二","周三","周四","周五","周六"],dayNamesMin:["日","一","二","三","四","五","六"],weekHeader:"周",dateFormat:"dd-mm-yy",firstDay:0,isRTL:!1,showMonthAfterYear:!0,yearSuffix:"年"},e.datepicker.setDefaults(e.datepicker.regional["zh-HK"])}),jQuery(function(e){e.datepicker.regional["zh-TW"]={closeText:"關閉",prevText:"&#x3C;上月",nextText:"下月&#x3E;",currentText:"今天",monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],dayNames:["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],dayNamesShort:["周日","周一","周二","周三","周四","周五","周六"],dayNamesMin:["日","一","二","三","四","五","六"],weekHeader:"周",dateFormat:"yy/mm/dd",firstDay:1,isRTL:!1,showMonthAfterYear:!0,yearSuffix:"年"},e.datepicker.setDefaults(e.datepicker.regional["zh-TW"])});
-},{}],64:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 /*
 
 $.Link (part of noUiSlider) - WTFPL */
@@ -27388,7 +28112,7 @@ b,a)})}function X(a){return this.each(function(){var b=c(this).val(),d=this.dest
 end:"mouseup touchend"},f="noUi-target noUi-base noUi-origin noUi-handle noUi-horizontal noUi-vertical noUi-background noUi-connect noUi-ltr noUi-rtl noUi-dragable  noUi-state-drag  noUi-state-tap noUi-active noUi-extended noUi-stacking".split(" ");c.fn.val=function(){var a=arguments,b=c(this[0]);return arguments.length?this.each(function(){(c(this).hasClass(f[0])?B:C).apply(c(this),a)}):(b.hasClass(f[0])?B:C).call(b)};c.noUiSlider={Link:c.Link};c.fn.noUiSlider=function(a,b){return(b?X:W).call(this,
 a)}})(window.jQuery||window.Zepto);
 
-},{}],65:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -27520,7 +28244,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 
 module.exports = Widget;
 
-},{"./lib/jquery-ui-i18n.min":63,"./views/filters-view":76,"backbone":"backbone","bootstrap/dist/js/bootstrap":55,"jquery":"jquery","jquery-ui/draggable":58,"underscore":"underscore"}],66:[function(require,module,exports){
+},{"./lib/jquery-ui-i18n.min":68,"./views/filters-view":81,"backbone":"backbone","bootstrap/dist/js/bootstrap":60,"jquery":"jquery","jquery-ui/draggable":63,"underscore":"underscore"}],71:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -27545,7 +28269,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],67:[function(require,module,exports){
+},{"backbone":"backbone"}],72:[function(require,module,exports){
 var _ = require('underscore');
 
 var BaseFilterModel = require('../models/base-filter-model');
@@ -27699,7 +28423,7 @@ module.exports = BaseFilterModel.extend({
 });
 
 
-},{"../models/base-filter-model":66,"../tree/tree-node-model":72,"underscore":"underscore"}],68:[function(require,module,exports){
+},{"../models/base-filter-model":71,"../tree/tree-node-model":77,"underscore":"underscore"}],73:[function(require,module,exports){
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -27754,7 +28478,7 @@ module.exports = GenericFilterModel.extend({
 });
 
 
-},{"../models/generic-filter-model":67,"../tree/tree-node-model":72,"jquery":"jquery"}],69:[function(require,module,exports){
+},{"../models/generic-filter-model":72,"../tree/tree-node-model":77,"jquery":"jquery"}],74:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({
@@ -27767,7 +28491,7 @@ module.exports = Backbone.Model.extend({
 		
 	}
 });
-},{"backbone":"backbone","underscore":"underscore"}],70:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],75:[function(require,module,exports){
 var $ = require('jquery');
 var BaseFilterModel = require('../models/base-filter-model');
 
@@ -27901,7 +28625,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":66,"jquery":"jquery"}],71:[function(require,module,exports){
+},{"../models/base-filter-model":71,"jquery":"jquery"}],76:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -27963,7 +28687,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":66,"jquery":"jquery","underscore":"underscore"}],72:[function(require,module,exports){
+},{"../models/base-filter-model":71,"jquery":"jquery","underscore":"underscore"}],77:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TreeNodeModel; // declare here to help with ref loop of collection and model
@@ -28236,7 +28960,7 @@ serialize: function(options) {
 
 module.exports = TreeNodeModel;
 
-},{"backbone":"backbone","underscore":"underscore"}],73:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],78:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -28431,7 +29155,7 @@ var TreeNodeView = Backbone.View.extend({
 
 module.exports = TreeNodeView;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],74:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
 var _ = require('underscore');
 
 var extractDates = function(settings, filtersOut, minName, maxName) {
@@ -28459,7 +29183,7 @@ module.exports = {
 		extractDates: extractDates
 }
 
-},{"underscore":"underscore"}],75:[function(require,module,exports){
+},{"underscore":"underscore"}],80:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -28503,7 +29227,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],81:[function(require,module,exports){
 /**
  * this is the view which renders the big Filter contents (the tabs)
  */
@@ -28968,7 +29692,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"../../../../../reamp/tools/log":84,"../collections/all-filters-collection":61,"../collections/settings-collection":62,"../utils/date-utils":74,"../views/top-level-filter-view":78,"amp-translate":82,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],77:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":89,"../collections/all-filters-collection":66,"../collections/settings-collection":67,"../utils/date-utils":79,"../views/top-level-filter-view":83,"amp-translate":87,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],82:[function(require,module,exports){
 
 var _ = require('underscore');
 
@@ -29099,7 +29823,7 @@ module.exports = BaseFilterView.extend({
 });
 
 
-},{"../tree/tree-node-view":73,"../views/base-filter-view":75,"underscore":"underscore"}],78:[function(require,module,exports){
+},{"../tree/tree-node-view":78,"../views/base-filter-view":80,"underscore":"underscore"}],83:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -29235,7 +29959,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../../../../../reamp/tools/log":84,"../collections/settings-collection":62,"../models/years-filter-model":70,"../models/years-only-filter-model":71,"../views/generic-filter-view":77,"../views/years-filter-view":79,"../views/years-only-filter-view":80,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":89,"../collections/settings-collection":67,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"../views/generic-filter-view":82,"../views/years-filter-view":84,"../views/years-only-filter-view":85,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],84:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -29397,7 +30121,7 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../lib/jquery.nouislider.min.js":64,"../views/base-filter-view":75,"jquery-ui/datepicker":57,"underscore":"underscore"}],80:[function(require,module,exports){
+},{"../lib/jquery.nouislider.min.js":69,"../views/base-filter-view":80,"jquery-ui/datepicker":62,"underscore":"underscore"}],85:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -29465,7 +30189,7 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../views/base-filter-view":75,"underscore":"underscore"}],81:[function(require,module,exports){
+},{"../views/base-filter-view":80,"underscore":"underscore"}],86:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -29675,7 +30399,7 @@ _.extend(State.prototype, Backbone.Events, {
 State.StateLoadError = StateLoadError;
 module.exports = State;
 
-},{"backbone":"backbone","underscore":"underscore"}],82:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],87:[function(require,module,exports){
 // TODO: move this up a dir, and instantiate and attach to the app
 
 
@@ -29784,7 +30508,7 @@ function Translator(options) {
         // We need a way to identify controls where the placeholder needs to be translated instead of the text.
         if (key.indexOf('[placeholder]') > -1) {
           $('[data-i18n="' + key + '"]', $newEl).attr('placeholder', value);
-        } else if (key.indexOf('[title]') > -1) {        	
+        } else if (key.indexOf('[title]') > -1) {
           $('[data-i18n="' + key + '"]', $newEl).attr('title', value);
         } else {
           $('[data-i18n="' + key + '"]', $newEl).text(value);
@@ -29891,7 +30615,7 @@ function Translator(options) {
 
 module.exports = Translator;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],83:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],88:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -29942,7 +30666,7 @@ _.extend(URL.prototype, Backbone.Events, {
 
 module.exports = URL;
 
-},{"backbone":"backbone","underscore":"underscore"}],84:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],89:[function(require,module,exports){
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

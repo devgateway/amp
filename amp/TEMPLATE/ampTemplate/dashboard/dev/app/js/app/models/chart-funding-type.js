@@ -10,7 +10,8 @@ module.exports = ChartModel.extend({
     title: '',
     stacked: false,
     seriesToExclude: [],
-    yearTotals:{}
+    yearTotals:{},
+    chartType: 'fundingType'
   },
 
   _prepareTranslations: function() {

@@ -1,18 +1,41 @@
+<style>
+rect.bordered {
+	stroke: #E6E6E6;
+	stroke-width: 2px;
+}
+
+text.mono {
+	font-size: 9pt;
+	font-family: Arial;
+	fill: #000;
+}
+
+text.axis-workweek {
+	fill: #000;
+}
+
+text.axis-worktime {
+	fill: #000;
+}
+</style>
+
 <div class="col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>">
 
   <div class="panel panel-chart">
     <div class="panel-heading fix-title-height">
-      <span class="pull-right big-number">
-        <b class="chart-total"></b>
-        <span class="chart-currency"></span>
-      </span>
+      <% if (model.get('showTotal') === true) { %>
+	      <span class="pull-right big-number">
+	        <b class="chart-total"></b>
+	        <span class="chart-currency"></span>
+	      </span>
+      <% } %>
       <h2 data-i18n="amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>"><%= model.get('title') %></h2>
     </div>
 
     <div class="panel-body">
       <div class="chart-container">
         <h3 class="dash-chart-diagnostic text-center"></h3>
-        <div class="dash-chart-wrap">
+        <div class="dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>">
         </div>
         <button type="button" class="btn btn-link btn-xs pull-right reset" style="display:none" data-i18n="amp.dashboard:chart-reset">reset others</button>
       </div>
@@ -29,6 +52,7 @@
               <span class="glyphicon glyphicon-<%= {
                 bar: 'signal',
                 multibar: 'signal',
+                heatmap: 'stats',
                 pie: 'adjust',
                 table: 'th-list'
               }[view] %>"></span>
@@ -50,7 +74,7 @@
 
       </div><!-- buttons in .pull-right -->
 
-      <% if (model.get('adjtype')) { %>
+      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>
         <form class="form-inline dash-form dash-adj-type" role="form">
           <select class="form-control like-btn-sm ftype-options">
             <option>...</option>

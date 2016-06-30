@@ -9,7 +9,8 @@ module.exports = ChartModel.extend({
   defaults: {
     limit: 5,
     title: '',
-    bigN: 0
+    bigN: 0,
+    chartType: 'top'
   },
 
   _prepareTranslations: function() {

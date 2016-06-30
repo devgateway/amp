@@ -4,8 +4,10 @@ var BackboneDash = require('../backbone-dash');
 var Tops = require('../models/chart-tops');
 var Predictability = require('../models/chart-aid-predictability');
 var FundingType = require('../models/chart-funding-type');
+var HeatMapChart = require('../models/chart-heatmaps');
 
 var TopsChartView = require('./chart-tops');
+var HeatMapChartView = require('./chart-heatmaps');
 var PredictabilityChartView = require('./chart-aid-predictability');
 var FundingTypeChartView = require('./chart-funding-type');
 
@@ -20,6 +22,7 @@ module.exports = BackboneDash.View.extend({
       var ChartView = chart instanceof Tops ? TopsChartView
                     : chart instanceof Predictability ? PredictabilityChartView
                     : chart instanceof FundingType ? FundingTypeChartView
+                    : chart instanceof HeatMapChart ? HeatMapChartView
                     : null;
       return new ChartView({ model: chart, app: this.app });
     }, this);

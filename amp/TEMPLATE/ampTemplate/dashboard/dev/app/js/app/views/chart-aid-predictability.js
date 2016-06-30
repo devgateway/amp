@@ -7,7 +7,11 @@ module.exports = ChartViewBase.extend({
 
   uiDefaults: {
     big: false,
-    view: 'multibar'
+    view: 'multibar',
+    showTotal: true,
+    showMeasuresSelector: true,
+    showTopLegends: true,
+    showCommonChartArea: true
   },
   events: function(){
       return _.extend({},ChartViewBase.prototype.events,{

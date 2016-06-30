@@ -7,6 +7,7 @@ var barSpecific = require('./_bar');
 var multibarSpecific = require('./_multibar');
 var pieSpecific = require('./_pie');
 var table = require('./_table');
+var heatmap = require('./_heatmap');
 var defaultTTTemplate = _.template(fs.readFileSync(
   __dirname + '/tt-template.html', 'UTF-8'));
 
@@ -15,6 +16,7 @@ var charters = {
   bar: common.nvCharter(barSpecific),
   pie: common.nvCharter(pieSpecific),
   multibar: common.nvCharter(multibarSpecific),
+  heatmap: common.nvCharter(heatmap),
   table: table.charter
 };
 

@@ -8,7 +8,11 @@ module.exports = ChartViewBase.extend({
   uiDefaults: {
     big: true,
     adjtype: 'FAKE',
-    view: 'multibar'
+    view: 'multibar',
+    showTotal: true,
+    showMeasuresSelector: true,
+    showTopLegends: true,
+    showCommonChartArea: true
   },
   events: function(){
       return _.extend({},ChartViewBase.prototype.events,{

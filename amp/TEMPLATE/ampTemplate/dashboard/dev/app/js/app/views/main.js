@@ -8,6 +8,7 @@ var Controls = require('./controls');
 var ChartsView = require('./charts');
 var Charts = require('../models/charts-collection');
 var boilerplate = require('amp-boilerplate');
+var HeatMapChart = require('../models/chart-heatmaps');
 var TopsChart = require('../models/chart-tops');
 var PredictabilityChart = require('../models/chart-aid-predictability');
 var FundingTypeChart = require('../models/chart-funding-type');
@@ -18,6 +19,7 @@ var modalTemplate = _.template(fs.readFileSync(
   __dirname + '/../templates/modal.html', 'UTF-8'));
 
 var EnabledChartsCollection = require('../models/enabled-charts-collection');
+var HeatmapsConfigCollection = require('../models/heatmaps-config-collection');
 
 module.exports = BackboneDash.View.extend({
 
@@ -32,6 +34,10 @@ module.exports = BackboneDash.View.extend({
     // AMP-19545: We instantiate the collection of enabled charts (from FM) and use it to enable or not each chart.
     var enabledChartsFM = new EnabledChartsCollection();
     enabledChartsFM.fetchData();
+    
+    // Get config of all heatmaps from backend.
+    var heatmapsConfigs = new HeatmapsConfigCollection();
+    heatmapsConfigs.fetchData();
     
     if(enabledChartsFM.models[0].get('error') !== undefined) {
         // The same endpoint will send an error if 'DASHBOARDS' is not active in the Feature Manager.
@@ -93,6 +99,11 @@ module.exports = BackboneDash.View.extend({
     	col.push(new TopsChart(
     			{ name: 'Peace-building and State-building Goals', big: true, showCategoriesInfo: true, view: 'pie' },
     			{ app: this.app, url: '/rest/dashboard/tops/ndd' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Sector Fragmentation'})) {
+    	col.push(new HeatMapChart(
+  	          { name: 'HeatMap by Sector and Donor Group', title: 'Sector Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { app: this.app, url: '/rest/dashboard/heat-map' }));
     }
        
     var chartsCollection = new Charts(col, { app: this.app });

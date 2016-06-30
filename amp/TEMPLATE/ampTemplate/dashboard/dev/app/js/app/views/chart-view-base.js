@@ -32,7 +32,8 @@ module.exports = BackboneDash.View.extend({
   chartViews: [
     'bar',
     'pie',
-    'table'
+    'heatmap',
+    'table'    
   ],  
   
   initialize: function(options) {
@@ -155,7 +156,9 @@ module.exports = BackboneDash.View.extend({
     var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions(), this.model);
     this.chartContainer.html(chart.el);
 
-    this.renderNumbers();
+    if (this.model.get('view') !== 'heatmap') {
+    	this.renderNumbers();
+    }
     var limit = this.model.get('limit');
     if (limit) {
       this.$('.reset')[limit === this.model.defaults.limit ? 'hide' : 'show']();
@@ -282,11 +285,13 @@ module.exports = BackboneDash.View.extend({
 		  }
 	    
 		  // Now bind NV tooltip mechanism to hover event for each legend.
-		  if($(elem).data('data-title')) {
+		  if($(elem).data('data-title') || $(elem).data('title')) {
 			  $(elem).hover(function() {
-	    		var offset = $(this).offset();
+	    		var offset = $(this).offset();	    		
+	    		//TODO: Check the generation of heatMapChart.js and see if we can set the 'data' field the same way than other charts.
+	    		var title = $(elem).data('data-title') ? $(elem).data('data-title') : $(elem).data('title');
 	    		//TODO: Remove hardcoded html and use a template.
-	    	    nv.tooltip.show([offset.left, offset.top], "<div class='panel panel-primary panel-popover'><div class='panel-heading'>" + $(elem).data('data-title') + "</div></div>");
+	    	    nv.tooltip.show([offset.left, offset.top], "<div class='panel panel-primary panel-popover'><div class='panel-heading'>" + title + "</div></div>");
 	    	        
 	    	    // TODO: Find a way to trigger the mouseover on the bar.
 	    	    // $($(this).closest('svg').find(".nv-groups").find(".nv-bar")[i]).trigger('hover');

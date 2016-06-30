@@ -2,8 +2,8 @@
 <class-diagram version="1.1.9" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="org.dgfoundation.amp.nireports.runtime.CellColumn" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/runtime/CellColumn.java" binary="false" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/runtime/CellColumn.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="726" y="167"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -12,8 +12,8 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="org.dgfoundation.amp.nireports.runtime.Column" project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/runtime/Column.java" binary="false" 
+  <class id="2" language="java" name="org.dgfoundation.amp.nireports.runtime.Column" project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/runtime/Column.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="288" y="211"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -23,8 +23,8 @@
     </display>  
   </class>  
   <class id="3" language="java" name="org.dgfoundation.amp.nireports.runtime.GroupColumn" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/runtime/GroupColumn.java" binary="false" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/runtime/GroupColumn.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="737" y="355"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -34,8 +34,8 @@
     </display>  
   </class>  
   <class id="4" language="java" name="org.dgfoundation.amp.nireports.runtime.ColumnContents" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/runtime/ColumnContents.java" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/runtime/ColumnContents.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="859" y="3"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -44,8 +44,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="org.dgfoundation.amp.nireports.runtime.NiCell" project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/runtime/NiCell.java" binary="false" 
+  <class id="5" language="java" name="org.dgfoundation.amp.nireports.runtime.NiCell" project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/runtime/NiCell.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="973" y="212"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -54,8 +54,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="org.dgfoundation.amp.nireports.Cell" project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/Cell.java" binary="false" 
+  <class id="6" language="java" name="org.dgfoundation.amp.nireports.Cell" project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/Cell.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1170" y="184"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -65,8 +65,8 @@
     </display>  
   </class>  
   <class id="7" language="java" name="org.dgfoundation.amp.nireports.ReportHeadingCell" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/ReportHeadingCell.java" binary="false" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/ReportHeadingCell.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="616" y="12"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

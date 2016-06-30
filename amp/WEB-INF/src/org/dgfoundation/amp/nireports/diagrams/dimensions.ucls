@@ -2,8 +2,8 @@
 <class-diagram version="1.1.9" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="org.dgfoundation.amp.nireports.schema.DimensionLevel" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/schema/DimensionLevel.java" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/schema/DimensionLevel.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="672" y="307"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -13,8 +13,8 @@
     </display>  
   </class>  
   <class id="2" language="java" name="org.dgfoundation.amp.nireports.schema.DimensionSnapshot" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/schema/DimensionSnapshot.java" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/schema/DimensionSnapshot.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="664" y="50"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -24,8 +24,8 @@
     </display>  
   </class>  
   <class id="3" language="java" name="org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiDimension.java" binary="false" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiDimension.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="365" y="347"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -35,8 +35,8 @@
     </display>  
   </class>  
   <class id="4" language="java" name="org.dgfoundation.amp.nireports.schema.NiDimension" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiDimension.java" binary="false" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiDimension.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="342" y="55"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -46,8 +46,8 @@
     </display>  
   </class>  
   <class id="5" language="java" name="org.dgfoundation.amp.nireports.schema.NiReportColumn" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiReportColumn.java" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiReportColumn.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="89" y="214"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

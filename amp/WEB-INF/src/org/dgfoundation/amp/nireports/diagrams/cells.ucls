@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.9" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="org.dgfoundation.amp.nireports.Cell" project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/Cell.java" binary="false" 
+  <class id="1" language="java" name="org.dgfoundation.amp.nireports.Cell" project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/Cell.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="564" y="279"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -12,8 +12,8 @@
     </display>  
   </class>  
   <class id="2" language="java" name="org.dgfoundation.amp.nireports.CategAmountCell" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/CategAmountCell.java" binary="false" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/CategAmountCell.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="788" y="380"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -22,8 +22,8 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="org.dgfoundation.amp.nireports.AmountCell" project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/AmountCell.java" binary="false" 
+  <class id="3" language="java" name="org.dgfoundation.amp.nireports.AmountCell" project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/AmountCell.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="783" y="522"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -32,8 +32,8 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="org.dgfoundation.amp.nireports.TextCell" project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/TextCell.java" binary="false" 
+  <class id="4" language="java" name="org.dgfoundation.amp.nireports.TextCell" project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/TextCell.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="74" width="143" x="696" y="16"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -43,8 +43,8 @@
     </display>  
   </class>  
   <class id="5" language="java" name="org.dgfoundation.amp.nireports.PercentageTextCell" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/PercentageTextCell.java" binary="false" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/PercentageTextCell.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="765" y="199"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -53,8 +53,8 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="org.dgfoundation.amp.nireports.MonetaryAmount" project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/MonetaryAmount.java" binary="false" 
+  <class id="6" language="java" name="org.dgfoundation.amp.nireports.MonetaryAmount" project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/MonetaryAmount.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1049" y="421"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -64,8 +64,8 @@
     </display>  
   </class>  
   <class id="7" language="java" name="org.dgfoundation.amp.nireports.schema.NiReportedEntity" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiReportedEntity.java" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiReportedEntity.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="127" y="287"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -75,8 +75,8 @@
     </display>  
   </class>  
   <class id="8" language="java" name="org.dgfoundation.amp.nireports.schema.NiReportMeasure" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiReportMeasure.java" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiReportMeasure.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="333" y="447"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -86,8 +86,8 @@
     </display>  
   </class>  
   <class id="9" language="java" name="org.dgfoundation.amp.nireports.schema.NiReportColumn" 
-    project="amp-nireports-development" 
-    file="/amp-nireports-development/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiReportColumn.java" 
+    project="amp-2.12-release" 
+    file="/amp-2.12-release/WEB-INF/src/org/dgfoundation/amp/nireports/schema/NiReportColumn.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="349" y="138"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

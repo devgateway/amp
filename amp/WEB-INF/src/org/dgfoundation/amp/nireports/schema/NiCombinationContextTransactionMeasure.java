@@ -76,7 +76,9 @@ public class NiCombinationContextTransactionMeasure extends NiReportMeasure<Cate
 	
 	@Override
 	public Set<String> getPrecursorMeasures() {
-		return Arrays.stream(measures).map(z -> z.name).collect(Collectors.toSet());
+	    // AMP-23028: per Constantin, feature is incomplete, should remove empty set for now here 
+	    return Collections.emptySet();
+		//return Arrays.stream(measures).map(z -> z.name).collect(Collectors.toSet());
 	}
 
 }

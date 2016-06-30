@@ -296,4 +296,11 @@ public class IndicatorEndPoints {
         return accessTypeList;
     }
 
+    @GET
+    @Path("/workspaces")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Collection<JsonBean> getWorkspaces() {
+        return IndicatorService.getWorkspaces();
+    }
+
 }

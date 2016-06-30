@@ -6,8 +6,9 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
+import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -16,8 +17,10 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class IndicatorUtils {
@@ -54,6 +57,15 @@ public class IndicatorUtils {
                 colors[i++] = indicatorColor.getColor();
             }
             indicatorJson.set(IndicatorEPConstants.COLOR_RAMP, colors);
+        }
+
+        if (indicator.getSharedWorkspaces() != null) {
+            Collection<JsonBean> sharedWorkspaces = new ArrayList<JsonBean>();
+            int i=0;
+            for (AmpIndicatorWorkspace indicatorWS: indicator.getSharedWorkspaces()){
+                sharedWorkspaces.add(getJsonBean(indicatorWS.getWorkspace()));
+            }
+            indicatorJson.set(IndicatorEPConstants.SHARED_WORKSPACES, sharedWorkspaces);
         }
 
         indicatorJson.set(IndicatorEPConstants.NUMBER_OF_IMPORTED_RECORDS, (indicator.getIndicatorValues()!=null ? indicator.getIndicatorValues().size() : 0));
@@ -97,11 +109,23 @@ public class IndicatorUtils {
             indicatorLayer.setColorRamp(colorRamp);
         }
 
+        if (indicator.get(IndicatorEPConstants.SHARED_WORKSPACES)!=null) {
+            Set<AmpIndicatorWorkspace> teams = new HashSet<AmpIndicatorWorkspace>();
+            List<String> indicatorTeams =  EndpointUtils.getSingleValue(indicator, IndicatorEPConstants.SHARED_WORKSPACES, Collections.emptyList());
+            for (int i = 0; i < indicatorTeams.size(); i++) {
+                AmpTeam team = TeamUtil.getAmpTeam(new Long(String.valueOf(indicatorTeams.get(i))));
+                AmpIndicatorWorkspace indicatorWs = new AmpIndicatorWorkspace();
+                indicatorWs.setWorkspace(team);
+                teams.add(indicatorWs);
+            }
+            indicatorLayer.setSharedWorkspaces(teams);
+        }
+
         return indicatorLayer;
     }
 
     public static AmpTeamMember getTeamMember() {
-        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        TeamMember tm = TeamUtil.getCurrentMember();
         if (tm != null) {
             AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
             if (ampTeamMember != null) {
@@ -119,9 +143,9 @@ public class IndicatorUtils {
         if (isAdmin()) {
             return true;
         } else {
-            TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+            TeamMember tm = TeamUtil.getCurrentMember();
             if (tm != null) {
-                AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+                AmpTeamMember ampTeamMember = IndicatorUtils.getTeamMember();
                 if (ampTeamMember != null) {
                     AmpIndicatorLayer indicatorLayer =DynLocationManagerUtil.getIndicatorLayerById(indicatorId);
                     if (indicatorLayer.getCreatedBy() != null && indicatorLayer.getCreatedBy().getAmpTeamMemId()==ampTeamMember.getAmpTeamMemId()){
@@ -161,4 +185,10 @@ public class IndicatorUtils {
         return result;
     }
 
+    public static JsonBean getJsonBean(AmpTeam ws) {
+        JsonBean teamJson = new JsonBean();
+        teamJson.set(IndicatorEPConstants.ID, ws.getAmpTeamId());
+        teamJson.set(IndicatorEPConstants.NAME, ws.getName());
+        return teamJson;
+    }
 }

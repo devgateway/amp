@@ -15,6 +15,7 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 	private Long numberOfClasses;
 	private AmpCategoryValue admLevel;
 	private Set <AmpLocationIndicatorValue> indicatorValues;
+    private Set <AmpIndicatorWorkspace> sharedWorkspaces;
 	private String unit;
 	private AmpIndicatorAccessType accessType;
 	private Date createdOn;
@@ -134,5 +135,13 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 
     public void setUpdatedOn(Date updatedOn) {
         this.updatedOn=updatedOn;
+    }
+
+    public Set<AmpIndicatorWorkspace> getSharedWorkspaces() {
+        return sharedWorkspaces;
+    }
+
+    public void setSharedWorkspaces(Set<AmpIndicatorWorkspace> sharedWorkspaces) {
+        this.sharedWorkspaces=sharedWorkspaces;
     }
 }

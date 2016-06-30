@@ -46,6 +46,7 @@ public class IndicatorEPConstants {
     public static final String TOTAL_PAGE_COUNT = "totalPageCount";
     public static final String TOTAL_RECORDS = "totalRecords";
     public static final String NUMBER_OF_IMPORTED_RECORDS="numberOfImportedRecords";
+    public static final String SHARED_WORKSPACES="sharedWorkspaces";
 
     public static final String PAGE = "page";
     public static final String DATA = "data";

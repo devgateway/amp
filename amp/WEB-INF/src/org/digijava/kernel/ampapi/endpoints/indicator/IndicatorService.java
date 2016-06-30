@@ -4,13 +4,12 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,21 +32,41 @@ public class IndicatorService {
         sort = (sort!=null ? sort : "");
 
         Collection<AmpIndicatorLayer> indicatorLayers = null;
-        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        TeamMember tm = TeamUtil.getCurrentMember();
         if (tm == null) {
             indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByAccessType(IndicatorEPConstants.ACCESS_TYPE_PUBLIC, orderBy, sort);
         } else if (IndicatorUtils.isAdmin()) {
             indicatorLayers = DynLocationManagerUtil.getIndicatorLayers(orderBy, sort);
         }
         else {
-            AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-            indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByCreatedBy(ampTeamMember, orderBy, sort);
+            indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByCreatedBy(IndicatorUtils.getTeamMember(), orderBy, sort);
         }
 
         if (indicatorLayers==null)
             indicatorLayers = new ArrayList<AmpIndicatorLayer>();
 
         return IndicatorUtils.getList(indicatorLayers, offset, count);
+    }
+
+    public static Collection<JsonBean> getWorkspaces() {
+
+        Collection<AmpTeam> workspaces = null;
+        TeamMember tm = TeamUtil.getCurrentMember();
+        if (tm != null) {
+            workspaces = TeamMemberUtil.getAllTeamsForUser(tm.getEmail());
+        }
+
+        Collection<JsonBean> workspacesList = new ArrayList<JsonBean>();
+
+        if (workspaces==null) {
+            workspaces = new ArrayList<AmpTeam>();
+        }
+
+        for (AmpTeam ws: workspaces){
+            workspacesList.add(IndicatorUtils.getJsonBean(ws));
+        }
+
+        return workspacesList;
     }
 
     public static JsonBean getIndicatorById(long id) {

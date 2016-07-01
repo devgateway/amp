@@ -134,7 +134,8 @@ public class EndPoints {
      * Build Heat Map based on the expected input format:
      * INPUT:
      * {
-     *  “count” : 25, // omit for no limit
+     *  “xCount” : 25, // default 25, set -1 to no limit
+     *  “yCount” : 10, // default 10, set -1 to no limit
      *  “xColumn” : “Primary Sector”, // must be OrigName
      *  “yColumn” : “Donor Group”, // must be origName
      *  “filters”: { ... }, // usual filters input
@@ -149,7 +150,7 @@ public class EndPoints {
      *  “xTotals” : [“5 000”, …], // formatted abmounts
      *  “yPTotals” : [17, ...],
      *  “yTotals”: [“800”, …],
-     *  “matrix” : [[100, ...], null, [...], ...],
+     *  “matrix” : [[{“p”: 100, “dv” : “12 000”}, ...], null, [...], ...], // p = % amount, dv = display value
      * } 
      * </pre> 
      * @param config exp

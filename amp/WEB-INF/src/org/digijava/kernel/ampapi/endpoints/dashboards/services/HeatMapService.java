@@ -47,14 +47,16 @@ public class HeatMapService {
     
     private static final Logger LOGGER = Logger.getLogger(HeatMapService.class);
     
-    private static final int DEFAULT_COUNT = 25;
+    private static final int DEFAULT_X_COUNT = 25;
+    private static final int DEFAULT_Y_COUNT = 10;
     private static final BigDecimal HUNDRED = new BigDecimal(100);
     private static final MathContext MCTX = new MathContext(2, RoundingMode.HALF_EVEN);
     
     private JsonBean config;
     private String xCol;
     private String yCol;
-    private Integer count;
+    private Integer xCount;
+    private Integer yCount;
     
     private DecimalFormat decimalFormatter;
     
@@ -90,7 +92,7 @@ public class HeatMapService {
         List<String> yTotalAmounts = new ArrayList<>();
         List<String> xTotalAmounts = new ArrayList<>();
         // storage for funding, then % amounts for matrix, xTotals and yTotals 
-        Map<String, Map<String, BigDecimal>> data = new LinkedHashMap<>();
+        Map<String, Map<String, ReportCell>> data = new LinkedHashMap<>();
         Map<String, BigDecimal> xTotal = new HashMap<>();
         Map<String, BigDecimal> yTotal = new HashMap<>();
         
@@ -98,11 +100,11 @@ public class HeatMapService {
         prepareXYResults(yTotalAmounts, yTotal, xTotal, data);
         
         // sort X axis descending (highest first)
-        int maxSize = count == null ? xTotal.size() : count;
+        int maxSize = xCount == null ? xTotal.size() : xCount;
         xTotal = getTopEntries(xTotal, maxSize);
         
         // build matrix and update amounts to %
-        BigDecimal[][] matrix = calculateMatrixAndPercentages(xTotalAmounts, xTotal, yTotal, data);
+        JsonBean[][] matrix = calculateMatrixAndPercentages(xTotalAmounts, xTotal, yTotal, data);
         
         // X * Y dataset
         result.set("yDataSet", data.keySet());
@@ -112,13 +114,15 @@ public class HeatMapService {
         result.set("yPTotals", yTotal.values());
         result.set("xPTotals", xTotal.values());
         result.set("xTotals", xTotalAmounts);
-        // % with matrix
+        // matrix with % and display value
         result.set("matrix", matrix);
     }
     
     private void prepareXYResults(List<String> yTotalAmounts, Map<String, BigDecimal> yTotal, 
-            Map<String, BigDecimal> xTotal, Map<String, Map<String, BigDecimal>> data) {
-        for (ReportArea yArea : report.reportContents.getChildren()) {
+            Map<String, BigDecimal> xTotal, Map<String, Map<String, ReportCell>> data) {
+        List<ReportArea> yAreas = yCount == null ? report.reportContents.getChildren() :
+            report.reportContents.getChildren().subList(0, yCount);
+        for (ReportArea yArea : yAreas) {
             // build Y axis 
             String yValue = yArea.getContents().get(yOutCol).displayedValue;
             ReportCell yTotCell = yArea.getContents().get(mOutCol);
@@ -127,7 +131,7 @@ public class HeatMapService {
             yTotal.put(yValue, yTotalAmount);
             
             // build row data
-            Map<String, BigDecimal> row = data.putIfAbsent(yValue, new HashMap<String, BigDecimal>());
+            Map<String, ReportCell> row = data.putIfAbsent(yValue, new HashMap<String, ReportCell>());
             if (row == null)
                 row = data.get(yValue);
             
@@ -136,7 +140,7 @@ public class HeatMapService {
                 String xValue = xArea.getContents().get(xOutCol).displayedValue;
                 ReportCell amountCell = xArea.getContents().get(mOutCol);
                 BigDecimal amount = amountCell == null ? BigDecimal.ZERO : (BigDecimal) amountCell.value;
-                row.put(xValue, amount);
+                row.put(xValue, amountCell);
                 
                 // calculate X totals
                 amount = amount.add(xTotal.getOrDefault(xValue, BigDecimal.ZERO));
@@ -145,24 +149,28 @@ public class HeatMapService {
         }
     }
     
-    private BigDecimal[][] calculateMatrixAndPercentages(List<String> xTotalAmounts, Map<String, BigDecimal> xTotal,
-            Map<String, BigDecimal> yTotal, Map<String, Map<String, BigDecimal>> data) {
+    private JsonBean[][] calculateMatrixAndPercentages(List<String> xTotalAmounts, Map<String, BigDecimal> xTotal,
+            Map<String, BigDecimal> yTotal, Map<String, Map<String, ReportCell>> data) {
         BigDecimal grandTotal = (BigDecimal) report.reportContents.getContents().get(mOutCol).value;
-        BigDecimal[][] matrix = new BigDecimal[data.size()][xTotal.size()];
+        JsonBean[][] matrix = new JsonBean[data.size()][xTotal.size()];
         
         int y = 0;
-        for (Entry<String, Map<String, BigDecimal>> entry : data.entrySet()) {
+        for (Entry<String, Map<String, ReportCell>> entry : data.entrySet()) {
             int x = 0;
-            Map<String, BigDecimal> currentRow = entry.getValue();
+            Map<String, ReportCell> currentRow = entry.getValue();
             boolean isEmpty = true;
             for (Entry<String, BigDecimal> xTotalEntry : xTotal.entrySet()) {
-                BigDecimal percentage = currentRow.get(xTotalEntry.getKey());
-                if (percentage != null) {
+                ReportCell amountCell = currentRow.get(xTotalEntry.getKey());
+                if (amountCell != null && amountCell.value != null) {
                     isEmpty = false;
+                    matrix[y][x] = new JsonBean();
+                    matrix[y][x].set("dv", amountCell.displayedValue);
+                    
+                    BigDecimal percentage = (BigDecimal) amountCell.value;
                     percentage = percentage.multiply(HUNDRED).divide(xTotalEntry.getValue(), MCTX);
                     percentage = percentage.setScale(2, RoundingMode.HALF_EVEN);
+                    matrix[y][x++].set("p", percentage);
                 }
-                matrix[y][x++] = percentage;
             }
             // don't set if full empty row
             if (isEmpty)
@@ -245,11 +253,13 @@ public class HeatMapService {
         // TODO add validation
         this.xCol = config.getString(DashboardConstants.X_COLUMN);
         this.yCol = config.getString(DashboardConstants.Y_COLUMN);
-        this.count = EndpointUtils.getSingleValue(config, EPConstants.COUNT, DEFAULT_COUNT);
-        if (count < 0) count = null;
+        this.xCount = EndpointUtils.getSingleValue(config, DashboardConstants.X_COUNT, DEFAULT_X_COUNT);
+        if (xCount < 0) xCount = null;
+        this.yCount = EndpointUtils.getSingleValue(config, DashboardConstants.Y_COUNT, DEFAULT_Y_COUNT);
+        if (yCount < 0) yCount = null;
         
-        String rName = String.format("HeatMap by %s and %s%s", xCol, yCol, (count == null ? "" : ", top " + count));
-        LOGGER.info(String.format("Generating '%s' Chard Data", rName));
+        String rName = String.format("HeatMap by %s and %s (xCount = %d, yCount = %d)", xCol, yCol, xCount, yCount);
+        LOGGER.info(String.format("Generating Chart '%s'", rName));
         
         ReportSpecificationImpl spec = new ReportSpecificationImpl(rName, ArConstants.DONOR_TYPE);
         ReportColumn yRepCol = new ReportColumn(yCol); 

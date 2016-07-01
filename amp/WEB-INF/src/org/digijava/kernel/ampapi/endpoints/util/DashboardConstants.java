@@ -25,6 +25,8 @@ public class DashboardConstants {
 	public static final String DASHBOARD_DEFAULT_MAX_YEAR_DAY = "";
 	public static final String DASHBOARD_DEFAULT_MIN_YEAR_DAY = "";
 	
+	public static final String X_COUNT = "xCount";
+	public static final String Y_COUNT = "yCount";
 	public static final String X_COLUMN = "xColumn";
 	public static final String X_COLUMNS = "xColumns";
 	public static final String Y_COLUMN = "yColumn";

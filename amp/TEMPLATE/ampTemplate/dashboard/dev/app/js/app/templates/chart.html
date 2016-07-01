@@ -32,6 +32,11 @@ text.axis-worktime {
       <h2 data-i18n="amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>"><%= model.get('title') %></h2>
     </div>
 
+	<% if (model.get('chartType') === 'fragmentation') { %>
+		<div class="heatmap-top-selectors-container">
+		</div>	
+	<% } %>
+	
     <div class="panel-body">
       <div class="chart-container">
         <h3 class="dash-chart-diagnostic text-center"></h3>
@@ -67,7 +72,7 @@ text.axis-worktime {
             target="_blank">
             <span class="glyphicon glyphicon-cloud-download"></span>
           </a>
-          <button type="button" class="btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm">
+          <button type="button" class="btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm" <%= model.get('disableResize') ? 'disabled' : ''%>>
             <span class="glyphicon glyphicon-fullscreen"></span>
           </button>
         </div>
@@ -89,4 +94,3 @@ text.axis-worktime {
 
   <div class="export-modal"></div>
 </div>
-

@@ -2531,7 +2531,8 @@ var common = require('../charts/common');
 module.exports = ChartModel.extend({
 
 	defaults: {
-	    limit: 31,
+	    xLimit: 31,
+	    yLimit: 10,
 	    title: '',
 	    name: '',
 	    bigN: 0,
@@ -2560,11 +2561,11 @@ module.exports = ChartModel.extend({
 		for (var i = 0; i < data.yDataSet.length; i++) {					
 			for (var j = 0; j < data.xDataSet.length; j++) {
 				if (data.matrix[i] !== null) {
-					var value = data.matrix[i][j] !== null ? data.matrix[i][j] : -1;
-					var row = {y: i + 1, x: j + 1, value: value/*, yname: data.yDataSet[i], xname: data.xDataSet[i]*/}; //name is for tooltip
+					var value = data.matrix[i][j] !== null ? data.matrix[i][j] : {p: -1, amount: '0'};
+					var row = {y: i + 1, x: j + 1, value: value.p, amount: value.dv/*, yname: data.yDataSet[i], xname: data.xDataSet[i]*/}; //name is for tooltip
 					self.values.push(row);
 				} else {
-					self.values.push({y: i + 1, x: j + 1, value: -1});
+					self.values.push({y: i + 1, x: j + 1, value: -1, amount: "0"});
 				}
 			}
 		}
@@ -2611,14 +2612,14 @@ module.exports = ChartModel.extend({
 	fetch: function(options) {
 		//TODO: add code for saved dashboards!!!		
 		var self = this;
-		options = _.defaults(options || {}, { url: this.url + '?' + param(this.pick('limit')) });
+		options = _.defaults(options || {}, { url: this.url + '?' + param(this.pick('xLimit')) });
 		
 		// Process params from heat-map/configs, in that EP we have defined each heatmap.
 		var configs = this.get('heatmap_config').models[0];
 		var thisChart = _.find(configs.get('charts', function() {return name === self.get('name')}));
 		var xColumn = configs.get('columns')[thisChart.xColumns[0]]; // First column is default.
 		var yColumn = configs.get('columns')[thisChart.yColumns[0]]; // First column is default.
-		var paramsForHeatMap = {count: self.get('limit'), xColumn: xColumn.origName, yColumn: yColumn.origName}; 		
+		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn.origName, yColumn: yColumn.origName}; 		
 		//options.data = JSON.stringify($.extend({}, paramsForHeatMap, JSON.parse(options.data)));
 		paramsForHeatMap.filters =  JSON.parse(options.data);
 		options.data = JSON.stringify(paramsForHeatMap);
@@ -3392,7 +3393,8 @@ module.exports = ChartViewBase.extend({
     showTotal: false,
     showMeasuresSelector: true,
     showTopLegends: false,
-    showCommonChartArea: false
+    showCommonChartArea: false,
+    disableResize: true
   },
   
   chartViews: [
@@ -3578,7 +3580,7 @@ var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
-var template = _.template("<style>\nrect.bordered {\n\tstroke: #E6E6E6;\n\tstroke-width: 2px;\n}\n\ntext.mono {\n\tfont-size: 9pt;\n\tfont-family: Arial;\n\tfill: #000;\n}\n\ntext.axis-workweek {\n\tfill: #000;\n}\n\ntext.axis-worktime {\n\tfill: #000;\n}\n</style>\n\n<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <% if (model.get('showTotal') === true) { %>\n\t      <span class=\"pull-right big-number\">\n\t        <b class=\"chart-total\"></b>\n\t        <span class=\"chart-currency\"></span>\n\t      </span>\n      <% } %>\n      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\n    </div>\n\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                heatmap: 'stats',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\">\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>\n\n");
+var template = _.template("<style>\nrect.bordered {\n\tstroke: #E6E6E6;\n\tstroke-width: 2px;\n}\n\ntext.mono {\n\tfont-size: 9pt;\n\tfont-family: Arial;\n\tfill: #000;\n}\n\ntext.axis-workweek {\n\tfill: #000;\n}\n\ntext.axis-worktime {\n\tfill: #000;\n}\n</style>\n\n<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <% if (model.get('showTotal') === true) { %>\n\t      <span class=\"pull-right big-number\">\n\t        <b class=\"chart-total\"></b>\n\t        <span class=\"chart-currency\"></span>\n\t      </span>\n      <% } %>\n      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\n    </div>\n\n\t<% if (model.get('chartType') === 'fragmentation') { %>\n\t\t<div class=\"heatmap-top-selectors-container\">\n\t\t</div>\t\n\t<% } %>\n\t\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                heatmap: 'stats',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\" <%= model.get('disableResize') ? 'disabled' : ''%>>\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>");
 
 
 var adjOptTemplate = _.template('<option value="<%=opt.id%>" ' +

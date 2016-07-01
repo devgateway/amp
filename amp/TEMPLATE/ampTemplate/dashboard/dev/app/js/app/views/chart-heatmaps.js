@@ -10,7 +10,8 @@ module.exports = ChartViewBase.extend({
     showTotal: false,
     showMeasuresSelector: true,
     showTopLegends: false,
-    showCommonChartArea: false
+    showCommonChartArea: false,
+    disableResize: true
   },
   
   chartViews: [

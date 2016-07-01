@@ -126,7 +126,7 @@ public class IndicatorUtils {
 
     public static AmpTeamMember getTeamMember() {
         TeamMember tm = TeamUtil.getCurrentMember();
-        if (tm != null) {
+        if (tm != null && tm.getTeamId() != null) {
             AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
             if (ampTeamMember != null) {
                 return ampTeamMember;

@@ -82,7 +82,12 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 
 
 	public void setColorRamp(Set<AmpIndicatorColor> colorRamp) {
-		this.colorRamp = colorRamp;
+        if (this.colorRamp == null) {
+            this.colorRamp = colorRamp;
+        } else {
+            this.colorRamp.retainAll(colorRamp);
+            this.colorRamp.addAll(colorRamp);
+        }
 	}
 
 
@@ -142,6 +147,11 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     }
 
     public void setSharedWorkspaces(Set<AmpIndicatorWorkspace> sharedWorkspaces) {
-        this.sharedWorkspaces=sharedWorkspaces;
+        if (this.sharedWorkspaces == null) {
+            this.sharedWorkspaces = sharedWorkspaces;
+        } else {
+            this.sharedWorkspaces.retainAll(sharedWorkspaces);
+            this.sharedWorkspaces.addAll(sharedWorkspaces);
+        }
     }
 }

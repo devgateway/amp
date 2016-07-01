@@ -6,8 +6,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"%>
-<link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
-	
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>

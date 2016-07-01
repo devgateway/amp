@@ -3,6 +3,7 @@ var _ = require('underscore');
 var BaseControlView = require('../../base-control/base-control-view');
 var FundingLayersView = require('./funding-layers-view');
 var IndicatorLayersView = require('./indicator-layers-view');
+var MyLayers = require('./admin-mylayers-view');
 
 var Template = fs.readFileSync(__dirname + '/../templates/multisection-layers-template.html', 'utf8');
 
@@ -12,8 +13,9 @@ module.exports = BaseControlView.extend({
   title: 'Statistical Data',
   iconClass: 'ampicon-layers',
   subSections: [
+    MyLayers,
     IndicatorLayersView,
-    FundingLayersView
+    FundingLayersView,
   ],
   radioButtonGroup: [],
 
@@ -42,7 +44,6 @@ module.exports = BaseControlView.extend({
 
       self.$('.content', self).append(section.render().el);
     });
-
     return this;
   }
 

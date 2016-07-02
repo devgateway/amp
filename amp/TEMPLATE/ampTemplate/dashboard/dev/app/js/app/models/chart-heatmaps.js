@@ -91,14 +91,14 @@ module.exports = ChartModel.extend({
 		
 		// Process params from heat-map/configs, in that EP we have defined each heatmap.
 		var configs = this.get('heatmap_config').models[0];
-		var thisChart = _.find(configs.get('charts', function() {return name === self.get('name')}));
+		var thisChart = _.find(configs.get('charts'), function(item) {return item.name === self.get('name')});
 		var xColumn = self.get('xAxisColumn') !== '' ? self.get('xAxisColumn') : configs.get('columns')[thisChart.xColumns[0]].origName; // First column is default.
 		var yColumn = configs.get('columns')[thisChart.yColumns[0]]; // First column is default.
 		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn.origName}; 		
 		//options.data = JSON.stringify($.extend({}, paramsForHeatMap, JSON.parse(options.data)));
 		paramsForHeatMap.filters =  JSON.parse(options.data);
 		options.data = JSON.stringify(paramsForHeatMap);
-		
+
 		return ChartModel.prototype.fetch.call(this, options);
 	}
 });

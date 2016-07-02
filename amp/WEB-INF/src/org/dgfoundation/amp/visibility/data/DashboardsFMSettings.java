@@ -40,6 +40,8 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 				add("Executing Agencies");
 				add("Peace-building and State-building Goals");
 				add("Sector Fragmentation");
+				add("Location Fragmentation");
+				add("Program Fragmentation");
 			}});
 	}};
 	
@@ -57,6 +59,8 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		add("Executing Agencies");
 		add("Peace-building and State-building Goals");
 		add("Sector Fragmentation");
+		add("Location Fragmentation");
+		add("Program Fragmentation");
 	}};
 	
 	@SuppressWarnings("serial")
@@ -81,6 +85,8 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		put("Executing Agencies", "Executing Agencies");
 		put("Peace-building and State-building Goals", "Peace-building and State-building Goals");
 		put("Sector Fragmentation", "Sector Fragmentation");
+		put("Location Fragmentation", "Location Fragmentation");
+		put("Program Fragmentation", "Program Fragmentation");
 	}};
 	
 	protected Collection<String> getAllPrecursors() {
@@ -144,6 +150,8 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		currentlyVisible.add("Executing Agencies");
 		currentlyVisible.add("Peace-building and State-building Goals");
 		currentlyVisible.add("Sector Fragmentation");
+		currentlyVisible.add("Location Fragmentation");
+		currentlyVisible.add("Program Fragmentation");
 		
 		return currentlyVisible;
 	}

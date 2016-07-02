@@ -2616,14 +2616,14 @@ module.exports = ChartModel.extend({
 		
 		// Process params from heat-map/configs, in that EP we have defined each heatmap.
 		var configs = this.get('heatmap_config').models[0];
-		var thisChart = _.find(configs.get('charts', function() {return name === self.get('name')}));
+		var thisChart = _.find(configs.get('charts'), function(item) {return item.name === self.get('name')});
 		var xColumn = self.get('xAxisColumn') !== '' ? self.get('xAxisColumn') : configs.get('columns')[thisChart.xColumns[0]].origName; // First column is default.
 		var yColumn = configs.get('columns')[thisChart.yColumns[0]]; // First column is default.
 		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn.origName}; 		
 		//options.data = JSON.stringify($.extend({}, paramsForHeatMap, JSON.parse(options.data)));
 		paramsForHeatMap.filters =  JSON.parse(options.data);
 		options.data = JSON.stringify(paramsForHeatMap);
-		
+
 		return ChartModel.prototype.fetch.call(this, options);
 	}
 });
@@ -4539,7 +4539,17 @@ module.exports = BackboneDash.View.extend({
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Sector Fragmentation'})) {
     	col.push(new HeatMapChart(
   	          { name: 'HeatMap by Sector and Donor Group', title: 'Sector Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
-  	          { app: this.app, url: '/rest/dashboard/heat-map' }));
+  	          { app: this.app, url: '/rest/dashboard/heat-map/sec' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Location Fragmentation'})) {
+    	col.push(new HeatMapChart(
+  	          { name: 'HeatMap by Location and Donor Group', title: 'Location Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { app: this.app, url: '/rest/dashboard/heat-map/loc' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Program Fragmentation'})) {
+    	col.push(new HeatMapChart(
+  	          { name: 'HeatMap by Program and Donor Group', title: 'Program Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { app: this.app, url: '/rest/dashboard/heat-map/prg' }));
     }
        
     var chartsCollection = new Charts(col, { app: this.app });
@@ -23710,7 +23720,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"C:\\Users\\Gabriel\\workspace-luna2\\amp-2.12-release-3\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"C:\\Users\\Gabriel\\workspace\\amp-2.12-release\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!

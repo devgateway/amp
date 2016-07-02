@@ -103,7 +103,17 @@ module.exports = BackboneDash.View.extend({
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Sector Fragmentation'})) {
     	col.push(new HeatMapChart(
   	          { name: 'HeatMap by Sector and Donor Group', title: 'Sector Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
-  	          { app: this.app, url: '/rest/dashboard/heat-map' }));
+  	          { app: this.app, url: '/rest/dashboard/heat-map/sec' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Location Fragmentation'})) {
+    	col.push(new HeatMapChart(
+  	          { name: 'HeatMap by Location and Donor Group', title: 'Location Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { app: this.app, url: '/rest/dashboard/heat-map/loc' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Program Fragmentation'})) {
+    	col.push(new HeatMapChart(
+  	          { name: 'HeatMap by Program and Donor Group', title: 'Program Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { app: this.app, url: '/rest/dashboard/heat-map/prg' }));
     }
        
     var chartsCollection = new Charts(col, { app: this.app });

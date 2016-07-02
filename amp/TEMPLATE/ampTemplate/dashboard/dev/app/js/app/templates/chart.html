@@ -31,11 +31,6 @@ text.axis-worktime {
       <% } %>
       <h2 data-i18n="amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>"><%= model.get('title') %></h2>
     </div>
-
-	<% if (model.get('chartType') === 'fragmentation') { %>
-		<div class="heatmap-top-selectors-container">
-		</div>	
-	<% } %>
 	
     <div class="panel-body">
       <div class="chart-container">
@@ -88,6 +83,16 @@ text.axis-worktime {
           <span class="cheat-lineheight"></span>
         </form>
       <% } %>
+      
+      <% if (model.get('chartType') === 'fragmentation') { %>
+		<form class="form-inline dash-form dash-xaxis-options" role="form">
+        	<select class="form-control like-btn-sm xaxis-options">
+            	<option>...</option>
+            	<!-- gets populated after settings load -->
+          	</select>
+          	<span class="cheat-lineheight"></span>
+        </form>
+	<% } %>
 
     </div>
   </div>

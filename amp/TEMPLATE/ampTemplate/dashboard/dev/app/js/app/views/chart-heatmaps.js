@@ -7,6 +7,7 @@ module.exports = ChartViewBase.extend({
 
   uiDefaults: {
 	adjtype: 'FAKE',
+	xAxisColumn: '',
     showTotal: false,
     showMeasuresSelector: true,
     showTopLegends: false,

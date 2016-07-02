@@ -22,6 +22,7 @@ module.exports = BackboneDash.View.extend({
 
   events: {
     'change .dash-adj-type select': 'changeAdjType',
+    'change .dash-xaxis-options select': 'changeXAxis',
     'click .reset': 'resetLimit',
     'click .chart-view': 'changeChartView',
     'click .download': 'download',
@@ -53,11 +54,12 @@ module.exports = BackboneDash.View.extend({
     this.listenTo(this.app.filter, 'apply', this.updateData);
     this.listenTo(this.app.settings, 'change', this.updateData);
     this.listenTo(this.model, 'change:adjtype', this.render);
+    this.listenTo(this.model, 'change:xAxisColumn', this.render);
     this.listenTo(this.model, 'change:limit', this.updateData);
     this.listenTo(this.model, 'change:view', this.render);
 
     this.app.state.register(this, 'chart:' + this.model.url, {
-      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements','seriesToExclude'),
+      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'xAxisColumn', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements','seriesToExclude'),
       set: _(this.model.set).bind(this.model),
       empty: null
     });
@@ -67,7 +69,8 @@ module.exports = BackboneDash.View.extend({
     if (this.chartClickHandler) { _.bindAll(this, 'chartClickHandler'); }
   },
 
-  render: function() {    
+  render: function() {
+	var self = this;
     var renderOptions = {
       views: this.chartViews,
       model: this.model,
@@ -101,6 +104,22 @@ module.exports = BackboneDash.View.extend({
       }).bind(this));
     } else {
         this.rendered = true;
+    }
+    
+    // For heatmaps add some extra combos.
+    if (this.model.get('chartType') === 'fragmentation') {
+    	var heatMapConfigs = this.model.get('heatmap_config').models[0];
+    	var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function(item) {return item.name === self.model.get('name')});
+    	this.$('.xaxis-options').html(
+    		_(thisHeatMapChart.xColumns).map(function(colId) {
+    			var item = _.find(heatMapConfigs.get('columns'), function(item, i) { return i === colId});
+    			var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
+    			return adjOptTemplate({
+    				opt: opt,
+    	            current: (opt.id === this.model.get('xAxisColumn'))
+    	        });
+    	    }, this)
+    	);
     }
 
     if (this._stateWait.state() !== 'pending') {
@@ -213,6 +232,11 @@ module.exports = BackboneDash.View.extend({
     var newType = e.currentTarget.value;
     this.model.set('adjtype', newType);
   },
+  
+  changeXAxis: function(e) {
+	  var newType = e.currentTarget.value;
+	  this.model.set('xAxisColumn', newType);
+  },  
 
   changeChartView: function(e) {
     var view = util.data(e.currentTarget, 'view');

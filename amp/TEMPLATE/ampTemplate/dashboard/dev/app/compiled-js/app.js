@@ -1081,8 +1081,9 @@ nv.models.heatMapChart = function() {
         	var cubeSize = 30;
         	var width = 1024 - innerMargin.left - innerMargin.right;
         	var topSectionHeight = 180;
-        	var height = topSectionHeight + (cubeSize * data[0].values.y.length);
-        	var legendElementWidth = cubeSize * 2;
+        	var legendSectionHeight = 20;
+        	var height = topSectionHeight + (cubeSize * data[0].values.y.length) + legendSectionHeight;
+        	var legendElementHeight = 22;
         	//var colors = [ "#cb213d", "#fca530", "#0e8466" ]; // alternatively colorbrewer.YlGnBu[9]
         	var noColor = '#FFFFFF';
         	var categories = [{min: -1, max: 0, color: noColor},
@@ -1097,7 +1098,7 @@ nv.models.heatMapChart = function() {
         	
         	var svg = container
         		/*.select("#chart")*/
-        		.append("svg")
+        		/*.append("svg")*/
         		/*.attr("width", width + innerMargin.left + innerMargin.right)*/
         		/*.attr("height", height + innerMargin.top + innerMargin.bottom)*/
         		.append("g")
@@ -1169,6 +1170,17 @@ nv.models.heatMapChart = function() {
         			.attr('data-title', function(d) {
         				return d;
         			});
+        		
+        		// Add Totals special column.
+        		xAxisLabelsContainer.append("text")
+        			.text(app.translator.translateSync("TOTALS"))
+        			.attr("x", cubeSize * data[0].values.x.length)
+        			.attr("y", 0)
+        			.attr("class", "xLabel mono axis nv-series heatmap-totals")
+        			.style("font-weight", "bold")
+            		.attr("transform", function(d, i) {
+        				return "rotate(270, " + (cubeSize * data[0].values.x.length) + ", 0)";
+        			});
 
         		// Cubes
         		var cubesContainer = svg
@@ -1186,23 +1198,51 @@ nv.models.heatMapChart = function() {
         			createCube(cubesContainer, {x: data[0].values.x.length + 1 , y: j + 1, value: data[0].values.yPTotals[j], tooltip: data[0].values.yTotals[j]}, cubeSize, noColor, categories);
         		}
         		
-        		// Basic tooltips.
-				/*$(container[0]).on('.yLabel', function(e) {
-        	        e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
-        	        dispatch.tooltipShow(e);
-        	    });
-
-        		$(container[0]).on('tooltipShow', function(e) {
-        	        if (tooltips) showTooltip(e);
-        	    });
-
-        		$(container[0]).on('tooltipHide', function() {
-        	        if (tooltips) nv.tooltip.cleanup();
-        	    });*/
+        		// Add percentage legends.
+        		createLegends(svg, data, cubeSize, categories, legendElementHeight);
         });
 
         renderWatch.renderEnd('pieChart immediate');
         return chart;
+    }
+    
+    function createLegends(svg, data, cubeSize, categories, legendElementHeight) {
+    	var legendsContainer = svg
+			.append("g")
+			.attr("transform", "translate(0, " + (((data[0].values.y.length + 1) * cubeSize) + 10) + ")")
+			.attr("class", "heatmap-legends-container");
+    	var legendsPool = [app.translator.translateSync("Less than 1%"),
+    	                   app.translator.translateSync("Between 1% and 4.99%"),
+    	                   app.translator.translateSync("Between 5% and 9.99%"),
+    	                   app.translator.translateSync("Between 10% and 14.99%"),
+    	                   app.translator.translateSync("Between 15% and 19.99%"),
+    	                   app.translator.translateSync("More than 20%")];   	
+    	var maxLegendTextWidth = 0;
+    	for (var i = 0; i < legendsPool.length; i++) {
+    		var auxWidth = calculateTextWidth(legendsPool[i]);
+    		if (auxWidth > maxLegendTextWidth) {
+    			maxLegendTextWidth = auxWidth;
+    		}
+    		$("#tempSpan").remove();
+    	}
+    	maxLegendTextWidth += 20;
+    	
+    	for (var i = 0; i < legendsPool.length; i++) {
+    		var legends = legendsContainer
+				.append("rect")
+				.attr("x", (i * maxLegendTextWidth))
+				.attr("width", maxLegendTextWidth)
+				.attr("height", legendElementHeight)
+				.attr("class", "bordered")
+				.style("fill", categories[i + 1].color);
+		
+			var text = legendsContainer.append("text"); 
+			text.attr('font-family', 'Arial')
+				.attr('font-size', '11px')
+				.attr("y", 15)
+				.attr("x", ((i * maxLegendTextWidth) + ((maxLegendTextWidth - calculateTextWidth(legendsPool[i])) / 2)))
+				.html(legendsPool[i]);
+    	}
     }
     
     function createCube(cubesContainer, data, cubeSize, noColor, categories) {
@@ -1278,6 +1318,13 @@ nv.models.heatMapChart = function() {
     		}
     	}
     	return color;
+    }
+    
+    function calculateTextWidth(text) {
+    	$("body").append("<span id='tempSpan' class='invisible'>" + text + "</span>");
+    	var auxWidth = $("#tempSpan").width();
+    	$("#tempSpan").remove();
+    	return auxWidth;
     }
 
     //============================================================

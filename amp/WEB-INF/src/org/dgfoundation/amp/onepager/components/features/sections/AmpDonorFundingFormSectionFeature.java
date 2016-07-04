@@ -584,6 +584,9 @@ public class AmpDonorFundingFormSectionFeature extends
 	}
 	
 	public AmpOrgRole findAmpOrgRole(AmpOrganisation org, AmpRole role) {
+		if(org == null || role == null) {
+			return null;
+		}
 		for (AmpOrgRole ampOrgRole : orgRoleModel.getObject()) {
 			if (ampOrgRole.getOrganisation().getIdentifier().equals(org.getIdentifier()) 
 					&& ampOrgRole.getRole().getIdentifier().equals(role.getIdentifier())) {

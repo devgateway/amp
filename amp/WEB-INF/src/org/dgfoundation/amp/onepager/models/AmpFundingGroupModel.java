@@ -64,7 +64,10 @@ public class AmpFundingGroupModel implements IModel<Set<AmpOrgRole>> {
 		Iterator<AmpFunding> fundingSetIterator = auxAmpFunding.iterator();
 		while (fundingSetIterator.hasNext()) {
 			AmpFunding funding = (AmpFunding) fundingSetIterator.next();
-			orgRoles.add(parent.findAmpOrgRole(funding.getAmpDonorOrgId(), funding.getSourceRole()));
+			AmpOrgRole ampOrgRole = parent.findAmpOrgRole(funding.getAmpDonorOrgId(), funding.getSourceRole());
+			if(ampOrgRole != null) {
+				orgRoles.add(ampOrgRole);
+			}
 		}
 		return orgRoles;
 	}

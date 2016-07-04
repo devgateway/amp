@@ -121,25 +121,26 @@ nv.models.heatMapChart = function() {
         	var legendSectionHeight = 20;
         	var height = topSectionHeight + (cubeSize * data[0].values.y.length) + legendSectionHeight;
         	var legendElementHeight = 22;
-        	//var colors = [ "#cb213d", "#fca530", "#0e8466" ]; // alternatively colorbrewer.YlGnBu[9]
         	var noColor = '#FFFFFF';
         	var categories = [{min: -1, max: 0, color: noColor},
         	                  {min: 0, max: 1, color: "#D05151"},
-        	                  {min: 1, max: 5, color: "#e68787"}, 
-        	                  {min: 5, max: 10, color: "#e4883e"}, 
-        	                  {min: 10, max: 15, color: "#f6b277"}, 
-        	                  {min: 15, max: 20, color: "#adcd95"}, 
-        	                  {min: 20, max: 101, color: "#7ba05f"}];
+        	                  {min: 1, max: 5, color: "#E68787"}, 
+        	                  {min: 5, max: 10, color: "#E4883E"}, 
+        	                  {min: 10, max: 15, color: "#F6B277"}, 
+        	                  {min: 15, max: 20, color: "#ADCD95"}, 
+        	                  {min: 20, max: 101, color: "#7BA05F"}];
         	
         	$(container[0]).attr('height', height).attr('class', 'dash-chart nvd3-svg heatmap-chart');
         	
         	var svg = container
-        		/*.select("#chart")*/
-        		/*.append("svg")*/
-        		/*.attr("width", width + innerMargin.left + innerMargin.right)*/
-        		/*.attr("height", height + innerMargin.top + innerMargin.bottom)*/
         		.append("g")
         		.attr("transform", "translate(" + innerMargin.left + "," + innerMargin.top + ")");
+        	
+        	// Add SVG filter for cell highlight.
+        	svg.append("defs").append("filter").attr("id", "filterSaturate").append("feColorMatrix").attr("in", "SourceGraphic").attr("type", "saturate").attr("values", "5");
+        	svg.append("defs").append("filter").attr("id", "filterLuminanceToAlpha").append("feColorMatrix").attr("in", "SourceGraphic").attr("type", "luminanceToAlpha");
+        	svg.append("defs").append("filter").attr("id", "filterBlur").append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "2");
+        	svg.append("defs").append("filter").attr("id", "filterDarken").append("feColorMatrix").attr("type", "matrix").attr("values", "0.5 0 0 0 0 0 0.5 0 0 0 0 0 0.5 0 0 0 0 0 1 0");
 
         	// Rows container.
         	var yAxisLabelsContainer = svg        	
@@ -291,6 +292,7 @@ nv.models.heatMapChart = function() {
     }
     
     function createCube(cubesContainer, data, cubeSize, noColor, categories) {
+    	var selfData = data;
     	var cube = cubesContainer
 			.append("rect")
 			.attr("x", ((data.x - 1) * cubeSize))
@@ -300,7 +302,9 @@ nv.models.heatMapChart = function() {
 			.attr("class", "bordered")
 			.attr("width", cubeSize)
 			.attr("height", cubeSize)
-			.style("fill", noColor);
+			.style("fill", noColor)
+			.attr("data-x", data.x - 1)
+			.attr("data-y", data.y - 1);
 		
 		cube.transition()
 			.duration(1000)
@@ -336,6 +340,13 @@ nv.models.heatMapChart = function() {
 				} else {
 					return '';
 				}
+			})
+			.on("click", function(obj) {				
+				// Remove all filters applied.
+				$($(cubesContainer[0]).find("rect")).removeAttr("filter");
+				// Apply "darken" to the cells.		
+				$($(cubesContainer[0]).find("[data-x='"+ (selfData.x - 1) + "']")).attr("filter", "url(#filterDarken)");
+				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']")).attr("filter", "url(#filterDarken)");
 			});
 		if (data.tooltip) {
 			text.attr('data-title', data.tooltip)

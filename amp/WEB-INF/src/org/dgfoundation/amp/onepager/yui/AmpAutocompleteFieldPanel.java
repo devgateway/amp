@@ -139,12 +139,12 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	protected void onBeforeRender() {
 		super.onBeforeRender();
 
-		final CharSequence url = onSelectBehavior.getCallbackUrl();
 		textField.add(new Behavior() {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
+				final CharSequence url = onSelectBehavior.getCallbackUrl();
 				String js = "function callWicket"
 						+ textField.getMarkupId()
 						+ "(selectedString) { " +

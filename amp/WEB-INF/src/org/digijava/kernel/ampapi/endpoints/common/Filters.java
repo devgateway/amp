@@ -504,7 +504,7 @@ public class Filters {
 	@GET
 	@Path("/fundingStatus/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "FundingStatus", columns = ColumnConstants.FUNDING_STATUS,name="Funding Status")
+	@ApiMethod(ui = true, id = "FundingStatus", columns = ColumnConstants.FUNDING_STATUS,name="Funding Status",tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getFundingStatus() {
 		return getCategoryValue(CategoryConstants.FUNDING_STATUS_KEY,ColumnConstants.FUNDING_STATUS);
 	}

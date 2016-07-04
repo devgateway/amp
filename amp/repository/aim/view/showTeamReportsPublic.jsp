@@ -477,8 +477,6 @@ function submitForm(action){
 																						%>
 																							<%-- <%@ include file="saiku_button.jspf" %> --%> 
 																						<% } %>
-																						<!-- Show XML, PDF and Printer Friendly icon removed with AMP-20044 -->
-																						<!--  
 																						<c:set var="translation">
 																							<digi:trn>Get report in Excel format</digi:trn>&nbsp;
 																						</c:set>
@@ -500,7 +498,6 @@ function submitForm(action){
 																								src="/TEMPLATE/ampTemplate/images/icons/pdf.gif"
 																								border="0" />
 																						</a>
-																						-->
 																						<!-- Show Printer Friendly icon removed with AMP-22055 -->
 																						<!--  
 																						<feature:display

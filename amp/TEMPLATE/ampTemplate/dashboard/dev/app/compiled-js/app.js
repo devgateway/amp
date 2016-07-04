@@ -1212,10 +1212,10 @@ nv.models.heatMapChart = function() {
 			.attr("transform", "translate(0, " + (((data[0].values.y.length + 1) * cubeSize) + 10) + ")")
 			.attr("class", "heatmap-legends-container");
     	var legendsPool = [app.translator.translateSync("Less than 1%"),
-    	                   app.translator.translateSync("Between 1% and 4.99%"),
-    	                   app.translator.translateSync("Between 5% and 9.99%"),
-    	                   app.translator.translateSync("Between 10% and 14.99%"),
-    	                   app.translator.translateSync("Between 15% and 19.99%"),
+    	                   app.translator.translateSync("Between 1% and <5%"),
+    	                   app.translator.translateSync("Between 5% and <10%"),
+    	                   app.translator.translateSync("Between 10% and <15%"),
+    	                   app.translator.translateSync("Between 15% and <20%"),
     	                   app.translator.translateSync("More than 20%")];   	
     	var maxLegendTextWidth = 0;
     	for (var i = 0; i < legendsPool.length; i++) {
@@ -1243,6 +1243,14 @@ nv.models.heatMapChart = function() {
 				.attr("x", ((i * maxLegendTextWidth) + ((maxLegendTextWidth - calculateTextWidth(legendsPool[i])) / 2)))
 				.html(legendsPool[i]);
     	}
+    	
+    	legendsContainer.append("text")
+			.text(app.translator.translateSync("LEGENDS"))
+			.attr("x", -6)
+			.attr("y", 15)
+			.attr("class", "yLabel mono axis nv-series heatmap-totals")
+			.style("text-anchor", "end")
+			.style("font-weight", "bold");
     }
     
     function createCube(cubesContainer, data, cubeSize, noColor, categories) {
@@ -1266,6 +1274,7 @@ nv.models.heatMapChart = function() {
 			.attr('font-size', '11px')
 			.attr("x", ((data.y - 1) * cubeSize))
 			.attr("y", ((data.y - 1) * cubeSize) + 19)
+			.attr("class", "heatmap-cell")
 			.attr("x", function() {
 				var d = data;
 				var auxVal = d.value;
@@ -23767,7 +23776,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"C:\\Users\\Gabriel\\workspace\\amp-2.12-release\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"C:\\Users\\Gabriel\\workspace-luna2\\amp-2.12-release-3\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!

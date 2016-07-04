@@ -614,14 +614,14 @@ public class Reports {
 		switch (type) {
 			case AMPReportExportConstants.XLSX: {
 				LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
-				String styleType = (String) queryModel.get(AMPReportExportConstants.EXCEL_TYPE_PARAM);
+				String styleType = queryModel != null ? (String) queryModel.get(AMPReportExportConstants.EXCEL_TYPE_PARAM) : null;
 				if ("plain".equals(styleType)) {
 					exporter = SaikuReportExportType.XLSX_PLAIN;
 				} else {
 					exporter = SaikuReportExportType.XLSX;
 				}
 							
-				String secondCurrencyCode = queryModel.containsKey("secondCurrency") ? queryModel.get("secondCurrency").toString() : null;
+				String secondCurrencyCode = queryModel != null && queryModel.containsKey("secondCurrency") ? queryModel.get("secondCurrency").toString() : null;
 				
 				if (secondCurrencyCode != null) {
 					logger.info(String.format("setts 1 = %s, 2 = %s, secondCurrency=%s", queryModel.get("1"), queryModel.get("2"), secondCurrencyCode));

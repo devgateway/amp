@@ -53,8 +53,11 @@ public class SaikuExportFilterUtils {
 							ReportColumn col = (ReportColumn) filter.getKey().entity;
 							String columnName = col.getColumnName();
 							
-							if (columnName.equals(ColumnConstants.DONOR_ID))
+							if (ColumnConstants.DONOR_ID.equals(columnName))
 								columnName = ColumnConstants.DONOR_AGENCY;
+							
+							if (ColumnConstants.ARCHIVED.equals(columnName)) 
+								break; //TODO: the filter is not yet implemented.
 							
 							columnName = AmpFiltersConverter.removeIdSuffixIfNeeded(AmpReportsSchema.getInstance(), columnName);
 							

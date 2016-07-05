@@ -1311,7 +1311,7 @@ nv.models.heatMapChart = function() {
 				$($(cubesContainer[0]).find("[data-x='"+ (selfData.x - 1) + "']")).attr("filter", "url(#filterDarken)");
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']")).attr("filter", "url(#filterDarken)");
 				// Highlight this cell.
-				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']" + "[data-x='"+ (selfData.x - 1) + "']")).attr("filter", "url(#filterSaturate)");
+				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']" + "[data-x='"+ (selfData.x - 1) + "']")).removeAttr("filter");
 			}).on("mouseover", function(obj) {				
 				console.log(selfData);
 			});

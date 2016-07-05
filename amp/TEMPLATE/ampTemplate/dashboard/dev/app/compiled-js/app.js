@@ -1044,7 +1044,7 @@ nv.models.heatMapChart = function() {
         selection.each(function(data) {//TODO: selection.each????
         	// Get currency for later.
         	var currencySettings = _.find(app.settings.models, function(item) {return item.get('id') === '1'});
-        	var selectedCurrency = _.find(currencySettings.get('options'), function(item) {return item.id === currencySettings.get('defaultId')}).value;
+        	var selectedCurrency = _.find(currencySettings.get('options'), function(item) {return item.selected === true}).value;
         	
         	var container = d3.select(this);
             nv.utils.initSVG(container);
@@ -1317,7 +1317,7 @@ nv.models.heatMapChart = function() {
 				// Highlight this cell.
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']" + "[data-x='"+ (selfData.x - 1) + "']")).removeAttr("filter");
 			}).on("mouseover", function(obj) {				
-				console.log(selfData);
+				//console.log(selfData);
 			});
 		if (data.tooltip) {
 			text.attr('data-title', data.tooltip)

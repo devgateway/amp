@@ -173,17 +173,6 @@ function user_admin_account() {
 
   $query = db_select('users', 'u');
   $query->condition('u.uid', 0, '<>');
-
-  // Hide system users from the users listing.
-  $db_and = db_and();
-  $db_and->condition('u.uid', 1, '>');
-  $db_and->condition('u.uid', 100, '<');
-  $db_and->condition('u.status', 1);
-  $db_or = db_or();
-  $db_or->condition($db_and);
-  $db_or->condition('u.uid', 100, '>');
-  $query->condition($db_or);
-
   user_build_filter_query($query);
 
   $count_query = clone $query;

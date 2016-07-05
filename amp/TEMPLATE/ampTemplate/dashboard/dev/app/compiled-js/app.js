@@ -1307,13 +1307,17 @@ nv.models.heatMapChart = function() {
 			.on("click", function(obj) {				
 				// Remove all filters applied.
 				$($(cubesContainer[0]).find("rect")).removeAttr("filter");
-				// Apply "darken" to the cells.		
+				// Apply "darken" to the row and column.		
 				$($(cubesContainer[0]).find("[data-x='"+ (selfData.x - 1) + "']")).attr("filter", "url(#filterDarken)");
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']")).attr("filter", "url(#filterDarken)");
+				// Highlight this cell.
+				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']" + "[data-x='"+ (selfData.x - 1) + "']")).attr("filter", "url(#filterSaturate)");
+			}).on("mouseover", function(obj) {				
+				console.log(selfData);
 			});
 		if (data.tooltip) {
 			text.attr('data-title', data.tooltip)
-			.attr("class", "nv-series");
+			.attr("class", "nv-series heatmap-cell");
 		}
     }
     
@@ -29590,6 +29594,7 @@ module.exports = Backbone.View.extend({
       case 'ModeOfPaymentList':
       case 'ExpenditureClassList':
       case 'FinancingInstrumentsList':
+      case 'FundingStatus':
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
       case 'ActivityStatusList':

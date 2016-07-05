@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Provides install, updated, and uninstall functions for recaptcha_mailhide.
+ */
+
+/**
+ * Implements hook_update_N().
+ */
+
+/**
+ * Issue #2473329: Remove obsolete variables.
+ */
+function recaptcha_mailhide_update_7100() {
+  // recaptcha_mailhide no longer uses any variables.
+  db_delete('variable')
+    ->condition('name', 'recaptcha_mailhide_%', 'LIKE')
+    ->execute();
+  cache_clear_all('variables', 'cache_bootstrap');
+  return t('Removed obsolete variables.');
+}

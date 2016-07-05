@@ -282,29 +282,32 @@ module.exports = BackboneDash.View.extend({
   beautifyLegends : function(self) {	  
 	  var hasValues = false;
 	  var hasProcessed = false;
-	  if(self.model != undefined && self.model.get('values') != undefined && self.model.get('values').length > 0) {
+	  if(self.model !== undefined && self.model.get('values') !== undefined && self.model.get('values').length > 0) {
 		  hasValues = true;
 	  }
-	  if(self.model != undefined && self.model.get('processed') != undefined && self.model.get('processed').length > 1) {
+	  if(self.model !== undefined && self.model.get('processed') !== undefined && self.model.get('processed').length > 1) {
 		  hasProcessed = true;
 	  }
 	  
 	  // Iterate the list of legend elements in DOM (only for this chart) and set a data element called 'data-title' that
 	  // will be then used when a hover event is fired.
 	  $(this.$el).find(".nv-series").each(function(i, elem) {
-		  if(hasValues && !hasProcessed) {
-			  // Top charts.
-			  if(self.model.get('values')[i] != undefined) {
-				  $(elem).data('data-title', self.model.get('values')[i].name);
-			  } else {
-				// This the last legend "Others" (doesnt come in the data).
-		    	$(elem).data('data-title', app.translator.translateSync("amp.dashboard:chart-FundingType-others", "Others"));
-			  }
-		  } else if(hasProcessed) {
-			  // Aid Predictability charts and Funding Type charts.
-			  if(self.model.get('processed')[i] != undefined) {
-				  // The extra check is for FT charts that have more legends (grouped, stacked, etc).
-				  $(elem).data('data-title', self.model.get('processed')[i].key);
+		  // Heatmaps dont need a special reprocessing.
+		  if (self.model.get('view') !== 'heatmap') {
+			  if(hasValues && !hasProcessed) {
+				  // Top charts.
+				  if(self.model.get('values')[i] != undefined) {
+					  $(elem).data('data-title', self.model.get('values')[i].name);
+				  } else {
+					// This the last legend "Others" (doesnt come in the data).
+			    	$(elem).data('data-title', app.translator.translateSync("amp.dashboard:chart-FundingType-others", "Others"));
+				  }
+			  } else if(hasProcessed) {
+				  // Aid Predictability charts and Funding Type charts.
+				  if(self.model.get('processed')[i] != undefined) {
+					  // The extra check is for FT charts that have more legends (grouped, stacked, etc).
+					  $(elem).data('data-title', self.model.get('processed')[i].key);
+				  }
 			  }
 		  }
 	    

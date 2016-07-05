@@ -1036,15 +1036,19 @@ nv.models.heatMapChart = function() {
 
     function chart(selection) {
     	var _self = this;
+    	var _ = require('underscore'); // This doesnt works on top of the file :(((
     	//console.log('heatMapChart.chart');
         renderWatch.reset();
         //renderWatch.models(pie);
 
         selection.each(function(data) {//TODO: selection.each????
+        	// Get currency for later.
+        	var currencySettings = _.find(app.settings.models, function(item) {return item.get('id') === '1'});
+        	var selectedCurrency = _.find(currencySettings.get('options'), function(item) {return item.id === currencySettings.get('defaultId')}).value;
+        	
         	var container = d3.select(this);
             nv.utils.initSVG(container);
 
-            var that = this;
             var availableWidth = (width || parseInt(container.style('width'), 10) || 960)
                     - margin.left - margin.right;
             var availableHeight = (height || parseInt(container.style('height'), 10) || 400)
@@ -1188,15 +1192,15 @@ nv.models.heatMapChart = function() {
     				.append("g")
     				.attr("class", "heatmap-cubes-container");
         		for (var i = 0; i < data[0].values.length; i++) {
-        			createCube(cubesContainer, data[0].values[i], cubeSize, noColor, categories);        			    				
+        			createCube(cubesContainer, $.extend(data[0].values[i], {tooltip: selectedCurrency + ' ' + data[0].values[i].amount}), cubeSize, noColor, categories);        			    				
         		}        
         		// Add total's row in the end.        		
         		for (var i = 0; i < data[0].values.x.length; i++) {
-        			createCube(cubesContainer, {x: i + 1, y: data[0].values.y.length + 1, value: data[0].values.xPTotals[i], tooltip: data[0].values.xTotals[i]}, cubeSize, noColor, categories);
+        			createCube(cubesContainer, {x: i + 1, y: data[0].values.y.length + 1, value: data[0].values.xPTotals[i], tooltip: selectedCurrency + ' ' + data[0].values.xTotals[i]}, cubeSize, noColor, categories);
         		}
         		// Add total's column on the right side.
         		for (var j = 0; j < data[0].values.y.length; j++) {
-        			createCube(cubesContainer, {x: data[0].values.x.length + 1 , y: j + 1, value: data[0].values.yPTotals[j], tooltip: data[0].values.yTotals[j]}, cubeSize, noColor, categories);
+        			createCube(cubesContainer, {x: data[0].values.x.length + 1 , y: j + 1, value: data[0].values.yPTotals[j], tooltip: selectedCurrency + ' ' + data[0].values.yTotals[j]}, cubeSize, noColor, categories);
         		}
         		
         		// Add percentage legends.
@@ -1317,7 +1321,7 @@ nv.models.heatMapChart = function() {
 			});
 		if (data.tooltip) {
 			text.attr('data-title', data.tooltip)
-			.attr("class", "nv-series heatmap-cell");
+				.attr("class", "nv-series heatmap-cell");
 		}
     }
     
@@ -1420,7 +1424,7 @@ nv.models.heatMapChart = function() {
     nv.utils.initOptions(chart);
     return chart;
 };
-},{}],12:[function(require,module,exports){
+},{"underscore":"underscore"}],12:[function(require,module,exports){
 
 nv.models.customizedMultiBarChart = function() {
   "use strict";
@@ -3927,29 +3931,32 @@ module.exports = BackboneDash.View.extend({
   beautifyLegends : function(self) {	  
 	  var hasValues = false;
 	  var hasProcessed = false;
-	  if(self.model != undefined && self.model.get('values') != undefined && self.model.get('values').length > 0) {
+	  if(self.model !== undefined && self.model.get('values') !== undefined && self.model.get('values').length > 0) {
 		  hasValues = true;
 	  }
-	  if(self.model != undefined && self.model.get('processed') != undefined && self.model.get('processed').length > 1) {
+	  if(self.model !== undefined && self.model.get('processed') !== undefined && self.model.get('processed').length > 1) {
 		  hasProcessed = true;
 	  }
 	  
 	  // Iterate the list of legend elements in DOM (only for this chart) and set a data element called 'data-title' that
 	  // will be then used when a hover event is fired.
 	  $(this.$el).find(".nv-series").each(function(i, elem) {
-		  if(hasValues && !hasProcessed) {
-			  // Top charts.
-			  if(self.model.get('values')[i] != undefined) {
-				  $(elem).data('data-title', self.model.get('values')[i].name);
-			  } else {
-				// This the last legend "Others" (doesnt come in the data).
-		    	$(elem).data('data-title', app.translator.translateSync("amp.dashboard:chart-FundingType-others", "Others"));
-			  }
-		  } else if(hasProcessed) {
-			  // Aid Predictability charts and Funding Type charts.
-			  if(self.model.get('processed')[i] != undefined) {
-				  // The extra check is for FT charts that have more legends (grouped, stacked, etc).
-				  $(elem).data('data-title', self.model.get('processed')[i].key);
+		  // Heatmaps dont need a special reprocessing.
+		  if (self.model.get('view') !== 'heatmap') {
+			  if(hasValues && !hasProcessed) {
+				  // Top charts.
+				  if(self.model.get('values')[i] != undefined) {
+					  $(elem).data('data-title', self.model.get('values')[i].name);
+				  } else {
+					// This the last legend "Others" (doesnt come in the data).
+			    	$(elem).data('data-title', app.translator.translateSync("amp.dashboard:chart-FundingType-others", "Others"));
+				  }
+			  } else if(hasProcessed) {
+				  // Aid Predictability charts and Funding Type charts.
+				  if(self.model.get('processed')[i] != undefined) {
+					  // The extra check is for FT charts that have more legends (grouped, stacked, etc).
+					  $(elem).data('data-title', self.model.get('processed')[i].key);
+				  }
 			  }
 		  }
 	    

@@ -1653,7 +1653,9 @@ function collapseAll() {
 									<b>${budgetStructure.budgetStructureName}</b>						
 						</td>
 						<td bgcolor="#f0f0f0" align="left" width="150">
-									<b>${budgetStructure.budgetStructurePercentage}%</b>						
+							<c:if test="${budgetStructure.budgetStructurePercentage != null && budgetStructure.budgetStructurePercentage.length() > 0}">
+								<b>${budgetStructure.budgetStructurePercentage}%</b>
+							</c:if>
 						</td>
 					</tr>
 				</c:forEach>

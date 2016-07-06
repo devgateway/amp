@@ -192,6 +192,9 @@ public class Reports {
 	 * @see ReportsUtil#getReportResultByPage
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
+		if (formParams != null) {
+			logger.debug(formParams);
+		}
 		JsonBean result = ReportsUtil.validateReportConfig(formParams, true);
 		if (result != null) {
 			return result;

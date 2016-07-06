@@ -245,7 +245,8 @@ public class ExpenditureClassTests extends ReportingTestCase {
 			}
 		}
 	}
-	
+	/*
+	 * Commented out since Expenditure Class isn't a column anymore
 	@Test
 	public void testExpenditureClassFiltering() {
 		NiReportModel cor = new NiReportModel("expenditure class-filtered-by-exp-class")
@@ -265,7 +266,10 @@ public class ExpenditureClassTests extends ReportingTestCase {
 		
 		runNiTestCase(spec("expenditure class-filtered-by-exp-class"), "en", acts, cor);
 	}
+	*/
 	
+	/* Commented out since Expenditure Class isn't a column anymore
+	 * 
 	@Test
 	public void testExpenditureClassFilteringFlat() {
 		NiReportModel cor = new NiReportModel("expenditure class-filtered-by-exp-class-flat")
@@ -282,6 +286,8 @@ public class ExpenditureClassTests extends ReportingTestCase {
 		
 		runNiTestCase(spec("expenditure class-filtered-by-exp-class-flat"), "en", acts, cor);
 	}
+	
+	*/
 	
 	@Override
 	public void setUp() {

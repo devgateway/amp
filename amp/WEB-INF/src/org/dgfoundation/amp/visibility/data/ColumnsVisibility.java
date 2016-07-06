@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -29,13 +31,28 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	protected static final Logger logger = Logger.getLogger(ColumnsVisibility.class);
 	
 	private static final Set<String> columnsSet = ConstantsUtil.getConstantsSet(ColumnConstants.class);
+
+	/*
+	 * Expenditure Class is not an actual column, but has column-type of filtering 
+	 * so it needs to be 'visible' for the filters, but not for any other purpose
+	 */
+	private static final Set<String> fakeColumns = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
 	
 	/**
 	 * @return the current set of visible columns
 	 */
 	synchronized
-	public static Set<String> getVisibleColumns() {
+	public static Set<String> getVisibleColumnsWithFakeOnes() {
 		return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS);
+	}
+
+	/**
+	 * @return the current set of visible columns 
+	 */
+	synchronized
+	public static Set<String> getVisibleColumns() {
+		return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS)
+				.stream().filter(z -> !fakeColumns.contains(z)).collect(Collectors.toSet());
 	}
 	
 	protected ColumnsVisibility() {
@@ -141,6 +158,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("/Activity Form/Funding/Overview Section/Type of Implementation", ColumnConstants.TYPE_OF_IMPLEMENTATION);
 		put("/Activity Form/Issues Section", ColumnConstants.ISSUES);
 		put("/Activity Form/Issues Section/Issue/Measure/Actor", ColumnConstants.ISSUES___MEASURES___ACTORS);
+		put("/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Expenditure Class", ColumnConstants.EXPENDITURE_CLASS);
 		put("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", ColumnConstants.AGREEMENT_CODE);
 		put("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument", ColumnConstants.FINANCING_INSTRUMENT);
 		put("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", ColumnConstants.FUNDING_CLASSIFICATION_DATE);
@@ -296,7 +314,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Description of Component Funding", ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING);
 		put("Draft", ColumnConstants.DRAFT);
 		put("Execution Rate", ColumnConstants.EXECUTION_RATE);
-		put("Expenditure Class", ColumnConstants.EXPENDITURE_CLASS);
+//		put("Expenditure Class", ColumnConstants.EXPENDITURE_CLASS);
 		put("Final Date for Disbursements Comments", ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS_COMMENTS);
 		put("Funding end date", ColumnConstants.FUNDING_END_DATE);
 		put("Funding start date", ColumnConstants.FUNDING_START_DATE);

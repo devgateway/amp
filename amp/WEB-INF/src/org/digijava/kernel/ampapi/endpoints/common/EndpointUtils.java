@@ -317,7 +317,7 @@ public class EndpointUtils {
 	public static List<AvailableMethod> getAvailableMethods(String className, boolean includeColumn){
 		List<AvailableMethod> availableFilters = new ArrayList<AvailableMethod>(); 
 		try {
-			Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
+			Set<String> visibleColumns = ColumnsVisibility.getVisibleColumnsWithFakeOnes();
 			Class<?> c = Class.forName(className);
 			
 			javax.ws.rs.Path p = c.getAnnotation(javax.ws.rs.Path.class);

@@ -778,7 +778,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			ColumnConstants.ACTIVITY_ID,
 			ColumnConstants.GEOCODE,
 			ColumnConstants.LOCATION,
-			ColumnConstants.DONOR_ID
+			ColumnConstants.DONOR_ID,
+			ColumnConstants.EXPENDITURE_CLASS
 		));
 		return PersistenceManager.getSession().doReturningWork(conn -> {
 			Set<String> inDbColumns = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "columnname", "amp_columns"), 1));

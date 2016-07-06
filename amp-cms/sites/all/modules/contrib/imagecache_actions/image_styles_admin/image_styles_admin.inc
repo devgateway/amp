@@ -151,7 +151,8 @@ function image_styles_admin_import_form($form/*, $form_state*/) {
  * Callback to validate the import style form.
  */
 function image_styles_admin_import_form_validate($form, &$form_state) {
-  if (image_styles_admin_import_extract_style($form_state['values']['serialized_style']) === FALSE) {
+  $import = image_styles_admin_unify_newlines($form_state['values']['serialized_style']);
+  if (image_styles_admin_import_extract_style($import) === FALSE) {
     form_set_error('serialized_style', t('The %field cannot be imported as an image style.', array('%field' => t('Image style import data'))));
   }
 }
@@ -160,7 +161,8 @@ function image_styles_admin_import_form_validate($form, &$form_state) {
  * Callback to process form submission of the import style form.
  */
 function image_styles_admin_import_form_submit($form, &$form_state) {
-  $style = image_styles_admin_import_extract_style($form_state['values']['serialized_style']);
+  $import = image_styles_admin_unify_newlines($form_state['values']['serialized_style']);
+  $style = image_styles_admin_import_extract_style($import);
   // Import the style by "duplicating" it, but prevent adding the -copy suffix
   // by passing the requested name and label as 2nd and 3rd parameter.
   $new_style = image_styles_admin_duplicate($style, $style['name'], isset($style['label']) ? $style['label'] : NULL);
@@ -190,7 +192,31 @@ function image_styles_admin_export_serialize($style) {
   foreach ($style['effects'] as &$effect) {
     $effect = array_intersect_key($effect, array('weight' => 0, 'name' => 0, 'data' => 0));
   }
+
+  array_walk_recursive($style, function(&$value) {
+    if (is_string($value)) {
+      $value = image_styles_admin_unify_newlines($value);
+    }
+  });
   return serialize($style);
+}
+
+/**
+ * Unifies newlines in the string to the Unix newline standard.
+ *
+ * #2636314: textareas may convert newlines to the underlying OS style: convert
+ * all new lines to Unix style before unserializing. As string length is in the
+ * serialized data, we must ensure that we also do this on each array value
+ * before serializing.
+ *
+ * @param string $str
+ *
+ * @return string
+ */
+function image_styles_admin_unify_newlines($str) {
+  $str = str_replace("\r\n", "\n", $str);
+  $str = str_replace("\r", "\n", $str);
+  return $str;
 }
 
 /**
@@ -204,7 +230,7 @@ function image_styles_admin_export_serialize($style) {
  *   image style data.
  */
 function image_styles_admin_import_extract_style($import) {
-  $style = @unserialize($import);
+  $style = unserialize($import);
 
   // Check if the contents of the textarea could be unserialized into an array.
   if (!is_array($style)) {

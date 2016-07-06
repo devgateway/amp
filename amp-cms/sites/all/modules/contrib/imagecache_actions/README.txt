@@ -9,6 +9,11 @@ Current and past maintainers for Imagecache Actions:
 - fietserwin (https://drupal.org/user/750928)
 
 
+Release notes for 7.x-1.x-dev
+-----------------------------
+- Clear all caches after updating.
+
+
 Release notes for 7.x-1.4
 -------------------------
 - This release supports image labels as introduced by Drupal 7.23.
@@ -113,9 +118,17 @@ On the other hand: the GD toolkit is always available (in the correct version),
 whereas imagemagick is not always present on shared hosting or may be present in
 an antique version that might give problems.
 
-Please also note that effects may give different results depending on the
+Please note that effects may give different results depending on the
 toolkit used.
 
+Please also note that a 3rd image toolkit exists:
+  Imagick (https://www.drupal.org/project/imagick)
+This toolkit uses the Imagick extension and thus does not call the ImageMagick
+binaries directly. However our module does not implement the toolkit specific
+parts for the effects we provide for the Imagick toolkit, but the Imagick
+toolkit comes with its own set of effects that partly covers our effects. So,
+depending on the effects you require it may be a replacement for both our module
+and the Imagemagick module or the core GD toolkit.
 
 Hard Dependencies
 -----------------

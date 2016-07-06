@@ -4,6 +4,60 @@ Imagecache Actions
 Imagecache Actions 7.x-1.x-dev
 ------------------------------
 
+Imagecache Actions 7.x-1.7
+--------------------------
+- [#2671526]: Fatal error on image style flush when image styles are defined in
+  Features.
+
+Imagecache Actions 7.x-1.6
+--------------------------
+- [#2664020]: IE fails to display images whose extension and Content-Type header
+  do not match the actual image type.
+- [#1591484]: Underlay not working (on IM).
+- [#2359523]: Follow up to improve help text.
+- [#2615986] by hargobind: Effect summary in image_styles_admin.module.
+- Notice: Undefined index: element in theme_coloractions_alpha_summary() (line
+  98 of coloractions\transparency.inc).
+- Removed superfluous theme entry 'imagecache_subroutine_summary' from
+  autorotate sub module.
+- [#2080877] by heathdutton: Interlace / Progressive effect.
+- [#760438] by fietserwin: Resize Overlay / Watermark for ImageMagick.
+- [#760438] by raintonr, Ace Cooper, ttkaminski, thijsvdanker, fietserwin:
+  Resize Overlay / Watermark (GD only).
+- [#768980] by idebr, fietserwin: Blur effect.
+- [#2636314]: 'Import style' can fail on newline characters.
+- [#2573225]: Resize by percentage not calculating other field.
+- [#2447419]: Correct erroneous call to module_load_include in
+  imagecache_canvasactions.module.
+- [#2416805]: Remove reference to non-existent imagecache_coloractions.install.
+- [#2416805]: remove deprecated jquery attr() and replace with FAPI #states
+  (rounded corners UI form).
+- [#2580805]: Coding standards corrections.
+
+
+Imagecache Actions 7.x-1.5 2014-11-29
+-------------------------------------
+- [#2366163]: autorotate sometimes doesn't work with ImageMagick.
+- Text effect: small clean-up of hook_exit().
+- [#2379359]: image_imagemagick_overlay() passes a stream wrapper to convert.
+- [#2359523]: Overlay: allow to define offsets from all sides.
+- [#1717436]: Add effects: color level adjustment and desaturate while retaining
+    alpha.
+- [#2278233]: Call to undefined function imagecache_actions_get_style_label().
+- [#2183721]: Duplicate/Export links just edit, they don't duplicate or export.
+    possible solution only.
+- [#2176727]: New actions: scale / resize by percent.
+- [#2190759]: hook_image_style_flush(): Prefer silent failure over clear failure.
+- [#2166715]: Typo causes extra query every page load.
+- [#2139091]: # sign before HEX in settings form breaks Define canvas action.
+- [#2085967]: Remove .gitignore from version control.
+- Text overlay: treat empty texts as normal situation.
+- [#2003446]: Clean up or remove .install files, adapt .info files.
+- [1854270-48]: Minor optimization for Posterize.
+- Refactor: eliminate test warnings and errors.
+- Refactor: standardize function and parameter naming, function order, doxygen
+    documentation and comments, remove spelling errors in doc and comments.
+
 
 Imagecache Actions 7.x-1.4 2013-08-24
 -------------------------------------

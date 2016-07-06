@@ -946,6 +946,7 @@ function entityqueue_field_widget_form(&$form, &$form_state, $field, $instance, 
         '#autocomplete_path' => $autocomplete_path,
         '#size' => $instance['widget']['settings']['size'],
         '#element_validate' => array('_entityreference_autocomplete_validate'),
+        '#id' => $table_id . '-add',
         '#attributes' => array(
           'id' => $table_id . '-add',
         ),
@@ -992,10 +993,10 @@ function entityqueue_widget_dragtable_element_validate($element, &$form_state) {
   // If the trigger was a remove button.
   $triggering_element = $form_state['triggering_element'];
   $offset = drupal_strlen($field_name) + 8;
-//  if (drupal_substr($triggering_element['#name'], 0, $offset) == $field_name . '_remove_') {
-//    $remove_key = drupal_substr($triggering_element['#name'], $offset);
-//    unset($existing_values[$remove_key]);
-//  }
+  if (drupal_substr($triggering_element['#name'], 0, $offset) == $field_name . '_remove_') {
+    $remove_key = drupal_substr($triggering_element['#name'], $offset);
+    unset($existing_values[$remove_key]);
+  }
   $values = array();
   $weights = array();
   foreach ($existing_values as $key => $row) {

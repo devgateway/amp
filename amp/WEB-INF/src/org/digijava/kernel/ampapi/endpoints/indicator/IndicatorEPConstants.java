@@ -17,6 +17,8 @@ public class IndicatorEPConstants {
     public static final String SAVED = "SAVED";
     public static final String DELETED = "DELETED";
 
+    public static final String DEFAULT_INDICATOR_ORDER_FIELD = "created_on";
+
     public static final SimpleDateFormat DATE_FORMATTER = DateTimeUtil.getStrictSimpleDateFormat(
             CurrencyEPConstants.DATE_FORMAT);
     public static final int DEFAULT_COUNT = 10;
@@ -47,6 +49,16 @@ public class IndicatorEPConstants {
     public static final String TOTAL_RECORDS = "totalRecords";
     public static final String NUMBER_OF_IMPORTED_RECORDS="numberOfImportedRecords";
     public static final String SHARED_WORKSPACES="sharedWorkspaces";
+
+    public static final String FIELD_NAME = "indicator_name";
+    public static final String FIELD_DESCRIPTION = "description";
+    public static final String FIELD_NUMBER_OF_CLASSES = "number_of_classes";
+    public static final String FIELD_UNIT = "unit";
+    public static final String FIELD_ADM_LEVEL_ID = "adm_level";
+    public static final String FIELD_ACCESS_TYPE_ID = "access_type";
+    public static final String FIELD_CREATED_ON = "created_on";
+    public static final String FIELD_UPDATED_ON = "updated_on";
+    public static final String FIELD_ID = "id";
 
     public static final String PAGE = "page";
     public static final String DATA = "data";

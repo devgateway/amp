@@ -1,38 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.gis;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.PathSegment;
-import javax.ws.rs.core.StreamingOutput;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -44,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -67,6 +38,34 @@ import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.PathSegment;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * Class that holds entrypoing for GIS api methods
@@ -384,6 +383,7 @@ public class GisEndPoints {
 			if (includeAdmLevel) {
 				json.set("admLevelId", indicator.getAdmLevel().getLabel());
 			}
+            json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
 			List<JsonBean> colors = new ArrayList<JsonBean>();
 			List<AmpIndicatorColor> colorList = new ArrayList<AmpIndicatorColor>(indicator.getColorRamp());
 			Collections.sort(colorList, new Comparator<AmpIndicatorColor>() {

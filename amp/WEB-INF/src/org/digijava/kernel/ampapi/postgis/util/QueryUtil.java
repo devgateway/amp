@@ -1,18 +1,8 @@
 package org.digijava.kernel.ampapi.postgis.util;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKTReader;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -24,6 +14,8 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.exception.DgException;
@@ -39,6 +31,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationSkeleton;
 import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
@@ -49,9 +42,18 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class QueryUtil {
 	protected static Logger logger = Logger.getLogger(QueryUtil.class);
@@ -373,7 +375,13 @@ public class QueryUtil {
 	public static List <AmpIndicatorLayer> getIndicatorLayers () {
 		Session dbSession = PersistenceManager.getSession();
 		String queryString = "select ind from "
-				+ AmpIndicatorLayer.class.getName() + " ind";
+				+ AmpIndicatorLayer.class.getName() + " ind"
+                + " left join ind.sharedWorkspaces s "
+                + " where (  "
+                + " ind.accessType = " + IndicatorAccessType.PUBLIC
+                + " or (ind.accessType = " + IndicatorAccessType.SHARED + " and s.workspace.ampTeamId in( " + TeamUtil.getCurrentTeam(TLSUtils.getRequest()).getAmpTeamId() + " )) "
+                + " or (ind.accessType = " + IndicatorAccessType.PRIVATE + " and ind.createdBy.ampTeamMemId = " + IndicatorUtils.getTeamMember().getAmpTeamMemId() + ") "
+                + " ) ";
 		Query qry = dbSession.createQuery(queryString);
 		qry.setCacheable(true);
 		return qry.list();
@@ -381,9 +389,16 @@ public class QueryUtil {
 	
 	 public static List <AmpIndicatorLayer> getIndicatorByCategoryValue (String value) {
 			Session dbSession = PersistenceManager.getSession();
+
 			String queryString = "select ind from "
-					+ AmpIndicatorLayer.class.getName()
-					+ " ind where upper(ind.admLevel.value)=:value)";
+					+ AmpIndicatorLayer.class.getName() + " ind "
+                    + " left join ind.sharedWorkspaces s "
+                    + " where upper(ind.admLevel.value)=:value) "
+                    + " and (  "
+                    + " ind.accessType = " + IndicatorAccessType.PUBLIC
+                    + " or (ind.accessType = " + IndicatorAccessType.SHARED + " and s.workspace.ampTeamId in( " + TeamUtil.getCurrentTeam(TLSUtils.getRequest()).getAmpTeamId() + " )) "
+                    + " or (ind.accessType = " + IndicatorAccessType.PRIVATE + " and ind.createdBy.ampTeamMemId = " + IndicatorUtils.getTeamMember().getAmpTeamMemId() + ") "
+                    + " ) ";
 			Query qry = dbSession.createQuery(queryString);
 			qry.setCacheable(true);
 			qry.setString("value", value.toUpperCase());

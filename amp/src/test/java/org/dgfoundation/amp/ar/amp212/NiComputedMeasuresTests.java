@@ -158,18 +158,18 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 	public void testTimeboundMeasures() {
 		NiReportModel cor = new NiReportModel("Timebound computed measures (timelocked)")
 				.withHeaders(Arrays.asList(
-						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 8))",
-						"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 7))",
-						"(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Previous Month Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Selected Year Planned Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Current Month Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Last Year of Planned Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Prior Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Cumulated Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 7))",
+						"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 6))",
+						"(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Previous Month Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Selected Year Planned Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Cumulated Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Current Month Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Last Year of Planned Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1))"))
 					.withWarnings(Arrays.asList())
 					.withBody(      new ReportAreaForTests(null)
-				      .withContents("Project Title", "", "Totals-Actual Disbursements", "400,036", "Totals-Previous Month Disbursements", "84,200", "Totals-Selected Year Planned Disbursements", "123,321", "Totals-Current Month Disbursements", "82,000", "Totals-Last Year of Planned Disbursements", "36,500", "Totals-Prior Actual Disbursements", "87,500", "Totals-Cumulated Disbursements", "171,700")
+				      .withContents("Project Title", "", "Totals-Actual Disbursements", "400,036", "Totals-Previous Month Disbursements", "84,200", "Totals-Selected Year Planned Disbursements", "123,321", "Totals-Cumulated Disbursements", "171,700", "Totals-Current Month Disbursements", "82,000", "Totals-Last Year of Planned Disbursements", "36,500")
 				      .withChildren(
 				        new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Totals-Actual Disbursements", "770", "Totals-Last Year of Planned Disbursements", "500"),
 				        new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Totals-Actual Disbursements", "90,000", "Totals-Last Year of Planned Disbursements", "36,000"),
-				        new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Disbursements", "253,700", "Totals-Previous Month Disbursements", "84,200", "Totals-Current Month Disbursements", "82,000", "Totals-Prior Actual Disbursements", "87,500", "Totals-Cumulated Disbursements", "171,700"),
+				        new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Disbursements", "253,700", "Totals-Previous Month Disbursements", "84,200", "Totals-Cumulated Disbursements", "171,700", "Totals-Current Month Disbursements", "82,000"),
 				        new ReportAreaForTests(new AreaOwner(88), "Project Title", "activity-weird-funding", "Totals-Actual Disbursements", "55,566", "Totals-Selected Year Planned Disbursements", "123,321")      ));
-				
+		
 		ReportSpecificationImpl spec = buildSpecification("Timebound computed measures (timelocked)", 
 				Arrays.asList(ColumnConstants.PROJECT_TITLE),
 				Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, 

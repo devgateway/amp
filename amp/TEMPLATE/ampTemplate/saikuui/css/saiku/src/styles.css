@@ -2125,3 +2125,11 @@ width:70px !important;
 .amp_settings, .amp_filters{
   width: auto !important;
 }
+
+#amp_currency {
+    max-width: 75%;
+}
+
+#amp_calendar {
+    max-width: 75%;
+}

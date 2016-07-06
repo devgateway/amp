@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
@@ -27,20 +28,21 @@ public class IndicatorService {
 	protected static final Logger logger = Logger.getLogger(IndicatorService.class);
 
     public static JsonBean getIndicators(Integer offset, Integer count, String orderBy, String sort ) {
+        ApiEMGroup errors = new ApiEMGroup();
 
-        orderBy = (orderBy!=null ? orderBy : IndicatorEPConstants.DEFAULT_INDICATOR_ORDER_FIELD);
-        sort = (sort!=null ? sort : "");
-        JsonBean result = IndicatorUtils.validateOrderBy(orderBy, sort);
-        if (result != null) {
-            return result;
+        orderBy = ((orderBy==null || "".equals(orderBy)) ? IndicatorEPConstants.DEFAULT_INDICATOR_ORDER_FIELD : orderBy);
+        sort = (sort!=null ? sort : "asc");
+
+        IndicatorUtils.validateOrderBy(orderBy, sort, errors);
+        if (errors.size() > 0) {
+            return ApiError.toError(errors.getAllErrors());
         }
 
         Collection<AmpIndicatorLayer> indicatorLayers = null;
-        TeamMember tm = TeamUtil.getCurrentMember();
-        if (tm == null) {
-            indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByAccessType(IndicatorEPConstants.ACCESS_TYPE_PUBLIC, orderBy, sort);
-        } else if (IndicatorUtils.isAdmin()) {
+        if (IndicatorUtils.isAdmin()) {
             indicatorLayers = DynLocationManagerUtil.getIndicatorLayers(orderBy, sort);
+        } else if (TeamUtil.getCurrentMember() == null) {
+            indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByAccessType(IndicatorEPConstants.ACCESS_TYPE_PUBLIC, orderBy, sort);
         }
         else {
             indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByCreatedBy(IndicatorUtils.getTeamMember(), orderBy, sort);

@@ -2,7 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
@@ -210,50 +210,20 @@ public class IndicatorUtils {
         return teamJson;
     }
 
-    public static final ApiErrorMessage validateField(String field) {
-        ApiErrorMessage err = null;
+    public static final void validateOrderBy(String orderBy, String sort, ApiEMGroup errors) {
 
-        if (!validFieldList.contains(field)){
-            err = new ApiErrorMessage(IndicatorErrors.INVALID_FIELD.id, IndicatorErrors.INVALID_FIELD.description,field);
-        }
-
-        if (err != null){
-            return err;
-        }else{
-            return null;
-        }
-    }
-
-    public static final JsonBean validateOrderBy(String orderBy, String sort) {
-        List<ApiErrorMessage> errors = new ArrayList<ApiErrorMessage>();
-
-        ApiErrorMessage err = null;
-
-        err = IndicatorUtils.validateField(orderBy);
-        if (err != null) errors.add(err);
+        ApiErrorMessage err = IndicatorUtils.validateField(orderBy);
+        if (err != null) errors.addApiErrorMessage(err, "orderBy");
 
         err = IndicatorUtils.validateSort(sort);
-        if (err != null) errors.add(err);
+        if (err != null) errors.addApiErrorMessage(err, "sort");
+    }
 
-        if(errors.size()>0){
-            return ApiError.toError(errors);
-        }else{
-            return null;
-        }
+    public static final ApiErrorMessage validateField(String field) {
+        return (validFieldList.contains(field)? null : new ApiErrorMessage(IndicatorErrors.INVALID_FIELD.id, IndicatorErrors.INVALID_FIELD.description,field));
     }
 
     public static final ApiErrorMessage validateSort(String sort) {
-
-        ApiErrorMessage err = null;
-
-        if (sort != null && !"".equalsIgnoreCase(sort) && !"desc".equalsIgnoreCase(sort) && !"asc".equalsIgnoreCase(sort)) {
-            err = new ApiErrorMessage(IndicatorErrors.INVALID_SORT.id, IndicatorErrors.INVALID_SORT.description,sort);
-        }
-
-        if (err != null){
-            return err;
-        }else{
-            return null;
-        }
+        return ("desc".equalsIgnoreCase(sort) || "asc".equalsIgnoreCase(sort)) ? null : new ApiErrorMessage(IndicatorErrors.INVALID_SORT.id, IndicatorErrors.INVALID_SORT.description,sort);
     }
 }

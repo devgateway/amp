@@ -261,8 +261,12 @@ function saveAllSettings(){
 }
 
 function setIndex(index){
-		document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].indexTab.value=index;
+	if(document.aimGlobalSettingsForm && document.aimGlobalSettingsForm.length > 0) {
+		document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length - 1].indexTab.value = index;
+	} else {
+		return false;
 	}
+}
 	
 var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 --></script>
@@ -318,12 +322,12 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 			                <ul class="yui-nav">
 								<c:set var="indexTab" value="0"/>
 								<logic:iterate name="sections"  id="sectionName">
-								<li>
-										<a href="#section${indexTab}" indexTab="${indexTab}" onclick="setIndex(${indexTab})">	
-											<div style="text-transform: capitalize;">
-												<digi:trn key="aim:globalsettings:sectionname:${sectionName}">${sectionName}</digi:trn>
-											</div>	
-										</a>
+								 <li>
+									<a indexTab="${indexTab}" onclick="setIndex(${indexTab})" style="cursor: pointer">
+										<div style="text-transform: capitalize;">
+											<digi:trn key="aim:globalsettings:sectionname:${sectionName}">${sectionName}</digi:trn>
+										</div>
+									</a>
 								</li>
 								<c:set var="indexTab" value="${indexTab + 1}"/>
 								</logic:iterate>

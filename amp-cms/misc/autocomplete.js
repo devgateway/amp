@@ -11,11 +11,11 @@ Drupal.behaviors.autocomplete = {
       if (!acdb[uri]) {
         acdb[uri] = new Drupal.ACDB(uri);
       }
-      console.log(this.id);
+
       var $input = $('#' + this.id.substr(0, this.id.length - 13))
         .attr('autocomplete', 'OFF')
         .attr('aria-autocomplete', 'list');
-      console.log($input);
+
       $($input[0].form).submit(Drupal.autocompleteSubmit);
       $input.parent()
         .attr('role', 'application')

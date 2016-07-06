@@ -2,14 +2,14 @@
 
 /**
  * @file
- * Install tasks for chr
+ * Install tasks for chr.
  */
 
 /**
  * Implements hook_enable().
  */
 function chr_enable() {
- // Enable the override
+ // Enable the override.
  if (variable_get('chr_override_drupal_http_request', FALSE)) {
    variable_set('chr_original_http_request_function_value', variable_get('drupal_http_request_function', FALSE));
    variable_set('drupal_http_request_function', 'chr_curl_http_request');
@@ -20,7 +20,7 @@ function chr_enable() {
  * Implements hook_disable().
  */
 function chr_disable() {
- // Restore original override function
+ // Restore original override function.
  variable_set('drupal_http_request_function', variable_get('chr_original_http_request_function_value', FALSE));
 }
 

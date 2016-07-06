@@ -3,9 +3,9 @@ description = Alternative implementation of drupal_http_request() with proxy sup
 core = 7.x
 
 configure = admin/config/services/chr
-; Information added by drupal.org packaging script on 2013-10-27
-version = "7.x-1.6"
+; Information added by Drupal.org packaging script on 2015-12-04
+version = "7.x-1.8"
 core = "7.x"
 project = "chr"
-datestamp = "1382914226"
+datestamp = "1449254646"
 

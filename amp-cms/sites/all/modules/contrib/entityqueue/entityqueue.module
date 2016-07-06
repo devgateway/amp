@@ -970,7 +970,6 @@ function entityqueue_field_widget_form(&$form, &$form_state, $field, $instance, 
       );
     }
 
-    dsm($subform);
     $subform['#element_validate'] = array('entityqueue_widget_dragtable_element_validate');
     return $subform;
   }

@@ -44,10 +44,11 @@ public class IndicatorExporter {
 
 	protected static final Logger logger = Logger.getLogger(IndicatorExporter.class);
 
-    public static StreamingOutput exportIndicatorById(long admLevelId) {
+    public static StreamingOutput exportIndicatorById(long admLevelId, long indicatorId) {
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("export");
         AmpCategoryValue categoryValue =(AmpCategoryValue) DbUtil.getObject(AmpCategoryValue.class, admLevelId);
+        AmpIndicatorLayer indicatorLayer =(AmpIndicatorLayer) DbUtil.getObject(AmpIndicatorLayer.class, indicatorId);
         logger.debug("Exporting indicator table layer for adm level: " + categoryValue.getValue());
         // title cells
         HSSFCellStyle titleCS = wb.createCellStyle();
@@ -74,7 +75,7 @@ public class IndicatorExporter {
         cell.setCellValue(nameTitle);
         cell.setCellStyle(titleCS);
 
-        List<AmpIndicatorLayer> indicatorLayers = DynLocationManagerUtil.getIndicatorByCategoryValueId(admLevelId);
+        List<AmpIndicatorLayer> indicatorLayers = DynLocationManagerUtil.getIndicatorByCategoryValueIdAndIndicatorId(admLevelId, indicatorId);
         for (AmpIndicatorLayer indicator : indicatorLayers) {
             cell = titleRow.createCell(cellIndex++);
             nameTitle = new HSSFRichTextString(indicator.getName());
@@ -82,7 +83,7 @@ public class IndicatorExporter {
             cell.setCellStyle(titleCS);
 
         }
-        populateIndicatorLayerTableValues(sheet, rowIndex, categoryValue);
+        populateIndicatorLayerTableValues(sheet, rowIndex, categoryValue, indicatorLayer);
         for (int i = 0; i < cellIndex; i++) {
             sheet.autoSizeColumn(i);
         }
@@ -100,7 +101,7 @@ public class IndicatorExporter {
         return streamOutput;
     }
 
-    public static JsonBean importIndicator(long saveOption, InputStream uploadedInputStream) {
+    public static JsonBean importIndicator(long saveOption, InputStream uploadedInputStream, long indicatorId) {
         JsonBean result = new JsonBean();
         byte[] fileData = new byte[0];
         try {
@@ -115,7 +116,7 @@ public class IndicatorExporter {
         Map<Integer, ApiErrorMessage> errors = new HashMap<Integer, ApiErrorMessage>();
         DynLocationManagerUtil.ErrorWrapper errorWrapper = null;
         try {
-            errorWrapper = DynLocationManagerUtil.importIndicatorTableExcelFile(inputStream, option);
+            errorWrapper = DynLocationManagerUtil.importIndicatorTableExcelFile(inputStream, option, indicatorId);
         } catch (AimException e) {
             logger.debug("importIndicator - AimException: ", e);
             throw new WebApplicationException(e);
@@ -150,7 +151,7 @@ public class IndicatorExporter {
         return result;
     }
 
-    public static void populateIndicatorLayerTableValues(HSSFSheet sheet,int rowIndex, AmpCategoryValue categoryValue) {
+    public static void populateIndicatorLayerTableValues(HSSFSheet sheet,int rowIndex, AmpCategoryValue categoryValue, AmpIndicatorLayer indicatorLayer) {
         Set<AmpCategoryValueLocations> locations = DynLocationManagerUtil
                 .getLocationsByLayer(categoryValue);
         for (AmpCategoryValueLocations location : locations) {
@@ -160,7 +161,7 @@ public class IndicatorExporter {
             cell.setCellValue(location.getName());
             cell = row.createCell(cellIndex++);
             cell.setCellValue(location.getGeoCode());
-            List <AmpLocationIndicatorValue> values = DynLocationManagerUtil.getLocationIndicatorValueByLocation(location);
+            List <AmpLocationIndicatorValue> values = DynLocationManagerUtil.getLocationIndicatorValueByLocationAndIndicator(location,indicatorLayer);
             for (AmpLocationIndicatorValue value:values) {
                 cell = row.createCell(cellIndex++);
                 cell.setCellValue(value.getValue());

@@ -1,4 +1,5 @@
 package org.digijava.module.aim.dbentity;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.io.Serializable;
@@ -17,7 +18,7 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 	private Set <AmpLocationIndicatorValue> indicatorValues;
     private Set <AmpIndicatorWorkspace> sharedWorkspaces;
 	private String unit;
-	private AmpIndicatorAccessType accessType;
+	private IndicatorAccessType accessType;
 	private Date createdOn;
 	private Date updatedOn;
 	private AmpTeamMember createdBy;
@@ -110,11 +111,11 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 		this.unit = unit;
 	}
 
-    public AmpIndicatorAccessType getAccessType() {
+    public IndicatorAccessType getAccessType() {
         return accessType;
     }
 
-    public void setAccessType(AmpIndicatorAccessType accessType) {
+    public void setAccessType(IndicatorAccessType accessType) {
         this.accessType = accessType;
     }
 

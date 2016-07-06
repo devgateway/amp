@@ -2,8 +2,11 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
@@ -26,16 +29,31 @@ import java.util.Set;
 public class IndicatorUtils {
     protected static final Logger logger = Logger.getLogger(IndicatorUtils.class);
 
+    public static Set<String> validFieldList = null;
+    static
+    {
+        validFieldList = new HashSet<String>();
+        validFieldList.add(IndicatorEPConstants.FIELD_ID);
+        validFieldList.add(IndicatorEPConstants.FIELD_NAME);
+        validFieldList.add(IndicatorEPConstants.FIELD_DESCRIPTION);
+        validFieldList.add(IndicatorEPConstants.FIELD_NUMBER_OF_CLASSES);
+        validFieldList.add(IndicatorEPConstants.FIELD_UNIT);
+        validFieldList.add(IndicatorEPConstants.FIELD_ADM_LEVEL_ID);
+        validFieldList.add(IndicatorEPConstants.FIELD_ACCESS_TYPE_ID);
+        validFieldList.add(IndicatorEPConstants.FIELD_CREATED_ON);
+        validFieldList.add(IndicatorEPConstants.FIELD_UPDATED_ON);
+    }
+
     public static JsonBean buildIndicatorLayerJson(AmpIndicatorLayer indicator) {
         JsonBean indicatorJson = new JsonBean();
 
         indicatorJson.set(IndicatorEPConstants.ID, indicator.getId());
-        indicatorJson.set(IndicatorEPConstants.NAME, indicator.getName());
-        indicatorJson.set(IndicatorEPConstants.DESCRIPTION, indicator.getDescription());
+        indicatorJson.set(IndicatorEPConstants.NAME, TranslatorWorker.translateText(indicator.getName()));
+        indicatorJson.set(IndicatorEPConstants.DESCRIPTION, TranslatorWorker.translateText(indicator.getDescription()));
         indicatorJson.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
         indicatorJson.set(IndicatorEPConstants.UNIT, indicator.getUnit());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
-        indicatorJson.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getId());
+        indicatorJson.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
         if (indicator.getCreatedOn()!=null) {
             indicatorJson.set(IndicatorEPConstants.CREATED_ON, IndicatorEPConstants.DATE_FORMATTER.format(indicator.getCreatedOn()));
         }
@@ -92,7 +110,7 @@ public class IndicatorUtils {
             indicatorLayer.setCreatedBy(getTeamMember());
         }
         indicatorLayer.setUpdatedOn(new Date());
-        indicatorLayer.setAccessType(DynLocationManagerUtil.getAmpIndicatorAccessTypeFromDb(Long.valueOf(indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID))));
+        indicatorLayer.setAccessType( (indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID)!=null ? IndicatorAccessType.getValueFromLong(Long.valueOf(indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID))) :IndicatorAccessType.NO_TYPE));
         indicatorLayer.setAdmLevel(CategoryManagerUtil.getAmpCategoryValueFromDb(Long.valueOf(indicator.getString(IndicatorEPConstants.ADM_LEVEL_ID))));
 
         if (indicator.get(IndicatorEPConstants.COLOR_RAMP_ID)!=null) {
@@ -190,5 +208,52 @@ public class IndicatorUtils {
         teamJson.set(IndicatorEPConstants.ID, ws.getAmpTeamId());
         teamJson.set(IndicatorEPConstants.NAME, ws.getName());
         return teamJson;
+    }
+
+    public static final ApiErrorMessage validateField(String field) {
+        ApiErrorMessage err = null;
+
+        if (!validFieldList.contains(field)){
+            err = new ApiErrorMessage(IndicatorErrors.INVALID_FIELD.id, IndicatorErrors.INVALID_FIELD.description,field);
+        }
+
+        if (err != null){
+            return err;
+        }else{
+            return null;
+        }
+    }
+
+    public static final JsonBean validateOrderBy(String orderBy, String sort) {
+        List<ApiErrorMessage> errors = new ArrayList<ApiErrorMessage>();
+
+        ApiErrorMessage err = null;
+
+        err = IndicatorUtils.validateField(orderBy);
+        if (err != null) errors.add(err);
+
+        err = IndicatorUtils.validateSort(sort);
+        if (err != null) errors.add(err);
+
+        if(errors.size()>0){
+            return ApiError.toError(errors);
+        }else{
+            return null;
+        }
+    }
+
+    public static final ApiErrorMessage validateSort(String sort) {
+
+        ApiErrorMessage err = null;
+
+        if (sort != null && !"".equalsIgnoreCase(sort) && !"desc".equalsIgnoreCase(sort) && !"asc".equalsIgnoreCase(sort)) {
+            err = new ApiErrorMessage(IndicatorErrors.INVALID_SORT.id, IndicatorErrors.INVALID_SORT.description,sort);
+        }
+
+        if (err != null){
+            return err;
+        }else{
+            return null;
+        }
     }
 }

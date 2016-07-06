@@ -20,4 +20,6 @@ public class IndicatorErrors {
     public static final ApiErrorMessage NAME_NOT_MATCH = new ApiErrorMessage(8, "Name misMatch");
     public static final ApiErrorMessage LOCATION_NOT_FOUND = new ApiErrorMessage(9, "Location not found");
 
+    public static final ApiErrorMessage INVALID_FIELD = new ApiErrorMessage(10, "Invalid field");
+    public static final ApiErrorMessage INVALID_SORT = new ApiErrorMessage(11, "Invalid sort");
 }

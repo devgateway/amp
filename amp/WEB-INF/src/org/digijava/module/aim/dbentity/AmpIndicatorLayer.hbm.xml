@@ -11,8 +11,15 @@
 		<property name="name" column="indicator_name" type="java.lang.String" />
 		<many-to-one name="admLevel" column="adm_level"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" lazy="false" />
-        <many-to-one name="accessType" column="access_type"
-			class="org.digijava.module.aim.dbentity.AmpIndicatorAccessType" cascade="none" not-null="true" lazy="false" />
+        <property name="accessType" >
+            <column name="access_type" not-null="true" default="0" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType</param>
+                <param name="useNamed">false</param>
+            </type>
+        </property>
+
+
 		<property name="description" column="description" type="text" />
 		<property name="numberOfClasses" column="number_of_classes" type="java.lang.Long" />
 		<property name="unit" column="unit" type="java.lang.String" />

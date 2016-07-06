@@ -25,11 +25,15 @@ import java.util.Collection;
 public class IndicatorService {
 
 	protected static final Logger logger = Logger.getLogger(IndicatorService.class);
-    public static final String DEFAULT_INDICATOR_ORDER_FIELD = "created_on";
 
     public static JsonBean getIndicators(Integer offset, Integer count, String orderBy, String sort ) {
-        orderBy = (orderBy!=null ? orderBy : DEFAULT_INDICATOR_ORDER_FIELD);
+
+        orderBy = (orderBy!=null ? orderBy : IndicatorEPConstants.DEFAULT_INDICATOR_ORDER_FIELD);
         sort = (sort!=null ? sort : "");
+        JsonBean result = IndicatorUtils.validateOrderBy(orderBy, sort);
+        if (result != null) {
+            return result;
+        }
 
         Collection<AmpIndicatorLayer> indicatorLayers = null;
         TeamMember tm = TeamUtil.getCurrentMember();

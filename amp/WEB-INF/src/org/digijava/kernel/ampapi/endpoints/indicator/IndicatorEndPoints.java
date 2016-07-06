@@ -4,13 +4,10 @@ import com.sun.jersey.multipart.FormDataParam;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.dbentity.AmpIndicatorAccessType;
 import org.digijava.module.aim.util.ColorRampUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,7 +16,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.StreamingOutput;
 import java.io.InputStream;
@@ -65,7 +61,7 @@ public class IndicatorEndPoints {
     @GET
     @Path("/indicator-layer")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "getIndicators", ui = false)
+        @ApiMethod(id = "getIndicators", ui = false)
     public JsonBean getIndicators(@QueryParam("offset") Integer offset, @QueryParam("count") Integer count, @QueryParam("orderby") String orderBy, @QueryParam("sort") String sort) {
         return IndicatorService.getIndicators(offset, count, orderBy,sort );
     }
@@ -168,11 +164,11 @@ public class IndicatorEndPoints {
      * @param admLevelId adm Level ID to query for category value
      */
     @GET
-    @Path("/indicator-layer/export/{id}")
+    @Path("/indicator-layer/export")
     @Produces("application/vnd.ms-excel")
-    public StreamingOutput exportIndicatorById(@Context HttpServletResponse webResponse,@PathParam("id") long admLevelId) {
+    public StreamingOutput exportIndicatorById(@QueryParam("admLevelId") long admLevelId, @QueryParam("id") long indicatorId) {
 
-        return IndicatorExporter.exportIndicatorById(admLevelId);
+        return IndicatorExporter.exportIndicatorById(admLevelId,indicatorId);
     }
 
     /**
@@ -185,9 +181,10 @@ public class IndicatorEndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public JsonBean importIndicator(
             @FormDataParam("option") long saveOption,
+            @FormDataParam("indicatorId") long indicatorId,
             @FormDataParam("file") InputStream uploadedInputStream
     ) {
-        return IndicatorExporter.importIndicator(saveOption, uploadedInputStream);
+        return IndicatorExporter.importIndicator(saveOption, uploadedInputStream, indicatorId);
     }
 
     /**
@@ -282,14 +279,13 @@ public class IndicatorEndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Collection<JsonBean> getAccessTypes() {
 
-        Collection<AmpIndicatorAccessType> accessTypes = DynLocationManagerUtil.getAmpIndicatorAccessTypes();
         Collection<JsonBean> accessTypeList = new ArrayList<JsonBean>();
 
-        for (AmpIndicatorAccessType access: accessTypes){
+        for (IndicatorAccessType access: IndicatorAccessType.values()){
             JsonBean accessJson = new JsonBean();
-            accessJson.set(IndicatorEPConstants.ID,access.getId());
-            accessJson.set(IndicatorEPConstants.VALUE,access.getValue());
-            accessJson.set(IndicatorEPConstants.LABEL,access.getLabel());
+            accessJson.set(IndicatorEPConstants.ID,access.getValue());
+            accessJson.set(IndicatorEPConstants.VALUE,access.name());
+            accessJson.set(IndicatorEPConstants.LABEL,access.name());
             accessTypeList.add(accessJson);
         }
 

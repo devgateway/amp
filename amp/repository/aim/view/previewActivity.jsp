@@ -1613,20 +1613,24 @@ function collapseAll() {
 <!-- FUNDING SECTION -->
 
 <!-- PROPOSED PROJECT COST -->
-<jsp:include page = "projectCost.jsp">
-	<jsp:param name= "costName" value = "Proposed Project Cost" />
-	<jsp:param name= "projCost" value = "${aimEditActivityForm.funding.proProjCost}" />
-	<jsp:param name= "funAmount" value = "${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.funAmount}" />
-	<jsp:param name= "currencyCode" value = "${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.currencyCode}" />
-	<jsp:param name= "funDate" value = "${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.funDate}" />
-</jsp:include>
-<jsp:include page = "projectCost.jsp">
-	<jsp:param name= "costName" value = "Revised Project Cost" />
-	<jsp:param name= "projCost" value = "${aimEditActivityForm.funding.revProjCost}" />
-	<jsp:param name= "funAmount" value = "${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.funAmount}" />
-	<jsp:param name= "currencyCode" value = "${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.currencyCode}" />
-	<jsp:param name= "funDate" value = "${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.funDate}" />
-</jsp:include>
+
+<c:set var="costName">Proposed Project Cost</c:set>
+<c:set var="yearBudget">${aimEditActivityForm.funding.proposedAnnualBudgets}</c:set>
+<c:set var="projCost">${aimEditActivityForm.funding.proProjCost}</c:set>
+<c:set var="funAmount">${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.funAmount}</c:set>
+<c:set var="currencyCode">${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.currencyCode}</c:set>
+<c:set var="funDate">${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.funDate}</c:set>
+<%@ include file="projectCost.jspf" %>
+
+<c:set var="costName">Revised Project Cost</c:set>
+<c:set var="yearBudget"/>
+<c:set var="projCost">${aimEditActivityForm.funding.revProjCost}</c:set>
+<c:set var="funAmount">${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.funAmount}</c:set>
+<c:set var="currencyCode">${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.currencyCode}</c:set>
+<c:set var="funDate">${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.funDate}</c:set>
+<%@ include file="projectCost.jspf" %>
+
+
 <!-- END PROPOSED PROJECT COST -->
 
 <!-- BUDGET STRUCTURE -->

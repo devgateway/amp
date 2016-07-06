@@ -4,9 +4,9 @@ core = 7.x
 package = Views
 dependencies[] = efq_views
 
-; Information added by Drupal.org packaging script on 2014-06-11
-version = "7.x-1.0-alpha4"
+; Information added by Drupal.org packaging script on 2014-06-20
+version = "7.x-1.0-alpha5"
 core = "7.x"
 project = "efq_views"
-datestamp = "1402517028"
+datestamp = "1403301833"
 

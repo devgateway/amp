@@ -369,6 +369,13 @@ function _efq_views_get_property_handlers(&$views_data, $property, $metadata, $e
       );
     }
 
+    // Add the contextual filter (argument) handler if it's set.
+    if (isset($property_info['views']['argument'])) {
+      $views_data['argument'] = array(
+        'handler' => $property_info['views']['argument'],
+      );
+    }
+
     // Add the sort handler if it's set.
     if (isset($property_info['views']['sort'])) {
       $views_data['sort'] = array(

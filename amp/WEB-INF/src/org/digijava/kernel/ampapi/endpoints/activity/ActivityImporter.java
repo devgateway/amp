@@ -937,6 +937,7 @@ public class ActivityImporter {
         postprocessActivityReferences();
         updatePPCAmount();
         updateRoleFundings();
+        updateOrgRoles();
 	}
 	
 
@@ -1084,6 +1085,7 @@ public class ActivityImporter {
     /**
 	 * Updates activity fundings with a default source role if the item is disabled from FM (or is null)
 	 */
+	
 	protected void updateRoleFundings() {
 		boolean isSourceRoleEnalbed = FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Source Role", null);
 
@@ -1095,6 +1097,30 @@ public class ActivityImporter {
 				}
 			}
         }
+	}
+	
+	/**
+	 * Updates activity org roles (missing org roles from fundings)
+	 */
+	protected void updateOrgRoles() {
+		for (AmpFunding f : newActivity.getFunding()) {
+			boolean found = false;
+			for (AmpOrgRole role : newActivity.getOrgrole()) {
+				if (role.getRole().getRoleCode().equals(f.getSourceRole()) 
+						&& role.getOrganisation().getAmpOrgId().equals(f.getAmpDonorOrgId())) {
+					found = true;
+					break;
+				}
+			}
+			
+			if (!found) {
+				AmpOrgRole role = new AmpOrgRole();
+				role.setOrganisation(f.getAmpDonorOrgId());
+				role.setActivity(newActivity);
+				role.setRole(f.getSourceRole());
+				newActivity.getOrgrole().add(role);
+			}
+		}
 	}
 	
 	

@@ -204,7 +204,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set<AmpActivityLocation> locations ;
 	
-	@Interchangeable(fieldTitle = "Org. Role", importable = true, fmPath = "/Activity Form/Related Organizations")
+	@Interchangeable(fieldTitle = "Org. Role", importable = true, fmPath = "/Activity Form/Organizations")
 	@VersionableCollection(fieldTitle = "Org. Role")
 	@InterchangeableDiscriminator(discriminatorField = "orgRoleConfig.name", settings = {
 			@Interchangeable(fieldTitle = "Donor Organization", importable=true, discriminatorOption = Constants.FUNDING_AGENCY, fmPath = FMVisibility.ANY_FM + "/Activity Form/Organizations/Donor Organization|/Activity Form/Funding/Search Funding Organizations/Search Organizations",

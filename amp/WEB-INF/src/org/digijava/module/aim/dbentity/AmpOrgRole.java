@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -18,9 +19,9 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     private Long ampOrgRoleId;
 	@Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
     private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true, uniqueConstraint=true)
+	@Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private AmpOrganisation organisation;
-	@Interchangeable(fieldTitle="Role"/*, descend=true*/, importable=true, pickIdOnly=true)
+	@Interchangeable(fieldTitle="Role"/*, descend=true*/, importable=true, pickIdOnly=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private AmpRole role;
 	@Interchangeable(fieldTitle="Percentage", importable=true, percentageConstraint = true, fmPath = FMVisibility.PARENT_FM + "/percentage")
 	private Float 	percentage;

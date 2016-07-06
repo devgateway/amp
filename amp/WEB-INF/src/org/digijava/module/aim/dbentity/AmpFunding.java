@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -113,7 +114,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private Float capitalSpendingPercentage;
 	@Interchangeable(fieldTitle="Agreement",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", importable=true)
 	private AmpAgreement agreement;
-	@Interchangeable(fieldTitle="Source Role",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Source Role", importable=true, pickIdOnly=true)
+	@Interchangeable(fieldTitle="Source Role",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Source Role", importable=true, pickIdOnly=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private AmpRole sourceRole;
 	@Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", importable=true)
 	private Date fundingClassificationDate;

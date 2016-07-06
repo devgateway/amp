@@ -190,16 +190,16 @@ function ctools_context_handler_render_handler($task, $subtask, $handler, $conte
         $build['content'] = $info['content'];
       }
 
-      // $build['contextual_links'] = array(
-      //   '#prefix' => '<div class="contextual-links-wrapper">',
-      //   '#suffix' => '</div>',
-      //   '#theme' => 'links__contextual',
-      //   '#links' => $links,
-      //   '#attributes' => array('class' => array('contextual-links')),
-      //   '#attached' => array(
-      //     'library' => array(array('contextual', 'contextual-links')),
-      //   ),
-      // );
+//      $build['contextual_links'] = array(
+//        '#prefix' => '<div class="contextual-links-wrapper">',
+//        '#suffix' => '</div>',
+//        '#theme' => 'links__contextual',
+//        '#links' => $links,
+//        '#attributes' => array('class' => array('contextual-links')),
+//        '#attached' => array(
+//          'library' => array(array('contextual', 'contextual-links')),
+//        ),
+//      );
       $info['content'] = $build;
     }
   }

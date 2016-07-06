@@ -6,11 +6,11 @@
  */
 $plugin = array(
   'single' => TRUE,
-  'title' => t('Node last updated date'),
-  'icon' => 'icon_node.png',
-  'description' => t('The date the referenced node was last updated.'),
-  'required context' => new ctools_context_required(t('Node'), 'node'),
-  'category' => t('Node'),
+  'title' => t('Comment created date'),
+  'icon' => 'icon_comment.png',
+  'description' => t('The date the referenced comment was created.'),
+  'required context' => new ctools_context_required(t('Comment'), 'entity:comment'),
+  'category' => t('Comment'),
   'defaults' => array(
     'format' => 'small',
   ),
@@ -19,20 +19,20 @@ $plugin = array(
 /**
  * Render the custom content type.
  */
-function ctools_node_updated_content_type_render($subtype, $conf, $panel_args, $context) {
-  if (empty($context) || empty($context->data) || empty($context->data->nid)) {
+function ctools_comment_created_content_type_render($subtype, $conf, $panel_args, $context) {
+  if (empty($context) || empty($context->data)) {
     return;
   }
 
-  // Get a shortcut to the node.
-  $node = $context->data;
+  // Get a shortcut to the comment.
+  $comment = $context->data;
 
   // Build the content type block.
   $block = new stdClass();
-  $block->module  = 'node_updated';
-  $block->title   = t('Last updated date');
-  $block->content = format_date(!empty($node->changed) ? $node->changed : $node->created, $conf['format']);
-  $block->delta   = $node->nid;
+  $block->module  = 'comment_created';
+  $block->title   = t('Created date');
+  $block->content = format_date($comment->created, $conf['format']);
+  $block->delta   = $comment->cid;
 
   return $block;
 }
@@ -40,14 +40,13 @@ function ctools_node_updated_content_type_render($subtype, $conf, $panel_args, $
 /**
  * Returns an edit form for custom type settings.
  */
-function ctools_node_updated_content_type_edit_form($form, &$form_state) {
+function ctools_comment_created_content_type_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
   $date_types = array();
 
   foreach (system_get_date_types() as $date_type => $definition) {
     $date_types[$date_type] = format_date(REQUEST_TIME, $date_type);
   }
-
   $form['format'] = array(
     '#title' => t('Date format'),
     '#type' => 'select',
@@ -60,7 +59,7 @@ function ctools_node_updated_content_type_edit_form($form, &$form_state) {
 /**
  * Submit handler for the custom type settings form.
  */
-function ctools_node_updated_content_type_edit_form_submit($form, &$form_state) {
+function ctools_comment_created_content_type_edit_form_submit($form, &$form_state) {
   // Copy everything from our defaults.
   foreach (array_keys($form_state['plugin']['defaults']) as $key) {
     $form_state['conf'][$key] = $form_state['values'][$key];
@@ -70,6 +69,6 @@ function ctools_node_updated_content_type_edit_form_submit($form, &$form_state) 
 /**
  * Returns the administrative title for a type.
  */
-function ctools_node_updated_content_type_admin_title($subtype, $conf, $context) {
-  return t('"@s" last updated date', array('@s' => $context->identifier));
+function ctools_comment_created_content_type_admin_title($subtype, $conf, $context) {
+  return t('"@s" created date', array('@s' => $context->identifier));
 }

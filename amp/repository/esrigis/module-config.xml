@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <module-config>
 	<name>esrigis</name>
-	<security login-required="false" default="READ">
+	<security>
 		<action login-required="true" pattern="/structureTypeManager">ADMIN</action>
 		<action login-required="true" pattern="/StructuresImporter">ADMIN</action>
 		<action login-required="true" pattern="/MapsConfiguration">ADMIN</action>

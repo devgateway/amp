@@ -311,527 +311,429 @@ $(document).ready(function() {
               </table>
              </td>
          </tr>
-         <tr>
-					                				<td>
-					                					<c:set var="reportNumber" value="${fn:length(aimTeamReportsForm.reports)}"></c:set>
-					                  					<c:if test="${reportNumber != 0}">
-					                  						
-					                  							<logic:present name="isUserLogged" scope="session">
-																	<c:if test="${!aimTeamReportsForm.showTabs}">
-																		<div class="filtered"style="float: right; font-size: 11px;">
-																			<span><img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" /></span>
-										                       				<span><digi:trn>Not filtered Report</digi:trn>&nbsp;
-										                       				<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" /></span>
-										                       				<span><digi:trn>Filtered Report</digi:trn>&nbsp;
-										                   					<img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
-										                       				<span><digi:trn>Edit Report</digi:trn>&nbsp;
-										                   					<img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
-										                       				<span><digi:trn>Delete Report</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-										                       			</div>
-																	</c:if>
-																	<c:if test="${aimTeamReportsForm.showTabs}">
-										               					<div  class="filtered" style="float: right; font-size: 11px;">
-										                   					<span><img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" />
-										                       				<digi:trn>Not filtered Tab</digi:trn>&nbsp;
-										                       				<span><img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" /></span>
-										                       				<digi:trn>Filtered Tab</digi:trn>&nbsp;
-										                   					<span><img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
-										                       				<digi:trn>Edit Tab</digi:trn>&nbsp;
-										                   					<span><img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
-										                       				<span><digi:trn>Delete Tab</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-										                       			</div>
-																	</c:if>
-					           									</logic:present>
-					           									<table>
-					                    						<tr style="font-size: 11px; font-family: Aria, sans-serif;">
-					                      							<td>
-                                                                        <jsp:useBean id="urlParamsPagination" type="java.util.Map" class="java.util.HashMap"/>
-                                                                        <jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
-                                                                        <jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
-                                                                        <jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
-                                                                        <jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
-                                                                        <%@include file="reports_paginator.jsp" %>
-																		<!--<c:out value="${aimTeamReportsForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimTeamReportsForm.totalPages}"></c:out>-->
-					                      							</td>
-					                    						</tr>
-					                  						</table>
-					                  					</c:if>
-					                				</td>
-					             				 </tr>
-					              				<tr>
-					                				<td valign="top">
-					                  					<table>
-					                    					<tr>                    
-					                     						<td>
-					                     							<logic:present name="onlyFavourites" scope="request">
-					                     								<div style="font-weight: bold; font-size: 115%; margin: 4px;">
-					                     									<digi:trn>Only favourite reports shown</digi:trn>
-					                     								</div>
-					                     							</logic:present>
-					                     							
-					                        						<table class="inside" style="font-size:11px; font-family: Arial,sans-serif; background-color: white;" width="950px">
-					                          							<tr>
-					                          								<td align="center" class="inside_header">&nbsp;
-					                            								
-					                            							</td>
-																					<td align="center" class="inside_header"><c:if
-																							test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=1}">
-																							<digi:link href="/viewTeamReports.do?sortBy=1">
-																								<b><digi:trn>${titleColumn}</digi:trn>
-																								</b>
-																							</digi:link>
-																							<c:if test="${aimTeamReportsForm.sortBy==2}">
-																								<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
-																									alt="down" />
-																							</c:if>
-																						</c:if> <c:if
-																							test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==1}">
-																							<digi:link href="/viewTeamReports.do?sortBy=2">
-																								<b><digi:trn key="aim:organizationName">${titleColumn}</digi:trn>
-																								</b>
-																							</digi:link>
-																							<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
-																						</c:if></td>
-																					<td align="center" class="inside_header"><b>
-																							<c:if
-																								test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=3}">
-																								<digi:link href="/viewTeamReports.do?sortBy=3">
-																									<digi:trn key="aim:reportOwnerName">
-														                                          Owner
-														                                      </digi:trn>
-																								</digi:link>
-																								<c:if test="${aimTeamReportsForm.sortBy==4}">
-																									<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
-																										alt="down" />
-																								</c:if>
-																							</c:if> <c:if
-																								test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==3}">
-																								<digi:link href="/viewTeamReports.do?sortBy=4">
-																									<digi:trn key="aim:reportOwnerName">
-														                                          Owner
-														                                      </digi:trn>
-																								</digi:link>
-																								<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif"
-																									alt="up" />
-																							</c:if> </b></td>
-																					<td align="center" class="inside_header"><b>
-																							<c:if
-																								test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=5}">
-																								<digi:link href="/viewTeamReports.do?sortBy=5">
-																									<digi:trn key="aim:reportCreationDate">
-															                                          Update Date
-															                                      </digi:trn>
-																								</digi:link>
-																								<c:if test="${aimTeamReportsForm.sortBy==6}">
-																									<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
-																										alt="down" />
-																								</c:if>
-																							</c:if> <c:if
-																								test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==5}">
-																								<digi:link href="/viewTeamReports.do?sortBy=6">
-																									<digi:trn key="aim:reportCreationDate">
-														                                            Update Date
-														                                        </digi:trn>
-																								</digi:link>
-																								<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif"
-																									alt="up" />
-																							</c:if> </b></td>
-																					<c:if test="${!aimTeamReportsForm.tabs}">
-																						<td align="center" class="inside_header">
-					                            								<b><digi:trn key="aim:reportType">Type</digi:trn></b>
-					                            							</td>
-					                            		</c:if>
-					                            							
-					                            							<c:if test="${!aimTeamReportsForm.showTabs}">
-					                            								<td align="center" class="inside_header">
-						                              								<b><digi:trn>Category</digi:trn></b>
-						                            							</td>
-					                            							</c:if>
-					                            						
-					                            							
-					                            							<td align="center" class="inside_header">
-					                              								<b><digi:trn key="aim:hierarchies">Hierarchies</digi:trn></b>
-					                            							</td>
-					                            							<%
-					                            							String s = (String)session.getAttribute("teamLeadFlag");
-					                               							TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-					                             							if(tm!=null) {
-					                            							%>
-					                              								<td align="center" class="inside_header">
-																					<b><digi:trn>Fields</digi:trn></b>
-																				</td>
-																				<c:if test="${aimTeamReportsForm.showTabs}">
-																				<td align="center" class="inside_header">
-					                                								<b><digi:trn>Position</digi:trn></b>
-					                              								</td>
-																				</c:if>
-					                              								<td align="center" class="inside_header">
-					                                								<b><digi:trn key="aim:reportAction">Action</digi:trn></b>
-					                              								</td>
-					                            							<% } %>
-					                          							</tr>                          
-					                          							<c:if test="${reportNumber == 0}">
-																			<c:if test="${!aimTeamReportsForm.showTabs}">
-							                         							<tr>
-							                            							<td colspan="4">
-							                            								<digi:trn key="aim:noreportspresent">No reports present</digi:trn>
-							                            							</td>
-							                          							</tr>
-																			</c:if>
-																			<c:if test="${aimTeamReportsForm.showTabs}">
-							                          							<tr>
-							                            							<td colspan="4">
-							                            								<digi:trn key="aim:notabspresent">No tabs present</digi:trn>
-							                            							</td>
-							                          							</tr>
-																			</c:if>
-					                          							</c:if>
-					                          							<%String color = ""; %>
-					                          							<logic:iterate name="aimTeamReportsForm"  property="reportsList" id="report" indexId="idx"
-					                            						type="org.digijava.module.aim.dbentity.AmpReports">
-					                              							<tr onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
-					                              							onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" >
-					                              							    <%if(idx.intValue()%2==1) color = "#dbe5f1"; %>
-					                              							    <%if(idx.intValue()%2!=1) color = "#ffffff"; %>
-					                              								<td align="center" class="inside" style="padding-right: 10px; padding-left: 10px;" bgcolor="<%=color%>">
-						                              								<logic:notEmpty name="report" property="filterDataSet">
-						                                  								<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" align="middle" />
-						                              								</logic:notEmpty>
-						                              								<logic:empty name="report" property="filterDataSet">
-						                                   								<img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" align="middle" />
-						                              								</logic:empty>
-					                              								</td>
-					                              								
-					                              								<%
-																					boolean onlySaikuButton = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS);
-																				%>
-					                              								<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
-					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
-					                              										<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
-					                              										<% if (false /*!onlySaikuButton*/) { %>
-					                              											<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
-					                              										<% } %>																																								    	
- 																					  	<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">
-																					  	<b>
-							                              										<p style="display: inline; max-width: 400px; white-space: normal" title='<c:out value="${report.name}"/>'>
-																									<c:choose>
-																										<c:when test="${fn:length(report.name) > 25}">
-																											<c:out value="${fn:substring(report.name, 0, 25)}" />...
-																										</c:when>
-																										<c:otherwise>
-																											<c:out value="${report.name}"/>
-																										</c:otherwise>
-																									</c:choose>
-							                     	         									</p>  
-							                              									</b>
- 																				    	</a>		                              										
-																					</c:if>
-						                          									<c:if test="${aimTeamReportsForm.showTabs}">
-						                          										<b>
-																                            <p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
-																								<c:choose>
-																									<c:when test="${fn:length(report.name) > 25}">
-																										<c:out value="${fn:substring(report.name, 0, 25)}" />...
-																									</c:when>
-																									<c:otherwise>
-																										<c:out value="${report.name}"/>
-																									</c:otherwise>
-																								</c:choose>
-															                                </p>  
-						                              									</b>
-						                          									</c:if>
-					                             
-					                              									<logic:present name="report" property="reportDescription" >
-					                                									<p style="max-width: 400px;white-space: normal" title="${report.reportDescription}">
-																							<c:choose>
-																								<c:when test="${fn:length(report.reportDescription) > 120}" >
-																									<c:out value="${fn:substring(report.reportDescription, 0, 120)}" />...
-																								</c:when>
-																								<c:otherwise>
-																									<c:out value="${report.reportDescription}" />
-																								</c:otherwise>
-																							</c:choose>
-					                                									</p>
-					                              									</logic:present>
-					                              								</td>
-					                              								<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
-					                                								<p style="white-space: nowrap">
-					                                									<logic:present name="report" property="ownerId">
-					                                   										<i><bean:write name="report" property="ownerId.user.name" /></i>
-					                                									</logic:present>
-					                                								</p>
-					                              								</td>
-					                              								<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
-					                                								<p style="white-space: nowrap">
-					                                  									<logic:present name="report" property="updatedDate">
-					                                      									<bean:write name="report" property="formatedUpdatedDate" />
-					                                  									</logic:present>
-					                                								</p>
-					                              								</td>
-					                              								<c:if test="${!aimTeamReportsForm.tabs}">
-					                              								<td class="inside" style="padding-right: 8px; padding-left: 8px; font-size: 11px;" bgcolor="<%=color%>">
-					                                								<div style="white-space: nowrap">
-					                                								<ul>
-					                                  									<li>
-																							<%
-														                                    if (report.getType()!=null && report.getType().equals(new Long(1))) {
-														                                   	%>
-														                                    	<digi:trn key="aim:donorType">donor</digi:trn>
-															                                <%
-														                                    }
-														                                    else if (report.getType()!=null && report.getType().equals(new Long (3))){
-															                                %>
-														                                    	<digi:trn key="aim:regionalType">regional</digi:trn>
-															                                <%
-														                                    }
-																							else if (report.getType()!=null && report.getType().equals(new Long(2))){
-															                                %>
-														                                    	<digi:trn key="aim:componentType">component</digi:trn>
-																							<%
-														                                    }
-														                                    else if (report.getType()!=null && report.getType().equals(new Long(4))){
-															                               	%>
-														                                    	<digi:trn key="aim:contributionType">contribution</digi:trn>
-														                                   	<%
-														                                    }
-														                                    else if (report.getType()!=null && report.getType().equals(new Long(5))){
-															                                %>
-															                                	<digi:trn>pledge</digi:trn>
-															                               	<%}%>
-						                              									</li>
-					                                  									<logic:equal name="report" property="drilldownTab" value="true">
-					                                    									<li>
-					                                      										<digi:trn key="aim:typeDrilldownTab">Desktop Tab</digi:trn>
-					                                    									</li>
-					                                  									</logic:equal>
-					                                  									<logic:equal name="report" property="publicReport" value="true">
-					                                    									<li>
-					                                      										<digi:trn key="aim:typePublicReport">Public Report</digi:trn>
-					                                    									</li>
-					                                  									</logic:equal>
-					                                  									<logic:equal name="report" property="hideActivities" value="true">
-					                                    									<li>
-					                                      										<digi:trn key="aim:typeSummaryReport">Summary Report</digi:trn>
-					                                    									</li>
-					                                  									</logic:equal>                                  
-					                                  									<logic:equal name="report" property="options" value="A">
-					                                   	 									<li>
-					                                    										<digi:trn key="aim:annualreport">Annual</digi:trn>
-					                                    									</li>
-					                                  									</logic:equal>
-					                                  									<logic:equal name="report" property="options" value="Q">
-					                                    									<li>
-					                                    										<digi:trn key="aim:quarterlyreport">Quarterly</digi:trn>
-					                                    									</li>
-					                                  									</logic:equal>
-					                                  									<logic:equal name="report" property="options" value="M">
-					                                    									<li>
-					                                    										<digi:trn key="aim:monthlyreport">Monthly</digi:trn>	
-					                                    									</li>
-					                                  									</logic:equal>
-					                                  								</ul>
-					                                								</div>
-					                              								</td>
-					                              								
-					                              							</c:if>
-					                              							<c:if test="${!aimTeamReportsForm.showTabs}">
-					                              								<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; " bgcolor="<%=color%>">
-					                              									${report.reportCategory.value }
-					                              								</td>
-					                              							</c:if>
-					                              								
-					                              								<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; width: 20%;" bgcolor="<%=color%>">
-					                              								<ul>
-					                                								<logic:iterate name="report" property="hierarchies" id="hierarchy" >
-					                                  									<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
-					                                  									<li>
-						                                      								<digi:trn key="aim:report:${hierarchy.column.columnName}">
-						                                        								<bean:write name="hierarchy" property="column.columnName" />
-						                                      								</digi:trn>
-					                                  									</li>
-					                                								</logic:iterate>
-					                                							</ul>
-					                              								</td>
-					                              							<%if (tm != null) {%>
-					                              								<td width="200" class="inside" style="padding-right: 5px; padding-left: 5px; font-size: 11px; width: 150px;" align="center" bgcolor="<%=color%>">  
-						                                							<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'>
-						                                							<ul> 
-						                                  								<logic:iterate name="report" property="columns" id="column" indexId="index"  >
-						                                    								<%if (index.intValue()%2==0){ %>
-						                                      									<li>                                      
-						                                      										<digi:trn key="aim:report:${column.column.columnName}">
-						                                        										<bean:write name="column" property="column.columnName" />
-						                                      										</digi:trn>
-						                                    								<% } else {%>
-						                                    								,
-						                                      								<digi:trn key="aim:report:${column.column.columnName}">
-						                                        								<bean:write name="column" property="column.columnName" />
-						                                      								</digi:trn>
-						                                      									</li>
-						                                    								<%} %>
-						                                  								</logic:iterate>
-						                                  							</ul>
-						                                							</div>
-						                                							<span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn>Columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn>Columns</digi:trn></u> ]&nbsp;</span>                               
-						                                							<div style='position:relative;display:none;' id='measure-<bean:write name="report" property="ampReportId"/>'>
-						                                							<ul> 
-						                                  								<logic:iterate name="report" property="measures" id="measure" indexId="index"  >
-						                                    								<li>
-						                                    									<digi:trn key="aim:reportBuilder:${measure.measure.aliasName}">${measure.measure.aliasName}</digi:trn>
-						                                    								</li>
-						                                  								</logic:iterate>
-						                                  							</ul>
-						                                							</div>
-						                                							<span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br /></span>
-					                                							</td>
-					                                							<c:if test="${aimTeamReportsForm.showTabs}">
-					                                							<td class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
-					                                						
-					                                							<c:forEach var="desktopTab" items="${report.desktopTabSelections}">
-					                                								<c:if test="${desktopTab.owner.ampTeamMemId==aimTeamReportsForm.currentMemberId}">
-					                                									<c:set var="position">
-					                                									${desktopTab.index}
-					                                									</c:set>
-					                                								</c:if>	                                								
-					                                								</c:forEach>
-
-					                                								<a class="activateTab${report.ampReportId}" onclick="activate(${report.ampReportId})" <c:if test="${not empty position}">style="display:none"</c:if>><digi:trn>activate</digi:trn></a>
-					                                								<div class="savePosition${report.ampReportId}" <c:if test="${empty position}">style="display:none"</c:if>  >
-					                                								<select class="savePositionDropDown${report.ampReportId}" 
-																								onchange="savePosition(${report.ampReportId})">
-																									<option value="-1"><digi:trn>none</digi:trn></option>
-																									 <c:forEach var="i" begin="0" end="4">
-            																							<option value="${i}" <c:if test="${position==i}">selected</c:if>><c:out value="${i+1}" /></option>
-            																						</c:forEach>	
-																					</select>
-																					<div class="savePositionStatusInfo${report.ampReportId}" style="font-size:9px;"></div>
-																					</div>
-
-					                                								 <c:remove var="position" />
-					                                								
-					                                				
-																				</td>
-					                                							</c:if>
-					                                							<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
-						                                							<p style="white-space: nowrap">
-						                                								<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-						                                								<c:set target="${urlParams}" property="rid">
-						                                  									<bean:write name="report" property="ampReportId" />
-						                                								</c:set>
-						                                								<%if (!onlySaikuButton) {%>
-							                                								<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
-							                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
-							                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
-						                                								<% } %>
-																						<%
-																							if (!report.isTab() && !onlySaikuButton) {
-																						%>
-																							<%-- <%@ include file="saiku_button.jspf" %> --%> 
-																						<% } %>
-																						
-						                                								<c:set target="${urlParams}" property="event" value="edit" />
-						                                								<logic:equal name="teamLeadFlag" scope="session" value="true"> 
-					                                      									<c:set var="translation">
-						                                      									<c:if test="${aimTeamReportsForm.showTabs}">
-							                                        								<digi:trn >Click on this icon to edit tab</digi:trn>&nbsp;
-						                                      									</c:if>
-						                                      									<c:if test="${!aimTeamReportsForm.showTabs}">
-						    	                                    								<digi:trn>Click on this icon to edit report</digi:trn>&nbsp;
-						                                      									</c:if>
-					                                        								</c:set>
-					                                        								<c:choose>
-					                                        									<c:when test="${report.budgetExporter}">
-								                                    								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true" title="${translation}">
-								                                      									<img src= "/repository/message/view/images/edit.gif" border="0" />
-								                                    								</digi:link> 					                                        										
-					                                        									</c:when>
-					                                        									<c:otherwise>					                                        										
-								                                    								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
-								                                      									<img src= "/repository/message/view/images/edit.gif" border="0" />
-								                                    								</digi:link> 
-					                                        									</c:otherwise>
-					                                        								</c:choose>	
-					                                      									&nbsp;
-					                                      									<c:set var="translation">
-					                                      										<c:if test="${aimTeamReportsForm.showTabs}">
-						                                        									<digi:trn  key="aim:ClickDeleteTab">Click on this icon to delete tab</digi:trn>&nbsp;
-																									<c:set target="${urlParams}" property="isTab" value="1" />
-					                                      										</c:if>
-					                                      										<c:if test="${!aimTeamReportsForm.showTabs}">
-						                                        									<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report</digi:trn>&nbsp;
-																									<c:set target="${urlParams}" property="isTab" value="0" />
-					                                      										</c:if>
-					                                       									</c:set>
-					                                      									<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-																								<img src= "/repository/message/view/images/trash_12.gif" border="0" />
-						                                  									</digi:link>
-						                                								</logic:equal>                            
-						                                								<logic:equal name="teamLeadFlag" scope="session" value="false">
-						                                  									<logic:present name="report" property="ownerId">
-						                                    									<logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}"> 
-						                                        									<c:set var="translation">
-						                                      											<c:if test="${aimTeamReportsForm.showTabs}">
-							                                       											<digi:trn key="aim:ClickEditTab">Click on this icon to edit tab</digi:trn>&nbsp;
-						                                      											</c:if>
-						                                      											<c:if test="${!aimTeamReportsForm.showTabs}">
-						    	                                    										<digi:trn key="aim:ClickEditReport">Click on this icon to edit report</digi:trn>&nbsp;
-						                                      											</c:if>
-					                                        										</c:set>
-						                                    										<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
-						                                      											<img src= "/repository/message/view/images/edit.gif" border="0" />
-						                                    										</digi:link>
-							                                    									<c:set var="translation">
-						                                      											<c:if test="${aimTeamReportsForm.showTabs}">
-							                                        										<digi:trn key="aim:ClickDeleteTab">Click on this icon to delete tab</digi:trn>&nbsp;
-																											<c:set target="${urlParams}" property="isTab" value="1" />
-						                                      											</c:if>
-						                                      											<c:if test="${!aimTeamReportsForm.showTabs}">
-							                                        										<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report</digi:trn>&nbsp;
-																											<c:set target="${urlParams}" property="isTab" value="0" />
-						                                      											</c:if>
-						                                       										</c:set>
-						                                       										<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-																										<img src= "/repository/message/view/images/trash_12.gif" border="0" />
-							                                  										</digi:link>
-						                                    									</logic:equal>    
-						                                  									</logic:present>                                                                                                
-						                                								</logic:equal>
-						                               	 							</p>
-					                              								</td>
-					                              							<% } %>   
-					                          								</tr>
-					                          							</logic:iterate>
-					                        						</table>
-					                      						</td>
-					                    					</tr>      
-					                  					</table>
-					                				</td>
-					              				</tr>
-					              				<tr>
-					              					<td valign="top">
-					              						<c:if test="${reportNumber != 0}">
-					                  						<table style="font-size: 11px; font-family: Aria, sans-serif;">
-					                    						<tr>
-					                      							<td align="center">
-                                                                        <%@include file="reports_paginator.jsp" %>
-																		<!--<c:out value="${aimTeamReportsForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimTeamReportsForm.totalPages}"></c:out>-->
-					                      							</td>
-					                    						</tr>
-					                  						</table>
-					                  					</c:if>
-					              					</td>
-					              				</tr>
-					            			</table>
-					          			</td>
-					        		</tr>
-					      		</table>
-             </digi:form>
-					    	</td>
-					  	</tr>
-					</table>
+         <tr> <td>
+			<c:set var="reportNumber" value="${fn:length(aimTeamReportsForm.reports)}"></c:set>
+			<c:if test="${reportNumber != 0}">
+				<logic:present name="isUserLogged" scope="session">
+					<c:if test="${!aimTeamReportsForm.showTabs}">
+						<div class="filtered"style="float: right; font-size: 11px;">
+							<span><img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" /></span>
+							<span>
+								<digi:trn>Not filtered Report</digi:trn>&nbsp;
+								<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
+							</span>
+							<span><digi:trn>Filtered Report</digi:trn>&nbsp;
+								<img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+							</span>
+							<span><digi:trn>Edit Report</digi:trn>&nbsp;
+								<img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+							</span>
+							<span><digi:trn>Delete Report</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						</div>
+					</c:if>
+					<c:if test="${aimTeamReportsForm.showTabs}">
+						<div  class="filtered" style="float: right; font-size: 11px;">
+						<span>
+							<img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" />
+							<digi:trn>Not filtered Tab</digi:trn>&nbsp;
+						</span>
+						<span>
+							<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
+						
+						<digi:trn>Filtered Tab</digi:trn>&nbsp;</span>
+						<span><img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
+						<digi:trn>Edit Tab</digi:trn>&nbsp;
+							<span>
+								<img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+							</span>
+						<span><digi:trn>Delete Tab</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						</div>
+					</c:if>
+				</logic:present>
+				<table> <tr style="font-size: 11px; font-family: Aria, sans-serif;"> <td>
+						<jsp:useBean id="urlParamsPagination" type="java.util.Map" class="java.util.HashMap"/>
+						<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
+						<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
+						<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
+						<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
+						<%@include file="reports_paginator.jsp" %>
+													<!--<c:out value="${aimTeamReportsForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimTeamReportsForm.totalPages}"></c:out>-->
+				</td> </tr> </table>
+			</c:if>
+		</td> </tr>
+		<tr> <td valign="top"> <table> <tr> <td>
+			<logic:present name="onlyFavourites" scope="request">
+				<div style="font-weight: bold; font-size: 115%; margin: 4px;">
+					<digi:trn>Only favourite reports shown</digi:trn>
 				</div>
-			</div>
-			</div>
-		</td>
-	</tr>
+			</logic:present>
+			<table class="inside" style="font-size:11px; font-family: Arial,sans-serif; background-color: white;" width="950px">
+				<tr> 
+					<td align="center" class="inside_header">&nbsp; </td>
+					<td align="center" class="inside_header">
+						<c:if test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=1}">
+							<digi:link href="/viewTeamReports.do?sortBy=1">
+								<b><digi:trn>${titleColumn}</digi:trn></b>
+							</digi:link>
+							<c:if test="${aimTeamReportsForm.sortBy==2}">
+								<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
+							</c:if>
+						</c:if>
+						<c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==1}">
+							<digi:link href="/viewTeamReports.do?sortBy=2">
+								<b><digi:trn key="aim:organizationName">${titleColumn}</digi:trn></b>
+							</digi:link>
+							<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
+						</c:if>
+					</td>
+					<td align="center" class="inside_header"><b>
+						<c:if test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=3}">
+							<digi:link href="/viewTeamReports.do?sortBy=3">
+								<digi:trn key="aim:reportOwnerName">Owner</digi:trn>
+							</digi:link>
+							<c:if test="${aimTeamReportsForm.sortBy==4}">
+								<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
+							</c:if>
+						</c:if>
+						<c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==3}">
+							<digi:link href="/viewTeamReports.do?sortBy=4">
+								<digi:trn key="aim:reportOwnerName">Owner</digi:trn>
+							</digi:link>
+							<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
+						</c:if> 
+					</b></td>
+					<td align="center" class="inside_header"> <b>
+						<c:if test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=5}">
+							<digi:link href="/viewTeamReports.do?sortBy=5">
+								<digi:trn key="aim:reportCreationDate">Update Date</digi:trn>
+							</digi:link>
+							<c:if test="${aimTeamReportsForm.sortBy==6}">
+								<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
+							</c:if>
+						</c:if> 
+						<c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==5}">
+							<digi:link href="/viewTeamReports.do?sortBy=6"> 
+								<digi:trn key="aim:reportCreationDate">Update Date</digi:trn>
+							</digi:link> <img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
+						</c:if> 
+					</b></td>
+					<c:if test="${!aimTeamReportsForm.tabs}">
+						<td align="center" class="inside_header"> <b>
+							<digi:trn key="aim:reportType">Type</digi:trn>
+						</b> </td>
+					</c:if>
+					<c:if test="${!aimTeamReportsForm.showTabs}">
+						<td align="center" class="inside_header">
+							<b><digi:trn>Category</digi:trn></b>
+						</td>
+					</c:if>
+					<td align="center" class="inside_header">
+						<b><digi:trn key="aim:hierarchies">Hierarchies</digi:trn></b>
+					</td>
+					<%
+						String s = (String)session.getAttribute("teamLeadFlag");
+						TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+						if(tm!=null) {
+					%>
+						<td align="center" class="inside_header">
+							<b><digi:trn>Fields</digi:trn></b>
+						</td>
+						<c:if test="${aimTeamReportsForm.showTabs}">
+							<td align="center" class="inside_header">
+								<b><digi:trn>Position</digi:trn></b>
+							</td>
+						</c:if>
+						<td align="center" class="inside_header">
+						<b><digi:trn key="aim:reportAction">Action</digi:trn></b>
+						</td>
+					<% } %>
+				</tr>
+				<c:if test="${reportNumber == 0}">
+					<c:if test="${!aimTeamReportsForm.showTabs}">
+						<tr> <td colspan="4">
+							<digi:trn key="aim:noreportspresent">No reports present</digi:trn>
+						</td> </tr>
+					</c:if>
+					<c:if test="${aimTeamReportsForm.showTabs}">
+						<tr> <td colspan="4">
+							<digi:trn key="aim:notabspresent">No tabs present</digi:trn>
+						</td> </tr>
+					</c:if>
+				</c:if>
+				<%String color = ""; %>
+					<logic:iterate name="aimTeamReportsForm"  property="reportsList" id="report" indexId="idx"
+						type="org.digijava.module.aim.dbentity.AmpReports">
+						<tr onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
+                              							onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" >
+							<%if(idx.intValue()%2==1) color = "#dbe5f1"; %>
+							<%if(idx.intValue()%2!=1) color = "#ffffff"; %>
+							<td align="center" class="inside" style="padding-right: 10px; padding-left: 10px;" bgcolor="<%=color%>">
+								<logic:notEmpty name="report" property="filterDataSet">
+									<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" align="middle" />
+								</logic:notEmpty>
+								<logic:empty name="report" property="filterDataSet">
+									<img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" align="middle" />
+								</logic:empty>
+							</td>
+							<%
+								//boolean onlySaikuButton = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS);
+							%>
+							<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
+								<c:if test="${!aimTeamReportsForm.showTabs}">
+									<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
+									<!-- link to the report under the Legacy engine
+										left here for historical and/or debug reasons
+										<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
+	 								-->
+									<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">
+										<b> <p style="display: inline; max-width: 400px; white-space: normal" title='<c:out value="${report.name}"/>'>
+											<c:choose>
+												<c:when test="${fn:length(report.name) > 25}">
+													<c:out value="${fn:substring(report.name, 0, 25)}" />...
+												</c:when>
+												<c:otherwise>
+													<c:out value="${report.name}"/>
+												</c:otherwise>
+											</c:choose>
+										</p></b>
+									</a>
+								</c:if>
+								<c:if test="${aimTeamReportsForm.showTabs}"> <b>
+									<p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
+										<c:choose>
+											<c:when test="${fn:length(report.name) > 25}">
+												<c:out value="${fn:substring(report.name, 0, 25)}" />...
+											</c:when>
+											<c:otherwise>
+												<c:out value="${report.name}"/>
+											</c:otherwise>
+										</c:choose>
+									</p> </b>
+								</c:if>
+								<logic:present name="report" property="reportDescription" >
+									<p style="max-width: 400px;white-space: normal" title="${report.reportDescription}">
+										<c:choose>
+											<c:when test="${fn:length(report.reportDescription) > 120}" >
+												<c:out value="${fn:substring(report.reportDescription, 0, 120)}" />...
+											</c:when>
+											<c:otherwise>
+												<c:out value="${report.reportDescription}" />
+											</c:otherwise>
+										</c:choose>
+									</p>
+								</logic:present>
+							</td>
+							<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
+								<p style="white-space: nowrap">
+									<logic:present name="report" property="ownerId">
+										<i><bean:write name="report" property="ownerId.user.name" /></i>
+									</logic:present>
+								</p>
+							</td>
+							<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
+								<p style="white-space: nowrap">
+									<logic:present name="report" property="updatedDate">
+										<bean:write name="report" property="formatedUpdatedDate" />
+									</logic:present>
+								</p>
+							</td>
+							<c:if test="${!aimTeamReportsForm.tabs}">
+								<td class="inside" style="padding-right: 8px; padding-left: 8px; font-size: 11px;" bgcolor="<%=color%>">
+									<div style="white-space: nowrap">
+										<ul> 
+											<li>
+												<% if (report.getType()!=null && report.getType().equals(new Long(1))) { %>
+													<digi:trn key="aim:donorType">donor</digi:trn>
+												<% } else if (report.getType()!=null && report.getType().equals(new Long (3))){ %>
+													<digi:trn key="aim:regionalType">regional</digi:trn>
+												<% } else if (report.getType()!=null && report.getType().equals(new Long(2))){ %>
+													<digi:trn key="aim:componentType">component</digi:trn>
+												<% } else if (report.getType()!=null && report.getType().equals(new Long(4))){ %>
+													<digi:trn key="aim:contributionType">contribution</digi:trn>
+												<% } else if (report.getType()!=null && report.getType().equals(new Long(5))){ %>
+													<digi:trn>pledge</digi:trn>
+												<%}%>
+											</li>
+											<logic:equal name="report" property="drilldownTab" value="true">
+											<li> <digi:trn key="aim:typeDrilldownTab">Desktop Tab</digi:trn> </li>
+											</logic:equal>
+											<logic:equal name="report" property="publicReport" value="true"> 
+												<li> <digi:trn key="aim:typePublicReport">Public Report</digi:trn> </li>
+											</logic:equal>
+											<logic:equal name="report" property="hideActivities" value="true">
+												<li> <digi:trn key="aim:typeSummaryReport">Summary Report</digi:trn> </li>
+											</logic:equal> 
+											<logic:equal name="report" property="options" value="A">
+												<li> <digi:trn key="aim:annualreport">Annual</digi:trn> </li>
+											</logic:equal>
+											<logic:equal name="report" property="options" value="Q">
+												<li> <digi:trn key="aim:quarterlyreport">Quarterly</digi:trn> </li>
+											</logic:equal>
+											<logic:equal name="report" property="options" value="M">
+												<li> <digi:trn key="aim:monthlyreport">Monthly</digi:trn> </li>
+											</logic:equal>
+										</ul>
+									</div>
+								</td>
+							</c:if>
+							<c:if test="${!aimTeamReportsForm.showTabs}">
+								<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; " bgcolor="<%=color%>">
+									${report.reportCategory.value }
+								</td>
+							</c:if>
+							<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; width: 20%;" bgcolor="<%=color%>">
+								<ul>
+									<logic:iterate name="report" property="hierarchies" id="hierarchy" >
+										<li> <digi:trn key="aim:report:${hierarchy.column.columnName}">
+												<bean:write name="hierarchy" property="column.columnName" />
+										</digi:trn> </li>
+									</logic:iterate>
+								</ul>
+							</td>
+							<%if (tm != null) {%>
+								<td width="200" class="inside" style="padding-right: 5px; padding-left: 5px; font-size: 11px; width: 150px;" align="center" bgcolor="<%=color%>">  
+									<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'>
+										<ul> 
+									<logic:iterate name="report" property="columns" id="column" indexId="index">
+										<%if (index.intValue()%2==0){ %>
+											<li>
+												<digi:trn key="aim:report:${column.column.columnName}">
+													<bean:write name="column" property="column.columnName" />
+												</digi:trn>
+										<% } else {%>
+										,
+											<digi:trn key="aim:report:${column.column.columnName}">
+													<bean:write name="column" property="column.columnName" />
+												</digi:trn>
+											</li>
+										<%} %>
+	 								</logic:iterate>
+	 							</ul>
+							</div>
+							<span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn>Columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn>Columns</digi:trn></u> ]&nbsp;</span>                               
+							<div style='position:relative;display:none;' id='measure-<bean:write name="report" property="ampReportId"/>'>
+								<ul> 
+									<logic:iterate name="report" property="measures" id="measure" indexId="index"  >
+									<li>
+										<digi:trn key="aim:reportBuilder:${measure.measure.aliasName}">${measure.measure.aliasName}</digi:trn>
+									</li>
+									</logic:iterate>
+								</ul>
+							</div>
+							<span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br /></span>
+						</td>
+						<c:if test="${aimTeamReportsForm.showTabs}">
+							<td class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
+							<c:forEach var="desktopTab" items="${report.desktopTabSelections}">
+								<c:if test="${desktopTab.owner.ampTeamMemId==aimTeamReportsForm.currentMemberId}">
+									<c:set var="position">${desktopTab.index}</c:set>
+								</c:if>
+							</c:forEach>
+							<a class="activateTab${report.ampReportId}" onclick="activate(${report.ampReportId})" <c:if test="${not empty position}">style="display:none"</c:if>><digi:trn>activate</digi:trn></a>
+							<div class="savePosition${report.ampReportId}" <c:if test="${empty position}">style="display:none"</c:if>  >
+								<select class="savePositionDropDown${report.ampReportId}" onchange="savePosition(${report.ampReportId})">
+									<option value="-1"><digi:trn>none</digi:trn></option>
+									<c:forEach var="i" begin="0" end="4">
+										<option value="${i}" <c:if test="${position==i}">selected</c:if>><c:out value="${i+1}" /></option>
+									</c:forEach>
+								</select>
+								<div class="savePositionStatusInfo${report.ampReportId}" style="font-size:9px;"></div>
+							</div>
+							<c:remove var="position" />
+						</td>
+					</c:if>
+					<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
+						<p style="white-space: nowrap">
+						<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+						<c:set target="${urlParams}" property="rid">
+							<bean:write name="report" property="ampReportId" />
+						</c:set>
+						<c:if test="${aimTeamReportsForm.showSaikuButton && !aimTeamReportsForm.showTabs}">
+							<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
+							onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+							<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
+						</c:if>
+						<c:set target="${urlParams}" property="event" value="edit" />
+						<logic:equal name="teamLeadFlag" scope="session" value="true"> 
+							<c:set var="translation">
+								<c:if test="${aimTeamReportsForm.showTabs}">
+									<digi:trn >Click on this icon to edit tab</digi:trn>&nbsp;
+								</c:if>
+								<c:if test="${!aimTeamReportsForm.showTabs}">
+									<digi:trn>Click on this icon to edit report</digi:trn>&nbsp;
+								</c:if>
+							</c:set>
+							<c:choose>
+								<c:when test="${report.budgetExporter}">
+									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true" title="${translation}">
+										<img src= "/repository/message/view/images/edit.gif" border="0" />
+									</digi:link>
+								</c:when>
+								<c:otherwise>
+									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
+										<img src= "/repository/message/view/images/edit.gif" border="0" />
+									</digi:link> 
+								</c:otherwise>
+							</c:choose>&nbsp;
+							<c:set var="translation">
+								<c:if test="${aimTeamReportsForm.showTabs}">
+									<digi:trn  key="aim:ClickDeleteTab">Click on this icon to delete tab</digi:trn>&nbsp;
+										<c:set target="${urlParams}" property="isTab" value="1" />
+								</c:if>
+								<c:if test="${!aimTeamReportsForm.showTabs}">
+									<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report</digi:trn>&nbsp;
+									<c:set target="${urlParams}" property="isTab" value="0" />
+								</c:if>
+							</c:set>
+								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" />
+								</digi:link>
+						</logic:equal>
+						<logic:equal name="teamLeadFlag" scope="session" value="false">
+							<logic:present name="report" property="ownerId">
+							<logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}"> 
+								<c:set var="translation">
+									<c:if test="${aimTeamReportsForm.showTabs}">
+										<digi:trn key="aim:ClickEditTab">Click on this icon to edit tab</digi:trn>&nbsp;
+									</c:if>
+									<c:if test="${!aimTeamReportsForm.showTabs}">
+										<digi:trn key="aim:ClickEditReport">Click on this icon to edit report</digi:trn>&nbsp;
+									</c:if>
+								</c:set>
+								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
+									<img src= "/repository/message/view/images/edit.gif" border="0" />
+								</digi:link>
+								<c:set var="translation">
+									<c:if test="${aimTeamReportsForm.showTabs}">
+										<digi:trn key="aim:ClickDeleteTab">Click on this icon to delete tab</digi:trn>&nbsp;
+										<c:set target="${urlParams}" property="isTab" value="1" />
+									</c:if>
+									<c:if test="${!aimTeamReportsForm.showTabs}">
+										<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report</digi:trn>&nbsp;
+										<c:set target="${urlParams}" property="isTab" value="0" />
+									</c:if>
+								</c:set>
+								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" />
+								</digi:link>
+							</logic:equal>    
+						</logic:present>
+					</logic:equal>
+					</p> </td>
+				<% } %>
+				</tr>
+			</logic:iterate>
+		</table> </td> </tr> </table> </td> </tr>
+		<tr>
+			<td valign="top">
+				<c:if test="${reportNumber != 0}">
+					<table style="font-size: 11px; font-family: Aria, sans-serif;">
+						<tr> <td align="center">
+ 								<%@include file="reports_paginator.jsp" %>
+								<!--<c:out value="${aimTeamReportsForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimTeamReportsForm.totalPages}"></c:out>-->
+						</td> </tr>
+					</table>
+				</c:if>
+			</td> </tr> </table> </td> </tr> </table>
+	</digi:form> </td></tr> </table> </div> </div> </div> </td> </tr>
 </table>

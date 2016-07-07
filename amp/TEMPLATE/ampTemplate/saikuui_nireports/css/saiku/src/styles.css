@@ -2125,3 +2125,11 @@ width:70px !important;
 .hidden_row {
 	display: none;
 }
+
+#amp_currency {
+    max-width: 75%;
+}
+
+#amp_calendar {
+    max-width: 75%;
+}

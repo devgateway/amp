@@ -26,11 +26,13 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationSkeleton;
 import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -379,25 +381,40 @@ public class QueryUtil {
                 + " left join ind.sharedWorkspaces s "
                 + " where (  "
                 + " ind.accessType = " + IndicatorAccessType.PUBLIC
-                + " or (ind.accessType = " + IndicatorAccessType.SHARED + " and s.workspace.ampTeamId in( " + TeamUtil.getCurrentTeam(TLSUtils.getRequest()).getAmpTeamId() + " )) "
-                + " or (ind.accessType = " + IndicatorAccessType.PRIVATE + " and ind.createdBy.ampTeamMemId = " + IndicatorUtils.getTeamMember().getAmpTeamMemId() + ") "
+                + getSharedIndicatorsQuery()
+                + getPrivateIndicatorsQuery()
                 + " ) ";
 		Query qry = dbSession.createQuery(queryString);
 		qry.setCacheable(true);
 		return qry.list();
  }
-	
-	 public static List <AmpIndicatorLayer> getIndicatorByCategoryValue (String value) {
-			Session dbSession = PersistenceManager.getSession();
 
+    private static String getSharedIndicatorsQuery() {
+        String sharedIndicatorsQuery = "";
+        if (TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER) != null && TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest()) != null) {
+            sharedIndicatorsQuery = " or (ind.accessType = " + IndicatorAccessType.SHARED + " and s.workspace.ampTeamId in( " + TeamUtil.getCurrentTeam(TLSUtils.getRequest()).getAmpTeamId() + " )) ";
+        }
+        return sharedIndicatorsQuery;
+    }
+
+    private static String getPrivateIndicatorsQuery() {
+        String privateIndicatorsQuery = "";
+        if (IndicatorUtils.getTeamMember() != null && TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest()) != null) {
+            privateIndicatorsQuery = " or (ind.accessType = " + IndicatorAccessType.PRIVATE + " and ind.createdBy.ampTeamMemId = " + IndicatorUtils.getTeamMember().getAmpTeamMemId() + ") ";
+        }
+        return privateIndicatorsQuery;
+    }
+
+    public static List <AmpIndicatorLayer> getIndicatorByCategoryValue (String value) {
+			Session dbSession = PersistenceManager.getSession();
 			String queryString = "select ind from "
 					+ AmpIndicatorLayer.class.getName() + " ind "
                     + " left join ind.sharedWorkspaces s "
                     + " where upper(ind.admLevel.value)=:value) "
                     + " and (  "
                     + " ind.accessType = " + IndicatorAccessType.PUBLIC
-                    + " or (ind.accessType = " + IndicatorAccessType.SHARED + " and s.workspace.ampTeamId in( " + TeamUtil.getCurrentTeam(TLSUtils.getRequest()).getAmpTeamId() + " )) "
-                    + " or (ind.accessType = " + IndicatorAccessType.PRIVATE + " and ind.createdBy.ampTeamMemId = " + IndicatorUtils.getTeamMember().getAmpTeamMemId() + ") "
+                    + getSharedIndicatorsQuery()
+                    + getPrivateIndicatorsQuery()
                     + " ) ";
 			Query qry = dbSession.createQuery(queryString);
 			qry.setCacheable(true);

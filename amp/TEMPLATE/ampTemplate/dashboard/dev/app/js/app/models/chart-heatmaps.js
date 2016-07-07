@@ -13,7 +13,8 @@ module.exports = ChartModel.extend({
 	    bigN: 0,
 	    alternativeContainerClass: 'heatmap-chart-wrap',
 	    values: [],
-	    chartType: 'fragmentation'
+	    chartType: 'fragmentation',
+	    swapAxes: false
 	},
 
 	_prepareTranslations: function() {
@@ -93,8 +94,16 @@ module.exports = ChartModel.extend({
 		var configs = this.get('heatmap_config').models[0];
 		var thisChart = _.find(configs.get('charts'), function(item) {return item.name === self.get('name')});
 		var xColumn = self.get('xAxisColumn') !== '' ? self.get('xAxisColumn') : configs.get('columns')[thisChart.xColumns[0]].origName; // First column is default.
-		var yColumn = configs.get('columns')[thisChart.yColumns[0]]; // First column is default.
-		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn.origName}; 		
+		var yColumn = configs.get('columns')[thisChart.yColumns[0]].origName; // First column is default.
+		
+		// Check if we need to switch axis.
+		if (self.get('swapAxes') === true) {
+			var auxAxis = yColumn;
+			yColumn = xColumn;
+			xColumn = auxAxis;
+		}
+		
+		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn}; 		
 		//options.data = JSON.stringify($.extend({}, paramsForHeatMap, JSON.parse(options.data)));
 		paramsForHeatMap.filters =  JSON.parse(options.data);
 		options.data = JSON.stringify(paramsForHeatMap);

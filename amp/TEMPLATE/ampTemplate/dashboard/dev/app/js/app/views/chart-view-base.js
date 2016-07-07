@@ -27,7 +27,8 @@ module.exports = BackboneDash.View.extend({
     'click .chart-view': 'changeChartView',
     'click .download': 'download',
     'click .expand': 'big',
-    'click .retry': 'render'    
+    'click .retry': 'render',
+    'click .heatmap-switch': 'heatmapSwitchAxis'
   },
 
   chartViews: [
@@ -276,7 +277,16 @@ module.exports = BackboneDash.View.extend({
     
     // Translate modal popup.	
    	app.translator.translateDOM($("." + specialClass));
-  },  
+  },
+  
+  heatmapSwitchAxis: function () {
+	  if (this.model.get('swapAxes') === true) {
+		  this.model.set('swapAxes', false);
+	  } else {
+		  this.model.set('swapAxes', true);
+	  }  
+	  this.updateData();
+  },
 
   //AMP-18630: Here we setup a simple tooltip for each legend element.
   beautifyLegends : function(self) {	  

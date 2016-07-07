@@ -11,6 +11,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.form.AddIndicatorLayerForm;
@@ -87,6 +88,7 @@ public class IndicatorLayerManager extends Action {
                 indLayer.setNumberOfClasses(indicatorLayerForm.getNumberOfClasses());
                 indLayer.setAdmLevel(CategoryManagerUtil.getAmpCategoryValueFromDb(indicatorLayerForm.getAdmLevelId()));
                 indLayer.setColorRamp(colorRamp);
+                indLayer.setAccessType(IndicatorAccessType.PUBLIC);
                 DbUtil.saveOrUpdateObject(indLayer);
                 DbUtil.update(indLayer);
                 indicatorLayerForm.setIndicatorLayers(DynLocationManagerUtil.getIndicatorLayers());

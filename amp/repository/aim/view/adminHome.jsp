@@ -319,13 +319,13 @@
                             </td>
                           </tr>
                             
-                          <tr>
+                          <%/* <tr>
                           <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                           <td>
                           <a href="#" onclick="showLayerManager();return false;"> <digi:trn>GIS Layers Manager</digi:trn></a>
                            </td>                          
                           </tr>
-                          
+                          */%>
 
                         </module:display>
                         <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION">

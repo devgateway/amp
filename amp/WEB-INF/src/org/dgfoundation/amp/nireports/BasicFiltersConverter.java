@@ -122,7 +122,7 @@ public abstract class BasicFiltersConverter {
 		// filtering by column
 		NiReportColumn<?> col = schema.getColumns().get(columnName);
 		if (col == null) {
-			engine.addReportWarning(new ReportWarning(String.format("not filtering by unimplemented column %s", columnName)));
+			engine.addReportWarning(new ReportWarning(String.format("not filtering by unimplemented column \"%s\"", columnName)));
 			return;
 		}
 		

@@ -458,7 +458,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		
 		GroupColumn catData = applyPostMeasureVerticalHierarchies(rawData);
 		this.headers = new NiHeaderInfo(this, catData, this.actualHierarchies.size());
-		this.rootReportData = new ColumnReportData(this, null, AmpCollections.map(catData.getLeafColumns(), cc -> cc.getContents()));
+		this.rootReportData = new ColumnReportData(this, null, AmpCollections.map(catData.getLeafColumns(), cc -> cc.getContents())); //mark here: this.reportWarnings
 	}
 	
 	/**
@@ -610,7 +610,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		for(String columnName:AmpCollections.union(this.actualHierarchies, this.actualColumns)) {
 			NiReportColumn<? extends Cell> col = schema.getColumns().get(columnName);
 			if (col == null) {
-				addReportWarning(new ReportWarning(String.format("column %s not supported in NiReports", columnName)));
+				addReportWarning(new ReportWarning(String.format("column \"%s\" not supported in NiReports", columnName)));
 				this.actualHierarchies.remove(columnName);
 				this.actualColumns.remove(columnName);
 			} else if (spec.isSummaryReport() && (!actualHierarchies.contains(columnName)) && (!col.getKeptInSummaryReports())) {
@@ -636,7 +636,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			if (measures.containsKey(measName))
 				supportedMeasures.add(measures.get(measName));
 			else {
-				addReportWarning(new ReportWarning(String.format("measure %s not supported in NiReports", measName)));
+				addReportWarning(new ReportWarning(String.format("measure \"%s\" not supported in NiReports", measName)));
 			}
 		}
 		Graph<NiReportMeasure<?>> measuresGraph = new Graph<>(supportedMeasures, meas -> meas.getPrecursorMeasures().stream().map(measName -> measures.get(measName)).collect(Collectors.toList()));

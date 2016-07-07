@@ -44,6 +44,8 @@ AMPTableRenderer.prototype.render = function(data, options) {
 		hiddenColumnNames = data.colorSettings.hiddenColumnNames;
 
 		// Create HTML table, with header + content.
+		
+		var preTableWarning = generateWarningsHtml(data);
 		var table = "<table>";
 		var headerHtml = generateHeaderHtml(data);
 		var contentHtml = generateContentHtml(data.page, {
@@ -52,7 +54,7 @@ AMPTableRenderer.prototype.render = function(data, options) {
 		table += headerHtml + contentHtml + "</table>";
 		Saiku.logger.log('AMPTableRenderer.render END');
 		Saiku.logger.log(new Date().getTime() - window.saiku_time + "ms");
-		return table;
+		return preTableWarning + table;
 	} else {
 		return "";
 	}
@@ -86,6 +88,24 @@ function getEntityTypeByColumnNumber(headerRowNumber, headerColumnNumber) {
 			return 'HEADER_MEASURE';
 	}
 	return undefined;
+}
+
+function generateWarningsHtml(data) {
+	var pre = '<div class="niReportWarning">' 
+	var post = "</div>";
+	var errors = [];
+	if (data.reportWarnings !== undefined) {
+		for (var key in data.reportWarnings) {
+			for (var key2 in data.reportWarnings[key]) {
+				errors.push('Warning: ' + data.reportWarnings[key][key2].message);
+				
+			}
+		}
+	}
+	if (errors.length > 0)
+		return pre + errors.join(post + pre) + post;
+	else
+		return '';
 }
 
 function generateHeaderHtml(data) {

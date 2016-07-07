@@ -174,6 +174,7 @@ public class ReportsUtil {
 				SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
 		
 		processRawValues(formParams);
+		result.set("reportWarnings", cachedReportData.report.reportWarnings);
 		
 		return result;
 	}

@@ -181,6 +181,10 @@ separated by commas, and have just one of these...*/
 	 color: #00496B !important;
 }
 
+.niReportWarning {
+	color: #FF3333;
+}
+
 .activity_status_unvalidated {
 	 color: green !important;
 }

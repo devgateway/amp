@@ -9,7 +9,7 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-                DROP TABLE amp_indicator_access_type CASCADE;
+                DROP TABLE IF EXISTS amp_indicator_access_type CASCADE;
             </lang>
         </script>
     </apply>

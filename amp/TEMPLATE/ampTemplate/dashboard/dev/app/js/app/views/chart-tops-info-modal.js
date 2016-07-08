@@ -16,6 +16,7 @@ module.exports = BackboneDash.View.extend({
 	render: function() {
 		var self = this;
 		this.$el.html(template({
+			error: undefined,
 			model: this.model,
 			context: this.context,
 			values: undefined,
@@ -34,17 +35,26 @@ module.exports = BackboneDash.View.extend({
     		contentType: 'application/json',
     		processData: false,
     		data: JSON.stringify(config)
-    	})
-    	.done(function(data) {
+    	}).done(function(data) {
     		//TODO: Can we avoid re-calling the template by binding the changes in the 'values' field? 
     		self.$el.html(template({
+				error: undefined,
     			model: self.model,
     			context: self.context,
     			values: data.values,
     			numberMultiplier: self.numberMultiplier
     		}));
     		app.translator.translateDOM($(".dash-settings-modal"));
-    	});
+    	}).fail(function(xhr, err) {
+			var msg = JSON.parse(xhr.responseText).error;
+			console.error("Error Getting chart-tops-info-modal from EP", msg);
+			self.$el.html(template({
+				model: self.model,
+				context: self.context,
+				error: err,
+				numberMultiplier: self.numberMultiplier
+			}));
+		});
     	
 		return this;
 	},

@@ -13,7 +13,12 @@
 </div>
 <div class="chart-tops-info-container">
 	<div class="chart-tops-info-content">
-		<% if(values === undefined) { %>
+		<% if(error) { %>
+			<div class="alert alert-danger" role="alert">
+				<strong><span data-i18n="amp.dashboard:error">Error</span></strong>
+				<span data-i18n="amp.dashboard:error-detail">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>
+			</div>
+		<% } else if(values === undefined) { %>
 			<img alt="" src="/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif">
 			<span data-i18n="amp.dashboard:download-rendering">Rendering...</span>
 		<% } else { %>

@@ -3539,7 +3539,7 @@ module.exports = ChartViewBase.extend({
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var template = _.template("<script type=\"text/javascript\">\r\n\tfunction openPreviewActivity(id) {\r\n\t\twindow.open('/aim/viewActivityPreview.do~public=true~pageId=2~activityId=' + id, '_blank');\r\n\t}\r\n</script>\r\n\r\n<div class='chart-tops-info-category'>\r\n\t<span>\r\n\t\t<b><%= (context.x.fmt || context.x.raw) %></b> - <%= model.get('adjtype')%> -  \t\t\r\n\t\t<span data-i18n=\"<%= app.settings.numberMultiplierDescription %>\"></span>\r\n\t\t<%= model.get('currency') %>\r\n\t</span>\r\n</div>\r\n<div class=\"chart-tops-info-container\">\r\n\t<div class=\"chart-tops-info-content\">\r\n\t\t<% if(values === undefined) { %>\r\n\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\r\n\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\r\n\t\t<% } else { %>\r\n\t\t\t<% var rowClass = ''; %>\r\n\t\t\t<table>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-amount\">Amount</span></th>\r\n\t\t\t\t</tr>\t\t\t\r\n\t\t\t<% _(values).each(function(row, i) { %>\r\n          \t\t<% \tif (i % 2 === 0) rowClass = 'odd_row';\r\n    \t\t\t\telse rowClass = ''; %>\r\n    \t\t\t<tr class=\"<%=rowClass%>\">\r\n    \t\t\t\t<td>\r\n    \t\t\t\t\t<span class='pointer' onclick='openPreviewActivity(<%=row.id%>)'><%=row.name%></span>\r\n    \t\t\t\t</td>\r\n    \t\t\t\t<td><%=row.formattedAmount%></td>\r\n    \t\t\t</tr>\r\n        \t<% }) %>\r\n        \t</table>\r\n\t\t<% } %>\r\n\t</div>\r\n</div>");
+var template = _.template("<script type=\"text/javascript\">\r\n\tfunction openPreviewActivity(id) {\r\n\t\twindow.open('/aim/viewActivityPreview.do~public=true~pageId=2~activityId=' + id, '_blank');\r\n\t}\r\n</script>\r\n\r\n<div class='chart-tops-info-category'>\r\n\t<span>\r\n\t\t<b><%= (context.x.fmt || context.x.raw) %></b> - <%= model.get('adjtype')%> -  \t\t\r\n\t\t<span data-i18n=\"<%= app.settings.numberMultiplierDescription %>\"></span>\r\n\t\t<%= model.get('currency') %>\r\n\t</span>\r\n</div>\r\n<div class=\"chart-tops-info-container\">\r\n\t<div class=\"chart-tops-info-content\">\r\n\t\t<% if(error) { %>\r\n\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t<strong><span data-i18n=\"amp.dashboard:error\">Error</span></strong>\r\n\t\t\t\t<span data-i18n=\"amp.dashboard:error-detail\">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>\r\n\t\t\t</div>\r\n\t\t<% } else if(values === undefined) { %>\r\n\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\r\n\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\r\n\t\t<% } else { %>\r\n\t\t\t<% var rowClass = ''; %>\r\n\t\t\t<table>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-amount\">Amount</span></th>\r\n\t\t\t\t</tr>\t\t\t\r\n\t\t\t<% _(values).each(function(row, i) { %>\r\n          \t\t<% \tif (i % 2 === 0) rowClass = 'odd_row';\r\n    \t\t\t\telse rowClass = ''; %>\r\n    \t\t\t<tr class=\"<%=rowClass%>\">\r\n    \t\t\t\t<td>\r\n    \t\t\t\t\t<span class='pointer' onclick='openPreviewActivity(<%=row.id%>)'><%=row.name%></span>\r\n    \t\t\t\t</td>\r\n    \t\t\t\t<td><%=row.formattedAmount%></td>\r\n    \t\t\t</tr>\r\n        \t<% }) %>\r\n        \t</table>\r\n\t\t<% } %>\r\n\t</div>\r\n</div>");
 
 module.exports = BackboneDash.View.extend({
 
@@ -3553,6 +3553,7 @@ module.exports = BackboneDash.View.extend({
 	render: function() {
 		var self = this;
 		this.$el.html(template({
+			error: undefined,
 			model: this.model,
 			context: this.context,
 			values: undefined,
@@ -3571,17 +3572,26 @@ module.exports = BackboneDash.View.extend({
     		contentType: 'application/json',
     		processData: false,
     		data: JSON.stringify(config)
-    	})
-    	.done(function(data) {
+    	}).done(function(data) {
     		//TODO: Can we avoid re-calling the template by binding the changes in the 'values' field? 
     		self.$el.html(template({
+				error: undefined,
     			model: self.model,
     			context: self.context,
     			values: data.values,
     			numberMultiplier: self.numberMultiplier
     		}));
     		app.translator.translateDOM($(".dash-settings-modal"));
-    	});
+    	}).fail(function(xhr, err) {
+			var msg = JSON.parse(xhr.responseText).error;
+			console.error("Error Getting chart-tops-info-modal from EP", msg);
+			self.$el.html(template({
+				model: self.model,
+				context: self.context,
+				error: err,
+				numberMultiplier: self.numberMultiplier
+			}));
+		});
     	
 		return this;
 	},
@@ -4191,7 +4201,7 @@ module.exports = BackboneDash.View.extend({
 
   prepareCanvas: function(canvas, h, w) {
 	var self = this;
-    var currencyName = 'nada';/*_.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;*/
+    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
     var ctx = canvas.getContext('2d'),
     	moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + currencyName,
         adjType = this.model.get('adjtype');    
@@ -23818,7 +23828,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"C:\\Users\\Gabriel\\workspace-luna2\\amp-2.12-release-3\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"/home/esoliani/amp-workspace/AMP_2_12_RELEASE/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/bootstrap/dist/js/bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!

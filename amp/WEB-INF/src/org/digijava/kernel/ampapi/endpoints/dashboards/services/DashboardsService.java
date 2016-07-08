@@ -537,8 +537,7 @@ public class DashboardsService {
 		
 		GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 		ReportOutputColumn titleCol = report.leafHeaders.get(0);
-		ReportOutputColumn amountCol = report.leafHeaders.get(0);
-
+		ReportOutputColumn amountCol = report.leafHeaders.get(1);
 		for (Iterator<ReportArea> iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
 			JsonBean row = new JsonBean();
 			Map<ReportOutputColumn, ReportCell> contents = iterator.next().getContents();

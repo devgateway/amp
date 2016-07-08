@@ -264,9 +264,10 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		this.hideLabel=hideLabel;
 		setOutputMarkupId(true);
 		this.fmName = fmName;
+		boolean showTooltipEditor = false;
+        boolean showTitleEditor = false;
 		this.showTooltipIfLabelHidden=showTooltipIfLabelHidden;
-        this.showTranslatorIconIfLabelHidden = showTranslatorIconIfLabelHidden;
-
+		
 		configureLabelText();
 		configureTranslatorLinks();
 		
@@ -275,10 +276,14 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		}
 		
 		//we show the edittooltip icon only if we are in translator mode and
-		//the label is not hidden or we choose to show it even if hidden
-        final boolean showTooltipEditor = isTooltipEditorVisible();
+		//the label is not hidden or we choose to show it even if hidden 
+		if (TranslatorUtil.isTranslatorMode(getSession()) && (!hideLabel || showTooltipIfLabelHidden ) && tooltipTranslatorEnabled) {
+			showTooltipEditor = true;
+		}
 
-        final boolean showTitleEditor = isTitleEditorVisible();
+		if ((TranslatorUtil.isTranslatorMode(getSession()) && (!hideLabel || showTranslatorIconIfLabelHidden)) && titleTranslatorEnabled) {
+            showTitleEditor = true;
+        }
 
 		Label requiredStar = new Label("requiredStar", new Model<String>("")) {
 			private static final long serialVersionUID = 1L;
@@ -402,16 +407,8 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		newLine.setVisible(!hideNewLine);
 		add(newLine);
 	}
-
-    public boolean isTooltipEditorVisible() {
-        return TranslatorUtil.isTranslatorMode(getSession()) && (!this.hideLabel || this.showTooltipIfLabelHidden ) && tooltipTranslatorEnabled;
-    }
-
-    public boolean isTitleEditorVisible() {
-        return (TranslatorUtil.isTranslatorMode(getSession()) && (!this.hideLabel || this.showTranslatorIconIfLabelHidden)) && titleTranslatorEnabled;
-    }
-
-    /**
+	
+	/**
 	 * on standard fields we add the tooltip to the label if you need it added on the component itself please override these method
 	 * please see {@link AmpButtonField} or {@link AmpAjaxLinkField}
 	 */
@@ -489,12 +486,5 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	
 	protected void configureLabelText(){
 	}
-
-    public IndicatingAjaxLink getEditTooltipLink() {
-        return editTooltipLink;
-    }
-
-    public IndicatingAjaxLink getEditTitleLink() {
-        return editTitleLink;
-    }
+	
 }

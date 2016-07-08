@@ -33,7 +33,6 @@ public class ReportsForm extends ActionForm {
     private int pagesToShow;
     private int offset;
     private boolean showReportList;
-    private boolean showSaikuButton;
 
     private Boolean showTabs	= false;
     private String keyword;
@@ -336,14 +335,6 @@ public class ReportsForm extends ActionForm {
 
 	public void setDefaultNumResults(int defaultNumResults) {
 		this.defaultNumResults = defaultNumResults;
-	}
-
-	public boolean isShowSaikuButton() {
-		return showSaikuButton;
-	}
-
-	public void setShowSaikuButton(boolean showSaikuButton) {
-		this.showSaikuButton = showSaikuButton;
 	}
 
 	public enum ReportSortBy{

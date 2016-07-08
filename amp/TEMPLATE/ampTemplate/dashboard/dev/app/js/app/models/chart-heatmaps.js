@@ -14,7 +14,8 @@ module.exports = ChartModel.extend({
 	    alternativeContainerClass: 'heatmap-chart-wrap',
 	    values: [],
 	    chartType: 'fragmentation',
-	    swapAxes: false
+	    swapAxes: false,
+	    chartDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet a arcu vel porttitor. Curabitur dolor ante, faucibus eu congue et, egestas ut tellus.'
 	},
 
 	_prepareTranslations: function() {

@@ -29,7 +29,11 @@ text.axis-worktime {
 	        <span class="chart-currency"></span>
 	      </span>
       <% } %>
-      <h2 data-i18n="amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>"><%= model.get('title') %></h2>
+      <h2 data-i18n="amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>"><%= model.get('title') %>
+      	<% if (model.get('chartType') === 'fragmentation' && model.get('chartDescription') !== '') { %>
+      		<img src="/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png" class="question_mark nv-series" data-title="<%= model.get('chartDescription') %>">
+      	<% } %>
+      </h2>
     </div>
 	
     <div class="panel-body">

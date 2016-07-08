@@ -171,9 +171,11 @@ public class ProjectList {
 				if (!include) {
 					negate = " NOT ";
 				}
-				String allActivitiesQuery = "SELECT amp_activity_id,amp_id,name,date_created,project_code,date_updated from amp_activity ";
+				String allActivitiesQuery = "SELECT act.amp_activity_id as amp_activity_id, act.amp_id as amp_id, act.name as name, act.date_created as date_created, "
+						+ "act.project_code as project_code, act.date_updated as date_updated, at.name as team_name "
+						+ "FROM amp_activity act JOIN amp_team at ON act.amp_team_id = at.amp_team_id ";
 				if (activityIds.size() > 0) {
-					allActivitiesQuery += " where amp_activity_id " + negate + " in (" + ids + ")";
+					allActivitiesQuery += " WHERE act.amp_activity_id " + negate + " in (" + ids + ")";
 				}
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allActivitiesQuery, null)) {
 					ResultSet rs = rsi.rs;
@@ -185,6 +187,7 @@ public class ProjectList {
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_CODE), rs.getString("project_code"));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(rs.getTimestamp("date_updated")));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
+						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.WORKSPACE_NAME), rs.getString("team_name"));
 						bean.set(ActivityEPConstants.EDIT, editable);
 						bean.set(ActivityEPConstants.VIEW, viewable);
 						activitiesList.add(bean);
@@ -211,6 +214,7 @@ public class ProjectList {
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_CODE), a.getProjectCode());
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(a.getUpdatedDate()));
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
+		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.WORKSPACE_NAME), a.getTeam().getName());
 		bean.set(ActivityEPConstants.EDIT, true);
 		bean.set(ActivityEPConstants.VIEW, true);
 		return bean;

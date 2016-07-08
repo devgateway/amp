@@ -23,6 +23,7 @@ import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpFundingSummaryPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -120,18 +121,14 @@ implements AmpRequiredComponentContainer{
 			
 		AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
 		boolean isLoan = (value == null ? false : value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey()));
-		loanTerms.getTextAreaContainer().setVisible(isLoan);
-	    loanTerms.getTitleLabel().setVisible(isLoan);  
 	    add(loanTerms);
-        toggleLoanFieldsVisibility(isLoan);	    
+        toggleLoanFieldsVisibility(isLoan);
 		typeOfAssistance.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {        
 			private static final long serialVersionUID = -6492252081340597543L;
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
 				boolean isLoan = (value == null ? false : (value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey())));
-				loanTerms.getTextAreaContainer().setVisible(isLoan);
-        	    loanTerms.getTitleLabel().setVisible(isLoan); 
         	    toggleLoanFieldsVisibility(isLoan);
             	target.add(loanTerms);
             	target.add(interestRate);
@@ -328,17 +325,27 @@ implements AmpRequiredComponentContainer{
 
 	}
     
-	private void toggleLoanFieldsVisibility(boolean visible){	
-		interestRate.getTextContainer().setVisible(visible);
-		interestRate.getTitleLabel().setVisible(visible);		
-		gracePeriod.getTextContainer().setVisible(visible);
-		gracePeriod.getTitleLabel().setVisible(visible);
-		ratificationDate.getDate().setVisible(visible);
-		ratificationDate.getTitleLabel().setVisible(visible);
-		maturity.getDate().setVisible(visible);	
-		maturity.getTitleLabel().setVisible(visible);		
-		
+	private void toggleLoanFieldsVisibility(boolean visible){
+		toggleLoanFieldsVisibility(visible, loanTerms, interestRate, gracePeriod, ratificationDate, maturity);
 	}
+
+	private void toggleLoanFieldsVisibility(boolean visible, AmpFieldPanel... components) {
+		for (AmpFieldPanel ampFieldPanel: components) {
+			if(ampFieldPanel instanceof AmpDatePickerFieldPanel) {
+				((AmpDatePickerFieldPanel) ampFieldPanel).getDate().setVisible(visible);
+			} else if(ampFieldPanel instanceof AmpTextAreaFieldPanel) {
+				((AmpTextAreaFieldPanel) ampFieldPanel).getTextAreaContainer().setVisible(visible);
+			} else if(ampFieldPanel instanceof AmpTextFieldPanel) {
+				((AmpTextFieldPanel) ampFieldPanel).getTextContainer().setVisible(visible);
+			}
+			ampFieldPanel.getTitleLabel().setVisible(visible);
+			ampFieldPanel.getTitleTooltip().setVisible(visible);
+			ampFieldPanel.setVisible(visible);
+			ampFieldPanel.getEditTitleLink().setVisible(visible && ampFieldPanel.isTitleEditorVisible());
+			ampFieldPanel.getEditTooltipLink().setVisible(visible && ampFieldPanel.isTooltipEditorVisible());
+		}
+	}
+
 	public List<FormComponent<?>> getRequiredFormComponents() {
 		return requiredFormComponents;
 	}

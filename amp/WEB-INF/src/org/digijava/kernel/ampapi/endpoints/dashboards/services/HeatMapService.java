@@ -120,27 +120,31 @@ public class HeatMapService {
     
     private void prepareXYResults(List<String> yTotalAmounts, Map<String, BigDecimal> yTotal, 
             Map<String, BigDecimal> xTotal, Map<String, Map<String, ReportCell>> data) {
-        List<ReportArea> yAreas = yCount == null ? report.reportContents.getChildren() :
-            report.reportContents.getChildren().subList(0, yCount);
-        for (ReportArea yArea : yAreas) {
-            // build Y axis 
-            String yValue = yArea.getContents().get(yOutCol).displayedValue;
-            ReportCell yTotCell = yArea.getContents().get(mOutCol);
-            yTotalAmounts.add(yTotCell.displayedValue);
-            BigDecimal yTotalAmount = yTotCell == null ? BigDecimal.ZERO : (BigDecimal) yTotCell.value; 
-            yTotal.put(yValue, yTotalAmount);
-            
-            // build row data
-            Map<String, ReportCell> row = data.putIfAbsent(yValue, new HashMap<String, ReportCell>());
-            if (row == null)
-                row = data.get(yValue);
+        int yCountLeft = yCount == null ? report.reportContents.getChildren().size() : yCount;
+        
+        // process all to get consistent X & Y totals
+        for (ReportArea yArea : report.reportContents.getChildren()) {
+            Map<String, ReportCell> row = null;
+            // build Y axis, as much as needed
+            if (yCountLeft-- > 0) {
+                String yValue = yArea.getContents().get(yOutCol).displayedValue;
+                ReportCell yTotCell = yArea.getContents().get(mOutCol);
+                yTotalAmounts.add(yTotCell.displayedValue);
+                BigDecimal yTotalAmount = yTotCell == null ? BigDecimal.ZERO : (BigDecimal) yTotCell.value; 
+                yTotal.put(yValue, yTotalAmount);
+                // build row data
+                row = data.putIfAbsent(yValue, new HashMap<String, ReportCell>());
+                if (row == null)
+                    row = data.get(yValue);
+            }
             
             for (ReportArea xArea : yArea.getChildren()) {
                 // configure X * Y intersection
                 String xValue = xArea.getContents().get(xOutCol).displayedValue;
                 ReportCell amountCell = xArea.getContents().get(mOutCol);
                 BigDecimal amount = amountCell == null ? BigDecimal.ZERO : (BigDecimal) amountCell.value;
-                row.put(xValue, amountCell);
+                if (row != null)
+                    row.put(xValue, amountCell);
                 
                 // calculate X totals
                 amount = amount.add(xTotal.getOrDefault(xValue, BigDecimal.ZERO));
@@ -169,8 +173,9 @@ public class HeatMapService {
                     BigDecimal percentage = (BigDecimal) amountCell.value;
                     percentage = percentage.multiply(HUNDRED).divide(xTotalEntry.getValue(), MCTX);
                     percentage = percentage.setScale(2, RoundingMode.HALF_EVEN);
-                    matrix[y][x++].set("p", percentage);
+                    matrix[y][x].set("p", percentage);
                 }
+                x++;
             }
             // don't set if full empty row
             if (isEmpty)
@@ -217,7 +222,7 @@ public class HeatMapService {
     }
     
     private Map<String, BigDecimal> getTopEntries(Map<String, BigDecimal> map, int maxSize) {
-        if (maxSize <= 1)
+        if (maxSize < 1)
             return Collections.emptyMap();
         // TODO: once we fix the possibility to use Lambda expressions in REST API, then we can simplify do this:
         /*

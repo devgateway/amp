@@ -157,11 +157,11 @@ public class EndPoints {
      * @return
      */
 	@POST
-    @Path("/heat-map/{type}")
+    @Path("/heat-map")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "heatMap")
     public JsonBean getHeatMap(JsonBean config) {
-        return new HeatMapService(config).buildHeatMap();
+	    return new HeatMapService(config).buildHeatMap();
     }
 	
 	/**

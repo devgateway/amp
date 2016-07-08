@@ -23828,7 +23828,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"/home/esoliani/amp-workspace/AMP_2_12_RELEASE/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/bootstrap/dist/js/bootstrap.js":52}],61:[function(require,module,exports){
+},{"C:\\Users\\Gabriel\\workspace-luna2\\amp-2.12-release-3\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!

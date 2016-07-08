@@ -155,9 +155,12 @@ public class EndPoints {
      * </pre> 
      * @param config exp
      * @return
+     * 
+     * IMPORTANT NOTE ABOUT /{type} PARAMETER: This extra parameter is needed here because the UI differentiates each heatmap in the dashboard by its url, 
+     * 	so we need for each heatmap (by Sector, Location or Program) an extra parameter that isnt actually used on the backend.
      */
 	@POST
-    @Path("/heat-map")
+    @Path("/heat-map/{type}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "heatMap")
     public JsonBean getHeatMap(JsonBean config) {

@@ -161,6 +161,9 @@ function helpergeneric_api_settings_form_submit($form, &$form_state) {
  * Page callback for 'admin/settings/generic'.
  */
 function helpergeneric_settings_form($form, &$form_state) {
+  global $language;
+  $language_aware = drupal_multilingual();
+
   $form['clear_cache'] = array(
     '#type' => 'fieldset',
     '#title' => t('Clear cache'),
@@ -180,13 +183,24 @@ function helpergeneric_settings_form($form, &$form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+  if ($language_aware) {
+    $site_name = i18n_variable_get('site_name', $language->language, 'Drupal');
+  }
+  else {
+    $site_name = variable_get('site_name', 'Drupal');
+  }
   $form['site_information']['site_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Site name'),
     '#description' => t('The site name will be transformed to uppercase before displaying in the header.'),
-    '#default_value' => variable_get('site_name', 'Drupal'),
+    '#default_value' => $site_name,
     '#required' => TRUE
   );
+  if ($language_aware) {
+    $form['site_information']['site_name']['#description'] .= t('<br /><strong>This value is language-aware. Current language: @lang</strong>', array(
+      '@lang' => $language->name,
+    ));
+  }
   // $form['site_information']['site_slogan'] = array(
   //   '#type' => 'textfield',
   //   '#title' => t('Slogan'),
@@ -231,7 +245,7 @@ function helpergeneric_settings_form($form, &$form_state) {
     '#type' => 'file',
     '#title' => t('Upload new logo image'),
     '#maxlength' => 40,
-      '#description' => t("Use this field to upload your logo. It should be uploaded at the exact size you want it displayed."),
+    '#description' => t("Use this field to upload your logo. It should be uploaded at the exact size you want it displayed."),
     '#tree' => FALSE,
   );
 
@@ -262,6 +276,21 @@ function helpergeneric_settings_form($form, &$form_state) {
     '#title' => t('Upload new icon image'),
     '#description' => t("Use this field to upload your shortcut icon."),
     '#tree' => FALSE,
+  );
+
+  // Miscellaneous settings go here.
+  // Just to have the right vars, prefix all with misc_.
+  $form['misc'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Miscellaneous'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['misc']['misc_use_export_buttons'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show Export Buttons'),
+    '#description' => t('If you want to hide the export functionality, uncheck this option.'),
+    '#default_value' => variable_get('misc_use_export_buttons', 1),
   );
 
   $form['#validate'][] = 'helpergeneric_settings_form_validate';
@@ -333,10 +362,16 @@ function helpergeneric_settings_form_clear_cache_submit($form, &$form_state) {
  */
 function helpergeneric_settings_form_submit($form, &$form_state) {
   global $theme;
+  global $language;
 
-  foreach (array('site_name', 'site_mail') as $var) {
+  foreach (array('site_name', 'site_mail', 'misc_use_export_buttons') as $var) {
     if (isset($form_state['values'][$var]))
-    variable_set($var, $form_state['values'][$var]);
+      variable_set($var, $form_state['values'][$var]);
+  }
+
+  // i18n variable.
+  if (drupal_multilingual()) {
+    i18n_variable_set('site_name', $form_state['values']['site_name'], $language->language);
   }
 
   // @TODO: Cleanup!

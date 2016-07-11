@@ -367,9 +367,11 @@ function helpergeneric_settings_form_submit($form, &$form_state) {
   foreach (array('site_name', 'site_mail', 'misc_use_export_buttons') as $var) {
     if (isset($form_state['values'][$var]))
     variable_set($var, $form_state['values'][$var]);
-    if (drupal_multilingual()) {
-      i18n_variable_set($var, $form_state['values'][$var], $language->language);
-    }
+  }
+
+  // i18n variable.
+  if (drupal_multilingual()) {
+    i18n_variable_set('site_name', $form_state['values']['site_name'], $language->language);
   }
 
   // @TODO: Cleanup!

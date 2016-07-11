@@ -161,6 +161,9 @@ function helpergeneric_api_settings_form_submit($form, &$form_state) {
  * Page callback for 'admin/settings/generic'.
  */
 function helpergeneric_settings_form($form, &$form_state) {
+  global $language;
+  $language_aware = drupal_multilingual();
+
   $form['clear_cache'] = array(
     '#type' => 'fieldset',
     '#title' => t('Clear cache'),
@@ -180,13 +183,24 @@ function helpergeneric_settings_form($form, &$form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+  if ($language_aware) {
+    $site_name = i18n_variable_get('site_name', $language->language, 'Drupal');
+  }
+  else {
+    $site_name = variable_get('site_name', 'Drupal');
+  }
   $form['site_information']['site_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Site name'),
     '#description' => t('The site name will be transformed to uppercase before displaying in the header.'),
-    '#default_value' => variable_get('site_name', 'Drupal'),
+    '#default_value' => $site_name,
     '#required' => TRUE
   );
+  if ($language_aware) {
+    $form['site_information']['site_name']['#description'] .= t('<br /><strong>This value is language-aware. Current language: @lang</strong>', array(
+      '@lang' => $language->name,
+    ));
+  }
   // $form['site_information']['site_slogan'] = array(
   //   '#type' => 'textfield',
   //   '#title' => t('Slogan'),
@@ -348,10 +362,14 @@ function helpergeneric_settings_form_clear_cache_submit($form, &$form_state) {
  */
 function helpergeneric_settings_form_submit($form, &$form_state) {
   global $theme;
+  global $language;
 
   foreach (array('site_name', 'site_mail', 'misc_use_export_buttons') as $var) {
     if (isset($form_state['values'][$var]))
     variable_set($var, $form_state['values'][$var]);
+    if (drupal_multilingual()) {
+      i18n_variable_set($var, $form_state['values'][$var], $language->language);
+    }
   }
 
   // @TODO: Cleanup!

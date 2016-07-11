@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import javax.security.auth.Subject;
@@ -195,6 +196,17 @@ public class Security {
 
 		return layout;
 	}
+	
+	/**
+	 * Return the list of workspaces the user has access to
+	 *
+	 */
+	@GET
+    @Path("/workspaces")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Collection<JsonBean> getWorkspaces() {
+        return SecurityService.getWorkspaces();
+    }
 
 	/**
 	 * Authorizes Container Request

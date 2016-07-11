@@ -54,27 +54,6 @@ public class IndicatorService {
         return IndicatorUtils.getList(indicatorLayers, offset, count);
     }
 
-    public static Collection<JsonBean> getWorkspaces() {
-
-        Collection<AmpTeam> workspaces = null;
-        TeamMember tm = TeamUtil.getCurrentMember();
-        if (tm != null) {
-            workspaces = TeamMemberUtil.getAllTeamsForUser(tm.getEmail());
-        }
-
-        Collection<JsonBean> workspacesList = new ArrayList<JsonBean>();
-
-        if (workspaces==null) {
-            workspaces = new ArrayList<AmpTeam>();
-        }
-
-        for (AmpTeam ws: workspaces){
-            workspacesList.add(IndicatorUtils.getJsonBean(ws));
-        }
-
-        return workspacesList;
-    }
-
     public static JsonBean getIndicatorById(long id) {
 
         if (!IndicatorUtils.hasRights(id)) {

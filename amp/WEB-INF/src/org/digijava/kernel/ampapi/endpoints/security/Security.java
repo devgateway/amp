@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorService;
 import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -278,6 +279,17 @@ public class Security {
 
 		return layout;
 	}
+	
+	/**
+	 * Return the list of workspaces the user has access to
+	 *
+	 */
+	@GET
+    @Path("/workspaces")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Collection<JsonBean> getWorkspaces() {
+        return SecurityService.getWorkspaces();
+    }
 
 	/**
 	 * Authorizes Container Request

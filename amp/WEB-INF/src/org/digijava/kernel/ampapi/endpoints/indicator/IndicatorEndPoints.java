@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import com.sun.jersey.multipart.FormDataParam;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.util.ColorRampUtil;
@@ -296,7 +297,7 @@ public class IndicatorEndPoints {
     @Path("/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Collection<JsonBean> getWorkspaces() {
-        return IndicatorService.getWorkspaces();
+        return SecurityService.getWorkspaces();
     }
 
 }

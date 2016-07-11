@@ -1,10 +1,19 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
@@ -17,14 +26,6 @@ import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class IndicatorUtils {
     protected static final Logger logger = Logger.getLogger(IndicatorUtils.class);
@@ -79,9 +80,8 @@ public class IndicatorUtils {
 
         if (indicator.getSharedWorkspaces() != null) {
             Collection<JsonBean> sharedWorkspaces = new ArrayList<JsonBean>();
-            int i=0;
             for (AmpIndicatorWorkspace indicatorWS: indicator.getSharedWorkspaces()){
-                sharedWorkspaces.add(getJsonBean(indicatorWS.getWorkspace()));
+                sharedWorkspaces.add(SecurityUtil.getTeamJsonBean(indicatorWS.getWorkspace()));
             }
             indicatorJson.set(IndicatorEPConstants.SHARED_WORKSPACES, sharedWorkspaces);
         }
@@ -201,13 +201,6 @@ public class IndicatorUtils {
         result.set(IndicatorEPConstants.DATA,indicatorLayerList);
 
         return result;
-    }
-
-    public static JsonBean getJsonBean(AmpTeam ws) {
-        JsonBean teamJson = new JsonBean();
-        teamJson.set(IndicatorEPConstants.ID, ws.getAmpTeamId());
-        teamJson.set(IndicatorEPConstants.NAME, ws.getName());
-        return teamJson;
     }
 
     public static final void validateOrderBy(String orderBy, String sort, ApiEMGroup errors) {

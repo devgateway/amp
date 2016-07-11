@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -72,26 +74,60 @@ public class ProjectList {
 	 * @return the list with a short JSON description for each activity 
 	 */
 	public static Collection<JsonBean> getActivityList(TeamMember tm) {
+		
 		Map<String, JsonBean> activityMap = new HashMap<String, JsonBean>();
 		List<JsonBean> viewableActivities = new ArrayList<JsonBean>();
 		List<JsonBean> editableActivities = new ArrayList<JsonBean>();
+		
 		final List<Long> viewableIds = getViewableActivityIds(tm);
 		List<Long> editableIds = getEditableActivityIds(tm);
-		List<JsonBean> notViewableActivities = getActivitiesByIds(viewableIds, false, false, false);
+		
+		// get list of the workspaces where the user is member of and can edit each activity
+		Map<Long, Set<String>> activitiesWs = getEditableWorkspacesForActivities(tm);
+		
+		List<JsonBean> notViewableActivities = getActivitiesByIds(viewableIds, activitiesWs, tm, false, false);
 		
 		if (viewableIds.size() > 0) {
 			viewableIds.removeAll(editableIds);
-			viewableActivities = getActivitiesByIds(viewableIds, true, true, false);
+			viewableActivities = getActivitiesByIds(viewableIds, activitiesWs, tm, true, true);
 		}
 		
 		if (editableIds.size() > 0) {
-			editableActivities = getActivitiesByIds(editableIds, true, true, !TeamMemberUtil.isManagementWorkspace(tm));
+			editableActivities = getActivitiesByIds(editableIds, activitiesWs, tm, true, true);
 		}
 		
 		populateActivityMap(activityMap, editableActivities);
 		populateActivityMap(activityMap, notViewableActivities);
 		populateActivityMap(activityMap, viewableActivities);
+		
 		return activityMap.values();
+	}
+
+	public static Map<Long, Set<String>> getEditableWorkspacesForActivities(TeamMember tm) {
+		Map<Long, Set<String>> activitiesWs = new HashMap<>();
+		try {
+			User currentUser = UserUtils.getUserByEmail(tm.getEmail());
+			Collection<AmpTeamMember> currentTeamMembers = TeamMemberUtil.getAllAmpTeamMembersByUser(currentUser);
+
+			for (AmpTeamMember atm : currentTeamMembers) {
+				TeamMember teamMember = new TeamMember(atm);
+				String wsFilterQuery = WorkspaceFilter.generateWorkspaceFilterQuery(teamMember);
+				List<Long> editableIds = getEditableActivityIds(teamMember, wsFilterQuery);
+				
+				for (Long actId : editableIds) {
+					if (!activitiesWs.containsKey(actId)) {
+						activitiesWs.put(actId, new HashSet<String>());
+					} 
+					
+					activitiesWs.get(actId).add(teamMember.getTeamId().toString());
+				}
+			}
+		} catch (DgException e) {
+			LOGGER.warn("Couldn't generate the list of editable workspaces for activities", e);
+			throw new RuntimeException(e);
+		}
+		
+		return activitiesWs;
 	}
 
 	private static void populateActivityMap(Map<String, JsonBean> activityMap, List<JsonBean> activities) {
@@ -114,13 +150,26 @@ public class ProjectList {
 	 * @return List<Long> with the editable activity Ids
 	 */
 	public static List<Long> getEditableActivityIds(TeamMember tm) {
+		HttpSession session = TLSUtils.getRequest().getSession();
+		String query = WorkspaceFilter.getWorkspaceFilterQuery(session);
+		
+		return getEditableActivityIds(tm, query);
+	}
+	
+	/**
+	 * Get the activities ids for the current workspace
+	 * 
+	 * @param session HttpSession
+	 * @return List<Long> with the editable activity Ids
+	 */
+	public static List<Long> getEditableActivityIds(TeamMember tm, String query) {
 		// based on AMP-20520 research the only rule found when activities are not editable is when in Mng WS
 		if (TeamMemberUtil.isManagementWorkspace(tm))
 			return Collections.emptyList();
-		HttpSession session = TLSUtils.getRequest().getSession();
-		String query = WorkspaceFilter.getWorkspaceFilterQuery(session);
+		
 		List<Long> result = PersistenceManager.getSession().createSQLQuery(query)
 				.addScalar("amp_activity_id", LongType.INSTANCE).list();
+		
 		return result;
 	}
 
@@ -156,14 +205,15 @@ public class ProjectList {
 	 * 
 	 * @param include whether to include or exclude the ids of the List<Long> activityIds into the result
 	 * @param activityIds List with the ids (amp_activity_id) of the activities to include or exclude
+	 * @param activitiesWs 
 	 * @param viewable whether the list of activities is viewable or not
 	 * @param editable whether the list of activities is editable or not
 	 * @return List <JsonBean> of the activities generated from including/excluding the List<Long> of activityIds
 	 */
-	public static List<JsonBean> getActivitiesByIds(final List<Long> activityIds, final boolean include,
-			final boolean viewable, final boolean editable) {
+	public static List<JsonBean> getActivitiesByIds(final List<Long> activityIds, final Map<Long, Set<String>> activitiesWs, final TeamMember tm, final boolean include,
+			final boolean viewable) {
 		final List<JsonBean> activitiesList = new ArrayList<JsonBean>();
-
+		
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 				String ids = StringUtils.join(activityIds, ",");
@@ -180,6 +230,10 @@ public class ProjectList {
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allActivitiesQuery, null)) {
 					ResultSet rs = rsi.rs;
 					while (rs.next()) {
+						long actId = rs.getLong("amp_activity_id");
+						Set<String> workspaces = activitiesWs.containsKey(actId) ? activitiesWs.get(actId) : null;
+						boolean editable = workspaces != null ? workspaces.contains(tm.getTeamId().toString()) : false;
+
 						JsonBean bean = new JsonBean();
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), rs.getLong("amp_activity_id"));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), InterchangeUtils.formatISO8601Date(rs.getTimestamp("date_created")));
@@ -187,7 +241,7 @@ public class ProjectList {
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_CODE), rs.getString("project_code"));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(rs.getTimestamp("date_updated")));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
-						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.WORKSPACE_NAME), rs.getString("team_name"));
+						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.WORKSPACES_EDIT), workspaces);
 						bean.set(ActivityEPConstants.EDIT, editable);
 						bean.set(ActivityEPConstants.VIEW, viewable);
 						activitiesList.add(bean);
@@ -214,7 +268,6 @@ public class ProjectList {
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_CODE), a.getProjectCode());
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(a.getUpdatedDate()));
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
-		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.WORKSPACE_NAME), a.getTeam().getName());
 		bean.set(ActivityEPConstants.EDIT, true);
 		bean.set(ActivityEPConstants.VIEW, true);
 		return bean;

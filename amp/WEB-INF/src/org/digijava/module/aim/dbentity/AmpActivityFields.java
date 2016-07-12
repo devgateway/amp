@@ -562,7 +562,9 @@ LoggerIdentifiable, Cloneable {
 				discriminatorOption = CategoryConstants.IMPLEMENTATION_LEVEL_KEY, fmPath="/Activity Form/Location/Implementation Level", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Implementation Location", importable=true, multipleValues=false, 
 				discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY, fmPath="/Activity Form/Location/Implementation Location", 
-				dependencies = {InterchangeDependencyResolver.IMPLEMENTATION_LOCATION_VALID_KEY}, pickIdOnly=true)
+				dependencies = {InterchangeDependencyResolver.IMPLEMENTATION_LOCATION_VALID_KEY}, pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Financial Instrument", importable=true, multipleValues=true, 
+				discriminatorOption = CategoryConstants.FINANCIAL_INSTRUMENT_KEY, fmPath="/Activity Form/Identification/Financial Instrument", pickIdOnly=true)
 	})
 	@VersionableCollection(fieldTitle = "Categories")
 	protected Set<AmpCategoryValue> categories;

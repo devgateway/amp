@@ -120,8 +120,6 @@ implements AmpRequiredComponentContainer{
 			
 		AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
 		boolean isLoan = (value == null ? false : value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey()));
-		loanTerms.getTextAreaContainer().setVisible(isLoan);
-	    loanTerms.getTitleLabel().setVisible(isLoan);  
 	    add(loanTerms);
         toggleLoanFieldsVisibility(isLoan);	    
 		typeOfAssistance.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {        
@@ -130,8 +128,6 @@ implements AmpRequiredComponentContainer{
 			protected void onUpdate(AjaxRequestTarget target) {
 				AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
 				boolean isLoan = (value == null ? false : (value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey())));
-				loanTerms.getTextAreaContainer().setVisible(isLoan);
-        	    loanTerms.getTitleLabel().setVisible(isLoan); 
         	    toggleLoanFieldsVisibility(isLoan);
             	target.add(loanTerms);
             	target.add(interestRate);
@@ -149,6 +145,7 @@ implements AmpRequiredComponentContainer{
             	
             	AmpFundingSummaryPanel l=
             	findParent(AmpFundingSummaryPanel.class);
+				target.appendJavaScript("Opentip.findElements();");
 				send(getPage(), Broadcast.BREADTH,new FundingSectionSummaryEvent(target));	
             }
         });
@@ -328,16 +325,27 @@ implements AmpRequiredComponentContainer{
 
 	}
     
-	private void toggleLoanFieldsVisibility(boolean visible){	
+	private void toggleLoanFieldsVisibility(boolean visible) {
+		loanTerms.getTextAreaContainer().setVisible(visible);
+		loanTerms.getTitleLabel().setVisible(visible);
+		loanTerms.setTooltipVisible(visible);
+
 		interestRate.getTextContainer().setVisible(visible);
-		interestRate.getTitleLabel().setVisible(visible);		
+		interestRate.getTitleLabel().setVisible(visible);
+		interestRate.setTooltipVisible(visible);
+
 		gracePeriod.getTextContainer().setVisible(visible);
 		gracePeriod.getTitleLabel().setVisible(visible);
+		gracePeriod.setTooltipVisible(visible);
+
 		ratificationDate.getDate().setVisible(visible);
 		ratificationDate.getTitleLabel().setVisible(visible);
-		maturity.getDate().setVisible(visible);	
-		maturity.getTitleLabel().setVisible(visible);		
-		
+		ratificationDate.setTooltipVisible(visible);
+
+		maturity.getDate().setVisible(visible);
+		maturity.getTitleLabel().setVisible(visible);
+		maturity.setTooltipVisible(visible);
+
 	}
 	public List<FormComponent<?>> getRequiredFormComponents() {
 		return requiredFormComponents;

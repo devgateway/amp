@@ -64,6 +64,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	protected boolean tooltipTranslatorEnabled = true;
 	protected boolean titleTranslatorEnabled = true;
 	protected String labelText;
+	private boolean hideTooltipIcon = true;
 
 	/**
 	 * @see #addFormComponent(FormComponent)
@@ -264,9 +265,8 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		this.hideLabel=hideLabel;
 		setOutputMarkupId(true);
 		this.fmName = fmName;
-		boolean showTooltipEditor = false;
-        boolean showTitleEditor = false;
 		this.showTooltipIfLabelHidden=showTooltipIfLabelHidden;
+		this.showTranslatorIconIfLabelHidden = showTranslatorIconIfLabelHidden;
 		
 		configureLabelText();
 		configureTranslatorLinks();
@@ -277,13 +277,9 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		
 		//we show the edittooltip icon only if we are in translator mode and
 		//the label is not hidden or we choose to show it even if hidden 
-		if (TranslatorUtil.isTranslatorMode(getSession()) && (!hideLabel || showTooltipIfLabelHidden ) && tooltipTranslatorEnabled) {
-			showTooltipEditor = true;
-		}
+		final boolean showTooltipEditor = isTooltipEditorVisible();
 
-		if ((TranslatorUtil.isTranslatorMode(getSession()) && (!hideLabel || showTranslatorIconIfLabelHidden)) && titleTranslatorEnabled) {
-            showTitleEditor = true;
-        }
+		final boolean showTitleEditor = isTitleEditorVisible();
 
 		Label requiredStar = new Label("requiredStar", new Model<String>("")) {
 			private static final long serialVersionUID = 1L;
@@ -414,11 +410,12 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 */
 	protected void addTooltip(){ 
 		// 
-		if(!hideLabel || showTooltipIfLabelHidden){
+		boolean visible = (!hideLabel || showTooltipIfLabelHidden) && this.hideTooltipIcon;
+		if(visible){
 			titleLabel.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
 			tooltipIcon.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
-			tooltipIcon.setVisible(true);
 		}
+		tooltipIcon.setVisible(visible);
 	}
 	
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,
@@ -486,5 +483,19 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	
 	protected void configureLabelText(){
 	}
-	
+
+	private boolean isTooltipEditorVisible() {
+		return TranslatorUtil.isTranslatorMode(getSession()) && (!this.hideLabel || this.showTooltipIfLabelHidden ) && tooltipTranslatorEnabled;
+	}
+
+	private boolean isTitleEditorVisible() {
+		return (TranslatorUtil.isTranslatorMode(getSession()) && (!this.hideLabel || this.showTranslatorIconIfLabelHidden)) && titleTranslatorEnabled;
+	}
+
+	public void setTooltipVisible(boolean visible) {
+		this.hideTooltipIcon = visible;
+		this.titleTooltip.setVisible(visible && isTooltipEditorVisible());
+		this.editTooltipLink.setVisible(visible && isTooltipEditorVisible());
+		this.editTitleLink.setVisible(visible && isTitleEditorVisible());
+	}
 }

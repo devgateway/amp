@@ -270,7 +270,7 @@ public class HeatMapService {
         ReportColumn yRepCol = new ReportColumn(yCol); 
         spec.addColumn(yRepCol);
         spec.addColumn(new ReportColumn(xCol));
-        spec.getHierarchies().add(yRepCol);
+        spec.getHierarchies().addAll(spec.getColumns());
         
         // also configures Measures - consistent with other Dashboards
         SettingsUtils.applyExtendedSettings(spec, config);

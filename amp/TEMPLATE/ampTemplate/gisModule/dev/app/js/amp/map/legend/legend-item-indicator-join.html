@@ -6,7 +6,7 @@
     <p><em data-18n="amp.gis:legend-loading">loading...</em>></p>
   <% } else { %>
     <% colourBuckets.each(function(bucket) { %>
-      <% if(bucket.get('value') && bucket.get('value')[0] ) { %>
+      <% if(bucket.get('value') && !_.isNaN(bucket.get('value')[0]) && _.isFinite(bucket.get('value')[0])) { %>
       <div>
         <span style="background: <%= bucket.hex() %> !important" class="color-block legend-sample"></span>
         <%= util.formatKMB()(bucket.get('value')[0]) %>&mdash;<%= util.formatKMB()(bucket.get('value')[1]) %> <%= unit %>

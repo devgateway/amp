@@ -18,8 +18,9 @@ module.exports = Backbone.Model
     });
 
     var numStops = this.get('classes') || 5;
+    var values = this.get('values') || [];
 
-    this.palette = new Palette.FromRange({stops: numStops, seed: this.get('id') });
+    this.palette = new Palette.FromRange({stops: numStops, seed: this.get('id'), values: values });
 
     // set color based on ramp, if one is provided.
     if (this.get('colorRamp')) {
@@ -74,7 +75,7 @@ module.exports = Backbone.Model
         max = value.value;
       }
     });
-    this.palette.set({min: min, max: max});
+    this.palette.set({min: min, max: max, values: this.get('values')});
   },
 
   _joinDataWithBoundaries: function(boundaryGeoJSON) {

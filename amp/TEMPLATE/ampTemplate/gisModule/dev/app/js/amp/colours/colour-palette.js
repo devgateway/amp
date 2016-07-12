@@ -3,6 +3,7 @@ var Backbone = require('backbone');
 var seedrandom = require('seedrandom');
 var niceBuckets = require('nice-buckets');
 var Colour = require('./colour-model');
+var Jenks = require('./jenks-utils');
 
 
 // magic numbers
@@ -94,9 +95,12 @@ var Palette = Backbone.Model.extend({
   },
 
   generateRange: function() {
+    var stops = this.get('stops');
+    var buckets = this.get('values').length > stops?
+        Jenks.getGVF(this.get('values'), stops):
+        niceBuckets.minFigs(stops, [this.get('min'), this.get('max')]);
     var newColours = [],
-        stops = this.get('stops'),
-        buckets = niceBuckets.minFigs(stops, [this.get('min'), this.get('max')]),
+        buckets = buckets,
         hStopSize = DEFAULT.H_SKEW / (stops - 1),
         sStopSize = (DEFAULT.S_MAX - DEFAULT.S_MIN) / (stops - 1),
         lStopSize = (DEFAULT.L_MAX - DEFAULT.L_MIN) / (stops - 1);
@@ -185,6 +189,7 @@ function FromRange(options) {
   var min = options.min || 0;
   var max = options.max || 100;
   var stops = options.stops || 5;
+  var values = options.values || [];
   if (stops >= max || stops <= min) {
     // AMP-20346: If this parameter is too high or too low we can kill the browser.
     stops = 5;
@@ -195,7 +200,8 @@ function FromRange(options) {
     min: min,
     max: max,
     stops: stops,
-    linLog: options.linLog || 'linear'
+    linLog: options.linLog || 'linear',
+    values: values
   });
 
   // after it's constructed so that its change listener will fire

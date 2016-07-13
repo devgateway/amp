@@ -10,7 +10,7 @@
 	<page name="viewAhSurveis" title=" - View AhSurveis " />
 	<page name="addSectorToIndicator" title="- Add Sector" />
 	
-	<page name="manageGPI" title="Manage Global Partnership Indicators" />
+	<page name="manageGPI" title=" - Manage Global Partnership Indicators" />
 
 	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />
 	<page name="addQuickLink" title="Add link" />
@@ -267,9 +267,9 @@
 	<page page="addRegionalObservationActor" name="aim_addRegionalObservationActor" title="AMP - Add Actor" />
 
 	<!-- for Paris -->
-	<page page="parisEditQuestion" name="aim_editQuestions" title="ParisIndicator Question Editor"/>
-	<page page="parisAddQuestion" name="aim_addQuestion" title="ParisIndicator Add Question"/>
-	<page page="parisAddIndicator" name="aim_addIndicator" title="Add New Paris Indicator"/>
+	<page page="parisEditQuestion" name="aim_editQuestions" title=" - ParisIndicator Question Editor"/>
+	<page page="parisAddQuestion" name="aim_addQuestion" title=" - ParisIndicator Add Question"/>
+	<page page="parisAddIndicator" name="aim_addIndicator" title=" - Add New Paris Indicator"/>
 
 	<!-- Printer Friendly HTML Reports -->
 	<page page="pIPrintSurvey" name="aim_pIPrintSurvey" title="AMP - Preview Activity" />
@@ -391,17 +391,17 @@
     <page name="editQuartzJobClass" title=" - Edit Job Class" />
     <page name="quartzJobClassManager" title=" - Job Class Manager" />
 
-	<page name="addPledge" page="addPledge" title =" - Add Pledge " />
+	<page name="addPledge" page="addPledge" title=" - Add Pledge " />
 	<page name="viewPledgesList" page="viewPledgesList" title =" - Pledges List " />
-	<page page="selectPledgeLocation" name="selectPledgeLocation" title="AMP - Select Location" />
-	<page page="selectPledgeProgram" name="selectPledgeProgram" title="AMP - Select Program" />
+	<page page="selectPledgeLocation" name="selectPledgeLocation" title=" - Select Location" />
+	<page page="selectPledgeProgram" name="selectPledgeProgram" title=" - Select Program" />
 	<!-- <page page="viewPledge" name="viewPledge" title="AMP - Select Location" />  -->
-	<page page="viewPledge" name="viewPledge" title="AMP - View Pledge" />
+	<page page="viewPledge" name="viewPledge" title=" - View Pledge" />
 
-	<page page="components/addContactPopin" name="aim_contactComponentPopIn" title="AMP - Select Organization" />
-	<page page="assignActivitiesJSON" name="aim_assignActivitiesJSON" title="AMP - Assign Activities" />
-	<page page="updateTeamMembersJSON" name="aim_updateTeamMembersJSON" title="AMP - Update Team Member" />
-	<page page="teamMembersAddFromAdminJSON" name="aim_teamMembersAddFromAdminJSON" title="AMP - Assign Team Member" />
+	<page page="components/addContactPopin" name="aim_contactComponentPopIn" title=" - Select Organization" />
+	<page page="assignActivitiesJSON" name="aim_assignActivitiesJSON" title=" - Assign Activities" />
+	<page page="updateTeamMembersJSON" name="aim_updateTeamMembersJSON" title=" - Update Team Member" />
+	<page page="teamMembersAddFromAdminJSON" name="aim_teamMembersAddFromAdminJSON" title=" - Assign Team Member" />
 	<page name="contactsPrintPreview" page="addressBookPrintPreview"></page>
 	
 	<page name="wicketHeader" page="wicketHeader"></page>

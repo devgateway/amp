@@ -16,11 +16,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
@@ -29,12 +31,12 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.FormatHelper;
 
 
@@ -59,6 +61,7 @@ public class HeatMapService {
     private Integer yCount;
     
     private DecimalFormat decimalFormatter;
+    private String othersTrn;
     
     private ReportSpecification spec;
     private GeneratedReport report;
@@ -100,12 +103,18 @@ public class HeatMapService {
         prepareXYResults(yTotalAmounts, yTotal, xTotal, data);
         
         // sort X axis descending (highest first)
+        int xTotalCount = xTotal.size();
         int maxSize = xCount == null ? xTotal.size() : xCount;
-        xTotal = getTopEntries(xTotal, maxSize);
+        xTotal = getTopEntries(xTotal, maxSize, data);
         
         // build matrix and update amounts to %
         JsonBean[][] matrix = calculateMatrixAndPercentages(xTotalAmounts, xTotal, yTotal, data);
         
+        // Counts
+        result.set("yCount", yTotal.size());
+        result.set("yTotalCount", report.reportContents.getChildren().size());
+        result.set("xCount", xTotal.size());
+        result.set("xTotalCount", xTotalCount);
         // X * Y dataset
         result.set("yDataSet", data.keySet());
         result.set("xDataSet", xTotal.keySet());
@@ -121,36 +130,57 @@ public class HeatMapService {
     private void prepareXYResults(List<String> yTotalAmounts, Map<String, BigDecimal> yTotal, 
             Map<String, BigDecimal> xTotal, Map<String, Map<String, ReportCell>> data) {
         int yCountLeft = yCount == null ? report.reportContents.getChildren().size() : yCount;
+        boolean buildOthers = yCountLeft < report.reportContents.getChildren().size(); 
         
         // process all to get consistent X & Y totals
         for (ReportArea yArea : report.reportContents.getChildren()) {
-            Map<String, ReportCell> row = null;
-            // build Y axis, as much as needed
-            if (yCountLeft-- > 0) {
-                String yValue = yArea.getContents().get(yOutCol).displayedValue;
-                ReportCell yTotCell = yArea.getContents().get(mOutCol);
-                yTotalAmounts.add(yTotCell.displayedValue);
-                BigDecimal yTotalAmount = yTotCell == null ? BigDecimal.ZERO : (BigDecimal) yTotCell.value; 
-                yTotal.put(yValue, yTotalAmount);
-                // build row data
-                row = data.putIfAbsent(yValue, new HashMap<String, ReportCell>());
-                if (row == null)
-                    row = data.get(yValue);
-            }
+            // build Y axis and get row data
+            Map<String, ReportCell> row = buildYRow(yArea, yCountLeft--, yTotal, yTotalAmounts, data);
             
             for (ReportArea xArea : yArea.getChildren()) {
                 // configure X * Y intersection
                 String xValue = xArea.getContents().get(xOutCol).displayedValue;
                 ReportCell amountCell = xArea.getContents().get(mOutCol);
                 BigDecimal amount = amountCell == null ? BigDecimal.ZERO : (BigDecimal) amountCell.value;
-                if (row != null)
-                    row.put(xValue, amountCell);
+                row.put(xValue, amountCell);
                 
                 // calculate X totals
                 amount = amount.add(xTotal.getOrDefault(xValue, BigDecimal.ZERO));
                 xTotal.put(xValue, amount);
             }
         }
+        
+        if (buildOthers) {
+            // only now add formatted Y "Others" summed up amount
+            yTotalAmounts.add(decimalFormatter.format(yTotal.get(getOthersTrn())));
+                        
+        }
+    }
+    
+    private Map<String, ReportCell> buildYRow(ReportArea yArea, int yCountLeft, Map<String, BigDecimal> yTotal, 
+            List<String> yTotalAmounts, Map<String, Map<String, ReportCell>> data) {
+        // build Y axis, as much as needed
+        boolean buildY = yCountLeft > 0;
+        // if no more Y to build, then collect everything remaining under "Others"
+        String yValue = buildY ? yValue = yArea.getContents().get(yOutCol).displayedValue : getOthersTrn();
+
+        ReportCell yTotCell = yArea.getContents().get(mOutCol);
+        BigDecimal yTotalAmount = yTotCell == null ? BigDecimal.ZERO : (BigDecimal) yTotCell.value;
+        
+        if (buildY) {
+            // for "Others" will be reformatted once its total is calculated
+            yTotalAmounts.add(yTotCell.displayedValue);
+        } else {
+            // remaining is summed up under "Others"
+            yTotalAmount = yTotalAmount.add(yTotal.getOrDefault(yValue, BigDecimal.ZERO));
+        }
+        yTotal.put(yValue, yTotalAmount);
+        
+        Map<String, ReportCell> row = data.putIfAbsent(yValue, new HashMap<String, ReportCell>());
+        if (row == null) {
+            row = data.get(yValue);
+        }
+        return row;
     }
     
     private JsonBean[][] calculateMatrixAndPercentages(List<String> xTotalAmounts, Map<String, BigDecimal> xTotal,
@@ -221,7 +251,15 @@ public class HeatMapService {
                 && report.reportContents.getChildren().size() > 0;
     }
     
-    private Map<String, BigDecimal> getTopEntries(Map<String, BigDecimal> map, int maxSize) {
+    /**
+     * Get top entries and collect anything remaining under "Others"
+     * @param map
+     * @param maxSize
+     * @param data
+     * @return top entries and "Others"
+     */
+    private Map<String, BigDecimal> getTopEntries(Map<String, BigDecimal> map, int maxSize, 
+            Map<String, Map<String, ReportCell>> data) {
         if (maxSize < 1)
             return Collections.emptyMap();
         // TODO: once we fix the possibility to use Lambda expressions in REST API, then we can simplify do this:
@@ -247,9 +285,36 @@ public class HeatMapService {
             }
         });
         sortedResult.addAll(map.entrySet());
+        BigDecimal xOthers = null;
         for (Entry<String, BigDecimal> entry : sortedResult) {
-            result.put(entry.getKey(), entry.getValue());
-            if (--maxSize == 0) break; 
+            if (maxSize-- > 0) {
+                result.put(entry.getKey(), entry.getValue());
+            } else {
+                // anything cut off should go to "Others"
+                xOthers = xOthers == null ? entry.getValue() : xOthers.add(entry.getValue());
+            }
+        }
+        // configure "Others" data if present 
+        if (xOthers != null) {
+            // set "Others" xTotals
+            result.put(getOthersTrn(), xOthers);
+            // now merge also Y intersections for "X Others"
+            Set<String> othersXSet = map.keySet();
+            othersXSet.removeAll(result.keySet());
+            for (Map<String, ReportCell> row : data.values()) {
+                BigDecimal otherXCell = null;
+                // note: again, iterating due to current Jersey and Lambda issue 
+                for (String otherX : othersXSet) {
+                    ReportCell amountCell = row.get(otherX);
+                    if (amountCell != null && amountCell.displayedValue != null) {
+                        BigDecimal otherToAdd = (BigDecimal) amountCell.value;
+                        otherXCell = otherXCell == null ? otherToAdd : otherXCell.add(otherToAdd);
+                    }
+                }
+                if (otherXCell != null)
+                    row.put(getOthersTrn(), new AmountCell(otherXCell, decimalFormatter.format(otherXCell)));
+            }
+
         }
         return result;
     }
@@ -284,5 +349,11 @@ public class HeatMapService {
         
         return spec;
     }
-
+    
+    private String getOthersTrn() {
+        if (this.othersTrn == null)
+            this.othersTrn = TranslatorWorker.translateText(DashboardConstants.OTHERS);
+        return this.othersTrn;
+    }
+    
 }

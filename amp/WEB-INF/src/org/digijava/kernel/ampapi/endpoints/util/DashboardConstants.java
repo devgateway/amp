@@ -20,6 +20,8 @@ public class DashboardConstants {
 	public static final String TOP_IMPLEMENTING_ORGS = "Implementing Agencies";
 	public static final String TOP_EXECUTING_ORGS = "Executing Agencies";
 	public static final String PEACE_BUILDING_AND_STATE_BUILDING_GOALS = "Peace-building and State-building Goals";
+	
+	public static final String OTHERS = "Others";
 
 	// Settings.
 	public static final String DASHBOARD_DEFAULT_MAX_YEAR_DAY = "";

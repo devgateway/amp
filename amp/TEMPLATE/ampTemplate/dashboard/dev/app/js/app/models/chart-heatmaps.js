@@ -6,7 +6,7 @@ var common = require('../charts/common');
 module.exports = ChartModel.extend({
 
 	defaults: {
-	    xLimit: 31,
+	    xLimit: 30,
 	    yLimit: 10,
 	    title: '',
 	    name: '',
@@ -89,7 +89,7 @@ module.exports = ChartModel.extend({
 	fetch: function(options) {
 		//TODO: add code for saved dashboards!!!		
 		var self = this;
-		options = _.defaults(options || {}, { url: this.url + '?' + param(this.pick('xLimit')) });
+		options = _.defaults(options || {}, { url: this.url /*+ '?' + param(this.pick('xLimit'))*/ });
 		
 		// Process params from heat-map/configs, in that EP we have defined each heatmap.
 		var configs = this.get('heatmap_config').models[0];
@@ -104,7 +104,7 @@ module.exports = ChartModel.extend({
 			xColumn = auxAxis;
 		}
 		
-		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn}; 		
+		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn, yCount: self.get('yLimit')}; 		
 		//options.data = JSON.stringify($.extend({}, paramsForHeatMap, JSON.parse(options.data)));
 		paramsForHeatMap.filters =  JSON.parse(options.data);
 		options.data = JSON.stringify(paramsForHeatMap);

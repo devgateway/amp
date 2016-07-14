@@ -119,6 +119,9 @@
 "amp.dashboard:chart-trillion": "T",
 "amp.dashboard:chart-peta": "P",
 "amp.dashboard:chart-exa": "E",
-"amp.dashboard:chart-swap-axes": "Swap Axes"
+"amp.dashboard:chart-swap-axes": "Swap Axes",
+"amp.dashboard:chart-HeatMapbySectorandDonorGroup":"Sector Fragmentation",
+"amp.dashboard:chart-HeatMapbyLocationandDonorGroup":"Location Fragmentation",
+"amp.dashboard:chart-HeatMapbyProgramandDonorGroup":"Program Fragmentation"
 }
 

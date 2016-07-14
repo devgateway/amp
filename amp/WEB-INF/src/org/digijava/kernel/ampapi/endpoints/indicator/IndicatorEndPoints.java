@@ -2,9 +2,9 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import com.sun.jersey.multipart.FormDataParam;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -286,18 +286,11 @@ public class IndicatorEndPoints {
             JsonBean accessJson = new JsonBean();
             accessJson.set(IndicatorEPConstants.ID,access.getValue());
             accessJson.set(IndicatorEPConstants.VALUE,access.name());
-            accessJson.set(IndicatorEPConstants.LABEL,access.name());
+            accessJson.set(IndicatorEPConstants.LABEL,TranslatorWorker.translateText(access.name()));
             accessTypeList.add(accessJson);
         }
 
         return accessTypeList;
-    }
-
-    @GET
-    @Path("/workspaces")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public Collection<JsonBean> getWorkspaces() {
-        return SecurityService.getWorkspaces();
     }
 
 }

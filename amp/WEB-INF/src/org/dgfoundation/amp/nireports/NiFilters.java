@@ -40,13 +40,16 @@ public interface NiFilters {
 	 */
 	public Map<String, Predicate<Cell>> getCellPredicates();
 	
-	
+	/**
+	 * returns a set of columns which should be fetched-and-filtered; then, only the activityIds which have survived filtering in these columns should be kept in the rest of the report 
+	 * @return
+	 */
+	public Set<String> getFilteringColumns();
+
 	/**
 	 * returns a list of hierarchies which should be mandatorily part of the report. In case the ReportSpec does not mandate any of them, the hierarchy will be added artificially and then removed
 	 * @return
 	 */
-	public Set<String> getFilteringColumns();
-	
 	public Set<String> getMandatoryHiers();
 	//public Map<NiDimensionUsage, Predicate<NiDimension.Coordinate>> getTransformedFilters();
 }

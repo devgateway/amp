@@ -20,6 +20,9 @@ public class ExpiringCacher<K, V> {
 	protected final String name;
 	protected final Function<K, V> valueGenerator;
 	protected final Supplier<Boolean> cacheInvalidator;
+
+	/** the timeout, in millies, to clear the cache after */
+	final long timeout;
 	
 	public ExpiringCacher(String name, Function<K, V> valueGenerator, Supplier<Boolean> cacheInvalidator, long timeout) {
 		this.timeout = timeout;
@@ -27,10 +30,7 @@ public class ExpiringCacher<K, V> {
 		this.valueGenerator = valueGenerator;
 		this.cacheInvalidator = cacheInvalidator;
 	}
-	
-	/** the timeout, in millies, to clear the cache after */
-	final long timeout;
-	
+		
 	final ConcurrentHashMap<K, V> entries = new ConcurrentHashMap<>();
 	
 	public V buildOrGetValue(K key) {

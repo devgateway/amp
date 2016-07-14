@@ -350,8 +350,7 @@ public class TeamMemberUtil {
 			String queryString = "select distinct tm from " + AmpTeamMember.class.getName() + " tm "
 					+ "inner join fetch tm.user as usr "
 					+ "inner join fetch tm.ampMemberRole "
-					+ "inner join fetch tm.ampTeam "
-					+ "inner join fetch usr.groups";
+					+ "inner join fetch tm.ampTeam";
 		
 			if (teamId != null) {
 				queryString += "  where (tm.ampTeam=:teamId)";

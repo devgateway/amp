@@ -1,13 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
@@ -26,6 +18,15 @@ import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class IndicatorUtils {
     protected static final Logger logger = Logger.getLogger(IndicatorUtils.class);
@@ -101,8 +102,8 @@ public class IndicatorUtils {
             indicatorLayer.setId(null);
         }
 
-        indicatorLayer.setName(indicator.getString(IndicatorEPConstants.NAME));
-        indicatorLayer.setDescription(indicator.getString(IndicatorEPConstants.DESCRIPTION));
+        indicatorLayer.setName(IndicatorTranslationUtil.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.NAME), indicatorLayer, indicator.get(IndicatorEPConstants.NAME)));
+        indicatorLayer.setDescription(IndicatorTranslationUtil.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.DESCRIPTION), indicatorLayer, indicator.get(IndicatorEPConstants.DESCRIPTION)));
         indicatorLayer.setNumberOfClasses(Long.valueOf(indicator.getString(IndicatorEPConstants.NUMBER_OF_CLASSES)));
         indicatorLayer.setUnit(indicator.getString(IndicatorEPConstants.UNIT));
         if (indicatorLayer.getId() == null) {
@@ -218,5 +219,27 @@ public class IndicatorUtils {
 
     public static final ApiErrorMessage validateSort(String sort) {
         return ("desc".equalsIgnoreCase(sort) || "asc".equalsIgnoreCase(sort)) ? null : new ApiErrorMessage(IndicatorErrors.INVALID_SORT.id, IndicatorErrors.INVALID_SORT.description,sort);
+    }
+
+    protected static Field getField(Object parent, String actualFieldName) {
+        if (parent == null) {
+            return null;
+        }
+        Field field = null;
+        try {
+            Class<?> clazz = parent.getClass();
+            while (field == null && !clazz.equals(Object.class)) {
+                try {
+                    field = clazz.getDeclaredField(actualFieldName);
+                    field.setAccessible(true);
+                } catch (NoSuchFieldException ex) {
+                    clazz = clazz.getSuperclass();
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            throw new RuntimeException(e);
+        }
+        return field;
     }
 }

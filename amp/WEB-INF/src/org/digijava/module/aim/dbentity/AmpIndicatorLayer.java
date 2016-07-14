@@ -1,16 +1,22 @@
 package org.digijava.module.aim.dbentity;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-
-public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicatorLayer> {
+@TranslatableClass (displayName = "IndicatorLayer")
+public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicatorLayer>, LoggerIdentifiable {
 	
 	private Long id;
+    @TranslatableField
 	private String name;
+    @TranslatableField
 	private String description;
 	private Set <AmpIndicatorColor> colorRamp;
 	private Long numberOfClasses;
@@ -66,6 +72,21 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 		return id.compareTo(o.getId());
 	}
 
+    public Object getObjectType() {
+        return this.getClass().getName();
+    }
+    @Override
+    public String getObjectFilteredName() {
+        return DbUtil.filter(getObjectName());
+    }
+
+    public Object getIdentifier() {
+        return this.getId();
+    }
+
+    public String getObjectName() {
+        return this.getId()+" "+this.getName();
+    }
 
 	public AmpCategoryValue getAdmLevel() {
 		return admLevel;

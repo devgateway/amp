@@ -243,7 +243,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 									ArConstants.userFriendlyNameOfRole(metaSet.getMetaInfo(MetaCategory.RECIPIENT_ROLE.category).v.toString())));
 				}
 				
-				if (transactionMoment == null || transactionAmount == null) continue;
+				if (transactionMoment == null || transactionAmount == null || srcCurrency == null) continue;
 				CategAmountCellProto cell = new CategAmountCellProto(ampActivityId, transactionAmount, srcCurrency, transactionMoment, metaSet, coos, fixed_exchange_rate);
 				cells.add(cell);
 			}

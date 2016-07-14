@@ -381,6 +381,7 @@ public class QueryUtil {
                 + " left join ind.sharedWorkspaces s "
                 + " where (  "
                 + " ind.accessType = " + IndicatorAccessType.PUBLIC
+                + " or ( ind.accessType = " + IndicatorAccessType.STANDARD + " ) "
                 + getSharedIndicatorsQuery()
                 + getPrivateIndicatorsQuery()
                 + " ) ";
@@ -413,6 +414,7 @@ public class QueryUtil {
                     + " where upper(ind.admLevel.value)=:value) "
                     + " and (  "
                     + " ind.accessType = " + IndicatorAccessType.PUBLIC
+                    + " or ( ind.accessType = " + IndicatorAccessType.STANDARD + " ) "
                     + getSharedIndicatorsQuery()
                     + getPrivateIndicatorsQuery()
                     + " ) ";

@@ -15,6 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporte
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorTranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -373,17 +374,27 @@ public class GisEndPoints {
 	}
 	private List<JsonBean> generateIndicatorJson (List<AmpIndicatorLayer> indicators,boolean includeAdmLevel) {
 		List<JsonBean> indicatorsJson = new ArrayList<JsonBean>();
-		for (AmpIndicatorLayer indicator : indicators) {
+
+        for (AmpIndicatorLayer indicator : indicators) {
 			JsonBean json = new JsonBean();
-			json.set("name", indicator.getName());
-			json.set("classes", indicator.getNumberOfClasses());
-			json.set("id", indicator.getId());
-			json.set("unit", indicator.getUnit());
-			json.set("description", indicator.getDescription());
+            json.set(IndicatorEPConstants.ID, indicator.getId());
+            json.set(IndicatorEPConstants.NAME, IndicatorTranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
+            json.set(IndicatorEPConstants.DESCRIPTION, IndicatorTranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
+			json.set(IndicatorEPConstants.ID, indicator.getId());
+			json.set(IndicatorEPConstants.UNIT, indicator.getUnit());
 			if (includeAdmLevel) {
-				json.set("admLevelId", indicator.getAdmLevel().getLabel());
+				json.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getLabel());
 			}
             json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
+            if (indicator.getCreatedOn()!=null) {
+                json.set(IndicatorEPConstants.CREATED_ON, IndicatorEPConstants.DATE_FORMATTER.format(indicator.getCreatedOn()));
+            }
+            if (indicator.getUpdatedOn() != null) {
+                json.set(IndicatorEPConstants.UPDATED_ON, IndicatorEPConstants.DATE_FORMATTER.format(indicator.getUpdatedOn()));
+            }
+            if (indicator.getCreatedBy() != null) {
+                json.set(IndicatorEPConstants.CREATE_BY, indicator.getCreatedBy().getUser().getEmail());
+            }
 			List<JsonBean> colors = new ArrayList<JsonBean>();
 			List<AmpIndicatorColor> colorList = new ArrayList<AmpIndicatorColor>(indicator.getColorRamp());
 			Collections.sort(colorList, new Comparator<AmpIndicatorColor>() {

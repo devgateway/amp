@@ -9,7 +9,6 @@ import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -167,25 +166,23 @@ public class AmpTreeVisibility implements Serializable{
 					if (module.getItems() != null){
 						for (Iterator jt = module.getItems().iterator(); jt.hasNext();) {
 							AmpFeaturesVisibility feature = (AmpFeaturesVisibility) jt.next();
-                            //if (!FeaturesUtil.internalUseFeatures.contains(feature.name)) {
-                                AmpTreeVisibility featureNode = new AmpTreeVisibility();
-                                featureNode.setRoot(feature);
-                                if (feature.getItems() != null){
-                                    for (Iterator kt = feature.getItems().iterator(); kt.hasNext();) {
-                                        AmpFieldsVisibility field = (AmpFieldsVisibility) kt.next();
-                                        AmpTreeVisibility fieldNode = new AmpTreeVisibility();
-                                        if(field.getDescription()==null || "".equals(field.getDescription()))
-                                            field.setDescription(field.getName());
-                                        fieldNode.setRoot(field);
-                                        fieldNode.setItems(null);
-                                        featureNode.getItems().put(field.getName(),
-                                                fieldNode);
-                                    }
-                                }
-                                moduleNode.getItems().put(feature.getName(),
-                                        featureNode);
-                            }
-						//}
+							AmpTreeVisibility featureNode = new AmpTreeVisibility();
+							featureNode.setRoot(feature);
+							if (feature.getItems() != null){
+								for (Iterator kt = feature.getItems().iterator(); kt.hasNext();) {
+									AmpFieldsVisibility field = (AmpFieldsVisibility) kt.next();
+									AmpTreeVisibility fieldNode = new AmpTreeVisibility();
+									if(field.getDescription()==null || "".equals(field.getDescription()))
+										field.setDescription(field.getName());
+									fieldNode.setRoot(field);
+									fieldNode.setItems(null);
+									featureNode.getItems().put(field.getName(),
+											fieldNode);
+								}
+							}
+							moduleNode.getItems().put(feature.getName(),
+									featureNode);
+						}
 					}
 					this.getItems().put(module.getName(), moduleNode);
 				}

@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -53,12 +54,9 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
-import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -507,64 +505,48 @@ public class Reports {
 	}
 	
 	private Response exportSaikuReport(String query, String type, AmpReports ampReport, Boolean isDinamic) {
+		logger.info("Starting export to " + type);
+		String decodedQuery = "";
+		
 		try {
-			logger.info("Starting export to " + type);
-			String decodedQuery = java.net.URLDecoder.decode(query, "UTF-8");
-			decodedQuery = decodedQuery.replace("query=", "");
-			JsonBean queryObject = JsonBean.getJsonBeanFromString(decodedQuery);
-			LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
-			
-			queryModel.remove("page");
-			queryModel.put("page", 0);
-			queryModel.put("recordsPerPage", -1);
-			queryModel.put("regenerate", true);
-			queryModel.put(AMPReportExportConstants.EXCEL_TYPE_PARAM, queryObject.get(AMPReportExportConstants.EXCEL_TYPE_PARAM));
-			if (isDinamic) {
-				queryObject.set(EPConstants.IS_DYNAMIC, true);
-
-			}
-			logger.info("Obtain report result...");
-			JsonBean result = getSaikuReport(queryObject, ampReport.getAmpReportId());
-
-			byte[] doc = null;
-			String filename = "export";
-
-			// We will use report settings to get the DecimalFormat in order to parse the formatted values
-			logger.info("Obtain report implementation...");
-			ReportSpecification report = null;
-			if (!isDinamic) {
-				report = ReportsUtil.getReport(ampReport.getAmpReportId());
-			} else {
-				// if the report is dynamic we need to load it from memory
-				report = AmpReportsToReportSpecification
-						.convert(ReportsUtil.getAmpReportFromSession(ampReport.getAmpReportId().intValue()));
-			}
-			
-			if (report != null && !StringUtils.isEmpty(report.getReportName())) {
-				filename = report.getReportName();
-			}
-			filename += "." + type;
-			filename = filename.replaceAll(" ", "_");
-			filename = String.format("\"%s\"", filename);
-
-			logger.info("Generate specific export...");
-			
-			GeneratedReport genateredReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(),
-			        ReportsUtil.convertSaikuParamsToReports(queryObject));
-			doc = exportNiReport(genateredReport, ampReport.getAmpReportId(), queryObject, type);
-
-			if (doc != null) {
-				logger.info("Send export data to browser...");
-				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
-						.header("content-disposition", "attachment; filename = " + filename)
-						.header("content-length", doc.length).build();
-			} else {
-				throw new Exception("Empty response while exporting.");
-			}
-		} catch (Exception e) {
+			decodedQuery = java.net.URLDecoder.decode(query, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
 			logger.error("error while generating report", e);
 			return Response.serverError().build();
 		}
+		
+		decodedQuery = decodedQuery.replace("query=", "");
+		JsonBean queryObject = JsonBean.getJsonBeanFromString(decodedQuery);
+		LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
+		
+		queryModel.remove("page");
+		queryModel.put("page", 0);
+		queryModel.put("recordsPerPage", -1);
+		queryModel.put("regenerate", true);
+		queryModel.put(AMPReportExportConstants.EXCEL_TYPE_PARAM, queryObject.get(AMPReportExportConstants.EXCEL_TYPE_PARAM));
+		if (isDinamic) {
+			queryObject.set(EPConstants.IS_DYNAMIC, true);
+
+		}
+		logger.info("Obtain report result...");
+		JsonBean result = getSaikuReport(queryObject, ampReport.getAmpReportId());
+
+		// We will use report settings to get the DecimalFormat in order to parse the formatted values
+		logger.info("Obtain report implementation...");
+		ReportSpecification report = null;
+		if (!isDinamic) {
+			report = ReportsUtil.getReport(ampReport.getAmpReportId());
+		} else {
+			// if the report is dynamic we need to load it from memory
+			report = AmpReportsToReportSpecification
+					.convert(ReportsUtil.getAmpReportFromSession(ampReport.getAmpReportId().intValue()));
+		}
+		
+		logger.info("Generate specific export...");
+		GeneratedReport genateredReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(),
+		        ReportsUtil.convertSaikuParamsToReports(queryObject));
+		
+		return getExportAsResponse(ampReport, type, genateredReport);
 	}
 	
 	/** Method used for exporting a public NiReport. 
@@ -576,17 +558,20 @@ public class Reports {
 		logger.info("Export specific public export...");
 		
 		GeneratedReport report = EndpointUtils.runReport(AmpReportsToReportSpecification.convert(ampReport));
-		String filename = ampReport.getName();
-		filename += "." + type;
-		filename = filename.replaceAll(" ", "_");
 		
 		//TODO: refactoring should be made before 2.12 official release by merging with exportSaikuReport
+		return getExportAsResponse(ampReport, type, report);
+	}
+
+	public Response getExportAsResponse(AmpReports ampReport, String type, GeneratedReport report) {
+		String fileName = getExportFileName(ampReport, type);
 		try {
 			byte[] doc = exportNiReport(report, ampReport.getAmpReportId(), new JsonBean(), type);
+			
 			if (doc != null) {
 				logger.info("Send export data to browser...");
 				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
-						.header("content-disposition", "attachment; filename = " + filename)
+						.header("content-disposition", "attachment; filename = " + fileName)
 						.header("content-length", doc.length).build();
 			} else {
 				logger.error(type + " report export is null");
@@ -596,6 +581,15 @@ public class Reports {
 			logger.error("error while generating report", e);
 			return Response.serverError().build();
 		}
+	}
+
+	public String getExportFileName(AmpReports ampReport, String type) {
+		
+		String filename = ampReport != null ? ampReport.getName() : "export";
+		filename += "." + type;
+		filename = String.format("\"%s\"", filename.replaceAll(" ", "_"));
+		
+		return filename;
 	}
 	
 	/** Method used for exporting a NiReport. 

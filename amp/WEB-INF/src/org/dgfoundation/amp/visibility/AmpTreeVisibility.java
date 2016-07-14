@@ -167,7 +167,7 @@ public class AmpTreeVisibility implements Serializable{
 					if (module.getItems() != null){
 						for (Iterator jt = module.getItems().iterator(); jt.hasNext();) {
 							AmpFeaturesVisibility feature = (AmpFeaturesVisibility) jt.next();
-                            if (!FeaturesUtil.internalUseFeatures.contains(feature.name)) {
+                            //if (!FeaturesUtil.internalUseFeatures.contains(feature.name)) {
                                 AmpTreeVisibility featureNode = new AmpTreeVisibility();
                                 featureNode.setRoot(feature);
                                 if (feature.getItems() != null){
@@ -185,7 +185,7 @@ public class AmpTreeVisibility implements Serializable{
                                 moduleNode.getItems().put(feature.getName(),
                                         featureNode);
                             }
-						}
+						//}
 					}
 					this.getItems().put(module.getName(), moduleNode);
 				}

@@ -13,6 +13,7 @@ import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorTranslationUtil;
@@ -413,15 +414,8 @@ public class GisEndPoints {
 			indicatorsJson.add(json);
 		}
 		return indicatorsJson;
+	}
 	
-	}
-	@GET
-	@Path("/export-map-test/")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public List<Activity> testMapExport(){
-		final Map<String,Activity>geocodeInfo=new LinkedHashMap<String,Activity>();
-		return LocationService.getMapExportByLocation(geocodeInfo,null);
-	}
 	/**
 	 * Export map id from current filters
 	 * 
@@ -450,11 +444,10 @@ public class GisEndPoints {
 		LinkedHashMap<String, Object> filters=(LinkedHashMap<String, Object>)filter.get("filters");
 		if(exportType==1){
 			name="map-export-project-sites.xls";
-			wb =LocationService.generateExcelExportByStructure(filters);	
+			wb = new ActivityStructuresExporter(filters).export(name);
 		}else{
 			name="map-export-administrative-Locations.xls";
 			wb = new ActivityLocationExporter(filters).export(name);
-//			wb=LocationService.generateExcelExportByLocation(filters);
 		}
 		webResponse.setHeader("Content-Disposition","attachment; filename=" + name);
 

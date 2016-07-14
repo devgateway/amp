@@ -60,59 +60,6 @@ public class ActivityLocationExporter extends ActivityExporter {
 		return res;
 	};
 	
-	private static boolean isUndefined(String value) {
-		return value == null || value.equals("Undefined") || value.equals("GeoId: Undefined");
-	}
-	
-	private Activity setActivityField(String key, String value, Activity a) {
-		switch(key) {
-			case ColumnConstants.GEOCODE:
-				if (!isUndefined(value)) {
-					if ("".equals(value)) {
-						//special case: this is the (i>0)th row of a Mondrian report; 
-						//the actual geocode to be used is the overriding one
-						a.setGeoCode(overridingGeoCode);
-						break;
-					} else {
-						geoCodes.add(value);
-						overridingGeoCode = value;
-						a.setGeoCode(value);
-						break;
-					}
-				} else 
-					return null;
-
-			case ColumnConstants.IMPLEMENTATION_LEVEL:
-				a.setImplementationLevel(value);
-				break;
-			case ColumnConstants.AMP_ID:
-				a.setAmpId(value);
-				break;
-			case ColumnConstants.PROJECT_TITLE:
-				a.setName(value);
-				break;
-			case MeasureConstants.ACTUAL_COMMITMENTS:
-				a.setTotalCommitments(value);
-				break;
-			case MeasureConstants.ACTUAL_DISBURSEMENTS:
-				a.setTotalDisbursments(value);
-				break;
-			case ColumnConstants.DONOR_AGENCY:
-				a.setDonorAgency(value);
-				break;
-			case ColumnConstants.PRIMARY_SECTOR:
-				a.setPrimarySector(value);
-				break;
-			case ColumnConstants.PROJECT_DESCRIPTION:
-				a.setDescription(value);
-				break;
-		}
-		return a;
-	}
-	
-
-	String overridingGeoCode = null;
-	
 	
 	/*because Mondrian, the first row of a hierarchy will contain the hierarchy value;
 	 * all subsequent ones of the same group will be null.
@@ -205,8 +152,8 @@ public class ActivityLocationExporter extends ActivityExporter {
 			extractActivitiesFromReport(report.reportContents, new Activity());
 			//postprocess: expand geocodes into latitude/longitude
 			//has to be done outside of the recursive part since it implies a DB request
-			if (geoCodes.size() > 0) {
-				String preparedGeoCodes = org.dgfoundation.amp.Util.toCSString(geoCodes);
+			if (getGeoCodes().size() > 0) {
+				String preparedGeoCodes = org.dgfoundation.amp.Util.toCSString(getGeoCodes());
 				Map<String, GeoDataSkeleton> geoDataExpanded = getGeoInfoFromDb(preparedGeoCodes);
 				for (Activity act : activities) {
 					if (geoDataExpanded.containsKey(act.getGeoCode())) {

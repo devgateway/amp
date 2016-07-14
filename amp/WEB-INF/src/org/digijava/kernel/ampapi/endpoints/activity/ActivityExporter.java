@@ -123,7 +123,6 @@ public class ActivityExporter {
 						// put the array with object values in the result JSON
 						resultJson.set(fieldTitle, collectionJson);
 					} else {
-
 						if (InterchangeableClassMapper.containsSupportedClass(field.getType()) || fieldValue == null) {
 							Class<? extends Object> parentClassName = parentObject == null ? field.getDeclaringClass() : parentObject.getClass();
 							resultJson.set(fieldTitle, InterchangeUtils.getTranslationValues(field, parentClassName, fieldValue, InterchangeUtils.getId(parentObject)));

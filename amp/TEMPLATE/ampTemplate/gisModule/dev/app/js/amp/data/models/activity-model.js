@@ -30,21 +30,15 @@ module.exports = Backbone.Model.extend({
   _joinFilters: function() {
     var self = this;
     var deferred = $.Deferred();
-
     this.collection.appData.filter.getAllFilters().then(function(allFilters) {
       var matchesFilters = self.attributes.matchesFilters;
       if (allFilters && allFilters.columnFilters && matchesFilters) {
-        _.each(matchesFilters, function(v, k) {
-          var filterKey = k;
-      	 if('Donor Agency' === k){
-      		  filterKey = 'Donor Id';
-      	  }  
+            _.each(matchesFilters, function(v, k) {
           //make sure it's a valid filter
-          if (allFilters.columnFilters[filterKey]) {
+          if (allFilters.columnFilters[k]) {
             //iterate over ids.        	        			  
             _.each(matchesFilters[k], function(id, index) {
-
-              var matched = _(allFilters.columnFilters[filterKey]).findWhere({id: id});
+              var matched = _(allFilters.columnFilters[k]).findWhere({id: id});
               if (matched) {
                 matchesFilters[k][index] = matched;
               }

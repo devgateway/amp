@@ -8,6 +8,7 @@ module.exports = ChartModel.extend({
 	defaults: {
 	    xLimit: 30,
 	    yLimit: 10,
+	    originalYLimit: 10,
 	    title: '',
 	    name: '',
 	    bigN: 0,
@@ -56,6 +57,11 @@ module.exports = ChartModel.extend({
 		self.values.yPTotals = this.normalizeValues(data.yPTotals);
 		self.values.xTotals = data.xTotals;
 		self.values.yTotals = data.yTotals;
+		self.values.xCount = data.xCount;
+		self.values.yCount = data.yCount;
+		self.values.xTotalCount = data.xTotalCount;
+		self.values.yTotalCount = data.yTotalCount;	
+		self.values.model = this;
 
 		if (!this.localizedLookup) {
 			// we can't procede if we don't have translations yet :(

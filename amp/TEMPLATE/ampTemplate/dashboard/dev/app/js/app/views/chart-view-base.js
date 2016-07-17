@@ -28,7 +28,8 @@ module.exports = BackboneDash.View.extend({
     'click .download': 'download',
     'click .expand': 'big',
     'click .retry': 'render',
-    'click .heatmap-switch': 'heatmapSwitchAxis'
+    'click .heatmap-switch': 'heatmapSwitchAxis',
+    'click .heatmap-reset-others': 'clickHeatmapResetOthers'
   },
 
   chartViews: [
@@ -186,6 +187,27 @@ module.exports = BackboneDash.View.extend({
     this.message.stop().fadeOut(200);
     
     this.beautifyLegends(this);
+    
+    if (this.model.get('view') === 'heatmap') {
+    	this.handleHeatmapClicks(this);
+    }
+  },
+  
+  handleHeatmapClicks: function(self) {
+	  var others = $(this.$el).find(".legend-others");
+	  if (others) {
+		  $(others).on('click', function(evt) {
+			  self.model.set('yLimit', self.model.get('yLimit') + self.model.get('originalYLimit'));
+			  self.updateData();
+			  self.$('.heatmap-reset-others').show();
+		  });		  
+	  }
+  },
+  
+  clickHeatmapResetOthers: function() {
+	  this.model.set('yLimit', this.model.get('originalYLimit'));
+	  this.updateData();
+	  this.$('.heatmap-reset-others').hide();
   },
 
   getChartOptions: function() {	  
@@ -306,7 +328,7 @@ module.exports = BackboneDash.View.extend({
 		  if (self.model.get('view') !== 'heatmap') {
 			  if(hasValues && !hasProcessed) {
 				  // Top charts.
-				  if(self.model.get('values')[i] != undefined) {
+				  if(self.model.get('values')[i] !== undefined) {
 					  $(elem).data('data-title', self.model.get('values')[i].name);
 				  } else {
 					// This the last legend "Others" (doesnt come in the data).
@@ -314,7 +336,7 @@ module.exports = BackboneDash.View.extend({
 				  }
 			  } else if(hasProcessed) {
 				  // Aid Predictability charts and Funding Type charts.
-				  if(self.model.get('processed')[i] != undefined) {
+				  if(self.model.get('processed')[i] !== undefined) {
 					  // The extra check is for FT charts that have more legends (grouped, stacked, etc).
 					  $(elem).data('data-title', self.model.get('processed')[i].key);
 				  }

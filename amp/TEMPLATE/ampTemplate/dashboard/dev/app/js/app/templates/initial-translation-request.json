@@ -122,6 +122,7 @@
 "amp.dashboard:chart-swap-axes": "Swap Axes",
 "amp.dashboard:chart-HeatMapbySectorandDonorGroup":"Sector Fragmentation",
 "amp.dashboard:chart-HeatMapbyLocationandDonorGroup":"Location Fragmentation",
-"amp.dashboard:chart-HeatMapbyProgramandDonorGroup":"Program Fragmentation"
+"amp.dashboard:chart-HeatMapbyProgramandDonorGroup":"Program Fragmentation",
+"amp.dashboard:chart-heatmap-reset-others":"Reset Others"
 }
 

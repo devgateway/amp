@@ -29,16 +29,6 @@ nv.models.heatMapChart = function() {
     //============================================================
     // Private Variables
     //------------------------------------------------------------
-
-    var showTooltip = function(e, offsetElement) {
-    	var tooltipLabel = pie.x()(e.point);
-        var left = e.pos[0] + ( (offsetElement && offsetElement.offsetLeft) || 0 );
-        var top = e.pos[1] + ( (offsetElement && offsetElement.offsetTop) || 0);
-        var y = pie.valueFormat()(pie.y()(e.point));
-        var content = tooltip(tooltipLabel, y, e, chart);
-        nv.tooltip.show([left, top], content, e.value < 0 ? 'n' : 's', null, offsetElement);
-    };
-
     var renderWatch = nv.utils.renderWatch(dispatch);
 
     var stateGetter = function(data) {
@@ -172,6 +162,21 @@ nv.models.heatMapChart = function() {
         		.attr('data-title', function(d) {
         			return d;
         		});
+        	
+        		// Format "Others" special row if needed.
+        		if (data[0].values.yCount < data[0].values.yTotalCount) {
+        			var self = this;
+        			var data2 = data;
+        			var textElement = $(container[0]).find('.yLabel').last();
+        			$(textElement).attr("class", function(d, i) {
+        				return $(textElement).attr('class') + ' legend-others';
+        			})/*.on('click', function(event) {
+        				data2[0].values.model.set('yLimit', data2[0].values.model.get('yLimit') + 5);
+        				//chart.dispatch.elementClick;
+        				//chart.update();
+        				dispatch.elementClick();
+        			})*/;
+        		}
         	
         		// Add Totals special row.
         		yAxisLabelsContainer.append("text")

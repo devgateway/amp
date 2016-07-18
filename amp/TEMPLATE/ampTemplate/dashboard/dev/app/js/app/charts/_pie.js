@@ -18,12 +18,18 @@ function dataToNv(data) {
   if (!_.isArray(data[0].values)) {
     common.fail('Data series did not have a "values" array. Instead', data[0].values);
   }
-  return data[0].values;  
+  return getPositiveValues(data[0].values);
+}
+
+function getPositiveValues(values) {
+  return _.filter(values, function(e) {
+    return e.y>0;
+  });
 }
 
 function countCategories(data) {
   // note: this takes regular data, not dataToNv data.
-  return data[0].values.length;
+  return getPositiveValues(data[0].values).length;
 }
 
 

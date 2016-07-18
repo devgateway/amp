@@ -244,19 +244,22 @@ public class DashboardsService {
 		String currcode = spec.getSettings().getCurrencyCode();
 		retlist.set("currency", currcode);
 		Integer maxLimit = report.reportContents.getChildren().size();
-		
 
-		for (Iterator<ReportArea> iterator = report.reportContents.getChildren().iterator(); 
-				values.size() < n && iterator.hasNext();) {
-			while (iterator.hasNext() && values.size() < n) {
-				Map<ReportOutputColumn, ReportCell> content = iterator.next().getContents();
+		double totalPositive = 0;
+		for (ReportArea reportArea: report.reportContents.getChildren()) {
+			Map<ReportOutputColumn, ReportCell> content = reportArea.getContents();
+			AmountCell ac = (AmountCell) content.get(valueCol);
+			double amount = ((BigDecimal) ac.value).doubleValue() * unitsOption.divider;
+			if (values.size() < n) {
 				JsonBean row = new JsonBean();
 				row.set("name", content.get(criteriaCol).displayedValue);
 				row.set("id", ((IdentifiedReportCell) content.get(criteriaCol)).entityId);
-				AmountCell ac = (AmountCell) content.get(valueCol);
-				row.set("amount", ((BigDecimal) ac.value).doubleValue() * unitsOption.divider);
+				row.set("amount", amount);
 				row.set("formattedAmount", ac.displayedValue);
 				values.add(row);
+			}
+			if(amount > 0) {
+				totalPositive += amount;
 			}
 		}
 		retlist.set("values", values);
@@ -266,6 +269,7 @@ public class DashboardsService {
 				calculateSumarizedTotals(rawTotal * unitsOption.multiplier, spec));
 		// report the total number of tops available
 		retlist.set("maxLimit", maxLimit);
+		retlist.set("totalPositive", totalPositive);
 		retlist.set("name", name);
 		retlist.set("title", title);
 		return retlist;

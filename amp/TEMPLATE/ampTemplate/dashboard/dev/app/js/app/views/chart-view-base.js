@@ -174,6 +174,7 @@ module.exports = BackboneDash.View.extend({
       this.resetNumbers();
       return;
     }
+    this.showNegativeAlert();
     var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions(), this.model);
     this.chartContainer.html(chart.el);
 
@@ -200,14 +201,21 @@ module.exports = BackboneDash.View.extend({
 			  self.model.set('yLimit', self.model.get('yLimit') + self.model.get('originalYLimit'));
 			  self.updateData();
 			  self.$('.heatmap-reset-others').show();
-		  });		  
+		  });
 	  }
   },
-  
+
   clickHeatmapResetOthers: function() {
 	  this.model.set('yLimit', this.model.get('originalYLimit'));
 	  this.updateData();
 	  this.$('.heatmap-reset-others').hide();
+  },
+  showNegativeAlert: function() {
+    if(this.model.get('view') === 'pie' && _.find(this.model.get('processed')[0].values, function(item) { return item.y < 0;})) {
+      this.$('.negative-values-message').show();
+    } else {
+      this.$('.negative-values-message').hide();
+    }
   },
 
   getChartOptions: function() {	  

@@ -123,6 +123,8 @@
 "amp.dashboard:chart-HeatMapbySectorandDonorGroup":"Sector Fragmentation",
 "amp.dashboard:chart-HeatMapbyLocationandDonorGroup":"Location Fragmentation",
 "amp.dashboard:chart-HeatMapbyProgramandDonorGroup":"Program Fragmentation",
-"amp.dashboard:chart-heatmap-reset-others":"Reset Others"
+"amp.dashboard:chart-heatmap-reset-others":"Reset Others",
+"amp.dashboard:negatives-values":"Negative values are not represented in this chart.",
+"amp.dashboard:negatives-values-parag":"Please switch to bar chart or table view to view all values."
 }
 

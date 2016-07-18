@@ -125,6 +125,14 @@
 "amp.dashboard:chart-HeatMapbyProgramandDonorGroup":"Program Fragmentation",
 "amp.dashboard:chart-heatmap-reset-others":"Reset Others",
 "amp.dashboard:negatives-values":"Negative values are not represented in this chart.",
-"amp.dashboard:negatives-values-parag":"Please switch to bar chart or table view to view all values."
+"amp.dashboard:negatives-values-parag":"Please switch to bar chart or table view to view all values.",
+"amp.dashboard:chart-heatmap-legends":"LEGENDS",
+"amp.dashboard:chart-heatmap-totals":"TOTALS",
+"amp.dashboard:chart-heatmap-legend1":"Less than 1%",
+"amp.dashboard:chart-heatmap-legend2":"Between 1% and <5%",
+"amp.dashboard:chart-heatmap-legend3":"Between 5% and <10%",
+"amp.dashboard:chart-heatmap-legend4":"Between 10% and <15%",
+"amp.dashboard:chart-heatmap-legend5":"Between 15% and <20%",
+"amp.dashboard:chart-heatmap-legend6":"More than 20%"
 }
 

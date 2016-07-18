@@ -180,13 +180,14 @@ nv.models.heatMapChart = function() {
         	
         		// Add Totals special row.
         		yAxisLabelsContainer.append("text")
-        			.text(app.translator.translateSync("TOTALS"))
+        			.text("TOTALS")
         			.attr("x", 0)
         			.attr("y", (data[0].values.y.length * cubeSize))
         			.attr("class", "yLabel mono axis nv-series heatmap-totals")
         			.style("text-anchor", "end")
         			.style("font-weight", "bold")
-            		.attr("transform", "translate(-6," + cubeSize / 1.5 + ")");
+            		.attr("transform", "translate(-6," + cubeSize / 1.5 + ")")
+            		.attr('data-i18n', 'amp.dashboard:chart-heatmap-totals');
 
         		// Columns container.
         		var xAxisLabelsContainer = svg
@@ -220,14 +221,15 @@ nv.models.heatMapChart = function() {
         		
         		// Add Totals special column.
         		xAxisLabelsContainer.append("text")
-        			.text(app.translator.translateSync("TOTALS"))
+        			.text("TOTALS")
         			.attr("x", cubeSize * data[0].values.x.length)
         			.attr("y", 0)
         			.attr("class", "xLabel mono axis nv-series heatmap-totals")
         			.style("font-weight", "bold")
             		.attr("transform", function(d, i) {
         				return "rotate(270, " + (cubeSize * data[0].values.x.length) + ", 0)";
-        			});
+        			})
+        			.attr('data-i18n', 'amp.dashboard:chart-heatmap-totals');
 
         		// Cubes
         		var cubesContainer = svg
@@ -247,8 +249,10 @@ nv.models.heatMapChart = function() {
         		
         		// Add percentage legends.
         		createLegends(svg, data, cubeSize, categories, legendElementHeight);
+        		
+        		app.translator.translateDOM(svg[0]);
         });
-
+        
         renderWatch.renderEnd('pieChart immediate');
         return chart;
     }
@@ -258,12 +262,12 @@ nv.models.heatMapChart = function() {
 			.append("g")
 			.attr("transform", "translate(0, " + (((data[0].values.y.length + 1) * cubeSize) + 10) + ")")
 			.attr("class", "heatmap-legends-container");
-    	var legendsPool = [app.translator.translateSync("Less than 1%"),
-    	                   app.translator.translateSync("Between 1% and <5%"),
-    	                   app.translator.translateSync("Between 5% and <10%"),
-    	                   app.translator.translateSync("Between 10% and <15%"),
-    	                   app.translator.translateSync("Between 15% and <20%"),
-    	                   app.translator.translateSync("More than 20%")];   	
+    	var legendsPool = [app.translator.translateSync("amp.dashboard:chart-heatmap-legend1"),
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend2"),
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend3"),
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend4"),
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend5"),
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend6")];
     	var maxLegendTextWidth = 0;
     	for (var i = 0; i < legendsPool.length; i++) {
     		var auxWidth = calculateTextWidth(legendsPool[i]);
@@ -292,12 +296,13 @@ nv.models.heatMapChart = function() {
     	}
     	
     	legendsContainer.append("text")
-			.text(app.translator.translateSync("LEGENDS"))
+			.text("LEGENDS")
 			.attr("x", -6)
 			.attr("y", 15)
 			.attr("class", "yLabel mono axis nv-series heatmap-totals")
 			.style("text-anchor", "end")
-			.style("font-weight", "bold");
+			.style("font-weight", "bold")
+			.attr('data-i18n', 'amp.dashboard:chart-heatmap-legends');
     }
     
     function createCube(cubesContainer, data, cubeSize, noColor, categories) {

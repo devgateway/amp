@@ -97,7 +97,7 @@ public class HeatMapService {
         // storage for funding, then % amounts for matrix, xTotals and yTotals 
         Map<String, Map<String, ReportCell>> data = new LinkedHashMap<>();
         Map<String, BigDecimal> xTotal = new HashMap<>();
-        Map<String, BigDecimal> yTotal = new HashMap<>();
+        Map<String, BigDecimal> yTotal = new LinkedHashMap<>();
         
         // distribute fundings per sets
         prepareXYResults(yTotalAmounts, yTotal, xTotal, data);

@@ -642,6 +642,14 @@ function helpergeneric_theme() {
 }
 
 /**
+ * Implements hook_boot().
+ */
+function helpergeneric_boot() {
+  // We want to add the current version of the PP.
+  drupal_add_http_header('X-PP-VERSION', '2.12');
+}
+
+/**
  * Implements hook_locale_default_languages_alter().
  *
  * This is used to controle the enabled languages. By default in code all

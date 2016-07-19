@@ -31,7 +31,12 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardErrors;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
@@ -62,6 +67,8 @@ public class HeatMapService {
     
     private DecimalFormat decimalFormatter;
     private String othersTrn;
+    private ApiEMGroup errors = new ApiEMGroup();
+    private Set<String> visibleColumns; 
     
     private ReportSpecification spec;
     private GeneratedReport report;
@@ -71,15 +78,20 @@ public class HeatMapService {
     
     public HeatMapService(JsonBean config) {
         this.config = config;
+        this.visibleColumns = ColumnsVisibility.getVisibleColumns();
     }
     
     public JsonBean buildHeatMap() {
         this.spec = getCustomReportRequest();
-        this.report = EndpointUtils.runReport(this.spec);
+        if (spec != null && errors.isEmpty()) {
+            this.report = EndpointUtils.runReport(this.spec);
+        }
         
         JsonBean result = new JsonBean();
-        result.set("summary", getSummary());
-        if (hasData(report)) {
+        if (!errors.isEmpty()) {
+            result = ApiError.toError(errors.getAllErrors());
+        } else if (hasData(report)) {
+            result.set("summary", getSummary());
             // init ROCs 
             getXYROC();
             
@@ -230,8 +242,11 @@ public class HeatMapService {
     }
     
     private void getXYROC() {
-        if (report.leafHeaders == null || report.leafHeaders.size() != 3) {
-            // TODO: error reporting
+        Integer headersSize = report.leafHeaders != null ? report.leafHeaders.size() : null;  
+        if (headersSize == null || headersSize != 3) {
+            // abnormal issue
+            throw new RuntimeException(TranslatorWorker.translateText("Invalid report structure (cannot be processed): "
+                    + "leaf headers size = ") + headersSize);
         } else {
             Iterator<ReportOutputColumn> iter = report.leafHeaders.iterator();
             yOutCol = iter.next();
@@ -247,8 +262,8 @@ public class HeatMapService {
     }
     
     private boolean hasData(GeneratedReport report) {
-        return !report.isEmpty && report.reportContents != null && report.reportContents.getChildren() != null
-                && report.reportContents.getChildren().size() > 0;
+        return report != null && !report.isEmpty && report.reportContents != null 
+                && report.reportContents.getChildren() != null && report.reportContents.getChildren().size() > 0;
     }
     
     /**
@@ -320,16 +335,17 @@ public class HeatMapService {
     }
     
     private ReportSpecification getCustomReportRequest() {
-        // TODO add validation
-        this.xCol = config.getString(DashboardConstants.X_COLUMN);
-        this.yCol = config.getString(DashboardConstants.Y_COLUMN);
-        this.xCount = EndpointUtils.getSingleValue(config, DashboardConstants.X_COUNT, DEFAULT_X_COUNT);
-        if (xCount < 0) xCount = null;
-        this.yCount = EndpointUtils.getSingleValue(config, DashboardConstants.Y_COUNT, DEFAULT_Y_COUNT);
-        if (yCount < 0) yCount = null;
+        this.xCol = readXYColumn(DashboardConstants.X_COLUMN);
+        this.yCol = readXYColumn(DashboardConstants.Y_COLUMN);
+        this.xCount = readXYCount(DashboardConstants.X_COUNT, DEFAULT_X_COUNT);
+        this.yCount = readXYCount(DashboardConstants.Y_COUNT, DEFAULT_Y_COUNT);
         
         String rName = String.format("HeatMap by %s and %s (xCount = %d, yCount = %d)", xCol, yCol, xCount, yCount);
-        LOGGER.info(String.format("Generating Chart '%s'", rName));
+        LOGGER.info(String.format("Generating Chart '%s'%s", rName, errors.isEmpty() ? "" : " - aborted due to errors"));
+        
+        // no generation if errors found
+        if (!errors.isEmpty())
+            return null;
         
         ReportSpecificationImpl spec = new ReportSpecificationImpl(rName, ArConstants.DONOR_TYPE);
         ReportColumn yRepCol = new ReportColumn(yCol); 
@@ -348,6 +364,28 @@ public class HeatMapService {
                 spec.getSettings().getCurrencyFormat() : FormatHelper.getDefaultFormat();
         
         return spec;
+    }
+    
+    private String readXYColumn(String param) {
+        String colName = config.getString(param);
+        // only if visible, since a generic EP
+        if (!visibleColumns.contains(colName)) {
+            errors.addApiErrorMessage(DashboardErrors.INVALID_COLUMN, param + " = " + colName);
+        }
+        return colName;
+    }
+    
+    private Integer readXYCount(String param, Integer defaultValue) {
+        Object count = config.get(param);
+        if (count == null) {
+            count = defaultValue;
+        } else if (!Integer.class.isAssignableFrom(count.getClass())) {
+            errors.addApiErrorMessage(DashboardErrors.INVALID_NUMBER, param + " = " + count);
+            count = null;
+        } else if (((Integer) count) < 0 ) {
+            count = null; // no limit
+        }
+        return (Integer) count;
     }
     
     private String getOthersTrn() {

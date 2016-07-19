@@ -16,7 +16,8 @@ module.exports = ChartModel.extend({
 	    values: [],
 	    chartType: 'fragmentation',
 	    swapAxes: false,
-	    chartDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet a arcu vel porttitor. Curabitur dolor ante, faucibus eu congue et, egestas ut tellus.'
+	    chartDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet a arcu vel porttitor. Curabitur dolor ante, faucibus eu congue et, egestas ut tellus.',
+	    showResetButton: false
 	},
 
 	_prepareTranslations: function() {
@@ -73,6 +74,13 @@ module.exports = ChartModel.extend({
 		data.processed = [{values: this.values}]; //TODO: processed???
 		data.values = this.values;
 		//console.log(data);
+		
+		if (data.yCount > this.get('originalYLimit') + 1) {
+			this.set('showResetButton', true);
+		} else {
+			this.set('showResetButton', false);
+		}
+		
 		return data;
 	},
 	

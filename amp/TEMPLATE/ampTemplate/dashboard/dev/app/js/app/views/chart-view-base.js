@@ -190,17 +190,23 @@ module.exports = BackboneDash.View.extend({
     this.beautifyLegends(this);
     
     if (this.model.get('view') === 'heatmap') {
-    	this.handleHeatmapClicks(this);
+    	this.handleHeatmapClicks();
+    }
+    
+    if (this.model.get('showResetButton')) {
+    	this.$('.heatmap-reset-others').show();
+    } else {
+    	this.$('.heatmap-reset-others').hide();
     }
   },
   
-  handleHeatmapClicks: function(self) {
-	  var others = $(this.$el).find(".legend-others");
+  handleHeatmapClicks: function() {
+	  var self = this;
+	  var others = this.$(".legend-others");
 	  if (others) {
 		  $(others).on('click', function(evt) {
 			  self.model.set('yLimit', self.model.get('yLimit') + self.model.get('originalYLimit'));
 			  self.updateData();
-			  self.$('.heatmap-reset-others').show();
 		  });
 	  }
   },
@@ -208,8 +214,8 @@ module.exports = BackboneDash.View.extend({
   clickHeatmapResetOthers: function() {
 	  this.model.set('yLimit', this.model.get('originalYLimit'));
 	  this.updateData();
-	  this.$('.heatmap-reset-others').hide();
   },
+  
   showNegativeAlert: function() {
     if(this.model.get('view') === 'pie' && _.find(this.model.get('processed')[0].values, function(item) { return item.y < 0;})) {
       this.$('.negative-values-message').show();

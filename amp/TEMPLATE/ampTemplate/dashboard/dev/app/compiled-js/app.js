@@ -967,6 +967,66 @@ module.exports = {
 };
 
 },{"../../ugly/util":47,"d3":"d3","numeral":49,"underscore":"underscore"}],11:[function(require,module,exports){
+nv.models.heatmap = function() {
+    "use strict";
+
+    //============================================================
+    // Public Variables with Default Settings
+    //------------------------------------------------------------
+
+    var margin = {top: 0, right: 0, bottom: 0, left: 0}
+        , width = 500
+        , height = 500
+        , getX = function(d) { return d.x }
+        , getY = function(d) { return d.y }
+        , id = Math.floor(Math.random() * 10000) //Create semi-unique ID in case user doesn't select one
+        , duration = 250
+        , dispatch = d3.dispatch('chartClick', 'elementClick', 'elementDblClick', 'elementMouseover', 'elementMouseout', 'renderEnd')
+        ;
+
+
+    //============================================================
+    // chart function
+    //------------------------------------------------------------
+
+    var renderWatch = nv.utils.renderWatch(dispatch);
+
+    function chart(selection) {
+        renderWatch.reset();
+        renderWatch.renderEnd('heatmap immediate');
+        return chart;
+    }
+
+    //============================================================
+    // Expose Public Variables
+    //------------------------------------------------------------
+
+    chart.dispatch = dispatch;
+    chart.options = nv.utils.optionsFunc.bind(chart);
+
+    chart._options = Object.create({}, {
+        // simple options, just get/set the necessary values
+        width:      {get: function(){return width;}, set: function(_){width=_;}},
+        height:     {get: function(){return height;}, set: function(_){height=_;}},
+        x:          {get: function(){return getX;}, set: function(_){getX=_;}},
+        id:         {get: function(){return id;}, set: function(_){id=_;}},
+
+        // options that require extra logic in the setter
+        margin: {get: function(){return margin;}, set: function(_){
+            margin.top    = typeof _.top    != 'undefined' ? _.top    : margin.top;
+            margin.right  = typeof _.right  != 'undefined' ? _.right  : margin.right;
+            margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
+            margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
+        }},
+        y: {get: function(){return getY;}, set: function(_){
+            getY=d3.functor(_);
+        }}
+    });
+
+    nv.utils.initOptions(chart);
+    return chart;
+};
+
 nv.models.heatMapChart = function() {
 	"use strict";
 
@@ -974,7 +1034,7 @@ nv.models.heatMapChart = function() {
     // Public Variables with Default Settings
     //------------------------------------------------------------	
 
-    //var pie = nv.models.pie();
+    var heatmap = nv.models.heatmap();
     //var legend = nv.models.legend().margin({top: 0, right: 0, bottom: 0, left: 0});
 
     var margin = {top: 30, right: 20, bottom: 20, left: 20}
@@ -1035,7 +1095,7 @@ nv.models.heatMapChart = function() {
     	var _ = require('underscore'); // This doesnt works on top of the file :(((
     	//console.log('heatMapChart.chart');
         renderWatch.reset();
-        //renderWatch.models(pie);
+        renderWatch.models(heatmap);
 
         selection.each(function(data) {//TODO: selection.each????
         	// Get currency for later.
@@ -1222,7 +1282,7 @@ nv.models.heatMapChart = function() {
         		app.translator.translateDOM(svg[0]);
         });
         
-        renderWatch.renderEnd('pieChart immediate');
+        renderWatch.renderEnd('heatmap immediate');
         return chart;
     }
     
@@ -1395,39 +1455,27 @@ nv.models.heatMapChart = function() {
     // expose chart's sub-components
     chart.legend = {};/*legend;*/
     chart.dispatch = dispatch;
-    chart.pie = {};/*pie;*/
+    chart.heatmap = heatmap;
     chart.options = nv.utils.optionsFunc.bind(chart);
 
     // use Object get/set functionality to map between vars and chart functions
     chart._options = Object.create({}, {    	
         // simple options, just get/set the necessary values
         noData:         {get: function(){return noData;},         set: function(_){noData=_;}},
-        tooltipContent: {get: function(){return tooltip;},        set: function(_){tooltip=_;}},
-        tooltips:       {get: function(){return tooltips;},       set: function(_){tooltips=_;}},
-        showLegend:     {get: function(){return showLegend;},     set: function(_){showLegend=_;}},
         defaultState:   {get: function(){return defaultState;},   set: function(_){defaultState=_;}},
         // options that require extra logic in the setter
-        color: {get: function(){return color;}, set: function(_){
-            color = _;
-            /*legend.color(color);
-            pie.color(color);*/
-        }},
         duration: {get: function(){return duration;}, set: function(_){
             duration = _;
             renderWatch.reset(duration);
         }},
+        color: {},
         margin: {get: function(){return margin;}, set: function(_){
             margin.top    = _.top    !== undefined ? _.top    : margin.top;
             margin.right  = _.right  !== undefined ? _.right  : margin.right;
             margin.bottom = _.bottom !== undefined ? _.bottom : margin.bottom;
             margin.left   = _.left   !== undefined ? _.left   : margin.left;
         }},
-        /*legendMargin: {get: function(){return legendMargin;}, set: function(_){
-        	legendMargin.top    = _.top    !== undefined ? _.top    : legendMargin.top;
-        	legendMargin.right  = _.right  !== undefined ? _.right  : legendMargin.right;
-        	legendMargin.bottom = _.bottom !== undefined ? _.bottom : legendMargin.bottom;
-        	legendMargin.left   = _.left   !== undefined ? _.left   : legendMargin.left;
-        }},*/
+        tooltipContent: {}
     });
     
     chart.height = function(_) {
@@ -1436,7 +1484,7 @@ nv.models.heatMapChart = function() {
         return chart;
     };
     
-    //nv.utils.inheritOptions(chart, pie);
+    nv.utils.inheritOptions(chart, heatmap);
     nv.utils.initOptions(chart);
     return chart;
 };
@@ -2632,7 +2680,8 @@ module.exports = ChartModel.extend({
 	    values: [],
 	    chartType: 'fragmentation',
 	    swapAxes: false,
-	    chartDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet a arcu vel porttitor. Curabitur dolor ante, faucibus eu congue et, egestas ut tellus.'
+	    chartDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet a arcu vel porttitor. Curabitur dolor ante, faucibus eu congue et, egestas ut tellus.',
+	    showResetButton: false
 	},
 
 	_prepareTranslations: function() {
@@ -2689,6 +2738,13 @@ module.exports = ChartModel.extend({
 		data.processed = [{values: this.values}]; //TODO: processed???
 		data.values = this.values;
 		//console.log(data);
+		
+		if (data.yCount > this.get('originalYLimit') + 1) {
+			this.set('showResetButton', true);
+		} else {
+			this.set('showResetButton', false);
+		}
+		
 		return data;
 	},
 	
@@ -3665,7 +3721,7 @@ var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
-var template = _.template("<style>\nrect.bordered {\n\tstroke: #E6E6E6;\n\tstroke-width: 2px;\n}\n\ntext.mono {\n\tfont-size: 9pt;\n\tfont-family: Arial;\n\tfill: #000;\n}\n\ntext.axis-workweek {\n\tfill: #000;\n}\n\ntext.axis-worktime {\n\tfill: #000;\n}\n</style>\n\n<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <% if (model.get('showTotal') === true) { %>\n\t      <span class=\"pull-right big-number\">\n\t        <b class=\"chart-total\"></b>\n\t        <span class=\"chart-currency\"></span>\n\t      </span>\n      <% } %>\n      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %>\n      \t<% if (model.get('chartType') === 'fragmentation' && model.get('chartDescription') !== '') { %>\n      \t\t<img src=\"/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png\" class=\"question_mark nv-series\" data-title=\"<%= model.get('chartDescription') %>\">\n      \t<% } %>\n      </h2>\n    </div>\n\t\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n      <div class=\"alert alert-warning negative-values-message\" role=\"alert\">\n          <strong data-i18n=\"amp.dashboard:negatives-values\">Negative values are not represented in this chart.</strong><br>\n          <span data-i18n=\"amp.dashboard:negatives-values-parag\">Please switch to bar chart or table view to view all values.</span>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                heatmap: 'stats',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\" <%= model.get('disableResize') ? 'disabled' : ''%>>\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n      \n      <% if (model.get('chartType') === 'fragmentation') { %>\n\t\t<form class=\"form-inline dash-form dash-xaxis-options\" role=\"form\">\n        \t<select class=\"form-control like-btn-sm xaxis-options\">\n            \t<option>...</option>\n            \t<!-- gets populated after settings load -->\n          \t</select>\n          \t<span class=\"cheat-lineheight\"></span>\n        </form>\n        <button type=\"button\" class=\"btn btn-sm btn-default heatmap-switch\">\n            <span data-i18n=\"amp.dashboard:chart-swap-axes\">Swap Axes</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-sm btn-default heatmap-reset-others\" style=\"display:none\"\">\n            <span data-i18n=\"amp.dashboard:chart-heatmap-reset-others\">Reset Others</span>\n        </button>\n\t <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>");
+var template = _.template("<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <% if (model.get('showTotal') === true) { %>\n\t      <span class=\"pull-right big-number\">\n\t        <b class=\"chart-total\"></b>\n\t        <span class=\"chart-currency\"></span>\n\t      </span>\n      <% } %>\n      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %>\n      \t<% if (model.get('chartType') === 'fragmentation' && model.get('chartDescription') !== '') { %>\n      \t\t<img src=\"/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png\" class=\"question_mark nv-series\" data-title=\"<%= model.get('chartDescription') %>\">\n      \t<% } %>\n      </h2>\n    </div>\n\t\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n      <div class=\"alert alert-warning negative-values-message\" role=\"alert\">\n          <strong data-i18n=\"amp.dashboard:negatives-values\">Negative values are not represented in this chart.</strong><br>\n          <span data-i18n=\"amp.dashboard:negatives-values-parag\">Please switch to bar chart or table view to view all values.</span>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                heatmap: 'stats',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\" <%= model.get('disableResize') ? 'disabled' : ''%>>\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n      \n      <% if (model.get('chartType') === 'fragmentation') { %>\n\t\t<form class=\"form-inline dash-form dash-xaxis-options\" role=\"form\">\n        \t<select class=\"form-control like-btn-sm xaxis-options\">\n            \t<option>...</option>\n            \t<!-- gets populated after settings load -->\n          \t</select>\n          \t<span class=\"cheat-lineheight\"></span>\n        </form>\n        <button type=\"button\" class=\"btn btn-sm btn-default heatmap-switch\">\n            <span data-i18n=\"amp.dashboard:chart-swap-axes\">Swap Axes</span>\n        </button>\n\t    <button type=\"button\" class=\"btn btn-sm btn-default heatmap-reset-others\">\n\t    \t<span data-i18n=\"amp.dashboard:chart-heatmap-reset-others\">Reset Others</span>\n\t    </button>\n\t <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>");
 
 
 var adjOptTemplate = _.template('<option value="<%=opt.id%>" ' +
@@ -3849,17 +3905,23 @@ module.exports = BackboneDash.View.extend({
     this.beautifyLegends(this);
     
     if (this.model.get('view') === 'heatmap') {
-    	this.handleHeatmapClicks(this);
+    	this.handleHeatmapClicks();
+    }
+    
+    if (this.model.get('showResetButton')) {
+    	this.$('.heatmap-reset-others').show();
+    } else {
+    	this.$('.heatmap-reset-others').hide();
     }
   },
   
-  handleHeatmapClicks: function(self) {
-	  var others = $(this.$el).find(".legend-others");
+  handleHeatmapClicks: function() {
+	  var self = this;
+	  var others = this.$(".legend-others");
 	  if (others) {
 		  $(others).on('click', function(evt) {
 			  self.model.set('yLimit', self.model.get('yLimit') + self.model.get('originalYLimit'));
 			  self.updateData();
-			  self.$('.heatmap-reset-others').show();
 		  });
 	  }
   },
@@ -3867,8 +3929,8 @@ module.exports = BackboneDash.View.extend({
   clickHeatmapResetOthers: function() {
 	  this.model.set('yLimit', this.model.get('originalYLimit'));
 	  this.updateData();
-	  this.$('.heatmap-reset-others').hide();
   },
+  
   showNegativeAlert: function() {
     if(this.model.get('view') === 'pie' && _.find(this.model.get('processed')[0].values, function(item) { return item.y < 0;})) {
       this.$('.negative-values-message').show();

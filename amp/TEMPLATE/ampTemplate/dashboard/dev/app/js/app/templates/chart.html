@@ -1,24 +1,3 @@
-<style>
-rect.bordered {
-	stroke: #E6E6E6;
-	stroke-width: 2px;
-}
-
-text.mono {
-	font-size: 9pt;
-	font-family: Arial;
-	fill: #000;
-}
-
-text.axis-workweek {
-	fill: #000;
-}
-
-text.axis-worktime {
-	fill: #000;
-}
-</style>
-
 <div class="col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>">
 
   <div class="panel panel-chart">
@@ -103,9 +82,9 @@ text.axis-worktime {
         <button type="button" class="btn btn-sm btn-default heatmap-switch">
             <span data-i18n="amp.dashboard:chart-swap-axes">Swap Axes</span>
         </button>
-        <button type="button" class="btn btn-sm btn-default heatmap-reset-others" style="display:none"">
-            <span data-i18n="amp.dashboard:chart-heatmap-reset-others">Reset Others</span>
-        </button>
+	    <button type="button" class="btn btn-sm btn-default heatmap-reset-others">
+	    	<span data-i18n="amp.dashboard:chart-heatmap-reset-others">Reset Others</span>
+	    </button>
 	 <% } %>
 
     </div>

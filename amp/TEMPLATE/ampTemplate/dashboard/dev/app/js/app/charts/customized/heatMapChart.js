@@ -1,3 +1,63 @@
+nv.models.heatmap = function() {
+    "use strict";
+
+    //============================================================
+    // Public Variables with Default Settings
+    //------------------------------------------------------------
+
+    var margin = {top: 0, right: 0, bottom: 0, left: 0}
+        , width = 500
+        , height = 500
+        , getX = function(d) { return d.x }
+        , getY = function(d) { return d.y }
+        , id = Math.floor(Math.random() * 10000) //Create semi-unique ID in case user doesn't select one
+        , duration = 250
+        , dispatch = d3.dispatch('chartClick', 'elementClick', 'elementDblClick', 'elementMouseover', 'elementMouseout', 'renderEnd')
+        ;
+
+
+    //============================================================
+    // chart function
+    //------------------------------------------------------------
+
+    var renderWatch = nv.utils.renderWatch(dispatch);
+
+    function chart(selection) {
+        renderWatch.reset();
+        renderWatch.renderEnd('heatmap immediate');
+        return chart;
+    }
+
+    //============================================================
+    // Expose Public Variables
+    //------------------------------------------------------------
+
+    chart.dispatch = dispatch;
+    chart.options = nv.utils.optionsFunc.bind(chart);
+
+    chart._options = Object.create({}, {
+        // simple options, just get/set the necessary values
+        width:      {get: function(){return width;}, set: function(_){width=_;}},
+        height:     {get: function(){return height;}, set: function(_){height=_;}},
+        x:          {get: function(){return getX;}, set: function(_){getX=_;}},
+        id:         {get: function(){return id;}, set: function(_){id=_;}},
+
+        // options that require extra logic in the setter
+        margin: {get: function(){return margin;}, set: function(_){
+            margin.top    = typeof _.top    != 'undefined' ? _.top    : margin.top;
+            margin.right  = typeof _.right  != 'undefined' ? _.right  : margin.right;
+            margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
+            margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
+        }},
+        y: {get: function(){return getY;}, set: function(_){
+            getY=d3.functor(_);
+        }}
+    });
+
+    nv.utils.initOptions(chart);
+    return chart;
+};
+
 nv.models.heatMapChart = function() {
 	"use strict";
 
@@ -5,7 +65,7 @@ nv.models.heatMapChart = function() {
     // Public Variables with Default Settings
     //------------------------------------------------------------	
 
-    //var pie = nv.models.pie();
+    var heatmap = nv.models.heatmap();
     //var legend = nv.models.legend().margin({top: 0, right: 0, bottom: 0, left: 0});
 
     var margin = {top: 30, right: 20, bottom: 20, left: 20}
@@ -66,7 +126,7 @@ nv.models.heatMapChart = function() {
     	var _ = require('underscore'); // This doesnt works on top of the file :(((
     	//console.log('heatMapChart.chart');
         renderWatch.reset();
-        //renderWatch.models(pie);
+        renderWatch.models(heatmap);
 
         selection.each(function(data) {//TODO: selection.each????
         	// Get currency for later.
@@ -253,7 +313,7 @@ nv.models.heatMapChart = function() {
         		app.translator.translateDOM(svg[0]);
         });
         
-        renderWatch.renderEnd('pieChart immediate');
+        renderWatch.renderEnd('heatmap immediate');
         return chart;
     }
     
@@ -426,39 +486,27 @@ nv.models.heatMapChart = function() {
     // expose chart's sub-components
     chart.legend = {};/*legend;*/
     chart.dispatch = dispatch;
-    chart.pie = {};/*pie;*/
+    chart.heatmap = heatmap;
     chart.options = nv.utils.optionsFunc.bind(chart);
 
     // use Object get/set functionality to map between vars and chart functions
     chart._options = Object.create({}, {    	
         // simple options, just get/set the necessary values
         noData:         {get: function(){return noData;},         set: function(_){noData=_;}},
-        tooltipContent: {get: function(){return tooltip;},        set: function(_){tooltip=_;}},
-        tooltips:       {get: function(){return tooltips;},       set: function(_){tooltips=_;}},
-        showLegend:     {get: function(){return showLegend;},     set: function(_){showLegend=_;}},
         defaultState:   {get: function(){return defaultState;},   set: function(_){defaultState=_;}},
         // options that require extra logic in the setter
-        color: {get: function(){return color;}, set: function(_){
-            color = _;
-            /*legend.color(color);
-            pie.color(color);*/
-        }},
         duration: {get: function(){return duration;}, set: function(_){
             duration = _;
             renderWatch.reset(duration);
         }},
+        color: {},
         margin: {get: function(){return margin;}, set: function(_){
             margin.top    = _.top    !== undefined ? _.top    : margin.top;
             margin.right  = _.right  !== undefined ? _.right  : margin.right;
             margin.bottom = _.bottom !== undefined ? _.bottom : margin.bottom;
             margin.left   = _.left   !== undefined ? _.left   : margin.left;
         }},
-        /*legendMargin: {get: function(){return legendMargin;}, set: function(_){
-        	legendMargin.top    = _.top    !== undefined ? _.top    : legendMargin.top;
-        	legendMargin.right  = _.right  !== undefined ? _.right  : legendMargin.right;
-        	legendMargin.bottom = _.bottom !== undefined ? _.bottom : legendMargin.bottom;
-        	legendMargin.left   = _.left   !== undefined ? _.left   : legendMargin.left;
-        }},*/
+        tooltipContent: {}
     });
     
     chart.height = function(_) {
@@ -467,7 +515,7 @@ nv.models.heatMapChart = function() {
         return chart;
     };
     
-    //nv.utils.inheritOptions(chart, pie);
+    nv.utils.inheritOptions(chart, heatmap);
     nv.utils.initOptions(chart);
     return chart;
 };

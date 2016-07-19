@@ -41,6 +41,10 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
         put(ColumnConstants.DONOR_TYPE, ColumnConstants.PLEDGES_DONOR_TYPE);
         
         put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+        put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+        put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2);
+        put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3);
+        
         
         put(ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.PLEDGES_PROGRAMS);
         put(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PLEDGES_PROGRAMS);

@@ -1,7 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import org.digijava.kernel.ampapi.endpoints.currency.CurrencyEPConstants;
-import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 import java.text.SimpleDateFormat;
 
@@ -17,10 +17,9 @@ public class IndicatorEPConstants {
     public static final String SAVED = "SAVED";
     public static final String DELETED = "DELETED";
 
-    public static final String DEFAULT_INDICATOR_ORDER_FIELD = "created_on";
+    public static final String DEFAULT_INDICATOR_ORDER_FIELD = "createdOn";
 
-    public static final SimpleDateFormat DATE_FORMATTER = DateTimeUtil.getStrictSimpleDateFormat(
-            CurrencyEPConstants.DATE_FORMAT);
+    public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
     public static final int DEFAULT_COUNT = 10;
 
     public static final long ACCESS_TYPE_PUBLIC = 2;
@@ -50,14 +49,15 @@ public class IndicatorEPConstants {
     public static final String NUMBER_OF_IMPORTED_RECORDS="numberOfImportedRecords";
     public static final String SHARED_WORKSPACES="sharedWorkspaces";
 
-    public static final String FIELD_NAME = "indicator_name";
+    public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_NUMBER_OF_CLASSES = "number_of_classes";
     public static final String FIELD_UNIT = "unit";
-    public static final String FIELD_ADM_LEVEL_ID = "adm_level";
-    public static final String FIELD_ACCESS_TYPE_ID = "access_type";
-    public static final String FIELD_CREATED_ON = "created_on";
-    public static final String FIELD_UPDATED_ON = "updated_on";
+    public static final String FIELD_ADM_LEVEL_ID = "admLevel";
+    public static final String FIELD_ACCESS_TYPE_ID = "accessType";
+    public static final String FIELD_CREATED_ON = "createdOn";
+    public static final String FIELD_UPDATED_ON = "updatedOn";
+    public static final String FIELD_CREATED_BY = "email";
     public static final String FIELD_ID = "id";
 
     public static final String PAGE = "page";

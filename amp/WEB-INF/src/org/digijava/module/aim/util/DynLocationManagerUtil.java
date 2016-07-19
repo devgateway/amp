@@ -1185,8 +1185,8 @@ public class DynLocationManagerUtil {
     public static List <AmpIndicatorLayer> getIndicatorLayers (String orderBy, String sort) {
 		Session dbSession = PersistenceManager.getSession();
 
-		String queryString = "select ind from "
-				+ AmpIndicatorLayer.class.getName() + " ind order by " + orderBy + " " + sort;
+		String queryString = "select indicator from "
+				+ AmpIndicatorLayer.class.getName() + " indicator order by " + orderBy + " " + sort;
 		Query qry = dbSession.createQuery(queryString);
 		return qry.list();
 	 
@@ -1194,8 +1194,8 @@ public class DynLocationManagerUtil {
 
     public static List <AmpIndicatorLayer> getIndicatorLayerByAccessType(long accessTypeId, String orderBy, String sort) {
         Session dbSession = PersistenceManager.getSession();
-        String queryString = "select ind from "
-                + AmpIndicatorLayer.class.getName() + " ind where accessType.id=:accessTypeId order by " + orderBy + " " + sort;
+        String queryString = "select indicator from "
+                + AmpIndicatorLayer.class.getName() + " indicator where indicator.accessType.id=:accessTypeId order by " + orderBy + " " + sort;
         Query qry = dbSession.createQuery(queryString);
         qry.setLong("accessTypeId", accessTypeId);
         return qry.list();
@@ -1204,9 +1204,9 @@ public class DynLocationManagerUtil {
 
     public static List <AmpIndicatorLayer> getIndicatorLayerByCreatedBy (AmpTeamMember teamMember, String orderBy, String sort) {
         Session dbSession = PersistenceManager.getSession();
-        String queryString = "select ind from " + AmpIndicatorLayer.class.getName() + " ind ";
-        queryString += " left join ind.sharedWorkspaces s ";
-        queryString += " where ind.createdBy.ampTeamMemId=:teamMemberId ";
+        String queryString = "select indicator from " + AmpIndicatorLayer.class.getName() + " indicator ";
+        queryString += " left join indicator.sharedWorkspaces s ";
+        queryString += " where indicator.createdBy.user.id=:userId ";
 
         Collection<AmpTeam> workspaces = null;
         TeamMember tm = TeamUtil.getCurrentMember();
@@ -1217,7 +1217,7 @@ public class DynLocationManagerUtil {
         queryString += " order by " + orderBy + " " + sort;
 
         Query qry = dbSession.createQuery(queryString);
-        qry.setLong("teamMemberId", teamMember.getAmpTeamMemId());
+        qry.setLong("userId", teamMember.getUser().getId());
         return qry.list();
 
     }
@@ -1384,7 +1384,7 @@ public class DynLocationManagerUtil {
                     for (AmpIndicatorLayer indicator : orderedIndicators) {
                         Cell cell = hssfRow.getCell(index++);
                         String value = getValue(cell);
-                        AmpLocationIndicatorValue locationIndicatorValue = DynLocationManagerUtil.getLocationIndicatorValue (1l,indicator.getId());
+                        AmpLocationIndicatorValue locationIndicatorValue = DynLocationManagerUtil.getLocationIndicatorValue (indicator.getId(), locationObject.getId());
                         if (locationIndicatorValue!=null && option.equals(Option.NEW)) {
                             continue;
                         }

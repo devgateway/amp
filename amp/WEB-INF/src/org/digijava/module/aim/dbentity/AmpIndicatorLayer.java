@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -16,8 +17,8 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 	private Long id;
     @TranslatableField
 	private String name;
-    @TranslatableField
-	private String description;
+    @VersionableFieldTextEditor
+    private String description;
 	private Set <AmpIndicatorColor> colorRamp;
 	private Long numberOfClasses;
 	private AmpCategoryValue admLevel;

@@ -2,12 +2,12 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
@@ -24,34 +24,47 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class IndicatorUtils {
     protected static final Logger logger = Logger.getLogger(IndicatorUtils.class);
 
-    public static Set<String> validFieldList = null;
+    public static Map<String, String> validFieldList = null;
+
     static
     {
-        validFieldList = new HashSet<String>();
-        validFieldList.add(IndicatorEPConstants.FIELD_ID);
-        validFieldList.add(IndicatorEPConstants.FIELD_NAME);
-        validFieldList.add(IndicatorEPConstants.FIELD_DESCRIPTION);
-        validFieldList.add(IndicatorEPConstants.FIELD_NUMBER_OF_CLASSES);
-        validFieldList.add(IndicatorEPConstants.FIELD_UNIT);
-        validFieldList.add(IndicatorEPConstants.FIELD_ADM_LEVEL_ID);
-        validFieldList.add(IndicatorEPConstants.FIELD_ACCESS_TYPE_ID);
-        validFieldList.add(IndicatorEPConstants.FIELD_CREATED_ON);
-        validFieldList.add(IndicatorEPConstants.FIELD_UPDATED_ON);
+        validFieldList = new HashMap<String, String>();
+        validFieldList.put(IndicatorEPConstants.FIELD_ID, "indicator");
+        validFieldList.put(IndicatorEPConstants.FIELD_NAME, "indicator");
+        validFieldList.put(IndicatorEPConstants.FIELD_DESCRIPTION, "indicator");
+        validFieldList.put(IndicatorEPConstants.FIELD_NUMBER_OF_CLASSES, "indicator");
+        validFieldList.put(IndicatorEPConstants.FIELD_UNIT, "indicator");
+        validFieldList.put(IndicatorEPConstants.FIELD_ADM_LEVEL_ID, "indicator");
+        validFieldList.put(IndicatorEPConstants.FIELD_ACCESS_TYPE_ID, "indicator");
+        validFieldList.put(IndicatorEPConstants.FIELD_CREATED_ON, "indicator");
+        validFieldList.put(IndicatorEPConstants.FIELD_UPDATED_ON, "indicator");
+        validFieldList.put(IndicatorEPConstants.FIELD_CREATED_BY, "indicator.createdBy.user");
+    }
+
+    public static String addAlias(String field) {
+        String result = field;
+        if (validFieldList.containsKey(field)) {
+            result = validFieldList.get(field) + "." + field;
+        }
+            return result;
+
     }
 
     public static JsonBean buildIndicatorLayerJson(AmpIndicatorLayer indicator) {
         JsonBean indicatorJson = new JsonBean();
 
         indicatorJson.set(IndicatorEPConstants.ID, indicator.getId());
-        indicatorJson.set(IndicatorEPConstants.NAME, TranslatorWorker.translateText(indicator.getName()));
-        indicatorJson.set(IndicatorEPConstants.DESCRIPTION, TranslatorWorker.translateText(indicator.getDescription()));
+        indicatorJson.set(IndicatorEPConstants.NAME, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
+        indicatorJson.set(IndicatorEPConstants.DESCRIPTION, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
         indicatorJson.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
         indicatorJson.set(IndicatorEPConstants.UNIT, indicator.getUnit());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
@@ -92,8 +105,8 @@ public class IndicatorUtils {
         return indicatorJson;
     }
 
-    public static AmpIndicatorLayer setIndicatorLayer(JsonBean indicator) {
-        AmpIndicatorLayer indicatorLayer = null; new AmpIndicatorLayer();
+    public static AmpIndicatorLayer setIndicatorLayer(JsonBean indicator, TranslationUtil indicatorTranslation) {
+        AmpIndicatorLayer indicatorLayer = null;
 
         if (indicator.get("id")!=null) {
             indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(Long.valueOf(indicator.getString("id")));
@@ -102,13 +115,13 @@ public class IndicatorUtils {
             indicatorLayer.setId(null);
         }
 
-        indicatorLayer.setName(IndicatorTranslationUtil.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.NAME), indicatorLayer, indicator.get(IndicatorEPConstants.NAME)));
-        indicatorLayer.setDescription(IndicatorTranslationUtil.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.DESCRIPTION), indicatorLayer, indicator.get(IndicatorEPConstants.DESCRIPTION)));
+        indicatorLayer.setName(indicatorTranslation.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.NAME), indicatorLayer, indicator.get(IndicatorEPConstants.NAME)));
+        indicatorLayer.setDescription(indicatorTranslation.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.DESCRIPTION), indicatorLayer, indicator.get(IndicatorEPConstants.DESCRIPTION)));
         indicatorLayer.setNumberOfClasses(Long.valueOf(indicator.getString(IndicatorEPConstants.NUMBER_OF_CLASSES)));
         indicatorLayer.setUnit(indicator.getString(IndicatorEPConstants.UNIT));
         if (indicatorLayer.getId() == null) {
             indicatorLayer.setCreatedOn(new Date());
-            indicatorLayer.setCreatedBy(getTeamMember());
+            indicatorLayer.setCreatedBy(TeamUtil.getCurrentAmpTeamMember());
         }
         indicatorLayer.setUpdatedOn(new Date());
         indicatorLayer.setAccessType( (indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID)!=null ? IndicatorAccessType.getValueFromLong(Long.valueOf(indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID))) :IndicatorAccessType.NO_TYPE));
@@ -143,17 +156,6 @@ public class IndicatorUtils {
         return indicatorLayer;
     }
 
-    public static AmpTeamMember getTeamMember() {
-        TeamMember tm = TeamUtil.getCurrentMember();
-        if (tm != null && tm.getTeamId() != null) {
-            AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-            if (ampTeamMember != null) {
-                return ampTeamMember;
-            }
-        }
-        return null;
-    }
-
     public static boolean isAdmin() {
         return "yes".equals(TLSUtils.getRequest().getSession().getAttribute("ampAdmin"));
     }
@@ -164,7 +166,7 @@ public class IndicatorUtils {
         } else {
             TeamMember tm = TeamUtil.getCurrentMember();
             if (tm != null) {
-                AmpTeamMember ampTeamMember = IndicatorUtils.getTeamMember();
+                AmpTeamMember ampTeamMember = TeamUtil.getCurrentAmpTeamMember();
                 if (ampTeamMember != null) {
                     AmpIndicatorLayer indicatorLayer =DynLocationManagerUtil.getIndicatorLayerById(indicatorId);
                     if (indicatorLayer.getCreatedBy() != null && indicatorLayer.getCreatedBy().getAmpTeamMemId()==ampTeamMember.getAmpTeamMemId()){
@@ -214,7 +216,7 @@ public class IndicatorUtils {
     }
 
     public static final ApiErrorMessage validateField(String field) {
-        return (validFieldList.contains(field)? null : new ApiErrorMessage(IndicatorErrors.INVALID_FIELD.id, IndicatorErrors.INVALID_FIELD.description,field));
+        return (validFieldList.containsKey(field)? null : new ApiErrorMessage(IndicatorErrors.INVALID_FIELD.id, IndicatorErrors.INVALID_FIELD.description,field));
     }
 
     public static final ApiErrorMessage validateSort(String sort) {

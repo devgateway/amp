@@ -1,8 +1,7 @@
-package org.digijava.kernel.ampapi.endpoints.indicator;
+package org.digijava.kernel.ampapi.endpoints.common;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
@@ -11,12 +10,13 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.translation.util.FieldTranslationPack;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -27,13 +27,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class IndicatorTranslationUtil {
-    protected static final Logger logger = Logger.getLogger(IndicatorTranslationUtil.class);
-    private static List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
-    private static TranslationSettings trnSettings;
+public class TranslationUtil {
+    protected static final Logger logger = Logger.getLogger(TranslationUtil.class);
+    private List<AmpContentTranslation> translations = null;
+    private static final TranslationSettings trnSettings = TranslationSettings.getCurrent();
 
-    public IndicatorTranslationUtil() {
-        this.trnSettings = TranslationSettings.getCurrent();
+    public TranslationUtil() {
+       this.translations = new ArrayList<AmpContentTranslation>();
+    }
+
+    public List<AmpContentTranslation> getTranslations() {
+        return translations;
     }
 
     public static Object getTranslatableFieldValue(String fieldName, String fieldValue, Long parentObjectId) {
@@ -96,6 +100,22 @@ public class IndicatorTranslationUtil {
         return translations;
     }
 
+    public static void serialize(Object obj, String propertyName, List<AmpContentTranslation> translations)
+    {
+        if (obj == null)
+            throw new RuntimeException("cannot serialize null!");
+
+        long entityId = ContentTranslationUtil.getObjectId(obj);
+        FieldTranslationPack ftp = new FieldTranslationPack(obj.getClass().getName(), propertyName);
+
+        for(AmpContentTranslation trans: translations) {
+            ContentTranslationUtil.evictEntityFromCache(obj);
+            if (propertyName.equalsIgnoreCase(trans.getFieldName()))
+                ftp.add(trans);
+        }
+        ContentTranslationUtil.saveFieldTranslations(entityId, ftp);
+    }
+
     /**
      * Detects if a field is translatable
      *
@@ -108,14 +128,18 @@ public class IndicatorTranslationUtil {
                 || field.isAnnotationPresent(VersionableFieldTextEditor.class));
     }
 
-    public static TranslationSettings getTranslationSettings() {
-        HttpServletRequest requestAttributes = TLSUtils.getRequest();
-
-        return (TranslationSettings) requestAttributes.getAttribute(EPConstants.TRANSLATIONS);
+    public static TranslationSettings.TranslationType getTranslatableType(Field field) {
+        if (isTranslatable(field)) {
+            return TranslationSettings.TranslationType.STRING;
+        }
+        if (field.isAnnotationPresent(VersionableFieldTextEditor.class)) {
+            return TranslationSettings.TranslationType.TEXT;
+        }
+        return TranslationSettings.TranslationType.NONE;
     }
 
-    public static String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
-        TranslationSettings.TranslationType trnType = trnSettings.getTranslatableType(field);
+    public String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
+        TranslationSettings.TranslationType trnType = getTranslatableType(field);
         // no translation expected
         if (TranslationSettings.TranslationType.NONE == trnType) {
             return (String) jsonValue;
@@ -173,7 +197,7 @@ public class IndicatorTranslationUtil {
                     }
                 } else if (editor == null) {
                     // create new
-                    editor = DbUtil.createEditor( IndicatorUtils.getTeamMember().getUser(), langCode, "", key, null, translation,
+                    editor = DbUtil.createEditor( TeamUtil.getCurrentAmpTeamMember().getUser(), langCode, "", key, null, translation,
                             "Activities API", TLSUtils.getRequest());
                     DbUtil.saveEditor(editor);
                 } else if (!editor.getBody().equals(translation)) {
@@ -201,7 +225,7 @@ public class IndicatorTranslationUtil {
      * @param trnJson <lang, value> map of translations for each language
      * @return value to be stored in the base table
      */
-    protected static String extractContentTranslation(Field field, Object parentObj, Map<String, Object> trnJson) {
+    protected String extractContentTranslation(Field field, Object parentObj, Map<String, Object> trnJson) {
         String value = null;
         String currentLangValue = null;
         String anyLangValue = null;

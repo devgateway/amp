@@ -16,7 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
-import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorTranslationUtil;
+import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -379,8 +379,8 @@ public class GisEndPoints {
         for (AmpIndicatorLayer indicator : indicators) {
 			JsonBean json = new JsonBean();
             json.set(IndicatorEPConstants.ID, indicator.getId());
-            json.set(IndicatorEPConstants.NAME, IndicatorTranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
-            json.set(IndicatorEPConstants.DESCRIPTION, IndicatorTranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
+            json.set(IndicatorEPConstants.NAME, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
+            json.set(IndicatorEPConstants.DESCRIPTION, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
 			json.set(IndicatorEPConstants.ID, indicator.getId());
 			json.set(IndicatorEPConstants.UNIT, indicator.getUnit());
 			if (includeAdmLevel) {

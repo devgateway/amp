@@ -31,6 +31,7 @@ module.exports = Backbone.Collection
 
   initialize: function(models, options) {
     this.boundaries = options.boundaries;
+    this.settings = options.settings;
   },
 
   loadAll: function() {
@@ -62,9 +63,14 @@ module.exports = Backbone.Collection
 
       // this is a custom one. API is a bit messy so we do fair bit of manual work.
       if (layer.colorRamp) {
-        layer.title = layer.name;
+    	 self.settings.load().then(function() {
+    	   var language = self.settings.findWhere({id:'language'}).get('defaultId'); 
+    	   layer.title = self.getMultilangString(layer,'name', language);
+    	   layer.description = self.getMultilangString(layer,'description', language);    	   
+    	 });   	 
         layer.type = 'joinBoundaries';
         layer.adminLevel = self._magicConversion(layer.admLevelId);
+        layer.tooltip = self._createTooltip(layer);
         return true;
       }
 
@@ -73,7 +79,25 @@ module.exports = Backbone.Collection
 
     return parsedData;
   },
-
+  getMultilangString: function(layer,field,language){
+	  var result = '';
+	  if(layer[field] === Object(layer[field]))
+	  {
+		  result = layer[field][language];
+		  if(_.isUndefined(result) || _.isNull(result)){
+			  _.each(_.keys(layer[field]),function(lang){
+				  if(layer[field][lang]){
+					  result = layer[field][lang];  
+				  }
+				  
+			  });
+			   
+		  }    		  
+	  }else{
+		  result = layer[field];
+	  }
+	  return result;
+  },
   getSelected: function() {
     return this.chain()
       .filter(function(model) { return model.get('selected'); });
@@ -88,6 +112,19 @@ module.exports = Backbone.Collection
     };
 
     return magicWords[textAdm];
+  },
+  _createTooltip: function(obj){
+	     var tooltip  = '';
+	     if(obj.description){
+	       tooltip += obj.description ;
+	     }
+	     if(obj.createdBy){
+	      tooltip += '&#013; Created by ' + obj.createdBy;
+	     }
+	     if(obj.createdOn){
+	      tooltip += '&#013; Created on ' + obj.createdOn;
+	     }
+	     return tooltip;
   }
 
 });

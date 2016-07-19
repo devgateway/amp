@@ -6,22 +6,24 @@ var OptionView = require('./option-view');
 var Template = fs.readFileSync(__dirname + '/../templates/layers-template.html', 'utf8');
 
 module.exports = Backbone.View.extend({
-  id: 'tool-layers-sd-indicator',
-  title: 'Country indicators',
-  iconClass: 'ampicon-layers',
-  description: 'View indicators on sub-national needs.',
-
+  
   template: _.template(Template),
 
   initialize: function(options) {
     var self = this;
+    this.id = options.config.id;
+    this.title = options.config.title;
+    this.iconClass = options.config.iconClass;
+    this.description = options.config.description;
+    this.filterLayers = options.config.filterLayers;
+
     this.app = options.app;
 
     /* For mutual exclusion, we use this reference to the parent */
     this.parentMultisectionControl = options.parent;
 
-
-    this.collection = new RadioListCollection(this.app.data.indicators.models, {
+    
+    this.collection = new RadioListCollection(this.filterLayers(this.app.data.indicators), {
       siblingGroupList: this.parentMultisectionControl.radioButtonGroup
     });
 
@@ -32,10 +34,10 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.app.data.indicators, 'add', this.render);
   },
 
-  render: function() {
+  render: function() {	 
     // TODO: find a better way to keep our proxy collection up to date
     // Thad do you know a good pattern for this?
-    this.collection.reset(this.app.data.indicators.models);
+    this.collection.reset(this.filterLayers(this.app.data.indicators));
     if(this.collection.length > 0){
     	this.$el.html(this.template({title: this.title}));
         this.app.translator.translateDOM(this.el); /* After to catch disabled */

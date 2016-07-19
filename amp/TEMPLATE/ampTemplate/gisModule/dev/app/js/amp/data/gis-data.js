@@ -72,7 +72,7 @@ _.extend(GISData.prototype, Backbone.Events, {
     });
 
 
-    this.indicators = new Indicators([], { boundaries: this.boundaries });
+    this.indicators = new Indicators([], { boundaries: this.boundaries, settings: this.settings});
 
     this.admClusters = new ADMClusters([], {
       boundaries: this.boundaries,

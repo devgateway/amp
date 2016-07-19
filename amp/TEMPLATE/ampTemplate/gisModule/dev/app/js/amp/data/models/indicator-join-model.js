@@ -23,7 +23,7 @@ module.exports = Backbone.Model
     this.palette = new Palette.FromRange({stops: numStops, seed: this.get('id'), values: values });
 
     // set color based on ramp, if one is provided.
-    if (this.get('colorRamp')) {
+    if (this.get('colorRamp') && this.get('colorRamp').length > 0) {
       var colorHex = this.get('colorRamp')[0].color; //choose last or first colour from ramp.
       this.palette.set('rootHue', husl.fromHex(colorHex)[0]);//Math.floor(seedrandom(options.seed)() * 360));
     }

@@ -136,14 +136,14 @@ module.exports = BackboneDash.View.extend({
 	if(this.app.rendered !== true) { return; }  
     if (!this.rendered) { return; }  // short-circuit on early filters apply event
     if (this._stateWait.state() === 'pending') {  // short-circuit until we have state
-      this.message.html('Loading saved settings...').attr('data-i18n', 'amp.dashboard:chart-loading-saved-settings');
+      this.message.html('Loading...').attr('data-i18n', 'amp.dashboard:chart-loading-saved-settings');
       app.translator.translateDOM($('.chart-container'));
       //this.message.fadeIn(100);
       return;
     }
 
     this.chartContainer.empty();
-    this.message.html('<span data-i18n="amp.dashboard:loading">...</span>').fadeIn(100);
+    this.message.html('<span data-i18n="amp.dashboard:loading">Loading...</span>').fadeIn(100);
 
     this.app.translator.getTranslations()
       .done(_(function() {  // defer here to prevent a race with translations loading

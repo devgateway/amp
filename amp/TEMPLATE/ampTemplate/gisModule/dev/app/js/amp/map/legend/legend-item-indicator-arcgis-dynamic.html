@@ -2,7 +2,7 @@
   <h3 data-i18n="amp.gis:title-<%= title %>"><%= title %></h3>
 
 <% if (status === 'loading') { %>
-  <p><em data-18n="amp.gis:legend-loading">loading...</em></p>
+  <p><em data-18n="amp.gis:legend-loading">Loading...</em></p>
 <% } else { %>
   <%  _.each(esriLegend, function(legend) {
       if (legend.label && legend.imageData) {

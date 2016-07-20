@@ -68,7 +68,7 @@
 "amp.gis:legend-title": "Legend",
 "amp.gis:legend-no-item": "No layers loaded",
 "amp.gis:legend-no-symbols": "This space is used to explain symbols on the map when Indicator Layers or Point Layers are loaded.",
-"amp.gis:legend-loading": "loading...",
+"amp.gis:legend-loading": "Loading...",
 "amp.gis:legend-others":"Others",
 "amp.gis:legend-none":"None",
 "amp.gis:legend-na":"n/a",

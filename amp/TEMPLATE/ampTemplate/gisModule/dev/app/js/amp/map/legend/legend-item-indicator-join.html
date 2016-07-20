@@ -3,7 +3,7 @@
   <small><%= obj.description %></small>
 
   <% if (status === 'loading') { %>
-    <p><em data-18n="amp.gis:legend-loading">loading...</em>></p>
+    <p><em data-18n="amp.gis:legend-loading">Loading...</em>></p>
   <% } else { %>
     <% colourBuckets.each(function(bucket) { %>
       <% if(bucket.get('value') && !_.isNaN(bucket.get('value')[0]) && _.isFinite(bucket.get('value')[0])) { %>

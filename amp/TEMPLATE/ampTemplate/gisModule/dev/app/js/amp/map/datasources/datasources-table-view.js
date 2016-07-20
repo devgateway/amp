@@ -99,7 +99,7 @@ module.exports = Backbone.View.extend({
           self.render(); //TODO: (drs) just append the new ones...?
         });
       }
-      self.$el.find('.load-more').text('loading...').addClass('disabled');
+      self.$el.find('.load-more').text('Loading...').addClass('disabled');
     } else {
     	self.$el.find('.load-more').addClass('load-more-hide');
     }

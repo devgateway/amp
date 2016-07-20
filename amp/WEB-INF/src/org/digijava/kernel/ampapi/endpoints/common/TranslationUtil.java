@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
@@ -21,6 +22,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +51,14 @@ public class TranslationUtil {
         }
     }
 
+    public static Set<String> getLanguages() {
+        Set<String> lang = new HashSet<String>();
+        Set<Locale> languages = TLSUtils.getSite().getTranslationLanguages();
+        for (Locale l : languages) {
+            lang.add(l.getCode());
+        }
+        return lang;
+    }
 
     /**
      * Get the translation values of the field.
@@ -76,7 +86,7 @@ public class TranslationUtil {
         Map<String, String> translations = new LinkedHashMap<String, String>();
 
         if (ContentTranslationUtil.multilingualIsEnabled()) {
-            Set<String> languages = TranslationSettings.getDefault().getTrnLocaleCodes();
+            Set<String> languages = getLanguages();
             for (String l : languages) {
                 translations.put(l, null);
             }
@@ -197,8 +207,8 @@ public class TranslationUtil {
                     }
                 } else if (editor == null) {
                     // create new
-                    editor = DbUtil.createEditor( TeamUtil.getCurrentAmpTeamMember().getUser(), langCode, "", key, null, translation,
-                            "Activities API", TLSUtils.getRequest());
+                    editor = DbUtil.createEditor(TeamUtil.getCurrentAmpTeamMember().getUser(), langCode, "", key, null, translation,
+                            "Indicator layer API", TLSUtils.getRequest());
                     DbUtil.saveEditor(editor);
                 } else if (!editor.getBody().equals(translation)) {
                     // update existing if needed

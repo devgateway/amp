@@ -18,7 +18,8 @@ public enum AmountsUnits {
 	
 	AMOUNTS_OPTION_UNITS(AmpARFilter.AMOUNT_OPTION_IN_UNITS, 1, "Amounts are in units"),
 	AMOUNTS_OPTION_THOUSANDS(AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS, 1000, "Amounts are in thousands (000)"),
-	AMOUNTS_OPTION_MILLIONS(AmpARFilter.AMOUNT_OPTION_IN_MILLIONS, 1000 * 1000, "Amounts are in millions (000 000)");
+	AMOUNTS_OPTION_MILLIONS(AmpARFilter.AMOUNT_OPTION_IN_MILLIONS, 1000 * 1000, "Amounts are in millions (000 000)"),
+	AMOUNTS_OPTION_BILLIONS(AmpARFilter.AMOUNT_OPTION_IN_BILLIONS, 1000 * 1000 * 1000, "Amounts are in billions (000 000 000)");
 	
 	private final static Map<Integer, AmountsUnits> CODE_TO_VALUE = new HashMap<>();
 	private final static SortedMap<Integer, AmountsUnits> DIVIDER_TO_VALUE = new TreeMap<>();

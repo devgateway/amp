@@ -1,22 +1,20 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.PaginatedReportAreaForTests;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.testmodels.NiReportModel;
-import org.dgfoundation.amp.testmodels.ReportModelGenerator;
 import org.junit.Test;
 
 /**
@@ -118,6 +116,43 @@ public class FormattingTests extends ReportingTestCase {
 		
 		ReportSpecificationImpl spec = buildSpecification("amountMillions", Arrays.asList(ColumnConstants.PROJECT_TITLE), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), null, GroupingCriteria.GROUPING_YEARLY);
 		spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
+
+		runNiTestCase(cor, spec, acts);
+	}
+	
+	@Test
+	public void testAmountBillions() {
+		NiReportModel cor = new NiReportModel("amountBillions")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 13))",
+					"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 10));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 11, colSpan: 2))",
+					"(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Funding-2009-Actual Commitments", "0,0001", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0,00064", "Funding-2011-Actual Commitments", "0,00121", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0,00002", "Funding-2012-Actual Disbursements", "0,00001", "Funding-2013-Actual Commitments", "0,00179", "Funding-2013-Actual Disbursements", "0,00054", "Totals-Actual Commitments", "0,00313", "Totals-Actual Disbursements", "0,00119")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "0,00012", "Funding-2011-Actual Commitments", "0,00021", "Totals-Actual Commitments", "0,00021", "Totals-Actual Disbursements", "0,00012"),
+			        new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Funding-2010-Actual Disbursements", "0,00045", "Funding-2011-Actual Commitments", "0,001", "Totals-Actual Commitments", "0,001", "Totals-Actual Disbursements", "0,00045"),
+			        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Funding-2013-Actual Disbursements", "0,00054", "Totals-Actual Disbursements", "0,00054"),
+			        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "0,0001", "Funding-2010-Actual Disbursements", "0,00006", "Funding-2012-Actual Commitments", "0,00002", "Funding-2012-Actual Disbursements", "0,00001", "Totals-Actual Commitments", "0,00012", "Totals-Actual Disbursements", "0,00007"),
+			        new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "0,00033", "Totals-Actual Commitments", "0,00033"),
+			        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "0,00057", "Totals-Actual Commitments", "0,00057"),
+			        new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "0,00089", "Totals-Actual Commitments", "0,00089")      ));
+
+		
+		ReportSpecificationImpl spec = buildSpecification("amountBillions", Arrays.asList(ColumnConstants.PROJECT_TITLE), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), null, GroupingCriteria.GROUPING_YEARLY);
+		spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_BILLIONS);
+		
+		DecimalFormat currencyFormat = (DecimalFormat) DecimalFormat.getNumberInstance();
+		currencyFormat.setMaximumFractionDigits(5);
+		currencyFormat.setMinimumFractionDigits(0);
+		
+		DecimalFormatSymbols custom = new DecimalFormatSymbols();
+		custom.setDecimalSeparator(',');
+		currencyFormat.setDecimalFormatSymbols(custom);
+		
+		spec.getOrCreateSettings().setCurrencyFormat(currencyFormat);
 
 		runNiTestCase(cor, spec, acts);
 	}

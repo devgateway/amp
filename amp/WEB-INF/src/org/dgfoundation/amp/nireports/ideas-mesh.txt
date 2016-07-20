@@ -1,14 +1,15 @@
-
 in case fetching a column/measure crashes -> remove said column/measure from report and add a note about it to warnings
 	-> treat the case when fetching a column which is also a hierarchy fails
 	
 lucene indexer
 refactor workspacefilter
 
-physically remove Mondrian-backed Saiku exports code (not used anymore)
-incremental caching for dates columns
 mondrian removal:
 -> delete mondrian_activity_fixed_texts.gov_agreement_number
 -> delete PPC
 -> group all hierarchies as levels under location / sectors
 
+doc:
+document sorting
+
+Behaviour documention

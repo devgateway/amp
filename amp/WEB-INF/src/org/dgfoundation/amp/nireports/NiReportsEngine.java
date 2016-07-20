@@ -193,13 +193,13 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	/** writes statistics in the {@link InclusiveTimer} instance */
-	@SuppressWarnings("serial")
-	protected void writeStatistics() {
-		timer.putMetaInNode("calendar_translations", new HashMap<String, Integer>(){{
-			put("calls", calendar.getCalls());
-			put("noncached", calendar.getNonCachedCalls());
-			put("percent_cached", calendar.getCalls() == 0 ? 0 : 100 - (100 * calendar.getNonCachedCalls() / calendar.getCalls()));
-		}});
+	protected void writeStatistics() {		
+		Map<String, Integer> statsNode = new HashMap<>();
+		statsNode.put("calls", calendar.getCalls());
+		statsNode.put("noncached", calendar.getNonCachedCalls());
+		statsNode.put("percent_cached", calendar.getCalls() == 0 ? 0 : 100 - (100 * calendar.getNonCachedCalls() / calendar.getCalls()));
+		timer.putMetaInNode("calendar_translations", statsNode);
+		
 		timer.putMetaInNode("hierarchies_tracker_stats", hiersTrackerCounter.getStats());
 		if (!reportWarnings.isEmpty()) {
 			timer.putMetaInNode("warnings", reportWarnings);

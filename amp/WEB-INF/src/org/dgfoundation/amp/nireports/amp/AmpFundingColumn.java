@@ -29,7 +29,6 @@ import org.dgfoundation.amp.nireports.IdValuePair;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.diff.CategAmountCellProto;
-import org.dgfoundation.amp.nireports.amp.diff.ContextKey;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
@@ -61,7 +60,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	
 	public final static Map<String, String> FUNDING_VIEW_COLUMNS = Collections.unmodifiableMap(_buildFundingViewFilter());
 		
-	protected final ExpiringCacher<ContextKey<Boolean>, FundingFetcherContext> cacher;
+	protected final ExpiringCacher<Boolean, NiReportsEngine, FundingFetcherContext> cacher;
 	protected final ActivityInvalidationDetector invalidationDetector;
 	protected final Object CACHE_SYNC_OBJ = new Object();
 	protected final Set<String> ignoredColumns;
@@ -83,7 +82,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 			if (!this.viewColumns.contains(col))
 				ic.add(col);
 		this.ignoredColumns = Collections.unmodifiableSet(ic); // specified-generic columns minus columns which do not exist in the view
-		this.cacher = new ExpiringCacher<>("funding cacher " + columnName, cacheKey -> resetCache(cacheKey.context), invalidationDetector, CACHE_TTL_SECONDS * 1000);
+		this.cacher = new ExpiringCacher<>("funding cacher " + columnName, (key, engine) -> resetCache(engine), invalidationDetector, CACHE_TTL_SECONDS * 1000);
 	}
 
 	
@@ -152,7 +151,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 			long start = System.currentTimeMillis();
 			List<CategAmountCellProto> protos;
 			synchronized(CACHE_SYNC_OBJ) {
-				FundingFetcherContext cache = cacher.buildOrGetValue(new ContextKey<>(engine, true));
+				FundingFetcherContext cache = cacher.buildOrGetValue(true, engine);
 				Set<Long> deltas = scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache, ids -> fetchSkeleton(engine, ids, cache));
 				protos = cache.cache.getCells(scratchpad.getMainIds(engine, this));
 				long delta = System.currentTimeMillis() - start;

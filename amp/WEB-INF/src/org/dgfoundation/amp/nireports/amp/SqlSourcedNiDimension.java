@@ -33,7 +33,7 @@ public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 	
 	public final String sourceViewName;
 	public final List<String> idColumnsNames;
-	public final ExpiringCacher<Boolean, DimensionSnapshot> cacher; 
+	public final ExpiringCacher<Boolean, Boolean, DimensionSnapshot> cacher; 
 	
 	/**
 	 * @param name
@@ -44,7 +44,7 @@ public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 		super(name, idColumnsNames.size());
 		this.sourceViewName = sourceViewName;
 		this.idColumnsNames = Collections.unmodifiableList(new ArrayList<>(idColumnsNames));
-		this.cacher = new ExpiringCacher<>("ds_cache: " + name, bool -> super.getDimensionData(), new ActivityInvalidationDetector(), DIMENSION_INVALIDATOR_TIMEOUT * 1000);
+		this.cacher = new ExpiringCacher<>("ds_cache: " + name, (bool, engine) -> super.getDimensionData(), new ActivityInvalidationDetector(), DIMENSION_INVALIDATOR_TIMEOUT * 1000);
 		check();
 	}
 	
@@ -61,7 +61,7 @@ public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 
 	@Override
 	public DimensionSnapshot getDimensionData() {
-		return cacher.buildOrGetValue(true);
+		return cacher.buildOrGetValue(true, true);
 	}
 	
 	@Override

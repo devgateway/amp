@@ -12,7 +12,6 @@ import org.dgfoundation.amp.diffcaching.ActivityInvalidationDetector;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.amp.diff.ContextKey;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.amp.diff.KeyBuilder;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
@@ -32,14 +31,14 @@ public abstract class AmpDifferentialColumn<K extends Cell, T> extends AmpSqlSou
 	public final static int CACHE_TTL_SECONDS = 10 * 60;
 	
 	protected final KeyBuilder<T> cacheKeyBuilder;
-	protected final ExpiringCacher<ContextKey<T>, DifferentialCache<K>> cacher;
+	protected final ExpiringCacher<T, NiReportsEngine, DifferentialCache<K>> cacher;
 	protected final ActivityInvalidationDetector invalidationDetector;
 	
 	public AmpDifferentialColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, KeyBuilder<T> cacheKeyBuilder, Behaviour<?> behaviour) {
 		super(columnName, levelColumn, viewName, behaviour);
 		this.cacheKeyBuilder = cacheKeyBuilder;
 		this.invalidationDetector = new ActivityInvalidationDetector();
-		this.cacher = new ExpiringCacher<>(String.format("column %s cacher", columnName), cacheKey -> origFetch(cacheKey.context, cacheKey.key), this.invalidationDetector, CACHE_TTL_SECONDS * 1000);
+		this.cacher = new ExpiringCacher<>(String.format("column %s cacher", columnName), this::origFetch, this.invalidationDetector, CACHE_TTL_SECONDS * 1000);
 	}
 	
 	/**
@@ -47,7 +46,7 @@ public abstract class AmpDifferentialColumn<K extends Cell, T> extends AmpSqlSou
 	 * @return
 	 */
 	public ImmutablePair<Set<Long>, DifferentialCache<K>> differentiallyImportCells(NiReportsEngine engine, Function<Set<Long>, List<K>> fetcher) {
-		DifferentialCache<K> cache = cacher.buildOrGetValue(cacheKeyBuilder.buildKeyPair(engine, this));
+		DifferentialCache<K> cache = cacher.buildOrGetValue(cacheKeyBuilder.buildKey(engine, this), engine);
 		return new ImmutablePair<>(AmpReportsScratchpad.get(engine).differentiallyImportCells(engine.timer, mainColumn, cache, fetcher), cache);
 	}
 	
@@ -61,7 +60,7 @@ public abstract class AmpDifferentialColumn<K extends Cell, T> extends AmpSqlSou
 			return super.fetch(engine);
 	}
 	
-	protected synchronized DifferentialCache<K> origFetch(NiReportsEngine engine, T key) {
+	protected synchronized DifferentialCache<K> origFetch(T key, NiReportsEngine engine) {
 		engine.timer.putMetaInNode("resetCache", true);
 		return new DifferentialCache<K>(invalidationDetector.getLastProcessedFullEtl());
 	}

@@ -23,6 +23,7 @@ import org.junit.Test;
  * @author Alexandru Cartaleanu
  *
  */
+//@RunWith(ConcurrentTestRunner.class)
 public class OffDbNiReportEngineTests extends BasicSanityChecks {
 	
 	static Logger log = Logger.getLogger(OffDbNiReportEngineTests.class);

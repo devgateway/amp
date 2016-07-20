@@ -17,7 +17,7 @@ import org.digijava.kernel.request.TLSUtils;
  * @author Nadejda Mandrescu
  */
 public class ReportCacher {
-	public final static int MAX_CACHED_REPORTS_PER_USER = 7;
+	public final static int MAX_CACHED_REPORTS_PER_USER = 3;
 	public final static String REPORT_CACHER_SESSION_ATTRIBUTE = "report_cache";
 	
 	private Map<String, CachedReportData> lru = Collections.synchronizedMap(
@@ -33,6 +33,7 @@ public class ReportCacher {
 	}
 	
 	public CachedReportData getCachedReportData(String reportToken) {
+		System.err.println("lru cache size = " + lru.size());
 		return lru.get(reportToken);
 	}
 	

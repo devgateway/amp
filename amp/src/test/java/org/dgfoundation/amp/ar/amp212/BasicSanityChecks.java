@@ -909,7 +909,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 						"(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2))",
 						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
 					.withWarnings(Arrays.asList(
-						"-1: [entityId: -1, message: measure pipeline Estimated Disbursements not supported in NiReports]"))
+						"-1: [entityId: -1, message: measure \"pipeline Estimated Disbursements\" not supported in NiReports]"))
 					.withBody(      new ReportAreaForTests(null)
 				      .withContents("Project Title", "", "Region", "", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "1,236,777", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
 				      .withChildren(
@@ -931,7 +931,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 						"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
 						"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Pipeline Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
 					.withWarnings(Arrays.asList(
-						"-1: [entityId: -1, message: measure pipeline Estimated Disbursements not supported in NiReports]"))
+						"-1: [entityId: -1, message: measure \"pipeline Estimated Disbursements\" not supported in NiReports]"))
 					.withBody(      new ReportAreaForTests(null)
 				      .withContents("Project Title", "", "Region", "", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
 				      .withChildren(
@@ -953,7 +953,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 					"(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2))",
 					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
 				.withWarnings(Arrays.asList(
-					"-1: [entityId: -1, message: measure pipeline Estimated Disbursements not supported in NiReports]"))
+					"-1: [entityId: -1, message: measure \"pipeline Estimated Disbursements\" not supported in NiReports]"))
 				.withBody(      new ReportAreaForTests(null)
 			      .withContents("Region", "", "Project Title", "", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "1,236,777", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
 			      .withChildren(
@@ -983,7 +983,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 					"(Region: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
 					"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Pipeline Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
 				.withWarnings(Arrays.asList(
-					"-1: [entityId: -1, message: measure pipeline Estimated Disbursements not supported in NiReports]"))
+					"-1: [entityId: -1, message: measure \"pipeline Estimated Disbursements\" not supported in NiReports]"))
 				.withBody(      new ReportAreaForTests(null)
 			      .withContents("Region", "", "Project Title", "", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
 			      .withChildren(

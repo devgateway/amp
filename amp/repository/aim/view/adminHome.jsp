@@ -326,7 +326,7 @@
                            <td>
                              <a href="#" onclick="showLayerManager();return false;">
                                 <digi:trn>GIS Layers Manager</digi:trn>
-                          `  </a>
+                             </a>
                            </td>                          
                           </tr>
                         </module:display>

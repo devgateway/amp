@@ -37,6 +37,7 @@ public class SettingsConstants {
 	public static final String AMOUNT_UNITS_1 = "amountUnits1";
 	public static final String AMOUNT_UNITS_1000 = "amountUnits1000";
 	public static final String AMOUNT_UNITS_1000000 = "amountUnits1000000";
+	public static final String AMOUNT_UNITS_1000000000 = "amountUnits1000000000";
 	public static final String YEAR_FROM = "yearFrom";
 	public static final String YEAR_TO = "yearTo";
 	public static final String YEAR_ALL = "all";
@@ -64,6 +65,7 @@ public class SettingsConstants {
 		put(AMOUNT_UNITS_1, "Amounts in Units");
 		put(AMOUNT_UNITS_1000, "Amounts in Thousands (000)");
 		put(AMOUNT_UNITS_1000000, "Amounts in Millions (000 000)");
+		put(AMOUNT_UNITS_1000000000, "Amounts in Billions (000 000 000)");
 		put(YEAR_FROM, "From:");
 		put(YEAR_TO, "To:");
 		put(YEAR_ALL, "All");
@@ -103,6 +105,7 @@ public class SettingsConstants {
 		put(AMOUNT_UNITS_1, "1");
 		put(AMOUNT_UNITS_1000, "0.001");
 		put(AMOUNT_UNITS_1000000, "0.000001");
+		put(AMOUNT_UNITS_1000000000, "0.000000001");
 	}});
 	
 	public static final Map<String, String> YEAR_MAP = Collections.unmodifiableMap(new LinkedHashMap<String, String>() {{

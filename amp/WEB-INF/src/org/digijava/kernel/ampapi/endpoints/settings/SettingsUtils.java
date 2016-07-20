@@ -628,7 +628,7 @@ public class SettingsUtils {
 			String decimalSymbol = (String) amountFormat.get(SettingsConstants.DECIMAL_SYMBOL);
 			String maxFractDigits = (String) amountFormat.get(SettingsConstants.MAX_FRACT_DIGITS);
 			Integer maxFractDigitsNum  = StringUtils.isNumber(maxFractDigits) ? Integer.valueOf(maxFractDigits) : null;
-			Boolean useGrouping  = (Boolean) amountFormat.get(SettingsConstants.DECIMAL_SYMBOL);
+			Boolean useGrouping  = (Boolean) amountFormat.get(SettingsConstants.USE_GROUPING);
 			String groupingSeparator  = (String) amountFormat.get(SettingsConstants.GROUP_SEPARATOR);
 			Integer groupingSize  = (Integer) amountFormat.get(SettingsConstants.GROUP_SIZE);
 			

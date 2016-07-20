@@ -473,6 +473,7 @@ public class AmpARFilter extends PropertyListable {
 	public final static int AMOUNT_OPTION_IN_UNITS = 0;
 	public final static int AMOUNT_OPTION_IN_THOUSANDS = 1;
 	public final static int AMOUNT_OPTION_IN_MILLIONS = 2;
+	public final static int AMOUNT_OPTION_IN_BILLIONS = 3;
 	
 	private Integer amountinthousand;
 	

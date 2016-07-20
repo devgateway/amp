@@ -53,6 +53,10 @@ public class SettingsMondrianReportTests extends MondrianReportsTestCase {
 		assertEquals(AmpARFilter.AMOUNT_OPTION_IN_MILLIONS, AmountsUnits.AMOUNTS_OPTION_MILLIONS.code);
 		assertEquals(1000 * 1000, AmountsUnits.AMOUNTS_OPTION_MILLIONS.divider);
 		assertEquals(0.001d * 0.001, AmountsUnits.AMOUNTS_OPTION_MILLIONS.multiplier);
+		
+		assertEquals(AmpARFilter.AMOUNT_OPTION_IN_BILLIONS, AmountsUnits.AMOUNTS_OPTION_BILLIONS.code);
+		assertEquals(1000 * 1000 * 1000, AmountsUnits.AMOUNTS_OPTION_BILLIONS.divider);
+		assertEquals(0.001d * 0.001 * 0.001, AmountsUnits.AMOUNTS_OPTION_BILLIONS.multiplier);
 	}
 	
 	@Test
@@ -60,6 +64,7 @@ public class SettingsMondrianReportTests extends MondrianReportsTestCase {
 		assertEquals(AmountsUnits.AMOUNTS_OPTION_UNITS, AmountsUnits.findByMultiplier(1));		
 		assertEquals(AmountsUnits.AMOUNTS_OPTION_THOUSANDS, AmountsUnits.findByMultiplier(0.001));
 		assertEquals(AmountsUnits.AMOUNTS_OPTION_MILLIONS, AmountsUnits.findByMultiplier(0.001 * 0.001));
+		assertEquals(AmountsUnits.AMOUNTS_OPTION_BILLIONS, AmountsUnits.findByMultiplier(0.001 * 0.001 * 0.001));
 	}
 	
 	@Test

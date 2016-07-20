@@ -32,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -387,12 +388,10 @@ public class GisEndPoints {
 				json.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getLabel());
 			}
             json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
-            if (indicator.getCreatedOn()!=null) {
-                json.set(IndicatorEPConstants.CREATED_ON, IndicatorEPConstants.DATE_FORMATTER.format(indicator.getCreatedOn()));
-            }
-            if (indicator.getUpdatedOn() != null) {
-                json.set(IndicatorEPConstants.UPDATED_ON, IndicatorEPConstants.DATE_FORMATTER.format(indicator.getUpdatedOn()));
-            }
+
+            json.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
+            json.set(IndicatorEPConstants.UPDATED_ON, FormatHelper.formatDate(indicator.getUpdatedOn()));
+
             if (indicator.getCreatedBy() != null) {
                 json.set(IndicatorEPConstants.CREATE_BY, indicator.getCreatedBy().getUser().getEmail());
             }

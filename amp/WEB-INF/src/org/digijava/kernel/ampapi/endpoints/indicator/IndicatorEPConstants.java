@@ -1,10 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
-
-import java.text.SimpleDateFormat;
-
 /**
  * Indicator Endpoint Constants
  * 
@@ -19,7 +14,6 @@ public class IndicatorEPConstants {
 
     public static final String DEFAULT_INDICATOR_ORDER_FIELD = "createdOn";
 
-    public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
     public static final int DEFAULT_COUNT = 10;
 
     public static final long ACCESS_TYPE_PUBLIC = 2;

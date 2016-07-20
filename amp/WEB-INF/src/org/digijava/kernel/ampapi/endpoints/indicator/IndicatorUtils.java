@@ -13,6 +13,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -69,12 +70,10 @@ public class IndicatorUtils {
         indicatorJson.set(IndicatorEPConstants.UNIT, indicator.getUnit());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
         indicatorJson.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
-        if (indicator.getCreatedOn()!=null) {
-            indicatorJson.set(IndicatorEPConstants.CREATED_ON, IndicatorEPConstants.DATE_FORMATTER.format(indicator.getCreatedOn()));
-        }
-        if (indicator.getUpdatedOn() != null) {
-            indicatorJson.set(IndicatorEPConstants.UPDATED_ON, IndicatorEPConstants.DATE_FORMATTER.format(indicator.getUpdatedOn()));
-        }
+
+        indicatorJson.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
+        indicatorJson.set(IndicatorEPConstants.UPDATED_ON, FormatHelper.formatDate(indicator.getUpdatedOn()));
+
         if (indicator.getCreatedBy() != null) {
             indicatorJson.set(IndicatorEPConstants.CREATE_BY, indicator.getCreatedBy().getUser().getEmail());
         }

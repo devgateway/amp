@@ -33,7 +33,7 @@ public class ReportCacher {
 	}
 	
 	public CachedReportData getCachedReportData(String reportToken) {
-		System.err.println("lru cache size = " + lru.size());
+		//System.err.println("lru cache size = " + lru.size());
 		return lru.get(reportToken);
 	}
 	

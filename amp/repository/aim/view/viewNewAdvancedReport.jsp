@@ -95,7 +95,7 @@ css_browser_selector(navigator.userAgent);
 
 
 var msgwait0="<digi:trn> Please wait...</digi:trn>";
-var msgwait1="<digi:trn> Loading Report </digi:trn>";
+var msgwait1="<digi:trn> Loading...</digi:trn>";
 var loadingreport = new YAHOO.widget.Panel("wait",   
         { width:"240px",  
           fixedcenter:true,  

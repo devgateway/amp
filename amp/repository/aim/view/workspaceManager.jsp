@@ -566,7 +566,7 @@
         myPanel.setHeader(msg);	
         var bodymsg='<div style="text-align: center">' + 
         '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-        '<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>'
+        '<digi:trn>Loading...</digi:trn><br/><br/></div>'
         myPanel.setBody(bodymsg);
         showContent();
     }

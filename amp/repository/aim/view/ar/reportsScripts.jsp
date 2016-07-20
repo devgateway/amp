@@ -45,7 +45,7 @@
 
 <script type="text/javascript">
 messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class
-messageObj.setWaitMessage('Loading message - please wait....');
+messageObj.setWaitMessage('Loading...');
 messageObj.setShadowOffset(5);	// Large shadow
 
 DHTMLSuite.commonObj.setCssCacheStatus(false);

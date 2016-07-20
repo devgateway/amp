@@ -256,7 +256,7 @@ font-weight : bold;
 	                    				startRecordIndex: 1,
 								        pageLinksLength: 5,
 								        MSG_EMPTY: "<digi:trn>No records found</digi:trn>",
-								        MSG_LOADING: "<digi:trn>Loading</digi:trn>"
+								        MSG_LOADING: "<digi:trn>Loading...</digi:trn>"
 	                			};
 
 
@@ -534,7 +534,7 @@ myTable.enhanceMarkup = function(markupName) {
     		 // Create the Paginator	       
 	         paginator:myPaginator,        
 	         MSG_EMPTY: "<digi:trn>No records found</digi:trn>",
-	         MSG_LOADING: "<digi:trn>Loading</digi:trn>"
+	         MSG_LOADING: "<digi:trn>Loading...</digi:trn>"
 	        }; 
 
     var tableEl						= markup.getElementsByTagName("table")[0];

@@ -146,7 +146,7 @@ function initializeTranslations(){
 	trnCancel = '<digi:trn>Cancel</digi:trn>';
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
-	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
+	trnLoading = '<digi:trn>Loading...</digi:trn>';
 	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";

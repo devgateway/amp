@@ -71,7 +71,7 @@
 	<digi:trn key="aim:reportwizard:filterProblems">Apparently there are some problems displaying filters pop-up. Please try again.</digi:trn>
 </c:set>
 <c:set var="loadingDataMessage">
-	<digi:trn key="aim:reportwizard:loadingData">Loading data. Please wait.</digi:trn>
+	<digi:trn key="aim:reportwizard:loadingData">Loading...</digi:trn>
 </c:set>
 <c:set var="cannotSaveFiltersMessage">
 	<digi:trn key="aim:reportwizard:cannotSaveFilters">There was a problem saving the filters. Please try again.</digi:trn>
@@ -118,7 +118,7 @@
         var content = document.getElementById("popinContent");
         content.innerHTML = '<div style="text-align: center">' +
             '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
-            '<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
+            '<digi:trn>Loading...</digi:trn><br/><br/></div>';
             showContent();
     }
     function mapCallBack(status, statusText, responseText, responseXML){

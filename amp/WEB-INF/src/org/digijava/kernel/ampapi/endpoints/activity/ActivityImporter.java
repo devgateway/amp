@@ -57,8 +57,10 @@ import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -165,6 +167,12 @@ public class ActivityImporter {
 	public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
 		init(newJson, update, endpointContextPath);
 		
+		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+		boolean allowAdding = FeaturesUtil.isVisibleField("Add Activity Button") && Boolean.TRUE.equals(tm.getAddActivity());
+		if (!allowAdding) {
+			errors.put(ActivityErrors.ADD_ACTIVITY_NOT_ALLOWED.id, ActivityErrors.ADD_ACTIVITY_NOT_ALLOWED);
+		}
+		
 		// retrieve fields definition for internal use
 		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields(true);
 		// get existing activity if this is an update request
@@ -177,6 +185,10 @@ public class ActivityImporter {
 		}
 		
 		if (ampActivityId != null) {
+			if (!isActivityEditable(tm, ampActivityId)) {
+				errors.put(ActivityErrors.UPDATE_ACTIVITY_NOT_ALLOWED.id, ActivityErrors.UPDATE_ACTIVITY_NOT_ALLOWED);
+			}
+			
 			try {
 				oldActivity  = ActivityUtil.loadActivity(ampActivityId);
 				oldJson = InterchangeUtils.getActivity(oldActivity, null);
@@ -248,7 +260,7 @@ public class ActivityImporter {
 		
 		return new ArrayList<ApiErrorMessage>(errors.values());
 	}
-	
+
 	/**
 	 * Recursive method (through ->validateAndImport->validateSubElements->[this method]
 	 * that attempts to validate the incoming JSON and import its data. 
@@ -1175,6 +1187,14 @@ public class ActivityImporter {
 	protected void postProcess() {
 		LuceneUtil.addUpdateActivity(TLSUtils.getRequest().getServletContext().getRealPath("/"), update,
         		TLSUtils.getSite(), Locale.forLanguageTag(trnSettings.getDefaultLangCode()), newActivity, oldActivity);
+	}
+	
+	private boolean isActivityEditable(TeamMember tm, Long ampActivityId) {
+		Map<Long, Set<String>> activitiesWs = ProjectList.getEditableWorkspacesForActivities(tm);
+		Set<String> workspaces = activitiesWs.containsKey(ampActivityId) ? activitiesWs.get(ampActivityId) : null;
+		boolean editable = workspaces != null ? workspaces.contains(tm.getTeamId().toString()) : false;
+		
+		return editable;
 	}
 
 	/**

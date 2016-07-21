@@ -39,5 +39,7 @@ public class ActivityErrors {
 	public static final ApiErrorMessage ACTIVITY_IS_LOCKED = new ApiErrorMessage(23, "Cannot aquire lock for the activity");
 	public static final ApiErrorMessage ACTIVITY_NOT_LOADED = new ApiErrorMessage(24, "Cannot load the activity");
 	public static final ApiErrorMessage FIELD_INVALID_PERCENTAGE = new ApiErrorMessage(25, "Percentage fields have to be >0, <=100");
+	public static final ApiErrorMessage ADD_ACTIVITY_NOT_ALLOWED = new ApiErrorMessage(26, "Adding activities is not allowed in this workspace");
+	public static final ApiErrorMessage UPDATE_ACTIVITY_NOT_ALLOWED = new ApiErrorMessage(27, "Updating the activity is not allowed in this workspace");
 
 }

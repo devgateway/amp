@@ -36,6 +36,7 @@ $modules = array(
   'coder',
     'coder_review',
   // 'contextual',
+  'coffee',
   'devel',
     'devel_generate',
     'devel_node_access',

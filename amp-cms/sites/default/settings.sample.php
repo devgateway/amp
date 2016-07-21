@@ -17,7 +17,7 @@
  * NOTE: The variable can be used inside update scripts, use only the following
  *       values: local, sample, staging, preprod, production, other.
  */
-define('PROJECT_ENVIRONMENT', 'local');
+define('PROJECT_ENVIRONMENT', 'production');
 
 // Allow developers to debug production environments.
 $hide_errors = TRUE;

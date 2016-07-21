@@ -32,7 +32,7 @@ module.exports = {
 	},
 	STANDARD:{
 		id: 'tool-standard-layers-indicators',
-		title: 'Standard indicators',
+		title: 'Standard Layers',
 		iconClass: 'ampicon-layers',
 		description: 'View indicators on sub-national needs.',
 		filterLayers:function(layers){

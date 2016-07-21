@@ -17,7 +17,7 @@ module.exports = BaseControlView.extend({
     FundingLayersView,
   ],
   radioButtonGroup: [],
-
+  sections:[],
   template: _.template(Template),
 
   initialize: function() {
@@ -31,7 +31,7 @@ module.exports = BaseControlView.extend({
     this.$('.content').html(this.template({title: this.title}));
     //create layer manager
     var self = this;    
-    var layerManager = new LayersManager({});   
+    var layerManager = new LayersManager({sections: self.sections});   
     self.$('.content', self).append(layerManager.render().el);
     
     this.addSection(StatisticalLayersConfig.STANDARD);
@@ -41,7 +41,7 @@ module.exports = BaseControlView.extend({
       /* Note: This object will access the radioButtonGroup
       * of this parent BaseControlView */
       var section = new SectionView({app: self.app, parent: self});
-
+      
       /* For Mutual Exclusion: */
       self.radioButtonGroup.push(section.collection);
 
@@ -55,6 +55,7 @@ module.exports = BaseControlView.extend({
 		var self = this;
 		var section = new IndicatorLayersView({app: self.app, parent: self, config: config});	      
 	    self.radioButtonGroup.push(section.collection);
+	    self.sections.push(section);
 	    self.$('.content', self).append(section.render().el);
    }
 

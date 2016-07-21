@@ -14,8 +14,10 @@ module.exports = Backbone.View.extend({
     },
 
     initialize: function(options) {
+    	this.sections = options.sections;
     },
     render: function() {
+    	var self = this;
         this.$el.html(this.template({title: this.title}));
         var self = this;
         this.layersManager = new IndicatorLayerManager({
@@ -23,8 +25,11 @@ module.exports = Backbone.View.extend({
             caller: 'GIS',
             el: this.$('#layers-manager-popup')
         });
-        this.layersManager.on('cancel', function() {
+        this.layersManager.on('cancel', function() {        	 
             self.$('#layers-manager-popup').hide();
+            _.each(self.sections, function(section) {
+            	section.reloadData();              	
+       	    });
         });
         this.$('#layers-manager-popup').hide();
         return this;

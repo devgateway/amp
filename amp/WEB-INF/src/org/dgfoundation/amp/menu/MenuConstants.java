@@ -45,6 +45,7 @@ public class MenuConstants {
 	public static final String ADD_SSC_ACTIVITY = "Add SSC Activity";
 	public static final String ADD_TAB = "Add Tab";
 	public static final String TAB_MANAGER = "Tab Manager";
+	public static final String IATI_IMPORTER = "IATI Importer";
 	// TBD how change workspace will work
 	public static final String CHANGE_WORKSPACE = "Change Workspace"; 
 	public static final String PLEDGES  = "Pledges";

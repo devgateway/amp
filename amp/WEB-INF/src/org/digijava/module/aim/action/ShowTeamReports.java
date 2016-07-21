@@ -34,9 +34,11 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.form.ReportsForm.ReportSortBy;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class ShowTeamReports extends Action {
@@ -58,7 +60,6 @@ public class ShowTeamReports extends Action {
 
 		ReportsForm rf = (ReportsForm) form;
         String action=rf.getAction();
-		
         if (rf.isReset()
 				|| (action != null && action.equalsIgnoreCase("clear"))) {
             rf.setKeyword(null);

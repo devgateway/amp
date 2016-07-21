@@ -1,0 +1,29 @@
+---
+
+- name: 'Install repo: Extra Packages for Enterprise Linux (EPEL)'
+  yum:
+    name: "{{ common__epel_repo_url }}"
+    state: present
+  register: result
+  until: '"failed" not in result'
+  retries: 5
+  delay: 10
+
+- name: 'Import EPEL GPG key'
+  rpm_key:
+    key: "{{ common__epel_repo_gpg_key_url }}"
+    state: present
+
+- name: 'Install repo: Inline with Upstream Stable (IUS)'
+  yum:
+    name: "{{ common__ius_repo_url }}"
+    state: present
+  register: result
+  until: '"failed" not in result'
+  retries: 5
+  delay: 10
+
+- name: 'Import IUS GPG key'
+  rpm_key:
+    key: "{{ common__ius_repo_gpg_key_url }}"
+    state: present

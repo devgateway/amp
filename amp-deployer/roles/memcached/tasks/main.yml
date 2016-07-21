@@ -1,0 +1,22 @@
+---
+
+# @TODO: Improve!
+
+# - name: Display all variables/facts known for a host
+#   debug: var=hostvars[inventory_hostname] verbosity=4
+
+# - debug: var=memcached__port
+
+- name: Install Memcached.
+  yum: name=memcached state=installed
+
+- name: Insert Firewall Rule
+  firewalld: port={{ memcached__port }}/tcp permanent=true state=enabled immediate=yes
+
+- name: Enable and start Memcached
+  service: name=memcached state=started enabled=yes
+
+- name: Update Memcached configuration
+  template: src=memcached.conf.j2 dest=/etc/sysconfig/memcached
+  notify:
+    - restart memcached

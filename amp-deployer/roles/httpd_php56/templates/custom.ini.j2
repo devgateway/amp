@@ -1,0 +1,79 @@
+; PHP configuration.
+; {{ ansible_managed }}
+
+; The default timezone used by all date/time functions.
+; @see: https://secure.php.net/date.timezone
+date.timezone = {{ httpd_php56__date_timezone }}
+
+; Maximum execution time of each script.
+; @see: https://secure.php.net/max-execution-time
+max_execution_time = {{ httpd_php56__max_execution_time }}
+
+; Maximum amount of memory a script may consume.
+; @see: https://secure.php.net/memory-limit
+memory_limit = {{ httpd_php56__memory_limit }}
+
+; Maximum size of POST data that PHP will accept.
+; @see: https://secure.php.net/post-max-size
+post_max_size = {{ httpd_php56__post_max_size }}
+
+; Maximum allowed size for uploaded files.
+; @see: https://secure.php.net/upload-max-filesize
+upload_max_filesize = {{ httpd_php56__upload_max_filesize }}
+
+; Do not expose the fact that PHP is installed on the server.
+; @see: https://secure.php.net/expose-php
+expose_php = {{ httpd_php56__expose_php }}
+
+; Set the error reporting level.
+; Development Value: E_ALL
+; Production Value: E_ALL & ~E_DEPRECATED & ~E_STRICT
+; @see: https://secure.php.net/error-reporting
+; @see: https://secure.php.net/manual/en/errorfunc.constants.php
+error_reporting = {{ httpd_php56__error_reporting }}
+
+; Control whether or not PHP will output errors.
+; Development Value: On
+; Production Value: Off
+; @see: https://secure.php.net/display-errors
+display_errors = {{ httpd_php56__display_errors }}
+
+; Control whether or not PHP will output errors during the startup sequence.
+; Development Value: On
+; Production Value: Off
+; @see: https://secure.php.net/display-startup-errors
+display_startup_errors = {{ httpd_php56__display_startup_errors }}
+
+; Include HTML tags in error messages.
+; Development Value: On
+; Production Value: Off
+; @see: https://secure.php.net/html-errors
+html_errors = {{ httpd_php56__html_errors }}
+
+; Enable the opcode cache for the CLI version of PHP.
+; @see: https://secure.php.net/manual/en/opcache.configuration.php#ini.opcache.enable
+opcache.enable = {{ httpd_php56__opcache_enable }}
+
+; Enable the opcode cache for the CLI version of PHP.
+; @see: https://secure.php.net/manual/en/opcache.configuration.php#ini.opcache.enable-cli
+;opcache.enable_cli = {{ httpd_php56__opcache_enable_cli }}
+
+; The size of the shared memory storage used by opcache, in megabytes.
+; @see: https://secure.php.net/manual/en/opcache.configuration.php#ini.opcache.memory-consumption
+opcache.memory_consumption = {{ httpd_php56__opcache_memory_consumption }}
+
+; The amount of memory used to store interned strings, in megabytes.
+; @see: https://secure.php.net/manual/en/opcache.configuration.php#ini.opcache.interned-strings-buffer
+opcache.interned_strings_buffer = {{ httpd_php56__opcache_interned_strings_buffer }}
+
+; The maximum number of keys (and therefore scripts) in the opcache hash table.
+; @see: https://secure.php.net/manual/en/opcache.configuration.php#ini.opcache.max-accelerated-files
+opcache.max_accelerated_files = {{ httpd_php56__opcache_max_accelerated_files }}
+
+; How often to check script timestamps for updates, in seconds.
+; @see: https://secure.php.net/manual/en/opcache.configuration.php#ini.opcache.revalidate-freq
+opcache.revalidate_freq = {{ httpd_php56__opcache_revalidate_freq }}
+
+; If enabled, a fast shutdown sequence is used that doesn't free each allocated block.
+; @see: https://secure.php.net/manual/en/opcache.configuration.php#ini.opcache.fast-shutdown
+opcache.fast_shutdown = {{ httpd_php56__opcache_fast_shutdown }}

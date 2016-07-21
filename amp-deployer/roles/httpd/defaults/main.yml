@@ -1,0 +1,27 @@
+---
+
+# Bind Apache HTTP to a specific port.
+# NOTE: The default is: 80
+httpd__port: 80
+httpd__tsl_port: 443
+
+# Set the server name.
+httpd__ServerName: "{{ ansible_fqdn }}"
+
+# Limit on the number of simultaneous requests that will be served.
+# NOTE: To use the default value just set it to: ~
+# @see: http://httpd.apache.org/docs/2.4/mod/mpm_common.html#maxrequestworkers
+# @see: https://github.com/jsmoriss/check-httpd-limits
+httpd__MaxRequestWorkers: ~
+
+# @see https://httpd.apache.org/docs/2.4/mod/mod_unixd.html
+httpd__User: apache
+httpd__Group: apache
+httpd__User_vhosts: apache
+httpd__Group_vhosts: apache
+
+# Number of times to rotate log files before being removed.
+httpd__logrotate_rotate: 28
+
+# Rotate log files only if they reach a this size.
+httpd__logrotate_size: 8M

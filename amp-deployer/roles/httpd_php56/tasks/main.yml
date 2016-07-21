@@ -1,0 +1,57 @@
+---
+
+# - name: Display all variables/facts known for a host
+#   debug: var=hostvars[inventory_hostname] verbosity=4
+
+# - debug: var=httpd_port
+# - debug: var=httpd_ServerName
+# - debug: var=httpd_MaxRequestWorkers|string()
+
+- name: Install Packages
+  yum: name={{ item }} state=installed
+  with_items:
+    - php56u
+    - php56u-gd
+    - php56u-intl
+    - php56u-mbstring
+    - php56u-mcrypt
+    - php56u-mysql
+    - php56u-opcache
+    - php56u-pdo
+    - php56u-pecl-uploadprogress
+    - php56u-pecl-xdebug
+    - php56u-pgsql
+    - php56u-twig
+  notify:
+    - restart httpd
+
+- name: Update PHP configuration
+  template:
+    src: custom.ini.j2
+    dest: /etc/php.d/99-custom.ini
+  notify:
+    - restart httpd
+
+- name: Check composer presence
+  stat: path=/usr/local/bin/composer
+  register: composer_executable
+
+- name: Install composer
+  include: composer.yml
+  when: not composer_executable.stat.exists
+
+- name: Check drush presence
+  stat: path=/usr/local/bin/drush
+  register: drush_executable
+
+- name: Install drush
+  include: drush.yml
+  when: httpd_php56__drush_install and not drush_executable.stat.exists
+
+- name: Check Drupal Console presence
+  stat: path=/usr/local/bin/drupal
+  register: drupal_console_executable
+
+- name: Install Drupal Console
+  include: drupal_console.yml
+  when: httpd_php56__drupal_console_install and not drupal_console_executable.stat.exists

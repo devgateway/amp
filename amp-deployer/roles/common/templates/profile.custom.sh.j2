@@ -1,0 +1,19 @@
+## Bash configuration.
+## {{ ansible_managed }}
+
+# Style shell prompt.
+if [ "$PS1" ]; then
+  if [[ $EUID -ne 0 ]]; then
+    # You are not root, the prompt should be yellow
+    PS1="\[\033[01;33m\]\u@\h\[\033[00m\]:\W\\$ "
+  else
+    # You are root, the prompt should be red
+    PS1="\[\033[01;31m\]\u@\h\[\033[00m\]:\W\\$ "
+  fi
+fi
+
+# Define custom aliases.
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color'
+alias ll='ls -lha'

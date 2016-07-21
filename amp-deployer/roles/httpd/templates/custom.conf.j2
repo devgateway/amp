@@ -1,0 +1,42 @@
+## Apache HTTPD configuration.
+## {{ ansible_managed }}
+
+# Set the server name.
+ServerName {{ httpd__ServerName }}
+
+{% if vagrant is defined %}
+# Do not use the kernel sendfile support to deliver files inside vhosts.
+# https://httpd.apache.org/docs/2.2/mod/core.html#enablesendfile
+# https://forums.virtualbox.org/viewtopic.php?f=7&t=56066
+EnableSendfile Off
+{% endif %}
+
+# Do not add extra information in the server-generated documents.
+# @see: https://httpd.apache.org/docs/2.4/mod/core.html#serversignature
+ServerSignature Off
+
+# Only send the server name in the response headers.
+# @see: https://httpd.apache.org/docs/2.4/mod/core.html#servertokens
+ServerTokens ProductOnly
+
+# Bind Apache to specific IP addresses and/or ports, instead of the default.
+# @see: https://httpd.apache.org/docs/2.4/mod/mpm_common.html#listen
+Listen {{ httpd__port }}
+
+# Set the Apache user and group
+# @see https://httpd.apache.org/docs/2.4/mod/mod_unixd.html
+User {{ httpd__User }}
+Group {{ httpd__Group }}
+
+# Limit the number of simultaneous requests that will be served.
+# NOTE: To use the default value just set it to: ~
+# @see: https://httpd.apache.org/docs/2.4/mod/mpm_common.html#maxrequestworkers
+# @see: https://github.com/jsmoriss/check-httpd-limits
+{% if httpd__MaxRequestWorkers %}
+MaxRequestWorkers {{ httpd__MaxRequestWorkers }}
+{% else %}
+#MaxRequestWorkers 32
+{% endif %}
+
+# Move vhosts specific conf files to a separate directory.
+IncludeOptional vhosts.d/*.conf

@@ -1,0 +1,86 @@
+## Virtual Host for {{ item.domain }}
+## {{ ansible_managed }}
+
+# Template options:
+#  - domain: the vhost domain name
+#  - noindex: ad a /robots.txt instructing robots to not index the vhost.
+#  - docroot: directory in the guest OS for the vhost docroot.
+#  - php_devel: ad some PHP devel specific settings to the vhost.
+#  - php_xdebug: load the PHP xdebug extension.
+
+<VirtualHost *:80>
+  ServerName {{ item.domain }}
+
+  {% if item.noindex | default(True) -%}
+  ## Do not allow robots to index the website
+  Alias /robots.txt /var/www/html/robots.noindex.txt
+  {% endif %}
+
+  ## Always disable forward proxy requests.
+  ProxyRequests Off
+
+  ## Use incoming Host HTTP request header for proxy request.
+  ProxyPreserveHost On
+
+  {% for set in item.proxy_directives_sets|default([]) -%}
+  # {{ set.comment }}
+  {% for set_directive in set.directives -%}
+  {{ set_directive }}
+  {% endfor %}
+
+  {% endfor %}
+
+  ## Vhost docroot
+  DocumentRoot "{{ item.docroot }}"
+  <Directory "{{ item.docroot }}">
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride all
+    Order allow,deny
+    Allow from all
+
+    ## Restrict Access
+    ## @see: http://httpd.apache.org/docs/2.4/mod/mod_auth_basic.html
+    #AuthType Basic
+    #AuthName "Access Restricted"
+    #AuthUserFile {{ item.docroot }}/docs/.httpdDevUserFile
+    #Require valid-user
+  </Directory>
+
+  ## Logging
+  CustomLog "/var/log/httpd/{{ item.domain }}--access.log" combined
+  ErrorLog "/var/log/httpd/{{ item.domain }}--error.log"
+
+  ## Rewrite rules
+  RewriteEngine On
+
+  {% if item.php_devel | default(False) -%}
+  ## Override PHP Settings.
+  ## @see: https://secure.php.net/manual/en/configuration.changes.php
+  <IfModule mod_php5.c>
+    ## @see: https://secure.php.net/error-reporting
+    ## @see: https://secure.php.net/manual/en/errorfunc.constants.php
+    ## E_ALL = 32767
+    php_value error_reporting 32767
+
+    ## @see: https://secure.php.net/display-errors
+    php_value display_errors On
+
+    ## @see: https://secure.php.net/display-startup-errors
+    php_value display_startup_errors On
+
+    ## @see: https://secure.php.net/html-errors
+    php_value html_errors On
+
+    ## @see: http://php.net/manual/en/opcache.configuration.php#ini.opcache.revalidate-freq
+    php_value opcache.revalidate_freq 1
+
+    ## @see: https://xdebug.org/docs/install
+    {% if item.php_xdebug | default(False) -%}
+    php_value zend_extension xdebug.so
+    {% else -%}
+    #php_value zend_extension xdebug.so
+    {% endif %}
+  </IfModule>
+  {% endif %}
+
+</VirtualHost>

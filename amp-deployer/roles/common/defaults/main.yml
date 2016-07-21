@@ -1,0 +1,26 @@
+---
+
+# Information about: Extra Packages for Enterprise Linux (EPEL) repository
+common__epel_repo_url: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+common__epel_repo_gpg_key_url: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+
+# Information about: Inline with Upstream Stable (IUS) repository
+common__ius_repo_url: https://centos7.iuscommunity.org/ius-release.rpm
+common__ius_repo_gpg_key_url: /etc/pki/rpm-gpg/IUS-COMMUNITY-GPG-KEY
+
+# Extra open TCP ports.
+common__extra_open_tcp_ports:
+  - 22
+
+# @see: http://docs.ansible.com/ansible/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module
+# common__developers:
+#   - name: example
+#     comment: Example User
+#     key: https://example.org/~example/authorized_keys.txt
+#     group: developers
+#     groups: wheel
+#     password: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+# Set the backups directory owner and group.
+common__backups_user: deployer
+common__backups_group: developers

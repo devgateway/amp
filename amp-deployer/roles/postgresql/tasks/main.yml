@@ -1,0 +1,102 @@
+---
+
+# - name: Display all variables/facts known for a host
+#   debug: var=hostvars[inventory_hostname] verbosity=4
+
+# - debug: var=postgresql__port
+# - debug: var=postgresql__client_authentication_default
+
+- name: Ensure repository is installed
+  include: repo.yml
+
+- name: Install PostgreSQL
+  yum:
+    name: '{{ item }}'
+    state: installed
+  with_items:
+    - postgresql95-server
+    - postgresql95-contrib
+
+- name: Insert Firewall Rule
+  firewalld:
+    port: '{{ postgresql__port }}/tcp'
+    immediate: yes
+    permanent: true
+    state: enabled
+
+- name: Initialize PostgreSQL
+  command: "{{ postgresql__setup_script }} initdb"
+  args:
+    creates: "{{ postgresql__conf_data_dir }}/PG_VERSION"
+
+- name: Create settings directory
+  file:
+    path: "{{ postgresql__conf_data_dir }}/conf.d"
+    state: directory
+    owner: postgres
+    group: postgres
+    mode: "u=rwx,g=,o="
+
+- name: Load extra configuration from conf.d directory
+  lineinfile:
+    dest: "{{ postgresql__conf_data_dir }}/postgresql.conf"
+    regexp: "^#include_dir = 'conf.d'(.+)"
+    line: "include_dir = 'conf.d'\\1"
+    backrefs: yes
+    state: present
+  notify:
+    - restart postgresql
+
+- name: Update PostgreSQL configuration
+  template:
+    src: custom.conf.j2
+    dest: "{{ postgresql__conf_data_dir }}/conf.d/custom.conf"
+    owner: postgres
+    group: postgres
+    mode: "u=rw,g=,o="
+  notify:
+    - restart postgresql
+
+#- name: Secure the installation
+#  include: postgresql_secure_installation.yml
+
+- name: Configure PostgreSQL Client Authentication
+  template:
+    src: pg_hba.conf.j2
+    dest: "{{ postgresql__conf_data_dir }}/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: "u=rw,g=,o="
+  notify:
+    - restart postgresql
+
+- name: Start and Enable PostgreSQL
+  service:
+    name: '{{ postgresql__service_name }}'
+    state: started
+    enabled: yes
+
+# Requried for `postgresql_db` and `postgresql_user`.
+- name: Install Python PostgreSQL bindings
+  yum:
+    name: python-psycopg2
+    state: installed
+
+- name: Create databases
+  postgresql_db:
+    name: '{{ item.name }}'
+    state: present
+  become: true
+  become_user: postgres
+  with_items: "{{ postgresql__databases|default([]) }}"
+
+- name: Create database users
+  postgresql_user:
+    name: '{{ item.user }}'
+    password: '{{ item.pass }}'
+    db: '{{ item.name }}'
+    priv: 'ALL'
+    state: present
+  become: true
+  become_user: postgres
+  with_items: "{{ postgresql__databases|default([]) }}"

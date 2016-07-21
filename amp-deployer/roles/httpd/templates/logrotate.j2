@@ -1,0 +1,16 @@
+## Apache HTTPD logrotate configuration.
+## {{ ansible_managed }}
+
+/var/log/httpd/*log {
+    daily
+    compress
+    rotate {{ httpd__logrotate_rotate }}
+    size {{ httpd__logrotate_size }}
+    missingok
+    notifempty
+    sharedscripts
+    delaycompress
+    postrotate
+        /bin/systemctl reload httpd.service > /dev/null 2>/dev/null || true
+    endscript
+}

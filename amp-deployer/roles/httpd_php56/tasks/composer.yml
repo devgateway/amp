@@ -1,0 +1,23 @@
+---
+
+- name: Download composer-installer
+  get_url: url=https://getcomposer.org/installer dest=/tmp/composer-installer
+
+- name: Install composer
+  shell: "cat /tmp/composer-installer | php -- --install-dir=/usr/local/bin"
+  args:
+    creates: /usr/local/bin/composer.phar
+
+- name: Delete composer-installer
+  file: path=/tmp/composer-installer state=absent
+
+- name: Rename composer.phar to composer
+  shell: mv /usr/local/bin/composer.phar /usr/local/bin/composer
+  args:
+    creates: /usr/local/bin/composer
+
+- name: Make composer executable
+  file: path=/usr/local/bin/composer mode=a+x state=file
+
+- name: Disable xdebug for composer
+  lineinfile: dest=/etc/php.d/15-xdebug.ini state=present backrefs=yes regexp="^zend_extension=(.+)" line=";zend_extension=\1"

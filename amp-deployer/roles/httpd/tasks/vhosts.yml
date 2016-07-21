@@ -1,0 +1,19 @@
+---
+
+- name: Create required DocumentRoot directories
+  file:
+    path: "{{ item.docroot }}"
+    state: directory
+    owner: "{{ httpd__User_vhosts }}"
+    group: "{{ httpd__Group_vhosts }}"
+    mode: "u=rwx,g=rwx,o=rx"
+  with_items: "{{ vhosts|default([]) }}"
+  when: item.docroot is defined
+
+- name: Add apache vhosts configuration.
+  template:
+    src: "vhost_{{ item.template }}.conf.j2"
+    dest: "/etc/httpd/vhosts.d/{{ '%02d'|format(item.weight|int) }}--{{ item.domain }}.conf"
+  with_items: "{{ vhosts|default([]) }}"
+  notify:
+    - restart httpd

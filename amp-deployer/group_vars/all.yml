@@ -1,0 +1,5 @@
+---
+# Project specific overrides go here.
+
+httpd_php56__memory_limit: 512M
+#httpd_php56__date_timezone: 'Europe/Bucharest'

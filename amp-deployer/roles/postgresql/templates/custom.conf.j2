@@ -1,0 +1,15 @@
+## PostgreSQL configuration.
+## {{ ansible_managed }}
+
+# Set port number to use when listening for TCP/IP connections.
+# @see: https://www.postgresql.org/docs/9.5/static/runtime-config-connection.html
+port = {{ postgresql__port }}
+
+# Change the addresses used to listen for connections.
+# @see: https://www.postgresql.org/docs/9.5/static/runtime-config-connection.html
+listen_addresses = '{{ postgresql__listen_addresses }}'
+
+# Set the output format for 'serialized strings'.
+# ALTER DATABASE $DB_NAME SET bytea_output = 'escape';
+# @see: https://www.postgresql.org/docs/9.5/static/runtime-config-client.html
+bytea_output = 'escape'

@@ -1,0 +1,25 @@
+# Memcached configuration.
+# {{ ansible_managed }}
+
+# Bind Memcached to a specific port.
+# @see: https://github.com/memcached/memcached/wiki/ConfiguringServer#networking
+# NOTE: The default connection port is 11211.
+PORT="{{ memcached__port }}"
+
+# Set the linux process user.
+# NOTE: The default user is memcached.
+USER="{{ memcached__user }}"
+
+# Set the maximum number of concurrent connections.
+# @see: https://github.com/memcached/memcached/wiki/ConfiguringServer#connection-limit
+# NOTE: The default value is 1024.
+MAXCONN="{{ memcached__maxconn }}"
+
+# Maximum memory to use for items in megabytes.
+# @see: https://github.com/memcached/memcached/wiki/ConfiguringServer#commandline-arguments
+# NOTE: The default value is 64.
+CACHESIZE="{{ memcached__cachesize }}"
+
+# Other command line arguments.
+# @see: https://github.com/memcached/memcached/wiki/ConfiguringServer#commandline-arguments
+OPTIONS="{{ memcached__options }}"

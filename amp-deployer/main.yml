@@ -1,0 +1,18 @@
+---
+- name: Configure LAMP
+  hosts: "{{ hosts|default('localhost') }}"
+  become: true
+  become_user: root
+
+  vars_files:
+    - ["vars.{{ project_environment|default('local') }}.yml", "vars.default.yml"]
+
+  tasks:
+    - hostname: name={{ hostname }}
+      when: hostname is defined
+
+  roles:
+    - common
+    - httpd_php56
+    - postgresql
+    - memcached

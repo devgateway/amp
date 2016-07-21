@@ -1,0 +1,186 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# For more information:
+# @see https://github.com/devgateway/happy-deployer
+
+# REQUIREMENTS:
+# @see https://github.com/cogitatio/vagrant-hostsupdater
+# @see https://github.com/dotless-de/vagrant-vbguest
+
+# Load some project specific settings form YAML files.
+require 'fileutils'
+require 'yaml'
+if File.exists? __dir__ + '/Vagrantsettings.local.yml'
+  project_settings_file = __dir__ + '/Vagrantsettings.local.yml'
+elsif File.exists? __dir__ + '/Vagrantsettings.yml'
+  project_settings_file = __dir__ + '/Vagrantsettings.yml'
+else
+  raise 'Can not find the Vagrantsettings.yml file.'
+end
+project_settings = YAML.load_file(project_settings_file)
+
+# Set the project hostname.
+if !project_settings.has_key? 'hostname'
+  project_settings['hostname'] =  project_settings['project_shortname'] + '-' + project_settings['project_environment']
+end
+# abort(project_settings.inspect) # print variables and exit
+
+# Prepare a list of variables for Ansible.
+if File.exists? __dir__ + '/vars.local.yml'
+  ansible_extra_vars_file = __dir__ + '/vars.local.yml'
+elsif File.exists? __dir__ + '/vars.default.yml'
+  ansible_extra_vars_file = __dir__ + '/vars.default.yml'
+else
+  raise 'Can not find the ansible/vars.local.yml file.'
+end
+ansible_extra_vars = YAML.load_file(ansible_extra_vars_file)
+project_settings.each_key {|key| ansible_extra_vars[key] = project_settings[key] }
+
+# Force Ansible to run on the current host.
+# TODO: Use custom inventory for Vagrant.
+ansible_extra_vars['hosts'] = 'all'
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version.
+Vagrant.configure(2) do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Configure the Main VM.
+  config.vm.define :main do |main_config|
+    # Information about the box.
+    main_config.vm.box = project_settings['vagrant_box']['name']
+    main_config.vm.box_url = project_settings['vagrant_box']['url']
+    main_config.vm.box_download_checksum = project_settings['vagrant_box']['download_checksum']
+    main_config.vm.box_download_checksum_type = project_settings['vagrant_box']['download_checksum_type']
+
+    # Disable automatic box update checking. If you disable this, then
+    # boxes will only be checked for updates when the user runs
+    # `vagrant box outdated`. This is not recommended.
+    # main_config.vm.box_check_update = false
+
+    # Settings for the vagrant-vbguest plugin.
+    # @see https://github.com/dotless-de/vagrant-vbguest
+    main_config.vbguest.auto_update = true
+
+    # Setup the VM hostname.
+    if defined? project_settings['vagrant']['hosts_entry'] and project_settings['vagrant']['hosts_entry'] == 1
+      main_config.vm.hostname = project_settings['hostname']
+    end
+
+    ########################################
+    # Setup VM access:
+
+    # 1. Add port forwarding
+    # main_config.vm.network :forwarded_port, guest: 80, host: 8080
+
+    # 2. Add a new virtual network interface card with a fixed IP.
+    main_config.vm.network :private_network, ip: project_settings['vagrant']['hostonlyip']
+
+    # Settings for the vagrant-hostsupdater plugin.
+    # @see https://github.com/cogitatio/vagrant-hostsupdater
+    main_config.hostsupdater.aliases = []
+    for vhost in ansible_extra_vars['vhosts']
+      main_config.hostsupdater.aliases = main_config.hostsupdater.aliases + [vhost['domain']]
+      if vhost.has_key? 'aliases'
+        main_config.hostsupdater.aliases = main_config.hostsupdater.aliases + vhost['aliases']
+      end
+    end
+    # Cleanup /etc/hosts when shutting down the VM.
+    main_config.hostsupdater.remove_on_suspend = true
+
+    ########################################
+
+    # Create a forwarded port mapping which allows access to a specific port
+    # within the machine from a port on the host machine. In the example below,
+    # accessing "localhost:8080" will access port 80 on the guest machine.
+    # main_config.vm.network "forwarded_port", guest: 80, host: 8080
+
+    # Create a private network, which allows host-only access to the machine
+    # using a specific IP.
+    # main_config.vm.network "private_network", ip: "192.168.33.10"
+
+    # Create a public network, which generally matched to bridged network.
+    # Bridged networks make the machine appear as another physical device on
+    # your network.
+    # main_config.vm.network "public_network"
+
+    # Share an additional folder to the guest VM. The first argument is
+    # the path on the host to the actual folder. The second argument is
+    # the path on the guest to mount the folder. And the optional third
+    # argument is a set of non-required options.
+    # main_config.vm.synced_folder "../data", "/vagrant_data"
+
+    # Mount project directories into the guest OS.
+    for volume in project_settings['vagrant_volumes']
+      if !(volume.has_key? 'skip' && volume['skip'])
+        main_config.vm.synced_folder volume['source'], volume['target']
+      end
+    end
+
+    # Provider-specific configuration so you can fine-tune various
+    # backing providers for Vagrant. These expose provider-specific options.
+    # Example for VirtualBox:
+    #
+    # main_config.vm.provider "virtualbox" do |vb|
+    #   # Display the VirtualBox GUI when booting the machine
+    #   vb.gui = true
+    #
+    #   # Customize the amount of memory on the VM:
+    #   vb.memory = "1024"
+    # end
+    #
+    # View the documentation for the provider you are using for more
+    # information on available options.
+
+    main_config.vm.provider :virtualbox do |vb|
+      # Use the host's resolver mechanisms to handle DNS requests.
+      vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+
+      # Set the amount of RAM, in MB, allocated to the virtual machine.
+      vb.customize ['modifyvm', :id, '--memory', 4096]
+
+      # Set the number of virtual CPUs allocated to the virtual machine.
+      vb.customize ['modifyvm', :id, '--cpus', 2]
+    end
+
+    # Enable provisioning with a shell script. Additional provisioners such as
+    # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+    # documentation for more information about their specific syntax and use.
+    # main_config.vm.provision "shell", inline: <<-SHELL
+    #   sudo apt-get update
+    #   sudo apt-get install -y apache2
+    # SHELL
+
+    # Update 'ansible.cfg'.
+    main_config.vm.provision "shell", inline: <<-SHELL
+      # Download and install the EPEL repository and import the public key.
+      # @see: https://fedoraproject.org/wiki/EPEL
+      test -f /etc/yum.repos.d/epel.repo || \
+        (
+          echo "Adding the EPEL repository..."\
+          rpm --quiet --force -Uh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm &> /dev/null && \
+          gpg --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 &> /dev/null \
+        )
+
+      echo "Installing Ansible from EPEL..."
+      yum --quiet --quiet install ansible
+
+      # Update Ansible configuration.
+      sudo /usr/bin/mkdir -p /etc/ansible
+      sudo /usr/bin/cp /vagrant/inventory.vagrant.conf /etc/hosts
+    SHELL
+
+    # Run Ansible from the Vagrant VM
+    # To manually run the playbook with extra variables, use:
+    #   $ cd /vagrant/ansible && make run
+    main_config.vm.provision 'ansible_local' do |ansible|
+      ansible.extra_vars = ansible_extra_vars
+      ansible.playbook = './main.yml'  # A relative path on the /vagrant guest directory.
+      ansible.sudo = true
+      # ansible.verbose = 'vv'
+    end
+  end
+end

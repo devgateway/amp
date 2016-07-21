@@ -1,0 +1,31 @@
+## Virtual Host for {{ item.domain }}
+## {{ ansible_managed }}
+
+# Template options:
+#  - domain: the vhost domain name
+#  - noindex: ad a /robots.txt instructing robots to not index the vhost.
+#  - directives: a list of directives for mod_proxy.
+
+<VirtualHost *:80>
+  ServerName {{ item.domain }}
+
+  {% if item.noindex | default(True) -%}
+  ## Do not allow robots to index the website
+  Alias /robots.txt /var/www/html/robots.noindex.txt
+  {%- endif %}
+
+  ## Always disable forward proxy requests.
+  ProxyRequests Off
+
+  ## Use incoming Host HTTP request header for proxy request.
+  ProxyPreserveHost On
+
+  ## Proxy directives.
+  {% for directive in item.directives -%}
+    {{ directive }}
+  {% endfor %}
+
+  ## Logging
+  CustomLog "/var/log/httpd/{{ item.domain }}--access.log" combined
+  ErrorLog "/var/log/httpd/{{ item.domain }}--error.log"
+</VirtualHost>

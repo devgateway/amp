@@ -87,14 +87,14 @@ module.exports = Backbone.Collection
 		  if(_.isUndefined(result) || _.isNull(result)){
 			  _.each(_.keys(layer[field]),function(lang){
 				  if(layer[field][lang]){
-					  result = layer[field][lang];  
+					  result = layer[field][lang] || '';  
 				  }
 				  
 			  });
 			   
 		  }    		  
 	  }else{
-		  result = layer[field];
+		  result = layer[field] || '';
 	  }
 	  return result;
   },

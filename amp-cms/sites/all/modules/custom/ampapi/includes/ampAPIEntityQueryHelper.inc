@@ -133,7 +133,7 @@ class ampAPIEntityQueryHelper {
     );
 
     // The API is slow at the moment.
-    $api_parameters['timeout'] = 120;
+    $api_parameters['timeout'] = variable_get('ampapi_timeout', 120);
 
     if (!empty($query->range)) {
       $request_body['recordsPerPage'] = $query->range['length'];

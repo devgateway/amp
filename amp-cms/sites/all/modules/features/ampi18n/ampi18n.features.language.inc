@@ -101,5 +101,18 @@ function ampi18n_locale_default_languages() {
     'prefix' => 'sq',
     'weight' => 0,
   );
+  // Exported language: tm.
+  $languages['tm'] = array(
+    'language' => 'tm',
+    'name' => 'Tetum',
+    'native' => 'Tetum',
+    'direction' => 0,
+    'enabled' => 1,
+    'plurals' => 0,
+    'formula' => '',
+    'domain' => '',
+    'prefix' => 'tm',
+    'weight' => 0,
+  );
   return $languages;
 }

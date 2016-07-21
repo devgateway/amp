@@ -19,7 +19,8 @@ module.exports = BaseControlView.extend({
   template:  _.template(Template),
 
   events: {
-    'click .gis-tool-share': 'share'
+    'click .gis-tool-share': 'share',
+    'click .gis-tool-img': 'image'
   },
 
   initialize: function() {
@@ -44,7 +45,13 @@ module.exports = BaseControlView.extend({
 			  if(!(hideEditableFormatSetting !== undefined && hideEditableFormatSetting.get('defaultId') == "true" && self.app.data.user.get("logged") == false)){
 				  self.exportMapToolView = new ExportMapToolView({app: self.app, el:renderedTemplate.find('.form-group')});
 				  self.exportMapToolView.render();
-			  }  
+			  }
+			  var showImageButton = self.app.data.settings.findWhere({id: 'download-map-selector'});
+              if(showImageButton && showImageButton.get('defaultId') == "true") {
+                  self.$('.gis-tool-img').show();
+              } else {
+                  self.$('.gis-tool-img').hide();
+              }
 		  });
 		});
 	  
@@ -77,6 +84,10 @@ module.exports = BaseControlView.extend({
     this.$('.gis-tool').removeClass('active');
     this.$(toolClass).addClass('active');
     this.$('.gis-tool-share-form').html(subView.render().el);
+  },
+
+  image: function() {
+      // TODO implement me
   }
 
 });

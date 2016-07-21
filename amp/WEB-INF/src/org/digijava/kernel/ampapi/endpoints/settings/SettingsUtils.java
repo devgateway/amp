@@ -434,6 +434,10 @@ public class SettingsUtils {
 				new SettingOptions.Option(
 						FeaturesUtil
 								.getGlobalSettingValue(GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW))));
+		settings.add(new SettingOptions(
+				"download-map-selector",
+				GlobalSettingsConstants.DOWNLOAD_MAP_SELECTOR,
+				new SettingOptions.Option(String.valueOf(FeaturesUtil.isVisibleFeature(GlobalSettingsConstants.DOWNLOAD_MAP_SELECTOR)))));
 		
 		// Workspace Settings
 		if (MenuUtils.getCurrentView() == AmpView.TEAM) {

@@ -1106,11 +1106,12 @@ public class ActivityImporter {
 		for (AmpFunding f : newActivity.getFunding()) {
 			boolean found = false;
 			for (AmpOrgRole role : newActivity.getOrgrole()) {
-				if (role.getRole().getRoleCode().equals(f.getSourceRole()) 
-						&& role.getOrganisation().getAmpOrgId().equals(f.getAmpDonorOrgId())) {
-					found = true;
-					break;
-				}
+				if (f.getSourceRole() != null && f.getAmpDonorOrgId() != null)
+					if (role.getRole().getRoleCode().equals(f.getSourceRole().getRoleCode()) 
+							&& role.getOrganisation().getAmpOrgId().equals(f.getAmpDonorOrgId().getAmpOrgId())) {
+						found = true;
+						break;
+					}
 			}
 			
 			if (!found) {

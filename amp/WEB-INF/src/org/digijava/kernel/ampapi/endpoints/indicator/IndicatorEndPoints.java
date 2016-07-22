@@ -2,11 +2,13 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import com.sun.jersey.multipart.FormDataParam;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import javax.ws.rs.Consumes;
@@ -22,6 +24,7 @@ import javax.ws.rs.core.StreamingOutput;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Path("indicator")
 public class IndicatorEndPoints {
@@ -298,6 +301,28 @@ public class IndicatorEndPoints {
         }
 
         return accessTypeList;
+    }
+    
+    /**
+     * 
+     * Provide Indicator Layer Types:
+     * <pre>
+     * @return 
+     * [
+     *  { 
+     *    "id" : 123,
+     *    "name" : “Ration (% of Total Population)” // translated
+     *  }, 
+     *  ...
+     * ]
+     * </pre>
+     * 
+     */
+    @GET
+    @Path("/indicator-types")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public List<JsonBean> getIndicatorLayerTypes() {
+        return CategoryValueService.getCategoryValues(CategoryConstants.INDICATOR_LAYER_TYPE_KEY);
     }
 
 }

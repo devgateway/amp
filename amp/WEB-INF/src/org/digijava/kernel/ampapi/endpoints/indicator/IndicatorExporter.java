@@ -21,6 +21,7 @@ import org.digijava.module.aim.form.DynLocationManagerForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,6 +45,7 @@ import java.util.Set;
 public class IndicatorExporter {
 
 	protected static final Logger logger = Logger.getLogger(IndicatorExporter.class);
+    private int cellIndex;
 
     public static StreamingOutput exportIndicatorById(long admLevelId, long indicatorId) {
         HSSFWorkbook wb = new HSSFWorkbook();
@@ -152,10 +155,15 @@ public class IndicatorExporter {
     }
 
     public static void populateIndicatorLayerTableValues(HSSFSheet sheet,int rowIndex, AmpCategoryValue categoryValue, AmpIndicatorLayer indicatorLayer) {
-        Set<AmpCategoryValueLocations> locations = DynLocationManagerUtil
-                .getLocationsByLayer(categoryValue);
+        Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
+        if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(categoryValue)) {
+            locations.add(DynLocationManagerUtil.getDefaultCountry());
+        } else {
+            locations = DynLocationManagerUtil.getLocationsByLayer(categoryValue);
+        }
+
         for (AmpCategoryValueLocations location : locations) {
-            int cellIndex = 0;
+            int cellIndex =0;
             HSSFRow row = sheet.createRow(rowIndex++);
             HSSFCell cell = row.createCell(cellIndex++);
             cell.setCellValue(location.getName());

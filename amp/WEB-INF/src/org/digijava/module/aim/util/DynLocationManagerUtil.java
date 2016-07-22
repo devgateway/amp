@@ -1235,6 +1235,19 @@ public class DynLocationManagerUtil {
 
     }
 
+    public static AmpIndicatorLayer getIndicatorLayerByName (String name) {
+        Session dbSession = PersistenceManager.getSession();
+        String queryString = "select ind from "
+                + AmpIndicatorLayer.class.getName() + " ind where name=:name";
+        Query qry = dbSession.createQuery(queryString);
+        qry.setString("name", name);
+        if (qry.list().size()==1)
+            return (AmpIndicatorLayer) qry.list().get(0);
+        else
+            return null;
+
+    }
+
  public static List <AmpLocationIndicatorValue> getLocationIndicatorValueByLocation (AmpCategoryValueLocations location) {
 	 Session dbSession = PersistenceManager.getSession();
 		String queryString = "select value from "
@@ -1321,9 +1334,13 @@ public class DynLocationManagerUtil {
             List<AmpCategoryValue> implLocs = new ArrayList<AmpCategoryValue>(
                     CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
 
+            boolean isCountryLevel = false;
             for (AmpCategoryValue admLevelValue:implLocs) {
                 if (admLevel.equalsIgnoreCase(admLevelValue.getValue()) && admLevelValue.isVisible()) {
                     selectedAdmLevel = admLevelValue;
+                    if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(admLevelValue)) {
+                        isCountryLevel = true;
+                    }
                     break;
                 }
             }
@@ -1364,19 +1381,21 @@ public class DynLocationManagerUtil {
                     AmpCategoryValueLocations locationObject = null;
                     String geoCodeId = null;
 
-                    Cell geoCodeIdCell = hssfRow.getCell(1);
-                    if (geoCodeIdCell != null) {
-                        geoCodeId = getValue(geoCodeIdCell);
-                        //some versions of excel converts to numeric and adds a .0 at the end
-                        if (StringUtils.isNotEmpty(geoCodeId) && !".0".equals(geoCodeId)) {
-                            geoCodeId = geoCodeId.replace(".0", "");
-                            locationObject = DynLocationManagerUtil.getLocationByGeoCode(geoCodeId, selectedAdmLevel);
-                            if(locationObject == null) {
-                                geoIdsWithProblems.add(geoCodeId);
+                    if (!isCountryLevel) {
+                        Cell geoCodeIdCell = hssfRow.getCell(1);
+                        if (geoCodeIdCell != null) {
+                            geoCodeId = getValue(geoCodeIdCell);
+                            //some versions of excel converts to numeric and adds a .0 at the end
+                            if (StringUtils.isNotEmpty(geoCodeId) && !".0".equals(geoCodeId)) {
+                                geoCodeId = geoCodeId.replace(".0", "");
+                                locationObject = DynLocationManagerUtil.getLocationByGeoCode(geoCodeId, selectedAdmLevel);
+                                if(locationObject == null) {
+                                    geoIdsWithProblems.add(geoCodeId);
+                                    continue;
+                                }
+                            } else {
                                 continue;
                             }
-                        } else {
-                            continue;
                         }
                     }
 
@@ -1384,7 +1403,12 @@ public class DynLocationManagerUtil {
                     for (AmpIndicatorLayer indicator : orderedIndicators) {
                         Cell cell = hssfRow.getCell(index++);
                         String value = getValue(cell);
+
+                        if (isCountryLevel){
+                            locationObject = getDefaultCountry();
+                        }
                         AmpLocationIndicatorValue locationIndicatorValue = DynLocationManagerUtil.getLocationIndicatorValue (indicator.getId(), locationObject.getId());
+
                         if (locationIndicatorValue!=null && option.equals(Option.NEW)) {
                             continue;
                         }

@@ -71,6 +71,7 @@ module.exports = Backbone.Collection
         layer.type = 'joinBoundaries';
         layer.adminLevel = self._magicConversion(layer.admLevelId);
         layer.tooltip = self._createTooltip(layer);
+        
         return true;
       }
 
@@ -81,22 +82,20 @@ module.exports = Backbone.Collection
   },
   getMultilangString: function(layer,field,language){
 	  var result = '';
-	  if(layer[field] === Object(layer[field]))
-	  {
+	  if(layer[field] === Object(layer[field])){
 		  result = layer[field][language];
 		  if(_.isUndefined(result) || _.isNull(result)){
 			  _.each(_.keys(layer[field]),function(lang){
 				  if(layer[field][lang]){
-					  result = layer[field][lang] || '';  
-				  }
-				  
+					  result = layer[field][lang];  
+				  }				  
 			  });
 			   
 		  }    		  
 	  }else{
-		  result = layer[field] || '';
+		  result = layer[field];
 	  }
-	  return result;
+	  return (!_.isUndefined(result) && !_.isNull(result)) ? result : '';	
   },
   getSelected: function() {
     return this.chain()

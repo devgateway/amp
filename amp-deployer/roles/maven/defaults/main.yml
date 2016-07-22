@@ -1,0 +1,19 @@
+---
+
+# Apache Maven version.
+maven__version: 3.2.5
+
+# Apache Maven tgz sha256sum.
+maven__download_checksum: 8c190264bdf591ff9f1268dc0ad940a2726f9e958e367716a09b8aaa7e74a755
+
+# Default mirror might be slow.
+# @see: https://maven.apache.org/download.cgi
+# @see: https://www.apache.org/mirrors/
+maven__mirror: "http://archive.apache.org/dist/"
+# maven__mirror: "http://www-eu.apache.org/dist/"
+# maven__mirror: "http://www-us.apache.org/dist/"
+
+
+#### Internal variables:
+_maven__package: "apache-maven-{{maven__version}}"
+_maven__download_url: "{{maven__mirror}}maven/maven-3/{{maven__version}}/binaries/{{_maven__package}}-bin.tar.gz"

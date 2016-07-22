@@ -382,8 +382,8 @@ public class GisEndPoints {
             json.set(IndicatorEPConstants.ID, indicator.getId());
             json.set(IndicatorEPConstants.NAME, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
             json.set(IndicatorEPConstants.DESCRIPTION, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
+            json.set(IndicatorEPConstants.UNIT, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
 			json.set(IndicatorEPConstants.ID, indicator.getId());
-			json.set(IndicatorEPConstants.UNIT, indicator.getUnit());
 			if (includeAdmLevel) {
 				json.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getLabel());
 			}

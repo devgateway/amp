@@ -30,8 +30,14 @@
 
   {% endfor %}
 
-  ## Vhost docroot
-  DocumentRoot "{{ item.docroot }}"
+  ## Rewrite rules
+  RewriteEngine On
+
+  # Redirect domain root to the portal homepage.
+  RewriteRule ^/$ /portal/ [R]
+
+  # Expose the docroot on /portal.
+  Alias /portal "{{item.docroot}}"
   <Directory "{{ item.docroot }}">
     Options Indexes FollowSymLinks MultiViews
     AllowOverride all
@@ -49,9 +55,6 @@
   ## Logging
   CustomLog "/var/log/httpd/{{ item.domain }}--access.log" combined
   ErrorLog "/var/log/httpd/{{ item.domain }}--error.log"
-
-  ## Rewrite rules
-  RewriteEngine On
 
   {% if item.php_devel | default(False) -%}
   ## Override PHP Settings.

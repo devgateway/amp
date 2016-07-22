@@ -1,9 +1,9 @@
 package org.digijava.module.aim.dbentity;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -34,26 +34,21 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 		return id;
 	}
 
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
 
-
 	public String getDescription() {
 		return description;
 	}
-
 
 	public void setDescription(String description) {
 		this.description = description;
@@ -62,7 +57,6 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 	public Long getNumberOfClasses() {
 		return numberOfClasses;
 	}
-
 
 	public void setNumberOfClasses(Long numberOfClasses) {
 		this.numberOfClasses = numberOfClasses;
@@ -93,16 +87,13 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 		return admLevel;
 	}
 
-
 	public void setAdmLevel(AmpCategoryValue admLevel) {
 		this.admLevel = admLevel;
 	}
 
-
 	public Set<AmpIndicatorColor> getColorRamp() {
 		return colorRamp;
 	}
-
 
 	public void setColorRamp(Set<AmpIndicatorColor> colorRamp) {
         if (this.colorRamp == null) {
@@ -113,7 +104,6 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
         }
 	}
 
-
 	public Set<AmpLocationIndicatorValue> getIndicatorValues() {
 		return indicatorValues;
 	}
@@ -123,11 +113,9 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 		this.indicatorValues = indicatorValues;
 	}
 
-
 	public String getUnit() {
 		return unit;
 	}
-
 
 	public void setUnit(String unit) {
 		this.unit = unit;

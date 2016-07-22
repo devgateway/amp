@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-23552</jira>
+    <keyword>delete indicators layers</keyword>
+    <author>apicca</author>
+    <description>delete indicators contraint</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                ALTER TABLE amp_location_indicator_value DROP CONSTRAINT fk_9uwbpid6x18parmks7bd7m5l3;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

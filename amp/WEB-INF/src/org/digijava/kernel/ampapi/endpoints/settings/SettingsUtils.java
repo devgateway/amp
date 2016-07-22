@@ -32,6 +32,7 @@ import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
@@ -66,11 +67,11 @@ public class SettingsUtils {
 		//build currency options
 		List<SettingOptions.Option> options = new ArrayList<SettingOptions.Option>();
 		for (AmpCurrency ampCurrency : CurrencyUtil.getActiveAmpCurrencyByName(true)) {
-			String ccValue = ampCurrency.isVirtual() ? 
+			String ccValue = ampCurrency.isVirtual() ?
 					ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(ampCurrency.getCurrencyCode()) :
-						ampCurrency.getCurrencyCode();
+                    ampCurrency.getCurrencyCode();
 			SettingOptions.Option currencyOption = new SettingOptions.Option(
-					ampCurrency.getCurrencyCode(), ampCurrency.getCurrencyName(), ccValue);
+                    ampCurrency.getCurrencyCode(), ampCurrency.getCurrencyName(), ccValue);
 			options.add(currencyOption);
 		}
 		//identifies the base currency 
@@ -422,7 +423,9 @@ public class SettingsUtils {
 
 		settings.add(new SettingOptions("language", "language", new SettingOptions.Option(TLSUtils
 				.getEffectiveLangCode())));
-		
+
+        settings.add(new SettingOptions("default-language", "default-language", new SettingOptions.Option(TLSUtils.getSite().getDefaultLanguage().getCode())));
+
 		settings.add(new SettingOptions(
 				"default-date-format",
 				GlobalSettingsConstants.DEFAULT_DATE_FORMAT,

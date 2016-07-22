@@ -73,6 +73,20 @@ public class IndicatorService {
         return indicatorJson;
     }
 
+    public static JsonBean getIndicatorByName(String name) {
+
+        AmpIndicatorLayer indicatorLayer = DynLocationManagerUtil.getIndicatorLayerByName(name);
+        JsonBean result = new JsonBean();
+        if (indicatorLayer!=null) {
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
+            return ApiError.toError(IndicatorErrors.EXISTING_NAME);
+        } else {
+            result.set(IndicatorEPConstants.RESULT, IndicatorEPConstants.AVAIBLE);
+            return result;
+        }
+
+    }
+
     public static JsonBean deleteIndicatorById(long id) {
         JsonBean result = new JsonBean();
 

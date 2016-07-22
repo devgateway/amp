@@ -11,6 +11,7 @@ public class IndicatorEPConstants {
     public static final String IMPORTED = "IMPORTED";
     public static final String SAVED = "SAVED";
     public static final String DELETED = "DELETED";
+    public static final String AVAIBLE = "AVAIBLE";
 
     public static final String DEFAULT_INDICATOR_ORDER_FIELD = "createdOn";
 

@@ -104,6 +104,13 @@ public class IndicatorEndPoints {
         return IndicatorService.getIndicatorById(indicatorId);
     }
 
+    @GET
+    @Path("/indicator-layer/check-name/{name}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getIndicatorByName", ui = false)
+    public JsonBean getIndicatorByName(@PathParam("name") String name) {
+        return IndicatorService.getIndicatorByName(name);
+    }
     /**
      * Delete indicator layer by Id
      * @param indicatorId indicator ID to query for indicator layer

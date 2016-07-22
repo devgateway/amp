@@ -16,3 +16,4 @@
     - httpd_php56
     - postgresql
     - memcached
+    - amp

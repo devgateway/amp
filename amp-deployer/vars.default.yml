@@ -14,7 +14,7 @@
 #  - php_devel: ad some PHP devel specific settings to the vhost.
 #  - php_xdebug: load the PHP xdebug extension.
 vhosts:
-  - domain: amp.local
+  - domain: amp212.local
     template: default_with_proxy
     docroot: /var/www/amp212-cms-local
     proxy_directives_sets:

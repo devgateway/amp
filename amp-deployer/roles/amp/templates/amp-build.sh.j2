@@ -1,0 +1,13 @@
+#!/bin/sh
+## AMP Build script.
+## {{ ansible_managed }}
+## TODO: Use variables.
+
+mvn clean \
+    generate-resources \
+    process-resources \
+    -DserverName=local \
+    -Djdbc.db=amp_local \
+    -Djdbc.user=amp_user \
+    -Djdbc.password=demo1 \
+    -Djdbc.port=5432

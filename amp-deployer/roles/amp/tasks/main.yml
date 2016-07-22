@@ -1,0 +1,31 @@
+---
+
+# @TODO: Improve!
+
+# - name: Display all variables/facts known for a host
+#   debug: var=hostvars[inventory_hostname] verbosity=4
+
+# - debug: var=amp__port
+
+- name: Insert Firewall Rule
+  firewalld: port={{amp__port}}/tcp permanent=true state=enabled immediate=yes
+
+- name: Create build script
+  template:
+    src: amp-build.sh.j2
+    dest: /usr/local/bin/amp-build
+
+- name: Make build script executable
+  file:
+    path: /usr/local/bin/amp-build
+    state: file
+    mode: "u=rwx,g=rwx,o=rx"
+
+- name: Create simbolic link for AMP
+  file:
+    src: "/opt/devgateway/amp212-local"
+    dest: "/opt/apache/apache-tomcat/webapps/ROOT"
+    state: link
+
+# - name: restart tomcat7
+#   command: service tomcat7 restart

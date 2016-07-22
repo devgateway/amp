@@ -3898,14 +3898,15 @@ module.exports = BackboneDash.View.extend({
   },
 
   showChart: function() {
+	  this.showNegativeAlert();
+	  
     // TODO: why are we triggering twice on load???
     if (!this.model.hasData()) {
       this.message.html('No Data Available').attr('data-i18n','amp.dashboard:chart-no-data-available');
       app.translator.translateDOM($('.chart-container'));
       this.resetNumbers();
       return;
-    }
-    this.showNegativeAlert();
+    }    
     var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions(), this.model);
     this.chartContainer.html(chart.el);
 

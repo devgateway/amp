@@ -17,7 +17,8 @@ module.exports = ChartModel.extend({
 	    chartType: 'fragmentation',
 	    swapAxes: false,
 	    chartDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet a arcu vel porttitor. Curabitur dolor ante, faucibus eu congue et, egestas ut tellus.',
-	    showResetButton: false
+	    showResetButton: false,
+	    showFullLegends: false
 	},
 
 	_prepareTranslations: function() {

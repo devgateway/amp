@@ -1054,6 +1054,7 @@ nv.models.heatMapChart = function() {
     var noData = "No Data Available.";
     var duration = 250;
     var dispatch = d3.dispatch('tooltipShow', 'tooltipHide', 'stateChange', 'changeState','renderEnd');
+    var shortTextLength = 17;
 
     //============================================================
     // Private Variables
@@ -1078,8 +1079,7 @@ nv.models.heatMapChart = function() {
         }
     };
   
-    var shortenText = function(text) {
-    	var length = 17;
+    var shortenText = function(text, length) {
     	if (text.length > length) {
     		text = text.substring(0, length) + '...';
     	}
@@ -1092,6 +1092,7 @@ nv.models.heatMapChart = function() {
 
     function chart(selection) {
     	var _self = this;
+    	this.rendered = false;
     	var _ = require('underscore'); // This doesnt works on top of the file :(((
     	//console.log('heatMapChart.chart');
         renderWatch.reset();
@@ -1101,6 +1102,7 @@ nv.models.heatMapChart = function() {
         	// Get currency for later.
         	var currencySettings = _.find(app.settings.models, function(item) {return item.get('id') === '1'});
         	var selectedCurrency = _.find(currencySettings.get('options'), function(item) {return item.selected === true}).value;
+        	var newShortTextLength = !data[0].values.model.get('showFullLegends') ? shortTextLength : 100;
         	
         	var container = d3.select(this);
             nv.utils.initSVG(container);
@@ -1157,7 +1159,8 @@ nv.models.heatMapChart = function() {
         	
         	var svg = container
         		.append("g")
-        		.attr("transform", "translate(" + innerMargin.left + "," + innerMargin.top + ")");
+        		.attr("transform", "translate(" + innerMargin.left + "," + innerMargin.top + ")")
+        		.attr("class", "heatmap-main-container");
         	
         	// Add SVG filter for cell highlight.
         	svg.append("defs").append("filter").attr("id", "filterSaturate").append("feColorMatrix").attr("in", "SourceGraphic").attr("type", "saturate").attr("values", "5");
@@ -1177,7 +1180,7 @@ nv.models.heatMapChart = function() {
         		.enter()
         		.append("text")
         		.text(function(d) {
-        			return shortenText(d);
+        			return shortenText(d, newShortTextLength);
         		})
         		.attr("x", 0)
         		.attr("y", function(d, i) {
@@ -1231,7 +1234,7 @@ nv.models.heatMapChart = function() {
         			.enter()
         			.append("text")
         			.text(function(d) {
-        				return shortenText(d);
+        				return shortenText(d, newShortTextLength);
         			})
         			.attr("x", function(d, i) {
         				return i * cubeSize;
@@ -1280,6 +1283,13 @@ nv.models.heatMapChart = function() {
         		createLegends(svg, data, cubeSize, categories, legendElementHeight);
         		
         		app.translator.translateDOM(svg[0]);
+        		
+        		// Recalculate margins if we are showing the full legends.
+            	if (data[0].values.model.get('showFullLegends')) {        		
+            		var top = svg.select('.heatmap-xAxis-container').node().getBBox().height;
+            		var left = svg.select('.heatmap-yAxis-container').node().getBBox().width + 25;
+            		svg.attr("transform", "translate(" + left + "," + top + ")");
+            	}
         });
         
         renderWatch.renderEnd('heatmap immediate');
@@ -1457,6 +1467,9 @@ nv.models.heatMapChart = function() {
     chart.dispatch = dispatch;
     chart.heatmap = heatmap;
     chart.options = nv.utils.optionsFunc.bind(chart);
+    chart.shortTextLength = function(_) {
+        return shortTextLength;
+    };
 
     // use Object get/set functionality to map between vars and chart functions
     chart._options = Object.create({}, {    	
@@ -2681,7 +2694,8 @@ module.exports = ChartModel.extend({
 	    chartType: 'fragmentation',
 	    swapAxes: false,
 	    chartDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet a arcu vel porttitor. Curabitur dolor ante, faucibus eu congue et, egestas ut tellus.',
-	    showResetButton: false
+	    showResetButton: false,
+	    showFullLegends: false
 	},
 
 	_prepareTranslations: function() {
@@ -3760,6 +3774,7 @@ module.exports = BackboneDash.View.extend({
     this.rendered = false;
     this._stateWait = new Deferred();
     this.message = null;
+    this.showChartPromise = new Deferred();
 
     if (this.app.savedDashes.length) {
       // a bit sketch....
@@ -3857,6 +3872,7 @@ module.exports = BackboneDash.View.extend({
       return;
     }
 
+    this.showChartPromise = new Deferred(); // We need to reinitialize this promise.
     this.chartContainer.empty();
     this.message.html('<span data-i18n="amp.dashboard:loading">Loading...</span>').fadeIn(100);
 
@@ -3913,6 +3929,7 @@ module.exports = BackboneDash.View.extend({
     } else {
     	this.$('.heatmap-reset-others').hide();
     }
+    this.showChartPromise.resolve();
   },
   
   handleHeatmapClicks: function() {
@@ -4205,8 +4222,10 @@ var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
-var template = _.template("<style>\nrect.bordered {\n\tstroke: #E6E6E6;\n\tstroke-width: 2px;\n}\n\ntext.mono {\n\tfont-size: 9pt;\n\tfont-family: Arial;\n\tfill: #000;\n}\n\ntext.axis-workweek {\n\tfill: #000;\n}\n\ntext.axis-worktime {\n\tfill: #000;\n}\n</style>\n\n<h4 data-i18n=\"amp.dashboard:download-preview\">Preview:</h4>\n\n<!-- This 'modal' div fixes AMP-19525: In FF when the chart is drawn (for less than a second) in 'svg-wrap', sometimes the mouse cursor is over one of the bars and triggers the tooltip,\nthat process is not fully performed thus resulting in incomplete html which is rejected by the browser :(  -->\n<div class=\"modal-preview-area\">\n</div>\n<div class=\"preview-area\">\n\t<div class=\"svg-wrap hidden\">\n  \t</div>\n  \t<div class=\"canvas-wrap hidden\">\n  \t</div>\n  \t<div class=\"table-wrap hidden\">\n  \t</div>\n</div>\n\n<div class=\"text-center\">\n  <a class=\"btn btn-success download-chart disabled\">\n    <span class=\"glyphicon glyphicon-download\"></span>\n    <span data-i18n=\"amp.dashboard:download-rendering\" class=\"word\">Rendering...</span>\n  </a>\n</div>\n");
+var template = _.template("<h4 data-i18n=\"amp.dashboard:download-preview\">Preview:</h4>\n\n<!-- This 'modal' div fixes AMP-19525: In FF when the chart is drawn (for less than a second) in 'svg-wrap', sometimes the mouse cursor is over one of the bars and triggers the tooltip,\nthat process is not fully performed thus resulting in incomplete html which is rejected by the browser :(  -->\n<div class=\"modal-preview-area\">\n</div>\n<div class=\"preview-area\">\n\t<div class=\"svg-wrap hidden\">\n  \t</div>\n  \t<div class=\"canvas-wrap hidden\">\n  \t</div>\n  \t<div class=\"table-wrap hidden\">\n  \t</div>\n</div>\n\n<div class=\"text-center\">\n  <a class=\"btn btn-success download-chart disabled\">\n    <span class=\"glyphicon glyphicon-download\"></span>\n    <span data-i18n=\"amp.dashboard:download-rendering\" class=\"word\">Rendering...</span>\n  </a>\n</div>\n");
 
+var previousXLimit = null;
+var previousYLimit = null;
 
 module.exports = BackboneDash.View.extend({
 
@@ -4219,6 +4238,7 @@ module.exports = BackboneDash.View.extend({
 				"Planned Expenditures": "amp.dashboard:ftype-planned-expenditures"
 			    },
   initialize: function(options) {
+	var self = this;
     this.app = options.app;
     var valuesLength = this.model.get('values') ? this.model.get('values').length : 0;
     var height = util.calculateChartHeight(valuesLength, true);
@@ -4227,10 +4247,22 @@ module.exports = BackboneDash.View.extend({
       width: $('.container').width(),	// sync with css!!!
       trimLabels: false,
       nvControls: false      
-    });    
+    });
+    
+    // Heatmaps export need to show all data at once so we force the x/y limits and re-render the chart.
+    if (this.model.get('chartType') === 'fragmentation') {
+	    previousXLimit = this.model.get('xLimit');
+	    previousYLimit = this.model.get('yLimit');
+	    this.model.set('yLimit', 10000);
+	    this.model.set('xLimit', 10000);
+	    this.model.set('showFullLegends', true);
+	    var chart = _.find(this.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
+	    chart.render();
+    }
   },
 
   render: function() {
+	var self = this;
     this.$el.html(template());
 
     if (this.model.get('view') === 'table') {
@@ -4240,25 +4272,47 @@ module.exports = BackboneDash.View.extend({
     	// In that moment the interval is finished and the chart is rendered.
     	var self = this;
     	var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.
+    	var chart = _.find(self.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
     	var interval = window.setInterval(function() {
-    		if ($('.dash-download-modal').closest('.in').length > 0) {
-    			window.clearInterval(interval);
-    			nv.tooltip.cleanup();
-    			if (rendered === false) {
-    				rendered = true;
-    				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
-    						self.$('.preview-area .canvas-wrap'));
-    			}
-    		}
+    		$.when(chart.showChartPromise.then(function() {
+    			if ($('.dash-download-modal').closest('.in').length > 0) {
+        			window.clearInterval(interval);
+        			nv.tooltip.cleanup();
+        			if (rendered === false) {
+        				rendered = true;
+        				    				
+        			    if (self.model.get('chartType') === 'fragmentation') {
+        			    	// We add an event for heatmaps to re-draw the original chart.
+        			    	$('.dash-download-modal').closest('.in').on('hide.bs.modal', function() {
+        			    		self.model.set('yLimit', previousYLimit);
+        			    	    self.model.set('xLimit', previousXLimit);
+        			    	    self.model.set('showFullLegends', false);
+        			    	    chart.render();
+        			    	});
+        			    }
+        			    
+        				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
+        						self.$('.preview-area .canvas-wrap'), chart);
+        			}
+        		}
+    		}, this));    		
     	}, 100);
     }
     return this;
   },
 
-  renderChart: function(svgContainer, canvasContainer) {
+  renderChart: function(svgContainer, canvasContainer, chart) {
+	var self = this;
     if (_(this.app.browserIssues).findWhere({feature: 'canvas'})) {
       this.app.viewFail(this, 'Chart export requires a modern web browser');
     }
+    
+    if (self.model.get('chartType') === 'fragmentation') {
+    	var svg = $($($(chart)[0].el).find("svg"))[0].getBBox();
+	    this.dashChartOptions.height = svg.height + 100;
+	    this.dashChartOptions.width = svg.width + 80;
+    }
+        
     var view = this.model.get('view'),
         data = this.model.get('processed'),
         canvas = document.createElement('canvas'),
@@ -4278,12 +4332,25 @@ module.exports = BackboneDash.View.extend({
       $('.modal-preview-area').remove();
       this.makeDownloadable(img.src, 'chart', '.png');
     });
-
+    
+    // Scale the modal correctly for heatmaps.
+    if (self.model.get('chartType') === 'fragmentation') {
+    	var modal = $('.dash-download-modal').closest('.in').find('.dash-download-modal');
+    	if ($(svgContainer).width() > $(modal).width()) {
+    		$(modal).find('.preview-area').css('max-width','90%');
+        	$(modal).closest('.in').find('.preview-area').css('overflow','auto');
+    	}
+    	if ($(svgContainer).height() > $(window).height()) {
+    		$(modal).find('.preview-area').css('max-height', ($(window).height() - 270) + 'px');
+        	$(modal).closest('.in').find('.preview-area').css('overflow','auto');
+    	}
+    }
   },
 
   prepareCanvas: function(canvas, h, w) {
 	var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+	var currency = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')});
+    var currencyName = currency !== undefined ? currency.value : '';
     var ctx = canvas.getContext('2d'),
     	moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + currencyName,
         adjType = this.model.get('adjtype');    
@@ -4309,10 +4376,15 @@ module.exports = BackboneDash.View.extend({
     ctx.fillText(this.model.get('title').toUpperCase(), 10, 10 + 22);
     // what money are we talking about?
     ctx.fillStyle = '#333';
-    ctx.textAlign = 'right';
-    ctx.fillText(moneyContext, w - 10, 10 + 22);
-    ctx.textAlign = 'left';  // reset it
-
+    if (self.model.get('chartType') === 'fragmentation') {
+    	ctx.font = 'normal 14px "Open Sans"';
+    	ctx.textAlign = 'left';
+    	ctx.fillText(moneyContext, 10, 50);	    
+    } else {    
+    	ctx.textAlign = 'right';
+	    ctx.fillText(moneyContext, w - 10, 10 + 22);
+	    ctx.textAlign = 'left';  // reset it
+    }    
     // reset font to something normal (nvd3 uses css ugh...)
     ctx.font = 'normal 12px "sans-serif"';
     
@@ -4320,11 +4392,25 @@ module.exports = BackboneDash.View.extend({
   },
 
   chartToCanvas: function(svg, canvas, cb) {
+	var self = this;
+	
+	if (this.model.get('chartType') === 'fragmentation') {
+		var css = "rect.bordered {stroke: #E6E6E6;stroke-width: 2px;} text.mono {font-size: 9pt;font-family: Arial;fill: #000;}";
+	    var s = document.createElement('style');
+	    s.setAttribute('type', 'text/css');
+	    s.innerHTML = "<![CDATA[\n" + css + "\n]]>";
+	    //var defs = document.createElement('defs');
+	    //defs.appendChild(s);
+	    svg.getElementsByTagName("defs")[0].appendChild(s);
+	    //svg.insertBefore(defs, canvas.firstChild);    
+	    //svg.appendChild(defs);
+	}
+	
     var boundCB = _(cb).bind(this);
     window.setTimeout(function() {
       this.app.tryTo(function() {
         canvg(canvas, svg.parentNode.innerHTML, { // note: svg.outerHTML breaks IE
-          offsetY: 42,
+          offsetY: ((self.model.get('chartType') !== 'fragmentation') ? 42 : 65),
           ignoreDimensions: true,
           ignoreClear: true,
           ignoreMouse: true,
@@ -23910,7 +23996,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"C:\\Users\\gerald\\amp\\AMP_2_12_RELEASE\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"C:\\Users\\Gabriel\\workspace-luna2\\amp-2.12-release-3\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -32545,7 +32631,7 @@ function Translator(options) {
         // We need a way to identify controls where the placeholder needs to be translated instead of the text.
         if (key.indexOf('[placeholder]') > -1) {
           $('[data-i18n="' + key + '"]', $newEl).attr('placeholder', value);
-        } else if (key.indexOf('[title]') > -1) {        	
+        } else if (key.indexOf('[title]') > -1) {
           $('[data-i18n="' + key + '"]', $newEl).attr('title', value);
         } else {
           $('[data-i18n="' + key + '"]', $newEl).text(value);

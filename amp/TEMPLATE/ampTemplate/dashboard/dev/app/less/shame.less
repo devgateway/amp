@@ -248,6 +248,7 @@ h3 {
 .dash-download-modal {
 	/*width: @preview-width;*/
 	width: auto;
+	max-width: 90%;
 }
 .modal-preview-area {
 	visibility: visible;
@@ -259,7 +260,7 @@ h3 {
     height:100%;
     text-align:center;
     z-index: 9999;
-    opacity:0.5;
+    opacity:0.75;
     background-color:white;
 }
 .preview-area .svg-wrap {
@@ -389,4 +390,13 @@ text.mono {
 	cursor: pointer;
 	fill: red !important;
 	font-weight: bold
+}
+
+.modal-backdrop.in {
+  filter: alpha(opacity=80);
+  opacity: .80;
+}
+
+.text-center {
+	margin-top: 10px;
 }

@@ -11,6 +11,8 @@ var util = require('../../ugly/util');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/download.html', 'UTF-8'));
 
+var previousXLimit = null;
+var previousYLimit = null;
 
 module.exports = BackboneDash.View.extend({
 
@@ -23,6 +25,7 @@ module.exports = BackboneDash.View.extend({
 				"Planned Expenditures": "amp.dashboard:ftype-planned-expenditures"
 			    },
   initialize: function(options) {
+	var self = this;
     this.app = options.app;
     var valuesLength = this.model.get('values') ? this.model.get('values').length : 0;
     var height = util.calculateChartHeight(valuesLength, true);
@@ -31,10 +34,22 @@ module.exports = BackboneDash.View.extend({
       width: $('.container').width(),	// sync with css!!!
       trimLabels: false,
       nvControls: false      
-    });    
+    });
+    
+    // Heatmaps export need to show all data at once so we force the x/y limits and re-render the chart.
+    if (this.model.get('chartType') === 'fragmentation') {
+	    previousXLimit = this.model.get('xLimit');
+	    previousYLimit = this.model.get('yLimit');
+	    this.model.set('yLimit', 10000);
+	    this.model.set('xLimit', 10000);
+	    this.model.set('showFullLegends', true);
+	    var chart = _.find(this.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
+	    chart.render();
+    }
   },
 
   render: function() {
+	var self = this;
     this.$el.html(template());
 
     if (this.model.get('view') === 'table') {
@@ -44,25 +59,47 @@ module.exports = BackboneDash.View.extend({
     	// In that moment the interval is finished and the chart is rendered.
     	var self = this;
     	var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.
+    	var chart = _.find(self.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
     	var interval = window.setInterval(function() {
-    		if ($('.dash-download-modal').closest('.in').length > 0) {
-    			window.clearInterval(interval);
-    			nv.tooltip.cleanup();
-    			if (rendered === false) {
-    				rendered = true;
-    				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
-    						self.$('.preview-area .canvas-wrap'));
-    			}
-    		}
+    		$.when(chart.showChartPromise.then(function() {
+    			if ($('.dash-download-modal').closest('.in').length > 0) {
+        			window.clearInterval(interval);
+        			nv.tooltip.cleanup();
+        			if (rendered === false) {
+        				rendered = true;
+        				    				
+        			    if (self.model.get('chartType') === 'fragmentation') {
+        			    	// We add an event for heatmaps to re-draw the original chart.
+        			    	$('.dash-download-modal').closest('.in').on('hide.bs.modal', function() {
+        			    		self.model.set('yLimit', previousYLimit);
+        			    	    self.model.set('xLimit', previousXLimit);
+        			    	    self.model.set('showFullLegends', false);
+        			    	    chart.render();
+        			    	});
+        			    }
+        			    
+        				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
+        						self.$('.preview-area .canvas-wrap'), chart);
+        			}
+        		}
+    		}, this));    		
     	}, 100);
     }
     return this;
   },
 
-  renderChart: function(svgContainer, canvasContainer) {
+  renderChart: function(svgContainer, canvasContainer, chart) {
+	var self = this;
     if (_(this.app.browserIssues).findWhere({feature: 'canvas'})) {
       this.app.viewFail(this, 'Chart export requires a modern web browser');
     }
+    
+    if (self.model.get('chartType') === 'fragmentation') {
+    	var svg = $($($(chart)[0].el).find("svg"))[0].getBBox();
+	    this.dashChartOptions.height = svg.height + 100;
+	    this.dashChartOptions.width = svg.width + 80;
+    }
+        
     var view = this.model.get('view'),
         data = this.model.get('processed'),
         canvas = document.createElement('canvas'),
@@ -82,12 +119,25 @@ module.exports = BackboneDash.View.extend({
       $('.modal-preview-area').remove();
       this.makeDownloadable(img.src, 'chart', '.png');
     });
-
+    
+    // Scale the modal correctly for heatmaps.
+    if (self.model.get('chartType') === 'fragmentation') {
+    	var modal = $('.dash-download-modal').closest('.in').find('.dash-download-modal');
+    	if ($(svgContainer).width() > $(modal).width()) {
+    		$(modal).find('.preview-area').css('max-width','90%');
+        	$(modal).closest('.in').find('.preview-area').css('overflow','auto');
+    	}
+    	if ($(svgContainer).height() > $(window).height()) {
+    		$(modal).find('.preview-area').css('max-height', ($(window).height() - 270) + 'px');
+        	$(modal).closest('.in').find('.preview-area').css('overflow','auto');
+    	}
+    }
   },
 
   prepareCanvas: function(canvas, h, w) {
 	var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+	var currency = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')});
+    var currencyName = currency !== undefined ? currency.value : '';
     var ctx = canvas.getContext('2d'),
     	moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + currencyName,
         adjType = this.model.get('adjtype');    
@@ -113,10 +163,15 @@ module.exports = BackboneDash.View.extend({
     ctx.fillText(this.model.get('title').toUpperCase(), 10, 10 + 22);
     // what money are we talking about?
     ctx.fillStyle = '#333';
-    ctx.textAlign = 'right';
-    ctx.fillText(moneyContext, w - 10, 10 + 22);
-    ctx.textAlign = 'left';  // reset it
-
+    if (self.model.get('chartType') === 'fragmentation') {
+    	ctx.font = 'normal 14px "Open Sans"';
+    	ctx.textAlign = 'left';
+    	ctx.fillText(moneyContext, 10, 50);	    
+    } else {    
+    	ctx.textAlign = 'right';
+	    ctx.fillText(moneyContext, w - 10, 10 + 22);
+	    ctx.textAlign = 'left';  // reset it
+    }    
     // reset font to something normal (nvd3 uses css ugh...)
     ctx.font = 'normal 12px "sans-serif"';
     
@@ -124,11 +179,25 @@ module.exports = BackboneDash.View.extend({
   },
 
   chartToCanvas: function(svg, canvas, cb) {
+	var self = this;
+	
+	if (this.model.get('chartType') === 'fragmentation') {
+		var css = "rect.bordered {stroke: #E6E6E6;stroke-width: 2px;} text.mono {font-size: 9pt;font-family: Arial;fill: #000;}";
+	    var s = document.createElement('style');
+	    s.setAttribute('type', 'text/css');
+	    s.innerHTML = "<![CDATA[\n" + css + "\n]]>";
+	    //var defs = document.createElement('defs');
+	    //defs.appendChild(s);
+	    svg.getElementsByTagName("defs")[0].appendChild(s);
+	    //svg.insertBefore(defs, canvas.firstChild);    
+	    //svg.appendChild(defs);
+	}
+	
     var boundCB = _(cb).bind(this);
     window.setTimeout(function() {
       this.app.tryTo(function() {
         canvg(canvas, svg.parentNode.innerHTML, { // note: svg.outerHTML breaks IE
-          offsetY: 42,
+          offsetY: ((self.model.get('chartType') !== 'fragmentation') ? 42 : 65),
           ignoreDimensions: true,
           ignoreClear: true,
           ignoreMouse: true,

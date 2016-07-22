@@ -45,6 +45,7 @@ module.exports = BackboneDash.View.extend({
     this.rendered = false;
     this._stateWait = new Deferred();
     this.message = null;
+    this.showChartPromise = new Deferred();
 
     if (this.app.savedDashes.length) {
       // a bit sketch....
@@ -142,6 +143,7 @@ module.exports = BackboneDash.View.extend({
       return;
     }
 
+    this.showChartPromise = new Deferred(); // We need to reinitialize this promise.
     this.chartContainer.empty();
     this.message.html('<span data-i18n="amp.dashboard:loading">Loading...</span>').fadeIn(100);
 
@@ -198,6 +200,7 @@ module.exports = BackboneDash.View.extend({
     } else {
     	this.$('.heatmap-reset-others').hide();
     }
+    this.showChartPromise.resolve();
   },
   
   handleHeatmapClicks: function() {

@@ -85,6 +85,7 @@ nv.models.heatMapChart = function() {
     var noData = "No Data Available.";
     var duration = 250;
     var dispatch = d3.dispatch('tooltipShow', 'tooltipHide', 'stateChange', 'changeState','renderEnd');
+    var shortTextLength = 17;
 
     //============================================================
     // Private Variables
@@ -109,8 +110,7 @@ nv.models.heatMapChart = function() {
         }
     };
   
-    var shortenText = function(text) {
-    	var length = 17;
+    var shortenText = function(text, length) {
     	if (text.length > length) {
     		text = text.substring(0, length) + '...';
     	}
@@ -123,6 +123,7 @@ nv.models.heatMapChart = function() {
 
     function chart(selection) {
     	var _self = this;
+    	this.rendered = false;
     	var _ = require('underscore'); // This doesnt works on top of the file :(((
     	//console.log('heatMapChart.chart');
         renderWatch.reset();
@@ -132,6 +133,7 @@ nv.models.heatMapChart = function() {
         	// Get currency for later.
         	var currencySettings = _.find(app.settings.models, function(item) {return item.get('id') === '1'});
         	var selectedCurrency = _.find(currencySettings.get('options'), function(item) {return item.selected === true}).value;
+        	var newShortTextLength = !data[0].values.model.get('showFullLegends') ? shortTextLength : 100;
         	
         	var container = d3.select(this);
             nv.utils.initSVG(container);
@@ -188,7 +190,8 @@ nv.models.heatMapChart = function() {
         	
         	var svg = container
         		.append("g")
-        		.attr("transform", "translate(" + innerMargin.left + "," + innerMargin.top + ")");
+        		.attr("transform", "translate(" + innerMargin.left + "," + innerMargin.top + ")")
+        		.attr("class", "heatmap-main-container");
         	
         	// Add SVG filter for cell highlight.
         	svg.append("defs").append("filter").attr("id", "filterSaturate").append("feColorMatrix").attr("in", "SourceGraphic").attr("type", "saturate").attr("values", "5");
@@ -208,7 +211,7 @@ nv.models.heatMapChart = function() {
         		.enter()
         		.append("text")
         		.text(function(d) {
-        			return shortenText(d);
+        			return shortenText(d, newShortTextLength);
         		})
         		.attr("x", 0)
         		.attr("y", function(d, i) {
@@ -262,7 +265,7 @@ nv.models.heatMapChart = function() {
         			.enter()
         			.append("text")
         			.text(function(d) {
-        				return shortenText(d);
+        				return shortenText(d, newShortTextLength);
         			})
         			.attr("x", function(d, i) {
         				return i * cubeSize;
@@ -311,6 +314,13 @@ nv.models.heatMapChart = function() {
         		createLegends(svg, data, cubeSize, categories, legendElementHeight);
         		
         		app.translator.translateDOM(svg[0]);
+        		
+        		// Recalculate margins if we are showing the full legends.
+            	if (data[0].values.model.get('showFullLegends')) {        		
+            		var top = svg.select('.heatmap-xAxis-container').node().getBBox().height;
+            		var left = svg.select('.heatmap-yAxis-container').node().getBBox().width + 25;
+            		svg.attr("transform", "translate(" + left + "," + top + ")");
+            	}
         });
         
         renderWatch.renderEnd('heatmap immediate');
@@ -488,6 +498,9 @@ nv.models.heatMapChart = function() {
     chart.dispatch = dispatch;
     chart.heatmap = heatmap;
     chart.options = nv.utils.optionsFunc.bind(chart);
+    chart.shortTextLength = function(_) {
+        return shortTextLength;
+    };
 
     // use Object get/set functionality to map between vars and chart functions
     chart._options = Object.create({}, {    	

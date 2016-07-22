@@ -66,8 +66,8 @@ public class IndicatorUtils {
         indicatorJson.set(IndicatorEPConstants.ID, indicator.getId());
         indicatorJson.set(IndicatorEPConstants.NAME, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
         indicatorJson.set(IndicatorEPConstants.DESCRIPTION, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
+        indicatorJson.set(IndicatorEPConstants.UNIT, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
         indicatorJson.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
-        indicatorJson.set(IndicatorEPConstants.UNIT, indicator.getUnit());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
         indicatorJson.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
 
@@ -116,8 +116,8 @@ public class IndicatorUtils {
 
         indicatorLayer.setName(indicatorTranslation.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.NAME), indicatorLayer, indicator.get(IndicatorEPConstants.NAME)));
         indicatorLayer.setDescription(indicatorTranslation.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.DESCRIPTION), indicatorLayer, indicator.get(IndicatorEPConstants.DESCRIPTION)));
+        indicatorLayer.setUnit(indicatorTranslation.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.UNIT), indicatorLayer, indicator.get(IndicatorEPConstants.UNIT)));
         indicatorLayer.setNumberOfClasses(Long.valueOf(indicator.getString(IndicatorEPConstants.NUMBER_OF_CLASSES)));
-        indicatorLayer.setUnit(indicator.getString(IndicatorEPConstants.UNIT));
         if (indicatorLayer.getId() == null) {
             indicatorLayer.setCreatedOn(new Date());
             indicatorLayer.setCreatedBy(TeamUtil.getCurrentAmpTeamMember());

@@ -24,7 +24,8 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 	private AmpCategoryValue admLevel;
 	private Set <AmpLocationIndicatorValue> indicatorValues;
     private Set <AmpIndicatorWorkspace> sharedWorkspaces;
-	private String unit;
+    @TranslatableField
+    private String unit;
 	private IndicatorAccessType accessType;
 	private Date createdOn;
 	private Date updatedOn;

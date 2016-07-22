@@ -131,6 +131,7 @@ public class IndicatorService {
 
             indicatorTranslation.serialize(indLayer, IndicatorEPConstants.NAME, indicatorTranslation.getTranslations());
             indicatorTranslation.serialize(indLayer, IndicatorEPConstants.DESCRIPTION, indicatorTranslation.getTranslations());
+            indicatorTranslation.serialize(indLayer, IndicatorEPConstants.UNIT, indicatorTranslation.getTranslations());
 
             JsonBean indicatorJson = IndicatorUtils.buildIndicatorLayerJson(indLayer);
 

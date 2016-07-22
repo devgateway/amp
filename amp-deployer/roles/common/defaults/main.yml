@@ -22,5 +22,5 @@ common__extra_open_tcp_ports:
 #     password: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 
 # Set the backups directory owner and group.
-common__backups_user: deployer
-common__backups_group: developers
+common__deployer_user: deployer
+common__deployer_group: developers

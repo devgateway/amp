@@ -34,8 +34,8 @@ vagrant_box:
   download_checksum_type: md5
 
 # Ansible variables to override.
-common__backups_user: vagrant
-common__backups_group: vagrant
+common__deployer_user: vagrant
+common__deployer_group: vagrant
 httpd__User: vagrant
 httpd__Group: vagrant
 httpd__User_vhosts: vagrant

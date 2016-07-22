@@ -19,13 +19,13 @@
   template: src=profile.custom.sh.j2 dest=/etc/profile.d/custom.sh
 
 - name: Create Directory for backups
-  file: path=/var/backups owner={{ common__backups_user }} group={{ common__backups_group }} state=directory mode=0775
+  file: path=/var/backups owner={{ common__deployer_user }} group={{ common__deployer_group }} state=directory mode=0775
 
 - name: Create Directory for daily backups
-  file: path=/var/backups/daily owner={{ common__backups_user }} group={{ common__backups_group }} state=directory mode=0775
+  file: path=/var/backups/daily owner={{ common__deployer_user }} group={{ common__deployer_group }} state=directory mode=0775
 
 - name: Create Directory for backup archives
-  file: path=/var/backups/archive owner={{ common__backups_user }} group={{ common__backups_group }} state=directory mode=0775
+  file: path=/var/backups/archive owner={{ common__deployer_user }} group={{ common__deployer_group }} state=directory mode=0775
 
 - name: Install Packages
   yum: name={{ item }} state=installed

@@ -1,0 +1,35 @@
+---
+
+tomcat__catalina_opts:
+  - "-server"
+  - "-Xmx4g"
+  - "-Djava.awt.headless=true"
+  - "-Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false"
+  - "-Dorg.apache.jasper.compiler.Parser.STRICT_WHITESPACE=false"
+  - "-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false"
+  - "-Djava.net.preferIPv4Stack=true"
+  #@see: http://docs.oracle.com/javase/8/docs/api/java/util/Locale.html
+  #- "-Duser.country=FR"
+  #- "-Duser.language=fr"
+
+# $JAVA_HOME for tomcat.
+tomcat__java_home: /usr/lib/jvm/java
+
+# Apache Tomcat version.
+tomcat__version: 7.0.70
+
+# Apache Tomcat tgz sha256sum.
+tomcat__download_checksum: 13f33616a3352e4fce548e042adfdd824353d0b48a42e1606daace7916868c74
+
+# Default mirror might be slow.
+# @see: https://tomcat.apache.org/download-70.cgi
+# @see: https://www.apache.org/mirrors/
+tomcat__mirror: "http://archive.apache.org/dist/"
+# tomcat__mirror: "http://www-eu.apache.org/dist/"
+# tomcat__mirror: "http://www-us.apache.org/dist/"
+tomcat__mirror: "http://mirrors.hostingromania.ro/apache.org/"
+
+
+#### Internal variables:
+_tomcat__package: "apache-tomcat-{{tomcat__version}}"
+_tomcat__download_url: "{{tomcat__mirror}}tomcat/tomcat-7/v{{tomcat__version}}/bin/{{_tomcat__package}}.tar.gz"

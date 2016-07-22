@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.schema;
+package org.dgfoundation.amp.nireports.behaviours;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.ImmutablePair;
@@ -6,6 +6,8 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
+import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
+import org.dgfoundation.amp.nireports.schema.TimeRange;
 
 /**
  * the behaviour of a once-per-entity column (like Proposed Project Cost)

@@ -72,6 +72,9 @@ public class HardcodedActivities {
 		activity("third activity with agreements", 67);
 		activity("Unvalidated activity", 64);
 		activity("with weird currencies", 79);
+		
+		// cells below have been added manually (no AMP correspondent). They should be restored manually in case this file is overwritten by codegen
+		activity("custom_1", 700);
 	}
 	
 	public Map<Long, String> getActNamesMap() {

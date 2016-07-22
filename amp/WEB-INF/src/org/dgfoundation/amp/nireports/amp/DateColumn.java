@@ -9,7 +9,7 @@ import java.util.Map;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.DateCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.schema.DateTokenBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.digijava.module.common.util.DateTimeUtil;
 

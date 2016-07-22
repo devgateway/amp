@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.schema;
+package org.dgfoundation.amp.nireports.behaviours;
 
 import java.util.List;
 import java.util.Map;
@@ -11,6 +11,7 @@ import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
+import org.dgfoundation.amp.nireports.schema.TimeRange;
 
 /**
  * column behaviour of a generated integer column. Also provides shortcut static builders for common cases

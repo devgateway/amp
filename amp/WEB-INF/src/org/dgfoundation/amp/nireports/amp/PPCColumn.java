@@ -15,9 +15,9 @@ import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.behaviours.NumericalColumnBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
-import org.dgfoundation.amp.nireports.schema.NumericalColumnBehaviour;
-import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 

@@ -1,6 +1,7 @@
-package org.dgfoundation.amp.nireports.schema;
+package org.dgfoundation.amp.nireports.amp;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
 /**

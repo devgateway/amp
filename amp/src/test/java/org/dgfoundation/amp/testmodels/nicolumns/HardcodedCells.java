@@ -141,8 +141,9 @@ public abstract class HardcodedCells<K extends Cell> {
 		coos.put(levelColumn.dimensionUsage, newVal);
 	}
 	
+	static String[] months = new String[] {"dummy", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	
-	protected CategAmountCell cell(String amount, String activityTitle, int year, String month, 
+	protected CategAmountCell cell(String amount, String activityTitle, Integer year, String month, 
 			String pledge, String transaction_type, String agreement, String recipient_org, 
 			String recipient_role, String source_role, String adjustment_type,
 			String donor_org, String funding_status, String mode_of_payment, 
@@ -150,6 +151,11 @@ public abstract class HardcodedCells<K extends Cell> {
 		
 		NiDimension cats = HardcodedReportsTestSchema.catsDimension;
 		
+		LocalDate parsedDate = LocalDate.parse(transaction_date, DateTimeFormatter.ISO_LOCAL_DATE);
+		if (year == null) {
+			year = parsedDate.getYear();
+			month = months[parsedDate.getMonth().getValue()];
+		}
 		MetaInfoGenerator mig = new MetaInfoGenerator();
 		Map<NiDimensionUsage, Coordinate> coos = new HashMap<NiDimensionUsage, Coordinate>();
 		MetaInfoSet mis = new MetaInfoSet(mig);
@@ -168,7 +174,7 @@ public abstract class HardcodedCells<K extends Cell> {
 		addToCoordsIfExists(degenerate(cats, "fin_instr"), TestModelConstants.FINANCING_INSTRUMENT_ID, financing_instrument, coos);
 		
 		return new CategAmountCell(activityIds.get(activityTitle), 
-				new MonetaryAmount(new BigDecimal(amount), null, null, LocalDate.parse(transaction_date, DateTimeFormatter.ISO_LOCAL_DATE), new AmpPrecisionSetting()), 
+				new MonetaryAmount(new BigDecimal(amount), null, null, parsedDate, new AmpPrecisionSetting()), 
 				mis, coos, td);
 	}
 	

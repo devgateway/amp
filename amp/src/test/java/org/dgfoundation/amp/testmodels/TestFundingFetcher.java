@@ -5,7 +5,7 @@ package org.dgfoundation.amp.testmodels;
 import java.util.Map;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.testmodels.nicolumns.FundingCells;
 import org.dgfoundation.amp.testmodels.nicolumns.HardcodedColumn;
 

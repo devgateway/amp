@@ -69,6 +69,10 @@ public class MeasureConstants {
 	public static final String PLANNED_RELEASE_OF_FUNDS = "Planned Release of Funds";
 	public static final String PIPELINE_MTEF_PROJECTIONS = "Pipeline " + ArConstants.MTEF_PROJECTION;
 	public static final String PROJECTION_MTEF_PROJECTIONS = "Projection " + ArConstants.MTEF_PROJECTION;
+
+	public static final String VARIANCE_OF_COMMITMENTS = "Variance Of Commitments";
+	public static final String VARIANCE_OF_DISBURSEMENTS = "Variance Of Disbursements";
+	public static final String AVERAGE_SIZE_DISBURSEMENTS = "Average Size of Disbursements";
 	
 	//type = P (pledge)
 	public static final String PLEDGES_ACTUAL_COMMITMENTS = "Actual Commitments";

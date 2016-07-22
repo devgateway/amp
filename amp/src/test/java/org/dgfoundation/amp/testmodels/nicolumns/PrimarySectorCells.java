@@ -65,7 +65,11 @@ public class PrimarySectorCells extends HardcodedCells<PercentageTextCell>{
 		cell("third activity with agreements", "110 - EDUCATION", 6236, 1.000000),
 		cell("Unvalidated activity", "110 - EDUCATION", 6236, 1.000000),
 		cell("with weird currencies", "110 - EDUCATION", 6236, 0.900000),
-		cell("with weird currencies", "112 - BASIC EDUCATION", 6242, 0.100000)
+		cell("with weird currencies", "112 - BASIC EDUCATION", 6242, 0.100000),
+		
+		// cells below have been added manually (no AMP correspondent). They should be restored manually in case this file is overwritten by codegen
+		cell("custom_1", "112 - BASIC EDUCATION", 6242, 0.400000),
+		cell("custom_1", "110 - EDUCATION", 6236, 0.600000)
 );
 	}
 

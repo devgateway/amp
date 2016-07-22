@@ -3,9 +3,9 @@ package org.dgfoundation.amp.nireports.amp;
 import org.apache.wicket.behavior.Behavior;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
-import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 
 /**
  * the {@link Behavior} of a non-Funding-Flow MTEF column

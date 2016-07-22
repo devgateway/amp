@@ -13,6 +13,7 @@ import java.util.Map;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.NumberedCell;
 import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker.SplitCellPercentage;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
@@ -122,6 +123,15 @@ public class NiCell implements Comparable<NiCell> {
 		
 		// gone till here -> neither of the cells is undefined
 		return cell.compareTo(o.cell);
+	}
+	
+	/**
+	 * computes, taking into account percentages, the amount stored in this cell. In case this NiCell is not holding a NumberedCell, the function will crash OR return a meaningless result
+	 */
+	public BigDecimal getAmount() {
+		BigDecimal percentage = calculatePercentage();
+		BigDecimal value = ((NumberedCell) cell).getAmount().multiply(percentage);
+		return value;
 	}
 	
 	public String getDisplayedValue() {

@@ -21,9 +21,9 @@ import org.dgfoundation.amp.nireports.PercentageTextCell;
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.amp.diff.TextColumnKeyBuilder;
+import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
-import org.dgfoundation.amp.nireports.schema.PercentageTokenBehaviour;
 import org.digijava.kernel.request.TLSUtils;
 
 

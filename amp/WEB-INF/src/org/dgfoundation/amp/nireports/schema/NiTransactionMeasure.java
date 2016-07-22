@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports.schema;
 
 import java.util.function.Predicate;
 import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 
 /**
  * a trivial measure defined as a transaction 

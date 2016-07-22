@@ -89,7 +89,7 @@ public interface Behaviour<V extends NiOutCell> {
 	public Cell buildUnallocatedCell(long mainId, long entityId, LevelColumn levelColumn);
 	
 	/**
-	 * computes a "zero" cell, which is different from an "empty" cell. For numerical cells, this is a cell with zero. For textual cells, this is an "" cell, although these do not have 
+	 * computes a "zero" cell, which is different from an "empty" cell. For numerical cells, this is a cell with zero. For textual cells, this is an "" cell 
 	 * @return
 	 */
 	public V getZeroCell();
@@ -135,7 +135,7 @@ public interface Behaviour<V extends NiOutCell> {
 		return true;
 	}
 
-	public default V doVerticalReduce(Collection<V> cells) {
+	public default NiOutCell doVerticalReduce(Collection<V> cells) {
 		return getZeroCell();
 	}
 	
@@ -147,7 +147,7 @@ public interface Behaviour<V extends NiOutCell> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")	
-	public default V buildGroupTrailCell(GroupReportData grd, CellColumn cc, List<NiReportData> visitedChildren) {
+	public default NiOutCell buildGroupTrailCell(GroupReportData grd, CellColumn cc, List<NiReportData> visitedChildren) {
 		return doVerticalReduce(AmpCollections.relist(visitedChildren, child -> (V) child.trailCells.get(cc)));
 	}
 	
@@ -155,7 +155,7 @@ public interface Behaviour<V extends NiOutCell> {
 	 * builds the trail cells for ColumnReportData 
 	 */
 	@SuppressWarnings("unchecked")
-	public default V buildColumnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<Long, NiOutCell>> mappedContents) {
+	public default NiOutCell buildColumnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<Long, NiOutCell>> mappedContents) {
 		return doVerticalReduce((Collection<V>) mappedContents.get(cc).values());
 	}
 

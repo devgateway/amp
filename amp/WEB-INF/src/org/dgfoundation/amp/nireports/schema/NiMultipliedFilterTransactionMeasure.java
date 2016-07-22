@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports.schema;
 import java.math.BigDecimal;
 import java.util.function.Function;
 import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 
 /**
  * a measure defined as a filtered transaction multiplied by a number

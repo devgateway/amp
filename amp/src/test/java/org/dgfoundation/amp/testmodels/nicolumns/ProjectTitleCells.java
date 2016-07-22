@@ -58,7 +58,11 @@ public class ProjectTitleCells extends HardcodedCells<TextCell>{
 			cell("Test MTEF directed", "Test MTEF directed", 18),
 			cell("third activity with agreements", "third activity with agreements", 67),
 			cell("Unvalidated activity", "Unvalidated activity", 64),
-			cell("with weird currencies", "with weird currencies", 79)
+			cell("with weird currencies", "with weird currencies", 79),
+
+			
+			// cells below have been added manually (no AMP correspondent). They should be restored manually in case this file is overwritten by codegen
+			cell("custom_1", "custom_1", 700)
 );
 	}
 

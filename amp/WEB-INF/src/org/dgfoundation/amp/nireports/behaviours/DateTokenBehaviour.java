@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.schema;
+package org.dgfoundation.amp.nireports.behaviours;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -18,6 +18,9 @@ import org.dgfoundation.amp.nireports.output.NiDateCell;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 public class DateTokenBehaviour implements Behaviour<NiDateCell> {

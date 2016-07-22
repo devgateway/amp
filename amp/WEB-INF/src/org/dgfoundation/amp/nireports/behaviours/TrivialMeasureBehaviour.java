@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.schema;
+package org.dgfoundation.amp.nireports.behaviours;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -15,6 +15,10 @@ import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
+import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**
@@ -49,8 +53,7 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 		NiPrecisionSetting precision = ((NumberedCell) cells.get(0).getCell()).getPrecision();
 		BigDecimal res = precision.adjustPrecision(BigDecimal.ZERO);
 		for(NiCell cell:cells) {
-			BigDecimal percentage = cell.calculatePercentage();
-			BigDecimal toAdd = ((NumberedCell) cell.getCell()).getAmount().multiply(percentage);
+			BigDecimal toAdd = cell.getAmount();
 			res = res.add(toAdd);
 		}
 		//System.err.format("reduced %d cells to %.2f: %s\n", cells.size(), res.doubleValue(), cells.toString());

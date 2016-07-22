@@ -22,12 +22,14 @@ import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
-import org.dgfoundation.amp.nireports.schema.DateTokenBehaviour;
-import org.dgfoundation.amp.nireports.schema.GeneratedIntegerBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
-import org.dgfoundation.amp.nireports.schema.PercentageTokenBehaviour;
-import org.dgfoundation.amp.nireports.schema.TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.testmodels.dimensions.CategoriesTestDimension;
 import org.dgfoundation.amp.testmodels.dimensions.LocationsTestDimension;
@@ -140,11 +142,17 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 		addMeasure(new TrivialTestMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", false));
 		addMeasure(new TrivialTestMeasure(MeasureConstants.PLANNED_COMMITMENTS, Constants.COMMITMENT, "Planned", false));
 		addMeasure(new TrivialTestMeasure(MeasureConstants.PLANNED_DISBURSEMENTS, Constants.DISBURSEMENT, "Planned", false));
-		
+				
 		// empty trivial measure
 		addMeasure(new TrivialTestMeasure(MeasureConstants.PIPELINE_COMMITMENTS, Constants.COMMITMENT, "Pipeline", false));
 		
 		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, null));
+		
+		// computed measures
+		// addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, false, def);
+		addLinearFilterMeasure(MeasureConstants.VARIANCE_OF_COMMITMENTS, null, VarianceMeasureBehaviour.instance, false, MeasureConstants.ACTUAL_COMMITMENTS, +1);
+		addLinearFilterMeasure(MeasureConstants.VARIANCE_OF_DISBURSEMENTS, null, VarianceMeasureBehaviour.instance, false, MeasureConstants.ACTUAL_DISBURSEMENTS, +1);
+		addLinearFilterMeasure(MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, null, AverageAmountBehaviour.instance, false, MeasureConstants.ACTUAL_DISBURSEMENTS, +1);
 	}
 
 	@Override

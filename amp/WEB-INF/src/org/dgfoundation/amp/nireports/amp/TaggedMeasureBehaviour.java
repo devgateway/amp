@@ -9,12 +9,12 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
-import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 
 /**
  * the {@link Behavior} of a Tagged entity (like Classified Actual Expenditures -- expenditures vertically divided by an ACV)

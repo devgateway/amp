@@ -71,10 +71,13 @@ import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
+import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.BooleanDimension;
-import org.dgfoundation.amp.nireports.schema.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
@@ -86,8 +89,6 @@ import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
-import org.dgfoundation.amp.nireports.schema.PidTextualTokenBehaviour;
-import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DgUtil;
@@ -177,7 +178,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.UNCOMMITTED_BALANCE , "Proposed Project Cost - Total Actual Commitments");
 		put(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,  "Proposed project cost - Cummulative Commitments");
 		put(MeasureConstants.UNDISBURSED_BALANCE , "Total Actual Commitment - Total Actual Disbursement");
-		put(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE,  "Cumulative Commitment - Cumulative Disbursement");	
+		put(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE,  "Cumulative Commitment - Cumulative Disbursement");
+		put(MeasureConstants.VARIANCE_OF_COMMITMENTS, "Max Actual Commitments - Min Actual Commitments");
+		put(MeasureConstants.VARIANCE_OF_DISBURSEMENTS, "Max Actual Disbursements - Min Actual Disbursements");
+		put(MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, "Sum Actual Disbursements / Number of Actual Disbursements");
 //		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Actual Disbursements / (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). "
 //					+ "Measure only makes sense in Annual and Totals-only reports");
 		
@@ -690,6 +694,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMultipliedFilterTransactionMeasure(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, MeasureConstants.PLANNED_DISBURSEMENTS, AmpFundingColumn::getCapitalMultiplier);
 		addMultipliedFilterTransactionMeasure(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, MeasureConstants.PLANNED_DISBURSEMENTS, AmpFundingColumn::getRecurrentMultiplier);				
 		
+//		addTrivialFilterMeasure(MeasureConstants.VARIANCE_OF_COMMITMENTS, VarianceMeasureBehaviour.instance, MeasureConstants.ACTUAL_COMMITMENTS, +1);
+//		addTrivialFilterMeasure(MeasureConstants.VARIANCE_OF_DISBURSEMENTS, VarianceMeasureBehaviour.instance, MeasureConstants.ACTUAL_DISBURSEMENTS, +1);
+//		addTrivialFilterMeasure(MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, AverageAmountBehaviour.instance, MeasureConstants.ACTUAL_DISBURSEMENTS, +1);
 	}
 	
 	protected void addMultipliedFilterTransactionMeasure(String measureName, String baseMeasureName, Function<CategAmountCell, BigDecimal> fMultCalculator) {

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 
 /**
  * a trivial measure defined as a transaction 

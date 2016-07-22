@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.nireports.schema.GeneratedColumnBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.GeneratedColumnBehaviour;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
 

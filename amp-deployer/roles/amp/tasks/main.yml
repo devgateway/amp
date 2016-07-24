@@ -26,6 +26,8 @@
     src: "/opt/devgateway/amp212-local"
     dest: "/opt/apache/apache-tomcat/webapps/ROOT"
     state: link
+    owner: "{{ common__deployer_user }}"
+    group: "{{ common__deployer_group }}"
 
 # - name: restart tomcat7
 #   command: service tomcat7 restart

@@ -100,3 +100,14 @@
   become: true
   become_user: postgres
   with_items: "{{ postgresql__databases|default([]) }}"
+
+- name: Vagrant - Create PostgreSQL password file
+  template:
+    src: dot.pgpass.j2
+    dest: "~/.pgpass"
+    owner: vagrant
+    group: vagrant
+    mode: "u=rw,g=,o="
+  become: true
+  become_user: vagrant
+  when: vagrant is defined

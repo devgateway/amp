@@ -8,7 +8,7 @@
 - name: Download Maven
   get_url:
     url: "{{_maven__download_url}}"
-    sha256sum: "{{maven__download_checksum}}"
+    checksum: "{{maven__download_checksum}}"
     dest: "/opt/apache/"
   register: archive_info
 

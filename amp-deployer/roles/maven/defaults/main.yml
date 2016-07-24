@@ -4,7 +4,7 @@
 maven__version: 3.2.5
 
 # Apache Maven tgz sha256sum.
-maven__download_checksum: 8c190264bdf591ff9f1268dc0ad940a2726f9e958e367716a09b8aaa7e74a755
+maven__download_checksum: "sha256:8c190264bdf591ff9f1268dc0ad940a2726f9e958e367716a09b8aaa7e74a755"
 
 # Default mirror might be slow.
 # @see: https://maven.apache.org/download.cgi

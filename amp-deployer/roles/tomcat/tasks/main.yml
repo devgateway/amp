@@ -8,7 +8,7 @@
 - name: Download Tomcat
   get_url:
     url: "{{_tomcat__download_url}}"
-    sha256sum: "{{tomcat__download_checksum}}"
+    checksum: "{{tomcat__download_checksum}}"
     dest: "/opt/apache/"
   register: archive_info
 

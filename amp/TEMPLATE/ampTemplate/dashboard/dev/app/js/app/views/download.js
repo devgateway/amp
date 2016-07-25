@@ -163,9 +163,10 @@ module.exports = BackboneDash.View.extend({
     // what money are we talking about?
     ctx.fillStyle = '#333';
     if (self.model.get('chartType') === 'fragmentation') {
-    	ctx.font = 'normal 14px "Open Sans"';
+    	// AMP-23584: Commented because now is not needed but maybe in the future...
+    	/*ctx.font = 'normal 14px "Open Sans"';
     	ctx.textAlign = 'left';
-    	ctx.fillText(moneyContext, 10, 50);	    
+    	ctx.fillText(moneyContext, 10, 50);*/	    
     } else {    
     	ctx.textAlign = 'right';
 	    ctx.fillText(moneyContext, w - 10, 10 + 22);

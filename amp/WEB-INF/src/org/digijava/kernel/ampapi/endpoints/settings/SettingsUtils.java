@@ -50,6 +50,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.h2.util.StringUtils;
 
 /**
@@ -425,6 +426,8 @@ public class SettingsUtils {
 				.getEffectiveLangCode())));
 
         settings.add(new SettingOptions("default-language", "default-language", new SettingOptions.Option(TLSUtils.getSite().getDefaultLanguage().getCode())));
+
+        settings.add(new SettingOptions("multilingual", "multilingual", new SettingOptions.Option(Boolean.toString(ContentTranslationUtil.multilingualIsEnabled()))));
 
 		settings.add(new SettingOptions(
 				"default-date-format",

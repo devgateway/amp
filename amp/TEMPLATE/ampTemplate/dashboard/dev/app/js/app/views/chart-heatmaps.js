@@ -22,11 +22,13 @@ module.exports = ChartViewBase.extend({
   
   modalView: undefined,
   
-  //Dont try to call initialize here because it throws a 'Module initialization error' :((
-  /*initialize: function(options) {
-	  this.modalView = new ModalView({ app: options.app, collection: this.model.collection });
-  },*/
-
+  chartClickHandler : function(context) {
+	  if (context.y.fmt === app.translator.translateSync('amp.dashboard:chart-heatmap-others')) {
+		  this.model.set('yLimit', this.model.get('yLimit') + 10);
+		  this.updateData();
+	  }
+  },
+  
   downloadChartOptions: {
     trimLabels: false
   }

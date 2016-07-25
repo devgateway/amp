@@ -181,7 +181,7 @@ module.exports = BackboneDash.View.extend({
     var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions(), this.model);
     this.chartContainer.html(chart.el);
 
-    if (this.model.get('view') !== 'heatmap') {
+    if (this.model.get('chartType') !== 'fragmentation') {
     	this.renderNumbers();
     }
     var limit = this.model.get('limit');

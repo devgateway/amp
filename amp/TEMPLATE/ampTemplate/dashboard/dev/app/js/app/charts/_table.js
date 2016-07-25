@@ -4,6 +4,8 @@ var util = require('../../ugly/util');
 var common = require('./common');
 var tableTemplate = _.template(fs.readFileSync(
   __dirname + '/table.html', 'UTF-8'));
+var heatmapTableTemplate = _.template(fs.readFileSync(
+		  __dirname + '/heatmap-table.html', 'UTF-8'));
 
 
 function fakeRawContext(e, data) {
@@ -31,27 +33,62 @@ function bindClickHandler(el, data, options) {
 
 
 function charter(data, options) {
+	if (options.model.get('chartType') === 'fragmentation') {
+		return heatmapCharter(data, options);
+	} else {
+		return commonCharter(data, options);
+	}	
+}
 
-  var keys = _(data).pluck('key');
+function commonCharter(data, options) {
+	var keys = _(data).pluck('key');
 
-  var values = _(data)
-    .chain()
-    .map(function(datum) { return datum.values; })
-    .transpose()
-    .value();
+	var values = _(data).chain().map(function(datum) {
+		return datum.values;
+	}).transpose().value();
 
-  var html = tableTemplate({
-    keys: keys,
-    values: values,
-    moneyFormat: options.shortFormatter
-  });
+	var html = tableTemplate({
+		keys : keys,
+		values : values,
+		moneyFormat : options.shortFormatter
+	});
 
-  var chartEl = document.createElement('div');
-  chartEl.innerHTML = html;
+	var chartEl = document.createElement('div');
+	chartEl.innerHTML = html;
 
-  bindClickHandler(chartEl, data, options);
+	bindClickHandler(chartEl, data, options);
 
-  return chartEl;
+	return chartEl;
+}
+
+function heatmapCharter(data, options) {
+	var keys = _(data).pluck('key');
+
+	var matrix = _.map(options.model.get("matrix"), function(itemY, i) {
+		return _.map(itemY, function(itemX, j) {
+			return {
+				y : options.model.get("yDataSet")[i],
+				x : options.model.get("xDataSet")[j],
+				value : (options.model.get("matrix")[i][j] ? options.model.get("matrix")[i][j] : {
+					'dv' : '',
+					'p' : ''
+				})
+			}
+		})
+	});
+
+	var html = heatmapTableTemplate({
+		keys : keys,
+		matrix : matrix,
+		moneyFormat : options.shortFormatter
+	});
+
+	var chartEl = document.createElement('div');
+	chartEl.innerHTML = html;
+	
+	bindClickHandler(chartEl, data, options);
+
+	return chartEl;
 }
 
 

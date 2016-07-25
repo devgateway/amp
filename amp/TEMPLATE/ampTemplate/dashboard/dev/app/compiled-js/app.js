@@ -108,7 +108,7 @@ _.extend(App.prototype, BackboneDash.Events, {
           }
       }
 
-      var dashboardTranslateKeys = JSON.parse("{\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF\",\n\n\"amp.common:title\": \"AMP\",\n\"amp.common:title-desktop\": \"Desktop\",\n\"amp.common:subtitle-my-desktop\": \"My Desktop\",\n\"amp.common:subtitle-add-tab\": \"Add Tab\",\n\"amp.common:subtitle-tab-manager\": \"Tab Manager\",\n\"amp.common:title-reports\": \"Reports\",\n\"amp.common:subtitle-all-reports\": \"All Reports\",\n\"amp.common:subtitle-fav-reports\": \"Favourite Reports\",\n\"amp.common:subtitle-report-generator\": \"Report Generator\",\n\"amp.common:subtitle-saiku\": \"Saiku\",\n\"amp.common:title-documents\": \"Documents\",\n\"amp.common:title-dashboards\": \"Dashboards\",\n\"amp.common:subtitle-gis\": \"New GIS (BETA)\",\n\"amp.common:subtitle-dashboards\": \"New Dashboard (BETA)\",\n\"amp.common:subtitle-dashboard-generator\": \"Dashboard Generator\",\n\"amp.common:subtitle-donor-profile\": \"Donor Profile\",\n\"amp.common:subtitle-region-profile\": \"Region Profile\",\n\"amp.common:subtitle-sector-profile\": \"Sector Profile\",\n\"amp.common:subtitle-executing-profile\": \"Executing Agency Profile\",\n\"amp.common:subtitle-beneficiary-profile\": \"Beneficiary Ministry Profile\",\n\"amp.common:title-tools\": \"Tools\",\n\"amp.common:subtitle-workspace-setup\": \"Workspace Setup\",\n\"amp.common:subtitle-advanced-mode\": \"Advanced Mode\",\n\"amp.common:subtitle-search\": \"Search\",\n\"amp.common:subtitle-addressbook\": \"Address Book\",\n\"amp.common:title-help\": \"Help\",\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\n\"amp.common:subtitle-glossary\": \"Glossary\",\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\n\"amp.common:title-logout\": \"Logout\",\n\"amp.common:filters-loading\": \"Loading...\",\n\"amp.dashboard:page-title\":\"AMP Dashboards\",\n\"amp.dashboard:loading\": \"Loading...\",\n\"amp.dashboard:title-projectdata\": \"Project Data\",\n\"amp.dashboard:sub-title-projectdata\": \"View where projects are being implemented throughout the country.\",\n\"amp.dashboard:title-Country\": \"Country\",\n\"amp.dashboard:title-Region\": \"Region\",\n\"amp.dashboard:title-Zone\": \"Zone\",\n\"amp.dashboard:title-District\": \"District\",\n\"amp.dashboard:chart-reset\": \"reset others\",\n\"amp.dashboard:chart-radioui-commitments\": \"Commitments\",\n\"amp.dashboard:chart-radioui-disbursements\": \"Disbursements\",\n\"amp.dashboard:filters-none-applied\": \"No filters applied\",\n\"amp.dashboard:close\": \"Close\",\n\"amp.dashboard:modal-sorry\": \"Sorry for any inconvenience\",\n\"amp.dashboard:share-dashboard-top\": \"Share dashboard\",\n\"amp.dashboard:share-dashboard\": \"Share this dashboard view\",\n\"amp.dashboard:share-link\": \"Link\",\n\"amp.dashboard:of\": \"of\",\n\"amp.dashboard:tooltip-predict-otherseries\": \"TRANSLATEME\",\n\"amp.dashboard:total\": \"total\",\n\"amp.common:title\": \"AMP Toolbar\",\n\"amp.common:title-filters\": \"Filters\",\n\"amp.dashboard:chart-TopDonorAgencies\": \"Top Donor Agencies\",\n\"amp.dashboard:chart-TopDonorGroups\": \"Top Donor Groups\",\n\"amp.dashboard:chart-TopRegions\": \"Top Regions\",\n\"amp.dashboard:chart-TopSectors\": \"Top Sectors\",\n\"amp.dashboard:chart-AidPredictability\": \"Aid Predictability\",\n\"amp.dashboard:chart-FundingType\": \"Funding Type\",\n\"amp.dashboard:chart-ResponsibleOrganizations\": \"Responsible Organizations\",\n\"amp.dashboard:chart-BeneficiaryAgencies\": \"Beneficiary Agencies\",\n\"amp.dashboard:chart-ExecutingAgencies\": \"Executing Agencies\",\n\"amp.dashboard:chart-ImplementingAgencies\": \"Implementing Agencies\",\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals\": \"Peace-building and State-building Goals\",\n\"amp.dashboard:predictability-planned\": \"Planned\",\n\"amp.dashboard:predictability-actual\": \"Actual\",\n\"amp.dashboard:chart-FundingType-Grant\": \"Grant\",\n\"amp.dashboard:chart-FundingType-Loan\": \"Loan\",\n\"amp.dashboard:chart-FundingType-others\": \"Others\",\n\"amp.dashboard:chart-TopRegions-DistrictUndefined\": \"District: U\",\n\"amp.dashboard:chart-TopRegions-others\": \"Others\",\n\"amp.dashboard:chart-TopSectors-others\": \"Others\",\n\"amp.dashboard:chart-TopDonorAgencies-others\": \"Others\",\n\"amp.dashboard:chart-TopDonorGroups-others\": \"Others\",\n\"amp.dashboard:chart-ResponsibleOrganizations-others\": \"Others\",\n\"amp.dashboard:chart-BeneficiaryAgencies-others\": \"Others\",\n\"amp.dashboard:chart-ExecutingAgencies-others\": \"Others\",\n\"amp.dashboard:chart-ImplementingAgencies-others\": \"Others\",\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals-others\":\"Others\",\n\"amp.dashboard:filters-edit\":\"edit filters\",\n\"amp.dashboard:dashboard-settings\":\"Settings\",\n\"amp.dashboard:settings-edit\":\"edit settings\",\n\"amp.dashboard:download-amount\":\"Amount\",\n\"amp.dashboard:download-preview\":\"Preview:\",\n\"amp.dashboard:download-rendering\":\"Rendering...\",\n\"amp.dashboard:download-download-chart\":\"Download chart\",\n\"amp.dashboard:download-download-data\":\"Download data\",\n\"amp.dashboard:chart-no-data-available\":\"No Data Available\",\n\"amp.dashboard:chart-loading-saved-settings\":\"Loading saved settings...\",\n\"amp.dashboard:filters-show-settings\":\"Show filter settings\",\n\"amp.dashboard:filters-chart-legends-Grouped\":\"Grouped\",\n\"amp.dashboard:filters-chart-legends-Stacked\":\"Stacked\",\n\"amp.dashboard:of-total\": \"of total\",\n\"amp.dashboard:aid-predictability-actual-disbursements\": \"Actual Disbursements\",\n\"amp.dashboard:aid-predictability-planned-disbursements\": \"Planned Disbursements\",\n\"amp.dashboard:filters-hide-details\": \"Hide filter details\",\n\"amp.dashboard:saving-state\": \"Saving dashboard state, please wait...\",\n\"amp.dashboard:date-range\": \"Date Range\",\n\"amp.dashboard:currency\" : \"Currency\",\n\"amp.dashboard:type\" : \"Type\",\n\"amp.dashboard:year\" : \"Year\",\n\"amp.dashboard:ftype-actual-commitment\": \"Actual Commitments\",\n\"amp.dashboard:ftype-actual-disbursement\": \"Actual Disbursements\",\n\"amp.dashboard:ftype-actual-expenditure\": \"Actual Expenditures\",\n\"amp.dashboard:ftype-planned-commitment\": \"Planned Commitments\" ,\n\"amp.dashboard:ftype-planned-disbursement\":\t\"Planned Disbursements\" ,\n\"amp.dashboard:ftype-planned-expenditures\":\t\"Planned Expenditures\",  \t\t\t\n\"amp.dashboard:dashboard-chart-tops-info-modal\": \"Category Detail\",\n\"amp.dashboard:chart-tops-table-projecttitle\": \"Project Title\",\n\"amp.dashboard:chart-tops-inunits\": \"In units\",\n\"amp.dashboard:chart-tops-inthousands\": \"In thousands\",\n\"amp.dashboard:chart-tops-inmillions\": \"In millions\",\n\"amp.dashboard:chart-thousand\": \"k\",\n\"amp.dashboard:chart-million\": \"M\",\n\"amp.dashboard:chart-billion\": \"B\",\n\"amp.dashboard:chart-trillion\": \"T\",\n\"amp.dashboard:chart-peta\": \"P\",\n\"amp.dashboard:chart-exa\": \"E\",\n\"amp.dashboard:chart-swap-axes\": \"Swap Axes\",\n\"amp.dashboard:chart-HeatMapbySectorandDonorGroup\":\"Sector Fragmentation\",\n\"amp.dashboard:chart-HeatMapbyLocationandDonorGroup\":\"Location Fragmentation\",\n\"amp.dashboard:chart-HeatMapbyProgramandDonorGroup\":\"Program Fragmentation\",\n\"amp.dashboard:chart-heatmap-reset-others\":\"Reset Others\",\n\"amp.dashboard:negatives-values\":\"Negative values are not represented in this chart.\",\n\"amp.dashboard:negatives-values-parag\":\"Please switch to bar chart or table view to view all values.\",\n\"amp.dashboard:chart-heatmap-legends\":\"LEGENDS\",\n\"amp.dashboard:chart-heatmap-totals\":\"TOTALS\",\n\"amp.dashboard:chart-heatmap-legend1\":\"Less than 1%\",\n\"amp.dashboard:chart-heatmap-legend2\":\"Between 1% and <5%\",\n\"amp.dashboard:chart-heatmap-legend3\":\"Between 5% and <10%\",\n\"amp.dashboard:chart-heatmap-legend4\":\"Between 10% and <15%\",\n\"amp.dashboard:chart-heatmap-legend5\":\"Between 15% and <20%\",\n\"amp.dashboard:chart-heatmap-legend6\":\"More than 20%\"\n}\n\n");
+      var dashboardTranslateKeys = JSON.parse("{\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF\",\n\n\"amp.common:title\": \"AMP\",\n\"amp.common:title-desktop\": \"Desktop\",\n\"amp.common:subtitle-my-desktop\": \"My Desktop\",\n\"amp.common:subtitle-add-tab\": \"Add Tab\",\n\"amp.common:subtitle-tab-manager\": \"Tab Manager\",\n\"amp.common:title-reports\": \"Reports\",\n\"amp.common:subtitle-all-reports\": \"All Reports\",\n\"amp.common:subtitle-fav-reports\": \"Favourite Reports\",\n\"amp.common:subtitle-report-generator\": \"Report Generator\",\n\"amp.common:subtitle-saiku\": \"Saiku\",\n\"amp.common:title-documents\": \"Documents\",\n\"amp.common:title-dashboards\": \"Dashboards\",\n\"amp.common:subtitle-gis\": \"New GIS (BETA)\",\n\"amp.common:subtitle-dashboards\": \"New Dashboard (BETA)\",\n\"amp.common:subtitle-dashboard-generator\": \"Dashboard Generator\",\n\"amp.common:subtitle-donor-profile\": \"Donor Profile\",\n\"amp.common:subtitle-region-profile\": \"Region Profile\",\n\"amp.common:subtitle-sector-profile\": \"Sector Profile\",\n\"amp.common:subtitle-executing-profile\": \"Executing Agency Profile\",\n\"amp.common:subtitle-beneficiary-profile\": \"Beneficiary Ministry Profile\",\n\"amp.common:title-tools\": \"Tools\",\n\"amp.common:subtitle-workspace-setup\": \"Workspace Setup\",\n\"amp.common:subtitle-advanced-mode\": \"Advanced Mode\",\n\"amp.common:subtitle-search\": \"Search\",\n\"amp.common:subtitle-addressbook\": \"Address Book\",\n\"amp.common:title-help\": \"Help\",\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\n\"amp.common:subtitle-glossary\": \"Glossary\",\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\n\"amp.common:title-logout\": \"Logout\",\n\"amp.common:filters-loading\": \"Loading...\",\n\"amp.dashboard:page-title\":\"AMP Dashboards\",\n\"amp.dashboard:loading\": \"Loading...\",\n\"amp.dashboard:title-projectdata\": \"Project Data\",\n\"amp.dashboard:sub-title-projectdata\": \"View where projects are being implemented throughout the country.\",\n\"amp.dashboard:title-Country\": \"Country\",\n\"amp.dashboard:title-Region\": \"Region\",\n\"amp.dashboard:title-Zone\": \"Zone\",\n\"amp.dashboard:title-District\": \"District\",\n\"amp.dashboard:chart-reset\": \"reset others\",\n\"amp.dashboard:chart-radioui-commitments\": \"Commitments\",\n\"amp.dashboard:chart-radioui-disbursements\": \"Disbursements\",\n\"amp.dashboard:filters-none-applied\": \"No filters applied\",\n\"amp.dashboard:close\": \"Close\",\n\"amp.dashboard:modal-sorry\": \"Sorry for any inconvenience\",\n\"amp.dashboard:share-dashboard-top\": \"Share dashboard\",\n\"amp.dashboard:share-dashboard\": \"Share this dashboard view\",\n\"amp.dashboard:share-link\": \"Link\",\n\"amp.dashboard:of\": \"of\",\n\"amp.dashboard:tooltip-predict-otherseries\": \"TRANSLATEME\",\n\"amp.dashboard:total\": \"total\",\n\"amp.common:title\": \"AMP Toolbar\",\n\"amp.common:title-filters\": \"Filters\",\n\"amp.dashboard:chart-TopDonorAgencies\": \"Top Donor Agencies\",\n\"amp.dashboard:chart-TopDonorGroups\": \"Top Donor Groups\",\n\"amp.dashboard:chart-TopRegions\": \"Top Regions\",\n\"amp.dashboard:chart-TopSectors\": \"Top Sectors\",\n\"amp.dashboard:chart-AidPredictability\": \"Aid Predictability\",\n\"amp.dashboard:chart-FundingType\": \"Funding Type\",\n\"amp.dashboard:chart-ResponsibleOrganizations\": \"Responsible Organizations\",\n\"amp.dashboard:chart-BeneficiaryAgencies\": \"Beneficiary Agencies\",\n\"amp.dashboard:chart-ExecutingAgencies\": \"Executing Agencies\",\n\"amp.dashboard:chart-ImplementingAgencies\": \"Implementing Agencies\",\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals\": \"Peace-building and State-building Goals\",\n\"amp.dashboard:predictability-planned\": \"Planned\",\n\"amp.dashboard:predictability-actual\": \"Actual\",\n\"amp.dashboard:chart-FundingType-Grant\": \"Grant\",\n\"amp.dashboard:chart-FundingType-Loan\": \"Loan\",\n\"amp.dashboard:chart-FundingType-others\": \"Others\",\n\"amp.dashboard:chart-TopRegions-DistrictUndefined\": \"District: U\",\n\"amp.dashboard:chart-TopRegions-others\": \"Others\",\n\"amp.dashboard:chart-TopSectors-others\": \"Others\",\n\"amp.dashboard:chart-TopDonorAgencies-others\": \"Others\",\n\"amp.dashboard:chart-TopDonorGroups-others\": \"Others\",\n\"amp.dashboard:chart-ResponsibleOrganizations-others\": \"Others\",\n\"amp.dashboard:chart-BeneficiaryAgencies-others\": \"Others\",\n\"amp.dashboard:chart-ExecutingAgencies-others\": \"Others\",\n\"amp.dashboard:chart-ImplementingAgencies-others\": \"Others\",\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals-others\":\"Others\",\n\"amp.dashboard:filters-edit\":\"edit filters\",\n\"amp.dashboard:dashboard-settings\":\"Settings\",\n\"amp.dashboard:settings-edit\":\"edit settings\",\n\"amp.dashboard:download-amount\":\"Amount\",\n\"amp.dashboard:download-preview\":\"Preview:\",\n\"amp.dashboard:download-rendering\":\"Rendering...\",\n\"amp.dashboard:download-download-chart\":\"Download chart\",\n\"amp.dashboard:download-download-data\":\"Download data\",\n\"amp.dashboard:chart-no-data-available\":\"No Data Available\",\n\"amp.dashboard:chart-loading-saved-settings\":\"Loading saved settings...\",\n\"amp.dashboard:filters-show-settings\":\"Show filter settings\",\n\"amp.dashboard:filters-chart-legends-Grouped\":\"Grouped\",\n\"amp.dashboard:filters-chart-legends-Stacked\":\"Stacked\",\n\"amp.dashboard:of-total\": \"of total\",\n\"amp.dashboard:aid-predictability-actual-disbursements\": \"Actual Disbursements\",\n\"amp.dashboard:aid-predictability-planned-disbursements\": \"Planned Disbursements\",\n\"amp.dashboard:filters-hide-details\": \"Hide filter details\",\n\"amp.dashboard:saving-state\": \"Saving dashboard state, please wait...\",\n\"amp.dashboard:date-range\": \"Date Range\",\n\"amp.dashboard:currency\" : \"Currency\",\n\"amp.dashboard:type\" : \"Type\",\n\"amp.dashboard:year\" : \"Year\",\n\"amp.dashboard:ftype-actual-commitment\": \"Actual Commitments\",\n\"amp.dashboard:ftype-actual-disbursement\": \"Actual Disbursements\",\n\"amp.dashboard:ftype-actual-expenditure\": \"Actual Expenditures\",\n\"amp.dashboard:ftype-planned-commitment\": \"Planned Commitments\" ,\n\"amp.dashboard:ftype-planned-disbursement\":\t\"Planned Disbursements\" ,\n\"amp.dashboard:ftype-planned-expenditures\":\t\"Planned Expenditures\",  \t\t\t\n\"amp.dashboard:dashboard-chart-tops-info-modal\": \"Category Detail\",\n\"amp.dashboard:chart-tops-table-projecttitle\": \"Project Title\",\n\"amp.dashboard:chart-tops-inunits\": \"In units\",\n\"amp.dashboard:chart-tops-inthousands\": \"In thousands\",\n\"amp.dashboard:chart-tops-inmillions\": \"In millions\",\n\"amp.dashboard:chart-thousand\": \"k\",\n\"amp.dashboard:chart-million\": \"M\",\n\"amp.dashboard:chart-billion\": \"B\",\n\"amp.dashboard:chart-trillion\": \"T\",\n\"amp.dashboard:chart-peta\": \"P\",\n\"amp.dashboard:chart-exa\": \"E\",\n\"amp.dashboard:chart-swap-axes\": \"Swap Axes\",\n\"amp.dashboard:chart-HeatMapbySectorandDonorGroup\":\"Sector Fragmentation\",\n\"amp.dashboard:chart-HeatMapbyLocationandDonorGroup\":\"Location Fragmentation\",\n\"amp.dashboard:chart-HeatMapbyProgramandDonorGroup\":\"Program Fragmentation\",\n\"amp.dashboard:chart-heatmap-reset-others\":\"Reset Others\",\n\"amp.dashboard:negatives-values\":\"Negative values are not represented in this chart.\",\n\"amp.dashboard:negatives-values-parag\":\"Please switch to bar chart or table view to view all values.\",\n\"amp.dashboard:chart-heatmap-legends\":\"LEGENDS\",\n\"amp.dashboard:chart-heatmap-totals\":\"TOTALS\",\n\"amp.dashboard:chart-heatmap-legend1\":\"Less than 1%\",\n\"amp.dashboard:chart-heatmap-legend2\":\"Between 1% and <5%\",\n\"amp.dashboard:chart-heatmap-legend3\":\"Between 5% and <10%\",\n\"amp.dashboard:chart-heatmap-legend4\":\"Between 10% and <15%\",\n\"amp.dashboard:chart-heatmap-legend5\":\"Between 15% and <20%\",\n\"amp.dashboard:chart-heatmap-legend6\":\"More than 20%\",\n\"amp.dashboard:chart-heatmap-others\":\"Others\"\n}\n\n");
       this.translator = new Translator({
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
@@ -622,6 +622,7 @@ var _ = require('underscore');
 var util = require('../../ugly/util');
 var common = require('./common');
 var tableTemplate = _.template("<div class=\"table-responsive\">\n  <table class=\"table table-striped table-condensed\">\n\n    <% if (_(keys).some()) { %>\n      <thead>\n        <tr>\n          <td></td>\n          <% _(keys).each(function(key, colIndex) { %>\n            <th data-series-index=\"<%= colIndex %>\">\n              <%= key %>\n            </th>\n          <% }); %>\n        </tr>\n      </thead>\n    <% } %>\n\n    <tbody>\n      <% _(values).each(function(row, rowIndex) { %>\n        <tr>\n          <th data-x-index=\"<%= rowIndex %>\">\n            <%= row[0].x %>\n          </th>\n          <% _(row).each(function(datum, colIndex) { %>\n            <td data-x-index=\"<%= rowIndex %>\" data-series-index=\"<%= colIndex %>\">\n              <%= moneyFormat(datum.y) %>\n            </td>\n          <% }) %>\n        </tr>\n      <% }) %>\n    </tbody>\n\n  </table>\n</div>\n");
+var heatmapTableTemplate = _.template("<div class=\"heatmap-table-responsive\">\n\t<table class=\"table table-striped table-condensed\">\n\t\t<tbody>\n\t\t\t<% _(matrix).each(function(row, i) { %>\n\t\t\t\t<% _(row).each(function(col, j) { %>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].y %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].x %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].value.dv %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].value.p %>\n\t\t\t\t\t\t</td>\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t</tr>\n\t\t\t\t<% }) %>\n\t\t\t<% }) %>\n\t\t</tbody>\n\t</table>\n</div>");
 
 
 function fakeRawContext(e, data) {
@@ -649,34 +650,68 @@ function bindClickHandler(el, data, options) {
 
 
 function charter(data, options) {
+	if (options.model.get('chartType') === 'fragmentation') {
+		return heatmapCharter(data, options);
+	} else {
+		return commonCharter(data, options);
+	}	
+}
 
-  var keys = _(data).pluck('key');
+function commonCharter(data, options) {
+	var keys = _(data).pluck('key');
 
-  var values = _(data)
-    .chain()
-    .map(function(datum) { return datum.values; })
-    .transpose()
-    .value();
+	var values = _(data).chain().map(function(datum) {
+		return datum.values;
+	}).transpose().value();
 
-  var html = tableTemplate({
-    keys: keys,
-    values: values,
-    moneyFormat: options.shortFormatter
-  });
+	var html = tableTemplate({
+		keys : keys,
+		values : values,
+		moneyFormat : options.shortFormatter
+	});
 
-  var chartEl = document.createElement('div');
-  chartEl.innerHTML = html;
+	var chartEl = document.createElement('div');
+	chartEl.innerHTML = html;
 
-  bindClickHandler(chartEl, data, options);
+	bindClickHandler(chartEl, data, options);
 
-  return chartEl;
+	return chartEl;
+}
+
+function heatmapCharter(data, options) {
+	var keys = _(data).pluck('key');
+
+	var matrix = _.map(options.model.get("matrix"), function(itemY, i) {
+		return _.map(itemY, function(itemX, j) {
+			return {
+				y : options.model.get("yDataSet")[i],
+				x : options.model.get("xDataSet")[j],
+				value : (options.model.get("matrix")[i][j] ? options.model.get("matrix")[i][j] : {
+					'dv' : '',
+					'p' : ''
+				})
+			}
+		})
+	});
+
+	var html = heatmapTableTemplate({
+		keys : keys,
+		matrix : matrix,
+		moneyFormat : options.shortFormatter
+	});
+
+	var chartEl = document.createElement('div');
+	chartEl.innerHTML = html;
+	
+	bindClickHandler(chartEl, data, options);
+
+	return chartEl;
 }
 
 
 module.exports = {
   charter: charter
 };
-
 },{"../../ugly/util":47,"./common":10,"underscore":"underscore"}],9:[function(require,module,exports){
 
 var _ = require('underscore');
@@ -3581,17 +3616,18 @@ module.exports = ChartViewBase.extend({
   
   modalView: undefined,
   
-  //Dont try to call initialize here because it throws a 'Module initialization error' :((
-  /*initialize: function(options) {
-	  this.modalView = new ModalView({ app: options.app, collection: this.model.collection });
-  },*/
-
+  chartClickHandler : function(context) {
+	  if (context.y.fmt === app.translator.translateSync('amp.dashboard:chart-heatmap-others')) {
+		  this.model.set('yLimit', this.model.get('yLimit') + 10);
+		  this.updateData();
+	  }
+  },
+  
   downloadChartOptions: {
     trimLabels: false
   }
 
 });
-
 },{"./chart-tops-info-modal":31,"./chart-view-base":33,"d3":"d3","underscore":"underscore"}],31:[function(require,module,exports){
 
 var _ = require('underscore');
@@ -3910,7 +3946,7 @@ module.exports = BackboneDash.View.extend({
     var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions(), this.model);
     this.chartContainer.html(chart.el);
 
-    if (this.model.get('view') !== 'heatmap') {
+    if (this.model.get('chartType') !== 'fragmentation') {
     	this.renderNumbers();
     }
     var limit = this.model.get('limit');

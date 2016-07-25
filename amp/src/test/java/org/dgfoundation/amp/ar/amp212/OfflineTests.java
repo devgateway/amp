@@ -51,6 +51,7 @@ public class OfflineTests
 		suite.addTest(new JUnit4TestAdapter(UnitsSettingsUtilityTests.class));
 		suite.addTest(new JUnit4TestAdapter(ETLTests.class));
 		suite.addTest(new JUnit4TestAdapter(FilterRuleTests.class));
+		suite.addTest(new JUnit4TestAdapter(ExpressionTreeTestcases.class));
 		
 		return suite;
 	}

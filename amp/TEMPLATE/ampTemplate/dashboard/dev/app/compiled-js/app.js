@@ -622,7 +622,7 @@ var _ = require('underscore');
 var util = require('../../ugly/util');
 var common = require('./common');
 var tableTemplate = _.template("<div class=\"table-responsive\">\n  <table class=\"table table-striped table-condensed\">\n\n    <% if (_(keys).some()) { %>\n      <thead>\n        <tr>\n          <td></td>\n          <% _(keys).each(function(key, colIndex) { %>\n            <th data-series-index=\"<%= colIndex %>\">\n              <%= key %>\n            </th>\n          <% }); %>\n        </tr>\n      </thead>\n    <% } %>\n\n    <tbody>\n      <% _(values).each(function(row, rowIndex) { %>\n        <tr>\n          <th data-x-index=\"<%= rowIndex %>\">\n            <%= row[0].x %>\n          </th>\n          <% _(row).each(function(datum, colIndex) { %>\n            <td data-x-index=\"<%= rowIndex %>\" data-series-index=\"<%= colIndex %>\">\n              <%= moneyFormat(datum.y) %>\n            </td>\n          <% }) %>\n        </tr>\n      <% }) %>\n    </tbody>\n\n  </table>\n</div>\n");
-var heatmapTableTemplate = _.template("<div class=\"heatmap-table-responsive\">\n\t<table class=\"table table-striped table-condensed\">\n\t\t<tbody>\n\t\t\t<% _(matrix).each(function(row, i) { %>\n\t\t\t\t<% _(row).each(function(col, j) { %>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].y %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].x %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].value.dv %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].value.p %>\n\t\t\t\t\t\t</td>\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t</tr>\n\t\t\t\t<% }) %>\n\t\t\t<% }) %>\n\t\t</tbody>\n\t</table>\n</div>");
+var heatmapTableTemplate = _.template("<div class=\"heatmap-table-responsive\">\n\t<table class=\"table table-striped table-condensed\">\n\t\t<% if (_(keys).some()) { %>\n\t    \t<thead>\n\t        \t<tr>\n\t          \t\t<% _(keys).each(function(key, colIndex) { %>\n\t            \t\t<th data-series-index=\"0\">\n\t              \t\t\t<%= key %>\n\t            \t\t</th>\n\t          \t\t<% }); %>\n\t        \t</tr>\n\t      \t</thead>\n\t    <% } %>\n\t\t<tbody>\n\t\t\t<% _(matrix).each(function(row, i) { %>\n\t\t\t\t<% _(row).each(function(col, j) { %>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].y %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].x %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].value.dv %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].value.p %>\n\t\t\t\t\t\t</td>\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t</tr>\n\t\t\t\t<% }) %>\n\t\t\t<% }) %>\n\t\t</tbody>\n\t</table>\n</div>");
 
 
 function fakeRawContext(e, data) {
@@ -679,7 +679,10 @@ function commonCharter(data, options) {
 }
 
 function heatmapCharter(data, options) {
-	var keys = _(data).pluck('key');
+	var keys = [options.model.get('summary')[0], 
+	            options.model.get('summary')[1], 
+	            this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount'), 
+	            this.app.translator.translateSync('amp.dashboard:percentage', 'Percentage')];
 
 	var matrix = _.map(options.model.get("matrix"), function(itemY, i) {
 		return _.map(itemY, function(itemX, j) {
@@ -4506,12 +4509,9 @@ module.exports = BackboneDash.View.extend({
 			})
 		});
 	    csvTransformed = [].concat.apply([], csvTransformed);
-	    if (adjtype) {
-	    	var trnAdjType = this.app.translator.translateSync(self.adjTypeTranslation[adjtype], adjtype);
-	    }
 	    csvTransformed = _.each(csvTransformed, function(item) { 
 	        item.push(currency);
-	        item.push(trnAdjType || '');
+	        item.push(self.model.get('summary')[2]);
 	    });
     }
 

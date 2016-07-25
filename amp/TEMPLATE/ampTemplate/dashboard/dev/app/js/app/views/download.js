@@ -253,12 +253,9 @@ module.exports = BackboneDash.View.extend({
 			})
 		});
 	    csvTransformed = [].concat.apply([], csvTransformed);
-	    if (adjtype) {
-	    	var trnAdjType = this.app.translator.translateSync(self.adjTypeTranslation[adjtype], adjtype);
-	    }
 	    csvTransformed = _.each(csvTransformed, function(item) { 
 	        item.push(currency);
-	        item.push(trnAdjType || '');
+	        item.push(self.model.get('summary')[2]);
 	    });
     }
 

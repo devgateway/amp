@@ -62,7 +62,10 @@ function commonCharter(data, options) {
 }
 
 function heatmapCharter(data, options) {
-	var keys = _(data).pluck('key');
+	var keys = [options.model.get('summary')[0], 
+	            options.model.get('summary')[1], 
+	            this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount'), 
+	            this.app.translator.translateSync('amp.dashboard:percentage', 'Percentage')];
 
 	var matrix = _.map(options.model.get("matrix"), function(itemY, i) {
 		return _.map(itemY, function(itemX, j) {

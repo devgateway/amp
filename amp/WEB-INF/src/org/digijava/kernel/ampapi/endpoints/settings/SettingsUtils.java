@@ -55,6 +55,7 @@ import org.h2.util.StringUtils;
 
 /**
  * Utility class for amp settings handling
+ * 
  * @author Nadejda Mandrescu
  */
 public class SettingsUtils {
@@ -444,7 +445,11 @@ public class SettingsUtils {
 				"download-map-selector",
 				GlobalSettingsConstants.DOWNLOAD_MAP_SELECTOR,
 				new SettingOptions.Option(String.valueOf(FeaturesUtil.isVisibleFeature(GlobalSettingsConstants.DOWNLOAD_MAP_SELECTOR)))));
-		
+		// for now the wrong way as it was done so far, tickets to add it properly are defined
+		settings.add(new SettingOptions(
+                "gap-analysis-map",
+                "Gap Analysis Map",
+                new SettingOptions.Option(String.valueOf(FeaturesUtil.isVisibleFeature("Gap Analysis Map")))));
 		// Workspace Settings
 		if (MenuUtils.getCurrentView() == AmpView.TEAM) {
 			settings.add(new SettingOptions("team-id", "team-id", new SettingOptions.Option(EndpointUtils

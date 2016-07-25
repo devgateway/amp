@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
-import org.dgfoundation.amp.nireports.output.NiAmountCell;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
-import org.dgfoundation.amp.nireports.output.NiTextCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 
@@ -17,11 +17,16 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
  * @author Dolghier Constantin
  *
  */
-public class VarianceMeasureBehaviour extends AbstractComputedBehaviour {
+public class VarianceMeasureBehaviour extends AbstractComputedBehaviour<NiAmountCell> {
 	public final static VarianceMeasureBehaviour instance = new VarianceMeasureBehaviour(TimeRange.MONTH);
 	
 	protected VarianceMeasureBehaviour(TimeRange timeRange) {
 		super(timeRange);
+	}
+	
+	@Override
+	public NiAmountCell getZeroCell() {
+		return NiAmountCell.ZERO;
 	}
 	
 	@Override

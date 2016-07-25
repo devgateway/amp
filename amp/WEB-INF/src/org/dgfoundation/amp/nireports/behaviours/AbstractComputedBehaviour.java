@@ -4,9 +4,9 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.output.NiAmountCell;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
-import org.dgfoundation.amp.nireports.output.NiTextCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
@@ -19,7 +19,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
  * @author Dolghier Constantin
  *
  */
-public abstract class AbstractComputedBehaviour implements Behaviour<NiAmountCell> {
+public abstract class AbstractComputedBehaviour<V extends NiAmountCell> implements Behaviour<V> {
 	
 	protected final TimeRange timeRange;
 	
@@ -35,11 +35,6 @@ public abstract class AbstractComputedBehaviour implements Behaviour<NiAmountCel
 	@Override
 	public Cell buildUnallocatedCell(long mainId, long entityId, LevelColumn levelColumn) {
 		throw new RuntimeException("doing hierarchies by measures not supported");
-	}
-
-	@Override
-	public NiAmountCell getZeroCell() {
-		return NiAmountCell.ZERO;
 	}
 
 	@Override

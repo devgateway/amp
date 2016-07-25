@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.dgfoundation.amp.nireports.output;
+package org.dgfoundation.amp.nireports.output.nicells;
 
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 

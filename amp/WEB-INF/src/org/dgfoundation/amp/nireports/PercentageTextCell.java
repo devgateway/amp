@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
-import org.dgfoundation.amp.nireports.output.CellVisitor;
+import org.dgfoundation.amp.nireports.output.nicells.CellVisitor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**

@@ -8,6 +8,7 @@ import static java.util.stream.Collectors.toMap;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;

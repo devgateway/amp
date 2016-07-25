@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiReportData;
-import org.dgfoundation.amp.nireports.output.NiSplitCell;
-import org.dgfoundation.amp.nireports.output.NiTextCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;

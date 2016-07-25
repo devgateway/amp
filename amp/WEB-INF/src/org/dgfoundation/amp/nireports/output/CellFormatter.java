@@ -19,6 +19,13 @@ import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NumberedCell;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
+import org.dgfoundation.amp.nireports.output.nicells.CellVisitor;
+import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiDateCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiIntCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 /**

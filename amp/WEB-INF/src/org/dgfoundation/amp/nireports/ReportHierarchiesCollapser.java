@@ -11,7 +11,7 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
-import org.dgfoundation.amp.nireports.output.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;

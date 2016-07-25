@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
-import org.dgfoundation.amp.nireports.output.NiAmountCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 import org.digijava.module.aim.helper.Constants;

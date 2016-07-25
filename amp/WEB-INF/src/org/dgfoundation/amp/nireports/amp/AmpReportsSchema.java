@@ -75,7 +75,8 @@ import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
-import org.dgfoundation.amp.nireports.output.NiTextCell;
+import org.dgfoundation.amp.nireports.formulas.NiFormula;
+import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.BooleanDimension;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
@@ -540,8 +541,17 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTaggedMeasures();
 		addComputedLinearMeasures();
 		addSscMeasures();
+		addFormulaMeasures();
 		
 		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
+	}
+	
+	protected void addFormulaMeasures() {
+		//addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, NiFormula.PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
+	}
+	
+	protected void addFormulaComputedMeasure(String measureName, NiFormula formula) {
+		addFormulaComputedMeasure(measureName, measureDescriptions.get(measureName), formula);
 	}
 	
 	protected void addPledgeColumns() {

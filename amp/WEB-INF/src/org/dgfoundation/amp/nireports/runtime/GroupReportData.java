@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toList;
 
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.output.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 

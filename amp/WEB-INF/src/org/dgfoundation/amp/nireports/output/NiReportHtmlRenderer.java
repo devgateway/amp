@@ -8,6 +8,9 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 

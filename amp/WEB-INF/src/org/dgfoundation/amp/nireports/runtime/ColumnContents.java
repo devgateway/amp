@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 import static org.dgfoundation.amp.algo.AmpCollections.remap;

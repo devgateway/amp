@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiCombinationContextTransactionMeasure;
+import org.dgfoundation.amp.nireports.schema.NiFormulaicMeasure;
 import org.dgfoundation.amp.nireports.schema.NiLinearCombinationTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
@@ -71,6 +73,24 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		failIf(def.length % 2 != 0, "you should supply an even number of arguments");
 		Map<NiTransactionMeasure, BigDecimal> defMap = parseMap(String.format("while defining measure %s", compMeasureName), def);
 		return addMeasure(new NiLinearCombinationTransactionMeasure(compMeasureName, defMap, behaviour, ignoreFilters, description));
+	}
+	
+	/**
+	 * adds an instance of {@link NiFormulaicMeasure} to the schema
+	 * @param compMeasureName
+	 * @param description
+	 * @param formula
+	 * @return
+	 */
+	public AbstractReportsSchema addFormulaComputedMeasure(String compMeasureName, String description, NiFormula formula) {
+		Map<String, NiReportMeasure<CategAmountCell>> depMeas = new HashMap<>();
+		for(String measName:formula.getDependencies()) {
+			NiReportMeasure<CategAmountCell> meas = (NiReportMeasure) measures.get(measName);
+			failIf(meas == null, () -> String.format("measure <%s> defined as dependency of measure <%s> does not exist", measName, compMeasureName));
+			depMeas.put(measName, meas);
+		}
+		return addMeasure(new NiFormulaicMeasure(compMeasureName, description, depMeas, formula));
+		//return addMeasure(meas)
 	}
 	
 	@SuppressWarnings("rawtypes")

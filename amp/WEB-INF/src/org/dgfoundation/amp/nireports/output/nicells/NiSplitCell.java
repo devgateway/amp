@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.output;
+package org.dgfoundation.amp.nireports.output.nicells;
 
 import java.util.Collections;
 import java.util.HashSet;

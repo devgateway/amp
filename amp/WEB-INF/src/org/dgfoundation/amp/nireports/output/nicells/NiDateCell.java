@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.output;
+package org.dgfoundation.amp.nireports.output.nicells;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import org.dgfoundation.amp.nireports.IntCell;
-import org.dgfoundation.amp.nireports.output.NiIntCell;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiReportData;
+import org.dgfoundation.amp.nireports.output.nicells.NiIntCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;

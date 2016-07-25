@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
-import org.dgfoundation.amp.nireports.output.NiAmountCell;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
-import org.dgfoundation.amp.nireports.output.NiTextCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 
@@ -18,13 +18,18 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
  * @author Dolghier Constantin
  *
  */
-public class AverageAmountBehaviour extends AbstractComputedBehaviour {
+public class AverageAmountBehaviour extends AbstractComputedBehaviour<NiAmountCell> {
 	public final static AverageAmountBehaviour instance = new AverageAmountBehaviour(TimeRange.MONTH);
 	
 	public AverageAmountBehaviour(TimeRange timeRange) {
 		super(timeRange);
 	}
-	
+
+	@Override
+	public NiAmountCell getZeroCell() {
+		return NiAmountCell.ZERO;
+	}
+
 	@Override
 	public NiAmountCell doHorizontalReduce(List<NiCell> cells) {
 		if (cells.isEmpty())
@@ -45,4 +50,5 @@ public class AverageAmountBehaviour extends AbstractComputedBehaviour {
 	public NiOutCell doVerticalReduce(Collection<NiAmountCell> cells) {
 		return NiTextCell.EMPTY;
 	}
+
 }

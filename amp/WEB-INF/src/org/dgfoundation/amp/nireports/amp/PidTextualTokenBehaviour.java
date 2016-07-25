@@ -2,8 +2,8 @@ package org.dgfoundation.amp.nireports.amp;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
-import org.dgfoundation.amp.nireports.output.NiTextCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 /**
  * empty text cells, by the default text cell behaviour, are just ""
  * for Project Implementation Delay, the requirement was to explicitely put '0' 

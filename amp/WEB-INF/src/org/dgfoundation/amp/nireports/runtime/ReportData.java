@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.output.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 

@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 
 /**
  * a visitor which digests the values of a given trailCell

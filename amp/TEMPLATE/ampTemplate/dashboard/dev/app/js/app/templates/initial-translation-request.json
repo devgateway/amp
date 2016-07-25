@@ -134,6 +134,6 @@
 "amp.dashboard:chart-heatmap-legend4":"Between 10% and <15%",
 "amp.dashboard:chart-heatmap-legend5":"Between 15% and <20%",
 "amp.dashboard:chart-heatmap-legend6":"More than 20%",
-"amp.dashboard:chart-heatmap-others":"Others"
+"amp.dashboard:chart-heatmap-others":"Others",
+"amp.dashboard:percentage": "Percentage"
 }
-

@@ -46,6 +46,7 @@ module.exports = BackboneDash.View.extend({
     this._stateWait = new Deferred();
     this.message = null;
     this.showChartPromise = new Deferred();
+    this.renderedPromise = new Deferred();
 
     if (this.app.savedDashes.length) {
       // a bit sketch....
@@ -74,6 +75,7 @@ module.exports = BackboneDash.View.extend({
 
   render: function() {
 	var self = this;
+	this.renderedPromise = new Deferred();
     var renderOptions = {
       views: this.chartViews,
       model: this.model,
@@ -130,6 +132,7 @@ module.exports = BackboneDash.View.extend({
     }
 
     this.app.translator.translateDOM(this.el);
+    this.renderedPromise.resolve();
     return this;
   },
 

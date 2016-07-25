@@ -50,41 +50,40 @@ module.exports = BackboneDash.View.extend({
 
   render: function() {
 	var self = this;
-    this.$el.html(template());
-
-    if (this.model.get('view') === 'table') {
-      this.renderCSV(this.$('.preview-area .table-wrap').removeClass('hidden'));
-    } else {
-    	// Here we will define an interval that will check periodically if the bootstrap modal is fully rendered.
-    	// In that moment the interval is finished and the chart is rendered.
-    	var self = this;
-    	var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.
-    	var chart = _.find(self.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
-    	var interval = window.setInterval(function() {
-    		$.when(chart.showChartPromise.then(function() {
-    			if ($('.dash-download-modal').closest('.in').length > 0) {
-        			window.clearInterval(interval);
-        			nv.tooltip.cleanup();
-        			if (rendered === false) {
-        				rendered = true;
-        				    				
-        			    if (self.model.get('chartType') === 'fragmentation') {
-        			    	// We add an event for heatmaps to re-draw the original chart.
-        			    	$('.dash-download-modal').closest('.in').on('hide.bs.modal', function() {
-        			    		self.model.set('yLimit', previousYLimit);
-        			    	    self.model.set('xLimit', previousXLimit);
-        			    	    self.model.set('showFullLegends', false);
-        			    	    chart.render();
-        			    	});
-        			    }
-        			    
-        				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
-        						self.$('.preview-area .canvas-wrap'), chart);
-        			}
-        		}
-    		}, this));    		
-    	}, 100);
-    }
+    this.$el.html(template());   
+    var chart = _.find(self.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
+    
+	// Here we will define an interval that will check periodically if the bootstrap modal is fully rendered.
+	// In that moment the interval is finished and the chart is rendered.
+	var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.	    	
+	var interval = window.setInterval(function() {
+		if ($('.dash-download-modal').closest('.in').length > 0) {
+			window.clearInterval(interval);
+			// Wait for the chart in the dashboard page to be fully rendered, this has impact only on heatmap charts, on the rest is transparent.
+			$.when(chart.renderedPromise, chart.showChartPromise).done(function() {
+	    		if (self.model.get('chartType') === 'fragmentation') {
+	    			// We add an event for heatmaps to re-draw the original chart.
+	    		    $('.dash-download-modal').closest('.in').on('hide.bs.modal', function() {
+	    		    	self.model.set('yLimit', previousYLimit);
+	    		    	self.model.set('xLimit', previousXLimit);
+	    		    	self.model.set('showFullLegends', false);
+	    		    	chart.render();
+	    		    });
+	    		}
+			    if (self.model.get('view') === 'table') {
+			    	self.renderCSV(self.$('.preview-area .table-wrap').removeClass('hidden'));
+			    } else {
+			        nv.tooltip.cleanup();
+			        if (rendered === false) {
+			        	rendered = true;
+			        	self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
+			        		self.$('.preview-area .canvas-wrap'), chart);
+			        }
+			    }
+			});
+		}
+    }, 100);
+    
     return this;
   },
 
@@ -220,32 +219,54 @@ module.exports = BackboneDash.View.extend({
 
     var self = this;
     var keys = _(data).pluck('key');
-    // table of all the data
-    csvTransformed = _(data)
-      .chain()
-      .pluck('values')
-      .transpose()
-      .map(function(row) {
-        return _(row).reduce(function(csvRow, cell) {
-          csvRow.push(cell.y);
-          return csvRow;
-        }, [row[0].x]);
-      })
-      .map(function(row) {
-        row.push(currency || '');
-        if (adjtype) {
-        	var key = self.adjTypeTranslation [adjtype];
-            var trnAdjType = this.app.translator.translateSync(key, adjtype);
-            row.push(trnAdjType);
-        }
-        return row;
-      })
-      .value();
+    
+    if (self.model.get('chartType') !== 'fragmentation') {
+	    // table of all the data
+	    csvTransformed = _(data)
+	      .chain()
+	      .pluck('values')
+	      .transpose()
+	      .map(function(row) {
+	        return _(row).reduce(function(csvRow, cell) {
+	          csvRow.push(cell.y);
+	          return csvRow;
+	        }, [row[0].x]);
+	      })
+	      .map(function(row) {
+	        row.push(currency || '');
+	        if (adjtype) {
+	        	var key = self.adjTypeTranslation [adjtype];
+	            var trnAdjType = this.app.translator.translateSync(key, adjtype);
+	            row.push(trnAdjType);
+	        }
+	        return row;
+	      })
+	      .value();
+    } else {
+        csvTransformed = _.map(self.model.get("matrix"), function(itemY, i) {
+			return _.map(itemY, function(itemX, j) {
+				return [self.model.get("yDataSet")[i],
+					self.model.get("xDataSet")[j],
+					self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].dv : '',
+					self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].p : ''
+				]
+			})
+		});
+	    csvTransformed = [].concat.apply([], csvTransformed);
+	    if (adjtype) {
+	    	var trnAdjType = this.app.translator.translateSync(self.adjTypeTranslation[adjtype], adjtype);
+	    }
+	    csvTransformed = _.each(csvTransformed, function(item) { 
+	        item.push(currency);
+	        item.push(trnAdjType || '');
+	    });
+    }
 
     // prepend a header row
     headerRow = [];
     var amountTrn = this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount');
     var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
+    var percentageTrn = this.app.translator.translateSync('amp.dashboard:percentage', 'Percentage');
     var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
     var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
 
@@ -265,6 +286,13 @@ module.exports = BackboneDash.View.extend({
 	    _.each(keys, function(item) {
 	    	headerRow.push(item);
 	    });
+	    headerRow.push(currencyTrn);
+	    headerRow.push(typeTrn);
+	} else if (this.model.get('chartType') === 'fragmentation') {
+		headerRow.push(this.model.get('summary')[0]);
+		headerRow.push(this.model.get('summary')[1]);
+	    headerRow.push(amountTrn);
+	    headerRow.push(percentageTrn);
 	    headerRow.push(currencyTrn);
 	    headerRow.push(typeTrn);
 	}

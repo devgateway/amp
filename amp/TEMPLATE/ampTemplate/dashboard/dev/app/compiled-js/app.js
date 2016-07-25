@@ -3213,7 +3213,7 @@ module.exports = BackboneDash.Model.extend({
 	    	} else {
 	    		console.info('Saved currency was deleted.');
 	    		// Select default currency.
-	    		newOpt = _(this.attributes.originalAllCurrencies).findWhere({id: _.find(app.settings.models, function(item) {return item.id === "1";}).get('defaultId')});
+	    		newOpt = _(this.attributes.originalAllCurrencies).findWhere({id: _.find(self.app.settings.models, function(item) {return item.id === "1";}).get('defaultId')});
 	    		newOpt.selected = true;
 	    	}
     	}
@@ -3221,8 +3221,8 @@ module.exports = BackboneDash.Model.extend({
 
     // If we are changing the calendar --> Update list of currencies.
     if (this.attributes.id === "2") {
-    	var currenciesForThisCalendar = _.find(_.find(app.settings.models, function(item) {return item.id === "calendarCurrencies";}).get('options'), function(item2) {return item2.id === optionId}).value.split(',');
-    	var allCurrencies = _.find(app.settings.models, function(item) {return item.id === '1'});
+    	var currenciesForThisCalendar = _.find(_.find(self.app.settings.models, function(item) {return item.id === "calendarCurrencies";}).get('options'), function(item2) {return item2.id === optionId}).value.split(',');
+    	var allCurrencies = _.find(self.app.settings.models, function(item) {return item.id === '1'});
     	// 'options' is linked to the calendar select, now we clean it one by one (assigning to [] will break the view).
     	for (var i = allCurrencies.get('options').length - 1; i >= 0; i--) {
     		allCurrencies.get('options').splice(i, 1);

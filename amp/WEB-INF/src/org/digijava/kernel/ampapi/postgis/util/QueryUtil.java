@@ -380,8 +380,8 @@ public class QueryUtil {
         String query = "";
         AmpTeamMember current = TeamUtil.getCurrentAmpTeamMember();
         if (current != null && current.getUser() != null){
-            query = " or (ind.accessType = " + IndicatorAccessType.SHARED + " and s.workspace.ampTeamId in( " + TeamUtil.getCurrentTeam(TLSUtils.getRequest()).getAmpTeamId() + " )) ";
-            query += " or (ind.accessType = " + IndicatorAccessType.PRIVATE + " and ind.createdBy.user.id = " + TeamUtil.getCurrentAmpTeamMember().getUser().getId() + ") ";
+            query = " or (ind.accessType = " + IndicatorAccessType.SHARED + " and s.workspace.ampTeamId in( " + current.getAmpTeam().getAmpTeamId() + " )) ";
+            query += " or (ind.accessType = " + IndicatorAccessType.PRIVATE + " and c.user.id = " + current.getUser().getId() + ") ";
         }
         return query;
     }
@@ -391,6 +391,7 @@ public class QueryUtil {
 			String queryString = "select ind from "
 					+ AmpIndicatorLayer.class.getName() + " ind "
                     + " left join ind.sharedWorkspaces s "
+                    + " left join ind.createdBy c "
                     + " where (  "
                     + " ind.accessType = " + IndicatorAccessType.PUBLIC
                     + " or ind.accessType = " + IndicatorAccessType.STANDARD

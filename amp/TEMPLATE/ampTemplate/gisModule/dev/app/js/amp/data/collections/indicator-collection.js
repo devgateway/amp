@@ -64,9 +64,9 @@ module.exports = Backbone.Collection
       // this is a custom one. API is a bit messy so we do fair bit of manual work.
       if (layer.colorRamp) {
     	 self.settings.load().then(function() {
-    	   var language = self.settings.findWhere({id:'language'}).get('defaultId'); 
-    	   layer.title = self.getMultilangString(layer,'name', language);
-    	   layer.description = self.getMultilangString(layer,'description', language);    	   
+    	    
+    	   layer.title = self.getMultilangString(layer,'name');
+    	   layer.description = self.getMultilangString(layer,'description');     	   
     	 });   	 
         layer.type = 'joinBoundaries';
         layer.adminLevel = self._magicConversion(layer.admLevelId);
@@ -80,22 +80,17 @@ module.exports = Backbone.Collection
 
     return parsedData;
   },
-  getMultilangString: function(layer,field,language){
+  getMultilangString: function(layer,field){  
+	  var currentLanguage = this.settings.findWhere({id:'language'}).get('defaultId');
+	  var defaultLanguage = this.settings.findWhere({id: 'default-language'}).get('defaultId');	    
 	  var result = '';
-	  if(layer[field] === Object(layer[field])){
-		  result = layer[field][language];
+	  if(!_.isUndefined(layer[field])){
+		  result = layer[field][currentLanguage];
 		  if(_.isUndefined(result) || _.isNull(result)){
-			  _.each(_.keys(layer[field]),function(lang){
-				  if(layer[field][lang]){
-					  result = layer[field][lang];  
-				  }				  
-			  });
-			   
-		  }    		  
-	  }else{
-		  result = layer[field];
-	  }
-	  return (!_.isUndefined(result) && !_.isNull(result)) ? result : '';	
+			  result = layer[field][defaultLanguage] || '';
+		  } 
+	  }	 
+	  return result;  	
   },
   getSelected: function() {
     return this.chain()
@@ -115,14 +110,15 @@ module.exports = Backbone.Collection
   _createTooltip: function(obj){
 	     var tooltip  = '';
 	     if(obj.description){
-	       tooltip += obj.description ;
+	       tooltip += obj.description + '. ' ;
+	     }
+	     
+	     if(obj.createdOn){
+	      tooltip += '&#013; Created on ' + obj.createdOn + '. ';
 	     }
 	     if(obj.createdBy){
-	      tooltip += '&#013; Created by ' + obj.createdBy;
-	     }
-	     if(obj.createdOn){
-	      tooltip += '&#013; Created on ' + obj.createdOn;
-	     }
+		      tooltip += '&#013; Created by ' + obj.createdBy + '. ';
+		 }
 	     return tooltip;
   }
 

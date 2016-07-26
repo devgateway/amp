@@ -21,7 +21,7 @@ module.exports = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template(this.model.attributes));
     this.app.translator.translateDOM(this.el); /* After to catch disabled */
-
+    this.$el.find('[data-toggle="tooltip"]').tooltip();
     return this;
   },
 

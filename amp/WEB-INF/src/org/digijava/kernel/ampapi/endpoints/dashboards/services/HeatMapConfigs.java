@@ -60,7 +60,7 @@ public class HeatMapConfigs {
        add(new HeatMapConfig(
                "HeatMap by Location and Donor Group",
                HeatMapConfig.Type.LOCATION,
-               LocationUtil.getAllLocationColumnNames(),
+               getLocationsForHeatMap(),
                Arrays.asList(ColumnConstants.DONOR_GROUP)
                ));
     }};
@@ -241,4 +241,9 @@ public class HeatMapConfigs {
         return colorThresholds;
     }
     
+    private static final List<String> getLocationsForHeatMap() {
+        List<String> locationColumns = new ArrayList<String>(LocationUtil.LOCATIONS_COLUMNS_NAMES);
+        locationColumns.remove(ColumnConstants.COUNTRY);
+        return locationColumns;
+    }
 }

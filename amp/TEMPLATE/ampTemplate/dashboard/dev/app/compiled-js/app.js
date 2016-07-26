@@ -1193,7 +1193,7 @@ nv.models.heatMapChart = function() {
         	                  {min: 15, max: 20, color: "#ADCD95"}, 
         	                  {min: 20, max: 101, color: "#7BA05F"}];
         	
-        	$(container[0]).attr('height', height).attr('class', 'dash-chart nvd3-svg heatmap-chart');
+        	$(container[0]).css('height', height + 'px').attr('class', 'dash-chart nvd3-svg heatmap-chart');
         	
         	var svg = container
         		.append("g")
@@ -1369,7 +1369,7 @@ nv.models.heatMapChart = function() {
 				.attr('font-size', '11px')
 				.attr("y", 15)
 				.attr("x", ((i * maxLegendTextWidth) + ((maxLegendTextWidth - calculateTextWidth(legendsPool[i])) / 2)))
-				.html(legendsPool[i]);
+				.text(legendsPool[i]); // Why "text" instead of "html", well because IE is not yet a real browser :(
     	}
     	
     	legendsContainer.append("text")
@@ -1419,7 +1419,8 @@ nv.models.heatMapChart = function() {
 				} else {
 					return ((d.x - 1) * cubeSize) + 5;
 				}					
-			}).html(function() {
+			}).text(function() {
+				// Why "text" instead of "html", well because IE is not yet a real browser :(
 				var d = data;
 				var auxVal = d.value;
 				if (auxVal > -1) {

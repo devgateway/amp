@@ -28,8 +28,7 @@ module.exports = BackboneDash.View.extend({
     'click .download': 'download',
     'click .expand': 'big',
     'click .retry': 'render',
-    'click .heatmap-switch': 'heatmapSwitchAxis',
-    'click .heatmap-reset-others': 'clickHeatmapResetOthers'
+    'click .heatmap-switch': 'heatmapSwitchAxis'
   },
 
   chartViews: [
@@ -200,9 +199,9 @@ module.exports = BackboneDash.View.extend({
     }
     
     if (this.model.get('showResetButton')) {
-    	this.$('.heatmap-reset-others').show();
+    	this.$('.reset').show();
     } else {
-    	this.$('.heatmap-reset-others').hide();
+    	this.$('.reset').hide();
     }
     this.showChartPromise.resolve();
   },
@@ -216,11 +215,6 @@ module.exports = BackboneDash.View.extend({
 			  self.updateData();
 		  });
 	  }
-  },
-
-  clickHeatmapResetOthers: function() {
-	  this.model.set('yLimit', this.model.get('originalYLimit'));
-	  this.updateData();
   },
   
   showNegativeAlert: function() {
@@ -269,7 +263,12 @@ module.exports = BackboneDash.View.extend({
   },
 
   resetLimit: function() {
-    this.model.set('limit', this.model.defaults.limit);
+	  if (this.model.get('chartType') === 'fragmentation') {
+		  this.model.set('yLimit', this.model.get('originalYLimit'));
+		  this.updateData();
+	  } else {
+		  this.model.set('limit', this.model.defaults.limit);
+	  }
   },
 
   changeAdjType: function(e) {

@@ -207,29 +207,11 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	public static final Map<String, String> dependencyMap= new HashMap<String, String>() {{
 		put(ColumnConstants.ACTIVITY_ID, ColumnConstants.PROJECT_TITLE);
 		put(ColumnConstants.INTERNAL_USE_ID, ColumnConstants.PROJECT_TITLE);
-		put(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR);
-		put(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR);
 		put(ColumnConstants.SECONDARY_SECTOR_ID, ColumnConstants.SECONDARY_SECTOR);
-		put(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR);
-		put(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR);
-		put(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR);
-		put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR);
 		put(ColumnConstants.AGREEMENT_CLOSE_DATE, ColumnConstants.AGREEMENT_CODE);
 		put(ColumnConstants.AGREEMENT_EFFECTIVE_DATE, ColumnConstants.AGREEMENT_CODE);
 		put(ColumnConstants.AGREEMENT_SIGNATURE_DATE, ColumnConstants.AGREEMENT_CODE);
 		put(ColumnConstants.AGREEMENT_TITLE_CODE, ColumnConstants.AGREEMENT_CODE);
-		
-		String[][] colPrefixList = new String[][]{
-			{"National Planning Objectives Level", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES},
-			{"Primary Program Level",  ColumnConstants.PRIMARY_PROGRAM},
-			{"Secondary Program Level", ColumnConstants.SECONDARY_PROGRAM},
-			{"Tertiary Program Level", ColumnConstants.TERTIARY_PROGRAM}
-		};
-		for (String[] colPrefix : colPrefixList) {
-			for (int i = 1; i < 9 ; i++) {
-				put(colPrefix[0] + " " + i, colPrefix[1]);
-			}
-		}
 		
 		put(ColumnConstants.DONOR_ID, ColumnConstants.DONOR_AGENCY);
 		put(ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_AGENCY);
@@ -367,6 +349,22 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Variance Of Disbursements", ColumnConstants.VARIANCE_OF_DISBURSEMENTS);
 		put(ColumnConstants.FORECAST_EXECUTION_RATE, ColumnConstants.FORECAST_EXECUTION_RATE);
 		put("Disaster Response Marker", ColumnConstants.DISASTER_RESPONSE_MARKER);
+		
+		// replicating the same approach as in the ReportWizard (until AMP-20480 is considered)
+		String[] colPrefixList = new String[] {"National Planning Objectives Level ", "Primary Program Level ", 
+		        "Secondary Program Level ", "Tertiary Program Level "};
+        for (String colPrefix : colPrefixList) {
+            for (int i = 1; i < 9 ; i++) {
+                String level = colPrefix + i; 
+                put(level, level);
+            }
+        }
+        put(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR);
+        put(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR);
+        put(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR);
+        put(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR);
+        put(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR);
+        put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
 	}};
 	
 	protected static final List<String> visibleByDefault = Arrays.asList(

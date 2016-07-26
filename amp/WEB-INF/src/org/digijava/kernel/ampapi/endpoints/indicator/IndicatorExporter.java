@@ -74,7 +74,7 @@ public class IndicatorExporter {
         cell.setCellStyle(titleCS);
 
         cell = titleRow.createCell(cellIndex++);
-        nameTitle = new HSSFRichTextString("GEO_ID_TITLE");
+        nameTitle = new HSSFRichTextString("ID_TITLE");
         cell.setCellValue(nameTitle);
         cell.setCellStyle(titleCS);
 
@@ -168,7 +168,7 @@ public class IndicatorExporter {
             HSSFCell cell = row.createCell(cellIndex++);
             cell.setCellValue(location.getName());
             cell = row.createCell(cellIndex++);
-            cell.setCellValue(location.getGeoCode());
+            cell.setCellValue(location.getId());
             List <AmpLocationIndicatorValue> values = DynLocationManagerUtil.getLocationIndicatorValueByLocationAndIndicator(location,indicatorLayer);
             for (AmpLocationIndicatorValue value:values) {
                 cell = row.createCell(cellIndex++);

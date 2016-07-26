@@ -1379,18 +1379,18 @@ public class DynLocationManagerUtil {
                 hssfRow = hssfSheet.getRow(j);
                 if (hssfRow != null) {
                     AmpCategoryValueLocations locationObject = null;
-                    String geoCodeId = null;
+                    String id = null;
 
                     if (!isCountryLevel) {
-                        Cell geoCodeIdCell = hssfRow.getCell(1);
-                        if (geoCodeIdCell != null) {
-                            geoCodeId = getValue(geoCodeIdCell);
+                        Cell idCell = hssfRow.getCell(1);
+                        if (idCell != null) {
+                            id = getValue(idCell);
                             //some versions of excel converts to numeric and adds a .0 at the end
-                            if (StringUtils.isNotEmpty(geoCodeId) && !".0".equals(geoCodeId)) {
-                                geoCodeId = geoCodeId.replace(".0", "");
-                                locationObject = DynLocationManagerUtil.getLocationByGeoCode(geoCodeId, selectedAdmLevel);
+                            if (StringUtils.isNotEmpty(id) && !".0".equals(id)) {
+                                id = id.replace(".0", "");
+                                locationObject = DynLocationManagerUtil.getLocationById(Long.parseLong(id), selectedAdmLevel);
                                 if(locationObject == null) {
-                                    geoIdsWithProblems.add(geoCodeId);
+                                    geoIdsWithProblems.add(id);
                                     continue;
                                 }
                             } else {
@@ -1454,21 +1454,21 @@ public class DynLocationManagerUtil {
  
 	/**
 	 * 
-	 * @param geoCode
+	 * @param id
 	 * @param cvLocationLayer
 	 *            the AmpCategoryValue specifying the layer (level) of the
 	 *            location...like Country or Region
 	 * @return
 	 */
-	public static AmpCategoryValueLocations getLocationByGeoCode(
-			String geoCode, AmpCategoryValue cvLocationLayer) {
+	public static AmpCategoryValueLocations getLocationById(
+            long id, AmpCategoryValue cvLocationLayer) {
 		Session dbSession = null;
 
 		try {
 			dbSession = PersistenceManager.getSession();
 			String queryString = "select loc from "
 					+ AmpCategoryValueLocations.class.getName()
-					+ " loc where (loc.geoCode=:geoCode)";
+					+ " loc where (loc.id=:id)";
 			if (cvLocationLayer != null) {
 				queryString += " AND (loc.parentCategoryValue=:cvId) ";
 			}
@@ -1476,12 +1476,12 @@ public class DynLocationManagerUtil {
 			if (cvLocationLayer != null) {
 				qry.setLong("cvId", cvLocationLayer.getId());
 			}
-			qry.setString("geoCode", geoCode);
+			qry.setLong("id", id);
 			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) qry
 					.uniqueResult();
 			return loc;
 		} catch (Exception e) {
-			logger.error("Exception getting AmpCategoryValueLocations by geoCode:"+geoCode,e);
+			logger.error("Exception getting AmpCategoryValueLocations by ID: " + id,e);
 		}
 		return null;
 	}

@@ -206,7 +206,6 @@ public class GlobalSettingsConstants {
 
     public static final String  IMPORT_PROCESSOR_URL = "Import processor endpoint URL";
 
-    public static final String  DOWNLOAD_MAP_SELECTOR = "Download Map selector";
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value
      */

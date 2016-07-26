@@ -443,8 +443,8 @@ public class SettingsUtils {
 								.getGlobalSettingValue(GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW))));
 		settings.add(new SettingOptions(
 				"download-map-selector",
-				GlobalSettingsConstants.DOWNLOAD_MAP_SELECTOR,
-				new SettingOptions.Option(String.valueOf(FeaturesUtil.isVisibleFeature(GlobalSettingsConstants.DOWNLOAD_MAP_SELECTOR)))));
+				GisConstants.DOWNLOAD_MAP_SELECTOR,
+				new SettingOptions.Option(String.valueOf(FeaturesUtil.isVisibleFeature(GisConstants.DOWNLOAD_MAP_SELECTOR)))));
 		// for now the wrong way as it was done so far, tickets to add it properly are defined
 		settings.add(new SettingOptions(
                 "gap-analysis-map",

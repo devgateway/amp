@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 import com.sun.jersey.multipart.FormDataParam;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -45,6 +46,8 @@ public class IndicatorEndPoints {
      *      "unit": "",
      *      "admLevelId": 77,
      *      "accessTypeId": 2,
+     *      "population": true,
+     *      "indicatorTypeId": 262,
      *      "createdOn": "2016-06-24",
      *      "updatedOn": "2016-06-24",
      *      "createdBy": "atl@amp.org",
@@ -82,6 +85,8 @@ public class IndicatorEndPoints {
      *      "numberOfClasses": 5,
      *      "unit": "",
      *      "admLevelId": 77,
+     *      "population": true,
+     *      "indicatorTypeId": 262,
      *      "accessTypeId": 2,
      *      "createdOn": "2016-06-24",
      *      "updatedOn": "2016-06-24",
@@ -146,6 +151,7 @@ public class IndicatorEndPoints {
      *      "unit": "",
      *      "admLevelId": 77,
      *      "accessTypeId": 2,
+     *      "indicatorTypeId": 262,
      *      "createdOn": "2016-06-24",
      *      "updatedOn": "2016-06-24",
      *      "createdBy": "atl@amp.org",
@@ -323,6 +329,30 @@ public class IndicatorEndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public List<JsonBean> getIndicatorLayerTypes() {
         return CategoryValueService.getCategoryValues(CategoryConstants.INDICATOR_LAYER_TYPE_KEY);
+    }
+    
+    /**
+     * Configures new list of indicator layers to be designated as population layers
+     * @param designatedIndicators a list of indicator ids, e.g. [2, 3, 4, ...]
+     * @return no content or errors
+     */
+    @GET
+    @Path("/population-layers")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "designate-population-layers", ui = false, authTypes = AuthRule.IN_ADMIN)
+    public JsonBean setPopulationLayers(@QueryParam("layersIds") String designatedIndicators) {
+        return new PopulationLayerDesignator().designateAsPopulationLayers(designatedIndicators);
+    }
+    
+    /**
+     * @return a list (e.g. [2, 3, 4, ...]) of all possible indicator layers to be designated as population layers.
+     * E.g. at this moment we agreed that only "count" population layers and "non-country" population layers are allowed
+     */
+    @GET
+    @Path("/population-layers-options")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public List<Long> getAllowedPopulationLayersOptions() {
+        return new PopulationLayerDesignator().getAllowedPopulationLayersOptions();
     }
 
 }

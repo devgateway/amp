@@ -69,6 +69,9 @@ public class IndicatorUtils {
         indicatorJson.set(IndicatorEPConstants.UNIT, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
         indicatorJson.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
+        indicatorJson.set(IndicatorEPConstants.IS_POPULATION, indicator.isPopulation());
+        indicatorJson.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : 
+            indicator.getIndicatorType().getId());
         indicatorJson.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
 
         indicatorJson.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
@@ -102,57 +105,6 @@ public class IndicatorUtils {
         indicatorJson.set(IndicatorEPConstants.NUMBER_OF_IMPORTED_RECORDS, (indicator.getIndicatorValues()!=null ? indicator.getIndicatorValues().size() : 0));
 
         return indicatorJson;
-    }
-
-    public static AmpIndicatorLayer setIndicatorLayer(JsonBean indicator, TranslationUtil indicatorTranslation) {
-        AmpIndicatorLayer indicatorLayer = null;
-
-        if (indicator.get("id")!=null) {
-            indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(Long.valueOf(indicator.getString("id")));
-        } else{
-            indicatorLayer = new AmpIndicatorLayer();
-            indicatorLayer.setId(null);
-        }
-
-        indicatorLayer.setName(indicatorTranslation.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.NAME), indicatorLayer, indicator.get(IndicatorEPConstants.NAME)));
-        indicatorLayer.setDescription(indicatorTranslation.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.DESCRIPTION), indicatorLayer, indicator.get(IndicatorEPConstants.DESCRIPTION)));
-        indicatorLayer.setUnit(indicatorTranslation.extractTranslationsOrSimpleValue(getField( indicatorLayer, IndicatorEPConstants.UNIT), indicatorLayer, indicator.get(IndicatorEPConstants.UNIT)));
-        indicatorLayer.setNumberOfClasses(Long.valueOf(indicator.getString(IndicatorEPConstants.NUMBER_OF_CLASSES)));
-        if (indicatorLayer.getId() == null) {
-            indicatorLayer.setCreatedOn(new Date());
-            indicatorLayer.setCreatedBy(TeamUtil.getCurrentAmpTeamMember());
-        }
-        indicatorLayer.setUpdatedOn(new Date());
-        indicatorLayer.setAccessType( (indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID)!=null ? IndicatorAccessType.getValueFromLong(Long.valueOf(indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID))) :IndicatorAccessType.NO_TYPE));
-        indicatorLayer.setAdmLevel(CategoryManagerUtil.getAmpCategoryValueFromDb(Long.valueOf(indicator.getString(IndicatorEPConstants.ADM_LEVEL_ID))));
-
-        if (indicator.get(IndicatorEPConstants.COLOR_RAMP_ID)!=null) {
-            Set<AmpIndicatorColor> colorRamp = new HashSet<AmpIndicatorColor>();
-            String[] colorRampColors = ColorRampUtil.getColorRamp(EndpointUtils.getSingleValue(indicator, IndicatorEPConstants.COLOR_RAMP_ID,null),
-                    indicatorLayer.getNumberOfClasses());
-            for (int i = 0; i < colorRampColors.length; i++) {
-                AmpIndicatorColor color = new AmpIndicatorColor();
-                long payload = i + 1;
-                color.setPayload(payload);
-                color.setColor(colorRampColors[i]);
-                colorRamp.add(color);
-            }
-            indicatorLayer.setColorRamp(colorRamp);
-        }
-
-        if (indicator.get(IndicatorEPConstants.SHARED_WORKSPACES)!=null) {
-            Set<AmpIndicatorWorkspace> teams = new HashSet<AmpIndicatorWorkspace>();
-            List<String> indicatorTeams =  EndpointUtils.getSingleValue(indicator, IndicatorEPConstants.SHARED_WORKSPACES, Collections.emptyList());
-            for (int i = 0; i < indicatorTeams.size(); i++) {
-                AmpTeam team = TeamUtil.getAmpTeam(new Long(String.valueOf(indicatorTeams.get(i))));
-                AmpIndicatorWorkspace indicatorWs = new AmpIndicatorWorkspace();
-                indicatorWs.setWorkspace(team);
-                teams.add(indicatorWs);
-            }
-            indicatorLayer.setSharedWorkspaces(teams);
-        }
-
-        return indicatorLayer;
     }
 
     public static boolean isAdmin() {
@@ -221,26 +173,5 @@ public class IndicatorUtils {
     public static final ApiErrorMessage validateSort(String sort) {
         return ("desc".equalsIgnoreCase(sort) || "asc".equalsIgnoreCase(sort)) ? null : new ApiErrorMessage(IndicatorErrors.INVALID_SORT.id, IndicatorErrors.INVALID_SORT.description,sort);
     }
-
-    protected static Field getField(Object parent, String actualFieldName) {
-        if (parent == null) {
-            return null;
-        }
-        Field field = null;
-        try {
-            Class<?> clazz = parent.getClass();
-            while (field == null && !clazz.equals(Object.class)) {
-                try {
-                    field = clazz.getDeclaredField(actualFieldName);
-                    field.setAccessible(true);
-                } catch (NoSuchFieldException ex) {
-                    clazz = clazz.getSuperclass();
-                }
-            }
-        } catch (Exception e) {
-            logger.error(e);
-            throw new RuntimeException(e);
-        }
-        return field;
-    }
+    
 }

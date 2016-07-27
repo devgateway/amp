@@ -29,6 +29,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+/**
+ * Content Translator
+ * 
+ */
 public class TranslationUtil {
     protected static final Logger logger = Logger.getLogger(TranslationUtil.class);
     private List<AmpContentTranslation> translations = null;
@@ -146,6 +150,17 @@ public class TranslationUtil {
             return TranslationSettings.TranslationType.TEXT;
         }
         return TranslationSettings.TranslationType.NONE;
+    }
+    
+    /**
+     * Retrieves translation or a simple String value 
+     * @param fieldName
+     * @param parentObj
+     * @param jsonValue
+     * @return
+     */
+    public String extractTranslationsOrSimpleValue(String fieldName, Object parentObj, Object jsonValue) {
+        return extractTranslationsOrSimpleValue(getField(parentObj, fieldName), parentObj, jsonValue);
     }
 
     public String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
@@ -287,7 +302,6 @@ public class TranslationUtil {
             translations.addAll(trnList);
         return value;
     }
-
 
     protected static Field getField(Object parent, String actualFieldName) {
         if (parent == null) {

@@ -41,8 +41,11 @@ public class IndicatorEPConstants {
     public static final String CURRENT_PAGE_NUMBER = "currentPageNumber";
     public static final String TOTAL_PAGE_COUNT = "totalPageCount";
     public static final String TOTAL_RECORDS = "totalRecords";
-    public static final String NUMBER_OF_IMPORTED_RECORDS="numberOfImportedRecords";
-    public static final String SHARED_WORKSPACES="sharedWorkspaces";
+    public static final String NUMBER_OF_IMPORTED_RECORDS = "numberOfImportedRecords";
+    public static final String SHARED_WORKSPACES = "sharedWorkspaces";
+    public static final String IS_POPULATION = "isPopulation";
+    public static final String INDICATOR_TYPE_ID = "indicatorTypeId";
+    public static final String CAN_DO_GAP_ANALYSIS = "canDoGapAnalysis";
 
     public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";

@@ -1,8 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -12,10 +16,6 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.Session;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Collection;
 
 
 /**
@@ -110,14 +110,20 @@ public class IndicatorService {
 
     public static JsonBean saveIndicator(JsonBean indicator) {
         JsonBean result = new JsonBean();
-        TranslationUtil indicatorTranslation = new TranslationUtil();
-        AmpIndicatorLayer indLayer = IndicatorUtils.setIndicatorLayer(indicator, indicatorTranslation);
-
-        if (indLayer.getId() != null && !IndicatorUtils.hasRights(indLayer.getId())) {
+        IndicatorUpdater updater = new IndicatorUpdater(indicator);
+        AmpIndicatorLayer indLayer = updater.getIndicatorLayer();
+        
+        if (!updater.getApiErrors().isEmpty()) {
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
+            return ApiError.toError(updater.getApiErrors().getAllErrors());
+        }
+            
+        // TODO: REFACTOR to return access rights denied before processing input. Also it can be part of Authorization process
+        if (indLayer != null && indLayer.getId() != null && !IndicatorUtils.hasRights(indLayer.getId())) {
             EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
             return ApiError.toError(IndicatorErrors.UNAUTHORIZED);
         }
-
+        
         try {
             if (indLayer.getId()==null) {
                 result.set(IndicatorEPConstants.RESULT, IndicatorEPConstants.INSERTED);
@@ -129,19 +135,19 @@ public class IndicatorService {
             sess.saveOrUpdate(indLayer);
             sess.flush();
 
-            indicatorTranslation.serialize(indLayer, IndicatorEPConstants.NAME, indicatorTranslation.getTranslations());
-            indicatorTranslation.serialize(indLayer, IndicatorEPConstants.DESCRIPTION, indicatorTranslation.getTranslations());
-            indicatorTranslation.serialize(indLayer, IndicatorEPConstants.UNIT, indicatorTranslation.getTranslations());
+            updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.NAME, updater.getContentTranslator().getTranslations());
+            updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.DESCRIPTION, updater.getContentTranslator().getTranslations());
+            updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.UNIT, updater.getContentTranslator().getTranslations());
 
             JsonBean indicatorJson = IndicatorUtils.buildIndicatorLayerJson(indLayer);
 
             result.set(IndicatorEPConstants.DATA, indicatorJson);
         } catch (Exception e) {
             logger.error("saveIndicator: ", e);
-            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
-            return ApiError.toError(IndicatorErrors.UNKNOWN_ERROR);
+            throw new RuntimeException(e);
         }
 
         return result;
     }
+    
 }

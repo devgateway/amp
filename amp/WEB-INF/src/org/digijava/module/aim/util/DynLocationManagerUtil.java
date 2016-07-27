@@ -1,5 +1,20 @@
 package org.digijava.module.aim.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -16,7 +31,6 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.DatabaseWaver;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
-import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorService;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -40,21 +54,6 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class DynLocationManagerUtil {
 	private static Logger logger = Logger
@@ -1500,6 +1499,24 @@ public class DynLocationManagerUtil {
 		public Set<String> getMoreinfo() {return moreinfo;}
 		public void setMoreinfo(Set<String> moreinfo) {this.moreinfo = moreinfo;}
 		
+	}
+	
+	/**
+	 * Reset population flag for all AmpIndicatorLayer entries to the given state
+	 * @param isPopulation
+	 * @return
+	 */
+	public static int resetIndicatorLayersPopulation(boolean isPopulation) {
+	    return PersistenceManager.getSession().createQuery("update " + AmpIndicatorLayer.class.getName() + " o "
+	            + "set o.population=:isPopulation").setBoolean("isPopulation", isPopulation).executeUpdate();
+	}
+	
+	public static List<Long> getIndicatorLayersIdsByTypeExcludeAdm(Long indicatorTypeId, Long implLocIdToExclude) {
+	    return PersistenceManager.getSession().createQuery("select o.id from " + AmpIndicatorLayer.class.getName() + " o "
+	            + "where o.indicatorType != null and o.indicatorType.id = :indicatorTypeId "
+	            + "and o.admLevel != null and o.admLevel.id != :implLocIdToExclude")
+	            .setLong("indicatorTypeId", indicatorTypeId).setLong("implLocIdToExclude", implLocIdToExclude)
+	            .list();
 	}
 
 }

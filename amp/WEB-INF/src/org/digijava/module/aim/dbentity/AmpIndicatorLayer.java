@@ -26,6 +26,8 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     private Set <AmpIndicatorWorkspace> sharedWorkspaces;
     @TranslatableField
     private String unit;
+	private AmpCategoryValue indicatorType;
+	private Boolean population;
 	private IndicatorAccessType accessType;
 	private Date createdOn;
 	private Date updatedOn;
@@ -165,5 +167,33 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
             this.sharedWorkspaces.retainAll(sharedWorkspaces);
             this.sharedWorkspaces.addAll(sharedWorkspaces);
         }
+    }
+
+    /**
+     * @return the indicatorType
+     */
+    public AmpCategoryValue getIndicatorType() {
+        return indicatorType;
+    }
+
+    /**
+     * @param indicatorType the indicatorType to set
+     */
+    public void setIndicatorType(AmpCategoryValue indicatorType) {
+        this.indicatorType = indicatorType;
+    }
+
+    /**
+     * @return the population
+     */
+    public Boolean isPopulation() {
+        return population;
+    }
+
+    /**
+     * @param population the population to set
+     */
+    public void setPopulation(Boolean population) {
+        this.population = population;
     }
 }

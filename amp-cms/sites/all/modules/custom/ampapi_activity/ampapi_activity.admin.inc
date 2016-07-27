@@ -172,7 +172,24 @@ function ampapi_activity_search_enabled_columns_validate($element, &$form_state,
   // Only save the list of enabled columns.
   $key = 'ampapi_activity_search_settings';
   $enabled_columns = $form_state['values'][$key]['enabled_columns'];
-  $form_state['values'][$key]['enabled_columns'] = array_filter($enabled_columns);
+  $enabled_columns = array_filter($enabled_columns);
+  $form_state['values'][$key]['enabled_columns'] = $enabled_columns;
+
+  // Select all of the measure columns and make sure at least 1 is enabled.
+  $mappers = ampapi_get_mappers();
+  $measure_columns = array();
+  foreach ($mappers as $key => $plugin) {
+    if (!empty($plugin['property name']) && $plugin['report field group'] == 'measures') {
+      $measure_columns[$plugin['property name']] = $plugin['title'];
+    }
+  }
+  if (!empty($measure_columns)) {
+    $enabled_measures = array_intersect(array_keys($measure_columns), array_keys($enabled_columns));
+    if (empty($enabled_measures)) {
+      $measures = implode(', ', $measure_columns);
+      form_set_error('columns', t('Please make sure you have enabled at least 1 measures column.<br />Measures columns are: %measures.', array('%measures' => $measures)));
+    }
+  }
 }
 
 /**
@@ -182,7 +199,8 @@ function ampapi_activity_search_enabled_filters_validate($element, &$form_state,
   // Only save the list of enabled columns.
   $key = 'ampapi_activity_search_settings';
   $enabled_filters = $form_state['values'][$key]['enabled_filters'];
-  $form_state['values'][$key]['enabled_filters'] = array_filter($enabled_filters);
+  $enabled_filters = array_filter($enabled_filters);
+  $form_state['values'][$key]['enabled_filters'] = $enabled_filters;
 }
 
 /**

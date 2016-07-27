@@ -62,6 +62,7 @@ class ampAPIEntityQueryHelper {
    */
   function executeQuery(EntityFieldQuery $query) {
     global $language_content;
+    global $user;
 
     $api_status = helpergeneric_check_api_status();
     if (!$api_status['online']) {
@@ -190,6 +191,21 @@ class ampAPIEntityQueryHelper {
         $t_args['%message'] = $response->status_message;
       }
       drupal_set_message(t('The API returned the following status message: %message', $t_args), 'error');
+
+      // Show the detailed error-message only of the user is admin or UID 1.
+      if (!empty($response->data) && (in_array('admin user', $user->roles) || $user->uid == 1)) {
+        $error_data = json_decode($response->data);
+        $errors = $error_data->error;
+        foreach ($errors as $code => $error) {
+          $explanation = reset($error);
+          $t_args = array(
+            '%code' => check_plain($code),
+            '%message' => check_plain($explanation),
+          );
+          drupal_set_message(t('API Error Code: %code<br />API Error Explanation: %message', $t_args), 'error');
+        }
+      }
+
       return ($query->count) ? 0 : array();
     }
 

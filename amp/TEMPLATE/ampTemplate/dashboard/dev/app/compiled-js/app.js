@@ -3831,7 +3831,7 @@ module.exports = BackboneDash.View.extend({
     this.listenTo(this.model, 'change:view', this.render);
 
     this.app.state.register(this, 'chart:' + this.model.url, {
-      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'xAxisColumn', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements','seriesToExclude'),
+      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'xAxisColumn', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements','seriesToExclude', 'xLimit', 'yLimit', 'swapAxes'),
       set: _(this.model.set).bind(this.model),
       empty: null
     });

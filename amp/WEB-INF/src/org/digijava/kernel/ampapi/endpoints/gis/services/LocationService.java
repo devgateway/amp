@@ -6,24 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -46,16 +37,15 @@ import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpStructure;
@@ -73,10 +63,9 @@ import org.hibernate.jdbc.Work;
  * @author Diego Dimunzio
  *
  */
-
 public class LocationService {
 	protected static Logger logger = Logger.getLogger(LocationService.class);
-
+	
 	/**
 	 * Get totals (actual commitments/ actual disbursements) by administrative level
 	 * @param admlevel
@@ -85,29 +74,9 @@ public class LocationService {
 	 */
 	public JsonBean getTotals(String admlevel, JsonBean config) {
 	    JsonBean retlist = new JsonBean();
-		HardCodedCategoryValue admLevelCV = null;
-		switch (admlevel) {
-		case "adm0":
-			admlevel = ColumnConstants.COUNTRY; 
-			admLevelCV = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY;
-			break;
-		case "adm1":
-			admlevel = ColumnConstants.REGION;
-			admLevelCV = CategoryConstants.IMPLEMENTATION_LOCATION_REGION;
-			break;
-		case "adm2":
-			admlevel = ColumnConstants.ZONE; 
-			admLevelCV = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE;
-			break;
-		case "adm3":
-			admlevel = ColumnConstants.DISTRICT; 
-			admLevelCV = CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT;
-			break;
-		default:
-			admlevel = ColumnConstants.REGION; 
-			admLevelCV = CategoryConstants.IMPLEMENTATION_LOCATION_REGION;
-			break;
-		}
+		HardCodedCategoryValue admLevelCV = GisConstants.ADM_TO_IMPL_CATEGORY_VALUE.getOrDefault(admlevel,
+		        CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+		admlevel = admLevelCV.getValueKey();
 		
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals", ArConstants.DONOR_TYPE);
@@ -386,5 +355,5 @@ public class LocationService {
 		al = q.list();
 		return al;
 
-	}	
+	}
 }

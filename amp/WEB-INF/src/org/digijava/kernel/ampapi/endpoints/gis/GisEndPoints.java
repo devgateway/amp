@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
+import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
@@ -376,6 +377,7 @@ public class GisEndPoints {
 	}
 	private List<JsonBean> generateIndicatorJson (List<AmpIndicatorLayer> indicators,boolean includeAdmLevel) {
 		List<JsonBean> indicatorsJson = new ArrayList<JsonBean>();
+		GapAnalysis gapAnalysis = new GapAnalysis();
 
         for (AmpIndicatorLayer indicator : indicators) {
 			JsonBean json = new JsonBean();
@@ -388,7 +390,9 @@ public class GisEndPoints {
 				json.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getLabel());
 			}
             json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
-
+            json.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
+            json.set(IndicatorEPConstants.CAN_DO_GAP_ANALYSIS, gapAnalysis.canDoGapAnalysis(indicator));
+            
             json.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
             json.set(IndicatorEPConstants.UPDATED_ON, FormatHelper.formatDate(indicator.getUpdatedOn()));
 

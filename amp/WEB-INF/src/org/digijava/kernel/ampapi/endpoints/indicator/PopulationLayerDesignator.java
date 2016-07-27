@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
@@ -167,13 +168,9 @@ public class PopulationLayerDesignator {
         Object layerIds = input.get("layersIds");
         if (layerIds != null && List.class.isAssignableFrom(layerIds.getClass()) && !((List) layerIds).isEmpty()) {
             for (Object oId : (List) layerIds) {
-                if (oId == null) {
-                    result.clear();
-                    break;
-                } else if (oId instanceof Integer) {
-                    result.add(new Long((Integer) oId));
-                } else if (oId instanceof Long) {
-                    result.add((Long) oId);
+                String id = String.valueOf(oId);
+                if (NumberUtils.isDigits(id)) {
+                    result.add(Long.parseLong(id));
                 } else {
                     result.clear();
                     break;

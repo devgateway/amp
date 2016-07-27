@@ -679,8 +679,15 @@ function commonCharter(data, options) {
 }
 
 function heatmapCharter(data, options) {
-	var keys = [options.model.get('summary')[0], 
-	            options.model.get('summary')[1], 
+	// For AMP-23582: we dont want the name from "summary" because thats the origName and not always the same name than the X axis combo selector. 
+	var firstColumnName = _.find(options.model.get('heatmap_config').models[0].get('columns'), function(item) {
+		return item.origName === options.model.get('summary')[0];
+	}).name; 
+	var secondColumnName = _.find(options.model.get('heatmap_config').models[0].get('columns'), function(item) {
+		return item.origName === options.model.get('summary')[1];
+	}).name;
+	var keys = [firstColumnName, 
+	            secondColumnName, 
 	            this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount'), 
 	            this.app.translator.translateSync('amp.dashboard:percentage', 'Percentage')];
 
@@ -4543,8 +4550,15 @@ module.exports = BackboneDash.View.extend({
 	    headerRow.push(currencyTrn);
 	    headerRow.push(typeTrn);
 	} else if (this.model.get('chartType') === 'fragmentation') {
-		headerRow.push(this.model.get('summary')[0]);
-		headerRow.push(this.model.get('summary')[1]);
+		// For AMP-23582: we dont want the name from "summary" because thats the origName and not always the same name than the X axis combo selector. 
+		var firstColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function(item) {
+			return item.origName === self.model.get('summary')[0];
+		}).name; 
+		var secondColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function(item) {
+			return item.origName === self.model.get('summary')[1];
+		}).name;
+		headerRow.push(firstColumnName);
+		headerRow.push(secondColumnName);
 	    headerRow.push(amountTrn);
 	    headerRow.push(percentageTrn);
 	    headerRow.push(currencyTrn);

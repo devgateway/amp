@@ -62,8 +62,15 @@ function commonCharter(data, options) {
 }
 
 function heatmapCharter(data, options) {
-	var keys = [options.model.get('summary')[0], 
-	            options.model.get('summary')[1], 
+	// For AMP-23582: we dont want the name from "summary" because thats the origName and not always the same name than the X axis combo selector. 
+	var firstColumnName = _.find(options.model.get('heatmap_config').models[0].get('columns'), function(item) {
+		return item.origName === options.model.get('summary')[0];
+	}).name; 
+	var secondColumnName = _.find(options.model.get('heatmap_config').models[0].get('columns'), function(item) {
+		return item.origName === options.model.get('summary')[1];
+	}).name;
+	var keys = [firstColumnName, 
+	            secondColumnName, 
 	            this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount'), 
 	            this.app.translator.translateSync('amp.dashboard:percentage', 'Percentage')];
 

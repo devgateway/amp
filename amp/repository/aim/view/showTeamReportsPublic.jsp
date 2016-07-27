@@ -346,13 +346,7 @@ function submitForm(action){
 																					
 																						<%-- <c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/> --%>
 																						
-																						<%
-																							boolean onlySaikuButton = report.isImplementedInMondrian() && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS);
-																						%>
-																						
-	 																					<% if (true/*onlySaikuButton*/) { %>
-																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
-																						<% } %>
+																						<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
 																					    
 																						<a
 																							href="${reportLink}"
@@ -467,16 +461,10 @@ function submitForm(action){
 																							<bean:write name="report" property="ampReportId" />
 																						</c:set>
 																						<c:set target="${urlParams}" property="event" value="edit" />
-																						<%if (!onlySaikuButton) {%>
-																							<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
-							                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
-							                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
-							                                							<% } %>
-																						<%
-																							if (!onlySaikuButton) {	
-																						%>
-																							<%-- <%@ include file="saiku_button.jspf" %> --%> 
-																						<% } %>
+
+																						<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
+						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
 																						<c:set var="translation">
 																							<digi:trn>Get report in Excel format</digi:trn>&nbsp;
 																						</c:set>

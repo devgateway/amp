@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
@@ -56,25 +55,25 @@ public class PopulationLayerDesignator {
      * @param designatedIndicators indicator layers ids list
      * @return no data on success or errors
      */
-    public JsonBean designateAsPopulationLayers(String designatedIndicators) {
+    public JsonBean designateAsPopulationLayers(JsonBean input) {
         JsonBean result = new JsonBean();
-        LOGGER.info("Designating new population layers: " + designatedIndicators);
-        String[] strIds = designatedIndicators.split(",");
-        List<AmpIndicatorLayer> newPopulationLayers = new ArrayList<>(strIds.length);
-        Map<Long, Set<String>> admLevelIndicatorMap = new HashMap<>();
-        Map<String, AmpIndicatorLayer> idToAil = new HashMap<>();
-        for (String idStr : strIds) {
-            Long id = NumberUtils.isDigits(idStr) ? Long.valueOf(idStr) : null;
+        List<Long> ids = getIds(input);
+        LOGGER.info("Designating new population layers: " + Util.toCSString(ids));
+        
+        List<AmpIndicatorLayer> newPopulationLayers = new ArrayList<>(ids.size());
+        Map<Long, Set<Long>> admLevelIndicatorMap = new HashMap<>();
+        Map<Long, AmpIndicatorLayer> idToAil = new HashMap<>();
+        for (Long id : ids) {
             AmpIndicatorLayer ail = id == null ? null : DynLocationManagerUtil.getIndicatorLayerById(id);
             Long admId = (ail == null || ail.getAdmLevel() == null) ? null : ail.getAdmLevel().getId();
-            Set<String> indicators = admLevelIndicatorMap.putIfAbsent(admId, new HashSet<>());
+            Set<Long> indicators = admLevelIndicatorMap.putIfAbsent(admId, new HashSet<>());
             if (indicators == null) { 
                 indicators = admLevelIndicatorMap.get(admId);
             }
-            if (indicators.add(idStr)) {
+            if (indicators.add(id)) {
                 newPopulationLayers.add(ail);
             }
-            idToAil.put(idStr, ail);
+            idToAil.put(id, ail);
         }
         validate(admLevelIndicatorMap, idToAil);
         
@@ -97,10 +96,10 @@ public class PopulationLayerDesignator {
         return result;
     }
     
-    private void validate(Map<Long, Set<String>> admLevelIndicatorMap, Map<String, AmpIndicatorLayer> idToAil) {
+    private void validate(Map<Long, Set<Long>> admLevelIndicatorMap, Map<Long, AmpIndicatorLayer> idToAil) {
         // invalid ids
-        Set<String> invalidIds = new HashSet<String>();
-        for (Entry<String, AmpIndicatorLayer> entry : idToAil.entrySet()) {
+        Set<Long> invalidIds = new HashSet<Long>();
+        for (Entry<Long, AmpIndicatorLayer> entry : idToAil.entrySet()) {
             if (entry.getValue() == null) {
                 invalidIds.add(entry.getKey());
             }
@@ -111,7 +110,7 @@ public class PopulationLayerDesignator {
         }
         // no adm level found
         if (admLevelIndicatorMap.containsKey(null)) {
-            Set<String> indicatorsWithNoAdms = admLevelIndicatorMap.get(null);
+            Set<Long> indicatorsWithNoAdms = admLevelIndicatorMap.get(null);
             indicatorsWithNoAdms.removeAll(invalidIds);
             if (!indicatorsWithNoAdms.isEmpty()) {
                 String err = getLayerInfo(indicatorsWithNoAdms, idToAil);
@@ -119,7 +118,7 @@ public class PopulationLayerDesignator {
             }
         }
         // duplicate indicators
-        for (Entry<Long, Set<String>> entry : admLevelIndicatorMap.entrySet()) {
+        for (Entry<Long, Set<Long>> entry : admLevelIndicatorMap.entrySet()) {
             if (entry.getValue().size() > 1) {
                 String err = String.format("duplicate indicators with the same adm layer (%d): %s ", entry.getKey(),                        
                         getLayerInfo(entry.getValue(), idToAil));
@@ -154,13 +153,37 @@ public class PopulationLayerDesignator {
         }
     }
     
-    private String getLayerInfo(Collection<String> layerIds, Map<String, AmpIndicatorLayer> idToAil) {
+    private String getLayerInfo(Collection<Long> layerIds, Map<Long, AmpIndicatorLayer> idToAil) {
         String invalidLayers = "";
-        for (String id : layerIds) {
+        for (Long id : layerIds) {
             AmpIndicatorLayer ail = idToAil.get(id);
             invalidLayers += ", " + (ail == null ? "id = " + id : "name = " + ail.getName());
         }
         return layerIds.size() > 0 ? invalidLayers.substring(2) : invalidLayers;
+    }
+    
+    private List<Long> getIds(JsonBean input) {
+        List<Long> result = new ArrayList<>();
+        Object layerIds = input.get("layersIds");
+        if (layerIds != null && List.class.isAssignableFrom(layerIds.getClass()) && !((List) layerIds).isEmpty()) {
+            for (Object oId : (List) layerIds) {
+                if (oId == null) {
+                    result.clear();
+                    break;
+                } else if (oId instanceof Integer) {
+                    result.add(new Long((Integer) oId));
+                } else if (oId instanceof Long) {
+                    result.add((Long) oId);
+                } else {
+                    result.clear();
+                    break;
+                }
+            }
+        }
+        if (result.isEmpty()) {
+            errors.addApiErrorMessage(IndicatorErrors.INVALID_POPULATION_LAYERS, input.getString("layersIds"));
+        }
+        return result;
     }
 
 }

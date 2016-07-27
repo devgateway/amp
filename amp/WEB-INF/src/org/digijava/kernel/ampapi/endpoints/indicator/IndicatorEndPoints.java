@@ -332,16 +332,20 @@ public class IndicatorEndPoints {
     }
     
     /**
+     * <pre>
      * Configures new list of indicator layers to be designated as population layers
-     * @param designatedIndicators a list of indicator ids, e.g. [2, 3, 4, ...]
+     * {
+     *   “layersIds” : [5,10,11 23, ...]
+     * }
+     * </pre>
      * @return no content or errors
      */
-    @GET
+    @POST
     @Path("/population-layers")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "designate-population-layers", ui = false, authTypes = AuthRule.IN_ADMIN)
-    public JsonBean setPopulationLayers(@QueryParam("layersIds") String designatedIndicators) {
-        return new PopulationLayerDesignator().designateAsPopulationLayers(designatedIndicators);
+    public JsonBean setPopulationLayers(JsonBean input) {
+        return new PopulationLayerDesignator().designateAsPopulationLayers(input);
     }
     
     /**

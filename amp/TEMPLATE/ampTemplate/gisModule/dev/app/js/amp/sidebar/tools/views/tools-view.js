@@ -5,6 +5,7 @@ var _ = require('underscore');
 var BaseControlView = require('../../base-control/base-control-view');
 var ShareMapToolView = require('./share-map-tool-view');
 var ExportMapToolView = require('./export-map-tool-view');
+var PrintUtil = require('../util/print-util');
 
 var Template = fs.readFileSync(__dirname + '/../templates/tools-template.html', 'utf8');
 
@@ -20,7 +21,7 @@ module.exports = BaseControlView.extend({
 
   events: {
     'click .gis-tool-share': 'share',
-    'click .gis-tool-img': 'image'
+    'click .gis-tool-img': 'print'
   },
 
   initialize: function() {
@@ -86,8 +87,43 @@ module.exports = BaseControlView.extend({
     this.$('.gis-tool-share-form').html(subView.render().el);
   },
 
-  image: function() {
-      // TODO implement me
+  print: function() {
+    var self = this;
+    var options = {
+        success: function(response) {
+            var a = document.createElement('a');
+            document.body.appendChild(a);
+            a.style = 'display: none';
+            a.href = 'data:image/png;base64,' + response;
+            a.download = 'new-gis.png';
+            self.fakeClick(a);
+            $('#map-loading').hide();
+            self.$('.gis-tool-img').toggleClass('disabled');
+        },
+        error: function(response) {
+            console.error(response);
+            $('#map-loading').hide();
+            self.$('.gis-tool-img').toggleClass('disabled');
+        }
+    };
+    $('#map-loading').show();
+    this.$('.gis-tool-img').toggleClass('disabled');
+    PrintUtil.printMap(options);
+  },
+  fakeClick: function(anchor) {
+      if(anchor) {
+          if(anchor.click) {
+              anchor.click();
+          } else if(document.createEvent) {
+              var e = document.createEvent('MouseEvents');
+              e.initEvent( 'click', true, true );
+              anchor.dispatchEvent(e);
+          } else if(document.createEventObject) {
+              var evObj = document.createEventObject();
+              anchor.fireEvent("onclick", evObj);
+          }
+      } else {
+          console.error("null anchor")
+      }
   }
-
 });

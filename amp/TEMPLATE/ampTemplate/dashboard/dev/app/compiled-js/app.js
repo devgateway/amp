@@ -4518,7 +4518,11 @@ module.exports = BackboneDash.View.extend({
 	    csvTransformed = [].concat.apply([], csvTransformed);
 	    csvTransformed = _.each(csvTransformed, function(item) { 
 	        item.push(currency);
-	        item.push(self.model.get('summary')[2]);
+	        if (adjtype) {
+	        	var key = self.adjTypeTranslation [adjtype];
+	            var trnAdjType = this.app.translator.translateSync(key, adjtype);
+	            item.push(trnAdjType);
+	        }	        
 	    });
     }
 

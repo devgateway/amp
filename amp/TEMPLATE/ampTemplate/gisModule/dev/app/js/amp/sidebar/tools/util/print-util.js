@@ -29,6 +29,7 @@ function printMap(options) {
         });
     });
     mapContainer.find(".table").css("font-size", "0.9em");
+    mapContainer.find(".leaflet-popup").css("font-family", '"Helvetica Neue", Helvetica, Arial, sans-serif;');
     _.each(removedEl, function (el) {
         var elem = mapContainer.find(el);
         if(!elem.hasClass('expanded')) {

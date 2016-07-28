@@ -1,18 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.common.print;
 
+import clover.com.google.common.base.Strings;
 import clover.org.apache.commons.codec.binary.Base64;
-import com.google.common.base.Strings;
+import com.google.common.base.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.print.phantom.PhantomService;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
-import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +28,7 @@ public class PrintImageService {
     private static final String NO_CACHE_NO_STORE_MUST_REVALIDATE = "no-cache, no-store, must-revalidate";
     private static final String PNG_EXTENSION = ".png";
     private static final String HTML_EXTENSION = ".html";
+    private static final String JS_EXTENSION = ".js";
     private static final int FILE_NAME_LENGTH = 10;
     private static final String ERROR_CREATING_IMAGE = "Error Creating image";
     private static final String CACHE_CONTROL = "Cache-Control";
@@ -48,17 +46,18 @@ public class PrintImageService {
     private static Response internalCreateImage(final HtmlContent htmlContent) {
         File tmpContentFile = null;
         File tmpImageFile = null;
+        File tmpJsFile = null;
         String errorMessage = ERROR_CREATING_IMAGE;
         try (
             final ByteArrayOutputStream output = new ByteArrayOutputStream()
         ){
-            tmpContentFile = createTemFile(htmlContent.getContent());
+            tmpContentFile = createTmpFile(htmlContent.getContent(), HTML_EXTENSION);
             final Integer height = getHeight(htmlContent);
             final Integer width = getWidth(htmlContent);
             tmpImageFile = File.createTempFile(RandomStringUtils.randomAlphabetic(FILE_NAME_LENGTH), PNG_EXTENSION);
-            final String script = Strings.isNullOrEmpty(htmlContent.getJavascript()) ? "": htmlContent.getJavascript();
-            PhantomService.createImage(tmpContentFile.toURI().toString(), tmpImageFile.getAbsolutePath(), width, height, script);
-
+            tmpJsFile = createTmpFile(htmlContent.getJavascript(), JS_EXTENSION);
+            final String scriptPath = tmpJsFile != null ? tmpJsFile.getAbsolutePath(): "";
+            PhantomService.createImage(tmpContentFile.toURI().toString(), tmpImageFile.getAbsolutePath(), width, height, scriptPath);
             Files.copy(tmpImageFile.toPath(), output);
             return createResponse(output);
         } catch (final Exception e) {
@@ -67,6 +66,7 @@ public class PrintImageService {
         } finally {
             safeDelete(tmpContentFile);
             safeDelete(tmpImageFile);
+            safeDelete(tmpJsFile);
         }
         return Response.serverError().entity(errorMessage).build();
     }
@@ -95,9 +95,12 @@ public class PrintImageService {
         return htmlContent.getHeight() != null && htmlContent.getHeight() > 0 ? htmlContent.getHeight(): DEFAULT_HEIGHT;
     }
 
-    private static File createTemFile(final String content) throws IOException {
-        final File htmlFile = File.createTempFile(RandomStringUtils.randomAlphabetic(FILE_NAME_LENGTH), HTML_EXTENSION);
-        FileUtils.writeStringToFile(htmlFile, content);
-        return htmlFile;
+    private static File createTmpFile(final String content, String extension) throws IOException {
+        if(!Strings.isNullOrEmpty(content)) {
+            final File file = File.createTempFile(RandomStringUtils.randomAlphabetic(FILE_NAME_LENGTH), extension);
+            FileUtils.writeStringToFile(file, content, Charsets.UTF_8.displayName());
+            return file;
+        }
+        return null;
     }
 }

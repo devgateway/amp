@@ -28,6 +28,7 @@ import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
+import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -153,6 +154,8 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 		addLinearFilterMeasure(MeasureConstants.VARIANCE_OF_COMMITMENTS, null, VarianceMeasureBehaviour.instance, false, MeasureConstants.ACTUAL_COMMITMENTS, +1);
 		addLinearFilterMeasure(MeasureConstants.VARIANCE_OF_DISBURSEMENTS, null, VarianceMeasureBehaviour.instance, false, MeasureConstants.ACTUAL_DISBURSEMENTS, +1);
 		addLinearFilterMeasure(MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, null, AverageAmountBehaviour.instance, false, MeasureConstants.ACTUAL_DISBURSEMENTS, +1);
+		
+		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, null, NiFormula.PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
 	}
 
 	@Override

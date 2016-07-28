@@ -22,6 +22,7 @@ import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.nireports.output.nicells.CellVisitor;
 import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiDateCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiIntCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
@@ -107,5 +108,12 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	public IntCell visit(NiIntCell cell, CellColumn currentColumn) {
 		IntCell res = new IntCell(cell.value, cell.entityId);
 		return res;
+	}
+
+	@Override
+	public ReportCell visit(NiFormulaicAmountCell cell, CellColumn currentColumn) {
+		if (cell.isDefined())
+			return visitNumberedCell(cell);
+		return null;
 	}
 }

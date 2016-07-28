@@ -17,4 +17,5 @@ public interface CellVisitor<K> {
 	K visit(NiSplitCell cell, CellColumn currentColumn);
 	K visit(NiDateCell cell, CellColumn currentColumn);
 	K visit(NiIntCell cell, CellColumn currentColumn);
+	K visit(NiFormulaicAmountCell cell, CellColumn currentColumn);
 }

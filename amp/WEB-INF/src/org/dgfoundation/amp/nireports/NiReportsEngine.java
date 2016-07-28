@@ -84,7 +84,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	public static final String PSEUDOCOLUMN_MONTH = "#date#month";
 	public static final String PSEUDOCOLUMN_MEASURE = "#ni#measure";
 	public static final String PSEUDOCOLUMN_COLUMN = "#ni#column";
-	
+		
 	//public final static Set<String> PSEUDOCOLUMNS = new HashSet<>(Arrays.asList(PSEUDOCOLUMN_MONTH, PSEUDOCOLUMN_QUARTER, PSEUDOCOLUMN_YEAR, PSEUDOCOLUMN_MEASURE, PSEUDOCOLUMN_COLUMN));
 	
 	// some of the fields below are public because they are part of the "internal" API and might be used by callbacks from deep inside ComputedMeasures / etc

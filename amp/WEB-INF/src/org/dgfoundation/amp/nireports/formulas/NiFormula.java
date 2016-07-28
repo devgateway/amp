@@ -9,11 +9,12 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
 import static org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell.isDefined;
 import static org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell.UNDEFINED;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 /**
  * an expression to be evaluated as function of a set of variables
@@ -79,7 +80,7 @@ public interface NiFormula {
 	}
 
 	public static NiFormula DIVIDE(NiFormula left, NiFormula right) {
-		return condition(left, right, (a, b) -> b.compareTo(BigDecimal.ZERO) != 0, BigDecimal::divide);
+		return condition(left, right, (a, b) -> b.compareTo(BigDecimal.ZERO) != 0, (a, b) -> a.divide(b, DIVISION_MC));
 	}
 
 	public static NiFormula MINIMUM(NiFormula left, NiFormula right) {
@@ -96,5 +97,5 @@ public interface NiFormula {
 	
 	public static NiFormula ZERO = CONSTANT(BigDecimal.ZERO);
 	public static NiFormula ONE = CONSTANT(BigDecimal.ONE);
-	
+	public static MathContext DIVISION_MC = new MathContext(100, RoundingMode.HALF_EVEN);
 }

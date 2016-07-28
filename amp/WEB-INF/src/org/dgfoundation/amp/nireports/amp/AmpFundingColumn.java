@@ -125,7 +125,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	// columns of type long which are optional
 	protected static List<ImmutablePair<MetaCategory, String>> longColumnsToFetch = Arrays.asList(
 			new ImmutablePair<>(MetaCategory.TRANSACTION_TYPE, "transaction_type"),			
-			new ImmutablePair<>(MetaCategory.AGREEMENT_ID, "agreement_id"),
+			//new ImmutablePair<>(MetaCategory.AGREEMENT_ID, "agreement_id"),
 			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id"),
 			new ImmutablePair<>(MetaCategory.SOURCE_ORG, "donor_org_id"),
 			new ImmutablePair<>(MetaCategory.EXPENDITURE_CLASS, "expenditure_class_id")

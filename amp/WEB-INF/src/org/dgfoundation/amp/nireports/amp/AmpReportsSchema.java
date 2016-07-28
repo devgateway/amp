@@ -547,7 +547,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 	
 	protected void addFormulaMeasures() {
-		//addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, NiFormula.PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
+		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, NiFormula.PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
 	}
 	
 	protected void addFormulaComputedMeasure(String measureName, NiFormula formula) {

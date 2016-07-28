@@ -5,6 +5,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 
+/**
+ * a {@link NiFormula} which has 2 operands. The operator is supplied via a constructor
+ * @author Dolghier Constantin
+ *
+ */
 class BinaryOperation implements NiFormula {
 
 	final NiFormula left, right;

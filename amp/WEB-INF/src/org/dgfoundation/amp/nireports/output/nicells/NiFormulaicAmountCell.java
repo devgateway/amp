@@ -5,9 +5,16 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 /**
- * a class which instantiates a NiAmountCell based on formulas
+ * a NiAmountCell subclass with some extra possibilities 
+ * <ul>
+ * <li>each cell holds a list of named values (see {@link #values})</li>
+ * <li>holding <strong>undefined</strong> values, which is one of {@link #UNDEFINED}, {@link #PLUS_INFINITY}, {@link #MINUS_INFINITY}</li>
+ * <li>cells are formatted potentially differently (see {@link CellVisitor#visit(NiFormulaicAmountCell, CellColumn)})</li>
+ * </ul>
+ * 
  * @author Dolghier Constantin
  *
  */
@@ -23,6 +30,15 @@ public class NiFormulaicAmountCell extends NiAmountCell {
 	public NiFormulaicAmountCell(Map<String, BigDecimal> values, BigDecimal amount, NiPrecisionSetting precision) {
 		super(amount, precision);
 		this.values = Collections.unmodifiableMap(values);
+	}
+	
+	public boolean isDefined() {
+		return isDefined(this.amount);
+	}
+	
+	@Override
+	public <K> K accept(CellVisitor<K> visitor, CellColumn niCellColumn) {
+		return visitor.visit(this, niCellColumn);
 	}
 	
 	/**

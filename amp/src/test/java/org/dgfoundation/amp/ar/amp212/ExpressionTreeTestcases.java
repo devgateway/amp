@@ -119,4 +119,11 @@ public class ExpressionTreeTestcases extends AmpTestCase {
 		testVal("undefined", twoByZero);
 		testVal("undefined", ADD(twoByZero, CONSTANT(15)));
 	}
+	
+	@Test
+	public void testDivision() {
+		NiFormula oneByThree = DIVIDE(VARIABLE("one"), CONSTANT(3));
+		testVal("0.3333333333333333333", oneByThree);
+	}
+	
 }

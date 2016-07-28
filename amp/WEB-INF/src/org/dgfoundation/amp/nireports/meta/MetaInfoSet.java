@@ -60,6 +60,12 @@ public class MetaInfoSet implements Iterable<MetaInfo>
 		this.metadata.put(info.getCategory(), info);
 	}
 	
+	public MetaInfoSet newInstance(String category, Object value) {
+		MetaInfoSet res = new MetaInfoSet(this);
+		res.add(category, value);
+		return res;
+	}
+	
 	public void addAll(MetaInfoSet infoSet) {
 		if (frozen)
 			throw new RuntimeException("trying to add metainfo to a frozen MetaInfoSet");

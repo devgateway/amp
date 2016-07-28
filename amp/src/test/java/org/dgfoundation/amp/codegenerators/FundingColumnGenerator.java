@@ -123,9 +123,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 	
 	// columns of type long which are optional
 	protected static List<ImmutablePair<MetaCategory, String>> longColumnsToFetch = Arrays.asList(
-			new ImmutablePair<>(MetaCategory.PLEDGE_ID, "pledge_id"),
 			new ImmutablePair<>(MetaCategory.TRANSACTION_TYPE, "transaction_type"),			
-			new ImmutablePair<>(MetaCategory.AGREEMENT_ID, "agreement_id"),
 			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id")
 			);	
 		

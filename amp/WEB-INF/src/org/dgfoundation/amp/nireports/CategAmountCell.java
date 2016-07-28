@@ -24,11 +24,26 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, Map<NiDimensionUsage, Coordinate> coos, TranslatedDate translatedDate) {
 		super(activityId, -1, coos, Optional.empty());
 		this.amount = amount;
-		this.metaInfo = metaInfo;
-		this.metaInfo.freeze();
+		this.metaInfo = metaInfo.freeze();
 		this.translatedDate = translatedDate;
 	}
 
+	/**
+	 * creates a new cell which is a clone of this one, save for the metadata which gets added a new entry
+	 * @param cat the category of the metadata entry to add
+	 * @param value the value of the metadata entry to add
+	 * @return
+	 */
+	public CategAmountCell withMeta(String cat, Object value) {
+		return new CategAmountCell(this.activityId, this.amount, this.metaInfo.newInstance(cat, value), this.coordinates, this.translatedDate);
+	}
+	
+	/**
+	 * creates a new cell which is a clone of this one, save for the {@link #amount} which is multiplied by a given value
+	 * @param cat the category of the metadata entry to add
+	 * @param value the value of the metadata entry to add
+	 * @return
+	 */
 	public CategAmountCell multiply(BigDecimal multipland) {
 		if (multipland.equals(BigDecimal.ONE))
 			return this;

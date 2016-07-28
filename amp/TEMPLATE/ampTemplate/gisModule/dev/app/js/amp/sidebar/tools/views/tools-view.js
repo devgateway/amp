@@ -96,34 +96,20 @@ module.exports = BaseControlView.extend({
             a.style = 'display: none';
             a.href = 'data:image/png;base64,' + response;
             a.download = 'new-gis.png';
-            self.fakeClick(a);
+            a.click();
             $('#map-loading').hide();
             self.$('.gis-tool-img').toggleClass('disabled');
+            self.$('.gis-tool-img').blur();
         },
         error: function(response) {
             console.error(response);
             $('#map-loading').hide();
             self.$('.gis-tool-img').toggleClass('disabled');
+            self.$('.gis-tool-img').blur();
         }
     };
     $('#map-loading').show();
     this.$('.gis-tool-img').toggleClass('disabled');
     PrintUtil.printMap(options);
   },
-  fakeClick: function(anchor) {
-      if(anchor) {
-          if(anchor.click) {
-              anchor.click();
-          } else if(document.createEvent) {
-              var e = document.createEvent('MouseEvents');
-              e.initEvent( 'click', true, true );
-              anchor.dispatchEvent(e);
-          } else if(document.createEventObject) {
-              var evObj = document.createEventObject();
-              anchor.fireEvent("onclick", evObj);
-          }
-      } else {
-          console.error("null anchor")
-      }
-  }
 });

@@ -3962,9 +3962,18 @@ module.exports = BackboneDash.View.extend({
     if (this.model.get('chartType') !== 'fragmentation') {
     	this.renderNumbers();
     }
-    var limit = this.model.get('limit');
-    if (limit) {
-      this.$('.reset')[limit === this.model.defaults.limit ? 'hide' : 'show']();
+    
+    if (this.model.get('chartType') !== 'fragmentation') {
+	    var limit = this.model.get('limit');
+	    if (limit) {
+	      this.$('.reset')[limit === this.model.defaults.limit ? 'hide' : 'show']();
+	    }
+    } else {
+        if (this.model.get('showResetButton')) {
+        	this.$('.reset').show();
+        } else {
+        	this.$('.reset').hide();
+        }
     }
     this.message.stop().fadeOut(200);
     
@@ -3973,12 +3982,7 @@ module.exports = BackboneDash.View.extend({
     if (this.model.get('view') === 'heatmap') {
     	this.handleHeatmapClicks();
     }
-    
-    if (this.model.get('showResetButton')) {
-    	this.$('.reset').show();
-    } else {
-    	this.$('.reset').hide();
-    }
+        
     this.showChartPromise.resolve();
   },
   

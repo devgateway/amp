@@ -20,7 +20,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -79,16 +78,8 @@ public class PopulationLayerDesignator {
         validate(admLevelIndicatorMap, idToAil);
         
         if (errors.isEmpty()) {
-            DynLocationManagerUtil.resetIndicatorLayersPopulation(false);
-            for (AmpIndicatorLayer populationLayer : newPopulationLayers) {
-                populationLayer.setPopulation(true);
-                try {
-                    DbUtil.saveOrUpdateObject(populationLayer);
-                } catch (Exception e) {
-                    LOGGER.error(e.getMessage());
-                    throw new RuntimeException(e);
-                }
-            }
+            DynLocationManagerUtil.setIndicatorLayersPopulation(false, null);
+            DynLocationManagerUtil.setIndicatorLayersPopulation(true, ids);
             LOGGER.info("New population layers designated successfully");
         } else {
             result = ApiError.toError(errors.getAllErrors());

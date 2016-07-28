@@ -1506,9 +1506,10 @@ public class DynLocationManagerUtil {
 	 * @param isPopulation
 	 * @return
 	 */
-	public static int resetIndicatorLayersPopulation(boolean isPopulation) {
+	public static int setIndicatorLayersPopulation(boolean isPopulation, List<Long> ids) {
+	    String whereIds = (ids == null || ids.isEmpty()) ? "" : " where o.id in (" + Util.toCSString(ids) + ")";
 	    return PersistenceManager.getSession().createQuery("update " + AmpIndicatorLayer.class.getName() + " o "
-	            + "set o.population=:isPopulation").setBoolean("isPopulation", isPopulation).executeUpdate();
+	            + "set o.population=:isPopulation" + whereIds).setBoolean("isPopulation", isPopulation).executeUpdate();
 	}
 	
 	public static List<Long> getIndicatorLayersIdsByTypeExcludeAdm(Long indicatorTypeId, Long implLocIdToExclude) {

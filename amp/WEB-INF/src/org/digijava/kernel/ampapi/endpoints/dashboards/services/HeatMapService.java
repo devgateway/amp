@@ -144,13 +144,16 @@ public class HeatMapService {
     
     private void prepareXYResults(List<String> yTotalAmounts, Map<String, BigDecimal> yTotal, 
             Map<String, BigDecimal> xTotal, Map<String, Map<String, ReportCell>> data) {
+        // how many y full entries left to include, while remaining will go to others
         int yCountLeft = yCount == null ? report.reportContents.getChildren().size() : yCount;
-        boolean buildOthers = yCountLeft < report.reportContents.getChildren().size(); 
+        boolean buildOthers = yCountLeft < report.reportContents.getChildren().size();
+        Map<String, BigDecimal> othersYRow = new HashMap<>();
         
         // process all to get consistent X & Y totals
         for (ReportArea yArea : report.reportContents.getChildren()) {
             // build Y axis and get row data
             Map<String, ReportCell> row = buildYRow(yArea, yCountLeft--, yTotal, yTotalAmounts, data);
+            boolean isOthersY = yCountLeft < 0;
             
             for (ReportArea xArea : yArea.getChildren()) {
                 // configure X * Y intersection
@@ -158,6 +161,10 @@ public class HeatMapService {
                 ReportCell amountCell = xArea.getContents().get(mOutCol);
                 BigDecimal amount = amountCell == null ? BigDecimal.ZERO : (BigDecimal) amountCell.value;
                 row.put(xValue, amountCell);
+                // build "Others" Y row 
+                if (isOthersY) {
+                    othersYRow.put(xValue, amount.add(othersYRow.getOrDefault(xValue, BigDecimal.ZERO)));
+                }
                 
                 // calculate X totals
                 amount = amount.add(xTotal.getOrDefault(xValue, BigDecimal.ZERO));
@@ -168,7 +175,15 @@ public class HeatMapService {
         if (buildOthers) {
             // only now add formatted Y "Others" summed up amount
             yTotalAmounts.add(decimalFormatter.format(yTotal.get(getOthersTrn())));
-                        
+            // update other Y row cells formatting
+            Map<String, ReportCell> otherYFormattedCells = data.get(getOthersTrn());
+            otherYFormattedCells.clear();
+            for (Entry<String, BigDecimal> cell : othersYRow.entrySet()) {
+                BigDecimal amount = cell.getValue();
+                if (!BigDecimal.ZERO.equals(amount)) {
+                    otherYFormattedCells.put(cell.getKey(), new AmountCell(amount, decimalFormatter.format(amount)));
+                }
+            }           
         }
     }
     
@@ -177,8 +192,8 @@ public class HeatMapService {
         // build Y axis, as much as needed
         boolean buildY = yCountLeft > 0;
         // if no more Y to build, then collect everything remaining under "Others"
-        String yValue = buildY ? yValue = yArea.getContents().get(yOutCol).displayedValue : getOthersTrn();
-
+        String yValue = buildY ? yArea.getContents().get(yOutCol).displayedValue : getOthersTrn();
+        
         ReportCell yTotCell = yArea.getContents().get(mOutCol);
         BigDecimal yTotalAmount = yTotCell == null ? BigDecimal.ZERO : (BigDecimal) yTotCell.value;
         

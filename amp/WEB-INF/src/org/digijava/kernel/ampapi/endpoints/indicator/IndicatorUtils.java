@@ -1,35 +1,36 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
-import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ColorRampUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 public class IndicatorUtils {
     protected static final Logger logger = Logger.getLogger(IndicatorUtils.class);
@@ -174,4 +175,83 @@ public class IndicatorUtils {
         return ("desc".equalsIgnoreCase(sort) || "asc".equalsIgnoreCase(sort)) ? null : new ApiErrorMessage(IndicatorErrors.INVALID_SORT.id, IndicatorErrors.INVALID_SORT.description,sort);
     }
     
+    /**
+     * Get unique Population Layer designated for the given implementation location
+     * @param hardcodedCatValue implLoc the implementation location (Region, etc)
+     * @return the population layer or null if no unique layer found
+     */
+    public static AmpIndicatorLayer getPopulationLayer(HardCodedCategoryValue hardcodedCatValue) {
+        return getPopulationLayer(hardcodedCatValue == null ? null : hardcodedCatValue.getAmpCategoryValueFromDB());
+    }
+    
+    /**
+     * Get unique Population Layer designated for the given implementation location
+     * @param implLoc the implementation location (Region, etc)
+     * @return the population layer or null if no unique layer found
+     */
+    public static AmpIndicatorLayer getPopulationLayer(AmpCategoryValue implementationLocation) {
+        AmpIndicatorLayer ail = null;
+        if (implementationLocation != null && implementationLocation.isVisible()) {
+            List<AmpIndicatorLayer> ailList = PersistenceManager.getSession()
+                    .createQuery("select o from " + AmpIndicatorLayer.class.getName() + " o "
+                    + "where o.population is true and o.admLevel is not null and o.admLevel.id=:admLevelId")
+                    .setLong("admLevelId", implementationLocation.getId()).list();
+            if (ailList != null && ailList.size() == 1) {
+                ail = ailList.iterator().next();
+            }
+        }
+        if (ail == null) {
+            logger.error("Could not uniquely locate population layer for admLevel = " + implementationLocation.getValue());
+        }
+        return ail;
+    }
+    
+    /**
+     * 
+     * @param indicatorId
+     * @param input
+     * @param isGapAnalysis
+     * @return
+     */
+    public static JsonBean getIndicatorsAndLocationValues(Long indicatorId, JsonBean input, boolean isGapAnalysis) {
+        AmpIndicatorLayer indicator = (AmpIndicatorLayer) DbUtil.getObjectOrNull(AmpIndicatorLayer.class, indicatorId);
+        if (indicator == null) {
+            return ApiError.toError(new ApiErrorMessage(IndicatorErrors.INVALID_ID, String.valueOf(indicatorId)));
+        }
+        GapAnalysis gapAnalysis = isGapAnalysis ? new GapAnalysis(indicator, input) : null;
+        boolean doingGapAnalysis = gapAnalysis != null && gapAnalysis.isReadyForGapAnalysis();
+        if (doingGapAnalysis) {
+            logger.info("Generating Gap Analysis");
+        } else if (isGapAnalysis) {
+            logger.error("Requested gap analysis, but it cannot be done => providing non-gap analysis data");
+        }
+        
+        // build general indicator info
+        JsonBean response = new JsonBean();
+        response.set(EPConstants.NAME, indicator.getName());
+        response.set("classes", indicator.getNumberOfClasses());
+        response.set("id", indicator.getId());
+        // TODO: do we need to change to smt like  = doingGapAnalysis ? "%" : indicator.getUnit()
+        response.set("unit", indicator.getUnit());
+        response.set("description", indicator.getDescription());
+        response.set("admLevelId", indicator.getAdmLevel().getLabel());
+        
+        // build locations values
+        List<JsonBean> values = new ArrayList<>();
+        for (AmpLocationIndicatorValue locIndValue : indicator.getIndicatorValues()) {
+            JsonBean object = new JsonBean();
+            String geoCode = locIndValue.getLocation().getGeoCode();
+            BigDecimal value = new BigDecimal(locIndValue.getValue());
+            if (doingGapAnalysis) {
+                value = gapAnalysis.getGapAnalysisAmount(value, geoCode);
+            }
+            object.set("value", value);
+            object.set("geoId", geoCode);
+            object.set("name", locIndValue.getLocation().getName());
+            
+            values.add(object);
+        }
+        response.set("values", values);
+        return response;
+    }
 }

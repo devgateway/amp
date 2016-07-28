@@ -1,10 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
@@ -16,6 +11,10 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.Session;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 /**
@@ -124,6 +123,12 @@ public class IndicatorService {
             return ApiError.toError(IndicatorErrors.UNAUTHORIZED);
         }
         
+        AmpIndicatorLayer existingIndicator = DynLocationManagerUtil.getIndicatorLayerByName(indLayer.getName());
+        if ((existingIndicator != null && indLayer.getId() == null) || (existingIndicator != null && existingIndicator.getId() != indLayer.getId() && indLayer.getId() != null)){
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
+            return ApiError.toError(IndicatorErrors.EXISTING_NAME);
+        }
+
         try {
             if (indLayer.getId()==null) {
                 result.set(IndicatorEPConstants.RESULT, IndicatorEPConstants.INSERTED);

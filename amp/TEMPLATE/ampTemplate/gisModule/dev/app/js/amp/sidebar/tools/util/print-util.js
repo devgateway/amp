@@ -6,7 +6,7 @@ function printMap(options) {
     options = options || {};
     var mapContainer = $('#map-container').clone(true, true);
     var translateEl = ['.leaflet-map-pane', '.leaflet-tile', '.leaflet-zoom-animated', '.leaflet-marker-icon', '.leaflet-popup'];
-    var removedEl = ['.legend', '.datasources', '.leaflet-control-container', '#map-header'];
+    var removedEl = ['.legend', '.datasources', '.leaflet-control-container', '#map-header', '.load-more'];
     _.each(translateEl, function (el) {
         var elem = mapContainer.find(el);
         var original = $(el);
@@ -27,8 +27,8 @@ function printMap(options) {
                 e.css("transform", "none");
             }
         });
-        mapContainer.find(".table").css("font-size", "0.9em");
     });
+    mapContainer.find(".table").css("font-size", "0.9em");
     _.each(removedEl, function (el) {
         var elem = mapContainer.find(el);
         if(!elem.hasClass('expanded')) {

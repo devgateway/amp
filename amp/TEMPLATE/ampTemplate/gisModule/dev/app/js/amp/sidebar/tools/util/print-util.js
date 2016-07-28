@@ -53,7 +53,14 @@ function printMap(options) {
 
 
     var styleLocation = document.location.href.replace("index.html", "compiled-css/main.css");
-    var headers = '<meta http-equiv="content-type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="' + styleLocation + '">';
+    var styleTabsLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/less/tabs.css");
+    var styleBootstrapLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap.css");
+    var styleBootstrapThemeLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap-theme.css");
+    var headers = '<meta http-equiv="content-type" content="text/html; charset=UTF-8">' +
+                  '<link rel="stylesheet" href="' + styleLocation + '">' +
+                  '<link rel="stylesheet" href="' + styleBootstrapLocation + '">' +
+                  '<link rel="stylesheet" href="' + styleTabsLocation + '">' +
+                  '<link rel="stylesheet" href="' + styleBootstrapThemeLocation + '">';
     var html = "<html><head>" + headers + "</head><body>" + mapContainer[0].outerHTML + "</body></html>";
     console.log(html);
     $.ajax({
@@ -66,7 +73,7 @@ function printMap(options) {
         contentType: 'application/json',
         headers : {
             'Accept' : 'image/png',
-            'Content-Type' : 'application/json'
+            'Content-Type' : 'application/json; charset=utf-8'
         },
         method: 'POST',
         url: '/rest/commons/print',

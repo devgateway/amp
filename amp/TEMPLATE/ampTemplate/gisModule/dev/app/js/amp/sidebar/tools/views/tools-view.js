@@ -98,19 +98,25 @@ module.exports = BaseControlView.extend({
             a.download = 'new-gis.png';
             self.fakeClick(a, response);
             $('#map-loading').hide();
-            self.$('.gis-tool-img').toggleClass('disabled');
-            self.$('.gis-tool-img').blur();
+            self.toggleButton(self, true);
         },
         error: function(response) {
             console.error(response);
             $('#map-loading').hide();
-            self.$('.gis-tool-img').toggleClass('disabled');
-            self.$('.gis-tool-img').blur();
+            self.toggleButton(self, true);
         }
     };
     $('#map-loading').show();
-    this.$('.gis-tool-img').toggleClass('disabled');
+    this.toggleButton(this);
     PrintUtil.printMap(options);
+  },
+  toggleButton: function(self, blur) {
+      var button = self.$('.gis-tool-img');
+      button.toggleClass('disabled');
+      button.toggleClass('btn-success');
+      if(blur) {
+        button.blur();
+      }
   },
   createBlob: function (response) {
     var byteCharacters = atob(response);

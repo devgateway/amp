@@ -8,7 +8,6 @@ import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
 import org.dgfoundation.amp.menu.MenuUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -151,13 +150,10 @@ public class SecurityService {
 	public static Collection<JsonBean> getWorkspaces() {
 
         Collection<AmpTeam> workspaces = null;
-        if (IndicatorUtils.isAdmin()) {
-            workspaces = TeamUtil.getAllTeams();
-        } else {
-            TeamMember tm = TeamUtil.getCurrentMember();
-            if (tm != null) {
-                workspaces = TeamMemberUtil.getAllTeamsForUser(tm.getEmail());
-            }
+
+        TeamMember tm = TeamUtil.getCurrentMember();
+        if (tm != null) {
+            workspaces = TeamMemberUtil.getAllTeamsForUser(tm.getEmail());
         }
 
         Collection<JsonBean> workspacesList = new ArrayList<JsonBean>();

@@ -96,7 +96,7 @@ module.exports = BaseControlView.extend({
             a.style = 'display: none';
             a.href = 'data:image/png;base64,' + response;
             a.download = 'new-gis.png';
-            a.click();
+            self.fakeClick(a, response);
             $('#map-loading').hide();
             self.$('.gis-tool-img').toggleClass('disabled');
             self.$('.gis-tool-img').blur();
@@ -112,4 +112,36 @@ module.exports = BaseControlView.extend({
     this.$('.gis-tool-img').toggleClass('disabled');
     PrintUtil.printMap(options);
   },
+  createBlob: function (response) {
+    var byteCharacters = atob(response);
+    var charCodeFromCharacter = function (c) {
+        return c.charCodeAt(0);
+    };
+    var byteArrays = [];
+    for (var offset = 0; offset < byteCharacters.length; offset += 1000) {
+        var slice = byteCharacters.slice(offset, offset + 1000);
+        var byteNumbers = Array.prototype.map.call(slice, charCodeFromCharacter);
+        byteArrays.push(new Uint8Array(byteNumbers));
+    }
+    var blob = new Blob(byteArrays, {type: "image/png"});
+    return blob;
+  },
+  fakeClick: function(anchor, response) {
+    if(anchor) {
+        try {
+            anchor.click();
+        } catch (e) {
+            var blob = this.createBlob(response);
+            if(window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(blob, 'new-gis.png');
+            } else {
+                var URLObj = window.URL || window.webkitURL;
+                var url = URLObj.createObjectURL(blob);
+                window.open(url);
+            }
+        }
+    } else {
+        console.error("null anchor")
+    }
+  }
 });

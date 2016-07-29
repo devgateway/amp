@@ -49,7 +49,7 @@ public class IndicatorUtils {
         validFieldList.put(IndicatorEPConstants.FIELD_ACCESS_TYPE_ID, "indicator");
         validFieldList.put(IndicatorEPConstants.FIELD_CREATED_ON, "indicator");
         validFieldList.put(IndicatorEPConstants.FIELD_UPDATED_ON, "indicator");
-        validFieldList.put(IndicatorEPConstants.FIELD_CREATED_BY, "indicator.createdBy.user");
+        validFieldList.put(IndicatorEPConstants.FIELD_CREATED_BY, "c");
     }
 
     public static String addAlias(String field) {

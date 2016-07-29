@@ -1182,14 +1182,16 @@ public class DynLocationManagerUtil {
     }
 
     public static List <AmpIndicatorLayer> getIndicatorLayers (String orderBy, String sort) {
-		Session dbSession = PersistenceManager.getSession();
+        Session dbSession = PersistenceManager.getSession();
 
-		String queryString = "select indicator from "
-				+ AmpIndicatorLayer.class.getName() + " indicator order by " + orderBy + " " + sort;
-		Query qry = dbSession.createQuery(queryString);
-		return qry.list();
-	 
-}
+        String queryString = "select indicator from "
+                + AmpIndicatorLayer.class.getName() + " indicator "
+                + " left join indicator.createdBy.user c "
+                + " order by " + orderBy + " " + sort;
+        Query qry = dbSession.createQuery(queryString);
+        return qry.list();
+
+    }
 
     public static List <AmpIndicatorLayer> getIndicatorLayerByAccessType(long accessTypeId, String orderBy, String sort) {
         Session dbSession = PersistenceManager.getSession();
@@ -1240,7 +1242,7 @@ public class DynLocationManagerUtil {
                 + AmpIndicatorLayer.class.getName() + " ind where name=:name";
         Query qry = dbSession.createQuery(queryString);
         qry.setString("name", name);
-        if (qry.list().size()==1)
+        if (qry.list().size() > 0)
             return (AmpIndicatorLayer) qry.list().get(0);
         else
             return null;

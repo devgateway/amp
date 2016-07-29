@@ -48,7 +48,7 @@ module.exports = Backbone.Collection
     return deferred;
   },
 
-  parse: function(data) {
+  parse: function(data) {	
     var self = this;
     var parsedData = data;
     parsedData = _.filter(data, function(layer) {
@@ -66,12 +66,13 @@ module.exports = Backbone.Collection
     	 self.settings.load().then(function() {
     	    
     	   layer.title = self.getMultilangString(layer,'name');
-    	   layer.description = self.getMultilangString(layer,'description');     	   
+    	   layer.description = self.getMultilangString(layer,'description');  
+    	   layer.unit = self.getMultilangString(layer,'unit');
     	 });   	 
         layer.type = 'joinBoundaries';
         layer.adminLevel = self._magicConversion(layer.admLevelId);
-        layer.tooltip = self._createTooltip(layer);
-        
+        layer.tooltip = self._createTooltip(layer); 
+        layer.classes = layer.numberOfClasses;
         return true;
       }
 

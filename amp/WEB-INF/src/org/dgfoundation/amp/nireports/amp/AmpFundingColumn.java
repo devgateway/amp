@@ -65,7 +65,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	protected final Object CACHE_SYNC_OBJ = new Object();
 	protected final Set<String> ignoredColumns;
 	
-	public final static int CACHE_TTL_SECONDS = 10 * 60;
+	public final static int CACHE_TTL_SECONDS = 1 * 60;  /* TODO: make that back to 10 * 60 */
 	
 	public AmpFundingColumn(String columnName, String viewName) {
 		this(columnName, viewName, TrivialMeasureBehaviour.getInstance());
@@ -125,20 +125,20 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	// columns of type long which are optional
 	protected static List<ImmutablePair<MetaCategory, String>> longColumnsToFetch = Arrays.asList(
 			new ImmutablePair<>(MetaCategory.TRANSACTION_TYPE, "transaction_type"),			
-			//new ImmutablePair<>(MetaCategory.AGREEMENT_ID, "agreement_id"),
+			new ImmutablePair<>(MetaCategory.TYPE_OF_ASSISTANCE, "terms_assist_id"),
+			new ImmutablePair<>(MetaCategory.MODE_OF_PAYMENT, "mode_of_payment_id"),
 			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id"),
 			new ImmutablePair<>(MetaCategory.SOURCE_ORG, "donor_org_id"),
 			new ImmutablePair<>(MetaCategory.EXPENDITURE_CLASS, "expenditure_class_id")
-			
-			);
+		);
 	
 	protected synchronized FundingFetcherContext resetCache(NiReportsEngine engine) {
 		engine.timer.putMetaInNode("resetCache", true);
 		Map<Long, String> adjTypeValue = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN ('%s', '%s')", CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY));
-		Map<Long, String> expClassValues = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname = '%s'", CategoryConstants.EXPENDITURE_CLASS_KEY));
+		Map<Long, String> acvs = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN('%s', '%s', '%s')", CategoryConstants.EXPENDITURE_CLASS_KEY, CategoryConstants.TYPE_OF_ASSISTENCE_KEY, CategoryConstants.MODE_OF_PAYMENT_KEY));
 		Map<Long, String> roles = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("SELECT amp_role_id, role_code FROM amp_role", CategoryConstants.ADJUSTMENT_TYPE_KEY));
 		
-		return new FundingFetcherContext(new DifferentialCache<CategAmountCellProto>(invalidationDetector.getLastProcessedFullEtl()), adjTypeValue, roles, expClassValues);
+		return new FundingFetcherContext(new DifferentialCache<CategAmountCellProto>(invalidationDetector.getLastProcessedFullEtl()), adjTypeValue, roles, acvs);
 	}
 
 	@Override
@@ -231,7 +231,9 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				addMetaIfIdValueExists(metaSet, "recipient_role_id", MetaCategory.RECIPIENT_ROLE, rs.rs, context.roles);
 				addMetaIfIdValueExists(metaSet, "source_role_id", MetaCategory.SOURCE_ROLE, rs.rs, context.roles);
 				addMetaIfIdValueExists(metaSet, "adjustment_type", MetaCategory.ADJUSTMENT_TYPE, rs.rs, context.adjustmentTypes);
-				addMetaIfIdValueExists(metaSet, "expenditure_class_id", MetaCategory.EXPENDITURE_CLASS, rs.rs, context.expenditureClasses);
+				addMetaIfIdValueExists(metaSet, "expenditure_class_id", MetaCategory.EXPENDITURE_CLASS, rs.rs, context.acvs);
+				addMetaIfIdValueExists(metaSet, "terms_assist_id", MetaCategory.TYPE_OF_ASSISTANCE, rs.rs, context.acvs);
+				addMetaIfIdValueExists(metaSet, "mode_of_payment_id", MetaCategory.MODE_OF_PAYMENT, rs.rs, context.acvs);
 				
 				if (metaSet.hasMetaInfo(MetaCategory.SOURCE_ROLE.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ROLE.category)
 					&& metaSet.hasMetaInfo(MetaCategory.SOURCE_ORG.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ORG.category)) 
@@ -279,14 +281,14 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		final DifferentialCache<CategAmountCellProto> cache;
 		final Map<Long, String> adjustmentTypes;
 		final Map<Long, String> roles;
-		final Map<Long, String> expenditureClasses;
+		final Map<Long, String> acvs;
 				
 		public FundingFetcherContext(DifferentialCache<CategAmountCellProto> cache, 
-				Map<Long, String> adjustmentTypes,  Map<Long, String> roles, Map<Long, String> expenditureClasses) {
+				Map<Long, String> adjustmentTypes,  Map<Long, String> roles, Map<Long, String> acvs) {
 			this.cache = cache;
 			this.adjustmentTypes = adjustmentTypes;
 			this.roles = roles;
-			this.expenditureClasses = expenditureClasses;
+			this.acvs = acvs;
 		}
 	}
 	

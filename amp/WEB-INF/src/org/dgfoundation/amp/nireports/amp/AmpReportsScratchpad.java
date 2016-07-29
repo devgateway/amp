@@ -16,6 +16,7 @@ import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -37,7 +38,9 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * the AMP-schema-specific scratchpad <br />
@@ -76,6 +79,9 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	public final Memoizer<SelectedYearBlock> computedMeasuresBlock;
 	public final Memoizer<Set<Long>> computedPledgeIds;
 	
+	public final boolean verticalSplitByModeOfPayment;
+	public final boolean verticalSplitByTypeOfAssistance;
+	
 	/**
 	 * the currency used to render the report - do not write anything to it!
 	 */
@@ -94,6 +100,12 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 			CurrencyUtil.getAmpcurrency(engine.spec.getSettings().getCurrencyCode());
 		this.environment = ReportEnvironment.buildFor(TLSUtils.getRequest());
 		this.lastEventId = SQLUtils.getLong(this.connection, "SELECT COALESCE(max(event_id), -1) FROM amp_etl_changelog");
+		this.verticalSplitByTypeOfAssistance = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true") &&
+			engine.spec.getColumnNames().contains(ColumnConstants.TYPE_OF_ASSISTANCE) &&
+			!engine.spec.getHierarchyNames().contains(ColumnConstants.TYPE_OF_ASSISTANCE);
+		this.verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
+			engine.spec.getColumnNames().contains(ColumnConstants.MODE_OF_PAYMENT) &&
+			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);		
 	}
 	
 	public AmpCurrency getUsedCurrency() {

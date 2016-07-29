@@ -51,6 +51,11 @@ public class CellColumn extends Column {
 	public GroupColumn verticallySplitByCategory(VSplitStrategy strategy, GroupColumn newParent) {
 		SortedMap<ComparableValue<String>, List<NiCell>> values = new TreeMap<>();
 		this.forEachCell(cell -> values.computeIfAbsent(strategy.categorize(cell), z -> new ArrayList<>()).add(cell));
+		ComparableValue<String> totalsSubcolumnCategory = strategy.getTotalSubcolumnName();
+		if (totalsSubcolumnCategory != null) {
+			this.forEachCell(cell -> values.computeIfAbsent(totalsSubcolumnCategory, z -> new ArrayList<>()).add(cell));
+		}
+			
 		GroupColumn res = this.asGroupColumn(null, newParent);
 		List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet());
 		for(ComparableValue<String> key:subColumnNames) {

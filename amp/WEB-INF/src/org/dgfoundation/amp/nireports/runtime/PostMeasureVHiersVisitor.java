@@ -14,13 +14,13 @@ public class PostMeasureVHiersVisitor implements ColumnVisitor<Column> {
 		
 	@Override
 	public Column visit(CellColumn cc) {
-		List<VSplitStrategy> subMeasureStrategies = cc.behaviour.getSubMeasureHierarchies(engine);
-		if (subMeasureStrategies == null || subMeasureStrategies.isEmpty())
+		List<VSplitStrategy> subMeasureStrategy = engine.schema.getSubMeasureHierarchies(engine, cc);
+		if (subMeasureStrategy == null || subMeasureStrategy.isEmpty())
 			return cc;
 		
-		GroupColumn res = cc.verticallySplitByCategory(subMeasureStrategies.get(0), cc.parent);
-		for(int i = 1; i < subMeasureStrategies.size(); i++)
-			res = res.verticallySplitByCategory(subMeasureStrategies.get(i), cc.parent);
+		GroupColumn res = cc.verticallySplitByCategory(subMeasureStrategy.get(0), cc.parent);
+		for(int i = 1; i < subMeasureStrategy.size(); i++)
+			res = res.verticallySplitByCategory(subMeasureStrategy.get(i), cc.parent);
 		return res;
 	}
 

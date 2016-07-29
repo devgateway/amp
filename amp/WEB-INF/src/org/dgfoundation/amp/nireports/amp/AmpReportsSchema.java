@@ -73,10 +73,13 @@ import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
+import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.BooleanDimension;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
@@ -92,6 +95,7 @@ import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.helper.Constants;
@@ -1203,6 +1207,38 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		AmpFundingColumn funding = this.getFundingFetcher(engine);
 		return funding.isTransactionLevelHierarchy(col);
 		//return super.isTransactionLevelHierarchy(col, engine);
+	}
+	
+	@Override
+	public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine engine, CellColumn cc) {
+		List<VSplitStrategy> raw = super.getSubMeasureHierarchies(engine, cc);
+		if (raw != null && !raw.isEmpty())
+			return raw;
+		
+		if (disableSubmeasureSplittingByColumn(engine))
+			return raw;
+		
+		AmpReportsScratchpad scratch = AmpReportsScratchpad.get(engine);
+		boolean splitByToA = cc.splitCell != null && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) && scratch.verticalSplitByTypeOfAssistance;
+		boolean splitByMoP = cc.splitCell != null && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) && scratch.verticalSplitByModeOfPayment;
+		
+		if (splitByToA)
+			return Arrays.asList(
+					TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.TYPE_OF_ASSISTANCE.category, ColumnConstants.TYPE_OF_ASSISTANCE, () -> TranslatorWorker.translateText("Total")));
+
+		if (splitByMoP)
+			return Arrays.asList(
+					TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.MODE_OF_PAYMENT.category, ColumnConstants.MODE_OF_PAYMENT, () -> TranslatorWorker.translateText("Total")));
+
+		return raw;
+	}
+	 
+	/**
+	 * returns true IFF splitByToA, splitByMoP and other behaviours like that (splitting a measure into subcategories) should be disabled.
+	 * Used for testcases only
+	 */
+	protected boolean disableSubmeasureSplittingByColumn(NiReportsEngine engine) {
+		return false;
 	}
 	
 	/**

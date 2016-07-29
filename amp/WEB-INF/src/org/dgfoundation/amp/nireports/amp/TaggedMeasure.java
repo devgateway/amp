@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 
 /**
@@ -17,7 +18,7 @@ public class TaggedMeasure extends NiTransactionMeasure {
 				cac -> 
 					cac.metaInfo.containsMeta(MetaCategory.TRANSACTION_TYPE.category, Long.valueOf(transactionType)) &&
 					cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName),
-					new TaggedMeasureBehaviour("Total " + measureName, metacat, pseudocolumnName) ,
+					new TaggedMeasureBehaviour("Total " + measureName, metacat.category, pseudocolumnName),
 				AmpReportsSchema.measureDescriptions.get(measureName), false
 			);
 	}

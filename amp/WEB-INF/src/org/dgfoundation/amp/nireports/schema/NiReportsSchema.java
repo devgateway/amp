@@ -14,6 +14,8 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
+import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 
 /**
  * an interface describing the Schema of an API's reporting needs
@@ -78,5 +80,15 @@ public interface NiReportsSchema {
 	 */
 	public default boolean isTransactionLevelHierarchy(NiReportColumn<?> col, NiReportsEngine engine) {
 		return col.isTransactionLevelHierarchy();
+	}
+	
+	/**
+	 * returns the list of post-measure V-split strategies for a given measure during the runtime of a report
+	 * @param engine
+	 * @param cc
+	 * @return
+	 */
+	public default List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine engine, CellColumn cc) {
+		return cc.behaviour.getSubMeasureHierarchies(engine);
 	}
 }

@@ -121,7 +121,7 @@ public class IndicatorUtils {
                 AmpTeamMember ampTeamMember = TeamUtil.getCurrentAmpTeamMember();
                 if (ampTeamMember != null) {
                     AmpIndicatorLayer indicatorLayer =DynLocationManagerUtil.getIndicatorLayerById(indicatorId);
-                    if (indicatorLayer.getCreatedBy() != null && indicatorLayer.getCreatedBy().getAmpTeamMemId()==ampTeamMember.getAmpTeamMemId()){
+                    if (indicatorLayer.getCreatedBy() != null && indicatorLayer.getCreatedBy().getUser().getId() == ampTeamMember.getUser().getId()){
                         return true;
                     }
                 }

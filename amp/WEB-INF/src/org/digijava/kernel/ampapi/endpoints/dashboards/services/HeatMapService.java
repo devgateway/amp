@@ -57,7 +57,6 @@ public class HeatMapService {
     private static final int DEFAULT_X_COUNT = 25;
     private static final int DEFAULT_Y_COUNT = 10;
     private static final BigDecimal HUNDRED = new BigDecimal(100);
-    private static final MathContext MCTX = new MathContext(2, RoundingMode.HALF_EVEN);
     
     private JsonBean config;
     private String xCol;
@@ -231,8 +230,8 @@ public class HeatMapService {
                     matrix[y][x].set("dv", amountCell.displayedValue);
                     
                     BigDecimal percentage = (BigDecimal) amountCell.value;
-                    percentage = percentage.multiply(HUNDRED).divide(xTotalEntry.getValue(), MCTX);
-                    percentage = percentage.setScale(2, RoundingMode.HALF_EVEN);
+                    percentage = percentage.multiply(HUNDRED).divide(xTotalEntry.getValue(), 6, RoundingMode.HALF_EVEN);
+                    percentage = percentage.setScale(6, RoundingMode.HALF_EVEN);
                     matrix[y][x].set("p", percentage);
                 }
                 x++;
@@ -243,7 +242,7 @@ public class HeatMapService {
             // now replace with % instead of fundings
             BigDecimal percentage = yTotal.get(entry.getKey());
             if (percentage != null) {
-                percentage = percentage.multiply(HUNDRED).divide(grandTotal, MCTX).setScale(2, RoundingMode.HALF_EVEN);
+                percentage = percentage.multiply(HUNDRED).divide(grandTotal, 6, RoundingMode.HALF_EVEN);
                 yTotal.put(entry.getKey(), percentage);
             }
             y++;

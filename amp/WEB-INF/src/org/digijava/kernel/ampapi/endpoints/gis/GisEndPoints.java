@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
@@ -328,7 +329,8 @@ public class GisEndPoints {
 	@ApiMethod(ui = false, id = "locationstotals")	
 	public JsonBean getAdminLevelsTotals(JsonBean filters, @PathParam ("admlevel") String admlevel){
 		LocationService ls = new LocationService();
-		return ls.getTotals(admlevel, filters);
+		// this Service was resetting the amount units so far (used by this EP only), now changed its interface to allow other "users" to not reset it
+		return ls.getTotals(admlevel, filters, AmountsUnits.AMOUNTS_OPTION_UNITS);
 	}
 	
 	

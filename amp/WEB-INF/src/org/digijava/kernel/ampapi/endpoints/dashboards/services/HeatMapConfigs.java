@@ -229,7 +229,7 @@ public class HeatMapConfigs {
     
     private BigDecimal getNewAmountFrom(Map<String, Object> threshold) {
         Object from = threshold.get(DashboardConstants.AMOUNT_FROM);
-        return from == null ? null : new BigDecimal(from.toString(), new MathContext(2, RoundingMode.HALF_EVEN));
+        return from == null ? null : new BigDecimal(from.toString()).setScale(6, RoundingMode.HALF_EVEN);
     }
     
     private List<AmpColorThreshold> clear(List<AmpColorThreshold> colorThresholds) {

@@ -34,6 +34,7 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -66,13 +67,19 @@ import org.hibernate.jdbc.Work;
 public class LocationService {
 	protected static Logger logger = Logger.getLogger(LocationService.class);
 	
+	private ReportSpecification spec = null;
+	
+	public ReportSpecification getLastReportSpec() {
+	    return spec;
+	}
+	
 	/**
 	 * Get totals (actual commitments/ actual disbursements) by administrative level
 	 * @param admlevel
 	 * @param config json configuration
 	 * @return
 	 */
-	public JsonBean getTotals(String admlevel, JsonBean config) {
+	public JsonBean getTotals(String admlevel, JsonBean config, AmountsUnits amountUnits) {
 	    JsonBean retlist = new JsonBean();
 		HardCodedCategoryValue admLevelCV = GisConstants.ADM_TO_IMPL_CATEGORY_VALUE.getOrDefault(admlevel,
 		        CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
@@ -80,12 +87,15 @@ public class LocationService {
 		
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals", ArConstants.DONOR_TYPE);
+		this.spec = spec;
 		spec.addColumn(new ReportColumn(admlevel));
 		spec.getHierarchies().addAll(spec.getColumns());
 		// also configures the measure(s) from funding type settings request
 		SettingsUtils.applyExtendedSettings(spec, config);
 		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
-		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
+		// THIS IS OLD, just allowing now to not reset the units when used by other services 
+		if (amountUnits != null)
+		    mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		
 		AmpReportFilters filterRules = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 		

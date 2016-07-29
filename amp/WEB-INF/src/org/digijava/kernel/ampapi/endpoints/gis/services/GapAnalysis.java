@@ -4,13 +4,14 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -27,7 +28,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCateg
  */
 public class GapAnalysis {
     protected static Logger LOGGER = Logger.getLogger(GapAnalysis.class);
-    private static final MathContext MCTX = new MathContext(6, RoundingMode.HALF_EVEN);
     
     private Map<String, AmpIndicatorLayer> implLocPopulationLayer = new HashMap<>();
     
@@ -38,6 +38,7 @@ public class GapAnalysis {
     private Map<String, BigDecimal> admFundings;
     private Map<String, BigDecimal> populationCount;
     private boolean isPopulation;
+    private String currencyCode;
     
     public GapAnalysis() {
     }
@@ -74,7 +75,9 @@ public class GapAnalysis {
             }
             // prepare funding data
             if (canDoGapAnalysis) {
-                admTotals = new LocationService().getTotals(admLevel, input);
+                LocationService locationService = new LocationService();
+                admTotals = locationService.getTotals(admLevel, input, null);
+                rememberUsedCurrency(locationService.getLastReportSpec());
                 admFundings = convertToMap(admTotals);
             }
         } else {
@@ -82,6 +85,15 @@ public class GapAnalysis {
             LOGGER.error("Could not identify admLevel for implLevel = " + implementationLocation);
         }
     }
+    
+    private void rememberUsedCurrency(ReportSpecification spec) {
+        if ( spec != null && spec.getSettings() != null && spec.getSettings().getCurrencyCode() != null) {
+            currencyCode = spec.getSettings().getCurrencyCode(); 
+        } else {
+            currencyCode = EndpointUtils.getDefaultCurrencyCode(); 
+        } 
+    }
+
     
     private void buildPopulationData(AmpIndicatorLayer populationLayer) {
         isPopulation = true;
@@ -92,17 +104,16 @@ public class GapAnalysis {
     }
     
     public BigDecimal getGapAnalysisAmount(BigDecimal amount, String geoCode) {
-        BigDecimal fundingAmount = admFundings.get(geoCode);
+        // if funding not generated, means is 0 funding for that geoCode
+        BigDecimal fundingAmount = admFundings.getOrDefault(geoCode, BigDecimal.ZERO);
         BigDecimal factor = isPopulation ? populationCount.get(geoCode) : BigDecimal.ONE;
         // if no factor found for population, then we report 'No Data'
-        amount = factor == null ? null : factor.multiply(amount);
-        // if no funding data or no amount, then 'No Data' to show
-        if (amount == null || fundingAmount == null || BigDecimal.ZERO.equals(amount.abs(MCTX)) ) {
+        if (amount == null || factor == null) {
             amount = null;
             // for testing only, until GIS is updated to handle "null"s
             // amount = BigDecimal.ZERO;
         } else {
-            amount =  fundingAmount.divide(amount, MCTX);
+            amount =  fundingAmount.divide(factor.multiply(amount), 6, RoundingMode.HALF_EVEN);
         }
         return amount;
     }
@@ -172,6 +183,10 @@ public class GapAnalysis {
             }
         }
         return false;
+    }
+    
+    public String getCurrencyCode() {
+        return currencyCode;
     }
     
 }

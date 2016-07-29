@@ -226,13 +226,17 @@ public class IndicatorUtils {
             logger.error("Requested gap analysis, but it cannot be done => providing non-gap analysis data");
         }
         
+        String unit = indicator.getUnit(); 
+        if (doingGapAnalysis) {
+            unit = String.format("%s / %s", gapAnalysis.getCurrencyCode(), unit); 
+        }
+        
         // build general indicator info
         JsonBean response = new JsonBean();
         response.set(EPConstants.NAME, indicator.getName());
         response.set("classes", indicator.getNumberOfClasses());
         response.set("id", indicator.getId());
-        // TODO: do we need to change to smt like  = doingGapAnalysis ? "%" : indicator.getUnit()
-        response.set("unit", indicator.getUnit());
+        response.set("unit", unit);
         response.set("description", indicator.getDescription());
         response.set("admLevelId", indicator.getAdmLevel().getLabel());
         
@@ -241,7 +245,7 @@ public class IndicatorUtils {
         for (AmpLocationIndicatorValue locIndValue : indicator.getIndicatorValues()) {
             JsonBean object = new JsonBean();
             String geoCode = locIndValue.getLocation().getGeoCode();
-            BigDecimal value = new BigDecimal(locIndValue.getValue());
+            BigDecimal value = BigDecimal.valueOf(locIndValue.getValue());
             if (doingGapAnalysis) {
                 value = gapAnalysis.getGapAnalysisAmount(value, geoCode);
             }

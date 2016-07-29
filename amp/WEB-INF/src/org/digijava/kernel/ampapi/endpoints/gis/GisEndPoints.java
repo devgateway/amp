@@ -382,6 +382,7 @@ public class GisEndPoints {
 			if (includeAdmLevel) {
 				json.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getLabel());
 			}
+            json.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
             json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
             json.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
             json.set(IndicatorEPConstants.CAN_DO_GAP_ANALYSIS, gapAnalysis.canDoGapAnalysis(indicator));

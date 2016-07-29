@@ -332,12 +332,12 @@ nv.models.heatMapChart = function() {
 			.append("g")
 			.attr("transform", "translate(0, " + (((data[0].values.y.length + 1) * cubeSize) + 10) + ")")
 			.attr("class", "heatmap-legends-container");
-    	var legendsPool = [app.translator.translateSync("amp.dashboard:chart-heatmap-legend1"),
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend2"),
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend3"),
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend4"),
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend5"),
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend6")];
+    	var legendsPool = [app.translator.translateSync("amp.dashboard:chart-heatmap-legend-less-than") + " 1%",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " 1% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <5%",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " 5% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <10%",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " 10% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <15%",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " 15% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <20%",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-more-than") + " 20%"];
     	var maxLegendTextWidth = 0;
     	for (var i = 0; i < legendsPool.length; i++) {
     		var auxWidth = calculateTextWidth(legendsPool[i]);

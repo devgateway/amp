@@ -38,6 +38,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -651,7 +652,7 @@ public class SettingsUtils {
 					maxFractDigitsNum, useGrouping, groupingSize);
 			reportSettings.setCurrencyFormat((DecimalFormat) format.getInstance(new Locale("en", "US")));
 			
-			Double multiplier = (Double) amountFormat.get(SettingsConstants.AMOUNT_UNITS);
+			Double multiplier = PersistenceManager.getDouble(amountFormat.get(SettingsConstants.AMOUNT_UNITS));
 			if (multiplier != null)
 				reportSettings.setUnitsOption(AmountsUnits.findByMultiplier(multiplier));
 		}

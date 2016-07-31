@@ -30,6 +30,11 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
   $langcode = (empty($langcode) ? LANGUAGE_NONE : $langcode);
   $cache_id = "contentblock:widget:{$langcode}:totalactivities:" . md5(serialize($widget_settings));
 
+  // Let's prepare the amount units (pre-configured per widget).
+  $amount_units_key = isset($widget_settings['amount-units']) ? $widget_settings['amount-units'] : 'amountUnits1';
+  $amount_units_settings = _ampapi_activity_get_api_settings('amount-units');
+  $amount_units = $amount_units_settings[$amount_units_key];
+
   // Try to get the response from cache.
   $report_totals = array();
   if ($cached = cache_get($cache_id, 'cache')) {
@@ -74,6 +79,9 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
     $request_body['show_empty_rows'] = TRUE;
 
     $api_settings = helpergeneric_get_api_settings();
+
+    // Let's add amount units.
+    $request_body['settings']['amountFormat']['amountUnits'] = $amount_units['value'];
 
     // Handle the global "Humanitarian Aid" filter.
     // @see helpergeneric_api_settings_form()
@@ -137,27 +145,14 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
   }
 
   // Get the number formatting pattern.
-  $number_format = NULL;
   $currency = '';
   foreach ($response_data->settings as $info) {
-    if ($info->id == 'ammountPattern') {
-      $number_format = $info->value;
-    }
-
     // @HACK: The id for currency is "1"!!!
     // @see: Documentation for /rest/gis/settings
     if ($info->id == '1') {
       $currency = $info->value->defaultId;
     }
   }
-  if (is_null($number_format)) {
-    $number_format = '###0.00';
-  }
-
-  // @see https://php.net/manual/en/numberformatter.create.php
-  // @see http://www.icu-project.org/apiref/icu4c/classDecimalFormat.html#details
-  $formatter_locale = NULL;
-  $formatter = new NumberFormatter($formatter_locale, NumberFormatter::PATTERN_DECIMAL, $number_format);
 
   foreach ($response_data->headers as $h_info) {
     // @TODO: use mappers.
@@ -169,18 +164,12 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
       continue;
     }
 
-    if ($formatter) {
-      $value = $response_data->page->pageArea->contents->{$h_info->hierarchicalName}->value;
-      // Display configuration in millions.
-      // @TODO: Add configuration options.
-      $value = $value / 1000 / 1000;
+    // Now, we really trust the API display values.
+    $amount_units_label = (isset($widget_settings['amount-units-label-type']) && $widget_settings['amount-units-label-type'] == 'long') ? $amount_units['label long'] : $amount_units['label short'];
 
-      $amount = '<span class="amount">' . $formatter->format($value) . '</span> ';
-      $amount .= '<span class="text">' . t('Millions !currencysymbol', array('!currencysymbol' => $currency)) . '</span>';
-    }
-    else {
-      $amount = check_plain($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->displayedValue);
-    }
+    $amount = check_plain($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->displayedValue);
+    $amount = '<span class="amount">' . $amount . '</span> ';
+    $amount .= '<span class="text">' . t('@amount_units !currencysymbol', array('!currencysymbol' => $currency, '@amount_units' => $amount_units_label)) . '</span>';
 
     switch ($h_info->hierarchicalName) {
       case '[Totals][Actual Commitments]':
@@ -263,17 +252,59 @@ function contentwidget_totalactivities_widget_render($plugin, $widget_settings, 
 }
 
 /**
- * Settings form for the 'Top Donors' predefined widget.
+ * Settings form for the 'Total Activities' fixed widget.
  */
-function contentwidget_totalactivities_widget_settings(&$element, &$form_state, $plugin, $widget_settings) {
-  $settings_form = array();
-  return $settings_form;
+function contentwidget_totalactivities_widget_settings($form, &$form_state, $plugin, $widget_settings) {
+  // Include this file, so that submit form works correctly.
+  ctools_form_include_file($form_state, $plugin['path'] . '/' . $plugin['file']);
+
+  // Let's allow users to select widget-related amount formatting.
+  $amount_units_settings = _ampapi_activity_get_api_settings('amount-units');
+  $amount_units_options = array();
+  foreach ($amount_units_settings as $amount_id => $amount_unit_setting) {
+    $amount_units_options[$amount_id] = $amount_unit_setting['name'];
+  }
+  $form['amount_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Amount Options'),
+    '#description' => t("These options change the widget amount formatting for the numeric output."),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#weight' => 10
+  );
+  $form['amount_settings']['widget_amount'] = array(
+    '#type' => 'select',
+    '#title' => t('Widget Amount Units'),
+    '#options' => $amount_units_options,
+    '#default_value' => isset($widget_settings['amount-units']) ? $widget_settings['amount-units'] : 'amountUnits1',
+    '#description' => t('Please specify which widget-based amount formatting option you would like to use.'),
+  );
+  $form['amount_settings']['widget_amount_label_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Amount Units Type'),
+    '#options' => array('short' => t('Short'), 'long' => t('Long')),
+    '#default_value' => isset($widget_settings['amount-units-label-type']) ? $widget_settings['amount-units-label-type'] : 'short',
+    '#description' => t('Please specify format would you like to use.<br />Short Example: M; Long Example: Millions.'),
+  );
+  $form['#submit'][] = 'contentwidget_totalactivities_widget_settings_submit';
+
+  return $form;
 }
 
 /**
- * Returns an serialized string for storing the widget settings in the database.
+ * Widget form submit handler.
+ *
+ * This is where we basically put everything into a standard variable.
  */
-function contentwidget_totalactivities_widget_settings_storage($widget_name, $form_values) {
-  $settings = array();
-  return serialize($settings);
+function contentwidget_totalactivities_widget_settings_submit($form, $form_state) {
+  $entity = $form['#entity'];
+
+  $values = $form_state['values'];
+  $amount = $values['widget_amount'];
+  $label_type = $values['widget_amount_label_type'];
+
+  $data['amount-units'] = $amount;
+  $data['amount-units-label-type'] = $label_type;
+
+  _contentwidget_fixed_set_settings($entity->machine_name, $data);
 }

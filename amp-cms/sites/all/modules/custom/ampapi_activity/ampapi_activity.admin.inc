@@ -159,6 +159,29 @@ function ampapi_activity_search_settings_form($form, &$form_state) {
     '#element_validate' => array('ampapi_activity_search_enabled_columns_validate'),
   );
 
+  // Let's allow users to select global amount option.
+  $amount_units_settings = _ampapi_activity_get_api_settings('amount-units');
+  $amount_units_options = array();
+  foreach ($amount_units_settings as $amount_id => $amount_unit_setting) {
+    $amount_units_options[$amount_id] = $amount_unit_setting['name'];
+  }
+  $form_elements['amount_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Amount Options'),
+    '#description' => t("These options change the global amount formatting for the numeric output for measure columns."),
+
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#parents' => array('ampapi_activity_search_settings'), // Remove the fieldset from the submitted values structure.
+  );
+  $form_elements['amount_settings']['global_amount'] = array(
+    '#type' => 'select',
+    '#title' => t('Global (Search) Amounts'),
+    '#options' => $amount_units_options,
+    '#default_value' => $search_settings['global_amount'],
+    '#description' => t('Please specify which global amount formatting option you would like to use.'),
+  );
+
   $form['ampapi_activity_search_settings'] += $form_elements;
   $form['#submit'][] = 'ampapi_activity_search_settings_form_submit';
 

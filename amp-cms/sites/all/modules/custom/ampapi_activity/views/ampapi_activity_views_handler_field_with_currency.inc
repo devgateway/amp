@@ -13,7 +13,11 @@ class ampapi_activity_views_handler_field_with_currency extends entity_views_han
     }
     if (isset($this->query->query->metaData['report_currency'])) {
       $currency = $this->query->query->metaData['report_currency'];
-      return $this->options['label'] .  ' (' . check_plain($currency) . ')';
+      if (isset($this->query->query->metaData['amount_units']['label long'])) {
+        $label_long = $this->query->query->metaData['amount_units']['label long'];
+        return $this->options['label'] . ' (' . check_plain($label_long) . ' ' . check_plain($currency) . ')';
+      }
+      return $this->options['label'] . ' (' . check_plain($currency) . ')';
     }
     return $this->options['label'];
   }

@@ -10,7 +10,6 @@ public class AvailableMethod {
 	private String endpoint;
 	private String method;
 	private String id;
-	private String column;
 	private String tab;
 	private String []columns;
 	private FilterType [] filterType;
@@ -61,20 +60,6 @@ public class AvailableMethod {
 
 	public void setFilterType(FilterType[] filterType) {
 		this.filterType = filterType;
-	}
-	/**
-	 * this property is kept for compatibility with the front end. To be remove once we ensure is not 
-	 * needed by the filters widget. This property is replaced by {@link #getColumns()}
-	 * @return
-	 */
-	
-	@Deprecated 
-	public String getColumn() {
-		return column;
-	}
-	@Deprecated 
-	public void setColumn(String column) {
-		this.column = column;
 	}
 
 	public String[] getColumns() {

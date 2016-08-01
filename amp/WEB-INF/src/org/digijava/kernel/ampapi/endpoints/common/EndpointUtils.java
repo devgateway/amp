@@ -354,14 +354,6 @@ public class EndpointUtils {
 						filter.setTab(apiAnnotation.tab());
 						filter.setFilterType(apiAnnotation.filterType());
 						if (includeColumn) {
-							if (apiAnnotation.columns().length > 1) { //this should not be empty since it has a default value
-								//If we have more than one column we column to NA (as it was before)
-								filter.setColumn(EPConstants.NA);
-							}else{
-								//if we have only one we set the first element 
-								filter.setColumn(apiAnnotation.columns()[0]);
-							}
-							
 							filter.setColumns(apiAnnotation.columns());
 						}
 						//we check the method exposed

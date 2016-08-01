@@ -24086,7 +24086,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"C:\\Users\\Gabriel\\workspace-luna2\\amp-2.12-release-3\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"/home/esoliani/amp-workspace/AMP_2_12_RELEASE/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/bootstrap/dist/js/bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -30476,7 +30476,7 @@ module.exports = Backbone.Model.extend({
     this.set('name', options.name);
     this.set('group', options.group || options.id);
     this.set('method', options.method);
-    this.set('column', options.column); 
+    this.set('columns', options.columns);
     this.set('empty', options.empty || false);
     this.url =  options.url || options.endpoint;
   }
@@ -30707,6 +30707,7 @@ module.exports = Backbone.Model.extend({
 });
 },{"backbone":"backbone","underscore":"underscore"}],75:[function(require,module,exports){
 var $ = require('jquery');
+var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
 
 
@@ -30767,7 +30768,7 @@ module.exports = BaseFilterModel.extend({
   serialize: function() {
 	// AMP-21041: Enabled filtering by start OR end date.
     if (this.get('selectedStart') || this.get('selectedEnd')) {
-    	  var key = this.get('column')!='N/A' ? this.get('column'):'date';
+    	  var key = _.first(this.get('columns')) !='N/A' ? _.first(this.get('column')): 'date';
     	  //console.log('serializing years-filter-model for ' + key + ', start = ' + this.get('selectedStart') + ', end = ' + this.get('selectedEnd'));    	  
     	  var obj = {};
     	  obj[key] = {
@@ -30798,7 +30799,7 @@ module.exports = BaseFilterModel.extend({
   },
   
   deserialize: function(obj) {
-	var key = this.get('column') != 'N/A' ? this.get('column') : 'date';
+	var key = _.first(this.get('columns')) !='N/A' ? _.first(this.get('column')) : 'date';
 	if (obj && obj[key]) {
 	  this.set('selectedStart', this._dateConvert(obj[key].start));
 	  this.set('selectedEnd', this._dateConvert(obj[key].end));
@@ -30839,7 +30840,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":71,"jquery":"jquery"}],76:[function(require,module,exports){
+},{"../models/base-filter-model":71,"jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');

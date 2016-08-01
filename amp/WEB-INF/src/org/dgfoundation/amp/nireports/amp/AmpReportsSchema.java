@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import static org.dgfoundation.amp.nireports.NiUtils.failIf;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.*;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_COUNTRY;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_DISTRICT;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_REGION;
@@ -147,7 +148,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(ColumnConstants.PROJECT_PERIOD,  "Project Period (months),  Proposed Completion Date - Actual Start date");
 		put(ColumnConstants.OVERAGE_PROJECT,  "Current date - Date of Planned Completion");
 		put(ColumnConstants.AGE_OF_PROJECT_MONTHS,  "Current date - Date of Agreement Effective");
-		put(ColumnConstants.PREDICTABILITY_OF_FUNDING ,  "((Planned Disbursements - Actual Disbursements) / Planned Disbursements) X 100");
 		put(ColumnConstants.AVERAGE_SIZE_OF_PROJECTS,  "Total Commitments / Count Of Activities");
 		put(ColumnConstants.VARIANCE_OF_COMMITMENTS,  "Max Commitments - Min Commitments");
 		put(ColumnConstants.VARIANCE_OF_DISBURSEMENTS,  "Max Disbursements- Min Disbursements");
@@ -187,6 +187,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.VARIANCE_OF_COMMITMENTS, "Max Actual Commitments - Min Actual Commitments");
 		put(MeasureConstants.VARIANCE_OF_DISBURSEMENTS, "Max Actual Disbursements - Min Actual Disbursements");
 		put(MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, "Sum Actual Disbursements / Number of Actual Disbursements");
+		put(MeasureConstants.PREDICTABILITY_OF_FUNDING ,  "((Planned Disbursements - Actual Disbursements) / Planned Disbursements) X 100");
 //		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Actual Disbursements / (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). "
 //					+ "Measure only makes sense in Annual and Totals-only reports");
 		
@@ -551,7 +552,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 	
 	protected void addFormulaMeasures() {
-		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, NiFormula.PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
+		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
+		addFormulaComputedMeasure(MeasureConstants.PREDICTABILITY_OF_FUNDING, PERCENTAGE(SUBTRACT(VARIABLE(MeasureConstants.PLANNED_DISBURSEMENTS), VARIABLE(MeasureConstants.ACTUAL_DISBURSEMENTS)), VARIABLE(MeasureConstants.PLANNED_DISBURSEMENTS)));
+		addFormulaComputedMeasure(MeasureConstants.CUMULATIVE_EXECUTION_RATE, PERCENTAGE(MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_COMMITMENT));
 	}
 	
 	protected void addFormulaComputedMeasure(String measureName, NiFormula formula) {

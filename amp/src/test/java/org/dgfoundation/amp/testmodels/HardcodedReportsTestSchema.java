@@ -3,6 +3,7 @@ package org.dgfoundation.amp.testmodels;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -17,6 +18,7 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.DateCell;
 import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.TextCell;
@@ -27,8 +29,11 @@ import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
+import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -143,6 +148,9 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 		addMeasure(new TrivialTestMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", false));
 		addMeasure(new TrivialTestMeasure(MeasureConstants.PLANNED_COMMITMENTS, Constants.COMMITMENT, "Planned", false));
 		addMeasure(new TrivialTestMeasure(MeasureConstants.PLANNED_DISBURSEMENTS, Constants.DISBURSEMENT, "Planned", false));
+		
+		addMeasure(new TrivialTestMeasure(MeasureConstants.CUMULATIVE_COMMITMENT, Constants.COMMITMENT, "Actual", false, true, TrivialMeasureBehaviour.getTotalsOnlyInstance()));
+		addMeasure(new TrivialTestMeasure(MeasureConstants.CUMULATIVE_DISBURSEMENT, Constants.DISBURSEMENT, "Actual", false, true, TrivialMeasureBehaviour.getTotalsOnlyInstance()));
 				
 		// empty trivial measure
 		addMeasure(new TrivialTestMeasure(MeasureConstants.PIPELINE_COMMITMENTS, Constants.COMMITMENT, "Pipeline", false));
@@ -156,6 +164,7 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 		addLinearFilterMeasure(MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, null, AverageAmountBehaviour.instance, false, MeasureConstants.ACTUAL_DISBURSEMENTS, +1);
 		
 		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, null, NiFormula.PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
+		addFormulaComputedMeasure(MeasureConstants.CUMULATIVE_EXECUTION_RATE, null, NiFormula.PERCENTAGE(MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_COMMITMENT));
 	}
 
 	@Override
@@ -198,6 +207,8 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 	}
 
 	protected Set<Long> getWorkspaceFilterIds() {
+		Set<String> missing = workspaceFilter.stream().filter(z -> !activityNames.containsKey(z)).collect(Collectors.toSet());
+		NiUtils.failIf(!missing.isEmpty(), () -> String.format("the following specified activities are not present in the hardcoded schema: <%s>", missing));
 		return workspaceFilter.stream().map(z -> activityNames.get(z)).collect(Collectors.toSet());
 	}
 	

@@ -10,12 +10,15 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -29,6 +32,7 @@ import org.dgfoundation.amp.testmodels.NiReportModel;
 import org.dgfoundation.amp.testmodels.ReportModelGenerator;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
+import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.junit.Test;
 
 /**
@@ -90,6 +94,21 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			"with weird currencies"
 		);
 
+	final List<String> actsUnfilteredMeasures = Arrays.asList(
+			"TAC_activity_1",
+			"TAC_activity_2",
+			"date-filters-activity",
+			"SSC Project 1",
+			"SSC Project 2",
+			"pledged 2",
+			"activity with capital spending",
+			"activity with contracting agency",
+			"activity 1 with agreement",
+			"Test MTEF directed",
+			"Unvalidated activity",
+			"Proposed Project Cost 1 - USD"
+		);
+	
 	final static List<String> hierarchiesToTry = Arrays.asList(
 			ColumnConstants.STATUS, ColumnConstants.IMPLEMENTATION_LEVEL, 
 			ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, 
@@ -1581,6 +1600,110 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		);
 		
 		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testUnfilteredMeasuresInUnfilteredReport() {
+		NiReportModel cor = new NiReportModel("testUnfilteredMeasuresInUnfilteredReport")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 22))",
+				"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 16));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 17, colSpan: 5))",
+				"(2006: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2));(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 13, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 15, colSpan: 2))",
+				"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Cumulative Commitment: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Cumulative Disbursement: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1));(Cumulative Execution Rate: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "3,348,754", "Funding-2013-Actual Disbursements", "686,956", "Funding-2014-Actual Commitments", "4,465,760,63", "Funding-2014-Actual Disbursements", "580,000", "Funding-2015-Actual Commitments", "501,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "9,751,263,21", "Totals-Actual Disbursements", "2,381,032", "Totals-Cumulative Commitment", "9,751,263,21", "Totals-Cumulative Disbursement", "2,381,032", "Totals-Cumulative Execution Rate", "24,42")
+		      .withChildren(
+		        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321", "Totals-Cumulative Commitment", "213,231", "Totals-Cumulative Disbursement", "123,321", "Totals-Cumulative Execution Rate", "57,83"),
+		        new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Funding-2010-Actual Disbursements", "453,213", "Funding-2011-Actual Commitments", "999,888", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213", "Totals-Cumulative Commitment", "999,888", "Totals-Cumulative Disbursement", "453,213", "Totals-Cumulative Execution Rate", "45,33"),
+		        new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
+		        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777", "Totals-Cumulative Disbursement", "143,777"),
+		        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000", "Totals-Cumulative Commitment", "125,000", "Totals-Cumulative Disbursement", "72,000", "Totals-Cumulative Execution Rate", "57,6"),
+		        new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Funding-2013-Actual Commitments", "111,333", "Funding-2013-Actual Disbursements", "555,111", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111", "Totals-Cumulative Commitment", "111,333", "Totals-Cumulative Disbursement", "555,111", "Totals-Cumulative Execution Rate", "498,6"),
+		        new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845", "Totals-Cumulative Commitment", "567,421", "Totals-Cumulative Disbursement", "131,845", "Totals-Cumulative Execution Rate", "23,24"),
+		        new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000", "Totals-Cumulative Commitment", "7,070,000", "Totals-Cumulative Disbursement", "450,000", "Totals-Cumulative Execution Rate", "6,36"),
+		        new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000", "Totals-Cumulative Commitment", "65,760,63", "Totals-Cumulative Disbursement", "80,000", "Totals-Cumulative Execution Rate", "121,65"),
+		        new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Commitments", "96,840,58", "Totals-Actual Disbursements", "50,000", "Totals-Cumulative Commitment", "96,840,58", "Totals-Cumulative Disbursement", "50,000", "Totals-Cumulative Execution Rate", "51,63"),
+		        new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000", "Totals-Cumulative Commitment", "45,000"),
+		        new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "456,789", "Totals-Actual Disbursements", "321,765", "Totals-Cumulative Commitment", "456,789", "Totals-Cumulative Disbursement", "321,765", "Totals-Cumulative Execution Rate", "70,44")      ));
+		
+		ReportSpecificationImpl spec = buildSpecification("testUnfilteredMeasuresInUnfilteredReport",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.CUMULATIVE_COMMITMENT, MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_EXECUTION_RATE),
+			null,
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		runNiTestCase(spec, "en", actsUnfilteredMeasures, cor);
+	}
+	
+	@Test
+	public void testUnfilteredMeasuresInDateFilteredReport() throws Exception {
+		NiReportModel cor = new NiReportModel("testUnfilteredMeasuresInDateFilteredReport")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 10))",
+					"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 4));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 5))",
+					"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Cumulative Commitment: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Cumulative Disbursement: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Cumulative Execution Rate: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Funding-2013-Actual Commitments", "3,348,754", "Funding-2013-Actual Disbursements", "686,956", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,748,754", "Totals-Actual Disbursements", "1,136,956", "Totals-Cumulative Commitment", "9,751,263,21", "Totals-Cumulative Disbursement", "2,381,032", "Totals-Cumulative Execution Rate", "24,42")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Totals-Cumulative Commitment", "213,231", "Totals-Cumulative Disbursement", "123,321", "Totals-Cumulative Execution Rate", "57,83"),
+			        new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Totals-Cumulative Commitment", "999,888", "Totals-Cumulative Disbursement", "453,213", "Totals-Cumulative Execution Rate", "45,33"),
+			        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Totals-Cumulative Disbursement", "143,777"),
+			        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Totals-Cumulative Commitment", "125,000", "Totals-Cumulative Disbursement", "72,000", "Totals-Cumulative Execution Rate", "57,6"),
+			        new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Funding-2013-Actual Commitments", "111,333", "Funding-2013-Actual Disbursements", "555,111", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111", "Totals-Cumulative Commitment", "111,333", "Totals-Cumulative Disbursement", "555,111", "Totals-Cumulative Execution Rate", "498,6"),
+			        new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845", "Totals-Cumulative Commitment", "567,421", "Totals-Cumulative Disbursement", "131,845", "Totals-Cumulative Execution Rate", "23,24"),
+			        new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000", "Totals-Cumulative Commitment", "7,070,000", "Totals-Cumulative Disbursement", "450,000", "Totals-Cumulative Execution Rate", "6,36"),
+			        new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Totals-Cumulative Commitment", "65,760,63", "Totals-Cumulative Disbursement", "80,000", "Totals-Cumulative Execution Rate", "121,65"),
+			        new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Cumulative Commitment", "96,840,58", "Totals-Cumulative Disbursement", "50,000", "Totals-Cumulative Execution Rate", "51,63"),
+			        new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Totals-Cumulative Commitment", "45,000"),
+			        new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Cumulative Commitment", "456,789", "Totals-Cumulative Disbursement", "321,765", "Totals-Cumulative Execution Rate", "70,44")      ));
+		
+		ReportSpecificationImpl spec = buildSpecification("testUnfilteredMeasuresInDateFilteredReport",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.CUMULATIVE_COMMITMENT, MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_EXECUTION_RATE),
+			null,
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		ReportFiltersImpl arf = new ReportFiltersImpl();
+		arf.addFilterRule(new ReportElement(ReportElement.ElementType.DATE), DateFilterUtils.getDatesRangeFilterRule(ReportElement.ElementType.DATE, 2456353, 2456897, "2456353", "2456897", true));
+		spec.setFilters(arf);
+		
+		runNiTestCase(spec, "en", actsUnfilteredMeasures, cor);
+	}
+
+	@Test
+	public void testUnfilteredMeasuresInSectorFilteredReport() throws Exception {
+		NiReportModel cor = new NiReportModel("testUnfilteredMeasuresInSectorFilteredReport")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 20))",
+				"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 14));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 15, colSpan: 5))",
+				"(2006: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2));(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 13, colSpan: 2))",
+				"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Cumulative Commitment: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Cumulative Disbursement: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Cumulative Execution Rate: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Funding-2006-Actual Commitments", "58,104,35", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "203,777", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "111,333", "Funding-2013-Actual Disbursements", "555,111", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "110,000", "Funding-2015-Actual Commitments", "273,394,5", "Funding-2015-Actual Disbursements", "160,882,5", "Totals-Actual Commitments", "633,592,48", "Totals-Actual Disbursements", "1,041,770,5", "Totals-Cumulative Commitment", "633,592,48", "Totals-Cumulative Disbursement", "1,041,770,5", "Totals-Cumulative Execution Rate", "164,42")
+		      .withChildren(
+		        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777", "Totals-Cumulative Disbursement", "143,777"),
+		        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000", "Totals-Cumulative Commitment", "125,000", "Totals-Cumulative Disbursement", "72,000", "Totals-Cumulative Execution Rate", "57,6"),
+		        new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Funding-2013-Actual Commitments", "111,333", "Funding-2013-Actual Disbursements", "555,111", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111", "Totals-Cumulative Commitment", "111,333", "Totals-Cumulative Disbursement", "555,111", "Totals-Cumulative Execution Rate", "498,6"),
+		        new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000", "Totals-Cumulative Commitment", "65,760,63", "Totals-Cumulative Disbursement", "80,000", "Totals-Cumulative Execution Rate", "121,65"),
+		        new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Funding-2006-Actual Commitments", "58,104,35", "Funding-2014-Actual Disbursements", "30,000", "Totals-Actual Commitments", "58,104,35", "Totals-Actual Disbursements", "30,000", "Totals-Cumulative Commitment", "58,104,35", "Totals-Cumulative Disbursement", "30,000", "Totals-Cumulative Execution Rate", "51,63"),
+		        new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000", "Totals-Cumulative Commitment", "45,000"),
+		        new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "228,394,5", "Funding-2015-Actual Disbursements", "160,882,5", "Totals-Actual Commitments", "228,394,5", "Totals-Actual Disbursements", "160,882,5", "Totals-Cumulative Commitment", "228,394,5", "Totals-Cumulative Disbursement", "160,882,5", "Totals-Cumulative Execution Rate", "70,44")      ));
+		
+		ReportSpecificationImpl spec = buildSpecification("testUnfilteredMeasuresInSectorFilteredReport",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.CUMULATIVE_COMMITMENT, MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_EXECUTION_RATE),
+			null,
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		ReportFiltersImpl arf = new ReportFiltersImpl();
+		arf.addFilterRule(new ReportElement(new ReportColumn(ColumnConstants.PRIMARY_SECTOR)), new FilterRule(Arrays.asList("6236"), true));
+		spec.setFilters(arf);
+		
+		runNiTestCase(spec, "en", actsUnfilteredMeasures, cor);
 	}
 
 }

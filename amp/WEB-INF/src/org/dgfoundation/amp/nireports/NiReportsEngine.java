@@ -341,7 +341,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			});
 		};
 		timer.run("Funding", () -> {
-			unfilteredFunding = schema.fetchEntity(this, schema.getFundingFetcher(this));
+			unfilteredFunding = schema.fetchEntity(this, schema.getFundingFetcher(this)).stream().filter(z -> this.mainIds.contains(z.activityId)).collect(Collectors.toList());
 			funding = selectRelevant(unfilteredFunding, buildCellFilterForColumn(FUNDING_COLUMN_NAME, true));
 			timer.putMetaInNode("cells", funding.size());
 			});

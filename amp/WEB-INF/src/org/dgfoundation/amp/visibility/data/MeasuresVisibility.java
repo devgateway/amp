@@ -111,8 +111,8 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.CUMULATIVE_DISBURSEMENT, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, Arrays.asList(ANNUAL_PROPOSED_PROJECT_COST_ID_NAME, ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE, Arrays.asList(ArConstants.DISBURSEMENT, ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
-		
-		
+		put(MeasureConstants.PREDICTABILITY_OF_FUNDING, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", ADJUSTMENT_PREFIX + "Planned"));
+		put(MeasureConstants.CUMULATIVE_EXECUTION_RATE, Arrays.asList(ArConstants.COMMITMENT, ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 	}};
 
 	public static Set<String> allMeasures = _getAllMeasures();	

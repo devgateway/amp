@@ -91,8 +91,12 @@ public interface NiFormula {
 		return ifDefined(left, right, BigDecimal::max);
 	}
 
+	public static NiFormula PERCENTAGE(NiFormula left, NiFormula right) {
+		return MULTIPLY(DIVIDE(left, right), CONSTANT(100));
+	}
+
 	public static NiFormula PERCENTAGE(String left, String right) {
-		return MULTIPLY(DIVIDE(VARIABLE(left), VARIABLE(right)), CONSTANT(100));
+		return PERCENTAGE(VARIABLE(left), VARIABLE(right));
 	}
 	
 	public static NiFormula ZERO = CONSTANT(BigDecimal.ZERO);

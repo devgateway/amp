@@ -56,7 +56,7 @@ public class DateFilterUtils {
         return getDatesRangeFilterRule(elemType, from, to, null, null, bothLimits); 
     }
     
-    private static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, 
+    public static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, 
             String fromName, String toName, boolean bothLimits) throws AmpApiException {
         validate (elemType, from);
         validate (elemType, to);

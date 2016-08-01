@@ -228,7 +228,6 @@ public class ColumnConstants {
 	public static final String PLEDGES_TITLES = "Pledges Titles";
 	public static final String PLEDGES_TYPE_OF_ASSISTANCE = "Pledges Type Of Assistance";
 	public static final String RELATED_PROJECTS = "Related Projects";
-	public static final String PREDICTABILITY_OF_FUNDING = "Predictability of Funding";
 	public static final String PRIMARY_PROGRAM = "Primary Program";
 	public static final String PRIMARY_PROGRAM_LEVEL_1 = "Primary Program Level 1";
 	public static final String PRIMARY_PROGRAM_LEVEL_2 = "Primary Program Level 2";

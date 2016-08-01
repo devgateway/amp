@@ -1681,6 +1681,66 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		}
 	}
 	
+	@Test
+	public void testPredictabilityOfFunding() {
+		NiReportModel cor = new NiReportModel("AMP-22639-predictability-of-funding")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 14))",
+				"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 10));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 11, colSpan: 3))",
+				"(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 2))",
+				"(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Predictability of Funding: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Funding-2010-Planned Disbursements", "0", "Funding-2010-Actual Disbursements", "780 311", "Funding-2012-Planned Disbursements", "0", "Funding-2012-Actual Disbursements", "12 000", "Funding-2013-Planned Disbursements", "0", "Funding-2013-Actual Disbursements", "1 266 956", "Funding-2014-Planned Disbursements", "146 300", "Funding-2014-Actual Disbursements", "710 200", "Funding-2015-Planned Disbursements", "36 500", "Funding-2015-Actual Disbursements", "437 335", "Totals-Planned Disbursements", "182 800", "Totals-Actual Disbursements", "3 206 802", "Totals-Predictability of Funding", "-1 654,27")
+		      .withChildren(
+		        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "123 321", "Totals-Actual Disbursements", "123 321"),
+		        new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Funding-2010-Actual Disbursements", "453 213", "Totals-Actual Disbursements", "453 213"),
+		        new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
+		        new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR"),
+		        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Funding-2010-Actual Disbursements", "143 777", "Totals-Actual Disbursements", "143 777"),
+		        new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+		        new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components"),
+		        new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents"),
+		        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Funding-2013-Actual Disbursements", "545 000", "Totals-Actual Disbursements", "545 000"),
+		        new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
+		        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Funding-2010-Actual Disbursements", "60 000", "Funding-2012-Actual Disbursements", "12 000", "Totals-Actual Disbursements", "72 000"),
+		        new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+		        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1"),
+		        new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2"),
+		        new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Funding-2013-Actual Disbursements", "555 111", "Totals-Actual Disbursements", "555 111"),
+		        new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Funding-2013-Actual Disbursements", "131 845", "Totals-Actual Disbursements", "131 845"),
+		        new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1"),
+		        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones"),
+		        new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages"),
+		        new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages"),
+		        new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge"),
+		        new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program"),
+		        new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program"),
+		        new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program"),
+		        new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1"),
+		        new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Funding-2014-Actual Disbursements", "450 000", "Totals-Actual Disbursements", "450 000"),
+		        new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Funding-2014-Planned Disbursements", "90 000", "Funding-2014-Actual Disbursements", "80 000", "Totals-Planned Disbursements", "90 000", "Totals-Actual Disbursements", "80 000", "Totals-Predictability of Funding", "11,11"),
+		        new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Funding-2014-Actual Disbursements", "50 000", "Totals-Actual Disbursements", "50 000"),
+		        new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting"),
+		        new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components"),
+		        new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components"),
+		        new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity"),
+		        new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Disbursements", "321 765", "Totals-Actual Disbursements", "321 765"),
+		        new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements"),
+		        new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements"),
+		        new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement"),
+		        new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Funding-2014-Planned Disbursements", "300", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Planned Disbursements", "500", "Funding-2015-Actual Disbursements", "570", "Totals-Planned Disbursements", "800", "Totals-Actual Disbursements", "770", "Totals-Predictability of Funding", "3,75"),
+		        new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms"),
+		        new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response"),
+		        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs"),
+		        new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Funding-2013-Actual Disbursements", "35 000", "Funding-2014-Actual Disbursements", "75 000", "Totals-Actual Disbursements", "110 000"),
+		        new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Funding-2014-Planned Disbursements", "56 000", "Funding-2014-Actual Disbursements", "55 000", "Funding-2015-Planned Disbursements", "36 000", "Funding-2015-Actual Disbursements", "35 000", "Totals-Planned Disbursements", "92 000", "Totals-Actual Disbursements", "90 000", "Totals-Predictability of Funding", "2,17"),
+		        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Funding-2015-Actual Disbursements", "80 000", "Totals-Actual Disbursements", "80 000"),
+		        new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")      ));
+
+		runNiTestCase(cor, spec("AMP-22639-predictability-of-funding"), "en", acts);
+	}
+	
 	@Override
 	public void setUp() {
 		AllTests_amp212.setUp();

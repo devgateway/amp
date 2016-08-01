@@ -189,7 +189,7 @@ public class WorkspaceFilter
 		//return "SELECT amp_activity_id FROM amp_activity WHERE name IN ('activity with capital spending', 'Activity with planned disbursements', 'activity with pipeline MTEFs and act. disb')";
 		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (13755, 9790)";
 		//return "SELECT amp_activity_id FROM v_ni_mtef_funding where source_role_id = 1 and amp_activity_id NOT IN (175, 176)";
-//		return "SELECT amp_activity_id FROM amp_activity WHERE name IN ('department/division')";	
+		//return "SELECT amp_activity_id FROM amp_activity WHERE name IN ('TAC_activity_1', 'TAC_activity_2', 'date-filters-activity', 'SSC Project 1', 'SSC Project 2', 'pledged 2', 'activity with capital spending', 'activity with contracting agency', 'activity 1 with agreement', 'Test MTEF directed', 'Unvalidated activity', 'Proposed Project Cost 1 - USD')";	
 		return TEAM_FILTER;
 	}
 	

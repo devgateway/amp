@@ -57,4 +57,9 @@ public abstract class AbstractComputedBehaviour<V extends NiAmountCell> implemen
 		// trivial measures are copied verbatim to totals
 		return new ImmutablePair<String, ColumnContents>(entity.name, fetchedContents);
 	}
+	
+	@Override
+	public boolean isTransactionLevelUndefinedSkipping() {
+		return true;
+	}
 }

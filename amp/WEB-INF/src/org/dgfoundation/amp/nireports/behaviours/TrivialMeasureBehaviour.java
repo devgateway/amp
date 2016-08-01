@@ -112,4 +112,8 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 		return false;
 	}
 
+	@Override
+	public boolean isTransactionLevelUndefinedSkipping() {
+		return true;
+	}
 }

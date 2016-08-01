@@ -49,8 +49,9 @@ public interface Behaviour<V extends NiOutCell> {
 	 * @return
 	 */
 	public V doHorizontalReduce(List<NiCell> cells);
-	public default Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell) {
-		if (cellMeetsCoos(acceptors, oldCell, splitCell))
+	public default Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell, boolean isTransactionLevelHierarchy) {
+		
+		if (cellMeetsCoos(acceptors, oldCell, splitCell, isTransactionLevelHierarchy && isTransactionLevelUndefinedSkipping()))
 			return oldCell;
 		else
 			return null;
@@ -64,7 +65,7 @@ public interface Behaviour<V extends NiOutCell> {
 		return null;
 	}
 	
-	public default ColumnContents horizSplit(ColumnContents oldContents, Map<Long, Cell> splitCells, Set<Long> acceptableMainIds, Map<NiDimensionUsage, IdsAcceptor> acceptors, boolean enqueueAcceptors) {
+	public default ColumnContents horizSplit(ColumnContents oldContents, Map<Long, Cell> splitCells, Set<Long> acceptableMainIds, Map<NiDimensionUsage, IdsAcceptor> acceptors, boolean enqueueAcceptors, boolean isTransactionLevelHierarchy) {
 		Map<Long, List<NiCell>> z = new HashMap<>();
 		for(Long mainId:acceptableMainIds) {
 			List<NiCell> oldCells = oldContents.data.get(mainId);
@@ -72,7 +73,7 @@ public interface Behaviour<V extends NiOutCell> {
 			if (oldCells == null)
 				continue;
 			for(NiCell oldCell:oldCells) {
-				Cell filteredCell = filterCell(acceptors, oldCell.getCell(), splitCell);
+				Cell filteredCell = filterCell(acceptors, oldCell.getCell(), splitCell, isTransactionLevelHierarchy);
 				if (filteredCell != null && oldCell.passesFilters(splitCell))
 					z.computeIfAbsent(mainId, id -> new ArrayList<>()).add(oldCell.advanceHierarchy(filteredCell, splitCell, enqueueAcceptors ? acceptors : null));
 			}
@@ -116,16 +117,21 @@ public interface Behaviour<V extends NiOutCell> {
 		return String.format("%s", getTimeRange());
 	}
 	
-	public static boolean cellMeetsCoos(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell) {
+	public static boolean cellMeetsCoos(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell, boolean skipMissingCoordinates) {
 		Map<NiDimensionUsage, NiDimension.Coordinate> cellCoos = oldCell.getCoordinates();
 		NiUtils.failIf(cellCoos == null, "null cellCoos");
 		for(Entry<NiDimensionUsage, NiDimension.Coordinate> splitterElem:splitCell.getCoordinates().entrySet()) {
 			NiDimensionUsage dimUsage = splitterElem.getKey();
+			boolean splitterIsUndefined = splitterElem.getValue().id == ColumnReportData.UNALLOCATED_ID;
 //			NiDimension.Coordinate splitterCoo = splitterElem.getValue();
 			NiDimension.Coordinate cellCoo = cellCoos.get(dimUsage);
-			if (cellCoo == null)
-				continue; // cell is indifferent to this coordinate
-			if (cellCoo.id == ColumnReportData.UNALLOCATED_ID && splitterElem.getValue().id == ColumnReportData.UNALLOCATED_ID)
+			if (cellCoo == null) {
+				// cell is indifferent to this coordinate
+				if (skipMissingCoordinates && !splitterIsUndefined)
+					return false; // being indifferent to transaction-level hier ==> rejected
+				continue;  // not a transaction-level hier -> accept all
+			}
+			if (cellCoo.id == ColumnReportData.UNALLOCATED_ID && splitterIsUndefined)
 				continue; // undefineds match
 			IdsAcceptor acceptor = acceptors.get(dimUsage);
 			boolean isAcceptable = acceptor.isAcceptable(cellCoo);
@@ -135,6 +141,13 @@ public interface Behaviour<V extends NiOutCell> {
 		return true;
 	}
 
+	/**
+	 * returns true iff cells of this type, upon running over a transaction-level hierarchy for which they lack a coordinate and the splitter is defined, should be skipped
+	 * normally all summable columns (e.g. funding cells which sum) should return true while texts should return false
+	 * @return
+	 */
+	public boolean isTransactionLevelUndefinedSkipping();
+	
 	public default NiOutCell doVerticalReduce(Collection<V> cells) {
 		return getZeroCell();
 	}

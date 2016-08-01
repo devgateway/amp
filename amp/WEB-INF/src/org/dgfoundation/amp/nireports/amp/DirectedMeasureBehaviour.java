@@ -56,9 +56,9 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
 	}
 	
 	@Override
-	public Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell) {
+	public Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell, boolean isTransactionLevelHierarchy) {
 		if ((!splitCell.mainLevel.isPresent()) || getHierarchiesListener().test(splitCell.mainLevel.get().dimensionUsage))
-			return super.filterCell(acceptors, oldCell, splitCell); // this is not a related-organisation hierarchy
+			return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy); // this is not a related-organisation hierarchy
 		
 		// gone till here -> we're doing a hierarchy by a related organisation
 		String srcRoleCode = oldCell.getMetaInfo().getMetaInfo(MetaCategory.SOURCE_ROLE.category).v.toString();

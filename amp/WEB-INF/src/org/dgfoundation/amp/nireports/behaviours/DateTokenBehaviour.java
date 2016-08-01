@@ -68,4 +68,10 @@ public class DateTokenBehaviour implements Behaviour<NiDateCell> {
 	public boolean hasPercentages() {
 		return false;
 	}
+	
+	@Override
+	public boolean isTransactionLevelUndefinedSkipping() {
+		return false;
+	}
+
 }

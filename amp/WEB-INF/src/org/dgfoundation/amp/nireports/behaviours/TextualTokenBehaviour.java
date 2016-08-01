@@ -66,9 +66,13 @@ public class TextualTokenBehaviour implements Behaviour<NiTextCell> {
 		return null;
 	}
 
-
 	@Override
 	public boolean hasPercentages() {
+		return false;
+	}
+	
+	@Override
+	public boolean isTransactionLevelUndefinedSkipping() {
 		return false;
 	}
 }

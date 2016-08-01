@@ -66,4 +66,9 @@ public abstract class GeneratedColumnBehaviour<K extends Cell, V extends NiOutCe
 	public boolean hasPercentages() {
 		return false;
 	}
+	
+	@Override
+	public boolean isTransactionLevelUndefinedSkipping() {
+		return false; // technically there shouldn't be cells here; just keeping it safe
+	}
 }

@@ -73,6 +73,9 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		super("AmpReportsSchema sanity tests");
 	}
 	
+	final static GrandTotalsDigest proposedProjectCostDigester = new GrandTotalsDigest(z -> z.equals("RAW / Proposed Project Amount") || z.startsWith("RAW / Revised Project Amount"));
+	final static String correctTotalsPPC = "{RAW / Proposed Project Amount=4781901.715878, RAW / Revised Project Amount=4412539.842263}";
+	
 	@Override
 	protected NiReportExecutor getNiExecutor(List<String> activityNames) {
 		return getDbExecutor(activityNames);
@@ -127,6 +130,35 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				"en", 
 				Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms"),
 				cor);
+	}
+	
+	/**
+	 * generates reports with many hierarchies and checks that, for any of them, the totals do not change
+	 * @throws Exception
+	 */
+	@Test
+	public void testProposedProjectCostDoesNotChangeTotals() throws Exception {
+		
+		ReportSpecificationImpl initSpec = buildSpecification("initSpec", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.REVISED_PROJECT_AMOUNT), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+				null, 
+				GroupingCriteria.GROUPING_YEARLY);
+		 		
+		assertEquals(correctTotalsPPC, buildDigest(initSpec, acts, proposedProjectCostDigester).toString());
+				
+		// single-hierarchy reports
+		for(boolean isSummary:Arrays.asList(true, false)) {
+			for(String hierName:hierarchiesToTry) {
+				ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary), 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.REVISED_PROJECT_AMOUNT, hierName), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+						Arrays.asList(hierName), 
+						GroupingCriteria.GROUPING_YEARLY);
+				spec.setSummaryReport(isSummary);
+				assertEquals(spec.getReportName(), correctTotalsPPC, buildDigest(spec, acts, proposedProjectCostDigester).toString());
+			}
+		}
 	}
 	
 	@Test

@@ -49,7 +49,7 @@ public class LoggingIdsAcceptors {
 		
 		@Override
 		public boolean isAcceptable(Coordinate cellCoos) {
-			boolean res = idsAcceptor.isAcceptable(coo);
+			boolean res = idsAcceptor.isAcceptable(cellCoos);
 			calls.add(String.format("%s: %s -> %s", dimUsg, cellCoos, res));
 			return res;
 		}

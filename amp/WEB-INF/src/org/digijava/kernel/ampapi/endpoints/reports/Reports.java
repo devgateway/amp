@@ -543,10 +543,10 @@ public class Reports {
 		}
 		
 		logger.info("Generate specific export...");
-		GeneratedReport genateredReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(),
+		GeneratedReport generatedReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(),
 		        ReportsUtil.convertSaikuParamsToReports(queryObject));
 		
-		return getExportAsResponse(ampReport, type, genateredReport);
+		return getExportAsResponse(ampReport, type, generatedReport, queryObject);
 	}
 	
 	/** Method used for exporting a public NiReport. 
@@ -560,13 +560,13 @@ public class Reports {
 		GeneratedReport report = EndpointUtils.runReport(AmpReportsToReportSpecification.convert(ampReport));
 		
 		//TODO: refactoring should be made before 2.12 official release by merging with exportSaikuReport
-		return getExportAsResponse(ampReport, type, report);
+		return getExportAsResponse(ampReport, type, report, new JsonBean());
 	}
 
-	public Response getExportAsResponse(AmpReports ampReport, String type, GeneratedReport report) {
+	public Response getExportAsResponse(AmpReports ampReport, String type, GeneratedReport report, JsonBean queryObject) {
 		String fileName = getExportFileName(ampReport, type);
 		try {
-			byte[] doc = exportNiReport(report, ampReport.getAmpReportId(), new JsonBean(), type);
+			byte[] doc = exportNiReport(report, ampReport.getAmpReportId(), queryObject, type);
 			
 			if (doc != null) {
 				logger.info("Send export data to browser...");

@@ -24,7 +24,6 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -150,12 +149,11 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		
 		String unitsOption = report.spec.getSettings().getUnitsOption().userMessage;
 		String currencyCode = report.spec.getSettings().getCurrencyCode();
-		String currencyName = CurrencyUtil.getCurrencyByCode(currencyCode).getCurrencyName();
 		
 		String translatedNotes = TranslatorWorker.translateText(unitsOption);
-		String translatedCurrency = TranslatorWorker.translateText(currencyName);
+		String translatedCurrencyCode = TranslatorWorker.translateText(currencyCode);
 		
-		cell.setCellValue(translatedNotes + " - " + translatedCurrency);
+		cell.setCellValue(translatedNotes + " - " + translatedCurrencyCode);
 		
 		CellRangeAddress mergedUnitsCell = new CellRangeAddress(currencyUnitsRowPosition, currencyUnitsRowPosition, 
 				0, report.rootHeaders.size() + 1);

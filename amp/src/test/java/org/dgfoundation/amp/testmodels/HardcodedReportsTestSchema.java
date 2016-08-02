@@ -163,8 +163,9 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 		addLinearFilterMeasure(MeasureConstants.VARIANCE_OF_DISBURSEMENTS, null, VarianceMeasureBehaviour.instance, false, MeasureConstants.ACTUAL_DISBURSEMENTS, +1);
 		addLinearFilterMeasure(MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, null, AverageAmountBehaviour.instance, false, MeasureConstants.ACTUAL_DISBURSEMENTS, +1);
 		
-		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, null, NiFormula.PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
-		addFormulaComputedMeasure(MeasureConstants.CUMULATIVE_EXECUTION_RATE, null, NiFormula.PERCENTAGE(MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_COMMITMENT));
+		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, null, NiFormula.PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS), false);
+		addFormulaComputedMeasure(MeasureConstants.AVERAGE_DISBURSEMENT_RATE, null, NiFormula.PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS), true);
+		addFormulaComputedMeasure(MeasureConstants.CUMULATIVE_EXECUTION_RATE, null, NiFormula.PERCENTAGE(MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_COMMITMENT), false);
 	}
 
 	@Override

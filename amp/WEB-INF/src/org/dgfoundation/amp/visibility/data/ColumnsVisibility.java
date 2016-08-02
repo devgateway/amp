@@ -277,7 +277,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Actors", ColumnConstants.ACTORS);
 		put("Age of Project (Months)", ColumnConstants.AGE_OF_PROJECT_MONTHS);
 		put("Archived", ColumnConstants.ARCHIVED);
-		put("Average Disbursement Rate", ColumnConstants.AVERAGE_DISBURSEMENT_RATE);
 		put("Average Size of Disbursements", ColumnConstants.AVERAGE_SIZE_OF_DISBURSEMENTS);
 		put("Average Size of Projects", ColumnConstants.AVERAGE_SIZE_OF_PROJECTS);
 		put("Budget Department", ColumnConstants.BUDGET_DEPARTMENT);

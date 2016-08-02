@@ -154,7 +154,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(ColumnConstants.EXECUTION_RATE,  "(Cumulative Disbursement/ Cumulative Commitment) * 100 ");
 		put(ColumnConstants.AVERAGE_SIZE_OF_DISBURSEMENTS,  "Sun Actual Disbursments / Number of Actual disbursments");
 		put(ColumnConstants.ACTIVITY_COUNT,  "Count Of Activities under the current hierarchy");
-		put(ColumnConstants.AVERAGE_DISBURSEMENT_RATE,  "Sum of Execution Rate / Number of Activities");
 		put(ColumnConstants.PROJECT_AGE_RATIO,  "Project Age Ratio,  Age of project / Project Period");
 //		put(ColumnConstants.PERCENTAGE_OF_TOTAL_DISBURSMENTS,  "AMP 1.x Disbursement Ratio");
 		put(ColumnConstants.PRIMARY_PROGRAM,  "Level-1 subprogram of the selected primary program");
@@ -188,6 +187,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.VARIANCE_OF_DISBURSEMENTS, "Max Actual Disbursements - Min Actual Disbursements");
 		put(MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, "Sum Actual Disbursements / Number of Actual Disbursements");
 		put(MeasureConstants.PREDICTABILITY_OF_FUNDING ,  "((Planned Disbursements - Actual Disbursements) / Planned Disbursements) X 100");
+		put(MeasureConstants.AVERAGE_DISBURSEMENT_RATE,  "Sum of Execution Rate / Number of Activities");
 //		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Actual Disbursements / (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). "
 //					+ "Measure only makes sense in Annual and Totals-only reports");
 		
@@ -553,12 +553,17 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	protected void addFormulaMeasures() {
 		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
+		addFormulaAverageComputedMeasure(MeasureConstants.AVERAGE_DISBURSEMENT_RATE, PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
 		addFormulaComputedMeasure(MeasureConstants.PREDICTABILITY_OF_FUNDING, PERCENTAGE(SUBTRACT(VARIABLE(MeasureConstants.PLANNED_DISBURSEMENTS), VARIABLE(MeasureConstants.ACTUAL_DISBURSEMENTS)), VARIABLE(MeasureConstants.PLANNED_DISBURSEMENTS)));
 		addFormulaComputedMeasure(MeasureConstants.CUMULATIVE_EXECUTION_RATE, PERCENTAGE(MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_COMMITMENT));
 	}
-	
+
+	protected void addFormulaAverageComputedMeasure(String measureName, NiFormula formula) {
+		addFormulaComputedMeasure(measureName, measureDescriptions.get(measureName), formula, true);
+	}
+
 	protected void addFormulaComputedMeasure(String measureName, NiFormula formula) {
-		addFormulaComputedMeasure(measureName, measureDescriptions.get(measureName), formula);
+		addFormulaComputedMeasure(measureName, measureDescriptions.get(measureName), formula, false);
 	}
 	
 	protected void addPledgeColumns() {

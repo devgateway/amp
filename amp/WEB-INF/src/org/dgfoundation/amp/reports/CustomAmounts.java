@@ -45,9 +45,9 @@ public class CustomAmounts {
 		add(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);
 		add(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS);
 		add(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT);
+		add(MeasureConstants.AVERAGE_DISBURSEMENT_RATE);
 		add(ColumnConstants.CUMULATIVE_EXECUTION_RATE);
 		add(ColumnConstants.PROJECT_AGE_RATIO);
-		add(ColumnConstants.AVERAGE_DISBURSEMENT_RATE);
 		add(ColumnConstants.FORECAST_EXECUTION_RATE);
 		
 	}};

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiCombinationContextTransactionMeasure;
+import org.dgfoundation.amp.nireports.schema.NiFormulaicAverageMeasure;
 import org.dgfoundation.amp.nireports.schema.NiFormulaicMeasure;
 import org.dgfoundation.amp.nireports.schema.NiLinearCombinationTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
@@ -82,14 +83,19 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	 * @param formula
 	 * @return
 	 */
-	public AbstractReportsSchema addFormulaComputedMeasure(String compMeasureName, String description, NiFormula formula) {
+	public AbstractReportsSchema addFormulaComputedMeasure(String compMeasureName, String description, NiFormula formula, boolean average) {
 		Map<String, NiReportMeasure<CategAmountCell>> depMeas = new HashMap<>();
 		for(String measName:formula.getDependencies()) {
 			NiReportMeasure<CategAmountCell> meas = (NiReportMeasure) measures.get(measName);
 			failIf(meas == null, () -> String.format("measure <%s> defined as dependency of measure <%s> does not exist", measName, compMeasureName));
 			depMeas.put(measName, meas);
 		}
-		return addMeasure(new NiFormulaicMeasure(compMeasureName, description, depMeas, formula));
+		NiReportMeasure<CategAmountCell> res;
+		if (average)
+			res = new NiFormulaicAverageMeasure(compMeasureName, description, depMeas, formula, true);
+		else
+			res = new NiFormulaicMeasure(compMeasureName, description, depMeas, formula);
+		return addMeasure(res);
 		//return addMeasure(meas)
 	}
 	

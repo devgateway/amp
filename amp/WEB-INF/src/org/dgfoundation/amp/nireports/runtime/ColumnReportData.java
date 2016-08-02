@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.nireports.runtime;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,8 +10,6 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -22,7 +19,6 @@ import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
-import static org.dgfoundation.amp.algo.AmpCollections.remap;
 /**
  * a leaf of a report - the bottom hierarchy, without any subreports
  * @author Dolghier Constantin

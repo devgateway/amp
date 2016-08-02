@@ -109,6 +109,16 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			"Proposed Project Cost 1 - USD"
 		);
 	
+	final List<String> executionRateActs = Arrays.asList(
+			"activity with capital spending",
+			"Activity with planned disbursements",
+			"execution rate activity",
+			// with ER ends here
+			"crazy funding 1",
+			"third activity with agreements",
+			"activity with tertiary_program"
+		);
+	
 	final static List<String> hierarchiesToTry = Arrays.asList(
 			ColumnConstants.STATUS, ColumnConstants.IMPLEMENTATION_LEVEL, 
 			ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, 
@@ -1705,4 +1715,109 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		runNiTestCase(spec, "en", actsUnfilteredMeasures, cor);
 	}
 
+	@Test
+	public void testAverageMeasureFlat() {
+		NiReportModel cor = new NiReportModel("testAverageMeasureFlat")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 13))",
+					"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Donor Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 9, colSpan: 4))",
+					"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Execution Rate: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Average Disbursement Rate: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Primary Sector", "", "Donor Agency", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "80,760,63", "Funding-2014-Actual Disbursements", "135,000", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Commitments", "537,549,63", "Totals-Actual Disbursements", "170,000", "Totals-Execution Rate", "93,41", "Totals-Average Disbursement Rate", "93,36")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Finland", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333"),
+			        new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Ministry of Economy", "Funding-2014-Actual Commitments", "15,000", "Totals-Actual Commitments", "15,000"),
+			        new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Finland", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000", "Totals-Execution Rate", "88,89", "Totals-Average Disbursement Rate", "88,89"),
+			        new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Ministry of Finance", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
+			        new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Ministry of Finance", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000", "Totals-Execution Rate", "97,83", "Totals-Average Disbursement Rate", "97,83")      ));
+	
+		
+		ReportSpecificationImpl spec = buildSpecification("testAverageMeasureFlat",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.DONOR_AGENCY),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.EXECUTION_RATE, MeasureConstants.AVERAGE_DISBURSEMENT_RATE),
+			null,
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		ReportFiltersImpl arf = new ReportFiltersImpl();
+		arf.addFilterRule(new ReportElement(new ReportColumn(ColumnConstants.PRIMARY_SECTOR)), new FilterRule(Arrays.asList("6236"), true));
+		spec.setFilters(arf);
+		
+		runNiTestCase(spec, "en", executionRateActs, cor);
+	}	
+	
+	@Test
+	public void testAverageMeasureSingleHier() {
+		NiReportModel cor = new NiReportModel("testAverageMeasureSingleHier")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 13))",
+					"(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Donor Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 9, colSpan: 4))",
+					"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Execution Rate: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Average Disbursement Rate: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Primary Sector", "", "Project Title", "", "Donor Agency", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "80,760,63", "Funding-2014-Actual Disbursements", "135,000", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Commitments", "537,549,63", "Totals-Actual Disbursements", "170,000", "Totals-Execution Rate", "93,41", "Totals-Average Disbursement Rate", "93,36")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION", 6236))
+			        .withContents("Project Title", "", "Donor Agency", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "80,760,63", "Funding-2014-Actual Disbursements", "135,000", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Commitments", "537,549,63", "Totals-Actual Disbursements", "170,000", "Totals-Execution Rate", "93,41", "Totals-Average Disbursement Rate", "93,36", "Primary Sector", "110 - EDUCATION")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Donor Agency", "Finland", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333"),
+			          new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Donor Agency", "Ministry of Economy", "Funding-2014-Actual Commitments", "15,000", "Totals-Actual Commitments", "15,000"),
+			          new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Donor Agency", "Finland", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000", "Totals-Execution Rate", "88,89", "Totals-Average Disbursement Rate", "88,89"),
+			          new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Donor Agency", "Ministry of Finance", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
+			          new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Donor Agency", "Ministry of Finance", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000", "Totals-Execution Rate", "97,83", "Totals-Average Disbursement Rate", "97,83")        )      ));
+		
+		ReportSpecificationImpl spec = buildSpecification("testAverageMeasureSingleHier",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.DONOR_AGENCY),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.EXECUTION_RATE, MeasureConstants.AVERAGE_DISBURSEMENT_RATE),
+			Arrays.asList(ColumnConstants.PRIMARY_SECTOR),
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		ReportFiltersImpl arf = new ReportFiltersImpl();
+		arf.addFilterRule(new ReportElement(new ReportColumn(ColumnConstants.PRIMARY_SECTOR)), new FilterRule(Arrays.asList("6236"), true));
+		spec.setFilters(arf);
+		
+		runNiTestCase(spec, "en", executionRateActs, cor);
+	}
+	
+	@Test
+	public void testAverageMeasureDualHier() {
+		NiReportModel cor = new NiReportModel("testAverageMeasureDualHier")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 13))",
+					"(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Donor Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 9, colSpan: 4))",
+					"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Execution Rate: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Average Disbursement Rate: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Primary Sector", "", "Donor Agency", "", "Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "80,760,63", "Funding-2014-Actual Disbursements", "135,000", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Commitments", "537,549,63", "Totals-Actual Disbursements", "170,000", "Totals-Execution Rate", "93,41", "Totals-Average Disbursement Rate", "93,36")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION", 6236))
+			        .withContents("Donor Agency", "", "Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "80,760,63", "Funding-2014-Actual Disbursements", "135,000", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Commitments", "537,549,63", "Totals-Actual Disbursements", "170,000", "Totals-Execution Rate", "93,41", "Totals-Average Disbursement Rate", "93,36", "Primary Sector", "110 - EDUCATION")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner("Donor Agency", "Finland", 21698))
+			          .withContents("Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "399,093,63", "Totals-Actual Disbursements", "80,000", "Totals-Execution Rate", "88,89", "Totals-Average Disbursement Rate", "88,89", "Donor Agency", "Finland")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333"),
+			            new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000", "Totals-Execution Rate", "88,89", "Totals-Average Disbursement Rate", "88,89")          ),
+			          new ReportAreaForTests(new AreaOwner("Donor Agency", "Ministry of Economy", 21700)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "15,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "15,000", "Totals-Actual Disbursements", "0", "Totals-Average Disbursement Rate", "0", "Donor Agency", "Ministry of Economy")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Funding-2014-Actual Commitments", "15,000", "Totals-Actual Commitments", "15,000")          ),
+			          new ReportAreaForTests(new AreaOwner("Donor Agency", "Ministry of Finance", 21699))
+			          .withContents("Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Commitments", "123,456", "Totals-Actual Disbursements", "90,000", "Totals-Execution Rate", "97,83", "Totals-Average Disbursement Rate", "97,83", "Donor Agency", "Ministry of Finance")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
+			            new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000", "Totals-Execution Rate", "97,83", "Totals-Average Disbursement Rate", "97,83")          )        )      ));
+		
+		ReportSpecificationImpl spec = buildSpecification("testAverageMeasureDualHier",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.DONOR_AGENCY),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.EXECUTION_RATE, MeasureConstants.AVERAGE_DISBURSEMENT_RATE),
+			Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.DONOR_AGENCY),
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		ReportFiltersImpl arf = new ReportFiltersImpl();
+		arf.addFilterRule(new ReportElement(new ReportColumn(ColumnConstants.PRIMARY_SECTOR)), new FilterRule(Arrays.asList("6236"), true));
+		spec.setFilters(arf);
+		
+		runNiTestCase(spec, "en", executionRateActs, cor);
+	}
 }

@@ -24,7 +24,7 @@
 					<b><digi:trn>Observation</digi:trn>:</b>
 				</td>
 				<td>
-					<b><c:out value="${lineMinistryObs.name}"/></b>
+					<span class="word_break bold"><c:out value="${lineMinistryObs.name}"/></span>
 				</td>	
 				</tr>	
 			</module:display>
@@ -45,7 +45,7 @@
 				<digi:trn>Measure</digi:trn>:
 			</td>
 			<td>	
-				<c:out value="${measure.name}"/>
+				<span class="word_break "><c:out value="${measure.name}"/></span>
 			</td>
 			</tr>
 			<c:if test="${not empty measure.actors }">
@@ -58,20 +58,17 @@
 						<logic:iterate name="measure" id="actor" property="actors">
 							<tr>
 							<td bgcolor="#F0F0F0">	
-							
-								<c:out value="${actor.name}"/>
+								<span class="word_break bold"><c:out value="${actor.name}"/></span>
 							</td>
 							</tr>
 							</logic:iterate>
 						</table>	
 				</td>
 			</tr>
-				
-				
 			</c:if>	
 			</logic:iterate>
-			</table>		
-			<br />	
+			</table>
+			<br />
 		</logic:iterate>
 		</c:if>
 	</div>

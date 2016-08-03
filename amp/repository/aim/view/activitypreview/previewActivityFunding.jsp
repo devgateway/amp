@@ -207,7 +207,7 @@
 																		</a></td>
 																		<td width="1">:</td>
 																		<td align="left">
-																			<b><bean:write name="funding" property="donorObjective" /></b>
+																			<span class="word_break bold"><bean:write name="funding" property="donorObjective" /></span>
 																		</td>
 																	</tr>
 																</module:display>
@@ -221,7 +221,7 @@
                                                                         </a></td>
                                                                         <td width="1">:</td>
                                                                         <td align="left">
-                                                                            <b><bean:write name="funding" property="conditions" /></b>
+                                                                            <span class="word_break bold"><bean:write name="funding" property="conditions" /></span>
                                                                         </td>
                                                                     </tr>
                                                                 </module:display>

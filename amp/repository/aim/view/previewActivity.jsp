@@ -22,7 +22,6 @@
 <%@page import="java.math.BigDecimal"%>
 <style type="text/css">
 	.legend_label a.trnClass { color:yellow;}
-}
 </style>
 
 <script language="JavaScript1.2" type="text/javascript"src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
@@ -57,10 +56,6 @@
 %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <link rel="stylesheet" type="text/css" href="<digi:file src= 'module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
-
-
-
-
 
 <script language="JavaScript">
 
@@ -315,16 +310,13 @@ function collapseAll() {
 		                <digi:trn key="aim:noPermissionToEDit">You do not have permissions to edit this activity.</digi:trn>
 		        </font>
 		     </td>
-	     </tr>           
+	     </tr>
 	     <tr>
 	         <td>&nbsp;
-	             
 	         </td>
 	     </tr>
 	</table>
 </logic:present>
-
-
 
 <c:if test="${aimEditActivityForm.activityExists=='no'}">
 	<div class="activity_preview_header" style="font-size: 12px;text-align: center;color:red">
@@ -339,7 +331,7 @@ function collapseAll() {
 	  <table width="990" border="0" cellpadding="0" cellspacing="0">
 	  <tr>
 	    <td width="60%">
-	    	<div class="activity_preview_name"><c:out value="${aimEditActivityForm.identification.title}"/></div>
+	    	<div class="activity_preview_name word_break"><c:out value="${aimEditActivityForm.identification.title}"/></div>
             <div style="clear:both;"></div>
 			<div class="l_sm">
 			 	<font color="red">
@@ -363,7 +355,7 @@ function collapseAll() {
 
 			<c:set var="hideWordSetting" scope="page" value="false"/>
 			<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW%>" compareWith="true" onTrueEvalBody="true">
-						<c:set var="hideWordSetting" scope="page" value="true"/>
+				<c:set var="hideWordSetting" scope="page" value="true"/>
 			</gs:test>
 			<c:if test="${(not hideWordSetting) || (hideWordSetting && sessionScope.currentMember != null)}">
 				<a onclick="javascript:exportToWord(${actId})" class="l_sm" style="cursor: pointer; color:#376091;">
@@ -378,7 +370,6 @@ function collapseAll() {
 	    	</a>
 	    	</logic:present>
 	    </td>
-	    
 	  </tr>
 	</table>
 	</div>
@@ -395,7 +386,6 @@ function collapseAll() {
 			</span>		
 		</legend>
 		<div class="field_text_big">
-		
 			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
@@ -404,8 +394,8 @@ function collapseAll() {
 					<b>
 		                 <bean:write name="aimEditActivityForm" property="funding.totalCommitments" /> 
 		                 ${aimEditActivityForm.currCode}
-	            	</b>		         	
-		         </c:if>    
+					</b>
+		         </c:if>
 		         <c:if test="${empty aimEditActivityForm.funding.totalCommitments}">
 			         <b>
 			         0
@@ -472,28 +462,27 @@ function collapseAll() {
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Expenditures</digi:trn>:<br/>
-				<c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
-	                <b>
-	                 <bean:write name="aimEditActivityForm" property="funding.totalExpenditures" /> 
-	                 ${aimEditActivityForm.currCode}
-	                </b>		          
-		         </c:if>
-		          <c:if test="${empty aimEditActivityForm.funding.totalExpenditures}">
-			         <b>
-			         0
-			         ${aimEditActivityForm.currCode}
-			         </b>
-		         </c:if>
+			<c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
+				<b>
+				<bean:write name="aimEditActivityForm" property="funding.totalExpenditures" /> 
+					${aimEditActivityForm.currCode}
+				</b>
+			</c:if>
+			<c:if test="${empty aimEditActivityForm.funding.totalExpenditures}">
+				<b>
+					0
+					${aimEditActivityForm.currCode}
+				</b>
+			</c:if>
 			<hr/>
 			</c:if>
-			
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Unallocated Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.unDisbursementsBalance}">
 	                <b>
 	                 <bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> 
 	                 ${aimEditActivityForm.currCode}
-	                </b>		          
+	                </b>
 		         </c:if>
 		          <c:if test="${empty aimEditActivityForm.funding.unDisbursementsBalance}">
 			         <b>
@@ -520,15 +509,14 @@ function collapseAll() {
 			    <hr/>
 			</c:if>
 			</module:display>
-							<c:if test="${not empty aimEditActivityForm.funding.totalMtefProjections}">
+			<c:if test="${not empty aimEditActivityForm.funding.totalMtefProjections}">
 					<digi:trn>Total MTEF Projections</digi:trn>:<br/>
 					<b>
 		                 <bean:write name="aimEditActivityForm" property="funding.totalMtefProjections" /> 
 		                 ${aimEditActivityForm.currCode}
 	            	</b>	
-	            				    <hr/>
-	         	</c:if>    
-			
+				<hr/>
+			</c:if>
 			<field:display name="Duration of Project" feature="Planning">
 				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Completion Date - Actual Start Date</digi:trn>" width="10" height=10 border="0">
 				<digi:trn>Duration of project</digi:trn>:
@@ -553,7 +541,7 @@ function collapseAll() {
 	<fieldset>
 	<legend>
 		<span class=legend_label><digi:trn>Additional info</digi:trn></span>	</legend>
-	<div class="field_text_big">
+	<div class="field_text_big word_break">
 	<digi:trn>Activity created by</digi:trn>: <br/>
 		<b> 
 			<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/> 
@@ -619,10 +607,10 @@ function collapseAll() {
 				<digi:trn>Identification</digi:trn>
 			</span>		
 		</legend>
-		<div id="identificationdiv" class="toggleDiv">	
+		<div id="identificationdiv" class="toggleDiv">
 			<module:display name="/Activity Form/Identification/Project Title" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:projectTitle">Project title</digi:trn>:&nbsp;<br />
-				<b><c:out value="${aimEditActivityForm.identification.title}"/></b>
+				<span class="word_break bold"><c:out value="${aimEditActivityForm.identification.title}"/></span>
 				<hr />
 			</module:display>
 			
@@ -638,7 +626,7 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:statusReason">Status Reason</digi:trn>:&nbsp;
 				<c:if test="${not empty aimEditActivityForm.identification.statusReason}">
-                    <b>${fn:trim(aimEditActivityForm.identification.statusReason)}</b>
+                    <span class="word_break bold">${fn:trim(aimEditActivityForm.identification.statusReason)}</span>
 				</c:if>
 				<hr />
 			</module:display>
@@ -670,7 +658,7 @@ function collapseAll() {
 				<c:if test="${not empty aimEditActivityForm.identification.ssc_modalities}">				
 				<b>
 				<c:forEach var="modality" items="${aimEditActivityForm.identification.ssc_modalities}">
-					${modality}<br/>
+					<span class="word_break">${modality}</span><br/>
 				</c:forEach>
 				</b>
 				</c:if>
@@ -681,8 +669,8 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:objectives">Objectives</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.objectives!=null}">
-					<b><c:set var="objKey" value="${aimEditActivityForm.identification.objectives}"/>
-					<digi:edit key="${objKey}"></digi:edit></b>
+					<c:set var="objKey" value="${aimEditActivityForm.identification.objectives}"/>
+					<span class="word_break bold"><digi:edit key="${objKey}"></digi:edit></span>
 				</c:if>
 					<hr />
 			</module:display>
@@ -697,7 +685,7 @@ function collapseAll() {
 									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 										<li>
 											<digi:trn>Objective Assumption</digi:trn>:&nbsp;<br />								
-											<b><bean:write name="comment" property="comment" /></b>
+											<span class="word_break bold"><bean:write name="comment" property="comment" /></span>
 											<br />
 										</li>
 									</logic:iterate>
@@ -708,7 +696,7 @@ function collapseAll() {
 									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 										<li>
 											<digi:trn>Objective Verification</digi:trn>:&nbsp;	<br />								
-											<b><bean:write name="comment" property="comment" /></b>
+											<span class="word_break bold"><bean:write name="comment" property="comment" /></span>
 										<br/>
 										</li>
 									</logic:iterate>
@@ -721,7 +709,7 @@ function collapseAll() {
 										type="org.digijava.module.aim.dbentity.AmpComments">
 										<li>
 											<digi:trn>Objective Objectively Verifiable Indicators</digi:trn>:&nbsp;	<br />									
-											<b><bean:write name="comment" property="comment"/></b>
+											<span class="word_break bold"><bean:write name="comment" property="comment" /></span>
 											<br/>
 										</li>
 									</logic:iterate>
@@ -736,8 +724,8 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Description" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:description">Description</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.description!=null}">
-					<b><c:set var="descKey" value="${aimEditActivityForm.identification.description}"/>
-					<digi:edit key="${descKey}"></digi:edit></b>
+					<c:set var="descKey" value="${aimEditActivityForm.identification.description}"/>
+					<span class="word_break bold"><digi:edit key="${descKey}"></digi:edit></span>
 				</c:if>
 					<hr />
 			</module:display>
@@ -745,8 +733,8 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Project Comments" parentModule="/Activity Form/Identification">
 				<digi:trn>Project Comments</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.projectComments!=null}">
-					<b><c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}"/>
-					<digi:edit key="${projcomKey}"></digi:edit></b>
+					<c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}"/>
+					<span class="word_break bold"><digi:edit key="${projcomKey}"></digi:edit></span>
 				</c:if>
 					<hr />
 			</module:display>
@@ -758,7 +746,7 @@ function collapseAll() {
 					<bean:define id="lessonsLearnedKey">
 						<c:out value="${aimEditActivityForm.identification.lessonsLearned}"/>
 					</bean:define>
-					<b><digi:edit key="${lessonsLearnedKey}"></digi:edit></b>
+					<span class="word_break bold"><digi:edit key="${lessonsLearnedKey}"></digi:edit></span>
 				</c:if>
 					<hr />
 			</module:display>
@@ -769,7 +757,7 @@ function collapseAll() {
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
+					<span class="word_break"><c:out value="${aimEditActivityForm.identification.projectImpact}"/></span>
 				</bean:define>
 				<jsp:include page="largeTextPropertyView.jsp" />
 			</logic:present>
@@ -779,7 +767,7 @@ function collapseAll() {
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<c:out value="${aimEditActivityForm.identification.activitySummary}"/>
+					<span class="word_break"><c:out value="${aimEditActivityForm.identification.activitySummary}"/></span>
 				</bean:define>
 				<jsp:include page="largeTextPropertyView.jsp" />
 		 	</logic:present> 
@@ -788,7 +776,7 @@ function collapseAll() {
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Conditionalities" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<c:out value="${aimEditActivityForm.identification.conditionality}"/>
+					<span class="word_break"><c:out value="${aimEditActivityForm.identification.conditionality}"/></span>
 				</bean:define>
 				<jsp:include page="largeTextPropertyView.jsp" />
 			</logic:present>
@@ -797,15 +785,15 @@ function collapseAll() {
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Project Management" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<c:out value="${aimEditActivityForm.identification.projectManagement}"/>
+					<span class="word_break"><c:out value="${aimEditActivityForm.identification.projectManagement}"/></span>
 				</bean:define>
 				<jsp:include page="largeTextPropertyView.jsp" />
 			</logic:present>
 			<module:display name="/Activity Form/Identification/Purpose" parentModule="/Activity Form/Identification">
 				<digi:trn >Purpose</digi:trn>:<br />
 				<c:if test="${aimEditActivityForm.identification.purpose!=null}">
-					<b><c:set var="objKey" value="${aimEditActivityForm.identification.purpose}"/>
-					<digi:edit key="${objKey}"></digi:edit></b>
+					<c:set var="objKey" value="${aimEditActivityForm.identification.purpose}"/>
+					<span class="word_break bold"><digi:edit key="${objKey}"></digi:edit></span>
 				</c:if>
 				<hr/>
 			</module:display>
@@ -817,10 +805,10 @@ function collapseAll() {
 						<module:display name="/Activity Form/Identification/Purpose Comments/Purpose Assumption" parentModule="/Activity Form/Identification/Purpose Comments">
 						<logic:equal name="comments" property="key" value="Purpose Assumption">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								 <li>
-								 <digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:<br />
-								<b><bean:write name="comment" property="comment" /></b>
-								<br />
+								<li>
+									<digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:<br />
+									<span class="word_break bold"><bean:write name="comment" property="comment" /></span>
+									<br />
 								</li>
 							</logic:iterate>
 						</logic:equal>
@@ -828,10 +816,10 @@ function collapseAll() {
 						<module:display name="/Activity Form/Identification/Purpose Comments/Purpose Verification" parentModule="/Activity Form/Identification/Purpose Comments">
 						<logic:equal name="comments" property="key" value="Purpose Verification">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								 <li>
-								 <digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:<br />
-								<b><bean:write name="comment" property="comment" /></b>
-								<br/>
+								<li>
+									<digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:<br />
+									<span class="word_break bold"><bean:write name="comment" property="comment" /></span>
+									<br/>
 								</li>
 							</logic:iterate>
 						</logic:equal>
@@ -840,9 +828,9 @@ function collapseAll() {
 						<logic:equal name="comments" property="key" value="Purpose Objectively Verifiable Indicators">
 							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 								<li>
-								<digi:trn key="aim:purposeObjectivelyVerifiableIndicators">Purpose Objectively Verifiable Indicators</digi:trn>:<br />
-								<b><bean:write name="comment" property="comment" /></b>
-								<br/>
+									<digi:trn key="aim:purposeObjectivelyVerifiableIndicators">Purpose Objectively Verifiable Indicators</digi:trn>:<br />
+									<span class="word_break bold"><bean:write name="comment" property="comment" /></span>
+									<br/>
 								</li>
 							</logic:iterate>
 						</logic:equal>
@@ -856,8 +844,8 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Results" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:results">Results</digi:trn>:&nbsp;<br />
 					<c:if test="${aimEditActivityForm.identification.results!=null}">
-						<b><c:set var="objKey" value="${aimEditActivityForm.identification.results}"/></b>
-						<b><digi:edit key="${objKey}"></digi:edit></b>
+						<c:set var="objKey" value="${aimEditActivityForm.identification.results}"/>
+						<span class="word_break bold"><digi:edit key="${objKey}"></digi:edit></b></span>
 						<hr>
 					</c:if> 
 			</module:display>					
@@ -871,7 +859,7 @@ function collapseAll() {
 									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 										<li>
 										<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:<br />
-										<b><bean:write name="comment" property="comment" /></b>
+										<span class="word_break bold"><bean:write name="comment" property="comment" /></span>
 										<br/>
 										</li>
 									</logic:iterate>
@@ -882,7 +870,7 @@ function collapseAll() {
 									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 										<li>
 										<digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:<br />
-										<b><bean:write name="comment" property="comment" /></b>
+										<span class="word_break bold"><bean:write name="comment" property="comment" /></span>
 										<br/>
 										</li>
 									</logic:iterate>
@@ -893,7 +881,7 @@ function collapseAll() {
 									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 										 <li>
 											<digi:trn key="aim:resultsObjectivelyVerifiableIndicators">Results Objectively Verifiable Indicators</digi:trn>:<br />
-										<b><bean:write name="comment" property="comment" /></b>
+										<span class="word_break bold"><bean:write name="comment" property="comment" /></span>
 										<br/>
 										</li>
 									</logic:iterate>
@@ -910,7 +898,9 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Accession Instrument" parentModule="/Activity Form/Identification">
 				<c:if test="${aimEditActivityForm.identification.accessionInstrument > 0}">
 				<digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>:&nbsp;<br />
-					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.accessionInstrument}"/></b>
+					<span class="word_break bold">
+						<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.accessionInstrument}"/>
+					</span>
 					<hr />
 					</c:if>
 			</module:display>
@@ -919,7 +909,9 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Project Implementing Unit" parentModule="/Activity Form/Identification">
 				<c:if test="${aimEditActivityForm.identification.projectImplUnitId > 0}">			
 				<digi:trn>Project Implementing Unit</digi:trn><br />
-					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectImplUnitId}"/></b>
+					<span class="word_break bold">
+						<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectImplUnitId}"/>
+					</span>
 				</c:if> 
 				<hr/>
 			</module:display>
@@ -927,20 +919,27 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/A.C. Chapter" parentModule="/Activity Form/Identification">
 				<c:if test="${aimEditActivityForm.identification.acChapter > 0}">
 				<digi:trn>A.C. Chapter</digi:trn><br />
-					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/></b>
+					<span class="word_break bold">
+						<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/>
+					</span>
 					<hr />
 				</c:if>					
 			</module:display>
 					 
 			<module:display name="/Activity Form/Identification/Cris Number" parentModule="/Activity Form/Identification">
 				<digi:trn>Cris Number</digi:trn>:&nbsp;<br />
-					<b><c:out value="${aimEditActivityForm.identification.crisNumber}"/></b><hr />
+					<span class="word_break bold">
+						<c:out value="${aimEditActivityForm.identification.crisNumber}"/>
+					</span>
+					<hr />
 			</module:display>
 					
 			<module:display name="/Activity Form/Identification/Procurement System" parentModule="/Activity Form/Identification">
 				<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
 				<digi:trn>Procurement System</digi:trn><br />
-					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.procurementSystem}"/></b>
+					<span class="word_break bold">
+						<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.procurementSystem}"/>
+					</span>
 				</c:if>
 					<hr />
 			</module:display>
@@ -948,7 +947,9 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Reporting System" parentModule="/Activity Form/Identification">
 				<c:if test="${aimEditActivityForm.identification.reportingSystem > 0}">
 				<digi:trn>Reporting System</digi:trn>:&nbsp;<br />
-					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.reportingSystem}"/></b>
+					<span class="word_break bold">
+						<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.reportingSystem}"/>
+					</span>
 					<hr />
 					</c:if>
 			</module:display>
@@ -956,7 +957,9 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Audit System" parentModule="/Activity Form/Identification">
 				<c:if test="${aimEditActivityForm.identification.auditSystem > 0}">
 				<digi:trn>Audit System</digi:trn>:&nbsp;<br />
-					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.auditSystem}"/></b>
+					<span class="word_break bold">
+						<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.auditSystem}"/>
+					</span>
 				</c:if> 				
 					<hr />	
 			</module:display>
@@ -964,16 +967,19 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Institutions" parentModule="/Activity Form/Identification">
 				<c:if test="${aimEditActivityForm.identification.institutions > 0}">
 				<digi:trn>Institutions</digi:trn>:&nbsp;<br />
-					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.institutions}"/></b>
+					<span class="word_break bold">
+						<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.institutions}"/>
+					</span>
 					<hr />
-				</c:if>					
+				</c:if>
 			</module:display>
-							
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 			<module:display name="/Activity Form/Identification/Project Category" parentModule="/Activity Form/Identification">
 				<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
 				<digi:trn>Project Category</digi:trn><br />
-					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/></b>
+					<span class="word_break bold">
+						<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/>
+					</span>
 					<hr />
 					</c:if>	
 			</module:display>
@@ -982,7 +988,8 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Government Agreement Number" parentModule="/Activity Form/Identification">
 				<c:if test="${not empty aimEditActivityForm.identification.govAgreementNumber}">
 				<digi:trn>Government Agreement Number</digi:trn>:&nbsp;<br />
-				<b><c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/></b><hr />
+				<span class="word_break bold"> <c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/>
+				</span><hr />
 				</c:if>
 				</module:display>
 	</module:display>
@@ -1012,18 +1019,17 @@ function collapseAll() {
 		
 		<c:if test="${!empty aimEditActivityForm.identification.chapterForPreview}" >
 			<digi:trn>Code Chapitre</digi:trn>:<br />
-			<b><bean:write name="aimEditActivityForm" property="identification.chapterForPreview.code" /> - 
-			<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.description"/></b>
+			<span class="word_break bold"><bean:write name="aimEditActivityForm" property="identification.chapterForPreview.code" /> - 
+			<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.description"/></span>]
 			<digi:trn>Imputations</digi:trn>:<br />
 			<logic:iterate id="imputation" name="aimEditActivityForm" property="identification.chapterForPreview.imputations">
-				<b><bean:write name="aimEditActivityForm" property="identification.chapterForPreview.year"/> - 
+				<span class="word_break bold"><bean:write name="aimEditActivityForm" property="identification.chapterForPreview.year"/> - 
 				<bean:write name="imputation" property="code" /> - 
-				<bean:write name="imputation" property="description" /></b>
+				<bean:write name="imputation" property="description" /></span>
 				<hr>
 			</logic:iterate>
 		</c:if>
 		</module:display>
-		
 			<c:if test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
 				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
 					<digi:trn>FY</digi:trn>:&nbsp;
@@ -1044,17 +1050,17 @@ function collapseAll() {
 				
 				<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
 					<digi:trn>Vote</digi:trn>:&nbsp;
-					<b><bean:write name="aimEditActivityForm" property="identification.vote"/></b>
+					<span class="word_break bold"><bean:write name="aimEditActivityForm" property="identification.vote"/></span>
 					<br />
 				</module:display>
 					<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras">
 					<digi:trn>Sub-Vote </digi:trn>:&nbsp;
-					<b><bean:write name="aimEditActivityForm" property="identification.subVote"/></b>
+					<span class="word_break bold"><bean:write name="aimEditActivityForm" property="identification.subVote"/></span>
 					<br />
 				</module:display>
 				<module:display name="/Activity Form/Identification/Budget Extras/Sub-Program" parentModule="/Activity Form/Identification/Budget Extras">
 					<digi:trn>Sub-Program</digi:trn>:&nbsp;
-					<b><bean:write name="aimEditActivityForm" property="identification.subProgram"/></b>
+					<span class="word_break bold"><bean:write name="aimEditActivityForm" property="identification.subProgram"/></span>
 					<br />
 				</module:display>
 				
@@ -1067,7 +1073,9 @@ function collapseAll() {
 				<c:forEach var="selectedsector" items="${aimEditActivityForm.identification.budgetsectors}">
 					<c:if test="${aimEditActivityForm.identification.selectedbudgedsector==selectedsector.idsector}">
 						<li style="margin-left: 10px">
-							<b><c:out value="${selectedsector.code}" /> - <c:out value="${selectedsector.sectorname}" /></b>
+							<span class="word_break bold">
+								<c:out value="${selectedsector.code}" /> - <c:out value="${selectedsector.sectorname}" />
+							</span>
 						</li>
 					</c:if>
 				</c:forEach>
@@ -1078,7 +1086,8 @@ function collapseAll() {
 				<c:forEach var="selectedorgs" items="${aimEditActivityForm.identification.budgetorgs}">
 					<c:if test="${aimEditActivityForm.identification.selectedorg==selectedorgs.ampOrgId}">
 						<li style="margin-left: 10px"><c:out value="${selectedorgs.budgetOrgCode}"/> - 
-						<b><c:out value="${selectedorgs.name}" /></b></li>
+							<span class="word_break bold"><c:out value="${selectedorgs.name}" /></span>
+						</li>
 					</c:if>
 				</c:forEach>
 				<br>
@@ -1088,8 +1097,8 @@ function collapseAll() {
 				<c:forEach var="selecteddep" items="${aimEditActivityForm.identification.budgetdepartments}">
 					<c:if test="${aimEditActivityForm.identification.selecteddepartment==selecteddep.id}">
 						<li style="margin-left: 10px">
-							<b><c:out value="${selecteddep.code}"/> - 
-							<c:out value="${selecteddep.name}"/></b>
+							<span class="word_break bold"><c:out value="${selecteddep.code}"/> - 
+							<c:out value="${selecteddep.name}"/></span>
 						</li>
 					</c:if>
 				</c:forEach>
@@ -1100,7 +1109,9 @@ function collapseAll() {
 				<c:forEach var="selectedprog" items="${aimEditActivityForm.identification.budgetprograms}">
 					<c:if test="${aimEditActivityForm.identification.selectedprogram==selectedprog.ampThemeId}">
 						<li style="margin-left: 10px">
-							<b><c:out value="${selectedprog.themeCode}"/> - <c:out value="${selectedprog.name}" /></b>
+							<span class="word_break bold">
+								<c:out value="${selectedprog.themeCode}"/> - <c:out value="${selectedprog.name}" />
+							</span>
 						</li>
 					</c:if>
 				</c:forEach>
@@ -1121,12 +1132,13 @@ function collapseAll() {
 						<tr>
 							<td>
 								<c:if test="${!empty selectedOrganizations.organisation.ampOrgId}">
-									<b><bean:define id="selectedOrgForPopup" 
+									<bean:define id="selectedOrgForPopup" 
 										name="selectedOrganizations" 
 										type="org.digijava.module.aim.helper.OrgProjectId"
-										toScope="request"/></b>
+										toScope="request"/>
 										<jsp:include page="previewOrganizationPopup.jsp" />
-								</c:if>							</td>
+								</c:if>
+							</td>
 						</tr>
 					</c:if>
 				</c:forEach>
@@ -1243,13 +1255,15 @@ function collapseAll() {
 								<logic:equal name="comments" property="key" value="Final Date for Disbursements">
 									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 										<li>
-											<b><bean:write name="comment" property="comment" /></b>
+											<span class="word_break ">
+												<bean:write name="comment" property="comment" />
+											</span>
 											<br />
 										</li>
 									</logic:iterate>
 								</logic:equal>
 						</logic:iterate>
-					</ul>		
+					</ul>
 				</field:display>
 			</feature:display>
 		</module:display>
@@ -1270,7 +1284,9 @@ function collapseAll() {
 								<logic:equal name="comments" property="key" value="current completion date">
 									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
 										<li>
-											<b><bean:write name="comment" property="comment" /></b>
+											<span class="word_break ">
+												<bean:write name="comment" property="comment" />
+											</span>
 											<br />
 										</li>
 									</logic:iterate>
@@ -1323,7 +1339,9 @@ function collapseAll() {
 		<logic:notEmpty name="aimEditActivityForm" property="documents.referenceDocs">
 			<logic:iterate name="aimEditActivityForm" property="documents.referenceDocs" id="doc">
 				<li>
+				<span class="word_break">
 					<bean:write name="doc" property="categoryValue"/>
+				</span>
 				</li>
 			</logic:iterate>
 		</logic:notEmpty>
@@ -1344,54 +1362,50 @@ function collapseAll() {
 		<div id="locationdiv" class="toggleDiv">
 		<module:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
 			<c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
-					<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
-						<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
-						<tr>
-							<td width="85%">
-								<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
-	                           		<b>[${ancestorLoc}]</b>	                                           
-	                            </c:forEach>
-	                          </td>
-							<td width="15%" align="right" valign=top>
-								<field:display name="Regional Percentage" feature="Location">
-									<c:if test="${selectedLocs.showPercent}">
-										<b><c:out value="${selectedLocs.percent}"/>%</b>									
-									</c:if>
-								</field:display>							
-							</td>
-						</tr>
-						</table>
-						<hr/>
-					</c:forEach>
-					<module:display name="GIS DASHBOARD">
+				<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
 					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 					<tr>
-						<td colspan="2">
-						<br>
-						<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
-							<bean:define id="selLocIds">
-							<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
-								<bean:write name="selectedLocs" property="locId" />|							
+						<td width="85%">
+							<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
+								<b>[${ancestorLoc}]</b>
 							</c:forEach>
-							</bean:define>
-						</logic:notEmpty>
+						</td>
+						<td width="15%" align="right" valign=top>
+							<field:display name="Regional Percentage" feature="Location">
+								<c:if test="${selectedLocs.showPercent}">
+									<b><c:out value="${selectedLocs.percent}"/>%</b>
+								</c:if>
+							</field:display>
 						</td>
 					</tr>
 					</table>
 					<hr/>
-					</module:display>
-					<field:display name="Show Map In Activity Preview" feature="Map Options">
+				</c:forEach>
+				<module:display name="GIS DASHBOARD">
 					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
-					<tr>
-						<td colspan="2">
-							<script type="text/javascript">
-							<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
-								coordinates.push('<c:out value="${selectedLocs.lat}"/>;<c:out value="${selectedLocs.lon}"/>;<c:out value="${selectedLocs.locationName}"/>');
-							</c:forEach>
-							</script>
-							<jsp:include page="previewmap.jsp"/>
-						</td>
-					</tr>
+						<tr> <td colspan="2">
+							<br>
+							<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
+								<bean:define id="selLocIds">
+								<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
+									<bean:write name="selectedLocs" property="locId" />|
+								</c:forEach>
+								</bean:define>
+							</logic:notEmpty>
+						</td></tr>
+					</table>
+					<hr/>
+				</module:display>
+				<field:display name="Show Map In Activity Preview" feature="Map Options">
+					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
+					<tr> <td colspan="2">
+						<script type="text/javascript">
+						<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
+							coordinates.push('<c:out value="${selectedLocs.lat}"/>;<c:out value="${selectedLocs.lon}"/>;<c:out value="${selectedLocs.locationName}"/>');
+						</c:forEach>
+						</script>
+						<jsp:include page="previewmap.jsp"/>
+					</td> </tr>
 					</table>
 					<hr/>
 					</field:display>
@@ -1401,12 +1415,12 @@ function collapseAll() {
 			<table>
 				<tr>
 					<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-						<digi:trn key="aim:level">Implementation Level</digi:trn>:					
+						<digi:trn key="aim:level">Implementation Level</digi:trn>:
 					</td>
 					<td bgcolor="#ffffff">
 						<c:if test="${aimEditActivityForm.location.levelId>0}">
 							<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.location.levelId}"/></b>
-						</c:if>					
+						</c:if>
 					</td>
 				</tr>
 			</table>
@@ -1416,11 +1430,14 @@ function collapseAll() {
 			<table style="font-size:11px;">
 				<tr>
 					<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-						<digi:trn key="aim:implementationLocation">Implementation Location</digi:trn>:					</td>
+						<digi:trn key="aim:implementationLocation">Implementation Location</digi:trn>:
+					</td>
 					<td bgcolor="#ffffff">
 						<c:if test="${aimEditActivityForm.location.implemLocationLevel>0}">
-							<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.location.implemLocationLevel}"/></b>
-						</c:if>					
+							<span class="word_break bold">
+								<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.implemLocationLevel}"/>
+							</span>
+						</c:if>
 					</td>
 				</tr>
 			</table>
@@ -1465,11 +1482,9 @@ function collapseAll() {
 								</legend>
 								<div class="toggleDiv">
 									<table width="100%" cellSpacing="2" cellPadding="1" style="font-size: 11px;">
-											<tr>
-												<td width="85%">
-													<b><digi:edit key="${programDescription}" /></b>
-												</td>
-											</tr>
+										<tr> <td width="85%">
+											<span class="word_break bold"><digi:edit key="${programDescription}" /></span>
+										</td> </tr>
 									</table>
 								</div>
 							</fieldset>
@@ -1495,7 +1510,7 @@ function collapseAll() {
 				</c:forEach>
 				<c:if test="${hasSectors}">
 					<digi:trn key="aim:addactivitysectors:${config.name} Sector">
-						<c:out value="${config.name} Sector" />
+						<span class="word_break"><c:out value="${config.name} Sector" /></span>
 					</digi:trn> 
 					<br/>
 				</c:if>
@@ -1509,23 +1524,23 @@ function collapseAll() {
 								  	<b><c:out value="${sectors.sectorScheme}" /></b>
 									<c:if test="${!empty sectors.sectorName}">
 										-
-										<b><c:out value="${sectors.sectorName}"/></b>
+										<span class="word_break bold"><c:out value="${sectors.sectorName}"/></span>
 									</c:if>
 									<c:if test="${!empty sectors.subsectorLevel1Name}">
 										<!-- Sub sector field not found -->
 										-
-										<b><c:out value="${sectors.subsectorLevel1Name}"/></b>
+										<span class="word_break bold"><c:out value="${sectors.subsectorLevel1Name}"/></span>
 									</c:if>
 									<c:if test="${!empty sectors.subsectorLevel2Name}">
 										-
-										<b><c:out value="${sectors.subsectorLevel2Name}"/></b>
+										<span class="word_break bold"><c:out value="${sectors.subsectorLevel2Name}"/></span>
 									</c:if>
 								</td>
 							<td width=15% align=right valign=top>
-                                <c:if test="${sectors.sectorPercentage!='' && sectors.sectorPercentage!='0'}">
-                               		<b>(<c:out value="${sectors.sectorPercentage}"/>)%</b>                                            
-                                </c:if>
-                            </td>
+								<c:if test="${sectors.sectorPercentage!='' && sectors.sectorPercentage!='0'}">
+									<span class="word_break bold">(<c:out value="${sectors.sectorPercentage}"/>)%</span>
+								</c:if>
+							</td>
 							</tr>
 							</table>
 							<hr>
@@ -1540,8 +1555,8 @@ function collapseAll() {
 		<table>
 			<c:forEach var="compo" items="${aimEditActivityForm.components.activityComponentes}">
 			<tr>
-				<td width="100%">${compo.sectorName}</td>
-				<td align="right">${compo.sectorPercentage}%</td>
+				<td width="100%"><span class="word_break">${compo.sectorName}</span></td>
+				<td align="right"><span class="word_break">${compo.sectorPercentage}%</span></td>
 			</tr>
 			</c:forEach>
 		</table>
@@ -1654,11 +1669,11 @@ function collapseAll() {
 				<c:forEach var="budgetStructure" items="${aimEditActivityForm.budgetStructure}" >
 					<tr bgcolor="#f0f0f0">
 						<td bgcolor="#f0f0f0" align="left" width="150">
-									<b>${budgetStructure.budgetStructureName}</b>						
+							<span class="word_break bold">${budgetStructure.budgetStructureName}</span>
 						</td>
 						<td bgcolor="#f0f0f0" align="left" width="150">
 							<c:if test="${budgetStructure.budgetStructurePercentage != null && budgetStructure.budgetStructurePercentage.length() > 0}">
-								<b>${budgetStructure.budgetStructurePercentage}%</b>
+								<span class="word_break bold">${budgetStructure.budgetStructurePercentage}%</span>
 							</c:if>
 						</td>
 					</tr>
@@ -1727,8 +1742,8 @@ function collapseAll() {
                     <module:display name="/Activity Form/Aid Effectivenes/${option.indicator.ampIndicatorName}"
                         parentModule="/Activity Form/Aid Effectivenes">
                         <div>
-                            <b>${fn:escapeXml(option.indicator.ampIndicatorName)}</b> -
-                            ${fn:escapeXml(option.ampIndicatorOptionName)}
+                            <span class="word_break bold">${fn:escapeXml(option.indicator.ampIndicatorName)}</span> -
+                            <span class="word_break">${fn:escapeXml(option.ampIndicatorOptionName)}</span>
                         </div>
                     </module:display>
                 </logic:iterate>
@@ -1753,39 +1768,41 @@ function collapseAll() {
 					<table width="100%" cellSpacing="1" cellPadding="1">
 						<tr>
 							<td class="prv_right">
-								<b><c:out value="${regFunds.regionName}"/></b>							
+								<span class="word_break bold"><c:out value="${regFunds.regionName}"/></span>
 							</td>
 						</tr>
 						<module:display name="/Activity Form/Regional Funding/Region Item/Commitments" parentModule="/Activity Form/Regional Funding/Region Item">
 						<c:if test="${!empty regFunds.commitments}">
-						<tr>
-							<td class="prv_right">
-								<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding" border="1">
-									<tr>
-											<td valign="top" width="100" bgcolor="#f0f0f0"> 
-												<digi:trn>Commitments</digi:trn>											</td>
-											<td class="prv_right">
+							<tr>
+								<td class="prv_right">
+									<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding" border="1"> <tr>
+										<td valign="top" width="100" bgcolor="#f0f0f0"> 
+											<digi:trn>Commitments</digi:trn>											
+										</td>
+										<td class="prv_right">
 											<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
-													<c:forEach var="fd" items="${regFunds.commitments}">
-														<tr>
-															<td width="50" bgcolor="#f0f0f0">
-																<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
-																	<c:out value="${fd.adjustmentTypeName}" />
-																</digi:trn></td>
-															<td align="right" width="100" bgcolor="#f0f0f0">
-																<c:out value="${fd.transactionAmount}"/>															</td>
-															<td class="prv_right">
-																<c:out value="${fd.currencyCode}"/>															</td>
-															<td bgcolor="#f0f0f0" width="70">
-																<c:out value="${fd.transactionDate}"/>															</td>
-															<td class="prv_right"></td>
-														</tr>
-													</c:forEach>
-												</table>												</td>
-											</tr>
-										</table>										</td>
-									</tr>
-								</c:if>
+												<c:forEach var="fd" items="${regFunds.commitments}">
+													<tr> <td width="50" bgcolor="#f0f0f0">
+														<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
+															<c:out value="${fd.adjustmentTypeName}" />
+														</digi:trn></td>
+														<td align="right" width="100" bgcolor="#f0f0f0">
+															<c:out value="${fd.transactionAmount}"/>
+														</td>
+														<td class="prv_right">
+															<c:out value="${fd.currencyCode}"/>
+														</td>
+														<td bgcolor="#f0f0f0" width="70">
+															<c:out value="${fd.transactionDate}"/>
+														</td>
+														<td class="prv_right"></td> </tr>
+												</c:forEach>
+											</table>
+										</td>
+									</tr> </table>
+								</td>
+							</tr>
+						</c:if>
 							</module:display>
 							<module:display name="/Activity Form/Regional Funding/Region Item/Disbursements" 
 								parentModule="/Activity Form/Regional Funding/Region Item">
@@ -1795,7 +1812,8 @@ function collapseAll() {
 									<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 										<tr>
 											<td valign="top" width="100" bgcolor="#f0f0f0">
-												<digi:trn key="aim:disbursements">Disbursements</digi:trn>											</td>
+												<digi:trn key="aim:disbursements">Disbursements</digi:trn>
+											</td>
 											<td class="prv_right">
 											<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 												<c:forEach var="fd" items="${regFunds.disbursements}">
@@ -1803,19 +1821,25 @@ function collapseAll() {
 														<td width="50" bgcolor="#f0f0f0">
 															<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																<c:out value="${fd.adjustmentTypeName}" />
-															</digi:trn>														</td>
+															</digi:trn>
+														</td>
 														<td align="right" width="100" bgcolor="#f0f0f0">
-															<c:out value="${fd.transactionAmount}"/>														</td>
+															<c:out value="${fd.transactionAmount}"/>
+														</td>
 														<td class="prv_right">
-															<c:out value="${fd.currencyCode}"/>														</td>
+															<c:out value="${fd.currencyCode}"/>
+														</td>
 														<td bgcolor="#f0f0f0" width="70">
-															<c:out value="${fd.transactionDate}"/>														</td>
+															<c:out value="${fd.transactionDate}"/>
+														</td>
 														<td class="prv_right"></td>
 													</tr>
 												</c:forEach>
-											</table>											</td>
+											</table>
+											</td>
 										</tr>
-									</table>									</td>
+									</table>
+									</td>
 								</tr>
 							</c:if>
 							</module:display>
@@ -1828,7 +1852,8 @@ function collapseAll() {
 									<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 										<tr>
 											<td valign="top" width="100" bgcolor="#f0f0f0">
-												<digi:trn key="aim:expenditures">Expenditures</digi:trn>											</td>
+												<digi:trn key="aim:expenditures">Expenditures</digi:trn>
+											</td>
 											<td class="prv_right">
 											<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 												<c:forEach var="fd" items="${regFunds.expenditures}">
@@ -1836,23 +1861,29 @@ function collapseAll() {
 														<td width="50" bgcolor="#f0f0f0">
 															<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																<c:out value="${fd.adjustmentTypeName}" />
-															</digi:trn>														</td>
+															</digi:trn>
+														</td>
 														<td align="right" width="100" bgcolor="#f0f0f0">
-															<c:out value="${fd.transactionAmount}"/>														</td>
+															<c:out value="${fd.transactionAmount}"/>
+														</td>
 														<td class="prv_right">
 															<c:out value="${fd.currencyCode}"/></td>
 														<td bgcolor="#f0f0f0" width="70">
-															<c:out value="${fd.transactionDate}"/>														</td>
+															<c:out value="${fd.transactionDate}"/>
+														</td>
 														<td class="prv_right"></td>
 													</tr>
 												</c:forEach>
-											</table>											</td>
+											</table>
+											</td>
 										</tr>
-									</table>									</td>
+									</table>
+									</td>
 								</tr>
 							</c:if>
 							</module:display>
-						</table>						</td>
+						</table>
+						</td>
 					</tr>
 				</c:forEach>
 				<tr>
@@ -1884,34 +1915,32 @@ function collapseAll() {
 		<c:if test="${!empty aimEditActivityForm.components.selectedComponents}">
 			<c:forEach var="comp" items="${aimEditActivityForm.components.selectedComponents}">
 				<table width="100%" cellSpacing="1" cellPadding="1">
-					<tr>
-						<td>
-							<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
-								<tr>
-									<td>
-										<b> <c:out value="${comp.title}" /> </b>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<i> <digi:trn key="aim:description">Description</digi:trn>
-										:</i> <c:out value="${comp.description}" />
-									</td>
-								</tr>
-                                <tr>
-									<td>
-										<i> <digi:trn key="aim:description">Component Type</digi:trn>
-										:</i> <c:out value="${comp.typeName}" />
-									</td>
-								</tr>
-								<tr>
-									<td class="prv_right">
-										<digi:trn>Component Funding</digi:trn>									
-									</td>
-								</tr>
-								<module:display name="/Activity Form/Components/Component/Components Commitments" 
-															parentModule="/Activity Form/Components/Component">
-								<c:if test="${!empty comp.commitments}">
+					<tr> <td> <table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
+						<tr>
+							<td>
+								<b> <c:out value="${comp.title}" /> </b>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<i> <digi:trn key="aim:description">Description</digi:trn>
+								:</i> <c:out value="${comp.description}" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<i> <digi:trn key="aim:description">Component Type</digi:trn>
+								:</i> <c:out value="${comp.typeName}" />
+							</td>
+						</tr>
+						<tr>
+							<td class="prv_right">
+								<digi:trn>Component Funding</digi:trn>									
+							</td>
+						</tr>
+						<module:display name="/Activity Form/Components/Component/Components Commitments" 
+								parentModule="/Activity Form/Components/Component">
+							<c:if test="${!empty comp.commitments}">
 								<tr>
 									<td class="prv_right">
 										<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
@@ -1928,19 +1957,19 @@ function collapseAll() {
 															<td width="50">
 																<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																	<b><c:out value="${fd.adjustmentTypeName}" /></b>
-																</digi:trn>															
+																</digi:trn>
 															</td>
 															</module:display>
 															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount" 
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">	
 																<td align="right" width="100">
-																	<b><c:out value="${fd.transactionAmount}"/></b>																
+																	<b><c:out value="${fd.transactionAmount}"/></b>
 																</td>
 															</module:display>
 															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency"
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																<td class="prv_right">
-																	<b><c:out value="${fd.currencyCode}"/></b>																
+																	<b><c:out value="${fd.currencyCode}"/></b>
 																</td>
 															</module:display>
 															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"
@@ -1949,32 +1978,34 @@ function collapseAll() {
 																	<b><digi:trn>Organisation</digi:trn>:</b>
 																	<logic:notEmpty property="componentOrganisation" name="fd">
 																		<c:out value="${fd.componentOrganisation.name}"/>
-																	</logic:notEmpty>																																
+																	</logic:notEmpty>
 																</td>
 															</module:display>
 															
 															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																<td width="70">
-																	<b><c:out value="${fd.transactionDate}"/></b>																
-															   </td>
+																	<b><c:out value="${fd.transactionDate}"/></b>
+																</td>
 															</module:display>
 														</tr>
 														<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Description"
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
-																<tr>
-																	<td width="50">
-																		<b><digi:trn>Description</digi:trn></b>
-																	</td>
-																	<td colspan="5" style="padding-left: 15px">
-																		<b><c:out value="${fd.componentTransactionDescription}" /></b>
-																	</td>
-																</tr>
+															<tr>
+																<td width="50">
+																	<b><digi:trn>Description</digi:trn></b>
+																</td>
+																<td colspan="5" style="padding-left: 15px">
+																	<b><c:out value="${fd.componentTransactionDescription}" /></b>
+																</td>
+															</tr>
 														</module:display>
 													</c:forEach>
-												</table>												</td>
+												</table> 
+												</td>
 											</tr>
-										</table>									</td>
+										</table> 
+									</td>
 								</tr>
 							</c:if>
 							</module:display>
@@ -1986,7 +2017,7 @@ function collapseAll() {
 									<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 										<tr>
 											<td width="100" style="padding-left:5px;" bgcolor="#f0f0f0">
-												<digi:trn key="aim:disbursements">Disbursements</digi:trn>											
+												<digi:trn key="aim:disbursements">Disbursements</digi:trn>
 											</td>
 											<td class="prv_right">
 											<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
@@ -1997,13 +2028,13 @@ function collapseAll() {
 															<td width="50">
 																<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																	<b><c:out value="${fd.adjustmentTypeName}" /></b>
-																</digi:trn>															
+																</digi:trn>
 															</td>
 														</module:display>
 														<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount"
 																	parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
 															<td align="right" width="100">
-																<b><c:out value="${fd.transactionAmount}"/></b>															
+																<b><c:out value="${fd.transactionAmount}"/></b>
 															</td>
 														</module:display>
 														
@@ -2021,9 +2052,11 @@ function collapseAll() {
 														</module:display>
 													</tr>
 												</c:forEach>
-											</table>											</td>
+											</table>
+											</td>
 										</tr>
-								</table>							</td>
+								</table>
+							</td>
 						</tr>
 					</c:if>
 					</module:display>
@@ -2036,7 +2069,7 @@ function collapseAll() {
 							<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 								<tr>
 									<td width="100" bgcolor="#f0f0f0" style="padding-left:5px;">
-										<digi:trn key="aim:expenditures">Expenditures</digi:trn>									
+										<digi:trn key="aim:expenditures">Expenditures</digi:trn>
 									</td>
 									<td class="prv_right">
 									<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
@@ -2047,13 +2080,13 @@ function collapseAll() {
 													<td width="50">
 														<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 															<b><c:out value="${fd.adjustmentTypeName}" /></b>
-														</digi:trn>													
+														</digi:trn>
 													</td>
 												</module:display>
 												<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount"
 													parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 													<td align="right" width="100">
-														<b><c:out value="${fd.transactionAmount}"/></b>				
+														<b><c:out value="${fd.transactionAmount}"/></b>
 													</td>
 												</module:display>
 												<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency"
@@ -2070,9 +2103,11 @@ function collapseAll() {
 												</module:display>
 											</tr>
 										</c:forEach>
-									</table>									</td>
+									</table>
+									</td>
 								</tr>
-							</table>							</td>
+							</table>
+							</td>
 						</tr>
 					</c:if>
 					</module:display>
@@ -2082,12 +2117,10 @@ function collapseAll() {
 								<jsp:include page="utils/amountUnitsUnformatted.jsp">
 									<jsp:param value="* " name="amount_prefix"/>
 								</jsp:include>	
-							</FONT>					
+							</FONT>
 						</td>
-				  </tr>
-				
-				</table>				</td>
-			</tr>
+					</tr>
+				</table> </td> </tr>
 		</table>
 	</c:forEach>
 	</c:if>
@@ -2101,12 +2134,16 @@ function collapseAll() {
 						<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
 							<tr>
 								<td>
-									<b><c:out value="${comp.title}" /></b>								</td>
+									<span class="word_break bold"><c:out value="${comp.title}" /></span>
+								</td>
 							</tr>
 							<tr>
 								<td>
-									<i><digi:trn key="aim:component_code">Component code</digi:trn>
-								:</i><c:out value="${comp.code}" /></td>
+									<span class="italic"><digi:trn key="aim:component_code">Component code</digi:trn></span>
+								</td>
+									
+								:<span class="word_break"><c:out value="${comp.code}" /></span>
+								</td>
 							</tr>
 							<c:if test="${!empty comp.url} }">
 							<tr>
@@ -2114,12 +2151,14 @@ function collapseAll() {
 									<a href="<c:out value="${comp.url}"/>" target="_blank">
 										<digi:trn key="aim:preview_link_to_component">Link to component</digi:trn>&nbsp;
 										<c:out value="${comp.code}"/>
-									</a>								</td>
+									</a>
+								</td>
 							</tr>
 							</c:if>
 							<tr>
 								<td class="prv_right"><b>
-									<digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>								</td>
+									<digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
+								</td>
 							</tr>
 							<tr>
 								<td class="prv_right">
@@ -2190,7 +2229,7 @@ function collapseAll() {
 					<td valign="top" colspan="3">
 						<li class="level1"><b> 
 							<digi:trn key="aim:issuename:${issue.id}">
-							<c:out value="${issue.name}" />
+							<span class="word_break"><c:out value="${issue.name}" /></span>
 							</digi:trn> 
 						<module:display name="/Activity Form/Issues Section/Issue/Date" parentModule="/Activity Form/Issues Section/Issue">
 								 <c:out value="${issue.issueDate}" />
@@ -2204,11 +2243,11 @@ function collapseAll() {
 								<td></td>
 								<td colspan="2">
 									<li class="level2"><i> <digi:trn key="aim:${measure.nameTrimmed}">
-										<c:out value="${measure.name}" /></digi:trn>
+										<span class="word_break"><c:out value="${measure.name}" /></digi:trn></span>
 									<module:display name="/Activity Form/Issues Section/Issue/Measure/Date" parentModule="/Activity Form/Issues Section/Issue/Measure">
 										 <c:out value="${measure.measureDate}" />
 									</module:display>
-										</i>									</li>								</td>
+										</i></li></td>
 							</tr>
 								<module:display name="/Activity Form/Issues Section/Issue/Measure/Actor" parentModule="/Activity Form/Issues Section/Issue/Measure">
 								<c:if test="${!empty measure.actors}">
@@ -2218,9 +2257,9 @@ function collapseAll() {
 											<td>
 											<li class="level3">
 												<digi:trn key="aim:${actor.nameTrimmed}">
-													<c:out value="${actor.name}" />
+													<span class="word_break"><c:out value="${actor.name}" /></span>
 												</digi:trn>
-											</li>											</td>
+											</li></td>
 										</tr>
 									</c:forEach>
 								</c:if>
@@ -2256,12 +2295,12 @@ function collapseAll() {
 								<table width="100%" class="box-border-nopadding">
 									<tr bgcolor="#f0f0f0">
 										<td vAlign="center" align="left">&nbsp;
-											<b><c:out value="${docs.title}"/></b> - &nbsp;&nbsp;&nbsp;<i>
+											<span class="word_break bold"><c:out value="${docs.title}"/></span> - &nbsp;&nbsp;&nbsp;<i>
 											<c:out value="${docs.fileName}"/></i> 
 											<logic:notEqual name="docs" property="docDescription" value=" ">
 												<br/>&nbsp;
 												<b><digi:trn>Description</digi:trn>:</b>
-												&nbsp;<bean:write name="docs" property="docDescription" />
+												&nbsp;<span class="word_break bold"><bean:write name="docs" property="docDescription" /></span>
 											</logic:notEqual> 
 											<logic:notEmpty name="docs" property="date">
 												<br />&nbsp;
@@ -2271,11 +2310,11 @@ function collapseAll() {
 											<logic:notEmpty name="docs" property="docType">
 												<br />&nbsp;
 												<b><digi:trn>Document Type</digi:trn>:</b>&nbsp;
-												<bean:write name="docs" property="docType" />
-											</logic:notEmpty>								
+												<span class="word_break bold"><bean:write name="docs" property="docType" /></span>
+											</logic:notEmpty>
 										</td>
 									</tr>
-								</table>						
+								</table>
 							</td>
 						</tr>
 					</c:if>
@@ -2369,7 +2408,7 @@ function collapseAll() {
 								<logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
 								<ul>
 									<li>
-										<b><bean:write name="fundingOrganization" property="orgName"/></b>
+										<span class="word_break bold"><bean:write name="fundingOrganization" property="orgName"/></span>
 									</li>
 								</ul>
 								</logic:iterate>
@@ -2394,10 +2433,10 @@ function collapseAll() {
 								type="org.digijava.module.aim.dbentity.AmpOrganisation">
 								<ul>
 									<li>
-										<b><bean:write name="respOrganisations" property="name"/></b>
+										<span class="word_break bold"><bean:write name="respOrganisations" property="name"/></span>
 										<c:set var="tempOrgId" scope="page">${respOrganisations.ampOrgId}</c:set>
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgToInfo(${tempOrgId})">
-											<b>(<c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}"/>)</b>
+											<span class="word_break bold">(<c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}"/>)</span>
 										</logic:notEmpty>
 										<module:display name="/Activity Form/Organizations/Responsible Organization/percentage" parentModule="/Activity Form/Organizations/Responsible Organization">
  	 	 	 		                         <logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgPercentage(${tempOrgId})" >
@@ -2427,10 +2466,10 @@ function collapseAll() {
 							type="org.digijava.module.aim.dbentity.AmpOrganisation">
 							<ul>
 								<li>
-									<b><bean:write name="execAgencies" property="name" /></b>
+									<span class="word_break bold"><bean:write name="execAgencies" property="name" /></span>
 									<c:set var="tempOrgId">${execAgencies.ampOrgId}</c:set>
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgToInfo(${tempOrgId})">
-										<b>(<c:out value="${aimEditActivityForm.agencies.executingOrgToInfo[tempOrgId]}"/>)</b>
+										<span class="word_break bold">(<c:out value="${aimEditActivityForm.agencies.executingOrgToInfo[tempOrgId]}"/>)</span>
 									</logic:notEmpty>
 									<module:display name="/Activity Form/Organizations/Executing Agency/percentage" parentModule="/Activity Form/Organizations/Executing Agency">
                                         <logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgPercentage(${tempOrgId})" >
@@ -2460,10 +2499,10 @@ function collapseAll() {
 								type="org.digijava.module.aim.dbentity.AmpOrganisation">
 								<ul>
 									<li>
-										<b><bean:write name="impAgencies" property="name" /></b>
+										<span class="word_break bold"><bean:write name="impAgencies" property="name" /></span>
 										<c:set var="tempOrgId">${impAgencies.ampOrgId}</c:set>
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgToInfo(${tempOrgId})">
-											<b>(<c:out value="${aimEditActivityForm.agencies.impOrgToInfo[tempOrgId]}"/>)</b>
+											<span class="word_break bold">(<c:out value="${aimEditActivityForm.agencies.impOrgToInfo[tempOrgId]}"/>)</span>
 										</logic:notEmpty>
 										<module:display name="/Activity Form/Organizations/Implementing Agency/percentage" parentModule="/Activity Form/Organizations/Implementing Agency">
                                             <logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgPercentage(${tempOrgId})" >
@@ -2493,11 +2532,11 @@ function collapseAll() {
 								type="org.digijava.module.aim.dbentity.AmpOrganisation">
 								<ul>
 									<li>
-										<b><bean:write name="benAgency" property="name" /></b>
+										<span class="word_break bold"><bean:write name="benAgency" property="name" /></span>
 										<c:set var="tempOrgId">${benAgency.ampOrgId}</c:set>
 										<!-- Additional Info field not found in the new activity form-->
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgToInfo(${tempOrgId})">
-											<b>(<c:out value="${aimEditActivityForm.agencies.benOrgToInfo[tempOrgId]}"/>)</b>
+											<span class="word_break bold">(<c:out value="${aimEditActivityForm.agencies.benOrgToInfo[tempOrgId]}"/>)</span>
 										</logic:notEmpty>
 										<module:display name="/Activity Form/Organizations/Beneficiary Agency/percentage" parentModule="/Activity Form/Organizations/Beneficiary Agency">
                                             <logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgPercentage(${tempOrgId})" >
@@ -2527,10 +2566,10 @@ function collapseAll() {
 								type="org.digijava.module.aim.dbentity.AmpOrganisation">
 								<ul>
 									<li>
-										<b><bean:write name="conAgencies" property="name" /></b>
+										<span class="word_break bold"><bean:write name="conAgencies" property="name" /></span>
 										<c:set var="tempOrgId">${conAgencies.ampOrgId}</c:set>
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgToInfo(${tempOrgId})">
-											<b>(<c:out value="${aimEditActivityForm.agencies.conOrgToInfo[tempOrgId]}"/> )</b>
+											<span class="word_break bold">(<c:out value="${aimEditActivityForm.agencies.conOrgToInfo[tempOrgId]}"/> )</span>
 										</logic:notEmpty>
 										<module:display name="/Activity Form/Organizations/Contracting Agency/percentage" parentModule="/Activity Form/Organizations/Contracting Agency">
                                             <logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgPercentage(${tempOrgId})" >
@@ -2563,11 +2602,11 @@ function collapseAll() {
 							type="org.digijava.module.aim.dbentity.AmpOrganisation">
 							<ul>
 								<li>
-									<b><bean:write name="sectGroup" property="name" /></b> 
+									<span class="word_break bold"><bean:write name="sectGroup" property="name" /></span> 
 									<c:set var="tempOrgId">${sectGroup.ampOrgId}</c:set> 
 									
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgToInfo(${tempOrgId})">
-										<b>(<c:out value="${aimEditActivityForm.agencies.sectOrgToInfo[tempOrgId]}"/> )</b>									
+										<span class="word_break bold">(<c:out value="${aimEditActivityForm.agencies.sectOrgToInfo[tempOrgId]}"/> )</span>
 									</logic:notEmpty>
 									<module:display name="/Activity Form/Organizations/Sector Group/percentage" parentModule="/Activity Form/Organizations/Sector Group">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgPercentage(${tempOrgId})" >
@@ -2597,10 +2636,10 @@ function collapseAll() {
 										type="org.digijava.module.aim.dbentity.AmpOrganisation">
 										<ul>
 											<li>
-												<b><bean:write name="regGroup" property="name" /></b> 
+												<span class="word_break bold"><bean:write name="regGroup" property="name" /></span> 
 												<c:set var="tempOrgId" >${regGroup.ampOrgId}</c:set> 
 												<logic:notEmpty property="agencies.regOrgToInfo(${tempOrgId})" name="aimEditActivityForm">
-													<b>(<c:out value="${aimEditActivityForm.agencies.regOrgToInfo[tempOrgId]}"/>)</b>												
+													<span class="word_break bold">(<c:out value="${aimEditActivityForm.agencies.regOrgToInfo[tempOrgId]}"/>)</span>
 												</logic:notEmpty>
 												<module:display name="/Activity Form/Organizations/Regional Group/percentage" parentModule="/Activity Form/Organizations/Regional Group">
 													<logic:notEmpty name="aimEditActivityForm" property="agencies.regOrgPercentage(${tempOrgId})" >
@@ -2632,11 +2671,11 @@ function collapseAll() {
 				<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
 				<c:forEach var="donorContact" items="${aimEditActivityForm.contactInformation.donorContacts}">
 					<div>		
-						<b><c:out value="${donorContact.contact.name}" /></b> 
-						<b><c:out value="${donorContact.contact.lastname}"/></b> - 
+						<span class="word_break bold"><c:out value="${donorContact.contact.name}" /></span> 
+						<span class="word_break bold"><c:out value="${donorContact.contact.lastname}"/></span> - 
 						<c:forEach var="property" items="${donorContact.contact.properties}">
 							<c:if test="${property.name=='contact email'}">
-								<b><c:out value="${property.value}" /> </b>;							
+								<span class="word_break bold"><c:out value="${property.value}" /> </span>;
 							</c:if>
 						</c:forEach>
 					</div>
@@ -2649,11 +2688,11 @@ function collapseAll() {
 				<digi:trn>MOFED contact information</digi:trn>:&nbsp;
 				<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
 					<div>
-						<b><c:out value="${mofedContact.contact.name}" /></b> 
-						<b><c:out value="${mofedContact.contact.lastname}"/> </b>- 
+						<span class="word_break bold"><c:out value="${mofedContact.contact.name}" /></span> 
+						<span class="word_break bold"><c:out value="${mofedContact.contact.lastname}"/> </span>- 
 						<c:forEach var="property" items="${mofedContact.contact.properties}">
 							<c:if test="${property.name=='contact email'}">
-								<b><c:out value="${property.value}" /></b> ;							
+								<span class="word_break bold"><c:out value="${property.value}" /></span> ;
 							</c:if>
 						</c:forEach>
 					</div>
@@ -2667,11 +2706,11 @@ function collapseAll() {
 				<digi:trn>Project Coordinator Contact Information</digi:trn>:&nbsp;
 				<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
 					<div>
-						<b><c:out value="${projCoordinatorContact.contact.name}"/></b>
-						<b><c:out value="${projCoordinatorContact.contact.lastname}" /></b>-
+						<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.name}"/></span>
+						<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.lastname}" /></span>-
 						<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
 							<c:if test="${property.name=='contact email'}">
-								<b><c:out value="${property.value}" /></b> ;
+								<span class="word_break bold"><c:out value="${property.value}" /></span> ;
 							</c:if>
 						</c:forEach>
 					</div>
@@ -2685,11 +2724,11 @@ function collapseAll() {
 				<digi:trn>Sector Ministry Contact Information</digi:trn>:&nbsp;
 				<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
 					<div>
-						<b><c:out value="${sectorMinistryContact.contact.name}" /></b>
-						<b><c:out value="${sectorMinistryContact.contact.lastname}" /></b> -
+						<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.name}" /></span>
+						<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.lastname}" /></span> -
 						<c:forEach var="property" items="${sectorMinistryContact.contact.properties}">
 							<c:if test="${property.name=='contact email'}">
-								<b><c:out value="${property.value}" /></b>;
+								<span class="word_break bold"><c:out value="${property.value}" /></span>;
 							</c:if>
 						</c:forEach>
 					</div>
@@ -2704,11 +2743,11 @@ function collapseAll() {
 					<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>:&nbsp;
 					<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
 						<div>
-							<b><c:out value="${implExecAgencyContact.contact.name}" /></b>
-							<b><c:out value="${implExecAgencyContact.contact.lastname}" /></b> -
+							<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.name}" /></span>
+							<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.lastname}" /></span> -
 							<c:forEach var="property" items="${implExecAgencyContact.contact.properties}">
 								<c:if test="${property.name=='contact email'}">
-									<b><c:out value="${property.value}" /></b> ;
+									<span class="word_break bold"><c:out value="${property.value}" /></span> ;
 								</c:if>
 							</c:forEach>
 						</div>
@@ -2760,27 +2799,27 @@ function collapseAll() {
 									<module:display name="/Activity Form/Contracts/Contract Item/Contract Info/Contract Name" parentModule="/Activity Form/Contracts/Contract Item/Contract Info">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:name" >Contract name:</digi:trn>											
+												<digi:trn key="aim:IPA:popup:name" >Contract name:</digi:trn>
 											</td>
-											<td><b>${contract.contractName}</b></td>
+											<td><span class="word_break bold">${contract.contractName}</span></td>
 										</tr>
 									</module:display>
 									<module:display name="/Activity Form/Contracts/Contract Item/Contract Info/Contract Description" parentModule="/Activity Form/Contracts/Contract Item/Contract Info">										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:description">Description:</digi:trn>											
+												<digi:trn key="aim:IPA:popup:description">Description:</digi:trn>
 											</td>
-											<td><b>${contract.description}</b></td>
+											<td><span class="word_break bold">${contract.description}</span></td>
 										</tr>
 									</module:display>
 									<module:display name="/Activity Form/Contracts/Contract Item/Contract Info/Activity Type" parentModule="/Activity Form/Contracts/Contract Item/Contract Info">										<tr>
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn>											
+												<digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn>
 											</td>
 											<td>
 												<c:if test="${not empty contract.activityCategory}">
-													<b>${contract.activityCategory.value}</b>
-												</c:if>											
+													<span class="word_break bold">${contract.activityCategory.value}</span>
+												</c:if>
 											</td>
 										</tr>
 									</module:display>
@@ -2791,7 +2830,7 @@ function collapseAll() {
 											</td>
 											<td>
 												<c:if test="${not empty contract.type}">
-													<b>${contract.type.value}</b>
+													<span class="word_break bold">${contract.type.value}</span>
 												</c:if>
 											</td>
 										</tr>
@@ -2801,25 +2840,25 @@ function collapseAll() {
 											<td align="left">
 												<digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn>											
 											</td>
-											<td><b>${contract.formattedStartOfTendering}</b></td>
+											<td><span class="word_break bold">${contract.formattedStartOfTendering}</span></td>
 										</tr>
 									</module:display>
 									<module:display name="/Activity Form/Contracts/Contract Item/Contract Details/Signature" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract:</digi:trn>											
+												<digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract:</digi:trn>
 											</td>
-											<td><b>${contract.formattedSignatureOfContract}</b></td>
+											<td><span class="word_break bold">${contract.formattedSignatureOfContract}</span></td>
 										</tr>
 									</module:display>
 									<module:display name="/Activity Form/Contracts/Contract Item/Contract Organizations" parentModule="/Activity Form/Contracts/Contract Item">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn>											
+												<digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn>
 											</td>
 											<td>
 												<c:if test="${not empty contract.organization}">
-	                                            	<b>${contract.organization.name}</b>	                                            
+	                                            	<span class="word_break bold">${contract.organization.name}</span>
 	                                            </c:if>
 	                                          </td>
 										</tr>
@@ -2827,80 +2866,80 @@ function collapseAll() {
 									<module:display name="/Activity Form/Contracts/Contract Item/Contract Details/Contractor Name" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:											
+												<digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:
 											</td>
-											<td><b>${contract.contractingOrganizationText}</b></td>
+											<td><span class="word_break bold">${contract.contractingOrganizationText}</span></td>
 										</tr>
 									</module:display>
 									<module:display name="/Activity Form/Contracts/Contract Item/Contract Details/Completion" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:contractCompletion">Contract Completion:</digi:trn>											
+												<digi:trn key="aim:IPA:popup:contractCompletion">Contract Completion:</digi:trn>
 											</td>
-											<td><b>${contract.formattedContractCompletion}</b></td>
+											<td><span class="word_break bold">${contract.formattedContractCompletion}</span></td>
 										</tr>
 									</module:display>
 									<module:display name="/Activity Form/Contracts/Contract Item/Contract Details/Status" parentModule="/Activity Form/Contracts/Contract Item/Contract Details">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:status">Status:</digi:trn>											
+												<digi:trn key="aim:IPA:popup:status">Status:</digi:trn>
 											</td>
 											<td>
 												<c:if test="${not empty contract.status}">
-	                                            	<b>${contract.status.value}</b>	                                            
-	                                           </c:if>											
+	                                            	<span class="word_break bold">${contract.status.value}</span>
+	                                           </c:if>
 	                                         </td>
 										</tr>
 									</module:display>
 									<module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/Contract Total Value" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:totalAmount">Total Amount</digi:trn>:											
+												<digi:trn key="aim:IPA:popup:totalAmount">Total Amount</digi:trn>:
 											</td>
 											<td>
 												<b>
 												${contract.totalAmount}
 												${contract.totalAmountCurrency.currencyCode}
-												</b>											
+												</b>
 											</td>
 										</tr>
 									</module:display>
 									<module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Contract Total Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
 										<tr>
 											<td align="left" colspan="2">
-												<digi:trn key="aim:IPA:popup:totalECContribution">Total EC Contribution:</digi:trn>											
+												<digi:trn key="aim:IPA:popup:totalECContribution">Total EC Contribution:</digi:trn>
 											</td>
 										</tr>
 									</module:display>
 									<module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IB Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:IB">IB</digi:trn>:											
+												<digi:trn key="aim:IPA:popup:IB">IB</digi:trn>:
 											</td>
 											<td>
 												<b>
 												${contract.totalECContribIBAmount}
 												${contract.totalAmountCurrency.currencyCode}
-												</b>											
+												</b>
 											</td>
 										</tr>
 									</module:display>
 									<module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/INV Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:INV">INV:</digi:trn>											
+												<digi:trn key="aim:IPA:popup:INV">INV:</digi:trn>
 											</td>
 											<td>
 												<b>
 												${contract.totalECContribINVAmount}
 												${contract.totalAmountCurrency.currencyCode}
-												</b>											
+												</b>
 											</td>
 										</tr>
 									</module:display>
 									<tr>
 										<td align="left" colspan="2">
-											<digi:trn key="aim:IPA:popup:totalNationalContribution">Total National Contribution:</digi:trn>											
+											<digi:trn key="aim:IPA:popup:totalNationalContribution">Total National Contribution:</digi:trn>
 										</td>
 									</tr>
 									<module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Central Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
@@ -2919,7 +2958,7 @@ function collapseAll() {
 									<module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Regional Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:Regional">Regional</digi:trn>:											
+												<digi:trn key="aim:IPA:popup:Regional">Regional</digi:trn>:
 											</td>
 											<td>
 												<b>
@@ -2932,52 +2971,52 @@ function collapseAll() {
 									<module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IFI Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:IFIs">IFIs</digi:trn>:											
+												<digi:trn key="aim:IPA:popup:IFIs">IFIs</digi:trn>:
 											</td>
 											<td>
 												<b>
 												${contract.totalNationalContribIFIAmount}
 												${contract.totalAmountCurrency.currencyCode}
-												</b>											
+												</b>
 											</td>
 										</tr>
 									</module:display>
 									<tr>
 										<td align="left" colspan="2">
-											<digi:trn key="aim:IPA:popup:totalPrivateContribution">Total Private Contribution:</digi:trn>											
+											<digi:trn key="aim:IPA:popup:totalPrivateContribution">Total Private Contribution:</digi:trn>
 										</td>
 									</tr>
 									<module:display name="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IB Amount" parentModule="/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:IB">IB:</digi:trn></b>											
+												<digi:trn key="aim:IPA:popup:IB">IB:</digi:trn></b>
 											</td>
 											<td>
 												<b>
 												${contract.totalPrivateContribAmount}
 												${contract.totalAmountCurrency.currencyCode}
-												</b>											
+												</b>
 											</td>
 										</tr>
 									</module:display>
 									<module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements" parentModule="/Activity Form/Contracts/Contract Item">
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:totalDisbursements">Total Disbursements</digi:trn>:											
+												<digi:trn key="aim:IPA:popup:totalDisbursements">Total Disbursements</digi:trn>:
 											</td>
 											<td>
 												<b>${contract.totalDisbursements}</b> &nbsp; 
 											<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
-													&nbsp; <b>${aimEditActivityForm.currCode}</b>		                                        
+													&nbsp; <b>${aimEditActivityForm.currCode}</b>
 											</logic:empty> 
 		                                    <logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
-											&nbsp; <b>${contract.dibusrsementsGlobalCurrency.currencyCode}</b>		                                         
-											</logic:notEmpty>	                                        
+											&nbsp; <b>${contract.dibusrsementsGlobalCurrency.currencyCode}</b>
+											</logic:notEmpty>
 											</td>
 										</tr>
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:totalFundingDisbursements">Total Funding Disbursements</digi:trn>:											
+												<digi:trn key="aim:IPA:popup:totalFundingDisbursements">Total Funding Disbursements</digi:trn>:
 											</td>
 											<td>
 												<b>${contract.fundingTotalDisbursements}</b> &nbsp; 
@@ -2991,21 +3030,21 @@ function collapseAll() {
 										</tr>
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:contractExecutionRate">Contract Execution Rate</digi:trn>:											
+												<digi:trn key="aim:IPA:popup:contractExecutionRate">Contract Execution Rate</digi:trn>:
 											</td>
 											<td>
-												&nbsp; <b>${contract.executionRate}</b>											
+												&nbsp; <b>${contract.executionRate}</b>
 											</td>
 										</tr>
 										<tr>
 											<td align="left">
-												<digi:trn key="aim:IPA:popup:contractFundingExecutionRate">Contract Funding Execution Rate</digi:trn>:											
+												<digi:trn key="aim:IPA:popup:contractFundingExecutionRate">Contract Funding Execution Rate</digi:trn>:
 											</td>
 											<td>&nbsp; <b>${contract.fundingExecutionRate}</b></td>
 										</tr>
 										<tr>
 											<td colspan="2">
-												<digi:trn key="aim:IPA:popup:disbursements">Disbursements:</digi:trn>											
+												<digi:trn key="aim:IPA:popup:disbursements">Disbursements:</digi:trn>
 											</td>
 										</tr>
 									<tr>
@@ -3028,17 +3067,17 @@ function collapseAll() {
 														</module:display>
 														<module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
 														<td align="left" valign="top">
-															<b>${disbursement.amount}</b>														
+															<b>${disbursement.amount}</b>
 														</td>
 														</module:display>
 														<module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
 														<td align="left" valign="top">
-															<b>${disbursement.currency.currencyCode}</b>														
+															<b>${disbursement.currency.currencyCode}</b>
 														</td>
 														</module:display>
 														<module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
 														<td align="left" valign="top">
-															<b>${disbursement.disbDate}</b>														
+															<b>${disbursement.disbDate}</b>
 														</td>
 														</module:display>
 													</tr>
@@ -3048,7 +3087,7 @@ function collapseAll() {
 									</tr>
 									<tr>
 										<td colspan="2">
-											<digi:trn key="aim:IPA:popup:fundingDisbursements">Funding Disbursements:</digi:trn>											
+											<digi:trn key="aim:IPA:popup:fundingDisbursements">Funding Disbursements:</digi:trn>
 										</td>
 									</tr>
 									<tr>
@@ -3094,19 +3133,19 @@ function collapseAll() {
 																</td>
 																<td align="center" valign="top">
 																<module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
-																	<b>${fundingDetail.transactionAmount}</b>																
+																	<b>${fundingDetail.transactionAmount}</b>
 																</module:display>	
 																</td>
 																
 																<td align="center" valign="top">
 																<module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
-																	<b>${fundingDetail.currencyCode.currencyCode}</b>																
+																	<b>${fundingDetail.currencyCode.currencyCode}</b>
 																</module:display>
 																</td>
 																<td align="center" valign="top">
 																<module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
 																	<b>${fundingDetail.transactionDate}</b>
-																</module:display>																
+																</module:display>
 																</td>
 															</tr>
 														</c:if>
@@ -3123,11 +3162,11 @@ function collapseAll() {
 												<digi:trn>Contracts financed by the lessor</digi:trn>:
 											</td>
 											<td>&nbsp;
-												<%if(ct.getDonorContractFundinAmount()!=null){ %> 
+												<% if(ct.getDonorContractFundinAmount()!=null){ %> 
 													<b><%=BigDecimal.valueOf(ct.getDonorContractFundinAmount()).toPlainString()%></b>
 												<%}%>
 												&nbsp;&nbsp;&nbsp;&nbsp;
-											<b>${contract.donorContractFundingCurrency.currencyCode}</b>											
+											<b>${contract.donorContractFundingCurrency.currencyCode}</b>
 										</td>
 										</tr>
 										<tr>

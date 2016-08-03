@@ -21,6 +21,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -85,6 +86,7 @@ implements AmpRequiredComponentContainer{
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
 			title.getTextAreaContainer().setRequired(true);
+			
 		if (ContentTranslationUtil.multilingualIsEnabled()){
 			
 			//we only disable the language switcher if we are in multilingual mode

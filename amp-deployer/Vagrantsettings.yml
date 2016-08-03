@@ -22,21 +22,20 @@ vagrant:
 # Define mount points for the VM.
 # - source: path in the host that should be mounted in the VM.
 # - target: path in the VM where the sources hould be mounted.
-# - skip: if this volume should not be mounted, you can configure your IDE to deploy the files.
-# - type: the type of synced folder. By default this is "vboxsf" which is very slow.
-#     - For linux/mac use: nfs
-#       @see: https://www.vagrantup.com/docs/synced-folders/nfs.html
-#     - For windows use: smb
-#       @see: https://www.vagrantup.com/docs/synced-folders/smb.html
+# - skip: if this volume should not be mounted; you can configure your IDE to deploy the files.
 vagrant_volumes:
   - source: ../amp-cms
     target: /var/www/amp212-cms-local
-    #type: nfs
-    #type: smb
+    #skip: true
   - source: ../amp
     target: /opt/devgateway/amp212-local
-    #type: nfs
-    #type: smb
+    #skip: true
+
+# The type of synced folder. By default this is "vboxsf" which is very slow.
+#   - For linux/mac see: https://www.vagrantup.com/docs/synced-folders/nfs.html
+#   - For windows see: https://www.vagrantup.com/docs/synced-folders/smb.html
+#vagrant_volumes_type: nfs  # for linux/mac
+#vagrant_volumes_type: smb  # for windows
 
 # Information about the box.
 vagrant_box:
@@ -47,11 +46,11 @@ vagrant_box:
 
 # Ansible variables to override.
 common__deployer_user: vagrant
-common__deployer_group: vagrant
+common__deployer_group: users
 httpd__User: vagrant
-httpd__Group: vagrant
+httpd__Group: users
 httpd__User_vhosts: vagrant
-httpd__Group_vhosts: vagrant
+httpd__Group_vhosts: users
 
 # Define forwarded ports.
 vagrant_mapped_ports:

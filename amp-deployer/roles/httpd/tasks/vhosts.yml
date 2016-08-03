@@ -8,7 +8,7 @@
     group: "{{ httpd__Group_vhosts }}"
     mode: "u=rwx,g=rwx,o=rx"
   with_items: "{{ vhosts|default([]) }}"
-  when: item.docroot is defined
+  when: item.docroot is defined and vagrant_volumes_type is defined and vagrant_volumes_type != 'nfs'
 
 - name: Add apache vhosts configuration.
   template:

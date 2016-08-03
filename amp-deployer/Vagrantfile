@@ -116,7 +116,11 @@ Vagrant.configure(2) do |config|
     # Mount project directories into the guest OS.
     for volume in project_settings['vagrant_volumes']
       if !(volume.has_key? 'skip' && volume['skip'])
-        main_config.vm.synced_folder volume['source'], volume['target']
+        mount_type = 'vboxsf'
+        if !(volume.has_key? 'type' && volume['type'])
+            mount_type = volume['type']
+        end
+        main_config.vm.synced_folder volume['source'], volume['target'], type: mount_type
       end
     end
 

@@ -76,6 +76,15 @@ Vagrant.configure(2) do |config|
     # 1. Add port forwarding
     # main_config.vm.network :forwarded_port, guest: 80, host: 8080
 
+    # Mapping project ports.
+    if project_settings.has_key? 'vagrant_mapped_ports'
+      for entry in project_settings['vagrant_mapped_ports']
+        if !(entry.has_key? 'skip' && entry['skip'])
+          main_config.vm.network :forwarded_port, guest: entry['source'], host: entry['target']
+        end
+      end
+    end
+
     # 2. Add a new virtual network interface card with a fixed IP.
     main_config.vm.network :private_network, ip: project_settings['vagrant']['hostonlyip']
 

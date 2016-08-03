@@ -70,19 +70,26 @@ httpd_php56__ini_extra_directives:
   - xdebug.remote_connect_back = 1
 
 # Define forwarded ports.
-vagrant_mapped_ports:
-  - source: 5432
-    target: 5432
-  - source: 8009
-    target: 8009
+#vagrant_mapped_ports:
+#  - source: 5432
+#    target: 5432
+#  - source: 8009
+#    target: 8009
 
 # PostgreSQL Client Authentication Configuration
+# Allow developers to use DB clients, like pgAdmin or IDE DB tools, on the host OS.
 # @see: https://www.postgresql.org/docs/9.5/static/client-authentication.html
 postgresql__listen_addresses: '0.0.0.0'
 postgresql__client_authentication_extras:
-  - comment: 'Use password auth on IPv4 local connections:'
+  - comment: 'Use password auth on IPv4 connections from the VM host:'
     type: host
-    database: yali
-    user: yali
-    address: '10.0.2.2/1'
+    database: amp_cms_local
+    user: amp_cms_user
+    address: '10.10.10.1/1'
+    method: md5
+  - comment: 'Use password auth on IPv4 connections from the VM host:'
+    type: host
+    database: amp_local
+    user: amp_user
+    address: '10.10.10.1/1'
     method: md5

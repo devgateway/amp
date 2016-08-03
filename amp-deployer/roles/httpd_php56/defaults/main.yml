@@ -4,6 +4,22 @@
 # @see: https://xdebug.org/
 httpd_php56__use_xdebug: false
 
+# The URL from where to download drush.
+# @NOTE: We down't use the official website since they don't use HTTPS.
+httpd_php56__drush_install: 1
+httpd_php56__drush_download_url: https://github.com/drush-ops/drush/releases/download/8.1.2/drush.phar
+httpd_php56__drush_download_checksum: 5a81d4cefe59f083f7aa6dbcd511c0446557d022a7cc08400ba18245a9e04076
+
+# The URL from where to download drupal console.
+httpd_php56__drupal_console_install: 1
+httpd_php56__drupal_console_download_url: https://drupalconsole.com/installer
+
+
+###
+### php.ini directives
+### @see: http://php.net/manual/en/ini.core.php
+###
+
 # The default timezone used by all date/time functions.
 # @see: https://secure.php.net/manual/en/datetime.configuration.php#ini.date.timezone
 httpd_php56__date_timezone: 'America/New_York'
@@ -82,16 +98,6 @@ httpd_php56__opcache_revalidate_freq: 60
 # If enabled, a fast shutdown sequence is used that doesn't free each allocated block.
 # @see: https://secure.php.net/manual/en/opcache.configuration.php#ini.opcache.fast-shutdown
 httpd_php56__opcache_fast_shutdown: 1
-
-# The URL from where to download drush.
-# @NOTE: We down't use the official website since they don't use HTTPS.
-httpd_php56__drush_install: 1
-httpd_php56__drush_download_url: https://github.com/drush-ops/drush/releases/download/8.1.2/drush.phar
-httpd_php56__drush_download_checksum: 5a81d4cefe59f083f7aa6dbcd511c0446557d022a7cc08400ba18245a9e04076
-
-# The URL from where to download drupal console.
-httpd_php56__drupal_console_install: 1
-httpd_php56__drupal_console_download_url: https://drupalconsole.com/installer
 
 # A list of extra PHP.ini directives.
 #httpd_php56__ini_extra_directives:

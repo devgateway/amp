@@ -2775,6 +2775,14 @@ public class ExportActivityToPDF extends Action {
                             {
                                 addNewInfoCell(fundingTable, "Funding Classification Date", funding.getFundingClassificationDate());
                             }
+                            if(funding.getEffectiveFundingDate() != null)
+                            {
+                                addNewInfoCell(fundingTable, "Effective Funding Date", funding.getEffectiveFundingDate());
+                            }
+                            if(funding.getFundingClosingDate() != null)
+                            {
+                                addNewInfoCell(fundingTable, "Funding Closing Date", funding.getFundingClosingDate());
+                            }
                             
                             if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date"))
                             {

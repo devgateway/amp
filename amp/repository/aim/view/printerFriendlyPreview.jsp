@@ -1485,6 +1485,28 @@ body {background:none;}
 																						</td>
 																					</tr>
                                                                                   </logic:notEmpty>
+	            																	<logic:notEmpty name="funding" property="effectiveFundingDate">
+																						<tr>
+																							<td align="left" width="339">
+																								<a><digi:trn>Effective Funding Date</digi:trn></a>
+																							</td>
+																							<td width="10">:</td>
+																							<td align="left">
+																								<bean:write name="funding" property="effectiveFundingDate"/>
+																							</td>
+																						</tr>
+																					</logic:notEmpty>
+																					<logic:notEmpty name="funding" property="fundingClosingDate">
+																						<tr>
+																							<td align="left" width="339">
+																								<a><digi:trn>Funding Closing Date</digi:trn></a>
+																							</td>
+																							<td width="10">:</td>
+																							<td align="left">
+																								<bean:write name="funding" property="fundingClosingDate"/>
+																							</td>
+																						</tr>
+																					</logic:notEmpty>
 																			<!-- here it goes Donor Objective  and Conditions ISSUE AMP-16421-->
 																			<field:display name="Conditions" feature="Funding Information">
 																				<logic:notEmpty name="funding" property="conditions">

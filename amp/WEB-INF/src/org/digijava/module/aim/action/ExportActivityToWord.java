@@ -2358,6 +2358,12 @@ public class ExportActivityToWord extends Action {
                         if (funding.getFundingClassificationDate() != null) {
                             addFundingRowData(null, eshDonorInfo, "Funding Classification Date",funding.getFundingClassificationDate(), false);
                         }
+                        if (funding.getEffectiveFundingDate() != null) {
+                            addFundingRowData(null, eshDonorInfo, "Effective Funding Date",funding.getEffectiveFundingDate(), false);
+                        }
+                        if (funding.getFundingClosingDate() != null) {
+                            addFundingRowData(null, eshDonorInfo, "Funding Closing Date",funding.getFundingClosingDate(), false);
+                        }
                         
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date",
                                 eshDonorInfo, "Ratification Date", funding.getRatificationDate(), true);
@@ -2501,6 +2507,12 @@ public class ExportActivityToWord extends Action {
                 if (fnd.getFundingClassificationDate() != null)
                     eshDonorInfo.addRowData(new ExportSectionHelperRowData("Funding Classification Date", null, null, true)
                             .addRowData(DateConversion.convertDateToLocalizedString(fnd.getFundingClassificationDate())));
+                if (fnd.getEffectiveFundingDate() != null)
+                    eshDonorInfo.addRowData(new ExportSectionHelperRowData("Effective Funding Date", null, null, true)
+                            .addRowData(DateConversion.convertDateToString(fnd.getEffectiveFundingDate())));
+                if (fnd.getFundingClosingDate() != null)
+                    eshDonorInfo.addRowData(new ExportSectionHelperRowData("Funding Closing Date", null, null, true)
+                            .addRowData(DateConversion.convertDateToString(fnd.getFundingClosingDate())));
                 
                 if (fnd.getRatificationDate() != null)
                     eshDonorInfo.addRowData(new ExportSectionHelperRowData("Ratification Date", null, null, true)

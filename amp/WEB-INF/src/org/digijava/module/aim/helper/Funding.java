@@ -88,6 +88,8 @@ public class Funding implements Serializable {
 	 */
 	private String code;
 	private String fundingClassificationDate;
+	private String effectiveFundingDate;
+	private String fundingClosingDate;
 	private Long groupVersionedFunding;
 	private Float capitalSpendingPercentage;	
 	
@@ -284,6 +286,8 @@ public class Funding implements Serializable {
 		this.setDonorObjective(ampFunding.getDonorObjective());
 		this.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
 		this.setFundingClassificationDate(DateConversion.convertDateToString(ampFunding.getFundingClassificationDate()));
+		this.setEffectiveFundingDate(DateConversion.convertDateToString(ampFunding.getEffectiveFundingDate()));
+		this.setFundingClosingDate(DateConversion.convertDateToString(ampFunding.getFundingClosingDate()));
 		this.setRatificationDate(DateConversion.convertDateToLocalizedString(ampFunding.getRatificationDate()));
 		this.setGracePeriod(ampFunding.getGracePeriod());
 		this.setInterestRate(ampFunding.getInterestRate());
@@ -919,6 +923,22 @@ public class Funding implements Serializable {
 	@java.lang.SuppressWarnings("all")
 	public void setMaturity(String maturity) {
 		this.maturity = maturity;
+	}
+
+	public String getEffectiveFundingDate() {
+		return effectiveFundingDate;
+	}
+
+	public void setEffectiveFundingDate(String effectiveFundingDate) {
+		this.effectiveFundingDate = effectiveFundingDate;
+	}
+
+	public String getFundingClosingDate() {
+		return fundingClosingDate;
+	}
+
+	public void setFundingClosingDate(String fundingClosingDate) {
+		this.fundingClosingDate = fundingClosingDate;
 	}
 
 	@java.lang.Override

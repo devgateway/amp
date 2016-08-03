@@ -264,6 +264,38 @@
 																	</td>
 																</tr>
 																</logic:notEmpty>
+																<module:display name="/Activity Form/Project Funding/Funding Group/Funding Item/Funding Classification/Effective Funding Date"
+																	parentModule="/Activity Form/Project Funding/Funding Group/Funding Item/Funding Classification">
+																<logic:notEmpty name="funding" property="effectiveFundingDate">
+																	<tr>
+																		<td align="left" width="150">
+																			<a title='<digi:trn>Effective Funding Date</digi:trn>'>
+																				<digi:trn>Effective Funding Date</digi:trn>
+																			</a>
+																		</td>
+																		<td width="1">:</td>
+																		<td align="left">
+																			<b><bean:write name="funding" property="effectiveFundingDate"/></b>
+																		</td>
+																	</tr>
+																</logic:notEmpty>
+																</module:display>
+																<module:display name="/Activity Form/Project Funding/Funding Group/Funding Item/Funding Classification/Funding Closing Date"
+																		parentModule="/Activity Form/Project Funding/Funding Group/Funding Item/Funding Classification">
+																<logic:notEmpty name="funding" property="fundingClosingDate">
+																	<tr>
+																		<td align="left" width="150">
+																			<a title='<digi:trn>Funding Closing Date</digi:trn>'>
+																				<digi:trn>Funding Closing Date</digi:trn>
+																			</a>
+																		</td>
+																		<td width="1">:</td>
+																		<td align="left">
+																			<b><bean:write name="funding" property="fundingClosingDate"/></b>
+																		</td>
+																	</tr>
+																</logic:notEmpty>
+																</module:display>
 															</table>
 															</td>
 														</tr>

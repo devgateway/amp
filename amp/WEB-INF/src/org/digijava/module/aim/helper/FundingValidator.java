@@ -24,8 +24,8 @@ public class FundingValidator {
 			if (e1 instanceof FundingDetail && e2 instanceof FundingDetail) {
 				FundingDetail fd1 = (FundingDetail) e1;
 				FundingDetail fd2 = (FundingDetail) e2;
-				Date dt1 = DateConversion.getDate(fd1.getTransactionDate());
-				Date dt2 = DateConversion.getDate(fd2.getTransactionDate());
+				Date dt1 = DateConversion.getLocalizedDate(fd1.getTransactionDate());
+				Date dt2 = DateConversion.getLocalizedDate(fd2.getTransactionDate());
 				if (((dt1 == null)&&(dt2 == null))||(dt1.equals(dt2))) {
 					return fd2.getAdjustmentTypeName().compareTo(fd1.getAdjustmentTypeName());
 				} else {
@@ -44,7 +44,7 @@ public class FundingValidator {
 			String tempAmt = fd.getTransactionAmount().replaceAll(",","");
 			double amt = Double.parseDouble(tempAmt);
 			
-			java.sql.Date dt = new java.sql.Date( DateConversion.getDate(fd.getTransactionDate()).getTime());
+			java.sql.Date dt = new java.sql.Date( DateConversion.getLocalizedDate(fd.getTransactionDate()).getTime());
 			double frmExRt = Util.getExchange(fd.getCurrencyCode(),dt);
 			double toExRt = Util.getExchange("USD",dt);
 			amt = CurrencyWorker.convert1(amt,frmExRt,toExRt);			
@@ -74,7 +74,7 @@ public class FundingValidator {
 	private static FundingDetail getFundDetail(Date date) {
 		for (int i = list1.size() -1 ;i >= 0;i --) {
 			FundingDetail fd = (FundingDetail) list1.get(i);
-			Date dt = DateConversion.getDate(fd.getTransactionDate());
+			Date dt = DateConversion.getLocalizedDate(fd.getTransactionDate());
 			if (dt.before(date)) return fd;
 		}
 		return null;
@@ -83,7 +83,7 @@ public class FundingValidator {
 	private static int validate() {
 		for (int i = 0;i < list2.size();i ++) {
 			FundingDetail fd = (FundingDetail) list2.get(i);
-			Date dt = DateConversion.getDate(fd.getTransactionDate());
+			Date dt = DateConversion.getLocalizedDate(fd.getTransactionDate());
 			FundingDetail temp = getFundDetail(dt);
 			
 			if (temp != null) {

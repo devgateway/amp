@@ -3061,11 +3061,11 @@ public class DbUtil {
 			AmpPrgIndicatorValue val2 = new AmpPrgIndicatorValue();
 
 			val1.setValueType(o1.getValueType());
-			val1.setCreationDate(DateConversion.ConvertDateToString(o1
+			val1.setCreationDate(DateConversion.convertDateToString(o1
 					.getValueDate()));
 
 			val2.setValueType(o2.getValueType());
-			val2.setCreationDate(DateConversion.ConvertDateToString(o2
+			val2.setCreationDate(DateConversion.convertDateToString(o2
 					.getValueDate()));
 			return new IndicatorValuesComparatorByTypeAndYear().compare(val1,
 					val2);

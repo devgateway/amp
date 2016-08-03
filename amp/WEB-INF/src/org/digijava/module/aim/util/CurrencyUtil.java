@@ -112,8 +112,7 @@ public class CurrencyUtil {
 					currencyRates.setCurrencyName( currencies.get(cRate.getToCurrencyCode()) );
 					currencyRates.setFromCurrencyName( currencies.get(cRate.getFromCurrencyCode()) );
 					currencyRates.setExchangeRate(cRate.getExchangeRate());
-					currencyRates.setExchangeRateDate(DateConversion.
-							ConvertDateToString(cRate.getExchangeRateDate()));
+					currencyRates.setExchangeRateDate(DateConversion.convertDateToString(cRate.getExchangeRateDate()));
 					currencyRates.setId(cRate.getAmpCurrencyRateId());
 					col.add(currencyRates);
 				}
@@ -178,8 +177,7 @@ public class CurrencyUtil {
 					currencyRates.setCurrencyName( currencies.get(cRate.getToCurrencyCode()) );
 					currencyRates.setFromCurrencyName( currencies.get(cRate.getFromCurrencyCode()) );
 					currencyRates.setExchangeRate(cRate.getExchangeRate());
-					currencyRates.setExchangeRateDate(DateConversion.
-							ConvertDateToString(cRate.getExchangeRateDate()));
+					currencyRates.setExchangeRateDate(DateConversion.convertDateToString(cRate.getExchangeRateDate()));
 					currencyRates.setId(cRate.getAmpCurrencyRateId());
 					col.add(currencyRates);
 				}

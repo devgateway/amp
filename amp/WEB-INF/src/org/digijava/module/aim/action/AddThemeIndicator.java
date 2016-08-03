@@ -185,7 +185,7 @@ public class AddThemeIndicator extends Action {
                             Collections.sort(sortedIndicatorValues,new IndicatorValuesComparator());
 				for (AmpIndicatorValue value : sortedIndicatorValues) {
 	            	AmpPrgIndicatorValue bean=new AmpPrgIndicatorValue();
-					bean.setCreationDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setCreationDate(DateConversion.convertDateToLocalizedString(value.getValueDate()));
 					bean.setValAmount(value.getValue());
 					bean.setValueType(value.getValueType());
 					bean.setIndicatorValueId(value.getIndValId());

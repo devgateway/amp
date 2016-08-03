@@ -555,7 +555,7 @@ public class ProgramUtil {
 					tempPrgInd.setIndicatorId(ampThemeIndId);
 					tempPrgInd.setName(tempThemeInd.getName());
 					tempPrgInd.setCode(tempThemeInd.getCode());
-                    tempPrgInd.setCreationDate(DateConversion.ConvertDateToString(tempThemeInd.getCreationDate()));
+                    tempPrgInd.setCreationDate(DateConversion.convertDateToLocalizedString(tempThemeInd.getCreationDate()));
 					tempPrgInd.setPrgIndicatorValues(getThemeIndicatorValues(ampThemeIndId));
 					tempPrgInd.setIndSectores(getSectorIndicator(ampThemeIndId));
 					themeInd.add(tempPrgInd);
@@ -606,7 +606,7 @@ public class ProgramUtil {
 					tempPrgIndVal.setIndicatorValueId(tempThIndVal.getAmpThemeIndValId());
 					tempPrgIndVal.setValueType(tempThIndVal.getValueType());
 					tempPrgIndVal.setValAmount(tempThIndVal.getValueAmount());
-					tempPrgIndVal.setCreationDate(DateConversion.ConvertDateToString(tempThIndVal.getCreationDate()));
+					tempPrgIndVal.setCreationDate(DateConversion.convertDateToLocalizedString(tempThIndVal.getCreationDate()));
 					col.add(tempPrgIndVal);
 				}
 			}
@@ -1236,7 +1236,7 @@ public class ProgramUtil {
 				tempPrgInd.setCode(tempInd.getCode());
 				tempPrgInd.setType(tempInd.getType());
 				tempPrgInd.setDescription(tempInd.getDescription());
-				tempPrgInd.setCreationDate(DateConversion.ConvertDateToString(tempInd.getCreationDate()));
+				tempPrgInd.setCreationDate(DateConversion.convertDateToLocalizedString(tempInd.getCreationDate()));
 				tempPrgInd.setCategory(tempInd.getCategory());
 				tempPrgInd.setNpIndicator(tempInd.isNpIndicator());
                 tempPrgInd.setThemes(tempInd.getThemes());

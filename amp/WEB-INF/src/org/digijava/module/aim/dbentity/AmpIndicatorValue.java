@@ -70,7 +70,7 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
         see addEditValue.jsp*/
         public String getValueDateString(){
               if( valueDate!=null){
-               return  DateTimeUtil.formatDate(valueDate);
+               return  DateTimeUtil.formatDateLocalized(valueDate);
             }
              return null;
         }

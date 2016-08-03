@@ -547,7 +547,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
             fd.setCurrencyName(cf.getCurrency().getCurrencyName());
             fd.setTransactionAmount(FormatHelper.formatNumber(cf.getTransactionAmount().doubleValue()));
-            fd.setTransactionDate(DateConversion.ConvertDateToString(cf.getTransactionDate()));
+            fd.setTransactionDate(DateConversion.convertDateToLocalizedString(cf.getTransactionDate()));
 			fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(cf.getTransactionDate()));
             fd.setTransactionType(cf.getTransactionType().intValue());
             if (fd.getTransactionType() == Constants.COMMITMENT) {

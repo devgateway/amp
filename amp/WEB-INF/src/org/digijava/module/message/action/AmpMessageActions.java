@@ -1357,7 +1357,7 @@ public class AmpMessageActions extends DispatchAction {
 			 form.setPriorityLevel(message.getPriorityLevel());
 			 form.setSenderType(MessageConstants.SENDER_TYPE_USER); //this message is created by User
 			 form.setSenderId(message.getSenderId());
-			 form.setCreationDate(DateConversion.ConvertDateToString(message.getCreationDate()));
+			 form.setCreationDate(DateConversion.convertDateToLocalizedString(message.getCreationDate()));
 			 form.setClassName(message.getClassName());
 			 form.setObjectURL(message.getObjectURL());
              form.setReceiver(message.getReceivers());
@@ -1427,7 +1427,7 @@ public class AmpMessageActions extends DispatchAction {
                 	result += " from=\"" +MessageConstants.SENDER_TYPE_SYSTEM + "\"";
                 }
                 result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getReceivers()) + "\"";
-                result += " received=\"" + DateConversion.ConvertDateToString(state.getMessage().getCreationDate()) + "\"";
+                result += " received=\"" + DateConversion.convertDateToString(state.getMessage().getCreationDate()) + "\"";
                 result += " priority=\"" + state.getMessage().getPriorityLevel() + "\"";
                 //attachments start
                 if(state.getMessage().getAttachedDocs()!=null){
@@ -1501,7 +1501,7 @@ public class AmpMessageActions extends DispatchAction {
         } else {
             result += " from=\"" + MessageConstants.SENDER_TYPE_SYSTEM + "\"";
         }
-        result += " received=\"" + DateConversion.ConvertDateToString(forwardedOrRepliedMessage.getCreationDate()) + "\"";
+        result += " received=\"" + DateConversion.convertDateToString(forwardedOrRepliedMessage.getCreationDate()) + "\"";
         result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedOrRepliedMessage.getReceivers()) + "\"";
         result += " priority=\"" + forwardedOrRepliedMessage.getPriorityLevel() + "\"";
         //attachments start
@@ -1553,7 +1553,7 @@ public class AmpMessageActions extends DispatchAction {
 // 			}
 //     		
 //     	 }
-     	 msgHelper.setCreationDate(DateConversion.ConvertDateToString(msg.getCreationDate()));
+     	 msgHelper.setCreationDate(DateConversion.convertDateToString(msg.getCreationDate()));
      	 return msgHelper;
 	 }
 	 

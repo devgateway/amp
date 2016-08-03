@@ -156,8 +156,7 @@ public class ActivityVersionUtil {
 							}
 							
 							if (auxOutput2.getValue()[i] instanceof Timestamp) {
-								String date = DateConversion.ConvertDateToString(new Date(((Timestamp) auxOutput2
-										.getValue()[i]).getTime()));
+								String date = DateConversion.convertDateToString(new Date(((Timestamp) auxOutput2.getValue()[i]).getTime()));
 								ret.append(date);
 							} else if (auxOutput2.getValue()[i] instanceof BigDecimal 
 									|| auxOutput2.getValue()[i] instanceof Double 

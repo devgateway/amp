@@ -237,7 +237,7 @@ public class FundingCalculationsHelper {
 		    	fundingDetail.setCurrencyName(curr.getCountryName());
 		    }
 			fundingDetail.setTransactionAmount(CurrencyWorker.convert(FeaturesUtil.applyThousandsForVisibility(amt.doubleValue()).doubleValue(), 1, 1));
-			fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
+			fundingDetail.setTransactionDate(DateConversion.convertDateToLocalizedString(fundDet.getTransactionDate()));
 			fundingDetail.setFiscalYear(DateConversion.convertDateToFiscalYearString(fundDet.getTransactionDate()));
 			fundingDetail.setCapitalPercent(fundDet.getCapitalSpendingPercentage());
 			fundingDetail.setReportingDate(fundDet.getReportingDate());

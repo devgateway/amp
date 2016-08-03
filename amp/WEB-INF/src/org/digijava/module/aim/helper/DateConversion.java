@@ -36,8 +36,8 @@ public class DateConversion
 					return 1;
 				}
 				try{
-					 dt1 = DateConversion.getDate(tdt1);
-					 dt2 = DateConversion.getDate(tdt2);
+					 dt1 = DateConversion.getLocalizedDate(tdt1);
+					 dt2 = DateConversion.getLocalizedDate(tdt2);
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
@@ -56,13 +56,12 @@ public class DateConversion
 	}
 	
 	
-	public static String ConvertDateToString(Date mysqlDate )
-	{
-		String textDate ="";
-		if (mysqlDate != null) {
-			  textDate = DateTimeUtil.formatDate(mysqlDate);
-		}
-		return textDate;
+	public static String convertDateToString(Date date) {
+		return date == null ? "" : DateTimeUtil.formatDate(date);
+	}
+	
+	public static String convertDateToLocalizedString(Date date) {
+		return date == null ? "" : DateTimeUtil.formatDateLocalized(date);
 	}
 	
 	public static Date getDate(String strDate, String format)
@@ -76,29 +75,36 @@ public class DateConversion
 			return null;
 	}	
 
-	/**@author jose
-	 * This method given a String like dd/mm/yyyy it will parse the date out of it and
-	 * return a date object
-	 * @param String dd/mm/yyyy or d/mm/yyyy or dd/m/yyyy or d/m/yyyy
-	 * @return Date
+	private static boolean isEmpty(String s) {
+		return s == null || s.isEmpty();
+	}
+	
+	/**
+	 * parses a localized date following the format in GlobalSettings
+	 * @param strDate
+	 * @return
+	 */
+	public static Date getLocalizedDate(String strDate) {
+		try {
+			return isEmpty(strDate) ? null : FormatHelper.parseLocalizedDate(strDate).getTime();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+	
+	
+	/**
+	 * parses a date following the format in GlobalSettings
+	 * @param strDate
+	 * @return
 	 */
 	public static Date getDate(String strDate) {
-	try {
-	    Date date = null;
-	    if (strDate != null && !strDate.trim().equals("")) {
-	    //date=sdf.parse(strDate);
-	    	//date=sdf.parse("01/Jun/2008");
-		//date = DateTimeUtil.parseDate(DateTimeUtil.formatDate(new Date(strDate)));
-	    	date = FormatHelper.parseDate(strDate).getTime();
-
-	    }
-
-	    return date;
-	} catch (Exception ex) {
-	    throw new RuntimeException(ex);
+		try {
+			return isEmpty(strDate) ? null : FormatHelper.parseDate(strDate).getTime();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
 	}
-
-    }
 	
 	public static Date getDateForIndicator(String strDate){
 		if (strDate == null)

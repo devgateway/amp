@@ -1001,39 +1001,39 @@ public class EditActivity extends Action {
           }
 
           eaForm.getIdentification().setCreatedDate(DateConversion
-                                .ConvertDateToString(activity.
+                                .convertDateToLocalizedString(activity.
               getCreatedDate()));
           eaForm.getIdentification().setUpdatedDate(DateConversion
-                                .ConvertDateToString(activity.
+                                .convertDateToLocalizedString(activity.
               getUpdatedDate()));
           eaForm.getPlanning().setOriginalAppDate(DateConversion
-                                    .ConvertDateToString(activity
+                                    .convertDateToLocalizedString(activity
                                             .getProposedApprovalDate()));
           eaForm.getPlanning().setRevisedAppDate(DateConversion
-                                   .ConvertDateToString(activity
+                                   .convertDateToLocalizedString(activity
                                            .getActualApprovalDate()));
           eaForm.getPlanning().setOriginalStartDate(DateConversion
-                                      .ConvertDateToString(activity
+                                      .convertDateToLocalizedString(activity
                                               .getProposedStartDate()));
           eaForm.getPlanning().setRevisedStartDate(DateConversion
-                                   .ConvertDateToString(activity
+                                   .convertDateToLocalizedString(activity
                                            .getActualStartDate()));
           eaForm.getPlanning().setContractingDate(DateConversion
-                                    .ConvertDateToString(activity.
+                                    .convertDateToLocalizedString(activity.
                                             getContractingDate()));
           eaForm.getPlanning().setDisbursementsDate(DateConversion
-                                      .ConvertDateToString(activity.
+                                      .convertDateToLocalizedString(activity.
                                               getDisbursmentsDate()));
           eaForm.getPlanning().setProposedCompDate(DateConversion
-                                     .ConvertDateToString(activity.
+                                     .convertDateToLocalizedString(activity.
                                              getProposedCompletionDate()));
 
           eaForm.getPlanning().setOriginalCompDate(DateConversion
-                                    .ConvertDateToString(activity
+                                    .convertDateToLocalizedString(activity
                                             .getOriginalCompDate()));
 
           eaForm.getPlanning().setCurrentCompDate(DateConversion
-                                    .ConvertDateToString(activity
+                                    .convertDateToLocalizedString(activity
                                             .getActualCompletionDate()));
           eaForm.getPlanning().setProjectImplementationDelay(DateConversion.getFormattedPeriod(
         		  ActivityUtil.getProjectImplementationDelay(activity)));
@@ -1907,7 +1907,7 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 
 
 				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
-				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
+				fd.setTransactionDate(DateConversion.convertDateToLocalizedString(ampCompFund.getTransactionDate()));
 				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());

@@ -1804,7 +1804,7 @@ public class ExportActivityToPDF extends Action {
                         euInfo+= TranslatorWorker.translateText("Progress")+":"+ euActivity.getProgress() + "\n";
                     }
                     if(FeaturesUtil.isVisibleField("Costing Due Date") && euActivity.getDueDate()!=null){
-                        euInfo+= TranslatorWorker.translateText("Due Date")+":"+ DateConversion.ConvertDateToString(euActivity.getDueDate()) + "\n";
+                        euInfo+= TranslatorWorker.translateText("Due Date")+":"+ DateConversion.convertDateToLocalizedString(euActivity.getDueDate()) + "\n";
                     }
                     anotherInfo.addElement(new Paragraph(postprocessText(euInfo),plainFont));
                     costingInnerTable.addCell(anotherInfo);

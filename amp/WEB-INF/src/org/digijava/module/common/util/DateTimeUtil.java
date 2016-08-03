@@ -22,7 +22,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.Constants;
@@ -63,20 +65,24 @@ public class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public static String formatDate(Date date){
-		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
+	public static String formatDateLocalized(Date date, Locale locale){
 		if (date == null) return null;
-		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-		if (pattern==null){
-			pattern=Constants.CALENDAR_DATE_FORMAT;
+		String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		if (pattern == null){
+			pattern = Constants.CALENDAR_DATE_FORMAT;
 		}
-        pattern = pattern.replace('m', 'M');
-		SimpleDateFormat formater=new SimpleDateFormat(pattern);
-		String result = formater.format(date);
-
-		return result;
+		pattern = pattern.replace('m', 'M');
+		return new SimpleDateFormat(pattern, locale).format(date);
 	}
-
+	
+	public static String formatDateLocalized(Date date) {
+		return formatDateLocalized(date, Locale.forLanguageTag(TLSUtils.getEffectiveLangCode()));
+	}
+	
+	public static String formatDate(Date date) {
+		return formatDateLocalized(date, Locale.getDefault());
+	}
+	
 	/**
 	 * Formats date using the supplied date pattern
 	 * @param date

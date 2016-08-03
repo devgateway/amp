@@ -3,6 +3,12 @@
 ## {{ ansible_managed }}
 ## TODO: Use variables.
 
+if [ ! -f pom.xml ]
+then
+  echo "Not a maven project, `pom.xml` not found!"
+  exit 2
+fi
+
 mvn clean \
     generate-resources \
     process-resources \

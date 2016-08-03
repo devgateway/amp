@@ -21,3 +21,4 @@
 
 - name: Disable xdebug for composer
   lineinfile: dest=/etc/php.d/15-xdebug.ini state=present backrefs=yes regexp="^zend_extension=(.+)" line=";zend_extension=\1"
+  when: not httpd_php56__use_xdebug

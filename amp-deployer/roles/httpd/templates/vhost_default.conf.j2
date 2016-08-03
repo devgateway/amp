@@ -6,7 +6,6 @@
 #  - noindex: ad a /robots.txt instructing robots to not index the vhost.
 #  - docroot: directory in the guest OS for the vhost docroot.
 #  - php_devel: ad some PHP devel specific settings to the vhost.
-#  - php_xdebug: load the PHP xdebug extension.
 
 <VirtualHost *:80>
   ServerName {{ item.domain }}
@@ -60,15 +59,6 @@
 
     ## @see: http://php.net/manual/en/opcache.configuration.php#ini.opcache.revalidate-freq
     php_value opcache.revalidate_freq 1
-
-    ## @see: https://xdebug.org/docs/install
-    {% if item.php_xdebug | default(False) -%}
-    php_value zend_extension xdebug.so
-    {%- else -%}
-    #php_value zend_extension xdebug.so
-    {%- endif %}
-
-
   </IfModule>
   {%- endif %}
 

@@ -77,3 +77,9 @@ opcache.revalidate_freq = {{ httpd_php56__opcache_revalidate_freq }}
 ; If enabled, a fast shutdown sequence is used that doesn't free each allocated block.
 ; @see: https://secure.php.net/manual/en/opcache.configuration.php#ini.opcache.fast-shutdown
 opcache.fast_shutdown = {{ httpd_php56__opcache_fast_shutdown }}
+
+
+; Extra php.ini directives.
+{% for directive in httpd_php56__ini_extra_directives|default([]) -%}
+  {{ directive }}
+{% endfor %}

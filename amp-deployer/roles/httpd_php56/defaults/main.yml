@@ -1,5 +1,9 @@
 ---
 
+# Enable and cofingure Xdebug.
+# @see: https://xdebug.org/
+httpd_php56__use_xdebug: false
+
 # The default timezone used by all date/time functions.
 # @see: https://secure.php.net/manual/en/datetime.configuration.php#ini.date.timezone
 httpd_php56__date_timezone: 'America/New_York'
@@ -88,3 +92,12 @@ httpd_php56__drush_download_checksum: 5a81d4cefe59f083f7aa6dbcd511c0446557d022a7
 # The URL from where to download drupal console.
 httpd_php56__drupal_console_install: 1
 httpd_php56__drupal_console_download_url: https://drupalconsole.com/installer
+
+# A list of extra PHP.ini directives.
+#httpd_php56__ini_extra_directives:
+#  - ; @see http://www.xdebug.org/docs/all_settings
+#  - xdebug.idekey = "vagrant-xdebug"
+#  - xdebug.max_nesting_level = 300
+#  - xdebug.remote_enable = 1
+#  - xdebug.remote_port = 9000
+#  - xdebug.remote_connect_back = 1

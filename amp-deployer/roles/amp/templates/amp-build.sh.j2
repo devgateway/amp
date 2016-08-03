@@ -5,8 +5,8 @@
 
 if [ ! -f pom.xml ]
 then
-  echo "Not a maven project, `pom.xml` not found!"
-  exit 2
+  echo "Not a maven project, 'pom.xml' not found!"
+  exit 1
 fi
 
 mvn clean \

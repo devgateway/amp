@@ -33,14 +33,6 @@ public class NiTransactionContextMeasure<K> extends NiReportMeasure<CategAmountC
 		return engine.funding.stream().filter(cell -> criterion.apply(context, cell)).collect(Collectors.toList());
 	} 
 	
-	/**
-	 * trivial measures do not depend on anything
-	 */
-	@Override
-	public Set<String> getPrecursorMeasures() {
-		return Collections.emptySet();
-	}
-
 	@Override
 	public List<ReportRenderWarning> performCheck() {
 		return null;

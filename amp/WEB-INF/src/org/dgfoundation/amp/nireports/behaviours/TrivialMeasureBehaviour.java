@@ -2,7 +2,9 @@ package org.dgfoundation.amp.nireports.behaviours;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
@@ -10,7 +12,9 @@ import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NumberedCell;
+import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
@@ -32,17 +36,27 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 	
 	protected final TimeRange timeRange;
 	
+	/**
+	 * horizReductionResult = f(engine, doHorizResult)
+	 */
+	protected final BiFunction<NiReportsEngine, BigDecimal, BigDecimal> horizResultPostprocessor; 
+	
 	private final static TrivialMeasureBehaviour instance = new TrivialMeasureBehaviour();
 	private final static TrivialMeasureBehaviour totalsOnlyInstance = new TrivialMeasureBehaviour(TimeRange.NONE);
 	
-	protected TrivialMeasureBehaviour() {
+	public TrivialMeasureBehaviour() {
 		this(TimeRange.MONTH);
 	}
 	
-	protected TrivialMeasureBehaviour(TimeRange timeRange) {
-		this.timeRange = timeRange;
+	public TrivialMeasureBehaviour(TimeRange timeRange) {
+		this(timeRange, null);
 	}
 	
+	public TrivialMeasureBehaviour(TimeRange timeRange, BiFunction<NiReportsEngine, BigDecimal, BigDecimal> horizResultPostprocessor) {
+		this.timeRange = timeRange;
+		this.horizResultPostprocessor = horizResultPostprocessor;
+	}
+		
 	@Override
 	public TimeRange getTimeRange() {
 		return timeRange;
@@ -58,6 +72,19 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 		}
 		//System.err.format("reduced %d cells to %.2f: %s\n", cells.size(), res.doubleValue(), cells.toString());
 		return new NiAmountCell(res, precision);
+	}
+
+	@Override
+	public NiAmountCell horizontalReduce(List<NiCell> cells, NiReportsEngine context) {
+		NiAmountCell z = doHorizontalReduce(cells);
+		if (z != null && horizResultPostprocessor != null) {
+			// a postprocessing func has been specified -> run it over the output and return either the result of postprocessing or an enveloped (empty) in case formula fails
+			BigDecimal zz = horizResultPostprocessor.apply(context, z.amount);
+			if (zz == null)
+				return NiFormulaicAmountCell.FORMULAIC_ZERO;
+			return new NiAmountCell(zz, z.precisionSetting);
+		}
+		return z;
 	}
 
 	@Override
@@ -115,5 +142,16 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 	@Override
 	public boolean isTransactionLevelUndefinedSkipping() {
 		return true;
+	}
+	
+	/**
+	 * builds a horizResultPostprocessor which divides the result by the report-wide total total
+	 * @param measureName the measure by whose sum to divide 
+	 * @return
+	 */
+	public static BiFunction<NiReportsEngine, BigDecimal, BigDecimal> buildMeasureTotalDivider(String measureName) {
+		return (engine, rawValue) -> 
+			NiFormula.PERCENTAGE(NiFormula.CONSTANT(rawValue), NiFormula.CONSTANT(engine.fetchedMeasures.get(measureName).getSumOfValues()))
+				.evaluateOrUndefined(Collections.emptyMap(), null);
 	}
 }

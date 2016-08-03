@@ -8,6 +8,7 @@ import static java.util.stream.Collectors.toMap;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
@@ -23,8 +24,11 @@ import org.dgfoundation.amp.nireports.runtime.ReportDataVisitor;
 public class NiReportDataOutputter implements ReportDataVisitor<NiReportData> {
 		
 	final NiHeaderInfo headers;
-	public NiReportDataOutputter(NiHeaderInfo headers) {
+	final NiReportsEngine engine;
+	
+	public NiReportDataOutputter(NiHeaderInfo headers, NiReportsEngine engine) {
 		this.headers = headers;
+		this.engine = engine;
 	}
 		
 	/**
@@ -46,7 +50,7 @@ public class NiReportDataOutputter implements ReportDataVisitor<NiReportData> {
 	@Override
 	public NiReportData visitLeaf(ColumnReportData crd) {
 		//System.out.format("visiting leaf %s", crd);
-		Map<CellColumn, Map<Long, NiOutCell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(cellColumn.getBehaviour()), null);
+		Map<CellColumn, Map<Long, NiOutCell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(cellColumn.getBehaviour(), engine), null);
 		return new NiColumnReportData(contents, buildTrailCells(crd, contents), crd.splitter);
 	}
 

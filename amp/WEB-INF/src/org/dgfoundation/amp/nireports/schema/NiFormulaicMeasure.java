@@ -43,11 +43,6 @@ public class NiFormulaicMeasure extends NiReportMeasure<CategAmountCell> {
 			null,
 			formula);
 	}
-	
-	@Override
-	public Set<String> getPrecursorMeasures() {
-		return Collections.emptySet();
-	}
 
 	/**
 	 * fetches the cells using the fetcher of each of the dependencies. Each fetched cell is tagged (using {@link CategAmountCell#withMeta(String, Object)}) with its configured tag.

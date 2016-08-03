@@ -25,6 +25,14 @@ public interface NiFormula {
 	
 	public BigDecimal evaluate(Map<String, BigDecimal> datastore);
 	public Set<String> getDependencies();
+	
+	/**
+	 * evaluates an expression. If the result is undefined, returns a given value instead
+	 */
+	public default BigDecimal evaluateOrUndefined(Map<String, BigDecimal> datastore, BigDecimal undefValue) {
+		BigDecimal res = evaluate(datastore);
+		return isDefined(res) ? res : undefValue;
+	}
 		
 	public static NiFormula build(Function<Map<String, BigDecimal>, BigDecimal> func, String...deps) {
 		return new NiFormula() {			

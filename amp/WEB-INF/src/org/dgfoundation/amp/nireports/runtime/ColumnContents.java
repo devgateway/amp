@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports.runtime;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,8 +11,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.algo.Memoizer;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 
 import static org.dgfoundation.amp.algo.AmpCollections.remap;
 import static org.dgfoundation.amp.algo.AmpCollections.relist;
@@ -25,6 +29,7 @@ import static org.dgfoundation.amp.algo.AmpCollections.relist;
  */
 public class ColumnContents {
 	public Map<Long, List<NiCell>> data = new HashMap<>();
+	public Memoizer<BigDecimal> sum = new Memoizer<BigDecimal>(this::_getSumOfValues); 
 	
 	public ColumnContents(Map<Long, ? extends List<NiCell>> data) {
 		Objects.requireNonNull(data);
@@ -36,6 +41,22 @@ public class ColumnContents {
 		keysToDelete.removeAll(idsToKeep);
 		for(Long key:keysToDelete)
 			data.remove(key);
+	}
+	
+	/**
+	 * computed the sum of values. For internal use; please used the memoized {@link #getSumOfValues()} instead 
+	 * @return
+	 */
+	protected BigDecimal _getSumOfValues() {
+		return TrivialMeasureBehaviour.getInstance().doHorizontalReduce(getLinearData()).amount;	
+	}
+	
+	/**
+	 * returns the sum of values. Memoized
+	 * @return
+	 */
+	public BigDecimal getSumOfValues() {
+		return sum.get();
 	}
 	
 //	/**
@@ -74,11 +95,11 @@ public class ColumnContents {
 		return res;
 	}
 	
-	public Map<Long, NiOutCell> flatten(Behaviour<?> behaviour) {
+	public Map<Long, NiOutCell> flatten(Behaviour<?> behaviour, NiReportsEngine context) {
 		Map<Long, NiOutCell> res = new HashMap<>();
 		for(long id:data.keySet()) {
 			List<NiCell> cells = data.get(id);
-			NiOutCell z = behaviour.doHorizontalReduce(cells);
+			NiOutCell z = behaviour.horizontalReduce(cells, context);
 			res.put(id, z);
 		}
 		return res;

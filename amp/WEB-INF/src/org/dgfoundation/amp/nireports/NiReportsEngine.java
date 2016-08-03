@@ -94,8 +94,8 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	NiFilters filters;
 	
-	final Map<String, ColumnContents> fetchedColumns = new LinkedHashMap<>();
-	final Map<String, ColumnContents> fetchedMeasures = new LinkedHashMap<>();
+	public final Map<String, ColumnContents> fetchedColumns = new LinkedHashMap<>();
+	public final Map<String, ColumnContents> fetchedMeasures = new LinkedHashMap<>();
 	final SortedMap<Long, SortedSet<ReportWarning>> reportWarnings = new TreeMap<>();
 	
 	/**
@@ -131,9 +131,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	public LinkedHashSet<String> actualMeasures;
 
 	/**
-	 * all the measures which are used in the actually-run report, but should not appear in the final report (for example have been added as a dependency of a measure)
+	 * the measures which should be run in the report (e.g. ones requested by the spec + the ones requested by NiReportMeasure.getPrecursorMeasures[value = true])
 	 */
-	public LinkedHashSet<String> virtualMeasures;
+	public LinkedHashSet<String> reportRunMeasures;
 
 	/**
 	 * all the hierarchies which are used in the actually-run report. Some of them might have been added virtually (like for example as a dependency of a filter). <br />
@@ -297,7 +297,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	protected void flatten() {
-		this.reportOutput = this.rootReportData.accept(new NiReportDataOutputter(headers));
+		this.reportOutput = this.rootReportData.accept(new NiReportDataOutputter(headers, this));
 	}
 	
 	/**
@@ -363,7 +363,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	protected void cleanColumnsAccordingToFunding() {
 		//Set<Long> idsToKeep = funding.stream().map(cell -> cell.activityId).collect(Collectors.toSet());
 		Set<Long> idsToKeep = new HashSet<>();
-		fetchedMeasures.values().stream().map(cc -> cc.data.keySet()).forEach(ids -> idsToKeep.addAll(ids));
+		reportRunMeasures.stream().map(z -> fetchedMeasures.get(z).data.keySet()).forEach(ids -> idsToKeep.addAll(ids));
 		
 		fetchedColumns.forEach((colName, colContents) -> {
 			if (!colName.equals(FUNDING_COLUMN_NAME))
@@ -480,7 +480,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	/**
-	 * this function is a semihack - it belongs somewhere in {@link NiReportsSchema}. TODO: refactor when the engine is almost done and we have a clear picture of the necessities
+	 * splits the funding part by time dimension, depending on the spec (years, quarters, months)
 	 * @param fundingColumn
 	 * @return
 	 */
@@ -506,7 +506,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			res = res.verticallySplitByCategory(splitCriteria, fundingColumn.getParent());
 		
 		this.premeasureSplitDepth = splitCriterias.size();
-		List<String> relevantMeasures = actualMeasures.stream().filter(zz -> behaviours.containsKey(zz) && behaviours.get(zz).getTimeRange() != TimeRange.NONE).collect(Collectors.toList());
+		List<String> relevantMeasures = reportRunMeasures.stream().filter(zz -> behaviours.containsKey(zz) && behaviours.get(zz).getTimeRange() != TimeRange.NONE).collect(toList());
 		
 		VSplitStrategy restoreMeasures = VSplitStrategy.build(
 			cell -> new ComparableValue<String>(cell.getEntity().getName(), AmpCollections.indexOf(relevantMeasures, cell.getEntity().getName())),
@@ -537,10 +537,10 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	protected Column buildFundingColumn(String columnName, GroupColumn parentColumn, Function<GroupColumn, GroupColumn> postprocessor) {
 		GroupColumn fundingColumn = new GroupColumn(columnName, null, parentColumn, null);
-		fetchedMeasures.forEach((name, contents) -> {
+		reportRunMeasures.forEach(name -> {
 			NiReportMeasure<?> meas = schema.getMeasures().get(name);
 			if (meas.getBehaviour().getTimeRange() != TimeRange.NONE)
-				fundingColumn.addColumn(new CellColumn(name, contents, fundingColumn, meas, meas.getBehaviour(), new NiColSplitCell(PSEUDOCOLUMN_MEASURE, new ComparableValue<String>(name, name))));
+				fundingColumn.addColumn(new CellColumn(name, fetchedMeasures.get(name), fundingColumn, meas, meas.getBehaviour(), new NiColSplitCell(PSEUDOCOLUMN_MEASURE, new ComparableValue<String>(name, name))));
 		});
 		GroupColumn res = postprocessor.apply(fundingColumn);
 		return res;
@@ -556,7 +556,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		LinkedHashMap<NiReportedEntity<?>, ColumnContents> fetchedEntities = new LinkedHashMap<>();
 		
 		// step1: collect fetched entities in a unified map, measures after columns
-		fetchedMeasures.forEach((name, contents) -> fetchedEntities.put(schema.getMeasures().get(name), contents));
+		reportRunMeasures.forEach(name -> fetchedEntities.put(schema.getMeasures().get(name), fetchedMeasures.get(name)));
 		orderedColumns.forEach(name -> fetchedEntities.put(schema.getColumns().get(name), fetchedColumns.get(name)));
 		
 		//step2: collect/generate the totals cells
@@ -624,7 +624,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 
 	/**
-	 * <strong>HAS A SIDE EFFECT</strong>: fills {@link #actualMeasures} and {@link #virtualMeasures} <br />
+	 * <strong>HAS A SIDE EFFECT</strong>: fills {@link #actualMeasures} and {@link #requestedMeasures} <br />
 	 * returns a list of the support measures of the ones mandated by the report. This function will become an one-liner when NiReports will become the reference reporting engine
 	 * @return
 	 */
@@ -639,10 +639,18 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 				addReportWarning(new ReportWarning(String.format("measure \"%s\" not supported in NiReports", measName)));
 			}
 		}
-		Graph<NiReportMeasure<?>> measuresGraph = new Graph<>(supportedMeasures, meas -> meas.getPrecursorMeasures().stream().map(measName -> measures.get(measName)).collect(Collectors.toList()));
+		Graph<NiReportMeasure<?>> measuresGraph = new Graph<>(supportedMeasures, meas -> AmpCollections.relist(meas.getPrecursorMeasures().keySet(), measName -> measures.get(measName)));
 		LinkedHashSet<NiReportMeasure<?>> allRunMeasures = measuresGraph.sortTopologically();
-		this.actualMeasures = new LinkedHashSet<>(allRunMeasures.stream().map(z -> z.getName()).collect(Collectors.toList()));
-		this.virtualMeasures = new LinkedHashSet<>(actualMeasures.stream().filter(z -> specifiedMeasures.contains(z)).collect(Collectors.toList()));
+		
+		Set<String> measuresToRun = new HashSet<>(spec.getMeasureNames());
+		allRunMeasures.forEach(meas -> {
+			meas.getPrecursorMeasures().forEach((depMeas, toRun) -> {
+				if (toRun)
+					measuresToRun.add(depMeas);
+			});
+		});
+		this.actualMeasures = new LinkedHashSet<>(AmpCollections.relist(allRunMeasures, NiReportMeasure::getName));
+		this.reportRunMeasures = new LinkedHashSet<>(actualMeasures.stream().filter(measuresToRun::contains).collect(toList()));
 		return allRunMeasures;
 	}
 	

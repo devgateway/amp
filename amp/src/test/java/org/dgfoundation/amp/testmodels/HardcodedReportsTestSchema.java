@@ -36,6 +36,7 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.testmodels.dimensions.CategoriesTestDimension;
 import org.dgfoundation.amp.testmodels.dimensions.LocationsTestDimension;
@@ -166,6 +167,12 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, null, NiFormula.PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS), false);
 		addFormulaComputedMeasure(MeasureConstants.AVERAGE_DISBURSEMENT_RATE, null, NiFormula.PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS), true);
 		addFormulaComputedMeasure(MeasureConstants.CUMULATIVE_EXECUTION_RATE, null, NiFormula.PERCENTAGE(MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_COMMITMENT), false);
+	
+		addMeasure(new TrivialTestMeasure(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", false, false,
+				byMeasureDividingBehaviour(TimeRange.NONE, MeasureConstants.ACTUAL_DISBURSEMENTS), singletonMap(MeasureConstants.ACTUAL_DISBURSEMENTS, false)));
+
+		addMeasure(new TrivialTestMeasure(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false, false,
+				byMeasureDividingBehaviour(TimeRange.NONE, MeasureConstants.ACTUAL_COMMITMENTS), singletonMap(MeasureConstants.ACTUAL_COMMITMENTS, false)));
 	}
 
 	@Override

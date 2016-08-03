@@ -43,14 +43,6 @@ public abstract class NiPredicateTransactionMeasure extends NiReportMeasure<Cate
 		}		
 	}
 	
-	/**
-	 * trivial measures do not depend on anything
-	 */
-	@Override
-	public Set<String> getPrecursorMeasures() {
-		return Collections.emptySet();
-	}
-
 	@Override
 	public List<ReportRenderWarning> performCheck() {
 		return null;

@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
@@ -52,9 +54,14 @@ public class AmpTrivialMeasure extends NiTransactionMeasure {
 		else 
 			return directed ? new DirectedMeasureBehaviour() : TrivialMeasureBehaviour.getInstance();
 	}
-	
+
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, 
 			Predicate<CategAmountCell> or, boolean ignoreFilters, Behaviour<NiAmountCell> overridingBehaviour) {
+		this(measureName, transactionType, adjustmentTypeName, directed, or, ignoreFilters, overridingBehaviour, Collections.emptyMap());
+	}
+	
+	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, 
+			Predicate<CategAmountCell> or, boolean ignoreFilters, Behaviour<NiAmountCell> overridingBehaviour, Map<String, Boolean> precursors) {
 
 		super(measureName, 
 				cac -> 
@@ -65,7 +72,8 @@ public class AmpTrivialMeasure extends NiTransactionMeasure {
 						),
 					getBehaviour(overridingBehaviour, directed),
 				AmpReportsSchema.measureDescriptions.get(measureName),
-				ignoreFilters
+				ignoreFilters,
+				precursors
 			);
 	}
 	

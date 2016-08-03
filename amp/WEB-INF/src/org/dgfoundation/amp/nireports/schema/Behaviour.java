@@ -81,9 +81,7 @@ public interface Behaviour<V extends NiOutCell> {
 		return new ColumnContents(z);
 	}
 	
-	public default NiOutCell horizontalReduce(List<NiCell> cells) {
-		if (cells == null || cells.isEmpty())
-			return getZeroCell();
+	public default NiOutCell horizontalReduce(List<NiCell> cells, NiReportsEngine context) {
 		return doHorizontalReduce(cells);
 	}
 	

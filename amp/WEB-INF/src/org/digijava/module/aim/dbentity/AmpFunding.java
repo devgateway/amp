@@ -118,6 +118,10 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private AmpRole sourceRole;
 	@Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", importable=true)
 	private Date fundingClassificationDate;
+	@Interchangeable(fieldTitle="Effective Funding Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Effective Funding Date", importable=true)
+	private Date effectiveFundingDate;
+	@Interchangeable(fieldTitle="Funding Closing Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Closing Date", importable=true)
+	private Date fundingClosingDate;
 	
 	@Interchangeable(fieldTitle="Ratification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date", importable=true)
 	private Date ratificationDate;	
@@ -400,7 +404,23 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	public void setFundingClassificationDate(Date fundingClassificationDate) {
 		this.fundingClassificationDate = fundingClassificationDate;
 	}
-	
+
+	public Date getEffectiveFundingDate() {
+		return effectiveFundingDate;
+	}
+
+	public void setEffectiveFundingDate(Date effectiveFundingDate) {
+		this.effectiveFundingDate = effectiveFundingDate;
+	}
+
+	public Date getFundingClosingDate() {
+		return fundingClosingDate;
+	}
+
+	public void setFundingClosingDate(Date fundingClosingDate) {
+		this.fundingClosingDate = fundingClosingDate;
+	}
+
 	@java.lang.SuppressWarnings("all")
 	public Long getAmpFundingId() {
 		return this.ampFundingId;

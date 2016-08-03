@@ -240,6 +240,14 @@ implements AmpRequiredComponentContainer{
 	        //date.getDate().setRequired(true);
 			add(date);
 
+		final PropertyModel<Date> effectiveFundingDateModel = new PropertyModel<>(model, "effectiveFundingDate");
+		AmpDatePickerFieldPanel effectiveFundingDate = new AmpDatePickerFieldPanel("effectiveFundingDate", effectiveFundingDateModel, "Effective Funding Date");
+		add(effectiveFundingDate);
+
+		final PropertyModel<Date> fundingClosingDateModel = new PropertyModel<>(model, "fundingClosingDate");
+		AmpDatePickerFieldPanel fundingClosingDate = new AmpDatePickerFieldPanel("fundingClosingDate", fundingClosingDateModel, "Funding Closing Date");
+		add(fundingClosingDate);
+
 		if (model != null && model.getObject() != null && 
 			model.getObject().getFundingDetails() != null &&
 			model.getObject().getFundingDetails().size() > 0)

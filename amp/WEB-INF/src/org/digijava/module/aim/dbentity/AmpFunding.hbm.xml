@@ -91,6 +91,9 @@
 		
 		<many-to-one name="agreement" column="agreement"
 			class="org.digijava.module.aim.dbentity.AmpAgreement" cascade="none" />
+
+		<property name="effectiveFundingDate" column="effective_funding_date" type="java.util.Date" />
+		<property name="fundingClosingDate" column="funding_closing_date" type="java.util.Date" />
 			
 	</class>
 </hibernate-mapping>

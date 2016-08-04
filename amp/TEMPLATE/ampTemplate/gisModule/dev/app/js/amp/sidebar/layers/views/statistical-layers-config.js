@@ -8,7 +8,7 @@ var layerTypes = {
 };
 
 var accessTypes = {
-		'NO_TYPE': 0,
+		'PUBLIC_STORED_IN_BROWSER': 0,
 		'PRIVATE': 1,
 		'PUBLIC': 2,
 		'STANDARD': 3,
@@ -24,7 +24,7 @@ module.exports = {
 		filterLayers:function(layers){	
 			
 			return layers.models.filter(function(layer){				
-				return layer.attributes.type === layerTypes.JOIN_BOUNDARIES && layer.attributes.accessTypeId == accessTypes.PRIVATE;
+				return layer.attributes.type === layerTypes.JOIN_BOUNDARIES && (layer.attributes.accessTypeId === accessTypes.PRIVATE || layer.attributes.accessTypeId === accessTypes.PUBLIC_STORED_IN_BROWSER);
 				
 			});				
 		}

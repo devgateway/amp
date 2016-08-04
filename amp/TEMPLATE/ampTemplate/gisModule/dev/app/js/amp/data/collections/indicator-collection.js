@@ -47,9 +47,23 @@ module.exports = Backbone.Collection
 
     return deferred;
   },
-
+  loadFromLocalStorage: function(data){
+	  var layersString = localStorage.getItem('AMP_INDICATOR_LAYERS') || '[]';
+	  var layers = [];
+	  try{
+		  layers = JSON.parse(layersString);
+	  }catch(e){
+		  console.error(e);
+	  }
+	  if(this.url === '/rest/gis/indicators'){
+		  layers.forEach(function(localLayer){			  
+			  data.push(localLayer);
+		  });
+	  }	  
+  },
   parse: function(data) {	
     var self = this;
+    self.loadFromLocalStorage(data);
     var parsedData = data;
     parsedData = _.filter(data, function(layer) {
       switch (layer.type) {

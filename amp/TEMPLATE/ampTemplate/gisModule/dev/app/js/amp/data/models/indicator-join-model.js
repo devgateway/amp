@@ -62,7 +62,29 @@ module.exports = Backbone.Model
       $('#map-loading').hide();
     });
   },
-
+  fetch: function(){
+	  var deferred = new jQuery.Deferred();
+	  if(this.attributes.isStoredInLocalStorage === true){
+		  var layers = this.getLayers();
+		  var layer = _.findWhere(layers,{id: this.attributes.id});
+		  if(!_.isUndefined(layer)){
+			  deferred.resolve(layer);
+		  }		  
+	  }else{
+		  return Backbone.Model.prototype.fetch.call(this) ;
+	  }
+	  return deferred.promise();	  
+  },
+  getLayers: function(){
+		var layersString = localStorage.getItem('AMP_INDICATOR_LAYERS') || '[]';
+		var layers = [];
+		try{
+			layers = JSON.parse(layersString);
+	    }catch(e){
+	        console.error(e);
+	    }
+	    return layers;			
+  },  
   updatePaletteRange: function() {
     var min = +Infinity,
         max = -Infinity;

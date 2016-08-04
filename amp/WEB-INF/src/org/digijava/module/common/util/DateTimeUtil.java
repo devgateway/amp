@@ -20,6 +20,7 @@ package org.digijava.module.common.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -59,7 +60,31 @@ public class DateTimeUtil {
         return date;
     }
 
-
+    public static String getGlobalPattern() {
+    	String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		if (pattern == null){
+			pattern = Constants.CALENDAR_DATE_FORMAT;
+		}
+		pattern = pattern.replace('m', 'M');
+		return pattern;
+    }
+    
+    public static SimpleDateFormat getGlobalSimpleDateFormatter() {
+		return new SimpleDateFormat(getGlobalPattern(), Locale.forLanguageTag(TLSUtils.getEffectiveLangCode()));
+    }
+    
+    public static SimpleDateFormat getGlobalSimpleDateFormatter(Locale locale) {
+		return new SimpleDateFormat(getGlobalPattern(), locale);
+    }
+    
+    public static Locale getLocale() {
+    	return Locale.forLanguageTag(TLSUtils.getEffectiveLangCode());
+    }
+    
+    public static DateTimeFormatter getGlobalDateTimeFormatter() {
+    	return DateTimeFormatter.ofPattern(getGlobalPattern()).withLocale(getLocale());
+    }
+    
 	/**
 	 * Formats date using pattern from global settings
 	 * @param date
@@ -67,16 +92,11 @@ public class DateTimeUtil {
 	 */
 	public static String formatDateLocalized(Date date, Locale locale){
 		if (date == null) return null;
-		String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-		if (pattern == null){
-			pattern = Constants.CALENDAR_DATE_FORMAT;
-		}
-		pattern = pattern.replace('m', 'M');
-		return new SimpleDateFormat(pattern, locale).format(date);
+		return getGlobalSimpleDateFormatter(locale).format(date);
 	}
 	
 	public static String formatDateLocalized(Date date) {
-		return formatDateLocalized(date, Locale.forLanguageTag(TLSUtils.getEffectiveLangCode()));
+		return formatDateLocalized(date, getLocale());
 	}
 	
 	public static String formatDate(Date date) {

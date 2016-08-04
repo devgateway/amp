@@ -7,6 +7,7 @@ import mondrian.util.Pair;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * a @link {@link ReportCell} containing a date
@@ -42,7 +43,7 @@ public final class MondrianDateCell extends ReportCell {
 		if (moOut == null) return new Pair<>(null, "");
 		try {
 			Date date = new SimpleDateFormat(MoConstants.DATE_FORMAT).parse(moOut);
-			return new Pair<>(date, new SimpleDateFormat(MoConstants.DATE_DISPLAY_FORMAT).format(date));
+			return new Pair<>(date, DateTimeUtil.getGlobalSimpleDateFormatter().format(date));
 		}
 		catch(Exception e) {
 			return new Pair<>(DUMMY_DATE, moOut); // could not parse date - at least save the displayed value
@@ -58,7 +59,7 @@ public final class MondrianDateCell extends ReportCell {
 		if (repOut == null || repOut.trim().isEmpty() || repOut.equals("#null")) repOut = null;
 		if (repOut == null) return DUMMY_DATE;
 		try {
-			return new SimpleDateFormat(MoConstants.DATE_DISPLAY_FORMAT).parse(repOut);
+			return DateTimeUtil.getGlobalSimpleDateFormatter().parse(repOut);
 		}
 		catch(Exception e) {
 			return DUMMY_DATE;

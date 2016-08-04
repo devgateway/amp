@@ -28,6 +28,7 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * a {@link CellVisitor} used to transform instances of {@link NiOutCell} into instances of {@link ReportCell}
@@ -49,7 +50,7 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 		this.amountsUnits = (settings != null && settings.getUnitsOption() != null) ? settings.getUnitsOption() : AmountsUnits.AMOUNTS_OPTION_UNITS;
 		this.unitsDivider = BigDecimal.valueOf(this.amountsUnits.divider);
 		this.outputSettings = outputSettings;
-		this.dateFormatter = DateTimeFormatter.ofPattern(dateDisplayFormat);
+		this.dateFormatter = DateTimeFormatter.ofPattern(dateDisplayFormat).withLocale(DateTimeUtil.getLocale()); 
 		this.translator = translator;
 	}
 

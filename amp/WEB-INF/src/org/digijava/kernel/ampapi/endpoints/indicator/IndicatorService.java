@@ -72,15 +72,15 @@ public class IndicatorService {
         return indicatorJson;
     }
 
-    public static JsonBean getIndicatorByName(String name) {
+    public static JsonBean checkName(String name) {
 
         AmpIndicatorLayer indicatorLayer = DynLocationManagerUtil.getIndicatorLayerByName(name);
         JsonBean result = new JsonBean();
         if (indicatorLayer!=null) {
-            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
-            return ApiError.toError(IndicatorErrors.EXISTING_NAME);
+            result.set(IndicatorEPConstants.RESULT, true);
+            return result;
         } else {
-            result.set(IndicatorEPConstants.RESULT, IndicatorEPConstants.AVAIBLE);
+            result.set(IndicatorEPConstants.RESULT, false);
             return result;
         }
 
@@ -136,17 +136,20 @@ public class IndicatorService {
                 result.set(IndicatorEPConstants.RESULT, IndicatorEPConstants.SAVED);
             }
 
-            Session sess = PersistenceManager.getSession();
-            sess.saveOrUpdate(indLayer);
-            sess.flush();
+            if (indLayer.getAccessType() != IndicatorAccessType.TEMPORARY) {
 
-            updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.NAME, updater.getContentTranslator().getTranslations());
-            updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.DESCRIPTION, updater.getContentTranslator().getTranslations());
-            updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.UNIT, updater.getContentTranslator().getTranslations());
+                Session sess = PersistenceManager.getSession();
+                sess.saveOrUpdate(indLayer);
+                sess.flush();
 
-            JsonBean indicatorJson = IndicatorUtils.buildIndicatorLayerJson(indLayer);
+                updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.NAME, updater.getContentTranslator().getTranslations());
+                updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.DESCRIPTION, updater.getContentTranslator().getTranslations());
+                updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.UNIT, updater.getContentTranslator().getTranslations());
 
-            result.set(IndicatorEPConstants.DATA, indicatorJson);
+                result.set(IndicatorEPConstants.DATA, IndicatorUtils.buildIndicatorLayerJson(indLayer));
+            } else {
+                result.set(IndicatorEPConstants.DATA, IndicatorUtils.buildSerializedIndicatorLayerJson(indLayer, indicator));
+            }
         } catch (Exception e) {
             logger.error("saveIndicator: ", e);
             throw new RuntimeException(e);

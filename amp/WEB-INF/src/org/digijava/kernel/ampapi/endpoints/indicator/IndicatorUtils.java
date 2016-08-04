@@ -108,6 +108,47 @@ public class IndicatorUtils {
         return indicatorJson;
     }
 
+
+    public static JsonBean buildSerializedIndicatorLayerJson(AmpIndicatorLayer indicator, JsonBean indicatorJson) {
+
+        indicatorJson.set(IndicatorEPConstants.ID, (long) System.identityHashCode(indicator));
+        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getValue());
+        indicatorJson.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
+
+        if (indicator.getColorRamp() != null) {
+            int i=0;
+            Collection<JsonBean> colorRampList = new ArrayList<JsonBean>();
+            for (AmpIndicatorColor indicatorColor: indicator.getColorRamp()){
+                JsonBean colorRamp = new JsonBean();
+                colorRamp.set("color",indicatorColor.getColor());
+                colorRamp.set("order",indicatorColor.getPayload());
+                colorRampList.add(colorRamp);
+            }
+            indicatorJson.set(IndicatorEPConstants.COLOR_RAMP, colorRampList);
+        }
+
+        if (indicator.getIndicatorValues() != null) {
+            Collection<JsonBean> indicatorValues = new ArrayList<JsonBean>();
+            for (AmpLocationIndicatorValue indicatorValue: indicator.getIndicatorValues()){
+                indicatorValues.add(getLocationIndicatorValueBean(indicatorValue));
+            }
+            indicatorJson.set(IndicatorEPConstants.VALUES, indicatorValues);
+        }
+
+        indicatorJson.set(IndicatorEPConstants.NUMBER_OF_IMPORTED_RECORDS, (indicator.getIndicatorValues()!=null ? indicator.getIndicatorValues().size() : 0));
+
+        return indicatorJson;
+    }
+
+    public static JsonBean getLocationIndicatorValueBean(AmpLocationIndicatorValue indicatorValue) {
+        JsonBean indicatorValueJson = new JsonBean();
+        indicatorValueJson.set(IndicatorEPConstants.VALUE, indicatorValue.getValue());
+        indicatorValueJson.set(IndicatorEPConstants.GEO_CODE_ID, indicatorValue.getLocation().getGeoCode());
+        indicatorValueJson.set(IndicatorEPConstants.NAME, indicatorValue.getLocation().getName());
+
+        return indicatorValueJson;
+    }
+
     public static boolean isAdmin() {
         return "yes".equals(TLSUtils.getRequest().getSession().getAttribute("ampAdmin"));
     }

@@ -11,7 +11,6 @@ public class IndicatorEPConstants {
     public static final String IMPORTED = "IMPORTED";
     public static final String SAVED = "SAVED";
     public static final String DELETED = "DELETED";
-    public static final String AVAIBLE = "AVAIBLE";
 
     public static final String DEFAULT_INDICATOR_ORDER_FIELD = "createdOn";
 
@@ -22,9 +21,11 @@ public class IndicatorEPConstants {
     public static final long PAYLOAD_INDEX = 1; // indicate
 
     public static final String RESULT = "result";
+    public static final String VALUES = "values";
     public static final String ID = "id";
     public static final String LABEL = "label";
     public static final String VALUE = "value";
+    public static final String GEO_CODE_ID = "geoId";
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";
     public static final String NUMBER_OF_CLASSES = "numberOfClasses";

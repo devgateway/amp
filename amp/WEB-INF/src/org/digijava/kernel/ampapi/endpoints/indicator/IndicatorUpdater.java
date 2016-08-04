@@ -3,19 +3,15 @@
  */
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
+import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -23,6 +19,13 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Creates a new indicator or updates an existing one
@@ -69,7 +72,7 @@ public class IndicatorUpdater {
             indicatorLayer.setCreatedBy(TeamUtil.getCurrentAmpTeamMember());
         }
         indicatorLayer.setUpdatedOn(new Date());
-        indicatorLayer.setAccessType( (indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID)!=null ? IndicatorAccessType.getValueFromLong(Long.valueOf(indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID))) :IndicatorAccessType.NO_TYPE));
+        indicatorLayer.setAccessType( (indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID)!=null ? IndicatorAccessType.getValueFromLong(Long.valueOf(indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID))) :IndicatorAccessType.TEMPORARY));
         setAdmLevel(indicatorLayer);
 
         if (indicator.get(IndicatorEPConstants.COLOR_RAMP_ID)!=null) {
@@ -96,6 +99,22 @@ public class IndicatorUpdater {
                 teams.add(indicatorWs);
             }
             indicatorLayer.setSharedWorkspaces(teams);
+        }
+
+        if (indicator.get(IndicatorEPConstants.VALUES)!=null) {
+            Set<AmpLocationIndicatorValue> locationIndicatorValues = new HashSet<AmpLocationIndicatorValue>();
+            List<LinkedHashMap<String, Object>> locationValues =  EndpointUtils.getSingleValue(indicator, IndicatorEPConstants.VALUES, Collections.emptyList());
+            for (int i = 0; i < locationValues.size(); i++) {
+                AmpLocationIndicatorValue locationIndicatorValue = new AmpLocationIndicatorValue();
+                LinkedHashMap<String, Object> location = locationValues.get(i);
+
+                AmpCategoryValueLocations locationObject = DynLocationManagerUtil.getLocationById(new Long(String.valueOf(location.get(IndicatorEPConstants.ID))), indicatorLayer.getAdmLevel());
+                locationIndicatorValue.setLocation(locationObject);
+                locationIndicatorValue.setIndicator(indicatorLayer);
+                locationIndicatorValue.setValue(Double.parseDouble(String.valueOf(location.get(IndicatorEPConstants.VALUE))));
+                locationIndicatorValues.add(locationIndicatorValue);
+            }
+            indicatorLayer.setIndicatorValues(locationIndicatorValues);
         }
 
         return indicatorLayer;

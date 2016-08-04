@@ -1273,6 +1273,20 @@ public class DynLocationManagerUtil {
 		return qry.list(); 
  }
 
+    public static List <AmpLocationIndicatorValue> getLocationIndicatorValueByLocationAndIndicatorName (AmpCategoryValueLocations location,String name) {
+        Session dbSession = PersistenceManager.getSession();
+        String queryString = "select value from "
+                + AmpLocationIndicatorValue.class.getName()
+                + " value where value.location.id=:id "
+                + " and value.indicator.name=:name ";
+
+        Query qry = dbSession.createQuery(queryString);
+        qry.setCacheable(true);
+        qry.setLong("id", location.getId());
+        qry.setString("name", name);
+        return qry.list();
+    }
+
  public static List <AmpLocationIndicatorValue> getLocationIndicatorValueByLocationAndIndicator (AmpCategoryValueLocations location,AmpIndicatorLayer indicator) {
 	 Session dbSession = PersistenceManager.getSession();
 		String queryString = "select value from "

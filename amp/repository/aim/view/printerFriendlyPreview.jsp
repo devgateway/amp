@@ -1365,8 +1365,8 @@ body {background:none;}
 																			<logic:notEmpty name="funding" property="financingInstrument">
 																				<tr>
                                                                                 	<td align="left" width="339">
-                                                                                  		<a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
-                                                                               	  		<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>
+                                                                                  		<a title="<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>">
+                                                                               	  		<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>
 																				  		</a>
 																				  	</td>
                                                                                 	<td width="10">:</td>
@@ -1431,7 +1431,7 @@ body {background:none;}
 																				<logic:notEmpty name="funding" property="financingInstrument">
 																					<tr>
                                                                                 		<td align="left" width="339">
-                                                                                  			<a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
+                                                                                  			<a title="<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>">
                                                                                  	 			<digi:trn key="aim:credit_donation">Credit/Donation</digi:trn>
 																				  			</a>
 																				  		</td>

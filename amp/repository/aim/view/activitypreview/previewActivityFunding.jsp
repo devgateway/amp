@@ -103,8 +103,8 @@
 																	<logic:notEmpty name="funding" property="financingInstrument">
 																	<tr>
 																		<td align="left" width="150"><a
-																			title='<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>'>
-																		<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>
+																			title='<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>'>
+																		<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
 																		<td align="left">

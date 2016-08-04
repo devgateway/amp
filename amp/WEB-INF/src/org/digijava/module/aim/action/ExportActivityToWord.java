@@ -2342,7 +2342,7 @@ public class ExportActivityToWord extends Action {
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence",
                                 eshDonorInfo, "Type of Assistance", funding.getTypeOfAssistance(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument",
-                                eshDonorInfo, "Financial Instrument", funding.getFinancingInstrument(), true);
+                                eshDonorInfo, "Financing Instrument", funding.getFinancingInstrument(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status",
                                 eshDonorInfo, "Funding Status", funding.getFundingStatus(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment",

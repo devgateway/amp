@@ -1342,7 +1342,7 @@ public class ExportActivityToPDF extends Action {
 
 
                 columnName=TranslatorWorker.translateText("Computation");
-                createGeneralInfoRow(mainLayout,columnName,identification.getTeam().getComputation() ?
+                createGeneralInfoRow(mainLayout,columnName, Boolean.TRUE.equals(identification.getTeam().getComputation()) ?
                         TranslatorWorker.translateText("Yes") :
                         TranslatorWorker.translateText("No"));
 
@@ -2757,7 +2757,7 @@ public class ExportActivityToPDF extends Action {
                             addNewInfoCell(fundingTable, "Organization Role", TranslatorWorker.translateText(funding.getSourceRole()));
                             //DISCREPANCY: in Word export, ToA and FI are checked via the FM; here, they aren't
                             addNewInfoCell(fundingTable, "Type of Assistance", funding.getTypeOfAssistance());
-                            addNewInfoCell(fundingTable, "Financial Instrument", funding.getFinancingInstrument());
+                            addNewInfoCell(fundingTable, "Financing Instrument", funding.getFinancingInstrument());
 
                             //Funding status
                             if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status"))

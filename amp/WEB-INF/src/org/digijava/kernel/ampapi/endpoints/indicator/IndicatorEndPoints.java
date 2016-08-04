@@ -113,10 +113,10 @@ public class IndicatorEndPoints {
     }
 
     @GET
-    @Path("/indicator-layer/check-name/{name}")
+    @Path("/indicator-layer/check-name")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "checkName", ui = false)
-    public JsonBean checkName(@PathParam("name") String name) {
+    public JsonBean checkName(@QueryParam("name") String name) {
         return IndicatorService.checkName(name);
     }
     /**

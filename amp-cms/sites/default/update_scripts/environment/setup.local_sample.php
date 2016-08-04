@@ -63,8 +63,8 @@ variable_del('file_temporary_path');
 variable_set('helpergeneric_cleanup_ui_force', FALSE);
 
 // Reset the hostname for the AMP API rest endpoint
-// variable_set('restclient_hostname', 'http://amp210-local.dev/rest');
-// variable_set('restclient_hostname', 'http://amp211-local.dev/rest');
+variable_set('restclient_hostname', 'http://localhost:8080/rest');
+variable_set('helpergeneric_amp_hostname', 'http://amp212.local');
 
 // Provide a list of modules to be disabled and uninstalled.
 $modules = array(

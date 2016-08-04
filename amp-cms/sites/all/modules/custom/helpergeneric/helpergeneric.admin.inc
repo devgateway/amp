@@ -70,13 +70,12 @@ function helpergeneric_api_settings_form($form, &$form_state) {
     '#collapsed' => FALSE,
   );
 
-  $example_url = helpergeneric_detect_amp_baseurl();
   $form['hostname']['restclient_hostname'] = array(
     '#type' => 'textfield',
     '#title' => t('Hostname'),
-    '#description' => t('The hostname for the server with no trailing slash. Ex: ') . $example_url . '/rest',
+    '#description' => t('The hostname for the server with no trailing slash. Ex: http://localhost:8080/rest'),
     '#size' => 40,
-    '#default_value' => variable_get('restclient_hostname', 'http://localhost:80/rest'),
+    '#default_value' => variable_get('restclient_hostname', 'http://localhost:8080/rest'),
   );
 
   // Provide an alternative link for links to AMP.
@@ -100,7 +99,7 @@ function helpergeneric_api_settings_form($form, &$form_state) {
   $form['hostname']['wrapper']['helpergeneric_amp_hostname'] = array(
     '#type' => 'textfield',
     '#title' => t('AMP Hostname'),
-    '#description' => t('The hostname for the AMP environment, without a trailing slash. Ex: ') . $example_url,
+    '#description' => t('The hostname for the AMP environment, without a trailing slash. Ex: http://amp212.local'),
     '#size' => 40,
     '#default_value' => $amp_hostname,
   );
@@ -439,10 +438,11 @@ function helpergeneric_language_settings_form($form, &$form_state) {
 
   $options = array();
   $form['weight'] = array('#tree' => TRUE);
+  $enabled_languages = array();
   foreach ($languages as $langcode => $language) {
     $options[$langcode] = '';
     if ($language->enabled) {
-      $enabled[] = $langcode;
+      $enabled_languages[] = $langcode;
     }
     $form['weight'][$langcode] = array(
       '#type' => 'weight',
@@ -460,7 +460,7 @@ function helpergeneric_language_settings_form($form, &$form_state) {
     '#title' => t('Enabled languages'),
     '#title_display' => 'invisible',
     '#options' => $options,
-    '#default_value' => $enabled,
+    '#default_value' => $enabled_languages,
   );
   $form['site_default'] = array(
     '#type' => 'radios',
@@ -492,6 +492,8 @@ function helpergeneric_language_settings_form($form, &$form_state) {
 function theme_helpergeneric_language_settings_form($variables) {
   $form = $variables['form'];
   $default = language_default();
+
+  $rows = array();
   foreach ($form['name'] as $key => $element) {
     // Do not take form control structures.
     if (is_array($element) && element_child($key)) {

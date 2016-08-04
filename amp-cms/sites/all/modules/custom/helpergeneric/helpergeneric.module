@@ -4,8 +4,8 @@
  * Define generic settings.
  */
 
-module_load_include('inc', 'helpergeneric', 'helpergeneric.field');
-module_load_include('inc', 'helpergeneric', 'helpergeneric.forms');
+include_once 'helpergeneric.field.inc';
+include_once 'helpergeneric.forms.inc';
 
 /**
  * Implements hook_menu().

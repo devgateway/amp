@@ -5,8 +5,8 @@
  */
 
 // Include formatter specific code.
-module_load_include('inc', 'contentblock', 'contentblock.admin_cbreference');
-module_load_include('inc', 'contentblock', 'contentblock.field');
+include_once 'contentblock.admin_cbreference.inc';
+include_once 'contentblock.field.inc';
 
 /**
  * Define administrative URLs.

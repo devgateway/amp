@@ -465,15 +465,23 @@ function submitForm(action){
 																						<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
 						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
 						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
-																						<c:set var="translation">
-																							<digi:trn>Get report in Excel format</digi:trn>&nbsp;
-																						</c:set>
-																						<a style="cursor:pointer"
-																							onclick="$.downloadReport(${report.ampReportId}, 'xls')" 
-																							title="${translation}">
-																							<digi:img hspace="0" vspace="0" height="16"	width="16" 
-																							src="/TEMPLATE/ampTemplate/images/icons/xls.gif" border="0" />
-																						</a>
+																						
+																						<c:set var="hideExportExcelSetting" scope="page" value="false"/>
+																						<%if(FeaturesUtil.isVisibleFeature("Hide Editable Export Formats")){ %> 
+																							<c:set var="hideExportExcelSetting" scope="page" value="true"/>
+																						<%}%>
+																						
+																						<c:if test="${(sessionScope.currentMember != null) || (not hideExportExcelSetting)}">
+																							<c:set var="translation">
+																								<digi:trn>Get report in Excel format</digi:trn>&nbsp;
+																							</c:set>
+																							<a style="cursor:pointer"
+																								onclick="$.downloadReport(${report.ampReportId}, 'xls')" 
+																								title="${translation}">
+																								<digi:img hspace="0" vspace="0" height="16"	width="16" 
+																								src="/TEMPLATE/ampTemplate/images/icons/xls.gif" border="0" />
+																							</a>
+																						</c:if>
 																						&nbsp;
 																						<c:set var="translation">
 																							<digi:trn>Get report in PDF format</digi:trn>&nbsp;

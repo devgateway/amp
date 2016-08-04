@@ -440,8 +440,7 @@ public class SettingsUtils {
 				"hide-editable-export-formats-public-view",
 				GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW,
 				new SettingOptions.Option(
-						FeaturesUtil
-								.getGlobalSettingValue(GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW))));
+						String.valueOf(FeaturesUtil.isVisibleFeature("Hide Editable Export Formats")))));
 		settings.add(new SettingOptions(
 				"download-map-selector",
 				GisConstants.DOWNLOAD_MAP_SELECTOR,

@@ -828,7 +828,7 @@ public class DynLocationManagerUtil {
 	 */
 	public static Set<AmpCategoryValueLocations> getLocationsByLayer(AmpCategoryValue cvLayer) {
 		TreeSet<AmpCategoryValueLocations> returnSet = new TreeSet<AmpCategoryValueLocations>(
-				alphabeticalLocComp);
+                alphabeticalLocAndIdComp);
 		try {
 			Session dbSession = PersistenceManager.getSession();
 			String queryString = "select loc from "
@@ -941,6 +941,19 @@ public class DynLocationManagerUtil {
 			return o1.getName().compareTo(o2.getName());
 		}
 	};
+
+    public static Comparator<AmpCategoryValueLocations> alphabeticalLocAndIdComp = new Comparator<AmpCategoryValueLocations>() {
+        public int compare(AmpCategoryValueLocations o1, AmpCategoryValueLocations o2) {
+
+            int result = o1.getName().compareTo(o2.getName());
+            if ( result != 0 ) { return result; }
+
+            result = Long.compare( o1.getId(), o2.getId());
+            if ( result != 0 ) { return result;}
+
+            return result;
+        }
+    };
 
     public static ErrorCode importExcelFile(InputStream inputStream, Option option) throws AimException {
         try {

@@ -1,7 +1,7 @@
 ---
 # Default vagrant settings file.
 #
-# You can copy this file to "Vagrantsettings.local.yml" and configure it.
+# You can copy this file to "VagrantSettings.local.yml" and configure it.
 #
 # For more information:
 # @see https://github.com/devgateway/happy-deployer
@@ -53,7 +53,10 @@ httpd__User_vhosts: vagrant
 httpd__Group_vhosts: users
 
 # Override default PHP settings.
-httpd_php56__date_timezone: 'Europe/Bucharest'
+# @see: https://secure.php.net/manual/en/datetime.configuration.php#ini.date.timezone
+#httpd_php56__date_timezone: 'America/New_York'
+#httpd_php56__date_timezone: 'Europe/Amsterdam'
+#httpd_php56__date_timezone: 'Europe/Bucharest'
 httpd_php56__error_reporting: E_ALL
 httpd_php56__display_errors: On
 httpd_php56__display_startup_errors: On

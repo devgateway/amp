@@ -1,8 +1,8 @@
 ---
 # Fallback environment settings file.
-# You can copy this file to "vars.{$project_environment}.yml" and configure it.
+# You can copy this file to "DeployerSettings.{$project_environment}.yml" and configure it.
 #
-# NOTE: The project Vagrantfile first tries to load "vars.local.yml".
+# NOTE: The project Vagrantfile first tries to load "DeployerSettings.local.yml".
 # TODO: Improve!!!
 #
 

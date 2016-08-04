@@ -47,11 +47,11 @@ provision:
 ## Provision the localhost using Ansible Playbooks.
 provision-vagrant:
 	@echo 'Provisioning the localhost using Ansible Playbooks:'
-	@test -e 'Vagrantsettings.local.yml' && ( \
-			echo 'Using Vagrantsettings.local.yml' && \
-			ansible-playbook --extra-vars "@Vagrantsettings.local.yml" -b main.yml \
+	@test -e 'VagrantSettings.local.yml' && ( \
+			echo 'Using VagrantSettings.local.yml' && \
+			ansible-playbook --extra-vars "@VagrantSettings.local.yml" -b main.yml \
 		) || true
-	@test ! -e 'Vagrantsettings.local.yml' && ( \
-			echo 'Using Vagrantsettings.yml' && \
-			ansible-playbook --extra-vars "@Vagrantsettings.yml" -b main.yml \
+	@test ! -e 'VagrantSettings.local.yml' && ( \
+			echo 'Using VagrantSettings.yml' && \
+			ansible-playbook --extra-vars "@VagrantSettings.yml" -b main.yml \
 		) || true

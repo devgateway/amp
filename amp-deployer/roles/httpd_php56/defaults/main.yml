@@ -23,8 +23,8 @@ httpd_php56__drupal_console_download_url: https://drupalconsole.com/installer
 # The default timezone used by all date/time functions.
 # @see: https://secure.php.net/manual/en/datetime.configuration.php#ini.date.timezone
 httpd_php56__date_timezone: 'America/New_York'
-# httpd_php56__date_timezone: 'Europe/Amsterdam'
-# httpd_php56__date_timezone: 'Europe/Bucharest'
+#httpd_php56__date_timezone: 'Europe/Amsterdam'
+#httpd_php56__date_timezone: 'Europe/Bucharest'
 
 # Maximum execution time of each script.
 # @see: https://secure.php.net/manual/en/info.configuration.php#ini.max-execution-time

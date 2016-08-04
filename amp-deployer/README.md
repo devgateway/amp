@@ -76,9 +76,9 @@ staging, preprod, production and other environments.
 3.  Prepare a set of variables for the environment
     ```
     # Create an environment file
-    cp vars.default.yml vars.TLS-staging.yml
+    cp DeployerSettings.yml DeployerSettings.TLS-staging.yml
     # or
-    cp vars.default.yml vars.MDA-preprod.yml
+    cp DeployerSettings.yml DeployerSettings.MDA-preprod.yml
 
     # Then update the files to add new DBs, VirtualHosts and so on...
     ```

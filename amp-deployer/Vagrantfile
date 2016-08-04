@@ -11,12 +11,12 @@
 # Load some project specific settings form YAML files.
 require 'fileutils'
 require 'yaml'
-if File.exists? __dir__ + '/Vagrantsettings.local.yml'
-  project_settings_file = __dir__ + '/Vagrantsettings.local.yml'
-elsif File.exists? __dir__ + '/Vagrantsettings.yml'
-  project_settings_file = __dir__ + '/Vagrantsettings.yml'
+if File.exists? __dir__ + '/VagrantSettings.local.yml'
+  project_settings_file = __dir__ + '/VagrantSettings.local.yml'
+elsif File.exists? __dir__ + '/VagrantSettings.yml'
+  project_settings_file = __dir__ + '/VagrantSettings.yml'
 else
-  raise 'Can not find the Vagrantsettings.yml file.'
+  raise 'Can not find the VagrantSettings.yml file.'
 end
 project_settings = YAML.load_file(project_settings_file)
 
@@ -27,12 +27,12 @@ end
 # abort(project_settings.inspect) # print variables and exit
 
 # Prepare a list of variables for Ansible.
-if File.exists? __dir__ + '/vars.local.yml'
-  ansible_extra_vars_file = __dir__ + '/vars.local.yml'
-elsif File.exists? __dir__ + '/vars.default.yml'
-  ansible_extra_vars_file = __dir__ + '/vars.default.yml'
+if File.exists? __dir__ + '/DeployerSettings.local.yml'
+  ansible_extra_vars_file = __dir__ + '/DeployerSettings.local.yml'
+elsif File.exists? __dir__ + '/DeployerSettings.yml'
+  ansible_extra_vars_file = __dir__ + '/DeployerSettings.yml'
 else
-  raise 'Can not find the ansible/vars.local.yml file.'
+  raise 'Can not find the DeployerSettings.yml file.'
 end
 ansible_extra_vars = YAML.load_file(ansible_extra_vars_file)
 project_settings.each_key {|key| ansible_extra_vars[key] = project_settings[key] }

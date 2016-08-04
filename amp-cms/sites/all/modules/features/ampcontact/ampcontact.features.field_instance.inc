@@ -10,7 +10,7 @@
 function ampcontact_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'entityform-contact-field_contact_email'
+  // Exported field_instance: 'entityform-contact-field_contact_email'.
   $field_instances['entityform-contact-field_contact_email'] = array(
     'bundle' => 'contact',
     'default_value' => NULL,
@@ -45,7 +45,7 @@ function ampcontact_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'entityform-contact-field_contact_message'
+  // Exported field_instance: 'entityform-contact-field_contact_message'.
   $field_instances['entityform-contact-field_contact_message'] = array(
     'bundle' => 'contact',
     'default_value' => NULL,
@@ -81,7 +81,7 @@ function ampcontact_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'entityform-contact-field_contact_name'
+  // Exported field_instance: 'entityform-contact-field_contact_name'.
   $field_instances['entityform-contact-field_contact_name'] = array(
     'bundle' => 'contact',
     'default_value' => NULL,
@@ -117,7 +117,7 @@ function ampcontact_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'entityform-contact-field_contact_organization'
+  // Exported field_instance: 'entityform-contact-field_contact_organization'.
   $field_instances['entityform-contact-field_contact_organization'] = array(
     'bundle' => 'contact',
     'default_value' => NULL,

@@ -60,46 +60,54 @@ install:
 	@echo '[DONE] Use oneUser/oneUser for credentials!'
 
 # Prepare environment for local development.
-prepare-local: prepare
+prepare-local:
+	@echo 'Creating file: ".htaccess"'
+	@test -f .htaccess || cp .htaccess{_sample,}
 	@echo 'Creating file: "sites/default/update_scripts/environment/setup.local.php"'
 	@test -f sites/default/update_scripts/environment/setup.local.php || \
 		cp sites/default/update_scripts/environment/setup.local{_sample,}.php
 	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
-	@test -f sites/default/settings.custom.php || \
-		chmod ug+w sites/default && \
-		cp sites/default/settings.{sample,custom}.php
+	@test -f sites/default/settings.custom.php || (\
+		chmod ug+w sites/default sites/default/settings*.php && \
+		cp sites/default/settings.{sample,custom}.php \
+	)
+	@sed -i -e "s/define('PROJECT_ENVIRONMENT', '\w\+')/define('PROJECT_ENVIRONMENT', 'local')/" sites/default/settings.custom.php
+	@echo 'Creating and updating file: "sites/default/drushrc.custom.php"'
+	@test -f sites/default/drush.custom.php || (\
+		chmod ug+w sites/default sites/default/drushrc*.php && \
+		cp sites/default/drushrc.{sample,custom}.php \
+	)
+	sed -i -e "s@// \(\$$options\['uri'\].*\)@\1@g" sites/default/drushrc.custom.php
 
 # Prepare environment for staging.
-prepare-staging: prepare
-	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
-	@test -f sites/default/settings.custom.php || \
-		chmod ug+w sites/default && \
-		cp sites/default/settings.{sample,custom}.php && \
-		chmod ug+w sites/default/settings*.php && \
-		sed -i -e "s/define('PROJECT_ENVIRONMENT', 'local')/define('PROJECT_ENVIRONMENT', 'staging')/" sites/default/settings.custom.php
-
-# Prepare environment for preprod.
-prepare-preprod: prepare
-	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
-	@test -f sites/default/settings.custom.php || \
-		chmod ug+w sites/default && \
-		cp sites/default/settings.{sample,custom}.php && \
-		chmod ug+w sites/default/settings*.php && \
-		sed -i -e "s/define('PROJECT_ENVIRONMENT', 'local')/define('PROJECT_ENVIRONMENT', 'preprod')/" sites/default/settings.custom.php
-
-# Prepare environment for production.
-prepare-production: prepare
-	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
-	@test -f sites/default/settings.custom.php || \
-		chmod ug+w sites/default && \
-		cp sites/default/settings.{sample,custom}.php && \
-		chmod ug+w sites/default/settings*.php && \
-		sed -i -e "s/define('PROJECT_ENVIRONMENT', 'local')/define('PROJECT_ENVIRONMENT', 'production')/" sites/default/settings.custom.php
-
-# Helper prepare.
-prepare:
+prepare-staging:
 	@echo 'Creating file: ".htaccess"'
 	@test -f .htaccess || cp .htaccess{_sample,}
+	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
+	@test -f sites/default/settings.custom.php || \
+		chmod ug+w sites/default sites/default/settings*.php && \
+		cp sites/default/settings.{sample,custom}.php
+	@sed -i -e "s/define('PROJECT_ENVIRONMENT', '\w\+')/define('PROJECT_ENVIRONMENT', 'staging')/" sites/default/settings.custom.php
+
+# Prepare environment for preprod.
+prepare-preprod:
+	@echo 'Creating file: ".htaccess"'
+	@test -f .htaccess || cp .htaccess{_sample,}
+	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
+	@test -f sites/default/settings.custom.php || \
+		chmod ug+w sites/default sites/default/settings*.php && \
+		cp sites/default/settings.{sample,custom}.php
+	@sed -i -e "s/define('PROJECT_ENVIRONMENT', '\w\+')/define('PROJECT_ENVIRONMENT', 'preprod')/" sites/default/settings.custom.php
+
+# Prepare environment for production.
+prepare-production:
+	@echo 'Creating file: ".htaccess"'
+	@test -f .htaccess || cp .htaccess{_sample,}
+	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
+	@test -f sites/default/settings.custom.php || \
+		chmod ug+w sites/default sites/default/settings*.php && \
+		cp sites/default/settings.{sample,custom}.php
+	@sed -i -e "s/define('PROJECT_ENVIRONMENT', '\w\+')/define('PROJECT_ENVIRONMENT', 'production')/" sites/default/settings.custom.php
 
 
 # Remove environment specific files.
@@ -125,6 +133,8 @@ destroy:
 	@read -p 'Press [Enter] key to continue or CTRL+C to cancel...'
 	@echo 'Erasing the database content...'
 	@drush sql-drop --yes
+	@echo 'Fixing permissions...'
+	@chmod +w sites/default sites/default/settings.php
 	@echo 'Erasing the user uploaded files...'
 	@rm -rf sites/default/files/*
 

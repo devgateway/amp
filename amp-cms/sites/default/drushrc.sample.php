@@ -14,7 +14,7 @@
  * Drupal's $GLOBALS['base_url'] will be set to http://default. This may cause
  * some functionality to not work as expected (e.g. inline images)
  */
-// $options['uri'] = "http://amp-cms-local.dev"; // Without trailing slash.
+// $options['uri'] = "http://amp212.local/portal"; // Without trailing slash.
 
 /**
  * List of tables to be omitted entirely from SQL dumps made by the 'sql-dump'

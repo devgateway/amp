@@ -1210,6 +1210,11 @@ class EntityformType extends Entity {
         return html_entity_decode(entity_i18n_string($name, $property_value, $langcode), ENT_QUOTES);
       }
     }
+    // @HACK: Translate entityform labels.
+    else if ($property_info['label'] == 'Label') {
+      return t($property_value);
+    }
+
     return $property_value;
   }
 

@@ -115,9 +115,9 @@ public class IndicatorEndPoints {
     @GET
     @Path("/indicator-layer/check-name/{name}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "getIndicatorByName", ui = false)
-    public JsonBean getIndicatorByName(@PathParam("name") String name) {
-        return IndicatorService.getIndicatorByName(name);
+    @ApiMethod(id = "checkName", ui = false)
+    public JsonBean checkName(@PathParam("name") String name) {
+        return IndicatorService.checkName(name);
     }
     /**
      * Delete indicator layer by Id
@@ -181,11 +181,11 @@ public class IndicatorEndPoints {
      * @param admLevelId adm Level ID to query for category value
      */
     @GET
-    @Path("/indicator-layer/export")
+    @Path("/indicator-layer/download")
     @Produces("application/vnd.ms-excel")
-    public StreamingOutput exportIndicatorById(@QueryParam("admLevelId") long admLevelId, @QueryParam("id") long indicatorId) {
+    public StreamingOutput download(@QueryParam("admLevelId") long admLevelId, @QueryParam("name") String indicatorName) {
 
-        return IndicatorExporter.exportIndicatorById(admLevelId,indicatorId);
+        return IndicatorExporter.download(admLevelId,indicatorName);
     }
 
     /**
@@ -198,10 +198,10 @@ public class IndicatorEndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public JsonBean importIndicator(
             @FormDataParam("option") long saveOption,
-            @FormDataParam("indicatorId") long indicatorId,
+            @FormDataParam("name") String name,
             @FormDataParam("file") InputStream uploadedInputStream
     ) {
-        return IndicatorExporter.importIndicator(saveOption, uploadedInputStream, indicatorId);
+        return IndicatorExporter.importIndicator(saveOption, uploadedInputStream, name);
     }
 
     /**

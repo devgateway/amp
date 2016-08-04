@@ -10,14 +10,13 @@
 function ampet_blog_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_blog_entry_type'
+  // Exported field_base: 'field_blog_entry_type'.
   $field_bases['field_blog_entry_type'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_blog_entry_type',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -37,14 +36,13 @@ function ampet_blog_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_blog_event_date'
+  // Exported field_base: 'field_blog_event_date'.
   $field_bases['field_blog_event_date'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_blog_event_date',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'date',
@@ -68,21 +66,13 @@ function ampet_blog_field_default_field_bases() {
     'type' => 'datestamp',
   );
 
-  // Exported field_base: 'field_blog_image'
+  // Exported field_base: 'field_blog_image'.
   $field_bases['field_blog_image'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_blog_image',
-    'foreign keys' => array(
-      'fid' => array(
-        'columns' => array(
-          'fid' => 'fid',
-        ),
-        'table' => 'file_managed',
-      ),
-    ),
     'indexes' => array(
       'fid' => array(
         0 => 'fid',

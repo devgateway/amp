@@ -10,7 +10,7 @@
 function ampet_blog_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-blog-body'
+  // Exported field_instance: 'node-blog-body'.
   $field_instances['node-blog-body'] = array(
     'bundle' => 'blog',
     'default_value' => NULL,
@@ -84,7 +84,7 @@ function ampet_blog_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-blog-field_blog_entry_type'
+  // Exported field_instance: 'node-blog-field_blog_entry_type'.
   $field_instances['node-blog-field_blog_entry_type'] = array(
     'bundle' => 'blog',
     'default_value' => NULL,
@@ -134,7 +134,7 @@ function ampet_blog_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-blog-field_blog_event_date'
+  // Exported field_instance: 'node-blog-field_blog_event_date'.
   $field_instances['node-blog-field_blog_event_date'] = array(
     'bundle' => 'blog',
     'deleted' => 0,
@@ -155,6 +155,7 @@ function ampet_blog_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
         'weight' => 2,
@@ -201,7 +202,7 @@ function ampet_blog_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-blog-field_blog_image'
+  // Exported field_instance: 'node-blog-field_blog_image'.
   $field_instances['node-blog-field_blog_image'] = array(
     'bundle' => 'blog',
     'deleted' => 0,
@@ -304,7 +305,7 @@ function ampet_blog_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-blog-title_field'
+  // Exported field_instance: 'node-blog-title_field'.
   $field_instances['node-blog-title_field'] = array(
     'bundle' => 'blog',
     'default_value' => NULL,

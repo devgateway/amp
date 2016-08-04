@@ -16,7 +16,10 @@ function ampet_blog_default_page_manager_pages() {
   $page->admin_title = 'Blog Listing';
   $page->admin_description = '';
   $page->path = 'blog/!type';
-  $page->access = array();
+  $page->access = array(
+    'type' => 'none',
+    'settings' => NULL,
+  );
   $page->menu = array();
   $page->arguments = array(
     'type' => array(

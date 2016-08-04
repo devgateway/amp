@@ -1117,6 +1117,12 @@ deleted 6 fields, do not reinsert
 <feature:display name="Change Password" module="Login - User Management"></feature:display>
 <feature:display name="Trouble signing in" module="Login - User Management"></feature:display>
 
+<module:display name="Activity Preview" parentModule="PUBLIC VIEW"></module:display>
+<feature:display name="Contacts" module="Activity Preview"></feature:display>
+<feature:display name="Version History" module="Activity Preview"></feature:display>
+<feature:display name="Hide Editable Export Formats" module="Activity Preview"></feature:display>
+
+
 <module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Filters" module="Public Reports and Tabs"></feature:display>
 <!-- AMP-9437 -->

@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
 
 <%
 	if (org.dgfoundation.amp.ar.WorkspaceFilter.isActivityWithinWorkspace((Long) request.getAttribute("actId")))
@@ -26,8 +27,18 @@
    		<%}%>
    		<td align=right>    	
 		<logic:present name="ALLOW_EDIT_ACTIVITY" scope="request">
-    		<c:set var="trn"><digi:trn>Version History</digi:trn></c:set>		
-    		<input type="button" class="buttonx_sm" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/> 
+    		
+    		<c:set var="hideVersionHistoryForPublicUsers" scope="page" value="false"/>
+			
+			<%if(!FeaturesUtil.isVisibleFeature("Version History")){ %> 
+				<c:set var="hideVersionHistoryForPublicUsers" scope="page" value="true"/>
+			<%}%>
+			
+			<c:if test="${(sessionScope.currentMember != null) || (not hideVersionHistoryForPublicUsers)}">
+				<c:set var="trn"><digi:trn>Version History</digi:trn></c:set>		
+    			<input type="button" class="buttonx_sm" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/> 
+			</c:if>
+    		
    			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Edit Activity" module="Previews">
 					<field:display feature="Edit Activity" name="Edit Activity Button">

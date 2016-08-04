@@ -4,6 +4,7 @@
 <%@ page import="org.digijava.module.aim.util.IndicatorUtil"%>
 <%@ page import="java.io.PrintWriter,java.util.*"%>
 <%@ page import="org.digijava.module.aim.util.TeamMemberUtil"%>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
@@ -354,10 +355,12 @@ function collapseAll() {
 			</a>
 
 			<c:set var="hideWordSetting" scope="page" value="false"/>
-			<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW%>" compareWith="true" onTrueEvalBody="true">
+			
+			<%if(FeaturesUtil.isVisibleFeature("Hide Editable Export Formats")){ %> 
 				<c:set var="hideWordSetting" scope="page" value="true"/>
-			</gs:test>
-			<c:if test="${(not hideWordSetting) || (hideWordSetting && sessionScope.currentMember != null)}">
+			<%}%>
+			
+			<c:if test="${(sessionScope.currentMember != null) || (not hideWordSetting)}">
 				<a onclick="javascript:exportToWord(${actId})" class="l_sm" style="cursor: pointer; color:#376091;">
 					<img src="img_2/ico_word.gif" />
 						<digi:trn>Export to Word</digi:trn>
@@ -2657,107 +2660,116 @@ function collapseAll() {
 	</div>
 </fieldset>
 </module:display>
+
 <!-- CONTACT INFORMATION -->
-<module:display name="/Activity Form/Contacts" parentModule="/Activity Form">
-<fieldset>
-	<legend>
-		<span class=legend_label id="contactlink" style="cursor: pointer;">
-			<digi:trn>Contact Information</digi:trn>
-		</span>	
-	</legend>
-	<div id="contactdiv" class="toggleDiv">
-		<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
-			<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
-				<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
-				<c:forEach var="donorContact" items="${aimEditActivityForm.contactInformation.donorContacts}">
-					<div>		
-						<span class="word_break bold"><c:out value="${donorContact.contact.name}" /></span> 
-						<span class="word_break bold"><c:out value="${donorContact.contact.lastname}"/></span> - 
-						<c:forEach var="property" items="${donorContact.contact.properties}">
-							<c:if test="${property.name=='contact email'}">
-								<span class="word_break bold"><c:out value="${property.value}" /> </span>;
-							</c:if>
-						</c:forEach>
-					</div>
-				</c:forEach>
-				<hr>
-			</c:if> 
-		</module:display>	
-		<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
-			<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
-				<digi:trn>MOFED contact information</digi:trn>:&nbsp;
-				<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
-					<div>
-						<span class="word_break bold"><c:out value="${mofedContact.contact.name}" /></span> 
-						<span class="word_break bold"><c:out value="${mofedContact.contact.lastname}"/> </span>- 
-						<c:forEach var="property" items="${mofedContact.contact.properties}">
-							<c:if test="${property.name=='contact email'}">
-								<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-							</c:if>
-						</c:forEach>
-					</div>
-				</c:forEach>
-				<hr>
-			</c:if> 
-		</module:display>
+<c:set var="hideContactsForPublicUsers" scope="page" value="false"/>
 		
-		<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
-			<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
-				<digi:trn>Project Coordinator Contact Information</digi:trn>:&nbsp;
-				<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
-					<div>
-						<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.name}"/></span>
-						<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.lastname}" /></span>-
-						<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
-							<c:if test="${property.name=='contact email'}">
-								<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-							</c:if>
+<%if(!FeaturesUtil.isVisibleFeature("Contacts")){ %> 
+	<c:set var="hideContactsForPublicUsers" scope="page" value="true"/>
+<%}%>
+		
+<c:if test="${(sessionScope.currentMember != null) || (not hideContactsForPublicUsers)}">
+	<module:display name="/Activity Form/Contacts" parentModule="/Activity Form">
+		<fieldset>
+			<legend>
+				<span class=legend_label id="contactlink" style="cursor: pointer;">
+					<digi:trn>Contact Information</digi:trn>
+				</span>	
+			</legend>
+			<div id="contactdiv" class="toggleDiv">
+				<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
+					<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
+						<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
+						<c:forEach var="donorContact" items="${aimEditActivityForm.contactInformation.donorContacts}">
+							<div>		
+								<span class="word_break bold"><c:out value="${donorContact.contact.name}" /></span> 
+								<span class="word_break bold"><c:out value="${donorContact.contact.lastname}"/></span> - 
+								<c:forEach var="property" items="${donorContact.contact.properties}">
+									<c:if test="${property.name=='contact email'}">
+										<span class="word_break bold"><c:out value="${property.value}" /> </span>;
+									</c:if>
+								</c:forEach>
+							</div>
 						</c:forEach>
-					</div>
-				</c:forEach>
-				<hr>
-			</c:if>
-		</module:display>
+						<hr>
+					</c:if> 
+				</module:display>	
+				<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
+					<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
+						<digi:trn>MOFED contact information</digi:trn>:&nbsp;
+						<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
+							<div>
+								<span class="word_break bold"><c:out value="${mofedContact.contact.name}" /></span> 
+								<span class="word_break bold"><c:out value="${mofedContact.contact.lastname}"/> </span>- 
+								<c:forEach var="property" items="${mofedContact.contact.properties}">
+									<c:if test="${property.name=='contact email'}">
+										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
+									</c:if>
+								</c:forEach>
+							</div>
+						</c:forEach>
+						<hr>
+					</c:if> 
+				</module:display>
 				
-		<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
-			<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
-				<digi:trn>Sector Ministry Contact Information</digi:trn>:&nbsp;
-				<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
-					<div>
-						<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.name}" /></span>
-						<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.lastname}" /></span> -
-						<c:forEach var="property" items="${sectorMinistryContact.contact.properties}">
-							<c:if test="${property.name=='contact email'}">
-								<span class="word_break bold"><c:out value="${property.value}" /></span>;
-							</c:if>
+				<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
+					<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
+						<digi:trn>Project Coordinator Contact Information</digi:trn>:&nbsp;
+						<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
+							<div>
+								<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.name}"/></span>
+								<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.lastname}" /></span>-
+								<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
+									<c:if test="${property.name=='contact email'}">
+										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
+									</c:if>
+								</c:forEach>
+							</div>
 						</c:forEach>
-					</div>
-				</c:forEach>
-				<hr>
-			</c:if> 
-		</module:display>
-					
-		<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information" 
-			parentModule="/Activity Form/Contacts">
-				<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
-					<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>:&nbsp;
-					<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
-						<div>
-							<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.name}" /></span>
-							<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.lastname}" /></span> -
-							<c:forEach var="property" items="${implExecAgencyContact.contact.properties}">
-								<c:if test="${property.name=='contact email'}">
-									<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-								</c:if>
-							</c:forEach>
-						</div>
-					</c:forEach>
-				</c:if>
-		</module:display>
-	</div>
-</fieldset>
-</module:display>
+						<hr>
+					</c:if>
+				</module:display>
+						
+				<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
+					<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
+						<digi:trn>Sector Ministry Contact Information</digi:trn>:&nbsp;
+						<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
+							<div>
+								<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.name}" /></span>
+								<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.lastname}" /></span> -
+								<c:forEach var="property" items="${sectorMinistryContact.contact.properties}">
+									<c:if test="${property.name=='contact email'}">
+										<span class="word_break bold"><c:out value="${property.value}" /></span>;
+									</c:if>
+								</c:forEach>
+							</div>
+						</c:forEach>
+						<hr>
+					</c:if> 
+				</module:display>
+							
+				<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information"  parentModule="/Activity Form/Contacts">
+					<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
+						<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>:&nbsp;
+						<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
+							<div>
+								<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.name}" /></span>
+								<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.lastname}" /></span> -
+								<c:forEach var="property" items="${implExecAgencyContact.contact.properties}">
+									<c:if test="${property.name=='contact email'}">
+										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
+									</c:if>
+								</c:forEach>
+							</div>
+						</c:forEach>
+					</c:if>
+				</module:display>
+			</div>
+		</fieldset>
+	</module:display>
+</c:if>
 <!-- END CONTACT INFORMATION -->
+
 <!-- COSTING -->
 <feature:display name="Costing" module="Activity Costing">
 <fieldset>

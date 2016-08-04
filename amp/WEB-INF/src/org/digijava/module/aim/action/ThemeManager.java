@@ -81,6 +81,9 @@ public class ThemeManager extends Action {
 						new ProgramHierarchyDefinition(),
 						new XMLtreeItemFactory());
 				
+//				List<AmpTheme> themes
+				
+				
 				themeForm.setThemes(themeFlatTree);
 				
 				/**

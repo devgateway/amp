@@ -283,6 +283,11 @@ public class ProgramUtil {
         }
 		
 		
+
+        public static List<AmpTheme> getAllThemes(boolean includeSubThemes) throws DgException {
+        	return getAllThemes(includeSubThemes, false);
+        }
+        
 		/**
          * Returns All AmpThemes including sub Themes if parameter is true.
          * @param includeSubThemes boolean false - only top level Themes, true - all themes
@@ -290,7 +295,7 @@ public class ProgramUtil {
 		 * @throws DgException
 		 */
         @SuppressWarnings("unchecked")
-		public static List<AmpTheme> getAllThemes(boolean includeSubThemes) throws DgException
+		public static List<AmpTheme> getAllThemes(boolean includeSubThemes, boolean getInvisible) throws DgException
 		{
             Session session = null;
             Query qry = null;
@@ -298,9 +303,13 @@ public class ProgramUtil {
 
             try {
                 session = PersistenceManager.getRequestDBSession();
-                String queryString = "select t from " + AmpTheme.class.getName()+ " t ";
+                String queryString = "select t from " + AmpTheme.class.getName()+ " t where 1=1 ";
+                if (!getInvisible) {
+                	queryString += " and ((t.deleted is null) OR (t.deleted = false))";
+                }
+                
                 if (!includeSubThemes) {
-                    queryString += "where t.parentThemeId is null ";
+                    queryString += " and t.parentThemeId is null ";
                 }
                 qry = session.createQuery(queryString);
                 themes = qry.list();
@@ -1203,21 +1212,11 @@ public class ProgramUtil {
 			for(int i=colSize-1; i>=0; i--)
 			{
 				AmpTheme ampTh = (AmpTheme) colTheme.get(i);
-				/*Set tempIndicators = ampTh.getIndicators();
-				Iterator tempInd = tempIndicators.iterator();
-				while(tempInd.hasNext())
-				{
-					AmpThemeIndicators themeInd = (AmpThemeIndicators) tempInd.next();
-					//deletePrgIndicator(themeInd.getAmpThemeIndId());
-				}*/
-				Session sess = null;
-				Transaction tx = null;
 				try {
-					sess = PersistenceManager.getSession();
-//beginTransaction();
+					Session sess = PersistenceManager.getSession();
 					AmpTheme tempTheme = (AmpTheme) sess.load(AmpTheme.class,ampTh.getAmpThemeId());
-					sess.delete(tempTheme);
-					//tx.commit();
+					tempTheme.setDeleted(true);
+					sess.saveOrUpdate(tempTheme);
 				} catch (HibernateException e) {
 					logger.error(e);
 					throw new AimException("Cannot delete theme with id "+themeId,e);

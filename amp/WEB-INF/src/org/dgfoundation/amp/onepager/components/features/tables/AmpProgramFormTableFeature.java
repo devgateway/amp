@@ -200,7 +200,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 			
 		});
 		
-		final AmpAutocompleteFieldPanel<AmpTheme> searchThemes=new AmpAutocompleteFieldPanel<AmpTheme>("search","Add Program",programSettingsString,AmpThemeSearchModel.class) {
+		final AmpAutocompleteFieldPanel<AmpTheme> searchThemes=new AmpAutocompleteFieldPanel<AmpTheme>("search","Add Program",
+				programSettingsString, AmpThemeSearchModel.class) {
 			/**
 			 * 
 			 */

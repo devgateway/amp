@@ -24,9 +24,8 @@ import java.util.TreeSet;
 @TranslatableClass (displayName = "Theme")
 public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable, NameableOrIdentifiable
 {
-	//IATI-check: to be ignored
+
 	private static final long serialVersionUID = 1L;
-	//private AmpActivityVersion activityId;
 	@Interchangeable(fieldTitle="ID", id=true)
     private Long ampThemeId ;
 	@Interchangeable(fieldTitle="Parent Theme ID", pickIdOnly=true)
@@ -55,6 +54,8 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 	private String language ;
 	@Interchangeable(fieldTitle="Version")
 	private String version ;
+	
+	private Boolean deleted;
 	
 	/**
 	 * don't be fooled by the name - it gets the children
@@ -526,4 +527,12 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
     {
     	return InternationalizedModelDescription.getForProperty(AmpTheme.class, "name").getSQLFunctionCall(idSource + ".ampThemeId");
     }
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
 }

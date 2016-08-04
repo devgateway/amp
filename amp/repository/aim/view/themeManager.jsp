@@ -221,70 +221,61 @@
 									<td vAlign="top" width="100%">
 									<digi:errors/>
 										<table align=left cellpadding="1" cellspacing="1" width="100%" class="inside" >							
-												<c:if test="${aimThemeForm.flag == 'activityReferences'}">
-																	<tr>
-																		<td colspan="2" align="center">
-																			<font color="red"><b><digi:trn key="aim:cannotDeleteThemeMsg1">
-																			Cannot delete the theme since some
-																			activities references it or its sub program: 
-																			</digi:trn>
-																				${aimThemeForm.activitiesUsingTheme }
-																				</b>
-																			</font>
-																		</td>
-																	</tr>
-												</c:if>
-												<c:if test="${aimThemeForm.flag == 'settingUsedInActivity'}">
-																	<tr>
-																		<td colspan="2" align="center">
-																			<font color="red"><b><digi:trn key="aim:cannotDeleteThemeDefHierarchy">
-																			Cannot delete the theme since it is used as a default hierarchy in: 
-																			</digi:trn>
-																				${aimThemeForm.settingsUsedByTheme }
-																				</b>
-																			</font>
-																		</td>
-																	</tr>
-												</c:if>
-												<c:if test="${aimThemeForm.flag == 'indicatorsNotEmpty'}">
-
-																	<tr>
-
-																		<td colspan="2" align="center">
-
-																			<font color="red"><b><digi:trn key="aim:cannotDeleteThemeMsg2">
-
-																			Cannot delete this program, one or more indicators are attached to it or its sub program.
-
-																			Delete the indicator(s) before deleting the program.
-
-																			</digi:trn></b></font>
-
-																		</td>
-																	</tr>
-												</c:if>
-															<c:if test="${aimThemeForm.flag == 'error'}">
-																<tr>
-																		<td colspan="2" align="center">
-																<font color="red"><b><digi:trn key="aim:cannotadd">
-																		program with this name already exists
-																</digi:trn></b></font>
-															
-														</td>
-													</tr></c:if>
+											<c:if test="${aimThemeForm.flag == 'activityReferences'}">
+												<tr>
+													<td colspan="2" align="center">
+														<font color="red"><b><digi:trn key="aim:cannotDeleteThemeMsg1">
+														Cannot delete the theme since some
+														activities references it or its sub program: 
+														</digi:trn>
+															${aimThemeForm.activitiesUsingTheme }
+															</b>
+														</font>
+													</td>
+												</tr>
+											</c:if>
+											<c:if test="${aimThemeForm.flag == 'settingUsedInActivity'}">
+												<tr>
+													<td colspan="2" align="center">
+														<font color="red"><b><digi:trn key="aim:cannotDeleteThemeDefHierarchy">
+														Cannot delete the theme since it is used as a default hierarchy in: 
+														</digi:trn>
+															${aimThemeForm.settingsUsedByTheme }
+															</b>
+														</font>
+													</td>
+												</tr>
+											</c:if>
+											<c:if test="${aimThemeForm.flag == 'indicatorsNotEmpty'}">
+												<tr>
+													<td colspan="2" align="center">
+														<font color="red"><b><digi:trn key="aim:cannotDeleteThemeMsg2">
+														Cannot delete this program, one or more indicators are attached to it or its sub program.
+														Delete the indicator(s) before deleting the program.
+														</digi:trn></b></font>
+													</td>
+												</tr>
+											</c:if>
+											<c:if test="${aimThemeForm.flag == 'error'}">
+												<tr>
+													<td colspan="2" align="center">
+														<font color="red"><b>
+															<digi:trn key="aim:cannotadd">program with this name already exists</digi:trn>
+														</b></font>
+													</td>
+												</tr>
+											</c:if>
 											<tr>
 												<td class="inside" >
-												
 												<!-- AMP-2204 -->
-														<bean:define id="firstLevel" name="aimThemeForm" property="themes" type="java.util.Collection"/>
-														<%= ProgramUtil.renderLevel(firstLevel,0,request) %>
-												</td>											
-											 
+													<bean:define id="firstLevel" name="aimThemeForm" property="themes" type="java.util.Collection"/>
+													<%= ProgramUtil.renderLevel(firstLevel,0,request) %>
+												</td>
 											<tr align="center" bgcolor="#ffffff">
 												<td style="padding-top:20px; padding-bottom:20px;" class="inside">
 												<input class="buttonx" type="button" name="addBtn" value="<digi:trn key="aim:addProgramMPM">Add New Program</digi:trn>" onclick="addProgram()" style="font-family:verdana;font-size:11px;">
 													<input class="buttonx" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()" style="font-family:verdana;font-size:11px;">
-                                                                                                        <input class="buttonx" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()" style="font-family:verdana;font-size:11px;">
+													<input class="buttonx" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()" style="font-family:verdana;font-size:11px;">
 												</td>
 											</tr>
 											<tr>
@@ -311,7 +302,6 @@
 										</table>
 									</td>
 								</tr>
-								
 							</table>
 						</td>
 					</tr>

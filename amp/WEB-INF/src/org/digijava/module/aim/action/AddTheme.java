@@ -150,13 +150,16 @@ public class AddTheme extends Action {
 		boolean existing = false;
 		AmpTheme theme = ProgramUtil.getTheme(themeForm.getProgramName());
 		if (theme != null) {
+			
 			if (themeForm.getThemeId() != null
 					&& !themeForm.getThemeId().equals(theme.getAmpThemeId())
-					&& theme.getName().equals(themeForm.getProgramName()))
+					&& theme.getName().equals(themeForm.getProgramName())
+					&& !Boolean.TRUE.equals(theme.getDeleted()))
 				existing = true;
 
 			if (themeForm.getThemeId() == null
-					&& theme.getName().equals(themeForm.getProgramName()))
+					&& theme.getName().equals(themeForm.getProgramName())
+					&& !Boolean.TRUE.equals(theme.getDeleted()))
 				existing = true;
 		}
 
@@ -168,12 +171,14 @@ public class AddTheme extends Action {
 					&& !themeForm.getThemeId().equals(
 							themeByCode.getAmpThemeId())
 					&& (themeByCode.getThemeCode().equals(themeForm
-							.getProgramCode())))
+							.getProgramCode()))
+					&& !Boolean.TRUE.equals(theme.getDeleted()))
 				existing = true;
 
 			if (themeForm.getThemeId() == null
 					&& themeByCode.getThemeCode().equals(
-							themeForm.getProgramCode()))
+							themeForm.getProgramCode())
+					&& !Boolean.TRUE.equals(theme.getDeleted()))
 				existing = true;
 		}
 

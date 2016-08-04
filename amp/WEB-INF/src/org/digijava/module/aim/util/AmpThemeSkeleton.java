@@ -20,7 +20,9 @@ public class AmpThemeSkeleton extends HierEntitySkeleton<AmpThemeSkeleton> {
      * @return a map of all programs from amp_theme, indexed by their ids
      */
     public static Map<Long, AmpThemeSkeleton> populateThemesTree(long root) {
-    	String condition = root <= 0 ? "" : "where amp_theme_id IN (select amp_theme_id from all_programs_with_levels where id0 = " + root + ")";
+    	String condition = root <= 0 ? "" : "where amp_theme_id IN (select amp_theme_id from all_programs_with_levels where id0 = " + root + ") "
+    			+ " AND ((deleted IS NULL) OR (deleted = false))"
+    			+ "";
     	return HierEntitySkeleton.fetchTree("amp_theme", condition, new EntityFetcher<AmpThemeSkeleton>() {
     		@Override public AmpThemeSkeleton fetch(ResultSet rs) throws SQLException {
     			return new AmpThemeSkeleton(nullInsteadOfZero(rs.getLong("amp_theme_id")), 

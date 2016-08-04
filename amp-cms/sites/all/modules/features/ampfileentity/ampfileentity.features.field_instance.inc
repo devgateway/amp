@@ -10,7 +10,7 @@
 function ampfileentity_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'file-audio-filename_field'
+  // Exported field_instance: 'file-audio-filename_field'.
   $field_instances['file-audio-filename_field'] = array(
     'bundle' => 'audio',
     'default_value' => NULL,
@@ -68,7 +68,7 @@ function ampfileentity_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'file-document-filename_field'
+  // Exported field_instance: 'file-document-filename_field'.
   $field_instances['file-document-filename_field'] = array(
     'bundle' => 'document',
     'default_value' => NULL,
@@ -126,7 +126,7 @@ function ampfileentity_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'file-image-field_file_image_alt_text'
+  // Exported field_instance: 'file-image-field_file_image_alt_text'.
   $field_instances['file-image-field_file_image_alt_text'] = array(
     'bundle' => 'image',
     'default_value' => NULL,
@@ -232,7 +232,7 @@ function ampfileentity_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'file-image-field_file_image_title_text'
+  // Exported field_instance: 'file-image-field_file_image_title_text'.
   $field_instances['file-image-field_file_image_title_text'] = array(
     'bundle' => 'image',
     'default_value' => NULL,
@@ -338,7 +338,7 @@ function ampfileentity_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'file-image-filename_field'
+  // Exported field_instance: 'file-image-filename_field'.
   $field_instances['file-image-filename_field'] = array(
     'bundle' => 'image',
     'default_value' => NULL,
@@ -438,7 +438,7 @@ function ampfileentity_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'file-video-filename_field'
+  // Exported field_instance: 'file-video-filename_field'.
   $field_instances['file-video-filename_field'] = array(
     'bundle' => 'video',
     'default_value' => NULL,

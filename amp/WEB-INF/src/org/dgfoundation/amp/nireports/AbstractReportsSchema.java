@@ -132,7 +132,7 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		return new TrivialMeasureBehaviour(tr, TrivialMeasureBehaviour.buildMeasureTotalDivider(measureName));
 	}
 	
-	public Map<String, Boolean> singletonMap(String k, Boolean v) {
+	public static Map<String, Boolean> singletonMap(String k, Boolean v) {
 		Map<String, Boolean> res = new HashMap<>();
 		res.put(k, v);
 		return res;

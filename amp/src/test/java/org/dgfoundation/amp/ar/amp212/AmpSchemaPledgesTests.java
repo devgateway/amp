@@ -1097,8 +1097,21 @@ public class AmpSchemaPledgesTests extends ReportingTestCase {
 	
 	@Test
     public void test_NOT_IMPLEMENTED_YET_PledgesPercentageOfDisbursement() {
-	    NiReportModel cor = null;
-        
+	    NiReportModel cor = new NiReportModel("AMP-22686-Pledge-Percentage-of-Disbursement")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 5))",
+				"(Pledges Titles: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Related Projects: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 3, colSpan: 2))",
+				"(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+				"(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Percentage of Disbursement: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Pledges Titles", "", "Related Projects", "", "Funding-2014-Actual Disbursements", "450 000", "Totals-Actual Disbursements", "450 000", "Totals-Percentage of Disbursement", "100")
+		      .withChildren(
+		        new ReportAreaForTests(new AreaOwner(3), "Pledges Titles", "Test pledge 1"),
+		        new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Related Projects", "Activity Linked With Pledge"),
+		        new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2"),
+		        new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Related Projects", "pledged 2, pledged education activity 1", "Funding-2014-Actual Disbursements", "450 000", "Totals-Actual Disbursements", "450 000", "Totals-Percentage of Disbursement", "100")      ));
+     
         runNiTestCase(spec("AMP-22686-Pledge-Percentage-of-Disbursement"), "en", acts, cor);
     }
 	

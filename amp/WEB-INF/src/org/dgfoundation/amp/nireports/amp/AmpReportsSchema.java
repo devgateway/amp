@@ -549,6 +549,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addSscMeasures();
 		addFormulaMeasures();
 		
+		addDividingMeasure(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, MeasureConstants.ACTUAL_DISBURSEMENTS, false);
 		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
 	}
 	
@@ -866,16 +867,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	private AmpReportsSchema addTrivialMeasures() {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false, cac -> cac.activityId > MondrianETL.PLEDGE_ID_ADDER));
-		addMeasure(new AmpTrivialMeasure(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false, 
-				cac -> cac.activityId > MondrianETL.PLEDGE_ID_ADDER, false, 
-				byMeasureDividingBehaviour(TimeRange.NONE, MeasureConstants.ACTUAL_COMMITMENTS), singletonMap(MeasureConstants.ACTUAL_COMMITMENTS, false)));
+		
+		addDividingMeasure(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, MeasureConstants.ACTUAL_COMMITMENTS, false);
 
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_COMMITMENTS, Constants.COMMITMENT, "Planned", false));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_COMMITMENTS, Constants.COMMITMENT, "Pipeline", false));
 
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", false));
-		addMeasure(new AmpTrivialMeasure(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", false, cac -> false, false, 
-				byMeasureDividingBehaviour(TimeRange.NONE, MeasureConstants.ACTUAL_DISBURSEMENTS), singletonMap(MeasureConstants.ACTUAL_DISBURSEMENTS, false)));
+		addDividingMeasure(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, false);
 		
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_DISBURSEMENTS, Constants.DISBURSEMENT, "Planned", false));
 
@@ -910,6 +909,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, Constants.PLEDGE));
 		
+		return this;
+	}
+	
+	private AmpReportsSchema addDividingMeasure(String measureName, String originalMeasureName, boolean unfiltered) {
+		addMeasure(new AmpTrivialMeasure(measureName, (AmpTrivialMeasure) measures.get(originalMeasureName), unfiltered, byMeasureDividingBehaviour(TimeRange.NONE, originalMeasureName)));
 		return this;
 	}
 	

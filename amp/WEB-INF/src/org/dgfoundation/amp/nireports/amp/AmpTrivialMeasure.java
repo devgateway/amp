@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import org.dgfoundation.amp.nireports.AbstractReportsSchema;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
@@ -33,11 +34,24 @@ public class AmpTrivialMeasure extends NiTransactionMeasure {
 		this(measureName, transactionType, adjustmentTypeName, directed, cac -> false, ignoreFilters, overridingBehaviour);
 	}
 	
+	public AmpTrivialMeasure(String measureName, Predicate<CategAmountCell> predicate, boolean unfiltered, Behaviour<NiAmountCell> behaviour, Map<String, Boolean> precursors) {
+		super(measureName, predicate, behaviour, AmpReportsSchema.measureDescriptions.get(measureName), unfiltered, precursors);
+	}
+	
+	/**
+	 * builds a measure dependent on an another measure
+	 * @param measureName
+	 * @param baseMeasure
+	 * @param unfiltered
+	 * @param behaviour
+	 */
+	public AmpTrivialMeasure(String measureName, AmpTrivialMeasure baseMeasure, boolean unfiltered, Behaviour<NiAmountCell> behaviour) {
+		super(measureName, baseMeasure.criterion, behaviour, AmpReportsSchema.measureDescriptions.get(measureName), unfiltered, AbstractReportsSchema.singletonMap(baseMeasure.name, false));
+	}
 	
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, 
 			Predicate<CategAmountCell> or) {
-		this(measureName, transactionType, adjustmentTypeName, directed, or, false, null);
-		
+		this(measureName, transactionType, adjustmentTypeName, directed, or, false, null);		
 	}
 	
 	/**
@@ -63,16 +77,15 @@ public class AmpTrivialMeasure extends NiTransactionMeasure {
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, 
 			Predicate<CategAmountCell> or, boolean ignoreFilters, Behaviour<NiAmountCell> overridingBehaviour, Map<String, Boolean> precursors) {
 
-		super(measureName, 
+		this(measureName, 
 				cac -> 
 					or.test(cac) || (
-							cac.metaInfo.containsMeta(MetaCategory.TRANSACTION_TYPE.category, Long.valueOf(transactionType)) &&
-							cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName) &&
-							(directed ? isDirected(cac) : isDonorSourced(cac))
-						),
-					getBehaviour(overridingBehaviour, directed),
-				AmpReportsSchema.measureDescriptions.get(measureName),
+						cac.metaInfo.containsMeta(MetaCategory.TRANSACTION_TYPE.category, Long.valueOf(transactionType)) &&
+						cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName) &&
+						(directed ? isDirected(cac) : isDonorSourced(cac))
+					),
 				ignoreFilters,
+				getBehaviour(overridingBehaviour, directed),
 				precursors
 			);
 	}

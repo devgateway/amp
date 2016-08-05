@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
@@ -61,5 +64,39 @@ public abstract class AbstractComputedBehaviour<V extends NiAmountCell> implemen
 	@Override
 	public boolean isTransactionLevelUndefinedSkipping() {
 		return true;
+	}
+	
+	/**
+	 * a reductor which sums
+	 * @param l
+	 * @return
+	 */
+	public static BigDecimal REDUCE_SUM(List<BigDecimal> l) {
+		if (l.isEmpty()) return BigDecimal.ZERO;
+		
+		if (l.size() == 1) return l.get(0);
+		
+		BigDecimal res = BigDecimal.ZERO;
+		for(BigDecimal term:l) {
+			res = res.add(term);
+		}
+		return res;
+	}
+	
+	/**
+	 * a reductor which multiplies
+	 * @param l
+	 * @return
+	 */
+	public static BigDecimal REDUCE_MUL(List<BigDecimal> l) {
+		if (l.isEmpty()) return BigDecimal.ONE;
+		
+		if (l.size() == 1) return l.get(0);
+		
+		BigDecimal res = BigDecimal.ONE;
+		for(BigDecimal term:l) {
+			res = res.multiply(term);
+		}
+		return res;
 	}
 }

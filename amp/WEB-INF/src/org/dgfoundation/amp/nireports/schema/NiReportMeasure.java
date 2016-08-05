@@ -12,7 +12,6 @@ import org.dgfoundation.amp.nireports.Cell;
  * <li>measures support dependency checking</li>
  * <li>others???</li>
  * </ul>
- * TODO: consider making NiReportMeasure a subclass of NiReportColumn
  * @author Dolghier Constantin
  *
  */

@@ -32,7 +32,7 @@ public class CustomAmounts {
 		add(ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS);
 		add(ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
 		add(ColumnConstants.UNCOMMITTED_BALANCE);
-		add(ColumnConstants.FORECAST_EXECUTION_RATE);
+		add(MeasureConstants.FORECAST_EXECUTION_RATE);
 		add(MeasureConstants.UNDISBURSED_BALANCE);
 	}};
 	
@@ -48,7 +48,7 @@ public class CustomAmounts {
 		add(MeasureConstants.AVERAGE_DISBURSEMENT_RATE);
 		add(ColumnConstants.CUMULATIVE_EXECUTION_RATE);
 		add(ColumnConstants.PROJECT_AGE_RATIO);
-		add(ColumnConstants.FORECAST_EXECUTION_RATE);
+		add(MeasureConstants.FORECAST_EXECUTION_RATE);
 		
 	}};
 	

@@ -325,7 +325,6 @@ public class ColumnConstants {
 	public static final String TYPE_OF_COOPERATION = "Type of Cooperation";
 	public static final String TYPE_OF_IMPLEMENTATION = "Type of Implementation";
 	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
-	public static final String FORECAST_EXECUTION_RATE = "Forecast Execution Rate";
 	public static final String VARIANCE_OF_COMMITMENTS = "Variance Of Commitments";
 	public static final String VARIANCE_OF_DISBURSEMENTS = "Variance Of Disbursements";
 	public static final String VOTE = "Vote";

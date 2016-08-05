@@ -83,6 +83,7 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.BooleanDimension;
+import org.dgfoundation.amp.nireports.schema.ForecastExecutionRateMeasure;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
@@ -164,6 +165,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(ColumnConstants.CUMULATIVE_EXECUTION_RATE,  "(Cumulative Disbursement/ Cumulative Commitment) * 100 ");
 	}};
 	
+	public final Map<Integer, MtefColumn> pipelineMtefColumns = new HashMap<>();
+	public final Map<Integer, MtefColumn> projectionMtefColumns = new HashMap<>();
+
 	@SuppressWarnings("serial")
 	public final static Map<String, String> measureDescriptions = new HashMap<String, String>() {{
 		put(MeasureConstants.CONSUMPTION_RATE , "(Selected Year Cumulated Disbursements / Selected Year of Planned Disbursements) * 100");
@@ -189,8 +193,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, "Sum Actual Disbursements / Number of Actual Disbursements");
 		put(MeasureConstants.PREDICTABILITY_OF_FUNDING ,  "((Planned Disbursements - Actual Disbursements) / Planned Disbursements) X 100");
 		put(MeasureConstants.AVERAGE_DISBURSEMENT_RATE,  "Sum of Execution Rate / Number of Activities");
-//		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Actual Disbursements / (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). "
-//					+ "Measure only makes sense in Annual and Totals-only reports");
+		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Sum of Actual Disbursements / Sum (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). ");
 		
 	}};
 	
@@ -552,6 +555,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addFormulaMeasures();
 		
 		addDividingMeasure(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, MeasureConstants.ACTUAL_DISBURSEMENTS, false);
+		addMeasure(new ForecastExecutionRateMeasure(MeasureConstants.FORECAST_EXECUTION_RATE));
 		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
 	}
 	
@@ -644,16 +648,23 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		//Project Implementation Delay uses a separate behaviour: '0' instead of '' for empty cells
 		no_entity(ColumnConstants.PROJECT_IMPLEMENTATION_DELAY, "v_project_impl_delay", PidTextualTokenBehaviour.instance);
 	}
-	
+		
 	protected void addMtefColumns() {
 		for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
 			
 			addColumn(new MtefColumn("MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, 
 					"MTEF", false, Optional.empty()).withGroup("Funding Information"));
-			addColumn(new MtefColumn("Pipeline MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, 
-					"Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)).withGroup("Funding Information"));
-			addColumn(new MtefColumn("Projection MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, 
-					"Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)).withGroup("Funding Information"));
+
+			MtefColumn pipelineMtefColumn = (MtefColumn) new MtefColumn("Pipeline MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, 
+					"Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)).withGroup("Funding Information");			
+			this.pipelineMtefColumns.put(mtefYear, pipelineMtefColumn);
+			addColumn(pipelineMtefColumn);
+
+			MtefColumn projectionMtefColumn = (MtefColumn) new MtefColumn("Projection MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, 
+					"Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)).withGroup("Funding Information");
+			this.projectionMtefColumns.put(mtefYear, projectionMtefColumn);
+			addColumn(projectionMtefColumn);
+			
 			addColumn(new MtefColumn("Real MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, 
 					"Real MTEF", true, Optional.empty()).withGroup("Funding Information"));
 		}

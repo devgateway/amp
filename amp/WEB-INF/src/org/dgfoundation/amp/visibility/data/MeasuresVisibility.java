@@ -102,7 +102,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.REAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", DIRECTED_DISBURSEMENTS_ID_NAME));
-		put(ColumnConstants.FORECAST_EXECUTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", MTEF_ID_NAME));
+		put(MeasureConstants.FORECAST_EXECUTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", MTEF_ID_NAME));
 		// skipping REAL_COMMITMENTS and REAL_MTEF, as could not find support for those in the AF
 		put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Planned"));
 		put(MeasureConstants.TOTAL_COMMITMENTS, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));

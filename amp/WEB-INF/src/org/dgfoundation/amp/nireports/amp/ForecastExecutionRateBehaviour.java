@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.behaviours;
+package org.dgfoundation.amp.nireports.amp;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -11,9 +11,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.algo.ValueWrapper;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
+import org.dgfoundation.amp.nireports.behaviours.AbstractComputedBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.FormulaicAmountBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
@@ -21,37 +25,16 @@ import org.dgfoundation.amp.nireports.schema.NiFormulaicMeasure;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 
 /**
- * the behaviour of an entity which has value = formula(tokens). The trail cells get their tokem from V-reduction
+ * the Forecast Execution Rate behaviour
  * @author Dolghier Constantin
  *
  */
-public class FormulaicAmountBehaviour extends AbstractComputedBehaviour<NiFormulaicAmountCell> {
+public class ForecastExecutionRateBehaviour extends AbstractComputedBehaviour<NiFormulaicAmountCell> {
 	
-	/**
-	 * the functions (one for each dependency-variable) used to reduce multiple values to a single one
-	 */
-	final Map<String, Function<List<BigDecimal>, BigDecimal>> reductors;
-	
-	/**
-	 * the expression tree which drives the behaviour
-	 */
-	final NiFormula formula;
-	
-	/**
-	 * the callback which is used to build "undefined" cells (ones where {@link #formula} returns one of the undefined values)
-	 */
-	final BiFunction<BigDecimal, Map<String, BigDecimal>, NiFormulaicAmountCell> undefinedBuilder;
-	
-	public FormulaicAmountBehaviour(TimeRange timeRange, 
-			Map<String, Function<List<BigDecimal>, BigDecimal>> reductors,
-			BiFunction<BigDecimal, Map<String, BigDecimal>, NiFormulaicAmountCell> undefinedBuilder,
-			NiFormula formula) {
+	public final static ForecastExecutionRateBehaviour instance = new ForecastExecutionRateBehaviour(TimeRange.NONE);
+				
+	public ForecastExecutionRateBehaviour(TimeRange timeRange) {
 		super(timeRange);
-		this.reductors = reductors;
-		this.formula = formula;
-		this.undefinedBuilder = undefinedBuilder == null ? 
-				(val, vals) -> new NiFormulaicAmountCell(vals, null, NiPrecisionSetting.IDENTITY_PRECISION_SETTING) : 
-					undefinedBuilder;
 	}
 	
 	/**
@@ -64,21 +47,51 @@ public class FormulaicAmountBehaviour extends AbstractComputedBehaviour<NiFormul
 	 */
 	@Override
 	public NiFormulaicAmountCell doHorizontalReduce(List<NiCell> cells) {
-		Map<String, BigDecimal> vals = AmpCollections.remap(
-				cells.stream().collect(Collectors.groupingBy(this::extractCellTag)), 
-				(entity, list) -> reductors.get(entity).apply(AmpCollections.relist(list, NiCell::getAmount)), 
-				null);
-
+		Map<String, BigDecimal> vals = buildVals(cells);
 		NiPrecisionSetting precision = cells.isEmpty() ? NiPrecisionSetting.IDENTITY_PRECISION_SETTING : ((NumberedCell) cells.get(0).getCell()).getPrecision();
 		return buildCell(vals, precision);
 	}
 
-	protected NiFormulaicAmountCell buildCell(Map<String, BigDecimal> vals, NiPrecisionSetting precision) {
-		BigDecimal numericValue = formula.evaluate(vals);
-		if (NiFormulaicAmountCell.isDefined(numericValue))
-			return new NiFormulaicAmountCell(vals, formula.evaluate(vals), precision);
+	protected Map<String, BigDecimal> buildVals(List<NiCell> cells) {
+		Map<String, List<NiCell>> distr = cells.stream().collect(Collectors.groupingBy(this::extractCellTag));
+		Map<String, BigDecimal> res = AmpCollections.remap(distr, this::sumCells, null);
+		return res;
+	}
+	
+	protected BigDecimal sumCells(List<NiCell> l) {
+		return REDUCE_SUM(l.stream().map(NiCell::getAmount).collect(Collectors.toList()));
+	}
+	
+	public final static NiFormula CALCULATOR = NiFormula.PERCENTAGE(NiFormula.VARIABLE("actdisb"), NiFormula.VARIABLE("mtef"));
+	
+	public NiFormulaicAmountCell buildCell(Map<String, BigDecimal> vals, NiPrecisionSetting precision) {
+		Map<Integer, BigDecimal> pipe = new HashMap<>(), proj = new HashMap<>();
+		ValueWrapper<BigDecimal> actDisb = new ValueWrapper<>(BigDecimal.ZERO);
+		
+		vals.forEach((tag, val) -> {
+			if (tag.equals(MeasureConstants.ACTUAL_DISBURSEMENTS))
+				actDisb.set(actDisb.value.add(val));
+			else {
+				String prefix = tag.substring(0, 4);
+				int year = Integer.valueOf(tag.substring(4));
+				Map<Integer, BigDecimal> map = prefix.equals("pipe") ? pipe : proj;
+				map.put(year, map.getOrDefault(year, BigDecimal.ZERO).add(val));
+			}
+		});
+		
+		BigDecimal totalMtef = BigDecimal.ZERO;
+		for(int year:AmpCollections.union(pipe.keySet(), proj.keySet())) {
+			totalMtef = totalMtef.add(AmpCollections.firstOf(pipe.get(year), proj.get(year)));
+		}
+		Map<String, BigDecimal> vv = new HashMap<>();
+		vv.put("mtef", totalMtef);
+		vv.put("actdisb", actDisb.value);
+		
+		BigDecimal numericValue = CALCULATOR.evaluateOrUndefined(vv, null);
+		if (numericValue != null)
+			return new NiFormulaicAmountCell(vals, numericValue, precision);
 		else
-			return undefinedBuilder.apply(numericValue, vals);
+			return buildNoValueCell(vals);
 	}
 	
 	protected String extractCellTag(NiCell cell) {
@@ -104,7 +117,7 @@ public class FormulaicAmountBehaviour extends AbstractComputedBehaviour<NiFormul
 					valsA.computeIfAbsent(cat, z -> new ArrayList<>()).add(val);
 				});
 			}
-		Map<String, BigDecimal> vals = AmpCollections.remap(valsA, (entity, list) -> reductors.get(entity).apply(list), null);
+		Map<String, BigDecimal> vals = AmpCollections.remap(valsA, (entity, list) -> REDUCE_SUM(list), null);
 		NiFormulaicAmountCell res = buildCell(vals, NiPrecisionSetting.IDENTITY_PRECISION_SETTING);
 		return res == null ? getZeroCell() : res;
 	}
@@ -112,5 +125,9 @@ public class FormulaicAmountBehaviour extends AbstractComputedBehaviour<NiFormul
 	@Override
 	public NiFormulaicAmountCell getZeroCell() {
 		return NiFormulaicAmountCell.FORMULAIC_ZERO;
+	}
+	
+	public NiFormulaicAmountCell buildNoValueCell(Map<String, BigDecimal> vals) {
+		return new NiFormulaicAmountCell(vals, null, NiPrecisionSetting.IDENTITY_PRECISION_SETTING);
 	}
 }

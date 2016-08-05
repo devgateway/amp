@@ -345,7 +345,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("SSC Modalities", ColumnConstants.SSC_MODALITIES);
 		put("Variance Of Commitments", ColumnConstants.VARIANCE_OF_COMMITMENTS);
 		put("Variance Of Disbursements", ColumnConstants.VARIANCE_OF_DISBURSEMENTS);
-		put(ColumnConstants.FORECAST_EXECUTION_RATE, ColumnConstants.FORECAST_EXECUTION_RATE);
 		put("Disaster Response Marker", ColumnConstants.DISASTER_RESPONSE_MARKER);
 		
 		// replicating the same approach as in the ReportWizard (until AMP-20480 is considered)

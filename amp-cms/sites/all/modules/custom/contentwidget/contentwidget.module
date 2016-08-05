@@ -11,6 +11,8 @@ function contentwidget_ctools_plugin_directory($owner, $plugin_type) {
   if ($owner == 'contentwidget' && $plugin_type == 'predefined_widgets') {
     return 'plugins/' . $plugin_type;
   }
+
+  return NULL;
 }
 
 /**
@@ -51,7 +53,7 @@ function contentwidget_get_predefined_widgets($include_hidden = FALSE) {
 /**
  * Fetch metadata on a specific predefined widget type.
  *
- * @param $predefined_widget type
+ * @param $predefined_widget
  *   Name of a predefined widget type.
  *
  * @return
@@ -213,7 +215,7 @@ function _contentwidget_settings_clean_values($values) {
  *  Returns the settings array.
  */
 function _contentwidget_fixed_get_settings($machine_name) {
-  return variable_get('contentblock_fixed_' . $machine_name);
+  return variable_get('contentblock_fixed_' . $machine_name, array());
 }
 
 /**
@@ -224,12 +226,9 @@ function _contentwidget_fixed_get_settings($machine_name) {
  *
  * @param $data
  *  Data is a simple array.
- *
- * @return bool
- *  Returns TRUE if settings were saved successfully.
  */
 function _contentwidget_fixed_set_settings($machine_name, $data) {
-  return variable_set('contentblock_fixed_' . $machine_name, $data);
+  variable_set('contentblock_fixed_' . $machine_name, $data);
 }
 
 /**

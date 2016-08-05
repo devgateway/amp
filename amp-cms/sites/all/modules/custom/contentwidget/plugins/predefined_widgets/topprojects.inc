@@ -291,7 +291,7 @@ function contentwidget_topprojects_widget_settings(&$element, &$form_state, $plu
   );
 
   if (empty($display_all_columns)) {
-    $data = contentwidget_topprojects_widget_retrieve_data($widget_settings);
+    $data = contentwidget_topprojects_widget_retrieve_data($plugin, $widget_settings);
 
     if (!empty($data->headers)) {
       $available_columns = array();

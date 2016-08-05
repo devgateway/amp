@@ -65,7 +65,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	protected final Object CACHE_SYNC_OBJ = new Object();
 	protected final Set<String> ignoredColumns;
 	
-	public final static int CACHE_TTL_SECONDS = 1 * 60;  /* TODO: make that back to 10 * 60 */
+	public final static int CACHE_TTL_SECONDS = 10 * 60;
 	
 	public AmpFundingColumn(String columnName, String viewName) {
 		this(columnName, viewName, TrivialMeasureBehaviour.getInstance());

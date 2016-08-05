@@ -21,7 +21,7 @@ import org.dgfoundation.amp.nireports.schema.Behaviour;
 public interface VSplitStrategy {
 	
 	/**
-	 * categorizes a cell to a category
+	 * categorizes a cell
 	 * @param cell
 	 */
 	public ComparableValue<String> categorize(NiCell cell);

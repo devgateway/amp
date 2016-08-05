@@ -4,7 +4,7 @@
  * Forms and helper functions for administrative pages.
  */
 
-module_load_include('inc', 'contentblock', 'contentblock.admin');
+include_once 'contentblock.admin.inc';
 
 /**
  * Implements hook_form_FORM_ID_alter() for contentblock_form().

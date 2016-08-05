@@ -17,8 +17,14 @@ NAME_PREFIX?=$$(basename $(ROOT_PATH))--$$(date --utc +'%y%m%d-%H%M-%Z')
 
 ## Avoid conflicts with files of the same name
 ## @see: http://www.gnu.org/savannah-checkouts/gnu/make/manual/html_node/Phony-Targets.html
-.PHONY: dummy update fix fix-permissions backup backup-db backup-files ctf destroy-environment offline online ce config-export ci config-import
+.PHONY: update install prepare-local prepare-staging prepare-preprod prepare-production backup backup-db backup-files clean destroy cc cf fm offline online
 
+
+## Display a list of targets.
+dummy:
+	@echo 'Here is a list of available commands:'
+	@grep -iE "^[a-z_-]+:" $(lastword $(MAKEFILE_LIST)) | cut -d: -f1 | grep -v dummy | xargs -i{} echo "  $$ make {}"
+	@echo ''
 
 
 # The default target, if no target argument is provided to `make`.
@@ -125,6 +131,11 @@ prepare-production:
 		chmod ug+w sites/default sites/default/settings*.php && \
 		cp sites/default/settings.{sample,custom}.php
 	@sed -i -e "s/define('PROJECT_ENVIRONMENT', '\w\+')/define('PROJECT_ENVIRONMENT', 'production')/" sites/default/settings.custom.php
+
+
+## Backup the database and user uploaded files.
+backup: backup-db backup-files
+	@echo 'Finished creating a full system backup.'
 
 
 ## Backup the database.

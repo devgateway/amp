@@ -142,7 +142,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static String PSEUDOCOLUMN_EXP_CLASS = "#amp#ExpClass";
 	
 	public final static String UNDEFINED_CATEGORY = "Unassigned";
-	
+
 	@SuppressWarnings("serial")
 	public final static Map<String, String> columnDescriptions = new HashMap<String, String>() {{
 		put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES,  "Level-1 subprogram of the selected national objective");
@@ -529,6 +529,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		date_column(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "v_contracting_date");
 		date_column(ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS, "v_disbursements_date");
 		date_column(ColumnConstants.FUNDING_CLASSIFICATION_DATE, "v_funding_classification_date");
+		date_column(ColumnConstants.EFFECTIVE_FUNDING_DATE, "v_effective_funding_date");
+		date_column(ColumnConstants.FUNDING_CLOSING_DATE, "v_funding_closing_date");
 		date_column(ColumnConstants.FUNDING_END_DATE, "v_funding_end_date");
 		date_column(ColumnConstants.FUNDING_START_DATE, "v_funding_start_date");
 		date_column(ColumnConstants.ORIGINAL_COMPLETION_DATE, "v_original_completion_date");

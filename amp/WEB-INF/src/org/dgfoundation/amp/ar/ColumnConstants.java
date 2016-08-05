@@ -331,4 +331,6 @@ public class ColumnConstants {
 	public static final String VOTE = "Vote";
 	public static final String ZONE = "Zone";
 	public static final String WORKSPACES = "Workspaces";
+	public static final String EFFECTIVE_FUNDING_DATE = "Effective Funding Date";
+	public static final String FUNDING_CLOSING_DATE = "Funding Closing Date";
 }

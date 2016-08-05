@@ -8,8 +8,3 @@
   until: '"failed" not in result'
   retries: 5
   delay: 10
-
-- name: 'Import repo GPG key'
-  rpm_key:
-    key: "{{ postgresql__repo_gpg_key_url }}"
-    state: present

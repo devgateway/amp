@@ -13,9 +13,7 @@
   yum:
     name: '{{ item }}'
     state: installed
-  with_items:
-    - postgresql95-server
-    - postgresql95-contrib
+  with_items: "{{postgresql__packages}}"
 
 - name: Insert Firewall Rule
   firewalld:

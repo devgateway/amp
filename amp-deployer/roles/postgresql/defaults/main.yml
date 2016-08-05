@@ -1,7 +1,7 @@
 ---
 
-# Set the root user password.
-postgresql__root_password: 'demo3'
+# Set the root user (postgres) password.
+#postgresql__root_password: 'demo3'
 
 # Bind MariaDB to a specific port.
 # NOTE: The default is: 5432
@@ -15,13 +15,15 @@ postgresql__listen_addresses: 'localhost'
 
 # Information about: Inline with Upstream Stable (IUS) repository
 # NO trailing slash for data_dir.
-postgresql__service_name: postgresql-9.5
-postgresql__setup_script: /usr/pgsql-9.5/bin/postgresql95-setup
-postgresql__conf_data_dir: /var/lib/pgsql/9.5/data
+postgresql__service_name: postgresql-9.3
+postgresql__setup_script: /usr/pgsql-9.3/bin/postgresql93-setup
+postgresql__conf_data_dir: /var/lib/pgsql/9.3/data
+postgresql__packages:
+  - postgresql93-server
+  - postgresql93-contrib
 
 # @see: http://yum.postgresql.org/repopackages.php
-postgresql__repo_url: https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-sl95-9.5-2.noarch.rpm
-postgresql__repo_gpg_key_url: /etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-95
+postgresql__repo_url: https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-7-x86_64/pgdg-sl93-9.3-2.noarch.rpm
 
 # PostgreSQL Client Authentication Configuration
 # @see: https://www.postgresql.org/docs/9.5/static/client-authentication.html

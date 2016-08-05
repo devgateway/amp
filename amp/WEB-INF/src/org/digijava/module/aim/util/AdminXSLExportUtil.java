@@ -5,7 +5,7 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.contrib.RegionUtil;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.ss.util.CellRangeAddress;
 import static org.apache.poi.hssf.usermodel.HSSFCellStyle.BORDER_THIN;
 

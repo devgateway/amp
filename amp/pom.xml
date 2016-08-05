@@ -550,11 +550,6 @@
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
-            <artifactId>poi-contrib</artifactId>
-            <version>3.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
             <artifactId>poi-scratchpad</artifactId>
             <version>3.14</version>
         </dependency>

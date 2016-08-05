@@ -22,7 +22,6 @@ import java.util.function.Function;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
-import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Criteria;

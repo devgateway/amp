@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.codegenerators;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -70,9 +71,12 @@ public abstract class ColumnGenerator extends CodeGenerator {
 	}
 	
 	public void generateToFile() throws FileNotFoundException, UnsupportedEncodingException {
-//		String path = "/home/simple/Desktop/codegen/" 
-		String path = System.getProperty("user.dir") + "/src/test/java/org/dgfoundation/amp/testmodels/nicolumns/" 
+		String path = "/home/simple/Desktop/codegen/" 
+		//String path = System.getProperty("user.dir")
+				+ "/src/test/java/org/dgfoundation/amp/testmodels/nicolumns/" 
 				+ getCanonicalNameWithCells(this.name) + ".java";
+		File file = new File(path);
+		file.getParentFile().mkdirs();
 		PrintWriter writer = new PrintWriter(path, "UTF-8");
 		writer.print(String.format(getFilePart1(), clazz.getName(), getCanonicalNameWithCells(this.name), getCanonicalNameWithCells(this.name)));
 		writer.print(this.generate());

@@ -27,7 +27,9 @@ public class ActivityIdsFetcher implements IdsGeneratorSource {
 	
 	@Override public Set<Long> getIds() {
 		try {
-			String whereQuery = activityNames == null ? "" : ("WHERE name IN (" + Util.toCSString(activityNames) + ")");
+			String whereQuery = activityNames == null ? "" : (
+				activityNames.isEmpty() ? "WHERE (1 = 2)" : ("WHERE name IN (" + Util.toCSStringForIN(activityNames) + ")"));
+			
 			String query = "SELECT amp_activity_id from amp_activity " + whereQuery;
 			return new TreeSet<Long>(DbHelper.getInActivities(query));
 		}

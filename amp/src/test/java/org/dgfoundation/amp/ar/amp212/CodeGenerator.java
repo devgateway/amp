@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
@@ -84,9 +85,10 @@ public class CodeGenerator  {
 			gen.generateToFile();
 	}
 	
-	private void generateFunding() {
+	private void generateFunding() throws IOException {
 		 FundingColumnGenerator gen = new FundingColumnGenerator();
-		 System.out.println(gen.generate());
+		 gen.generateToFile();
+		 //System.out.println(gen.generate());
 	}
 	
 	
@@ -110,15 +112,49 @@ public class CodeGenerator  {
 		System.out.println(catGen.generate());
 	}
 	
-	public void generateCode() throws FileNotFoundException, UnsupportedEncodingException  {
-//			generateFunding();
+	public void generateCode() throws IOException  {
+			generateFunding();
 			generateActivityNames();
 //			generateFundingTypesNames();
-//			generateDimensions();
-//			generateColumns();
+			generateDimensions();
+			generateColumns();
 	}
 	
-	public static void main(String[] args)  throws AMPException, FileNotFoundException, UnsupportedEncodingException {
+	/**
+	 * Prior to startup one must make sure than organization names are unique. This is true in the testcases database.
+	 * For real production databases used for benchmarking, one may just prune the duplicate DBs. The SQL queries to do it are, in order:
+	 * 
+	 * create table temp_duplicate_orgs AS
+select z.* from (
+select org_name, count(*) cnt from ni_all_orgs_dimension where org_id > 0 group by org_name) z
+where z.cnt > 1
+
+
+create table temp_orgs_to_delete AS (select amp_org_id from 
+amp_organisation where name in (select org_name from temp_duplicate_orgs))
+
+
+delete from amp_org_role where organisation in (select amp_org_id from temp_orgs_to_delete)
+delete from amp_funding_detail where amp_funding_id in (select amp_funding_id from amp_funding where amp_donor_org_id  in (select amp_org_id from temp_orgs_to_delete))
+
+delete from amp_funding where amp_donor_org_id  in (select amp_org_id from temp_orgs_to_delete)
+
+delete from amp_user_ext where amp_org_id  in (select amp_org_id from temp_orgs_to_delete)
+delete from amp_funding_detail where recipient_org_id in (select amp_org_id from temp_orgs_to_delete)
+truncate amp_ahsurvey cascade
+
+delete from amp_organisation where amp_org_id in (select amp_org_id from temp_orgs_to_delete)
+
+DROP TABLE temp_duplicate_orgs;
+DROP TABLE temp_orgs_to_delete;
+
+
+	 * 
+	 * @param args
+	 * @throws AMPException
+	 * @throws IOException
+	 */
+	public static void main(String[] args)  throws AMPException, IOException {
 		AllTests_amp212.configureLog4j();
 		AllTests_amp212.setUp();
 		new CodeGenerator().generateCode();

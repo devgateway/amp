@@ -100,6 +100,8 @@ public class FundingColumnGenerator extends ColumnGenerator {
 			this.recipient_role = recipient_role;
 			this.source_role = source_role;
 			this.adjustment_type = adjustment_type;
+			if (donor_org == null)
+				System.out.println("masha");
 			this.donor_org = donor_org;
 			this.funding_status = funding_status;
 			this.mode_of_payment = mode_of_payment;
@@ -129,7 +131,10 @@ public class FundingColumnGenerator extends ColumnGenerator {
 		
 	private Map<Long, String> getActivityNames() {
 		String query = "SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_team_id IN "
-				+ "(SELECT amp_team_id FROM amp_team WHERE name = 'test workspace')"
+				+ "(SELECT amp_team_id FROM amp_team WHERE "
+				+ "1=1"
+				//+ "name = 'test workspace'"
+				+ ")"
 				+ "AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity)";
 		return (Map<Long, String>) PersistenceManager.getSession().doReturningWork(connection -> SQLUtils.collectKeyValue(connection, query));
 	}
@@ -171,6 +176,8 @@ public class FundingColumnGenerator extends ColumnGenerator {
 						
 						//these are read from the coords map
 						String donor_org = cat(TestModelConstants.DONOR_ORG_ID, cell.coordinates);
+						if (donor_org == null)
+							continue;
 						String funding_status = cat(TestModelConstants.FUNDING_STATUS_ID, cell.coordinates);
 						String mode_of_payment = cat(TestModelConstants.MODE_OF_PAYMENT_ID, cell.coordinates);
 						String terms_assist = cat(TestModelConstants.TERMS_ASSIST_ID, cell.coordinates);

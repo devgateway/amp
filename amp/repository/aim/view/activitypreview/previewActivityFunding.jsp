@@ -264,8 +264,8 @@
 																	</td>
 																</tr>
 																</logic:notEmpty>
-																<module:display name="/Activity Form/Project Funding/Funding Group/Funding Item/Funding Classification/Effective Funding Date"
-																	parentModule="/Activity Form/Project Funding/Funding Group/Funding Item/Funding Classification">
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Effective Funding Date"
+																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																<logic:notEmpty name="funding" property="effectiveFundingDate">
 																	<tr>
 																		<td align="left" width="150">
@@ -280,8 +280,8 @@
 																	</tr>
 																</logic:notEmpty>
 																</module:display>
-																<module:display name="/Activity Form/Project Funding/Funding Group/Funding Item/Funding Classification/Funding Closing Date"
-																		parentModule="/Activity Form/Project Funding/Funding Group/Funding Item/Funding Classification">
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Closing Date"
+																		parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																<logic:notEmpty name="funding" property="fundingClosingDate">
 																	<tr>
 																		<td align="left" width="150">

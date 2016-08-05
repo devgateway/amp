@@ -362,6 +362,8 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR);
         put(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR);
         put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
+		put(ColumnConstants.EFFECTIVE_FUNDING_DATE, ColumnConstants.EFFECTIVE_FUNDING_DATE);
+		put(ColumnConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
 	}};
 	
 	protected static final List<String> visibleByDefault = Arrays.asList(

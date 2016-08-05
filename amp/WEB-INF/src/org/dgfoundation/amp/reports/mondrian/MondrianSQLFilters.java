@@ -36,7 +36,9 @@ public class MondrianSQLFilters {
 		addDateColumn(ColumnConstants.ACTUAL_COMPLETION_DATE, "actual_completion_date");
 		addDateColumn(ColumnConstants.PROPOSED_COMPLETION_DATE, "proposed_completion_date");
 		addDateColumn(ColumnConstants.ACTIVITY_CREATED_ON, "date_created");
-		addDateColumn(ColumnConstants.ACTIVITY_UPDATED_ON, "date_updated");		
+		addDateColumn(ColumnConstants.ACTIVITY_UPDATED_ON, "date_updated");
+		addDateColumn(ColumnConstants.EFFECTIVE_FUNDING_DATE, "effective_funding_date");
+		addDateColumn(ColumnConstants.FUNDING_CLOSING_DATE, "funding_closing_date");
 		put(ColumnConstants.APPROVAL_STATUS, new MondrianApprovalStatusFilter());
 		put(ColumnConstants.AMP_ID, new MondrianAmpIdFilter());
 		put(ColumnConstants.HUMANITARIAN_AID, new MondrianBooleanAAVFieldFilter("humanitarianaid", ColumnConstants.HUMANITARIAN_AID));

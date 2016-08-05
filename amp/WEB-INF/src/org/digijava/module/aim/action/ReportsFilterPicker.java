@@ -251,16 +251,17 @@ public class ReportsFilterPicker extends Action {
     
     /**
      * 
-     * @param filterForm the struts ActionForm
      * @param fmField the FM field that should be checked in order to see if this element should be shown in the page.
      * If null, no check will be done.
      * @param baseFormProperty the string that will be used to construct the HTML form properties
      * @param label the name that will appear next to this field
      * @param dynamicDateFilterObj the object from the ActionForm that defines this dynamic date filter 
      * @param htmlDivId
+	 * @param otherCriteriaElements
      */
-    private static void addDateFilter(ReportsFilterPickerForm filterForm, String fmField, String baseFormProperty, String label,
-    									DynamicDateFilter dynamicDateFilterObj, String htmlDivId) {
+    private static void addDateFilter(String fmField, String baseFormProperty, String label,
+									  DynamicDateFilter dynamicDateFilterObj, String htmlDivId,
+									  Collection<GroupingElement<HierarchyListableImplementation>> otherCriteriaElements) {
     		if (fmField == null || FeaturesUtil.isVisibleField(fmField) ) {
 			
 				Collection<DateListableImplementation> children = new ArrayList<DateListableImplementation>();
@@ -299,8 +300,8 @@ public class ReportsFilterPicker extends Action {
 				rootDate.setChildren(children);
 				GroupingElement<HierarchyListableImplementation> filterByDate	= 
 						new GroupingElement<HierarchyListableImplementation>(label, htmlDivId, rootDate, "", GroupingElement.GROUPING_ELEMENT_FIELD_TYPE_DATE);
-				
-				filterForm.getOtherCriteriaElements().add(filterByDate);
+
+				otherCriteriaElements.add(filterByDate);
 			}
     }
 	
@@ -780,7 +781,11 @@ public class ReportsFilterPicker extends Action {
 		}
 		
 		addFinancingLocationElement(filterForm, "Activity Pledges Title", "All pledges", CategoryConstants.PLEDGES_NAMES_KEY, "Pledges titles", "filter_activity_peldges_title_div", "selectedActivityPledgesTitle");
-						
+
+		addDateFilter("Effective Funding Date", "EffectiveFunding",
+				"Effective Funding Date", filterForm.getDynamicEffectiveFundingFilter(), "filter_efd_div", filterForm.getFinancingLocationElements());
+		addDateFilter("Funding Closing Date", "FundingClosing",
+				"Funding Closing Date", filterForm.getDynamicFundingClosingFilter(), "filter_fcd_div", filterForm.getFinancingLocationElements());
 		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> activityStatusValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true);	
@@ -969,20 +974,20 @@ public class ReportsFilterPicker extends Action {
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
 		
-		addDateFilter(filterForm, "Actual Start Date", "ActivityStart", "Actual Start Date", 
-				filterForm.getDynamicActivityStartFilter(), "filter_activity_start_date_div");
+		addDateFilter("Actual Start Date", "ActivityStart", "Actual Start Date",
+				filterForm.getDynamicActivityStartFilter(), "filter_activity_start_date_div", filterForm.getOtherCriteriaElements());
 		
-		addDateFilter(filterForm, "Current Completion Date", "ActivityActualCompletion", 
-				"Current Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), "filter_activity_actual_completion_date_div");
+		addDateFilter("Current Completion Date", "ActivityActualCompletion",
+				"Current Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), "filter_activity_actual_completion_date_div", filterForm.getOtherCriteriaElements());
 		
-		addDateFilter(filterForm, "Final Date for Contracting", "ActivityFinalContracting", 
-				"Final Date for Contracting", filterForm.getDynamicActivityFinalContractingFilter(), "filter_activity_final_contracting_date_div");
+		addDateFilter("Final Date for Contracting", "ActivityFinalContracting",
+				"Final Date for Contracting", filterForm.getDynamicActivityFinalContractingFilter(), "filter_activity_final_contracting_date_div", filterForm.getOtherCriteriaElements());
 		
-		addDateFilter(filterForm, "Proposed Approval Date", "ProposedApproval", 
-				"Proposed Approval Date", filterForm.getDynamicProposedApprovalFilter(), "filter_proposed_approval_date_div");
+		addDateFilter("Proposed Approval Date", "ProposedApproval",
+				"Proposed Approval Date", filterForm.getDynamicProposedApprovalFilter(), "filter_proposed_approval_date_div", filterForm.getOtherCriteriaElements());
 		
 		//Finance date filter
-		addDateFilter(filterForm, null, "", "Date Filter", filterForm.getDynamicDateFilter(), "filter_date_div");
+		addDateFilter(null, "", "Date Filter", filterForm.getDynamicDateFilter(), "filter_date_div", filterForm.getOtherCriteriaElements());
 		
 		
 		Collection<AmpIndicatorRiskRatings> meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
@@ -1347,8 +1352,22 @@ public class ReportsFilterPicker extends Action {
 		arf.setDynActivityFinalContractingFilterAmount(filterForm.getDynamicActivityFinalContractingFilter().getAmount());
 		arf.setDynActivityFinalContractingFilterOperator(filterForm.getDynamicActivityFinalContractingFilter().getOperator());
 		arf.setDynActivityFinalContractingFilterXPeriod(filterForm.getDynamicActivityFinalContractingFilter().getxPeriod());
-		
-		arf.setSelectedActivityPledgesSettings(Integer.parseInt(filterForm.getSelectedActivityPledgesSettings()));
+
+        arf.setToEffectiveFundingDate(filterForm.getToEffectiveFundingDate());
+        arf.setFromEffectiveFundingDate(filterForm.getFromEffectiveFundingDate());
+        arf.setDynEffectiveFundingFilterCurrentPeriod(filterForm.getDynamicEffectiveFundingFilter().getCurrentPeriod());
+        arf.setDynEffectiveFundingFilterAmount(filterForm.getDynamicEffectiveFundingFilter().getAmount());
+        arf.setDynEffectiveFundingFilterOperator(filterForm.getDynamicEffectiveFundingFilter().getOperator());
+        arf.setDynEffectiveFundingFilterXPeriod(filterForm.getDynamicEffectiveFundingFilter().getxPeriod());
+
+        arf.setToFundingClosingDate(filterForm.getToFundingClosingDate());
+        arf.setFromFundingClosingDate(filterForm.getFromFundingClosingDate());
+        arf.setDynFundingClosingFilterCurrentPeriod(filterForm.getDynamicFundingClosingFilter().getCurrentPeriod());
+        arf.setDynFundingClosingFilterAmount(filterForm.getDynamicFundingClosingFilter().getAmount());
+        arf.setDynFundingClosingFilterOperator(filterForm.getDynamicFundingClosingFilter().getOperator());
+        arf.setDynFundingClosingFilterXPeriod(filterForm.getDynamicFundingClosingFilter().getxPeriod());
+
+        arf.setSelectedActivityPledgesSettings(Integer.parseInt(filterForm.getSelectedActivityPledgesSettings()));
 
 		int curYear = new GregorianCalendar().get(Calendar.YEAR);
 		

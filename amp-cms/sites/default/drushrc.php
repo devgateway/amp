@@ -37,7 +37,7 @@ $options['shell-aliases']['online'] = 'variable-set -y --always-set maintenance_
 // Create a custom sql-dump command.
 // @TODO: Make this work with Drush 7.
 $drupal_root = drush_get_context('DRUSH_SELECTED_DRUPAL_ROOT');
-$file_name = preg_replace('/[^A-Za-z0-9._-]/', '', basename($drupal_root)) . '.' . date('Ymd-Hi') . '.sql';
+$file_name = preg_replace('/[^A-Za-z0-9._-]/', '', basename($drupal_root)) . '--' . date('ymd-Hi-T') . '.sql';
 $options['shell-aliases']['dump'] = 'sql-dump --result-file=' . $file_name;
 
 $command_specific['sql-dump'] = array(

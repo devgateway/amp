@@ -3,6 +3,23 @@
 # To execute a target ('command'), just type `make` followed by the
 # name of the command.
 
+## Current working directory path.
+ROOT_PATH=$$(dirname $$(readlink -e $(lastword $(MAKEFILE_LIST))))
+
+## Backups Path (without a trailing slash).
+DIR?='.'
+
+## Expand the backups path.
+BACKUPS_PATH?=$$(readlink -e $(DIR))
+
+## Backup file name prefix.
+NAME_PREFIX?=$$(basename $(ROOT_PATH))--$$(date --utc +'%y%m%d-%H%M-%Z')
+
+## Avoid conflicts with files of the same name
+## @see: http://www.gnu.org/savannah-checkouts/gnu/make/manual/html_node/Phony-Targets.html
+.PHONY: dummy update fix fix-permissions backup backup-db backup-files ctf destroy-environment offline online ce config-export ci config-import
+
+
 
 # The default target, if no target argument is provided to `make`.
 # Update an environment with the latest changes from code.
@@ -77,7 +94,7 @@ prepare-local:
 		chmod ug+w sites/default sites/default/drushrc*.php && \
 		cp sites/default/drushrc.{sample,custom}.php \
 	)
-	sed -i -e "s@// \(\$$options\['uri'\].*\)@\1@g" sites/default/drushrc.custom.php
+	@sed -i -e "s@// \(\$$options\['uri'\].*\)@\1@g" sites/default/drushrc.custom.php
 
 # Prepare environment for staging.
 prepare-staging:
@@ -108,6 +125,34 @@ prepare-production:
 		chmod ug+w sites/default sites/default/settings*.php && \
 		cp sites/default/settings.{sample,custom}.php
 	@sed -i -e "s/define('PROJECT_ENVIRONMENT', '\w\+')/define('PROJECT_ENVIRONMENT', 'production')/" sites/default/settings.custom.php
+
+
+## Backup the database.
+backup-db:
+	@# Make sure the environment is prepared.
+	@test -e 'sites/default/settings.custom.php' || (echo 'Missing settings.custom.php, exiting...'; exit 1)
+	@echo 'Backing-up the project database.'
+	@time drush sql-dump --gzip --result-file=$(BACKUPS_PATH)/$(NAME_PREFIX).sql
+	@echo 'Site database backup created:'
+	@echo ' - '$(BACKUPS_PATH)/$(NAME_PREFIX).sql.gz
+
+
+## Backup the user uploaded public files.
+backup-files:
+	@# Make sure the environment is prepared.
+	@test -d 'sites/default/files' || (echo 'Site files directory not found.'; exit 1)
+	@echo Backing-up about `du --si -sm sites/default/files | cut -f1 -` Mb of user uploaded files.
+	@time /usr/bin/tar -C sites/default \
+		--exclude=css \
+		--exclude=ctools \
+		--exclude=languages \
+		--exclude=less \
+		--exclude=js \
+		--exclude=styles \
+		--exclude=backup_migrate \
+		-czf $(BACKUPS_PATH)/$(NAME_PREFIX).files.tgz files
+	@echo 'Site files backup created:'
+	@echo ' - '$(BACKUPS_PATH)/$(NAME_PREFIX).files.tgz
 
 
 # Remove environment specific files.

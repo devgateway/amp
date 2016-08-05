@@ -5,6 +5,7 @@ var JoinIndicator = require('../models/indicator-join-model');
 var ArcGISDynamicLayerIndicator = require('../models/indicator-arcgis-dynamicLayer-model');
 var WMSIndicator = require('../models/indicator-wms-model');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
+var IndicatorLayerLocalStorage = require('../indicator-layer-localstorage');
 
 /* Backbone Collection IndicatorLayers (RENAME FILE) */
 module.exports = Backbone.Collection
@@ -37,7 +38,6 @@ module.exports = Backbone.Collection
   loadAll: function() {
     var self = this;
     var deferred = $.Deferred();
-
     this.load().then(function() {
       self.url = '/rest/gis/indicators';
       self.fetch({remove: false}).then(function() {
@@ -47,15 +47,10 @@ module.exports = Backbone.Collection
 
     return deferred;
   },
-  loadFromLocalStorage: function(data){
-	  var layersString = localStorage.getItem('AMP_INDICATOR_LAYERS') || '[]';
-	  var layers = [];
-	  try{
-		  layers = JSON.parse(layersString);
-	  }catch(e){
-		  console.error(e);
-	  }
+  loadFromLocalStorage: function(data){	 
 	  if(this.url === '/rest/gis/indicators'){
+		  IndicatorLayerLocalStorage.cleanUp();
+		  var layers = IndicatorLayerLocalStorage.findAll();	  
 		  layers.forEach(function(localLayer){			  
 			  data.push(localLayer);
 		  });

@@ -3,6 +3,29 @@
 # To execute a target ('command'), just type `make` followed by the
 # name of the command.
 
+## Current working directory path.
+ROOT_PATH=$$(dirname $$(readlink -e $(lastword $(MAKEFILE_LIST))))
+
+## Backups Path (without a trailing slash).
+DIR?='.'
+
+## Expand the backups path.
+BACKUPS_PATH?=$$(readlink -e $(DIR))
+
+## Backup file name prefix.
+NAME_PREFIX?=$$(basename $(ROOT_PATH))--$$(date --utc +'%y%m%d-%H%M-%Z')
+
+## Avoid conflicts with files of the same name
+## @see: http://www.gnu.org/savannah-checkouts/gnu/make/manual/html_node/Phony-Targets.html
+.PHONY: update install prepare-local prepare-staging prepare-preprod prepare-production backup backup-db backup-files clean destroy cc cf fm offline online
+
+
+## Display a list of targets.
+dummy:
+	@echo 'Here is a list of available commands:'
+	@grep -iE "^[a-z_-]+:" $(lastword $(MAKEFILE_LIST)) | cut -d: -f1 | grep -v dummy | xargs -i{} echo "  $$ make {}"
+	@echo ''
+
 
 # The default target, if no target argument is provided to `make`.
 # Update an environment with the latest changes from code.
@@ -60,46 +83,87 @@ install:
 	@echo '[DONE] Use oneUser/oneUser for credentials!'
 
 # Prepare environment for local development.
-prepare-local: prepare
+prepare-local:
+	@echo 'Creating file: ".htaccess"'
+	@test -f .htaccess || cp .htaccess{_sample,}
 	@echo 'Creating file: "sites/default/update_scripts/environment/setup.local.php"'
 	@test -f sites/default/update_scripts/environment/setup.local.php || \
 		cp sites/default/update_scripts/environment/setup.local{_sample,}.php
 	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
-	@test -f sites/default/settings.custom.php || \
-		chmod ug+w sites/default && \
-		cp sites/default/settings.{sample,custom}.php
+	@test -f sites/default/settings.custom.php || (\
+		chmod ug+w sites/default sites/default/settings*.php && \
+		cp sites/default/settings.{sample,custom}.php \
+	)
+	@sed -i -e "s/define('PROJECT_ENVIRONMENT', '\w\+')/define('PROJECT_ENVIRONMENT', 'local')/" sites/default/settings.custom.php
+	@echo 'Creating and updating file: "sites/default/drushrc.custom.php"'
+	@test -f sites/default/drush.custom.php || (\
+		chmod ug+w sites/default sites/default/drushrc*.php && \
+		cp sites/default/drushrc.{sample,custom}.php \
+	)
+	@sed -i -e "s@// \(\$$options\['uri'\].*\)@\1@g" sites/default/drushrc.custom.php
 
 # Prepare environment for staging.
-prepare-staging: prepare
-	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
-	@test -f sites/default/settings.custom.php || \
-		chmod ug+w sites/default && \
-		cp sites/default/settings.{sample,custom}.php && \
-		chmod ug+w sites/default/settings*.php && \
-		sed -i -e "s/define('PROJECT_ENVIRONMENT', 'local')/define('PROJECT_ENVIRONMENT', 'staging')/" sites/default/settings.custom.php
-
-# Prepare environment for preprod.
-prepare-preprod: prepare
-	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
-	@test -f sites/default/settings.custom.php || \
-		chmod ug+w sites/default && \
-		cp sites/default/settings.{sample,custom}.php && \
-		chmod ug+w sites/default/settings*.php && \
-		sed -i -e "s/define('PROJECT_ENVIRONMENT', 'local')/define('PROJECT_ENVIRONMENT', 'preprod')/" sites/default/settings.custom.php
-
-# Prepare environment for production.
-prepare-production: prepare
-	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
-	@test -f sites/default/settings.custom.php || \
-		chmod ug+w sites/default && \
-		cp sites/default/settings.{sample,custom}.php && \
-		chmod ug+w sites/default/settings*.php && \
-		sed -i -e "s/define('PROJECT_ENVIRONMENT', 'local')/define('PROJECT_ENVIRONMENT', 'production')/" sites/default/settings.custom.php
-
-# Helper prepare.
-prepare:
+prepare-staging:
 	@echo 'Creating file: ".htaccess"'
 	@test -f .htaccess || cp .htaccess{_sample,}
+	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
+	@test -f sites/default/settings.custom.php || \
+		chmod ug+w sites/default sites/default/settings*.php && \
+		cp sites/default/settings.{sample,custom}.php
+	@sed -i -e "s/define('PROJECT_ENVIRONMENT', '\w\+')/define('PROJECT_ENVIRONMENT', 'staging')/" sites/default/settings.custom.php
+
+# Prepare environment for preprod.
+prepare-preprod:
+	@echo 'Creating file: ".htaccess"'
+	@test -f .htaccess || cp .htaccess{_sample,}
+	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
+	@test -f sites/default/settings.custom.php || \
+		chmod ug+w sites/default sites/default/settings*.php && \
+		cp sites/default/settings.{sample,custom}.php
+	@sed -i -e "s/define('PROJECT_ENVIRONMENT', '\w\+')/define('PROJECT_ENVIRONMENT', 'preprod')/" sites/default/settings.custom.php
+
+# Prepare environment for production.
+prepare-production:
+	@echo 'Creating file: ".htaccess"'
+	@test -f .htaccess || cp .htaccess{_sample,}
+	@echo 'Creating and updating file: "sites/default/settings.custom.php"'
+	@test -f sites/default/settings.custom.php || \
+		chmod ug+w sites/default sites/default/settings*.php && \
+		cp sites/default/settings.{sample,custom}.php
+	@sed -i -e "s/define('PROJECT_ENVIRONMENT', '\w\+')/define('PROJECT_ENVIRONMENT', 'production')/" sites/default/settings.custom.php
+
+
+## Backup the database and user uploaded files.
+backup: backup-db backup-files
+	@echo 'Finished creating a full system backup.'
+
+
+## Backup the database.
+backup-db:
+	@# Make sure the environment is prepared.
+	@test -e 'sites/default/settings.custom.php' || (echo 'Missing settings.custom.php, exiting...'; exit 1)
+	@echo 'Backing-up the project database.'
+	@time drush sql-dump --gzip --result-file=$(BACKUPS_PATH)/$(NAME_PREFIX).sql
+	@echo 'Site database backup created:'
+	@echo ' - '$(BACKUPS_PATH)/$(NAME_PREFIX).sql.gz
+
+
+## Backup the user uploaded public files.
+backup-files:
+	@# Make sure the environment is prepared.
+	@test -d 'sites/default/files' || (echo 'Site files directory not found.'; exit 1)
+	@echo Backing-up about `du --si -sm sites/default/files | cut -f1 -` Mb of user uploaded files.
+	@time /usr/bin/tar -C sites/default \
+		--exclude=css \
+		--exclude=ctools \
+		--exclude=languages \
+		--exclude=less \
+		--exclude=js \
+		--exclude=styles \
+		--exclude=backup_migrate \
+		-czf $(BACKUPS_PATH)/$(NAME_PREFIX).files.tgz files
+	@echo 'Site files backup created:'
+	@echo ' - '$(BACKUPS_PATH)/$(NAME_PREFIX).files.tgz
 
 
 # Remove environment specific files.
@@ -125,6 +189,8 @@ destroy:
 	@read -p 'Press [Enter] key to continue or CTRL+C to cancel...'
 	@echo 'Erasing the database content...'
 	@drush sql-drop --yes
+	@echo 'Fixing permissions...'
+	@chmod +w sites/default sites/default/settings.php
 	@echo 'Erasing the user uploaded files...'
 	@rm -rf sites/default/files/*
 

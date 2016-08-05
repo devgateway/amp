@@ -4,6 +4,7 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
@@ -36,7 +37,11 @@ public class ApiErrorResponse {
      */
     public static Response buildGenericError(ApiErrorMessage msg) {
         JsonBean formattedMessage = ApiError.toError(msg);
-        ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(formattedMessage);
+        
+        ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+        		.entity(formattedMessage)
+        		.type(MediaType.APPLICATION_JSON);
+        
         return builder.build();
     }
 	
@@ -87,8 +92,13 @@ public class ApiErrorResponse {
 	 */
 	public static void reportError(Response.Status status, JsonBean error) {
 		logger.error(String.format("[HTTP %d] Error response = %s", status.getStatusCode(), error.toString()));
-		ResponseBuilder builder = Response.status(status).entity(error);
+		
+		ResponseBuilder builder = Response.status(status).
+				entity(error).
+				type(MediaType.APPLICATION_JSON);
+		
 		Response response = builder.build();
+		
 		throw new WebApplicationException(response);
 	}
 	

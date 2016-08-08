@@ -466,12 +466,12 @@ function submitForm(action){
 						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
 						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
 																						
-																						<c:set var="hideExportExcelSetting" scope="page" value="false"/>
-																						<%if(FeaturesUtil.isVisibleFeature("Hide Editable Export Formats")){ %> 
-																							<c:set var="hideExportExcelSetting" scope="page" value="true"/>
+																						<c:set var="showExportExcelSetting" scope="page" value="true"/>
+																						<%if(!FeaturesUtil.isVisibleFeature("Show Editable Export Formats")){ %> 
+																							<c:set var="showExportExcelSetting" scope="page" value="false"/>
 																						<%}%>
 																						
-																						<c:if test="${(sessionScope.currentMember != null) || (not hideExportExcelSetting)}">
+																						<c:if test="${(sessionScope.currentMember != null) || (showExportExcelSetting)}">
 																							<c:set var="translation">
 																								<digi:trn>Get report in Excel format</digi:trn>&nbsp;
 																							</c:set>

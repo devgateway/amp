@@ -354,13 +354,13 @@ function collapseAll() {
 				<img src="img_2/ico_pdf.gif" />${trn}
 			</a>
 
-			<c:set var="hideWordSetting" scope="page" value="false"/>
+			<c:set var="showWordSetting" scope="page" value="false"/>
 			
-			<%if(FeaturesUtil.isVisibleFeature("Hide Editable Export Formats")){ %> 
-				<c:set var="hideWordSetting" scope="page" value="true"/>
+			<%if(FeaturesUtil.isVisibleFeature("Show Editable Export Formats")){ %> 
+				<c:set var="showWordSetting" scope="page" value="true"/>
 			<%}%>
 			
-			<c:if test="${(sessionScope.currentMember != null) || (not hideWordSetting)}">
+			<c:if test="${(sessionScope.currentMember != null) || (showWordSetting)}">
 				<a onclick="javascript:exportToWord(${actId})" class="l_sm" style="cursor: pointer; color:#376091;">
 					<img src="img_2/ico_word.gif" />
 						<digi:trn>Export to Word</digi:trn>

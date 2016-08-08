@@ -881,7 +881,7 @@
 <module:display name="Activity Preview" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Contacts" module="Activity Preview"></feature:display>
 <feature:display name="Version History" module="Activity Preview"></feature:display>
-<feature:display name="Hide Editable Export Formats" module="Activity Preview"></feature:display>
+<feature:display name="Show Editable Export Formats" module="Activity Preview"></feature:display>
 
 <module:display name="Visualization Dashboards"></module:display>
 

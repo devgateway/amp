@@ -16,6 +16,7 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.listenTo(this.model, 'change:selected', this.render);
+    this.listenTo(this.model, 'change:selectedGapAnalysis', this.render);
   },
 
   render: function() {
@@ -27,6 +28,9 @@ module.exports = Backbone.View.extend({
 
   toggleSelect: function() {
     this.model.trigger('toggleSelect', this.model);
+    if (this.model.get('type') === "Indicator Layers" || this.model.get('type') === "joinBoundaries") {
+    	this.app.mapView.headerGapAnalysisView.refresh(this.model);
+    }    
     this.app.translator.translateDOM(this.el);
   }
 

@@ -11,13 +11,13 @@ var SettingsView = require('./settings/views/settings-view');
 
 
 var controlViews = [
-  ProjectsView,
-  StatisticalDataView,
+  {view: ProjectsView, name: 'projectsView'},
+  {view: StatisticalDataView, name: 'statisticalDataView'},
   //LayerManager,
-  FiltersView,
-//  SearchView, //disabled for 2.10
-  ToolsView,
-  SettingsView  
+  {view: FiltersView, name: 'filtersView'},
+  //SearchView, //disabled for 2.10
+  {view: ToolsView, name: 'toolsView'},
+  {view: SettingsView, name: 'settingsView'},  
 ];
 
 module.exports = Backbone.View.extend({
@@ -34,8 +34,11 @@ module.exports = Backbone.View.extend({
 
   // Render entire geocoding view.
   render: function() {
+	self = this;
     this.$el.append(_.map(controlViews, function(ControlView) {
-      var view = new ControlView({app: this.app});
+      var view = new ControlView.view({app: this.app});
+      // We save the reference of each child-view for future use.
+      self[ControlView.name] = view;
       return view.render().el;
     }));
 

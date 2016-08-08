@@ -7,6 +7,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,11 +22,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.ProgramUtil.ProgramHierarchyDefinition;
 import org.digijava.module.aim.util.ProgramUtil.XMLtreeItemFactory;
@@ -128,16 +129,16 @@ public class ThemeManager extends Action {
 		
 			//Iterator itr = DbUtil.getActivityThemeFromAAT(new Long(Long.parseLong(request.getParameter("themeId")))).iterator();
                         Long programId=themeForm.getThemeId();
-			Collection col = ProgramUtil.checkActivitiesUsingProgram(programId);
+			List<String> acts = ProgramUtil.getActivityNamesUsingProgram(programId);
 			Collection col2 = ProgramUtil.getProgramIndicators(programId);
                       
 			String nameOfSettingsUsedInActivity	= ProgramUtil.getNameOfProgramSettingsUsed( themeForm.getThemeId() );
 			
-			if( !flagProblemFound && (col!=null) && (!(col.isEmpty())) )
+			if( !flagProblemFound && (acts!=null) && (!(acts.isEmpty())) )
 			{
 				flagProblemFound	= true;
 				themeForm.setFlag("activityReferences");
-				themeForm.setActivitiesUsingTheme( ActivityUtil.collectionToCSV(col) );
+				themeForm.setActivitiesUsingTheme(SQLUtils.generateCSV(acts));
 			}
 			if ( !flagProblemFound && nameOfSettingsUsedInActivity != null && nameOfSettingsUsedInActivity.length() > 0 ) {
 				flagProblemFound 	= true;

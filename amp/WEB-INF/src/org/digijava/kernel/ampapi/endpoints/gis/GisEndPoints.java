@@ -351,22 +351,12 @@ public class GisEndPoints {
 		}
 	}
 	
-	// TODO: remove this one once GIS migrated to POST method
-	@GET
-	@Path("/indicators/{indicatorId}")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "IndicatorById")	
-	public JsonBean getIndicatorsById(@PathParam ("indicatorId") Long indicatorId){
-	    return getIndicatorsById(new JsonBean(), indicatorId, false);
-	    //return getIndicatorsById(new JsonBean(), indicatorId, true);
-	}
-	
 	@POST
 	@Path("/indicators/{indicatorId}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "IndicatorById")
-	public JsonBean getIndicatorsById(JsonBean input, @PathParam ("indicatorId") Long indicatorId, 
-	        @QueryParam("gapAnalysis") @DefaultValue("false") Boolean isGapAnalysis) {
+	public JsonBean getIndicatorsById(JsonBean input, @PathParam ("indicatorId") Long indicatorId) {
+		boolean isGapAnalysis = Boolean.valueOf(input.get("gapAnalysis").toString());
 	    return IndicatorUtils.getIndicatorsAndLocationValues(indicatorId, input, isGapAnalysis);
 	}
 	

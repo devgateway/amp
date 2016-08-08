@@ -16,6 +16,16 @@ module.exports = Backbone.Model
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
     });
+    
+    this.listenTo(this, 'change:selectedGapAnalysis', function(blah, show) {
+        this.trigger('sync', this);
+    });
+       
+    // We listen to the "apply" event on filter widget and trigger a "filter" event that will be listened by our view.
+    // This way the view will also receive this model as parameter.
+    this.listenTo(app.data.filter, 'apply', function(blah, show) {
+        this.trigger('filter', this);
+    });  
 
     var numStops = this.get('classes') || 5;
     var values = this.get('values') || [];
@@ -57,24 +67,42 @@ module.exports = Backbone.Model
     return boundaryLoaded;
   },
 
-  loadAll: function() {
-    return when(this.load(), this.loadBoundary()).promise().done(function() {
+  loadAll: function(options) {
+    return when(this.load(options), this.loadBoundary()).promise().done(function() {
       $('#map-loading').hide();
     });
   },
+  
   fetch: function(){
+	  var self = this;
 	  var deferred = new jQuery.Deferred();
 	  if(this.attributes.isStoredInLocalStorage === true){		  
 		  var layer = IndicatorLayerLocalStorage.findById(this.attributes.id);;
 		  if(!_.isUndefined(layer)){
 			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);
 			  deferred.resolve(layer);
-		  }		  
-	  }else{
-		  return Backbone.Model.prototype.fetch.call(this) ;
+		  }
+	  } else {
+		// By adding this section here in fetch we are sure any call made over /rest/indicators/id will have the right parameters without duplicating code.  
+		if (this.lastFetchXhr && this.lastFetchXhr.readyState > 0 && this.lastFetchXhr.readyState < 4) {
+			return this.lastFetchXhr.abort();
+		}
+		var filter = {otherFilters: {}};
+	    if (app.data.filter) {
+	      _.extend(filter, app.data.filter.serialize());
+	    }
+	    filter.settings = app.data.settings.serialize();
+	    var params = {};
+	    filter.gapAnalysis = app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected');
+	    params.type = 'POST';
+	    params.data = JSON.stringify(filter);
+	    // "params" will set the right type + filters + settings + gap analysis.
+	    this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
+	    return this.lastFetchXhr;
 	  }
 	  return deferred.promise();	  
-  }, 
+  },
+    
   updatePaletteRange: function() {
     var min = +Infinity,
         max = -Infinity;

@@ -436,9 +436,7 @@ public class SettingsUtils {
 		settings.add(new SettingOptions(
 				"hide-editable-export-formats-public-view",
 				GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW,
-				new SettingOptions.Option(
-						FeaturesUtil
-								.getGlobalSettingValue(GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW))));
+				new SettingOptions.Option(String.valueOf(FeaturesUtil.isVisibleFeature("Hide Editable Export Formats")))));
 		
 		// Workspace Settings
 		if (MenuUtils.getCurrentView() == AmpView.TEAM) {
@@ -627,7 +625,7 @@ public class SettingsUtils {
 		if (amountFormat != null) {
 			String decimalSymbol = (String) amountFormat.get(SettingsConstants.DECIMAL_SYMBOL);
 			String maxFractDigits = (String) amountFormat.get(SettingsConstants.MAX_FRACT_DIGITS);
-			Integer maxFractDigitsNum  = StringUtils.isNumber(maxFractDigits) ? Integer.valueOf(maxFractDigits) : null;
+			Integer maxFractDigitsNum = maxFractDigits != null && StringUtils.isNumber(maxFractDigits) ? Integer.valueOf(maxFractDigits) : null;
 			Boolean useGrouping  = (Boolean) amountFormat.get(SettingsConstants.USE_GROUPING);
 			String groupingSeparator  = (String) amountFormat.get(SettingsConstants.GROUP_SEPARATOR);
 			Integer groupingSize  = (Integer) amountFormat.get(SettingsConstants.GROUP_SIZE);

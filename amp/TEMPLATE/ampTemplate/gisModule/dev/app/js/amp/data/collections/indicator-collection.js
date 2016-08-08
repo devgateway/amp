@@ -128,7 +128,9 @@ module.exports = Backbone.Collection
 	     }
 	     if(obj.createdBy){
 		      tooltip += '&#013; Created by ' + obj.createdBy + '. ';
-		 }
+		 } else {
+             tooltip += '&#013; Created by Admin'; // if the layer is created by the admin then it's null.
+         }
 	     return tooltip;
   }
 

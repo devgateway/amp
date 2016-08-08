@@ -43,7 +43,7 @@ public class IndicatorImporter {
      * @return returns
      * @throws org.digijava.module.aim.exception.AimException
      */
-    public Collection<JsonBean> processExcelFile(InputStream inputStream, String name) {
+    public Collection<JsonBean> processExcelFile(InputStream inputStream) {
         POIFSFileSystem fsFileSystem = null;
         Collection<JsonBean> locationIndicatorValueList = new ArrayList<JsonBean>();
         Set<String> geoIdsWithProblems=new HashSet<String>();
@@ -81,11 +81,6 @@ public class IndicatorImporter {
             int indicatorNumberOfCells = 1;
             if (indicatorNumberOfCells+2 < physicalNumberOfCells) {
                 errors.addApiErrorMessage(IndicatorErrors.NUMBER_NOT_MATCH, " physical number of cells not match ");
-            }
-
-            String cellValue = hssfRow.getCell(2).getStringCellValue();
-            if (!cellValue.equals(name)) {
-                errors.addApiErrorMessage(IndicatorErrors.NAME_NOT_MATCH, " name not match between " + cellValue + " and " + name);
             }
 
             for (int j = 1; j < hssfSheet.getPhysicalNumberOfRows(); j++) {

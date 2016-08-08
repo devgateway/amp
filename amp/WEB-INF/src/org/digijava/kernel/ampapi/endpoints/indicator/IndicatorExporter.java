@@ -109,7 +109,7 @@ public class IndicatorExporter {
         InputStream inputStream = new ByteArrayInputStream(fileData);
 
         IndicatorImporter importer = new IndicatorImporter();
-        Collection<JsonBean> locationIndicatorValueList = importer.processExcelFile(inputStream, name);
+        Collection<JsonBean> locationIndicatorValueList = importer.processExcelFile(inputStream);
 
         if (!importer.getApiErrors().isEmpty()) {
             EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);

@@ -24,6 +24,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.DatabaseWaver;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -58,6 +59,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import com.tonbeller.wcf.utils.SqlUtils;
 
 
 public class ProgramUtil {
@@ -1653,51 +1656,24 @@ public class ProgramUtil {
 		}
     	return "../ampTemplate/images/arrow_right.gif";
     }
-
-    public static Collection<AmpActivityVersion> checkActivitiesUsingProgram( Long programId ) {
-    	ArrayList<AmpActivityVersion> activities	= new ArrayList<AmpActivityVersion>();
-    	 Session sess = null;
-         Collection col = null;
-         try {
-             ArrayList programs = (ArrayList) getRelatedThemes(programId);
-             if (programs != null) {
-                 Iterator<AmpTheme> iterProgram = programs.iterator();
-                 while (iterProgram.hasNext()) {
-                     AmpTheme program = iterProgram.next();
-                     sess = PersistenceManager.getRequestDBSession();
-                     AmpTheme themeToBeDeleted = (AmpTheme) sess.load(AmpTheme.class, program.getAmpThemeId());
-//                     if (themeToBeDeleted.getActivities() != null) {
-//                         activities.addAll(themeToBeDeleted.getActivities());
-//                     }
-//                     if (themeToBeDeleted.getActivityId() != null) {
-//                         activities.add(themeToBeDeleted.getActivityId());
-//                     }
-
-                     String queryString = "select a from " + AmpActivityProgram.class.getName() + " a where (a.program=:program) ";
-                     Query qry = sess.createQuery(queryString);
-                     qry.setLong("program", programId);
-                     Collection result = qry.list();
-                     if (result != null) {
-                         Iterator iterator = result.iterator();
-                         while (iterator.hasNext()) {
-                             AmpActivityProgram actProgram = (AmpActivityProgram) iterator.next();
-                             if (actProgram != null && actProgram.getActivity() != null) {
-                                 activities.add(actProgram.getActivity());
-                             }
-                         }
-                     }
-                 }
-             }
-
-             return activities;
-         }
-         catch (Exception e) {
-			// TODO: handle exception
-        	 e.printStackTrace();
-        	 return null;
-		}
-    	
-    }
+    
+	
+	/**
+	 * Fetches the names of last version of activities that have a specific program
+	 * @param programId the program id to be selected
+	 * @return
+	 */
+	public static List<String> getActivityNamesUsingProgram( Long programId ) {
+		return PersistenceManager.getSession().doReturningWork(conn -> {
+			String query = "SELECT distinct(aa.name) "
+					+ "FROM amp_activity aa "
+					+ "JOIN amp_activity_program aap "
+					+ "ON aap.amp_activity_id = aa.amp_activity_id "
+					+ "WHERE aap.amp_program_id = " + programId;
+			return SQLUtils.fetchAsList(conn, query, 1);
+		});
+	}
+    
     public static String getNameOfProgramSettingsUsed(Long programId) { 
     	Collection programSettings					= getProgramSetttingsUsed(programId);
     	
@@ -1713,6 +1689,7 @@ public class ProgramUtil {
     	else
     		return null;
     }
+    
     public static Collection getProgramSetttingsUsed(Long programId) {
     	Session sess 						= null;
         try {

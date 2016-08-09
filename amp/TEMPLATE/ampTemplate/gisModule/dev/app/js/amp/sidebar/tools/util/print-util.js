@@ -29,7 +29,6 @@ function printMap(options) {
         });
     });
     mapContainer.find(".table").css("font-size", "0.9em");
-    mapContainer.find(".leaflet-popup").css("font-family", '"Helvetica Neue", Helvetica, Arial, sans-serif;');
     _.each(removedEl, function (el) {
         var elem = mapContainer.find(el);
         if(!elem.hasClass('expanded')) {
@@ -57,13 +56,29 @@ function printMap(options) {
     var styleTabsLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/less/tabs.css");
     var styleBootstrapLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap.css");
     var styleBootstrapThemeLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap-theme.css");
+    var fontBaseLocation = document.location.href.replace("index.html", "fonts");
+    var fontFace = "@font-face {" +
+                    " font-family: 'Open Sans';" +
+                    " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot');"+
+                    " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.woff') format('woff'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.ttf') format('truetype'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.svg#open_sanslight') format('svg');"+
+                    " font-weight: 300;" +
+                    " font-style: normal;" +
+                    "} " +
+                    "@font-face {" +
+                    " font-family: 'Open Sans';" +
+                    " src: url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');" +
+                    " src: url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');" +
+                    " font-weight: 800;" +
+                    " font-style: normal;" +
+                    "}";
     var headers = '<meta http-equiv="content-type" content="text/html; charset=UTF-8">' +
                   '<link rel="stylesheet" href="' + styleLocation + '">' +
                   '<link rel="stylesheet" href="' + styleBootstrapLocation + '">' +
                   '<link rel="stylesheet" href="' + styleTabsLocation + '">' +
-                  '<link rel="stylesheet" href="' + styleBootstrapThemeLocation + '">';
+                  '<link rel="stylesheet" href="' + styleBootstrapThemeLocation + '">' +
+                  '<style>' + fontFace + '</style>';
     var html = "<html><head>" + headers + "</head><body>" + mapContainer[0].outerHTML + "</body></html>";
-    console.log(html);
+    //console.log(html); Only for Debugging
     $.ajax({
         data: JSON.stringify({
             content: html,

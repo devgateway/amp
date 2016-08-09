@@ -11,7 +11,7 @@ webpage.open(system.args[1], function (status) {
             console.log(webpage.injectJs(system.args[5]));
         }
         window.setTimeout(function () {
-            webpage.render(imageFile);
+            webpage.render(imageFile, {format: 'png', quality: '100'});
             phantom.exit();
         }, 200);
     }

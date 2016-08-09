@@ -159,6 +159,28 @@ function ampapi_activity_search_settings_form($form, &$form_state) {
     '#element_validate' => array('ampapi_activity_search_enabled_columns_validate'),
   );
 
+  // Let's allow users to select global amount option.
+  $amount_units_settings = _ampapi_activity_get_api_settings('amount-units');
+  $amount_units_options = array();
+  foreach ($amount_units_settings as $amount_id => $amount_unit_setting) {
+    $amount_units_options[$amount_id] = $amount_unit_setting['name'];
+  }
+  $form_elements['amount_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Amount Options'),
+    '#description' => t("These options change the global amount formatting for the numeric output for measure columns."),
+
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#parents' => array('ampapi_activity_search_settings'), // Remove the fieldset from the submitted values structure.
+  );
+  $form_elements['amount_settings']['global_amount'] = array(
+    '#type' => 'select',
+    '#title' => t('Global (Search) Amounts'),
+    '#options' => $amount_units_options,
+    '#default_value' => $search_settings['global_amount'],
+    '#description' => t('Please specify which global amount formatting option you would like to use.'),
+  );
   $form['ampapi_activity_search_settings'] += $form_elements;
   $form['#submit'][] = 'ampapi_activity_search_settings_form_submit';
 
@@ -172,7 +194,24 @@ function ampapi_activity_search_enabled_columns_validate($element, &$form_state,
   // Only save the list of enabled columns.
   $key = 'ampapi_activity_search_settings';
   $enabled_columns = $form_state['values'][$key]['enabled_columns'];
-  $form_state['values'][$key]['enabled_columns'] = array_filter($enabled_columns);
+  $enabled_columns = array_filter($enabled_columns);
+  $form_state['values'][$key]['enabled_columns'] = $enabled_columns;
+
+  // Select all of the measure columns and make sure at least 1 is enabled.
+  $mappers = ampapi_get_mappers();
+  $measure_columns = array();
+  foreach ($mappers as $key => $plugin) {
+    if (!empty($plugin['property name']) && $plugin['report field group'] == 'measures') {
+      $measure_columns[$plugin['property name']] = $plugin['title'];
+    }
+  }
+  if (!empty($measure_columns)) {
+    $enabled_measures = array_intersect(array_keys($measure_columns), array_keys($enabled_columns));
+    if (empty($enabled_measures)) {
+      $measures = implode(', ', $measure_columns);
+      form_set_error('columns', t('Please make sure you have enabled at least 1 measures column.<br />Measures columns are: %measures.', array('%measures' => $measures)));
+    }
+  }
 }
 
 /**
@@ -182,7 +221,8 @@ function ampapi_activity_search_enabled_filters_validate($element, &$form_state,
   // Only save the list of enabled columns.
   $key = 'ampapi_activity_search_settings';
   $enabled_filters = $form_state['values'][$key]['enabled_filters'];
-  $form_state['values'][$key]['enabled_filters'] = array_filter($enabled_filters);
+  $enabled_filters = array_filter($enabled_filters);
+  $form_state['values'][$key]['enabled_filters'] = $enabled_filters;
 }
 
 /**

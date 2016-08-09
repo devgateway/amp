@@ -427,6 +427,71 @@ function ampapi_activity_get_search_settings() {
     $settings['ssc_status'] = FALSE;
   }
 
+  if (empty($settings['global_amount'])) {
+    $settings['global_amount'] = 'amountUnits1';
+  }
+
+  return $settings;
+}
+
+/**
+ * Fetches the API settings.
+ *
+ * @param mixed $id
+ *  String representation of the ID of the searched settings.
+ *
+ * @return mixed
+ *  Returns ALL settings if $id argument isn't specified,
+ *  Returns specific settings related to specified $id,
+ *  If specified $id is a wrong one, returns FALSE.
+ */
+function _ampapi_activity_get_api_settings($id = FALSE) {
+  // Make the call.
+  $settings = ampapi_request('get', 'amp/settings', TRUE);
+  // Specify exceptions (usually hardcoded settings, FOR NOW).
+  $exceptions = array(
+    'amount-units' => array(
+      'amountUnits1' => array(
+        'name' => t('Units (1)'),
+        'value' => 1.0,
+      ),
+      'amountUnits1000' => array(
+        'name' => t('Thousands (1 000)'),
+        'label long' => t('Thousands'),
+        'label short' => t('K'),
+        'value' => 0.001,
+      ),
+      'amountUnits1000000' => array(
+        'name' => t('Millions (1 000 000)'),
+        'label long' => t('Millions'),
+        'label short' => t('M'),
+        'value' => 0.000001,
+      ),
+      'amountUnits1000000000' => array(
+        'name' => t('Billions (1 000 000 000)'),
+        'label long' => t('Billions'),
+        'label short' => t('B'),
+        'value' => 0.000000001,
+      ),
+    )
+  );
+
+  if ($id) {
+    // Of course, we have exceptions, these are hardcoded versions of the settings,
+    // because currently API doesn't handle them nicely.
+    if (in_array($id, array_keys($exceptions))) {
+      return $exceptions[$id];
+    }
+    else {
+      // Look-up the ID.
+      foreach ($settings as $setting) {
+        if ($id == $setting->id) {
+          return $id;
+        }
+      }
+    }
+    return FALSE;
+  }
   return $settings;
 }
 

@@ -204,6 +204,32 @@ function _contentwidget_settings_clean_values($values) {
 }
 
 /**
+ * Helper function that gets the fixed contentblock settings.
+ *
+ * @param $machine_name
+ *  Machine name of the contentblock.
+ *
+ * @return array
+ *  Returns the settings array.
+ */
+function _contentwidget_fixed_get_settings($machine_name) {
+  return variable_get('contentblock_fixed_' . $machine_name, array());
+}
+
+/**
+ * Helper function that sets the fixed contentblock settings.
+ *
+ * @param $machine_name
+ *  Machine name of the contentblock.
+ *
+ * @param $data
+ *  Data is a simple array.
+ */
+function _contentwidget_fixed_set_settings($machine_name, $data) {
+  variable_set('contentblock_fixed_' . $machine_name, $data);
+}
+
+/**
  * Implements hook_field_is_empty().
  */
 function contentwidget_field_is_empty($item, $field) {

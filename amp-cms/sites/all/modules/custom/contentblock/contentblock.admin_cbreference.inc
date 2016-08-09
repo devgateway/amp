@@ -65,6 +65,15 @@ function _contentblock_form_contentblock_form_alter(&$form, &$form_state, $form_
       $form['#validate'][] = '_contentblock_cbreference_entity_form_welcome_validate';
       break;
   }
+
+  // Use the widget form if specified so.
+  if (isset($cbreference_info['use widget form']) && $cbreference_info['use widget form'] == TRUE) {
+    $plugin = contentwidget_get_predefined_widget($form['#entity']->machine_name);
+    if ($function = ctools_plugin_get_function($plugin, 'settings form')) {
+      $widget_settings = _contentwidget_fixed_get_settings($form['#entity']->machine_name);
+      $form = $function($form, $form_state, $plugin, $widget_settings);
+    }
+  }
 }
 
 /**

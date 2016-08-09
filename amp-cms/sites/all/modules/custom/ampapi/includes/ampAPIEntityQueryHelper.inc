@@ -152,6 +152,16 @@ class ampAPIEntityQueryHelper {
     // Always show Activities with empty funding.
     $request_body['show_empty_rows'] = TRUE;
 
+    // Now let's add some settings to the request of the body.
+    $search_settings = ampapi_activity_get_search_settings();
+
+    // Let's add amount units (and force them to be floats).
+    $global_amount = $search_settings['global_amount'];
+    $amount_units_settings = _ampapi_activity_get_api_settings('amount-units');
+    $global_amount_settings = $amount_units_settings[$global_amount];
+    $request_body['settings']['amountFormat']['amountUnits'] = $global_amount_settings['value'];
+    $query->addMetaData('amount_units', $global_amount_settings);
+
     // @TODO: Deal with multiple sorts and maping of special properties.
     // @TODO: Request API support for count queries, for now we don't include order options.
     if ($query->order && !$query->count) {

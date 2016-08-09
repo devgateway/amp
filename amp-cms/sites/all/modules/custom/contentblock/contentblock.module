@@ -193,6 +193,7 @@ function contentblock_get_fixed_types($type = NULL) {
     'action label' => t('Edit'),
     'available_fields' => array(
     ),
+    'use widget form' => TRUE,
   );
 
   $items['totalpledges'] = array(
@@ -201,6 +202,7 @@ function contentblock_get_fixed_types($type = NULL) {
     'action label' => t('Edit'),
     'available_fields' => array(
     ),
+    'use widget form' => TRUE,
   );
 
   $items['blogsidebar'] = array(

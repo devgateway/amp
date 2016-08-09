@@ -5,7 +5,6 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -15,11 +14,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
@@ -99,16 +98,27 @@ public class UpdateWorkspace extends Action {
 			newTeam.setName(uwForm.getTeamName());
 			
 			newTeam.setAccessType(uwForm.getWorkspaceType());
-			newTeam.setAddActivity(uwForm.getAddActivity());
 			newTeam.setComputation(uwForm.getComputation());
 			newTeam.setCrossteamvalidation(uwForm.getCrossteamvalidation());
 			newTeam.setIsolated(uwForm.getIsolated());
-			if (newTeam.getIsolated()) {
-                TeamUtil.unlinkParentWorkspace(uwForm.getTeamId());
+			
+			if (!newTeam.getIsolated()) {
+				newTeam.setAddActivity(uwForm.getAddActivity());
+				newTeam.setUseFilter(uwForm.getUseFilter());
+				newTeam.setHideDraftActivities(uwForm.getHideDraftActivities());
+				
+				if(uwForm.getUseFilter() == null || !uwForm.getUseFilter()) {
+					if (uwForm.getOrganizations() != null) {
+						TreeSet s = new TreeSet();
+						s.addAll(uwForm.getOrganizations());
+						newTeam.setOrganizations(s);
+					}
+				} 
+			} else {
+				TeamUtil.unlinkParentWorkspace(uwForm.getTeamId());
 			}
-			newTeam.setUseFilter(uwForm.getUseFilter());
-			newTeam.setHideDraftActivities(uwForm.getHideDraftActivities());
-                newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
+            
+            newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
             
             if(uwForm.getUseFilter()==null || !uwForm.getUseFilter()){
 				if (uwForm.getOrganizations() != null) {
@@ -185,7 +195,7 @@ public class UpdateWorkspace extends Action {
 					return mapping.getInputForward();
 				}
 
-                if(uwForm.getUseFilter()!=null && uwForm.getUseFilter()){
+				if(!uwForm.getIsolated() && uwForm.getUseFilter() !=null && uwForm.getUseFilter()){
                     AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
                     if ( filter != null) {
                         if ( newTeam.getAmpTeamId()!=null )
@@ -251,44 +261,42 @@ public class UpdateWorkspace extends Action {
 					uwForm.getDeletedChildWorkspaces().clear();
 				}
 
-				if (uwForm.getUseFilter() == null || !uwForm.getUseFilter()) {
-					if (uwForm.getOrganizations() != null) {
-						TreeSet s = new TreeSet();
-						s.addAll(uwForm.getOrganizations());
-						newTeam.setOrganizations(s);
-					}
-
-					if (newTeam.getAmpTeamId() != null) {
-                        AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
-                    }
-					
-				} else {//uses filter
-					newTeam.setOrganizations(null);
-
-                    AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
-					if ( filter != null) {
-						if ( newTeam.getAmpTeamId()!=null )
-							AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
-						Set fdSet	= AmpFilterData.createFilterDataSet(newTeam, filter);
-						if (newTeam.getFilterDataSet() == null) {
-                            newTeam.setFilterDataSet(fdSet);
-                        } else {
-							newTeam.getFilterDataSet().clear();
-							newTeam.getFilterDataSet().addAll(fdSet);
+				if (!uwForm.getIsolated()) {
+					if (!Boolean.valueOf(uwForm.getUseFilter())) {
+						if (uwForm.getOrganizations() != null) {
+							TreeSet s = new TreeSet();
+							s.addAll(uwForm.getOrganizations());
+							newTeam.setOrganizations(s);
 						}
-					} else if (newTeam.getAmpTeamId() != null) {
-                        AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
-                    }
-					
+
+						if (newTeam.getAmpTeamId() != null) {
+	                        AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
+	                    }
+					} else {//uses filter
+						newTeam.setOrganizations(null);
+	
+	                    AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
+						if ( filter != null) {
+							if ( newTeam.getAmpTeamId()!=null )
+								AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
+							Set fdSet	= AmpFilterData.createFilterDataSet(newTeam, filter);
+							if (newTeam.getFilterDataSet() == null) {
+	                            newTeam.setFilterDataSet(fdSet);
+	                        } else {
+								newTeam.getFilterDataSet().clear();
+								newTeam.getFilterDataSet().addAll(fdSet);
+							}
+						} else if (newTeam.getAmpTeamId() != null) {
+	                        AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
+	                    }
+					}
 				}
 	                
-					if (uwForm.getWorkspaceGroup() != null) {
-	                	newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
-	                }
+				if (uwForm.getWorkspaceGroup() != null) {
+                	newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
+                }
 	            
-                    
-				boolean teamExist = TeamUtil.updateTeam(newTeam,
-						uwForm.getChildWorkspaces());
+				boolean teamExist = TeamUtil.updateTeam(newTeam, uwForm.getChildWorkspaces());
 				if (teamExist) {
 					errors.add(
 							ActionMessages.GLOBAL_MESSAGE,

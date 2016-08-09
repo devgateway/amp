@@ -40,8 +40,8 @@ module.exports = BackboneDash.View.extend({
     if (this.model.get('chartType') === 'fragmentation') {
 	    previousXLimit = this.model.get('xLimit');
 	    previousYLimit = this.model.get('yLimit');
-	    this.model.set('yLimit', 10000);
-	    this.model.set('xLimit', 10000);
+	    this.model.set('yLimit', -1);
+	    this.model.set('xLimit', -1);
 	    this.model.set('showFullLegends', true);
 	    var chart = _.find(this.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
 	    chart.render();
@@ -181,15 +181,12 @@ module.exports = BackboneDash.View.extend({
 	var self = this;
 	
 	if (this.model.get('chartType') === 'fragmentation') {
+		// This is what applies the necessary styles to the chart´s SVG.
 		var css = "rect.bordered {stroke: #E6E6E6;stroke-width: 2px;} text.mono {font-size: 9pt;font-family: Arial;fill: #000;}";
 	    var s = document.createElement('style');
 	    s.setAttribute('type', 'text/css');
 	    s.innerHTML = "<![CDATA[\n" + css + "\n]]>";
-	    //var defs = document.createElement('defs');
-	    //defs.appendChild(s);
 	    svg.getElementsByTagName("defs")[0].appendChild(s);
-	    //svg.insertBefore(defs, canvas.firstChild);    
-	    //svg.appendChild(defs);
 	}
 	
     var boundCB = _(cb).bind(this);

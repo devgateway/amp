@@ -393,20 +393,17 @@ var heatMapChart = require('./customized/heatMapChart');
 var _ = require('underscore');
 
 function dataToNv(data) {
-	//console.log("_heatmap.dataToNv");
   return data;
 }
 
 
 function countCategories(data) {
-	//console.log("_heatmap.countCategories");
   // note: this takes regular data, not dataToNv data.
   return data[0].values.length - 1;  // 1 for others...?
 }
 
 
 function chart(options, data) {
-	//console.log("_heatmap.chart");
   //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
   //will give me >400 px height
   var height = options.height < 400 ? 300 : 400;
@@ -415,38 +412,12 @@ function chart(options, data) {
 	  height = calculatedHeight; 
   }
    
-  //TODO: Check if discreteBarChart is the best option.
   var _chart = nv.models.heatMapChart().height(900);
-    /*.valueFormat(options.shortFormatter)
-    .showValues(true)
-    .showYAxis(false)
-    .showXAxis(false)
-    .height(height)
-    .margin({ top: 5, right: 10, bottom: 10, left: 10 });*/
   return _chart;
 }
 
 
 function addLegend(svg, chart, nvData, trimLabels, width) {
-	//console.log("_heatmap.addLegend");
-  /*var legendHeight;
-
-  var legend = nv.models.legend()
-    .width(width || svg.clientWidth)
-    .margin({left: 20, right: 20})
-    .rightAlign(false)
-    .color(util.categoryColours(nvData[0].values.length))
-    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : util.formatShortText(85)(d.x); });
-
-  d3.select(svg)
-    .datum(nvData)
-    .append('g')
-      .attr('class', 'legend')
-      .datum(nvData[0].values)
-      .call(legend);
-
-  legendHeight = svg.querySelector('.legend').getBBox().height;
-  chart.margin({top: legendHeight + 15});*/
 }
 
 
@@ -1080,26 +1051,28 @@ nv.models.heatMapChart = function() {
     //------------------------------------------------------------	
 
     var heatmap = nv.models.heatmap();
-    //var legend = nv.models.legend().margin({top: 0, right: 0, bottom: 0, left: 0});
 
     var margin = {top: 30, right: 20, bottom: 20, left: 20}
-    //var legendMargin = {top: 30, right: 20, bottom: 20, left: 20}
     var width = null;
 	var height = null;
     var showLegend = false;
     var color = nv.utils.defaultColor();
-    var tooltips = true;
-    var tooltip = function(key, y, e, graph) {
-    	return '<h3 style="background-color: '
-        	+ e.color + '">' + key + '</h3>'
-            + '<p>' +  y + '</p>';
-        }
     var	state = nv.utils.state();
     var defaultState = null;
     var noData = "No Data Available.";
     var duration = 250;
     var dispatch = d3.dispatch('tooltipShow', 'tooltipHide', 'stateChange', 'changeState','renderEnd');
     var shortTextLength = 17;
+    var innerMargin = {
+    		top : 120,
+			right : 0,
+			bottom : 100,
+			left : 150
+    };
+    
+    const initialWidth = 960;
+    const initialHeight = 400;
+    const containerWidth = 1024;
 
     //============================================================
     // Private Variables
@@ -1139,11 +1112,11 @@ nv.models.heatMapChart = function() {
     	var _self = this;
     	this.rendered = false;
     	var _ = require('underscore'); // This doesnt works on top of the file :(((
-    	//console.log('heatMapChart.chart');
+
         renderWatch.reset();
         renderWatch.models(heatmap);
 
-        selection.each(function(data) {//TODO: selection.each????
+        selection.each(function(data) {
         	// Get currency for later.
         	var currencySettings = _.find(app.settings.models, function(item) {return item.get('id') === '1'});
         	var selectedCurrency = _.find(currencySettings.get('options'), function(item) {return item.selected === true}).value;
@@ -1152,12 +1125,11 @@ nv.models.heatMapChart = function() {
         	var container = d3.select(this);
             nv.utils.initSVG(container);
 
-            var availableWidth = (width || parseInt(container.style('width'), 10) || 960)
+            var availableWidth = (width || parseInt(container.style('width'), 10) || initialWidth)
                     - margin.left - margin.right;
-            var availableHeight = (height || parseInt(container.style('height'), 10) || 400)
+            var availableHeight = (height || parseInt(container.style('height'), 10) || initialHeight)
                     - margin.top - margin.bottom;
 
-            //chart.update = function() { container.transition().call(chart); }; //comented to avoid adding the chart again.
             chart.container = this;
 
             state.setter(stateSetter(data), chart.update)
@@ -1178,20 +1150,14 @@ nv.models.heatMapChart = function() {
                 }
             }
 
-            //TODO: move these definitions to top.
-            var innerMargin = {
-            		top : 120,
-        			right : 0,
-        			bottom : 100,
-        			left : 150
-            };
         	var cubeSize = 30;
-        	var width = 1024 - innerMargin.left - innerMargin.right;
+        	var width = containerWidth - innerMargin.left - innerMargin.right;
         	var topSectionHeight = 180;
         	var legendSectionHeight = 20;
         	var height = topSectionHeight + (cubeSize * data[0].values.y.length) + legendSectionHeight;
         	var legendElementHeight = 22;
         	var noColor = '#FFFFFF';
+        	// Until we add the option in Admin to configure color ramps we have it fixed here.
         	var categories = [{min: -1, max: 0, color: noColor},
         	                  {min: 0, max: 1, color: "#D05151"},
         	                  {min: 1, max: 5, color: "#E68787"}, 
@@ -1208,6 +1174,7 @@ nv.models.heatMapChart = function() {
         		.attr("class", "heatmap-main-container");
         	
         	// Add SVG filter for cell highlight.
+        	// For more info about these filters see: http://www.svgbasics.com/filters4.html // http://apike.ca/prog_svg_filter_feColorMatrix.html // http://alistapart.com/article/finessing-fecolormatrix
         	svg.append("defs").append("filter").attr("id", "filterSaturate").append("feColorMatrix").attr("in", "SourceGraphic").attr("type", "saturate").attr("values", "5");
         	svg.append("defs").append("filter").attr("id", "filterLuminanceToAlpha").append("feColorMatrix").attr("in", "SourceGraphic").attr("type", "luminanceToAlpha");
         	svg.append("defs").append("filter").attr("id", "filterBlur").append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "2");
@@ -1219,7 +1186,7 @@ nv.models.heatMapChart = function() {
 				.attr("class", "heatmap-yAxis-container");
         	
         	// Rows.
-        	var yLabels = yAxisLabelsContainer
+        	var yAxisLabels = yAxisLabelsContainer
         		.selectAll(".yLabel")
         		.data(data[0].values.y)
         		.enter()
@@ -1247,12 +1214,7 @@ nv.models.heatMapChart = function() {
         			var textElement = $(container[0]).find('.yLabel').last();
         			$(textElement).attr("class", function(d, i) {
         				return $(textElement).attr('class') + ' legend-others';
-        			})/*.on('click', function(event) {
-        				data2[0].values.model.set('yLimit', data2[0].values.model.get('yLimit') + 5);
-        				//chart.dispatch.elementClick;
-        				//chart.update();
-        				dispatch.elementClick();
-        			})*/;
+        			});
         		}
         	
         		// Add Totals special row.
@@ -1273,7 +1235,9 @@ nv.models.heatMapChart = function() {
         			.attr("class", "heatmap-xAxis-container");
 
         		// Columns
-        		var yAxisLabels = xAxisLabelsContainer
+        		// Notice in transform functions the order is very important if you have to apply more than one, like translate and rotate.
+        		// cubeSize is where we define how big are the cubes so if we change it in the future the chart will resize correctly.
+        		var xAxisLabels = xAxisLabelsContainer
         			.selectAll(".xLabel")
         			.data(data[0].values.x)
         			.enter()
@@ -1285,7 +1249,6 @@ nv.models.heatMapChart = function() {
         				return i * cubeSize;
         			})
         			.attr("y", 0)
-        			/*.style("text-anchor", "middle")*/
         			.attr("transform", function(d, i) {
         				return "rotate(270, " + (cubeSize * i) + ", 0)";
         			})
@@ -1376,7 +1339,7 @@ nv.models.heatMapChart = function() {
 				.attr('font-size', '11px')
 				.attr("y", 15)
 				.attr("x", ((i * maxLegendTextWidth) + ((maxLegendTextWidth - calculateTextWidth(legendsPool[i])) / 2)))
-				.text(legendsPool[i]); // Why "text" instead of "html", well because IE is not yet a real browser :(
+				.text(legendsPool[i]); // Why "text" instead of "html", because it doesnt work on IE.
     	}
     	
     	legendsContainer.append("text")
@@ -1415,6 +1378,7 @@ nv.models.heatMapChart = function() {
 			.attr("y", ((data.y - 1) * cubeSize) + 19)
 			.attr("class", "heatmap-cell")
 			.attr("x", function() {
+				// The "offsets" we add on each return call are tied to the current font family and size, so if we change them we might need to change the offsets too.
 				var d = data;
 				var auxVal = d.value;
 				if (auxVal > 0 && auxVal < 1) {
@@ -1427,7 +1391,7 @@ nv.models.heatMapChart = function() {
 					return ((d.x - 1) * cubeSize) + 5;
 				}					
 			}).text(function() {
-				// Why "text" instead of "html", well because IE is not yet a real browser :(
+				// Cant use "html" function on IE.
 				var d = data;
 				var auxVal = d.value;
 				if (auxVal > -1) {
@@ -1448,27 +1412,14 @@ nv.models.heatMapChart = function() {
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']")).attr("filter", "url(#filterDarken)");
 				// Highlight this cell.
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']" + "[data-x='"+ (selfData.x - 1) + "']")).removeAttr("filter");
-			}).on("mouseover", function(obj) {				
-				//console.log(selfData);
 			});
+		
 		if (data.tooltip) {
 			text.attr('data-title', data.tooltip)
 				.attr("class", "nv-series heatmap-cell");
 		}
     }
-    
-    function calculateColor(value, colors) {
-    	var color = "";
-    	var cutPoint = 100 / colors.length;
-    	for (var i = 0; i < colors.length ; i++) {
-    		if ((value >= (i * cutPoint)) && (value < ((i + 1) * cutPoint))) {
-    			color = colors[i];
-    			break;
-    		}
-    	}    	
-    	return color;
-    }
-    
+       
     function calculateColorFromCategories(value, categories, noColor) {
     	var color = noColor;
     	for (var i = 0; i < categories.length; i++) {
@@ -1488,28 +1439,11 @@ nv.models.heatMapChart = function() {
     }
 
     //============================================================
-    // Event Handling/Dispatching (out of chart's scope)
-    //------------------------------------------------------------
-
-    /*dispatch.on('elementMouseover.tooltip', function(e) {
-        e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
-        dispatch.tooltipShow(e);
-    });
-
-    dispatch.on('tooltipShow', function(e) {
-        if (tooltips) showTooltip(e);
-    });
-
-    dispatch.on('tooltipHide', function() {
-        if (tooltips) nv.tooltip.cleanup();
-    });*/
-
-    //============================================================
     // Expose Public Variables
     //------------------------------------------------------------
 
     // expose chart's sub-components
-    chart.legend = {};/*legend;*/
+    chart.legend = {};
     chart.dispatch = dispatch;
     chart.heatmap = heatmap;
     chart.options = nv.utils.optionsFunc.bind(chart);
@@ -4304,8 +4238,8 @@ module.exports = BackboneDash.View.extend({
     if (this.model.get('chartType') === 'fragmentation') {
 	    previousXLimit = this.model.get('xLimit');
 	    previousYLimit = this.model.get('yLimit');
-	    this.model.set('yLimit', 10000);
-	    this.model.set('xLimit', 10000);
+	    this.model.set('yLimit', -1);
+	    this.model.set('xLimit', -1);
 	    this.model.set('showFullLegends', true);
 	    var chart = _.find(this.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
 	    chart.render();
@@ -4445,15 +4379,12 @@ module.exports = BackboneDash.View.extend({
 	var self = this;
 	
 	if (this.model.get('chartType') === 'fragmentation') {
+		// This is what applies the necessary styles to the chart´s SVG.
 		var css = "rect.bordered {stroke: #E6E6E6;stroke-width: 2px;} text.mono {font-size: 9pt;font-family: Arial;fill: #000;}";
 	    var s = document.createElement('style');
 	    s.setAttribute('type', 'text/css');
 	    s.innerHTML = "<![CDATA[\n" + css + "\n]]>";
-	    //var defs = document.createElement('defs');
-	    //defs.appendChild(s);
 	    svg.getElementsByTagName("defs")[0].appendChild(s);
-	    //svg.insertBefore(defs, canvas.firstChild);    
-	    //svg.appendChild(defs);
 	}
 	
     var boundCB = _(cb).bind(this);
@@ -4901,17 +4832,17 @@ module.exports = BackboneDash.View.extend({
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Sector Fragmentation'})) {
     	col.push(new HeatMapChart(
-  	          { name: 'HeatMap by Sector and Donor Group', title: 'Sector Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { name: 'HeatMap by Sector and Donor Group', title: 'Sector Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs },
   	          { app: this.app, url: '/rest/dashboard/heat-map/sec' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Location Fragmentation'})) {
     	col.push(new HeatMapChart(
-  	          { name: 'HeatMap by Location and Donor Group', title: 'Location Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { name: 'HeatMap by Location and Donor Group', title: 'Location Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs },
   	          { app: this.app, url: '/rest/dashboard/heat-map/loc' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Program Fragmentation'})) {
     	col.push(new HeatMapChart(
-  	          { name: 'HeatMap by Program and Donor Group', title: 'Program Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { name: 'HeatMap by Program and Donor Group', title: 'Program Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs },
   	          { app: this.app, url: '/rest/dashboard/heat-map/prg' }));
     }
        

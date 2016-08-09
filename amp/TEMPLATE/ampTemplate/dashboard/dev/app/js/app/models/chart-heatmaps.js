@@ -6,9 +6,9 @@ var common = require('../charts/common');
 module.exports = ChartModel.extend({
 
 	defaults: {
-	    xLimit: 30,
-	    yLimit: 10,
-	    originalYLimit: 10,
+	    xLimit: 30, //This is the max number of elements we will see in the x axis.
+	    yLimit: 10, //This is the max number of elements we will see in the y axis.  
+	    originalYLimit: 10, //This is the original max number of elements for the y axis (used to revert "others").
 	    title: '',
 	    name: '',
 	    bigN: 0,
@@ -51,7 +51,6 @@ module.exports = ChartModel.extend({
 		}
 				
 		// Normalize values.
-		// TODO: recalculate column percentages to sum 100%.
 		self.values = this.normalizeValues(self.values);
 		
 		// Add totals data.
@@ -72,9 +71,8 @@ module.exports = ChartModel.extend({
 		}
 		var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
 
-		data.processed = [{values: this.values}]; //TODO: processed???
+		data.processed = [{values: this.values}];
 		data.values = this.values;
-		//console.log(data);
 		
 		if (data.yCount > this.get('originalYLimit') + 1) {
 			this.set('showResetButton', true);
@@ -89,7 +87,7 @@ module.exports = ChartModel.extend({
 		for (var i = 0; i < values.length; i++) {
 			var auxValue = values[i].value !== undefined ? values[i].value : values[i]; 
 			if (auxValue > 0 && auxValue < 1) {
-				//self.values[i].value = 1;
+				//Do nothing;
 			} else {
 				if (values[i].value !== undefined) {
 					values[i].value = Math.floor(auxValue);
@@ -104,7 +102,7 @@ module.exports = ChartModel.extend({
 	fetch: function(options) {
 		//TODO: add code for saved dashboards!!!		
 		var self = this;
-		options = _.defaults(options || {}, { url: this.url /*+ '?' + param(this.pick('xLimit'))*/ });
+		options = _.defaults(options || {}, { url: this.url });
 		
 		// Process params from heat-map/configs, in that EP we have defined each heatmap.
 		var configs = this.get('heatmap_config').models[0];
@@ -120,7 +118,6 @@ module.exports = ChartModel.extend({
 		}
 		
 		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn, yCount: self.get('yLimit')}; 		
-		//options.data = JSON.stringify($.extend({}, paramsForHeatMap, JSON.parse(options.data)));
 		paramsForHeatMap.filters =  JSON.parse(options.data);
 		options.data = JSON.stringify(paramsForHeatMap);
 

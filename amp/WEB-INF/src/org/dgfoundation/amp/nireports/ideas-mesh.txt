@@ -13,4 +13,4 @@ doc:
 document sorting
 
 Behaviour documention
-fix the v_ | z_ | zz_ fixer in SimpleSQLPatcher
+

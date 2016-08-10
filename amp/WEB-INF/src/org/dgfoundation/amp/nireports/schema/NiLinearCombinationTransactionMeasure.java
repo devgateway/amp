@@ -21,8 +21,7 @@ public class NiLinearCombinationTransactionMeasure extends NiPredicateTransactio
 	protected final BigDecimal[] prods;
 	
 	/**
-	 * Specifies whether coordinates have to be stripped from cells before being calculated.
-	 * Stripped coords imply insubordination to hierarchies. 
+	 * Specifies whether the output cells will have their coordinates stripped. See {@link CategAmountCell#withStrippedCoords()} for details
 	 */
 	protected final boolean stripCoords;
 	

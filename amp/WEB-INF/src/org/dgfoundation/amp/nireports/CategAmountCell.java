@@ -40,7 +40,7 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	}
 	
 	/**
-	 * creates a new cell with stripped coordinates (forcing it to ignore hiearchies, therefore)
+	 * creates a new cell with stripped coordinates (therefore yield a cell which ignores transaction-level hierarchies and filters)
 	 * @return
 	 */
 	public CategAmountCell withStrippedCoords() {

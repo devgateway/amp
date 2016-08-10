@@ -9,7 +9,9 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -17,6 +19,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.WebApplicationException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -36,6 +41,9 @@ public class IndicatorImporter {
 
     public ApiEMGroup getApiErrors() {
         return errors;
+    }
+    public enum Option{
+        OVERWRITE,NEW
     }
 
     /**
@@ -130,7 +138,7 @@ public class IndicatorImporter {
         catch (IllegalStateException e) {
             errors.addApiErrorMessage(IndicatorErrors.INCORRECT_CONTENT, " File is not ok ");
         }
-        catch(IOException e){
+        catch(IOException e) {
             errors.addApiErrorMessage(IndicatorErrors.INCORRECT_CONTENT, " File is not ok ");
         }
         catch (Exception e) {
@@ -145,11 +153,35 @@ public class IndicatorImporter {
     private String getValue(Cell cell) {
         String value=null;
         if(cell!=null){
-            switch(cell.getCellType()){
+            switch(cell.getCellType()) {
                 case Cell.CELL_TYPE_STRING:value=(cell.getStringCellValue()!=null&&cell.getStringCellValue().trim().equals(""))?null:cell.getStringCellValue();break;
                 case Cell.CELL_TYPE_NUMERIC: value=""+cell.getNumericCellValue();break;
             }
         }
         return value;
     }
+
+    public static JsonBean importIndicator(InputStream uploadedInputStream) {
+        JsonBean result = new JsonBean();
+        byte[] fileData = new byte[0];
+        try {
+            fileData = org.apache.commons.io.IOUtils.toByteArray(uploadedInputStream);
+        } catch (IOException e) {
+            throw new WebApplicationException(e);
+        }
+
+        InputStream inputStream = new ByteArrayInputStream(fileData);
+
+        IndicatorImporter importer = new IndicatorImporter();
+        Collection<JsonBean> locationIndicatorValueList = importer.processExcelFile(inputStream);
+
+        if (!importer.getApiErrors().isEmpty()) {
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
+            return ApiError.toError(importer.getApiErrors().getAllErrors());
+        }
+
+        result.set(IndicatorEPConstants.VALUES, locationIndicatorValueList);
+        return result;
+    }
+
 }

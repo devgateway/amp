@@ -201,7 +201,7 @@ public class IndicatorEndPoints {
             @FormDataParam("name") String name,
             @FormDataParam("file") InputStream uploadedInputStream
     ) {
-        return IndicatorExporter.importIndicator(saveOption, uploadedInputStream, name);
+        return IndicatorImporter.importIndicator(uploadedInputStream);
     }
 
     /**

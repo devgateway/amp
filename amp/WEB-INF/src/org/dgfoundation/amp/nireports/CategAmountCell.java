@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,6 +37,14 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	 */
 	public CategAmountCell withMeta(String cat, Object value) {
 		return new CategAmountCell(this.activityId, this.amount, this.metaInfo.newInstance(cat, value), this.coordinates, this.translatedDate);
+	}
+	
+	/**
+	 * creates a new cell with stripped coordinates (forcing it to ignore hiearchies, therefore)
+	 * @return
+	 */
+	public CategAmountCell withStrippedCoords() {
+		return new CategAmountCell(this.activityId, this.amount, this.metaInfo, Collections.emptyMap(), this.translatedDate);
 	}
 	
 	/**

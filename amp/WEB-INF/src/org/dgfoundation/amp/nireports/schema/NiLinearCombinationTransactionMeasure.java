@@ -20,18 +20,25 @@ public class NiLinearCombinationTransactionMeasure extends NiPredicateTransactio
 	protected final NiTransactionMeasure[] measures;
 	protected final BigDecimal[] prods;
 	
+	/**
+	 * Specifies whether coordinates have to be stripped from cells before being calculated.
+	 * Stripped coords imply insubordination to hierarchies. 
+	 */
+	protected final boolean stripCoords;
+	
 	public NiLinearCombinationTransactionMeasure(String measureName, Map<NiTransactionMeasure, BigDecimal> terms,  
-			Behaviour<?> behaviour, boolean ignoreFilters, String description) {
+			Behaviour<?> behaviour, boolean ignoreFilters, boolean stripCoords, String description) {
 		super(measureName,  behaviour, description, ignoreFilters);
 		NiUtils.failIf(terms.isEmpty(), () -> String.format("while defining measure %s: you supplied an empty terms list", measureName));
 		this.terms = Collections.unmodifiableMap(new LinkedHashMap<>(terms));
 		this.measures = terms.keySet().toArray(new NiTransactionMeasure[0]);
 		this.prods = terms.values().toArray(new BigDecimal[0]);
+		this.stripCoords = stripCoords;
 	}
 	
 	public NiLinearCombinationTransactionMeasure(String measureName, Map<NiTransactionMeasure, BigDecimal> terms, 
-			boolean ignoreFilters, String description) {
-		this(measureName, terms, TrivialMeasureBehaviour.getInstance(), ignoreFilters, description);
+			boolean ignoreFilters, boolean stripCoords, String description) {
+		this(measureName, terms, TrivialMeasureBehaviour.getInstance(), ignoreFilters, stripCoords, description);
 	}
 	
 	@Override
@@ -40,7 +47,7 @@ public class NiLinearCombinationTransactionMeasure extends NiPredicateTransactio
 			if (measures[i].criterion.test(src)) {
 				CategAmountCell c = multiply(src, prods[i]);
 				if (c != null)
-					return c;
+					return stripCoords ? c.withStrippedCoords() : c;
 				break;
 			}
 		}

@@ -701,7 +701,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 				MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, +1,
 				MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, +1);		
 		
-		addTrivialFilterMeasure(MeasureConstants.UNCOMMITTED_BALANCE,
+		addTrivialStrippedFilterMeasure(MeasureConstants.UNCOMMITTED_BALANCE,
 				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
 				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT, +1,
 				MeasureConstants.ACTUAL_COMMITMENTS, -1);
@@ -716,7 +716,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			MeasureConstants.ACTUAL_COMMITMENTS, -1,
 			MeasureConstants.PLEDGES_ACTUAL_PLEDGE, +1);
 		
-		addUnfilteredTrivialFilterMeasure(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, 
+		addUnfilteredStrippedTrivialFilterMeasure(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, 
 				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
 				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT, +1,
 				MeasureConstants.CUMULATIVE_COMMITMENT, -1);
@@ -764,12 +764,20 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMeasure(new NiTransactionContextMeasure<K>(measureName, contextBuilder, crit, behaviour, measureDescriptions.get(measureName)));
 	}
 	
+	protected void addUnfilteredStrippedTrivialFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
+		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, true, true, def);
+	}
+	
 	protected void addUnfilteredTrivialFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
-		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, true, def);
+		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, true, false, def);
 	}
 	
 	protected void addTrivialFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
-		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, false, def);
+		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, false, false, def);
+	}
+	
+	protected void addTrivialStrippedFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
+		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, false, true, def);
 	}
 	
 	protected void addDerivedFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {

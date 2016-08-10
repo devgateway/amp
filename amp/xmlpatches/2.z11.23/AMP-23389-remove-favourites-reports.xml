@@ -9,7 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DELETE from amp_menu_entry_view where menu_id in (SELECT id FROM amp_menu_entry WHERE name = 'Favourite Reports')
+				DELETE from amp_menu_entry_view where menu_id in (SELECT id FROM amp_menu_entry WHERE name = 'Favourite Reports');
 				
 				DELETE from amp_menu_entry where name = 'Favourite Reports';
 				

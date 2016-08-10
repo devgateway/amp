@@ -9,6 +9,13 @@ var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var Palette = require('../../colours/colour-palette');
 var IndicatorLayerLocalStorage = require('../indicator-layer-localstorage');
 
+// http://www.w3schools.com/ajax/ajax_xmlhttprequest_onreadystatechange.asp
+const readyStateNotInitialized = 0;
+const readyStateConnectionEstablished = 1;
+const readyStateRequestReceived = 2;
+const readyStateProcessingRequest = 3;
+const readyStateResponseReady = 4;
+
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
 
@@ -84,7 +91,7 @@ module.exports = Backbone.Model
 		  }
 	  } else {
 		// By adding this section here in fetch we are sure any call made over /rest/indicators/id will have the right parameters without duplicating code.  
-		if (this.lastFetchXhr && this.lastFetchXhr.readyState > 0 && this.lastFetchXhr.readyState < 4) {
+		if (this.lastFetchXhr && this.lastFetchXhr.readyState > this.readyStateNotInitialized && this.lastFetchXhr.readyState < this.readyStateResponseReady) {
 			return this.lastFetchXhr.abort();
 		}
 		var filter = {otherFilters: {}};

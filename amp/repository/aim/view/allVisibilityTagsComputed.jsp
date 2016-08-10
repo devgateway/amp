@@ -22,6 +22,7 @@
 <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION"/>
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display>

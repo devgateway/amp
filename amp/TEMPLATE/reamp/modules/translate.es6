@@ -11,3 +11,17 @@ export function loadTranslations(initial){
     body: JSON.stringify(initial)
   }).then(callFunc('json'))
 }
+
+export function loadTranslationsDev(initial){
+  return fetch("http://localhost:8080/rest/translations/label-translations", {
+    method: 'post',
+    credentials: 'no-cors',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Method': 'POST',
+      'Access-Control-Request-Headers': 'X-Custom-Header'
+    },
+    body: JSON.stringify(initial)
+  }).then(callFunc('json'))
+}

@@ -113,7 +113,12 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 
 
 	public void setIndicatorValues(Set<AmpLocationIndicatorValue> indicatorValues) {
-		this.indicatorValues = indicatorValues;
+        if (this.indicatorValues == null) {
+            this.indicatorValues = indicatorValues;
+        } else {
+            this.indicatorValues.retainAll(indicatorValues);
+            this.indicatorValues.addAll(indicatorValues);
+        }
 	}
 
 	public String getUnit() {

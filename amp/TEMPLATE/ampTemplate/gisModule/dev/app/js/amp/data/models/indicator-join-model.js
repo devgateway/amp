@@ -128,6 +128,9 @@ module.exports = Backbone.Model
   _joinDataWithBoundaries: function(boundaryGeoJSON) {
     var self = this;
     var indexedValues = _.indexBy(this.get('values'), 'geoId');
+    if(indexedValues["null"]) {
+        indexedValues[0] = indexedValues["null"]; //hack for some countries the geoId is null.
+    }
     var admKey = this.get('adminLevel').replace('-', '').toUpperCase();
 
     // copy boundary geoJSON, and inject data

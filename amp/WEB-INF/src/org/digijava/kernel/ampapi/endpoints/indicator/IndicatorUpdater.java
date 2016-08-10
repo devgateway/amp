@@ -50,12 +50,12 @@ public class IndicatorUpdater {
     public TranslationUtil getContentTranslator() {
         return contentTranslator;
     }
-    
+
     public AmpIndicatorLayer getIndicatorLayer() {
         AmpIndicatorLayer indicatorLayer = null;
 
-        if (indicator.get("id")!=null) {
-            indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(Long.valueOf(indicator.getString("id")));
+        if (indicator.get(IndicatorEPConstants.ID)!=null) {
+            indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(Long.valueOf(indicator.getString(IndicatorEPConstants.ID)));
         } else{
             indicatorLayer = new AmpIndicatorLayer();
             indicatorLayer.setId(null);
@@ -66,7 +66,7 @@ public class IndicatorUpdater {
         indicatorLayer.setUnit(contentTranslator.extractTranslationsOrSimpleValue(IndicatorEPConstants.UNIT, indicatorLayer, indicator.get(IndicatorEPConstants.UNIT)));
         indicatorLayer.setNumberOfClasses(Long.valueOf(indicator.getString(IndicatorEPConstants.NUMBER_OF_CLASSES)));
         addIndicatorType(indicatorLayer);
-        
+
         if (indicatorLayer.getId() == null) {
             indicatorLayer.setCreatedOn(new Date());
             indicatorLayer.setCreatedBy(TeamUtil.getCurrentAmpTeamMember());
@@ -102,17 +102,42 @@ public class IndicatorUpdater {
         }
 
         if (indicator.get(IndicatorEPConstants.VALUES)!=null) {
+
+            IndicatorImporter.Option option = (indicator.getString(IndicatorEPConstants.OPTION_TO_SAVE_VALUES) == "new") ? IndicatorImporter.Option.NEW: IndicatorImporter.Option.OVERWRITE;
+
             Set<AmpLocationIndicatorValue> locationIndicatorValues = new HashSet<AmpLocationIndicatorValue>();
             List<LinkedHashMap<String, Object>> locationValues =  EndpointUtils.getSingleValue(indicator, IndicatorEPConstants.VALUES, Collections.emptyList());
             for (int i = 0; i < locationValues.size(); i++) {
-                AmpLocationIndicatorValue locationIndicatorValue = new AmpLocationIndicatorValue();
+
                 LinkedHashMap<String, Object> location = locationValues.get(i);
 
-                AmpCategoryValueLocations locationObject = DynLocationManagerUtil.getLocationById(new Long(String.valueOf(location.get(IndicatorEPConstants.ID))), indicatorLayer.getAdmLevel());
-                locationIndicatorValue.setLocation(locationObject);
-                locationIndicatorValue.setIndicator(indicatorLayer);
-                locationIndicatorValue.setValue(Double.parseDouble(String.valueOf(location.get(IndicatorEPConstants.VALUE))));
-                locationIndicatorValues.add(locationIndicatorValue);
+                long locId = new Long(String.valueOf(location.get(IndicatorEPConstants.ID)));
+                AmpCategoryValueLocations locationObject = DynLocationManagerUtil.getLocationById(locId , indicatorLayer.getAdmLevel());
+
+                if (locationObject != null ) {
+
+                    AmpLocationIndicatorValue locationIndicatorValue = null;
+
+                    if (indicatorLayer.getId() != null) {
+                        locationIndicatorValue = DynLocationManagerUtil.getLocationIndicatorValue(indicatorLayer.getId(), locId);
+                    }
+
+                    if (locationIndicatorValue != null && option.equals(IndicatorImporter.Option.NEW)) {
+                        continue;
+                    } else {
+                        if (locationIndicatorValue != null) {
+                            locationIndicatorValue.setValue(Double.parseDouble(String.valueOf(location.get(IndicatorEPConstants.VALUE))));
+                        } else {
+                            locationIndicatorValue = new AmpLocationIndicatorValue();
+                            locationIndicatorValue.setLocation(locationObject);
+                            locationIndicatorValue.setIndicator(indicatorLayer);
+                            locationIndicatorValue.setValue(Double.parseDouble(String.valueOf(location.get(IndicatorEPConstants.VALUE))));
+                        }
+                    }
+                    locationIndicatorValues.add(locationIndicatorValue);
+                } else {
+                    errors.addApiErrorMessage(IndicatorErrors.LOCATION_NOT_FOUND, IndicatorEPConstants.FIELD_ID + " = " + locId);
+                }
             }
             indicatorLayer.setIndicatorValues(locationIndicatorValues);
         }

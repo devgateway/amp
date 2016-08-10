@@ -9,9 +9,6 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.util.DbUtil;
@@ -19,14 +16,10 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,7 +42,6 @@ public class IndicatorExporter {
         logger.debug("Exporting indicator table layer for adm level: " + categoryValue.getValue());
         // title cells
         HSSFCellStyle titleCS = wb.createCellStyle();
-        wb.createCellStyle();
         titleCS.setWrapText(true);
         titleCS.setFillForegroundColor(HSSFColor.BROWN.index);
         HSSFFont fontHeader = wb.createFont();
@@ -62,21 +54,9 @@ public class IndicatorExporter {
         int cellIndex = 0;
         HSSFRow titleRow = sheet.createRow(rowIndex++);
 
-        HSSFCell cell = titleRow.createCell(cellIndex++);
-        HSSFRichTextString nameTitle = new HSSFRichTextString(categoryValue.getValue());
-        cell.setCellValue(nameTitle);
-        cell.setCellStyle(titleCS);
-
-        cell = titleRow.createCell(cellIndex++);
-        nameTitle = new HSSFRichTextString("ID_TITLE");
-        cell.setCellValue(nameTitle);
-        cell.setCellStyle(titleCS);
-
-        cell = titleRow.createCell(cellIndex++);
-        nameTitle = new HSSFRichTextString(name);
-        cell.setCellValue(nameTitle);
-        cell.setCellStyle(titleCS);
-
+        HSSFCell cell = getCell(categoryValue.getValue() , titleCS, cellIndex++, titleRow);
+        cell = getCell("ID_TITLE" , titleCS, cellIndex++, titleRow);
+        cell = getCell(name , titleCS, cellIndex++, titleRow);
 
         populateIndicatorLayerTableValues(sheet, rowIndex, categoryValue, name);
         for (int i = 0; i < cellIndex; i++) {
@@ -96,28 +76,12 @@ public class IndicatorExporter {
         return streamOutput;
     }
 
-    public static JsonBean importIndicator(long saveOption, InputStream uploadedInputStream, String name) {
-        JsonBean result = new JsonBean();
-        byte[] fileData = new byte[0];
-        try {
-            fileData = org.apache.commons.io.IOUtils.toByteArray(uploadedInputStream);
-        } catch (IOException e) {
-            logger.debug("importIndicator - IOException: ", e);
-            throw new WebApplicationException(e);
-        }
-
-        InputStream inputStream = new ByteArrayInputStream(fileData);
-
-        IndicatorImporter importer = new IndicatorImporter();
-        Collection<JsonBean> locationIndicatorValueList = importer.processExcelFile(inputStream);
-
-        if (!importer.getApiErrors().isEmpty()) {
-            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
-            return ApiError.toError(importer.getApiErrors().getAllErrors());
-        }
-
-        result.set(IndicatorEPConstants.VALUES, locationIndicatorValueList);
-        return result;
+    private static HSSFCell getCell(String title, HSSFCellStyle titleCS, int index, HSSFRow titleRow) {
+        HSSFCell cell = titleRow.createCell(index);
+        HSSFRichTextString nameTitle = new HSSFRichTextString(title);
+        cell.setCellValue(nameTitle);
+        cell.setCellStyle(titleCS);
+        return cell;
     }
 
     public static void populateIndicatorLayerTableValues(HSSFSheet sheet,int rowIndex, AmpCategoryValue categoryValue, String name) {
@@ -131,14 +95,12 @@ public class IndicatorExporter {
         for (AmpCategoryValueLocations location : locations) {
             int cellIndex =0;
             HSSFRow row = sheet.createRow(rowIndex++);
-            HSSFCell cell = row.createCell(cellIndex++);
-            cell.setCellValue(location.getName());
-            cell = row.createCell(cellIndex++);
-            cell.setCellValue(location.getId());
+            HSSFCell cell = getCell(location.getName() , null, cellIndex++, row);
+            cell = getCell(String.valueOf(location.getId()) , null, cellIndex++, row);
+
             List<AmpLocationIndicatorValue> values = DynLocationManagerUtil.getLocationIndicatorValueByLocationAndIndicatorName(location,name);
             for (AmpLocationIndicatorValue value:values) {
-                cell = row.createCell(cellIndex++);
-                cell.setCellValue(value.getValue());
+                cell = getCell(String.valueOf(value.getValue()) , null, cellIndex++, row);
             }
 
         }

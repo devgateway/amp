@@ -122,11 +122,16 @@ public class IndicatorService {
             EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
             return ApiError.toError(IndicatorErrors.UNAUTHORIZED);
         }
-        
+
         AmpIndicatorLayer existingIndicator = DynLocationManagerUtil.getIndicatorLayerByName(indLayer.getName());
         if ((existingIndicator != null && indLayer.getId() == null) || (existingIndicator != null && existingIndicator.getId() != indLayer.getId() && indLayer.getId() != null)){
             EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
             return ApiError.toError(IndicatorErrors.EXISTING_NAME);
+        }
+
+        if (!IndicatorUtils.isAdmin() && TeamUtil.getCurrentMember() == null && indLayer.getAccessType() != IndicatorAccessType.TEMPORARY) {
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
+            return ApiError.toError(IndicatorErrors.INVALID_INDICATOR_TYPE);
         }
 
         try {

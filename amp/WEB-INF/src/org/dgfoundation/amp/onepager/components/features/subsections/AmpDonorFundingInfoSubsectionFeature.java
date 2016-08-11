@@ -241,11 +241,31 @@ implements AmpRequiredComponentContainer{
 			add(date);
 
 		final PropertyModel<Date> effectiveFundingDateModel = new PropertyModel<>(model, "effectiveFundingDate");
-		AmpDatePickerFieldPanel effectiveFundingDate = new AmpDatePickerFieldPanel("effectiveFundingDate", effectiveFundingDateModel, "Effective Funding Date");
+		final AmpDatePickerFieldPanel effectiveFundingDate = new AmpDatePickerFieldPanel("effectiveFundingDate", effectiveFundingDateModel, "Effective Funding Date");
+		add(new AmpComponentPanel("effectiveFundingDateRequired", "Required Validator for Effective Funding Date") {
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				if (this.isVisible()){
+					effectiveFundingDate.getDate().setRequired(true);
+					requiredFormComponents.add(effectiveFundingDate.getDate());
+				}
+			}
+		});
 		add(effectiveFundingDate);
 
 		final PropertyModel<Date> fundingClosingDateModel = new PropertyModel<>(model, "fundingClosingDate");
-		AmpDatePickerFieldPanel fundingClosingDate = new AmpDatePickerFieldPanel("fundingClosingDate", fundingClosingDateModel, "Funding Closing Date");
+		final AmpDatePickerFieldPanel fundingClosingDate = new AmpDatePickerFieldPanel("fundingClosingDate", fundingClosingDateModel, "Funding Closing Date");
+		add(new AmpComponentPanel("fundingClosingDateRequired", "Required Validator for Funding Closing Date") {
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				if (this.isVisible()){
+					fundingClosingDate.getDate().setRequired(true);
+					requiredFormComponents.add(fundingClosingDate.getDate());
+				}
+			}
+		});
 		add(fundingClosingDate);
 
 		if (model != null && model.getObject() != null && 

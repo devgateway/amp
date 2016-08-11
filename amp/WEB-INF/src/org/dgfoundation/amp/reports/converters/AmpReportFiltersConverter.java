@@ -24,6 +24,11 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
 
+/**
+ * an AmpReportFilters -> AmpARFilter converter (e.g. the opposite of {@link AmpARFilterConverter})
+ * @author ginchauspe, nmandrescu
+ *
+ */
 public class AmpReportFiltersConverter {
 
 	protected static final Logger logger = Logger.getLogger(AmpReportFiltersConverter.class);
@@ -113,7 +118,7 @@ public class AmpReportFiltersConverter {
 			param[0] = paramClass;
 			Method setterMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(ampARFilterFieldName), param);
 
-			// Get values from mondrian filters.
+			// Get values from Reports API filters.
 			List<FilterRule> filterRules = this.filters.getAllFilterRules().get(new ReportColumn(mondrianFilterColumnName));
 
 			if (filterRules != null) {
@@ -164,8 +169,7 @@ public class AmpReportFiltersConverter {
 			}
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error(e, e);
 		}
 	}
 

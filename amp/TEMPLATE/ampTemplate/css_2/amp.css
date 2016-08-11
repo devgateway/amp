@@ -1282,3 +1282,8 @@ div.footer {
 #layers-wizard .tooltip.right .tooltip-arrow {
           border-right-color: #428bca;         
 }
+
+.set-population-body{
+	height: 400px; 
+	overflow-y: auto;
+}

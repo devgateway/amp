@@ -298,6 +298,10 @@ public class DashboardsService {
 		if (undefinedAreas.isEmpty()) {
 			return;
 		}
+		
+		final String NATIONAL = "National";
+		final String INTERNATIONAL = "International";
+
 		ReportOutputColumn regionCol = report.leafHeaders.get(0);
         AmpCategoryValueLocations currentCountry = DynLocationManagerUtil.getDefaultCountry();
         
@@ -307,10 +311,10 @@ public class DashboardsService {
 		    if (uRegion.entityId != -MoConstants.UNDEFINED_KEY) {
 		        if (uRegion.entityId == -currentCountry.getId()) {
 		            // national
-		            uRegion = new TextCell(TranslatorWorker.translateText(MoConstants.NATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
+		            uRegion = new TextCell(TranslatorWorker.translateText(NATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
 		        } else {
 		            // international
-		            uRegion = new TextCell(TranslatorWorker.translateText(MoConstants.INTERNATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
+		            uRegion = new TextCell(TranslatorWorker.translateText(INTERNATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
 		        }
 		        undefined.getContents().put(regionCol, uRegion);
 		        for (ReportArea child : undefined.getChildren()) {

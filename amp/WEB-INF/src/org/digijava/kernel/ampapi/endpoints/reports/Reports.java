@@ -46,6 +46,8 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
+import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
@@ -661,7 +663,7 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final Map<String, String> getAllowedColumns() {
 		Map<String, String> columnToDisplayName = new HashMap<String, String>();
-		Set<String> configurableColumns = MondrianReportUtils.getConfigurableColumns();
+		Set<String> configurableColumns = ColumnsVisibility.getConfigurableColumns();
 		for (String originalColumnName : configurableColumns) {
 			columnToDisplayName.put(originalColumnName, TranslatorWorker.translateText(originalColumnName));
 		}
@@ -674,7 +676,7 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final Map<String, String> getAllowedMeasures() {
 		Map<String, String> measuresToDisplayName = new HashMap<String, String>();
-		Set<String> configurableMeasures = MondrianReportUtils.getConfigurableMeasures();
+		Set<String> configurableMeasures = MeasuresVisibility.getConfigurableMeasures();
 		for (String originalMeasureName : configurableMeasures) {
 			measuresToDisplayName.put(originalMeasureName, TranslatorWorker.translateText(originalMeasureName));
 		}
@@ -694,7 +696,7 @@ public class Reports {
 			// AmpARFilter oldFilters = FilterUtil.buildFilter(null, reportId);
 			AmpARFilter newFilters = null;
 
-			// Convert json object back to the new format: MondrianReportFilters.
+			// Convert json object back to AmpReportFilters
 			if (formParams.get("filters") != null) {
 				JsonBean filters = new JsonBean();
 				LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get("filters");

@@ -30,13 +30,12 @@ import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.CustomMeasures;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -125,9 +124,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replace("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
 		contents = contents.replace("@@calendar@@", getReportCalendarTag());
 		contents = contents.replace("@@nopledges@@", pledgesRelevant ? "" : "_no_pledges");
-		
-		contents = updateDateLimits(contents, getReportSelectedYear());
-		
+				
 		// area for (pledges + activities) reports hacks. Holding my nose while writing this - let whatever genius wanted Mondrian as a report engine maintain this PoS :D
 		String nonAcPledgeExcluderString = isDonorReportWithPledges ? "(mondrian_fact_table.entity_id &lt; 800000000) AND " : ""; // annulate non-Actual-Commitments trivial measures IFF running an "also show pledges" report
 		String actualCommitmentsDefinition = "__" + (isDonorReportWithPledges ? "Actual Commitments United" : "Actual Commitments Usual") + "__";
@@ -146,16 +143,12 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replaceAll("@@pipelinemteffilter@@", buildDateFilteringSubquery(ReportElement.ElementType.PIPELINE_MTEF_DATE, String.format("adjustment_type = %d", pipelineMtefAcv.existsInDatabase() ? pipelineMtefAcv.getIdInDatabase() : 12324))); // crap code but who cares, we're dumping this stuff soon
 		contents = contents.replaceAll("@@projectionmteffilter@@", buildDateFilteringSubquery(ReportElement.ElementType.PROJECTION_MTEF_DATE, String.format("adjustment_type = %d", projectionMtefAcv.existsInDatabase() ? projectionMtefAcv.getIdInDatabase() : 12324)));
 		
-		contents = contents.replaceAll("@@pipelinemteffilternodate@@", String.format("adjustment_type = %d", pipelineMtefAcv.existsInDatabase() ? pipelineMtefAcv.getIdInDatabase() : 12324)); // crap code but who cares, we're dumping this stuff soon
-		contents = contents.replaceAll("@@projectionmteffilternodate@@", String.format("adjustment_type = %d", projectionMtefAcv.existsInDatabase() ? projectionMtefAcv.getIdInDatabase() : 12324));
-
 		contents = contents.replaceAll("@@pipelinemtefacv@@", pipelineMtefAcv.existsInDatabase() ? pipelineMtefAcv.getIdInDatabase().toString() : "12324"); // crap code but who cares, we're dumping this stuff soon
 		contents = contents.replaceAll("@@projectionmtefacv@@", projectionMtefAcv.existsInDatabase() ? projectionMtefAcv.getIdInDatabase().toString() : "12324");
 		
 		// process general filters & custom filters 
 		String entityFilteringSubquery = buildFilteringSubquery(); 
 		// order is important, keep it here, do not move up; these date filters tags solution will be soon removed
-		entityFilteringSubquery = entityFilteringSubquery.replaceAll(FactTableFiltering.DATE_FILTERS_TAG_START + "|" + FactTableFiltering.DATE_FILTERS_TAG_END, "");
 		
 		logger.info("the entity filtering subquery is: " + entityFilteringSubquery);
 		contents = contents.replaceAll("@@filteredActivities@@", entityFilteringSubquery);
@@ -470,7 +463,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		// remove calculated members whose dependencies are missing
 		for (Entry<String, List<String>> pair : CustomMeasures.MEASURE_DEPENDENCY.entrySet()) {
 			for (String measure : pair.getValue()) {
-				if (!MondrianMapping.definedMeasures.contains(measure)) {
+				if (!MondrianMapping.isMeasureDefined(measure)) {
 					Node calculatedMember = XMLGlobals.selectNode(xmlSchema, "//CalculatedMember[@name='" + pair.getKey() + "']");
 					calculatedMember.getParentNode().removeChild(calculatedMember);
 					break;
@@ -478,18 +471,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			}
 		}
 	}
-	
-//	protected String buildActivityStatusSQL() {
-//		StringBuilder res = new StringBuilder("CASE");
-//		//CASE WHEN approval_status='approved' THEN 1 WHEN approval_status='startedapproved' THEN 2 ELSE NULL END
-//		//mondrian_activity_fixed_texts.approval_status
-//		for(String status:AmpARFilter.activityStatusToNr.keySet()) {
-//			int key = AmpARFilter.activityStatusToNr.get(status);
-//			res.append(String.format(" WHEN mondrian_activity_texts.approval_status='%s' THEN %d", status, key));
-//		}
-//		res.append(" ELSE 999999999 END");
-//		return res.toString();
-//	}
 	
 	protected String getReportLocale() {
 		return "_" + currentEnvironment.get().locale;
@@ -504,7 +485,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected String buildDateFilteringSubquery(ReportElement.ElementType elementType, String transactionTypeFilteringQuery) {
-		MondrianReportFilters mrf = (currentReport.get().getFilters() != null) ? (MondrianReportFilters) currentReport.get().getFilters() : null;
+		AmpReportFilters mrf = (currentReport.get().getFilters() != null) ? (AmpReportFilters) currentReport.get().getFilters() : null;
 		String ret = new FactTableFiltering(mrf).buildDateFilteringFragment(elementType, transactionTypeFilteringQuery);
 		return ret;
 	}
@@ -514,7 +495,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	 * @return
 	 */
 	protected String buildFilteringSubquery() {
-		MondrianReportFilters mrf = (currentReport.get().getFilters() != null) ? (MondrianReportFilters) currentReport.get().getFilters() : null;
+		AmpReportFilters mrf = (currentReport.get().getFilters() != null) ? (AmpReportFilters) currentReport.get().getFilters() : null;
 		String ret = String.format("(%s) %s", buildEntityIdFilteringSQL(mrf), new FactTableFiltering(mrf).getQueryFragment());
 		return ret;
 	}
@@ -541,7 +522,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	 * @param mrf
 	 * @return
 	 */
-	protected String buildEntityIdFilteringSQL(MondrianReportFilters mrf) {
+	protected String buildEntityIdFilteringSQL(ReportFilters mrf) {
 		int reportType = currentReport.get().getReportType();
 		String entityFilteringSubquery = getAllowedActivitiesSubquery(mrf, reportType);
 		String ret = currentReport.get().isAlsoShowPledges() ? 
@@ -550,7 +531,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		return ret;
 	}
 	
-	protected String getAllowedActivitiesSubquery(MondrianReportFilters mrf, int reportType) {
+	protected String getAllowedActivitiesSubquery(ReportFilters mrf, int reportType) {
 		List<Set<Long>> sets = new ArrayList<>(); // list of all sets of ids which we'll have to intersect
 		
 		switch(reportType) {
@@ -563,12 +544,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				if (currentEnvironment.get().workspaceFilter != null)
 					sets.add(currentEnvironment.get().workspaceFilter.getIds());
 				break;
-		}			
-		
-		if (mrf != null) {
-			Set<Long> filteredIds = MondrianSQLFilters.getActivityIds(mrf);
-			if (filteredIds != null)
-				sets.add(filteredIds);
 		}
 		
 		if (sets.isEmpty())
@@ -606,37 +581,4 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		return new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null), "EUR");
 	}
 	
-	/**
-	 * Update formulas with dates
-	 * @param contents schema content
-	 * @return updated schema content
-	 */
-	private String updateDateLimits(String contents, int selectedYear) {
-		Calendar c = Calendar.getInstance();
-		
-		// calculate the end of the last month (e.g. now is /03/2015, then this will be /02/2015)
-		c.set(Calendar.DAY_OF_MONTH, 1); // => 01/03/2015
-		c.add(Calendar.DAY_OF_MONTH, -1); // => 28/02/205
-		contents = contents.replaceAll("@@last_month_end@@", DateTimeUtil.toJulianDayString(c.getTime()));
-		
-		// calculate the end of the month before last month (this will be /01/2015)
-		c.add(Calendar.DAY_OF_MONTH, 1); // => 01/03/2015
-		c.add(Calendar.MONTH, -1); // => 01/02/2015
-		c.add(Calendar.DAY_OF_MONTH, -1); // => 31/01/2015
-		contents = contents.replaceAll("@@month_before_last_month_end@@", DateTimeUtil.toJulianDayString(c.getTime()));
-		
-		// calculate the beginning of the year date
-		c.set(Calendar.DAY_OF_YEAR, 1);
-		c.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR)); // reconfigure explicitly the year in case it moved back
-		contents = contents.replaceAll("@@current_year_start@@", DateTimeUtil.toJulianDayString(c.getTime()));
-		
-		// calculate the selected year start & end
-		c.set(Calendar.YEAR, selectedYear);
-		contents = contents.replaceAll("@@selected_year_start@@", DateTimeUtil.toJulianDayString(c.getTime()));
-		c.add(Calendar.YEAR, 1);
-		c.add(Calendar.DAY_OF_YEAR, -1);
-		contents = contents.replaceAll("@@selected_year_end@@", DateTimeUtil.toJulianDayString(c.getTime()));
-		
-		return contents;
-	}
 }

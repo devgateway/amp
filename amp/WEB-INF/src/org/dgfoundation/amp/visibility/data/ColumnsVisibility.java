@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -53,6 +54,12 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	public static Set<String> getVisibleColumns() {
 		return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS)
 				.stream().filter(z -> !fakeColumns.contains(z)).collect(Collectors.toSet());
+	}
+	
+	public static Set<String> getConfigurableColumns() {
+		Set<String> configurableColumns = new HashSet<String>(getVisibleColumns());
+		configurableColumns.retainAll(AmpReportsSchema.getInstance().getColumns().keySet());
+		return configurableColumns;
 	}
 	
 	protected ColumnsVisibility() {

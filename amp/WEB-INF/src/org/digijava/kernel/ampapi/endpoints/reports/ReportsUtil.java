@@ -49,6 +49,7 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.dgfoundation.amp.utils.BoundedList;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -606,12 +607,12 @@ public class ReportsUtil {
 		
 		// validate the columns
         ApiErrorMessage err = validateList("columns", (List<String>) formParams.get(EPConstants.ADD_COLUMNS),
-				MondrianReportUtils.getConfigurableColumns(), isCustom);
+				ColumnsVisibility.getConfigurableColumns(), isCustom);
 		if (err != null) errors.add(err);
 		
 		// validate the measures
 		err = validateList("measures", (List<String>) formParams.get(EPConstants.ADD_MEASURES),
-				MondrianReportUtils.getConfigurableMeasures(), isCustom);
+				MeasuresVisibility.getConfigurableMeasures(), isCustom);
 		if (err != null) errors.add(err);
 		
 		// validate the hierarchies

@@ -24,6 +24,7 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -611,14 +612,14 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	 */
 	public boolean hasAvailableMeasures() {
 		Set<String> reportMeasures = getMeasureNames();
-		Set<String> availableMeasures = new HashSet<>(MondrianMapping.definedMeasures);
+		Set<String> availableMeasures = new HashSet<>(AmpReportsSchema.getInstance().getMeasures().keySet());
 		reportMeasures.retainAll(availableMeasures);
 		return !reportMeasures.isEmpty();
 	}
 
 	public boolean hasAvailableColumns() {
 		Set<String> reportColumns = getColumnNames();
-		Set<String> availableColumns = new HashSet<>(MondrianMapping.definedColumns);
+		Set<String> availableColumns = new HashSet<>(AmpReportsSchema.getInstance().getColumns().keySet());
 		reportColumns.retainAll(availableColumns);
 		return !reportColumns.isEmpty();
 

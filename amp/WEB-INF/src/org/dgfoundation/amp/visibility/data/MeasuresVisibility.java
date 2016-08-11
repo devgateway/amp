@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
@@ -235,6 +236,12 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		return currentlyVisible;
 	}
 
+	public static Set<String> getConfigurableMeasures() {
+		Set<String> configurableMeasures = new HashSet<String>(getVisibleMeasures());
+		configurableMeasures.retainAll(AmpReportsSchema.getInstance().getMeasures().keySet());
+		return configurableMeasures;
+	}
+	
 	@Override
 	protected Set<String> getAllData() {
 		return allMeasures;

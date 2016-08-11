@@ -167,6 +167,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	public final Map<Integer, MtefColumn> pipelineMtefColumns = new HashMap<>();
 	public final Map<Integer, MtefColumn> projectionMtefColumns = new HashMap<>();
+	public final Set<String> DATE_COLUMN_NAMES;
 
 	@SuppressWarnings("serial")
 	public final static Map<String, String> measureDescriptions = new HashMap<String, String>() {{
@@ -557,6 +558,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addDividingMeasure(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, MeasureConstants.ACTUAL_DISBURSEMENTS, false);
 		addMeasure(new ForecastExecutionRateMeasure(MeasureConstants.FORECAST_EXECUTION_RATE));
 		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
+		
+		
+		this.DATE_COLUMN_NAMES = this.getColumns().keySet().stream().filter(z -> this.getNamedElemType(z) == NamedElemType.DATE).collect(Collectors.toSet());
 	}
 	
 	protected void addFormulaMeasures() {

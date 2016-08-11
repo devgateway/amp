@@ -8,7 +8,6 @@ import java.util.GregorianCalendar;
 import java.util.Optional;
 
 import org.dgfoundation.amp.newreports.AmpReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**

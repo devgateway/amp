@@ -32,7 +32,6 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;

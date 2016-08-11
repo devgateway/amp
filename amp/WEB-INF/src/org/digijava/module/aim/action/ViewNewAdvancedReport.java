@@ -34,17 +34,12 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.mondrian.MondrianETL;
-import org.dgfoundation.amp.mondrian.MonetLeak;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
-import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
-import org.dgfoundation.amp.reports.DateColumns;
-import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
-import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -87,16 +82,6 @@ public class ViewNewAdvancedReport extends Action {
 		return mapping.findForward("index");
 	}
 	
-	protected String checkSqlFilters() {
-		StringBuilder res = new StringBuilder();
-		for (String columnName:new TreeSet<>(MondrianMapping.definedColumns)) {
-			boolean doneThroughSql = FiltersGroup.FILTER_GROUP.containsKey(columnName) || DateColumns.ACTIVITY_DATES.contains(columnName);
-			if (!doneThroughSql)
-				res.append("\t->" + columnName + "\n");
-		}
-		return res.toString();
-	}
-	
 	protected String redo_virtual_currencies() {
 		CCExchangeRate.regenerateConstantCurrenciesExchangeRates(false);
 		return "ok";
@@ -124,19 +109,7 @@ public class ViewNewAdvancedReport extends Action {
 			ARUtil.writeResponse(response, String.format("ETL done in %.2f seconds", elapsedSecs));
 			return null;
 		}
-		
-		if (request.getParameter("monet_leak") != null) {
-			String[] args = null;
-			if (request.getParameter("steps") != null) args = new String[] {request.getParameter("steps")};
-			ARUtil.writeResponse(response, String.format("round duration: %.2f millies", MonetLeak.main(args)));
-			return null;
-		}
-		
-		if (request.getParameter("check_sql_filter") != null) {
-			ARUtil.writeResponse(response, checkSqlFilters());
-			return null;
-		}
-		
+				
 		if (request.getParameter("redo_virtual_currencies") != null) {
 			ARUtil.writeResponse(response, redo_virtual_currencies());
 			return null;
@@ -146,14 +119,7 @@ public class ViewNewAdvancedReport extends Action {
 			ARUtil.writeResponse(response, runNiReportsBench());
 		}
 		
-		
-//		if (request.getParameter("monet_etl") != null) {
-//			try(MonetConnection monetConn = MonetConnection.getConnection()) {
-//				ARUtil.writeResponse(response, String.format("the monet table mondrian_fact_table has columns: %s", monetConn.getTableColumnsWithTypes("mondrian_fact_table",  true)));
-//			}
-//			return null;
-//		}
-		
+				
 		String loadStatus = request.getParameter("loadstatus");
 
 		if (loadStatus != null){

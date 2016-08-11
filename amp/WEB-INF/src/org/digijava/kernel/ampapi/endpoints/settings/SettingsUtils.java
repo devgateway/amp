@@ -32,6 +32,7 @@ import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -394,7 +395,7 @@ public class SettingsUtils {
 		List<SettingOptions> settings = getSettings();
 		// add GIS specific settings
 		Set<String> measures = new LinkedHashSet<String>(GisConstants.FUNDING_TYPES);
-		measures.retainAll(MondrianReportUtils.getConfigurableMeasures());
+		measures.retainAll(MeasuresVisibility.getConfigurableMeasures());
 		settings.add(getFundingTypeSettings(measures));
 
 		settings.add(new SettingOptions("use-icons-for-sectors-in-project-list",

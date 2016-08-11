@@ -325,8 +325,6 @@ public final class MoConstants {
 	public static final String TOTAL_MEASURES = "Total Measures";
 	
 	//Values
-	public static final String NATIONAL = "National";
-	public static final String INTERNATIONAL = "International";
 	public static final Integer UNDEFINED_KEY = 999999999;
 	public static final Integer UNDEFINED_YEAR_KEY = 9999;
 	public static final Integer UNDEFINED_QUARTER_KEY = 99;

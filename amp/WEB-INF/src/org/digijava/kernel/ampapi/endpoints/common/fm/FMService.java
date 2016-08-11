@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -72,7 +73,7 @@ public class FMService {
 	 * @param result
 	 */
 	private static void provideReportingFields(JsonBean result) {
-		result.set(EPConstants.REPORTING_FIELDS, MondrianReportUtils.getConfigurableColumns());
+		result.set(EPConstants.REPORTING_FIELDS, ColumnsVisibility.getConfigurableColumns());
 	}
 	
 	/**

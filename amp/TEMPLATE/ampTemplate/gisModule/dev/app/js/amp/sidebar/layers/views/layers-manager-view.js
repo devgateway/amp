@@ -16,6 +16,11 @@ module.exports = Backbone.View.extend({
     initialize: function(options) {
     	this.sections = options.sections;
     },
+    reloadSections: function() {
+        _.each(this.sections, function(section) {
+            section.reloadData();
+        });
+    },
     render: function() {
     	var self = this;
         this.$el.html(this.template({title: this.title}));
@@ -27,10 +32,21 @@ module.exports = Backbone.View.extend({
         });
         this.layersManager.on('cancel', function() {        	 
             self.$('#layers-manager-popup').hide();
-            _.each(self.sections, function(section) {
-            	section.reloadData();              	
-       	    });
+            self.reloadSections();
         });
+        this.layersManager.on('removeLayer', function() {
+            console.log('we are removing a layer');
+            self.reloadSections();
+        });
+        this.layersManager.on('changeStateLayer', function() {
+            console.log('we are changing a layer');
+            self.reloadSections();
+        });
+        this.layersManager.on('showAdmin', function() {
+            console.log('we are creating a new layer');
+            self.reloadSections();
+        });
+
         this.$('#layers-manager-popup').hide();
         return this;
     },

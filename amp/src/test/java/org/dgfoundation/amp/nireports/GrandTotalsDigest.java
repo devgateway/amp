@@ -35,4 +35,17 @@ public class GrandTotalsDigest implements NiReportOutputBuilder<Map<String, NiOu
 	public String toString() {
 		return "Grand Totals Digester";
 	}
+	
+	/**
+	 * returns this digester expressed as a single-string-supplying digester
+	 * @return
+	 */
+	public NiReportOutputBuilder<String> asStringDigester() {
+		return (spec, reportRun) -> this.buildOutput(spec, reportRun).toString();
+	}
+	
+	/**
+	 * a string digester of all the headers
+	 */
+	public static NiReportOutputBuilder<String> ALL_TOTALS_DIGESTER = new GrandTotalsDigest(a -> true).asStringDigester();
 }

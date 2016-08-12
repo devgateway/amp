@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.testcases.tanzania;
+package org.dgfoundation.amp.nireports.testcases.tanzania.columns;
 
 import java.util.Arrays;
 import java.util.List;

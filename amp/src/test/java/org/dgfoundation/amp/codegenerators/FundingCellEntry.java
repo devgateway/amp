@@ -74,7 +74,7 @@ public class FundingCellEntry implements Serializable {
 	public String toString() {
 		return String.format("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s", 
 				pad(escape(amount.toString()), 20), 
-				pad(escape(anon(activityTitle)), 60),
+				pad(escape(activityTitle), 60),
 				year,
 				pad(escape(month), 13),
 				pad(escape(pledge), 30), 

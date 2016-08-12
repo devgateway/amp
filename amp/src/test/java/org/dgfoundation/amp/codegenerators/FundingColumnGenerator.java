@@ -14,10 +14,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.GZIPOutputStream;
 
 import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 
-
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.amp.AmpFundingColumn;
@@ -26,11 +27,11 @@ import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.testcases.TestModelConstants;
-import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
 
 /**
  * Code generator for funding columns.
@@ -64,7 +65,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id")
 			);	
 			
-	protected Map<String, LevelColumn> buildOptionalDimensionCols(HardcodedReportsTestSchema schema) {
+	protected Map<String, LevelColumn> buildOptionalDimensionCols(NiReportsSchema schema) {
 		Map<String, NiReportColumn<?>> cols = schema.getColumns();
 		Map<String, LevelColumn> res = new HashMap<>();
 		AmpFundingColumn.FUNDING_VIEW_COLUMNS.forEach((colName, viewColName) -> res.put(viewColName, cols.get(colName).levelColumn.get()));
@@ -77,7 +78,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 				new ArrayList<String>(getActivityNames().values()), 
 				eng -> {
 					List<CategAmountCell> cells = sorted((List<CategAmountCell>) eng.schema.getFundingFetcher(eng).fetch(eng));
-					Map<Long, String> activityNames = getActivityNames();
+					Map<Long, String> activityNames = AmpCollections.remap(getActivityNames(), CodeGenerator::anon, null);
 					for (CategAmountCell cell : cells) {
 						
 						BigDecimal amount = cell.getAmount();
@@ -90,8 +91,6 @@ public class FundingColumnGenerator extends ColumnGenerator {
 						String transaction_type = cat(TestModelConstants.TRANSACTION_TYPE, cell.metaInfo); //meta
 						String agreement = cat(TestModelConstants.AGREEMENT_ID, cell.metaInfo); //meta
 						String recipient_org = cat(TestModelConstants.RECIPIENT_ORG, cell.metaInfo); //meta
-						if (recipient_org != null)
-							System.out.print("");
 
 						//these three are saved directly as values
 						String recipient_role = catValueDirectly(TestModelConstants.RECIPIENT_ROLE, cell.metaInfo);
@@ -210,7 +209,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 	}
 	
 	public void binaryDump() {
-		try(OutputStream os = new BufferedOutputStream(new FileOutputStream(getPath() + File.pathSeparator + "funding.bin"), 1024);) {
+		try(OutputStream os = new GZIPOutputStream(new BufferedOutputStream(new FileOutputStream(getPath() + File.pathSeparator + "funding.gz"), 1024))) {
 			try(ObjectOutputStream oos = new ObjectOutputStream(os)) {
 				oos.writeObject(entries);
 			}

@@ -43,13 +43,14 @@ public abstract class CodeGenerator {
 	public String getPath() {
 		String path = "/home/simple/Desktop/codegen/" 
 		//String path = System.getProperty("user.dir")
-				+ "/src/test/java/org/dgfoundation/amp/" + PACKAGE_NAME + "/nicolumns/" 
-				+ getCanonicalNameWithCells(this.name) + ".java";
+				+ "/src/test/java/org/dgfoundation/amp/" + PACKAGE_NAME + "/nicolumns/"; 
 		return path;
 	}
 	
 	public void generateToFile() throws FileNotFoundException, UnsupportedEncodingException {
-		String path = getPath();
+		String path = getPath()
+				+ getCanonicalNameWithCells(this.name) + ".java";
+		
 		File file = new File(path);
 		file.getParentFile().mkdirs();
 		PrintWriter writer = new PrintWriter(path, "UTF-8");

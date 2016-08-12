@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.testcases.tanzania;
+package org.dgfoundation.amp.nireports.testcases.tanzania.columns;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,12 +9,12 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
 
 
-public class PrimaryProgramLevel1Cells extends HardcodedCells<PercentageTextCell>{
+public class SecondaryProgramLevel2Cells extends HardcodedCells<PercentageTextCell>{
 
-	public PrimaryProgramLevel1Cells(Map<String, Long> activityNames, Map<String, Long> entityNames, NiDimension dim, String key) {
+	public SecondaryProgramLevel2Cells(Map<String, Long> activityNames, Map<String, Long> entityNames, NiDimension dim, String key) {
 		super(activityNames, entityNames, degenerate(dim, key));
 	}
-	public PrimaryProgramLevel1Cells(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {
+	public SecondaryProgramLevel2Cells(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {
 		super(activityNames, entityNames, lc);
 	}
 

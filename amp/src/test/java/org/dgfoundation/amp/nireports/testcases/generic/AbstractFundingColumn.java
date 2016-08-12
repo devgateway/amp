@@ -1,11 +1,19 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
+import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.codegenerators.FundingCellEntry;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
@@ -113,6 +121,27 @@ public abstract class AbstractFundingColumn extends HardcodedCells<CategAmountCe
 		//LevelColumn levelColumn = optionalIdsMap.get(categoryName);
 		Coordinate newVal = levelColumn.getCoordinate(val);
 		coos.put(levelColumn.dimensionUsage, newVal);
+	}
+	
+	protected CategAmountCell entryToCell(FundingCellEntry fce) {
+		return cell(fce.amount.toString(), fce.activityTitle, fce.year, fce.month, fce.pledge, fce.transaction_type, fce.agreement, fce.recipient_org, fce.recipient_role, fce.source_role, fce.adjustment_type, fce.donor_org, fce.funding_status, fce.mode_of_payment, fce.terms_assist, fce.financing_instrument, fce.transaction_date);
+	}
+
+	protected List<CategAmountCell> decodeCells(InputStream uis) {
+		try(InputStream is = new GZIPInputStream(new BufferedInputStream(uis))) {
+			try(ObjectInputStream ois = new ObjectInputStream(is)) {
+				List<FundingCellEntry> entries = (List<FundingCellEntry>) ois.readObject();
+				return AmpCollections.relist(entries, this::entryToCell);
+			}
+		}
+		catch(IOException | ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+		/*			amount                         , activity title                          , year, month        , pledge                        , transaction_type              , agreement                     , recipient_org                 , recipient_role                , source_role                   , adjustment_type               , donor_org                     , funding_status                , mode_of_payment               , terms_assist                  , financing_instrument          */
+/*return Arrays.asList(
+			cell("121000.000000"     , "f5d0a35b"                                                  , 2015, "April"      , null                          , null                          , null                          , null                          , null                          , "DN"                          , "Actual"                      , "ACTIONAID  LBG"              , null                          , null                          , "Grant"                       , "Sector Budget Support (SBS)" , "2016-04-12"),
+			cell("1580000.000000"    , "f5d0a35b"                                                  , 2015, "April"      , null                          , "commitment"                  , null                          , null                          , null                          , "DN"                          , "Actual"                      , "ACTIONAID  LBG"              , null                          , null                          , "Grant"                       , "Sector Budget Support (SBS)" , "2016-04-12")
+);*/
 	}
 	
 	static String[] months = new String[] {"dummy", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};

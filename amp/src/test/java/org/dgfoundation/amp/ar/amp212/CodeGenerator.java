@@ -121,11 +121,11 @@ public class CodeGenerator  {
 	}
 	
 	public void generateCode() throws IOException  {
-/*			generateFunding();
-			generateActivityNames();*/
-			generateFundingTypesNames();
-			/*generateDimensions();
-			generateColumns();*/
+			generateFunding();
+//			generateActivityNames();
+//			generateFundingTypesNames();
+//			generateDimensions();
+//			generateColumns();
 	}
 	
 	/**

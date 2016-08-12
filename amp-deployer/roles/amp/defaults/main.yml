@@ -1,3 +1,5 @@
 ---
 
 amp__port: 8009
+
+amp__import_and_build: 0

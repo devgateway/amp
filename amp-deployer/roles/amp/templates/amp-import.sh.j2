@@ -1,0 +1,22 @@
+#!/bin/sh
+## AMP Import script.
+## {{ ansible_managed }}
+## TODO: Use variables.
+
+
+# Create and configure the amp environment?!?
+zcat /vagrant/amp.pgsql.gz | \
+  pg_restore --clean --no-owner --no-privileges --username amp_user --dbname amp_local
+
+# TODO: Update the AMP DB.
+# TODO: Add instructions on how to generate a new password.
+=> UPDATE dg_site_domain SET site_domain='amp212.local';
+=> UPDATE dg_user SET password='a9993e364706816aba3e25717850c26c9cd0d89d';
+=> UPDATE amp_global_settings SET settingsvalue = 'false' WHERE settingsname = 'Secure Server';
+
+
+# Create and configure the amp-cms environment?!?
+zcat /vagrant/amp-cms.pgsql.gz | \
+  pg_restore --clean --no-owner --no-privileges --username amp_cms_user --dbname amp_cms_local
+tar -C /var/www/amp212-cms-local/sites/default -xf /vagrant/amp-cms.files.tar.gz
+# TODO: Run `make update`

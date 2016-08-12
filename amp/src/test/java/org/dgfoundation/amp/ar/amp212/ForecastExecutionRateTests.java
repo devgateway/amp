@@ -24,7 +24,7 @@ import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.amp.ForecastExecutionRateBehaviour;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
-import org.dgfoundation.amp.testmodels.NiReportModel;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.junit.Test;
 
 /**

@@ -18,9 +18,9 @@ import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
-import org.dgfoundation.amp.testmodels.HardcodedActivities;
-import org.dgfoundation.amp.testmodels.NiReportModel;
-import org.dgfoundation.amp.testmodels.ReportModelGenerator;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedActivities;
 import org.digijava.module.aim.helper.DateConversion;
 import org.junit.Test;
 

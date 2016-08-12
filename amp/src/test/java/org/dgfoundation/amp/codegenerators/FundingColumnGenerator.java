@@ -29,8 +29,8 @@ import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
-import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
-import org.dgfoundation.amp.testmodels.TestModelConstants;
+import org.dgfoundation.amp.nireports.testcases.TestModelConstants;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
 
 /**
  * Code generator for funding columns.

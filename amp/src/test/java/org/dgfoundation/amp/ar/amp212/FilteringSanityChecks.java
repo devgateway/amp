@@ -17,7 +17,7 @@ import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.testmodels.NiReportModel;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.junit.Test;
 
 /**

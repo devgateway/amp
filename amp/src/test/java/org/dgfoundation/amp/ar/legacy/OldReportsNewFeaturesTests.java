@@ -9,6 +9,10 @@ import java.util.TreeMap;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
+import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
+import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
+import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.AmpRunnable;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -17,11 +21,6 @@ import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.junit.Test;
-
-import org.dgfoundation.amp.testmodels.ColumnReportDataModel;
-import org.dgfoundation.amp.testmodels.GroupColumnModel;
-import org.dgfoundation.amp.testmodels.GroupReportModel;
-import org.dgfoundation.amp.testmodels.SimpleColumnModel;
 
 /**
  * testcases for new features added into the old reports engine in AMP 2.11

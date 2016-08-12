@@ -18,7 +18,7 @@ import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
-import org.dgfoundation.amp.testmodels.NiReportModel;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.junit.Test;
 
 /**

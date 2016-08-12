@@ -19,7 +19,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TrailCellsDigest;
-import org.dgfoundation.amp.testmodels.NiReportModel;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.junit.Test;
 

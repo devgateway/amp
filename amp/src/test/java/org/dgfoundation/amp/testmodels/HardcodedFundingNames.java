@@ -1,9 +1,6 @@
 package org.dgfoundation.amp.testmodels;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Contains the hardcoded mapping of some funding categories and columns, used by hardcoded funding cells.
@@ -11,15 +8,10 @@ import java.util.Map;
  * @author acartaleanu
  *
  */
-public class HardcodedFundingNames {
-
-	Map<String, Map<String, Long>> params = new HashMap<String, Map<String, Long>>();
-	
-	public HardcodedFundingNames() {
-		populateMaps();
-	}
-		
-	private void populateMaps() {
+public class HardcodedFundingNames extends IHardcodedNames {
+			
+	@Override
+	protected void populateMaps() {
 		category("donor_org_id", Arrays.asList(
 				param("UNDP", 21695),
 				param("World Bank", 21697),
@@ -108,39 +100,5 @@ public class HardcodedFundingNames {
 			category("financing_instrument_id", Arrays.asList(
 				param("default financing instrument", 2120),
 				param("second financing instrument", 2125)));
-
-
-
-
-
-
 	}
-	
-	/**
-	 * String -> Long: category names are keys to their ids
-	 */
-	public Map<String, Map<String, Long>> getParams() {
-		return params;
-	}
-	
-	private void category(String name, List<Entry> list) {
-		Map<String, Long> categ = new HashMap<String, Long>();
-		for (Entry entry : list) {
-			categ.put(entry.text, entry.id);
-		}
-		params.put(name, categ);
-	}
-	
-	private Entry param(String name, long id) {
-		return new Entry(id, name);
-	}
-	
-	class Entry {
-		final long id;
-		final String text;
-		public Entry(long id, String text) {
-			this.id = id;
-			this.text = text;
-		}
-	}	
 }

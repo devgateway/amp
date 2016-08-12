@@ -15,6 +15,7 @@ public class FundingTypesGenerator extends CodeGenerator {
 	Map<String, Map<String, Long>> params;
 	
 	public FundingTypesGenerator(Map<String, Map<String, Long>> params) {
+		super("HardcodedFundingNames", "hardcodedFundingNames");
 		this.params = params;
 	}
 	
@@ -36,6 +37,21 @@ public class FundingTypesGenerator extends CodeGenerator {
 			bld.append("));\n");
 		}
 		return bld.toString();
+	}
+
+	@Override
+	protected String getFilePart1() {
+		return "";
+	}
+
+	@Override
+	protected String getFilePart2() {
+		return "";
+	}
+
+	@Override
+	protected String getCanonicalNameWithCells(String name) {
+		return "HardcodedFundingNames";
 	}
 
 }

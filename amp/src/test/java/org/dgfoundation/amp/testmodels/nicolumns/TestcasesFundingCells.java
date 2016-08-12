@@ -5,16 +5,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.testmodels.HardcodedFundingNames;
+import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 
 
-public class FundingCells extends HardcodedCells<CategAmountCell> {
+public class TestcasesFundingCells extends AbstractFundingColumn {
 
-	public FundingCells(Map<String, Long> activityNames, Map<String, Long> entityNames) {
-		super(activityNames, entityNames, null);
+	public TestcasesFundingCells(Map<String, Long> activityNames) {
+		super(activityNames, HardcodedReportsTestSchema.catsDimension, HardcodedReportsTestSchema.DONOR_DIM_USG, new HardcodedFundingNames());
 	}
 
 	@Override
-	protected List<CategAmountCell> populateCells() {
+	public List<CategAmountCell> populateCells() {
 		/*amount                         , activity title                                              , year, month        , pledge                        , transaction_type              , agreement                     , recipient_org                 , recipient_role                , source_role                   , adjustment_type               , donor_org                     , funding_status                , mode_of_payment               , terms_assist                  , financing_instrument          */
 		return Arrays.asList(
 				cell("500.000000"        , "Activity 2 with multiple agreements"                       , 2015, "March"      , null                          , "commitment"                  , "Agreement 1 Title"           , null                          , null                          , "DN"                          , "Actual"                      , "USAID"                       , null                          , null                          , "default type of assistance"  , "default financing instrument", "2015-03-02"),

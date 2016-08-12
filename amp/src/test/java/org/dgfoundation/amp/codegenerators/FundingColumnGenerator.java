@@ -1,18 +1,23 @@
 package org.dgfoundation.amp.codegenerators;
 
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.amp.AmpFundingColumn;
@@ -26,7 +31,6 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.testmodels.TestModelConstants;
-import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
  * Code generator for funding columns.
@@ -41,77 +45,8 @@ public class FundingColumnGenerator extends ColumnGenerator {
 		super("Funding", CategAmountCell.class);
 		this.entries = populateList();
 	}
-
-	class Entry {
-		public final BigDecimal amount;
-		public final String activityTitle;
-		public final String year;
-		public final String month;
-		public final String pledge;
-		public final String transaction_type;
-		public final String agreement;
-		public final String recipient_org;
-		public final String recipient_role;
-		public final String source_role;
-		public final String adjustment_type;
-		public final String donor_org;
-		public final String funding_status;
-		public final String mode_of_payment;
-		public final String terms_assist;
-		public final String financing_instrument;
-		public final String transaction_date;
-		
-		
-		@Override
-		public String toString() {
-			return String.format("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s", 
-					pad(escape(amount.toString()), 20), 
-					pad(escape(activityTitle), 60),
-					year,
-					pad(escape(month), 13),
-					pad(escape(pledge), 30), 
-					pad(escape(transaction_type), 30), 
-					pad(escape(agreement), 30), 
-					pad(escape(recipient_org), 30), 
-					pad(escape(recipient_role), 30),
-					pad(escape(source_role), 30),
-					pad(escape(adjustment_type), 30),
-					pad(escape(donor_org), 30), 
-					pad(escape(funding_status), 30), 
-					pad(escape(mode_of_payment), 30), 
-					pad(escape(terms_assist), 30), 
-					pad(escape(financing_instrument), 30),
-					pad(escape(transaction_date), 10));
-		}
-		
-		public Entry(BigDecimal amount, String activityTitle, String year, String month, 
-					String pledge, String transaction_type, String agreement, String recipient_org, 
-					String recipient_role, String source_role, String adjustment_type,
-					String donor_org, String funding_status, String mode_of_payment, 
-					String terms_assist, String financing_instrument, String transaction_date){
-			this.amount = amount;
-			this.activityTitle = activityTitle;
-			this.year = year;
-			this.month = month;
-			this.pledge = pledge;
-			this.transaction_type = transaction_type;
-			this.agreement = agreement;
-			this.recipient_org = recipient_org;
-			this.recipient_role = recipient_role;
-			this.source_role = source_role;
-			this.adjustment_type = adjustment_type;
-			if (donor_org == null)
-				System.out.println("masha");
-			this.donor_org = donor_org;
-			this.funding_status = funding_status;
-			this.mode_of_payment = mode_of_payment;
-			this.terms_assist = terms_assist;
-			this.financing_instrument = financing_instrument;
-			this.transaction_date = transaction_date;
-		}
-	}
 	
-	final List<Entry> entries;
+	final List<FundingCellEntry> entries;
 
 	private Map<String, LevelColumn> buildOptionalDimensionCols(AmpReportsSchema schema) {
 		Map<String, NiReportColumn<?>> cols = schema.getColumns();
@@ -128,17 +63,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 			new ImmutablePair<>(MetaCategory.TRANSACTION_TYPE, "transaction_type"),			
 			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id")
 			);	
-		
-	private Map<Long, String> getActivityNames() {
-		String query = "SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_team_id IN "
-				+ "(SELECT amp_team_id FROM amp_team WHERE "
-				+ "1=1"
-				//+ "name = 'test workspace'"
-				+ ")"
-				+ "AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity)";
-		return (Map<Long, String>) PersistenceManager.getSession().doReturningWork(connection -> SQLUtils.collectKeyValue(connection, query));
-	}
-	
+			
 	protected Map<String, LevelColumn> buildOptionalDimensionCols(HardcodedReportsTestSchema schema) {
 		Map<String, NiReportColumn<?>> cols = schema.getColumns();
 		Map<String, LevelColumn> res = new HashMap<>();
@@ -146,8 +71,8 @@ public class FundingColumnGenerator extends ColumnGenerator {
 		return res;
 	}
 	
-	private List<Entry> populateList() {
-		final List<Entry> entries = new ArrayList<>();
+	private List<FundingCellEntry> populateList() {
+		final List<FundingCellEntry> entries = new ArrayList<>();
 		runInEngineContext( 
 				new ArrayList<String>(getActivityNames().values()), 
 				eng -> {
@@ -182,21 +107,21 @@ public class FundingColumnGenerator extends ColumnGenerator {
 						String mode_of_payment = cat(TestModelConstants.MODE_OF_PAYMENT_ID, cell.coordinates);
 						String terms_assist = cat(TestModelConstants.TERMS_ASSIST_ID, cell.coordinates);
 						String financing_instrument = cat(TestModelConstants.FINANCING_INSTRUMENT_ID, cell.coordinates);
-						entries.add(new Entry(amount, activityTitle, year, month, pledge, transaction_type, 
+						entries.add(new FundingCellEntry(amount, activityTitle, year, month, pledge, transaction_type, 
 								agreement, recipient_org, recipient_role, source_role, adjustment_type, 
 								donor_org, funding_status, mode_of_payment, terms_assist, financing_instrument,
 								transaction_date));
 					}
 				});
-		entries.sort((Entry e1, Entry e2) -> {
+		entries.sort((FundingCellEntry e1, FundingCellEntry e2) -> {
 			if (!e1.activityTitle.equals(e2.activityTitle))
 				return e1.activityTitle.compareTo(e2.activityTitle);
 			if (!e1.amount.equals(e2.amount))
 				return e1.amount.compareTo(e2.amount);
 			if (!e1.donor_org.equals(e2.donor_org))
 				return e1.donor_org.compareTo(e2.donor_org);
-			if (!e1.year.equals(e2.year))
-				return e1.year.compareTo(e2.year);
+			if (e1.year != e2.year)
+				return Integer.compare(e1.year, e2.year);
 			if (!e1.month.equals(e2.month))
 				return e1.month.compareTo(e2.month);
 			return e1.transaction_type.compareTo(e2.transaction_type);
@@ -246,7 +171,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 	static String generateNames() {
 		return String.format("\t\t\t%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s", 
 				pad("amount", 31), 
-				pad("activity title", 60),
+				pad("activity title", 40),
 				pad("year", 4),
 				pad("month", 13),
 				pad("pledge", 30), 
@@ -272,7 +197,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 		strb.append("*/\n");
 		strb.append("return Arrays.asList(\n");
 		for (int i = 0; i < entries.size(); i++) {
-			Entry ent = entries.get(i);
+			FundingCellEntry ent = entries.get(i);
 			strb.append("\t\t\tcell(");
 			strb.append(ent.toString());
 			strb.append(")");
@@ -282,5 +207,17 @@ public class FundingColumnGenerator extends ColumnGenerator {
 		}
 		strb.append(");");
 		return strb.toString();
-	}	
+	}
+	
+	public void binaryDump() {
+		try(OutputStream os = new BufferedOutputStream(new FileOutputStream(getPath() + File.pathSeparator + "funding.bin"), 1024);) {
+			try(ObjectOutputStream oos = new ObjectOutputStream(os)) {
+				oos.writeObject(entries);
+			}
+		}
+		catch(IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 }

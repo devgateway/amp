@@ -17,7 +17,7 @@ public class TreeNode {
 	final List<TreeNode> children;
 	public TreeNode(long id, String name, Long parentId) {
 		this.id = id;
-		this.name = name;
+		this.name = CodeGenerator.cleanup(name);
 		this.parentId = parentId;
 		this.children = new ArrayList<TreeNode>();
 	}

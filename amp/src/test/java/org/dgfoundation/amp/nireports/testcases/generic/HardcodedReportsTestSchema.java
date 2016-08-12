@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.ReportExecutor;
@@ -151,9 +152,11 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 				byMeasureDividingBehaviour(TimeRange.NONE, MeasureConstants.ACTUAL_COMMITMENTS), singletonMap(MeasureConstants.ACTUAL_COMMITMENTS, false)));
 	}
 
+	protected final Memoizer<TestFundingFetcher> fundingFetcher = new Memoizer<>(() -> new TestFundingFetcher(activityNames, new TestcasesFundingCells(activityNames)));
+	
 	@Override
 	public NiReportColumn<CategAmountCell> getFundingFetcher(NiReportsEngine engine) {
-		return new TestFundingFetcher(activityNames, new TestcasesFundingCells(activityNames));
+		return fundingFetcher.get();
 	}
 	
     private void addDateColumn(String name, HardcodedCells<DateCell> cells) {

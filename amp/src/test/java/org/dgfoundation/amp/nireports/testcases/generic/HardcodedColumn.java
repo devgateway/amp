@@ -9,7 +9,7 @@ import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
-public  class HardcodedColumn<K extends Cell> extends NiReportColumn<K> {
+public class HardcodedColumn<K extends Cell> extends NiReportColumn<K> {
 	protected List<K> cells;
 	protected boolean keptInSummaryReports = false;
 	

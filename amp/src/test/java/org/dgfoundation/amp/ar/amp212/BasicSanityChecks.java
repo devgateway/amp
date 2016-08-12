@@ -410,7 +410,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		//System.err.println("nr of failures: " + fails);
 		long delta = System.currentTimeMillis() - start;
 		long speed = reps * 1000 / delta;
-		double relativeSpeed = speed / 286.0;
+		double relativeSpeed = speed / 349.0;
 		System.err.format("I ran %d double-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
 	}
 	
@@ -446,7 +446,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		//System.err.println("nr of failures: " + fails);
 		long delta = System.currentTimeMillis() - start;
 		long speed = reps * 1000 / delta;
-		double relativeSpeed = speed / 409.0;
+		double relativeSpeed = speed / 516.0;
 		System.err.format("I ran %d triple-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
 	}
 	

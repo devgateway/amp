@@ -168,9 +168,6 @@ public class PopulationLayerDesignator {
                 }
             }
         }
-        if (result.isEmpty()) {
-            errors.addApiErrorMessage(IndicatorErrors.INVALID_POPULATION_LAYERS, input.getString("layersIds"));
-        }
         return result;
     }
 

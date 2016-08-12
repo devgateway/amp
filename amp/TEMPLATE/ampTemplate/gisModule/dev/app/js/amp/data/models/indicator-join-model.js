@@ -31,8 +31,11 @@ module.exports = Backbone.Model
     // We listen to the "apply" event on filter widget and trigger a "filter" event that will be listened by our view.
     // This way the view will also receive this model as parameter.
     this.listenTo(app.data.filter, 'apply', function(blah, show) {
-        this.trigger('filter', this);
-    });  
+        this.trigger('applyFilter', this);
+    });
+    this.listenTo(app.data.settings, 'applySettings', function(blah, show) {
+        this.trigger('applySettings', this);
+    });
 
     var numStops = this.get('classes') || 5;
     var values = this.get('values') || [];

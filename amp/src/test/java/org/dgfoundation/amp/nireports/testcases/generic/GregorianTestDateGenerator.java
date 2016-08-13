@@ -23,9 +23,24 @@ public class GregorianTestDateGenerator {
 	}
 	
 	public GregorianTestDateGenerator(int year, String month) {
+		this.date = parseDate(year, month);
+	}
+	
+	protected static int nrDigits(int year) {
+		int nr = 0;
+		while (year > 0) {
+			nr ++;
+			year /= 10;
+		}
+		return nr;
+	}
+	
+	protected static LocalDate parseDate(int year, String month) {
+		char[] y = new char[] {'y', 'y', 'y', 'y', 'y'};
+		String yyyy = String.copyValueOf(y, 0, nrDigits(year));
 		String dateString = String.format("%d-%s-01", year, month);
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMMM-dd", Locale.US);
-		date = LocalDate.parse(dateString, dtf);
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(yyyy + "-MMMM-dd", Locale.US);
+		return LocalDate.parse(dateString, dtf);
 	}
 	
 	int getQuarter(Month month) {

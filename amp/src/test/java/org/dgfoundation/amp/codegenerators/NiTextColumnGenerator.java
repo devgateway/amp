@@ -25,7 +25,7 @@ public class NiTextColumnGenerator extends ColumnGenerator {
 		public final long id;
 		
 		public Entry(String aavname, String name, long id) {
-			this.aavname = cleanupOrAnon(aavname);
+			this.aavname = anon(aavname);
 			this.text = cleanupOrAnon(name);
 			this.id = id;
 		}

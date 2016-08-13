@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
@@ -41,6 +42,7 @@ public class GrandTotalsDigest implements NiReportOutputBuilder<Map<String, NiOu
 	 * @return
 	 */
 	public NiReportOutputBuilder<String> asStringDigester() {
+		//return (spec, reportRun) -> this.buildOutput(spec, reportRun).entrySet().stream().map(z -> String.format("%s: %s\n", z.getKey(), z.getValue())).collect(Collectors.toList()).toString();
 		return (spec, reportRun) -> this.buildOutput(spec, reportRun).toString();
 	}
 	

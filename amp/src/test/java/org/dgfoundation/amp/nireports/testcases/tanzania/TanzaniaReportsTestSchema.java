@@ -67,6 +67,7 @@ import org.dgfoundation.amp.nireports.testcases.tanzania.columns.RegionCells;
 import org.dgfoundation.amp.nireports.testcases.tanzania.columns.SecondarySectorCells;
 import org.dgfoundation.amp.nireports.testcases.tanzania.columns.SecondarySectorSubSectorCells;
 import org.dgfoundation.amp.nireports.testcases.tanzania.columns.StatusCells;
+import org.dgfoundation.amp.nireports.testcases.tanzania.columns.TypeOfAssistanceCells;
 import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.CategoriesTestDimension;
 import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.LocationsTestDimension;
 import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.OrganizationsTestDimension;

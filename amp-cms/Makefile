@@ -184,15 +184,14 @@ clean:
 destroy:
 	@# Make sure the environment is prepared.
 	@test -f "sites/default/settings.custom.php" || (echo "No settings.custom.php file."; exit 16)
-
 	@echo -e '\E[33m'"[WARNING] This will ERASE the database and the user uploaded files."'\033[0m'
 	@read -p 'Press [Enter] key to continue or CTRL+C to cancel...'
 	@echo 'Erasing the database content...'
 	@drush sql-drop --yes
 	@echo 'Fixing permissions...'
-	@chmod +w sites/default sites/default/settings.php
+	@chmod +w sites/default sites/default/*
 	@echo 'Erasing the user uploaded files...'
-	@rm -rf sites/default/files/*
+	@rm -rf sites/default/files
 
 
 # Clear the site cache.

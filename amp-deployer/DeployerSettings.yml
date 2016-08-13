@@ -30,8 +30,8 @@ vhosts:
           - 'ProxyPassReverseCookiePath / /'
       - comment: 'ArcGIS server proxy settings.'
         directives:
-          - 'ProxyPass /arcgis http://www.aidtransparency.gov.tl:6080/arcgis'
-          - 'ProxyPassReverse /arcgis http://www.aidtransparency.gov.tl:6080/arcgis'
+          - '#ProxyPass /arcgis http://www.aidtransparency.gov.tl:6080/arcgis'
+          - '#ProxyPassReverse /arcgis http://www.aidtransparency.gov.tl:6080/arcgis'
     noindex: true
     php_devel: true
     weight: 10

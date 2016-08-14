@@ -4,8 +4,6 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 
 	"use strict";
 	
-	var initialized = false;
-
 	function SettingsManager() {
 		if (!(this instanceof SettingsManager)) {
 			throw new TypeError("SettingsManager constructor cannot be called as a function.");
@@ -26,7 +24,6 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 	};
 	
 	SettingsManager.initialize = function() {
-		var self = this;
 		var SettingDialogContainerView = Marionette.ItemView.extend({
 			template : _.template(settingsDialogTemplate)
 		});
@@ -48,14 +45,15 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			modal : true,
 			title : TranslationManager.getTranslated("Settings"),
 			width : 'auto',
-			position: { my: "center bottom", at: "center center", of: window }
+			position: { my: "center bottom", at: "center center", of: window },
+			close: function() {
+				jQuery(settingsDialog.el).dialog('destroy').remove();
+			}
 		});
 		jQuery(".buttonify").button();
 		$('#settings-missing-values-error').hide();
 		TranslationManager.searchAndTranslate();
 		
-		this.initialized = true;
-
 		// Register apply button click.
 		jQuery(".settings-container #applySettingsBtn").on("click", function() {
 			if($('#currency').val() === null || $('#calendar').val() === null) {
@@ -66,7 +64,6 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			
 			jQuery('#calendar').removeAttr('selected');
 			jQuery('#currency').removeAttr('selected');
-			jQuery(settingsDialog.el).dialog('close');
 
 			/* settingsDialog.model.get('currency'),settingsDialog.model.get('calendar') */
 
@@ -93,10 +90,9 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			app.TabsApp.dynamicContentRegion.currentView.legends.currentView.render();
 
 			// Destroy the dialog to unbind the event.
-			jQuery(settingsDialog.el).dialog('destroy').remove();
-			self.initialized = false;
+			jQuery(settingsDialog.el).dialog('close');
 		});
-		
+
 		//Register calendar change.
 		jQuery(".settings-container #calendar").on("change", function() {
 			var calendarSelect = $('.settings-container #calendar');
@@ -115,15 +111,11 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			});
 			$(currencySelect).val(availableCurrenciesForCalendar[0]);
 		});
-		jQuery(settingsDialog.el).dialog('close');
 		app.TabsApp.settingsDialogView = settingsDialog;
 	};
 
 	SettingsManager.openDialog = function() {
-		if (this.initialized === false) {
-			// By re-initialing we prevent some parameters ghosting.
-			this.initialize();
-		}
+		this.initialize();
 		jQuery(app.TabsApp.settingsDialogView.el).dialog('open');
 	};
 

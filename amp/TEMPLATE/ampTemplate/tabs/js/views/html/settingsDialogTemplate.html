@@ -24,7 +24,7 @@
 					<select name="calendar" id="calendar"> 
 						<% for(var c in calendars) { 
 							var selected = '';
-							if(parseInt(calendars[c].id) === selectedCalendar) { 
+							if(parseInt(calendars[c].id) === parseInt(selectedCalendar)) {
 								selected = "selected = 'selected' "; 
 							}%>
 							<option value="<%= calendars[c].id%>"<%= selected %> ><%=calendars[c].name%></option> 

@@ -14,16 +14,21 @@ public class AmpThemeSkeleton extends HierEntitySkeleton<AmpThemeSkeleton> {
 		super(id, themeName, code, parentId);
 	}
 	
-    
-    /**
-     * 
-     * @return a map of all programs from amp_theme, indexed by their ids
-     */
+	private static String getCondition(long root) {
+		String condition = "WHERE ((deleted IS NULL) OR (deleted = false)) ";
+		if (root > 0) {
+			condition += String.format(" AND amp_theme_id IN (SELECT amp_theme_id FROM all_programs_with_levels WHERE id0 = %d)", root); 
+		}
+		return condition;
+	}
+
+	/**
+	 * Builds a map of ampthemeskeletons, indexed by ids
+	 * @param root id of the root whose children are fetched, -1 for no such limit
+	 * @return
+	 */
     public static Map<Long, AmpThemeSkeleton> populateThemesTree(long root) {
-    	String condition = root <= 0 ? "" : "where amp_theme_id IN (select amp_theme_id from all_programs_with_levels where id0 = " + root + ") "
-    			+ " AND ((deleted IS NULL) OR (deleted = false))"
-    			+ "";
-    	return HierEntitySkeleton.fetchTree("amp_theme", condition, new EntityFetcher<AmpThemeSkeleton>() {
+    	return HierEntitySkeleton.fetchTree("amp_theme", getCondition(root), new EntityFetcher<AmpThemeSkeleton>() {
     		@Override public AmpThemeSkeleton fetch(ResultSet rs) throws SQLException {
     			return new AmpThemeSkeleton(nullInsteadOfZero(rs.getLong("amp_theme_id")), 
 					 	rs.getString("name"), 

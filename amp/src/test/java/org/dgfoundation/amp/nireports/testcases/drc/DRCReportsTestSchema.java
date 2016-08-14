@@ -1,14 +1,12 @@
-package org.dgfoundation.amp.nireports.testcases.tanzania;
+package org.dgfoundation.amp.nireports.testcases.drc;
 
 import static org.dgfoundation.amp.nireports.testcases.TestModelConstants.*;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.Memoizer;
@@ -42,38 +40,11 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.testcases.ReportsTestScratchpad;
 import org.dgfoundation.amp.nireports.testcases.TestFundingFetcher;
 import org.dgfoundation.amp.nireports.testcases.TrivialTestMeasure;
+import org.dgfoundation.amp.nireports.testcases.drc.columns.*;
+import org.dgfoundation.amp.nireports.testcases.drc.dimensions.*;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedCells;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedColumn;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ActivityCreatedOnCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ActivityUpdatedOnCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.CountryCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.DistrictCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.DonorAgencyCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.DonorGroupCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.DonorTypeCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.FinancingInstrumentCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.FundingStatusCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ImplementationLevelCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ImplementingAgencyCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ImplementingAgencyGroupsCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ImplementingAgencyTypeCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ModeOfPaymentCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.PrimaryProgramLevel1Cells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.PrimaryProgramLevel2Cells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.PrimarySectorCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.PrimarySectorSubSectorCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ProjectTitleCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.RegionCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.SecondarySectorCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.SecondarySectorSubSectorCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.StatusCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.TypeOfAssistanceCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.columns.ZoneCells;
-import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.CategoriesTestDimension;
-import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.LocationsTestDimension;
-import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.OrganizationsTestDimension;
-import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.ProgramsTestDimension;
-import org.dgfoundation.amp.nireports.testcases.tanzania.dimensions.SectorsTestDimension;
+
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -81,7 +52,7 @@ import org.digijava.module.aim.helper.Constants;
  * @author acartaleanu
  *
  */
-public class TanzaniaReportsTestSchema extends AbstractReportsSchema {
+public class DRCReportsTestSchema extends AbstractReportsSchema {
 
 	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
 			Arrays.asList(ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE)));
@@ -102,13 +73,13 @@ public class TanzaniaReportsTestSchema extends AbstractReportsSchema {
 	
 	public final static NiDimensionUsage LOC_DIM_USG = locsDimension.getDimensionUsage("LOCS");
 			
-	private static TanzaniaReportsTestSchema instance;
+	private static DRCReportsTestSchema instance;
 	
 	public final static Map<String, Long> activityNames = generateActivityNamesMap();
 	
 	public static Set<String> workspaceFilter = activityNames.keySet();
 	
-	public TanzaniaReportsTestSchema() { 
+	public DRCReportsTestSchema() { 
 		//2x degenerate dimensions
 		addTextColumn(ColumnConstants.STATUS, new StatusCells(activityNames, catsDimension.getEntityIds(), catsDimension, "status"));
 		addTextColumn(ColumnConstants.IMPLEMENTATION_LEVEL, new ImplementationLevelCells(activityNames, catsDimension.getEntityIds(), catsDimension, "impl_level"));
@@ -177,7 +148,7 @@ public class TanzaniaReportsTestSchema extends AbstractReportsSchema {
 				byMeasureDividingBehaviour(TimeRange.NONE, MeasureConstants.ACTUAL_COMMITMENTS), singletonMap(MeasureConstants.ACTUAL_COMMITMENTS, false)));
 	}
 
-	protected final Memoizer<TestFundingFetcher> fundingFetcher = new Memoizer<>(() -> new TestFundingFetcher(activityNames, new TanzaniaFundingCells(activityNames)));
+	protected final Memoizer<TestFundingFetcher> fundingFetcher = new Memoizer<>(() -> new TestFundingFetcher(activityNames, new DRCFundingCells(activityNames)));
 	
 	@Override
 	public NiReportColumn<CategAmountCell> getFundingFetcher(NiReportsEngine engine) {
@@ -189,7 +160,7 @@ public class TanzaniaReportsTestSchema extends AbstractReportsSchema {
 	}
     
 	private static Map<String, Long> generateActivityNamesMap() {
-		return new TanzaniaHardcodedActivities().getActIdsMap();
+		return new DRCHardcodedActivities().getActIdsMap();
 	}
 	
 	private void addPercentageColumn(String name, HardcodedCells<PercentageTextCell> cells) {
@@ -200,9 +171,9 @@ public class TanzaniaReportsTestSchema extends AbstractReportsSchema {
 		addColumn(new HardcodedColumn<TextCell>(name, cells, cells.levelColumn.orElse(null), TextualTokenBehaviour.instance));
 	}
 	
-	public static TanzaniaReportsTestSchema getInstance() {
+	public static DRCReportsTestSchema getInstance() {
 		if (instance == null){
-			instance = new TanzaniaReportsTestSchema();
+			instance = new DRCReportsTestSchema();
 		}
 		return instance;
 	}
@@ -234,9 +205,9 @@ public class TanzaniaReportsTestSchema extends AbstractReportsSchema {
 		return new ReportsTestScratchpad(engine);
 	}
 	
-	@Override public TanzaniaReportsTestSchema addColumn(NiReportColumn<?> col) {
+	@Override public DRCReportsTestSchema addColumn(NiReportColumn<?> col) {
 		if (TRANSACTION_LEVEL_HIERARCHIES.contains(col.name))
 			col = col.setTransactionLevelHierarchy();
-		return (TanzaniaReportsTestSchema) super.addColumn(col);
+		return (DRCReportsTestSchema) super.addColumn(col);
 	}
 }

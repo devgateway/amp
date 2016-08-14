@@ -116,7 +116,10 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	ReportData rootReportData;
 	public NiReportData reportOutput;
 	
+	/** the filtered funding */
 	public List<CategAmountCell> funding;
+	
+	/** the unfiltered funding, as returned by the schema */
 	public List<CategAmountCell> unfilteredFunding;
 	public final ReportSpecification spec;
 	

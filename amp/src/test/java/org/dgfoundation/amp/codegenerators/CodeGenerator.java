@@ -24,7 +24,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
  */
 public abstract class CodeGenerator {
 	
-	public static String PACKAGE_NAME = "tanzania";
+	public static String PACKAGE_NAME = "drc";
 	public static boolean OBFUSCATE_TEXT = true;
 	
 	public abstract String generate();

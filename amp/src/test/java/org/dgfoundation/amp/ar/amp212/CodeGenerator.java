@@ -121,11 +121,11 @@ public class CodeGenerator  {
 	}
 	
 	public void generateCode() throws IOException  {
-//			generateFunding();
-//			generateActivityNames();
-//			generateFundingTypesNames();
-//			generateDimensions();
-			generateColumns();
+		generateFunding();
+		generateActivityNames();
+		generateFundingTypesNames();
+		generateDimensions();
+		generateColumns();
 	}
 	
 	/**
@@ -150,7 +150,10 @@ delete from amp_funding where amp_donor_org_id  in (select amp_org_id from temp_
 delete from amp_user_ext where amp_org_id  in (select amp_org_id from temp_orgs_to_delete);
 delete from amp_funding_detail where recipient_org_id in (select amp_org_id from temp_orgs_to_delete);
 truncate amp_ahsurvey cascade;
-
+truncate amp_activity_internal_id;
+truncate amp_org_recipient;
+truncate amp_organisation_sector;
+truncate amp_org_location;
 delete from amp_organisation where amp_org_id in (select amp_org_id from temp_orgs_to_delete);
 
 DROP TABLE temp_duplicate_orgs;

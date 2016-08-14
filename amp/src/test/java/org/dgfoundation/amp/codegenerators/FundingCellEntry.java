@@ -7,13 +7,13 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 
 import static org.dgfoundation.amp.codegenerators.CodeGenerator.escape;
 import static org.dgfoundation.amp.codegenerators.CodeGenerator.pad;
-import static org.dgfoundation.amp.codegenerators.CodeGenerator.anon;
 
 /**
  * a simplified representation of a {@link CategAmountCell}
- * @author simple
+ * @author Dolghier Constantin
  *
  */
+@SuppressWarnings("serial")
 public class FundingCellEntry implements Serializable {
 	public final BigDecimal amount;
 	public final String activityTitle;

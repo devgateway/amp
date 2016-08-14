@@ -130,7 +130,10 @@ public class CodeGenerator  {
 	
 	/**
 	 * Prior to startup one must make sure than organization names are unique. This is true in the testcases database.
-	 * For real production databases used for benchmarking, one may just prune the duplicate DBs. The SQL queries to do it are, in order:
+	 * 
+	 * 
+------------------------------------------------------------------------------------ 
+For real production databases used for benchmarking, one may just prune the duplicate DBs. The SQL queries to do it are, in order:
 
 create table temp_duplicate_orgs AS
 select z.* from (
@@ -159,6 +162,27 @@ delete from amp_organisation where amp_org_id in (select amp_org_id from temp_or
 DROP TABLE temp_duplicate_orgs;
 DROP TABLE temp_orgs_to_delete;
 
+-----------------------------------------
+to export a database in a good-enough-for-benchmarks-use state, run the following SQL (warning: it will corrupt the history)
+
+TRUNCATE mondrian_fact_table;
+TRUNCATE mondrian_raw_donor_transactions;
+TRUNCATE dg_editor;
+TRUNCATE cached_v_pledges_funding_st;
+TRUNCATE cached_v_donor_funding;
+
+truncate amp_org_role_budget;
+delete from amp_org_role where activity NOT IN (select amp_activity_id from amp_activity);
+
+TRUNCATE amp_message CASCADE;
+delete from amp_funding_detail where amp_fund_detail_id not in (select amp_fund_detail_id from amp_activity aa join v_donor_funding vdf on aa.amp_activity_id = vdf.amp_activity_id);
+delete from amp_funding where amp_funding_id not in (select amp_funding_id from amp_activity aa join v_donor_funding vdf on aa.amp_activity_id = vdf.amp_activity_id);
+
+
+TRUNCATE amp_audit_logger;
+
+delete from amp_activity_sector where amp_activity_id NOT IN (select amp_activity_id from amp_activity);
+delete from amp_activities_categoryvalues where amp_activity_id NOT IN (select amp_activity_id from amp_activity);
 
 	 * 
 	 * @param args

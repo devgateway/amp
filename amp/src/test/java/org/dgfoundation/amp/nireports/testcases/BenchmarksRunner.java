@@ -18,11 +18,20 @@ import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.output.NiReportsFormatter;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
+/**
+ * a class which, given a schema and a list of benchmarks to run, runs each of them and returns the results in a hashmap having the spec.reportName as a key.
+ * Each report is run multiple times and the best result is reported (thus this class is good for CPU-bottlenecked schemas / reports only)
+ * @author Dolghier Constantin
+ *
+ */
 public class BenchmarksRunner {
 	
 	final NiReportsSchema schema;
 	final NiReportOutputBuilder<String> digester;
 
+	/**
+	 * the number of times to run each report
+	 */
 	public static int runs = 5;
 	
 	public BenchmarksRunner(NiReportsSchema schema, NiReportOutputBuilder<String> digester) {
@@ -36,6 +45,12 @@ public class BenchmarksRunner {
 		return res;
 	}
 	
+	/**
+	 * runs a specific report and returns an estimate of its performance. The estimate is the best result over {@link #runs} runs
+	 * @param spec
+	 * @param corOutput - the cor output to take into account. The function will throw an exception in case the non-timing fields are set and disagree with what comes out of the reports engine
+	 * @return
+	 */
 	protected BenchmarkResult runBenchmark(ReportSpecification spec, BenchmarkResult corOutput) {
 		long bestTime = Long.MAX_VALUE;
 		BenchmarkResult bestRes = null;
@@ -50,6 +65,14 @@ public class BenchmarksRunner {
 		return bestRes;
 	}
 	
+	/**
+	 * runs a given report a single time and returns the metrics (timings, digests, counts) of it. Crashes in case that a cor is supplied and any of its set values disagrees with what came out of the reports engine
+	 * @param runName
+	 * @param spec
+	 * @param corOutput
+	 * @param runNumber
+	 * @return
+	 */
 	protected BenchmarkResult doRun(String runName, ReportSpecification spec, BenchmarkResult corOutput, int runNumber) {
 		NiReportsEngine engine = new NiReportsEngine(schema, spec);
 		long start = System.currentTimeMillis();
@@ -63,15 +86,24 @@ public class BenchmarksRunner {
 		final int nrFundingCells = engine.funding.size();
 		String corDigest = corOutput != null ? corOutput.digest : null;
 		
+		final int nrEntities = apiOutput.getNrEntities();
 		NiUtils.failIf(corDigest != null && !digest.equals(corDigest), () -> String.format("digest was <%s> instead of <%s>", digest, corDigest));
 		NiUtils.failIf(corOutput != null && corOutput.nrFundingCells >= 0 && corOutput.nrFundingCells != nrFundingCells, () -> String.format("digest was <%s> instead of <%s>", digest, corDigest));
+		NiUtils.failIf(corOutput != null && corOutput.nrEntities >= 0 && nrEntities != corOutput.nrEntities, () -> String.format("nrEntities changed: should be %d, but is %d", corOutput.nrEntities, nrEntities));
+
 		
 		if (runName.equals("bySector") && runNumber == 0 && false)
 			System.out.println(new ReportModelGenerator().buildOutput(spec, reportRes).describeInCode());
 		
 		return new BenchmarkResult(runName, delta, formatTime, apiOutput.getNrEntities(), nrFundingCells, digest);
 	}
-	
+
+	/**
+	 * formats the NiReports API output to Reports API output. The output per se is not used, but the process is benchmarked against regressions
+	 * @param spec
+	 * @param reportRes
+	 * @return
+	 */
 	protected ReportArea formatOutput(ReportSpecification spec, NiReportRunResult reportRes) {
 		DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
 		decSymbols.setDecimalSeparator('.');
@@ -81,6 +113,11 @@ public class BenchmarksRunner {
 		return reportRes.reportOut.accept(formatter);		
 	}
 	
+	/**
+	 * the result of running a single test. If the test is being run multiple times, the best one is preserved  (e.g. the one with minimum {@link #runMillies})
+	 * @author Dolghier Constantin
+	 *
+	 */
 	public static class BenchmarkResult {
 		public final String runName;
 		public final long runMillies;

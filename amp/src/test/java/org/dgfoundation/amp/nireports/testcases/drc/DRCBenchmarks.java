@@ -14,7 +14,7 @@ import org.dgfoundation.amp.nireports.testcases.SchemaBenchmarks;
 import org.dgfoundation.amp.nireports.testcases.BenchmarksRunner.BenchmarkResult;
 
 /**
- * the entry point for NiReports' "Tanzania" offline performance benchmarks (e.g. a curated, hardcoded, dump of altered Tanzania DB)
+ * the entry point for NiReports' "DRC" offline performance benchmarks (e.g. a curated, hardcoded, dump of altered DRC DB)
  * @author Dolghier Constantin
  *
  */

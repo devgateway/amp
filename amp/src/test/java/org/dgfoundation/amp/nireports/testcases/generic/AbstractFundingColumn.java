@@ -14,6 +14,7 @@ import java.util.zip.GZIPInputStream;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.codegenerators.FundingCellEntry;
+import org.dgfoundation.amp.codegenerators.FundingColumnGenerator;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
@@ -30,6 +31,13 @@ import org.dgfoundation.amp.nireports.testcases.IHardcodedNames;
 import org.dgfoundation.amp.nireports.testcases.TestModelConstants;
 import org.dgfoundation.amp.nireports.testcases.TestcasesPrecisionSetting;
 
+/**
+ * a Funding Column which gets its data from a source which encodes the cells independent of the schema. 
+ * Supplies various utilities to be used by the concrete subclasses (which construct cells either from hardcoded-in-src data OR hardcoded-in-files data); also supplies a method for reading cells off a binary dump created through {@link FundingColumnGenerator#binaryDump()}
+ * (please see {@link #decodeCells(InputStream)})
+ * @author Dolghier Constantin
+ *
+ */
 public abstract class AbstractFundingColumn extends HardcodedCells<CategAmountCell> {
 
 	protected final NiDimension cats;

@@ -6,7 +6,11 @@ import java.util.Map;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.testcases.generic.AbstractFundingColumn;
 
-
+/**
+ * the Tanzania class reading funding cells from the binary dump residing in file funding.gz
+ * @author Dolghier Constantin
+ *
+ */
 public class TanzaniaFundingCells extends AbstractFundingColumn {
 
 	public TanzaniaFundingCells(Map<String, Long> activityNames) {

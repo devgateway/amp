@@ -34,7 +34,6 @@ public class SchemaBenchmarks {
 		for(String reportName:runRes.keySet()) {
 			BenchmarkResult run = runRes.get(reportName);
 			BenchmarkResult cor = corByName.get(reportName);
-			NiUtils.failIf(cor.nrEntities >= 0 && run.nrEntities != cor.nrEntities, () -> String.format("nrEntities changed: should be %d, but is %d", cor.nrEntities, run.nrEntities));
 			
 			System.out.format("%s,%d,%d,%d,%d,%.2f,%.2f\n", reportName, run.nrEntities, run.runMillies, run.outputMillies, run.nrFundingCells, speedup(run.runMillies, cor.runMillies), speedup(run.outputMillies, cor.outputMillies));
 		}

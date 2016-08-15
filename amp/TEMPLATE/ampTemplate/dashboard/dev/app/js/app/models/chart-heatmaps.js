@@ -36,9 +36,21 @@ module.exports = ChartModel.extend({
 	parse: function (data) {
 		var self = this;
 		self.values = new Array();
+		if (_.isUndefined(data.xDataSet) || _.isUndefined(data.yDataSet)) {
+			// The EP for heatmaps is different than the other charts because it returns an empty object, so we set explicitly some fields to empty value. 
+			data.yDataSet = [];
+			data.xDataSet = [];
+			data.matrix = [];
+			data.xTotals = 0;
+			data.yTotals = 0;
+			data.xCount = 0;
+			data.yCount = 0;
+			data.xTotalCount = 0;
+			data.yTotalCount = 0;
+		}		
 		self.values.x = data.xDataSet;
 		self.values.y = data.yDataSet;
-		for (var i = 0; i < data.yDataSet.length; i++) {					
+		for (var i = 0; i < data.yDataSet.length; i++) {
 			for (var j = 0; j < data.xDataSet.length; j++) {
 				if (data.matrix[i] !== null) {
 					var value = data.matrix[i][j] !== null ? data.matrix[i][j] : {p: -1, amount: '0'};
@@ -84,23 +96,24 @@ module.exports = ChartModel.extend({
 	},
 	
 	normalizeValues: function(values) {
-		for (var i = 0; i < values.length; i++) {
-			var auxValue = values[i].value !== undefined ? values[i].value : values[i]; 
-			if (auxValue > 0 && auxValue < 1) {
-				//Do nothing;
-			} else {
-				if (values[i].value !== undefined) {
-					values[i].value = Math.floor(auxValue);
+		if (_.isUndefined(values) === false) {
+			for (var i = 0; i < values.length; i++) {
+				var auxValue = values[i].value !== undefined ? values[i].value : values[i];
+				if (auxValue > 0 && auxValue < 1) {
+					//Do nothing;
 				} else {
-					values[i] = Math.floor(auxValue);
+					if (values[i].value !== undefined) {
+						values[i].value = Math.floor(auxValue);
+					} else {
+						values[i] = Math.floor(auxValue);
+					}
 				}
-			}			
+			}
 		}
 		return values;
 	},
 
 	fetch: function(options) {
-		//TODO: add code for saved dashboards!!!		
 		var self = this;
 		options = _.defaults(options || {}, { url: this.url });
 		

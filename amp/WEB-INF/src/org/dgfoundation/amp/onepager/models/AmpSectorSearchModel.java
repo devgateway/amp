@@ -48,14 +48,6 @@ public class AmpSectorSearchModel extends
 			session = PersistenceManager.getSession();
 			session.enableFilter("isDeletedFilter").setParameter("deleted", Boolean.FALSE);
 
-//			TODO-CONSTANTIN			
-//			debug / research code: please leave it here until I remove it later
-//			String myQuery = "select sec from " + AmpSector.class.getName() + " sec where sec.name like '%у%'";
-//			//System.out.println("aaaa start aaaa");
-//			for(AmpSector ampSec:((List<AmpSector>)(session.createQuery(myQuery).list())))
-//				//System.out.println(ampSec.getName());
-//			//System.out.println("aaaa end aaaa");
-			
 			Integer maxResults = (Integer) getParams().get(
 					AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 			AmpSectorScheme scheme = (AmpSectorScheme) getParams().get(
@@ -63,11 +55,6 @@ public class AmpSectorSearchModel extends
 			Criteria crit = session.createCriteria(AmpSector.class);
 			crit.setCacheable(true);
 			Junction junction = Restrictions.conjunction().add(Restrictions.and(Restrictions.eq("ampSecSchemeId", scheme), Restrictions.or( Restrictions.isNull("deleted"), Restrictions.eq( "deleted", Boolean.FALSE))));
-			/*Junction junction = Restrictions.conjunction().add(
-					Restrictions.eq("ampSecSchemeId", scheme));
-			if (input.trim().length() > 0)
-				junction.add(getTextCriterion("name", input));
-			junction.add( Restrictions.or( Restrictions.isNull("deleted"), Restrictions.eq( "deleted", Boolean.FALSE)));*/
 			crit.add(junction);
 			crit.addOrder(Order.asc("name"));
 			if (maxResults != null && maxResults != 0)

@@ -34,4 +34,7 @@ public interface AmpAutoCompleteDisplayable {
 	public <T extends AmpAutoCompleteDisplayable> Collection<T> getSiblings();
 	public <T extends AmpAutoCompleteDisplayable> Collection<T> getVisibleSiblings();
 	public String getAutoCompleteLabel();
+	
+	public  <T extends AmpAutoCompleteDisplayable> Collection<T> getNonDeletedChildren();
+
 }

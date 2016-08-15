@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,6 +52,8 @@ public class NormalizedPercentagesColumn extends AmpDifferentialColumn<Percentag
 	}
 	
 	protected synchronized List<PercentageTextCell> fetchIds(NiReportsEngine engine, Set<Long> ids) {
+		if (ids.isEmpty())
+			return Collections.emptyList();
 		String locale = TLSUtils.getEffectiveLangCode();
 		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
 		PercentagesCorrector.Snapshot percsSnapshot = scratchpad.buildSnapshot(this.percentagesSnapshot, percentagesCorrector, ids);

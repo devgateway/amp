@@ -32,7 +32,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 		super(input, language, params);
 	}
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	public enum PARAM implements AmpAutoCompleteModelParam {
 		PROGRAM_TYPE
@@ -52,8 +52,6 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				AmpTheme def = aaps.getDefaultHierarchy();
 				
 				Criteria crit = session.createCriteria(AmpTheme.class);
-				//do not show deleted entries
-				crit.add(Restrictions.or(Restrictions.eq("deleted", Boolean.FALSE), Restrictions.isNull("deleted")));
 
 				crit.setCacheable(true);
 				//The following line was commented out because it added only the parent hierarchy in the list.
@@ -67,6 +65,8 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 						crit.add((Criterion)o);
 					}
 				}
+
+				crit.add(Restrictions.or(Restrictions.eq("deleted", Boolean.FALSE), Restrictions.isNull("deleted")));
 
 				Integer maxResults = (Integer) getParams().get(
 						AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
@@ -96,14 +96,6 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				if (isExactMatch())
 					return ret;
 
-				//AMP-16739 the default program is always the root of hierarchy 
-				/*if (def != null) {
-					AmpTheme defUsed = new AmpTheme();
-					defUsed.setName(def.getName());
-					defUsed.setAmpThemeId(def.getAmpThemeId());
-					defUsed.setTransientBoolean(true);
-					ret.add(0, defUsed);
-				}*/
 			} catch (Exception e) {
 				throw new DgException("Cannot retrive all themes from db", e);
 			}

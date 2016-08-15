@@ -9,11 +9,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
+import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel.PARAM;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -38,6 +42,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 		PROGRAM_TYPE
 	};
 
+	
 	@Override
 	protected Collection<AmpTheme> load() {
 		try {
@@ -45,17 +50,13 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 			Session session = null;
 			try {
 				session = PersistenceManager.getRequestDBSession();
-
 				String pType = (String) getParams().get(PARAM.PROGRAM_TYPE);
 				AmpActivityProgramSettings aaps = ProgramUtil
 						.getAmpActivityProgramSettings(pType);
 				AmpTheme def = aaps.getDefaultHierarchy();
 				
 				Criteria crit = session.createCriteria(AmpTheme.class);
-
 				crit.setCacheable(true);
-				//The following line was commented out because it added only the parent hierarchy in the list.
-				//getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, false);
 				if (input.trim().length() > 0){
 					Object o = getTextCriterion("name", input);
 					if (o instanceof SimpleExpression){

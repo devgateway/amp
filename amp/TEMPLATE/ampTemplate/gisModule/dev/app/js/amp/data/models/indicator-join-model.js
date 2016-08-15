@@ -87,7 +87,7 @@ module.exports = Backbone.Model
 	  var self = this;
 	  var deferred = new jQuery.Deferred();
 	  if(this.attributes.isStoredInLocalStorage === true){		  
-		  var layer = IndicatorLayerLocalStorage.findById(this.attributes.id);;
+		  var layer = IndicatorLayerLocalStorage.findById(this.attributes.id);
 		  if(!_.isUndefined(layer)){
 			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);
 			  deferred.resolve(layer);

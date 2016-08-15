@@ -94,7 +94,6 @@ module.exports = BaseControlView.extend({
             var a = document.createElement('a');
             document.body.appendChild(a);
             a.style = 'display: none';
-            a.href = 'data:image/png;base64,' + response;
             a.download = 'new-gis.png';
             self.fakeClick(a, response);
             $('#map-loading').hide();
@@ -136,6 +135,10 @@ module.exports = BaseControlView.extend({
   fakeClick: function(anchor, response) {
     if(anchor) {
         try {
+            var blob = this.createBlob(response);
+            var URLObj = window.URL || window.webkitURL;
+            var url = URLObj.createObjectURL(blob);
+            anchor.href = url;
             anchor.click();
         } catch (e) {
             var blob = this.createBlob(response);

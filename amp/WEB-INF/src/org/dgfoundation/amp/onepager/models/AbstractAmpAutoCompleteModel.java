@@ -114,6 +114,8 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 	 * current sector is a search hit (it was discovered by mysql search) it
 	 * also adds its children, if any, to the results.
 	 * 
+	 * It also ignores softdeleted entries, if said objects are softdeletable.
+	 * 
 	 * @param tree
 	 *            the output tree with sector results
 	 * @param obj
@@ -128,7 +130,7 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 			tree.add(obj);
 		else {
 			if (searchHit)
-				obj.getVisibleSiblings().addAll(obj.getSiblings());
+				obj.getVisibleSiblings().addAll(obj.getNonDeletedChildren());
 			obj.getParent().getVisibleSiblings().add(obj);
 			addToRootTree(tree, obj.getParent(), false);
 		}

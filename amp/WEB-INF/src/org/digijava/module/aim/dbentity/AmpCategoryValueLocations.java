@@ -294,4 +294,9 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 	{
 		return InternationalizedModelDescription.getForProperty(AmpCategoryValueLocations.class, "name").getSQLFunctionCall(idSource + ".id");
 	}
+
+	@Override
+	public <T extends AmpAutoCompleteDisplayable> Collection<T> getNonDeletedChildren() {
+		return getSiblings();
+	}
 }

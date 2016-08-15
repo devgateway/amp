@@ -8,8 +8,13 @@
 	<description>Update amp_columns_filters_seq start value</description>
 	<apply>
 		<script>
-			<lang delimiter=";" type="postgres">
-				SELECT setval('amp_columns_filters_seq', (SELECT MAX(id) FROM amp_columns_filters));
+			<lang delimiter="@" type="postgres">
+				DO $$
+				declare seqValue integer;
+				begin
+				  SELECT MAX(id) into seqValue FROM amp_columns_filters;
+				  EXECUTE 'ALTER SEQUENCE amp_columns_filters_seq RESTART WITH ' || seqValue;
+				END$$@			
 			</lang>
 		</script>
 	</apply>

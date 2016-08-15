@@ -32,6 +32,7 @@ module.exports = Backbone.View.extend({
 	  } else {
 		  $('.gap-analysis-bar').hide();
 	  }
+	  app.translator.translateDOM(this.$el);
 	  return this;
   },
   

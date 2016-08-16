@@ -30,8 +30,8 @@ vhosts:
           - 'ProxyPassReverseCookiePath / /'
       - comment: 'ArcGIS server proxy settings.'
         directives:
-          - '#ProxyPass /arcgis http://www.aidtransparency.gov.tl:6080/arcgis'
-          - '#ProxyPassReverse /arcgis http://www.aidtransparency.gov.tl:6080/arcgis'
+          - '#ProxyPass /arcgis https://example.org:6080/arcgis'
+          - '#ProxyPassReverse /arcgis https://example.org:6080/arcgis'
     noindex: true
     php_devel: true
     weight: 10
@@ -45,6 +45,12 @@ postgresql__databases:
   - name: amp_local
     user: amp_user
     pass: 'demo1'
+    extensions:
+      - fuzzystrmatch
+      - unaccent
+      - postgis
+      - postgis_topology
+      - postgis_tiger_geocoder
 
 # Extra open TCP ports.
 common__extra_open_tcp_ports:

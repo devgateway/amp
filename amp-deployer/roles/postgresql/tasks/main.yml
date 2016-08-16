@@ -100,7 +100,7 @@
     - "{{ postgresql__databases|default([]) }}"
     - extensions
     - flags:
-        skip_missing: True
+      skip_missing: True
 
 - name: Create database users
   postgresql_user:

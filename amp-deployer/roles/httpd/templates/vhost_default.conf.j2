@@ -21,8 +21,7 @@
   <Directory "{{ item.docroot }}">
     Options Indexes FollowSymLinks MultiViews
     AllowOverride all
-    Order allow,deny
-    Allow from all
+    Require all granted
 
     ## Restrict Access
     ## @see: http://httpd.apache.org/docs/2.4/mod/mod_auth_basic.html

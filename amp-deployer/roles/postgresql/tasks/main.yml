@@ -99,7 +99,7 @@
   become_user: postgres
   with_items: "{{ postgresql__databases|default([]) }}"
 
-- name: Vagrant - Create PostgreSQL password file
+- name: Create PostgreSQL password file for user vagrant
   template:
     src: dot.pgpass.j2
     dest: "~/.pgpass"

@@ -15,15 +15,16 @@ postgresql__listen_addresses: 'localhost'
 
 # Information about: Inline with Upstream Stable (IUS) repository
 # NO trailing slash for data_dir.
-postgresql__service_name: postgresql-9.3
-postgresql__setup_script: /usr/pgsql-9.3/bin/postgresql93-setup
-postgresql__conf_data_dir: /var/lib/pgsql/9.3/data
+postgresql__service_name: postgresql-9.4
+postgresql__setup_script: /usr/pgsql-9.4/bin/postgresql94-setup
+postgresql__conf_data_dir: /var/lib/pgsql/9.4/data
 postgresql__packages:
-  - postgresql93-server
-  - postgresql93-contrib
+  - postgresql94-server
+  - postgresql94-contrib
+  - postgis2_94
 
 # @see: http://yum.postgresql.org/repopackages.php
-postgresql__repo_url: https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-7-x86_64/pgdg-sl93-9.3-2.noarch.rpm
+postgresql__repo_url: https://download.postgresql.org/pub/repos/yum/9.4/redhat/rhel-7-x86_64/pgdg-sl94-9.4-2.noarch.rpm
 
 # PostgreSQL Client Authentication Configuration
 # @see: https://www.postgresql.org/docs/9.5/static/client-authentication.html

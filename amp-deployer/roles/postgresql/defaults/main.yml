@@ -21,6 +21,7 @@ postgresql__conf_data_dir: /var/lib/pgsql/9.4/data
 postgresql__packages:
   - postgresql94-server
   - postgresql94-contrib
+  - postgresql94-libs
   - postgis2_94
 
 # @see: http://yum.postgresql.org/repopackages.php

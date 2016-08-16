@@ -223,13 +223,12 @@
 										<table align=left cellpadding="1" cellspacing="1" width="100%" class="inside" >							
 											<c:if test="${aimThemeForm.flag == 'activityReferences'}">
 												<tr>
-													<td colspan="2" align="center">
+													<td colspan="2" align="left" style="padding-bottom:20px">
 														<font color="red"><b><digi:trn key="aim:cannotDeleteThemeMsg1">
-														Cannot delete the theme since some
-														activities references it or its sub program: 
-														</digi:trn>
+														Cannot delete the theme since some activities references it or its sub program: 
+														</digi:trn></b>
+														<br/>
 															${aimThemeForm.activitiesUsingTheme }
-															</b>
 														</font>
 													</td>
 												</tr>

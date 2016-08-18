@@ -40,7 +40,7 @@ module.exports = Backbone.Collection
     var deferred = $.Deferred();
     this.load().then(function() {
       self.url = '/rest/gis/indicators';
-      self.fetch().then(function() {
+      self.fetch({remove: false}).then(function() {
         deferred.resolve();
       });
     });

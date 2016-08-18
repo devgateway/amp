@@ -22,7 +22,7 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
 import static org.dgfoundation.amp.nireports.NiUtils.failIf;
 
 /**
- * 
+ * an abstract {@link NiReportsSchema} which contains utility methods for defining a schema in a coder-friendly way while ensuring reasonable safeguards for correctness.
  * @author Dolghier Constantin
  *
  */
@@ -39,7 +39,12 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	public Map<String, NiReportMeasure<?>> getMeasures() {
 		return Collections.unmodifiableMap(measures);
 	}
-		
+	
+	/**
+	 * adds a column definition to {@link #columns}, checking that no other column with the same name has been previously defined
+	 * @param col the column to add to the schema
+	 * @return
+	 */
 	public AbstractReportsSchema addColumn(NiReportColumn<?> col) {
 		failIf(columns.containsKey(col.name), "double definition of column with name " + col.name);
 		failIf(col.getBehaviour() == null, "no behaviour specified for column with name " + col.name);
@@ -47,6 +52,11 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		return this;
 	}
 	
+	/**
+	 * adds a measure definition to {@link #measures}, checking that no other measure with the same name has been previously defined
+	 * @param meas
+	 * @return
+	 */
 	public AbstractReportsSchema addMeasure(NiReportMeasure<?> meas) {
 		failIf(measures.containsKey(meas.name), "double definition of measure with name " + meas.name);
 		failIf(meas.getBehaviour() == null, "no behaviour specified for measure with name " + meas.name);
@@ -55,8 +65,12 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	}
 	
 	/**
-	 * accepts an array of (measureName, Number)
-	 * @param def
+	 * constructs a {@link NiCombinationContextTransactionMeasure} measure and then adds it to the schema by using {@link #addMeasure(NiReportMeasure)}  
+	 * @param compMeasure the name of the measure to construct
+	 * @param description the description of the measure to construct
+	 * @param behaviour the behaviour of the measure to construct
+	 * @param def an even-length array. Each pair is a (measureName, {@link Number}) tuple. The <i>measureName</i> should reference an already-defined measure of type {@link NiTransactionContextMeasure}.
+	 * @see NiCombinationContextTransactionMeasure for information on the measure built and inserted by this function
 	 * @return
 	 */
 	public AbstractReportsSchema addDerivedLinearFilterMeasure(String compMeasureName, String description, Behaviour<?> behaviour, Object...def) {

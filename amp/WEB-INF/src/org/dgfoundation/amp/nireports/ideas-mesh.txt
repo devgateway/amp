@@ -9,8 +9,3 @@ mondrian removal:
 -> delete PPC
 -> group all hierarchies as levels under location / sectors
 
-doc:
-document sorting
-
-Behaviour documention
-

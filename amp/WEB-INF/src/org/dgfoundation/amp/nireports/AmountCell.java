@@ -11,7 +11,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
- * a cell with an amount and an attached metadata
+ * a cell with an amount, with no coordinates or metadata
  * @author Dolghier Constantin
  *
  */

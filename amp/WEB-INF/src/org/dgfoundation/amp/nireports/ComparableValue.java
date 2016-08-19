@@ -3,12 +3,15 @@ package org.dgfoundation.amp.nireports;
 import java.util.Objects;
 
 /**
- * a class which pairs together a value and a comparable token
+ * a class which pairs together a value (payload) and a comparable token (used for ordering values only). Useful for when it is not practical to specify a custom comparator in a containing collection
  * @author Dolghier Constantin
  *
- * @param <K>
+ * @param <V> the type of the payload
  */
+@SuppressWarnings("rawtypes")
 public class ComparableValue<V> implements Comparable<ComparableValue<V>> {
+	
+	/** the payload */
 	protected final V value;
 	protected final Comparable comparable;
 	

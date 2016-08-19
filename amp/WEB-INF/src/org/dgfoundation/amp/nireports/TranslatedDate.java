@@ -1,7 +1,7 @@
 package org.dgfoundation.amp.nireports;
 
 /**
- * a class which is used for stored the result of translating a LocalDate into some user-specified calendar
+ * a class which is used for stored the result of translating a LocalDate into some schema-specific calendar
  * @author Dolghier Constantin
  *
  */

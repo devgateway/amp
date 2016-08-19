@@ -31,7 +31,7 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	protected Map<String, NiReportMeasure<?>> measures = new HashMap<>();
 	
 	@Override
-	public Map<String, NiReportColumn<?>> getColumns() {
+	public Map<String, NiReportColumn<? extends Cell>> getColumns() {
 		return Collections.unmodifiableMap(columns);
 	}
 	

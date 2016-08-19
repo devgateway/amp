@@ -45,7 +45,7 @@ import org.dgfoundation.amp.testutils.AmpTestCase;
  * @author Dolghier Constantin
  *
  */
-public class NiTestCase extends AmpTestCase {
+public abstract class NiTestCase extends AmpTestCase {
 	
 	final String TCN = "TotalColumnsName";
 	

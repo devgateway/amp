@@ -29,21 +29,7 @@
 			   			FROM amp_eu_activity eu 
 			   				JOIN amp_eu_activity_contributions eu_con ON eu_con.eu_activity_id = eu.id
 			   				JOIN amp_category_value val ON eu_con.financing_instr_category_value = val.id;
-			   				
-			   				
-				DROP VIEW IF EXISTS v_credit_donation CASCADE;
-			   	CREATE OR REPLACE VIEW v_credit_donation AS
-			   		SELECT v.amp_activity_id,
-			   			CASE v.category_value
-			   				WHEN 'Donacion' THEN 'Donacion'::text
-			   				ELSE 'Credito'::text
-			   			END AS name,
-			   			CASE v.category_value
-			   				WHEN 'Donacion' THEN 1
-			   				ELSE 2
-			   			END AS id
-			   		FROM v_financing_instrument v;
-        	</lang>
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

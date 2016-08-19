@@ -305,8 +305,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		single_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description", COMPONENT_LEVEL_COLUMN);
 		
 		no_dimension(ColumnConstants.COSTING_DONOR, "v_costing_donors");
-		degenerate_dimension(ColumnConstants.CREDIT_DONATION, "v_credit_donation", boolDimension);
-		
 		degenerate_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker", boolDimension);
 		no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
 		no_entity(ColumnConstants.ENVIRONMENT, "v_environment", DG_EDITOR_POSTPROCESSOR);

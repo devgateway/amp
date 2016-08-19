@@ -71,11 +71,14 @@ function loadBaseMap() {
 			subdomains = ['otile1','otile2','otile3','otile4'];
 		}
 		var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-		tileLayer = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 16, attribution: osmAttrib,
+		tileLayer = new L.TileLayer({url: osmUrl, minZoom: 0, maxZoom: 16, attribution: osmAttrib,
 				 subdomains: subdomains });	
 	}
 	else {
-	    tileLayer = L.esri.tiledMapLayer(basemapurl, {maxZoom: 16});
+	    tileLayer = L.esri.tiledMapLayer({
+	    	url: basemapurl,
+			maxZoom: 16
+	    });
 	}
 	
 	map.addLayer(tileLayer);

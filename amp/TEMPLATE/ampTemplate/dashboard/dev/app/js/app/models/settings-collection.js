@@ -34,12 +34,12 @@ module.exports = BackboneDash.Collection.extend({
     this.app = options.app;
     this._loaded = new Deferred();
     _.bindAll(this, 'toAPI', 'fromState');
-    if(!this.app.hasIssue('localStorage')){
+    if(!this.app.hasIssue('sessionStorage')){
       //this should be "once", but this collection gets synced 2 times for some reason
       //TODO: find the reason for above and replace this with "once"
       this.on("sync", _(function(){
         try{
-          var settings = JSON.parse(localStorage.settings);
+          var settings = JSON.parse(sessionStorage.settings);
           if("object" == typeof settings && null !== settings){
             if(settings[1]){
               this.findWhere({id: "1"}).select(settings[1], false);              
@@ -49,7 +49,7 @@ module.exports = BackboneDash.Collection.extend({
             }
           }
         }
-        //we're catching because it will throw if localStorage.settings is empty or corrupted
+        //we're catching because it will throw if sessionStorage.settings is empty or corrupted
         catch(e){}
       }).bind(this));
     }

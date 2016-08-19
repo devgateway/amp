@@ -50,11 +50,11 @@ module.exports = BackboneDash.View.extend({
     var optionId = e.currentTarget.value;
     logger.log("Changing", optionId, "setting");
     //if the browser supports local storage
-    if(!this.app.hasIssue('localStorage') && (1 == this.current.get('id') || 2 == this.current.get('id'))){
+    if(!this.app.hasIssue('sessionStorage') && (1 == this.current.get('id') || 2 == this.current.get('id'))){
       var settings;
-      //try reading the settings JSON from localStorage and deserialize it...
+      //try reading the settings JSON from sessionStorage and deserialize it...
       try{
-        settings = JSON.parse(localStorage.settings);
+        settings = JSON.parse(sessionStorage.settings);
       }
       catch(e){}
       //...regardless of whether that failed or not...
@@ -68,7 +68,7 @@ module.exports = BackboneDash.View.extend({
       //and after all that paranoia we can now relatively safely persist the settings:
       var id = this.current.get('id');
       settings[id] = optionId;
-      localStorage.settings = JSON.stringify(settings);
+      sessionStorage.settings = JSON.stringify(settings);
     }
     this.current.select(optionId, false);
   },

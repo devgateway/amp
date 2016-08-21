@@ -283,11 +283,10 @@ public class IndicatorUtils {
         response.set(EPConstants.NAME, indicator.getName());
         // TODO: unify Indicator Layers and GIS API, use FIELD_NUMBER_OF_CLASSES
         response.set("classes", indicator.getNumberOfClasses());
-        response.set(EPConstants.ID, indicator.getId());
-        response.set(IndicatorEPConstants.FIELD_UNIT, unit);
-        response.set(IndicatorEPConstants.FIELD_DESCRIPTION, indicator.getDescription());
-        // TODO: unify Indicator Layers and GIS API, use FIELD_ADM_LEVEL_ID
-        response.set("admLevelId", indicator.getAdmLevel().getLabel());
+        response.set(IndicatorEPConstants.ID, indicator.getId());
+        response.set(IndicatorEPConstants.UNIT, unit);
+        response.set(IndicatorEPConstants.DESCRIPTION, indicator.getDescription());
+        response.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getLabel());
         response.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
         response.set(IndicatorEPConstants.DO_GAP_ANALYSIS, doingGapAnalysis);
         

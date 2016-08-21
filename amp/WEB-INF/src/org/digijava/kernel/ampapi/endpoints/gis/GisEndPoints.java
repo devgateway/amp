@@ -443,8 +443,8 @@ public class GisEndPoints {
 	@POST
     @Path("/do-gap-analysis")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "canDoGapAnalysis")
-    public JsonBean canDoGapAnalysis(JsonBean input) {
+    @ApiMethod(ui = false, id = "doDoGapAnalysis")
+    public JsonBean doDoGapAnalysis(JsonBean input) {
 	    return new PublicGapAnalysis().doPublicGapAnalysis(input);
     } 
 	

@@ -3,6 +3,7 @@
  */
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
@@ -38,6 +39,8 @@ public class IndicatorUpdater {
     
     private ApiEMGroup errors = new ApiEMGroup(); 
     private TranslationUtil contentTranslator = new TranslationUtil();
+    private Long indicatorId;
+    private boolean indicatorIdDetected;
     
     public IndicatorUpdater(JsonBean indicator) {
         this.indicator = indicator;
@@ -50,12 +53,28 @@ public class IndicatorUpdater {
     public TranslationUtil getContentTranslator() {
         return contentTranslator;
     }
+    
+    public Long getIndicatorId() {
+        if (!indicatorIdDetected) {
+            indicatorIdDetected = true;
+            String indIdStr = indicator.getString(IndicatorEPConstants.ID);
+            if (indIdStr != null) {
+                if (NumberUtils.isNumber(indIdStr)) {
+                    indicatorId = Long.valueOf(indIdStr);
+                } else {
+                    errors.addApiErrorMessage(IndicatorErrors.FIELD_INVALID_VALUE, IndicatorEPConstants.ID + " = " + indIdStr);
+                }
+            }
+        }
+        return indicatorId;
+    }
 
     public AmpIndicatorLayer getIndicatorLayer() {
         AmpIndicatorLayer indicatorLayer = null;
+        Long indicatorId = getIndicatorId();
 
-        if (indicator.get(IndicatorEPConstants.ID)!=null) {
-            indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(Long.valueOf(indicator.getString(IndicatorEPConstants.ID)));
+        if (indicatorId != null) {
+            indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(indicatorId);
         } else{
             indicatorLayer = new AmpIndicatorLayer();
             indicatorLayer.setId(null);

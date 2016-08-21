@@ -42,6 +42,7 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
@@ -356,7 +357,7 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "IndicatorById")
 	public JsonBean getIndicatorsById(JsonBean input, @PathParam ("indicatorId") Long indicatorId) {
-		boolean isGapAnalysis = Boolean.valueOf(input.get("gapAnalysis").toString());
+		boolean isGapAnalysis = EndpointUtils.getSingleValue(input, IndicatorEPConstants.DO_GAP_ANALYSIS, Boolean.FALSE);
 	    return IndicatorUtils.getIndicatorsAndLocationValues(indicatorId, input, isGapAnalysis);
 	}
 	
@@ -404,6 +405,48 @@ public class GisEndPoints {
 		}
 		return indicatorsJson;
 	}
+	
+	/**
+	 * Clarifies if Gap Analysis can be done over for the indicator layer based on its indicator Type and ADM level
+	 * @param indicatorTypeId the indicator type id
+	 * @param admLevel administrative level id
+	 * @return <pre>
+	 * {
+	 *     "canDoGapAnalysis": true/false
+	 *     "error" : {...} // OPTIONAL, on invalid input/other errors   
+	 * }
+	 * </pre>
+	 * 
+	 */
+	@GET
+    @Path("/can-do-gap-analysis")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "canDoGapAnalysis")
+    public JsonBean canDoGapAnalysis(@QueryParam("indicatorTypeId") Long indicatorTypeId, 
+            @QueryParam("admLevelId") Long admLevelId) {
+	    return new PublicGapAnalysis().canDoGapAnalysis(indicatorTypeId, admLevelId);
+    }
+	
+	/**
+	 * Runs Gap Analysis directly over external indicator data, not from DB. 
+	 * For saved indicators Gap Analysis see {@link #getIndicatorsById(JsonBean, Long)} 
+	 * @param input
+	 * <pre>
+	 * {
+	 *   "indicator" : {...}, // full indicator data, like the one that is used for for saving
+	 *   "filters" : {...}, // current filters
+	 *   "settings" : {...} // current settings if any
+	 * }
+	 * </pre>
+	 * @return
+	 */
+	@POST
+    @Path("/do-gap-analysis")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "canDoGapAnalysis")
+    public JsonBean canDoGapAnalysis(JsonBean input) {
+	    return new PublicGapAnalysis().doPublicGapAnalysis(input);
+    } 
 	
 	/**
 	 * Export map id from current filters

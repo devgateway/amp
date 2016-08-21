@@ -22,6 +22,7 @@ public class IndicatorEPConstants {
 
     public static final String RESULT = "result";
     public static final String VALUES = "values";
+    public static final String INDICATOR = "indicator";
     public static final String ID = "id";
     public static final String LABEL = "label";
     public static final String VALUE = "value";
@@ -47,6 +48,7 @@ public class IndicatorEPConstants {
     public static final String IS_POPULATION = "isPopulation";
     public static final String INDICATOR_TYPE_ID = "indicatorTypeId";
     public static final String CAN_DO_GAP_ANALYSIS = "canDoGapAnalysis";
+    public static final String DO_GAP_ANALYSIS = "gapAnalysis";
     public static final String OPTION_TO_SAVE_VALUES = "option";
 
     public static final String FIELD_NAME = "name";

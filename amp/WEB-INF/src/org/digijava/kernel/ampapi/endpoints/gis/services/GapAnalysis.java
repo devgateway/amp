@@ -168,17 +168,27 @@ public class GapAnalysis {
     }
     
     /**
-     * Checks if gap analysis can be done over the specified indicator layer
+     * Checks if Gap Analysis can be done over the specified indicator layer
      * @param ail the indicator layer to test
      * @return true if gap analysis can be done over this indicator layer
      */
     public boolean canDoGapAnalysis(AmpIndicatorLayer ail) {
-        if (ail != null && ail.getIndicatorType() != null) {
-            String acvValue = ail.getIndicatorType().getValue();
+        return ail == null ? false : canDoGapAnalysis(ail.getIndicatorType(), ail.getAdmLevel());
+    }
+    
+    /**
+     * Checks if Gap Analysis can be done based on indicator type and ADM level 
+     * @param indicatorType the indicator type
+     * @param admLevel the admLevel
+     * @return true if Gap Analysis can be done
+     */
+    public boolean canDoGapAnalysis(AmpCategoryValue indicatorType, AmpCategoryValue admLevel) {
+        if (indicatorType != null) {
+            String acvValue = indicatorType.getValue();
             if (acvValue.equals(CategoryConstants.INDICATOR_LAYER_TYPE_PER_CAPITA.getValueKey())
                     || acvValue.equals(CategoryConstants.INDICATOR_LAYER_TYPE_COUNT.getValueKey())
                     || (acvValue.equals(CategoryConstants.INDICATOR_LAYER_TYPE_POPULATION_RATIO.getValueKey())
-                            && getPopulationLayer(ail.getAdmLevel()) != null)) {
+                            && getPopulationLayer(admLevel) != null)) {
                 return true;
             }
         }

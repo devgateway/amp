@@ -259,6 +259,12 @@ public class IndicatorUtils {
         if (indicator == null) {
             return ApiError.toError(new ApiErrorMessage(IndicatorErrors.INVALID_ID, String.valueOf(indicatorId)));
         }
+        return getIndicatorsAndLocationValues(indicator, input, isGapAnalysis);
+    }
+    
+    public static JsonBean getIndicatorsAndLocationValues(AmpIndicatorLayer indicator, JsonBean input, 
+            boolean isGapAnalysis) {
+     
         GapAnalysis gapAnalysis = isGapAnalysis ? new GapAnalysis(indicator, input) : null;
         boolean doingGapAnalysis = gapAnalysis != null && gapAnalysis.isReadyForGapAnalysis();
         if (doingGapAnalysis) {
@@ -275,12 +281,15 @@ public class IndicatorUtils {
         // build general indicator info
         JsonBean response = new JsonBean();
         response.set(EPConstants.NAME, indicator.getName());
+        // TODO: unify Indicator Layers and GIS API, use FIELD_NUMBER_OF_CLASSES
         response.set("classes", indicator.getNumberOfClasses());
-        response.set("id", indicator.getId());
-        response.set("unit", unit);
-        response.set("description", indicator.getDescription());
+        response.set(EPConstants.ID, indicator.getId());
+        response.set(IndicatorEPConstants.FIELD_UNIT, unit);
+        response.set(IndicatorEPConstants.FIELD_DESCRIPTION, indicator.getDescription());
+        // TODO: unify Indicator Layers and GIS API, use FIELD_ADM_LEVEL_ID
         response.set("admLevelId", indicator.getAdmLevel().getLabel());
         response.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
+        response.set(IndicatorEPConstants.DO_GAP_ANALYSIS, doingGapAnalysis);
         
         // build locations values
         List<JsonBean> values = new ArrayList<>();
@@ -291,13 +300,13 @@ public class IndicatorUtils {
             if (doingGapAnalysis) {
                 value = gapAnalysis.getGapAnalysisAmount(value, geoCode);
             }
-            object.set("value", value);
-            object.set("geoId", geoCode);
-            object.set("name", locIndValue.getLocation().getName());
+            object.set(IndicatorEPConstants.VALUE, value);
+            object.set(IndicatorEPConstants.GEO_CODE_ID, geoCode);
+            object.set(IndicatorEPConstants.NAME, locIndValue.getLocation().getName());
             
             values.add(object);
         }
-        response.set("values", values);
+        response.set(IndicatorEPConstants.VALUES, values);
         return response;
     }
 }

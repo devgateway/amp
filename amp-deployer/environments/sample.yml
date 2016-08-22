@@ -1,12 +1,8 @@
 ---
-# Fallback environment settings file.
-# You can copy this file to "DeployerSettings.{$project_environment}.yml" and configure it.
+# Sample environment settings file.
 #
-# NOTE: The project Vagrantfile first tries to load "DeployerSettings.local.yml".
-# TODO: Improve!!!
+# Vagrant will load this file if a "local.yml" environment variables file does not exist.
 #
-
-amp__root: /opt/devgateway/amp-local
 
 # Web server vhosts information:
 #  - template: name of the template used to create the vhost.
@@ -39,7 +35,6 @@ vhosts:
     weight: 10
 
 # Database credentials.
-postgresql__root_password: 'demo3'
 postgresql__databases:
   - name: amp_cms_local
     user: amp_cms_user

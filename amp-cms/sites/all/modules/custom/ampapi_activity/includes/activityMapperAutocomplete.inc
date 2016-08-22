@@ -12,7 +12,7 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
       return array();
     }
 
-    $returned_data = ampapi_request('get', $info['endpoint'], TRUE);
+    $returned_data = ampAPIRestClient::get($info['endpoint']);
     if (empty($returned_data)) {
       return array();
     }
@@ -25,6 +25,7 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
       case 'filters/programs':
       case 'filters/sectors':
         // Do not include top level option in the autocomplete suggestions.
+        /** @noinspection PhpUndefinedFieldInspection */
         $returned_data = $returned_data->children;
         break;
     }
@@ -266,7 +267,7 @@ class activityMapperSubFilterAutocomplete extends activityMapperAutocompleteBase
       $endpoint = $plugin['report filter endpoint'];
     }
 
-    $sub_filter_data = ampapi_request('get', $endpoint, TRUE);
+    $sub_filter_data = ampAPIRestClient::get($endpoint);
 
     if (empty($sub_filter_data)) {
       return FALSE;

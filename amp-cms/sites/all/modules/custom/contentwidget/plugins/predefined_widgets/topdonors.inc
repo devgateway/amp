@@ -26,7 +26,7 @@ $plugin = array(
 function contentwidget_topdonors_widget_retrieve_data($plugin, $widget_settings, $langcode = NULL) {
   $data = array();
 
-  $api_status = helpergeneric_check_api_status();
+  $api_status = ampAPIRestClient::status();
   if (!$api_status['online']) {
     return $data;
   }
@@ -34,103 +34,87 @@ function contentwidget_topdonors_widget_retrieve_data($plugin, $widget_settings,
   $langcode = (empty($langcode) ? LANGUAGE_NONE : $langcode);
   $cache_id = "contentblock:widget:{$langcode}:topdonors:" . md5(serialize($widget_settings));
 
-  // Try to get the response from cache.
+  // Try to get the processed response from cache.
   if ($cached = cache_get($cache_id, 'cache')) {
-    $response = $cached->data;
+    return $cached->data;
   }
-  else {
-    // Prepare a list of parameters for the request.
-    $parameters = array();
 
-    if (!empty($widget_settings['period'])) {
-      $parameters['months'] = $widget_settings['period'];
-    }
-    if (!empty($widget_settings['count'])) {
-      $parameters['count'] = $widget_settings['count'];
-    }
-    if ($langcode != LANGUAGE_NONE) {
-      $parameters['language'] = $langcode;
-    }
+  // Prepare a list of options for the request.
+  $options = array();
+  $options['headers'] = array(
+    'Accept' => 'application/json',
+    'Content-Type' => 'application/json',
+  );
 
-    if (!empty($widget_settings['type'])) {
-      // @TODO: Request and API Endpoint for this.
-      switch ($widget_settings['type']) {
-        case 'disbursements':
-          $parameters['fundingType'] = 2;
-          break;
+  if (!empty($widget_settings['period'])) {
+    $options['parameters']['months'] = $widget_settings['period'];
+  }
+  if (!empty($widget_settings['count'])) {
+    $options['parameters']['count'] = $widget_settings['count'];
+  }
 
-        case 'commitments':
-        default:
-          $parameters['fundingType'] = 1;
-          break;
-      }
-    }
+  if (!empty($widget_settings['type'])) {
+    // @TODO: Request and API Endpoint for this.
+    switch ($widget_settings['type']) {
+      case 'disbursements':
+        $options['parameters']['fundingType'] = 2;
+        break;
 
-    $variables = array();
-    $variables['headers'] = array(
-      'Accept' => 'application/json',
-      'Content-Type' => 'application/json',
-    );
-
-    $request_body = array();
-
-    $api_settings = helpergeneric_get_api_settings();
-
-    // Handle the global "Humanitarian Aid" filter.
-    // @see helpergeneric_api_settings_form()
-    if (!empty($api_settings['humanitarian_aid_only'])) {
-      $humanitarian_aid_plugin = ampapi_get_mapper_by_property_name('humanitarian_aid');
-      $class_name = ctools_plugin_get_class($humanitarian_aid_plugin, 'handler');
-      /** @var activityMapperOptionsInterface $handler */
-      $handler = new $class_name();
-
-      // Only display data related to humanitarian aid.
-      $ha_key = $humanitarian_aid_plugin['report field key'];
-      $ha_value = $handler->getMatchedValue($humanitarian_aid_plugin, TRUE);
-      $request_body['columnFilters'][$ha_key] = array($ha_value);
-    }
-
-    // Handle the global "Disaster Response Marker" filter.
-    // @see helpergeneric_api_settings_form()
-    if (!empty($api_settings['disaster_response_marker_only'])) {
-      $disaster_response_marker_plugin = ampapi_get_mapper_by_property_name('disaster_response_marker');
-      $class_name = ctools_plugin_get_class($disaster_response_marker_plugin, 'handler');
-      /** @var activityMapperOptionsInterface $handler */
-      $handler = new $class_name();
-
-      // Only display data related to humanitarian aid.
-      $drm_key = $disaster_response_marker_plugin['report field key'];
-      $drm_value = $handler->getMatchedValue($disaster_response_marker_plugin, TRUE);
-      $request_body['columnFilters'][$drm_key] = array($drm_value);
-    }
-
-    $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);
-
-    // Make a GET request.
-    $response = restclient_post($plugin['resource api path'] . '?' . drupal_http_build_query($parameters), $variables);
-
-    // We want to cache only successful responses.
-    if (restclient_response_code($response) == RESTCLIENT_RESPONSE_SUCCESS) {
-      // 1 hours cache life time for requests should be plenty for now.
-      $expire = 3600;
-      cache_set($cache_id, $response, 'cache', REQUEST_TIME + $expire);
+      case 'commitments':
+      default:
+        $options['parameters']['fundingType'] = 1;
+        break;
     }
   }
 
-  // @TODO: Add support for more response codes.
-  if (restclient_response_code($response) == RESTCLIENT_RESPONSE_SUCCESS) {
-    if (!empty($response->data)) {
-      $data = json_decode($response->data);
-    }
-    else {
-      drupal_set_message(t('No data retrieved from the API. Please try again later or check the API Settings.'), 'error');
-    }
-  }
-  else {
-    drupal_set_message(t('Could not retrieve data from the API. Please try again later or check the API Settings.'), 'error');
+  $request_body = array();
+
+  // Get the API settings.
+  $api_settings = helpergeneric_get_api_settings();
+
+  // Handle the global "Humanitarian Aid" filter.
+  // @see helpergeneric_api_settings_form()
+  if (!empty($api_settings['humanitarian_aid_only'])) {
+    $humanitarian_aid_plugin = ampapi_get_mapper_by_property_name('humanitarian_aid');
+    $class_name = ctools_plugin_get_class($humanitarian_aid_plugin, 'handler');
+    /** @var activityMapperOptionsInterface $handler */
+    $handler = new $class_name();
+
+    // Only display data related to humanitarian aid.
+    $ha_key = $humanitarian_aid_plugin['report field key'];
+    $ha_value = $handler->getMatchedValue($humanitarian_aid_plugin, TRUE);
+    $request_body['columnFilters'][$ha_key] = array($ha_value);
   }
 
-  return $data;
+  // Handle the global "Disaster Response Marker" filter.
+  // @see helpergeneric_api_settings_form()
+  if (!empty($api_settings['disaster_response_marker_only'])) {
+    $disaster_response_marker_plugin = ampapi_get_mapper_by_property_name('disaster_response_marker');
+    $class_name = ctools_plugin_get_class($disaster_response_marker_plugin, 'handler');
+    /** @var activityMapperOptionsInterface $handler */
+    $handler = new $class_name();
+
+    // Only display data related to humanitarian aid.
+    $drm_key = $disaster_response_marker_plugin['report field key'];
+    $drm_value = $handler->getMatchedValue($disaster_response_marker_plugin, TRUE);
+    $request_body['columnFilters'][$drm_key] = array($drm_value);
+  }
+
+  // JSON Encode the request body. Can't use JSON_FORCE_OBJECT.
+  $options['body'] = empty($request_body) ? '{}' : json_encode($request_body);
+
+  // Get the data.
+  $use_cache = FALSE;  // We cache the processed data, not the request.
+  $response_data = ampAPIRestClient::post($plugin['resource api path'], $options, $use_cache);
+  if (empty($response_data)) {
+    return array();
+  }
+
+  // 1 hours cache life time for requests should be plenty for now.
+  $expire = 3600;
+  cache_set($cache_id, $response_data, 'cache', REQUEST_TIME + $expire);
+
+  return $response_data;
 }
 
 /**

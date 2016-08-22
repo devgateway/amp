@@ -64,7 +64,8 @@ class ampAPIEntityQueryHelper {
     global $language_content;
     global $user;
 
-    $api_status = helpergeneric_check_api_status();
+    // Do not prepare the request when the API is offline.
+    $api_status = ampAPIRestClient::status();
     if (!$api_status['online']) {
       return ($query->count) ? 0 : array();
     }
@@ -163,8 +164,8 @@ class ampAPIEntityQueryHelper {
     $request_body['settings']['amountFormat']['amountUnits'] = $global_amount_settings['value'];
     $query->addMetaData('amount_units', $global_amount_settings);
 
-    // @TODO: Deal with multiple sorts and maping of special properties.
-    // @TODO: Request API support for count queries, for now we don't include order options.
+    // TODO: Deal with multiple sorts and mapping of special properties.
+    // TODO: Request API support for count queries.
     if ($query->order && !$query->count) {
       $order = end($query->order);
       $plugin = ampapi_get_mapper_by_property_name($order['specifier']);
@@ -278,9 +279,9 @@ class ampAPIEntityQueryHelper {
 
     // Get a list of enabled columns and measures.
     // GET /rest/data/report/columns
-    $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
+    $columns_data = ampAPIRestClient::get('data/report/columns');
     // GET /rest/data/report/measures
-    $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
+    $measures_data = ampAPIRestClient::get('data/report/measures');
 
     foreach ($query->metaData['view']->field as $field_name => $field_handler) {
       $plugin = ampapi_get_mapper_by_property_name($field_name);

@@ -8,20 +8,40 @@
  */
 
 .messages {
-  background: no-repeat 0.5em 50%;  /* LTR */
+  @spacing: 1em;
+
+  // The line-height and icon size need to be taken into account when aligning the background icon.
+  @vertical_align: @spacing + (1.2 - 1);
+
+  background: no-repeat 0.5em @vertical_align;  /* LTR */
   border: @border_width solid transparent;
   border-radius: @border_width * 2;
   margin-bottom: 1em;
-  padding: 1em;
+
+  /*noinspection CssOptimizeSimilarProperties*/
+  padding: @spacing;
+  /*noinspection CssOptimizeSimilarProperties*/
   padding-left: 2.5em; /* LTR */
   word-wrap: break-word;
   overflow-wrap: break-word;
 
   & > ul {
-    list-style: none;
-    padding: 0;
     margin: 0;
+    padding: 0 0 0 1em;
+
+    & > li {
+      margin-bottom: 1em;
+
+      pre {
+        padding-left: 2em;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
+
   .mdzr-box-shadow & {
     border-left-width: 0;  /* LTR */
   }

@@ -22,9 +22,9 @@ $plugin = array(
 );
 
 function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_settings, $langcode = NULL) {
-  $api_status = helpergeneric_check_api_status();
+  $api_status = ampAPIRestClient::status();
   if (!$api_status['online']) {
-    return;
+    return array();
   }
 
   $langcode = (empty($langcode) ? LANGUAGE_NONE : $langcode);
@@ -35,117 +35,87 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
   $amount_units_settings = _ampapi_activity_get_api_settings('amount-units');
   $amount_units = $amount_units_settings[$amount_units_key];
 
-  // Try to get the response from cache.
-  $report_totals = array();
+  // Try to get the processed response from cache.
   if ($cached = cache_get($cache_id, 'cache')) {
-    $report_totals = $cached->data;
-    return $report_totals;
-  }
-  else {
-    // Prepare a list of parameters for the request.
-    $parameters = array();
-    if ($langcode != LANGUAGE_NONE) {
-      $parameters['language'] = $langcode;
-    }
-
-    $variables = array();
-    $variables['headers'] = array(
-      'Accept' => 'application/json',
-      'Content-Type' => 'application/json',
-    );
-
-    $request_body = array(
-      'add_columns' => array(),
-      'add_measures' => array(),
-    );
-
-    $id_plugin = ampapi_get_mapper_by_property_name('id');
-    $request_body['add_columns'][] = $id_plugin['report field key'];
-
-    $actual_commitments_plugin = ampapi_get_mapper_by_property_name('actual_commitments');
-    $request_body['add_measures'][] = $actual_commitments_plugin['report field key'];
-
-    $actual_disbursements_plugin = ampapi_get_mapper_by_property_name('actual_disbursements');
-    $request_body['add_measures'][] = $actual_disbursements_plugin['report field key'];
-
-    $request_body['page'] = 1;
-    $request_body['recordsPerPage'] = 1;
-    $request_body['regenerate'] = TRUE;
-    $request_body['rowTotals'] = TRUE;
-    $request_body['raw_values'] = array('M');
-    $request_body['name'] = 'api:totalactivities';
-
-    // Include Activities with empty funding in the total activities count.
-    $request_body['show_empty_rows'] = TRUE;
-
-    $api_settings = helpergeneric_get_api_settings();
-
-    // Let's add amount units.
-    $request_body['settings']['amountFormat']['amountUnits'] = $amount_units['value'];
-
-    // Handle the global "Humanitarian Aid" filter.
-    // @see helpergeneric_api_settings_form()
-    if (!empty($api_settings['humanitarian_aid_only'])) {
-      $humanitarian_aid_plugin = ampapi_get_mapper_by_property_name('humanitarian_aid');
-      $class_name = ctools_plugin_get_class($humanitarian_aid_plugin, 'handler');
-      /** @var activityMapperOptionsInterface $handler */
-      $handler = new $class_name();
-
-      // Only display data related to humanitarian aid.
-      // NOTE: Filters for the custom reports endpoint need to be inside a "filters" key.
-      $ha_key = $humanitarian_aid_plugin['report field key'];
-      $ha_value = $handler->getMatchedValue($humanitarian_aid_plugin, TRUE);
-      $request_body['filters']['columnFilters'][$ha_key] = array($ha_value);
-    }
-
-    // Handle the global "Disaster Response Marker" filter.
-    // @see helpergeneric_api_settings_form()
-    if (!empty($api_settings['disaster_response_marker_only'])) {
-      $disaster_response_marker_plugin = ampapi_get_mapper_by_property_name('disaster_response_marker');
-      $class_name = ctools_plugin_get_class($disaster_response_marker_plugin, 'handler');
-      /** @var activityMapperOptionsInterface $handler */
-      $handler = new $class_name();
-
-      // Only display data related to disaster response.
-      $drm_key = $disaster_response_marker_plugin['report field key'];
-      $drm_value = $handler->getMatchedValue($disaster_response_marker_plugin, TRUE);
-      $request_body['filters']['columnFilters'][$drm_key] = array($drm_value);
-    }
-
-    $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);
-
-    // Set the API Resource Endpoint.
-    $resource_path = $plugin['resource api path'];
-    if (!empty($parameters)) {
-      $resource_path .= '?' . drupal_http_build_query($parameters);
-    }
-
-    // Make a GET request.
-    $response = restclient_post($resource_path, $variables);
+    return $cached->data;
   }
 
-  // @TODO: Add support for more response codes.
-  if (restclient_response_code($response) != RESTCLIENT_RESPONSE_SUCCESS) {
-    drupal_set_message(t('Could not retrieve data from the API. Please try again later or check the API Settings.'), 'error');
-    return;
+  // Prepare a list of options for the request.
+  $options = array();
+  $options['headers'] = array(
+    'Accept' => 'application/json',
+    'Content-Type' => 'application/json',
+  );
+
+  $request_body = array();
+
+  $id_plugin = ampapi_get_mapper_by_property_name('id');
+  $request_body['add_columns'][] = $id_plugin['report field key'];
+
+  $actual_commitments_plugin = ampapi_get_mapper_by_property_name('actual_commitments');
+  $request_body['add_measures'][] = $actual_commitments_plugin['report field key'];
+
+  $actual_disbursements_plugin = ampapi_get_mapper_by_property_name('actual_disbursements');
+  $request_body['add_measures'][] = $actual_disbursements_plugin['report field key'];
+
+  $request_body['page'] = 1;
+  $request_body['recordsPerPage'] = 1;
+  $request_body['regenerate'] = TRUE;
+  $request_body['rowTotals'] = TRUE;
+  $request_body['raw_values'] = array('M');
+  $request_body['name'] = 'api:totalactivities';
+
+  // Include Activities with empty funding in the total activities count.
+  $request_body['show_empty_rows'] = TRUE;
+
+  // Get the API settings.
+  $api_settings = helpergeneric_get_api_settings();
+
+  // Let's add amount units.
+  $request_body['settings']['amountFormat']['amountUnits'] = $amount_units['value'];
+
+  // Handle the global "Humanitarian Aid" filter.
+  // @see helpergeneric_api_settings_form()
+  if (!empty($api_settings['humanitarian_aid_only'])) {
+    $humanitarian_aid_plugin = ampapi_get_mapper_by_property_name('humanitarian_aid');
+    $class_name = ctools_plugin_get_class($humanitarian_aid_plugin, 'handler');
+    /** @var activityMapperOptionsInterface $handler */
+    $handler = new $class_name();
+
+    // Only display data related to humanitarian aid.
+    // NOTE: Filters for the custom reports endpoint need to be inside a "filters" key.
+    $ha_key = $humanitarian_aid_plugin['report field key'];
+    $ha_value = $handler->getMatchedValue($humanitarian_aid_plugin, TRUE);
+    $request_body['filters']['columnFilters'][$ha_key] = array($ha_value);
   }
 
-  if (empty($response->data)) {
-    drupal_set_message(t('No data retrieved from the API. Please try again later or check the API Settings.'), 'error');
-    return;
+  // Handle the global "Disaster Response Marker" filter.
+  // @see helpergeneric_api_settings_form()
+  if (!empty($api_settings['disaster_response_marker_only'])) {
+    $disaster_response_marker_plugin = ampapi_get_mapper_by_property_name('disaster_response_marker');
+    $class_name = ctools_plugin_get_class($disaster_response_marker_plugin, 'handler');
+    /** @var activityMapperOptionsInterface $handler */
+    $handler = new $class_name();
+
+    // Only display data related to disaster response.
+    $drm_key = $disaster_response_marker_plugin['report field key'];
+    $drm_value = $handler->getMatchedValue($disaster_response_marker_plugin, TRUE);
+    $request_body['filters']['columnFilters'][$drm_key] = array($drm_value);
   }
 
-  $response_data = json_decode($response->data);
+  // JSON Encode the request body. Can't use JSON_FORCE_OBJECT.
+  $options['body'] = empty($request_body) ? '{}' : json_encode($request_body);
 
-  if (!empty($response_data->error)) {
-    $t_args = array();
-    $t_args['%message'] = reset($response_data->error);
-    drupal_set_message(t('The API returned the following status message: %message', $t_args), 'error');;
-    return;
+  // Get the data.
+  $use_cache = FALSE;  // We cache the processed data, not the request.
+  $response_data = ampAPIRestClient::post($plugin['resource api path'], $options, $use_cache);
+  if (empty($response_data)) {
+    return array();
   }
 
   // Get the number formatting pattern.
   $currency = '';
+  /** @noinspection PhpUndefinedFieldInspection */
   foreach ($response_data->settings as $info) {
     // @HACK: The id for currency is "1"!!!
     // @see: Documentation for /rest/gis/settings
@@ -154,12 +124,15 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
     }
   }
 
+  $report_totals = array();
+  /** @noinspection PhpUndefinedFieldInspection */
   foreach ($response_data->headers as $h_info) {
     // @TODO: use mappers.
     if (!in_array($h_info->hierarchicalName, array('[Totals][Actual Commitments]', '[Totals][Actual Disbursements]'))) {
       continue;
     }
 
+    /** @noinspection PhpUndefinedFieldInspection */
     if (!isset($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->value)) {
       continue;
     }
@@ -167,6 +140,7 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
     // Now, we really trust the API display values.
     $amount_units_label = (isset($widget_settings['amount-units-label-type']) && $widget_settings['amount-units-label-type'] == 'long') ? $amount_units['label long'] : $amount_units['label short'];
 
+    /** @noinspection PhpUndefinedFieldInspection */
     $amount = check_plain($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->displayedValue);
     $amount = '<span class="amount">' . $amount . '</span> ';
     $amount .= '<span class="text">' . t('@amount_units !currencysymbol', array('!currencysymbol' => $currency, '@amount_units' => $amount_units_label)) . '</span>';
@@ -181,7 +155,14 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
     }
   }
 
+  if (empty($report_totals) || TRUE) {
+    ampAPIRestClient::log($plugin['title'] . ': Data for measures is missing', array());
+    return array();
+  }
+
+  /** @noinspection PhpUndefinedFieldInspection */
   if (!empty($response_data->page->totalRecords)) {
+    /** @noinspection PhpUndefinedFieldInspection */
     $report_totals['activities_count'] = '<span class="amount">' . intval($response_data->page->totalRecords) . '</span> ';
   }
 
@@ -201,7 +182,7 @@ function contentwidget_totalactivities_widget_render($plugin, $widget_settings, 
 
   $data = contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_settings, $langcode);
   if (empty($data)) {
-    return;
+    return '';
   }
 
   $info_blocks = array(

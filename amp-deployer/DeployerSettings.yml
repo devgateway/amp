@@ -6,6 +6,8 @@
 # TODO: Improve!!!
 #
 
+amp__root: /opt/devgateway/amp-local
+
 # Web server vhosts information:
 #  - template: name of the template used to create the vhost.
 #  - docroot: directory in the guest OS for the vhost docroot, this should point to the amp-cms (Public Portal).

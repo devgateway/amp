@@ -18,7 +18,7 @@
 
 - name: Create simbolic link for AMP
   file:
-    src: "/opt/devgateway/amp212-local"
+    src: "{{ amp__project_root }}"
     dest: "/opt/apache/apache-tomcat/webapps/ROOT"
     state: link
     owner: "{{ common__deployer_user }}"

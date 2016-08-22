@@ -168,6 +168,9 @@ Vagrant.configure(2) do |config|
 
       # Set the number of virtual CPUs allocated to the virtual machine.
       vb.customize ['modifyvm', :id, '--cpus', 2]
+
+      # Set the name of the VM.
+      vb.name = project_settings['hostname'] + "_main_#{(Time.now.to_f * 1000.0).to_i}"
     end
 
     # Enable provisioning with a shell script. Additional provisioners such as

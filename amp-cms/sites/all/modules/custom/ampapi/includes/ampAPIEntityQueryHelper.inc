@@ -59,11 +59,11 @@ class ampAPIEntityQueryHelper {
    * Queries entity collections stored in AMP.
    *
    * @see EntityFieldQuery::queryCallback().
+   *
+   * @param \EntityFieldQuery $query
+   * @return array|int
    */
   function executeQuery(EntityFieldQuery $query) {
-    global $language_content;
-    global $user;
-
     // Do not prepare the request when the API is offline.
     $api_status = ampAPIRestClient::status();
     if (!$api_status['online']) {
@@ -125,21 +125,14 @@ class ampAPIEntityQueryHelper {
       $this->_api_add_fields($query, $request_body);
     }
 
-    $api_parameters['query'] = array(
-      'language' => $language_content->language,
-    );
-
     $api_parameters['headers'] = array(
       'Accept' => 'application/json',
       'Content-Type' => 'application/json',
     );
 
-    // The API is slow at the moment.
-    $api_parameters['timeout'] = variable_get('ampapi_timeout', 120);
-
     if (!empty($query->range)) {
       $request_body['recordsPerPage'] = $query->range['length'];
-      $request_body['page'] = $query->range['start'] / $query->range['length'] + 1; // It's not 0 based.
+      $request_body['page'] = $query->range['start'] / $query->range['length'] + 1;  // It's not 0 based.
 
       // Only calculate totals when we request a single page.
       if (!empty($query->metaData['view'])) {
@@ -185,53 +178,13 @@ class ampAPIEntityQueryHelper {
 
     // The api requires that we provide at least an empty object.
     $api_parameters['body'] = empty($request_body) ? '{}' : json_encode($request_body);
-    $response = restclient_post($this->api_resource_path , $api_parameters);
+    $response_data = ampAPIRestClient::post($this->api_resource_path, $api_parameters);
 
-    if (empty($response)) {
-      drupal_set_message(t('The API returned an empty response, please try again later.'), 'error');
+    if (empty($response_data)) {
       return ($query->count) ? 0 : array();
     }
 
-    // @TODO: Add support for more 200 class response codes.
-    if (!empty($response) && restclient_response_code($response) != RESTCLIENT_RESPONSE_SUCCESS) {
-      $t_args = array();
-      if (!empty($response->error)) {
-        $t_args['%message'] = $response->error;
-      }
-      else if (!empty($response->status_message)) {
-        $t_args['%message'] = $response->status_message;
-      }
-      drupal_set_message(t('The API returned the following status message: %message', $t_args), 'error');
-
-      // Show the detailed error-message only of the user is admin or UID 1.
-      if (!empty($response->data) && (in_array('admin user', $user->roles) || $user->uid == 1)) {
-        $error_data = json_decode($response->data);
-        $errors = $error_data->error;
-        foreach ($errors as $code => $error) {
-          $explanation = reset($error);
-          $t_args = array(
-            '%code' => check_plain($code),
-            '%message' => check_plain($explanation),
-          );
-          drupal_set_message(t('API Error Code: %code<br />API Error Explanation: %message', $t_args), 'error');
-        }
-      }
-
-      return ($query->count) ? 0 : array();
-    }
-
-    $response_data = json_decode($response->data);
-    if (!empty($response_data->error)) {
-      foreach ($response_data->error as $error_message) {
-        $t_args = array(
-          '%message' => check_plain($error_message),
-        );
-        drupal_set_message(t('The API returned the following error message: %message', $t_args), 'error');
-        return ($query->count) ? 0 : array();
-      }
-    }
-
-    // Count the number of items.
+    // Count the number of items. Required for creating the pager.
     // @TODO: Request API support for count queries.
     if ($query->count) {
       if (empty($response_data->page->totalRecords)) {

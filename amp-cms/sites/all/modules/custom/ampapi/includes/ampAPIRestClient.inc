@@ -119,6 +119,11 @@ class ampAPIRestClient {
 
     $options += array('reset' => TRUE, 'error_handling' => TRUE);
 
+    // The API is slow at the moment.
+    if (!isset($options['timeout'])) {
+      $options['timeout'] = (int) variable_get('ampapi_timeout', 120);
+    }
+
     if (!empty($langcode) && $langcode != LANGUAGE_NONE) {
       $options['parameters']['language'] = $langcode;
     }

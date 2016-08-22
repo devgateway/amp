@@ -29,6 +29,8 @@ module.exports = Backbone.View.extend({
 
     this.loadData();    
     this.listenTo(this.app.data.indicators, 'add', this.render);
+    this.listenTo(this.app.data.indicators, 'remove', this.render);
+    this.listenTo(this.app.data.indicators, 'reset', this.render);
   },
   loadData: function(){
 	  var self = this;
@@ -49,6 +51,8 @@ module.exports = Backbone.View.extend({
             app: this.app
           })).render().el;
         }));
+    }else{
+    	this.$el.empty();
     }
     return this;
   },

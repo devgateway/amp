@@ -31,16 +31,11 @@ module.exports = Backbone.View.extend({
             el: this.$('#layers-manager-popup')
         });
         this.layersManager.on('cancel', function() {        	 
-            self.$('#layers-manager-popup').hide();
-            self.reloadSections();
+            self.$('#layers-manager-popup').hide();            
         });
-        this.layersManager.on('removeLayer', function() {            
+        this.layersManager.on('removeLayer addLayer changeStateLayer', function() {            
             self.reloadSections();
-        });
-        this.layersManager.on('changeStateLayer', function() {            
-            self.reloadSections();
-        });        
-
+        }); 
         this.$('#layers-manager-popup').hide();
         return this;
     },

@@ -2,7 +2,6 @@ package org.dgfoundation.amp.nireports.behaviours;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apache.wicket.behavior.Behavior;
@@ -10,7 +9,6 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
@@ -24,6 +22,11 @@ import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
  */
 public class TaggedMeasureBehaviour extends TrivialMeasureBehaviour {
 		
+	/**
+	 * the category to insert when the cell lacks the metadata 
+	 */
+	public final static String UNDEFINED_CATEGORY = "Unassigned";
+
 	protected final String totalColumnName;
 	protected final String tagCategory;
 	protected final String pseudoColumnName;
@@ -48,7 +51,7 @@ public class TaggedMeasureBehaviour extends TrivialMeasureBehaviour {
 
 	public static String getTagName(Cell cell, String tagCategory) {
 		MetaInfo metaInfo = cell.getMetaInfo().getMetaInfo(tagCategory);
-		return metaInfo == null ? AmpReportsSchema.UNDEFINED_CATEGORY : metaInfo.v.toString();
+		return metaInfo == null ? UNDEFINED_CATEGORY : metaInfo.v.toString();
 	}
 	
 	@Override

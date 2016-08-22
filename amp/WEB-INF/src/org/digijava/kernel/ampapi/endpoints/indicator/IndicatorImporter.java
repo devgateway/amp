@@ -4,6 +4,7 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -37,6 +38,7 @@ import java.util.Set;
  */
 public class IndicatorImporter {
 
+    private static final Logger LOGGER = Logger.getLogger(IndicatorImporter.class);
     private ApiEMGroup errors = new ApiEMGroup();
 
     public ApiEMGroup getApiErrors() {
@@ -122,6 +124,11 @@ public class IndicatorImporter {
                         locationObject = DynLocationManagerUtil.getDefaultCountry();
                     }
 
+                    if(value == null) {
+                        LOGGER.info(" Missing value for " + locationObject.getName());
+                        continue;
+                    }
+
                     JsonBean result = new JsonBean();
                     result.set(IndicatorEPConstants.VALUE, Double.valueOf(value));
                     result.set(IndicatorEPConstants.ID, locationObject.getId());
@@ -146,6 +153,9 @@ public class IndicatorImporter {
         }
         if(geoIdsWithProblems.size()>0){
             errors.addApiErrorMessage(IndicatorErrors.LOCATION_NOT_FOUND, geoIdsWithProblems.toString() );
+        }
+        if(locationIndicatorValueList.isEmpty()) {
+            errors.addApiErrorMessage(IndicatorErrors.FIELD_INVALID_VALUE, " Cannot import indicator without any value ");
         }
         return locationIndicatorValueList;
     }

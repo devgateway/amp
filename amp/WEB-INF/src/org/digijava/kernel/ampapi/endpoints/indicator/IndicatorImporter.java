@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
- *
  * @author apicca
  */
 public class IndicatorImporter {
@@ -42,19 +40,21 @@ public class IndicatorImporter {
     public ApiEMGroup getApiErrors() {
         return errors;
     }
-    public enum Option{
-        OVERWRITE,NEW
+
+    public enum Option {
+        OVERWRITE, NEW
     }
 
     /**
      * Return the errorc
+     *
      * @return returns
      * @throws org.digijava.module.aim.exception.AimException
      */
     public Collection<JsonBean> processExcelFile(InputStream inputStream) {
         POIFSFileSystem fsFileSystem = null;
         Collection<JsonBean> locationIndicatorValueList = new ArrayList<JsonBean>();
-        Set<String> geoIdsWithProblems=new HashSet<String>();
+        Set<String> geoIdsWithProblems = new HashSet<String>();
         try {
             fsFileSystem = new POIFSFileSystem(inputStream);
             HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
@@ -64,14 +64,14 @@ public class IndicatorImporter {
             Cell admLevelCell = hssfRow.getCell(0);
             String admLevel = "";
             AmpCategoryValue selectedAdmLevel = null;
-            if (admLevelCell!= null) {
+            if (admLevelCell != null) {
                 admLevel = admLevelCell.getStringCellValue();
             }
             List<AmpCategoryValue> implLocs = new ArrayList<AmpCategoryValue>(
                     CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
 
             boolean isCountryLevel = false;
-            for (AmpCategoryValue admLevelValue:implLocs) {
+            for (AmpCategoryValue admLevelValue : implLocs) {
                 if (admLevel.equalsIgnoreCase(admLevelValue.getValue()) && admLevelValue.isVisible()) {
                     selectedAdmLevel = admLevelValue;
                     if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(admLevelValue)) {
@@ -87,7 +87,7 @@ public class IndicatorImporter {
 
             int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();
             int indicatorNumberOfCells = 1;
-            if (indicatorNumberOfCells+2 < physicalNumberOfCells) {
+            if (indicatorNumberOfCells + 2 < physicalNumberOfCells) {
                 errors.addApiErrorMessage(IndicatorErrors.NUMBER_NOT_MATCH, " physical number of cells not match ");
             }
 
@@ -105,7 +105,7 @@ public class IndicatorImporter {
                             if (StringUtils.isNotEmpty(id) && !".0".equals(id)) {
                                 id = id.replace(".0", "");
                                 locationObject = DynLocationManagerUtil.getLocationById(Long.parseLong(id), selectedAdmLevel);
-                                if(locationObject == null) {
+                                if (locationObject == null) {
                                     geoIdsWithProblems.add(id);
                                     continue;
                                 }
@@ -118,7 +118,7 @@ public class IndicatorImporter {
                     Cell cell = hssfRow.getCell(2);
                     String value = getValue(cell);
 
-                    if (isCountryLevel){
+                    if (isCountryLevel) {
                         locationObject = DynLocationManagerUtil.getDefaultCountry();
                     }
 
@@ -131,31 +131,31 @@ public class IndicatorImporter {
                 }
             }
 
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
+            errors.addApiErrorMessage(IndicatorErrors.UNKNOWN_ERROR, " Cannot import indicator values ");
+        } catch (IllegalStateException e) {
+            errors.addApiErrorMessage(IndicatorErrors.INCORRECT_CONTENT, " File is not ok ");
+        } catch (IOException e) {
+            errors.addApiErrorMessage(IndicatorErrors.INCORRECT_CONTENT, " File is not ok ");
+        } catch (Exception e) {
             errors.addApiErrorMessage(IndicatorErrors.UNKNOWN_ERROR, " Cannot import indicator values ");
         }
-        catch (IllegalStateException e) {
-            errors.addApiErrorMessage(IndicatorErrors.INCORRECT_CONTENT, " File is not ok ");
-        }
-        catch(IOException e) {
-            errors.addApiErrorMessage(IndicatorErrors.INCORRECT_CONTENT, " File is not ok ");
-        }
-        catch (Exception e) {
-            errors.addApiErrorMessage(IndicatorErrors.UNKNOWN_ERROR, " Cannot import indicator values ");
-        }
-        if(geoIdsWithProblems.size()>0){
-            errors.addApiErrorMessage(IndicatorErrors.LOCATION_NOT_FOUND, geoIdsWithProblems.toString() );
+        if (geoIdsWithProblems.size() > 0) {
+            errors.addApiErrorMessage(IndicatorErrors.LOCATION_NOT_FOUND, geoIdsWithProblems.toString());
         }
         return locationIndicatorValueList;
     }
 
     private String getValue(Cell cell) {
-        String value=null;
-        if(cell!=null){
-            switch(cell.getCellType()) {
-                case Cell.CELL_TYPE_STRING:value=(cell.getStringCellValue()!=null&&cell.getStringCellValue().trim().equals(""))?null:cell.getStringCellValue();break;
-                case Cell.CELL_TYPE_NUMERIC: value=""+cell.getNumericCellValue();break;
+        String value = null;
+        if (cell != null) {
+            switch (cell.getCellType()) {
+                case Cell.CELL_TYPE_STRING:
+                    value = (cell.getStringCellValue() != null && cell.getStringCellValue().trim().equals("")) ? null : cell.getStringCellValue();
+                    break;
+                case Cell.CELL_TYPE_NUMERIC:
+                    value = "" + cell.getNumericCellValue();
+                    break;
             }
         }
         return value;

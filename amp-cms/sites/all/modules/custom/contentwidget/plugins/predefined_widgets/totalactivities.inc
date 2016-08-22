@@ -216,7 +216,7 @@ function contentwidget_totalactivities_widget_render($plugin, $widget_settings, 
       '#suffix' => '</div>',
     );
     $build['title'] = array(
-      '#markup' => '<h3 class="contentblock-title">' . t('Pledges Block - Not Published') . '</h3>',
+      '#markup' => '<h3 class="contentblock-title">' . t('Activities Block - Not Published') . '</h3>',
     );
     $build['content'] = array(
       '#markup' => '<p>' . t('This block is unpublished. To re-enable it - click !here and publish it.', array(

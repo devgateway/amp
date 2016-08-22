@@ -1,5 +1,6 @@
 ---
 # Sample environment settings file.
+# See the docs/production-environments.md file for how to use this file.
 #
 # Vagrant will load this file if a "local.yml" environment variables file does not exist.
 #

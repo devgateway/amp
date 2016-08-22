@@ -35,13 +35,7 @@ module.exports = Backbone.View.extend({
 	  this.app.data.indicators.loadAll().then(function() {
 	      self._registerSerializer();
 	  });  
-  },
-  reloadData: function(){
-	  var self = this;
-	  this.app.data.indicators.loadAll().then(function() {	  
-		  self.render();
-	  });  
-  },
+  },  
   render: function() {	 
     // TODO: find a better way to keep our proxy collection up to date
     // Thad do you know a good pattern for this?

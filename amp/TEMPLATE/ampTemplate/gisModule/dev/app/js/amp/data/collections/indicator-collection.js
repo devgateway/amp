@@ -8,8 +8,7 @@ var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var IndicatorLayerLocalStorage = require('../indicator-layer-localstorage');
 
 /* Backbone Collection IndicatorLayers (RENAME FILE) */
-module.exports = Backbone.Collection
-.extend(LoadOnceMixin).extend({
+module.exports = Backbone.Collection.extend({
 
   url: '/rest/gis/indicator-layers',
 
@@ -46,6 +45,10 @@ module.exports = Backbone.Collection
     });
 
     return deferred;
+  },
+  load: function(){
+	  this.url = '/rest/gis/indicator-layers';
+	  return this.fetch()
   },
   loadFromLocalStorage: function(data){	 
 	  if(this.url === '/rest/gis/indicators'){

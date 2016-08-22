@@ -138,7 +138,17 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
     }
 
     // Now, we really trust the API display values.
-    $amount_units_label = (isset($widget_settings['amount-units-label-type']) && $widget_settings['amount-units-label-type'] == 'long') ? $amount_units['label long'] : $amount_units['label short'];
+    $amount_units_label = '';
+    if ((isset($widget_settings['amount-units-label-type']) && $widget_settings['amount-units-label-type'] == 'long')) {
+      if (isset($amount_units['label long'])) {
+        $amount_units_label = filter_xss($amount_units['label long']);
+      }
+    }
+    else {
+      if (isset($amount_units['label short'])) {
+        $amount_units_label = filter_xss($amount_units['label short']);
+      }
+    }
 
     /** @noinspection PhpUndefinedFieldInspection */
     $amount = check_plain($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->displayedValue);

@@ -79,7 +79,9 @@ public class PopulationLayerDesignator {
         
         if (errors.isEmpty()) {
             DynLocationManagerUtil.setIndicatorLayersPopulation(false, null);
-            DynLocationManagerUtil.setIndicatorLayersPopulation(true, ids);
+            if(!ids.isEmpty()) {
+                DynLocationManagerUtil.setIndicatorLayersPopulation(true, ids);
+            }
             LOGGER.info("New population layers designated successfully");
         } else {
             result = ApiError.toError(errors.getAllErrors());

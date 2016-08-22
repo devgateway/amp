@@ -1,5 +1,5 @@
 ## PostgreSQL password file.
-## {{ ansible_managed }}
+## Managed by Ansible!
 #hostname:port:database:username:password
 
 {% for item in postgresql__databases|default([]) -%}

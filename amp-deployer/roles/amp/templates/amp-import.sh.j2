@@ -1,6 +1,6 @@
 #!/bin/sh
 ## AMP Import script.
-## {{ ansible_managed }}
+## Managed by Ansible!
 ## TODO: Use variables.
 
 
@@ -25,5 +25,5 @@ psql --username amp_user --dbname amp_local -c "UPDATE amp_global_settings SET s
 # Create and configure the amp-cms environment?!?
 zcat /vagrant/amp-cms.pgsql.gz | \
   pg_restore --clean --no-owner --no-privileges --username amp_cms_user --dbname amp_cms_local
-tar -C /var/www/amp212-cms-local/sites/default -xf /vagrant/amp-cms.files.tar.gz
+tar -C {{amp__project_cms_root}}/sites/default -xf /vagrant/amp-cms.files.tar.gz
 # TODO: Run `make update`

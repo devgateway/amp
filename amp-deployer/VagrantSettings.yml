@@ -52,26 +52,6 @@ httpd__Group: users
 httpd__User_vhosts: vagrant
 httpd__Group_vhosts: users
 
-# Override default PHP settings.
-# @see: https://secure.php.net/manual/en/datetime.configuration.php#ini.date.timezone
-#httpd_php56__date_timezone: 'America/New_York'
-#httpd_php56__date_timezone: 'Europe/Amsterdam'
-#httpd_php56__date_timezone: 'Europe/Bucharest'
-httpd_php56__error_reporting: E_ALL
-httpd_php56__display_errors: On
-httpd_php56__display_startup_errors: On
-httpd_php56__html_errors: On
-httpd_php56__opcache_enable: 0
-
-# A list of extra PHP.ini directives.
-httpd_php56__ini_extra_directives:
-  - ; @see http://www.xdebug.org/docs/all_settings
-  - xdebug.idekey = "vagrant-xdebug"
-  - xdebug.max_nesting_level = 300
-  - xdebug.remote_enable = 1
-  - xdebug.remote_port = 9000
-  - xdebug.remote_connect_back = 1
-
 # Define forwarded ports.
 #vagrant_mapped_ports:
 #  - source: 5432

@@ -36,6 +36,14 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
   $langcode = (empty($langcode) ? LANGUAGE_NONE : $langcode);
   $cache_id = "contentblock:widget:{$langcode}:totalpledges:" . md5(serialize($widget_settings));
 
+  // Let's prepare the amount units (pre-configured per widget).
+  $amount_units_key = isset($widget_settings['amount-units']) ? $widget_settings['amount-units'] : 'amountUnits1';
+  $amount_units_settings = _ampapi_activity_get_api_settings('amount-units');
+  $amount_units = $amount_units_settings[$amount_units_key];
+
+  // Try to get the response from cache.
+  $report_totals = array();
+
   // Try to get the processed response from cache.
   if ($cached = cache_get($cache_id, 'cache')) {
     return $cached->data;
@@ -73,6 +81,9 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
   $request_body['name'] = 'api:totalpledges';
 
   $api_settings = helpergeneric_get_api_settings();
+
+  // Let's add amount units.
+  $request_body['settings']['amountFormat']['amountUnits'] = $amount_units['value'];
 
   // Handle the global "Humanitarian Aid" filter.
   // @see helpergeneric_api_settings_form()
@@ -114,18 +125,12 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
   }
 
   // Get the number formatting pattern.
-  $number_format = NULL;
   $currency = '';
   // There's a case (for now) when API returns wrong data, we should handle it.
   /** @noinspection PhpUndefinedFieldInspection */
   if (!is_null($response_data->settings)) {
     /** @noinspection PhpUndefinedFieldInspection */
     foreach ($response_data->settings as $info) {
-      // TODO: For now we've decided to keep things hardcoded for the widget.
-      // if ($info->id == 'ammountPattern') {
-      //   $number_format = $info->value;
-      // }
-
       // @HACK: The id for currency is "1"!!!
       // @see: Documentation for /rest/gis/settings
       if ($info->id == '1') {
@@ -133,14 +138,6 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
       }
     }
   }
-  if (is_null($number_format)) {
-    $number_format = '###,###.###';
-  }
-
-  // @see https://php.net/manual/en/numberformatter.create.php
-  // @see http://www.icu-project.org/apiref/icu4c/classDecimalFormat.html#details
-  $formatter_locale = NULL;
-  $formatter = new NumberFormatter($formatter_locale, NumberFormatter::PATTERN_DECIMAL, $number_format);
 
   // There's a case (for now) when API returns wrong data, we should handle it.
   $report_totals = array();
@@ -156,20 +153,23 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
         continue;
       }
 
-      if ($formatter) {
-        /** @noinspection PhpUndefinedFieldInspection */
-        $value = $response_data->page->pageArea->contents->{$h_info->hierarchicalName}->value;
-        // Display configuration in millions.
-        // @TODO: Add configuration options.
-        $value = $value / 1000 / 1000;
-
-        $amount = '<span class="amount">' . $formatter->format($value) . '</span> ';
-        $amount .= '<span class="text">' . t('Millions !currencysymbol', array('!currencysymbol' => $currency)) . '</span>';
+      // Now, we really trust the API display values.
+      $amount_units_label = '';
+      if ((isset($widget_settings['amount-units-label-type']) && $widget_settings['amount-units-label-type'] == 'long')) {
+        if (isset($amount_units['label long'])) {
+          $amount_units_label = filter_xss($amount_units['label long']);
+        }
       }
       else {
-        /** @noinspection PhpUndefinedFieldInspection */
-        $amount = check_plain($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->displayedValue);
+        if (isset($amount_units['label short'])) {
+          $amount_units_label = filter_xss($amount_units['label short']);
+        }
       }
+
+      /** @noinspection PhpUndefinedFieldInspection */
+      $amount = check_plain($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->displayedValue);
+      $amount = '<span class="amount">' . $amount . '</span> ';
+      $amount .= '<span class="text">' . t('@amount_units !currencysymbol', array('!currencysymbol' => $currency, '@amount_units' => $amount_units_label)) . '</span>';
 
       switch ($h_info->hierarchicalName) {
         case '[Totals][Actual Pledge]':
@@ -281,20 +281,24 @@ function contentwidget_totalpledges_widget_retrieve_activities_data($plugin, $wi
 }
 
 /**
- * Render callback for the 'Top Donors' predefined widget.
+ * Render callback for the 'Top Pledges' predefined widget.
  */
 function contentwidget_totalpledges_widget_render($plugin, $widget_settings, $entity, $langcode) {
   // Provide some default values.
   $widget_settings += $plugin['defaults'];
 
-  $data = contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget_settings, $langcode);
-  $data_activities = contentwidget_totalpledges_widget_retrieve_activities_data($plugin, $widget_settings, $langcode);
+  // Make the queries only if the entity is published.
+  if ($entity->status == NODE_PUBLISHED) {
+    $data = contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget_settings, $langcode);
+    $data_activities = contentwidget_totalpledges_widget_retrieve_activities_data($plugin, $widget_settings, $langcode);
 
-  if (empty($data)) {
-    return '';
-  }
-  elseif (!empty($data_activities)) {
-    $data = array_merge($data, $data_activities);
+    if (!empty($data) && !empty($data_activities)) {
+      $data = array_merge($data, $data_activities);
+    }
+
+    if (empty($data)) {
+      return '';
+    }
   }
 
   $info_blocks = array(
@@ -308,11 +312,22 @@ function contentwidget_totalpledges_widget_render($plugin, $widget_settings, $en
     '#prefix' => '<div class="contentblock-published clearfix">',
     '#suffix' => '</div>',
   );
-  if (empty($entity->status)) {
+
+  // If it is not published (we don't make the call(s), and we render a custom version of the block).
+  if (empty($entity->status) || $entity->status == NODE_NOT_PUBLISHED) {
     $build = array(
-      '#prefix' => '<div class="contentblock-unpublished clearfix">',
+      '#prefix' => '<div class="contentblock-unpublished empty-contentblock clearfix">',
       '#suffix' => '</div>',
     );
+    $build['title'] = array(
+      '#markup' => '<h3 class="contentblock-title">' . t('Pledges Block - Not Published') . '</h3>',
+    );
+    $build['content'] = array(
+      '#markup' => '<p>' . t('This block is unpublished. To re-enable it - click !here and publish it.', array(
+        '!here' => l(t('here'), 'admin/settings/content-sections/' . $entity->machine_name)
+      )) . '</p>',
+    );
+    return $build;
   }
 
   // Create the table headers.
@@ -345,18 +360,63 @@ function contentwidget_totalpledges_widget_render($plugin, $widget_settings, $en
   return array('#markup' => drupal_render($build));
 }
 
-/**
- * Settings form for the 'Top Donors' predefined widget.
- */
-function contentwidget_totalpledges_widget_settings(&$element, &$form_state, $plugin, $widget_settings) {
-  $settings_form = array();
-  return $settings_form;
-}
 
 /**
- * Returns an serialized string for storing the widget settings in the database.
+ * Settings form for the 'Total Pledges' fixed widget.
  */
-function contentwidget_totalpledges_widget_settings_storage($widget_name, $form_values) {
-  $settings = array();
-  return serialize($settings);
+function contentwidget_totalpledges_widget_settings($form, &$form_state, $plugin, $widget_settings) {
+  // Include this file, so that submit form works correctly.
+  ctools_form_include_file($form_state, $plugin['path'] . '/' . $plugin['file']);
+
+  // Let's allow users to select widget-related amount formatting.
+  $amount_units_settings = _ampapi_activity_get_api_settings('amount-units');
+  $amount_units_options = array();
+  foreach ($amount_units_settings as $amount_id => $amount_unit_setting) {
+    $amount_units_options[$amount_id] = $amount_unit_setting['name'];
+  }
+
+  $form['amount_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Amount Options'),
+    '#description' => t("These options change the widget amount formatting for the numeric output."),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#weight' => 10
+  );
+  $form['amount_settings']['widget_amount'] = array(
+    '#type' => 'select',
+    '#title' => t('Widget Amount Units'),
+    '#options' => $amount_units_options,
+    '#default_value' => isset($widget_settings['amount-units']) ? $widget_settings['amount-units'] : 'amountUnits1',
+    '#description' => t('Please specify which widget-based amount formatting option you would like to use.'),
+  );
+  $form['amount_settings']['widget_amount_label_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Amount Units Type'),
+    '#options' => array('short' => t('Short'), 'long' => t('Long')),
+    '#default_value' => isset($widget_settings['amount-units-label-type']) ? $widget_settings['amount-units-label-type'] : 'short',
+    '#description' => t('Please specify format would you like to use.<br />Short Example: M; Long Example: Millions.'),
+  );
+  $form['#submit'][] = 'contentwidget_totalpledges_widget_settings_submit';
+
+  return $form;
+}
+
+
+/**
+ * Widget form submit handler.
+ *
+ * This is where we basically put everything into a standard variable.
+ */
+function contentwidget_totalpledges_widget_settings_submit($form, $form_state) {
+  $entity = $form['#entity'];
+
+  $values = $form_state['values'];
+  $amount = $values['widget_amount'];
+  $label_type = $values['widget_amount_label_type'];
+
+  $data['amount-units'] = $amount;
+  $data['amount-units-label-type'] = $label_type;
+
+  _contentwidget_fixed_set_settings($entity->machine_name, $data);
 }

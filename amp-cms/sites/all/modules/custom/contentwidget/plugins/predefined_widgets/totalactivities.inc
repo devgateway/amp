@@ -190,9 +190,12 @@ function contentwidget_totalactivities_widget_render($plugin, $widget_settings, 
   // Provide some default values.
   $widget_settings += $plugin['defaults'];
 
-  $data = contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_settings, $langcode);
-  if (empty($data)) {
-    return '';
+  // Make the queries only if the entity is published.
+  if ($entity->status == NODE_PUBLISHED) {
+    $data = contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_settings, $langcode);
+    if (empty($data)) {
+      return '';
+    }
   }
 
   $info_blocks = array(
@@ -205,11 +208,22 @@ function contentwidget_totalactivities_widget_render($plugin, $widget_settings, 
     '#prefix' => '<div class="contentblock-published clearfix">',
     '#suffix' => '</div>',
   );
-  if (empty($entity->status)) {
+
+  // If it is not published (we don't make the call, and we render a custom version of the block).
+  if (empty($entity->status) || $entity->status == NODE_NOT_PUBLISHED) {
     $build = array(
-      '#prefix' => '<div class="contentblock-unpublished clearfix">',
+      '#prefix' => '<div class="contentblock-unpublished empty-contentblock clearfix">',
       '#suffix' => '</div>',
     );
+    $build['title'] = array(
+      '#markup' => '<h3 class="contentblock-title">' . t('Pledges Block - Not Published') . '</h3>',
+    );
+    $build['content'] = array(
+      '#markup' => '<p>' . t('This block is unpublished. To re-enable it - click !here and publish it.', array(
+          '!here' => l(t('here'), 'admin/settings/content-sections/' . $entity->machine_name)
+        )) . '</p>',
+    );
+    return $build;
   }
 
   // Create the table headers.

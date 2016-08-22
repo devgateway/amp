@@ -144,7 +144,7 @@ class ampAPIRestClient {
       // Just in case somebody removes the 'error_handling' flag.
       $msg = 'The API failed to respond, please try again later.';
       $msg .= 'Request: <pre>%request</pre>';
-      ampAPIRestClient::log($msg, $t_args, WATCHDOG_ERROR);
+      ampAPIRestClient::log($msg, $t_args);
       return array();
     }
 
@@ -155,7 +155,7 @@ class ampAPIRestClient {
         $t_args['%error'] = $response->error;
         $msg .= 'Request: <pre>%error</pre>';
       }
-      ampAPIRestClient::log($msg, $t_args, WATCHDOG_ERROR);
+      ampAPIRestClient::log($msg, $t_args);
       return array();
     }
 
@@ -170,21 +170,21 @@ class ampAPIRestClient {
           $t_args['%message'] = $response->error;
           $msg = 'The API returned %code with the following error message: <pre>%message</pre>';
           $msg .= 'Request: <pre>%request</pre>';
-          ampAPIRestClient::log($msg, $t_args, WATCHDOG_ERROR);
+          ampAPIRestClient::log($msg, $t_args);
           return array();
         }
         if (!empty($response->status_message)) {
           $t_args['%message'] = $response->status_message;
           $msg = 'The API returned %code with the following status message: <pre>%message</pre>';
           $msg .= 'Request: <pre>%request</pre>';
-          ampAPIRestClient::log($msg, $t_args, WATCHDOG_ERROR);
+          ampAPIRestClient::log($msg, $t_args);
           return array();
         }
       }
 
       $msg = 'The API returned %code with an empty response, please try again later.';
       $msg .= 'Request: <pre>%request</pre>';
-      ampAPIRestClient::log($msg, $t_args, WATCHDOG_WARNING);
+      ampAPIRestClient::log($msg, $t_args);
       return array();
     }
 
@@ -244,7 +244,7 @@ class ampAPIRestClient {
 
       $msg = 'The API returned %code with an invalid JSON response, the following has been returned: <pre>%message</pre>';
       $msg .= 'Request: <pre>%request</pre>';
-      ampAPIRestClient::log($msg, $t_args, WATCHDOG_ERROR);
+      ampAPIRestClient::log($msg, $t_args);
       return array();
     }
 
@@ -269,7 +269,7 @@ class ampAPIRestClient {
    * @param $variables
    * @param int $severity
    */
-  public static function log($message, $variables, $severity = WATCHDOG_ERROR) {
+  public static function log($message, $variables = array(), $severity = WATCHDOG_ERROR) {
     // Display error only to users with the 'admin user' role.
     $role = user_role_load_by_name('admin user');
     if ($GLOBALS['user']->uid == 1 || ($GLOBALS['user']->uid && user_has_role($role))) {
@@ -324,7 +324,7 @@ class ampAPIRestClient {
     }
 
     if (isset($msg)) {
-      ampAPIRestClient::log($msg, $args, WATCHDOG_WARNING);
+      ampAPIRestClient::log($msg, $args);
     }
   }
 }

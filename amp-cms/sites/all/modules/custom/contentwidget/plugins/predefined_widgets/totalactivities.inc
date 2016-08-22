@@ -165,7 +165,7 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
     }
   }
 
-  if (empty($report_totals) || TRUE) {
+  if (empty($report_totals)) {
     ampAPIRestClient::log($plugin['title'] . ': Data for measures is missing', array());
     return array();
   }

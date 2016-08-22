@@ -196,16 +196,13 @@ class ContentBlockEntityUIController extends EntityBundleableUIController {
    * @param $conditions
    *   An array of conditions as needed by entity_load().
    *
-   * @return Array
+   * @return array
    *   A renderable array.
    */
   public function overviewTable($conditions = array()) {
 
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', $this->entityType);
-
-    // Do not show "Fixed" entities on the admin form.
-    $query->entityCondition('bundle', 'fixed', '!=');
 
     // Add all conditions to query.
     foreach ($conditions as $key => $value) {

@@ -19,12 +19,15 @@
  */
 define('PROJECT_ENVIRONMENT', 'production');
 
-// Allow developers to debug production environments.
+// Allow developers to debug environments.
 $hide_errors = TRUE;
 if ($hide_errors && PROJECT_ENVIRONMENT == 'production') {
-  ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
-  ini_set('display_errors', FALSE);
-  ini_set('display_startup_errors', FALSE);
+  ini_set('error_reporting', E_ALL & ~E_DEPRECATED & ~E_STRICT);
+  ini_set('display_errors', 'Off');
+}
+else {
+  ini_set('error_reporting', E_ALL);
+  ini_set('display_errors', 'On');
 }
 
 // Setup the database configuration.
@@ -58,14 +61,14 @@ $drupal_hash_salt = '';
 // $conf['stage_file_proxy_origin_dir'] = 'sites/default/files';
 
 /**
- * Sample code to deny access to unwanted visitors. Useful for DB sample environments.
+ * Deny access to unwanted visitors.
  */
-// if (php_sapi_name() != 'cli') {
-//   if (empty($_COOKIE['KnockKnock']) || $_COOKIE['KnockKnock'] != 'Nobel') {
-//     // - Knock, Knock. - Who’s there? - Nobel. - Nobel who? - No bell, that’s why I knocked!
-//     $url = 'http://example.org/';
-//     print 'You are not welcome here! Maybe you wanted to try: ';
-//     print "<a href=\"$url\">$url</a>";
-//     exit();
-//   }
-// }
+$deny_access = FALSE;
+if ($deny_access && php_sapi_name() != 'cli') {
+  if (empty($_COOKIE['KnockKnock']) || $_COOKIE['KnockKnock'] != 'Nobel') {
+    // - Knock, Knock. - Who’s there? - Nobel. - Nobel who? - No bell, that’s why I knocked!
+    print 'You are not welcome here!';
+    exit();
+  }
+}
+

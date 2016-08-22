@@ -96,7 +96,7 @@ class activityMapperBase implements activityMapperInterface {
       if (in_array($plugin['property info']['type'], array('text'))) {
         $to_filter = FALSE;
       }
-      $filtered = ($to_filter) ? filter_xss($column->displayedValue, array()) : $column->displayedValue;
+      $filtered = ($to_filter) ? filter_xss($column->displayedValue, array()) : strip_tags($column->displayedValue);
       return $filtered;
     }
 

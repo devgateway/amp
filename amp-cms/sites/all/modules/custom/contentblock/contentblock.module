@@ -301,16 +301,6 @@ function contentblock_access($op, $entity = NULL, $account = NULL) {
     return $allow;
   }
 
-  // Only allow UID1 to delete 'fixed' contentblocks using the normal UI.
-  $bundle = is_object($entity) ? $entity->bundle() : NULL;
-  $restriected_operations = array('delete');
-  if ($account->uid != 1 && $bundle == 'fixed' && in_array($op, $restriected_operations)) {
-    if ($cid) {
-      $rights[$account->uid][$cid][$op] = FALSE;
-    }
-    return FALSE;
-  }
-
   if (user_access("contentblock entity $op")) {
     if ($cid) {
       $rights[$account->uid][$cid][$op] = TRUE;
@@ -570,6 +560,8 @@ function contentblock_ctools_plugin_directory($module, $plugin) {
   if ($module == 'ctools' && $plugin == 'content_types') {
     return 'plugins/' . $plugin;
   }
+
+  return NULL;
 }
 
 /**

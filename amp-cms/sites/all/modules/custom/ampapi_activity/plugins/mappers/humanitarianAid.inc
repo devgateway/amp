@@ -29,7 +29,7 @@ class humanitarianAidMapper extends activityMapperBase implements activityMapper
       return NULL;
     }
 
-    $returned_data = ampapi_request('get', $plugin['report filter endpoint'], TRUE);
+    $returned_data = ampAPIRestClient::get($plugin['report filter endpoint']);
 
     if (!empty($returned_data->values)) {
       // Yes, the AMP API is very consistent. And (on the Nepal DB at least) the

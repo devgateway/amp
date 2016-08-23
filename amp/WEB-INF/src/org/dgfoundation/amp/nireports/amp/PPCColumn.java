@@ -22,7 +22,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
- * class for fetching PPC columns. Since ProposedProjectCost is an activity-level attribute, these cells lack any coordinates.
+ * class for fetching PPC columns
  * @author Dolghier Constantin
  *
  */

@@ -14,11 +14,13 @@ import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**
- * an abstract behaviour of a fully-custom aggregated column/measure. <br />
- * These entities lack disaggregated cells, instead they populate at the late aggregation phase
+ * a specification of the behaviour of a given {@link NiReportColumn} / {@link NiReportMeasure}
  * @author Dolghier Constantin
  *
  */

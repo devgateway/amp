@@ -7,7 +7,7 @@ import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
 
 /**
  * 
- * a <i>ni_all_orgs_dimension</i>-backed dimension consisting of (orgType[level = 0], orgGroup[level = 1], org[level = 2])
+ * a dimension consisting of (orgType[level = 0], orgGroup[level = 1], org[level = 2])
  * @author Dolghier Constantin
  *
  */

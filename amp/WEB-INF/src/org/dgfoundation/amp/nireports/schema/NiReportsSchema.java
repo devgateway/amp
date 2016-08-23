@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
@@ -12,12 +13,12 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 
 /**
- * an interface describing the Schema of an API's reporting needs.
- * For a detailed reading about defining and using a schema, please refer to https://wiki.dgfoundation.org/display/AMPDOC/2.+NiReports+Configuration%3A+the+schema
+ * an interface describing the Schema of an API's reporting needs
  * @author Constantin Dolghier
  *
  */

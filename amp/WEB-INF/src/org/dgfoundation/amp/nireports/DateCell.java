@@ -8,13 +8,11 @@ import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**
- * a {@link Cell} which holds a date. Coordinates are empty unless it has a mainLevel (in which case it will have exactly one coordinate, as per the general contract of {@link Cell})
  * @author Dolghier Constantin
  *
  */
 public final class DateCell extends Cell {
 
-	/** the payload - the held date */
 	public final LocalDate date;
 	
 	public DateCell(LocalDate date, long activityId, long entityId, Optional<LevelColumn> levelColumn) {
@@ -29,7 +27,6 @@ public final class DateCell extends Cell {
 	}
 
 	@Override
-	/** always empty */
 	public MetaInfoSet getMetaInfo() {
 		return MetaInfoSet.empty();
 	}

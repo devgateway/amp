@@ -6,9 +6,7 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 
 /**
- * a measure defined as a filtered transaction multiplied by a number: for each cell, a configured callback
- * decides a multiplier for it. In case the multiplier is null, the cell is dropped; else the result of
- * multiplying the cell by the result is output
+ * a measure defined as a filtered transaction multiplied by a number
  * @author Dolghier Constantin
  *
  */

@@ -3,7 +3,7 @@ package org.dgfoundation.amp.nireports.output.nicells;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 /**
- * a {@link NiOutCell} holding an integer (for example, a computed entity holding counts or ids)
+ * a cell which holds an integer
  * @author Dolghier Constantin
  *
  */

@@ -1,11 +1,12 @@
 package org.dgfoundation.amp.nireports;
 
 /**
- * an immutable Tuple(2) of unrelated values, conventionally called "k" and "v". <br />
- * null values are not supported for either.
- * {@link #equals(Object)} and {@link #hashCode()} are defined in terms of both {@link #k} and {@link #v}
- * 
+ * an immutable Tuple(2) of unrelated values, conventionally called "k" and "v"
+ * null values are not supported for either
  * @author Dolghier Constantin
+ *
+ * @param <K>
+ * @param <V>
  */
 public class ImmutablePair<K, V> {
 	public final K k;

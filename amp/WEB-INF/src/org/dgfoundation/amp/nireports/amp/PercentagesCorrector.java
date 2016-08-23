@@ -20,40 +20,16 @@ import org.dgfoundation.amp.newreports.ReportRenderWarningType;
 import org.dgfoundation.amp.nireports.NiUtils;
 
 /**
- * a corrector for null percentages and denormalized percentages sums.
- * Its way of working is akin to the one employed by dimensions: a {@link PercentagesCorrector} instance contains info regarding ways of fetching the correcting data. 
- * Since that information varies with time, one uses a {@link Snapshot} to postprocess live data fetched from the database. Hence, the process of correcting percentages is two-step: <br />
- * 1. make a snapshot by calling {@link PercentagesCorrector#buildSnapshot(java.sql.Connection, Set)} <br />
- * 2. use that snapshot in {@link NormalizedPercentagesColumn#extractCell(org.dgfoundation.amp.nireports.NiReportsEngine, java.sql.ResultSet, Snapshot)} <br />
- * 
- * Please note that this class does not operate on the AMP column view; instead it operates on the "basic view". The basic view is the natural-data table which generates the column-views
- * via JOINs (for example, v_regions is a result of joining amp_activity_location with ni_all_locations_with_levels). Since joining with a dimension definition table does
- * not change percentages' sums, computing the sums for the basic view is enough to be able to correct the percentages for any derived view.
+ * a corrector for null percentages and denormalized percentages sums 
  * @author Dolghier Constantin
  *
  */
 public class PercentagesCorrector {
 	public final static BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100l);
 	
-	/**
-	 * the "basic" view to fetch data from. For example, v_region's basic view is amp_activity_locations
-	 */
 	public final String view;
-	
-	/**
-	 * the view-column name containing the ownerId (usually amp_activity_id or pledge_id)
-	 */
 	public final String mainIdColumnName;
-	
-	/**
-	 * the view-column name containing the percentages
-	 */
 	public final String percentagesColumnName;
-	
-	/**
-	 * an optional SQL statement to add to the WHERE of the SELECT. Used for cases when the same basic view contains data for multiple families of columns 
-	 * (for example, amp_activity_sector)
-	 */
 	public final Supplier<String> conditionSupplier;
 	
 	public PercentagesCorrector(String view, String mainIdColumnName, String percentagesColumnName, Supplier<String> conditionSupplier) {
@@ -64,7 +40,7 @@ public class PercentagesCorrector {
 	}
 	
 	/**
-	 * builds a snapshot containing correction information for certain ids only; thus it enabled differential fetching for percentages-corrector data
+	 * todo: when filter-ids-caching has been implemented, replace this by a reference to FFC
 	 * @param ids
 	 * @return
 	 */
@@ -72,7 +48,7 @@ public class PercentagesCorrector {
 		String query = String.format("select %1$s, SUM(COALESCE(%2$s, 100)) AS perc FROM %3$s vz " + 
 						"WHERE (%4$s) AND (vz.%1$s IN (%5$s)) " + 
 						"GROUP BY %1$s " + 
-						"HAVING SUM(COALESCE(%2$s, 100)) <> 100", // minimize SQL traffic by only fetching denormal-entity entries
+						"HAVING SUM(COALESCE(%2$s, 100)) <> 100", 
 						mainIdColumnName, percentagesColumnName, view, conditionSupplier.get(), Util.toCSStringForIN(ids));
 		Map<Long, Double> sumOfPercentages = new HashMap<>();
 		SQLUtils.forEachRow(conn, query, ExceptionConsumer.of(rs -> { 
@@ -90,11 +66,6 @@ public class PercentagesCorrector {
 		return new Snapshot(sumOfPercentages);
 	}
 	
-	/**
-	 * a {@link PercentagesCorrector} snapshot containing data for the denormal entities only
-	 * @author Dolghier Constantin
-	 *
-	 */
 	public static class Snapshot {
 		/** sum of percentages if each null is counted as 100 */
 		public final Map<Long, Double> sumOfPercentages;
@@ -102,15 +73,7 @@ public class PercentagesCorrector {
 		public Snapshot(Map<Long, Double> sumOfPercentages) {
 			this.sumOfPercentages = Collections.unmodifiableMap(sumOfPercentages);
 		}
-
 		
-		/**
-		 * given a raw data (percentage as it comes from the AMP view) and its ownerId, return the percentage which should be output in the engine-visible Cell instead
-		 * @param mainId the ownerId
-		 * @param raw the Double percentage as it appears in the AMp view
-		 * @param nrNulls the number of nulls in the AMP view
-		 * @return
-		 */
 		public Double correctPercentage(long mainId, Double raw, int nrNulls) {
 			if (!sumOfPercentages.containsKey(mainId)) {
 				// common case: no correction needed, make it FAST

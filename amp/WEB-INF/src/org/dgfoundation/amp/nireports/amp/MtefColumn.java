@@ -7,8 +7,7 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 /**
- * class for fetching any of the MTEF columns/measures.
- * It is a very simple subclass of {@link AmpFundingColumn}, since the fetching SQL filtering logic is slightly different, being based on the MTEF year
+ * class for fetching any of the MTEF columns/measures
  * @author Dolghier Constantin
  *
  */

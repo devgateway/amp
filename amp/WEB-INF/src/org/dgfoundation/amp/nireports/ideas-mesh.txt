@@ -9,7 +9,7 @@ mondrian removal:
 -> delete PPC
 -> group all hierarchies as levels under location / sectors
 
-Stopped at TaggedMeasure
+Stopped at NiReportsVoidnessChecker
 
 exercises:
 

@@ -94,7 +94,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	 */
 	public final static Map<String, String> FUNDING_VIEW_COLUMNS = Collections.unmodifiableMap(_buildFundingViewFilter());
 	
-	public final static Map<String, LevelColumn> OPTIONAL_DIMENSION_COLS = buildOptionalDimensionCols();
+	public final static Memoizer<Map<String, LevelColumn>> OPTIONAL_DIMENSION_COLS = new Memoizer<>(() -> buildOptionalDimensionCols());
 		
 	/**
 	 * the cell prototypes cache, plus some auxiliary info
@@ -280,7 +280,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 						addMetaIfLongExists(metaSet, longOptionalColumn.k, rs.rs, longOptionalColumn.v);
 				
 				// fetch the coordinates for the non-disabled NiDimensionUsage's
-				for(Map.Entry<String, LevelColumn> optDim:OPTIONAL_DIMENSION_COLS.entrySet())
+				for(Map.Entry<String, LevelColumn> optDim:OPTIONAL_DIMENSION_COLS.get().entrySet())
 					if (!ignoredColumns.contains(optDim.getKey()))
 						addCoordinateIfLongExists(coos, rs.rs, optDim.getKey(), optDim.getValue());
 				

@@ -10,7 +10,7 @@ import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 import static org.dgfoundation.amp.algo.AmpCollections.orderedListWrapper;
 
 /**
- * a cell which holds a text
+ * a {@link NiOutCell} holding a set of dates
  * @author Dolghier Constantin
  *
  */

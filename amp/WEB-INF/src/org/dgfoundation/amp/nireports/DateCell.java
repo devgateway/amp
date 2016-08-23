@@ -14,7 +14,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
  */
 public final class DateCell extends Cell {
 
-	/** the payload - the hold date */
+	/** the payload - the held date */
 	public final LocalDate date;
 	
 	public DateCell(LocalDate date, long activityId, long entityId, Optional<LevelColumn> levelColumn) {

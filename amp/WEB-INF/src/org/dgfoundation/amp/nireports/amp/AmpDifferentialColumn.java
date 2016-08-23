@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.sql.SQLException;
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;

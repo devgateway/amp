@@ -151,7 +151,7 @@ public class IndicatorImporter {
             errors.addApiErrorMessage(IndicatorErrors.LOCATION_NOT_FOUND, geoIdsWithProblems.toString());
         }
         if(locationIndicatorValueList.isEmpty()) {
-            errors.addApiErrorMessage(IndicatorErrors.INVALID_IMPORT_NO_VALUE, " Cannot import indicator without any value ");
+            errors.addApiErrorMessage(IndicatorErrors.INVALID_IMPORT_NO_VALUE, null);
         }
         return locationIndicatorValueList;
     }

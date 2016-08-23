@@ -14,11 +14,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
- * 
- * a date column
- * 	<li>amp_activity_id (or pledge_id)</li>
- *  <li>payload (text)</li>
- *  </ol>  
+ * a differentially-fetched column which generates {@link DateCell} cells
  *  All the extra columns are ignored
  * @author Dolghier Constantin
  *

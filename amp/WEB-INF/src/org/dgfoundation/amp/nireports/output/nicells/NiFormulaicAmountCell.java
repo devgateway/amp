@@ -8,7 +8,7 @@ import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 /**
- * a NiAmountCell subclass with some extra possibilities 
+ * a {@link NiAmountCell} subclass with some extra possibilities 
  * <ul>
  * <li>each cell holds a list of named values (see {@link #values})</li>
  * <li>holding <strong>undefined</strong> values, which is one of {@link #UNDEFINED}, {@link #PLUS_INFINITY}, {@link #MINUS_INFINITY}</li>

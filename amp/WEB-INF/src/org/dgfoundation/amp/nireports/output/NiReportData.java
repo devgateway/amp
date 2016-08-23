@@ -9,10 +9,9 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ReportData;
-import org.dgfoundation.amp.nireports.runtime.ReportDataVisitor;
 
 /**
- * a flattened report output subregion (see {@link ReportData})
+ * a flattened report output subregion (a flattened counterpart of {@link ReportData})
  * @author Dolghier Constantin
  *
  */

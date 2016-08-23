@@ -7,6 +7,7 @@ import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**
+ * a {@link Cell} which holds a text. The MetaInfo is always empty, while the coordinates are either empty or with a single entry, depending on the #mainLevel)
  * @author Dolghier Constantin
  *
  */

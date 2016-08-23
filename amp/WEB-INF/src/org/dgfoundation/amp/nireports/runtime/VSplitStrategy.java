@@ -12,7 +12,7 @@ import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 /**
  * an interface which governs the way a column is split vertically:
- * 1. (TODO) generating subclasses
+ * 1. generating subclasses
  * 2. mapping individual cells to subclasses
  * 3. specifying the behaviour of generated {@link CellColumn}s
  * @author Dolghier Constantin

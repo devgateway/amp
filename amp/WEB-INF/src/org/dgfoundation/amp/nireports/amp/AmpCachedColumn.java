@@ -14,7 +14,10 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 
 
 /**
- * an AMP column which keeps a keyed cache of a column, subject to invalidation on db changes or a timeout
+ * an AMP column which keeps a keyed cache of a column, subject to invalidation on db changes or a timeout. 
+ * Each instance of this class has an {@link ExpiringCacher} instance, the key being built by a callback specified at construction time. 
+ * For this class, the cache is non-granular at the activityId level, thus <i>you should subclass it only when your fetcher ignores ampActivityIds and fetches columns entirely</i>. <br /> 
+ * Please see {@link ExpiringCacher} for more details. <br />
  * @author Dolghier Constantin
  *
  * @param <K> the type of the generated cells

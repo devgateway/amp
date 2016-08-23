@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
@@ -20,13 +21,14 @@ import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**
- * the behaviour of a trivial measure
+ * The behaviour of a trivial measure. <br />
+ * A trivial measure is one which obeys the report's time-splitting settings {@link GroupingCriteria}, obeys percentages
+ * and does both horizontal and vertical reduction through addition
  * @author Dolghier Constantin
  *
  */

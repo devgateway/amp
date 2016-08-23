@@ -82,7 +82,6 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.BooleanDimension;
-import org.dgfoundation.amp.nireports.schema.ForecastExecutionRateMeasure;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;

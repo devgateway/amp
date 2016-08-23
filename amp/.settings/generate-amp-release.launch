@@ -12,7 +12,7 @@
 <listEntry value="jdbc.password=abc"/>
 <listEntry value="jdbc.port=5433"/>
 </listAttribute>
-<stringAttribute key="M2_RUNTIME" value="apache-maven-3.2.5"/>
+<stringAttribute key="M2_RUNTIME" value="EMBEDDED"/>
 <booleanAttribute key="M2_SKIP_TESTS" value="false"/>
 <intAttribute key="M2_THREADS" value="4"/>
 <booleanAttribute key="M2_UPDATE_SNAPSHOTS" value="true"/>

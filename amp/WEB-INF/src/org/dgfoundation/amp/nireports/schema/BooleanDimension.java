@@ -3,7 +3,7 @@ package org.dgfoundation.amp.nireports.schema;
 import java.util.Arrays;
 
 /**
- * NiReports' boolean dimension, used for yes/no/undefined columns
+ * NiReports' hardcoded boolean dimension, used for yes/no/undefined columns
  * @author Dolghier Constantin
  *
  */

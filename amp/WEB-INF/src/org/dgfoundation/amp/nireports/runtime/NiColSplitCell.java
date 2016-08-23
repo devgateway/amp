@@ -5,7 +5,7 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
 
 /**
- * info about the info which has been used to split the parent column.
+ * info about the cell which has been used to split the parent report
  * @author Dolghier Constantin
  *
  */

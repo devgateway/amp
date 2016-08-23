@@ -2358,6 +2358,17 @@ function sessionstorage(){
 	} catch (exception) {}	  
 }
 
+function sessionstorage(){
+	  var mod = 'whatever';
+	  try {
+		sessionStorage.setItem(mod, mod);
+		sessionStorage.removeItem(mod);
+	    return true;
+	  } catch (e) {
+	    console.log(e);
+	    return false;
+	  }
+}
 
 module.exports = function() {
   var missingFeatures = [];  // an empty array will cast to bool false. handy!

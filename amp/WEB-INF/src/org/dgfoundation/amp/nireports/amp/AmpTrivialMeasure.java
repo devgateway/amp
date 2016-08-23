@@ -12,38 +12,28 @@ import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 import org.digijava.module.aim.helper.Constants;
 
-/**
- * a straightforward {@link NiTransactionMeasure} which converts AMP-specific configuration info into Ni-generic predicates
- * @author simple
- *
- */
 public class AmpTrivialMeasure extends NiTransactionMeasure {
 
 	/**
-	 * trivial measure defined by a transaction type (say, Commitments), an adjustment name (say, Actual) and a directed/not directed boolean
+	 * trivial measure which discerns between directed/nondirected
+	 * @param measureName
+	 * @param transactionType
+	 * @param adjustmentTypeName
+	 * @param directed
 	 */
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed) {
 		this(measureName, transactionType, adjustmentTypeName, directed, cac -> false, false, null);
 	}
-
-	/**
-	 * trivial measure defined by a transaction type (say, Commitments), an adjustment name (say, Actual), a directed/not directed boolean and an ignore/obey filters boolean
-	 */
+	
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, boolean ignoreFilters) {
 		this(measureName, transactionType, adjustmentTypeName, directed, cac -> false, ignoreFilters, null);
 	}
-
-	/**
-	 * trivial measure defined by a transaction type (say, Commitments), an adjustment name (say, Actual), a directed/not directed boolean, an ignore/obey filters boolean and a behaviour.
-	 * In case behaviour is null, a context-based one will be deducted from the combination of the other parameters
-	 */
-	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, boolean ignoreFilters, Behaviour<NiAmountCell> overridingBehaviour) {
+	
+	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName,
+			boolean directed, boolean ignoreFilters, Behaviour<NiAmountCell> overridingBehaviour) {
 		this(measureName, transactionType, adjustmentTypeName, directed, cac -> false, ignoreFilters, overridingBehaviour);
 	}
-
-	/**
-	 * equivalent to {@link #AmpTrivialMeasure(String, long, String, boolean, Predicate, boolean, Behaviour)}, but also specifies the {@link #getPrecursorMeasures()}
-	 */
+	
 	public AmpTrivialMeasure(String measureName, Predicate<CategAmountCell> predicate, boolean unfiltered, Behaviour<NiAmountCell> behaviour, Map<String, Boolean> precursors) {
 		super(measureName, predicate, behaviour, AmpReportsSchema.measureDescriptions.get(measureName), unfiltered, precursors);
 	}

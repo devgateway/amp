@@ -10,7 +10,6 @@ import java.util.TreeSet;
 
 import static org.dgfoundation.amp.algo.AmpCollections.any;
 
-import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
@@ -18,17 +17,10 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
-/**
- * The {@link Behaviour} of a Percentageful texts column. 
- * Since the percentages are only relevant when using the column as a hierarchy, this class is identical to {@link TextualTokenBehaviour}, 
- * save for the fact that it consumes {@link PercentageTextCell} instead of {@link TextCell}. 
- * For example, just as in {@link TextualTokenBehaviour}, multiple {@link org.dgfoundation.amp.nireports.PercentageTextCell} instances are horizontally reduced to a concatenation of the alphabetically-sorted values 
- * @author Dolghier Constantin
- *
- */
 public class PercentageTokenBehaviour implements Behaviour<NiTextCell> {
 
 	public final static PercentageTokenBehaviour instance = new PercentageTokenBehaviour();

@@ -2,18 +2,24 @@ package org.dgfoundation.amp.nireports.runtime;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
+import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
- * a disaggregated report containing subreports
+ * a report containing subreports
  * @author Dolghier Constantin
  *
  */

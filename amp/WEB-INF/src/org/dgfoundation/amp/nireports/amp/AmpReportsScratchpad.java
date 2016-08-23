@@ -27,13 +27,13 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
+import org.dgfoundation.amp.nireports.SqlSourcedColumn;
 import org.dgfoundation.amp.nireports.TranslatedDate;
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
-import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
-import org.dgfoundation.amp.nireports.schema.SqlSourcedColumn;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -44,9 +44,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * the AMP-schema-specific scratchpad <br />
- * In short: each {@link NiReportsEngine} instance running a report has an {@link AmpReportsScratchpad} counterpart instance. 
- * They each hold a reference to each other (for ease of coding) and they are both discarded as soon as a report run ends.
- * please see {@link NiReportsEngine#schemaSpecificScratchpad}
+ * please see {@link NiReportsEngine#schemaSpecificScratchpad} 
  * @author Dolghier Constantin
  *
  */
@@ -73,44 +71,15 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 
 	//public final Map<PercentagesCorrector, PercentagesCorrector.Snapshot> percsCorrectors = new ConcurrentHashMap<>();
 	
-	/**
-	 * the JDBC connection used by the fetchers to run SQL queries
-	 */
 	public final Connection connection;
 	
-	/**
-	 * the non-report-spec params influencing a report run, like workspace filter, locale, default currency
-	 */
 	public final ReportEnvironment environment;
-	
-	/**
-	 * the counterpart engine
-	 */
 	public final NiReportsEngine engine;
-	
-	/**
-	 * the last amp_etl_changelog event id which will be taken in consideration by fetchers while running this report
-	 */
 	public final long lastEventId;
-	
-	/**
-	 * a {@link Memoizer} of a block of various variables relevant for computed measures. Relatively expensive and relatively rarely used, thus memoized
-	 */
 	public final Memoizer<SelectedYearBlock> computedMeasuresBlock;
-	
-	/**
-	 * a {@link Memoizer} for pledge ids. Quite expensive to calculate and very rarely used, thus memoized
-	 */
 	public final Memoizer<Set<Long>> computedPledgeIds;
 	
-	/**
-	 * this will be true IFF {@link GlobalSettingsConstants#SPLIT_BY_MODE_OF_PAYMENT} is true AND the report includes {@link ColumnConstants#MODE_OF_PAYMENT} as a column but not as a hierarchy
-	 */
 	public final boolean verticalSplitByModeOfPayment;
-	
-	/**
-	 * this will be true IFF {@link GlobalSettingsConstants#SPLIT_BY_TYPE_OF_ASSISTANCE} is true AND the report includes {@link ColumnConstants#TYPE_OF_ASSISTANCE} as a column but not as a hierarchy
-	 */
 	public final boolean verticalSplitByTypeOfAssistance;
 	
 	/**
@@ -147,14 +116,6 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 //		return percsCorrectors.computeIfAbsent(corrector, z -> buildSnapshot(z, ids));
 //	}
 		
-	/**
-	 * builds a {@link PercentagesCorrector} {@link Snapshot} based on a preexisting {@link Snapshot}, a generating {@link PercentagesCorrector} and a set of ids to fetch.
-	 * Works based on the same ideas as {@link DifferentialCache}
-	 * @param earlyEntries
-	 * @param corrector
-	 * @param ids
-	 * @return
-	 */
 	public Snapshot buildSnapshot(Snapshot earlyEntries, PercentagesCorrector corrector, Set<Long> ids) {
 		final ValueWrapper<Snapshot> snapshot = new ValueWrapper<>(null);
 		engine.timer.run("normalize_percentages", () -> {
@@ -164,25 +125,14 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		return earlyEntries == null ? snapshot.value : earlyEntries.mergeWith(snapshot.value);
 	}
 	
-	/**
-	 * returns the set of ids of entities of a given type which have been affected by an ETL-logged change between a given first-Event-Id and this scratchpad's max-event-id
-	 * @param entityType the type of logged entity to query for. You can find a list of them in the ETL documentation here: https://wiki.dgfoundation.org/display/AMPDOC/AMP+2.10+ETL+process, file <i>etl_incremental_tables.png</i>
-	 * @param firstEventId
-	 * @return
-	 */
 	public Set<Long> getChangedEntities(String entityType, long firstEventId) {
 		Set<Long> changedEntityIds = new HashSet<>(SQLUtils.fetchLongs(this.connection, String.format("SELECT DISTINCT entity_id FROM amp_etl_changelog WHERE (entity_name='%s') AND (event_id > %d) AND (event_id <= %d)", entityType, firstEventId, lastEventId)));
 		return changedEntityIds;
 	}
 	
-	/**
-	 * returns the set of ownerIds which should be fetched for a given sqlsourced column 
-	 * @param entityType the main-entity-type of the column we are trying to fetch
-	 * @return
-	 */
 	public Set<Long> getRequestedEntityIds(String entityType) {
 		if (entityType.equals("pledge") && engine.spec.getReportType() == ArConstants.DONOR_TYPE)
-			return computedPledgeIds.get(); // fetching pledges in a donor report - so it's a "Also Show Pledges" report -> <strong>for this column only</strong> we will fetch pledges
+			return computedPledgeIds.get();
 
 		return engine.getMainIds();
 	}
@@ -190,10 +140,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	public String getEntityType(String mainColumn) {
 		return mainColumn.equals("amp_activity_id") ? "activity" : "pledge";
 	}
-
-	/**
-	 * given an engine context and a column, returns the set of ownerIds which should be fetched from the column
-	 */
+	
 	@Override
 	public Set<Long> getMainIds(NiReportsEngine engine, NiReportColumn<?> col) {
 		if (!(col instanceof SqlSourcedColumn))
@@ -202,22 +149,6 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		return getRequestedEntityIds(getEntityType(ssc.mainColumn));
 	}
 	
-	/**
-	 * given a {@link DifferentialCache} instance, does the following:
-	 * <ol>
-	 * <li>queries the database for the entities which have changed since the last time the cache instance has been populated ({@link #getChangedEntities(String, long)}) - let's call it (a)</li>
-	 * <li>queries the reports engine for the entities which are requested by the current report run ({@link #getRequestedEntityIds(String)}) - let's call it (b)</li>
-	 * <li>gets the set of entity ids which are already present in the cache {@link DifferentialCache#getCachedEntityIds()} - let's call it (c)</li>
-	 * <li>calculates the set of entity ids which have to be refetched as being (a - c + b). Let's all it (d)</li>
-	 * <li>fetches the (d) cells</li>
-	 * <li>returns (d)</li>
-	 * </ol> 
-	 * @param timer the current-column-fetching timer so that the topmost node can be populated with statistics
-	 * @param mainColumn the "main" column name of the backing view of the fetched column. Used to decide whether to query the ETL log for activity IDs or pledge IDs
-	 * @param cache the cache to be used as a data repo
-	 * @param fetcher the function used for fetching cells with a given set of main IDs
-	 * @return
-	 */
 	public<K extends Cell> Set<Long> differentiallyImportCells(InclusiveTimer timer, String mainColumn, DifferentialCache<K> cache, Function<Set<Long>, List<K>> fetcher) {
 		String entityType = getEntityType(mainColumn);
 		Set<Long> changedEntityIds = getChangedEntities(entityType, cache.getLastEventId());
@@ -235,11 +166,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		return idsToReplace;
 	}
 
-	/**
-	 * shorthand function to take repetitive casts out of common code: gets the AMP scratchpad attached to a running engine 
-	 * @param engine
-	 * @return
-	 */
+	
 	public static AmpReportsScratchpad get(NiReportsEngine engine) {
 		return (AmpReportsScratchpad) engine.schemaSpecificScratchpad;
 	}
@@ -258,9 +185,6 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		return precisionSetting;
 	}
 
-	/**
-	 * adds a caching layer in front of AMP's slow calendar converters. Also translates the text headers for fiscal years and workarounds calendar bugs (AMP-22850)
-	 */
 	@Override
 	public CachingCalendarConverter buildCalendarConverter() {
 		CalendarConverter underlyingConverter = buildUnderlyingCalendarConverter(engine.spec);
@@ -273,7 +197,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	}
 	
 	/**
-	 * postprocesses funding column's transaction dates for the sake of AMP-22850
+	 * postprocesses funding column's transaction dates
 	 * @param in
 	 * @return
 	 */

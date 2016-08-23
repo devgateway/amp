@@ -18,9 +18,6 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
  */
 public class NiReportOutputCleaner implements NiReportDataVisitor<NiReportData> {
 
-	/**
-	 * leaf output-columns which should be kept
-	 */
 	final Set<CellColumn> kk;
 	
 	public NiReportOutputCleaner(NiHeaderInfo headers) {
@@ -38,12 +35,6 @@ public class NiReportOutputCleaner implements NiReportDataVisitor<NiReportData> 
 		return new NiGroupReportData(subreports, keepKeys(grd.trailCells, kk), grd.splitter);
 	}
 
-	/**
-	 * returns a new map containing the filtered entries from a given map which have their keys in a whitelisted set of ok keys
-	 * @param in
-	 * @param okKeys
-	 * @return
-	 */
 	protected<K, V> Map<K, V> keepKeys(Map<K, V> in, Set<K> okKeys) {
 		return in.entrySet().stream().filter(z -> okKeys.contains(z.getKey())).collect(Collectors.toMap(z -> z.getKey(), z -> z.getValue()));
 	}

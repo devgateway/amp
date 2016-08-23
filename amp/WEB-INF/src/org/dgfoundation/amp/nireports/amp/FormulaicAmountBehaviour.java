@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.behaviours;
+package org.dgfoundation.amp.nireports.amp;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
+import org.dgfoundation.amp.nireports.behaviours.AbstractComputedBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
@@ -112,5 +113,39 @@ public class FormulaicAmountBehaviour extends AbstractComputedBehaviour<NiFormul
 	@Override
 	public NiFormulaicAmountCell getZeroCell() {
 		return NiFormulaicAmountCell.FORMULAIC_ZERO;
+	}
+	
+	/**
+	 * a reductor which sums
+	 * @param l
+	 * @return
+	 */
+	public static BigDecimal REDUCE_SUM(List<BigDecimal> l) {
+		if (l.isEmpty()) return BigDecimal.ZERO;
+		
+		if (l.size() == 1) return l.get(0);
+		
+		BigDecimal res = BigDecimal.ZERO;
+		for(BigDecimal term:l) {
+			res = res.add(term);
+		}
+		return res;
+	}
+	
+	/**
+	 * a reductor which multiplies
+	 * @param l
+	 * @return
+	 */
+	public static BigDecimal REDUCE_MUL(List<BigDecimal> l) {
+		if (l.isEmpty()) return BigDecimal.ONE;
+		
+		if (l.size() == 1) return l.get(0);
+		
+		BigDecimal res = BigDecimal.ONE;
+		for(BigDecimal term:l) {
+			res = res.multiply(term);
+		}
+		return res;
 	}
 }

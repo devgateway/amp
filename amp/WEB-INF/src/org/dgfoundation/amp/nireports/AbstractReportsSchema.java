@@ -3,7 +3,6 @@ package org.dgfoundation.amp.nireports;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.Map;
 
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
@@ -13,7 +12,6 @@ import org.dgfoundation.amp.nireports.schema.NiCombinationContextTransactionMeas
 import org.dgfoundation.amp.nireports.schema.NiFormulaicAverageMeasure;
 import org.dgfoundation.amp.nireports.schema.NiFormulaicMeasure;
 import org.dgfoundation.amp.nireports.schema.NiLinearCombinationTransactionMeasure;
-import org.dgfoundation.amp.nireports.schema.NiPredicateTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
@@ -24,7 +22,7 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
 import static org.dgfoundation.amp.nireports.NiUtils.failIf;
 
 /**
- * an abstract {@link NiReportsSchema} which contains utility methods for defining a schema in a coder-friendly way while ensuring reasonable safeguards for correctness.
+ * 
  * @author Dolghier Constantin
  *
  */
@@ -41,12 +39,7 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	public Map<String, NiReportMeasure<?>> getMeasures() {
 		return Collections.unmodifiableMap(measures);
 	}
-	
-	/**
-	 * adds a column definition to {@link #columns}, checking that no other column with the same name has been previously defined
-	 * @param col the column to add to the schema
-	 * @return
-	 */
+		
 	public AbstractReportsSchema addColumn(NiReportColumn<?> col) {
 		failIf(columns.containsKey(col.name), "double definition of column with name " + col.name);
 		failIf(col.getBehaviour() == null, "no behaviour specified for column with name " + col.name);
@@ -54,11 +47,6 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		return this;
 	}
 	
-	/**
-	 * adds a measure definition to {@link #measures}, checking that no other measure with the same name has been previously defined
-	 * @param meas
-	 * @return
-	 */
 	public AbstractReportsSchema addMeasure(NiReportMeasure<?> meas) {
 		failIf(measures.containsKey(meas.name), "double definition of measure with name " + meas.name);
 		failIf(meas.getBehaviour() == null, "no behaviour specified for measure with name " + meas.name);
@@ -67,12 +55,8 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	}
 	
 	/**
-	 * constructs a {@link NiCombinationContextTransactionMeasure} measure and then adds it to the schema by using {@link #addMeasure(NiReportMeasure)}  
-	 * @param compMeasure the name of the measure to construct
-	 * @param description the description of the measure to construct
-	 * @param behaviour the behaviour of the measure to construct
-	 * @param def an even-length array. Each pair is a (measureName, {@link Number}) tuple. The <i>measureName</i> should reference an already-defined measure of type {@link NiTransactionContextMeasure}.
-	 * @see NiCombinationContextTransactionMeasure for information on the measure built and inserted by this function
+	 * accepts an array of (measureName, Number)
+	 * @param def
 	 * @return
 	 */
 	public AbstractReportsSchema addDerivedLinearFilterMeasure(String compMeasureName, String description, Behaviour<?> behaviour, Object...def) {
@@ -81,15 +65,10 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		Map<NiTransactionContextMeasure, BigDecimal> defMap = parseContextFilterMap(String.format("while defining measure %s", compMeasureName), def);
 		return addMeasure(new NiCombinationContextTransactionMeasure(compMeasureName, defMap, behaviour, description));
 	}
-
+	
 	/**
-	 * constructs a {@link NiLinearCombinationTransactionMeasure} measure and then adds it to the schema by using {@link #addMeasure(NiReportMeasure)}
-	 * @param compMeasureName the name of the measure to construct
-	 * @param description the description of the measure to construct
-	 * @param behaviour the behaviour of the measure to construct
-	 * @param ignoreFilters whether the constructed measure should be based off filtered or unfiltered funding cells. See {@link NiPredicateTransactionMeasure#ignoreFilters}
-	 * @param stripCoords whether to strip coordinates off the generated cells
-	 * @param def def an even-length array. Each pair is a (measureName, {@link Number}) tuple. The <i>measureName</i> should reference an already-defined measure of type {@link NiTransactionMeasure}.
+	 * accepts an array of (measureName, Number)
+	 * @param def
 	 * @return
 	 */
 	public AbstractReportsSchema addLinearFilterMeasure(String compMeasureName, String description, Behaviour<?> behaviour, 
@@ -100,11 +79,10 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	}
 	
 	/**
-	 * constructs a measure based off a formula and then adds it to the schema by using {@link #addMeasure(NiReportMeasure)}. The measure would be of one of {@link NiFormulaicMeasure} or {@link NiFormulaicAverageMeasure}
-	 * @param compMeasureName the name of the measure to construct
-	 * @param description the description of the measure to construct
-	 * @param formula the formula to drive the cells
-	 * @param average whether to create a {@link NiFormulaicAverageMeasure} (e.g. populate trail cells based off the average of a formula across cells) or a {@link NiFormulaicMeasure} (e.g. populate body and trail cells based off the value of the formula)
+	 * adds an instance of {@link NiFormulaicMeasure} to the schema
+	 * @param compMeasureName
+	 * @param description
+	 * @param formula
 	 * @return
 	 */
 	public AbstractReportsSchema addFormulaComputedMeasure(String compMeasureName, String description, NiFormula formula, boolean average) {
@@ -123,15 +101,9 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		//return addMeasure(meas)
 	}
 	
-	/**
-	 * parses an even-length array of ({@link NiTransactionContextMeasure}, {@link Number}) elements into a Map from measure to BigDecimal. Normally used for building linear-combination measures
-	 * @param errPrefix the prefix of the error message in the exception to the generated in case of any error
-	 * @param def the even-length array
-	 * @return
-	 */
 	@SuppressWarnings("rawtypes")
 	public Map<NiTransactionContextMeasure, BigDecimal> parseContextFilterMap(String errPrefix, Object...def) {
-		Map<NiTransactionContextMeasure, BigDecimal> res = new IdentityHashMap<>();
+		Map<NiTransactionContextMeasure, BigDecimal> res = new HashMap<>();
 		for(int i = 0; i < def.length / 2; i++) {
 			String measureName = (String) def[i * 2];
 			Number factor = (Number) def[i * 2 + 1];
@@ -143,14 +115,8 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		return res;
 	}
 	
-	/**
-	 * parses an even-length array of ({@link NiTransactionMeasure}, {@link Number}) elements into a Map from measure to BigDecimal. Normally used for building linear-combination measures
-	 * @param errPrefix the prefix of the error message in the exception to the generated in case of any error
-	 * @param def the even-length array
-	 * @return
-	 */
 	public Map<NiTransactionMeasure, BigDecimal> parseMap(String errPrefix, Object...def) {
-		Map<NiTransactionMeasure, BigDecimal> res = new IdentityHashMap<>();
+		Map<NiTransactionMeasure, BigDecimal> res = new HashMap<>();
 		for(int i = 0; i < def.length / 2; i++) {
 			String measureName = (String) def[i * 2];
 			Number factor = (Number) def[i * 2 + 1];
@@ -162,22 +128,10 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		return res;
 	}
 	
-	/**
-	 * builds a numerical column behaviour which is trivial in all regards except that it divides its output by the per-report total of a measure
-	 * @param tr the time range of the generated behaviour
-	 * @param measureName the measure by whose total the results should be divided. It is up to the schema to ensure that this measure has been previously fetched
-	 * @return
-	 */
 	public TrivialMeasureBehaviour byMeasureDividingBehaviour(TimeRange tr, String measureName) {
 		return new TrivialMeasureBehaviour(tr, TrivialMeasureBehaviour.buildMeasureTotalDivider(measureName));
 	}
 	
-	/**
-	 * builds a single-entry map
-	 * @param k
-	 * @param v
-	 * @return
-	 */
 	public static Map<String, Boolean> singletonMap(String k, Boolean v) {
 		Map<String, Boolean> res = new HashMap<>();
 		res.put(k, v);

@@ -2,11 +2,12 @@ package org.dgfoundation.amp.nireports.amp.dimensions;
 
 import java.util.Arrays;
 
+import org.dgfoundation.amp.nireports.amp.PercentagesCorrector;
 import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
 
 /**
  * 
- * an <i>amp_category_value</i>-backed dimension consisting of (amp_category_class[level=0], amp_category_value[level=1]) 
+ * a dimension consisting of (amp_category_class[level=0], amp_category_value[level=1]) 
  * @author Dolghier Constantin
  *
  */

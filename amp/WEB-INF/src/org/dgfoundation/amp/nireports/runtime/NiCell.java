@@ -18,36 +18,17 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 
 /**
- * An immutable {@link Cell} wrapper which has identity and is not shared between reports or columns.
- * The identity is added so that a NiCell adds personally-identifying information to a cell,
- * for example the percentages ({@link #hiersTracker}) or the upstream filters ({@link #passedFilters})
+ * a class whose instances as a per-cell tag by the NiReportsEngine. This class should be totally opaque for clients!
  * @author Dolghier Constantin
  *
  */
 public class NiCell implements Comparable<NiCell> {
-	/**
-	 * the entity to which this instance belongs
-	 */
 	protected final NiReportedEntity<?> entity;
-	
-	/**
-	 * the enclosed raw cell
-	 */
 	protected final Cell cell;
-	
-	/**
-	 * whether this is an undefined cell (e.g. one with a negative entityId)
-	 */
 	protected final boolean undefinedCell;
 	
-	/**
-	 * the per-NiDimensionUsage coordinates-and-percentages
-	 */
 	protected final HierarchiesTracker hiersTracker;
 	
-	/**
-	 * the upstream-passed filters during the "filters as collapsed hierarchies" phase
-	 */
 	protected final Map<NiDimensionUsage, List<IdsAcceptor>> passedFilters;
 	
 	public NiCell(Cell cell, NiReportedEntity<?> entity, HierarchiesTracker hiersTracker) {
@@ -63,24 +44,10 @@ public class NiCell implements Comparable<NiCell> {
 		this.passedFilters = Collections.unmodifiableMap(passedFilters);
 	}
 
-	/**
-	 * creates a new instance, obtained by advancing the hierarchy and passed filters of the given cell
-	 * 
-	 * @param newContents the cell to embed in the new instance. Unless you are doing some voodoo, this would equal {@link #cell}
-	 * @param splitCell the splitter cell used to advance {@link #hiersTracker}
-	 * @param acceptors might be null, in which case {@link #passedFilters} won't be advanced
-	 * @return
-	 */
 	public NiCell advanceHierarchy(Cell newContents, Cell splitCell, Map<NiDimensionUsage, IdsAcceptor> acceptors) {
 		return new NiCell(newContents, entity, hiersTracker.advanceHierarchy(splitCell), mergeAcceptors(acceptors));
 	}
 	
-	/**
-	 * computes a map of acceptors which is the result of merging this cell's {@link #passedFilters} with the given acceptors.
-	 * In case both the cell and the given acceptors contain a mapping for a given {@link NiDimensionUsage}, the given map has priority 
-	 * @param acceptors
-	 * @return
-	 */
 	public Map<NiDimensionUsage, List<IdsAcceptor>> mergeAcceptors(Map<NiDimensionUsage, IdsAcceptor> acceptors) {
 		if (acceptors == null || acceptors.isEmpty())
 			return passedFilters;
@@ -117,11 +84,6 @@ public class NiCell implements Comparable<NiCell> {
 		return this.passedFilters;
 	}
 	
-	/**
-	 * returns true IFF this cell passes the filters of a given splitCell by consulting against the stored {@link #passedFilters}
-	 * @param splitCell
-	 * @return
-	 */
 	public boolean passesFilters(Cell splitCell) {
 //		boolean debug = this.cell instanceof TextCell; 
 //		if (debug) {
@@ -140,11 +102,7 @@ public class NiCell implements Comparable<NiCell> {
 		//if (debug) System.err.format("OK\n", 1);
 		return true;
 	}
-
-	/**
-	 * calculates the percentage which should be applied to the enclosed {@link #cell}'s amount
-	 * @return
-	 */
+	
 	public BigDecimal calculatePercentage() {
 		return hiersTracker.calculatePercentage(getEntity().getBehaviour().getHierarchiesListener()).setScale(6, RoundingMode.HALF_EVEN); //TODO: maybe use the per-report precision setting
 	}

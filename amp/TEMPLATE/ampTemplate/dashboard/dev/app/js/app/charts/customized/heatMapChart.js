@@ -171,15 +171,8 @@ nv.models.heatMapChart = function() {
         	var legendSectionHeight = 20;
         	var height = topSectionHeight + (cubeSize * data[0].values.y.length) + legendSectionHeight;
         	var legendElementHeight = 22;
-        	var noColor = '#FFFFFF';
-        	// Until we add the option in Admin to configure color ramps we have it fixed here.
-        	var categories = [{min: -1, max: 0, color: noColor},
-        	                  {min: 0, max: 1, color: "#D05151"},
-        	                  {min: 1, max: 5, color: "#E68787"}, 
-        	                  {min: 5, max: 10, color: "#E4883E"}, 
-        	                  {min: 10, max: 15, color: "#F6B277"}, 
-        	                  {min: 15, max: 20, color: "#ADCD95"}, 
-        	                  {min: 20, max: 101, color: "#7BA05F"}];
+        	const noColor = '#FFFFFF';
+        	var categories = getCategoriesByThreshold(noColor, data[0].values.model);
         	
         	$(container[0]).css('height', height + 'px').attr('class', 'dash-chart nvd3-svg heatmap-chart');
         	
@@ -319,17 +312,35 @@ nv.models.heatMapChart = function() {
         return chart;
     }
     
+    function getCategoriesByThreshold(noColor, model) {
+    	var categories = new Array();
+    	categories.push({min: -1, max: 0, color: noColor});
+    	var colors = model.get('heatmap_config').models[0].get('amountColors');
+    	var i = 1;
+    	for (var property in colors) {
+    	    if (colors.hasOwnProperty(property)) {
+    	    	categories.push({min: parseInt(property), color: colors[property], max: null});
+    	    	if (i > 1) {
+    	    		categories[i - 1].max = parseInt(property);
+    	    	}
+    	    	i++;
+    	    }
+    	}
+    	categories[i - 1].max = 101;
+    	return categories;
+    }
+    
     function createLegends(svg, data, cubeSize, categories, legendElementHeight) {
     	var legendsContainer = svg
 			.append("g")
 			.attr("transform", "translate(0, " + (((data[0].values.y.length + 1) * cubeSize) + 10) + ")")
 			.attr("class", "heatmap-legends-container");
-    	var legendsPool = [app.translator.translateSync("amp.dashboard:chart-heatmap-legend-less-than") + " 1%",
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " 1% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <5%",
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " 5% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <10%",
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " 10% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <15%",
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " 15% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <20%",
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-more-than") + " 20%"];
+    	var legendsPool = [app.translator.translateSync("amp.dashboard:chart-heatmap-legend-less-than") + " " + categories[1].max + "%",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[2].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[2].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[3].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[3].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[4].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[4].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[5].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[5].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-more-than") + " " + categories[6].min + "%"];
     	var maxLegendTextWidth = 0;
     	for (var i = 0; i < legendsPool.length; i++) {
     		var auxWidth = calculateTextWidth(legendsPool[i]);

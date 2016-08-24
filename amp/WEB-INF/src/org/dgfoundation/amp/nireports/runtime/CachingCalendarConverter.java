@@ -11,7 +11,8 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 
 /**
  * a wrapper for a {@link CalendarConverter} which caches the result of calling an underlying {@link CalendarConverter}.<br />
- * This is done because AMP's CalendarWorkers are very slow, while at the same time AMP's datasets usually contain multiple reusages of the same transaction date (DRC and Tanzania have a reuse ratio of around 30x)
+ * This is done because AMP's CalendarWorkers are very slow, while at the same time AMP's datasets usually contain multiple 
+ * reuses of the same transaction date (DRC and Tanzania have a reuse ratio of around 30x)
  * @author Dolghier Constantin
  *
  */

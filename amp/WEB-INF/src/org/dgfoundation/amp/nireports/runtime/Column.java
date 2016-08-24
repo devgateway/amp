@@ -3,11 +3,11 @@ package org.dgfoundation.amp.nireports.runtime;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 
 /**
- * a column. All columns are immutable in the upside direction (thus a {@link CellColumn} is always immutable), but children can be changed
+ * a Report-output-column. All columns are immutable in the upside direction 
+ * (thus a {@link CellColumn} is always immutable), but children can be changed
  *
  */
 public abstract class Column {

@@ -65,7 +65,6 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ComponentsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
@@ -83,7 +82,6 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.BooleanDimension;
-import org.dgfoundation.amp.nireports.schema.ForecastExecutionRateMeasure;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
@@ -95,6 +93,7 @@ import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
+import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -107,7 +106,9 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
- * the big, glorious, immaculate, AMP Reports schema
+ * the big, glorious, immaculate, AMP NiReports schema.
+ * This class is a big monolithic mess, mirrorring the way the AMP business domain is
+ * 
  * @author Dolghier Constantin
  *
  */
@@ -115,8 +116,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
 	public static final Logger logger = Logger.getLogger(AmpReportsSchema.class);
 	
+	/**
+	 * put this to false if you are debugging the caching fetching layers of the schema (e.g. {@link AmpDifferentialColumn}, {@link AmpCachedColumn}, {@link AmpFundingColumn})
+	 */
 	public boolean ENABLE_CACHING = true;
-	
+
+	/**
+	 * the hierarchies which are transaction-level. Please see <a href='https://wiki.dgfoundation.org/display/AMPDOC/2.+NiReports+Configuration%3A+the+schema#id-2.NiReportsConfiguration:theschema-3.4.2.Typesofhierarchicalcolumns'>here</a> for more details
+	 */
 	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
 			Arrays.asList(
 				ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.RELATED_PROJECTS, 
@@ -140,10 +147,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * the pseudocolumn of the header Splitter for cells which are funding flows
 	 */
 	public final static String PSEUDOCOLUMN_FLOW = "#amp#FundingFlow";
+	
+	/**
+	 * the pseudocolumn of the header Splitter for cells which are names of Expenditure Class tags
+	 */
 	public final static String PSEUDOCOLUMN_EXP_CLASS = "#amp#ExpClass";
 	
-	public final static String UNDEFINED_CATEGORY = "Unassigned";
-
 	@SuppressWarnings("serial")
 	public final static Map<String, String> columnDescriptions = new HashMap<String, String>() {{
 		put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES,  "Level-1 subprogram of the selected national objective");
@@ -165,8 +174,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(ColumnConstants.CUMULATIVE_EXECUTION_RATE,  "(Cumulative Disbursement/ Cumulative Commitment) * 100 ");
 	}};
 	
+	/**
+	 * Map<mtef-year-number, Pipeline MTEF column>. Holds all the Pipeline MTEF XXXX columns defined by this schema
+	 */
 	public final Map<Integer, MtefColumn> pipelineMtefColumns = new HashMap<>();
+	
+	/**
+	 * Map<mtef-year-number, Projection MTEF column>. Holds all the Projection MTEF XXXX columns defined by this schema
+	 */
 	public final Map<Integer, MtefColumn> projectionMtefColumns = new HashMap<>();
+	
+	/**
+	 * the names of all the columns which output dates
+	 */
 	public final Set<String> DATE_COLUMN_NAMES;
 
 	@SuppressWarnings("serial")
@@ -195,12 +215,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.PREDICTABILITY_OF_FUNDING ,  "((Planned Disbursements - Actual Disbursements) / Planned Disbursements) X 100");
 		put(MeasureConstants.AVERAGE_DISBURSEMENT_RATE,  "Sum of Execution Rate / Number of Activities");
 		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Sum of Actual Disbursements / Sum (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). ");
-		
+		put(null, null);
 	}};
 	
-	/**
-	 * the name of the "Donor" instance of the Organisation Dimension
-	 */
+	// the organisation-based NiDimensionUsage's
 	public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage(Constants.FUNDING_AGENCY);
 	public final static NiDimensionUsage IA_DIM_USG = orgsDimension.getDimensionUsage(Constants.IMPLEMENTING_AGENCY);
 	public final static NiDimensionUsage BA_DIM_USG = orgsDimension.getDimensionUsage(Constants.BENEFICIARY_AGENCY);
@@ -211,11 +229,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage SG_DIM_USG = orgsDimension.getDimensionUsage(Constants.SECTOR_GROUP);	
 	public final static NiDimensionUsage RAW_ORG_DIM_USG = orgsDimension.getDimensionUsage(Constants.ORGANIZATION);
 	public final static LevelColumn RAW_ORG_LEVEL_COLUMN = RAW_ORG_DIM_USG.getLevelColumn(LEVEL_ORGANISATION);
-
-	
-	
 	public final static NiDimensionUsage CF_DIM_USG = orgsDimension.getDimensionUsage("ComponentFunding");
 	
+	// the sectors-based NiDimensionUsage's
 	public final static NiDimensionUsage PS_DIM_USG = secsDimension.getDimensionUsage("Primary");
 	public final static NiDimensionUsage SS_DIM_USG = secsDimension.getDimensionUsage("Secondary");	
 	public final static NiDimensionUsage TS_DIM_USG = secsDimension.getDimensionUsage("Tertiary");	
@@ -223,6 +239,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage RAW_SCT_DIM_USG = secsDimension.getDimensionUsage("Any");
 	public final static LevelColumn RAW_SCT_LEVEL_COLUMN = RAW_SCT_DIM_USG.getLevelColumn(LEVEL_ALL_IDS);
 	
+	// the programs-based NiDimensionUsage's
 	public final static NiDimensionUsage PP_DIM_USG = progsDimension.getDimensionUsage("Primary Program");
 	public final static NiDimensionUsage SP_DIM_USG = progsDimension.getDimensionUsage("Secondary Program");	
 	public final static NiDimensionUsage TP_DIM_USG = progsDimension.getDimensionUsage("Tertiary Program");
@@ -231,6 +248,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static LevelColumn RAW_PRG_LEVEL_COLUMN = RAW_PRG_DIM_USG.getLevelColumn(LEVEL_ALL_IDS);
 
 
+	// various single-dimension-usage 
 	public final static NiDimensionUsage LOC_DIM_USG = locsDimension.getDimensionUsage("LOCS");
 	public final static NiDimensionUsage AGR_DIM_USG = agreementsDimension.getDimensionUsage("agr");
 	public final static LevelColumn AGR_LEVEL_COLUMN = AGR_DIM_USG.getLevelColumn(0);
@@ -251,6 +269,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	private static AmpReportsSchema instance = new AmpReportsSchema();
 		
+	/**
+	 * the Donor-columns percentages correctors
+	 */
 	@SuppressWarnings("serial")
 	public final Map<NiDimensionUsage, PercentagesCorrector> PERCENTAGE_CORRECTORS = new HashMap<NiDimensionUsage, PercentagesCorrector>() {{
 		putAll(orgsDimension.getAllPercentagesCorrectors(false));
@@ -275,6 +296,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	protected final static AmpFundingColumn pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding");
 	protected final static AmpFundingColumn componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding");
 	
+	/**
+	 * the constructor defines all the columns and measures of the schema. Since this involves scanning the database quite a lot, this constructor is SLOW
+	 */
 	protected AmpReportsSchema() {
 		single_dimension(ColumnConstants.PROJECT_TITLE, "v_titles", ACT_LEVEL_COLUMN);
 		no_dimension(ColumnConstants.ACTIVITY_ID, "v_activity_ids");
@@ -640,8 +664,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.PLEDGES_DETAIL_START_DATE, "v_pledges_funding_start_date");
 		no_entity(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date");
 	}
+	
+	
 	/**
-	 * Adds pseudocomputed columns -- calculations are done in SQL, but the data isn't extracted from a table directly
+	 * Adds pseudocomputed columns -- calculations are done in SQL, so as far as NiReports is concerned, these are regular columns
 	 */
 	protected void addPseudoComputedColumns() {
 		no_entity(ColumnConstants.AGE_OF_PROJECT_MONTHS, "v_project_age");
@@ -788,6 +814,18 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addDerivedLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, def);
 	}
 	
+	/**
+	 * AMP's painful history had the same entities being defined alternatively as measures/columns. Now that all of it is settled / decided by the place
+	 * the entity is defined in {@link AmpReportsSchema}, we need a script to migrate "column X" to "measure X" iff: 
+	 * <ul>
+	 * <li>column X does not exist in the schema</li>
+	 * <li>column X exists in the database</li>
+	 * <li>column X is used in existing reports</li>
+	 * <li>measure X exists in the schema</li>
+	 * </ul> <br /> 
+	 * 
+	 * @return
+	 */
 	public Set<String> migrateColumns() {
 		return PersistenceManager.getSession().doReturningWork(conn -> {
 			Map<Long, String> dbColumns = SQLUtils.collectKeyValue(conn, "SELECT columnid, columnname FROM amp_columns");
@@ -819,11 +857,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	
 	/**
-	 * This method is created for the following scenario:
-	 * 		- a column was added to AmpReportsSchema
-	 * 		- this column doesn't exist in the old reports schema (described by AmpColumns)
-	 * 	In this scenario, opening a report with said 
-	 *  new column in the old reports engine would probably result in a crash.
+	 * This method is created for the following scenario 
+	 * <ul>
+	 * 		<li>a column was added to AmpReportsSchema</li>
+	 * 		<li>this column doesn't exist in the old reports schema (described by AmpColumns)</li>
+	 * </ul>
+	 * 	In this scenario, opening a report with said new column in the old reports engine would probably result in a crash.
 	 *  To avoid this, an entry referring to an empty view is added -- so that the column is shown having no data
 	 *  (since there's no point in backporting the column entirely). 
 	 */
@@ -884,6 +923,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		}); 
 	}
 	
+	/**
+	 * adds the "unfiltered trivial" measures to the schema. Unfiltered trivial measures are those which behave like the trivial ones, except that they operate on unfiltered funding and do not obey any report-level filters or hierarchies.
+	 * @return
+	 */
 	private AmpReportsSchema addUnfilteredTrivialMeasures() {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.CUMULATIVE_DISBURSEMENT, Constants.DISBURSEMENT, "Actual", false, true, TrivialMeasureBehaviour.getTotalsOnlyInstance()));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.CUMULATIVE_COMMITMENT, Constants.COMMITMENT, "Actual", false, true, TrivialMeasureBehaviour.getTotalsOnlyInstance()));
@@ -1149,7 +1192,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		}
 	}
 	
-	// ========== implementation code below ==========
 	@Override public AmpReportsSchema addColumn(NiReportColumn<?> col) {
 		if (TRANSACTION_LEVEL_HIERARCHIES.contains(col.name))
 			col = col.setTransactionLevelHierarchy();
@@ -1179,6 +1221,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 	
 	/**
+	 * performs the per-column checks (superclass behaviour) and then also checks the percentages in the basic tables (like amp_activity_location)
 	 * also checks the percentages on the system
 	 */
 	@Override
@@ -1198,6 +1241,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return sp;
 	};
 	
+	/**
+	 * fetches an entity. Does special mumbo-jumbp for "Also Show Pledges" Donor Reports
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public<K extends Cell> List<K> fetchEntity(NiReportsEngine engine, NiReportedEntity<K> entity) throws Exception {
@@ -1253,17 +1299,24 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		//return super.isTransactionLevelHierarchy(col, engine);
 	}
 	
+	/**
+	 * the schema-specific sub-measure-hierarchy overrider
+	 */
 	@Override
 	public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine engine, CellColumn cc) {
 		List<VSplitStrategy> raw = super.getSubMeasureHierarchies(engine, cc);
 		if (raw != null && !raw.isEmpty())
-			return raw;
+			return raw; // the measure specifies its own submeasures - run them (example: Funding Flows)
 		
 		if (disableSubmeasureSplittingByColumn(engine))
-			return raw;
+			return raw; // let the subclasses the chance to disable submeasures
 		
 		AmpReportsScratchpad scratch = AmpReportsScratchpad.get(engine);
+		
+		// should this measure be split by TypeOfAssistance?
 		boolean splitByToA = cc.splitCell != null && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) && scratch.verticalSplitByTypeOfAssistance;
+		
+		// should this measure be split by ModeOfPayment?
 		boolean splitByMoP = cc.splitCell != null && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) && scratch.verticalSplitByModeOfPayment;
 		
 		if (splitByToA)

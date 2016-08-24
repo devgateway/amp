@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.nireports.output;
 
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.SortedMap;
 
@@ -15,7 +14,8 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 
 /**
- * renders the result of running a NiReport to a html string. See {@link NiReportOutputBuilder}
+ * renders the result of running a NiReport to a html string. See {@link NiReportOutputBuilder}.
+ * You can run this code for debugging reasons by opening <a href='this link'>http://localhost:9090/rest/data/nireport/ZZZ</a>, where ZZZ = amp_report_id in the database
  * @author Dolghier Constantin
  *
  */

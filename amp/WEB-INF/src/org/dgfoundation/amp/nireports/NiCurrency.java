@@ -1,7 +1,7 @@
 package org.dgfoundation.amp.nireports;
 
 /**
- * user-independent way of specifying a currency in NiReports
+ * schema-independent way of specifying a currency in NiReports. It is not really used throughout NiReports Core, as it is kept for the benefit of the schemas / developers only
  * @author Dolghier Constantin
  *
  */

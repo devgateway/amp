@@ -1,29 +1,23 @@
-package org.dgfoundation.amp.nireports;
+package org.dgfoundation.amp.nireports.schema;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Set;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.IdValuePair;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
-import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
-import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
 
 /**
- * a column which fetches its input from a view which contains 3 or more columns: <br />
- * 	1. amp_activity_id (or pledge_id)
- *  2. (undefined, but normally payload)
- *  3. entity_id (e.g. sector_id, donor_id etc) <br />
- *  
- *  All the extra columns are ignored by this class and are to be used / ignored by the subclasses <br />
- *  This abstract class also functions as a utility methods repository
+ * a column which fetches its input from an sql view/table. Offers utility methods for reading coordinates and metadata
  * @author Dolghier Constantin
  *
  */

@@ -3,7 +3,7 @@ package org.dgfoundation.amp.nireports.output.nicells;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 /**
- * a cell which stays in the output of NiReports
+ * the root class of the aggregated-phase cells hierarchy
  * @author Dolghier Constantin
  *
  */

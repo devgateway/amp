@@ -1,7 +1,7 @@
 import * as AMP from "amp/architecture";
 import React from "react";
 import Threshold from "./threshold.jsx";
-import {Alert, Button} from "react-bootstrap";
+import {Alert, Button, Glyphicon} from "react-bootstrap";
 import {postJson, delay} from "amp/tools";
 import {HEAT_MAP_ADMIN} from "amp/config/endpoints";
 
@@ -17,18 +17,35 @@ var ThresholdList = React.createClass({displayName: 'Threshold List',
   },
   componentWillReceiveProps: function(nextProps) {
   	let map = new Map();
-    let idValue = nextProps.data.reduce(function(map, threshold) {
-    	map.set(threshold.id, threshold.amountFrom)
+  	this.idValue = nextProps.data.reduce(function(map, threshold) {
+    	map.set(threshold.id, threshold.amountFrom);
     	return map;
     }, map);
-    this.idValue = idValue;
+    let sortedThresholds = this.getSortedValues();
+    for(let threshold of nextProps.data) {
+        let nextLimit = this.findNextLimit(threshold.amountFrom, sortedThresholds);
+    	if (this.refs[threshold.id] !== undefined) {
+    		this.refs[threshold.id].to = nextLimit; 
+    	} else {
+    		threshold.to = nextLimit;
+    	}
+    }
     this.invalidIds = new Set([]);
+  },
+  findNextLimit: function(value, sortedThresholds) {
+  	let nextLimit = sortedThresholds.find(function(amount) {return amount > value});
+  	return (nextLimit === undefined) ? 100 : nextLimit;
+  },
+  getSortedValues: function() {
+  	let sortedThresholds = Array.from(this.idValue.values(), v => v);
+  	return sortedThresholds.sort(function(a, b) {return a-b});
   },
   render: function() {
     this.__ = key => this.props.translations[key];
-  	let thresholdNodes = this.props.data.map(function(threshold) {
-  	  return (
-        <Threshold ref={threshold.id} id={threshold.id} colorName={threshold.name} color={threshold.color} from={threshold.amountFrom} 
+    let thresholdNodes = this.props.data.map(function(threshold) {
+      return (
+        <Threshold ref={threshold.id} id={threshold.id} colorName={threshold.name} color={threshold.color}
+        	from={threshold.amountFrom} to={threshold.to} 
         	onChange={this.onChildChanged} translations={this.props.translations}/>
       );
     }.bind(this));
@@ -41,15 +58,15 @@ var ThresholdList = React.createClass({displayName: 'Threshold List',
     return (
     	<table className="table table-striped">
         	<caption>
-	          	<h2>
-	            	{this.__('amp.heat-map:threshold-settings')}
-	          	</h2>
+	          	<h2>{this.__('amp.heat-map:threshold-settings')}</h2>
+	            <Alert><Glyphicon glyph="info-sign"/> {this.__('amp.heat-map:howTo')}</Alert>
         	</caption>
         	<thead>
 		        <tr>
-		          <th width="33%">{this.__('amp.heat-map:color')}</th>
-		          <th width="33%">{this.__('amp.heat-map:from')} {this.__('amp.heat-map:threshold')}</th>
-		          <th width="34%"/>
+		          <th width="25%">{this.__('amp.heat-map:color')}</th>
+		          <th width="25%">{this.__('amp.heat-map:from')}</th>
+		          <th width="25%">{this.__('amp.heat-map:to')}</th>
+		          <th width="25%"/>
 		        </tr>
 		    </thead>
 		    <tbody>
@@ -57,8 +74,8 @@ var ThresholdList = React.createClass({displayName: 'Threshold List',
 		    </tbody>
 		    <tfoot>
 		    	<tr>
-		    		<td colSpan="3">
-		    		    <Button bsStyle="success" onClick={this.handleSubmit} disabled={!this.state.valid || this.state.submitting}>
+		    		<td colSpan="4">
+		    		    <Button bsStyle="primary" onClick={this.handleSubmit} disabled={!this.state.valid || this.state.submitting}>
 		    		    	{this.__('amp.heat-map:save')}
 		    		    </Button>
 			    		<p/>
@@ -87,6 +104,7 @@ var ThresholdList = React.createClass({displayName: 'Threshold List',
     invalidCount += this.validateChild(elem)
     this.invalidIds.forEach(id => invalidCount += this.validateChild(this.refs[id]));
     let valid = invalidCount === 0;
+    elem.to = this.findNextLimit(elem.value, this.getSortedValues());
   	this.setState({valid : valid});
   	//console.log('onChildChanged -> ' + elem.props.id + ', with value = ' + elem.value)
   },
@@ -143,11 +161,13 @@ var ThresholdList = React.createClass({displayName: 'Threshold List',
 
 ThresholdList.translations = {
   ...Threshold.translations,
+  "amp.heat-map:howTo": "Listed colors will be used to highlight the amounts within specified range",
   "amp.heat-map:save": "Save",
   "amp.heat-map:success": "Success",
   "amp.heat-map:threshold-settings": "Threshold Settings",
   "amp.heat-map:threshold": "Threshold",
   "amp.heat-map:from": "From",
+  "amp.heat-map:to": "To",
   "amp.heat-map:color": "Color"
 };
 

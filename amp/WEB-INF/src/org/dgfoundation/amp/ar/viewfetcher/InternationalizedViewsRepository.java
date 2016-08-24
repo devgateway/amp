@@ -264,12 +264,12 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_expenditure_class").
 						addTrnColDef("name", "id"));
 
-				addSimpleTranslatedView(this, "v_financial_instrument", "category_value", "id");
 				addSimpleTranslatedView(this, "v_financing_instrument", "category_value", "id");
 				addSimpleTranslatedView(this, "v_humanitarian_aid", "val", "val_id");
 				addSimpleTranslatedView(this, "v_disaster_response_marker", "val", "val_id");
 				addSimpleTranslatedView(this, "v_funding_status", "funding_status_name", "funding_status_code");
 				addSimpleTranslatedView(this, "v_implementation_level", "name", "level_code");
+				addSimpleTranslatedView(this, "v_ac_chapters", "name", "val_id");
 
 				addViewDef(this, new I18nViewDescription("v_implementing_agency").
 						addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name")));

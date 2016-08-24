@@ -21,12 +21,7 @@ import org.dgfoundation.amp.nireports.schema.NiFormulaicMeasure;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 
 /**
- * the behaviour of an entity which has value = formula(tokens). The trail cells get their tokens' values from V-reduction. <br />
- * When building instances of this class, one specifies the {@link #formula} and the callbacks which combine tokens' values. <br />
- * The way to extract individual tokens from cells is hardcoded: each cell holds zero or one tokens. <br />
- * The <i>token value</i> of a cell is {@link NiCell#getAmount()}, while the <i>token name</i> is the {@link String} metavalue at key {@link NiFormulaicMeasure#METAINFO_KEY_UNDERLYING_MEASURE}. <br />
- * 
- * This class is closely related to {@link FormulaAverageBehaviour} (which is a simplified/partial version of this one) and {@link NiFormulaicMeasure} (which builds instances of this class)
+ * the behaviour of an entity which has value = formula(tokens). The trail cells get their tokem from V-reduction
  * @author Dolghier Constantin
  *
  */
@@ -86,10 +81,6 @@ public class FormulaicAmountBehaviour extends AbstractComputedBehaviour<NiFormul
 			return undefinedBuilder.apply(numericValue, vals);
 	}
 	
-	/**
-	 * extracts the token this cell is encoding
-	 * @param cell
-	 */
 	protected String extractCellTag(NiCell cell) {
 		CategAmountCell cac = (CategAmountCell) cell.getCell();
 		return cac.metaInfo.getMetaInfo(NiFormulaicMeasure.METAINFO_KEY_UNDERLYING_MEASURE).v.toString();

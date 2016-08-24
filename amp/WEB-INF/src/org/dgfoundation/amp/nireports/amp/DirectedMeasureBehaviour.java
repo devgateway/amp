@@ -22,11 +22,7 @@ import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
- * the {@link Behavior} of a Funding Flow entity.
- * The differences are in: <ul>
- * <li>the VSplitStrategy for submeasure hierarchies: Funding Flow entities split themselves by the name of the Funding Flow</li>
- * <li>the hierarchies-filtering behaviour under NiDimensionUsages based on the orgs dimension: percentages are ignored for these</li>
- * </ul>
+ * the {@link Behavior} of a Funding Flow entity
  * @author Dolghier Constantin
  *
  */
@@ -42,9 +38,6 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
 		this.totalColumnName = totalColumnName;
 	}
 	
-	/**
-	 * instructs the reporting engine to split this entity by the flow name. The flow name has been precomputed during fetching in {@link AmpFundingColumn}
-	 */
 	@Override
 	public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine context) {
 		VSplitStrategy byFundingFlow = VSplitStrategy.build(cell -> new ComparableValue<String>(getFlowName(cell.getCell()), getFlowName(cell.getCell())), AmpReportsSchema.PSEUDOCOLUMN_FLOW);
@@ -62,9 +55,6 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
 		return new ImmutablePair<String, ColumnContents>(totalColumnName, fetchedContents);
 	}
 	
-	/**
-	 * delegates to the superclass for non-orgs-related hierarchies. For orgs-related ones, filters on an OR basis
-	 */
 	@Override
 	public Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell, boolean isTransactionLevelHierarchy) {
 		if ((!splitCell.mainLevel.isPresent()) || getHierarchiesListener().test(splitCell.mainLevel.get().dimensionUsage))
@@ -94,7 +84,8 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
 	}
 	
 	/** 
-	 * disables percentages for NiDimensionUsages based on the Organisations dimension
+	 * <strong>make the common case fast: if this function returns null, it is a shortcut for "measure listenes to all hierarchies"</strong>
+	 * @return a predicate which governs the hierarchies whose percentages are listened to by an entity 
 	 */
 	@Override
 	public Predicate<NiDimensionUsage> getHierarchiesListener() {

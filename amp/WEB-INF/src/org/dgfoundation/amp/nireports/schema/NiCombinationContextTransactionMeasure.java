@@ -1,10 +1,12 @@
 package org.dgfoundation.amp.nireports.schema;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
@@ -12,37 +14,22 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 /**
- * Measure defined as a linear combination of context measures (instances of {@link NiCombinationContextTransactionMeasure}). <br />
- * The measure is configured by being given a set of {@link NiTransactionContextMeasure} and corresponding numbers. 
- * The measure works by repeating the steps below for each and every cell in the Funding column: <ol>
- * 	<li>find a measure in the map for which {@link NiTransactionContextMeasure#criterion} returns nonnull</li>
- *  <li>if none exists, the given cell is ignored and no further processing happens</li>
- *  <li>if a match exists, the output of the criterion is multiplied by the value given at construction time and the resulting cell goes in the output</li>
- *  <li>if multiple matches exist, the behaviour is undefined. In the current implementation, an arbitrary match will be used for the previous step</li>
- * </ol> 
+ * Measure resulted from combining context measures (NiTransactionContextMeasure). 
+ * May combine NiTransactionContextMeasures only. 
  * @author acartaleanu
  *
  */
 public class NiCombinationContextTransactionMeasure extends NiReportMeasure<CategAmountCell> {
 	
-	/**
-	 * the defining precursor measures, as fed to the constructor
-	 */
-	public final Map<NiTransactionContextMeasure<Object>, BigDecimal> terms;
 	
-	
-	/**
-	 * the defining precusor measures, in an array. Array for iteration speed reasons
-	 */
-	protected final NiTransactionContextMeasure<Object>[] measures;
-	
-	/**
-	 * the defining precursor measures' coefficients, in an array, enumerated in the same order as {@link #measures}. {@link #prods}[i] = {@link #terms}[{@link #measures}[i]]. Put here for iteration speed reasons. 
-	 */
+	@SuppressWarnings("rawtypes")
+	public final Map<NiTransactionContextMeasure, BigDecimal> terms;
+	@SuppressWarnings("rawtypes")
+	protected final NiTransactionContextMeasure[] measures;
 	protected final BigDecimal[] prods;	
 	
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("rawtypes")
 	public NiCombinationContextTransactionMeasure(String name, Map<NiTransactionContextMeasure, BigDecimal> terms, 
 			Behaviour<?> behaviour, String description) {
 		super(name, behaviour, description);
@@ -51,17 +38,18 @@ public class NiCombinationContextTransactionMeasure extends NiReportMeasure<Cate
 		this.prods = terms.values().toArray(new BigDecimal[0]);
 	}
 
-	/**
-	 * iterates the stored precursor measures in {@link #measures}, searching for a match. Once a match is found, returns the result of multiplying the match with the corresponding factor from {@link #prods}
-	 * @param src
-	 * @param contexts
-	 * @return the cell to be inserted in the measure's output or null if this input cell should be ignored
-	 */
+	protected CategAmountCell multiply(CategAmountCell cell, BigDecimal multiplier) {
+		if (multiplier == BigDecimal.ONE)
+			return cell;
+		return cell.multiply(multiplier);
+	}
+	
+	@SuppressWarnings("unchecked")
 	public CategAmountCell processCell(CategAmountCell src, Object[] contexts) {
 		for(int i = 0; i < measures.length; i++) {
-			Boolean res = measures[i].criterion.apply(contexts[i], src);
-			if (Boolean.TRUE.equals(res)) {
-				CategAmountCell c = src.multiply(prods[i]);
+			Object res = measures[i].criterion.apply(contexts[i], src);
+			if (Boolean.TRUE.equals((Boolean)res)) {
+				CategAmountCell c = multiply(src, prods[i]);
 				if (c != null)
 					return c;
 				break;
@@ -71,6 +59,7 @@ public class NiCombinationContextTransactionMeasure extends NiReportMeasure<Cate
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<CategAmountCell> fetch(NiReportsEngine engine) throws Exception {
 		Object[] contexts = new Object[measures.length];

@@ -5,7 +5,6 @@ import java.util.List;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.NiUtils;
 
 /**
  * specifies an entity a report can be run on, e.g. a measure or a column
@@ -21,7 +20,6 @@ public abstract class NiReportedEntity<K extends Cell> {
 	public final String representingString;
 	
 	protected NiReportedEntity(String name, Behaviour<?> behaviour, String description) {
-		NiUtils.failIf(behaviour == null, () -> String.format("trying to define entity <%s> with null behaviour", name));
 		this.name = name;
 		this.behaviour = behaviour;
 		this.description = description;

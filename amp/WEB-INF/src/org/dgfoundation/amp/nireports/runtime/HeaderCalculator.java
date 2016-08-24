@@ -4,19 +4,14 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 
 /**
- * An implementation used for rasterizing the headers. Populates {@link Column#reportHeaderCell}.
- * It is quite messy because it is imperative code with heuristics. Long term we might want to have it a pluggable strategy. It is not needed a.t.m. so enjoy the code!
+ * class used for calculating {@link Column#reportHeaderCell}
+ * It is quite messy because it is imperative code with heuristics
  * @author Dolghier Constantin
  *
  */
 public class HeaderCalculator {
 
 	protected final NiReportsEngine engine;
-	
-	/**
-	 * constructs an instance of the rasterizer. 
-	 * @param engine the context to be used as datasource for the various heuristics driving the depth allocation
-	 */
 	public HeaderCalculator(NiReportsEngine engine) {
 		this.engine = engine;
 	}
@@ -38,21 +33,12 @@ public class HeaderCalculator {
 		return calculateChildrenMaxRowSpan(gc) + computeSelfRowSpanNoSplit(gc);
 	}
 	
-	/**
-	 * recursively rasterizes a column tree by populating {@link Column#reportHeaderCell}
-	 * @param c the root of the tree to rasterize
-	 * @param totalRowSpan the total rowspan available for the tree
-	 * @param startingDepth the depth (y-position, 0-based) at which the root should reside
-	 * @param startingColumn the x-position (0-based) at which the root should reside
-	 */
 	public void calculatePositionInHeadingLayout(Column c, int totalRowSpan, int startingDepth, int startingColumn) {
 		if (c instanceof CellColumn) {
-			// leaves always take the whole resource allocation
 			c.reportHeaderCell = new ReportHeadingCell(startingDepth, totalRowSpan, totalRowSpan, startingColumn, getWidth(c), c.name);
 			return;
 		}
 		
-		// this is not a leaf column, so let's distribute the rowSpan
 		GroupColumn gc = (GroupColumn) c;
 		int selfRowSpan = computeSelfRowSpan(gc, totalRowSpan);
 
@@ -90,38 +76,24 @@ public class HeaderCalculator {
 		return maxColSpan;
     }
     
-    /**
-     * a heuristic to calculate the selfrowspan of a column given the total depth availability
-     * @param gc
-     * @param totalRowSpan
-     * @return
-     */
 	protected int computeSelfRowSpan(GroupColumn gc, int totalRowSpan) {
 		if (gc.splitCell != null)
 			if (gc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_COLUMN) || gc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE))
-				return totalRowSpan - calculateChildrenMaxRowSpan(gc); // vertically-split columns and measure take the maximum possible depth, leaving a minimum for the children
+				return totalRowSpan - calculateChildrenMaxRowSpan(gc);
 		
 		return computeSelfRowSpanNoSplit(gc);
 	}
 	
 	protected int computeSelfRowSpanNoSplit(GroupColumn gc) {
 		if (gc.name.equals(NiReportsEngine.ROOT_COLUMN_NAME))
-			return 1; // artificial root always gets 1, since it is not going to be displayed anyway
+			return 1;
 
-		if (gc.hierarchicalName.equals(FUNDING_COLUMN_PATH))
-			return 1; // funding always gets 1, since it is used for grouping measures and bears no other useful or variable information
+		if (gc.hierarchicalName.equals("RAW / Funding"))
+			return 1;
 
-		if (gc.hierarchicalName.equals(TOTALS_COLUMN_PATH)) {
-			/** Totals have the same structure as Funding, except that they are not being split pre-measure (a.t.m. this means time-based splitting). 
-			 * Thus, to align the "Totals" and "Funding" subtrees, "Totals" will get the depth got by "Funding" (e.g. 1) plus the depth got by the temporal columns (e.g. 1 each)
-			 * NiReportsEngine exports these in the generic name NiReportsEngine.premeasureSplitDepth
-			 */
-			return 1 + engine.premeasureSplitDepth; 
-		}
+		if (gc.hierarchicalName.equals("RAW / Totals"))
+			return 1 + engine.premeasureSplitDepth;
 
 		return 1;
 	}
-	
-	protected final static String FUNDING_COLUMN_PATH = String.format("%s / %s", NiReportsEngine.ROOT_COLUMN_NAME, NiReportsEngine.FUNDING_COLUMN_NAME);
-	protected final static String TOTALS_COLUMN_PATH = String.format("%s / %s", NiReportsEngine.ROOT_COLUMN_NAME, NiReportsEngine.TOTALS_COLUMN_NAME);
 }

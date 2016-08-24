@@ -21,14 +21,12 @@ import org.dgfoundation.amp.nireports.runtime.ReportData;
 import org.dgfoundation.amp.nireports.runtime.ReportDataVisitor;
 
 /**
- * a visitor which implements the instructions contained in {@link ReportCollapsingStrategy}.
- * e.g. smashes together hierarchies which are deemed as being equal by the given {@link #strategy}
+ * a visitor which implements the instructions contained in {@link ReportCollapsingStrategy}, e.g. smashes together hierarchies with the same name but different underlying IDs
  * @author Dolghier Constantin
  *
  */
 public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData> {
 
-	
 	protected final ReportCollapsingStrategy strategy;
 	protected final List<CellColumn> leaves;
 	
@@ -42,9 +40,6 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		return crd; // not stashing leafs with the same name
 	}
 
-	/**
-	 * applies the {@link #strategy} to the children of a given {@link GroupReportData} 
-	 */
 	@Override
 	public ReportData visitGroup(GroupReportData grd) {
 		if (grd.getSubReports().isEmpty() || strategy == ReportCollapsingStrategy.NEVER)
@@ -97,17 +92,9 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		return new ColumnContents(res);
 	}
 
-	/** a marker interface that an object implements one of the discriminating strategies requested by {@link ReportCollapsingStrategy} */
 	interface ReportDataDigest {};
 	
-	/**
-	 * a digester corresponding to {@link ReportCollapsingStrategy#UNKNOWNS}
-	 */
-	final static Function<ReportData, ReportDataDigest> UNKNOWNS_DIGESTER = rd -> new UnknownDigest(rd);
-	
-	/**
-	 * a digester corresponding to {@link ReportCollapsingStrategy#ALWAYS}
-	 */	
+	final static Function<ReportData, ReportDataDigest> UNKNOWNS_DIGESTER = rd -> new UnknownDigest(rd); 
 	final static Function<ReportData, ReportDataDigest> ALWAYS_DIGESTER = rd -> new AlwaysDigest(rd);
 	
 	/**

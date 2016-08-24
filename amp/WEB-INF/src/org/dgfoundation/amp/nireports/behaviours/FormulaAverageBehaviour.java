@@ -21,8 +21,8 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
 
 /**
  * the behaviour of an entity which has value = formula(tokens) for cells, but outputs average(formula) in the trails (and maybe the original cells).
- * The trail cells get their tokens' values from V-reduction.
- * See {@link FormulaicAmountBehaviour} as the base code - this class is a partial ripoff/copypaste off it
+ * The trail cells get their tokem from V-reduction.
+ * See {@link FormulaicAmountBehaviour} as the base code
  * @author Dolghier Constantin
  */
 public class FormulaAverageBehaviour extends AbstractComputedBehaviour<NiFormulaicAmountCell> {

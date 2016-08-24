@@ -14,7 +14,7 @@ import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 
 /**
- * {@link GeneratedColumnBehaviour} which generates integers 
+ * column behaviour of a generated integer column. Also provides shortcut static builders for common cases
  * @author Dolghier Constantin
  *
  */

@@ -2,7 +2,7 @@ package org.dgfoundation.amp.nireports.amp;
 
 /**
  * category keys which can be found in the AmpReportsSchema metaInfo
- * @author Dolghier Constantin
+ * @author simple
  *
  */
 public enum MetaCategory {

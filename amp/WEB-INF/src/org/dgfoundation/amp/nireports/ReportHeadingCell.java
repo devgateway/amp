@@ -1,11 +1,8 @@
 package org.dgfoundation.amp.nireports;
 
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.nireports.runtime.Column;
-
 /**
- * <b>IMMUTABLE</b> class holding information regarding a single cell of a rasterized {@link Column}, please keep it as such!
- * This is the NiReports API equivalent of the ReportsAPI {@link ReportCell}
+ * The cell holds information about a cell which is to be displayed in a report's heading <br />
+ * <b>IMMUTABLE</b> class, please keep it as such!
  * @author Dolghier Constantin
  *
  */
@@ -65,15 +62,6 @@ public class ReportHeadingCell {
 		return name;
 	}
 
-	/**
-	 * constructs an instance with the given parameters. In case the input data is inconsistent or incorrect, will throw a {@link RuntimeException}
-	 * @param startRow zero-based non-negative number of the toplevel row of the header cell
-	 * @param totalRowSpan positive rowspan (depth) of the header tree 
-	 * @param rowSpan positive rowspan of the header cell. Should be less than or equal to totalRowSpan
-	 * @param startColumn zero-based nonnegative x-coo of the beginning of the cell
-	 * @param colSpan positive x-span of the cell
-	 * @param name
-	 */
 	public ReportHeadingCell(int startRow, int totalRowSpan, int rowSpan, int startColumn, int colSpan, String name)
 	{
 		if (totalRowSpan <= 0)

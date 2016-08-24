@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.dgfoundation.amp.newreports.ReportSettings;
 
 /**
- * a Cell which contains a number. The number can be of any type (percentage, natural amount, etc)
+ * a Cell which has a number. The number can be a percentage or simple amount
  * @author Dolghier Constantin
  *
  */
@@ -15,7 +15,8 @@ public interface NumberedCell extends Comparable {
 	public NiPrecisionSetting getPrecision();
 	
 	/**
-	 * whether this cell should respond be scaled according to {@link ReportSettings#getUnitsOption()}
+	 * whether this cell should respond to {@link ReportSettings#getUnitsOption()}
+	 * @return
 	 */
 	public boolean isScalableByUnits();
 	

@@ -8,36 +8,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.dgfoundation.amp.nireports.ReportHierarchiesCollapser;
-import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
 /**
- * a cell which holds info regarding the splitter cell of a hierarchy element (e.g. the name of a {@link NiReportData} and the ids having that id)
+ * a cell which holds info regarding the splitter cell of a hierarchy element
  * @author Dolghier Constantin
  *
  */
 public class NiSplitCell extends NiOutCell {
-	/**
-	 * the text of the cell e.g. the name of the {@link NiReportData} instance enclosing it
-	 */
 	public final String text;
-	
-	/**
-	 * the entity ids which went into this cell. Happens especially frequently for undefined virtual entries, when multiple negative ids all map to the same "Undefined foobar" name and subreport
-	 */
 	public final Set<Long> entityIds;
-	
-	/**
-	 * whether this cell encodes an undefined entry (one with negative entityIds)
-	 */
 	public final boolean undefined;
-	
-	/**
-	 * the column which was the hierarchy which lead to this cell having been generated
-	 */
 	public final NiReportColumn<?> entity;
 	
 	public NiSplitCell(NiReportColumn<?> entity, String text, Set<Long> entityIds, boolean undefined) {
@@ -54,11 +37,8 @@ public class NiSplitCell extends NiOutCell {
 	}
 	
 	/**
-	 * Merges a number of NiSplitCells into a split cell. #text and #entity are taken from an arbitrary cell of the set (they should all be the same).
-	 * Normally used while running {@link ReportHierarchiesCollapser}, which requires that all merged subreports have the same name (having the same id is optional).
-	 * Thus, this function assumes that they have the same displayed text and sets the text of the output to being the text of an arbitrary cell from the input. <br />
-	 * Has undefined behaviour (upto crashing) in case the input is an empty set
-	 * @param in the set of cells which the caller wants to merge.
+	 * merges a number of NiSplitCells into a split cell. #text and #entity are taken from an arbitrary cell of the set (they should all be the same)
+	 * @param in
 	 * @return
 	 */
 	public static NiSplitCell merge(Stream<NiSplitCell> in) {

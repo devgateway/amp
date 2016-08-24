@@ -4,13 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- * a thin {@link Map} wrapper which counts access stats
- * @author Dolghier Constantin
- *
- * @param <K>
- * @param <V>
- */
 public class CountedCacher<K, V> {
 	public final CacheHitsCounter stats;
 	public final Map<K, V> cache = new HashMap<>();

@@ -32,9 +32,6 @@ import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
  */
 public class AmpFiltersConverter extends BasicFiltersConverter {
 
-	/**
-	 * Map<DONOR_REPORT_COLUMN, corresponding PLEDGE_REPORT_COLUMN>
-	 */
     final static Map<String, String> DONOR_COLUMNS_TO_PLEDGE_COLUMNS = new HashMap<String, String>() {{
     	put(ColumnConstants.PROJECT_TITLE, ColumnConstants.PLEDGES_TITLES);
         put(ColumnConstants.STATUS, ColumnConstants.PLEDGE_STATUS);
@@ -101,35 +98,23 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 			return; //TODO: hack so that preexisting testcases are not broken while developing the feature
 		
 		if (columnName.equals(ColumnConstants.DONOR_ID))
-			columnName = ColumnConstants.DONOR_AGENCY; // Hello, filter widget with your weird peculiarities
+			columnName = ColumnConstants.DONOR_AGENCY;
 		
 		if (columnName.equals(ColumnConstants.DONOR_AGENCY) && (rules == null || (rules.size() == 1 && rules.get(0).filterType == FilterType.VALUES && rules.get(0).values.isEmpty())))
 			return; // temporary hack for https://jira.dgfoundation.org/browse/AMP-22602
 				
 		if (columnName.equals(ColumnConstants.ACTIVITY_ID)) {
-			// fast track for ACTIVITY_ID filtering: construct a predicate to run on top of the workspace filter
 			this.activityIdsPredicate = Optional.of(mergePredicates(rules.stream().map(FilterRule::buildPredicate).collect(toList())));
 			return;
 		}
 		
-		if (columnName.equals(ColumnConstants.APPROVAL_STATUS)) {
-			/**
-			 * AMP-22621: the Filter widget uses a set of codes for filtering on activity (draft, status). 
-			 * The AMP schema implements by filtering on a non-user-visible column which generates the same codes and then filtering out based on their values.
-			 * Please see v_filtered_activity_status for a definition of this view (and also to understand the meaning of the Filter widget codes)
-			 */
-			columnName = ColumnConstants.FILTERED_APPROVAL_STATUS; 
-		}
-		
+		if (columnName.equals(ColumnConstants.APPROVAL_STATUS))
+			columnName = ColumnConstants.FILTERED_APPROVAL_STATUS;
+
 		columnName = removeIdSuffixIfNeeded(schema, columnName);
 
-		if (this.spec.getReportType() == ArConstants.PLEDGES_TYPE) {
-			/**
-			 * there is no "pledges filter widget": the filter widget uses hardcoded column names (the ones from the donor reports).
-			 * In order to support filtering in pledge reports, we will convert the donor-columns references to pledges-columns references 
-			 */
+		if (this.spec.getReportType() == ArConstants.PLEDGES_TYPE)
 	        columnName = DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
-		}
 
 		if (schema.getColumns().containsKey(columnName)) {
 			super.processColumnElement(columnName, rules);
@@ -139,21 +124,16 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 		// gone till here -> we're going to fail anyway, but using the superclass
 		super.processColumnElement(columnName, rules);
 	}
-
-	/**
-	 * cleanup the post-Mondrian mess: if filtering by a nonexistent "XXX Id" column, treat it as filtering by existent "XXX", 
-	 * since in Mondrian the "XXX" and "XXX Id" columns were distinct entities
-	 * @param schema the AMP-like reports schema used for checking for the (non)existence of columns by name
-	 * @param columnName
-	 * @return
-	 */
+	
 	public static String removeIdSuffixIfNeeded(NiReportsSchema schema, String columnName) {
 		if (columnName.endsWith(" Id")) {
+			// cleanup the post-Mondrian mess: if filtering by a "XXX Id" column, treat it as filtering by "XXX", since in Mondrian the "XXX" and "XXX id" columns were distinct entities
 			String newColumnName = columnName.substring(0, columnName.length() - 3);
 			if (schema.getColumns().containsKey(newColumnName)) {
 				return newColumnName;
 			}
 		}
+		
 		return columnName;
 	}
 	

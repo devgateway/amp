@@ -1,27 +1,24 @@
 package org.dgfoundation.amp.nireports.runtime;
 
 import org.dgfoundation.amp.nireports.ComparableValue;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
+import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
 /**
- * info about the cell which has been used to split the parent report
+ * info about the info which has been used to split the parent column
  * @author Dolghier Constantin
  *
  */
 public class NiColSplitCell {
 	
 	/**
-	 * the entity type used to generate this V-hierarchy. <br />
-	 * Please see the {@link NiReportsEngine}.PSEUDOCOLUMN_XXX constants for the values supported by the NiReports Core. 
-	 * The schema can add any number of values here (for example, crosstabs as implemented by {@link TaggedMeasureBehaviour}). 
+	 * the entity type used.
+	 * For dates, please see NiReportsEngine.NI_PSEUDOCOLUMN_XXX constants
+	 * for when/if crosstab reports will be supported, it will be the column name (from {@link NiReportsSchema#getColumns()})
 	 */
 	public final String entityType;
 	
 	/**
-	 * an arbitrary value whose interpretation depends on {@link #entityType}. <br />
-	 * NiReports Core use its {@link ComparableValue#getValue()} for naming the column, 
-	 * while its {@link ComparableValue#getComparable()} for deciding the ordering of subcolumns
+	 * an arbitrary value whose interpretation depends on {@link #entityType}
 	 */
 	public final ComparableValue<String> info;
 	

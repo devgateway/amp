@@ -12,6 +12,7 @@ import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.sorting.ReportDataComparator;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
+import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 /**
  * a flattened non-leaf node of a report output (see {@link GroupReportData})

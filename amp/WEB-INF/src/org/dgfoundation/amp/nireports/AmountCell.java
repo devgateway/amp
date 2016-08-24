@@ -6,11 +6,12 @@ import java.util.Map;
 
 import org.dgfoundation.amp.nireports.meta.CategCell;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.output.nicells.CellVisitor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
- * a cell with an amount, with no coordinates or metadata
+ * a cell with an amount and an attached metadata
  * @author Dolghier Constantin
  *
  */

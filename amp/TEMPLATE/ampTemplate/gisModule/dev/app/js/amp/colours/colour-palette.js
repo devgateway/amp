@@ -99,11 +99,12 @@ var Palette = Backbone.Model.extend({
     var buckets = this.get('values').length > stops?
         Jenks.getGVF(this.get('values'), stops):
         niceBuckets.minFigs(stops, [this.get('min'), this.get('max')]);
+    var stopSize = stops > 1 ? stops: 1;
     var newColours = [],
         buckets = buckets,
-        hStopSize = DEFAULT.H_SKEW / (stops - 1),
-        sStopSize = (DEFAULT.S_MAX - DEFAULT.S_MIN) / (stops - 1),
-        lStopSize = (DEFAULT.L_MAX - DEFAULT.L_MIN) / (stops - 1);
+        hStopSize = DEFAULT.H_SKEW / stopSize,
+        sStopSize = (DEFAULT.S_MAX - DEFAULT.S_MIN) / stopSize,
+        lStopSize = (DEFAULT.L_MAX - DEFAULT.L_MIN) / stopSize;
 
     function makeTest(bucket) {
       return function(value) {

@@ -14,6 +14,7 @@ var DataSourcesView = require('../datasources/datasources-view');
 var ProjectSitesLayerView = require('../views/structures-view');
 var ADMClustersLayersView = require('../views/adm-clusters-view');
 var IndicatorLayersView = require('../views/indicator-layers-view');
+var messageView = require('../views/message-view');
 
 var Basemaps = require('../collections/basemap-collection');
 var Template = fs.readFileSync(__dirname + '/../templates/map-container-template.html', 'utf8');
@@ -57,6 +58,7 @@ module.exports = Backbone.View.extend({
       map: this.map,
       collection: this.basemaps
     });
+    this.messageView = messageView;
 
     this.listenTo(this.indicatorLayersView, 'addedToMap', this._indicatorsShown);
   },
@@ -73,6 +75,7 @@ module.exports = Backbone.View.extend({
 
     this.$el.append(this.legendView.render().el);
     this.$el.append(this.datasourcesView.render().el);
+    this.$el.append(this.messageView.render().el);
 
     this.$el.append('<div id="map-loading" style="position: absolute;left: 50%;top: 50%;">' +
       '<img src="img/loading-icon.gif"></div>');

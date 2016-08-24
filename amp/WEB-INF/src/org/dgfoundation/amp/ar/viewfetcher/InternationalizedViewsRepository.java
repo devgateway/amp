@@ -264,6 +264,7 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_expenditure_class").
 						addTrnColDef("name", "id"));
 
+				addSimpleTranslatedView(this, "v_financial_instrument", "category_value", "id");
 				addSimpleTranslatedView(this, "v_financing_instrument", "category_value", "id");
 				addSimpleTranslatedView(this, "v_humanitarian_aid", "val", "val_id");
 				addSimpleTranslatedView(this, "v_disaster_response_marker", "val", "val_id");

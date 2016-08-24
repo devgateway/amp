@@ -31,7 +31,7 @@ module.exports = BaseControlView.extend({
     this.$('.content').html(this.template({title: this.title}));
     //create layer manager
     var self = this;    
-    var layerManager = new LayersManager({sections: self.sections});   
+    var layerManager = new LayersManager({sections: self.sections, app: this.app});   
     self.$('.content', self).append(layerManager.render().el);
     
     this.addSection(StatisticalLayersConfig.STANDARD);

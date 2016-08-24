@@ -75,7 +75,7 @@ function loadBaseMap() {
 				 subdomains: subdomains });	
 	}
 	else {
-	    tileLayer = L.esri.tiledMapLayer(basemapurl, {maxZoom: 16});
+	    tileLayer = L.esri.tiledMapLayer({url: basemapurl, maxZoom: 16});
 	}
 	
 	map.addLayer(tileLayer);

@@ -29,23 +29,20 @@ module.exports = Backbone.View.extend({
 
     this.loadData();    
     this.listenTo(this.app.data.indicators, 'add', this.render);
+    this.listenTo(this.app.data.indicators, 'remove', this.render);
+    this.listenTo(this.app.data.indicators, 'reset', this.render);
   },
   loadData: function(){
 	  var self = this;
 	  this.app.data.indicators.loadAll().then(function() {
 	      self._registerSerializer();
 	  });  
-  },
-  reloadData: function(){
-	  var self = this;
-	  this.app.data.indicators.loadAll().then(function() {	  
-		  self.render();
-	  });  
-  },
+  },  
   render: function() {	 
     // TODO: find a better way to keep our proxy collection up to date
     // Thad do you know a good pattern for this?
     this.collection.reset(this.filterLayers(this.app.data.indicators));
+    this.$el.empty();
     if(this.collection.length > 0){
     	this.$el.html(this.template({title: this.title}));
         this.app.translator.translateDOM(this.el); /* After to catch disabled */

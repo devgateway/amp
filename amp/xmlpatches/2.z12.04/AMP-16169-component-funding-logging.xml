@@ -16,12 +16,11 @@
 				        	INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('component', NEW.amp_component_id);
 				        	
 				        	INSERT INTO amp_etl_changelog(entity_name, entity_id) 
-				        	VALUES (
 				        		SELECT 'activity', aac.amp_activity_id 
 				        		FROM amp_component_funding aaf 
 				        		JOIN amp_activity_components aac 
 				        		ON aac.amp_component_id = aaf.amp_component_id
-				        		AND aaf.amp_component_id = NEW.amp_component_id); 
+				        		AND aaf.amp_component_id = NEW.amp_component_id; 
 				        END IF;
 				        RETURN NEW;
 				    END;
@@ -33,12 +32,11 @@
 				        	INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('component', OLD.amp_component_id);
 				        	
 				        	INSERT INTO amp_etl_changelog(entity_name, entity_id) 
-				        	VALUES (
 				        		SELECT 'activity', aac.amp_activity_id 
 				        		FROM amp_component_funding aaf 
 				        		JOIN amp_activity_components aac 
 				        		ON aac.amp_component_id = aaf.amp_component_id
-				        		AND aaf.amp_component_id = OLD.amp_component_id); 
+				        		AND aaf.amp_component_id = OLD.amp_component_id; 
 				        END IF;
 				        RETURN OLD;
 				    END;

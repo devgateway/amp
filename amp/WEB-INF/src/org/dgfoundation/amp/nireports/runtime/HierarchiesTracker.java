@@ -3,7 +3,6 @@ package org.dgfoundation.amp.nireports.runtime;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -13,8 +12,8 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
- * a class which tracks the hierarchies which have been applied on top of a cell
- * TODO: add testcases
+ * A class which tracks the hierarchies which have been applied on top of a cell.
+ * You can read a (long) description on how it works here https://wiki.dgfoundation.org/display/AMPDOC/3.+NiReports+runtime#id-3.NiReportsruntime-3.4.1Percentagestrackingruntime
  * @author Dolghier Constantin
  *
  */
@@ -81,7 +80,7 @@ public class HierarchiesTracker {
 		return prod;
 	}
 	
-	class SplitCellPercentage {
+	static class SplitCellPercentage {
 
 		public final int level;
 		public final long id;
@@ -114,7 +113,7 @@ public class HierarchiesTracker {
 		}
 	}
 	
-	class AdvancementInfo {
+	static class AdvancementInfo {
 		LevelColumn level;
 		long id;
 		BigDecimal cellPercentage;

@@ -3,7 +3,16 @@ package org.dgfoundation.amp.nireports.runtime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
+/**
+ * a {@link ColumnVisitor} which performs the post-measures splitting of the report.
+ * Uses {@link NiReportsSchema#getSubMeasureHierarchies(NiReportsEngine, CellColumn)} as a source of strategies
+ * for each separate {@link CellColumn}
+ * 
+ * @author Dolghier Constantin
+ *
+ */
 public class PostMeasureVHiersVisitor implements ColumnVisitor<Column> {
 
 	final NiReportsEngine engine;

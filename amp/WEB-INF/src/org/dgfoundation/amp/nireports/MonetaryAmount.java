@@ -7,7 +7,7 @@ import org.digijava.module.common.util.DateTimeUtil;
 
 
 /**
- * <strong>immutable</strong> representation of a transaction
+ * <strong>immutable</strong> representation of a transaction. Contains an amount, a date, a precision setting + some fields kept mainly for debugging or "what if some schema will need it" reasons. 
  * @author Dolghier Constantin
  *
  */

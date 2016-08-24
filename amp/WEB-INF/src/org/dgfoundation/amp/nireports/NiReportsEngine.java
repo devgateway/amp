@@ -60,14 +60,18 @@ import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
+import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 
 import static java.util.stream.Collectors.toList;
 
 /**
- * The NiReports engine API-independent entrypoint. A single report should be run per class instance <br />
+ * The NiReports engine API-independent entrypoint. A single report should be run per instance <br />
  * No schema-specific code below this point. <br />
  * Code can change its APIs at any point below this point - using the AMP Reports API here is entirely optional <br />
+ * 
+ * Because instances of this class are the root of the objects tree and are accessible throughtout the schema, its state is generously exposed as <i>public</i> fields.
+ * It's a tradeoff between architectural beauty and workable simplicity. 
  * 
  * @author Dolghier Constantin
  *
@@ -75,18 +79,53 @@ import static java.util.stream.Collectors.toList;
 public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	public static final Logger logger = Logger.getLogger(NiReportsEngine.class);
+	
+	/**
+	 * the name of the artificial headers root (see {@link NiHeaderInfo})
+	 */
 	public static final String ROOT_COLUMN_NAME = "RAW";
+	
+	/**
+	 * the name of the premeasure-split measures subtree root (see {@link NiHeaderInfo})
+	 */
 	public static final String FUNDING_COLUMN_NAME = "Funding";
+	
+	/**
+	 * the name of the measures- and columns- totals subtree root (see {@link NiHeaderInfo}, {@link VSplitStrategy#getTotalSubcolumnName()}). 
+	 * see {@link NiColSplitCell#entityType}
+	 */
 	public static final String TOTALS_COLUMN_NAME = "Totals";
 	
+	/**
+	 * the type of the {@link #ROOT_COLUMN_NAME} / {@link #FUNDING_COLUMN_NAME} / year group column in the headers output
+	 * see {@link NiColSplitCell#entityType}  
+	 */
 	public static final String PSEUDOCOLUMN_YEAR = "#date#year";
+	
+	/**
+	 * the type of the {@link #ROOT_COLUMN_NAME} / {@link #FUNDING_COLUMN_NAME} / {@link #PSEUDOCOLUMN_YEAR} / quarter group column in the headers output
+	 * see {@link NiColSplitCell#entityType}
+	 */	
 	public static final String PSEUDOCOLUMN_QUARTER = "#date#quarter";
+	
+	/**
+	 * the type of the {@link #ROOT_COLUMN_NAME} / {@link #FUNDING_COLUMN_NAME} / {@link #PSEUDOCOLUMN_YEAR} / month group column in the headers output
+	 * see {@link NiColSplitCell#entityType} 
+	 */		
 	public static final String PSEUDOCOLUMN_MONTH = "#date#month";
+	
+	/**
+	 * the type of the header column identifying a measure
+ 	 * see {@link NiColSplitCell#entityType}
+	 */
 	public static final String PSEUDOCOLUMN_MEASURE = "#ni#measure";
+
+	/**
+	 * the type of the header column identifying a column
+ 	 * see {@link NiColSplitCell#entityType}
+	 */
 	public static final String PSEUDOCOLUMN_COLUMN = "#ni#column";
 		
-	//public final static Set<String> PSEUDOCOLUMNS = new HashSet<>(Arrays.asList(PSEUDOCOLUMN_MONTH, PSEUDOCOLUMN_QUARTER, PSEUDOCOLUMN_YEAR, PSEUDOCOLUMN_MEASURE, PSEUDOCOLUMN_COLUMN));
-	
 	// some of the fields below are public because they are part of the "internal" API and might be used by callbacks from deep inside ComputedMeasures / etc
 	
 	public final NiReportsSchema schema;

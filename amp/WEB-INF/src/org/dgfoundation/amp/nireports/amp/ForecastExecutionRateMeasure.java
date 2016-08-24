@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.schema;
+package org.dgfoundation.amp.nireports.amp;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +16,8 @@ import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.ForecastExecutionRateBehaviour;
 import org.dgfoundation.amp.nireports.amp.MtefColumn;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.schema.NiFormulaicMeasure;
+import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 
 /**
  * the forecast execution rate measure

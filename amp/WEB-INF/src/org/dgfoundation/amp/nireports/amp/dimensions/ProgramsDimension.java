@@ -7,7 +7,7 @@ import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
 
 /**
  * 
- * a dimension consisting of (TOP_SECTOR[level=0], SUB_SECTOR[level=1], SUB_SUB_SECTOR[level=2]) 
+ * a <i>ni_all_programs_with_levels</i>-backed <strong>continuum</strong> dimension consisting of (TOP_PROGRAM[level=0], PROGRAM[level=1], SUB_PROGRAM[level=2], SUB_SUB_PROGRAM[level=3] and so upto level 8) 
  * @author Dolghier Constantin
  *
  */

@@ -17,7 +17,8 @@ import org.dgfoundation.amp.nireports.runtime.ReportData;
 import org.dgfoundation.amp.nireports.runtime.ReportDataVisitor;
 
 /**
- * a visitor which does vertical reductions on {@link ReportData}, thus converting NiReports-internal structures into NiReports-output structures
+ * a visitor which does reductions on {@link ReportData} (both vertical and horizontal reductions), 
+ * thus converting NiReports disaggregated structures into NiReports-output aggregated (flattened) structures
  * @author Dolghier Constantin, Chihai Viorel
  *
  */

@@ -1,8 +1,7 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
@@ -11,7 +10,7 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 
 /**
- * a trivial measure defined as a transaction 
+ * a measure defined as being the result of applying a {@link Predicate} on either filtered or unfiltered cells and outputting the nonnull ones
  * @author Dolghier Constantin
  *
  */
@@ -32,7 +31,7 @@ public abstract class NiPredicateTransactionMeasure extends NiReportMeasure<Cate
 		return funding.stream().map(this::processCell).filter(z -> z != null).collect(Collectors.toList());
 	}
 	
-	public abstract CategAmountCell processCell(CategAmountCell src);
+	protected abstract CategAmountCell processCell(CategAmountCell src);
 	
 	@Override
 	public List<CategAmountCell> fetch(NiReportsEngine engine) {

@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
 
 import static org.dgfoundation.amp.algo.AmpCollections.any;
 
@@ -19,10 +17,17 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
+/**
+ * the behaviour of a {@link DateCell}-populated column.
+ * These columns have no trail cells. 
+ * One notable thing about their behaviour is that, upon horizontally reducing multiple {@link DateCell} instances into a {@link NiDateCell} one, 
+ * the dates are displayed in <i>chronological order</i> (see {@link NiDateCell#sortedValues})
+ * @author Dolghier Constantin
+ *
+ */
 public class DateTokenBehaviour implements Behaviour<NiDateCell> {
 
 	public final static DateTokenBehaviour instance = new DateTokenBehaviour();

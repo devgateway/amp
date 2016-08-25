@@ -1,11 +1,6 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -31,13 +26,7 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	
 	/** the cell to display under a column if the contents is null (to avoid resending the same info repeatedly). never null for leaves; value is meaningless for intermediate notes */
 	public final ReportCell emptyCell;
-	
-	/** flags about the column */
-	@Deprecated
-	public final Set<Object> flags; //TODO: delete it after Mondrian-based reporting will be out. This is a hack used by Mondrian only
-	
-	transient public final List<ReportOutputColumn> children = new ArrayList<ReportOutputColumn>();
-	
+			
 	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String originalColumnName, ReportCell emptyCell, Collection<?> flags) {
 		this(columnName, parentColumn, originalColumnName, null, emptyCell, flags);
 	}
@@ -52,11 +41,6 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 		this.originalColumnName = originalColumnName;
 		this.description = description;
 		this.emptyCell = emptyCell == null ? TextCell.EMPTY : emptyCell;
-		if (parentColumn !=null) {
-			this.parentColumn.children.add(this);
-		}
-		
-		this.flags = Collections.unmodifiableSet(new HashSet<>(flags == null ? new ArrayList<Object>() : flags));
 	}
 	
 	@Deprecated

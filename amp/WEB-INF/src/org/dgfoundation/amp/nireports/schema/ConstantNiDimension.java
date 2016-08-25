@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * a NiDimension which uses a constant tabular bidiarray as a source of data
+ * a NiDimension which uses a constant tabular bidimensional array as a source of data
  * @author Dolghier Constantin
  *
  */

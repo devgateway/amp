@@ -8,7 +8,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 
 /**
  * 
- * a dimension consisting of (country[level=0], region[level=1], zone[level=2], district[level=3]) 
+ * an <i>ni_all_locations_with_levels</i>-backed <strong>continuum</strong> dimension consisting of (country[level=0], region[level=1], zone[level=2], district[level=3]) 
  * @author Dolghier Constantin
  *
  */

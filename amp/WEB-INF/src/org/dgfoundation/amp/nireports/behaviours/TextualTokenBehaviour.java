@@ -16,10 +16,16 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
+/**
+ * A close relative to {@link PercentageTokenBehaviour}.
+ * Textual columns do not have totals, do not split by time, do not keep individual reports - thus the only notable thing is how horizontal reduction is performed:
+ * multiple {@link org.dgfoundation.amp.nireports.TextCell} instances are horizontally reduced to a concatenation of the alphabetically-sorted values
+ * @author Dolghier Constantin
+ *
+ */
 public class TextualTokenBehaviour implements Behaviour<NiTextCell> {
 	
 	public final static TextualTokenBehaviour instance = new TextualTokenBehaviour(); 

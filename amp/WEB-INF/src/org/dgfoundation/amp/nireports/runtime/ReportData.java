@@ -4,13 +4,17 @@ import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.algo.Memoizer;
+import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 
 /**
- * this class is a hybrid between the old-reports-engine ColumnReportData, GroupReportData and will in the end implement the ReportsAPI {@link ReportArea}
+ * This class holds a disaggregated report, where all the individual cells, as fetched from the schema,
+ * can be found.
+ * While the {@link Cell}s are raw, they are enclosed into {@link NiCell} instances to track filtering and percentages;
+ * also the cells are distributed across hierarchies.
  * @author Dolghier Constantin
  *
  */

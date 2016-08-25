@@ -6,9 +6,9 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.SqlSourcedColumn;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.SqlSourcedColumn;
 
 
 /**

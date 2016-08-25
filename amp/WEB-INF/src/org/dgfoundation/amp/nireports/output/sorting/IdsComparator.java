@@ -9,13 +9,20 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 /**
- * a class which knows how to compare two ids which denote two entitites (e.g. activities) 
+ * a class which knows how to compare two ids which denote two entities (e.g. activities) 
  * @author Dolghier Constantin
  *
  */
 public class IdsComparator implements Comparator<Long> {
 
+	/**
+	 * the keys are the output-columns to sort for, in meaningful order of iteration. The values are either true (ascending) or false (descending)
+	 */
 	final LinkedHashMap<CellColumn, Boolean> colsSorting;
+	
+	/**
+	 * the report leaf whose entities are being sorted
+	 */
 	final NiColumnReportData crd;
 	
 	public IdsComparator(LinkedHashMap<CellColumn, Boolean> colsSorting, NiColumnReportData crd) {

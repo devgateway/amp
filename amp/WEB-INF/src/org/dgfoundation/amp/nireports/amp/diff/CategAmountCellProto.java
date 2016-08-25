@@ -19,7 +19,8 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 
 /**
- * a "proto" CategAmountCell which contains all the data necessary to translate a transaction to {@link CategAmountCell} once one has been gives a Calendar and a Currency
+ * a "proto cell": a class which contains all the data necessary to translate a transaction to {@link CategAmountCell} once one has been given a Calendar, Locale and a Currency.
+ * The process which transforms a {@link CategAmountCellProto} into a {@link CategAmountCell} is called <i>materialization</i> and is implemented in {@link #materialize(AmpCurrency, CachingCalendarConverter, CurrencyConvertor, NiPrecisionSetting)}
  * @author Dolghier Constantin
  *
  */
@@ -41,6 +42,15 @@ public class CategAmountCellProto extends Cell {
 		this.transactionDate = transactionMoment.toLocalDate();
 	}
 	
+	/**
+	 * materializes this instance into a full transaction. The operation is O(1) cheap because the heavyweight components of a cell are deeply immutable structures
+	 * which are shared between with the prototype (namely, {@link #metaInfo} and {@link #getCoordinates()})
+	 * @param usedCurrency the {@link AmpCurrency} to use for converting the natural transaction to
+	 * @param calendarConverter the O(1) {@link CalendarConverter} to use for translating the natural transaction's date
+	 * @param currencyConvertor the O(1) {@link CurrencyConvertor} to use for for converting amounts between currencies
+	 * @param precisionSetting the precision settings to use while doing the amount conversions and to store in the generated {@link MonetaryAmount}
+	 * @return
+	 */
 	public CategAmountCell materialize(AmpCurrency usedCurrency, CachingCalendarConverter calendarConverter, CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting) {
 		BigDecimal usedExchangeRate = BigDecimal.valueOf(currencyConvertor.getExchangeRate(origCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
 		MonetaryAmount amount = new MonetaryAmount(origAmount.multiply(usedExchangeRate), origAmount, origCurrency, transactionDate, precisionSetting);

@@ -1,8 +1,6 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -12,7 +10,7 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 /**
- * a trivial measure defined as a transaction which is filtered based on context
+ * a measure defined as a transaction which is filtered based on context
  * @author Dolghier Constantin
  *
  */

@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var messageView = require('../map/views/message-view');
 var IndicatorLayerLocalStorage = {};
 var HOURS_TO_STORE	 = 12;
 var MILLISECONDS_IN_AN_HOUR = (1000 * 60 * 60);
@@ -8,10 +9,14 @@ IndicatorLayerLocalStorage.findAll = function(){
 	var layers = [];
 	try{
 		layers = JSON.parse(layersString);
-    }catch(e){
+    } catch(e){
         console.error(e);
+		messageView.trigger('MESSAGE', {
+			title: 'Error',
+			description: 'Could not find local layers'
+		});
     }
-    return layers;			
+    return layers;
 };
 IndicatorLayerLocalStorage.findById = function(id){
 	var layers = IndicatorLayerLocalStorage.findAll();

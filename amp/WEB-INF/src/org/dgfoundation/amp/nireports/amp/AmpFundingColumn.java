@@ -47,46 +47,112 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import static java.util.stream.Collectors.toList;
 
 /**
- * the {@link NiReportColumn} which fetches a transactions' funding
+ * the {@link NiReportColumn} which fetches funding cells. This class is the common ancestors for all the coordinates-based funding cells in the AMP schema 
+ * (that is, all of them except Proposed Project Cost): [Donor / Component / Pledges] Funding, the MTEF columns. <br />
+ * This class implements a 2-level caching akin to {@link AmpDifferentialColumn}, except that the first level is degenerating: it is a boolean whose key always equals <i>true</i>. <br />
+ * Earlier implementations of this class were a true 2-level cache, the key of the first level being the 3-tuple (calendar, currency, locale); 
+ * this was abandoned because it might lead to big amounts of memory being consumed on the Cartesian product of the key: each cell might be duplicated upto (nr_currencies x nr_calendars x nr_locales) times. <br />
+ * Thus, the AMP schema uses a different schema for caching funding cells: what is actually cached in the level2-caches in {@link DifferentialCache} is <i>cell prototypes</i>.
+ * A <i>cell prototype</i> is an instance of {@link CategAmountCellProto}: a class which closely mirrors {@link CategAmountCell}, but has its fields dependent on locale / calendar / currency unpopulated.
+ * Through <i>materialization</i>, a {@link CategAmountCellProto} builds (cheaply) a {@link CategAmountCell} instance which is then output to the client code.<br />
+ * Thus, the fetching of AMP's funding columns is a multiprocess step like this:
+ * <ol>
+ * <li>the necessary cell prototypes are fetched differentially and stored in the {@link DifferentialCache} instance which is a member of {@link FundingFetcherContext}. Please see {@link AmpReportsScratchpad#differentiallyImportCells(org.dgfoundation.amp.algo.timing.InclusiveTimer, String, DifferentialCache, java.util.function.Function)}</li>
+ * <li>all the relevant prototypes (which is a superset of the just-fetched cells) are materialized. This cheap operation can be performed because at report runtime, the 3 parameters driving materialization are all known </li>
+ * </ol>
+ * Please note that the materialized cells are ephemeral: running two consecutive reports with identical (calendar, currency, locale) settings will lead to materialization being rerun. 
+ * This is a low-hanging fruit for dashboards-like scenarios where the same funding column fetching settings are being used repeatedly in a matter of seconds. <br />
+ * 
+ * An another point of this class is that, at initialization, it scans the backing view for missing columns and will not attempt to read those from the view. 
+ * Some minor functionality is configured hardcodedly via the fetcher looking up the column it is fetching. The following constants are a non-exhaustive list of names
+ * of columns which are fetched by this column: {@link #ENTITY_COMPONENT_FUNDING}, {@link #ENTITY_DONOR_FUNDING}, {@link #ENTITY_PLEDGE_FUNDING}. 
+ * Some columns (most notably, the MTEF family of columns) do not have dedicated entries in the column code
  * 
  * @author Dolghier Constantin
  *
  */
 public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
+	/**
+	 * {@link #getName()} in case this column is used to fetch "Donor Funding"
+	 */
 	public final static String ENTITY_DONOR_FUNDING = "Funding";
+	
+	/**
+	 * {@link #getName()} in case this column is used to fetch "Pledge Funding"
+	 */
 	public final static String ENTITY_PLEDGE_FUNDING = "Pledge Funding";
+	
+	/**
+	 * {@link #getName()} in case this column is used to fetch "Component Funding"
+	 */
 	public final static String ENTITY_COMPONENT_FUNDING = "Component Funding";
 	
+	/**
+	 * Map<amp_column_name, view_column_name>
+	 * the coordinates-defining view columns supported by the maximum extent of the AMP schema.
+	 */
 	public final static Map<String, String> FUNDING_VIEW_COLUMNS = Collections.unmodifiableMap(_buildFundingViewFilter());
+	
+	public final static Memoizer<Map<String, LevelColumn>> OPTIONAL_DIMENSION_COLS = new Memoizer<>(() -> buildOptionalDimensionCols());
 		
+	/**
+	 * the cell prototypes cache, plus some auxiliary info
+	 */
 	protected final ExpiringCacher<Boolean, NiReportsEngine, FundingFetcherContext> cacher;
 	protected final ActivityInvalidationDetector invalidationDetector;
-	protected final Object CACHE_SYNC_OBJ = new Object();
-	protected final Set<String> ignoredColumns;
 	
+	/**
+	 * the sync obj for non-thread-safe destructive operations
+	 */
+	protected final Object CACHE_SYNC_OBJ = new Object();
+	
+	/**
+	 * the view-columns which should not be read by the fetching code. 
+	 * An entry lands in this set either programmatically or through the column not existing in the view 
+	 */
+	protected final Set<String> ignoredColumns;
+		
+	/**
+	 * the number of seconds to keep fetched prototypes in memory 
+	 */
 	public final static int CACHE_TTL_SECONDS = 10 * 60;
 	
+	/**
+	 * delegates to {@link #AmpFundingColumn(String, String, Behaviour)} with {@link TrivialMeasureBehaviour} as a behaviour
+	 */
 	public AmpFundingColumn(String columnName, String viewName) {
 		this(columnName, viewName, TrivialMeasureBehaviour.getInstance());
 	}
 
+	/**
+	 * constructs an instance which will fetch a given AMP entity from a given PostgreSQL view with a given {@link Behaviour}.
+	 * As part of initialisation, the view is scanned for columns which are supported by AMP Funding but are missing from the view. 
+	 * Any such viewcolumns (and their associated NiDimensionUsage's) will be ignored by this instance upon fetching
+	 * @param columnName the name of the AMP entity (column) to fetch
+	 * @param viewName the name of the PostgreSQL view to fetch data from
+	 * @param behaviour the behaviour of the column
+	 */
 	protected AmpFundingColumn(String columnName, String viewName, Behaviour<?> behaviour) {
 		super(columnName, null, viewName, behaviour);
 		this.invalidationDetector = new ActivityInvalidationDetector();
 		Set<String> ic = new HashSet<>();
 		for(String col:FUNDING_VIEW_COLUMNS.values())
 			if (!this.viewColumns.contains(col))
-				ic.add(col);
+				ic.add(col); // ignore missing NiDimension-bearing viewcolumns
 		for(String col:AmpCollections.relist(longColumnsToFetch, z -> z.v))
 			if (!this.viewColumns.contains(col))
-				ic.add(col);
+				ic.add(col); // ignore missing generic-numbers-bearing viewcolumns
 		this.ignoredColumns = Collections.unmodifiableSet(ic); // specified-generic columns minus columns which do not exist in the view
 		this.cacher = new ExpiringCacher<>("funding cacher " + columnName, (key, engine) -> resetCache(engine), invalidationDetector, CACHE_TTL_SECONDS * 1000);
 	}
 
-	
-	public static Map<String, String> _buildFundingViewFilter() {
+	/**
+	 * builds the constant map from (amp-column-which-is-the-leaf-of-a-NiDimensionUsage) to (view-column-name). <br />
+	 * This forces that all funding-bearing views read by the AMP schema to have same-named view-columns for same-NiDimensionUsage's!
+	 * @return
+	 */
+	private static Map<String, String> _buildFundingViewFilter() {
 		Map<String, String> res = new HashMap<>();
 		res.put(ColumnConstants.TYPE_OF_ASSISTANCE, "terms_assist_id");
 		res.put(ColumnConstants.FINANCING_INSTRUMENT, "financing_instrument_id");
@@ -115,30 +181,37 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		return !ignoredColumns.contains(viewName);
 	}
 	
-	protected Map<String, LevelColumn> buildOptionalDimensionCols(AmpReportsSchema schema) {
-		Map<String, NiReportColumn<?>> cols = schema.getColumns();
+	protected static Map<String, LevelColumn> buildOptionalDimensionCols() {
+		Map<String, NiReportColumn<?>> cols = AmpReportsSchema.getInstance().getColumns();
 		Map<String, LevelColumn> res = new HashMap<>();
 		FUNDING_VIEW_COLUMNS.forEach((colName, viewColName) -> res.put(viewColName, cols.get(colName).levelColumn.get()));
 		return res;
 	}
 	
-	// columns of type long which are optional
+	/**
+	 * columns of type long which are optional
+	 */
 	protected static List<ImmutablePair<MetaCategory, String>> longColumnsToFetch = Arrays.asList(
-			new ImmutablePair<>(MetaCategory.TRANSACTION_TYPE, "transaction_type"),			
-			new ImmutablePair<>(MetaCategory.TYPE_OF_ASSISTANCE, "terms_assist_id"),
-			new ImmutablePair<>(MetaCategory.MODE_OF_PAYMENT, "mode_of_payment_id"),
-			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id"),
-			new ImmutablePair<>(MetaCategory.SOURCE_ORG, "donor_org_id"),
-			new ImmutablePair<>(MetaCategory.EXPENDITURE_CLASS, "expenditure_class_id")
-		);
+		new ImmutablePair<>(MetaCategory.TRANSACTION_TYPE, "transaction_type"),			
+		new ImmutablePair<>(MetaCategory.TYPE_OF_ASSISTANCE, "terms_assist_id"),
+		new ImmutablePair<>(MetaCategory.MODE_OF_PAYMENT, "mode_of_payment_id"),
+		new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id"),
+		new ImmutablePair<>(MetaCategory.SOURCE_ORG, "donor_org_id"),
+		new ImmutablePair<>(MetaCategory.EXPENDITURE_CLASS, "expenditure_class_id")
+	);
 	
+	/**
+	 * builds a new l2 cache entry upon invalidation. 
+	 * @param engine
+	 * @return
+	 */
 	protected synchronized FundingFetcherContext resetCache(NiReportsEngine engine) {
 		engine.timer.putMetaInNode("resetCache", true);
-		Map<Long, String> adjTypeValue = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN ('%s', '%s')", CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY));
-		Map<Long, String> acvs = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN('%s', '%s', '%s')", CategoryConstants.EXPENDITURE_CLASS_KEY, CategoryConstants.TYPE_OF_ASSISTENCE_KEY, CategoryConstants.MODE_OF_PAYMENT_KEY));
+		//Map<Long, String> adjTypeValue = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN ('%s', '%s')", CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY));
+		Map<Long, String> acvs = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN('%s', '%s', '%s', '%s', '%s')", CategoryConstants.EXPENDITURE_CLASS_KEY, CategoryConstants.TYPE_OF_ASSISTENCE_KEY, CategoryConstants.MODE_OF_PAYMENT_KEY, CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY));
 		Map<Long, String> roles = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("SELECT amp_role_id, role_code FROM amp_role", CategoryConstants.ADJUSTMENT_TYPE_KEY));
 		
-		return new FundingFetcherContext(new DifferentialCache<CategAmountCellProto>(invalidationDetector.getLastProcessedFullEtl()), adjTypeValue, roles, acvs);
+		return new FundingFetcherContext(new DifferentialCache<CategAmountCellProto>(invalidationDetector.getLastProcessedFullEtl()), roles, acvs);
 	}
 
 	@Override
@@ -168,14 +241,15 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	protected String buildSupplementalCondition(NiReportsEngine engine, Set<Long> ids, FundingFetcherContext context) {
 		return "1=1";
 	}
-	
+
 	/**
-	 * independent of report options
-	 * @param engine
+	 * fetches cell prototypes with the given ownerIds
+	 * @param engine the engine running the report
+	 * @param ids the ids to fetch
+	 * @param context the level2 entry which will end up hosting the fetched cells in {@link FundingFetcherContext#cache} 
 	 * @return
-	 * @throws Exception
 	 */
-	public List<CategAmountCellProto> fetchSkeleton(NiReportsEngine engine, Set<Long> ids, FundingFetcherContext context) {
+	protected List<CategAmountCellProto> fetchSkeleton(NiReportsEngine engine, Set<Long> ids, FundingFetcherContext context) {
 		if (ids.isEmpty())
 			return Collections.emptyList();
 		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
@@ -190,8 +264,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
 		
 		List<CategAmountCellProto> cells = new ArrayList<>();
-		MetaInfoGenerator metaGenerator = new MetaInfoGenerator();
-		Map<String, LevelColumn> optionalDimensionCols = buildOptionalDimensionCols(schema);
+		MetaInfoGenerator metaGenerator = new MetaInfoGenerator(); // one metainfo generator per differential fetch run - as a tradeoff between a complicated expiring-one-per-cacher and an inefficient one-per-cell
 		BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100l);
 				
 		try(RsInfo rs = SQLUtils.rawRunQuery(scratchpad.connection, query, null)) {
@@ -199,13 +272,15 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				MetaInfoSet metaSet = new MetaInfoSet(metaGenerator);
 				Map<NiDimensionUsage, Coordinate> coos = new HashMap<>();
 				
-				long ampActivityId = rs.rs.getLong(this.mainColumn);
-								
+				long ownerId = rs.rs.getLong(this.mainColumn);
+					
+				// fetch the non-disabled metadata (like adjustment_type etc)
 				for(ImmutablePair<MetaCategory, String> longOptionalColumn:longColumnsToFetch)
 					if (!ignoredColumns.contains(longOptionalColumn.v))
 						addMetaIfLongExists(metaSet, longOptionalColumn.k, rs.rs, longOptionalColumn.v);
 				
-				for(Map.Entry<String, LevelColumn> optDim:optionalDimensionCols.entrySet())
+				// fetch the coordinates for the non-disabled NiDimensionUsage's
+				for(Map.Entry<String, LevelColumn> optDim:OPTIONAL_DIMENSION_COLS.get().entrySet())
 					if (!ignoredColumns.contains(optDim.getKey()))
 						addCoordinateIfLongExists(coos, rs.rs, optDim.getKey(), optDim.getValue());
 				
@@ -230,11 +305,12 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 								
 				addMetaIfIdValueExists(metaSet, "recipient_role_id", MetaCategory.RECIPIENT_ROLE, rs.rs, context.roles);
 				addMetaIfIdValueExists(metaSet, "source_role_id", MetaCategory.SOURCE_ROLE, rs.rs, context.roles);
-				addMetaIfIdValueExists(metaSet, "adjustment_type", MetaCategory.ADJUSTMENT_TYPE, rs.rs, context.adjustmentTypes);
+				addMetaIfIdValueExists(metaSet, "adjustment_type", MetaCategory.ADJUSTMENT_TYPE, rs.rs, context.acvs);
 				addMetaIfIdValueExists(metaSet, "expenditure_class_id", MetaCategory.EXPENDITURE_CLASS, rs.rs, context.acvs);
 				addMetaIfIdValueExists(metaSet, "terms_assist_id", MetaCategory.TYPE_OF_ASSISTANCE, rs.rs, context.acvs);
 				addMetaIfIdValueExists(metaSet, "mode_of_payment_id", MetaCategory.MODE_OF_PAYMENT, rs.rs, context.acvs);
 				
+				// add the directed-transactions meta, if appliable
 				if (metaSet.hasMetaInfo(MetaCategory.SOURCE_ROLE.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ROLE.category)
 					&& metaSet.hasMetaInfo(MetaCategory.SOURCE_ORG.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ORG.category)) 
 				{
@@ -244,8 +320,9 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 									ArConstants.userFriendlyNameOfRole(metaSet.getMetaInfo(MetaCategory.RECIPIENT_ROLE.category).v.toString())));
 				}
 				
-				if (transactionMoment == null || transactionAmount == null || srcCurrency == null) continue;
-				CategAmountCellProto cell = new CategAmountCellProto(ampActivityId, transactionAmount, srcCurrency, transactionMoment, metaSet, coos, fixed_exchange_rate);
+				if (transactionMoment == null || transactionAmount == null || srcCurrency == null) 
+					continue; // there are valid cells which should not appear in the view... but sometimes they do (corrupted ancient entries + draft activities). just skip
+				CategAmountCellProto cell = new CategAmountCellProto(ownerId, transactionAmount, srcCurrency, transactionMoment, metaSet, coos, fixed_exchange_rate);
 				cells.add(cell);
 			}
 		}
@@ -265,6 +342,12 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		return null;
 	}
 
+	/**
+	 * fetches a BigDecimal from a view, if the view column exists and the row has a non-null value. 
+	 * @param colName the view-column to fetch from
+	 * @return the fetched number OR null if view-column does not exist
+	 * @throws SQLException
+	 */
 	protected BigDecimal getBigDecimal(ResultSet rs, String colName) throws SQLException {
 		if (viewColumns.contains(colName))
 			return rs.getBigDecimal(colName);
@@ -277,16 +360,30 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		return null;
 	}
 	
+	/**
+	 * the context data used for fetching funding. 
+	 * Given that any "big" database change will lead to this entry being reset and rebuilt, it is safe to keep any non-activity-level data here
+	 * @author Dolghier Constantin
+	 *
+	 */
 	static class FundingFetcherContext {
+		/**
+		 * the differential cache for cell prototypes
+		 */
 		final DifferentialCache<CategAmountCellProto> cache;
-		final Map<Long, String> adjustmentTypes;
+		
+		/**
+		 * the organization roles (select * from amp_role)
+		 */
 		final Map<Long, String> roles;
+		
+		/**
+		 * the AmpCategoryValues
+		 */
 		final Map<Long, String> acvs;
 				
-		public FundingFetcherContext(DifferentialCache<CategAmountCellProto> cache, 
-				Map<Long, String> adjustmentTypes,  Map<Long, String> roles, Map<Long, String> acvs) {
+		public FundingFetcherContext(DifferentialCache<CategAmountCellProto> cache, Map<Long, String> roles, Map<Long, String> acvs) {
 			this.cache = cache;
-			this.adjustmentTypes = adjustmentTypes;
 			this.roles = roles;
 			this.acvs = acvs;
 		}

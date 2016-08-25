@@ -826,11 +826,15 @@ public class ReportWizardAction extends MultiAction {
         for(AmpFieldsVisibility field:ampAllFields)
             ampAllFieldsByName.put(field.getName(), field);
 
-        //int iterations1 = 0, iterations2 = 0;
         for(AmpColumns ampColumn:allAmpColumns)
         {
+            if (FeaturesUtil.columnIgnoredInReportWizard(ampColumn.getColumnName()))
+            	continue;
+
+        	
             AmpFieldsVisibility ampFieldVisibility = ampAllFieldsByName.get(ampColumn.getColumnName());
 
+            
             if(ampFieldVisibility == null)
                 continue;
 
@@ -868,7 +872,6 @@ public class ReportWizardAction extends MultiAction {
                 if (!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)
                         && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){
                     ampThemesOrdered.add(aco);
-                    //System.out.println("	----------------ADDED!");
                 }
             }
         }

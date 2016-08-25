@@ -45,8 +45,9 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String originalColumnName, String description, ReportCell emptyCell, Collection<?> flags) {
 		this.columnName = columnName;
 		
-		if (columnName == null || columnName.isEmpty())
-			throw new NullPointerException();
+		if (columnName == null || columnName.isEmpty()) {
+			throw new NullPointerException("The translated name of the column is empty. The original column name is '" + originalColumnName + "'");
+		}
 		
 		this.parentColumn = parentColumn;
 		this.originalColumnName = originalColumnName;

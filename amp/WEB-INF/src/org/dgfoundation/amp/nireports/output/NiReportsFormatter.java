@@ -142,7 +142,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	
 	protected ReportOutputColumn buildReportOutputColumn(Column niCol) {
 		ReportCell emptyCell = buildEmptyCell(niCol);
-		return new ReportOutputColumn(niCol.name, niColumnToROC.get(niCol.getParent()), niCol.name, niCol.getDescription(), emptyCell, null);
+		return new ReportOutputColumn(niCol.name, niColumnToROC.get(niCol.getParent()), niCol.name, null, emptyCell, null);
 	}
 	
 	/**

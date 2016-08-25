@@ -81,8 +81,5 @@ public abstract class Column {
 		Column other = (Column) oth;
 		return getHierName().equals(other.getHierName());
 	}
-	
-	public String getDescription() {
-		return null;
-	}
+
 }

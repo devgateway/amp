@@ -97,11 +97,6 @@ public class CellColumn extends Column {
 		else
 			return Collections.emptyList();
 	}
-
-	@Override
-	public String getDescription() {
-		return entity != null ? entity.description : null;
-	}
 	
 	@Override
 	public <K> K accept(ColumnVisitor<K> cv) {

@@ -8,7 +8,7 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 
 /**
- * a trivial measure defined as a transaction 
+ * a trivial measure defined as a filter 
  * @author Dolghier Constantin
  *
  */

@@ -1,5 +1,6 @@
 import * as AMP from "amp/architecture";
 import React from "react";
+import ThresholdState from "./threshold-state.jsx";
 import Threshold from "./threshold.jsx";
 import {Alert, Button, Glyphicon} from "react-bootstrap";
 import {postJson, delay} from "amp/tools";
@@ -16,35 +17,22 @@ var ThresholdList = React.createClass({displayName: 'Threshold List',
     return {data : {}, valid: true, submitting: false, alert: ALERT_TYPE.NONE};
   },
   componentWillReceiveProps: function(nextProps) {
-  	let map = new Map();
-  	this.idValue = nextProps.data.reduce(function(map, threshold) {
-    	map.set(threshold.id, threshold.amountFrom);
-    	return map;
-    }, map);
-    let sortedThresholds = this.getSortedValues();
-    for(let threshold of nextProps.data) {
-        let nextLimit = this.findNextLimit(threshold.amountFrom, sortedThresholds);
-    	if (this.refs[threshold.id] !== undefined) {
-    		this.refs[threshold.id].to = nextLimit; 
-    	} else {
-    		threshold.to = nextLimit;
-    	}
-    }
-    this.invalidIds = new Set([]);
+  	this.thresholdState = new ThresholdState(nextProps, this.refs);
   },
-  findNextLimit: function(value, sortedThresholds) {
-  	let nextLimit = sortedThresholds.find(function(amount) {return amount > value});
-  	return (nextLimit === undefined) ? 100 : nextLimit;
-  },
-  getSortedValues: function() {
-  	let sortedThresholds = Array.from(this.idValue.values(), v => v);
-  	return sortedThresholds.sort(function(a, b) {return a-b});
+  _getIndexSuffix: function(current) {
+  	switch(current) {
+  	  case 0: return " (" + this.__('amp.heat-map:lowest') + ")";
+  	  case this.props.data.length - 1: return " (" + this.__('amp.heat-map:highest')  + ")";
+  	  default: return "";
+  	}
   },
   render: function() {
     this.__ = key => this.props.translations[key];
-    let thresholdNodes = this.props.data.map(function(threshold) {
+    let thresholdNodes = this.props.data.map(function(threshold, index) {
+      index = (index + 1) + this._getIndexSuffix(index);
       return (
-        <Threshold ref={threshold.id} id={threshold.id} colorName={threshold.name} color={threshold.color}
+        <Threshold ref={threshold.id} id={threshold.id} index={index}
+        	colorName={threshold.name} color={threshold.color}
         	from={threshold.amountFrom} to={threshold.to} 
         	onChange={this.onChildChanged} translations={this.props.translations}/>
       );
@@ -53,8 +41,7 @@ var ThresholdList = React.createClass({displayName: 'Threshold List',
     if (this.state.alert !== ALERT_TYPE.NONE) {
     	infoAlert = this.getAlert();
 	}
-	this.data = this.props.data;
-    
+	
     return (
     	<table className="table table-striped">
         	<caption>
@@ -63,10 +50,11 @@ var ThresholdList = React.createClass({displayName: 'Threshold List',
         	</caption>
         	<thead>
 		        <tr>
-		          <th width="25%">{this.__('amp.heat-map:color')}</th>
-		          <th width="25%">{this.__('amp.heat-map:from')}</th>
-		          <th width="25%">{this.__('amp.heat-map:to')}</th>
-		          <th width="25%"/>
+		          <th width="20%">{this.__('amp.heat-map:threshold-range')}</th>	
+		          <th width="20%">{this.__('amp.heat-map:color')}</th>
+		          <th width="20%">{this.__('amp.heat-map:from')}</th>
+		          <th width="20%">{this.__('amp.heat-map:to')}</th>
+		          <th width="20%"/>
 		        </tr>
 		    </thead>
 		    <tbody>
@@ -74,7 +62,7 @@ var ThresholdList = React.createClass({displayName: 'Threshold List',
 		    </tbody>
 		    <tfoot>
 		    	<tr>
-		    		<td colSpan="4">
+		    		<td colSpan="5">
 		    		    <Button bsStyle="primary" onClick={this.handleSubmit} disabled={!this.state.valid || this.state.submitting}>
 		    		    	{this.__('amp.heat-map:save')}
 		    		    </Button>
@@ -93,45 +81,46 @@ var ThresholdList = React.createClass({displayName: 'Threshold List',
   	}
   	return (
   		<Alert ref="errorAlert" bsStyle={this.state.alert} className="resultAlert" bsClass="alert" onDismiss={this.hideAlert}>
-      		<span className="alertMsg" >{isSuccess ? this.__('amp.heat-map:success') : this.state.alertMsg}</span>
+  			{isSuccess ? this.__('amp.heat-map:success') : this.state.alertMsg}
 		</Alert>);
   },
   hideAlert: function() {
   	this.setState({alert: ALERT_TYPE.NONE});
   },
   onChildChanged: function(elem) {
-    let invalidCount = 0;
-    invalidCount += this.validateChild(elem)
-    this.invalidIds.forEach(id => invalidCount += this.validateChild(this.refs[id]));
-    let valid = invalidCount === 0;
-    elem.to = this.findNextLimit(elem.value, this.getSortedValues());
+  	let valid = this.thresholdState.validateThresholdChange(elem, this.refs);
+  	this.updateRangeAlert();
   	this.setState({valid : valid});
-  	//console.log('onChildChanged -> ' + elem.props.id + ', with value = ' + elem.value)
   },
-  validateChild: function(elem) {
-    this.idValue.set(elem.props.id, elem.value);
-    let sameValueElements = new Map([...this.idValue].filter(([key, value]) => value == elem.value)); 
-    if (sameValueElements.size > 1) {
-    	//console.log('Another element exists with the same value!');
-    	for (let [key, value] of sameValueElements) {
-    		this.refs[key].flagValidity(Threshold.STATUS.DUPLICATE);
-    		this.invalidIds.add(key);
-    	}
-    	return sameValueElements.size;
-    } else if (elem.value === null) {
-    	this.refs[elem.props.id].flagValidity(Threshold.STATUS.INVALID);
-    	return 1;
-    } else {
-    	this.invalidIds.delete(elem.props.id);
-    	this.refs[elem.props.id].flagValidity(Threshold.STATUS.OK);
-    	return 0;
-    }
+  updateRangeAlert: function() {
+    if (this.thresholdState.getInvalidRanges().size === 0) {
+      this.hideAlert();
+  	} else {
+  	  let rangeErrors = new Array();
+  	  // 0 based index, expecting any except the last
+  	  for(let index of this.thresholdState.getInvalidRanges()) {
+  	    let errorMsg = <div>
+  	      {this.__('amp.heat-map:range-must-be').replace("{0}", (index + 1)) + " " +
+  	      (index == 0 ? "" : this.__('amp.heat-map:higher') + " #" + index + " " + this.__('amp.heat-map:and') + " ") +
+  	      this.__('amp.heat-map:lower') + " #" + (index + 2) + "."}
+  	      </div>;
+  	    rangeErrors.push(errorMsg);
+  	  }
+  	  let alertMsg = <div>
+  	  	{this.__('amp.heat-map:invalid-ranges')}
+  	  	{rangeErrors}
+  	  	</div>;
+  	  this.setState({
+  	  	alert: ALERT_TYPE.ERROR,
+  	  	alertMsg: alertMsg 
+  	  });
+  	}
   },
   handleSubmit: function(e) {
     e.preventDefault();
     this.setState({submitting : true});
     for(let threshold of this.props.data) {
-    	threshold.amountFrom = this.idValue.get(threshold.id);
+    	threshold.amountFrom = this.thresholdState.getIdValue().get(threshold.id);
     }
     let newSettings = new AMP.Model({'amountColors' : this.props.data});
     postJson(HEAT_MAP_ADMIN, newSettings.toJS()).then(result => this.processResult(result));
@@ -161,15 +150,21 @@ var ThresholdList = React.createClass({displayName: 'Threshold List',
 
 ThresholdList.translations = {
   ...Threshold.translations,
-  "amp.heat-map:howTo": "Listed colors will be used to highlight the amounts within specified range",
+  "amp.heat-map:howTo": "Listed colors will be used to highlight the amounts within specified ordered ranges",
+  "amp.heat-map:invalid-ranges": "Threshold ranges are incorrectly ordered:",
+  "amp.heat-map:range-must-be": "Range #{0} must be",
+  "amp.heat-map:higher": "higher than",
+  "amp.heat-map:and": "and",
+  "amp.heat-map:lower": "lower than",
+  "amp.heat-map:lowest": "lowest",
+  "amp.heat-map:highest": "highest",
   "amp.heat-map:save": "Save",
   "amp.heat-map:success": "Success",
   "amp.heat-map:threshold-settings": "Threshold Settings",
-  "amp.heat-map:threshold": "Threshold",
+  "amp.heat-map:threshold-range": "Threshold range",
   "amp.heat-map:from": "From",
   "amp.heat-map:to": "To",
   "amp.heat-map:color": "Color"
 };
 
 module.exports = ThresholdList;
-

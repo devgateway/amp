@@ -41,9 +41,10 @@ var Threshold = React.createClass({displayName: 'Threshold',
       		<Alert ref="notUnique" className="undo-popup inputAlert" bsStyle="danger" bsClass="alert" onDismiss={this.alertDismiss}>
       			<span className="alertMsg">{this.__(this.state.alertMessage)}</span>
 		    </Alert>;
-    } 
+    }
     return (
       <tr key={this.props.id}>
+        <td>{this.props.index}</td>
       	<td style={bgStyle}><strong>{this.props.colorName}</strong></td>
       	<td>
       		<NumericInput value={this.value} min={0} max={100} onChange={this.handleChange} 

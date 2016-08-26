@@ -6,17 +6,14 @@ package org.dgfoundation.amp.newreports.pagination;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 
 /**
  * Stores partial report area, with statistical information regarding the full report area,
  * like actual total count of children  
- * TODO: delete this class once Mondrian is finished with
  * @author Nadejda Mandrescu
  */
-@Deprecated
 public class PartialReportArea extends ReportAreaImpl {
 	// configured to -1 to mark uninitialized state
 	//@JsonIgnore

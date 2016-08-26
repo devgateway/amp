@@ -248,3 +248,12 @@ function ampapi_url_outbound_alter(&$path, &$options, $original_path) {
     $options['absolute'] = TRUE;
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function ampapi_form_menu_edit_item_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['link_path']['#description'])) {
+    $form['link_path']['#description'] .= '<br/>' . t('AMP NOTE: Use <b>%token</b> as the base of your URL instead of using the domain when linking directly to AMP.', array('%token' => '<amp>'));
+  }
+}

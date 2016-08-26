@@ -1255,7 +1255,7 @@ div.footer {
 }
 
 #layers-wizard{
-	max-height:450px;
+	max-height:500px;
 	overflow-y:auto;
 }
 .required-field{
@@ -1287,4 +1287,11 @@ div.footer {
 .set-population-body{
 	height: 400px; 
 	overflow-y: auto;
+}
+
+.wizard-container{
+  margin:0 15px 0 15px;
+}
+.wizard-message-section{
+  min-height:80px;
 }

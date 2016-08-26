@@ -13,7 +13,7 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * this class indexes a ReportArea so that it can answer pagination requests extremely fastly
- * @author simple
+ * @author Dolghier Constantin
  *
  */
 public class PaginatedReport {

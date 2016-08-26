@@ -25,7 +25,7 @@ public abstract class NiReportMeasure<K extends Cell> extends NiReportedEntity<K
 	 * returns the map of measures which should be fetched before this measure's {@link #fetch(NiReportContext)} function will be called
 	 * the value of an item is: <ul>
 	 * <li><strong>true</strong> if the measure should be run as part of the report upto output (where it would be culled)</li>
-	 * <li><strong>true</strong> if the measure should just be fetched</li>
+	 * <li><strong>false</strong> if the measure should just be fetched</li>
 	 * </ul>
 	 * @return
 	 */

@@ -51,7 +51,8 @@ public class CellColumn extends Column {
 		this.forEachCell(cell -> values.computeIfAbsent(strategy.categorize(cell), z -> new ArrayList<>()).add(cell));
 		ComparableValue<String> totalsSubcolumnCategory = strategy.getTotalSubcolumnName();
 		if (totalsSubcolumnCategory != null) {
-			this.forEachCell(cell -> values.computeIfAbsent(totalsSubcolumnCategory, z -> new ArrayList<>()).add(cell));
+			values.put(totalsSubcolumnCategory, new ArrayList<>());
+			this.forEachCell(cell -> values.get(totalsSubcolumnCategory).add(cell));
 		}
 			
 		GroupColumn res = this.asGroupColumn(null, newParent);
@@ -96,11 +97,6 @@ public class CellColumn extends Column {
 			return Arrays.asList(this);
 		else
 			return Collections.emptyList();
-	}
-
-	@Override
-	public String getDescription() {
-		return entity != null ? entity.description : null;
 	}
 	
 	@Override

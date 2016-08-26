@@ -64,11 +64,19 @@ public class AmpNiReportsFormatter extends NiReportsFormatter {
 	protected ReportOutputColumn buildReportOutputColumn(Column niCol) {
 		String trnName = getNameTranslation(niCol);
 		String trnDescription = getDescriptionTranslation(niCol);
+		//logger.error(String.format("transforming [%s] to [%s, %s]", niCol.getHierName(), trnName, trnDescription));
 		return new ReportOutputColumn(trnName, niColumnToROC.get(niCol.getParent()), niCol.name, trnDescription, buildEmptyCell(niCol), null);
 	}
 	
 	protected String getDescriptionTranslation(Column niCol) {
-		String description = niCol.getDescription();
+		String description = null;
+		if (niCol.splitCell != null) {
+			if (niCol.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE))
+				description = AmpReportsSchema.measureDescriptions.get(niCol.splitCell.info.getValue());
+			
+			if (niCol.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_COLUMN))
+					description = AmpReportsSchema.columnDescriptions.get(niCol.splitCell.info.getValue());
+		}
 		return description == null ? null : TranslatorWorker.translateText(description);
 	}
 	

@@ -36,7 +36,11 @@ public class PaginatedReport {
 		int firstRow = clamp(start, 0, indexedLeaves.size() - 1);
 		int lastRow = clamp(firstRow + pageSize - 1, 0, indexedLeaves.size() - 1);
 		Set<ReportArea> areasToInclude = computeAreasToInclude(firstRow, lastRow);
-		// at this point, if an element is present in areasToInclude, then all of its parents are also included. If an element is not included, then none of its children is
+		/*
+		 *  at this point, if an element is present in areasToInclude, 
+		 *  then all of its parents are also included. 
+		 *  If an element is not included, then none of its children is
+		 */
 		ReportArea res = scanAreas(rootElement, areasToInclude, 0);
 		long deltaTime = System.currentTimeMillis() - startTime;
 		logger.info("getting page took " + deltaTime + " millies");
@@ -173,5 +177,4 @@ public class PaginatedReport {
 		}
 		return res;
 	}
-		
 }

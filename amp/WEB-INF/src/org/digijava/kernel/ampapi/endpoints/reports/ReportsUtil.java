@@ -153,11 +153,9 @@ public class ReportsUtil {
 		
 		// get the report (from cache if it was cached)
 		CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
-//		ReportAreaMultiLinked[] areas = null;
 		PaginatedReport pagiReport = null;
 		if (cachedReportData != null) {
 			pagiReport = cachedReportData.paginationInfo;
-//			areas = cachedReportData.areas;
 			if (cachedReportData.report != null) {
 				result.set("headers", cachedReportData.report.leafHeaders);
 			}
@@ -166,18 +164,15 @@ public class ReportsUtil {
 		// extract data for the requested page
 		ReportArea pageArea = null;
 		if (recordsPerPage != -1) {
-//			pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
 			pageArea = pagiReport.getPage(start, recordsPerPage);
 		} else if (cachedReportData != null && cachedReportData.report !=null) {
 			pageArea = cachedReportData.report.reportContents;
 		}
 		
 		int totalPageCount = pagiReport == null ? 0 : pagiReport.getPageCount(recordsPerPage);
-//		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
 		
 		// configure the result
 		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, (pagiReport != null ? pagiReport.getRecordsCount() : 0)));
-//		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, (areas != null ? areas.length : 0)));
 		result.set(EPConstants.SETTINGS, cachedReportData != null ? 
 				SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
 		return result;

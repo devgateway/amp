@@ -11,7 +11,7 @@ import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.ReportData;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
-import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
 import org.junit.Test;
 
 /**

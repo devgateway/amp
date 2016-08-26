@@ -6,7 +6,7 @@ import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
 
 /**
  * 
- * a dimension consisting of (amp_category_class[level=0], amp_category_value[level=1]) 
+ * an <i>amp_components</i>-backed dimension consisting of (amp_component_type[level=0], amp_category_id[level=1]) 
  * @author Dolghier Constantin
  *
  */

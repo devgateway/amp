@@ -7,7 +7,7 @@ import org.dgfoundation.amp.nireports.NumberedCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 /**
- * a class holding a monetary amount
+ * a {@link NiOutCell} holding an arbitrary-precision amount
  * @author Dolghier Constantin
  *
  */

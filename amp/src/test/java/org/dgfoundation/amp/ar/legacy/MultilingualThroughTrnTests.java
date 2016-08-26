@@ -1,9 +1,5 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import org.dgfoundation.amp.testmodels.ColumnReportDataModel;
-import org.dgfoundation.amp.testmodels.GroupColumnModel;
-import org.dgfoundation.amp.testmodels.GroupReportModel;
-import org.dgfoundation.amp.testmodels.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 
 import junit.framework.Test;
@@ -11,6 +7,12 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
+
+import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
+import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
+import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
+import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
+
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 
 public class MultilingualThroughTrnTests extends ReportsTestCase

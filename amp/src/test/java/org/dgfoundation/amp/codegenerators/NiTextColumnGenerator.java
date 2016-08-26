@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.nireports.TextCell;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -24,8 +25,8 @@ public class NiTextColumnGenerator extends ColumnGenerator {
 		public final long id;
 		
 		public Entry(String aavname, String name, long id) {
-			this.aavname = aavname;
-			this.text = name;
+			this.aavname = anon(aavname);
+			this.text = cleanupOrAnon(name);
 			this.id = id;
 		}
 		
@@ -35,17 +36,15 @@ public class NiTextColumnGenerator extends ColumnGenerator {
 		}
 	}
 	
+	public String cleanupOrAnon(String str) {
+		return this.name == ColumnConstants.PROJECT_TITLE ? anon(str) : cleanup(str);
+	}
+	
 	public NiTextColumnGenerator(String columnName) {
 		super(columnName, TextCell.class);
 		this.entries = populateList();
 	}
-	
-	private Map<Long, String> getActivityNames() {
-		String query = "SELECT amp_activity_id, name FROM amp_activity WHERE amp_team_id IN "
-				+ "(SELECT amp_team_id FROM amp_team WHERE name = 'test workspace')";
-		return (Map<Long, String>) PersistenceManager.getSession().doReturningWork(connection -> SQLUtils.collectKeyValue(connection, query));
-	}
-	
+		
 	private List<Entry> populateList() {
 		final List<Entry> entries = new ArrayList<>();
 		runInEngineContext( 

@@ -149,7 +149,7 @@ SaveReportEngine.prototype.checkEnter = function (e) {
 	return true;
 };
 SaveReportEngine.prototype.runReportInSaiku = function(reportToken) {
-	var reportUrl = '/TEMPLATE/ampTemplate/saikuui_nireports/index.html#report/run/' + reportToken;
+	var reportUrl = '/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/run/' + reportToken;
 	globalOpenPopup(null, reportUrl);
 
 }

@@ -29,7 +29,7 @@ FilterUtils.extractFilters = function(content) {
 			}
 			if (element.value !== null) {
 				content.push(self.parseValue(element, element.value));
-			} else if (element.valueToName !== null) {
+			} else if (element.valueToName !== null && content.length === 0 ) {
 				// This should be .models but the way the endpoint returns
 				// the data breaks backbone.
 				_.each(element.valueToName, function(item_, i) {

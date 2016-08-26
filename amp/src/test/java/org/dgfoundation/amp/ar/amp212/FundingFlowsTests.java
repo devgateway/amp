@@ -13,8 +13,8 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.dgfoundation.amp.testmodels.NiReportModel;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.junit.Test;
 

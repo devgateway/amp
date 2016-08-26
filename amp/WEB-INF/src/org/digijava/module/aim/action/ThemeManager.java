@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.exception.AimException;
@@ -35,6 +36,8 @@ import org.digijava.module.aim.util.ProgramUtil.XMLtreeItemFactory;
 public class ThemeManager extends Action {
 
 	private static Logger logger = Logger.getLogger(ThemeManager.class);
+	
+	public final static int ACTIVITIES_ERROR_COUNT = 10;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -138,7 +141,7 @@ public class ThemeManager extends Action {
 			{
 				flagProblemFound	= true;
 				themeForm.setFlag("activityReferences");
-				themeForm.setActivitiesUsingTheme(SQLUtils.generateCSV(acts));
+				themeForm.setActivitiesUsingTheme(buildMessageFromActivities(acts));
 			}
 			if ( !flagProblemFound && nameOfSettingsUsedInActivity != null && nameOfSettingsUsedInActivity.length() > 0 ) {
 				flagProblemFound 	= true;
@@ -215,5 +218,24 @@ public class ThemeManager extends Action {
 		
 		
 		return mapping.findForward("forward");
+	}
+
+	private String buildMessageFromActivities(List<String> acts) {
+		StringBuilder sb = new StringBuilder();
+		
+		int cnt = acts.size() > ACTIVITIES_ERROR_COUNT ? ACTIVITIES_ERROR_COUNT : acts.size();
+		for (int i=0; i < cnt; i++) {
+			sb.append("<br/>");
+			sb.append("\"" + acts.get(i) + "\";");
+		}
+		
+		if (acts.size() > ACTIVITIES_ERROR_COUNT) {
+			sb.append("<br/><br/>");
+			sb.append("<b>" + TranslatorWorker.translateText("and") + " ");
+			sb.append(acts.size() - ACTIVITIES_ERROR_COUNT);
+			sb.append(" " + TranslatorWorker.translateText(" more") + "...</b>");
+		}
+		
+		return sb.toString();
 	}
 }

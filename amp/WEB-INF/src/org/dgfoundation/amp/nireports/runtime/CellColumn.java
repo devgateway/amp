@@ -12,9 +12,7 @@ import java.util.function.Consumer;
 import static java.util.Collections.emptyList;
 
 import org.dgfoundation.amp.nireports.ComparableValue;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.ReportHeadingCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
@@ -98,11 +96,6 @@ public class CellColumn extends Column {
 			return Arrays.asList(this);
 		else
 			return Collections.emptyList();
-	}
-
-	@Override
-	public String getDescription() {
-		return entity != null ? entity.description : null;
 	}
 	
 	@Override

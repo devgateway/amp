@@ -3,6 +3,7 @@
 /**
  * Define administrative URLs.
  */
+
 define('AMPACTIVITY_UI_PATH', 'activity');
 define('AMPACTIVITY_ADMIN_UI_PATH', 'admin/content/activity');
 define('AMPACTIVITY_BUNDLE_ADMIN_UI_PATH', 'admin/structure/activity');
@@ -113,6 +114,8 @@ function ampapi_activity_ctools_plugin_directory($owner, $plugin_type) {
   if ($owner == 'ampapi' && $plugin_type == 'mapper') {
     return 'plugins/mappers';
   }
+
+  return NULL;
 }
 
 /**
@@ -186,8 +189,10 @@ function _ampapi_human_filesize($path, $decimals = 2) {
  * Implements hook_views_pre_build()
  *
  * Update all displays of the Activities view and remove disabled fields and filters.
+ *
+ * @param view $view
  */
-function ampapi_activity_views_pre_build(View &$view) {
+function ampapi_activity_views_pre_build(view &$view) {
   if ($view->name != 'activities') {
     return;
   }
@@ -269,8 +274,8 @@ function _ampapi_activity_get_field_status($name, $handler, $ssc_status) {
 
   // Get a list of enabled columns and measures, these also affect the filter
   // visibility.
-  $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
-  $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
+  $columns_data = ampAPIRestClient::get('data/report/columns');
+  $measures_data = ampAPIRestClient::get('data/report/measures');
 
   // Hide fields disabled in AMP.
   $mapper_plugin = ampapi_get_mapper_by_property_name($handler->real_field);
@@ -311,8 +316,8 @@ function _ampapi_activity_get_filter_status($name, $handler, $ssc_status) {
 
   // Get a list of enabled columns and measures, these also affect the filter
   // visibility.
-  $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
-  $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
+  $columns_data = ampAPIRestClient::get('data/report/columns');
+  $measures_data = ampAPIRestClient::get('data/report/measures');
 
   // Hide Search type selector for SSC activities.
   $ssc_search_enabled = ampapi_activity_ssc_status();
@@ -454,7 +459,7 @@ function ampapi_activity_get_search_settings() {
  */
 function _ampapi_activity_get_api_settings($id = FALSE) {
   // Make the call.
-  $settings = ampapi_request('get', 'amp/settings', TRUE);
+  $settings = ampAPIRestClient::get('amp/settings');
   // Specify exceptions (usually hardcoded settings, FOR NOW).
   $exceptions = array(
     'amount-units' => array(

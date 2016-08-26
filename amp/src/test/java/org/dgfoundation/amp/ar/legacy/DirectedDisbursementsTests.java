@@ -3,10 +3,10 @@ package org.dgfoundation.amp.ar.legacy;
 import java.util.HashSet;
 import java.util.List;
 
-import org.dgfoundation.amp.testmodels.ColumnReportDataModel;
-import org.dgfoundation.amp.testmodels.GroupColumnModel;
-import org.dgfoundation.amp.testmodels.GroupReportModel;
-import org.dgfoundation.amp.testmodels.SimpleColumnModel;
+import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
+import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
+import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
+import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.*;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;

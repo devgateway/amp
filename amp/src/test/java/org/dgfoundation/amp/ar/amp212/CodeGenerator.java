@@ -13,6 +13,8 @@ import org.dgfoundation.amp.codegenerators.ActivityTitlesGenerator;
 import org.dgfoundation.amp.codegenerators.CategoriesTreeGenerator;
 import org.dgfoundation.amp.codegenerators.ColumnGenerator;
 import org.dgfoundation.amp.codegenerators.FundingColumnGenerator;
+import org.dgfoundation.amp.codegenerators.FundingIdsMapper;
+import org.dgfoundation.amp.codegenerators.FundingTypesGenerator;
 import org.dgfoundation.amp.codegenerators.NaturalTreeGenerator;
 import org.dgfoundation.amp.codegenerators.NiDateColumnGenerator;
 import org.dgfoundation.amp.codegenerators.NiDimensionGenerator;
@@ -46,7 +48,7 @@ public class CodeGenerator  {
 		return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
 	}
 	
-	private void generateColumns() throws FileNotFoundException, UnsupportedEncodingException {
+	protected void generateColumns() throws FileNotFoundException, UnsupportedEncodingException {
 		List<ColumnGenerator> gens = Arrays.asList(
 				 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_SECTOR),
 				 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_SECTOR),
@@ -85,69 +87,102 @@ public class CodeGenerator  {
 			gen.generateToFile();
 	}
 	
-	private void generateFunding() throws IOException {
+	protected void generateFunding() throws IOException {
 		 FundingColumnGenerator gen = new FundingColumnGenerator();
 		 gen.generateToFile();
+		 gen.binaryDump();
 		 //System.out.println(gen.generate());
 	}
 	
-	
-	private void generateActivityNames() {
+    protected void generateFundingTypesNames() throws IOException {
+	 	 FundingTypesGenerator gen = new FundingTypesGenerator(new FundingIdsMapper().getAllParams());
+	 	 gen.generateToFile();
+	 	 //System.out.println(gen.generate());
+    }
+    
+    protected void generateActivityNames() throws IOException {
 		ActivityTitlesGenerator gen = new ActivityTitlesGenerator();
-		System.out.println(gen.generate());
+		gen.generateToFile();
 	}
 	
 
-	public void generateDimensions() {
-		NiDimensionGenerator programGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_theme", "amp_theme_id", "parent_theme_id", "name").getRoots());
-		NiDimensionGenerator sectorsGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_sector", "amp_sector_id", "parent_sector_id", "name").getRoots());
-		NiDimensionGenerator locationsGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_category_value_location", "id", "parent_location", "location_name").getRoots());
-		NiDimensionGenerator orgGen = new NiDimensionGenerator(new OrganizationsTreeGenerator().getRoots());
-		NiDimensionGenerator catGen = new NiDimensionGenerator(new CategoriesTreeGenerator().getRoots());
+	public void generateDimensions() throws IOException {
+		NiDimensionGenerator programGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_theme", "amp_theme_id", "parent_theme_id", "name").getRoots(), "ProgramsTestDimension", "progs", 4);
+		NiDimensionGenerator sectorsGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_sector", "amp_sector_id", "parent_sector_id", "name").getRoots(), "SectorsTestDimension", "sectors", 3);
+		NiDimensionGenerator locationsGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_category_value_location", "id", "parent_location", "location_name").getRoots(), "LocationsTestDimension", "locs", 4);
+		NiDimensionGenerator orgGen = new NiDimensionGenerator(new OrganizationsTreeGenerator().getRoots(), "OrganizationsTestDimension", "orgs", 3);
+		NiDimensionGenerator catGen = new NiDimensionGenerator(new CategoriesTreeGenerator().getRoots(), "CategoriesTestDimension", "cats", 2);
 
-		System.out.println(locationsGen.generate());
-		System.out.println(programGen.generate());
-		System.out.println(sectorsGen.generate());
-		System.out.println(orgGen.generate());
-		System.out.println(catGen.generate());
+		locationsGen.generateToFile();
+		programGen.generateToFile();
+		sectorsGen.generateToFile();
+		orgGen.generateToFile();
+		catGen.generateToFile();
 	}
 	
 	public void generateCode() throws IOException  {
-			generateFunding();
-			generateActivityNames();
-//			generateFundingTypesNames();
-			generateDimensions();
-			generateColumns();
+		generateFunding();
+		generateActivityNames();
+		generateFundingTypesNames();
+		generateDimensions();
+		generateColumns();
 	}
 	
 	/**
 	 * Prior to startup one must make sure than organization names are unique. This is true in the testcases database.
-	 * For real production databases used for benchmarking, one may just prune the duplicate DBs. The SQL queries to do it are, in order:
 	 * 
-	 * create table temp_duplicate_orgs AS
+	 * 
+------------------------------------------------------------------------------------ 
+For real production databases used for benchmarking, one may just prune the duplicate DBs. The SQL queries to do it are, in order:
+
+create table temp_duplicate_orgs AS
 select z.* from (
 select org_name, count(*) cnt from ni_all_orgs_dimension where org_id > 0 group by org_name) z
-where z.cnt > 1
+where z.cnt > 1;
 
 
 create table temp_orgs_to_delete AS (select amp_org_id from 
-amp_organisation where name in (select org_name from temp_duplicate_orgs))
+amp_organisation where name in (select org_name from temp_duplicate_orgs));
 
 
-delete from amp_org_role where organisation in (select amp_org_id from temp_orgs_to_delete)
-delete from amp_funding_detail where amp_funding_id in (select amp_funding_id from amp_funding where amp_donor_org_id  in (select amp_org_id from temp_orgs_to_delete))
+delete from amp_org_role where organisation in (select amp_org_id from temp_orgs_to_delete);
+delete from amp_funding_detail where amp_funding_id in (select amp_funding_id from amp_funding where amp_donor_org_id  in (select amp_org_id from temp_orgs_to_delete));
 
-delete from amp_funding where amp_donor_org_id  in (select amp_org_id from temp_orgs_to_delete)
+delete from amp_funding where amp_donor_org_id  in (select amp_org_id from temp_orgs_to_delete);
 
-delete from amp_user_ext where amp_org_id  in (select amp_org_id from temp_orgs_to_delete)
-delete from amp_funding_detail where recipient_org_id in (select amp_org_id from temp_orgs_to_delete)
-truncate amp_ahsurvey cascade
-
-delete from amp_organisation where amp_org_id in (select amp_org_id from temp_orgs_to_delete)
+delete from amp_user_ext where amp_org_id  in (select amp_org_id from temp_orgs_to_delete);
+delete from amp_funding_detail where recipient_org_id in (select amp_org_id from temp_orgs_to_delete);
+truncate amp_ahsurvey cascade;
+truncate amp_activity_internal_id;
+truncate amp_org_recipient;
+truncate amp_organisation_sector;
+truncate amp_org_location;
+delete from amp_organisation where amp_org_id in (select amp_org_id from temp_orgs_to_delete);
 
 DROP TABLE temp_duplicate_orgs;
 DROP TABLE temp_orgs_to_delete;
 
+-----------------------------------------
+to export a database in a good-enough-for-benchmarks-use state, run the following SQL (warning: it will corrupt the history)
+
+TRUNCATE mondrian_fact_table;
+TRUNCATE mondrian_raw_donor_transactions;
+TRUNCATE dg_editor;
+TRUNCATE cached_v_pledges_funding_st;
+TRUNCATE cached_v_donor_funding;
+
+truncate amp_org_role_budget;
+delete from amp_org_role where activity NOT IN (select amp_activity_id from amp_activity);
+
+TRUNCATE amp_message CASCADE;
+delete from amp_funding_detail where amp_fund_detail_id not in (select amp_fund_detail_id from amp_activity aa join v_donor_funding vdf on aa.amp_activity_id = vdf.amp_activity_id);
+delete from amp_funding where amp_funding_id not in (select amp_funding_id from amp_activity aa join v_donor_funding vdf on aa.amp_activity_id = vdf.amp_activity_id);
+
+
+TRUNCATE amp_audit_logger;
+
+delete from amp_activity_sector where amp_activity_id NOT IN (select amp_activity_id from amp_activity);
+delete from amp_activities_categoryvalues where amp_activity_id NOT IN (select amp_activity_id from amp_activity);
 
 	 * 
 	 * @param args

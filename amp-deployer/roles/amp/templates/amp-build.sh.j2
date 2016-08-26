@@ -1,6 +1,6 @@
 #!/bin/sh
 ## AMP Build script.
-## {{ ansible_managed }}
+## Managed by Ansible!
 ## TODO: Use variables.
 
 if [ ! -f pom.xml ]
@@ -9,7 +9,7 @@ then
   exit 1
 fi
 
-mvn clean \
+/usr/local/bin/mvn clean \
     generate-resources \
     process-resources \
     -DserverName=local \

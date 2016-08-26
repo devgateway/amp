@@ -27,7 +27,6 @@ tomcat__download_checksum: "sha256:13f33616a3352e4fce548e042adfdd824353d0b48a42e
 tomcat__mirror: "http://archive.apache.org/dist/"
 # tomcat__mirror: "http://www-eu.apache.org/dist/"
 # tomcat__mirror: "http://www-us.apache.org/dist/"
-tomcat__mirror: "http://mirrors.hostingromania.ro/apache.org/"
 
 
 #### Internal variables:

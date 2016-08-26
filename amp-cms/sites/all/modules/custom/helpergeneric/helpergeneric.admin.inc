@@ -57,9 +57,18 @@ function helpergeneric_toggle_cleanup_ui_force_submit($form, &$form_state) {
  * Page callback for 'admin/settings/api'.
  */
 function helpergeneric_api_settings_form($form, &$form_state) {
-  $api_status = helpergeneric_check_api_status(FALSE, FALSE);
-  if (!$api_status['online']) {
-    drupal_set_message($api_status['message'], 'warning');
+  // We use the same default value for restclient_hostname as the restclient.module
+  $restclient_hostname = variable_get('restclient_hostname', 'http://localhost:80/rest');
+  if (empty($restclient_hostname)) {
+    drupal_set_message(t('API Server Hostname is not configured!'), 'warning');
+  }
+
+  // Do not display API status page when the page is submitted.
+  if (empty($form_state['input'])) {
+    $api_status = ampAPIRestClient::status(FALSE);
+    if ($api_status['online']) {
+      drupal_set_message(t('The API Server %url is online!', array('%url' => $restclient_hostname)), 'status');
+    }
   }
 
   $form['hostname'] = array(
@@ -73,9 +82,9 @@ function helpergeneric_api_settings_form($form, &$form_state) {
   $form['hostname']['restclient_hostname'] = array(
     '#type' => 'textfield',
     '#title' => t('Hostname'),
-    '#description' => t('The hostname for the server with no trailing slash. Ex: http://localhost:8080/rest'),
+    '#description' => t('The hostname for the server with no trailing slash. Ex: http://example.org/rest'),
     '#size' => 40,
-    '#default_value' => variable_get('restclient_hostname', 'http://localhost:8080/rest'),
+    '#default_value' => $restclient_hostname,
   );
 
   // Provide an alternative link for links to AMP.

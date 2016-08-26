@@ -14,20 +14,22 @@
   template:
     src: amp-build.sh.j2
     dest: /usr/local/bin/amp-build
-
-- name: Make build script executable
-  file:
-    path: /usr/local/bin/amp-build
-    state: file
     mode: "u=rwx,g=rwx,o=rx"
 
 - name: Create simbolic link for AMP
   file:
-    src: "/opt/devgateway/amp212-local"
+    src: "{{ amp__project_root }}"
     dest: "/opt/apache/apache-tomcat/webapps/ROOT"
     state: link
     owner: "{{ common__deployer_user }}"
     group: "{{ common__deployer_group }}"
 
-# - name: restart tomcat7
-#   command: service tomcat7 restart
+- name: Create import script
+  template:
+    src: amp-import.sh.j2
+    dest: /usr/local/bin/amp-import
+    mode: "u=rwx,g=rwx,o=rx"
+
+- name: Import and build the amp and amp-cms
+  include: import.yml
+  when: amp__import_and_build

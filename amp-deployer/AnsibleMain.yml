@@ -1,0 +1,24 @@
+---
+
+# You can copy this file to AnsibleMain.local.yml and make local configurations.
+# TODO: Do not use sample configuration if project environment has been specified but does not exist.
+
+- name: Prepare the server
+  hosts: "{{ hosts|default('devel') }}"
+  become: true
+  become_user: root
+
+  # Try to load an environment specific files if it exists, otherwise use the sample variables file.
+  vars_files:
+    - ["environments/{{ project_environment|default('local') }}.yml", "environments/sample.yml"]
+
+  tasks:
+    - hostname: name={{ hostname }}
+      when: hostname is defined
+
+  roles:
+    - common
+    - httpd_php56
+    - postgresql
+    - memcached
+    - amp

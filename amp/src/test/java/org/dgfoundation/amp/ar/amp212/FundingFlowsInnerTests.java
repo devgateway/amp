@@ -21,9 +21,9 @@ import org.dgfoundation.amp.nireports.schema.DimensionLevel;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
-import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
-import org.dgfoundation.amp.testmodels.LoggingIdsAcceptors;
-import org.dgfoundation.amp.testmodels.dimensions.OrganizationsTestDimension;
+import org.dgfoundation.amp.nireports.testcases.LoggingIdsAcceptors;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
+import org.dgfoundation.amp.nireports.testcases.generic.dimensions.OrganizationsTestDimension;
 import org.digijava.module.aim.helper.Constants;
 import org.junit.Test;
 

@@ -33,20 +33,20 @@ function ampapi_activity_embeddedform_content_type_render($subtype, $conf, $pane
   $block->title_is_xss_free = TRUE;
 
   // Make sure the API is online before displaying the search form.
-  $api_status = helpergeneric_check_api_status();
+  $api_status = ampAPIRestClient::status();
   if (!$api_status['online']) {
-    return;
+    return '';
   }
 
   $name = 'activities';
   $display_id = 'search_page';
   $view = views_get_view($name);
   if (empty($view)) {
-    return;
+    return '';
   }
 
   if (!$view->access($display_id)) {
-    return;
+    return '';
   }
 
   $view->set_display($display_id);
@@ -65,6 +65,7 @@ function ampapi_activity_embeddedform_content_type_render($subtype, $conf, $pane
     $exposed_form = $view->display_handler->get_plugin('exposed_form');
     $exposed_form->options['reset_button'] = FALSE;
     $exposed_form->options['submit_button'] = t('Search');
+    /** @noinspection PhpUndefinedMethodInspection */
     $output['form']['#markup'] = $exposed_form->render_exposed_form(TRUE);
   }
   $view->destroy();

@@ -5,6 +5,14 @@ import java.math.RoundingMode;
 
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 
+/**
+ * the precision setting used by AMP.
+ * NiReports does all the calculations in units; the results are translated in the requested multiplicity units at the output stages.
+ * Hence, keeping 6 significant digits as a scale is a more-than-ok 
+ * 
+ * @author Dolghier Constantin
+ *
+ */
 public class AmpPrecisionSetting implements NiPrecisionSetting {
 
 	@Override

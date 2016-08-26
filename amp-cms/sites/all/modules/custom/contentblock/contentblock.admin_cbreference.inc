@@ -48,11 +48,6 @@ function _contentblock_form_contentblock_form_alter(&$form, &$form_state, $form_
     // $form['title_field']['#attributes']['class'][] = 'element-hidden';
   }
 
-  if ($form_state['op'] == 'add' && !empty($_GET['destination'])) {
-    drupal_set_message(t('If you only want to remove the instructions for this block/section you can just click "Save" without adding/configuring any content.'));
-    drupal_set_message(t('You can later configure this block/section from the "Settings > Content Sections" page.'));
-  }
-
   // Attach validate callbacks.
   switch ($form['#entity']->machine_name) {
     case 'linkedmap':

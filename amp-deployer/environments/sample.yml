@@ -1,0 +1,56 @@
+---
+# Sample environment settings file.
+# See the docs/production-environments.md file for how to use this file.
+#
+# Vagrant will load this file if a "local.yml" environment variables file does not exist.
+#
+
+# Web server vhosts information:
+#  - template: name of the template used to create the vhost.
+#  - docroot: directory in the guest OS for the vhost docroot, this should point to the amp-cms (Public Portal).
+#  - proxy_directives: a list of directives for Apache HTTPD mod_proxy.
+#  - noindex: ad a /robots.txt instructing robots to not index the vhost.
+#  - php_devel: ad some PHP devel specific settings to the vhost.
+vhosts:
+  - domain: amp212.local
+    template: default_with_proxy
+    docroot: /var/www/amp212-cms-local
+    proxy_directives_sets:
+      - comment: 'Do not proxy the public portal.'
+        directives:
+          - 'ProxyPass /portal !'
+      - comment: 'Do not proxy the ArcGIS server.'
+        directives:
+          - 'ProxyPass /arcgis !'
+      - comment: 'AMP server proxy settings.'
+        directives:
+          - 'ProxyPass / ajp://localhost:8009/ connectiontimeout=300 timeout=300'
+          - 'ProxyPassReverse / ajp://localhost:8009/'
+          - 'ProxyPassReverseCookiePath / /'
+      - comment: 'ArcGIS server proxy settings.'
+        directives:
+          - '#ProxyPass /arcgis https://example.org:6080/arcgis'
+          - '#ProxyPassReverse /arcgis https://example.org:6080/arcgis'
+    noindex: true
+    php_devel: true
+    weight: 10
+
+# Database credentials.
+postgresql__databases:
+  - name: amp_cms_local
+    user: amp_cms_user
+    pass: 'demo1'
+  - name: amp_local
+    user: amp_user
+    pass: 'demo1'
+    extensions:
+      - fuzzystrmatch
+      - unaccent
+      - postgis
+      - postgis_topology
+      - postgis_tiger_geocoder
+
+# Extra open TCP ports.
+common__extra_open_tcp_ports:
+  - 22
+  - 8009

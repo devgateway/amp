@@ -272,13 +272,6 @@ public class ProgramUtil {
 			return getAllThemes(false);
 		}
 
-		/**
-         * Returns All AmpThemes including sub Themes if parameter is true.
-         * @param includeSubThemes boolean false - only top level Themes, true - all themes
-		 * @return
-		 * @throws DgException
-		 */
-        @SuppressWarnings("unchecked")
 		public static Map<Long, AmpThemeSkeleton> getAllThemesFaster() throws DgException
 		{
             Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(-1);
@@ -286,7 +279,6 @@ public class ProgramUtil {
         }
 		
 		
-
         public static List<AmpTheme> getAllThemes(boolean includeSubThemes) throws DgException {
         	return getAllThemes(includeSubThemes, false);
         }

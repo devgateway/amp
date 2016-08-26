@@ -15,14 +15,13 @@ import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
-
-import java.util.Arrays;
+import org.digijava.module.aim.util.SoftDeletable;
 
 
 @TranslatableClass (displayName = "Sector")
-public class AmpSector implements Serializable, Comparable, Identifiable,
+public class AmpSector implements Serializable, Comparable<AmpSector>, Identifiable,
 		ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable,
-		Cloneable, OrgProfileValue, NameableOrIdentifiable {
+		SoftDeletable, Cloneable, OrgProfileValue, NameableOrIdentifiable {
 	@Interchangeable(fieldTitle="Sector ID", id=true)
 	private Long ampSectorId;
 	@Interchangeable(fieldTitle="Parent Sector ID", pickIdOnly=true)
@@ -233,8 +232,8 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 		ampSecSchemeId = scheme;
 	}
 
-	public int compareTo(Object o) {
-		return ampSectorId.compareTo(((AmpSector) o).getAmpSectorId());
+	public int compareTo(AmpSector other) {
+		return ampSectorId.compareTo(other.getAmpSectorId());
 	}
 
 	public String toString() {
@@ -382,4 +381,20 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
     {
     	return InternationalizedModelDescription.getForProperty(AmpSector.class, "name").getSQLFunctionCall(idSource + ".ampSectorId");
     }
+
+	@Override
+	public Collection<AmpAutoCompleteDisplayable> getNonDeletedChildren() {
+		Collection<AmpSector> children = getChildren();
+		Collection<AmpAutoCompleteDisplayable> res = new ArrayList<>(children.size());
+		for (AmpSector theme: children) {
+			if (!theme.isSoftDeleted())
+				res.add(theme);
+		}
+		return res;
+	}
+
+	@Override
+	public boolean isSoftDeleted() {
+		return Boolean.TRUE.equals(this.deleted);
+	}
 }

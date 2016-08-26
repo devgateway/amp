@@ -1,5 +1,5 @@
 ## Virtual Host for {{ item.domain }}
-## {{ ansible_managed }}
+## Managed by Ansible!
 
 # Template options:
 #  - domain: the vhost domain name
@@ -21,8 +21,7 @@
   <Directory "{{ item.docroot }}">
     Options Indexes FollowSymLinks MultiViews
     AllowOverride all
-    Order allow,deny
-    Allow from all
+    Require all granted
 
     ## Restrict Access
     ## @see: http://httpd.apache.org/docs/2.4/mod/mod_auth_basic.html

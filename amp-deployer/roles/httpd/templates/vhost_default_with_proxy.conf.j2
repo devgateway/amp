@@ -1,5 +1,5 @@
 ## Virtual Host for {{ item.domain }}
-## {{ ansible_managed }}
+## Managed by Ansible!
 
 # Template options:
 #  - domain: the vhost domain name
@@ -10,27 +10,20 @@
 <VirtualHost *:80>
   ServerName {{ item.domain }}
 
-  {% if item.noindex | default(True) -%}
-  ## Do not allow robots to index the website
-  Alias /robots.txt /var/www/html/robots.noindex.txt
-  {% endif %}
-
   ## Always disable forward proxy requests.
   ProxyRequests Off
 
   ## Use incoming Host HTTP request header for proxy request.
   ProxyPreserveHost On
 
-  {% for set in item.proxy_directives_sets|default([]) -%}
-  # {{ set.comment }}
-  {% for set_directive in set.directives -%}
-  {{ set_directive }}
-  {% endfor %}
-
-  {% endfor %}
-
   ## Rewrite rules
   RewriteEngine On
+
+  {% if item.noindex | default(True) -%}
+  ## Do not allow robots to index the website
+  Alias /robots.txt /var/www/html/robots.noindex.txt
+  ProxyPass /robots.txt !
+  {% endif %}
 
   # Redirect domain root to the portal homepage.
   RewriteRule ^/$ /portal/ [R]
@@ -50,6 +43,14 @@
     #AuthUserFile {{ item.docroot }}/docs/.httpdDevUserFile
     #Require valid-user
   </Directory>
+
+  {% for set in item.proxy_directives_sets|default([]) -%}
+  # {{ set.comment }}
+  {% for set_directive in set.directives -%}
+  {{ set_directive }}
+  {% endfor %}
+
+  {% endfor %}
 
   ## Logging
   CustomLog "/var/log/httpd/{{ item.domain }}--access.log" combined

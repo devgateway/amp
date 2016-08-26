@@ -18,7 +18,8 @@ module.exports = Backbone.View.extend({
       self.listenTo(self.app.data.indicators, 'hide', self.hideLayer);
       self.listenTo(self.app.data.indicators, 'sync', self.refreshLayer);
       
-      self.listenTo(self.app.data.indicators, 'filter', self.filter);
+      self.listenTo(self.app.data.indicators, 'applyFilter', self.refreshGapLayer);
+      self.listenTo(self.app.data.indicators, 'applySettings', self.refreshGapLayer);
             
       self.listenTo(self.app.data.hilightFundingCollection, 'show', self.refreshLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'hide', self.hideLayer);
@@ -26,7 +27,7 @@ module.exports = Backbone.View.extend({
     });
   },
   
-  filter: function(layer) {
+  refreshGapLayer: function(layer) {
 	if (layer.get('selected')) {
 		layer._changing = true;
 		this.refreshLayer(layer);

@@ -18,9 +18,9 @@ import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
-import org.dgfoundation.amp.testmodels.HardcodedActivities;
-import org.dgfoundation.amp.testmodels.NiReportModel;
-import org.dgfoundation.amp.testmodels.ReportModelGenerator;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedActivities;
 import org.digijava.module.aim.helper.DateConversion;
 import org.junit.Test;
 
@@ -82,9 +82,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	}
 	
 	@Test
-	public void testHierarchiesWithEverything() {
-		NiReportModel cor = null;
-		
+	public void testHierarchiesWithEverything() {		
 		List<String> columns = Arrays.asList(ColumnConstants.AC_CHAPTER, ColumnConstants.IMPLEMENTATION_LEVEL, ColumnConstants.IMPLEMENTATION_LOCATION, 
 				ColumnConstants.ACCESSION_INSTRUMENT, ColumnConstants.STATUS, ColumnConstants.TYPE_OF_ASSISTANCE, 
 				ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.DONOR_TYPE, ColumnConstants.CREDIT_DONATION, 

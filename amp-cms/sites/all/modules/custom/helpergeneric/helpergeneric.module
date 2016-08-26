@@ -112,14 +112,14 @@ function helpergeneric_menu() {
  */
 function helpergeneric_amp_redirect() {
   if (empty($_GET['d'])) {
-    return drupal_not_found();
+    drupal_not_found();
   }
   global $language_content;
 
   // Only redirect to relative URLs starting with 'TEMPLATE'.
   $destination = trim($_GET['d'], '/');
   if (strpos($destination, 'TEMPLATE') !== 0) {
-    return drupal_not_found();
+    drupal_not_found();
   }
 
   // Set the default js options.
@@ -752,64 +752,6 @@ function helpergeneric_unparse_url($parsed_url) {
   $query    = isset($parsed_url['query']) ? '?' . $parsed_url['query'] : '';
   $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
   return "$scheme$user$pass$host$port$path$query$fragment";
-}
-
-/**
- * Tries to determine if the API is online or not.
- */
-function helpergeneric_check_api_status($display_error = TRUE, $link = TRUE) {
-  static $status;
-
-  if (isset($status)) {
-    return $status;
-  }
-
-  $status = array(
-    'online' => FALSE,
-    'message' => '',
-  );
-
-  $response = restclient_get('test', array('reset' => TRUE, 'error_handling' => TRUE));
-  if (empty($response) || $response->code == '404') {
-    $status['online'] = FALSE;
-    $status['message'] = t('The API server seems to be offline.');
-
-    if (user_access('helpergeneric administer settings') && $link) {
-      $t_args = array('!settings' => l(t('API Settings'), 'admin/settings/api'));
-      $status['message'] .= ' ' . t('Please check the !settings page or the AMP status.', $t_args);
-    }
-    else {
-      $status['message'] .= ' ' . t('Please try again later.');
-    }
-  }
-  else {
-    $response_code = restclient_response_code($response);
-    if ($response_code == RESTCLIENT_RESPONSE_SUCCESS) {
-      $status['online'] = TRUE;
-    }
-    else if ($response_code == RESTCLIENT_RESPONSE_CLIENT_ERROR && $response->code == '404') {
-      $status['message'] = t('The API server seems to be offline.');
-      if ($link) {
-        $t_args = array('!settings' => l(t('API Settings'), 'admin/settings/api'));
-        $status['message'] .= ' ' . t('Please check the !settings page.', $t_args);
-      }
-    }
-    else {
-      if (!empty($response->error)) {
-        $status['message'] = t('The API returned the following status message: %message', array('%message' => $response->error));
-      }
-      else if (!empty($response->status_message)) {
-        $status['message'] = t('The API returned the following status message: %message', array('%message' => $response->status_message));
-      }
-    }
-  }
-
-  // The error is displayed only the first time this function is called.
-  if ($display_error && !empty($status['message'])) {
-    drupal_set_message($status['message'], 'error');
-  }
-
-  return $status;
 }
 
 function _helpergeneric_get_social_links($current_url, $page_title = NULL) {

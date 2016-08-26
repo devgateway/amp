@@ -8,8 +8,7 @@ var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var IndicatorLayerLocalStorage = require('../indicator-layer-localstorage');
 
 /* Backbone Collection IndicatorLayers (RENAME FILE) */
-module.exports = Backbone.Collection
-.extend(LoadOnceMixin).extend({
+module.exports = Backbone.Collection.extend({
 
   url: '/rest/gis/indicator-layers',
 
@@ -40,12 +39,16 @@ module.exports = Backbone.Collection
     var deferred = $.Deferred();
     this.load().then(function() {
       self.url = '/rest/gis/indicators';
-      self.fetch().then(function() {
+      self.fetch({remove: false}).then(function() {
         deferred.resolve();
       });
     });
 
     return deferred;
+  },
+  load: function(){
+	  this.url = '/rest/gis/indicator-layers';
+	  return this.fetch()
   },
   loadFromLocalStorage: function(data){	 
 	  if(this.url === '/rest/gis/indicators'){
@@ -128,10 +131,8 @@ module.exports = Backbone.Collection
 	     }
 	     if(obj.createdBy){
 		      tooltip += '&#013; Created by ' + obj.createdBy + '. ';
-		 } else {
-             tooltip += '&#013; Created by Admin'; // if the layer is created by the admin then it's null.
-         }
+		 }
 	     return tooltip;
-  }
+}
 
 });

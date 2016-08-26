@@ -29,23 +29,20 @@ module.exports = Backbone.View.extend({
 
     this.loadData();    
     this.listenTo(this.app.data.indicators, 'add', this.render);
+    this.listenTo(this.app.data.indicators, 'remove', this.render);
+    this.listenTo(this.app.data.indicators, 'reset', this.render);
   },
   loadData: function(){
 	  var self = this;
 	  this.app.data.indicators.loadAll().then(function() {
 	      self._registerSerializer();
 	  });  
-  },
-  reloadData: function(){
-	  var self = this;
-	  this.app.data.indicators.loadAll().then(function() {	  
-		  self.render();
-	  });  
-  },
+  },  
   render: function() {	 
     // TODO: find a better way to keep our proxy collection up to date
     // Thad do you know a good pattern for this?
     this.collection.reset(this.filterLayers(this.app.data.indicators));
+    this.$el.empty();
     if(this.collection.length > 0){
     	this.$el.html(this.template({title: this.title}));
         this.app.translator.translateDOM(this.el); /* After to catch disabled */
@@ -67,17 +64,29 @@ module.exports = Backbone.View.extend({
       get: function() {
         var tmp = self.collection.getSelected().first().value();
         if (tmp) {
-          return tmp.toJSON().id; //TODO: should be an id....
+          return {id: tmp.toJSON().id, selectedGapAnalysis: tmp.get('selectedGapAnalysis')}; //TODO: should be an id....
         } else {
           return null;
         }
       },
       set: function(id) {
-        if (id) {
-          var selectedModel = self.collection.findWhere({id: id});
-          if (selectedModel) {
-            self.collection.select(selectedModel);
-          }
+    	var auxId = id;
+    	// We need to check if id is a number or an object for old saved data (before we added Gap Analysis, "id" was a number).
+    	if (id instanceof Object && id.id !== undefined) {
+    		auxId = id.id;
+    	}
+    	if (auxId) {
+    		var selectedModel = self.collection.findWhere({id: auxId});
+        	if (selectedModel) {				
+				// Refresh the Gap Analysis area first because we need the parameter for the indicator EP.
+				if (selectedModel.get('canDoGapAnalysis') === true) {
+					self.app.mapView.headerGapAnalysisView.model.set('isGapAnalysisAvailable', true);				
+					if (id.selectedGapAnalysis === true) {
+						self.app.mapView.headerGapAnalysisView.model.set('isGapAnalysisSelected', true);
+					}
+				}
+				self.collection.select(selectedModel);
+          	}          
         }
       },
       empty: null

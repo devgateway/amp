@@ -5,10 +5,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.dgfoundation.amp.testmodels.ColumnReportDataModel;
-import org.dgfoundation.amp.testmodels.GroupColumnModel;
-import org.dgfoundation.amp.testmodels.GroupReportModel;
-import org.dgfoundation.amp.testmodels.SimpleColumnModel;
+import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
+import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
+import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
+import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.request.TLSUtils;

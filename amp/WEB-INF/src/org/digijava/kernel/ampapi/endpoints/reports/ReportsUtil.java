@@ -262,10 +262,8 @@ public class ReportsUtil {
 	}
 	
 	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams) {
-		// the caching mechanism should be or deleted at all or rewrote. 
-		// During the pagination, sorting and exports the regenerate = true always, because the 'regenerate' param is not set to false
-
-		String reportToken = EndpointUtils.getSingleValue(formParams, EPConstants.MD5_TOKEN, Long.toString(Calendar.getInstance().getTimeInMillis()));
+		
+		String reportToken = EndpointUtils.getSingleValue(formParams, EPConstants.MD5_TOKEN, null); // use null in case the frontend has not generated an md5 token (e.g. Tabs as of 15/aug/2016). Using the timestamp is a VERY bad idea since it would pollute the cache at each page cache
 		
 		boolean regenerate = ReportCacher.getReportData(reportToken) == null;
 		CachedReportData cachedReportData = null;

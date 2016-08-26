@@ -8,8 +8,8 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
-import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
-import org.dgfoundation.amp.testmodels.TestModelConstants;
+import org.dgfoundation.amp.nireports.testcases.TestModelConstants;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 

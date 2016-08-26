@@ -88,6 +88,20 @@
   become_user: postgres
   with_items: "{{ postgresql__databases|default([]) }}"
 
+- name: Add database extensions
+  postgresql_ext:
+    name: '{{ item.1 }}'
+    db: '{{ item.0.name }}'
+    #login_user: '{{ item.0.user }}'
+    #login_password: '{{ item.0.pass }}'
+  become: true
+  become_user: postgres
+  with_subelements:
+    - "{{ postgresql__databases|default([]) }}"
+    - extensions
+    - flags:
+      skip_missing: True
+
 - name: Create database users
   postgresql_user:
     name: '{{ item.user }}'
@@ -99,7 +113,7 @@
   become_user: postgres
   with_items: "{{ postgresql__databases|default([]) }}"
 
-- name: Vagrant - Create PostgreSQL password file
+- name: Create PostgreSQL password file for user vagrant
   template:
     src: dot.pgpass.j2
     dest: "~/.pgpass"

@@ -9,11 +9,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
+import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel.PARAM;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -32,12 +36,13 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 		super(input, language, params);
 	}
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	public enum PARAM implements AmpAutoCompleteModelParam {
 		PROGRAM_TYPE
 	};
 
+	
 	@Override
 	protected Collection<AmpTheme> load() {
 		try {
@@ -45,19 +50,13 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 			Session session = null;
 			try {
 				session = PersistenceManager.getRequestDBSession();
-
 				String pType = (String) getParams().get(PARAM.PROGRAM_TYPE);
 				AmpActivityProgramSettings aaps = ProgramUtil
 						.getAmpActivityProgramSettings(pType);
 				AmpTheme def = aaps.getDefaultHierarchy();
 				
 				Criteria crit = session.createCriteria(AmpTheme.class);
-				//do not show deleted entries
-				crit.add(Restrictions.or(Restrictions.eq("deleted", Boolean.FALSE), Restrictions.isNull("deleted")));
-
 				crit.setCacheable(true);
-				//The following line was commented out because it added only the parent hierarchy in the list.
-				//getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, false);
 				if (input.trim().length() > 0){
 					Object o = getTextCriterion("name", input);
 					if (o instanceof SimpleExpression){
@@ -67,6 +66,8 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 						crit.add((Criterion)o);
 					}
 				}
+
+				crit.add(Restrictions.or(Restrictions.eq("deleted", Boolean.FALSE), Restrictions.isNull("deleted")));
 
 				Integer maxResults = (Integer) getParams().get(
 						AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
@@ -96,14 +97,6 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				if (isExactMatch())
 					return ret;
 
-				//AMP-16739 the default program is always the root of hierarchy 
-				/*if (def != null) {
-					AmpTheme defUsed = new AmpTheme();
-					defUsed.setName(def.getName());
-					defUsed.setAmpThemeId(def.getAmpThemeId());
-					defUsed.setTransientBoolean(true);
-					ret.add(0, defUsed);
-				}*/
 			} catch (Exception e) {
 				throw new DgException("Cannot retrive all themes from db", e);
 			}

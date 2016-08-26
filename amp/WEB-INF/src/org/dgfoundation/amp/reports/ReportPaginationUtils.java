@@ -62,8 +62,7 @@ public class ReportPaginationUtils {
 	public final static CachedReportData cacheReportData(Long reportId, GeneratedReport generatedReport) {
 		if (generatedReport == null) return null;
 		//adding
-		ReportAreaMultiLinked[] res = convert(generatedReport.reportContents);
-		CachedReportData crd = new CachedReportData(generatedReport, res);
+		CachedReportData crd = new CachedReportData(generatedReport);
 		ReportCacher.addReportData(reportId, crd);
 		return crd;
 	}

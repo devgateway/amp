@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ColoredCell;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
@@ -22,6 +20,8 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
  *
  */
 public class ScorecardExcelExporter {
+	
+	ScorecardExcelTemplate scorecardExcelTemplate;
 
 	/**
 	 * Creates an excel workbook (HSSFWorkbook) having the headers with all the Quarters spanning the desired period,
@@ -39,6 +39,10 @@ public class ScorecardExcelExporter {
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = workbook.createSheet(TranslatorWorker.translateText("Donor Scorecard"));
 		worksheet.setColumnWidth(0, 11000);
+		
+		// create the template styles
+		scorecardExcelTemplate = new ScorecardExcelTemplate(workbook);
+		
 		// index from 0,0... cell A1 is cell(0,0)
 		createHeader(headers, workbook, worksheet);
 		createColumns(columns, workbook, worksheet);
@@ -46,28 +50,8 @@ public class ScorecardExcelExporter {
 			for (int j = 0; j < headers.size(); j++) {
 				ColoredCell cell = data.get(columns.get(i).getIdentifier()).get(headers.get(j).toString());
 				HSSFCell paintedCell = worksheet.getRow(i + 1).createCell(j + 1);
-				CellStyle cellStyle = workbook.createCellStyle();
-				short color = HSSFColor.RED.index;
-				switch (cell.getColor()) {
-				case GRAY:
-					color = HSSFColor.GREY_40_PERCENT.index;
-					break;
-				case GREEN:
-					color = HSSFColor.GREEN.index;
-					break;
-				case RED:
-					color = HSSFColor.RED.index;
-					break;
-
-				case YELLOW:
-					color = HSSFColor.YELLOW.index;
-					break;
-
-				}
-				cellStyle.setFillForegroundColor(color);
-				cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+				CellStyle cellStyle = scorecardExcelTemplate.getColoredStyle(cell.getColor());
 				paintedCell.setCellStyle(cellStyle);
-
 			}
 		}
 		return workbook;
@@ -82,13 +66,11 @@ public class ScorecardExcelExporter {
 	 */
 	private void createColumns(List<AmpOrganisation> columns, HSSFWorkbook workbook, HSSFSheet worksheet) {
 		int rowIndex = 0;
-		CellStyle style = workbook.createCellStyle();
-		style.setWrapText(true);
 		for (AmpOrganisation column : columns) {
 			HSSFRow donorNameRow = worksheet.createRow(++rowIndex);
 			HSSFCell donorNameCell = donorNameRow.createCell(0);
 			donorNameCell.setCellValue(column.getName());
-			donorNameCell.setCellStyle(style);
+			donorNameCell.setCellStyle(scorecardExcelTemplate.getWrapTextCellStyle());
 		}
 	}
 
@@ -103,14 +85,11 @@ public class ScorecardExcelExporter {
 		HSSFRow row = worksheet.createRow(0);
 		HSSFCell donorTextCell = row.createCell(headerIndex);
 		donorTextCell.setCellValue(TranslatorWorker.translateText("Donors"));
-		HSSFCellStyle blueHeaderStyle = workbook.createCellStyle();
-		blueHeaderStyle.setFillForegroundColor(HSSFColor.LIGHT_BLUE.index);
-		blueHeaderStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-		donorTextCell.setCellStyle(blueHeaderStyle);
+		donorTextCell.setCellStyle(scorecardExcelTemplate.getBlueHeaderCellStyle());
 		for (Quarter headerName : headers) {
 			HSSFCell quarter = row.createCell(++headerIndex);
 			quarter.setCellValue(headerName.toString());
-			quarter.setCellStyle(blueHeaderStyle);
+			quarter.setCellStyle(scorecardExcelTemplate.getBlueHeaderCellStyle());
 			worksheet.autoSizeColumn(headerIndex);
 		}
 	}

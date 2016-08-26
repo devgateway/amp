@@ -237,7 +237,7 @@ function ampapi_goto() {
  * @inheritdoc
  */
 function ampapi_url_outbound_alter(&$path, &$options, $original_path) {
-  if (FALSE && substr($path, 0, 6) == '<amp>/') {
+  if (substr($path, 0, 6) == '<amp>/') {
     // Prepare the AMP path.
     $amp_hostname = helpergeneric_detect_amp_baseurl();
     $amp_relative_path = substr($path, 5);

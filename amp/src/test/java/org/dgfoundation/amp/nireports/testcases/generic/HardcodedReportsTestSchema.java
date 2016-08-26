@@ -26,7 +26,7 @@ import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.ActivityCountingBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.BigTransactionCountingBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
@@ -150,8 +150,7 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 		addMeasure(new TrivialTestMeasure(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false, false,
 				byMeasureDividingBehaviour(TimeRange.NONE, MeasureConstants.ACTUAL_COMMITMENTS), singletonMap(MeasureConstants.ACTUAL_COMMITMENTS, false)));
 
-		BigDecimal threshold = new BigDecimal("100000");
-		addMeasure(new NiTransactionMeasure(MeasureConstants.NUMBER_OF_BIG_TRANSACTIONS, cac -> cac.getAmount().compareTo(threshold) >= 0, ActivityCountingBehaviour.instance, "Count", false));
+		addMeasure(new NiTransactionMeasure(MeasureConstants.NUMBER_OF_BIG_TRANSACTIONS, cac -> true, BigTransactionCountingBehaviour.instance, "Count", false));
 	}
 
 	protected final Memoizer<TestFundingFetcher> fundingFetcher = new Memoizer<>(() -> new TestFundingFetcher(activityNames, new TestcasesFundingCells(activityNames)));

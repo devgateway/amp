@@ -1,10 +1,12 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.List;
 
 import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTransactionCountCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
@@ -13,24 +15,32 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
 /**
  * @author Octavian Ciubotaru
  */
-public class ActivityCountingBehaviour extends AbstractComputedBehaviour<NiTransactionCountCell> {
+public class BigTransactionCountingBehaviour extends AbstractComputedBehaviour<NiTransactionCountCell> {
 
-    public static final ActivityCountingBehaviour instance = new ActivityCountingBehaviour(TimeRange.MONTH);
+    public static final BigTransactionCountingBehaviour instance = new BigTransactionCountingBehaviour(TimeRange.MONTH);
 
-    private ActivityCountingBehaviour(TimeRange timeRange) {
+    private BigTransactionCountingBehaviour(TimeRange timeRange) {
         super(timeRange);
     }
 
     @Override
-    public NiTransactionCountCell doHorizontalReduce(List<NiCell> cells) {
+    public NiOutCell horizontalReduce(List<NiCell> cells, NiReportsEngine context) {
         if (cells.isEmpty()) {
             return NiTransactionCountCell.ZERO;
         }
+        BigDecimal threshold = context.schemaSpecificScratchpad.getBigTransactionThreshold();
         IdentityHashMap<Cell, Boolean> transactionCells = new IdentityHashMap<>();
         for (NiCell niCell : cells) {
-            transactionCells.put(niCell.getCell(), true);
+            if (niCell.getAmount().compareTo(threshold) >= 0) {
+                transactionCells.put(niCell.getCell(), true);
+            }
         }
         return new NiTransactionCountCell(transactionCells);
+    }
+
+    @Override
+    public NiTransactionCountCell doHorizontalReduce(List<NiCell> cells) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

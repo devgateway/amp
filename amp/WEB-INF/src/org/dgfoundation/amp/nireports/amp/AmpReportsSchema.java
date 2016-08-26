@@ -71,7 +71,7 @@ import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
-import org.dgfoundation.amp.nireports.behaviours.ActivityCountingBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.BigTransactionCountingBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
@@ -978,12 +978,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, Constants.PLEDGE));
 
-		Long thresholdAsLong = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.BIG_TRANSACTION_THRESHOLD);
-		if (thresholdAsLong == -1) {
-			thresholdAsLong = 100000l; // assume this default for testing purposes since it is not yet present in amp_tests_212 db
-		}
-		BigDecimal threshold = BigDecimal.valueOf(thresholdAsLong);
-		addMeasure(new NiTransactionMeasure(MeasureConstants.NUMBER_OF_BIG_TRANSACTIONS, cac -> cac.getAmount().compareTo(threshold) >= 0, ActivityCountingBehaviour.instance, "Count", false));
+		addMeasure(new NiTransactionMeasure(MeasureConstants.NUMBER_OF_BIG_TRANSACTIONS, cac -> true, BigTransactionCountingBehaviour.instance, "Count", false));
 		
 		return this;
 	}

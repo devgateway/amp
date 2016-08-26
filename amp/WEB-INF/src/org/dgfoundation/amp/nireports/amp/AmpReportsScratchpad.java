@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -120,6 +121,8 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	
 	protected final NiPrecisionSetting precisionSetting = new AmpPrecisionSetting();
 
+	private BigDecimal bigTransactionThreshold;
+
 	public AmpReportsScratchpad(NiReportsEngine engine) {
 		this.engine = engine;
 		this.computedMeasuresBlock =  new Memoizer<>(() -> SelectedYearBlock.buildFor(this.engine.spec, forcedNowDate == null ? LocalDate.now() : forcedNowDate));
@@ -136,7 +139,13 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 			!engine.spec.getHierarchyNames().contains(ColumnConstants.TYPE_OF_ASSISTANCE);
 		this.verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
 			engine.spec.getColumnNames().contains(ColumnConstants.MODE_OF_PAYMENT) &&
-			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);		
+			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);
+
+		Long thresholdAsLong = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.BIG_TRANSACTION_THRESHOLD);
+		if (thresholdAsLong == -1) {
+			thresholdAsLong = 100000L; // assume this default for testing purposes since it is not yet present in amp_tests_212 db
+		}
+		bigTransactionThreshold = BigDecimal.valueOf(thresholdAsLong);
 	}
 	
 	public AmpCurrency getUsedCurrency() {
@@ -283,5 +292,10 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		if (preexistantMonthNumber != monthNumber)
 			return in.withMonth(new ComparableValue<>(in.month.getValue(), monthNumber));
 		return in;
+	}
+
+	@Override
+	public BigDecimal getBigTransactionThreshold() {
+		return bigTransactionThreshold;
 	}
 }

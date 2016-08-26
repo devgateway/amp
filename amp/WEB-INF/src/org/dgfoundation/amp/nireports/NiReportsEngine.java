@@ -626,11 +626,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		for(String hier: this.actualHierarchies) {
 			CellColumn cel = (CellColumn) this.headers.rootColumn.findChildByName(hier);
 			NiUtils.failIf(cel == null, () -> String.format("could not find fetched column used for hierarchies: %s", hier));
-			if (cel != null) {
-				timer.run(hier, () -> {
-					this.rootReportData = this.rootReportData.horizSplit(cel);
-				});
-			}
+			timer.run(hier, () -> this.rootReportData = this.rootReportData.horizSplit(cel));
 		}
 	}
 		

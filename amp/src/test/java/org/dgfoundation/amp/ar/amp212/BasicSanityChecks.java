@@ -1908,4 +1908,32 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		
 		runNiTestCase(spec, "en", executionRateActs, cor);
 	}
+
+	@Test
+	public void testNumberOfBigTransactions() {
+		NiReportModel cor = new NiReportModel("testNumberOfBigTransactions")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 9))",
+						"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 7, colSpan: 2))",
+						"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2))",
+						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Number of Big Transactions", "2", "Funding-2014-Actual Commitments", "80,760,63", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Number of Big Transactions", "1", "Totals-Actual Commitments", "537,549,63", "Totals-Number of Big Transactions", "3")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Number of Big Transactions", "2", "Totals-Actual Commitments", "333,333", "Totals-Number of Big Transactions", "2"),
+								new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Funding-2014-Actual Commitments", "15,000", "Totals-Actual Commitments", "15,000"),
+								new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Funding-2014-Actual Commitments", "65,760,63", "Totals-Actual Commitments", "65,760,63"),
+								new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Number of Big Transactions", "1", "Totals-Actual Commitments", "123,456", "Totals-Number of Big Transactions", "1"),
+								new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements"),
+								new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity")      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testNumberOfBigTransactions",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.NUMBER_OF_BIG_TRANSACTIONS),
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+
+		runNiTestCase(spec, "en", executionRateActs, cor);
+	}
 }

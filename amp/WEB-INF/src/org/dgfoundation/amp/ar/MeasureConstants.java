@@ -94,4 +94,6 @@ public class MeasureConstants {
 
 	//public static final String FORECAST_EXECUTION_RATE = "Forecast Execution Rate";
 	public static final String ALWAYS_PRESENT = "Always Present";
+
+	public static final String NUMBER_OF_BIG_TRANSACTIONS = "Number of Big Transactions";
 }

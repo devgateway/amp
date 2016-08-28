@@ -1967,4 +1967,14 @@ public class TeamUtil {
     	}
         return res;
     }
+    
+    public static void getTeams(AmpTeam team, List<AmpTeam> teams) {
+        teams.add(team);
+        Collection<AmpTeam> childrenTeams =  TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
+        if (childrenTeams != null) {
+            for (AmpTeam tm : childrenTeams) {
+                getTeams(tm, teams);
+            }
+        }
+    }
 }

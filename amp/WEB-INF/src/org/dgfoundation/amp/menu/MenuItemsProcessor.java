@@ -13,7 +13,6 @@ import java.util.Set;
 import org.dgfoundation.amp.menu.dynamic.DynamicMenu;
 import org.dgfoundation.amp.menu.dynamic.EmailMenu;
 import org.dgfoundation.amp.menu.dynamic.LanguageMenu;
-import org.dgfoundation.amp.menu.dynamic.VisualizationDashboardsMenu;
 import org.dgfoundation.amp.menu.dynamic.WorkspaceMenu;
 import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
 import org.digijava.kernel.request.TLSUtils;
@@ -148,7 +147,6 @@ public class MenuItemsProcessor {
 	
 	private static final Map<String, DynamicMenu> dynamicPerRequest = new HashMap<String, DynamicMenu>() {{
 		put(MenuConstants.CHANGE_WORKSPACE, new WorkspaceMenu());
-		put(MenuConstants.DASHBOARDS, new VisualizationDashboardsMenu());
 	}};
 	
 	/**

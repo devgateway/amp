@@ -42,7 +42,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
-import org.digijava.module.visualization.util.DashboardUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;

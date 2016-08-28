@@ -8,8 +8,6 @@ package org.digijava.module.aim.util;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -38,7 +36,35 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.admin.helper.AmpActivityFake;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
+import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureImg;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.dbentity.IPAContractDisbursement;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ActivityItem;
 import org.digijava.module.aim.helper.Components;
@@ -53,7 +79,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
-import org.digijava.module.visualization.util.DashboardUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
@@ -61,7 +86,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.MatchMode;
-import org.digijava.module.aim.dbentity.AmpStructure;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
@@ -278,7 +302,7 @@ public class ActivityUtil {
           //oql += " and " +getTeamMemberWhereClause(teamMember);
     	  AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
           if (teamMember.getComputation()!=null&&teamMember.getComputation()) {
-              String ids = DashboardUtil.getComputationOrgsQry(team);
+              String ids = OrganisationUtil.getComputationOrgsQry(team);
               if(ids.length()>1){
               ids = ids.substring(0, ids.length() - 1);
               	whereTeamStatement.append("  and ( latestAct.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(" + ids+"))");
@@ -289,13 +313,12 @@ public class ActivityUtil {
 				if (team.getAccessType().equals("Management")) {
 					whereTeamStatement.append(String.format(" and (latestAct.draft=false or latestAct.draft is null) and latestAct.approvalStatus IN ('%s', '%s') ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
 					List<AmpTeam> teams = new ArrayList<AmpTeam>();
-					DashboardUtil.getTeams(team, teams);
+					TeamUtil.getTeams(team, teams);
 					String relatedOrgs = "", teamIds = "";
 					for (AmpTeam tm : teams) {
 						if (tm.getComputation() != null && tm.getComputation()) {
-							relatedOrgs += DashboardUtil
-									.getComputationOrgsQry(tm);
-							 relatedOrgsCriteria=true;
+							relatedOrgs += OrganisationUtil.getComputationOrgsQry(tm);
+							relatedOrgsCriteria=true;
 						}
 						teamIds += tm.getAmpTeamId() + ",";
 					}
@@ -1890,6 +1913,20 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		if (fromDate.before(toDate))
 			return DateConversion.getPeriod(fromDate, toDate);
 		return null;
+	}
+	
+	public static Collection<Long> getNationalActivityList() {
+		Collection<Long> ret = new HashSet<Long>();
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			Long id = CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.getIdInDatabase();
+			Query query = session.createSQLQuery("SELECT amp_activity_id FROM amp_activities_categoryvalues WHERE amp_categoryvalue_id = ?");
+			query.setLong(0, id);
+			ret = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 	
 } // End

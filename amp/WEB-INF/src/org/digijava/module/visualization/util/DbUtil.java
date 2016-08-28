@@ -17,7 +17,6 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpColorThreshold;
 import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -26,16 +25,13 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.visualization.dbentity.AmpDashboard;
-import org.digijava.module.visualization.dbentity.AmpDashboardGraph;
-import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -218,7 +214,7 @@ public class DbUtil {
         for (Iterator iterator = programs.iterator(); iterator.hasNext();) {
 			AmpTheme ampTheme = (AmpTheme) iterator.next();
 			if (ampTheme.getIndlevel()>0)
-				if (sett.getDefaultHierarchyId()== DashboardUtil.getTopLevelProgram(ampTheme).getParentThemeId().getAmpThemeId())
+				if (sett.getDefaultHierarchyId()== ProgramUtil.getTopLevelProgram(ampTheme).getParentThemeId().getAmpThemeId())
 					programs2.add(ampTheme);
 		}
         return programs2;
@@ -542,89 +538,6 @@ public class DbUtil {
  	 	return null;
  	}
 
-	public static List<AmpDashboard> getAllDashboards() {
-        Session session = null;
-        List<AmpDashboard> dsb = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select d from "
-                + AmpDashboard.class.getName() + " d ";
-            Query qry = session.createQuery(queryString);
-            dsb = qry.list();
-
-        } catch (Exception ex) {
-            logger.error("Unable to get dashboards from database", ex);
-        }
-        logger.debug("Getting dashboards successfully ");
-        return dsb;
-    }
-	
-	public static AmpDashboard getDashboardById(Long id) {
-        Session session = null;
-        AmpDashboard dash = null;
-        Iterator itr = null;
-		
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select d from "
-                + AmpDashboard.class.getName() + " d where (d.id=:id)";
-            Query qry = session.createQuery(queryString);
-            qry = session.createQuery(queryString);
-			qry.setParameter("id", id, LongType.INSTANCE);
-			itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				dash = (AmpDashboard) itr.next();
-			}
-        } catch (Exception ex) {
-            logger.error("Unable to get dashboard from database", ex);
-        }
-        logger.debug("Getting dashboard successfully ");
-        return dash;
-    }
-
-    
-	public static List<AmpGraph> getAllGraphs() {
-        Session session = null;
-        List<AmpGraph> graphs = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select g from "
-                + AmpGraph.class.getName() + " g ";
-            Query qry = session.createQuery(queryString);
-            graphs = qry.list();
-
-        } catch (Exception ex) {
-            logger.error("Unable to get graphs from database", ex);
-        }
-        logger.debug("Getting graphs successfully ");
-        return graphs;
-    }
-	
-	public static AmpGraph getGraphById(Long id) {
-        Session session = null;
-        AmpGraph graph = null;
-        Iterator itr = null;
-		
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select g from "
-                + AmpGraph.class.getName() + " g where (g.id=:id)";
-            Query qry = session.createQuery(queryString);
-            qry = session.createQuery(queryString);
-			qry.setParameter("id", id, LongType.INSTANCE);
-			itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				graph = (AmpGraph) itr.next();
-			}
-        } catch (Exception ex) {
-            logger.error("Unable to get graphs from database", ex);
-        }
-        logger.debug("Getting graphs successfully ");
-        return graph;
-    }
-
 	public static AmpTheme getProgramById(Long id) {
         Session session = null;
         AmpTheme prog = null;
@@ -647,83 +560,6 @@ public class DbUtil {
         return prog;
     }
 
-	public static List<AmpDashboardGraph> getDashboardGraphByDashboard(Long id) {
-        Session session = null;
-        List<AmpDashboardGraph> dashGraphs = null;
-        Iterator itr = null;
-		
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select dg from "
-                + AmpDashboardGraph.class.getName() + " dg where (dg.dashboard=:id)";
-            Query qry = session.createQuery(queryString);
-            qry = session.createQuery(queryString);
-			qry.setParameter("id", id, LongType.INSTANCE);
-			dashGraphs = qry.list();
-        } catch (Exception ex) {
-            logger.error("Unable to get dashboardGraphs from database", ex);
-        }
-        logger.debug("Getting dashboardGraphs successfully ");
-        return dashGraphs;
-    }
-
-	public static AmpDashboardGraph getDashboardGraphById(Long id) {
-        Session session = null;
-        AmpDashboardGraph dashGraph = null;
-        Iterator itr = null;
-		
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select d from "
-                + AmpDashboardGraph.class.getName() + " d where (d.id=:id)";
-            Query qry = session.createQuery(queryString);
-            qry = session.createQuery(queryString);
-			qry.setParameter("id", id, LongType.INSTANCE);
-			itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				dashGraph = (AmpDashboardGraph) itr.next();
-			}
-        } catch (Exception ex) {
-            logger.error("Unable to get dashboard graph from database", ex);
-        }
-        logger.debug("Getting dashboard graph successfully ");
-        return dashGraph;
-    }
-	
-	
-	public static void removeDashboard(AmpDashboard dashboard) throws DgException {
-		try {
-			Session session = PersistenceManager.getSession();
-
-			Collection<AmpDashboardGraph> dashGraphs = getDashboardGraphByDashboard(dashboard.getId());
-			
-			for (Iterator iterator = dashGraphs.iterator(); iterator.hasNext();) {
-				AmpDashboardGraph ampDashboardGraph = (AmpDashboardGraph) iterator.next();
-				session.delete(ampDashboardGraph);
-			}
-			session.delete(dashboard);
-		} catch (HibernateException e) {
-			logger.error("Error deleting dashboard",e);
-		}
-	}
-	
-	public static List<AmpDashboard> getDashboardsToShowInMenu() {
-        Session session = null;
-        List<AmpDashboard> dashs = null;
-        Iterator itr = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select d from "
-                + AmpDashboard.class.getName() + " d where (d.showInMenu='true')";
-            Query qry;
-            qry = session.createQuery(queryString);
-			dashs = qry.list();
-        } catch (Exception ex) {
-            logger.error("Unable to get dashboards from database", ex);
-        }
-        
-        return dashs;
-    }
 	public static ArrayList<BigInteger> getInActivities(String query) throws Exception{
 		Session session = PersistenceManager.getRequestDBSession();
 		ArrayList<BigInteger> result = (ArrayList<BigInteger>) session.createSQLQuery("select amp_activity_id from amp_activity where " + query).list();

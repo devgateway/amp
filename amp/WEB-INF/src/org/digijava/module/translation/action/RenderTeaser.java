@@ -22,8 +22,6 @@
 
 package org.digijava.module.translation.action;
 
-import java.util.Collection;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,11 +30,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.translation.form.TranslationForm;
 import org.digijava.module.translation.util.TranslationManager;
-import org.digijava.module.visualization.dbentity.AmpDashboard;
-import org.digijava.module.visualization.util.DashboardUtil;
 
 public class RenderTeaser
     extends TilesAction {

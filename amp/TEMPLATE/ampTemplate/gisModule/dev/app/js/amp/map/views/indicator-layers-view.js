@@ -48,6 +48,7 @@ module.exports = Backbone.View.extend({
 
   // removes layer, then shows it. Important for layers whos content changes.
   refreshLayer: function(layer) {
+	  alert('refreshLayer')
     var loadedLayer = this.leafletLayerMap[layer.cid];
 
     if (loadedLayer) {

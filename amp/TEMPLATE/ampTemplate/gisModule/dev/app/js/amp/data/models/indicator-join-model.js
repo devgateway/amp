@@ -83,15 +83,26 @@ module.exports = Backbone.Model
     });
   },
   
-  fetch: function(){
+  fetch: function(){	
 	  var self = this;
 	  var deferred = new jQuery.Deferred();
-	  if(this.attributes.isStoredInLocalStorage === true){		  
+	  if(this.attributes.isStoredInLocalStorage === true){
 		  var layer = IndicatorLayerLocalStorage.findById(this.attributes.id);
 		  if(!_.isUndefined(layer)){
 			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);
+			  // If Gap analysis selected we call the EP to reprocess the local data.
+			  if (app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected')) {
+				  $.ajax({
+					  url: '/rest/gis/do-gap-analysis', 
+					  async: false, 
+					  data: {indicator: layer.values} })
+				  .done(function(data) {
+					  //localLayer.canDoGapAnalysis = data.canDoGapAnalysis;
+				  });
+			  }
 			  deferred.resolve(layer);
 		  }
+		  return deferred.promise();
 	  } else {
 		// By adding this section here in fetch we are sure any call made over /rest/indicators/id will have the right parameters without duplicating code.  
 		if (this.lastFetchXhr && this.lastFetchXhr.readyState > this.readyStateNotInitialized && this.lastFetchXhr.readyState < this.readyStateResponseReady) {
@@ -109,8 +120,7 @@ module.exports = Backbone.Model
 	    // "params" will set the right type + filters + settings + gap analysis.
 	    this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
 	    return this.lastFetchXhr;
-	  }
-	  return deferred.promise();	  
+	  }	  
   },
     
   updatePaletteRange: function() {

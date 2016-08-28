@@ -433,7 +433,7 @@ public class GisEndPoints {
 	 * @param input
 	 * <pre>
 	 * {
-	 *   "indicator" : {...}, // full indicator data, like the one that is used for for saving
+	 *   "indicator" : {...}, // full indicator data, like the one that is used for saving
 	 *   "filters" : {...}, // current filters
 	 *   "settings" : {...} // current settings if any
 	 * }

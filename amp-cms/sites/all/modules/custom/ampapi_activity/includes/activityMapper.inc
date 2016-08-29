@@ -87,6 +87,11 @@ class activityMapperBase implements activityMapperInterface {
 
   /**
    * Value handler.
+   *
+   * @param $plugin
+   * @param $column
+   * @param NumberFormatter|null $formatter
+   * @return string|int|null
    */
   public static function getValue($plugin, $column, $formatter = NULL) {
     if (isset($column->displayedValue)) {
@@ -100,12 +105,19 @@ class activityMapperBase implements activityMapperInterface {
       return $filtered;
     }
 
+    // Return 0 for measures with no funding.
+    if ($column->value == '#null') {
+      if ($plugin['report field group'] == 'measures') {
+        return 0;
+      }
+
+      return NULL;
+    }
+
     if ($formatter && $plugin['report field group'] == 'measures') {
       return $formatter->format($column->value);
     }
 
-    if ($column->value == '#null') {
-      return NULL;
-    }
+    return NULL;
   }
 }

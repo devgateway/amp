@@ -17,8 +17,6 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
  */
 public class MinTransactionDateBehaviour extends AbstractComputedBehaviour<NiDateCell> {
 
-    public final static String TRANSACTION_DATE = "transaction_date";
-
     public final static MinTransactionDateBehaviour instance = new MinTransactionDateBehaviour(TimeRange.MONTH);
 
     private MinTransactionDateBehaviour(TimeRange timeRange) {
@@ -31,7 +29,7 @@ public class MinTransactionDateBehaviour extends AbstractComputedBehaviour<NiDat
     }
 
     private LocalDate getTransactionDate(NiCell c) {
-        return (LocalDate) ((CategAmountCell) c.getCell()).metaInfo.getMetaInfo(TRANSACTION_DATE).v;
+        return ((CategAmountCell) c.getCell()).amount.date;
     }
 
     private LocalDate minDate(LocalDate minDate, LocalDate date) {

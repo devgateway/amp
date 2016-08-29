@@ -72,7 +72,6 @@ public abstract class AbstractFundingColumn extends HardcodedCells<CategAmountCe
 		addToMetaIfExists(TestModelConstants.TRANSACTION_TYPE, transaction_type, mis);
 		addToMetaIfExists(TestModelConstants.AGREEMENT_ID, agreement, mis);
 		addToMetaIfExists(TestModelConstants.RECIPIENT_ORG, recipient_org, mis);
-		addToMetaIfExistsDirectly(MinTransactionDateBehaviour.TRANSACTION_DATE, parsedDate, mis);
 		addToMetaIfExistsDirectly(TestModelConstants.RECIPIENT_ROLE, recipient_role, mis);
 		addToMetaIfExistsDirectly(TestModelConstants.SOURCE_ROLE, source_role, mis);
 		addToMetaIfExistsDirectly(TestModelConstants.ADJUSTMENT_TYPE, adjustment_type, mis);

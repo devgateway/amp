@@ -310,8 +310,6 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				addMetaIfIdValueExists(metaSet, "terms_assist_id", MetaCategory.TYPE_OF_ASSISTANCE, rs.rs, context.acvs);
 				addMetaIfIdValueExists(metaSet, "mode_of_payment_id", MetaCategory.MODE_OF_PAYMENT, rs.rs, context.acvs);
 
-				metaSet.add(MetaCategory.TRANSACTION_DATE.category, transactionMoment.toLocalDate());
-
 				// add the directed-transactions meta, if appliable
 				if (metaSet.hasMetaInfo(MetaCategory.SOURCE_ROLE.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ROLE.category)
 					&& metaSet.hasMetaInfo(MetaCategory.SOURCE_ORG.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ORG.category)) 

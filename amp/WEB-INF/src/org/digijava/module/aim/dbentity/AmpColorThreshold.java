@@ -16,6 +16,7 @@ public class AmpColorThreshold {
     private String colorName;
     private String colorHash;
     private BigDecimal thresholdStart;
+    private Integer index;
     
     /**
      * @return the ampColorThresholdId
@@ -72,6 +73,20 @@ public class AmpColorThreshold {
      */
     public void setThresholdStart(BigDecimal thresholdStart) {
         this.thresholdStart = thresholdStart;
+    }
+
+    /**
+     * @return the index
+     */
+    public Integer getIndex() {
+        return index;
+    }
+
+    /**
+     * @param index the index to set
+     */
+    public void setIndex(Integer index) {
+        this.index = index;
     }
     
 

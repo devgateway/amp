@@ -24,7 +24,7 @@ public class MondrianUtils {
 
 			@Override
 			public void execute(Connection connection) throws SQLException {
-				//doTheCheck(connection);
+				doTheCheck(connection);
 			}
 			
 		});

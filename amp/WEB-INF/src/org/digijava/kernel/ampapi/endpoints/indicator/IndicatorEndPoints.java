@@ -317,6 +317,7 @@ public class IndicatorEndPoints {
      * [
      *  { 
      *    "id" : 123,
+     *    "orig-name" : "Ration (% of Total Population)", // not translated
      *    "name" : “Ration (% of Total Population)” // translated
      *  }, 
      *  ...
@@ -328,7 +329,7 @@ public class IndicatorEndPoints {
     @Path("/indicator-types")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public List<JsonBean> getIndicatorLayerTypes() {
-        return CategoryValueService.getCategoryValues(CategoryConstants.INDICATOR_LAYER_TYPE_KEY);
+        return CategoryValueService.getCategoryValues(CategoryConstants.INDICATOR_LAYER_TYPE_KEY, true);
     }
     
     /**

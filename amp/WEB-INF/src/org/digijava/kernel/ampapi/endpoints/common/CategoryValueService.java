@@ -24,18 +24,21 @@ public class CategoryValueService {
             
     /**
      * Simple list of Category Values:
+     * @param categoryKey the category key
+     * @param addOrigName true if also to add original untranslated category value
      * <pre>
      * @return 
      * [
      *  { 
      *    "id" : 123,
+     *    "orig-name" : "Ration (% of Total Population)", // (optional) if requested, is not translated
      *    "name" : “Ration (% of Total Population)” // translated
      *  }, 
      *  ...
      * ]
      * </pre>
      */
-    public static List<JsonBean> getCategoryValues(String categoryKey) {
+    public static List<JsonBean> getCategoryValues(String categoryKey, boolean addOrigName) {
         List<JsonBean> types = new ArrayList<JsonBean>();
         Collection<AmpCategoryValue> categValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                 categoryKey);
@@ -46,6 +49,9 @@ public class CategoryValueService {
         for (AmpCategoryValue acv : categValues) {
             JsonBean jsonType = new JsonBean();
             jsonType.set(EPConstants.ID, acv.getId());
+            if (addOrigName) {
+                jsonType.set(EPConstants.ORIGINAL_NAME, acv.getValue());
+            }
             jsonType.set(EPConstants.NAME, TranslatorWorker.translateText(acv.getValue()));
             types.add(jsonType);
         }

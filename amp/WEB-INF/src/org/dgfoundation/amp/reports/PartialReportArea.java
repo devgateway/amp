@@ -143,7 +143,7 @@ public class PartialReportArea extends ReportAreaImpl {
 		leafActivities.addAll(idSet);
 	}
 	
-	protected Set<Integer> getLeafActivities() {
+	public Set<Integer> getLeafActivities() {
 		return leafActivities;
 	}
 }

@@ -15,6 +15,7 @@ public class ReportAreaImpl implements ReportArea {
 	protected NamedTypedEntity owner;
 	protected Map<ReportOutputColumn, ReportCell> contents;
 	protected List<ReportArea> children;
+	protected int nrEntities = -1;
 	
 	public ReportAreaImpl() {
 	}
@@ -44,6 +45,10 @@ public class ReportAreaImpl implements ReportArea {
 
 	public void setChildren(List<ReportArea> children) {
 		this.children = children;
+	}
+	
+	public int getNrEntities() {
+		return this.nrEntities;
 	}
 	
 	public String toString() {

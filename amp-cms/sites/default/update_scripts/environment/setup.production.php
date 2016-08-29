@@ -31,6 +31,9 @@ if (PROJECT_ENVIRONMENT == 'production') {
   variable_del('helpergeneric_cleanup_ui_force');
 }
 
+// Disable rest debugging.
+variable_del('restclient_debug');
+
 // Provide a list of modules to be disabled and uninstalled.
 $modules = array(
   'coder',

@@ -536,6 +536,7 @@ function callbackApplyFilter(e){
 	params = params + "&selectedPrimaryPrograms=" + getQueryParameter("selectedPrimaryPrograms");
 	params = params + "&selectedSecondaryPrograms=" + getQueryParameter("selectedSecondaryPrograms");
 
+	// visualization form and url will not work since old dashboards were removed in AMP-23740
 
 	loadingPanel.show();
 

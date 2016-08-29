@@ -29,10 +29,10 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColorThreshold;
 import org.digijava.module.aim.helper.HeatMapConfig;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.visualization.util.DbUtil;
 
 /**
  * HeatMap Configurations

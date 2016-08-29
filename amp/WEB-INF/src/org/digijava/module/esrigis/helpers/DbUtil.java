@@ -1,4 +1,4 @@
-package org.digijava.module.visualization.util;
+package org.digijava.module.esrigis.helpers;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

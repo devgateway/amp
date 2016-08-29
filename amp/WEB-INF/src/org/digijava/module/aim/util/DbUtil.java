@@ -43,6 +43,7 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpColorThreshold;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -90,6 +91,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
@@ -3310,5 +3312,10 @@ public class DbUtil {
 	
 	public static void clearPendingChanges() {
 	    PersistenceManager.getSession().clear();
+	}
+	
+	public static List<AmpColorThreshold> getColorThresholds() {
+	    return PersistenceManager.getSession().createCriteria(AmpColorThreshold.class)
+	            .addOrder(org.hibernate.criterion.Order.asc("thresholdStart")).list();
 	}
 }

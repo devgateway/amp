@@ -35,7 +35,6 @@ import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 
 public class MapFilter {
 	private static final long serialVersionUID = 1L;

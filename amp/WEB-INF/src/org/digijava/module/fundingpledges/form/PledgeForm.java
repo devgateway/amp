@@ -644,15 +644,10 @@ public class PledgeForm extends ActionForm implements Serializable {
 	public void setSelectedDocs(int index, DocumentShim entry) {
 		this.selectedDocs.set(index, entry);
 	}
-	
-	public List<DocumentShim> getSelectedDocsList() {
+
+	public List<DocumentShim> getSelectedDocs() {
 		return selectedDocs;
 	}
-	
-	public void setSelectedDocsList(List<DocumentShim> selectedDocs) {
-		this.selectedDocs = selectedDocs;
-	}
-	
 	// TRASH GETTERS AND SETTERS BELOW
 	@java.lang.SuppressWarnings("all")
 	public PledgeForm() {

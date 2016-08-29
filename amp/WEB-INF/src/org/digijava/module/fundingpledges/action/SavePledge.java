@@ -141,7 +141,7 @@ public class SavePledge extends Action {
     	res.addAll(do_save_programs(session, pledge, plForm.getSelectedProgs()));
     	res.addAll(do_save_locations(session, pledge, plForm.getSelectedLocs()));
     	res.addAll(do_save_funding(session, pledge, plForm.getSelectedFunding()));
-    	res.addAll(do_save_documents(session, pledge, plForm.getSelectedDocsList(), plForm.getInitialDocuments()));
+    	res.addAll(do_save_documents(session, pledge, plForm.getSelectedDocs(), plForm.getInitialDocuments()));
     	session.saveOrUpdate(pledge);
     	if (res.isEmpty()) { //save succeeded
     		boolean newPledge = plForm.isNewPledge();

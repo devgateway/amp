@@ -286,9 +286,9 @@ public class IndicatorUtils {
         response.set(IndicatorEPConstants.ID, indicator.getId());
         response.set(IndicatorEPConstants.UNIT, unit);
         response.set(IndicatorEPConstants.DESCRIPTION, indicator.getDescription());
-        response.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getLabel());
-        response.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
+        response.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getLabel());        
         response.set(IndicatorEPConstants.DO_GAP_ANALYSIS, doingGapAnalysis);
+        response.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
         
         // build locations values
         List<JsonBean> values = new ArrayList<>();

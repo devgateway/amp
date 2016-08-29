@@ -41,7 +41,7 @@ public class PaginatedReport {
 		 *  then all of its parents are also included. 
 		 *  If an element is not included, then none of its children is
 		 */
-		ReportArea res = scanAreas(rootElement, areasToInclude, 0);
+		ReportArea res = scanAreas(rootElement, areasToInclude);
 		long deltaTime = System.currentTimeMillis() - startTime;
 		logger.info("getting page took " + deltaTime + " millies");
 		return res;
@@ -53,7 +53,7 @@ public class PaginatedReport {
 	 * @param areasToInclude
 	 * @return
 	 */
-	protected PaginatedReportArea scanAreas(ReportArea elem, Set<ReportArea> areasToInclude, int ownerId) {
+	protected PaginatedReportArea scanAreas(ReportArea elem, Set<ReportArea> areasToInclude) {
 		if (!areasToInclude.contains(elem))
 			throw new IllegalStateException("pagination error: asked to scan an area which should not be scanned");
 		List<PaginatedReportArea> scannedChildren = null;
@@ -61,17 +61,17 @@ public class PaginatedReport {
 			scannedChildren = new ArrayList<>();
 			for (ReportArea area : elem.getChildren()) {
 				if (areasToInclude.contains(area)) {
-					scannedChildren.add(scanAreas(area, areasToInclude, ownerId + 1));
+					scannedChildren.add(scanAreas(area, areasToInclude));
 				}
 			}
 		}
 		 
-		PaginatedReportArea res = duplicate(elem, scannedChildren, ownerId);
+		PaginatedReportArea res = duplicate(elem, scannedChildren);
 		return res;
 	}
 	
-	protected PaginatedReportArea duplicate(ReportArea elem, List<PaginatedReportArea> children, int ownerId) {
-		PaginatedReportArea res = new PaginatedReportArea(elem, children, ownerId);
+	protected PaginatedReportArea duplicate(ReportArea elem, List<PaginatedReportArea> children) {
+		PaginatedReportArea res = new PaginatedReportArea(elem, children);
 		return res;
 	}
 	

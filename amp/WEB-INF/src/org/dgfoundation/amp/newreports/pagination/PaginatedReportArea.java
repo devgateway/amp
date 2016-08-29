@@ -30,7 +30,7 @@ public class PaginatedReportArea extends ReportAreaImpl {
 	protected final transient Set<Long> currentLeafActivities;
 	protected static final Logger logger = Logger.getLogger(PaginatedReportArea.class);
 	
-	public PaginatedReportArea(ReportArea src, List<PaginatedReportArea> children, int ownerId) {
+	public PaginatedReportArea(ReportArea src, List<PaginatedReportArea> children) {
 		this.contents = src.getContents();
 		this.nrEntities = getNrEntities(src);
 		this.owner = src.getOwner();

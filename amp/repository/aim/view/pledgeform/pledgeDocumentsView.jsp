@@ -11,7 +11,7 @@
 	<c:if test="${empty pledgeForm.selectedDocs}">
 		<div class="text-center"><h3><digi:trn>No Documents</digi:trn></h3></div>
 	</c:if>
-	<c:if test="${not empty pledgeForm.selectedDocsList}">
+	<c:if test="${not empty pledgeForm.selectedDocs}">
 	<table class="table table-striped table-bordered table-hover table-condensed">
 		<thead>
 			<tr>

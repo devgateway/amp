@@ -106,7 +106,12 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			"third activity with agreements",
 			"activity with tertiary_program"
 		);
-	
+
+	final List<String> minTransactionDateActs = Arrays.asList(
+			"Eth Water",
+			"TAC_activity_1"
+		);
+
 	final static List<String> hierarchiesToTry = Arrays.asList(
 			ColumnConstants.STATUS, ColumnConstants.IMPLEMENTATION_LEVEL, 
 			ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, 
@@ -1907,5 +1912,40 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			GroupingCriteria.GROUPING_YEARLY);
 		
 		runNiTestCase(spec, "en", executionRateActs, cor);
+	}
+
+	@Test
+	public void testMinTransactionDate() {
+		NiReportModel cor = new NiReportModel("testMinTransactionDate")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 5))",
+						"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 3));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 1))",
+						"(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 1));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+						"(First Transaction Date: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(First Transaction Date: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(First Transaction Date: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(First Transaction Date: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Project Title", "", "Funding-2010-First Transaction Date", "12/05/2010", "Funding-2011-First Transaction Date", "02/08/2011", "Funding-2013-First Transaction Date", "01/08/2013", "Totals-First Transaction Date", "12/05/2010")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-First Transaction Date", "12/05/2010", "Funding-2011-First Transaction Date", "02/08/2011", "Totals-First Transaction Date", "12/05/2010"),
+								new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Funding-2013-First Transaction Date", "01/08/2013", "Totals-First Transaction Date", "01/08/2013")      ));
+		new NiReportModel("testMinTransactionDate")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 5))",
+						"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 3));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 1))",
+						"(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 1));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+						"(First Transaction Date: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(First Transaction Date: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(First Transaction Date: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(First Transaction Date: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Project Title", "", "Funding-2010-First Transaction Date", "12/05/2010", "Funding-2011-First Transaction Date", "02/08/2011", "Funding-2013-First Transaction Date", "01/08/2013", "Totals-First Transaction Date", "12/05/2010")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-First Transaction Date", "12/05/2010", "Funding-2011-First Transaction Date", "02/08/2011", "Totals-First Transaction Date", "12/05/2010"),
+								new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Funding-2013-First Transaction Date", "01/08/2013", "Totals-First Transaction Date", "01/08/2013")      ));
+		ReportSpecificationImpl spec = buildSpecification("testMinTransactionDate",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE),
+				Arrays.asList(MeasureConstants.FIRST_TRANSACTION_DATE),
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+
+		runNiTestCase(spec, "en", minTransactionDateActs, cor);
 	}
 }

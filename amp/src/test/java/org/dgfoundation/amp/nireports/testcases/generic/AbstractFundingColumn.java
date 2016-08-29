@@ -19,6 +19,7 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.TranslatedDate;
+import org.dgfoundation.amp.nireports.behaviours.MinTransactionDateBehaviour;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
@@ -71,6 +72,7 @@ public abstract class AbstractFundingColumn extends HardcodedCells<CategAmountCe
 		addToMetaIfExists(TestModelConstants.TRANSACTION_TYPE, transaction_type, mis);
 		addToMetaIfExists(TestModelConstants.AGREEMENT_ID, agreement, mis);
 		addToMetaIfExists(TestModelConstants.RECIPIENT_ORG, recipient_org, mis);
+		addToMetaIfExistsDirectly(MinTransactionDateBehaviour.TRANSACTION_DATE, parsedDate, mis);
 		addToMetaIfExistsDirectly(TestModelConstants.RECIPIENT_ROLE, recipient_role, mis);
 		addToMetaIfExistsDirectly(TestModelConstants.SOURCE_ROLE, source_role, mis);
 		addToMetaIfExistsDirectly(TestModelConstants.ADJUSTMENT_TYPE, adjustment_type, mis);
@@ -86,6 +88,19 @@ public abstract class AbstractFundingColumn extends HardcodedCells<CategAmountCe
 	}
 	
 	/**
+	 * Adds funding parameter as string (not as id), if != null.
+	 * This is done for: recipient role, source role, adjustment type
+	 * Mirrors code in AmpFundingColumn.fetch().
+	 * @param categoryName
+	 * @param value
+	 * @param mis
+	 */
+	private void addToMetaIfExistsDirectly(String categoryName, Object value, MetaInfoSet mis) {
+		if (value != null)
+			mis.add(new MetaInfo(categoryName, value));
+	}
+
+	/**
 	 * Adds funding parameter id if value != null.
 	 * This is done for: pledge, transaction type, agreement, recipient org.
 	 * Mirrors code in AmpFundingColumn.fetch().
@@ -96,19 +111,6 @@ public abstract class AbstractFundingColumn extends HardcodedCells<CategAmountCe
 	private void addToMetaIfExists(String categoryName, String value, MetaInfoSet mis) {
 		if (value != null)
 			mis.add(new MetaInfo(categoryName, fundingIds.get(categoryName).get(value)));
-	}
-	
-	/**
-	 * Adds funding parameter as string (not as id), if != null.
-	 * This is done for: recipient role, source role, adjustment type
-	 * Mirrors code in AmpFundingColumn.fetch().
-	 * @param categoryName
-	 * @param value
-	 * @param mis
-	 */
-	private void addToMetaIfExistsDirectly(String categoryName, String value, MetaInfoSet mis) {
-		if (value != null)
-			mis.add(new MetaInfo(categoryName, value));
 	}
 	/*			this.donor_org = donor_org;
 			this.funding_status = funding_status;

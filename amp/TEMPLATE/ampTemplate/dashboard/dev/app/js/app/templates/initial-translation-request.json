@@ -133,5 +133,8 @@
 "amp.dashboard:chart-heatmap-legend-and":"and",
 "amp.dashboard:chart-heatmap-legend-more-than":"More than",
 "amp.dashboard:chart-heatmap-others":"Others",
-"amp.dashboard:percentage": "Percentage"
+"amp.dashboard:percentage": "Percentage",
+"amp.dashboard:chart-heatmap-help-text-location":"Location Heatmap",
+"amp.dashboard:chart-heatmap-help-text-sector":"Sector Heatmap",
+"amp.dashboard:chart-heatmap-help-text-program":"Program Heatmap"
 }

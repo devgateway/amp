@@ -8,10 +8,10 @@
 
 <digi:instance property="pledgeForm" />
 <div id='pledge_form_documents_data'>
-	<c:if test="${empty pledgeForm.selectedDocsList}">
+	<c:if test="${empty pledgeForm.selectedDocs}">
 		<div class="text-center"><h3><digi:trn>No Documents</digi:trn></h3></div>
 	</c:if>
-	<c:if test="${not empty pledgeForm.selectedDocsList}">
+	<c:if test="${not empty pledgeForm.selectedDocs}">
 	<table class="table table-striped table-bordered table-hover table-condensed">
 		<thead>
 			<tr>
@@ -21,7 +21,7 @@
 			</tr>
 		</thead>
 		<tbody>	
-		<c:forEach var="selectedDocs" items="${pledgeForm.selectedDocsList}" varStatus="index">
+		<c:forEach var="selectedDocs" items="${pledgeForm.selectedDocs}" varStatus="index">
 			<c:set var="indexLoc" value="${indexLoc+1}"/>
 			<tr id="pledge_form_row_for_document_${selectedDocs.uniqueId}">
 				<td class="text-right">

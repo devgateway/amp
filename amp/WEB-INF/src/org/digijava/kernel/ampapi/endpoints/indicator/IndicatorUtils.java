@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -70,6 +71,7 @@ public class IndicatorUtils {
         indicatorJson.set(IndicatorEPConstants.UNIT, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
         indicatorJson.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
+        indicatorJson.set(IndicatorEPConstants.ADM_X, getAdmX(indicator));
         indicatorJson.set(IndicatorEPConstants.IS_POPULATION, indicator.isPopulation());
         indicatorJson.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : 
             indicator.getIndicatorType().getId());
@@ -307,5 +309,15 @@ public class IndicatorUtils {
         }
         response.set(IndicatorEPConstants.VALUES, values);
         return response;
+    }
+    
+    /**
+     * Find the corresponding adm-0, adm-1, etc for the selected implementation location
+     * @param indicator the indicator
+     * @return the corresponding adm-x 
+     */
+    public static String getAdmX(AmpIndicatorLayer indicator) {
+        String implementationLocation = indicator.getAdmLevel() == null ? null : indicator.getAdmLevel().getValue();
+        return GisConstants.IMPL_CATEGORY_VALUE_TO_ADM.get(implementationLocation);
     }
 }

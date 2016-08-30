@@ -4703,7 +4703,7 @@ module.exports = BackboneDash.View.extend({
   renderApplied: function() {
     var filters = this.app.filter.serializeToModels();
     var countApplied = _(filters.columnFilters).keys().length;
-    countApplied += !!filters.otherFilters;
+    countApplied += _(filters.otherFilters).keys().length;
     this.$('.applied-filters').html(summaryTemplate({ countApplied: countApplied }));
     this.app.translator.translateDOM(this.el);
   },
@@ -4742,13 +4742,22 @@ module.exports = BackboneDash.View.extend({
       };
     });
     if (filters.otherFilters) {
-      // Currently assumes that any otherFilters just implies Date Range
-      // ... there is no obvious way to get nice strings out.
-      var dateRange = filters.otherFilters.date;
-      var dateRangeText = app.translator.translateSync("amp.dashboard:date-range","Date Range");
-      applied.push({
-        name: dateRangeText,
-        detail: [this.app.filter.formatDate(dateRange.start) + '&mdash;' + this.app.filter.formatDate(dateRange.end)]
+      _.each(Object.keys(filters.otherFilters), function (filterKey) {
+          var filterField = filters.otherFilters[filterKey];
+          var dateRangeText = '';
+          if(filterKey === 'date') {
+            dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
+          } else if(filterKey === 'computedYear') {
+            dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
+          } else {
+            dateRangeText = app.translator.translateSync("amp.dashboard:" + filterKey.replace(/[^\w]/g, '-'), filterKey);
+          }
+          var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
+          applied.push({
+            id: filterKey.replace(/[^\w]/g, '-'),
+            name: dateRangeText,
+            detail: [detail]
+          });
       });
     }
     this.$('.applied-filters').html(detailsTemplate({ applied: applied }));
@@ -24046,7 +24055,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"C:\\Git\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"/home/esoliani/amp-workspace/AMP_212_GIT/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/bootstrap/dist/js/bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!

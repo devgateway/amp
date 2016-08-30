@@ -69,7 +69,6 @@ public class FeaturesUtil {
 	
 	public final static String AMP_TREE_VISIBILITY_ATTR = "ampTreeVisibility";
 
-	private static Set<String> columnsIgnoredInReportWizard = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
 	
 	public static void logGlobalSettingsCache() {
 		String log = "";
@@ -85,9 +84,7 @@ public class FeaturesUtil {
 		return globalSettingsCache;
 	}
 	
-	public static boolean columnIgnoredInReportWizard(String columnName) {
-		return columnsIgnoredInReportWizard.contains(columnName);
-	}
+
 	public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {
 		globalSettingsCache = new HashMap<String, AmpGlobalSettings>();
 		for (AmpGlobalSettings sett : globalSettings) {

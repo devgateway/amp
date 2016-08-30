@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.utils.MultiAction;
@@ -76,8 +77,8 @@ import com.google.common.collect.HashBiMap;
 public class ReportWizardAction extends MultiAction {
 
     public static final String MULTILINGUAL_REPORT_PREFIX = "multilingual_report";
+	private static Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
 
-    
     
     private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
 
@@ -828,7 +829,7 @@ public class ReportWizardAction extends MultiAction {
 
         for(AmpColumns ampColumn:allAmpColumns)
         {
-            if (FeaturesUtil.columnIgnoredInReportWizard(ampColumn.getColumnName()))
+            if (columnIgnoredInReportWizard(ampColumn.getColumnName()))
             	continue;
 
         	
@@ -1020,5 +1021,9 @@ public class ReportWizardAction extends MultiAction {
         }
 
     }
+    
+	public static boolean columnIgnoredInReportWizard(String columnName) {
+		return COLUMNS_IGNORED_IN_REPORT_WIZARD.contains(columnName);
+	}
 
 }

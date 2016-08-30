@@ -21,8 +21,6 @@
 		<action login-required="true" pattern="/getSectorSchemes">ADMIN</action>
 		<action login-required="true" pattern="/getSectorClassConfig">ADMIN</action>
 		<action login-required="true" pattern="/GlobalSettings">ADMIN</action>
-		<action login-required="true" pattern="/importLocationIndicatorValuesXLS">ADMIN</action>
-		<action login-required="true" pattern="/indicatorLayerManager">ADMIN</action>
 		<action login-required="true" pattern="/manageGPI">ADMIN</action>
 		<action login-required="true" pattern="/organisationManager">ADMIN</action>
 		<action login-required="true" pattern="/organisationManager">ADMIN</action>

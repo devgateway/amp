@@ -64,7 +64,7 @@ public class AmpNiReportsFormatter extends NiReportsFormatter {
 	protected ReportOutputColumn buildReportOutputColumn(Column niCol) {
 		String trnName = getNameTranslation(niCol);
 		String trnDescription = getDescriptionTranslation(niCol);
-		logger.error(String.format("transforming [%s] to [%s, %s]", niCol.getHierName(), trnName, trnDescription));
+		//logger.error(String.format("transforming [%s] to [%s, %s]", niCol.getHierName(), trnName, trnDescription));
 		return new ReportOutputColumn(trnName, niColumnToROC.get(niCol.getParent()), niCol.name, trnDescription, buildEmptyCell(niCol), null);
 	}
 	

@@ -21,12 +21,14 @@ module.exports = Backbone.View.extend({
     this.data = options.data;
     this.state = options.state;
 
-    this.mapView = new MapView({app: this});
-    /* this.dataQualityView = new DataQualityView({app: this}); */
-    this.sidebarView = new SidebarView({app: this});
+    
 
   },
-
+  createViews: function(){
+	  this.mapView = new MapView({app: this});
+	    /* this.dataQualityView = new DataQualityView({app: this}); */
+	  this.sidebarView = new SidebarView({app: this}); 
+  },
   // Render entire geocoding view.
   render: function() {
     this.$el.html(ModuleTemplate);

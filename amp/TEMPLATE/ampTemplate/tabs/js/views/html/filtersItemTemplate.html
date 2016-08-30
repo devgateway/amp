@@ -3,8 +3,8 @@
         <b><%= trnName %></b>:
 		<br> 
 		<% _.each(values, function(item, i) { %>			
-			<% if (item.trnName) { %>
-				<div class='round-filter'><%= item.trnName %></div>
+			<% if (item.trnName || item.name) { %>
+				<div class='round-filter'><%= item.trnName || item.name %></div>
 			<% } else { %>
 				<div class='round-filter'> - </div>
 			<% } %>

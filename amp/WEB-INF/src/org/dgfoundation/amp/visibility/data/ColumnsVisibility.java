@@ -11,8 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -37,7 +37,8 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	 * Expenditure Class is not an actual column, but has column-type of filtering 
 	 * so it needs to be 'visible' for the filters, but not for any other purpose
 	 */
-	private static final Set<String> fakeColumns = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
+	private static final Set<String> fakeColumns = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS,
+	        ColumnConstants.COMPUTED_YEAR));
 	
 	/**
 	 * @return the current set of visible columns
@@ -272,6 +273,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	@SuppressWarnings("serial")
 	protected static final Map<String, String> featuresToColumnsMap = new HashMap<String, String>() {{
 		put("Physical Progress", ColumnConstants.PHYSICAL_PROGRESS);
+		put("Computed Columns Filters", ColumnConstants.COMPUTED_YEAR);
 	}};
 	
 	@SuppressWarnings("serial")

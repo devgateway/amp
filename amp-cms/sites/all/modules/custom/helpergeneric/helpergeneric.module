@@ -693,6 +693,7 @@ function helpergeneric_detect_amp_baseurl() {
     return $url;
   }
 
+  // Use the AMP hostname if it has been set.
   $amp_hostname = variable_get('helpergeneric_amp_hostname', NULL);
   if (!empty($amp_hostname)) {
     $url = $amp_hostname;
@@ -702,13 +703,17 @@ function helpergeneric_detect_amp_baseurl() {
 
     return $url;
   }
-
-  $restclient_hostname = variable_get('restclient_hostname', NULL);
-  if (!empty($restclient_hostname)) {
+  // Use the API hostname if it has been configured.
+  else if ($restclient_hostname = variable_get('restclient_hostname', NULL)) {
     $restclient_hostname_parts = parse_url($restclient_hostname);
-    unset($restclient_hostname_parts['path']);
+    foreach (array('path', 'query', 'fragment') as $key) {
+      if (isset($restclient_hostname_parts[$key])) {
+        unset($restclient_hostname_parts[$key]);
+      }
+    }
     $url = helpergeneric_unparse_url($restclient_hostname_parts);
   }
+  // Fallback to the current domain root.
   else {
     $host = $_SERVER['SERVER_NAME'];
     if (!empty($_SERVER['HTTPS'])) {

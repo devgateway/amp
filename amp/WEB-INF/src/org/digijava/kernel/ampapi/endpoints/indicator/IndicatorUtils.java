@@ -280,6 +280,7 @@ public class IndicatorUtils {
         response.set("unit", unit);
         response.set("description", indicator.getDescription());
         response.set("admLevelId", indicator.getAdmLevel().getLabel());
+        response.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
         
         // build locations values
         List<JsonBean> values = new ArrayList<>();

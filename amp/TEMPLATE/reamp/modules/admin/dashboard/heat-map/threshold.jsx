@@ -10,6 +10,7 @@ function formatPercentage(value) {
 var Threshold = React.createClass({displayName: 'Threshold',
   getInitialState: function() {
   	this.value = this.props.from;
+  	this.to = this.props.to;
   	return {valid : true, inputStyle : {}, alertVisible : false};
   },
   handleChange: function(valueAsNumber, valueAsString) {
@@ -40,13 +41,17 @@ var Threshold = React.createClass({displayName: 'Threshold',
       		<Alert ref="notUnique" className="undo-popup inputAlert" bsStyle="danger" bsClass="alert" onDismiss={this.alertDismiss}>
       			<span className="alertMsg">{this.__(this.state.alertMessage)}</span>
 		    </Alert>;
-    } 
+    }
     return (
-      <tr className="colorThreshold" key={this.props.id}>
-      	<td className="title-and-desc" style={bgStyle}><strong>{this.props.colorName}</strong></td>
+      <tr key={this.props.id}>
+        <td>{this.props.index}</td>
+      	<td style={bgStyle}><strong>{this.props.colorName}</strong></td>
       	<td>
-      		<NumericInput value={this.value} min={0} max={100} format={formatPercentage} onChange={this.handleChange} style = {this.state.inputStyle}/>
+      		<NumericInput value={this.value} min={0} max={100} onChange={this.handleChange} 
+      			 className="threshold" style={this.state.inputStyle}/> 
+      	    <span className="threshold"> %</span>
       	</td>
+      	<td><span className="threshold thresholdFixed">{this.to} %</span></td>
       	<td>{alert}</td>
       </tr>
     )

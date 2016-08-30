@@ -190,3 +190,70 @@ function ampapi_entity_access($op, $entity = NULL, $account = NULL, $entity_type
   }
   return FALSE;
 }
+
+/**
+ * Implements hook_menu().
+ */
+function ampapi_menu() {
+  $items = array();
+
+  $items['<amp>'] = array(
+    'page callback' => 'ampapi_goto',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Fallback menu callback for links pointing to AMP.
+ *
+ * Redirects links starting with `<amp>` to the hostname of the AMP API used.
+ */
+function ampapi_goto() {
+  // $page_arguments = func_get_args();
+  $page_path = implode('/', func_get_args());
+  if (!empty($page_path)) {
+    $page_path = '/' . $page_path;
+  }
+
+  // Get the page query parameters.
+  $amp_page_query_parameters = drupal_get_query_parameters();
+
+  $amp_hostname = helpergeneric_detect_amp_baseurl();
+  $goto_options = array(
+    'external' => TRUE,
+    'absolute' => TRUE,
+    'query' => $amp_page_query_parameters,
+  );
+
+  drupal_goto($amp_hostname . $page_path, $goto_options);
+}
+
+/**
+ * Implements hook_url_outbound_alter().
+ *
+ * @inheritdoc
+ */
+function ampapi_url_outbound_alter(&$path, &$options, $original_path) {
+  if (substr($path, 0, 6) == '<amp>/') {
+    // Prepare the AMP path.
+    $amp_hostname = helpergeneric_detect_amp_baseurl();
+    $amp_relative_path = substr($path, 5);
+
+    // Change the path to an absolute path pointing to AMP.
+    $path = $amp_hostname . $amp_relative_path;
+    $options['external'] = TRUE;
+    $options['absolute'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function ampapi_form_menu_edit_item_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['link_path']['#description'])) {
+    $form['link_path']['#description'] .= '<br/>' . t('AMP NOTE: Use <b>%token</b> as the base of your URL instead of using the domain when linking directly to AMP.', array('%token' => '<amp>'));
+  }
+}

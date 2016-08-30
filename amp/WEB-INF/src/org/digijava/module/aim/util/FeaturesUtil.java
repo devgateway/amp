@@ -1,7 +1,6 @@
 package org.digijava.module.aim.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
@@ -18,7 +17,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -66,8 +64,6 @@ public class FeaturesUtil {
 	public static String errorLog = "";
 	
 	public final static String AMP_TREE_VISIBILITY_ATTR = "ampTreeVisibility";
-
-	private static Set<String> columnsIgnoredInReportWizard = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
 	
 	public static void logGlobalSettingsCache() {
 		String log = "";
@@ -80,10 +76,6 @@ public class FeaturesUtil {
 
 	public static synchronized Map<String, AmpGlobalSettings> getGlobalSettingsCache() {
 		return globalSettingsCache;
-	}
-	
-	public static boolean columnIgnoredInReportWizard(String columnName) {
-		return columnsIgnoredInReportWizard.contains(columnName);
 	}
 	
 	public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {

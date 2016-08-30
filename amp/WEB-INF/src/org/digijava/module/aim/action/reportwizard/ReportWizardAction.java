@@ -831,16 +831,12 @@ public class ReportWizardAction extends MultiAction {
             if (FeaturesUtil.columnIgnoredInReportWizard(ampColumn.getColumnName()))
             	continue;
 
-        	
             AmpFieldsVisibility ampFieldVisibility = ampAllFieldsByName.get(ampColumn.getColumnName());
-
-            
             if(ampFieldVisibility == null)
                 continue;
 
             if (!ampFieldVisibility.isFieldActive(ampTreeVisibility))
                 continue; // negative "continue" instead of if/else, so as to reduce the depth of blocks
-
 
             //skip build columns with no rights
             if(ampFieldVisibility.getPermission(false) != null && !ampFieldVisibility.canDo(GatePermConst.Actions.VIEW,scope))

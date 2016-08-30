@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.utils.MultiAction;
@@ -76,8 +77,7 @@ import com.google.common.collect.HashBiMap;
 public class ReportWizardAction extends MultiAction {
 
     public static final String MULTILINGUAL_REPORT_PREFIX = "multilingual_report";
-
-    
+	private static Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
     
     private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
 
@@ -826,17 +826,17 @@ public class ReportWizardAction extends MultiAction {
         for(AmpFieldsVisibility field:ampAllFields)
             ampAllFieldsByName.put(field.getName(), field);
 
-        //int iterations1 = 0, iterations2 = 0;
         for(AmpColumns ampColumn:allAmpColumns)
         {
-            AmpFieldsVisibility ampFieldVisibility = ampAllFieldsByName.get(ampColumn.getColumnName());
+            if (columnIgnoredInReportWizard(ampColumn.getColumnName()))
+            	continue;
 
+            AmpFieldsVisibility ampFieldVisibility = ampAllFieldsByName.get(ampColumn.getColumnName());
             if(ampFieldVisibility == null)
                 continue;
 
             if (!ampFieldVisibility.isFieldActive(ampTreeVisibility))
                 continue; // negative "continue" instead of if/else, so as to reduce the depth of blocks
-
 
             //skip build columns with no rights
             if(ampFieldVisibility.getPermission(false) != null && !ampFieldVisibility.canDo(GatePermConst.Actions.VIEW,scope))
@@ -868,7 +868,6 @@ public class ReportWizardAction extends MultiAction {
                 if (!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)
                         && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){
                     ampThemesOrdered.add(aco);
-                    //System.out.println("	----------------ADDED!");
                 }
             }
         }
@@ -1017,5 +1016,9 @@ public class ReportWizardAction extends MultiAction {
         }
 
     }
+    
+	public static boolean columnIgnoredInReportWizard(String columnName) {
+		return COLUMNS_IGNORED_IN_REPORT_WIZARD.contains(columnName);
+	}
 
 }

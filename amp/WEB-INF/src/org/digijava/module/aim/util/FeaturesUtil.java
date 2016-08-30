@@ -61,8 +61,6 @@ public class FeaturesUtil {
 
 	private static Map<String, AmpGlobalSettings> globalSettingsCache = null;
 
-	//private ServletContext ampContext = null;
-
 	public static String errorLog = "";
 	
 	public final static String AMP_TREE_VISIBILITY_ATTR = "ampTreeVisibility";
@@ -79,7 +77,7 @@ public class FeaturesUtil {
 	public static synchronized Map<String, AmpGlobalSettings> getGlobalSettingsCache() {
 		return globalSettingsCache;
 	}
-
+	
 	public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {
 		globalSettingsCache = new HashMap<String, AmpGlobalSettings>();
 		for (AmpGlobalSettings sett : globalSettings) {
@@ -92,7 +90,6 @@ public class FeaturesUtil {
         return s != null && templateId == Long.parseLong(s);
     }
 
-
     public static List<String> getAssignedToTeams (Long templateId) {
         List<String> retVal = null;
         Session sess = PersistenceManager.getSession();
@@ -101,7 +98,8 @@ public class FeaturesUtil {
         Query q = sess.createQuery(qs.toString());
         q.setLong("TEMPLATE_ID", templateId);
         List<String> tmpVal = q.list();
-        if (!tmpVal.isEmpty()) retVal = tmpVal;
+        if (!tmpVal.isEmpty())
+        	retVal = tmpVal;
 
         return retVal;
     }

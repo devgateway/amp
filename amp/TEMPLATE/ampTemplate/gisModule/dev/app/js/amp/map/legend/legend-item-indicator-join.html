@@ -9,7 +9,11 @@
       <% if(bucket.get('value') && !_.isNaN(bucket.get('value')[0]) && _.isFinite(bucket.get('value')[0])) { %>
       <div>
         <span style="background: <%= bucket.hex() %> !important" class="color-block legend-sample"></span>
-        <% if(unit === '%') { %>
+        
+        <% 
+        var ratioOtherIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_OTHER});
+        var percentIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_PERCENTAGE});        
+        if((percentIndicator && percentIndicator.get('id') === model.get('indicatorTypeId')) || (ratioOtherIndicator && ratioOtherIndicator.get('id') === model.get('indicatorTypeId'))) { %>        
           <%= util.formatPercentage()(bucket.get('value')[0]) %>&mdash;<%= util.formatPercentage()(bucket.get('value')[1]) %>
         <% } else { %>
           <%= util.formatKMB()(bucket.get('value')[0]) %>&mdash;<%= util.formatKMB()(bucket.get('value')[1]) %> <%= unit %>

@@ -22,13 +22,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.jcr.Node;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -44,7 +41,26 @@ import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAgreement;
+import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
+import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureImg;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
@@ -448,8 +464,8 @@ public class ActivityUtil {
 			act.setDraft(false);
 		act.setAmpActivityGroup(group);
 		
-		if (act.getComponentFundings() != null)
-			act.getComponentFundings().size();
+		if (act.getComponents() != null)
+			act.getComponents().size();
 		if (act.getCosts() != null)
 			act.getCosts().size();
 		if (act.getMember() != null)
@@ -465,23 +481,28 @@ public class ActivityUtil {
 	}
 
 
-	private static void updateComponentFunding(AmpActivityVersion a,
-			Session session) {
-		if (a.getComponentFundings() == null || a.getComponents() == null)
+	private static void updateComponentFunding(AmpActivityVersion a, Session session) {
+		Set<AmpComponent> components = a.getComponents();
+		
+		if (components == null) {
 			return;
-		Iterator<AmpComponentFunding> it1 = a.getComponentFundings().iterator();
-		while (it1.hasNext()) {
-			AmpComponentFunding cf = (AmpComponentFunding) it1
-					.next();
-			Iterator<AmpComponent> it2 = a.getComponents().iterator();
-			while (it2.hasNext()) {
-				AmpComponent comp = (AmpComponent) it2.next();
-				if (comp.getTitle().compareTo(cf.getComponent().getTitle()) == 0){
-					cf.setComponent(comp);
-					break;
+		}
+		
+		Iterator<AmpComponent> componentIterator = components.iterator();
+		while (componentIterator.hasNext()) {
+			AmpComponent ampComponent = componentIterator.next();
+
+			if (Hibernate.isInitialized(ampComponent.getFundings())) {
+				Iterator<AmpComponentFunding> ampComponentFundingsIterator = ampComponent.getFundings().iterator();
+				
+				while(ampComponentFundingsIterator.hasNext()) {
+					AmpComponentFunding acf = ampComponentFundingsIterator.next();
+					
+					if (acf.getTransactionAmount() == null) {
+						ampComponentFundingsIterator.remove();
+					} 
 				}
 			}
-			session.saveOrUpdate(cf);
 		}
 	}
 

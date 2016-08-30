@@ -14,12 +14,20 @@ function fakeRawContext(e, data) {
   var t = e.target,
       seriesIndex = parseInt(util.data(t, 'seriesIndex'), 10) || 0,
       xIndex = parseInt(util.data(t, 'xIndex'), 10);
-  return {
-    label: data[seriesIndex].values[xIndex].x || xIndex,
-    seriesIndex: seriesIndex,
-    pointIndex: xIndex,
-    point: data[seriesIndex].values[xIndex] || xIndex
-  };
+  // This check is for heatmaps because they dont use the same data structure.
+  if (!isNaN(xIndex)) {
+	  return {
+	    label: data[seriesIndex].values[xIndex].x || xIndex,
+	    seriesIndex: seriesIndex,
+	    pointIndex: xIndex,
+	    point: data[seriesIndex].values[xIndex] || xIndex
+	  };
+  } else {
+	  return {
+		  label: '',
+		  point: ''
+	  };
+  }
 }
 
 

@@ -2539,7 +2539,7 @@ public class ExportActivityToWord extends Action {
                 String toCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
                 
                 TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-                if (tm != null) 
+                if (tm != null && tm.getAppSettings() != null) 
                     toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
                 
                 if (structuredFundings.size() > 0) {

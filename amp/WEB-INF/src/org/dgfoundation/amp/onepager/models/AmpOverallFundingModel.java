@@ -47,7 +47,7 @@ public class AmpOverallFundingModel implements IModel {
 		String toCurrCode = Constants.DEFAULT_CURRENCY;
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
 
-		if (tm != null) {
+		if (tm != null && tm.getAppSettings() != null) {
 			toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 		}
 

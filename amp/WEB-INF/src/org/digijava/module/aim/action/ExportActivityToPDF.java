@@ -1744,9 +1744,9 @@ public class ExportActivityToPDF extends Action {
 
                 TeamMember tm = (TeamMember) session.getAttribute(CURRENT_MEMBER);
                 Long defaultCurrency=null;
-                if(tm.getAppSettings().getCurrencyId()!=null){
+                if(tm.getAppSettings() != null && tm.getAppSettings().getCurrencyId() != null){
                     defaultCurrency=tm.getAppSettings().getCurrencyId();
-                }else{
+                } else {
                     defaultCurrency=CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId();
                 }
 

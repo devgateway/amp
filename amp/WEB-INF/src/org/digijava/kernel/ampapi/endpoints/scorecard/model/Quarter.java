@@ -44,7 +44,7 @@ public class Quarter {
 		this.quarterNumber = quarterNumber;
 		this.year = year;
 		this.yearCode = "" + year;
-		if (calendar.getIsFiscal()) {
+		if (calendar.getStartMonthNum() != 1) {
 			this.yearCode += "-" + (year + 1);
 		}
 	}

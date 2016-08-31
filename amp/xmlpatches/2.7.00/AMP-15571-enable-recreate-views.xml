@@ -10,10 +10,16 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
+
+				INSERT INTO amp_columns (columnid, columnname, aliasname, celltype, extractorview) 
+				select nextval('amp_columns_seq'), 'Description of Component Funding', 'component_funding_description', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_component_funding_description'
+				where not exists (select 1 from amp_columns where columnname='Description of Component Funding');
+
+				INSERT INTO amp_columns (columnid, columnname, aliasname, celltype, extractorview) 
+				select nextval('amp_columns_seq'), 'Component Funding Organization', 'component_funding_organization_name', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_component_funding_organization_name'
+				where not exists (select 1 from amp_columns where columnname='Component Funding Organization');
+
 				
-				INSERT INTO amp_columns (columnid, columnname, aliasname, celltype, extractorview) VALUES
-				(nextval('amp_columns_seq'), 'Description of Component Funding', 'component_funding_description', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_component_funding_description'),
-				(nextval('amp_columns_seq'), 'Component Funding Organization', 'component_funding_organization_name', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_component_funding_organization_name')
 			</lang>
 		</script>
 	</apply>

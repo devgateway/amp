@@ -121,6 +121,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 */
 	public boolean ENABLE_CACHING = true;
 
+	@Override
+	public Map<String, NiReportColumn<?>> getColumns() {
+		return super.getColumns();
+	}
+
 	/**
 	 * the hierarchies which are transaction-level. Please see <a href='https://wiki.dgfoundation.org/display/AMPDOC/2.+NiReports+Configuration%3A+the+schema#id-2.NiReportsConfiguration:theschema-3.4.2.Typesofhierarchicalcolumns'>here</a> for more details
 	 */

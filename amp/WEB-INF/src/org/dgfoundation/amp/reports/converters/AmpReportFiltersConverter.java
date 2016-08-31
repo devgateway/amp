@@ -15,7 +15,10 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -57,13 +60,16 @@ public class AmpReportFiltersConverter {
 		}
 
 		// Donors section.
-		addFilter(ColumnConstants.DONOR_ID, AmpOrganisation.class, "donnorgAgency", true);
+		addFilter(ColumnConstants.DONOR_AGENCY, AmpOrganisation.class, "donnorgAgency", true);
 
 		// Related organizations section.
 		addFilter(ColumnConstants.BENEFICIARY_AGENCY, AmpOrganisation.class, "beneficiaryAgency", true);
 		addFilter(ColumnConstants.EXECUTING_AGENCY, AmpOrganisation.class, "executingAgency", true);
 		addFilter(ColumnConstants.CONTRACTING_AGENCY, AmpOrganisation.class, "contractingAgency", true);
 		addFilter(ColumnConstants.IMPLEMENTING_AGENCY, AmpOrganisation.class, "implementingAgency", true);
+		//addFilter(ColumnConstants.REGIONAL_GROUP, AmpOrganisation.class, "", true);
+		addFilter(ColumnConstants.RESPONSIBLE_ORGANIZATION, AmpOrganisation.class, "responsibleorg", true);
+		//addFilter(ColumnConstants.SECTOR_GROUP, AmpOrganisation.class, "", true);
 
 		// Sector´s section.
 		addFilter(ColumnConstants.PRIMARY_SECTOR, AmpSector.class, "selectedSectors", true);
@@ -80,15 +86,17 @@ public class AmpReportFiltersConverter {
 		addFilter(ColumnConstants.PRIMARY_PROGRAM, AmpTheme.class, "selectedPrimaryPrograms", true);
 		addFilter(ColumnConstants.SECONDARY_PROGRAM, AmpTheme.class, "selectedSecondaryPrograms", true);
 		addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, AmpTheme.class, "selectedNatPlanObj", true);
-
+		
+		// Activity section.
+		addFilter(ColumnConstants.STATUS, AmpCategoryValue.class, "statuses", true);
+		addFilter(ColumnConstants.APPROVAL_STATUS, String.class, "approvalStatusSelected", true);
+		
 		// Other fields.
 		addFilter(ColumnConstants.FINANCING_INSTRUMENT, AmpCategoryValue.class, "financingInstruments", true);
 		addFilter(ColumnConstants.TYPE_OF_ASSISTANCE, AmpCategoryValue.class, "typeOfAssistance", true);
 		addFilter(ColumnConstants.ON_OFF_TREASURY_BUDGET, AmpCategoryValue.class, "budget", true);
 		addFilter(ColumnConstants.WORKSPACES, AmpTeam.class, "workspaces", true);
-		addFilter(ColumnConstants.STATUS, AmpCategoryValue.class, "statuses", true);
-		addFilter(ColumnConstants.APPROVAL_STATUS, String.class, "approvalStatusSelected", true);
-		
+				
 		this.ampARFilter.setComputedYear(this.filters.getComputedYear());
 		
 		// System.out.println(this.ampARFilter.toString());
@@ -119,7 +127,7 @@ public class AmpReportFiltersConverter {
 			Method setterMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(ampARFilterFieldName), param);
 
 			// Get values from Reports API filters.
-			List<FilterRule> filterRules = this.filters.getAllFilterRules().get(new ReportColumn(mondrianFilterColumnName));
+			List<FilterRule> filterRules = this.filters.getAllFilterRules().get(new ReportElement(new ReportColumn(mondrianFilterColumnName)));
 
 			if (filterRules != null) {
 				if (paramClass.getName().equals("java.util.Set") || paramClass.getName().equals("java.util.Collection")) {

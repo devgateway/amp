@@ -14,4 +14,12 @@ public interface FMSettings {
 	
 	/** @return a set of enabled FM settings */
 	Set<String> getEnabledSettings();
+	
+	default FMTree getEnabledSettingsAsFMTree() {
+	    throw new RuntimeException("Not implemented");
+	}
+	
+	default boolean supportsFMTree() {
+	    return false;
+	}
 }

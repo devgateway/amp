@@ -2357,6 +2357,14 @@ public class FeaturesUtil {
 	}
 	
 	/**
+	 * @return AmpTreeVisibility used by the current context
+	 */
+	public static AmpTreeVisibility getCurrentAmpTreeVisibility() {
+	    return getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession()); 
+	    
+	}
+	
+	/**
 	 * gets the visibility tree relevant for this session. Does that by trying to get the tree of the session; if none exists, then falls back to the global one
 	 * @param ampContext
 	 * @param session

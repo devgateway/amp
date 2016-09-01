@@ -2369,6 +2369,20 @@ function sessionstorage(){
 	} catch (exception) {}	  
 }
 
+<<<<<<< HEAD
+=======
+function sessionstorage(){
+	  var mod = 'whatever';
+	  try {
+		sessionStorage.setItem(mod, mod);
+		sessionStorage.removeItem(mod);
+	    return true;
+	  } catch (e) {
+	    console.log(e);
+	    return false;
+	  }
+}
+>>>>>>> branch 'bug/AMP-23434' of https://github.com/devgateway/amp/
 
 module.exports = function() {
   var missingFeatures = [];  // an empty array will cast to bool false. handy!

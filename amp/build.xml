@@ -333,7 +333,7 @@
       <delete dir="${doc.path}"/>
       <delete dir="${gen-src}"/>
       <delete dir="${metainf}"/>    	
-  	  <delete includeemptydirs="true">
+  	  <delete includeemptydirs="true" failonerror="false">
   	    <fileset dir="${webinf}/lib" includes="**/*"/>
   	  </delete>
     </target>

@@ -20,6 +20,7 @@ var HilightFundingCollection = require('./collections/hilight-funding-collection
 var Settings = require('./collections/settings-collection');
 
 var Structures = require('./collections/structures-collection'); /*a.k.a. structures */
+var IndicatorTypes = require('./collections/indicator-type-collection');
 var User = require('./models/amp-user-model.js');
 
 var GISData = function() {
@@ -48,6 +49,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 
 	    this.boundaries = new Boundaries();
 	    this.settings = new Settings();
+	    this.indicatorTypes = new IndicatorTypes();
 	    this.user = new User();
 	    this.activities = new Activities([], {
 	      settings: this.settings,
@@ -110,6 +112,7 @@ _.extend(GISData.prototype, Backbone.Events, {
     $.when(this.filter.loaded, this._stateWait).then(function() {
       self.boundaries.load();
       self.indicators.loadAll();
+      self.indicatorTypes.load();
 
       //drs attach indicotr listnerneros here
 

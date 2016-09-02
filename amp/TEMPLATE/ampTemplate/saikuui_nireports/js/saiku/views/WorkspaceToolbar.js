@@ -52,6 +52,39 @@ var EnabledGisCollection = Backbone.Collection.extend({
 var enabledGisFM = new EnabledGisCollection();
 enabledGisFM.fetchData();
 
+var EnabledAdminSectionModel = Backbone.Model.extend({
+    url : '/rest/common/fm',
+    fetchData : function() {
+        var params = {
+            'reporting-fields' : false,
+            'enabled-modules': true,
+            'detail-modules': ['ADMINISTRATIVE SECTION'],
+            'detail-flat': true,
+            'full-enabled-paths' : true
+        };
+        this.fetch({
+            type : 'POST',
+            async : false,
+            processData : false,
+            mimeType : 'application/json',
+            traditional : true,
+            headers : {
+                'Content-Type' : 'application/json',
+                'Cache-Control' : 'no-cache'
+            },
+            data : JSON.stringify(params),
+            error : function(collection, response) {
+                //console.error('error loading enabled modules.');
+            },
+            success : function(collection, response) {
+            }
+        });
+    }
+});
+
+var enabledASFM = new EnabledAdminSectionModel();
+enabledASFM.fetchData();
+
 var UserModel = Backbone.Model.extend({
 	  url: '/rest/security/layout',
 
@@ -149,7 +182,11 @@ var WorkspaceToolbar = Backbone.View.extend({
         }
     	
         this.reflect_properties();
-
+        if(_.isUndefined(_.findWhere(enabledASFM.get('ADMINISTRATIVE SECTION'), '/ADMINISTRATIVE SECTION/Currency deflator'))) {
+            $(this.el).find('a.export_dual_currency').hide();
+        } else {
+            $(this.el).find('a.export_dual_currency').show();
+        }
     },
     hideEditableFormatsPublicView: function(){
         if(window.currentSettings[Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS] !== undefined && window.currentSettings[Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS] == 'true' && user.get('logged') == false){

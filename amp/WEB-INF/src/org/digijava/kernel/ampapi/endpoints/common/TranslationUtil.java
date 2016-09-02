@@ -67,9 +67,9 @@ public class TranslationUtil {
     /**
      * Get the translation values of the field.
      * @param field
-     * @param class used for retrieving translation
+     * @param clazz used for retrieving translation
      * @param fieldValue
-     * @param parentObject is the parent that contains the object in order to retrieve translations throu parent object id
+     * @param parentObjectId is the parent object id that contains the object in order to retrieve translations
      * @return object with the translated values
      */
     public static Object getTranslationValues(Field field, Class<?> clazz, Object fieldValue, Long parentObjectId) throws NoSuchMethodException,
@@ -104,11 +104,11 @@ public class TranslationUtil {
                     translations.put(trn.getLocale(), trn.getTranslation());
                 }
             }
-        } else {
-            String defLangCode = TranslationSettings.getDefault().getDefaultLangCode();
-            if (translations.get(defLangCode) == null){
-                translations.put(defLangCode, fieldValue);
-            }
+        }
+
+        String defLangCode = TranslationSettings.getDefault().getDefaultLangCode();
+        if (translations.get(defLangCode) == null) {
+            translations.put(defLangCode, fieldValue);
         }
 
         return translations;

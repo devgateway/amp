@@ -66,17 +66,38 @@ function flash() {
 }
 
 function localstorage(){
-  var mod = 'whatever';
-  try {
-    localStorage.setItem(mod, mod);
-    localStorage.removeItem(mod);
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
+	var uid = new Date;
+	var result;
+	try {
+		localStorage.setItem(uid, uid);
+		result = localStorage.getItem(uid) == uid;
+		localStorage.removeItem(uid);
+		return result && localStorage;
+	} catch (exception) {}	
 }
 
+function sessionstorage(){  
+	var uid = new Date;
+	var result;
+	try {
+		sessionStorage.setItem(uid, uid);
+		result = sessionStorage.getItem(uid) == uid;
+		sessionStorage.removeItem(uid);
+		return result && sessionStorage;
+	} catch (exception) {}	  
+}
+
+function sessionstorage(){
+	  var mod = 'whatever';
+	  try {
+		sessionStorage.setItem(mod, mod);
+		sessionStorage.removeItem(mod);
+	    return true;
+	  } catch (e) {
+	    console.log(e);
+	    return false;
+	  }
+}
 
 module.exports = function() {
   var missingFeatures = [];  // an empty array will cast to bool false. handy!
@@ -122,6 +143,12 @@ module.exports = function() {
       severity: 'minor'
     });
   }
-
+  
+  if (!sessionstorage()) {
+	    missingFeatures.push({
+	      feature: 'sessionStorage',
+	      severity: 'minor'
+	    });
+	  }
   return missingFeatures;
 };

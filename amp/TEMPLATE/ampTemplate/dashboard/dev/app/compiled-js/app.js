@@ -4244,7 +4244,7 @@ var previousXLimit = null;
 var previousYLimit = null;
 
 module.exports = BackboneDash.View.extend({
-	
+
   initialize: function(options) {
 	var self = this;
     this.app = options.app;
@@ -24046,7 +24046,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"/home/esoliani/amp-workspace/AMP_212_GIT/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/bootstrap/dist/js/bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!

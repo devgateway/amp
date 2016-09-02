@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -76,5 +77,18 @@ public class ModulesVisibility extends DataVisibility implements FMSettings {
 	}
 	
 	protected static final Set<String> mainModulesSet = new HashSet<String>(mainModulesMap.values());
+	
+	/**
+	 * Provides the original FM name associated to the module
+	 * @param displayName the display name used as reference
+	 * @return the original FM name
+	 */
+	public String getOrigName(String moduleDisplayName) {
+	    for (Entry<String, String> entry : mainModulesMap.entrySet()) {
+	        if (entry.getValue().equalsIgnoreCase(moduleDisplayName))
+	            return entry.getKey();
+	    }
+	    return null;
+	}
 	
 }

@@ -8,4 +8,4 @@ ReactDOM.render(
   document.getElementById('heat-map')
 );
 
-new boilerplate.layout({showLogin: false});
+new boilerplate.layout({});

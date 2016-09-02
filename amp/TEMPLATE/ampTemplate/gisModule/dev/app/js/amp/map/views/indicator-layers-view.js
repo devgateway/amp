@@ -3,6 +3,7 @@ var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 var util = require('../../../libs/local/chart-util');
 var _ = require('underscore');
+var Constants = require('../../../libs/local/constants');
 
 module.exports = Backbone.View.extend({
 
@@ -153,13 +154,23 @@ module.exports = Backbone.View.extend({
         var foundNF = _.find(self.app.data.settings.models, function(item) {
           return item.get('id') === 'number-format';
         });
+        
         var ampFormatter = new util.DecimalFormat(_.find(foundNF.get('options'), function(item) {
-          return item.id === foundNF.get('defaultId');
-        }).name);
+            return item.id === foundNF.get('defaultId');
+          }).name);
 
+        
+        var value;
+        var percentIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_PERCENTAGE});
+        var ratioOtherIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_OTHER});
+        if((percentIndicator && percentIndicator.get('id') === layerModel.get('indicatorTypeId')) || (ratioOtherIndicator && ratioOtherIndicator.get('id') === layerModel.get('indicatorTypeId'))){
+        	value = ampFormatter.format(feature.properties.value * 100);
+        }else{
+        	value = ampFormatter.format(feature.properties.value)
+        }        
         var fundingPopupTemplate = ['<strong>', feature.properties.name, '</strong>',
                         '<br/>', formattedTitleString, '',
-                        ampFormatter.format(feature.properties.value), ' ', unit].join('');
+                        value, ' ', unit].join('');
 
         layer.bindPopup(fundingPopupTemplate);
       });

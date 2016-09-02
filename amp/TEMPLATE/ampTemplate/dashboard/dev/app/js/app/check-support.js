@@ -65,17 +65,6 @@ function flash() {
   }
 }
 
-function localstorage(){
-    var uid = new Date;
-	var result;
-	try {
-		localStorage.setItem(uid, uid);
-		result = localStorage.getItem(uid) == uid;
-		localStorage.removeItem(uid);
-		return result && localStorage;
-	} catch (exception) {}	
-}
-
 function sessionstorage(){  
 	var uid = new Date;
 	var result;
@@ -126,13 +115,6 @@ module.exports = function() {
     });
   }
 
-  if (!localstorage()) {
-    missingFeatures.push({
-      feature: 'localStorage',
-      severity: 'minor'
-    });
-  }
-  
   if (!sessionstorage()) {
 	    missingFeatures.push({
 	      feature: 'sessionStorage',

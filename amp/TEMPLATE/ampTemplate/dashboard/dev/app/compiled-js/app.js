@@ -4245,14 +4245,6 @@ var previousYLimit = null;
 
 module.exports = BackboneDash.View.extend({
 
-  //TODO: This is wrong because different countries have other measures (ie: ssc).
-  adjTypeTranslation : {"Actual Commitments":"amp.dashboard:ftype-actual-commitment",
-			"Actual Disbursements":"amp.dashboard:ftype-actual-disbursement",
-				"Actual Expenditures":"amp.dashboard:ftype-actual-expenditure",
-				"Planned Commitments": "amp.dashboard:ftype-planned-commitment",
-				"Planned Disbursements": "amp.dashboard:ftype-planned-disbursement",
-				"Planned Expenditures": "amp.dashboard:ftype-planned-expenditures"
-			    },
   initialize: function(options) {
 	var self = this;
     this.app = options.app;
@@ -4280,7 +4272,7 @@ module.exports = BackboneDash.View.extend({
   render: function() {
 	var self = this;
     this.$el.html(template());   
-    var chart = _.find(self.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
+    this.chart = _.find(self.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
     
 	// Here we will define an interval that will check periodically if the bootstrap modal is fully rendered.
 	// In that moment the interval is finished and the chart is rendered.
@@ -4289,14 +4281,14 @@ module.exports = BackboneDash.View.extend({
 		if ($('.dash-download-modal').closest('.in').length > 0) {
 			window.clearInterval(interval);
 			// Wait for the chart in the dashboard page to be fully rendered, this has impact only on heatmap charts, on the rest is transparent.
-			$.when(chart.renderedPromise, chart.showChartPromise).done(function() {
+			$.when(self.chart.renderedPromise, self.chart.showChartPromise).done(function() {
 	    		if (self.model.get('chartType') === 'fragmentation') {
 	    			// We add an event for heatmaps to re-draw the original chart.
 	    		    $('.dash-download-modal').closest('.in').on('hide.bs.modal', function() {
 	    		    	self.model.set('yLimit', previousYLimit);
 	    		    	self.model.set('xLimit', previousXLimit);
 	    		    	self.model.set('showFullLegends', false);
-	    		    	chart.render();
+						self.chart.render();
 	    		    });
 	    		}
 			    if (self.model.get('view') === 'table') {
@@ -4306,7 +4298,7 @@ module.exports = BackboneDash.View.extend({
 			        if (rendered === false) {
 			        	rendered = true;
 			        	self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
-			        		self.$('.preview-area .canvas-wrap'), chart);
+			        		self.$('.preview-area .canvas-wrap'), self.chart);
 			        }
 			    }
 			});
@@ -4370,8 +4362,7 @@ module.exports = BackboneDash.View.extend({
     	moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + currencyName,
         adjType = this.model.get('adjtype');    
     if (adjType) {
-    	var key = this.adjTypeTranslation [adjType];
-        var trnAdjType = this.app.translator.translateSync(key, adjType);
+        var trnAdjType = this.chart.$el.find('.ftype-options option:selected').text();
         moneyContext = trnAdjType + moneyContext;
     }
 
@@ -4461,8 +4452,7 @@ module.exports = BackboneDash.View.extend({
 	      .map(function(row) {
 	        row.push(currency || '');
 	        if (adjtype) {
-	        	var key = self.adjTypeTranslation [adjtype];
-	            var trnAdjType = this.app.translator.translateSync(key, adjtype);
+				var trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
 	            row.push(trnAdjType);
 	        }
 	        return row;
@@ -4482,8 +4472,7 @@ module.exports = BackboneDash.View.extend({
 	    csvTransformed = _.each(csvTransformed, function(item) { 
 	        item.push(currency);
 	        if (adjtype) {
-	        	var key = self.adjTypeTranslation [adjtype];
-	            var trnAdjType = this.app.translator.translateSync(key, adjtype);
+				var trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
 	            item.push(trnAdjType);
 	        }	        
 	    });
@@ -24057,7 +24046,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"/home/esoliani/amp-workspace/AMP_212_GIT/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/bootstrap/dist/js/bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!

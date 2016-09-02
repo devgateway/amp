@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -20,7 +19,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author Nadejda Mandrescu
  */
 public class FMService {
-	protected static final Logger logger = Logger.getLogger(FMService.class);
+	protected static final Logger LOGGER = Logger.getLogger(FMService.class);
 	
 	/**
 	 * 
@@ -42,11 +41,14 @@ public class FMService {
 					provideEnabledModules(result);
 				}
 				
+				Boolean detailFlat = EndpointUtils.getSingleValue(config, EPConstants.DETAILS_FLAT, Boolean.TRUE);
+				Boolean fullEnabledPaths = EndpointUtils.getSingleValue(config, EPConstants.FULL_ENABLED_PATHS, Boolean.TRUE);
 				provideModulesDetails(result, EndpointUtils.getSingleValue(config, EPConstants.DETAIL_MODULES, 
-						new ArrayList<String>()));
+						new ArrayList<String>()), detailFlat, fullEnabledPaths);
 			}
 		} catch(Exception ex) {
-			result.set(EPConstants.ERROR, ex.getMessage());
+		    LOGGER.error("Unexpected error occurred while generating FM settings", ex);
+		    result.set(EPConstants.ERROR, ex.getMessage());
 		}
 		
 		return result;
@@ -84,7 +86,8 @@ public class FMService {
 		result.set(EPConstants.ENABLED_MODULES, FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES));
 	}
 	
-	private static void provideModulesDetails(JsonBean result, List<String> detailModules) {
+	private static void provideModulesDetails(JsonBean result, List<String> detailModules, Boolean detailFlat,
+	        Boolean fullEnabledPaths) {
 		if (detailModules == null || detailModules.size() == 0) return;
 		
 		// check if all enabled modules are requested
@@ -92,7 +95,14 @@ public class FMService {
 			detailModules = new ArrayList<String>(FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES));
 		}
 		for (String module : detailModules) {
-			result.set(module, FMSettingsMediator.getEnabledSettings(module));
+		    boolean supportsFMTree = FMSettingsMediator.supportsFMTree(module);
+		    if (detailFlat || !supportsFMTree) {
+		        Set<String> entries = !supportsFMTree ? FMSettingsMediator.getEnabledSettings(module) :
+		            FMSettingsMediator.getEnabledSettingsAsTree(module).toFlattenedTree(fullEnabledPaths);
+		        result.set(module, entries);
+		    } else {
+		        result.set(module, FMSettingsMediator.getEnabledSettingsAsTree(module).asJson(fullEnabledPaths));
+		    }
 		}
 	}
 }

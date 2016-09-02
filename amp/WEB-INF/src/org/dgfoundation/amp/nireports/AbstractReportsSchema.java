@@ -33,7 +33,7 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	protected Map<String, NiReportMeasure<?>> measures = new HashMap<>();
 	
 	@Override
-	public Map<String, NiReportColumn<?>> getColumns() {
+	public Map<String, NiReportColumn<? extends Cell>> getColumns() {
 		return Collections.unmodifiableMap(columns);
 	}
 	
@@ -116,9 +116,9 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		}
 		NiReportMeasure<CategAmountCell> res;
 		if (average)
-			res = new NiFormulaicAverageMeasure(compMeasureName, description, depMeas, formula, true);
+			res = new NiFormulaicAverageMeasure(compMeasureName, description, depMeas, formula, true, false);
 		else
-			res = new NiFormulaicMeasure(compMeasureName, description, depMeas, formula);
+			res = new NiFormulaicMeasure(compMeasureName, description, depMeas, formula, false);
 		return addMeasure(res);
 		//return addMeasure(meas)
 	}

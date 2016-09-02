@@ -54,19 +54,21 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 		this.translator = translator;
 	}
 
-	public String formatScalableAmount(BigDecimal value) {
-		value = value.divide(unitsDivider);
-		if (decimalFormatter == null || value == null) 
+	private String scaleAndFormatAmount(BigDecimal value) {
+		return formatAmount(value.divide(unitsDivider));
+	}
+
+	private String formatAmount(BigDecimal value) {
+		if (decimalFormatter == null || value == null)
 			return value == null ? "" : String.valueOf(value);
 		return decimalFormatter.format(value);
 	}
-	
+
 	public ReportCell visitNumberedCell(NumberedCell cell) {
 		BigDecimal amt = cell.getAmount();
-		if (cell.isScalableByUnits()) {
-			return new org.dgfoundation.amp.newreports.AmountCell(amt, formattedValues.computeIfAbsent(amt, this::formatScalableAmount));
-		}
-		return new org.dgfoundation.amp.newreports.AmountCell(amt, String.valueOf(amt));
+		return new org.dgfoundation.amp.newreports.AmountCell(
+				amt,
+				formattedValues.computeIfAbsent(amt, cell.isScalableByUnits() ? this::scaleAndFormatAmount : this::formatAmount));
 	}
 	
 	@Override

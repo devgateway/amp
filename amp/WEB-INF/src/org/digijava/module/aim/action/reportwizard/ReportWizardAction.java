@@ -273,11 +273,6 @@ public class ReportWizardAction extends MultiAction {
                 myForm.setReportType("pledge");
             }
         }
-        if (myForm.getReportType().equalsIgnoreCase("pledge") && typereport != ArConstants.PLEDGES_TYPE){
-            typereport = ArConstants.PLEDGES_TYPE;
-            String[] tmp = {"5"};
-            request.getParameterMap().put("type", tmp);
-        }
 
         request.getSession().setAttribute(ReportsFilterPicker.PLEDGE_REPORT_REQUEST_ATTRIBUTE, Boolean.toString(typereport == ArConstants.PLEDGES_TYPE)); //WARNING: When merging with 2.4, using ReportContextData attribute instead of storing in the session
         request.setAttribute(MULTILINGUAL_REPORT_PREFIX + "_title", new MultilingualInputFieldValues(AmpReports.class, myForm.getReportId(), "name", null, null));

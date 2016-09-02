@@ -60,7 +60,7 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 				final MarkupContainer listParent=this.getParent();
 				AmpTextFieldPanel<String> internalId=new AmpTextFieldPanel<String>("internalId", new PropertyModel<String>(item.getModel(), 
 						"internalId"),"internalId",true);
-				
+				internalId.setTextContainerDefaultMaxSize();
 				item.add(internalId);
 				
 				item.add(new Label("orgNameLabel", item.getModelObject()

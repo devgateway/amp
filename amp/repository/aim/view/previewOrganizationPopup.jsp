@@ -88,7 +88,11 @@
   </script>
 
 
-<div align="left" class="nice_tooltip" title=""  ">[<u><bean:write name="org" property="organisation.name"/>  <bean:write name="org" property="projectId"/></u>]
+<div align="left" class="nice_tooltip" title=""  ">
+[<u>
+	<bean:write name="org" property="organisation.name"/>  
+	<span class="word_break"><bean:write name="org" property="projectId"/></span>
+</u>]
 
 </div>
 </li>

@@ -25,11 +25,14 @@ public class NiFormulaicAmountCell extends NiAmountCell {
 	public final static BigDecimal PLUS_INFINITY = new BigDecimal(0);
 	public final static BigDecimal MINUS_INFINITY = new BigDecimal(0);
 	
-	public final static NiFormulaicAmountCell FORMULAIC_ZERO = new NiFormulaicAmountCell(Collections.emptyMap(), ZERO.amount, ZERO.precisionSetting); 
-	
-	public NiFormulaicAmountCell(Map<String, BigDecimal> values, BigDecimal amount, NiPrecisionSetting precision) {
+	public final static NiFormulaicAmountCell FORMULAIC_ZERO = new NiFormulaicAmountCell(Collections.emptyMap(), ZERO.amount, ZERO.precisionSetting, false);
+
+	private boolean isScalableByUnits;
+
+	public NiFormulaicAmountCell(Map<String, BigDecimal> values, BigDecimal amount, NiPrecisionSetting precision, boolean isScalableByUnits) {
 		super(amount, precision);
 		this.values = Collections.unmodifiableMap(values);
+		this.isScalableByUnits = isScalableByUnits;
 	}
 	
 	public boolean isDefined() {
@@ -48,5 +51,10 @@ public class NiFormulaicAmountCell extends NiAmountCell {
 	 */
 	public static boolean isDefined(BigDecimal a) {
 		return a != null && a != UNDEFINED && a != PLUS_INFINITY && a != MINUS_INFINITY;
+	}
+
+	@Override
+	public boolean isScalableByUnits() {
+		return isScalableByUnits;
 	}
 }

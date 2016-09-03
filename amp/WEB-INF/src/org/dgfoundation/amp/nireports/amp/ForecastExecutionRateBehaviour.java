@@ -6,18 +6,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
 import org.dgfoundation.amp.nireports.behaviours.AbstractComputedBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.FormulaicAmountBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
@@ -32,11 +30,17 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
 public class ForecastExecutionRateBehaviour extends AbstractComputedBehaviour<NiFormulaicAmountCell> {
 	
 	public final static ForecastExecutionRateBehaviour instance = new ForecastExecutionRateBehaviour(TimeRange.NONE);
-				
+
+	/**
+	 * Specified whenever cells produced by this behaviour are scalable by units.
+	 * See also {@link ReportSettings#getUnitsOption()}.
+	 */
+	private final boolean isScalableByUnits = false;
+
 	public ForecastExecutionRateBehaviour(TimeRange timeRange) {
 		super(timeRange);
 	}
-	
+
 	/**
 	 * combines multiple elementary cells into one {@link NiFormulaicAmountCell}. It has 3 functions to fulfill: 
 	 * <ul>
@@ -89,7 +93,7 @@ public class ForecastExecutionRateBehaviour extends AbstractComputedBehaviour<Ni
 		
 		BigDecimal numericValue = CALCULATOR.evaluateOrUndefined(vv, null);
 		if (numericValue != null)
-			return new NiFormulaicAmountCell(vals, numericValue, precision);
+			return new NiFormulaicAmountCell(vals, numericValue, precision, isScalableByUnits);
 		else
 			return buildNoValueCell(vals);
 	}
@@ -128,6 +132,6 @@ public class ForecastExecutionRateBehaviour extends AbstractComputedBehaviour<Ni
 	}
 	
 	public NiFormulaicAmountCell buildNoValueCell(Map<String, BigDecimal> vals) {
-		return new NiFormulaicAmountCell(vals, null, NiPrecisionSetting.IDENTITY_PRECISION_SETTING);
+		return new NiFormulaicAmountCell(vals, null, NiPrecisionSetting.IDENTITY_PRECISION_SETTING, isScalableByUnits);
 	}
 }

@@ -30,16 +30,17 @@ public class NiFormulaicMeasure extends NiReportMeasure<CategAmountCell> {
 	 */
 	public final Map<String, NiReportMeasure<CategAmountCell>> depMeas;
 	
-	public NiFormulaicMeasure(String measName, String description, Map<String, NiReportMeasure<CategAmountCell>> depMeas, NiFormula formula) {
-		super(measName, buildBehaviour(formula), description);
+	public NiFormulaicMeasure(String measName, String description, Map<String, NiReportMeasure<CategAmountCell>> depMeas, NiFormula formula, boolean isScalableByUnits) {
+		super(measName, buildBehaviour(formula, isScalableByUnits), description);
 		this.depMeas = Collections.unmodifiableMap(new HashMap<>(depMeas));
 	}
 	
-	static FormulaicAmountBehaviour buildBehaviour(NiFormula formula) {
+	static FormulaicAmountBehaviour buildBehaviour(NiFormula formula, boolean isScalableByUnits) {
 		return new FormulaicAmountBehaviour(TimeRange.NONE, 
 			formula.getDependencies().stream().collect(Collectors.toMap(z -> z, z -> FormulaicAmountBehaviour::REDUCE_SUM)),
 			null,
-			formula);
+			formula,
+			isScalableByUnits);
 	}
 
 	/**

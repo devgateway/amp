@@ -32,6 +32,7 @@ public class IndicatorEPConstants {
     public static final String NUMBER_OF_CLASSES = "numberOfClasses";
     public static final String UNIT = "unit";
     public static final String ADM_LEVEL_ID = "admLevelId";
+    public static final String ADM_LEVEL_NAME = "admLevelName";
     public static final String ADM_X = "admX";
     public static final String ACCESS_TYPE_ID = "accessTypeId";
     public static final String COLOR_RAMP_ID = "colorRampId";

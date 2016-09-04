@@ -64,6 +64,7 @@ public class PublicGapAnalysis {
             // create a temporary indicator layer
             JsonBean indicatorJson = new JsonBean();
             indicatorJson.any().putAll(indicatorMap);
+            indicatorJson.set(IndicatorEPConstants.ID, null); // Make sure the public layer doesnt have an id.
             AmpIndicatorLayer indicator = IndicatorService.getIndicatorLayer(indicatorJson, errors, null);
             if (errors.isEmpty()) {
                 return IndicatorUtils.getIndicatorsAndLocationValues(indicator, input, true);

@@ -96,7 +96,8 @@ module.exports = Backbone.Model
 					  url: '/rest/gis/do-gap-analysis', 
 					  async: false, 
 					  type: 'POST',
-					  processData: false,
+					  dataType: "json",         
+	                  contentType: 'application/json',
 					  data: JSON.stringify({indicator: layer})})
 				  .done(function(data) {
 					  //localLayer.canDoGapAnalysis = data.canDoGapAnalysis;

@@ -59,7 +59,7 @@ module.exports = Backbone.Collection.extend({
 			  $.ajax({
 				  url: '/rest/gis/can-do-gap-analysis', 
 				  async: false, 
-				  data: {indicatorTypeId: localLayer.indicatorTypeId, admLevelId: 77 /*localLayer.admLevelId*/} })
+				  data: {indicatorTypeId: localLayer.indicatorTypeId, admLevelId: localLayer.admLevelId} })
 			  .done(function(data) {
 				  localLayer.canDoGapAnalysis = data.canDoGapAnalysis;
 			  });			  
@@ -91,7 +91,7 @@ module.exports = Backbone.Collection.extend({
     	 });   	 
         layer.type = 'joinBoundaries';
         //debugger
-        layer.adminLevel = self._magicConversion(layer.admLevelId);
+        layer.adminLevel = self._magicConversion(layer.admLevelName);
         layer.tooltip = self._createTooltip(layer); 
         layer.classes = layer.numberOfClasses;        
         return true;

@@ -114,7 +114,8 @@ public class IndicatorUtils {
     public static JsonBean buildSerializedIndicatorLayerJson(AmpIndicatorLayer indicator, JsonBean indicatorJson) {
 
         indicatorJson.set(IndicatorEPConstants.ID, (long) System.identityHashCode(indicator));
-        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getValue());
+        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
+        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getValue());
         indicatorJson.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
 
         if (indicator.getColorRamp() != null) {
@@ -147,6 +148,7 @@ public class IndicatorUtils {
         indicatorValueJson.set(IndicatorEPConstants.VALUE, indicatorValue.getValue());
         indicatorValueJson.set(IndicatorEPConstants.GEO_CODE_ID, indicatorValue.getLocation().getGeoCode());
         indicatorValueJson.set(IndicatorEPConstants.NAME, indicatorValue.getLocation().getName());
+        indicatorValueJson.set(IndicatorEPConstants.ID, indicatorValue.getLocation().getId());
 
         return indicatorValueJson;
     }
@@ -301,6 +303,7 @@ public class IndicatorUtils {
             if (doingGapAnalysis) {
                 value = gapAnalysis.getGapAnalysisAmount(value, geoCode);
             }
+            object.set(IndicatorEPConstants.ID, locIndValue.getLocation().getId());
             object.set(IndicatorEPConstants.VALUE, value);
             object.set(IndicatorEPConstants.GEO_CODE_ID, geoCode);
             object.set(IndicatorEPConstants.NAME, locIndValue.getLocation().getName());

@@ -68,7 +68,7 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	
 	/**
 	 * constructs a {@link NiCombinationContextTransactionMeasure} measure and then adds it to the schema by using {@link #addMeasure(NiReportMeasure)}  
-	 * @param compMeasure the name of the measure to construct
+	 * @param compMeasureName the name of the measure to construct
 	 * @param description the description of the measure to construct
 	 * @param behaviour the behaviour of the measure to construct
 	 * @param def an even-length array. Each pair is a (measureName, {@link Number}) tuple. The <i>measureName</i> should reference an already-defined measure of type {@link NiTransactionContextMeasure}.
@@ -98,6 +98,14 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		Map<NiTransactionMeasure, BigDecimal> defMap = parseMap(String.format("while defining measure %s", compMeasureName), def);
 		return addMeasure(new NiLinearCombinationTransactionMeasure(compMeasureName, defMap, behaviour, ignoreFilters, stripCoords, description));
 	}
+
+	/**
+	 * <p>Use this method to add computed measures for which scaling does not apply.</p>
+	 * See also {@link AbstractReportsSchema#addFormulaComputedMeasure(String, String, NiFormula, boolean, boolean)}.
+	 */
+	public AbstractReportsSchema addFormulaComputedMeasure(String compMeasureName, String description, NiFormula formula, boolean average) {
+		return addFormulaComputedMeasure(compMeasureName, description, formula, average, false);
+	}
 	
 	/**
 	 * constructs a measure based off a formula and then adds it to the schema by using {@link #addMeasure(NiReportMeasure)}. The measure would be of one of {@link NiFormulaicMeasure} or {@link NiFormulaicAverageMeasure}
@@ -105,9 +113,10 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	 * @param description the description of the measure to construct
 	 * @param formula the formula to drive the cells
 	 * @param average whether to create a {@link NiFormulaicAverageMeasure} (e.g. populate trail cells based off the average of a formula across cells) or a {@link NiFormulaicMeasure} (e.g. populate body and trail cells based off the value of the formula)
+	 * @param isScalableByUnits are cells created by this measure to be scaled or not
 	 * @return
 	 */
-	public AbstractReportsSchema addFormulaComputedMeasure(String compMeasureName, String description, NiFormula formula, boolean average) {
+	public AbstractReportsSchema addFormulaComputedMeasure(String compMeasureName, String description, NiFormula formula, boolean average, boolean isScalableByUnits) {
 		Map<String, NiReportMeasure<CategAmountCell>> depMeas = new HashMap<>();
 		for(String measName:formula.getDependencies()) {
 			NiReportMeasure<CategAmountCell> meas = (NiReportMeasure) measures.get(measName);
@@ -116,9 +125,9 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		}
 		NiReportMeasure<CategAmountCell> res;
 		if (average)
-			res = new NiFormulaicAverageMeasure(compMeasureName, description, depMeas, formula, true, false);
+			res = new NiFormulaicAverageMeasure(compMeasureName, description, depMeas, formula, true, isScalableByUnits);
 		else
-			res = new NiFormulaicMeasure(compMeasureName, description, depMeas, formula, false);
+			res = new NiFormulaicMeasure(compMeasureName, description, depMeas, formula, isScalableByUnits);
 		return addMeasure(res);
 		//return addMeasure(meas)
 	}

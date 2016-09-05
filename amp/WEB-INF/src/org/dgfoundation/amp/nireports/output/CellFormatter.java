@@ -60,8 +60,8 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	}
 
 	private String formatAmount(BigDecimal value) {
-		if (decimalFormatter == null || value == null)
-			return value == null ? "" : String.valueOf(value);
+		if (decimalFormatter == null)
+			return String.valueOf(value);
 		return decimalFormatter.format(value);
 	}
 

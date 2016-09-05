@@ -11,6 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
@@ -46,17 +47,24 @@ public class FormulaicAmountBehaviour extends AbstractComputedBehaviour<NiFormul
 	 * the callback which is used to build "undefined" cells (ones where {@link #formula} returns one of the undefined values)
 	 */
 	final BiFunction<BigDecimal, Map<String, BigDecimal>, NiFormulaicAmountCell> undefinedBuilder;
+
+	/**
+	 * Specified whenever cells produced by this behaviour are scalable by units.
+	 * See also {@link ReportSettings#getUnitsOption()}.
+	 */
+	private final boolean isScalableByUnits;
 	
 	public FormulaicAmountBehaviour(TimeRange timeRange, 
 			Map<String, Function<List<BigDecimal>, BigDecimal>> reductors,
 			BiFunction<BigDecimal, Map<String, BigDecimal>, NiFormulaicAmountCell> undefinedBuilder,
-			NiFormula formula) {
+			NiFormula formula, boolean isScalableByUnits) {
 		super(timeRange);
 		this.reductors = reductors;
 		this.formula = formula;
 		this.undefinedBuilder = undefinedBuilder == null ? 
-				(val, vals) -> new NiFormulaicAmountCell(vals, null, NiPrecisionSetting.IDENTITY_PRECISION_SETTING) : 
+				(val, vals) -> new NiFormulaicAmountCell(vals, null, NiPrecisionSetting.IDENTITY_PRECISION_SETTING, isScalableByUnits) :
 					undefinedBuilder;
+		this.isScalableByUnits = isScalableByUnits;
 	}
 	
 	/**
@@ -81,7 +89,7 @@ public class FormulaicAmountBehaviour extends AbstractComputedBehaviour<NiFormul
 	protected NiFormulaicAmountCell buildCell(Map<String, BigDecimal> vals, NiPrecisionSetting precision) {
 		BigDecimal numericValue = formula.evaluate(vals);
 		if (NiFormulaicAmountCell.isDefined(numericValue))
-			return new NiFormulaicAmountCell(vals, formula.evaluate(vals), precision);
+			return new NiFormulaicAmountCell(vals, numericValue, precision, isScalableByUnits);
 		else
 			return undefinedBuilder.apply(numericValue, vals);
 	}

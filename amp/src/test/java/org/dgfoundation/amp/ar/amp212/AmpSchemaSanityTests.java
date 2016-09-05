@@ -1,9 +1,7 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.AllTests_amp212;
@@ -21,7 +19,6 @@ import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedActivities;
-import org.digijava.module.aim.helper.DateConversion;
 import org.junit.Test;
 
 /**
@@ -104,6 +101,46 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				GroupingCriteria.GROUPING_TOTALS_ONLY), 
 			new HardcodedActivities().getActNamesList(),
 			new ReportModelGenerator());
+	}
+
+	@Test
+	public void testAllMeasures() {
+		List<String> columns = Arrays.asList(ColumnConstants.PROJECT_TITLE);
+
+		List<String> measures = Arrays.asList(
+				MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_ARREARS, MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS,
+				MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT,
+				MeasureConstants.ACTUAL_EXPENDITURES, MeasureConstants.BILATERAL_SSC_COMMITMENTS, MeasureConstants.CONSUMPTION_RATE,
+				MeasureConstants.CUMULATED_DISBURSEMENTS, MeasureConstants.CUMULATIVE_COMMITMENT, MeasureConstants.CUMULATIVE_DISBURSEMENT,
+				MeasureConstants.CUMULATED_SSC_COMMITMENTS, MeasureConstants.DISBURSMENT_RATIO, MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS,
+				MeasureConstants.PIPELINE_COMMITMENTS, MeasureConstants.PLANNED_COMMITMENTS, MeasureConstants.PLANNED_DISBURSEMENT_ORDERS,
+				MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.PLANNED_ARREARS, MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL,
+				MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, MeasureConstants.PLANNED_EXPENDITURES, MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS,
+				MeasureConstants.CURRENT_MONTH_DISBURSEMENTS, MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS,
+				MeasureConstants.TOTAL_COMMITMENTS, MeasureConstants.TOTAL_DISBURSEMENTS, MeasureConstants.TRIANGULAR_SSC_COMMITMENTS,
+				MeasureConstants.UNCOMMITTED_BALANCE, MeasureConstants.UNDISBURSED_BALANCE, MeasureConstants.REAL_PLANNED_DISBURSEMENTS,
+				MeasureConstants.REAL_DISBURSEMENTS, MeasureConstants.REAL_COMMITMENTS, MeasureConstants.REAL_MTEFS,
+				MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS,
+				MeasureConstants.PERCENTAGE_OF_DISBURSEMENT, MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES,
+				MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE, MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST,
+				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT, MeasureConstants.ACTUAL_ESTIMATED_DISBURSEMENTS, MeasureConstants.ACTUAL_RELEASE_OF_FUNDS,
+				MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS, MeasureConstants.PIPELINE_RELEASE_OF_FUNDS, MeasureConstants.PLANNED_ESTIMATED_DISBURSEMENTS,
+				MeasureConstants.PLANNED_RELEASE_OF_FUNDS, MeasureConstants.PIPELINE_MTEF_PROJECTIONS, MeasureConstants.PROJECTION_MTEF_PROJECTIONS,
+				MeasureConstants.VARIANCE_OF_COMMITMENTS, MeasureConstants.VARIANCE_OF_DISBURSEMENTS, MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS,
+				MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS, MeasureConstants.PLEDGES_ACTUAL_DISBURSEMENTS, MeasureConstants.PLEDGES_ACTUAL_PLEDGE,
+				MeasureConstants.PLEDGES_COMMITMENT_GAP, MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, MeasureConstants.PLEDGES_PLANNED_COMMITMENTS,
+				MeasureConstants.PLEDGES_PLANNED_DISBURSEMENTS, MeasureConstants.MTEF_PROJECTIONS, MeasureConstants.EXECUTION_RATE,
+				MeasureConstants.PREDICTABILITY_OF_FUNDING, MeasureConstants.CUMULATIVE_EXECUTION_RATE, MeasureConstants.AVERAGE_DISBURSEMENT_RATE,
+				MeasureConstants.FORECAST_EXECUTION_RATE, MeasureConstants.ALWAYS_PRESENT);
+
+		buildDigest(
+				buildSpecification("testcase with all unusual measures",
+						columns,
+						measures,
+						columns,
+						GroupingCriteria.GROUPING_MONTHLY),
+				new HardcodedActivities().getActNamesList(),
+				new ReportModelGenerator());
 	}
 	
 	@Test

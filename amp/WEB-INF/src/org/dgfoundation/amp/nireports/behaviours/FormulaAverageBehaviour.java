@@ -10,6 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
@@ -41,15 +42,23 @@ public class FormulaAverageBehaviour extends AbstractComputedBehaviour<NiFormula
 	 * whether to output values in individual cells
 	 */
 	final boolean valuesInCells;
-	
+
+	/**
+	 * Specified whenever cells produced by this behaviour are scalable by units.
+	 * See also {@link ReportSettings#getUnitsOption()}.
+	 */
+	private final boolean isScalableByUnits;
+
 	public FormulaAverageBehaviour(TimeRange timeRange, 
 			Map<String, Function<List<BigDecimal>, BigDecimal>> reductors,
 			boolean valuesInCells,
-			NiFormula formula) {
+			NiFormula formula,
+		    boolean isScalableByUnits) {
 		super(timeRange);
 		this.reductors = reductors;
 		this.formula = formula;
 		this.valuesInCells = valuesInCells;
+		this.isScalableByUnits = isScalableByUnits;
 	}
 	
 	/**
@@ -73,9 +82,9 @@ public class FormulaAverageBehaviour extends AbstractComputedBehaviour<NiFormula
 			Map<String, BigDecimal> values = new HashMap<>();
 			values.put("sum", numericValue);
 			values.put("num", BigDecimal.ONE);
-			return new NiFormulaicAmountCell(values, valuesInCells ? numericValue : null, precision);
+			return new NiFormulaicAmountCell(values, valuesInCells ? numericValue : null, precision, isScalableByUnits);
 		}
-		return new NiFormulaicAmountCell(Collections.emptyMap(), null, precision);
+		return new NiFormulaicAmountCell(Collections.emptyMap(), null, precision, isScalableByUnits);
 	}
 	
 	protected String extractCellTag(NiCell cell) {
@@ -102,7 +111,7 @@ public class FormulaAverageBehaviour extends AbstractComputedBehaviour<NiFormula
 		if (num.compareTo(BigDecimal.ZERO) > 0) {
 			BigDecimal res = sum.divide(num, NiFormula.DIVISION_MC);
 			//System.out.format("the average of %d items is %.2f\n", num.intValue(), res.doubleValue());
-			return new NiFormulaicAmountCell(z, res, NiPrecisionSetting.IDENTITY_PRECISION_SETTING);
+			return new NiFormulaicAmountCell(z, res, NiPrecisionSetting.IDENTITY_PRECISION_SETTING, isScalableByUnits);
 		}
 		return getZeroCell();
 	}

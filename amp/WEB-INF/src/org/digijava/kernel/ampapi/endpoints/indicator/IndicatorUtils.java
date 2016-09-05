@@ -71,6 +71,7 @@ public class IndicatorUtils {
         indicatorJson.set(IndicatorEPConstants.UNIT, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
         indicatorJson.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
+        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
         indicatorJson.set(IndicatorEPConstants.ADM_X, getAdmX(indicator));
         indicatorJson.set(IndicatorEPConstants.IS_POPULATION, indicator.isPopulation());
         indicatorJson.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : 
@@ -290,7 +291,8 @@ public class IndicatorUtils {
         response.set(IndicatorEPConstants.ID, indicator.getId());
         response.set(IndicatorEPConstants.UNIT, unit);
         response.set(IndicatorEPConstants.DESCRIPTION, indicator.getDescription());
-        response.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getLabel());        
+        response.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
+        response.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
         response.set(IndicatorEPConstants.DO_GAP_ANALYSIS, doingGapAnalysis);
         response.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
         

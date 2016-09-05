@@ -47,6 +47,8 @@ module.exports = Backbone.Model
       var colorHex = this.get('colorRamp')[0].color; //choose last or first colour from ramp.
       this.palette.set('rootHue', husl.fromHex(colorHex)[0]);//Math.floor(seedrandom(options.seed)() * 360));
     }
+    
+    this.lastFetchXhr = null;
   },
 
   loadBoundary: function() {
@@ -85,39 +87,64 @@ module.exports = Backbone.Model
   
   fetch: function(){	
 	  var self = this;
-	  var deferred = new jQuery.Deferred();
+	  	  
+	  var filter = {otherFilters: {}};
+	  if (app.data.filter) {
+		  _.extend(filter, app.data.filter.serialize());
+	  }
+	  var settings = app.data.settings.serialize();	  	  
+	  
 	  if(this.attributes.isStoredInLocalStorage === true){
+		  this.deferredForLocalStorage = new jQuery.Deferred();
 		  var layer = IndicatorLayerLocalStorage.findById(this.attributes.id);
 		  if(!_.isUndefined(layer)){
 			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);
 			  // If Gap analysis selected we call the EP to reprocess the local data.
 			  if (app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected')) {
-				  $.ajax({
+				  console.log('resolve con gap');
+				  /*var ajaxRet = $.ajax({
 					  url: '/rest/gis/do-gap-analysis', 
 					  async: false, 
 					  type: 'POST',
 					  dataType: "json",         
 	                  contentType: 'application/json',
-					  data: JSON.stringify({indicator: layer})})
+					  data: JSON.stringify({indicator: layer, settings: settings, filters: filter})})
 				  .done(function(data) {
-					  //localLayer.canDoGapAnalysis = data.canDoGapAnalysis;
-				  });
-			  }
-			  deferred.resolve(layer);
+					  console.log('resolve con gap');
+					  layer.values = data.values;
+					  layer.unit[Object.keys(layer.unit)] = data.unit;
+					  return self.deferredForLocalStorage.resolve(layer); //TODO: forzar refresco del mapa, OJO que quizas tenga q reemplazar este ajax mio por algo q no haga fallar el mixin.
+					  //return ajaxRet;
+					  //TODO: probar con return Backbone.Model.prototype.fetch.call(this, params); para q no falle el done del mixin!!!
+				  });*/
+				  
+				  this.url = '/rest/gis/do-gap-analysis';
+				  var params = {};
+				  params.type = 'POST';
+				  params.data = {indicator: layer, settings: settings};
+				  params.data = JSON.stringify(_.extend(params.data, filter));
+				  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
+				  return this.lastFetchXhr;
+				  
+			  } else {
+				  console.log('resolve sin gap');
+				  return this.deferredForLocalStorage.resolve(layer);
+			  }			  
+		  } else {
+			  alert('problema');
 		  }
-		  return deferred.promise();
+		  //console.log('devuelvo promise');
+		  //return this.deferredForLocalStorage.resolve(layer);
+		  //return this.deferredForLocalStorage.promise();
 	  } else {
 		// By adding this section here in fetch we are sure any call made over /rest/indicators/id will have the right parameters without duplicating code.  
 		if (this.lastFetchXhr && this.lastFetchXhr.readyState > this.readyStateNotInitialized && this.lastFetchXhr.readyState < this.readyStateResponseReady) {
+			alert('abort');
 			return this.lastFetchXhr.abort();
 		}
-		var filter = {otherFilters: {}};
-	    if (app.data.filter) {
-	      _.extend(filter, app.data.filter.serialize());
-	    }
-	    filter.settings = app.data.settings.serialize();
-	    var params = {};
-	    filter.gapAnalysis = app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected');
+		filter.gapAnalysis = app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected');
+		filter.settings = settings;
+		var params = {};
 	    params.type = 'POST';
 	    params.data = JSON.stringify(filter);
 	    // "params" will set the right type + filters + settings + gap analysis.

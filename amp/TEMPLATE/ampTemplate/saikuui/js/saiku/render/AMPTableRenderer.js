@@ -17,6 +17,7 @@ var AMPTableRenderer = function(options) {
 	}
 };
 
+
 this.headerMatrix = undefined;
 this.metadataHierarchies = undefined;
 this.metadataColumns = undefined;
@@ -40,6 +41,15 @@ AMPTableRenderer.prototype.render = function(data, options) {
 	if (type === 'pdf' || type === 'csv' || type === 'xlsx') {
 		metadataColumns = data.columns;
 		metadataHierarchies = data.hierarchies;
+	}
+	
+	// AMP-23950 create trim() function if it's not available natively (in xls, pdf exports it does not exist)
+	// taken form https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
+	
+	if (!String.prototype.trim) {
+		String.prototype.trim = function () {
+			return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+		};
 	}
 
 	if (data !== undefined && data.page !== null && data.page.pageArea !== null) {

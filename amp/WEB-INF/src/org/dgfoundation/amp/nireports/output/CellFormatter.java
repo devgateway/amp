@@ -40,7 +40,8 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	final protected DateTimeFormatter dateFormatter;
 	final protected DecimalFormat decimalFormatter;
 	final protected OutputSettings outputSettings;
-	final protected Map<BigDecimal, String> formattedValues = new HashMap<>();
+	final protected Map<BigDecimal, String> scaledAndFormattedAmounts = new HashMap<>();
+	final protected Map<BigDecimal, String> formattedAmounts = new HashMap<>();
 	final protected Function<String, String> translator;
 	final protected AmountsUnits amountsUnits;
 	final protected BigDecimal unitsDivider;
@@ -66,9 +67,13 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 
 	public ReportCell visitNumberedCell(NumberedCell cell) {
 		BigDecimal amt = cell.getAmount();
-		return new org.dgfoundation.amp.newreports.AmountCell(
-				amt,
-				formattedValues.computeIfAbsent(amt, cell.isScalableByUnits() ? this::scaleAndFormatAmount : this::formatAmount));
+		String formattedAmount;
+		if (cell.isScalableByUnits()) {
+			formattedAmount = scaledAndFormattedAmounts.computeIfAbsent(amt, this::scaleAndFormatAmount);
+		} else {
+			formattedAmount = formattedAmounts.computeIfAbsent(amt, this::formatAmount);
+		}
+		return new org.dgfoundation.amp.newreports.AmountCell(amt, formattedAmount);
 	}
 	
 	@Override

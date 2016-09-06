@@ -79,8 +79,8 @@
     		titleTD.innerHTML=inboxFull; 
     		textTD.innerHTML=deleteData; 
     	}else{    	 
-    		titleTD.innerHTML='<digi:trn>New Message</digi:trn>'; 
-    		textTD.innerHTML='<digi:trn>You have a new Message</digi:trn>'; 
+    		titleTD.innerHTML='<digi:trn jsFriendly="true">New Message</digi:trn>'; 
+    		textTD.innerHTML='<digi:trn jsFriendly="true">You have a new Message</digi:trn>'; 
     	}
       $('#msgDiv').show("slow");
       window.setTimeout("hideMessage()",4000);

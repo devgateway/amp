@@ -14,36 +14,36 @@
 <script langauage="JavaScript">
 
     var  selectedMessagePanel;
-    var noMsgs="<digi:trn>No Messages Present</digi:trn>";
-    var noAlerts="<digi:trn>No Alerts Present</digi:trn>";
-    var noApprovals="<digi:trn>No Pending Approvals</digi:trn>";
-    var noEvents="<digi:trn>No Upcoming Events</digi:trn>";
-   	var from='<digi:trn>From</digi:trn>';
-    var to='<digi:trn>To</digi:trn>';
-	var date='<digi:trn>Date</digi:trn>';
-	var prLevel='<digi:trn>Priority</digi:trn>';
-	var desc='<digi:trn>Message Details</digi:trn>';
-	var editBtn='<digi:trn>Edit</digi:trn>';
-	var fwdBtn='<digi:trn>Forward</digi:trn>';
-	var deleteBtn='<digi:trn>Delete</digi:trn>';
-	var pagesTrn='<digi:trn>Pages</digi:trn>';
-	var ofTrn='<digi:trn>of</digi:trn>';
-	var firstPage='<digi:trn>click here to go to first page</digi:trn>';
-	var prevPage='<digi:trn>click here to go to previous page</digi:trn>';
-	var nextPage='<digi:trn>Click here to go to next page</digi:trn>';
-	var lastPg='<digi:trn>click here to go to last page</digi:trn>';
-	var referenceURL='<digi:trn>Reference URL</digi:trn>';
-	var attachmedFiles='<digi:trn>Attached Files</digi:trn>';
-    var forwardClick='<digi:trn> Click on this icon to forward message</digi:trn>&nbsp;';
-    var editClick='<digi:trn> Click on this icon to edit message</digi:trn>&nbsp;';
-    var replyClick='<digi:trn> Click on this icon to reply message</digi:trn>&nbsp;';
-    var deleteClick='<digi:trn> Click on this icon to delete message</digi:trn>&nbsp;';
-    var viewMessage='<digi:trn> Click here to view the message</digi:trn>';
-    var viewDetails='<digi:trn>Click here to view details</digi:trn>';
+    var noMsgs="<digi:trn jsFriendly="true">No Messages Present</digi:trn>";
+    var noAlerts="<digi:trn jsFriendly="true">No Alerts Present</digi:trn>";
+    var noApprovals="<digi:trn jsFriendly="true">No Pending Approvals</digi:trn>";
+    var noEvents="<digi:trn jsFriendly="true">No Upcoming Events</digi:trn>";
+   	var from='<digi:trn jsFriendly="true">From</digi:trn>';
+    var to='<digi:trn jsFriendly="true">To</digi:trn>';
+	var date='<digi:trn jsFriendly="true">Date</digi:trn>';
+	var prLevel='<digi:trn jsFriendly="true">Priority</digi:trn>';
+	var desc='<digi:trn jsFriendly="true">Message Details</digi:trn>';
+	var editBtn='<digi:trn jsFriendly="true">Edit</digi:trn>';
+	var fwdBtn='<digi:trn jsFriendly="true">Forward</digi:trn>';
+	var deleteBtn='<digi:trn jsFriendly="true">Delete</digi:trn>';
+	var pagesTrn='<digi:trn jsFriendly="true">Pages</digi:trn>';
+	var ofTrn='<digi:trn jsFriendly="true">of</digi:trn>';
+	var firstPage='<digi:trn jsFriendly="true">click here to go to first page</digi:trn>';
+	var prevPage='<digi:trn jsFriendly="true">click here to go to previous page</digi:trn>';
+	var nextPage='<digi:trn jsFriendly="true">Click here to go to next page</digi:trn>';
+	var lastPg='<digi:trn jsFriendly="true">click here to go to last page</digi:trn>';
+	var referenceURL='<digi:trn jsFriendly="true">Reference URL</digi:trn>';
+	var attachmedFiles='<digi:trn jsFriendly="true">Attached Files</digi:trn>';
+    var forwardClick='<digi:trn jsFriendly="true"> Click on this icon to forward message</digi:trn>&nbsp;';
+    var editClick='<digi:trn jsFriendly="true"> Click on this icon to edit message</digi:trn>&nbsp;';
+    var replyClick='<digi:trn jsFriendly="true"> Click on this icon to reply message</digi:trn>&nbsp;';
+    var deleteClick='<digi:trn jsFriendly="true"> Click on this icon to delete message</digi:trn>&nbsp;';
+    var viewMessage='<digi:trn jsFriendly="true"> Click here to view the message</digi:trn>';
+    var viewDetails='<digi:trn jsFriendly="true">Click here to view details</digi:trn>';
     
     msgHeaders = {
-    		msgTitle : '<digi:trn>Message Title</digi:trn>',
-    		msgActions : '<digi:trn>Actions</digi:trn>'
+    		msgTitle : '<digi:trn jsFriendly="true">Message Title</digi:trn>',
+    		msgActions : '<digi:trn jsFriendly="true">Actions</digi:trn>'
     }
     
     viewOrHideAllLabel = {
@@ -52,7 +52,7 @@
     }
     
     alertForEmptySelection = {
-    		selectAlert :'<digi:trn>Please Select Messages</digi:trn>'
+    		selectAlert :'<digi:trn jsFriendly="true">Please Select Messages</digi:trn>'
     }
     
 	//used to define whether we just entered page from desktop

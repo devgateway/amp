@@ -119,7 +119,7 @@ function disable() {
 	var wTLFlag   = document.getElementById('workingTeamLeadFlag').value;
 	var msg='';
 	if (appstatus == "started") {
-		msg+='<digi:trn key="aim:saveActivity:started">Do you want to submit this activity for approval ?</digi:trn>';
+		msg+= '<digi:trn key="aim:saveActivity:started" jsFriendly="true">Do you want to submit this activity for approval ?</digi:trn>';
 		if (wTLFlag == "yes") {
 			//if (confirm("Do you want to approve this activity ?"))
 				document.getElementById('approvalStatus').value = "approved";
@@ -128,7 +128,7 @@ function disable() {
 				document.getElementById('approvalStatus').value = "created";
 	}
 	if (appstatus == "approved") {
-		msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
+		msg+='<digi:trn key="aim:saveActivity:approved" jsFriendly="true">Do you want to approve this activity ?</digi:trn>';
 		if (wTLFlag != "yes")
 			document.getElementById('approvalStatus').value = "edited";
 	}

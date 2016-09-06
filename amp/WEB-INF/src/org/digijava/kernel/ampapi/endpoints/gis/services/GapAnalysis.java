@@ -108,7 +108,7 @@ public class GapAnalysis {
         BigDecimal fundingAmount = admFundings.getOrDefault(geoCode, BigDecimal.ZERO);
         BigDecimal factor = isPopulation ? populationCount.get(geoCode) : BigDecimal.ONE;
         // if no factor found for population, then we report 'No Data'
-        if (amount == null || factor == null) {
+        if (amount == null || factor == null || BigDecimal.ZERO.compareTo(amount) == 0) {
             amount = null;
             // for testing only, until GIS is updated to handle "null"s
             // amount = BigDecimal.ZERO;

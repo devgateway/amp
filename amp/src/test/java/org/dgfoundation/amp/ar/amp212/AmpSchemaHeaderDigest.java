@@ -2,7 +2,9 @@ package org.dgfoundation.amp.ar.amp212;
 
 import static org.dgfoundation.amp.algo.AmpCollections.relist;
 
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
@@ -18,7 +20,7 @@ import org.dgfoundation.amp.nireports.output.NiReportRunResult;
  */
 class AmpSchemaHeaderDigest implements NiReportOutputBuilder<String> {
 
-    public static final AmpSchemaHeaderDigest instance = new AmpSchemaHeaderDigest();
+    private Map<ReportOutputColumn, String> cache = new IdentityHashMap<>();
 
     @Override
     public String buildOutput(ReportSpecification spec, NiReportRunResult reportRun) {
@@ -33,14 +35,17 @@ class AmpSchemaHeaderDigest implements NiReportOutputBuilder<String> {
     }
 
     private String digestOutputHeader(ReportOutputColumn column) {
-        String digest = "";
+        StringBuilder digest = new StringBuilder("{");
         if (column.parentColumn != null) {
-            digest += String.format("parent=%s, ", digestOutputHeader(column.parentColumn));
+            digest.append("parent=")
+                    .append(cache.computeIfAbsent(column.parentColumn, this::digestOutputHeader))
+                    .append(", ");
         }
-        digest += String.format("name=%s", column.originalColumnName);
+        digest.append("name=").append(column.originalColumnName);
         if (column.description != null) {
-            digest += String.format(", desc=%s", column.description);
+            digest.append(", desc=").append(column.description);
         }
-        return String.format("{%s}", digest);
+        digest.append("}");
+        return digest.toString();
     }
 }

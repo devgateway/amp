@@ -1973,7 +1973,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 						Arrays.asList(ColumnConstants.PROJECT_TITLE),
 						Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
 						null,
-						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, AmpSchemaHeaderDigest.instance);
+						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, new AmpSchemaHeaderDigest());
 		assertEquals(expectedHeaders, actualHeaders);
 	}
 
@@ -1989,7 +1989,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 						Arrays.asList(ColumnConstants.ACTIVITY_COUNT),
 						Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
 						null,
-						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, AmpSchemaHeaderDigest.instance);
+						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, new AmpSchemaHeaderDigest());
 		assertEquals(expectedHeaders, actualHeaders);
 	}
 
@@ -2005,7 +2005,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 						Arrays.asList(ColumnConstants.PROJECT_TITLE),
 						Arrays.asList(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS),
 						null,
-						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, AmpSchemaHeaderDigest.instance);
+						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, new AmpSchemaHeaderDigest());
 		assertEquals(expectedHeaders, actualHeaders);
 	}
 
@@ -2020,7 +2020,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 						Arrays.asList(ColumnConstants.ACTIVITY_COUNT),
 						Arrays.asList(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS),
 						null,
-						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, AmpSchemaHeaderDigest.instance);
+						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, new AmpSchemaHeaderDigest());
 		assertEquals(expectedHeaders, actualHeaders);
 	}
 
@@ -2040,7 +2040,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Reimbursable}, " +
 					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Unassigned}, " +
 					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Total}}";
-			String actualHeaders = buildDigest(spec("AMP-15863-mode-of-payment-undisbursed-balance"), acts, AmpSchemaHeaderDigest.instance);
+			String actualHeaders = buildDigest(spec("AMP-15863-mode-of-payment-undisbursed-balance"), acts, new AmpSchemaHeaderDigest());
 			assertEquals(expectedHeaders, actualHeaders);
 		} finally {
 			TestcasesReportsSchema.disableToAMoPSplitting = true;

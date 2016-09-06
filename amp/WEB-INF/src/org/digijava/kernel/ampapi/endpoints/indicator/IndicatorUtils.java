@@ -175,7 +175,7 @@ public class IndicatorUtils {
 
         offset = Math.min(indicatorLayers.size(), offset == null ? 0 : offset);
         count = (count == null ? IndicatorEPConstants.DEFAULT_COUNT : count);
-        int totalPageCount = (indicatorLayers.size() / count) + 1;
+        int totalPageCount = (indicatorLayers.size() % count == 0 ? (indicatorLayers.size() / count) : (indicatorLayers.size() / count) + 1);
 
         JsonBean result = new JsonBean();
         JsonBean page = new JsonBean();

@@ -1960,7 +1960,93 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		
 		runNiTestCase(cor, spec("AMP-15795-percentage-of-total-commitments-no-precursors-hier"), "en", acts);
 	}
-	
+
+	public void testOutputHeaders_noDesc() {
+		String expectedHeaders = "{rootHeaders=" +
+				"{name=Project Title}, " +
+				"{name=Totals}, " +
+				"leafHeaders=" +
+				"{name=Project Title}, " +
+				"{parent={name=Totals}, name=Actual Disbursements}}";
+		String actualHeaders = buildDigest(
+				buildSpecification("testOutputHeaders_noDesc",
+						Arrays.asList(ColumnConstants.PROJECT_TITLE),
+						Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+						null,
+						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, new AmpSchemaHeaderDigest());
+		assertEquals(expectedHeaders, actualHeaders);
+	}
+
+	public void testOutputHeaders_columnWithDesc() {
+		String expectedHeaders = "{rootHeaders=" +
+				"{name=Activity Count, desc=Count Of Activities under the current hierarchy}, " +
+				"{name=Totals}, " +
+				"leafHeaders=" +
+				"{name=Activity Count, desc=Count Of Activities under the current hierarchy}, " +
+				"{parent={name=Totals}, name=Actual Disbursements}}";
+		String actualHeaders = buildDigest(
+				buildSpecification("testOutputHeaders_columnWithDesc",
+						Arrays.asList(ColumnConstants.ACTIVITY_COUNT),
+						Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+						null,
+						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, new AmpSchemaHeaderDigest());
+		assertEquals(expectedHeaders, actualHeaders);
+	}
+
+	public void testOutputHeaders_measureWithDesc() {
+		String expectedHeaders = "{rootHeaders=" +
+				"{name=Project Title}, " +
+				"{name=Totals}, " +
+				"leafHeaders=" +
+				"{name=Project Title}, " +
+				"{parent={name=Totals}, name=Last Year of Planned Disbursements, desc=Previous Year Planned Disbursements}}";
+		String actualHeaders = buildDigest(
+				buildSpecification("testOutputHeaders_measureWithDesc",
+						Arrays.asList(ColumnConstants.PROJECT_TITLE),
+						Arrays.asList(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS),
+						null,
+						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, new AmpSchemaHeaderDigest());
+		assertEquals(expectedHeaders, actualHeaders);
+	}
+
+	public void testOutputHeaders_columnAndMeasureWithDesc() {
+		String expectedHeaders = "{rootHeaders=" +
+				"{name=Activity Count, desc=Count Of Activities under the current hierarchy}, " +
+				"{name=Totals}, " +
+				"leafHeaders={name=Activity Count, desc=Count Of Activities under the current hierarchy}, " +
+				"{parent={name=Totals}, name=Last Year of Planned Disbursements, desc=Previous Year Planned Disbursements}}";
+		String actualHeaders = buildDigest(
+				buildSpecification("testOutputHeaders_columnAndMeasureWithDesc",
+						Arrays.asList(ColumnConstants.ACTIVITY_COUNT),
+						Arrays.asList(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS),
+						null,
+						GroupingCriteria.GROUPING_TOTALS_ONLY), acts, new AmpSchemaHeaderDigest());
+		assertEquals(expectedHeaders, actualHeaders);
+	}
+
+	public void testOutputHeaders_nonLeafDesc() {
+		try {
+			TestcasesReportsSchema.disableToAMoPSplitting = false;
+			String expectedHeaders = "{rootHeaders=" +
+					"{name=Project Title}, " +
+					"{name=Mode of Payment}, " +
+					"{name=Totals}, " +
+					"leafHeaders=" +
+					"{name=Project Title}, " +
+					"{name=Mode of Payment}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Cash}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Direct payment}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=No Information}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Reimbursable}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Unassigned}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Total}}";
+			String actualHeaders = buildDigest(spec("AMP-15863-mode-of-payment-undisbursed-balance"), acts, new AmpSchemaHeaderDigest());
+			assertEquals(expectedHeaders, actualHeaders);
+		} finally {
+			TestcasesReportsSchema.disableToAMoPSplitting = true;
+		}
+	}
+
 	@Override
 	public void setUp() {
 		AllTests_amp212.setUp();

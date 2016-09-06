@@ -47,8 +47,7 @@ module.exports = Backbone.Model
       var colorHex = this.get('colorRamp')[0].color; //choose last or first colour from ramp.
       this.palette.set('rootHue', husl.fromHex(colorHex)[0]);//Math.floor(seedrandom(options.seed)() * 360));
     }
-    
-    this.lastFetchXhr = null;
+        
   },
 
   loadBoundary: function() {
@@ -86,6 +85,7 @@ module.exports = Backbone.Model
   },
   
   fetch: function(){	
+	  console.log('fetch');
 	  var self = this;
 	  	  
 	  var filter = {otherFilters: {}};
@@ -94,41 +94,66 @@ module.exports = Backbone.Model
 	  }
 	  var settings = app.data.settings.serialize();	  	  
 	  
-	  if(this.attributes.isStoredInLocalStorage === true){
-		  this.deferredForLocalStorage = new jQuery.Deferred();
+	  if(this.attributes.isStoredInLocalStorage === true){		  
+		  this.deferredForLocalStorage = new $.Deferred();
+		  IndicatorLayerLocalStorage.cleanUp();
+		  //debugger
 		  var layer = IndicatorLayerLocalStorage.findById(this.attributes.id);
 		  if(!_.isUndefined(layer)){
 			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);
 			  // If Gap analysis selected we call the EP to reprocess the local data.
 			  if (app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected')) {
 				  console.log('resolve con gap');
-				  /*var ajaxRet = $.ajax({
-					  url: '/rest/gis/do-gap-analysis', 
-					  async: false, 
-					  type: 'POST',
-					  dataType: "json",         
-	                  contentType: 'application/json',
-					  data: JSON.stringify({indicator: layer, settings: settings, filters: filter})})
-				  .done(function(data) {
-					  console.log('resolve con gap');
-					  layer.values = data.values;
-					  layer.unit[Object.keys(layer.unit)] = data.unit;
-					  return self.deferredForLocalStorage.resolve(layer); //TODO: forzar refresco del mapa, OJO que quizas tenga q reemplazar este ajax mio por algo q no haga fallar el mixin.
-					  //return ajaxRet;
-					  //TODO: probar con return Backbone.Model.prototype.fetch.call(this, params); para q no falle el done del mixin!!!
-				  });*/
-				  
 				  this.url = '/rest/gis/do-gap-analysis';
 				  var params = {};
 				  params.type = 'POST';
-				  params.data = {indicator: layer, settings: settings};
+				  params.data = {indicator: layer, settings: settings, isGapAnalysis: true};
 				  params.data = JSON.stringify(_.extend(params.data, filter));
 				  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
-				  return this.lastFetchXhr;
-				  
-			  } else {
+				  //debugger;
+				  return this.lastFetchXhr;				  
+			  } else {				  
 				  console.log('resolve sin gap');
-				  return this.deferredForLocalStorage.resolve(layer);
+				  // esto anda pero no recarga el localstorage.
+				  /*layer._changing = true;
+				  console.log(layer);
+				  var test=this.deferredForLocalStorage.resolve(layer);
+				  debugger;
+				  return test*/
+				  
+				  // esto anda pero no me gusta porque es ir al backend.
+				  /*this.url = '/rest/gis/do-gap-analysis';
+				  var params = {};
+				  params.type = 'POST';
+				  params.data = {indicator: layer, settings: settings, isGapAnalysis: false};
+				  params.data = JSON.stringify(_.extend(params.data, filter));
+				  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
+				  return this.lastFetchXhr;*/
+				  
+				  // esto carga bien el layer la primera vez pero sigue sin volver a mostrar el localstorage luego del gap.
+				  /*var ajax = $.ajax({
+					  url: "/",
+					}).done(function() {
+					    return layer;
+					});
+				  debugger
+				  return ajax;*/
+				  
+				  // esto tambien carga el layer la primera vez!!!
+				  /*this.url = "/rest/gis/indicators"
+				  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
+				  this.on('sync', function() {
+					  console.log('listo el ep falso');
+					  return layer;
+				  }, this);
+				  //debugger;
+				  return this.lastFetchXhr;*/
+				  
+				  layer._changing = true;
+				  console.log(layer);
+				  var test=this.deferredForLocalStorage.resolveWith(this, [layer]);
+				  //debugger;
+				  return test;
 			  }			  
 		  } else {
 			  alert('problema');

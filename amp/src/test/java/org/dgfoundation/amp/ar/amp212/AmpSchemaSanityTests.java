@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import static org.dgfoundation.amp.algo.AmpCollections.relist;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -10,10 +12,14 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
+import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
+import org.dgfoundation.amp.nireports.amp.AmpNiReportsFormatter;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
@@ -1960,7 +1966,116 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		
 		runNiTestCase(cor, spec("AMP-15795-percentage-of-total-commitments-no-precursors-hier"), "en", acts);
 	}
-	
+
+	public void testOutputHeaders_noDesc() {
+		String expectedHeaders = "{rootHeaders=" +
+				"{name=Project Title}, " +
+				"{name=Totals}, " +
+				"leafHeaders=" +
+				"{name=Project Title}, " +
+				"{parent={name=Totals}, name=Actual Disbursements}}";
+		String actualHeaders = buildOutputHeaderDigest(
+				buildSpecification("testOutputHeaders_noDesc",
+						Arrays.asList(ColumnConstants.PROJECT_TITLE),
+						Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+						null,
+						GroupingCriteria.GROUPING_TOTALS_ONLY));
+		assertEquals(expectedHeaders, actualHeaders);
+	}
+
+	public void testOutputHeaders_columnWithDesc() {
+		String expectedHeaders = "{rootHeaders=" +
+				"{name=Activity Count, desc=Count Of Activities under the current hierarchy}, " +
+				"{name=Totals}, " +
+				"leafHeaders=" +
+				"{name=Activity Count, desc=Count Of Activities under the current hierarchy}, " +
+				"{parent={name=Totals}, name=Actual Disbursements}}";
+		String actualHeaders = buildOutputHeaderDigest(
+				buildSpecification("testOutputHeaders_columnWithDesc",
+						Arrays.asList(ColumnConstants.ACTIVITY_COUNT),
+						Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+						null,
+						GroupingCriteria.GROUPING_TOTALS_ONLY));
+		assertEquals(expectedHeaders, actualHeaders);
+	}
+
+	public void testOutputHeaders_measureWithDesc() {
+		String expectedHeaders = "{rootHeaders=" +
+				"{name=Project Title}, " +
+				"{name=Totals}, " +
+				"leafHeaders=" +
+				"{name=Project Title}, " +
+				"{parent={name=Totals}, name=Last Year of Planned Disbursements, desc=Previous Year Planned Disbursements}}";
+		String actualHeaders = buildOutputHeaderDigest(
+				buildSpecification("testOutputHeaders_measureWithDesc",
+						Arrays.asList(ColumnConstants.PROJECT_TITLE),
+						Arrays.asList(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS),
+						null,
+						GroupingCriteria.GROUPING_TOTALS_ONLY));
+		assertEquals(expectedHeaders, actualHeaders);
+	}
+
+	public void testOutputHeaders_columnAndMeasureWithDesc() {
+		String expectedHeaders = "{rootHeaders=" +
+				"{name=Activity Count, desc=Count Of Activities under the current hierarchy}, " +
+				"{name=Totals}, " +
+				"leafHeaders={name=Activity Count, desc=Count Of Activities under the current hierarchy}, " +
+				"{parent={name=Totals}, name=Last Year of Planned Disbursements, desc=Previous Year Planned Disbursements}}";
+		String actualHeaders = buildOutputHeaderDigest(
+				buildSpecification("testOutputHeaders_columnAndMeasureWithDesc",
+						Arrays.asList(ColumnConstants.ACTIVITY_COUNT),
+						Arrays.asList(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS),
+						null,
+						GroupingCriteria.GROUPING_TOTALS_ONLY));
+		assertEquals(expectedHeaders, actualHeaders);
+	}
+
+	public void testOutputHeaders_nonLeafDesc() {
+		try {
+			TestcasesReportsSchema.disableToAMoPSplitting = false;
+			String expectedHeaders = "{rootHeaders=" +
+					"{name=Project Title}, " +
+					"{name=Mode of Payment}, " +
+					"{name=Totals}, " +
+					"leafHeaders=" +
+					"{name=Project Title}, " +
+					"{name=Mode of Payment}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Cash}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Direct payment}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=No Information}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Reimbursable}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Unassigned}, " +
+					"{parent={parent={name=Totals}, name=Undisbursed Balance, desc=Total Actual Commitment - Total Actual Disbursement}, name=Total}}";
+			String actualHeaders = buildOutputHeaderDigest(spec("AMP-15863-mode-of-payment-undisbursed-balance"));
+			assertEquals(expectedHeaders, actualHeaders);
+		} finally {
+			TestcasesReportsSchema.disableToAMoPSplitting = true;
+		}
+	}
+
+	private String buildOutputHeaderDigest(ReportSpecification spec) {
+		GeneratedReport generatedReport = buildDigest(spec, acts, AmpNiReportsFormatter.asOutputBuilder(null));
+		return String.format("{rootHeaders=%s, leafHeaders=%s}",
+				digestOutputHeaders(generatedReport.rootHeaders),
+				digestOutputHeaders(generatedReport.leafHeaders));
+	}
+
+	private String digestOutputHeaders(List<ReportOutputColumn> columns) {
+		return String.join(", ", relist(columns, this::digestOutputHeader));
+	}
+
+	private String digestOutputHeader(ReportOutputColumn column) {
+		String digest = "";
+		if (column.parentColumn != null) {
+			digest += String.format("parent=%s, ", digestOutputHeader(column.parentColumn));
+		}
+		digest += String.format("name=%s", column.originalColumnName);
+		if (column.description != null) {
+			digest += String.format(", desc=%s", column.description);
+		}
+		return String.format("{%s}", digest);
+	}
+
 	@Override
 	public void setUp() {
 		AllTests_amp212.setUp();

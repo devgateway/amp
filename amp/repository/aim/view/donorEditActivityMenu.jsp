@@ -55,7 +55,7 @@ function save() {
 	var appstatus = document.aimEditActivityForm.approvalStatus.value;
 	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
 	if (appstatus == "started") {
-		msg+='<digi:trn key="aim:saveActivity:started">Do you want to submit this activity for approval ?</digi:trn>';
+		msg += '<digi:trn key="aim:saveActivity:started" jsFriendly="true">Do you want to submit this activity for approval ?</digi:trn>';
 		if (wTLFlag == "yes") {
 			//if (confirm("Do you want to approve this activity ?"))
 				document.aimEditActivityForm.approvalStatus.value = "approved";
@@ -68,7 +68,7 @@ function save() {
 			document.aimEditActivityForm.approvalStatus.value = "edited";
 	}else if (wTLFlag == "yes") {
 		if (appstatus == "created" || appstatus == "edited") {
-			msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
+			msg+= '<digi:trn key="aim:saveActivity:approved" jsFriendly="true">Do you want to approve this activity ?</digi:trn>';
 			if (confirm(msg))
 				document.aimEditActivityForm.approvalStatus.value = "approved";
 		}

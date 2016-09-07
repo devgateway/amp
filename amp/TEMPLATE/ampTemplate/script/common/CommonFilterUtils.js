@@ -90,7 +90,9 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 						item_) {
 					return parseInt(item_.id);
 				});
-				blob.columnFilters[item.name + ' Level 2'] = blob.columnFilters[item.name + ' Level 1'];
+				for (var i = 2; i < 9; i++) {
+					blob.columnFilters[item.name + ' Level ' + i] = blob.columnFilters[item.name + ' Level 1'];
+				}
 				break;
 				
 			case 'Funding Organization':

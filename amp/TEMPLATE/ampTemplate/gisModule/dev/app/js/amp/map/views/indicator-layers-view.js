@@ -27,6 +27,7 @@ module.exports = Backbone.View.extend({
       self.listenTo(self.app.data.hilightFundingCollection, 'sync', self.refreshLayer);
     });
   },
+  // clears applied layers from the map when gis sidebar is refreshed
   clearLayers: function(){	 
 	  var self = this;
 	  var layerIds = _.keys(this.leafletLayerMap);

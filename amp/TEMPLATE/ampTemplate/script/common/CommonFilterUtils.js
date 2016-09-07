@@ -66,6 +66,7 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 			case 'Humanitarian Aid':
 			case 'Disaster Response Marker':
 			case 'Expenditure Class':
+			case 'Donor Agency':
 				blob.columnFilters[item.name] = _.map(item.values, function(item_) {
 					return parseInt(item_.id);
 				});
@@ -90,12 +91,6 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 					return parseInt(item_.id);
 				});
 				blob.columnFilters[item.name + ' Level 2'] = blob.columnFilters[item.name + ' Level 1'];
-				break;
-				
-			case 'Donor Agency':
-				blob.columnFilters['Donor Id'] = _.map(item.values, function(item_) {
-					return parseInt(item_.id);
-				});
 				break;
 				
 			case 'Funding Organization':

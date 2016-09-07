@@ -87,7 +87,17 @@ public class AmpReportFiltersConverter {
 		addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_6, AmpTheme.class, "selectedPrimaryPrograms", false);
 		addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_7, AmpTheme.class, "selectedPrimaryPrograms", false);
 		addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_8, AmpTheme.class, "selectedPrimaryPrograms", false);
+		
 		addFilter(ColumnConstants.SECONDARY_PROGRAM, AmpTheme.class, "selectedSecondaryPrograms", true);
+		addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, AmpTheme.class, "selectedSecondaryPrograms", false);
+		addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, AmpTheme.class, "selectedSecondaryPrograms", false);
+		addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3, AmpTheme.class, "selectedSecondaryPrograms", false);
+		addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_4, AmpTheme.class, "selectedSecondaryPrograms", false);
+		addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_5, AmpTheme.class, "selectedSecondaryPrograms", false);
+		addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_6, AmpTheme.class, "selectedSecondaryPrograms", false);
+		addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_7, AmpTheme.class, "selectedSecondaryPrograms", false);
+		addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_8, AmpTheme.class, "selectedSecondaryPrograms", false);
+		
 		addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, AmpTheme.class, "selectedNatPlanObj", true);
 		addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, AmpTheme.class, "selectedNatPlanObj", false);		
 		addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, AmpTheme.class, "selectedNatPlanObj", false);

@@ -22,7 +22,7 @@ var helpBody=' <digi:trn jsFriendly="true"> to open all reports on one page, ple
 var helpBodyAct=' <digi:trn jsFriendly="true"> Please enter a number greater than "1"</digi:trn>';
 var wrongNumber = '<digi:trn jsFriendly="true">Wrong number of activities/projects per page. </digi:trn>';
 var helpTitle='<digi:trn jsFriendly="true">Report Sheet</digi:trn>';
-var helpNumberPages = '<digi:trn>Wrong number of pages to display in paginator. The number should be greater than 1.</digi:trn>';
+var helpNumberPages = '<digi:trn jsFriendly="true">Wrong number of pages to display in paginator. The number should be greater than 1.</digi:trn>';
 var wrongNumberOfReportsPerPage = '<digi:trn jsFriendly="true">Wrong number of activities/projects per page. </digi:trn>';
 
 function validade(){
@@ -343,7 +343,7 @@ function loadShareRules(){
 										</c:forEach>
 									</html:select>
 												<br />
-									<a style="cursor:pointer;color:#006699" onClick="if(document.getElementById('defaultReport').value == 0) {alert('<digi:trn key="aim:defaultTeamTabDetailsAlertMessage">Please select a default tab</digi:trn>');return false;}else{showMyPanel();}"><digi:trn key="aim:defaultTeamTabDetailsMessage">Click here for details</digi:trn></a>
+									<a style="cursor:pointer;color:#006699" onClick="if(document.getElementById('defaultReport').value == 0) {alert('<digi:trn jsFriendly="true" key="aim:defaultTeamTabDetailsAlertMessage">Please select a default tab</digi:trn>');return false;}else{showMyPanel();}"><digi:trn key="aim:defaultTeamTabDetailsMessage">Click here for details</digi:trn></a>
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>

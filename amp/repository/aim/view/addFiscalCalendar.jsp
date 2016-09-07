@@ -12,7 +12,7 @@
 <script language="JavaScript">
 
 	function msg() {
-		if (confirm('<digi:trn key="aim:fiscalCalendar:deleteQuestion">Are you sure about deleting this calendar?</digi:trn>')) {
+		if (confirm('<digi:trn jsFriendly="true" key="aim:fiscalCalendar:deleteQuestion">Are you sure about deleting this calendar?</digi:trn>')) {
 			document.aimAddFiscalCalForm.action.value = "delete";
 			document.aimAddFiscalCalForm.submit();
 		}
@@ -36,7 +36,7 @@
         var str = document.aimAddFiscalCalForm.fiscalCalName.value;
         str = trim(str);
 		if (str.length == 0 || str == null) {
-                   msg='<digi:trn key="aim:enterNameFiscalCalendar">Please enter name for this Fiscal Calenedar</digi:trn>'
+                   msg='<digi:trn jsFriendly="true" key="aim:enterNameFiscalCalendar">Please enter name for this Fiscal Calenedar</digi:trn>'
                    alert(msg);
 
 			document.aimAddFiscalCalForm.fiscalCalName.focus();
@@ -44,38 +44,38 @@
         }
 
         if(sm.match("[^0-9]") || sm.length == 0){
-          msg='<digi:trn key="aim:invalidStartMonth">Invalid Start Month value</digi:trn>'
+          msg='<digi:trn jsFriendly="true" key="aim:invalidStartMonth">Invalid Start Month value</digi:trn>'
           alert(msg);
           document.aimAddFiscalCalForm.startMonthNum.focus();
           return false;
         }else if(sm>12 || sm<1){
-           msg='<digi:trn key="aim:invalidStartMonth">Invalid Start Month value</digi:trn>'
+           msg='<digi:trn jsFriendly="true" key="aim:invalidStartMonth">Invalid Start Month value</digi:trn>'
           alert(msg);
           document.aimAddFiscalCalForm.startMonthNum.focus();
           return false;
         }
 
         if(sd.match("[^0-9]") || sd.length == 0){
-          msg='<digi:trn key="aim:invalidStartDay">Invalid Start Day value</digi:trn>'
+          msg='<digi:trn jsFriendly="true" key="aim:invalidStartDay">Invalid Start Day value</digi:trn>'
           alert(msg);
           document.aimAddFiscalCalForm.startDayNum.focus();
           return false;
         }else if(sd>31){
-          msg='<digi:trn key="aim:invalidStartDay">Invalid Start Day value</digi:trn>'
+          msg='<digi:trn jsFriendly="true" key="aim:invalidStartDay">Invalid Start Day value</digi:trn>'
           alert(msg);
           document.aimAddFiscalCalForm.startDayNum.focus();
           return false;
         }
 
         if(yr.match("[^0-9,-]") || yr.length == 0){
-          msg='<digi:trn key="aim:invalidYearOffset">Invalid Year Offset value</digi:trn>'
+          msg='<digi:trn jsFriendly="true" key="aim:invalidYearOffset">Invalid Year Offset value</digi:trn>'
           alert(msg);
           document.aimAddFiscalCalForm.yearOffset.focus();
           return false;
         }
         /*
         else if(yr>0){
-          msg='<digi:trn key="aim:invalidYearOffset">Invalid Year Offset value</digi:trn>'
+          msg='<digi:trn jsFriendly="true" key="aim:invalidYearOffset">Invalid Year Offset value</digi:trn>'
           alert(msg);
           document.aimAddFiscalCalForm.yearOffset.focus();
           return false;

@@ -24,7 +24,7 @@ function viewLog(sourceId) {
 }
 
 function deleteSource1(sourceId){
-	var msg = '<digi:trn>Delete this source?</digi:trn>';
+	var msg = '<digi:trn jsFriendly="true">Delete this source?</digi:trn>';
 	var result = confirm(msg);
 	if (result==true) {
 	//Logic to delete the item
@@ -36,7 +36,7 @@ function deleteSource1(sourceId){
 }
 
 function deleteSource(sourceId) {
-	var msg = '<digi:trn>Delete this source?</digi:trn>';
+	var msg = '<digi:trn jsFriendly="true">Delete this source?</digi:trn>';
 	var result = confirm(msg);
 	if (result==true) {
 		var form = document.getElementById('manageForm');

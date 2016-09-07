@@ -287,7 +287,7 @@ span.extContactDropdownEmail {
 		var content = document.getElementById("popinContent");
 		content.innerHTML = '<div style="text-align: center">' + 
 		'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-		'<digi:trn>Loading...</digi:trn><br/><br/></div>';
+		'<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>';
 		showContent();
 	}
 
@@ -804,7 +804,7 @@ function validateGuestEmail (email) {
 	var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 	var expression = new RegExp(pattern)
 	if(expression.test(email)!=true){
-	    var trn='<digi:trn>Please provide correct email</digi:trn>';
+	    var trn='<digi:trn jsFriendly="true">Please provide correct email</digi:trn>';
 			alert(trn);
 	    successVal = false; 
 	}

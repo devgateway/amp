@@ -28,7 +28,7 @@
 	     );
 	
 	function initScriptsLogframe() {
-		var msgP5='\n<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>';
+		var msgP5='\n<digi:trn jsFriendly="true" key="aim:previewLogframe">Preview Logframe</digi:trn>';
 		myPanelLogframe.setHeader(msgP5);
 		myPanelLogframe.setBody("");
 		myPanelLogframe.render(document.body);
@@ -38,7 +38,7 @@
 	function showPLogframe() {
 		var content = document.getElementById("myPLogframeContent");
 		var element5 = document.getElementById("myPLogframe"); 
-		var loading='\n<digi:trn>Loading...</digi:trn>';
+		var loading='\n<digi:trn jsFriendly="true">Loading...</digi:trn>';
         content.innerHTML = '<div style="height:400px"><p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>'+loading+'</b></font></p></div>';
 		//if (panelFirstShow == 1){
 			myPanelLogframe.setBody(element5.innerHTML);

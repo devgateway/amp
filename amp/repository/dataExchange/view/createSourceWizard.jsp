@@ -147,7 +147,7 @@ function trim1 (str) {
  function importActivities(sourceId){
 	 $('#errorContainer').html('');
 	 var nameS = document.createSourceForm.name;
-	 var msg = '<digi:trn>Please insert name</digi:trn>';
+	 var msg = '<digi:trn jsFriendly="true">Please insert name</digi:trn>';
 	 if(document.createSourceForm.fileUploaded == null){
 		 if(trim1(nameS.value).length==0){
 				 $('#errorContainer').html ("<font color='red'>"+msg+"</span");
@@ -160,7 +160,7 @@ function trim1 (str) {
 	 }
 	 selectedHierarchies = $('[name="selectedLanguages"]:checked');
 	 if (selectedHierarchies.length == 0) {
-		 var errorMsg = '<digi:trn>Please choose the projects\' hierarchy(s) to be imported</digi:trn>';
+		 var errorMsg = '<digi:trn jsFriendly="true">Please choose the projects\' hierarchy(s) to be imported</digi:trn>';
 		 $('#errorContainer').html ("<font color='red'>"+errorMsg+"</span");
 		 $("html, body").animate({ scrollTop: 0 }, "fast");
 		 return true;

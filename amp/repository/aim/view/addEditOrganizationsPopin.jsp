@@ -394,7 +394,7 @@ function checkNumeric(objName,comma,period,hyphen)
 }
 
 function myAddSectors(params) {
-    var msg='\n<digi:trn key="aim:addLocation">Add Sectors</digi:trn>';
+    var msg='\n<digi:trn jsFriendly="true" key="aim:addLocation">Add Sectors</digi:trn>';
     showPanelLoading(msg);
 	<digi:context name="commentUrl" property="context/aim/selectSectors.do" />
     var url = "<%=commentUrl%>";
@@ -402,7 +402,7 @@ function myAddSectors(params) {
 }
 
 function myAddLocation(params) {
-    var msg='\n<digi:trn key="aim:addLocation">Add Location</digi:trn>';
+    var msg='\n<digi:trn jsFriendly="true" key="aim:addLocation">Add Location</digi:trn>';
     showPanelLoading(msg);
     <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
     var url = "<%=selectLoc%>";
@@ -424,7 +424,7 @@ function showPanelLoading(msg){
     var content = document.getElementById("popinContent");
     content.innerHTML = '<div style="text-align: center">' +
         '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
-        '<digi:trn>Loading...</digi:trn><br/><br/></div>';
+        '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>';
         showContent();
    
 }

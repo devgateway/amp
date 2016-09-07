@@ -227,7 +227,7 @@ function enter(event) {
 		style="font-family: Arial, Helvetica, sans-serif;">
 
 	<ul class="yui-nav">
-		<li class="selected"><a title='<digi:trn key="aim:helpSearch">Search</digi:trn>'>
+		<li class="selected"><a title='<digi:trn jsFriendly="true" key="aim:helpSearch">Search</digi:trn>'>
 		<div>
 		<digi:trn key="aim:helpSearch">Search</digi:trn>
 		</div>

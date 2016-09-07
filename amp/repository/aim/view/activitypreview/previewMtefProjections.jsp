@@ -18,7 +18,7 @@
 <c:if test="${!empty funding.mtefDetails}">
 	<tr bgcolor="#FFFFCC">
 		<td colspan="3" style="text-transform: uppercase">
-			<a title='<digi:trn>Medium-Term Expenditure Framework Projections</digi:trn>'>
+			<a title='<digi:trn jsFriendly="true">Medium-Term Expenditure Framework Projections</digi:trn>'>
 				<digi:trn>MTEF Projections</digi:trn>:
 			</a>
 		</td>

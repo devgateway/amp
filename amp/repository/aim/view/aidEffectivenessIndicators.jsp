@@ -221,7 +221,7 @@
     }
 
     function confirmDelete(deleteAction) {
-        var confirmMessage = '<digi:trn>Are you sure you want to delete this aid effectiveness indicator?</digi:trn>';
+        var confirmMessage = '<digi:trn jsFriendly="true">Are you sure you want to delete this aid effectiveness indicator?</digi:trn>';
         if (confirm(confirmMessage) === true) {
             window.location.href = deleteAction;
         }

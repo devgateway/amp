@@ -73,8 +73,8 @@
 	var graphId = '${graph.containerId}';
 	var trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	var trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>";
-	var trnLoading = '<digi:trn>Loading...</digi:trn>';
-	var trnCancel = '<digi:trn>Cancel</digi:trn>';
+	var trnLoading = '<digi:trn jsFriendly="true">Loading...</digi:trn>';
+	var trnCancel = '<digi:trn jsFriendly="true">Cancel</digi:trn>';
 	var trnCommitments="<digi:trn jsFriendly='true'>Commitments</digi:trn>";
 	var trnDisbursements="<digi:trn jsFriendly='true'>Disbursements</digi:trn>";
 	var trnExpenditures="<digi:trn jsFriendly='true'>Expenditures</digi:trn>";

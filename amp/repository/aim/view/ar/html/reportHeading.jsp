@@ -46,7 +46,7 @@
   	pageContext.setAttribute("linkMap", new HashMap());
   %>
   <%for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
-  <tr title='<digi:trn key="reports.ReportHeadings">Report Headings</digi:trn>'>
+  <tr title='<digi:trn jsFriendly="true" key="reports.ReportHeadings">Report Headings</digi:trn>'>
   <c:if test="${reportMeta.hideActivities != null && reportMeta.hideActivities }">
   	<td style="background-color:#EAEAEA;" class="clsTableTitleColHtml">
   		<% if ( curDepth == 1 ) {  %>

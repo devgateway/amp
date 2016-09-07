@@ -102,15 +102,15 @@ background-color:#FFFFFF;
 	var strProposed="<digi:trn key='aim:NPD:sumproposedPrjCost'>Proposed Project Cost</digi:trn>";
 	var actCurrPage=1;
 	var actMaxPages=0;
-	var pgNext='<digi:trn key="aim:npd:pagination:next">Next</digi:trn>';
-	var pgPrev='<digi:trn key="aim:npd:pagination:prev">Prev</digi:trn>';
-	var pgLast='<digi:trn key="aim:npd:pagination:last">Last</digi:trn>';
-	var pgFirst='<digi:trn key="aim:npd:pagination:first">First</digi:trn>';
-	var pgPagesLabel='<digi:trn key="aim:npd:pagination:pageslabel">Pages:</digi:trn>';
-	var status='<digi:trn key="aim:npd:status">Status</digi:trn>';
-	var title='<digi:trn key="aim:npd:titl">Title</digi:trn>';
-	var strDate='<digi:trn key="aim:npd:strdate">Start Date</digi:trn>';
-	var donor='<digi:trn key="aim:npd:donor">Donor</digi:trn>';
+	var pgNext='<digi:trn jsFriendly="true" key="aim:npd:pagination:next">Next</digi:trn>';
+	var pgPrev='<digi:trn jsFriendly="true" key="aim:npd:pagination:prev">Prev</digi:trn>';
+	var pgLast='<digi:trn jsFriendly="true" key="aim:npd:pagination:last">Last</digi:trn>';
+	var pgFirst='<digi:trn jsFriendly="true" key="aim:npd:pagination:first">First</digi:trn>';
+	var pgPagesLabel='<digi:trn jsFriendly="true" key="aim:npd:pagination:pageslabel">Pages:</digi:trn>';
+	var status='<digi:trn jsFriendly="true" key="aim:npd:status">Status</digi:trn>';
+	var title='<digi:trn jsFriendly="true" key="aim:npd:titl">Title</digi:trn>';
+	var strDate='<digi:trn jsFriendly="true" key="aim:npd:strdate">Start Date</digi:trn>';
+	var donor='<digi:trn jsFriendly="true" key="aim:npd:donor">Donor</digi:trn>';
 	
 	function clearChildren(node){
 		while(node.firstChild!=null){	

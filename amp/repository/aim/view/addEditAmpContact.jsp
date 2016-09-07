@@ -137,7 +137,7 @@
 	 	for (var i = 0;  i < number.length;  i++) {
 	 		var ch = number.charAt(i);
 	  		if (validChars.indexOf(ch)==-1){
-	  			alert('<digi:trn>enter correct number</digi:trn>');	   			
+	  			alert('<digi:trn jsFriendly="true">enter correct number</digi:trn>');	   			
 	   			return false;
 	  		}
 	 	}	 
@@ -147,7 +147,7 @@
 	function checkPhoneNumberType(type){
 	 	var regex='^[a-zA-Z]*$';
 	  	if (!type.match(regex)){
-	  		alert('<digi:trn>only letters are allowed for phone type</digi:trn>');	   			
+	  		alert('<digi:trn jsFriendly="true">only letters are allowed for phone type</digi:trn>');	   			
 	   		return false;
 	  	}	 		 
 	 	return true;
@@ -196,12 +196,12 @@
 	function validateInfo(){
 		var msg='';
 		if(document.getElementById('name').value==null || document.getElementById('name').value.trim()==''){
-			msg='<digi:trn>Please Enter Name</digi:trn>'
+			msg='<digi:trn jsFriendly="true">Please Enter Name</digi:trn>'
 			alert(msg);
 			return false;
 		}
 		if(document.getElementById('lastname').value==null || document.getElementById('lastname').value.trim()==''){
-			msg='<digi:trn>Please Enter lastname</digi:trn>'
+			msg='<digi:trn jsFriendly="true">Please Enter lastname</digi:trn>'
 			alert(msg);
 			return false;
 		}
@@ -222,7 +222,7 @@
     		var regex='^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)';
         	for(var i=0;i < emails.length; i++){
                 if(emails[i].value==null || emails[i].value==''){
-                	msg='<digi:trn>Please Enter email</digi:trn>';
+                	msg='<digi:trn jsFriendly="true">Please Enter email</digi:trn>';
             		alert(msg);
                     return false;
                 }
@@ -241,7 +241,7 @@
     	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
     		for(var i=0;i < phoneNumbers.length; i++){
     			if(phoneNumbers[i].value==''){
-    				msg='<digi:trn>Please Enter phone</digi:trn>';
+    				msg='<digi:trn jsFriendly="true">Please Enter phone</digi:trn>';
             		alert(msg);
             		return false;
     			}        		
@@ -265,7 +265,7 @@
     	if(faxes!=null){
     		for(var i=0;i < faxes.length; i++){
         		if(faxes[i].value==''){
-        			msg='<digi:trn>Please enter fax</digi:trn>';
+        			msg='<digi:trn jsFriendly="true">Please enter fax</digi:trn>';
             		alert(msg);
         			return false;
         		}else if(checkNumber(faxes[i].value)==false){
@@ -465,7 +465,7 @@
             var content = document.getElementById("popinContent");
             content.innerHTML = '<div style="text-align: center">' +
                 '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
-                '<digi:trn>Loading...</digi:trn><br/><br/></div>';
+                '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>';
                 showContent();
         }
 
@@ -534,7 +534,7 @@
 						<ul class="yui-nav">
 							<li>
 								<a href="${contextPath}/aim/addressBook.do?actionType=viewAddressBook&reset=true&tabIndex=1">
-									<div title='<digi:trn>Existing Contacts</digi:trn>'>
+									<div title='<digi:trn jsFriendly="true">Existing Contacts</digi:trn>'>
 										<digi:trn>Existing Contacts</digi:trn>
 									</div>
 								</a>
@@ -599,7 +599,7 @@
 														<digi:trn>Add Organizations</digi:trn>
 													</aim:addOrganizationButton>
 													<c:if test="${not empty addressbookForm.organizations}">
-														<input type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn>Remove Organization(s)</digi:trn>' />
+														<input type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn jsFriendly="true">Remove Organization(s)</digi:trn>' />
 													</c:if>
 													</td>
 													</tr>

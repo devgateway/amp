@@ -15,7 +15,7 @@
 function selectOrg(params1, params2, params3, params4) {
 	myPanel.cfg.setProperty("width","600px");
 	myPanel.cfg.setProperty("height","550px");
-	var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
+	var msg='\n<digi:trn jsFriendly="true" key="aim:selectOrg">Select Organization</digi:trn>';
 	showPanelLoading(msg);
 	YAHOO.util.Connect.asyncRequest("POST", params1, callback);
 }

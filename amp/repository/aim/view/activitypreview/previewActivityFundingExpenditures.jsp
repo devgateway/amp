@@ -23,7 +23,7 @@
             <tr bgcolor="#FFFFCC">
                 <td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC"
                     style="text-transform: uppercase;"><a
-                        title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
+                        title='<digi:trn jsFriendly="true" key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
 
                     <digi:trn key="aim:plannedexpenditures">Planned Expenditures</digi:trn>
                 </a></td>
@@ -67,7 +67,7 @@
         <c:if test="${!empty funding.actualExpendituresDetails}">
             <tr bgcolor="#FFFFCC">
                 <td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase">
-                    <a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
+                    <a title='<digi:trn jsFriendly="true" key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
                         <digi:trn key="aim:actualexpenditures">Actual Expenditures</digi:trn>:
                     </a>
                 </td>
@@ -109,7 +109,7 @@
         <c:if test="${!empty funding.pipelineExpendituresDetails}">
             <tr bgcolor="#FFFFCC">
                 <td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase">
-                    <a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
+                    <a title='<digi:trn jsFriendly="true" key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
                         <digi:trn key="aim:pipelineexpenditures">Pipeline Expenditures</digi:trn>:
                     </a>
                 </td>

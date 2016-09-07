@@ -69,9 +69,9 @@
 </style>
 
 <script type="text/javascript">
-	var alertValidationTime = '<digi:trn>Please select validation time</digi:trn>';
-	var alertValidationPeriod = '<digi:trn>Please check Validation Period if you have selected Validation Time</digi:trn>';
-	var alertValidationPercentage = '<digi:trn>Please enter a valid percentage (0.01 - 100.00)</digi:trn>';
+	var alertValidationTime = '<digi:trn jsFriendly="true">Please select validation time</digi:trn>';
+	var alertValidationPeriod = '<digi:trn jsFriendly="true">Please check Validation Period if you have selected Validation Time</digi:trn>';
+	var alertValidationPercentage = '<digi:trn jsFriendly="true">Please enter a valid percentage (0.01 - 100.00)</digi:trn>';
 </script>
 
 <digi:instance property="aimScorecardManagerForm" />

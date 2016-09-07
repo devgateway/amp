@@ -45,7 +45,7 @@
 	     );
 	
 	function initScriptsHistory() {
-		var msgP6='\n<digi:trn>Version History</digi:trn>';
+		var msgP6='\n<digi:trn jsFriendly="true">Version History</digi:trn>';
 		myPanelHistory.setHeader(msgP6);
 		myPanelHistory.setBody("");
 		myPanelHistory.render(document.body);
@@ -55,7 +55,7 @@
 	function showHistory() {
 		var content = document.getElementById("myHistoryContent");
 		var element6 = document.getElementById("myHistory");
-        var loading='\n<digi:trn>Loading...</digi:trn>';
+        var loading='\n<digi:trn jsFriendly="true">Loading...</digi:trn>';
 		content.innerHTML = '<p align="center"><img align="top" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader.gif" /><font size="3"><b>'+loading+'</b></font></p>';
 		//if (panelFirstShow == 1){
 			myPanelHistory.setBody(element6.innerHTML);

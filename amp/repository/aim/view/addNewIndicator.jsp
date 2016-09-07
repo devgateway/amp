@@ -363,7 +363,7 @@ function closeWindow() {
 	</html:reset>
 --%>	 
  	
-	<input type="submit" name="clearButton" value='<digi:trn key="btn:clear">Clear</digi:trn>' class="buttonx" onclick="resetAddNewIndicator();"/>
+	<input type="submit" name="clearButton" value='<digi:trn jsFriendly="true" key="btn:clear">Clear</digi:trn>' class="buttonx" onclick="resetAddNewIndicator();"/>
  
  	 <html:button  styleClass="buttonx" property="submitButton"  onclick="closeWindow()">
 			<digi:trn key="btn:close">Close</digi:trn> 

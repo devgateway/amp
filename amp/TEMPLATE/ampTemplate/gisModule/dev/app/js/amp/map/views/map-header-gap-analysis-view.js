@@ -16,11 +16,14 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.listenTo(this.app.data.title, 'update', this.render);
-    
+    this.listenTo(this.app.data.indicators, 'reset', this.resetLayers);
     this.model.set('isGapAnalysisAvailable', false);
 	this.model.set('isGapAnalysisSelected', false);
   },
-
+  resetLayers: function(){
+	  this.model.set('isGapAnalysisAvailable', false);
+	  this.render();
+  },
   render: function() {
 	  var self = this;	  
 	  this.$el.html(this.template({

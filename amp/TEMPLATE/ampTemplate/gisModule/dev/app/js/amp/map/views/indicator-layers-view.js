@@ -48,7 +48,6 @@ module.exports = Backbone.View.extend({
 
   // removes layer, then shows it. Important for layers whos content changes.
   refreshLayer: function(layer) {
-	  alert('refreshLayer')
     var loadedLayer = this.leafletLayerMap[layer.cid];
 
     if (loadedLayer) {
@@ -82,7 +81,7 @@ module.exports = Backbone.View.extend({
       }
       self.leafletLayerMap[layer.cid] = loadedLayer;
 
-      // only add it to the map if is still selected.
+      // only add it to the map if is still selected.      
       if (layer.get('selected')) {
         self.map.addLayer(loadedLayer);
         if (loadedLayer.bringToBack) {
@@ -98,8 +97,6 @@ module.exports = Backbone.View.extend({
     	  delete layer._loaded;
       }
     });
-
-    layer.load();
   },
 
   hideLayer: function(layer) {

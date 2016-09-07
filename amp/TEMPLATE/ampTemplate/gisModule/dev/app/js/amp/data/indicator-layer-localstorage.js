@@ -24,10 +24,6 @@ IndicatorLayerLocalStorage.findById = function(id){
 	return layer;			
 };
 
-IndicatorLayerLocalStorage.executeGapAnalysis = function(id) {
-	alert(id);
-};
-
 IndicatorLayerLocalStorage.save = function(layer){
 	var layers = IndicatorLayerLocalStorage.findAll();
 	var index = _.indexOf(_.pluck(layers, 'id'), layer.id);

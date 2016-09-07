@@ -85,7 +85,6 @@ module.exports = Backbone.Model
   },
   
   fetch: function(){	
-	  console.log('fetch');
 	  var self = this;
 	  	  
 	  var filter = {otherFilters: {}};
@@ -95,76 +94,32 @@ module.exports = Backbone.Model
 	  var settings = app.data.settings.serialize();	  	  
 	  
 	  if(this.attributes.isStoredInLocalStorage === true){		  
-		  this.deferredForLocalStorage = new $.Deferred();
 		  IndicatorLayerLocalStorage.cleanUp();
-		  //debugger
 		  var layer = IndicatorLayerLocalStorage.findById(this.attributes.id);
 		  if(!_.isUndefined(layer)){
-			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);
-			  // If Gap analysis selected we call the EP to reprocess the local data.
+			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);			  
+			  var params = {};
+			  params.type = 'POST';
 			  if (app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected')) {
-				  console.log('resolve con gap');
+				// If Gap analysis selected we call the EP to reprocess the local data.
 				  this.url = '/rest/gis/do-gap-analysis';
-				  var params = {};
-				  params.type = 'POST';
 				  params.data = {indicator: layer, settings: settings, isGapAnalysis: true};
 				  params.data = JSON.stringify(_.extend(params.data, filter));
-				  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
-				  //debugger;
-				  return this.lastFetchXhr;				  
-			  } else {				  
-				  console.log('resolve sin gap');
-				  // esto anda pero no recarga el localstorage.
-				  /*layer._changing = true;
-				  console.log(layer);
-				  var test=this.deferredForLocalStorage.resolve(layer);
-				  debugger;
-				  return test*/
-				  
-				  // esto anda pero no me gusta porque es ir al backend.
-				  /*this.url = '/rest/gis/do-gap-analysis';
-				  var params = {};
-				  params.type = 'POST';
-				  params.data = {indicator: layer, settings: settings, isGapAnalysis: false};
-				  params.data = JSON.stringify(_.extend(params.data, filter));
-				  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
-				  return this.lastFetchXhr;*/
-				  
-				  // esto carga bien el layer la primera vez pero sigue sin volver a mostrar el localstorage luego del gap.
-				  /*var ajax = $.ajax({
-					  url: "/",
-					}).done(function() {
-					    return layer;
-					});
-				  debugger
-				  return ajax;*/
-				  
-				  // esto tambien carga el layer la primera vez!!!
-				  /*this.url = "/rest/gis/indicators"
-				  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
-				  this.on('sync', function() {
-					  console.log('listo el ep falso');
-					  return layer;
-				  }, this);
-				  //debugger;
-				  return this.lastFetchXhr;*/
-				  
-				  layer._changing = true;
-				  console.log(layer);
-				  var test=this.deferredForLocalStorage.resolveWith(this, [layer]);
-				  //debugger;
-				  return test;
+			  } else {
+				  // If gap analysis is NOT selected then we send the data from localStorage anyway, the EP will return it without changes.
+				  // This is needed because after the gap analysis is selected we cant render again the original public layer.				  
+				  this.url = '/rest/gis/process-public-layer';
+				  layer.unit = (layer.unit instanceof Object) ? Object.keys(layer.unit)[0] : layer.unit; // Needed preprocess for popups.
+				  params.data = JSON.stringify(layer);
 			  }			  
+			  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
+			  return this.lastFetchXhr;				  
 		  } else {
-			  alert('problema');
+			  console.error('Invalid layer.');
 		  }
-		  //console.log('devuelvo promise');
-		  //return this.deferredForLocalStorage.resolve(layer);
-		  //return this.deferredForLocalStorage.promise();
 	  } else {
 		// By adding this section here in fetch we are sure any call made over /rest/indicators/id will have the right parameters without duplicating code.  
 		if (this.lastFetchXhr && this.lastFetchXhr.readyState > this.readyStateNotInitialized && this.lastFetchXhr.readyState < this.readyStateResponseReady) {
-			alert('abort');
 			return this.lastFetchXhr.abort();
 		}
 		filter.gapAnalysis = app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected');

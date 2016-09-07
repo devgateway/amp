@@ -444,10 +444,29 @@ public class GisEndPoints {
 	@POST
     @Path("/do-gap-analysis")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "doDoGapAnalysis")
-    public JsonBean doDoGapAnalysis(JsonBean input) {
-	    return new PublicGapAnalysis().doPublicGapAnalysis(input);
-    } 
+    @ApiMethod(ui = false, id = "doGapAnalysis")
+    public JsonBean doGapAnalysis(JsonBean input) {
+		return new PublicGapAnalysis().doPublicGapAnalysis(input);
+    }
+	
+	/**
+	 * Just returns the same data so the GIS code doesnt break with public layers. 
+	 * @param input
+	 * <pre>
+	 * {
+	 *   "indicator" : {...}, // full indicator data, like the one that is used for saving
+	 * }
+	 * </pre>
+	 * @return
+	 */
+	@POST
+    @Path("/process-public-layer")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "processPublicLayer")
+    public JsonBean processPublicLayer(JsonBean input) {
+		// Due to problems on the frontend for now we receive the public layer data and if there is no gap analysis then we return it without changes.
+		return input;
+    }	 
 	
 	/**
 	 * Export map id from current filters

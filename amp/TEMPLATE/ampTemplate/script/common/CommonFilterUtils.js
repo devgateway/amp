@@ -104,6 +104,7 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 				blob.columnFilters[item.name] = _.map(item.values, function(item_) {
 					return parseInt(item_.id);
 				});
+				blob.columnFilters[item.name + ' Id'] = blob.columnFilters[item.name];
 				blob.columnFilters[item.name + ' Sub-Sector'] = blob.columnFilters[item.name];
 				blob.columnFilters[item.name + ' Sub-Sub-Sector'] = blob.columnFilters[item.name];
 				break;

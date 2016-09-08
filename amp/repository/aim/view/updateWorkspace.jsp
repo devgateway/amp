@@ -104,7 +104,7 @@
     var panelStart=0;
     var checkAndClose=false;
     function initOrganizationScript() {
-        var msg='\n<digi:trn>Add Organizations</digi:trn>';
+        var msg='\n<digi:trn jsFriendly="true">Add Organizations</digi:trn>';
         myPanel.setHeader(msg);
         myPanel.setBody("");
         myPanel.beforeHideEvent.subscribe(function() {
@@ -118,7 +118,7 @@
         var content = document.getElementById("popinContent");
         content.innerHTML = '<div style="text-align: center">' +
             '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
-            '<digi:trn>Loading...</digi:trn><br/><br/></div>';
+            '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>';
             showContent();
     }
     function mapCallBack(status, statusText, responseText, responseXML){

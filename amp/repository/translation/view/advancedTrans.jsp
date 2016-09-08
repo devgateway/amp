@@ -127,7 +127,7 @@ function expireKeys() {
 	}
 
 	if (!selected) {
-		alert('<digi:trn key="translation:keysNotSelected">Please select at least one key</digi:trn>');
+		alert('<digi:trn jsFriendly="true" key="translation:keysNotSelected">Please select at least one key</digi:trn>');
 		return false;
 	}
 
@@ -244,10 +244,10 @@ function showHideAddNewKey() {
 
 	if (div.style.display == 'none') {
 		div.style.display = '';
-		linkDiv.innerHTML = '<digi:trn key="translation:hideAddNewKey">Hide add new key</digi:trn>';
+		linkDiv.innerHTML = '<digi:trn jsFriendly="true" key="translation:hideAddNewKey">Hide add new key</digi:trn>';
 	} else {
 		div.style.display = 'none';
-		linkDiv.innerHTML = '<digi:trn key="translation:addNewKey">Add new key</digi:trn>';
+		linkDiv.innerHTML = '<digi:trn jsFriendly="true" key="translation:addNewKey">Add new key</digi:trn>';
 	}
 	return false;
 }

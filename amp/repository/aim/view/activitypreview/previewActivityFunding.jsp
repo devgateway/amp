@@ -43,7 +43,7 @@
 																<logic:notEmpty name="funding" property="orgFundingId">
 																	<tr>
 																		<td align="left" width="150">
-																			<a title='<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>'>
+																			<a title='<digi:trn key="aim:FundOrgId" jsFriendly="true">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>'>
 																				<digi:trn>Funding Organization Id</digi:trn>
 																			</a>																		
 																		</td>
@@ -58,7 +58,7 @@
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item"> --%>
 																<tr>
 																	<td align="left" width="150">
-																		<a title='<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>'>
+																		<a title='<digi:trn key="aim:fundOrgName" jsFriendly="true">Funding Organization Name</digi:trn>'>
 																			<digi:trn key="aim:OrgName">Organization Name</digi:trn>
 																		</a>
 																	</td>
@@ -70,7 +70,7 @@
 																<logic:present name="funding" property="sourceRole">
 																<tr>
 																	<td align="left" width="150">
-																		<a title='<digi:trn key="aim:orgRole">Organization Role</digi:trn>'>
+																		<a title='<digi:trn key="aim:orgRole" jsFriendly="true">Organization Role</digi:trn>'>
 																			<digi:trn key="aim:OrgRole">Organization Role</digi:trn>
 																		</a>
 																	</td>
@@ -87,7 +87,7 @@
 																	    parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150"><a
-																			title='<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>'>
+																			title='<digi:trn key="aim:AssitanceType" jsFriendly="true">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>'>
 																		<digi:trn key="aim:typeOfAssist">Type of Assistance</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
@@ -103,7 +103,7 @@
 																	<logic:notEmpty name="funding" property="financingInstrument">
 																	<tr>
 																		<td align="left" width="150"><a
-																			title='<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>'>
+																			title='<digi:trn key="aim:financialInst" jsFriendly="true">Financing Instrument</digi:trn>'>
 																		<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
@@ -118,7 +118,7 @@
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150"><a
-																			title='<digi:trn>Funding Status</digi:trn>'>
+																			title='<digi:trn jsFriendly="true">Funding Status</digi:trn>'>
 																		<digi:trn>Funding Status</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
@@ -132,7 +132,7 @@
 																<logic:notEmpty name="funding" property="modeOfPayment">
 																	<tr>
 																		<td align="left" width="150"><a
-																			title='<digi:trn>Mode of Payment</digi:trn>'>
+																			title='<digi:trn jsFriendly="true">Mode of Payment</digi:trn>'>
 																		<digi:trn>Mode of Payment</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
@@ -147,7 +147,7 @@
 																<logic:notEmpty name="funding" property="ratificationDate">
 																<tr>
 																	<td align="left" width="150">
-																		<a title='<digi:trn>Ratification Date</digi:trn>'>
+																		<a title='<digi:trn jsFriendly="true">Ratification Date</digi:trn>'>
 																			<digi:trn>Ratification Date</digi:trn>
 																		</a>
 																	</td>
@@ -160,7 +160,7 @@
 																<logic:notEmpty name="funding" property="maturity">
 																<tr>
 																	<td align="left" width="150">
-																		<a title='<digi:trn>Maturity</digi:trn>'>
+																		<a title='<digi:trn jsFriendly="true">Maturity</digi:trn>'>
 																			<digi:trn>Maturity</digi:trn>
 																		</a>
 																	</td>
@@ -173,7 +173,7 @@
 																<logic:notEmpty name="funding" property="interestRate">
 																<tr>
 																	<td align="left" width="150">
-																		<a title='<digi:trn>Interest Rate</digi:trn>'>
+																		<a title='<digi:trn jsFriendly="true">Interest Rate</digi:trn>'>
 																			<digi:trn>Interest Rate</digi:trn>
 																		</a>
 																	</td>
@@ -186,7 +186,7 @@
 																<logic:notEmpty name="funding" property="gracePeriod">
 																<tr>
 																	<td align="left" width="150">
-																		<a title='<digi:trn>Grace Period</digi:trn>'>
+																		<a title='<digi:trn jsFriendly="true">Grace Period</digi:trn>'>
 																			<digi:trn>Grace Period</digi:trn>
 																		</a>
 																	</td>
@@ -202,7 +202,7 @@
 																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 																	<tr>
 																		<td align="left" width="150"><a
-																			title='<digi:trn key="aim:donorobjective">Donor Objective</digi:trn>'>
+																			title='<digi:trn jsFriendly="true" key="aim:donorobjective">Donor Objective</digi:trn>'>
 																		<digi:trn key="aim:donorobjective">Donor Objective</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
@@ -216,7 +216,7 @@
                                                                 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Conditions" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
                                                                     <tr>
                                                                         <td align="left" width="150"><a
-                                                                                title='<digi:trn key="aim:donorobjective">Conditions</digi:trn>'>
+                                                                                title='<digi:trn jsFriendly="true" key="aim:donorobjective">Conditions</digi:trn>'>
                                                                             <digi:trn key="aim:donorobjective">Conditions</digi:trn>
                                                                         </a></td>
                                                                         <td width="1">:</td>
@@ -230,7 +230,7 @@
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150">
-																			<a title='<digi:trn>Agreement Title</digi:trn>'>
+																			<a title='<digi:trn jsFriendly="true">Agreement Title</digi:trn>'>
 																				<digi:trn>Agreement Title</digi:trn>
 																			</a>
 																		</td>
@@ -241,7 +241,7 @@
 																	</tr>
 																	<tr>
 																		<td align="left" width="150">
-																			<a title='<digi:trn>Agreement Code</digi:trn>'>
+																			<a title='<digi:trn jsFriendly="true">Agreement Code</digi:trn>'>
 																				<digi:trn>Agreement Code</digi:trn>
 																			</a>
 																		</td>
@@ -254,7 +254,7 @@
 																<logic:notEmpty name="funding" property="fundingClassificationDate">
 																<tr>
 																	<td align="left" width="150">
-																		<a title='<digi:trn>Funding Classification Date</digi:trn>'>
+																		<a title='<digi:trn jsFriendly="true">Funding Classification Date</digi:trn>'>
 																			<digi:trn>Funding Classification Date</digi:trn>
 																		</a>
 																	</td>
@@ -269,7 +269,7 @@
 																<logic:notEmpty name="funding" property="effectiveFundingDate">
 																	<tr>
 																		<td align="left" width="150">
-																			<a title='<digi:trn>Effective Funding Date</digi:trn>'>
+																			<a title='<digi:trn jsFriendly="true">Effective Funding Date</digi:trn>'>
 																				<digi:trn>Effective Funding Date</digi:trn>
 																			</a>
 																		</td>
@@ -285,7 +285,7 @@
 																<logic:notEmpty name="funding" property="fundingClosingDate">
 																	<tr>
 																		<td align="left" width="150">
-																			<a title='<digi:trn>Funding Closing Date</digi:trn>'>
+																			<a title='<digi:trn jsFriendly="true">Funding Closing Date</digi:trn>'>
 																				<digi:trn>Funding Closing Date</digi:trn>
 																			</a>
 																		</td>

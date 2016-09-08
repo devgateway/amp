@@ -255,7 +255,7 @@ value="key" label="value" />
 			<table width="100%" cellspacing="5">
 				<tr>
 					<td width="45%" align="right">
-							<input  type="button" name="addBtn" value='<digi:trn key="btn:save">Save</digi:trn>' 
+							<input  type="button" name="addBtn" value='<digi:trn jsFriendly="true" key="btn:save">Save</digi:trn>' 
 								onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />','<bean:write name="aimAddSectorForm" property="levelType" />')" class="dr-menu"/>
 					</td>
 					
@@ -264,7 +264,7 @@ value="key" label="value" />
 					</td>
 					
 					<td width="45%" align="left">
-						<input type="button" value='<digi:trn key="btn:cancel">Cancel</digi:trn>' class="dr-menu" onclick="cancel('<%= session.getAttribute("Id") %>','<bean:write name="aimAddSectorForm" property="levelType" />')"/>
+						<input type="button" value='<digi:trn jsFriendly="true" key="btn:cancel">Cancel</digi:trn>' class="dr-menu" onclick="cancel('<%= session.getAttribute("Id") %>','<bean:write name="aimAddSectorForm" property="levelType" />')"/>
 					</td>
 				</tr>
 			</table>

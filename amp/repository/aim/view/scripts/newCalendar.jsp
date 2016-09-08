@@ -309,7 +309,7 @@
 		        close:true
 		        
 		    });
-			dialog.setHeader('<digi:trn>Pick A Date</digi:trn>');
+			dialog.setHeader('<digi:trn jsFriendly="true">Pick A Date</digi:trn>');
             dialog.setBody('<div class="yui-skin-sam"><div class="cal-div-wrapper" id="'+calDivWrapper+'"></div></div>');
             dialog.render( renderDiv );
             dialog.showEvent.subscribe(function() {

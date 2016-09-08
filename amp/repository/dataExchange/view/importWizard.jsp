@@ -200,7 +200,7 @@ div.fakefile2 input{
     						<feature:display name="Synergy Client" module="Activity Import Manager">
     						<tr>
     							<td>
-									<input type="button" onclick="javascript:importFromWs();" value='<digi:trn>Update Synergy Activities</digi:trn>' />
+									<input type="button" onclick="javascript:importFromWs();" value='<digi:trn jsFriendly="true">Update Synergy Activities</digi:trn>' />
 								</td>
     						</tr>
     						</feature:display>

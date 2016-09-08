@@ -41,7 +41,7 @@
 		<c:if test="${myForm.showTheFollowingDocuments!=null}">
 			showTheFollowingDocuments		= '${myForm.showTheFollowingDocuments}';
 		</c:if>
-	    var select = '<digi:trn key="contentrepository:SelectDocumentsTitle">Select Documents</digi:trn>';
+	    var select = '<digi:trn jsFriendly="true" key="contentrepository:SelectDocumentsTitle">Select Documents</digi:trn>';
 	    var windowHandler;
 	    if(showTheFollowingDocuments=='PUBLIC'){
 	    	windowHandler	= newWindow( select,false,'otherDocumentsDiv');
@@ -123,7 +123,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	<c:set var="translation">
 			<digi:trn>Click here to open a new document window</digi:trn>
 	</c:set>
-	<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue; font-size: x-small" onClick="newWindow('<digi:trn>Select Documents</digi:trn>', true, 'otherDocumentsDiv')" /> 
+	<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue; font-size: x-small" onClick="newWindow('<digi:trn jsFriendly="true">Select Documents</digi:trn>', true, 'otherDocumentsDiv')" /> 
 		<digi:trn>New window</digi:trn>
 	</a>
 </c:if>

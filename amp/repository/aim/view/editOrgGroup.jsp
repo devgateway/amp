@@ -32,12 +32,12 @@
 		str = trim(str);
 
 		if (str == null || str.length == 0) {
-			alert('<digi:trn key="aim:alert:editOrgGroup">Please enter a name for this Group</digi:trn>');
+			alert('<digi:trn jsFriendly="true" key="aim:alert:editOrgGroup">Please enter a name for this Group</digi:trn>');
 			document.aimAddOrgGroupForm.orgGrpName.focus();
 			return false;
 		}
 		else if (type == null || type == "-1" || type.length == 0) {
-			alert('<digi:trn key="aim:alert:editOrgGroupType">Please select type for this Group</digi:trn>');
+			alert('<digi:trn jsFriendly="true" key="aim:alert:editOrgGroupType">Please select type for this Group</digi:trn>');
 			document.aimAddOrgGroupForm.orgTypeId.focus();
 			return false;
 		}

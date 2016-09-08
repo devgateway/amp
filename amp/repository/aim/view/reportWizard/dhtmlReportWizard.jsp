@@ -99,11 +99,11 @@
 		</c:if>
 		
 		//validation messages
-	    var equalSymbolMsg = '<digi:trn key="rep:format:equalsSymbol">Decimal Symbol and group symbol must be diferents</digi:trn>';
-		var badSymbolEmptyMsg ='<digi:trn key="rep:format:badSymbolEmpty">Symbols can not be a empty, you can use the space character</digi:trn>';
-		var badSymbolNumberMsg = '<digi:trn key="rep:format:badSymbolNumber">Symbols can not be a number</digi:trn>';
-		var badGorupSize = '<digi:trn key="rep:format:badGorupSize">The value should be greater than zero</digi:trn>';
-		var badYearRange = '<digi:trn key="rep:format:badYearRange">Year Range To should be greater than From</digi:trn>';
+	    var equalSymbolMsg = '<digi:trn jsFriendly="true" key="rep:format:equalsSymbol">Decimal Symbol and group symbol must be diferents</digi:trn>';
+		var badSymbolEmptyMsg ='<digi:trn jsFriendly="true" key="rep:format:badSymbolEmpty">Symbols can not be a empty, you can use the space character</digi:trn>';
+		var badSymbolNumberMsg = '<digi:trn jsFriendly="true" key="rep:format:badSymbolNumber">Symbols can not be a number</digi:trn>';
+		var badGorupSize = '<digi:trn jsFriendly="true" key="rep:format:badGorupSize">The value should be greater than zero</digi:trn>';
+		var badYearRange = '<digi:trn jsFriendly="true" key="rep:format:badYearRange">Year Range To should be greater than From</digi:trn>';
 
 		var filterPanelNameText = '${filterPanelName}' + ': ' + '${fn:escapeXml(aimReportWizardForm.reportTitle)}';
 		

@@ -20,7 +20,7 @@
 
 	<tr bgcolor="#ffffff">
 		<td colspan="5" bgcolor="#FFFFCC" style="text-transform: uppercase"><a
-			title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
+			title='<digi:trn jsFriendly="true" key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
 		<digi:trn key="aim:actualdisbursementOrders">Actual Disbursment Orders</digi:trn>
 
 		</a></td>
@@ -43,7 +43,7 @@
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">
             	<a
-			title='<digi:trn key="aim:FundRelease"> Release of funds to,
+			title='<digi:trn jsFriendly="true" key="aim:FundRelease"> Release of funds to,
 			or the purchase of goods or services for a recipient; by
 			extension, the amount thus spent. Disbursements record the actual
 			international transfer of financial resources, or of goods or

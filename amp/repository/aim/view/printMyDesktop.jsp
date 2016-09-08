@@ -80,7 +80,7 @@
 							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
 							onMouseOut="this.className='colHeaderLink'" width="40%"
 							onClick="window.document.location='/aim/previewPrintMyDesktop.do?view=sorted&srt=1'"
-							title='<digi:trn key="aim:ProjectNames">Complete List of Projects for Team</digi:trn>'>
+							title='<digi:trn jsFriendly="true" key="aim:ProjectNames">Complete List of Projects for Team</digi:trn>'>
 								<digi:trn key="aim:project">Project</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 1}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
@@ -94,7 +94,7 @@
 							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
 							onMouseOut="this.className='colHeaderLink'"  width="14%"
 							onClick="window.document.location='/aim/previewPrintMyDesktop.do?view=sorted&srt=2'"
-							title='<digi:trn key="aim:IdforAMP">System Generated Project ID</digi:trn>'>
+							title='<digi:trn jsFriendly="true" key="aim:IdforAMP">System Generated Project ID</digi:trn>'>
 								<digi:trn key="aim:ampId">AMP ID</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 2}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
@@ -108,7 +108,7 @@
 							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
 							onMouseOut="this.className='colHeaderLink'"  width="28%"
 							onClick="window.document.location='/aim/previewPrintMyDesktop.do?view=sorted&srt=3'"
-							title='<digi:trn key="aim:FundingDonor">Funding Donor for Project</digi:trn>'>
+							title='<digi:trn jsFriendly="true" key="aim:FundingDonor">Funding Donor for Project</digi:trn>'>
 								<digi:trn key="aim:donor">Donor(s)</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 3}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
@@ -122,7 +122,7 @@
 							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
 							onMouseOut="this.className='colHeaderLink'"  width="18%"
 							onClick="window.document.location='/aim/previewPrintMyDesktop.do?view=sorted&srt=4'"
-							title='<digi:trn key="aim:TotalCommitMade">Total Committed Amount of Project</digi:trn>'>
+							title='<digi:trn jsFriendly="true" key="aim:TotalCommitMade">Total Committed Amount of Project</digi:trn>'>
 								<FONT color="blue">*</FONT>
 								<digi:trn key="aim:totalCommitments">Total Commitments</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 4}">

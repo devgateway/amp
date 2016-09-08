@@ -84,7 +84,7 @@ function loadExchangeRate() {
 
 function updateRates()
 {
-	if(confirm('<digi:trn key="aim:updateCurrencyFromUploadedFile">Do you want to update the Currency rates from the uploaded file ?</digi:trn>'))
+	if(confirm('<digi:trn jsFriendly="true" key="aim:updateCurrencyFromUploadedFile">Do you want to update the Currency rates from the uploaded file ?</digi:trn>'))
 	{
 		<digi:context name="updateRates" property="context/module/moduleinstance/saveCurrencyRate.do~doAction=file"/>
 		document.aimCurrencyRateForm.action = "<%= updateRates %>";
@@ -124,7 +124,7 @@ function deleteRates() {
 }
 
 function validate(){
-	return(confirm('<digi:trn>Do you want to delete this Currency rate?</digi:trn>'));
+	return(confirm('<digi:trn jsFriendly="true">Do you want to delete this Currency rate?</digi:trn>'));
 }
 
 function selectFile() {

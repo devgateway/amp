@@ -211,7 +211,7 @@
      			$('#distancediv').toggle();
      			searchactive = true;
   	  		}else{
-				alert('<digi:trn>"The value must be numeric and positive"</digi:trn>');
+				alert('<digi:trn jsFriendly="true">"The value must be numeric and positive"</digi:trn>');
   	  	  	}
      	});
 	});

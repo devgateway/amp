@@ -39,7 +39,7 @@
 		    
 	function initScriptsRecurr() {
 	
-	    var msg='\n<digi:trn key="cal:calendar:eventsetup">Recurring Event Setup</digi:trn>';
+	    var msg='\n<digi:trn jsFriendly="true" key="cal:calendar:eventsetup">Recurring Event Setup</digi:trn>';
 		myPanel1.setHeader(msg);
 		myPanel1.setBody("");
 		myPanel1.render(document.body);

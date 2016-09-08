@@ -1335,7 +1335,7 @@ body {background:none;}
 																		<logic:present name="funding" property="sourceRole">
 																			<tr>
 																				<td align="left" width="150">
-																					<a title='<digi:trn key="aim:orgRole">Organization Role</digi:trn>'>
+																					<a title='<digi:trn jsFriendly="true" key="aim:orgRole">Organization Role</digi:trn>'>
 																						<digi:trn key="aim:OrgRole">Organization Role</digi:trn>
 																					</a>
 																				</td>
@@ -1378,7 +1378,7 @@ body {background:none;}
                                                                             <logic:notEmpty name="funding" property="ratificationDate">
 																<tr>
 																	<td align="left" width="150">
-																		<a title='<digi:trn>Ratification Date</digi:trn>'>
+																		<a title='<digi:trn jsFriendly="true">Ratification Date</digi:trn>'>
 																			<digi:trn>Ratification Date</digi:trn>
 																		</a>
 																	</td>
@@ -1391,7 +1391,7 @@ body {background:none;}
 																<logic:notEmpty name="funding" property="maturity">
 																<tr>
 																	<td align="left" width="150">
-																		<a title='<digi:trn>Maturity</digi:trn>'>
+																		<a title='<digi:trn jsFriendly="true">Maturity</digi:trn>'>
 																			<digi:trn>Maturity</digi:trn>
 																		</a>
 																	</td>
@@ -1404,7 +1404,7 @@ body {background:none;}
 																<logic:notEmpty name="funding" property="interestRate">
 																<tr>
 																	<td align="left" width="150">
-																		<a title='<digi:trn>Interest Rate</digi:trn>'>
+																		<a title='<digi:trn jsFriendly="true">Interest Rate</digi:trn>'>
 																			<digi:trn>Interest Rate</digi:trn>
 																		</a>
 																	</td>
@@ -1417,7 +1417,7 @@ body {background:none;}
 																<logic:notEmpty name="funding" property="gracePeriod">
 																<tr>
 																	<td align="left" width="150">
-																		<a title='<digi:trn>Grace Period</digi:trn>'>
+																		<a title='<digi:trn jsFriendly="true">Grace Period</digi:trn>'>
 																			<digi:trn>Grace Period</digi:trn>
 																		</a>
 																	</td>
@@ -1704,7 +1704,7 @@ body {background:none;}
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000; text-transform: uppercase;">
                         <digi:trn key='aim:totalActualDisbursementOrder'>
-                                    <a title='<digi:trn key="aim:FundRelease"> Release of funds to,
+                                    <a title='<digi:trn jsFriendly="true" key="aim:FundRelease"> Release of funds to,
                                 or the purchase of goods or services for a recipient; by
                                 extension, the amount thus spent. Disbursements record the actual
                                 international transfer of financial resources, or of goods or

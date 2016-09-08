@@ -338,7 +338,7 @@
                                   <%} %>
                                 </logic:iterate>
                               </div>
-                              <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="reports" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
+                              <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn jsFriendly="true" key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="reports" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
                               </span>
 
                               <div style='position:relative;display:none;' id='measure-<bean:write name="reports" property="measures"/>'> 
@@ -350,7 +350,7 @@
                                   </li>
                                 </logic:iterate>
                               </div>										                                
-                              <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="reports" property="measures"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
+                              <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn jsFriendly="true" key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="reports" property="measures"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
                               </span>
 														</td>
                                                 </tr>

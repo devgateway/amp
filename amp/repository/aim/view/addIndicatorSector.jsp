@@ -21,7 +21,7 @@
                                                   <c:if test="${empty aimNewIndicatorForm.activitySectors}">
                                                     <tr>
                                                       <td bgcolor="#F8F8F8">
-                                                        <input type="button" class="buttonx" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+                                                        <input type="button" class="buttonx" onclick="addSectors();" value='<digi:trn jsFriendly="true" key="btn:addSectors">Add Sectors</digi:trn>' />
                                                       </td>
                                                     </tr>
                                                   </c:if>
@@ -73,7 +73,7 @@
                                                                     </td>
                                                                   </logic:notEmpty>
                                                                   <td >
-																	<input type="button" class="dr-menu" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+																	<input type="button" class="dr-menu" onclick="return removeSelSectors()" value='<digi:trn jsFriendly="true" key="btn:removeSector">Remove Sector</digi:trn>' />
                                                                   </td>
                                                                 </tr>
                                                               </table>

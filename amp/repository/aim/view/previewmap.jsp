@@ -53,7 +53,7 @@ a {
 	 function openPopup () {
 		 myPanelMap.hideEvent.subscribe(function(o) {
 			    $('#locationPopupMap').css("visibility", 'hidden');
-			    $('#ashowmap').html('<digi:trn>Show Map</digi:trn>')
+			    $('#ashowmap').html('<digi:trn jsFriendly="true">Show Map</digi:trn>')
 			});
 		var element = document.getElementById("locationPopupMap");
 		myPanelMap.setBody(element);
@@ -68,7 +68,7 @@ a {
 	 }
       
       function showMapInPopup(node) {
-         node.innerHTML = '<digi:trn>Hide Map</digi:trn>';
+         node.innerHTML = '<digi:trn jsFriendly="true">Hide Map</digi:trn>';
 		 openPopup();
       }
       
@@ -126,7 +126,7 @@ a {
 	
 	YAHOO.amptab.initPanels	= function () {
 		createMap ();
-		var msg='\n<digi:trn>Location Map</digi:trn>';
+		var msg='\n<digi:trn jsFriendly="true">Location Map</digi:trn>';
 		myPanelMap.setHeader(msg);
 		myPanelMap.setBody("Example");
 		myPanelMap.render(document.body);

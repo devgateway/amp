@@ -40,7 +40,7 @@
 					title1 = temp[1];
 					if (title1!=null && title1.length!=0){
 						$("#"+id).mouseover(function() {
-		            	     stm(['<digi:trn>Description</digi:trn>',title1],Style[1]);
+		            	     stm(['<digi:trn jsFriendly="true">Description</digi:trn>',title1],Style[1]);
 		                });
 		            	$("#"+id).mouseout(function() {
 		                	 htm();
@@ -50,7 +50,7 @@
 					title2 = temp[1];
 					if (title2!=null && title2.length!=0){
 						$("#"+id).mouseover(function() {
-		            	     stm(['<digi:trn>Description</digi:trn>',title2],Style[1]);
+		            	     stm(['<digi:trn jsFriendly="true">Description</digi:trn>',title2],Style[1]);
 		                });
 		            	$("#"+id).mouseout(function() {
 		                	 htm();

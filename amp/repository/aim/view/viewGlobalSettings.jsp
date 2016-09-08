@@ -97,12 +97,12 @@ function validateChangeRangeDefaultValue(){
 function validateCustomFields(form) {	
 	if (typeof form.gsfValue != "undefined") {
  		if (form.gsfValue.value=='' && isRequired(form)) {
- 	 		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value);        
+ 	 		alert('<digi:trn jsFriendly="true" key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value);        
  	 		return false;
  		}
  	} else {
  	 	if (form.listOfValues.value=='') {
- 	 		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value);
+ 	 		alert('<digi:trn jsFriendly="true" key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value);
 			return false;
 		}
 	}
@@ -384,7 +384,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 			                                  <html:hidden property="globalId" name="globalSett"/>
 			                                  <html:hidden property="globalSettingsName" name="globalSett"/>
 											<%String gfId=globalSett.getGlobalSettingsName().replace(' ', '_'); %>
-											 <input type="hidden" id="gstv_<%=gfId%>" name="globalSettingsNameTranslated" value='<digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>'>
+											 <input type="hidden" id="gstv_<%=gfId%>" name="globalSettingsNameTranslated" value='<digi:trn jsFriendly="true" key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>'>
 										
 			                                  <%String possibleValues = "possibleValues("+ globalSett.getGlobalSettingsName()+ ")";
 												String gsType = globalSett.getGlobalSettingsPossibleValues();

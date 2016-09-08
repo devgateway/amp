@@ -61,7 +61,7 @@ function MyPanelWrapper(header, url) {
 	var panel	= MyPanelWrapper.panels[url];
 	if (panel == null) {
 		panel 		= new YAHOO.widget.Panel("MyPanel"+url, { width:"400px", visible:true, draggable:true, close:true } );
-		panel.setHeader('<digi:trn>'+header+'</digi:trn>');
+		panel.setHeader('<digi:trn jsFriendly="true">'+header+'</digi:trn>');
 		panel.setBody("<div style='text-align: center;'><img src='/TEMPLATE/ampTemplate/images/ajax-loader.gif' /></div>");
 		panel.render(document.body);
 		panel.center();

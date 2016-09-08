@@ -19,7 +19,7 @@
 <c:if test="${!empty funding.plannedEDDDetails}">
 	<tr bgcolor="#ffffff">
 		<td height="20" colspan="4" bgcolor="#FFFFCC" style="text-transform: uppercase">
-            <a title='<digi:trn>Estimated Donor Disbursements</digi:trn>'>
+            <a title='<digi:trn jsFriendly="true">Estimated Donor Disbursements</digi:trn>'>
 	        	<digi:trn>Planned EDD</digi:trn>
 		    </a>
         </td>

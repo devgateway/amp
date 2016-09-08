@@ -123,7 +123,7 @@
 	<div id="demo" class="yui-navset" style="font-family: Arial, Helvetica, sans-serif;">
 		<ul class="yui-nav">
 			<li class="selected">
-				<a title='<digi:trn>AMP field definition glossary</digi:trn>'>
+				<a title='<digi:trn jsFriendly="true">AMP field definition glossary</digi:trn>'>
 					<div>
 						<digi:trn>Glossary</digi:trn>
 					</div>
@@ -153,7 +153,7 @@
 	<div id="demo" class="yui-navset" style="font-family: Arial, Helvetica, sans-serif;">
 		<ul class="yui-nav">
 			<li class="selected">
-				<a title='<digi:trn>Select items in the tree</digi:trn>'>
+				<a title='<digi:trn jsFriendly="true">Select items in the tree</digi:trn>'>
 					<div id="nodeTitle">
 						&nbsp;&nbsp;&nbsp;&nbsp;
 					</div>
@@ -186,7 +186,7 @@
 			<div id="demo" class="yui-navset" style="font-family: Arial, Helvetica, sans-serif;">
 				<ul class="yui-nav">
 					<li class="selected">
-						<a title='<digi:trn>Search Glossary</digi:trn>'>
+						<a title='<digi:trn jsFriendly="true">Search Glossary</digi:trn>'>
 							<div>
 								<digi:trn>Search</digi:trn>
 							</div>
@@ -335,7 +335,7 @@
 
 	function doSearchReset() {
 		$('div#searchResults').html('');
-		$('div#nodeContentDiv').html('<digi:trn>Please select node in glossary tree</digi:trn>');
+		$('div#nodeContentDiv').html('<digi:trn jsFriendly="true">Please select node in glossary tree</digi:trn>');
 		$('div#nodeTitle').html('&nbsp;&nbsp;&nbsp;&nbsp;');
 		$('input#edtSearchField').val('');
 	}

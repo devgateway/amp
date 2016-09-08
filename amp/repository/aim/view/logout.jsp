@@ -58,7 +58,7 @@
 				</tr>
 				<tr>
 					<td>&nbsp;</td>				
-					<td align="center" title='<digi:trn key="aim:clickToGoBackToHomePage">Click here to go back to the Home Page</digi:trn>'>
+					<td align="center" title='<digi:trn jsFriendly="true" key="aim:clickToGoBackToHomePage">Click here to go back to the Home Page</digi:trn>'>
 					<digi:link href="/">
 					<digi:trn key="aim:goBackToHomePage">
 					Click here to go back to the home page

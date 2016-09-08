@@ -58,7 +58,7 @@
 	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                <ul class="yui-nav">&nbsp;
                           <li class="selected" style="width: 100%">
-                          <a title='<digi:trn key="aim:PortfolioOfReports">Portfolio Reports </digi:trn>'>
+                          <a title='<digi:trn jsFriendly="true" key="aim:PortfolioOfReports">Portfolio Reports </digi:trn>'>
                           <div style="border-left-width:1px">
                           	<digi:trn key="aim:helpTopic">Help Topics</digi:trn>
                           </div>

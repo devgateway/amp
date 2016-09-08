@@ -312,7 +312,7 @@
 
 							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=1'"
 
-							title='<digi:trn key="aim:ProjectNames">Complete List of Projects for Team</digi:trn>'>
+							title='<digi:trn key="aim:ProjectNames" jsFriendly="true">Complete List of Projects for Team</digi:trn>'>
 
 								<digi:trn key="aim:project">Project</digi:trn>
 
@@ -340,7 +340,7 @@
 
 							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=2'"
 
-							title='<digi:trn key="aim:IdforAMP">System Generated Project ID</digi:trn>'>
+							title='<digi:trn key="aim:IdforAMP" jsFriendly="true">System Generated Project ID</digi:trn>'>
 
 								<digi:trn key="aim:ampId">AMP ID</digi:trn>
 
@@ -368,7 +368,7 @@
 
 							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=3'"
 
-							title='<digi:trn key="aim:FundingDonor">Funding Donor for Project</digi:trn>'>
+							title='<digi:trn key="aim:FundingDonor" jsFriendly="true">Funding Donor for Project</digi:trn>'>
 
 								<digi:trn key="aim:donor">Donor(s)</digi:trn>
 
@@ -396,7 +396,7 @@
 
 							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=4'"
 
-							title='<digi:trn key="aim:TotalCommitMade">Total Committed Amount of Project</digi:trn>'>
+							title='<digi:trn key="aim:TotalCommitMade" jsFriendly="true">Total Committed Amount of Project</digi:trn>'>
 
 								<FONT color="blue">*</FONT>
 

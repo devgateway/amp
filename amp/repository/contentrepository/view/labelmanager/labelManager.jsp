@@ -126,7 +126,7 @@
 			divEl.style.display	= "";
 			
 			panel 		= new YAHOO.widget.Panel("panelForLabels", { width:"400px", visible:true, draggable:true, close:true, modal:false } );
-			panel.setHeader('<digi:trn>Label Manager</digi:trn>');
+			panel.setHeader('<digi:trn jsFriendly="true">Label Manager</digi:trn>');
 			panel.setBody( divEl );
 			panel.render(document.body);
 			YAHOO.amp.addEditPanel	= panel;
@@ -141,7 +141,7 @@
 			var divEl			= document.getElementById('colorPickerDiv');
 			divEl.style.display	= "block";
 			panel 		= new YAHOO.widget.Panel("panelForColors", { width:"450px", visible:true, draggable:true, close:true, modal:false } );
-			panel.setHeader('<digi:trn>Pick Color</digi:trn>');
+			panel.setHeader('<digi:trn jsFriendly="true">Pick Color</digi:trn>');
 			panel.setBody( divEl );
 			panel.setFooter('<button id="okColorButton"><digi:trn>OK</digi:trn></button>');
 			panel.render(document.body);

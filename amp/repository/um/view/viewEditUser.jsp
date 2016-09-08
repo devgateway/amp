@@ -37,7 +37,7 @@ function goAction(value){
 	  	}
 	  	
 	  	if (value == 'delOrgs'){
-	  		var msg='<digi:trn>Please select at least one organization ! </digi:trn>';
+	  		var msg='<digi:trn jsFriendly="true">Please select at least one organization ! </digi:trn>';
 	  		var assignedOrgs = $("input[id^='verOrg_']");
 	  		var orgsSelected = 0;
 	  		if(assignedOrgs == null || assignedOrgs.length ==0){ //

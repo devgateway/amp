@@ -66,18 +66,18 @@
 								<td>
 									<c:choose>
 										<c:when test="${documentData.hasAnyVersionPendingApproval==true &&  documentData.hasApproveVersionRights==true}">
-											<span style="color:#00CC00;font-weigth:bold;" onmouseover="Tip('<digi:trn>DESCRIPTION</digi:trn>: ${escapedDescription}');" onmouseout="UnTip();">
+											<span style="color:#00CC00;font-weigth:bold;" onmouseover="Tip('<digi:trn jsFriendly="true">DESCRIPTION</digi:trn>: ${escapedDescription}');" onmouseout="UnTip();">
 												<bean:write name='documentData' property='title'/>
 											</span>
 										</c:when>
 										<c:when test="${not empty documentData.shareWith && documentData.hasShareRights==true &&  
 											documentData.needsApproval==true && documentData.hasApproveVersionRights}">
-											<span style="color:red;font-weigth:bold;" onmouseover="Tip('<digi:trn>DESCRIPTION</digi:trn>: ${escapedDescription}');" onmouseout="UnTip();">
+											<span style="color:red;font-weigth:bold;" onmouseover="Tip('<digi:trn jsFriendly="true">DESCRIPTION</digi:trn>: ${escapedDescription}');" onmouseout="UnTip();">
 												<bean:write name='documentData' property='title'/>
 											</span>
 										</c:when>
 										<c:otherwise>
-											<span style="color:#222222;" onmouseover="Tip('<digi:trn>DESCRIPTION</digi:trn>: ${escapedDescription}');" onmouseout="UnTip();">
+											<span style="color:#222222;" onmouseover="Tip('<digi:trn jsFriendly="true">DESCRIPTION</digi:trn>: ${escapedDescription}');" onmouseout="UnTip();">
 												<bean:write name='documentData' property='title'/>
 											</span>
 										</c:otherwise>
@@ -108,7 +108,7 @@
 										</c:when>
 										<c:otherwise>
 											<c:set var="shouldCutLink" value="false"></c:set>
-											<a onmouseover="Tip('<digi:trn>Download</digi:trn> file')" onmouseout="UnTip()" onClick="downloadFile('${documentData.uuid}');"  
+											<a onmouseover="Tip('<digi:trn jsFriendly="true">Download</digi:trn> file')" onmouseout="UnTip()" onClick="downloadFile('${documentData.uuid}');"  
 												style="cursor:pointer; color: #222222; font-size: 12px">
 												<!-- onClick="downloadFile('${documentData.nodeVersionUUID}');"  I think no need for nodeVersionUUID parameter. it shuld match the download link from Actions menu-->
 												
@@ -223,7 +223,7 @@
 										<c:otherwise>
 		
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="D<bean:write name='documentData' property='uuid' />"
-											onclick="window.open('${documentData.webLink }')" onmouseout="UnTip()"	onmouseover="Tip('<digi:trn>Follow link to </digi:trn> ${documentData.webLink}')">
+											onclick="window.open('${documentData.webLink }')" onmouseout="UnTip()"	onmouseover="Tip('<digi:trn jsFriendly="true">Follow link to </digi:trn> ${documentData.webLink}')">
 												<digi:trn>Follow the Link</digi:trn>
 											</a>
 										</c:otherwise>

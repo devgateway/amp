@@ -706,11 +706,11 @@ initContactScript();
 																						<td colspan="2"><input type="button"
 																							class="buttonx_sm"
 																							onclick="javascript:addSectors();"
-																							value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+																							value='<digi:trn jsFriendly="true" key="btn:addSectors">Add Sectors</digi:trn>' />
 																							<c:if test="${not empty aimAddOrgForm.sectors}">
 																								<input type="button" class="buttonx_sm"
 																									onclick="return removeSectors()"
-																									value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+																									value='<digi:trn jsFriendly="true" key="btn:removeSector">Remove Sector</digi:trn>' />
 																							</c:if></td>
 																					</tr>
 

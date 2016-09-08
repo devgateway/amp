@@ -162,8 +162,8 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
 <script type="text/javascript">
-	SaveReportEngine.connectionErrorMessage = '<digi:trn key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>';
-	SaveReportEngine.savingMessage = '<digi:trn key="aim:reportwizard:savingData">Saving data. Please wait.</digi:trn>';
+	SaveReportEngine.connectionErrorMessage = '<digi:trn jsFriendly="true" key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>';
+	SaveReportEngine.savingMessage = '<digi:trn jsFriendly="true" key="aim:reportwizard:savingData">Saving data. Please wait.</digi:trn>';
 	saveReportEngine = null;
 </script>
 
@@ -245,7 +245,7 @@
 	function initScripts() {
 		//alert('initScripts');
 
-		var msg = '\n<digi:trn key="rep:filter:filters">Filters</digi:trn>';
+		var msg = '\n<digi:trn jsFriendly="true" key="rep:filter:filters">Filters</digi:trn>';
 		myPanel1.setHeader(msg);
 		myPanel1.setBody("<p>initScripts</p>");
 		myPanel1.render(document.body);
@@ -359,7 +359,7 @@
 	function checkRangeValues() {
 		var actualFrom = document.aimReportsFilterPickerForm2.renderStartYear.value;
 		var actualTo = document.aimReportsFilterPickerForm2.renderEndYear.value;
-		var msg = '\n<digi:trn key="rep:filter:wrongSelecteRange">Default Start Year must be lesser than Default End Year</digi:trn>';
+		var msg = '\n<digi:trn jsFriendly="true" key="rep:filter:wrongSelecteRange">Default Start Year must be lesser than Default End Year</digi:trn>';
 		if (actualFrom > actualTo) {
 			alert(msg);
 			return false;

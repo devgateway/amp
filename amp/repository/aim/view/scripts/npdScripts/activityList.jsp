@@ -455,7 +455,7 @@
             var to= document.getElementById('yearTo');
             selActYearTo = to.value;
             if( selActYearTo!=-1 && selActYearFrom > selActYearTo){
-            	var msg='<digi:trn>Please choose correct year range</digi:trn>';
+            	var msg='<digi:trn jsFriendly="true">Please choose correct year range</digi:trn>';
             	alert(msg);
             	return false;
             }

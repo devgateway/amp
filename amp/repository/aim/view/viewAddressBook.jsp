@@ -188,9 +188,9 @@
 
 	
 <script language="JavaScript">
-	var msgDataError = '<digi:trn>Data error</digi:trn>';
-	var msgLoading	 = '<digi:trn>Loading...</digi:trn>';
-	var noData 		 = '<digi:trn>No Records found</digi:trn>';
+	var msgDataError = '<digi:trn jsFriendly="true">Data error</digi:trn>';
+	var msgLoading	 = '<digi:trn jsFriendly="true">Loading...</digi:trn>';
+	var noData 		 = '<digi:trn jsFriendly="true">No Records found</digi:trn>';
 	
 	YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 		function initDynamicTable1() {	
@@ -199,8 +199,8 @@
 
 		    	this.formatActions = function(elCell, oRecord, oColumn, sData) {
 		        	elCell.innerHTML =
-		        		"<a href=/aim/addressBook.do?actionType=editContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Edit Contact</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-		            	"<a onclick='return confirmDelete()' href=/aim/addressBook.do?actionType=deleteContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Delete Contact</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>" 		        	
+		        		"<a href=/aim/addressBook.do?actionType=editContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn jsFriendly="true">Click here to Edit Contact</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+		            	"<a onclick='return confirmDelete()' href=/aim/addressBook.do?actionType=deleteContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn jsFriendly="true">Click here to Delete Contact</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>" 		        	
 			        	
 		        };		        
 		        
@@ -377,7 +377,7 @@
 	}
 
 	function confirmDelete(){
-		var msg='<digi:trn>Are you sure you want to delete contact ?</digi:trn>';
+		var msg='<digi:trn jsFriendly="true">Are you sure you want to delete contact ?</digi:trn>';
 		return confirm(msg);
 	}
 
@@ -441,7 +441,7 @@
 	</li>
 	<li>
 	<a href="${contextPath}/aim/addressBook.do?actionType=addContact">
-	<div title='<digi:trn>Add New Contact</digi:trn>'>
+	<div title='<digi:trn jsFriendly="true">Add New Contact</digi:trn>'>
 		<digi:trn>Add New Contact</digi:trn>
 	</div>
 	</a>		

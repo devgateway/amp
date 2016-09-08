@@ -26,7 +26,7 @@
 	<tr bgcolor="#ffffff">
 		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC"
 			style="text-transform: uppercase;"><a
-			title='<digi:trn key="aim:PlannedArreartsmade">PLANNED ARREARS DESCRIPTION TEXT</digi:trn>'>
+			title='<digi:trn jsFriendly="true" key="aim:PlannedArreartsmade">PLANNED ARREARS DESCRIPTION TEXT</digi:trn>'>
 		<digi:trn key="aim:plannedarrears">Planned Arrears </digi:trn>
 		</a></td>
 		<td height="20" bgcolor="#FFFFCC" align="center">
@@ -68,7 +68,7 @@
 	<tr><td colspan="4" height="7px"></td></tr>
 	<tr>
 		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase">
-			<a title='<digi:trn key="aim:ActualArrearsmade">ACTUAL ARREARS DESCRIPTION</digi:trn>'>
+			<a title='<digi:trn jsFriendly="true" key="aim:ActualArrearsmade">ACTUAL ARREARS DESCRIPTION</digi:trn>'>
 				<digi:trn key="aim:actualArrears">Actual Arrears</digi:trn> 
 			</a>
 		</td>

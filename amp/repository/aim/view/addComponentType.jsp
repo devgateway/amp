@@ -10,7 +10,7 @@
 <script language="JavaScript">
 
 function onDelete() {
-  var flag = confirm('<digi:trn key="aim:deleteconfirm">Are you sure?</digi:trn>');
+  var flag = confirm('<digi:trn jsFriendly="true" key="aim:deleteconfirm">Are you sure?</digi:trn>');
   return flag;
 }
 
@@ -168,7 +168,7 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 											<td height="25" align="center" colspan="2">
 											<field:display name="Admin - Component Type Save Button" feature="Admin - Component Type">
 											  <input class="buttonx" id="addBtn" type="button"
-												value='<digi:trn key="btn:save">Save</digi:trn>'
+												value='<digi:trn jsFriendly="true" key="btn:save">Save</digi:trn>'
 												onClick="return updateComponentsType()">
 											</field:display>
 											<field:display name="Admin - Component Type Cancel Button" feature="Admin - Component Type">

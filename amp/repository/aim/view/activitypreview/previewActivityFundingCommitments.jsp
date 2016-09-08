@@ -26,7 +26,7 @@
 	<tr bgcolor="#ffffff">
 		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC"
 			style="text-transform: uppercase;"><a
-			title='<digi:trn key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
+			title='<digi:trn jsFriendly="true" key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
 		<digi:trn key="aim:plannedcommitments">Planned Commitments </digi:trn>
 		</a></td>
 		<td height="20" bgcolor="#FFFFCC" align="center">
@@ -68,7 +68,7 @@
 	<tr><td colspan="4" height="7px"></td></tr>
 	<tr>
 		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase">
-			<a title='<digi:trn key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
+			<a title='<digi:trn jsFriendly="true" key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
 			<digi:trn key="aim:actualcommitments">Actual Commitments </digi:trn> </a>
 		</td>
 		<td height="20" bgcolor="#FFFFCC" align="center">

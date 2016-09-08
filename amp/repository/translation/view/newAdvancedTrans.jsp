@@ -342,12 +342,12 @@ th {
 					$('div.msgGroupBodyClosed').slideUp();
 					$('div.msgGroupBodyOpened').slideDown();
 					$('img.imgGroupToggle').attr('src',imgMinus);
-					$('.expandColapse').attr({value:'<digi:trn>Collapse All</digi:trn>', title:'Colapse all translations'});
+					$('.expandColapse').attr({value:'<digi:trn jsFriendly="true">Collapse All</digi:trn>', title:'Colapse all translations'});
 				} else {
 					$('div.msgGroupBodyOpened').slideUp();
 					$('div.msgGroupBodyClosed').slideDown();
 					$('img.imgGroupToggle').attr('src',imgPlus);
-					$('.expandColapse').attr({value:'<digi:trn>Expand All</digi:trn>', title:'Expand all translations'});
+					$('.expandColapse').attr({value:'<digi:trn jsFriendly="true">Expand All</digi:trn>', title:'Expand all translations'});
 				}
 				$(this).toggleClass('toggle');
 			}
@@ -479,7 +479,7 @@ function showOnlyEnglishTRNs(){
 		$('#btnUndoSelected').click(function(){
 			var checkboxes = $('input.changedListItem:checked');
 			if (checkboxes!=null && checkboxes.length>0){
-				if (confirm('<digi:trn>Are you sure</digi:trn>?')){
+				if (confirm('<digi:trn jsFriendly="true">Are you sure</digi:trn>?')){
 					var changes = [];
 					checkboxes.each(function(index){
 						changes[changes.length]=$(this).val();

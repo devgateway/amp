@@ -12,7 +12,7 @@
 <script language="JavaScript">
 
 function onDelete() {
-  var flag = confirm('<digi:trn key="aim:deleteconfirm">Are you sure?</digi:trn>');
+  var flag = confirm('<digi:trn jsFriendly="true" key="aim:deleteconfirm">Are you sure?</digi:trn>');
   return flag;
 }
 
@@ -177,10 +177,10 @@ function closeWindow()
                                         <tr>
                                           <td bgColor=#dddddb height="25" align="center" colspan="2">
 											<field:display name="Admin - Component Save Button" feature="Admin - Component">
-                                            	<input class="dr-menu" id="addBtn" type="button" value='<digi:trn key="btn:save">Save</digi:trn>' onClick="return updateComponents('<bean:write name="aimUpdateComponentsForm" property="id"/>')">&nbsp;&nbsp;
+                                            	<input class="dr-menu" id="addBtn" type="button" value='<digi:trn jsFriendly="true" key="btn:save">Save</digi:trn>' onClick="return updateComponents('<bean:write name="aimUpdateComponentsForm" property="id"/>')">&nbsp;&nbsp;
 											</field:display>
 											<field:display name="Admin - Component Cancel Button" feature="Admin - Component">
-												<input type="button" value="<digi:trn key='btn:cancel'>Cancel</digi:trn>" styleClass="dr-menu" onclick="window.close();" />
+												<input type="button" value="<digi:trn jsFriendly="true" key='btn:cancel'>Cancel</digi:trn>" styleClass="dr-menu" onclick="window.close();" />
 											</field:display>
                                           </td>
                                         </tr>

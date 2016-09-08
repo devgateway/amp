@@ -114,7 +114,7 @@
 																		<td valign=top><input type="button"
 																			style="margin-top: 10px;" class="buttonx"
 																			name="addBtn"
-																			value='<digi:trn key="btn:save">Save</digi:trn>'
+																			value='<digi:trn jsFriendly="true" key="btn:save">Save</digi:trn>'
 																			onclick="updateScheme('<bean:write name="aimAddSectorForm" property="secSchemeId" />')" />
 																		<td>
 																	</tr>

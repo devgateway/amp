@@ -19,7 +19,7 @@
 <c:if test="${!empty funding.plannedDisbursementDetails}">
 	<tr bgcolor="#ffffff">
 		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase;">
-			<b><a title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
+			<b><a title='<digi:trn jsFriendly="true" key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
 	        	<digi:trn key="aim:planneddisbursements">Planned Disbursement</digi:trn>
 		    </a></b>
         </td>

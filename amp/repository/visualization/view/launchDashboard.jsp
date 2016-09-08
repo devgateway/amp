@@ -157,10 +157,10 @@ function initializeTranslations(){
 	trnExportOptions = '\n<digi:trn jsFriendly="true">Export Options</digi:trn>' 
 	trnAdvancedFilter = '\n<digi:trn jsFriendly="true">Advanced Filters</digi:trn>'; 
 	trnInstallFlash = '\n<digi:trn jsFriendly="true">Install Flash Plugin</digi:trn>'; 
-	trnCancel = '<digi:trn>Cancel</digi:trn>';
+	trnCancel = '<digi:trn jsFriendly="true">Cancel</digi:trn>';
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
-	trnLoading = '<digi:trn>Loading...</digi:trn>';
+	trnLoading = '<digi:trn jsFriendly="true">Loading...</digi:trn>';
 	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";

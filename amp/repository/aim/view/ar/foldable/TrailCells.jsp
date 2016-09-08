@@ -38,7 +38,7 @@
                 name="<bean:write name="reportData" property="absoluteReportNameMD5"/>"
                 style="cursor:pointer" src="img_2/ico_plus.gif" alt='hidden' 
              	onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportNameMD5"/>&quot;).depthRelatVar='${depthRelatVar}';toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportNameMD5"/>&quot;)" 
-                title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' 
+                title='<digi:trn jsFriendly="true" key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' 
                border="0"/>
           	</div>
          </c:if>

@@ -259,7 +259,7 @@
 		 
 	 }
 	 YAHOO.amptab.initPanels	= function () {
-			var msg='\n<digi:trn>Export Indicator Layer Table</digi:trn>';
+			var msg='\n<digi:trn jsFriendly="true">Export Indicator Layer Table</digi:trn>';
 			myPanelExport.setHeader(msg);
 			myPanelExport.setBody("Example");
 			myPanelExport.render(document.body);

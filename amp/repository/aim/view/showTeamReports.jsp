@@ -17,6 +17,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
+<%@ page import="org.dgfoundation.amp.ar.ArConstants" %>
 
 
 <!-- this is for the nice tooltip widgets -->
@@ -477,9 +478,13 @@ $(document).ready(function() {
 							</td>
 							<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
 								<c:if test="${!aimTeamReportsForm.showTabs}">
+									<% if (report.getType()!=null && report.getType().equals((long) ArConstants.REGIONAL_TYPE)){ %>
+									<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
+									<% } else { %>
 									<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
+									<% } %>
 									<!-- link to the report under the Legacy engine
-										left here for historical and/or debug reasons
+										left here for debug reasons
 										/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=REPORT_ID
 	 								-->
 									<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">

@@ -395,8 +395,8 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 */
 	protected boolean fundingFiltersIds() {
 		return filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME) // there is any predicate operating on Funding 
-				|| 
-			filters.getFilteringColumns().stream().anyMatch(z -> schema.getColumns().get(z).isTransactionLevelHierarchy()); // we are filtering on a transaction-level hierarchy
+				|| (!spec.getHierarchies().isEmpty() &&  // or report has hierarchies and we are filtering on a transaction-level hierarchy
+			filters.getFilteringColumns().stream().anyMatch(z -> schema.getColumns().get(z).isTransactionLevelHierarchy()));
 	}
 	
 	/**

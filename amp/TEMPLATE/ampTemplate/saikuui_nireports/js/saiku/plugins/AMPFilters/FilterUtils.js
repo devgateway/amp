@@ -6,8 +6,6 @@ FilterUtils.parseValue = function(elem, v) {
 	return {id: v, name: theName};
 };
 
-
-
 //TODO: move to CommonFilterUtils.js and merge with the same function on Tabs.
 FilterUtils.extractFilters = function(content) {
 	Saiku.logger.log("FilterUtils.extractFilters");
@@ -55,18 +53,15 @@ FilterUtils.extractFilters = function(content) {
 			_.each(content,function(item, i) {
 				//for now only true or false were asked to be translated. 
 				//Avoid doing a ajax call for all values if we only need 2.
-				item.trnName = TranslationManager.getTranslated(item.name);
-//				if (item.name === "true" || item.name === "false") {
-//					
-//				 }
-//				else {
-//					item.trnName = item.name;
-//				}
+				if (item.name === "true" || item.name === "false") {
+					item.trnName = TranslationManager.getTranslated(item.name);
+				 }
+				else {
+					item.trnName = item.name;
+				}
 			});
 			var auxFilter = {
-//				trnName : item/*TranslationManager.getTranslated(item)*/,
 				trnName : TranslationManager.getTranslated(item),
-//				trnName : Saiku.i18n.translate(item),
 				name: item,
 				values : content
 			};
@@ -102,7 +97,6 @@ FilterUtils.extractFilters = function(content) {
 				});
 			}
 			var auxFilter = {
-//				trnName : item/*TranslationManager.getTranslated(item)*/,
 				trnName : TranslationManager.getTranslated(item),
 				name: item,
 				values : content
@@ -110,22 +104,5 @@ FilterUtils.extractFilters = function(content) {
 			filters.push(auxFilter);
 		}
 	});
-	
-	/* We dont need it for now, TODO: merge with tabs code because is the same logic.
-	//Process filters that dont come inside the previous categories (ie: computed year).
-	if (content.computedYear) {
-		var values = [];
-		values.push({
-			id : content.computedYear,
-			name : content.computedYear
-		});
-		var auxFilter = new Filter({
-			trnName : TranslationManager.getTranslated('Computed Year'),
-			name: 'computedYear',
-			values : values
-		}); 
-		filters.add(auxFilter);
-	}*/
-	
 	return filters;
 };

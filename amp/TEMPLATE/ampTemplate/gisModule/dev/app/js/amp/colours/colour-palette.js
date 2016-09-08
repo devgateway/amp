@@ -96,8 +96,10 @@ var Palette = Backbone.Model.extend({
 
   generateRange: function() {
     var stops = this.get('stops');
-    var buckets = this.get('values').length > stops?
-        Jenks.getGVF(this.get('values'), stops):
+    //exclude null values that break Jenks.getGVF
+    var values = _.reject(this.get('values'), function(value){ return value.value == null; });
+    var buckets = values.length > stops?
+        Jenks.getGVF(values, stops):
         niceBuckets.minFigs(stops, [this.get('min'), this.get('max')]);
     var stopSize = stops > 1 ? stops: 1;
     var newColours = [],

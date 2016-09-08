@@ -119,11 +119,14 @@ public class AmpReportFiltersConverter {
 		addFilter(ColumnConstants.REGION, AmpCategoryValueLocations.class, "locationSelected", false);
 		addFilter(ColumnConstants.ZONE, AmpCategoryValueLocations.class, "locationSelected", false);
 		
-		// Other fields.
+		// Financial section.
 		addFilter(ColumnConstants.FINANCING_INSTRUMENT, AmpCategoryValue.class, "financingInstruments", true);
 		addFilter(ColumnConstants.TYPE_OF_ASSISTANCE, AmpCategoryValue.class, "typeOfAssistance", true);
 		addFilter(ColumnConstants.ON_OFF_TREASURY_BUDGET, AmpCategoryValue.class, "budget", true);
 		addFilter(ColumnConstants.WORKSPACES, AmpTeam.class, "workspaces", true);
+		
+		// Other section.
+		addFilter(ColumnConstants.HUMANITARIAN_AID, Integer.class, "humanitarianAid", true);
 				
 		this.ampARFilter.setComputedYear(this.filters.getComputedYear());
 		
@@ -168,11 +171,13 @@ public class AmpReportFiltersConverter {
 							Iterator<String> iValues = auxFilterRule.values.iterator();
 							while (iValues.hasNext()) {
 								String auxValue = iValues.next();
-								if (!ampARFilterFieldClass.toString().equals("class java.lang.String")) {
-									Object auxEntity = session.load(ampARFilterFieldClass, new Long(auxValue));
-									values.add(auxEntity);
-								} else {
+								if (ampARFilterFieldClass.toString().equals("class java.lang.String")) {
 									values.add(auxValue);
+								} else if (ampARFilterFieldClass.toString().equals("class java.lang.Integer")) {
+									values.add(Integer.valueOf(auxValue));
+								} else {
+									Object auxEntity = session.load(ampARFilterFieldClass, new Long(auxValue));
+									values.add(auxEntity);	
 								}
 							}
 						}

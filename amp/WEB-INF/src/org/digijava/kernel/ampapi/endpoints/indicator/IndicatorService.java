@@ -163,7 +163,7 @@ public class IndicatorService {
                 errors.addApiErrorMessage(IndicatorErrors.EXISTING_NAME, indLayer.getName());
             }
             boolean isAuthenticated = MenuUtils.getCurrentView() != AmpView.PUBLIC;
-            if (isAuthenticated && indLayer.getAccessType() != IndicatorAccessType.TEMPORARY) {
+            if (isAuthenticated && indLayer.getAccessType() == IndicatorAccessType.TEMPORARY) {
                 errors.addApiErrorMessage(IndicatorErrors.FIELD_INVALID_VALUE, 
                         IndicatorEPConstants.ACCESS_TYPE_ID + " = " + indicator.get(IndicatorEPConstants.ACCESS_TYPE_ID));
             }

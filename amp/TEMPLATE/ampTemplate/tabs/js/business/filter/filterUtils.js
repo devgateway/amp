@@ -1,4 +1,4 @@
-define([ 'models/filter', 'collections/filters', 'business/translations/translationManager', 'jquery' ], function(Filter, Filters, TranslationManager, jQuery) {
+define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' ], function(Filter, Filters, TranslationManager, jQuery) {
 
 	"use strict";
 

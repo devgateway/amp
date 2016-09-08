@@ -1,5 +1,5 @@
 define([ 'marionette', 'models/document', 'collections/documents',
-		'text!views/html/desktopResourcesContainerTemplate.html', 'business/translations/translationManager',
+		'text!views/html/desktopResourcesContainerTemplate.html', 'translationManager',
 		'text!views/html/documentTemplate.html', 'jquery', 'jqueryui' ], function(Marionette, Document, Documents,
 		desktopResourcesContainerTemplate, TranslationManager, documentTemplate, jQuery) {
 

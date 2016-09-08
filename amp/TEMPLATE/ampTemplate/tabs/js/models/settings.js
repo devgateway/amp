@@ -1,4 +1,4 @@
-define([ 'underscore', 'backbone', 'business/translations/translationManager' ], function(_, Backbone, TranslationManager) {
+define([ 'underscore', 'backbone', 'translationManager' ], function(_, Backbone, TranslationManager) {
 
 	var Settings = Backbone.Model.extend({
 		url : '/rest/amp/settings',

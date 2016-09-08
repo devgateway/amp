@@ -3,7 +3,7 @@
 
 define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html',
 		'text!views/html/filtersItemTemplate.html', 'models/tab', 'text!views/html/invisibleTabLinkTemplate.html',
-		'text!views/html/legendsTemplate.html', 'business/grid/gridManager', 'business/translations/translationManager',
+		'text!views/html/legendsTemplate.html', 'business/grid/gridManager', 'translationManager',
 		'business/filter/filterUtils', 'util/tabUtils', 'jquery', 'jqueryui' ,'models/settings'], function(Marionette, Content, Legend, DynamicContentView,
 		filtersTemplate, filtersItemTemplate, Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager, TranslationManager, FilterUtils,
 		TabUtils, jQuery, Settings) {
@@ -43,6 +43,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 
 			// --------------------------------------------------------------------------------------//
 			// TODO: Move filters section elsewhere.
+			//llk
 			// Create collection of Filters used for legends.
 			app.TabsApp.filters = FilterUtils.extractFilters(firstContent.get('reportMetadata').get('reportSpec').get('filters'));
 			// Variable to save the current serialized filters from widget.

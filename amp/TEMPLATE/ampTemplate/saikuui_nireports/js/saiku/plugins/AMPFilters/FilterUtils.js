@@ -6,6 +6,8 @@ FilterUtils.parseValue = function(elem, v) {
 	return {id: v, name: theName};
 };
 
+
+
 //TODO: move to CommonFilterUtils.js and merge with the same function on Tabs.
 FilterUtils.extractFilters = function(content) {
 	Saiku.logger.log("FilterUtils.extractFilters");
@@ -53,15 +55,18 @@ FilterUtils.extractFilters = function(content) {
 			_.each(content,function(item, i) {
 				//for now only true or false were asked to be translated. 
 				//Avoid doing a ajax call for all values if we only need 2.
-				if (item.name === "true" || item.name === "false") {
-					item.trnName = item.name/*TranslationManager.getTranslated(item.name)*/;
-				 }
-				else {
-					item.trnName = item.name;
-				}
+				item.trnName = TranslationManager.getTranslated(item.name);
+//				if (item.name === "true" || item.name === "false") {
+//					
+//				 }
+//				else {
+//					item.trnName = item.name;
+//				}
 			});
 			var auxFilter = {
-				trnName : item/*TranslationManager.getTranslated(item)*/,
+//				trnName : item/*TranslationManager.getTranslated(item)*/,
+				trnName : TranslationManager.getTranslated(item),
+//				trnName : Saiku.i18n.translate(item),
 				name: item,
 				values : content
 			};
@@ -97,7 +102,8 @@ FilterUtils.extractFilters = function(content) {
 				});
 			}
 			var auxFilter = {
-				trnName : item/*TranslationManager.getTranslated(item)*/,
+//				trnName : item/*TranslationManager.getTranslated(item)*/,
+				trnName : TranslationManager.getTranslated(item),
 				name: item,
 				values : content
 			};

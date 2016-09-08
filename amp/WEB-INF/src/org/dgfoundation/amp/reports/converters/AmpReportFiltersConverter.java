@@ -127,6 +127,7 @@ public class AmpReportFiltersConverter {
 		
 		// Other section.
 		addFilter(ColumnConstants.HUMANITARIAN_AID, Integer.class, "humanitarianAid", true);
+		addFilter(ColumnConstants.DISASTER_RESPONSE_MARKER, Integer.class, "disasterResponse", true);
 				
 		this.ampARFilter.setComputedYear(this.filters.getComputedYear());
 		

@@ -21,13 +21,24 @@ module.exports = Backbone.View.extend({
       
       self.listenTo(self.app.data.indicators, 'applyFilter', self.refreshGapLayer);
       self.listenTo(self.app.data.indicators, 'applySettings', self.refreshGapLayer);
-            
+      self.listenTo(self.app.data.indicators, 'reset', self.clearLayers);        
       self.listenTo(self.app.data.hilightFundingCollection, 'show', self.refreshLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'hide', self.hideLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'sync', self.refreshLayer);
     });
   },
-  
+  // clears applied layers from the map when gis sidebar is refreshed
+  clearLayers: function(){	 
+	  var self = this;
+	  var layerIds = _.keys(this.leafletLayerMap);
+	  _.each(layerIds, function(cid){
+		  var layer = self.leafletLayerMap[cid];
+		  if(!_.isUndefined(layer)){
+			  self.map.removeLayer(layer);			   
+		  }		
+		  delete self.leafletLayerMap[cid];
+	  });	  
+  },
   refreshGapLayer: function(layer) {
 	if (layer.get('selected')) {
 		layer._changing = true;

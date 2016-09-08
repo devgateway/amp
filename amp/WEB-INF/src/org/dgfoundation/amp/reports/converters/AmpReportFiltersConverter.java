@@ -20,6 +20,7 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -111,6 +112,12 @@ public class AmpReportFiltersConverter {
 		// Activity section.
 		addFilter(ColumnConstants.STATUS, AmpCategoryValue.class, "statuses", true);
 		addFilter(ColumnConstants.APPROVAL_STATUS, String.class, "approvalStatusSelected", true);
+		
+		// Location section.
+		addFilter(ColumnConstants.COUNTRY, AmpCategoryValueLocations.class, "locationSelected", true);
+		addFilter(ColumnConstants.DISTRICT, AmpCategoryValueLocations.class, "locationSelected", false);
+		addFilter(ColumnConstants.REGION, AmpCategoryValueLocations.class, "locationSelected", false);
+		addFilter(ColumnConstants.ZONE, AmpCategoryValueLocations.class, "locationSelected", false);
 		
 		// Other fields.
 		addFilter(ColumnConstants.FINANCING_INSTRUMENT, AmpCategoryValue.class, "financingInstruments", true);

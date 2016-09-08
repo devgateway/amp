@@ -50,7 +50,8 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			// Save default sorters if any.
 			app.TabsApp.currentSorting = FilterUtils.extractSorters(firstContent.get('reportMetadata').get('reportSpec').get('sorters'), 
 					firstContent.get('reportMetadata').get('reportSpec').get('columns'),
-					firstContent.get('reportMetadata').get('reportSpec').get('measures'));
+					firstContent.get('reportMetadata').get('reportSpec').get('measures'),
+					firstContent.get('reportMetadata').get('reportSpec').get('hierarchies'));
 			// Define the views.
 			var FilterItemView = Marionette.ItemView.extend({
 				tagName : 'div',

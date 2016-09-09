@@ -105,7 +105,7 @@ public class HeatMapConfigs {
         if (columnsIndexes.size() == 0) return null;
         hmJson.set(DashboardConstants.Y_COLUMNS, columnsIndexes);
         
-        hmJson.set(EPConstants.NAME, TranslatorWorker.translateText(hmConfig.name));
+        hmJson.set(EPConstants.NAME, hmConfig.name);
         hmJson.set(EPConstants.TYPE, hmConfig.type.toString());
         
         return hmJson;

@@ -3,7 +3,9 @@ package org.dgfoundation.amp.reports.converters;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -25,7 +27,10 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
 
 /**
@@ -133,10 +138,11 @@ public class AmpReportFiltersConverter {
 		// Other section.
 		addFilter(ColumnConstants.HUMANITARIAN_AID, Integer.class, "humanitarianAid", true);
 		addFilter(ColumnConstants.DISASTER_RESPONSE_MARKER, Integer.class, "disasterResponse", true);
-				
+		addDateRangeFilter(ColumnConstants.ACTUAL_START_DATE, "fromActivityStartDate", "toActivityStartDate");
+		addDateRangeFilter(ColumnConstants.PROPOSED_START_DATE, "fromProposedApprovalDate", "toProposedApprovalDate");
+		addDateRangeFilter(ColumnConstants.ACTUAL_COMPLETION_DATE, "fromActivityActualCompletionDate", "toActivityActualCompletionDate");
 		this.ampARFilter.setComputedYear(this.filters.getComputedYear());
 		
-		// System.out.println(this.ampARFilter.toString());
 		return this.ampARFilter;
 	}
 
@@ -181,6 +187,8 @@ public class AmpReportFiltersConverter {
 									values.add(auxValue);
 								} else if (ampARFilterFieldClass.toString().equals("class java.lang.Integer")) {
 									values.add(Integer.valueOf(auxValue));
+								} else if (ampARFilterFieldClass.toString().equals("class java.lang.Double")) {
+									values.add(Double.valueOf(auxValue));
 								} else {
 									Object auxEntity = session.load(ampARFilterFieldClass, new Long(auxValue));
 									values.add(auxEntity);	
@@ -220,6 +228,27 @@ public class AmpReportFiltersConverter {
 		}
 	}
 
+	private void addDateRangeFilter(String mondrianFilterColumnName, String fromMethod, String toMethod) {
+		try {
+			Method setterFromMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(fromMethod), java.lang.String.class);
+			Method setterToMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(toMethod), java.lang.String.class);			
+			SimpleDateFormat originalFormat = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
+			List<FilterRule> filterRules = this.filters.getAllFilterRules().get(new ReportElement(new ReportColumn(mondrianFilterColumnName)));
+			if (filterRules != null) {
+				FilterRule auxFilterRule = (FilterRule) filterRules.toArray()[0];
+				String fromDate = originalFormat.format(DateTimeUtil.fromJulianNumberToDate(auxFilterRule.min));
+				String toDate = originalFormat.format(DateTimeUtil.fromJulianNumberToDate(auxFilterRule.max));
+
+				// Use reflection to call the setter.
+				setterFromMethod.invoke(this.ampARFilter, fromDate);
+				setterToMethod.invoke(this.ampARFilter, toDate);
+				logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + fromDate + " / " + toDate);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+	}
+	
 	/**
 	 * Merge all fields that have not been populated in the build process.
 	 * 

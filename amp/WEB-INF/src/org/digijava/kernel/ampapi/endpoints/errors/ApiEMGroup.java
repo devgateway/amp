@@ -19,6 +19,15 @@ public class ApiEMGroup {
 	public ApiEMGroup() {
 	}
 	
+	public void add(ApiEMGroup anotherErrors) {
+	    for (ApiErrorMessage em: anotherErrors.getAllErrors()) {
+	        if (errorGroups.containsKey(em.id)) {
+	            em = new ApiErrorMessage(errorGroups.get(em.id), em.value);
+	        }
+	        errorGroups.put(em.id, em);
+	    }
+	}
+	
 	public Collection<ApiErrorMessage> getAllErrors() {
 		return errorGroups.values();
 	}

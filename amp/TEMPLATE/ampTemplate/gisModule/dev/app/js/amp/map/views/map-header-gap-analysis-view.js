@@ -41,6 +41,7 @@ module.exports = Backbone.View.extend({
   },
   
   refresh: function(model_) {
+	  //debugger
 	  if (model_.get('type') === "Indicator Layers" || model_.get('type') === "joinBoundaries") {
 		  this.model.set('isGapAnalysisAvailable', model_.get('canDoGapAnalysis') && model_.get('selected'));
 		  this.render();

@@ -11,6 +11,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.currency.Currencies;
 import org.digijava.kernel.ampapi.endpoints.dashboards.EndPoints;
+import org.digijava.kernel.ampapi.endpoints.gis.GisEndPoints;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEndPoints;
 import org.digijava.kernel.ampapi.endpoints.reports.Reports;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
@@ -43,6 +44,7 @@ public class ApiError {
         put(Currencies.class.getName(), 4);
         put(EndPoints.class.getName(), 5);
         put(IndicatorEndPoints.class.getName(), 6);
+        put(GisEndPoints.class.getName(), 7);
 	}};
 	
 	/**
@@ -56,6 +58,16 @@ public class ApiError {
 		
 		return getResultErrorBean(errorBean);
 	};
+	
+	/**
+	 * Builds a JSON with all errors stored in this group. 
+	 * @param errorsGroup
+	 * @return
+	 * @see {@link #toError(Collection)}
+	 */
+	public static JsonBean toError(ApiEMGroup errorsGroup) {
+	    return toError(errorsGroup.getAllErrors());
+	}
 	
 	/**
 	 * Returns a JSON object with list of error messages

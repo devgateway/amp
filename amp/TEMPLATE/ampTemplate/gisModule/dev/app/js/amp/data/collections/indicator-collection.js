@@ -54,7 +54,15 @@ module.exports = Backbone.Collection.extend({
 	  if(this.url === '/rest/gis/indicators'){
 		  IndicatorLayerLocalStorage.cleanUp();
 		  var layers = IndicatorLayerLocalStorage.findAll();	  
-		  layers.forEach(function(localLayer){			  
+		  layers.forEach(function(localLayer){
+			  // Here we check if this local indicator can do gap analysis or not.
+			  $.ajax({
+				  url: '/rest/gis/can-do-gap-analysis', 
+				  async: false, 
+				  data: {indicatorTypeId: localLayer.indicatorTypeId, admLevelId: localLayer.admLevelId} })
+			  .done(function(data) {
+				  localLayer.canDoGapAnalysis = data.canDoGapAnalysis;
+			  });			  
 			  data.push(localLayer);
 		  });
 	  }	  
@@ -82,9 +90,10 @@ module.exports = Backbone.Collection.extend({
     	   layer.unit = self.getMultilangString(layer,'unit');
     	 });   	 
         layer.type = 'joinBoundaries';
-        layer.adminLevel = self._magicConversion(layer.admLevelId);
+        //debugger
+        layer.adminLevel = self._magicConversion(layer.admLevelName);
         layer.tooltip = self._createTooltip(layer); 
-        layer.classes = layer.numberOfClasses;
+        layer.classes = layer.numberOfClasses;        
         return true;
       }
 

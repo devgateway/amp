@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -70,6 +71,8 @@ public class IndicatorUtils {
         indicatorJson.set(IndicatorEPConstants.UNIT, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
         indicatorJson.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
+        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
+        indicatorJson.set(IndicatorEPConstants.ADM_X, getAdmX(indicator));
         indicatorJson.set(IndicatorEPConstants.IS_POPULATION, indicator.isPopulation());
         indicatorJson.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : 
             indicator.getIndicatorType().getId());
@@ -112,7 +115,8 @@ public class IndicatorUtils {
     public static JsonBean buildSerializedIndicatorLayerJson(AmpIndicatorLayer indicator, JsonBean indicatorJson) {
 
         indicatorJson.set(IndicatorEPConstants.ID, (long) System.identityHashCode(indicator));
-        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getValue());
+        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
+        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getValue());
         indicatorJson.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
 
         if (indicator.getColorRamp() != null) {
@@ -145,6 +149,7 @@ public class IndicatorUtils {
         indicatorValueJson.set(IndicatorEPConstants.VALUE, indicatorValue.getValue());
         indicatorValueJson.set(IndicatorEPConstants.GEO_CODE_ID, indicatorValue.getLocation().getGeoCode());
         indicatorValueJson.set(IndicatorEPConstants.NAME, indicatorValue.getLocation().getName());
+        indicatorValueJson.set(IndicatorEPConstants.ID, indicatorValue.getLocation().getId());
 
         return indicatorValueJson;
     }
@@ -259,6 +264,12 @@ public class IndicatorUtils {
         if (indicator == null) {
             return ApiError.toError(new ApiErrorMessage(IndicatorErrors.INVALID_ID, String.valueOf(indicatorId)));
         }
+        return getIndicatorsAndLocationValues(indicator, input, isGapAnalysis);
+    }
+    
+    public static JsonBean getIndicatorsAndLocationValues(AmpIndicatorLayer indicator, JsonBean input, 
+            boolean isGapAnalysis) {
+     
         GapAnalysis gapAnalysis = isGapAnalysis ? new GapAnalysis(indicator, input) : null;
         boolean doingGapAnalysis = gapAnalysis != null && gapAnalysis.isReadyForGapAnalysis();
         if (doingGapAnalysis) {
@@ -275,11 +286,14 @@ public class IndicatorUtils {
         // build general indicator info
         JsonBean response = new JsonBean();
         response.set(EPConstants.NAME, indicator.getName());
+        // TODO: unify Indicator Layers and GIS API, use FIELD_NUMBER_OF_CLASSES
         response.set("classes", indicator.getNumberOfClasses());
-        response.set("id", indicator.getId());
-        response.set("unit", unit);
-        response.set("description", indicator.getDescription());
-        response.set("admLevelId", indicator.getAdmLevel().getLabel());
+        response.set(IndicatorEPConstants.ID, indicator.getId());
+        response.set(IndicatorEPConstants.UNIT, unit);
+        response.set(IndicatorEPConstants.DESCRIPTION, indicator.getDescription());
+        response.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
+        response.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
+        response.set(IndicatorEPConstants.DO_GAP_ANALYSIS, doingGapAnalysis);
         response.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
         
         // build locations values
@@ -291,13 +305,24 @@ public class IndicatorUtils {
             if (doingGapAnalysis) {
                 value = gapAnalysis.getGapAnalysisAmount(value, geoCode);
             }
-            object.set("value", value);
-            object.set("geoId", geoCode);
-            object.set("name", locIndValue.getLocation().getName());
+            object.set(IndicatorEPConstants.ID, locIndValue.getLocation().getId());
+            object.set(IndicatorEPConstants.VALUE, value);
+            object.set(IndicatorEPConstants.GEO_CODE_ID, geoCode);
+            object.set(IndicatorEPConstants.NAME, locIndValue.getLocation().getName());
             
             values.add(object);
         }
-        response.set("values", values);
+        response.set(IndicatorEPConstants.VALUES, values);
         return response;
+    }
+    
+    /**
+     * Find the corresponding adm-0, adm-1, etc for the selected implementation location
+     * @param indicator the indicator
+     * @return the corresponding adm-x 
+     */
+    public static String getAdmX(AmpIndicatorLayer indicator) {
+        String implementationLocation = indicator.getAdmLevel() == null ? null : indicator.getAdmLevel().getValue();
+        return GisConstants.IMPL_CATEGORY_VALUE_TO_ADM.get(implementationLocation);
     }
 }

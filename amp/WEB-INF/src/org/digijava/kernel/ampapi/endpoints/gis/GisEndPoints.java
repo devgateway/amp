@@ -42,6 +42,7 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
@@ -356,7 +357,7 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "IndicatorById")
 	public JsonBean getIndicatorsById(JsonBean input, @PathParam ("indicatorId") Long indicatorId) {
-		boolean isGapAnalysis = Boolean.valueOf(input.get("gapAnalysis").toString());
+		boolean isGapAnalysis = EndpointUtils.getSingleValue(input, IndicatorEPConstants.DO_GAP_ANALYSIS, Boolean.FALSE);
 	    return IndicatorUtils.getIndicatorsAndLocationValues(indicatorId, input, isGapAnalysis);
 	}
 	
@@ -372,7 +373,8 @@ public class GisEndPoints {
             json.set(IndicatorEPConstants.UNIT, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
 			json.set(IndicatorEPConstants.ID, indicator.getId());
 			if (includeAdmLevel) {
-				json.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getLabel());
+				json.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
+				json.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
 			}
             json.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
             json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
@@ -404,6 +406,67 @@ public class GisEndPoints {
 		}
 		return indicatorsJson;
 	}
+	
+	/**
+	 * Clarifies if Gap Analysis can be done over for the indicator layer based on its indicator Type and ADM level
+	 * @param indicatorTypeId the indicator type id
+	 * @param admLevel administrative level id
+	 * @return <pre>
+	 * {
+	 *     "canDoGapAnalysis": true/false
+	 *     "error" : {...} // OPTIONAL, on invalid input/other errors   
+	 * }
+	 * </pre>
+	 * 
+	 */
+	@GET
+    @Path("/can-do-gap-analysis")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "canDoGapAnalysis")
+    public JsonBean canDoGapAnalysis(@QueryParam("indicatorTypeId") Long indicatorTypeId, 
+            @QueryParam("admLevelId") Long admLevelId) {
+	    return new PublicGapAnalysis().canDoGapAnalysis(indicatorTypeId, admLevelId);
+    }
+	
+	/**
+	 * Runs Gap Analysis directly over external indicator data, not from DB. 
+	 * For saved indicators Gap Analysis see {@link #getIndicatorsById(JsonBean, Long)} 
+	 * @param input
+	 * <pre>
+	 * {
+	 *   "indicator" : {...}, // full indicator data, like the one that is used for saving
+	 *   "filters" : {...}, // current filters
+	 *   "settings" : {...} // current settings if any
+	 * }
+	 * </pre>
+	 * @return
+	 */
+	@POST
+    @Path("/do-gap-analysis")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "doGapAnalysis")
+    public JsonBean doGapAnalysis(JsonBean input) {
+		return new PublicGapAnalysis().doPublicGapAnalysis(input);
+    }
+	
+	/**
+	 * Just returns the same data so the GIS code doesnt break with public layers. 
+	 * @param input
+	 * <pre>
+	 * {
+	 *   "indicator" : {...}, // full indicator data, like the one that is used for saving
+	 * }
+	 * </pre>
+	 * @return
+	 */
+	@POST
+    @Path("/process-public-layer")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "processPublicLayer")
+    public JsonBean processPublicLayer(JsonBean input) {
+		// Due to problems on the frontend for now we receive the public layer data and if there is no gap analysis then we return it without changes.
+		return input;
+    }	 
 	
 	/**
 	 * Export map id from current filters

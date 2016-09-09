@@ -178,7 +178,7 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	 * @return
 	 */
 	public TrivialMeasureBehaviour byMeasureDividingBehaviour(TimeRange tr, String measureName) {
-		return new TrivialMeasureBehaviour(tr, TrivialMeasureBehaviour.buildMeasureTotalDivider(measureName));
+		return new TrivialMeasureBehaviour(tr, TrivialMeasureBehaviour.buildMeasureTotalDivider(measureName), false);
 	}
 	
 	/**

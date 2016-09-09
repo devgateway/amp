@@ -47,6 +47,7 @@ module.exports = Backbone.Model
       var colorHex = this.get('colorRamp')[0].color; //choose last or first colour from ramp.
       this.palette.set('rootHue', husl.fromHex(colorHex)[0]);//Math.floor(seedrandom(options.seed)() * 360));
     }
+        
   },
 
   loadBoundary: function() {
@@ -83,34 +84,53 @@ module.exports = Backbone.Model
     });
   },
   
-  fetch: function(){
+  fetch: function(){	
 	  var self = this;
-	  var deferred = new jQuery.Deferred();
+	  	  
+	  var filter = {otherFilters: {}};
+	  if (app.data.filter) {
+		  _.extend(filter, app.data.filter.serialize());
+	  }
+	  var settings = app.data.settings.serialize();	  	  
+	  
 	  if(this.attributes.isStoredInLocalStorage === true){		  
+		  IndicatorLayerLocalStorage.cleanUp();
 		  var layer = IndicatorLayerLocalStorage.findById(this.attributes.id);
 		  if(!_.isUndefined(layer)){
-			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);
-			  deferred.resolve(layer);
+			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);			  
+			  var params = {};
+			  params.type = 'POST';
+			  if (app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected')) {
+				// If Gap analysis selected we call the EP to reprocess the local data.
+				  this.url = '/rest/gis/do-gap-analysis';
+				  params.data = {indicator: layer, settings: settings, isGapAnalysis: true};
+				  params.data = JSON.stringify(_.extend(params.data, filter));
+			  } else {
+				  // If gap analysis is NOT selected then we send the data from localStorage anyway, the EP will return it without changes.
+				  // This is needed because after the gap analysis is selected we cant render again the original public layer.				  
+				  this.url = '/rest/gis/process-public-layer';
+				  layer.unit = (layer.unit instanceof Object) ? Object.keys(layer.unit)[0] : layer.unit; // Needed preprocess for popups.
+				  params.data = JSON.stringify(layer);
+			  }			  
+			  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
+			  return this.lastFetchXhr;				  
+		  } else {
+			  console.error('Invalid layer.');
 		  }
 	  } else {
 		// By adding this section here in fetch we are sure any call made over /rest/indicators/id will have the right parameters without duplicating code.  
 		if (this.lastFetchXhr && this.lastFetchXhr.readyState > this.readyStateNotInitialized && this.lastFetchXhr.readyState < this.readyStateResponseReady) {
 			return this.lastFetchXhr.abort();
 		}
-		var filter = {otherFilters: {}};
-	    if (app.data.filter) {
-	      _.extend(filter, app.data.filter.serialize());
-	    }
-	    filter.settings = app.data.settings.serialize();
-	    var params = {};
-	    filter.gapAnalysis = app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected');
+		filter.gapAnalysis = app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected');
+		filter.settings = settings;
+		var params = {};
 	    params.type = 'POST';
 	    params.data = JSON.stringify(filter);
 	    // "params" will set the right type + filters + settings + gap analysis.
 	    this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
 	    return this.lastFetchXhr;
-	  }
-	  return deferred.promise();	  
+	  }	  
   },
     
   updatePaletteRange: function() {

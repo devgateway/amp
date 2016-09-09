@@ -181,7 +181,7 @@ public class EndPoints {
 	 *                  ],
 	 *     “charts” : [{
 	 *                 “type” : “S”, // other options: “P”, “L”
-	 *                 “name” : “Fragmentation by Donor and Sector”,
+	 *                 “name” : “Fragmentation by Donor and Sector”, //name will be always in English, not traslated
 	 *                 “yColumns” : [0], xColumns : [1, 2, 3] // indexes ref of all used columns
 	 *                 }, ....],
 	 *     “amountColors” :  [ {0 : “#d05151”}, {1 : #e68787}, ...] // i.e. for values >= 1, use #e68787 color

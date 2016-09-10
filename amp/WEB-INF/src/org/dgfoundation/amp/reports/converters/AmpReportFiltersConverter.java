@@ -120,15 +120,17 @@ public class AmpReportFiltersConverter {
 		
 		// Location section.
 		addFilter(ColumnConstants.COUNTRY, AmpCategoryValueLocations.class, "locationSelected", true);
-		addFilter(ColumnConstants.DISTRICT, AmpCategoryValueLocations.class, "locationSelected", false);
-		addFilter(ColumnConstants.REGION, AmpCategoryValueLocations.class, "locationSelected", false);
+		addFilter(ColumnConstants.REGION, AmpCategoryValueLocations.class, "locationSelected", false);		
 		addFilter(ColumnConstants.ZONE, AmpCategoryValueLocations.class, "locationSelected", false);
+		addFilter(ColumnConstants.DISTRICT, AmpCategoryValueLocations.class, "locationSelected", false);				
 		
 		// Financial section.
 		addFilter(ColumnConstants.FINANCING_INSTRUMENT, AmpCategoryValue.class, "financingInstruments", true);
 		addFilter(ColumnConstants.TYPE_OF_ASSISTANCE, AmpCategoryValue.class, "typeOfAssistance", true);
 		addFilter(ColumnConstants.ON_OFF_TREASURY_BUDGET, AmpCategoryValue.class, "budget", true);
 		addFilter(ColumnConstants.WORKSPACES, AmpTeam.class, "workspaces", true);
+		addFilter(ColumnConstants.FUNDING_STATUS, AmpCategoryValue.class, "fundingStatus", true);
+		addFilter(ColumnConstants.MODE_OF_PAYMENT, AmpCategoryValue.class, "modeOfPayment", true);
 		
 		// Other section.
 		addFilter(ColumnConstants.HUMANITARIAN_AID, Integer.class, "humanitarianAid", true);

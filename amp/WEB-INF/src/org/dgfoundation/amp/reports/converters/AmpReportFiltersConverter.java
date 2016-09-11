@@ -136,8 +136,11 @@ public class AmpReportFiltersConverter {
 		addFilter(ColumnConstants.HUMANITARIAN_AID, Integer.class, "humanitarianAid", true);
 		addFilter(ColumnConstants.DISASTER_RESPONSE_MARKER, Integer.class, "disasterResponse", true);
 		addDateRangeFilter(ColumnConstants.ACTUAL_START_DATE, "fromActivityStartDate", "toActivityStartDate");
-		addDateRangeFilter(ColumnConstants.PROPOSED_START_DATE, "fromProposedApprovalDate", "toProposedApprovalDate");
+		addDateRangeFilter(ColumnConstants.PROPOSED_APPROVAL_DATE, "fromProposedApprovalDate", "toProposedApprovalDate");
 		addDateRangeFilter(ColumnConstants.ACTUAL_COMPLETION_DATE, "fromActivityActualCompletionDate", "toActivityActualCompletionDate");
+		addDateRangeFilter(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "fromActivityFinalContractingDate", "toActivityFinalContractingDate");
+		addDateRangeFilter(ColumnConstants.EFFECTIVE_FUNDING_DATE, "fromEffectiveFundingDate", "toEffectiveFundingDate");
+		addDateRangeFilter(ColumnConstants.FUNDING_CLOSING_DATE, "fromFundingClosingDate", "toFundingClosingDate");
 		this.ampARFilter.setComputedYear(this.filters.getComputedYear());
 		
 		return this.ampARFilter;

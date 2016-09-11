@@ -62,13 +62,19 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 			case 'On/Off/Treasury Budget':
 			case 'Zone':
 			case 'Region':
-			case 'District':
-			case 'Humanitarian Aid':
-			case 'Disaster Response Marker':
+			case 'District':						
 			case 'Expenditure Class':
 			case 'Donor Agency':
 				blob.columnFilters[item.name] = _.map(item.values, function(item_) {
 					return parseInt(item_.id);
+				});
+				break;
+			
+			// cases where the filter only accepts boolean values.
+			case 'Disaster Response Marker':
+			case 'Humanitarian Aid':
+				blob.columnFilters[item.name] = _.map(item.values, function(item_) {
+					return parseInt(item_);
 				});
 				break;
 	

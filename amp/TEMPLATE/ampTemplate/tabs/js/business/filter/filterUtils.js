@@ -58,6 +58,7 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 				} else if (element.get('valueToName') !== null) {
 					// This should be .models but the way the endpoint returns
 					// the data breaks backbone.
+					var foundValueToName = false;
 					_.each(element.get('valueToName').attributes, function(item_, i) {
 						// Need to do this because of how js parses these data
 						// and adds an extra element.
@@ -68,9 +69,21 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 							if (dateIntervalType !== undefined)
 								item.dateIntervalType = dateIntervalType;
 							content.push(item);
+							foundValueToName = true;
 						}
 					});
+					if (!foundValueToName) {
+						// This is a special case for usually for boolean filters with YES and/or NO answer.						
+						_.each(element.get('values').models, function(item_, i) {
+							if (i !== undefined && item_ !== undefined) {
+								var item = {};
+								item[i] = item_.get('value');
+								content = item;
+							}
+						});
+					}
 				}
+				
 				//translate filter values
 				_.each(content,function(item, i) {
 					//for now only true or false were asked to be translated. 
@@ -79,7 +92,12 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 						item.trnName = TranslationManager.getTranslated(item.name);
 					 }
 					else {
-						item.trnName = item.name;
+						if (item instanceof Array) {
+							item.trnName = item.name;							
+						} else {
+							// This is a special case for boolean filters like Humanitarian Aid that have a different structure so we cant translate anything, just have 0/1.
+							// This forces us to translate 0/1 into Yes/No elsewhere because we cant do "1".trnName = 'Yes'
+						}
 					}
 				});
 				var auxFilter = new Filter({

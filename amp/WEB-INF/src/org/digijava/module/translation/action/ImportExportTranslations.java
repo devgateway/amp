@@ -3,13 +3,14 @@ package org.digijava.module.translation.action;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -34,11 +36,13 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
+import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LangSupport;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.text.LocalizationUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.translation.entity.MessageGroup;
@@ -64,6 +68,10 @@ public class ImportExportTranslations extends Action {
 	public static final String SESSION_ROOT = "dgfoundation.amp.translation.import.xmlRoot";
 	public static final int XML_FORMAT=1;
 	public static final int EXCEL_FORMAT=2;
+	
+	private final int charWidth = 300;
+	private final int defaultWidth = 15;
+	
 	private static Logger logger = Logger.getLogger(ImportExportTranslations.class);
 
 	@Override
@@ -127,6 +135,8 @@ public class ImportExportTranslations extends Action {
                 }
                 HSSFWorkbook wb = new HSSFWorkbook();
                 HSSFSheet sheet = wb.createSheet();
+                Map<Integer, Integer> cachedWidths = new HashMap<Integer, Integer>();
+                
                 int rownum=0,column=0;
                 HSSFRow row=sheet.createRow(rownum++);
                 row.createCell(column++, HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Key"));
@@ -134,24 +144,25 @@ public class ImportExportTranslations extends Action {
                 row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(targetLang);
                 row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Date of creation (en) "));
                 row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Date of creation ("+targetLang+") "));
-                if( messageGroups!=null){
+                if( messageGroups!=null) {
                     for(MessageGroup messageGrp:  messageGroups){
-                        column=0;
+                        IntWrapper columnIdx = new IntWrapper();
+                        
                         if(rownum==65536){
-                            for (int i = 0; i < 3; i++) {
-                                sheet.autoSizeColumn(i); // adjust width of
-                                                            // the first
-                                                            // column
-                            }
-                             sheet = wb.createSheet();
-                             rownum=0;
+                        	adjustColumnWidths(sheet, cachedWidths);
+                            sheet = wb.createSheet();
+                            rownum=0;
                         }
+                        
                         row=sheet.createRow(rownum++);
-                        row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(messageGrp.getKey());
+                        row.createCell(columnIdx.intValue(),HSSFCell.CELL_TYPE_BLANK).setCellValue(messageGrp.getKey());
+                        setMaxColWidth(messageGrp.getKey(), columnIdx.intValue(), cachedWidths);
+                        
                         String englishText=null;
                         String targetText=null;
                         Date englishCreationDate=null;
                         Date targetCreationDate=null;
+                        
                         for(Message message :messageGrp.getAllMessages()){
                             if(message.getLocale().equals("en")){
                                 englishText=message.getMessage();
@@ -175,22 +186,30 @@ public class ImportExportTranslations extends Action {
 							logger.error("Can not export key because text is too long: " + messageGrp.getKey());
 							continue;
 						}
-                        row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(englishText);
-                        row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(targetText);
-                        HSSFCell englishDateCell=row.createCell(column++,HSSFCell.CELL_TYPE_BLANK);
-                        if(englishCreationDate!=null){
-                            englishDateCell.setCellValue(englishCreationDate);
+                        row.createCell(columnIdx.inc().intValue(),HSSFCell.CELL_TYPE_BLANK).setCellValue(englishText);
+                        setMaxColWidth(englishText, columnIdx.intValue(), cachedWidths);
+                        row.createCell(columnIdx.inc().intValue(),HSSFCell.CELL_TYPE_BLANK).setCellValue(targetText);
+                        setMaxColWidth(targetText, columnIdx.intValue(), cachedWidths);
+                        
+                        HSSFCell englishDateCell = row.createCell(columnIdx.inc().intValue(),HSSFCell.CELL_TYPE_BLANK);
+                        if (englishCreationDate != null){
+                        	String formattedEnglishCreationDate = LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH).
+                        			format(englishCreationDate);
+                            englishDateCell.setCellValue(formattedEnglishCreationDate);
+                            setMaxColWidth(formattedEnglishCreationDate, columnIdx.intValue(), cachedWidths);
                         }
-                        HSSFCell targetDateCell=row.createCell(column++,HSSFCell.CELL_TYPE_BLANK);
-                        if(targetCreationDate!=null){
-                            targetDateCell.setCellValue(targetCreationDate);
+                        
+                        HSSFCell targetDateCell = row.createCell(columnIdx.inc().intValue(),HSSFCell.CELL_TYPE_BLANK);
+                        if (targetCreationDate != null) {
+                        	String formattedTargetCreationDate = LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH).
+                        			format(targetCreationDate);
+                            targetDateCell.setCellValue(formattedTargetCreationDate);
+                            setMaxColWidth(formattedTargetCreationDate, columnIdx.intValue(), cachedWidths);
                         }
                     }
                 }
-                for (int i = 0; i < 5; i++) {
-                    sheet.autoSizeColumn(i); // adjust width of the first
-                                                // column
-                }
+                
+                adjustColumnWidths(sheet, cachedWidths);
 
                 wb.write(response.getOutputStream());
                 return null;
@@ -208,7 +227,29 @@ public class ImportExportTranslations extends Action {
         }
     }
 
-    private void doImportLang(HttpServletRequest request, ImportExportForm ioForm, HttpSession session, Site site) throws DgException {
+    private void setMaxColWidth(String formattedTargetCreationDate, int column, Map<Integer, Integer> cachedWidths) {
+    	IntWrapper width = new IntWrapper().inc(10);
+    	
+    	if (StringUtils.isNotEmpty(formattedTargetCreationDate)) {
+    		width.set(formattedTargetCreationDate.length());
+    	}
+		
+    	cachedWidths.compute(column, (k, v) -> v == null ? width.value : v < width.value ? width.value : v);
+	}
+
+	private void adjustColumnWidths(HSSFSheet sheet, Map<Integer, Integer> cachedWidths) {
+		
+		for (int i=0; i < 5; i++) {
+			if (cachedWidths.containsKey(i)) {
+				int width = cachedWidths.get(i) < 100 ? cachedWidths.get(i) : 100;
+				sheet.setColumnWidth(i, width * charWidth);
+			} else {
+				sheet.setColumnWidth(i, defaultWidth * charWidth);
+			}
+		}
+	}
+
+	private void doImportLang(HttpServletRequest request, ImportExportForm ioForm, HttpSession session, Site site) throws DgException {
         long startTime = System.currentTimeMillis();
         String[] selectedLanguages = ioForm.getSelectedImportedLanguages();
         Set<String> languagesToImport = new HashSet<String>(Arrays.asList(selectedLanguages));

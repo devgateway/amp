@@ -3,12 +3,14 @@ package org.digijava.module.translation.util;
 import java.io.File;
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -27,12 +29,12 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Row;
-import org.dgfoundation.amp.newreports.NumberedTypedEntity;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.text.LocalizationUtil;
 import org.digijava.kernel.translator.CachedTranslatorWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnAccesTimeSaver;
@@ -47,8 +49,8 @@ import org.digijava.module.translation.importexport.TranslationSearcher;
 import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.Translations;
 import org.digijava.module.translation.jaxb.Trn;
+import org.h2.util.StringUtils;
 import org.hibernate.FlushMode;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -535,8 +537,27 @@ public class ImportExportUtil {
 				//so if its an error cell the target text is "" as if the cell would be empty
 				String targetText = (hssfRow.getCell(2) == null || hssfRow.getCell(2).getCellType()==HSSFCell.CELL_TYPE_ERROR) ? ""
 						: hssfRow.getCell(2).getStringCellValue();
-				Date englishDate=(hssfRow.getCell(3) == null) ? null: hssfRow.getCell(3).getDateCellValue();
-				Date targetDate=(hssfRow.getCell(4) == null) ? null: hssfRow.getCell(4).getDateCellValue();
+				
+				Date englishDate = null;
+				if (hssfRow.getCell(3) != null) {
+					if(hssfRow.getCell(3).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+						englishDate = hssfRow.getCell(3).getDateCellValue();
+					} else if (!StringUtils.isNullOrEmpty(hssfRow.getCell(3).getStringCellValue())) {
+						englishDate = LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH)
+														.parse(hssfRow.getCell(3).getStringCellValue());
+					}
+				}
+				
+				Date targetDate = null;
+				if (hssfRow.getCell(4) != null) {
+					if(hssfRow.getCell(4).getCellType() == HSSFCell.CELL_TYPE_NUMERIC)  {
+						targetDate = hssfRow.getCell(4).getDateCellValue();
+					} else if (!StringUtils.isNullOrEmpty(hssfRow.getCell(4).getStringCellValue())) {
+						targetDate = LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH)
+														.parse(hssfRow.getCell(4).getStringCellValue());
+					}
+				}
+				
 				if(englishDate!=null){
 					Message message = new Message();
 					message.setKey(key);

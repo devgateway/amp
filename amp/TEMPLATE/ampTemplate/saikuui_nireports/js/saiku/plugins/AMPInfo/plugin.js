@@ -27,7 +27,8 @@ var AMPInfo = Backbone.View.extend({
 			animate : "linear",
 			activate: function (event, ui) {
 				$("#amp_info_filters_block").empty();
-				var modelFilters = window.currentFilter.serializeToModels();				
+				var modelFilters = window.currentFilter.serializeToModels();
+//				FilterUtils.updateFiltersRegion(modelFilters);
 				$("#amp_info_filters_block").html(filtersToHtml(modelFilters));
 				Saiku.i18n.translate();
 			}
@@ -112,8 +113,8 @@ var filtersToHtml = function(filters) {
 					auxItem.id = item.get('id');
 					auxItem.name = item.get('name');
 					if (item.get('name') === "true" || item.get('name') === "false") {
-						//auxItem.trnName = TranslationManager.getTranslated(item.get('name'));
-						auxItem.trnName = item.get('name');
+						auxItem.trnName = TranslationManager.getTranslated(item.get('name'));
+						//auxItem.trnName = item.get('name');
 					 }
 					else {
 						auxItem.trnName = item.get('name');
@@ -133,16 +134,16 @@ var filtersToHtml = function(filters) {
 			var dateContent = filters.otherFilters[propertyName];
 			if (dateContent != undefined) {
 				var filter = {
-					trnName : propertyName, /*TranslationManager.getTranslated(propertyName),*/
+					trnName : TranslationManager.getTranslated(propertyName), 
 					name : propertyName,
 					values:[]
 				};
 				if (dateContent.modelType === 'DATE-RANGE-VALUES') {
 					dateContent.start = dateContent.start || "";
 					dateContent.end = dateContent.end || "";
-									
-					var startDatePrefix = (dateContent.start.length > 0 && dateContent.end.length === 0) ? "from " : "";
-					var endDatePrefix = (dateContent.start.length === 0 && dateContent.end.length > 0) ? "until " : "";
+					
+					var startDatePrefix = TranslationManager.getTranslated((dateContent.start.length > 0 && dateContent.end.length === 0) ? "from" : "") + '&nbsp;';
+					var endDatePrefix = TranslationManager.getTranslated((dateContent.start.length === 0 && dateContent.end.length > 0) ? "until" : "") + '&nbsp';
 					
 					if(dateContent.start.length > 0){
 						filter.values.push({

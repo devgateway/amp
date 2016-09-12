@@ -1,4 +1,4 @@
-define([ 'business/grid/columnsMapping', 'business/translations/translationManager', 'util/tabUtils' ], function(columnsMapping,
+define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ], function(columnsMapping,
 		TranslationManager, TabUtils) {
 
 	"use strict";

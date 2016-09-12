@@ -6,12 +6,15 @@ package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.Set;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -20,6 +23,8 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
@@ -114,6 +119,32 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 			}
 		};
 		add(list);
+		
+		final Boolean isTabView=FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN);
+		
+		AmpAjaxLinkField addNewFunding= new AmpAjaxLinkField("addAnotherFunding","New Funding Item","New Funding Item") {			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onClick(AjaxRequestTarget target) {
+				if (fundsModel.getObject().size() > 0) {
+					AmpFunding funding = fundsModel.getObject().iterator().next();
+					parent.addFundingItem(funding);
+					target.add(parent);
+					target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
+					if (isTabView) {
+						//when adding a new funding search for the correct index
+						//parent.getTabsList()
+						int index = parent.calculateTabIndex(funding.getAmpDonorOrgId(),
+								funding.getSourceRole());
+						
+						target.appendJavaScript("switchTabs("+ index +");");
+					}
+				}
+			}
+		};
+		
+		add(addNewFunding);
 	}
 	
 	public IModel<AmpRole> getRole() {

@@ -47,9 +47,6 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 
 				var element = subElement.models[0];
 				var content = [];
-				if (subElement.name === 'DATE') {
-					var dateIntervalType = CommonFilterUtils.getDateIntervalType(element, item, i);
-				}				
 				if (element.get('value') !== null) {
 					var auxItem = {};
 					auxItem.id = element.get('value');
@@ -66,8 +63,9 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 							var item = {};
 							item.id = i;
 							item.name = item_;
-							if (dateIntervalType !== undefined)
-								item.dateIntervalType = dateIntervalType;
+							if (subElement.name === 'DATE') {
+								item.dateIntervalType = (element.get('max') === item.id ? 'max' : 'min');
+							}
 							content.push(item);
 							foundValueToName = true;
 						}
@@ -267,29 +265,6 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 	
   };
 	  
-	FilterUtils.fillDateBlob = function(dateBlob, attributes){
-		if (attributes.values.length === 1) {
-			if (attributes.values[0].dateIntervalType === "min") {
-				dateBlob.start = FilterUtils._dateConvert(attributes.values[0].name);
-				FilterUtils.pushDateLimit("Start Date", FilterUtils._dateConvert(attributes.values[0].name));
-			} else {
-				dateBlob.end = FilterUtils._dateConvert(attributes.values[0].name);
-				FilterUtils.pushDateLimit("End Date", FilterUtils._dateConvert(attributes.values[0].name));				
-			}
-		}
-		else if (attributes.values.length === 2) {
-			dateBlob.start = FilterUtils._dateConvert(attributes.values[0].name);
-			FilterUtils.pushDateLimit("Start Date", FilterUtils._dateConvert(attributes.values[0].name));
-
-			dateBlob.end = FilterUtils._dateConvert(attributes.values[1].name);
-			FilterUtils.pushDateLimit("End Date", FilterUtils._dateConvert(attributes.values[1].name));			
-		}
-		else {
-			//error. why doesn't it have dates
-		}
-
-	};	
-
 	FilterUtils.widgetFiltersToJavaFilters = function(originalFilters) {
 		return originalFilters;
 	};

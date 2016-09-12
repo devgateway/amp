@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -22,7 +21,6 @@ public class FMSettingsMediator {
 	public static final String FMGROUP_COLUMNS = "COLUMNS";
 	public static final String FMGROUP_MEASURES = "MEASURES";
 	public static final String FMGROUP_MODULES = "MODULES";
-	public static final String FMGROUP_GIS = "GIS";
 	public static final String FMGROUP_DASHBOARDS = "DASHBOARDS";
 	public static final String FMGROUP_MENU = "MENU";
 
@@ -39,7 +37,6 @@ public class FMSettingsMediator {
 		groups.put(FMGROUP_COLUMNS, ColumnsVisibility.class);
 		groups.put(FMGROUP_MEASURES, MeasuresVisibility.class);
 		groups.put(FMGROUP_MODULES, ModulesVisibility.class);
-		groups.put(FMGROUP_GIS, GisFMSettings.class);
 		groups.put(FMGROUP_DASHBOARDS, DashboardsFMSettings.class);
 		groups.put(FMGROUP_MENU, MenuVisibility.class);
 		
@@ -52,13 +49,30 @@ public class FMSettingsMediator {
 	 * @return
 	 */
 	public static Set<String> getEnabledSettings(String fmGroupName) {
-		Map<String, FMSettings> templateGroup = getTemplate(FeaturesUtil.getCurrentTemplateId());
-		FMSettings fmGroup = getFMSettings(templateGroup, fmGroupName);
+	    FMSettings fmGroup = getFMSettings(fmGroupName);
 		
 		if (fmGroup != null) {
 			return fmGroup.getEnabledSettings();
 		}
 		return Collections.emptySet();
+	}
+	
+	protected static FMSettings getFMSettings(String fmGroupName) {
+	    Map<String, FMSettings> templateGroup = getTemplate(FeaturesUtil.getCurrentTemplateId());
+        return getFMSettings(templateGroup, fmGroupName);
+	}
+	
+	public static boolean supportsFMTree(String fmGroupName) {
+	    FMSettings fmGroup = getFMSettings(fmGroupName);
+	    return fmGroup == null ? false : fmGroup.supportsFMTree();
+	}
+	
+	public static FMTree getEnabledSettingsAsTree(String fmGroupName) {
+	    FMSettings fmGroup = getFMSettings(fmGroupName);
+	    if (fmGroup != null) {
+            return fmGroup.getEnabledSettingsAsFMTree();
+        }
+        return new FMTree(null, false);
 	}
 	
 	/**
@@ -93,6 +107,12 @@ public class FMSettingsMediator {
 				} catch (Exception e) {
 					logger.error(e);
 				}
+			} else {
+			    // fallback to the generic settings
+			    ModulesVisibility modulesSettings = (ModulesVisibility) getFMSettings(FMSettingsMediator.FMGROUP_MODULES);
+			    String fmModule = modulesSettings.getOrigName(fmGroupName);
+			    fmGroup = new GenericVisibility(fmModule);
+			    templateGroup.put(fmGroupName, fmGroup);
 			}
 		}
 		return fmGroup;

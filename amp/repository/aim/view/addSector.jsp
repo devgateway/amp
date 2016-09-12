@@ -328,7 +328,7 @@
 
 						<html:submit value="Save" styleClass="dr-menu"/>--%>
 
-							<input  type="button" name="addBtn" class="dr-menu" value='<digi:trn key="btn:save">Save</digi:trn>' onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')"/>
+							<input  type="button" name="addBtn" class="dr-menu" value='<digi:trn jsFriendly="true" key="btn:save">Save</digi:trn>' onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')"/>
 
 					</td>
 					
@@ -341,7 +341,7 @@
 					
 					
 					<td width="45%" align="left">
-						<input type="button" value='<digi:trn key="btn:cancel">Cancel</digi:trn>' class="dr-menu" onclick="return cancel()"/>
+						<input type="button" value='<digi:trn jsFriendly="true" key="btn:cancel">Cancel</digi:trn>' class="dr-menu" onclick="return cancel()"/>
 					</td>
 					
 

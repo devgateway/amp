@@ -526,7 +526,7 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 						var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 						var expression = new RegExp(pattern)
 					    if(expression.test(email)!=true){
-						    var trn='<digi:trn>Please provide correct email</digi:trn>';
+						    var trn='<digi:trn jsFriendly="true">Please provide correct email</digi:trn>';
 								alert(trn);
 						    return false; 
 					    }
@@ -551,7 +551,7 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 		var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 		var expression = new RegExp(pattern)
     if(expression.test(email)!=true){
-	    var trn='<digi:trn>Please provide correct email</digi:trn>';
+	    var trn='<digi:trn jsFriendly="true">Please provide correct email</digi:trn>';
 			alert(trn);
 	    successVal = false; 
     }
@@ -618,7 +618,7 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 	function validateFile(){
 		var fileToBeAttached=document.getElementById('fileUploaded');
 		if(fileToBeAttached.value==null || fileToBeAttached.value==''){
-			var msg='<digi:trn>Please select file to attach</digi:trn>';
+			var msg='<digi:trn jsFriendly="true">Please select file to attach</digi:trn>';
 			alert(msg);
 			return false;
 		}

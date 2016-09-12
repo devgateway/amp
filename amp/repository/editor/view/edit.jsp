@@ -29,7 +29,7 @@ function validate(){
 		size=100000;
 	}
 	if ($("[name='content']").ckeditor().html().length > size){
-		var msg='<digi:trn key="editor:longtextError">The text is too long.</digi:trn>'+' Max is '+size+' chrs';
+		var msg='<digi:trn jsFriendly="true" key="editor:longtextError">The text is too long.</digi:trn>'+' Max is '+size+' chrs';
 		alert(msg);
 		return false;
 	}

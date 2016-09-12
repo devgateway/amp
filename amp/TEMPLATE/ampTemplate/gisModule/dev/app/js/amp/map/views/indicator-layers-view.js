@@ -3,6 +3,7 @@ var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 var util = require('../../../libs/local/chart-util');
 var _ = require('underscore');
+var Constants = require('../../../libs/local/constants');
 
 module.exports = Backbone.View.extend({
 
@@ -20,13 +21,24 @@ module.exports = Backbone.View.extend({
       
       self.listenTo(self.app.data.indicators, 'applyFilter', self.refreshGapLayer);
       self.listenTo(self.app.data.indicators, 'applySettings', self.refreshGapLayer);
-            
+      self.listenTo(self.app.data.indicators, 'reset', self.clearLayers);        
       self.listenTo(self.app.data.hilightFundingCollection, 'show', self.refreshLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'hide', self.hideLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'sync', self.refreshLayer);
     });
   },
-  
+  // clears applied layers from the map when gis sidebar is refreshed
+  clearLayers: function(){	 
+	  var self = this;
+	  var layerIds = _.keys(this.leafletLayerMap);
+	  _.each(layerIds, function(cid){
+		  var layer = self.leafletLayerMap[cid];
+		  if(!_.isUndefined(layer)){
+			  self.map.removeLayer(layer);			   
+		  }		
+		  delete self.leafletLayerMap[cid];
+	  });	  
+  },
   refreshGapLayer: function(layer) {
 	if (layer.get('selected')) {
 		layer._changing = true;
@@ -69,7 +81,7 @@ module.exports = Backbone.View.extend({
       }
       self.leafletLayerMap[layer.cid] = loadedLayer;
 
-      // only add it to the map if is still selected.
+      // only add it to the map if is still selected.      
       if (layer.get('selected')) {
         self.map.addLayer(loadedLayer);
         if (loadedLayer.bringToBack) {
@@ -85,8 +97,6 @@ module.exports = Backbone.View.extend({
     	  delete layer._loaded;
       }
     });
-
-    layer.load();
   },
 
   hideLayer: function(layer) {
@@ -153,13 +163,25 @@ module.exports = Backbone.View.extend({
         var foundNF = _.find(self.app.data.settings.models, function(item) {
           return item.get('id') === 'number-format';
         });
+        
         var ampFormatter = new util.DecimalFormat(_.find(foundNF.get('options'), function(item) {
-          return item.id === foundNF.get('defaultId');
-        }).name);
+            return item.id === foundNF.get('defaultId');
+          }).name);
 
-        var fundingPopupTemplate = ['<strong>', feature.properties.name, '</strong>',
+        
+        var value;
+        var percentIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_PERCENTAGE});
+        var ratioOtherIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_OTHER});
+        if((percentIndicator && percentIndicator.get('id') === layerModel.get('indicatorTypeId')) || (ratioOtherIndicator && ratioOtherIndicator.get('id') === layerModel.get('indicatorTypeId'))){
+        	value = ampFormatter.format(feature.properties.value * 100);
+        }else{
+        	value = ampFormatter.format(feature.properties.value)
+        }        
+        
+        var fundingPopupTemplate = value ? ['<strong>', feature.properties.name, '</strong>',
                         '<br/>', formattedTitleString, '',
-                        ampFormatter.format(feature.properties.value), ' ', unit].join('');
+                        value, ' ', unit].join('') : ['<strong>', feature.properties.name, '</strong>',
+                                                      '<br/>', self.app.translator.translateSync("amp.gis:popup-no-data","No Data")].join('');
 
         layer.bindPopup(fundingPopupTemplate);
       });

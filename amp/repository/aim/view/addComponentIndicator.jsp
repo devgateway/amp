@@ -12,20 +12,20 @@
 	<!--
 
 function onDelete() {
-  var flag = confirm('<digi:trn key="aim:deleteconfirm">Are you sure?</digi:trn>');
+  var flag = confirm('<digi:trn jsFriendly="true" key="aim:deleteconfirm">Are you sure?</digi:trn>');
   return flag;
 }
 	function validate() 
 	{
 		if (trim(document.aimComponentsForm.compIndicatorName.value).length == 0) 
 		{
-			alert('<digi:trn key="aim:enterindicatorname">Please enter Indicator name</digi:trn>');
+			alert('<digi:trn jsFriendly="true" key="aim:enterindicatorname">Please enter Indicator name</digi:trn>');
 			document.aimIndicatorForm.compIndicatorName.focus();
 			return false;
 		}	
 		if (trim(document.aimComponentsForm.compIndicatorCode.value).length == 0) 
 		{
-			alert('<digi:trn key="aim:enterindicatcode">Please enter Indicator code</digi:trn>');
+			alert('<digi:trn jsFriendly="true" key="aim:enterindicatcode">Please enter Indicator code</digi:trn>');
 			document.aimIndicatorForm.compIndicatorCode.focus();
 			return false;
 		}			
@@ -131,7 +131,7 @@ function onDelete() {
 	<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
 	<tr bgColor=#dddddb>
 		<td bgColor=#dddddb height="25" align="center" colspan="2">
-			<input type="button" value='<digi:trn key="btn:save">Save</digi:trn>' class="dr-menu" onclick="return saveCompIndicator('<bean:write name="aimComponentsForm" property="indicatorId"/>')">&nbsp;&nbsp;
+			<input type="button" value='<digi:trn jsFriendly="true" key="btn:save">Save</digi:trn>' class="dr-menu" onclick="return saveCompIndicator('<bean:write name="aimComponentsForm" property="indicatorId"/>')">&nbsp;&nbsp;
 			<html:reset  styleClass="dr-menu" property="submitButton" >
 				<digi:trn key="btn:cancel">Cancel</digi:trn> &nbsp;&nbsp;
 			</html:reset>

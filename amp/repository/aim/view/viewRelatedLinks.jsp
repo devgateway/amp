@@ -9,7 +9,7 @@
 
 <script language="javascript">
     function confirmDelete() {
-      var flag = confirm('<digi:trn key="aim:areyousureremove">Are you sure you want to remove?</digi:trn>');
+      var flag = confirm('<digi:trn jsFriendly="true" key="aim:areyousureremove">Are you sure you want to remove?</digi:trn>');
       return flag;
     }
 

@@ -25,7 +25,7 @@
 <script language="javascript">
 
 function deleteEvent(){
-	var err = '<digi:trn>Are You sure?</digi:trn>';
+	var err = '<digi:trn jsFriendly="true">Are You sure?</digi:trn>';
 	if(confirm(err))
 	{
 		document.getElementById('hdnMethod').value = "delete";

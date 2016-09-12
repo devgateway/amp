@@ -1299,9 +1299,9 @@ border-right: 1px solid rgb(208, 208, 208);
 
                                                                             <tr>
                                                                                 <td colspan="2">
-                                                                                    <input type="button" class="buttonx_sm" onclick="javascript:addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+                                                                                    <input type="button" class="buttonx_sm" onclick="javascript:addSectors();" value='<digi:trn jsFriendly="true" key="btn:addSectors">Add Sectors</digi:trn>' />
                                                                                     <c:if test="${not empty aimAddOrgForm.sectors}">
-                                                                                        <input type="button" class="buttonx_sm" onclick="return removeSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+                                                                                        <input type="button" class="buttonx_sm" onclick="return removeSectors()" value='<digi:trn jsFriendly="true" key="btn:removeSector">Remove Sector</digi:trn>' />
                                                                                     </c:if>
                                                                                 </td>
                                                                             </tr>
@@ -1490,7 +1490,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                             <td>
 
                                                 <c:if test="${empty aimAddOrgForm.selectedLocs}">
-                                                    <input type="button" class="buttonx_sm" onclick="javascript:selectLocation();" value='<digi:trn>Add Location</digi:trn>' />
+                                                    <input type="button" class="buttonx_sm" onclick="javascript:selectLocation();" value='<digi:trn jsFriendly="true">Add Location</digi:trn>' />
                                                 </c:if>
 
                                                 <c:if test="${not empty aimAddOrgForm.selectedLocs}">
@@ -1518,9 +1518,9 @@ border-right: 1px solid rgb(208, 208, 208);
                                                         </c:forEach>
                                                         <tr>
                                                             <td colspan="3">
-                                                                <input type="button" class="buttonx_sm" onclick="javascript:selectLocation();" value='<digi:trn>Add Location</digi:trn>' />
+                                                                <input type="button" class="buttonx_sm" onclick="javascript:selectLocation();" value='<digi:trn jsFriendly="true">Add Location</digi:trn>' />
 
-                                                                <input type="button" class="buttonx_sm" onclick="javascript:removeSelLocations();" value='<digi:trn>Remove Location</digi:trn>' />
+                                                                <input type="button" class="buttonx_sm" onclick="javascript:removeSelLocations();" value='<digi:trn jsFriendly="true">Remove Location</digi:trn>' />
 
                                                             </td>
                                                         </tr>
@@ -1906,12 +1906,12 @@ border-right: 1px solid rgb(208, 208, 208);
 
                             <tr>
                                 <td>
-                                    <input type="button" class="buttonx_sm" onclick="javascript:addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+                                    <input type="button" class="buttonx_sm" onclick="javascript:addSectors();" value='<digi:trn jsFriendly="true" key="btn:addSectors">Add Sectors</digi:trn>' />
                                 </td>
                                 <td>
                                     &nbsp;
                                     <c:if test="${not empty aimAddOrgForm.sectors}">
-                                        <input type="button" class="buttonx_sm" onclick="return removeSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+                                        <input type="button" class="buttonx_sm" onclick="return removeSectors()" value='<digi:trn jsFriendly="true" key="btn:removeSector">Remove Sector</digi:trn>' />
                                     </c:if>
                                 </td>
 

@@ -36,7 +36,7 @@
 	pageContext.setAttribute("linkMap", linkMap);
   %>
   <%for (int curDepth = 0; curDepth < columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
-  <tr class="reportHeader" title='<digi:trn key="reports.ReportHeadings">Report Headings</digi:trn>'>
+  <tr class="reportHeader" title='<digi:trn jsFriendly="true" key="reports.ReportHeadings">Report Headings</digi:trn>'>
   <%boolean first=true;
   	if (curDepth == 0) {
   %>

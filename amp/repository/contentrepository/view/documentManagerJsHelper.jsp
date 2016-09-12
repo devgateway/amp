@@ -123,11 +123,11 @@ font-weight : bold;
 <%@page import="java.net.URLDecoder"%>
 
 <c:set var="translation_public_ver_msg">
-		<digi:trn>The marked version is currently public</digi:trn>
+		<digi:trn jsFriendly="true">The marked version is currently public</digi:trn>
 </c:set>
 
 <c:set var="headerVersion">
-				<digi:trn>Version</digi:trn>
+				<digi:trn jsFriendly="true">Version</digi:trn>
 </c:set>
 
 <script type="text/javascript">
@@ -153,56 +153,56 @@ font-weight : bold;
 
 
 <c:set var="headerPublYear">
-	<digi:trn>Publ.Year</digi:trn>
+	<digi:trn jsFriendly="true">Publ.Year</digi:trn>
 </c:set>
 
 <c:set var="headerType">
-	<digi:trn>Type</digi:trn>
+	<digi:trn jsFriendly="true">Type</digi:trn>
 </c:set>
 
 <c:set var="headerIndex">
-	<digi:trn>Index</digi:trn>
+	<digi:trn jsFriendly="true">Index</digi:trn>
 </c:set>
 
 <c:set var="headerCategory">
-	<digi:trn>Category</digi:trn>
+	<digi:trn jsFriendly="true">Category</digi:trn>
 </c:set>
 
 <c:set var="headerFileName">
-	<digi:trn>Resource Name</digi:trn>
+	<digi:trn jsFriendly="true">Resource Name</digi:trn>
 </c:set>
 
 <c:set var="headerDate">
-	<digi:trn>Date</digi:trn>
+	<digi:trn jsFriendly="true">Date</digi:trn>
 </c:set>
 
 <c:set var="headerFileSize">
-	<digi:trn>Size (MB)</digi:trn>
+	<digi:trn jsFriendly="true">Size (MB)</digi:trn>
 </c:set>
 
 <c:set var="headerNotes">
-	<digi:trn>Notes</digi:trn>
+	<digi:trn jsFriendly="true">Notes</digi:trn>
 </c:set>
 
 <c:set var="headerAction">
-	<digi:trn>Actions</digi:trn>
+	<digi:trn jsFriendly="true">Actions</digi:trn>
 </c:set>
 
 <c:set var="labelstrn">
-	<digi:trn>Labels</digi:trn>
+	<digi:trn jsFriendly="true">Labels</digi:trn>
 </c:set>
 <c:set var="filterstrn">
-	<digi:trn>Filters</digi:trn>
+	<digi:trn jsFriendly="true">Filters</digi:trn>
 </c:set>
 <c:set var="keywordstrn">
-	<digi:trn>Keywords</digi:trn>
+	<digi:trn jsFriendly="true">Keywords</digi:trn>
 </c:set>
 
 
 <script type="text/javascript">
 	var prevPage = null;
-	var applylabels = "<digi:trn>Apply Labels</digi:trn>";
-	var nonetext = "<digi:trn>none</digi:trn>";
+	var applylabels = "<digi:trn jsFriendly="true">Apply Labels</digi:trn>";
+	var nonetext = "<digi:trn jsFriendly="true">none</digi:trn>";
 	YAHOO.namespace("YAHOO.amp");
 	YAHOO.namespace("YAHOO.amp.table");
 
@@ -287,7 +287,7 @@ font-weight : bold;
 	}
 </script>
 <c:set var="translation1">
-	<digi:trn>Are you sure you want to delete this document ?</digi:trn>
+	<digi:trn jsFriendly="true">Are you sure you want to delete this document ?</digi:trn>
 </c:set>
 
 <c:set var="translation2">
@@ -1469,7 +1469,7 @@ function shareDoc(uuid,shareWith,tabType){
 	var callback	= new Object();
 	callback.success	= function(o) {
 		 					if ("${shareWithoutApprovalNeeded}" != "true") {
-							var successAlert='<digi:trn>Your document will be shared with team members and will be available under Team resources tab after workspace manager approval</digi:trn>';                                                 
+							var successAlert='<digi:trn jsFriendly="true">Your document will be shared with team members and will be available under Team resources tab after workspace manager approval</digi:trn>';                                                 
 	 						alert(successAlert);
 		 					}
 	 	 					window.location.replace( window.location.href );
@@ -1508,7 +1508,7 @@ function rejectVersion(versionId, baseNodeUUID){
 							window.location.replace( window.location.href );
 						};
 	callback.failure	= function(o) {
-							var failureAlert='<digi:trn>There seems to be a problem with the connection. Please try again later</digi:trn>';							
+							var failureAlert='<digi:trn jsFriendly="true">There seems to be a problem with the connection. Please try again later</digi:trn>';							
 							alert(failureAlert);
 							var myDiv=document.getElementById('loadingDiv');
 							myDiv.style.display="none";
@@ -1614,7 +1614,7 @@ function showOrgsPanel(uuid) {
 			draggable:true, close:true,
 			effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 			modal:true } );
-		organisationPanel.setHeader('<digi:trn>Participating Organizations</digi:trn>');
+		organisationPanel.setHeader('<digi:trn jsFriendly="true">Participating Organizations</digi:trn>');
 		organisationPanel.setBody("");
 		//panel.setFooter("End of Panel #2");
 		organisationPanel.render(document.body);

@@ -87,7 +87,7 @@
 				<td colspan="2" style="text-align: center;">
 					<br>
 					<input type="button" name="applySorter" class="buttonx"
-					value='<digi:trn key="aim:popsort:hierarchy:apply">Apply Sorting</digi:trn>' onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~applySorter=true~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~levelPicked='+levelPicked.options[levelPicked.selectedIndex].value+'~levelSorter='+levelSorter.options[levelSorter.selectedIndex].value+'~levelSortOrder='+levelSortOrder.options[levelSortOrder.selectedIndex].value);hideSorter();"/>
+					value='<digi:trn jsFriendly="true" key="aim:popsort:hierarchy:apply">Apply Sorting</digi:trn>' onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~applySorter=true~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~levelPicked='+levelPicked.options[levelPicked.selectedIndex].value+'~levelSorter='+levelSorter.options[levelSorter.selectedIndex].value+'~levelSortOrder='+levelSortOrder.options[levelSortOrder.selectedIndex].value);hideSorter();"/>
 					&nbsp;&nbsp;
 					<input type="button" class="buttonx" onclick="resetSorter(this);return false;" value="<digi:trn>Reset</digi:trn>" />
 				</td>

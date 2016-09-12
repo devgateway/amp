@@ -59,7 +59,7 @@ YAHOO.namespace("YAHOO.amp");
  var checkAndCloseContact=false;
 
    function initContactScript() {
-     var msg='\n<digi:trn >Add Contact Information</digi:trn>';
+     var msg='\n<digi:trn jsFriendly="true">Add Contact Information</digi:trn>';
      myPanelContact.setHeader(msg);
      myPanelContact.setBody("");
      myPanelContact.beforeHideEvent.subscribe(function() {
@@ -137,7 +137,7 @@ YAHOO.namespace("YAHOO.amp");
         var content = document.getElementById("popinContactContent");
         content.innerHTML = '<div style="text-align: center">' +
             '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
-            '<digi:trn>Loading...</digi:trn><br/><br/></div>';
+            '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>';
         showContactContent();
     }
     function selectContact(params1) {

@@ -459,7 +459,7 @@ ${aimMainProjectDetailsForm.activityExists}
 			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Logframe" module="Previews">
 					<field:display name="Logframe Preview Button" feature="Logframe">
-						<div id="gen" title='<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>'>
+						<div id="gen" title='<digi:trn jsFriendly="true" key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>'>
 						<a href="#" onclick="javascript:previewLogframe(document.getElementById('tempActivity').value); return false;">
 						<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn></a></div>&nbsp;
 					</field:display>
@@ -469,7 +469,7 @@ ${aimMainProjectDetailsForm.activityExists}
 				<feature:display name="Project Fiche" module="Previews">
 					<field:display name="Project Fiche Button" feature="Project Fiche">
 						&nbsp;|
-						<div id="gen" title='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>'>
+						<div id="gen" title='<digi:trn jsFriendly="true" key="aim:projectFiche">Project Fiche</digi:trn>'>
 						<a href="#" onclick="javascript:projectFiche(document.getElementById('tempActivity').value); return false;">
 						<digi:trn key="aim:projectFiche">Project Fiche</digi:trn></a></div>
 					</field:display>
@@ -529,7 +529,7 @@ ${aimMainProjectDetailsForm.activityExists}
 								<LI>
                                 <span>
 								<digi:link href="/viewChannelOverview.do" name="urlTabs">
-								<div title='<digi:trn key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>'>
+								<div title='<digi:trn jsFriendly="true" key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>'>
 									<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
                                 </div>
 								</digi:link>
@@ -552,7 +552,7 @@ ${aimMainProjectDetailsForm.activityExists}
 								<LI>
                                 <span>
 								<digi:link href="/viewReferences.do" name="urlTabs">
-								<div title='<digi:trn key="aim:clickToViewReferences">Click here to view References</digi:trn>'>
+								<div title='<digi:trn jsFriendly="true" key="aim:clickToViewReferences">Click here to view References</digi:trn>'>
 									<digi:trn key="aim:references">references</digi:trn>
                                 </div>
 								</digi:link>
@@ -567,7 +567,7 @@ ${aimMainProjectDetailsForm.activityExists}
 							   <LI>
                                		<a name="node">
                                		<digi:link href="/viewFinancingBreakdown.do" name="urlTabs">
-										<div title='<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>'>
+										<div title='<digi:trn jsFriendly="true" key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>'>
 											<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 		                                </div>
 									</digi:link>
@@ -579,7 +579,7 @@ ${aimMainProjectDetailsForm.activityExists}
 								<LI>
                                 <span>
 		              			<digi:link href="/viewFinancingBreakdown.do" name="urlTabs">
-								<div title='<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>'>
+								<div title='<digi:trn jsFriendly="true" key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>'>
 									<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
                                 </div>
 								</digi:link>
@@ -604,7 +604,7 @@ ${aimMainProjectDetailsForm.activityExists}
 										<LI>
                                         <span>
                                             <digi:link href="/viewPhysicalProgress.do" name="urlTabs">
-                                            <div title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
+                                            <div title='<digi:trn jsFriendly="true" key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
                                             <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
                                             </div>
 	                                        </digi:link>
@@ -629,7 +629,7 @@ ${aimMainProjectDetailsForm.activityExists}
 										<LI>
                                         <span>
                                             <digi:link href="/viewKnowledge.do" name="urlTabs">
-                                            <div title='<digi:trn key="aim:clickToViewDocuments">Click here to view Documents</digi:trn>'>
+                                            <div title='<digi:trn jsFriendly="true" key="aim:clickToViewDocuments">Click here to view Documents</digi:trn>'>
                                             <digi:trn key="aim:documents">Documents</digi:trn>
                                             </div>
 	                                        </digi:link>
@@ -655,7 +655,7 @@ ${aimMainProjectDetailsForm.activityExists}
 									<LI>
                                     <span>
 									<digi:link href="/viewRegionalFundingBreakdown.do" name="urlTabs">
-										<div title='<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>'>
+										<div title='<digi:trn jsFriendly="true" key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>'>
 										<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 	
                                         </div>
 									</digi:link>
@@ -683,7 +683,7 @@ ${aimMainProjectDetailsForm.activityExists}
 								<LI>	
                                 <span>
 								<digi:link href="/viewSurveyList.do" name="survey">
-								<div title='<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>'>
+								<div title='<digi:trn jsFriendly="true" key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>'>
 									<digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn> 	
                                 </div>
 								</digi:link>
@@ -706,7 +706,7 @@ ${aimMainProjectDetailsForm.activityExists}
 								<LI>
                                 <span>
 								<digi:link href="/viewActivityDashboard.do" name="urlTabs">
-								<div title='<digi:trn key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>'>
+								<div title='<digi:trn jsFriendly="true" key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>'>
 									<digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
                                 </div>
 								</digi:link>
@@ -731,7 +731,7 @@ ${aimMainProjectDetailsForm.activityExists}
 										<LI>
                                 <span>
 				              			<digi:link href="/viewProjectCostsBreakdown.do" name="urlTabs">
-										<div title='<digi:trn key="aim:clickToViewCosting">Click here to view Costing</digi:trn>'>
+										<div title='<digi:trn jsFriendly="true" key="aim:clickToViewCosting">Click here to view Costing</digi:trn>'>
 											<digi:trn key="aim:projectCosting">Costing</digi:trn>
                                         </div>
 										</digi:link>
@@ -755,7 +755,7 @@ ${aimMainProjectDetailsForm.activityExists}
                                 <LI>
                                 <span>
                                 <digi:link href="/viewIPAContracting.do" name="urlTabs">
-                                <div title='<digi:trn key="aim:clickToViewContracting">Click here to view Contracting</digi:trn>'>
+                                <div title='<digi:trn jsFriendly="true" key="aim:clickToViewContracting">Click here to view Contracting</digi:trn>'>
                                     <digi:trn key="aim:projectContracting">Contracting</digi:trn>
                                 </div>
                                 </digi:link>
@@ -780,7 +780,7 @@ ${aimMainProjectDetailsForm.activityExists}
 		                            	<LI>
 		                                	<span>
 		                                		<digi:link href="/viewRegionalObservations.do" name="urlTabs">
-			                                		<div title='<digi:trn>Click here to view Regional Observations</digi:trn>'>
+			                                		<div title='<digi:trn jsFriendly="true">Click here to view Regional Observations</digi:trn>'>
 			                                    		<digi:trn>Regional Observations</digi:trn>
 			                                		</div>
 		                                		</digi:link>

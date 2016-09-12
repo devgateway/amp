@@ -60,6 +60,7 @@ public class ColumnConstants {
 	public static final String COMPONENT_FUNDING_ORGANIZATION = "Component Funding Organization";
 	public static final String COMPONENT_NAME = "Component Name";
 	public static final String COMPONENT_TYPE = "Component Type";
+	public static final String COMPUTED_YEAR = "Computed Year";
 	public static final String CONTRACTING_AGENCY = "Contracting Agency";
 	public static final String CONTRACTING_AGENCY_ACRONYM = "Contracting Agency Acronym";
 	public static final String CONTRACTING_AGENCY_DEPARTMENT_DIVISION = "Contracting Agency Department/Division";

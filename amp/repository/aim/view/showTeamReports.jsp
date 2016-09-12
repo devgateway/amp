@@ -607,7 +607,7 @@ $(document).ready(function() {
 	 								</logic:iterate>
 	 							</ul>
 							</div>
-							<span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn>Columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn>Columns</digi:trn></u> ]&nbsp;</span>                               
+							<span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn jsFriendly="true">Columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn>Columns</digi:trn></u> ]&nbsp;</span>                               
 							<div style='position:relative;display:none;' id='measure-<bean:write name="report" property="ampReportId"/>'>
 								<ul> 
 									<logic:iterate name="report" property="measures" id="measure" indexId="index"  >
@@ -617,7 +617,7 @@ $(document).ready(function() {
 									</logic:iterate>
 								</ul>
 							</div>
-							<span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br /></span>
+							<span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn jsFriendly="true" key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br /></span>
 						</td>
 						<c:if test="${aimTeamReportsForm.showTabs}">
 							<td class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
@@ -662,12 +662,12 @@ $(document).ready(function() {
 							</c:set>
 							<c:choose>
 								<c:when test="${report.budgetExporter}">
-									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true" title="${translation}">
+									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true&type=${report.type}" title="${translation}">
 										<img src= "/repository/message/view/images/edit.gif" border="0" />
 									</digi:link>
 								</c:when>
 								<c:otherwise>
-									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
+									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
 										<img src= "/repository/message/view/images/edit.gif" border="0" />
 									</digi:link> 
 								</c:otherwise>
@@ -697,7 +697,7 @@ $(document).ready(function() {
 										<digi:trn key="aim:ClickEditReport">Click on this icon to edit report</digi:trn>&nbsp;
 									</c:if>
 								</c:set>
-								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
+								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
 									<img src= "/repository/message/view/images/edit.gif" border="0" />
 								</digi:link>
 								<c:set var="translation">

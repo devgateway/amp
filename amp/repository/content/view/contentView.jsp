@@ -45,7 +45,7 @@
 			{
 				if (labelText[index].length > 0){
 					$("#"+idThumbnail).mouseover(function() {
-						 stm(['<digi:trn>Description</digi:trn>',labelText[index]],Style[1]);
+						 stm(['<digi:trn jsFriendly="true">Description</digi:trn>',labelText[index]],Style[1]);
 					});
 					$("#"+idThumbnail).mouseout(function() {
 						 htm();

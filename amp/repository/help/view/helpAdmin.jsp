@@ -296,7 +296,7 @@ function IsEmpty(){
 		<tr><td>&nbsp;</td></tr>&nbsp;
 	<tr>
 		<td align="left"  colspan="2" >
-				<input type="button" onclick="exp()" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'/>
+				<input type="button" onclick="exp()" value='<digi:trn jsFriendly="true" key="aim:translationmanagerexportbutton">Export</digi:trn>'/>
 				<hr>
 		</td>
 	</tr>
@@ -317,7 +317,7 @@ function IsEmpty(){
 	</td></tr>
 	<tr>
 		<td align="left">
-  			<input type="button" onclick="imp()" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'/>
+  			<input type="button" onclick="imp()" value='<digi:trn jsFriendly="true" key="aim:translationmanagerimportbutton">Import</digi:trn>'/>
 <!--		<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>--> <digi:errors/>
 	    </td>
 	</tr>

@@ -21,7 +21,7 @@
     var idUpdaterMember = aimTeamMemberForm.memberId.value;
     var selectedRole=document.getElementById("selRole");
     if(isEmpty(selectedRole.value) == true){
-        var msg='<digi:trn>Please Select Role</digi:trn>';
+        var msg='<digi:trn jsFriendly="true">Please Select Role</digi:trn>';
     	alert(msg);
     	return false;
     }

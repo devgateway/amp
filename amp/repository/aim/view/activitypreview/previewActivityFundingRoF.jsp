@@ -20,7 +20,7 @@
 	<tr bgcolor="#ffffff">
 		<td height="20" colspan="4" bgcolor="#FFFFCC"
 			style="text-transform: uppercase"><a
-			title='<digi:trn>Release of funds to</digi:trn>'>
+			title='<digi:trn jsFriendly="true">Release of funds to</digi:trn>'>
 	
 		<digi:trn>Planned Release of Funds</digi:trn>
 		</a></td>

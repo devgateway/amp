@@ -119,7 +119,7 @@ function disable() {
 	var wTLFlag   = document.getElementById('workingTeamLeadFlag').value;
 	var msg='';
 	if (appstatus == "started") {
-		msg+='<digi:trn key="aim:saveActivity:started">Do you want to submit this activity for approval ?</digi:trn>';
+		msg+= '<digi:trn key="aim:saveActivity:started" jsFriendly="true">Do you want to submit this activity for approval ?</digi:trn>';
 		if (wTLFlag == "yes") {
 			//if (confirm("Do you want to approve this activity ?"))
 				document.getElementById('approvalStatus').value = "approved";
@@ -128,7 +128,7 @@ function disable() {
 				document.getElementById('approvalStatus').value = "created";
 	}
 	if (appstatus == "approved") {
-		msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
+		msg+='<digi:trn key="aim:saveActivity:approved" jsFriendly="true">Do you want to approve this activity ?</digi:trn>';
 		if (wTLFlag != "yes")
 			document.getElementById('approvalStatus').value = "edited";
 	}
@@ -3286,13 +3286,13 @@ function collapseAll() {
 	jQuery.fn.exists = function(){return this.length>0;}
 	$("#collapseall").click(function() {
 		var showOrHide;  
-			  if($("#collapseall").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
-			  		$("#collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
-			  		$("#collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
+			  if($("#collapseall").attr('value')== '<digi:trn jsFriendly="true">Collapse All</digi:trn>'){ 
+			  		$("#collapseall").attr('value','<digi:trn jsFriendly="true">Expand All</digi:trn>');
+			  		$("#collapseall_1").attr('value','<digi:trn jsFriendly="true">Expand All</digi:trn>');
 			  		showOrHide=false;
 		  	  }else{
-			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
-			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
+			  		$("#collapseall").attr('value','<digi:trn jsFriendly="true">Collapse All</digi:trn>');
+			  		$("#collapseall_1").attr('value','<digi:trn jsFriendly="true">Collapse All</digi:trn>');
 			  		showOrHide=true;
 		  	  }
 		  	$(".toggleDiv").toggle(showOrHide);
@@ -3304,15 +3304,15 @@ function collapseAll() {
 	$( "button, input[type='button']" ).click (function (event) {
 		if (event.target.id=='collapseall_1') {
 			var showOrHide;  
-			  if($("#collapseall_1").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
-			  		$("#collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
-			  		$("#collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
-			  		$(event.target).attr('value','<digi:trn>Expand All</digi:trn>');
+			  if($("#collapseall_1").attr('value')== '<digi:trn jsFriendly="true">Collapse All</digi:trn>'){ 
+			  		$("#collapseall_1").attr('value','<digi:trn jsFriendly="true">Expand All</digi:trn>');
+			  		$("#collapseall").attr('value','<digi:trn jsFriendly="true">Expand All</digi:trn>');
+			  		$(event.target).attr('value','<digi:trn jsFriendly="true">Expand All</digi:trn>');
 			  		showOrHide=false;
 		  	  }else{
-			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
-			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
-			  		$(event.target).attr('value','<digi:trn>Collapse All</digi:trn>');
+			  		$("#collapseall_1").attr('value','<digi:trn jsFriendly="true">Collapse All</digi:trn>');
+			  		$("#collapseall").attr('value','<digi:trn jsFriendly="true">Collapse All</digi:trn>');
+			  		$(event.target).attr('value','<digi:trn jsFriendly="true">Collapse All</digi:trn>');
 			  		showOrHide=true;
 		  	  }
 			  $(".toggleDiv").toggle(showOrHide);

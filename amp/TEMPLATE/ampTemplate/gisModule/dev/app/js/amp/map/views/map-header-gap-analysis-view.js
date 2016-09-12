@@ -16,11 +16,15 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.listenTo(this.app.data.title, 'update', this.render);
-    
+    //reset is triggered when the side bar gis sidebar is reloaded in layers-manager-view
+    this.listenTo(this.app.data.indicators, 'reset', this.resetLayers);
     this.model.set('isGapAnalysisAvailable', false);
 	this.model.set('isGapAnalysisSelected', false);
   },
-
+  resetLayers: function(){
+	  this.model.set('isGapAnalysisAvailable', false);
+	  this.render();
+  },
   render: function() {
 	  var self = this;	  
 	  this.$el.html(this.template({
@@ -37,6 +41,7 @@ module.exports = Backbone.View.extend({
   },
   
   refresh: function(model_) {
+	  //debugger
 	  if (model_.get('type') === "Indicator Layers" || model_.get('type') === "joinBoundaries") {
 		  this.model.set('isGapAnalysisAvailable', model_.get('canDoGapAnalysis') && model_.get('selected'));
 		  this.render();

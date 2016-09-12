@@ -9,7 +9,7 @@
 
 <script langauage="JavaScript">
 function onDelete() {
-  var flag = confirm('<digi:trn key="aim:deletethisType">Delete this Type</digi:trn>');
+  var flag = confirm('<digi:trn jsFriendly="true" key="aim:deletethisType">Delete this Type</digi:trn>');
   return flag;
 }
 

@@ -298,8 +298,8 @@
         
         
             var myColumnDefs = [
-                {key:"name", label:'<digi:trn>NAME</digi:trn>', sortable:true, width: 250,formatter:this.formatTeamName},
-                {key:"actions", label:'<digi:trn>ACTIONS</digi:trn>', width: 160, formatter:this.formatActions,className:"ignore"}
+                {key:"name", label:'<digi:trn jsFriendly="true">NAME</digi:trn>', sortable:true, width: 250,formatter:this.formatTeamName},
+                {key:"actions", label:'<digi:trn jsFriendly="true">ACTIONS</digi:trn>', width: 160, formatter:this.formatActions,className:"ignore"}
             ];
   
             var div = document.getElementById('errors');
@@ -325,16 +325,16 @@
 	        	containers : ["dt-pag-nav","dt-pag-nav2"], 
 	        	template : '{CurrentPageReport}&nbsp;<span class="l_sm"><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}<br/>{FirstPageLink}{PageLinks}{LastPageLink}',
 	        	pageReportTemplate		: '<span class="l_sm"><digi:trn>Showing items</digi:trn></span> <span class="txt_sm_b">{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>',
-	        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn>All</digi:trn>'}],
-	        	firstPageLinkLabel : 	'<digi:trn>first page</digi:trn>',
-	        	previousPageLinkLabel : '<digi:trn>prev</digi:trn>',
+	        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
+	        	firstPageLinkLabel : 	'<digi:trn jsFriendly="true">first page</digi:trn>',
+	        	previousPageLinkLabel : '<digi:trn jsFriendly="true">prev</digi:trn>',
 	        	firstPageLinkClass : "yui-pg-first l_sm",
 	        	lastPageLinkClass: "yui-pg-last l_sm",
 	        	nextPageLinkClass: "yui-pg-next l_sm",
 	        	previousPageLinkClass: "yui-pg-previous l_sm",
 	        	rowsPerPageDropdownClass:"l_sm",
-	        	nextPageLinkLabel		: '<digi:trn>next</digi:trn>',
-	        	lastPageLinkLabel		: '<digi:trn>last page</digi:trn>',
+	        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
+	        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last page</digi:trn>',
 	        	 // use custom page link labels
 	            pageLabelBuilder: function (page,paginator) {
 	                var curr = paginator.getCurrentPage();
@@ -566,13 +566,13 @@
         myPanel.setHeader(msg);	
         var bodymsg='<div style="text-align: center">' + 
         '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-        '<digi:trn>Loading...</digi:trn><br/><br/></div>'
+        '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>'
         myPanel.setBody(bodymsg);
         showContent();
     }
     
     function addNewUser()	{
-        var msg='\n<digi:trn>AMP View Settings</digi:trn>';
+        var msg='\n<digi:trn jsFriendly="true">AMP View Settings</digi:trn>';
         showPanelLoading(msg);
             <digi:context name="commentUrl" property="context/module/moduleinstance/addUser.do"/>  
             var url = "<%=commentUrl %>";
@@ -587,7 +587,7 @@
 <script language="JavaScript">
     var oldKeyword="", oldWorkspaceType="", oldWorkspaceGroup="";
     function onDelete() {
-        var flag = confirm('<digi:trn key="admin:workSpaceManager.deleteQuestion">Delete this workspace?</digi:trn>');
+        var flag = confirm('<digi:trn jsFriendly="true" key="admin:workSpaceManager.deleteQuestion">Delete this workspace?</digi:trn>');
         return flag;
     }
 
@@ -708,9 +708,9 @@
     }
     
     function memberAction(action, id){
-        var msg='<digi:trn>Delete Member</digi:trn>';
+        var msg='<digi:trn jsFriendly="true">Delete Member</digi:trn>';
         if(action==='edit'){
-            msg='<digi:trn>Edit Member</digi:trn>'
+            msg='<digi:trn jsFriendly="true">Edit Member</digi:trn>'
         }
         myPanel.cfg.setProperty("width","400px");
         myPanel.cfg.setProperty("height","350px"); 
@@ -969,7 +969,7 @@
         if(validateAddedMember()){
             checkAndClose=true;
             lastFunction="showDetails";
-            var msg='<digi:trn>Assign Member</digi:trn>';
+            var msg='<digi:trn jsFriendly="true">Assign Member</digi:trn>';
                 <digi:context name="commentUrl" property="context/module/moduleinstance/addTeamMemberJSON.do"/>;
             var url = "<%=commentUrl %>";
             url += "?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value+"&email="+document.getElementsByName('email')[0].value+"&role="+document.getElementsByName('role')[0].value;
@@ -986,7 +986,7 @@
     }
     
     function addActivities(id){
-        var msg='<digi:trn>Assign Activities</digi:trn>';
+        var msg='<digi:trn jsFriendly="true">Assign Activities</digi:trn>';
         myPanel.cfg.setProperty("width","500px");
         myPanel.cfg.setProperty("height","400px"); 
         showPanelLoading(msg);
@@ -1105,7 +1105,7 @@
             url+="?"+ret+"&teamId="+document.getElementsByName('teamId')[0].value;
             var bodymsg='<div style="text-align: center">' + 
             '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-            '<digi:trn>Saving, please wait ...</digi:trn><br/><br/></div>'
+            '<digi:trn jsFriendly="true">Saving, please wait ...</digi:trn><br/><br/></div>'
             myPanel.setBody(bodymsg);
             YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
         }
@@ -1276,7 +1276,7 @@
                         <option value="0"><digi:trn>Members</digi:trn></option> 
                         <option value="1"><digi:trn>Activities</digi:trn></option> 
                     </select> &nbsp;&nbsp;&nbsp;
-					<input type="button" id="ws_go" class="buttonx" value='<digi:trn>Show</digi:trn>' onclick="showDetails()">
+					<input type="button" id="ws_go" class="buttonx" value='<digi:trn jsFriendly="true">Show</digi:trn>' onclick="showDetails()">
                     </td>
                     </tr>
                 </table>

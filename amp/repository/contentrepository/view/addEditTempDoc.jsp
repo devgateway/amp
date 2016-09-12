@@ -225,13 +225,13 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	function validateDoc(){
 		var tempName=document.getElementById('tempName');
 		if(tempName==null || tempName.value==''){
-			var msg='<digi:trn>Please Enter Name</digi:trn>';
+			var msg='<digi:trn jsFriendly="true">Please Enter Name</digi:trn>';
 			alert(msg);
 			return false;
 		}
 		var fields=$("select[id^='fieldType_']");
 		if(fields==null || fields.length==0){
-			var msg='<digi:trn>Please Add at least one field</digi:trn>';
+			var msg='<digi:trn jsFriendly="true">Please Add at least one field</digi:trn>';
 			alert(msg);
 			return false;
 		}
@@ -239,7 +239,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 		if(fields!=null && fields.length>0){
 			for(var i=0;i<fields.length;i++){
 				if(fields[i].value=='-1'){
-					var msg='<digi:trn>Select Field Type</digi:trn>';
+					var msg='<digi:trn jsFriendly="true">Select Field Type</digi:trn>';
 					alert(msg);
 					return false;
 				}
@@ -257,7 +257,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 			tempDocManagerForm.submit();
             }
 		}else{
-			var msg='<digi:trn>Please select Field to remove</digi:trn>';
+			var msg='<digi:trn jsFriendly="true">Please select Field to remove</digi:trn>';
 			alert(msg);
     		return false;
 		}

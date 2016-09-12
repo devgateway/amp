@@ -116,7 +116,7 @@
 	function showPaleteContent(objectId,hexColorObject){
 		objId=objectId;
 		hexColor=hexColorObject;
-		var msg='\n<digi:trn key="aim:colorpalete">Color Palette</digi:trn>';
+		var msg='\n<digi:trn jsFriendly="true" key="aim:colorpalete">Color Palette</digi:trn>';
 		showPanelLoading(msg);
 		<digi:context name="showPalete" property="context/calendar/showColorPalete.do" />	  
 		var url = "<%=showPalete %>";
@@ -128,7 +128,7 @@
 		var content = document.getElementById("popinContent");
 		content.innerHTML = '<div style="text-align: center">' + 
 		'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
-		'<digi:trn>Loading...</digi:trn><br/><br/></div>';
+		'<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>';
 		showContent();
 	}
 

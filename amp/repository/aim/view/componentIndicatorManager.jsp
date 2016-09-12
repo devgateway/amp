@@ -10,7 +10,7 @@
 <!--
 
 	function onDelete() {
-  	var flag = confirm('<digi:trn key="aim:deletethiscomponentIndicator">Are you sure you want to remove this component indicator ?</digi:trn>');
+  	var flag = confirm('<digi:trn jsFriendly="true" key="aim:deletethiscomponentIndicator">Are you sure you want to remove this component indicator ?</digi:trn>');
   	return flag;
 }
 	function addingCompIndicators()

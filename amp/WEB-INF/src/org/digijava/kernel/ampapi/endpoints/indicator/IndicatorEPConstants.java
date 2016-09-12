@@ -22,6 +22,7 @@ public class IndicatorEPConstants {
 
     public static final String RESULT = "result";
     public static final String VALUES = "values";
+    public static final String INDICATOR = "indicator";
     public static final String ID = "id";
     public static final String LABEL = "label";
     public static final String VALUE = "value";
@@ -31,6 +32,8 @@ public class IndicatorEPConstants {
     public static final String NUMBER_OF_CLASSES = "numberOfClasses";
     public static final String UNIT = "unit";
     public static final String ADM_LEVEL_ID = "admLevelId";
+    public static final String ADM_LEVEL_NAME = "admLevelName";
+    public static final String ADM_X = "admX";
     public static final String ACCESS_TYPE_ID = "accessTypeId";
     public static final String COLOR_RAMP_ID = "colorRampId";
     public static final String CREATED_ON = "createdOn";
@@ -47,6 +50,7 @@ public class IndicatorEPConstants {
     public static final String IS_POPULATION = "isPopulation";
     public static final String INDICATOR_TYPE_ID = "indicatorTypeId";
     public static final String CAN_DO_GAP_ANALYSIS = "canDoGapAnalysis";
+    public static final String DO_GAP_ANALYSIS = "gapAnalysis";
     public static final String OPTION_TO_SAVE_VALUES = "option";
 
     public static final String FIELD_NAME = "name";

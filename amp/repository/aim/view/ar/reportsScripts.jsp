@@ -273,7 +273,7 @@ saveReportEngine	= null;
 		    
 	function initScripts() {
 	
-	    var msg='\n<digi:trn key="rep:filter:filters">Filters</digi:trn>';
+	    var msg='\n<digi:trn key="rep:filter:filters" jsFriendly="true">Filters</digi:trn>';
 		myPanel1.setHeader(msg);
 		myPanel1.setBody("");
 		myPanel1.render(document.body);

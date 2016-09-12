@@ -43,6 +43,7 @@ public class AmpReportFiltersConverter {
 	protected static final Logger logger = Logger.getLogger(AmpReportFiltersConverter.class);
 	private AmpReportFilters filters;
 	private AmpARFilter ampARFilter;
+	private static final String TRANSACTION_DATE = "DATE";
 
 	public AmpReportFiltersConverter(AmpReportFilters filters) {
 		if (filters == null) {
@@ -146,6 +147,7 @@ public class AmpReportFiltersConverter {
 		addDateRangeFilter(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "fromActivityFinalContractingDate", "toActivityFinalContractingDate");
 		addDateRangeFilter(ColumnConstants.EFFECTIVE_FUNDING_DATE, "fromEffectiveFundingDate", "toEffectiveFundingDate");
 		addDateRangeFilter(ColumnConstants.FUNDING_CLOSING_DATE, "fromFundingClosingDate", "toFundingClosingDate");
+		addDateRangeFilter(TRANSACTION_DATE, "fromDate", "toDate");
 		this.ampARFilter.setComputedYear(this.filters.getComputedYear());
 		
 		return this.ampARFilter;
@@ -238,7 +240,13 @@ public class AmpReportFiltersConverter {
 			Method setterFromMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(fromMethod), java.lang.String.class);
 			Method setterToMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(toMethod), java.lang.String.class);			
 			SimpleDateFormat originalFormat = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
-			List<FilterRule> filterRules = this.filters.getAllFilterRules().get(new ReportElement(new ReportColumn(mondrianFilterColumnName)));
+			ReportElement filterElement = null;
+			if (mondrianFilterColumnName.equalsIgnoreCase(TRANSACTION_DATE)) {
+				filterElement = new ReportElement(ElementType.DATE);
+			} else {
+				filterElement = new ReportElement(new ReportColumn(mondrianFilterColumnName));
+			}
+			List<FilterRule> filterRules = this.filters.getAllFilterRules().get(filterElement);
 			if (filterRules != null) {
 				FilterRule auxFilterRule = (FilterRule) filterRules.toArray()[0];
 				String fromDate = originalFormat.format(DateTimeUtil.fromJulianNumberToDate(auxFilterRule.min));

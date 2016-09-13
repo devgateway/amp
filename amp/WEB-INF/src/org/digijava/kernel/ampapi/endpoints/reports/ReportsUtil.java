@@ -41,6 +41,8 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.PartialReportArea;
@@ -165,9 +167,9 @@ public class ReportsUtil {
 		
 		// get the report (from cache if it was cached)
 		CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
-		ReportAreaMultiLinked[] areas = null;
+		PaginatedReport pagiReport = null;
 		if (cachedReportData != null) {
-			areas = cachedReportData.areas;
+			pagiReport = cachedReportData.paginationInfo;
 			if (cachedReportData.report != null) {
 				result.set("headers", cachedReportData.report.leafHeaders);
 			}
@@ -176,16 +178,15 @@ public class ReportsUtil {
 		// extract data for the requested page
 		ReportArea pageArea = null;
 		if (recordsPerPage != -1) {
-			pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
+			pageArea = pagiReport.getPage(start, recordsPerPage);
 		} else if (cachedReportData != null && cachedReportData.report !=null) {
 			pageArea = cachedReportData.report.reportContents;
 		}
 		
-		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
+		int totalPageCount = pagiReport == null ? 0 : pagiReport.getPageCount(recordsPerPage);
 		
 		// configure the result
-		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, 
-				(areas != null ? areas.length : 0)));
+		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, (pagiReport != null ? pagiReport.getRecordsCount() : 0)));
 		result.set(EPConstants.SETTINGS, cachedReportData != null ? 
 				SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
 		return result;

@@ -42,6 +42,15 @@ AMPTableRenderer.prototype.render = function(data, options) {
 		metadataHierarchies = data.hierarchies;
 	}
 
+	
+	// AMP-23950 create trim() function if it's not available natively (in xls, pdf exports it does not exist)
+	// taken form https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
+	
+	if (!String.prototype.trim) {
+			String.prototype.trim = function () {
+					return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+			};
+	}
 	if (data !== undefined && data.page !== null && data.page.pageArea !== null) {
 		ACTIVITY_STATUS_CODES = data.colorSettings.activityStatusCodes;
 		

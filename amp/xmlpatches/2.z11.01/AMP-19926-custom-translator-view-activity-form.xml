@@ -18,16 +18,16 @@
 				INSERT INTO amp_menu_entry_view(menu_id, view_type) VALUES ((SELECT id FROM amp_menu_entry WHERE name = 'Non-Translator View AF'), 2);
 				INSERT INTO AMP_MENU_ENTRY_DG_GROUP (MENU_ID, GROUP_ID) VALUES (
 					(SELECT id FROM amp_menu_entry WHERE name = 'Translator View AF'),
-					(SELECT id FROM dg_group WHERE group_key = 'ADM'));
+					(SELECT id FROM dg_group WHERE group_key = 'ADM' and site_id=3));
 				INSERT INTO AMP_MENU_ENTRY_DG_GROUP (MENU_ID, GROUP_ID) VALUES (
 					(SELECT id FROM amp_menu_entry WHERE name = 'Translator View AF'),
-					(SELECT id FROM dg_group WHERE group_key = 'TRN'));
+					(SELECT id FROM dg_group WHERE group_key = 'TRN' and site_id=3));
 				INSERT INTO AMP_MENU_ENTRY_DG_GROUP (MENU_ID, GROUP_ID) VALUES (
 					(SELECT id FROM amp_menu_entry WHERE name = 'Non-Translator View AF'),
-					(SELECT id FROM dg_group WHERE group_key = 'ADM'));
+					(SELECT id FROM dg_group WHERE group_key = 'ADM' and site_id=3));
 				INSERT INTO AMP_MENU_ENTRY_DG_GROUP (MENU_ID, GROUP_ID) VALUES (
 					(SELECT id FROM amp_menu_entry WHERE name = 'Non-Translator View AF'),
-					(SELECT id FROM dg_group WHERE group_key = 'TRN'));
+					(SELECT id FROM dg_group WHERE group_key = 'TRN' and site_id=3));
 				
 				<!-- ignore standard Translator View menu entries in AF as well -->
 				UPDATE amp_menu_entry SET request_url = '^(?!(.*/TEMPLATE/ampTemplate/gisModule/dist/index.html.*|.*/TEMPLATE/ampTemplate/dashboard/build/index.html.*|.*/wicket/onepager/activity/new.*|.*/wicket/onepager/ssc/new.*)).*' 

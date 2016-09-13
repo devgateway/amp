@@ -5,7 +5,7 @@
 	<jira>AMP-23389</jira>
 	<keyword>remove favourite reports</keyword>
 	<author>vchihai</author>
-	<description>Remove 'Favourite Reports' from Reports menu</description>
+	<description>Remove 'Favourite Reports' from reports menu</description>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
@@ -13,7 +13,7 @@
 				
 				DELETE from amp_menu_entry where name = 'Favourite Reports';
 				
-				UPDATE amp_menu_entry SET url = '/viewTeamReports.do?tabs=false&reset=true' WHERE name  = 'All Reports';
+				UPDATE amp_menu_entry SET url = '/viewTeamReports.do?tabs=false&amp;reset=true' WHERE name  = 'All Reports';
 			</lang>
 		</script>
 	</apply>

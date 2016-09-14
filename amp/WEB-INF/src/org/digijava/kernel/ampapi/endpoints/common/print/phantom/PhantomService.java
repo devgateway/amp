@@ -4,6 +4,8 @@ import com.github.jarlakxen.embedphantomjs.ExecutionTimeout;
 import com.github.jarlakxen.embedphantomjs.PhantomJSReference;
 import com.github.jarlakxen.embedphantomjs.executor.PhantomJSFileExecutor;
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;
@@ -32,7 +34,12 @@ public class PhantomService {
         try {
             if(!initialized) {
                 LOGGER.info("Initializing the phantom service");
-                executor = new PhantomJSFileExecutor(PhantomJSReference.create().build(), new ExecutionTimeout(TIMEOUT, TimeUnit.SECONDS));
+				executor = new PhantomJSFileExecutor(
+						PhantomJSReference.create()
+								.useDownloadUrl(FeaturesUtil
+										.getGlobalSettingValue(GlobalSettingsConstants.DOWNLOAD_PHANTOM_URL))
+								.build(),
+						new ExecutionTimeout(TIMEOUT, TimeUnit.SECONDS));
                 scriptFile = new File(PhantomService.class.getResource(PHANTOM_SCRIPT_FILE).getFile());
                 initialized = true;
             }

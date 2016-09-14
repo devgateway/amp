@@ -205,6 +205,8 @@ public class GlobalSettingsConstants {
     public static final String  HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW = "Hide editable export formats public view";
 
     public static final String  IMPORT_PROCESSOR_URL = "Import processor endpoint URL";
+    
+    public static final String  DOWNLOAD_PHANTOM_URL = "PhantomJS URL";
 
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value

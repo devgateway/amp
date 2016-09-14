@@ -56,9 +56,6 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 
 				var element = subElement.models[0];
 				var content = [];
-				if (subElement.name === 'DATE') {
-					var dateIntervalType = CommonFilterUtils.getDateIntervalType(element, item, i);
-				}				
 				if (element.get('value') !== null) {
 					var auxItem = {};
 					auxItem.id = element.get('value');
@@ -67,6 +64,7 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 				} else if (element.get('valueToName') !== null) {
 					// This should be .models but the way the endpoint returns
 					// the data breaks backbone.
+					var foundValueToName = false;
 					_.each(element.get('valueToName').attributes, function(item_, i) {
 						// Need to do this because of how js parses these data
 						// and adds an extra element.
@@ -74,12 +72,25 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 							var item = {};
 							item.id = i;
 							item.name = item_;
-							if (dateIntervalType !== undefined)
-								item.dateIntervalType = dateIntervalType;
+							if (subElement.name === 'DATE') {
+								item.dateIntervalType = (element.get('max') === item.id ? 'max' : 'min');
+							}
 							content.push(item);
+							foundValueToName = true;
 						}
 					});
+					if (!foundValueToName) {
+						// This is a special case for usually for boolean filters with YES and/or NO answer.						
+						_.each(element.get('values').models, function(item_, i) {
+							if (i !== undefined && item_ !== undefined) {
+								var item = {};
+								item[i] = item_.get('value');
+								content = item;
+							}
+						});
+					}
 				}
+				
 				//translate filter values
 				_.each(content,function(item, i) {
 					//for now only true or false were asked to be translated. 
@@ -88,7 +99,12 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 						item.trnName = TranslationManager.getTranslated(item.name);
 					 }
 					else {
-						item.trnName = item.name;
+						if (item instanceof Array) {
+							item.trnName = item.name;							
+						} else {
+							// This is a special case for boolean filters like Humanitarian Aid that have a different structure so we cant translate anything, just have 0/1.
+							// This forces us to translate 0/1 into Yes/No elsewhere because we cant do "1".trnName = 'Yes'
+						}
 					}
 				});
 				var auxFilter = new Filter({
@@ -258,29 +274,6 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 	
   };
 	  
-	FilterUtils.fillDateBlob = function(dateBlob, attributes){
-		if (attributes.values.length === 1) {
-			if (attributes.values[0].dateIntervalType === "min") {
-				dateBlob.start = FilterUtils._dateConvert(attributes.values[0].name);
-				FilterUtils.pushDateLimit("Start Date", FilterUtils._dateConvert(attributes.values[0].name));
-			} else {
-				dateBlob.end = FilterUtils._dateConvert(attributes.values[0].name);
-				FilterUtils.pushDateLimit("End Date", FilterUtils._dateConvert(attributes.values[0].name));				
-			}
-		}
-		else if (attributes.values.length === 2) {
-			dateBlob.start = FilterUtils._dateConvert(attributes.values[0].name);
-			FilterUtils.pushDateLimit("Start Date", FilterUtils._dateConvert(attributes.values[0].name));
-
-			dateBlob.end = FilterUtils._dateConvert(attributes.values[1].name);
-			FilterUtils.pushDateLimit("End Date", FilterUtils._dateConvert(attributes.values[1].name));			
-		}
-		else {
-			//error. why doesn't it have dates
-		}
-
-	};	
-
 	FilterUtils.widgetFiltersToJavaFilters = function(originalFilters) {
 		return originalFilters;
 	};

@@ -9,6 +9,7 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidatorAdapter;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
@@ -18,6 +19,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author aartimon
@@ -30,31 +32,26 @@ public class TranslatableValidators implements IValidator<String> {
 
     
     private static boolean isUnqTtlValidator(IValidator<? super String> validator) {
-    	boolean unq = false;
-    	
-        if (validator instanceof ValidatorAdapter && ((ValidatorAdapter) validator).getValidator() instanceof AmpUniqueActivityTitleValidator) {
-        	unq = true;
-        }
-    	return unq;
+    	return validator instanceof ValidatorAdapter && 
+    			((ValidatorAdapter) validator).getValidator() instanceof AmpUniqueActivityTitleValidator;
     }
     
-    private List<IValidator<? super String>> excludeUniqueTitleValidator(List<IValidator<? super String>> originalValidators) {
-    	final List<IValidator<? super String>> validatorsExcludingUniqueTitleValidator = new ArrayList<>();
-    	if (validators != null)
-    	{
-	        for (IValidator validator : validators) {
-	            if (!isUnqTtlValidator(validator)) {
-	            	validatorsExcludingUniqueTitleValidator.add(validator);
-	            }
-	        }
+    private static boolean isStringValidator(IValidator<? super String> validator) {
+    	return validator instanceof StringValidator;
+    }
+    
+    private List<IValidator<? super String>> excludeUnnestableValidators(List<IValidator<? super String>> originalValidators) {
+    	List<IValidator<? super String>> res = new ArrayList<>();
+    	if (validators != null) {
+    		res = validators.stream().filter(v -> !isUnqTtlValidator(v) && !isStringValidator(v)).collect(Collectors.toList());
     	}
-		return Collections.unmodifiableList(validatorsExcludingUniqueTitleValidator);    	
+		return Collections.unmodifiableList(res);
     }
     
     public TranslatableValidators(IModel<String> originalModel, IModel<String> newModel , List<IValidator<? super String>> validators) {
         this.originalModel = originalModel;
         this.newModel = newModel;
-        this.validators = excludeUniqueTitleValidator(validators);
+        this.validators = excludeUnnestableValidators(validators);
         
     }
 
@@ -80,8 +77,11 @@ public class TranslatableValidators implements IValidator<String> {
         if (component.getModel() instanceof TranslationDecoratorModel
         		|| component.getModel() instanceof ResourceTranslationModel){
             List<IValidator<? super String>> validators = component.getValidators();
+            //strip all validators from component
+            //apart from uniqueTitleValidator
+            //and maxStringLength validator
             for (IValidator validator : validators){
-            	if (!isUnqTtlValidator(validator)){
+            	if (!isUnqTtlValidator(validator) && !isStringValidator(validator)){
             		component.remove(validator);
             	}
             }
@@ -89,6 +89,7 @@ public class TranslatableValidators implements IValidator<String> {
             component.add(tv);
         }
     }
+    
 	/**
 	 * if flag is set, will return true and clear it (set to false)
 	 * @param formComponent
@@ -108,7 +109,6 @@ public class TranslatableValidators implements IValidator<String> {
 	            	((AmpTextAreaFieldPanel) thisLevel0).setUniqueTitleValidatorError(false);
 	            }
 	            return result;
-	            
 	        } catch (Exception  e) {
 	        	return false;
 	        }
@@ -130,14 +130,6 @@ public class TranslatableValidators implements IValidator<String> {
             	/* if the failing validator is AmpUniqueActivityTitleValidator
             	 * switching shouldn't be performed
             	 * */
-//            	if (formComponent instanceof AmpTextAreaFieldPanel) {
-            		
-//            	}
-            	if (AmpTextAreaFieldPanel.class.isAssignableFrom(formComponent.getParent().getClass())) {
-//            		formComponent.get
-//            		formComponent.ge
-//            		if (((AmpTextAreaFieldPanel)formComponent).isUniqueTitleValidatorError())
-            	}
             	if (!isFlagSet(formComponent)) {
 	                tdm.getLangModel().setObject(null);
 	                formComponent.clearInput();

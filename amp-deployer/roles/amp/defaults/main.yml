@@ -1,0 +1,8 @@
+---
+
+amp__port: 8009
+
+amp__import_and_build: 0
+
+amp__project_root: /opt/devgateway/amp212-local
+amp__project_cms_root: /var/www/amp212-cms-local

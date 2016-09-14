@@ -1924,7 +1924,7 @@ public class TeamUtil {
      */
     public static AmpTeamMember getCurrentAmpTeamMember(){
     	TeamMember tm = getCurrentMember(); 
-    	return tm == null ? null : getAmpTeamMember(tm.getMemberId());
+    	return (tm == null || tm.getTeamId() == null) ? null : getAmpTeamMember(tm.getMemberId());
     }
     
     /**

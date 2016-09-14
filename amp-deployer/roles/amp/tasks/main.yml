@@ -1,0 +1,35 @@
+---
+
+# @TODO: Improve!
+
+# - name: Display all variables/facts known for a host
+#   debug: var=hostvars[inventory_hostname] verbosity=4
+
+# - debug: var=amp__port
+
+- name: Insert Firewall Rule
+  firewalld: port={{amp__port}}/tcp permanent=true state=enabled immediate=yes
+
+- name: Create build script
+  template:
+    src: amp-build.sh.j2
+    dest: /usr/local/bin/amp-build
+    mode: "u=rwx,g=rwx,o=rx"
+
+- name: Create simbolic link for AMP
+  file:
+    src: "{{ amp__project_root }}"
+    dest: "/opt/apache/apache-tomcat/webapps/ROOT"
+    state: link
+    owner: "{{ common__deployer_user }}"
+    group: "{{ common__deployer_group }}"
+
+- name: Create import script
+  template:
+    src: amp-import.sh.j2
+    dest: /usr/local/bin/amp-import
+    mode: "u=rwx,g=rwx,o=rx"
+
+- name: Import and build the amp and amp-cms
+  include: import.yml
+  when: amp__import_and_build

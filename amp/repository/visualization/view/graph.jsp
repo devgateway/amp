@@ -53,8 +53,8 @@
 <input type="hidden" id="GlobalFontWeight" value="bold" />
 <input type="hidden" id="trnMessagePanel" value="<digi:trn jsFriendly='true'>Empty Dataset</digi:trn>" />
 <input type="hidden" id="trnMessageEmpty" value="<digi:trn jsFriendly='true'>No data to show</digi:trn>" />
-<input type="hidden" id="trnMessageLoadingPanel" value="<digi:trn jsFriendly='true'>Loading</digi:trn>" />
-<input type="hidden" id="trnMessageLoading" value="<digi:trn jsFriendly='true'>Loading data...</digi:trn>" />
+<input type="hidden" id="trnMessageLoadingPanel" value="<digi:trn jsFriendly='true'>Loading...</digi:trn>" />
+<input type="hidden" id="trnMessageLoading" value="<digi:trn jsFriendly='true'>Loading...</digi:trn>" />
 <input type="hidden" id="trnMessageYearError" value="<digi:trn jsFriendly='true'>Please select at least two different years</digi:trn>" />
 <input type="hidden" id="trnMessageError" value="<digi:trn jsFriendly='true'>Error</digi:trn>" />
 <input type="hidden" id="trnYears" value="<digi:trn jsFriendly='true'>Years</digi:trn>" />

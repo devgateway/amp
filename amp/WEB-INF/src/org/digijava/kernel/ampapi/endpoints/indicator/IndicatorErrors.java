@@ -22,4 +22,8 @@ public class IndicatorErrors {
 
     public static final ApiErrorMessage INVALID_FIELD = new ApiErrorMessage(10, "Invalid field");
     public static final ApiErrorMessage INVALID_SORT = new ApiErrorMessage(11, "Invalid sort");
+    public static final ApiErrorMessage EXISTING_NAME = new ApiErrorMessage(12, "Existing name");
+    public static final ApiErrorMessage INVALID_POPULATION_LAYERS = new ApiErrorMessage(13, "Invalid population layers");
+    public static final ApiErrorMessage INVALID_INDICATOR_TYPE = new ApiErrorMessage(14, "Invalid Indicator Type");
+    public static final ApiErrorMessage INVALID_IMPORT_NO_VALUE = new ApiErrorMessage(15, "Invalid Import: Please add at least one indicator value");
 }

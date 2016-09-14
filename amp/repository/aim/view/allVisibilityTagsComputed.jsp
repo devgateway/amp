@@ -22,6 +22,7 @@
 <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION"/>
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display>
@@ -98,6 +99,7 @@
 <module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
@@ -247,6 +249,8 @@
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display> 
 <field:display feature="Funding Information" name="Funding Classification Date"></field:display>
 <field:display feature="Funding Information" name="Expenditure Class"></field:display>
+<field:display feature="Funding Information" name="Effective Funding Date"></field:display>
+<field:display feature="Funding Information" name="Funding Closing Date"></field:display>
 <field:display feature="Government Contact Information" name="Government Email"></field:display> 
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 
@@ -860,6 +864,7 @@
 <field:display name="Sector Group Department/Division"  feature="Sector Group"></field:display>
 
 <feature:display name="Use icons for Sectors in Project List" module="/GIS"></feature:display>
+<feature:display name="Gap Analysis Map" module="/GIS"></feature:display>
 
 <!-- create entries for each and every available measure -->
 <%
@@ -875,6 +880,12 @@
 <!-- new dashboard -->
 <module:display name="Public Dashboards" parentModule="PUBLIC VIEW"></module:display>
 <!--  -->
+
+<module:display name="Activity Preview" parentModule="PUBLIC VIEW"></module:display>
+<feature:display name="Contacts" module="Activity Preview"></feature:display>
+<feature:display name="Version History" module="Activity Preview"></feature:display>
+<feature:display name="Show Editable Export Formats" module="Activity Preview"></feature:display>
+
 <module:display name="Visualization Dashboards"></module:display>
 
 <module:display name="Dashboard Org. Info" parentModule="Visualization Dashboards"></module:display>

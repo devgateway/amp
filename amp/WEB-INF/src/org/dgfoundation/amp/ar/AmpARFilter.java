@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.dgfoundation.amp.PropertyListable;
@@ -440,6 +441,20 @@ public class AmpARFilter extends PropertyListable {
 	private String dynProposedApprovalFilterOperator;
 	private String dynProposedApprovalFilterXPeriod;
 
+	private String fromEffectiveFundingDate;
+	private String toEffectiveFundingDate;
+	private String dynEffectiveFundingFilterCurrentPeriod;
+	private Integer dynEffectiveFundingFilterAmount;
+	private String dynEffectiveFundingFilterOperator;
+	private String dynEffectiveFundingFilterXPeriod;
+
+	private String fromFundingClosingDate;
+	private String toFundingClosingDate;
+	private String dynFundingClosingFilterCurrentPeriod;
+	private Integer dynFundingClosingFilterAmount;
+	private String dynFundingClosingFilterOperator;
+	private String dynFundingClosingFilterXPeriod;
+
 	/**
 	 * whether to only show activities linked/not linked to pledges
 	 */
@@ -474,6 +489,7 @@ public class AmpARFilter extends PropertyListable {
 	public final static int AMOUNT_OPTION_IN_UNITS = 0;
 	public final static int AMOUNT_OPTION_IN_THOUSANDS = 1;
 	public final static int AMOUNT_OPTION_IN_MILLIONS = 2;
+	public final static int AMOUNT_OPTION_IN_BILLIONS = 3;
 	
 	private Integer amountinthousand;
 	
@@ -1801,6 +1817,27 @@ public class AmpARFilter extends PropertyListable {
 			ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER = "SELECT apsd.amp_activity_id from v_actual_proposed_date apsd WHERE " + ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER;
 			queryAppend(ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER);
 		}
+
+		dates = this.calculateDateFilters(fromEffectiveFundingDate, toEffectiveFundingDate, dynEffectiveFundingFilterCurrentPeriod, dynEffectiveFundingFilterAmount, dynEffectiveFundingFilterOperator, dynEffectiveFundingFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+
+		String ACTIVITY_EFFECTIVE_FUNDING_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "apsd.effective_funding_date");
+		if (ACTIVITY_EFFECTIVE_FUNDING_DATE_FILTER.length() > 0) {
+			ACTIVITY_EFFECTIVE_FUNDING_DATE_FILTER = "SELECT apsd.amp_activity_id from v_actual_proposed_date apsd WHERE " + ACTIVITY_EFFECTIVE_FUNDING_DATE_FILTER;
+			queryAppend(ACTIVITY_EFFECTIVE_FUNDING_DATE_FILTER);
+		}
+
+		dates = this.calculateDateFilters(fromFundingClosingDate, toFundingClosingDate, dynFundingClosingFilterCurrentPeriod, dynFundingClosingFilterAmount, dynFundingClosingFilterOperator, dynFundingClosingFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+
+		String ACTIVITY_FUNDING_CLOSING_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "apsd.funding_closing_date");
+		if (ACTIVITY_FUNDING_CLOSING_DATE_FILTER.length() > 0) {
+			ACTIVITY_FUNDING_CLOSING_DATE_FILTER = "SELECT apsd.amp_activity_id from v_funding_closing_date apsd WHERE " + ACTIVITY_FUNDING_CLOSING_DATE_FILTER;
+			queryAppend(ACTIVITY_FUNDING_CLOSING_DATE_FILTER);
+		}
+
 	}
 	
 
@@ -2972,6 +3009,44 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	/**
+	 * @return a ['from', 'to'] pair for EffectiveFundingDate range or [null, null] if none is configured
+	 */
+	public Date[] buildFromAndToEffectiveFundingDateAsDate() {
+		boolean noFrom = StringUtils.isBlank(fromEffectiveFundingDate);
+		boolean noTo = StringUtils.isBlank(toEffectiveFundingDate);
+		if (noFrom && noTo) {
+			Date[] dates = this.calculateDateFiltersAsDate(this.dynEffectiveFundingFilterCurrentPeriod, this.dynEffectiveFundingFilterAmount, this.dynEffectiveFundingFilterOperator, this.dynEffectiveFundingFilterXPeriod);
+			return dates;
+		}
+		try {
+			return new Date[]{(noFrom ? null : sdfIn.parse(fromEffectiveFundingDate)), (noTo ? null : sdfIn.parse(toEffectiveFundingDate))};
+		}
+		catch(ParseException e) {
+			logger.error("invalid date trickled into AmpARFilter::fromEffectiveFundingDate!", e); // SHOULD NOT HAPPEN!
+			return null;
+		}
+	}
+
+	/**
+	 * @return a ['from', 'to'] pair for FundingClosingDate range or [null, null] if none is configured
+	 */
+	public Date[] buildFromAndToFundingClosingDateAsDate() {
+		boolean noFrom = StringUtils.isBlank(fromFundingClosingDate);
+		boolean noTo = StringUtils.isBlank(toFundingClosingDate);
+		if (noFrom && noTo) {
+			Date[] dates = this.calculateDateFiltersAsDate(this.dynFundingClosingFilterCurrentPeriod, this.dynFundingClosingFilterAmount, this.dynFundingClosingFilterOperator, this.dynFundingClosingFilterXPeriod);
+			return dates;
+		}
+		try {
+			return new Date[]{(noFrom ? null : sdfIn.parse(fromFundingClosingDate)), (noTo ? null : sdfIn.parse(toFundingClosingDate))};
+		}
+		catch(ParseException e) {
+			logger.error("invalid date trickled into AmpARFilter::fromFundingClosingDate!", e); // SHOULD NOT HAPPEN!
+			return null;
+		}
+	}
+
+	/**
 	 * @param fromActivityFinalContractingDate the fromActivityFinalContractingDate to set
 	 */
 	public void setFromActivityFinalContractingDate(
@@ -3591,5 +3666,101 @@ public class AmpARFilter extends PropertyListable {
 
 	public static boolean isTrue(Boolean b) {
 		return b != null && b;
+	}
+
+	public String getFromEffectiveFundingDate() {
+		return fromEffectiveFundingDate;
+	}
+
+	public void setFromEffectiveFundingDate(String fromEffectiveFundingDate) {
+		this.fromEffectiveFundingDate = fromEffectiveFundingDate;
+	}
+
+	public String getToEffectiveFundingDate() {
+		return toEffectiveFundingDate;
+	}
+
+	public void setToEffectiveFundingDate(String toEffectiveFundingDate) {
+		this.toEffectiveFundingDate = toEffectiveFundingDate;
+	}
+
+	public String getDynEffectiveFundingFilterCurrentPeriod() {
+		return dynEffectiveFundingFilterCurrentPeriod;
+	}
+
+	public void setDynEffectiveFundingFilterCurrentPeriod(String dynEffectiveFundingFilterCurrentPeriod) {
+		this.dynEffectiveFundingFilterCurrentPeriod = dynEffectiveFundingFilterCurrentPeriod;
+	}
+
+	public Integer getDynEffectiveFundingFilterAmount() {
+		return dynEffectiveFundingFilterAmount;
+	}
+
+	public void setDynEffectiveFundingFilterAmount(Integer dynEffectiveFundingFilterAmount) {
+		this.dynEffectiveFundingFilterAmount = dynEffectiveFundingFilterAmount;
+	}
+
+	public String getDynEffectiveFundingFilterOperator() {
+		return dynEffectiveFundingFilterOperator;
+	}
+
+	public void setDynEffectiveFundingFilterOperator(String dynEffectiveFundingFilterOperator) {
+		this.dynEffectiveFundingFilterOperator = dynEffectiveFundingFilterOperator;
+	}
+
+	public String getDynEffectiveFundingFilterXPeriod() {
+		return dynEffectiveFundingFilterXPeriod;
+	}
+
+	public void setDynEffectiveFundingFilterXPeriod(String dynEffectiveFundingFilterXPeriod) {
+		this.dynEffectiveFundingFilterXPeriod = dynEffectiveFundingFilterXPeriod;
+	}
+
+	public String getFromFundingClosingDate() {
+		return fromFundingClosingDate;
+	}
+
+	public void setFromFundingClosingDate(String fromFundingClosingDate) {
+		this.fromFundingClosingDate = fromFundingClosingDate;
+	}
+
+	public String getToFundingClosingDate() {
+		return toFundingClosingDate;
+	}
+
+	public void setToFundingClosingDate(String toFundingClosingDate) {
+		this.toFundingClosingDate = toFundingClosingDate;
+	}
+
+	public String getDynFundingClosingFilterCurrentPeriod() {
+		return dynFundingClosingFilterCurrentPeriod;
+	}
+
+	public void setDynFundingClosingFilterCurrentPeriod(String dynFundingClosingFilterCurrentPeriod) {
+		this.dynFundingClosingFilterCurrentPeriod = dynFundingClosingFilterCurrentPeriod;
+	}
+
+	public Integer getDynFundingClosingFilterAmount() {
+		return dynFundingClosingFilterAmount;
+	}
+
+	public void setDynFundingClosingFilterAmount(Integer dynFundingClosingFilterAmount) {
+		this.dynFundingClosingFilterAmount = dynFundingClosingFilterAmount;
+	}
+
+	public String getDynFundingClosingFilterOperator() {
+		return dynFundingClosingFilterOperator;
+	}
+
+	public void setDynFundingClosingFilterOperator(String dynFundingClosingFilterOperator) {
+		this.dynFundingClosingFilterOperator = dynFundingClosingFilterOperator;
+	}
+
+	public String getDynFundingClosingFilterXPeriod() {
+		return dynFundingClosingFilterXPeriod;
+	}
+
+	public void setDynFundingClosingFilterXPeriod(String dynFundingClosingFilterXPeriod) {
+		this.dynFundingClosingFilterXPeriod = dynFundingClosingFilterXPeriod;
 	}
 }

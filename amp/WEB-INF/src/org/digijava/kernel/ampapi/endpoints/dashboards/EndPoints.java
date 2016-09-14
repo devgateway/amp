@@ -134,8 +134,8 @@ public class EndPoints {
      * Build Heat Map based on the expected input format:
      * INPUT:
      * {
-     *  “xCount” : 25, // default 25, set -1 to no limit
-     *  “yCount” : 10, // default 10, set -1 to no limit
+     *  “xCount” : 25, // default 25, set -1 to no limit. +1 ("Others") will be added if more than that available
+     *  “yCount” : 10, // default 10, set -1 to no limit. +1 ("Others") will be added if more than that available
      *  “xColumn” : “Primary Sector”, // must be OrigName
      *  “yColumn” : “Donor Group”, // must be origName
      *  “filters”: { ... }, // usual filters input
@@ -144,13 +144,15 @@ public class EndPoints {
      * OUTPUT:
      * {
      *  “summary” : [“Primary Sector”, “Donor Group”, “Actual Commitments”],
-     *  “xDataSet” : [“Education”, “Health”, ...],
-     *  “yDataSet” : [“World Bank Group”, “ADB”, ...],
+     *  “xDataSet” : [“Education”, “Health”, ...], // may end with "Others" (translated) for anything cut off 
+     *  “yDataSet” : [“World Bank Group”, “ADB”, ...], // may end with "Others" (translated) for anything cut off
      *  “xPTotals” : [100, ...], // percentage, 100 for each X per current rules
      *  “xTotals” : [“5 000”, …], // formatted abmounts
      *  “yPTotals” : [17, ...],
      *  “yTotals”: [“800”, …],
      *  “matrix” : [[{“p”: 100, “dv” : “12 000”}, ...], null, [...], ...], // p = % amount, dv = display value
+     *  "xTotalCount" : 30,// the actual total count of entries for X. Can be used to detect if "Other" is present on X
+     *  "yTotalCount" : 20 // the actual total count of entries for Y. Can be used to detect if "Other" is present on Y
      * } 
      * </pre> 
      * @param config exp

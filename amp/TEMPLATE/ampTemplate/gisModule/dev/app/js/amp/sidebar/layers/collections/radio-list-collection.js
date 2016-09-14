@@ -28,7 +28,7 @@ module.exports = Backbone.Collection.extend({
 
   select: function(model) {
     _.each(this.siblingGroupList, function(child) {
-      child.clearSelected();
+      if(child) child.clearSelected();
     });
 
     $('#map-loading').show();

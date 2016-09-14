@@ -29,8 +29,8 @@ public class NiPercentageTextColumnGenerator extends ColumnGenerator {
 		public final BigDecimal percentage;
 		
 		public Entry(String aavname, String name, long id, BigDecimal percentage) {
-			this.aavname = aavname;
-			this.text = name;
+			this.aavname = anon(aavname);
+			this.text = cleanup(name);
 			this.id = id;
 			this.percentage = percentage;
 		}
@@ -46,13 +46,7 @@ public class NiPercentageTextColumnGenerator extends ColumnGenerator {
 		this.name = columnName;
 		this.entries = populateList();
 	}
-	
-	private Map<Long, String> getActivityNames() {
-		String query = "SELECT amp_activity_id, name FROM amp_activity WHERE amp_team_id IN "
-				+ "(SELECT amp_team_id FROM amp_team WHERE name = 'test workspace')";
-		return (Map<Long, String>) PersistenceManager.getSession().doReturningWork(connection -> SQLUtils.collectKeyValue(connection, query));
-	}
-	
+		
 	/**
 	 * Uses the reports engine and AmpReportsSchema to fetch cells.
 	 * It's not done via direct selects because of the importance of normalization (Normalized*Column.java)

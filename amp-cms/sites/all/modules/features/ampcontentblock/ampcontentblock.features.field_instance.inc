@@ -10,7 +10,7 @@
 function ampcontentblock_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'contentblock-fixed-field_cbblocks'
+  // Exported field_instance: 'contentblock-fixed-field_cbblocks'.
   $field_instances['contentblock-fixed-field_cbblocks'] = array(
     'bundle' => 'fixed',
     'default_value' => NULL,
@@ -48,7 +48,7 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-fixed-field_cbbody'
+  // Exported field_instance: 'contentblock-fixed-field_cbbody'.
   $field_instances['contentblock-fixed-field_cbbody'] = array(
     'bundle' => 'fixed',
     'default_value' => NULL,
@@ -84,7 +84,7 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-fixed-field_cbimage'
+  // Exported field_instance: 'contentblock-fixed-field_cbimage'.
   $field_instances['contentblock-fixed-field_cbimage'] = array(
     'bundle' => 'fixed',
     'deleted' => 0,
@@ -165,7 +165,7 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-fixed-field_cblinks'
+  // Exported field_instance: 'contentblock-fixed-field_cblinks'.
   $field_instances['contentblock-fixed-field_cblinks'] = array(
     'bundle' => 'fixed',
     'default_value' => NULL,
@@ -186,6 +186,7 @@ function ampcontentblock_field_default_field_instances() {
     'label' => 'Link',
     'required' => 0,
     'settings' => array(
+      'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
         'configurable_title' => 0,
@@ -200,6 +201,7 @@ function ampcontentblock_field_default_field_instances() {
       'entity_translation_sync' => FALSE,
       'rel_remove' => 'default',
       'title' => 'none',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -215,7 +217,7 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-fixed-title_field'
+  // Exported field_instance: 'contentblock-fixed-title_field'.
   $field_instances['contentblock-fixed-title_field'] = array(
     'bundle' => 'fixed',
     'default_value' => NULL,
@@ -255,7 +257,7 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-predefined-field_cbwidget'
+  // Exported field_instance: 'contentblock-predefined-field_cbwidget'.
   $field_instances['contentblock-predefined-field_cbwidget'] = array(
     'bundle' => 'predefined',
     'deleted' => 0,
@@ -287,7 +289,7 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-predefined-title_field'
+  // Exported field_instance: 'contentblock-predefined-title_field'.
   $field_instances['contentblock-predefined-title_field'] = array(
     'bundle' => 'predefined',
     'default_value' => NULL,
@@ -329,7 +331,7 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-text-field_cbbody'
+  // Exported field_instance: 'contentblock-text-field_cbbody'.
   $field_instances['contentblock-text-field_cbbody'] = array(
     'bundle' => 'text',
     'default_value' => NULL,
@@ -365,7 +367,7 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-text-title_field'
+  // Exported field_instance: 'contentblock-text-title_field'.
   $field_instances['contentblock-text-title_field'] = array(
     'bundle' => 'text',
     'default_value' => NULL,

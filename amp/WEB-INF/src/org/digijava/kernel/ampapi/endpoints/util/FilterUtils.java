@@ -20,7 +20,7 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.Filters;
@@ -34,11 +34,9 @@ import org.digijava.module.search.util.SearchUtil;
 
 public class FilterUtils {
 	protected static Logger logger = Logger.getLogger(FilterUtils.class);
-	
-	private static List<String> COLUMN_DATES_FILTER = Collections.unmodifiableList(new ArrayList<>(MondrianSQLFilters.DATE_COLUMNS));
-	
+		
 	public static AmpReportFilters getApiOtherFilters(Map<String, Object> filter, AmpReportFilters filterRules) {
-		for (String columnName : COLUMN_DATES_FILTER) {
+		for (String columnName : AmpReportsSchema.getInstance().DATE_COLUMN_NAMES) {
 			if (filter.get(columnName) != null) {
 				filterRules = addDateFilterRule(columnName, filter, filterRules);
 			}
@@ -62,7 +60,7 @@ public class FilterUtils {
 			
 			if (start != null || end != null) {
 				SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
-				if (COLUMN_DATES_FILTER.contains(dateColumn)) {
+				if (AmpReportsSchema.getInstance().DATE_COLUMN_NAMES.contains(dateColumn)) {
 					filterRules.addDateRangeFilterRule(new ReportColumn(dateColumn),
 							start == null ? null : sdf.parse(start), end == null ? null : sdf.parse(end));
 				} else {
@@ -88,7 +86,7 @@ public class FilterUtils {
 	}
 
 	/**
-	 * returns a MondrianReportFilters based on the End point parameter
+	 * returns a AmpReportFilters based on the End point parameter
 	 * 
 	 * @param filter
 	 * @return
@@ -176,9 +174,9 @@ public class FilterUtils {
 	}
 	
 	/**
-	 * Builds MondrianReportFilters based on the json filters request
+	 * Builds AmpReportFilters based on the json filters request
 	 * @param filtersConfig
-	 * @return MondrianReportFilters
+	 * @return AmpReportFilters
 	 * @see #getFilters(JsonBean, List)
 	 */
 	public static AmpReportFilters getFilters(JsonBean filtersConfig, AmpReportFilters filters) {
@@ -186,10 +184,10 @@ public class FilterUtils {
 	}
 	
 	/**
-	 * Builds MondrianReportFilters based on the json filters request and additional options
+	 * Builds AmpReportFilters based on the json filters request and additional options
 	 * @param filtersConfig json filters config request
 	 * @param activitIds    the list of activities to filter by
-	 * @return MondrianReportFilters
+	 * @return AmpReportFilters
 	 */
 	public static AmpReportFilters getFilters(JsonBean filtersConfig, List<String> activitIds,
 			AmpReportFilters filters) {

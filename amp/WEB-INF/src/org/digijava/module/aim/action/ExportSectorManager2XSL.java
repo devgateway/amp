@@ -11,8 +11,6 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.contrib.RegionUtil;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -134,7 +132,8 @@ public class ExportSectorManager2XSL extends Action {
 									mergeRowsNum+=threeLevelSectors.size();
 									CellRangeAddress region=new CellRangeAddress((row.getRowNum()-threeLevelSectors.size()),row.getRowNum()-1,2,2);
 									AdminXSLExportUtil.applyingStylesToRegion(region, sheet, wb);
-									sheet.addMergedRegion(region);
+									if (threeLevelSectors.size() != 1)
+										sheet.addMergedRegion(region);
 								}
 								else{
 									cellIndex=3;
@@ -146,7 +145,8 @@ public class ExportSectorManager2XSL extends Action {
 							}
 							CellRangeAddress region=new CellRangeAddress((row.getRowNum()-mergeRowsNum),row.getRowNum()-1,1,1);
 							AdminXSLExportUtil.applyingStylesToRegion(region, sheet, wb);
-							sheet.addMergedRegion(region);
+							if (mergeRowsNum != 1)
+								sheet.addMergedRegion(region);
 						}
 						else{
 							cellIndex=2;

@@ -18,8 +18,8 @@ public class CompleteWorkspaceFilter implements IdsGeneratorSource {
 	
 	public final TeamMember tm;
 	public final AmpARFilter workspaceFilter;
-	final ExpiringCacher<Boolean, Set<Long>> cacher = 
-			new ExpiringCacher<Boolean, Set<Long>>("workspaceFilter", b -> computeIds(), new DatabaseChangedDetector(), 3 * 60 * 1000);
+	final ExpiringCacher<Boolean, Boolean, Set<Long>> cacher = 
+			new ExpiringCacher<>("workspaceFilter", (b, engine) -> computeIds(), new DatabaseChangedDetector(), 3 * 60 * 1000);
 	
 	public CompleteWorkspaceFilter(TeamMember tm, AmpARFilter workspaceFilter) {
 		this.tm = tm;
@@ -27,7 +27,7 @@ public class CompleteWorkspaceFilter implements IdsGeneratorSource {
 	}
 	
 	@Override public Set<Long> getIds() {
-		return cacher.buildOrGetValue(true);
+		return cacher.buildOrGetValue(true, true);
 	}
 	
 	/** called when the cacher determines that the cache has been invalidated */

@@ -350,8 +350,7 @@ public class TeamMemberUtil {
 			String queryString = "select distinct tm from " + AmpTeamMember.class.getName() + " tm "
 					+ "inner join fetch tm.user as usr "
 					+ "inner join fetch tm.ampMemberRole "
-					+ "inner join fetch tm.ampTeam "
-					+ "inner join fetch usr.groups";
+					+ "inner join fetch tm.ampTeam";
 		
 			if (teamId != null) {
 				queryString += "  where (tm.ampTeam=:teamId)";
@@ -961,16 +960,22 @@ public class TeamMemberUtil {
 	 */
 	public static Map<Long, List<AmpTeamMember>> getTeamMembersByUserId(Set<Long> userIds) {
 		Map<Long, List<AmpTeamMember>> res = new HashMap<>();
-		for(long userId:userIds)
-			res.put(userId, new ArrayList<AmpTeamMember>());
-		List<Object[]> z = PersistenceManager.getSession()
-				.createQuery("select tm, tm.user.id from " + AmpTeamMember.class.getName() + " tm where tm.user.id in :userIds")
-				.setParameterList("userIds", userIds)
-				.list();
-		for(Object[] elem:z) {
-			long userId = PersistenceManager.getLong(elem[1]);
-			res.get(userId).add((AmpTeamMember) elem[0]);
+		
+		if (userIds != null && !userIds.isEmpty()) {
+			for(long userId : userIds)
+				res.put(userId, new ArrayList<AmpTeamMember>());
+			
+			List<Object[]> teamUsers = PersistenceManager.getSession()
+					.createQuery("select tm, tm.user.id from " + AmpTeamMember.class.getName() + " tm where tm.user.id in :userIds")
+					.setParameterList("userIds", userIds)
+					.list();
+			
+			for(Object[] teamUser : teamUsers) {
+				long userId = PersistenceManager.getLong(teamUser[1]);
+				res.get(userId).add((AmpTeamMember) teamUser[0]);
+			}
 		}
+		
 		return res;
 	}
 	

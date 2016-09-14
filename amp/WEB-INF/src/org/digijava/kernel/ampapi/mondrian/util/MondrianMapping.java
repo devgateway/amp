@@ -3,11 +3,9 @@
  */
 package org.digijava.kernel.ampapi.mondrian.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,12 +13,9 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
-import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
@@ -34,66 +29,19 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  * @author Nadejda Mandrescu
  */
 public class MondrianMapping {
-	public static MDXElement toMDXElement(NamedTypedEntity entity) {
-		MDXElement elem = entityMap.get(entity); 
-		return elem==null ? null : elem.clone();
-	}
-	
-	public static List<MDXAttribute> getDateElements(GroupingCriteria grouping) {
-		List<MDXAttribute> dateTuple = new ArrayList<MDXAttribute>();
 		
-		String dateDimension = MoConstants.DATES;
-		String monthHierarchy = MoConstants.H_MONTH;
-		String quarterHierarchy = MoConstants.H_QUARTER;
-		String yearHierarchy = MoConstants.H_YEAR;
-		boolean addQuarter = true;
-		
-		switch(grouping) {
-		case GROUPING_MONTHLY: 
-			dateTuple.add(new MDXLevel(dateDimension, monthHierarchy, MoConstants.ATTR_MONTH));
-			addQuarter = false;
-		case GROUPING_QUARTERLY:
-			if (addQuarter)
-				dateTuple.add(0, new MDXLevel(dateDimension, quarterHierarchy, MoConstants.ATTR_QUARTER));
-		case GROUPING_YEARLY: 
-			dateTuple.add(0, new MDXLevel(dateDimension, yearHierarchy, MoConstants.ATTR_YEAR));
-		default:
-			break;
-		}
-		return dateTuple;
+
+	private final static Set<String> definedMeasures = new HashSet<>();
+	public static boolean isMeasureDefined(String measName) {
+		return definedMeasures.contains(measName);
 	}
 	
-	public static MDXAttribute getElementByType(ElementType type) {
-		switch(type) {
-		case YEAR : return new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR);
-		case DATE: return new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_DATE);
-		default: return null;
-		}
-	}
-	
-	public static String getAll(MDXAttribute mdxAttr) {
-		if (mdxAttr.getDimension().equals(MoConstants.DATES)) {
-			String hierarchy = mdxAttr instanceof MDXLevel ? ((MDXLevel)mdxAttr).getHierarchy() : MoConstants.H_DATES; 
-			return (new MDXLevel(MoConstants.DATES, hierarchy , MoConstants.ATTR_ALL_DATES)).getFullName();
-		}
-		return null;
-	}
-	
-	/**
-	 * Mappings between actual hierarchies and their duplicates to be used on Filter axis
-	 */
-	
-	public static final Set<String> definedColumns = new HashSet<String>();
-	public static final Set<String> definedMeasures = new HashSet<String>();
-	public static final Map<String, String> dependency = new HashMap<String, String>();
-		
 	/**
 	 * Mappings between AMP Data and Mondrian Schema 
 	 */
 	public static final Map<NamedTypedEntity,MDXElement> entityMap = new HashMap<NamedTypedEntity, MDXElement>() {
 		
 		void addColumnDefinition(String columnName, MDXLevel mdxLevel) {
-			definedColumns.add(columnName);
 			ReportColumn rc = new ReportColumn(columnName);
 			if (this.containsKey(rc))
 				throw new RuntimeException(String.format("column %s defined at least twice: once as %s, and then as %s", rc, this.get(rc), mdxLevel));
@@ -250,20 +198,13 @@ public class MondrianMapping {
 				}
 			}
 			addMeasureDefinition(MeasureConstants.CUMULATED_SSC_COMMITMENTS);
-					
-			// define Execution Rate only of dependent measures were also defined
-			if (definedMeasures.contains(MeasureConstants.ACTUAL_DISBURSEMENTS) && definedMeasures.contains(MeasureConstants.PLANNED_DISBURSEMENTS)) {
-				addMeasureDefinition(MeasureConstants.EXECUTION_RATE);
-			}
-			
+								
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL);
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE);
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL);
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT);
 			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);
 			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS);
-			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS);
-			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
 			addMeasureDefinition(MeasureConstants.UNDISBURSED_BALANCE);
 			addMeasureDefinition(MeasureConstants.PLEDGES_COMMITMENT_GAP);
 			

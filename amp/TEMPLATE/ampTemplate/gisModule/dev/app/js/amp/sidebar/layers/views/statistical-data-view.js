@@ -3,7 +3,8 @@ var _ = require('underscore');
 var BaseControlView = require('../../base-control/base-control-view');
 var FundingLayersView = require('./funding-layers-view');
 var IndicatorLayersView = require('./indicator-layers-view');
-//var MyLayers = require('./admin-mylayers-view');
+var StatisticalLayersConfig = require('./statistical-layers-config');
+var LayersManager = require('./layers-manager-view');
 
 var Template = fs.readFileSync(__dirname + '/../templates/multisection-layers-template.html', 'utf8');
 
@@ -12,13 +13,11 @@ module.exports = BaseControlView.extend({
   id: 'tool-layers-sd',
   title: 'Statistical Data',
   iconClass: 'ampicon-layers',
-  subSections: [
-    //MyLayers,
-    IndicatorLayersView,
+  subSections: [       
     FundingLayersView,
   ],
   radioButtonGroup: [],
-
+  sections:[],
   template: _.template(Template),
 
   initialize: function() {
@@ -29,22 +28,35 @@ module.exports = BaseControlView.extend({
     // TODO: find a better way to keep our proxy collection up to date
     // Thad do you know a good pattern for this?
     BaseControlView.prototype.render.apply(this);
-
     this.$('.content').html(this.template({title: this.title}));
-
-    var self = this;
-
+    //create layer manager
+    var self = this;    
+    var layerManager = new LayersManager({sections: self.sections, app: this.app});   
+    self.$('.content', self).append(layerManager.render().el);
+    
+    this.addSection(StatisticalLayersConfig.STANDARD);
+    this.addSection(StatisticalLayersConfig.MY_LAYERS);
+    this.addSection(StatisticalLayersConfig.SHARED);
     _.each(this.subSections, function(SectionView) {
       /* Note: This object will access the radioButtonGroup
       * of this parent BaseControlView */
       var section = new SectionView({app: self.app, parent: self});
-
+      
       /* For Mutual Exclusion: */
       self.radioButtonGroup.push(section.collection);
 
       self.$('.content', self).append(section.render().el);
     });
+    
     return this;
-  }
+  },
+  
+  addSection: function(config){
+		var self = this;
+		var section = new IndicatorLayersView({app: self.app, parent: self, config: config});	      
+	    self.radioButtonGroup.push(section.collection);
+	    self.sections.push(section);
+	    self.$('.content', self).append(section.render().el);
+   }
 
 });

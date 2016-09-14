@@ -5,13 +5,12 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.hibernate.Session;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -31,13 +30,14 @@ public class IndicatorService {
         ApiEMGroup errors = new ApiEMGroup();
 
         orderBy = ((orderBy==null || "".equals(orderBy)) ? IndicatorEPConstants.DEFAULT_INDICATOR_ORDER_FIELD : orderBy);
+
         sort = (sort!=null ? sort : "asc");
 
         IndicatorUtils.validateOrderBy(orderBy, sort, errors);
         if (errors.size() > 0) {
             return ApiError.toError(errors.getAllErrors());
         }
-
+        orderBy = IndicatorUtils.addAlias(orderBy);
         Collection<AmpIndicatorLayer> indicatorLayers = null;
         if (IndicatorUtils.isAdmin()) {
             indicatorLayers = DynLocationManagerUtil.getIndicatorLayers(orderBy, sort);
@@ -45,34 +45,13 @@ public class IndicatorService {
             indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByAccessType(IndicatorEPConstants.ACCESS_TYPE_PUBLIC, orderBy, sort);
         }
         else {
-            indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByCreatedBy(IndicatorUtils.getTeamMember(), orderBy, sort);
+            indicatorLayers = DynLocationManagerUtil.getIndicatorLayerByCreatedBy(TeamUtil.getCurrentAmpTeamMember(), orderBy, sort);
         }
 
         if (indicatorLayers==null)
             indicatorLayers = new ArrayList<AmpIndicatorLayer>();
 
         return IndicatorUtils.getList(indicatorLayers, offset, count);
-    }
-
-    public static Collection<JsonBean> getWorkspaces() {
-
-        Collection<AmpTeam> workspaces = null;
-        TeamMember tm = TeamUtil.getCurrentMember();
-        if (tm != null) {
-            workspaces = TeamMemberUtil.getAllTeamsForUser(tm.getEmail());
-        }
-
-        Collection<JsonBean> workspacesList = new ArrayList<JsonBean>();
-
-        if (workspaces==null) {
-            workspaces = new ArrayList<AmpTeam>();
-        }
-
-        for (AmpTeam ws: workspaces){
-            workspacesList.add(IndicatorUtils.getJsonBean(ws));
-        }
-
-        return workspacesList;
     }
 
     public static JsonBean getIndicatorById(long id) {
@@ -91,6 +70,20 @@ public class IndicatorService {
             return ApiError.toError(IndicatorErrors.INVALID_ID);
         }
         return indicatorJson;
+    }
+
+    public static JsonBean checkName(String name) {
+
+        AmpIndicatorLayer indicatorLayer = DynLocationManagerUtil.getIndicatorLayerByName(name);
+        JsonBean result = new JsonBean();
+        if (indicatorLayer!=null) {
+            result.set(IndicatorEPConstants.RESULT, true);
+            return result;
+        } else {
+            result.set(IndicatorEPConstants.RESULT, false);
+            return result;
+        }
+
     }
 
     public static JsonBean deleteIndicatorById(long id) {
@@ -116,11 +109,29 @@ public class IndicatorService {
 
     public static JsonBean saveIndicator(JsonBean indicator) {
         JsonBean result = new JsonBean();
-        AmpIndicatorLayer indLayer = IndicatorUtils.setIndicatorLayer(indicator);
-
-        if (indLayer.getId() != null && !IndicatorUtils.hasRights(indLayer.getId())) {
+        IndicatorUpdater updater = new IndicatorUpdater(indicator);
+        AmpIndicatorLayer indLayer = updater.getIndicatorLayer();
+        
+        if (!updater.getApiErrors().isEmpty()) {
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
+            return ApiError.toError(updater.getApiErrors().getAllErrors());
+        }
+            
+        // TODO: REFACTOR to return access rights denied before processing input. Also it can be part of Authorization process
+        if (indLayer != null && indLayer.getId() != null && !IndicatorUtils.hasRights(indLayer.getId())) {
             EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
             return ApiError.toError(IndicatorErrors.UNAUTHORIZED);
+        }
+
+        AmpIndicatorLayer existingIndicator = DynLocationManagerUtil.getIndicatorLayerByName(indLayer.getName());
+        if ((existingIndicator != null && indLayer.getId() == null) || (existingIndicator != null && existingIndicator.getId() != indLayer.getId() && indLayer.getId() != null)){
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
+            return ApiError.toError(IndicatorErrors.EXISTING_NAME);
+        }
+
+        if (!IndicatorUtils.isAdmin() && TeamUtil.getCurrentMember() == null && indLayer.getAccessType() != IndicatorAccessType.TEMPORARY) {
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
+            return ApiError.toError(IndicatorErrors.INVALID_INDICATOR_TYPE);
         }
 
         try {
@@ -129,17 +140,27 @@ public class IndicatorService {
             } else {
                 result.set(IndicatorEPConstants.RESULT, IndicatorEPConstants.SAVED);
             }
-            DbUtil.saveOrUpdateObject(indLayer);
 
-            JsonBean indicatorJson = IndicatorUtils.buildIndicatorLayerJson(indLayer);
+            if (indLayer.getAccessType() != IndicatorAccessType.TEMPORARY) {
 
-            result.set(IndicatorEPConstants.DATA, indicatorJson);
+                Session sess = PersistenceManager.getSession();
+                sess.saveOrUpdate(indLayer);
+                sess.flush();
+
+                updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.NAME, updater.getContentTranslator().getTranslations());
+                updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.DESCRIPTION, updater.getContentTranslator().getTranslations());
+                updater.getContentTranslator().serialize(indLayer, IndicatorEPConstants.UNIT, updater.getContentTranslator().getTranslations());
+
+                result.set(IndicatorEPConstants.DATA, IndicatorUtils.buildIndicatorLayerJson(indLayer));
+            } else {
+                result.set(IndicatorEPConstants.DATA, IndicatorUtils.buildSerializedIndicatorLayerJson(indLayer, indicator));
+            }
         } catch (Exception e) {
             logger.error("saveIndicator: ", e);
-            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
-            return ApiError.toError(IndicatorErrors.UNKNOWN_ERROR);
+            throw new RuntimeException(e);
         }
 
         return result;
     }
+    
 }

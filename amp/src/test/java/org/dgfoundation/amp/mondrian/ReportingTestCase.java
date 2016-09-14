@@ -10,25 +10,21 @@ import java.util.function.Function;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.ExceptionConsumer;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.IdsGeneratorSource;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
+import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
-import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -39,18 +35,12 @@ import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
-import org.dgfoundation.amp.reports.ReportPaginationUtils;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
-import org.dgfoundation.amp.testmodels.NiReportModel;
-import org.dgfoundation.amp.testmodels.ReportModel;
-import org.dgfoundation.amp.testmodels.ReportModelGenerator;
 import org.dgfoundation.amp.testutils.ActivityIdsFetcher;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.dgfoundation.amp.testutils.NameFilteringTeamFilter;
-import org.dgfoundation.amp.testutils.PledgeIdsFetcher;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -59,8 +49,6 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 public abstract class ReportingTestCase extends AmpTestCase {
 	
@@ -98,54 +86,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
 	public ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
 		return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
 	}
-	
-	/**
-	 * runs a single report test and compares the result with the expected cor 
-	 * @param testName - test name to be displayed in case of error
-	 * @param reportName - the name of the report (AmpReports entry in the tests database) which should be run
-	 * @param activities - the names of the activities which should be presented via a dummy WorkspaceFilter to the report. Put ReportTestingUtils.NULL_PLACEHOLDER if NO WorkspaceFilter should be put (e.g. let the report see all the activities) 
-	 * @param correctResult - a model (sketch) of the expected result
-	 * @param modifier - the modifier (might be null) to postprocess AmpReports and AmpARFilter after being loaded from the DB
-	 */
-	@Deprecated
-	protected void runMondrianTestCase(String testName, String reportName, List<String> activities, ReportAreaForTests correctResult, String locale) {
-		runMondrianTestCase(getReportSpecification(reportName), locale, activities, correctResult);
-	}
 		
-	@Deprecated
-	protected void runMondrianTestCase(String reportName, List<String> activities, ReportAreaForTests correctResult, String locale,
-			Class<? extends ReportAreaImpl> areaTyp) {
-			runMondrianTestCase(getReportSpecification(reportName), locale, activities, correctResult, areaTyp);
-	}
-	
-	@Deprecated
-	protected void runMondrianTestCase(String reportName, List<String> activities, ReportAreaForTests correctResult, String locale) {
-		runMondrianTestCase(reportName, reportName, activities, correctResult, locale);
-	}
-		
-	protected GeneratedReport runReportOn(ReportSpecification spec, String locale, List<String> entities, Class<? extends ReportAreaImpl> areaType) {
-		return runReportOnMondrian(spec, locale, entities, areaType);
-	}
-	
-	protected GeneratedReport runReportOnMondrian(ReportSpecification spec, String locale, List<String> entities,
-			Class<? extends ReportAreaImpl> areaType) {
-		try {
-			IdsGeneratorSource activitiesSrc = null;
-			IdsGeneratorSource pledgesSrc = null;
-			if (spec.getReportType() == ArConstants.PLEDGES_TYPE)
-				pledgesSrc = new PledgeIdsFetcher(entities);
-			else
-				activitiesSrc = new ActivityIdsFetcher(entities);
-			ReportEnvironment env = new ReportEnvironment(locale, activitiesSrc, pledgesSrc, FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY));
-			ReportExecutor generator = new MondrianReportGenerator(areaType, env);
-			GeneratedReport res = generator.executeReport(spec);
-			return res;
-		}
-		catch(Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
 	protected GeneratedReport runReportOnNiReports(ReportSpecification spec, String locale, List<String> entities,
 			Class<? extends ReportAreaImpl> areaType) {
 		try {
@@ -162,93 +103,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
 			throw new RuntimeException(e);
 		}
 	}
-
-		
-	/**
-	 * 
-	 * @param spec
-	 * @param locale
-	 * @param entities
-	 * @param cor
-	 */
-	@Deprecated
-	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> entities, ReportAreaForTests cor) {
-		runMondrianTestCase(spec, locale, entities, cor, ReportAreaImpl.class);
-	}
-	
-	/**
-	 * Runs Mondrian Test case with pagination option
-	 * 
-	 * @param spec
-	 * @param locale 
-	 * @param entities
-	 * @param cor
-	 * @param areaType normally for Pagination you would use {@link PartialReportArea}
-	 * @param page page number starting from 1 (as if it is selected by the user in the UI)
-	 * @param pageSize number of leaf records per page or null to use the default config (not recommended)
-	 */
-	@Deprecated
-	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> entities, 
-			ReportAreaForTests cor, Class<? extends ReportAreaImpl> areaType) {
-		GeneratedReport rep = this.runReportOn(spec, locale, entities, areaType);
-		//Iterator<ReportOutputColumn> bla = rep.reportContents.getChildren().get(0).getContents().keySet().iterator();
-		//ReportOutputColumn first = bla.next(), second = bla.next(), third = bla.next(), fourth = bla.next();
-		
-		ReportArea reportContents = rep.reportContents;
-		
-		//if (cor == null) return;
-		String delta = cor == null ? null : cor.getDifferenceAgainst(reportContents);
-		
-		if (cor == null || delta != null) {
-			System.err.println("\n------------------------------------------------------------------------------------------");
-			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-			for (int i = 0; i < stackTrace.length; i++) {
-				StackTraceElement stackTraceEl = stackTrace[i];
-				if (stackTraceEl.getClassName().startsWith("org.dgfoundation.amp")
-						&& !stackTraceEl.getClassName().contains(ReportingTestCase.class.getName())) {
-					System.err.println(stackTraceEl.toString() + ":");
-					break;
-				}
-			}
-			System.err.println("this is output for test " + spec.getReportName() + describeReportOutputInCode(reportContents));
-		}
-
-        checkReportHeaders(rep, spec);
-
-		if (delta != null) {
-            fail("test " + spec.getReportName() + " failed: " + delta);
-        }
-	}
-	
-//	protected void runNiTestCase(ReportSpecification spec, String locale, List<String> entities, 
-//			NiReportModel cor, Class<? extends ReportAreaImpl> areaType) {
-//		
-//		GeneratedReport rep = runReportOnNiReports(spec, locale, entities, areaType);
-//		
-//		//if (cor == null) return;
-//		String delta = cor == null ? null : cor.getDifferenceAgainst(reportContents);
-//		
-//		if (cor == null || delta != null) {
-//			System.err.println("\n------------------------------------------------------------------------------------------");
-//			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-//			for (int i = 0; i < stackTrace.length; i++) {
-//				StackTraceElement stackTraceEl = stackTrace[i];
-//				if (stackTraceEl.getClassName().startsWith("org.dgfoundation.amp")
-//						&& !stackTraceEl.getClassName().contains(ReportingTestCase.class.getName())) {
-//					System.err.println(stackTraceEl.toString() + ":");
-//					break;
-//				}
-//			}
-//			System.err.println("this is output for test " + spec.getReportName() + describeReportOutputInCode(reportContents));
-//		}
-//
-//        checkReportHeaders(rep, spec);
-//
-//		if (delta != null) {
-//            fail("test " + spec.getReportName() + " failed: " + delta);
-//        }
-//	}
-	
+			
 	protected ReportSpecificationImpl buildActivityListingReportSpec(String name) {
 		ReportSpecificationImpl spec = buildSpecification(name, 
 				Arrays.asList(ColumnConstants.PROJECT_TITLE), 
@@ -260,15 +115,15 @@ public abstract class ReportingTestCase extends AmpTestCase {
 		return spec;
 	}
 	
-	protected MondrianReportFilters buildSimpleFilter(String column, List<String> ids, boolean inclusive) {
-		MondrianReportFilters mrf = new MondrianReportFilters();
+	protected ReportFiltersImpl buildSimpleFilter(String column, List<String> ids, boolean inclusive) {
+		ReportFiltersImpl mrf = new ReportFiltersImpl();
 		mrf.addFilterRule(new ReportColumn(column), new FilterRule(ids, inclusive));
 		return mrf;
 
 	}
 	
-	protected MondrianReportFilters buildSimpleFilter(String column, String value, boolean inclusive) {
-		MondrianReportFilters mrf = new MondrianReportFilters();
+	protected ReportFiltersImpl buildSimpleFilter(String column, String value, boolean inclusive) {
+		ReportFiltersImpl mrf = new ReportFiltersImpl();
 		mrf.addFilterRule(new ReportColumn(column), new FilterRule(value, inclusive));
 		return mrf;
 	}

@@ -4,7 +4,7 @@
  * Forms and helper functions for administrative pages.
  */
 
-module_load_include('inc', 'contentblock', 'contentblock.admin');
+include_once 'contentblock.admin.inc';
 
 /**
  * Implements hook_form_FORM_ID_alter() for contentblock_form().
@@ -48,11 +48,6 @@ function _contentblock_form_contentblock_form_alter(&$form, &$form_state, $form_
     // $form['title_field']['#attributes']['class'][] = 'element-hidden';
   }
 
-  if ($form_state['op'] == 'add' && !empty($_GET['destination'])) {
-    drupal_set_message(t('If you only want to remove the instructions for this block/section you can just click "Save" without adding/configuring any content.'));
-    drupal_set_message(t('You can later configure this block/section from the "Settings > Content Sections" page.'));
-  }
-
   // Attach validate callbacks.
   switch ($form['#entity']->machine_name) {
     case 'linkedmap':
@@ -64,6 +59,15 @@ function _contentblock_form_contentblock_form_alter(&$form, &$form_state, $form_
     case 'welcome':
       $form['#validate'][] = '_contentblock_cbreference_entity_form_welcome_validate';
       break;
+  }
+
+  // Use the widget form if specified so.
+  if (isset($cbreference_info['use widget form']) && $cbreference_info['use widget form'] == TRUE) {
+    $plugin = contentwidget_get_predefined_widget($form['#entity']->machine_name);
+    if ($function = ctools_plugin_get_function($plugin, 'settings form')) {
+      $widget_settings = _contentwidget_fixed_get_settings($form['#entity']->machine_name);
+      $form = $function($form, $form_state, $plugin, $widget_settings);
+    }
   }
 }
 

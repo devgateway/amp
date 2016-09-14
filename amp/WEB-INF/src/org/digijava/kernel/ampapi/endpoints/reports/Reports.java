@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -45,6 +46,8 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
+import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
@@ -53,12 +56,9 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
-import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -507,64 +507,48 @@ public class Reports {
 	}
 	
 	private Response exportSaikuReport(String query, String type, AmpReports ampReport, Boolean isDinamic) {
+		logger.info("Starting export to " + type);
+		String decodedQuery = "";
+		
 		try {
-			logger.info("Starting export to " + type);
-			String decodedQuery = java.net.URLDecoder.decode(query, "UTF-8");
-			decodedQuery = decodedQuery.replace("query=", "");
-			JsonBean queryObject = JsonBean.getJsonBeanFromString(decodedQuery);
-			LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
-			
-			queryModel.remove("page");
-			queryModel.put("page", 0);
-			queryModel.put("recordsPerPage", -1);
-			queryModel.put("regenerate", true);
-			queryModel.put(AMPReportExportConstants.EXCEL_TYPE_PARAM, queryObject.get(AMPReportExportConstants.EXCEL_TYPE_PARAM));
-			if (isDinamic) {
-				queryObject.set(EPConstants.IS_DYNAMIC, true);
-
-			}
-			logger.info("Obtain report result...");
-			JsonBean result = getSaikuReport(queryObject, ampReport.getAmpReportId());
-
-			byte[] doc = null;
-			String filename = "export";
-
-			// We will use report settings to get the DecimalFormat in order to parse the formatted values
-			logger.info("Obtain report implementation...");
-			ReportSpecification report = null;
-			if (!isDinamic) {
-				report = ReportsUtil.getReport(ampReport.getAmpReportId());
-			} else {
-				// if the report is dynamic we need to load it from memory
-				report = AmpReportsToReportSpecification
-						.convert(ReportsUtil.getAmpReportFromSession(ampReport.getAmpReportId().intValue()));
-			}
-			
-			if (report != null && !StringUtils.isEmpty(report.getReportName())) {
-				filename = report.getReportName();
-			}
-			filename += "." + type;
-			filename = filename.replaceAll(" ", "_");
-			filename = String.format("\"%s\"", filename);
-
-			logger.info("Generate specific export...");
-			
-			GeneratedReport genateredReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(),
-			        ReportsUtil.convertSaikuParamsToReports(queryObject));
-			doc = exportNiReport(genateredReport, ampReport.getAmpReportId(), queryObject, type);
-
-			if (doc != null) {
-				logger.info("Send export data to browser...");
-				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
-						.header("content-disposition", "attachment; filename = " + filename)
-						.header("content-length", doc.length).build();
-			} else {
-				throw new Exception("Empty response while exporting.");
-			}
-		} catch (Exception e) {
+			decodedQuery = java.net.URLDecoder.decode(query, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
 			logger.error("error while generating report", e);
 			return Response.serverError().build();
 		}
+		
+		decodedQuery = decodedQuery.replace("query=", "");
+		JsonBean queryObject = JsonBean.getJsonBeanFromString(decodedQuery);
+		LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
+		
+		queryModel.remove("page");
+		queryModel.put("page", 0);
+		queryModel.put("recordsPerPage", -1);
+		queryModel.put("regenerate", true);
+		queryModel.put(AMPReportExportConstants.EXCEL_TYPE_PARAM, queryObject.get(AMPReportExportConstants.EXCEL_TYPE_PARAM));
+		if (isDinamic) {
+			queryObject.set(EPConstants.IS_DYNAMIC, true);
+
+		}
+		logger.info("Obtain report result...");
+		JsonBean result = getSaikuReport(queryObject, ampReport.getAmpReportId());
+
+		// We will use report settings to get the DecimalFormat in order to parse the formatted values
+		logger.info("Obtain report implementation...");
+		ReportSpecification report = null;
+		if (!isDinamic) {
+			report = ReportsUtil.getReport(ampReport.getAmpReportId());
+		} else {
+			// if the report is dynamic we need to load it from memory
+			report = AmpReportsToReportSpecification
+					.convert(ReportsUtil.getAmpReportFromSession(ampReport.getAmpReportId().intValue()));
+		}
+		
+		logger.info("Generate specific export...");
+		GeneratedReport generatedReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(),
+		        ReportsUtil.convertSaikuParamsToReports(queryObject));
+		
+		return getExportAsResponse(ampReport, type, generatedReport, queryObject);
 	}
 	
 	/** Method used for exporting a public NiReport. 
@@ -576,17 +560,20 @@ public class Reports {
 		logger.info("Export specific public export...");
 		
 		GeneratedReport report = EndpointUtils.runReport(AmpReportsToReportSpecification.convert(ampReport));
-		String filename = ampReport.getName();
-		filename += "." + type;
-		filename = filename.replaceAll(" ", "_");
 		
 		//TODO: refactoring should be made before 2.12 official release by merging with exportSaikuReport
+		return getExportAsResponse(ampReport, type, report, new JsonBean());
+	}
+
+	public Response getExportAsResponse(AmpReports ampReport, String type, GeneratedReport report, JsonBean queryObject) {
+		String fileName = getExportFileName(ampReport, type);
 		try {
-			byte[] doc = exportNiReport(report, ampReport.getAmpReportId(), new JsonBean(), type);
+			byte[] doc = exportNiReport(report, ampReport.getAmpReportId(), queryObject, type);
+			
 			if (doc != null) {
 				logger.info("Send export data to browser...");
 				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
-						.header("content-disposition", "attachment; filename = " + filename)
+						.header("content-disposition", "attachment; filename = " + fileName)
 						.header("content-length", doc.length).build();
 			} else {
 				logger.error(type + " report export is null");
@@ -596,6 +583,15 @@ public class Reports {
 			logger.error("error while generating report", e);
 			return Response.serverError().build();
 		}
+	}
+
+	public String getExportFileName(AmpReports ampReport, String type) {
+		
+		String filename = ampReport != null ? ampReport.getName() : "export";
+		filename += "." + type;
+		filename = String.format("\"%s\"", filename.replaceAll(" ", "_"));
+		
+		return filename;
 	}
 	
 	/** Method used for exporting a NiReport. 
@@ -667,7 +663,7 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final Map<String, String> getAllowedColumns() {
 		Map<String, String> columnToDisplayName = new HashMap<String, String>();
-		Set<String> configurableColumns = MondrianReportUtils.getConfigurableColumns();
+		Set<String> configurableColumns = ColumnsVisibility.getConfigurableColumns();
 		for (String originalColumnName : configurableColumns) {
 			columnToDisplayName.put(originalColumnName, TranslatorWorker.translateText(originalColumnName));
 		}
@@ -680,7 +676,7 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final Map<String, String> getAllowedMeasures() {
 		Map<String, String> measuresToDisplayName = new HashMap<String, String>();
-		Set<String> configurableMeasures = MondrianReportUtils.getConfigurableMeasures();
+		Set<String> configurableMeasures = MeasuresVisibility.getConfigurableMeasures();
 		for (String originalMeasureName : configurableMeasures) {
 			measuresToDisplayName.put(originalMeasureName, TranslatorWorker.translateText(originalMeasureName));
 		}
@@ -700,7 +696,7 @@ public class Reports {
 			// AmpARFilter oldFilters = FilterUtil.buildFilter(null, reportId);
 			AmpARFilter newFilters = null;
 
-			// Convert json object back to the new format: MondrianReportFilters.
+			// Convert json object back to AmpReportFilters
 			if (formParams.get("filters") != null) {
 				JsonBean filters = new JsonBean();
 				LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get("filters");

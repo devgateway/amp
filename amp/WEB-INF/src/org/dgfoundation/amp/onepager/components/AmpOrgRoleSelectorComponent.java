@@ -19,9 +19,7 @@ import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpRelatedOrgsModel;
 import org.dgfoundation.amp.onepager.models.AmpRelatedRolesModel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
-import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
-
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -34,6 +32,7 @@ import org.digijava.module.aim.helper.Constants;
  */
 public class AmpOrgRoleSelectorComponent extends Panel {
 	private static Logger logger = Logger.getLogger(AmpOrgRoleSelectorComponent.class);
+	private final AmpComponentPanel showDonorOrganization;
 	private final AmpComponentPanel showResponsibleOrganization;
 	private final AmpComponentPanel showExecutingAgency;
 	private final AmpComponentPanel showImplementingAgency;
@@ -66,6 +65,8 @@ public class AmpOrgRoleSelectorComponent extends Panel {
 		
 		
 		//for the list of organizations
+		showDonorOrganization = new AmpComponentPanel("showDonorOrganization", "Add Donor Organization"){};
+        add(showDonorOrganization);
 		showResponsibleOrganization = new AmpComponentPanel("showResponsibleOrganization", "Add Responsible Organization"){};
         add(showResponsibleOrganization);
         showExecutingAgency= new AmpComponentPanel("showExecutingAgency", "Add Executing Agency"){};
@@ -127,9 +128,10 @@ public class AmpOrgRoleSelectorComponent extends Panel {
 		List<String>orgRole=new ArrayList<String>();
 
 		//here we are going to configure the list of available orgroles
-		//the donor agency is added by default
-		orgRole.add(Constants.FUNDING_AGENCY);
-		FMUtil.isFmVisible(showImplementingAgency);
+		
+		if(FMUtil.isFmVisible(showDonorOrganization)){
+			orgRole.add(Constants.FUNDING_AGENCY);
+		}
 		if(FMUtil.isFmVisible(showResponsibleOrganization)){
 			orgRole.add(Constants.RESPONSIBLE_ORGANISATION);
 		}

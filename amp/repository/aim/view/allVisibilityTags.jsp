@@ -25,6 +25,7 @@
 <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION"/>
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -111,6 +112,7 @@
 <module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Map Module"></module:display>
 
 <module:display name="Aid Effectiveness" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -353,6 +355,8 @@
 <field:display feature="Funding Information" name="Funding Classification Date"></field:display>
 <field:display feature="Funding Information" name="Agreement Parlimentary Approval Date"></field:display>
 <field:display feature="Funding Information" name="Expenditure Class"></field:display>
+<field:display feature="Funding Information" name="Effective Funding Date"></field:display>
+<field:display feature="Funding Information" name="Funding Closing Date"></field:display>
 <field:display feature="Government Contact Information" name="Government Email"></field:display> 
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 
@@ -1106,6 +1110,8 @@ deleted 6 fields, do not reinsert
 
 <feature:display name="Use icons for Sectors in Project List" module="/GIS"></feature:display>
 <feature:display name="Project sites" module="/GIS"></feature:display>
+<feature:display name="Download Map selector" module="/GIS"></feature:display>
+<feature:display name="Gap Analysis Map" module="/GIS"></feature:display>
 
 <!-- Public View Modules/Features/Fields -->
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>
@@ -1113,6 +1119,11 @@ deleted 6 fields, do not reinsert
 <feature:display name="Enable New User Registration" module="Login - User Management"></feature:display>
 <feature:display name="Change Password" module="Login - User Management"></feature:display>
 <feature:display name="Trouble signing in" module="Login - User Management"></feature:display>
+
+<module:display name="Activity Preview" parentModule="PUBLIC VIEW"></module:display>
+<feature:display name="Contacts" module="Activity Preview"></feature:display>
+<feature:display name="Version History" module="Activity Preview"></feature:display>
+<feature:display name="Show Editable Export Formats" module="Activity Preview"></feature:display>
 
 <module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Filters" module="Public Reports and Tabs"></feature:display>

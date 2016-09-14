@@ -137,7 +137,7 @@ YAHOO.namespace("YAHOO.amp");
         var content = document.getElementById("popinContactContent");
         content.innerHTML = '<div style="text-align: center">' +
             '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
-            '<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
+            '<digi:trn>Loading...</digi:trn><br/><br/></div>';
         showContactContent();
     }
     function selectContact(params1) {

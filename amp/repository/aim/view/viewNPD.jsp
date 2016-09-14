@@ -133,7 +133,7 @@ background-color:#FFFFFF;
    		var div=document.createElement('div');
    		var img=document.createElement('img');
    		img.src="/TEMPLATE/ampTemplate/images/amploading.gif";
-   		img.alt="loading...";
+   		img.alt="Loading...";
    		div.appendChild(img);
    		parent.appendChild(div);
    	}

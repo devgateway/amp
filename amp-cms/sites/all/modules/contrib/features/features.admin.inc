@@ -736,7 +736,6 @@ function _features_export_build($feature, &$form_state) {
 
     // Allow modules to filter the available components.
     drupal_alter('features_component_export', $component_export, $component);
-    dsm('test');
     $export['components'][$component] = $component_export;
   }
   $export['features_exclude'] = $excluded;
@@ -1632,9 +1631,9 @@ function _features_get_features_list() {
 
   $cache = cache_get('features:features_list');
   if ($cache) {
-    $features = $cache->data;  
+    $features = $cache->data;
   }
-  
+
   if (empty($features)) {
     // Clear & rebuild key caches
     features_get_info(NULL, NULL, TRUE);

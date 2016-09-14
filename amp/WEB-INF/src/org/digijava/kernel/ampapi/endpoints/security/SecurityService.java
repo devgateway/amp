@@ -3,22 +3,27 @@
  */
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
 import org.dgfoundation.amp.menu.MenuUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.w3c.dom.Document;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Security Endpoint related services like menu, footer, user
@@ -142,4 +147,25 @@ public class SecurityService {
 
 	}
 	
+	public static Collection<JsonBean> getWorkspaces() {
+
+        Collection<AmpTeam> workspaces = null;
+
+        TeamMember tm = TeamUtil.getCurrentMember();
+        if (tm != null) {
+            workspaces = TeamMemberUtil.getAllTeamsForUser(tm.getEmail());
+        }
+
+        Collection<JsonBean> workspacesList = new ArrayList<JsonBean>();
+
+        if (workspaces==null) {
+            workspaces = new ArrayList<AmpTeam>();
+        }
+
+        for (AmpTeam ws: workspaces){
+            workspacesList.add(SecurityUtil.getTeamJsonBean(ws));
+        }
+
+        return workspacesList;
+    }
 }

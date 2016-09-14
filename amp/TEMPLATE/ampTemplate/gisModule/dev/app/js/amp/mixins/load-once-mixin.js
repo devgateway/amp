@@ -4,11 +4,12 @@ var _ = require('underscore');
 
 module.exports = {
 
-  load: function() {
+  load: function(options) {
+	var options = options || {};
     if (!_.has(this, '_loaded')) {
       var self = this;
       this._loaded = new Deferred();
-      this.fetch()
+      this.fetch(options)
         .done(function() {
           self._loaded.resolveWith(self, [self]);
         })
@@ -24,14 +25,14 @@ module.exports = {
     return this._loaded.promise();
   },
 
-  loadAll: function() {
+  loadAll: function(options) {
     // classes using this mixin can override this method to add more loading
     // and processing before resolving. For example a class which loads a
     // boundary could implement this method as:
     //
     // return jQuery.when(this.load(), this.loadBoundary()).promise();
     //
-    return this.load();
+    return this.load(options);
   }
 
 };

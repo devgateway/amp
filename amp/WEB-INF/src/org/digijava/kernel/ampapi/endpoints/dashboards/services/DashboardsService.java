@@ -244,19 +244,22 @@ public class DashboardsService {
 		String currcode = spec.getSettings().getCurrencyCode();
 		retlist.set("currency", currcode);
 		Integer maxLimit = report.reportContents.getChildren().size();
-		
 
-		for (Iterator<ReportArea> iterator = report.reportContents.getChildren().iterator(); 
-				values.size() < n && iterator.hasNext();) {
-			while (iterator.hasNext() && values.size() < n) {
-				Map<ReportOutputColumn, ReportCell> content = iterator.next().getContents();
+		double totalPositive = 0;
+		for (ReportArea reportArea: report.reportContents.getChildren()) {
+			Map<ReportOutputColumn, ReportCell> content = reportArea.getContents();
+			AmountCell ac = (AmountCell) content.get(valueCol);
+			double amount = ((BigDecimal) ac.value).doubleValue() * unitsOption.divider;
+			if (values.size() < n) {
 				JsonBean row = new JsonBean();
 				row.set("name", content.get(criteriaCol).displayedValue);
 				row.set("id", ((IdentifiedReportCell) content.get(criteriaCol)).entityId);
-				AmountCell ac = (AmountCell) content.get(valueCol);
-				row.set("amount", ((BigDecimal) ac.value).doubleValue() * unitsOption.divider);
+				row.set("amount", amount);
 				row.set("formattedAmount", ac.displayedValue);
 				values.add(row);
+			}
+			if(amount > 0) {
+				totalPositive += amount;
 			}
 		}
 		retlist.set("values", values);
@@ -266,6 +269,7 @@ public class DashboardsService {
 				calculateSumarizedTotals(rawTotal * unitsOption.multiplier, spec));
 		// report the total number of tops available
 		retlist.set("maxLimit", maxLimit);
+		retlist.set("totalPositive", totalPositive);
 		retlist.set("name", name);
 		retlist.set("title", title);
 		return retlist;
@@ -294,6 +298,10 @@ public class DashboardsService {
 		if (undefinedAreas.isEmpty()) {
 			return;
 		}
+		
+		final String NATIONAL = "National";
+		final String INTERNATIONAL = "International";
+
 		ReportOutputColumn regionCol = report.leafHeaders.get(0);
         AmpCategoryValueLocations currentCountry = DynLocationManagerUtil.getDefaultCountry();
         
@@ -303,10 +311,10 @@ public class DashboardsService {
 		    if (uRegion.entityId != -MoConstants.UNDEFINED_KEY) {
 		        if (uRegion.entityId == -currentCountry.getId()) {
 		            // national
-		            uRegion = new TextCell(TranslatorWorker.translateText(MoConstants.NATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
+		            uRegion = new TextCell(TranslatorWorker.translateText(NATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
 		        } else {
 		            // international
-		            uRegion = new TextCell(TranslatorWorker.translateText(MoConstants.INTERNATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
+		            uRegion = new TextCell(TranslatorWorker.translateText(INTERNATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
 		        }
 		        undefined.getContents().put(regionCol, uRegion);
 		        for (ReportArea child : undefined.getChildren()) {

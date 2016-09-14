@@ -8,8 +8,8 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
-import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
-import org.dgfoundation.amp.testmodels.TestModelConstants;
+import org.dgfoundation.amp.nireports.testcases.TestModelConstants;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -34,11 +34,11 @@ public class FundingIdsMapper {
 			+ "(4, 'disbursement order'), (5, 'pledges commitment'), (6, 'pledges disbursement'), (7, 'pledge'), (8, 'release of funds'), "
 			+ "(9, 'estimated donor disbursement'), (15, 'annual proposed project cost') ) as t(id, type)";
 	String AGREEMENT_QUERY = "SELECT id, title FROM amp_agreement";
-	String RECIPIENT_ORG_QUERY = "SELECT amp_org_id, org_name FROM v_all_organizations_with_levels";
+	String RECIPIENT_ORG_QUERY = "SELECT org_id, org_name FROM ni_all_orgs_dimension where org_id > 0";
 	String RECIPIENT_ROLE_QUERY = "SELECT amp_role_id, name FROM amp_role";
 	String SOURCE_ROLE_QUERY = "SELECT amp_role_id, name FROM amp_role";
 	String ADJUSTMENT_TYPE_QUERY = String.format(_RAW_ACV_QUERY, CategoryConstants.ADJUSTMENT_TYPE_NAME);
-	String DONOR_ORG_QUERY = "SELECT amp_org_id, org_name FROM v_all_organizations_with_levels";
+	String DONOR_ORG_QUERY = RECIPIENT_ORG_QUERY;
 	String FUNDING_STATUS_QUERY = String.format(_RAW_ACV_QUERY, CategoryConstants.FUNDING_STATUS_NAME);
 	String MODE_OF_PAYMENT_QUERY = String.format(_RAW_ACV_QUERY, CategoryConstants.MODE_OF_PAYMENT_NAME);
 	/* it's "Type of Assistence" in constants, but too scared to change it, since it might break something

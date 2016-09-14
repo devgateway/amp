@@ -44,6 +44,8 @@ module.exports = BackboneDash.View.extend({
     this.rendered = false;
     this._stateWait = new Deferred();
     this.message = null;
+    this.showChartPromise = new Deferred();
+    this.renderedPromise = new Deferred();
 
     if (this.app.savedDashes.length) {
       // a bit sketch....
@@ -60,7 +62,7 @@ module.exports = BackboneDash.View.extend({
     this.listenTo(this.model, 'change:view', this.render);
 
     this.app.state.register(this, 'chart:' + this.model.url, {
-      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'xAxisColumn', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements','seriesToExclude'),
+      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'xAxisColumn', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements','seriesToExclude', 'xLimit', 'yLimit', 'swapAxes'),
       set: _(this.model.set).bind(this.model),
       empty: null
     });
@@ -72,6 +74,7 @@ module.exports = BackboneDash.View.extend({
 
   render: function() {
 	var self = this;
+	this.renderedPromise = new Deferred();
     var renderOptions = {
       views: this.chartViews,
       model: this.model,
@@ -128,6 +131,7 @@ module.exports = BackboneDash.View.extend({
     }
 
     this.app.translator.translateDOM(this.el);
+    this.renderedPromise.resolve();
     return this;
   },
 
@@ -135,14 +139,15 @@ module.exports = BackboneDash.View.extend({
 	if(this.app.rendered !== true) { return; }  
     if (!this.rendered) { return; }  // short-circuit on early filters apply event
     if (this._stateWait.state() === 'pending') {  // short-circuit until we have state
-      this.message.html('Loading saved settings...').attr('data-i18n', 'amp.dashboard:chart-loading-saved-settings');
+      this.message.html('Loading...').attr('data-i18n', 'amp.dashboard:chart-loading-saved-settings');
       app.translator.translateDOM($('.chart-container'));
       //this.message.fadeIn(100);
       return;
     }
 
+    this.showChartPromise = new Deferred(); // We need to reinitialize this promise.
     this.chartContainer.empty();
-    this.message.html('<span data-i18n="amp.dashboard:loading">...</span>').fadeIn(100);
+    this.message.html('<span data-i18n="amp.dashboard:loading">Loading...</span>').fadeIn(100);
 
     this.app.translator.getTranslations()
       .done(_(function() {  // defer here to prevent a race with translations loading
@@ -166,26 +171,62 @@ module.exports = BackboneDash.View.extend({
   },
 
   showChart: function() {
+	  this.showNegativeAlert();
+	  
     // TODO: why are we triggering twice on load???
     if (!this.model.hasData()) {
       this.message.html('No Data Available').attr('data-i18n','amp.dashboard:chart-no-data-available');
       app.translator.translateDOM($('.chart-container'));
       this.resetNumbers();
       return;
-    }
+    }    
     var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions(), this.model);
     this.chartContainer.html(chart.el);
 
-    if (this.model.get('view') !== 'heatmap') {
+    if (this.model.get('chartType') !== 'fragmentation') {
     	this.renderNumbers();
     }
-    var limit = this.model.get('limit');
-    if (limit) {
-      this.$('.reset')[limit === this.model.defaults.limit ? 'hide' : 'show']();
+    
+    if (this.model.get('chartType') !== 'fragmentation') {
+	    var limit = this.model.get('limit');
+	    if (limit) {
+	      this.$('.reset')[limit === this.model.defaults.limit ? 'hide' : 'show']();
+	    }
+    } else {
+        if (this.model.get('showResetButton')) {
+        	this.$('.reset').show();
+        } else {
+        	this.$('.reset').hide();
+        }
     }
     this.message.stop().fadeOut(200);
     
     this.beautifyLegends(this);
+    
+    if (this.model.get('view') === 'heatmap') {
+    	this.handleHeatmapClicks();
+    }
+        
+    this.showChartPromise.resolve();
+  },
+  
+  handleHeatmapClicks: function() {
+	  var self = this;
+	  var others = this.$(".legend-others");
+	  if (others) {
+		  $(others).on('click', function(evt) {
+			  self.model.set('yLimit', self.model.get('yLimit') + self.model.get('originalYLimit'));
+			  self.updateData();
+		  });
+	  }
+  },
+  
+  showNegativeAlert: function() {
+    if(this.model.get('view') === 'pie' && _.find(this.model.get('processed')[0].values, function(item) { return item.y < 0;})) {
+      this.$('.negative-values-message').show();
+    } else {
+      this.$('.negative-values-message').hide();
+    }
   },
 
   getChartOptions: function() {	  
@@ -226,7 +267,12 @@ module.exports = BackboneDash.View.extend({
   },
 
   resetLimit: function() {
-    this.model.set('limit', this.model.defaults.limit);
+	  if (this.model.get('chartType') === 'fragmentation') {
+		  this.model.set('yLimit', this.model.get('originalYLimit'));
+		  this.updateData();
+	  } else {
+		  this.model.set('limit', this.model.defaults.limit);
+	  }
   },
 
   changeAdjType: function(e) {
@@ -306,7 +352,7 @@ module.exports = BackboneDash.View.extend({
 		  if (self.model.get('view') !== 'heatmap') {
 			  if(hasValues && !hasProcessed) {
 				  // Top charts.
-				  if(self.model.get('values')[i] != undefined) {
+				  if(self.model.get('values')[i] !== undefined) {
 					  $(elem).data('data-title', self.model.get('values')[i].name);
 				  } else {
 					// This the last legend "Others" (doesnt come in the data).
@@ -314,7 +360,7 @@ module.exports = BackboneDash.View.extend({
 				  }
 			  } else if(hasProcessed) {
 				  // Aid Predictability charts and Funding Type charts.
-				  if(self.model.get('processed')[i] != undefined) {
+				  if(self.model.get('processed')[i] !== undefined) {
 					  // The extra check is for FT charts that have more legends (grouped, stacked, etc).
 					  $(elem).data('data-title', self.model.get('processed')[i].key);
 				  }

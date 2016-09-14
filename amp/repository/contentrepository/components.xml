@@ -15,7 +15,7 @@
 	<page name="amp_deleteDocumentResponse" page="deleteDocumentResponse"/>
 	<page name="cr_docToOrg" page="docToOrg" title= "" />
 	<page name="templateDocsManager" page="templateDocsManager" title =" - Template Documents Manager" />
-	<page name="addEditTempDoc" page="addEditTempDoc"/>
+	<page name="addEditTempDoc" page="addEditTempDoc" title=" - Create/Edit template document"/>
 	<page name="tempFieldPreDefinedValues" page="tempFieldPreDefinedValues"/>
 	<page name="docFromTemplate" page="docFromTemplate"/>
 	<page name="cr_labelManager" page="labelmanager/labelManager" title=" - Label Manager" />

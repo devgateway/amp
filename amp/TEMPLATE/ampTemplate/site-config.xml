@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE page [
-<!ENTITY ampVersion "2.12.3">
-<!ENTITY buildDate "09.07.2016">
+<!ENTITY ampVersion "2.12.4">
+<!ENTITY buildDate "11.08.2016">
 ]>
 <site-config>
 	<site-layout>
@@ -166,7 +166,7 @@
 			<put-item name="body"/>
 		</layout>
 		<layout name="pledgesLayout">
-		<put name="title">AMP</put>
+		<put name="title"> - Add Pledge </put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>

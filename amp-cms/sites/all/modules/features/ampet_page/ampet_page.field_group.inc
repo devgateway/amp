@@ -8,7 +8,7 @@
  * Implements hook_field_group_info().
  */
 function ampet_page_field_group_info() {
-  $export = array();
+  $field_groups = array();
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -40,7 +40,11 @@ function ampet_page_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_title_wrapper|node|page|full'] = $field_group;
+  $field_groups['group_title_wrapper|node|page|full'] = $field_group;
 
-  return $export;
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Title Wrapper');
+
+  return $field_groups;
 }

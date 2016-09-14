@@ -13,7 +13,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
-import org.dgfoundation.amp.testmodels.ReportModelGenerator;
+import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
 import org.junit.Test;
 
 /**

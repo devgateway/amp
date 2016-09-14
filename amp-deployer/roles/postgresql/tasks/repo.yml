@@ -1,0 +1,10 @@
+---
+
+- name: 'Install repo: PostgreSQL'
+  yum:
+    name: "{{ postgresql__repo_url }}"
+    state: present
+  register: result
+  until: '"failed" not in result'
+  retries: 5
+  delay: 10

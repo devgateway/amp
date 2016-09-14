@@ -49,6 +49,7 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.dgfoundation.amp.utils.BoundedList;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -261,10 +262,8 @@ public class ReportsUtil {
 	}
 	
 	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams) {
-		// the caching mechanism should be or deleted at all or rewrote. 
-		// During the pagination, sorting and exports the regenerate = true always, because the 'regenerate' param is not set to false
-
-		String reportToken = EndpointUtils.getSingleValue(formParams, EPConstants.MD5_TOKEN, Long.toString(Calendar.getInstance().getTimeInMillis()));
+		
+		String reportToken = EndpointUtils.getSingleValue(formParams, EPConstants.MD5_TOKEN, null); // use null in case the frontend has not generated an md5 token (e.g. Tabs as of 15/aug/2016). Using the timestamp is a VERY bad idea since it would pollute the cache at each page cache
 		
 		boolean regenerate = ReportCacher.getReportData(reportToken) == null;
 		CachedReportData cachedReportData = null;
@@ -469,6 +468,10 @@ public class ReportsUtil {
 				somethingAdded = true;
 			}
 		}
+		for(Entry<ReportColumn, List<FilterRule>> elem: oldFilters.getDateFilterRules().entrySet()) {
+			result.getDateFilterRules().put(elem.getKey(), elem.getValue());
+			somethingAdded = true;
+		}
 		if (newFilters == null && !somethingAdded)
 			return newFilters; // do not alter filters if we did nothing
 		
@@ -602,12 +605,12 @@ public class ReportsUtil {
 		
 		// validate the columns
         ApiErrorMessage err = validateList("columns", (List<String>) formParams.get(EPConstants.ADD_COLUMNS),
-				MondrianReportUtils.getConfigurableColumns(), isCustom);
+				ColumnsVisibility.getConfigurableColumns(), isCustom);
 		if (err != null) errors.add(err);
 		
 		// validate the measures
 		err = validateList("measures", (List<String>) formParams.get(EPConstants.ADD_MEASURES),
-				MondrianReportUtils.getConfigurableMeasures(), isCustom);
+				MeasuresVisibility.getConfigurableMeasures(), isCustom);
 		if (err != null) errors.add(err);
 		
 		// validate the hierarchies

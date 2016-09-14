@@ -88,6 +88,8 @@ public class Funding implements Serializable {
 	 */
 	private String code;
 	private String fundingClassificationDate;
+	private String effectiveFundingDate;
+	private String fundingClosingDate;
 	private Long groupVersionedFunding;
 	private Float capitalSpendingPercentage;	
 	
@@ -274,8 +276,8 @@ public class Funding implements Serializable {
 		this.setFinancingInstrument(ampFunding.getFinancingInstrument());
 		this.setFundingStatus(ampFunding.getFundingStatus());
 		this.setModeOfPayment(ampFunding.getModeOfPayment());
-		this.setActStartDate(DateConversion.ConvertDateToString(ampFunding.getActualStartDate()));
-		this.setActCloseDate(DateConversion.ConvertDateToString(ampFunding.getActualCompletionDate()));
+		this.setActStartDate(DateConversion.convertDateToLocalizedString(ampFunding.getActualStartDate()));
+		this.setActCloseDate(DateConversion.convertDateToLocalizedString(ampFunding.getActualCompletionDate()));
 		this.setFundingId(ampFunding.getAmpFundingId().longValue());
 		this.setGroupVersionedFunding(ampFunding.getGroupVersionedFunding());
 		this.setOrgFundingId(ampFunding.getFinancingId());
@@ -283,11 +285,13 @@ public class Funding implements Serializable {
 		this.setConditions(ampFunding.getConditions());
 		this.setDonorObjective(ampFunding.getDonorObjective());
 		this.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
-		this.setFundingClassificationDate(DateConversion.ConvertDateToString(ampFunding.getFundingClassificationDate()));
-		this.setRatificationDate(DateConversion.ConvertDateToString(ampFunding.getRatificationDate()));
+		this.setFundingClassificationDate(DateConversion.convertDateToString(ampFunding.getFundingClassificationDate()));
+		this.setEffectiveFundingDate(DateConversion.convertDateToString(ampFunding.getEffectiveFundingDate()));
+		this.setFundingClosingDate(DateConversion.convertDateToString(ampFunding.getFundingClosingDate()));
+		this.setRatificationDate(DateConversion.convertDateToLocalizedString(ampFunding.getRatificationDate()));
 		this.setGracePeriod(ampFunding.getGracePeriod());
 		this.setInterestRate(ampFunding.getInterestRate());
-		this.setMaturity(DateConversion.ConvertDateToString(ampFunding.getMaturity()));
+		this.setMaturity(DateConversion.convertDateToLocalizedString(ampFunding.getMaturity()));
 		
 		
 		if (ampFunding.getAgreement() != null) {
@@ -919,6 +923,22 @@ public class Funding implements Serializable {
 	@java.lang.SuppressWarnings("all")
 	public void setMaturity(String maturity) {
 		this.maturity = maturity;
+	}
+
+	public String getEffectiveFundingDate() {
+		return effectiveFundingDate;
+	}
+
+	public void setEffectiveFundingDate(String effectiveFundingDate) {
+		this.effectiveFundingDate = effectiveFundingDate;
+	}
+
+	public String getFundingClosingDate() {
+		return fundingClosingDate;
+	}
+
+	public void setFundingClosingDate(String fundingClosingDate) {
+		this.fundingClosingDate = fundingClosingDate;
 	}
 
 	@java.lang.Override

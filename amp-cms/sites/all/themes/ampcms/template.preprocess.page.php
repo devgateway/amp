@@ -146,7 +146,9 @@ function ampcms_css_alter(&$css) {
   $exceptions_list = array(
     'sites/all/modules/contrib/admin_menu',
     'sites/all/modules/contrib/ctools',
+    'sites/all/modules/contrib/coffee',
     'sites/all/modules/contrib/date',
+    'sites/all/modules/contrib/devel',
     'sites/all/modules/contrib/l10n_client',
     'sites/all/modules/contrib/media',
   );

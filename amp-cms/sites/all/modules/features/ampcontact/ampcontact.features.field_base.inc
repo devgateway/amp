@@ -10,14 +10,13 @@
 function ampcontact_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_contact_email'
+  // Exported field_base: 'field_contact_email'.
   $field_bases['field_contact_email'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_contact_email',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'email',
@@ -28,21 +27,13 @@ function ampcontact_field_default_field_bases() {
     'type' => 'email',
   );
 
-  // Exported field_base: 'field_contact_message'
+  // Exported field_base: 'field_contact_message'.
   $field_bases['field_contact_message'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_contact_message',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -57,21 +48,13 @@ function ampcontact_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_contact_name'
+  // Exported field_base: 'field_contact_name'.
   $field_bases['field_contact_name'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_contact_name',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -87,14 +70,13 @@ function ampcontact_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_contact_organization'
+  // Exported field_base: 'field_contact_organization'.
   $field_bases['field_contact_organization'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_contact_organization',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',

@@ -60,7 +60,7 @@ public class HeatMapConfigs {
        add(new HeatMapConfig(
                "HeatMap by Location and Donor Group",
                HeatMapConfig.Type.LOCATION,
-               LocationUtil.getAllLocationColumnNames(),
+               getLocationsForHeatMap(),
                Arrays.asList(ColumnConstants.DONOR_GROUP)
                ));
     }};
@@ -229,7 +229,7 @@ public class HeatMapConfigs {
     
     private BigDecimal getNewAmountFrom(Map<String, Object> threshold) {
         Object from = threshold.get(DashboardConstants.AMOUNT_FROM);
-        return from == null ? null : new BigDecimal(from.toString(), new MathContext(2, RoundingMode.HALF_EVEN));
+        return from == null ? null : new BigDecimal(from.toString()).setScale(6, RoundingMode.HALF_EVEN);
     }
     
     private List<AmpColorThreshold> clear(List<AmpColorThreshold> colorThresholds) {
@@ -241,4 +241,9 @@ public class HeatMapConfigs {
         return colorThresholds;
     }
     
+    private static final List<String> getLocationsForHeatMap() {
+        List<String> locationColumns = new ArrayList<String>(LocationUtil.LOCATIONS_COLUMNS_NAMES);
+        locationColumns.remove(ColumnConstants.COUNTRY);
+        return locationColumns;
+    }
 }

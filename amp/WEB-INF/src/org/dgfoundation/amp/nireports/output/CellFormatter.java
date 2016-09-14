@@ -19,7 +19,16 @@ import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NumberedCell;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
+import org.dgfoundation.amp.nireports.output.nicells.CellVisitor;
+import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiDateCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiIntCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * a {@link CellVisitor} used to transform instances of {@link NiOutCell} into instances of {@link ReportCell}
@@ -41,7 +50,7 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 		this.amountsUnits = (settings != null && settings.getUnitsOption() != null) ? settings.getUnitsOption() : AmountsUnits.AMOUNTS_OPTION_UNITS;
 		this.unitsDivider = BigDecimal.valueOf(this.amountsUnits.divider);
 		this.outputSettings = outputSettings;
-		this.dateFormatter = DateTimeFormatter.ofPattern(dateDisplayFormat);
+		this.dateFormatter = DateTimeFormatter.ofPattern(dateDisplayFormat).withLocale(DateTimeUtil.getLocale()); 
 		this.translator = translator;
 	}
 
@@ -100,5 +109,12 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	public IntCell visit(NiIntCell cell, CellColumn currentColumn) {
 		IntCell res = new IntCell(cell.value, cell.entityId);
 		return res;
+	}
+
+	@Override
+	public ReportCell visit(NiFormulaicAmountCell cell, CellColumn currentColumn) {
+		if (cell.isDefined())
+			return visitNumberedCell(cell);
+		return null;
 	}
 }

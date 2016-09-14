@@ -32,7 +32,9 @@ public abstract class AmpTestCase extends TestCase
 	public AmpTestCase(String name) {
 		super(name);
 	}
-	
+
+	final BigDecimal BIG_DECIMAL_EPSI = BigDecimal.valueOf(0.0001d);
+
 	public void shouldFail(AmpRunnable runnable){
 		shouldFail(runnable, null);
 	}
@@ -63,7 +65,14 @@ public abstract class AmpTestCase extends TestCase
 	 * @param b
 	 */
 	public void assertBigDecimalEquals(BigDecimal expected, BigDecimal given) {
-		if (expected.compareTo(given) != 0)
+		if (expected == null ^ given == null) {
+			fail(String.format("expected: %s, given: %s", expected, given));
+			return;
+		}
+		if (expected == null && given == null)
+			return;
+		BigDecimal delta = given.subtract(expected).abs();
+		if (delta.compareTo(BIG_DECIMAL_EPSI) > 0)
 			fail(String.format("expected: %s, given: %s", expected, given));
 	}
 	

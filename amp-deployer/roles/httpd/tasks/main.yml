@@ -1,0 +1,50 @@
+---
+
+# - name: Display all variables/facts known for a host
+#   debug: var=hostvars[inventory_hostname] verbosity=4
+
+# - debug: var=httpd_port
+# - debug: var=httpd_ServerName
+# - debug: var=httpd_MaxRequestWorkers|string()
+
+- name: Install Apache HTTPD
+  yum: name=httpd state=installed
+
+- name: Insert Firewall Rule - allow port {{ httpd__port }}
+  firewalld: port={{ httpd__port }}/tcp permanent=true state=enabled immediate=yes
+
+- name: Insert Firewall Rule - allow port {{ httpd__tsl_port }}
+  firewalld: port={{ httpd__tsl_port }}/tcp permanent=true state=enabled immediate=yes
+
+- name: Enable and start Apache HTTPD
+  service: name=httpd state=started enabled=yes
+
+- name: Update logrotate configuration
+  template:
+    src: logrotate.j2
+    dest: /etc/logrotate.d/httpd
+
+- name: Create Directory for Virutal Hosts
+  file: path=/etc/httpd/vhosts.d state=directory mode=0755
+
+- name: Update Apache HTTPD configuration
+  template: src=custom.conf.j2 dest=/etc/httpd/conf.d/custom.conf
+  notify:
+    - restart httpd
+
+- name: Disable default Listen directives from httpd.conf
+  lineinfile: dest=/etc/httpd/conf/httpd.conf state=present backrefs=yes regexp="^Listen (.+)" line="#Listen \1"
+  notify:
+    - restart httpd
+
+- name: Create systemd settings directory
+  file: path=/etc/systemd/system/httpd.service.d state=directory
+
+- name: Configure the Apache HTTPD service umask
+  copy: src=service_httpd_umask.conf dest=/etc/systemd/system/httpd.service.d/umask.conf
+
+- name: Copy noindex robots.txt
+  copy: src=robots.noindex.txt dest=/var/www/html/robots.noindex.txt
+
+- name: Manage VirtualHosts
+  include: vhosts.yml

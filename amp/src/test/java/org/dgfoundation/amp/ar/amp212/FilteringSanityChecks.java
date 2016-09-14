@@ -17,7 +17,7 @@ import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.testmodels.NiReportModel;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.junit.Test;
 
 /**
@@ -79,8 +79,8 @@ public abstract class FilteringSanityChecks extends ReportingTestCase {
 			"with weird currencies"
 		);
 	
-	protected ReportSpecificationImpl buildSpecForFiltering(String title, List<String> cols, List<String> hiers, ReportElement elem, FilterRule rule) {
-		ReportSpecificationImpl spec = buildSpecification(title, 
+	public static ReportSpecificationImpl buildSpecForFiltering(String title, List<String> cols, List<String> hiers, ReportElement elem, FilterRule rule) {
+		ReportSpecificationImpl spec = ReportSpecificationImpl.buildFor(title, 
 				cols, 
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
 				hiers, 
@@ -92,7 +92,7 @@ public abstract class FilteringSanityChecks extends ReportingTestCase {
 		return spec;
 	}
 
-	protected ReportSpecificationImpl buildSpecForFiltering(String title, List<String> cols, List<String> hiers, String filterColumnName, List<Long> ids, boolean positive) {
+	public static ReportSpecificationImpl buildSpecForFiltering(String title, List<String> cols, List<String> hiers, String filterColumnName, List<Long> ids, boolean positive) {
 		FilterRule rule = ids.size() == 1 ? new FilterRule(ids.get(0).toString(), positive) : new FilterRule(ids.stream().map(z -> z.toString()).collect(Collectors.toList()), positive);
 		ReportElement elem = new ReportElement(new ReportColumn(filterColumnName));
 		return buildSpecForFiltering(title, cols, hiers, elem, rule);

@@ -25,7 +25,7 @@ public class FormatDateHelperTag extends BodyTagSupport {
 			Timestamp time = getValue();
 			String result="";
 			if (value!=null)
-				result = DateConversion.ConvertDateToString( new Date(value.getTime()) );
+				result = DateConversion.convertDateToLocalizedString( new Date(value.getTime()) );
 			
 			out.write(result);
 			return super.doStartTag();

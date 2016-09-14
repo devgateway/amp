@@ -15,7 +15,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;

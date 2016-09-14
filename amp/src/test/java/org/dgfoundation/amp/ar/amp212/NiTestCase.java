@@ -23,7 +23,7 @@ import org.dgfoundation.amp.nireports.amp.DirectedMeasureBehaviour;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
-import org.dgfoundation.amp.nireports.output.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CacheHitsCounter;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
@@ -36,8 +36,8 @@ import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
-import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 
 /**

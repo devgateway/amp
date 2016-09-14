@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
@@ -96,12 +97,13 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Planned"));
 		put(MeasureConstants.PERCENTAGE_OF_DISBURSEMENT, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.EXECUTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", ADJUSTMENT_PREFIX + "Planned"));
+		put(MeasureConstants.AVERAGE_DISBURSEMENT_RATE, get(MeasureConstants.EXECUTION_RATE));
 		put(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", MeasureConstants.PLEDGES_ACTUAL_PLEDGE));
 		put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.REAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", DIRECTED_DISBURSEMENTS_ID_NAME));
-		put(ColumnConstants.FORECAST_EXECUTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", MTEF_ID_NAME));
+		put(MeasureConstants.FORECAST_EXECUTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", MTEF_ID_NAME));
 		// skipping REAL_COMMITMENTS and REAL_MTEF, as could not find support for those in the AF
 		put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Planned"));
 		put(MeasureConstants.TOTAL_COMMITMENTS, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
@@ -111,8 +113,8 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.CUMULATIVE_DISBURSEMENT, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, Arrays.asList(ANNUAL_PROPOSED_PROJECT_COST_ID_NAME, ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE, Arrays.asList(ArConstants.DISBURSEMENT, ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
-		
-		
+		put(MeasureConstants.PREDICTABILITY_OF_FUNDING, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", ADJUSTMENT_PREFIX + "Planned"));
+		put(MeasureConstants.CUMULATIVE_EXECUTION_RATE, Arrays.asList(ArConstants.COMMITMENT, ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 	}};
 
 	public static Set<String> allMeasures = _getAllMeasures();	
@@ -234,6 +236,12 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		return currentlyVisible;
 	}
 
+	public static Set<String> getConfigurableMeasures() {
+		Set<String> configurableMeasures = new HashSet<String>(getVisibleMeasures());
+		configurableMeasures.retainAll(AmpReportsSchema.getInstance().getMeasures().keySet());
+		return configurableMeasures;
+	}
+	
 	@Override
 	protected Set<String> getAllData() {
 		return allMeasures;

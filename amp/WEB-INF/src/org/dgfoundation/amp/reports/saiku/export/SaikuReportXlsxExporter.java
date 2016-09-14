@@ -13,9 +13,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
+import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.HeaderCell;
@@ -36,6 +37,9 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	
 	public final String reportSheetName = "Formatted";
 	public final String summarySheetName = "Summary Information";
+	
+	public final int currencyUnitsRowPosition = 1;
+	public final int initHeaderRowOffset = 3;
 	
 	/**
 	 * Map<String sheetName, Map<Integer header-column-number, Integer columnWidth>> 
@@ -107,6 +111,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	protected void addDualReportSheetToWorkbook(SXSSFWorkbook wb, GeneratedReport dualReport) {
 		if (dualReport != null) {
 			String ampCurrencyCode = dualReport.spec.getSettings().getCurrencyCode();
+			ampCurrencyCode = ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(ampCurrencyCode);
+			
 			String sheetName = TranslatorWorker.translateText(getReportSheetName()) + String.format(" - %s", ampCurrencyCode);
 			addReportSheetToWorkbook(wb, dualReport, sheetName);
 		}
@@ -120,6 +126,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	protected void addDualSummarySheetToWorkbook(SXSSFWorkbook wb, GeneratedReport dualReport) {
 		if (dualReport != null) {
 			String ampCurrencyCode = dualReport.spec.getSettings().getCurrencyCode();
+			ampCurrencyCode = ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(ampCurrencyCode);
+			
 			String sheetName = TranslatorWorker.translateText(getSummarySheetName()) + String.format(" - %s", ampCurrencyCode);
 			addSummarySheetToWorkbook(wb, dualReport, sheetName);
 		}
@@ -130,10 +138,37 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	}
 
 	protected void generateReportSheet(SXSSFWorkbook wb, SXSSFSheet sheet, GeneratedReport report) {
+		renderReportTableUnits(wb, sheet, report);
 		renderReportTableHeader(wb, sheet, report);
 		renderReportData(sheet, report);
 	}
 	
+	/**
+	 * @param wb
+	 * @param sheet
+	 * @param report
+	 */
+	protected void renderReportTableUnits(SXSSFWorkbook wb, SXSSFSheet sheet, GeneratedReport report) {
+		Row row = sheet.createRow(currencyUnitsRowPosition);
+		Cell cell = row.createCell(0);
+		
+		String unitsOption = report.spec.getSettings().getUnitsOption().userMessage;
+		String currencyCode = report.spec.getSettings().getCurrencyCode();
+		currencyCode = ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(currencyCode);
+		
+		String translatedNotes = TranslatorWorker.translateText(unitsOption);
+		String translatedCurrencyCode = TranslatorWorker.translateText(currencyCode);
+
+		cell.setCellValue(translatedNotes + " - " + translatedCurrencyCode);
+		
+		CellRangeAddress mergedUnitsCell = new CellRangeAddress(currencyUnitsRowPosition, currencyUnitsRowPosition, 
+				0, report.rootHeaders.size() + 1);
+		
+		if (mergedUnitsCell.getNumberOfCells() > 1)
+			sheet.addMergedRegion(mergedUnitsCell);
+	}
+
+
 	/**
 	 * @param wb
 	 * @param sheet
@@ -144,7 +179,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
 		
 		for(int i=0; i < report.generatedHeaders.size(); i++) {
-			Row row = sheet.createRow(i);
+			Row row = sheet.createRow(initHeaderRowOffset + i);
 			for(HeaderCell headerCell : report.generatedHeaders.get(i)) {
 				
 				if (isHiddenColumn(headerCell.originalName)) {
@@ -157,7 +192,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 				cell.setCellValue(headerCell.getName());
 				setMaxColWidth(sheet, cell, cellColumnPos);
 				
-				CellRangeAddress mergedHeaderCell = new CellRangeAddress(i, i + headerCell.getRowSpan() - 1, 
+				CellRangeAddress mergedHeaderCell = new CellRangeAddress(initHeaderRowOffset + i, initHeaderRowOffset + i + headerCell.getRowSpan() - 1, 
 						cellColumnPos, cellColumnPos + headerCell.getColSpan() - 1);
 				if (mergedHeaderCell.getNumberOfCells()  > 1)
 					sheet.addMergedRegion(mergedHeaderCell);
@@ -176,7 +211,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 * @param report
 	 */
 	protected void renderReportData(SXSSFSheet sheet, GeneratedReport report) {
-		Row row = sheet.createRow(report.generatedHeaders.size());
+		Row row = sheet.createRow(initHeaderRowOffset + report.generatedHeaders.size());
 		renderTableRow(sheet, report, report.reportContents, 0, row);
 		renderTableTotals(sheet, report, report.reportContents);
 	}
@@ -438,6 +473,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		}
 		String calendar = reportSpec.getSettings().getCalendar().getName();
 		String units = reportSpec.getSettings().getUnitsOption().userMessage;
+		currency = ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(currency);
+		
 		renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Currency"), currency);
 		renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Calendar"), calendar);
 		renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Units"), units);

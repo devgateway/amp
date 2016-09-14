@@ -8,7 +8,7 @@ import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.dgfoundation.amp.testmodels.GroupReportModel;
+import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.um.exception.UMException;

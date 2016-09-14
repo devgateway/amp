@@ -17,8 +17,8 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.dgfoundation.amp.testmodels.NiReportModel;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.junit.Test;
 
@@ -210,7 +210,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 					"(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 13, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 15, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 16, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 17, colSpan: 1));(Real MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 18, colSpan: 4))",
 					"(EXEC-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(IMPL-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(EXEC-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(IMPL-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(EXEC-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(EXEC-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(IMPL-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1));(IMPL-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1))"))
 				.withWarnings(Arrays.asList(
-					"-1: [entityId: -1, message: measure Real MTEFs not supported in NiReports]"))
+					"-1: [entityId: -1, message: measure \"Real MTEFs\" not supported in NiReports]"))
 				.withBody(      new ReportAreaForTests(null)
 			      .withContents("Project Title", "", "MTEF 2011/2012", "1 438 011", "MTEF 2012/2013", "211 000", "Real MTEF 2011/2012-EXEC-BENF", "50 000", "Real MTEF 2011/2012-IMPL-EXEC", "110 500", "Real MTEF 2012/2013-EXEC-EXEC", "22 000", "Real MTEF 2012/2013-IMPL-BENF", "43 000", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "143 777", "Funding-2013-Actual Commitments", "570 000", "Funding-2013-Actual Disbursements", "580 000", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "75 000", "Funding-2015-Actual Commitments", "656 256", "Funding-2015-Actual Disbursements", "80 000", "Totals-Actual Commitments", "1 226 256", "Totals-Actual Disbursements", "878 777", "Totals-MTEF", "1 649 011", "Totals-Real MTEF-EXEC-BENF", "50 000", "Totals-Real MTEF-EXEC-EXEC", "22 000", "Totals-Real MTEF-IMPL-BENF", "43 000", "Totals-Real MTEF-IMPL-EXEC", "110 500")
 			      .withChildren(

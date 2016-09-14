@@ -1,0 +1,7 @@
+---
+
+- name: Install JAVA OpenJDK Runtime Environment
+  yum: name={{item}} state=installed
+  with_items:
+    - java-1.8.0-openjdk
+    - java-1.8.0-openjdk-devel

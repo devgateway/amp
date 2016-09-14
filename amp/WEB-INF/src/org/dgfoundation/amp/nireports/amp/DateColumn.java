@@ -9,16 +9,12 @@ import java.util.Map;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.DateCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.schema.DateTokenBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
- * 
- * a date column
- * 	<li>amp_activity_id (or pledge_id)</li>
- *  <li>payload (text)</li>
- *  </ol>  
+ * a differentially-fetched column which generates {@link DateCell} cells
  *  All the extra columns are ignored
  * @author Dolghier Constantin
  *

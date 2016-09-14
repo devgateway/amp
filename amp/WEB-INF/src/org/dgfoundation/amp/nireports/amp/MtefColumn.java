@@ -1,24 +1,22 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.amp.AmpFundingColumn.FundingFetcherContext;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 /**
- * class for fetching any of the MTEF columns/measures
+ * class for fetching any of the MTEF columns/measures.
+ * It is a very simple subclass of {@link AmpFundingColumn}, since the fetching SQL filtering logic is slightly different, being based on the MTEF year
  * @author Dolghier Constantin
  *
  */
 public class MtefColumn extends AmpFundingColumn {
 
-	final int mtefYear;
-	final Optional<Long> adjustmentTypeCode;
-	final boolean directed;
+	public final int mtefYear;
+	public final Optional<Long> adjustmentTypeCode;
+	public final boolean directed;
 
 	public MtefColumn(String columnName, int mtefYear, String totalColumnName, boolean directed, Optional<HardCodedCategoryValue> adjustmentType) {
 		super(columnName, "v_ni_mtef_funding",

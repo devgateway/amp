@@ -84,7 +84,7 @@ function page (page){
 				</table>
 				<div style="text-align: center; display: none;" id="loadingImg">
 					<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp; 
-        			<b class="ins_title"><digi:trn>Loading, please wait ...</digi:trn></b>
+        			<b class="ins_title"><digi:trn>Loading...</digi:trn></b>
 				</div>
 				<table class="inside" width=980 border=0 cellpadding="0" cellspacing="0" style="margin:10px;">
 					<tr>

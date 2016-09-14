@@ -1124,25 +1124,26 @@ public class ActivityImporter {
 	 */
 	protected void updateOrgRoles() {
 		for (AmpFunding f : newActivity.getFunding()) {
-			boolean found = false;
-			for (AmpOrgRole role : newActivity.getOrgrole()) {
-				if (role.getRole().getRoleCode().equals(f.getSourceRole()) 
-						&& role.getOrganisation().getAmpOrgId().equals(f.getAmpDonorOrgId())) {
-					found = true;
-					break;
+			if (f.getSourceRole() != null && f.getAmpDonorOrgId() != null) {
+				boolean found = false;
+				for (AmpOrgRole role : newActivity.getOrgrole()) {
+						if (role.getRole().getRoleCode().equals(f.getSourceRole().getRoleCode()) 
+								&& role.getOrganisation().getAmpOrgId().equals(f.getAmpDonorOrgId().getAmpOrgId())) {
+							found = true;
+							break;
+						}
 				}
-			}
 			
-			if (!found) {
-				AmpOrgRole role = new AmpOrgRole();
-				role.setOrganisation(f.getAmpDonorOrgId());
-				role.setActivity(newActivity);
-				role.setRole(f.getSourceRole());
-				newActivity.getOrgrole().add(role);
+				if (!found) {
+					AmpOrgRole role = new AmpOrgRole();
+					role.setOrganisation(f.getAmpDonorOrgId());
+					role.setActivity(newActivity);
+					role.setRole(f.getSourceRole());
+					newActivity.getOrgrole().add(role);
+				}
 			}
 		}
 	}
-	
 	
 	/**
 	 * Execute custom configurations that is not worth to define generic for single use cases

@@ -11,7 +11,6 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.AmpThemeSkeleton;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
@@ -168,7 +167,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private String selectedActivityPledgesSettings = "-1";
 	
 	private Object[] selectedExpenditureClasses;
-	
+	private DynamicDateFilter dynamicEffectiveFundingFilter = new DynamicDateFilter();
+	private DynamicDateFilter dynamicFundingClosingFilter = new DynamicDateFilter();
+	private String fromEffectiveFundingDate;
+	private String toEffectiveFundingDate;
+	private String fromFundingClosingDate;
+	private String toFundingClosingDate;
+
 	public int getCalendarsSize() {
 		if (calendars == null) return 0;
 		return calendars.size();
@@ -1357,5 +1362,53 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedExpenditureClasses(Object[] selectedExpenditureClasses) {
 		this.selectedExpenditureClasses = selectedExpenditureClasses;
+	}
+
+	public DynamicDateFilter getDynamicEffectiveFundingFilter() {
+		return dynamicEffectiveFundingFilter;
+	}
+
+	public void setDynamicEffectiveFundingFilter(DynamicDateFilter dynamicEffectiveFundingFilter) {
+		this.dynamicEffectiveFundingFilter = dynamicEffectiveFundingFilter;
+	}
+
+	public DynamicDateFilter getDynamicFundingClosingFilter() {
+		return dynamicFundingClosingFilter;
+	}
+
+	public void setDynamicFundingClosingFilter(DynamicDateFilter dynamicFundingClosingFilter) {
+		this.dynamicFundingClosingFilter = dynamicFundingClosingFilter;
+	}
+
+	public String getFromEffectiveFundingDate() {
+		return fromEffectiveFundingDate;
+	}
+
+	public void setFromEffectiveFundingDate(String fromEffectiveFundingDate) {
+		this.fromEffectiveFundingDate = fromEffectiveFundingDate;
+	}
+
+	public String getToEffectiveFundingDate() {
+		return toEffectiveFundingDate;
+	}
+
+	public void setToEffectiveFundingDate(String toEffectiveFundingDate) {
+		this.toEffectiveFundingDate = toEffectiveFundingDate;
+	}
+
+	public String getFromFundingClosingDate() {
+		return fromFundingClosingDate;
+	}
+
+	public void setFromFundingClosingDate(String fromFundingClosingDate) {
+		this.fromFundingClosingDate = fromFundingClosingDate;
+	}
+
+	public String getToFundingClosingDate() {
+		return toFundingClosingDate;
+	}
+
+	public void setToFundingClosingDate(String toFundingClosingDate) {
+		this.toFundingClosingDate = toFundingClosingDate;
 	}
 }

@@ -1,0 +1,4 @@
+# No robots should visit this site further.
+# @see: http://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow: /

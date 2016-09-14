@@ -10,6 +10,9 @@ var formatKMB = function(precision) {
   };
 };
 
+var formatPercentage = function(precision) {
+  return d3.format(',.' + (precision || 2) + '%');
+};
 
 var formatShortText = function(maxWidth) {
   var ellipseWidth = 1;
@@ -36,5 +39,6 @@ module.exports = {
   formatKMB: formatKMB,
   formatShortText: formatShortText,
   categoryColours: categoryColours,
-  DecimalFormat: DecimalFormat
+  DecimalFormat: DecimalFormat,
+  formatPercentage: formatPercentage
 };

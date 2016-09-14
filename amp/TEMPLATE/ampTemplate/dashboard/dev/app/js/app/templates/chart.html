@@ -1,24 +1,3 @@
-<style>
-rect.bordered {
-	stroke: #E6E6E6;
-	stroke-width: 2px;
-}
-
-text.mono {
-	font-size: 9pt;
-	font-family: Arial;
-	fill: #000;
-}
-
-text.axis-workweek {
-	fill: #000;
-}
-
-text.axis-worktime {
-	fill: #000;
-}
-</style>
-
 <div class="col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>">
 
   <div class="panel panel-chart">
@@ -29,11 +8,13 @@ text.axis-worktime {
 	        <span class="chart-currency"></span>
 	      </span>
       <% } %>
-      <h2 data-i18n="amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>"><%= model.get('title') %>
-      	<% if (model.get('chartType') === 'fragmentation' && model.get('chartDescription') !== '') { %>
-      		<img src="/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png" class="question_mark nv-series" data-title="<%= model.get('chartDescription') %>">
-      	<% } %>
-      </h2>
+      <div>
+	      <h2 data-i18n="amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>"><%= model.get('title') %></h2>
+	      <% if (model.get('chartType') === 'fragmentation') { %>
+	      	<% var help_icon_text = app.translator.translateSync('amp.dashboard:chart-heatmap-help-text-' + model.get('heatmap_type'));%>
+	      	<img src="/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png" class="question_mark nv-series" data-title="<%= help_icon_text %>">
+	      <% } %>
+      </div>
     </div>
 	
     <div class="panel-body">
@@ -42,6 +23,10 @@ text.axis-worktime {
         <div class="dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>">
         </div>
         <button type="button" class="btn btn-link btn-xs pull-right reset" style="display:none" data-i18n="amp.dashboard:chart-reset">reset others</button>
+      </div>
+      <div class="alert alert-warning negative-values-message" role="alert">
+          <strong data-i18n="amp.dashboard:negatives-values">Negative values are not represented in this chart.</strong><br>
+          <span data-i18n="amp.dashboard:negatives-values-parag">Please switch to bar chart or table view to view all values.</span>
       </div>
     </div>
 

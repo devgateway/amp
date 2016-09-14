@@ -5,6 +5,7 @@ package org.digijava.module.aim.util;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +28,10 @@ import org.hibernate.Transaction;
 public class LocationUtil {
 
 	private static Logger logger = Logger.getLogger(LocationUtil.class);
+	
+	public static final List<String> LOCATIONS_COLUMNS_NAMES = Collections.unmodifiableList( 
+	        Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, 
+            ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
 
 	//End Search Location.
 	public static AmpLocation getAmpLocationByCVLocation(Long ampCVLocationId) {
@@ -272,10 +277,5 @@ public class LocationUtil {
             return collator.compare(location1FullName.toString(), location2FullName.toString());
 
         }
-    }
-    
-    public static List<String> getAllLocationColumnNames() {
-        return Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, 
-                ColumnConstants.DISTRICT, ColumnConstants.LOCATION);
     }
 }

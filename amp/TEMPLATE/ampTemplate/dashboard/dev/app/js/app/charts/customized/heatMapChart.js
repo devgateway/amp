@@ -1,3 +1,63 @@
+nv.models.heatmap = function() {
+    "use strict";
+
+    //============================================================
+    // Public Variables with Default Settings
+    //------------------------------------------------------------
+
+    var margin = {top: 0, right: 0, bottom: 0, left: 0}
+        , width = 500
+        , height = 500
+        , getX = function(d) { return d.x }
+        , getY = function(d) { return d.y }
+        , id = Math.floor(Math.random() * 10000) //Create semi-unique ID in case user doesn't select one
+        , duration = 250
+        , dispatch = d3.dispatch('chartClick', 'elementClick', 'elementDblClick', 'elementMouseover', 'elementMouseout', 'renderEnd')
+        ;
+
+
+    //============================================================
+    // chart function
+    //------------------------------------------------------------
+
+    var renderWatch = nv.utils.renderWatch(dispatch);
+
+    function chart(selection) {
+        renderWatch.reset();
+        renderWatch.renderEnd('heatmap immediate');
+        return chart;
+    }
+
+    //============================================================
+    // Expose Public Variables
+    //------------------------------------------------------------
+
+    chart.dispatch = dispatch;
+    chart.options = nv.utils.optionsFunc.bind(chart);
+
+    chart._options = Object.create({}, {
+        // simple options, just get/set the necessary values
+        width:      {get: function(){return width;}, set: function(_){width=_;}},
+        height:     {get: function(){return height;}, set: function(_){height=_;}},
+        x:          {get: function(){return getX;}, set: function(_){getX=_;}},
+        id:         {get: function(){return id;}, set: function(_){id=_;}},
+
+        // options that require extra logic in the setter
+        margin: {get: function(){return margin;}, set: function(_){
+            margin.top    = typeof _.top    != 'undefined' ? _.top    : margin.top;
+            margin.right  = typeof _.right  != 'undefined' ? _.right  : margin.right;
+            margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
+            margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
+        }},
+        y: {get: function(){return getY;}, set: function(_){
+            getY=d3.functor(_);
+        }}
+    });
+
+    nv.utils.initOptions(chart);
+    return chart;
+};
+
 nv.models.heatMapChart = function() {
 	"use strict";
 
@@ -5,40 +65,33 @@ nv.models.heatMapChart = function() {
     // Public Variables with Default Settings
     //------------------------------------------------------------	
 
-    //var pie = nv.models.pie();
-    //var legend = nv.models.legend().margin({top: 0, right: 0, bottom: 0, left: 0});
+    var heatmap = nv.models.heatmap();
 
     var margin = {top: 30, right: 20, bottom: 20, left: 20}
-    //var legendMargin = {top: 30, right: 20, bottom: 20, left: 20}
     var width = null;
 	var height = null;
     var showLegend = false;
     var color = nv.utils.defaultColor();
-    var tooltips = true;
-    var tooltip = function(key, y, e, graph) {
-    	return '<h3 style="background-color: '
-        	+ e.color + '">' + key + '</h3>'
-            + '<p>' +  y + '</p>';
-        }
     var	state = nv.utils.state();
     var defaultState = null;
     var noData = "No Data Available.";
     var duration = 250;
     var dispatch = d3.dispatch('tooltipShow', 'tooltipHide', 'stateChange', 'changeState','renderEnd');
+    var shortTextLength = 17;
+    var innerMargin = {
+    		top : 120,
+			right : 0,
+			bottom : 100,
+			left : 150
+    };
+    
+    const initialWidth = 960;
+    const initialHeight = 400;
+    const containerWidth = 1024;
 
     //============================================================
     // Private Variables
     //------------------------------------------------------------
-
-    var showTooltip = function(e, offsetElement) {
-    	var tooltipLabel = pie.x()(e.point);
-        var left = e.pos[0] + ( (offsetElement && offsetElement.offsetLeft) || 0 );
-        var top = e.pos[1] + ( (offsetElement && offsetElement.offsetTop) || 0);
-        var y = pie.valueFormat()(pie.y()(e.point));
-        var content = tooltip(tooltipLabel, y, e, chart);
-        nv.tooltip.show([left, top], content, e.value < 0 ? 'n' : 's', null, offsetElement);
-    };
-
     var renderWatch = nv.utils.renderWatch(dispatch);
 
     var stateGetter = function(data) {
@@ -59,8 +112,7 @@ nv.models.heatMapChart = function() {
         }
     };
   
-    var shortenText = function(text) {
-    	var length = 17;
+    var shortenText = function(text, length) {
     	if (text.length > length) {
     		text = text.substring(0, length) + '...';
     	}
@@ -73,25 +125,26 @@ nv.models.heatMapChart = function() {
 
     function chart(selection) {
     	var _self = this;
+    	this.rendered = false;
     	var _ = require('underscore'); // This doesnt works on top of the file :(((
-    	//console.log('heatMapChart.chart');
-        renderWatch.reset();
-        //renderWatch.models(pie);
 
-        selection.each(function(data) {//TODO: selection.each????
+        renderWatch.reset();
+        renderWatch.models(heatmap);
+
+        selection.each(function(data) {
         	// Get currency for later.
         	var currencySettings = _.find(app.settings.models, function(item) {return item.get('id') === '1'});
         	var selectedCurrency = _.find(currencySettings.get('options'), function(item) {return item.selected === true}).value;
+        	var newShortTextLength = !data[0].values.model.get('showFullLegends') ? shortTextLength : 100;
         	
         	var container = d3.select(this);
             nv.utils.initSVG(container);
 
-            var availableWidth = (width || parseInt(container.style('width'), 10) || 960)
+            var availableWidth = (width || parseInt(container.style('width'), 10) || initialWidth)
                     - margin.left - margin.right;
-            var availableHeight = (height || parseInt(container.style('height'), 10) || 400)
+            var availableHeight = (height || parseInt(container.style('height'), 10) || initialHeight)
                     - margin.top - margin.bottom;
 
-            //chart.update = function() { container.transition().call(chart); }; //comented to avoid adding the chart again.
             chart.container = this;
 
             state.setter(stateSetter(data), chart.update)
@@ -112,35 +165,24 @@ nv.models.heatMapChart = function() {
                 }
             }
 
-            //TODO: move these definitions to top.
-            var innerMargin = {
-            		top : 120,
-        			right : 0,
-        			bottom : 100,
-        			left : 150
-            };
         	var cubeSize = 30;
-        	var width = 1024 - innerMargin.left - innerMargin.right;
+        	var width = containerWidth - innerMargin.left - innerMargin.right;
         	var topSectionHeight = 180;
         	var legendSectionHeight = 20;
         	var height = topSectionHeight + (cubeSize * data[0].values.y.length) + legendSectionHeight;
         	var legendElementHeight = 22;
-        	var noColor = '#FFFFFF';
-        	var categories = [{min: -1, max: 0, color: noColor},
-        	                  {min: 0, max: 1, color: "#D05151"},
-        	                  {min: 1, max: 5, color: "#E68787"}, 
-        	                  {min: 5, max: 10, color: "#E4883E"}, 
-        	                  {min: 10, max: 15, color: "#F6B277"}, 
-        	                  {min: 15, max: 20, color: "#ADCD95"}, 
-        	                  {min: 20, max: 101, color: "#7BA05F"}];
+        	const noColor = '#FFFFFF';
+        	var categories = getCategoriesByThreshold(noColor, data[0].values.model);
         	
-        	$(container[0]).attr('height', height).attr('class', 'dash-chart nvd3-svg heatmap-chart');
+        	$(container[0]).css('height', height + 'px').attr('class', 'dash-chart nvd3-svg heatmap-chart');
         	
         	var svg = container
         		.append("g")
-        		.attr("transform", "translate(" + innerMargin.left + "," + innerMargin.top + ")");
+        		.attr("transform", "translate(" + innerMargin.left + "," + innerMargin.top + ")")
+        		.attr("class", "heatmap-main-container");
         	
         	// Add SVG filter for cell highlight.
+        	// For more info about these filters see: http://www.svgbasics.com/filters4.html // http://apike.ca/prog_svg_filter_feColorMatrix.html // http://alistapart.com/article/finessing-fecolormatrix
         	svg.append("defs").append("filter").attr("id", "filterSaturate").append("feColorMatrix").attr("in", "SourceGraphic").attr("type", "saturate").attr("values", "5");
         	svg.append("defs").append("filter").attr("id", "filterLuminanceToAlpha").append("feColorMatrix").attr("in", "SourceGraphic").attr("type", "luminanceToAlpha");
         	svg.append("defs").append("filter").attr("id", "filterBlur").append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "2");
@@ -152,13 +194,13 @@ nv.models.heatMapChart = function() {
 				.attr("class", "heatmap-yAxis-container");
         	
         	// Rows.
-        	var yLabels = yAxisLabelsContainer
+        	var yAxisLabels = yAxisLabelsContainer
         		.selectAll(".yLabel")
         		.data(data[0].values.y)
         		.enter()
         		.append("text")
         		.text(function(d) {
-        			return shortenText(d);
+        			return shortenText(d, newShortTextLength);
         		})
         		.attr("x", 0)
         		.attr("y", function(d, i) {
@@ -173,15 +215,26 @@ nv.models.heatMapChart = function() {
         			return d;
         		});
         	
+        		// Format "Others" special row if needed.
+        		if (data[0].values.yCount < data[0].values.yTotalCount) {
+        			var self = this;
+        			var data2 = data;
+        			var textElement = $(container[0]).find('.yLabel').last();
+        			$(textElement).attr("class", function(d, i) {
+        				return $(textElement).attr('class') + ' legend-others';
+        			});
+        		}
+        	
         		// Add Totals special row.
         		yAxisLabelsContainer.append("text")
-        			.text(app.translator.translateSync("TOTALS"))
+        			.text("TOTALS")
         			.attr("x", 0)
         			.attr("y", (data[0].values.y.length * cubeSize))
         			.attr("class", "yLabel mono axis nv-series heatmap-totals")
         			.style("text-anchor", "end")
         			.style("font-weight", "bold")
-            		.attr("transform", "translate(-6," + cubeSize / 1.5 + ")");
+            		.attr("transform", "translate(-6," + cubeSize / 1.5 + ")")
+            		.attr('data-i18n', 'amp.dashboard:chart-heatmap-totals');
 
         		// Columns container.
         		var xAxisLabelsContainer = svg
@@ -190,19 +243,20 @@ nv.models.heatMapChart = function() {
         			.attr("class", "heatmap-xAxis-container");
 
         		// Columns
-        		var yAxisLabels = xAxisLabelsContainer
+        		// Notice in transform functions the order is very important if you have to apply more than one, like translate and rotate.
+        		// cubeSize is where we define how big are the cubes so if we change it in the future the chart will resize correctly.
+        		var xAxisLabels = xAxisLabelsContainer
         			.selectAll(".xLabel")
         			.data(data[0].values.x)
         			.enter()
         			.append("text")
         			.text(function(d) {
-        				return shortenText(d);
+        				return shortenText(d, newShortTextLength);
         			})
         			.attr("x", function(d, i) {
         				return i * cubeSize;
         			})
         			.attr("y", 0)
-        			/*.style("text-anchor", "middle")*/
         			.attr("transform", function(d, i) {
         				return "rotate(270, " + (cubeSize * i) + ", 0)";
         			})
@@ -215,14 +269,15 @@ nv.models.heatMapChart = function() {
         		
         		// Add Totals special column.
         		xAxisLabelsContainer.append("text")
-        			.text(app.translator.translateSync("TOTALS"))
+        			.text("TOTALS")
         			.attr("x", cubeSize * data[0].values.x.length)
         			.attr("y", 0)
         			.attr("class", "xLabel mono axis nv-series heatmap-totals")
         			.style("font-weight", "bold")
             		.attr("transform", function(d, i) {
         				return "rotate(270, " + (cubeSize * data[0].values.x.length) + ", 0)";
-        			});
+        			})
+        			.attr('data-i18n', 'amp.dashboard:chart-heatmap-totals');
 
         		// Cubes
         		var cubesContainer = svg
@@ -242,10 +297,37 @@ nv.models.heatMapChart = function() {
         		
         		// Add percentage legends.
         		createLegends(svg, data, cubeSize, categories, legendElementHeight);
+        		
+        		app.translator.translateDOM(svg[0]);
+        		
+        		// Recalculate margins if we are showing the full legends.
+            	if (data[0].values.model.get('showFullLegends')) {        		
+            		var top = svg.select('.heatmap-xAxis-container').node().getBBox().height;
+            		var left = svg.select('.heatmap-yAxis-container').node().getBBox().width + 25;
+            		svg.attr("transform", "translate(" + left + "," + top + ")");
+            	}
         });
-
-        renderWatch.renderEnd('pieChart immediate');
+        
+        renderWatch.renderEnd('heatmap immediate');
         return chart;
+    }
+    
+    function getCategoriesByThreshold(noColor, model) {
+    	var categories = new Array();
+    	categories.push({min: -1, max: 0, color: noColor});
+    	var colors = model.get('heatmap_config').models[0].get('amountColors');
+    	var i = 1;
+    	for (var property in colors) {
+    	    if (colors.hasOwnProperty(property)) {
+    	    	categories.push({min: parseInt(property), color: colors[property], max: null});
+    	    	if (i > 1) {
+    	    		categories[i - 1].max = parseInt(property);
+    	    	}
+    	    	i++;
+    	    }
+    	}
+    	categories[i - 1].max = 101;
+    	return categories;
     }
     
     function createLegends(svg, data, cubeSize, categories, legendElementHeight) {
@@ -253,12 +335,12 @@ nv.models.heatMapChart = function() {
 			.append("g")
 			.attr("transform", "translate(0, " + (((data[0].values.y.length + 1) * cubeSize) + 10) + ")")
 			.attr("class", "heatmap-legends-container");
-    	var legendsPool = [app.translator.translateSync("Less than 1%"),
-    	                   app.translator.translateSync("Between 1% and <5%"),
-    	                   app.translator.translateSync("Between 5% and <10%"),
-    	                   app.translator.translateSync("Between 10% and <15%"),
-    	                   app.translator.translateSync("Between 15% and <20%"),
-    	                   app.translator.translateSync("More than 20%")];   	
+    	var legendsPool = [app.translator.translateSync("amp.dashboard:chart-heatmap-legend-less-than") + " " + categories[1].max + "%",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[2].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[2].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[3].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[3].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[4].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[4].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[5].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[5].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-more-than") + " " + categories[6].min + "%"];
     	var maxLegendTextWidth = 0;
     	for (var i = 0; i < legendsPool.length; i++) {
     		var auxWidth = calculateTextWidth(legendsPool[i]);
@@ -283,16 +365,17 @@ nv.models.heatMapChart = function() {
 				.attr('font-size', '11px')
 				.attr("y", 15)
 				.attr("x", ((i * maxLegendTextWidth) + ((maxLegendTextWidth - calculateTextWidth(legendsPool[i])) / 2)))
-				.html(legendsPool[i]);
+				.text(legendsPool[i]); // Why "text" instead of "html", because it doesnt work on IE.
     	}
     	
     	legendsContainer.append("text")
-			.text(app.translator.translateSync("LEGENDS"))
+			.text("LEGENDS")
 			.attr("x", -6)
 			.attr("y", 15)
 			.attr("class", "yLabel mono axis nv-series heatmap-totals")
 			.style("text-anchor", "end")
-			.style("font-weight", "bold");
+			.style("font-weight", "bold")
+			.attr('data-i18n', 'amp.dashboard:chart-heatmap-legends');
     }
     
     function createCube(cubesContainer, data, cubeSize, noColor, categories) {
@@ -321,6 +404,7 @@ nv.models.heatMapChart = function() {
 			.attr("y", ((data.y - 1) * cubeSize) + 19)
 			.attr("class", "heatmap-cell")
 			.attr("x", function() {
+				// The "offsets" we add on each return call are tied to the current font family and size, so if we change them we might need to change the offsets too.
 				var d = data;
 				var auxVal = d.value;
 				if (auxVal > 0 && auxVal < 1) {
@@ -332,7 +416,8 @@ nv.models.heatMapChart = function() {
 				} else {
 					return ((d.x - 1) * cubeSize) + 5;
 				}					
-			}).html(function() {
+			}).text(function() {
+				// Cant use "html" function on IE.
 				var d = data;
 				var auxVal = d.value;
 				if (auxVal > -1) {
@@ -353,27 +438,14 @@ nv.models.heatMapChart = function() {
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']")).attr("filter", "url(#filterDarken)");
 				// Highlight this cell.
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']" + "[data-x='"+ (selfData.x - 1) + "']")).removeAttr("filter");
-			}).on("mouseover", function(obj) {				
-				//console.log(selfData);
 			});
+		
 		if (data.tooltip) {
 			text.attr('data-title', data.tooltip)
 				.attr("class", "nv-series heatmap-cell");
 		}
     }
-    
-    function calculateColor(value, colors) {
-    	var color = "";
-    	var cutPoint = 100 / colors.length;
-    	for (var i = 0; i < colors.length ; i++) {
-    		if ((value >= (i * cutPoint)) && (value < ((i + 1) * cutPoint))) {
-    			color = colors[i];
-    			break;
-    		}
-    	}    	
-    	return color;
-    }
-    
+       
     function calculateColorFromCategories(value, categories, noColor) {
     	var color = noColor;
     	for (var i = 0; i < categories.length; i++) {
@@ -393,62 +465,36 @@ nv.models.heatMapChart = function() {
     }
 
     //============================================================
-    // Event Handling/Dispatching (out of chart's scope)
-    //------------------------------------------------------------
-
-    /*dispatch.on('elementMouseover.tooltip', function(e) {
-        e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
-        dispatch.tooltipShow(e);
-    });
-
-    dispatch.on('tooltipShow', function(e) {
-        if (tooltips) showTooltip(e);
-    });
-
-    dispatch.on('tooltipHide', function() {
-        if (tooltips) nv.tooltip.cleanup();
-    });*/
-
-    //============================================================
     // Expose Public Variables
     //------------------------------------------------------------
 
     // expose chart's sub-components
-    chart.legend = {};/*legend;*/
+    chart.legend = {};
     chart.dispatch = dispatch;
-    chart.pie = {};/*pie;*/
+    chart.heatmap = heatmap;
     chart.options = nv.utils.optionsFunc.bind(chart);
+    chart.shortTextLength = function(_) {
+        return shortTextLength;
+    };
 
     // use Object get/set functionality to map between vars and chart functions
     chart._options = Object.create({}, {    	
         // simple options, just get/set the necessary values
         noData:         {get: function(){return noData;},         set: function(_){noData=_;}},
-        tooltipContent: {get: function(){return tooltip;},        set: function(_){tooltip=_;}},
-        tooltips:       {get: function(){return tooltips;},       set: function(_){tooltips=_;}},
-        showLegend:     {get: function(){return showLegend;},     set: function(_){showLegend=_;}},
         defaultState:   {get: function(){return defaultState;},   set: function(_){defaultState=_;}},
         // options that require extra logic in the setter
-        color: {get: function(){return color;}, set: function(_){
-            color = _;
-            /*legend.color(color);
-            pie.color(color);*/
-        }},
         duration: {get: function(){return duration;}, set: function(_){
             duration = _;
             renderWatch.reset(duration);
         }},
+        color: {},
         margin: {get: function(){return margin;}, set: function(_){
             margin.top    = _.top    !== undefined ? _.top    : margin.top;
             margin.right  = _.right  !== undefined ? _.right  : margin.right;
             margin.bottom = _.bottom !== undefined ? _.bottom : margin.bottom;
             margin.left   = _.left   !== undefined ? _.left   : margin.left;
         }},
-        /*legendMargin: {get: function(){return legendMargin;}, set: function(_){
-        	legendMargin.top    = _.top    !== undefined ? _.top    : legendMargin.top;
-        	legendMargin.right  = _.right  !== undefined ? _.right  : legendMargin.right;
-        	legendMargin.bottom = _.bottom !== undefined ? _.bottom : legendMargin.bottom;
-        	legendMargin.left   = _.left   !== undefined ? _.left   : legendMargin.left;
-        }},*/
+        tooltipContent: {}
     });
     
     chart.height = function(_) {
@@ -457,7 +503,7 @@ nv.models.heatMapChart = function() {
         return chart;
     };
     
-    //nv.utils.inheritOptions(chart, pie);
+    nv.utils.inheritOptions(chart, heatmap);
     nv.utils.initOptions(chart);
     return chart;
 };

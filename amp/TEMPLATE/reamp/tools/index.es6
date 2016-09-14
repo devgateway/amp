@@ -34,6 +34,34 @@ export function postJson(endpoint, payload){
   })
 }
 
+export function fetchJsonDev(url) {
+  url = 'http://localhost:8080' + url; 
+  return fetch(url, {
+  	credentials: 'no-cors',
+  	headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Method': 'POST',
+      'Access-Control-Request-Headers': 'X-Custom-Header'
+    }}
+  ).then(callFunc('json'))
+}
+
+export function postJsonDev(endpoint, payload){
+  endpoint = 'http://localhost:8080' + endpoint;	
+  return fetch(endpoint, {
+    method: 'post',
+    credentials: 'no-cors',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Method': 'POST',
+      'Access-Control-Request-Headers': 'X-Custom-Header'
+    },
+    body: JSON.stringify(payload)
+  })
+}
+
 export function range(from, to){
   var arr = [];
   for(var counter = from; counter <= to; counter++){
@@ -73,3 +101,9 @@ export var spy = cb => (...args) => {
  * @param cbs An infinite number of functions
  */
 export var compose = (...cbs) => initial => cbs.reduce((accum, cb) => cb(accum), initial);
+
+export function delay(interval) {
+    return new Promise(function(resolve) {
+        setTimeout(resolve, interval);
+    });
+}

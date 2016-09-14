@@ -13,7 +13,7 @@
 <digi:instance property="crDocumentManagerForm" />
 <bean:define id="myForm" name="crDocumentManagerForm" toScope="page" type="org.digijava.module.contentrepository.form.DocumentManagerForm" />
 	<div id="loadingDiv" style="text-align: center;display: none;">
-		<digi:trn>Please Wait...</digi:trn> <br>
+		<digi:trn>Loading...</digi:trn> <br>
 		<img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' height='15px' align="middle"/>
 	</div>
 	<logic:notEmpty name="crDocumentManagerForm" property="otherDocuments">	

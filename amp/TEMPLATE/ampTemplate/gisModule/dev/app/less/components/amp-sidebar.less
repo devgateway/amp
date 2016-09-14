@@ -10,7 +10,10 @@
   background: @amp_content_bg;
 }
 
-
+#sidebar-tools{
+  border-right: 2px solid  @amp_inverse_bg;
+  background: @amp_inverse_bg;
+}
 #sidebar {
   z-index: @amp_sidebar_layer;
   position: absolute;
@@ -19,8 +22,8 @@
   bottom: 0;
   width: @amp_sidebar_width;
   background: @amp_inverse_bg;
-  color: @amp_inverse;
-  border-right: 2px solid  @amp_inverse_bg;
+  color: @amp_inverse;  
+  height:100%;
 
   .glyphicon-info-sign {
     color: @amp_sidebar_help_icon;
@@ -197,3 +200,9 @@
   padding: 0;
 }
 
+#tool-layers-manager{
+  margin:10px;
+ .btn-layers-manager{
+    width: 80%;
+  }
+}

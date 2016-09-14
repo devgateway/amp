@@ -1,0 +1,125 @@
+---
+
+# - name: Display all variables/facts known for a host
+#   debug: var=hostvars[inventory_hostname] verbosity=4
+
+# - debug: var=postgresql__port
+# - debug: var=postgresql__client_authentication_default
+
+- name: Ensure repository is installed
+  include: repo.yml
+
+- name: Install PostgreSQL
+  yum:
+    name: '{{ item }}'
+    state: installed
+  with_items: "{{postgresql__packages}}"
+
+- name: Insert Firewall Rule
+  firewalld:
+    port: '{{ postgresql__port }}/tcp'
+    immediate: yes
+    permanent: true
+    state: enabled
+
+- name: Initialize PostgreSQL
+  command: "{{ postgresql__setup_script }} initdb"
+  args:
+    creates: "{{ postgresql__conf_data_dir }}/PG_VERSION"
+
+- name: Create settings directory
+  file:
+    path: "{{ postgresql__conf_data_dir }}/conf.d"
+    state: directory
+    owner: postgres
+    group: postgres
+    mode: "u=rwx,g=,o="
+
+- name: Load extra configuration from conf.d directory
+  lineinfile:
+    dest: "{{ postgresql__conf_data_dir }}/postgresql.conf"
+    regexp: "^#include_dir = 'conf.d'(.+)"
+    line: "include_dir = 'conf.d'\\1"
+    backrefs: yes
+    state: present
+  notify:
+    - restart postgresql
+
+- name: Update PostgreSQL configuration
+  template:
+    src: custom.conf.j2
+    dest: "{{ postgresql__conf_data_dir }}/conf.d/custom.conf"
+    owner: postgres
+    group: postgres
+    mode: "u=rw,g=,o="
+  notify:
+    - restart postgresql
+
+#- name: Secure the installation
+#  include: postgresql_secure_installation.yml
+
+- name: Configure PostgreSQL Client Authentication
+  template:
+    src: pg_hba.conf.j2
+    dest: "{{ postgresql__conf_data_dir }}/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: "u=rw,g=,o="
+  notify:
+    - restart postgresql
+
+- name: Start and Enable PostgreSQL
+  service:
+    name: '{{ postgresql__service_name }}'
+    state: started
+    enabled: yes
+
+# Requried for `postgresql_db` and `postgresql_user`.
+- name: Install Python PostgreSQL bindings
+  yum:
+    name: python-psycopg2
+    state: installed
+
+- name: Create databases
+  postgresql_db:
+    name: '{{ item.name }}'
+    state: present
+  become: true
+  become_user: postgres
+  with_items: "{{ postgresql__databases|default([]) }}"
+
+- name: Add database extensions
+  postgresql_ext:
+    name: '{{ item.1 }}'
+    db: '{{ item.0.name }}'
+    #login_user: '{{ item.0.user }}'
+    #login_password: '{{ item.0.pass }}'
+  become: true
+  become_user: postgres
+  with_subelements:
+    - "{{ postgresql__databases|default([]) }}"
+    - extensions
+    - flags:
+      skip_missing: True
+
+- name: Create database users
+  postgresql_user:
+    name: '{{ item.user }}'
+    password: '{{ item.pass }}'
+    db: '{{ item.name }}'
+    priv: 'ALL'
+    state: present
+  become: true
+  become_user: postgres
+  with_items: "{{ postgresql__databases|default([]) }}"
+
+- name: Create PostgreSQL password file for user vagrant
+  template:
+    src: dot.pgpass.j2
+    dest: "~/.pgpass"
+    owner: vagrant
+    group: vagrant
+    mode: "u=rw,g=,o="
+  become: true
+  become_user: vagrant
+  when: vagrant is defined

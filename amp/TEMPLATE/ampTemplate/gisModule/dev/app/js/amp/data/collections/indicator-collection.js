@@ -5,10 +5,10 @@ var JoinIndicator = require('../models/indicator-join-model');
 var ArcGISDynamicLayerIndicator = require('../models/indicator-arcgis-dynamicLayer-model');
 var WMSIndicator = require('../models/indicator-wms-model');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
+var IndicatorLayerLocalStorage = require('../indicator-layer-localstorage');
 
 /* Backbone Collection IndicatorLayers (RENAME FILE) */
-module.exports = Backbone.Collection
-.extend(LoadOnceMixin).extend({
+module.exports = Backbone.Collection.extend({
 
   url: '/rest/gis/indicator-layers',
 
@@ -31,12 +31,12 @@ module.exports = Backbone.Collection
 
   initialize: function(models, options) {
     this.boundaries = options.boundaries;
+    this.settings = options.settings;
   },
 
   loadAll: function() {
     var self = this;
     var deferred = $.Deferred();
-
     this.load().then(function() {
       self.url = '/rest/gis/indicators';
       self.fetch({remove: false}).then(function() {
@@ -46,9 +46,22 @@ module.exports = Backbone.Collection
 
     return deferred;
   },
-
-  parse: function(data) {
+  load: function(){
+	  this.url = '/rest/gis/indicator-layers';
+	  return this.fetch()
+  },
+  loadFromLocalStorage: function(data){	 
+	  if(this.url === '/rest/gis/indicators'){
+		  IndicatorLayerLocalStorage.cleanUp();
+		  var layers = IndicatorLayerLocalStorage.findAll();	  
+		  layers.forEach(function(localLayer){			  
+			  data.push(localLayer);
+		  });
+	  }	  
+  },
+  parse: function(data) {	
     var self = this;
+    self.loadFromLocalStorage(data);
     var parsedData = data;
     parsedData = _.filter(data, function(layer) {
       switch (layer.type) {
@@ -62,9 +75,16 @@ module.exports = Backbone.Collection
 
       // this is a custom one. API is a bit messy so we do fair bit of manual work.
       if (layer.colorRamp) {
-        layer.title = layer.name;
+    	 self.settings.load().then(function() {
+    	    
+    	   layer.title = self.getMultilangString(layer,'name');
+    	   layer.description = self.getMultilangString(layer,'description');  
+    	   layer.unit = self.getMultilangString(layer,'unit');
+    	 });   	 
         layer.type = 'joinBoundaries';
         layer.adminLevel = self._magicConversion(layer.admLevelId);
+        layer.tooltip = self._createTooltip(layer); 
+        layer.classes = layer.numberOfClasses;
         return true;
       }
 
@@ -73,7 +93,18 @@ module.exports = Backbone.Collection
 
     return parsedData;
   },
-
+  getMultilangString: function(layer,field){  
+	  var currentLanguage = this.settings.findWhere({id:'language'}).get('defaultId');
+	  var defaultLanguage = this.settings.findWhere({id: 'default-language'}).get('defaultId');	    
+	  var result = '';
+	  if(!_.isUndefined(layer[field])){
+		  result = layer[field][currentLanguage];
+		  if(_.isUndefined(result) || _.isNull(result)){
+			  result = layer[field][defaultLanguage] || '';
+		  } 
+	  }	 
+	  return result;  	
+  },
   getSelected: function() {
     return this.chain()
       .filter(function(model) { return model.get('selected'); });
@@ -88,6 +119,20 @@ module.exports = Backbone.Collection
     };
 
     return magicWords[textAdm];
-  }
+  },
+  _createTooltip: function(obj){
+	     var tooltip  = '';
+	     if(obj.description){
+	       tooltip += obj.description + '. ' ;
+	     }
+	     
+	     if(obj.createdOn){
+	      tooltip += '&#013; Created on ' + obj.createdOn + '. ';
+	     }
+	     if(obj.createdBy){
+		      tooltip += '&#013; Created by ' + obj.createdBy + '. ';
+		 }
+	     return tooltip;
+}
 
 });

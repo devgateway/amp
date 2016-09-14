@@ -16,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
@@ -62,8 +61,6 @@ public class FeaturesUtil {
 
 	private static Map<String, AmpGlobalSettings> globalSettingsCache = null;
 
-	//private ServletContext ampContext = null;
-
 	public static String errorLog = "";
 	
 	public final static String AMP_TREE_VISIBILITY_ATTR = "ampTreeVisibility";
@@ -80,7 +77,7 @@ public class FeaturesUtil {
 	public static synchronized Map<String, AmpGlobalSettings> getGlobalSettingsCache() {
 		return globalSettingsCache;
 	}
-
+	
 	public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {
 		globalSettingsCache = new HashMap<String, AmpGlobalSettings>();
 		for (AmpGlobalSettings sett : globalSettings) {
@@ -93,7 +90,6 @@ public class FeaturesUtil {
         return s != null && templateId == Long.parseLong(s);
     }
 
-
     public static List<String> getAssignedToTeams (Long templateId) {
         List<String> retVal = null;
         Session sess = PersistenceManager.getSession();
@@ -102,7 +98,8 @@ public class FeaturesUtil {
         Query q = sess.createQuery(qs.toString());
         q.setLong("TEMPLATE_ID", templateId);
         List<String> tmpVal = q.list();
-        if (!tmpVal.isEmpty()) retVal = tmpVal;
+        if (!tmpVal.isEmpty())
+        	retVal = tmpVal;
 
         return retVal;
     }
@@ -2350,14 +2347,12 @@ public class FeaturesUtil {
 	}
 
 	public static boolean isVisibleModule(String moduleName){
-		if (StringUtils.lowerCase(moduleName).equals("national planning dashboard")){
-			System.out.println("ururu");
-		}
-
-		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
-		AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot(moduleName);
+		AmpTreeVisibility ampTreeVisibility = FeaturesUtil.getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
+		AmpModulesVisibility moduleToTest = ampTreeVisibility.getModuleByNameFromRoot(moduleName);
+		
 		if (moduleToTest != null)
 			return moduleToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
+		
 		return false;
 	}
 	

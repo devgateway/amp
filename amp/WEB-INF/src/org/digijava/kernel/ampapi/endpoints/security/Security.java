@@ -1,6 +1,23 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import com.sun.jersey.spi.container.ContainerRequest;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -34,22 +51,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.xml.sax.SAXException;
 
-import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import com.sun.jersey.spi.container.ContainerRequest;
 
 /**
  * This class should have all security / permissions related methods
@@ -85,26 +87,28 @@ public class Security {
 		
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
 		String username = null;
-		String team = null;
+		String teamName = null;
 		boolean addActivity = false;
-		//if the user is adminn the he doesn't have a workspace assigned
+		//if the user is admin the he doesn't have a workspace assigned
  
 		if (tm != null) {
 			username = tm.getMemberName();
 			if (!isAdmin) {
-				AmpTeamMember ampTeamMember;
-				ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-				team = ampTeamMember.getAmpTeam().getName();
+				AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+				AmpTeam team = ampTeamMember.getAmpTeam();
+				teamName = team.getName();
 				// if the user is logged in without a token, we generate one
 				if (apiToken == null) {
 					// if no token is present in session we generate one
 					apiToken = SecurityUtil.generateToken();
 				}
-				addActivity = FeaturesUtil.isVisibleField("Add Activity Button") && ampTeamMember.getAmpTeam().getAddActivity();
+				
+				addActivity = FeaturesUtil.isVisibleField("Add Activity Button") && Boolean.TRUE.equals(team.getAddActivity());
 			}
 
 		}
-		return createResponse(isAdmin, apiToken, username, team, addActivity);
+		
+		return createResponse(isAdmin, apiToken, username, teamName, addActivity);
 	}
 
 	@NotNull
@@ -278,6 +282,17 @@ public class Security {
 
 		return layout;
 	}
+	
+	/**
+	 * Return the list of workspaces the user has access to
+	 *
+	 */
+	@GET
+    @Path("/workspaces")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Collection<JsonBean> getWorkspaces() {
+        return SecurityService.getWorkspaces();
+    }
 
 	/**
 	 * Authorizes Container Request

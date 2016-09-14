@@ -1,0 +1,78 @@
+---
+# Default vagrant settings file.
+#
+# You can copy this file to "VagrantSettings.local.yml" and configure it.
+#
+# For more information:
+# @see https://github.com/devgateway/happy-deployer
+#
+
+# Used to name the VM and set hostname for the GUEST (only if vagrant.hosts_entry is 1).
+# TODO: Use `project_environment` to botstrap instances?!?
+project_shortname: amp212
+project_environment: local
+
+# Vagrant VM only settings.
+#  - hostonlyip: should be unique IP among your virtual machines.
+#  - hosts_entry: determines if the GUEST hostname is add added to the HOST /etc/hosts file.
+vagrant:
+  hostonlyip: 10.10.10.212
+  hosts_entry: 0
+
+# Define mount points for the VM.
+# - source: path in the host that should be mounted in the VM.
+# - target: path in the VM where the sources hould be mounted.
+# - skip: if this volume should not be mounted; you can configure your IDE to deploy the files.
+vagrant_volumes:
+  - source: ../amp-cms
+    target: /var/www/amp212-cms-local
+    #skip: true
+  - source: ../amp
+    target: /opt/devgateway/amp212-local
+    #skip: true
+
+# The type of synced folder. By default this is "vboxsf" which is very slow.
+#   - For linux/mac see: https://www.vagrantup.com/docs/synced-folders/nfs.html
+#   - For windows see: https://www.vagrantup.com/docs/synced-folders/smb.html
+#vagrant_volumes_type: nfs  # for linux/mac
+#vagrant_volumes_type: smb  # for windows
+
+# Information about the box.
+vagrant_box:
+  name: sl7201607
+  url: http://www.example.org/scientific-7-201607.box
+  download_checksum: 7bfe7ba403eeeb20d57fdd1c8b400e10
+  download_checksum_type: md5
+
+# Ansible variables to override.
+common__deployer_user: vagrant
+common__deployer_group: users
+httpd__User: vagrant
+httpd__Group: users
+httpd__User_vhosts: vagrant
+httpd__Group_vhosts: users
+
+# Define forwarded ports.
+#vagrant_mapped_ports:
+#  - source: 5432
+#    target: 5432
+#  - source: 8009
+#    target: 8009
+
+# PostgreSQL Client Authentication Configuration
+# Allow developers to use DB clients, like pgAdmin or IDE DB tools, on the host OS.
+# @see: https://www.postgresql.org/docs/9.5/static/client-authentication.html
+postgresql__listen_addresses: '0.0.0.0'
+postgresql__client_authentication_extras:
+  - comment: 'Use password auth on IPv4 connections from the VM host:'
+    type: host
+    database: amp_cms_local
+    user: amp_cms_user
+    address: '10.10.10.1/1'
+    method: md5
+  - comment: 'Use password auth on IPv4 connections from the VM host:'
+    type: host
+    database: amp_local
+    user: amp_user
+    address: '10.10.10.1/1'
+    method: md5

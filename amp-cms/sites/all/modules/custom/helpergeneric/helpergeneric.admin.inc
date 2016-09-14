@@ -57,9 +57,18 @@ function helpergeneric_toggle_cleanup_ui_force_submit($form, &$form_state) {
  * Page callback for 'admin/settings/api'.
  */
 function helpergeneric_api_settings_form($form, &$form_state) {
-  $api_status = helpergeneric_check_api_status(FALSE, FALSE);
-  if (!$api_status['online']) {
-    drupal_set_message($api_status['message'], 'warning');
+  // We use the same default value for restclient_hostname as the restclient.module
+  $restclient_hostname = variable_get('restclient_hostname', 'http://localhost:80/rest');
+  if (empty($restclient_hostname)) {
+    drupal_set_message(t('API Server Hostname is not configured!'), 'warning');
+  }
+
+  // Do not display API status page when the page is submitted.
+  if (empty($form_state['input'])) {
+    $api_status = ampAPIRestClient::status(FALSE);
+    if ($api_status['online']) {
+      drupal_set_message(t('The API Server %url is online!', array('%url' => $restclient_hostname)), 'status');
+    }
   }
 
   $form['hostname'] = array(
@@ -70,13 +79,12 @@ function helpergeneric_api_settings_form($form, &$form_state) {
     '#collapsed' => FALSE,
   );
 
-  $example_url = helpergeneric_detect_amp_baseurl();
   $form['hostname']['restclient_hostname'] = array(
     '#type' => 'textfield',
     '#title' => t('Hostname'),
-    '#description' => t('The hostname for the server with no trailing slash. Ex: ') . $example_url . '/rest',
+    '#description' => t('The hostname for the server with no trailing slash. Ex: http://example.org/rest'),
     '#size' => 40,
-    '#default_value' => variable_get('restclient_hostname', 'http://localhost:80/rest'),
+    '#default_value' => $restclient_hostname,
   );
 
   // Provide an alternative link for links to AMP.
@@ -100,7 +108,7 @@ function helpergeneric_api_settings_form($form, &$form_state) {
   $form['hostname']['wrapper']['helpergeneric_amp_hostname'] = array(
     '#type' => 'textfield',
     '#title' => t('AMP Hostname'),
-    '#description' => t('The hostname for the AMP environment, without a trailing slash. Ex: ') . $example_url,
+    '#description' => t('The hostname for the AMP environment, without a trailing slash. Ex: http://amp212.local'),
     '#size' => 40,
     '#default_value' => $amp_hostname,
   );
@@ -161,6 +169,9 @@ function helpergeneric_api_settings_form_submit($form, &$form_state) {
  * Page callback for 'admin/settings/generic'.
  */
 function helpergeneric_settings_form($form, &$form_state) {
+  global $language;
+  $language_aware = drupal_multilingual();
+
   $form['clear_cache'] = array(
     '#type' => 'fieldset',
     '#title' => t('Clear cache'),
@@ -180,13 +191,24 @@ function helpergeneric_settings_form($form, &$form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+  if ($language_aware) {
+    $site_name = i18n_variable_get('site_name', $language->language, 'Drupal');
+  }
+  else {
+    $site_name = variable_get('site_name', 'Drupal');
+  }
   $form['site_information']['site_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Site name'),
     '#description' => t('The site name will be transformed to uppercase before displaying in the header.'),
-    '#default_value' => variable_get('site_name', 'Drupal'),
+    '#default_value' => $site_name,
     '#required' => TRUE
   );
+  if ($language_aware) {
+    $form['site_information']['site_name']['#description'] .= t('<br /><strong>This value is language-aware. Current language: @lang</strong>', array(
+      '@lang' => $language->name,
+    ));
+  }
   // $form['site_information']['site_slogan'] = array(
   //   '#type' => 'textfield',
   //   '#title' => t('Slogan'),
@@ -231,7 +253,7 @@ function helpergeneric_settings_form($form, &$form_state) {
     '#type' => 'file',
     '#title' => t('Upload new logo image'),
     '#maxlength' => 40,
-      '#description' => t("Use this field to upload your logo. It should be uploaded at the exact size you want it displayed."),
+    '#description' => t("Use this field to upload your logo. It should be uploaded at the exact size you want it displayed."),
     '#tree' => FALSE,
   );
 
@@ -262,6 +284,21 @@ function helpergeneric_settings_form($form, &$form_state) {
     '#title' => t('Upload new icon image'),
     '#description' => t("Use this field to upload your shortcut icon."),
     '#tree' => FALSE,
+  );
+
+  // Miscellaneous settings go here.
+  // Just to have the right vars, prefix all with misc_.
+  $form['misc'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Miscellaneous'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['misc']['misc_use_export_buttons'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show Export Buttons'),
+    '#description' => t('If you want to hide the export functionality, uncheck this option.'),
+    '#default_value' => variable_get('misc_use_export_buttons', 1),
   );
 
   $form['#validate'][] = 'helpergeneric_settings_form_validate';
@@ -333,10 +370,16 @@ function helpergeneric_settings_form_clear_cache_submit($form, &$form_state) {
  */
 function helpergeneric_settings_form_submit($form, &$form_state) {
   global $theme;
+  global $language;
 
-  foreach (array('site_name', 'site_mail') as $var) {
+  foreach (array('site_name', 'site_mail', 'misc_use_export_buttons') as $var) {
     if (isset($form_state['values'][$var]))
-    variable_set($var, $form_state['values'][$var]);
+      variable_set($var, $form_state['values'][$var]);
+  }
+
+  // i18n variable.
+  if (drupal_multilingual()) {
+    i18n_variable_set('site_name', $form_state['values']['site_name'], $language->language);
   }
 
   // @TODO: Cleanup!
@@ -404,10 +447,11 @@ function helpergeneric_language_settings_form($form, &$form_state) {
 
   $options = array();
   $form['weight'] = array('#tree' => TRUE);
+  $enabled_languages = array();
   foreach ($languages as $langcode => $language) {
     $options[$langcode] = '';
     if ($language->enabled) {
-      $enabled[] = $langcode;
+      $enabled_languages[] = $langcode;
     }
     $form['weight'][$langcode] = array(
       '#type' => 'weight',
@@ -425,7 +469,7 @@ function helpergeneric_language_settings_form($form, &$form_state) {
     '#title' => t('Enabled languages'),
     '#title_display' => 'invisible',
     '#options' => $options,
-    '#default_value' => $enabled,
+    '#default_value' => $enabled_languages,
   );
   $form['site_default'] = array(
     '#type' => 'radios',
@@ -457,6 +501,8 @@ function helpergeneric_language_settings_form($form, &$form_state) {
 function theme_helpergeneric_language_settings_form($variables) {
   $form = $variables['form'];
   $default = language_default();
+
+  $rows = array();
   foreach ($form['name'] as $key => $element) {
     // Do not take form control structures.
     if (is_array($element) && element_child($key)) {

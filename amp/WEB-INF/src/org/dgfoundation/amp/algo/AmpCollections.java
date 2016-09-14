@@ -359,4 +359,18 @@ public class AmpCollections {
 		res.add(elem);
 		return Collections.unmodifiableList(res);
 	}
+	
+	/**
+	 * returns the first of the values which is not null
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static<K> K firstOf(K...vals) {
+		for(K k:vals) {
+			if (k != null)
+				return k;
+		}
+		return null;
+	}
 }

@@ -1,0 +1,21 @@
+---
+
+- name: Download the Drupal Console
+  get_url: url={{ httpd_php56__drupal_console_download_url }} dest=/tmp/drupal.phar
+
+- name: Rename and move drupal.phar to user bin directory
+  shell: mv /tmp/drupal.phar /usr/local/bin/drupal
+  args:
+    creates: /usr/local/bin/drupal
+
+- name: Make the Drupal Console executable
+  file: path=/usr/local/bin/drupal mode=a+x state=file
+
+# @TODO: Fix, this only runs inside vagrant
+- name: Copy configuration files to user home directory.
+  shell: /usr/local/bin/drupal init --override
+  become: true
+  become_user: vagrant
+  args:
+    creates: /home/vagrant/.console/config.yml
+  when: vagrant is defined

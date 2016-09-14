@@ -2,7 +2,6 @@ package org.dgfoundation.amp.nireports.output;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,15 +22,17 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
-import org.dgfoundation.amp.nireports.amp.AmpNiReportsFormatter;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
+import org.dgfoundation.amp.nireports.output.nicells.CellVisitor;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
-import org.digijava.kernel.translator.TranslatorWorker;
 
 
 /**
- * part of the (NiReportsCore, AmpReportsSchema, Reports API) intersection - translates NiOut output into ReportsAPI output
+ * Part of the (NiReportsCore, AmpReportsSchema, Reports API) intersection - translates NiOut output into ReportsAPI output.
+ * e.g. turns the {@link NiOutCell} hierarchy into {@link ReportCell} hierarchy and the {@link NiReportData} hierarchy into {@link ReportAreaImpl} hierarchy
  * @author Dolghier Constantin
  *
  */
@@ -91,9 +92,21 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 			generatedHeaders.add(ampHeaderRow);
 		}
 		List<ReportOutputColumn> remappedLeaves = AmpCollections.relist(leafColumns, niColumn -> niColumnToROC.get(niColumn)); 
-		leafHeaders = needToGenerateDummyColumn ? 
-			new ArrayList<ReportOutputColumn>() {{add(rootHeaders.get(0)); addAll(remappedLeaves);}} : 
-			remappedLeaves;
+		leafHeaders = needToGenerateDummyColumn ?
+			buildArrayList(rootHeaders.get(0), remappedLeaves) : remappedLeaves;
+	}
+	
+	/**
+	 * for you LISP lovers - cons :D. Constructs a new list formed by prepending an item to a list
+	 * @param elem
+	 * @param list
+	 * @return
+	 */
+	protected<K> List<K> buildArrayList(K elem, List<K> list) {
+		List<K> res = new ArrayList<>();
+		res.add(elem);
+		res.addAll(list);
+		return res;
 	}
 	
 	/**
@@ -105,6 +118,14 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		return new TextCell(String.format("(%s %s)", cc.name, "Unspecified"));
 	}
 	
+	/**
+	 * builds the "empty cell" field of a column header, 
+	 * e.g. the value which should be displayed / assumed by client code iff there is no entry for a given (ReportArea, ReportOutputColumn) position in the output
+	 * @param niCol
+	 * 
+	 * Please see {@link ReportOutputColumn#emptyCell}
+	 * @return
+	 */
 	protected ReportCell buildEmptyCell(Column niCol) {
 		if (niCol instanceof CellColumn) {
 			CellColumn cc = (CellColumn) niCol;
@@ -121,15 +142,28 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	
 	protected ReportOutputColumn buildReportOutputColumn(Column niCol) {
 		ReportCell emptyCell = buildEmptyCell(niCol);
-		return new ReportOutputColumn(niCol.name, niColumnToROC.get(niCol.getParent()), niCol.name, niCol.getDescription(), emptyCell, null);
+		return new ReportOutputColumn(niCol.name, niColumnToROC.get(niCol.getParent()), niCol.name, null, emptyCell, null);
 	}
 	
+	/**
+	 * Converts a {@link NiOutCell} to a {@link ReportCell} by using the built-in {@link #cellFormatter}. 
+	 * This function is a convenience frontend for converting nulls into nulls.
+	 * @param cell
+	 * @param niCellColumn
+	 * @return
+	 */
 	protected ReportCell convert(NiOutCell cell, CellColumn niCellColumn) {
 		if (cell == null)
 			return null;
 		return cell.accept(cellFormatter, niCellColumn);
 	}
 
+	/**
+	 * renders a single row (e.g. the data corresponding to a single entity) in a {@link NiColumnReportData} as a childless {@link ReportAreaImpl}
+	 * @param crd the leaf holding the entity data
+	 * @param id the id of the entity to convert
+	 * @return
+	 */
 	protected ReportAreaImpl renderCrdRow(NiColumnReportData crd, long id) {
 		ReportAreaImpl row = reportAreaSupplier.get();
 		row.setOwner(new AreaOwner(id));
@@ -179,6 +213,11 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		return res;
 	}
 	
+	/**
+	 * converts a NiReports API {@link NiSplitCell} into its Reports Output API equivalent of {@link AreaOwner}
+	 * @param cell
+	 * @return
+	 */
 	protected AreaOwner toAreaOwner(NiSplitCell cell) {
 		if (cell == null) return null;
 		return new AreaOwner(cell.entity.name, 
@@ -186,6 +225,11 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 				cell.entityIds == null || cell.entityIds.isEmpty() ? -1 : cell.entityIds.iterator().next()); // choose any of the ids if there is a multitude of them
 	}
 	
+	/**
+	 * converts the NiReports Output API trail cells into a Reports Output API map
+	 * @param niReportData
+	 * @return
+	 */
 	protected Map<ReportOutputColumn, ReportCell> trailCells(NiReportData niReportData) {
 		Map<ReportOutputColumn, ReportCell> res = new LinkedHashMap<>();
 		for(int i = hiersStack.size(); i < leafColumns.size(); i++) {

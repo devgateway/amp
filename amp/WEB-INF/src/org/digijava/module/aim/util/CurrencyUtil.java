@@ -20,6 +20,8 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.diffcaching.DatabaseChangedDetector;
+import org.dgfoundation.amp.diffcaching.ExpiringCacher;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -112,8 +114,7 @@ public class CurrencyUtil {
 					currencyRates.setCurrencyName( currencies.get(cRate.getToCurrencyCode()) );
 					currencyRates.setFromCurrencyName( currencies.get(cRate.getFromCurrencyCode()) );
 					currencyRates.setExchangeRate(cRate.getExchangeRate());
-					currencyRates.setExchangeRateDate(DateConversion.
-							ConvertDateToString(cRate.getExchangeRateDate()));
+					currencyRates.setExchangeRateDate(DateConversion.convertDateToString(cRate.getExchangeRateDate()));
 					currencyRates.setId(cRate.getAmpCurrencyRateId());
 					col.add(currencyRates);
 				}
@@ -178,8 +179,7 @@ public class CurrencyUtil {
 					currencyRates.setCurrencyName( currencies.get(cRate.getToCurrencyCode()) );
 					currencyRates.setFromCurrencyName( currencies.get(cRate.getFromCurrencyCode()) );
 					currencyRates.setExchangeRate(cRate.getExchangeRate());
-					currencyRates.setExchangeRateDate(DateConversion.
-							ConvertDateToString(cRate.getExchangeRateDate()));
+					currencyRates.setExchangeRateDate(DateConversion.convertDateToString(cRate.getExchangeRateDate()));
 					currencyRates.setId(cRate.getAmpCurrencyRateId());
 					col.add(currencyRates);
 				}
@@ -524,7 +524,12 @@ public class CurrencyUtil {
 		return (AmpCurrency) PersistenceManager.getSession().get(AmpCurrency.class, id);
 	}
 
+	private static ExpiringCacher<String, Boolean, AmpCurrency> currencies = new ExpiringCacher<>("currencyByCode", (code, ignored) -> doFetchCurrency(code), new DatabaseChangedDetector(), 30 * 60 * 1000);
 	public static AmpCurrency getAmpcurrency(String currCode) {
+		return currencies.buildOrGetValue(currCode, true);
+	}
+	
+	private static AmpCurrency doFetchCurrency(String currCode) {
 		try {
 			String queryString = "select c from " + AmpCurrency.class.getName()
 					+ " c " + "where (c.currencyCode=:id)";

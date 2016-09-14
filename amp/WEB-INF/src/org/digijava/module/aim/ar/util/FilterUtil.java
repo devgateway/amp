@@ -192,6 +192,20 @@ public class FilterUtil {
 		form.getDynamicProposedApprovalFilter().setAmount(filter.getDynProposedApprovalFilterAmount());
 		form.getDynamicProposedApprovalFilter().setOperator(filter.getDynProposedApprovalFilterOperator());
 		form.getDynamicProposedApprovalFilter().setxPeriod(filter.getDynProposedApprovalFilterXPeriod());
+
+        form.setToEffectiveFundingDate(filter.getToEffectiveFundingDate());
+        form.setFromEffectiveFundingDate(filter.getFromEffectiveFundingDate());
+        form.getDynamicEffectiveFundingFilter().setCurrentPeriod(filter.getDynEffectiveFundingFilterCurrentPeriod());
+        form.getDynamicEffectiveFundingFilter().setAmount(filter.getDynEffectiveFundingFilterAmount());
+        form.getDynamicEffectiveFundingFilter().setOperator(filter.getDynEffectiveFundingFilterOperator());
+        form.getDynamicEffectiveFundingFilter().setxPeriod(filter.getDynEffectiveFundingFilterXPeriod());
+
+        form.setToFundingClosingDate(filter.getToFundingClosingDate());
+        form.setFromFundingClosingDate(filter.getFromFundingClosingDate());
+        form.getDynamicFundingClosingFilter().setCurrentPeriod(filter.getDynFundingClosingFilterCurrentPeriod());
+        form.getDynamicFundingClosingFilter().setAmount(filter.getDynFundingClosingFilterAmount());
+        form.getDynamicFundingClosingFilter().setOperator(filter.getDynFundingClosingFilterOperator());
+        form.getDynamicFundingClosingFilter().setxPeriod(filter.getDynFundingClosingFilterXPeriod());
 		
 		form.setCurrency(filter.getUsedCurrency().getAmpCurrencyId());
 		form.setDefaultCurrency(AmpARFilter.getDefaultCurrency().getAmpCurrencyId());

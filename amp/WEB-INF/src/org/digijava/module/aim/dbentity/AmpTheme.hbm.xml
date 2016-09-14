@@ -23,6 +23,7 @@
 		<property name="background" column="background" type="text" />
 		<property name="objectives" column="objectives" type="text" />
 		<property name="outputs" column="outputs" type="text" />
+		<property name="deleted" column="deleted" type="java.lang.Boolean" />
 		<property name="beneficiaries" column="beneficiaries" type="text" />
 		<property name="environmentConsiderations" column="environment_considerations" type="text" />
 

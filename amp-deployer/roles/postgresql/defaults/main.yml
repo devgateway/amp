@@ -1,0 +1,68 @@
+---
+
+# Set the root user (postgres) password.
+#postgresql__root_password: 'demo3'
+
+# Bind MariaDB to a specific port.
+# NOTE: The default is: 5432
+# @see: https://www.postgresql.org/docs/9.5/static/runtime-config-connection.html
+postgresql__port: 5432
+
+# Change the addresses used to listen for connections.
+# @see: https://www.postgresql.org/docs/9.5/static/runtime-config-connection.html
+postgresql__listen_addresses: 'localhost'
+
+
+# Information about: Inline with Upstream Stable (IUS) repository
+# NO trailing slash for data_dir.
+postgresql__service_name: postgresql-9.4
+postgresql__setup_script: /usr/pgsql-9.4/bin/postgresql94-setup
+postgresql__conf_data_dir: /var/lib/pgsql/9.4/data
+postgresql__packages:
+  - postgresql94-server
+  - postgresql94-contrib
+  - postgresql94-libs
+  - postgis2_94
+
+# @see: http://yum.postgresql.org/repopackages.php
+postgresql__repo_url: https://download.postgresql.org/pub/repos/yum/9.4/redhat/rhel-7-x86_64/pgdg-sl94-9.4-2.noarch.rpm
+
+# PostgreSQL Client Authentication Configuration
+# @see: https://www.postgresql.org/docs/9.5/static/client-authentication.html
+postgresql__client_authentication_default:
+  - comment: 'postgres: peer auth on Unix-domain socket connections'
+    type: local
+    database: all
+    user: postgres
+    address: ''
+    method: peer
+  - comment: 'postgres: ident auth on IPv4 local connections:'
+    type: host
+    database: all
+    user: postgres
+    address: '127.0.0.1/32'
+    method: ident
+  - comment: 'postgres: ident auth on IPv6 local connections:'
+    type: host
+    database: all
+    user: postgres
+    address: '::1/128'
+    method: ident
+  - comment: 'Use password auth on Unix-domain socket connections:'
+    type: local
+    database: all
+    user: all
+    address: ''
+    method: md5
+  - comment: 'Use password auth on IPv4 local connections:'
+    type: host
+    database: all
+    user: all
+    address: '127.0.0.1/32'
+    method: md5
+  - comment: 'Use password auth on IPv6 local connections:'
+    type: host
+    database: all
+    user: all
+    address: '::1/128'
+    method: md5

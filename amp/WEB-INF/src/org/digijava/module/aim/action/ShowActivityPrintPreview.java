@@ -202,41 +202,19 @@ public class ShowActivityPrintPreview
                 	eaForm.getPlanning().getActRankCollection().add(new Integer(i));
                 }
 
-                eaForm.getIdentification().setCreatedDate(DateConversion
-                                      .ConvertDateToString(activity.
-                    getCreatedDate()));
+                eaForm.getIdentification().setCreatedDate(DateConversion.convertDateToLocalizedString(activity.getCreatedDate()));
                 eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
-                eaForm.getIdentification().setUpdatedDate(DateConversion
-                        .ConvertDateToString(activity.
-                        		getUpdatedDate()));
+                eaForm.getIdentification().setUpdatedDate(DateConversion.convertDateToLocalizedString(activity.getUpdatedDate()));
 
-                eaForm.getPlanning().setOriginalAppDate(DateConversion
-                                          .ConvertDateToString(activity
-                    .getProposedApprovalDate()));
-                eaForm.getPlanning().setRevisedAppDate(DateConversion
-                                         .ConvertDateToString(activity
-                    .getActualApprovalDate()));
-                eaForm.getPlanning().setOriginalStartDate(DateConversion
-                                            .ConvertDateToString(activity
-                    .getProposedStartDate()));
-                eaForm.getPlanning().setOriginalCompDate(DateConversion
-                                            .ConvertDateToString(activity
-                    .getOriginalCompDate()));
-                eaForm
-                .getPlanning().setRevisedStartDate(DateConversion
-                                         .ConvertDateToString(activity
-                    .getActualStartDate()));
-                eaForm.getPlanning().setCurrentCompDate(DateConversion
-                                          .ConvertDateToString(activity
-                    .getActualCompletionDate()));
-                eaForm.getPlanning().setContractingDate(DateConversion
-                        .ConvertDateToString(activity.
-                        		getContractingDate()));
-                eaForm.getPlanning().setDisbursementsDate(DateConversion
-                        .ConvertDateToString(activity.
-                        		getDisbursmentsDate()));
-
-                eaForm.getPlanning().setProposedCompDate(DateConversion.ConvertDateToString(activity.getProposedCompletionDate()));
+                eaForm.getPlanning().setOriginalAppDate(DateConversion.convertDateToLocalizedString(activity.getProposedApprovalDate()));
+                eaForm.getPlanning().setRevisedAppDate(DateConversion.convertDateToLocalizedString(activity.getActualApprovalDate()));
+                eaForm.getPlanning().setOriginalStartDate(DateConversion.convertDateToLocalizedString(activity.getProposedStartDate()));
+                eaForm.getPlanning().setOriginalCompDate(DateConversion.convertDateToLocalizedString(activity.getOriginalCompDate()));
+                eaForm.getPlanning().setRevisedStartDate(DateConversion.convertDateToLocalizedString(activity.getActualStartDate()));
+                eaForm.getPlanning().setCurrentCompDate(DateConversion.convertDateToLocalizedString(activity.getActualCompletionDate()));
+                eaForm.getPlanning().setContractingDate(DateConversion.convertDateToLocalizedString(activity.getContractingDate()));
+                eaForm.getPlanning().setDisbursementsDate(DateConversion.convertDateToLocalizedString(activity.getDisbursmentsDate()));
+                eaForm.getPlanning().setProposedCompDate(DateConversion.convertDateToLocalizedString(activity.getProposedCompletionDate()));
             
                 
 
@@ -461,7 +439,7 @@ public class ShowActivityPrintPreview
                                                 .ConvertDecimalToText(
                                                     ampRegFund
                                                     .getTransactionAmount().doubleValue()));
-                        fd.setTransactionDate(DateConversion.ConvertDateToString(ampRegFund.getTransactionDate()));
+                        fd.setTransactionDate(DateConversion.convertDateToString(ampRegFund.getTransactionDate()));
         				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampRegFund.getTransactionDate()));
 
                         fd.setTransactionType(ampRegFund.getTransactionType()
@@ -1052,7 +1030,7 @@ public class ShowActivityPrintPreview
 				fd.setCurrencyCode(ampCompFund.getCurrency().getCurrencyCode());
 				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
 				fd.setTransactionAmount(FormatHelper.formatNumber(ampCompFund.getTransactionAmount().doubleValue()));
-				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
+				fd.setTransactionDate(DateConversion.convertDateToLocalizedString(ampCompFund.getTransactionDate()));
 				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());

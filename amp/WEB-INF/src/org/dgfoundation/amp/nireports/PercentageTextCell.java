@@ -5,18 +5,35 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
-import org.dgfoundation.amp.nireports.output.CellVisitor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**
- * TODO: do we support null percentages?
+ * A {@link Cell} which holds a text and a fractional number called "percentage". 
+ * The MetaInfo is always empty, while the coordinates are either empty or with a single entry, depending on the #mainLevel)
  * @author Dolghier Constantin
  *
  */
 public final class PercentageTextCell extends Cell {
+	
+	/**
+	 * DUMMY SOZO
+	 * the non-null fractional number. 0.0 <= percentage <= 1.0
+	 */
 	public final BigDecimal percentage;
+	
+	/**
+	 * the non-null text
+	 */
 	public final String text;
 	
+	/**
+	 * constructs an instance with the given parameters. Will throw a {@link RuntimeException} (or one of its subclasses) in case it is given an invalid input
+	 * @param text
+	 * @param activityId
+	 * @param entityId
+	 * @param levelColumn
+	 * @param percentage
+	 */
 	public PercentageTextCell(String text, long activityId, long entityId, Optional<LevelColumn> levelColumn, BigDecimal percentage) {
 		super(activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
 		Objects.requireNonNull(text);

@@ -3,11 +3,12 @@ package org.dgfoundation.amp.nireports;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 
 /**
  * a visitor which digests the values of a given trailCell
@@ -35,4 +36,18 @@ public class GrandTotalsDigest implements NiReportOutputBuilder<Map<String, NiOu
 	public String toString() {
 		return "Grand Totals Digester";
 	}
+	
+	/**
+	 * returns this digester expressed as a single-string-supplying digester
+	 * @return
+	 */
+	public NiReportOutputBuilder<String> asStringDigester() {
+		//return (spec, reportRun) -> this.buildOutput(spec, reportRun).entrySet().stream().map(z -> String.format("%s: %s\n", z.getKey(), z.getValue())).collect(Collectors.toList()).toString();
+		return (spec, reportRun) -> this.buildOutput(spec, reportRun).toString();
+	}
+	
+	/**
+	 * a string digester of all the headers
+	 */
+	public static NiReportOutputBuilder<String> ALL_TOTALS_DIGESTER = new GrandTotalsDigest(a -> true).asStringDigester();
 }

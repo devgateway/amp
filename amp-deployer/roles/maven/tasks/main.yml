@@ -1,0 +1,38 @@
+---
+
+- name: Create "/opt/apache/" directory
+  file:
+    path: "/opt/apache/"
+    state: directory
+
+- name: Download Maven
+  get_url:
+    url: "{{_maven__download_url}}"
+    checksum: "{{maven__download_checksum}}"
+    dest: "/opt/apache/"
+  register: archive_info
+
+- name: Extract downloaded archive
+  unarchive:
+    src: "{{archive_info.dest}}"
+    dest: "/opt/apache/"
+    copy: no
+    list_files: yes
+  register: archive_files_info
+
+#- name: Delete downloaded archive
+#  file:
+#    path: "{{archive_info.dest}}"
+#    state: absent
+
+- name: Create simbolic link for release directory
+  file:
+    dest: "/opt/apache/apache-maven"
+    src: "{{_maven__package}}"
+    state: link
+
+- name: Create simbolic link for binary
+  file:
+    src: "/opt/apache/apache-maven/bin/mvn"
+    dest: "/usr/local/bin/mvn"
+    state: link

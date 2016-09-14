@@ -29,15 +29,28 @@ import static java.util.stream.Collectors.toList;
 import java.util.ArrayList;
 
 /**
- * a NiFilters converter which does the job (through subclasses, if necessary) in Basic or AMP-like filtering schemas
+ * a NiFilters converter which does the job (through subclasses, if necessary) in Basic or AMP-like filtering schemas.
+ * The generated NiFilters instance is an instance of {@link PassiveNiFilters}
+ * The specification is too big to fit in here, please refer to https://wiki.dgfoundation.org/display/AMPDOC/3.+NiReports+runtime#id-3.NiReportsruntime-3.5Filteringruntime
  * @author Dolghier Constantin
  *
  */
 public abstract class BasicFiltersConverter {
 	
+	/**
+	 * the rules, as enumerated in {@link ReportSpecification#getFilters()}
+	 */
 	protected final Map<ReportElement, List<FilterRule>> rawRules;
 	protected final ReportSpecification spec;
+	
+	/**
+	 * the context which uses this instance
+	 */
 	protected final NiReportsEngine engine;
+	
+	/**
+	 * the schema which referenced this converter
+	 */
 	protected final NiReportsSchema schema;
 	
 	/**
@@ -60,7 +73,7 @@ public abstract class BasicFiltersConverter {
 	 */
 	protected Optional<Predicate<Long>> activityIdsPredicate = Optional.empty();
 	
-	public BasicFiltersConverter(NiReportsEngine engine) {
+	protected BasicFiltersConverter(NiReportsEngine engine) {
 		this.engine = engine;
 		this.spec = engine.spec;
 		this.schema = engine.schema;
@@ -131,7 +144,7 @@ public abstract class BasicFiltersConverter {
 			return;
 		}
 		
-		notifySupportedColumn(columnName);
+		notifySupportedColumn(columnName); // callback for subclasses
 
 		if (col.levelColumn != null && col.levelColumn.isPresent()) {
 			// filtering by a column which defines a LevelColumn: filter the whole report's cellset by the given LC 

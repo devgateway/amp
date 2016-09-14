@@ -96,6 +96,7 @@ td.inside {margin: 0; padding: 4px; background-color: #FFF;border:1px solid #b8b
 
 
 /* CONTENT */
+.word_break {word-wrap: break-word;}
 .main_side {background-color:#EFEFEF; border-left:1px solid #BDBCB5; border-right:1px solid #BDBCB5; border-bottom:1px solid #BDBCB5;}
 .main_side_cont {padding:10px; font-size:12px; line-height:22px;}
 .tab {border-top:1px solid #BEBDB6; border-right: 1px solid #BEBDB6; border-bottom:1px solid #BEBDB6; margin-bottom:7px;}

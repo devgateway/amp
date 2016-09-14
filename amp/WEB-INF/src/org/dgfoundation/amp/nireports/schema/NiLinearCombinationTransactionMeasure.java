@@ -7,9 +7,10 @@ import java.util.Map;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 
 /**
- * a trivial measure defined as a transaction 
+ * a measure defined as a linear combination between trivial {@link NiTransactionMeasure}s
  * @author Dolghier Constantin
  *
  */
@@ -19,18 +20,24 @@ public class NiLinearCombinationTransactionMeasure extends NiPredicateTransactio
 	protected final NiTransactionMeasure[] measures;
 	protected final BigDecimal[] prods;
 	
+	/**
+	 * Specifies whether the output cells will have their coordinates stripped. See {@link CategAmountCell#withStrippedCoords()} for details
+	 */
+	protected final boolean stripCoords;
+	
 	public NiLinearCombinationTransactionMeasure(String measureName, Map<NiTransactionMeasure, BigDecimal> terms,  
-			Behaviour<?> behaviour, boolean ignoreFilters, String description) {
+			Behaviour<?> behaviour, boolean ignoreFilters, boolean stripCoords, String description) {
 		super(measureName,  behaviour, description, ignoreFilters);
 		NiUtils.failIf(terms.isEmpty(), () -> String.format("while defining measure %s: you supplied an empty terms list", measureName));
 		this.terms = Collections.unmodifiableMap(new LinkedHashMap<>(terms));
 		this.measures = terms.keySet().toArray(new NiTransactionMeasure[0]);
 		this.prods = terms.values().toArray(new BigDecimal[0]);
+		this.stripCoords = stripCoords;
 	}
 	
 	public NiLinearCombinationTransactionMeasure(String measureName, Map<NiTransactionMeasure, BigDecimal> terms, 
-			boolean ignoreFilters, String description) {
-		this(measureName, terms, TrivialMeasureBehaviour.getInstance(), ignoreFilters, description);
+			boolean ignoreFilters, boolean stripCoords, String description) {
+		this(measureName, terms, TrivialMeasureBehaviour.getInstance(), ignoreFilters, stripCoords, description);
 	}
 	
 	@Override
@@ -39,7 +46,7 @@ public class NiLinearCombinationTransactionMeasure extends NiPredicateTransactio
 			if (measures[i].criterion.test(src)) {
 				CategAmountCell c = multiply(src, prods[i]);
 				if (c != null)
-					return c;
+					return stripCoords ? c.withStrippedCoords() : c;
 				break;
 			}
 		}

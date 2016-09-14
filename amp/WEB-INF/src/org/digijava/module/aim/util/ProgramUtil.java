@@ -24,6 +24,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.DatabaseWaver;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -58,6 +59,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import com.tonbeller.wcf.utils.SqlUtils;
 
 
 public class ProgramUtil {
@@ -269,13 +272,6 @@ public class ProgramUtil {
 			return getAllThemes(false);
 		}
 
-		/**
-         * Returns All AmpThemes including sub Themes if parameter is true.
-         * @param includeSubThemes boolean false - only top level Themes, true - all themes
-		 * @return
-		 * @throws DgException
-		 */
-        @SuppressWarnings("unchecked")
 		public static Map<Long, AmpThemeSkeleton> getAllThemesFaster() throws DgException
 		{
             Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(-1);
@@ -283,6 +279,10 @@ public class ProgramUtil {
         }
 		
 		
+        public static List<AmpTheme> getAllThemes(boolean includeSubThemes) throws DgException {
+        	return getAllThemes(includeSubThemes, false);
+        }
+        
 		/**
          * Returns All AmpThemes including sub Themes if parameter is true.
          * @param includeSubThemes boolean false - only top level Themes, true - all themes
@@ -290,7 +290,7 @@ public class ProgramUtil {
 		 * @throws DgException
 		 */
         @SuppressWarnings("unchecked")
-		public static List<AmpTheme> getAllThemes(boolean includeSubThemes) throws DgException
+		public static List<AmpTheme> getAllThemes(boolean includeSubThemes, boolean getInvisible) throws DgException
 		{
             Session session = null;
             Query qry = null;
@@ -298,9 +298,13 @@ public class ProgramUtil {
 
             try {
                 session = PersistenceManager.getRequestDBSession();
-                String queryString = "select t from " + AmpTheme.class.getName()+ " t ";
+                String queryString = "select t from " + AmpTheme.class.getName()+ " t where 1=1 ";
+                if (!getInvisible) {
+                	queryString += " and ((t.deleted is null) OR (t.deleted = false))";
+                }
+                
                 if (!includeSubThemes) {
-                    queryString += "where t.parentThemeId is null ";
+                    queryString += " and t.parentThemeId is null ";
                 }
                 qry = session.createQuery(queryString);
                 themes = qry.list();
@@ -555,7 +559,7 @@ public class ProgramUtil {
 					tempPrgInd.setIndicatorId(ampThemeIndId);
 					tempPrgInd.setName(tempThemeInd.getName());
 					tempPrgInd.setCode(tempThemeInd.getCode());
-                    tempPrgInd.setCreationDate(DateConversion.ConvertDateToString(tempThemeInd.getCreationDate()));
+                    tempPrgInd.setCreationDate(DateConversion.convertDateToLocalizedString(tempThemeInd.getCreationDate()));
 					tempPrgInd.setPrgIndicatorValues(getThemeIndicatorValues(ampThemeIndId));
 					tempPrgInd.setIndSectores(getSectorIndicator(ampThemeIndId));
 					themeInd.add(tempPrgInd);
@@ -606,7 +610,7 @@ public class ProgramUtil {
 					tempPrgIndVal.setIndicatorValueId(tempThIndVal.getAmpThemeIndValId());
 					tempPrgIndVal.setValueType(tempThIndVal.getValueType());
 					tempPrgIndVal.setValAmount(tempThIndVal.getValueAmount());
-					tempPrgIndVal.setCreationDate(DateConversion.ConvertDateToString(tempThIndVal.getCreationDate()));
+					tempPrgIndVal.setCreationDate(DateConversion.convertDateToLocalizedString(tempThIndVal.getCreationDate()));
 					col.add(tempPrgIndVal);
 				}
 			}
@@ -1200,21 +1204,11 @@ public class ProgramUtil {
 			for(int i=colSize-1; i>=0; i--)
 			{
 				AmpTheme ampTh = (AmpTheme) colTheme.get(i);
-				/*Set tempIndicators = ampTh.getIndicators();
-				Iterator tempInd = tempIndicators.iterator();
-				while(tempInd.hasNext())
-				{
-					AmpThemeIndicators themeInd = (AmpThemeIndicators) tempInd.next();
-					//deletePrgIndicator(themeInd.getAmpThemeIndId());
-				}*/
-				Session sess = null;
-				Transaction tx = null;
 				try {
-					sess = PersistenceManager.getSession();
-//beginTransaction();
+					Session sess = PersistenceManager.getSession();
 					AmpTheme tempTheme = (AmpTheme) sess.load(AmpTheme.class,ampTh.getAmpThemeId());
-					sess.delete(tempTheme);
-					//tx.commit();
+					tempTheme.setDeleted(true);
+					sess.saveOrUpdate(tempTheme);
 				} catch (HibernateException e) {
 					logger.error(e);
 					throw new AimException("Cannot delete theme with id "+themeId,e);
@@ -1236,7 +1230,7 @@ public class ProgramUtil {
 				tempPrgInd.setCode(tempInd.getCode());
 				tempPrgInd.setType(tempInd.getType());
 				tempPrgInd.setDescription(tempInd.getDescription());
-				tempPrgInd.setCreationDate(DateConversion.ConvertDateToString(tempInd.getCreationDate()));
+				tempPrgInd.setCreationDate(DateConversion.convertDateToLocalizedString(tempInd.getCreationDate()));
 				tempPrgInd.setCategory(tempInd.getCategory());
 				tempPrgInd.setNpIndicator(tempInd.isNpIndicator());
                 tempPrgInd.setThemes(tempInd.getThemes());
@@ -1654,51 +1648,24 @@ public class ProgramUtil {
 		}
     	return "../ampTemplate/images/arrow_right.gif";
     }
-
-    public static Collection<AmpActivityVersion> checkActivitiesUsingProgram( Long programId ) {
-    	ArrayList<AmpActivityVersion> activities	= new ArrayList<AmpActivityVersion>();
-    	 Session sess = null;
-         Collection col = null;
-         try {
-             ArrayList programs = (ArrayList) getRelatedThemes(programId);
-             if (programs != null) {
-                 Iterator<AmpTheme> iterProgram = programs.iterator();
-                 while (iterProgram.hasNext()) {
-                     AmpTheme program = iterProgram.next();
-                     sess = PersistenceManager.getRequestDBSession();
-                     AmpTheme themeToBeDeleted = (AmpTheme) sess.load(AmpTheme.class, program.getAmpThemeId());
-//                     if (themeToBeDeleted.getActivities() != null) {
-//                         activities.addAll(themeToBeDeleted.getActivities());
-//                     }
-//                     if (themeToBeDeleted.getActivityId() != null) {
-//                         activities.add(themeToBeDeleted.getActivityId());
-//                     }
-
-                     String queryString = "select a from " + AmpActivityProgram.class.getName() + " a where (a.program=:program) ";
-                     Query qry = sess.createQuery(queryString);
-                     qry.setLong("program", programId);
-                     Collection result = qry.list();
-                     if (result != null) {
-                         Iterator iterator = result.iterator();
-                         while (iterator.hasNext()) {
-                             AmpActivityProgram actProgram = (AmpActivityProgram) iterator.next();
-                             if (actProgram != null && actProgram.getActivity() != null) {
-                                 activities.add(actProgram.getActivity());
-                             }
-                         }
-                     }
-                 }
-             }
-
-             return activities;
-         }
-         catch (Exception e) {
-			// TODO: handle exception
-        	 e.printStackTrace();
-        	 return null;
-		}
-    	
-    }
+    
+	
+	/**
+	 * Fetches the names of last version of activities that have a specific program
+	 * @param programId the program id to be selected
+	 * @return
+	 */
+	public static List<String> getActivityNamesUsingProgram( Long programId ) {
+		return PersistenceManager.getSession().doReturningWork(conn -> {
+			String query = "SELECT distinct(aa.name) "
+					+ "FROM amp_activity aa "
+					+ "JOIN amp_activity_program aap "
+					+ "ON aap.amp_activity_id = aa.amp_activity_id "
+					+ "WHERE aap.amp_program_id = " + programId;
+			return SQLUtils.fetchAsList(conn, query, 1);
+		});
+	}
+    
     public static String getNameOfProgramSettingsUsed(Long programId) { 
     	Collection programSettings					= getProgramSetttingsUsed(programId);
     	
@@ -1714,6 +1681,7 @@ public class ProgramUtil {
     	else
     		return null;
     }
+    
     public static Collection getProgramSetttingsUsed(Long programId) {
     	Session sess 						= null;
         try {

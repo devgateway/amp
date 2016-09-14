@@ -18,7 +18,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
@@ -33,7 +32,6 @@ import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -178,6 +176,12 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 			public IConverter getInternalConverter(java.lang.Class<?> type) {
 				return CustomDoubleConverter.INSTANCE;
 			}
+
+
+			@Override
+			protected void onAjaxOnUpdate(final AjaxRequestTarget target) {
+				exchangeRateOnAjaxOnUpdate(target);
+			}
 		};
 		exchangeRate.getTextContainer().add(new RangeValidator<Double>(0.001d, null));
 		exchangeRate.getTextContainer().add(new AttributeModifier("size", new Model<String>("6")));
@@ -195,6 +199,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 				fixedExchangeRateModel.setObject(state ? null : 0D);
 	            exchangeRate.setEnabled(!state);
 	            target.add(exchangeRate.getParent().getParent().getParent());
+				enableFixedRateOnAjaxOnUpdate(target);
 	        }
 			
 			@Override
@@ -207,5 +212,13 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 	    };
 	    item.add(enableFixedRate);
 	    return item;
+	}
+
+	protected void enableFixedRateOnAjaxOnUpdate(AjaxRequestTarget target) {
+
+	}
+
+	protected void exchangeRateOnAjaxOnUpdate(AjaxRequestTarget target) {
+
 	}
 }

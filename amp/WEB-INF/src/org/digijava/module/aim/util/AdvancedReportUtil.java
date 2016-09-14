@@ -16,6 +16,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -126,7 +128,7 @@ public final class AdvancedReportUtil {
     {
     	List<AmpColumns> columnsOut = new ArrayList<AmpColumns>();
 //    	public static Set<String> getConfigurableColumns()
-    	Set<String> columnNames = MondrianReportUtils.getConfigurableColumns();
+    	Set<String> columnNames = ColumnsVisibility.getConfigurableColumns();
     	for (AmpColumns col : CACHED_COLUMNS_LIST) {
     		//if (columnNames.contains(col.getColumnName()) || columnNames.contains(col.getAliasName()))
     			columnsOut.add(col);
@@ -155,7 +157,6 @@ public final class AdvancedReportUtil {
 		}
 		catch(Exception e)
 		{
-			logger.error(e);
 			throw new RuntimeException("cound not fetch columns list", e);
 		}		
 	}	
@@ -220,7 +221,7 @@ public final class AdvancedReportUtil {
 		List <AmpMeasures> am_in = getMeasureListbyType(type);
 		
 		List <AmpMeasures> am_out = new ArrayList<AmpMeasures>();
-		Set<String> visMesNames = MondrianReportUtils.getConfigurableMeasures();
+		Set<String> visMesNames = MeasuresVisibility.getConfigurableMeasures();
 		for (AmpMeasures meas : am_in) {
 			//if (visMesNames.contains(meas.getMeasureName()))
 				am_out.add(meas);

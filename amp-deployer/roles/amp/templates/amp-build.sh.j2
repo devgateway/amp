@@ -1,0 +1,19 @@
+#!/bin/sh
+## AMP Build script.
+## Managed by Ansible!
+## TODO: Use variables.
+
+if [ ! -f pom.xml ]
+then
+  echo "Not a maven project, 'pom.xml' not found!"
+  exit 1
+fi
+
+/usr/local/bin/mvn clean \
+    generate-resources \
+    process-resources \
+    -DserverName=local \
+    -Djdbc.db=amp_local \
+    -Djdbc.user=amp_user \
+    -Djdbc.password=demo1 \
+    -Djdbc.port=5432

@@ -318,16 +318,19 @@
                               </digi:link>
                             </td>
                           </tr>
-                            
-                          <%/* <tr>
-                          <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                          <td>
-                          <a href="#" onclick="showLayerManager();return false;"> <digi:trn>GIS Layers Manager</digi:trn></a>
+                        </module:display>
+
+                        <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION">
+                          <tr>
+                           <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                           <td>
+                             <a href="#" onclick="showLayerManager();return false;">
+                                <digi:trn>GIS Layers Manager</digi:trn>
+                             </a>
                            </td>                          
                           </tr>
-                          */%>
-
                         </module:display>
+
                         <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
@@ -793,6 +796,20 @@
                             <td class="admin_box_label"><digi:link module="budgetexport" href="/" title="Budget Integration">
                               <digi:trn>Budget Integration</digi:trn>
                             </digi:link></td>
+                          </tr>
+                        </module:display>
+                        <module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION">
+                          <tr>
+                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td class="admin_box_label">
+                              <c:set var="translation">
+                                <digi:trn invisibleLinks="true">Click here to view Dashboard Manager</digi:trn>
+                              </c:set>
+                              <a href="/TEMPLATE/reamp/modules/admin/dashboard/index.html"
+                                 title="${translation}">
+                                <digi:trn>Dashboard Manager</digi:trn>
+                              </a>
+                            </td>
                           </tr>
                         </module:display>
                       </table>

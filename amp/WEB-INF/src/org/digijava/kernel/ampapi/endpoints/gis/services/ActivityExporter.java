@@ -30,9 +30,20 @@ public abstract class ActivityExporter {
 	protected List<String> columnNames;
 	protected List<List<String>> rowValues;
 	protected List<Activity> activities = new ArrayList<>();
-	protected Set<String> geoCodes = new HashSet<String>();
+	private Set<String> geoCodes = new HashSet<String>();
 
 
+	protected Set<String> getGeoCodes() {
+		return geoCodes;
+	}
+
+	protected void appendToGeoCodes(String geoCode) {
+		if (geoCodes == null) {
+			geoCodes = new HashSet<String>();
+		}
+		geoCodes.add(geoCode);
+	}
+	
 	/**
 	 * Generates untranslated names of Excel column headers
 	 * @return
@@ -46,8 +57,9 @@ public abstract class ActivityExporter {
 	 */
 	private static List<String> generateColumnNames(List<String> originalNames) {
 		List<String> res = new ArrayList<>();
-		for (String colName : originalNames)
+		for (String colName : originalNames) {
 			res.add(TranslatorWorker.translateText(colName));
+		}
 		return res;
 	}
 	
@@ -64,8 +76,6 @@ public abstract class ActivityExporter {
 			 addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-//		spec.setCalculateColumnTotals(true);
-//		spec.setCalculateRowTotals(true);
 		@SuppressWarnings("unchecked")
 		LinkedHashMap<String, Object> otherFilters = (LinkedHashMap<String, Object>)filters.get("otherFilters");
 		@SuppressWarnings("unchecked")
@@ -91,10 +101,14 @@ public abstract class ActivityExporter {
 		this.rowValues = generateRowValues();
 	}
 	
+	/**
+	 * Generates rows of strings; used in the export (generateExcelExport) afterwards
+	 * @return
+	 */
 	protected abstract List<List<String>> generateRowValues();
 	
 	/**
-	 * Generates a list of activities, implementation-specific criteria
+	 * Generates a list of dto.activities (rows for the excel export), implementation-specific criteria
 	 * @return
 	 */
 	protected abstract List<Activity> generateActivities();
@@ -103,6 +117,77 @@ public abstract class ActivityExporter {
 		return generateExcelExport(fileName);
 	}
 	
+	private static boolean isUndefined(String value) {
+		return value == null || value.equals("Undefined") || value.equals("GeoId: Undefined");
+	}
+	
+	/**
+	 * used in ActivityLocationExporter code paths
+	 */
+	private String overridingGeoCode = null;
+
+	
+	
+	protected String getOverridingGeoCode() {
+		return overridingGeoCode;
+	}
+
+	protected void setOverridingGeoCode(String overridingGeoCode) {
+		this.overridingGeoCode = overridingGeoCode;
+	}
+
+	protected Activity setActivityField(String key, String value, Activity a) {
+		switch(key) {
+			case ColumnConstants.GEOCODE:
+				if (!isUndefined(value)) {
+					if ("".equals(value)) {
+						//special case: this is the (i>0)th row of a Mondrian report; 
+						//the actual geocode to be used is the overriding one
+						a.setGeoCode(overridingGeoCode);
+						break;
+					} else {
+						geoCodes.add(value);
+						overridingGeoCode = value;
+						a.setGeoCode(value);
+						break;
+					}
+				} else 
+					return null;
+			case ColumnConstants.ACTIVITY_ID:
+				a.setId(Long.parseLong(value));
+			case ColumnConstants.IMPLEMENTATION_LEVEL:
+				a.setImplementationLevel(value);
+				break;
+			case ColumnConstants.AMP_ID:
+				a.setAmpId(value);
+				break;
+			case ColumnConstants.PROJECT_TITLE:
+				a.setName(value);
+				break;
+			case MeasureConstants.ACTUAL_COMMITMENTS:
+				a.setTotalCommitments(value);
+				break;
+			case MeasureConstants.ACTUAL_DISBURSEMENTS:
+				a.setTotalDisbursments(value);
+				break;
+			case ColumnConstants.DONOR_AGENCY:
+				a.setDonorAgency(value);
+				break;
+			case ColumnConstants.PRIMARY_SECTOR:
+				a.setPrimarySector(value);
+				break;
+			case ColumnConstants.PROJECT_DESCRIPTION:
+				a.setDescription(value);
+				break;
+		}
+		return a;
+	}
+	
+	/**
+	 * Generates the Excel export based on the list of value rows
+	 * @param fileName
+	 * @return
+	 */
 	public HSSFWorkbook generateExcelExport(String fileName){
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet(fileName);

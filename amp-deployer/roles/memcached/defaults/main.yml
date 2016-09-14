@@ -1,0 +1,27 @@
+---
+
+# Verify active settings with:
+# $ echo "stats settings" | nc localhost 11211
+
+# Bind Memcached to a specific port.
+# @see: https://github.com/memcached/memcached/wiki/ConfiguringServer#networking
+# NOTE: The default connection port is 11211.
+memcached__port: 11211
+
+# Set the linux process user.
+# NOTE: The default user is memcached.
+memcached__user: memcached
+
+# Set the maximum number of concurrent connections.
+# @see: https://github.com/memcached/memcached/wiki/ConfiguringServer#connection-limit
+# NOTE: The default value is 1024.
+memcached__maxconn: 1024
+
+# Maximum memory to use for items in megabytes.
+# @see: https://github.com/memcached/memcached/wiki/ConfiguringServer#commandline-arguments
+# NOTE: The default value is 64.
+memcached__cachesize: 64
+
+# Other command line arguments.
+# @see: https://github.com/memcached/memcached/wiki/ConfiguringServer#commandline-arguments
+memcached__options: ""

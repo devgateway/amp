@@ -35,10 +35,13 @@ module.exports = ChartViewBase.extend({
 	var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
     var self = this;
     var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+    var percentage = context.y.raw > 0 ?
+        d3.format('%')(context.y.raw / this.model.get('totalPositive')) + '</b>&nbsp<span>' + ofTotal:
+        "";
     return {tt: {
       heading: context.x.raw,
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
-      footerText: '<b>' + d3.format('%')(context.y.raw / this.model.get('total')) + '</b>&nbsp<span>' + ofTotal + '</span>'
+      footerText: '<b>' + percentage + '</span>'
     }};
   },
 

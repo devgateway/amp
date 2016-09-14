@@ -1127,22 +1127,22 @@ public class IndicatorUtil {
 				if (value.getValueType()==AmpIndicatorValue.ACTUAL){
 					bean.setActualVal(new Float(value.getValue()));
 					bean.setActualValComments(value.getComment());
-					bean.setActualValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setActualValDate(DateConversion.convertDateToLocalizedString(value.getValueDate()));
 					bean.setCurrentVal(new Float(value.getValue()));
 					bean.setCurrentValComments(value.getComment());
-					bean.setCurrentValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setCurrentValDate(DateConversion.convertDateToLocalizedString(value.getValueDate()));
 					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 				if (value.getValueType()==AmpIndicatorValue.BASE){
 					bean.setBaseVal(new Float(value.getValue()));
 					bean.setBaseValComments(value.getComment());
-					bean.setBaseValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setBaseValDate(DateConversion.convertDateToString(value.getValueDate()));
 					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 				if (value.getValueType()==AmpIndicatorValue.TARGET){
 					bean.setTargetVal(new Float(value.getValue()));
 					bean.setTargetValComments(value.getComment());
-					bean.setTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setTargetValDate(DateConversion.convertDateToString(value.getValueDate()));
 					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 				if (value.getValueType()==AmpIndicatorValue.REVISED){
@@ -1151,7 +1151,7 @@ public class IndicatorUtil {
 					}
 					bean.setRevisedTargetValComments(value.getComment());
 					if(value.getValueDate()!=null){
-						bean.setRevisedTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+						bean.setRevisedTargetValDate(DateConversion.convertDateToString(value.getValueDate()));
 					}
 					bean.setIndicatorsCategory(value.getLogFrame());
 				}
@@ -1233,7 +1233,7 @@ public class IndicatorUtil {
 			tempPrgInd.setType(tempInd.getType());
 			tempPrgInd.setDescription(tempInd.getDescription());
 			tempPrgInd.setCreationDate(DateConversion
-					.ConvertDateToString(tempInd.getCreationDate()));
+					.convertDateToLocalizedString(tempInd.getCreationDate()));
 			tempPrgInd.setCategory(tempInd.getCategory());
 			tempPrgInd.setSector(tempInd.getSectors());
 			//TODO INDIC tempPrgInd.setActivity(tempInd.getActivity());
@@ -1352,7 +1352,7 @@ public class IndicatorUtil {
 				tempPrgInd.setName(tempThemeInd.getName());
 				tempPrgInd.setCode(tempThemeInd.getCode());
 				tempPrgInd.setCreationDate(DateConversion
-						.ConvertDateToString(tempThemeInd.getCreationDate()));
+						.convertDateToLocalizedString(tempThemeInd.getCreationDate()));
 				tempPrgInd.setPrgIndicatorValues(ProgramUtil
 						.getThemeIndicatorValues(ampThemeIndId));
 				themeInd.add(tempPrgInd);

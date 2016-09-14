@@ -2,10 +2,14 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import com.sun.jersey.multipart.FormDataParam;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import javax.ws.rs.Consumes;
@@ -21,6 +25,7 @@ import javax.ws.rs.core.StreamingOutput;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Path("indicator")
 public class IndicatorEndPoints {
@@ -41,6 +46,8 @@ public class IndicatorEndPoints {
      *      "unit": "",
      *      "admLevelId": 77,
      *      "accessTypeId": 2,
+     *      "population": true,
+     *      "indicatorTypeId": 262,
      *      "createdOn": "2016-06-24",
      *      "updatedOn": "2016-06-24",
      *      "createdBy": "atl@amp.org",
@@ -78,6 +85,8 @@ public class IndicatorEndPoints {
      *      "numberOfClasses": 5,
      *      "unit": "",
      *      "admLevelId": 77,
+     *      "population": true,
+     *      "indicatorTypeId": 262,
      *      "accessTypeId": 2,
      *      "createdOn": "2016-06-24",
      *      "updatedOn": "2016-06-24",
@@ -103,6 +112,13 @@ public class IndicatorEndPoints {
         return IndicatorService.getIndicatorById(indicatorId);
     }
 
+    @GET
+    @Path("/indicator-layer/check-name")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "checkName", ui = false)
+    public JsonBean checkName(@QueryParam("name") String name) {
+        return IndicatorService.checkName(name);
+    }
     /**
      * Delete indicator layer by Id
      * @param indicatorId indicator ID to query for indicator layer
@@ -135,6 +151,7 @@ public class IndicatorEndPoints {
      *      "unit": "",
      *      "admLevelId": 77,
      *      "accessTypeId": 2,
+     *      "indicatorTypeId": 262,
      *      "createdOn": "2016-06-24",
      *      "updatedOn": "2016-06-24",
      *      "createdBy": "atl@amp.org",
@@ -164,11 +181,11 @@ public class IndicatorEndPoints {
      * @param admLevelId adm Level ID to query for category value
      */
     @GET
-    @Path("/indicator-layer/export")
+    @Path("/indicator-layer/download")
     @Produces("application/vnd.ms-excel")
-    public StreamingOutput exportIndicatorById(@QueryParam("admLevelId") long admLevelId, @QueryParam("id") long indicatorId) {
+    public StreamingOutput download(@QueryParam("admLevelId") long admLevelId, @QueryParam("name") String indicatorName) {
 
-        return IndicatorExporter.exportIndicatorById(admLevelId,indicatorId);
+        return IndicatorExporter.download(admLevelId,indicatorName);
     }
 
     /**
@@ -181,10 +198,10 @@ public class IndicatorEndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public JsonBean importIndicator(
             @FormDataParam("option") long saveOption,
-            @FormDataParam("indicatorId") long indicatorId,
+            @FormDataParam("name") String name,
             @FormDataParam("file") InputStream uploadedInputStream
     ) {
-        return IndicatorExporter.importIndicator(saveOption, uploadedInputStream, indicatorId);
+        return IndicatorImporter.importIndicator(uploadedInputStream);
     }
 
     /**
@@ -285,18 +302,62 @@ public class IndicatorEndPoints {
             JsonBean accessJson = new JsonBean();
             accessJson.set(IndicatorEPConstants.ID,access.getValue());
             accessJson.set(IndicatorEPConstants.VALUE,access.name());
-            accessJson.set(IndicatorEPConstants.LABEL,access.name());
+            accessJson.set(IndicatorEPConstants.LABEL,TranslatorWorker.translateText(access.name()));
             accessTypeList.add(accessJson);
         }
 
         return accessTypeList;
     }
-
+    
+    /**
+     * 
+     * Provide Indicator Layer Types:
+     * <pre>
+     * @return 
+     * [
+     *  { 
+     *    "id" : 123,
+     *    "orig-name" : "Ration (% of Total Population)", // not translated
+     *    "name" : “Ration (% of Total Population)” // translated
+     *  }, 
+     *  ...
+     * ]
+     * </pre>
+     * 
+     */
     @GET
-    @Path("/workspaces")
+    @Path("/indicator-types")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public Collection<JsonBean> getWorkspaces() {
-        return IndicatorService.getWorkspaces();
+    public List<JsonBean> getIndicatorLayerTypes() {
+        return CategoryValueService.getCategoryValues(CategoryConstants.INDICATOR_LAYER_TYPE_KEY, true);
+    }
+    
+    /**
+     * <pre>
+     * Configures new list of indicator layers to be designated as population layers
+     * {
+     *   “layersIds” : [5,10,11 23, ...]
+     * }
+     * </pre>
+     * @return no content or errors
+     */
+    @POST
+    @Path("/population-layers")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "designate-population-layers", ui = false, authTypes = AuthRule.IN_ADMIN)
+    public JsonBean setPopulationLayers(JsonBean input) {
+        return new PopulationLayerDesignator().designateAsPopulationLayers(input);
+    }
+    
+    /**
+     * @return a list (e.g. [2, 3, 4, ...]) of all possible indicator layers to be designated as population layers.
+     * E.g. at this moment we agreed that only "count" population layers and "non-country" population layers are allowed
+     */
+    @GET
+    @Path("/population-layers-options")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public List<Long> getAllowedPopulationLayersOptions() {
+        return new PopulationLayerDesignator().getAllowedPopulationLayersOptions();
     }
 
 }

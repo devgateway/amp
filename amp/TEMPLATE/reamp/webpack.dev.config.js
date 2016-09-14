@@ -6,6 +6,11 @@ module.exports = {
       'webpack-dev-server/client?http://localhost:3000',
       'webpack/hot/only-dev-server',
       "./modules/admin/currency/deflator/script.es6"
+    ],
+    "admin/dashboard/script": [
+       'webpack-dev-server/client?http://localhost:3000',
+       'webpack/hot/only-dev-server',
+       './modules/admin/dashboard/script.es6'
     ]
     //"filters/script": [
     //  'webpack-dev-server/client?http://localhost:3000',
@@ -26,7 +31,7 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.jsx$/, loaders:['react-hot', 'babel'], exclude: /node_modules/ },
-      { test: /\.es6$/, loaders:['babel'], exclude: /node_modules/ },
+      { test: /\.es6$/, loaders:['react-hot', 'babel'], exclude: /node_modules/ },
       { test: /\.json$/, loader: 'json' },
       { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style!css" },
       { test: /\.less$/, loader: "style!css!less" }

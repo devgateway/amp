@@ -16,8 +16,8 @@ import org.dgfoundation.amp.newreports.ReportRenderWarningType;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
 import org.dgfoundation.amp.nireports.amp.diff.TextColumnKeyBuilder;
+import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
-import org.dgfoundation.amp.nireports.schema.PercentageTokenBehaviour;
 import org.digijava.kernel.persistence.PersistenceManager;
 
 /**

@@ -408,7 +408,7 @@ span.extContactDropdownEmail {
 					<br>
 					<div style="text-align: center; display: none;" id="loadingImg">
 						<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp; 
-		        		<b class="ins_title"><digi:trn>Loading, please wait ...</digi:trn></b>
+		        		<b class="ins_title"><digi:trn>Loading...</digi:trn></b>
 					</div>
 				</td>
 			</tr>

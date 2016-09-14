@@ -1,0 +1,10 @@
+---
+
+- name: Download drush.phar
+  get_url: url={{ httpd_php56__drush_download_url }} dest=/usr/local/bin/drush sha256sum={{ httpd_php56__drush_download_checksum }}
+
+- name: Make drush executable
+  file:
+    path: /usr/local/bin/drush
+    state: file
+    mode: "u=rwx,g=rwx,o=rx"

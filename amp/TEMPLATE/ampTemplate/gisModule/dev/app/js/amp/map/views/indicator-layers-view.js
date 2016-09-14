@@ -17,11 +17,21 @@ module.exports = Backbone.View.extend({
       self.listenTo(self.app.data.indicators, 'show', self.showLayer);
       self.listenTo(self.app.data.indicators, 'hide', self.hideLayer);
       self.listenTo(self.app.data.indicators, 'sync', self.refreshLayer);
-
+      
+      self.listenTo(self.app.data.indicators, 'applyFilter', self.refreshGapLayer);
+      self.listenTo(self.app.data.indicators, 'applySettings', self.refreshGapLayer);
+            
       self.listenTo(self.app.data.hilightFundingCollection, 'show', self.refreshLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'hide', self.hideLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'sync', self.refreshLayer);
     });
+  },
+  
+  refreshGapLayer: function(layer) {
+	if (layer.get('selected')) {
+		layer._changing = true;
+		this.refreshLayer(layer);
+	}
   },
 
   // removes layer, then shows it. Important for layers whos content changes.
@@ -35,8 +45,8 @@ module.exports = Backbone.View.extend({
   },
 
   showLayer: function(layer) {
-    var self = this,
-        loadedLayer = this.leafletLayerMap[layer.cid];
+    var self = this;
+    var loadedLayer = this.leafletLayerMap[layer.cid];
 
     if (loadedLayer === 'loading') {
       console.warn('tried to show a layer that is still loading, return');
@@ -70,6 +80,10 @@ module.exports = Backbone.View.extend({
         }
         self.trigger('addedToMap'); //TODO: better way. needed to let map bring structures to front.
       }
+      // This forces to reload indicators if the model changed.
+      if (layer._changing) {
+    	  delete layer._loaded;
+      }
     });
 
     layer.load();
@@ -80,6 +94,8 @@ module.exports = Backbone.View.extend({
     if (leafletLayer) {
       this.map.removeLayer(leafletLayer);
     }
+    //TODO: can we set an event for this change?
+    app.mapView.headerGapAnalysisView.model.set('isGapAnalysisSelected', false);
   },
 
   getNewGeoJSONLayer: function(layerModel) {

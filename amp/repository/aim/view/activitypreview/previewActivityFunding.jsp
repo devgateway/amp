@@ -103,8 +103,8 @@
 																	<logic:notEmpty name="funding" property="financingInstrument">
 																	<tr>
 																		<td align="left" width="150"><a
-																			title='<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>'>
-																		<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>
+																			title='<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>'>
+																		<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
 																		<td align="left">
@@ -207,7 +207,7 @@
 																		</a></td>
 																		<td width="1">:</td>
 																		<td align="left">
-																			<b><bean:write name="funding" property="donorObjective" /></b>
+																			<span class="word_break bold"><bean:write name="funding" property="donorObjective" /></span>
 																		</td>
 																	</tr>
 																</module:display>
@@ -221,7 +221,7 @@
                                                                         </a></td>
                                                                         <td width="1">:</td>
                                                                         <td align="left">
-                                                                            <b><bean:write name="funding" property="conditions" /></b>
+                                                                            <span class="word_break bold"><bean:write name="funding" property="conditions" /></span>
                                                                         </td>
                                                                     </tr>
                                                                 </module:display>
@@ -264,6 +264,38 @@
 																	</td>
 																</tr>
 																</logic:notEmpty>
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Effective Funding Date"
+																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
+																<logic:notEmpty name="funding" property="effectiveFundingDate">
+																	<tr>
+																		<td align="left" width="150">
+																			<a title='<digi:trn>Effective Funding Date</digi:trn>'>
+																				<digi:trn>Effective Funding Date</digi:trn>
+																			</a>
+																		</td>
+																		<td width="1">:</td>
+																		<td align="left">
+																			<b><bean:write name="funding" property="effectiveFundingDate"/></b>
+																		</td>
+																	</tr>
+																</logic:notEmpty>
+																</module:display>
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Closing Date"
+																		parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
+																<logic:notEmpty name="funding" property="fundingClosingDate">
+																	<tr>
+																		<td align="left" width="150">
+																			<a title='<digi:trn>Funding Closing Date</digi:trn>'>
+																				<digi:trn>Funding Closing Date</digi:trn>
+																			</a>
+																		</td>
+																		<td width="1">:</td>
+																		<td align="left">
+																			<b><bean:write name="funding" property="fundingClosingDate"/></b>
+																		</td>
+																	</tr>
+																</logic:notEmpty>
+																</module:display>
 															</table>
 															</td>
 														</tr>

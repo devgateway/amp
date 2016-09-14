@@ -9,8 +9,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.digijava.kernel.ampapi.mondrian.queries.TestQueries;
-
 
 /**
  * 
@@ -48,14 +46,7 @@ public class TestEndPoints {
 	@Path ("/testquery")
 	@Produces(MediaType.TEXT_PLAIN)
 	public final String queryresult() {
-		TestQueries query = new TestQueries();
-		try {
-			return query.getQuery(context.getRealPath("/WEB-INF/")).toString();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "Can't execute query .. :(";
+		return "Mondrian API removed from AMP";
 	}
 
 

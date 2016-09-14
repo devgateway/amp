@@ -1,9 +1,10 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
-
+import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
+import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
+import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
+import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
-import org.dgfoundation.amp.testmodels.*;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

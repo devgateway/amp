@@ -15,12 +15,11 @@ import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.reports.mondrian.ActivityFilter;
-import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -37,9 +36,9 @@ public class FactTableFiltering {
 	public static final String DATE_FILTERS_TAG_END = "@@date-filters-end@@";
 	public static final String DATE_FILTERS_PATTERN = DATE_FILTERS_TAG_START + ".*" + DATE_FILTERS_TAG_END;
 	
-	protected final MondrianReportFilters mrf;
+	protected final AmpReportFilters mrf;
 	
-	public FactTableFiltering(MondrianReportFilters mrf) {
+	public FactTableFiltering(AmpReportFilters mrf) {
 		this.mrf = mrf;
 	}
 	
@@ -55,15 +54,16 @@ public class FactTableFiltering {
 			String appendedQuery = String.format(" AND ((transaction_type <> 2) OR ((transaction_type = 2) %s))", expenditureClassFragment); 
 			subquery.append(appendedQuery);			
 			// process regular columns
-			for(Entry<String, List<FilterRule>> sqlFilterRule:mrf.getSqlFilterRules().entrySet()) {
-				String mainColumnName = sqlFilterRule.getKey();
-				/*expenditure class is processed above, because it's a property of transactions and should affect
-				 * only transactiontype=2 (expenditures), which is not a working mechanism on regular columns*/
-				if (mainColumnName.equals(ColumnConstants.EXPENDITURE_CLASS))
-					continue;
-				String fragment = buildQuerySubfragment(mainColumnName, sqlFilterRule.getValue());
-				subquery.append(fragment);
-			}
+			
+//			for(Entry<String, List<FilterRule>> sqlFilterRule:mrf.getSqlFilterRules().entrySet()) {
+//				String mainColumnName = sqlFilterRule.getKey();
+//				/*expenditure class is processed above, because it's a property of transactions and should affect
+//				 * only transactiontype=2 (expenditures), which is not a working mechanism on regular columns*/
+//				if (mainColumnName.equals(ColumnConstants.EXPENDITURE_CLASS))
+//					continue;
+//				String fragment = buildQuerySubfragment(mainColumnName, sqlFilterRule.getValue());
+//				subquery.append(fragment);
+//			}
 			
 			String dateFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.DATE, String.format("(transaction_type <> %d) AND (transaction_type <> %d)", Constants.MTEFPROJECTION, 200 + Constants.MTEFPROJECTION));
 			String realMtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.REAL_MTEF_DATE, "transaction_type = " + (200 + Constants.MTEFPROJECTION));
@@ -189,7 +189,7 @@ public class FactTableFiltering {
 			add(ColumnConstants.TERTIARY_PROGRAM, new ProgramIdsExpander("tertiary_program_id"));
 			add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, new ProgramIdsExpander("national_objectives_program_id"));
 			
-			add(FiltersGroup.LOCATION_FILTER, new LocationIdsExpander("location_id"));
+			//add(FiltersGroup.LOCATION_FILTER, new LocationIdsExpander("location_id"));
 			
 			add(ColumnConstants.DONOR_AGENCY, new IdentityExpander("donor_id"));
 			add(ColumnConstants.DONOR_GROUP, new OrgGrpIdsExpander("donor_id"));

@@ -735,7 +735,7 @@ public class DbUtil {
 	 */
 	public static List<AmpColorThreshold> getColorThresholds() {
 	    return PersistenceManager.getSession().createCriteria(AmpColorThreshold.class)
-	            .addOrder(Order.asc("thresholdStart")).list();
+	            .addOrder(Order.asc("index")).list();
 	}
 	 
 }

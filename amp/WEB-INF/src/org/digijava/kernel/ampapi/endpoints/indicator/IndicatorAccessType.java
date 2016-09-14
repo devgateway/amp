@@ -7,7 +7,7 @@ import java.util.List;
  * Created by anpicca on 04/07/2016.
  */
 public enum IndicatorAccessType {
-    NO_TYPE(0l),
+    TEMPORARY(0l),
     PRIVATE(1l),
     PUBLIC(2l),
     STANDARD(3l),

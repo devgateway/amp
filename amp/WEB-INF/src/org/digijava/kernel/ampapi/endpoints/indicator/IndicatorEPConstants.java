@@ -1,10 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import org.digijava.kernel.ampapi.endpoints.currency.CurrencyEPConstants;
-import org.digijava.module.common.util.DateTimeUtil;
-
-import java.text.SimpleDateFormat;
-
 /**
  * Indicator Endpoint Constants
  * 
@@ -17,10 +12,8 @@ public class IndicatorEPConstants {
     public static final String SAVED = "SAVED";
     public static final String DELETED = "DELETED";
 
-    public static final String DEFAULT_INDICATOR_ORDER_FIELD = "created_on";
+    public static final String DEFAULT_INDICATOR_ORDER_FIELD = "createdOn";
 
-    public static final SimpleDateFormat DATE_FORMATTER = DateTimeUtil.getStrictSimpleDateFormat(
-            CurrencyEPConstants.DATE_FORMAT);
     public static final int DEFAULT_COUNT = 10;
 
     public static final long ACCESS_TYPE_PUBLIC = 2;
@@ -28,9 +21,11 @@ public class IndicatorEPConstants {
     public static final long PAYLOAD_INDEX = 1; // indicate
 
     public static final String RESULT = "result";
+    public static final String VALUES = "values";
     public static final String ID = "id";
     public static final String LABEL = "label";
     public static final String VALUE = "value";
+    public static final String GEO_CODE_ID = "geoId";
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";
     public static final String NUMBER_OF_CLASSES = "numberOfClasses";
@@ -47,17 +42,22 @@ public class IndicatorEPConstants {
     public static final String CURRENT_PAGE_NUMBER = "currentPageNumber";
     public static final String TOTAL_PAGE_COUNT = "totalPageCount";
     public static final String TOTAL_RECORDS = "totalRecords";
-    public static final String NUMBER_OF_IMPORTED_RECORDS="numberOfImportedRecords";
-    public static final String SHARED_WORKSPACES="sharedWorkspaces";
+    public static final String NUMBER_OF_IMPORTED_RECORDS = "numberOfImportedRecords";
+    public static final String SHARED_WORKSPACES = "sharedWorkspaces";
+    public static final String IS_POPULATION = "isPopulation";
+    public static final String INDICATOR_TYPE_ID = "indicatorTypeId";
+    public static final String CAN_DO_GAP_ANALYSIS = "canDoGapAnalysis";
+    public static final String OPTION_TO_SAVE_VALUES = "option";
 
-    public static final String FIELD_NAME = "indicator_name";
+    public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_NUMBER_OF_CLASSES = "number_of_classes";
     public static final String FIELD_UNIT = "unit";
-    public static final String FIELD_ADM_LEVEL_ID = "adm_level";
-    public static final String FIELD_ACCESS_TYPE_ID = "access_type";
-    public static final String FIELD_CREATED_ON = "created_on";
-    public static final String FIELD_UPDATED_ON = "updated_on";
+    public static final String FIELD_ADM_LEVEL_ID = "admLevel";
+    public static final String FIELD_ACCESS_TYPE_ID = "accessType";
+    public static final String FIELD_CREATED_ON = "createdOn";
+    public static final String FIELD_UPDATED_ON = "updatedOn";
+    public static final String FIELD_CREATED_BY = "email";
     public static final String FIELD_ID = "id";
 
     public static final String PAGE = "page";

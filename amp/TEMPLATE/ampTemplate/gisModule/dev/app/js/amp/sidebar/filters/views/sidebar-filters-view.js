@@ -26,7 +26,7 @@ module.exports = BaseControlView.extend({
     BaseControlView.prototype.initialize.apply(this, arguments);
 
     this.app.data.filter.loaded.then(function() {
-    	console.error('filters loaded');
+    	console.info('filters loaded');
       self.app.state.register(self, 'filters', {
         get: function() { return self.app.data.filter.serialize();},
         set: function(state) {

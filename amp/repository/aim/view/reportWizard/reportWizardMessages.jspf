@@ -11,7 +11,7 @@
 	<digi:trn key="aim:reportwizard:filterProblems">Apparently there are some problems displaying filters pop-up. Please try again.</digi:trn>
 </c:set>
 <c:set var="loadingDataMessage">
-	<digi:trn key="aim:reportwizard:loadingData">Loading data. Please wait.</digi:trn>
+	<digi:trn key="aim:reportwizard:loadingData">Loading...</digi:trn>
 </c:set>
 <c:set var="savingDataMessage">
 	<digi:trn key="aim:reportwizard:savingData">Saving data. Please wait.</digi:trn>

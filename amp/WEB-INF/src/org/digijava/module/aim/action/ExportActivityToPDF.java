@@ -1342,7 +1342,7 @@ public class ExportActivityToPDF extends Action {
 
 
                 columnName=TranslatorWorker.translateText("Computation");
-                createGeneralInfoRow(mainLayout,columnName,identification.getTeam().getComputation() ?
+                createGeneralInfoRow(mainLayout,columnName, Boolean.TRUE.equals(identification.getTeam().getComputation()) ?
                         TranslatorWorker.translateText("Yes") :
                         TranslatorWorker.translateText("No"));
 
@@ -1804,7 +1804,7 @@ public class ExportActivityToPDF extends Action {
                         euInfo+= TranslatorWorker.translateText("Progress")+":"+ euActivity.getProgress() + "\n";
                     }
                     if(FeaturesUtil.isVisibleField("Costing Due Date") && euActivity.getDueDate()!=null){
-                        euInfo+= TranslatorWorker.translateText("Due Date")+":"+ DateConversion.ConvertDateToString(euActivity.getDueDate()) + "\n";
+                        euInfo+= TranslatorWorker.translateText("Due Date")+":"+ DateConversion.convertDateToLocalizedString(euActivity.getDueDate()) + "\n";
                     }
                     anotherInfo.addElement(new Paragraph(postprocessText(euInfo),plainFont));
                     costingInnerTable.addCell(anotherInfo);
@@ -2757,7 +2757,7 @@ public class ExportActivityToPDF extends Action {
                             addNewInfoCell(fundingTable, "Organization Role", TranslatorWorker.translateText(funding.getSourceRole()));
                             //DISCREPANCY: in Word export, ToA and FI are checked via the FM; here, they aren't
                             addNewInfoCell(fundingTable, "Type of Assistance", funding.getTypeOfAssistance());
-                            addNewInfoCell(fundingTable, "Financial Instrument", funding.getFinancingInstrument());
+                            addNewInfoCell(fundingTable, "Financing Instrument", funding.getFinancingInstrument());
 
                             //Funding status
                             if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status"))
@@ -2774,6 +2774,14 @@ public class ExportActivityToPDF extends Action {
                             //always display FundingClassification Date, if it has been entered
                             {
                                 addNewInfoCell(fundingTable, "Funding Classification Date", funding.getFundingClassificationDate());
+                            }
+                            if(funding.getEffectiveFundingDate() != null)
+                            {
+                                addNewInfoCell(fundingTable, "Effective Funding Date", funding.getEffectiveFundingDate());
+                            }
+                            if(funding.getFundingClosingDate() != null)
+                            {
+                                addNewInfoCell(fundingTable, "Funding Closing Date", funding.getFundingClosingDate());
                             }
                             
                             if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date"))

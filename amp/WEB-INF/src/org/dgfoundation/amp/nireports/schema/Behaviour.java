@@ -18,9 +18,9 @@ import org.dgfoundation.amp.nireports.DatedCell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiReportData;
-import org.dgfoundation.amp.nireports.output.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
@@ -49,8 +49,9 @@ public interface Behaviour<V extends NiOutCell> {
 	 * @return
 	 */
 	public V doHorizontalReduce(List<NiCell> cells);
-	public default Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell) {
-		if (cellMeetsCoos(acceptors, oldCell, splitCell))
+	public default Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell, boolean isTransactionLevelHierarchy) {
+		
+		if (cellMeetsCoos(acceptors, oldCell, splitCell, isTransactionLevelHierarchy && isTransactionLevelUndefinedSkipping()))
 			return oldCell;
 		else
 			return null;
@@ -64,7 +65,7 @@ public interface Behaviour<V extends NiOutCell> {
 		return null;
 	}
 	
-	public default ColumnContents horizSplit(ColumnContents oldContents, Map<Long, Cell> splitCells, Set<Long> acceptableMainIds, Map<NiDimensionUsage, IdsAcceptor> acceptors, boolean enqueueAcceptors) {
+	public default ColumnContents horizSplit(ColumnContents oldContents, Map<Long, Cell> splitCells, Set<Long> acceptableMainIds, Map<NiDimensionUsage, IdsAcceptor> acceptors, boolean enqueueAcceptors, boolean isTransactionLevelHierarchy) {
 		Map<Long, List<NiCell>> z = new HashMap<>();
 		for(Long mainId:acceptableMainIds) {
 			List<NiCell> oldCells = oldContents.data.get(mainId);
@@ -72,7 +73,7 @@ public interface Behaviour<V extends NiOutCell> {
 			if (oldCells == null)
 				continue;
 			for(NiCell oldCell:oldCells) {
-				Cell filteredCell = filterCell(acceptors, oldCell.getCell(), splitCell);
+				Cell filteredCell = filterCell(acceptors, oldCell.getCell(), splitCell, isTransactionLevelHierarchy);
 				if (filteredCell != null && oldCell.passesFilters(splitCell))
 					z.computeIfAbsent(mainId, id -> new ArrayList<>()).add(oldCell.advanceHierarchy(filteredCell, splitCell, enqueueAcceptors ? acceptors : null));
 			}
@@ -80,16 +81,14 @@ public interface Behaviour<V extends NiOutCell> {
 		return new ColumnContents(z);
 	}
 	
-	public default NiOutCell horizontalReduce(List<NiCell> cells) {
-		if (cells == null || cells.isEmpty())
-			return getZeroCell();
+	public default NiOutCell horizontalReduce(List<NiCell> cells, NiReportsEngine context) {
 		return doHorizontalReduce(cells);
 	}
 	
 	public Cell buildUnallocatedCell(long mainId, long entityId, LevelColumn levelColumn);
 	
 	/**
-	 * computes a "zero" cell, which is different from an "empty" cell. For numerical cells, this is a cell with zero. For textual cells, this is an "" cell, although these do not have 
+	 * computes a "zero" cell, which is different from an "empty" cell. For numerical cells, this is a cell with zero. For textual cells, this is an "" cell 
 	 * @return
 	 */
 	public V getZeroCell();
@@ -116,16 +115,21 @@ public interface Behaviour<V extends NiOutCell> {
 		return String.format("%s", getTimeRange());
 	}
 	
-	public static boolean cellMeetsCoos(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell) {
+	public static boolean cellMeetsCoos(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell, boolean skipMissingCoordinates) {
 		Map<NiDimensionUsage, NiDimension.Coordinate> cellCoos = oldCell.getCoordinates();
 		NiUtils.failIf(cellCoos == null, "null cellCoos");
 		for(Entry<NiDimensionUsage, NiDimension.Coordinate> splitterElem:splitCell.getCoordinates().entrySet()) {
 			NiDimensionUsage dimUsage = splitterElem.getKey();
+			boolean splitterIsUndefined = splitterElem.getValue().id == ColumnReportData.UNALLOCATED_ID;
 //			NiDimension.Coordinate splitterCoo = splitterElem.getValue();
 			NiDimension.Coordinate cellCoo = cellCoos.get(dimUsage);
-			if (cellCoo == null)
-				continue; // cell is indifferent to this coordinate
-			if (cellCoo.id == ColumnReportData.UNALLOCATED_ID && splitterElem.getValue().id == ColumnReportData.UNALLOCATED_ID)
+			if (cellCoo == null) {
+				// cell is indifferent to this coordinate
+				if (skipMissingCoordinates && !splitterIsUndefined)
+					return false; // being indifferent to transaction-level hier ==> rejected
+				continue;  // not a transaction-level hier -> accept all
+			}
+			if (cellCoo.id == ColumnReportData.UNALLOCATED_ID && splitterIsUndefined)
 				continue; // undefineds match
 			IdsAcceptor acceptor = acceptors.get(dimUsage);
 			boolean isAcceptable = acceptor.isAcceptable(cellCoo);
@@ -135,7 +139,14 @@ public interface Behaviour<V extends NiOutCell> {
 		return true;
 	}
 
-	public default V doVerticalReduce(Collection<V> cells) {
+	/**
+	 * returns true iff cells of this type, upon running over a transaction-level hierarchy for which they lack a coordinate and the splitter is defined, should be skipped
+	 * normally all summable columns (e.g. funding cells which sum) should return true while texts should return false
+	 * @return
+	 */
+	public boolean isTransactionLevelUndefinedSkipping();
+	
+	public default NiOutCell doVerticalReduce(Collection<V> cells) {
 		return getZeroCell();
 	}
 	
@@ -147,7 +158,7 @@ public interface Behaviour<V extends NiOutCell> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")	
-	public default V buildGroupTrailCell(GroupReportData grd, CellColumn cc, List<NiReportData> visitedChildren) {
+	public default NiOutCell buildGroupTrailCell(GroupReportData grd, CellColumn cc, List<NiReportData> visitedChildren) {
 		return doVerticalReduce(AmpCollections.relist(visitedChildren, child -> (V) child.trailCells.get(cc)));
 	}
 	
@@ -155,7 +166,7 @@ public interface Behaviour<V extends NiOutCell> {
 	 * builds the trail cells for ColumnReportData 
 	 */
 	@SuppressWarnings("unchecked")
-	public default V buildColumnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<Long, NiOutCell>> mappedContents) {
+	public default NiOutCell buildColumnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<Long, NiOutCell>> mappedContents) {
 		return doVerticalReduce((Collection<V>) mappedContents.get(cc).values());
 	}
 

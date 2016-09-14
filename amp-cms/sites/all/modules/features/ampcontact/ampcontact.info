@@ -47,4 +47,3 @@ features[variable][] = recaptcha_theme
 features_exclude[dependencies][ctools] = ctools
 features_exclude[dependencies][strongarm] = strongarm
 features_exclude[dependencies][rules] = rules
-mtime = 1422283916

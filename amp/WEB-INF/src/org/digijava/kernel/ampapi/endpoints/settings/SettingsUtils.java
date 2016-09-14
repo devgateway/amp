@@ -32,11 +32,14 @@ import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -49,10 +52,12 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.h2.util.StringUtils;
 
 /**
  * Utility class for amp settings handling
+ * 
  * @author Nadejda Mandrescu
  */
 public class SettingsUtils {
@@ -66,11 +71,11 @@ public class SettingsUtils {
 		//build currency options
 		List<SettingOptions.Option> options = new ArrayList<SettingOptions.Option>();
 		for (AmpCurrency ampCurrency : CurrencyUtil.getActiveAmpCurrencyByName(true)) {
-			String ccValue = ampCurrency.isVirtual() ? 
+			String ccValue = ampCurrency.isVirtual() ?
 					ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(ampCurrency.getCurrencyCode()) :
-						ampCurrency.getCurrencyCode();
+                    ampCurrency.getCurrencyCode();
 			SettingOptions.Option currencyOption = new SettingOptions.Option(
-					ampCurrency.getCurrencyCode(), ampCurrency.getCurrencyName(), ccValue);
+                    ampCurrency.getCurrencyCode(), ampCurrency.getCurrencyName(), ccValue);
 			options.add(currencyOption);
 		}
 		//identifies the base currency 
@@ -390,7 +395,7 @@ public class SettingsUtils {
 		List<SettingOptions> settings = getSettings();
 		// add GIS specific settings
 		Set<String> measures = new LinkedHashSet<String>(GisConstants.FUNDING_TYPES);
-		measures.retainAll(MondrianReportUtils.getConfigurableMeasures());
+		measures.retainAll(MeasuresVisibility.getConfigurableMeasures());
 		settings.add(getFundingTypeSettings(measures));
 
 		settings.add(new SettingOptions("use-icons-for-sectors-in-project-list",
@@ -422,7 +427,11 @@ public class SettingsUtils {
 
 		settings.add(new SettingOptions("language", "language", new SettingOptions.Option(TLSUtils
 				.getEffectiveLangCode())));
-		
+
+        settings.add(new SettingOptions("default-language", "default-language", new SettingOptions.Option(TLSUtils.getSite().getDefaultLanguage().getCode())));
+
+        settings.add(new SettingOptions("multilingual", "multilingual", new SettingOptions.Option(Boolean.toString(ContentTranslationUtil.multilingualIsEnabled()))));
+
 		settings.add(new SettingOptions(
 				"default-date-format",
 				GlobalSettingsConstants.DEFAULT_DATE_FORMAT,
@@ -432,9 +441,16 @@ public class SettingsUtils {
 				"hide-editable-export-formats-public-view",
 				GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW,
 				new SettingOptions.Option(
-						FeaturesUtil
-								.getGlobalSettingValue(GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW))));
-		
+						String.valueOf(!FeaturesUtil.isVisibleFeature("Show Editable Export Formats")))));
+		settings.add(new SettingOptions(
+				"download-map-selector",
+				GisConstants.DOWNLOAD_MAP_SELECTOR,
+				new SettingOptions.Option(String.valueOf(FeaturesUtil.isVisibleFeature(GisConstants.DOWNLOAD_MAP_SELECTOR)))));
+		// for now the wrong way as it was done so far, tickets to add it properly are defined
+		settings.add(new SettingOptions(
+                "gap-analysis-map",
+                "Gap Analysis Map",
+                new SettingOptions.Option(String.valueOf(FeaturesUtil.isVisibleFeature("Gap Analysis Map")))));
 		// Workspace Settings
 		if (MenuUtils.getCurrentView() == AmpView.TEAM) {
 			settings.add(new SettingOptions("team-id", "team-id", new SettingOptions.Option(EndpointUtils
@@ -627,8 +643,8 @@ public class SettingsUtils {
 		if (amountFormat != null) {
 			String decimalSymbol = (String) amountFormat.get(SettingsConstants.DECIMAL_SYMBOL);
 			String maxFractDigits = (String) amountFormat.get(SettingsConstants.MAX_FRACT_DIGITS);
-			Integer maxFractDigitsNum  = StringUtils.isNumber(maxFractDigits) ? Integer.valueOf(maxFractDigits) : null;
-			Boolean useGrouping  = (Boolean) amountFormat.get(SettingsConstants.DECIMAL_SYMBOL);
+			Integer maxFractDigitsNum  = maxFractDigits != null && StringUtils.isNumber(maxFractDigits) ? Integer.valueOf(maxFractDigits) : null;
+			Boolean useGrouping  = (Boolean) amountFormat.get(SettingsConstants.USE_GROUPING);
 			String groupingSeparator  = (String) amountFormat.get(SettingsConstants.GROUP_SEPARATOR);
 			Integer groupingSize  = (Integer) amountFormat.get(SettingsConstants.GROUP_SIZE);
 			
@@ -636,7 +652,7 @@ public class SettingsUtils {
 					maxFractDigitsNum, useGrouping, groupingSize);
 			reportSettings.setCurrencyFormat((DecimalFormat) format.getInstance(new Locale("en", "US")));
 			
-			Double multiplier = (Double) amountFormat.get(SettingsConstants.AMOUNT_UNITS);
+			Double multiplier = PersistenceManager.getDouble(amountFormat.get(SettingsConstants.AMOUNT_UNITS));
 			if (multiplier != null)
 				reportSettings.setUnitsOption(AmountsUnits.findByMultiplier(multiplier));
 		}

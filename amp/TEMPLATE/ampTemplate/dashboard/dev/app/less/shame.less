@@ -103,6 +103,7 @@ h3 {
         .big-chart & {
           font-size: 2em;
         }
+        float: left;
       }
     }
     
@@ -247,6 +248,7 @@ h3 {
 .dash-download-modal {
 	/*width: @preview-width;*/
 	width: auto;
+	max-width: 90%;
 }
 .modal-preview-area {
 	visibility: visible;
@@ -258,7 +260,7 @@ h3 {
     height:100%;
     text-align:center;
     z-index: 9999;
-    opacity:0.5;
+    opacity:0.75;
     background-color:white;
 }
 .preview-area .svg-wrap {
@@ -343,6 +345,17 @@ h3 {
 	height: 1000px !important;
 }*/
 
+rect.bordered {
+	stroke: #E6E6E6;
+	stroke-width: 2px;
+}
+
+text.mono {
+	font-size: 9pt;
+	font-family: Arial;
+	fill: #000;
+}
+
 .heatmap-chart-wrap {
 	height: auto !important;
 	min-height: 300px !important;
@@ -361,4 +374,35 @@ h3 {
 
 .question_mark {
 	width: 13px;
+	float: left;
+	margin-top: 11px;
+	margin-left: 5px;
+}
+
+.negative-values-message {
+  margin: 0;
+  opacity: 0.8;
+  z-index: 100;
+  padding: 0;
+  display: none;
+}
+
+.legend-others {
+	cursor: pointer;
+	fill: red !important;
+	font-weight: bold
+}
+
+.modal-backdrop.in {
+  filter: alpha(opacity=80);
+  opacity: .80;
+}
+
+.text-center {
+	margin-top: 10px;
+}
+
+.heatmap-table-responsive {
+	max-height: 500px; 
+	overflow-y: auto;
 }

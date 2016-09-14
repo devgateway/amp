@@ -108,7 +108,7 @@ _.extend(App.prototype, BackboneDash.Events, {
           }
       }
 
-      var dashboardTranslateKeys = JSON.parse("{\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF\",\n\n\"amp.common:title\": \"AMP\",\n\"amp.common:title-desktop\": \"Desktop\",\n\"amp.common:subtitle-my-desktop\": \"My Desktop\",\n\"amp.common:subtitle-add-tab\": \"Add Tab\",\n\"amp.common:subtitle-tab-manager\": \"Tab Manager\",\n\"amp.common:title-reports\": \"Reports\",\n\"amp.common:subtitle-all-reports\": \"All Reports\",\n\"amp.common:subtitle-fav-reports\": \"Favourite Reports\",\n\"amp.common:subtitle-report-generator\": \"Report Generator\",\n\"amp.common:subtitle-saiku\": \"Saiku\",\n\"amp.common:title-documents\": \"Documents\",\n\"amp.common:title-dashboards\": \"Dashboards\",\n\"amp.common:subtitle-gis\": \"New GIS (BETA)\",\n\"amp.common:subtitle-dashboards\": \"New Dashboard (BETA)\",\n\"amp.common:subtitle-dashboard-generator\": \"Dashboard Generator\",\n\"amp.common:subtitle-donor-profile\": \"Donor Profile\",\n\"amp.common:subtitle-region-profile\": \"Region Profile\",\n\"amp.common:subtitle-sector-profile\": \"Sector Profile\",\n\"amp.common:subtitle-executing-profile\": \"Executing Agency Profile\",\n\"amp.common:subtitle-beneficiary-profile\": \"Beneficiary Ministry Profile\",\n\"amp.common:title-tools\": \"Tools\",\n\"amp.common:subtitle-workspace-setup\": \"Workspace Setup\",\n\"amp.common:subtitle-advanced-mode\": \"Advanced Mode\",\n\"amp.common:subtitle-search\": \"Search\",\n\"amp.common:subtitle-addressbook\": \"Address Book\",\n\"amp.common:title-help\": \"Help\",\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\n\"amp.common:subtitle-glossary\": \"Glossary\",\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\n\"amp.common:title-logout\": \"Logout\",\n\"amp.common:filters-loading\": \"Loading...\",\n\"amp.dashboard:page-title\":\"AMP Dashboards\",\n\"amp.dashboard:loading\": \"Loading...\",\n\"amp.dashboard:title-projectdata\": \"Project Data\",\n\"amp.dashboard:sub-title-projectdata\": \"View where projects are being implemented throughout the country.\",\n\"amp.dashboard:title-Country\": \"Country\",\n\"amp.dashboard:title-Region\": \"Region\",\n\"amp.dashboard:title-Zone\": \"Zone\",\n\"amp.dashboard:title-District\": \"District\",\n\"amp.dashboard:chart-reset\": \"reset others\",\n\"amp.dashboard:chart-radioui-commitments\": \"Commitments\",\n\"amp.dashboard:chart-radioui-disbursements\": \"Disbursements\",\n\"amp.dashboard:filters-none-applied\": \"No filters applied\",\n\"amp.dashboard:close\": \"Close\",\n\"amp.dashboard:modal-sorry\": \"Sorry for any inconvenience\",\n\"amp.dashboard:share-dashboard-top\": \"Share dashboard\",\n\"amp.dashboard:share-dashboard\": \"Share this dashboard view\",\n\"amp.dashboard:share-link\": \"Link\",\n\"amp.dashboard:of\": \"of\",\n\"amp.dashboard:tooltip-predict-otherseries\": \"TRANSLATEME\",\n\"amp.dashboard:total\": \"total\",\n\"amp.common:title\": \"AMP Toolbar\",\n\"amp.common:title-filters\": \"Filters\",\n\"amp.dashboard:chart-TopDonorAgencies\": \"Top Donor Agencies\",\n\"amp.dashboard:chart-TopDonorGroups\": \"Top Donor Groups\",\n\"amp.dashboard:chart-TopRegions\": \"Top Regions\",\n\"amp.dashboard:chart-TopSectors\": \"Top Sectors\",\n\"amp.dashboard:chart-AidPredictability\": \"Aid Predictability\",\n\"amp.dashboard:chart-FundingType\": \"Funding Type\",\n\"amp.dashboard:chart-ResponsibleOrganizations\": \"Responsible Organizations\",\n\"amp.dashboard:chart-BeneficiaryAgencies\": \"Beneficiary Agencies\",\n\"amp.dashboard:chart-ExecutingAgencies\": \"Executing Agencies\",\n\"amp.dashboard:chart-ImplementingAgencies\": \"Implementing Agencies\",\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals\": \"Peace-building and State-building Goals\",\n\"amp.dashboard:predictability-planned\": \"Planned\",\n\"amp.dashboard:predictability-actual\": \"Actual\",\n\"amp.dashboard:chart-FundingType-Grant\": \"Grant\",\n\"amp.dashboard:chart-FundingType-Loan\": \"Loan\",\n\"amp.dashboard:chart-FundingType-others\": \"Others\",\n\"amp.dashboard:chart-TopRegions-DistrictUndefined\": \"District: U\",\n\"amp.dashboard:chart-TopRegions-others\": \"Others\",\n\"amp.dashboard:chart-TopSectors-others\": \"Others\",\n\"amp.dashboard:chart-TopDonorAgencies-others\": \"Others\",\n\"amp.dashboard:chart-TopDonorGroups-others\": \"Others\",\n\"amp.dashboard:chart-ResponsibleOrganizations-others\": \"Others\",\n\"amp.dashboard:chart-BeneficiaryAgencies-others\": \"Others\",\n\"amp.dashboard:chart-ExecutingAgencies-others\": \"Others\",\n\"amp.dashboard:chart-ImplementingAgencies-others\": \"Others\",\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals-others\":\"Others\",\n\"amp.dashboard:filters-edit\":\"edit filters\",\n\"amp.dashboard:dashboard-settings\":\"Settings\",\n\"amp.dashboard:settings-edit\":\"edit settings\",\n\"amp.dashboard:download-amount\":\"Amount\",\n\"amp.dashboard:download-preview\":\"Preview:\",\n\"amp.dashboard:download-rendering\":\"Rendering...\",\n\"amp.dashboard:download-download-chart\":\"Download chart\",\n\"amp.dashboard:download-download-data\":\"Download data\",\n\"amp.dashboard:chart-no-data-available\":\"No Data Available\",\n\"amp.dashboard:chart-loading-saved-settings\":\"Loading saved settings...\",\n\"amp.dashboard:filters-show-settings\":\"Show filter settings\",\n\"amp.dashboard:filters-chart-legends-Grouped\":\"Grouped\",\n\"amp.dashboard:filters-chart-legends-Stacked\":\"Stacked\",\n\"amp.dashboard:of-total\": \"of total\",\n\"amp.dashboard:aid-predictability-actual-disbursements\": \"Actual Disbursements\",\n\"amp.dashboard:aid-predictability-planned-disbursements\": \"Planned Disbursements\",\n\"amp.dashboard:filters-hide-details\": \"Hide filter details\",\n\"amp.dashboard:saving-state\": \"Saving dashboard state, please wait...\",\n\"amp.dashboard:date-range\": \"Date Range\",\n\"amp.dashboard:currency\" : \"Currency\",\n\"amp.dashboard:type\" : \"Type\",\n\"amp.dashboard:year\" : \"Year\",\n\"amp.dashboard:ftype-actual-commitment\": \"Actual Commitments\",\n\"amp.dashboard:ftype-actual-disbursement\": \"Actual Disbursements\",\n\"amp.dashboard:ftype-actual-expenditure\": \"Actual Expenditures\",\n\"amp.dashboard:ftype-planned-commitment\": \"Planned Commitments\" ,\n\"amp.dashboard:ftype-planned-disbursement\":\t\"Planned Disbursements\" ,\n\"amp.dashboard:ftype-planned-expenditures\":\t\"Planned Expenditures\",  \t\t\t\n\"amp.dashboard:dashboard-chart-tops-info-modal\": \"Category Detail\",\n\"amp.dashboard:chart-tops-table-projecttitle\": \"Project Title\",\n\"amp.dashboard:chart-tops-inunits\": \"In units\",\n\"amp.dashboard:chart-tops-inthousands\": \"In thousands\",\n\"amp.dashboard:chart-tops-inmillions\": \"In millions\",\n\"amp.dashboard:chart-thousand\": \"k\",\n\"amp.dashboard:chart-million\": \"M\",\n\"amp.dashboard:chart-billion\": \"B\",\n\"amp.dashboard:chart-trillion\": \"T\",\n\"amp.dashboard:chart-peta\": \"P\",\n\"amp.dashboard:chart-exa\": \"E\",\n\"amp.dashboard:chart-swap-axes\": \"Swap Axes\"\n}\n\n");
+      var dashboardTranslateKeys = JSON.parse("{\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF\",\n\n\"amp.common:title\": \"AMP\",\n\"amp.common:title-desktop\": \"Desktop\",\n\"amp.common:subtitle-my-desktop\": \"My Desktop\",\n\"amp.common:subtitle-add-tab\": \"Add Tab\",\n\"amp.common:subtitle-tab-manager\": \"Tab Manager\",\n\"amp.common:title-reports\": \"Reports\",\n\"amp.common:subtitle-all-reports\": \"All Reports\",\n\"amp.common:subtitle-fav-reports\": \"Favourite Reports\",\n\"amp.common:subtitle-report-generator\": \"Report Generator\",\n\"amp.common:subtitle-saiku\": \"Saiku\",\n\"amp.common:title-documents\": \"Documents\",\n\"amp.common:title-dashboards\": \"Dashboards\",\n\"amp.common:subtitle-gis\": \"New GIS (BETA)\",\n\"amp.common:subtitle-dashboards\": \"New Dashboard (BETA)\",\n\"amp.common:subtitle-dashboard-generator\": \"Dashboard Generator\",\n\"amp.common:subtitle-donor-profile\": \"Donor Profile\",\n\"amp.common:subtitle-region-profile\": \"Region Profile\",\n\"amp.common:subtitle-sector-profile\": \"Sector Profile\",\n\"amp.common:subtitle-executing-profile\": \"Executing Agency Profile\",\n\"amp.common:subtitle-beneficiary-profile\": \"Beneficiary Ministry Profile\",\n\"amp.common:title-tools\": \"Tools\",\n\"amp.common:subtitle-workspace-setup\": \"Workspace Setup\",\n\"amp.common:subtitle-advanced-mode\": \"Advanced Mode\",\n\"amp.common:subtitle-search\": \"Search\",\n\"amp.common:subtitle-addressbook\": \"Address Book\",\n\"amp.common:title-help\": \"Help\",\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\n\"amp.common:subtitle-glossary\": \"Glossary\",\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\n\"amp.common:title-logout\": \"Logout\",\n\"amp.common:filters-loading\": \"Loading...\",\n\"amp.dashboard:page-title\":\"AMP Dashboards\",\n\"amp.dashboard:loading\": \"Loading...\",\n\"amp.dashboard:title-projectdata\": \"Project Data\",\n\"amp.dashboard:sub-title-projectdata\": \"View where projects are being implemented throughout the country.\",\n\"amp.dashboard:title-Country\": \"Country\",\n\"amp.dashboard:title-Region\": \"Region\",\n\"amp.dashboard:title-Zone\": \"Zone\",\n\"amp.dashboard:title-District\": \"District\",\n\"amp.dashboard:chart-reset\": \"reset others\",\n\"amp.dashboard:chart-radioui-commitments\": \"Commitments\",\n\"amp.dashboard:chart-radioui-disbursements\": \"Disbursements\",\n\"amp.dashboard:filters-none-applied\": \"No filters applied\",\n\"amp.dashboard:close\": \"Close\",\n\"amp.dashboard:modal-sorry\": \"Sorry for any inconvenience\",\n\"amp.dashboard:share-dashboard-top\": \"Share dashboard\",\n\"amp.dashboard:share-dashboard\": \"Share this dashboard view\",\n\"amp.dashboard:share-link\": \"Link\",\n\"amp.dashboard:of\": \"of\",\n\"amp.dashboard:tooltip-predict-otherseries\": \"TRANSLATEME\",\n\"amp.dashboard:total\": \"total\",\n\"amp.common:title\": \"AMP Toolbar\",\n\"amp.common:title-filters\": \"Filters\",\n\"amp.dashboard:chart-TopDonorAgencies\": \"Top Donor Agencies\",\n\"amp.dashboard:chart-TopDonorGroups\": \"Top Donor Groups\",\n\"amp.dashboard:chart-TopRegions\": \"Top Regions\",\n\"amp.dashboard:chart-TopSectors\": \"Top Sectors\",\n\"amp.dashboard:chart-AidPredictability\": \"Aid Predictability\",\n\"amp.dashboard:chart-FundingType\": \"Funding Type\",\n\"amp.dashboard:chart-ResponsibleOrganizations\": \"Responsible Organizations\",\n\"amp.dashboard:chart-BeneficiaryAgencies\": \"Beneficiary Agencies\",\n\"amp.dashboard:chart-ExecutingAgencies\": \"Executing Agencies\",\n\"amp.dashboard:chart-ImplementingAgencies\": \"Implementing Agencies\",\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals\": \"Peace-building and State-building Goals\",\n\"amp.dashboard:predictability-planned\": \"Planned\",\n\"amp.dashboard:predictability-actual\": \"Actual\",\n\"amp.dashboard:chart-FundingType-Grant\": \"Grant\",\n\"amp.dashboard:chart-FundingType-Loan\": \"Loan\",\n\"amp.dashboard:chart-FundingType-others\": \"Others\",\n\"amp.dashboard:chart-TopRegions-DistrictUndefined\": \"District: U\",\n\"amp.dashboard:chart-TopRegions-others\": \"Others\",\n\"amp.dashboard:chart-TopSectors-others\": \"Others\",\n\"amp.dashboard:chart-TopDonorAgencies-others\": \"Others\",\n\"amp.dashboard:chart-TopDonorGroups-others\": \"Others\",\n\"amp.dashboard:chart-ResponsibleOrganizations-others\": \"Others\",\n\"amp.dashboard:chart-BeneficiaryAgencies-others\": \"Others\",\n\"amp.dashboard:chart-ExecutingAgencies-others\": \"Others\",\n\"amp.dashboard:chart-ImplementingAgencies-others\": \"Others\",\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals-others\":\"Others\",\n\"amp.dashboard:filters-edit\":\"edit filters\",\n\"amp.dashboard:dashboard-settings\":\"Settings\",\n\"amp.dashboard:settings-edit\":\"edit settings\",\n\"amp.dashboard:download-amount\":\"Amount\",\n\"amp.dashboard:download-preview\":\"Preview:\",\n\"amp.dashboard:download-rendering\":\"Rendering...\",\n\"amp.dashboard:download-download-chart\":\"Download chart\",\n\"amp.dashboard:download-download-data\":\"Download data\",\n\"amp.dashboard:chart-no-data-available\":\"No Data Available\",\n\"amp.dashboard:chart-loading-saved-settings\":\"Loading saved settings...\",\n\"amp.dashboard:filters-show-settings\":\"Show filter settings\",\n\"amp.dashboard:filters-chart-legends-Grouped\":\"Grouped\",\n\"amp.dashboard:filters-chart-legends-Stacked\":\"Stacked\",\n\"amp.dashboard:of-total\": \"of total\",\n\"amp.dashboard:aid-predictability-actual-disbursements\": \"Actual Disbursements\",\n\"amp.dashboard:aid-predictability-planned-disbursements\": \"Planned Disbursements\",\n\"amp.dashboard:filters-hide-details\": \"Hide filter details\",\n\"amp.dashboard:saving-state\": \"Saving dashboard state, please wait...\",\n\"amp.dashboard:date-range\": \"Date Range\",\n\"amp.dashboard:currency\" : \"Currency\",\n\"amp.dashboard:type\" : \"Type\",\n\"amp.dashboard:year\" : \"Year\",\n\"amp.dashboard:ftype-actual-commitment\": \"Actual Commitments\",\n\"amp.dashboard:ftype-actual-disbursement\": \"Actual Disbursements\",\n\"amp.dashboard:ftype-actual-expenditure\": \"Actual Expenditures\",\n\"amp.dashboard:ftype-planned-commitment\": \"Planned Commitments\" ,\n\"amp.dashboard:ftype-planned-disbursement\":\t\"Planned Disbursements\" ,\n\"amp.dashboard:ftype-planned-expenditures\":\t\"Planned Expenditures\",  \t\t\t\n\"amp.dashboard:dashboard-chart-tops-info-modal\": \"Category Detail\",\n\"amp.dashboard:chart-tops-table-projecttitle\": \"Project Title\",\n\"amp.dashboard:chart-tops-inunits\": \"In units\",\n\"amp.dashboard:chart-tops-inthousands\": \"In thousands\",\n\"amp.dashboard:chart-tops-inmillions\": \"In millions\",\n\"amp.dashboard:chart-thousand\": \"k\",\n\"amp.dashboard:chart-million\": \"M\",\n\"amp.dashboard:chart-billion\": \"B\",\n\"amp.dashboard:chart-trillion\": \"T\",\n\"amp.dashboard:chart-peta\": \"P\",\n\"amp.dashboard:chart-exa\": \"E\",\n\"amp.dashboard:chart-swap-axes\": \"Swap Axes\",\n\"amp.dashboard:chart-HeatMapbySectorandDonorGroup\":\"Sector Fragmentation\",\n\"amp.dashboard:chart-HeatMapbyLocationandDonorGroup\":\"Location Fragmentation\",\n\"amp.dashboard:chart-HeatMapbyProgramandDonorGroup\":\"Program Fragmentation\",\n\"amp.dashboard:chart-heatmap-reset-others\":\"Reset Others\",\n\"amp.dashboard:negatives-values\":\"Negative values are not represented in this chart.\",\n\"amp.dashboard:negatives-values-parag\":\"Please switch to bar chart or table view to view all values.\",\n\"amp.dashboard:chart-heatmap-legends\":\"LEGENDS\",\n\"amp.dashboard:chart-heatmap-totals\":\"TOTALS\",\n\"amp.dashboard:chart-heatmap-legend-less-than\":\"Less than\",\n\"amp.dashboard:chart-heatmap-legend-between\":\"Between\",\n\"amp.dashboard:chart-heatmap-legend-and\":\"and\",\n\"amp.dashboard:chart-heatmap-legend-more-than\":\"More than\",\n\"amp.dashboard:chart-heatmap-others\":\"Others\",\n\"amp.dashboard:percentage\": \"Percentage\",\n\"amp.dashboard:chart-heatmap-help-text-location\":\"Location Heatmap\",\n\"amp.dashboard:chart-heatmap-help-text-sector\":\"Sector Heatmap\",\n\"amp.dashboard:chart-heatmap-help-text-program\":\"Program Heatmap\"\n}");
       this.translator = new Translator({
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
@@ -393,20 +393,17 @@ var heatMapChart = require('./customized/heatMapChart');
 var _ = require('underscore');
 
 function dataToNv(data) {
-	//console.log("_heatmap.dataToNv");
   return data;
 }
 
 
 function countCategories(data) {
-	//console.log("_heatmap.countCategories");
   // note: this takes regular data, not dataToNv data.
   return data[0].values.length - 1;  // 1 for others...?
 }
 
 
 function chart(options, data) {
-	//console.log("_heatmap.chart");
   //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
   //will give me >400 px height
   var height = options.height < 400 ? 300 : 400;
@@ -415,38 +412,12 @@ function chart(options, data) {
 	  height = calculatedHeight; 
   }
    
-  //TODO: Check if discreteBarChart is the best option.
   var _chart = nv.models.heatMapChart().height(900);
-    /*.valueFormat(options.shortFormatter)
-    .showValues(true)
-    .showYAxis(false)
-    .showXAxis(false)
-    .height(height)
-    .margin({ top: 5, right: 10, bottom: 10, left: 10 });*/
   return _chart;
 }
 
 
 function addLegend(svg, chart, nvData, trimLabels, width) {
-	//console.log("_heatmap.addLegend");
-  /*var legendHeight;
-
-  var legend = nv.models.legend()
-    .width(width || svg.clientWidth)
-    .margin({left: 20, right: 20})
-    .rightAlign(false)
-    .color(util.categoryColours(nvData[0].values.length))
-    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : util.formatShortText(85)(d.x); });
-
-  d3.select(svg)
-    .datum(nvData)
-    .append('g')
-      .attr('class', 'legend')
-      .datum(nvData[0].values)
-      .call(legend);
-
-  legendHeight = svg.querySelector('.legend').getBBox().height;
-  chart.margin({top: legendHeight + 15});*/
 }
 
 
@@ -540,12 +511,18 @@ function dataToNv(data) {
   if (!_.isArray(data[0].values)) {
     common.fail('Data series did not have a "values" array. Instead', data[0].values);
   }
-  return data[0].values;  
+  return getPositiveValues(data[0].values);
+}
+
+function getPositiveValues(values) {
+  return _.filter(values, function(e) {
+    return e.y>0;
+  });
 }
 
 function countCategories(data) {
   // note: this takes regular data, not dataToNv data.
-  return data[0].values.length;
+  return getPositiveValues(data[0].values).length;
 }
 
 
@@ -616,6 +593,7 @@ var _ = require('underscore');
 var util = require('../../ugly/util');
 var common = require('./common');
 var tableTemplate = _.template("<div class=\"table-responsive\">\n  <table class=\"table table-striped table-condensed\">\n\n    <% if (_(keys).some()) { %>\n      <thead>\n        <tr>\n          <td></td>\n          <% _(keys).each(function(key, colIndex) { %>\n            <th data-series-index=\"<%= colIndex %>\">\n              <%= key %>\n            </th>\n          <% }); %>\n        </tr>\n      </thead>\n    <% } %>\n\n    <tbody>\n      <% _(values).each(function(row, rowIndex) { %>\n        <tr>\n          <th data-x-index=\"<%= rowIndex %>\">\n            <%= row[0].x %>\n          </th>\n          <% _(row).each(function(datum, colIndex) { %>\n            <td data-x-index=\"<%= rowIndex %>\" data-series-index=\"<%= colIndex %>\">\n              <%= moneyFormat(datum.y) %>\n            </td>\n          <% }) %>\n        </tr>\n      <% }) %>\n    </tbody>\n\n  </table>\n</div>\n");
+var heatmapTableTemplate = _.template("<div class=\"heatmap-table-responsive\">\n\t<table class=\"table table-striped table-condensed\">\n\t\t<% if (_(keys).some()) { %>\n\t    \t<thead>\n\t        \t<tr>\n\t          \t\t<% _(keys).each(function(key, colIndex) { %>\n\t            \t\t<th data-series-index=\"0\">\n\t              \t\t\t<%= key %>\n\t            \t\t</th>\n\t          \t\t<% }); %>\n\t        \t</tr>\n\t      \t</thead>\n\t    <% } %>\n\t\t<tbody>\n\t\t\t<% _(matrix).each(function(row, i) { %>\n\t\t\t\t<% _(row).each(function(col, j) { %>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].y %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].x %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].value.dv %>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td data-x-index=\"<%= i %>\" data-series-index=\"0\">\n\t\t\t\t\t\t\t<%= matrix[i][j].value.p %>\n\t\t\t\t\t\t</td>\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t</tr>\n\t\t\t\t<% }) %>\n\t\t\t<% }) %>\n\t\t</tbody>\n\t</table>\n</div>");
 
 
 function fakeRawContext(e, data) {
@@ -624,12 +602,20 @@ function fakeRawContext(e, data) {
   var t = e.target,
       seriesIndex = parseInt(util.data(t, 'seriesIndex'), 10) || 0,
       xIndex = parseInt(util.data(t, 'xIndex'), 10);
-  return {
-    label: data[seriesIndex].values[xIndex].x || xIndex,
-    seriesIndex: seriesIndex,
-    pointIndex: xIndex,
-    point: data[seriesIndex].values[xIndex] || xIndex
-  };
+  // This check is for heatmaps because they dont use the same data structure.
+  if (!isNaN(xIndex)) {
+	  return {
+	    label: data[seriesIndex].values[xIndex].x || xIndex,
+	    seriesIndex: seriesIndex,
+	    pointIndex: xIndex,
+	    point: data[seriesIndex].values[xIndex] || xIndex
+	  };
+  } else {
+	  return {
+		  label: '',
+		  point: ''
+	  };
+  }
 }
 
 
@@ -643,34 +629,78 @@ function bindClickHandler(el, data, options) {
 
 
 function charter(data, options) {
+	if (options.model.get('chartType') === 'fragmentation') {
+		return heatmapCharter(data, options);
+	} else {
+		return commonCharter(data, options);
+	}	
+}
 
-  var keys = _(data).pluck('key');
+function commonCharter(data, options) {
+	var keys = _(data).pluck('key');
 
-  var values = _(data)
-    .chain()
-    .map(function(datum) { return datum.values; })
-    .transpose()
-    .value();
+	var values = _(data).chain().map(function(datum) {
+		return datum.values;
+	}).transpose().value();
 
-  var html = tableTemplate({
-    keys: keys,
-    values: values,
-    moneyFormat: options.shortFormatter
-  });
+	var html = tableTemplate({
+		keys : keys,
+		values : values,
+		moneyFormat : options.shortFormatter
+	});
 
-  var chartEl = document.createElement('div');
-  chartEl.innerHTML = html;
+	var chartEl = document.createElement('div');
+	chartEl.innerHTML = html;
 
-  bindClickHandler(chartEl, data, options);
+	bindClickHandler(chartEl, data, options);
 
-  return chartEl;
+	return chartEl;
+}
+
+function heatmapCharter(data, options) {
+	// For AMP-23582: we dont want the name from "summary" because thats the origName and not always the same name than the X axis combo selector. 
+	var firstColumnName = _.find(options.model.get('heatmap_config').models[0].get('columns'), function(item) {
+		return item.origName === options.model.get('summary')[0];
+	}).name; 
+	var secondColumnName = _.find(options.model.get('heatmap_config').models[0].get('columns'), function(item) {
+		return item.origName === options.model.get('summary')[1];
+	}).name;
+	var keys = [firstColumnName, 
+	            secondColumnName, 
+	            this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount'), 
+	            this.app.translator.translateSync('amp.dashboard:percentage', 'Percentage')];
+
+	var matrix = _.map(options.model.get("matrix"), function(itemY, i) {
+		return _.map(itemY, function(itemX, j) {
+			return {
+				y : options.model.get("yDataSet")[i],
+				x : options.model.get("xDataSet")[j],
+				value : (options.model.get("matrix")[i][j] ? options.model.get("matrix")[i][j] : {
+					'dv' : '',
+					'p' : ''
+				})
+			}
+		})
+	});
+
+	var html = heatmapTableTemplate({
+		keys : keys,
+		matrix : matrix,
+		moneyFormat : options.shortFormatter
+	});
+
+	var chartEl = document.createElement('div');
+	chartEl.innerHTML = html;
+	
+	bindClickHandler(chartEl, data, options);
+
+	return chartEl;
 }
 
 
 module.exports = {
   charter: charter
 };
-
 },{"../../ugly/util":47,"./common":10,"underscore":"underscore"}],9:[function(require,module,exports){
 
 var _ = require('underscore');
@@ -961,6 +991,66 @@ module.exports = {
 };
 
 },{"../../ugly/util":47,"d3":"d3","numeral":49,"underscore":"underscore"}],11:[function(require,module,exports){
+nv.models.heatmap = function() {
+    "use strict";
+
+    //============================================================
+    // Public Variables with Default Settings
+    //------------------------------------------------------------
+
+    var margin = {top: 0, right: 0, bottom: 0, left: 0}
+        , width = 500
+        , height = 500
+        , getX = function(d) { return d.x }
+        , getY = function(d) { return d.y }
+        , id = Math.floor(Math.random() * 10000) //Create semi-unique ID in case user doesn't select one
+        , duration = 250
+        , dispatch = d3.dispatch('chartClick', 'elementClick', 'elementDblClick', 'elementMouseover', 'elementMouseout', 'renderEnd')
+        ;
+
+
+    //============================================================
+    // chart function
+    //------------------------------------------------------------
+
+    var renderWatch = nv.utils.renderWatch(dispatch);
+
+    function chart(selection) {
+        renderWatch.reset();
+        renderWatch.renderEnd('heatmap immediate');
+        return chart;
+    }
+
+    //============================================================
+    // Expose Public Variables
+    //------------------------------------------------------------
+
+    chart.dispatch = dispatch;
+    chart.options = nv.utils.optionsFunc.bind(chart);
+
+    chart._options = Object.create({}, {
+        // simple options, just get/set the necessary values
+        width:      {get: function(){return width;}, set: function(_){width=_;}},
+        height:     {get: function(){return height;}, set: function(_){height=_;}},
+        x:          {get: function(){return getX;}, set: function(_){getX=_;}},
+        id:         {get: function(){return id;}, set: function(_){id=_;}},
+
+        // options that require extra logic in the setter
+        margin: {get: function(){return margin;}, set: function(_){
+            margin.top    = typeof _.top    != 'undefined' ? _.top    : margin.top;
+            margin.right  = typeof _.right  != 'undefined' ? _.right  : margin.right;
+            margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
+            margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
+        }},
+        y: {get: function(){return getY;}, set: function(_){
+            getY=d3.functor(_);
+        }}
+    });
+
+    nv.utils.initOptions(chart);
+    return chart;
+};
+
 nv.models.heatMapChart = function() {
 	"use strict";
 
@@ -968,40 +1058,33 @@ nv.models.heatMapChart = function() {
     // Public Variables with Default Settings
     //------------------------------------------------------------	
 
-    //var pie = nv.models.pie();
-    //var legend = nv.models.legend().margin({top: 0, right: 0, bottom: 0, left: 0});
+    var heatmap = nv.models.heatmap();
 
     var margin = {top: 30, right: 20, bottom: 20, left: 20}
-    //var legendMargin = {top: 30, right: 20, bottom: 20, left: 20}
     var width = null;
 	var height = null;
     var showLegend = false;
     var color = nv.utils.defaultColor();
-    var tooltips = true;
-    var tooltip = function(key, y, e, graph) {
-    	return '<h3 style="background-color: '
-        	+ e.color + '">' + key + '</h3>'
-            + '<p>' +  y + '</p>';
-        }
     var	state = nv.utils.state();
     var defaultState = null;
     var noData = "No Data Available.";
     var duration = 250;
     var dispatch = d3.dispatch('tooltipShow', 'tooltipHide', 'stateChange', 'changeState','renderEnd');
+    var shortTextLength = 17;
+    var innerMargin = {
+    		top : 120,
+			right : 0,
+			bottom : 100,
+			left : 150
+    };
+    
+    const initialWidth = 960;
+    const initialHeight = 400;
+    const containerWidth = 1024;
 
     //============================================================
     // Private Variables
     //------------------------------------------------------------
-
-    var showTooltip = function(e, offsetElement) {
-    	var tooltipLabel = pie.x()(e.point);
-        var left = e.pos[0] + ( (offsetElement && offsetElement.offsetLeft) || 0 );
-        var top = e.pos[1] + ( (offsetElement && offsetElement.offsetTop) || 0);
-        var y = pie.valueFormat()(pie.y()(e.point));
-        var content = tooltip(tooltipLabel, y, e, chart);
-        nv.tooltip.show([left, top], content, e.value < 0 ? 'n' : 's', null, offsetElement);
-    };
-
     var renderWatch = nv.utils.renderWatch(dispatch);
 
     var stateGetter = function(data) {
@@ -1022,8 +1105,7 @@ nv.models.heatMapChart = function() {
         }
     };
   
-    var shortenText = function(text) {
-    	var length = 17;
+    var shortenText = function(text, length) {
     	if (text.length > length) {
     		text = text.substring(0, length) + '...';
     	}
@@ -1036,25 +1118,26 @@ nv.models.heatMapChart = function() {
 
     function chart(selection) {
     	var _self = this;
+    	this.rendered = false;
     	var _ = require('underscore'); // This doesnt works on top of the file :(((
-    	//console.log('heatMapChart.chart');
-        renderWatch.reset();
-        //renderWatch.models(pie);
 
-        selection.each(function(data) {//TODO: selection.each????
+        renderWatch.reset();
+        renderWatch.models(heatmap);
+
+        selection.each(function(data) {
         	// Get currency for later.
         	var currencySettings = _.find(app.settings.models, function(item) {return item.get('id') === '1'});
         	var selectedCurrency = _.find(currencySettings.get('options'), function(item) {return item.selected === true}).value;
+        	var newShortTextLength = !data[0].values.model.get('showFullLegends') ? shortTextLength : 100;
         	
         	var container = d3.select(this);
             nv.utils.initSVG(container);
 
-            var availableWidth = (width || parseInt(container.style('width'), 10) || 960)
+            var availableWidth = (width || parseInt(container.style('width'), 10) || initialWidth)
                     - margin.left - margin.right;
-            var availableHeight = (height || parseInt(container.style('height'), 10) || 400)
+            var availableHeight = (height || parseInt(container.style('height'), 10) || initialHeight)
                     - margin.top - margin.bottom;
 
-            //chart.update = function() { container.transition().call(chart); }; //comented to avoid adding the chart again.
             chart.container = this;
 
             state.setter(stateSetter(data), chart.update)
@@ -1075,35 +1158,24 @@ nv.models.heatMapChart = function() {
                 }
             }
 
-            //TODO: move these definitions to top.
-            var innerMargin = {
-            		top : 120,
-        			right : 0,
-        			bottom : 100,
-        			left : 150
-            };
         	var cubeSize = 30;
-        	var width = 1024 - innerMargin.left - innerMargin.right;
+        	var width = containerWidth - innerMargin.left - innerMargin.right;
         	var topSectionHeight = 180;
         	var legendSectionHeight = 20;
         	var height = topSectionHeight + (cubeSize * data[0].values.y.length) + legendSectionHeight;
         	var legendElementHeight = 22;
-        	var noColor = '#FFFFFF';
-        	var categories = [{min: -1, max: 0, color: noColor},
-        	                  {min: 0, max: 1, color: "#D05151"},
-        	                  {min: 1, max: 5, color: "#E68787"}, 
-        	                  {min: 5, max: 10, color: "#E4883E"}, 
-        	                  {min: 10, max: 15, color: "#F6B277"}, 
-        	                  {min: 15, max: 20, color: "#ADCD95"}, 
-        	                  {min: 20, max: 101, color: "#7BA05F"}];
+        	const noColor = '#FFFFFF';
+        	var categories = getCategoriesByThreshold(noColor, data[0].values.model);
         	
-        	$(container[0]).attr('height', height).attr('class', 'dash-chart nvd3-svg heatmap-chart');
+        	$(container[0]).css('height', height + 'px').attr('class', 'dash-chart nvd3-svg heatmap-chart');
         	
         	var svg = container
         		.append("g")
-        		.attr("transform", "translate(" + innerMargin.left + "," + innerMargin.top + ")");
+        		.attr("transform", "translate(" + innerMargin.left + "," + innerMargin.top + ")")
+        		.attr("class", "heatmap-main-container");
         	
         	// Add SVG filter for cell highlight.
+        	// For more info about these filters see: http://www.svgbasics.com/filters4.html // http://apike.ca/prog_svg_filter_feColorMatrix.html // http://alistapart.com/article/finessing-fecolormatrix
         	svg.append("defs").append("filter").attr("id", "filterSaturate").append("feColorMatrix").attr("in", "SourceGraphic").attr("type", "saturate").attr("values", "5");
         	svg.append("defs").append("filter").attr("id", "filterLuminanceToAlpha").append("feColorMatrix").attr("in", "SourceGraphic").attr("type", "luminanceToAlpha");
         	svg.append("defs").append("filter").attr("id", "filterBlur").append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "2");
@@ -1115,13 +1187,13 @@ nv.models.heatMapChart = function() {
 				.attr("class", "heatmap-yAxis-container");
         	
         	// Rows.
-        	var yLabels = yAxisLabelsContainer
+        	var yAxisLabels = yAxisLabelsContainer
         		.selectAll(".yLabel")
         		.data(data[0].values.y)
         		.enter()
         		.append("text")
         		.text(function(d) {
-        			return shortenText(d);
+        			return shortenText(d, newShortTextLength);
         		})
         		.attr("x", 0)
         		.attr("y", function(d, i) {
@@ -1136,15 +1208,26 @@ nv.models.heatMapChart = function() {
         			return d;
         		});
         	
+        		// Format "Others" special row if needed.
+        		if (data[0].values.yCount < data[0].values.yTotalCount) {
+        			var self = this;
+        			var data2 = data;
+        			var textElement = $(container[0]).find('.yLabel').last();
+        			$(textElement).attr("class", function(d, i) {
+        				return $(textElement).attr('class') + ' legend-others';
+        			});
+        		}
+        	
         		// Add Totals special row.
         		yAxisLabelsContainer.append("text")
-        			.text(app.translator.translateSync("TOTALS"))
+        			.text("TOTALS")
         			.attr("x", 0)
         			.attr("y", (data[0].values.y.length * cubeSize))
         			.attr("class", "yLabel mono axis nv-series heatmap-totals")
         			.style("text-anchor", "end")
         			.style("font-weight", "bold")
-            		.attr("transform", "translate(-6," + cubeSize / 1.5 + ")");
+            		.attr("transform", "translate(-6," + cubeSize / 1.5 + ")")
+            		.attr('data-i18n', 'amp.dashboard:chart-heatmap-totals');
 
         		// Columns container.
         		var xAxisLabelsContainer = svg
@@ -1153,19 +1236,20 @@ nv.models.heatMapChart = function() {
         			.attr("class", "heatmap-xAxis-container");
 
         		// Columns
-        		var yAxisLabels = xAxisLabelsContainer
+        		// Notice in transform functions the order is very important if you have to apply more than one, like translate and rotate.
+        		// cubeSize is where we define how big are the cubes so if we change it in the future the chart will resize correctly.
+        		var xAxisLabels = xAxisLabelsContainer
         			.selectAll(".xLabel")
         			.data(data[0].values.x)
         			.enter()
         			.append("text")
         			.text(function(d) {
-        				return shortenText(d);
+        				return shortenText(d, newShortTextLength);
         			})
         			.attr("x", function(d, i) {
         				return i * cubeSize;
         			})
         			.attr("y", 0)
-        			/*.style("text-anchor", "middle")*/
         			.attr("transform", function(d, i) {
         				return "rotate(270, " + (cubeSize * i) + ", 0)";
         			})
@@ -1178,14 +1262,15 @@ nv.models.heatMapChart = function() {
         		
         		// Add Totals special column.
         		xAxisLabelsContainer.append("text")
-        			.text(app.translator.translateSync("TOTALS"))
+        			.text("TOTALS")
         			.attr("x", cubeSize * data[0].values.x.length)
         			.attr("y", 0)
         			.attr("class", "xLabel mono axis nv-series heatmap-totals")
         			.style("font-weight", "bold")
             		.attr("transform", function(d, i) {
         				return "rotate(270, " + (cubeSize * data[0].values.x.length) + ", 0)";
-        			});
+        			})
+        			.attr('data-i18n', 'amp.dashboard:chart-heatmap-totals');
 
         		// Cubes
         		var cubesContainer = svg
@@ -1205,10 +1290,37 @@ nv.models.heatMapChart = function() {
         		
         		// Add percentage legends.
         		createLegends(svg, data, cubeSize, categories, legendElementHeight);
+        		
+        		app.translator.translateDOM(svg[0]);
+        		
+        		// Recalculate margins if we are showing the full legends.
+            	if (data[0].values.model.get('showFullLegends')) {        		
+            		var top = svg.select('.heatmap-xAxis-container').node().getBBox().height;
+            		var left = svg.select('.heatmap-yAxis-container').node().getBBox().width + 25;
+            		svg.attr("transform", "translate(" + left + "," + top + ")");
+            	}
         });
-
-        renderWatch.renderEnd('pieChart immediate');
+        
+        renderWatch.renderEnd('heatmap immediate');
         return chart;
+    }
+    
+    function getCategoriesByThreshold(noColor, model) {
+    	var categories = new Array();
+    	categories.push({min: -1, max: 0, color: noColor});
+    	var colors = model.get('heatmap_config').models[0].get('amountColors');
+    	var i = 1;
+    	for (var property in colors) {
+    	    if (colors.hasOwnProperty(property)) {
+    	    	categories.push({min: parseInt(property), color: colors[property], max: null});
+    	    	if (i > 1) {
+    	    		categories[i - 1].max = parseInt(property);
+    	    	}
+    	    	i++;
+    	    }
+    	}
+    	categories[i - 1].max = 101;
+    	return categories;
     }
     
     function createLegends(svg, data, cubeSize, categories, legendElementHeight) {
@@ -1216,12 +1328,12 @@ nv.models.heatMapChart = function() {
 			.append("g")
 			.attr("transform", "translate(0, " + (((data[0].values.y.length + 1) * cubeSize) + 10) + ")")
 			.attr("class", "heatmap-legends-container");
-    	var legendsPool = [app.translator.translateSync("Less than 1%"),
-    	                   app.translator.translateSync("Between 1% and <5%"),
-    	                   app.translator.translateSync("Between 5% and <10%"),
-    	                   app.translator.translateSync("Between 10% and <15%"),
-    	                   app.translator.translateSync("Between 15% and <20%"),
-    	                   app.translator.translateSync("More than 20%")];   	
+    	var legendsPool = [app.translator.translateSync("amp.dashboard:chart-heatmap-legend-less-than") + " " + categories[1].max + "%",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[2].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[2].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[3].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[3].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[4].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[4].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[5].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[5].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-more-than") + " " + categories[6].min + "%"];
     	var maxLegendTextWidth = 0;
     	for (var i = 0; i < legendsPool.length; i++) {
     		var auxWidth = calculateTextWidth(legendsPool[i]);
@@ -1246,16 +1358,17 @@ nv.models.heatMapChart = function() {
 				.attr('font-size', '11px')
 				.attr("y", 15)
 				.attr("x", ((i * maxLegendTextWidth) + ((maxLegendTextWidth - calculateTextWidth(legendsPool[i])) / 2)))
-				.html(legendsPool[i]);
+				.text(legendsPool[i]); // Why "text" instead of "html", because it doesnt work on IE.
     	}
     	
     	legendsContainer.append("text")
-			.text(app.translator.translateSync("LEGENDS"))
+			.text("LEGENDS")
 			.attr("x", -6)
 			.attr("y", 15)
 			.attr("class", "yLabel mono axis nv-series heatmap-totals")
 			.style("text-anchor", "end")
-			.style("font-weight", "bold");
+			.style("font-weight", "bold")
+			.attr('data-i18n', 'amp.dashboard:chart-heatmap-legends');
     }
     
     function createCube(cubesContainer, data, cubeSize, noColor, categories) {
@@ -1284,6 +1397,7 @@ nv.models.heatMapChart = function() {
 			.attr("y", ((data.y - 1) * cubeSize) + 19)
 			.attr("class", "heatmap-cell")
 			.attr("x", function() {
+				// The "offsets" we add on each return call are tied to the current font family and size, so if we change them we might need to change the offsets too.
 				var d = data;
 				var auxVal = d.value;
 				if (auxVal > 0 && auxVal < 1) {
@@ -1295,7 +1409,8 @@ nv.models.heatMapChart = function() {
 				} else {
 					return ((d.x - 1) * cubeSize) + 5;
 				}					
-			}).html(function() {
+			}).text(function() {
+				// Cant use "html" function on IE.
 				var d = data;
 				var auxVal = d.value;
 				if (auxVal > -1) {
@@ -1316,27 +1431,14 @@ nv.models.heatMapChart = function() {
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']")).attr("filter", "url(#filterDarken)");
 				// Highlight this cell.
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']" + "[data-x='"+ (selfData.x - 1) + "']")).removeAttr("filter");
-			}).on("mouseover", function(obj) {				
-				//console.log(selfData);
 			});
+		
 		if (data.tooltip) {
 			text.attr('data-title', data.tooltip)
 				.attr("class", "nv-series heatmap-cell");
 		}
     }
-    
-    function calculateColor(value, colors) {
-    	var color = "";
-    	var cutPoint = 100 / colors.length;
-    	for (var i = 0; i < colors.length ; i++) {
-    		if ((value >= (i * cutPoint)) && (value < ((i + 1) * cutPoint))) {
-    			color = colors[i];
-    			break;
-    		}
-    	}    	
-    	return color;
-    }
-    
+       
     function calculateColorFromCategories(value, categories, noColor) {
     	var color = noColor;
     	for (var i = 0; i < categories.length; i++) {
@@ -1356,62 +1458,36 @@ nv.models.heatMapChart = function() {
     }
 
     //============================================================
-    // Event Handling/Dispatching (out of chart's scope)
-    //------------------------------------------------------------
-
-    /*dispatch.on('elementMouseover.tooltip', function(e) {
-        e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
-        dispatch.tooltipShow(e);
-    });
-
-    dispatch.on('tooltipShow', function(e) {
-        if (tooltips) showTooltip(e);
-    });
-
-    dispatch.on('tooltipHide', function() {
-        if (tooltips) nv.tooltip.cleanup();
-    });*/
-
-    //============================================================
     // Expose Public Variables
     //------------------------------------------------------------
 
     // expose chart's sub-components
-    chart.legend = {};/*legend;*/
+    chart.legend = {};
     chart.dispatch = dispatch;
-    chart.pie = {};/*pie;*/
+    chart.heatmap = heatmap;
     chart.options = nv.utils.optionsFunc.bind(chart);
+    chart.shortTextLength = function(_) {
+        return shortTextLength;
+    };
 
     // use Object get/set functionality to map between vars and chart functions
     chart._options = Object.create({}, {    	
         // simple options, just get/set the necessary values
         noData:         {get: function(){return noData;},         set: function(_){noData=_;}},
-        tooltipContent: {get: function(){return tooltip;},        set: function(_){tooltip=_;}},
-        tooltips:       {get: function(){return tooltips;},       set: function(_){tooltips=_;}},
-        showLegend:     {get: function(){return showLegend;},     set: function(_){showLegend=_;}},
         defaultState:   {get: function(){return defaultState;},   set: function(_){defaultState=_;}},
         // options that require extra logic in the setter
-        color: {get: function(){return color;}, set: function(_){
-            color = _;
-            /*legend.color(color);
-            pie.color(color);*/
-        }},
         duration: {get: function(){return duration;}, set: function(_){
             duration = _;
             renderWatch.reset(duration);
         }},
+        color: {},
         margin: {get: function(){return margin;}, set: function(_){
             margin.top    = _.top    !== undefined ? _.top    : margin.top;
             margin.right  = _.right  !== undefined ? _.right  : margin.right;
             margin.bottom = _.bottom !== undefined ? _.bottom : margin.bottom;
             margin.left   = _.left   !== undefined ? _.left   : margin.left;
         }},
-        /*legendMargin: {get: function(){return legendMargin;}, set: function(_){
-        	legendMargin.top    = _.top    !== undefined ? _.top    : legendMargin.top;
-        	legendMargin.right  = _.right  !== undefined ? _.right  : legendMargin.right;
-        	legendMargin.bottom = _.bottom !== undefined ? _.bottom : legendMargin.bottom;
-        	legendMargin.left   = _.left   !== undefined ? _.left   : legendMargin.left;
-        }},*/
+        tooltipContent: {}
     });
     
     chart.height = function(_) {
@@ -1420,7 +1496,7 @@ nv.models.heatMapChart = function() {
         return chart;
     };
     
-    //nv.utils.inheritOptions(chart, pie);
+    nv.utils.inheritOptions(chart, heatmap);
     nv.utils.initOptions(chart);
     return chart;
 };
@@ -2606,8 +2682,9 @@ var common = require('../charts/common');
 module.exports = ChartModel.extend({
 
 	defaults: {
-	    xLimit: 31,
-	    yLimit: 10,
+	    xLimit: 30, //This is the max number of elements we will see in the x axis.
+	    yLimit: 10, //This is the max number of elements we will see in the y axis.  
+	    originalYLimit: 10, //This is the original max number of elements for the y axis (used to revert "others").
 	    title: '',
 	    name: '',
 	    bigN: 0,
@@ -2615,7 +2692,9 @@ module.exports = ChartModel.extend({
 	    values: [],
 	    chartType: 'fragmentation',
 	    swapAxes: false,
-	    chartDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet a arcu vel porttitor. Curabitur dolor ante, faucibus eu congue et, egestas ut tellus.'
+	    heatmap_type: null,
+	    showResetButton: false,
+	    showFullLegends: false
 	},
 
 	_prepareTranslations: function() {
@@ -2633,9 +2712,21 @@ module.exports = ChartModel.extend({
 	parse: function (data) {
 		var self = this;
 		self.values = new Array();
+		if (_.isUndefined(data.xDataSet) || _.isUndefined(data.yDataSet)) {
+			// The EP for heatmaps is different than the other charts because it returns an empty object, so we set explicitly some fields to empty value. 
+			data.yDataSet = [];
+			data.xDataSet = [];
+			data.matrix = [];
+			data.xTotals = 0;
+			data.yTotals = 0;
+			data.xCount = 0;
+			data.yCount = 0;
+			data.xTotalCount = 0;
+			data.yTotalCount = 0;
+		}		
 		self.values.x = data.xDataSet;
 		self.values.y = data.yDataSet;
-		for (var i = 0; i < data.yDataSet.length; i++) {					
+		for (var i = 0; i < data.yDataSet.length; i++) {
 			for (var j = 0; j < data.xDataSet.length; j++) {
 				if (data.matrix[i] !== null) {
 					var value = data.matrix[i][j] !== null ? data.matrix[i][j] : {p: -1, amount: '0'};
@@ -2648,7 +2739,6 @@ module.exports = ChartModel.extend({
 		}
 				
 		// Normalize values.
-		// TODO: recalculate column percentages to sum 100%.
 		self.values = this.normalizeValues(self.values);
 		
 		// Add totals data.
@@ -2656,6 +2746,11 @@ module.exports = ChartModel.extend({
 		self.values.yPTotals = this.normalizeValues(data.yPTotals);
 		self.values.xTotals = data.xTotals;
 		self.values.yTotals = data.yTotals;
+		self.values.xCount = data.xCount;
+		self.values.yCount = data.yCount;
+		self.values.xTotalCount = data.xTotalCount;
+		self.values.yTotalCount = data.yTotalCount;	
+		self.values.model = this;
 
 		if (!this.localizedLookup) {
 			// we can't procede if we don't have translations yet :(
@@ -2664,32 +2759,39 @@ module.exports = ChartModel.extend({
 		}
 		var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
 
-		data.processed = [{values: this.values}]; //TODO: processed???
+		data.processed = [{values: this.values}];
 		data.values = this.values;
-		//console.log(data);
+		
+		if (data.yCount > this.get('originalYLimit') + 1) {
+			this.set('showResetButton', true);
+		} else {
+			this.set('showResetButton', false);
+		}
+		
 		return data;
 	},
 	
 	normalizeValues: function(values) {
-		for (var i = 0; i < values.length; i++) {
-			var auxValue = values[i].value !== undefined ? values[i].value : values[i]; 
-			if (auxValue > 0 && auxValue < 1) {
-				//self.values[i].value = 1;
-			} else {
-				if (values[i].value !== undefined) {
-					values[i].value = Math.floor(auxValue);
+		if (_.isUndefined(values) === false) {
+			for (var i = 0; i < values.length; i++) {
+				var auxValue = values[i].value !== undefined ? values[i].value : values[i];
+				if (auxValue > 0 && auxValue < 1) {
+					//Do nothing;
 				} else {
-					values[i] = Math.floor(auxValue);
+					if (values[i].value !== undefined) {
+						values[i].value = Math.floor(auxValue);
+					} else {
+						values[i] = Math.floor(auxValue);
+					}
 				}
-			}			
+			}
 		}
 		return values;
 	},
 
 	fetch: function(options) {
-		//TODO: add code for saved dashboards!!!		
 		var self = this;
-		options = _.defaults(options || {}, { url: this.url + '?' + param(this.pick('xLimit')) });
+		options = _.defaults(options || {}, { url: this.url });
 		
 		// Process params from heat-map/configs, in that EP we have defined each heatmap.
 		var configs = this.get('heatmap_config').models[0];
@@ -2704,8 +2806,7 @@ module.exports = ChartModel.extend({
 			xColumn = auxAxis;
 		}
 		
-		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn}; 		
-		//options.data = JSON.stringify($.extend({}, paramsForHeatMap, JSON.parse(options.data)));
+		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn, yCount: self.get('yLimit')}; 		
 		paramsForHeatMap.filters =  JSON.parse(options.data);
 		options.data = JSON.stringify(paramsForHeatMap);
 
@@ -3083,7 +3184,7 @@ module.exports = BackboneDash.Model.extend({
 	    	} else {
 	    		console.info('Saved currency was deleted.');
 	    		// Select default currency.
-	    		newOpt = _(this.attributes.originalAllCurrencies).findWhere({id: _.find(app.settings.models, function(item) {return item.id === "1";}).get('defaultId')});
+	    		newOpt = _(this.attributes.originalAllCurrencies).findWhere({id: _.find(self.app.settings.models, function(item) {return item.id === "1";}).get('defaultId')});
 	    		newOpt.selected = true;
 	    	}
     	}
@@ -3091,8 +3192,8 @@ module.exports = BackboneDash.Model.extend({
 
     // If we are changing the calendar --> Update list of currencies.
     if (this.attributes.id === "2") {
-    	var currenciesForThisCalendar = _.find(_.find(app.settings.models, function(item) {return item.id === "calendarCurrencies";}).get('options'), function(item2) {return item2.id === optionId}).value.split(',');
-    	var allCurrencies = _.find(app.settings.models, function(item) {return item.id === '1'});
+    	var currenciesForThisCalendar = _.find(_.find(self.app.settings.models, function(item) {return item.id === "calendarCurrencies";}).get('options'), function(item2) {return item2.id === optionId}).value.split(',');
+    	var allCurrencies = _.find(self.app.settings.models, function(item) {return item.id === '1'});
     	// 'options' is linked to the calendar select, now we clean it one by one (assigning to [] will break the view).
     	for (var i = allCurrencies.get('options').length - 1; i >= 0; i--) {
     		allCurrencies.get('options').splice(i, 1);
@@ -3489,52 +3590,18 @@ module.exports = ChartViewBase.extend({
   
   modalView: undefined,
   
-  //Dont try to call initialize here because it throws a 'Module initialization error' :((
-  /*initialize: function(options) {
-	  this.modalView = new ModalView({ app: options.app, collection: this.model.collection });
-  },*/
-
-  downloadChartOptions: {
-    trimLabels: false
-  },
-
-  getTTContent: function(context) {
-	var ofTotal = app.translator.translateSync("amp.dashboard:of-total","of total");
-	var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
-    var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
-    return {tt: {
-      heading: context.x.raw,
-      bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
-      footerText: '<b>' + d3.format('%')(context.y.raw / this.model.get('total')) + '</b>&nbsp<span>' + ofTotal + '</span>'
-    }};
-  },
-
-  chartClickHandler: function(context) {	  
-    // clicking on the "others" bar loads five more.
-    if (context.data[context.series.index]
-               .values[context.x.index].special === 'others') {
-      this.model.set('limit', this.model.get('limit') + 5);      
-        this.model.set('big', true);      
-    } else if (this.model.get('showCategoriesInfo') === true) {    	
-    	this.modalView = new ModalView({ app: app, context: context, model: this.model });
-    	this.openInfoWindow();    	    	
-    }
+  chartClickHandler : function(context) {
+	  if (context.y.fmt === app.translator.translateSync('amp.dashboard:chart-heatmap-others')) {
+		  this.model.set('yLimit', this.model.get('yLimit') + 10);
+		  this.updateData();
+	  }
   },
   
-  openInfoWindow: function() {
-	  var specialClass = 'dash-settings-modal';
-	  this.app.modal('Category Detail', {
-		  specialClass: specialClass,
-	      bodyEl: this.modalView.render().el,
-	      i18nTitle: 'amp.dashboard:dashboard-chart-tops-info-modal'
-	  });	    
-	  // Translate modal popup.
-	  app.translator.translateDOM($("." + specialClass));
+  downloadChartOptions: {
+    trimLabels: false
   }
 
 });
-
 },{"./chart-tops-info-modal":31,"./chart-view-base":33,"d3":"d3","underscore":"underscore"}],31:[function(require,module,exports){
 
 var _ = require('underscore');
@@ -3635,10 +3702,13 @@ module.exports = ChartViewBase.extend({
 	var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
     var self = this;
     var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+    var percentage = context.y.raw > 0 ?
+        d3.format('%')(context.y.raw / this.model.get('totalPositive')) + '</b>&nbsp<span>' + ofTotal:
+        "";
     return {tt: {
       heading: context.x.raw,
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
-      footerText: '<b>' + d3.format('%')(context.y.raw / this.model.get('total')) + '</b>&nbsp<span>' + ofTotal + '</span>'
+      footerText: '<b>' + percentage + '</span>'
     }};
   },
 
@@ -3675,7 +3745,7 @@ var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
-var template = _.template("<style>\nrect.bordered {\n\tstroke: #E6E6E6;\n\tstroke-width: 2px;\n}\n\ntext.mono {\n\tfont-size: 9pt;\n\tfont-family: Arial;\n\tfill: #000;\n}\n\ntext.axis-workweek {\n\tfill: #000;\n}\n\ntext.axis-worktime {\n\tfill: #000;\n}\n</style>\n\n<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <% if (model.get('showTotal') === true) { %>\n\t      <span class=\"pull-right big-number\">\n\t        <b class=\"chart-total\"></b>\n\t        <span class=\"chart-currency\"></span>\n\t      </span>\n      <% } %>\n      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %>\n      \t<% if (model.get('chartType') === 'fragmentation' && model.get('chartDescription') !== '') { %>\n      \t\t<img src=\"/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png\" class=\"question_mark nv-series\" data-title=\"<%= model.get('chartDescription') %>\">\n      \t<% } %>\n      </h2>\n    </div>\n\t\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                heatmap: 'stats',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\" <%= model.get('disableResize') ? 'disabled' : ''%>>\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n      \n      <% if (model.get('chartType') === 'fragmentation') { %>\n\t\t<form class=\"form-inline dash-form dash-xaxis-options\" role=\"form\">\n        \t<select class=\"form-control like-btn-sm xaxis-options\">\n            \t<option>...</option>\n            \t<!-- gets populated after settings load -->\n          \t</select>\n          \t<span class=\"cheat-lineheight\"></span>\n        </form>\n        <button type=\"button\" class=\"btn btn-sm btn-default heatmap-switch\">\n            <span data-i18n=\"amp.dashboard:chart-swap-axes\">Swap Axes</span>\n        </button>\n\t <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>");
+var template = _.template("<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <% if (model.get('showTotal') === true) { %>\n\t      <span class=\"pull-right big-number\">\n\t        <b class=\"chart-total\"></b>\n\t        <span class=\"chart-currency\"></span>\n\t      </span>\n      <% } %>\n      <div>\n\t      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\n\t      <% if (model.get('chartType') === 'fragmentation') { %>\n\t      \t<% var help_icon_text = app.translator.translateSync('amp.dashboard:chart-heatmap-help-text-' + model.get('heatmap_type'));%>\n\t      \t<img src=\"/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png\" class=\"question_mark nv-series\" data-title=\"<%= help_icon_text %>\">\n\t      <% } %>\n      </div>\n    </div>\n\t\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n      <div class=\"alert alert-warning negative-values-message\" role=\"alert\">\n          <strong data-i18n=\"amp.dashboard:negatives-values\">Negative values are not represented in this chart.</strong><br>\n          <span data-i18n=\"amp.dashboard:negatives-values-parag\">Please switch to bar chart or table view to view all values.</span>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                heatmap: 'stats',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\" <%= model.get('disableResize') ? 'disabled' : ''%>>\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n      \n      <% if (model.get('chartType') === 'fragmentation') { %>\n\t\t<form class=\"form-inline dash-form dash-xaxis-options\" role=\"form\">\n        \t<select class=\"form-control like-btn-sm xaxis-options\">\n            \t<option>...</option>\n            \t<!-- gets populated after settings load -->\n          \t</select>\n          \t<span class=\"cheat-lineheight\"></span>\n        </form>\n        <button type=\"button\" class=\"btn btn-sm btn-default heatmap-switch\">\n            <span data-i18n=\"amp.dashboard:chart-swap-axes\">Swap Axes</span>\n        </button>\n\t <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>");
 
 
 var adjOptTemplate = _.template('<option value="<%=opt.id%>" ' +
@@ -3713,6 +3783,8 @@ module.exports = BackboneDash.View.extend({
     this.rendered = false;
     this._stateWait = new Deferred();
     this.message = null;
+    this.showChartPromise = new Deferred();
+    this.renderedPromise = new Deferred();
 
     if (this.app.savedDashes.length) {
       // a bit sketch....
@@ -3729,7 +3801,7 @@ module.exports = BackboneDash.View.extend({
     this.listenTo(this.model, 'change:view', this.render);
 
     this.app.state.register(this, 'chart:' + this.model.url, {
-      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'xAxisColumn', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements','seriesToExclude'),
+      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'xAxisColumn', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements','seriesToExclude', 'xLimit', 'yLimit', 'swapAxes'),
       set: _(this.model.set).bind(this.model),
       empty: null
     });
@@ -3741,6 +3813,7 @@ module.exports = BackboneDash.View.extend({
 
   render: function() {
 	var self = this;
+	this.renderedPromise = new Deferred();
     var renderOptions = {
       views: this.chartViews,
       model: this.model,
@@ -3797,6 +3870,7 @@ module.exports = BackboneDash.View.extend({
     }
 
     this.app.translator.translateDOM(this.el);
+    this.renderedPromise.resolve();
     return this;
   },
 
@@ -3804,14 +3878,15 @@ module.exports = BackboneDash.View.extend({
 	if(this.app.rendered !== true) { return; }  
     if (!this.rendered) { return; }  // short-circuit on early filters apply event
     if (this._stateWait.state() === 'pending') {  // short-circuit until we have state
-      this.message.html('Loading saved settings...').attr('data-i18n', 'amp.dashboard:chart-loading-saved-settings');
+      this.message.html('Loading...').attr('data-i18n', 'amp.dashboard:chart-loading-saved-settings');
       app.translator.translateDOM($('.chart-container'));
       //this.message.fadeIn(100);
       return;
     }
 
+    this.showChartPromise = new Deferred(); // We need to reinitialize this promise.
     this.chartContainer.empty();
-    this.message.html('<span data-i18n="amp.dashboard:loading">...</span>').fadeIn(100);
+    this.message.html('<span data-i18n="amp.dashboard:loading">Loading...</span>').fadeIn(100);
 
     this.app.translator.getTranslations()
       .done(_(function() {  // defer here to prevent a race with translations loading
@@ -3835,26 +3910,62 @@ module.exports = BackboneDash.View.extend({
   },
 
   showChart: function() {
+	  this.showNegativeAlert();
+	  
     // TODO: why are we triggering twice on load???
     if (!this.model.hasData()) {
       this.message.html('No Data Available').attr('data-i18n','amp.dashboard:chart-no-data-available');
       app.translator.translateDOM($('.chart-container'));
       this.resetNumbers();
       return;
-    }
+    }    
     var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions(), this.model);
     this.chartContainer.html(chart.el);
 
-    if (this.model.get('view') !== 'heatmap') {
+    if (this.model.get('chartType') !== 'fragmentation') {
     	this.renderNumbers();
     }
-    var limit = this.model.get('limit');
-    if (limit) {
-      this.$('.reset')[limit === this.model.defaults.limit ? 'hide' : 'show']();
+    
+    if (this.model.get('chartType') !== 'fragmentation') {
+	    var limit = this.model.get('limit');
+	    if (limit) {
+	      this.$('.reset')[limit === this.model.defaults.limit ? 'hide' : 'show']();
+	    }
+    } else {
+        if (this.model.get('showResetButton')) {
+        	this.$('.reset').show();
+        } else {
+        	this.$('.reset').hide();
+        }
     }
     this.message.stop().fadeOut(200);
     
     this.beautifyLegends(this);
+    
+    if (this.model.get('view') === 'heatmap') {
+    	this.handleHeatmapClicks();
+    }
+        
+    this.showChartPromise.resolve();
+  },
+  
+  handleHeatmapClicks: function() {
+	  var self = this;
+	  var others = this.$(".legend-others");
+	  if (others) {
+		  $(others).on('click', function(evt) {
+			  self.model.set('yLimit', self.model.get('yLimit') + self.model.get('originalYLimit'));
+			  self.updateData();
+		  });
+	  }
+  },
+  
+  showNegativeAlert: function() {
+    if(this.model.get('view') === 'pie' && _.find(this.model.get('processed')[0].values, function(item) { return item.y < 0;})) {
+      this.$('.negative-values-message').show();
+    } else {
+      this.$('.negative-values-message').hide();
+    }
   },
 
   getChartOptions: function() {	  
@@ -3895,7 +4006,12 @@ module.exports = BackboneDash.View.extend({
   },
 
   resetLimit: function() {
-    this.model.set('limit', this.model.defaults.limit);
+	  if (this.model.get('chartType') === 'fragmentation') {
+		  this.model.set('yLimit', this.model.get('originalYLimit'));
+		  this.updateData();
+	  } else {
+		  this.model.set('limit', this.model.defaults.limit);
+	  }
   },
 
   changeAdjType: function(e) {
@@ -3975,7 +4091,7 @@ module.exports = BackboneDash.View.extend({
 		  if (self.model.get('view') !== 'heatmap') {
 			  if(hasValues && !hasProcessed) {
 				  // Top charts.
-				  if(self.model.get('values')[i] != undefined) {
+				  if(self.model.get('values')[i] !== undefined) {
 					  $(elem).data('data-title', self.model.get('values')[i].name);
 				  } else {
 					// This the last legend "Others" (doesnt come in the data).
@@ -3983,7 +4099,7 @@ module.exports = BackboneDash.View.extend({
 				  }
 			  } else if(hasProcessed) {
 				  // Aid Predictability charts and Funding Type charts.
-				  if(self.model.get('processed')[i] != undefined) {
+				  if(self.model.get('processed')[i] !== undefined) {
 					  // The extra check is for FT charts that have more legends (grouped, stacked, etc).
 					  $(elem).data('data-title', self.model.get('processed')[i].key);
 				  }
@@ -4123,8 +4239,10 @@ var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
-var template = _.template("<style>\nrect.bordered {\n\tstroke: #E6E6E6;\n\tstroke-width: 2px;\n}\n\ntext.mono {\n\tfont-size: 9pt;\n\tfont-family: Arial;\n\tfill: #000;\n}\n\ntext.axis-workweek {\n\tfill: #000;\n}\n\ntext.axis-worktime {\n\tfill: #000;\n}\n</style>\n\n<h4 data-i18n=\"amp.dashboard:download-preview\">Preview:</h4>\n\n<!-- This 'modal' div fixes AMP-19525: In FF when the chart is drawn (for less than a second) in 'svg-wrap', sometimes the mouse cursor is over one of the bars and triggers the tooltip,\nthat process is not fully performed thus resulting in incomplete html which is rejected by the browser :(  -->\n<div class=\"modal-preview-area\">\n</div>\n<div class=\"preview-area\">\n\t<div class=\"svg-wrap hidden\">\n  \t</div>\n  \t<div class=\"canvas-wrap hidden\">\n  \t</div>\n  \t<div class=\"table-wrap hidden\">\n  \t</div>\n</div>\n\n<div class=\"text-center\">\n  <a class=\"btn btn-success download-chart disabled\">\n    <span class=\"glyphicon glyphicon-download\"></span>\n    <span data-i18n=\"amp.dashboard:download-rendering\" class=\"word\">Rendering...</span>\n  </a>\n</div>\n");
+var template = _.template("<h4 data-i18n=\"amp.dashboard:download-preview\">Preview:</h4>\n\n<!-- This 'modal' div fixes AMP-19525: In FF when the chart is drawn (for less than a second) in 'svg-wrap', sometimes the mouse cursor is over one of the bars and triggers the tooltip,\nthat process is not fully performed thus resulting in incomplete html which is rejected by the browser :(  -->\n<div class=\"modal-preview-area\">\n</div>\n<div class=\"preview-area\">\n\t<div class=\"svg-wrap hidden\">\n  \t</div>\n  \t<div class=\"canvas-wrap hidden\">\n  \t</div>\n  \t<div class=\"table-wrap hidden\">\n  \t</div>\n</div>\n\n<div class=\"text-center\">\n  <a class=\"btn btn-success download-chart disabled\">\n    <span class=\"glyphicon glyphicon-download\"></span>\n    <span data-i18n=\"amp.dashboard:download-rendering\" class=\"word\">Rendering...</span>\n  </a>\n</div>\n");
 
+var previousXLimit = null;
+var previousYLimit = null;
 
 module.exports = BackboneDash.View.extend({
 
@@ -4137,6 +4255,7 @@ module.exports = BackboneDash.View.extend({
 				"Planned Expenditures": "amp.dashboard:ftype-planned-expenditures"
 			    },
   initialize: function(options) {
+	var self = this;
     this.app = options.app;
     var valuesLength = this.model.get('values') ? this.model.get('values').length : 0;
     var height = util.calculateChartHeight(valuesLength, true);
@@ -4145,38 +4264,71 @@ module.exports = BackboneDash.View.extend({
       width: $('.container').width(),	// sync with css!!!
       trimLabels: false,
       nvControls: false      
-    });    
+    });
+    
+    // Heatmaps export need to show all data at once so we force the x/y limits and re-render the chart.
+    if (this.model.get('chartType') === 'fragmentation') {
+	    previousXLimit = this.model.get('xLimit');
+	    previousYLimit = this.model.get('yLimit');
+	    this.model.set('yLimit', -1);
+	    this.model.set('xLimit', -1);
+	    this.model.set('showFullLegends', true);
+	    var chart = _.find(this.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
+	    chart.render();
+    }
   },
 
   render: function() {
-    this.$el.html(template());
-
-    if (this.model.get('view') === 'table') {
-      this.renderCSV(this.$('.preview-area .table-wrap').removeClass('hidden'));
-    } else {
-    	// Here we will define an interval that will check periodically if the bootstrap modal is fully rendered.
-    	// In that moment the interval is finished and the chart is rendered.
-    	var self = this;
-    	var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.
-    	var interval = window.setInterval(function() {
-    		if ($('.dash-download-modal').closest('.in').length > 0) {
-    			window.clearInterval(interval);
-    			nv.tooltip.cleanup();
-    			if (rendered === false) {
-    				rendered = true;
-    				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
-    						self.$('.preview-area .canvas-wrap'));
-    			}
-    		}
-    	}, 100);
-    }
+	var self = this;
+    this.$el.html(template());   
+    var chart = _.find(self.app.view.charts.chartViews, function(item) {return item.model.get('name') === self.model.get('name')});
+    
+	// Here we will define an interval that will check periodically if the bootstrap modal is fully rendered.
+	// In that moment the interval is finished and the chart is rendered.
+	var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.	    	
+	var interval = window.setInterval(function() {
+		if ($('.dash-download-modal').closest('.in').length > 0) {
+			window.clearInterval(interval);
+			// Wait for the chart in the dashboard page to be fully rendered, this has impact only on heatmap charts, on the rest is transparent.
+			$.when(chart.renderedPromise, chart.showChartPromise).done(function() {
+	    		if (self.model.get('chartType') === 'fragmentation') {
+	    			// We add an event for heatmaps to re-draw the original chart.
+	    		    $('.dash-download-modal').closest('.in').on('hide.bs.modal', function() {
+	    		    	self.model.set('yLimit', previousYLimit);
+	    		    	self.model.set('xLimit', previousXLimit);
+	    		    	self.model.set('showFullLegends', false);
+	    		    	chart.render();
+	    		    });
+	    		}
+			    if (self.model.get('view') === 'table') {
+			    	self.renderCSV(self.$('.preview-area .table-wrap').removeClass('hidden'));
+			    } else {
+			        nv.tooltip.cleanup();
+			        if (rendered === false) {
+			        	rendered = true;
+			        	self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
+			        		self.$('.preview-area .canvas-wrap'), chart);
+			        }
+			    }
+			});
+		}
+    }, 100);
+    
     return this;
   },
 
-  renderChart: function(svgContainer, canvasContainer) {
+  renderChart: function(svgContainer, canvasContainer, chart) {
+	var self = this;
     if (_(this.app.browserIssues).findWhere({feature: 'canvas'})) {
       this.app.viewFail(this, 'Chart export requires a modern web browser');
     }
+    
+    if (self.model.get('chartType') === 'fragmentation') {
+    	var svg = $($($(chart)[0].el).find("svg"))[0].getBBox();
+	    this.dashChartOptions.height = svg.height + 100;
+	    this.dashChartOptions.width = svg.width + 80;
+    }
+        
     var view = this.model.get('view'),
         data = this.model.get('processed'),
         canvas = document.createElement('canvas'),
@@ -4196,12 +4348,25 @@ module.exports = BackboneDash.View.extend({
       $('.modal-preview-area').remove();
       this.makeDownloadable(img.src, 'chart', '.png');
     });
-
+    
+    // Scale the modal correctly for heatmaps.
+    if (self.model.get('chartType') === 'fragmentation') {
+    	var modal = $('.dash-download-modal').closest('.in').find('.dash-download-modal');
+    	if ($(svgContainer).width() > $(modal).width()) {
+    		$(modal).find('.preview-area').css('max-width','90%');
+        	$(modal).closest('.in').find('.preview-area').css('overflow','auto');
+    	}
+    	if ($(svgContainer).height() > $(window).height()) {
+    		$(modal).find('.preview-area').css('max-height', ($(window).height() - 270) + 'px');
+        	$(modal).closest('.in').find('.preview-area').css('overflow','auto');
+    	}
+    }
   },
 
   prepareCanvas: function(canvas, h, w) {
 	var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+	var currency = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')});
+    var currencyName = currency !== undefined ? currency.value : '';
     var ctx = canvas.getContext('2d'),
     	moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + currencyName,
         adjType = this.model.get('adjtype');    
@@ -4227,10 +4392,15 @@ module.exports = BackboneDash.View.extend({
     ctx.fillText(this.model.get('title').toUpperCase(), 10, 10 + 22);
     // what money are we talking about?
     ctx.fillStyle = '#333';
-    ctx.textAlign = 'right';
-    ctx.fillText(moneyContext, w - 10, 10 + 22);
-    ctx.textAlign = 'left';  // reset it
-
+    if (self.model.get('chartType') === 'fragmentation') {
+    	ctx.font = 'normal 14px "Open Sans"';
+    	ctx.textAlign = 'left';
+    	ctx.fillText(trnAdjType, 10, 50);	    
+    } else {    
+    	ctx.textAlign = 'right';
+	    ctx.fillText(moneyContext, w - 10, 10 + 22);
+	    ctx.textAlign = 'left';  // reset it
+    }    
     // reset font to something normal (nvd3 uses css ugh...)
     ctx.font = 'normal 12px "sans-serif"';
     
@@ -4238,11 +4408,22 @@ module.exports = BackboneDash.View.extend({
   },
 
   chartToCanvas: function(svg, canvas, cb) {
+	var self = this;
+	
+	if (this.model.get('chartType') === 'fragmentation') {
+		// This is what applies the necessary styles to the chart´s SVG.
+		var css = "rect.bordered {stroke: #E6E6E6;stroke-width: 2px;} text.mono {font-size: 9pt;font-family: Arial;fill: #000;}";
+	    var s = document.createElement('style');
+	    s.setAttribute('type', 'text/css');
+	    s.innerHTML = "<![CDATA[\n" + css + "\n]]>";
+	    svg.getElementsByTagName("defs")[0].appendChild(s);
+	}
+	
     var boundCB = _(cb).bind(this);
     window.setTimeout(function() {
       this.app.tryTo(function() {
         canvg(canvas, svg.parentNode.innerHTML, { // note: svg.outerHTML breaks IE
-          offsetY: 42,
+          offsetY: ((self.model.get('chartType') !== 'fragmentation') ? 42 : 65),
           ignoreDimensions: true,
           ignoreClear: true,
           ignoreMouse: true,
@@ -4265,32 +4446,55 @@ module.exports = BackboneDash.View.extend({
 
     var self = this;
     var keys = _(data).pluck('key');
-    // table of all the data
-    csvTransformed = _(data)
-      .chain()
-      .pluck('values')
-      .transpose()
-      .map(function(row) {
-        return _(row).reduce(function(csvRow, cell) {
-          csvRow.push(cell.y);
-          return csvRow;
-        }, [row[0].x]);
-      })
-      .map(function(row) {
-        row.push(currency || '');
-        if (adjtype) {
-        	var key = self.adjTypeTranslation [adjtype];
-            var trnAdjType = this.app.translator.translateSync(key, adjtype);
-            row.push(trnAdjType);
-        }
-        return row;
-      })
-      .value();
+    
+    if (self.model.get('chartType') !== 'fragmentation') {
+	    // table of all the data
+	    csvTransformed = _(data)
+	      .chain()
+	      .pluck('values')
+	      .transpose()
+	      .map(function(row) {
+	        return _(row).reduce(function(csvRow, cell) {
+	          csvRow.push(cell.y);
+	          return csvRow;
+	        }, [row[0].x]);
+	      })
+	      .map(function(row) {
+	        row.push(currency || '');
+	        if (adjtype) {
+	        	var key = self.adjTypeTranslation [adjtype];
+	            var trnAdjType = this.app.translator.translateSync(key, adjtype);
+	            row.push(trnAdjType);
+	        }
+	        return row;
+	      })
+	      .value();
+    } else {
+        csvTransformed = _.map(self.model.get("matrix"), function(itemY, i) {
+			return _.map(itemY, function(itemX, j) {
+				return [self.model.get("yDataSet")[i],
+					self.model.get("xDataSet")[j],
+					self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].dv : '',
+					self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].p : ''
+				]
+			})
+		});
+	    csvTransformed = [].concat.apply([], csvTransformed);
+	    csvTransformed = _.each(csvTransformed, function(item) { 
+	        item.push(currency);
+	        if (adjtype) {
+	        	var key = self.adjTypeTranslation [adjtype];
+	            var trnAdjType = this.app.translator.translateSync(key, adjtype);
+	            item.push(trnAdjType);
+	        }	        
+	    });
+    }
 
     // prepend a header row
     headerRow = [];
     var amountTrn = this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount');
     var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
+    var percentageTrn = this.app.translator.translateSync('amp.dashboard:percentage', 'Percentage');
     var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
     var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
 
@@ -4310,6 +4514,20 @@ module.exports = BackboneDash.View.extend({
 	    _.each(keys, function(item) {
 	    	headerRow.push(item);
 	    });
+	    headerRow.push(currencyTrn);
+	    headerRow.push(typeTrn);
+	} else if (this.model.get('chartType') === 'fragmentation') {
+		// For AMP-23582: we dont want the name from "summary" because thats the origName and not always the same name than the X axis combo selector. 
+		var firstColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function(item) {
+			return item.origName === self.model.get('summary')[0];
+		}).name; 
+		var secondColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function(item) {
+			return item.origName === self.model.get('summary')[1];
+		}).name;
+		headerRow.push(firstColumnName);
+		headerRow.push(secondColumnName);
+	    headerRow.push(amountTrn);
+	    headerRow.push(percentageTrn);
 	    headerRow.push(currencyTrn);
 	    headerRow.push(typeTrn);
 	}
@@ -4485,7 +4703,7 @@ module.exports = BackboneDash.View.extend({
   renderApplied: function() {
     var filters = this.app.filter.serializeToModels();
     var countApplied = _(filters.columnFilters).keys().length;
-    countApplied += !!filters.otherFilters;
+    countApplied += _(filters.otherFilters).keys().length;
     this.$('.applied-filters').html(summaryTemplate({ countApplied: countApplied }));
     this.app.translator.translateDOM(this.el);
   },
@@ -4524,13 +4742,22 @@ module.exports = BackboneDash.View.extend({
       };
     });
     if (filters.otherFilters) {
-      // Currently assumes that any otherFilters just implies Date Range
-      // ... there is no obvious way to get nice strings out.
-      var dateRange = filters.otherFilters.date;
-      var dateRangeText = app.translator.translateSync("amp.dashboard:date-range","Date Range");
-      applied.push({
-        name: dateRangeText,
-        detail: [this.app.filter.formatDate(dateRange.start) + '&mdash;' + this.app.filter.formatDate(dateRange.end)]
+      _.each(Object.keys(filters.otherFilters), function (filterKey) {
+          var filterField = filters.otherFilters[filterKey];
+          var dateRangeText = '';
+          if(filterKey === 'date') {
+            dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
+          } else if(filterKey === 'computedYear') {
+            dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
+          } else {
+            dateRangeText = app.translator.translateSync("amp.dashboard:" + filterKey.replace(/[^\w]/g, '-'), filterKey);
+          }
+          var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
+          applied.push({
+            id: filterKey.replace(/[^\w]/g, '-'),
+            name: dateRangeText,
+            detail: [detail]
+          });
       });
     }
     this.$('.applied-filters').html(detailsTemplate({ applied: applied }));
@@ -4646,17 +4873,17 @@ module.exports = BackboneDash.View.extend({
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Sector Fragmentation'})) {
     	col.push(new HeatMapChart(
-  	          { name: 'HeatMap by Sector and Donor Group', title: 'Sector Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { name: 'HeatMap by Sector and Donor Group', title: 'Sector Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs, heatmap_type: 'sector' },
   	          { app: this.app, url: '/rest/dashboard/heat-map/sec' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Location Fragmentation'})) {
     	col.push(new HeatMapChart(
-  	          { name: 'HeatMap by Location and Donor Group', title: 'Location Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { name: 'HeatMap by Location and Donor Group', title: 'Location Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs, heatmap_type: 'location' },
   	          { app: this.app, url: '/rest/dashboard/heat-map/loc' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Program Fragmentation'})) {
     	col.push(new HeatMapChart(
-  	          { name: 'HeatMap by Program and Donor Group', title: 'Program Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs }, //TODO: change view value.
+  	          { name: 'HeatMap by Program and Donor Group', title: 'Program Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs, heatmap_type: 'program' },
   	          { app: this.app, url: '/rest/dashboard/heat-map/prg' }));
     }
        
@@ -23576,7 +23803,7 @@ var Backbone = require('backbone');
 var _ = require('underscore');
 require('bootstrap/dist/js/bootstrap');
 
-var Template = "<style>\r\n    .footerText {\r\n    padding: 0;\r\n    font-family: arial;\r\n    font-size: 11px;\r\n    border: 0px;\r\n    }\r\n    .footer {\r\n    background-color: #8B8B8B;\r\n    color: #FFF;\r\n    margin-top: 0;\r\n    padding-bottom: 10px;\r\n    padding-top: 10px;\r\n    text-align: center;\r\n    }\r\n    .dgf_footer {\r\n    color: #8B8B8B;\r\n    line-height: 18px;\r\n    text-align: center;\r\n    background-color:white;\r\n    padding-top:10px;\r\n    }\r\n    .dgf_footer img {\r\n    line-height: 18px;\r\n    margin-bottom: 5px;\r\n    }\r\n    .loading{   \r\n      margin: 10px 20px 10px 20px;\r\n    }\r\n    \r\n</style>\r\n\r\n<div class=\"footer footerText\">\r\n    AMP <b><%=  properties.ampVersion %></b> build <b><%=  properties.buildDate %></b> - <%= properties.footerText %>\r\n    <% if(showAdminLinks == true  && properties.adminLinks != undefined) { %>\r\n    <a href='<%=  properties.adminLinks[0].url %>'><%=  properties.adminLinks[0].name %></a>\r\n    <a href='<%=  properties.adminLinks[1].url %>'><%=  properties.adminLinks[1].name %></digi:trn></a>\r\n    <% } %>\r\n</div>\r\n<% if(showDGFooter == true)  { %>\r\n<div class=\"dgf_footer footerText\">\r\n    <img src=\"/TEMPLATE/ampTemplate/img_2/dgf_logo_bottom.gif\" class=\"dgf_logo_footer\">\r\n    <br/>\r\n    Development Gateway\r\n    <br/>\r\n    1110 Vermont Ave, NW, Suite 500\r\n    <br/>\r\n    Washington, DC 20005 USA\r\n    <br/>\r\n    info@developmentgateway.org, Tel: +1.202.572.9200, Fax: +1 202.572.9290\r\n</div>\r\n<% } %>\r\n\r\n\r\n<div id=\"user-profile\" class=\"modal fade\" id=\"about-popup\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\r\n<div class=\"modal-dialog\">\r\n <div class=\"modal-content\">\r\n <div class=\"modal-header\">\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\r\n        <h4 class=\"modal-title text-primary\" data-i18n=\"amp.profile:modal.title\">Member Details</h4>\r\n </div>\r\n <div class=\"user-profile-content\">\r\n   <div class='loading' data-i18n=\"amp.profile:modal.loading\"> Loading user profile...</div>\r\n </div> \r\n </div>\r\n </div>\r\n </div>\r\n<% if(properties.trackingEnabled === true) { %>\r\n<!-- Piwik\r\nSite id can be checked here: http://stats.ampsite.net/index.php?module=SitesManager&action=index&idSite=1&period=range&date=last30\r\nAlso,the wiki for piwik: https://wiki.dgfoundation.org/display/AMPDOC/Integrating+AMP+with+Piwik\r\n-->\r\n<script type=\"text/javascript\">\r\n\t  var _paq = _paq || [];\r\n    if (window.PiwikAlreadyFetched === undefined ) {\r\n      _paq.push(['setUserId', \"<%= properties.email %>\"]);\r\n      _paq.push(['setCustomVariable',\r\n          1,\r\n          \"Workspace|WID\",\r\n          \"<%= properties.workspace %>|<%= properties.workspaceId %>\",\r\n          \"page\"]);\r\n  \t  _paq.push([\"trackPageView\"]);\r\n  \t  _paq.push([\"enableLinkTracking\"]);\r\n\r\n      /* TDK: keep track of whether we put the script DOM node on the page already\r\n       *   in case the page reparses this javascript on another modification.\r\n       */\r\n      window.PiwikAlreadyFetched = true;\r\n\r\n      /* Stock Piwik code: */\r\n  \t  (function() {\r\n  \t    var u=\"<%=  properties.trackingUrl %>\";\r\n  \t    _paq.push([\"setTrackerUrl\", u+\"piwik.php\"]);\r\n  \t    _paq.push([\"setSiteId\", \"<%=properties.siteId %>\"]);\r\n  \t    var d=document, g=d.createElement(\"script\"), s=d.getElementsByTagName(\"script\")[0]; g.type=\"text/javascript\";\r\n  \t    g.defer=true; g.async=true; g.src=u+\"piwik.js\"; s.parentNode.insertBefore(g,s);\r\n  \t  })();\r\n    }\r\n\t</script>\r\n<!-- End Piwik Code -->\r\n<% } %>\r\n";
+var Template = "<style>\r\n    .footerText {\r\n    padding: 0;\r\n    font-family: arial;\r\n    font-size: 11px;\r\n    border: 0px;\r\n    }\r\n    .footer {\r\n    background-color: #8B8B8B;\r\n    color: #FFF;\r\n    margin-top: 0;\r\n    padding-bottom: 10px;\r\n    padding-top: 10px;\r\n    text-align: center;\r\n    }\r\n    .dgf_footer {\r\n    color: #8B8B8B;\r\n    line-height: 18px;\r\n    text-align: center;\r\n    background-color:white;\r\n    padding-top:10px;\r\n    }\r\n    .dgf_footer img {\r\n    line-height: 18px;\r\n    margin-bottom: 5px;\r\n    }\r\n    .loading{   \r\n      margin: 10px 20px 10px 20px;\r\n    }\r\n    \r\n</style>\r\n\r\n<div class=\"footer footerText\">\r\n    AMP <b><%=  properties.ampVersion %></b> build <b><%=  properties.buildDate %></b> - <%= properties.footerText %>\r\n    <% if(showAdminLinks == true  && properties.adminLinks != undefined) { %>\r\n    <a href='<%=  properties.adminLinks[0].url %>'><%=  properties.adminLinks[0].name %></a>\r\n    <a href='<%=  properties.adminLinks[1].url %>'><%=  properties.adminLinks[1].name %></digi:trn></a>\r\n    <% } %>\r\n</div>\r\n<% if(showDGFooter == true)  { %>\r\n<div class=\"dgf_footer footerText\">\r\n    <img src=\"/TEMPLATE/ampTemplate/img_2/dgf_logo_bottom.gif\" class=\"dgf_logo_footer\">\r\n    <br/>\r\n    Development Gateway\r\n    <br/>\r\n    1110 Vermont Ave, NW, Suite 500\r\n    <br/>\r\n    Washington, DC 20005 USA\r\n    <br/>\r\n    info@developmentgateway.org, Tel: +1.202.572.9200, Fax: +1 202.572.9290\r\n</div>\r\n<% } %>\r\n\r\n\r\n<div id=\"user-profile\" class=\"modal fade\" id=\"about-popup\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\r\n<div class=\"modal-dialog\">\r\n <div class=\"modal-content\">\r\n <div class=\"modal-header\">\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\r\n        <h4 class=\"modal-title text-primary\" data-i18n=\"amp.profile:modal.title\">Member Details</h4>\r\n </div>\r\n <div class=\"user-profile-content\">\r\n   <div class='loading' data-i18n=\"amp.profile:modal.loading\">Loading...</div>\r\n </div> \r\n </div>\r\n </div>\r\n </div>\r\n<% if(properties.trackingEnabled === true) { %>\r\n<!-- Piwik\r\nSite id can be checked here: http://stats.ampsite.net/index.php?module=SitesManager&action=index&idSite=1&period=range&date=last30\r\nAlso,the wiki for piwik: https://wiki.dgfoundation.org/display/AMPDOC/Integrating+AMP+with+Piwik\r\n-->\r\n<script type=\"text/javascript\">\r\n\t  var _paq = _paq || [];\r\n    if (window.PiwikAlreadyFetched === undefined ) {\r\n      _paq.push(['setUserId', \"<%= properties.email %>\"]);\r\n      _paq.push(['setCustomVariable',\r\n          1,\r\n          \"Workspace|WID\",\r\n          \"<%= properties.workspace %>|<%= properties.workspaceId %>\",\r\n          \"page\"]);\r\n  \t  _paq.push([\"trackPageView\"]);\r\n  \t  _paq.push([\"enableLinkTracking\"]);\r\n\r\n      /* TDK: keep track of whether we put the script DOM node on the page already\r\n       *   in case the page reparses this javascript on another modification.\r\n       */\r\n      window.PiwikAlreadyFetched = true;\r\n\r\n      /* Stock Piwik code: */\r\n  \t  (function() {\r\n  \t    var u=\"<%=  properties.trackingUrl %>\";\r\n  \t    _paq.push([\"setTrackerUrl\", u+\"piwik.php\"]);\r\n  \t    _paq.push([\"setSiteId\", \"<%=properties.siteId %>\"]);\r\n  \t    var d=document, g=d.createElement(\"script\"), s=d.getElementsByTagName(\"script\")[0]; g.type=\"text/javascript\";\r\n  \t    g.defer=true; g.async=true; g.src=u+\"piwik.js\"; s.parentNode.insertBefore(g,s);\r\n  \t  })();\r\n    }\r\n\t</script>\r\n<!-- End Piwik Code -->\r\n<% } %>\r\n";
 var LayoutModel = require('../models/amp-layout-model.js');
 
 module.exports = Backbone.View.extend({
@@ -23661,7 +23888,7 @@ var Backbone = require('backbone');
 require('bootstrap/dist/js/bootstrap');
 var _ = require('underscore');
 
-var Template = "<!-- inline styles used so we can relocate amp-boilerplate module-->\n<style>\n  /* This directory and then Dashboard & GIS need\n   * to be rebuilt with their respective browserify-processes to see\n   * changes from this filter-popup due to brfs, see readme.md\n   */\n  #amp-header {\n    font-family: \"Open Sans\",\"Helvetica Neue\",Helvetica,Arial,sans-serif;\n  }\n  #amp-header .navbar-header>button.navbar-toggle {\n    /* fix contracted menu icon to not block map*/\n    padding: 2px;\n    margin: 4px;\n  }\n\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampPublic,\n  #amp-header .container.ampUserLoggedIn ul.ampPublic {\n    display: none !important;\n  }\n\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampUserLoggedIn,\n  #amp-header .container.ampUserLoggedIn ul.ampUserLoggedIn {\n    display: inherit !important;\n  }\n\n  #amp-header .container-fluid ul.ampPublic,\n  #amp-header .container ul.ampPublic {\n    display: inherit !important;\n  }\n\n  #amp-header .container-fluid ul.ampUserLoggedIn,\n  #amp-header .container ul.ampUserLoggedIn {\n    display: none !important;\n  }\n\n\n  div#amp-header nav div.container,\n  div#amp-header nav div.navbar-collapse a,\n  div#amp-header nav div.container-fluid,\n  div#amp-header nav div.navbar-collapse a {\n    font-size: 12px;\n  }\n\n  div#amp-header .navbar-brand {\n    font-size: 16px !important;\n    color: #E69923;\n    text-shadow: 1px 1px 5px #CCC;\n    white-space: nowrap;\n    padding-bottom: 8px;\n  }\n\n  div#amp-header .double-row .navbar-brand {\n    padding-top: 8px;\n    height: 41px;\n  }\n\n  /* Several places in AMP include things that will set this\n   * back to gigantic margins.\n   * 8px feels like generous padding\n   * 5px is slightly tight.\n   *\n   */\n  div#amp-header .single-row .nav > li > a {\n    padding-right: 6px;\n    padding-left: 6px;\n  }\n  div#amp-header .double-row .nav > li > a{\n    padding-right: 10px;\n    padding-left: 10px;\n    padding-bottom: 8px;\n    padding-top: 9px;\n  }\n\n  div#amp-header .double-row #AmpMenus.nav > li:nth-child(1) > a {\n    /* For first element, eliminate padding to ensure is flush. */\n    padding-left: 0;\n  }\n\n    div#amp-header .workspace-name {\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n    div#amp-header .user-url {\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n\n  /* limit size of top level menu to prevent translations that are too long\n   * Apply to a span so that that caret doesn't get chopped off.\n   */\n  /* max-width:\n   * 141px is generous, fits ÉTUDES ET DOCUMENTS\n   * 124px is minimum to include 3 words (Ministry of ??...)\n   * 117px fits TABLEAUX DE BORD\n   *\n   * div.ampUserLoggedIn in selector makes this effective ONLY when logged in\n   * single-row selector only when using that mode\n   */\n  #amp-header div.ampUserLoggedIn .single-row ul#AmpMenus > .dropdown > a > span.dropdown-text {\n    max-width: 141px;\n  }\n\n  #amp-header ul#AmpMenus > .dropdown > a > span.dropdown-text {\n    display: inline-block;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    color: #3E6C94;\n    text-rendering: optimizeLegibility;\n  }\n\n\n  #amp-header ul#AmpMenus > .dropdown > a > span.caret {\n    /* bump up caret to the height of the truncate-able inline-block next to it */\n    padding-bottom: 11px;\n    color: rgb(11, 12, 26);\n  }\n\n\n  #amp-header .container-fluid.no-gutters,\n  #amp-header .container.no-gutters {\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  /* No gutters creates space for 1 gridsquare logo.\n   * http://julienmelissas.com/no-gutter-column-trick-for-bootstrap/\n   */\n  #amp-header .container-fluid .row.no-gutters,\n  #amp-header .container .row.no-gutters {\n    margin-right: 0;\n    margin-left: 0;\n  }\n  #amp-header .container-fluid .row.no-gutters > [class^=\"col-\"],\n  #amp-header .container-fluid .row.no-gutters > [class*=\" col-\"],\n  #amp-header .container .row.no-gutters > [class^=\"col-\"],\n  #amp-header .container .row.no-gutters > [class*=\"col-\"] {\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  #amp-header nav > .container-fluid > div.row:nth-child(1),\n  #amp-header nav > .container > div.row:nth-child(1) {\n    background-color: #FFF;\n  }\n\n  #amp-header nav > .container > div.row:nth-child(2),\n  #amp-header nav > .container-fluid > div.row:nth-child(2) {\n    border-top: 1px solid #EDEDED;\n    background-color: #F7F7F7;\n  }\n\n  #amp-header .container-fluid,\n  #amp-header .container {\n    background-color: #FFF; /* Fixes gray area in gutter of single-row */\n  }\n\n\n/* There is a second set of gutters on the navbar itself. */\n  div#amp-header .navbar-collapse.no-gutters{\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  /* These four styles avoids setting hard max-widths on these items */\n  #amp-header .ampLoggedInMenus {\n    width: 95%; /* account for scrollbar */\n    text-shadow: 1px 1px 1px #AAA;\n  }\n\n  /* give a bit of extra width to workspace */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(1) {\n      text-align: right;\n  }\n  /* user name */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(2) {\n      text-align: center;\n  }\n  /* Logout */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(3) {\n      white-space: nowrap; /* prevent translations of logout from wrapping */\n  }\n\n  div#amp-header div#logincontainer {\n    padding-left: 140px; /* IE9 fix that works everywhere: make room for green login button */\n  }\n\n  div#amp-header .login_here {\n    margin-top: 3px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\n  }\n\n  html.ie9 div#amp-header .login_here {\n    margin-top: -11px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\n  }\n\n  /******/\n  .scrollable-menu {\n    height: auto;\n    max-height: 400px;\n    overflow-x: hidden;\n  }\n\n  .dropdown-submenu {\n    position: relative;\n  }\n\n  .dropdown-submenu>.dropdown-menu {\n    top: 0;\n    left: 100%;\n    margin-top: -6px;\n    margin-left: -1px;\n    -webkit-border-radius: 0 6px 6px 6px;\n    -moz-border-radius: 0 6px 6px 6px;\n    border-radius: 0 6px 6px 6px;\n  }\n\n  .dropdown-submenu:hover>.dropdown-menu {\n    display: block;\n  }\n\n  .dropdown-submenu>a:after {\n    display: block;\n    content: \" \";\n    float: right;\n    width: 0;\n    height: 0;\n    border-color: transparent;\n    border-style: solid;\n    border-width: 5px 0 5px 5px;\n    border-left-color: #cccccc;\n    margin-top: 5px;\n    margin-right: -10px;\n  }\n\n  .dropdown-submenu:hover>a:after {\n    border-left-color: #ffffff;\n  }\n\n  .dropdown-submenu.pull-left {\n    float: none;\n  }\n\n  .dropdown-submenu.pull-left>.dropdown-menu {\n    left: -100%;\n    margin-left: 10px;\n    -webkit-border-radius: 6px 0 6px 6px;\n    -moz-border-radius: 6px 0 6px 6px;\n    border-radius: 6px 0 6px 6px;\n  }\n\n</style>\n<script type=\"text/javascript\">\n  function switchTranslation (url) {\n    $('#backUrl').val(document.location.href);\n    document.modeSwitchForm.action = url;\n    document.modeSwitchForm.submit();\n  }\n</script>\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\n</form>\n<%\n/***\n * Single Row Header Design (used when optionally requested: on GIS)\n * Useful for fixed height apps.\n *\n * Container-fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *      columns AmpMenus (public or internal menus shown as provided by API)\n *      nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n *        3 columns\n *  login_here (ignores bootstrap container structure; shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/\n\n  if (useSingleRowHeader) {\n %>\n<nav class=\"navbar navbar-default single-row\" role=\"navigation\">\n  <div class=\"container-fluid\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n        <a class=\"navbar-brand\" href=\"/aim\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-11\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <div class=\"col-md-8 col-sm-10\">\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n              <!-- File -->\n\n            </ul>\n            <div class=\"clearfix\"></div>\n          </div>\n          <div class=\"col-md-4 col-sm-2\">\n              <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n                <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\">&nbsp;</a></li>\n                <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                  <a class=\"user-url\">\n                    <span id=\"header-first-name\">&nbsp;</span>&nbsp;<span id=\"header-last-name\">&nbsp;</span>\n                  </a>\n                </li>\n                <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n              </ul>\n              <% if(showLogin) { %>\n                <% if(loginDropdown){ %>\n                  <div class=\"login_here\" id=\"show_login_pop\">\n                    <div class=\"login_here_cont\">\n                      <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                    </div>\n                  </div>\n                <% } else { %>\n                  <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                    <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                  </ul>\n                <% } %>\n              <% } %>\n              <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n <% } else { %>\n\n<% /***\n * Double Row Header Design (used by default)\n *\n * Container-Fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *        nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n            3 columns\n * row\n *    columns AmpMenus (public or internal menus shown as provided by API)\n *  login_here (ignores bootstrap container structure, shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/ %>\n<nav class=\"navbar navbar-default double-row\" role=\"navigation\">\n  <div class=\"container-fluid no-gutters\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1 col-sm-offset-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n        <a class=\"navbar-brand\" href=\"/aim\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-9\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <!-- To change workspace/user truncation length, edit the offset and grid number below:-->\n          <div class=\"col-sm-offset-5 col-sm-7\">\n            <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n              <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\">&nbsp;</a></li>\n              <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                <a class=\"user-url\">\n                  <span id=\"header-first-name\">&nbsp;</span>&nbsp;<span id=\"header-last-name\">&nbsp;</span>\n                </a>\n              </li>\n              <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n            </ul>\n            <% if(showLogin) { %>\n              <% if(loginDropdown){ %>\n                <div class=\"login_here\" id=\"show_login_pop\">\n                  <div class=\"login_here_cont\">\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                  </div>\n                </div>\n              <% } else { %>\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                </ul>\n              <% } %>\n            <% } %>\n            <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n\n    <div class=\"row no-gutters\">\n      <div class=\"col-sm-11 col-sm-offset-1\">\n        <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n          <!-- File -->\n\n        </ul>\n        <div class=\"clearfix\"></div>\n      </div>\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n\n<%\n  } %>\n";
+var Template = "<!-- inline styles used so we can relocate amp-boilerplate module-->\n<style>\n  /* This directory and then Dashboard & GIS need\n   * to be rebuilt with their respective browserify-processes to see\n   * changes from this filter-popup due to brfs, see readme.md\n   */\n  #amp-header {\n    font-family: \"Open Sans\",\"Helvetica Neue\",Helvetica,Arial,sans-serif;\n  }\n  #amp-header .navbar-header>button.navbar-toggle {\n    /* fix contracted menu icon to not block map*/\n    padding: 2px;\n    margin: 4px;\n  }\n\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampPublic,\n  #amp-header .container.ampUserLoggedIn ul.ampPublic {\n    display: none !important;\n  }\n\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampUserLoggedIn,\n  #amp-header .container.ampUserLoggedIn ul.ampUserLoggedIn {\n    display: inherit !important;\n  }\n\n  #amp-header .container-fluid ul.ampPublic,\n  #amp-header .container ul.ampPublic {\n    display: inherit !important;\n  }\n\n  #amp-header .container-fluid ul.ampUserLoggedIn,\n  #amp-header .container ul.ampUserLoggedIn {\n    display: none !important;\n  }\n\n\n  div#amp-header nav div.container,\n  div#amp-header nav div.navbar-collapse a,\n  div#amp-header nav div.container-fluid,\n  div#amp-header nav div.navbar-collapse a {\n    font-size: 12px;\n  }\n\n  div#amp-header .navbar-brand {\n    font-size: 16px !important;\n    color: #E69923;\n    text-shadow: 1px 1px 5px #CCC;\n    white-space: nowrap;\n    padding-bottom: 8px;\n  }\n\n  div#amp-header .double-row .navbar-brand {\n    padding-top: 8px;\n    height: 41px;\n  }\n\n  /* Several places in AMP include things that will set this\n   * back to gigantic margins.\n   * 8px feels like generous padding\n   * 5px is slightly tight.\n   *\n   */\n  div#amp-header .single-row .nav > li > a {\n    padding-right: 6px;\n    padding-left: 6px;\n  }\n  div#amp-header .double-row .nav > li > a{\n    padding-right: 10px;\n    padding-left: 10px;\n    padding-bottom: 8px;\n    padding-top: 9px;\n  }\n\n  div#amp-header .double-row #AmpMenus.nav > li:nth-child(1) > a {\n    /* For first element, eliminate padding to ensure is flush. */\n    padding-left: 0;\n  }\n\n    div#amp-header .workspace-name {\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n    div#amp-header .user-url {\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n\n  /* limit size of top level menu to prevent translations that are too long\n   * Apply to a span so that that caret doesn't get chopped off.\n   */\n  /* max-width:\n   * 141px is generous, fits ÉTUDES ET DOCUMENTS\n   * 124px is minimum to include 3 words (Ministry of ??...)\n   * 117px fits TABLEAUX DE BORD\n   *\n   * div.ampUserLoggedIn in selector makes this effective ONLY when logged in\n   * single-row selector only when using that mode\n   */\n  #amp-header div.ampUserLoggedIn .single-row ul#AmpMenus > .dropdown > a > span.dropdown-text {\n    max-width: 141px;\n  }\n\n  #amp-header ul#AmpMenus > .dropdown > a > span.dropdown-text {\n    display: inline-block;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    color: #3E6C94;\n    text-rendering: optimizeLegibility;\n  }\n\n\n  #amp-header ul#AmpMenus > .dropdown > a > span.caret {\n    /* bump up caret to the height of the truncate-able inline-block next to it */\n    padding-bottom: 11px;\n    color: rgb(11, 12, 26);\n  }\n\n\n  #amp-header .container-fluid.no-gutters,\n  #amp-header .container.no-gutters {\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  /* No gutters creates space for 1 gridsquare logo.\n   * http://julienmelissas.com/no-gutter-column-trick-for-bootstrap/\n   */\n  #amp-header .container-fluid .row.no-gutters,\n  #amp-header .container .row.no-gutters {\n    margin-right: 0;\n    margin-left: 0;\n  }\n  #amp-header .container-fluid .row.no-gutters > [class^=\"col-\"],\n  #amp-header .container-fluid .row.no-gutters > [class*=\" col-\"],\n  #amp-header .container .row.no-gutters > [class^=\"col-\"],\n  #amp-header .container .row.no-gutters > [class*=\"col-\"] {\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  #amp-header nav > .container-fluid > div.row:nth-child(1),\n  #amp-header nav > .container > div.row:nth-child(1) {\n    background-color: #FFF;\n  }\n\n  #amp-header nav > .container > div.row:nth-child(2),\n  #amp-header nav > .container-fluid > div.row:nth-child(2) {\n    border-top: 1px solid #EDEDED;\n    background-color: #F7F7F7;\n  }\n\n  #amp-header .container-fluid,\n  #amp-header .container {\n    background-color: #FFF; /* Fixes gray area in gutter of single-row */\n  }\n\n\n/* There is a second set of gutters on the navbar itself. */\n  div#amp-header .navbar-collapse.no-gutters{\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  /* These four styles avoids setting hard max-widths on these items */\n  #amp-header .ampLoggedInMenus {\n    width: 95%; /* account for scrollbar */\n    text-shadow: 1px 1px 1px #AAA;\n  }\n\n  /* give a bit of extra width to workspace */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(1) {\n      text-align: right;\n  }\n  /* user name */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(2) {\n      text-align: center;\n  }\n  /* Logout */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(3) {\n      white-space: nowrap; /* prevent translations of logout from wrapping */\n  }\n\n  div#amp-header div#logincontainer {\n    padding-left: 140px; /* IE9 fix that works everywhere: make room for green login button */\n  }\n\n  div#amp-header .login_here {\n    margin-top: 3px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\n  }\n\n  html.ie9 div#amp-header .login_here {\n    margin-top: -11px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\n  }\n\n  /******/\n  .scrollable-menu {\n    height: auto;\n    max-height: 400px;\n    overflow-x: hidden;\n  }\n\n  .dropdown-submenu {\n    position: relative;\n  }\n\n  .dropdown-submenu>.dropdown-menu {\n    top: 0;\n    left: 100%;\n    margin-top: -6px;\n    margin-left: -1px;\n    -webkit-border-radius: 0 6px 6px 6px;\n    -moz-border-radius: 0 6px 6px 6px;\n    border-radius: 0 6px 6px 6px;\n  }\n\n  .dropdown-submenu:hover>.dropdown-menu {\n    display: block;\n  }\n\n  .dropdown-submenu>a:after {\n    display: block;\n    content: \" \";\n    float: right;\n    width: 0;\n    height: 0;\n    border-color: transparent;\n    border-style: solid;\n    border-width: 5px 0 5px 5px;\n    border-left-color: #cccccc;\n    margin-top: 5px;\n    margin-right: -10px;\n  }\n\n  .dropdown-submenu:hover>a:after {\n    border-left-color: #ffffff;\n  }\n\n  .dropdown-submenu.pull-left {\n    float: none;\n  }\n\n  .dropdown-submenu.pull-left>.dropdown-menu {\n    left: -100%;\n    margin-left: 10px;\n    -webkit-border-radius: 6px 0 6px 6px;\n    -moz-border-radius: 6px 0 6px 6px;\n    border-radius: 6px 0 6px 6px;\n  }\n\n</style>\n<script type=\"text/javascript\">\n  function switchTranslation (url) {\n    $('#backUrl').val(document.location.href);\n    document.modeSwitchForm.action = url;\n    document.modeSwitchForm.submit();\n  }\n</script>\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\n</form>\n<%\n/***\n * Single Row Header Design (used when optionally requested: on GIS)\n * Useful for fixed height apps.\n *\n * Container-fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *      columns AmpMenus (public or internal menus shown as provided by API)\n *      nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n *        3 columns\n *  login_here (ignores bootstrap container structure; shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/\n\n  if (useSingleRowHeader) {\n %>\n<nav class=\"navbar navbar-default single-row\" role=\"navigation\">\n  <div class=\"container-fluid\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n         <% if(showLogin) { %>\n             <a class=\"navbar-brand\" href=\"/\" data-i18n=\"[title]amp.common:platform\">\n         <% } else { %>\n             <a class=\"navbar-brand\" href=\"/aim\" data-i18n=\"[title]amp.common:platform\">\n         <% } %>\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-11\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <div class=\"col-md-8 col-sm-10\">\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n              <!-- File -->\n\n            </ul>\n            <div class=\"clearfix\"></div>\n          </div>\n          <div class=\"col-md-4 col-sm-2\">\n              <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n                <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\">&nbsp;</a></li>\n                <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                  <a class=\"user-url\">\n                    <span id=\"header-first-name\">&nbsp;</span>&nbsp;<span id=\"header-last-name\">&nbsp;</span>\n                  </a>\n                </li>\n                <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n              </ul>\n              <% if(showLogin) { %>\n                <% if(loginDropdown){ %>\n                  <div class=\"login_here\" id=\"show_login_pop\">\n                    <div class=\"login_here_cont\">\n                      <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                    </div>\n                  </div>\n                <% } else { %>\n                  <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                    <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                  </ul>\n                <% } %>\n              <% } %>\n              <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n <% } else { %>\n\n<% /***\n * Double Row Header Design (used by default)\n *\n * Container-Fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *        nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n            3 columns\n * row\n *    columns AmpMenus (public or internal menus shown as provided by API)\n *  login_here (ignores bootstrap container structure, shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/ %>\n<nav class=\"navbar navbar-default double-row\" role=\"navigation\">\n  <div class=\"container-fluid no-gutters\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1 col-sm-offset-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n        <% if(showLogin) { %>\n          <a class=\"navbar-brand\" href=\"/\" data-i18n=\"[title]amp.common:platform\">\n        <% } else { %>\n          <a class=\"navbar-brand\" href=\"/aim\" data-i18n=\"[title]amp.common:platform\">\n        <% } %>\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-9\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <!-- To change workspace/user truncation length, edit the offset and grid number below:-->\n          <div class=\"col-sm-offset-5 col-sm-7\">\n            <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n              <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\">&nbsp;</a></li>\n              <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                <a class=\"user-url\">\n                  <span id=\"header-first-name\">&nbsp;</span>&nbsp;<span id=\"header-last-name\">&nbsp;</span>\n                </a>\n              </li>\n              <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n            </ul>\n            <% if(showLogin) { %>\n              <% if(loginDropdown){ %>\n                <div class=\"login_here\" id=\"show_login_pop\">\n                  <div class=\"login_here_cont\">\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                  </div>\n                </div>\n              <% } else { %>\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                </ul>\n              <% } %>\n            <% } %>\n            <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n\n    <div class=\"row no-gutters\">\n      <div class=\"col-sm-11 col-sm-offset-1\">\n        <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n          <!-- File -->\n\n        </ul>\n        <div class=\"clearfix\"></div>\n      </div>\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n\n<%\n  } %>\n";
 var MenuCollection = require('../collections/amp-menus-collection.js');
 var MenuModel = require('../models/amp-menus-model.js');
 
@@ -23828,7 +24055,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"C:\\Users\\Gabriel\\workspace-luna2\\amp-2.12-release-3\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"/home/nadia/git/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/bootstrap/dist/js/bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -28219,11 +28446,1822 @@ module.exports  = Backbone.Collection.extend({
 },{"../models/setting":74,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],68:[function(require,module,exports){
 /*! jQuery UI - v1.10.4 - 2014-01-17
 * http://jqueryui.com
-* Includes: [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object], [object Object]
+* Includes: jquery.ui.datepicker-af.js, jquery.ui.datepicker-ar-DZ.js, jquery.ui.datepicker-ar.js, jquery.ui.datepicker-az.js, jquery.ui.datepicker-be.js, jquery.ui.datepicker-bg.js, jquery.ui.datepicker-bs.js, jquery.ui.datepicker-ca.js, jquery.ui.datepicker-cs.js, jquery.ui.datepicker-cy-GB.js, jquery.ui.datepicker-da.js, jquery.ui.datepicker-de.js, jquery.ui.datepicker-el.js, jquery.ui.datepicker-en-AU.js, jquery.ui.datepicker-en-GB.js, jquery.ui.datepicker-en-NZ.js, jquery.ui.datepicker-eo.js, jquery.ui.datepicker-es.js, jquery.ui.datepicker-et.js, jquery.ui.datepicker-eu.js, jquery.ui.datepicker-fa.js, jquery.ui.datepicker-fi.js, jquery.ui.datepicker-fo.js, jquery.ui.datepicker-fr-CA.js, jquery.ui.datepicker-fr-CH.js, jquery.ui.datepicker-fr.js, jquery.ui.datepicker-gl.js, jquery.ui.datepicker-he.js, jquery.ui.datepicker-hi.js, jquery.ui.datepicker-hr.js, jquery.ui.datepicker-hu.js, jquery.ui.datepicker-hy.js, jquery.ui.datepicker-id.js, jquery.ui.datepicker-is.js, jquery.ui.datepicker-it.js, jquery.ui.datepicker-ja.js, jquery.ui.datepicker-ka.js, jquery.ui.datepicker-kk.js, jquery.ui.datepicker-km.js, jquery.ui.datepicker-ko.js, jquery.ui.datepicker-ky.js, jquery.ui.datepicker-lb.js, jquery.ui.datepicker-lt.js, jquery.ui.datepicker-lv.js, jquery.ui.datepicker-mk.js, jquery.ui.datepicker-ml.js, jquery.ui.datepicker-ms.js, jquery.ui.datepicker-nb.js, jquery.ui.datepicker-nl-BE.js, jquery.ui.datepicker-nl.js, jquery.ui.datepicker-nn.js, jquery.ui.datepicker-no.js, jquery.ui.datepicker-pl.js, jquery.ui.datepicker-pt-BR.js, jquery.ui.datepicker-pt.js, jquery.ui.datepicker-rm.js, jquery.ui.datepicker-ro.js, jquery.ui.datepicker-ru.js, jquery.ui.datepicker-sk.js, jquery.ui.datepicker-sl.js, jquery.ui.datepicker-sq.js, jquery.ui.datepicker-sr-SR.js, jquery.ui.datepicker-sr.js, jquery.ui.datepicker-sv.js, jquery.ui.datepicker-ta.js, jquery.ui.datepicker-th.js, jquery.ui.datepicker-tj.js, jquery.ui.datepicker-tr.js, jquery.ui.datepicker-uk.js, jquery.ui.datepicker-vi.js, jquery.ui.datepicker-zh-CN.js, jquery.ui.datepicker-zh-HK.js, jquery.ui.datepicker-zh-TW.js
 * Copyright 2014 jQuery Foundation and other contributors; Licensed MIT */
+/* Afrikaans initialisation for the jQuery UI date picker plugin. */
+/* Written by Renier Pretorius. */
+jQuery(function($){
+	$.datepicker.regional['af'] = {
+		closeText: 'Selekteer',
+		prevText: 'Vorige',
+		nextText: 'Volgende',
+		currentText: 'Vandag',
+		monthNames: ['Januarie','Februarie','Maart','April','Mei','Junie',
+		'Julie','Augustus','September','Oktober','November','Desember'],
+		monthNamesShort: ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun',
+		'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des'],
+		dayNames: ['Sondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrydag', 'Saterdag'],
+		dayNamesShort: ['Son', 'Maa', 'Din', 'Woe', 'Don', 'Vry', 'Sat'],
+		dayNamesMin: ['So','Ma','Di','Wo','Do','Vr','Sa'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['af']);
+});
 
-jQuery(function(e){e.datepicker.regional.af={closeText:"Selekteer",prevText:"Vorige",nextText:"Volgende",currentText:"Vandag",monthNames:["Januarie","Februarie","Maart","April","Mei","Junie","Julie","Augustus","September","Oktober","November","Desember"],monthNamesShort:["Jan","Feb","Mrt","Apr","Mei","Jun","Jul","Aug","Sep","Okt","Nov","Des"],dayNames:["Sondag","Maandag","Dinsdag","Woensdag","Donderdag","Vrydag","Saterdag"],dayNamesShort:["Son","Maa","Din","Woe","Don","Vry","Sat"],dayNamesMin:["So","Ma","Di","Wo","Do","Vr","Sa"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.af)}),jQuery(function(e){e.datepicker.regional["ar-DZ"]={closeText:"إغلاق",prevText:"&#x3C;السابق",nextText:"التالي&#x3E;",currentText:"اليوم",monthNames:["جانفي","فيفري","مارس","أفريل","ماي","جوان","جويلية","أوت","سبتمبر","أكتوبر","نوفمبر","ديسمبر"],monthNamesShort:["1","2","3","4","5","6","7","8","9","10","11","12"],dayNames:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],dayNamesShort:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],dayNamesMin:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],weekHeader:"أسبوع",dateFormat:"dd/mm/yy",firstDay:6,isRTL:!0,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["ar-DZ"])}),jQuery(function(e){e.datepicker.regional.ar={closeText:"إغلاق",prevText:"&#x3C;السابق",nextText:"التالي&#x3E;",currentText:"اليوم",monthNames:["كانون الثاني","شباط","آذار","نيسان","مايو","حزيران","تموز","آب","أيلول","تشرين الأول","تشرين الثاني","كانون الأول"],monthNamesShort:["1","2","3","4","5","6","7","8","9","10","11","12"],dayNames:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],dayNamesShort:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],dayNamesMin:["ح","ن","ث","ر","خ","ج","س"],weekHeader:"أسبوع",dateFormat:"dd/mm/yy",firstDay:6,isRTL:!0,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ar)}),jQuery(function(e){e.datepicker.regional.az={closeText:"Bağla",prevText:"&#x3C;Geri",nextText:"İrəli&#x3E;",currentText:"Bugün",monthNames:["Yanvar","Fevral","Mart","Aprel","May","İyun","İyul","Avqust","Sentyabr","Oktyabr","Noyabr","Dekabr"],monthNamesShort:["Yan","Fev","Mar","Apr","May","İyun","İyul","Avq","Sen","Okt","Noy","Dek"],dayNames:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"],dayNamesShort:["B","Be","Ça","Ç","Ca","C","Ş"],dayNamesMin:["B","B","Ç","С","Ç","C","Ş"],weekHeader:"Hf",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.az)}),jQuery(function(e){e.datepicker.regional.be={closeText:"Зачыніць",prevText:"&larr;Папяр.",nextText:"Наст.&rarr;",currentText:"Сёньня",monthNames:["Студзень","Люты","Сакавік","Красавік","Травень","Чэрвень","Ліпень","Жнівень","Верасень","Кастрычнік","Лістапад","Сьнежань"],monthNamesShort:["Сту","Лют","Сак","Кра","Тра","Чэр","Ліп","Жні","Вер","Кас","Ліс","Сьн"],dayNames:["нядзеля","панядзелак","аўторак","серада","чацьвер","пятніца","субота"],dayNamesShort:["ндз","пнд","аўт","срд","чцв","птн","сбт"],dayNamesMin:["Нд","Пн","Аў","Ср","Чц","Пт","Сб"],weekHeader:"Тд",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.be)}),jQuery(function(e){e.datepicker.regional.bg={closeText:"затвори",prevText:"&#x3C;назад",nextText:"напред&#x3E;",nextBigText:"&#x3E;&#x3E;",currentText:"днес",monthNames:["Януари","Февруари","Март","Април","Май","Юни","Юли","Август","Септември","Октомври","Ноември","Декември"],monthNamesShort:["Яну","Фев","Мар","Апр","Май","Юни","Юли","Авг","Сеп","Окт","Нов","Дек"],dayNames:["Неделя","Понеделник","Вторник","Сряда","Четвъртък","Петък","Събота"],dayNamesShort:["Нед","Пон","Вто","Сря","Чет","Пет","Съб"],dayNamesMin:["Не","По","Вт","Ср","Че","Пе","Съ"],weekHeader:"Wk",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.bg)}),jQuery(function(e){e.datepicker.regional.bs={closeText:"Zatvori",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Danas",monthNames:["Januar","Februar","Mart","April","Maj","Juni","Juli","August","Septembar","Oktobar","Novembar","Decembar"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],dayNames:["Nedelja","Ponedeljak","Utorak","Srijeda","Četvrtak","Petak","Subota"],dayNamesShort:["Ned","Pon","Uto","Sri","Čet","Pet","Sub"],dayNamesMin:["Ne","Po","Ut","Sr","Če","Pe","Su"],weekHeader:"Wk",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.bs)}),jQuery(function(e){e.datepicker.regional.ca={closeText:"Tanca",prevText:"Anterior",nextText:"Següent",currentText:"Avui",monthNames:["gener","febrer","març","abril","maig","juny","juliol","agost","setembre","octubre","novembre","desembre"],monthNamesShort:["gen","feb","març","abr","maig","juny","jul","ag","set","oct","nov","des"],dayNames:["diumenge","dilluns","dimarts","dimecres","dijous","divendres","dissabte"],dayNamesShort:["dg","dl","dt","dc","dj","dv","ds"],dayNamesMin:["dg","dl","dt","dc","dj","dv","ds"],weekHeader:"Set",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ca)}),jQuery(function(e){e.datepicker.regional.cs={closeText:"Zavřít",prevText:"&#x3C;Dříve",nextText:"Později&#x3E;",currentText:"Nyní",monthNames:["leden","únor","březen","duben","květen","červen","červenec","srpen","září","říjen","listopad","prosinec"],monthNamesShort:["led","úno","bře","dub","kvě","čer","čvc","srp","zář","říj","lis","pro"],dayNames:["neděle","pondělí","úterý","středa","čtvrtek","pátek","sobota"],dayNamesShort:["ne","po","út","st","čt","pá","so"],dayNamesMin:["ne","po","út","st","čt","pá","so"],weekHeader:"Týd",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.cs)}),jQuery(function(e){e.datepicker.regional["cy-GB"]={closeText:"Done",prevText:"Prev",nextText:"Next",currentText:"Today",monthNames:["Ionawr","Chwefror","Mawrth","Ebrill","Mai","Mehefin","Gorffennaf","Awst","Medi","Hydref","Tachwedd","Rhagfyr"],monthNamesShort:["Ion","Chw","Maw","Ebr","Mai","Meh","Gor","Aws","Med","Hyd","Tac","Rha"],dayNames:["Dydd Sul","Dydd Llun","Dydd Mawrth","Dydd Mercher","Dydd Iau","Dydd Gwener","Dydd Sadwrn"],dayNamesShort:["Sul","Llu","Maw","Mer","Iau","Gwe","Sad"],dayNamesMin:["Su","Ll","Ma","Me","Ia","Gw","Sa"],weekHeader:"Wy",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["cy-GB"])}),jQuery(function(e){e.datepicker.regional.da={closeText:"Luk",prevText:"&#x3C;Forrige",nextText:"Næste&#x3E;",currentText:"Idag",monthNames:["Januar","Februar","Marts","April","Maj","Juni","Juli","August","September","Oktober","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],dayNames:["Søndag","Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag"],dayNamesShort:["Søn","Man","Tir","Ons","Tor","Fre","Lør"],dayNamesMin:["Sø","Ma","Ti","On","To","Fr","Lø"],weekHeader:"Uge",dateFormat:"dd-mm-yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.da)}),jQuery(function(e){e.datepicker.regional.de={closeText:"Schließen",prevText:"&#x3C;Zurück",nextText:"Vor&#x3E;",currentText:"Heute",monthNames:["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],monthNamesShort:["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"],dayNames:["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],dayNamesShort:["So","Mo","Di","Mi","Do","Fr","Sa"],dayNamesMin:["So","Mo","Di","Mi","Do","Fr","Sa"],weekHeader:"KW",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.de)}),jQuery(function(e){e.datepicker.regional.el={closeText:"Κλείσιμο",prevText:"Προηγούμενος",nextText:"Επόμενος",currentText:"Τρέχων Μήνας",monthNames:["Ιανουάριος","Φεβρουάριος","Μάρτιος","Απρίλιος","Μάιος","Ιούνιος","Ιούλιος","Αύγουστος","Σεπτέμβριος","Οκτώβριος","Νοέμβριος","Δεκέμβριος"],monthNamesShort:["Ιαν","Φεβ","Μαρ","Απρ","Μαι","Ιουν","Ιουλ","Αυγ","Σεπ","Οκτ","Νοε","Δεκ"],dayNames:["Κυριακή","Δευτέρα","Τρίτη","Τετάρτη","Πέμπτη","Παρασκευή","Σάββατο"],dayNamesShort:["Κυρ","Δευ","Τρι","Τετ","Πεμ","Παρ","Σαβ"],dayNamesMin:["Κυ","Δε","Τρ","Τε","Πε","Πα","Σα"],weekHeader:"Εβδ",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.el)}),jQuery(function(e){e.datepicker.regional["en-AU"]={closeText:"Done",prevText:"Prev",nextText:"Next",currentText:"Today",monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],dayNamesShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],dayNamesMin:["Su","Mo","Tu","We","Th","Fr","Sa"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["en-AU"])}),jQuery(function(e){e.datepicker.regional["en-GB"]={closeText:"Done",prevText:"Prev",nextText:"Next",currentText:"Today",monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],dayNamesShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],dayNamesMin:["Su","Mo","Tu","We","Th","Fr","Sa"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["en-GB"])}),jQuery(function(e){e.datepicker.regional["en-NZ"]={closeText:"Done",prevText:"Prev",nextText:"Next",currentText:"Today",monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],dayNamesShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],dayNamesMin:["Su","Mo","Tu","We","Th","Fr","Sa"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["en-NZ"])}),jQuery(function(e){e.datepicker.regional.eo={closeText:"Fermi",prevText:"&#x3C;Anta",nextText:"Sekv&#x3E;",currentText:"Nuna",monthNames:["Januaro","Februaro","Marto","Aprilo","Majo","Junio","Julio","Aŭgusto","Septembro","Oktobro","Novembro","Decembro"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aŭg","Sep","Okt","Nov","Dec"],dayNames:["Dimanĉo","Lundo","Mardo","Merkredo","Ĵaŭdo","Vendredo","Sabato"],dayNamesShort:["Dim","Lun","Mar","Mer","Ĵaŭ","Ven","Sab"],dayNamesMin:["Di","Lu","Ma","Me","Ĵa","Ve","Sa"],weekHeader:"Sb",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.eo)}),jQuery(function(e){e.datepicker.regional.es={closeText:"Cerrar",prevText:"&#x3C;Ant",nextText:"Sig&#x3E;",currentText:"Hoy",monthNames:["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],monthNamesShort:["ene","feb","mar","abr","may","jun","jul","ogo","sep","oct","nov","dic"],dayNames:["domingo","lunes","martes","miércoles","jueves","viernes","sábado"],dayNamesShort:["dom","lun","mar","mié","juv","vie","sáb"],dayNamesMin:["D","L","M","X","J","V","S"],weekHeader:"Sm",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.es)}),jQuery(function(e){e.datepicker.regional.et={closeText:"Sulge",prevText:"Eelnev",nextText:"Järgnev",currentText:"Täna",monthNames:["Jaanuar","Veebruar","Märts","Aprill","Mai","Juuni","Juuli","August","September","Oktoober","November","Detsember"],monthNamesShort:["Jaan","Veebr","Märts","Apr","Mai","Juuni","Juuli","Aug","Sept","Okt","Nov","Dets"],dayNames:["Pühapäev","Esmaspäev","Teisipäev","Kolmapäev","Neljapäev","Reede","Laupäev"],dayNamesShort:["Pühap","Esmasp","Teisip","Kolmap","Neljap","Reede","Laup"],dayNamesMin:["P","E","T","K","N","R","L"],weekHeader:"näd",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.et)}),jQuery(function(e){e.datepicker.regional.eu={closeText:"Egina",prevText:"&#x3C;Aur",nextText:"Hur&#x3E;",currentText:"Gaur",monthNames:["urtarrila","otsaila","martxoa","apirila","maiatza","ekaina","uztaila","abuztua","iraila","urria","azaroa","abendua"],monthNamesShort:["urt.","ots.","mar.","api.","mai.","eka.","uzt.","abu.","ira.","urr.","aza.","abe."],dayNames:["igandea","astelehena","asteartea","asteazkena","osteguna","ostirala","larunbata"],dayNamesShort:["ig.","al.","ar.","az.","og.","ol.","lr."],dayNamesMin:["ig","al","ar","az","og","ol","lr"],weekHeader:"As",dateFormat:"yy-mm-dd",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.eu)}),jQuery(function(e){e.datepicker.regional.fa={closeText:"بستن",prevText:"&#x3C;قبلی",nextText:"بعدی&#x3E;",currentText:"امروز",monthNames:["فروردين","ارديبهشت","خرداد","تير","مرداد","شهريور","مهر","آبان","آذر","دی","بهمن","اسفند"],monthNamesShort:["1","2","3","4","5","6","7","8","9","10","11","12"],dayNames:["يکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه","شنبه"],dayNamesShort:["ی","د","س","چ","پ","ج","ش"],dayNamesMin:["ی","د","س","چ","پ","ج","ش"],weekHeader:"هف",dateFormat:"yy/mm/dd",firstDay:6,isRTL:!0,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.fa)}),jQuery(function(e){e.datepicker.regional.fi={closeText:"Sulje",prevText:"&#xAB;Edellinen",nextText:"Seuraava&#xBB;",currentText:"Tänään",monthNames:["Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"],monthNamesShort:["Tammi","Helmi","Maalis","Huhti","Touko","Kesä","Heinä","Elo","Syys","Loka","Marras","Joulu"],dayNamesShort:["Su","Ma","Ti","Ke","To","Pe","La"],dayNames:["Sunnuntai","Maanantai","Tiistai","Keskiviikko","Torstai","Perjantai","Lauantai"],dayNamesMin:["Su","Ma","Ti","Ke","To","Pe","La"],weekHeader:"Vk",dateFormat:"d.m.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.fi)}),jQuery(function(e){e.datepicker.regional.fo={closeText:"Lat aftur",prevText:"&#x3C;Fyrra",nextText:"Næsta&#x3E;",currentText:"Í dag",monthNames:["Januar","Februar","Mars","Apríl","Mei","Juni","Juli","August","September","Oktober","November","Desember"],monthNamesShort:["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Aug","Sep","Okt","Nov","Des"],dayNames:["Sunnudagur","Mánadagur","Týsdagur","Mikudagur","Hósdagur","Fríggjadagur","Leyardagur"],dayNamesShort:["Sun","Mán","Týs","Mik","Hós","Frí","Ley"],dayNamesMin:["Su","Má","Tý","Mi","Hó","Fr","Le"],weekHeader:"Vk",dateFormat:"dd-mm-yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.fo)}),jQuery(function(e){e.datepicker.regional["fr-CA"]={closeText:"Fermer",prevText:"Précédent",nextText:"Suivant",currentText:"Aujourd'hui",monthNames:["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"],monthNamesShort:["janv.","févr.","mars","avril","mai","juin","juil.","août","sept.","oct.","nov.","déc."],dayNames:["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],dayNamesShort:["dim.","lun.","mar.","mer.","jeu.","ven.","sam."],dayNamesMin:["D","L","M","M","J","V","S"],weekHeader:"Sem.",dateFormat:"yy-mm-dd",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["fr-CA"])}),jQuery(function(e){e.datepicker.regional["fr-CH"]={closeText:"Fermer",prevText:"&#x3C;Préc",nextText:"Suiv&#x3E;",currentText:"Courant",monthNames:["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"],monthNamesShort:["janv.","févr.","mars","avril","mai","juin","juil.","août","sept.","oct.","nov.","déc."],dayNames:["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],dayNamesShort:["dim.","lun.","mar.","mer.","jeu.","ven.","sam."],dayNamesMin:["D","L","M","M","J","V","S"],weekHeader:"Sm",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["fr-CH"])}),jQuery(function(e){e.datepicker.regional.fr={closeText:"Fermer",prevText:"Précédent",nextText:"Suivant",currentText:"Aujourd'hui",monthNames:["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"],monthNamesShort:["janv.","févr.","mars","avril","mai","juin","juil.","août","sept.","oct.","nov.","déc."],dayNames:["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],dayNamesShort:["dim.","lun.","mar.","mer.","jeu.","ven.","sam."],dayNamesMin:["D","L","M","M","J","V","S"],weekHeader:"Sem.",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.fr)}),jQuery(function(e){e.datepicker.regional.gl={closeText:"Pechar",prevText:"&#x3C;Ant",nextText:"Seg&#x3E;",currentText:"Hoxe",monthNames:["Xaneiro","Febreiro","Marzo","Abril","Maio","Xuño","Xullo","Agosto","Setembro","Outubro","Novembro","Decembro"],monthNamesShort:["Xan","Feb","Mar","Abr","Mai","Xuñ","Xul","Ago","Set","Out","Nov","Dec"],dayNames:["Domingo","Luns","Martes","Mércores","Xoves","Venres","Sábado"],dayNamesShort:["Dom","Lun","Mar","Mér","Xov","Ven","Sáb"],dayNamesMin:["Do","Lu","Ma","Mé","Xo","Ve","Sá"],weekHeader:"Sm",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.gl)}),jQuery(function(e){e.datepicker.regional.he={closeText:"סגור",prevText:"&#x3C;הקודם",nextText:"הבא&#x3E;",currentText:"היום",monthNames:["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"],monthNamesShort:["ינו","פבר","מרץ","אפר","מאי","יוני","יולי","אוג","ספט","אוק","נוב","דצמ"],dayNames:["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"],dayNamesShort:["א'","ב'","ג'","ד'","ה'","ו'","שבת"],dayNamesMin:["א'","ב'","ג'","ד'","ה'","ו'","שבת"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!0,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.he)}),jQuery(function(e){e.datepicker.regional.hi={closeText:"बंद",prevText:"पिछला",nextText:"अगला",currentText:"आज",monthNames:["जनवरी ","फरवरी","मार्च","अप्रेल","मई","जून","जूलाई","अगस्त ","सितम्बर","अक्टूबर","नवम्बर","दिसम्बर"],monthNamesShort:["जन","फर","मार्च","अप्रेल","मई","जून","जूलाई","अग","सित","अक्ट","नव","दि"],dayNames:["रविवार","सोमवार","मंगलवार","बुधवार","गुरुवार","शुक्रवार","शनिवार"],dayNamesShort:["रवि","सोम","मंगल","बुध","गुरु","शुक्र","शनि"],dayNamesMin:["रवि","सोम","मंगल","बुध","गुरु","शुक्र","शनि"],weekHeader:"हफ्ता",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.hi)}),jQuery(function(e){e.datepicker.regional.hr={closeText:"Zatvori",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Danas",monthNames:["Siječanj","Veljača","Ožujak","Travanj","Svibanj","Lipanj","Srpanj","Kolovoz","Rujan","Listopad","Studeni","Prosinac"],monthNamesShort:["Sij","Velj","Ožu","Tra","Svi","Lip","Srp","Kol","Ruj","Lis","Stu","Pro"],dayNames:["Nedjelja","Ponedjeljak","Utorak","Srijeda","Četvrtak","Petak","Subota"],dayNamesShort:["Ned","Pon","Uto","Sri","Čet","Pet","Sub"],dayNamesMin:["Ne","Po","Ut","Sr","Če","Pe","Su"],weekHeader:"Tje",dateFormat:"dd.mm.yy.",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.hr)}),jQuery(function(e){e.datepicker.regional.hu={closeText:"bezár",prevText:"vissza",nextText:"előre",currentText:"ma",monthNames:["Január","Február","Március","Április","Május","Június","Július","Augusztus","Szeptember","Október","November","December"],monthNamesShort:["Jan","Feb","Már","Ápr","Máj","Jún","Júl","Aug","Szep","Okt","Nov","Dec"],dayNames:["Vasárnap","Hétfő","Kedd","Szerda","Csütörtök","Péntek","Szombat"],dayNamesShort:["Vas","Hét","Ked","Sze","Csü","Pén","Szo"],dayNamesMin:["V","H","K","Sze","Cs","P","Szo"],weekHeader:"Hét",dateFormat:"yy.mm.dd.",firstDay:1,isRTL:!1,showMonthAfterYear:!0,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.hu)}),jQuery(function(e){e.datepicker.regional.hy={closeText:"Փակել",prevText:"&#x3C;Նախ.",nextText:"Հաջ.&#x3E;",currentText:"Այսօր",monthNames:["Հունվար","Փետրվար","Մարտ","Ապրիլ","Մայիս","Հունիս","Հուլիս","Օգոստոս","Սեպտեմբեր","Հոկտեմբեր","Նոյեմբեր","Դեկտեմբեր"],monthNamesShort:["Հունվ","Փետր","Մարտ","Ապր","Մայիս","Հունիս","Հուլ","Օգս","Սեպ","Հոկ","Նոյ","Դեկ"],dayNames:["կիրակի","եկուշաբթի","երեքշաբթի","չորեքշաբթի","հինգշաբթի","ուրբաթ","շաբաթ"],dayNamesShort:["կիր","երկ","երք","չրք","հնգ","ուրբ","շբթ"],dayNamesMin:["կիր","երկ","երք","չրք","հնգ","ուրբ","շբթ"],weekHeader:"ՇԲՏ",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.hy)}),jQuery(function(e){e.datepicker.regional.id={closeText:"Tutup",prevText:"&#x3C;mundur",nextText:"maju&#x3E;",currentText:"hari ini",monthNames:["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","Nopember","Desember"],monthNamesShort:["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agus","Sep","Okt","Nop","Des"],dayNames:["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"],dayNamesShort:["Min","Sen","Sel","Rab","kam","Jum","Sab"],dayNamesMin:["Mg","Sn","Sl","Rb","Km","jm","Sb"],weekHeader:"Mg",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.id)}),jQuery(function(e){e.datepicker.regional.is={closeText:"Loka",prevText:"&#x3C; Fyrri",nextText:"Næsti &#x3E;",currentText:"Í dag",monthNames:["Janúar","Febrúar","Mars","Apríl","Maí","Júní","Júlí","Ágúst","September","Október","Nóvember","Desember"],monthNamesShort:["Jan","Feb","Mar","Apr","Maí","Jún","Júl","Ágú","Sep","Okt","Nóv","Des"],dayNames:["Sunnudagur","Mánudagur","Þriðjudagur","Miðvikudagur","Fimmtudagur","Föstudagur","Laugardagur"],dayNamesShort:["Sun","Mán","Þri","Mið","Fim","Fös","Lau"],dayNamesMin:["Su","Má","Þr","Mi","Fi","Fö","La"],weekHeader:"Vika",dateFormat:"dd.mm.yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.is)}),jQuery(function(e){e.datepicker.regional.it={closeText:"Chiudi",prevText:"&#x3C;Prec",nextText:"Succ&#x3E;",currentText:"Oggi",monthNames:["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"],monthNamesShort:["Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"],dayNames:["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"],dayNamesShort:["Dom","Lun","Mar","Mer","Gio","Ven","Sab"],dayNamesMin:["Do","Lu","Ma","Me","Gi","Ve","Sa"],weekHeader:"Sm",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.it)}),jQuery(function(e){e.datepicker.regional.ja={closeText:"閉じる",prevText:"&#x3C;前",nextText:"次&#x3E;",currentText:"今日",monthNames:["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],monthNamesShort:["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],dayNames:["日曜日","月曜日","火曜日","水曜日","木曜日","金曜日","土曜日"],dayNamesShort:["日","月","火","水","木","金","土"],dayNamesMin:["日","月","火","水","木","金","土"],weekHeader:"週",dateFormat:"yy/mm/dd",firstDay:0,isRTL:!1,showMonthAfterYear:!0,yearSuffix:"年"},e.datepicker.setDefaults(e.datepicker.regional.ja)}),jQuery(function(e){e.datepicker.regional.ka={closeText:"დახურვა",prevText:"&#x3c; წინა",nextText:"შემდეგი &#x3e;",currentText:"დღეს",monthNames:["იანვარი","თებერვალი","მარტი","აპრილი","მაისი","ივნისი","ივლისი","აგვისტო","სექტემბერი","ოქტომბერი","ნოემბერი","დეკემბერი"],monthNamesShort:["იან","თებ","მარ","აპრ","მაი","ივნ","ივლ","აგვ","სექ","ოქტ","ნოე","დეკ"],dayNames:["კვირა","ორშაბათი","სამშაბათი","ოთხშაბათი","ხუთშაბათი","პარასკევი","შაბათი"],dayNamesShort:["კვ","ორშ","სამ","ოთხ","ხუთ","პარ","შაბ"],dayNamesMin:["კვ","ორშ","სამ","ოთხ","ხუთ","პარ","შაბ"],weekHeader:"კვირა",dateFormat:"dd-mm-yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ka)}),jQuery(function(e){e.datepicker.regional.kk={closeText:"Жабу",prevText:"&#x3C;Алдыңғы",nextText:"Келесі&#x3E;",currentText:"Бүгін",monthNames:["Қаңтар","Ақпан","Наурыз","Сәуір","Мамыр","Маусым","Шілде","Тамыз","Қыркүйек","Қазан","Қараша","Желтоқсан"],monthNamesShort:["Қаң","Ақп","Нау","Сәу","Мам","Мау","Шіл","Там","Қыр","Қаз","Қар","Жел"],dayNames:["Жексенбі","Дүйсенбі","Сейсенбі","Сәрсенбі","Бейсенбі","Жұма","Сенбі"],dayNamesShort:["жкс","дсн","ссн","срс","бсн","жма","снб"],dayNamesMin:["Жк","Дс","Сс","Ср","Бс","Жм","Сн"],weekHeader:"Не",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.kk)}),jQuery(function(e){e.datepicker.regional.km={closeText:"ធ្វើ​រួច",prevText:"មុន",nextText:"បន្ទាប់",currentText:"ថ្ងៃ​នេះ",monthNames:["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"],monthNamesShort:["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"],dayNames:["អាទិត្យ","ចន្ទ","អង្គារ","ពុធ","ព្រហស្បតិ៍","សុក្រ","សៅរ៍"],dayNamesShort:["អា","ច","អ","ពុ","ព្រហ","សុ","សៅ"],dayNamesMin:["អា","ច","អ","ពុ","ព្រហ","សុ","សៅ"],weekHeader:"សប្ដាហ៍",dateFormat:"dd-mm-yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.km)}),jQuery(function(e){e.datepicker.regional.ko={closeText:"닫기",prevText:"이전달",nextText:"다음달",currentText:"오늘",monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],monthNamesShort:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],dayNames:["일요일","월요일","화요일","수요일","목요일","금요일","토요일"],dayNamesShort:["일","월","화","수","목","금","토"],dayNamesMin:["일","월","화","수","목","금","토"],weekHeader:"Wk",dateFormat:"yy-mm-dd",firstDay:0,isRTL:!1,showMonthAfterYear:!0,yearSuffix:"년"},e.datepicker.setDefaults(e.datepicker.regional.ko)}),jQuery(function(e){e.datepicker.regional.ky={closeText:"Жабуу",prevText:"&#x3c;Мур",nextText:"Кий&#x3e;",currentText:"Бүгүн",monthNames:["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],monthNamesShort:["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"],dayNames:["жекшемби","дүйшөмбү","шейшемби","шаршемби","бейшемби","жума","ишемби"],dayNamesShort:["жек","дүй","шей","шар","бей","жум","ише"],dayNamesMin:["Жк","Дш","Шш","Шр","Бш","Жм","Иш"],weekHeader:"Жум",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ky)}),jQuery(function(e){e.datepicker.regional.lb={closeText:"Fäerdeg",prevText:"Zréck",nextText:"Weider",currentText:"Haut",monthNames:["Januar","Februar","Mäerz","Abrëll","Mee","Juni","Juli","August","September","Oktober","November","Dezember"],monthNamesShort:["Jan","Feb","Mäe","Abr","Mee","Jun","Jul","Aug","Sep","Okt","Nov","Dez"],dayNames:["Sonndeg","Méindeg","Dënschdeg","Mëttwoch","Donneschdeg","Freideg","Samschdeg"],dayNamesShort:["Son","Méi","Dën","Mët","Don","Fre","Sam"],dayNamesMin:["So","Mé","Dë","Më","Do","Fr","Sa"],weekHeader:"W",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.lb)}),jQuery(function(e){e.datepicker.regional.lt={closeText:"Uždaryti",prevText:"&#x3C;Atgal",nextText:"Pirmyn&#x3E;",currentText:"Šiandien",monthNames:["Sausis","Vasaris","Kovas","Balandis","Gegužė","Birželis","Liepa","Rugpjūtis","Rugsėjis","Spalis","Lapkritis","Gruodis"],monthNamesShort:["Sau","Vas","Kov","Bal","Geg","Bir","Lie","Rugp","Rugs","Spa","Lap","Gru"],dayNames:["sekmadienis","pirmadienis","antradienis","trečiadienis","ketvirtadienis","penktadienis","šeštadienis"],dayNamesShort:["sek","pir","ant","tre","ket","pen","šeš"],dayNamesMin:["Se","Pr","An","Tr","Ke","Pe","Še"],weekHeader:"SAV",dateFormat:"yy-mm-dd",firstDay:1,isRTL:!1,showMonthAfterYear:!0,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.lt)}),jQuery(function(e){e.datepicker.regional.lv={closeText:"Aizvērt",prevText:"Iepr.",nextText:"Nāk.",currentText:"Šodien",monthNames:["Janvāris","Februāris","Marts","Aprīlis","Maijs","Jūnijs","Jūlijs","Augusts","Septembris","Oktobris","Novembris","Decembris"],monthNamesShort:["Jan","Feb","Mar","Apr","Mai","Jūn","Jūl","Aug","Sep","Okt","Nov","Dec"],dayNames:["svētdiena","pirmdiena","otrdiena","trešdiena","ceturtdiena","piektdiena","sestdiena"],dayNamesShort:["svt","prm","otr","tre","ctr","pkt","sst"],dayNamesMin:["Sv","Pr","Ot","Tr","Ct","Pk","Ss"],weekHeader:"Ned.",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.lv)}),jQuery(function(e){e.datepicker.regional.mk={closeText:"Затвори",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Денес",monthNames:["Јануари","Февруари","Март","Април","Мај","Јуни","Јули","Август","Септември","Октомври","Ноември","Декември"],monthNamesShort:["Јан","Фев","Мар","Апр","Мај","Јун","Јул","Авг","Сеп","Окт","Ное","Дек"],dayNames:["Недела","Понеделник","Вторник","Среда","Четврток","Петок","Сабота"],dayNamesShort:["Нед","Пон","Вто","Сре","Чет","Пет","Саб"],dayNamesMin:["Не","По","Вт","Ср","Че","Пе","Са"],weekHeader:"Сед",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.mk)}),jQuery(function(e){e.datepicker.regional.ml={closeText:"ശരി",prevText:"മുന്നത്തെ",nextText:"അടുത്തത് ",currentText:"ഇന്ന്",monthNames:["ജനുവരി","ഫെബ്രുവരി","മാര്‍ച്ച്","ഏപ്രില്‍","മേയ്","ജൂണ്‍","ജൂലൈ","ആഗസ്റ്റ്","സെപ്റ്റംബര്‍","ഒക്ടോബര്‍","നവംബര്‍","ഡിസംബര്‍"],monthNamesShort:["ജനു","ഫെബ്","മാര്‍","ഏപ്രി","മേയ്","ജൂണ്‍","ജൂലാ","ആഗ","സെപ്","ഒക്ടോ","നവം","ഡിസ"],dayNames:["ഞായര്‍","തിങ്കള്‍","ചൊവ്വ","ബുധന്‍","വ്യാഴം","വെള്ളി","ശനി"],dayNamesShort:["ഞായ","തിങ്ക","ചൊവ്വ","ബുധ","വ്യാഴം","വെള്ളി","ശനി"],dayNamesMin:["ഞാ","തി","ചൊ","ബു","വ്യാ","വെ","ശ"],weekHeader:"ആ",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ml)}),jQuery(function(e){e.datepicker.regional.ms={closeText:"Tutup",prevText:"&#x3C;Sebelum",nextText:"Selepas&#x3E;",currentText:"hari ini",monthNames:["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"],monthNamesShort:["Jan","Feb","Mac","Apr","Mei","Jun","Jul","Ogo","Sep","Okt","Nov","Dis"],dayNames:["Ahad","Isnin","Selasa","Rabu","Khamis","Jumaat","Sabtu"],dayNamesShort:["Aha","Isn","Sel","Rab","kha","Jum","Sab"],dayNamesMin:["Ah","Is","Se","Ra","Kh","Ju","Sa"],weekHeader:"Mg",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ms)}),jQuery(function(e){e.datepicker.regional.nb={closeText:"Lukk",prevText:"&#xAB;Forrige",nextText:"Neste&#xBB;",currentText:"I dag",monthNames:["januar","februar","mars","april","mai","juni","juli","august","september","oktober","november","desember"],monthNamesShort:["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"],dayNamesShort:["søn","man","tir","ons","tor","fre","lør"],dayNames:["søndag","mandag","tirsdag","onsdag","torsdag","fredag","lørdag"],dayNamesMin:["sø","ma","ti","on","to","fr","lø"],weekHeader:"Uke",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.nb)
-}),jQuery(function(e){e.datepicker.regional["nl-BE"]={closeText:"Sluiten",prevText:"←",nextText:"→",currentText:"Vandaag",monthNames:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],monthNamesShort:["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"],dayNames:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"],dayNamesShort:["zon","maa","din","woe","don","vri","zat"],dayNamesMin:["zo","ma","di","wo","do","vr","za"],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["nl-BE"])}),jQuery(function(e){e.datepicker.regional.nl={closeText:"Sluiten",prevText:"←",nextText:"→",currentText:"Vandaag",monthNames:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],monthNamesShort:["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"],dayNames:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"],dayNamesShort:["zon","maa","din","woe","don","vri","zat"],dayNamesMin:["zo","ma","di","wo","do","vr","za"],weekHeader:"Wk",dateFormat:"dd-mm-yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.nl)}),jQuery(function(e){e.datepicker.regional.nn={closeText:"Lukk",prevText:"&#xAB;Førre",nextText:"Neste&#xBB;",currentText:"I dag",monthNames:["januar","februar","mars","april","mai","juni","juli","august","september","oktober","november","desember"],monthNamesShort:["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"],dayNamesShort:["sun","mån","tys","ons","tor","fre","lau"],dayNames:["sundag","måndag","tysdag","onsdag","torsdag","fredag","laurdag"],dayNamesMin:["su","må","ty","on","to","fr","la"],weekHeader:"Veke",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.nn)}),jQuery(function(e){e.datepicker.regional.no={closeText:"Lukk",prevText:"&#xAB;Forrige",nextText:"Neste&#xBB;",currentText:"I dag",monthNames:["januar","februar","mars","april","mai","juni","juli","august","september","oktober","november","desember"],monthNamesShort:["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"],dayNamesShort:["søn","man","tir","ons","tor","fre","lør"],dayNames:["søndag","mandag","tirsdag","onsdag","torsdag","fredag","lørdag"],dayNamesMin:["sø","ma","ti","on","to","fr","lø"],weekHeader:"Uke",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.no)}),jQuery(function(e){e.datepicker.regional.pl={closeText:"Zamknij",prevText:"&#x3C;Poprzedni",nextText:"Następny&#x3E;",currentText:"Dziś",monthNames:["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"],monthNamesShort:["Sty","Lu","Mar","Kw","Maj","Cze","Lip","Sie","Wrz","Pa","Lis","Gru"],dayNames:["Niedziela","Poniedziałek","Wtorek","Środa","Czwartek","Piątek","Sobota"],dayNamesShort:["Nie","Pn","Wt","Śr","Czw","Pt","So"],dayNamesMin:["N","Pn","Wt","Śr","Cz","Pt","So"],weekHeader:"Tydz",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.pl)}),jQuery(function(e){e.datepicker.regional["pt-BR"]={closeText:"Fechar",prevText:"&#x3C;Anterior",nextText:"Próximo&#x3E;",currentText:"Hoje",monthNames:["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"],monthNamesShort:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],dayNames:["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"],dayNamesShort:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],dayNamesMin:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],weekHeader:"Sm",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["pt-BR"])}),jQuery(function(e){e.datepicker.regional.pt={closeText:"Fechar",prevText:"Anterior",nextText:"Seguinte",currentText:"Hoje",monthNames:["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"],monthNamesShort:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],dayNames:["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"],dayNamesShort:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],dayNamesMin:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],weekHeader:"Sem",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.pt)}),jQuery(function(e){e.datepicker.regional.rm={closeText:"Serrar",prevText:"&#x3C;Suandant",nextText:"Precedent&#x3E;",currentText:"Actual",monthNames:["Schaner","Favrer","Mars","Avrigl","Matg","Zercladur","Fanadur","Avust","Settember","October","November","December"],monthNamesShort:["Scha","Fev","Mar","Avr","Matg","Zer","Fan","Avu","Sett","Oct","Nov","Dec"],dayNames:["Dumengia","Glindesdi","Mardi","Mesemna","Gievgia","Venderdi","Sonda"],dayNamesShort:["Dum","Gli","Mar","Mes","Gie","Ven","Som"],dayNamesMin:["Du","Gl","Ma","Me","Gi","Ve","So"],weekHeader:"emna",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.rm)}),jQuery(function(e){e.datepicker.regional.ro={closeText:"Închide",prevText:"&#xAB; Luna precedentă",nextText:"Luna următoare &#xBB;",currentText:"Azi",monthNames:["Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie","Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"],monthNamesShort:["Ian","Feb","Mar","Apr","Mai","Iun","Iul","Aug","Sep","Oct","Nov","Dec"],dayNames:["Duminică","Luni","Marţi","Miercuri","Joi","Vineri","Sâmbătă"],dayNamesShort:["Dum","Lun","Mar","Mie","Joi","Vin","Sâm"],dayNamesMin:["Du","Lu","Ma","Mi","Jo","Vi","Sâ"],weekHeader:"Săpt",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ro)}),jQuery(function(e){e.datepicker.regional.ru={closeText:"Закрыть",prevText:"&#x3C;Пред",nextText:"След&#x3E;",currentText:"Сегодня",monthNames:["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],monthNamesShort:["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"],dayNames:["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"],dayNamesShort:["вск","пнд","втр","срд","чтв","птн","сбт"],dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],weekHeader:"Нед",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ru)}),jQuery(function(e){e.datepicker.regional.sk={closeText:"Zavrieť",prevText:"&#x3C;Predchádzajúci",nextText:"Nasledujúci&#x3E;",currentText:"Dnes",monthNames:["január","február","marec","apríl","máj","jún","júl","august","september","október","november","december"],monthNamesShort:["Jan","Feb","Mar","Apr","Máj","Jún","Júl","Aug","Sep","Okt","Nov","Dec"],dayNames:["nedeľa","pondelok","utorok","streda","štvrtok","piatok","sobota"],dayNamesShort:["Ned","Pon","Uto","Str","Štv","Pia","Sob"],dayNamesMin:["Ne","Po","Ut","St","Št","Pia","So"],weekHeader:"Ty",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.sk)}),jQuery(function(e){e.datepicker.regional.sl={closeText:"Zapri",prevText:"&#x3C;Prejšnji",nextText:"Naslednji&#x3E;",currentText:"Trenutni",monthNames:["Januar","Februar","Marec","April","Maj","Junij","Julij","Avgust","September","Oktober","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Avg","Sep","Okt","Nov","Dec"],dayNames:["Nedelja","Ponedeljek","Torek","Sreda","Četrtek","Petek","Sobota"],dayNamesShort:["Ned","Pon","Tor","Sre","Čet","Pet","Sob"],dayNamesMin:["Ne","Po","To","Sr","Če","Pe","So"],weekHeader:"Teden",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.sl)}),jQuery(function(e){e.datepicker.regional.sq={closeText:"mbylle",prevText:"&#x3C;mbrapa",nextText:"Përpara&#x3E;",currentText:"sot",monthNames:["Janar","Shkurt","Mars","Prill","Maj","Qershor","Korrik","Gusht","Shtator","Tetor","Nëntor","Dhjetor"],monthNamesShort:["Jan","Shk","Mar","Pri","Maj","Qer","Kor","Gus","Sht","Tet","Nën","Dhj"],dayNames:["E Diel","E Hënë","E Martë","E Mërkurë","E Enjte","E Premte","E Shtune"],dayNamesShort:["Di","Hë","Ma","Më","En","Pr","Sh"],dayNamesMin:["Di","Hë","Ma","Më","En","Pr","Sh"],weekHeader:"Ja",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.sq)}),jQuery(function(e){e.datepicker.regional["sr-SR"]={closeText:"Zatvori",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Danas",monthNames:["Januar","Februar","Mart","April","Maj","Jun","Jul","Avgust","Septembar","Oktobar","Novembar","Decembar"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Avg","Sep","Okt","Nov","Dec"],dayNames:["Nedelja","Ponedeljak","Utorak","Sreda","Četvrtak","Petak","Subota"],dayNamesShort:["Ned","Pon","Uto","Sre","Čet","Pet","Sub"],dayNamesMin:["Ne","Po","Ut","Sr","Če","Pe","Su"],weekHeader:"Sed",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional["sr-SR"])}),jQuery(function(e){e.datepicker.regional.sr={closeText:"Затвори",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Данас",monthNames:["Јануар","Фебруар","Март","Април","Мај","Јун","Јул","Август","Септембар","Октобар","Новембар","Децембар"],monthNamesShort:["Јан","Феб","Мар","Апр","Мај","Јун","Јул","Авг","Сеп","Окт","Нов","Дец"],dayNames:["Недеља","Понедељак","Уторак","Среда","Четвртак","Петак","Субота"],dayNamesShort:["Нед","Пон","Уто","Сре","Чет","Пет","Суб"],dayNamesMin:["Не","По","Ут","Ср","Че","Пе","Су"],weekHeader:"Сед",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.sr)}),jQuery(function(e){e.datepicker.regional.sv={closeText:"Stäng",prevText:"&#xAB;Förra",nextText:"Nästa&#xBB;",currentText:"Idag",monthNames:["Januari","Februari","Mars","April","Maj","Juni","Juli","Augusti","September","Oktober","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],dayNamesShort:["Sön","Mån","Tis","Ons","Tor","Fre","Lör"],dayNames:["Söndag","Måndag","Tisdag","Onsdag","Torsdag","Fredag","Lördag"],dayNamesMin:["Sö","Må","Ti","On","To","Fr","Lö"],weekHeader:"Ve",dateFormat:"yy-mm-dd",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.sv)}),jQuery(function(e){e.datepicker.regional.ta={closeText:"மூடு",prevText:"முன்னையது",nextText:"அடுத்தது",currentText:"இன்று",monthNames:["தை","மாசி","பங்குனி","சித்திரை","வைகாசி","ஆனி","ஆடி","ஆவணி","புரட்டாசி","ஐப்பசி","கார்த்திகை","மார்கழி"],monthNamesShort:["தை","மாசி","பங்","சித்","வைகா","ஆனி","ஆடி","ஆவ","புர","ஐப்","கார்","மார்"],dayNames:["ஞாயிற்றுக்கிழமை","திங்கட்கிழமை","செவ்வாய்க்கிழமை","புதன்கிழமை","வியாழக்கிழமை","வெள்ளிக்கிழமை","சனிக்கிழமை"],dayNamesShort:["ஞாயிறு","திங்கள்","செவ்வாய்","புதன்","வியாழன்","வெள்ளி","சனி"],dayNamesMin:["ஞா","தி","செ","பு","வி","வெ","ச"],weekHeader:"Не",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.ta)}),jQuery(function(e){e.datepicker.regional.th={closeText:"ปิด",prevText:"&#xAB;&#xA0;ย้อน",nextText:"ถัดไป&#xA0;&#xBB;",currentText:"วันนี้",monthNames:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],monthNamesShort:["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."],dayNames:["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"],dayNamesShort:["อา.","จ.","อ.","พ.","พฤ.","ศ.","ส."],dayNamesMin:["อา.","จ.","อ.","พ.","พฤ.","ศ.","ส."],weekHeader:"Wk",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.th)}),jQuery(function(e){e.datepicker.regional.tj={closeText:"Идома",prevText:"&#x3c;Қафо",nextText:"Пеш&#x3e;",currentText:"Имрӯз",monthNames:["Январ","Феврал","Март","Апрел","Май","Июн","Июл","Август","Сентябр","Октябр","Ноябр","Декабр"],monthNamesShort:["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"],dayNames:["якшанбе","душанбе","сешанбе","чоршанбе","панҷшанбе","ҷумъа","шанбе"],dayNamesShort:["якш","душ","сеш","чор","пан","ҷум","шан"],dayNamesMin:["Як","Дш","Сш","Чш","Пш","Ҷм","Шн"],weekHeader:"Хф",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.tj)}),jQuery(function(e){e.datepicker.regional.tr={closeText:"kapat",prevText:"&#x3C;geri",nextText:"ileri&#x3e",currentText:"bugün",monthNames:["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"],monthNamesShort:["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"],dayNames:["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"],dayNamesShort:["Pz","Pt","Sa","Ça","Pe","Cu","Ct"],dayNamesMin:["Pz","Pt","Sa","Ça","Pe","Cu","Ct"],weekHeader:"Hf",dateFormat:"dd.mm.yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.tr)}),jQuery(function(e){e.datepicker.regional.uk={closeText:"Закрити",prevText:"&#x3C;",nextText:"&#x3E;",currentText:"Сьогодні",monthNames:["Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"],monthNamesShort:["Січ","Лют","Бер","Кві","Тра","Чер","Лип","Сер","Вер","Жов","Лис","Гру"],dayNames:["неділя","понеділок","вівторок","середа","четвер","п’ятниця","субота"],dayNamesShort:["нед","пнд","вів","срд","чтв","птн","сбт"],dayNamesMin:["Нд","Пн","Вт","Ср","Чт","Пт","Сб"],weekHeader:"Тиж",dateFormat:"dd/mm/yy",firstDay:1,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.uk)}),jQuery(function(e){e.datepicker.regional.vi={closeText:"Đóng",prevText:"&#x3C;Trước",nextText:"Tiếp&#x3E;",currentText:"Hôm nay",monthNames:["Tháng Một","Tháng Hai","Tháng Ba","Tháng Tư","Tháng Năm","Tháng Sáu","Tháng Bảy","Tháng Tám","Tháng Chín","Tháng Mười","Tháng Mười Một","Tháng Mười Hai"],monthNamesShort:["Tháng 1","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"],dayNames:["Chủ Nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"],dayNamesShort:["CN","T2","T3","T4","T5","T6","T7"],dayNamesMin:["CN","T2","T3","T4","T5","T6","T7"],weekHeader:"Tu",dateFormat:"dd/mm/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},e.datepicker.setDefaults(e.datepicker.regional.vi)}),jQuery(function(e){e.datepicker.regional["zh-CN"]={closeText:"关闭",prevText:"&#x3C;上月",nextText:"下月&#x3E;",currentText:"今天",monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],dayNames:["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],dayNamesShort:["周日","周一","周二","周三","周四","周五","周六"],dayNamesMin:["日","一","二","三","四","五","六"],weekHeader:"周",dateFormat:"yy-mm-dd",firstDay:1,isRTL:!1,showMonthAfterYear:!0,yearSuffix:"年"},e.datepicker.setDefaults(e.datepicker.regional["zh-CN"])}),jQuery(function(e){e.datepicker.regional["zh-HK"]={closeText:"關閉",prevText:"&#x3C;上月",nextText:"下月&#x3E;",currentText:"今天",monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],dayNames:["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],dayNamesShort:["周日","周一","周二","周三","周四","周五","周六"],dayNamesMin:["日","一","二","三","四","五","六"],weekHeader:"周",dateFormat:"dd-mm-yy",firstDay:0,isRTL:!1,showMonthAfterYear:!0,yearSuffix:"年"},e.datepicker.setDefaults(e.datepicker.regional["zh-HK"])}),jQuery(function(e){e.datepicker.regional["zh-TW"]={closeText:"關閉",prevText:"&#x3C;上月",nextText:"下月&#x3E;",currentText:"今天",monthNames:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],monthNamesShort:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],dayNames:["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],dayNamesShort:["周日","周一","周二","周三","周四","周五","周六"],dayNamesMin:["日","一","二","三","四","五","六"],weekHeader:"周",dateFormat:"yy/mm/dd",firstDay:1,isRTL:!1,showMonthAfterYear:!0,yearSuffix:"年"},e.datepicker.setDefaults(e.datepicker.regional["zh-TW"])});
+/* Algerian Arabic Translation for jQuery UI date picker plugin. (can be used for Tunisia)*/
+/* Mohamed Cherif BOUCHELAGHEM -- cherifbouchelaghem@yahoo.fr */
+
+jQuery(function($){
+	$.datepicker.regional['ar-DZ'] = {
+		closeText: 'إغلاق',
+		prevText: '&#x3C;السابق',
+		nextText: 'التالي&#x3E;',
+		currentText: 'اليوم',
+		monthNames: ['جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان',
+		'جويلية', 'أوت', 'سبتمبر','أكتوبر', 'نوفمبر', 'ديسمبر'],
+		monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+		dayNames: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+		dayNamesShort: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+		dayNamesMin: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+		weekHeader: 'أسبوع',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 6,
+  		isRTL: true,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['ar-DZ']);
+});
+
+/* Arabic Translation for jQuery UI date picker plugin. */
+/* Khaled Alhourani -- me@khaledalhourani.com */
+/* NOTE: monthNames are the original months names and they are the Arabic names, not the new months name فبراير - يناير and there isn't any Arabic roots for these months */
+jQuery(function($){
+	$.datepicker.regional['ar'] = {
+		closeText: 'إغلاق',
+		prevText: '&#x3C;السابق',
+		nextText: 'التالي&#x3E;',
+		currentText: 'اليوم',
+		monthNames: ['كانون الثاني', 'شباط', 'آذار', 'نيسان', 'مايو', 'حزيران',
+		'تموز', 'آب', 'أيلول',	'تشرين الأول', 'تشرين الثاني', 'كانون الأول'],
+		monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+		dayNames: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+		dayNamesShort: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+		dayNamesMin: ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
+		weekHeader: 'أسبوع',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 6,
+  		isRTL: true,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['ar']);
+});
+
+/* Azerbaijani (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Jamil Najafov (necefov33@gmail.com). */
+jQuery(function($) {
+	$.datepicker.regional['az'] = {
+		closeText: 'Bağla',
+		prevText: '&#x3C;Geri',
+		nextText: 'İrəli&#x3E;',
+		currentText: 'Bugün',
+		monthNames: ['Yanvar','Fevral','Mart','Aprel','May','İyun',
+		'İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'],
+		monthNamesShort: ['Yan','Fev','Mar','Apr','May','İyun',
+		'İyul','Avq','Sen','Okt','Noy','Dek'],
+		dayNames: ['Bazar','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə'],
+		dayNamesShort: ['B','Be','Ça','Ç','Ca','C','Ş'],
+		dayNamesMin: ['B','B','Ç','С','Ç','C','Ş'],
+		weekHeader: 'Hf',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['az']);
+});
+
+/* Belarusian initialisation for the jQuery UI date picker plugin. */
+/* Written by Pavel Selitskas <p.selitskas@gmail.com> */
+jQuery(function($){
+	$.datepicker.regional['be'] = {
+		closeText: 'Зачыніць',
+		prevText: '&larr;Папяр.',
+		nextText: 'Наст.&rarr;',
+		currentText: 'Сёньня',
+		monthNames: ['Студзень','Люты','Сакавік','Красавік','Травень','Чэрвень',
+		'Ліпень','Жнівень','Верасень','Кастрычнік','Лістапад','Сьнежань'],
+		monthNamesShort: ['Сту','Лют','Сак','Кра','Тра','Чэр',
+		'Ліп','Жні','Вер','Кас','Ліс','Сьн'],
+		dayNames: ['нядзеля','панядзелак','аўторак','серада','чацьвер','пятніца','субота'],
+		dayNamesShort: ['ндз','пнд','аўт','срд','чцв','птн','сбт'],
+		dayNamesMin: ['Нд','Пн','Аў','Ср','Чц','Пт','Сб'],
+		weekHeader: 'Тд',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['be']);
+});
+
+/* Bulgarian initialisation for the jQuery UI date picker plugin. */
+/* Written by Stoyan Kyosev (http://svest.org). */
+jQuery(function($){
+	$.datepicker.regional['bg'] = {
+		closeText: 'затвори',
+		prevText: '&#x3C;назад',
+		nextText: 'напред&#x3E;',
+		nextBigText: '&#x3E;&#x3E;',
+		currentText: 'днес',
+		monthNames: ['Януари','Февруари','Март','Април','Май','Юни',
+		'Юли','Август','Септември','Октомври','Ноември','Декември'],
+		monthNamesShort: ['Яну','Фев','Мар','Апр','Май','Юни',
+		'Юли','Авг','Сеп','Окт','Нов','Дек'],
+		dayNames: ['Неделя','Понеделник','Вторник','Сряда','Четвъртък','Петък','Събота'],
+		dayNamesShort: ['Нед','Пон','Вто','Сря','Чет','Пет','Съб'],
+		dayNamesMin: ['Не','По','Вт','Ср','Че','Пе','Съ'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['bg']);
+});
+
+/* Bosnian i18n for the jQuery UI date picker plugin. */
+/* Written by Kenan Konjo. */
+jQuery(function($){
+	$.datepicker.regional['bs'] = {
+		closeText: 'Zatvori',
+		prevText: '&#x3C;',
+		nextText: '&#x3E;',
+		currentText: 'Danas',
+		monthNames: ['Januar','Februar','Mart','April','Maj','Juni',
+		'Juli','August','Septembar','Oktobar','Novembar','Decembar'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun',
+		'Jul','Aug','Sep','Okt','Nov','Dec'],
+		dayNames: ['Nedelja','Ponedeljak','Utorak','Srijeda','Četvrtak','Petak','Subota'],
+		dayNamesShort: ['Ned','Pon','Uto','Sri','Čet','Pet','Sub'],
+		dayNamesMin: ['Ne','Po','Ut','Sr','Če','Pe','Su'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['bs']);
+});
+
+/* Inicialització en català per a l'extensió 'UI date picker' per jQuery. */
+/* Writers: (joan.leon@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['ca'] = {
+		closeText: 'Tanca',
+		prevText: 'Anterior',
+		nextText: 'Següent',
+		currentText: 'Avui',
+		monthNames: ['gener','febrer','març','abril','maig','juny',
+		'juliol','agost','setembre','octubre','novembre','desembre'],
+		monthNamesShort: ['gen','feb','març','abr','maig','juny',
+		'jul','ag','set','oct','nov','des'],
+		dayNames: ['diumenge','dilluns','dimarts','dimecres','dijous','divendres','dissabte'],
+		dayNamesShort: ['dg','dl','dt','dc','dj','dv','ds'],
+		dayNamesMin: ['dg','dl','dt','dc','dj','dv','ds'],
+		weekHeader: 'Set',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['ca']);
+});
+
+/* Czech initialisation for the jQuery UI date picker plugin. */
+/* Written by Tomas Muller (tomas@tomas-muller.net). */
+jQuery(function($){
+	$.datepicker.regional['cs'] = {
+		closeText: 'Zavřít',
+		prevText: '&#x3C;Dříve',
+		nextText: 'Později&#x3E;',
+		currentText: 'Nyní',
+		monthNames: ['leden','únor','březen','duben','květen','červen',
+		'červenec','srpen','září','říjen','listopad','prosinec'],
+		monthNamesShort: ['led','úno','bře','dub','kvě','čer',
+		'čvc','srp','zář','říj','lis','pro'],
+		dayNames: ['neděle', 'pondělí', 'úterý', 'středa', 'čtvrtek', 'pátek', 'sobota'],
+		dayNamesShort: ['ne', 'po', 'út', 'st', 'čt', 'pá', 'so'],
+		dayNamesMin: ['ne','po','út','st','čt','pá','so'],
+		weekHeader: 'Týd',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['cs']);
+});
+
+/* Welsh/UK initialisation for the jQuery UI date picker plugin. */
+/* Written by William Griffiths. */
+jQuery(function($){
+	$.datepicker.regional['cy-GB'] = {
+		closeText: 'Done',
+		prevText: 'Prev',
+		nextText: 'Next',
+		currentText: 'Today',
+		monthNames: ['Ionawr','Chwefror','Mawrth','Ebrill','Mai','Mehefin',
+		'Gorffennaf','Awst','Medi','Hydref','Tachwedd','Rhagfyr'],
+		monthNamesShort: ['Ion', 'Chw', 'Maw', 'Ebr', 'Mai', 'Meh',
+		'Gor', 'Aws', 'Med', 'Hyd', 'Tac', 'Rha'],
+		dayNames: ['Dydd Sul', 'Dydd Llun', 'Dydd Mawrth', 'Dydd Mercher', 'Dydd Iau', 'Dydd Gwener', 'Dydd Sadwrn'],
+		dayNamesShort: ['Sul', 'Llu', 'Maw', 'Mer', 'Iau', 'Gwe', 'Sad'],
+		dayNamesMin: ['Su','Ll','Ma','Me','Ia','Gw','Sa'],
+		weekHeader: 'Wy',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['cy-GB']);
+});
+
+/* Danish initialisation for the jQuery UI date picker plugin. */
+/* Written by Jan Christensen ( deletestuff@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['da'] = {
+		closeText: 'Luk',
+		prevText: '&#x3C;Forrige',
+		nextText: 'Næste&#x3E;',
+		currentText: 'Idag',
+		monthNames: ['Januar','Februar','Marts','April','Maj','Juni',
+		'Juli','August','September','Oktober','November','December'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun',
+		'Jul','Aug','Sep','Okt','Nov','Dec'],
+		dayNames: ['Søndag','Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag'],
+		dayNamesShort: ['Søn','Man','Tir','Ons','Tor','Fre','Lør'],
+		dayNamesMin: ['Sø','Ma','Ti','On','To','Fr','Lø'],
+		weekHeader: 'Uge',
+		dateFormat: 'dd-mm-yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['da']);
+});
+
+/* German initialisation for the jQuery UI date picker plugin. */
+/* Written by Milian Wolff (mail@milianw.de). */
+jQuery(function($){
+	$.datepicker.regional['de'] = {
+		closeText: 'Schließen',
+		prevText: '&#x3C;Zurück',
+		nextText: 'Vor&#x3E;',
+		currentText: 'Heute',
+		monthNames: ['Januar','Februar','März','April','Mai','Juni',
+		'Juli','August','September','Oktober','November','Dezember'],
+		monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+		'Jul','Aug','Sep','Okt','Nov','Dez'],
+		dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+		dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+		dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+		weekHeader: 'KW',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['de']);
+});
+
+/* Greek (el) initialisation for the jQuery UI date picker plugin. */
+/* Written by Alex Cicovic (http://www.alexcicovic.com) */
+jQuery(function($){
+	$.datepicker.regional['el'] = {
+		closeText: 'Κλείσιμο',
+		prevText: 'Προηγούμενος',
+		nextText: 'Επόμενος',
+		currentText: 'Τρέχων Μήνας',
+		monthNames: ['Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος',
+		'Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'],
+		monthNamesShort: ['Ιαν','Φεβ','Μαρ','Απρ','Μαι','Ιουν',
+		'Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'],
+		dayNames: ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'],
+		dayNamesShort: ['Κυρ','Δευ','Τρι','Τετ','Πεμ','Παρ','Σαβ'],
+		dayNamesMin: ['Κυ','Δε','Τρ','Τε','Πε','Πα','Σα'],
+		weekHeader: 'Εβδ',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['el']);
+});
+
+/* English/EN initialisation for the jQuery UI date picker plugin. */
+/* Written by Stuart. */
+/*jQuery(function($){
+	$.datepicker.regional['en'] = {
+		closeText: 'Done',
+		prevText: 'Prev',
+		nextText: 'Next',
+		currentText: 'Today',
+		monthNames: ['January','February','March','April','May','June',
+		'July','August','September','October','November','December'],
+		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+		'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['en-GB']);
+});*/
+
+/* English/Australia initialisation for the jQuery UI date picker plugin. */
+/* Based on the en-GB initialisation. */
+jQuery(function($){
+	$.datepicker.regional['en-AU'] = {
+		closeText: 'Done',
+		prevText: 'Prev',
+		nextText: 'Next',
+		currentText: 'Today',
+		monthNames: ['January','February','March','April','May','June',
+		'July','August','September','October','November','December'],
+		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+		'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['en-AU']);
+});
+
+/* English/UK initialisation for the jQuery UI date picker plugin. */
+/* Written by Stuart. */
+jQuery(function($){
+	$.datepicker.regional['en-GB'] = {
+		closeText: 'Done',
+		prevText: 'Prev',
+		nextText: 'Next',
+		currentText: 'Today',
+		monthNames: ['January','February','March','April','May','June',
+		'July','August','September','October','November','December'],
+		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+		'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['en-GB']);
+});
+
+/* English/New Zealand initialisation for the jQuery UI date picker plugin. */
+/* Based on the en-GB initialisation. */
+jQuery(function($){
+	$.datepicker.regional['en-NZ'] = {
+		closeText: 'Done',
+		prevText: 'Prev',
+		nextText: 'Next',
+		currentText: 'Today',
+		monthNames: ['January','February','March','April','May','June',
+		'July','August','September','October','November','December'],
+		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+		'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['en-NZ']);
+});
+
+/* Esperanto initialisation for the jQuery UI date picker plugin. */
+/* Written by Olivier M. (olivierweb@ifrance.com). */
+jQuery(function($){
+	$.datepicker.regional['eo'] = {
+		closeText: 'Fermi',
+		prevText: '&#x3C;Anta',
+		nextText: 'Sekv&#x3E;',
+		currentText: 'Nuna',
+		monthNames: ['Januaro','Februaro','Marto','Aprilo','Majo','Junio',
+		'Julio','Aŭgusto','Septembro','Oktobro','Novembro','Decembro'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun',
+		'Jul','Aŭg','Sep','Okt','Nov','Dec'],
+		dayNames: ['Dimanĉo','Lundo','Mardo','Merkredo','Ĵaŭdo','Vendredo','Sabato'],
+		dayNamesShort: ['Dim','Lun','Mar','Mer','Ĵaŭ','Ven','Sab'],
+		dayNamesMin: ['Di','Lu','Ma','Me','Ĵa','Ve','Sa'],
+		weekHeader: 'Sb',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['eo']);
+});
+
+/* Inicialización en español para la extensión 'UI date picker' para jQuery. */
+/* Traducido por Vester (xvester@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['es'] = {
+		closeText: 'Cerrar',
+		prevText: '&#x3C;Ant',
+		nextText: 'Sig&#x3E;',
+		currentText: 'Hoy',
+		monthNames: ['enero','febrero','marzo','abril','mayo','junio',
+		'julio','agosto','septiembre','octubre','noviembre','diciembre'],
+		monthNamesShort: ['ene','feb','mar','abr','may','jun',
+		'jul','ogo','sep','oct','nov','dic'],
+		dayNames: ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'],
+		dayNamesShort: ['dom','lun','mar','mié','juv','vie','sáb'],
+		dayNamesMin: ['D','L','M','X','J','V','S'],
+		weekHeader: 'Sm',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['es']);
+});
+
+/* Estonian initialisation for the jQuery UI date picker plugin. */
+/* Written by Mart Sõmermaa (mrts.pydev at gmail com). */
+jQuery(function($){
+	$.datepicker.regional['et'] = {
+		closeText: 'Sulge',
+		prevText: 'Eelnev',
+		nextText: 'Järgnev',
+		currentText: 'Täna',
+		monthNames: ['Jaanuar','Veebruar','Märts','Aprill','Mai','Juuni',
+		'Juuli','August','September','Oktoober','November','Detsember'],
+		monthNamesShort: ['Jaan', 'Veebr', 'Märts', 'Apr', 'Mai', 'Juuni',
+		'Juuli', 'Aug', 'Sept', 'Okt', 'Nov', 'Dets'],
+		dayNames: ['Pühapäev', 'Esmaspäev', 'Teisipäev', 'Kolmapäev', 'Neljapäev', 'Reede', 'Laupäev'],
+		dayNamesShort: ['Pühap', 'Esmasp', 'Teisip', 'Kolmap', 'Neljap', 'Reede', 'Laup'],
+		dayNamesMin: ['P','E','T','K','N','R','L'],
+		weekHeader: 'näd',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['et']);
+});
+
+/* Euskarako oinarria 'UI date picker' jquery-ko extentsioarentzat */
+/* Karrikas-ek itzulia (karrikas@karrikas.com) */
+jQuery(function($){
+	$.datepicker.regional['eu'] = {
+		closeText: 'Egina',
+		prevText: '&#x3C;Aur',
+		nextText: 'Hur&#x3E;',
+		currentText: 'Gaur',
+		monthNames: ['urtarrila','otsaila','martxoa','apirila','maiatza','ekaina',
+			'uztaila','abuztua','iraila','urria','azaroa','abendua'],
+		monthNamesShort: ['urt.','ots.','mar.','api.','mai.','eka.',
+			'uzt.','abu.','ira.','urr.','aza.','abe.'],
+		dayNames: ['igandea','astelehena','asteartea','asteazkena','osteguna','ostirala','larunbata'],
+		dayNamesShort: ['ig.','al.','ar.','az.','og.','ol.','lr.'],
+		dayNamesMin: ['ig','al','ar','az','og','ol','lr'],
+		weekHeader: 'As',
+		dateFormat: 'yy-mm-dd',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['eu']);
+});
+
+/* Persian (Farsi) Translation for the jQuery UI date picker plugin. */
+/* Javad Mowlanezhad -- jmowla@gmail.com */
+/* Jalali calendar should supported soon! (Its implemented but I have to test it) */
+jQuery(function($) {
+	$.datepicker.regional['fa'] = {
+		closeText: 'بستن',
+		prevText: '&#x3C;قبلی',
+		nextText: 'بعدی&#x3E;',
+		currentText: 'امروز',
+		monthNames: [
+			'فروردين',
+			'ارديبهشت',
+			'خرداد',
+			'تير',
+			'مرداد',
+			'شهريور',
+			'مهر',
+			'آبان',
+			'آذر',
+			'دی',
+			'بهمن',
+			'اسفند'
+		],
+		monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+		dayNames: [
+			'يکشنبه',
+			'دوشنبه',
+			'سه‌شنبه',
+			'چهارشنبه',
+			'پنجشنبه',
+			'جمعه',
+			'شنبه'
+		],
+		dayNamesShort: [
+			'ی',
+			'د',
+			'س',
+			'چ',
+			'پ',
+			'ج',
+			'ش'
+		],
+		dayNamesMin: [
+			'ی',
+			'د',
+			'س',
+			'چ',
+			'پ',
+			'ج',
+			'ش'
+		],
+		weekHeader: 'هف',
+		dateFormat: 'yy/mm/dd',
+		firstDay: 6,
+		isRTL: true,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['fa']);
+});
+
+/* Finnish initialisation for the jQuery UI date picker plugin. */
+/* Written by Harri Kilpiö (harrikilpio@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['fi'] = {
+		closeText: 'Sulje',
+		prevText: '&#xAB;Edellinen',
+		nextText: 'Seuraava&#xBB;',
+		currentText: 'Tänään',
+		monthNames: ['Tammikuu','Helmikuu','Maaliskuu','Huhtikuu','Toukokuu','Kesäkuu',
+		'Heinäkuu','Elokuu','Syyskuu','Lokakuu','Marraskuu','Joulukuu'],
+		monthNamesShort: ['Tammi','Helmi','Maalis','Huhti','Touko','Kesä',
+		'Heinä','Elo','Syys','Loka','Marras','Joulu'],
+		dayNamesShort: ['Su','Ma','Ti','Ke','To','Pe','La'],
+		dayNames: ['Sunnuntai','Maanantai','Tiistai','Keskiviikko','Torstai','Perjantai','Lauantai'],
+		dayNamesMin: ['Su','Ma','Ti','Ke','To','Pe','La'],
+		weekHeader: 'Vk',
+		dateFormat: 'd.m.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['fi']);
+});
+
+/* Faroese initialisation for the jQuery UI date picker plugin */
+/* Written by Sverri Mohr Olsen, sverrimo@gmail.com */
+jQuery(function($){
+	$.datepicker.regional['fo'] = {
+		closeText: 'Lat aftur',
+		prevText: '&#x3C;Fyrra',
+		nextText: 'Næsta&#x3E;',
+		currentText: 'Í dag',
+		monthNames: ['Januar','Februar','Mars','Apríl','Mei','Juni',
+		'Juli','August','September','Oktober','November','Desember'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','Mei','Jun',
+		'Jul','Aug','Sep','Okt','Nov','Des'],
+		dayNames: ['Sunnudagur','Mánadagur','Týsdagur','Mikudagur','Hósdagur','Fríggjadagur','Leyardagur'],
+		dayNamesShort: ['Sun','Mán','Týs','Mik','Hós','Frí','Ley'],
+		dayNamesMin: ['Su','Má','Tý','Mi','Hó','Fr','Le'],
+		weekHeader: 'Vk',
+		dateFormat: 'dd-mm-yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['fo']);
+});
+
+/* Canadian-French initialisation for the jQuery UI date picker plugin. */
+jQuery(function ($) {
+	$.datepicker.regional['fr-CA'] = {
+		closeText: 'Fermer',
+		prevText: 'Précédent',
+		nextText: 'Suivant',
+		currentText: 'Aujourd\'hui',
+		monthNames: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+			'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+		monthNamesShort: ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin',
+			'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
+		dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+		dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
+		dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+		weekHeader: 'Sem.',
+		dateFormat: 'yy-mm-dd',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''
+	};
+	$.datepicker.setDefaults($.datepicker.regional['fr-CA']);
+});
+
+/* Swiss-French initialisation for the jQuery UI date picker plugin. */
+/* Written Martin Voelkle (martin.voelkle@e-tc.ch). */
+jQuery(function($){
+	$.datepicker.regional['fr-CH'] = {
+		closeText: 'Fermer',
+		prevText: '&#x3C;Préc',
+		nextText: 'Suiv&#x3E;',
+		currentText: 'Courant',
+		monthNames: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+			'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+		monthNamesShort: ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin',
+			'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
+		dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+		dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
+		dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+		weekHeader: 'Sm',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['fr-CH']);
+});
+
+/* French initialisation for the jQuery UI date picker plugin. */
+/* Written by Keith Wood (kbwood{at}iinet.com.au),
+			  Stéphane Nahmani (sholby@sholby.net),
+			  Stéphane Raimbault <stephane.raimbault@gmail.com> */
+jQuery(function($){
+	$.datepicker.regional['fr'] = {
+		closeText: 'Fermer',
+		prevText: 'Précédent',
+		nextText: 'Suivant',
+		currentText: 'Aujourd\'hui',
+		monthNames: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+			'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+		monthNamesShort: ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin',
+			'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
+		dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+		dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
+		dayNamesMin: ['D','L','M','M','J','V','S'],
+		weekHeader: 'Sem.',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['fr']);
+});
+
+/* Galician localization for 'UI date picker' jQuery extension. */
+/* Translated by Jorge Barreiro <yortx.barry@gmail.com>. */
+jQuery(function($){
+	$.datepicker.regional['gl'] = {
+		closeText: 'Pechar',
+		prevText: '&#x3C;Ant',
+		nextText: 'Seg&#x3E;',
+		currentText: 'Hoxe',
+		monthNames: ['Xaneiro','Febreiro','Marzo','Abril','Maio','Xuño',
+		'Xullo','Agosto','Setembro','Outubro','Novembro','Decembro'],
+		monthNamesShort: ['Xan','Feb','Mar','Abr','Mai','Xuñ',
+		'Xul','Ago','Set','Out','Nov','Dec'],
+		dayNames: ['Domingo','Luns','Martes','Mércores','Xoves','Venres','Sábado'],
+		dayNamesShort: ['Dom','Lun','Mar','Mér','Xov','Ven','Sáb'],
+		dayNamesMin: ['Do','Lu','Ma','Mé','Xo','Ve','Sá'],
+		weekHeader: 'Sm',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['gl']);
+});
+
+/* Hebrew initialisation for the UI Datepicker extension. */
+/* Written by Amir Hardon (ahardon at gmail dot com). */
+jQuery(function($){
+	$.datepicker.regional['he'] = {
+		closeText: 'סגור',
+		prevText: '&#x3C;הקודם',
+		nextText: 'הבא&#x3E;',
+		currentText: 'היום',
+		monthNames: ['ינואר','פברואר','מרץ','אפריל','מאי','יוני',
+		'יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'],
+		monthNamesShort: ['ינו','פבר','מרץ','אפר','מאי','יוני',
+		'יולי','אוג','ספט','אוק','נוב','דצמ'],
+		dayNames: ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'],
+		dayNamesShort: ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','שבת'],
+		dayNamesMin: ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','שבת'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 0,
+		isRTL: true,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['he']);
+});
+
+/* Hindi initialisation for the jQuery UI date picker plugin. */
+/* Written by Michael Dawart. */
+jQuery(function($){
+	$.datepicker.regional['hi'] = {
+		closeText: 'बंद',
+		prevText: 'पिछला',
+		nextText: 'अगला',
+		currentText: 'आज',
+		monthNames: ['जनवरी ','फरवरी','मार्च','अप्रेल','मई','जून',
+		'जूलाई','अगस्त ','सितम्बर','अक्टूबर','नवम्बर','दिसम्बर'],
+		monthNamesShort: ['जन', 'फर', 'मार्च', 'अप्रेल', 'मई', 'जून',
+		'जूलाई', 'अग', 'सित', 'अक्ट', 'नव', 'दि'],
+		dayNames: ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'],
+		dayNamesShort: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'],
+		dayNamesMin: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'],
+		weekHeader: 'हफ्ता',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['hi']);
+});
+
+/* Croatian i18n for the jQuery UI date picker plugin. */
+/* Written by Vjekoslav Nesek. */
+jQuery(function($){
+	$.datepicker.regional['hr'] = {
+		closeText: 'Zatvori',
+		prevText: '&#x3C;',
+		nextText: '&#x3E;',
+		currentText: 'Danas',
+		monthNames: ['Siječanj','Veljača','Ožujak','Travanj','Svibanj','Lipanj',
+		'Srpanj','Kolovoz','Rujan','Listopad','Studeni','Prosinac'],
+		monthNamesShort: ['Sij','Velj','Ožu','Tra','Svi','Lip',
+		'Srp','Kol','Ruj','Lis','Stu','Pro'],
+		dayNames: ['Nedjelja','Ponedjeljak','Utorak','Srijeda','Četvrtak','Petak','Subota'],
+		dayNamesShort: ['Ned','Pon','Uto','Sri','Čet','Pet','Sub'],
+		dayNamesMin: ['Ne','Po','Ut','Sr','Če','Pe','Su'],
+		weekHeader: 'Tje',
+		dateFormat: 'dd.mm.yy.',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['hr']);
+});
+
+/* Hungarian initialisation for the jQuery UI date picker plugin. */
+/* Written by Istvan Karaszi (jquery@spam.raszi.hu). */
+jQuery(function($){
+	$.datepicker.regional['hu'] = {
+		closeText: 'bezár',
+		prevText: 'vissza',
+		nextText: 'előre',
+		currentText: 'ma',
+		monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június',
+		'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
+		monthNamesShort: ['Jan', 'Feb', 'Már', 'Ápr', 'Máj', 'Jún',
+		'Júl', 'Aug', 'Szep', 'Okt', 'Nov', 'Dec'],
+		dayNames: ['Vasárnap', 'Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat'],
+		dayNamesShort: ['Vas', 'Hét', 'Ked', 'Sze', 'Csü', 'Pén', 'Szo'],
+		dayNamesMin: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
+		weekHeader: 'Hét',
+		dateFormat: 'yy.mm.dd.',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['hu']);
+});
+
+/* Armenian(UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Levon Zakaryan (levon.zakaryan@gmail.com)*/
+jQuery(function($){
+	$.datepicker.regional['hy'] = {
+		closeText: 'Փակել',
+		prevText: '&#x3C;Նախ.',
+		nextText: 'Հաջ.&#x3E;',
+		currentText: 'Այսօր',
+		monthNames: ['Հունվար','Փետրվար','Մարտ','Ապրիլ','Մայիս','Հունիս',
+		'Հուլիս','Օգոստոս','Սեպտեմբեր','Հոկտեմբեր','Նոյեմբեր','Դեկտեմբեր'],
+		monthNamesShort: ['Հունվ','Փետր','Մարտ','Ապր','Մայիս','Հունիս',
+		'Հուլ','Օգս','Սեպ','Հոկ','Նոյ','Դեկ'],
+		dayNames: ['կիրակի','եկուշաբթի','երեքշաբթի','չորեքշաբթի','հինգշաբթի','ուրբաթ','շաբաթ'],
+		dayNamesShort: ['կիր','երկ','երք','չրք','հնգ','ուրբ','շբթ'],
+		dayNamesMin: ['կիր','երկ','երք','չրք','հնգ','ուրբ','շբթ'],
+		weekHeader: 'ՇԲՏ',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['hy']);
+});
+
+/* Indonesian initialisation for the jQuery UI date picker plugin. */
+/* Written by Deden Fathurahman (dedenf@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['id'] = {
+		closeText: 'Tutup',
+		prevText: '&#x3C;mundur',
+		nextText: 'maju&#x3E;',
+		currentText: 'hari ini',
+		monthNames: ['Januari','Februari','Maret','April','Mei','Juni',
+		'Juli','Agustus','September','Oktober','Nopember','Desember'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','Mei','Jun',
+		'Jul','Agus','Sep','Okt','Nop','Des'],
+		dayNames: ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],
+		dayNamesShort: ['Min','Sen','Sel','Rab','kam','Jum','Sab'],
+		dayNamesMin: ['Mg','Sn','Sl','Rb','Km','jm','Sb'],
+		weekHeader: 'Mg',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['id']);
+});
+
+/* Icelandic initialisation for the jQuery UI date picker plugin. */
+/* Written by Haukur H. Thorsson (haukur@eskill.is). */
+jQuery(function($){
+	$.datepicker.regional['is'] = {
+		closeText: 'Loka',
+		prevText: '&#x3C; Fyrri',
+		nextText: 'Næsti &#x3E;',
+		currentText: 'Í dag',
+		monthNames: ['Janúar','Febrúar','Mars','Apríl','Maí','Júní',
+		'Júlí','Ágúst','September','Október','Nóvember','Desember'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','Maí','Jún',
+		'Júl','Ágú','Sep','Okt','Nóv','Des'],
+		dayNames: ['Sunnudagur','Mánudagur','Þriðjudagur','Miðvikudagur','Fimmtudagur','Föstudagur','Laugardagur'],
+		dayNamesShort: ['Sun','Mán','Þri','Mið','Fim','Fös','Lau'],
+		dayNamesMin: ['Su','Má','Þr','Mi','Fi','Fö','La'],
+		weekHeader: 'Vika',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['is']);
+});
+
+/* Italian initialisation for the jQuery UI date picker plugin. */
+/* Written by Antonello Pasella (antonello.pasella@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['it'] = {
+		closeText: 'Chiudi',
+		prevText: '&#x3C;Prec',
+		nextText: 'Succ&#x3E;',
+		currentText: 'Oggi',
+		monthNames: ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno',
+			'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
+		monthNamesShort: ['Gen','Feb','Mar','Apr','Mag','Giu',
+			'Lug','Ago','Set','Ott','Nov','Dic'],
+		dayNames: ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'],
+		dayNamesShort: ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'],
+		dayNamesMin: ['Do','Lu','Ma','Me','Gi','Ve','Sa'],
+		weekHeader: 'Sm',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['it']);
+});
+
+/* Japanese initialisation for the jQuery UI date picker plugin. */
+/* Written by Kentaro SATO (kentaro@ranvis.com). */
+jQuery(function($){
+	$.datepicker.regional['ja'] = {
+		closeText: '閉じる',
+		prevText: '&#x3C;前',
+		nextText: '次&#x3E;',
+		currentText: '今日',
+		monthNames: ['1月','2月','3月','4月','5月','6月',
+		'7月','8月','9月','10月','11月','12月'],
+		monthNamesShort: ['1月','2月','3月','4月','5月','6月',
+		'7月','8月','9月','10月','11月','12月'],
+		dayNames: ['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'],
+		dayNamesShort: ['日','月','火','水','木','金','土'],
+		dayNamesMin: ['日','月','火','水','木','金','土'],
+		weekHeader: '週',
+		dateFormat: 'yy/mm/dd',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: '年'};
+	$.datepicker.setDefaults($.datepicker.regional['ja']);
+});
+
+/* Georgian (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Lado Lomidze (lado.lomidze@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['ka'] = {
+		closeText: 'დახურვა',
+		prevText: '&#x3c; წინა',
+		nextText: 'შემდეგი &#x3e;',
+		currentText: 'დღეს',
+		monthNames: ['იანვარი','თებერვალი','მარტი','აპრილი','მაისი','ივნისი', 'ივლისი','აგვისტო','სექტემბერი','ოქტომბერი','ნოემბერი','დეკემბერი'],
+		monthNamesShort: ['იან','თებ','მარ','აპრ','მაი','ივნ', 'ივლ','აგვ','სექ','ოქტ','ნოე','დეკ'],
+		dayNames: ['კვირა','ორშაბათი','სამშაბათი','ოთხშაბათი','ხუთშაბათი','პარასკევი','შაბათი'],
+		dayNamesShort: ['კვ','ორშ','სამ','ოთხ','ხუთ','პარ','შაბ'],
+		dayNamesMin: ['კვ','ორშ','სამ','ოთხ','ხუთ','პარ','შაბ'],
+		weekHeader: 'კვირა',
+		dateFormat: 'dd-mm-yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['ka']);
+});
+
+/* Kazakh (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Dmitriy Karasyov (dmitriy.karasyov@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['kk'] = {
+		closeText: 'Жабу',
+		prevText: '&#x3C;Алдыңғы',
+		nextText: 'Келесі&#x3E;',
+		currentText: 'Бүгін',
+		monthNames: ['Қаңтар','Ақпан','Наурыз','Сәуір','Мамыр','Маусым',
+		'Шілде','Тамыз','Қыркүйек','Қазан','Қараша','Желтоқсан'],
+		monthNamesShort: ['Қаң','Ақп','Нау','Сәу','Мам','Мау',
+		'Шіл','Там','Қыр','Қаз','Қар','Жел'],
+		dayNames: ['Жексенбі','Дүйсенбі','Сейсенбі','Сәрсенбі','Бейсенбі','Жұма','Сенбі'],
+		dayNamesShort: ['жкс','дсн','ссн','срс','бсн','жма','снб'],
+		dayNamesMin: ['Жк','Дс','Сс','Ср','Бс','Жм','Сн'],
+		weekHeader: 'Не',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['kk']);
+});
+
+/* Khmer initialisation for the jQuery calendar extension. */
+/* Written by Chandara Om (chandara.teacher@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['km'] = {
+		closeText: 'ធ្វើ​រួច',
+		prevText: 'មុន',
+		nextText: 'បន្ទាប់',
+		currentText: 'ថ្ងៃ​នេះ',
+		monthNames: ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា',
+		'កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'],
+		monthNamesShort: ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា',
+		'កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'],
+		dayNames: ['អាទិត្យ', 'ចន្ទ', 'អង្គារ', 'ពុធ', 'ព្រហស្បតិ៍', 'សុក្រ', 'សៅរ៍'],
+		dayNamesShort: ['អា', 'ច', 'អ', 'ពុ', 'ព្រហ', 'សុ', 'សៅ'],
+		dayNamesMin: ['អា', 'ច', 'អ', 'ពុ', 'ព្រហ', 'សុ', 'សៅ'],
+		weekHeader: 'សប្ដាហ៍',
+		dateFormat: 'dd-mm-yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['km']);
+});
+
+/* Korean initialisation for the jQuery calendar extension. */
+/* Written by DaeKwon Kang (ncrash.dk@gmail.com), Edited by Genie. */
+jQuery(function($){
+	$.datepicker.regional['ko'] = {
+		closeText: '닫기',
+		prevText: '이전달',
+		nextText: '다음달',
+		currentText: '오늘',
+		monthNames: ['1월','2월','3월','4월','5월','6월',
+		'7월','8월','9월','10월','11월','12월'],
+		monthNamesShort: ['1월','2월','3월','4월','5월','6월',
+		'7월','8월','9월','10월','11월','12월'],
+		dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
+		dayNamesShort: ['일','월','화','수','목','금','토'],
+		dayNamesMin: ['일','월','화','수','목','금','토'],
+		weekHeader: 'Wk',
+		dateFormat: 'yy-mm-dd',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: '년'};
+	$.datepicker.setDefaults($.datepicker.regional['ko']);
+});
+
+/* Kyrgyz (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Sergey Kartashov (ebishkek@yandex.ru). */
+jQuery(function($){
+	$.datepicker.regional['ky'] = {
+		closeText: 'Жабуу',
+		prevText: '&#x3c;Мур',
+		nextText: 'Кий&#x3e;',
+		currentText: 'Бүгүн',
+		monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь',
+		'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+		monthNamesShort: ['Янв','Фев','Мар','Апр','Май','Июн',
+		'Июл','Авг','Сен','Окт','Ноя','Дек'],
+		dayNames: ['жекшемби', 'дүйшөмбү', 'шейшемби', 'шаршемби', 'бейшемби', 'жума', 'ишемби'],
+		dayNamesShort: ['жек', 'дүй', 'шей', 'шар', 'бей', 'жум', 'ише'],
+		dayNamesMin: ['Жк','Дш','Шш','Шр','Бш','Жм','Иш'],
+		weekHeader: 'Жум',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''
+	};
+	$.datepicker.setDefaults($.datepicker.regional['ky']);
+});
+
+/* Luxembourgish initialisation for the jQuery UI date picker plugin. */
+/* Written by Michel Weimerskirch <michel@weimerskirch.net> */
+jQuery(function($){
+	$.datepicker.regional['lb'] = {
+		closeText: 'Fäerdeg',
+		prevText: 'Zréck',
+		nextText: 'Weider',
+		currentText: 'Haut',
+		monthNames: ['Januar','Februar','Mäerz','Abrëll','Mee','Juni',
+		'Juli','August','September','Oktober','November','Dezember'],
+		monthNamesShort: ['Jan', 'Feb', 'Mäe', 'Abr', 'Mee', 'Jun',
+		'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+		dayNames: ['Sonndeg', 'Méindeg', 'Dënschdeg', 'Mëttwoch', 'Donneschdeg', 'Freideg', 'Samschdeg'],
+		dayNamesShort: ['Son', 'Méi', 'Dën', 'Mët', 'Don', 'Fre', 'Sam'],
+		dayNamesMin: ['So','Mé','Dë','Më','Do','Fr','Sa'],
+		weekHeader: 'W',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['lb']);
+});
+
+/* Lithuanian (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* @author Arturas Paleicikas <arturas@avalon.lt> */
+jQuery(function($){
+	$.datepicker.regional['lt'] = {
+		closeText: 'Uždaryti',
+		prevText: '&#x3C;Atgal',
+		nextText: 'Pirmyn&#x3E;',
+		currentText: 'Šiandien',
+		monthNames: ['Sausis','Vasaris','Kovas','Balandis','Gegužė','Birželis',
+		'Liepa','Rugpjūtis','Rugsėjis','Spalis','Lapkritis','Gruodis'],
+		monthNamesShort: ['Sau','Vas','Kov','Bal','Geg','Bir',
+		'Lie','Rugp','Rugs','Spa','Lap','Gru'],
+		dayNames: ['sekmadienis','pirmadienis','antradienis','trečiadienis','ketvirtadienis','penktadienis','šeštadienis'],
+		dayNamesShort: ['sek','pir','ant','tre','ket','pen','šeš'],
+		dayNamesMin: ['Se','Pr','An','Tr','Ke','Pe','Še'],
+		weekHeader: 'SAV',
+		dateFormat: 'yy-mm-dd',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['lt']);
+});
+
+/* Latvian (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* @author Arturas Paleicikas <arturas.paleicikas@metasite.net> */
+jQuery(function($){
+	$.datepicker.regional['lv'] = {
+		closeText: 'Aizvērt',
+		prevText: 'Iepr.',
+		nextText: 'Nāk.',
+		currentText: 'Šodien',
+		monthNames: ['Janvāris','Februāris','Marts','Aprīlis','Maijs','Jūnijs',
+		'Jūlijs','Augusts','Septembris','Oktobris','Novembris','Decembris'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','Mai','Jūn',
+		'Jūl','Aug','Sep','Okt','Nov','Dec'],
+		dayNames: ['svētdiena','pirmdiena','otrdiena','trešdiena','ceturtdiena','piektdiena','sestdiena'],
+		dayNamesShort: ['svt','prm','otr','tre','ctr','pkt','sst'],
+		dayNamesMin: ['Sv','Pr','Ot','Tr','Ct','Pk','Ss'],
+		weekHeader: 'Ned.',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['lv']);
+});
+
+/* Macedonian i18n for the jQuery UI date picker plugin. */
+/* Written by Stojce Slavkovski. */
+jQuery(function($){
+	$.datepicker.regional['mk'] = {
+		closeText: 'Затвори',
+		prevText: '&#x3C;',
+		nextText: '&#x3E;',
+		currentText: 'Денес',
+		monthNames: ['Јануари','Февруари','Март','Април','Мај','Јуни',
+		'Јули','Август','Септември','Октомври','Ноември','Декември'],
+		monthNamesShort: ['Јан','Фев','Мар','Апр','Мај','Јун',
+		'Јул','Авг','Сеп','Окт','Ное','Дек'],
+		dayNames: ['Недела','Понеделник','Вторник','Среда','Четврток','Петок','Сабота'],
+		dayNamesShort: ['Нед','Пон','Вто','Сре','Чет','Пет','Саб'],
+		dayNamesMin: ['Не','По','Вт','Ср','Че','Пе','Са'],
+		weekHeader: 'Сед',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['mk']);
+});
+
+/* Malayalam (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Saji Nediyanchath (saji89@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['ml'] = {
+		closeText: 'ശരി',
+		prevText: 'മുന്നത്തെ',
+		nextText: 'അടുത്തത് ',
+		currentText: 'ഇന്ന്',
+		monthNames: ['ജനുവരി','ഫെബ്രുവരി','മാര്‍ച്ച്','ഏപ്രില്‍','മേയ്','ജൂണ്‍',
+		'ജൂലൈ','ആഗസ്റ്റ്','സെപ്റ്റംബര്‍','ഒക്ടോബര്‍','നവംബര്‍','ഡിസംബര്‍'],
+		monthNamesShort: ['ജനു', 'ഫെബ്', 'മാര്‍', 'ഏപ്രി', 'മേയ്', 'ജൂണ്‍',
+		'ജൂലാ', 'ആഗ', 'സെപ്', 'ഒക്ടോ', 'നവം', 'ഡിസ'],
+		dayNames: ['ഞായര്‍', 'തിങ്കള്‍', 'ചൊവ്വ', 'ബുധന്‍', 'വ്യാഴം', 'വെള്ളി', 'ശനി'],
+		dayNamesShort: ['ഞായ', 'തിങ്ക', 'ചൊവ്വ', 'ബുധ', 'വ്യാഴം', 'വെള്ളി', 'ശനി'],
+		dayNamesMin: ['ഞാ','തി','ചൊ','ബു','വ്യാ','വെ','ശ'],
+		weekHeader: 'ആ',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['ml']);
+});
+
+/* Malaysian initialisation for the jQuery UI date picker plugin. */
+/* Written by Mohd Nawawi Mohamad Jamili (nawawi@ronggeng.net). */
+jQuery(function($){
+	$.datepicker.regional['ms'] = {
+		closeText: 'Tutup',
+		prevText: '&#x3C;Sebelum',
+		nextText: 'Selepas&#x3E;',
+		currentText: 'hari ini',
+		monthNames: ['Januari','Februari','Mac','April','Mei','Jun',
+		'Julai','Ogos','September','Oktober','November','Disember'],
+		monthNamesShort: ['Jan','Feb','Mac','Apr','Mei','Jun',
+		'Jul','Ogo','Sep','Okt','Nov','Dis'],
+		dayNames: ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'],
+		dayNamesShort: ['Aha','Isn','Sel','Rab','kha','Jum','Sab'],
+		dayNamesMin: ['Ah','Is','Se','Ra','Kh','Ju','Sa'],
+		weekHeader: 'Mg',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['ms']);
+});
+
+/* Norwegian Bokmål initialisation for the jQuery UI date picker plugin. */
+/* Written by Bjørn Johansen (post@bjornjohansen.no). */
+jQuery(function($){
+	$.datepicker.regional['nb'] = {
+		closeText: 'Lukk',
+		prevText: '&#xAB;Forrige',
+		nextText: 'Neste&#xBB;',
+		currentText: 'I dag',
+		monthNames: ['januar','februar','mars','april','mai','juni','juli','august','september','oktober','november','desember'],
+		monthNamesShort: ['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'],
+		dayNamesShort: ['søn','man','tir','ons','tor','fre','lør'],
+		dayNames: ['søndag','mandag','tirsdag','onsdag','torsdag','fredag','lørdag'],
+		dayNamesMin: ['sø','ma','ti','on','to','fr','lø'],
+		weekHeader: 'Uke',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''
+	};
+	$.datepicker.setDefaults($.datepicker.regional['nb']);
+});
+
+/* Dutch (Belgium) initialisation for the jQuery UI date picker plugin. */
+/* David De Sloovere @DavidDeSloovere */
+jQuery(function($){
+	$.datepicker.regional['nl-BE'] = {
+		closeText: 'Sluiten',
+		prevText: '←',
+		nextText: '→',
+		currentText: 'Vandaag',
+		monthNames: ['januari', 'februari', 'maart', 'april', 'mei', 'juni',
+		'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
+		monthNamesShort: ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun',
+		'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+		dayNames: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'],
+		dayNamesShort: ['zon', 'maa', 'din', 'woe', 'don', 'vri', 'zat'],
+		dayNamesMin: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['nl-BE']);
+});
+
+/* Dutch (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Mathias Bynens <http://mathiasbynens.be/> */
+jQuery(function($){
+	$.datepicker.regional.nl = {
+		closeText: 'Sluiten',
+		prevText: '←',
+		nextText: '→',
+		currentText: 'Vandaag',
+		monthNames: ['januari', 'februari', 'maart', 'april', 'mei', 'juni',
+		'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
+		monthNamesShort: ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun',
+		'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+		dayNames: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'],
+		dayNamesShort: ['zon', 'maa', 'din', 'woe', 'don', 'vri', 'zat'],
+		dayNamesMin: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd-mm-yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional.nl);
+});
+
+/* Norwegian Nynorsk initialisation for the jQuery UI date picker plugin. */
+/* Written by Bjørn Johansen (post@bjornjohansen.no). */
+jQuery(function($){
+	$.datepicker.regional['nn'] = {
+		closeText: 'Lukk',
+		prevText: '&#xAB;Førre',
+		nextText: 'Neste&#xBB;',
+		currentText: 'I dag',
+		monthNames: ['januar','februar','mars','april','mai','juni','juli','august','september','oktober','november','desember'],
+		monthNamesShort: ['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'],
+		dayNamesShort: ['sun','mån','tys','ons','tor','fre','lau'],
+		dayNames: ['sundag','måndag','tysdag','onsdag','torsdag','fredag','laurdag'],
+		dayNamesMin: ['su','må','ty','on','to','fr','la'],
+		weekHeader: 'Veke',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''
+	};
+	$.datepicker.setDefaults($.datepicker.regional['nn']);
+});
+
+/* Norwegian initialisation for the jQuery UI date picker plugin. */
+/* Written by Naimdjon Takhirov (naimdjon@gmail.com). */
+
+jQuery(function($){
+	$.datepicker.regional['no'] = {
+		closeText: 'Lukk',
+		prevText: '&#xAB;Forrige',
+		nextText: 'Neste&#xBB;',
+		currentText: 'I dag',
+		monthNames: ['januar','februar','mars','april','mai','juni','juli','august','september','oktober','november','desember'],
+		monthNamesShort: ['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'],
+		dayNamesShort: ['søn','man','tir','ons','tor','fre','lør'],
+		dayNames: ['søndag','mandag','tirsdag','onsdag','torsdag','fredag','lørdag'],
+		dayNamesMin: ['sø','ma','ti','on','to','fr','lø'],
+		weekHeader: 'Uke',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''
+	};
+	$.datepicker.setDefaults($.datepicker.regional['no']);
+});
+
+/* Polish initialisation for the jQuery UI date picker plugin. */
+/* Written by Jacek Wysocki (jacek.wysocki@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['pl'] = {
+		closeText: 'Zamknij',
+		prevText: '&#x3C;Poprzedni',
+		nextText: 'Następny&#x3E;',
+		currentText: 'Dziś',
+		monthNames: ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec',
+		'Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'],
+		monthNamesShort: ['Sty','Lu','Mar','Kw','Maj','Cze',
+		'Lip','Sie','Wrz','Pa','Lis','Gru'],
+		dayNames: ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'],
+		dayNamesShort: ['Nie','Pn','Wt','Śr','Czw','Pt','So'],
+		dayNamesMin: ['N','Pn','Wt','Śr','Cz','Pt','So'],
+		weekHeader: 'Tydz',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['pl']);
+});
+
+/* Brazilian initialisation for the jQuery UI date picker plugin. */
+/* Written by Leonildo Costa Silva (leocsilva@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['pt-BR'] = {
+		closeText: 'Fechar',
+		prevText: '&#x3C;Anterior',
+		nextText: 'Próximo&#x3E;',
+		currentText: 'Hoje',
+		monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+		'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+		monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun',
+		'Jul','Ago','Set','Out','Nov','Dez'],
+		dayNames: ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'],
+		dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+		dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+		weekHeader: 'Sm',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['pt-BR']);
+});
+
+/* Portuguese initialisation for the jQuery UI date picker plugin. */
+jQuery(function($){
+	$.datepicker.regional['pt'] = {
+		closeText: 'Fechar',
+		prevText: 'Anterior',
+		nextText: 'Seguinte',
+		currentText: 'Hoje',
+		monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+		'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+		monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun',
+		'Jul','Ago','Set','Out','Nov','Dez'],
+		dayNames: ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'],
+		dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+		dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+		weekHeader: 'Sem',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['pt']);
+});
+
+/* Romansh initialisation for the jQuery UI date picker plugin. */
+/* Written by Yvonne Gienal (yvonne.gienal@educa.ch). */
+jQuery(function($){
+	$.datepicker.regional['rm'] = {
+		closeText: 'Serrar',
+		prevText: '&#x3C;Suandant',
+		nextText: 'Precedent&#x3E;',
+		currentText: 'Actual',
+		monthNames: ['Schaner','Favrer','Mars','Avrigl','Matg','Zercladur', 'Fanadur','Avust','Settember','October','November','December'],
+		monthNamesShort: ['Scha','Fev','Mar','Avr','Matg','Zer', 'Fan','Avu','Sett','Oct','Nov','Dec'],
+		dayNames: ['Dumengia','Glindesdi','Mardi','Mesemna','Gievgia','Venderdi','Sonda'],
+		dayNamesShort: ['Dum','Gli','Mar','Mes','Gie','Ven','Som'],
+		dayNamesMin: ['Du','Gl','Ma','Me','Gi','Ve','So'],
+		weekHeader: 'emna',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['rm']);
+});
+
+/* Romanian initialisation for the jQuery UI date picker plugin.
+ *
+ * Written by Edmond L. (ll_edmond@walla.com)
+ * and Ionut G. Stan (ionut.g.stan@gmail.com)
+ */
+jQuery(function($){
+	$.datepicker.regional['ro'] = {
+		closeText: 'Închide',
+		prevText: '&#xAB; Luna precedentă',
+		nextText: 'Luna următoare &#xBB;',
+		currentText: 'Azi',
+		monthNames: ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie',
+		'Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'],
+		monthNamesShort: ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun',
+		'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		dayNames: ['Duminică', 'Luni', 'Marţi', 'Miercuri', 'Joi', 'Vineri', 'Sâmbătă'],
+		dayNamesShort: ['Dum', 'Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm'],
+		dayNamesMin: ['Du','Lu','Ma','Mi','Jo','Vi','Sâ'],
+		weekHeader: 'Săpt',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['ro']);
+});
+
+/* Russian (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Andrew Stromnov (stromnov@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['ru'] = {
+		closeText: 'Закрыть',
+		prevText: '&#x3C;Пред',
+		nextText: 'След&#x3E;',
+		currentText: 'Сегодня',
+		monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь',
+		'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+		monthNamesShort: ['Янв','Фев','Мар','Апр','Май','Июн',
+		'Июл','Авг','Сен','Окт','Ноя','Дек'],
+		dayNames: ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'],
+		dayNamesShort: ['вск','пнд','втр','срд','чтв','птн','сбт'],
+		dayNamesMin: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
+		weekHeader: 'Нед',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['ru']);
+});
+
+/* Slovak initialisation for the jQuery UI date picker plugin. */
+/* Written by Vojtech Rinik (vojto@hmm.sk). */
+jQuery(function($){
+	$.datepicker.regional['sk'] = {
+		closeText: 'Zavrieť',
+		prevText: '&#x3C;Predchádzajúci',
+		nextText: 'Nasledujúci&#x3E;',
+		currentText: 'Dnes',
+		monthNames: ['január','február','marec','apríl','máj','jún',
+		'júl','august','september','október','november','december'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','Máj','Jún',
+		'Júl','Aug','Sep','Okt','Nov','Dec'],
+		dayNames: ['nedeľa','pondelok','utorok','streda','štvrtok','piatok','sobota'],
+		dayNamesShort: ['Ned','Pon','Uto','Str','Štv','Pia','Sob'],
+		dayNamesMin: ['Ne','Po','Ut','St','Št','Pia','So'],
+		weekHeader: 'Ty',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['sk']);
+});
+
+/* Slovenian initialisation for the jQuery UI date picker plugin. */
+/* Written by Jaka Jancar (jaka@kubje.org). */
+/* c = č, s = š z = ž C = Č S = Š Z = Ž */
+jQuery(function($){
+	$.datepicker.regional['sl'] = {
+		closeText: 'Zapri',
+		prevText: '&#x3C;Prejšnji',
+		nextText: 'Naslednji&#x3E;',
+		currentText: 'Trenutni',
+		monthNames: ['Januar','Februar','Marec','April','Maj','Junij',
+		'Julij','Avgust','September','Oktober','November','December'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun',
+		'Jul','Avg','Sep','Okt','Nov','Dec'],
+		dayNames: ['Nedelja','Ponedeljek','Torek','Sreda','Četrtek','Petek','Sobota'],
+		dayNamesShort: ['Ned','Pon','Tor','Sre','Čet','Pet','Sob'],
+		dayNamesMin: ['Ne','Po','To','Sr','Če','Pe','So'],
+		weekHeader: 'Teden',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['sl']);
+});
+
+/* Albanian initialisation for the jQuery UI date picker plugin. */
+/* Written by Flakron Bytyqi (flakron@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['sq'] = {
+		closeText: 'mbylle',
+		prevText: '&#x3C;mbrapa',
+		nextText: 'Përpara&#x3E;',
+		currentText: 'sot',
+		monthNames: ['Janar','Shkurt','Mars','Prill','Maj','Qershor',
+		'Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'],
+		monthNamesShort: ['Jan','Shk','Mar','Pri','Maj','Qer',
+		'Kor','Gus','Sht','Tet','Nën','Dhj'],
+		dayNames: ['E Diel','E Hënë','E Martë','E Mërkurë','E Enjte','E Premte','E Shtune'],
+		dayNamesShort: ['Di','Hë','Ma','Më','En','Pr','Sh'],
+		dayNamesMin: ['Di','Hë','Ma','Më','En','Pr','Sh'],
+		weekHeader: 'Ja',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['sq']);
+});
+
+/* Serbian i18n for the jQuery UI date picker plugin. */
+/* Written by Dejan Dimić. */
+jQuery(function($){
+	$.datepicker.regional['sr-SR'] = {
+		closeText: 'Zatvori',
+		prevText: '&#x3C;',
+		nextText: '&#x3E;',
+		currentText: 'Danas',
+		monthNames: ['Januar','Februar','Mart','April','Maj','Jun',
+		'Jul','Avgust','Septembar','Oktobar','Novembar','Decembar'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun',
+		'Jul','Avg','Sep','Okt','Nov','Dec'],
+		dayNames: ['Nedelja','Ponedeljak','Utorak','Sreda','Četvrtak','Petak','Subota'],
+		dayNamesShort: ['Ned','Pon','Uto','Sre','Čet','Pet','Sub'],
+		dayNamesMin: ['Ne','Po','Ut','Sr','Če','Pe','Su'],
+		weekHeader: 'Sed',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['sr-SR']);
+});
+
+/* Serbian i18n for the jQuery UI date picker plugin. */
+/* Written by Dejan Dimić. */
+jQuery(function($){
+	$.datepicker.regional['sr'] = {
+		closeText: 'Затвори',
+		prevText: '&#x3C;',
+		nextText: '&#x3E;',
+		currentText: 'Данас',
+		monthNames: ['Јануар','Фебруар','Март','Април','Мај','Јун',
+		'Јул','Август','Септембар','Октобар','Новембар','Децембар'],
+		monthNamesShort: ['Јан','Феб','Мар','Апр','Мај','Јун',
+		'Јул','Авг','Сеп','Окт','Нов','Дец'],
+		dayNames: ['Недеља','Понедељак','Уторак','Среда','Четвртак','Петак','Субота'],
+		dayNamesShort: ['Нед','Пон','Уто','Сре','Чет','Пет','Суб'],
+		dayNamesMin: ['Не','По','Ут','Ср','Че','Пе','Су'],
+		weekHeader: 'Сед',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['sr']);
+});
+
+/* Swedish initialisation for the jQuery UI date picker plugin. */
+/* Written by Anders Ekdahl ( anders@nomadiz.se). */
+jQuery(function($){
+	$.datepicker.regional['sv'] = {
+		closeText: 'Stäng',
+		prevText: '&#xAB;Förra',
+		nextText: 'Nästa&#xBB;',
+		currentText: 'Idag',
+		monthNames: ['Januari','Februari','Mars','April','Maj','Juni',
+		'Juli','Augusti','September','Oktober','November','December'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun',
+		'Jul','Aug','Sep','Okt','Nov','Dec'],
+		dayNamesShort: ['Sön','Mån','Tis','Ons','Tor','Fre','Lör'],
+		dayNames: ['Söndag','Måndag','Tisdag','Onsdag','Torsdag','Fredag','Lördag'],
+		dayNamesMin: ['Sö','Må','Ti','On','To','Fr','Lö'],
+		weekHeader: 'Ve',
+		dateFormat: 'yy-mm-dd',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['sv']);
+});
+
+/* Tamil (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by S A Sureshkumar (saskumar@live.com). */
+jQuery(function($){
+	$.datepicker.regional['ta'] = {
+		closeText: 'மூடு',
+		prevText: 'முன்னையது',
+		nextText: 'அடுத்தது',
+		currentText: 'இன்று',
+		monthNames: ['தை','மாசி','பங்குனி','சித்திரை','வைகாசி','ஆனி',
+		'ஆடி','ஆவணி','புரட்டாசி','ஐப்பசி','கார்த்திகை','மார்கழி'],
+		monthNamesShort: ['தை','மாசி','பங்','சித்','வைகா','ஆனி',
+		'ஆடி','ஆவ','புர','ஐப்','கார்','மார்'],
+		dayNames: ['ஞாயிற்றுக்கிழமை','திங்கட்கிழமை','செவ்வாய்க்கிழமை','புதன்கிழமை','வியாழக்கிழமை','வெள்ளிக்கிழமை','சனிக்கிழமை'],
+		dayNamesShort: ['ஞாயிறு','திங்கள்','செவ்வாய்','புதன்','வியாழன்','வெள்ளி','சனி'],
+		dayNamesMin: ['ஞா','தி','செ','பு','வி','வெ','ச'],
+		weekHeader: 'Не',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['ta']);
+});
+
+/* Thai initialisation for the jQuery UI date picker plugin. */
+/* Written by pipo (pipo@sixhead.com). */
+jQuery(function($){
+	$.datepicker.regional['th'] = {
+		closeText: 'ปิด',
+		prevText: '&#xAB;&#xA0;ย้อน',
+		nextText: 'ถัดไป&#xA0;&#xBB;',
+		currentText: 'วันนี้',
+		monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
+		'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
+		monthNamesShort: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.',
+		'ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'],
+		dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
+		dayNamesShort: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
+		dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['th']);
+});
+
+/* Tajiki (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Abdurahmon Saidov (saidovab@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['tj'] = {
+		closeText: 'Идома',
+		prevText: '&#x3c;Қафо',
+		nextText: 'Пеш&#x3e;',
+		currentText: 'Имрӯз',
+		monthNames: ['Январ','Феврал','Март','Апрел','Май','Июн',
+		'Июл','Август','Сентябр','Октябр','Ноябр','Декабр'],
+		monthNamesShort: ['Янв','Фев','Мар','Апр','Май','Июн',
+		'Июл','Авг','Сен','Окт','Ноя','Дек'],
+		dayNames: ['якшанбе','душанбе','сешанбе','чоршанбе','панҷшанбе','ҷумъа','шанбе'],
+		dayNamesShort: ['якш','душ','сеш','чор','пан','ҷум','шан'],
+		dayNamesMin: ['Як','Дш','Сш','Чш','Пш','Ҷм','Шн'],
+		weekHeader: 'Хф',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['tj']);
+});
+
+/* Turkish initialisation for the jQuery UI date picker plugin. */
+/* Written by Izzet Emre Erkan (kara@karalamalar.net). */
+jQuery(function($){
+	$.datepicker.regional['tr'] = {
+		closeText: 'kapat',
+		prevText: '&#x3C;geri',
+		nextText: 'ileri&#x3e',
+		currentText: 'bugün',
+		monthNames: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran',
+		'Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+		monthNamesShort: ['Oca','Şub','Mar','Nis','May','Haz',
+		'Tem','Ağu','Eyl','Eki','Kas','Ara'],
+		dayNames: ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
+		dayNamesShort: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+		dayNamesMin: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+		weekHeader: 'Hf',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['tr']);
+});
+
+/* Ukrainian (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Maxim Drogobitskiy (maxdao@gmail.com). */
+/* Corrected by Igor Milla (igor.fsp.milla@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['uk'] = {
+		closeText: 'Закрити',
+		prevText: '&#x3C;',
+		nextText: '&#x3E;',
+		currentText: 'Сьогодні',
+		monthNames: ['Січень','Лютий','Березень','Квітень','Травень','Червень',
+		'Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'],
+		monthNamesShort: ['Січ','Лют','Бер','Кві','Тра','Чер',
+		'Лип','Сер','Вер','Жов','Лис','Гру'],
+		dayNames: ['неділя','понеділок','вівторок','середа','четвер','п’ятниця','субота'],
+		dayNamesShort: ['нед','пнд','вів','срд','чтв','птн','сбт'],
+		dayNamesMin: ['Нд','Пн','Вт','Ср','Чт','Пт','Сб'],
+		weekHeader: 'Тиж',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['uk']);
+});
+
+/* Vietnamese initialisation for the jQuery UI date picker plugin. */
+/* Translated by Le Thanh Huy (lthanhhuy@cit.ctu.edu.vn). */
+jQuery(function($){
+	$.datepicker.regional['vi'] = {
+		closeText: 'Đóng',
+		prevText: '&#x3C;Trước',
+		nextText: 'Tiếp&#x3E;',
+		currentText: 'Hôm nay',
+		monthNames: ['Tháng Một', 'Tháng Hai', 'Tháng Ba', 'Tháng Tư', 'Tháng Năm', 'Tháng Sáu',
+		'Tháng Bảy', 'Tháng Tám', 'Tháng Chín', 'Tháng Mười', 'Tháng Mười Một', 'Tháng Mười Hai'],
+		monthNamesShort: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
+		'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+		dayNames: ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'],
+		dayNamesShort: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+		dayNamesMin: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+		weekHeader: 'Tu',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['vi']);
+});
+
+/* Chinese initialisation for the jQuery UI date picker plugin. */
+/* Written by Cloudream (cloudream@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['zh-CN'] = {
+		closeText: '关闭',
+		prevText: '&#x3C;上月',
+		nextText: '下月&#x3E;',
+		currentText: '今天',
+		monthNames: ['一月','二月','三月','四月','五月','六月',
+		'七月','八月','九月','十月','十一月','十二月'],
+		monthNamesShort: ['一月','二月','三月','四月','五月','六月',
+		'七月','八月','九月','十月','十一月','十二月'],
+		dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+		dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+		dayNamesMin: ['日','一','二','三','四','五','六'],
+		weekHeader: '周',
+		dateFormat: 'yy-mm-dd',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: '年'};
+	$.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+});
+
+/* Chinese initialisation for the jQuery UI date picker plugin. */
+/* Written by SCCY (samuelcychan@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['zh-HK'] = {
+		closeText: '關閉',
+		prevText: '&#x3C;上月',
+		nextText: '下月&#x3E;',
+		currentText: '今天',
+		monthNames: ['一月','二月','三月','四月','五月','六月',
+		'七月','八月','九月','十月','十一月','十二月'],
+		monthNamesShort: ['一月','二月','三月','四月','五月','六月',
+		'七月','八月','九月','十月','十一月','十二月'],
+		dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+		dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+		dayNamesMin: ['日','一','二','三','四','五','六'],
+		weekHeader: '周',
+		dateFormat: 'dd-mm-yy',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: '年'};
+	$.datepicker.setDefaults($.datepicker.regional['zh-HK']);
+});
+
+/* Chinese initialisation for the jQuery UI date picker plugin. */
+/* Written by Ressol (ressol@gmail.com). */
+jQuery(function($){
+	$.datepicker.regional['zh-TW'] = {
+		closeText: '關閉',
+		prevText: '&#x3C;上月',
+		nextText: '下月&#x3E;',
+		currentText: '今天',
+		monthNames: ['一月','二月','三月','四月','五月','六月',
+		'七月','八月','九月','十月','十一月','十二月'],
+		monthNamesShort: ['一月','二月','三月','四月','五月','六月',
+		'七月','八月','九月','十月','十一月','十二月'],
+		dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+		dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+		dayNamesMin: ['日','一','二','三','四','五','六'],
+		weekHeader: '周',
+		dateFormat: 'yy/mm/dd',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: true,
+		yearSuffix: '年'};
+	$.datepicker.setDefaults($.datepicker.regional['zh-TW']);
+});
+
 },{}],69:[function(require,module,exports){
 /*
 
@@ -28270,7 +30308,7 @@ if (window.$ == undefined || $.fn.jquery.split(' ')[0].split('.')[0] < 2) {
 }
 require('jquery-ui/draggable');
 require('bootstrap/dist/js/bootstrap');
-require('./lib/jquery-ui-i18n.min')
+require('./lib/jquery-ui-i18n')
 
 var FilterView = require('./views/filters-view');
 
@@ -28389,7 +30427,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 
 module.exports = Widget;
 
-},{"./lib/jquery-ui-i18n.min":68,"./views/filters-view":81,"backbone":"backbone","bootstrap/dist/js/bootstrap":60,"jquery":"jquery","jquery-ui/draggable":63,"underscore":"underscore"}],71:[function(require,module,exports){
+},{"./lib/jquery-ui-i18n":68,"./views/filters-view":81,"backbone":"backbone","bootstrap/dist/js/bootstrap":60,"jquery":"jquery","jquery-ui/draggable":63,"underscore":"underscore"}],71:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -28407,7 +30445,7 @@ module.exports = Backbone.Model.extend({
     this.set('name', options.name);
     this.set('group', options.group || options.id);
     this.set('method', options.method);
-    this.set('column', options.column); 
+    this.set('columns', options.columns);
     this.set('empty', options.empty || false);
     this.url =  options.url || options.endpoint;
   }
@@ -28638,6 +30676,7 @@ module.exports = Backbone.Model.extend({
 });
 },{"backbone":"backbone","underscore":"underscore"}],75:[function(require,module,exports){
 var $ = require('jquery');
+var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
 
 
@@ -28698,7 +30737,7 @@ module.exports = BaseFilterModel.extend({
   serialize: function() {
 	// AMP-21041: Enabled filtering by start OR end date.
     if (this.get('selectedStart') || this.get('selectedEnd')) {
-    	  var key = this.get('column')!='N/A' ? this.get('column'):'date';
+    	  var key = _.first(this.get('columns')) !='N/A' ? _.first(this.get('columns')): 'date';
     	  //console.log('serializing years-filter-model for ' + key + ', start = ' + this.get('selectedStart') + ', end = ' + this.get('selectedEnd'));    	  
     	  var obj = {};
     	  obj[key] = {
@@ -28729,7 +30768,7 @@ module.exports = BaseFilterModel.extend({
   },
   
   deserialize: function(obj) {
-	var key = this.get('column') != 'N/A' ? this.get('column') : 'date';
+	var key = _.first(this.get('columns')) !='N/A' ? _.first(this.get('columns')) : 'date';
 	if (obj && obj[key]) {
 	  this.set('selectedStart', this._dateConvert(obj[key].start));
 	  this.set('selectedEnd', this._dateConvert(obj[key].end));
@@ -28770,7 +30809,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":71,"jquery":"jquery"}],76:[function(require,module,exports){
+},{"../models/base-filter-model":71,"jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -29422,19 +31461,7 @@ module.exports = Backbone.View.extend({
     this.draggable = options.draggable;
     this.caller = options.caller;
     this.settings = new SettingsCollection();
-    this.settings.fetch({          
-        success: function (collection, response, options) {        	
-        	var languageSetting = self.settings.findWhere({id:'language'});
-        	if(languageSetting){
-        		var lang = languageSetting.get('defaultId') 
-        		//using en does not work, empty string resets to default i.e english
-                lang = (lang === 'en') ?  '' : lang; 
-        		console.log('setting date picker lang: ' + lang);
-        		$.datepicker.setDefaults($.datepicker.regional[lang]);
-        	}   	
-        		
-        }
-    });
+    this.settings.fetch();
     
     this.dateFormatMappings = [];
     this.dateFormatMappings.push({ampformat: 'dd/MMM/yyyy', datepickerformat:'dd/M/yy'});
@@ -29632,6 +31659,8 @@ module.exports = Backbone.View.extend({
       case 'ExpenditureClassList':
       case 'FinancingInstrumentsList':
       case 'FundingStatus':
+      case 'effectiveFundingDate':
+      case 'fundingClosingDate':
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
       case 'ActivityStatusList':
@@ -30199,6 +32228,16 @@ module.exports = BaseFilterView.extend({
 
     //this.$('#start-date').val(this.model.get('selectedStart'));
     //this.$('#end-date').val(this.model.get('selectedEnd'));
+    
+    // Set the language for datepickers here (instead of doing it in filters-view.js) to prevent race conditions that would set the wrong language.
+    var languageSetting = this.filterView.settings.findWhere({id:'language'});
+	if (languageSetting) {
+		var lang = languageSetting.get('defaultId') 
+		//English is default so we dont set it.
+        lang = (lang === 'en') ?  '' : lang; 
+		//console.log('setting date picker lang: ' + lang);
+		$.datepicker.setDefaults($.datepicker.regional[lang]);
+	}
   },
 
   renderTitle:function() {

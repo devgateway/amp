@@ -7,6 +7,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,11 +22,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.ProgramUtil.ProgramHierarchyDefinition;
 import org.digijava.module.aim.util.ProgramUtil.XMLtreeItemFactory;
@@ -34,6 +36,8 @@ import org.digijava.module.aim.util.ProgramUtil.XMLtreeItemFactory;
 public class ThemeManager extends Action {
 
 	private static Logger logger = Logger.getLogger(ThemeManager.class);
+	
+	public final static int ACTIVITIES_ERROR_COUNT = 10;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -81,6 +85,9 @@ public class ThemeManager extends Action {
 						new ProgramHierarchyDefinition(),
 						new XMLtreeItemFactory());
 				
+//				List<AmpTheme> themes
+				
+				
 				themeForm.setThemes(themeFlatTree);
 				
 				/**
@@ -125,16 +132,16 @@ public class ThemeManager extends Action {
 		
 			//Iterator itr = DbUtil.getActivityThemeFromAAT(new Long(Long.parseLong(request.getParameter("themeId")))).iterator();
                         Long programId=themeForm.getThemeId();
-			Collection col = ProgramUtil.checkActivitiesUsingProgram(programId);
+			List<String> acts = ProgramUtil.getActivityNamesUsingProgram(programId);
 			Collection col2 = ProgramUtil.getProgramIndicators(programId);
                       
 			String nameOfSettingsUsedInActivity	= ProgramUtil.getNameOfProgramSettingsUsed( themeForm.getThemeId() );
 			
-			if( !flagProblemFound && (col!=null) && (!(col.isEmpty())) )
+			if( !flagProblemFound && (acts!=null) && (!(acts.isEmpty())) )
 			{
 				flagProblemFound	= true;
 				themeForm.setFlag("activityReferences");
-				themeForm.setActivitiesUsingTheme( ActivityUtil.collectionToCSV(col) );
+				themeForm.setActivitiesUsingTheme(buildMessageFromActivities(acts));
 			}
 			if ( !flagProblemFound && nameOfSettingsUsedInActivity != null && nameOfSettingsUsedInActivity.length() > 0 ) {
 				flagProblemFound 	= true;
@@ -211,5 +218,24 @@ public class ThemeManager extends Action {
 		
 		
 		return mapping.findForward("forward");
+	}
+
+	private String buildMessageFromActivities(List<String> acts) {
+		StringBuilder sb = new StringBuilder();
+		
+		int cnt = acts.size() > ACTIVITIES_ERROR_COUNT ? ACTIVITIES_ERROR_COUNT : acts.size();
+		for (int i=0; i < cnt; i++) {
+			sb.append("<br/>");
+			sb.append("\"" + acts.get(i) + "\";");
+		}
+		
+		if (acts.size() > ACTIVITIES_ERROR_COUNT) {
+			sb.append("<br/><br/>");
+			sb.append("<b>" + TranslatorWorker.translateText("and") + " ");
+			sb.append(acts.size() - ACTIVITIES_ERROR_COUNT);
+			sb.append(" " + TranslatorWorker.translateText(" more") + "...</b>");
+		}
+		
+		return sb.toString();
 	}
 }

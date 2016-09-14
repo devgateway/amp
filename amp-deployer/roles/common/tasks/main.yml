@@ -1,0 +1,58 @@
+---
+
+# - name: Display all variables/facts known for a host
+#   debug: var=hostvars[inventory_hostname] verbosity=4
+
+# - debug: var=common__epel_repo_url
+# - debug: var=vagrant_volumes
+
+- name: Ensure repositories are installed
+  include: repos.yml
+
+- name: Configure firewall
+  include: firewall.yml
+
+- name: Configure users
+  include: users.yml
+
+- name: Configure Bash
+  template: src=profile.custom.sh.j2 dest=/etc/profile.d/custom.sh
+
+- name: Create Directory for backups
+  file: path=/var/backups owner={{ common__deployer_user }} group={{ common__deployer_group }} state=directory mode=0775
+
+- name: Create Directory for daily backups
+  file: path=/var/backups/daily owner={{ common__deployer_user }} group={{ common__deployer_group }} state=directory mode=0775
+
+- name: Create Directory for backup archives
+  file: path=/var/backups/archive owner={{ common__deployer_user }} group={{ common__deployer_group }} state=directory mode=0775
+
+- name: Install Packages
+  yum: name={{ item }} state=installed
+  with_items:
+    - bash-completion
+    - bash-completion-extras
+    - deltarpm
+    - git
+    - htop
+    - iftop
+    - iotop
+    - lsof
+    - net-tools
+    - nmap-ncat
+    - patch
+    - screen
+    - vim
+    - wget
+
+- name: Install yum-cron.
+  yum: name=yum-cron state=present
+
+- name: Enable and start yum-cron
+  service: name=yum-cron state=started enabled=yes
+
+- name: Configure autoupdates.
+  lineinfile:
+    dest: "/etc/yum/yum-cron.conf"
+    regexp: '^apply_updates = .+'
+    line: 'apply_updates = yes'

@@ -500,8 +500,8 @@ public class ExportActivityToWord extends Action {
                     }
                 }
 
-                List<Table> regioanlFundingTables = getRegioanlFundingTables(request, ampContext, activity);
-                for (Table tbl : regioanlFundingTables) {
+                List<Table> regionalFundingTables = getRegionalFundingTables(request, ampContext, activity);
+                for (Table tbl : regionalFundingTables) {
                     doc.add(tbl);
                 }
 
@@ -1885,7 +1885,7 @@ public class ExportActivityToWord extends Action {
                 for (AmpIssues issue : issues) {
                     String issueName = issue.getName();
                     if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Date")){
-                        issueName += "  " + DateConversion.ConvertDateToString(issue.getIssueDate());
+                        issueName += "  " + DateConversion.convertDateToLocalizedString(issue.getIssueDate());
                     }
                     eshIssuesTable.addRowData(new ExportSectionHelperRowData(issueName, null, null, false));
                     if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure") &&
@@ -1893,7 +1893,7 @@ public class ExportActivityToWord extends Action {
                         for (AmpMeasure measure : (Set<AmpMeasure>) issue.getMeasures()) {
                             String measureName= measure.getName();
                             if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure/Date")) {
-                                measureName += "  " + DateConversion.ConvertDateToString(measure.getMeasureDate());
+                                measureName += "  " + DateConversion.convertDateToLocalizedString(measure.getMeasureDate());
                             }
                             eshIssuesTable.addRowData((new ExportSectionHelperRowData(" \u2022" +measureName , null, null, false)));
                             if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure/Actor") && measure.getActors() != null && !measure.getActors().isEmpty()) {
@@ -2125,13 +2125,11 @@ public class ExportActivityToWord extends Action {
     /*
      * Regional funding section
      */
-    private List<Table> getRegioanlFundingTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
+    private List<Table> getRegionalFundingTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
-        HttpSession session =request.getSession();
         ExportSectionHelper eshTitle = new ExportSectionHelper("Regional Fundings", true).setWidth(100f).setAlign("left");
         if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding")){
             retVal.add(createSectionTable(eshTitle, request, ampContext));
-
             if (act.getRegionalFundings() != null && !act.getRegionalFundings().isEmpty()) {
                 Set<AmpRegionalFunding> regFnds = act.getRegionalFundings();
                 boolean visibleModuleRegCommitments = FeaturesUtil.isVisibleModule(
@@ -2140,8 +2138,6 @@ public class ExportActivityToWord extends Action {
                         "/Activity Form/Regional Funding/Region Item/Disbursements");
                 boolean visibleModuleRegExpenditures = FeaturesUtil.isVisibleModule(
                         "/Activity Form/Regional Funding/Region Item/Expenditures");
-
-
                 for (AmpRegionalFunding regFnd : regFnds) {
                     // validating module visibility
                     // Commitments
@@ -2151,7 +2147,7 @@ public class ExportActivityToWord extends Action {
                                 .getTransactionType()), null,null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowData(regFnd.getAdjustmentType().getLabel(), true)
-                                .addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
+                                .addRowData(DateConversion.convertDateToLocalizedString(regFnd.getTransactionDate()))
                                 .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency().getCurrencyCode()));
                         retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
                     }
@@ -2165,7 +2161,7 @@ public class ExportActivityToWord extends Action {
                                 .getTransactionType()), null,null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowData(regFnd.getAdjustmentType().getLabel(), true)
-                                .addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
+                                .addRowData(DateConversion.convertDateToLocalizedString(regFnd.getTransactionDate()))
                                 .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency().getCurrencyCode()));
                         retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
                     }
@@ -2179,7 +2175,7 @@ public class ExportActivityToWord extends Action {
                                 .getTransactionType()), null,null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowData(regFnd.getAdjustmentType().getLabel(), true)
-                                .addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
+                                .addRowData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
                                 .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency().getCurrencyCode()));
                         retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
                     }
@@ -2346,7 +2342,7 @@ public class ExportActivityToWord extends Action {
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence",
                                 eshDonorInfo, "Type of Assistance", funding.getTypeOfAssistance(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument",
-                                eshDonorInfo, "Financial Instrument", funding.getFinancingInstrument(), true);
+                                eshDonorInfo, "Financing Instrument", funding.getFinancingInstrument(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status",
                                 eshDonorInfo, "Funding Status", funding.getFundingStatus(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment",
@@ -2361,6 +2357,12 @@ public class ExportActivityToWord extends Action {
                                 eshDonorInfo, "Agreement Title", funding.getCode(), true);
                         if (funding.getFundingClassificationDate() != null) {
                             addFundingRowData(null, eshDonorInfo, "Funding Classification Date",funding.getFundingClassificationDate(), false);
+                        }
+                        if (funding.getEffectiveFundingDate() != null) {
+                            addFundingRowData(null, eshDonorInfo, "Effective Funding Date",funding.getEffectiveFundingDate(), false);
+                        }
+                        if (funding.getFundingClosingDate() != null) {
+                            addFundingRowData(null, eshDonorInfo, "Funding Closing Date",funding.getFundingClosingDate(), false);
                         }
                         
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date",
@@ -2504,15 +2506,21 @@ public class ExportActivityToWord extends Action {
 
                 if (fnd.getFundingClassificationDate() != null)
                     eshDonorInfo.addRowData(new ExportSectionHelperRowData("Funding Classification Date", null, null, true)
-                            .addRowData(DateConversion.ConvertDateToString(fnd.getFundingClassificationDate())));
+                            .addRowData(DateConversion.convertDateToLocalizedString(fnd.getFundingClassificationDate())));
+                if (fnd.getEffectiveFundingDate() != null)
+                    eshDonorInfo.addRowData(new ExportSectionHelperRowData("Effective Funding Date", null, null, true)
+                            .addRowData(DateConversion.convertDateToString(fnd.getEffectiveFundingDate())));
+                if (fnd.getFundingClosingDate() != null)
+                    eshDonorInfo.addRowData(new ExportSectionHelperRowData("Funding Closing Date", null, null, true)
+                            .addRowData(DateConversion.convertDateToString(fnd.getFundingClosingDate())));
                 
                 if (fnd.getRatificationDate() != null)
                     eshDonorInfo.addRowData(new ExportSectionHelperRowData("Ratification Date", null, null, true)
-                            .addRowData(DateConversion.ConvertDateToString(fnd.getRatificationDate())));
+                            .addRowData(DateConversion.convertDateToLocalizedString(fnd.getRatificationDate())));
                 
                 if (fnd.getMaturity() != null)
                     eshDonorInfo.addRowData(new ExportSectionHelperRowData("Maturity", null, null, true)
-                            .addRowData(DateConversion.ConvertDateToString(fnd.getMaturity())));
+                            .addRowData(DateConversion.convertDateToLocalizedString(fnd.getMaturity())));
                 
                 if (fnd.getInterestRate() != null)
                     eshDonorInfo.addRowData(new ExportSectionHelperRowData("Interest Rate", null, null, true)

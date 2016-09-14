@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.nireports.runtime;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,18 +10,17 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.output.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
-import static org.dgfoundation.amp.algo.AmpCollections.remap;
 /**
  * a leaf of a report - the bottom hierarchy, without any subreports
  * @author Dolghier Constantin
@@ -105,6 +103,23 @@ public class ColumnReportData extends ReportData {
 		return horizSplit(dataColumn, z.contents, z.getBehaviour(), (NiReportColumn<?>) z.entity, false); //setting this to true should NOT change the output of the report, but triple-hier would run 7% slower
 	}
 	
+	/**
+	 * Horizontally splits this instance by a given CellColumn.
+	 * Every entityId in the given splitter column will create a subreport. Each and every CellColumn in this instance
+	 * will be filtered repeatedly, according to {@link Behaviour#horizSplit(ColumnContents, Map, Set, Map, boolean, boolean)}. 
+	 * Every nonempty subreport is kept and output as a child {@link ColumnReportData} of the generated {@link GroupReportData}.
+	 * What constitutes a "nonempty subreport" is subject to<ul>>:
+	 * <ul>
+	 * 	<li>spec: {@link ReportSpecification#isDisplayEmptyFundingRows()}</li>
+	 * 	<li>type of hierarchy-generator column: {@link NiReportsSchema#isTransactionLevelHierarchy(NiReportColumn, NiReportsEngine)}</li>
+	 * </ul>
+	 * @param dataColumn the column driving the hierarchy
+	 * @param wholeColumn the full contents, as fetched, of the column driving the hierarchy
+	 * @param behaviour the behaviour of the driving column
+	 * @param schemaColumn the schema column of the driving column
+	 * @param enqueueAcceptors whether to enqueue the acceptors, for each individual cell. Used for the "filtering as collapsed hierachies" functionality
+	 * @return
+	 */
 	public GroupReportData horizSplit(ColumnContents dataColumn, ColumnContents wholeColumn, Behaviour<?> behaviour, NiReportColumn<?> schemaColumn, boolean enqueueAcceptors) {
 		SplitDigest splitDigest = new SplitDigest(schemaColumn, dataColumn, behaviour, wholeColumn, this::getIds);
 		
@@ -115,7 +130,8 @@ public class ColumnReportData extends ReportData {
 
 		IdsAcceptorsBuilder bld = context;
 		List<ColumnReportData> newChildren = new ArrayList<>();
-		boolean keepEmptyFundingRows = context.spec.isDisplayEmptyFundingRows() && (!context.schema.isTransactionLevelHierarchy(schemaColumn, context));
+		boolean isTransactionLevel = context.schema.isTransactionLevelHierarchy(schemaColumn, context);
+		boolean keepEmptyFundingRows = context.spec.isDisplayEmptyFundingRows() && !isTransactionLevel;
 		
 		for(long catId:orderedCatIds) {
 			//NiCell splitCell = splitters.get(catId).get(0); // choose any, because they all have the same coordinates
@@ -130,7 +146,7 @@ public class ColumnReportData extends ReportData {
 			Map<CellColumn, ColumnContents> subContents = new HashMap<>();
 			for(CellColumn cc:contents.keySet()) {
 				ColumnContents oldContents = contents.get(cc);
-				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, splitDigest.splitterCells.get(catId), splitDigest.actIds.get(catId), acceptors, enqueueAcceptors);
+				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, splitDigest.splitterCells.get(catId), splitDigest.actIds.get(catId), acceptors, enqueueAcceptors, isTransactionLevel);
 //				if (cc.getHierName().equals("RAW / Funding / 2006 / Actual Commitments"))
 //					System.err.format("splitting %s.%s by %s.%s; %d cells became %d: %s\n", this, cc.getHierName(), z.getHierName(), splitCell.toString(), oldContents.countCells(), newContents.countCells(), newContents);
 				subContents.put(cc, newContents);

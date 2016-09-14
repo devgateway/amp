@@ -15,9 +15,10 @@ public class NiDateColumnGenerator extends ColumnGenerator {
 	private class Entry {
 		final String activityTitle;
 		final LocalDate date;
+		
 		public Entry(String activityTitle, LocalDate date, long activityId) {
 			this.date = date;
-			this.activityTitle = activityTitle;
+			this.activityTitle = anon(activityTitle);
 		}
 		
 		public String toString() {
@@ -30,15 +31,8 @@ public class NiDateColumnGenerator extends ColumnGenerator {
 	}
 	
 	final private List<Entry> entries;
-	
-	private Map<Long, String> getActivityNames() {
-		String query = "SELECT amp_activity_id, name FROM amp_activity WHERE amp_team_id IN "
-				+ "(SELECT amp_team_id FROM amp_team WHERE name = 'test workspace')";
-		return (Map<Long, String>) PersistenceManager.getSession().doReturningWork(connection -> SQLUtils.collectKeyValue(connection, query));
-	}
-	
+		
 	private List<Entry> populateList() {
-		List<Entry> result = new ArrayList<Entry>();
 		final List<Entry> entries = new ArrayList<>();
 		runInEngineContext( 
 				new ArrayList<String>(getActivityNames().values()), 

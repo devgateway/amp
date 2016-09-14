@@ -22,165 +22,138 @@ $plugin = array(
 );
 
 function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_settings, $langcode = NULL) {
-  $api_status = helpergeneric_check_api_status();
+  $api_status = ampAPIRestClient::status();
   if (!$api_status['online']) {
-    return;
+    return array();
   }
 
   $langcode = (empty($langcode) ? LANGUAGE_NONE : $langcode);
   $cache_id = "contentblock:widget:{$langcode}:totalactivities:" . md5(serialize($widget_settings));
 
-  // Try to get the response from cache.
-  $report_totals = array();
+  // Let's prepare the amount units (pre-configured per widget).
+  $amount_units_key = isset($widget_settings['amount-units']) ? $widget_settings['amount-units'] : 'amountUnits1';
+  $amount_units_settings = _ampapi_activity_get_api_settings('amount-units');
+  $amount_units = $amount_units_settings[$amount_units_key];
+
+  // Try to get the processed response from cache.
   if ($cached = cache_get($cache_id, 'cache')) {
-    $report_totals = $cached->data;
-    return $report_totals;
-  }
-  else {
-    // Prepare a list of parameters for the request.
-    $parameters = array();
-    if ($langcode != LANGUAGE_NONE) {
-      $parameters['language'] = $langcode;
-    }
-
-    $variables = array();
-    $variables['headers'] = array(
-      'Accept' => 'application/json',
-      'Content-Type' => 'application/json',
-    );
-
-    $request_body = array(
-      'add_columns' => array(),
-      'add_measures' => array(),
-    );
-
-    $id_plugin = ampapi_get_mapper_by_property_name('id');
-    $request_body['add_columns'][] = $id_plugin['report field key'];
-
-    $actual_commitments_plugin = ampapi_get_mapper_by_property_name('actual_commitments');
-    $request_body['add_measures'][] = $actual_commitments_plugin['report field key'];
-
-    $actual_disbursements_plugin = ampapi_get_mapper_by_property_name('actual_disbursements');
-    $request_body['add_measures'][] = $actual_disbursements_plugin['report field key'];
-
-    $request_body['page'] = 1;
-    $request_body['recordsPerPage'] = 1;
-    $request_body['regenerate'] = TRUE;
-    $request_body['rowTotals'] = TRUE;
-    $request_body['raw_values'] = array('M');
-    $request_body['name'] = 'api:totalactivities';
-
-    // Include Activities with empty funding in the total activities count.
-    $request_body['show_empty_rows'] = TRUE;
-
-    $api_settings = helpergeneric_get_api_settings();
-
-    // Handle the global "Humanitarian Aid" filter.
-    // @see helpergeneric_api_settings_form()
-    if (!empty($api_settings['humanitarian_aid_only'])) {
-      $humanitarian_aid_plugin = ampapi_get_mapper_by_property_name('humanitarian_aid');
-      $class_name = ctools_plugin_get_class($humanitarian_aid_plugin, 'handler');
-      /** @var activityMapperOptionsInterface $handler */
-      $handler = new $class_name();
-
-      // Only display data related to humanitarian aid.
-      // NOTE: Filters for the custom reports endpoint need to be inside a "filters" key.
-      $ha_key = $humanitarian_aid_plugin['report field key'];
-      $ha_value = $handler->getMatchedValue($humanitarian_aid_plugin, TRUE);
-      $request_body['filters']['columnFilters'][$ha_key] = array($ha_value);
-    }
-
-    // Handle the global "Disaster Response Marker" filter.
-    // @see helpergeneric_api_settings_form()
-    if (!empty($api_settings['disaster_response_marker_only'])) {
-      $disaster_response_marker_plugin = ampapi_get_mapper_by_property_name('disaster_response_marker');
-      $class_name = ctools_plugin_get_class($disaster_response_marker_plugin, 'handler');
-      /** @var activityMapperOptionsInterface $handler */
-      $handler = new $class_name();
-
-      // Only display data related to disaster response.
-      $drm_key = $disaster_response_marker_plugin['report field key'];
-      $drm_value = $handler->getMatchedValue($disaster_response_marker_plugin, TRUE);
-      $request_body['filters']['columnFilters'][$drm_key] = array($drm_value);
-    }
-
-    $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);
-
-    // Set the API Resource Endpoint.
-    $resource_path = $plugin['resource api path'];
-    if (!empty($parameters)) {
-      $resource_path .= '?' . drupal_http_build_query($parameters);
-    }
-
-    // Make a GET request.
-    $response = restclient_post($resource_path, $variables);
+    return $cached->data;
   }
 
-  // @TODO: Add support for more response codes.
-  if (restclient_response_code($response) != RESTCLIENT_RESPONSE_SUCCESS) {
-    drupal_set_message(t('Could not retrieve data from the API. Please try again later or check the API Settings.'), 'error');
-    return;
+  // Prepare a list of options for the request.
+  $options = array();
+  $options['headers'] = array(
+    'Accept' => 'application/json',
+    'Content-Type' => 'application/json',
+  );
+
+  $request_body = array();
+
+  $id_plugin = ampapi_get_mapper_by_property_name('id');
+  $request_body['add_columns'][] = $id_plugin['report field key'];
+
+  $actual_commitments_plugin = ampapi_get_mapper_by_property_name('actual_commitments');
+  $request_body['add_measures'][] = $actual_commitments_plugin['report field key'];
+
+  $actual_disbursements_plugin = ampapi_get_mapper_by_property_name('actual_disbursements');
+  $request_body['add_measures'][] = $actual_disbursements_plugin['report field key'];
+
+  $request_body['page'] = 1;
+  $request_body['recordsPerPage'] = 1;
+  $request_body['regenerate'] = TRUE;
+  $request_body['rowTotals'] = TRUE;
+  $request_body['raw_values'] = array('M');
+  $request_body['name'] = 'api:totalactivities';
+
+  // Include Activities with empty funding in the total activities count.
+  $request_body['show_empty_rows'] = TRUE;
+
+  // Get the API settings.
+  $api_settings = helpergeneric_get_api_settings();
+
+  // Let's add amount units.
+  $request_body['settings']['amountFormat']['amountUnits'] = $amount_units['value'];
+
+  // Handle the global "Humanitarian Aid" filter.
+  // @see helpergeneric_api_settings_form()
+  if (!empty($api_settings['humanitarian_aid_only'])) {
+    $humanitarian_aid_plugin = ampapi_get_mapper_by_property_name('humanitarian_aid');
+    $class_name = ctools_plugin_get_class($humanitarian_aid_plugin, 'handler');
+    /** @var activityMapperOptionsInterface $handler */
+    $handler = new $class_name();
+
+    // Only display data related to humanitarian aid.
+    // NOTE: Filters for the custom reports endpoint need to be inside a "filters" key.
+    $ha_key = $humanitarian_aid_plugin['report field key'];
+    $ha_value = $handler->getMatchedValue($humanitarian_aid_plugin, TRUE);
+    $request_body['filters']['columnFilters'][$ha_key] = array($ha_value);
   }
 
-  if (empty($response->data)) {
-    drupal_set_message(t('No data retrieved from the API. Please try again later or check the API Settings.'), 'error');
-    return;
+  // Handle the global "Disaster Response Marker" filter.
+  // @see helpergeneric_api_settings_form()
+  if (!empty($api_settings['disaster_response_marker_only'])) {
+    $disaster_response_marker_plugin = ampapi_get_mapper_by_property_name('disaster_response_marker');
+    $class_name = ctools_plugin_get_class($disaster_response_marker_plugin, 'handler');
+    /** @var activityMapperOptionsInterface $handler */
+    $handler = new $class_name();
+
+    // Only display data related to disaster response.
+    $drm_key = $disaster_response_marker_plugin['report field key'];
+    $drm_value = $handler->getMatchedValue($disaster_response_marker_plugin, TRUE);
+    $request_body['filters']['columnFilters'][$drm_key] = array($drm_value);
   }
 
-  $response_data = json_decode($response->data);
+  // JSON Encode the request body. Can't use JSON_FORCE_OBJECT.
+  $options['body'] = empty($request_body) ? '{}' : json_encode($request_body);
 
-  if (!empty($response_data->error)) {
-    $t_args = array();
-    $t_args['%message'] = reset($response_data->error);
-    drupal_set_message(t('The API returned the following status message: %message', $t_args), 'error');;
-    return;
+  // Get the data.
+  $use_cache = FALSE;  // We cache the processed data, not the request.
+  $response_data = ampAPIRestClient::post($plugin['resource api path'], $options, $use_cache);
+  if (empty($response_data)) {
+    return array();
   }
 
   // Get the number formatting pattern.
-  $number_format = NULL;
   $currency = '';
+  /** @noinspection PhpUndefinedFieldInspection */
   foreach ($response_data->settings as $info) {
-    if ($info->id == 'ammountPattern') {
-      $number_format = $info->value;
-    }
-
     // @HACK: The id for currency is "1"!!!
     // @see: Documentation for /rest/gis/settings
     if ($info->id == '1') {
       $currency = $info->value->defaultId;
     }
   }
-  if (is_null($number_format)) {
-    $number_format = '###0.00';
-  }
 
-  // @see https://php.net/manual/en/numberformatter.create.php
-  // @see http://www.icu-project.org/apiref/icu4c/classDecimalFormat.html#details
-  $formatter_locale = NULL;
-  $formatter = new NumberFormatter($formatter_locale, NumberFormatter::PATTERN_DECIMAL, $number_format);
-
+  $report_totals = array();
+  /** @noinspection PhpUndefinedFieldInspection */
   foreach ($response_data->headers as $h_info) {
     // @TODO: use mappers.
     if (!in_array($h_info->hierarchicalName, array('[Totals][Actual Commitments]', '[Totals][Actual Disbursements]'))) {
       continue;
     }
 
+    /** @noinspection PhpUndefinedFieldInspection */
     if (!isset($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->value)) {
       continue;
     }
 
-    if ($formatter) {
-      $value = $response_data->page->pageArea->contents->{$h_info->hierarchicalName}->value;
-      // Display configuration in millions.
-      // @TODO: Add configuration options.
-      $value = $value / 1000 / 1000;
-
-      $amount = '<span class="amount">' . $formatter->format($value) . '</span> ';
-      $amount .= '<span class="text">' . t('Millions !currencysymbol', array('!currencysymbol' => $currency)) . '</span>';
+    // Now, we really trust the API display values.
+    $amount_units_label = '';
+    if ((isset($widget_settings['amount-units-label-type']) && $widget_settings['amount-units-label-type'] == 'long')) {
+      if (isset($amount_units['label long'])) {
+        $amount_units_label = filter_xss($amount_units['label long']);
+      }
     }
     else {
-      $amount = check_plain($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->displayedValue);
+      if (isset($amount_units['label short'])) {
+        $amount_units_label = filter_xss($amount_units['label short']);
+      }
     }
+
+    /** @noinspection PhpUndefinedFieldInspection */
+    $amount = check_plain($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->displayedValue);
+    $amount = '<span class="amount">' . $amount . '</span> ';
+    $amount .= '<span class="text">' . t('@amount_units !currencysymbol', array('!currencysymbol' => $currency, '@amount_units' => $amount_units_label)) . '</span>';
 
     switch ($h_info->hierarchicalName) {
       case '[Totals][Actual Commitments]':
@@ -192,7 +165,14 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
     }
   }
 
+  if (empty($report_totals)) {
+    ampAPIRestClient::log($plugin['title'] . ': Data for measures is missing', array());
+    return array();
+  }
+
+  /** @noinspection PhpUndefinedFieldInspection */
   if (!empty($response_data->page->totalRecords)) {
+    /** @noinspection PhpUndefinedFieldInspection */
     $report_totals['activities_count'] = '<span class="amount">' . intval($response_data->page->totalRecords) . '</span> ';
   }
 
@@ -210,9 +190,12 @@ function contentwidget_totalactivities_widget_render($plugin, $widget_settings, 
   // Provide some default values.
   $widget_settings += $plugin['defaults'];
 
-  $data = contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_settings, $langcode);
-  if (empty($data)) {
-    return;
+  // Make the queries only if the entity is published.
+  if ($entity->status == NODE_PUBLISHED) {
+    $data = contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_settings, $langcode);
+    if (empty($data)) {
+      return '';
+    }
   }
 
   $info_blocks = array(
@@ -225,11 +208,22 @@ function contentwidget_totalactivities_widget_render($plugin, $widget_settings, 
     '#prefix' => '<div class="contentblock-published clearfix">',
     '#suffix' => '</div>',
   );
-  if (empty($entity->status)) {
+
+  // If it is not published (we don't make the call, and we render a custom version of the block).
+  if (empty($entity->status) || $entity->status == NODE_NOT_PUBLISHED) {
     $build = array(
-      '#prefix' => '<div class="contentblock-unpublished clearfix">',
+      '#prefix' => '<div class="contentblock-unpublished empty-contentblock clearfix">',
       '#suffix' => '</div>',
     );
+    $build['title'] = array(
+      '#markup' => '<h3 class="contentblock-title">' . t('Activities Block - Not Published') . '</h3>',
+    );
+    $build['content'] = array(
+      '#markup' => '<p>' . t('This block is unpublished. To re-enable it - click !here and publish it.', array(
+          '!here' => l(t('here'), 'admin/settings/content-sections/' . $entity->machine_name)
+        )) . '</p>',
+    );
+    return $build;
   }
 
   // Create the table headers.
@@ -263,17 +257,59 @@ function contentwidget_totalactivities_widget_render($plugin, $widget_settings, 
 }
 
 /**
- * Settings form for the 'Top Donors' predefined widget.
+ * Settings form for the 'Total Activities' fixed widget.
  */
-function contentwidget_totalactivities_widget_settings(&$element, &$form_state, $plugin, $widget_settings) {
-  $settings_form = array();
-  return $settings_form;
+function contentwidget_totalactivities_widget_settings($form, &$form_state, $plugin, $widget_settings) {
+  // Include this file, so that submit form works correctly.
+  ctools_form_include_file($form_state, $plugin['path'] . '/' . $plugin['file']);
+
+  // Let's allow users to select widget-related amount formatting.
+  $amount_units_settings = _ampapi_activity_get_api_settings('amount-units');
+  $amount_units_options = array();
+  foreach ($amount_units_settings as $amount_id => $amount_unit_setting) {
+    $amount_units_options[$amount_id] = $amount_unit_setting['name'];
+  }
+  $form['amount_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Amount Options'),
+    '#description' => t("These options change the widget amount formatting for the numeric output."),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#weight' => 10
+  );
+  $form['amount_settings']['widget_amount'] = array(
+    '#type' => 'select',
+    '#title' => t('Widget Amount Units'),
+    '#options' => $amount_units_options,
+    '#default_value' => isset($widget_settings['amount-units']) ? $widget_settings['amount-units'] : 'amountUnits1',
+    '#description' => t('Please specify which widget-based amount formatting option you would like to use.'),
+  );
+  $form['amount_settings']['widget_amount_label_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Amount Units Type'),
+    '#options' => array('short' => t('Short'), 'long' => t('Long')),
+    '#default_value' => isset($widget_settings['amount-units-label-type']) ? $widget_settings['amount-units-label-type'] : 'short',
+    '#description' => t('Please specify format would you like to use.<br />Short Example: M; Long Example: Millions.'),
+  );
+  $form['#submit'][] = 'contentwidget_totalactivities_widget_settings_submit';
+
+  return $form;
 }
 
 /**
- * Returns an serialized string for storing the widget settings in the database.
+ * Widget form submit handler.
+ *
+ * This is where we basically put everything into a standard variable.
  */
-function contentwidget_totalactivities_widget_settings_storage($widget_name, $form_values) {
-  $settings = array();
-  return serialize($settings);
+function contentwidget_totalactivities_widget_settings_submit($form, $form_state) {
+  $entity = $form['#entity'];
+
+  $values = $form_state['values'];
+  $amount = $values['widget_amount'];
+  $label_type = $values['widget_amount_label_type'];
+
+  $data['amount-units'] = $amount;
+  $data['amount-units-label-type'] = $label_type;
+
+  _contentwidget_fixed_set_settings($entity->machine_name, $data);
 }

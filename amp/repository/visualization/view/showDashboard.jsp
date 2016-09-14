@@ -147,7 +147,7 @@ function initializeTranslations(){
 	trnCancel = '<digi:trn>Cancel</digi:trn>';
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
-	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
+	trnLoading = '<digi:trn>Loading...</digi:trn>';
 	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
@@ -1252,8 +1252,8 @@ function initializeGlobalVariables(){
 <input type="hidden" id="GlobalFontWeight" value="bold" />
 <input type="hidden" id="trnMessagePanel" value="<digi:trn jsFriendly='true'>Empty Dataset</digi:trn>" />
 <input type="hidden" id="trnMessageEmpty" value="<digi:trn jsFriendly='true'>No data to show</digi:trn>" />
-<input type="hidden" id="trnMessageLoadingPanel" value="<digi:trn jsFriendly='true'>Loading</digi:trn>" />
-<input type="hidden" id="trnMessageLoading" value="<digi:trn jsFriendly='true'>Loading data...</digi:trn>" />
+<input type="hidden" id="trnMessageLoadingPanel" value="<digi:trn jsFriendly='true'>Loading...</digi:trn>" />
+<input type="hidden" id="trnMessageLoading" value="<digi:trn jsFriendly='true'>Loading...</digi:trn>" />
 <!--  End Global variables for all flash files -->
 
 <div id="demo" class="yui-navset">
@@ -1911,7 +1911,7 @@ function initializeTranslations(){
 	trnCancel = '<digi:trn>Cancel</digi:trn>';
 	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
 	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
-	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
+	trnLoading = '<digi:trn>Loading...</digi:trn>';
 	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";

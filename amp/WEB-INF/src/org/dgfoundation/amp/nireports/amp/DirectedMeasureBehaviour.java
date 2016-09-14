@@ -11,6 +11,7 @@ import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
@@ -18,11 +19,14 @@ import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
-import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
- * the {@link Behavior} of a Funding Flow entity
+ * the {@link Behavior} of a Funding Flow entity.
+ * The differences are in: <ul>
+ * <li>the VSplitStrategy for submeasure hierarchies: Funding Flow entities split themselves by the name of the Funding Flow</li>
+ * <li>the hierarchies-filtering behaviour under NiDimensionUsages based on the orgs dimension: percentages are ignored for these</li>
+ * </ul>
  * @author Dolghier Constantin
  *
  */
@@ -38,6 +42,9 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
 		this.totalColumnName = totalColumnName;
 	}
 	
+	/**
+	 * instructs the reporting engine to split this entity by the flow name. The flow name has been precomputed during fetching in {@link AmpFundingColumn}
+	 */
 	@Override
 	public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine context) {
 		VSplitStrategy byFundingFlow = VSplitStrategy.build(cell -> new ComparableValue<String>(getFlowName(cell.getCell()), getFlowName(cell.getCell())), AmpReportsSchema.PSEUDOCOLUMN_FLOW);
@@ -55,10 +62,13 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
 		return new ImmutablePair<String, ColumnContents>(totalColumnName, fetchedContents);
 	}
 	
+	/**
+	 * delegates to the superclass for non-orgs-related hierarchies. For orgs-related ones, filters on an OR basis
+	 */
 	@Override
-	public Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell) {
+	public Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell, boolean isTransactionLevelHierarchy) {
 		if ((!splitCell.mainLevel.isPresent()) || getHierarchiesListener().test(splitCell.mainLevel.get().dimensionUsage))
-			return super.filterCell(acceptors, oldCell, splitCell); // this is not a related-organisation hierarchy
+			return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy); // this is not a related-organisation hierarchy
 		
 		// gone till here -> we're doing a hierarchy by a related organisation
 		String srcRoleCode = oldCell.getMetaInfo().getMetaInfo(MetaCategory.SOURCE_ROLE.category).v.toString();
@@ -84,8 +94,7 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
 	}
 	
 	/** 
-	 * <strong>make the common case fast: if this function returns null, it is a shortcut for "measure listenes to all hierarchies"</strong>
-	 * @return a predicate which governs the hierarchies whose percentages are listened to by an entity 
+	 * disables percentages for NiDimensionUsages based on the Organisations dimension
 	 */
 	@Override
 	public Predicate<NiDimensionUsage> getHierarchiesListener() {

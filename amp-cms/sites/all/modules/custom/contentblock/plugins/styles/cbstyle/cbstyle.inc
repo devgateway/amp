@@ -141,15 +141,18 @@ function theme_cbstyle_style_render_pane($vars) {
   if (empty($vars['content']->content)) {
     return;
   }
+  $content = $vars['content'];
+  $pane = $vars['pane'];
+  $display = $vars['display'];
 
   $contentblock_attributes = array();
-  if (!empty($vars['pane']->css['css_id'])) {
+  if (!empty($pane->css['css_id'])) {
     // Provided CSS ID must be unique!
-    $contentblock_attributes['id'] = drupal_html_id($vars['pane']->css['css_id']);
+    $contentblock_attributes['id'] = drupal_html_id($pane->css['css_id']);
   }
   else {
     // Create a unique ID for the ContentBlock Widget.
-    $contentblock_attributes['id'] = drupal_html_id('contentblock-' . $vars['pane']->pid);
+    $contentblock_attributes['id'] = drupal_html_id('contentblock-' . $pane->pid);
   }
 
   // Add a class to the wrapper.
@@ -158,9 +161,9 @@ function theme_cbstyle_style_render_pane($vars) {
     $contentblock_attributes['class'] += $vars['settings']['pane_classes'];
   }
 
-  if (!empty($vars['pane']->css['css_class'])) {
+  if (!empty($pane->css['css_class'])) {
     // Sanitize the provided list of classes.
-    $class_list = explode(' ', $vars['pane']->css['css_class']);
+    $class_list = explode(' ', $pane->css['css_class']);
     foreach ($class_list as $class) {
       $contentblock_attributes['class'][] = drupal_html_class($class);
     }
@@ -173,11 +176,11 @@ function theme_cbstyle_style_render_pane($vars) {
   );
 
   // Add the section title.
-  if (!empty($vars['content']->title)) {
+  if (!empty($content->title)) {
     $elements['pane_title'] = array(
       '#tag' => 'h3',
       '#theme' => 'html_tag',
-      '#value' => $vars['content']->title,
+      '#value' => $content->title,
       '#attributes' => array(
         'class' => array(
           'pane-title',
@@ -194,16 +197,20 @@ function theme_cbstyle_style_render_pane($vars) {
       ),
     ),
   );
-  if (is_string($vars['content']->content)) {
-    $elements['pane_content']['content']['#markup'] = $vars['content']->content;
+  if (is_string($content->content)) {
+    $elements['pane_content']['content']['#markup'] = $content->content;
   }
-  else if (is_array($vars['content']->content)) {
-    $elements['pane_content'] += $vars['content']->content;
+  else if (is_array($content->content)) {
+    // We unset this because we actually use it a bit higher, in our custom wrapper,
+    // So we want to avoid printing it twice.
+    unset($content->css_class);
+    $rendered_pane = theme('panels_pane', array('content' => $content, 'pane' => $pane, 'display' => $display));
+    $elements['pane_content']['content']['#markup'] = $rendered_pane;
   }
 
-  if (!empty($vars['content']->title)) {
+  if (!empty($content->title)) {
     // Add the section content.
-    $class = strip_tags($vars['content']->title);
+    $class = strip_tags($content->title);
     $elements['pane_content']['#attributes']['class'][] = drupal_html_class('contentblock-content-' . $class);
   }
 

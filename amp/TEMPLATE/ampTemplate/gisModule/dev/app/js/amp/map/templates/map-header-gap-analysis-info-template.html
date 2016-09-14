@@ -1,0 +1,9 @@
+<% if (obj.isGapAnalysisAvailable) { %>
+	<div class="radio" style="margin-top: 2px;">
+  		<label>
+    		<input type="checkbox" class="map-header-gap-analysis-button" <%=(obj.isGapAnalysisSelected ? 'checked' : '')%> />
+    		<span class="styled-checkbox"></span>
+    		<span title="" data-i18n="amp.gis:title-gap-analysis-selector" data-toggle="tooltip" data-original-title="">Gap Analysis View Available</span>
+  		</label>
+  	</div>
+<% } %>

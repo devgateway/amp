@@ -125,7 +125,7 @@ public class ExportAndImportTemplates extends DispatchAction {
                 xml += "<" + "template name=\"" + org.digijava.module.aim.util.DbUtil.filter(temp.getName()) + "\" ";                
                 String desc=org.digijava.module.aim.util.DbUtil.filter(temp.getDescription());
                 xml += " msgDetails=\"" +desc + "\"";
-                xml += " received=\"" + DateConversion.ConvertDateToString(temp.getCreationDate()) + "\"";
+                xml += " received=\"" + DateConversion.convertDateToString(temp.getCreationDate()) + "\"";
                 xml += " relatedTrigger=\"" +temp.getRelatedTriggerName() + "\"";                               
                 xml += ">";                
                 xml += "</template>";

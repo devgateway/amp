@@ -43,7 +43,6 @@ public class ColumnConstants {
 	public static final String FILTERED_APPROVAL_STATUS = "Filtered Approval Status";
 	public static final String ARCHIVED = "Archived";
 	public static final String AUDIT_SYSTEM = "Audit System";
-	public static final String AVERAGE_DISBURSEMENT_RATE = "Average Disbursement Rate";
 	public static final String AVERAGE_SIZE_OF_DISBURSEMENTS = "Average Size of Disbursements";
 	public static final String AVERAGE_SIZE_OF_PROJECTS = "Average Size of Projects";
 	public static final String BENEFICIARY_AGENCY = "Beneficiary Agency";
@@ -61,6 +60,7 @@ public class ColumnConstants {
 	public static final String COMPONENT_FUNDING_ORGANIZATION = "Component Funding Organization";
 	public static final String COMPONENT_NAME = "Component Name";
 	public static final String COMPONENT_TYPE = "Component Type";
+	public static final String COMPUTED_YEAR = "Computed Year";
 	public static final String CONTRACTING_AGENCY = "Contracting Agency";
 	public static final String CONTRACTING_AGENCY_ACRONYM = "Contracting Agency Acronym";
 	public static final String CONTRACTING_AGENCY_DEPARTMENT_DIVISION = "Contracting Agency Department/Division";
@@ -228,7 +228,6 @@ public class ColumnConstants {
 	public static final String PLEDGES_TITLES = "Pledges Titles";
 	public static final String PLEDGES_TYPE_OF_ASSISTANCE = "Pledges Type Of Assistance";
 	public static final String RELATED_PROJECTS = "Related Projects";
-	public static final String PREDICTABILITY_OF_FUNDING = "Predictability of Funding";
 	public static final String PRIMARY_PROGRAM = "Primary Program";
 	public static final String PRIMARY_PROGRAM_LEVEL_1 = "Primary Program Level 1";
 	public static final String PRIMARY_PROGRAM_LEVEL_2 = "Primary Program Level 2";
@@ -327,10 +326,11 @@ public class ColumnConstants {
 	public static final String TYPE_OF_COOPERATION = "Type of Cooperation";
 	public static final String TYPE_OF_IMPLEMENTATION = "Type of Implementation";
 	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
-	public static final String FORECAST_EXECUTION_RATE = "Forecast Execution Rate";
 	public static final String VARIANCE_OF_COMMITMENTS = "Variance Of Commitments";
 	public static final String VARIANCE_OF_DISBURSEMENTS = "Variance Of Disbursements";
 	public static final String VOTE = "Vote";
 	public static final String ZONE = "Zone";
 	public static final String WORKSPACES = "Workspaces";
+	public static final String EFFECTIVE_FUNDING_DATE = "Effective Funding Date";
+	public static final String FUNDING_CLOSING_DATE = "Funding Closing Date";
 }

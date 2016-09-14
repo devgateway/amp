@@ -185,8 +185,7 @@ public class GlobalSettingsConstants {
     public static final String DEFAULT_STRUCTURE_TYPE="Default Structure Type";
     
     public static final String ACTIVITY_FORM_FUNDING_SECTION_DESIGN="Activity Form - Funding Section - Tab View";
-    public static final String ONLY_SAIKU_FOR_DONOR_REPORTS = "Use only Saiku for donor reports";
-    
+
     public static final String MAX_LOCATIONS_ICONS = "Show icons for Project Sites for locations up to";
     
     public static final String REPORT_WIZARD_VISIBILITY_SOURCE = "Report wizard visibility source";
@@ -206,6 +205,7 @@ public class GlobalSettingsConstants {
     public static final String  HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW = "Hide editable export formats public view";
 
     public static final String  IMPORT_PROCESSOR_URL = "Import processor endpoint URL";
+
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value
      */

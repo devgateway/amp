@@ -5,6 +5,7 @@ var _ = require('underscore');
 var BaseControlView = require('../../base-control/base-control-view');
 var ShareMapToolView = require('./share-map-tool-view');
 var ExportMapToolView = require('./export-map-tool-view');
+var PrintUtil = require('../util/print-util');
 
 var Template = fs.readFileSync(__dirname + '/../templates/tools-template.html', 'utf8');
 
@@ -19,7 +20,8 @@ module.exports = BaseControlView.extend({
   template:  _.template(Template),
 
   events: {
-    'click .gis-tool-share': 'share'
+    'click .gis-tool-share': 'share',
+    'click .gis-tool-img': 'print'
   },
 
   initialize: function() {
@@ -44,7 +46,13 @@ module.exports = BaseControlView.extend({
 			  if(!(hideEditableFormatSetting !== undefined && hideEditableFormatSetting.get('defaultId') == "true" && self.app.data.user.get("logged") == false)){
 				  self.exportMapToolView = new ExportMapToolView({app: self.app, el:renderedTemplate.find('.form-group')});
 				  self.exportMapToolView.render();
-			  }  
+			  }
+			  var showImageButton = self.app.data.settings.findWhere({id: 'download-map-selector'});
+              if(showImageButton && showImageButton.get('defaultId') == "true") {
+                  self.$('.gis-tool-img').show();
+              } else {
+                  self.$('.gis-tool-img').hide();
+              }
 		  });
 		});
 	  
@@ -77,6 +85,73 @@ module.exports = BaseControlView.extend({
     this.$('.gis-tool').removeClass('active');
     this.$(toolClass).addClass('active');
     this.$('.gis-tool-share-form').html(subView.render().el);
-  }
+  },
 
+  print: function() {
+    var self = this;
+    var options = {
+        success: function(response) {
+            var a = document.createElement('a');
+            document.body.appendChild(a);
+            a.style = 'display: none';
+            a.download = 'new-gis.png';
+            self.fakeClick(a, response);
+            $('#map-loading').hide();
+            self.toggleButton(self, true);
+        },
+        error: function(response) {
+            var messageBox = self.$('.alert');
+            messageBox.show().delay(5000).fadeOut();
+            $('#map-loading').hide();
+            self.toggleButton(self, true);
+        }
+    };
+    $('#map-loading').show();
+    this.toggleButton(this);
+    PrintUtil.printMap(options);
+  },
+  toggleButton: function(self, blur) {
+      var button = self.$('.gis-tool-img');
+      button.toggleClass('disabled');
+      button.toggleClass('btn-success');
+      if(blur) {
+        button.blur();
+      }
+  },
+  createBlob: function (response) {
+    var byteCharacters = atob(response);
+    var charCodeFromCharacter = function (c) {
+        return c.charCodeAt(0);
+    };
+    var byteArrays = [];
+    for (var offset = 0; offset < byteCharacters.length; offset += 1000) {
+        var slice = byteCharacters.slice(offset, offset + 1000);
+        var byteNumbers = Array.prototype.map.call(slice, charCodeFromCharacter);
+        byteArrays.push(new Uint8Array(byteNumbers));
+    }
+    var blob = new Blob(byteArrays, {type: "image/png"});
+    return blob;
+  },
+  fakeClick: function(anchor, response) {
+    if(anchor) {
+        try {
+            var blob = this.createBlob(response);
+            var URLObj = window.URL || window.webkitURL;
+            var url = URLObj.createObjectURL(blob);
+            anchor.href = url;
+            anchor.click();
+        } catch (e) {
+            var blob = this.createBlob(response);
+            if(window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(blob, 'new-gis.png');
+            } else {
+                var URLObj = window.URL || window.webkitURL;
+                var url = URLObj.createObjectURL(blob);
+                window.open(url);
+            }
+        }
+    } else {
+        console.error("null anchor")
+    }
+  }
 });

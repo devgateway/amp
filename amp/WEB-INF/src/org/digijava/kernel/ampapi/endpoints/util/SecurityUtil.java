@@ -13,6 +13,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.joda.time.DateTime;
@@ -197,5 +198,13 @@ public class SecurityUtil {
 			tokens.remove(token);
 			sc.setAttribute(SecurityUtil.TOKENS,tokens);
 		}
+	}
+	
+	public static JsonBean getTeamJsonBean(AmpTeam ws) {
+		JsonBean teamJson = new JsonBean();
+		teamJson.set("id", ws.getAmpTeamId());
+		teamJson.set("name", ws.getName());
+		
+		return teamJson;
 	}
 }

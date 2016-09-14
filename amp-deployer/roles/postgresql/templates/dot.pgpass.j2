@@ -1,0 +1,7 @@
+## PostgreSQL password file.
+## Managed by Ansible!
+#hostname:port:database:username:password
+
+{% for item in postgresql__databases|default([]) -%}
+  {{item.hostname|default('localhost')}}:{{postgresql__port}}:{{item.name}}:{{item.user}}:{{item.pass}}
+{% endfor %}

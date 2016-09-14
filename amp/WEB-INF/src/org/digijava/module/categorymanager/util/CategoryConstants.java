@@ -142,6 +142,9 @@ public class CategoryConstants {
 	public static final String EVENT_TYPE_KEY = "event_type";
 	public static final String EVENT_COLOR_NAME = "Event Color";
 	public static final String EVENT_COLOR_KEY = "event_color";
+	
+	public static final String INDICATOR_LAYER_TYPE_NAME = "Indicator Layer Type"; 
+	public static final String INDICATOR_LAYER_TYPE_KEY = "indicator_layer_type";
 
 	public static final long NONE_TYPE		= 0;
 	public static final long COUNTRY_TYPE	= 1;
@@ -235,6 +238,12 @@ public class CategoryConstants {
 	 public static final HardCodedCategoryValue EXPENDITURE_CLASS_OTHERS = 
 			 new CategoryConstants.HardCodedCategoryValue("expenditure_class", "Others", false);
 	 
+	 public static final HardCodedCategoryValue INDICATOR_LAYER_TYPE_PER_CAPITA = 
+	         new CategoryConstants.HardCodedCategoryValue("indicator_layer_type", "Per Capita", true);
+	 public static final HardCodedCategoryValue INDICATOR_LAYER_TYPE_POPULATION_RATIO = 
+             new CategoryConstants.HardCodedCategoryValue("indicator_layer_type", "Ratio (% of Total Population)", true);
+	 public static final HardCodedCategoryValue INDICATOR_LAYER_TYPE_COUNT = 
+             new CategoryConstants.HardCodedCategoryValue("indicator_layer_type", "Count", true);
 	 
 	//Org. Manager : Staff Information type
 	 public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";

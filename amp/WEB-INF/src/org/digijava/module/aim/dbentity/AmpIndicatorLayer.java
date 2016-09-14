@@ -1,23 +1,33 @@
 package org.digijava.module.aim.dbentity;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-
-public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicatorLayer> {
+@TranslatableClass (displayName = "IndicatorLayer")
+public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicatorLayer>, LoggerIdentifiable {
 	
 	private Long id;
+    @TranslatableField
 	private String name;
-	private String description;
+    @VersionableFieldTextEditor
+    private String description;
 	private Set <AmpIndicatorColor> colorRamp;
 	private Long numberOfClasses;
 	private AmpCategoryValue admLevel;
 	private Set <AmpLocationIndicatorValue> indicatorValues;
     private Set <AmpIndicatorWorkspace> sharedWorkspaces;
-	private String unit;
+    @TranslatableField
+    private String unit;
+	private AmpCategoryValue indicatorType;
+	private Boolean population;
 	private IndicatorAccessType accessType;
 	private Date createdOn;
 	private Date updatedOn;
@@ -27,26 +37,21 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 		return id;
 	}
 
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
 
-
 	public String getDescription() {
 		return description;
 	}
-
 
 	public void setDescription(String description) {
 		this.description = description;
@@ -55,7 +60,6 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 	public Long getNumberOfClasses() {
 		return numberOfClasses;
 	}
-
 
 	public void setNumberOfClasses(Long numberOfClasses) {
 		this.numberOfClasses = numberOfClasses;
@@ -66,21 +70,33 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 		return id.compareTo(o.getId());
 	}
 
+    public Object getObjectType() {
+        return this.getClass().getName();
+    }
+    @Override
+    public String getObjectFilteredName() {
+        return DbUtil.filter(getObjectName());
+    }
+
+    public Object getIdentifier() {
+        return this.getId();
+    }
+
+    public String getObjectName() {
+        return this.getId()+" "+this.getName();
+    }
 
 	public AmpCategoryValue getAdmLevel() {
 		return admLevel;
 	}
 
-
 	public void setAdmLevel(AmpCategoryValue admLevel) {
 		this.admLevel = admLevel;
 	}
 
-
 	public Set<AmpIndicatorColor> getColorRamp() {
 		return colorRamp;
 	}
-
 
 	public void setColorRamp(Set<AmpIndicatorColor> colorRamp) {
         if (this.colorRamp == null) {
@@ -91,21 +107,23 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
         }
 	}
 
-
 	public Set<AmpLocationIndicatorValue> getIndicatorValues() {
 		return indicatorValues;
 	}
 
 
 	public void setIndicatorValues(Set<AmpLocationIndicatorValue> indicatorValues) {
-		this.indicatorValues = indicatorValues;
+        if (this.indicatorValues == null) {
+            this.indicatorValues = indicatorValues;
+        } else {
+            this.indicatorValues.retainAll(indicatorValues);
+            this.indicatorValues.addAll(indicatorValues);
+        }
 	}
-
 
 	public String getUnit() {
 		return unit;
 	}
-
 
 	public void setUnit(String unit) {
 		this.unit = unit;
@@ -154,5 +172,33 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
             this.sharedWorkspaces.retainAll(sharedWorkspaces);
             this.sharedWorkspaces.addAll(sharedWorkspaces);
         }
+    }
+
+    /**
+     * @return the indicatorType
+     */
+    public AmpCategoryValue getIndicatorType() {
+        return indicatorType;
+    }
+
+    /**
+     * @param indicatorType the indicatorType to set
+     */
+    public void setIndicatorType(AmpCategoryValue indicatorType) {
+        this.indicatorType = indicatorType;
+    }
+
+    /**
+     * @return the population
+     */
+    public Boolean isPopulation() {
+        return population;
+    }
+
+    /**
+     * @param population the population to set
+     */
+    public void setPopulation(Boolean population) {
+        this.population = population;
     }
 }

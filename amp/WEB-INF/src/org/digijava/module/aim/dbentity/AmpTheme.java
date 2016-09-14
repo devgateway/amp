@@ -1,8 +1,10 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
@@ -18,15 +20,15 @@ import org.digijava.module.aim.util.HierarchyListableComparator;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SoftDeletable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.util.TreeSet;
 @TranslatableClass (displayName = "Theme")
-public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable, NameableOrIdentifiable
+public class AmpTheme implements Serializable, Comparable<AmpTheme>, SoftDeletable, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable, NameableOrIdentifiable
 {
-	//IATI-check: to be ignored
+
 	private static final long serialVersionUID = 1L;
-	//private AmpActivityVersion activityId;
 	@Interchangeable(fieldTitle="ID", id=true)
     private Long ampThemeId ;
 	@Interchangeable(fieldTitle="Parent Theme ID", pickIdOnly=true)
@@ -55,6 +57,8 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 	private String language ;
 	@Interchangeable(fieldTitle="Version")
 	private String version ;
+	
+	private Boolean deleted;
 	
 	/**
 	 * don't be fooled by the name - it gets the children
@@ -450,7 +454,6 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 			return this.ampThemeId + "";
 		}
 		
-
 		@Override
 		public boolean getTranslateable() {
 			return translateable;
@@ -526,4 +529,27 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
     {
     	return InternationalizedModelDescription.getForProperty(AmpTheme.class, "name").getSQLFunctionCall(idSource + ".ampThemeId");
     }
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+	
+	public boolean isSoftDeleted() {
+		return Boolean.TRUE.equals(deleted);
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public Collection<AmpAutoCompleteDisplayable> getNonDeletedChildren() {
+		Collection<AmpTheme> children = getSiblings();
+		Collection<AmpAutoCompleteDisplayable> res = new ArrayList<>(children.size());
+		for (AmpTheme theme: children) {
+			if (!theme.isSoftDeleted())
+				res.add(theme);
+		}
+		return res;
+	}
 }

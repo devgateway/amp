@@ -1,41 +1,67 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.function.Predicate;
 
+import org.dgfoundation.amp.nireports.AbstractReportsSchema;
 import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.output.NiAmountCell;
+import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
+import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
-import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 import org.digijava.module.aim.helper.Constants;
 
+/**
+ * a straightforward {@link NiTransactionMeasure} which converts AMP-specific configuration info into Ni-generic predicates
+ * @author simple
+ *
+ */
 public class AmpTrivialMeasure extends NiTransactionMeasure {
 
 	/**
-	 * trivial measure which discerns between directed/nondirected
-	 * @param measureName
-	 * @param transactionType
-	 * @param adjustmentTypeName
-	 * @param directed
+	 * trivial measure defined by a transaction type (say, Commitments), an adjustment name (say, Actual) and a directed/not directed boolean
 	 */
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed) {
 		this(measureName, transactionType, adjustmentTypeName, directed, cac -> false, false, null);
 	}
-	
+
+	/**
+	 * trivial measure defined by a transaction type (say, Commitments), an adjustment name (say, Actual), a directed/not directed boolean and an ignore/obey filters boolean
+	 */
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, boolean ignoreFilters) {
 		this(measureName, transactionType, adjustmentTypeName, directed, cac -> false, ignoreFilters, null);
 	}
-	
-	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName,
-			boolean directed, boolean ignoreFilters, Behaviour<NiAmountCell> overridingBehaviour) {
+
+	/**
+	 * trivial measure defined by a transaction type (say, Commitments), an adjustment name (say, Actual), a directed/not directed boolean, an ignore/obey filters boolean and a behaviour.
+	 * In case behaviour is null, a context-based one will be deducted from the combination of the other parameters
+	 */
+	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, boolean ignoreFilters, Behaviour<NiAmountCell> overridingBehaviour) {
 		this(measureName, transactionType, adjustmentTypeName, directed, cac -> false, ignoreFilters, overridingBehaviour);
 	}
+
+	/**
+	 * equivalent to {@link #AmpTrivialMeasure(String, long, String, boolean, Predicate, boolean, Behaviour)}, but also specifies the {@link #getPrecursorMeasures()}
+	 */
+	public AmpTrivialMeasure(String measureName, Predicate<CategAmountCell> predicate, boolean unfiltered, Behaviour<NiAmountCell> behaviour, Map<String, Boolean> precursors) {
+		super(measureName, predicate, behaviour, AmpReportsSchema.measureDescriptions.get(measureName), unfiltered, precursors);
+	}
 	
+	/**
+	 * builds a measure dependent on an another measure
+	 * @param measureName
+	 * @param baseMeasure
+	 * @param unfiltered
+	 * @param behaviour
+	 */
+	public AmpTrivialMeasure(String measureName, AmpTrivialMeasure baseMeasure, boolean unfiltered, Behaviour<NiAmountCell> behaviour) {
+		super(measureName, baseMeasure.criterion, behaviour, AmpReportsSchema.measureDescriptions.get(measureName), unfiltered, AbstractReportsSchema.singletonMap(baseMeasure.name, false));
+	}
 	
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, 
 			Predicate<CategAmountCell> or) {
-		this(measureName, transactionType, adjustmentTypeName, directed, or, false, null);
-		
+		this(measureName, transactionType, adjustmentTypeName, directed, or, false, null);		
 	}
 	
 	/**
@@ -52,20 +78,25 @@ public class AmpTrivialMeasure extends NiTransactionMeasure {
 		else 
 			return directed ? new DirectedMeasureBehaviour() : TrivialMeasureBehaviour.getInstance();
 	}
-	
+
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, 
 			Predicate<CategAmountCell> or, boolean ignoreFilters, Behaviour<NiAmountCell> overridingBehaviour) {
+		this(measureName, transactionType, adjustmentTypeName, directed, or, ignoreFilters, overridingBehaviour, Collections.emptyMap());
+	}
+	
+	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, 
+			Predicate<CategAmountCell> or, boolean ignoreFilters, Behaviour<NiAmountCell> overridingBehaviour, Map<String, Boolean> precursors) {
 
-		super(measureName, 
+		this(measureName, 
 				cac -> 
 					or.test(cac) || (
-							cac.metaInfo.containsMeta(MetaCategory.TRANSACTION_TYPE.category, Long.valueOf(transactionType)) &&
-							cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName) &&
-							(directed ? isDirected(cac) : isDonorSourced(cac))
-						),
-					getBehaviour(overridingBehaviour, directed),
-				AmpReportsSchema.measureDescriptions.get(measureName),
-				ignoreFilters
+						cac.metaInfo.containsMeta(MetaCategory.TRANSACTION_TYPE.category, Long.valueOf(transactionType)) &&
+						cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName) &&
+						(directed ? isDirected(cac) : isDonorSourced(cac))
+					),
+				ignoreFilters,
+				getBehaviour(overridingBehaviour, directed),
+				precursors
 			);
 	}
 	

@@ -12,10 +12,8 @@ import java.util.function.Consumer;
 import static java.util.Collections.emptyList;
 
 import org.dgfoundation.amp.nireports.ComparableValue;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.ReportHeadingCell;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
+import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 
@@ -51,6 +49,12 @@ public class CellColumn extends Column {
 	public GroupColumn verticallySplitByCategory(VSplitStrategy strategy, GroupColumn newParent) {
 		SortedMap<ComparableValue<String>, List<NiCell>> values = new TreeMap<>();
 		this.forEachCell(cell -> values.computeIfAbsent(strategy.categorize(cell), z -> new ArrayList<>()).add(cell));
+		ComparableValue<String> totalsSubcolumnCategory = strategy.getTotalSubcolumnName();
+		if (totalsSubcolumnCategory != null) {
+			values.put(totalsSubcolumnCategory, new ArrayList<>());
+			this.forEachCell(cell -> values.get(totalsSubcolumnCategory).add(cell));
+		}
+			
 		GroupColumn res = this.asGroupColumn(null, newParent);
 		List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet());
 		for(ComparableValue<String> key:subColumnNames) {
@@ -93,11 +97,6 @@ public class CellColumn extends Column {
 			return Arrays.asList(this);
 		else
 			return Collections.emptyList();
-	}
-
-	@Override
-	public String getDescription() {
-		return entity != null ? entity.description : null;
 	}
 	
 	@Override

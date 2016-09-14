@@ -120,8 +120,6 @@ implements AmpRequiredComponentContainer{
 			
 		AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
 		boolean isLoan = (value == null ? false : value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey()));
-		loanTerms.getTextAreaContainer().setVisible(isLoan);
-	    loanTerms.getTitleLabel().setVisible(isLoan);  
 	    add(loanTerms);
         toggleLoanFieldsVisibility(isLoan);	    
 		typeOfAssistance.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {        
@@ -130,8 +128,6 @@ implements AmpRequiredComponentContainer{
 			protected void onUpdate(AjaxRequestTarget target) {
 				AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
 				boolean isLoan = (value == null ? false : (value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey())));
-				loanTerms.getTextAreaContainer().setVisible(isLoan);
-        	    loanTerms.getTitleLabel().setVisible(isLoan); 
         	    toggleLoanFieldsVisibility(isLoan);
             	target.add(loanTerms);
             	target.add(interestRate);
@@ -149,6 +145,7 @@ implements AmpRequiredComponentContainer{
             	
             	AmpFundingSummaryPanel l=
             	findParent(AmpFundingSummaryPanel.class);
+				target.appendJavaScript("Opentip.findElements();");
 				send(getPage(), Broadcast.BREADTH,new FundingSectionSummaryEvent(target));	
             }
         });
@@ -243,6 +240,34 @@ implements AmpRequiredComponentContainer{
 	        //date.getDate().setRequired(true);
 			add(date);
 
+		final PropertyModel<Date> effectiveFundingDateModel = new PropertyModel<>(model, "effectiveFundingDate");
+		final AmpDatePickerFieldPanel effectiveFundingDate = new AmpDatePickerFieldPanel("effectiveFundingDate", effectiveFundingDateModel, "Effective Funding Date");
+		add(new AmpComponentPanel("effectiveFundingDateRequired", "Required Validator for Effective Funding Date") {
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				if (this.isVisible()){
+					effectiveFundingDate.getDate().setRequired(true);
+					requiredFormComponents.add(effectiveFundingDate.getDate());
+				}
+			}
+		});
+		add(effectiveFundingDate);
+
+		final PropertyModel<Date> fundingClosingDateModel = new PropertyModel<>(model, "fundingClosingDate");
+		final AmpDatePickerFieldPanel fundingClosingDate = new AmpDatePickerFieldPanel("fundingClosingDate", fundingClosingDateModel, "Funding Closing Date");
+		add(new AmpComponentPanel("fundingClosingDateRequired", "Required Validator for Funding Closing Date") {
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				if (this.isVisible()){
+					fundingClosingDate.getDate().setRequired(true);
+					requiredFormComponents.add(fundingClosingDate.getDate());
+				}
+			}
+		});
+		add(fundingClosingDate);
+
 		if (model != null && model.getObject() != null && 
 			model.getObject().getFundingDetails() != null &&
 			model.getObject().getFundingDetails().size() > 0)
@@ -328,16 +353,27 @@ implements AmpRequiredComponentContainer{
 
 	}
     
-	private void toggleLoanFieldsVisibility(boolean visible){	
+	private void toggleLoanFieldsVisibility(boolean visible) {
+		loanTerms.getTextAreaContainer().setVisible(visible);
+		loanTerms.getTitleLabel().setVisible(visible);
+		loanTerms.setTooltipVisible(visible);
+
 		interestRate.getTextContainer().setVisible(visible);
-		interestRate.getTitleLabel().setVisible(visible);		
+		interestRate.getTitleLabel().setVisible(visible);
+		interestRate.setTooltipVisible(visible);
+
 		gracePeriod.getTextContainer().setVisible(visible);
 		gracePeriod.getTitleLabel().setVisible(visible);
+		gracePeriod.setTooltipVisible(visible);
+
 		ratificationDate.getDate().setVisible(visible);
 		ratificationDate.getTitleLabel().setVisible(visible);
-		maturity.getDate().setVisible(visible);	
-		maturity.getTitleLabel().setVisible(visible);		
-		
+		ratificationDate.setTooltipVisible(visible);
+
+		maturity.getDate().setVisible(visible);
+		maturity.getTitleLabel().setVisible(visible);
+		maturity.setTooltipVisible(visible);
+
 	}
 	public List<FormComponent<?>> getRequiredFormComponents() {
 		return requiredFormComponents;

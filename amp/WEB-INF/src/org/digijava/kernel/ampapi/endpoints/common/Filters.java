@@ -898,8 +898,27 @@ public class Filters {
 	@GET
     @Path("/computed-year")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.COMPUTED_YEAR, name = "Computed Year", tab = EPConstants.TAB_OTHER)
+    @ApiMethod(ui = true, id = FiltersConstants.COMPUTED_YEAR, name = "Computed Year",
+        columns = ColumnConstants.COMPUTED_YEAR, tab = EPConstants.TAB_OTHER)
     public SettingField getComputedYear() {
 	    return FiltersBuilder.buildComputedYears();
+	}
+
+	@GET
+	@Path("/effectiveFundingDate/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, name = ColumnConstants.EFFECTIVE_FUNDING_DATE, columns = ColumnConstants.EFFECTIVE_FUNDING_DATE, id = "effectiveFundingDate",
+			tab = EPConstants.TAB_FINANCIALS)
+	public JsonBean getEffectiveFundingDate(){
+		return new JsonBean();
+	}
+
+	@GET
+	@Path("/fundingClosingDate/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, name = ColumnConstants.FUNDING_CLOSING_DATE, columns = ColumnConstants.FUNDING_CLOSING_DATE, id = "fundingClosingDate",
+			tab = EPConstants.TAB_FINANCIALS)
+	public JsonBean getFundingClosingDate(){
+		return new JsonBean();
 	}
 }

@@ -33,7 +33,7 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 	 */
 	@Override
 	protected void renderReportData(SXSSFSheet sheet, GeneratedReport report) {
-		Row row = sheet.createRow(report.generatedHeaders.size());
+		Row row = sheet.createRow(initHeaderRowOffset + report.generatedHeaders.size());
 		renderTableRow(sheet, report, report.reportContents, 0, row, new ArrayList<>());
 		renderTableTotals(sheet, report, report.reportContents);
 	}
@@ -43,7 +43,7 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 	protected void renderReportTableHeader(Workbook wb, Sheet sheet, GeneratedReport report) {
 		int hiddenColumnsCnt = 0;
 		for(int i=0; i < report.generatedHeaders.size(); i++) {
-			Row row = sheet.createRow(i);
+			Row row = sheet.createRow(initHeaderRowOffset + i);
 			for(HeaderCell headerCell : report.generatedHeaders.get(i)) {
 				
 				if (isHiddenColumn(headerCell.originalName)) {
@@ -55,7 +55,7 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 				Cell cell = row.createCell(cellColumnPos);
 				cell.setCellValue(headerCell.getName());
 				setMaxColWidth(sheet, cell, cellColumnPos);
-				CellRangeAddress mergedHeaderCell = new CellRangeAddress(i, i + headerCell.getRowSpan() - 1, 
+				CellRangeAddress mergedHeaderCell = new CellRangeAddress(initHeaderRowOffset + i, initHeaderRowOffset + i + headerCell.getRowSpan() - 1, 
 						cellColumnPos, cellColumnPos + headerCell.getColSpan() - 1);
 				if (mergedHeaderCell.getNumberOfCells()  > 1)
 					sheet.addMergedRegion(mergedHeaderCell);

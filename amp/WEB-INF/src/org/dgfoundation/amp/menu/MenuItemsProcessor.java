@@ -101,6 +101,7 @@ public class MenuItemsProcessor {
 			visible = TranslatorWorker.isTranslationMode(TLSUtils.getRequest());
 			break;
 		case MenuConstants.ADD_ACTIVITY:
+		case MenuConstants.IATI_IMPORTER:
 		case MenuConstants.ADD_SSC_ACTIVITY:
 			visible = tm != null && Boolean.TRUE.equals(tm.getAddActivity());
 			break;

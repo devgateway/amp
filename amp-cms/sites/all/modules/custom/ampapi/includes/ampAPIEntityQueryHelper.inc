@@ -59,11 +59,13 @@ class ampAPIEntityQueryHelper {
    * Queries entity collections stored in AMP.
    *
    * @see EntityFieldQuery::queryCallback().
+   *
+   * @param \EntityFieldQuery $query
+   * @return array|int
    */
   function executeQuery(EntityFieldQuery $query) {
-    global $language_content;
-
-    $api_status = helpergeneric_check_api_status();
+    // Do not prepare the request when the API is offline.
+    $api_status = ampAPIRestClient::status();
     if (!$api_status['online']) {
       return ($query->count) ? 0 : array();
     }
@@ -123,21 +125,14 @@ class ampAPIEntityQueryHelper {
       $this->_api_add_fields($query, $request_body);
     }
 
-    $api_parameters['query'] = array(
-      'language' => $language_content->language,
-    );
-
     $api_parameters['headers'] = array(
       'Accept' => 'application/json',
       'Content-Type' => 'application/json',
     );
 
-    // The API is slow at the moment.
-    $api_parameters['timeout'] = 120;
-
     if (!empty($query->range)) {
       $request_body['recordsPerPage'] = $query->range['length'];
-      $request_body['page'] = $query->range['start'] / $query->range['length'] + 1; // It's not 0 based.
+      $request_body['page'] = $query->range['start'] / $query->range['length'] + 1;  // It's not 0 based.
 
       // Only calculate totals when we request a single page.
       if (!empty($query->metaData['view'])) {
@@ -152,8 +147,18 @@ class ampAPIEntityQueryHelper {
     // Always show Activities with empty funding.
     $request_body['show_empty_rows'] = TRUE;
 
-    // @TODO: Deal with multiple sorts and maping of special properties.
-    // @TODO: Request API support for count queries, for now we don't include order options.
+    // Now let's add some settings to the request of the body.
+    $search_settings = ampapi_activity_get_search_settings();
+
+    // Let's add amount units (and force them to be floats).
+    $global_amount = $search_settings['global_amount'];
+    $amount_units_settings = _ampapi_activity_get_api_settings('amount-units');
+    $global_amount_settings = $amount_units_settings[$global_amount];
+    $request_body['settings']['amountFormat']['amountUnits'] = $global_amount_settings['value'];
+    $query->addMetaData('amount_units', $global_amount_settings);
+
+    // TODO: Deal with multiple sorts and mapping of special properties.
+    // TODO: Request API support for count queries.
     if ($query->order && !$query->count) {
       $order = end($query->order);
       $plugin = ampapi_get_mapper_by_property_name($order['specifier']);
@@ -173,38 +178,13 @@ class ampAPIEntityQueryHelper {
 
     // The api requires that we provide at least an empty object.
     $api_parameters['body'] = empty($request_body) ? '{}' : json_encode($request_body);
-    $response = restclient_post($this->api_resource_path , $api_parameters);
+    $response_data = ampAPIRestClient::post($this->api_resource_path, $api_parameters);
 
-    if (empty($response)) {
-      drupal_set_message(t('The API returned an empty response, please try again later.'), 'error');
+    if (empty($response_data)) {
       return ($query->count) ? 0 : array();
     }
 
-    // @TODO: Add support for more 200 class response codes.
-    if (!empty($response) && restclient_response_code($response) != RESTCLIENT_RESPONSE_SUCCESS) {
-      $t_args = array();
-      if (!empty($response->error)) {
-        $t_args['%message'] = $response->error;
-      }
-      else if (!empty($response->status_message)) {
-        $t_args['%message'] = $response->status_message;
-      }
-      drupal_set_message(t('The API returned the following status message: %message', $t_args), 'error');
-      return ($query->count) ? 0 : array();
-    }
-
-    $response_data = json_decode($response->data);
-    if (!empty($response_data->error)) {
-      foreach ($response_data->error as $error_message) {
-        $t_args = array(
-          '%message' => check_plain($error_message),
-        );
-        drupal_set_message(t('The API returned the following error message: %message', $t_args), 'error');
-        return ($query->count) ? 0 : array();
-      }
-    }
-
-    // Count the number of items.
+    // Count the number of items. Required for creating the pager.
     // @TODO: Request API support for count queries.
     if ($query->count) {
       if (empty($response_data->page->totalRecords)) {
@@ -252,9 +232,9 @@ class ampAPIEntityQueryHelper {
 
     // Get a list of enabled columns and measures.
     // GET /rest/data/report/columns
-    $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
+    $columns_data = ampAPIRestClient::get('data/report/columns');
     // GET /rest/data/report/measures
-    $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
+    $measures_data = ampAPIRestClient::get('data/report/measures');
 
     foreach ($query->metaData['view']->field as $field_name => $field_handler) {
       $plugin = ampapi_get_mapper_by_property_name($field_name);

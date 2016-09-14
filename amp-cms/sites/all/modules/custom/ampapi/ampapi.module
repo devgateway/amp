@@ -12,6 +12,8 @@
  * @param EntityFieldQuery $query
  *
  * @return array
+ *
+ * @throws ampAPIEntityQueryHelperException
  */
 function ampapi_execute_query(EntityFieldQuery $query) {
   if (empty($query->entityConditions['entity_type']['value'])) {
@@ -91,10 +93,14 @@ function ampapi_get_mapper_by_property_name($property_name) {
       return $plugin;
     }
   }
+
+  return NULL;
 }
 
 /**
  * Returns a list information about AMP document fields.
+ * @param string $entity_type
+ * @return array
  */
 function ampapi_get_schema_info($entity_type) {
   $info = entity_get_info($entity_type);
@@ -108,6 +114,21 @@ function ampapi_get_schema_info($entity_type) {
 
 /**
  * Access callback for custom AMP entities.
+ *
+ * @param $op
+ *   The operation being performed. One of 'view', 'update', 'create' or
+ *   'delete'.
+ * @param $entity_type
+ *   The entity type of the entity to check for.
+ * @param Entity $entity
+ *   Optionally an entity to check access for. If no entity is given, it will be
+ *   determined whether access is allowed for all entities of the given type.
+ * @param $account
+ *   The user to check for. Leave it to NULL to check for the global user.
+ *
+ * @return boolean
+ *   Whether access is allowed or not. If the entity type does not specify any
+ *   access information, NULL is returned.
  */
 function ampapi_entity_access($op, $entity = NULL, $account = NULL, $entity_type) {
   $rights = &drupal_static(__FUNCTION__, array());
@@ -140,14 +161,17 @@ function ampapi_entity_access($op, $entity = NULL, $account = NULL, $entity_type
 
     if (!array_key_exists('status', $property_info['properties'])) {
       // Always allow access to entities that don't have a status field.
-      // @see fbcentity_question_access().
       $allow = TRUE;
     }
     else if (user_access("$entity_type entity administer") || user_access("$entity_type entity access overview")) {
       $allow = TRUE;
     }
-    else if ($entity->status && user_access("$entity_type entity $op")) {
-      $allow = TRUE;
+    else {
+      /** @noinspection PhpUndefinedFieldInspection */
+      $entity_status = $entity->status;
+      if ($entity_status && user_access("$entity_type entity $op")) {
+        $allow = TRUE;
+      }
     }
 
     $rights[$account->uid][$cid][$op] = $allow;
@@ -168,76 +192,68 @@ function ampapi_entity_access($op, $entity = NULL, $account = NULL, $entity_type
 }
 
 /**
- * Helper function fore rest requests that also caches results.
+ * Implements hook_menu().
  */
-function ampapi_request($type, $endpoint, $use_cache = FALSE, $options = array()) {
-  global $language_content;
-  $langcode = $language_content->language;
+function ampapi_menu() {
+  $items = array();
 
-  // Make sure the API is online before attempting to make another request.
-  $api_status = helpergeneric_check_api_status();
-  if (!$api_status['online']) {
-    return array();
+  $items['<amp>'] = array(
+    'page callback' => 'ampapi_goto',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Fallback menu callback for links pointing to AMP.
+ *
+ * Redirects links starting with `<amp>` to the hostname of the AMP API used.
+ */
+function ampapi_goto() {
+  // $page_arguments = func_get_args();
+  $page_path = implode('/', func_get_args());
+  if (!empty($page_path)) {
+    $page_path = '/' . $page_path;
   }
 
-  $cache_id = "ampapi_request:{$langcode}:{$type}:{$endpoint}:" . md5(serialize($options));
-  // Try to get the response from cache.
-  if ($use_cache && $cached = cache_get($cache_id, 'cache')) {
-    return $cached->data;
-  }
+  // Get the page query parameters.
+  $amp_page_query_parameters = drupal_get_query_parameters();
 
-  $options += array('reset' => TRUE, 'error_handling' => TRUE);
+  $amp_hostname = helpergeneric_detect_amp_baseurl();
+  $goto_options = array(
+    'external' => TRUE,
+    'absolute' => TRUE,
+    'query' => $amp_page_query_parameters,
+  );
 
-  $parameters = array();
-  if (!empty($langcode) && $langcode != LANGUAGE_NONE) {
-    $parameters['language'] = $langcode;
-  }
+  drupal_goto($amp_hostname . $page_path, $goto_options);
+}
 
-  if ($type == 'get') {
-    $response = restclient_get($endpoint . '?' . drupal_http_build_query($parameters), $options);
-  }
-  else if ($type == 'post') {
-    $response = restclient_post($endpoint . '?' . drupal_http_build_query($parameters), $options);
-  }
+/**
+ * Implements hook_url_outbound_alter().
+ *
+ * @inheritdoc
+ */
+function ampapi_url_outbound_alter(&$path, &$options, $original_path) {
+  if (substr($path, 0, 6) == '<amp>/') {
+    // Prepare the AMP path.
+    $amp_hostname = helpergeneric_detect_amp_baseurl();
+    $amp_relative_path = substr($path, 5);
 
-  if (empty($response)) {
-    drupal_set_message(t('The API returned an empty response, please try again later.'), 'error');
-    return array();
+    // Change the path to an absolute path pointing to AMP.
+    $path = $amp_hostname . $amp_relative_path;
+    $options['external'] = TRUE;
+    $options['absolute'] = TRUE;
   }
+}
 
-  // @TODO: Add support for more 200 class response codes.
-  if (restclient_response_code($response) != RESTCLIENT_RESPONSE_SUCCESS) {
-    $t_args = array();
-    if (!empty($response->error)) {
-      $t_args['%message'] = $response->error;
-    }
-    else if (!empty($response->status_message)) {
-      $t_args['%message'] = $response->status_message;
-    }
-    drupal_set_message(t('The API returned the following status message: %message', $t_args), 'error');
-    return array();
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function ampapi_form_menu_edit_item_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['link_path']['#description'])) {
+    $form['link_path']['#description'] .= '<br/>' . t('AMP NOTE: Use <b>%token</b> as the base of your URL instead of using the domain when linking directly to AMP.', array('%token' => '<amp>'));
   }
-  if (empty($response) || empty($response->data)) {
-    drupal_set_message(t('The API returned an empty response, please try again later.'), 'error');
-    return array();
-  }
-
-  $response_data = json_decode($response->data);
-  if (!empty($response_data->error)) {
-    foreach ($response_data->error as $error_message) {
-      $t_args = array(
-        '%message' => check_plain($error_message),
-      );
-      drupal_set_message(t('The API returned the following error message: %message', $t_args), 'error');
-    }
-    return array();
-  }
-
-  if ($use_cache) {
-    // 1 hours cache life time for requests should be plenty for now.
-    $expire = 3600;
-    cache_set($cache_id, $response_data, 'cache', REQUEST_TIME + $expire);
-  }
-
-  return $response_data;
 }

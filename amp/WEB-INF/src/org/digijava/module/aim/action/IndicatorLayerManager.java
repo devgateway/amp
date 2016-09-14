@@ -60,7 +60,9 @@ public class IndicatorLayerManager extends Action {
                 indicatorLayerForm.setUnit(layerToEdit.getUnit());
                 indicatorLayerForm.setIndicatorLayerId(layerToEdit.getId());
                 indicatorLayerForm.setNumberOfClasses(layerToEdit.getNumberOfClasses());
-                indicatorLayerForm.setSelectedColorRampIndex(ColorRampUtil.getIndexByColors(layerToEdit.getColorRamp()));
+                if (layerToEdit.getColorRamp() != null && !layerToEdit.getColorRamp().isEmpty()) {
+                	indicatorLayerForm.setSelectedColorRampIndex(ColorRampUtil.getIndexByColors(layerToEdit.getColorRamp()));
+                }
                 indicatorLayerForm.setAdmLevelList(CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                         "implementation_location", true));
                 return mapping.findForward("addEdit");

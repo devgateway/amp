@@ -58,7 +58,7 @@ public class RegionalFundingsHelper {
 			fd.setCurrencyCode(regFund.getCurrency().getCurrencyCode());
 			fd.setTransactionAmount(FormatHelper.formatNumber(regFund.getTransactionAmount().doubleValue()));
 			
-			String tsDate = DateConversion.ConvertDateToString(regFund.getTransactionDate());
+			String tsDate = DateConversion.convertDateToLocalizedString(regFund.getTransactionDate());
 			fd.setTransactionDate(tsDate);
 			fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(regFund.getTransactionDate()));
 

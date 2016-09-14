@@ -3,15 +3,21 @@
   <small><%= obj.description %></small>
 
   <% if (status === 'loading') { %>
-    <p><em data-18n="amp.gis:legend-loading">loading...</em>></p>
-  <% } else { %>
+    <p><em data-18n="amp.gis:legend-loading">Loading...</em>></p>
+  <% } else if(colourBuckets && colourBuckets.length > 0) { %>
     <% colourBuckets.each(function(bucket) { %>
-      <% if(bucket.get('value') && bucket.get('value')[0] ) { %>
+      <% if(bucket.get('value') && !_.isNaN(bucket.get('value')[0]) && _.isFinite(bucket.get('value')[0])) { %>
       <div>
         <span style="background: <%= bucket.hex() %> !important" class="color-block legend-sample"></span>
-        <%= util.formatKMB()(bucket.get('value')[0]) %>&mdash;<%= util.formatKMB()(bucket.get('value')[1]) %> <%= unit %>
+        <% if(unit === '%') { %>
+          <%= util.formatPercentage()(bucket.get('value')[0]) %>&mdash;<%= util.formatPercentage()(bucket.get('value')[1]) %>
+        <% } else { %>
+          <%= util.formatKMB()(bucket.get('value')[0]) %>&mdash;<%= util.formatKMB()(bucket.get('value')[1]) %> <%= unit %>
+        <% } %>
       </div>
       <% } %>
     <% }) %>
+  <% } else { %>
+    <p><em data-18n="amp.gis:legend-noDataAvailable">No Data Available</em>></p>
   <% } %>
 </span>

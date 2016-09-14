@@ -35,7 +35,7 @@ function initializeTranslations(){
 	trnAll="<digi:trn jsFriendly='true'>All</digi:trn>";
 	trnAdvancedFilter = '\n<digi:trn jsFriendly="true">Advanced Filters</digi:trn>'; 
 	trnCancel = '<digi:trn>Cancel</digi:trn>';
-	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
+	trnLoading = '<digi:trn>Loading...</digi:trn>';
 	trnCommitments="<digi:trn jsFriendly='true'>Commitments</digi:trn>";
 	trnDisbursements="<digi:trn jsFriendly='true'>Disbursements</digi:trn>";
 	trnExpenditures="<digi:trn jsFriendly='true'>Expenditures</digi:trn>";

@@ -6,24 +6,25 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.List;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.RangeValidator;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
-import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
@@ -101,5 +102,29 @@ public class AmpDonorCommitmentsFormTableFeature extends
 			
 		};
 		add(list);
+	}
+
+	@Override
+	protected void enableFixedRateOnAjaxOnUpdate(AjaxRequestTarget target) {
+		onFundingDetailChanged(target);
+	}
+
+	@Override
+	protected void exchangeRateOnAjaxOnUpdate(AjaxRequestTarget target) {
+		onFundingDetailChanged(target);
+	}
+
+	private void onFundingDetailChanged(AjaxRequestTarget target) {
+		AmpComponentPanel parentPanel = findParent(AmpFundingItemFeaturePanel.class);
+		parentPanel.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>() {
+			@Override
+			public void component(AmpCollectionValidatorField component,
+								  IVisit<Void> visit) {
+				component.reloadValidationField(target);
+				visit.dontGoDeeper();
+			}
+		});
+
+		send(getPage(), Broadcast.BREADTH, new OverallFundingTotalsEvents(target));
 	}
 }

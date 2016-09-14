@@ -119,6 +119,22 @@
 "amp.dashboard:chart-trillion": "T",
 "amp.dashboard:chart-peta": "P",
 "amp.dashboard:chart-exa": "E",
-"amp.dashboard:chart-swap-axes": "Swap Axes"
+"amp.dashboard:chart-swap-axes": "Swap Axes",
+"amp.dashboard:chart-HeatMapbySectorandDonorGroup":"Sector Fragmentation",
+"amp.dashboard:chart-HeatMapbyLocationandDonorGroup":"Location Fragmentation",
+"amp.dashboard:chart-HeatMapbyProgramandDonorGroup":"Program Fragmentation",
+"amp.dashboard:chart-heatmap-reset-others":"Reset Others",
+"amp.dashboard:negatives-values":"Negative values are not represented in this chart.",
+"amp.dashboard:negatives-values-parag":"Please switch to bar chart or table view to view all values.",
+"amp.dashboard:chart-heatmap-legends":"LEGENDS",
+"amp.dashboard:chart-heatmap-totals":"TOTALS",
+"amp.dashboard:chart-heatmap-legend-less-than":"Less than",
+"amp.dashboard:chart-heatmap-legend-between":"Between",
+"amp.dashboard:chart-heatmap-legend-and":"and",
+"amp.dashboard:chart-heatmap-legend-more-than":"More than",
+"amp.dashboard:chart-heatmap-others":"Others",
+"amp.dashboard:percentage": "Percentage",
+"amp.dashboard:chart-heatmap-help-text-location":"Location Heatmap",
+"amp.dashboard:chart-heatmap-help-text-sector":"Sector Heatmap",
+"amp.dashboard:chart-heatmap-help-text-program":"Program Heatmap"
 }
-

@@ -11,8 +11,4 @@ import org.dgfoundation.amp.nireports.schema.NiReportColumn;
  */
 public interface KeyBuilder<K> {
 	public K buildKey(NiReportsEngine engine, NiReportColumn<?> col);
-	
-	public default ContextKey<K> buildKeyPair(NiReportsEngine engine, NiReportColumn<?> col) {
-		return new ContextKey<>(engine, buildKey(engine, col));
-	}
 }

@@ -6,8 +6,9 @@ var common = require('../charts/common');
 module.exports = ChartModel.extend({
 
 	defaults: {
-	    xLimit: 31,
-	    yLimit: 10,
+	    xLimit: 30, //This is the max number of elements we will see in the x axis.
+	    yLimit: 10, //This is the max number of elements we will see in the y axis.  
+	    originalYLimit: 10, //This is the original max number of elements for the y axis (used to revert "others").
 	    title: '',
 	    name: '',
 	    bigN: 0,
@@ -15,7 +16,9 @@ module.exports = ChartModel.extend({
 	    values: [],
 	    chartType: 'fragmentation',
 	    swapAxes: false,
-	    chartDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet a arcu vel porttitor. Curabitur dolor ante, faucibus eu congue et, egestas ut tellus.'
+	    heatmap_type: null,
+	    showResetButton: false,
+	    showFullLegends: false
 	},
 
 	_prepareTranslations: function() {
@@ -33,9 +36,21 @@ module.exports = ChartModel.extend({
 	parse: function (data) {
 		var self = this;
 		self.values = new Array();
+		if (_.isUndefined(data.xDataSet) || _.isUndefined(data.yDataSet)) {
+			// The EP for heatmaps is different than the other charts because it returns an empty object, so we set explicitly some fields to empty value. 
+			data.yDataSet = [];
+			data.xDataSet = [];
+			data.matrix = [];
+			data.xTotals = 0;
+			data.yTotals = 0;
+			data.xCount = 0;
+			data.yCount = 0;
+			data.xTotalCount = 0;
+			data.yTotalCount = 0;
+		}		
 		self.values.x = data.xDataSet;
 		self.values.y = data.yDataSet;
-		for (var i = 0; i < data.yDataSet.length; i++) {					
+		for (var i = 0; i < data.yDataSet.length; i++) {
 			for (var j = 0; j < data.xDataSet.length; j++) {
 				if (data.matrix[i] !== null) {
 					var value = data.matrix[i][j] !== null ? data.matrix[i][j] : {p: -1, amount: '0'};
@@ -48,7 +63,6 @@ module.exports = ChartModel.extend({
 		}
 				
 		// Normalize values.
-		// TODO: recalculate column percentages to sum 100%.
 		self.values = this.normalizeValues(self.values);
 		
 		// Add totals data.
@@ -56,6 +70,11 @@ module.exports = ChartModel.extend({
 		self.values.yPTotals = this.normalizeValues(data.yPTotals);
 		self.values.xTotals = data.xTotals;
 		self.values.yTotals = data.yTotals;
+		self.values.xCount = data.xCount;
+		self.values.yCount = data.yCount;
+		self.values.xTotalCount = data.xTotalCount;
+		self.values.yTotalCount = data.yTotalCount;	
+		self.values.model = this;
 
 		if (!this.localizedLookup) {
 			// we can't procede if we don't have translations yet :(
@@ -64,32 +83,39 @@ module.exports = ChartModel.extend({
 		}
 		var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
 
-		data.processed = [{values: this.values}]; //TODO: processed???
+		data.processed = [{values: this.values}];
 		data.values = this.values;
-		//console.log(data);
+		
+		if (data.yCount > this.get('originalYLimit') + 1) {
+			this.set('showResetButton', true);
+		} else {
+			this.set('showResetButton', false);
+		}
+		
 		return data;
 	},
 	
 	normalizeValues: function(values) {
-		for (var i = 0; i < values.length; i++) {
-			var auxValue = values[i].value !== undefined ? values[i].value : values[i]; 
-			if (auxValue > 0 && auxValue < 1) {
-				//self.values[i].value = 1;
-			} else {
-				if (values[i].value !== undefined) {
-					values[i].value = Math.floor(auxValue);
+		if (_.isUndefined(values) === false) {
+			for (var i = 0; i < values.length; i++) {
+				var auxValue = values[i].value !== undefined ? values[i].value : values[i];
+				if (auxValue > 0 && auxValue < 1) {
+					//Do nothing;
 				} else {
-					values[i] = Math.floor(auxValue);
+					if (values[i].value !== undefined) {
+						values[i].value = Math.floor(auxValue);
+					} else {
+						values[i] = Math.floor(auxValue);
+					}
 				}
-			}			
+			}
 		}
 		return values;
 	},
 
 	fetch: function(options) {
-		//TODO: add code for saved dashboards!!!		
 		var self = this;
-		options = _.defaults(options || {}, { url: this.url + '?' + param(this.pick('xLimit')) });
+		options = _.defaults(options || {}, { url: this.url });
 		
 		// Process params from heat-map/configs, in that EP we have defined each heatmap.
 		var configs = this.get('heatmap_config').models[0];
@@ -104,8 +130,7 @@ module.exports = ChartModel.extend({
 			xColumn = auxAxis;
 		}
 		
-		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn}; 		
-		//options.data = JSON.stringify($.extend({}, paramsForHeatMap, JSON.parse(options.data)));
+		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn, yCount: self.get('yLimit')}; 		
 		paramsForHeatMap.filters =  JSON.parse(options.data);
 		options.data = JSON.stringify(paramsForHeatMap);
 

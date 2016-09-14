@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,21 +15,20 @@ import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
-import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.amp.diff.TextColumnKeyBuilder;
-import org.dgfoundation.amp.nireports.schema.Behaviour;
+import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
-import org.dgfoundation.amp.nireports.schema.PercentageTokenBehaviour;
 import org.digijava.kernel.request.TLSUtils;
 
 
 /**
- * a column which fetches items with percentages from a view with a "nonNulls" column and associated {@link PercentagesCorrector} instance
+ * a column which fetches items with percentages from a view with a "nonNulls" column and associated {@link PercentagesCorrector} instance.
+ * {@link PercentagesCorrector} is used for correcting dirty AMP data (e.g. where percentages for a given activity id do not add up to 100%)
  * @author Dolghier Constantin
  *
  */
@@ -50,7 +50,15 @@ public class NormalizedPercentagesColumn extends AmpDifferentialColumn<Percentag
 		return pair.v.getCells(engine.schemaSpecificScratchpad.getMainIds(engine, this));
 	}
 	
+	/**
+	 * fetches the entries corresponding to a given set of ownerIds, corrects the percentages and then returns the result cells
+	 * @param engine the context of the request
+	 * @param ids the ownerIds to fetch
+	 * @return
+	 */
 	protected synchronized List<PercentageTextCell> fetchIds(NiReportsEngine engine, Set<Long> ids) {
+		if (ids.isEmpty())
+			return Collections.emptyList();
 		String locale = TLSUtils.getEffectiveLangCode();
 		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
 		PercentagesCorrector.Snapshot percsSnapshot = scratchpad.buildSnapshot(this.percentagesSnapshot, percentagesCorrector, ids);
@@ -71,6 +79,14 @@ public class NormalizedPercentagesColumn extends AmpDifferentialColumn<Percentag
 		return res;
 	}
 	
+	/**
+	 * extracts a single cell from a single row of a {@link ResultSet}, corrects the percentage and returns the result.
+	 * @param engine the request context
+	 * @param rs the correctly-position (row-wise) {@link ResultSet}
+	 * @param percsSnapshot the {@link Snapshot} used for correcting percentages
+	 * @return the result corrected cell OR null if the row contains invalid data
+	 * @throws SQLException
+	 */
 	protected PercentageTextCell extractCell(NiReportsEngine engine, ResultSet rs, Snapshot percsSnapshot) throws SQLException {
 		long activityId = rs.getLong(1);
 		String text = rs.getString(2);

@@ -3,7 +3,7 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 		TranslationManager, GridManager, Legend, jQuery) {
 
 	"use strict";
-
+	
 	function SettingsManager() {
 		if (!(this instanceof SettingsManager)) {
 			throw new TypeError("SettingsManager constructor cannot be called as a function.");
@@ -45,12 +45,15 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			modal : true,
 			title : TranslationManager.getTranslated("Settings"),
 			width : 'auto',
-			position: { my: "center bottom", at: "center center", of: window }
+			position: { my: "center bottom", at: "center center", of: window },
+			close: function() {
+				jQuery(settingsDialog.el).dialog('destroy').remove();
+			}
 		});
 		jQuery(".buttonify").button();
 		$('#settings-missing-values-error').hide();
 		TranslationManager.searchAndTranslate();
-
+		
 		// Register apply button click.
 		jQuery(".settings-container #applySettingsBtn").on("click", function() {
 			if($('#currency').val() === null || $('#calendar').val() === null) {
@@ -61,7 +64,6 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			
 			jQuery('#calendar').removeAttr('selected');
 			jQuery('#currency').removeAttr('selected');
-			jQuery(settingsDialog.el).dialog('close');
 
 			/* settingsDialog.model.get('currency'),settingsDialog.model.get('calendar') */
 
@@ -70,6 +72,7 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 				"1" : jQuery("#currency").val(),
 				"2" : jQuery("#calendar").val()
 			};
+			
 			GridManager.filter(app.TabsApp.currentTab.get('id'), app.TabsApp.serializedFilters, app.TabsApp.appliedSettings);
 
             var currentLegendModel = app.TabsApp.dynamicContentRegion.currentView.legends.currentView.model;
@@ -87,9 +90,9 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			app.TabsApp.dynamicContentRegion.currentView.legends.currentView.render();
 
 			// Destroy the dialog to unbind the event.
-			//jQuery(settingsDialog.el).dialog('destroy').remove();			
+			jQuery(settingsDialog.el).dialog('close');
 		});
-		
+
 		//Register calendar change.
 		jQuery(".settings-container #calendar").on("change", function() {
 			var calendarSelect = $('.settings-container #calendar');
@@ -108,11 +111,11 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			});
 			$(currencySelect).val(availableCurrenciesForCalendar[0]);
 		});
-		jQuery(settingsDialog.el).dialog('close');
 		app.TabsApp.settingsDialogView = settingsDialog;
 	};
 
 	SettingsManager.openDialog = function() {
+		this.initialize();
 		jQuery(app.TabsApp.settingsDialogView.el).dialog('open');
 	};
 

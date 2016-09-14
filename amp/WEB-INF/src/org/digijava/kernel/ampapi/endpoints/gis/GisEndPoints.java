@@ -1,43 +1,17 @@
 package org.digijava.kernel.ampapi.endpoints.gis;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.codehaus.jackson.node.POJONode;
-import org.codehaus.jackson.node.TextNode;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dto.Activity;
-import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
-import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
-import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
-import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
-import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
-import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
-import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
-import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
-import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
-import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpIndicatorColor;
-import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
-import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.esrigis.dbentity.AmpApiState;
-import org.digijava.module.esrigis.dbentity.AmpMapConfig;
-import org.digijava.module.esrigis.helpers.DbHelper;
-import org.digijava.module.esrigis.helpers.MapConstants;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,19 +27,49 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.StreamingOutput;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.codehaus.jackson.node.POJONode;
+import org.codehaus.jackson.node.TextNode;
+import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
+import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
+import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
+import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
+import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
+import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
+import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpIndicatorColor;
+import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.esrigis.dbentity.AmpApiState;
+import org.digijava.module.esrigis.dbentity.AmpMapConfig;
+import org.digijava.module.esrigis.helpers.DbHelper;
+import org.digijava.module.esrigis.helpers.MapConstants;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 /**
  * Class that holds entrypoing for GIS api methods
@@ -325,7 +329,8 @@ public class GisEndPoints {
 	@ApiMethod(ui = false, id = "locationstotals")	
 	public JsonBean getAdminLevelsTotals(JsonBean filters, @PathParam ("admlevel") String admlevel){
 		LocationService ls = new LocationService();
-		return ls.getTotals(admlevel, filters);
+		// this Service was resetting the amount units so far (used by this EP only), now changed its interface to allow other "users" to not reset it
+		return ls.getTotals(admlevel, filters, AmountsUnits.AMOUNTS_OPTION_UNITS);
 	}
 	
 	
@@ -346,44 +351,40 @@ public class GisEndPoints {
 		}
 	}
 	
-	@GET
+	@POST
 	@Path("/indicators/{indicatorId}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "IndicatorById")	
-	public JSONObject getIndicatorsById(@PathParam ("indicatorId") Long indicatorId){
-		AmpIndicatorLayer indicator = (AmpIndicatorLayer)DbUtil.getObject(AmpIndicatorLayer.class, indicatorId);
-		JSONObject response = new JSONObject();
-		response.put("name", indicator.getName());
-		response.put("classes", indicator.getNumberOfClasses());
-		response.put("id", indicator.getId());
-		response.put("unit", indicator.getUnit());
-		response.put("description", indicator.getDescription());
-		response.put("admLevelId", indicator.getAdmLevel().getLabel());
-		JSONArray values = new JSONArray();
-		for (AmpLocationIndicatorValue value:indicator.getIndicatorValues()) {
-			JSONObject object = new JSONObject();
-			object.put ("value",value.getValue());
-			object.put("geoId", value.getLocation().getGeoCode());
-			object.put("name", value.getLocation().getName());
-			
-			values.add(object);
-		}
-		response.put("values", values);
-		return response;
+	@ApiMethod(ui = false, id = "IndicatorById")
+	public JsonBean getIndicatorsById(JsonBean input, @PathParam ("indicatorId") Long indicatorId) {
+		boolean isGapAnalysis = Boolean.valueOf(input.get("gapAnalysis").toString());
+	    return IndicatorUtils.getIndicatorsAndLocationValues(indicatorId, input, isGapAnalysis);
 	}
+	
 	private List<JsonBean> generateIndicatorJson (List<AmpIndicatorLayer> indicators,boolean includeAdmLevel) {
 		List<JsonBean> indicatorsJson = new ArrayList<JsonBean>();
-		for (AmpIndicatorLayer indicator : indicators) {
+		GapAnalysis gapAnalysis = new GapAnalysis();
+
+        for (AmpIndicatorLayer indicator : indicators) {
 			JsonBean json = new JsonBean();
-			json.set("name", indicator.getName());
-			json.set("classes", indicator.getNumberOfClasses());
-			json.set("id", indicator.getId());
-			json.set("unit", indicator.getUnit());
-			json.set("description", indicator.getDescription());
+            json.set(IndicatorEPConstants.ID, indicator.getId());
+            json.set(IndicatorEPConstants.NAME, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
+            json.set(IndicatorEPConstants.DESCRIPTION, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
+            json.set(IndicatorEPConstants.UNIT, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
+			json.set(IndicatorEPConstants.ID, indicator.getId());
 			if (includeAdmLevel) {
-				json.set("admLevelId", indicator.getAdmLevel().getLabel());
+				json.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getLabel());
 			}
+            json.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
             json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
+            json.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
+            json.set(IndicatorEPConstants.CAN_DO_GAP_ANALYSIS, gapAnalysis.canDoGapAnalysis(indicator));
+            
+            json.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
+            json.set(IndicatorEPConstants.UPDATED_ON, FormatHelper.formatDate(indicator.getUpdatedOn()));
+
+            if (indicator.getCreatedBy() != null) {
+                json.set(IndicatorEPConstants.CREATE_BY, indicator.getCreatedBy().getUser().getEmail());
+            }
 			List<JsonBean> colors = new ArrayList<JsonBean>();
 			List<AmpIndicatorColor> colorList = new ArrayList<AmpIndicatorColor>(indicator.getColorRamp());
 			Collections.sort(colorList, new Comparator<AmpIndicatorColor>() {
@@ -402,15 +403,8 @@ public class GisEndPoints {
 			indicatorsJson.add(json);
 		}
 		return indicatorsJson;
+	}
 	
-	}
-	@GET
-	@Path("/export-map-test/")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public List<Activity> testMapExport(){
-		final Map<String,Activity>geocodeInfo=new LinkedHashMap<String,Activity>();
-		return LocationService.getMapExportByLocation(geocodeInfo,null);
-	}
 	/**
 	 * Export map id from current filters
 	 * 
@@ -439,11 +433,10 @@ public class GisEndPoints {
 		LinkedHashMap<String, Object> filters=(LinkedHashMap<String, Object>)filter.get("filters");
 		if(exportType==1){
 			name="map-export-project-sites.xls";
-			wb =LocationService.generateExcelExportByStructure(filters);	
+			wb = new ActivityStructuresExporter(filters).export(name);
 		}else{
 			name="map-export-administrative-Locations.xls";
 			wb = new ActivityLocationExporter(filters).export(name);
-//			wb=LocationService.generateExcelExportByLocation(filters);
 		}
 		webResponse.setHeader("Content-Disposition","attachment; filename=" + name);
 

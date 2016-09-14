@@ -95,6 +95,8 @@ import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
+import com.tonbeller.wcf.utils.SqlUtils;
+
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
 
@@ -102,7 +104,41 @@ public class DbUtil {
 		return filter(text, false);
 
 	}
+	
+	
+	
+	/**
+	 * Used in the AMP-23713.xml patch. 
+	 * Can be reused for other tables, but highly inadvisable to be edited itself. 
+	 * @param tableName the tablename
+	 */
+	public static void removeReferencedConstraints(String tableName) {
+		for (String query : generateFkeyConRemovalQueries(tableName)) {
+			PersistenceManager.getSession().doWork(conn -> {
+				SQLUtils.executeQuery(conn, query);
+			});
+		}
+	}
 
+	/**
+	 * Generates queries that would drop all foreign key constraints pointing to specified table.
+	 * Used in AMP-23713.xml, reuse, but do not edit
+	 * @param tableName the table name to have foreign keys stripped
+	 * @return
+	 */
+	private static List<String> generateFkeyConRemovalQueries(String tableName) {
+		return PersistenceManager.getSession().doReturningWork(conn -> {
+			String query = "SELECT 'ALTER TABLE '|| clazz.relname ||' DROP CONSTRAINT '||constr.conname||';' AS query " + 
+					"FROM pg_constraint constr, pg_class clazz, pg_class clazz_f " +
+					"WHERE constr.conrelid = clazz.oid " +
+					"AND constr.contype ='f' " +
+					"AND constr.confrelid = clazz_f.oid " +
+					"AND clazz_f.relname ='%s'; ";
+			query = String.format(query, tableName);
+			return SQLUtils.fetchAsList(conn, query, 1);
+		});
+	}
+	
 	public static String filter(String text, boolean acute) {
 
 		String result = null;
@@ -3061,11 +3097,11 @@ public class DbUtil {
 			AmpPrgIndicatorValue val2 = new AmpPrgIndicatorValue();
 
 			val1.setValueType(o1.getValueType());
-			val1.setCreationDate(DateConversion.ConvertDateToString(o1
+			val1.setCreationDate(DateConversion.convertDateToString(o1
 					.getValueDate()));
 
 			val2.setValueType(o2.getValueType());
-			val2.setCreationDate(DateConversion.ConvertDateToString(o2
+			val2.setCreationDate(DateConversion.convertDateToString(o2
 					.getValueDate()));
 			return new IndicatorValuesComparatorByTypeAndYear().compare(val1,
 					val2);

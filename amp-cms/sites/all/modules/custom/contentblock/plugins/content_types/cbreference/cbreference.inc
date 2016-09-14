@@ -27,12 +27,12 @@ $plugin = array(
  */
 function contentblock_cbreference_content_type_render($subtype, $conf, $panel_args) {
   if (empty($conf['machine_name'])) {
-    return;
+    return '';
   }
 
   $cbreference_info = contentblock_get_fixed_types($conf['machine_name']);
   if (empty($cbreference_info)) {
-    return;
+    return '';
   }
 
   $block = new stdClass();
@@ -52,85 +52,52 @@ function contentblock_cbreference_content_type_render($subtype, $conf, $panel_ar
   $entities = entity_load('contentblock', array(), array('machine_name' => $conf['machine_name']));
   $entity = reset($entities);
 
+  if (empty($entity) && !contentblock_access('create')) {
+    return '';
+  }
+
+  // Display placeholder to users that can create the contentblock entity.
   if (empty($entity)) {
     $block->content['#contextual_links'] = array(
       'contentblock' => array('admin/settings/content-sections', array($conf['machine_name'])),
     );
 
+    $block_css_classes[] = 'cbreference-empty-block-placeholder';
+    _contentblock_cbreference_empty_block_placeholder($block, $conf, $cbreference_info);
+  }
+  else {
+    $block->content['#contextual_links'] = array(
+      'contentblock' => array('contentblock', array($entity->identifier())),
+    );
+
+    if (!entity_access('view', 'contentblock', $entity)) {
+      return '';
+    }
+
+    module_load_include('inc', 'contentblock', 'contentblock.cbreference');
+    $function = 'contentblock_cbreference_render__' . $entity->machine_name;
+
     if (!empty($cbreference_info['is section'])) {
-      $message = t('You have not configured this section. Click !here to go to the section settings page to add content and/or remove this message and title.', array(
-        '!here' => l(t('here'), 'admin/settings/content-sections/' . $conf['machine_name']),
-      ));
+      $function = 'contentblock_cbreference_render__section';
     }
-    else {
-      if ($block->delta == 'welcome') {
-        $message = t('You have not configured this block. Click !here to go to the block settings page to edit content.', array(
-          '!here' => l(t('here'), 'admin/settings/content-sections/' . $conf['machine_name']),
-        ));
-
-        $block->content['#prefix'] = '<div class="empty-contentblock clearfix">';
-        $block->content['#suffix'] = '</div>';
+    if (function_exists($function)) {
+      $return = $function($entity, $conf);
+      if (empty($return)) {
+        return '';
       }
-      elseif ($block->delta == 'totalactivities' || $block->delta == 'totalpledges') {
-        $message = t('You have not configured this block. Click !here to go to the block settings page to edit content.', array(
-          '!here' => l(t('here'), 'admin/settings/content-sections/' . $conf['machine_name']),
-        ));
 
-        $block->content['#prefix'] = '<div class="empty-contentblock clearfix">';
-        $block->content['#suffix'] = '</div>';
+      if (isset($return['#view_mode'])) {
+        $block_css_classes[] = drupal_html_class('cbreference-view-mode-' . $return['#view_mode']);
       }
-      else {
-        $message = t('You have not configured this block. Click !here to go to the block settings page to edit content and/or remove this message and title.', array(
-          '!here' => l(t('here'), 'admin/settings/content-sections/' . $conf['machine_name']),
-        ));
 
-        $block->content['#prefix'] = '<div class="layout-block layout-separator">';
-        $block->content['#suffix'] = '</div>';
+      // Make sure we don't display an empty block.
+      $children = element_children($return);
+      if (empty($children)) {
+        return '';
       }
+
+      $block->content[] = $return;
     }
-
-    $block->content['title'] = array(
-      '#markup' => '<h3 class="contentblock-title">' . $cbreference_info['title'] . '</h3>',
-    );
-    $block->content['content'] = array(
-      '#markup' => '<p>' . $message . '</p>',
-    );
-
-    return $block;
-  }
-
-  $block->content['#contextual_links'] = array(
-    'contentblock' => array('contentblock', array($entity->identifier())),
-  );
-
-  $view_mode = 'default';
-  if (!entity_access('view', 'contentblock', $entity)) {
-    return;
-  }
-
-  module_load_include('inc', 'contentblock', 'contentblock.cbreference');
-  $function = 'contentblock_cbreference_render__' . $entity->machine_name;
-
-  if (!empty($cbreference_info['is section'])) {
-   $function = 'contentblock_cbreference_render__section';
-  }
-  if (function_exists($function)) {
-    $return = $function($entity, $conf);
-    if (empty($return)) {
-      return;
-    }
-
-    if (isset($return['#view_mode'])) {
-      $block_css_classes[] = drupal_html_class('cbreference-view-mode-' . $return['#view_mode']);
-    }
-
-    // Make sure we don't display an empty block.
-    $children = element_children($return);
-    if (empty($children)) {
-      return;
-    }
-
-    $block->content[] = $return;
   }
 
   if (!empty($block_css_classes)) {
@@ -138,6 +105,57 @@ function contentblock_cbreference_content_type_render($subtype, $conf, $panel_ar
   }
 
   return $block;
+}
+
+/**
+ * Return a placeholder for the content block entity.
+ *
+ * @param $conf
+ * @param $block
+ * @param $cbreference_info
+ * @return object
+ */
+function _contentblock_cbreference_empty_block_placeholder($block, $conf, $cbreference_info) {
+  if (!empty($cbreference_info['is section'])) {
+    $message = t('You have not configured this section. Click !here to go to the section settings page to add content and/or remove this message and title.', array(
+      '!here' => l(t('here'), 'admin/settings/content-sections/' . $conf['machine_name']),
+    ));
+  }
+  else {
+    if ($block->delta == 'welcome') {
+      $message = t('You have not configured this block. Click !here to go to the block settings page to edit content.', array(
+        '!here' => l(t('here'), 'admin/settings/content-sections/' . $conf['machine_name']),
+      ));
+
+      $block->content['#prefix'] = '<div class="empty-contentblock clearfix">';
+      $block->content['#suffix'] = '</div>';
+    }
+    elseif ($block->delta == 'totalactivities' || $block->delta == 'totalpledges') {
+      $message = t('You have not configured this block. Click !here to go to the block settings page to edit content.', array(
+        '!here' => l(t('here'), 'admin/settings/content-sections/' . $conf['machine_name']),
+      ));
+
+      $block->content['#prefix'] = '<div class="empty-contentblock clearfix">';
+      $block->content['#suffix'] = '</div>';
+    }
+    else {
+      $message = t('You have not configured this block. Click !here to go to the block settings page to edit content and/or remove this message and title.', array(
+        '!here' => l(t('here'), 'admin/settings/content-sections/' . $conf['machine_name']),
+      ));
+
+      $block->content['#prefix'] = '<div class="layout-block layout-separator">';
+      $block->content['#suffix'] = '</div>';
+    }
+  }
+
+  $message .= ' <br />' . t('NOTE: This message is visible only to users that can configure the block.');
+
+  $block->content['title'] = array(
+    '#markup' => '<h3 class="contentblock-title">' . $cbreference_info['title'] . '</h3>',
+  );
+  $block->content['content'] = array(
+    '#markup' => '<p>' . $message . '</p>',
+  );
 }
 
 /**
@@ -184,4 +202,6 @@ function contentblock_cbreference_content_type_admin_title($subtype, $conf) {
   if (!empty($conf['machine_name'])) {
     return t('CB Reference, machine_name: %machine_name', array('%machine_name' => $conf['machine_name']));
   }
+
+  return '';
 }

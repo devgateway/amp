@@ -645,7 +645,7 @@ public class ReportsUtil {
 			copy.removeAll(allowedValues);
 			if (copy.size() > 0) {
                 return new ApiErrorMessage(ReportErrors.LIST_INVALID.id, ReportErrors.LIST_INVALID.description,
-                        listName);
+                        listName + ": [" + StringUtils.join(copy, ", ") + "]");
             }
 		}
 		return null;

@@ -236,16 +236,16 @@ public class ImportExportTranslations extends Action {
     		setMaxColWidth(value, column, currentColumnMaxWidths);
     	}
     }
-    
 
-    private void setMaxColWidth(String formattedTargetCreationDate, int column, Map<Integer, Integer> cachedWidths) {
+    private void setMaxColWidth(String cellValue, int column, Map<Integer, Integer> columnWidths) {
+    	// set default width, 10 characters
     	IntWrapper width = new IntWrapper().inc(10);
     	
-    	if (StringUtils.isNotEmpty(formattedTargetCreationDate)) {
-    		width.set(formattedTargetCreationDate.length());
+    	if (StringUtils.isNotEmpty(cellValue)) {
+    		width.set(cellValue.length());
     	}
 		
-    	cachedWidths.compute(column, (k, v) -> v == null ? width.value : v < width.value ? width.value : v);
+    	columnWidths.compute(column, (k, v) -> v == null ? width.value : v < width.value ? width.value : v);
 	}
 
 	private void adjustColumnWidths(HSSFSheet sheet, Map<Integer, Integer> columnWidths) {

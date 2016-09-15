@@ -80,49 +80,13 @@ implements AmpRequiredComponentContainer{
 			this.fmType = AmpFMTypes.MODULE;
 			
 			IModel<String> m = new PropertyModel<String>(am, "name");
-			final AmpTextAreaFieldPanel title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true);
+			final AmpTextAreaFieldPanel title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true,true);
 
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am, "ampActivityGroup")));
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
 			title.getTextAreaContainer().setRequired(true);
-			
-		if (ContentTranslationUtil.multilingualIsEnabled()){
-			
-			//we only disable the language switcher if we are in multilingual mode
 
-			//we only disable if the object in the default language is null or empty
-			if(title.getModel().getObject()==null || title.getModel().getObject().equals("")){
-				TranslationDecorator titleDecorator=
-						(TranslationDecorator)title.get("trnContainer");
-						titleDecorator.getSwitchingDisabled().setObject(Boolean.TRUE);				
-			}
-			title.getTextAreaContainer().add(
-					new AjaxFormComponentUpdatingBehavior("onblur") {
-
-						@Override
-						protected void onUpdate(AjaxRequestTarget target) {
-
-							// we only enable/disable the langage switcher if we
-							// are in multilingual mode
-							// if the switching is disabled and the title is
-							// empty or null we prevent from
-							// switching to other language.
-							// title.getTextAreaContainer().checkRequired()
-							// title.getTextAreaContainer().valid()
-             //               titleSimilarityWarning.getWarning().modelChanged();
-
-							TranslationDecorator titleDecorator = (TranslationDecorator) title
-									.get("trnContainer");
-							if(title.getModel().getObject()==null || title.getModel().getObject().equals("")){
-							
-							titleDecorator.getSwitchingDisabled().setObject(
-									Boolean.TRUE);
-							}
-						}
-
-					});
-		}
 			title.getTextAreaContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			
 

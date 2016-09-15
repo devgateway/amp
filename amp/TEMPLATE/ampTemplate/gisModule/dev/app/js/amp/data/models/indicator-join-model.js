@@ -78,10 +78,15 @@ module.exports = Backbone.Model
     return boundaryLoaded;
   },
 
-  loadAll: function(options) {
-    return when(this.load(options), this.loadBoundary()).promise().done(function() {
-      $('#map-loading').hide();
-    });
+  loadAll: function(options) {	 
+	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){
+		  this.url = '/rest/gis/indicators/' + this.get('id') 
+	  }else if(this.get('type') === 'Indicator Layers'){
+		  this.url = '/rest/gis/indicator-layers/' + this.get('id');
+	  }		  
+	  return when(this.load(options), this.loadBoundary()).promise().done(function() {
+		  $('#map-loading').hide();
+	  });
   },
   
   fetch: function(){	

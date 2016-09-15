@@ -35,6 +35,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
     protected TextArea<String> textAreaContainer;
     private Component translationDecorator;
     private WebMarkupContainer closeLink;
+    
     /**
      * Since all validation errors are going through TranslatableValidators.onError(), 
      * and there is no way to send the validator that generated the cause, 
@@ -46,14 +47,14 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 	}
 
     public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine) {
-        this(id, model, fmName, wysiwyg, hideLabel, hideNewLine, false);
+        this(id, model, fmName, wysiwyg, hideLabel, hideNewLine, false,false);
     }
     /**
      * @param id
      * @param fmName
      * @param wysiwyg if true, CKeditor will be added to the {@link TextArea}
      */
-	public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine, boolean showReqStar) {
+	public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine, boolean showReqStar,boolean currentNavigationLanguageRequired) {
 		//super(id, model, fmName, hideLabel, hideNewLine, false, showReqStar);
 		super(id, model, fmName, hideLabel, hideNewLine, showReqStar);
         this.wysiwyg = wysiwyg;
@@ -133,7 +134,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 		}
 		add(preview);
 		
-		translationDecorator = TranslationDecorator.of("trnContainer", (IModel<String>) textAreaContainer.getModel(), (wysiwyg ? this : textAreaContainer));
+		translationDecorator = TranslationDecorator.of("trnContainer", (IModel<String>) textAreaContainer.getModel(), (wysiwyg ? this : textAreaContainer),currentNavigationLanguageRequired);
         add(translationDecorator);
 		addFormComponent(textAreaContainer);
 	}

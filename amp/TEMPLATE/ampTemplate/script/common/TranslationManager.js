@@ -25,6 +25,7 @@ function initializeGlobalTranslationsCache() {
 }
 
 function putTranslationValueInCache(key, value) {
+	key = key.replace(/['"]/ig, ' '); //Sanitize some strings in french that would break the js later.
 	TranslationManager.globalTranslationCache[key] = value;
 }
 

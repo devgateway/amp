@@ -110,6 +110,7 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 	}
 
 	function putTranslationValueInCache(key, value) {
+		key = key.replace(/['"]/ig, ' '); //Sanitize some strings in french that would break the js later.
 		app.TabsApp.globalTranslationCache[key] = value;
 	}
 

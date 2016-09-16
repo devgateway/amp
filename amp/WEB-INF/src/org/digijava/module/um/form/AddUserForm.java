@@ -448,7 +448,7 @@ public class AddUserForm  extends ValidatorForm {
             	errors.put("error.registration.LastNameBlank", "LastName is Blank");
             }
             if ( (this.getEmail() == null) || this.getEmail().trim().length() == 0) {
-            	errors.put("error.registration.noemail", "you must enter Valid email please check in");
+            	errors.put("error.registration.noemail", "Please enter a valid email address.");
                    }
             if ( (this.getPassword() == null) ||
                     this.getPassword().trim().length() == 0) {

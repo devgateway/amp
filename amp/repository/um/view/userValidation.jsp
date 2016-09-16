@@ -14,7 +14,7 @@
 	function validateEmails(email, confirmationEmail) {
 		if(! EMAIL_REGEX.test(email) || ! EMAIL_REGEX.test(confirmationEmail)) {
 			<c:set var="translation">
-			<digi:trn key="error.registration.noemail">you must enter Valid email please check in</digi:trn>
+			<digi:trn key="error.registration.noemail">Please enter a valid email address.</digi:trn>
     		</c:set>
 			alert("${translation}");
         	return false;

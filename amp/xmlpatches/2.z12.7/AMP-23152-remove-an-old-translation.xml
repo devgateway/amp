@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-23152</jira>
+    <keyword>translations</keyword>
+    <author>acartaleanu</author>
+    <description>Remove an old translation of weirdly formed message</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+				delete from dg_message where orig_message = 'you must enter Valid email please check in';
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

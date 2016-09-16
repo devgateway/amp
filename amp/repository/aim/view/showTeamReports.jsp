@@ -668,12 +668,12 @@ $(document).ready(function() {
 							<c:choose>
 								<c:when test="${report.budgetExporter}">
 									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true&type=${report.type}" title="${translation}">
-										<img src= "/repository/message/view/images/edit.gif" border="0" />
+										<img src= "/repository/message/view/images/edit.gif" border="0" style="padding-right: 5px;" />
 									</digi:link>
 								</c:when>
 								<c:otherwise>
 									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
-										<img src= "/repository/message/view/images/edit.gif" border="0" />
+										<img src= "/repository/message/view/images/edit.gif" border="0" style="padding-right: 5px;" />
 									</digi:link> 
 								</c:otherwise>
 							</c:choose>&nbsp;
@@ -688,7 +688,7 @@ $(document).ready(function() {
 								</c:if>
 							</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src= "/repository/message/view/images/trash_12.gif" border="0" />
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" style="padding-right: 5px;" />
 								</digi:link>
 						</logic:equal>
 						<logic:equal name="teamLeadFlag" scope="session" value="false">
@@ -703,7 +703,7 @@ $(document).ready(function() {
 									</c:if>
 								</c:set>
 								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
-									<img src= "/repository/message/view/images/edit.gif" border="0" />
+									<img src= "/repository/message/view/images/edit.gif" border="0" style="padding-right: 5px;" />
 								</digi:link>
 								<c:set var="translation">
 									<c:if test="${aimTeamReportsForm.showTabs}">
@@ -716,7 +716,7 @@ $(document).ready(function() {
 									</c:if>
 								</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src= "/repository/message/view/images/trash_12.gif" border="0" />
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" style="padding-right: 5px;" />
 								</digi:link>
 							</logic:equal>    
 						</logic:present>

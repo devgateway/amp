@@ -181,7 +181,6 @@ public class HeatMapConfigs {
             EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
             return ApiError.toError(errors.getAllErrors());
         }
-        org.digijava.module.aim.util.DbUtil.saveOrUpdate(thresholds);
         
         return result;
     }

@@ -11,7 +11,7 @@
 
         <property name="colorName" column="color_name" type="java.lang.String" unique="true" />
         <property name="colorHash" column="color_hash" type="java.lang.String" unique="true" />
-        <property name="thresholdStart" column="threshold_start" type="java.math.BigDecimal" unique="true" />
+        <property name="thresholdStart" column="threshold_start" type="java.math.BigDecimal" />
         <property name="index" column="index" type="java.lang.Integer"/>
 
     </class>

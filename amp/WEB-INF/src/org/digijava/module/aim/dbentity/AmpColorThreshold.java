@@ -89,5 +89,9 @@ public class AmpColorThreshold {
         this.index = index;
     }
     
+    public String toString() {
+        return String.format("[%d] %s (%s) from %s (idx = %d)", ampColorThresholdId, colorName, colorHash, 
+                thresholdStart, index);
+    }
 
 }

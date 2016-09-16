@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 
@@ -240,18 +241,22 @@
 								</div>
 							</c:if>
 							
-							<c:if test="${searchform.queryType==-1||searchform.queryType==7}">
-								<div class="${search_results_block_class}"><span
-									class="button_green default_cursor">${fn:length(resultPledges)}</span> ${resultFound} <span class="button_green default_cursor"><digi:trn>Pledges</digi:trn></span>
-								<ul>
-									<c:forEach items="${resultPledges}" var="pledge">
-										<li><a
-											title="<digi:trn>Click here to view the pledge]</digi:trn>"
-											href="/viewPledge.do?id=${pledge.ampId}">${pledge.objectFilteredName}</a>
-									</c:forEach>
-								</ul>
-								</div>
-							</c:if>							
+							<module:display name="Pledges" parentModule="Project Management">
+								<c:if test="${searchform.queryType==-1||searchform.queryType==7}">
+									<div class="${search_results_block_class}">
+										<span class="button_green default_cursor">${fn:length(resultPledges)}</span> 
+										${resultFound} 
+										<span class="button_green default_cursor"><digi:trn>Pledges</digi:trn></span>
+									<ul>
+										<c:forEach items="${resultPledges}" var="pledge">
+											<li><a
+												title="<digi:trn>Click here to view the pledge]</digi:trn>"
+												href="/viewPledge.do?id=${pledge.ampId}">${pledge.objectFilteredName}</a>
+										</c:forEach>
+									</ul>
+									</div>
+								</c:if>
+							</module:display>
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==1}">
 								<div class="${search_results_block_class}"><span

@@ -101,8 +101,11 @@ module.exports = BaseControlView.extend({
         },
         error: function(response) {
             var messageBox = self.$('.alert');
-            messageBox.show().delay(5000).fadeOut();
+            messageBox.show();
             $('#map-loading').hide();
+            self.$('.alert .close').on('click', function(e) {
+                $(this).parent().hide();
+            });
             self.toggleButton(self, true);
         }
     };

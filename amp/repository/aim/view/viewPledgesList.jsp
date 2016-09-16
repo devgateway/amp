@@ -136,6 +136,13 @@ function setHoveredRow(rowId) {
 
 <digi:form action="/viewPledgesList.do" method="post">
 <c:set var="usedCurrency"><%=AmpARFilter.getDefaultCurrency().getCurrencyCode()%></c:set>
+<div class="l_sm">
+ 	<font color="red">
+ 		<jsp:include page="utils/amountUnitsUnformatted.jsp">
+			<jsp:param value="* " name="amount_prefix"/>
+		</jsp:include>
+	</font>
+  	</div>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" vAlign="top" align="center" border="0">
 	
 	<tr>

@@ -1843,119 +1843,110 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	@Test
 	public void testPercentageOfCommsDisbsNoPrecursors() {
 		NiReportModel cor = new NiReportModel("AMP-15795-percentage-of-total-commitments-no-precursors-hier")
-		.withHeaders(Arrays.asList(
-				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 5))",
-				"(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Type Of Assistance: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 3, colSpan: 2))",
-				"",
-				"(Percentage of Total Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Percentage Of Total Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))"))
-			.withWarnings(Arrays.asList())
-			.withBody(      new ReportAreaForTests(null)
-		      .withContents("Region", "", "Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "100", "Totals-Percentage Of Total Disbursements", "100")
-		      .withChildren(
-		        new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County", 9085)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "8,3", "Totals-Percentage Of Total Disbursements", "38,79", "Region", "Anenii Noi County")
-		        .withChildren(
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
-		          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "8,3", "Totals-Percentage Of Total Disbursements", "38,79", "Type Of Assistance", "default type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Totals-Percentage Of Total Disbursements", "4,48"),
-		            new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Totals-Percentage Of Total Disbursements", "17"),
-		            new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Totals-Percentage of Total Commitments", "3,44"),
-		            new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Totals-Percentage of Total Commitments", "1,72"),
-		            new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Totals-Percentage of Total Commitments", "0,57", "Totals-Percentage Of Total Disbursements", "17,31"),
-		            new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Percentage of Total Commitments", "1,47"),
-		            new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Totals-Percentage of Total Commitments", "0,92"),
-		            new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Totals-Percentage of Total Commitments", "0,19")          )        ),
-		        new ReportAreaForTests(new AreaOwner("Region", "Balti County", 9086))
-		        .withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "11,05", "Totals-Percentage Of Total Disbursements", "10,89", "Region", "Balti County")
-		        .withChildren(
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
-		          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "9,9", "Totals-Percentage Of Total Disbursements", "10,89", "Type Of Assistance", "default type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Totals-Percentage of Total Commitments", "0,57"),
-		            new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Percentage of Total Commitments", "1,47"),
-		            new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Totals-Percentage of Total Commitments", "3,67"),
-		            new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Totals-Percentage of Total Commitments", "0,19"),
-		            new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Percentage of Total Commitments", "0,27", "Totals-Percentage Of Total Disbursements", "0,86"),
-		            new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Percentage of Total Commitments", "2,35", "Totals-Percentage Of Total Disbursements", "10,03"),
-		            new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Percentage of Total Commitments", "1,37")          ),
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "second type of assistance", 2124)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "1,14", "Totals-Percentage Of Total Disbursements", "0", "Type Of Assistance", "second type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Totals-Percentage of Total Commitments", "1,14")          )        ),
-		        new ReportAreaForTests(new AreaOwner("Region", "Cahul County", 9087)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "36,43", "Totals-Percentage Of Total Disbursements", "14,03", "Region", "Cahul County")
-		        .withChildren(
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "second type of assistance", 2124)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "36,43", "Totals-Percentage Of Total Disbursements", "14,03", "Type Of Assistance", "second type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Totals-Percentage of Total Commitments", "36,43", "Totals-Percentage Of Total Disbursements", "14,03")          )        ),
-		        new ReportAreaForTests(new AreaOwner("Region", "Chisinau City", 9088)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "1,53", "Totals-Percentage Of Total Disbursements", "1,4", "Region", "Chisinau City")
-		        .withChildren(
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
-		          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "1,53", "Totals-Percentage Of Total Disbursements", "1,4", "Type Of Assistance", "default type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Totals-Percentage of Total Commitments", "0,26"),
-		            new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Totals-Percentage of Total Commitments", "0,64"),
-		            new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Totals-Percentage of Total Commitments", "0,64"),
-		            new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Totals-Percentage Of Total Disbursements", "1,4")          )        ),
-		        new ReportAreaForTests(new AreaOwner("Region", "Chisinau County", 9089))
-		        .withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "26,11", "Totals-Percentage Of Total Disbursements", "5,92", "Region", "Chisinau County")
-		        .withChildren(
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
-		          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "25,77", "Totals-Percentage Of Total Disbursements", "3,43", "Type Of Assistance", "default type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Totals-Percentage of Total Commitments", "25,76"),
-		            new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Totals-Percentage of Total Commitments", "0,01"),
-		            new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Totals-Percentage Of Total Disbursements", "3,43")          ),
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "second type of assistance", 2124)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "0,34", "Totals-Percentage Of Total Disbursements", "2,49", "Type Of Assistance", "second type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Totals-Percentage of Total Commitments", "0,34", "Totals-Percentage Of Total Disbursements", "2,49")          )        ),
-		        new ReportAreaForTests(new AreaOwner("Region", "Drochia County", 9090)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "3,2", "Totals-Percentage Of Total Disbursements", "2,49", "Region", "Drochia County")
-		        .withChildren(
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
-		          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "3,2", "Totals-Percentage Of Total Disbursements", "2,49", "Type Of Assistance", "default type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Percentage of Total Commitments", "3,2"),
-		            new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Totals-Percentage Of Total Disbursements", "2,49")          )        ),
-		        new ReportAreaForTests(new AreaOwner("Region", "Dubasari County", 9091)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "1,1", "Totals-Percentage Of Total Disbursements", "5,25", "Region", "Dubasari County")
-		        .withChildren(
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
-		          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "1,1", "Totals-Percentage Of Total Disbursements", "5,25", "Type Of Assistance", "default type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Totals-Percentage of Total Commitments", "1,1", "Totals-Percentage Of Total Disbursements", "3,85"),
-		            new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Totals-Percentage Of Total Disbursements", "1,4")          )        ),
-		        new ReportAreaForTests(new AreaOwner("Region", "Edinet County", 9092)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "2,92", "Totals-Percentage Of Total Disbursements", "4,11", "Region", "Edinet County")
-		        .withChildren(
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "2,92", "Totals-Percentage Of Total Disbursements", "4,11", "Type Of Assistance", "default type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Totals-Percentage of Total Commitments", "2,92", "Totals-Percentage Of Total Disbursements", "4,11")          )        ),
-		        new ReportAreaForTests(new AreaOwner("Region", "Falesti County", 9093)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "5,15", "Totals-Percentage Of Total Disbursements", "14,13", "Region", "Falesti County")
-		        .withChildren(
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "5,15", "Totals-Percentage Of Total Disbursements", "14,13", "Type Of Assistance", "default type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Totals-Percentage of Total Commitments", "5,15", "Totals-Percentage Of Total Disbursements", "14,13")          )        ),
-		        new ReportAreaForTests(new AreaOwner("Region", "Transnistrian Region", 9105))
-		        .withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "0,86", "Totals-Percentage Of Total Disbursements", "0,7", "Region", "Transnistrian Region")
-		        .withChildren(
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "0,22", "Totals-Percentage Of Total Disbursements", "0,7", "Type Of Assistance", "default type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Percentage of Total Commitments", "0,22", "Totals-Percentage Of Total Disbursements", "0,7")          ),
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "second type of assistance", 2124)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "0,64", "Totals-Percentage Of Total Disbursements", "0", "Type Of Assistance", "second type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Totals-Percentage of Total Commitments", "0,64")          )        ),
-		        new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined", -8977)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "3,35", "Totals-Percentage Of Total Disbursements", "2,27", "Region", "Region: Undefined")
-		        .withChildren(
-		          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
-		          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "3,35", "Totals-Percentage Of Total Disbursements", "2,27", "Type Of Assistance", "default type of assistance")
-		          .withChildren(
-		            new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Totals-Percentage of Total Commitments", "0,64", "Totals-Percentage Of Total Disbursements", "2,25"),
-		            new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Totals-Percentage of Total Commitments", "0,26"),
-		            new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Totals-Percentage of Total Commitments", "0,16"),
-		            new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Totals-Percentage of Total Commitments", "0,08"),
-		            new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Totals-Percentage of Total Commitments", "0,06"),
-		            new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Totals-Percentage of Total Commitments", "0"),
-		            new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Totals-Percentage of Total Commitments", "0,23"),
-		            new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Totals-Percentage of Total Commitments", "0,63"),
-		            new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Totals-Percentage Of Total Disbursements", "0,02"),
-		            new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Percentage of Total Commitments", "0,77"),
-		            new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Totals-Percentage of Total Commitments", "0,5")          )        )      ));
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 4))",
+						"(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Type Of Assistance: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 3, colSpan: 1))",
+						"",
+						"(Percentage of Total Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
+					.withBody(      new ReportAreaForTests(null)
+				      .withContents("Region", "", "Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "100")
+				      .withChildren(
+				        new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County", 9085)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "8,3", "Region", "Anenii Noi County")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
+				          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "8,3", "Type Of Assistance", "default type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Totals-Percentage of Total Commitments", "3,44"),
+				            new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Totals-Percentage of Total Commitments", "1,72"),
+				            new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Totals-Percentage of Total Commitments", "0,57"),
+				            new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Percentage of Total Commitments", "1,47"),
+				            new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Totals-Percentage of Total Commitments", "0,92"),
+				            new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Totals-Percentage of Total Commitments", "0,19")          )        ),
+				        new ReportAreaForTests(new AreaOwner("Region", "Balti County", 9086))
+				        .withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "11,05", "Region", "Balti County")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
+				          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "9,9", "Type Of Assistance", "default type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Totals-Percentage of Total Commitments", "0,57"),
+				            new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Percentage of Total Commitments", "1,47"),
+				            new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Totals-Percentage of Total Commitments", "3,67"),
+				            new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Totals-Percentage of Total Commitments", "0,19"),
+				            new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Percentage of Total Commitments", "0,27"),
+				            new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Percentage of Total Commitments", "2,35"),
+				            new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Percentage of Total Commitments", "1,37")          ),
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "second type of assistance", 2124)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "1,14", "Type Of Assistance", "second type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Totals-Percentage of Total Commitments", "1,14")          )        ),
+				        new ReportAreaForTests(new AreaOwner("Region", "Cahul County", 9087)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "36,43", "Region", "Cahul County")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "second type of assistance", 2124)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "36,43", "Type Of Assistance", "second type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Totals-Percentage of Total Commitments", "36,43")          )        ),
+				        new ReportAreaForTests(new AreaOwner("Region", "Chisinau City", 9088)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "1,53", "Region", "Chisinau City")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
+				          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "1,53", "Type Of Assistance", "default type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Totals-Percentage of Total Commitments", "0,26"),
+				            new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Totals-Percentage of Total Commitments", "0,64"),
+				            new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Totals-Percentage of Total Commitments", "0,64")          )        ),
+				        new ReportAreaForTests(new AreaOwner("Region", "Chisinau County", 9089))
+				        .withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "26,11", "Region", "Chisinau County")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
+				          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "25,77", "Type Of Assistance", "default type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Totals-Percentage of Total Commitments", "25,76"),
+				            new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Totals-Percentage of Total Commitments", "0,01")          ),
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "second type of assistance", 2124)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "0,34", "Type Of Assistance", "second type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Totals-Percentage of Total Commitments", "0,34")          )        ),
+				        new ReportAreaForTests(new AreaOwner("Region", "Drochia County", 9090)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "3,2", "Region", "Drochia County")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "3,2", "Type Of Assistance", "default type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Percentage of Total Commitments", "3,2")          )        ),
+				        new ReportAreaForTests(new AreaOwner("Region", "Dubasari County", 9091)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "1,1", "Region", "Dubasari County")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "1,1", "Type Of Assistance", "default type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Totals-Percentage of Total Commitments", "1,1")          )        ),
+				        new ReportAreaForTests(new AreaOwner("Region", "Edinet County", 9092)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "2,92", "Region", "Edinet County")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "2,92", "Type Of Assistance", "default type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Totals-Percentage of Total Commitments", "2,92")          )        ),
+				        new ReportAreaForTests(new AreaOwner("Region", "Falesti County", 9093)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "5,15", "Region", "Falesti County")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "5,15", "Type Of Assistance", "default type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Totals-Percentage of Total Commitments", "5,15")          )        ),
+				        new ReportAreaForTests(new AreaOwner("Region", "Transnistrian Region", 9105))
+				        .withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "0,86", "Region", "Transnistrian Region")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "0,22", "Type Of Assistance", "default type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Percentage of Total Commitments", "0,22")          ),
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "second type of assistance", 2124)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "0,64", "Type Of Assistance", "second type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Totals-Percentage of Total Commitments", "0,64")          )        ),
+				        new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined", -8977)).withContents("Type Of Assistance", "", "Project Title", "", "Totals-Percentage of Total Commitments", "3,35", "Region", "Region: Undefined")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
+				          .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "3,35", "Type Of Assistance", "default type of assistance")
+				          .withChildren(
+				            new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Totals-Percentage of Total Commitments", "0,64"),
+				            new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Totals-Percentage of Total Commitments", "0,26"),
+				            new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Totals-Percentage of Total Commitments", "0,16"),
+				            new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Totals-Percentage of Total Commitments", "0,08"),
+				            new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Totals-Percentage of Total Commitments", "0,06"),
+				            new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Totals-Percentage of Total Commitments", "0"),
+				            new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Totals-Percentage of Total Commitments", "0,23"),
+				            new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Totals-Percentage of Total Commitments", "0,63"),
+				            new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Percentage of Total Commitments", "0,77"),
+				            new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Totals-Percentage of Total Commitments", "0,5")          )        )      ));
 		
 		runNiTestCase(cor, spec("AMP-15795-percentage-of-total-commitments-no-precursors-hier"), "en", acts);
 	}

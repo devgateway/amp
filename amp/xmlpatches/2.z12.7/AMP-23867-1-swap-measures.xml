@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-23799</jira>
+    <keyword>FM</keyword>
+    <author>acartaleanu</author>
+    <description>swap measures from unimplemented to their implemented analogs</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+				UPDATE amp_report_measures SET measureid = (SELECT measureid FROM amp_measures WHERE measurename = 'Uncommitted Cumulative Balance') 
+						 WHERE measureid = (SELECT measureid FROM amp_measures WHERE measurename = 'Uncommitted Balance');
+
+				UPDATE amp_report_measures SET measureid = (SELECT measureid FROM amp_measures WHERE measurename = 'Percentage Of Total Disbursements') 
+						 WHERE measureid = (SELECT measureid FROM amp_measures WHERE measurename = 'Disbursment Ratio');
+
+				UPDATE amp_report_measures SET measureid = (SELECT measureid FROM amp_measures WHERE measurename = 'Cumulative Commitment') 
+						 WHERE measureid = (SELECT measureid FROM amp_measures WHERE measurename = 'Total Commitments');
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

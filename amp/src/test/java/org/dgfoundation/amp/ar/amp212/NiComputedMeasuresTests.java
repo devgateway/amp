@@ -1,9 +1,7 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,12 +13,10 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.digijava.module.aim.helper.DateConversion;
 import org.junit.Test;
 
 /**
@@ -295,7 +291,7 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 		
 		ReportSpecificationImpl spec = buildSpecification("Uncommitted balance",
 				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT),
-				Arrays.asList(MeasureConstants.UNCOMMITTED_BALANCE, MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,
+				Arrays.asList(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,
 						MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.CUMULATED_DISBURSEMENTS),
 				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE),
 				GroupingCriteria.GROUPING_YEARLY);
@@ -316,7 +312,7 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 		
 		spec = buildSpecification("Uncommitted balance",
 				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT),
-				Arrays.asList(MeasureConstants.UNCOMMITTED_BALANCE, MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,
+				Arrays.asList(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,
 						MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.CUMULATED_DISBURSEMENTS),
 				null,
 				GroupingCriteria.GROUPING_YEARLY);

@@ -166,7 +166,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(ColumnConstants.AVERAGE_SIZE_OF_DISBURSEMENTS,  "Sun Actual Disbursments / Number of Actual disbursments");
 		put(ColumnConstants.ACTIVITY_COUNT,  "Count Of Activities under the current hierarchy");
 		put(ColumnConstants.PROJECT_AGE_RATIO,  "Project Age Ratio,  Age of project / Project Period");
-//		put(ColumnConstants.PERCENTAGE_OF_TOTAL_DISBURSMENTS,  "AMP 1.x Disbursement Ratio");
 		put(ColumnConstants.PRIMARY_PROGRAM,  "Level-1 subprogram of the selected primary program");
 		put(ColumnConstants.SECONDARY_PROGRAM,  "Level-1 subprogram of the selected secondary program");
 		put(ColumnConstants.TERTIARY_PROGRAM,  "Level-1 subprogram of the selected tertiary program");
@@ -191,12 +190,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
 	@SuppressWarnings("serial")
 	public final static Map<String, String> measureDescriptions = new HashMap<String, String>() {{
-		put(MeasureConstants.CONSUMPTION_RATE , "(Selected Year Cumulated Disbursements / Selected Year of Planned Disbursements) * 100");
 		put(MeasureConstants.CUMULATED_DISBURSEMENTS , "Prior Actual Disbursements + Previous Month Disbursements");
 		put(MeasureConstants.CUMULATIVE_COMMITMENT,  "Sum of all ACTUAL COMMITMENTS independent of filters");
 		put(MeasureConstants.CUMULATIVE_DISBURSEMENT,  "Sum of all ACTUAL DISBURSEMENTS independent of filters");
 		put(MeasureConstants.CURRENT_MONTH_DISBURSEMENTS , "Sum of Actual Disbursements of the current month");
-		put(MeasureConstants.DISBURSMENT_RATIO , "Sum of actual disbursment / Total actual disb * 100");
 		put(MeasureConstants.EXECUTION_RATE , "Sum Of Actual Disb (Dependent on Filter) / Sum Of Planned Disb (Dependent on Filter) * 100");
 		put(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS , "Previous Year Planned Disbursements");
 		put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS , "(Total Actual Disbursements for Year,Quarter,Month / Total Actual Disbursements) * 100");
@@ -205,7 +202,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS , "Actual Disbursements Of Previous Month");
 		put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS , "Current Year Actual Disbursements Until Previous Month (not included)");
 		put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS , "Selected Year Planned Disbursements");
-		put(MeasureConstants.UNCOMMITTED_BALANCE , "Proposed Project Cost - Total Actual Commitments");
 		put(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,  "Proposed project cost - Cummulative Commitments");
 		put(MeasureConstants.UNDISBURSED_BALANCE , "Total Actual Commitment - Total Actual Disbursement");
 		put(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE,  "Cumulative Commitment - Cumulative Disbursement");
@@ -723,10 +719,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 				MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, +1,
 				MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, +1);		
 		
-		addTrivialStrippedFilterMeasure(MeasureConstants.UNCOMMITTED_BALANCE,
-				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
-				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT, +1,
-				MeasureConstants.ACTUAL_COMMITMENTS, -1);
+//		addTrivialStrippedFilterMeasure(MeasureConstants.UNCOMMITTED_BALANCE,
+//				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
+//				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT, +1,
+//				MeasureConstants.ACTUAL_COMMITMENTS, -1);
 
 		addTrivialFilterMeasure(MeasureConstants.UNDISBURSED_BALANCE,
 				TrivialMeasureBehaviour.getTotalsOnlyInstance(),

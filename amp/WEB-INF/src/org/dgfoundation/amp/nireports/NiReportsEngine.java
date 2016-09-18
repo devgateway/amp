@@ -306,7 +306,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	/**
-	 * generates a new instance with new {@link #rasterizedHeaders} and {@link #leafColumns}, but sharing the same {@link #rootColumn}
+	 * generates a new instance with new {@link NiHeaderInfo#rasterizedHeaders} and {@link NiHeaderInfo#leafColumns}, but sharing the same {@link NiHeaderInfo#rootColumn}
 	 * @param filter
 	 * @return
 	 */
@@ -403,9 +403,12 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * removes any traces of entities containing no funding
 	 */
 	protected void cleanColumnsAccordingToFunding() {
-		//Set<Long> idsToKeep = funding.stream().map(cell -> cell.activityId).collect(Collectors.toSet());
 		Set<Long> idsToKeep = new HashSet<>();
-		reportRunMeasures.stream().map(z -> fetchedMeasures.get(z).data.keySet()).forEach(ids -> idsToKeep.addAll(ids));
+		if (fetchedMeasures.isEmpty()) { // if we are running measureless report then filter by funding
+			funding.stream().map(cell -> cell.activityId).forEach(idsToKeep::add);
+		} else {
+			reportRunMeasures.stream().map(z -> fetchedMeasures.get(z).data.keySet()).forEach(idsToKeep::addAll);
+		}
 		
 		fetchedColumns.forEach((colName, colContents) -> {
 			if (!colName.equals(FUNDING_COLUMN_NAME))
@@ -666,7 +669,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 
 	/**
-	 * <strong>HAS A SIDE EFFECT</strong>: fills {@link #actualMeasures} and {@link #requestedMeasures} <br />
+	 * <strong>HAS A SIDE EFFECT</strong>: fills {@link #actualMeasures} and {@link #reportRunMeasures} <br />
 	 * returns a list of the support measures of the ones mandated by the report. This function will become an one-liner when NiReports will become the reference reporting engine
 	 * @return
 	 */

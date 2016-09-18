@@ -1980,4 +1980,166 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		
 		runNiTestCase(spec, "en", executionRateActs, cor);
 	}
+
+	@Test
+	public void testNumberOfBigTransactions() {
+		NiReportModel cor = new NiReportModel("testNumberOfBigTransactions")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 9))",
+						"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 7, colSpan: 2))",
+						"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2))",
+						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Number of Big Transactions", "2", "Funding-2014-Actual Commitments", "80,760,63", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Number of Big Transactions", "1", "Totals-Actual Commitments", "537,549,63", "Totals-Number of Big Transactions", "3")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Number of Big Transactions", "2", "Totals-Actual Commitments", "333,333", "Totals-Number of Big Transactions", "2"),
+								new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Funding-2014-Actual Commitments", "15,000", "Funding-2014-Number of Big Transactions", "0", "Totals-Actual Commitments", "15,000", "Totals-Number of Big Transactions", "0"),
+								new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Number of Big Transactions", "0", "Totals-Actual Commitments", "65,760,63", "Totals-Number of Big Transactions", "0"),
+								new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Number of Big Transactions", "1", "Totals-Actual Commitments", "123,456", "Totals-Number of Big Transactions", "1"),
+								new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Number of Big Transactions", "0"),
+								new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Number of Big Transactions", "0")      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testNumberOfBigTransactions",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.NUMBER_OF_BIG_TRANSACTIONS),
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+
+		runNiTestCase(spec, "en", executionRateActs, cor);
+	}
+
+	@Test
+	public void testNumberOfBigTransactions1Hier() {
+		NiReportModel cor = new NiReportModel("testNumberOfBigTransactions1Hier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 10))",
+						"(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 8, colSpan: 2))",
+						"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2))",
+						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Region", "", "Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Number of Big Transactions", "2", "Funding-2014-Actual Commitments", "80,760,63", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Number of Big Transactions", "1", "Totals-Actual Commitments", "537,549,63", "Totals-Number of Big Transactions", "3")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Region", "Balti County", 9086)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Number of Big Transactions", "2", "Funding-2014-Actual Commitments", "0", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "333,333", "Totals-Number of Big Transactions", "2", "Region", "Balti County")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Number of Big Transactions", "2", "Totals-Actual Commitments", "333,333", "Totals-Number of Big Transactions", "2")        ),
+								new ReportAreaForTests(new AreaOwner("Region", "Chisinau City", 9088))
+										.withContents("Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Number of Big Transactions", "1", "Totals-Actual Commitments", "123,456", "Totals-Number of Big Transactions", "1", "Region", "Chisinau City")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Number of Big Transactions", "1", "Totals-Actual Commitments", "123,456", "Totals-Number of Big Transactions", "1"),
+												new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Number of Big Transactions", "0")        ),
+								new ReportAreaForTests(new AreaOwner("Region", "Chisinau County", 9089)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "65,760,63", "Totals-Number of Big Transactions", "0", "Region", "Chisinau County")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Number of Big Transactions", "0", "Totals-Actual Commitments", "65,760,63", "Totals-Number of Big Transactions", "0")        ),
+								new ReportAreaForTests(new AreaOwner("Region", "Dubasari County", 9091)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "0", "Totals-Number of Big Transactions", "0", "Region", "Dubasari County")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Number of Big Transactions", "0")        ),
+								new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined", -8977))
+										.withContents("Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "15,000", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "15,000", "Totals-Number of Big Transactions", "0", "Region", "Region: Undefined")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Funding-2014-Actual Commitments", "15,000", "Funding-2014-Number of Big Transactions", "0", "Totals-Actual Commitments", "15,000", "Totals-Number of Big Transactions", "0"),
+												new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Number of Big Transactions", "0")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testNumberOfBigTransactions1Hier",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.NUMBER_OF_BIG_TRANSACTIONS),
+				Arrays.asList(ColumnConstants.REGION),
+				GroupingCriteria.GROUPING_YEARLY);
+
+		runNiTestCase(spec, "en", executionRateActs, cor);
+	}
+
+	@Test
+	public void testNumberOfBigTransactions2Hier() {
+		NiReportModel cor = new NiReportModel("testNumberOfBigTransactions2Hier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 11))",
+						"(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 9, colSpan: 2))",
+						"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2))",
+						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Region", "", "Primary Sector", "", "Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Number of Big Transactions", "2", "Funding-2014-Actual Commitments", "80,760,63", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Number of Big Transactions", "1", "Totals-Actual Commitments", "537,549,63", "Totals-Number of Big Transactions", "3")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Region", "Balti County", 9086)).withContents("Primary Sector", "", "Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Number of Big Transactions", "2", "Funding-2014-Actual Commitments", "0", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "333,333", "Totals-Number of Big Transactions", "2", "Region", "Balti County")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION", 6236)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Number of Big Transactions", "2", "Funding-2014-Actual Commitments", "0", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "333,333", "Totals-Number of Big Transactions", "2", "Primary Sector", "110 - EDUCATION")
+														.withChildren(
+																new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Number of Big Transactions", "2", "Totals-Actual Commitments", "333,333", "Totals-Number of Big Transactions", "2")          )        ),
+								new ReportAreaForTests(new AreaOwner("Region", "Chisinau City", 9088)).withContents("Primary Sector", "", "Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Number of Big Transactions", "1", "Totals-Actual Commitments", "123,456", "Totals-Number of Big Transactions", "1", "Region", "Chisinau City")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION", 6236))
+														.withContents("Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Number of Big Transactions", "1", "Totals-Actual Commitments", "123,456", "Totals-Number of Big Transactions", "1", "Primary Sector", "110 - EDUCATION")
+														.withChildren(
+																new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Number of Big Transactions", "1", "Totals-Actual Commitments", "123,456", "Totals-Number of Big Transactions", "1"),
+																new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Number of Big Transactions", "0")          )        ),
+								new ReportAreaForTests(new AreaOwner("Region", "Chisinau County", 9089)).withContents("Primary Sector", "", "Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "65,760,63", "Totals-Number of Big Transactions", "0", "Region", "Chisinau County")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION", 6236)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "65,760,63", "Totals-Number of Big Transactions", "0", "Primary Sector", "110 - EDUCATION")
+														.withChildren(
+																new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Number of Big Transactions", "0", "Totals-Actual Commitments", "65,760,63", "Totals-Number of Big Transactions", "0")          )        ),
+								new ReportAreaForTests(new AreaOwner("Region", "Dubasari County", 9091)).withContents("Primary Sector", "", "Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "0", "Totals-Number of Big Transactions", "0", "Region", "Dubasari County")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION", 6236)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "0", "Totals-Number of Big Transactions", "0", "Primary Sector", "110 - EDUCATION")
+														.withChildren(
+																new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Number of Big Transactions", "0")          )        ),
+								new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined", -8977))
+										.withContents("Primary Sector", "", "Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "15,000", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "15,000", "Totals-Number of Big Transactions", "0", "Region", "Region: Undefined")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION", 6236)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "15,000", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "15,000", "Totals-Number of Big Transactions", "0", "Primary Sector", "110 - EDUCATION")
+														.withChildren(
+																new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Funding-2014-Actual Commitments", "15,000", "Funding-2014-Number of Big Transactions", "0", "Totals-Actual Commitments", "15,000", "Totals-Number of Big Transactions", "0")          ),
+												new ReportAreaForTests(new AreaOwner("Primary Sector", "112 - BASIC EDUCATION", 6242)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Number of Big Transactions", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Actual Commitments", "0", "Totals-Number of Big Transactions", "0", "Primary Sector", "112 - BASIC EDUCATION")
+														.withChildren(
+																new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Funding-2014-Number of Big Transactions", "0", "Funding-2015-Number of Big Transactions", "0", "Totals-Number of Big Transactions", "0")          )        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testNumberOfBigTransactions2Hier",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.NUMBER_OF_BIG_TRANSACTIONS),
+				Arrays.asList(ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR),
+				GroupingCriteria.GROUPING_YEARLY);
+
+		runNiTestCase(spec, "en", executionRateActs, cor);
+	}
+
+	@Test
+	public void testNumberOfBigTransactionsPercentages() {
+		NiReportModel cor = new NiReportModel("testNumberOfBigTransactionsPercentages")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 7))",
+						"(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 2))",
+						"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2))",
+						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Number of Big Transactions: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Region", "", "Primary Sector", "", "Project Title", "", "Funding-2013-Actual Commitments", "890,000", "Funding-2013-Number of Big Transactions", "1", "Totals-Actual Commitments", "890,000", "Totals-Number of Big Transactions", "1")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County", 9085))
+										.withContents("Primary Sector", "", "Project Title", "", "Funding-2013-Actual Commitments", "178,000", "Funding-2013-Number of Big Transactions", "1", "Totals-Actual Commitments", "178,000", "Totals-Number of Big Transactions", "1", "Region", "Anenii Noi County")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION", 6236)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "53,400", "Funding-2013-Number of Big Transactions", "0", "Totals-Actual Commitments", "53,400", "Totals-Number of Big Transactions", "0", "Primary Sector", "110 - EDUCATION")
+														.withChildren(
+																new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "53,400", "Funding-2013-Number of Big Transactions", "0", "Totals-Actual Commitments", "53,400", "Totals-Number of Big Transactions", "0")          ),
+												new ReportAreaForTests(new AreaOwner("Primary Sector", "120 - HEALTH", 6252)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "124,600", "Funding-2013-Number of Big Transactions", "1", "Totals-Actual Commitments", "124,600", "Totals-Number of Big Transactions", "1", "Primary Sector", "120 - HEALTH")
+														.withChildren(
+																new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "124,600", "Funding-2013-Number of Big Transactions", "1", "Totals-Actual Commitments", "124,600", "Totals-Number of Big Transactions", "1")          )        ),
+								new ReportAreaForTests(new AreaOwner("Region", "Balti County", 9086))
+										.withContents("Primary Sector", "", "Project Title", "", "Funding-2013-Actual Commitments", "712,000", "Funding-2013-Number of Big Transactions", "1", "Totals-Actual Commitments", "712,000", "Totals-Number of Big Transactions", "1", "Region", "Balti County")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION", 6236)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "213,600", "Funding-2013-Number of Big Transactions", "1", "Totals-Actual Commitments", "213,600", "Totals-Number of Big Transactions", "1", "Primary Sector", "110 - EDUCATION")
+														.withChildren(
+																new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "213,600", "Funding-2013-Number of Big Transactions", "1", "Totals-Actual Commitments", "213,600", "Totals-Number of Big Transactions", "1")          ),
+												new ReportAreaForTests(new AreaOwner("Primary Sector", "120 - HEALTH", 6252)).withContents("Project Title", "", "Funding-2013-Actual Commitments", "498,400", "Funding-2013-Number of Big Transactions", "1", "Totals-Actual Commitments", "498,400", "Totals-Number of Big Transactions", "1", "Primary Sector", "120 - HEALTH")
+														.withChildren(
+																new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "498,400", "Funding-2013-Number of Big Transactions", "1", "Totals-Actual Commitments", "498,400", "Totals-Number of Big Transactions", "1")          )        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testNumberOfBigTransactionsPercentages",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.NUMBER_OF_BIG_TRANSACTIONS),
+				Arrays.asList(ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR),
+				GroupingCriteria.GROUPING_YEARLY);
+
+		runNiTestCase(spec, "en", Arrays.asList("Activity With Zones and Percentages"), cor);
+	}
 }

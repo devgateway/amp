@@ -2,13 +2,12 @@ package org.dgfoundation.amp.nireports.testcases.generic;
 
 import static org.dgfoundation.amp.nireports.testcases.TestModelConstants.*;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.Memoizer;
@@ -27,6 +26,7 @@ import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.BigTransactionCountingBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
@@ -34,10 +34,9 @@ import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -150,6 +149,8 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 
 		addMeasure(new TrivialTestMeasure(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false, false,
 				byMeasureDividingBehaviour(TimeRange.NONE, MeasureConstants.ACTUAL_COMMITMENTS), singletonMap(MeasureConstants.ACTUAL_COMMITMENTS, false)));
+
+		addMeasure(new NiTransactionMeasure(MeasureConstants.NUMBER_OF_BIG_TRANSACTIONS, cac -> true, BigTransactionCountingBehaviour.instance, "Count", false));
 	}
 
 	protected final Memoizer<TestFundingFetcher> fundingFetcher = new Memoizer<>(() -> new TestFundingFetcher(activityNames, new TestcasesFundingCells(activityNames)));

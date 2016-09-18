@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import org.dgfoundation.amp.newreports.CalendarConverter;
@@ -45,4 +46,6 @@ public interface SchemaSpecificScratchpad extends AutoCloseable {
 	public default Set<Long> getMainIds(NiReportsEngine engine, NiReportColumn<?> col) {
 		return engine.getMainIds();
 	}
+
+	BigDecimal getBigTransactionThreshold();
 }

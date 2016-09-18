@@ -7,7 +7,6 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
@@ -21,7 +20,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
  * @author Dolghier Constantin
  *
  */
-public abstract class AbstractComputedBehaviour<V extends NiAmountCell> implements Behaviour<V> {
+public abstract class AbstractComputedBehaviour<V extends NiOutCell> implements Behaviour<V> {
 	
 	protected final TimeRange timeRange;
 	

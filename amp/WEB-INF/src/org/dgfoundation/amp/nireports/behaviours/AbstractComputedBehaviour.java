@@ -21,7 +21,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
  * @author Dolghier Constantin
  *
  */
-public abstract class AbstractComputedBehaviour<V extends NiAmountCell> implements Behaviour<V> {
+public abstract class AbstractComputedBehaviour<V extends NiOutCell> implements Behaviour<V> {
 	
 	protected final TimeRange timeRange;
 	

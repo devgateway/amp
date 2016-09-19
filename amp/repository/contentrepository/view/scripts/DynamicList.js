@@ -209,9 +209,9 @@ AbstractDynamicList.prototype.sendRequestPublic	= function (shouldRetrieveFilter
 			new RetrieveFilters(this));
 };
 
-AbstractDynamicList.prototype.sendResetRequest		= function (panelId, shouldRetrieveFilters) {
-	this.resetFilterData(panelId, shouldRetrieveFilters);
-	this.sendRequest(shouldRetrieveFilters);
+AbstractDynamicList.prototype.sendResetRequest	= function () {
+	this.resetFilterData(this.fDivId, false);
+	this.sendRequest(false);
 };
 
 AbstractDynamicList.prototype.resetFilterData		= function (panelId, shouldRetrieveFilters) {

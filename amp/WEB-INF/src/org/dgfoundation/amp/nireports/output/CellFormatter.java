@@ -29,6 +29,8 @@ import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.translation.exotic.AmpDateFormatter;
+import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
 /**
  * a {@link CellVisitor} used to transform instances of {@link NiOutCell} into instances of {@link ReportCell}
@@ -37,7 +39,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  */
 public class CellFormatter implements CellVisitor<ReportCell> {
 
-	final protected DateTimeFormatter dateFormatter;
+	final protected AmpDateFormatter dateFormatter;
 	final protected DecimalFormat decimalFormatter;
 	final protected OutputSettings outputSettings;
 	final protected Map<BigDecimal, String> scaledAndFormattedAmounts = new HashMap<>();
@@ -51,7 +53,8 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 		this.amountsUnits = (settings != null && settings.getUnitsOption() != null) ? settings.getUnitsOption() : AmountsUnits.AMOUNTS_OPTION_UNITS;
 		this.unitsDivider = BigDecimal.valueOf(this.amountsUnits.divider);
 		this.outputSettings = outputSettings;
-		this.dateFormatter = DateTimeFormatter.ofPattern(dateDisplayFormat).withLocale(DateTimeUtil.getLocale()); 
+		this.dateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(dateDisplayFormat);
+//		this.dateFormatter = DateTimeFormatter.ofPattern(dateDisplayFormat).withLocale(DateTimeUtil.getLocale()); 
 		this.translator = translator;
 	}
 
@@ -98,7 +101,7 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 
 	@Override
 	public ReportCell visit(NiDateCell cell, CellColumn currentColumn) {
-		List<String> formattedDates = cell.sortedValues.stream().map(date -> date.format(dateFormatter)).collect(Collectors.toList());
+		List<String> formattedDates = cell.sortedValues.stream().map(date -> dateFormatter.format(date)).collect(Collectors.toList());
 		String formattedValue = String.join(", ", formattedDates);
 		return new DateCell(cell.comparableToken, formattedValue, cell.entityId, cell.entitiesIdsValues);
 	}

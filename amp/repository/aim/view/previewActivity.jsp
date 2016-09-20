@@ -356,7 +356,7 @@ function collapseAll() {
 
 			<c:set var="showWordSetting" scope="page" value="false"/>
 			
-			<%if(FeaturesUtil.isVisibleFeature("Show Editable Export Formats")){ %> 
+			<%if(FeaturesUtil.isVisibleModule("Show Editable Export Formats")){ %> 
 				<c:set var="showWordSetting" scope="page" value="true"/>
 			<%}%>
 			

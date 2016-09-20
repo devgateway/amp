@@ -86,7 +86,6 @@ public class TranslationsEndPoints {
 	@Path("/languages/{langCode}")
 	@ApiMethod(ui = false, id = "LanguageSwitch")
 	public void switchLanguage(@PathParam("langCode") String langCode,@Context HttpServletResponse response){
-
         Locale locale = new Locale();
         locale.setCode(langCode);
         DgUtil.switchLanguage(locale, TLSUtils.getRequest(), response);

@@ -54,14 +54,14 @@ FilterUtils.extractFilters = function(content) {
 				//for now only true or false were asked to be translated. 
 				//Avoid doing a ajax call for all values if we only need 2.
 				if (item.name === "true" || item.name === "false") {
-					item.trnName = item.name/*TranslationManager.getTranslated(item.name)*/;
+					item.trnName = TranslationManager.getTranslated(item.name);
 				 }
 				else {
 					item.trnName = item.name;
 				}
 			});
 			var auxFilter = {
-				trnName : item/*TranslationManager.getTranslated(item)*/,
+				trnName : TranslationManager.getTranslated(item),
 				name: item,
 				values : content
 			};
@@ -97,29 +97,12 @@ FilterUtils.extractFilters = function(content) {
 				});
 			}
 			var auxFilter = {
-				trnName : item/*TranslationManager.getTranslated(item)*/,
+				trnName : TranslationManager.getTranslated(item),
 				name: item,
 				values : content
 			};
 			filters.push(auxFilter);
 		}
 	});
-	
-	/* We dont need it for now, TODO: merge with tabs code because is the same logic.
-	//Process filters that dont come inside the previous categories (ie: computed year).
-	if (content.computedYear) {
-		var values = [];
-		values.push({
-			id : content.computedYear,
-			name : content.computedYear
-		});
-		var auxFilter = new Filter({
-			trnName : TranslationManager.getTranslated('Computed Year'),
-			name: 'computedYear',
-			values : values
-		}); 
-		filters.add(auxFilter);
-	}*/
-	
 	return filters;
 };

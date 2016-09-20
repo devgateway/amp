@@ -1,4 +1,4 @@
-define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/translations/translationManager',
+define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'translationManager',
 		'business/grid/gridManager', 'models/legend', 'jquery', 'jqueryui' ], function(Marionette, settingsDialogTemplate,
 		TranslationManager, GridManager, Legend, jQuery) {
 

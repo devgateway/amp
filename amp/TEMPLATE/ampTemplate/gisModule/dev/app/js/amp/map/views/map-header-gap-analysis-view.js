@@ -36,7 +36,8 @@ module.exports = Backbone.View.extend({
 	  } else {
 		  $('.gap-analysis-bar').hide();
 	  }
-	  app.translator.translateDOM(this.$el);
+      app.translator.translateDOM(this.$el);
+      this.$el.find('[data-toggle="tooltip"]').tooltip();
 	  return this;
   },
   

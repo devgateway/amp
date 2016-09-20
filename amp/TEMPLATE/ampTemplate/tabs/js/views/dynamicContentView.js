@@ -1,5 +1,5 @@
 define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!views/html/settingsDialogTemplate.html', 'models/settings',
-		'business/settings/settingsManager', 'filtersWidget', 'business/filter/filterUtils', 'business/translations/translationManager',
+		'business/settings/settingsManager', 'filtersWidget', 'business/filter/filterUtils', 'translationManager',
 		'business/tabManager', 'jquery', 'jqueryui' ], function(Marionette, dynamicContentTemplate, settingsDialogTemplate, Settings,
 		SettingsManager, FiltersWidget, FilterUtils, TranslationManager, TabManager, jQuery) {
 

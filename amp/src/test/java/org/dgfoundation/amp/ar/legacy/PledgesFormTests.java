@@ -13,7 +13,6 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.DocumentShim;
 import org.digijava.module.fundingpledges.form.PledgeForm;
@@ -58,7 +57,7 @@ public class PledgesFormTests extends AmpTestCase
 		
 		PledgeForm pledgeForm = new PledgeForm();
 		pledgeForm.importPledgeData(PledgesEntityHelper.getPledgesById(3L));
-		assertEquals(3, pledgeForm.getSelectedDocsList().size());
+		assertEquals(3, pledgeForm.getSelectedDocs().size());
 //		assertShimEquals(pledgeForm.getSelectedDocsList().get(0), "aaaa.png", "документ проекта", "4e478d3e-41a4-4b35-b4de-52c07ecd9d5a", 480000);
 //		assertShimEquals(pledgeForm.getSelectedDocsList().get(1), "AMP-17265-amp27.patch", "yahoo", "96e0a2be-53b0-4f16-bb02-a8bc7dc46778", 480000);
 //		assertShimEquals(pledgeForm.getSelectedDocsList().get(2), "SSC Implementation Notes.doc", "some ssc implementation notes", "03b4ed7a-b4d7-4204-8a0b-613131edf9f0", 480000);

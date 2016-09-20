@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -23,11 +24,9 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.exceptions.UsedCategoryException;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
-import com.sun.istack.logging.Logger;
 
 public class FundingCalculationsHelper {
 	private static Logger logger = Logger.getLogger(FundingCalculationsHelper.class);
@@ -70,6 +69,7 @@ public class FundingCalculationsHelper {
 	DecimalWraper totTriangularSscDisbOrder = new DecimalWraper();
 	DecimalWraper totOfficialDevAidArrears = new DecimalWraper();
 	DecimalWraper totOdaSscComm = new DecimalWraper();
+	DecimalWraper totBilateralSccEDD = new DecimalWraper();
 	
     @SuppressWarnings("serial")
 	private static Map<Integer, String> transactionTypeLabelMap = new HashMap<Integer, String>(){{
@@ -105,6 +105,7 @@ public class FundingCalculationsHelper {
 		put(combineKeys(Constants.ESTIMATED_DONOR_DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL), () -> totActualEDD);
         put(combineKeys(Constants.ESTIMATED_DONOR_DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED), () -> totPlannedEDD);
         put(combineKeys(Constants.ESTIMATED_DONOR_DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE), () -> totPipelineEDD);
+		put(combineKeys(Constants.ESTIMATED_DONOR_DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC), () -> totBilateralSccEDD);
 		put(combineKeys(Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL), () -> totActualExp);
         put(combineKeys(Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_PLANNED), () -> totPlannedExp);
         put(combineKeys(Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE), () -> totPipelineExp);
@@ -135,8 +136,11 @@ public class FundingCalculationsHelper {
 		Supplier<DecimalWraper> supplier = wrapperNames.get(String.format("%s %s", transTypeKey, adjKey));
 		if(supplier != null) {
 			return supplier.get();
+		} else {
+			logger.error("Unsupported transaction + adjustment combination: " +
+					String.format("transType: %s, adjType: %s", transTypeKey, adjKey));
 		}
-		return null;
+		return new DecimalWraper();
 	}
 	
 	/**
@@ -277,12 +281,8 @@ public class FundingCalculationsHelper {
 			totalPledged.add(amt);
 		} else {
 			DecimalWraper wrp = getTotalByKey(adjType.getLabel(), getTransactionTypeLabel(fundDet.getTransactionType()));
-			if (wrp != null){
+			if (wrp != null) {
 				wrp.add(amt);
-			}
-			else {
-				throw new RuntimeException("Unsupported transaction + adjustment combination: " + 
-    					String.format("transType: %s, adjType: %s", fundDet.getTransactionType(), adjType.getLabel()));
 			}
 		}
 	}
@@ -450,6 +450,46 @@ public class FundingCalculationsHelper {
 
 	public DecimalWraper getTotOfficialDevAidArrears() {
 		return totOfficialDevAidArrears;
+	}
+
+	public DecimalWraper getTotBilaterlaSscExp() {
+		return totBilaterlaSscExp;
+	}
+
+	public DecimalWraper getTotTriangularSscExp() {
+		return totTriangularSscExp;
+	}
+
+	public DecimalWraper getTotOfficialDevelopmentAidDisb() {
+		return totOfficialDevelopmentAidDisb;
+	}
+
+	public DecimalWraper getTotBilateralSscDisb() {
+		return totBilateralSscDisb;
+	}
+
+	public DecimalWraper getTotTriangularSscDisb() {
+		return totTriangularSscDisb;
+	}
+
+	public DecimalWraper getTotOfficialDevelopmentAidExp() {
+		return totOfficialDevelopmentAidExp;
+	}
+
+	public DecimalWraper getTotTriangularSccExp() {
+		return totTriangularSccExp;
+	}
+
+	public DecimalWraper getTotBilateralSScExp() {
+		return totBilateralSScExp;
+	}
+
+	public DecimalWraper getTotOfficialDevelopmentAidComm() {
+		return totOfficialDevelopmentAidComm;
+	}
+
+	public DecimalWraper getTotBilateralSccEDD() {
+		return totBilateralSccEDD;
 	}
 
 	public boolean isDebug() {
@@ -636,4 +676,6 @@ public class FundingCalculationsHelper {
 	public void setTotTriangularSscArrears(DecimalWraper totTriangularSscArrears) {
 		this.totTriangularSscArrears = totTriangularSscArrears;
 	}
+
+
 }

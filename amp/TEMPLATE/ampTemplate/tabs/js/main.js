@@ -17,6 +17,7 @@ require.config({
 		 */
 		jqgrid : 'lib/one_place/jqgrid-all',
 		filtersWidget : '/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter',
+		translationManager: '/TEMPLATE/ampTemplate/script/common/TranslationManager',
 		commonFilterUtils : '/TEMPLATE/ampTemplate/script/common/CommonFilterUtils', 
 		i18next : 'lib/i18next_1.6.3.min',
 		numeral : 'lib/numeral_1.4.5.min'
@@ -49,7 +50,7 @@ require.config({
 			exports : "jQuery.fn.jqGrid"
 		},
 		filtersWidget : {
-			deps : [ 'backbone', 'commonFilterUtils' ],
+			deps : [ 'backbone', 'commonFilterUtils'],
 			exports : 'filtersWidget'
 		},
 		i18next : {
@@ -57,11 +58,15 @@ require.config({
 		},
 		numeral : {
 			exports : 'numeral'
+		} 
+		,
+		translationManager: {
+			exports : 'TranslationManager'
 		}
 	}
 });
 
-require([ 'jquery', 'text!views/html/regions.html','business/translations/translationManager' ], function(jQuery, regionsTemplate,TranslationManager) {
+require([ 'jquery', 'text!views/html/regions.html','translationManager' ], function(jQuery, regionsTemplate, TranslationManager) {
 	
 	var data = {};
 	data["tabs.common:loadingTabs"] = "Loading tabs...";

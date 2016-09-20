@@ -17,6 +17,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
+<%@ page import="org.dgfoundation.amp.ar.ArConstants" %>
 
 
 <!-- this is for the nice tooltip widgets -->
@@ -477,9 +478,13 @@ $(document).ready(function() {
 							</td>
 							<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
 								<c:if test="${!aimTeamReportsForm.showTabs}">
+									<% if (report.getType()!=null && report.getType().equals((long) ArConstants.REGIONAL_TYPE)){ %>
+									<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
+									<% } else { %>
 									<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
+									<% } %>
 									<!-- link to the report under the Legacy engine
-										left here for historical and/or debug reasons
+										left here for debug reasons
 										/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=REPORT_ID
 	 								-->
 									<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">
@@ -663,12 +668,12 @@ $(document).ready(function() {
 							<c:choose>
 								<c:when test="${report.budgetExporter}">
 									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true&type=${report.type}" title="${translation}">
-										<img src= "/repository/message/view/images/edit.gif" border="0" />
+										<img src= "/repository/message/view/images/edit.gif" border="0" style="padding-right: 5px;" />
 									</digi:link>
 								</c:when>
 								<c:otherwise>
 									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
-										<img src= "/repository/message/view/images/edit.gif" border="0" />
+										<img src= "/repository/message/view/images/edit.gif" border="0" style="padding-right: 5px;" />
 									</digi:link> 
 								</c:otherwise>
 							</c:choose>&nbsp;
@@ -683,7 +688,7 @@ $(document).ready(function() {
 								</c:if>
 							</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src= "/repository/message/view/images/trash_12.gif" border="0" />
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" style="padding-right: 5px;" />
 								</digi:link>
 						</logic:equal>
 						<logic:equal name="teamLeadFlag" scope="session" value="false">
@@ -698,7 +703,7 @@ $(document).ready(function() {
 									</c:if>
 								</c:set>
 								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
-									<img src= "/repository/message/view/images/edit.gif" border="0" />
+									<img src= "/repository/message/view/images/edit.gif" border="0" style="padding-right: 5px;" />
 								</digi:link>
 								<c:set var="translation">
 									<c:if test="${aimTeamReportsForm.showTabs}">
@@ -711,7 +716,7 @@ $(document).ready(function() {
 									</c:if>
 								</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src= "/repository/message/view/images/trash_12.gif" border="0" />
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" style="padding-right: 5px;" />
 								</digi:link>
 							</logic:equal>    
 						</logic:present>

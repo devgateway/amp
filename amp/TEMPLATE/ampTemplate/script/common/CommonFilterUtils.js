@@ -2,22 +2,20 @@ var CommonFilterUtils = {};
 
 CommonFilterUtils.getDateIntervalType = function(element) {
 	console.log("CommonFilterUtils.getDateIntervalType");
-	// Since this function now is common for Tabs and Saiku we need to transform
-	// backbone objects from tabs to plain js objects.
-	if (element.attributes !== undefined) {
-		element = _.pluck(element, 'attributes');
-	}
-	
-	var min = element.min;
-	var max = element.max;
+	// element can be a simple object or a Backbone Model.
+	var isModel = (element.get !== undefined);
+	var min = isModel ? element.get('min') : element.min;
+	var max = isModel ? element.get('max') : element.max;
 	if (min === undefined)
 		return "max";
 	if (max === undefined)
 		return "min";
-	if (element.valueToName[min] === undefined) {
+	var valueToNameMin = isModel ? element.get('valueToName').attributes[min] : element.valueToName[min];	
+	var valueToNameMax = isModel ? element.get('valueToName').attributes[max] : element.valueToName[max];
+	if (valueToNameMin === undefined) {
 		return "max";
 	}
-	if (element.valueToName[max] === undefined) {
+	if (valueToNameMax === undefined) {
 		return "min";
 	}		
 	return "both";
@@ -62,12 +60,19 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 			case 'On/Off/Treasury Budget':
 			case 'Zone':
 			case 'Region':
-			case 'District':
-			case 'Humanitarian Aid':
-			case 'Disaster Response Marker':
+			case 'District':						
 			case 'Expenditure Class':
+			case 'Donor Agency':
 				blob.columnFilters[item.name] = _.map(item.values, function(item_) {
 					return parseInt(item_.id);
+				});
+				break;
+			
+			// cases where the filter only accepts boolean values.
+			case 'Disaster Response Marker':
+			case 'Humanitarian Aid':
+				blob.columnFilters[item.name] = _.map(item.values, function(item_) {
+					return parseInt(item_);
 				});
 				break;
 	
@@ -89,13 +94,9 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 						item_) {
 					return parseInt(item_.id);
 				});
-				blob.columnFilters[item.name + ' Level 2'] = blob.columnFilters[item.name + ' Level 1'];
-				break;
-				
-			case 'Donor Agency':
-				blob.columnFilters['Donor Id'] = _.map(item.values, function(item_) {
-					return parseInt(item_.id);
-				});
+				for (var i = 2; i < 9; i++) {
+					blob.columnFilters[item.name + ' Level ' + i] = blob.columnFilters[item.name + ' Level 1'];
+				}
 				break;
 				
 			case 'Funding Organization':
@@ -109,6 +110,7 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 				blob.columnFilters[item.name] = _.map(item.values, function(item_) {
 					return parseInt(item_.id);
 				});
+				blob.columnFilters[item.name + ' Id'] = blob.columnFilters[item.name];
 				blob.columnFilters[item.name + ' Sub-Sector'] = blob.columnFilters[item.name];
 				blob.columnFilters[item.name + ' Sub-Sub-Sector'] = blob.columnFilters[item.name];
 				break;
@@ -118,9 +120,9 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 				// item.attributes);
 				var newDate = {};
 				_.map(item.values, function(item_, i) {						
-					if (item_.type === "min") {
+					if (item_.dateIntervalType === "min") {
 						newDate['start'] = item_.name;
-					} else if (item_.type === "max") {
+					} else if (item_.dateIntervalType === "max") {
 						newDate['end'] = item_.name;
 					}
 					return newDate;

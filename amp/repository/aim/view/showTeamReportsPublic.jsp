@@ -467,7 +467,7 @@ function submitForm(action){
 						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
 																						
 																						<c:set var="showExportExcelSetting" scope="page" value="true"/>
-																						<%if(!FeaturesUtil.isVisibleFeature("Show Editable Export Formats")){ %> 
+																						<%if(!FeaturesUtil.isVisibleModule("Show Editable Export Formats")){ %> 
 																							<c:set var="showExportExcelSetting" scope="page" value="false"/>
 																						<%}%>
 																						

@@ -23893,7 +23893,8 @@ module.exports = Backbone.View.extend({
   template: _.template(Template),
   menuRendered: new $.Deferred(),
   events: {
-    'click #show_login_pop': 'openLoginBox'
+    'click #show_login_pop': 'openLoginBox',
+    'click #header-logout': 'deleteSettings'
   },
 
   initialize: function(options) {
@@ -23975,6 +23976,12 @@ module.exports = Backbone.View.extend({
   openLoginBox: function() {
     $("div#show_login_pop_box").show();
     $("#j_username").focus();
+  },
+  deleteSettings: function(){ 
+	  //delete settings on logout
+	  if(sessionStorage && sessionStorage.settings){
+		  delete sessionStorage.settings;  
+	  }	  	  
   }
 });
 
@@ -24046,7 +24053,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"C:\\Git\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -28752,30 +28759,6 @@ jQuery(function($){
 	$.datepicker.setDefaults($.datepicker.regional['el']);
 });
 
-/* English/EN initialisation for the jQuery UI date picker plugin. */
-/* Written by Stuart. */
-/*jQuery(function($){
-	$.datepicker.regional['en'] = {
-		closeText: 'Done',
-		prevText: 'Prev',
-		nextText: 'Next',
-		currentText: 'Today',
-		monthNames: ['January','February','March','April','May','June',
-		'July','August','September','October','November','December'],
-		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-		'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-		dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
-		weekHeader: 'Wk',
-		dateFormat: 'dd/mm/yy',
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['en-GB']);
-});*/
-
 /* English/Australia initialisation for the jQuery UI date picker plugin. */
 /* Based on the en-GB initialisation. */
 jQuery(function($){
@@ -30253,6 +30236,30 @@ jQuery(function($){
 	$.datepicker.setDefaults($.datepicker.regional['zh-TW']);
 });
 
+
+/* English/EN initialisation for the jQuery UI date picker plugin. */
+/* Written by Stuart. */
+jQuery(function($){
+	$.datepicker.regional['en'] = {
+		closeText: 'Done',
+		prevText: 'Prev',
+		nextText: 'Next',
+		currentText: 'Today',
+		monthNames: ['January','February','March','April','May','June',
+		'July','August','September','October','November','December'],
+		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+		'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['en-GB']);
+});
 },{}],69:[function(require,module,exports){
 /*
 

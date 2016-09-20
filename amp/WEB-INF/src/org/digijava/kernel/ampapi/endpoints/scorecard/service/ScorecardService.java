@@ -284,23 +284,26 @@ public class ScorecardService {
 		int startYear = getDefaultStartYear();
 		int endYear = getDefaultEndYear();
 		String gsCalendarId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		Date startDate = CalendarUtil.getStartDate(Long.valueOf(gsCalendarId), startYear);
-		Date endDate = CalendarUtil.getEndDate(Long.valueOf(gsCalendarId), endYear);
+		long startTime = CalendarUtil.getStartDate(Long.valueOf(gsCalendarId), startYear).getTime();
+		long endTime = CalendarUtil.getEndDate(Long.valueOf(gsCalendarId), endYear).getTime();
 		try {
 			ICalendarWorker worker = fiscalCalendar.getworker();
-			Date currentDate = new Date(startDate.getTime());
-			int index = 1;
-			while (currentDate.compareTo(endDate) < 1) {
+			while (startTime < endTime) {
+				long currentTime = startTime;
 				for (int i = 1; i <= 4; i++) {
-					worker.setTime(currentDate);
+					worker.setTime(new Date(currentTime));
 					Quarter quarter = new Quarter(fiscalCalendar, i, worker.getYear());
+//					if (worker.getYear() < startYear) {
+//						quarter = new Quarter(fiscalCalendar, 4, worker.getYear());
+//					}
 					quarters.add(quarter);
 					Calendar cal = Calendar.getInstance();
-					cal.setTime(startDate);
-					cal.add(Calendar.MONTH, 3 * index);
-					index++;
-					currentDate.setTime(cal.getTimeInMillis());
+					cal.setTimeInMillis(startTime);
+					cal.add(Calendar.MONTH, 3 * i);
+					currentTime = cal.getTimeInMillis();
 				}
+				startYear++;
+				startTime = CalendarUtil.getStartDate(Long.valueOf(gsCalendarId), startYear).getTime();
 			}
 		} catch (Exception e) {
 			logger.error("Couldn't generate quarters ", e);

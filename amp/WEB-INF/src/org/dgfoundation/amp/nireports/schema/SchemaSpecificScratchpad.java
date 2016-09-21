@@ -45,4 +45,12 @@ public interface SchemaSpecificScratchpad extends AutoCloseable {
 	public default Set<Long> getMainIds(NiReportsEngine engine, NiReportColumn<?> col) {
 		return engine.getMainIds();
 	}
+
+	/**
+	 * returns the localised name for column used for time range sub totals. if sub totals are not needed then null
+	 * must be returned.
+	 * @param reportSpecification report specification
+	 * @return localized column name
+	 */
+	public String getTimeRangeSubTotalColumnName(ReportSpecification reportSpecification);
 }

@@ -20,9 +20,9 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
@@ -120,6 +120,11 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	
 	protected final NiPrecisionSetting precisionSetting = new AmpPrecisionSetting();
 
+	/**
+	 * whether to display sub total columns for monthly and quarterly reports
+	 */
+	public final boolean displayTimeRangeSubTotals;
+
 	public AmpReportsScratchpad(NiReportsEngine engine) {
 		this.engine = engine;
 		this.computedMeasuresBlock =  new Memoizer<>(() -> SelectedYearBlock.buildFor(this.engine.spec, forcedNowDate == null ? LocalDate.now() : forcedNowDate));
@@ -136,7 +141,8 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 			!engine.spec.getHierarchyNames().contains(ColumnConstants.TYPE_OF_ASSISTANCE);
 		this.verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
 			engine.spec.getColumnNames().contains(ColumnConstants.MODE_OF_PAYMENT) &&
-			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);		
+			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);
+		this.displayTimeRangeSubTotals = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.DISPLAY_TIME_RANGE_SUB_TOTALS);
 	}
 	
 	public AmpCurrency getUsedCurrency() {
@@ -283,5 +289,20 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		if (preexistantMonthNumber != monthNumber)
 			return in.withMonth(new ComparableValue<>(in.month.getValue(), monthNumber));
 		return in;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getTimeRangeSubTotalColumnName(ReportSpecification reportSpecification) {
+		Boolean specSubTotals = reportSpecification.isDisplayTimeRangeSubTotals();
+
+		// first check if report specification returns a value for sub totals, if not use system wide settings
+		if ((specSubTotals == null && displayTimeRangeSubTotals) || specSubTotals == Boolean.TRUE) {
+			return TranslatorWorker.translateText("Total");
+		} else {
+			return null;
+		}
 	}
 }

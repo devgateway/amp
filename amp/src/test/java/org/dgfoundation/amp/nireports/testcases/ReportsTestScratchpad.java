@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports.testcases;
 import java.util.function.Function;
 
 import org.dgfoundation.amp.newreports.CalendarConverter;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.AmpPrecisionSetting;
@@ -37,5 +38,11 @@ public class ReportsTestScratchpad implements SchemaSpecificScratchpad {
 	public CachingCalendarConverter buildCalendarConverter() {
 		CalendarConverter cc = this.buildUnderlyingCalendarConverter(engine.spec);
 		return new CachingCalendarConverter(cc, cc.getDefaultFiscalYearPrefix(), Function.identity());
+	}
+
+	@Override
+	public String getTimeRangeSubTotalColumnName(ReportSpecification reportSpecification) {
+		Boolean subTotals = reportSpecification.isDisplayTimeRangeSubTotals();
+		return subTotals != null && subTotals ? "Total" : null;
 	}
 }

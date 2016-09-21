@@ -537,9 +537,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		
 		Column res = new CellColumn(fundingColumn.name, new ColumnContents(allCells), fundingColumn.getParent(), null, null, fundingColumn.splitCell);
 		List<VSplitStrategy> splitCriterias = new ArrayList<>();
-		splitCriterias.add(TimeRange.YEAR.asVSplitStrategy());
+		splitCriterias.add(TimeRange.YEAR.asVSplitStrategy(this));
 		if (userRequestedRange != TimeRange.YEAR)
-			splitCriterias.add(userRequestedRange.asVSplitStrategy());
+			splitCriterias.add(userRequestedRange.asVSplitStrategy(this));
 //		for(TimeRange tr:categories) {
 //			splitCriterias.add(tr.asVSplitStrategy());
 //		}

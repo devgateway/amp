@@ -299,7 +299,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		Boolean specSubTotals = reportSpecification.isDisplayTimeRangeSubTotals();
 
 		// first check if report specification returns a value for sub totals, if not use system wide settings
-		if ((specSubTotals != null && specSubTotals) || displayTimeRangeSubTotals) {
+		if ((specSubTotals == null && displayTimeRangeSubTotals) || specSubTotals == Boolean.TRUE) {
 			return TranslatorWorker.translateText("Total");
 		} else {
 			return null;

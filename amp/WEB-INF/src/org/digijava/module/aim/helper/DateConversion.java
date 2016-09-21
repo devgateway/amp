@@ -88,9 +88,12 @@ public class DateConversion
 	 */
 	public static Date getLocalizedDate(String strDate) {
 		try {
-			LocalDate ld = AmpDateFormatterFactory.getLocalizedFormatter().parseDate(strDate);
-			return java.sql.Date.valueOf(ld);
-//			return isEmpty(strDate) ? null : FormatHelper.parseLocalizedDate(strDate).getTime();
+			if (isEmpty(strDate))
+				return null;
+			else {
+				LocalDate ld = AmpDateFormatterFactory.getLocalizedFormatter().parseDate(strDate);
+				return java.sql.Date.valueOf(ld);
+			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}

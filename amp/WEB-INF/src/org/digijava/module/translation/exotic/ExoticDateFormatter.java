@@ -1,5 +1,6 @@
 package org.digijava.module.translation.exotic;
 
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -15,7 +16,7 @@ public class ExoticDateFormatter extends AmpDateFormatter {
 	final private Pattern monthPattern;
 	final private Pattern yearPattern;
 	
-	
+
 	public ExoticDateFormatter(String pattern, String langCode) {
 		super(pattern, Locale.forLanguageTag(langCode));
 		dayPattern = Pattern.compile("^\\d+");
@@ -42,7 +43,7 @@ public class ExoticDateFormatter extends AmpDateFormatter {
 		if (this.pattern.contains("MMM")) {
 			return formatWithMonthName(date);
 		} else {
-			return DateTimeFormatter.ofPattern(pattern).withLocale(locale).format(date);
+			return dtf.format(date);
 		}
 	}
 	
@@ -80,12 +81,9 @@ public class ExoticDateFormatter extends AmpDateFormatter {
 	}
 	
 	private int getMonths(String in) {
-		String patt = this.pattern.toLowerCase();
-		int posM = patt.indexOf("mmm");
 		Matcher m = monthPattern.matcher(in);
 		m.find();
 		String monthName = m.group();
-		
 		return ExoticMonthNames.forLocale(locale).getMonthNumber(monthName);
 	}
 	

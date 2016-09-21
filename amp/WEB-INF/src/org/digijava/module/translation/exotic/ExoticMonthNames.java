@@ -1,15 +1,12 @@
 package org.digijava.module.translation.exotic;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver;
 
 public class ExoticMonthNames {
 	
@@ -23,18 +20,36 @@ public class ExoticMonthNames {
 		return new ExoticMonthNames(loc);
 	}
 	
+	private static ConcurrentHashMap<Locale, List<String>> localesToMonthNames = new ConcurrentHashMap<>();
+	
+	private List<String> loadMonthNamesForLocale(Locale loc) {
+		List<String> res = new ArrayList<>();
+		ResourceBundle rb = ResourceBundle.getBundle("org.digijava.module.translation.exotic.ExoticMonthNames", loc);
+		Enumeration<String> keys = rb.getKeys();
+		while (keys.hasMoreElements()) {
+			String key = keys.nextElement();
+			String value = rb.getString(key);
+			res.add(value);
+		}
+		return res;
+	}
+	
+	List<String> getMonthNamesForLocale(Locale loc) {
+		return localesToMonthNames.computeIfAbsent(loc, z -> loadMonthNamesForLocale(loc));
+	}
+	
 	/**
 	 * 
 	 * @param monthNumber number of the month, starting from 1
 	 * @return capitalized month name in that language
 	 */
 	public String getFullMonthName(int monthNumber) {
-		ResourceBundle rb = ResourceBundle.getBundle("org.digijava.module.translation.exotic.ExoticMonthNames", locale);
-		return rb.getString(new Integer(monthNumber).toString());
+		return getMonthNamesForLocale(locale).get(monthNumber - 1);
+
 	}
 	
 	private static String shortenMonthName(String in) {
-		return in.toLowerCase().substring(0, 3);
+		return in.substring(0, 3);
 	}
 	
 	public String getShortMonthName(int monthNumber) {
@@ -42,14 +57,12 @@ public class ExoticMonthNames {
 	}
 	
 	public int getMonthNumber(String shortMonthName) {
-		ResourceBundle rb = ResourceBundle.getBundle("org.digijava.module.translation.exotic.ExoticMonthNames", locale);
-		Enumeration<String> keys = rb.getKeys();
-		while (keys.hasMoreElements()) {
-			String key = keys.nextElement();
-			String value = rb.getString(key);
-			if (shortenMonthName(value).equals(shortMonthName.toLowerCase()))
-				return Integer.parseInt(key);
+		List<String> monthNames = getMonthNamesForLocale(locale);
+		for (int i = 0; i < monthNames.size(); i++) {
+			if (shortenMonthName(monthNames.get(i)).equals(shortMonthName))
+				return i + 1;
 		}
-		throw new RuntimeException("No month with short name " + shortMonthName);
+		throw new RuntimeException("Couldn't find month with short name" + shortMonthName + " in locale " + locale.toString());
 	}
+
 }

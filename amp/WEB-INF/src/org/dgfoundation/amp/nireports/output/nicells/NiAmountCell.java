@@ -15,10 +15,16 @@ public class NiAmountCell extends NiOutCell implements NumberedCell {
 
 	public final BigDecimal amount;
 	public final NiPrecisionSetting precisionSetting;
+	public final boolean isScalableByUnits;
 	
 	public NiAmountCell(BigDecimal amount, NiPrecisionSetting precisionSetting) {
+		this(amount, precisionSetting, true);
+	}
+
+	public NiAmountCell(BigDecimal amount, NiPrecisionSetting precisionSetting, boolean isScalableByUnits) {
 		this.amount = amount;
 		this.precisionSetting = precisionSetting;
+		this.isScalableByUnits = isScalableByUnits;
 	}
 	
 	@Override
@@ -46,7 +52,7 @@ public class NiAmountCell extends NiOutCell implements NumberedCell {
 
 	@Override
 	public boolean isScalableByUnits() {
-		return true;
+		return isScalableByUnits;
 	}
 
 }

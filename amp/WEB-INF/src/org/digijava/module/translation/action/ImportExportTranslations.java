@@ -147,7 +147,7 @@ public class ImportExportTranslations extends Action {
                 int rownum=0;
                 HSSFRow row=sheet.createRow(rownum++);
                 IntWrapper columnIdx = new IntWrapper();
-                createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, TranslatorWorker.translateText("Key"), currentColumnMaxWidths);
+                createCell(row, columnIdx.intValue(), HSSFCell.CELL_TYPE_BLANK, TranslatorWorker.translateText("Key"), currentColumnMaxWidths);
                 createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, "en", currentColumnMaxWidths);
                 createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, targetLang, currentColumnMaxWidths);
                 createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, TranslatorWorker.translateText("Date of creation (en) "), currentColumnMaxWidths);

@@ -678,9 +678,9 @@ public class DynLocationManagerUtil {
 	 * @param locations
 	 * @return
 	 */
-	public static Set<Long> populateWithDescendantsIds(Collection<AmpCategoryValueLocations> locations)
-	{
-		Set<Long> allOutputLocations = getRecursiveChildrenOfCategoryValueLocations(AlgoUtils.collectIds(new HashSet<Long>(), locations));
+	public static Set<Long> populateWithDescendantsIds(Collection<AmpCategoryValueLocations> locations, boolean includeDeleted)	{
+		Set<Long> allOutputLocations = getRecursiveChildrenOfCategoryValueLocations(AlgoUtils.collectIds(new HashSet<Long>(), locations), includeDeleted);
+		
 		return allOutputLocations;
 	}
 	
@@ -689,12 +689,14 @@ public class DynLocationManagerUtil {
 	 * @param destCollection
 	 * @param locations
 	 */
-	public static void populateWithDescendants(Set <AmpCategoryValueLocations> destCollection, 
-			Collection<AmpCategoryValueLocations> locations ) {
+	public static void populateWithDescendants(Set<AmpCategoryValueLocations> destCollection, 
+			Collection<AmpCategoryValueLocations> locations, boolean includeDeleted) {
 		
-		Set<Long> allOutputLocations = populateWithDescendantsIds(locations);
-		for(Long outputId:allOutputLocations)
+		Set<Long> allOutputLocations = populateWithDescendantsIds(locations, includeDeleted);
+		
+		for(Long outputId:allOutputLocations) {
 			destCollection.add(getLocation(outputId, false));
+		}
 	}
 	
 	/**
@@ -702,21 +704,34 @@ public class DynLocationManagerUtil {
 	 * @param inIds
 	 * @return
 	 */
-	public static Set<Long> getRecursiveAscendantsOfCategoryValueLocations(Collection<Long> inIds)
-	{
+	public static Set<Long> getRecursiveAscendantsOfCategoryValueLocations(Collection<Long> inIds, boolean includeDeleted) {
+		String exludeDeletedCriteria = " deleted IS NOT TRUE AND";
+		
+		if (includeDeleted) {
+			exludeDeletedCriteria = "";
+		}
+		
 		return AlgoUtils.runWave(inIds, 
-				new DatabaseWaver("SELECT DISTINCT(parent_location) FROM amp_category_value_location WHERE (parent_location IS NOT NULL) AND (id IN ($))"));
+				new DatabaseWaver("SELECT DISTINCT(parent_location) FROM amp_category_value_location WHERE "
+						+ exludeDeletedCriteria + " (parent_location IS NOT NULL) AND (id IN ($))"));
 	}
 		
 	/**
 	 * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm
 	 * @param inIds
+	 * @param includedDeleted
 	 * @return
 	 */
-	public static Set<Long> getRecursiveChildrenOfCategoryValueLocations(Collection<Long> inIds)
-	{
+	public static Set<Long> getRecursiveChildrenOfCategoryValueLocations(Collection<Long> inIds, boolean includeDeleted) {
+		String exludeDeletedCriteria = " deleted IS NOT TRUE AND";
+		
+		if (includeDeleted) {
+			exludeDeletedCriteria = "";
+		}
+		
 		return AlgoUtils.runWave(inIds, 
-				new DatabaseWaver("SELECT DISTINCT id FROM amp_category_value_location WHERE parent_location IN ($)"));
+				new DatabaseWaver("SELECT DISTINCT id FROM amp_category_value_location WHERE "
+						+ exludeDeletedCriteria + " parent_location IN ($)"));
 	}
 	
 	public static void populateWithAscendants(Collection <AmpCategoryValueLocations> destCollection, 
@@ -834,7 +849,8 @@ public class DynLocationManagerUtil {
 			Session dbSession = PersistenceManager.getSession();
 			String queryString = "select loc from "
 					+ AmpCategoryValueLocations.class.getName()
-					+ " loc where (loc.parentCategoryValue=:cvId) ";
+					+ " loc where (loc.parentCategoryValue=:cvId) "
+					+ " and (loc.deleted != true)";
 			Query qry = dbSession.createQuery(queryString);
 			qry.setLong("cvId", cvLayer.getId());
             qry.setCacheable(true);

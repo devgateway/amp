@@ -51,7 +51,8 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 	private String iso3;
 	@Interchangeable(fieldTitle="Full Name")
 	private String fullName;
-
+	
+	private Boolean deleted;
 	
 	private boolean translateable	= false;
 	@Interchangeable(fieldTitle="ISO")
@@ -65,9 +66,7 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-
 	
-
 	public String getCode() {
 		return code;
 	}
@@ -123,8 +122,6 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 	public void setIso3(String iso3) {
 		this.iso3 = iso3;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -232,6 +229,21 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 	public void setTranslateable(boolean translateable) {
 		this.translateable = translateable;
 	}
+	
+	public Boolean getDeleted() {
+		return deleted;
+	}
+	
+	public void setDeleted(Boolean deleted) {
+		if (deleted == null)
+			this.deleted = false;
+		else
+			this.deleted = deleted;
+	}
+	
+	public boolean isSoftDeleted() {
+		return Boolean.TRUE.equals(deleted);
+	}
 
 	@Override
 	public Class getDimensionClass() {
@@ -259,6 +271,7 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
     public String getAdditionalSearchString() {
         return this.code;
     }
+    
     @Override
     public List<ValueTranslatabePair> getValuesForOrgReport(){
     	List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();

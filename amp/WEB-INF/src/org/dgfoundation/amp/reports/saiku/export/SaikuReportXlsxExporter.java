@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.newreports.AmountCell;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.HeaderCell;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -57,6 +59,12 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 * size of a batch of rows being accumulated until being flushed
 	 */
 	protected int flushBatchSize = 100;
+	
+	/**
+	 * We need to know the current amount unit (units, millions, etc) at the moment of extracting the ReportCell's value to get the correct Double number.
+	 * Without this conversion ReportCell.displayedValue and ReportCell.value->double will be different.   
+	 */
+	protected AmountsUnits amountUnits = null;
 	
 	/**
 	 * generates a workbook containing data about 1 or 2 reports. Normally you'd want both reports to actually be the
@@ -152,7 +160,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		Row row = sheet.createRow(currencyUnitsRowPosition);
 		Cell cell = row.createCell(0);
 		
-		String unitsOption = report.spec.getSettings().getUnitsOption().userMessage;
+		amountUnits = report.spec.getSettings().getUnitsOption();
+		String unitsOption = amountUnits.userMessage;
 		String currencyCode = report.spec.getSettings().getCurrencyCode();
 		currencyCode = ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(currencyCode);
 		
@@ -383,7 +392,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	}
 	
 	protected double getDoubleValue(ReportCell reportCell) {
-		return reportCell != null ? new Double(reportCell.value.toString()) : 0d;
+        return reportCell != null ? (new Double(reportCell.value.toString()) / amountUnits.divider) : 0d;
 	}
 	
 	protected String getStringValue(ReportCell reportCell) {

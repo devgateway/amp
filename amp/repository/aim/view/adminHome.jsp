@@ -8,6 +8,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/gis-layers-manager.css">
+
 <jsp:include page="teamPagesHeader.jsp"  />
 <jsp:include page="allVisibilityTags.jsp" />
 

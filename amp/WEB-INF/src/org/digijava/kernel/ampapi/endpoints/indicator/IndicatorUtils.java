@@ -178,7 +178,7 @@ public class IndicatorUtils {
 
     public static JsonBean getList(Collection<AmpIndicatorLayer> indicatorLayers, Integer offset, Integer count) {
 
-        offset = Math.min(indicatorLayers.size(), offset == null ? 0 : offset);
+        offset = Math.min(indicatorLayers.size(), (offset == null || offset >= indicatorLayers.size()) ? 0 : offset);
         count = (count == null ? IndicatorEPConstants.DEFAULT_COUNT : count);
         int totalPageCount = (indicatorLayers.size() % count == 0 ? (indicatorLayers.size() / count) : (indicatorLayers.size() / count) + 1);
 

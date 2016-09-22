@@ -209,8 +209,13 @@ AbstractDynamicList.prototype.sendRequestPublic	= function (shouldRetrieveFilter
 			new RetrieveFilters(this));
 };
 
-AbstractDynamicList.prototype.sendResetRequest	= function () {
-	this.resetFilterData(this.fDivId, false);
+/**
+ * Reset filters
+ * @param {Event} e - event object
+ * @param {Object} obj - arbitrary object passed as a parameter to the handler
+ */
+AbstractDynamicList.prototype.sendResetRequest	= function (e, obj) {
+	this.resetFilterData(obj.fDivId, false);
 	this.sendRequest(false);
 };
 
@@ -329,7 +334,7 @@ AbstractDynamicList.prototype.getFilterPanel = function (buttonId, divId, hide) 
 		
 		/* Yep, hardcoded stuff: the filter buttons are hardcoded so that the first one is "Apply Filters", the second one is "Reset Filters" and the third one is "Close window" */
 		divEl.style.display	= "";
-		var buttonEls	= divEl.getElementsByTagName("button");
+		var buttonEls	= divEl.getElementsByTagName("button");		
 		YAHOO.util.Event.on(buttonEls[0], "click", this.sendRequest, this, true);
 		YAHOO.util.Event.on(buttonEls[1], "click", this.sendResetRequest, this, true);
 		YAHOO.util.Event.on(buttonEls[2], "click", this.closeAll, this, true);

@@ -394,22 +394,20 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * @return
 	 */
 	protected boolean fundingFiltersIds() {
-		return filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME) // there is any predicate operating on Funding 
+		return !spec.getMeasures().isEmpty() && // not measureless
+				(filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME) // there is any predicate operating on Funding
 				|| 
-			filters.getFilteringColumns().stream().anyMatch(z -> schema.getColumns().get(z).isTransactionLevelHierarchy()); // we are filtering on a transaction-level hierarchy
+			filters.getFilteringColumns().stream().anyMatch(z -> schema.getColumns().get(z).isTransactionLevelHierarchy())); // we are filtering on a transaction-level hierarchy
 	}
 	
 	/**
 	 * removes any traces of entities containing no funding
 	 */
 	protected void cleanColumnsAccordingToFunding() {
+		//Set<Long> idsToKeep = funding.stream().map(cell -> cell.activityId).collect(Collectors.toSet());
 		Set<Long> idsToKeep = new HashSet<>();
-		if (fetchedMeasures.isEmpty()) { // if we are running measureless report then filter by funding
-			funding.stream().map(cell -> cell.activityId).forEach(idsToKeep::add);
-		} else {
-			reportRunMeasures.stream().map(z -> fetchedMeasures.get(z).data.keySet()).forEach(idsToKeep::addAll);
-		}
-		
+		reportRunMeasures.stream().map(z -> fetchedMeasures.get(z).data.keySet()).forEach(ids -> idsToKeep.addAll(ids));
+
 		fetchedColumns.forEach((colName, colContents) -> {
 			if (!colName.equals(FUNDING_COLUMN_NAME))
 				colContents.retainIds(idsToKeep);

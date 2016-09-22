@@ -7,7 +7,13 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+/**
+ * Class containing month names with locales unsupported by Java 8. 
+ * To add a new one, create a file ExoticMonthNames_{two-letter-code}.properties in this package. 
+ * Originally created for Tetum (Timor). 
+ * @author acartaleanu
+ *
+ */
 public class ExoticMonthNames {
 	
 	private final Locale locale;

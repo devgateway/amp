@@ -3,8 +3,6 @@ package org.digijava.module.translation.exotic;
 import java.util.Locale;
 
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 public class AmpDateFormatterFactory {
@@ -20,7 +18,7 @@ public class AmpDateFormatterFactory {
 	}
 	
 	/**
-	 * Gets the locale if none is specified. 
+	 * Gets the default formatter if no locale is specified. 
 	 * The default is English to avoid weird behaviour in the case of 
 	 * non-English systems.
 	 * @return
@@ -29,10 +27,19 @@ public class AmpDateFormatterFactory {
 		return new AmpSimpleDateFormatter(DateTimeUtil.getGlobalPattern(), Locale.ENGLISH);
 	}
 	
+	/**
+	 * Gets a localized formatter with the default pattern.
+	 * @return
+	 */
 	public static AmpDateFormatter getLocalizedFormatter() {
 		return getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
 	}
 
+	/**
+	 * Gets a localized formatter with a specified pattern.
+	 * @param format
+	 * @return
+	 */
 	public static AmpDateFormatter getLocalizedFormatter(String format) {
 		String langCode = TLSUtils.getEffectiveLangCode();
 		if (isLangCodeSupported(langCode))

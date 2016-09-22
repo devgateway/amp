@@ -1042,7 +1042,7 @@ public class MapFilter {
 		if (selectedIds.contains(-1L))
 			return null;
 		
-		return new ArrayList<Long>(DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(selectedIds));
+		return new ArrayList<Long>(DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(selectedIds, false));
 	}
 	
     public List<AmpCategoryValue> getPeacebuildingMarkers() {

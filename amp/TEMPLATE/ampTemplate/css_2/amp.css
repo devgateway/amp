@@ -1269,6 +1269,10 @@ div.footer {
   margin: 0 auto;
 }
 
+.img-padding {
+    padding-right: 5px;
+}
+
 .tooltip-align {
     vertical-align: middle;
 }

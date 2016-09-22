@@ -35,6 +35,13 @@ public class AmpDateFormatterFactory {
 		return getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
 	}
 
+	public static AmpDateFormatter getLocalizedFormatter(String format, Locale locale) {
+		if (isLangCodeSupported(locale.getLanguage()))
+			return new AmpSimpleDateFormatter(format, locale);
+		else 
+			return new ExoticDateFormatter(format, locale);
+	}
+	
 	/**
 	 * Gets a localized formatter with a specified pattern.
 	 * @param format
@@ -42,10 +49,8 @@ public class AmpDateFormatterFactory {
 	 */
 	public static AmpDateFormatter getLocalizedFormatter(String format) {
 		String langCode = TLSUtils.getEffectiveLangCode();
-		if (isLangCodeSupported(langCode))
-			return new AmpSimpleDateFormatter(format, langCode);
-		else 
-			return new ExoticDateFormatter(format, langCode);
+		return getLocalizedFormatter(format, Locale.forLanguageTag(langCode));
+		
 	}
 	
 

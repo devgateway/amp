@@ -16,11 +16,11 @@ public class ExoticDateFormatter extends AmpDateFormatter {
 	final private Pattern yearPattern;
 	
 
-	public ExoticDateFormatter(String pattern, String langCode) {
-		super(pattern, Locale.forLanguageTag(langCode));
+	public ExoticDateFormatter(String pattern, Locale locale) {
+		super(pattern, locale);
 		dayPattern = Pattern.compile("^\\d+");
+		monthPattern = Pattern.compile("[\\w&&[\\D]]{3}+");
 		yearPattern = Pattern.compile("\\d{4}+");
-		monthPattern = Pattern.compile("\\w{3}+");
 	}
 	
 	@Override

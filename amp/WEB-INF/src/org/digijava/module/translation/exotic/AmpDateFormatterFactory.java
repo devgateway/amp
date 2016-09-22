@@ -19,8 +19,14 @@ public class AmpDateFormatterFactory {
 		return false;
 	}
 	
+	/**
+	 * Gets the locale if none is specified. 
+	 * The default is English to avoid weird behaviour in the case of 
+	 * non-English systems.
+	 * @return
+	 */
 	public static AmpDateFormatter getDefaultFormatter() {
-		return new AmpSimpleDateFormatter(DateTimeUtil.getGlobalPattern(), Locale.getDefault());
+		return new AmpSimpleDateFormatter(DateTimeUtil.getGlobalPattern(), Locale.ENGLISH);
 	}
 	
 	public static AmpDateFormatter getLocalizedFormatter() {

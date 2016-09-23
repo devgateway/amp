@@ -5,6 +5,7 @@ var Backbone = require('backbone');
 var husl = require('husl');
 
 var TopojsonLibrary = require('../../../libs/local/topojson.js');
+var StringUtil = require('../../../libs/local/string-util');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var Palette = require('../../colours/colour-palette');
 var IndicatorLayerLocalStorage = require('../indicator-layer-localstorage');
@@ -112,9 +113,11 @@ module.exports = Backbone.Model
 				  params.data = JSON.stringify(_.extend(params.data, filter));
 			  } else {
 				  // If gap analysis is NOT selected then we send the data from localStorage anyway, the EP will return it without changes.
-				  // This is needed because after the gap analysis is selected we cant render again the original public layer.				  
+				  // This is needed because after the gap analysis is selected we cant render again the original public layer.	
+				  
 				  this.url = '/rest/gis/process-public-layer';
-				  layer.unit = (layer.unit instanceof Object) ? Object.keys(layer.unit)[0] : layer.unit; // Needed preprocess for popups.
+				  layer.unit = StringUtil.getMultilangString(layer,'unit', app.data.settings); // Needed preprocess for popups.
+				  layer.description = StringUtil.getMultilangString(layer,'description', app.data.settings);				  
 				  params.data = JSON.stringify(layer);
 			  }			  
 			  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
@@ -137,7 +140,7 @@ module.exports = Backbone.Model
 	    return this.lastFetchXhr;
 	  }	  
   },
-    
+  
   updatePaletteRange: function() {
     var min = +Infinity,
         max = -Infinity;

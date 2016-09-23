@@ -21,8 +21,8 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 /**
- * 
- * @author Gabriel
+ * Activity Util service methods for Activity EPs.
+ * @author Gabriel Inchauspe
  *
  */
 public class ActivityEndpointUtils {
@@ -34,8 +34,10 @@ public class ActivityEndpointUtils {
 	protected static final Logger logger = Logger.getLogger(ActivityEndpointUtils.class);
 	
 	/**
+	 * Given a list of amp ids (String) we try and clone the current active
+	 * version (only if versioning is enabled).
 	 * 
-	 * @param uniqueActivityIds
+	 * @param config
 	 * @return
 	 */
 	public static JsonBean cloneActivities(JsonBean config) {		
@@ -47,18 +49,18 @@ public class ActivityEndpointUtils {
 		if (!ActivityVersionUtil.isVersioningEnabled()) {
 			response.set("errors", ERROR_NO_VERSIONING);
 		} else {
-			// Convert to set just in case the data contains the same AMP_ID more than once.
+			// Convert to Set just in case the data contains the same AMP_ID more than one time.
 			Set<String> uniqueActivityIds = new HashSet<String>((List<String>) config.get(PARAM_ACTIVITIES));
-			
+			// Find all activities in one call.
 			Set<AmpActivityVersion> activities = DbUtil.getActivitiesByAmpId(uniqueActivityIds);		
 			Iterator<AmpActivityVersion> iActivities = activities.iterator();
 			while (iActivities.hasNext()) {
-				try {
-					AmpActivityVersion activity = iActivities.next();
-					
-					// Save new version.
+				AmpActivityVersion activity = iActivities.next();
+				try {									
+					//TODO: Do we need to save with a different user?
 					AmpTeamMember ampClosingMember = AmpBackgroundActivitiesCloser.createActivityCloserTeamMemberIfNeeded(activity.getTeam());
 					List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
+					// Save new version.
 					AmpActivityVersion newAmpActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(activity, translations, ampClosingMember, false, PersistenceManager.getRequestDBSession(), false, false);
 					
 					// If oldId == newId --> the activity was not cloned but updated.
@@ -71,12 +73,13 @@ public class ActivityEndpointUtils {
 						activitiesResponse.add(activityData);
 					}
 				} catch (Exception e) {
+					failed.add(activity.getAmpId());
 					logger.error(e);
 				}
 			}
 			response.set(PARAM_SUCCEED, activitiesResponse);
 			
-			// Find failed ids.
+			// Find invalid ids.
 			Iterator<String> iIds = uniqueActivityIds.iterator();
 			while (iIds.hasNext()) {
 				String id = iIds.next();
@@ -94,5 +97,4 @@ public class ActivityEndpointUtils {
 		}
 		return response;
 	}
-
 }

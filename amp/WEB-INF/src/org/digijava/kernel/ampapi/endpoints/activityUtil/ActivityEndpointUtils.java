@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity.utils;
+package org.digijava.kernel.ampapi.endpoints.activityUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +33,7 @@ public class ActivityEndpointUtils {
 	public static JsonBean cloneActivities(Set<String> uniqueActivityIds) {
 		JsonBean response = new JsonBean();
 		List<Map<String, Long[]>> activitiesResponse = new ArrayList<Map<String, Long[]>>();
+		List<String> failed = new ArrayList<String>();
 		
 		// Check if activity versioning is enabled.
 		if (!ActivityVersionUtil.isVersioningEnabled()) {
@@ -45,6 +46,10 @@ public class ActivityEndpointUtils {
 				// Get the list of versions of an activity by its AMP_ID.
 				String id = iIds.next();
 				Set<AmpActivityVersion> activitiesHistory = DbUtil.getActivitiesByAmpId(id);
+				if (activitiesHistory.size() == 0) {
+					failed.add(id);
+					throw new Exception("AMPID not found: " + id);
+				}
 				// Get currenct (active) version.
 				AmpActivityVersion currentActivityVersion = Collections.max(activitiesHistory, activityComparatorByAmpId);
 				
@@ -61,6 +66,7 @@ public class ActivityEndpointUtils {
 			}
 		}
 		response.set("activities", activitiesResponse);
+		response.set("failed", failed);
 		return response;
 	}
 

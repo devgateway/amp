@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -3274,5 +3275,24 @@ public class DbUtil {
 	
 	public static void clearPendingChanges() {
 	    PersistenceManager.getSession().clear();
+	}
+	
+	public static Set<AmpActivityVersion> getActivitiesByAmpId(String id) {
+		Session session = null;
+		Query q = null;
+		Set<AmpActivityVersion> activities = null;
+		StringBuilder queryString = new StringBuilder("select a from "
+				+ AmpActivityVersion.class.getName() + " a ");
+		queryString.append("where a.ampId=:id");
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			q = session.createQuery(queryString.toString());
+			q.setString("id", id);
+			activities = new HashSet<AmpActivityVersion>(q.list());
+
+		} catch (Exception ex) {
+			logger.error("Unable to get Amp Structure Type from database ", ex);
+		}
+		return activities;
 	}
 }

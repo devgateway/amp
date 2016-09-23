@@ -25,13 +25,11 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 public class ActivityEndpoint {
 
 	@POST
-	@Path("/clone2")
+	@Path("/clone")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = {AuthRule.NONE}, ui = false, name = "clone2", id = "")
 	public JsonBean cloneActivities(JsonBean config) {
-		// Convert to set just in case the data contains the same AMP_ID more than once.
-		Set<String> uniqueActivityIds = new HashSet<String>((List<String>) config.get("activities"));
-		return ActivityEndpointUtils.cloneActivities(uniqueActivityIds);
+		return ActivityEndpointUtils.cloneActivities(config);
 	}
 }

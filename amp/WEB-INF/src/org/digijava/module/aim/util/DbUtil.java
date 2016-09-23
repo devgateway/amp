@@ -3277,21 +3277,19 @@ public class DbUtil {
 	    PersistenceManager.getSession().clear();
 	}
 	
-	public static Set<AmpActivityVersion> getActivitiesByAmpId(String id) {
+	public static Set<AmpActivityVersion> getActivitiesByAmpId(Set<String> uniqueActivityIds) {
 		Session session = null;
 		Query q = null;
 		Set<AmpActivityVersion> activities = null;
-		StringBuilder queryString = new StringBuilder("select a from "
-				+ AmpActivityVersion.class.getName() + " a ");
-		queryString.append("where a.ampId=:id");
+		StringBuilder queryString = new StringBuilder("SELECT aav FROM " + AmpActivityVersion.class.getName() + " aav ");
+		queryString.append("WHERE aav.ampId IN (:id) AND aav.ampActivityId IN (SELECT ampActivityId FROM ").append(AmpActivity.class.getName()).append(" )");
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			q = session.createQuery(queryString.toString());
-			q.setString("id", id);
+			q.setParameterList("id", uniqueActivityIds);
 			activities = new HashSet<AmpActivityVersion>(q.list());
-
 		} catch (Exception ex) {
-			logger.error("Unable to get Amp Structure Type from database ", ex);
+			logger.error("Unable to get activities from database ", ex);
 		}
 		return activities;
 	}

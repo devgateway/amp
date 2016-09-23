@@ -47,12 +47,6 @@ public class FMEndpoint {
 	 * @return
 	 */
 	public JsonBean cloneActivities(JsonBean config) {
-		//TODO: check user logged in.
-		//TODO: basic sanitization checks.
-		// poner comentario q el q tendria q poder clonar es el usuario validador del workspace.
-		
-		// Convert to set just in case the data contains the same AMP_ID more than once.
-		Set<String> uniqueActivityIds = new HashSet<String>((List<String>) config.get("activities"));
-		return ActivityEndpointUtils.cloneActivities(uniqueActivityIds);
+		return ActivityEndpointUtils.cloneActivities(config);
 	}
 }

@@ -22,34 +22,39 @@ import org.digijava.module.aim.util.DbUtil;
 public class ActivityEndpointUtils {
 
 	protected static final Logger logger = Logger.getLogger(ActivityEndpointUtils.class);
+	
+	private static final Comparator<AmpActivityVersion> activityComparatorByAmpId = new Comparator<AmpActivityVersion>() {
+		@Override
+		public int compare(AmpActivityVersion o1, AmpActivityVersion o2) {
+			return Long.compare(o1.getAmpActivityId(), o2.getAmpActivityId());
+		}
+	}; 
 
 	public static JsonBean cloneActivities(Set<String> uniqueActivityIds) {
 		JsonBean response = new JsonBean();
-		List<Map<String, Long>> activitiesResponse = new ArrayList<Map<String, Long>>();
+		List<Map<String, Long[]>> activitiesResponse = new ArrayList<Map<String, Long[]>>();
 		
-		//Comparator<AmpActivityVersion> activityComparator = Comparator.comparing(AmpActivityVersion::getAmpActivityId); // Lambdas doesnt work with Jersey before 1.19!!!
-		Comparator<AmpActivityVersion> activityComparator = new Comparator<AmpActivityVersion>() {
-			@Override
-			public int compare(AmpActivityVersion o1, AmpActivityVersion o2) {
-				return Long.compare(o1.getAmpActivityId(), o2.getAmpActivityId());
-			}
-		};
+		// Check if activity versioning is enabled.
+		if (!ActivityVersionUtil.isVersioningEnabled()) {
+			response.set("errors", "Versioning is not enabled, clone not available.");
+		}
 		
 		Iterator<String> iIds = uniqueActivityIds.iterator();
 		while (iIds.hasNext()) {
 			try {
+				// Get the list of versions of an activity by its AMP_ID.
 				String id = iIds.next();
-				Set<AmpActivityVersion> activitiesHistory = DbUtil.getActivitiesByAmpId(id);				
-				AmpActivityVersion activeActivityVersion = Collections.max(activitiesHistory, activityComparator);
-				logger.info(activeActivityVersion + "-" + activitiesHistory.size() + "-" + activeActivityVersion.getAmpActivityId());
+				Set<AmpActivityVersion> activitiesHistory = DbUtil.getActivitiesByAmpId(id);
+				// Get currenct (active) version.
+				AmpActivityVersion currentActivityVersion = Collections.max(activitiesHistory, activityComparatorByAmpId);
 				
 				// Clone activity.
-				AmpTeamMember ampClosingMember = AmpBackgroundActivitiesCloser.createActivityCloserTeamMemberIfNeeded(activeActivityVersion.getTeam());
+				AmpTeamMember ampClosingMember = AmpBackgroundActivitiesCloser.createActivityCloserTeamMemberIfNeeded(currentActivityVersion.getTeam());
 				List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
-				AmpActivityVersion newAmpActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(activeActivityVersion, translations, ampClosingMember, false, PersistenceManager.getRequestDBSession(), false, false);
+				AmpActivityVersion newAmpActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(currentActivityVersion, translations, ampClosingMember, false, PersistenceManager.getRequestDBSession(), false, false);
 				// Return data about the new activity.
-				Map<String, Long> activityData = new HashMap<String, Long>();
-				activityData.put(id, newAmpActivity.getAmpActivityId());
+				Map<String, Long[]> activityData = new HashMap<String, Long[]>();
+				activityData.put(id, new Long[] {currentActivityVersion.getAmpActivityId(), newAmpActivity.getAmpActivityId()});
 				activitiesResponse.add(activityData);
 			} catch (Exception e) {
 				logger.error(e);

@@ -35,24 +35,4 @@ public class FMEndpoint {
 	public JsonBean getFMSettings(JsonBean config) {
 		return FMService.getFMSettings(config);
 	}
-	
-	@POST
-	@Path("/clone")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = false, name = "clone", id = "")
-	/**
-	 * Retrieves 
-	 * @param config
-	 * @return
-	 */
-	public JsonBean cloneActivities(JsonBean config) {
-		//TODO: check user logged in.
-		//TODO: basic sanitization checks.
-		
-		// Convert to set just in case the data contains the same AMP_ID more than once.
-		Set<String> uniqueActivityIds = new HashSet<String>((List<String>) config.get("activities"));
-		return ActivityEndpointUtils.cloneActivities(uniqueActivityIds);
-	}
 }
-
-	

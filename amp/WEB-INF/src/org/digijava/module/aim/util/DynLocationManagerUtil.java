@@ -117,22 +117,15 @@ public class DynLocationManagerUtil {
 		Session dbSession = PersistenceManager.getSession();
 		try {
 			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) dbSession.load(AmpCategoryValueLocations.class, id);
+			loc.setDeleted(true);
+			dbSession.save(loc);
 			
-			AmpLocation ampLoc = DynLocationManagerUtil.getAmpLocation(loc);
-			if (ampLoc != null && ampLoc.getActivities() != null && ampLoc.getActivities().size() > 0) {
-				errors.add("title", new ActionMessage("error.aim.dynRegionManager.locationIsInUse"));
-			} else {
-				if (loc.getParentLocation() != null)
-					loc.getParentLocation().getChildLocations().remove(loc);
-				
-				if (ampLoc != null) {
-					dbSession.delete(ampLoc);
-				}
-				
-				dbSession.delete(loc);
+			for (AmpCategoryValueLocations l : loc.getChildLocations()) {
+				deleteLocation(l.getId(), errors);
 			}
+			
 		} catch (Exception e) {
-			errors.add("title", new ActionMessage("error.aim.dynRegionManager.locationIsInUse"));
+			errors.add("title", new ActionMessage("error.aim.dynRegionManager.cannotSaveOrUpdate"));
 			logger.error(e);
 		}
 	}
@@ -218,7 +211,7 @@ public class DynLocationManagerUtil {
 		TreeSet<AmpCategoryValueLocations> returnLocations = new TreeSet<AmpCategoryValueLocations>(alphabeticalLocComp);
 		
 		for(AmpCategoryValueLocations loc : allLocations) {
-			if (loc.getParentLocation() == null) {
+			if (loc.getParentLocation() == null && !loc.isSoftDeleted()) {
 				returnLocations.add(loc);
 			}
 		}
@@ -1073,6 +1066,7 @@ public class DynLocationManagerUtil {
                                 location.setIso3(iso3);
                                 location.setParentCategoryValue(implLoc);
                                 location.setParentLocation(parentLoc);
+                                location.setDeleted(false);
                                 boolean edit = location.getId() != null;
                                 LocationUtil.saveLocation(location, edit);
                             }

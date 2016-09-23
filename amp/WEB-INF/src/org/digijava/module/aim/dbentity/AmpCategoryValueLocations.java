@@ -235,10 +235,7 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 	}
 	
 	public void setDeleted(Boolean deleted) {
-		if (deleted == null)
-			this.deleted = false;
-		else
-			this.deleted = deleted;
+		this.deleted = deleted;
 	}
 	
 	public boolean isSoftDeleted() {

@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,7 +13,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -25,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -44,7 +44,6 @@ import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.dgfoundation.amp.utils.BoundedList;
@@ -66,12 +65,20 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 import net.sf.json.JSONObject;
 
+/**
+ * Reports API utility classes
+ * 
+ * @author Nadejda Mandrescu
+ */
 public class ReportsUtil {
+    // TODO: the class grow up too much, we need to split it
+    
 	protected static final Logger logger = Logger.getLogger(ReportsUtil.class);
 
 	/**
@@ -820,5 +827,25 @@ public class ReportsUtil {
 		return ampReport;
 	}
 	
+	/**
+	 * The decimal format to be used for this report (the configured or the default one)
+	 * @param spec report specification
+	 * @return decimal format for report amounts
+	 */
+	public static DecimalFormat getDecimalFormatOrDefault(ReportSpecification spec) {
+	    if (spec != null && spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null)
+            return spec.getSettings().getCurrencyFormat();
+        return FormatHelper.getDefaultFormat();
+	}
 	
+	/**
+	 * The amounts unit configured or the default one to be used for the specified report
+	 * @param spec report specification
+	 * @return amount units
+	 */
+	public static AmountsUnits getAmountsUnitsOrDefault(ReportSpecification spec) {
+        if (spec != null && spec.getSettings() != null && spec.getSettings().getUnitsOption() != null)
+            return spec.getSettings().getUnitsOption();
+        return AmountsUnits.getDefaultValue();
+	}
 }

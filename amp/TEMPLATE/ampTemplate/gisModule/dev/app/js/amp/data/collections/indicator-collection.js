@@ -6,6 +6,7 @@ var ArcGISDynamicLayerIndicator = require('../models/indicator-arcgis-dynamicLay
 var WMSIndicator = require('../models/indicator-wms-model');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var IndicatorLayerLocalStorage = require('../indicator-layer-localstorage');
+var StringUtil = require('../../../libs/local/string-util');
 
 /* Backbone Collection IndicatorLayers (RENAME FILE) */
 module.exports = Backbone.Collection.extend({
@@ -85,9 +86,9 @@ module.exports = Backbone.Collection.extend({
       if (layer.colorRamp) {
     	 self.settings.load().then(function() {
     	    
-    	   layer.title = self.getMultilangString(layer,'name');
-    	   layer.description = self.getMultilangString(layer,'description');  
-    	   layer.unit = self.getMultilangString(layer,'unit');
+    	   layer.title = StringUtil.getMultilangString(layer,'name', self.settings);
+    	   layer.description = StringUtil.getMultilangString(layer,'description', self.settings);  
+    	   layer.unit = StringUtil.getMultilangString(layer,'unit', self.settings);
     	 });   	 
         layer.type = 'joinBoundaries';
         //debugger
@@ -101,18 +102,6 @@ module.exports = Backbone.Collection.extend({
     });
 
     return parsedData;
-  },
-  getMultilangString: function(layer,field){  
-	  var currentLanguage = this.settings.findWhere({id:'language'}).get('defaultId');
-	  var defaultLanguage = this.settings.findWhere({id: 'default-language'}).get('defaultId');	    
-	  var result = '';
-	  if(!_.isUndefined(layer[field])){
-		  result = layer[field][currentLanguage];
-		  if(_.isUndefined(result) || _.isNull(result)){
-			  result = layer[field][defaultLanguage] || '';
-		  } 
-	  }	 
-	  return result;  	
   },
   getSelected: function() {
     return this.chain()

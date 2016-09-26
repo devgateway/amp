@@ -41,7 +41,6 @@ import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
@@ -50,6 +49,7 @@ import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -85,7 +85,7 @@ import mondrian.util.Pair;
  */
 
 @Path("data")
-public class Reports {
+public class Reports implements ErrorReportingEndpoint {
 	
 	private static final String DEFAULT_CATALOG_NAME = "AMP";
 	private static final String DEFAULT_CUBE_NAME = "Donor Funding";
@@ -892,5 +892,12 @@ public class Reports {
 			res.add(new ReportRenderWarningEx(z));
 		return res;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class getErrorsClass() {
+		return ReportErrors.class;
+	}
 }

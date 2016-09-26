@@ -15,6 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -29,7 +30,7 @@ import net.sf.json.JSONObject;
  */
 
 @Path("dashboard")
-public class EndPoints {
+public class EndPoints implements ErrorReportingEndpoint {
 	/**
 	 * Show a list of available top ___ things, with their names
 	 * @return
@@ -243,4 +244,12 @@ public class EndPoints {
     public JsonBean setHeatMapSettings(JsonBean config) throws Exception {
         return new HeatMapConfigs().saveHeatMapAdminSettings(config);
     }
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class getErrorsClass() {
+		return DashboardErrors.class;
+	}
 }

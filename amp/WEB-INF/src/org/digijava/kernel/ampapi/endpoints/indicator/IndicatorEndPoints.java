@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 import com.sun.jersey.multipart.FormDataParam;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -28,7 +29,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Path("indicator")
-public class IndicatorEndPoints {
+public class IndicatorEndPoints implements ErrorReportingEndpoint {
 
     private static final Logger logger = Logger.getLogger(IndicatorEndPoints.class);
 
@@ -360,4 +361,11 @@ public class IndicatorEndPoints {
         return new PopulationLayerDesignator().getAllowedPopulationLayersOptions();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Class getErrorsClass() {
+        return IndicatorErrors.class;
+    }
 }

@@ -21,6 +21,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -60,7 +61,7 @@ import com.sun.jersey.spi.container.ContainerRequest;
  * 
  */
 @Path("security")
-public class Security {
+public class Security implements ErrorReportingEndpoint {
 	private static final Logger logger = Logger.getLogger(Security.class);
 	private static String SITE_CONFIG_PATH = "TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
 			+ System.getProperty("file.separator") + "site-config.xml";
@@ -316,4 +317,12 @@ public class Security {
 		return "Token: " + token;
 	}
 	*/
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class getErrorsClass() {
+		return SecurityErrors.class;
+	}
 }

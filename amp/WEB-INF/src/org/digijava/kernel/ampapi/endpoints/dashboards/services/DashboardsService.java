@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -290,38 +292,74 @@ public class DashboardsService {
 	 * @param generator
 	 */
 	protected static void postProcessRE(GeneratedReport report, ReportSpecificationImpl spec, OutputSettings outSettings) {
+	    final DecimalFormat formatter = ReportsUtil.getDecimalFormatOrDefault(spec);
+	    final AmountsUnits amountsUnits = ReportsUtil.getAmountsUnitsOrDefault(spec);
+	    
 		List<ReportArea> undefinedAreas = new ArrayList<>();
-		for(ReportArea ra:report.reportContents.getChildren())
-			if (ra.getOwner() != null && ra.getOwner().id < 0)
+		for (ReportArea ra : report.reportContents.getChildren()) {
+		    // detect those undefined for countries, but skip those that are really undefined for regions
+			if (ra.getOwner() != null && ra.getOwner().id < 0 && (ra.getOwner().id != -MoConstants.UNDEFINED_KEY))
 				undefinedAreas.add(ra);
-		// if undefined region is not found, then nothing to drill down
+		}
+		// if no countries are found, then nothing to update
 		if (undefinedAreas.isEmpty()) {
 			return;
 		}
 		
-		final String NATIONAL = "National";
-		final String INTERNATIONAL = "International";
-
 		ReportOutputColumn regionCol = report.leafHeaders.get(0);
+		ReportOutputColumn amountCol = report.leafHeaders.get(1);
         AmpCategoryValueLocations currentCountry = DynLocationManagerUtil.getDefaultCountry();
         
+        // collect other countries under International
+        final Map<Long, String> internationalEntitiesIdsValues = new TreeMap<>();
+        List<ReportArea> intlChildren = new ArrayList<>();
+        long intlAnyCountryId = 0;
+        ReportArea intlUndefined = null;
+        BigDecimal intlAmount = null;
+        
 		for (ReportArea undefined : undefinedAreas) {
-		    IdentifiedReportCell uRegion = (IdentifiedReportCell) undefined.getContents().get(regionCol);
-		    // the not real undefined regions
-		    if (uRegion.entityId != -MoConstants.UNDEFINED_KEY) {
-		        if (uRegion.entityId == -currentCountry.getId()) {
-		            // national
-		            uRegion = new TextCell(TranslatorWorker.translateText(NATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
-		        } else {
-		            // international
-		            uRegion = new TextCell(TranslatorWorker.translateText(INTERNATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
-		        }
-		        undefined.getContents().put(regionCol, uRegion);
-		        for (ReportArea child : undefined.getChildren()) {
-		            child.getContents().put(regionCol, uRegion);
-		        }
-		    }
+		    IdentifiedReportCell uRegionCell = (IdentifiedReportCell) undefined.getContents().get(regionCol);
+		    
+	        if (uRegionCell.entityId == -currentCountry.getId()) {
+	            // national
+	            updateUndefinedEntry(undefined, regionCol, DashboardConstants.NATIONAL, uRegionCell.entityId,
+	                    uRegionCell.entitiesIdsValues, undefined.getChildren());
+	        } else {
+	            BigDecimal otherCountryAmount = (BigDecimal) undefined.getContents().get(amountCol).value;
+	            // international
+	            if (intlUndefined == null) {
+	                // reuse only the 1st country that we'll transformed to international later
+	                intlUndefined = undefined;
+	                intlAnyCountryId = uRegionCell.entityId; // not relevant for this EP
+	                intlAmount = otherCountryAmount; 
+	            } else {
+	                report.reportContents.getChildren().remove(undefined);
+	                intlAmount = intlAmount.add(otherCountryAmount);
+	            }
+	            //internationId = uRegion.entityId; // remember any id, not relevant
+	            internationalEntitiesIdsValues.putAll(uRegionCell.entitiesIdsValues);
+	            intlChildren.addAll(undefined.getChildren());
+	        }
 		}
+		
+		if (intlUndefined != null) {
+		    // repeating Reports behavior: divide only formatted amount
+		    BigDecimal scaledAmount = intlAmount.divide(BigDecimal.valueOf(amountsUnits.divider));
+		    intlUndefined.getContents().put(amountCol, new AmountCell(intlAmount, formatter.format(scaledAmount)));
+		    updateUndefinedEntry(intlUndefined, regionCol, DashboardConstants.INTERNATIONAL, intlAnyCountryId,
+		            internationalEntitiesIdsValues, intlChildren);
+		}
+	}
+	
+	private static void updateUndefinedEntry(ReportArea undefined, ReportOutputColumn regionCol,
+	        String name, long id, Map<Long, String> entitiesIdsValues, List<ReportArea> children) {
+	    // recreate the cell to have a correct name for the undefined area
+	    TextCell uRegionCell = new TextCell(TranslatorWorker.translateText(name), id, entitiesIdsValues);
+        undefined.getContents().put(regionCol, uRegionCell);
+        
+	    for (ReportArea child : undefined.getChildren()) {
+            child.getContents().put(regionCol, uRegionCell);
+        }
 	}
 	
 	protected static JSONObject buildEmptyJSon(String...keys) {

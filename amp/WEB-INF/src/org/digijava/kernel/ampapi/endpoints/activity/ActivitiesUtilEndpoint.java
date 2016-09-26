@@ -6,7 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityEndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.CloneActivitiesUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -16,8 +16,8 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author Gabriel Inchauspe
  *
  */
-@Path("cloneUtil")
-public class ActivityUtilEndpoint {
+@Path("activitiesUtil")
+public class ActivitiesUtilEndpoint {
 
 	@POST
 	@Path("/clone")
@@ -26,6 +26,6 @@ public class ActivityUtilEndpoint {
 	@ApiMethod(authTypes = {AuthRule.NONE}, ui = false, name = "clone", id = "")
 	//@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_ADMIN}, ui = false, name = "clone", id = "")
 	public JsonBean cloneActivities(JsonBean config) {
-		return ActivityEndpointUtils.cloneActivities(config);
+		return CloneActivitiesUtil.cloneActivities(config);
 	}
 }

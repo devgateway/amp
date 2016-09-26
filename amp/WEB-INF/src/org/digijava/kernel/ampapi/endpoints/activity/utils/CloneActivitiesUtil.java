@@ -21,17 +21,17 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 /**
- * Activity Util service methods for Activity EPs.
+ * Util class for cloning activities from an EP.
  * @author Gabriel Inchauspe
  *
  */
-public class ActivityEndpointUtils {
+public class CloneActivitiesUtil {
 	
 	protected static final String ERROR_NO_VERSIONING = "Versioning is not enabled, clone not available.";
 	protected static final String PARAM_SUCCEED = "succeed";
 	protected static final String PARAM_FAILED = "failed";
 	protected static final String PARAM_ACTIVITIES = "activities";
-	protected static final Logger logger = Logger.getLogger(ActivityEndpointUtils.class);
+	protected static final Logger logger = Logger.getLogger(CloneActivitiesUtil.class);
 	
 	/**
 	 * Given a list of amp ids (String) we try and clone the current active

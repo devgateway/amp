@@ -12,7 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityEndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.CloneActivitiesUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;

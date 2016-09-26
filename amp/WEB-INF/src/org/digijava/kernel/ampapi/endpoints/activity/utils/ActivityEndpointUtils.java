@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activityUtil;
+package org.digijava.kernel.ampapi.endpoints.activity.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

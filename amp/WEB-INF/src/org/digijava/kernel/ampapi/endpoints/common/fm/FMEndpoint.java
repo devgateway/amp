@@ -12,7 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.digijava.kernel.ampapi.endpoints.activityUtil.ActivityEndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityEndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -35,18 +35,5 @@ public class FMEndpoint {
 	 */
 	public JsonBean getFMSettings(JsonBean config) {
 		return FMService.getFMSettings(config);
-	}
-	
-	@POST
-	@Path("/clone")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_ADMIN}, ui = false, name = "clone", id = "")
-	/**
-	 * Retrieves 
-	 * @param config
-	 * @return
-	 */
-	public JsonBean cloneActivities(JsonBean config) {
-		return ActivityEndpointUtils.cloneActivities(config);
 	}
 }

@@ -49,10 +49,10 @@ function contentwidget_topprojects_widget_retrieve_data($plugin, $widget_setting
   );
 
   if (!empty($widget_settings['period'])) {
-    $options['parameters']['months'] = $widget_settings['period'];
+    $parameters['months'] = $widget_settings['period'];
   }
   if (!empty($widget_settings['count'])) {
-    $options['parameters']['count'] = $widget_settings['count'];
+    $parameters['count'] = $widget_settings['count'];
   }
 
   $request_body = array();
@@ -100,7 +100,8 @@ function contentwidget_topprojects_widget_retrieve_data($plugin, $widget_setting
 
   // Get the data.
   $use_cache = FALSE;  // We cache the processed data, not the request.
-  $response_data = ampAPIRestClient::post($plugin['resource api path'], $options, $use_cache);
+  $endpoint = (!empty($parameters)) ? $plugin['resource api path'] . '?' . drupal_http_build_query($parameters) : $plugin['resource api path'];
+  $response_data = ampAPIRestClient::post($endpoint, $options, $use_cache);
   if (empty($response_data)) {
     return array();
   }

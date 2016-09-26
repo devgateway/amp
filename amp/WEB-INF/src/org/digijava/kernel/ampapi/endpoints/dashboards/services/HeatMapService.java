@@ -377,7 +377,8 @@ public class HeatMapService {
         // sort ascending by Y axis (aka Donor Group)
         spec.addSorter(new SortingInfo(yRepCol, true));
         
-        this.decimalFormatter = ReportsUtil.getDecimalFormatOrDefault(spec);
+        this.decimalFormatter = (spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null) ? 
+                spec.getSettings().getCurrencyFormat() : FormatHelper.getDefaultFormat();
         
         return spec;
     }

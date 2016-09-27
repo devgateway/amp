@@ -1175,3 +1175,7 @@ table.component-funding-table tr
 div.footer {
 	margin-top:15px;
 }
+
+.img-padding {
+    padding-right: 5px;
+}

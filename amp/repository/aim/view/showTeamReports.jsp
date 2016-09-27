@@ -652,7 +652,7 @@ $(document).ready(function() {
 						</c:set>
 						<c:if test="${!aimTeamReportsForm.showTabs}">
 							<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
-							onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+							onclick="return popup(this,'');" class="img-padding" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
 							<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
 						</c:if>
 						<c:set target="${urlParams}" property="event" value="edit" />
@@ -668,12 +668,12 @@ $(document).ready(function() {
 							<c:choose>
 								<c:when test="${report.budgetExporter}">
 									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true&type=${report.type}" title="${translation}">
-										<img src= "/repository/message/view/images/edit.gif" border="0" />
+										<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 									</digi:link>
 								</c:when>
 								<c:otherwise>
 									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
-										<img src= "/repository/message/view/images/edit.gif" border="0" />
+										<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 									</digi:link> 
 								</c:otherwise>
 							</c:choose>&nbsp;
@@ -688,7 +688,7 @@ $(document).ready(function() {
 								</c:if>
 							</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src= "/repository/message/view/images/trash_12.gif" border="0" />
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" class="img-padding" />
 								</digi:link>
 						</logic:equal>
 						<logic:equal name="teamLeadFlag" scope="session" value="false">
@@ -703,7 +703,7 @@ $(document).ready(function() {
 									</c:if>
 								</c:set>
 								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
-									<img src= "/repository/message/view/images/edit.gif" border="0" />
+									<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 								</digi:link>
 								<c:set var="translation">
 									<c:if test="${aimTeamReportsForm.showTabs}">
@@ -716,7 +716,7 @@ $(document).ready(function() {
 									</c:if>
 								</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src= "/repository/message/view/images/trash_12.gif" border="0" />
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" class="img-padding" />
 								</digi:link>
 							</logic:equal>    
 						</logic:present>

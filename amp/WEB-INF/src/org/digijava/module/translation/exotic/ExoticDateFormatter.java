@@ -3,19 +3,31 @@ package org.digijava.module.translation.exotic;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExoticDateFormatter extends AmpDateFormatter {
-
+	
+	/**
+	 * Since the solution was not made generic (via date format data supplier), 
+	 * a list of supported formats was put (so as to make a 
+	 */
+	private static Set<String> supportedFormats = new HashSet<String>(Arrays.asList("dd/MMM/yyyy","MMM/dd/yyyy","dd/MM/yyyy","MM/dd/yyyy"));
+	
 	private final Pattern dayPattern;
 	private final Pattern monthPattern;
 	private final Pattern yearPattern;
 	
 	public ExoticDateFormatter(String pattern, String langCode) {
 		super(pattern, Locale.forLanguageTag(langCode));
+		if (!supportedFormats.contains(pattern))
+			throw new RuntimeException("Format " + pattern + " not supported!");
 		dayPattern = Pattern.compile("^\\d+");
 		yearPattern = Pattern.compile("\\d{4}+");
 		monthPattern = Pattern.compile("\\w{3}+");

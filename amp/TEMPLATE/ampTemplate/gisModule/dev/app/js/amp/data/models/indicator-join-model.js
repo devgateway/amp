@@ -79,17 +79,23 @@ module.exports = Backbone.Model
     return boundaryLoaded;
   },
 
-  loadAll: function(options) {	 
-	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){
-		  this.url = '/rest/gis/indicators/' + this.get('id') 
+  loadAll: function(options) {
+	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){		  	  
+		  this.url = '/rest/gis/indicators/' + this.getId(); 
 	  }else if(this.get('type') === 'Indicator Layers'){
 		  this.url = '/rest/gis/indicator-layers/' + this.get('id');
-	  }		  
+	  }	
 	  return when(this.load(options), this.loadBoundary()).promise().done(function() {
 		  $('#map-loading').hide();
 	  });
   },
-  
+  getId: function(){
+	  var id = this.get('id');
+	  if(typeof this.get('id') === 'string' || this.get('id') instanceof String){
+		  id = parseInt(this.get('id').replace( /^\D+/g, ''));
+      }	
+	  return id
+  },
   fetch: function(){	
 	  var self = this;
 	  	  
@@ -101,7 +107,7 @@ module.exports = Backbone.Model
 	  
 	  if(this.attributes.isStoredInLocalStorage === true){		  
 		  IndicatorLayerLocalStorage.cleanUp();
-		  var layer = IndicatorLayerLocalStorage.findById(this.attributes.id);
+		  var layer = IndicatorLayerLocalStorage.findById(this.getId());
 		  if(!_.isUndefined(layer)){
 			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);			  
 			  var params = {};

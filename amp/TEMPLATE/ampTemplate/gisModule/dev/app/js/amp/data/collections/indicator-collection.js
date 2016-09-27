@@ -12,7 +12,7 @@ var StringUtil = require('../../../libs/local/string-util');
 module.exports = Backbone.Collection.extend({
 
   url: '/rest/gis/indicator-layers',
-
+  JOIN_BOUNDARIES_PREFIX:'J',
   model: function(attrs) {
     var typeName = attrs.type;
 
@@ -84,6 +84,7 @@ module.exports = Backbone.Collection.extend({
 
       // this is a custom one. API is a bit messy so we do fair bit of manual work.
       if (layer.colorRamp) {
+    	 layer.id = self.JOIN_BOUNDARIES_PREFIX + layer.id;
     	 self.settings.load().then(function() {
     	    
     	   layer.title = StringUtil.getMultilangString(layer,'name', self.settings);

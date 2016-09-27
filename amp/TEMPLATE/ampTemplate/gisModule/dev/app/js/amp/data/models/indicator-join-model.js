@@ -5,6 +5,7 @@ var Backbone = require('backbone');
 var husl = require('husl');
 
 var TopojsonLibrary = require('../../../libs/local/topojson.js');
+var StringUtil = require('../../../libs/local/string-util');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var Palette = require('../../colours/colour-palette');
 var IndicatorLayerLocalStorage = require('../indicator-layer-localstorage');
@@ -79,11 +80,22 @@ module.exports = Backbone.Model
   },
 
   loadAll: function(options) {
-    return when(this.load(options), this.loadBoundary()).promise().done(function() {
-      $('#map-loading').hide();
-    });
+	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){		  	  
+		  this.url = '/rest/gis/indicators/' + this.getId(); 
+	  }else if(this.get('type') === 'Indicator Layers'){
+		  this.url = '/rest/gis/indicator-layers/' + this.get('id');
+	  }	
+	  return when(this.load(options), this.loadBoundary()).promise().done(function() {
+		  $('#map-loading').hide();
+	  });
   },
-  
+  getId: function(){
+	  var id = this.get('id');
+	  if(typeof this.get('id') === 'string' || this.get('id') instanceof String){
+		  id = parseInt(this.get('id').replace( /^\D+/g, ''));
+      }	
+	  return id
+  },
   fetch: function(){	
 	  var self = this;
 	  	  
@@ -95,7 +107,7 @@ module.exports = Backbone.Model
 	  
 	  if(this.attributes.isStoredInLocalStorage === true){		  
 		  IndicatorLayerLocalStorage.cleanUp();
-		  var layer = IndicatorLayerLocalStorage.findById(this.attributes.id);
+		  var layer = IndicatorLayerLocalStorage.findById(this.getId());
 		  if(!_.isUndefined(layer)){
 			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);			  
 			  var params = {};
@@ -107,9 +119,11 @@ module.exports = Backbone.Model
 				  params.data = JSON.stringify(_.extend(params.data, filter));
 			  } else {
 				  // If gap analysis is NOT selected then we send the data from localStorage anyway, the EP will return it without changes.
-				  // This is needed because after the gap analysis is selected we cant render again the original public layer.				  
+				  // This is needed because after the gap analysis is selected we cant render again the original public layer.	
+				  
 				  this.url = '/rest/gis/process-public-layer';
-				  layer.unit = (layer.unit instanceof Object) ? Object.keys(layer.unit)[0] : layer.unit; // Needed preprocess for popups.
+				  layer.unit = StringUtil.getMultilangString(layer,'unit', app.data.settings); // Needed preprocess for popups.
+				  layer.description = StringUtil.getMultilangString(layer,'description', app.data.settings);				  
 				  params.data = JSON.stringify(layer);
 			  }			  
 			  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
@@ -132,7 +146,7 @@ module.exports = Backbone.Model
 	    return this.lastFetchXhr;
 	  }	  
   },
-    
+  
   updatePaletteRange: function() {
     var min = +Infinity,
         max = -Infinity;

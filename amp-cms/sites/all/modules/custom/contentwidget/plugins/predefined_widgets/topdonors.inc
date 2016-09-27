@@ -47,22 +47,22 @@ function contentwidget_topdonors_widget_retrieve_data($plugin, $widget_settings,
   );
 
   if (!empty($widget_settings['period'])) {
-    $options['parameters']['months'] = $widget_settings['period'];
+    $parameters['months'] = $widget_settings['period'];
   }
   if (!empty($widget_settings['count'])) {
-    $options['parameters']['count'] = $widget_settings['count'];
+    $parameters['count'] = $widget_settings['count'];
   }
 
   if (!empty($widget_settings['type'])) {
     // @TODO: Request and API Endpoint for this.
     switch ($widget_settings['type']) {
       case 'disbursements':
-        $options['parameters']['fundingType'] = 2;
+        $parameters['fundingType'] = 2;
         break;
 
       case 'commitments':
       default:
-        $options['parameters']['fundingType'] = 1;
+        $parameters['fundingType'] = 1;
         break;
     }
   }
@@ -105,7 +105,8 @@ function contentwidget_topdonors_widget_retrieve_data($plugin, $widget_settings,
 
   // Get the data.
   $use_cache = FALSE;  // We cache the processed data, not the request.
-  $response_data = ampAPIRestClient::post($plugin['resource api path'], $options, $use_cache);
+  $endpoint = (!empty($parameters)) ? $plugin['resource api path'] . '?' . drupal_http_build_query($parameters) : $plugin['resource api path'];
+  $response_data = ampAPIRestClient::post($endpoint, $options, $use_cache);
   if (empty($response_data)) {
     return array();
   }

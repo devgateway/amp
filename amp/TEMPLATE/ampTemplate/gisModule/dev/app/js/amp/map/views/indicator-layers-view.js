@@ -172,7 +172,7 @@ module.exports = Backbone.View.extend({
         var value;
         var percentIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_PERCENTAGE});
         var ratioOtherIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_OTHER});
-        if((percentIndicator && percentIndicator.get('id') === layerModel.get('indicatorTypeId')) || (ratioOtherIndicator && ratioOtherIndicator.get('id') === layerModel.get('indicatorTypeId'))){
+        if(layerModel.get('gapAnalysis') === false && ((percentIndicator && percentIndicator.get('id') === layerModel.get('indicatorTypeId')) || (ratioOtherIndicator && ratioOtherIndicator.get('id') === layerModel.get('indicatorTypeId')))){
         	value = ampFormatter.format(feature.properties.value * 100);
         }else{
         	value = ampFormatter.format(feature.properties.value)

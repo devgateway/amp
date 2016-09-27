@@ -17,23 +17,16 @@
  *************************************************************************/
 package org.digijava.module.common.util;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
-import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -80,7 +73,6 @@ public class DateTimeUtil {
 	 * @return
 	 */
 	public static String formatDateLocalized(Date date){
-		if (date == null) return null;
 		AmpDateFormatter formatter = AmpDateFormatterFactory.getLocalizedFormatter();
 		return formatter.format(date);
 	}
@@ -90,16 +82,9 @@ public class DateTimeUtil {
 		return formatter.format(date);
 	}
 	
-	/**
-	 * Formats date using the supplied date pattern
-	 * @param date
-	 * @return
-	 */
-	public static String formatDate(Date date, String format){		
-		if (date == null) return null;		
-		SimpleDateFormat formater = new SimpleDateFormat(format);
-		String result = formater.format(date);
-		return result;
+	public static String formatDate(Date date, String pattern) {
+		AmpDateFormatter formatter = AmpDateFormatterFactory.getDefaultFormatter(pattern);
+		return formatter.format(date);
 	}
 	
 	public static Date parseDate(String date) throws Exception{

@@ -54,7 +54,6 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 		this.unitsDivider = BigDecimal.valueOf(this.amountsUnits.divider);
 		this.outputSettings = outputSettings;
 		this.dateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(dateDisplayFormat);
-//		this.dateFormatter = DateTimeFormatter.ofPattern(dateDisplayFormat).withLocale(DateTimeUtil.getLocale()); 
 		this.translator = translator;
 	}
 

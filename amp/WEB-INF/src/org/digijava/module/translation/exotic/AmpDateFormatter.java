@@ -21,13 +21,14 @@ public abstract class AmpDateFormatter {
 	protected final String pattern;
 	protected final DateTimeFormatter dtf;
 	
-	public AmpDateFormatter(String pattern, Locale locale) {
-		this.locale = locale;
-		this.pattern = pattern;
+	protected AmpDateFormatter(PatternLocalePair pair) {
+		this.locale = pair.locale;
+		this.pattern = pair.pattern;
 		dtf = DateTimeFormatter.ofPattern(this.pattern).withLocale(locale);
 	}
 	
 	public String format(Date date) {
+		if (date == null) return null;
 		LocalDate ld = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		return format(ld);
 	}

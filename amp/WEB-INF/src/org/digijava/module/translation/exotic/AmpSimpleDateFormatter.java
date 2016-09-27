@@ -5,18 +5,17 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 
-
+/**
+ * Concrete class for formatting and parsing dates in locales supported by Java 8.
+ * 
+ * @author acartaleanu
+ *
+ */
 public class AmpSimpleDateFormatter extends AmpDateFormatter {
 	
-	
-	public AmpSimpleDateFormatter(String pattern, String langCode) {
-		super(pattern, Locale.forLanguageTag(langCode));
+	protected AmpSimpleDateFormatter(PatternLocalePair p) {
+		super(p);
 	}
-
-	public AmpSimpleDateFormatter(String pattern, Locale loc) {
-		super(pattern, loc);
-	}
-	
 	
 	@Override
 	public String format(LocalDate date) {

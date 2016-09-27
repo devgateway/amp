@@ -50,7 +50,7 @@ public class ExoticMonthNames {
 			if (shortenMonthName(monthNames.get(i)).equals(shortMonthName))
 				return i + 1;
 		}
-		throw new RuntimeException("Couldn't find month with short name" + shortMonthName + " in locale " + locale.toString());
+		throw new RuntimeException("Couldn't find month with short name " + shortMonthName + " in locale " + locale.toString());
 	}
 	
 	/**

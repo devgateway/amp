@@ -15,17 +15,17 @@ import java.util.regex.Pattern;
 public class ExoticDateFormatter extends AmpDateFormatter {
 	
 	/**
-	 * Since the solution was not made generic (via date format data supplier), 
-	 * a list of supported formats was put (so as to make a 
+	 * Whitelists supported formats, since formats unused in AMP were not kept in mind 
+	 * when implementing it (reason: too much unrequested work). 
 	 */
-	private static Set<String> supportedFormats = new HashSet<String>(Arrays.asList("dd/MMM/yyyy","MMM/dd/yyyy","dd/MM/yyyy","MM/dd/yyyy"));
+	private static Set<String> supportedFormats = new HashSet<String>(Arrays.asList("yyyy-MM-dd", "dd/MMM/yyyy","MMM/dd/yyyy","dd/MM/yyyy","MM/dd/yyyy"));
 	
 	private final Pattern dayPattern;
 	private final Pattern monthPattern;
 	private final Pattern yearPattern;
 	
-	public ExoticDateFormatter(String pattern, String langCode) {
-		super(pattern, Locale.forLanguageTag(langCode));
+	protected ExoticDateFormatter(PatternLocalePair p) {
+		super(p);
 		if (!supportedFormats.contains(pattern))
 			throw new RuntimeException("Format " + pattern + " not supported!");
 		dayPattern = Pattern.compile("^\\d+");

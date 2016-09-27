@@ -22,6 +22,7 @@ import org.digijava.module.aim.util.DbUtil;
 
 /**
  * Util class for cloning activities from an EP.
+ * 
  * @author Gabriel Inchauspe
  *
  */

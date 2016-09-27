@@ -12,19 +12,26 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
+ * This class can have utility methods related to activities.
  * 
  * @author Gabriel Inchauspe
- *
+ *	
  */
 @Path("activitiesUtil")
 public class ActivitiesUtilEndpoint {
 
+	/**
+	 * Clone each activity from a list, returns an object with a list of success activities and a list of failed activities.
+	 * The list contains the ampId (String) not the id (Long) of the activity (this can be extended in the future if needed).
+	 * 
+	 * @param config: {"activities": ["AMP_ID1", "AMP_ID2", "AMP_ID3", "AMP_ID4", "AMP_ID5"]}
+	 * @return {succeed: [{OLD_ID1, NEW_ID1}, {OLD_ID2, NEW_ID2}], failed: [AMP_ID3, AMP_ID4, AMP_ID5]}
+	 */
 	@POST
 	@Path("/clone")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = {AuthRule.NONE}, ui = false, name = "clone", id = "")
-	//@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_ADMIN}, ui = false, name = "clone", id = "")
+	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_ADMIN}, ui = false, name = "clone", id = "")
 	public JsonBean cloneActivities(JsonBean config) {
 		return CloneActivitiesUtil.cloneActivities(config);
 	}

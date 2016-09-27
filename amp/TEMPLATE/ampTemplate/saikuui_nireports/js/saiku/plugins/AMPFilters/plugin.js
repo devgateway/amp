@@ -81,7 +81,7 @@ var AMPFilters = Backbone.View.extend({
 						'<a href="#amp_filters" class="amp_filters button i18n" title="Filters">Filters</a>')
 						.css(
 								{
-									'width' : "30px"
+									'width' : "auto"
 								});
 
 				var $filters_li = $('<li class="seperator"></li>').append(

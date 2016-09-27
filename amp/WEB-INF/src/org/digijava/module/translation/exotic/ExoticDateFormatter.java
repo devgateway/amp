@@ -12,6 +12,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Concrete class for formatting and parsing dates in locales unsupported by Java 8.  
+ * @author acartaleanu
+ *
+ */
 public class ExoticDateFormatter extends AmpDateFormatter {
 	
 	/**

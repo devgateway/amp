@@ -54,7 +54,7 @@
     </category>
 
     <category name="org.dgfoundation"> <!-- DEBUG default -->
-        <priority value="DEBUG"/>
+        <priority value="INFO"/>
     </category>
     <category name="org.apache.wicket.devutils.inspector.RenderPerformanceListener">
         <priority value="DEBUG"/>   <!-- SET to DEBUG to see wicket page render times -->

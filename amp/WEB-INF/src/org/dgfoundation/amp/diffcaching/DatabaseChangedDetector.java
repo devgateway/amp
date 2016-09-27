@@ -19,7 +19,7 @@ public class DatabaseChangedDetector implements Supplier<Boolean> {
 	public Boolean get() {
 		long lastFullEtl = PersistenceManager.getSession().doReturningWork(this::getLastFullEtl);
 		boolean res = lastFullEtl > lastProcessedFullEtl;
-//		ExpiringCacher.logger.debug(String.format("DBCD: lastFullEtl = %d, lastProcessedFullETL = %d, returning: %b\n", lastFullEtl, lastProcessedFullEtl, res));
+		ExpiringCacher.logger.debug(String.format("DBCD: lastFullEtl = %d, lastProcessedFullETL = %d, returning: %b\n", lastFullEtl, lastProcessedFullEtl, res));
 		this.lastProcessedFullEtl = lastFullEtl;
 		return res;
 	}

@@ -5,21 +5,29 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
-
+/**
+ * Class for formatting and parsing dates in locales used by AMP.
+ * May support locales unsupported by Java8, 
+ * e.g. Tetum (with the help of {@link ExoticDateFormatter}
+ * 
+ * @author acartaleanu
+ *
+ */
 public abstract class AmpDateFormatter {
 	
 	
 	protected final Locale locale;
 	protected final String pattern;
 	protected final DateTimeFormatter dtf;
+	
 	public AmpDateFormatter(String pattern, Locale locale) {
 		this.locale = locale;
 		this.pattern = pattern;
 		dtf = DateTimeFormatter.ofPattern(this.pattern).withLocale(locale);
 	}
-
 	
 	public abstract String format(Date date);
+	
 	public abstract String format(LocalDate date);
 	
 	public abstract LocalDate parseDate(String in);

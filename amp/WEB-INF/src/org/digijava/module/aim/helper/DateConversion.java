@@ -2,6 +2,7 @@ package org.digijava.module.aim.helper ;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
@@ -86,7 +88,12 @@ public class DateConversion
 	 */
 	public static Date getLocalizedDate(String strDate) {
 		try {
-			return isEmpty(strDate) ? null : FormatHelper.parseLocalizedDate(strDate).getTime();
+			if (isEmpty(strDate))
+				return null;
+			else {
+				LocalDate ld = AmpDateFormatterFactory.getLocalizedFormatter().parseDate(strDate);
+				return java.sql.Date.valueOf(ld);
+			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}

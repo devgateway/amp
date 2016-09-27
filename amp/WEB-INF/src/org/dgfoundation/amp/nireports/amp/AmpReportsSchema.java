@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import static org.dgfoundation.amp.nireports.NiUtils.failIf;
 import static org.dgfoundation.amp.nireports.formulas.NiFormula.*;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_COUNTRY;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_DISTRICT;

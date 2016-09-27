@@ -11,7 +11,6 @@ import java.util.StringJoiner;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
-import org.digijava.module.translation.exotic.ExoticDateFormatter;
 import org.junit.Test;
 
 public class DateTimeTests extends AmpTestCase {

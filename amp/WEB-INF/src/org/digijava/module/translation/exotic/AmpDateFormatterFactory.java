@@ -75,5 +75,4 @@ public class AmpDateFormatterFactory {
 		else
 			return getFormatter(locale, pattern, ExoticDateFormatter::new);
 	}
-	
 }

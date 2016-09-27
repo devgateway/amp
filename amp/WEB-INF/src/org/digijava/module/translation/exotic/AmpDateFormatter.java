@@ -62,5 +62,4 @@ public abstract class AmpDateFormatter {
 	
 	public abstract LocalDate parseDate(String in);
 	
-	
 }

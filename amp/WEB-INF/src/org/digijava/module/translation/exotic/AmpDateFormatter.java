@@ -21,9 +21,9 @@ public abstract class AmpDateFormatter {
 	protected final String pattern;
 	protected final DateTimeFormatter dtf;
 	
-	protected AmpDateFormatter(PatternLocalePair pair) {
-		this.locale = pair.locale;
-		this.pattern = pair.pattern;
+	protected AmpDateFormatter(Locale locale, String pattern) {
+		this.locale = locale;
+		this.pattern = pattern;
 		dtf = DateTimeFormatter.ofPattern(this.pattern).withLocale(locale);
 	}
 	

@@ -3,6 +3,7 @@ package org.digijava.module.translation.exotic;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -19,7 +20,12 @@ public class AmpDateFormatterFactory {
 		return false;
 	}
 	
-	private static Map<PatternLocalePair, AmpDateFormatter> cachedFormatters = new ConcurrentHashMap<>();
+	private static Map<Locale, Map<String,AmpDateFormatter>> cachedFormatters = new ConcurrentHashMap<>();
+	
+	private static AmpDateFormatter getFormatter(Locale locale, String pattern, BiFunction<Locale, String, AmpDateFormatter> instanceGenerator) {
+		return cachedFormatters.computeIfAbsent(locale, c -> new ConcurrentHashMap<>())
+				.computeIfAbsent(pattern, z -> instanceGenerator.apply(locale, pattern));
+	}
 	
 	/**
 	 * Gets the default formatter if no locale is specified. 
@@ -28,8 +34,7 @@ public class AmpDateFormatterFactory {
 	 * @return
 	 */
 	public static AmpDateFormatter getDefaultFormatter() {
-		PatternLocalePair p = new PatternLocalePair(DateTimeUtil.getGlobalPattern(), Locale.ENGLISH);
-		return cachedFormatters.computeIfAbsent(p, s -> new AmpSimpleDateFormatter(p));
+		return getFormatter(Locale.ENGLISH, DateTimeUtil.getGlobalPattern(), AmpSimpleDateFormatter::new);
 	}
 	
 	/**
@@ -37,8 +42,7 @@ public class AmpDateFormatterFactory {
 	 * @return
 	 */
 	public static AmpDateFormatter getDefaultFormatter(String pattern) {
-		PatternLocalePair p = new PatternLocalePair(pattern, Locale.ENGLISH);
-		return cachedFormatters.computeIfAbsent(p, s -> new AmpSimpleDateFormatter(p));
+		return getFormatter(Locale.ENGLISH, pattern, AmpSimpleDateFormatter::new);
 	}
 	
 	/**
@@ -54,13 +58,12 @@ public class AmpDateFormatterFactory {
 	 * @param format
 	 * @return
 	 */
-	public static AmpDateFormatter getLocalizedFormatter(String format) {
+	public static AmpDateFormatter getLocalizedFormatter(String pattern) {
 		String langCode = TLSUtils.getEffectiveLangCode();
-		Locale loc = Locale.forLanguageTag(langCode);
-		PatternLocalePair p = new PatternLocalePair(format, loc);
+		Locale locale = Locale.forLanguageTag(langCode);
 		if (isLangCodeSupported(langCode))
-			return cachedFormatters.computeIfAbsent(p, s -> new AmpSimpleDateFormatter(p));
-		else 
-			return cachedFormatters.computeIfAbsent(p, s -> new ExoticDateFormatter(p));
+			return getFormatter(locale, pattern, AmpSimpleDateFormatter::new);
+		else
+			return getFormatter(locale, pattern, ExoticDateFormatter::new);
 	}
 }

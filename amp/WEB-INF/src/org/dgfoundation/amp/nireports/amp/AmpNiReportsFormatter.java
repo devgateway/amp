@@ -23,7 +23,6 @@ import org.dgfoundation.amp.nireports.output.CellFormatter;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
 /**
  * part of the (NiReportsCore, AmpReportsSchema, Reports API) intersection - formats the output according to the AMP-specific rules.

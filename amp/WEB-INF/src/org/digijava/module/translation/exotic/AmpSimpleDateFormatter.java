@@ -1,8 +1,6 @@
 package org.digijava.module.translation.exotic;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -13,8 +11,8 @@ import java.util.Locale;
  */
 public class AmpSimpleDateFormatter extends AmpDateFormatter {
 	
-	protected AmpSimpleDateFormatter(PatternLocalePair p) {
-		super(p);
+	protected AmpSimpleDateFormatter(Locale locale, String pattern) {
+		super(locale, pattern);
 	}
 	
 	@Override

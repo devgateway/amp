@@ -1,12 +1,8 @@
 package org.digijava.module.translation.exotic;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -29,8 +25,8 @@ public class ExoticDateFormatter extends AmpDateFormatter {
 	private final Pattern monthPattern;
 	private final Pattern yearPattern;
 	
-	protected ExoticDateFormatter(PatternLocalePair p) {
-		super(p);
+	protected ExoticDateFormatter(Locale locale, String pattern) {
+		super(locale, pattern);
 		if (!supportedFormats.contains(pattern))
 			throw new RuntimeException("Format " + pattern + " not supported!");
 		dayPattern = Pattern.compile("^\\d+");

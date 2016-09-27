@@ -1,6 +1,7 @@
 package org.digijava.module.translation.exotic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
@@ -17,18 +18,20 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ExoticMonthNames {
 	
 	private final Locale locale;
+	private final List<String> names;
 	
-	private ExoticMonthNames(Locale loc) {
+	private ExoticMonthNames(List<String> names, Locale loc) {
+		this.names = Collections.unmodifiableList(names);
 		this.locale = loc;
 	}
 	
 	static ExoticMonthNames forLocale(Locale loc) {
-		return new ExoticMonthNames(loc);
+		return localesToMonthNames.computeIfAbsent(loc, z -> new ExoticMonthNames(loadMonthNamesForLocale(loc), loc));
 	}
 	
-	private static ConcurrentHashMap<Locale, List<String>> localesToMonthNames = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<Locale, ExoticMonthNames> localesToMonthNames = new ConcurrentHashMap<>();
 	
-	private List<String> loadMonthNamesForLocale(Locale loc) {
+	private static List<String> loadMonthNamesForLocale(Locale loc) {
 		List<String> res = new ArrayList<>();
 		ResourceBundle rb = ResourceBundle.getBundle("org.digijava.module.translation.exotic.ExoticMonthNames", loc);
 		Enumeration<String> keys = rb.getKeys();
@@ -39,9 +42,10 @@ public class ExoticMonthNames {
 		}
 		return res;
 	}
+
 	
-	List<String> getMonthNamesForLocale(Locale loc) {
-		return localesToMonthNames.computeIfAbsent(loc, z -> loadMonthNamesForLocale(loc));
+	List<String> getMonthNames() {
+		return names;
 	}
 	
 	/**
@@ -50,7 +54,7 @@ public class ExoticMonthNames {
 	 * @return capitalized month name in that language
 	 */
 	public String getFullMonthName(int monthNumber) {
-		return getMonthNamesForLocale(locale).get(monthNumber - 1);
+		return getMonthNames().get(monthNumber - 1);
 
 	}
 	
@@ -63,7 +67,7 @@ public class ExoticMonthNames {
 	}
 	
 	public int getMonthNumber(String shortMonthName) {
-		List<String> monthNames = getMonthNamesForLocale(locale);
+		List<String> monthNames = getMonthNames();
 		for (int i = 0; i < monthNames.size(); i++) {
 			if (shortenMonthName(monthNames.get(i)).equals(shortMonthName))
 				return i + 1;

@@ -397,43 +397,40 @@ var WorkspaceToolbar = Backbone.View.extend({
     export_amp_dual_currency: function() {
     	Saiku.logger.log("WorkspaceToolbar.export_amp_dual_currency");
         var that = this;
-        if(!this.deflatedCurrenciesPromise){
+        if (!this.deflatedCurrenciesPromise) {
             this.deflatedCurrenciesPromise = $.get("/rest/amp/settings")
                 .then(function(settings){
                     return settings.filter(function(setting){
                         return setting.id == "1";
                     })[0]
-                })
-                .then(function(setting){
-                    return setting.options.filter(function(currency){
-                        return currency.id != setting.defaultId
-                    })
-                })
-            ;
+                });
         }
+        
         this.deflatedCurrenciesPromise.then(function(currencies){
+        	availableCurrencies = _.filter(currencies.options, function(currency) {
+        		return currency.id !== window.currentSettings['1'];
+            }); 
             var $container = $('#deflated-currencies-container');
             var $select = $container.find('#amp_deflated_currency');
             var $export = $container.find(".btn.export");
             var $cancel = $container.find(".btn.cancel");
             var $close = $container.find(".close.cancel");
-            if($select.is(":empty")){
-                $select.append(currencies.map(function(currency){
-                    return $("<option></option>")
-                        .text(currency.name + " (" + currency.id + ")")
-                        .attr("value", currency.id);
-                }));
-                $cancel.add($export).add($close).click(function(){
-                    $container.hide();
-                });
-                $export.click(function(){
-                    var payload = $.extend(true, {}, that.workspace.currentQueryModel);
-                    payload.xls_type = 'styled';
-                    payload.queryModel.secondCurrency = $select.val();
-                    $.postDownload("/rest/data/saikureport/export/xls/" + that.calculate_url(),
-                      {query: JSON.stringify(payload)}, "post");
-                });
-            }
+            $select.empty();
+            $select.append(availableCurrencies.map(function(currency){
+                return $("<option></option>")
+                    .text(currency.name + " (" + currency.id + ")")
+                    .attr("value", currency.id);
+            }));
+            $cancel.add($export).add($close).click(function(){
+                $container.hide();
+            });
+            $export.click(function(){
+                var payload = $.extend(true, {}, that.workspace.currentQueryModel);
+                payload.xls_type = 'styled';
+                payload.queryModel.secondCurrency = $select.val();
+                $.postDownload("/rest/data/saikureport/export/xls/" + that.calculate_url(),
+                  {query: JSON.stringify(payload)}, "post");
+            });
             $container.show();
         });
     },

@@ -23,7 +23,6 @@ public class ExoticMonthNames {
 		return localesToMonthNames.computeIfAbsent(loc, z -> new ExoticMonthNames(loc));
 	}
 	
-	
 	private final Locale locale;
 	private final List<String> names;
 	

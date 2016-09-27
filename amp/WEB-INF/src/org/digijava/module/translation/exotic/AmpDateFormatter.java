@@ -1,6 +1,7 @@
 package org.digijava.module.translation.exotic;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
@@ -26,7 +27,10 @@ public abstract class AmpDateFormatter {
 		dtf = DateTimeFormatter.ofPattern(this.pattern).withLocale(locale);
 	}
 	
-	public abstract String format(Date date);
+	public String format(Date date) {
+		LocalDate ld = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		return format(ld);
+	}
 	
 	public abstract String format(LocalDate date);
 	

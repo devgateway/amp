@@ -10,23 +10,15 @@ import java.util.regex.Pattern;
 
 public class ExoticDateFormatter extends AmpDateFormatter {
 
-
-	final private Pattern dayPattern;
-	final private Pattern monthPattern;
-	final private Pattern yearPattern;
+	private final Pattern dayPattern;
+	private final Pattern monthPattern;
+	private final Pattern yearPattern;
 	
-
 	public ExoticDateFormatter(String pattern, String langCode) {
 		super(pattern, Locale.forLanguageTag(langCode));
 		dayPattern = Pattern.compile("^\\d+");
 		yearPattern = Pattern.compile("\\d{4}+");
 		monthPattern = Pattern.compile("\\w{3}+");
-	}
-	
-	@Override
-	public String format(Date date) {
-		LocalDate ld = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		return format(ld);
 	}
 	
 	@Override
@@ -38,6 +30,19 @@ public class ExoticDateFormatter extends AmpDateFormatter {
 		}
 	}
 	
+	@Override
+	public LocalDate parseDate(String in) {
+		if (this.pattern.contains("MMM")) {
+			return parseWithMonthName(in);
+		} else {
+			return dtf.parse(in, LocalDate::from);
+		}
+	}
+	
+	private LocalDate parseWithMonthName(String in) {
+		return LocalDate.of(getYears(in), getMonths(in), getDays(in));
+	}
+	
 	private String formatWithMonthName(LocalDate date) {
 		String day = String.format("%d", date.getDayOfMonth());
 		String monthName = ExoticMonthNames.forLocale(this.locale).getShortMonthName(date.getMonthValue());
@@ -47,19 +52,7 @@ public class ExoticDateFormatter extends AmpDateFormatter {
 		res = res.replace("yyyy", year);
 		return res;
 	}
-	
-	@Override
-	public LocalDate parseDate(String in) {
-		if (this.pattern.contains("MMM")) {
-			return parseWithMonthName(in);
-		} else {
-			return DateTimeFormatter.ofPattern(pattern).withLocale(locale).parse(in, LocalDate::from);
-		}
-	}
-	
-	private LocalDate parseWithMonthName(String in) {
-		return LocalDate.of(getYears(in), getMonths(in), getDays(in));
-	}
+
 
 	private int getDays(String in) {
 		String patt = this.pattern.toLowerCase();

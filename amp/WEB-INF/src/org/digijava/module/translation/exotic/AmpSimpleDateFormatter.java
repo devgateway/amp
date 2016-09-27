@@ -17,12 +17,7 @@ public class AmpSimpleDateFormatter extends AmpDateFormatter {
 		super(pattern, loc);
 	}
 	
-	@Override
-	public String format(Date date) {
-		LocalDate ld = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		return format(ld);
-	}
-
+	
 	@Override
 	public String format(LocalDate date) {
 		return dtf.format(date);
@@ -32,5 +27,4 @@ public class AmpSimpleDateFormatter extends AmpDateFormatter {
 	public LocalDate parseDate(String in) {
 		return dtf.parse(in, LocalDate::from);
 	}
-
 }

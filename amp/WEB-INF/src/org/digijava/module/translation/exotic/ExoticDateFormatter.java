@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
  */
 public class ExoticDateFormatter extends AmpDateFormatter {
 	
+<<<<<<< HEAD
 	private final Pattern dayPattern;
 	private final Pattern monthPattern;
 	private final Pattern yearPattern;
@@ -22,9 +23,24 @@ public class ExoticDateFormatter extends AmpDateFormatter {
 		super(locale, pattern);
 		if (!supportedFormats.contains(pattern))
 			throw new IllegalArgumentException("Format " + pattern + " not supported!");
+=======
+
+	public ExoticDateFormatter(String pattern, Locale locale) {
+		super(pattern, locale);
+>>>>>>> branch 'bug/AMP-24186' of https://github.com/devgateway/amp.git
 		dayPattern = Pattern.compile("^\\d+");
+		monthPattern = Pattern.compile("[\\w&&[\\D]]{3}+");
 		yearPattern = Pattern.compile("\\d{4}+");
+<<<<<<< HEAD
 		monthPattern = Pattern.compile("[a-zA-Z]{3}+");
+=======
+	}
+	
+	@Override
+	public String format(Date date) {
+		LocalDate ld = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		return format(ld);
+>>>>>>> branch 'bug/AMP-24186' of https://github.com/devgateway/amp.git
 	}
 	
 	@Override

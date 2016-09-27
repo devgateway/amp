@@ -53,6 +53,13 @@ public class AmpDateFormatterFactory {
 		return getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
 	}
 
+	public static AmpDateFormatter getLocalizedFormatter(String format, Locale locale) {
+		if (isLangCodeSupported(locale.getLanguage()))
+			return new AmpSimpleDateFormatter(format, locale);
+		else 
+			return new ExoticDateFormatter(format, locale);
+	}
+	
 	/**
 	 * Gets a localized formatter with a specified pattern.
 	 * Locale picked from current request.
@@ -61,7 +68,12 @@ public class AmpDateFormatterFactory {
 	 */
 	public static AmpDateFormatter getLocalizedFormatter(String pattern) {
 		String langCode = TLSUtils.getEffectiveLangCode();
+<<<<<<< HEAD
 		return getLocalizedFormatter(pattern, Locale.forLanguageTag(langCode));
+=======
+		return getLocalizedFormatter(format, Locale.forLanguageTag(langCode));
+		
+>>>>>>> branch 'bug/AMP-24186' of https://github.com/devgateway/amp.git
 	}
 	
 	/**

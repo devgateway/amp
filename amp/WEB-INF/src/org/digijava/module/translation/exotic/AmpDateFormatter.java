@@ -3,8 +3,14 @@ package org.digijava.module.translation.exotic;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Class for formatting and parsing dates in locales used by AMP.
@@ -16,6 +22,25 @@ import java.util.Locale;
  */
 public abstract class AmpDateFormatter {
 	
+	
+	/**
+	 * Whitelists supported formats, since formats unused in AMP were not kept in mind 
+	 * when implementing it (reason: too much unrequested work). 
+	 */
+	protected static Set<String> supportedFormats = generateSupportedPatterns();
+	
+	public static Set<String> generateSupportedPatterns() {
+		List<String> base = Arrays.asList("dd-MMM-yyyy", "dd-MM-yyyy", "MM-dd-yyyy", "MMM-dd-yyyy", "yyyy-MMM-dd", "yyyy-MM-dd");
+		List<String> res = new ArrayList<>();
+		for (String el : base) {
+			res.add(el.replaceAll("-", "/"));
+			res.add(el.replaceAll("-", "."));
+			res.add(el);
+		}
+		//LinkedHashSet to preserve order for testing reasons
+		Set<String> set = new LinkedHashSet<>(res);
+		return Collections.unmodifiableSet(set);
+	}
 	
 	protected final Locale locale;
 	protected final String pattern;

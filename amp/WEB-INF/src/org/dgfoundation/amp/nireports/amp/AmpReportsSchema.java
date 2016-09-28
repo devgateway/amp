@@ -719,11 +719,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 				MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, +1,
 				MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, +1);		
 		
-//		addTrivialStrippedFilterMeasure(MeasureConstants.UNCOMMITTED_BALANCE,
-//				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
-//				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT, +1,
-//				MeasureConstants.ACTUAL_COMMITMENTS, -1);
-
 		addTrivialFilterMeasure(MeasureConstants.UNDISBURSED_BALANCE,
 				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
 				MeasureConstants.ACTUAL_COMMITMENTS, +1,

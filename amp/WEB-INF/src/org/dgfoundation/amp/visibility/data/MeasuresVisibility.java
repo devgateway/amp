@@ -113,7 +113,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.CUMULATIVE_EXECUTION_RATE, Arrays.asList(ArConstants.COMMITMENT, ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 	}};
 
-	public static Set<String> allMeasures = _getAllMeasures();	
+	public static Set<String> allMeasures = _getAllMeasures();
 	
 	public static void resetMeasuresList() {
 		allMeasures = _getAllMeasures();

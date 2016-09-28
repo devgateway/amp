@@ -1029,6 +1029,7 @@
                         <configuration>
                             <outputDirectory>WEB-INF/lib</outputDirectory>
                             <excludeScope>provided</excludeScope>
+                            <silent>true</silent>
                         </configuration>
                     </execution>
                 </executions>
@@ -1069,10 +1070,10 @@
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
                                 <property name="jdbc.db" value="amp_drc" />
 
-                                <echo message="compile classpath: ${compile_classpath}" />
-                                <echo message="runtime classpath: ${runtime_classpath}" />
-                                <echo message="test classpath:    ${test_classpath}" />
-                                <echo message="plugin classpath:  ${plugin_classpath}" />
+                                <!--<echo message="compile classpath: ${compile_classpath}" />-->
+                                <!--<echo message="runtime classpath: ${runtime_classpath}" />-->
+                                <!--<echo message="test classpath:    ${test_classpath}" />-->
+                                <!--<echo message="plugin classpath:  ${plugin_classpath}" />-->
 
                                 <ant antfile="${basedir}/build.xml">
                                     <target name="deployForServer" />
@@ -1095,10 +1096,10 @@
                                 <property name="test_classpath" refid="maven.test.classpath" />
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
 
-                                <echo message="compile classpath: ${compile_classpath}" />
-                                <echo message="runtime classpath: ${runtime_classpath}" />
-                                <echo message="test classpath:    ${test_classpath}" />
-                                <echo message="plugin classpath:  ${plugin_classpath}" />
+                                <!--<echo message="compile classpath: ${compile_classpath}" />-->
+                                <!--<echo message="runtime classpath: ${runtime_classpath}" />-->
+                                <!--<echo message="test classpath:    ${test_classpath}" />-->
+                                <!--<echo message="plugin classpath:  ${plugin_classpath}" />-->
 
                                 <ant antfile="${basedir}/build.xml">
                                     <target name="clean" />

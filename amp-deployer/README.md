@@ -8,7 +8,7 @@ staging, preprod, production and other environments.
 ## Usage Instructions
 
 * [Setting up local development environments](docs/local-environments.md)
-* [Setting up production, preprod or testing environments](production-environments.md)
+* [Setting up production, preprod or testing environments](docs/production-environments.md)
 
 
 ## Preparing Environment Configuration Files

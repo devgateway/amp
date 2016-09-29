@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -19,7 +20,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 
 @Path("currency")
-public class Currencies {
+public class Currencies implements ErrorReportingEndpoint {
 	
 	@Context
 	private HttpServletRequest httpRequest;
@@ -167,5 +168,12 @@ public class Currencies {
 	public JsonBean saveConstantCurrencies(JsonBean input) {
 		return CurrencyService.saveConstantCurrencies(input);
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class getErrorsClass() {
+		return CurrencyErrors.class;
+	}
 }

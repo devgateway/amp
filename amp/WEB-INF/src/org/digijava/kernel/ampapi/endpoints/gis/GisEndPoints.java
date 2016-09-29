@@ -37,6 +37,7 @@ import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
@@ -79,7 +80,7 @@ import net.sf.json.JSONSerializer;
  * 
  */
 @Path("gis")
-public class GisEndPoints {
+public class GisEndPoints implements ErrorReportingEndpoint {
 	private static final Logger logger = Logger.getLogger(GisEndPoints.class);
 
 	@Context
@@ -602,4 +603,11 @@ public class GisEndPoints {
 		return ReportsUtil.getApiState(reportConfigId);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class getErrorsClass() {
+		return GisErrors.class;
+	}
 }

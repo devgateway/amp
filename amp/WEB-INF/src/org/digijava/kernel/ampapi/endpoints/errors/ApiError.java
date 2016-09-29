@@ -73,7 +73,7 @@ public class ApiError {
 	 * Returns a JSON object with list of error messages
 	 * list of error messages => generic 0 error code with the given list of errors
 	 * list of custom errors, where integer will be validated to be between 0 and 99
-	 * @param ApiErrorMessage object 
+	 * @param errorMessages a collection of objects of type String or ApiErrorMessage
 	 * @return the JSON object of the error. E.g.: {0: [“Generic error 1”, “Generic error 2”], 135: [“Forbidden fields have been configured: sector_id”], 123: [“Generic error 1”]}
 	 */
 	public static JsonBean toError(Collection<?> errorMessages) {
@@ -103,8 +103,8 @@ public class ApiError {
 	
 	/**
 	 * Returns a JSON object with a single error message. Generic 0 error code with one error in the list.
-	 * @param ApiErrorMessage object
-	 * @return the json of the error. E.g.: {123: [“Generic error 1”]}
+	 * @param apiErrorMessage ApiErrorMessage object
+	 * @return the json of the error. E.g.: {"0102": ["Generic error 1"]}
 	 */
 	public static JsonBean toError(ApiErrorMessage apiErrorMessage) {
 		JsonBean errorBean = new JsonBean();
@@ -147,7 +147,8 @@ public class ApiError {
 	
 	/**
 	 * Returns the id of the ApiErrorMessage object. A lookup for the class code will be made on the stacktrace . 
-	 * @param ApiErrorMessage object
+	 * @param componentId component id
+	 * @param errorId error id
 	 * @return the id of the error
 	 */
 	private static String getErrorId(int componentId, int errorId) {

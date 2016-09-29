@@ -32,7 +32,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	protected boolean alsoShowPledges = false;
 	protected boolean summaryReport = false;
 	protected ReportCollapsingStrategy reportCollapsingStrategy = ReportCollapsingStrategy.UNKNOWNS;
-	protected Boolean displayTimeRangeSubtotals;
+	protected boolean displayTimeRangeSubtotals = true;
 	
     /**
      * If the report query results in empty data
@@ -289,7 +289,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	}
 
 	@Override
-	public Boolean isDisplayTimeRangeSubTotals() {
+	public boolean isDisplayTimeRangeSubTotals() {
 		return displayTimeRangeSubtotals;
 	}
 

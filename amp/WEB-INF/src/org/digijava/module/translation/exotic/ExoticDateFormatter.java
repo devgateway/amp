@@ -1,12 +1,11 @@
 package org.digijava.module.translation.exotic;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+
 
 /**
  * Concrete class for formatting and parsing dates in locales unsupported by Java 8.  
@@ -15,23 +14,17 @@ import java.util.regex.Pattern;
  */
 public class ExoticDateFormatter extends AmpDateFormatter {
 	
-	/**
-	 * Whitelists supported formats, since formats unused in AMP were not kept in mind 
-	 * when implementing it (reason: too much unrequested work). 
-	 */
-	private static Set<String> supportedFormats = new HashSet<String>(Arrays.asList("yyyy-MM-dd", "dd/MMM/yyyy","MMM/dd/yyyy","dd/MM/yyyy","MM/dd/yyyy"));
-	
 	private final Pattern dayPattern;
 	private final Pattern monthPattern;
 	private final Pattern yearPattern;
 	
 	protected ExoticDateFormatter(Locale locale, String pattern) {
 		super(locale, pattern);
-		if (!supportedFormats.contains(pattern))
-			throw new RuntimeException("Format " + pattern + " not supported!");
+		if (!SUPPORTED_FORMATS.contains(pattern))
+			throw new IllegalArgumentException("Format " + pattern + " not supported!");
 		dayPattern = Pattern.compile("^\\d+");
 		yearPattern = Pattern.compile("\\d{4}+");
-		monthPattern = Pattern.compile("\\w{3}+");
+		monthPattern = Pattern.compile("[a-zA-Z]{3}+");
 	}
 	
 	@Override

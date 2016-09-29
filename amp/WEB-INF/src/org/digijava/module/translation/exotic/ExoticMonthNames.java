@@ -1,12 +1,15 @@
 package org.digijava.module.translation.exotic;
 
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.dgfoundation.amp.algo.AlgoUtils;
 
 /**
  * Class containing month names with locales unsupported by Java 8. 
@@ -24,33 +27,37 @@ public class ExoticMonthNames {
 	}
 	
 	private final Locale locale;
-	private final List<String> names;
-	
+	private final Map<String, Integer> namesToNumbers;
+	private final Map<String, Integer> shortNamesToNumbers;
+	private final Map<Integer, String> numbersToNames;
 	
 	private ExoticMonthNames(Locale loc) {
-		this.names = Collections.unmodifiableList(loadMonthNamesForLocale(loc));
+		this.namesToNumbers = Collections.unmodifiableMap(loadMonthNamesForLocale(loc));
+		this.numbersToNames = Collections.unmodifiableMap(AlgoUtils.reverseIntoHashMap(namesToNumbers));
+		Map<String, Integer> t = new HashMap<>();
+		namesToNumbers.forEach((key, value) -> t.put(shortenMonthName(key), value));
+		this.shortNamesToNumbers = Collections.unmodifiableMap(t);
 		this.locale = loc;
 	}
 	
-	private List<String> loadMonthNamesForLocale(Locale loc) {
-		List<String> res = new ArrayList<>();
+	private Map<String, Integer> loadMonthNamesForLocale(Locale loc) {
 		ResourceBundle rb = ResourceBundle.getBundle("org.digijava.module.translation.exotic.ExoticMonthNames", loc);
+		HashMap<String, Integer> res = new HashMap<>();
 		Enumeration<String> keys = rb.getKeys();
 		while (keys.hasMoreElements()) {
-			String key = keys.nextElement();
-			String value = rb.getString(key);
-			res.add(value);
+			String skey = keys.nextElement();
+			Integer key = Integer.parseInt(skey);
+			String value = rb.getString(skey);
+			res.put(value, key);
 		}
 		return res;
 	}
 	
 	public int getMonthNumber(String shortMonthName) {
-		List<String> monthNames = getMonthNames();
-		for (int i = 0; i < monthNames.size(); i++) {
-			if (shortenMonthName(monthNames.get(i)).equals(shortMonthName))
-				return i + 1;
-		}
-		throw new RuntimeException("Couldn't find month with short name " + shortMonthName + " in locale " + locale.toString());
+		Integer res = shortNamesToNumbers.get(shortMonthName);
+		if (res == null)
+			throw new RuntimeException("Couldn't find month with short name " + shortMonthName + " in locale " + locale.toString());
+		return res;
 	}
 	
 	/**
@@ -59,11 +66,10 @@ public class ExoticMonthNames {
 	 * @return capitalized month name in that language
 	 */
 	public String getFullMonthName(int monthNumber) {
-		return getMonthNames().get(monthNumber - 1);
-	}
-
-	List<String> getMonthNames() {
-		return names;
+		String res = numbersToNames.get(monthNumber);
+		if (res == null) 
+			throw new RuntimeException("Couldn't find month with number " + monthNumber + " in locale " + locale.toString());
+		return numbersToNames.get(monthNumber);
 	}
 	
 	public String getShortMonthName(int monthNumber) {

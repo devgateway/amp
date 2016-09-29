@@ -52,16 +52,25 @@ public class AmpDateFormatterFactory {
 	public static AmpDateFormatter getLocalizedFormatter() {
 		return getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
 	}
-
+	
 	/**
 	 * Gets a localized formatter with a specified pattern.
+	 * Locale picked from current request.
 	 * @param format
 	 * @return
 	 */
 	public static AmpDateFormatter getLocalizedFormatter(String pattern) {
 		String langCode = TLSUtils.getEffectiveLangCode();
-		Locale locale = Locale.forLanguageTag(langCode);
-		if (isLangCodeSupported(langCode))
+		return getLocalizedFormatter(pattern, Locale.forLanguageTag(langCode));
+	}
+	
+	/**
+	 * Gets a localized formatter with a specified pattern.
+	 * @param format
+	 * @return
+	 */
+	public static AmpDateFormatter getLocalizedFormatter(String pattern, Locale locale) {
+		if (isLangCodeSupported(locale.getLanguage()))
 			return getFormatter(locale, pattern, AmpSimpleDateFormatter::new);
 		else
 			return getFormatter(locale, pattern, ExoticDateFormatter::new);

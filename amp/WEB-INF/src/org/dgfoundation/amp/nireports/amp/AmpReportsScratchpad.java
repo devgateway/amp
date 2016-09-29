@@ -120,11 +120,6 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	
 	protected final NiPrecisionSetting precisionSetting = new AmpPrecisionSetting();
 
-	/**
-	 * whether to display sub total columns for monthly and quarterly reports
-	 */
-	public final boolean displayTimeRangeSubTotals;
-
 	public AmpReportsScratchpad(NiReportsEngine engine) {
 		this.engine = engine;
 		this.computedMeasuresBlock =  new Memoizer<>(() -> SelectedYearBlock.buildFor(this.engine.spec, forcedNowDate == null ? LocalDate.now() : forcedNowDate));
@@ -142,7 +137,6 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		this.verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
 			engine.spec.getColumnNames().contains(ColumnConstants.MODE_OF_PAYMENT) &&
 			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);
-		this.displayTimeRangeSubTotals = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.DISPLAY_TIME_RANGE_SUB_TOTALS);
 	}
 	
 	public AmpCurrency getUsedCurrency() {
@@ -295,14 +289,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getTimeRangeSubTotalColumnName(ReportSpecification reportSpecification) {
-		Boolean specSubTotals = reportSpecification.isDisplayTimeRangeSubTotals();
-
-		// first check if report specification returns a value for sub totals, if not use system wide settings
-		if ((specSubTotals == null && displayTimeRangeSubTotals) || specSubTotals == Boolean.TRUE) {
-			return TranslatorWorker.translateText("Total");
-		} else {
-			return null;
-		}
+	public String getTimeRangeSubTotalColumnName(ReportSpecification spec) {
+		return spec.isDisplayTimeRangeSubTotals() ? TranslatorWorker.translateText("Total") : null;
 	}
 }

@@ -46,8 +46,8 @@ else
   raise 'Can not find the AnsibleMain.local.yml or AnsibleMain.yml.'
 end
 
-# Vagrant v1.8.4 is required for ansible_local provisioning to work properly.
-Vagrant.require_version ">= 1.8.4"
+# Vagrant v1.8.6 is required for SSH connection to work properly.
+Vagrant.require_version ">= 1.8.6"
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version.

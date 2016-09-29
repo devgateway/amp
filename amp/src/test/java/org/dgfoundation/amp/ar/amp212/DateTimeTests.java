@@ -17,13 +17,12 @@ public class DateTimeTests extends AmpTestCase {
 	
 	public DateTimeTests() {
 		super("Date/time conversion tests");
-		
 	}
-	private final static Set<String> patterns = AmpDateFormatter.generateSupportedPatterns();
+	private final static Set<String> PATTERNS = AmpDateFormatter.generateSupportedPatterns();
 	
-	private final static List<String> limitedPatterns = Arrays.asList("dd/MMM/yyyy", "MMM/dd/yyyy", "yyyy/MMM/dd");
+	private final static List<String> LIMITED_PATTERNS = Arrays.asList("dd/MMM/yyyy", "MMM/dd/yyyy", "yyyy/MMM/dd");
 	
-	private final static List<LocalDate> limitedDates = generateLimitedDates();
+	private final static List<LocalDate> LIMITED_DATES = generateLimitedDates();
 	
 	private static List<LocalDate> generateLimitedDates() {
 		List<LocalDate> res = new ArrayList<>();
@@ -35,7 +34,7 @@ public class DateTimeTests extends AmpTestCase {
 	}
 	
 	
-	private final static List<LocalDate> dates = generateDates();
+	private final static List<LocalDate> DATES = generateDates();
 	private static List<LocalDate> generateDates() {
 		List<LocalDate> res = new ArrayList<>();
 		for (int i = 1; i <= 12; i++) {
@@ -47,8 +46,8 @@ public class DateTimeTests extends AmpTestCase {
 
 	@Test
 	public void testLocalizedWithPattern() {
-		for (LocalDate ld : dates) {
-			for (String pattern : patterns) {
+		for (LocalDate ld : DATES) {
+			for (String pattern : PATTERNS) {
 				AmpDateFormatter formatter = AmpDateFormatterFactory.getLocalizedFormatter(pattern);
 				String fm = formatter.format(ld);
 				LocalDate defm = formatter.parseDate(fm);
@@ -60,8 +59,8 @@ public class DateTimeTests extends AmpTestCase {
 
 	
 	private void runLocalizedWithPattern(Locale locale) {
-		for (LocalDate ld : dates) {
-			for (String pattern : patterns) {
+		for (LocalDate ld : DATES) {
+			for (String pattern : PATTERNS) {
 				AmpDateFormatter formatter = AmpDateFormatterFactory.getLocalizedFormatter(pattern, locale);
 				String fm = formatter.format(ld);
 				LocalDate defm = formatter.parseDate(fm);
@@ -135,27 +134,18 @@ public class DateTimeTests extends AmpTestCase {
 	
 	@Test
 	public void testDefaultFormatter() {
-		for (LocalDate ld : dates) {
+		for (LocalDate ld : DATES) {
 			AmpDateFormatter formatter = AmpDateFormatterFactory.getDefaultFormatter();
 			String fm = formatter.format(ld);
 			LocalDate defm = formatter.parseDate(fm);
 			assertEquals(ld, defm);
 		}
 	}
-	private void printCorrect(List<String> values, String message) {
-		System.out.println(message);
-		StringJoiner sj = new StringJoiner(",");
-		
-		for (String p : values) {
-			sj.add("\"" + p + "\"");
-		}
-		System.out.println("Arrays.asList(" + sj.toString() +  ");");
-	}
-	
+
 	private void runShortLocalizedWithPattern(Locale locale, List<String> cor) {
 		List<String> res = new ArrayList<>();
-		for (LocalDate ld : limitedDates) {
-			for (String pattern : limitedPatterns) {
+		for (LocalDate ld : LIMITED_DATES) {
+			for (String pattern : LIMITED_PATTERNS) {
 				AmpDateFormatter formatter = AmpDateFormatterFactory.getLocalizedFormatter(pattern, locale);
 				String fm = formatter.format(ld);
 				res.add(fm);
@@ -166,5 +156,15 @@ public class DateTimeTests extends AmpTestCase {
 			printCorrect(res, "Correct output for " + locale.getLanguage() + " :");
 		}
 		assertEquals(cor, res);
-	}	
+	}
+	
+	private void printCorrect(List<String> values, String message) {
+		System.out.println(message);
+		StringJoiner sj = new StringJoiner(",");
+		
+		for (String p : values) {
+			sj.add("\"" + p + "\"");
+		}
+		System.out.println("Arrays.asList(" + sj.toString() +  ");");
+	}
 }

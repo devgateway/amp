@@ -38,7 +38,9 @@ public class XMLPatchesWrongPaths {
 		// any upgrade to 2.10+ go through 2.8 patches first anyway and looks like the order here is not important
 		{"AMP-17073.xml", "xmlpatches/2.7.18/", "xmlpatches/2.8.4/"},
 		// applicable to old maps that are no longer used in 2.10+, plus any upgrade to 2.10+ go through 2.8 patches first anyway and looks like the order here is not important
-		{"AMP-16976.xml", "xmlpatches/2.7.16/", "xmlpatches/2.8.3/"}
+		{"AMP-16976.xml", "xmlpatches/2.7.16/", "xmlpatches/2.8.3/"},
+		// wrong folder created, relocated and fixing the path 
+		{"AMP-24103-deffer-unique-constraint.xml", "xmlpatches/2.z12.7/", "xmlpatches/2.z12.07/"}
 	};
 	
 	public static final String SQL_PATCH = getSQLPatch();

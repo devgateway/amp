@@ -881,6 +881,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 				null, 
 				GroupingCriteria.GROUPING_QUARTERLY);
 		spec.setDisplayEmptyFundingColumns(true);
+		spec.setDisplayTimeRangeSubtotals(false);
 		runNiTestCase(
 				spec,
 				"en", 
@@ -908,6 +909,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
 				null, 
 				GroupingCriteria.GROUPING_MONTHLY);
+		spec.setDisplayTimeRangeSubtotals(false);
 		
 		spec.setDisplayEmptyFundingColumns(true);
 		runNiTestCase(

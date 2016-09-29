@@ -27,7 +27,7 @@ public abstract class AmpDateFormatter {
 	 * Whitelists supported formats, since formats unused in AMP were not kept in mind 
 	 * when implementing it (reason: too much unrequested work). 
 	 */
-	protected static Set<String> supportedFormats = generateSupportedPatterns();
+	protected static Set<String> SUPPORTED_FORMATS = generateSupportedPatterns();
 	
 	public static Set<String> generateSupportedPatterns() {
 		List<String> base = Arrays.asList("dd-MMM-yyyy", "dd-MM-yyyy", "MM-dd-yyyy", "MMM-dd-yyyy", "yyyy-MMM-dd", "yyyy-MM-dd");

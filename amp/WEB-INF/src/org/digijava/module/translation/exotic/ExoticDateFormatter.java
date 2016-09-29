@@ -20,7 +20,7 @@ public class ExoticDateFormatter extends AmpDateFormatter {
 	
 	protected ExoticDateFormatter(Locale locale, String pattern) {
 		super(locale, pattern);
-		if (!supportedFormats.contains(pattern))
+		if (!SUPPORTED_FORMATS.contains(pattern))
 			throw new IllegalArgumentException("Format " + pattern + " not supported!");
 		dayPattern = Pattern.compile("^\\d+");
 		yearPattern = Pattern.compile("\\d{4}+");

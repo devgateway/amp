@@ -45,16 +45,6 @@ public class DateTimeTests extends AmpTestCase {
 		return res;
 	}
 
-	private void printCorrect(List<String> values, String message) {
-		System.out.println(message);
-		StringJoiner sj = new StringJoiner(",");
-		
-		for (String p : values) {
-			sj.add("\"" + p + "\"");
-		}
-		System.out.println("Arrays.asList(" + sj.toString() +  ");");
-	}
-	
 	@Test
 	public void testLocalizedWithPattern() {
 		for (LocalDate ld : dates) {
@@ -67,21 +57,7 @@ public class DateTimeTests extends AmpTestCase {
 		}
 	}
 
-	private void runShortLocalizedWithPattern(Locale locale, List<String> cor) {
-		List<String> res = new ArrayList<>();
-		for (LocalDate ld : limitedDates) {
-			for (String pattern : limitedPatterns) {
-				AmpDateFormatter formatter = AmpDateFormatterFactory.getLocalizedFormatter(pattern, locale);
-				String fm = formatter.format(ld);
-				res.add(fm);
-//				System.out.println(String.format("For input %s on pattern %s got result %s", ld.toString(), pattern, fm));
-			}
-		}
-		if (!cor.equals(res)) {
-			printCorrect(res, "Correct output for " + locale.getLanguage() + " :");
-		}
-		assertEquals(cor, res);
-	}
+
 	
 	private void runLocalizedWithPattern(Locale locale) {
 		for (LocalDate ld : dates) {
@@ -101,7 +77,7 @@ public class DateTimeTests extends AmpTestCase {
 	
 	@Test
 	public void testLocalizedWithPatternTimor() {
-		runLocalizedWithPattern(Locale.forLanguageTag("tm"));Locale.forLanguageTag("tm");
+		runLocalizedWithPattern(Locale.forLanguageTag("tm"));
 	}
 	
 	@Test
@@ -112,7 +88,7 @@ public class DateTimeTests extends AmpTestCase {
 	@Test
 	public void testUnsupportedPatternYears() {
 		try {
-			AmpDateFormatter formatter = AmpDateFormatterFactory.getLocalizedFormatter("yyyyy-mmm-dd", Locale.forLanguageTag("tm"));
+			AmpDateFormatterFactory.getLocalizedFormatter("yyyyy-mmm-dd", Locale.forLanguageTag("tm"));
 			fail("should have caught the invalid formatter");
 		} catch(IllegalArgumentException e) {
 		}
@@ -121,7 +97,7 @@ public class DateTimeTests extends AmpTestCase {
 	@Test
 	public void testUnsupportedPatternMonths() {
 		try {
-			AmpDateFormatter formatter = AmpDateFormatterFactory.getLocalizedFormatter("yyyy-mmmmm-dd", Locale.forLanguageTag("tm"));
+			AmpDateFormatterFactory.getLocalizedFormatter("yyyy-mmmmm-dd", Locale.forLanguageTag("tm"));
 			fail("should have caught the invalid formatter");
 		} catch(IllegalArgumentException e) {
 		}
@@ -130,7 +106,7 @@ public class DateTimeTests extends AmpTestCase {
 	@Test
 	public void testUnsupportedPatternYears2() {
 		try {
-			AmpDateFormatter formatter = AmpDateFormatterFactory.getLocalizedFormatter("yy-mmm-dd", Locale.forLanguageTag("tm"));
+			AmpDateFormatterFactory.getLocalizedFormatter("yy-mmm-dd", Locale.forLanguageTag("tm"));
 			fail("should have caught the invalid formatter");
 		} catch(IllegalArgumentException e) {
 		}
@@ -166,4 +142,29 @@ public class DateTimeTests extends AmpTestCase {
 			assertEquals(ld, defm);
 		}
 	}
+	private void printCorrect(List<String> values, String message) {
+		System.out.println(message);
+		StringJoiner sj = new StringJoiner(",");
+		
+		for (String p : values) {
+			sj.add("\"" + p + "\"");
+		}
+		System.out.println("Arrays.asList(" + sj.toString() +  ");");
+	}
+	
+	private void runShortLocalizedWithPattern(Locale locale, List<String> cor) {
+		List<String> res = new ArrayList<>();
+		for (LocalDate ld : limitedDates) {
+			for (String pattern : limitedPatterns) {
+				AmpDateFormatter formatter = AmpDateFormatterFactory.getLocalizedFormatter(pattern, locale);
+				String fm = formatter.format(ld);
+				res.add(fm);
+//				System.out.println(String.format("For input %s on pattern %s got result %s", ld.toString(), pattern, fm));
+			}
+		}
+		if (!cor.equals(res)) {
+			printCorrect(res, "Correct output for " + locale.getLanguage() + " :");
+		}
+		assertEquals(cor, res);
+	}	
 }

@@ -11,10 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
 
-
-
-
-
 /**
  * Class containing month names with locales unsupported by Java 8. 
  * To add a new one, create a file ExoticMonthNames_{two-letter-code}.properties in this package. 
@@ -34,7 +30,6 @@ public class ExoticMonthNames {
 	private final Map<String, Integer> namesToNumbers;
 	private final Map<String, Integer> shortNamesToNumbers;
 	private final Map<Integer, String> numbersToNames;
-	
 	
 	private ExoticMonthNames(Locale loc) {
 		this.namesToNumbers = Collections.unmodifiableMap(loadMonthNamesForLocale(loc));
@@ -76,8 +71,6 @@ public class ExoticMonthNames {
 			throw new RuntimeException("Couldn't find month with number " + monthNumber + " in locale " + locale.toString());
 		return numbersToNames.get(monthNumber);
 	}
-
-	
 	
 	public String getShortMonthName(int monthNumber) {
 		return shortenMonthName(getFullMonthName(monthNumber));

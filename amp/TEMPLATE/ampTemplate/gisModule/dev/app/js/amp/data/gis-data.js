@@ -111,13 +111,10 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     $.when(this.filter.loaded, this._stateWait).then(function() {
       self.boundaries.load();
-      self.indicators.loadAll();
       self.indicatorTypes.load();
-
       //drs attach indicotr listnerneros here
 
       self.structuresMenu.attachListeners();
-
       self.admClusters.load();
       self.admClusters.attachListeners();
       self.hilightFundingCollection.load();

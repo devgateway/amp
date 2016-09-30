@@ -26,18 +26,12 @@ module.exports = Backbone.View.extend({
     this.collection = new RadioListCollection(this.filterLayers(this.app.data.indicators), {
       siblingGroupList: this.parentMultisectionControl.radioButtonGroup
     });
-
-    this.loadData();    
+   
     this.listenTo(this.app.data.indicators, 'add', this.render);
     this.listenTo(this.app.data.indicators, 'remove', this.render);
     this.listenTo(this.app.data.indicators, 'reset', this.render);
-  },
-  loadData: function(){
-	  var self = this;
-	  this.app.data.indicators.loadAll().then(function() {
-	      self._registerSerializer();
-	  });  
-  },  
+    this._registerSerializer();
+  },   
   render: function() {	 
     // TODO: find a better way to keep our proxy collection up to date
     // Thad do you know a good pattern for this?

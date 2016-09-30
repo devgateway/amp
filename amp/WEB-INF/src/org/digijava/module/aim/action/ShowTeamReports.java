@@ -8,8 +8,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,20 +19,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ReportContextData;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.form.ReportsForm.ReportSortBy;
 import org.digijava.module.aim.helper.ApplicationSettings;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -105,7 +96,11 @@ public class ShowTeamReports extends Action {
 //			if(arf==null) arf=new AmpARFilter();		
 //			arf.setPublicView(true);
 //			session.setAttribute(ArConstants.REPORTS_Z_FILTER, arf);
-			return mapping.findForward("forwardPublic");
+			if(!FeaturesUtil.isVisibleModule("Public Reports")) {
+	            return mapping.findForward("index");
+	        } else {
+	        	return mapping.findForward("forwardPublic");
+	        }
 		}
 		else
 			return mapping.findForward( forwardName );

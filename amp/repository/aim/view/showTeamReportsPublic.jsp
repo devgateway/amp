@@ -15,7 +15,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
 
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.PUBLIC_VIEW %>" compareWith="On" onTrueEvalBody="true">
+<%if(FeaturesUtil.isVisibleModule("Public Reports")){ %> 
 
 <!-- this is for the nice tooltip widgets -->
 
@@ -630,7 +630,7 @@ function submitForm(action){
 			</tr>
 		</table>
 	</digi:form>
-</gs:test>
+<%}%>
 
 
 <script>

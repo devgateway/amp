@@ -426,19 +426,19 @@ public class UserRegisterForm
 
         	if ( (this.getFirstNames() == null) ||
                 this.getFirstNames().trim().length() == 0) {
-        		errors.put("error.registration.FirstNameBlank", "First Name is Blank");
+        		errors.put("error.registration.FirstNameBlank", "First Name is blank");
             }
             if ( (this.getLastName() == null) ||
                 this.getLastName().trim().length() == 0) {
             	
-            	errors.put("error.registration.LastNameBlank", "LastName is Blank");
+            	errors.put("error.registration.LastNameBlank", "LastName is blank");
             }
             if ( (this.getEmail() == null) || this.getEmail().trim().length() == 0) {
-            	errors.put("error.registration.noemail", "you must enter Valid email please check in");
+            	errors.put("error.registration.noemail", "Please enter a valid email address.");
                    }
             if ( (this.getPassword() == null) ||
                     this.getPassword().trim().length() == 0) {
-                    errors.put("error.registration.passwordBlank", "Password field is Blank");
+                    errors.put("error.registration.passwordBlank", "Password field is blank");
                 }            
             
 

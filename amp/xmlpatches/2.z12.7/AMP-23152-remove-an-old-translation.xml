@@ -9,7 +9,10 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-				delete from dg_message where orig_message = 'you must enter Valid email please check in';
+				DELETE FROM dg_message WHERE orig_message = 'you must enter Valid email please check in';
+				DELETE FROM dg_message WHERE orig_message = 'First Name is Blank';
+				DELETE FROM dg_message WHERE orig_message = 'LastName is Blank';
+				DELETE FROM dg_message WHERE orig_message = 'New password is a required field';
             </lang>
         </script>
     </apply>

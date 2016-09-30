@@ -31,7 +31,8 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	protected boolean emptyOutputForUnspecifiedData = true;
 	protected boolean alsoShowPledges = false;
 	protected boolean summaryReport = false;
-	protected ReportCollapsingStrategy reportCollapsingStrategy = ReportCollapsingStrategy.UNKNOWNS; 
+	protected ReportCollapsingStrategy reportCollapsingStrategy = ReportCollapsingStrategy.UNKNOWNS;
+	protected boolean displayTimeRangeSubtotals = true;
 	
     /**
      * If the report query results in empty data
@@ -285,5 +286,14 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	@Override
 	public boolean isSummaryReport() {
 		return summaryReport;
+	}
+
+	@Override
+	public boolean isDisplayTimeRangeSubTotals() {
+		return displayTimeRangeSubtotals;
+	}
+
+	public void setDisplayTimeRangeSubtotals(Boolean displayTimeRangeSubtotals) {
+		this.displayTimeRangeSubtotals = displayTimeRangeSubtotals;
 	}
 }

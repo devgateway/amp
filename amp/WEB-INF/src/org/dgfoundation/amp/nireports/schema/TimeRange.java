@@ -67,7 +67,7 @@ public enum TimeRange implements Comparable<TimeRange> {
 		}
 	}
 	
-	public VSplitStrategy asVSplitStrategy() {
+	public VSplitStrategy asVSplitStrategy(NiReportsEngine engine) {
 		return new VSplitStrategy() {
 
 			@Override
@@ -83,6 +83,17 @@ public enum TimeRange implements Comparable<TimeRange> {
 			@Override
 			public String toString() {
 				return String.format("VSplitStrategy for %s", entityType);
+			}
+
+			@Override
+			public ComparableValue<String> getTotalSubcolumnName() {
+				if (TimeRange.this == QUARTER || TimeRange.this == MONTH) {
+					String name = engine.schemaSpecificScratchpad.getTimeRangeSubTotalColumnName(engine.spec);
+					if (name != null) {
+						return new ComparableValue<>(name, Integer.MAX_VALUE);
+					}
+				}
+				return null;
 			}
 		};
 

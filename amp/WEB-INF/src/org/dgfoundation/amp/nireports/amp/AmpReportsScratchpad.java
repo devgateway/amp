@@ -20,9 +20,9 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
@@ -136,7 +136,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 			!engine.spec.getHierarchyNames().contains(ColumnConstants.TYPE_OF_ASSISTANCE);
 		this.verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
 			engine.spec.getColumnNames().contains(ColumnConstants.MODE_OF_PAYMENT) &&
-			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);		
+			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);
 	}
 	
 	public AmpCurrency getUsedCurrency() {
@@ -283,5 +283,13 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		if (preexistantMonthNumber != monthNumber)
 			return in.withMonth(new ComparableValue<>(in.month.getValue(), monthNumber));
 		return in;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getTimeRangeSubTotalColumnName(ReportSpecification spec) {
+		return spec.isDisplayTimeRangeSubTotals() ? TranslatorWorker.translateText("Total") : null;
 	}
 }

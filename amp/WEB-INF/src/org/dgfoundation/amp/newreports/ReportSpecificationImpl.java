@@ -28,6 +28,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	//private boolean summaryReport = false;
 	protected boolean displayEmptyFundingColumns = false;
 	protected boolean displayEmptyFundingRows = false;
+	protected boolean displayEmptyFundingRowsWhenFilteringByTransactionHierarchy = false;
 	protected boolean emptyOutputForUnspecifiedData = true;
 	protected boolean alsoShowPledges = false;
 	protected boolean summaryReport = false;
@@ -207,6 +208,14 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	@Override
 	public boolean isDisplayEmptyFundingRows() {
 		return this.displayEmptyFundingRows;
+	}
+
+	public boolean isDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy() {
+		return displayEmptyFundingRowsWhenFilteringByTransactionHierarchy;
+	}
+
+	public void setDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy(boolean v) {
+		this.displayEmptyFundingRowsWhenFilteringByTransactionHierarchy = v;
 	}
 
 	@Override

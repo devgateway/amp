@@ -394,9 +394,21 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * @return
 	 */
 	protected boolean fundingFiltersIds() {
+		//spec.isDisplayEmptyFundingRowsInNonHierarchicalReports() &&
 		return filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME) // there is any predicate operating on Funding 
-				|| 
-			filters.getFilteringColumns().stream().anyMatch(z -> schema.getColumns().get(z).isTransactionLevelHierarchy()); // we are filtering on a transaction-level hierarchy
+				|| // or we are filtering on a transaction-level hierarchy and should hide empty rows
+				(isHideEmptyFundingRowsWhenFilteringByTransactionHier() && isFilteringOnTransactionLevelHierarchy());
+	}
+
+	private boolean isHideEmptyFundingRowsWhenFilteringByTransactionHier() {
+		// hide empty rows if we have hierarchies (because filtering must be equal to hierarchies)
+		return !spec.getHierarchies().isEmpty()
+				|| // or we have non-hierarchical report and spec say to hide empty rows
+				!spec.isDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy();
+	}
+
+	private boolean isFilteringOnTransactionLevelHierarchy() {
+		return filters.getFilteringColumns().stream().anyMatch(z -> schema.getColumns().get(z).isTransactionLevelHierarchy());
 	}
 	
 	/**

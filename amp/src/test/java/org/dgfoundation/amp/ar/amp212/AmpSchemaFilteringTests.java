@@ -72,11 +72,12 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 						"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Mode of Payment: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(AMP ID: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 2))",
 						"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2))",
 						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1))"))
-					.withWarnings(Arrays.asList())
-					.withBody(      new ReportAreaForTests(null)
-				      .withContents("Project Title", "", "Mode of Payment", "", "AMP ID", "", "Funding-2013-Actual Commitments", "666 777", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "666 777", "Totals-Actual Disbursements", "0")
-				      .withChildren(
-				        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Mode of Payment", "Reimbursable", "AMP ID", "8721135", "Funding-2013-Actual Commitments", "666 777", "Totals-Actual Commitments", "666 777")));
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Project Title", "", "Mode of Payment", "", "AMP ID", "", "Funding-2013-Actual Commitments", "666 777", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "666 777", "Totals-Actual Disbursements", "0")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Mode of Payment", "Reimbursable", "AMP ID", "8721135", "Funding-2013-Actual Commitments", "666 777", "Totals-Actual Commitments", "666 777"),
+								new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Mode of Payment", "Non-Cash", "AMP ID", "87211372")      ));
 
 		runNiTestCase(cor, spec("simple-filtered-by-mode-of-payment"), acts);
 	}

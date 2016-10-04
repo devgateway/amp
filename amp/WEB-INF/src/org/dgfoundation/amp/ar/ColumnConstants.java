@@ -161,9 +161,6 @@ public class ColumnConstants {
 	public static final String MODALITIES = "Modalities";
 	public static final String OVERAGE_PROJECT = "Overage Project";
 	public static final String PAYMENT_CAPITAL___RECURRENT = "Payment Capital - Recurrent";
-	public static final String PHYSICAL_PROGRESS = "Physical Progress";
-	public static final String PHYSICAL_PROGRESS_DESCRIPTION = "Physical progress description";
-	public static final String PHYSICAL_PROGRESS_TITLE = "Physical progress title";
 	public static final String PLEDGE_CONTACT_1___ADDRESS = "Pledge Contact 1 - Address";
 	public static final String PLEDGE_CONTACT_1___ALTERNATE_CONTACT = "Pledge Contact 1 - Alternate Contact";
 	public static final String PLEDGE_CONTACT_1___ALTERNATE_EMAIL = "Pledge Contact 1 - Alternate Email";

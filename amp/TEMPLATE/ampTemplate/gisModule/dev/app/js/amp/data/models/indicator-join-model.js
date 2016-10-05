@@ -16,6 +16,7 @@ const readyStateConnectionEstablished = 1;
 const readyStateRequestReceived = 2;
 const readyStateProcessingRequest = 3;
 const readyStateResponseReady = 4;
+const JOIN_BOUNDARIES_PREFIX = 'J';
 
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
@@ -146,7 +147,13 @@ module.exports = Backbone.Model
 	    return this.lastFetchXhr;
 	  }	  
   },
-  
+  parse: function(response, options){	  
+	  //if from /rest/gis/indicators/ add prefix to id prevent collision
+	  if(this.url.indexOf('/rest/gis/indicators/') !== -1){	
+		  response.id = JOIN_BOUNDARIES_PREFIX +  response.id;
+	  }
+	  return response;	  
+  },
   updatePaletteRange: function() {
     var min = +Infinity,
         max = -Infinity;

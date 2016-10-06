@@ -65,17 +65,6 @@ function flash() {
   }
 }
 
-function sessionstorage(){  
-	var uid = new Date;
-	var result;
-	try {
-		sessionStorage.setItem(uid, uid);
-		result = sessionStorage.getItem(uid) == uid;
-		sessionStorage.removeItem(uid);
-		return result && sessionStorage;
-	} catch (exception) {}	  
-}
-
 
 module.exports = function() {
   var missingFeatures = [];  // an empty array will cast to bool false. handy!
@@ -114,13 +103,6 @@ module.exports = function() {
       severity: isIE() ? 'major' : 'minor'
     });
   }
-
-  if (!sessionstorage()) {
-	    missingFeatures.push({
-	      feature: 'sessionStorage',
-	      severity: 'minor'
-	    });
-	  }
 
   return missingFeatures;
 };

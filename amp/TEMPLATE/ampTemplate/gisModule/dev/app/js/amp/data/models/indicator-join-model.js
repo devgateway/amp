@@ -73,8 +73,10 @@ module.exports = Backbone.Model
                                  .value();
         var boundaries = TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
         self.updatePaletteRange();
-
         self._joinDataWithBoundaries(boundaries);
+        self.maxValue = self._getMaxValue();
+        self.minValue = self._getMinValue();
+        self.valuesAreIntegers = self._valuesAreIntegers();        
       });
 
     return boundaryLoaded;
@@ -168,7 +170,33 @@ module.exports = Backbone.Model
     });
     this.palette.set({min: min, max: max, values: this.get('values')});
   },
-
+  //check if all values are integers
+  _valuesAreIntegers: function(){
+	  if(this.get('values')){
+		  var integerValues = this.get('values').filter(function(item){
+			  return item.value % 1 === 0;  
+		  });	  
+		  return integerValues.length === this.get('values').length;  
+	  }
+	  return false 
+   },
+   //find max value
+   _getMaxValue: function(){
+	   var result = 0;
+	   if(this.get('values')){
+		   var values = _.pluck(this.get('values'),'value');
+		   result =  _.max(values);
+	   }	  
+	   return result;
+   },   
+   _getMinValue: function(){
+	   var result = 0;
+	   if(this.get('values')){
+		   var values = _.pluck(this.get('values'),'value');
+		   result =  _.min(values);
+	   }	  
+	   return result;
+   },    
   _joinDataWithBoundaries: function(boundaryGeoJSON) {
     var self = this;
     var indexedValues = _.indexBy(this.get('values'), 'geoId');

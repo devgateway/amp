@@ -25,6 +25,14 @@ module.exports = Backbone.Model
       this.trigger(show ? 'show' : 'hide', this);
     });
     
+    this.listenTo(this, 'change:values', function() {   
+    	this.maxValue = this._getMaxValue();
+    	this.minValue = this._getMinValue();
+    	this.valuesAreIntegers = this._valuesAreIntegers(); 
+    	this.updatePaletteRange();
+        this.trigger('valuesChanged', this);
+     });
+    
     this.listenTo(this, 'change:selectedGapAnalysis', function(blah, show) {
         this.trigger('sync', this);
     });
@@ -71,11 +79,7 @@ module.exports = Backbone.Model
                                  .first()
                                  .value();
         var boundaries = TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
-        self.updatePaletteRange();
-        self._joinDataWithBoundaries(boundaries);
-        self.maxValue = self._getMaxValue();
-        self.minValue = self._getMinValue();
-        self.valuesAreIntegers = self._valuesAreIntegers();        
+        self._joinDataWithBoundaries(boundaries);               
       });
 
     return boundaryLoaded;

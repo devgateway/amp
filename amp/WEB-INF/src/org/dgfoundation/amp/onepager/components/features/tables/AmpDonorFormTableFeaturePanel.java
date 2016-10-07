@@ -5,7 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 
-import java.text.NumberFormat;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;

@@ -253,7 +253,7 @@ public class UpdateWorkspace extends Action {
 				}
 
 				if (!uwForm.getIsolated()) {
-					if (!Boolean.valueOf(uwForm.getUseFilter())) {
+					if (uwForm.getUseFilter()!=null && !uwForm.getUseFilter()) {
 						if (uwForm.getOrganizations() != null) {
 							TreeSet s = new TreeSet();
 							s.addAll(uwForm.getOrganizations());

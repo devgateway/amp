@@ -27,10 +27,10 @@ module.exports = Backbone.View.extend({
 		  values.max = chartUtils.formatPercentage()(bucket.get('value')[1]);
 		  values.isPercent = true;
 	  }else { 
-		//if all values are integers and less than or equal to 1000 do not format using KMB function
-		  if(model.valuesAreIntegers && model.maxValue <= this.MAX_VALUE){ 			  
-			  values.min = bucket.get('value')[0]; 
-			  values.max =  bucket.get('value')[1];
+		//do not format using KMB if all values are integers and less than or equal to 1000 or values are between 0 and 1 inclusive		  
+		  if((model.valuesAreIntegers && model.maxValue <= this.MAX_VALUE) || (model.maxValue <= 1 && model.minValue >= 0) ){
+		  	  values.min = bucket.get('value')[0]; 
+			  values.max =  bucket.get('value')[1];			  
 		  } else {          
 			  values.min = chartUtils.formatKMB()(bucket.get('value')[0]);
 			  values.max = chartUtils.formatKMB()(bucket.get('value')[1]);

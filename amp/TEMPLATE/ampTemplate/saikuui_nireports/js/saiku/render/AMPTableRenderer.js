@@ -419,10 +419,14 @@ function generateDataRows(page, options) {
 }
 
 function getCellDataStyleClass(contentMatrix, cleanValue, i, j) {
-	var styleClass = " class='row "
+	var styleClass = " class='row ";
 		
 	if (contentMatrix[i][j].color) {
 		styleClass += this.contentMatrix[i][j].color + " ";
+	}
+
+	if (j < this.metadataHierarchies.length) {
+		styleClass += "hier_level_" + (j+1) + " ";
 	}
 	
 	if (cleanValue.tooltip) {

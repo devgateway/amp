@@ -87,7 +87,7 @@ public enum TimeRange implements Comparable<TimeRange> {
 
 			@Override
 			public ComparableValue<String> getTotalSubcolumnName() {
-				if (TimeRange.this == QUARTER) {
+				if (TimeRange.this == QUARTER || TimeRange.this == MONTH) {
 					String name = engine.schemaSpecificScratchpad.getTimeRangeSubTotalColumnName(engine.spec);
 					if (name != null) {
 						return new ComparableValue<>(name, Integer.MAX_VALUE);

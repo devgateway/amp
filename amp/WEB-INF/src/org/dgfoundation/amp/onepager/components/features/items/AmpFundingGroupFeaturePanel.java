@@ -128,7 +128,10 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				if (fundsModel.getObject().size() > 0) {
-					AmpFunding funding = fundsModel.getObject().iterator().next();
+					AmpFunding funding = new AmpFunding();
+					funding.setAmpDonorOrgId(model.getObject());
+					funding.setSourceRole(role.getObject());
+					
 					parent.addFundingItem(funding);
 					target.add(parent);
 					target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));

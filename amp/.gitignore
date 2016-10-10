@@ -4,3 +4,4 @@ amp.iml
 gen-src/
 target/
 jackrabbit/
+/lucene/

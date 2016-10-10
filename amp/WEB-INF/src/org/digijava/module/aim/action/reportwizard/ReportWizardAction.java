@@ -673,17 +673,18 @@ public class ReportWizardAction extends MultiAction {
         MultilingualInputFieldValues.serialize(ampReport, "name", null, null, request);
 
         if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true")) {
-            callSaikuReport (ampReport.getAmpReportId().intValue(), response,"openReportId", ampReport.hasAvailableMeasures());
+            boolean saiku = ampReport.hasAvailableMeasures() && ampReport.getType().intValue() != ArConstants.REGIONAL_TYPE;
+            callSaikuReport (ampReport.getAmpReportId().intValue(), response,"openReportId", saiku);
         }
         return null;
     }
 
-	private void callSaikuReport(Integer reportId, HttpServletResponse response, String varName, boolean hasAvailableMeasures ) throws IOException {
+	private void callSaikuReport(Integer reportId, HttpServletResponse response, String varName, boolean saiku) throws IOException {
 		PrintWriter out = response.getWriter();
 		StringBuilder responseString = new StringBuilder();
 		responseString.append(varName + "=" + reportId);
 		responseString.append(",");
-		responseString.append("saiku=" + hasAvailableMeasures );
+		responseString.append("saiku=" + saiku);
 		
 		out.write(responseString.toString());
 		out.flush();

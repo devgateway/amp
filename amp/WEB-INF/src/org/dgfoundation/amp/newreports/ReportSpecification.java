@@ -114,4 +114,6 @@ public interface ReportSpecification extends Cloneable {
 	public default Set<String> getMeasureNames() {
 		return new LinkedHashSet<>(getMeasures().stream().map(z -> z.getMeasureName()).collect(Collectors.toList()));
 	}
+
+	public boolean isDisplayTimeRangeSubTotals();
 }

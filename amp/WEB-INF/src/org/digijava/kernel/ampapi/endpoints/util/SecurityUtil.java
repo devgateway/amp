@@ -48,8 +48,13 @@ public class SecurityUtil {
 		if (tokens == null) {
 			tokens = new HashMap<String, AmpApiToken>();
 		}
+		
 		//we remove application token
-		tokens.remove(TLSUtils.getRequest().getSession().getAttribute(USER_TOKEN));
+		AmpApiToken tokenFromSession = (AmpApiToken) TLSUtils.getRequest().getSession().getAttribute(USER_TOKEN);
+		if (tokenFromSession != null) {
+			tokens.remove(tokenFromSession.getToken());
+		}
+		
 		// we remove session object
 		TLSUtils.getRequest().getSession().setAttribute(USER_TOKEN, null);
 		String token = UUID.randomUUID().toString();
@@ -63,6 +68,7 @@ public class SecurityUtil {
 		apiToken.setTeamMember((TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER));
 		tokens.put(token, apiToken);
 		TLSUtils.getRequest().getServletContext().setAttribute(SecurityUtil.TOKENS, tokens);
+		
 		return apiToken;
 	}
 

@@ -16,7 +16,11 @@ module.exports = Backbone.View.extend({
     _.bindAll(this, 'getLegendValues');
   },
   MAX_VALUE: 1000,//maximum value displayed without KMB formating
-  getLegendValues: function(model,bucket){	  
+  getLegendValues: function(model,bucket){
+	  if(_.isUndefined(model.maxValue) || _.isUndefined(model.minValue) || _.isUndefined(model.valuesAreIntegers)){
+		  model.analyzeValues();
+	  }
+	  
 	  var values = {};
 	  values.isPercent = false;
 	  var ratioOtherIndicator = this.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_OTHER});

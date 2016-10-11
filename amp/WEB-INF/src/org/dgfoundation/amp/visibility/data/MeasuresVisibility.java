@@ -89,9 +89,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, Arrays.asList(ArConstants.DISBURSEMENT, CAPITAL_SPENDING_PERCENTAGE_ID_NAME, ADJUSTMENT_PREFIX + "Planned"));
 		put(MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST, Arrays.asList(ANNUAL_PROPOSED_PROJECT_COST_ID_NAME));
 		put(MeasureConstants.PLEDGES_COMMITMENT_GAP, Arrays.asList(ArConstants.COMMITMENT, MeasureConstants.PLEDGES_ACTUAL_PLEDGE, ADJUSTMENT_PREFIX + "Actual"));
-		put(MeasureConstants.CONSUMPTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", ADJUSTMENT_PREFIX + "Planned"));
 		put(MeasureConstants.CUMULATED_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
-		put(MeasureConstants.DISBURSMENT_RATIO, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.CURRENT_MONTH_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Planned"));
@@ -106,8 +104,6 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.FORECAST_EXECUTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", MTEF_ID_NAME));
 		// skipping REAL_COMMITMENTS and REAL_MTEF, as could not find support for those in the AF
 		put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Planned"));
-		put(MeasureConstants.TOTAL_COMMITMENTS, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
-		put(MeasureConstants.UNCOMMITTED_BALANCE, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual", PROPOSED_PROJECT_COST_ID_NAME));
 		put(MeasureConstants.UNDISBURSED_BALANCE, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual", ArConstants.DISBURSEMENT));
 		put(MeasureConstants.CUMULATIVE_COMMITMENT, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.CUMULATIVE_DISBURSEMENT, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
@@ -117,7 +113,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.CUMULATIVE_EXECUTION_RATE, Arrays.asList(ArConstants.COMMITMENT, ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 	}};
 
-	public static Set<String> allMeasures = _getAllMeasures();	
+	public static Set<String> allMeasures = _getAllMeasures();
 	
 	public static void resetMeasuresList() {
 		allMeasures = _getAllMeasures();

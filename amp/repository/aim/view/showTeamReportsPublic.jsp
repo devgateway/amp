@@ -340,14 +340,11 @@ function submitForm(action){
 																				<c:set var="nameTooltip">
 																					<digi:trn>Click here to view the Report</digi:trn>
 																				</c:set>
+																				<c:set var="reportLink" value="${fn:getReportUrl(report)}" />
 																				<td class="report_inside" style="font-size: 11px;"
 																					bgcolor="${color}">
 																					<div class="t_sm" title="${report.name}">
 																					
-																						<%-- <c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/> --%>
-																						
-																						<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
-																					    
 																						<a
 																							href="${reportLink}"
 																							onclick="return popup(this,'');"
@@ -462,7 +459,7 @@ function submitForm(action){
 																						</c:set>
 																						<c:set target="${urlParams}" property="event" value="edit" />
 
-																						<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
+																						<a href="${reportLink}"
 						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
 						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
 																						

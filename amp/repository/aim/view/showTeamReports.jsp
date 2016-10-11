@@ -466,6 +466,7 @@ $(document).ready(function() {
 						type="org.digijava.module.aim.dbentity.AmpReports">
 						<tr onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
                               							onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" >
+							<c:set var="reportLink" value="${fn:getReportUrl(report)}" />
 							<%if(idx.intValue()%2==1) color = "#dbe5f1"; %>
 							<%if(idx.intValue()%2!=1) color = "#ffffff"; %>
 							<td align="center" class="inside" style="padding-right: 10px; padding-left: 10px;" bgcolor="<%=color%>">
@@ -478,15 +479,6 @@ $(document).ready(function() {
 							</td>
 							<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
 								<c:if test="${!aimTeamReportsForm.showTabs}">
-									<% if (report.getType()!=null && report.getType().equals((long) ArConstants.REGIONAL_TYPE)){ %>
-									<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
-									<% } else { %>
-									<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
-									<% } %>
-									<!-- link to the report under the Legacy engine
-										left here for debug reasons
-										/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=REPORT_ID
-	 								-->
 									<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">
 										<b> <p style="display: inline; max-width: 400px; white-space: normal" title='<c:out value="${report.name}"/>'>
 											<c:choose>
@@ -651,7 +643,7 @@ $(document).ready(function() {
 							<bean:write name="report" property="ampReportId" />
 						</c:set>
 						<c:if test="${!aimTeamReportsForm.showTabs}">
-							<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
+							<a href="${reportLink}"
 							onclick="return popup(this,'');" class="img-padding" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
 							<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
 						</c:if>

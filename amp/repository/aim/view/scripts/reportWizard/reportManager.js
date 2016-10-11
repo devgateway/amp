@@ -361,8 +361,9 @@ NormalReportManager.prototype.callbackRepTypeCall = {
 
 NormalReportManager.prototype.checkReportDetails	= function () {
 	this.enableTab(1);
-	return true;
-
+	// regional reports are not supported by nireports yet
+	// we either have to be logged in or choose a report different from regional
+	return currentMemberInSession || getReportType() != "regional";
 };
 
 NormalReportManager.prototype.checkMeasures	= function () {

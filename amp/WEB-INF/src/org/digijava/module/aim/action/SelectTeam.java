@@ -20,16 +20,12 @@ import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.LoginForm;
-import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -48,6 +44,8 @@ public class SelectTeam extends Action {
 
         HttpSession session = request.getSession();
         SimpleUrlLogoutSuccessHandler  l;
+        
+        AmpApiToken sessionToken = SecurityUtil.getTokenFromSession();
         
         //Removing attributes from previous session (East Timor. Aug.2011)
         ReportContextData.clearSession();
@@ -92,10 +90,6 @@ public class SelectTeam extends Action {
             }
             // -----------------------------
 
-           
-
-
-
             TeamMember tm = TeamUtil.setupFiltersForLoggedInUser(request, member);
             PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
             lForm.setLogin(true);
@@ -120,6 +114,10 @@ public class SelectTeam extends Action {
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
             FeaturesUtil.setAmpTreeVisibility(request.getServletContext(), session,ampTreeVisibility);
+            
+            if (sessionToken != null && sessionToken.getTeamMember() != tm) {
+            	SecurityUtil.generateToken();
+            }
 
         } catch (Exception e) {
             e.printStackTrace(System.out);
@@ -127,10 +125,12 @@ public class SelectTeam extends Action {
 
         //once we have selected the team we have to check if we need to generate the token
         if("true".equals(request.getParameter("generateToken"))){
-        	AmpApiToken token =SecurityUtil.generateToken();
+        	AmpApiToken token = SecurityUtil.generateToken();
         	response.sendRedirect(request.getParameter("callbackUrl") + "?amp_api_token="+token.getToken());
         	return null;
         }
+        
+        
         return mapping.findForward("forward");
     }
 }

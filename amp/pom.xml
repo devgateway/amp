@@ -976,9 +976,6 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>${project.basedir}/WEB-INF/src</sourceDirectory>
-
-        <outputDirectory>${project.basedir}/WEB-INF/classes</outputDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -998,40 +995,18 @@
                             <Implementation-Vendor>Development Gateway</Implementation-Vendor>
                         </manifestEntries>
                     </archive>
-                    <webResources>
-                        <resource>
-                            <directory>.</directory>
-                            <includes>
-                                <include>**/*</include>
-                            </includes>
-                            <excludes>
-                                <exclude>META-INF/context.xml</exclude>
-                                <exclude>WEB-INF/src/**</exclude>
-                                <exclude>.settings/**</exclude>
-                                <exclude>.externalToolBuilders/**</exclude>
-                            </excludes>
-                        </resource>
-                    </webResources>
-                    <webXml>WEB-INF/web.xml</webXml>
+                    <!--FIXME as a temporary solution we are excluding node and node_modules folders from final war.-->
+                    <!--Reasoning: these are only needed during build phase and are not required at runtime.-->
+                    <!--A proper solution would probably be to create a maven module for each react application.-->
+                    <warSourceExcludes>
+                        TEMPLATE/ampTemplate/gisModule/dev/**,
+                        TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node/**,
+                        TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/**,
+                        TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/**,
+                        TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node/**,
+                        TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules/**
+                    </warSourceExcludes>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>WEB-INF/lib</outputDirectory>
-                            <excludeScope>provided</excludeScope>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
@@ -1132,7 +1107,7 @@
                             <npmVersion>1.3.8</npmVersion>
                             <!-- optional: where to download node and npm from. Defaults to http://nodejs.org/dist/ -->
                             <downloadRoot>http://nodejs.org/dist/</downloadRoot>
-                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+                             <workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <!-- Installing node and npm  for amp-boilerplate-->
@@ -1149,7 +1124,7 @@
                             <npmVersion>1.4.9</npmVersion>
                             <!-- optional: where to download node and npm from. Defaults to http://nodejs.org/dist/ -->
                             <downloadRoot>http://nodejs.org/dist/</downloadRoot>
-                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
+                             <workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
                     <!-- Running npm for amp-boilerplate-->
@@ -1162,7 +1137,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>install</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
+               			    <workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
                     <!-- Running gulp for amp-boilerplate-->
@@ -1174,7 +1149,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>build</arguments>
-               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
+               				<workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
                                                  <!-- Installing node and npm  for gis-layers-manager-->
@@ -1191,7 +1166,7 @@
                             <npmVersion>1.4.9</npmVersion>
                             <!-- optional: where to download node and npm from. Defaults to http://nodejs.org/dist/ -->
                             <downloadRoot>http://nodejs.org/dist/</downloadRoot>
-                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
+                             <workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
                     <!-- Running npm for gis-layers-manager-->
@@ -1204,7 +1179,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>install</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
+               			    <workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
                     <!-- Running gulp for gis-layers-manager-->
@@ -1216,7 +1191,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>build</arguments>
-               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
+               				<workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
                              
@@ -1232,7 +1207,7 @@
                             <!-- optional: The default argument is actually  "install", so unless you need to run some other npm command,
                             you can remove this whole <configuration> section.-->
                             <arguments>install</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+               			    <workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <!-- Running gulp for GIS-->
@@ -1247,7 +1222,7 @@
 <!--                             optional: if not specified, it will run gulp's default   -->
 <!--                             task (and you can remove this whole <configuration> section.)  -->
                             <arguments>build</arguments>
-               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+               				<workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1258,7 +1233,7 @@
                         <phase>test</phase>
                         <configuration>
                             <arguments>test</arguments>
-               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+               				<workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
 
@@ -1275,7 +1250,7 @@
 <!--                         <configuration> -->
 <!--                             <nodeVersion>v0.10.29</nodeVersion> -->
 <!--                             <npmVersion>1.3.8</npmVersion> -->
-<!--                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
+<!--                              <workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
 <!--                         </configuration> -->
 <!--                     </execution> -->
 <!--                     Running npm for filters -->
@@ -1286,7 +1261,7 @@
 <!--                         </goals> -->
 <!--                         <phase>generate-sources</phase> -->
 <!--                         <configuration> -->
-<!--                  		    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
+<!--                  		    <workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
 <!--                         </configuration> -->
 <!--                     </execution> -->
 <!--                         Running gulp for filters -->
@@ -1298,7 +1273,7 @@
 <!--                         <phase>generate-sources</phase> -->
 <!--                         <configuration> -->
 <!--                             <arguments>build</arguments> -->
-<!--                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
+<!--                				<workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
 <!--                         </configuration> -->
 <!--                     </execution> -->
                     
@@ -1313,7 +1288,7 @@
 <!--                         <configuration> -->
 <!--                             <nodeVersion>v0.10.29</nodeVersion> -->
 <!--                             <npmVersion>1.3.8</npmVersion> -->
-<!--                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
+<!--                              <workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
 <!--                         </configuration> -->
 <!--                     </execution> -->
 <!--                       Running npm for dashboard -->
@@ -1324,7 +1299,7 @@
 <!--                         </goals> -->
 <!--                         <phase>generate-sources</phase> -->
 <!--                         <configuration> -->
-<!--                  		    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
+<!--                  		    <workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
 <!--                         </configuration> -->
 <!--                     </execution> -->
                     
@@ -1337,7 +1312,7 @@
 <!--                         <phase>generate-sources</phase> -->
 <!--                         <configuration> -->
 <!--                             <arguments>build</arguments> -->
-<!--                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
+<!--                				<workingDirectory>${project.basedir}/src/main/webapp/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
 <!--                         </configuration> -->
 <!--                     </execution> -->
                 
@@ -1464,7 +1439,7 @@
                                         <artifactId>swagger-doclet</artifactId>
                                         <version>1.0.4.2</version>
                                     </docletArtifact>
-                                    <sourcepath>${project.basedir}/WEB-INF/src/org/digijava/kernel/ampapi</sourcepath>
+                                    <subpackages>org.digijava.kernel.ampapi</subpackages>
                                     <reportOutputDirectory>${project.build.outputDirectory}</reportOutputDirectory>
                                     <useStandardDocletOptions>false</useStandardDocletOptions>
                                     <additionalparam>-apiVersion 1 -docBasePath ${docBasePath} -apiBasePath ${apiBasePath} -d ${project.basedir}/api-docs -swaggerUiPath ${project.basedir}/swagger-ui-src</additionalparam>

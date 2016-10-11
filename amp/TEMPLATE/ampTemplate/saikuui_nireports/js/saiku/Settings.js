@@ -26,7 +26,7 @@ var Settings = {
     RESULTS_PER_PAGE: 10,
     USE_AMP_LANGUAGE: true,
     DEFAULT_LANGUAGE: "en",
-    DEFAULT_PAGE_TITLE: 'Aid Management Platform - NiReports'
+    DEFAULT_PAGE_TITLE: 'Aid Management Platform - Reports'
 };
 
 /**

@@ -1442,7 +1442,7 @@
                                     <subpackages>org.digijava.kernel.ampapi</subpackages>
                                     <reportOutputDirectory>${project.build.outputDirectory}</reportOutputDirectory>
                                     <useStandardDocletOptions>false</useStandardDocletOptions>
-                                    <additionalparam>-apiVersion 1 -docBasePath ${docBasePath} -apiBasePath ${apiBasePath} -d ${project.basedir}/api-docs -swaggerUiPath ${project.basedir}/swagger-ui-src</additionalparam>
+                                    <additionalparam>-apiVersion 1 -docBasePath ${docBasePath} -apiBasePath ${apiBasePath} -d ${project.build.directory}/${project.build.finalName}/api-docs -swaggerUiPath ${project.basedir}/swagger-ui-src</additionalparam>
                                 </configuration>
                                 <goals>
                                     <goal>javadoc</goal>

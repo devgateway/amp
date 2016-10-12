@@ -5,7 +5,7 @@
     <property file="digijava.properties"/>
 	<property file="${user.home}/ant-global.properties"/>
 		
-	<property file="compat.properties"/>
+	<property file="src/main/webapp/compat.properties"/>
 	<property name="debug" value="true" />
 
 
@@ -15,7 +15,7 @@
     <property name="project.version" value="2.0.0"/>
     <property name="lib" location="target/lib" />
     <property name="webinf" location="src/main/webapp/WEB-INF" />
-	<property name="metainf" location="./META-INF" />		
+	<property name="metainf" location="src/main/webapp/META-INF" />
     <property name="classes" location="target/classes" />
     <property name="src" location="src/main/java" />
     <property name="test" location="src/test/java" />
@@ -142,7 +142,7 @@
     	<produces dir="${gen-src}" includes="org/digijava/module/help/jaxbi/*.java"/>
     </xjc>
    	
-    <xjc destdir="${gen-src}" schema="./doc/xmlpatcher.xsd" package="org.digijava.module.xmlpatcher.jaxb">
+    <xjc destdir="${gen-src}" schema="src/main/webapp/doc/xmlpatcher.xsd" package="org.digijava.module.xmlpatcher.jaxb">
          <produces dir="${gen-src}" includes="org/digijava/module/xmlpatcher/jaxb/*.java"/>
     </xjc>
    </target>

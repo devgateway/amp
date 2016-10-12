@@ -113,16 +113,19 @@ _.extend(App.prototype, BackboneDash.Events, {
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
       });
-      // TODO: handle translations load failure
-
+      // TODO: handle translations load failure      ​
       this.filter = new Filter({
-        draggable: true,
-        sync: options.sync || BackboneDash.sync,
-        caller: 'DASHBOARD'
-      });
+          draggable: true,
+          sync: options.sync || BackboneDash.sync,
+          caller: 'DASHBOARD'
+        });
 
-      // initialize app components
-      this.view = new MainView({ app: this, el: options.el });
+      var self = this;  
+      $.when(this.translator.promise).then(function(){
+    	  // initialize app components
+          self.view = new MainView({ app: self, el: options.el });
+      });
+       
 
       _initDefer.resolve(this);
     } catch (e) {
@@ -28441,6 +28444,7 @@ module.exports  = Backbone.Collection.extend({
 * Copyright 2014 jQuery Foundation and other contributors; Licensed MIT */
 /* Afrikaans initialisation for the jQuery UI date picker plugin. */
 /* Written by Renier Pretorius. */
+/*ALTERED FOR AMP -- ADDED TETUM LOCALE*/
 jQuery(function($){
 	$.datepicker.regional['af'] = {
 		closeText: 'Selekteer',
@@ -30084,6 +30088,30 @@ jQuery(function($){
 	$.datepicker.setDefaults($.datepicker.regional['tj']);
 });
 
+/* Tetum (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Alexandru Cartaleanu (acartaleanu@developmentgateway.org). */
+/* LOCAL AMP CODE -- THIS WILL DISAPPEAR */
+jQuery(function($){
+	$.datepicker.regional['tm'] = {
+		closeText: 'Halo',
+		prevText: 'Uluk',
+		nextText: 'Tuir mai',
+		currentText: 'Ohin loron',
+		monthNames: ['Janeiru','Fevreiru','Marsu','Abril','Maiu','Junhu',
+		'Julhu','Agostu','Septembru','Otubru','Novembru','Dezrembru'],
+		monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+		'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dez'],
+		dayNames: ['Dumingu', 'Segunda', 'Tersa', 'Kuarta', 'Kinta', 'Sesta', 'Sabadu'],
+		dayNamesShort: ['Dum', 'Seg', 'Ter', 'Krt', 'Kin', 'Ses', 'Sab'],
+		dayNamesMin: ['Dm','Sg','Tr','Kt','Kn','Ss','Sb'],
+		weekHeader: 'Sm',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['tm']);
+});
 /* Turkish initialisation for the jQuery UI date picker plugin. */
 /* Written by Izzet Emre Erkan (kara@karalamalar.net). */
 jQuery(function($){

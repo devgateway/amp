@@ -20,9 +20,9 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template(this.model.attributes));
+    this.$el.html(this.template({obj: this.model.attributes, translator: this.app.translator}));
     this.app.translator.translateDOM(this.el); /* After to catch disabled */
-    this.$el.find('[data-toggle="tooltip"]').tooltip();
+    this.$el.find('[data-toggle="tooltip"]').tooltip({html: true});
     return this;
   },
 

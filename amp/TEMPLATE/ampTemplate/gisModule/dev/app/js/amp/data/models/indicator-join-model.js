@@ -27,9 +27,7 @@ module.exports = Backbone.Model
     });
     
     this.listenTo(this, 'change:values', function() {   
-    	this.maxValue = this._getMaxValue();
-    	this.minValue = this._getMinValue();
-    	this.valuesAreIntegers = this._valuesAreIntegers(); 
+    	this.analyzeValues(); 
     	this.updatePaletteRange();
         this.trigger('valuesChanged', this);
      });
@@ -186,7 +184,7 @@ module.exports = Backbone.Model
    },
    //find max value
    _getMaxValue: function(){
-	   var result = 0;
+	   var result = -Infinity;
 	   if(this.get('values')){
 		   var values = _.pluck(this.get('values'),'value');
 		   result =  _.max(values);
@@ -194,13 +192,18 @@ module.exports = Backbone.Model
 	   return result;
    },   
    _getMinValue: function(){
-	   var result = 0;
+	   var result = +Infinity;
 	   if(this.get('values')){
 		   var values = _.pluck(this.get('values'),'value');
 		   result =  _.min(values);
 	   }	  
 	   return result;
-   },    
+   },  
+   analyzeValues: function(){
+	   this.maxValue = this._getMaxValue();
+   	   this.minValue = this._getMinValue();
+   	   this.valuesAreIntegers = this._valuesAreIntegers(); 
+   },
   _joinDataWithBoundaries: function(boundaryGeoJSON) {
     var self = this;
     var indexedValues = _.indexBy(this.get('values'), 'geoId');

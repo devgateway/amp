@@ -109,9 +109,9 @@ public class ScorecardService {
 		final List<ActivityUpdate> activityUpdateList = new ArrayList<ActivityUpdate>();
 		int startYear = getDefaultStartYear();
 		int endYear = getDefaultEndYear();
-		Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		Date startDate = CalendarUtil.getStartDate(gsCalendarId, startYear);
-		Date endDate = CalendarUtil.getEndDate(gsCalendarId, endYear);
+		String gsCalendarId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		Date startDate = CalendarUtil.getStartDate(Long.valueOf(gsCalendarId), startYear);
+		Date endDate = CalendarUtil.getEndDate(Long.valueOf(gsCalendarId), endYear);
 		String pattern = "yyyy-MM-dd";
 		final String formattedStartDate = new SimpleDateFormat(pattern).format(startDate);
 		final String formattedEndDate = new SimpleDateFormat(pattern).format(endDate);
@@ -229,9 +229,12 @@ public class ScorecardService {
 	 * @return the default start year for generating the donor scorecard
 	 */
 	private int getDefaultStartYear() {
-		int defaultStartYear = FeaturesUtil.getGlobalSettingValueInteger(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
-		int startYear = defaultStartYear > 0 ? defaultStartYear : DEFAULT_START_YEAR;
-		
+		String defaultStartYear = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
+		int startYear = DEFAULT_START_YEAR;
+		if (defaultStartYear != null && !"".equalsIgnoreCase(defaultStartYear)
+				&& Integer.parseInt(defaultStartYear) > 0) {
+			startYear = Integer.parseInt(defaultStartYear);
+		}
 		return startYear;
 	}
 
@@ -242,9 +245,11 @@ public class ScorecardService {
 	 * @return the default end year for generating the donor scorecard
 	 */
 	private int getDefaultEndYear() {
-		int defaultEndYear = FeaturesUtil.getGlobalSettingValueInteger(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
-		int endYear = defaultEndYear > 0 ? defaultEndYear : Calendar.getInstance().get(Calendar.YEAR);
-		
+		String defaultEndYear = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
+		int endYear = Calendar.getInstance().get(Calendar.YEAR);
+		if (defaultEndYear != null && !"".equalsIgnoreCase(defaultEndYear) && Integer.parseInt(defaultEndYear) > 0) {
+			endYear = Integer.parseInt(defaultEndYear);
+		}
 		return endYear;
 	}
 
@@ -278,11 +283,9 @@ public class ScorecardService {
 		final List<Quarter> quarters = new ArrayList<Quarter>();
 		int startYear = getDefaultStartYear();
 		int endYear = getDefaultEndYear();
-		
-		Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		long startTime = CalendarUtil.getStartDate(gsCalendarId, startYear).getTime();
-		long endTime = CalendarUtil.getEndDate(gsCalendarId, endYear).getTime();
-		
+		String gsCalendarId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		long startTime = CalendarUtil.getStartDate(Long.valueOf(gsCalendarId), startYear).getTime();
+		long endTime = CalendarUtil.getEndDate(Long.valueOf(gsCalendarId), endYear).getTime();
 		try {
 			ICalendarWorker worker = fiscalCalendar.getworker();
 			while (startTime < endTime) {
@@ -290,6 +293,9 @@ public class ScorecardService {
 				for (int i = 1; i <= 4; i++) {
 					worker.setTime(new Date(currentTime));
 					Quarter quarter = new Quarter(fiscalCalendar, i, worker.getYear());
+//					if (worker.getYear() < startYear) {
+//						quarter = new Quarter(fiscalCalendar, 4, worker.getYear());
+//					}
 					quarters.add(quarter);
 					Calendar cal = Calendar.getInstance();
 					cal.setTimeInMillis(startTime);
@@ -297,7 +303,7 @@ public class ScorecardService {
 					currentTime = cal.getTimeInMillis();
 				}
 				startYear++;
-				startTime = CalendarUtil.getStartDate(gsCalendarId, startYear).getTime();
+				startTime = CalendarUtil.getStartDate(Long.valueOf(gsCalendarId), startYear).getTime();
 			}
 		} catch (Exception e) {
 			logger.error("Couldn't generate quarters ", e);

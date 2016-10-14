@@ -32,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpScorecardSettings;
 import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -108,9 +109,9 @@ public class ScorecardService {
 		final List<ActivityUpdate> activityUpdateList = new ArrayList<ActivityUpdate>();
 		int startYear = getDefaultStartYear();
 		int endYear = getDefaultEndYear();
-		String gsCalendarId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		Date startDate = CalendarUtil.getStartDate(Long.valueOf(gsCalendarId), startYear);
-		Date endDate = CalendarUtil.getEndDate(Long.valueOf(gsCalendarId), endYear);
+		Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		Date startDate = CalendarUtil.getStartDate(gsCalendarId, startYear);
+		Date endDate = CalendarUtil.getEndDate(gsCalendarId, endYear);
 		String pattern = "yyyy-MM-dd";
 		final String formattedStartDate = new SimpleDateFormat(pattern).format(startDate);
 		final String formattedEndDate = new SimpleDateFormat(pattern).format(endDate);
@@ -228,12 +229,9 @@ public class ScorecardService {
 	 * @return the default start year for generating the donor scorecard
 	 */
 	private int getDefaultStartYear() {
-		String defaultStartYear = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
-		int startYear = DEFAULT_START_YEAR;
-		if (defaultStartYear != null && !"".equalsIgnoreCase(defaultStartYear)
-				&& Integer.parseInt(defaultStartYear) > 0) {
-			startYear = Integer.parseInt(defaultStartYear);
-		}
+		int defaultStartYear = FeaturesUtil.getGlobalSettingValueInteger(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
+		int startYear = defaultStartYear > 0 ? defaultStartYear : DEFAULT_START_YEAR;
+		
 		return startYear;
 	}
 
@@ -244,11 +242,9 @@ public class ScorecardService {
 	 * @return the default end year for generating the donor scorecard
 	 */
 	private int getDefaultEndYear() {
-		String defaultEndYear = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
-		int endYear = Calendar.getInstance().get(Calendar.YEAR);
-		if (defaultEndYear != null && !"".equalsIgnoreCase(defaultEndYear) && Integer.parseInt(defaultEndYear) > 0) {
-			endYear = Integer.parseInt(defaultEndYear);
-		}
+		int defaultEndYear = FeaturesUtil.getGlobalSettingValueInteger(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
+		int endYear = defaultEndYear > 0 ? defaultEndYear : Calendar.getInstance().get(Calendar.YEAR);
+		
 		return endYear;
 	}
 
@@ -282,24 +278,26 @@ public class ScorecardService {
 		final List<Quarter> quarters = new ArrayList<Quarter>();
 		int startYear = getDefaultStartYear();
 		int endYear = getDefaultEndYear();
-		String gsCalendarId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		Date startDate = CalendarUtil.getStartDate(Long.valueOf(gsCalendarId), startYear);
-		Date endDate = CalendarUtil.getEndDate(Long.valueOf(gsCalendarId), endYear);
+		
+		Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		long startTime = CalendarUtil.getStartDate(gsCalendarId, startYear).getTime();
+		long endTime = CalendarUtil.getEndDate(gsCalendarId, endYear).getTime();
+		
 		try {
 			ICalendarWorker worker = fiscalCalendar.getworker();
-			Date currentDate = new Date(startDate.getTime());
-			int index = 1;
-			while (currentDate.compareTo(endDate) < 1) {
+			while (startTime < endTime) {
+				long currentTime = startTime;
 				for (int i = 1; i <= 4; i++) {
-					worker.setTime(currentDate);
+					worker.setTime(new Date(currentTime));
 					Quarter quarter = new Quarter(fiscalCalendar, i, worker.getYear());
 					quarters.add(quarter);
 					Calendar cal = Calendar.getInstance();
-					cal.setTime(startDate);
-					cal.add(Calendar.MONTH, 3 * index);
-					index++;
-					currentDate.setTime(cal.getTimeInMillis());
+					cal.setTimeInMillis(startTime);
+					cal.add(Calendar.MONTH, 3 * i);
+					currentTime = cal.getTimeInMillis();
 				}
+				startYear++;
+				startTime = CalendarUtil.getStartDate(gsCalendarId, startYear).getTime();
 			}
 		} catch (Exception e) {
 			logger.error("Couldn't generate quarters ", e);
@@ -384,16 +382,16 @@ public class ScorecardService {
 					if (threshold == null) {
 						threshold = DEFAULT_THRESHOLD;
 					}
-					String quarterEndDate = new SimpleDateFormat("yyyy-MM-dd").format(quarter.getQuarterEndDate());
+					String quarterEndDate = new SimpleDateFormat("yyyy-MM-dd").format(getGregorianDate(quarter.getQuarterEndDate()));
 					//Get total (not completed nor deleted) activities  by donor at the end of a given quarter
-					Object [] activityIds = getLatestActivityIdsByDate(quarterEndDate,status);
+					Object [] activityIds = getLatestActivityIdsByDate(quarterEndDate, status);
 					String query = "select count (distinct (a.amp_id)) as total_activities,r.organisation as donor_id "
 							+ "from amp_activity_version a, amp_org_role r,amp_organisation o,amp_activities_categoryvalues c,amp_category_value v "+
 							" WHERE  r.activity=a.amp_activity_id  AND a.amp_activity_id = c.amp_activity_id "+
 							"AND c.amp_categoryvalue_id = v.id "+
 							"AND v.amp_category_class_id = (select id from amp_category_class where keyname='activity_status') ";
 					if (!status.equals("")) {
-						query += "AND c.amp_categoryvalue_id not in (" + status + " ) ";
+						query += "AND c.amp_categoryvalue_id in (" + status + " ) ";
 					}
 					query += "AND o.amp_org_id = r.organisation " + "AND ( o.deleted IS NULL OR o.deleted = false ) "
 							+ "AND    (EXISTS  (SELECT af.amp_donor_org_id " + " FROM   amp_funding af,amp_activity_version v "
@@ -504,7 +502,7 @@ public class ScorecardService {
 						+ "AND  v.amp_category_class_id = (select id from amp_category_class where "
 						+ " keyname='activity_status') ";
 				if (!status.equals("")) {
-					query += "AND c.amp_categoryvalue_id not in (" + status + " ) ";
+					query += "AND c.amp_categoryvalue_id in (" + status + " ) ";
 				}
 				query += "group by amp_id";
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
@@ -536,10 +534,8 @@ public class ScorecardService {
 	 */
 	private Map<Long, Map<String, ColoredCell>> countActivityUpdates(List<ActivityUpdate> activityUpdates,
 			Map<Long, Map<String, ColoredCell>> data) {
-		ICalendarWorker worker = fiscalCalendar.getworker();
 		for (ActivityUpdate activityUpdate : activityUpdates) {
 			Long donorId = activityUpdate.getDonorId();
-			worker.setTime(activityUpdate.getModifyDate());
 			Quarter quarter = new Quarter(fiscalCalendar, activityUpdate.getModifyDate());
 			ColoredCell cell = data.get(donorId).get(quarter.toString());
 			logger.info("Quarter" + quarter);
@@ -577,7 +573,7 @@ public class ScorecardService {
 		if (settings != null && settings.getValidationPeriod() != null && settings.getValidationPeriod()) {
 			Integer weekNumber = settings.getValidationTime();
 				Quarter quarter = new Quarter(fiscalCalendar, updateDate);
-				Date quarterStartDate = quarter.getQuarterStartDate();
+				Date quarterStartDate = getGregorianDate(quarter.getQuarterStartDate());
 				Calendar calendarGracePeriod = Calendar.getInstance();
 				calendarGracePeriod.setTime(quarterStartDate);
 				calendarGracePeriod.add(Calendar.WEEK_OF_YEAR, weekNumber);
@@ -652,8 +648,8 @@ public class ScorecardService {
 		final IntWrapper orgCount = new IntWrapper();
 		
 		Quarter pastQuarter = getPastQuarter();
-		Date startDate = pastQuarter == null ? new Date() : pastQuarter.getQuarterStartDate();
-		Date endDate = pastQuarter == null ? new Date() : pastQuarter.getQuarterEndDate();
+		Date startDate = pastQuarter == null ? new Date() : getGregorianDate(pastQuarter.getQuarterStartDate());
+		Date endDate = pastQuarter == null ? new Date() : getGregorianDate(pastQuarter.getQuarterEndDate());
 		String pattern = "yyyy-MM-dd";
 		final String formattedStartDate = new SimpleDateFormat(pattern).format(startDate);
 		final String formattedEndDate = new SimpleDateFormat(pattern).format(endDate);
@@ -726,6 +722,7 @@ public class ScorecardService {
 	
 	private int getPastQuarterObjectsCount(String inputQuery, final String paramDate) {
 		Quarter pastQuarter = getPastQuarter();
+		
 		Date startDate = pastQuarter == null ? new Date() : pastQuarter.getQuarterStartDate();
 		Date endDate = pastQuarter == null ? new Date() : pastQuarter.getQuarterEndDate();
 		
@@ -755,5 +752,13 @@ public class ScorecardService {
 		
 		
 		return count.intValue();
+	}
+	
+	private Date getGregorianDate(Date sourceDate) {
+		if (!(fiscalCalendar.getworker() instanceof GregorianBasedWorker)) {
+			return FiscalCalendarUtil.toGregorianDate(sourceDate, fiscalCalendar);
+		}
+		
+		return sourceDate;
 	}
 }

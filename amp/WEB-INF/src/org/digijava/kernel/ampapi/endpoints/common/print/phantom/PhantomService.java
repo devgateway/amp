@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class PhantomService {
 
     private static final String PHANTOM_SCRIPT_FILE = "phantom-script.js";
-    private static final int TIMEOUT = 20;
+    private static final int TIMEOUT = 40;
     private static volatile boolean initialized = false;
     private static PhantomJSFileExecutor executor;
     private static File scriptFile;
@@ -36,9 +36,7 @@ public class PhantomService {
                 LOGGER.info("Initializing the phantom service");
 				executor = new PhantomJSFileExecutor(
 						PhantomJSReference.create()
-								.useDownloadUrl(FeaturesUtil
-										.getGlobalSettingValue(GlobalSettingsConstants.DOWNLOAD_PHANTOM_URL))
-								.build(),
+						.addCommandLineOptions("--ssl-protocol=any").build(),
 						new ExecutionTimeout(TIMEOUT, TimeUnit.SECONDS));
                 scriptFile = new File(PhantomService.class.getResource(PHANTOM_SCRIPT_FILE).getFile());
                 initialized = true;

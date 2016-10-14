@@ -12,6 +12,8 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import clover.org.apache.commons.lang.StringEscapeUtils;
+
 /**
  * Encaspulates a html link of type {@link IndicatingAjaxLink}
  * 
@@ -71,8 +73,9 @@ public abstract class AmpLinkField extends AmpFieldPanel<Void> {
 					@Override
 					public CharSequence getPrecondition(Component component) {
 						if(qModel==null) return null; 
-						else
-							return "if(!confirm('"+qModel.getObject()+"')) return false;";	
+						else {
+							return "if(!confirm('"+ StringEscapeUtils.escapeJavaScript(qModel.getObject())+"')) return false;";
+						}
 					}
 				};
 				attributes.getAjaxCallListeners().add(myAjaxCallListener);

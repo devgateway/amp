@@ -34,6 +34,9 @@
 			</button>
 		</feature:display>
 		<logic:present name="currentMember" scope="session">
+			<script type="application/javascript">
+				var currentMemberInSession = true;
+			</script>
 			<button style="margin-right:2px;" type="button" name="save" disabled="disabled" onclick="saveReportEngine.saveOverwrite()" class="buttonx_dis"/>
 				<digi:trn key="rep:wizard:Save">Save</digi:trn>
 			</button>
@@ -42,6 +45,9 @@
 			</button>
 		</logic:present>
 		<logic:notPresent name="currentMember" scope="session">
+			<script type="application/javascript">
+				var currentMemberInSession = false;
+			</script>
 			<button style="margin-right:2px;" type="button" name="save" disabled="disabled" onclick="saveReportEngine.executeReport()" class="buttonx_dis"/>
 				<digi:trn key="rep:wizard:RunReport">Run report...</digi:trn>
 			</button>		

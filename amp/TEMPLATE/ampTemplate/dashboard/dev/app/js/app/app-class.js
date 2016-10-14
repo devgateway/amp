@@ -100,16 +100,19 @@ _.extend(App.prototype, BackboneDash.Events, {
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
       });
-      // TODO: handle translations load failure
-
+      // TODO: handle translations load failure      ​
       this.filter = new Filter({
-        draggable: true,
-        sync: options.sync || BackboneDash.sync,
-        caller: 'DASHBOARD'
-      });
+          draggable: true,
+          sync: options.sync || BackboneDash.sync,
+          caller: 'DASHBOARD'
+        });
 
-      // initialize app components
-      this.view = new MainView({ app: this, el: options.el });
+      var self = this;  
+      $.when(this.translator.promise).then(function(){
+    	  // initialize app components
+          self.view = new MainView({ app: self, el: options.el });
+      });
+       
 
       _initDefer.resolve(this);
     } catch (e) {

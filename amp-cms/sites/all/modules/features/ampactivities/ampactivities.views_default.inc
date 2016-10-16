@@ -531,6 +531,31 @@ function ampactivities_views_default_views() {
     5 => 0,
   );
 
+  /* Filter criterion: Activity: Status */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'efq_activity';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = array(
+    'all' => 'all',
+    216 => '216',
+    64 => '64',
+    63 => '63',
+  );
+  $handler->display->display_options['filters']['status']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['status']['expose']['operator_id'] = 'status_op';
+  $handler->display->display_options['filters']['status']['expose']['label'] = 'Status';
+  $handler->display->display_options['filters']['status']['expose']['operator'] = 'status_op';
+  $handler->display->display_options['filters']['status']['expose']['identifier'] = 'status';
+  $handler->display->display_options['filters']['status']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    3 => 0,
+    5 => 0,
+  );
+  $handler->display->display_options['filters']['status']['type'] = 'select';
+
+
   /* Display: Search Page */
   $handler = $view->new_display('page', 'Search Page', 'search_page');
   $handler->display->display_options['path'] = 'activities';

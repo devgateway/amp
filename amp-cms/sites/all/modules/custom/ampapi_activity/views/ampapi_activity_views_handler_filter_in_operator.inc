@@ -18,7 +18,7 @@ class ampapi_activity_views_handler_filter_in_operator extends efq_views_handler
 
   function has_extra_options() { return TRUE; }
 
-  function get_value_options() { /* don't overwrite the value options */ }
+//  function get_value_options() { /* don't overwrite the value options */ }
 
 
   function option_definition() {
@@ -34,7 +34,11 @@ class ampapi_activity_views_handler_filter_in_operator extends efq_views_handler
     $form['type'] = array(
       '#type' => 'radios',
       '#title' => t('Selection type'),
-      '#options' => array('tokeninput' => t('Tokeninput'), 'autocomplete' => t('Autocomplete')),
+      '#options' => array(
+        'tokeninput' => t('Tokeninput'),
+        'autocomplete' => t('Autocomplete'),
+        'select' => t('Dropdown Select'),
+      ),
       '#default_value' => $this->options['type'],
     );
   }
@@ -116,6 +120,15 @@ class ampapi_activity_views_handler_filter_in_operator extends efq_views_handler
         '#autocomplete_path' => 'ampapi/autocomplete/' . $field_name,
       );
     }
+    else if ($this->options['type'] == 'select') {
+      if (!empty($this->definition['options arguments'])) {
+        foreach ($this->definition['options arguments'] as $options_argument) {
+          $plugin = ampapi_get_mapper($options_argument);
+          ctools_plugin_get_class($plugin, 'handler');
+        }
+      }
+      parent::value_form($form, $form_state);
+    }
   }
 
 
@@ -179,6 +192,12 @@ class ampapi_activity_views_handler_filter_in_operator extends efq_views_handler
         $this->value = $value;
         return TRUE;
       }
+    }
+    else if ($this->options['type'] == 'select') {
+      if ($raw_value !== 'All') {
+        $this->value = array($raw_value);
+      }
+      return TRUE;
     }
 
     return FALSE;

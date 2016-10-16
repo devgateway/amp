@@ -17,7 +17,8 @@ $plugin = array(
   'report field group' => 'columns',
   'report field key' => 'Status',
 
-  'filters endpoint' => 'filters/activityStatus',
+  'report filter key' => 'Status',
+  'report filter endpoint' => 'filters/activityStatus',
 
   'handler' => 'activityStatusMapper',
 );
@@ -26,10 +27,10 @@ class activityStatusMapper extends activityMapperBase {
   public static function optionsList($plugin) {
     // Small sanity check.
     if (!is_array($plugin)) {
-      $plugin = ampapi_get_mapper_by_property_name($plugin);
+      $plugin = ampapi_get_mapper($plugin);
     }
 
-    $response_data = ampAPIRestClient::get($plugin['filters endpoint']);
+    $response_data = ampAPIRestClient::get($plugin['report filter endpoint']);
     if (empty($response_data) || empty($response_data->values)) {
       return array();
     }

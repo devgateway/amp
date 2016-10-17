@@ -2,18 +2,7 @@
   <label>
  <input type="checkbox" name="<%= obj.group %>" value="<%= obj.id || obj.value %>" <% if(obj.selected){%> checked <%}%> >
  <span class="styled-checkbox"></span>
- <%   var tooltip  = '';
-	  if(obj.description){
-	     tooltip += obj.description + '. ' ;
-	  }	     
-	  if(obj.createdOn){
-	     tooltip += '<br/> Created on ' + obj.createdOn;
-	  }
-	  if(obj.createdBy){
-		 tooltip += ' by ' + obj.createdBy
-	  }	     
-  %>
-  <span title ="<%= tooltip %>" data-i18n="amp.gis:title-<%= obj.title.replace(/ /g,'') %>"  data-toggle="tooltip"><%= obj.title %></span>
+ <span title ="<%= tooltip %>" data-i18n="amp.gis:title-<%= obj.title.replace(/ /g,'') %>"  data-toggle="tooltip"><%= obj.title %></span>
   </label>
   <% if (obj.helpText){ %>
     <a href="#layer-info" class="layer-info"

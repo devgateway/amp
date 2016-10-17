@@ -18,14 +18,25 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.model, 'change:selected', this.render);
     this.listenTo(this.model, 'change:selectedGapAnalysis', this.render);
   },
-
+  createTooltip: function(obj){
+	  var tooltip  = '';
+	  if(obj.description){
+	     tooltip += obj.description + '. ' ;
+	  }	     
+	  if(obj.createdOn){
+	     tooltip += '<br/> Created on ' + obj.createdOn;
+	  }
+	  if(obj.createdBy){
+		 tooltip += ' by ' + obj.createdBy
+	  }	
+	  return tooltip;
+  },
   render: function() {
-    this.$el.html(this.template({obj: this.model.attributes, translator: this.app.translator}));
+    this.$el.html(this.template({obj: this.model.attributes, tooltip: this.createTooltip(this.model.attributes)}));
     this.app.translator.translateDOM(this.el); /* After to catch disabled */
     this.$el.find('[data-toggle="tooltip"]').tooltip({html: true});
     return this;
   },
-
   toggleSelect: function() {
     this.model.trigger('toggleSelect', this.model);
     if (this.model.get('type') === "Indicator Layers" || this.model.get('type') === "joinBoundaries") {

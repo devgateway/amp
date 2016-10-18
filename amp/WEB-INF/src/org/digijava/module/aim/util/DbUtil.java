@@ -3276,21 +3276,17 @@ public class DbUtil {
 	public static void clearPendingChanges() {
 	    PersistenceManager.getSession().clear();
 	}
-	
-	public static Set<AmpActivityVersion> getActivitiesByAmpId(Set<String> uniqueActivityIds) {
-		Session session = null;
-		Query q = null;
-		Set<AmpActivityVersion> activities = null;
-		StringBuilder queryString = new StringBuilder("SELECT aav FROM " + AmpActivityVersion.class.getName() + " aav ");
-		queryString.append("WHERE aav.ampId IN (:id) AND aav.ampActivityId IN (SELECT ampActivityId FROM ").append(AmpActivity.class.getName()).append(" )");
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			q = session.createQuery(queryString.toString());
-			q.setParameterList("id", uniqueActivityIds);
-			activities = new HashSet<AmpActivityVersion>(q.list());
-		} catch (Exception ex) {
-			logger.error("Unable to get activities from database ", ex);
-		}
-		return activities;
+	/**
+	 * Get a list of activities by its AMP_ID
+	 * @param uniqueAmpActivityIds Set of unique amp_id used to retrieve activities
+	 * @return 
+	 */
+	public static List<AmpActivityVersion> getActivitiesByAmpId(Set<String> uniqueAmpActivityIds) {
+		List<AmpActivityVersion> activities = null;
+		Query q = PersistenceManager.getSession()
+				.createQuery("SELECT aav FROM " + AmpActivityVersion.class.getName() + " aav "
+						+ "WHERE aav.ampId IN (:ampIds) AND aav.ampActivityId IN (SELECT ampActivityId FROM "
+						+ AmpActivity.class.getName() + " )" );
+		return q.setParameterList("ampIds", uniqueAmpActivityIds).list();
 	}
 }

@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -3274,5 +3275,18 @@ public class DbUtil {
 	
 	public static void clearPendingChanges() {
 	    PersistenceManager.getSession().clear();
+	}
+	/**
+	 * Get a list of activities by its AMP_ID
+	 * @param uniqueAmpActivityIds Set of unique amp_id used to retrieve activities
+	 * @return 
+	 */
+	public static List<AmpActivityVersion> getActivitiesByAmpId(Set<String> uniqueAmpActivityIds) {
+		List<AmpActivityVersion> activities = null;
+		Query q = PersistenceManager.getSession()
+				.createQuery("SELECT aav FROM " + AmpActivityVersion.class.getName() + " aav "
+						+ "WHERE aav.ampId IN (:ampIds) AND aav.ampActivityId IN (SELECT ampActivityId FROM "
+						+ AmpActivity.class.getName() + " )" );
+		return q.setParameterList("ampIds", uniqueAmpActivityIds).list();
 	}
 }

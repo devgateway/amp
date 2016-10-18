@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivitiesUtilEndpoint;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.currency.Currencies;
@@ -43,6 +44,7 @@ public class ApiError {
         put(Currencies.class.getName(), 4);
         put(EndPoints.class.getName(), 5);
         put(IndicatorEndPoints.class.getName(), 6);
+        put(ActivitiesUtilEndpoint.class.getName(), 7);
 	}};
 	
 	/**

@@ -31,5 +31,3 @@ public class FMEndpoint {
 		return FMService.getFMSettings(config);
 	}
 }
-
-	

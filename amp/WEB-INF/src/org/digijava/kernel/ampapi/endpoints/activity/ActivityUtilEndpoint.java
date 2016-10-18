@@ -18,7 +18,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  *	
  */
 @Path("activitiesUtil")
-public class ActivitiesUtilEndpoint {
+public class ActivityUtilEndpoint {
 
 	/**
 	 * Clone each activity from a list, returns an object with a list of success activities and a list of failed, draft, not found activities.
@@ -38,7 +38,7 @@ public class ActivitiesUtilEndpoint {
 	@Path("/clone")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod( ui = false, name = "clone", id = "")
+    @ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_ADMIN}, ui = false, name = "clone", id = "")
 	public JsonBean cloneActivities(JsonBean config) {
 		return CloneActivitiesUtil.cloneActivities(config);
 	}

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityUtilErrors;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -36,9 +37,6 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 public class CloneActivitiesUtil {
 
 
-	protected static final ApiErrorMessage ERROR_NO_ALLOWED = new ApiErrorMessage(1, "Not allowed");
-	protected static final ApiErrorMessage ERROR_UN_EXPECTED = new ApiErrorMessage(2, "Un-expected error");
-	
 	protected static final String PARAM_SUCCEED = "succeed";
 	protected static final String PARAM_FAILED = "failed";
 	protected static final String PARAM_DRAFT = "draft";
@@ -63,10 +61,20 @@ public class CloneActivitiesUtil {
 		List<String> clonedActivities = new ArrayList<String>();
 		
 		// Check if activity versioning is enabled.
-		if (!ActivityVersionUtil.isVersioningEnabled()) {
-            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
-            errors.addApiErrorMessage(ERROR_NO_ALLOWED, "activity");
-            return ApiError.toError(errors.getAllErrors());
+		if (!ActivityVersionUtil.isVersioningEnabled() || ContentTranslationUtil.multilingualIsEnabled()) {
+			if (!ActivityVersionUtil.isVersioningEnabled()) {
+				errors.addApiErrorMessage(ActivityUtilErrors.ERROR_NOT_ALLOWED,
+						"Versioning is not enabled, clone not available.");
+			} else {
+				// we will not permit the cloning if content translation is
+				// enabled a follow up ticket has been createdAMP-24416
+				if (ContentTranslationUtil.multilingualIsEnabled()) {
+					errors.addApiErrorMessage(ActivityUtilErrors.ERROR_NOT_ALLOWED,
+							"Multilingual is enabled, and content translation not implemented");
+
+				}
+			}
+			return ApiError.toError(errors.getAllErrors());
 
 		} else {
 			// Convert to Set just in case the data contains the same AMP_ID more than one time.

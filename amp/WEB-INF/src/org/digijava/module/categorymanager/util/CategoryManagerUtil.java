@@ -926,6 +926,17 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     	
     	return cvs;
 	}
+	
+	public static void sortByIndex(List<AmpCategoryValue> categoryValues){
+		Collections.sort(categoryValues, new Comparator <AmpCategoryValue> (){
+            public int compare(AmpCategoryValue cv1, AmpCategoryValue cv2) {
+                int result;
+                if (cv1.getIndex() < cv2.getIndex()) result = -1;
+                        else if (cv1.getIndex() < cv2.getIndex()) result = 0;
+                        else result = 1;
+                return result;
+            }});
+	}
 		
 }
 

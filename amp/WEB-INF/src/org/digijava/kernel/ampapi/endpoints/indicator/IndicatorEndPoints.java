@@ -26,6 +26,8 @@ import javax.ws.rs.core.StreamingOutput;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Path("indicator")
@@ -263,15 +265,15 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Collection<JsonBean> getLevels() {
 
-        Collection<AmpCategoryValue> admLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
+        List<AmpCategoryValue> admLevels = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                 "implementation_location", true);
-
+        CategoryManagerUtil.sortByIndex(admLevels);
         Collection<JsonBean> indicatorLayerList = new ArrayList<JsonBean>();
         for (AmpCategoryValue admLevel: admLevels){
             JsonBean categoryValue = new JsonBean();
             categoryValue.set(IndicatorEPConstants.ID, admLevel.getId());
             categoryValue.set(IndicatorEPConstants.LABEL, admLevel.getLabel());
-            categoryValue.set(IndicatorEPConstants.VALUE, admLevel.getValue());
+            categoryValue.set(IndicatorEPConstants.VALUE, admLevel.getValue());            
             indicatorLayerList.add(categoryValue);
         }
 

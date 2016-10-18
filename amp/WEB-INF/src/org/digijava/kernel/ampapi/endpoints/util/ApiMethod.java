@@ -18,8 +18,9 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 public @interface ApiMethod {
 
 	/**
-	 * Is this method visible in UI?
-	 * <p>Note: Probably this field is related only to <b>filters</b> because ui = true is only in filters endpoint</p>
+	 * Whenever to display this filter in UI.
+	 *
+	 * <p>Note: Used in filters only.</p>
 	 */
 	boolean ui();
 
@@ -39,13 +40,6 @@ public @interface ApiMethod {
 	 * <p>Note: Used in filters only.</p>
 	 */
 	String[] columns() default EPConstants.NA;
-
-	/**
-	 * Not used anywhere yet. TODO Remove if unused.
-	 *
-	 * <p>Note: Used in filters only.</p>
-	 */
-	String columnGroup() default EPConstants.NA;
 
 	/**
 	 * Specified where this filter can be used.

@@ -13,6 +13,8 @@
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <buildVersion>2.12-SNAPSHOT</buildVersion>
+        <buildSource></buildSource>
+        <buildDate></buildDate>
         <jersey.version>1.18</jersey.version>
         <saiku.version>3.0-RC2</saiku.version>
         <saiku3.version>3.0-RC2-DG</saiku3.version>
@@ -1002,6 +1004,13 @@
                         <resource>
                             <directory>.</directory>
                             <includes>
+                                <include>TEMPLATE/ampTemplate/site-config.xml</include>
+                            </includes>
+                           <filtering>true</filtering>
+                        </resource>
+                        <resource>
+                            <directory>.</directory>
+                            <includes>
                                 <include>**/*</include>
                             </includes>
                             <excludes>
@@ -1009,6 +1018,7 @@
                                 <exclude>WEB-INF/src/**</exclude>
                                 <exclude>.settings/**</exclude>
                                 <exclude>.externalToolBuilders/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/site-config.xml</exclude>
                             </excludes>
                         </resource>
                     </webResources>

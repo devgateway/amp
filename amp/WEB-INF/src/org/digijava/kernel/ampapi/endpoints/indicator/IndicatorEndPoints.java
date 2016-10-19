@@ -26,8 +26,6 @@ import javax.ws.rs.core.StreamingOutput;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Path("indicator")

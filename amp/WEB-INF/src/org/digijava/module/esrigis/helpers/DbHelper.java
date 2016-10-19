@@ -579,7 +579,7 @@ public class DbHelper {
 
 	public static Long[] getAllDescendantsLocation(Long[] locationIds) 
 	{
-		Set<Long> ids = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(Arrays.asList(locationIds));
+		Set<Long> ids = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(Arrays.asList(locationIds), false);
 		return (Long[]) ids.toArray(new Long[0]);
 	}
 

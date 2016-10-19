@@ -334,8 +334,8 @@ public class PledgeForm extends ActionForm implements Serializable {
 		if (implLocationValue != null) {
 			AmpCategoryValue implLevel = getImplementationLevel(); // guaranteed to be non-null or we have a bug
 			// something selected -> so need to build list of forbidden locations so that they are disabled in the multiselect
-			Set<Long> forbiddenLocations = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(getAllSelectedLocations());
-			forbiddenLocations.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(getAllSelectedLocations())); // any selected locations and any of their descendants or ascendants are forbidden
+			Set<Long> forbiddenLocations = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(getAllSelectedLocations(), false);
+			forbiddenLocations.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(getAllSelectedLocations(), false)); // any selected locations and any of their descendants or ascendants are forbidden
 			if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.equalsCategoryValue(implLevel) && CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocationValue)) {
 				// Implementation Level: NATIONAL, Implementation Location: Country: only the default country is available
 				AmpCategoryValueLocations country = DynLocationManagerUtil.getDefaultCountry();

@@ -261,8 +261,8 @@ CommonFilterUtils.calculateMD5FromParameters = function (model, id, lang) {
 		parameters.sorting = model.queryModel.sorting; 
 	}
 	
-	console.log(JSON.stringify(parameters));
+	//console.log(JSON.stringify(parameters));
 	var md5 = hex_md5(JSON.stringify(parameters));
-	console.log(md5);
+	//console.log(md5);
 	return md5;
 };

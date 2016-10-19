@@ -49,8 +49,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils', 
 			regenerate : true,
 			columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
 			filters : jsonFilters,
-			settings : settings/*,
-			MD5 : generateMD5(jsonFilters, settings, app.TabsApp.currentSorting, id, _.findWhere(app.TabsApp.settings.attributes, {id:'language'}).defaultId)*/
+			settings : settings
 		};
 		if (app.TabsApp.currentSorting !== undefined) {
 			data.sidx = app.TabsApp.currentSorting.sidx;
@@ -108,8 +107,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils', 
 							page : 1,
 							regenerate : true,
 							columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
-							filters : null/*,
-							MD5 : generateMD5(null, null, {sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, id, _.findWhere(app.TabsApp.settings.attributes, {id:'language'}).defaultId)*/
+							filters : null
 						},
 						serializeGridData : function(postData) {
 							if (postData.sidx && postData.sord) {
@@ -162,9 +160,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils', 
 						loadBeforeSend : function(xhr, settings) {
 							TranslationManager.searchAndTranslate();
 						},
-						serializeGridData: function (data){
-							console.log(data);
-							data.MD5 = generateMD5(data.filters, data.settings, {sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, id, _.findWhere(app.TabsApp.settings.attributes, {id:'language'}).defaultId)
+						serializeGridData: function (data) {
+							// This function is called automatically BEFORE sending the request, so here we can make changes on the POST data.
+							data.MD5 = generateMD5(data.filters, data.settings,  
+									{sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, 
+									id, _.findWhere(app.TabsApp.settings.attributes, {id:'language'}).defaultId);
 							return JSON.stringify(data);
 						},
 						gridComplete : function() {
@@ -415,11 +415,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils', 
 									});
 								});
 							}
-						},
-						onSortCol : function (index, columnIndex, sortOrder) {
-					        //alert(index+columnIndex+sortOrder);
-					        //return index+columnIndex+sortOrder;
-					    }
+						}
 					});
 			app.TabsApp.currentGrid = jQuery(grid);
 		});

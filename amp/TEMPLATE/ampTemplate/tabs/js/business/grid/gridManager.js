@@ -1,5 +1,5 @@
-define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ], function(columnsMapping,
-		TranslationManager, TabUtils) {
+define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils', 'md5', 'underscore' ], function(columnsMapping,
+		TranslationManager, TabUtils, md5, _) {
 
 	"use strict";
 
@@ -49,7 +49,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 			regenerate : true,
 			columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
 			filters : jsonFilters,
-			settings : settings
+			settings : settings/*,
+			MD5 : generateMD5(jsonFilters, settings, app.TabsApp.currentSorting, id, _.findWhere(app.TabsApp.settings.attributes, {id:'language'}).defaultId)*/
 		};
 		if (app.TabsApp.currentSorting !== undefined) {
 			data.sidx = app.TabsApp.currentSorting.sidx;
@@ -107,7 +108,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 							page : 1,
 							regenerate : true,
 							columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
-							filters : null
+							filters : null/*,
+							MD5 : generateMD5(null, null, {sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, id, _.findWhere(app.TabsApp.settings.attributes, {id:'language'}).defaultId)*/
 						},
 						serializeGridData : function(postData) {
 							if (postData.sidx && postData.sord) {
@@ -159,6 +161,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 						footerrow : true,
 						loadBeforeSend : function(xhr, settings) {
 							TranslationManager.searchAndTranslate();
+						},
+						serializeGridData: function (data){
+							console.log(data);
+							data.MD5 = generateMD5(data.filters, data.settings, {sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, id, _.findWhere(app.TabsApp.settings.attributes, {id:'language'}).defaultId)
+							return JSON.stringify(data);
 						},
 						gridComplete : function() {
 							// Save current sorting settings in case we save the tab later.
@@ -408,7 +415,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 									});
 								});
 							}
-						}
+						},
+						onSortCol : function (index, columnIndex, sortOrder) {
+					        //alert(index+columnIndex+sortOrder);
+					        //return index+columnIndex+sortOrder;
+					    }
 					});
 			app.TabsApp.currentGrid = jQuery(grid);
 		});
@@ -613,4 +624,19 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 	}
 
 	return GridManager;
+	
+	function generateMD5(filters, settings, sorting, id, lang) {
+		var model = {queryModel: {}};
+		if (filters !== null) {
+			model.queryModel.filters = filters;
+		}
+		if (settings !== null) {
+			model.queryModel.settings = settings;
+		}
+		if (sorting !== null) {
+			model.queryModel.sorting = sorting;
+		}
+		var md5 = CommonFilterUtils.calculateMD5FromParameters(model, id, lang);
+		return md5;
+	}
 });

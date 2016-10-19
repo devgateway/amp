@@ -150,7 +150,7 @@ public class SecurityService {
 				// if buildDate is empty it shouldn't replace the release date.
 				// In PROD and STG this props should be empty
 				if (StringUtils.isNotEmpty(buildSource)) {
-					ampVersion += " (" + buildSource + ")";
+					ampVersion += buildSource;
 				}
 				
 				if (StringUtils.isNotEmpty(buildDate)) {

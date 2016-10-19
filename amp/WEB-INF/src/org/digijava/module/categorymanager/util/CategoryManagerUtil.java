@@ -927,6 +927,10 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     	return cvs;
 	}
 	
+	/**
+	 * Sorts Category Values List by index field in ascending order 
+	 * @param categoryValues
+	 */
 	public static void sortByIndex(List<AmpCategoryValue> categoryValues){
 		Collections.sort(categoryValues, new Comparator <AmpCategoryValue> (){
             public int compare(AmpCategoryValue cv1, AmpCategoryValue cv2) {

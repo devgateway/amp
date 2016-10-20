@@ -164,6 +164,8 @@ public class AmpReportsToReportSpecification {
 			spec.setDisplayEmptyFundingRows(false);
 		else 
 			spec.setDisplayEmptyFundingRows(true);
+
+		spec.setDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy(true);
 	}
 	
 	private void configureHierarchies() {

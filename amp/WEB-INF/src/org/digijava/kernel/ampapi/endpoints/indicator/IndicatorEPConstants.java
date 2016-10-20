@@ -26,7 +26,7 @@ public class IndicatorEPConstants {
     public static final int COLOR_RAMP_INDEX = 8; // index of last element of the colors arrays.
     public static final long PAYLOAD_INDEX = 1; // indicate
     
-    public static final long  RED_GREEN_PALETTE_INDEX = 9;
+    public static final long RED_GREEN_PALETTE_INDEX = 9;
     public static final long BLUE_PURPLE_PALETTE_INDEX = 10;
    
     public static final String RESULT = "result";
@@ -77,7 +77,7 @@ public class IndicatorEPConstants {
     public static final String PAGE = "page";
     public static final String DATA = "data";
     
-    public static final Set<Long> MULTI_COLOR_PALETTES= Collections.unmodifiableSet((new HashSet<Long>() {{
+    public static final Set<Long> MULTI_COLOR_PALETTES = Collections.unmodifiableSet((new HashSet<Long>() {{
 		add(RED_GREEN_PALETTE_INDEX);	
 		add(BLUE_PURPLE_PALETTE_INDEX);
 	}}));

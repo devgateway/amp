@@ -128,19 +128,18 @@ var Palette = Backbone.Model.extend({
 
     this.colours.reset(newColours);
   },
-  getColour: function(stop, stops, sStopSize, lStopSize, hStopSize){
-	  if(this.get('multiColorSet') && stops <= this.get('multiColorSet').length){
+  getColour: function(stop, stops, sStopSize, lStopSize, hStopSize) {
+	  if (this.get('multiColorSet') && stops <= this.get('multiColorSet').length) {
 		  return {
 			  h: this.get('multiColorSet')[stop][0],
 			  s: this.get('multiColorSet')[stop][1],
 			  l: this.get('multiColorSet')[stop][2]
-		  }
-	  }else{
+		  };
+	  } else {
 		  return {h: (this.get('rootHue') + (hStopSize * stop) + 360) % 360,
 		      s: DEFAULT.S_MIN + (sStopSize * stop),
-		      l: DEFAULT.L_MAX - (lStopSize * stop)}  // dark to bright 
-	  }
-	  
+		      l: DEFAULT.L_MAX - (lStopSize * stop)};  // dark to bright 
+	  }	  
   },  
   generateSet: function() {
 

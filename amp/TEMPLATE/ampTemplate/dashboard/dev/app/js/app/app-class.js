@@ -107,12 +107,8 @@ _.extend(App.prototype, BackboneDash.Events, {
           caller: 'DASHBOARD'
         });
 
-      var self = this;  
-      $.when(this.translator.promise).then(function(){
-    	  // initialize app components
-          self.view = new MainView({ app: self, el: options.el });
-      });
-       
+   	  // initialize app components
+      this.view = new MainView({ app: this, el: options.el });      
 
       _initDefer.resolve(this);
     } catch (e) {

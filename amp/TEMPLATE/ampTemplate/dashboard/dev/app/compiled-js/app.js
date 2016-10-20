@@ -2358,17 +2358,6 @@ function flash() {
   }
 }
 
-function sessionstorage(){  
-	var uid = new Date;
-	var result;
-	try {
-		sessionStorage.setItem(uid, uid);
-		result = sessionStorage.getItem(uid) == uid;
-		sessionStorage.removeItem(uid);
-		return result && sessionStorage;
-	} catch (exception) {}	  
-}
-
 
 module.exports = function() {
   var missingFeatures = [];  // an empty array will cast to bool false. handy!
@@ -2407,13 +2396,6 @@ module.exports = function() {
       severity: isIE() ? 'major' : 'minor'
     });
   }
-
-  if (!sessionstorage()) {
-	    missingFeatures.push({
-	      feature: 'sessionStorage',
-	      severity: 'minor'
-	    });
-	  }
 
   return missingFeatures;
 };
@@ -3270,25 +3252,6 @@ module.exports = BackboneDash.Collection.extend({
     this.app = options.app;
     this._loaded = new Deferred();
     _.bindAll(this, 'toAPI', 'fromState');
-    if(!this.app.hasIssue('sessionStorage')){
-      //this should be "once", but this collection gets synced 2 times for some reason
-      //TODO: find the reason for above and replace this with "once"
-      this.on("sync", _(function(){
-        try{
-          var settings = JSON.parse(sessionStorage.settings);
-          if("object" == typeof settings && null !== settings){
-            if(settings[1]){
-              this.findWhere({id: "1"}).select(settings[1], false);              
-            }
-            if(settings[2]){
-              this.findWhere({id: "2"}).select(settings[2], false);
-            }
-          }
-        }
-        //we're catching because it will throw if sessionStorage.settings is empty or corrupted
-        catch(e){}
-      }).bind(this));
-    }
   },
 
   parse: function(settings) {
@@ -4964,28 +4927,7 @@ module.exports = BackboneDash.View.extend({
 
   changeSetting: function(e) {
     var optionId = e.currentTarget.value;
-    logger.log("Changing", optionId, "setting");
-    //if the browser supports local storage
-    if(!this.app.hasIssue('sessionStorage') && (1 == this.current.get('id') || 2 == this.current.get('id'))){
-      var settings;
-      //try reading the settings JSON from sessionStorage and deserialize it...
-      try{
-        settings = JSON.parse(sessionStorage.settings);
-      }
-      catch(e){}
-      //...regardless of whether that failed or not...
-      finally{
-        //...ensure settings is a normal object...
-        if(!("object" == typeof settings && null !== settings)){
-          //...if it's not, let it be just an empty object
-          settings = {};
-        }
-      }
-      //and after all that paranoia we can now relatively safely persist the settings:
-      var id = this.current.get('id');
-      settings[id] = optionId;
-      sessionStorage.settings = JSON.stringify(settings);
-    }
+    logger.log("Changing", optionId, "setting"); 
     this.current.select(optionId, false);
   },
   

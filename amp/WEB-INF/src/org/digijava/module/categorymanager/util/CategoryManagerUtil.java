@@ -496,9 +496,9 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	}
 	/**
 	 * gets all ACV that are not also deleted 
-	 * The function is called with ordered as parameter
 	 * @param categoryKey
-	 * @return 
+	 * @param ordered if this is true the returned collection is ordered by name ascending, if it is false the returned collection is ordered by index ascending
+	 * @return
 	 */
 	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKeyExcludeDeleted(String categoryKey,Boolean ordered){
 		Collection<AmpCategoryValue> visibleValues = new ArrayList<AmpCategoryValue>(); 

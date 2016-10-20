@@ -44,20 +44,27 @@ module.exports = Backbone.Model
     this.listenTo(app.data.settings, 'applySettings', function(blah, show) {
         this.trigger('applySettings', this);
     });
-
-    var numStops = this.get('classes') || 5;
-    var values = this.get('values') || [];
-
-    this.palette = new Palette.FromRange({stops: numStops, seed: this.get('id'), values: values });
-
-    // set color based on ramp, if one is provided.
-    if (this.get('colorRamp') && this.get('colorRamp').length > 0) {
-      var colorHex = this.get('colorRamp')[0].color; //choose last or first colour from ramp.
-      this.palette.set('rootHue', husl.fromHex(colorHex)[0]);//Math.floor(seedrandom(options.seed)() * 360));
-    }
-        
+    this.initializePalette();        
   },
+  initializePalette: function() {
+	  var numStops = this.get('classes') || 5;
+	  var values = this.get('values') || [];
+	  this.palette = new Palette.FromRange({stops: numStops, seed: this.get('id'), values: values });
 
+	  if (this.get('colorRamp') && this.get('colorRamp').length > 0) {
+		  //use the colors provided, if the colorRamp has multiple colors. By default it uses shades of the same color generated in colour-palette.js
+		  if (this.get('isMultiColor') === true && numStops <= this.get('colorRamp').length) {
+			  var multiColorSet = [];
+			  _.each(this.get('colorRamp'),function(colorRamp) {
+				  multiColorSet.push(husl.fromHex(colorRamp.color));
+			  });           	
+			  this.palette.set('multiColorSet', multiColorSet);         
+		  } else {
+			  var colorHex = this.get('colorRamp')[0].color; //choose last or first colour from ramp.
+			  this.palette.set('rootHue', husl.fromHex(colorHex)[0]);//Math.floor(seedrandom(options.seed)() * 360));
+		  }      
+	  } 
+  },
   loadBoundary: function() {
     // Phil's ideal way of being able to join with non-hosted boundaries.:
     // var boundaryLink = this.get('joinBoundariesLink');  // TODO: handle IDs vs links consitently

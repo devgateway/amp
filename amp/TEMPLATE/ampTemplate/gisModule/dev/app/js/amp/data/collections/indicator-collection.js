@@ -94,7 +94,6 @@ module.exports = Backbone.Collection.extend({
         layer.type = 'joinBoundaries';
         //debugger
         layer.adminLevel = self._magicConversion(layer.admLevelName);
-        layer.tooltip = self._createTooltip(layer); 
         layer.classes = layer.numberOfClasses;        
         return true;
       }
@@ -118,20 +117,5 @@ module.exports = Backbone.Collection.extend({
     };
 
     return magicWords[textAdm];
-  },
-  _createTooltip: function(obj){
-	     var tooltip  = '';
-	     if(obj.description){
-	       tooltip += obj.description + '. ' ;
-	     }
-	     
-	     if(obj.createdOn){
-	      tooltip += '&#013; Created on ' + obj.createdOn + '. ';
-	     }
-	     if(obj.createdBy){
-		      tooltip += '&#013; Created by ' + obj.createdBy + '. ';
-		 }
-	     return tooltip;
-}
-
+  }
 });

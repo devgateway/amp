@@ -24049,7 +24049,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(52)
-},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"C:\\Git\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!

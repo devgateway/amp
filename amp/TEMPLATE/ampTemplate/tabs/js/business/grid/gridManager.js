@@ -1,5 +1,5 @@
-define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ], function(columnsMapping,
-		TranslationManager, TabUtils) {
+define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils', 'md5', 'underscore' ], function(columnsMapping,
+		TranslationManager, TabUtils, md5, _) {
 
 	"use strict";
 
@@ -159,6 +159,13 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 						footerrow : true,
 						loadBeforeSend : function(xhr, settings) {
 							TranslationManager.searchAndTranslate();
+						},
+						serializeGridData: function (data) {
+							// This function is called automatically BEFORE sending the request, so here we can make changes on the POST data.
+							data.MD5 = generateMD5(data.filters, data.settings,  
+									{sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, 
+									id, _.findWhere(app.TabsApp.settings.attributes, {id:'language'}).defaultId);
+							return JSON.stringify(data);
 						},
 						gridComplete : function() {
 							// Save current sorting settings in case we save the tab later.
@@ -613,4 +620,19 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 	}
 
 	return GridManager;
+	
+	function generateMD5(filters, settings, sorting, id, lang) {
+		var model = {queryModel: {}};
+		if (filters !== null) {
+			model.queryModel.filters = filters;
+		}
+		if (settings !== null) {
+			model.queryModel.settings = settings;
+		}
+		if (sorting !== null) {
+			model.queryModel.sorting = sorting;
+		}
+		var md5 = CommonFilterUtils.calculateMD5FromParameters(model, id, lang);
+		return md5;
+	}
 });

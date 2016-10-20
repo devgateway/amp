@@ -485,9 +485,9 @@ public class DbUtil {
 	 * @param allLocationsList
 	 * @return
 	 */
-	private static Long[] getAllDescendantsLocation(Long[] locationIds) {
+	private static Long[] getAllDescendantsLocation(Long[] locationIds, boolean includeDeleted) {
 
-		Set<Long> ids = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(Arrays.asList(locationIds));
+		Set<Long> ids = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(Arrays.asList(locationIds), includeDeleted);
 		return (Long[]) ids.toArray(new Long[0]);
 		
 //    	Set<Long> tempLocationsIds = new java.util.HashSet<Long>();    	

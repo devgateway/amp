@@ -691,7 +691,7 @@ public class AmpARFilter extends PropertyListable {
 		if (locationSelected == null)
 			return null;
 		
-		Set<Long> allDescendantsIds = DynLocationManagerUtil.populateWithDescendantsIds(locationSelected);
+		Set<Long> allDescendantsIds = DynLocationManagerUtil.populateWithDescendantsIds(locationSelected, false);
 		List<AmpCategoryValueLocations> allAscendingLocations	= new ArrayList<AmpCategoryValueLocations>();
 		DynLocationManagerUtil.populateWithAscendants(allAscendingLocations, locationSelected);
 		Set<Long> allSelectedLocations = new HashSet<Long>(allDescendantsIds);
@@ -1242,7 +1242,7 @@ public class AmpARFilter extends PropertyListable {
 			Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
 			allSelectedLocations.addAll(locationSelected);
 			
-			DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected);
+			DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected, false);
 			this.pledgesLocations = new ArrayList<AmpCategoryValueLocations>();
 			this.pledgesLocations.addAll(allSelectedLocations);
 			DynLocationManagerUtil.populateWithAscendants(this.pledgesLocations, locationSelected);
@@ -1386,7 +1386,7 @@ public class AmpARFilter extends PropertyListable {
 		
 		if (locationSelected != null) {
 			long a = System.currentTimeMillis();
-			Set<Long> allDescendantsIds = DynLocationManagerUtil.populateWithDescendantsIds(locationSelected);
+			Set<Long> allDescendantsIds = DynLocationManagerUtil.populateWithDescendantsIds(locationSelected, false);
 			long b = System.currentTimeMillis();
 			logger.error("generating " + allDescendantsIds.size() + " ids took " + (b - a) + " millies");
 			

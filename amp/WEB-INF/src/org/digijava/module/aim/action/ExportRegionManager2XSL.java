@@ -137,37 +137,39 @@ public class ExportRegionManager2XSL extends Action {
 		
 		if (locations != null) {
 			for (AmpCategoryValueLocations location : locations) {
-				int cellIndex=0;
-				Set<AmpCategoryValueLocations> childrenLocs = location.getChildLocations();
-				int currentLayer = location.getParentCategoryValue().getIndex();
-				
-				if(hideEmptyCountries && currentLayer == countryLayerIndex && childrenLocs.size() == 0) {
-					continue;
-				}
-				
-				HSSFRow row = sheet.createRow(rowIndex[0]++);
-				HSSFCell cell = row.createCell(cellIndex++);
-				cell.setCellValue(location.getId());
-				
-				List<String> parents = DynLocationManagerUtil.getParents(location);
-				for(String parent : parents){
+				if (!location.isSoftDeleted()) {
+					int cellIndex=0;
+					Set<AmpCategoryValueLocations> childrenLocs = location.getChildLocations();
+					int currentLayer = location.getParentCategoryValue().getIndex();
+					
+					if(hideEmptyCountries && currentLayer == countryLayerIndex && childrenLocs.size() == 0) {
+						continue;
+					}
+					
+					HSSFRow row = sheet.createRow(rowIndex[0]++);
+					HSSFCell cell = row.createCell(cellIndex++);
+					cell.setCellValue(location.getId());
+					
+					List<String> parents = DynLocationManagerUtil.getParents(location);
+					for(String parent : parents){
+						cell = row.createCell(cellIndex++);
+						cell.setCellValue(parent);
+					}
+					
+					cellIndex=lastImpLevelIndex;
 					cell = row.createCell(cellIndex++);
-					cell.setCellValue(parent);
+					cell.setCellValue(location.getGsLat());
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(location.getGsLong());
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(location.getGeoCode());
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(location.getIso());
+					cell = row.createCell(cellIndex++);
+					cell.setCellValue(location.getIso3());
+					
+					generateLocationHierarchy(childrenLocs, rowIndex, sheet,hideEmptyCountries, countryLayerIndex, lastImpLevelIndex);
 				}
-				
-				cellIndex=lastImpLevelIndex;
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(location.getGsLat());
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(location.getGsLong());
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(location.getGeoCode());
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(location.getIso());
-				cell = row.createCell(cellIndex++);
-				cell.setCellValue(location.getIso3());
-				
-				generateLocationHierarchy(childrenLocs, rowIndex, sheet,hideEmptyCountries, countryLayerIndex, lastImpLevelIndex);
 			}
 		}
 	}

@@ -139,6 +139,7 @@ public class AddNewLocation extends Action {
                 location.setDescription(addRegForm.getDescription());
                 location.setGsLat(addRegForm.getGsLat());
                 location.setGsLong(addRegForm.getGsLong());
+                location.setDeleted(false);
 
                 try {
 

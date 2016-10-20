@@ -19,7 +19,10 @@
 			INSERT INTO amp_program_settings (amp_program_settings_id, allow_multiple, name, default_hierarchy) 
 			SELECT nextval('amp_program_settings_seq'), true, 'Tertiary Program', NULL 
 			WHERE NOT EXISTS (SELECT amp_program_settings_id FROM amp_program_settings WHERE name  = 'Tertiary Program');
-				
+
+            INSERT INTO amp_program_settings (amp_program_settings_id, allow_multiple, name, default_hierarchy)
+            SELECT nextval('amp_program_settings_seq'), true, 'National Plan Objective', NULL
+            WHERE NOT EXISTS (SELECT amp_program_settings_id FROM amp_program_settings WHERE name  = 'National Plan Objective');
             </lang>
         </script>
     </apply>

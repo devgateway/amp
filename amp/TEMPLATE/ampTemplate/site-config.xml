@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE page [
 <!ENTITY ampVersion "2.12.7">
-<!ENTITY buildDate "2.10.2016">
+<!ENTITY releaseDate "2.10.2016">
+<!ENTITY buildDate "${buildDate}">
+<!ENTITY buildSource "${buildSource}">
 ]>
 <site-config>
 	<site-layout>
@@ -137,7 +139,13 @@
 		
 		<layout name="headerMiddleLayout" file="headerMiddle.jsp">
 			<put name="version">&ampVersion;</put>
-			<put name="build_version">&buildDate;</put>
+			<put name="build_version">&releaseDate;</put>
+			
+			<!-- The build_info parameter is not used in the jsp. But we need to reference the entities in order to read the values.
+				 For the entities declared but non-referenced, the java xml parser will set "null". 
+			-->
+			<put name="build_info">&buildSource;&buildDate;</put>
+	  		
 	  		<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>

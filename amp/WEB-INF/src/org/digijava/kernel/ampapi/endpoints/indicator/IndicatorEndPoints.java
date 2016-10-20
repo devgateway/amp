@@ -264,7 +264,7 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     public Collection<JsonBean> getLevels() {
 
         Collection<AmpCategoryValue> admLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
-                "implementation_location", true);
+                "implementation_location", false);
 
         Collection<JsonBean> indicatorLayerList = new ArrayList<JsonBean>();
         for (AmpCategoryValue admLevel: admLevels){

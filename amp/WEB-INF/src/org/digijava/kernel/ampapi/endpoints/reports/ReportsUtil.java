@@ -475,10 +475,13 @@ public class ReportsUtil {
 				somethingAdded = true;
 			}
 		}
-		for(Entry<ReportColumn, List<FilterRule>> elem: oldFilters.getDateFilterRules().entrySet()) {
-			result.getDateFilterRules().put(elem.getKey(), elem.getValue());
-			somethingAdded = true;
+		for(Entry<ReportColumn, List<FilterRule>> elem : oldFilters.getDateFilterRules().entrySet()) {
+			if (!result.getDateFilterRules().containsKey(elem.getKey())) {
+				result.getDateFilterRules().put(elem.getKey(), elem.getValue());
+				somethingAdded = true;
+			}
 		}
+		
 		if (newFilters == null && !somethingAdded)
 			return newFilters; // do not alter filters if we did nothing
 		

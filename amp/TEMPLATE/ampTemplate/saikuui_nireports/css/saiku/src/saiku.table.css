@@ -120,6 +120,14 @@ tr.level_3 td.total, tr.level_3 th.row_total, .workspace_results table tr th.hie
     background-color: #E8E8E8;
 }
 
+.workspace_results table tr th.hier_level_2 {
+    border-top: 1px solid #C8C8C8;
+}
+
+.workspace_results table tr th.hier_level_1 {
+    border-top: 1px solid #B8B8B8;
+}
+
 .workspace_results table tbody tr:hover {
   background: #edf4fa !important;
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-23945</jira>
+    <keyword>remove wrong translations</keyword>
+    <author>apicca</author>
+    <description>remove the translations generated incorrectly on the initial fix</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                DELETE FROM dg_message WHERE message_utf8 in ( 
+				'Enter the measures for each location in the labeled column next to the respective location.',
+				'If Indicator Layer Type is "Ratio (% of Population)" or "Ratio (other)" please enter either in decimal format or add % to the end of each measure.',
+				'Save the spreadsheet and re-upload in the next step.');
+
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

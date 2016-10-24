@@ -84,7 +84,7 @@
 	selectedCols						= new Array();
 	selectedHiers						= new Array();
 	selectedMeas						= new Array();
-	defaultLanguage = "";
+	var defaultLanguage = '${aimReportWizardForm.defaultLanguage}';
 
 	if ( "true" == "${myForm.budgetExporter}" )	
 		NormalReportManager.prototype.maxHierarchies = 5;
@@ -140,23 +140,7 @@
 
 	
 	YAHOO.util.Event.addListener(window, "load", initializeDragAndDrop);
-	YAHOO.util.Event.addListener(window, "load", setCurrentLang);
 
-	function setCurrentLang()
-	{
-		$.ajax({
-			url:"/rest/amp/settings",
-			async:false,
-			data: "",
-			success:  function(data) {
-				$.each(data,function(index,d){
-					if (d.id == "language") {
-						defaultLanguage = d.defaultId;
-					}
-				});
-			}
-		});
-	}
 </script>
 
 <style type="text/css">

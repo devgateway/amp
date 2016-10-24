@@ -9,11 +9,7 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-                DELETE FROM dg_message WHERE message_utf8 in ( 
-				'Enter the measures for each location in the labeled column next to the respective location.',
-				'If Indicator Layer Type is "Ratio (% of Population)" or "Ratio (other)" please enter either in decimal format or add % to the end of each measure.',
-				'Save the spreadsheet and re-upload in the next step.');
-
+                DELETE FROM dg_message WHERE message_key in ( '-1317293799','791060892','-1222091797' );
             </lang>
         </script>
     </apply>

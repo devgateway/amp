@@ -97,7 +97,7 @@ function showUser(email){
 		previewWorkspaceframe('/aim/default/userProfile.do',param);
 	}
 	else{
-		var trasnlation = '<digi:trn key="aim:userblankmail">The user does not have a valid email address</digi:trn>';
+		var trasnlation = '<digi:trn jsFriendly="true" key="aim:userblankmail">The user does not have a valid email address</digi:trn>';
 		alert (trasnlation);
 	}
 }
@@ -139,13 +139,13 @@ function toggleSettings(){
 	if(currentDisplaySettings.css('display') == "inline-flex"){
 		currentDisplaySettings.hide();
 		$('#exportScorecard').hide();
-		displaySettingsButton.html('<digi:trn key="aim:Showcleanupoptions">Show cleanup options</digi:trn>'+ ' &gt;&gt;');
+		displaySettingsButton.html('<digi:trn jsFriendly="true" key="aim:Showcleanupoptions">Show cleanup options</digi:trn>'+ ' &gt;&gt;');
 	}
 	else
 	{
 		currentDisplaySettings.css('display', 'inline-flex');
 		$('#exportScorecard').css('display','inline-flex');
-		displaySettingsButton.html('<digi:trn key="aim:Hidecleanupoptions">Hide cleanup options</digi:trn>'+ ' &lt;&lt;');
+		displaySettingsButton.html('<digi:trn jsFriendly="true" key="aim:Hidecleanupoptions">Hide cleanup options</digi:trn>'+ ' &lt;&lt;');
 	}
 }
 

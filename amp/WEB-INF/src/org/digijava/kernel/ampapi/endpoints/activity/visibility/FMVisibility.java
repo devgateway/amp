@@ -41,8 +41,14 @@ public class FMVisibility {
 			while (iter.hasNext() && fmPath.contains(PARENT_FM)) {
 				Interchangeable interchangeable = iter.next();
 				// skipping current field interchangeable path if it was pushed to the queue
-				if (!fmPath.equals(interchangeable.fmPath()))
-					fmPath = fmPath.replace(PARENT_FM, interchangeable.fmPath());
+				if (!fmPath.equals(interchangeable.fmPath())) {
+					// if it contains more parent paths, we need to add to each one the current fmPath
+					if (interchangeable.fmPath().startsWith(ANY_FM)) {
+						fmPath = updateAnyFmPaths(fmPath, interchangeable);
+					} else {
+						fmPath = fmPath.replace(PARENT_FM, interchangeable.fmPath());
+					}
+				}
 			}
 		}
 		if (fmPath.startsWith(ANY_FM)) {
@@ -55,6 +61,33 @@ public class FMVisibility {
 		} else {
 			return isFinalFmPathEnabled(fmPath);
 		}
+	}
+	
+	/**
+	 * 
+	 * In order to check correctly the children of
+	 * E.g.: root path = _ANY_FM_X|Y, field path = z
+	 * 
+	 * The children of the path should be checked for _ANY_FM_X\z|Y\z
+	 * 
+	 * @param fmPath - current field fmPath. e.g: _PARENT_FM_\z
+	 * @param interchangeable - the parent interchangeable (_ANY_FM_X|Y)
+	 * 
+	 * 
+	 * @return updated path (_ANY_FM_X\z|Y\z) 
+	 */
+	
+	protected static String updateAnyFmPaths(String fmPath, Interchangeable interchangeable) {
+		String updatedPath = interchangeable.fmPath();
+		
+		for(String anyFMOption : interchangeable.fmPath().substring(ANY_FM.length()).split("\\|")) {
+			if (StringUtils.isNotBlank(anyFMOption)) {
+				if (!anyFMOption.equals(interchangeable.fmPath()))
+					updatedPath = updatedPath.replace(anyFMOption, anyFMOption + fmPath.replace(PARENT_FM, ""));
+			}
+		}
+		
+		return updatedPath;
 	}
 	
 	protected static boolean isFinalFmPathEnabled(String fmPath) {

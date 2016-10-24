@@ -65,7 +65,7 @@ public class FMVisibility {
 	
 	/**
 	 * 
-	 * In order to check correctly the children of
+	 * Update the children visibility paths for parents having _ANY_FM_ clause
 	 * E.g.: root path = _ANY_FM_X|Y, field path = z
 	 * 
 	 * The children of the path should be checked for _ANY_FM_X\z|Y\z

@@ -32,6 +32,7 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
@@ -266,6 +267,7 @@ public class ReportWizardAction extends MultiAction {
         }else{
             myForm.setProjecttitle("");
         }
+        myForm.setDefaultLanguage(TLSUtils.getEffectiveLangCode());
 
         if (request.getParameter("type")!=null){
             typereport = new Integer(request.getParameter("type"));

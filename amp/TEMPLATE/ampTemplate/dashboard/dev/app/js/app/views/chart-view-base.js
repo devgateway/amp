@@ -271,22 +271,26 @@ module.exports = BackboneDash.View.extend({
   },
   
   fixTitleWidth: function() {
+	  var elementsSpace = 10;
+	  var max_lines_on_title = 2;
+	  var charsToRemove = 5;
 	  var title = this.$(".chart-title h2");
 	  var titleWidth = $(title).width();
 	  var containerWidth = this.$(".panel-heading").width();
 	  var amountWidth = this.$(".big-number").width();
 	  if (containerWidth < titleWidth + amountWidth) {
-		  $(title).css('width', (containerWidth - amountWidth - 10) + 'px');
-		  // While title has more than 2 lines we keep removing characters.
-		  while (this.calculateTextHeight(title) > 2) {
-			  $(title).html($(title).html().substring(0, $(title).html().length - 5) + '...');
+		  $(title).css('width', (containerWidth - amountWidth - elementsSpace) + 'px');
+		  while (this.calculateTextLines(title) > max_lines_on_title) {
+			  $(title).html($(title).html().substring(0, $(title).html().length - charsToRemove) + '...');
+			  $(title).attr('data-title', this.model.get('title'));
+			  this.addSimpleTooltip(title);
 		  }
 	  }
   },
   
-  calculateTextHeight: function(object) {
-	  var lines = 0;
-	  lines = Math.floor($(object).height() / 24);
+  calculateTextLines: function(object) {
+	  var lineHeight = 24;
+	  var lines = Math.floor($(object).height() / lineHeight);
 	  return lines;
   },
 
@@ -392,21 +396,20 @@ module.exports = BackboneDash.View.extend({
 		  }
 	    
 		  // Now bind NV tooltip mechanism to hover event for each legend.
-		  if($(elem).data('data-title') || $(elem).data('title')) {
-			  $(elem).hover(function() {
-	    		var offset = $(this).offset();	    		
-	    		//TODO: Check the generation of heatMapChart.js and see if we can set the 'data' field the same way than other charts.
-	    		var title = $(elem).data('data-title') ? $(elem).data('data-title') : $(elem).data('title');
-	    		//TODO: Remove hardcoded html and use a template.
-	    	    nv.tooltip.show([offset.left, offset.top], "<div class='panel panel-primary panel-popover'><div class='panel-heading'>" + title + "</div></div>");
-	    	        
-	    	    // TODO: Find a way to trigger the mouseover on the bar.
-	    	    // $($(this).closest('svg').find(".nv-groups").find(".nv-bar")[i]).trigger('hover');
-	    	   }, function() {
-	    		   nv.tooltip.cleanup();
-	    	   });
-		  }
+		  self.addSimpleTooltip(elem);
 	  });
+  },
+  
+  addSimpleTooltip: function(object) {
+	  if ($(object).data('data-title') || $(object).data('title')) {
+		  $(object).hover(function() {
+			  var title = $(object).data('data-title') ? $(object).data('data-title') : $(object).data('title');
+			  var offset = $(object).offset();
+	    	  nv.tooltip.show([offset.left, offset.top], "<div class='panel panel-primary panel-popover'><div class='panel-heading'>" + title + "</div></div>");
+		  }, function() {
+			  nv.tooltip.cleanup();
+		  });
+	  }
   }
 
 });

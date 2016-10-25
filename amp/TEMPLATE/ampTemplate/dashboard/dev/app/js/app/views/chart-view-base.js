@@ -188,6 +188,7 @@ module.exports = BackboneDash.View.extend({
 
     if (this.model.get('chartType') !== 'fragmentation') {
     	this.renderNumbers();
+    	this.fixTitleWidth();
     }
     
     if (this.model.get('chartType') !== 'fragmentation') {
@@ -267,6 +268,26 @@ module.exports = BackboneDash.View.extend({
   resetNumbers: function() {
     this.$('.chart-total').html('');
     this.$('.chart-currency').html('');
+  },
+  
+  fixTitleWidth: function() {
+	  var title = this.$(".chart-title h2");
+	  var titleWidth = $(title).width();
+	  var containerWidth = this.$(".panel-heading").width();
+	  var amountWidth = this.$(".big-number").width();
+	  if (containerWidth < titleWidth + amountWidth) {
+		  $(title).css('width', (containerWidth - amountWidth - 10) + 'px');
+		  // While title has more than 2 lines we keep removing characters.
+		  while (this.calculateTextHeight(title) > 2) {
+			  $(title).html($(title).html().substring(0, $(title).html().length - 5) + '...');
+		  }
+	  }
+  },
+  
+  calculateTextHeight: function(object) {
+	  var lines = 0;
+	  lines = Math.floor($(object).height() / 24);
+	  return lines;
   },
 
   resetLimit: function() {

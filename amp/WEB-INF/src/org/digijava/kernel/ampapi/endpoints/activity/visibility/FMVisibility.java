@@ -51,6 +51,7 @@ public class FMVisibility {
 				}
 			}
 		}
+		
 		if (fmPath.startsWith(ANY_FM)) {
 			for(String anyFMOption : fmPath.substring(ANY_FM.length()).split("\\|")) {
 				if (StringUtils.isNotBlank(anyFMOption) && isFinalFmPathEnabled(anyFMOption)) {
@@ -67,23 +68,18 @@ public class FMVisibility {
 	 * 
 	 * Update the children visibility paths for parents having _ANY_FM_ clause
 	 * E.g.: root path = _ANY_FM_X|Y, field path = z
-	 * 
 	 * The children of the path should be checked for _ANY_FM_X\z|Y\z
 	 * 
 	 * @param fmPath - current field fmPath. e.g: _PARENT_FM_\z
-	 * @param interchangeable - the parent interchangeable (_ANY_FM_X|Y)
-	 * 
-	 * 
+	 * @param parentInterchangeable - the parent interchangeable (_ANY_FM_X|Y)
 	 * @return updated path (_ANY_FM_X\z|Y\z) 
 	 */
-	
-	protected static String updateAnyFmPaths(String fmPath, Interchangeable interchangeable) {
-		String updatedPath = interchangeable.fmPath();
+	protected static String updateAnyFmPaths(String fmPath, Interchangeable parentInterchangeable) {
+		String updatedPath = parentInterchangeable.fmPath();
 		
-		for(String anyFMOption : interchangeable.fmPath().substring(ANY_FM.length()).split("\\|")) {
+		for(String anyFMOption : parentInterchangeable.fmPath().substring(ANY_FM.length()).split("\\|")) {
 			if (StringUtils.isNotBlank(anyFMOption)) {
-				if (!anyFMOption.equals(interchangeable.fmPath()))
-					updatedPath = updatedPath.replace(anyFMOption, anyFMOption + fmPath.replace(PARENT_FM, ""));
+				updatedPath = updatedPath.replace(anyFMOption, anyFMOption + fmPath.replace(PARENT_FM, ""));
 			}
 		}
 		

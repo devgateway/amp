@@ -1231,12 +1231,6 @@ function collapseAll() {
 			<b>${aimEditActivityForm.planning.revisedStartDate}</b>
 		</module:display>
 		
-		<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
-            <hr>
-            <digi:trn>Proposed Project Life</digi:trn>:&nbsp;
-            <b>${aimEditActivityForm.planning.proposedProjectLife}</b>
-        </module:display>
-		
 		<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Original Completion Date</digi:trn>:&nbsp;
@@ -1317,9 +1311,15 @@ function collapseAll() {
 			<digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;
 			<b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b>
 		</module:display>
-		
-		<hr>
-		<field:display name="Duration of Project" feature="Planning"> 
+
+		<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
+			<hr>
+			<digi:trn>Proposed Project Life</digi:trn>:&nbsp;
+			<b>${aimEditActivityForm.planning.proposedProjectLife}</b>
+		</module:display>
+
+		<field:display name="Duration of Project" feature="Planning">
+			<hr>
 			<digi:trn>Duration of project</digi:trn>:&nbsp;
 			<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
 			    <b>${aimEditActivityForm.planning.projectPeriod}</b>&nbsp;<digi:trn>Months</digi:trn>

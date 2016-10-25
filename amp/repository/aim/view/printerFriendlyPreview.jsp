@@ -816,15 +816,6 @@ body {background:none;}
 													</td>
 												</tr>
 												</module:display>
-												<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
-                                                    <tr>
-                                                        <td width="32%"><digi:trn>Proposed Project Life</digi:trn></td>
-                                                        <td width="1">:</td>
-                                                        <td align="left">
-                                                            ${aimEditActivityForm.planning.proposedProjectLife}
-                                                        </td>
-                                                    </tr>
-                                                </module:display>
 
 												<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 												<tr>
@@ -962,6 +953,16 @@ body {background:none;}
 													<td colspan="3">&nbsp;</td>
 												</tr>
 												</c:if>
+
+													<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
+														<tr>
+															<td width="32%"><digi:trn>Proposed Project Life</digi:trn></td>
+															<td width="1">:</td>
+															<td align="left">
+																	${aimEditActivityForm.planning.proposedProjectLife}
+															</td>
+														</tr>
+													</module:display>
 
 												<field:display name="Duration of Project" feature="Planning">
 												<c:if test="${!aimEditActivityForm.editAct}">

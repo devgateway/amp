@@ -33,10 +33,6 @@ public class SettingsConstants {
 	public static final String GROUP_SEPARATOR = "groupSeparator";
 	public static final String GROUP_SIZE = "groupSize";
 	public static final String AMOUNT_UNITS = "amountUnits";
-	public static final String AMOUNT_UNITS_1 = "amountUnits1";
-	public static final String AMOUNT_UNITS_1000 = "amountUnits1000";
-	public static final String AMOUNT_UNITS_1000000 = "amountUnits1000000";
-	public static final String AMOUNT_UNITS_1000000000 = "amountUnits1000000000";
 	public static final String YEAR_FROM = "yearFrom";
 	public static final String YEAR_TO = "yearTo";
 	public static final String YEAR_ALL = "all";
@@ -60,10 +56,6 @@ public class SettingsConstants {
 		put(GROUP_SEPARATOR, "Grouping Separator");
 		put(GROUP_SIZE, "Group Size");
 		put(AMOUNT_UNITS, "Grouping Separator");
-		put(AMOUNT_UNITS_1, "Amounts in Units");
-		put(AMOUNT_UNITS_1000, "Amounts in Thousands (000)");
-		put(AMOUNT_UNITS_1000000, "Amounts in Millions (000 000)");
-		put(AMOUNT_UNITS_1000000000, "Amounts in Billions (000 000 000)");
 		put(YEAR_FROM, "From:");
 		put(YEAR_TO, "To:");
 		put(YEAR_ALL, "All");

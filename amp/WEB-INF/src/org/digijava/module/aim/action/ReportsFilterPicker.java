@@ -124,6 +124,10 @@ public class ReportsFilterPicker extends Action {
         if (teamMember != null) {
             ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
         }
+        
+		if(request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")){
+    		return mapping.findForward("mydesktop");
+    	}
 
         if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && 
         		ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {

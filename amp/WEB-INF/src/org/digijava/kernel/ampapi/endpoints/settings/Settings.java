@@ -10,7 +10,7 @@ public class Settings {
     @JsonProperty("currency")
     private String currencyCode;
 
-    @JsonProperty("calendar-id")
+    @JsonProperty("calendar")
     private String calendarId;
 
     @JsonProperty("year-range")

@@ -16,11 +16,9 @@ import org.dgfoundation.amp.ar.MeasureConstants;
  * @author Nadejda Mandrescu
  */
 public class SettingsConstants {
-	// TODO: legacy numeric ids defined in GIS API proposal - better to change them to more meaning-full ids
-	public static final String FUNDING_TYPE_ID = "0";
-	public static final String CURRENCY_ID = "1";
-	public static final String CALENDAR_TYPE_ID = "2";
-	// TODO: legacy numeric ids - END
+	public static final String FUNDING_TYPE_ID = "funding-type";
+	public static final String CURRENCY_ID = "currency";
+	public static final String CALENDAR_TYPE_ID = "calendar";
 	public static final String CALENDAR_CURRENCIES_ID = "calendarCurrencies";
 	public static final String AMOUNT_FORMAT_ID = "amountFormat";
 	public static final String YEAR_RANGE_ID = "yearRange";

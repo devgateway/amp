@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.settings;
+package org.digijava.kernel.xmlpatches;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,12 +18,12 @@ import org.slf4j.LoggerFactory;
  *
  * @author Octavian Ciubotaru
  */
-public class SettingsUpdater {
+public class AmpApiStateUpdater {
 
-    private static final Logger logger = LoggerFactory.getLogger(SettingsUpdater.class);
+    private static final Logger logger = LoggerFactory.getLogger(AmpApiStateUpdater.class);
 
     public static void main(String[] args) throws IOException {
-        System.out.println(new SettingsUpdater().updateStateBlob(null));
+        System.out.println(new AmpApiStateUpdater().updateStateBlob(null));
     }
 
     /**
@@ -39,7 +39,7 @@ public class SettingsUpdater {
      * Static method called from xml patcher. Acts as a main method. Check {@link #update()} method.
      */
     public static void run() {
-        new SettingsUpdater().update();
+        new AmpApiStateUpdater().update();
     }
 
     /**

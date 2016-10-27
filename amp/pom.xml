@@ -1039,6 +1039,7 @@
                         <configuration>
                             <outputDirectory>WEB-INF/lib</outputDirectory>
                             <excludeScope>provided</excludeScope>
+                            <silent>true</silent>
                         </configuration>
                     </execution>
                 </executions>
@@ -1079,10 +1080,10 @@
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
                                 <property name="jdbc.db" value="amp_drc" />
 
-                                <echo message="compile classpath: ${compile_classpath}" />
-                                <echo message="runtime classpath: ${runtime_classpath}" />
-                                <echo message="test classpath:    ${test_classpath}" />
-                                <echo message="plugin classpath:  ${plugin_classpath}" />
+                                <!--<echo message="compile classpath: ${compile_classpath}" />-->
+                                <!--<echo message="runtime classpath: ${runtime_classpath}" />-->
+                                <!--<echo message="test classpath:    ${test_classpath}" />-->
+                                <!--<echo message="plugin classpath:  ${plugin_classpath}" />-->
 
                                 <ant antfile="${basedir}/build.xml">
                                     <target name="deployForServer" />
@@ -1105,10 +1106,10 @@
                                 <property name="test_classpath" refid="maven.test.classpath" />
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
 
-                                <echo message="compile classpath: ${compile_classpath}" />
-                                <echo message="runtime classpath: ${runtime_classpath}" />
-                                <echo message="test classpath:    ${test_classpath}" />
-                                <echo message="plugin classpath:  ${plugin_classpath}" />
+                                <!--<echo message="compile classpath: ${compile_classpath}" />-->
+                                <!--<echo message="runtime classpath: ${runtime_classpath}" />-->
+                                <!--<echo message="test classpath:    ${test_classpath}" />-->
+                                <!--<echo message="plugin classpath:  ${plugin_classpath}" />-->
 
                                 <ant antfile="${basedir}/build.xml">
                                     <target name="clean" />
@@ -1139,7 +1140,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <nodeVersion>v0.10.29</nodeVersion>
-                            <npmVersion>1.3.8</npmVersion>
+                            <npmVersion>1.4.9</npmVersion>
                             <!-- optional: where to download node and npm from. Defaults to http://nodejs.org/dist/ -->
                             <downloadRoot>http://nodejs.org/dist/</downloadRoot>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>

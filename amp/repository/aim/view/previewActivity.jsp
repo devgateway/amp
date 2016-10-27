@@ -760,9 +760,11 @@ function collapseAll() {
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<span class="word_break"><c:out value="${aimEditActivityForm.identification.projectImpact}"/></span>
+					<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
 				</bean:define>
-				<jsp:include page="largeTextPropertyView.jsp" />
+				<span class="word_break">
+					<jsp:include page="largeTextPropertyView.jsp" />
+				</span>
 			</logic:present>
 			
 		 	<logic:present name="aimEditActivityForm" property="identification.activitySummary"> 
@@ -770,27 +772,33 @@ function collapseAll() {
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<span class="word_break"><c:out value="${aimEditActivityForm.identification.activitySummary}"/></span>
+					<c:out value="${aimEditActivityForm.identification.activitySummary}"/>
 				</bean:define>
-				<jsp:include page="largeTextPropertyView.jsp" />
+				<span class="word_break">
+					<jsp:include page="largeTextPropertyView.jsp" />
+				</span>
 		 	</logic:present> 
 			<logic:present name="aimEditActivityForm" property="identification.conditionality">
 				<bean:define id="moduleName" value="/Activity Form/Identification/Conditionalities" toScope="request"/>
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Conditionalities" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<span class="word_break"><c:out value="${aimEditActivityForm.identification.conditionality}"/></span>
+					<c:out value="${aimEditActivityForm.identification.conditionality}"/>
 				</bean:define>
-				<jsp:include page="largeTextPropertyView.jsp" />
+				<span class="word_break">
+					<jsp:include page="largeTextPropertyView.jsp" />
+				</span>
 			</logic:present>
 			<logic:present name="aimEditActivityForm" property="identification.projectManagement">
 				<bean:define id="moduleName" value="/Activity Form/Identification/Project Management" toScope="request"/>
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Project Management" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<span class="word_break"><c:out value="${aimEditActivityForm.identification.projectManagement}"/></span>
+					<c:out value="${aimEditActivityForm.identification.projectManagement}"/>
 				</bean:define>
-				<jsp:include page="largeTextPropertyView.jsp" />
+				<span class="word_break">
+					<jsp:include page="largeTextPropertyView.jsp" />
+				</span>
 			</logic:present>
 			<module:display name="/Activity Form/Identification/Purpose" parentModule="/Activity Form/Identification">
 				<digi:trn >Purpose</digi:trn>:<br />

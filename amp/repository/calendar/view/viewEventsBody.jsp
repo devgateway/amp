@@ -80,21 +80,14 @@
 
 </script>
 
-
- 
- 
 <link rel="stylesheet"  href="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/dhtmlxscheduler.css"/>" type="text/css"/> 
-
 
 <script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/dhtmlxscheduler.js"/>" type="text/javascript"></script>
  
 <script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_year_view.js"/>" type="text/javascript"></script>
- 
- 
- 
- 
- <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_recurring.js"/>" type="text/javascript"></script>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
 <c:set var="printButon"><%=request.getSession().getAttribute("print")%></c:set>
  <c:if test="${printButon}">

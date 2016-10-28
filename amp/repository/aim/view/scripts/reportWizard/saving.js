@@ -52,19 +52,6 @@ function getReportTitles()
 	return '&' + ser;
 }
 
-function getReportTitlesInCurrentLang(lang)
-{
-	var allInputs = $('#AmpReports_name_holder').find('.multilingual_input_element');
-	for(var i = 0; i < allInputs.length; i++)
-	{
-		var elem = allInputs[i];
-		if (elem.name == 'AmpReports_name_' + lang) {
-			return elem.value;
-		}
-	};
-	return null;
-}
-
 function getReportCategory() {
 	var categoryEl 	= document.getElementById("repCat");
 	if (categoryEl != null ) {
@@ -291,19 +278,12 @@ SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
 			"... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
 
 	var reportTitles = getReportTitles();
-	var sendData = true;
 	var noReportNameSupplied = "";
 	if (reportTitles == null ) {
-		reportTitles = ""; 
+		reportTitles = "";
 		noReportNameSupplied = "&noReportNameSupplied=true";
-	} else {
-		var reportTitleInCurrentLang = getReportTitlesInCurrentLang(defaultLanguage);
-		if (reportTitleInCurrentLang == null || reportTitleInCurrentLang == '') {
-			this.divEl.innerHTML = "Please enter a report name in current language";
-			sendData = false;
-		}
 	}
-	if (sendData) {
+	if (reportTitles != null) {
 		var postString		= "reportTitle=dummy&reportDescription="+encodeURIComponent(getReportDescription()) + "&reportPeriod="+getReportPeriod() + 
 							"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
 							"&reportCategory="+ getReportCategory()+

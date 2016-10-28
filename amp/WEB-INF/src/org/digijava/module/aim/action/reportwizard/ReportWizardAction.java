@@ -267,7 +267,6 @@ public class ReportWizardAction extends MultiAction {
         }else{
             myForm.setProjecttitle("");
         }
-        myForm.setDefaultLanguage(TLSUtils.getEffectiveLangCode());
 
         if (request.getParameter("type")!=null){
             typereport = new Integer(request.getParameter("type"));

@@ -84,7 +84,6 @@
 	selectedCols						= new Array();
 	selectedHiers						= new Array();
 	selectedMeas						= new Array();
-	var defaultLanguage = '${aimReportWizardForm.defaultLanguage}';
 
 	if ( "true" == "${myForm.budgetExporter}" )	
 		NormalReportManager.prototype.maxHierarchies = 5;

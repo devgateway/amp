@@ -23,7 +23,7 @@ import org.digijava.module.aim.util.DbUtil;
 /**
  * @author Octavian Ciubotaru
  */
-@Path("settingsDefinitions")
+@Path("settings-definitions")
 public class SettingsDefinitionsEndpoint {
 
     @GET

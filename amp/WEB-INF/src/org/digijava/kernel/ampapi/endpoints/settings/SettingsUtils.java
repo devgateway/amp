@@ -1,13 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,7 +28,6 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -450,15 +447,15 @@ public class SettingsUtils {
 	}
 	
 	/**
-	 * Applies common settings and other custom settings (e.g. funding type) 
-	 * 
-	 * @param spec report specification 
-	 * @param config request configuration that stores the settings  
+	 * Applies common settings and other custom settings (e.g. funding type)
+	 *
+	 * @param spec report specification
+	 * @param config request configuration that stores the settings
 	 */
 	public static void applyExtendedSettings(ReportSpecificationImpl spec, JsonBean config) {
 		// apply first common settings, i.e. calendar and currency
 		applySettings(spec, config, true);
-		
+
 		// now apply custom settings, i.e. selected measures
 		List<String> measureOptions = new ArrayList<String>();
 		if (config.get(EPConstants.SETTINGS) != null) {
@@ -480,33 +477,25 @@ public class SettingsUtils {
 			spec.addMeasure(new ReportMeasure(SettingsConstants.DEFAULT_FUNDING_TYPE_ID));
 		}
 	}
-		
+
 	/**
 	 * Configures report specification with settings provided via Json
-	 * 
+	 *
 	 * Applies request settings, that are expected in the following format:
 	 * config = {
 	 * ...,
 	 * “settings” :  { // fields selected options or specified values
-     * 		"0" : [“Actual Commitments”, “Actual Disbursements”],
-     * 		"1" : “USD”,
-     * 		"2" : “123”
-     *      "amountFormat" : {
-     *              decimalSymbol : ".", 
-     *              maxFracDigits : 2,
-     *              useGrouping   : true,
-     *              groupSeparator: " ",
-     *              groupSize     : 3,
-     *              amountUnits   : 0.001
-     *             },
-     *       "yearRange" : {
-     *       		yearFrom : "all",
-     *       		yearTo   : "2014"
-     *       }
-     * 	}
-     * }
+	 * 		"funding-type" : [“Actual Commitments”, “Actual Disbursements”],
+	 * 		"currency-code" : “USD”,
+	 * 		"calendar-id" : “123”
+	 *      "year-range" : {
+	 *       		from : "all",
+	 *       		to   : "2014"
+	 *       }
+	 * 	}
+	 * }
 	 * @param spec - report specification over which to apply the settings
-	 * @param config - JSON request that includes the settings 
+	 * @param config - JSON request that includes the settings
 	 * @param setDefaults if true, then not specified settings will be configured with defaults
 	 */
 	public static void applySettings(ReportSpecificationImpl spec, JsonBean config, boolean setDefaults) {
@@ -514,22 +503,21 @@ public class SettingsUtils {
 			logger.error("Unsupported conversion for: " + spec.getSettings().getClass());
 			return;
 		}
-		
+
 		ReportSettingsImpl reportSettings = (ReportSettingsImpl) spec.getSettings();
 		if (reportSettings == null) {
 			reportSettings = new ReportSettingsImpl();
 			spec.setSettings(reportSettings);
 		}
-		
+
 		// these are the settings provided via json
 		Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
-		
+
 		configureCurrencyCode(reportSettings, settings, setDefaults);
-		configureNumberFormat(reportSettings, settings, setDefaults);
 		configureCalendar(reportSettings, settings, setDefaults);
 		configureYearRange(reportSettings, settings, setDefaults);
 	}
-	
+
 	/**
 	 * 
 	 * @param reportSettings
@@ -544,39 +532,6 @@ public class SettingsUtils {
 		
 		if (setDefaults && reportSettings.getCurrencyCode() == null)
 			reportSettings.setCurrencyCode(EndpointUtils.getDefaultCurrencyCode());
-	}
-	
-	/**
-	 * 
-	 * @param reportSettings
-	 * @param settings
-	 * @param setDefaults
-	 */
-	private static void configureNumberFormat(ReportSettingsImpl reportSettings, Map<String, Object> settings, 
-			boolean setDefaults) {
-		// apply numberFormat
-		Map<String, Object> amountFormat = settings == null ? null : 
-			(Map<String, Object>) settings.get(SettingsConstants.AMOUNT_FORMAT_ID);
-		if (amountFormat != null) {
-			String decimalSymbol = (String) amountFormat.get(SettingsConstants.DECIMAL_SYMBOL);
-			String maxFractDigits = (String) amountFormat.get(SettingsConstants.MAX_FRACT_DIGITS);
-			Integer maxFractDigitsNum  = maxFractDigits != null && StringUtils.isNumber(maxFractDigits) ? Integer.valueOf(maxFractDigits) : null;
-			Boolean useGrouping  = (Boolean) amountFormat.get(SettingsConstants.USE_GROUPING);
-			String groupingSeparator  = (String) amountFormat.get(SettingsConstants.GROUP_SEPARATOR);
-			Integer groupingSize  = (Integer) amountFormat.get(SettingsConstants.GROUP_SIZE);
-			
-			DecimalFormat format = AmpARFilter.buildCustomFormat(decimalSymbol, groupingSeparator, 
-					maxFractDigitsNum, useGrouping, groupingSize);
-			reportSettings.setCurrencyFormat((DecimalFormat) format.getInstance(new Locale("en", "US")));
-			
-			Double multiplier = PersistenceManager.getDouble(amountFormat.get(SettingsConstants.AMOUNT_UNITS));
-			if (multiplier != null)
-				reportSettings.setUnitsOption(AmountsUnits.findByMultiplier(multiplier));
-		}
-		
-		if (setDefaults && reportSettings.getCurrencyFormat() == null) {
-			reportSettings.setCurrencyFormat(EndpointUtils.getDecimalSymbols());
-		}
 	}
 	
 	/**

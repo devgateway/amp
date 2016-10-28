@@ -31,8 +31,9 @@ public class AmpApiStateUpdater {
      */
     private static final Map<String, String> SETTINGS_TO_RENAME = new HashMap<String, String>() {{
         put("0", "funding-type");
-        put("1", "currency");
-        put("2", "calendar");
+        put("1", "currency-code");
+        put("2", "calendar-id");
+        put("calendarCurrencies", "calendar-currencies");
     }};
 
     /**

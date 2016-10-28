@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.settings;
 
 import java.util.Collections;
@@ -17,22 +14,15 @@ import org.dgfoundation.amp.ar.MeasureConstants;
  */
 public class SettingsConstants {
 	public static final String FUNDING_TYPE_ID = "funding-type";
-	public static final String CURRENCY_ID = "currency";
-	public static final String CALENDAR_TYPE_ID = "calendar";
-	public static final String CALENDAR_CURRENCIES_ID = "calendarCurrencies";
-	public static final String AMOUNT_FORMAT_ID = "amountFormat";
-	public static final String YEAR_RANGE_ID = "yearRange";
+	public static final String CURRENCY_ID = "currency-code";
+	public static final String CALENDAR_TYPE_ID = "calendar-id";
+	public static final String CALENDAR_CURRENCIES_ID = "calendar-currencies";
+	public static final String YEAR_RANGE_ID = "year-range";
 	
 	public static final String DEFAULT_FUNDING_TYPE_ID = MeasureConstants.ACTUAL_COMMITMENTS;
 	
-	public static final String DECIMAL_SYMBOL = "decimalSymbol";
-	public static final String MAX_FRACT_DIGITS = "maxFracDigits";
-	public static final String USE_GROUPING = "useGrouping";
-	public static final String GROUP_SEPARATOR = "groupSeparator";
-	public static final String GROUP_SIZE = "groupSize";
-	public static final String AMOUNT_UNITS = "amountUnits";
-	public static final String YEAR_FROM = "yearFrom";
-	public static final String YEAR_TO = "yearTo";
+	public static final String YEAR_FROM = "from";
+	public static final String YEAR_TO = "to";
 	public static final String YEAR_ALL = "all";
 	
 	public static final String NO_LIMIT = "noLimit";
@@ -43,17 +33,10 @@ public class SettingsConstants {
 		put(FUNDING_TYPE_ID, "Funding Type");
 		put(CURRENCY_ID, "Currency");
 		put(CALENDAR_TYPE_ID, "Calendar Type");
-		put(AMOUNT_FORMAT_ID, "Amount Format");
 		put(CALENDAR_CURRENCIES_ID, "Calendar Currencies");
 		put(YEAR_RANGE_ID, "Year Range *");
 		put(CUSTOM, "Custom");
 		put(NO_LIMIT, "No Limit");
-		put(DECIMAL_SYMBOL, "Decimal Separator");
-		put(MAX_FRACT_DIGITS, "Maximum Fraction Digits");
-		put(USE_GROUPING, "Use Grouping Separator");
-		put(GROUP_SEPARATOR, "Grouping Separator");
-		put(GROUP_SIZE, "Group Size");
-		put(AMOUNT_UNITS, "Grouping Separator");
 		put(YEAR_FROM, "From:");
 		put(YEAR_TO, "To:");
 		put(YEAR_ALL, "All");

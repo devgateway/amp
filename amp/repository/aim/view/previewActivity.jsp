@@ -2297,35 +2297,36 @@ function collapseAll() {
 	</legend>
 	<div id="documnetsdiv" class="toggleDiv">
 	<c:if test="${ (!empty aimEditActivityForm.documents.documents) || (!empty aimEditActivityForm.documents.crDocuments)}">
-		<table width="100%" cellSpacing="0" cellPadding="0">
+		<table width="100%" cellSpacing="1" cellPadding="5" cellSpacing="0" cellPadding="0">
 			<logic:notEmpty name="aimEditActivityForm" property="documents.documents" >
 				<logic:iterate name="aimEditActivityForm" property="documents.documents" id="docs" type="org.digijava.module.aim.helper.Documents">
 					<c:if test="${docs.isFile == true}">
 						<tr>
 							<td>
-								<table width="100%" class="box-border-nopadding">
-									<tr bgcolor="#f0f0f0">
+								<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+									<tr>
 										<td vAlign="center" align="left">&nbsp;
-											<span class="word_break bold"><c:out value="${docs.title}"/></span> - &nbsp;&nbsp;&nbsp;<i>
+											<span class="word_break bold"><c:out value="${docs.title}"/></span>&nbsp;&nbsp;-&nbsp;&nbsp;<i>
 											<c:out value="${docs.fileName}"/></i> 
 											<logic:notEqual name="docs" property="docDescription" value=" ">
 												<br/>&nbsp;
-												<b><digi:trn>Description</digi:trn>:</b>
+												<digi:trn>Description</digi:trn>:
 												&nbsp;<span class="word_break bold"><bean:write name="docs" property="docDescription" /></span>
 											</logic:notEqual> 
 											<logic:notEmpty name="docs" property="date">
 												<br />&nbsp;
-												<b><digi:trn>Date</digi:trn>:</b>
-												&nbsp;<c:out value="${docs.date}" />
+												<digi:trn>Date</digi:trn>:
+												<b>&nbsp;<c:out value="${docs.date}" /></b>
 											</logic:notEmpty> 
 											<logic:notEmpty name="docs" property="docType">
 												<br />&nbsp;
-												<b><digi:trn>Document Type</digi:trn>:</b>&nbsp;
+												<digi:trn>Document Type</digi:trn>:&nbsp;
 												<span class="word_break bold"><bean:write name="docs" property="docType" /></span>
 											</logic:notEmpty>
 										</td>
 									</tr>
 								</table>
+								<hr />
 							</td>
 						</tr>
 					</c:if>
@@ -2335,35 +2336,33 @@ function collapseAll() {
 				<tr>
 					<td>
 						<logic:iterate name="aimEditActivityForm" property="documents.crDocuments" id="crDoc">
-						<table width="100%" class="box-border-nopadding">
-								<tr bgcolor="#f0f0f0">
+						<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+								<tr>
 									<td vAlign="center" align="left">
-										&nbsp;<b><c:out value="${crDoc.title}"/></b> - &nbsp;&nbsp;&nbsp;
+										&nbsp;<b><c:out value="${crDoc.title}"/></b>&nbsp;&nbsp;-&nbsp;&nbsp;
 										<i><c:out value="${crDoc.name}"/></i>
 										<c:set var="translation">
 											<digi:trn>Click here to download document</digi:trn>
 										</c:set> 
-										<%-- <a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>"
-											onclick="window.location='/contentrepository/downloadFile.do?uuid=<c:out value="${crDoc.uuid}"/>'"
-											title="${translation}">
-											<img src="/repository/contentrepository/view/images/check_out.gif" border="0" >
-										</a> --%>
 										<a id="<c:out value="${crDoc.uuid}"/>" target="_blank" href="${crDoc.generalLink}" title="${translation}">
 											<img src="/repository/contentrepository/view/images/check_out.gif" border="0">
 										</a>
 										<logic:notEmpty name="crDoc" property="description">
 											<br/>&nbsp;
-											<b><digi:trn>Description</digi:trn>:</b>&nbsp;
-											<bean:write name="crDoc" property="description" />
+											<digi:trn>Description</digi:trn>:&nbsp;
+											<b><bean:write name="crDoc" property="description" /></b>
 										</logic:notEmpty> 
 										<logic:notEmpty name="crDoc" property="calendar">
 											<br/>&nbsp;
-											<b><digi:trn>Date</digi:trn>:</b>
-											&nbsp;<c:out value="${crDoc.calendar}" />
-										</logic:notEmpty>									</td>
+											<digi:trn>Date</digi:trn>:
+											<b>&nbsp;<c:out value="${crDoc.calendar}" /></b>
+										</logic:notEmpty>
+									</td>
 								</tr>
 							</table>
-						</logic:iterate>					</td>
+							<hr />
+						</logic:iterate>
+					</td>
 				</tr>
 			</logic:notEmpty>
 		</table>

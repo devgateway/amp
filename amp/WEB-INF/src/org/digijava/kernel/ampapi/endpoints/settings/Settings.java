@@ -7,10 +7,10 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 public class Settings {
 
-    @JsonProperty("currency")
+    @JsonProperty("currency-code")
     private String currencyCode;
 
-    @JsonProperty("calendar")
+    @JsonProperty("calendar-id")
     private String calendarId;
 
     @JsonProperty("year-range")

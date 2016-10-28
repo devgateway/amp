@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.settings;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -128,10 +129,12 @@ public class SettingsUtils {
 	}
 	
 	/**
-	 * @param measures measures
 	 * @return options
 	 */
-	private static SettingOptions getFundingTypeSettings(Set<String> measures) {
+	static SettingOptions getFundingTypeSettings() {
+		Set<String> measures = new LinkedHashSet<String>(GisConstants.FUNDING_TYPES);
+		measures.retainAll(MeasuresVisibility.getConfigurableMeasures());
+
 		//identifies the default funding type
 		String defaultId = SettingsConstants.DEFAULT_FUNDING_TYPE_ID;				
 		//AMP-20157: We need to check if the default funding type (usually Actual Commitments) is in the list of available active options.
@@ -178,38 +181,73 @@ public class SettingsUtils {
 	}
 
 	private static String getReportCurrencyCode(ReportSpecification spec) {
-		String selectedId = null;
+		String selectedId = EndpointUtils.getDefaultCurrencyCode();
 		if (spec.getSettings() != null && spec.getSettings().getCurrencyCode() != null) {
 			selectedId = spec.getSettings().getCurrencyCode();
 		}
-		return getSelectedValue(selectedId, getCurrencySettings());
+		return selectedId;
 	}
 	
 	private static String getReportCalendarId(ReportSpecification spec) {
-		String selectedId = null;
+		String selectedId = EndpointUtils.getDefaultCalendarId();
 		if (spec.getSettings() != null && spec.getSettings().getCalendar() != null) {
 			selectedId = spec.getSettings().getCalendar().getIdentifier().toString();
 		}
-		return getSelectedValue(selectedId, getCalendarSettings());
+		return selectedId;
 	}
 	
 	private static Settings.YearRange getReportYearRange(ReportSpecification spec) {
-		SettingOptions yearsOptions = getReportYearsOptions();
-		String fromId;
-		String toId;
+		Settings.YearRange yearRange = new Settings.YearRange();
 
 		if (spec.getSettings() != null && spec.getSettings().getYearRangeFilter() != null) {
-			fromId = getReportYear(spec.getSettings().getYearRangeFilter().min);
-			toId = getReportYear(spec.getSettings().getYearRangeFilter().max);
+			yearRange.setFrom(getReportYear(spec.getSettings().getYearRangeFilter().min));
+			yearRange.setTo(getReportYear(spec.getSettings().getYearRangeFilter().max));
 		} else {
-			fromId = EndpointUtils.getDefaultReportStartYear();
-			toId = EndpointUtils.getDefaultReportEndYear();
+			yearRange.setFrom(EndpointUtils.getDefaultReportStartYear());
+			yearRange.setTo(EndpointUtils.getDefaultReportEndYear());
 		}
 
-		Settings.YearRange yearRange = new Settings.YearRange();
-		yearRange.setFrom(getSelectedValue(fromId, yearsOptions));
-		yearRange.setTo(getSelectedValue(toId, yearsOptions));
 		return yearRange;
+	}
+
+	static SettingField getCalendarField() {
+		return getSettingFieldForOptions(SettingsConstants.CALENDAR_TYPE_ID, getCalendarSettings());
+	}
+
+	static SettingField getCurrencyField() {
+		return getSettingFieldForOptions(SettingsConstants.CURRENCY_ID, getCurrencySettings());
+	}
+
+	static SettingField getFundingTypeField() {
+		return getSettingFieldForOptions(SettingsConstants.FUNDING_TYPE_ID, getFundingTypeSettings());
+	}
+
+	/**
+	 * Return year range field using defaults.
+	 *
+	 * @return field that defines the year range in reports
+	 */
+	static SettingField getReportYearRangeField() {
+		return getReportYearRangeField(null);
+	}
+
+	/**
+	 * Return year range field taking in consideration report settings. If report settings are not specified then
+	 * defaults are used.
+	 *
+	 * @param reportSpecification report specification used to select default values
+	 * @return field that defines the year range in reports
+	 */
+	static SettingField getReportYearRangeField(ReportSpecification reportSpecification) {
+		SettingOptions yearsOptions = getReportYearsOptions();
+		Settings.YearRange range = getReportYearRange(reportSpecification);
+
+		List<SettingField> rangeFields = Arrays.asList(
+				getSelectedOptions(range.getFrom(), yearsOptions, SettingsConstants.YEAR_FROM),
+				getSelectedOptions(range.getTo(), yearsOptions, SettingsConstants.YEAR_TO));
+
+		return new SettingField(SettingsConstants.YEAR_RANGE_ID, null,
+				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.YEAR_RANGE_ID), rangeFields);
 	}
 	
 	private static String getReportYear(String year) {
@@ -246,15 +284,22 @@ public class SettingsUtils {
 		return new SettingOptions(null, options);
 	}
 	
-	private static String getSelectedValue(String selectedId, SettingOptions defaults) {
-		String id = (selectedId == null) ? defaults.defaultId : selectedId;
-		String value = null;
-		for (SettingOptions.Option option : defaults.options) {
-			if (option.id.equals(id)) {
-				value = option.value;
-			}
-		}
-		return value;
+	private static SettingField getSelectedOptions(String selectedId,
+												   SettingOptions defaults, String id) {
+		/* configuring id & name to null, because they must be removed later on,
+		 * when agreed with GIS to switch to a bit different structure provided by
+		 * SettingFilter as a root
+		 */
+		SettingOptions actualOptions = new SettingOptions(null,
+				defaults.multi, null,
+				(selectedId == null ? defaults.defaultId : selectedId),
+				defaults.options, false);
+		return getSettingFieldForOptions(id, actualOptions);
+	}
+
+	private static SettingField getSettingFieldForOptions(String id, SettingOptions options) {
+		String name = SettingsConstants.ID_NAME_MAP.get(id);
+		return new SettingField(id, null, name, options);
 	}
 	
 	/**
@@ -273,9 +318,7 @@ public class SettingsUtils {
 		// retrieve common settings
 		List<SettingOptions> settings = getSettings();
 		// add GIS specific settings
-		Set<String> measures = new LinkedHashSet<String>(GisConstants.FUNDING_TYPES);
-		measures.retainAll(MeasuresVisibility.getConfigurableMeasures());
-		settings.add(getFundingTypeSettings(measures));
+		settings.add(getFundingTypeSettings());
 
 		settings.add(new SettingOptions("use-icons-for-sectors-in-project-list",
 				GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST, new SettingOptions.Option(Boolean.toString(FeaturesUtil

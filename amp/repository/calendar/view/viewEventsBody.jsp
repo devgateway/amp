@@ -85,6 +85,13 @@
 <script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/dhtmlxscheduler.js"/>" type="text/javascript"></script>
  
 <script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_year_view.js"/>" type="text/javascript"></script>
+
+<!-- Recurring Events -->
+<!--
+By default, the scheduler doesn't support recurring events. To enable such support, you need to include a special extension file on the page - dhtmlxscheduler_recurring.js.
+
+read more in http://docs.dhtmlx.com/scheduler/recurring_events.html
+-->
 <script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_recurring.js"/>" type="text/javascript"></script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>

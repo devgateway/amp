@@ -590,8 +590,7 @@ function createPeaceBuildingFeatureLayer() {
 								});
 								infoTemplateContent += "</tr></table>";
 								
-									
-									
+									// visualization form and url will not work since old dashboards were removed in AMP-23740
 									infoTemplateContent +=  "</td></tr><tr><td colspan='2'><a href='/visualization/launchDashboard.do?fromMap=true&reset=true&id=" + dashboardId + "&filter.regionId=${DB_ID}' target='_new'>Dashboard</a>"
 									+ "</td></tr></table>";
 								

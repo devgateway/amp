@@ -134,8 +134,10 @@ public class TeamUtil {
     public static Set<AmpTeam> getRelatedTeamsForTeams(Collection<AmpTeam> teams) {
     	Set<AmpTeam> result = new HashSet<AmpTeam>();
     	for (AmpTeam ampTeam : teams) {
-    		result.add(ampTeam);
-    		result.addAll(TeamUtil.getAmpLevel0Teams(ampTeam.getAmpTeamId()));
+    		if (ampTeam != null) {
+	    		result.add(ampTeam);
+	    		result.addAll(TeamUtil.getAmpLevel0Teams(ampTeam.getAmpTeamId()));
+    		}
     	}
     	return result;
     }

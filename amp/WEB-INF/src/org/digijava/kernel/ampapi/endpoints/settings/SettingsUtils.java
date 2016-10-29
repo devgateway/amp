@@ -178,7 +178,7 @@ public class SettingsUtils {
 	}
 
 	private static String getReportCurrencyCode(ReportSpecification spec) {
-		String selectedId = EndpointUtils.getDefaultCurrencyCode();
+		String selectedId = null;
 		if (spec.getSettings() != null && spec.getSettings().getCurrencyCode() != null) {
 			selectedId = spec.getSettings().getCurrencyCode();
 		}
@@ -186,7 +186,7 @@ public class SettingsUtils {
 	}
 	
 	private static String getReportCalendarId(ReportSpecification spec) {
-		String selectedId = EndpointUtils.getDefaultCalendarId();
+		String selectedId = null;
 		if (spec.getSettings() != null && spec.getSettings().getCalendar() != null) {
 			selectedId = spec.getSettings().getCalendar().getIdentifier().toString();
 		}
@@ -194,14 +194,12 @@ public class SettingsUtils {
 	}
 	
 	private static Settings.YearRange getReportYearRange(ReportSpecification spec) {
-		Settings.YearRange yearRange = new Settings.YearRange();
+		Settings.YearRange yearRange = null;
 
 		if (spec.getSettings() != null && spec.getSettings().getYearRangeFilter() != null) {
+			yearRange = new Settings.YearRange();
 			yearRange.setFrom(getReportYear(spec.getSettings().getYearRangeFilter().min));
 			yearRange.setTo(getReportYear(spec.getSettings().getYearRangeFilter().max));
-		} else {
-			yearRange.setFrom(EndpointUtils.getDefaultReportStartYear());
-			yearRange.setTo(EndpointUtils.getDefaultReportEndYear());
 		}
 
 		return yearRange;
@@ -232,12 +230,18 @@ public class SettingsUtils {
 	 * Return year range field taking in consideration report settings. If report settings are not specified then
 	 * defaults are used.
 	 *
-	 * @param reportSpecification report specification used to select default values
+	 * @param spec report specification used to select default values
 	 * @return field that defines the year range in reports
 	 */
-	static SettingField getReportYearRangeField(ReportSpecification reportSpecification) {
+	static SettingField getReportYearRangeField(ReportSpecification spec) {
 		SettingOptions yearsOptions = getReportYearsOptions();
-		Settings.YearRange range = getReportYearRange(reportSpecification);
+
+		Settings.YearRange range = getReportYearRange(spec);
+		if (range == null) {
+			range = new Settings.YearRange();
+			range.setFrom(EndpointUtils.getDefaultReportStartYear());
+			range.setTo(EndpointUtils.getDefaultReportEndYear());
+		}
 
 		List<SettingField> rangeFields = Arrays.asList(
 				getSelectedOptions(range.getFrom(), yearsOptions, SettingsConstants.YEAR_FROM),

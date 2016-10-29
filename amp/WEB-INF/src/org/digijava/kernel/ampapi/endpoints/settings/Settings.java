@@ -3,6 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.settings;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
+ * Structure used to store user specified settings.
+ *
  * @author Octavian Ciubotaru
  */
 public class Settings {

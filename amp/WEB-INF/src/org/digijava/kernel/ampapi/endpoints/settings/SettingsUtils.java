@@ -197,6 +197,10 @@ public class SettingsUtils {
 		return yearRange;
 	}
 
+	static SettingField getCalendarCurrenciesField() {
+		return getSettingFieldForOptions(SettingsConstants.CALENDAR_CURRENCIES_ID, getCalendarCurrencySettings());
+	}
+
 	static SettingField getCalendarField() {
 		return getSettingFieldForOptions(SettingsConstants.CALENDAR_TYPE_ID, getCalendarSettings());
 	}

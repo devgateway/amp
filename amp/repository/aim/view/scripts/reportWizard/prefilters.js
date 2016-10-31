@@ -84,37 +84,41 @@ Filters.prototype.failure = function (o) {
 					response = YAHOO.lang.JSON.parse(o.responseText);
 					// get the json attribute value of the 'logged' attribute
 					isLogged = response['logged'];
+					if (isLogged) {
+						// could be some connection issues
+						o.argument.filter.filterPanel.setBody("<font color='red'>" + this.filterProblemsMessage + "</font>");
+					} else {
+						// timeout to redirect
+						var timeout = 5;
+						
+						// build the error message
+						var errorMessageUserLoggedOut = "<font color='red'><digi:trn jsFriendly='true'>The user is logged out</digi:trn>. ";
+
+						errorMessageUserLoggedOut +="<digi:trn jsFriendly='true'>You will be redirected in</digi:trn> " + timeout + " <digi:trn jsFriendly='true'>seconds</digi:trn></font>.";
+						o.argument.filter.filterPanel.setBody(errorMessageUserLoggedOut);
+						
+						var timer = setTimeout(function() {
+							window.location = '/aim/index.do'
+						}, timeout * 1000);
+					}
 	            }  catch (x) {
-	            	alert("Error occured: " + x);
+	            	var errorMessage = "<font color='red'> ";
+	            	errorMessage +="<digi:trn jsFriendly='true'>An error has occured</digi:trn> " + x + "</font>.";
+	            	o.argument.filter.filterPanel.setBody(errorMessage);
 	            	return;
 	            }
 			}
 		},
 		failure : function(o) {
-			alert("The URL is unreachble " + o.responseText);
-		}
+			var errorMessage = "<font color='red'> ";
+			errorMessage +="<digi:trn jsFriendly='true'>The URL is unreachble</digi:trn> " + o.responseText + "</font>.";
+			o.argument.filter.filterPanel.setBody(errorMessage);
+		},
+		argument: { filter: this}
 	};
-	
 	// get the information about the user 
 	YAHOO.util.Connect.asyncRequest("GET", "/rest/security/layout", getUserInformation);
-	
-	if (isLogged) {
-		// could be some connection issues
-		this.filterPanel.setBody("<font color='red'>" + this.filterProblemsMessage + "</font>");
-	} else {
-		// timeout to redirect
-		var timeout = 5;
-		
-		// build the error message
-		var errorMessage = "<font color='red'><digi:trn jsFriendly='true'>The user is logged out</digi:trn>. ";
-		errorMessage +="<digi:trn jsFriendly='true'>You will be redirected in</digi:trn> " + timeout + " <digi:trn jsFriendly='true'>seconds</digi:trn></font>.";
-		
-		this.filterPanel.setBody(errorMessage);
-		
-		var timer = setTimeout(function() {
-			window.location = '/aim/index.do'
-		}, timeout * 1000);
-	}
+
 };
 
 Filters.prototype.showFilters	= function(reportContextId) {

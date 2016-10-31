@@ -9,11 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -202,56 +198,34 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 
     public String getFormattedStartOfTendering() {
         String formatted = "";
-        try{
         if (startOfTendering != null) {
-            formatted = DateTimeUtil.parseDateForPicker2(startOfTendering, null);
-        }
-        }
-        catch(Exception ex){
-            Logger.getLogger(IPAContract.class.getName()).log(Level.SEVERE, null, ex);
+            formatted = DateTimeUtil.formatDateForPicker2(startOfTendering, null);
         }
         return formatted;
     }
 
     public String getFormattedContractValidity() {
         String formatted = "";
-        try {
-            if (contractValidity != null) {
-                formatted = DateTimeUtil.parseDateForPicker2(contractValidity, null);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(IPAContract.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+		if (contractValidity != null) {
+			formatted = DateTimeUtil.formatDateForPicker2(contractValidity, null);
+		}
         return formatted;
-
     }
 
     public String getFormattedSignatureOfContract() {
         String formatted = "";
-        try {
-            if (signatureOfContract != null) {
-                formatted = DateTimeUtil.parseDateForPicker2(signatureOfContract, null);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(IPAContract.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+		if (signatureOfContract != null) {
+			formatted = DateTimeUtil.formatDateForPicker2(signatureOfContract, null);
+		}
         return formatted;
-
     }
     
     public String getFormattedContractCompletion() {
         String formatted = "";
-        try {
-            if (contractCompletion != null) {
-                formatted = DateTimeUtil.parseDateForPicker2(contractCompletion, null);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(IPAContract.class.getName()).log(Level.SEVERE, null, ex);
-        }
+		if (contractCompletion != null) {
+			formatted = DateTimeUtil.formatDateForPicker2(contractCompletion, null);
+		}
         return formatted;
-
     }
 
     public void setDescription(String description) {

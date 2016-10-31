@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.settings;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportYearRangeField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCurrencyField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarField;
+import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarCurrenciesField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getFundingTypeField;
 
 import java.util.Arrays;
@@ -38,7 +39,7 @@ public class SettingsDefinitionsEndpoint {
     @Path("/dashboards")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForDashboards() {
-        return Arrays.asList(getCurrencyField(), getCalendarField());
+        return Arrays.asList(getCurrencyField(), getCalendarField(), getCalendarCurrenciesField());
     }
 
     /**
@@ -50,7 +51,11 @@ public class SettingsDefinitionsEndpoint {
     @Path("/gis")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForGisModule() {
-        return Arrays.asList(getCurrencyField(), getCalendarField(), getFundingTypeField());
+        return Arrays.asList(
+                getCurrencyField(),
+                getCalendarField(),
+                getCalendarCurrenciesField(),
+                getFundingTypeField());
     }
 
     /**
@@ -74,7 +79,11 @@ public class SettingsDefinitionsEndpoint {
     @Path("/reports")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForReports() {
-        return Arrays.asList(getCurrencyField(), getCalendarField(), getReportYearRangeField());
+        return Arrays.asList(
+                getCurrencyField(),
+                getCalendarField(),
+                getCalendarCurrenciesField(),
+                getReportYearRangeField());
     }
 
     /**
@@ -88,6 +97,10 @@ public class SettingsDefinitionsEndpoint {
     public final List<SettingField> getSettingDefinitionsForReport(@PathParam("report_id") Long reportId) {
         AmpReports ampReport = DbUtil.getAmpReport(reportId);
         ReportSpecification spec = AmpReportsToReportSpecification.convert(ampReport);
-        return Arrays.asList(getCurrencyField(), getCalendarField(), getReportYearRangeField(spec));
+        return Arrays.asList(
+                getCurrencyField(),
+                getCalendarField(),
+                getCalendarCurrenciesField(),
+                getReportYearRangeField(spec));
     }
 }

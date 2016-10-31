@@ -472,11 +472,13 @@ public class QueryUtil {
 				String query =  "SELECT (o.amp_org_id) orgId, o.name, o.acronym FROM  amp_organisation o WHERE o.amp_org_id IN (" +
 								"SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_org_role aor, amp_role r " +
 								"WHERE (o.amp_org_id = aor.organisation AND aor.role = r.amp_role_id AND r.role_code = 'DN') " +
+								"AND activity NOT IN (select amp_activity_id from amp_activity_version where amp_team_id IN (SELECT amp_team_id from amp_team where isolated = true))" +
 								"UNION " +
 								"SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_funding af, amp_activity_version v, amp_role r   " +                
 								"WHERE  o.amp_org_id = af.amp_donor_org_id  AND v.amp_activity_id = af.amp_activity_id  AND (v.deleted is false) " +
-								"AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN')) " +
-								"AND (o.deleted IS NULL OR o.deleted = false ) ";
+								"AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN') "	+ 
+								"AND v.amp_team_id NOT IN (SELECT amp_team_id from amp_team where isolated = true)) " +
+								"AND (o.deleted IS NULL OR o.deleted = false) ";
 						 
 						if (toExcludeFilter) {
 							query += "AND o.amp_org_id NOT IN (SELECT amp_donor_id FROM amp_scorecard_organisation WHERE to_exclude = true) ";

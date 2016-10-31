@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.currency.ConstantCurrency;
@@ -39,10 +37,10 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.h2.util.StringUtils;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Utility class for amp settings handling
@@ -341,7 +339,7 @@ public class SettingsUtils {
 	}
 
     private static void addWorkspaceSettings(JsonBean settings) {
-        TeamMember teamMember = getTeamMember();
+        TeamMember teamMember = TeamUtil.getCurrentMember();
         AmpTeam ampTeam = EndpointUtils.getAppSettings().getTeam();
 
         settings.set("team-id", ampTeam.getAmpTeamId().toString());
@@ -357,16 +355,6 @@ public class SettingsUtils {
         if (ampTeam.getWorkspacePrefix() != null) {
             settings.set("workspace-prefix", ampTeam.getWorkspacePrefix().getValue());
         }
-    }
-
-    @Nullable
-    private static TeamMember getTeamMember() {
-        HttpServletRequest request = TLSUtils.getRequest();
-        TeamMember tm = null;
-        if (request != null && request.getSession() != null) {
-            tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
-        }
-        return tm;
     }
 
     private static void addDateRangeSettingsForDashboardsAndGis(JsonBean settings) {

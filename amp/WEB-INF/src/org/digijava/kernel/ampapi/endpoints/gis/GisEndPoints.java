@@ -376,6 +376,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 			if (includeAdmLevel) {
 				json.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
 				json.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
+				json.set(IndicatorEPConstants.ADMIN_LEVEL, IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex());
 			}
             json.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
             json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());

@@ -73,7 +73,8 @@ public class SaikuReportCsvExporter implements SaikuReportExporter {
 		if (reportContents.getChildren() != null) {
 			renderGroupLines(csvContent, currLine, report, reportContents, level);
 		} else {
-			if (level == 0) {
+			// If it is summaryReport with one dummy column, we need to show the row with data
+			if (level == 0 && !hasReportGeneratedDummyColumn(report)) {
 				return;
 			}
 			
@@ -128,4 +129,7 @@ public class SaikuReportCsvExporter implements SaikuReportExporter {
 		return columnName.equals("Draft") || columnName.equals("Approval Status");
 	}
 	
+	protected boolean hasReportGeneratedDummyColumn(GeneratedReport report) {
+		 return report.spec.isSummaryReport() && (report.spec.getHierarchies() == null || report.spec.getHierarchies().isEmpty());
+	}
 }

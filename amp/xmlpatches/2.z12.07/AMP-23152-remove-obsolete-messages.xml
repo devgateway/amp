@@ -9,10 +9,13 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-				DELETE FROM dg_message WHERE message_utf8 = 'you must enter Valid email please check in';
-				DELETE FROM dg_message WHERE message_utf8 = 'First Name is Blank';
-				DELETE FROM dg_message WHERE message_utf8 = 'LastName is Blank';
-				DELETE FROM dg_message WHERE message_utf8 = 'New password is a required field';
+				DELETE FROM dg_message WHERE message_key = '-461367667'; 	-- 'you must enter Valid email please check in';
+				DELETE FROM dg_message WHERE message_key = '361254755'; 	-- 'First Name is Blank';
+				DELETE FROM dg_message WHERE message_key = '-2038592003';	-- 'LastName is Blank';
+				DELETE FROM dg_message WHERE message_key = '1052495440';	-- 'New password is required';
+				DELETE FROM dg_message WHERE message_key = '-1732379682';	-- 'New password is required.';
+				DELETE FROM dg_message WHERE message_key = '1177269289';	-- 'Old password is required';
+				DELETE FROM dg_message WHERE message_key = '2135609637';	-- 'Old password is required.';
             </lang>
         </script>
     </apply>

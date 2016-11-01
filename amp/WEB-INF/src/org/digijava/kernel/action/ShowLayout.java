@@ -22,7 +22,6 @@
 
 package org.digijava.kernel.action;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -32,17 +31,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.visualization.dbentity.AmpDashboard;
-import org.digijava.module.visualization.util.DashboardUtil;
-import org.hibernate.Session;
 
 /**
  * Struts action, which shows site's layout if "layout" parameter is set, then
@@ -96,17 +90,6 @@ public class ShowLayout
     // Calculate layout path
     String layoutConfigPath = viewConfig.getMainLayoutPath(layout);
     
-    Session session = PersistenceManager.getSession(); // ensure a properly-initialized session exists
-    try {
-    	//Sets the dashboards to be available on the menu. 
-    	List<AmpDashboard> dashboards 	= org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
-    	request.getSession().setAttribute(Constants.MENU_DASHBOARDS, DashboardUtil.generateIdToNameForDashboards(dashboards));    
-    	return new ActionForward(layoutConfigPath);
-    }
-    finally {
-        //PersistenceManager.endSessionLifecycle();
-    }
-
+    return new ActionForward(layoutConfigPath);
   }
-
 }

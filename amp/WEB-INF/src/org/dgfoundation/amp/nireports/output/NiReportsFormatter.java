@@ -85,7 +85,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 			for (Entry<Integer, Column> entry : niHeaderRow.entrySet()) {
 				Column niCol = entry.getValue();
 				ReportOutputColumn roc = niColumnToROC.computeIfAbsent(niCol, this::buildReportOutputColumn);
-				ampHeaderRow.add(new HeaderCell(niCol.getReportHeaderCell(), roc, i == 1 && needToGenerateDummyColumn ? 1 : 0));
+				ampHeaderRow.add(new HeaderCell(niCol.getReportHeaderCell(), roc, needToGenerateDummyColumn ? 1 : 0));
 				if (i == 1)
 					rootHeaders.add(roc);
 			}

@@ -295,9 +295,7 @@ body {background:none;}
 											<td bgcolor="#ffffff">
 												<c:if test="${not empty aimEditActivityForm.identification.lessonsLearned}">
 													<bean:define id="lessonsLearnedKey">
-													<span class="word_break">
 														<c:out value="${aimEditActivityForm.identification.lessonsLearned}"/>
-														</span>
 													</bean:define>
 													<span class="word_break bold">
 														<digi:edit key="${lessonsLearnedKey}"></digi:edit>

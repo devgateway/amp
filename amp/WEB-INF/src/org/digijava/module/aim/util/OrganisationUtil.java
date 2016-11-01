@@ -5,6 +5,7 @@ package org.digijava.module.aim.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,6 +17,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -112,4 +114,19 @@ public class OrganisationUtil {
     	
     	return orgGroups;
 	}
+	
+	 public static String getComputationOrgsQry(AmpTeam team) {
+	        String orgIds = "";
+	        if (team.getComputation() != null && team.getComputation()) {
+	            Set<AmpOrganisation> orgs = team.getOrganizations();
+	            Iterator<AmpOrganisation> orgIter = orgs.iterator();
+	            while (orgIter.hasNext()) {
+	                AmpOrganisation org = orgIter.next();
+	                orgIds += org.getAmpOrgId() + ",";
+	            }
+
+	        }
+	        
+	        return orgIds;
+	 }    
 }

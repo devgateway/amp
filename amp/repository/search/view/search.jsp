@@ -124,12 +124,11 @@
 					<digi:trn>Resources</digi:trn>
 				</html:option>
 
-
-				<html:option value="7">
-					<digi:trn>Pledges</digi:trn>
-				</html:option>
-
-
+				<module:display name="Pledges" parentModule="Project Management">
+					<html:option value="7">
+						<digi:trn>Pledges</digi:trn>
+					</html:option>
+				</module:display>
 				
                 <feature:display name="Responsible Organization" module="Organizations">
                 	<field:display name="Search Feature - Responsible Organization" feature="Search Feature">

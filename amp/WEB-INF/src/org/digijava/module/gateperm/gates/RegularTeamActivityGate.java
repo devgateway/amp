@@ -65,10 +65,12 @@ public class RegularTeamActivityGate extends Gate {
 
 		
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
-		if (tm == null) {
-			/* no teammember -> anonymous access (not logged in) -> gatekeeper says no */
+		
+		if (tm == null || tm.getTeamId() == null) {
+			/* no teammember or currentTeam is admin -> anonymous access (not logged in) -> gatekeeper says no */
 			return false;
 		}
+		
 		AmpTeam currentTeam = TeamUtil.getAmpTeam(tm.getTeamId());
 		AmpTeam activityTeam=ampa.getTeam();
 		

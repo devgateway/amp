@@ -15,7 +15,7 @@
         <buildVersion>2.12-SNAPSHOT</buildVersion>
         <buildSource></buildSource>
         <buildDate></buildDate>
-        <jersey.version>1.18</jersey.version>
+        <jersey.version>1.19</jersey.version>
         <saiku.version>3.0-RC2</saiku.version>
         <saiku3.version>3.0-RC2-DG</saiku3.version>
         <apidocs>false</apidocs>

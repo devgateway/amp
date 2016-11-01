@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
 import java.io.ByteArrayOutputStream;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +13,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
@@ -237,17 +237,20 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		if (reportContents.getChildren() != null) {
 			return renderGroupRow(sheet, report, reportContents, level, row);
 		} else {
-			// Totals are rendered in renderTableTotals method()
-			if (level == 0) {
+			// Totals are rendered in renderTableTotals method(). If it is summaryReport with one dummy column, we need to show the row with data
+			if (level == 0 && !hasReportGeneratedDummyColumn(report)) {
 				return row.getRowNum();
-			}
+			} 
+			
+			// if we have summary report without columns we need to show a row with the data as in the Saiku table
+			Row tableRow = hasReportGeneratedDummyColumn(report) ? sheet.createRow(row.getRowNum() + 1) : row;
 			
 			IntWrapper intWrapper = new IntWrapper();
 			report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {
 				if (!(report.spec.getHierarchies().size() > 0 && intWrapper.value < level - 1)) {
 					ReportCell rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
 					createCell(sheet, row, intWrapper.value, rc);
-				}
+				} 
 				intWrapper.inc();
 			});
 			try {
@@ -256,9 +259,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 				throw new RuntimeException(e);
 			}
 			
+			return tableRow.getRowNum();
 		}
-		
-		return row.getRowNum();
 	}
 	
 	/**
@@ -340,6 +342,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 			cell = row.createCell(i, Cell.CELL_TYPE_STRING);
 			String value = TranslatorWorker.translateText("Report Totals");
 			cell.setCellValue(value + " (" + report.reportContents.getNrEntities() + ")");
+			setMaxColWidth(sheet, cell, i);
 		} else {
 			return createCell(sheet, row, i, rc);
 		}
@@ -530,6 +533,10 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 
 	protected boolean isHiddenColumn(String columnName) {
 		return columnName.equals("Draft") || columnName.equals("Approval Status");
+	}
+	
+	protected boolean hasReportGeneratedDummyColumn(GeneratedReport report) {
+		 return report.spec.isSummaryReport() && (report.spec.getHierarchies() == null || report.spec.getHierarchies().isEmpty());
 	}
 	
 	protected String getReportSheetName() {

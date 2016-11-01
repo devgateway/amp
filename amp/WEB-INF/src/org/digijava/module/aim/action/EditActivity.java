@@ -1185,9 +1185,9 @@ public class EditActivity extends Action {
           eaForm.getFunding().setShowTriangularSsc(CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.isActiveInDatabase());
 
           String toCurrCode=null;
-          if (tm != null)
+          if (tm != null && tm.getAppSettings() != null)
               toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
-          else{
+          else {
         	  toCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
           }
 
@@ -1607,12 +1607,12 @@ public class EditActivity extends Action {
     	crossteamcheck = true;
     } else {
     	//check if the activity belongs to the team where the user is logged.
-    	if (teamMember != null) {
+    	if (teamMember != null && teamMember.getTeamId() != null) {
     		crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
     	}
     }
     
-    if (teamMember != null){
+    if (teamMember != null && teamMember.getTeamAccessType() != null){
     	Long ampTeamId = teamMember.getTeamId();
     	boolean teamLeadFlag    = teamMember.getTeamHead() || teamMember.isApprover();
     	boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);

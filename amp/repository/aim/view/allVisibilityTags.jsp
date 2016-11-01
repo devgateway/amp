@@ -1160,15 +1160,3 @@ deleted 6 fields, do not reinsert
 <field:display name="Mandatory Budget Organization Code" feature="Organization Form"></field:display>
 <field:display name="Mandatory Organization Code" feature="Organization Form"></field:display>
 
-<!--  -->
-<module:display name="Visualization Dashboards"></module:display>
-
-<module:display name="Dashboard Generator" parentModule="Visualization Dashboards"></module:display>
-<module:display name="Dashboard Generator in public view" parentModule="Visualization Dashboards"></module:display>
-<module:display name="Dashboard Manager" parentModule="Visualization Dashboards"></module:display>
-
-<module:display name="Dashboard Org. Info" parentModule="Visualization Dashboards"></module:display>
-<feature:display name="Background of organization" module="Dashboard Org. Info"></feature:display> 
-<feature:display name="Org. Description" module="Dashboard Org. Info"></feature:display> 
-<feature:display name="Key Areas of Focus" module="Dashboard Org. Info"></feature:display> 
-<feature:display name="Show Names As Acronyms" module="Dashboard Org. Info"></feature:display>

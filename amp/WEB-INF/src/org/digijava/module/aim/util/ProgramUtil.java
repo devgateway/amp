@@ -1912,4 +1912,10 @@ public class ProgramUtil {
             }
             return cNames;
         }
- }
+	public static AmpTheme getTopLevelProgram(AmpTheme program) {
+		if (program.getParentThemeId() != null && program.getIndlevel() > 1) {
+			program = getTopLevelProgram(program.getParentThemeId());
+		}
+		return program;
+	}
+}

@@ -1,7 +1,0 @@
----
-
-- name: restart postgresql
-  service: name={{ postgresql__service_name }} state=restarted
-
-- name: restart firewalld
-  service: name=firewalld state=restarted

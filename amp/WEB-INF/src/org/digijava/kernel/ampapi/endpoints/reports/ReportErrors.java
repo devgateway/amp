@@ -20,4 +20,5 @@ public class ReportErrors {
     public static final ApiErrorMessage REPORT_TYPE_INVALID = new ApiErrorMessage(4, "Invalid report type: ");
     public static final ApiErrorMessage REPORT_TYPE_REQUIRED = new ApiErrorMessage(5, "Project type is required");
     public static final ApiErrorMessage ACTIVITY_TYPE_LIST_INVALID = new ApiErrorMessage(6, "Invalid list of activity types: ");
+    public static final ApiErrorMessage REPORT_NOT_FOUND = new ApiErrorMessage(7, "Report not found");
 }

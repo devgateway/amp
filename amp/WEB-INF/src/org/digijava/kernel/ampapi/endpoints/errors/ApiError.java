@@ -15,6 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.gis.GisEndPoints;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEndPoints;
 import org.digijava.kernel.ampapi.endpoints.reports.Reports;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsDefinitionsEndpoint;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -45,6 +46,7 @@ public class ApiError {
         put(EndPoints.class.getName(), 5);
         put(IndicatorEndPoints.class.getName(), 6);
         put(GisEndPoints.class.getName(), 7);
+        put(SettingsDefinitionsEndpoint.class.getName(), 8);
 	}};
 	
 	/**

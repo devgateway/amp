@@ -188,7 +188,7 @@ public class SettingsUtils {
 	private static Settings.YearRange getReportYearRange(ReportSpecification spec) {
 		Settings.YearRange yearRange = null;
 
-		if (spec.getSettings() != null && spec.getSettings().getYearRangeFilter() != null) {
+		if (spec != null && spec.getSettings() != null && spec.getSettings().getYearRangeFilter() != null) {
 			yearRange = new Settings.YearRange();
 			yearRange.setFrom(getReportYear(spec.getSettings().getYearRangeFilter().min));
 			yearRange.setTo(getReportYear(spec.getSettings().getYearRangeFilter().max));

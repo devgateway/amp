@@ -581,7 +581,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public JSONArray getBoundaries() {
 		String path = httpRequest.getServletContext().getRealPath("/");
-		return ReportsUtil.getBoundaries(path);
+		return IndicatorUtils.getBoundaries(path);
 	}
 	
 	@GET

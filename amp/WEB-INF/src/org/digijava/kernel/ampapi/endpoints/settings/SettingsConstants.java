@@ -29,11 +29,7 @@ public class SettingsConstants {
 	public static final String CUSTOM = "custom";
 
 	public static final String AMOUNT_UNITS = "number-divider";
-	public static final String AMOUNT_UNITS_1 = "number-divider-1";
-	public static final String AMOUNT_UNITS_1000 = "number-divider-1000";
-	public static final String AMOUNT_UNITS_1000000 = "number-divider-1000000";
-	public static final String AMOUNT_UNITS_1000000000 = "number-divider-1000000000";
-	
+
 	/** {id, value} map for settings fields ID-NAME map */
 	public static final Map<String, String> ID_NAME_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
 		put(FUNDING_TYPE_ID, "Funding Type");
@@ -47,21 +43,9 @@ public class SettingsConstants {
 		put(YEAR_TO, "To:");
 		put(YEAR_ALL, "All");
 		put(AMOUNT_UNITS, "Amount units");
-		put(AMOUNT_UNITS_1, "Amounts in Units");
-		put(AMOUNT_UNITS_1000, "Amounts in Thousands (000)");
-		put(AMOUNT_UNITS_1000000, "Amounts in Millions (000 000)");
-		put(AMOUNT_UNITS_1000000000, "Amounts in Billions (000 000 000)");
 	}});
 	
 	public static final Map<String, String> YEAR_MAP = Collections.unmodifiableMap(new LinkedHashMap<String, String>() {{
 		put(YEAR_ALL, "-1");
-	}});
-
-	/** {id, value} map for default amount units */
-	public static final Map<String, String> AMOUNT_UNITS_MAP = Collections.unmodifiableMap(new LinkedHashMap<String, String>() {{
-		put(AMOUNT_UNITS_1, "1");
-		put(AMOUNT_UNITS_1000, "1000");
-		put(AMOUNT_UNITS_1000000, "1000000");
-		put(AMOUNT_UNITS_1000000000, "1000000000");
 	}});
 }

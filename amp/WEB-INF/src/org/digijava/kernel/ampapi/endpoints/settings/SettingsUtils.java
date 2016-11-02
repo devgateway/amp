@@ -214,11 +214,13 @@ public class SettingsUtils {
 	}
 
 	static SettingField getAmountUnitsField() {
-		String defaultOption = Integer.toString(AmountsUnits.getDefaultValue().divider);
+		AmountsUnits defaultAmountUnits = AmountsUnits.getForDivider(AmountsUnits.getDefaultValue().divider);
+		String defaultOption = Integer.toString(defaultAmountUnits.code);
 
 		List<SettingOptions.Option> options = new ArrayList<>();
-		for (Map.Entry<String, String> entry : SettingsConstants.AMOUNT_UNITS_MAP.entrySet()) {
-			options.add(new SettingOptions.Option(entry.getValue(), entry.getKey()));
+		for (AmountsUnits units : AmountsUnits.values()) {
+			String divider = Integer.toString(units.divider);
+			options.add(new SettingOptions.Option(Integer.toString(units.code), units.userMessage, divider));
 		}
 
 		return getSettingFieldForOptions(SettingsConstants.AMOUNT_UNITS, new SettingOptions(defaultOption, options));

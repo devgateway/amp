@@ -66,6 +66,18 @@ public enum AmountsUnits {
 		
 		throw new RuntimeException("unknown AmpARFilter amount code: " + code);
 	}
+
+	/**
+	 * Returns AmountUnits for a specified divider.
+	 * @param divider 1, 1000, etc
+	 * @return AmountUnits corresponding to the divider
+	 */
+	public static AmountsUnits getForDivider(int divider) {
+		if (DIVIDER_TO_VALUE.containsKey(divider))
+			return DIVIDER_TO_VALUE.get(divider);
+
+		throw new RuntimeException("Unknown AmountsUnits with divider: " + divider);
+	}
 	
 	/**
 	 * returns the value stored in GlobalSettings

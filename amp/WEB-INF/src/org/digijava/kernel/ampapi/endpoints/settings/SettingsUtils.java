@@ -213,6 +213,17 @@ public class SettingsUtils {
 		return getSettingFieldForOptions(SettingsConstants.FUNDING_TYPE_ID, getFundingTypeSettings());
 	}
 
+	static SettingField getAmountUnitsField() {
+		String defaultOption = Integer.toString(AmountsUnits.getDefaultValue().divider);
+
+		List<SettingOptions.Option> options = new ArrayList<>();
+		for (Map.Entry<String, String> entry : SettingsConstants.AMOUNT_UNITS_MAP.entrySet()) {
+			options.add(new SettingOptions.Option(entry.getValue(), entry.getKey()));
+		}
+
+		return getSettingFieldForOptions(SettingsConstants.AMOUNT_UNITS, new SettingOptions(defaultOption, options));
+	}
+
 	/**
 	 * Return year range field using defaults.
 	 *
@@ -332,6 +343,8 @@ public class SettingsUtils {
 		settings.set("download-map-selector", FeaturesUtil.isVisibleFeature(GisConstants.DOWNLOAD_MAP_SELECTOR));
 
 		settings.set("gap-analysis-map", FeaturesUtil.isVisibleFeature("Gap Analysis Map"));
+
+		settings.set("has-ssc-workspaces", !TeamUtil.getAllSSCWorkspaces().isEmpty());
 
 		if (MenuUtils.getCurrentView() == AmpView.TEAM) {
             addWorkspaceSettings(settings);

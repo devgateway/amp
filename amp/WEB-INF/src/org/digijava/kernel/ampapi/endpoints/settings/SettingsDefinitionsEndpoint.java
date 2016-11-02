@@ -1,13 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportYearRangeField;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCurrencyField;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarField;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarCurrenciesField;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getFundingTypeField;
+import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.*;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -67,7 +62,9 @@ public class SettingsDefinitionsEndpoint {
     @Path("/public")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForPublicPortal() {
-        return Collections.emptyList(); // TODO return correct settings
+        return Arrays.asList(
+                getAmountUnitsField(),
+                getCurrencyField());
     }
 
     /**

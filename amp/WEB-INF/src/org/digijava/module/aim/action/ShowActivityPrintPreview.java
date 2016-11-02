@@ -183,12 +183,9 @@ public class ShowActivityPrintPreview
                 eaForm.getIdentification().setStatus(DbUtil.getActivityApprovalStatus(new Long(actId)));
                 
                 String langCode = RequestUtils.getNavigationLanguage(request).getCode();
-                Editor reason=org.digijava.module.editor.util.DbUtil.getEditor(activity.getStatusReason(), langCode);
-                if(reason!=null){
-                  eaForm.getIdentification().setStatusReason(reason.getBody());
+                if(activity.getStatusReason()!=null){
+                    eaForm.getIdentification().setStatusReason(activity.getStatusReason());
                 }
-                else
-                	eaForm.getIdentification().setStatusReason(null);
 
                 if(null != activity.getLineMinRank())
                     eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().

@@ -46,7 +46,7 @@ public class SettingsConstants {
 		put(YEAR_FROM, "From:");
 		put(YEAR_TO, "To:");
 		put(YEAR_ALL, "All");
-		put(AMOUNT_UNITS, "Grouping Separator");
+		put(AMOUNT_UNITS, "Amount units");
 		put(AMOUNT_UNITS_1, "Amounts in Units");
 		put(AMOUNT_UNITS_1000, "Amounts in Thousands (000)");
 		put(AMOUNT_UNITS_1000000, "Amounts in Millions (000 000)");

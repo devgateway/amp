@@ -121,25 +121,21 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 			var subElement = filtersDateColumnsJson.get(item);
 			if (subElement instanceof Backbone.Collection) {
 				var element = subElement.models[0];
-				var content = [];	
+				var content = [];
+				var valueToName = element.get('valueToName');
 				if (element.get('value') !== null) {
 					var auxItem = {};
 					auxItem.id = element.get('value');
-					auxItem.name = element.get('valueToName').attributes[element.get('value')];
+					auxItem.name = valueToName.attributes[element.get('value')];
 					content.push(auxItem);
-				} else if (element.get('valueToName') !== null) {
-					// This should be .models but the way the endpoint returns
-					// the data breaks backbone.
-					_.each(element.get('valueToName').attributes, function(j, item2) {
-						// Need to do this because of how js parses these data
-						// and adds an extra element.
-						if (j !== undefined) {
-							var item_ = {};
-							item_.id = i;
-							item_.name = j;
-							content.push(item_);
-						}
-					});
+				} else if (valueToName !== null) {
+					valueToName = _.without(Object.keys(valueToName.attributes), "id");
+					if (valueToName.length === 2) { // Start and end date OR start date only. 
+						content.push({id: i, name: element.get('valueToName').get(valueToName[0])}, {id: i, name: element.get('valueToName').get(valueToName[1])});
+					} else {
+						// End date only.
+						content.push({id: i, name: null}, {id: i, name: element.get('valueToName').get(valueToName[0])});
+					}
 				}
 				var auxFilter = new Filter({
 					trnName : TranslationManager.getTranslated(item),

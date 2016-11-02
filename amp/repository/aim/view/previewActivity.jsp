@@ -629,7 +629,8 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:statusReason">Status Reason</digi:trn>:&nbsp;
 				<c:if test="${not empty aimEditActivityForm.identification.statusReason}">
-                    <span class="word_break bold">${fn:trim(aimEditActivityForm.identification.statusReason)}</span>
+					<c:set var="projstatusReason" value="${aimEditActivityForm.identification.statusReason}"/>
+					<span class="word_break bold"><digi:edit key="${projstatusReason}"></digi:edit></span>
 				</c:if>
 				<hr />
 			</module:display>

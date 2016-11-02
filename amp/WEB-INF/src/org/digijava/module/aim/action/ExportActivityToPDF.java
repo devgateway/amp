@@ -1,6 +1,6 @@
 package org.digijava.module.aim.action;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -96,8 +96,6 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 
-import clover.org.apache.commons.lang.StringUtils;
-
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -115,6 +113,8 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPTableEvent;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
+
+import clover.org.apache.commons.lang.StringUtils;
 
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 
@@ -271,7 +271,7 @@ public class ExportActivityToPDF extends Action {
                 columnName = TranslatorWorker.translateText("Status Reason");
                 columnVal = "";
                 if (identification.getStatusReason() != null) {
-                    columnVal += processHtml(request, identification.getStatusReason());
+                    columnVal += processEditTagValue(request, identification.getStatusReason());
                     createGeneralInfoRow(mainLayout, columnName, columnVal);
                 }
             }

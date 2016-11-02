@@ -144,7 +144,8 @@ body {background:none;}
                                               </td>
                                               <td bgcolor="#FFFFFF">
                                                 <span class="word_break">
-                                                	<c:out value="${aimEditActivityForm.identification.statusReason}" escapeXml="false" />
+                                                	<c:set var="objStatusReason" value="${aimEditActivityForm.identification.statusReason}" />
+													<span class="word_break"><digi:edit key="${objStatusReason}"></digi:edit></span>
 												</span>
                                               </td>
                                         </tr>

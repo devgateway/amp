@@ -151,7 +151,7 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 			case 'Proposed Completion Date':
 			case 'Proposed Start Date':
 			case 'Effective Funding Date':
-			case 'Closing Funding Date':
+			case 'Funding Closing Date':
 				var newDate = {};
 				_.map(item.values, function(item_, i) {						
 					if(i === 0) {

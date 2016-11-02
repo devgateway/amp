@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
@@ -173,17 +174,6 @@ public class ActivityUtil {
 							.getMtefProjections().iterator();
 					updateFundingDetails(ampFundingMTEFProjectionIterator);
 				}
-				if (Hibernate.isInitialized(ampFunding.getAgreement())) {
-					AmpAgreement agg = ampFunding.getAgreement();
-					if (agg != null) {
-						if ((agg.getId() == null || agg.getId() < 0L)) {
-							agg.setId(null);
-							session.save(agg);
-						} else {
-							session.merge(agg);
-						}
-					}
-				}
 			}
 
 		}
@@ -259,9 +249,9 @@ public class ActivityUtil {
 			saveResources(a, session); 
 			saveEditors(session, createNewVersion); 
 			saveComments(a, session,draft); 
-			saveAgreements(session);
 		}
 
+		saveAgreements(a, session, isActivityForm);
         saveContacts(a, session,(draft != draftChange));
 		
 		updateComponentFunding(a, session);
@@ -590,16 +580,16 @@ public class ActivityUtil {
 		}
 	}
 
-	private static void saveAgreements(Session session) {
-
-		AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
-		HashSet<AmpAgreement> agreements = s.getMetaData(OnePagerConst.AGREEMENT_ITEMS);
-		// AmpFundiong
-		if (agreements == null)
-			return;
-		Iterator<AmpAgreement> it = agreements.iterator();
-		while (it.hasNext()) {
-			AmpAgreement agg = (AmpAgreement) it.next();
+	/**
+	 * Method to save/update agreements into hibernate session
+	 * @param a 	the AmpActivityVersion object
+	 * @param session	the Hibernate Session
+	 * @param isActivityForm the parameter used to decide the source of the agreements (wicket session, activity object)
+	 */
+	private static void saveAgreements(AmpActivityVersion a, Session session, boolean isActivityForm) {
+		Set<AmpAgreement> agreements = isActivityForm ? getAgreementsFromActivityForm() : getAgreementsFromActivity(a);
+		
+		for (AmpAgreement agg : agreements) {
 			if (agg.getId() == null || agg.getId() < 0L) {
 				agg.setId(null);
 				session.save(agg);
@@ -607,6 +597,37 @@ public class ActivityUtil {
 				session.merge(agg);
 			}
 		}
+	}
+
+	/**
+	 * Get the agreements from the Wicket session
+	 * @return Set<AmpAgreement>
+	 */
+	private static Set<AmpAgreement> getAgreementsFromActivityForm() {
+		AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		Set<AmpAgreement> agreements = s.getMetaData(OnePagerConst.AGREEMENT_ITEMS);
+		
+		return agreements == null ? new HashSet<>() : agreements;
+	}
+
+	/**
+	 * get Agreements from the activity object. 
+	 * Usually this method will process activities created/updated via Activity API endpoints
+	 * @param a	the AmpActivityVersion object
+	 * @return Set<AmpAgreement>
+	 */
+	private static Set<AmpAgreement> getAgreementsFromActivity(AmpActivityVersion a) {
+		Set<AmpAgreement> agreements = new HashSet<>();
+		
+		Set<AmpFunding> af = a.getFunding();
+		if (af != null && Hibernate.isInitialized(af)) {
+			agreements = af.stream()
+					.filter(f -> f.getAgreement() != null && Hibernate.isInitialized(f.getAgreement()))
+					.map(f -> f.getAgreement())
+					.collect(Collectors.toSet());
+		}
+		
+		return agreements;
 	}
 
 	private static void saveResources(AmpActivityVersion a, Session session) {

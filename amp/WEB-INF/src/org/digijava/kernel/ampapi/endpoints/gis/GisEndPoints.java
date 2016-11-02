@@ -85,11 +85,6 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 
 	@Context
 	private HttpServletRequest httpRequest;
-	private String BOUNDARY_PATH = "src" + System.getProperty("file.separator") + "main"
-			+ System.getProperty("file.separator") + "resources" + System.getProperty("file.separator") + "gis"
-			+ System.getProperty("file.separator") + "boundaries" 
-			+ System.getProperty("file.separator");
-
 		
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -579,20 +574,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 	@Path("/boundaries")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public JSONArray getBoundaries() {
-		String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-		String path = httpRequest.getServletContext().getRealPath("/") + BOUNDARY_PATH + countryIso.toUpperCase()
-				+ System.getProperty("file.separator") + "list.json";
-		JSONArray json = null;
-		try {
-			InputStream is = 
-	                new FileInputStream(path);
-	        String jsonTxt = IOUtils.toString( is );
-	        json = (JSONArray) JSONSerializer.toJSON(jsonTxt);  
-			
-		} catch (IOException e) {
-			logger.warn("couldn't read file " + path, e);
-		}
-		return json;
+		String path = httpRequest.getServletContext().getRealPath("/");
+		return ReportsUtil.getBoundaries(path);
 	}
 	
 	@GET

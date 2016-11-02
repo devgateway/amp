@@ -459,32 +459,11 @@ public class ReportsFilterPicker extends Action {
         	filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
 			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));
 		}
-        ArrayList<String> decimalseparators = new ArrayList<String>();
 		DecimalFormat usedDecimalFormat = FormatHelper.getDecimalFormat();
 		String selecteddecimalseparator  = String.valueOf((usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator()));
 			 
-		 if (!selecteddecimalseparator.equalsIgnoreCase(".") && !selecteddecimalseparator.equalsIgnoreCase(",") ){
-			 decimalseparators.add(selecteddecimalseparator);
-		 }
-			 
-		 decimalseparators.add(".");
-		 decimalseparators.add(",");
-		 //decimalseparators.add(TranslatorWorker.translateText("CUSTOM",request));
-		 filterForm.setAlldecimalSymbols(decimalseparators);
-		 
-		 ArrayList<String> groupseparators = new ArrayList<String>();
 		 String selectedgroupingseparator  = String.valueOf(usedDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator());
 		 
-		 if (!selectedgroupingseparator.equalsIgnoreCase(".") && !selectedgroupingseparator.equalsIgnoreCase(",") ){
-			 groupseparators.add(selectedgroupingseparator);
-		 }
-			 
-		 groupseparators.add(".");
-		 groupseparators.add(",");
-		 //groupseparators.add(TranslatorWorker.translateText("CUSTOM",request));
-		 filterForm.setAllgroupingseparators(groupseparators);
-			 
-			 
 		 if (filterForm.getCustomDecimalSymbol() != null) {
 			 filterForm.setCustomDecimalSymbol(selecteddecimalseparator);
 			 filterForm.setCustomDecimalPlaces(usedDecimalFormat.getMaximumFractionDigits());

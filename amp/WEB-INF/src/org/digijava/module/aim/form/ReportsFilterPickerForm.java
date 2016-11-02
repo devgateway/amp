@@ -141,8 +141,6 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Integer renderEndYear;
 	private Integer resetRenderStartYear;
 	private Integer resetRenderEndYear;
-	private Collection<String> allgroupingseparators;
-	private Collection<String> alldecimalSymbols;
 	private String decimalSymbol;
 	private String customDecimalSymbol;
 	private String customDecimalSymbolTxt;
@@ -643,16 +641,6 @@ public class ReportsFilterPickerForm extends ActionForm {
 	@java.lang.SuppressWarnings("all")
 	public Integer getResetRenderEndYear() {
 		return this.resetRenderEndYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<String> getAllgroupingseparators() {
-		return this.allgroupingseparators;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<String> getAlldecimalSymbols() {
-		return this.alldecimalSymbols;
 	}
 	
 	@java.lang.SuppressWarnings("all")
@@ -1215,17 +1203,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setResetRenderEndYear(final Integer resetRenderEndYear) {
 		this.resetRenderEndYear = resetRenderEndYear;
 	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setAllgroupingseparators(final Collection<String> allgroupingseparators) {
-		this.allgroupingseparators = allgroupingseparators;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setAlldecimalSymbols(final Collection<String> alldecimalSymbols) {
-		this.alldecimalSymbols = alldecimalSymbols;
-	}
-	
+
 	@java.lang.SuppressWarnings("all")
 	public void setDecimalSymbol(final String decimalSymbol) {
 		this.decimalSymbol = decimalSymbol;

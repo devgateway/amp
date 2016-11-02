@@ -644,28 +644,6 @@ public class Reports implements ErrorReportingEndpoint {
 	}
 
 	@GET
-	@Path("/report/{report_id}/settings/")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public final Object getSettings(@PathParam("report_id") Long reportId) {
-		AmpARFilter arFilter = FilterUtil.buildFilter(null, reportId);
-		ReportsFilterPickerForm oldFilterForm = new ReportsFilterPickerForm();
-		FilterUtil.populateForm(oldFilterForm, arFilter, reportId);
-		ReportsFilterPicker.fillSettingsFormDropdowns(oldFilterForm, arFilter);
-		Map<String, Object> settings = new HashMap<String, Object>();
-		settings.put("decimalSeparators", oldFilterForm.getAlldecimalSymbols());
-		settings.put("decimalSymbols", oldFilterForm.getAlldecimalSymbols());
-		settings.put("groupSeparators", oldFilterForm.getAllgroupingseparators());
-		settings.put("amountInThousands", oldFilterForm.getAmountinthousands());
-		settings.put("selectedDecimalPlaces", oldFilterForm.getCustomDecimalPlaces());
-		settings.put("selectedDecimalSeparator", oldFilterForm.getCustomDecimalSymbol());
-		settings.put("selectedGroupSeparator", oldFilterForm.getCustomGroupCharacter());
-		settings.put("selectedUseGroupingSeparator", oldFilterForm.getCustomUseGrouping());
-		// settings.put("calendars", oldFilterForm.getCalendars());
-		// settings.put("currencies", oldFilterForm.getCurrencies());
-		return settings;
-	}
-	
-	@GET
 	@Path("/report/columns")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final Map<String, String> getAllowedColumns() {

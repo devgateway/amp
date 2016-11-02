@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,6 +51,7 @@ import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -106,7 +109,11 @@ public class Reports implements ErrorReportingEndpoint {
 	@Path("/report/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JSONResult getReport(@PathParam("report_id") Long reportId) {
-		JSONResult report = getReport(DbUtil.getAmpReport(reportId));
+		AmpReports ampReport = DbUtil.getAmpReport(reportId);
+		if (ampReport == null) {
+			ApiErrorResponse.reportError(BAD_REQUEST, ReportErrors.REPORT_NOT_FOUND);
+		}
+		JSONResult report = getReport(ampReport);
 		report.getReportMetadata().setReportType(SAVED);
 		report.getReportMetadata().setReportIdentifier(reportId.toString());
 		return report;

@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportYearRangeField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCurrencyField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarField;
@@ -18,6 +19,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -28,7 +31,7 @@ import org.digijava.module.aim.util.DbUtil;
  * @author Octavian Ciubotaru
  */
 @Path("settings-definitions")
-public class SettingsDefinitionsEndpoint {
+public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for dashboards.
@@ -96,11 +99,20 @@ public class SettingsDefinitionsEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForReport(@PathParam("report_id") Long reportId) {
         AmpReports ampReport = DbUtil.getAmpReport(reportId);
+        if (ampReport == null) {
+            ApiErrorResponse.reportError(BAD_REQUEST, SettingsDefinitionsErrors.REPORT_NOT_FOUND);
+        }
+
         ReportSpecification spec = AmpReportsToReportSpecification.convert(ampReport);
         return Arrays.asList(
                 getCurrencyField(),
                 getCalendarField(),
                 getCalendarCurrenciesField(),
                 getReportYearRangeField(spec));
+    }
+
+    @Override
+    public Class getErrorsClass() {
+        return SettingsDefinitionsErrors.class;
     }
 }

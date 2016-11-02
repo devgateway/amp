@@ -100,7 +100,7 @@ public class ScorecardService {
 	}
 
 	/**
-	 * Returns the list of all ActivityUpdates that occurred on the system
+	 * Returns the list of all ActivityUpdates that occurred on the system except the ones from private WS
 	 * 
 	 * @param allowedStatuses
 	 * @return List<ActivityUpdate> , list with all ActivityUpdates
@@ -169,7 +169,9 @@ public class ScorecardService {
 	 * 
 	 * @param toExlcude
 	 * @return List<ScorecardNoUpdateDonor> , list with donors 
-	 * if toExclude param is true, the method will return all the donors except the excluded donors
+	 * if toExclude param is true, the method will return all the donors except:
+	 * - excluded donors 
+	 * - donors without activities in non-private WS
 	 * if toExclude param is false, the method will return the no update donors
 	 */
 	public List<ScorecardNoUpdateDonor> getScorecardDonors(final boolean toExlcude) {
@@ -183,10 +185,12 @@ public class ScorecardService {
 				String query = "SELECT (o.amp_org_id) amp_org_id, o.name, o.acronym FROM  amp_organisation o WHERE o.amp_org_id IN ("
 						+ "SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_org_role aor, amp_role r "
 						+ "WHERE (o.amp_org_id = aor.organisation AND aor.role = r.amp_role_id AND r.role_code = 'DN') "
+						+ "AND activity NOT IN (select amp_activity_id from amp_activity_version where amp_team_id IN (SELECT amp_team_id from amp_team where isolated = true))"
 						+ "UNION "
 						+ "SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_funding af, amp_activity_version v, amp_role r   "          
 						+ "WHERE  o.amp_org_id = af.amp_donor_org_id  AND v.amp_activity_id = af.amp_activity_id  AND (v.deleted is false) "
 						+ "AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN') "
+						+ "AND v.amp_team_id NOT IN (SELECT amp_team_id from amp_team where isolated = true)"
 						+ ") AND (o.deleted IS NULL OR o.deleted = false ) " 
 						+ "AND o.amp_org_id ";
 				
@@ -389,7 +393,8 @@ public class ScorecardService {
 							+ "from amp_activity_version a, amp_org_role r,amp_organisation o,amp_activities_categoryvalues c,amp_category_value v "+
 							" WHERE  r.activity=a.amp_activity_id  AND a.amp_activity_id = c.amp_activity_id "+
 							"AND c.amp_categoryvalue_id = v.id "+
-							"AND v.amp_category_class_id = (select id from amp_category_class where keyname='activity_status') ";
+							"AND v.amp_category_class_id = (select id from amp_category_class where keyname='activity_status') " +
+							"AND a.amp_team_id NOT IN (SELECT amp_team_id from amp_team where isolated = true) ";
 					if (!status.equals("")) {
 						query += "AND c.amp_categoryvalue_id in (" + status + " ) ";
 					}
@@ -500,7 +505,8 @@ public class ScorecardService {
                         + "AND (a.draft = false OR a.draft is null) "
 						+ "AND c.amp_categoryvalue_id = v.id "
 						+ "AND  v.amp_category_class_id = (select id from amp_category_class where "
-						+ " keyname='activity_status') ";
+						+ " keyname='activity_status') "
+						+ "AND a.amp_team_id NOT IN (SELECT amp_team_id from amp_team where isolated = true) ";
 				if (!status.equals("")) {
 					query += "AND c.amp_categoryvalue_id in (" + status + " ) ";
 				}

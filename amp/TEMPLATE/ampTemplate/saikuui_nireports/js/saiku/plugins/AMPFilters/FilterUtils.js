@@ -73,7 +73,7 @@ FilterUtils.extractFilters = function(content) {
 	var keys = [];
 	for(var k in filtersDateColumnsJson) keys.push(k);
 	$(keys).each(function(i, item) {
-		var subElement = filtersDateColumnsJson[item];
+		var subElement = filtersDateColumnsJson[item];		
 		if (subElement instanceof Array) {
 			var element = subElement.models ? subElement.models[0] : subElement[0];
 			var content = [];	
@@ -83,18 +83,13 @@ FilterUtils.extractFilters = function(content) {
 				auxItem.name = element.valueToName[element.value];
 				content.push(auxItem);
 			} else if (element.valueToName !== null) {
-				// This should be .models but the way the endpoint returns
-				// the data breaks backbone.
-				_.each(element.valueToName, function(j, item2) {
-					// Need to do this because of how js parses these data
-					// and adds an extra element.
-					if (j !== undefined) {
-						var item_ = {};
-						item_.id = i;
-						item_.name = j;
-						content.push(item_);
-					}
-				});
+				var valueToName = Object.keys(element.valueToName);
+				if (valueToName.length === 2) { // Start and end date OR start date only. 
+					content.push({id: i, name: element.valueToName[valueToName[0]]}, {id: i, name: element.valueToName[valueToName[1]]});
+				} else {
+					// End date only.
+					content.push({id: i, name: null}, {id: i, name: element.valueToName[valueToName[0]]});
+				}
 			}
 			var auxFilter = {
 				trnName : TranslationManager.getTranslated(item),

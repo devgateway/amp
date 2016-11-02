@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +19,8 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.IOUtils;
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -70,14 +68,8 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
 
 /**
  * Reports API utility classes
@@ -852,31 +844,5 @@ public class ReportsUtil {
         if (spec != null && spec.getSettings() != null && spec.getSettings().getUnitsOption() != null)
             return spec.getSettings().getUnitsOption();
         return AmountsUnits.getDefaultValue();
-	}
-	
-	/**
-	 * Return the list .json files for this country.
-	 * @param path
-	 * @return
-	 */
-	public static JSONArray getBoundaries(String path) {
-		String fileSeparator = System.getProperty("file.separator");
-		String BOUNDARY_PATH = "src" + fileSeparator + "main" + fileSeparator
-				+ "resources" + fileSeparator + "gis" + fileSeparator
-				+ "boundaries" + fileSeparator;
-		String countryIso = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-		path = path + BOUNDARY_PATH + countryIso.toUpperCase()
-				+ System.getProperty("file.separator") + "list.json";
-		JSONArray json = null;
-		try {
-			InputStream is = new FileInputStream(path);
-			String jsonTxt = IOUtils.toString(is);
-			json = (JSONArray) JSONSerializer.toJSON(jsonTxt);
-
-		} catch (IOException e) {
-			logger.error("couldn't read file " + path, e);
-		}
-		return json;
 	}
 }

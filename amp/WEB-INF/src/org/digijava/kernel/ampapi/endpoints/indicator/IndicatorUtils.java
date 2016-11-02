@@ -1,5 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,6 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONSerializer;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
@@ -25,10 +32,12 @@ import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
@@ -325,4 +334,30 @@ public class IndicatorUtils {
         String implementationLocation = indicator.getAdmLevel() == null ? null : indicator.getAdmLevel().getValue();
         return GisConstants.IMPL_CATEGORY_VALUE_TO_ADM.get(implementationLocation);
     }
+    
+    /**
+	 * Return the list .json files for this country.
+	 * @param path
+	 * @return
+	 */
+	public static JSONArray getBoundaries(String path) {
+		String fileSeparator = System.getProperty("file.separator");
+		String BOUNDARY_PATH = "src" + fileSeparator + "main" + fileSeparator
+				+ "resources" + fileSeparator + "gis" + fileSeparator
+				+ "boundaries" + fileSeparator;
+		String countryIso = FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+		path = path + BOUNDARY_PATH + countryIso.toUpperCase()
+				+ System.getProperty("file.separator") + "list.json";
+		JSONArray json = null;
+		try {
+			InputStream is = new FileInputStream(path);
+			String jsonTxt = IOUtils.toString(is);
+			json = (JSONArray) JSONSerializer.toJSON(jsonTxt);
+
+		} catch (IOException e) {
+			logger.error("couldn't read file " + path, e);
+		}
+		return json;
+	}
 }

@@ -277,7 +277,7 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
                 "implementation_location", true);
 
         String path = httpRequest.getServletContext().getRealPath("/");
-        JSONArray jsonFiles = ReportsUtil.getBoundaries(path);
+        JSONArray jsonFiles = IndicatorUtils.getBoundaries(path);
         
         Collection<JsonBean> indicatorLayerList = new ArrayList<JsonBean>();
         for (AmpCategoryValue admLevel: admLevels){

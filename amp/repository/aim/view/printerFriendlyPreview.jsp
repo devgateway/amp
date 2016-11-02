@@ -1523,7 +1523,8 @@ body {background:none;}
 																				</logic:notEmpty>
 																			</field:display>
 
-																			<field:display name="Agreement" feature="Funding Information">
+																			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
+																					parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																				<logic:notEmpty name="funding" property="title">
                                                                               		<tr>
                                                                                 		<td align="left" width="339">
@@ -1548,7 +1549,7 @@ body {background:none;}
                                                                                   		</td>
                                                                               		</tr>
 																				</logic:notEmpty>
-																			</field:display>
+																			</module:display>
 																			
 				                                                            </table>
                                                                            </td>

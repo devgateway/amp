@@ -2894,10 +2894,9 @@ public class ExportActivityToWord extends Action {
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")) {
             columnName = TranslatorWorker.translateText("Status Reason");
-            columnVal = "";
             if (identification.getStatusReason() != null) {
-                columnVal += processHtml(request, identification.getStatusReason());
-                generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
+                generateOverAllTableRows(identificationSubTable1, columnName,
+                        processEditTagValue(request, identification.getStatusReason()), null);
             }
         }
 

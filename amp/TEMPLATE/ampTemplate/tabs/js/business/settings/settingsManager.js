@@ -14,15 +14,6 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'translati
 		constructor : SettingsManager
 	};
 
-	SettingsManager.setAvailableCategories = function(settings, id) {
-		$.ajax({
-			url : '/rest/data/report/' + id + '/settings',
-			async : false
-		}).done(function(data) {
-			return settings;
-		});
-	};
-	
 	SettingsManager.initialize = function() {
 		var SettingDialogContainerView = Marionette.ItemView.extend({
 			template : _.template(settingsDialogTemplate)
@@ -36,7 +27,6 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'translati
 		if (app.TabsApp.appliedSettings != null) {
 			settings.set('selectedCalendar', app.TabsApp.appliedSettings["2"]);
 		}
-		// SettingsManager.setAvailableCategories(settings, reportId);
 		var settingsDialog = new SettingDialogContainerView({
 			model : settings
 		});

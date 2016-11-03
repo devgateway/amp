@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -334,30 +335,4 @@ public class IndicatorUtils {
         String implementationLocation = indicator.getAdmLevel() == null ? null : indicator.getAdmLevel().getValue();
         return GisConstants.IMPL_CATEGORY_VALUE_TO_ADM.get(implementationLocation);
     }
-    
-    /**
-	 * Return the list .json files for this country.
-	 * @param path
-	 * @return
-	 */
-	public static JSONArray getBoundaries(String path) {
-		String fileSeparator = System.getProperty("file.separator");
-		String BOUNDARY_PATH = "src" + fileSeparator + "main" + fileSeparator
-				+ "resources" + fileSeparator + "gis" + fileSeparator
-				+ "boundaries" + fileSeparator;
-		String countryIso = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-		path = path + BOUNDARY_PATH + countryIso.toUpperCase()
-				+ System.getProperty("file.separator") + "list.json";
-		JSONArray json = null;
-		try {
-			InputStream is = new FileInputStream(path);
-			String jsonTxt = IOUtils.toString(is);
-			json = (JSONArray) JSONSerializer.toJSON(jsonTxt);
-
-		} catch (IOException e) {
-			logger.error("couldn't read file " + path, e);
-		}
-		return json;
-	}
 }

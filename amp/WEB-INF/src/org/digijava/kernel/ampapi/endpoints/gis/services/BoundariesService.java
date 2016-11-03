@@ -4,8 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
 import org.apache.commons.io.IOUtils;
@@ -18,22 +26,23 @@ public class BoundariesService {
 
 	protected static Logger logger = Logger.getLogger(BoundariesService.class);
 
+	private static final String CONTEXT_PATH = TLSUtils.getRequest()
+			.getServletContext().getRealPath("/");
+	private static final String BOUNDARY_PATH = "src" + File.separator + "main"
+			+ File.separator + "resources" + File.separator + "gis"
+			+ File.separator + "boundaries" + File.separator;
+
 	/**
-	 * Return the list .json files for this country.
+	 * Return the list .json files for this country as a JSONArray object.
 	 * 
 	 * @param path
 	 * @return
 	 */
 	public static JSONArray getBoundaries() {
-		String path = TLSUtils.getRequest().getServletContext()
-				.getRealPath("/");
-		String BOUNDARY_PATH = "src" + File.separator + "main" + File.separator
-				+ "resources" + File.separator + "gis" + File.separator
-				+ "boundaries" + File.separator;
 		String countryIso = FeaturesUtil
 				.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-		path = path + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator
-				+ "list.json";
+		String path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase()
+				+ File.separator + "list.json";
 		JSONArray json = null;
 		try {
 			InputStream is = new FileInputStream(path);
@@ -45,5 +54,22 @@ public class BoundariesService {
 			throw new RuntimeException(e);
 		}
 		return json;
+	}
+
+	/**
+	 * Return the list of .json files for this country as a Map with the adm-N
+	 * for key.
+	 * 
+	 * @return
+	 */
+	public static Map<String, JSONObject> getBoundariesAsList() {
+		JSONArray boundariesJSON = BoundariesService.getBoundaries();
+		List boundariesList = Arrays.asList(boundariesJSON.toArray());
+		Map<String, JSONObject> boundariesMap = new HashMap<>();
+		for (final Object adm : boundariesList) {
+			boundariesMap.put(((JSONObject) adm).get("id").toString(),
+					(JSONObject) adm);
+		}
+		return boundariesMap;
 	}
 }

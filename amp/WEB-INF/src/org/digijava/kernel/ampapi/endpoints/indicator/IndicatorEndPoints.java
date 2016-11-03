@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONArray;
 
@@ -274,11 +275,11 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
         Collection<AmpCategoryValue> admLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                 "implementation_location", false);
 
-        JSONArray jsonFiles = BoundariesService.getBoundaries();
+        Map jsonFilesMap = BoundariesService.getBoundariesAsList();
         
         Collection<JsonBean> indicatorLayerList = new ArrayList<JsonBean>();
-        for (AmpCategoryValue admLevel: admLevels){
-			if (jsonFiles.toString().contains(IndicatorEPConstants.ADM_PREFIX + admLevel.getIndex())) {
+        for (AmpCategoryValue admLevel: admLevels){        	
+			if (jsonFilesMap.containsKey(IndicatorEPConstants.ADM_PREFIX + admLevel.getIndex())) {
         		JsonBean categoryValue = new JsonBean();
                 categoryValue.set(IndicatorEPConstants.ID, admLevel.getId());
                 categoryValue.set(IndicatorEPConstants.LABEL, admLevel.getLabel());

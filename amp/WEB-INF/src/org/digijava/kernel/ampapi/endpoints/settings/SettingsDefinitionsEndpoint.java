@@ -37,7 +37,11 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     @Path("/dashboards")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForDashboards() {
-        return Arrays.asList(getCurrencyField(), getCalendarField(), getCalendarCurrenciesField());
+        return Arrays.asList(
+                getCurrencyField(),
+                getCalendarField(),
+                getCalendarCurrenciesField(),
+                getFundingTypeField());
     }
 
     /**

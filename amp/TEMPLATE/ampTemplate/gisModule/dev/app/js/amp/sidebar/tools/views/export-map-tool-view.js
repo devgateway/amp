@@ -41,15 +41,14 @@ module.exports = Backbone.View.extend({
     	    // append is important because 'share' is inside same el
 //        	var value = $(self.template()).find('button.hideable').css('display','none').html();
         	
-        	self.$el.append(self.template());
+        	self.$el.append(self.template());        	
         	self.$el.find('button.hideable').css('display', 'none')
         } else {
     	    // append is important because 'share' is inside same el
-    	    self.$el.append(self.template());
-        	
+    	    self.$el.append(self.template());        	
         }
   		
-  		
+        self.app.translator.translateDOM(self.el);
   	});
     return this;
   },

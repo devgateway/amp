@@ -5,6 +5,7 @@ import com.sun.jersey.multipart.FormDataParam;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -39,9 +40,6 @@ import net.sf.json.JSONArray;
 public class IndicatorEndPoints implements ErrorReportingEndpoint {
 
     private static final Logger logger = Logger.getLogger(IndicatorEndPoints.class);
-    
-    @Context
-	private HttpServletRequest httpRequest;
 
     /**
      * Retrieve and provide a list of indicator layers
@@ -276,8 +274,7 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
         Collection<AmpCategoryValue> admLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                 "implementation_location", false);
 
-        String path = httpRequest.getServletContext().getRealPath("/");
-        JSONArray jsonFiles = IndicatorUtils.getBoundaries(path);
+        JSONArray jsonFiles = BoundariesService.getBoundaries();
         
         Collection<JsonBean> indicatorLayerList = new ArrayList<JsonBean>();
         for (AmpCategoryValue admLevel: admLevels){

@@ -41,6 +41,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
+import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
@@ -83,10 +84,7 @@ import net.sf.json.JSONSerializer;
 @Path("gis")
 public class GisEndPoints implements ErrorReportingEndpoint {
 	private static final Logger logger = Logger.getLogger(GisEndPoints.class);
-
-	@Context
-	private HttpServletRequest httpRequest;
-		
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<AvailableMethod> getAvailableFilters() {
@@ -580,8 +578,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 	@Path("/boundaries")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public JSONArray getBoundaries() {
-		String path = httpRequest.getServletContext().getRealPath("/");
-		return IndicatorUtils.getBoundaries(path);
+		return BoundariesService.getBoundaries();
 	}
 	
 	@GET

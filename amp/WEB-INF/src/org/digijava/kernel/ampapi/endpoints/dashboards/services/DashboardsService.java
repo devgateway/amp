@@ -268,7 +268,7 @@ public class DashboardsService {
 
 		retlist.set("total", rawTotal);
 		retlist.set("sumarizedTotal",
-				calculateSumarizedTotals(rawTotal * unitsOption.multiplier, spec));
+				calculateSumarizedTotals(rawTotal / unitsOption.divider, spec));
 		// report the total number of tops available
 		retlist.set("maxLimit", maxLimit);
 		retlist.set("totalPositive", totalPositive);

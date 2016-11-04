@@ -1,9 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import com.sun.jersey.multipart.FormDataParam;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -13,6 +16,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -21,12 +25,18 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.StreamingOutput;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Path("indicator")
 public class IndicatorEndPoints implements ErrorReportingEndpoint {
@@ -262,19 +272,19 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     @Path("/adm-level")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Collection<JsonBean> getLevels() {
-
         Collection<AmpCategoryValue> admLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                 "implementation_location", true);
-
+        Map<String, JSONObject> jsonFilesMap = BoundariesService.getBoundariesAsList();        
         Collection<JsonBean> indicatorLayerList = new ArrayList<JsonBean>();
-        for (AmpCategoryValue admLevel: admLevels){
-            JsonBean categoryValue = new JsonBean();
-            categoryValue.set(IndicatorEPConstants.ID, admLevel.getId());
-            categoryValue.set(IndicatorEPConstants.LABEL, admLevel.getLabel());
-            categoryValue.set(IndicatorEPConstants.VALUE, admLevel.getValue());
-            indicatorLayerList.add(categoryValue);
+        for (AmpCategoryValue admLevel: admLevels){        	
+			if (jsonFilesMap.containsKey(IndicatorEPConstants.ADM_PREFIX + admLevel.getIndex())) {
+        		JsonBean categoryValue = new JsonBean();
+                categoryValue.set(IndicatorEPConstants.ID, admLevel.getId());
+                categoryValue.set(IndicatorEPConstants.LABEL, admLevel.getLabel());
+                categoryValue.set(IndicatorEPConstants.VALUE, admLevel.getValue());
+                indicatorLayerList.add(categoryValue);
+        	}            
         }
-
         return indicatorLayerList;
     }
 

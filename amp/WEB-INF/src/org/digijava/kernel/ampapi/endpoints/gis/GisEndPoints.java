@@ -41,6 +41,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
+import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
@@ -83,15 +84,7 @@ import net.sf.json.JSONSerializer;
 @Path("gis")
 public class GisEndPoints implements ErrorReportingEndpoint {
 	private static final Logger logger = Logger.getLogger(GisEndPoints.class);
-
-	@Context
-	private HttpServletRequest httpRequest;
-	private String BOUNDARY_PATH = "src" + System.getProperty("file.separator") + "main"
-			+ System.getProperty("file.separator") + "resources" + System.getProperty("file.separator") + "gis"
-			+ System.getProperty("file.separator") + "boundaries" 
-			+ System.getProperty("file.separator");
-
-		
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<AvailableMethod> getAvailableFilters() {
@@ -585,20 +578,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 	@Path("/boundaries")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public JSONArray getBoundaries() {
-		String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-		String path = httpRequest.getServletContext().getRealPath("/") + BOUNDARY_PATH + countryIso.toUpperCase()
-				+ System.getProperty("file.separator") + "list.json";
-		JSONArray json = null;
-		try {
-			InputStream is = 
-	                new FileInputStream(path);
-	        String jsonTxt = IOUtils.toString( is );
-	        json = (JSONArray) JSONSerializer.toJSON(jsonTxt);  
-			
-		} catch (IOException e) {
-			logger.warn("couldn't read file " + path, e);
-		}
-		return json;
+		return BoundariesService.getBoundaries();
 	}
 	
 	@GET

@@ -1,10 +1,11 @@
 package org.digijava.module.aim.dbentity;
-import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
+
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 
 public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicatorLayer> {
@@ -78,17 +79,19 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 
 
 	public Set<AmpIndicatorColor> getColorRamp() {
+	    if (colorRamp == null)
+            colorRamp = new HashSet<AmpIndicatorColor>();
 		return colorRamp;
 	}
 
 
 	public void setColorRamp(Set<AmpIndicatorColor> colorRamp) {
-        if (this.colorRamp == null) {
-            this.colorRamp = colorRamp;
-        } else {
-            this.colorRamp.retainAll(colorRamp);
-            this.colorRamp.addAll(colorRamp);
-        }
+		if (this.colorRamp == null) {
+			this.colorRamp = colorRamp;
+		} else {
+			this.colorRamp.retainAll(colorRamp);
+			this.colorRamp.addAll(colorRamp);
+		}
 	}
 
 

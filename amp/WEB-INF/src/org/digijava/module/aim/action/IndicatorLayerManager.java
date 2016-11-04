@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.form.AddIndicatorLayerForm;
@@ -19,6 +20,7 @@ import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.Session;
 
 public class IndicatorLayerManager extends Action {
 
@@ -73,24 +75,28 @@ public class IndicatorLayerManager extends Action {
                     colorRamp = indLayer.getColorRamp();
                     colorRamp.clear();
                 }
+
                 String[] colorRampColors = ColorRampUtil.getColorRamp(indicatorLayerForm.getSelectedColorRamp(),
                         indicatorLayerForm.getNumberOfClasses());
                 for (int i = 0; i < colorRampColors.length; i++) {
                     AmpIndicatorColor color = new AmpIndicatorColor();
-                    int payload = i + 1;
-                    color.setPayload((long) payload);
+                    long payload = i + 1;
+                    color.setPayload(payload);
                     color.setColor(colorRampColors[i]);
                     colorRamp.add(color);
                 }
+                indLayer.getColorRamp().addAll(colorRamp);
                 indLayer.setName(indicatorLayerForm.getName());
                 indLayer.setUnit(indicatorLayerForm.getUnit());
                 indLayer.setDescription(indicatorLayerForm.getDescription());
                 indLayer.setNumberOfClasses(indicatorLayerForm.getNumberOfClasses());
                 indLayer.setAdmLevel(CategoryManagerUtil.getAmpCategoryValueFromDb(indicatorLayerForm.getAdmLevelId()));
-                indLayer.setColorRamp(colorRamp);
+
                 indLayer.setAccessType(IndicatorAccessType.PUBLIC);
-                DbUtil.saveOrUpdateObject(indLayer);
-                DbUtil.update(indLayer);
+                Session sess = PersistenceManager.getSession();
+                sess.saveOrUpdate(indLayer);
+                sess.flush();
+                sess.clear();
                 indicatorLayerForm.setIndicatorLayers(DynLocationManagerUtil.getIndicatorLayers());
                 return mapping.findForward("added");
         }

@@ -1013,72 +1013,33 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     public static void deleteActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
 
-        /* delete AMP activity Survey */
-        //Set<AmpAhsurvey> ampSurvey = ampAct.getSurvey();
-        AmpAhsurvey[] ampSurvey = ampAct.getSurvey().toArray(new AmpAhsurvey[ampAct.getSurvey().size()]);
-        if (ampSurvey != null) {
+        logger.info("deleting ... Activity # " + ampAct.getAmpActivityId());
+        Connection con = ((SessionImplementor)session).connection();
+        //	 delete surveys
+        String deleteActivitySurveyResponse = "DELETE FROM amp_ahsurvey_response WHERE amp_ahsurvey_id in ( SELECT amp_ahsurvey_id FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId() + " ) ";
+        SQLUtils.executeQuery(con, deleteActivitySurveyResponse );
 
-            for(AmpAhsurvey ahSurvey : ampSurvey){
-                if (ahSurvey != null) {
-                    AmpAhsurveyResponse[] ampAhsurveyResponse = ahSurvey.getResponses().toArray(new AmpAhsurveyResponse[ahSurvey.getResponses().size()]);
-                    for(AmpAhsurveyResponse surveyResp : ampAhsurveyResponse) {
-                        ahSurvey.getResponses().remove(surveyResp);
-                        session.delete(surveyResp);
-                        session.flush();
-                    }
-                }
-                ampAct.getSurvey().remove(ahSurvey);
-                session.delete(ahSurvey);
-                session.flush();
-            }
-        }
+        String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        SQLUtils.executeQuery(con, deleteActivitySurvey );
 
-        AmpGPISurvey[] ampGpiSurvey = ampAct.getGpiSurvey().toArray(new AmpGPISurvey[ampAct.getGpiSurvey().size()]);
-        if (ampSurvey != null) {
+        //	 delete surveys
+        String deleteActivityGPISurveyReponse = "DELETE FROM amp_gpi_survey_response WHERE amp_gpisurvey_id in ( SELECT amp_gpisurvey_id FROM amp_gpi_survey WHERE amp_activity_id = " + ampAct.getAmpActivityId() + " ) " ;
+        SQLUtils.executeQuery(con, deleteActivityGPISurveyReponse );
 
-            for(AmpGPISurvey ahGpiSurvey : ampGpiSurvey){
-                if (ahGpiSurvey != null) {
-                    AmpGPISurveyResponse[] ampGPISurveyResponse = ahGpiSurvey.getResponses().toArray(new AmpGPISurveyResponse[ahGpiSurvey.getResponses().size()]);
-                    for(AmpGPISurveyResponse surveyResp : ampGPISurveyResponse) {
-                        ahGpiSurvey.getResponses().remove(surveyResp);
-                        session.delete(surveyResp);
-                        session.flush();
-                    }
-                }
-                ampAct.getGpiSurvey().remove(ahGpiSurvey);
-                session.delete(ahGpiSurvey);
-                session.flush();
-            }
-        }
+        String deleteActivityGPISurvey = "DELETE FROM amp_gpi_survey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        SQLUtils.executeQuery(con, deleteActivityGPISurvey );
 
         //	 delete all previous comments
-        List<AmpComments> col = org.digijava.module.aim.util.DbUtil.getAllCommentsByActivityId(ampAct.getAmpActivityId(), session);
-        logger.info("col.size() [Inside deleting]: " + col.size());
-        if (col != null) {
-            Iterator itr = col.iterator();
-            while (itr.hasNext()) {
-                AmpComments comObj = (AmpComments) itr.next();
-                comObj.setAmpActivityId(null);
-                session.delete(comObj);
-            }
-        }
         String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        Connection con = ((SessionImplementor)session).connection();
-        Statement stmt = con.createStatement();
-        stmt.executeUpdate(deleteActivityComments);
-        logger.info("comments deleted");
+        SQLUtils.executeQuery(con, deleteActivityComments );
 
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        con = ((SessionImplementor)session).connection();
-        stmt = con.createStatement();
-        int deletedRows = stmt.executeUpdate(deleteActivityTeam);
+        SQLUtils.executeQuery(con, deleteActivityTeam );
 
         //Delete the connection with components.
         String deleteActivityComponent = "DELETE FROM amp_activity_components WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        con = ((SessionImplementor)session).connection();
-        stmt = con.createStatement();
-        deletedRows = stmt.executeUpdate(deleteActivityComponent);
+        SQLUtils.executeQuery(con, deleteActivityComponent );
 
     }
     

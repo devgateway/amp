@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -131,6 +132,6 @@ public class BuildVersionVerifier {
     	if (this.dbVersion.encodedVersion == null) //no table yet, this is the first startup, it's fine
     		return;
     	if (this.dbVersion.encodedVersion > this.codeVersion.encodedVersion)
-			return;
+    		throw new RuntimeException(String.format("AMP was last started on %s, code version is %s, crashing startup on purpose!", this.dbVersion.version, this.codeVersion.version));
 	}
 }

@@ -64,10 +64,9 @@ public class BoundariesService {
 	 */
 	public static Map<String, JSONObject> getBoundariesAsList() {
 		JSONArray boundariesJSON = BoundariesService.getBoundaries();
-		List boundariesList = Arrays.asList(boundariesJSON.toArray());
 		Map<String, JSONObject> boundariesMap = new HashMap<>();
-		for (final Object adm : boundariesList) {
-			boundariesMap.put(((JSONObject) adm).get("id").toString(),
+		for (final Object adm : boundariesJSON) {
+			boundariesMap.put(String.valueOf(((JSONObject) adm).get("id")),
 					(JSONObject) adm);
 		}
 		return boundariesMap;

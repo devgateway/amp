@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Path("indicator")
 public class IndicatorEndPoints implements ErrorReportingEndpoint {
@@ -271,12 +272,9 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     @Path("/adm-level")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Collection<JsonBean> getLevels() {
-
         Collection<AmpCategoryValue> admLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                 "implementation_location", true);
-
-        Map jsonFilesMap = BoundariesService.getBoundariesAsList();
-        
+        Map<String, JSONObject> jsonFilesMap = BoundariesService.getBoundariesAsList();        
         Collection<JsonBean> indicatorLayerList = new ArrayList<JsonBean>();
         for (AmpCategoryValue admLevel: admLevels){        	
 			if (jsonFilesMap.containsKey(IndicatorEPConstants.ADM_PREFIX + admLevel.getIndex())) {
@@ -287,7 +285,6 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
                 indicatorLayerList.add(categoryValue);
         	}            
         }
-
         return indicatorLayerList;
     }
 

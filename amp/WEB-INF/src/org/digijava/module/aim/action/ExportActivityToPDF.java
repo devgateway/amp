@@ -2971,7 +2971,6 @@ public class ExportActivityToPDF extends Action {
                 }
 
                 // do not pass the currencyCode. The measure unit for rate is percentages
-                addTotalsOutput(fundingTable, "Consumption Rate", myForm.getFunding().getConsumptionRate(), "");
                 addTotalsOutput(fundingTable, "Delivery Rate", myForm.getFunding().getDeliveryRate(), "");
 
             }

@@ -535,11 +535,6 @@ function collapseAll() {
 				<b> ${aimEditActivityForm.funding.deliveryRate}</b>
 				<hr/>
 			</field:display> 
-			<field:display name="Consumption rate" feature="Funding Information">
-				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Expenditures / Actual Disbursements * 100</digi:trn>" width="10" height=10 border="0">
-				<digi:trn>Consumption rate</digi:trn>:<br/>
-				<b>${aimEditActivityForm.funding.consumptionRate}</b>		
-			</field:display>
 	</fieldset>	
 	<fieldset>
 	<legend>

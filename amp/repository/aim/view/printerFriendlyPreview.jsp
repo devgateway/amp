@@ -1762,15 +1762,6 @@ body {background:none;}
                         	</logic:notEmpty>
                         </feature:display>
 
-                        <logic:notEmpty name="aimEditActivityForm" property="funding.consumptionRate">
-                        	<tr>
-                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:undisbursedBalance"> Consumption Rate</digi:trn>: </td>
-                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-									<b>${aimEditActivityForm.funding.consumptionRate}</b>
-                                	&nbsp;
-                            	</td>
-                        	</tr>
-                        </logic:notEmpty>
                         <logic:notEmpty name="aimEditActivityForm" property="funding.deliveryRate">
 							<tr>
                             	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn>Delivery Rate</digi:trn>: </td>

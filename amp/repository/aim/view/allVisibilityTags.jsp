@@ -974,7 +974,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Undisbursed Funds" feature="Funding Information"></field:display> 
 <field:display name="Unexpended Funds" feature="Funding Information"></field:display> 
 <field:display name="Delivery rate" feature="Funding Information"></field:display> 
-<field:display name="Consumption rate" feature="Funding Information"></field:display> 
 <field:display name="Validate Mandatory Regional Percentage" feature="Location"></field:display> 
 <field:display name="Verifications" feature="Identification"></field:display> 
 <field:display name="View Schemes Link" feature="Sectors"></field:display> 

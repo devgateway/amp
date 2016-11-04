@@ -528,12 +528,6 @@
             	            	</c:if>
                 	        </feature:display>
                         
-							<c:if test="${not empty aimEditActivityForm.funding.consumptionRate}">
-						   		<c:set var="activity_funding_text"><digi:trn key="aim:undisbursedBalance">Consumption Rate</digi:trn></c:set>
-								<c:set var="activity_funding_amount">${aimEditActivityForm.funding.consumptionRate}</c:set>
-								<%@include file="preview_activity_funding_detail.jspf" %>
-							</c:if>
-
 	                     	<c:if test="${not empty aimEditActivityForm.funding.deliveryRate}">
                          		<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">

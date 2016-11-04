@@ -2751,11 +2751,6 @@ public class ExportActivityToWord extends Action {
 			addTotalsOutput(fundingTotalsDetails,"UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
 		}
 		
-		// Consumption Rate
-        if (myForm.getFunding().getConsumptionRate()!=null && myForm.getFunding().getConsumptionRate().length()>0) {
-    		addTotalsOutput(fundingTotalsDetails,"Consumption Rate", myForm.getFunding().getConsumptionRate(), null);
-        }
-
 		// Delivery Rate
         if (myForm.getFunding().getDeliveryRate() != null && myForm.getFunding().getDeliveryRate().length() > 0) {
         	addTotalsOutput(fundingTotalsDetails,"Delivery Rate", myForm.getFunding().getDeliveryRate(), null);
@@ -3527,27 +3522,6 @@ public class ExportActivityToWord extends Action {
             rowAmountForCell1++;
         }
 
-//		//if(FeaturesUtil.isVisibleField("Delivery rate", ampContext))
-//		{
-//			if(myForm.getFunding().getDeliveryRate()!=null){
-//				columnVal =  myForm.getFunding().getDeliveryRate();
-//			}else{
-//				columnVal = "";
-//			}
-//			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Delivery rate")+": ",columnVal,CELLCOLORGRAY);
-//			rowAmountForCell1++;
-//		}
-//		
-//		//if(FeaturesUtil.isVisibleField("Consumption rate", ampContext))
-//		{
-//			if(myForm.getFunding().getConsumptionRate()!=null){
-//				columnVal =  myForm.getFunding().getConsumptionRate();
-//			}else{
-//				columnVal = "";
-//			}
-//			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Consumption rate")+": ",columnVal,CELLCOLORGRAY);	
-//			rowAmountForCell1++;
-//		}	            
         overallFundingCell.add(overAllFundingSubTable);
         overAllTable.addCell(overallFundingCell);
 

@@ -330,4 +330,8 @@ public class ColumnConstants {
 	public static final String WORKSPACES = "Workspaces";
 	public static final String EFFECTIVE_FUNDING_DATE = "Effective Funding Date";
 	public static final String FUNDING_CLOSING_DATE = "Funding Closing Date";
+
+	public static String toKebabCase(String str) {
+		return str.toLowerCase().replace(' ', '-').replace('/', '-');
+	}
 }

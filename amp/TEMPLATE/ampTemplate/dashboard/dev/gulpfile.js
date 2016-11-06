@@ -33,7 +33,8 @@ var paths = {
     libs: [
       './node_modules/bootstrap/dist/css/bootstrap.css',
       './node_modules/nvd3/build/nv.d3.css',
-      '../../node_modules/amp-filter/dist/amp-filter.css'
+      '../../node_modules/amp-filter/dist/amp-filter.css',
+      '../../node_modules/amp-settings/dist/amp-settings.css'
     ],
     testStyles: './bower_components/mocha/mocha.css'
   },

@@ -1,44 +1,36 @@
 var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var ModalView = require('./settings-modal');
-var template = _.template(fs.readFileSync(
-  __dirname + '/../templates/settings.html', 'UTF-8'));
-
-
+var template = _.template(fs.readFileSync(__dirname + '/../templates/settings.html', 'UTF-8'));
 module.exports = BackboneDash.View.extend({
-
   events: {
     'click .dash-settings-button': 'editSettings'
   },
-
   initialize: function(options) {
-    this.app = options.app;
-    this.modalView = new ModalView({ app: this.app, collection: this.collection });
-
-    this.app.settings._loaded.done(_(function() {
-      this.app.state.register(this, 'settings', {
-        get: this.app.settings.toAPI,
-        set: this.app.settings.fromState
+    this.app = options.app;    
+    this.app.settingsWidget.definitions.loaded.done(_(function() {
+     this.app.state.register(this, 'settings', {
+        get: this.app.settingsWidget.toAPIFormat,
+        set: this.app.settingsWidget.restoreFromSaved
       });
     }).bind(this));
   },
-
   render: function() {
-    this.$el.html(template());  
+    this.$el.html(template()); 
+    this.app.settingsWidget.setElement(this.el.querySelector('#amp-settings'));
     return this;
   },
-
   editSettings: function() {
-	var specialClass = 'dash-settings-modal';
-    this.app.modal('Settings', {
-      specialClass: specialClass,
-      bodyEl: this.modalView.render().el,
-      i18nTitle: 'amp.dashboard:dashboard-settings'
-    });
-    
-    // Translate modal popup.
-    app.translator.translateDOM($("." + specialClass));
-  }
+	var self = this;
+	this.app.settingsWidget.show();
+	this.$('#amp-settings').show();
+	this.app.settingsWidget.on('close', function() {
+		self.$('#amp-settings').hide();
+	});
+	
+	this.app.settingsWidget.on('apply-settings', function() {
+		self.$('#amp-settings').hide();
+	});	
+ }
 
 });

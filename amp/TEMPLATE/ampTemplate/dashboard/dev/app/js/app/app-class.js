@@ -9,7 +9,8 @@ var StateLoadError = require('amp-state/index').StateLoadError;
 var fs = require('fs');
 var Translator = require('amp-translate');
 var Filter = require('amp-filter/src/main');
-var Settings = require('./models/settings-collection');
+var SettingsWidget = require('amp-settings/src/index');
+var GeneralSettings = require('amp-settings/src/models/global-settings');
 var UserModel = require('./models/amp-user.js');
 var SavedDashes = require('./models/saved-dashes-collection.js');
 
@@ -35,7 +36,7 @@ _.extend(App.prototype, BackboneDash.Events, {
     this.initialized = _initDefer.promise();
 
     try {
-    	this.settings = new Settings([], { app: this });
+    	
     	this.user = new UserModel()
 
       // check our support level
@@ -100,12 +101,17 @@ _.extend(App.prototype, BackboneDash.Events, {
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
       });
+      
+      this.initSettings();
+      
       // TODO: handle translations load failure      ​
       this.filter = new Filter({
           draggable: true,
           sync: options.sync || BackboneDash.sync,
           caller: 'DASHBOARD'
         });
+       
+      
 
    	  // initialize app components
       this.view = new MainView({ app: this, el: options.el });      
@@ -180,6 +186,18 @@ _.extend(App.prototype, BackboneDash.Events, {
         modalReady.reject('app views did not init');
       });
     return modalReady.promise();
+  },
+  initSettings: function(){
+	this.settingsWidget = new SettingsWidget({
+	  		draggable : true,
+	  		caller : 'DASHBOARDS',
+	  		isPopup: true,
+	  		definitionUrl: '/rest/settings-definitions/gis'
+	});
+	
+	this.generalSettings = new GeneralSettings();
+	this.generalSettings.load();
+	
   }
 
 });

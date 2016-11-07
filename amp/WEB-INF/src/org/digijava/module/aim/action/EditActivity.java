@@ -5,6 +5,26 @@
 
 package org.digijava.module.aim.action;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.jcr.Node;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -110,26 +130,6 @@ import org.digijava.module.esrigis.helpers.MapConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
-
-import javax.jcr.Node;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 
 
 /**
@@ -1605,7 +1605,7 @@ public class EditActivity extends Action {
     	crossteamcheck = true;
     } else {
     	//check if the activity belongs to the team where the user is logged.
-    	if (teamMember != null && teamMember.getTeamId() != null) {
+    	if (teamMember != null && teamMember.getTeamId() != null && activity.getTeam() != null && activity.getTeam().getAmpTeamId() != null) {
     		crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
     	}
     }

@@ -4,9 +4,6 @@
  */
 package org.digijava.module.gateperm.gates;
 
-import java.util.Map;
-import java.util.Queue;
-
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -14,6 +11,9 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
+
+import java.util.Map;
+import java.util.Queue;
 
 /**
  * This gate allows access on activities belonging to a workspace in which the current user belongs
@@ -75,7 +75,7 @@ public class RegularTeamActivityGate extends Gate {
 		AmpTeam activityTeam=ampa.getTeam();
 		
 		//current team same as activity team=>always access
-		if (currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId()))
+		if (activityTeam != null && currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId()))
 				return true;
 			
 		

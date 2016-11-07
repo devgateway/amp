@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -347,6 +349,10 @@ public class SettingsUtils {
 		settings.set("gap-analysis-map", FeaturesUtil.isVisibleFeature("Gap Analysis Map"));
 
 		settings.set("has-ssc-workspaces", !TeamUtil.getAllSSCWorkspaces().isEmpty());
+
+		DecimalFormatSymbols formatSymbols = FormatHelper.getDefaultFormat().getDecimalFormatSymbols();
+		settings.set("number-group-separator", formatSymbols.getGroupingSeparator());
+		settings.set("number-decimal-separator", formatSymbols.getDecimalSeparator());
 
 		if (MenuUtils.getCurrentView() == AmpView.TEAM) {
             addWorkspaceSettings(settings);

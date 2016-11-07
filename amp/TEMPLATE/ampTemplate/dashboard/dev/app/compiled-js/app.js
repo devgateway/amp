@@ -205,7 +205,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 	  		draggable : true,
 	  		caller : 'DASHBOARDS',
 	  		isPopup: true,
-	  		definitionUrl: '/rest/settings-definitions/gis'
+	  		definitionUrl: '/rest/settings-definitions/dashboards'
 	});	
 	this.generalSettings = new GeneralSettings();
 	this.generalSettings.load();	
@@ -4446,7 +4446,7 @@ module.exports = BackboneDash.View.extend({
       var blob = {};
       // AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...)
       
-      //this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
+      this.app.filter.extractDates(this.app.generalSettings, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
 
       this.app.filter.loaded.done(_(function() {
         console.info('filters loaded');
@@ -4556,7 +4556,6 @@ module.exports = BackboneDash.View.extend({
   hideFilterDetails: function() {
     this.renderApplied();
   }
-
 });
 
 },{"../../../../../../../reamp/tools/log":98,"../backbone-dash":3,"underscore":"underscore"}],37:[function(require,module,exports){
@@ -30142,26 +30141,19 @@ _.extend(Widget.prototype, Backbone.Events, {
         end: ''
       };
 
-    var defaultMinDate = _.find(settings, function(item) {
-      return item.get('id') === minName;
-    });
-    if (defaultMinDate !== undefined && defaultMinDate.get('name') !== '') {
-      filtersOut.otherFilters.date.start = defaultMinDate.get('name');
+    var defaultMinDate = settings.get(minName);    
+    if (defaultMinDate !== undefined && defaultMinDate !== '') {
+      filtersOut.otherFilters.date.start = defaultMinDate;
     }
-    var defaultMaxDate = _.find(settings, function(item) {
-      return item.get('id') === maxName;
-    });
-    if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
-      filtersOut.otherFilters.date.end = defaultMaxDate.get('name');
+    var defaultMaxDate = settings.get(maxName);
+    if (defaultMaxDate !== undefined && defaultMaxDate !== '') {
+      filtersOut.otherFilters.date.end = defaultMaxDate;
     }
   }
 
 });
 
-
-
 module.exports = Widget;
-
 },{"./lib/jquery-ui-i18n":65,"./views/filters-view":78,"backbone":"backbone","bootstrap/dist/js/bootstrap":57,"jquery":"jquery","jquery-ui/draggable":60,"underscore":"underscore"}],68:[function(require,module,exports){
 var Backbone = require('backbone');
 

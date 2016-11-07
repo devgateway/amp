@@ -28,7 +28,7 @@ module.exports = BackboneDash.View.extend({
       var blob = {};
       // AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...)
       
-      //this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
+      this.app.filter.extractDates(this.app.generalSettings, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
 
       this.app.filter.loaded.done(_(function() {
         console.info('filters loaded');
@@ -138,5 +138,4 @@ module.exports = BackboneDash.View.extend({
   hideFilterDetails: function() {
     this.renderApplied();
   }
-
 });

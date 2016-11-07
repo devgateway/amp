@@ -192,7 +192,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 	  		draggable : true,
 	  		caller : 'DASHBOARDS',
 	  		isPopup: true,
-	  		definitionUrl: '/rest/settings-definitions/gis'
+	  		definitionUrl: '/rest/settings-definitions/dashboards'
 	});	
 	this.generalSettings = new GeneralSettings();
 	this.generalSettings.load();	

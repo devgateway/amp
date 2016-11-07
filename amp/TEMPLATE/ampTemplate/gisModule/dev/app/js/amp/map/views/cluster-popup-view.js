@@ -41,8 +41,7 @@ module.exports = Backbone.View.extend({
       return feature.properties.admName === popup._source._clusterId;
     });
 
-    this.cluster.fundingType = this.app.data.settings.get('0').get('selected');
-
+    this.cluster.fundingType = this.app.data.settingsWidget.getSelectedOrDefaultFundingTypeId();    
     // get appropriate cluster model:
     if (this.cluster) {
       popup.setContent(this.template(this.cluster));
@@ -130,7 +129,7 @@ module.exports = Backbone.View.extend({
     _.extend(payload, this.app.data.filter.serialize());
 
     // get funding type, ask for consistancy form API, and at least put this function inside settings collection..
-    var settings = this.app.data.settings.serialize();
+    var settings = this.app.data.settingsWidget.toAPIFormat(); 	
 
     _.extend(payload, {settings: settings});
 
@@ -165,8 +164,8 @@ module.exports = Backbone.View.extend({
   // otherwise show actual values.
   _updatePlannedActualUI: function() {
     var self = this;
-    this.app.data.settings.load().then(function() {
-      var selected = self.app.data.settings.get('0').get('selected');
+    this.app.data.settingsWidget.definitions.load().then(function() {      
+      var selected = self.app.data.settingsWidget.getSelectedOrDefaultFundingTypeId();      
       if (selected.toLowerCase().indexOf('planned') >= 0) {
         self.tempDOM.find('.setting-actual').hide();
         self.tempDOM.find('.setting-planned').show();
@@ -195,19 +194,15 @@ module.exports = Backbone.View.extend({
 
     return this.app.data.activities.getActivities(activityIDs).then(function(activityCollection) {
 
-      self.app.data.settings.load().then(function() {
+        self.app.data.settingsWidget.definitions.load().load().then(function() {
         self.tempDOM.find('#projects-pane .loading').remove();
 
         /* Format the numerical columns */
-        var foundNF = _.find(self.app.data.settings.models, function(item) {
-          return item.get('id') === 'number-format';
-        });
-        var ampFormatter = new util.DecimalFormat(_.find(foundNF.get('options'), function(item) {
-           return item.id === foundNF.get('defaultId');
-         }).name);
-        var currencyCode = self.app.data.settings.get('1').get('selected');
+        var foundNF = self.app.data.generalSettings.get('number-format');          
+        var ampFormatter = new util.DecimalFormat(foundNF);        
+        var currencyCode = self.app.data.settingsWidget.getSelectedOrDefaultCurrencyId();
         var fundingType = 'Actual';
-        var selected = self.app.data.settings.get('0').get('selected');
+        var selected = self.app.data.settingsWidget.getSelectedOrDefaultFundingTypeId();
         if (selected.toLowerCase().indexOf('planned') >= 0) {
           fundingType = 'Planned';
         }

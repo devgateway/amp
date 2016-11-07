@@ -28,18 +28,14 @@ module.exports = Backbone.View.extend({
       //TODO: Move this code to a config class.
       //IT IS REPEATED IN map/views/structures-view.js
       var MAX_NUM_FOR_ICONS = 0;
-      var useIconsForSectors = _.find(app.data.settings.models, function(item) {
-        return (item.id === 'use-icons-for-sectors-in-project-list');
-      });
-      var maxLocationIcons = _.find(app.data.settings.models, function(item) {
-        return (item.id === 'max-locations-icons');
-      });
-      if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
-        if (maxLocationIcons !== undefined && maxLocationIcons.get('name') !== '') {
-          if (maxLocationIcons.get('name') === '0') {
+      var useIconsForSectors = app.data.generalSettings.get('use-icons-for-sectors-in-project-list');
+      var maxLocationIcons = app.data.generalSettings.get('max-locations-icons');    	
+      if (useIconsForSectors !== undefined && useIconsForSectors === true) {
+        if (maxLocationIcons !== undefined && maxLocationIcons !== '') {
+          if (maxLocationIcons === 0) {
             MAX_NUM_FOR_ICONS = 99999; //always show
           } else {
-            MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'), 10);
+            MAX_NUM_FOR_ICONS = maxLocationIcons;
           }
         } else {
           MAX_NUM_FOR_ICONS = 0;

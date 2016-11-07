@@ -21,14 +21,9 @@ module.exports = Backbone.View.extend({
 
   render: function() {
 	  var self = this;
-  	this.app.data.settings.load().then(function(){
-  		
-        var foundPS = _.find(self.app.data.settings.models, function(item) {
-            return item.get('id') === 'project-sites';
-          });
-
-        //occasionally, foundPS.attributes.selected will be undefined, so we have to dig through the attributes
-        if (foundPS !== undefined && foundPS.attributes.options[0].value !== 'true') {
+  	this.app.data.generalSettings.load().then(function(){  		
+        var foundPS = self.app.data.generalSettings.get('project-sites');         
+        if (foundPS !== true) {
         	//need to remove project-sites
         	//find the index of project-sites in projectLayerCollection
 //        	var index = undefined;

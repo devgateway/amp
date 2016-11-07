@@ -57,13 +57,10 @@ module.exports = BaseControlView.extend({
 
     // add content
     this._loaded.then(function() {
-    	self.app.data.settings.load().then(function(){       
+    	self.app.data.generalSettings.load().then(function(){       
     		//check if we need to show Project Sites
-            var foundPS = _.find(self.app.data.settings.models, function(item) {
-                return item.get('id') === 'project-sites';
-              });
-            
-            if (foundPS !== undefined && foundPS.attributes.selected !== 'true') {
+            var foundPS = self.app.data.generalSettings.get('project-sites');                      
+            if (foundPS !== true) {
             	//need to remove project-sites
             	//find the index of project-sites in projectLayerCollection
             	var index = undefined;

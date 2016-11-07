@@ -38,17 +38,15 @@ module.exports = BaseControlView.extend({
     // needed to wait until 'el' exists before creating and rendering, or events break.
     
     
-	  this.app.data.settings.load().then(function(){
+	  this.app.data.generalSettings.load().then(function(){
 		  self.app.data.user.load().then(function() {		   
-			  var hideEditableFormatSetting = _.find(self.app.data.settings.models, function(item) {
-				  return item.get('id') === 'hide-editable-export-formats-public-view';
-			  });
-			  if(!(hideEditableFormatSetting !== undefined && hideEditableFormatSetting.get('defaultId') == "true" && self.app.data.user.get("logged") == false)){
+			  var hideEditableFormatSetting = self.app.data.generalSettings.get('hide-editable-export-formats-public-view');
+			  if(!(hideEditableFormatSetting == true && self.app.data.user.get("logged") == false)){
 				  self.exportMapToolView = new ExportMapToolView({app: self.app, el:renderedTemplate.find('.form-group')});
 				  self.exportMapToolView.render();
 			  }
-			  var showImageButton = self.app.data.settings.findWhere({id: 'download-map-selector'});
-              if(showImageButton && showImageButton.get('defaultId') == "true") {
+			  var showImageButton = self.app.data.generalSettings.get('download-map-selector');
+              if(showImageButton && showImageButton == true) {
                   self.$('.gis-tool-img').show();
               } else {
                   self.$('.gis-tool-img').hide();

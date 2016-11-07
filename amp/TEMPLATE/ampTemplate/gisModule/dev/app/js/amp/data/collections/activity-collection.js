@@ -41,8 +41,8 @@ module.exports = Backbone.Collection
     }
 
     /* include "settings", only if there is something to send. DO NOT send blank settings. */
-    if (this.appData.settings && !_.isEmpty(this.appData.settings.serialize())) {
-      payload.settings = this.appData.settings.serialize();
+    if (this.appData.settingsWidget && !_.isEmpty(this.appData.settingsWidget.toAPIFormat())) {
+      payload.settings = this.appData.settingsWidget.toAPIFormat();
     }
 
     /* These will always need to be reset when you do a raw fetch
@@ -168,8 +168,8 @@ module.exports = Backbone.Collection
       if (this.appData.filter) {
         _.extend(payload, this.appData.filter.serialize());
       }
-      if (this.appData.settings && !_.isEmpty(this.appData.settings.serialize())) {
-        payload.settings = this.appData.settings.serialize();
+      if (this.appData.settingsWidget && !_.isEmpty(this.appData.settingsWidget.toAPIFormat())) {
+        payload.settings = this.appData.settingsWidget.toAPIFormat();
       }
 
       Backbone.Collection.prototype.fetch.call(this, {

@@ -40,7 +40,7 @@ module.exports = Backbone.Model
     this.listenTo(app.data.filter, 'apply', function(blah, show) {
         this.trigger('applyFilter', this);
     });
-    this.listenTo(app.data.settings, 'applySettings', function(blah, show) {
+    this.listenTo(app.data.settingsWidget, 'apply-settings', function(blah, show) {
         this.trigger('applySettings', this);
     });
     this.initializePalette();        
@@ -114,7 +114,7 @@ module.exports = Backbone.Model
 	  if (app.data.filter) {
 		  _.extend(filter, app.data.filter.serialize());
 	  }
-	  var settings = app.data.settings.serialize();	  	  
+	  var settings = app.data.settingsWidget.toAPIFormat();	  	  
 	  
 	  if(this.attributes.isStoredInLocalStorage === true){		  
 		  IndicatorLayerLocalStorage.cleanUp();
@@ -133,8 +133,8 @@ module.exports = Backbone.Model
 				  // This is needed because after the gap analysis is selected we cant render again the original public layer.	
 				  
 				  this.url = '/rest/gis/process-public-layer';
-				  layer.unit = StringUtil.getMultilangString(layer,'unit', app.data.settings); // Needed preprocess for popups.
-				  layer.description = StringUtil.getMultilangString(layer,'description', app.data.settings);				  
+				  layer.unit = StringUtil.getMultilangString(layer,'unit', app.data.generalSettings); // Needed preprocess for popups.
+				  layer.description = StringUtil.getMultilangString(layer,'description', app.data.generalSettings);				  
 				  params.data = JSON.stringify(layer);
 			  }			  
 			  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);

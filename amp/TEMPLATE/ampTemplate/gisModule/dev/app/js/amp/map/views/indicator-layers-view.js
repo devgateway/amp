@@ -154,24 +154,21 @@ module.exports = Backbone.View.extend({
       if (colorRamp) {
         titleString = layerModel.get('title');
       }
-      self.app.data.settings.load().then(function() {
+      self.app.data.settingsWidget.definitions.load().then(function() {
 
         //only for not customs layers
-        if (titleString === '' && self.app.data.settings.get('0')) {
-          titleString = self.app.data.settings.get('0').get('selectedName');
+    	 
+        if (titleString === '') {
+          var fundingTypeId = self.app.data.settingsWidget.getSelectedOrDefaultFundingTypeId();
+          titleString = self.app.data.settingsWidget.definitions.findFundingTypeById(fundingTypeId).name;        
         }
         var formattedTitleString = ['<strong>',
                              titleString,
                              ': ',
                              '</strong>'].join('');
-        var foundNF = _.find(self.app.data.settings.models, function(item) {
-          return item.get('id') === 'number-format';
-        });
         
-        var ampFormatter = new util.DecimalFormat(_.find(foundNF.get('options'), function(item) {
-            return item.id === foundNF.get('defaultId');
-          }).name);
-
+        var foundNF =  self.app.data.generalSettings('number-format');        
+        var ampFormatter = new util.DecimalFormat(foundNF);
         
         var value;
         var percentIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_PERCENTAGE});

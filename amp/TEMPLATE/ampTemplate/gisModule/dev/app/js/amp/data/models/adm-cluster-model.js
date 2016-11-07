@@ -20,7 +20,7 @@ module.exports = Backbone.Model
 
     this.listenTo(this.collection.filter, 'apply', this.refreshModel);
     //this.listenTo(this.collection.settings, 'change:selected', this.refreshModel);
-    this.listenTo(this.collection.settings, 'applySettings', this.refreshModel);
+    this.listenTo(this.collection.settingsWidget, 'apply-settings', this.refreshModel);
   },
 
   // if filters change and layer is selected update it.
@@ -49,7 +49,7 @@ module.exports = Backbone.Model
     }
 
     // TODO: verify settings works..
-    filter.settings = this.collection.settings.serialize();
+    filter.settings = this.collection.settingsWidget.toAPIFormat();
 
     filter.otherFilters.adminLevel = this._translateADMToMagicWord(this.get('value'));
 

@@ -5,12 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -21,9 +18,9 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
-import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.Filters;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersProcessor;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
@@ -88,27 +85,28 @@ public class FilterUtils {
 	/**
 	 * returns a AmpReportFilters based on the End point parameter
 	 * 
-	 * @param filter
+	 * @param filters
 	 * @return
 	 */
-	public static AmpReportFilters getApiColumnFilter(LinkedHashMap<String, Object> filter, 
+	public static AmpReportFilters getApiColumnFilter(Map<String, Object> filters,
 	        AmpReportFilters filterRules) {
-		if (filter == null) {
+		if (filters == null) {
 			return filterRules;
 		}
 		if (filterRules == null) {
 			filterRules = new AmpReportFilters();
 		}
-		Set<String> validColumns = ConstantsUtil.getConstantsSet(ColumnConstants.class);
-		for (Entry<String, Object> entry : filter.entrySet()) {
-			if (validColumns.contains(entry.getKey())) {
-				if (entry.getValue() instanceof List) {
-					List<String> ids = getStringsFromArray((List<?>) filter.get(entry.getKey()));
-					filterRules.addFilterRule(new ReportColumn(entry.getKey()), new FilterRule(ids, true)); 
+		for (Entry<String, Object> entry : filters.entrySet()) {
+			String column = FiltersConstants.ID_TO_COLUMN.get(entry.getKey());
+			if (column != null) {
+				Object value = entry.getValue();
+				if (value instanceof List) {
+					List<String> ids = getStringsFromArray((List<?>) value);
+					filterRules.addFilterRule(new ReportColumn(column), new FilterRule(ids, true));
 				} else 
-				if (entry.getValue() != null) {
-					String value = entry.getValue().toString();
-					filterRules.addFilterRule(new ReportColumn(entry.getKey()), new FilterRule(value, true));
+				if (value != null) {
+					String strValue = value.toString();
+					filterRules.addFilterRule(new ReportColumn(column), new FilterRule(strValue, true));
 				}
 			}
 		}
@@ -131,11 +129,11 @@ public class FilterUtils {
 		return s;
 	}
 	
-	public static List<String> applyKeywordSearch(LinkedHashMap<String, Object> otherFilter) {
-		List<String> activitIds = new ArrayList<String>();
+	public static List<String> applyKeywordSearch(Map<String, Object> filters) {
+		List<String> activitIds = new ArrayList<>();
 
-		if (otherFilter!=null && otherFilter.get("keyword") != null) {
-			String keyword = ((Map<String,Object>)otherFilter).get("keyword").toString();
+		if (filters!=null && filters.get("keyword") != null) {
+			String keyword = filters.get("keyword").toString();
 			Collection<LoggerIdentifiable> activitySearch = SearchUtil
 					.getActivities(keyword,
 							TLSUtils.getRequest(), (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember"));
@@ -148,19 +146,16 @@ public class FilterUtils {
 		return activitIds;
 	}
 	
-	public static AmpReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, 
-			LinkedHashMap<String, Object> otherFilter, List<String> activityIds) {
-		return getFilterRules(columnFilter, otherFilter, activityIds, null);
+	public static AmpReportFilters getFilterRules(Map<String, Object> filters, List<String> activityIds) {
+		return getFilterRules(filters, activityIds, null);
 	}
 			
-	public static AmpReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, 
-			LinkedHashMap<String, Object> otherFilter, List<String> activityIds, AmpReportFilters filterRules) {
-			if(columnFilter!=null){
-				filterRules = FilterUtils.getApiColumnFilter(columnFilter, filterRules);	
-			}
-			if(otherFilter!=null){
-				filterRules = FilterUtils.getApiOtherFilters(otherFilter, filterRules);
-			}
+	public static AmpReportFilters getFilterRules(Map<String, Object> filters,
+			List<String> activityIds, AmpReportFilters filterRules) {
+		if (filters != null) {
+			filterRules = FilterUtils.getApiColumnFilter(filters, filterRules);
+			filterRules = FilterUtils.getApiOtherFilters(filters, filterRules);
+		}
 		if(activityIds!=null && activityIds.size()>0){
 			//if we have activityIds to add to the filter comming from the search by keyworkd
 			if(filterRules==null){
@@ -193,22 +188,18 @@ public class FilterUtils {
 			AmpReportFilters filters) {
 		
 		//we check if we have filter by keyword
-		LinkedHashMap<String, Object> otherFilter = null;
-		if (filtersConfig != null) {
-			otherFilter = (LinkedHashMap<String, Object>) filtersConfig.get("otherFilters");
-			if (activitIds == null) {
-				activitIds = new ArrayList<String>();
-			}
-			activitIds.addAll(FilterUtils.applyKeywordSearch( otherFilter));
+		Map<String, Object> filterMap = filtersConfig.any();
+
+		if (activitIds == null) {
+			activitIds = new ArrayList<>();
 		}
-		
-		filters = FilterUtils.getFilterRules(
-				(LinkedHashMap<String, Object>) filtersConfig.get("columnFilters"),
-				otherFilter, activitIds, filters);
+		activitIds.addAll(FilterUtils.applyKeywordSearch(filterMap));
+
+		filters = FilterUtils.getFilterRules(filterMap, activitIds, filters);
 		
 		FiltersProcessor fProcessor = new FiltersProcessor(filtersConfig, filters);
 		
-		return (AmpReportFilters) fProcessor.getFilters();
+		return fProcessor.getFilters();
 	}
 	
 	/**

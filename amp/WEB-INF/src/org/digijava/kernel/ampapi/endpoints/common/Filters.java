@@ -98,7 +98,7 @@ public class Filters {
 	@GET
 	@Path("/activityapprovalStatus")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ActivityApprovalStatus", columns = ColumnConstants.APPROVAL_STATUS, 
+	@ApiMethod(ui = true, id = FiltersConstants.APPROVAL_STATUS, columns = ColumnConstants.APPROVAL_STATUS,
 				name = "Approval Status", visibilityCheck = "hasToShowActivityapprovalStatusFilter", tab=EPConstants.TAB_ACTIVITY)
 	public JsonBean getActivityApprovalStatus() {
 		JsonBean as=new JsonBean();
@@ -243,7 +243,8 @@ public class Filters {
 	@GET
 	@Path("/proposedStartDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = ColumnConstants.PROPOSED_START_DATE, columns = ColumnConstants.PROPOSED_START_DATE, id = "ProposedStartDate", filterType = {
+	@ApiMethod(ui = true, name = ColumnConstants.PROPOSED_START_DATE, columns = ColumnConstants.PROPOSED_START_DATE,
+			id = FiltersConstants.PROPOSED_START_DATE, filterType = {
 			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getProposedStartDate(){
 		return new JsonBean();
@@ -252,7 +253,8 @@ public class Filters {
 	@GET
 	@Path("/actualStartDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = ColumnConstants.ACTUAL_START_DATE, columns = ColumnConstants.ACTUAL_START_DATE, id = "ActualStartDate", filterType = {
+	@ApiMethod(ui = true, name = ColumnConstants.ACTUAL_START_DATE, columns = ColumnConstants.ACTUAL_START_DATE,
+			id = FiltersConstants.ACTUAL_START_DATE, filterType = {
 			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getActualStartDate(){
 		return new JsonBean();
@@ -261,7 +263,8 @@ public class Filters {
 	@GET
 	@Path("/proposedCompletionDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = ColumnConstants.PROPOSED_COMPLETION_DATE, columns = ColumnConstants.PROPOSED_COMPLETION_DATE, id = "ProposedCompletionDate", filterType = {
+	@ApiMethod(ui = true, name = ColumnConstants.PROPOSED_COMPLETION_DATE, columns = ColumnConstants.PROPOSED_COMPLETION_DATE,
+			id = FiltersConstants.PROPOSED_COMPLETION_DATE, filterType = {
 			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getProposedCompletionDate(){
 		return new JsonBean();
@@ -270,7 +273,8 @@ public class Filters {
 	@GET
 	@Path("/actualCompletionDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = ColumnConstants.ACTUAL_COMPLETION_DATE, columns = ColumnConstants.ACTUAL_COMPLETION_DATE, id = "ActualCompletionDate", filterType = {
+	@ApiMethod(ui = true, name = ColumnConstants.ACTUAL_COMPLETION_DATE, columns = ColumnConstants.ACTUAL_COMPLETION_DATE,
+			id = FiltersConstants.ACTUAL_COMPLETION_DATE, filterType = {
 			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getActualCompletionDate(){
 		return new JsonBean();
@@ -279,7 +283,8 @@ public class Filters {
 	@GET
 	@Path("/finalDateContracting/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, id = "ForContractingDate", filterType = {
+	@ApiMethod(ui = true, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING,
+			id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, filterType = {
 			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getDateForContracting() {
 		return new JsonBean();
@@ -288,7 +293,8 @@ public class Filters {
 	@GET
 	@Path("/proposedApprovalDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = ColumnConstants.PROPOSED_APPROVAL_DATE, columns = ColumnConstants.PROPOSED_APPROVAL_DATE, id = "ProposedApprovalDate", filterType = {
+	@ApiMethod(ui = true, name = ColumnConstants.PROPOSED_APPROVAL_DATE, columns = ColumnConstants.PROPOSED_APPROVAL_DATE,
+			id = FiltersConstants.PROPOSED_APPROVAL_DATE, filterType = {
 			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getProposedApprovalDate() {
 		return new JsonBean();
@@ -297,7 +303,8 @@ public class Filters {
 	@GET
 	@Path("/actualApprovalDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = ColumnConstants.ACTUAL_APPROVAL_DATE, columns = ColumnConstants.ACTUAL_APPROVAL_DATE, id = "ActualApprovalDate", filterType = {
+	@ApiMethod(ui = true, name = ColumnConstants.ACTUAL_APPROVAL_DATE, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
+			id = FiltersConstants.ACTUAL_APPROVAL_DATE, filterType = {
 			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getActualApprovalDate() {
 		return new JsonBean();
@@ -475,8 +482,8 @@ public class Filters {
 	@GET
 	@Path("/typeOfAssistance/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "TypeOfAssistanceList", columns = ColumnConstants.TYPE_OF_ASSISTANCE,name="Type of Assistance", 
-				tab=EPConstants.TAB_FINANCIALS)
+	@ApiMethod(ui = true, id = FiltersConstants.TYPE_OF_ASSISTANCE, columns = ColumnConstants.TYPE_OF_ASSISTANCE,
+			name="Type of Assistance", tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getTypeOfAssistance() {
 		return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY,ColumnConstants.TYPE_OF_ASSISTANCE);
 	}
@@ -489,7 +496,8 @@ public class Filters {
 	@GET
 	@Path("/modeOfPayment/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ModeOfPaymentList", columns = ColumnConstants.MODE_OF_PAYMENT,name="Mode of Payment", tab=EPConstants.TAB_FINANCIALS)
+	@ApiMethod(ui = true, id = FiltersConstants.MODE_OF_PAYMENT, columns = ColumnConstants.MODE_OF_PAYMENT,
+			name="Mode of Payment", tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getModeOfPayment() {
 		return getCategoryValue(CategoryConstants.MODE_OF_PAYMENT_KEY,ColumnConstants.MODE_OF_PAYMENT);
 	}
@@ -501,7 +509,8 @@ public class Filters {
 	@GET
 	@Path("/activityStatus/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ActivityStatusList", columns = ColumnConstants.STATUS,name="Activity Status", tab=EPConstants.TAB_ACTIVITY)
+	@ApiMethod(ui = true, id = FiltersConstants.STATUS, columns = ColumnConstants.STATUS,name="Activity Status",
+			tab=EPConstants.TAB_ACTIVITY)
 	public JsonBean getActivityStatus() {
 		return getCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY,
 				ColumnConstants.STATUS);
@@ -515,8 +524,8 @@ public class Filters {
 	@GET
 	@Path("/activityBudget/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ActivityBudgetList", columns = ColumnConstants.ON_OFF_TREASURY_BUDGET, name="Activity Budget", 
-			tab=EPConstants.TAB_FINANCIALS)
+	@ApiMethod(ui = true, id = FiltersConstants.ON_OFF_TREASURY_BUDGET, columns = ColumnConstants.ON_OFF_TREASURY_BUDGET,
+			name="Activity Budget", tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getActivityBudget() {
 		return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.ON_OFF_TREASURY_BUDGET);
 	}	
@@ -529,7 +538,8 @@ public class Filters {
 	@GET
 	@Path("/fundingStatus/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "FundingStatus", columns = ColumnConstants.FUNDING_STATUS,name="Funding Status",tab=EPConstants.TAB_FINANCIALS)
+	@ApiMethod(ui = true, id = FiltersConstants.FUNDING_STATUS, columns = ColumnConstants.FUNDING_STATUS,
+			name="Funding Status",tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getFundingStatus() {
 		return getCategoryValue(CategoryConstants.FUNDING_STATUS_KEY,ColumnConstants.FUNDING_STATUS);
 	}
@@ -542,7 +552,8 @@ public class Filters {
 	@GET
 	@Path("/expenditureClass/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ExpenditureClassList", columns = ColumnConstants.EXPENDITURE_CLASS, name="Expenditure Class", tab=EPConstants.TAB_FINANCIALS)
+	@ApiMethod(ui = true, id = FiltersConstants.EXPENDITURE_CLASS, columns = ColumnConstants.EXPENDITURE_CLASS,
+			name="Expenditure Class", tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getExpenditureClass() {
 		return getCategoryValue(CategoryConstants.EXPENDITURE_CLASS_KEY, ColumnConstants.EXPENDITURE_CLASS);
 	}
@@ -555,8 +566,8 @@ public class Filters {
 	@GET
 	@Path("/financingInstruments/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "FinancingInstrumentsList", columns = ColumnConstants.FINANCING_INSTRUMENT,name="Financing Instruments", 
-	tab=EPConstants.TAB_FINANCIALS)
+	@ApiMethod(ui = true, id = FiltersConstants.FINANCING_INSTRUMENT, columns = ColumnConstants.FINANCING_INSTRUMENT,
+			name="Financing Instruments", tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getFinancingInstruments() {
 		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY, ColumnConstants.FINANCING_INSTRUMENT);
 	}
@@ -587,7 +598,8 @@ public class Filters {
 	@GET
 	@Path("/locations/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "LocationList", columns = ColumnConstants.LOCATION,name="Locations", tab=EPConstants.TAB_LOCATIONS)
+	@ApiMethod(ui = true, id = FiltersConstants.LOCATION, columns = ColumnConstants.LOCATION, name="Locations",
+			tab=EPConstants.TAB_LOCATIONS)
 	public JsonBean getLocations() {
 		return QueryUtil.getLocationsForFilter();
 	}
@@ -595,7 +607,8 @@ public class Filters {
 	@GET
 	@Path("/humanitarianAid/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "HumanitarianAidValues", columns = ColumnConstants.HUMANITARIAN_AID, name=ColumnConstants.HUMANITARIAN_AID, tab=EPConstants.TAB_FINANCIALS)
+	@ApiMethod(ui = true, id = FiltersConstants.HUMANITARIAN_AID, columns = ColumnConstants.HUMANITARIAN_AID,
+			name=ColumnConstants.HUMANITARIAN_AID, tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getHumanitarianAid() {
 		return buildYesNoJsonBean(ColumnConstants.HUMANITARIAN_AID);
 	}
@@ -603,8 +616,8 @@ public class Filters {
 	@GET
 	@Path("/disasterResponse/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "DisasterResponseValues", columns = ColumnConstants.DISASTER_RESPONSE_MARKER, 
-	name=ColumnConstants.DISASTER_RESPONSE_MARKER, tab=EPConstants.TAB_FINANCIALS)
+	@ApiMethod(ui = true, id = FiltersConstants.DISASTER_RESPONSE_MARKER, columns = ColumnConstants.DISASTER_RESPONSE_MARKER,
+			name=ColumnConstants.DISASTER_RESPONSE_MARKER, tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getDisasterResponse() {
 		return buildYesNoJsonBean(ColumnConstants.DISASTER_RESPONSE_MARKER);
 	}
@@ -764,7 +777,7 @@ public class Filters {
 	@GET
 	@Path("/workspaces")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces", columns = ColumnConstants.TEAM, 
+	@ApiMethod(ui = true, name = "Workspaces", id = FiltersConstants.TEAM, columns = ColumnConstants.TEAM,
 				visibilityCheck = "hasToShowWorkspaceFilter", tab = EPConstants.TAB_OTHER)
 	public JsonBean getWorkspaces() {
 		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
@@ -907,8 +920,8 @@ public class Filters {
 	@GET
 	@Path("/effectiveFundingDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = ColumnConstants.EFFECTIVE_FUNDING_DATE, columns = ColumnConstants.EFFECTIVE_FUNDING_DATE, id = "effectiveFundingDate",
-			tab = EPConstants.TAB_FINANCIALS)
+	@ApiMethod(ui = true, name = ColumnConstants.EFFECTIVE_FUNDING_DATE, columns = ColumnConstants.EFFECTIVE_FUNDING_DATE,
+			id = FiltersConstants.EFFECTIVE_FUNDING_DATE, tab = EPConstants.TAB_FINANCIALS)
 	public JsonBean getEffectiveFundingDate(){
 		return new JsonBean();
 	}
@@ -916,8 +929,8 @@ public class Filters {
 	@GET
 	@Path("/fundingClosingDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = ColumnConstants.FUNDING_CLOSING_DATE, columns = ColumnConstants.FUNDING_CLOSING_DATE, id = "fundingClosingDate",
-			tab = EPConstants.TAB_FINANCIALS)
+	@ApiMethod(ui = true, name = ColumnConstants.FUNDING_CLOSING_DATE, columns = ColumnConstants.FUNDING_CLOSING_DATE,
+			id = FiltersConstants.FUNDING_CLOSING_DATE, tab = EPConstants.TAB_FINANCIALS)
 	public JsonBean getFundingClosingDate(){
 		return new JsonBean();
 	}

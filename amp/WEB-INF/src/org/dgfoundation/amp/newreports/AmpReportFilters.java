@@ -10,8 +10,8 @@ import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -73,17 +73,21 @@ public class AmpReportFilters extends ReportFiltersImpl {
 
 	@JsonAnyGetter
 	public Map<String, FilterRule> getAllFilterRulesForJackson() {
-		return AmpCollections.remap(getAllFilterRules(), this::nameForReportElement, Function.identity(), false);
+		return AmpCollections.remap(getAllFilterRules(), this::idForReportElement, Function.identity(), false);
 	}
 
-	private String nameForReportElement(ReportElement re) {
-		String name;
+	private String idForReportElement(ReportElement re) {
+		String id;
 		if (ElementType.ENTITY.equals(re.type)) {
-			name = re.entity.getEntityName();
+			String entityName = re.entity.getEntityName();
+			id = FiltersConstants.COLUMN_TO_ID.get(entityName);
+			if (id == null) {
+				throw new RuntimeException("No matching filter for column name: " + entityName);
+			}
 		} else {
-			name = re.type.toString();
+			id = re.type.toString();
 		}
-		return ColumnConstants.toKebabCase(name);
+		return id;
 	}
 
 	/**

@@ -100,10 +100,9 @@ public class LocationService {
 		AmpReportFilters filterRules = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 		
 		if(config != null){
-			Object columnFilters = config.get("columnFilters");
-			if(columnFilters!=null){
-				filterRules = FilterUtils.getApiColumnFilter(
-						(LinkedHashMap<String, Object>) config.get("columnFilters"), filterRules);	
+			Map<String, Object> filters = (Map<String, Object>) config.get("filters");
+			if (filters != null) {
+				filterRules = FilterUtils.getApiColumnFilter(filters, filterRules);
 			}
  		}
 		Map<String, String> admLevelToGeoCode;

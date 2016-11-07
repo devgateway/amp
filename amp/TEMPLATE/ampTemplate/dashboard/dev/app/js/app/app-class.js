@@ -193,14 +193,10 @@ _.extend(App.prototype, BackboneDash.Events, {
 	  		caller : 'DASHBOARDS',
 	  		isPopup: true,
 	  		definitionUrl: '/rest/settings-definitions/gis'
-	});
-	
+	});	
 	this.generalSettings = new GeneralSettings();
-	this.generalSettings.load();
-	
+	this.generalSettings.load();	
   }
-
 });
-
 
 module.exports = App;

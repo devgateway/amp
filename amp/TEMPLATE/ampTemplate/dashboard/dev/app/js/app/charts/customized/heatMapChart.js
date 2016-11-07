@@ -133,7 +133,7 @@ nv.models.heatMapChart = function() {
 
         selection.each(function(data) {
         	// Get currency for later.        	       	
-        	var currencyId = app.settingsWidget.toAPIFormat()[app.settingsWidget.Constants.CURRENCY_ID] || app.settingsWidget.definitions.getDefaultCurrencyId();
+        	var currencyId = app.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
         	var selectedCurrency = app.settingsWidget.definitions.findCurrencyById(currencyId).value;        	
         	var newShortTextLength = !data[0].values.model.get('showFullLegends') ? shortTextLength : 100;
         	

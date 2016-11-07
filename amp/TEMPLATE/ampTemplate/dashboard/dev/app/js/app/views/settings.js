@@ -28,7 +28,7 @@ module.exports = BackboneDash.View.extend({
 		self.$('#amp-settings').hide();
 	});
 	
-	this.app.settingsWidget.on('apply-settings', function() {
+	this.app.settingsWidget.on('applySettings', function() {
 		self.$('#amp-settings').hide();
 	});	
  }

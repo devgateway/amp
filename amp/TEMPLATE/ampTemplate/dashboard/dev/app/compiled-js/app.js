@@ -206,15 +206,11 @@ _.extend(App.prototype, BackboneDash.Events, {
 	  		caller : 'DASHBOARDS',
 	  		isPopup: true,
 	  		definitionUrl: '/rest/settings-definitions/gis'
-	});
-	
+	});	
 	this.generalSettings = new GeneralSettings();
-	this.generalSettings.load();
-	
+	this.generalSettings.load();	
   }
-
 });
-
 
 module.exports = App;
 
@@ -1143,7 +1139,7 @@ nv.models.heatMapChart = function() {
 
         selection.each(function(data) {
         	// Get currency for later.        	       	
-        	var currencyId = app.settingsWidget.toAPIFormat()[app.settingsWidget.Constants.CURRENCY_ID] || app.settingsWidget.definitions.getDefaultCurrencyId();
+        	var currencyId = app.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
         	var selectedCurrency = app.settingsWidget.definitions.findCurrencyById(currencyId).value;        	
         	var newShortTextLength = !data[0].values.model.get('showFullLegends') ? shortTextLength : 100;
         	
@@ -3540,7 +3536,7 @@ module.exports = BackboneDash.View.extend({
     }
 
     this.listenTo(this.app.filter, 'apply', this.updateData);
-    this.listenTo(this.app.settingsWidget, 'apply-settings', this.updateData);
+    this.listenTo(this.app.settingsWidget, 'applySettings', this.updateData);
     this.listenTo(this.model, 'change:adjtype', this.render);
     this.listenTo(this.model, 'change:xAxisColumn', this.render);
     this.listenTo(this.model, 'change:limit', this.updateData);
@@ -4746,7 +4742,7 @@ module.exports = BackboneDash.View.extend({
 		self.$('#amp-settings').hide();
 	});
 	
-	this.app.settingsWidget.on('apply-settings', function() {
+	this.app.settingsWidget.on('applySettings', function() {
 		self.$('#amp-settings').hide();
 	});	
  }
@@ -32138,6 +32134,7 @@ module.exports  = Backbone.Collection.extend({
 	initialize: function(models, options) {
 		this.options = options;
 		this.url = options.definitionUrl;
+		this.app = options.app;
 		this.loaded = new Deferred();
 		_.bindAll(this,'load');
 	},
@@ -32159,12 +32156,7 @@ module.exports  = Backbone.Collection.extend({
 		return this.loaded.promise();
 	},
 	findCurrencyById: function(id){
-		var currency = _.find(this.get(Constants.CURRENCY_ID).get('value').options, function(option){ return option.id === id });
-		if(_.isUndefined(currency)){
-			var defaultId = this.getDefaultCurrencyId();
-			currency = _.find(this.get(Constants.CURRENCY_ID).get('value').options, function(option){ return option.id === defaultId });	
-		}
-		return currency;
+		return _.find(this.get(Constants.CURRENCY_ID).get('value').options, function(option){ return option.id === id });		 
 	},
 	findCalendarById: function(id){
 		return _.find(this.get(Constants.CALENDAR_ID).get('value').options, function(option){ return option.id === id });
@@ -32178,7 +32170,7 @@ module.exports  = Backbone.Collection.extend({
 	getCalendarSetting: function(){
 		return this.get(Constants.CALENDAR_ID);
 	},	
-	getFundingTypeSetting(){
+	getFundingTypeSetting:function(){
 		return this.get(Constants.FUNDING_TYPE_ID);
 	},
 	getDefaultCurrencyId: function(){
@@ -32187,9 +32179,18 @@ module.exports  = Backbone.Collection.extend({
 	getDefaultCalendarId: function(){
 		return this.getCalendarSetting().get('value').defaultId;
 	},
-	getDefaultFundingTypeById(){
+	getDefaultFundingTypeById: function(){
 		return this.getFundingTypeSetting().get('value').defaultId;
-	}	
+	},
+	getSelectedOrDefaultCurrencyId : function() {
+	    return this.app.toAPIFormat()[Constants.CURRENCY_ID] || this.getDefaultCurrencyId();
+	},
+	getSelectedOrDefaultCalendarId : function() {
+		return this.app.toAPIFormat()[Constants.CALENDAR_ID] || this.getDefaultCalendarId();
+	},
+	getSelectedOrDefaultFundingTypeId : function() {
+		return this.app.toAPIFormat()[Constants.FUNDING_TYPE_ID] || this.getDefaultFundingTypeById();
+	}
 });
 
 
@@ -32253,6 +32254,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 		options = _.defaults(options, {
 			isPopup : Config.IS_POPUP
 		});		
+		options.app = this;
 		this.definitions = new SettingsDefinitionsCollection([], options);
 		options.definitions = this.definitions;
 		this.view = new SettingsView(options);
@@ -32273,8 +32275,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 	},
 	setElement : function(arguments) {
 		this.view.setElement(arguments);
-	}
-	
+	}	
 });
 module.exports = Widget;
 window.AMPSettings = Widget;
@@ -32319,9 +32320,9 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var Translator = require('amp-translate');
 var Template = "<% if(obj.isPopup) {%>\r\n<div class=\"panel-heading\">\r\n\t\t\t<button type=\"button\" class=\"close cancel\" aria-hidden=\"true\">x</button>\r\n\t\t\t<h3 class=\"panel-title\" data-i18n=\"amp.settings:title\">Settings</h3>\r\n</div>\r\n<%}%>\r\n<div class=\"panel-body\">\t\t\r\n<div class=\"container-fluid\">\r\n  <div class=\"settings\">\r\n    Loading...\r\n  </div>\r\n  <% if(!obj.isPopup) {%>\r\n  <div class=\"form-group\">\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n  </div>\r\n  <%}%>\r\n</div>\r\n</div>\r\n<% if(obj.isPopup) {%>\r\n<div class=\"panel-footer setting-dialog-footer\">\r\n    <button type=\"button\" class=\"btn btn-warning cancel-btn cancel\" data-i18n=\"amp.settings:cancel-button\">Cancel</button>\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n </div>\r\n <%}%>\r\n \r\n \r\n";
-var SelectTemplate = "<div class=\"form-group\">\n  <label class=\"control-label\"><%= obj.setting.name %></label>\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\n  <% _.each(obj.setting.value.options, function(option){ %>\n    <option value=\"<%= option.id %>\"  <% if(obj.appliedSettings[obj.setting.id] == option.id){ %> selected <% } %> >\n      <%= option.name %>\n    </option>\n  <%}); %>\n  </select>\n</div>\n";
+var SelectTemplate = "<div class=\"form-group\">\n  <label class=\"control-label\"><%= obj.setting.name %></label>\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\n  <% _.each(obj.setting.value.options, function(option){ %>\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings[obj.setting.id];%>\n    <option value=\"<%= option.id %>\"  <% if(selected == option.id){ %> selected <% } %> >\n      <%= option.name %>\n    </option>\n  <%}); %>\n  </select>\n</div>\n";
 var YearRangeTemplate = "<div class=\"form-group\"> \r\n<label ><%= obj.name %></label> \r\n <div class=\"row year-range \"> \r\n \r\n </div>  \r\n</div>";
-var YearSelectTemplate = "<div class=\"col-xs-2\">\r\n   <label ><%= obj.setting.name %></label>\r\n </div>\r\n  <div class=\"col-xs-4\">  \r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n  <% _.each(obj.setting.value.options, function(option){ %>\r\n    <option value=\"<%= option.id %>\"  <% if(obj.appliedSettings['year-range'] && obj.appliedSettings['year-range'][obj.setting.id] == option.id){ %> selected <% } %> >\r\n      <%= option.name %>\r\n    </option>\r\n  <%}); %>\r\n  </select>  \r\n  </div>";
+var YearSelectTemplate = "<div class=\"col-xs-2\">\r\n   <label ><%= obj.setting.name %></label>\r\n </div>\r\n  <div class=\"col-xs-4\">  \r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n  <% _.each(obj.setting.value.options, function(option){ %>\r\n     <% \r\n     var applied = obj.appliedSettings['year-range'] ? obj.appliedSettings['year-range'][obj.setting.id] : null;\r\n     var selected = obj.settingsSelections[obj.setting.id];     \r\n      %>\r\n    <option value=\"<%= option.id %>\"  <% if((selected || applied) == option.id){ %> selected <% } %> >\r\n      <%= option.name %>\r\n    </option>\r\n  <%}); %>\r\n  </select>  \r\n  </div>";
 var Constants = require('../common/constants');
 
 module.exports = Backbone.View.extend({
@@ -32340,6 +32341,7 @@ module.exports = Backbone.View.extend({
 	initialize : function(options) {
 		this.definitions = options.definitions;
 		this.isPopup = options.isPopup;
+		this.caller = options.caller;
 		if (options.translator === undefined) {
 			this.createTranslator(true);
 		} else {
@@ -32374,7 +32376,9 @@ module.exports = Backbone.View.extend({
 		this.$('.settings').html('');
 		this.appendSetting(Constants.CALENDAR_ID);
 		this.appendSetting(Constants.CURRENCY_ID);
-		this.appendSetting(Constants.FUNDING_TYPE_ID);
+		if (this.caller !== Constants.CONTEXT.DASHBOARDS) {
+			this.appendSetting(Constants.FUNDING_TYPE_ID);
+		}
 		this.appendYearRangeSetting();
 		this.translate(this.$el);
 	},
@@ -32385,7 +32389,8 @@ module.exports = Backbone.View.extend({
 		if (setting) {
 			this.$('.settings').append(this.selectTemplate({
 				setting : setting.toJSON(),
-				appliedSettings : this.appliedSettings
+				appliedSettings : this.appliedSettings,
+				settingsSelections: this.settingsSelections
 			}));
 		}
 		if (settingID === Constants.CURRENCY_ID && _.isUndefined(this.allCurrencies)) {
@@ -32408,7 +32413,8 @@ module.exports = Backbone.View.extend({
 		});
 		this.$('.year-range').append(this.yearSelectTemplate({
 			setting : setting,
-			appliedSettings : this.appliedSettings
+			appliedSettings : this.appliedSettings,
+			settingsSelections: this.settingsSelections
 		}));
 	},
 	getCurrenciesByCalendar : function(calendarId) {
@@ -32477,7 +32483,7 @@ module.exports = Backbone.View.extend({
 	},
 	applySettings : function() {
 		this.updateAppliedSettings();
-		this.trigger('apply-settings', this.appliedSettings);
+		this.trigger('applySettings', this.appliedSettings);
 	},
 	close : function() {
 		this.settingsSelections = {};

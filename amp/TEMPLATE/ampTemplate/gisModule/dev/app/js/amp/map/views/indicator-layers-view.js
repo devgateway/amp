@@ -166,10 +166,8 @@ module.exports = Backbone.View.extend({
                              titleString,
                              ': ',
                              '</strong>'].join('');
-        
-        var foundNF =  self.app.data.generalSettings('number-format');        
-        var ampFormatter = new util.DecimalFormat(foundNF);
-        
+                  
+        var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));    
         var value;
         var percentIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_PERCENTAGE});
         var ratioOtherIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_OTHER});

@@ -194,12 +194,11 @@ module.exports = Backbone.View.extend({
 
     return this.app.data.activities.getActivities(activityIDs).then(function(activityCollection) {
 
-        self.app.data.settingsWidget.definitions.load().load().then(function() {
+        self.app.data.settingsWidget.definitions.load().then(function() {
         self.tempDOM.find('#projects-pane .loading').remove();
 
-        /* Format the numerical columns */
-        var foundNF = self.app.data.generalSettings.get('number-format');          
-        var ampFormatter = new util.DecimalFormat(foundNF);        
+        /* Format the numerical columns */               
+        var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));        
         var currencyCode = self.app.data.settingsWidget.getSelectedOrDefaultCurrencyId();
         var fundingType = 'Actual';
         var selected = self.app.data.settingsWidget.getSelectedOrDefaultFundingTypeId();

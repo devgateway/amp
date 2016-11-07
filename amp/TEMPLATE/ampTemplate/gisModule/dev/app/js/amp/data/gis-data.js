@@ -52,7 +52,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 	   this.settingsWidget = new SettingsWidget({
 	  		draggable : true,
 	  		caller : 'GIS',
-	  		isPopup: true,
+	  		isPopup: false,
 	  		definitionUrl: '/rest/settings-definitions/gis'
 	   });
 	

@@ -20,13 +20,13 @@ module.exports = Backbone.View.extend({
     var self = this;
     this.collection.load().then(function() {
 
-    	self.app.data.settingsWidget.definitions.load().then(function() {
+    	self.app.data.generalSettings.load().then(function() {
         //TODO: inefficient to constantly redraw (if already on page), put in temp obj first.
         // then only append once.
         self.collection.each(function(project) {
           // it joins on activity init, but for some reason it was being overridden...
-          // temp dirty force rejoin for now, otherwise use: getJoinedVersion
-          var ampFormatter = self.app.data.generalSettings.get('number-format');
+          // temp dirty force rejoin for now, otherwise use: getJoinedVersion          
+          var ampFormatter = new chartUtils.DecimalFormat(self.app.data.generalSettings.get('number-format'));          
           // dec 31st, 2014 tried getjoinedversion INSTEAD OF tempDirtyForceJoin, but still doesn't work
           project.tempDirtyForceJoin().then(function() {
 

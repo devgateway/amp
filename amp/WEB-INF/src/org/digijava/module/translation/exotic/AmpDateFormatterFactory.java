@@ -1,7 +1,9 @@
 package org.digijava.module.translation.exotic;
 
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 
@@ -10,10 +12,16 @@ import org.digijava.module.common.util.DateTimeUtil;
 
 public class AmpDateFormatterFactory {
 	
+	/*
+	 * List of supported locales with custom month names
+	 * tm - Tetum  
+	 */
+	private static final Set<String> EXOTIC_LOCALE_NAMES = Collections.singleton("tm");
+	
 	private static boolean isLangCodeSupported(String langCode) {
 		Locale[] supportedLocales = Locale.getAvailableLocales();
 		for (Locale supLoc : supportedLocales) {
-			if (langCode.equals(supLoc.getLanguage())) {
+			if (langCode.equals(supLoc.getLanguage()) && !EXOTIC_LOCALE_NAMES.contains(supLoc.getLanguage())) {
 				return true;
 			}
 		}

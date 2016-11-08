@@ -8,9 +8,11 @@ import java.util.function.Function;
 
 import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -25,11 +27,13 @@ public class AmpReportFilters extends ReportFiltersImpl {
 
 	private final Map<ReportColumn, FilterRule> dateFilterRules = new HashMap<>();
 
+	@JsonIgnore
 	protected AmpFiscalCalendar calendar;
 
 	/**
 	 * also known as "selected year"
 	 */
+	@JsonProperty(FiltersConstants.COMPUTED_YEAR)
 	protected Integer computedYear;
 
 	public AmpReportFilters(Map<ReportElement, FilterRule> filterRules) {

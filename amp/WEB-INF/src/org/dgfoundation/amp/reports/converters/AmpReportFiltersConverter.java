@@ -82,7 +82,7 @@ public class AmpReportFiltersConverter {
 		addFilter(ColumnConstants.PRIMARY_SECTOR, AmpSector.class, "selectedSectors", true);
 		addFilter(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, AmpSector.class, "selectedSectors", false);
 		addFilter(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, AmpSector.class, "selectedSectors", false);
-		addFilter(ColumnConstants.SECONDARY_SECTOR_ID, AmpSector.class, "selectedSecondarySectors", true);
+		addFilter(ColumnConstants.SECONDARY_SECTOR, AmpSector.class, "selectedSecondarySectors", true);
 		addFilter(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, AmpSector.class, "selectedSecondarySectors", false);
 		addFilter(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, AmpSector.class, "selectedSecondarySectors", false);
 		addFilter(ColumnConstants.TERTIARY_SECTOR, AmpSector.class, "selectedTertiarySectors", true);

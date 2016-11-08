@@ -217,7 +217,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	public static final Map<String, String> dependencyMap= new HashMap<String, String>() {{
 		put(ColumnConstants.ACTIVITY_ID, ColumnConstants.PROJECT_TITLE);
 		put(ColumnConstants.INTERNAL_USE_ID, ColumnConstants.PROJECT_TITLE);
-		put(ColumnConstants.SECONDARY_SECTOR_ID, ColumnConstants.SECONDARY_SECTOR);
 		put(ColumnConstants.AGREEMENT_CLOSE_DATE, ColumnConstants.AGREEMENT_CODE);
 		put(ColumnConstants.AGREEMENT_EFFECTIVE_DATE, ColumnConstants.AGREEMENT_CODE);
 		put(ColumnConstants.AGREEMENT_SIGNATURE_DATE, ColumnConstants.AGREEMENT_CODE);

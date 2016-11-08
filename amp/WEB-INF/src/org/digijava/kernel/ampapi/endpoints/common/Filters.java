@@ -733,7 +733,7 @@ public class Filters {
 			if(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME.equals(sectorConfigName)){	
 				switch (level) {
 				case 1:
-					columnName=ColumnConstants.SECONDARY_SECTOR_ID;
+					columnName=ColumnConstants.SECONDARY_SECTOR;
 					break;
 				case 2:
 					columnName=ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR;

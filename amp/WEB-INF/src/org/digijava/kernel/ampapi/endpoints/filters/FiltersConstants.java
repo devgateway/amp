@@ -50,7 +50,6 @@ public class FiltersConstants {
     public static final String SECONDARY_PROGRAM = "secondary-program";
     public static final String SECONDARY_PROGRAM_LEVEL_1 = "secondary-program-level-1";
     public static final String SECONDARY_SECTOR = "secondary-sector";
-    public static final String SECONDARY_SECTOR_ID = "secondary-sector-id";
     public static final String SECONDARY_SECTOR_SUB_SECTOR = "secondary-sector-sub-sector";
     public static final String SECONDARY_SECTOR_SUB_SUB_SECTOR = "secondary-sector-sub-sub-sector";
     public static final String STATUS = "status";

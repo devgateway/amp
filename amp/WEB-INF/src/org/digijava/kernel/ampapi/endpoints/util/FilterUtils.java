@@ -75,7 +75,6 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM);
 		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
 		mapSimpleColumn(FiltersConstants.SECONDARY_SECTOR, ColumnConstants.SECONDARY_SECTOR);
-		mapSimpleColumn(FiltersConstants.SECONDARY_SECTOR_ID, ColumnConstants.SECONDARY_SECTOR_ID);
 		mapSimpleColumn(FiltersConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR);
 		mapSimpleColumn(FiltersConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR);
 		mapSimpleColumn(FiltersConstants.STATUS, ColumnConstants.STATUS);

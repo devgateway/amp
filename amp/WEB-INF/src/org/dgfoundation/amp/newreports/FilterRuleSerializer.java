@@ -53,11 +53,11 @@ public class FilterRuleSerializer extends SerializerBase<FilterRule> {
             jgen.writeNull();
         } else {
             jgen.writeStartObject();
-            if (rule.min != null) {
-                jgen.writeStringField("start", rule.min);
+            if (rule.min != null && rule.valueToName.get(rule.min) != null) {
+                jgen.writeStringField("start", rule.valueToName.get(rule.min));
             }
-            if (rule.max != null) {
-                jgen.writeStringField("end", rule.max);
+            if (rule.max != null && rule.valueToName.get(rule.max) != null) {
+                jgen.writeStringField("end", rule.valueToName.get(rule.max));
             }
             jgen.writeEndObject();
         }

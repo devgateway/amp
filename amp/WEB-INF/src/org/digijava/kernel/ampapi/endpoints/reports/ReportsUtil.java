@@ -430,10 +430,8 @@ public class ReportsUtil {
 	
 	public static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams, 
 			AmpFiscalCalendar oldCalendar) {
-		JsonBean filters = new JsonBean();
-		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get(EPConstants.FILTERS);
-		if (requestFilters != null) {
-			filters.any().putAll(requestFilters);
+		Map<String, Object> filterMap = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+		if (filterMap != null) {
 			AmpReportFilters newFilters = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 			if (spec.getFilters() != null) {
 				// TODO: we need calendar + date to be linked in UI as well OR make same form for filters and settings
@@ -444,8 +442,8 @@ public class ReportsUtil {
 					//newFilters.setOldCalendar(oldCalendar);
 				}
 			}
-			
-			AmpReportFilters formFilters = FilterUtils.getFilters(filters, newFilters);
+
+			AmpReportFilters formFilters = FilterUtils.getFilters(filterMap, newFilters);
 			AmpReportFilters stickyFilters = copyStickyMtefEntries((AmpReportFilters) spec.getFilters(), formFilters);
 			spec.setFilters(stickyFilters);
 		}

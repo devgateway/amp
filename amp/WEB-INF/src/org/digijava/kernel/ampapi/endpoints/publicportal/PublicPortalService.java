@@ -71,7 +71,9 @@ public class PublicPortalService {
 		/*TODO: tbd if we need to filter out null dates from results
 		MondrianReportUtils.filterOutNullDates(spec);
 		*/
-		FilterUtils.applyFilterRules(config, spec,months);
+		if (config != null) {
+			FilterUtils.applyFilterRules((Map<String, Object>) config.get(EPConstants.FILTERS), spec, months);
+		}
 		// configure project types
 		ReportsUtil.configureProjectTypes(spec, config);
 		// do we need to include empty fundings in case no fundings are detected at all? 
@@ -173,7 +175,9 @@ public class PublicPortalService {
 			}
 		}
 
-		FilterUtils.applyFilterRules(config, spec,months);
+		if (config != null) {
+			FilterUtils.applyFilterRules((Map<String, Object>) config.get(EPConstants.FILTERS), spec, months);
+		}
 
 		SettingsUtils.applySettings(spec, config, true);
 		getPublicReport(count, result, content, spec, true, measureName, null);
@@ -256,7 +260,9 @@ public class PublicPortalService {
 		spec.addColumn(new ReportColumn(ColumnConstants.RELATED_PLEDGES));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 
-		FilterUtils.applyFilterRules(config, spec, null);
+		if (config != null) {
+			FilterUtils.applyFilterRules((Map<String, Object>) config.get(EPConstants.FILTERS), spec, null);
+		}
 
 		spec.setDisplayEmptyFundingRows(true);
 

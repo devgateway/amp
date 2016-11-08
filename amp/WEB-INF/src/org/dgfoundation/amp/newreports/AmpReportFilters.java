@@ -11,8 +11,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
@@ -80,12 +80,12 @@ public class AmpReportFilters extends ReportFiltersImpl {
 		String id;
 		if (ElementType.ENTITY.equals(re.type)) {
 			String entityName = re.entity.getEntityName();
-			id = FiltersConstants.COLUMN_TO_ID.get(entityName);
+			id = FilterUtils.INSTANCE.idFromColumnName(entityName);
 			if (id == null) {
 				throw new RuntimeException("No matching filter for column name: " + entityName);
 			}
 		} else {
-			id = re.type.toString();
+			id = re.type.toString().toLowerCase();
 		}
 		return id;
 	}

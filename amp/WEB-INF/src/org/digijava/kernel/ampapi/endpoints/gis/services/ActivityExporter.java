@@ -76,21 +76,16 @@ public abstract class ActivityExporter {
 			 addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-		@SuppressWarnings("unchecked")
-		LinkedHashMap<String, Object> otherFilters = (LinkedHashMap<String, Object>)filters.get("otherFilters");
-		@SuppressWarnings("unchecked")
-		LinkedHashMap<String, Object> colFilters = (LinkedHashMap<String, Object>)filters.get("columnFilters");
-		AmpReportFilters mrf = getFilterRules(otherFilters, colFilters);
+		AmpReportFilters mrf = getFilterRules();
 		if (mrf != null)
 			spec.setFilters(mrf);
 		return spec;
 	}
 	
 	
-	protected AmpReportFilters getFilterRules(LinkedHashMap<String, Object> otherFilter, 
-			LinkedHashMap <String, Object> columnFilters) {
-		List<String> activityIds = otherFilter != null ? FilterUtils.applyKeywordSearch(otherFilter) : null;
- 		return FilterUtils.getFilterRules(columnFilters, otherFilter, activityIds);
+	private AmpReportFilters getFilterRules() {
+		List<String> activityIds = filters != null ? FilterUtils.applyKeywordSearch(filters) : null;
+ 		return FilterUtils.getFilterRules(filters, activityIds);
 	}
 	
 	

@@ -617,7 +617,7 @@ public class DashboardsService {
 
 		if (userSettings.get(SettingsConstants.CALENDAR_TYPE_ID) != null) {
 			defaultSettings.setCalendar(FiscalCalendarUtil.getAmpFiscalCalendar(
-					new Long(userSettings.get(SettingsConstants.CALENDAR_TYPE_ID).toString()).longValue()));
+					Long.valueOf(userSettings.get(SettingsConstants.CALENDAR_TYPE_ID).toString())));
 		}
 		spec.setSettings(defaultSettings);
 	}

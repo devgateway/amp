@@ -418,10 +418,11 @@ var WorkspaceToolbar = Backbone.View.extend({
             var $cancel = $container.find(".btn.cancel");
             var $close = $container.find(".close.cancel");
             var maxLength = 40;
+            var extraChar = 6;
             if($select.is(":empty")){
                 $select.append(currencies.map(function(currency){
-                    if (maxLength < (currency.name.length + 6)) {
-                        maxLength = (currency.name.length + 6);
+                    if (maxLength < (currency.name.length + extraChar)) {
+                        maxLength = (currency.name.length + extraChar);
                     }
                     return $("<option></option>")
                         .text(currency.name + " (" + currency.id + ")")

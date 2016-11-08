@@ -2,7 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-public class AmpIndicatorColor implements Serializable, Comparable <AmpIndicatorColor>{
+public class AmpIndicatorColor implements Serializable {
 
 	private String color;
 	private AmpIndicatorLayer indicatorLayer;
@@ -35,8 +35,4 @@ public class AmpIndicatorColor implements Serializable, Comparable <AmpIndicator
 		this.payload = payload;
 	}
 
-	@Override
-	public int compareTo(AmpIndicatorColor o) {
-		return 0;
-	}
 }

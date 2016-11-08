@@ -54,10 +54,15 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.APPROVAL_STATUS, ColumnConstants.APPROVAL_STATUS);
 		mapSimpleColumn(FiltersConstants.COMPUTED_YEAR, ColumnConstants.COMPUTED_YEAR);
 		mapSimpleColumn(FiltersConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.DISASTER_RESPONSE_MARKER);
+		mapSimpleColumn(FiltersConstants.DONOR_AGENCY, ColumnConstants.DONOR_AGENCY);
+		mapSimpleColumn(FiltersConstants.DONOR_GROUP, ColumnConstants.DONOR_GROUP);
+		mapSimpleColumn(FiltersConstants.DONOR_TYPE, ColumnConstants.DONOR_TYPE);
+		mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY, ColumnConstants.EXECUTING_AGENCY);
 		mapSimpleColumn(FiltersConstants.EXPENDITURE_CLASS, ColumnConstants.EXPENDITURE_CLASS);
 		mapSimpleColumn(FiltersConstants.FINANCING_INSTRUMENT, ColumnConstants.FINANCING_INSTRUMENT);
 		mapSimpleColumn(FiltersConstants.FUNDING_STATUS, ColumnConstants.FUNDING_STATUS);
 		mapSimpleColumn(FiltersConstants.HUMANITARIAN_AID, ColumnConstants.HUMANITARIAN_AID);
+		mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY, ColumnConstants.IMPLEMENTING_AGENCY);
 		mapSimpleColumn(FiltersConstants.LOCATION, ColumnConstants.LOCATION);
 		mapSimpleColumn(FiltersConstants.MODE_OF_PAYMENT, ColumnConstants.MODE_OF_PAYMENT);
 		mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
@@ -69,6 +74,7 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.PROCUREMENT_SYSTEM, ColumnConstants.PROCUREMENT_SYSTEM);
 		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM);
 		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+		mapSimpleColumn(FiltersConstants.SECONDARY_SECTOR, ColumnConstants.SECONDARY_SECTOR);
 		mapSimpleColumn(FiltersConstants.SECONDARY_SECTOR_ID, ColumnConstants.SECONDARY_SECTOR_ID);
 		mapSimpleColumn(FiltersConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR);
 		mapSimpleColumn(FiltersConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR);
@@ -79,6 +85,8 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR);
 		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
 		mapSimpleColumn(FiltersConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_ASSISTANCE);
+		mapSimpleColumn(FiltersConstants.WORKSPACES, ColumnConstants.WORKSPACES);
+		mapSimpleColumn(FiltersConstants.ZONE, ColumnConstants.ZONE);
 	}
 
 	private void mapSimpleColumn(String filterId, String columnName) {

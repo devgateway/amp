@@ -26,7 +26,7 @@ module.exports = Backbone.View.extend({
 	  var ratioOtherIndicator = this.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_OTHER});
 	  var percentIndicator = this.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_PERCENTAGE});
 	  
-	  if(model.get('gapAnalysis') === false && ((percentIndicator && percentIndicator.get('id') === model.get('indicatorTypeId')) || (ratioOtherIndicator && ratioOtherIndicator.get('id') === model.get('indicatorTypeId')))) {       
+	  if(model.get('gapAnalysis') !== true && ((percentIndicator && percentIndicator.get('id') === model.get('indicatorTypeId')) || (ratioOtherIndicator && ratioOtherIndicator.get('id') === model.get('indicatorTypeId')))) {       
 		  values.min = chartUtils.formatPercentage()(bucket.get('value')[0]);
 		  values.max = chartUtils.formatPercentage()(bucket.get('value')[1]);
 		  values.isPercent = true;

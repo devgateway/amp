@@ -2,8 +2,6 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-import org.jetbrains.annotations.NotNull;
-
 public class AmpIndicatorColor implements Serializable, Comparable <AmpIndicatorColor>{
 
 	private String color;
@@ -38,7 +36,7 @@ public class AmpIndicatorColor implements Serializable, Comparable <AmpIndicator
 	}
 
 	@Override
-	public int compareTo(@NotNull AmpIndicatorColor o) {
+	public int compareTo(AmpIndicatorColor o) {
 		return 0;
 	}
 }

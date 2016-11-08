@@ -79,8 +79,10 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 
 
 	public Set<AmpIndicatorColor> getColorRamp() {
-	    if (colorRamp == null)
-            colorRamp = new HashSet<AmpIndicatorColor>();
+		if (colorRamp == null) {
+			colorRamp=new HashSet<AmpIndicatorColor>();
+		}
+
 		return colorRamp;
 	}
 

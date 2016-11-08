@@ -9,13 +9,13 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 public class Settings {
 
-    @JsonProperty("currency-code")
+    @JsonProperty(SettingsConstants.CURRENCY_ID)
     private String currencyCode;
 
-    @JsonProperty("calendar-id")
+    @JsonProperty(SettingsConstants.CALENDAR_TYPE_ID)
     private String calendarId;
 
-    @JsonProperty("year-range")
+    @JsonProperty(SettingsConstants.YEAR_RANGE_ID)
     private YearRange yearRange;
 
     public String getCurrencyCode() {

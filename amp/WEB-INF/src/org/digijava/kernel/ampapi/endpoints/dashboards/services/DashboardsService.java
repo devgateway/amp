@@ -37,6 +37,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -610,13 +611,13 @@ public class DashboardsService {
 		LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.get("settings");
 		ReportSettingsImpl defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
 		defaultSettings.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
-		if (userSettings.get("1") != null) {
-			defaultSettings.setCurrencyCode(userSettings.get("1").toString());
+		if (userSettings.get(SettingsConstants.CURRENCY_ID) != null) {
+			defaultSettings.setCurrencyCode(userSettings.get(SettingsConstants.CURRENCY_ID).toString());
 		}
 
-		if (userSettings.get("2") != null) {
-			defaultSettings.setCalendar(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(userSettings.get("2")
-					.toString()).longValue()));
+		if (userSettings.get(SettingsConstants.CALENDAR_TYPE_ID) != null) {
+			defaultSettings.setCalendar(FiscalCalendarUtil.getAmpFiscalCalendar(
+					Long.valueOf(userSettings.get(SettingsConstants.CALENDAR_TYPE_ID).toString())));
 		}
 		spec.setSettings(defaultSettings);
 	}

@@ -547,12 +547,14 @@ function collapseAll() {
 		</b>
 		<hr/>
 	<digi:trn>Created in workspace</digi:trn>: <br />
-	<b>
-		<c:out value="${aimEditActivityForm.identification.team.name}"/> -
-		<digi:trn>
-		    <c:out value="${aimEditActivityForm.identification.team.accessType}"/>
-		</digi:trn>
-	</b>
+	<c:if test="${aimEditActivityForm.identification.team !=null}">
+		<b>
+			<c:out value="${aimEditActivityForm.identification.team.name}"/> -
+			<digi:trn>
+				<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
+			</digi:trn>
+		</b>
+	</c:if>
 	<hr />
  	<digi:trn>Computation</digi:trn>: <br/>
 	<b>

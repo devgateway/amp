@@ -1,18 +1,16 @@
 package org.digijava.module.aim.action;
 
-import java.awt.Color;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.*;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Table;
+import com.lowagie.text.rtf.RtfWriter2;
+import com.lowagie.text.rtf.table.RtfCell;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -94,17 +92,26 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Chunk;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Table;
-import com.lowagie.text.rtf.RtfWriter2;
-import com.lowagie.text.rtf.table.RtfCell;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 
@@ -1471,12 +1478,6 @@ public class ExportActivityToWord extends Action {
             generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedStartDate(),null);
         }
 
-        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
-            columnName = TranslatorWorker.translateText("Proposed Project Life") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getProposedProjectLife() == null ? ""
-                    : String.valueOf(planning.getProposedProjectLife()), null);
-        }
-
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date")) {
             columnName = TranslatorWorker.translateText("Original Completion Date")+": ";
             generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalCompDate(), null);
@@ -1513,6 +1514,12 @@ public class ExportActivityToWord extends Action {
         commColumnName = "Current Completion Date Comments";
         if(FeaturesUtil.isVisibleField(commColumnName)){
             this.buildCommentsPart("current completion date", commColumnName, allComments, planningSubTable1);
+        }
+
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
+            columnName = TranslatorWorker.translateText("Proposed Project Life") + ": ";
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getProposedProjectLife() == null ? ""
+                    : String.valueOf(planning.getProposedProjectLife()), null);
         }
 
         if(FeaturesUtil.isVisibleField("Duration of Project")){
@@ -2744,11 +2751,6 @@ public class ExportActivityToWord extends Action {
 			addTotalsOutput(fundingTotalsDetails,"UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
 		}
 		
-		// Consumption Rate
-        if (myForm.getFunding().getConsumptionRate()!=null && myForm.getFunding().getConsumptionRate().length()>0) {
-    		addTotalsOutput(fundingTotalsDetails,"Consumption Rate", myForm.getFunding().getConsumptionRate(), null);
-        }
-
 		// Delivery Rate
         if (myForm.getFunding().getDeliveryRate() != null && myForm.getFunding().getDeliveryRate().length() > 0) {
         	addTotalsOutput(fundingTotalsDetails,"Delivery Rate", myForm.getFunding().getDeliveryRate(), null);
@@ -2887,10 +2889,9 @@ public class ExportActivityToWord extends Action {
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")) {
             columnName = TranslatorWorker.translateText("Status Reason");
-            columnVal = "";
             if (identification.getStatusReason() != null) {
-                columnVal += processHtml(request, identification.getStatusReason());
-                generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
+                generateOverAllTableRows(identificationSubTable1, columnName,
+                        processEditTagValue(request, identification.getStatusReason()), null);
             }
         }
 
@@ -3521,27 +3522,6 @@ public class ExportActivityToWord extends Action {
             rowAmountForCell1++;
         }
 
-//		//if(FeaturesUtil.isVisibleField("Delivery rate", ampContext))
-//		{
-//			if(myForm.getFunding().getDeliveryRate()!=null){
-//				columnVal =  myForm.getFunding().getDeliveryRate();
-//			}else{
-//				columnVal = "";
-//			}
-//			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Delivery rate")+": ",columnVal,CELLCOLORGRAY);
-//			rowAmountForCell1++;
-//		}
-//		
-//		//if(FeaturesUtil.isVisibleField("Consumption rate", ampContext))
-//		{
-//			if(myForm.getFunding().getConsumptionRate()!=null){
-//				columnVal =  myForm.getFunding().getConsumptionRate();
-//			}else{
-//				columnVal = "";
-//			}
-//			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Consumption rate")+": ",columnVal,CELLCOLORGRAY);	
-//			rowAmountForCell1++;
-//		}	            
         overallFundingCell.add(overAllFundingSubTable);
         overAllTable.addCell(overallFundingCell);
 

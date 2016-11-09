@@ -1033,72 +1033,37 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
   			session.delete(actSector);
   		}	  
     }
-	    
+
     public static void deleteActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
 
-        /* delete AMP activity Survey */
-        Set<AmpAhsurvey> ampSurvey = ampAct.getSurvey();
-        if (ampSurvey != null) {
-          for(AmpAhsurvey ahSurvey:ampSurvey){
-            Set<AmpAhsurveyResponse> ahAmpSurvey = ahSurvey.getResponses();
-            if (ahSurvey != null) {
-              for(AmpAhsurveyResponse surveyResp: ahAmpSurvey){
-                ahSurvey.getResponses().remove(surveyResp);
-                session.delete(surveyResp);
-                session.flush();
-              }
-            }
-            ampAct.getSurvey().remove(ahSurvey);
-            session.delete(ahSurvey);
-            session.flush();
-          }
-        }
+        logger.info("deleting ... Activity # " + ampAct.getAmpActivityId());
+        Connection con = ((SessionImplementor)session).connection();
+        //	 delete surveys
+        String deleteActivitySurveyResponse = "DELETE FROM amp_ahsurvey_response WHERE amp_ahsurvey_id in ( SELECT amp_ahsurvey_id FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId() + " ) ";
+        SQLUtils.executeQuery(con, deleteActivitySurveyResponse );
+
+        String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        SQLUtils.executeQuery(con, deleteActivitySurvey );
+
+        //	 delete surveys
+        String deleteActivityGPISurveyReponse = "DELETE FROM amp_gpi_survey_response WHERE amp_gpisurvey_id in ( SELECT amp_gpisurvey_id FROM amp_gpi_survey WHERE amp_activity_id = " + ampAct.getAmpActivityId() + " ) " ;
+        SQLUtils.executeQuery(con, deleteActivityGPISurveyReponse );
+
+        String deleteActivityGPISurvey = "DELETE FROM amp_gpi_survey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        SQLUtils.executeQuery(con, deleteActivityGPISurvey );
 
         //	 delete all previous comments
-        List<AmpComments> col = org.digijava.module.aim.util.DbUtil.getAllCommentsByActivityId(ampAct.getAmpActivityId(), session);
-        logger.info("col.size() [Inside deleting]: " + col.size());
-        if (col != null) {
-          Iterator itr = col.iterator();
-          while (itr.hasNext()) {
-            AmpComments comObj = (AmpComments) itr.next();
-            comObj.setAmpActivityId(null);
-            session.delete(comObj);
-          }
-        }
         String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        Connection con = ((SessionImplementor)session).connection();
-        Statement stmt = con.createStatement();
-        stmt.executeUpdate(deleteActivityComments);
-        logger.info("comments deleted");
-        
+        SQLUtils.executeQuery(con, deleteActivityComments );
+
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-         con = ((SessionImplementor)session).connection();
-         stmt = con.createStatement();
-        int deletedRows = stmt.executeUpdate(deleteActivityTeam);
-        
-        //Delete the connection with Indicator Project. 
-        //String deleteIndicatorProject = "DELETE FROM amp_indicator_project WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        //con = session.connection();
-        //stmt = con.createStatement();
-        //deletedRows = stmt.executeUpdate(deleteIndicatorProject);
-        
-//        ArrayList ipacontracts = org.digijava.module.aim.util.DbUtil.getAllIPAContractsByActivityId(ampAct.getAmpActivityId());
-//	    logger.debug("contracts number [Inside deleting]: " + ipacontracts.size());
-//	    if (ipacontracts != null) {
-//	      Iterator itr = ipacontracts.iterator();
-//	      while (itr.hasNext()) {
-//	        IPAContract contract = (IPAContract) itr.next();
-//	        session.delete(contract);
-//	      }
-//	    }
-//	    logger.debug("contracts deleted");
+        SQLUtils.executeQuery(con, deleteActivityTeam );
 
-      
-      
-    //Section moved here from ActivityManager.java because it didn't worked there.
-	//ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
-    
+        //Delete the connection with components.
+        String deleteActivityComponent = "DELETE FROM amp_activity_components WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        SQLUtils.executeQuery(con, deleteActivityComponent );
+
     }
     
 	public static void removeMergeSources(Long ampActivityId,Session session){

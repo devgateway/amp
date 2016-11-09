@@ -3,12 +3,12 @@
   <div class="panel panel-chart">
     <div class="panel-heading fix-title-height">
       <% if (model.get('showTotal') === true) { %>
-	      <span class="pull-right big-number">
+	      <div class="pull-right big-number">
 	        <b class="chart-total"></b>
 	        <span class="chart-currency"></span>
-	      </span>
+	      </div>
       <% } %>
-      <div>
+      <div class="chart-title">
 	      <h2 data-i18n="amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>"><%= model.get('title') %></h2>
 	      <% if (model.get('chartType') === 'fragmentation') { %>
 	      	<% var help_icon_text = app.translator.translateSync('amp.dashboard:chart-heatmap-help-text-' + model.get('heatmap_type'));%>

@@ -5,17 +5,6 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -57,7 +46,6 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
-//import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.ManagedDocument;
 import org.digijava.module.aim.helper.OrgProjectId;
@@ -79,8 +67,19 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.editor.dbentity.Editor;
 import org.hibernate.Hibernate;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+//import org.digijava.module.aim.helper.Issues;
 
 public class ShowActivityPrintPreview
     extends Action {
@@ -181,14 +180,12 @@ public class ShowActivityPrintPreview
                 eaForm.getIdentification().setAmpId(activity.getAmpId());
 
                 eaForm.getIdentification().setStatus(DbUtil.getActivityApprovalStatus(new Long(actId)));
-                
+
                 String langCode = RequestUtils.getNavigationLanguage(request).getCode();
-                Editor reason=org.digijava.module.editor.util.DbUtil.getEditor(activity.getStatusReason(), langCode);
-                if(reason!=null){
-                  eaForm.getIdentification().setStatusReason(reason.getBody());
+
+                if(activity.getStatusReason()!=null){
+                    eaForm.getIdentification().setStatusReason(activity.getStatusReason());
                 }
-                else
-                	eaForm.getIdentification().setStatusReason(null);
 
                 if(null != activity.getLineMinRank())
                     eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().

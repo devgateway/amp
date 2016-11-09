@@ -144,7 +144,8 @@ body {background:none;}
                                               </td>
                                               <td bgcolor="#FFFFFF">
                                                 <span class="word_break">
-                                                	<c:out value="${aimEditActivityForm.identification.statusReason}" escapeXml="false" />
+                                                	<c:set var="objStatusReason" value="${aimEditActivityForm.identification.statusReason}" />
+													<span class="word_break"><digi:edit key="${objStatusReason}"></digi:edit></span>
 												</span>
                                               </td>
                                         </tr>
@@ -814,15 +815,6 @@ body {background:none;}
 													</td>
 												</tr>
 												</module:display>
-												<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
-                                                    <tr>
-                                                        <td width="32%"><digi:trn>Proposed Project Life</digi:trn></td>
-                                                        <td width="1">:</td>
-                                                        <td align="left">
-                                                            ${aimEditActivityForm.planning.proposedProjectLife}
-                                                        </td>
-                                                    </tr>
-                                                </module:display>
 
 												<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 												<tr>
@@ -960,6 +952,16 @@ body {background:none;}
 													<td colspan="3">&nbsp;</td>
 												</tr>
 												</c:if>
+
+													<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
+														<tr>
+															<td width="32%"><digi:trn>Proposed Project Life</digi:trn></td>
+															<td width="1">:</td>
+															<td align="left">
+																	${aimEditActivityForm.planning.proposedProjectLife}
+															</td>
+														</tr>
+													</module:display>
 
 												<field:display name="Duration of Project" feature="Planning">
 												<c:if test="${!aimEditActivityForm.editAct}">
@@ -1760,15 +1762,6 @@ body {background:none;}
                         	</logic:notEmpty>
                         </feature:display>
 
-                        <logic:notEmpty name="aimEditActivityForm" property="funding.consumptionRate">
-                        	<tr>
-                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:undisbursedBalance"> Consumption Rate</digi:trn>: </td>
-                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-									<b>${aimEditActivityForm.funding.consumptionRate}</b>
-                                	&nbsp;
-                            	</td>
-                        	</tr>
-                        </logic:notEmpty>
                         <logic:notEmpty name="aimEditActivityForm" property="funding.deliveryRate">
 							<tr>
                             	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn>Delivery Rate</digi:trn>: </td>

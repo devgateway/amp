@@ -124,7 +124,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
@@ -983,10 +982,9 @@ public class EditActivity extends Action {
                                     trim());
           }
           eaForm.getIdentification().setAmpId(activity.getAmpId());
-          Editor reason=org.digijava.module.editor.util.DbUtil.getEditor(activity.getStatusReason(),langCode);
-          if(reason!=null){
-            eaForm.getIdentification().setStatusReason(reason.getBody());
-          }
+
+          if (activity.getStatusReason() != null)
+              eaForm.getIdentification().setStatusReason(activity.getStatusReason());
 
           if (null != activity.getLineMinRank()) {
               eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().toString());
@@ -1607,7 +1605,7 @@ public class EditActivity extends Action {
     	crossteamcheck = true;
     } else {
     	//check if the activity belongs to the team where the user is logged.
-    	if (teamMember != null && teamMember.getTeamId() != null) {
+    	if (teamMember != null && teamMember.getTeamId() != null && activity.getTeam() != null && activity.getTeam().getAmpTeamId() != null) {
     		crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
     	}
     }

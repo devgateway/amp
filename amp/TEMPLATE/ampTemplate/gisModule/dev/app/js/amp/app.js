@@ -10,10 +10,11 @@ var State = require('amp-state/index'); //require('./services/state');
 var translator = require('./services/translator');
 var WindowTitle = require('./services/title');
 var URLService = require('./services/url');
+var Constants = require('./data/constants');
 var data = new GISData();
 var url = new URLService();
 var state = new State({ url: url, saved: data.savedMaps, autoinit: true, prefix: ['saved/', 'report/']});
-
+var constants = new Constants();
 
 var app = new App({
 	  url: url,
@@ -62,6 +63,7 @@ function configureApp(){
 	data.initializeCollectionsAndModels();	
 	data.addState(state);	
 	app.translator = translator.init();
+	app.constants = constants;
 	app.createViews();
 	app.data.load();
 	// initialize everything that doesn't need to touch the DOM

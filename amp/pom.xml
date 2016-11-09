@@ -1089,6 +1089,7 @@
                                 <property name="test_classpath" refid="maven.test.classpath" />
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
                                 <property name="jdbc.db" value="amp_drc" />
+
                                 <ant antfile="${basedir}/build.xml">
                                     <target name="deployForServer" />
                                     <target name="jaxb" />
@@ -1270,7 +1271,7 @@
                             <arguments>build</arguments>
                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
                         </configuration>
-                    </execution>     
+                    </execution>
                     <!-- Running npm for GIS-->
                     <execution>
                         <id>npm install for GIS</id>

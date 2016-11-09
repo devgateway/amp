@@ -1,5 +1,0 @@
----
-
-dependencies:
-  - { role: maven }
-  - { role: tomcat }

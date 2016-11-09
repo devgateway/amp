@@ -535,11 +535,6 @@ function collapseAll() {
 				<b> ${aimEditActivityForm.funding.deliveryRate}</b>
 				<hr/>
 			</field:display> 
-			<field:display name="Consumption rate" feature="Funding Information">
-				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Expenditures / Actual Disbursements * 100</digi:trn>" width="10" height=10 border="0">
-				<digi:trn>Consumption rate</digi:trn>:<br/>
-				<b>${aimEditActivityForm.funding.consumptionRate}</b>		
-			</field:display>
 	</fieldset>	
 	<fieldset>
 	<legend>
@@ -552,12 +547,14 @@ function collapseAll() {
 		</b>
 		<hr/>
 	<digi:trn>Created in workspace</digi:trn>: <br />
-	<b>
-		<c:out value="${aimEditActivityForm.identification.team.name}"/> -
-		<digi:trn>
-		    <c:out value="${aimEditActivityForm.identification.team.accessType}"/>
-		</digi:trn>
-	</b>
+	<c:if test="${aimEditActivityForm.identification.team !=null}">
+		<b>
+			<c:out value="${aimEditActivityForm.identification.team.name}"/> -
+			<digi:trn>
+				<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
+			</digi:trn>
+		</b>
+	</c:if>
 	<hr />
  	<digi:trn>Computation</digi:trn>: <br/>
 	<b>
@@ -629,7 +626,8 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:statusReason">Status Reason</digi:trn>:&nbsp;
 				<c:if test="${not empty aimEditActivityForm.identification.statusReason}">
-                    <span class="word_break bold">${fn:trim(aimEditActivityForm.identification.statusReason)}</span>
+					<c:set var="projstatusReason" value="${aimEditActivityForm.identification.statusReason}"/>
+					<span class="word_break bold"><digi:edit key="${projstatusReason}"></digi:edit></span>
 				</c:if>
 				<hr />
 			</module:display>
@@ -1239,12 +1237,6 @@ function collapseAll() {
 			<b>${aimEditActivityForm.planning.revisedStartDate}</b>
 		</module:display>
 		
-		<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
-            <hr>
-            <digi:trn>Proposed Project Life</digi:trn>:&nbsp;
-            <b>${aimEditActivityForm.planning.proposedProjectLife}</b>
-        </module:display>
-		
 		<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Original Completion Date</digi:trn>:&nbsp;
@@ -1325,9 +1317,15 @@ function collapseAll() {
 			<digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;
 			<b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b>
 		</module:display>
-		
-		<hr>
-		<field:display name="Duration of Project" feature="Planning"> 
+
+		<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
+			<hr>
+			<digi:trn>Proposed Project Life</digi:trn>:&nbsp;
+			<b>${aimEditActivityForm.planning.proposedProjectLife}</b>
+		</module:display>
+
+		<field:display name="Duration of Project" feature="Planning">
+			<hr>
 			<digi:trn>Duration of project</digi:trn>:&nbsp;
 			<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
 			    <b>${aimEditActivityForm.planning.projectPeriod}</b>&nbsp;<digi:trn>Months</digi:trn>

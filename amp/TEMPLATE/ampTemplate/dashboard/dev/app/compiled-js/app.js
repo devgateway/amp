@@ -16,18 +16,15 @@ var _ = require('underscore');
 var Deferred = require('jquery').Deferred;
 var BackboneDash = require('./backbone-dash');
 var supportCheck = require('./check-support');
-
 var URLService = require('amp-url/index');
 var State = require('amp-state/index');
 var StateLoadError = require('amp-state/index').StateLoadError;
 
 var Translator = require('amp-translate');
 var Filter = require('amp-filter/src/main');
-var SettingsWidget = require('amp-settings/src/index');
-var GeneralSettings = require('amp-settings/src/models/global-settings');
+var Settings = require('amp-settings/src/index');
 var UserModel = require('./models/amp-user.js');
 var SavedDashes = require('./models/saved-dashes-collection.js');
-
 var MainView = require('./views/main');
 var FailView = require('./views/fail');
 
@@ -201,20 +198,20 @@ _.extend(App.prototype, BackboneDash.Events, {
     return modalReady.promise();
   },
   initSettings: function(){
-	this.settingsWidget = new SettingsWidget({
+	this.settingsWidget = new Settings.SettingsWidget({
 	  		draggable : true,
 	  		caller : 'DASHBOARDS',
 	  		isPopup: true,
 	  		definitionUrl: '/rest/settings-definitions/dashboards'
 	});	
-	this.generalSettings = new GeneralSettings();
+	this.generalSettings = new Settings.GeneralSettings();
 	this.generalSettings.load();	
   }
 });
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":14,"./models/amp-user.js":15,"./models/saved-dashes-collection.js":25,"./views/fail":35,"./views/main":37,"amp-filter/src/main":67,"amp-settings/src/index":91,"amp-settings/src/models/global-settings":92,"amp-state/index":95,"amp-translate":96,"amp-url/index":97,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":14,"./models/amp-user.js":15,"./models/saved-dashes-collection.js":25,"./views/fail":35,"./views/main":37,"amp-filter/src/main":67,"amp-settings/src/index":91,"amp-state/index":95,"amp-translate":96,"amp-url/index":97,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -32218,6 +32215,7 @@ var Config = require('./common/config');
 var Constants = require('./common/constants');
 var SettingsDefinitionsCollection = require('./collections/settings-definitions-collection');
 var SettingsView = require('./views/settings-view');
+var GeneralSettings = require('./models/general-settings');
 //jquery is colliding in GIS module, so we only load it if it is not loaded or if there is a jquery loaded but version is older than 2.x.x
 if (window.$ == undefined || $.fn.jquery.split(' ')[0].split('.')[0] < 2) {
 	window.jQuery = window.$ = Backbone.$ = jQuery;
@@ -32269,9 +32267,9 @@ _.extend(Widget.prototype, Backbone.Events, {
 		this.view.setElement(arguments);
 	}	
 });
-module.exports = Widget;
-window.AMPSettings = Widget;
-},{"./collections/settings-definitions-collection":88,"./common/config":89,"./common/constants":90,"./views/settings-view":94,"backbone":"backbone","bootstrap/dist/js/bootstrap":83,"jquery":"jquery","jquery-ui/draggable":85,"underscore":"underscore"}],92:[function(require,module,exports){
+module.exports = {SettingsWidget: Widget, GeneralSettings: GeneralSettings}
+window.AMPSettings = {SettingsWidget: Widget, GeneralSettings: GeneralSettings};
+},{"./collections/settings-definitions-collection":88,"./common/config":89,"./common/constants":90,"./models/general-settings":92,"./views/settings-view":94,"backbone":"backbone","bootstrap/dist/js/bootstrap":83,"jquery":"jquery","jquery-ui/draggable":85,"underscore":"underscore"}],92:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');

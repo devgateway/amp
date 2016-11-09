@@ -20,7 +20,7 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.common.Filters;
+import org.digijava.kernel.ampapi.endpoints.common.FiltersEndpoint;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersProcessor;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -244,7 +244,7 @@ public class FilterUtils {
 		List<String> s = new ArrayList<String>();
 		for (Object obj : theArray) {
 			if (obj != null) {
-				if(Filters.ANY_BOOLEAN.equals(obj.toString())) {
+				if(FiltersEndpoint.ANY_BOOLEAN.equals(obj.toString())) {
 					s.add(FilterRule.FALSE_VALUE);
 					s.add(FilterRule.TRUE_VALUE);
 				} else {

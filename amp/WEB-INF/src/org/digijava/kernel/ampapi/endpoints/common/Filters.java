@@ -30,6 +30,7 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterType;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
@@ -179,7 +180,7 @@ public class Filters {
 				String sectorDisplayName = TranslatorWorker.translateText(ampClassificationConfiguration.getName() + SECTORS_SUFFIX);
 				
 				SimpleJsonBean sectorBean = new SimpleJsonBean(sectorConfigId, sectorDisplayName);
-				sectorBean.setFilterId(columnName);
+				sectorBean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
 				
 				sectorList.add(sectorBean);
 			}
@@ -334,7 +335,7 @@ public class Filters {
 				// only add if its enabled
 				if (visibleColumns.contains(columnName)) {
 					SimpleJsonBean bean = new SimpleJsonBean(PersistenceManager.getLong(program[0]), TranslatorWorker.translateText(programName));
-					bean.setFilterId(programName);
+					bean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
 					programs.add(bean);
 				}
 			}
@@ -460,7 +461,7 @@ public class Filters {
 				Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(rootAmpThemeId);
 				String programName = schemeName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE) ? ColumnConstants.NATIONAL_PLANNING_OBJECTIVES : schemeName;
 				SimpleJsonBean bean = buildProgramsJsonBean(themes.get(rootAmpThemeId), programName, 0);
-				bean.setFilterId(programName);
+				bean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(programName));
 				return bean;
 			} else {
 				return new SimpleJsonBean();
@@ -624,7 +625,7 @@ public class Filters {
 	
 	protected JsonBean buildYesNoJsonBean(String columnName) {
 		JsonBean res = new JsonBean();
-		res.set("filterId", columnName);
+		res.set("filterId", FilterUtils.INSTANCE.idFromColumnName(columnName));
 		res.set("name", columnName);
 		res.set("translatedName", columnName);
 		res.set("id", ANY_BOOLEAN);
@@ -642,10 +643,10 @@ public class Filters {
  * @param filterId
  * @return
  */
-	private JsonBean getCategoryValue(String categoryKey,String filterId) {
+	private JsonBean getCategoryValue(String categoryKey, String columnName) {
 		JsonBean js=new JsonBean();
-		js.set("filterId",filterId);
-		js.set("name", TranslatorWorker.translateText(filterId));
+		js.set("filterId", FilterUtils.INSTANCE.idFromColumnName(columnName));
+		js.set("name", TranslatorWorker.translateText(columnName));
 		js.set("values",getCategoryValue(categoryKey));
 		return js;
 		
@@ -655,7 +656,7 @@ public class Filters {
 		SimpleJsonBean res = new SimpleJsonBean();
 		res.setId(loc.getId());
 		res.setName(loc.getName());		
-		res.setFilterId(programName + " Level " + level );
+		res.setFilterId(FilterUtils.INSTANCE.idFromColumnName(programName + " Level " + level));
 		ArrayList<SimpleJsonBean> children = new ArrayList<SimpleJsonBean>();
 		for(AmpThemeSkeleton child:loc.getChildLocations())
 			children.add(buildProgramsJsonBean(child, programName, level + 1));
@@ -759,7 +760,7 @@ public class Filters {
 				}
 			}
 		}
-		s.setFilterId(columnName);
+		s.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
 		level++;
 		for (AmpSector ampSectorChild : as.getSectors()) {
 			s.getChildren().add(getSectors(ampSectorChild,sectorConfigName,level));
@@ -818,7 +819,7 @@ public class Filters {
 			teamsListJson = orderByProperty(teamsListJson, NAME_PROPERTY);
 		}
 		JsonBean js = new JsonBean();
-		js.set("filterId", ColumnConstants.TEAM);
+		js.set("filterId", FiltersConstants.TEAM);
 		js.set("name", TranslatorWorker.translateText("Workspaces"));
 		js.set("values", teamsListJson);
 		

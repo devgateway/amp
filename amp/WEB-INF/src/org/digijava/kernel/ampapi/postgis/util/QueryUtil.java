@@ -5,7 +5,6 @@ import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
@@ -14,6 +13,7 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
@@ -359,7 +359,7 @@ public class QueryUtil {
 							String displayName = TranslatorWorker.translateText(rs.getString("name"));
 							
 							SimpleJsonBean orgRole = new SimpleJsonBean(orgRoleId, orgRoleName,	null, displayName);
-							orgRole.setFilterId(orgRoleName);
+							orgRole.setFilterId(FiltersConstants.ORG_ROLE_CODE_TO_FILTER_ID.get(orgRoleCode));
 							
 							orgRoles.add(orgRole);
 						}
@@ -448,9 +448,9 @@ public class QueryUtil {
 		return location;
 	}
 	
-	public final static String[] LEVEL_TO_NAME = {"na", ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, "na2", "na3", "na4"};
+	private final static String[] LEVEL_TO_NAME = {"na", FiltersConstants.COUNTRY, FiltersConstants.REGION, FiltersConstants.ZONE, FiltersConstants.DISTRICT, "na2", "na3", "na4"};
 	
-	public static JsonBean buildLocationsJsonBean(LocationSkeleton loc, int level) {
+	private static JsonBean buildLocationsJsonBean(LocationSkeleton loc, int level) {
 		JsonBean res = new JsonBean();
 		res.set("id", loc.getId());
 		res.set("name", loc.getName());

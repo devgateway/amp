@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.digijava.module.aim.helper.Constants;
+
 /**
  * Filters Constants
  * 
@@ -49,6 +51,14 @@ public class FiltersConstants {
     public static final String LOCATION = "location";
     public static final String MODE_OF_PAYMENT = "mode-of-payment";
     public static final String NATIONAL_PLANNING_OBJECTIVES = "national-planning-objectives";
+    public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_1 = "national-planning-objectives-level-1";
+    public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_2 = "national-planning-objectives-level-2";
+    public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_3 = "national-planning-objectives-level-3";
+    public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_4 = "national-planning-objectives-level-4";
+    public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_5 = "national-planning-objectives-level-5";
+    public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_6 = "national-planning-objectives-level-6";
+    public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_7 = "national-planning-objectives-level-7";
+    public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_8 = "national-planning-objectives-level-8";
     public static final String ON_OFF_TREASURY_BUDGET = "on-off-treasury-budget";
     public static final String PLEDGES_AID_MODALITY = "pledges-aid-modality";
     public static final String PLEDGES_DONOR_GROUP = "pledges-donor-group";
@@ -60,6 +70,14 @@ public class FiltersConstants {
     public static final String PLEDGES_TERTIARY_SECTORS = "pledges-tertiary-sectors";
     public static final String PLEDGES_TITLES = "pledges-titles";
     public static final String PRIMARY_PROGRAM = "primary-program";
+    public static final String PRIMARY_PROGRAM_LEVEL_1 = "primary-program-level-1";
+    public static final String PRIMARY_PROGRAM_LEVEL_2 = "primary-program-level-2";
+    public static final String PRIMARY_PROGRAM_LEVEL_3 = "primary-program-level-3";
+    public static final String PRIMARY_PROGRAM_LEVEL_4 = "primary-program-level-4";
+    public static final String PRIMARY_PROGRAM_LEVEL_5 = "primary-program-level-5";
+    public static final String PRIMARY_PROGRAM_LEVEL_6 = "primary-program-level-6";
+    public static final String PRIMARY_PROGRAM_LEVEL_7 = "primary-program-level-7";
+    public static final String PRIMARY_PROGRAM_LEVEL_8 = "primary-program-level-8";
     public static final String PRIMARY_SECTOR = "primary-sector";
     public static final String PRIMARY_SECTOR_SUB_SECTOR = "primary-sector-sub-sector";
     public static final String PRIMARY_SECTOR_SUB_SUB_SECTOR = "primary-sector-sub-sub-sector";
@@ -69,6 +87,13 @@ public class FiltersConstants {
     public static final String RESPONSIBLE_ORGANIZATION = "responsible-organization";
     public static final String SECONDARY_PROGRAM = "secondary-program";
     public static final String SECONDARY_PROGRAM_LEVEL_1 = "secondary-program-level-1";
+    public static final String SECONDARY_PROGRAM_LEVEL_2 = "secondary-program-level-2";
+    public static final String SECONDARY_PROGRAM_LEVEL_3 = "secondary-program-level-3";
+    public static final String SECONDARY_PROGRAM_LEVEL_4 = "secondary-program-level-4";
+    public static final String SECONDARY_PROGRAM_LEVEL_5 = "secondary-program-level-5";
+    public static final String SECONDARY_PROGRAM_LEVEL_6 = "secondary-program-level-6";
+    public static final String SECONDARY_PROGRAM_LEVEL_7 = "secondary-program-level-7";
+    public static final String SECONDARY_PROGRAM_LEVEL_8 = "secondary-program-level-8";
     public static final String SECONDARY_SECTOR = "secondary-sector";
     public static final String SECONDARY_SECTOR_SUB_SECTOR = "secondary-sector-sub-sector";
     public static final String SECONDARY_SECTOR_SUB_SUB_SECTOR = "secondary-sector-sub-sub-sector";
@@ -76,6 +101,14 @@ public class FiltersConstants {
     public static final String STATUS = "status";
     public static final String TEAM = "team";
     public static final String TERTIARY_PROGRAM = "tertiary-program";
+    public static final String TERTIARY_PROGRAM_LEVEL_1 = "tertiary-program-level-1";
+    public static final String TERTIARY_PROGRAM_LEVEL_2 = "tertiary-program-level-2";
+    public static final String TERTIARY_PROGRAM_LEVEL_3 = "tertiary-program-level-3";
+    public static final String TERTIARY_PROGRAM_LEVEL_4 = "tertiary-program-level-4";
+    public static final String TERTIARY_PROGRAM_LEVEL_5 = "tertiary-program-level-5";
+    public static final String TERTIARY_PROGRAM_LEVEL_6 = "tertiary-program-level-6";
+    public static final String TERTIARY_PROGRAM_LEVEL_7 = "tertiary-program-level-7";
+    public static final String TERTIARY_PROGRAM_LEVEL_8 = "tertiary-program-level-8";
     public static final String TERTIARY_SECTOR = "tertiary-sector";
     public static final String TERTIARY_SECTOR_SUB_SECTOR = "tertiary-sector-sub-sector";
     public static final String TERTIARY_SECTOR_SUB_SUB_SECTOR = "tertiary-sector-sub-sub-sector";
@@ -95,5 +128,16 @@ public class FiltersConstants {
     /** filters IDs to main Group (Tab) mapping */
     public static final Map<String, String> ID_GROUP_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put(COMPUTED_YEAR, OTHER);
+    }});
+
+    /**
+     * Maps Organisation Role Code to Filter Id.
+     */
+    public static final Map<String, String> ORG_ROLE_CODE_TO_FILTER_ID = Collections.unmodifiableMap(new HashMap<String, String>() {{
+        put(Constants.FUNDING_AGENCY, DONOR_AGENCY);
+        put(Constants.IMPLEMENTING_AGENCY, IMPLEMENTING_AGENCY);
+        put(Constants.EXECUTING_AGENCY, EXECUTING_AGENCY);
+        put(Constants.BENEFICIARY_AGENCY, BENEFICIARY_AGENCY);
+        put(Constants.CONTRACTING_AGENCY, CONTRACTING_AGENCY);
     }});
 }

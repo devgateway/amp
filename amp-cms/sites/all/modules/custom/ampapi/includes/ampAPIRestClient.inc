@@ -125,7 +125,7 @@ class ampAPIRestClient {
     }
 
     if (!empty($langcode) && $langcode != LANGUAGE_NONE) {
-      $options['parameters']['language'] = $langcode;
+      $options['query']['language'] = $langcode;
     }
 
     switch ($request_type) {

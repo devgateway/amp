@@ -186,10 +186,6 @@ public class ExportActivityToPDF extends Action {
         ampContext = getServlet().getServletContext();
         //to know whether print happens from Public View or not
         HttpSession session = request.getSession();
-        TeamMember teamMember = (TeamMember) session.getAttribute(CURRENT_MEMBER);
-        if(teamMember == null) {
-            return mapping.findForward("index");
-        }
         Long actId=null;
         AmpActivityVersion activity=null;
         if(request.getParameter("activityid")!=null){
@@ -1256,7 +1252,11 @@ public class ExportActivityToPDF extends Action {
             /**
              *	Contact Informations
              */
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts")){
+            
+            boolean isContactInformationVisible = FeaturesUtil.isVisibleModule("/Activity Form/Contacts") &&
+            		((TeamMember) session.getAttribute(CURRENT_MEMBER) != null || FeaturesUtil.isVisibleFeature("Contacts"));
+            
+            if(isContactInformationVisible){
                 //Funding contact information
                 if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Donor Contact Information")){
                     buildContactInfoOutput(mainLayout,"Donor funding contact information",myForm.getContactInformation().getDonorContacts(),ampContext);
@@ -1744,10 +1744,10 @@ public class ExportActivityToPDF extends Action {
 
                 TeamMember tm = (TeamMember) session.getAttribute(CURRENT_MEMBER);
                 Long defaultCurrency=null;
-                if(tm.getAppSettings().getCurrencyId()!=null){
-                    defaultCurrency=tm.getAppSettings().getCurrencyId();
-                }else{
-                    defaultCurrency=CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId();
+                if(tm != null && tm.getAppSettings().getCurrencyId()!=null){
+                    defaultCurrency = tm.getAppSettings().getCurrencyId();
+                } else{
+                    defaultCurrency = CurrencyUtil.getDefaultCurrency().getAmpCurrencyId();
                 }
 
                 for (EUActivity euActivity : (Collection<EUActivity>)euActs) {

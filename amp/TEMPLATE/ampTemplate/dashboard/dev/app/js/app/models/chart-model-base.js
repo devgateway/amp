@@ -30,7 +30,7 @@ module.exports = BackboneDash.Model.extend({
       // TODO adjtype hard-coding key for now, should get from settings...
       data.settings = _({}).extend(data.settings, {'funding-type': this.get('adjtype')});
     }
-
+    _.defaults(data.settings,{ 'currency-code': this.app.settingsWidget.definitions.getDefaultCurrencyId()});
     options.data = JSON.stringify(data);
     return BackboneDash.Model.prototype.fetch.call(this, options);
   }

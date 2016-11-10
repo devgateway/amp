@@ -2837,7 +2837,7 @@ module.exports = BackboneDash.Model.extend({
       // TODO adjtype hard-coding key for now, should get from settings...
       data.settings = _({}).extend(data.settings, {'funding-type': this.get('adjtype')});
     }
-
+    _.defaults(data.settings,{ 'currency-code': this.app.settingsWidget.definitions.getDefaultCurrencyId()});
     options.data = JSON.stringify(data);
     return BackboneDash.Model.prototype.fetch.call(this, options);
   }
@@ -3740,7 +3740,7 @@ module.exports = BackboneDash.View.extend({
     	this.$('.chart-total').html(util.translateLanguage(this.model.get('sumarizedTotal'))); // this shall use the format from the server and translate it in the front end
     }
     var self = this;
-    var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;    	
+   var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;    	
     this.$('.chart-currency').html(currencyName);
   },
 
@@ -3878,7 +3878,6 @@ module.exports = BackboneDash.View.extend({
 		  self.addSimpleTooltip(elem);
 	  });
   },
-<<<<<<< Upstream, based on future/v2.13
   
   addSimpleTooltip: function(object) {
 	  if ($(object).data('data-title') || $(object).data('title')) {
@@ -3890,8 +3889,7 @@ module.exports = BackboneDash.View.extend({
 			  nv.tooltip.cleanup();
 		  });
 	  }
-  }
-=======
+  },
   extractNumberFormatSettings: function(settings) {
 		  var numberFormat = {}; 
 	      numberFormat.numberFormat = this.app.generalSettings.get('number-format') || '#,#.#';
@@ -3918,7 +3916,6 @@ module.exports = BackboneDash.View.extend({
 			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inbillions';
 		  }
 	  }
->>>>>>> 22c3750 AMP-24362 Reuse new settings widget in Dashboards
 
 });
 
@@ -23753,15 +23750,9 @@ module.exports = Backbone.View.extend({
 });
 
 
-<<<<<<< Upstream, based on future/v2.13
-},{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
-module.exports=require(52)
-},{"C:\\Git\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
-=======
 },{"backbone":"backbone","underscore":"underscore"}],57:[function(require,module,exports){
 module.exports=require(49)
 },{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],58:[function(require,module,exports){
->>>>>>> 22c3750 AMP-24362 Reuse new settings widget in Dashboards
 var jQuery = require('jquery');
 
 /*!

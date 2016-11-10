@@ -21,11 +21,11 @@ module.exports = Backbone.View.extend({
 
     //attach legend listeners after filter and app state loaded.
     $.when(this.app.data.filter.loaded, this.app.data._stateWait).then(function() {
-      self.listenTo(self.app.data, 'show hide refresh sync', self.render);
+      self.listenTo(self.app.data, 'show hide refresh sync valuesChanged', self.render);
     });
   },
 
-  render: function() {
+  render: function() {	
     var self = this;
     // Chained Translate: returns el
     this.app.translator.translateDOM(this.template())

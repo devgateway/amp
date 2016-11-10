@@ -182,11 +182,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 */
 	public final Map<Integer, MtefColumn> projectionMtefColumns = new HashMap<>();
 	
-	/**
-	 * the names of all the columns which output dates
-	 */
-	public final Set<String> DATE_COLUMN_NAMES;
-
 	@SuppressWarnings("serial")
 	public final static Map<String, String> measureDescriptions = new HashMap<String, String>() {{
 		put(MeasureConstants.CUMULATED_DISBURSEMENTS , "Prior Actual Disbursements + Previous Month Disbursements");
@@ -568,8 +563,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMeasure(new ForecastExecutionRateMeasure(MeasureConstants.FORECAST_EXECUTION_RATE));
 		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
 		
-		
-		this.DATE_COLUMN_NAMES = this.getColumns().keySet().stream().filter(z -> this.getNamedElemType(z) == NamedElemType.DATE).collect(Collectors.toSet());
 	}
 	
 	protected void addFormulaMeasures() {

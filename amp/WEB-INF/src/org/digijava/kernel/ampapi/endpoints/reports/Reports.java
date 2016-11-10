@@ -682,50 +682,44 @@ public class Reports implements ErrorReportingEndpoint {
 			AmpARFilter newFilters = null;
 
 			// Convert json object back to AmpReportFilters
-			if (formParams.get("filters") != null) {
-				JsonBean filters = new JsonBean();
-				LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get("filters");
-				AmpReportFilters reportFilters = null;
-				if (requestFilters != null) {
-					filters.any().putAll(requestFilters);
-					reportFilters = FilterUtils.getFilters(filters,
-							new AmpReportFilters());
+			Map<String, Object> filterMap = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+			if (filterMap != null) {
+				AmpReportFilters reportFilters = FilterUtils.getFilters(filterMap, new AmpReportFilters());
 
-					// Transform back to legacy AmpARFilters.
-					AmpReportFiltersConverter converter = new AmpReportFiltersConverter(reportFilters);
-					newFilters = converter.buildFilters();
-					// converter.mergeWithOldFilters(oldFilters);
-					
-					if (formParams.getString("sidx") != null && !formParams.getString("sidx").equals("")) {			
-						formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));									
-						logger.info(formParams.get(EPConstants.SORTING));
-						newFilters.setSortByAsc(formParams.getString("sord").equals("asc") ? true : false);
-						
-						String columns = "";
-						for (Map map : ((List<Map>) formParams.get(EPConstants.SORTING))) {
-							String column = map.get("columns").toString();
-							column = column.substring(column.indexOf("[") + 1, column.indexOf("]"));
-							columns += ("/" + column);
-						}
-						newFilters.setSortBy(columns);
-					}
-					
-					if (formParams.get(EPConstants.SETTINGS) != null) {
-						String currency = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("1").toString();
-						String calendar = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("2").toString();
-						newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
-						newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
-					}
-					
-					logger.info(newFilters);
+				// Transform back to legacy AmpARFilters.
+				AmpReportFiltersConverter converter = new AmpReportFiltersConverter(reportFilters);
+				newFilters = converter.buildFilters();
+				// converter.mergeWithOldFilters(oldFilters);
 
-					Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, newFilters);
-					if (report.getFilterDataSet() == null)
-						report.setFilterDataSet(fdSet);
-					else {
-						report.getFilterDataSet().clear();
-						report.getFilterDataSet().addAll(fdSet);
+				if (formParams.getString("sidx") != null && !formParams.getString("sidx").equals("")) {
+					formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));
+					logger.info(formParams.get(EPConstants.SORTING));
+					newFilters.setSortByAsc(formParams.getString("sord").equals("asc") ? true : false);
+
+					String columns = "";
+					for (Map map : ((List<Map>) formParams.get(EPConstants.SORTING))) {
+						String column = map.get("columns").toString();
+						column = column.substring(column.indexOf("[") + 1, column.indexOf("]"));
+						columns += ("/" + column);
 					}
+					newFilters.setSortBy(columns);
+				}
+
+				if (formParams.get(EPConstants.SETTINGS) != null) {
+					String currency = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("1").toString();
+					String calendar = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("2").toString();
+					newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
+					newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
+				}
+
+				logger.info(newFilters);
+
+				Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, newFilters);
+				if (report.getFilterDataSet() == null)
+					report.setFilterDataSet(fdSet);
+				else {
+					report.getFilterDataSet().clear();
+					report.getFilterDataSet().addAll(fdSet);
 				}
 			}
 			

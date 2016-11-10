@@ -71,7 +71,7 @@ public class PublicPortalService {
 		/*TODO: tbd if we need to filter out null dates from results
 		MondrianReportUtils.filterOutNullDates(spec);
 		*/
-		FilterUtils.applyFilterRules(config, spec,months);
+		applyFilterRules(config, spec, months);
 		// configure project types
 		ReportsUtil.configureProjectTypes(spec, config);
 		// do we need to include empty fundings in case no fundings are detected at all? 
@@ -173,7 +173,7 @@ public class PublicPortalService {
 			}
 		}
 
-		FilterUtils.applyFilterRules(config, spec,months);
+		applyFilterRules(config, spec, months);
 
 		SettingsUtils.applySettings(spec, config, true);
 		getPublicReport(count, result, content, spec, true, measureName, null);
@@ -256,7 +256,7 @@ public class PublicPortalService {
 		spec.addColumn(new ReportColumn(ColumnConstants.RELATED_PLEDGES));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 
-		FilterUtils.applyFilterRules(config, spec, null);
+		applyFilterRules(config, spec, null);
 
 		spec.setDisplayEmptyFundingRows(true);
 
@@ -281,6 +281,20 @@ public class PublicPortalService {
 		}
 		activitiesPledgesCount.set("ActivitiesWithPledgesCount", count);
 		return activitiesPledgesCount;
+	}
+
+	/**
+	 * Apply or append rules if config is not null.
+	 * See {@link FilterUtils#applyFilterRules(Map, ReportSpecificationImpl, Integer)}.
+	 *
+	 * @param config JsonBean containing filters object
+	 * @param spec report specification
+	 * @param months filter by last N months, may be null
+	 */
+	private static void applyFilterRules(JsonBean config, ReportSpecificationImpl spec, Integer months) {
+		if (config != null) {
+			FilterUtils.applyFilterRules((Map<String, Object>) config.get(EPConstants.FILTERS), spec, months);
+		}
 	}
 	
 } 

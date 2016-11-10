@@ -1,19 +1,20 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Function;
 
+import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
@@ -24,16 +25,18 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
  */
 public class AmpReportFilters extends ReportFiltersImpl {
 
-	protected final Map<ReportColumn, List<FilterRule>> dateFilterRules = new HashMap<ReportColumn, List<FilterRule>>();
+	private final Map<ReportColumn, FilterRule> dateFilterRules = new HashMap<>();
 
+	@JsonIgnore
 	protected AmpFiscalCalendar calendar;
 
 	/**
 	 * also known as "selected year"
 	 */
+	@JsonProperty(FiltersConstants.COMPUTED_YEAR)
 	protected Integer computedYear;
 
-	public AmpReportFilters(Map<ReportElement, List<FilterRule>> filterRules) {
+	public AmpReportFilters(Map<ReportElement, FilterRule> filterRules) {
 		super(filterRules);
 	}
 	
@@ -57,7 +60,7 @@ public class AmpReportFilters extends ReportFiltersImpl {
  		return calendar;
  	}
 		
-	public AmpReportFilters(Map<ReportElement, List<FilterRule>> filterRules, AmpFiscalCalendar calendar) {
+	public AmpReportFilters(Map<ReportElement, FilterRule> filterRules, AmpFiscalCalendar calendar) {
 		super(filterRules);
 		this.calendar = calendar;
 	}
@@ -68,51 +71,45 @@ public class AmpReportFilters extends ReportFiltersImpl {
 	 * @return
 	 */
 	@JsonIgnore
-	public Map<ReportColumn, List<FilterRule>> getDateFilterRules() {
+	public Map<ReportColumn, FilterRule> getDateFilterRules() {
 		return this.dateFilterRules;
 	}
-	
-	/**
-	 * Column Filters currently used by Filters Widget
-	 * TODO: refactor once Filters v2 implemented
-	 * @return
-	 */
-	public Map<String, List<FilterRule>> getColumnFilterRules() {
-        if (filterRules == null) return null; 
-        Map<String, List<FilterRule>> filters = new HashMap<String, List<FilterRule>>(filterRules.size());
-        for (Entry<ReportElement, List<FilterRule>> entry : filterRules.entrySet()) {
-            if (ElementType.ENTITY.equals(entry.getKey().type))
-                filters.put(entry.getKey().entity.getEntityName(), entry.getValue());
-            else 
-                filters.put(entry.getKey().type.toString(), entry.getValue());
-        }
-        return filters;
-    }
+
+	@JsonAnyGetter
+	public Map<String, FilterRule> getAllFilterRulesForJackson() {
+		return AmpCollections.remap(getAllFilterRules(), this::idForReportElement, Function.identity(), false);
+	}
+
+	private String idForReportElement(ReportElement re) {
+		String id;
+		if (ElementType.ENTITY.equals(re.type)) {
+			String entityName = re.entity.getEntityName();
+			id = FilterUtils.INSTANCE.idFromColumnName(entityName);
+			if (id == null) {
+				throw new RuntimeException("No matching filter for column name: " + entityName);
+			}
+		} else {
+			id = re.type.toString().toLowerCase();
+		}
+		return id;
+	}
 
 	/**
 	 * concatenates {@link #getFilterRules()} with {@link #getDateFilterRules()}
 	 */
 	@JsonIgnore
 	@Override
-	public Map<ReportElement, List<FilterRule>> getAllFilterRules() {
+	public Map<ReportElement, FilterRule> getAllFilterRules() {
 		if (dateFilterRules == null || dateFilterRules.isEmpty())
 			return getFilterRules();
 		
-		Map<ReportElement, List<FilterRule>> res = new HashMap<>(getFilterRules());
+		Map<ReportElement, FilterRule> res = new HashMap<>(getFilterRules());
 		res.putAll(AmpCollections.remap(getDateFilterRules(), rc -> new ReportElement(rc), Function.identity(), false));
 		return res;
 	}
-	
-	/**
-	 * These are basically the activity dates filters
-	 * called through reflection during json, DO NOT DELETE
-	 */
-	public Map<String, List<FilterRule>> getColumnDateFilterRules() {
-		return AmpCollections.remap(dateFilterRules, ReportColumn::getColumnName, Function.identity(), false);
-	}
-	
-	protected <T> void addFilterRule(Map<T, List<FilterRule>> filterRules, T elem, FilterRule filterRule) {
-		filterRules.computeIfAbsent(elem, ignored -> new ArrayList<>()).add(filterRule);
+
+	protected <T> void addFilterRule(Map<T, FilterRule> filterRules, T elem, FilterRule filterRule) {
+		filterRules.put(elem, filterRule);
 	}
 	
 	public static int getReportSelectedYear(ReportSpecification spec) {

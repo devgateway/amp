@@ -1249,7 +1249,11 @@ public class ExportActivityToPDF extends Action {
             /**
              *	Contact Informations
              */
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts")){
+            
+            boolean isContactInformationVisible = FeaturesUtil.isVisibleModule("/Activity Form/Contacts") &&
+            		((TeamMember) session.getAttribute(CURRENT_MEMBER) != null || FeaturesUtil.isVisibleFeature("Contacts"));
+            
+            if(isContactInformationVisible){
                 //Funding contact information
                 if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Donor Contact Information")){
                     buildContactInfoOutput(mainLayout,"Donor funding contact information",myForm.getContactInformation().getDonorContacts(),ampContext);

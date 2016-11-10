@@ -1462,46 +1462,60 @@ function collapseAll() {
 <!-- LOCATIONS SECTION -->
 <module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
 	<c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" />
-	<c:set var="programs_name"><digi:trn>National Plan</digi:trn></c:set>
-	<%@include file="activitypreview/programs.jspf" %>
+	<c:set var="programs_name"></c:set>
+	<fieldset>
+		<legend>
+			<span class="legend_label" style="cursor: pointer;"><digi:trn>National Plan</digi:trn></span>
+		</legend>
+		<div class="toggleDiv">
+		<%@include file="activitypreview/programs.jspf" %>
+		</div>
+	</fieldset>
 </module:display>
 
 <!-- PROGRAM SECTION -->
 <module:display name="/Activity Form/Program" parentModule="/Activity Form">
-	<c:set var="programs_list" value="${aimEditActivityForm.programs.primaryPrograms}" />
-	<c:set var="programs_name"><digi:trn>Program</digi:trn></c:set>
-	<%@include file="activitypreview/programs.jspf" %>
-</module:display>
-<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
-	<c:set var="programs_list" value="${aimEditActivityForm.programs.secondaryPrograms}" />
-	<c:set var="programs_name"><digi:trn>Secondary Programs</digi:trn></c:set>
-	<%@include file="activitypreview/programs.jspf" %>
-</module:display>
-<module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
-	<c:set var="programs_list" value="${aimEditActivityForm.programs.tertiaryPrograms}" />
-	<c:set var="programs_name"><digi:trn>Tertiary Programs</digi:trn></c:set>
-	<%@include file="activitypreview/programs.jspf" %>
+<fieldset>
+	<legend>
+		<span class="legend_label" style="cursor: pointer;"><digi:trn>Program</digi:trn></span>
+	</legend>
+	<div class="toggleDiv">
+		<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form">
+			<c:set var="programs_list" value="${aimEditActivityForm.programs.primaryPrograms}" />
+			<c:set var="programs_name"><digi:trn>Primary Programs</digi:trn></c:set>
+			<%@include file="activitypreview/programs.jspf" %>
+		</module:display>
+		<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
+			<c:set var="programs_list" value="${aimEditActivityForm.programs.secondaryPrograms}" />
+			<c:set var="programs_name"><digi:trn>Secondary Programs</digi:trn></c:set>
+			<%@include file="activitypreview/programs.jspf" %>
+		</module:display>
+		<module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
+			<c:set var="programs_list" value="${aimEditActivityForm.programs.tertiaryPrograms}" />
+			<c:set var="programs_name"><digi:trn>Tertiary Programs</digi:trn></c:set>
+			<%@include file="activitypreview/programs.jspf" %>
+		</module:display>
+		<!-- program description -->
+		<module:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
+			<c:set var="programDescription" value="${aimEditActivityForm.programs.programDescription}" />
+			<c:if test="${not empty programDescription}">
+				<span class="word_break"><digi:trn>Program Description</digi:trn></span>
+				<table width="100%" cellSpacing="2" cellPadding="1" style="font-size: 11px;">
+					<tr>
+						<td width="85%">
+							<span class="word_break bold"><digi:edit key="${programDescription}" /></span>
+						</td>
+					</tr>
+				</table>
+				<hr>
+			</c:if>
+		</module:display>
+		<!-- end program description -->
+	</div>
+</fieldset>
 </module:display>
 <!-- END PROGRAM SECTION -->
-<!-- program description --> 
-					<module:display name="/Activity Form/Program/Program Description"
-						parentModule="/Activity Form/Program">
-						<c:set var="programDescription" value="${aimEditActivityForm.programs.programDescription}" />
-						<c:if test="${not empty programDescription}">
-							<fieldset>
-								<legend>
-									<span class="legend_label" style="cursor: pointer;"><digi:trn>Program Description</digi:trn></span>
-								</legend>
-								<div class="toggleDiv">
-									<table width="100%" cellSpacing="2" cellPadding="1" style="font-size: 11px;">
-										<tr> <td width="85%">
-											<span class="word_break bold"><digi:edit key="${programDescription}" /></span>
-										</td> </tr>
-									</table>
-								</div>
-							</fieldset>
-						</c:if>
-					</module:display> <!-- end program description -->
+
 <!-- SECTORS SECTION -->
 <module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
 <fieldset>
@@ -1563,7 +1577,7 @@ function collapseAll() {
 		</module:display>
 	</c:forEach>		
 	<c:if test="${not empty aimEditActivityForm.components.activityComponentes}">
-		ss<digi:trn>Components</digi:trn>:&nbsp;
+		<digi:trn>Components</digi:trn>:&nbsp;
 		<table>
 			<c:forEach var="compo" items="${aimEditActivityForm.components.activityComponentes}">
 			<tr>

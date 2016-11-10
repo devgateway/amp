@@ -30058,7 +30058,7 @@ jQuery(function($){
 /* LOCAL AMP CODE -- THIS WILL DISAPPEAR */
 jQuery(function($){
 	$.datepicker.regional['tm'] = {
-		closeText: 'Halo',
+		closeText: 'Halo ona',
 		prevText: 'Uluk',
 		nextText: 'Tuir mai',
 		currentText: 'Ohin loron',

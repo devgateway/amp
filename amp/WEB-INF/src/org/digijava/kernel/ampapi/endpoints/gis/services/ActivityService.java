@@ -69,9 +69,9 @@ public class ActivityService {
 		//we check if we have filter by keyword
 		LinkedHashMap<String, Object> filters = null;
 		if (config != null) {
-			filters=(LinkedHashMap<String, Object>)config.get(EPConstants.FILTERS);
-			if(activitIds==null){
-				activitIds=new ArrayList<>();
+			filters = (LinkedHashMap<String, Object>) config.get(EPConstants.FILTERS);
+			if (activitIds == null) {
+				activitIds = new ArrayList<>();
 			}
 			activitIds.addAll(FilterUtils.applyKeywordSearch(filters));
 		}

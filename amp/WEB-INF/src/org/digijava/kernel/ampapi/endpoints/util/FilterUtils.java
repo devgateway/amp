@@ -377,10 +377,11 @@ public class FilterUtils {
 	}
 
 	/**
-	 * Apply filterRules. In case the spec already have filterRules, append them
-	 * 
-	 * @param config
-	 * @param spec
+	 * Apply filterRules. In case the spec already have filterRules, append them.
+	 *
+	 * @param filterMap map with all filters
+	 * @param spec report specification
+	 * @param months if not null then filter by last N months
 	 */
 	public static void applyFilterRules(Map<String, Object> filterMap, ReportSpecificationImpl spec, Integer months) {
 	    AmpReportFilters filterRules = FilterUtils.getFilters(filterMap, (AmpReportFilters) spec.getFilters());

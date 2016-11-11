@@ -299,7 +299,7 @@ SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
 	} else {
 		var reportTitleInCurrentLang = getReportTitlesInCurrentLang(defaultLanguage);
 		if (reportTitleInCurrentLang == null || reportTitleInCurrentLang == '') {
-			this.divEl.innerHTML = "Please enter a report name in current language";
+			this.divEl.innerHTML = emptyCurrentLanguage;
 			sendData = false;
 		}
 	}

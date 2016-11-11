@@ -4,7 +4,12 @@
  */
 package org.digijava.module.aim.form.reportwizard;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
+
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
@@ -49,7 +54,8 @@ public class ReportWizardForm extends ActionForm {
 	private Long reportCategory = new Long(0);
 	private Boolean forceNameOverwrite = false;
 	private Boolean runReport = false;
-	
+	private String defaultLanguage = "";
+
 	@java.lang.SuppressWarnings("all")
 	public ReportWizardForm() {
 	}
@@ -347,8 +353,15 @@ public class ReportWizardForm extends ActionForm {
 	public void setReportBeingEdited(Boolean reportBeingEdited) {
 		this.reportBeingEdited = reportBeingEdited == null ? false : reportBeingEdited;
 	}
-	
-	
+
+	public String getDefaultLanguage() {
+		return defaultLanguage;
+	}
+
+	public void setDefaultLanguage(String defaultLanguage) {
+		this.defaultLanguage=defaultLanguage;
+	}
+
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
 	public boolean equals(final java.lang.Object o) {

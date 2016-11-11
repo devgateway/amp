@@ -85,6 +85,7 @@
 	selectedHiers						= new Array();
 	selectedMeas						= new Array();
 	var defaultLanguage = '${aimReportWizardForm.defaultLanguage}';
+	var emptyCurrentLanguage = '<digi:trn jsFriendly="true" key="rep:format:currentLanguageEmpty">Please enter a report name in current language</digi:trn>';
 
 	if ( "true" == "${myForm.budgetExporter}" )	
 		NormalReportManager.prototype.maxHierarchies = 5;

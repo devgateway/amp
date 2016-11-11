@@ -70,7 +70,7 @@ module.exports = Backbone.View.extend({
     		auxId = id.id;
     	}
     	if (auxId) {
-            var selectedModel = self.collection.findWhere({id: "J" + auxId});
+            var selectedModel = self.collection.findWhere({id: auxId});
         	if (selectedModel) {				
 				// Refresh the Gap Analysis area first because we need the parameter for the indicator EP.
 				if (selectedModel.get('canDoGapAnalysis') === true) {

@@ -1,31 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
+import mondrian.util.Pair;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -57,7 +32,6 @@ import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -76,7 +50,30 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 
-import mondrian.util.Pair;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /***
  * 
@@ -743,23 +740,13 @@ public class Reports implements ErrorReportingEndpoint {
 					}
 				}
 			}
-			
-			Session session = PersistenceManager.getSession();			
-			List<Map<String, String>> reportData = (List<Map<String, String>>) formParams.get("reportData");
-			boolean emptyDefaultName = true;
-            String defaultLang = TLSUtils.getEffectiveLangCode();
-			for (Map<String, String> name : reportData) {
-				if (defaultLang != null && defaultLang.equals(name.get("lang")) && !"".equals(name.get("name"))) {
-					emptyDefaultName = false;
-				}
-			}
-			if(!emptyDefaultName) {
-				Map<String, AmpContentTranslation> translations = populateContentTranslations(reportData, reportId);			
-				MultilingualInputFieldValues.serialize(report, "name", session, translations);
-				logger.info(report);
-			} else {
-				message = TranslatorWorker.translateText("Invalid report name.");
-			}
+
+            Session session = PersistenceManager.getSession();
+            List<Map<String, String>> reportData = (List<Map<String, String>>) formParams.get("reportData");
+            Map<String, AmpContentTranslation> translations = populateContentTranslations(reportData, reportId);
+            MultilingualInputFieldValues.serialize(report, "name", session, translations);
+            logger.info(report);
+
 		} catch (Exception e) {
 			message = e.getLocalizedMessage();
 		}

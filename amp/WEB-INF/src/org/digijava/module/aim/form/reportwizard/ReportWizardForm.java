@@ -54,8 +54,6 @@ public class ReportWizardForm extends ActionForm {
 	private Long reportCategory = new Long(0);
 	private Boolean forceNameOverwrite = false;
 	private Boolean runReport = false;
-	private String defaultLanguage = "";
-
 	@java.lang.SuppressWarnings("all")
 	public ReportWizardForm() {
 	}
@@ -352,14 +350,6 @@ public class ReportWizardForm extends ActionForm {
 	
 	public void setReportBeingEdited(Boolean reportBeingEdited) {
 		this.reportBeingEdited = reportBeingEdited == null ? false : reportBeingEdited;
-	}
-
-	public String getDefaultLanguage() {
-		return defaultLanguage;
-	}
-
-	public void setDefaultLanguage(String defaultLanguage) {
-		this.defaultLanguage=defaultLanguage;
 	}
 
 	@java.lang.Override

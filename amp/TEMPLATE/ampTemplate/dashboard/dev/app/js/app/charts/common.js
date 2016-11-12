@@ -176,14 +176,14 @@ function nvCharter(specific) {
 
 function formatNumber(number) {
 	var format = "";
-	if (app.settings.numberFormatSettings.groupSeparator.length > 0) {
+	if (app.generalSettings.numberFormatSettings.groupSeparator.length > 0) {
 		format = "0,0";
 	} else {
 		format = "0";
 	}
-	if (app.settings.numberFormatSettings.numberFormat.indexOf('.') > 0) {
-		var decimalDigits = app.settings.numberFormatSettings.numberFormat.length
-			- app.settings.numberFormatSettings.numberFormat.indexOf('.');
+	if (app.generalSettings.numberFormatSettings.numberFormat.indexOf('.') > 0) {
+		var decimalDigits = app.generalSettings.numberFormatSettings.numberFormat.length
+			- app.generalSettings.numberFormatSettings.numberFormat.indexOf('.');
 		format = format + "." + new Array(decimalDigits).join("0");
 	}
 
@@ -191,8 +191,8 @@ function formatNumber(number) {
 	// delimiters.
 	var ampLang = {
 		delimiters : {
-			thousands : app.settings.numberFormatSettings.groupSeparator,
-			decimal : app.settings.numberFormatSettings.decimalSeparator
+			thousands : app.generalSettings.numberFormatSettings.groupSeparator,
+			decimal : app.generalSettings.numberFormatSettings.decimalSeparator
 		},
 		abbreviations : {
 			thousand : app.translator.translateSync('amp.dashboard:chart-thousand'),

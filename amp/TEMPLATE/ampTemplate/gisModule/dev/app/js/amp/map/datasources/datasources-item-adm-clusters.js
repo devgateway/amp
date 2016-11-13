@@ -32,7 +32,7 @@ module.exports = Backbone.View.extend({
 
             // Get actual or planned based on funding type setting
             var fundingType = 'Actual';
-            var selected = self.app.data.settingsWidget.getSelectedOrDefaultFundingTypeId();
+            var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
             if (selected.toLowerCase().indexOf('planned') >= 0) {
               fundingType = 'Planned';
             }
@@ -42,7 +42,7 @@ module.exports = Backbone.View.extend({
             // Format values.
             var formattedCommitments = ampFormatter.format(project.attributes[fundingType + ' Commitments']);
             var formattedDisbursements = ampFormatter.format(project.attributes[fundingType + ' Disbursements']);
-            var currencyCode = self.app.data.settingsWidget.getSelectedOrDefaultCurrencyId();
+            var currencyCode = self.app.data.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
             
             // put them on the page.
             self.$el.append(self.template({

@@ -18,7 +18,7 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.collection = this.app.data.activities;
     this.listenTo(this.app.data.filter, 'apply', this.refreshModel);
-    this.listenTo(this.app.data.settingsWidget, 'apply-settings', this.refreshModel);
+    this.listenTo(this.app.data.settingsWidget, 'applySettings', this.refreshModel);
     _.bindAll(this, 'render');
   },
 
@@ -71,7 +71,7 @@ module.exports = Backbone.View.extend({
   updatePlannedActualUI: function() {
     var self = this;
     this.app.data.settingsWidget.definitions.load().then(function() {      
-    	var selected = self.app.data.settingsWidget.getSelectedOrDefaultFundingTypeId();		
+    	var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();		
     	if (selected.toLowerCase().indexOf('planned') >= 0) {
         self.$('.setting-actual').hide();
         self.$('.setting-planned').show();

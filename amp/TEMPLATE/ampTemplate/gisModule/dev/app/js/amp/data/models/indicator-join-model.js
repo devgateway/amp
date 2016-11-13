@@ -40,7 +40,7 @@ module.exports = Backbone.Model
     this.listenTo(app.data.filter, 'apply', function(blah, show) {
         this.trigger('applyFilter', this);
     });
-    this.listenTo(app.data.settingsWidget, 'apply-settings', function(blah, show) {
+    this.listenTo(app.data.settingsWidget, 'applySettings', function(blah, show) {
         this.trigger('applySettings', this);
     });
     this.initializePalette();        

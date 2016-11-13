@@ -45,7 +45,7 @@ module.exports = BaseControlView.extend({
 	this.app.data.settingsWidget.on('close', function() {		
 	});
 	
-	this.app.data.settingsWidget.on('apply-settings', function() {	
+	this.app.data.settingsWidget.on('applySettings', function() {	
 		$('#map-loading').show();		
 	});		
 	

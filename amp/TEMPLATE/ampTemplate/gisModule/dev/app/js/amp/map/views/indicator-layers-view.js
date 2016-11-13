@@ -159,7 +159,7 @@ module.exports = Backbone.View.extend({
         //only for not customs layers
     	 
         if (titleString === '') {
-          var fundingTypeId = self.app.data.settingsWidget.getSelectedOrDefaultFundingTypeId();
+          var fundingTypeId = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
           titleString = self.app.data.settingsWidget.definitions.findFundingTypeById(fundingTypeId).name;        
         }
         var formattedTitleString = ['<strong>',

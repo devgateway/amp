@@ -17,8 +17,8 @@ var Indicators = require('./collections/indicator-collection');
 var StructuresMenu = require('./models/structures-menu-model'); /*a.k.a. structures */
 var ADMClusters = require('./collections/adm-cluster-collection');
 var HilightFundingCollection = require('./collections/hilight-funding-collection');
-var SettingsWidget = require('amp-settings/src/index');
-var GeneralSettings = require('amp-settings/src/models/global-settings');
+var Settings = require('amp-settings/src/index');
+
 
 var Structures = require('./collections/structures-collection'); /*a.k.a. structures */
 var IndicatorTypes = require('./collections/indicator-type-collection');
@@ -49,14 +49,14 @@ _.extend(GISData.prototype, Backbone.Events, {
 	    this.filter.view._getFilterList();
 
 	    this.boundaries = new Boundaries();
-	   this.settingsWidget = new SettingsWidget({
+	   this.settingsWidget = new Settings.SettingsWidget({
 	  		draggable : true,
 	  		caller : 'GIS',
 	  		isPopup: false,
 	  		definitionUrl: '/rest/settings-definitions/gis'
 	   });
 	
-	   this.generalSettings = new GeneralSettings();
+	   this.generalSettings = new Settings.GeneralSettings();
 	   this.generalSettings.load();
 	    
 	    this.indicatorTypes = new IndicatorTypes();

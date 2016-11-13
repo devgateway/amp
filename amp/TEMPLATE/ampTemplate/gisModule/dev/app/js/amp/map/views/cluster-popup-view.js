@@ -41,7 +41,7 @@ module.exports = Backbone.View.extend({
       return feature.properties.admName === popup._source._clusterId;
     });
 
-    this.cluster.fundingType = this.app.data.settingsWidget.getSelectedOrDefaultFundingTypeId();    
+    this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();    
     // get appropriate cluster model:
     if (this.cluster) {
       popup.setContent(this.template(this.cluster));
@@ -165,7 +165,7 @@ module.exports = Backbone.View.extend({
   _updatePlannedActualUI: function() {
     var self = this;
     this.app.data.settingsWidget.definitions.load().then(function() {      
-      var selected = self.app.data.settingsWidget.getSelectedOrDefaultFundingTypeId();      
+      var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();      
       if (selected.toLowerCase().indexOf('planned') >= 0) {
         self.tempDOM.find('.setting-actual').hide();
         self.tempDOM.find('.setting-planned').show();
@@ -199,9 +199,9 @@ module.exports = Backbone.View.extend({
 
         /* Format the numerical columns */               
         var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));        
-        var currencyCode = self.app.data.settingsWidget.getSelectedOrDefaultCurrencyId();
+        var currencyCode = self.app.data.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
         var fundingType = 'Actual';
-        var selected = self.app.data.settingsWidget.getSelectedOrDefaultFundingTypeId();
+        var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
         if (selected.toLowerCase().indexOf('planned') >= 0) {
           fundingType = 'Planned';
         }

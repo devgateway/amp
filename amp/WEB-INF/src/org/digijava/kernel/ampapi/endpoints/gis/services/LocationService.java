@@ -126,10 +126,9 @@ public class LocationService {
 			});
 
 			filterRules.addFilterRule(new ReportColumn(ColumnConstants.COUNTRY), new FilterRule(countryId.value, true));
-			//if country level we only return the current country with 0 has GeoCode
 			admLevelToGeoCode = Collections.unmodifiableMap(new HashMap<String, String>() {
 				{
-					this.put(countryName.value, "0");
+					this.put(countryName.value, countryId.value);
 				}
 			});
 		} else {

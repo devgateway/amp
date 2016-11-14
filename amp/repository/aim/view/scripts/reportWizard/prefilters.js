@@ -89,16 +89,16 @@ Filters.prototype.failure = function (o) {
 						o.argument.filter.filterPanel.setBody("<font color='red'>" + this.filterProblemsMessage + "</font>");
 					} else {
 						// timeout to redirect
-						var timeout = 5;
+						var timeout = 3;
 						
 						// build the error message
-						var errorMessageUserLoggedOut = "<font color='red'><digi:trn jsFriendly='true'>The user is logged out</digi:trn>. ";
+						var errorMessageUserLoggedOut = "<font color='red'><digi:trn jsFriendly='true'>An error has occured</digi:trn>. ";
 
-						errorMessageUserLoggedOut +="<digi:trn jsFriendly='true'>You will be redirected in</digi:trn> " + timeout + " <digi:trn jsFriendly='true'>seconds</digi:trn></font>.";
+						errorMessageUserLoggedOut +="<digi:trn jsFriendly='true'>The page will be reloaded in </digi:trn> " + timeout + " <digi:trn jsFriendly='true'>seconds</digi:trn></font>.";
 						o.argument.filter.filterPanel.setBody(errorMessageUserLoggedOut);
 						
 						var timer = setTimeout(function() {
-							window.location = '/aim/index.do'
+							window.location.reload();
 						}, timeout * 1000);
 					}
 	            }  catch (x) {

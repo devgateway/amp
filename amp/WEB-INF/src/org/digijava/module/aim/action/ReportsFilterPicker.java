@@ -27,6 +27,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.InvalidReportContextException;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.exception.DgException;
@@ -126,7 +127,7 @@ public class ReportsFilterPicker extends Action {
         }
         
 		if(request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")){
-    		return mapping.findForward("mydesktop");
+    		return mapping.findForward("index");
     	}
 
         if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && 
@@ -158,9 +159,15 @@ public class ReportsFilterPicker extends Action {
 		if ("true".equals(sourceIsReportWizard) ) {
 			filterForm.setSourceIsReportWizard(true);
 			if ( request.getParameter("doreset") != null ) {
-				AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
-				FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
-				modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_FILTERS, reportFilter);
+				try {
+					AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
+					FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
+					modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_FILTERS, reportFilter);
+				} catch (InvalidReportContextException e) {
+					logger.error(e.getMessage(), e);
+					return mapping.findForward("mydesktop");
+				}
+				
 				return mapping.findForward("forward");
 			}
 		}
@@ -237,17 +244,15 @@ public class ReportsFilterPicker extends Action {
 			AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
 			return decideNextForward(mapping, filterForm, request, arf);
 		}
-
-		AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
-		FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
-		try
-		{
+		try {
+			AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
+			FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
 			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL, reportFilter);
+		} catch (InvalidReportContextException e) {
+			logger.error(e.getMessage(), e);
+			return mapping.findForward("mydesktop");
 		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		
 		return mapping.findForward("forward");
 		/*AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
 		return decideNextForward(mapping, filterForm, request, arf);*/

@@ -435,7 +435,7 @@ public class ReportContextData
 			if (createIfNotExists)
 				return createWithId(request.getSession(), reportId, false);
 			else
-				throw new IllegalStateException("nonexistant reportId: " + reportId);
+				throw new InvalidReportContextException("nonexistant reportId: " + reportId);
 		}
 		
 		return map.get(reportId);

@@ -69,17 +69,15 @@ module.exports = Backbone.View.extend({
   // table should show planned comitments and dispursements,
   // otherwise show actual values.
   updatePlannedActualUI: function() {
-    var self = this;
-    this.app.data.settingsWidget.definitions.load().then(function() {      
-    	var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();		
-    	if (selected.toLowerCase().indexOf('planned') >= 0) {
-        self.$('.setting-actual').hide();
-        self.$('.setting-planned').show();
-      } else {
-        self.$('.setting-actual').show();
-        self.$('.setting-planned').hide();
-      }
-    });
+	  var self = this;
+	  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();		
+	  if (selected.toLowerCase().indexOf('planned') >= 0) {
+		  self.$('.setting-actual').hide();
+		  self.$('.setting-planned').show();
+	  } else {
+		  self.$('.setting-actual').show();
+		  self.$('.setting-planned').hide();
+	  }    
   },
 
   toggleDatasources: function() {

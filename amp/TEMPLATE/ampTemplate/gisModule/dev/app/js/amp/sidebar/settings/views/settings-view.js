@@ -21,14 +21,12 @@ module.exports = BaseControlView.extend({
     var self = this;
     BaseControlView.prototype.initialize.apply(this, arguments);
     this.app = options.app;
-    
-    this.app.data.settingsWidget.definitions.loaded.done(_(function() {
-        self.app.data.state.register(this, 'settings', {
+    self.app.data.state.register(this, 'settings', {
           get: self.app.data.settingsWidget.toAPIFormat,
           set: self.app.data.settingsWidget.restoreFromSaved,
           empty: null
         });
-    }).bind(this));
+   
     
   },
 

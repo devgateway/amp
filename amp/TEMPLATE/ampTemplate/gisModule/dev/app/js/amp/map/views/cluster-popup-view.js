@@ -163,64 +163,59 @@ module.exports = Backbone.View.extend({
   // table should show planned comitments and dispursements,
   // otherwise show actual values.
   _updatePlannedActualUI: function() {
-    var self = this;
-    this.app.data.settingsWidget.definitions.load().then(function() {      
-      var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();      
-      if (selected.toLowerCase().indexOf('planned') >= 0) {
-        self.tempDOM.find('.setting-actual').hide();
-        self.tempDOM.find('.setting-planned').show();
-      } else {
-        self.tempDOM.find('.setting-actual').show();
-        self.tempDOM.find('.setting-planned').hide();
-      }
-    });
+	  var self = this;       
+	  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();      
+	  if (selected.toLowerCase().indexOf('planned') >= 0) {
+		  self.tempDOM.find('.setting-actual').hide();
+		  self.tempDOM.find('.setting-planned').show();
+	  } else {
+		  self.tempDOM.find('.setting-actual').show();
+		  self.tempDOM.find('.setting-planned').hide();
+	  }    
   },
 
 
 
   //TODO: should be done in data.adm cluster..then we can cache for if someone closes and reopens
   _loadMoreProjects: function() {
-    var self = this;
-    var startIndex = this._currentPage * this.PAGE_SIZE;
-    var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
+	  var self = this;
+	  var startIndex = this._currentPage * this.PAGE_SIZE;
+	  var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
 
-    // hide load more button if all activities loaded.
-    if (startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length) {
-      this.tempDOM.find('.load-more').hide();
-    } else {
-      this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
-        (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.activityid.length);
-    }
+	  // hide load more button if all activities loaded.
+	  if (startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length) {
+		  this.tempDOM.find('.load-more').hide();
+	  } else {
+		  this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
+				  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.activityid.length);
+	  }
 
-    return this.app.data.activities.getActivities(activityIDs).then(function(activityCollection) {
+	  return this.app.data.activities.getActivities(activityIDs).then(function(activityCollection) {        
+		  self.tempDOM.find('#projects-pane .loading').remove();
+		  /* Format the numerical columns */               
+		  var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));        
+		  var currencyCode = self.app.data.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
+		  var fundingType = 'Actual';
+		  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
+		  if (selected.toLowerCase().indexOf('planned') >= 0) {
+			  fundingType = 'Planned';
+		  }
 
-        self.app.data.settingsWidget.definitions.load().then(function() {
-        self.tempDOM.find('#projects-pane .loading').remove();
+		  var activityFormatted = _.map(activityCollection, function(activity) {
 
-        /* Format the numerical columns */               
-        var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));        
-        var currencyCode = self.app.data.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
-        var fundingType = 'Actual';
-        var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
-        if (selected.toLowerCase().indexOf('planned') >= 0) {
-          fundingType = 'Planned';
-        }
+			  var formattedCommitments = ampFormatter.format(activity.get(fundingType + ' Commitments'));
+			  var formattedDisbursements = ampFormatter.format(activity.get(fundingType + ' Disbursements'));
 
-        var activityFormatted = _.map(activityCollection, function(activity) {
+			  //TODO: should be done elsewhere, for example in toJSON or parse.
+			  activity.set('formattedActualCommitments', [formattedCommitments ? formattedCommitments : 0, ' ', currencyCode].join(''));
+			  activity.set('formattedActualDisbursements', [formattedDisbursements ? formattedDisbursements : 0, ' ', currencyCode].join(''));
+			  return activity;
+		  });
 
-          var formattedCommitments = ampFormatter.format(activity.get(fundingType + ' Commitments'));
-          var formattedDisbursements = ampFormatter.format(activity.get(fundingType + ' Disbursements'));
+		  self.tempDOM.find('.project-list').append(
+				  self.projectListTemplate({activities: activityFormatted})
+		  );
 
-          //TODO: should be done elsewhere, for example in toJSON or parse.
-          activity.set('formattedActualCommitments', [formattedCommitments ? formattedCommitments : 0, ' ', currencyCode].join(''));
-          activity.set('formattedActualDisbursements', [formattedDisbursements ? formattedDisbursements : 0, ' ', currencyCode].join(''));
-          return activity;
-        });
-
-        self.tempDOM.find('.project-list').append(
-        self.projectListTemplate({activities: activityFormatted})
-        );
-      });
-    });
+	  });
   }
 });

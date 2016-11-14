@@ -84,14 +84,11 @@ module.exports = Backbone.Collection.extend({
 
       // this is a custom one. API is a bit messy so we do fair bit of manual work.
       if (layer.colorRamp) {
-    	 layer.id = app.constants.JOIN_BOUNDARIES_PREFIX + layer.id;
-    	 self.generalSettings.load().then(function() {    	    
-    	   layer.title = StringUtil.getMultilangString(layer,'name', self.generalSettings);
-    	   layer.description = StringUtil.getMultilangString(layer,'description', self.generalSettings);  
-    	   layer.unit = StringUtil.getMultilangString(layer,'unit', self.generalSettings);
-    	 });   	 
-        layer.type = 'joinBoundaries';
-        //debugger
+    	layer.id = app.constants.JOIN_BOUNDARIES_PREFIX + layer.id;    	    	    
+    	layer.title = StringUtil.getMultilangString(layer,'name', self.generalSettings);
+    	layer.description = StringUtil.getMultilangString(layer,'description', self.generalSettings);  
+    	layer.unit = StringUtil.getMultilangString(layer,'unit', self.generalSettings);    	  	 
+        layer.type = 'joinBoundaries';        
         layer.classes = layer.numberOfClasses;        
         return true;
       }

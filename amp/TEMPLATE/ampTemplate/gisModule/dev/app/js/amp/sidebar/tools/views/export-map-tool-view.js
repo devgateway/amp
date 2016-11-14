@@ -21,8 +21,7 @@ module.exports = Backbone.View.extend({
 
   render: function() {
 	  var self = this;
-  	this.app.data.generalSettings.load().then(function(){  		
-        var foundPS = self.app.data.generalSettings.get('project-sites');         
+  	  var foundPS = self.app.data.generalSettings.get('project-sites');         
         if (foundPS !== true) {
         	//need to remove project-sites
         	//find the index of project-sites in projectLayerCollection
@@ -43,9 +42,8 @@ module.exports = Backbone.View.extend({
     	    self.$el.append(self.template());        	
         }
   		
-        self.app.translator.translateDOM(self.el);
-  	});
-    return this;
+        self.app.translator.translateDOM(self.el);  	
+        return this;
   },
 
   // can't call it export because that's a reserved word.

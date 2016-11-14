@@ -143,47 +143,45 @@ module.exports = Backbone.View.extend({
 
   // used to hilight the geojson layer on click, show popup, and unhilight after.
   tmpFundingOnEachFeature: function(feature, layer, layerModel) {
-    var self = this;
-    // Add popup
-    if (feature && feature.properties) {
-      // TODO: drs append  format value.
-      var unit = (layerModel.get('unit') ? layerModel.get('unit') : '');
-      var colorRamp = layerModel.get('colorRamp');
-      var titleString = '';
-      // this is a custom one.
-      if (colorRamp) {
-        titleString = layerModel.get('title');
-      }
-      self.app.data.settingsWidget.definitions.load().then(function() {
+	  var self = this;
+	  // Add popup
+	  if (feature && feature.properties) {
+		  // TODO: drs append  format value.
+		  var unit = (layerModel.get('unit') ? layerModel.get('unit') : '');
+		  var colorRamp = layerModel.get('colorRamp');
+		  var titleString = '';
+		  // this is a custom one.
+		  if (colorRamp) {
+			  titleString = layerModel.get('title');
+		  }      
 
-        //only for not customs layers
-    	 
-        if (titleString === '') {
-          var fundingTypeId = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
-          titleString = self.app.data.settingsWidget.definitions.findFundingTypeById(fundingTypeId).name;        
-        }
-        var formattedTitleString = ['<strong>',
-                             titleString,
-                             ': ',
-                             '</strong>'].join('');
-                  
-        var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));    
-        var value;
-        var percentIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_PERCENTAGE});
-        var ratioOtherIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_OTHER});
-        if(layerModel.get('gapAnalysis') !== true && ((percentIndicator && percentIndicator.get('id') === layerModel.get('indicatorTypeId')) || (ratioOtherIndicator && ratioOtherIndicator.get('id') === layerModel.get('indicatorTypeId')))){
-        	value = ampFormatter.format(feature.properties.value * 100);
-        }else{
-        	value = ampFormatter.format(feature.properties.value)
-        }        
-        
-        var fundingPopupTemplate = value ? ['<strong>', feature.properties.name, '</strong>',
-                        '<br/>', formattedTitleString, '',
-                        value, ' ', unit].join('') : ['<strong>', feature.properties.name, '</strong>',
-                                                      '<br/>', self.app.translator.translateSync("amp.gis:popup-no-data","No Data")].join('');
+		  //only for not customs layers    	 
+		  if (titleString === '') {
+			  var fundingTypeId = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
+			  titleString = self.app.data.settingsWidget.definitions.findFundingTypeById(fundingTypeId).name;        
+		  }
+		  var formattedTitleString = ['<strong>',
+		                              titleString,
+		                              ': ',
+		                              '</strong>'].join('');
 
-        layer.bindPopup(fundingPopupTemplate);
-      });
+		  var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));    
+		  var value;
+		  var percentIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_PERCENTAGE});
+		  var ratioOtherIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_OTHER});
+		  if(layerModel.get('gapAnalysis') !== true && ((percentIndicator && percentIndicator.get('id') === layerModel.get('indicatorTypeId')) || (ratioOtherIndicator && ratioOtherIndicator.get('id') === layerModel.get('indicatorTypeId')))){
+			  value = ampFormatter.format(feature.properties.value * 100);
+		  }else{
+			  value = ampFormatter.format(feature.properties.value)
+		  }        
+
+		  var fundingPopupTemplate = value ? ['<strong>', feature.properties.name, '</strong>',
+		                                      '<br/>', formattedTitleString, '',
+		                                      value, ' ', unit].join('') : ['<strong>', feature.properties.name, '</strong>',
+		                                                                    '<br/>', self.app.translator.translateSync("amp.gis:popup-no-data","No Data")].join('');
+
+		                                      layer.bindPopup(fundingPopupTemplate);
+      
     }
 
     // hilight and unhilight the area when a user clicks on them..

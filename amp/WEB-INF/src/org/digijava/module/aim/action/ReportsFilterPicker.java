@@ -118,136 +118,136 @@ public class ReportsFilterPicker extends Action {
 //    	AmpCaching.clearInstance();
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
 		//filterForm.setAmpReportId(ReportContextData.getFromRequest().getAmp);
-        boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
-        boolean showWorkspaceFilter = true;
-        TeamMember teamMember = (TeamMember) request.getSession().getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-        AmpTeam ampTeam = null;
-        if (teamMember != null) {
-            ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
-        }
-        
-		if(request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")){
-    		return mapping.findForward("index");
-    	}
-
-        if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && 
-        		ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {
-           showWorkspaceFilter = false;
-        }
-        filterForm.setShowWorkspaceFilter(showWorkspaceFilter);
-
-
- 	 	String ampReportId 	= request.getParameter("ampReportId");
-		if ( "".equals(ampReportId) )
-			ampReportId		= null;
-		
-		Long longAmpReportId = ampReportId == null ? null : tryParseLong(ampReportId);
-		
-		if(ampReportId==null){
-			ampReportId = request.getParameter("reportContextId");
+		try {
+	        boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
+	        boolean showWorkspaceFilter = true;
+	        TeamMember teamMember = (TeamMember) request.getSession().getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+	        AmpTeam ampTeam = null;
+	        if (teamMember != null) {
+	            ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
+	        }
+	        
+			if(request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")){
+	    		return mapping.findForward("index");
+	    	}
+	
+	        if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && 
+	        		ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {
+	           showWorkspaceFilter = false;
+	        }
+	        filterForm.setShowWorkspaceFilter(showWorkspaceFilter);
+	
+	
+	 	 	String ampReportId 	= request.getParameter("ampReportId");
 			if ( "".equals(ampReportId) )
 				ampReportId		= null;
-			longAmpReportId = ampReportId == null ? null : tryParseLong(ampReportId);
-		}
-		if(longAmpReportId==null){
-			String pledged = request.getParameter("pledged");
-			if(pledged!=null){
-				filterForm.setPledged(Boolean.valueOf(pledged));
+			
+			Long longAmpReportId = ampReportId == null ? null : tryParseLong(ampReportId);
+			
+			if(ampReportId==null){
+				ampReportId = request.getParameter("reportContextId");
+				if ( "".equals(ampReportId) )
+					ampReportId		= null;
+				longAmpReportId = ampReportId == null ? null : tryParseLong(ampReportId);
 			}
-		}
-		String sourceIsReportWizard			= request.getParameter("sourceIsReportWizard");
-		if ("true".equals(sourceIsReportWizard) ) {
-			filterForm.setSourceIsReportWizard(true);
-			if ( request.getParameter("doreset") != null ) {
-				try {
-					AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
-					FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
-					modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_FILTERS, reportFilter);
-				} catch (InvalidReportContextException e) {
-					logger.error(e.getMessage(), e);
-					return mapping.findForward("mydesktop");
+			if(longAmpReportId==null){
+				String pledged = request.getParameter("pledged");
+				if(pledged!=null){
+					filterForm.setPledged(Boolean.valueOf(pledged));
 				}
-				
-				return mapping.findForward("forward");
 			}
-		}
-		else
-			filterForm.setSourceIsReportWizard(false);
-		
-		filterForm.setAmpReportId(ampReportId);
-//		this code makes no sense		
-// 		AmpARFilter arf = (AmpARFilter) request.getSession().getAttribute(ArConstants.REPORTS_Z_FILTER);
-//		if (arf == null)
-//		{
-//			arf = new AmpARFilter();		
-//			arf.setPublicView(true);
-//			request.getSession().setAttribute(ArConstants.REPORTS_Z_FILTER,arf);
-//		}
-		
-		filterForm.setPledged(false);
-		if (longAmpReportId != null)
-		{
-			Session session = PersistenceManager.getSession();
-			AmpReports report = (AmpReports) session.get(AmpReports.class, longAmpReportId);
-			if (report != null &&  report.getType() != null ){
-				filterForm.setReporttype(report.getType());
-				filterForm.setPledged(report.getType() == ArConstants.PLEDGES_TYPE);
-			}
-			if (ampReportId.length() > 0 && report != null && report.getDrilldownTab())
-				request.getSession().setAttribute(Constants.CURRENT_TAB_REPORT, report);
-		}
-		
- 		// init form
-		if (request.getParameter("init") != null)
-		{
-			AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
-			FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
-			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS, reportFilter);
-			return null;
-		}
-
-		String applyFormatValue = request.getParameter("applyFormat");
-		if (applyFormatValue != null)
-		{
-			if (applyFormatValue.equals("Reset"))
-			{
-				// TODO-CONSTANTIN: reset is now done client-side. If done server-side, should handle non-english translations of "Reset" here!
-				// reset tab/report settings
-				AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
-				return decideNextForward(mapping, filterForm, request, arf);
-				//return modeReset(mapping, form, request, response);
-			} else if (applyFormatValue.equals("true"))
-			{
-				AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
-				return decideNextForward(mapping, filterForm, request, arf); // an AMP-y-hacky way of saying "please redraw the report without changing anything"
+			String sourceIsReportWizard			= request.getParameter("sourceIsReportWizard");
+			if ("true".equals(sourceIsReportWizard) ) {
+				filterForm.setSourceIsReportWizard(true);
+				if ( request.getParameter("doreset") != null ) {
+					try {
+						AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
+						FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
+						modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_FILTERS, reportFilter);
+					} catch (InvalidReportContextException e) {
+						logger.error(e.getMessage(), e);
+						return mapping.findForward("mydesktop");
+					}
+					
+					return mapping.findForward("forward");
+				}
 			}
 			else
+				filterForm.setSourceIsReportWizard(false);
+			
+			filterForm.setAmpReportId(ampReportId);
+	//		this code makes no sense		
+	// 		AmpARFilter arf = (AmpARFilter) request.getSession().getAttribute(ArConstants.REPORTS_Z_FILTER);
+	//		if (arf == null)
+	//		{
+	//			arf = new AmpARFilter();		
+	//			arf.setPublicView(true);
+	//			request.getSession().setAttribute(ArConstants.REPORTS_Z_FILTER,arf);
+	//		}
+			
+			filterForm.setPledged(false);
+			if (longAmpReportId != null)
 			{
-				if (!applyFormatValue.equals("Apply Format"))
-					logger.warn("unknown applyformat setting, assuming it is 'Apply Format': " + applyFormatValue);
-				// apply tab/report settings
-				AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
+				Session session = PersistenceManager.getSession();
+				AmpReports report = (AmpReports) session.get(AmpReports.class, longAmpReportId);
+				if (report != null &&  report.getType() != null ){
+					filterForm.setReporttype(report.getType());
+					filterForm.setPledged(report.getType() == ArConstants.PLEDGES_TYPE);
+				}
+				if (ampReportId.length() > 0 && report != null && report.getDrilldownTab())
+					request.getSession().setAttribute(Constants.CURRENT_TAB_REPORT, report);
+			}
+			
+	 		// init form
+			if (request.getParameter("init") != null)
+			{
+				AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
+				FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
+				modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS, reportFilter);
+				return null;
+			}
+	
+			String applyFormatValue = request.getParameter("applyFormat");
+			if (applyFormatValue != null)
+			{
+				if (applyFormatValue.equals("Reset"))
+				{
+					// TODO-CONSTANTIN: reset is now done client-side. If done server-side, should handle non-english translations of "Reset" here!
+					// reset tab/report settings
+					AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
+					return decideNextForward(mapping, filterForm, request, arf);
+					//return modeReset(mapping, form, request, response);
+				} else if (applyFormatValue.equals("true"))
+				{
+					AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
+					return decideNextForward(mapping, filterForm, request, arf); // an AMP-y-hacky way of saying "please redraw the report without changing anything"
+				}
+				else
+				{
+					if (!applyFormatValue.equals("Apply Format"))
+						logger.warn("unknown applyformat setting, assuming it is 'Apply Format': " + applyFormatValue);
+					// apply tab/report settings
+					AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
+					return decideNextForward(mapping, filterForm, request, arf);
+				}				
+			}
+			
+			// gone till here -> Apply or Reset Filters form 
+			if (request.getParameter("reset") != null)
+			{
+				AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
 				return decideNextForward(mapping, filterForm, request, arf);
-			}				
-		}
-		
-		// gone till here -> Apply or Reset Filters form 
-		if (request.getParameter("reset") != null)
-		{
-			AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
-			return decideNextForward(mapping, filterForm, request, arf);
-		}
-
-		if (request.getParameter("apply") != null)
-		{
-			// apply Filters form
-			AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
-			return decideNextForward(mapping, filterForm, request, arf);
-		}
-		try {
-			AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
-			FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
-			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL, reportFilter);
+			}
+	
+			if (request.getParameter("apply") != null)
+			{
+				// apply Filters form
+				AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
+				return decideNextForward(mapping, filterForm, request, arf);
+			}
+				AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
+				FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
+				modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL, reportFilter);
 		} catch (InvalidReportContextException e) {
 			logger.error(e.getMessage(), e);
 			return mapping.findForward("mydesktop");

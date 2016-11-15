@@ -38,10 +38,45 @@ public class ConfigEndpoints {
     private static final String INSERTED = "INSERTED";
     private static final String NOT_VALID = "NOT A VALID GLOBAL SETTING";
     private static final String NOT_VALID_VALUE = "NOT A VALID VALUE";
-	/**
-	 * Save global settings
-	 * @param globalSettings jsonBean with a settings to save
-	 * @return save's status jsonBean 
+	
+    
+    /**
+	 * Updates or creates global settings from a JSON representation.
+	 * </br>
+	 * If a settingsName is provided and a global settings exists with this settingsName, the global settings is updated. Otherwise, the global settings is created.<br>
+	 * The response will be an array of JSON objects having information about the global settings and status result (SAVED|INSERTED|NOT A VALID VALUE) 
+	 * 
+	 * <h3>Sample Input:</h3><pre>
+     * {"settings" : 
+	 *  [
+	 *   {
+	 *     "settingName": "Closed activity status",
+	 *     "settingValue": "211",
+	 *     "possibleValues": "v_g_settings_activity_statuses",
+	 *     "description": "(Only valid when feature is enabled) The status corresponding to the \"Activity has ended\" state",
+	 *     "section": "general",
+	 *     "valueTranslatable": null,
+	 *     "possibleValuesIds": {
+	 *       "Cancelled / Suspended": "200",
+	 *       "Completed": "201",
+	 *       "Considered": "202",
+	 *       "Ongoing": "203",
+	 *       "Planned": "204",
+	 *       "Proposed": "205",
+	 *       "Closed": "211"
+	 *   }
+	 *  ]
+	 * }</pre>
+     * </br>
+     * <h3>Sample Output:</h3><pre>
+     *  [
+	 *   {
+	 *    "Link Mode of Payment to Funding Status": "SAVED"
+	 *   }
+	 *  ]</pre>
+	 * 
+	 * @param globalSettings JSON representation of the global settings
+	 * @return JSON object with all status information (SAVED|INSERTED|NOT A VALID VALUE) 
 	 */
 	@POST
 	@Path("/globalSettings")
@@ -88,11 +123,68 @@ public class ConfigEndpoints {
 		return resultList;
 	}
 	
-	
 	/**
-	 * get global settings
-	 * @param globalSettings jsonBean with a settings to save
-	 * @return save's status jsonBean 
+	 * Provides global settings options and their possible values for the requested options.
+	 * </br>
+	 * <dl>
+	 * The global settings JSON object holds information regarding:
+	 * <dt><b>settingName</b><dd> - the name of the global settings
+	 * <dt><b>settingValue</b><dd> - the current value of the settings
+	 * <dt><b>possibleValues</b><dd> - the type of possible values. It could be boolean, double, integer or 
+	 * <dt><b>description</b><dd> - the description of the global settings
+	 * <dt><b>section</b><dd> - the section where the global settings belongs to
+	 * <dt><b>valueTranslatbale</b><dd> - if the global settings has translations
+	 * <dt><b>possibleValuesIds</b><dd> - possible values of the settings
+	 * </dl></br></br>
+	 * If the request contains an empty JSON, all global settings will be provided.
+	 * Empty Request: <code>{}</code></br></br>
+	 * 
+	 * In order to retrieve information about specific settings, the request should contain a JSON object with the names of the desirable information.
+	 * 
+	 * <h3>Sample Input:</h3><pre>
+     * {"settings" : 
+	 *  [
+	 *    {"settingName": "Link Mode of Payment to Funding Status"},
+	 *    {"settingName" : "Closed activity status"}
+	 *  ]
+	 * }</pre>
+     * </br>
+     * <h3>Sample Output:</h3><pre>
+     * {
+     *   "settings": [
+	 *    {
+	 *     "settingName": "Link Mode of Payment to Funding Status",
+	 *     "settingValue": "false",
+	 *     "possibleValues": "t_Boolean",
+	 *     "description": "Link Mode of Payment to Funding Status",
+	 *     "section": "funding",
+	 *     "valueTranslatable": null,
+	 *     "possibleValuesIds": {}
+	 *    },
+	 *    {
+	 *     "settingName": "Closed activity status",
+	 *     "settingValue": "211",
+	 *     "possibleValues": "v_g_settings_activity_statuses",
+	 *     "description": "(Only valid when feature is enabled) The status corresponding to the \"Activity has ended\" state",
+	 *     "section": "general",
+	 *     "valueTranslatable": null,
+	 *     "possibleValuesIds": {
+	 *       "Cancelled / Suspended": "200",
+	 *       "Completed": "201",
+	 *       "Considered": "202",
+	 *       "Ongoing": "203",
+	 *       "Planned": "204",
+	 *       "Proposed": "205",
+	 *       "Closed": "211"
+	 *    }
+     *  ]
+     * }</pre>
+	 * 
+	 * 
+	 * @param globalSettings a JSON object containing the information about the requested global settings. 
+	 * If the JSON is empty the endpoint will return all global settings
+	 * 
+	 * @return a JSON object with the available global settings 
 	 */
 	@POST
 	@Path("/getGlobalSettings")

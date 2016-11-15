@@ -152,7 +152,7 @@ public class ExportActivityToWord extends Action {
         HttpSession session = request.getSession();
         
         TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-        if(teamMember == null && !FeaturesUtil.isVisibleFeature("Show Editable Export Formats")) {
+        if(teamMember == null && !FeaturesUtil.isVisibleModule("Show Editable Export Formats")) {
         	return mapping.findForward("index");
         }
         

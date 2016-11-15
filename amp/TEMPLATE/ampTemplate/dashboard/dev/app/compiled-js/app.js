@@ -32208,9 +32208,9 @@ var SettingsDefinitionsCollection = require('./collections/settings-definitions-
 var SettingsView = require('./views/settings-view');
 var GeneralSettings = require('./models/general-settings');
 //jquery is colliding in GIS module, so we only load it if it is not loaded or if there is a jquery loaded but version is older than 2.x.x
-//if (window.$ == undefined || $.fn.jquery.split(' ')[0].split('.')[0] < 2) {
+if (window.$ == undefined || $.fn.jquery.split(' ')[0].split('.')[0] < 2) {
 	window.jQuery = window.$ = Backbone.$ = jQuery;
-//}
+}
 var bootstrap_enabled = (typeof $().modal == 'function');
 if (bootstrap_enabled) {
 	require('bootstrap/dist/js/bootstrap');

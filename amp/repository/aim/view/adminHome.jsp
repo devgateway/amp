@@ -8,7 +8,6 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/gis-layers-manager.css">
 
 <jsp:include page="teamPagesHeader.jsp"  />
 <jsp:include page="allVisibilityTags.jsp" />
@@ -326,7 +325,7 @@
                           <tr>
                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                            <td>
-                             <a href="#" onclick="showLayerManager();return false;">
+                             <a href="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/index.html" >
                                 <digi:trn>GIS Layers Manager</digi:trn>
                              </a>
                            </td>                          
@@ -817,22 +816,3 @@
     </td>
   </tr>
 </table>
-<div id="layers-manager-popup" style="display:none;"></div>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/gis-layers-manager.js"/>"></script>
-<script language="JavaScript">
-
-       var gisLayersManager = new window.gisLayersManager({
-     		draggable: true,
-	        caller: 'ADMIN',
-	        el: $('#layers-manager-popup')
-		  });
-              
-        gisLayersManager.on('cancel', function() { 	      
- 	       $('#layers-manager-popup').hide();
- 	    });
-       
-       function showLayerManager() {
-    	     gisLayersManager.show(); 
-    	     $('#layers-manager-popup').show();
-    	}
-</script>

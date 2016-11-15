@@ -66,6 +66,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 
@@ -267,7 +268,13 @@ public class ReportWizardAction extends MultiAction {
         }else{
             myForm.setProjecttitle("");
         }
-        myForm.setDefaultLanguage(TLSUtils.getEffectiveLangCode());
+
+        if (!ContentTranslationUtil.multilingualIsEnabled()){
+            //If content translation is not enabled we need to use the default site language
+            myForm.setDefaultLanguage(TLSUtils.getSite().getDefaultLanguage().getCode());
+        } else {
+            myForm.setDefaultLanguage(TLSUtils.getEffectiveLangCode());
+        }
 
         if (request.getParameter("type")!=null){
             typereport = new Integer(request.getParameter("type"));

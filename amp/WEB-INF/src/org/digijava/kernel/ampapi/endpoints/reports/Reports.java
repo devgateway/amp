@@ -737,7 +737,7 @@ public class Reports implements ErrorReportingEndpoint {
 				MultilingualInputFieldValues.serialize(report, "name", session, translations);
 				logger.info(report);
 			} else {
-				message = TranslatorWorker.translateText("Invalid report name.");
+				message = TranslatorWorker.translateText("Please enter a report name in current language");
 			}
 		} catch (Exception e) {
 			message = e.getLocalizedMessage();

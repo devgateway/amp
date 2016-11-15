@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action;
 
+import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
+
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.DocumentException;
@@ -157,7 +159,7 @@ public class ExportActivityToWord extends Action {
         HttpSession session = request.getSession();
         
         TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-        if(teamMember == null && !FeaturesUtil.isVisibleFeature("Show Editable Export Formats")) {
+        if(teamMember == null && !FeaturesUtil.isVisibleModule("Show Editable Export Formats")) {
         	return mapping.findForward("index");
         }
         
@@ -1671,43 +1673,43 @@ public class ExportActivityToWord extends Action {
      */
     private List<Table> getContactInfoTables (HttpServletRequest request,	ServletContext ampContext, EditActivityForm myForm) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
-        HttpSession session=request.getSession();
+        HttpSession session = request.getSession();
         ExportSectionHelper eshTitle = new ExportSectionHelper("Contact Information", true).setWidth(100f).setAlign("left");
 
-        if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts")){
-
+        boolean isContactInformationVisible = FeaturesUtil.isVisibleModule("/Activity Form/Contacts") &&
+        		((TeamMember) session.getAttribute(CURRENT_MEMBER) != null || FeaturesUtil.isVisibleFeature("Contacts"));
+        
+        if(isContactInformationVisible) {
             retVal.add(createSectionTable(eshTitle, request, ampContext));
-
             ExportSectionHelper eshContactInfoTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
 
             // Donor funding contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Donor Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,	"Donor funding contact information", myForm
-                        .getContactInformation().getDonorContacts(),ampContext, request);
+                buildContactInfoOutput(eshContactInfoTable,	"Donor funding contact information", 
+                		myForm.getContactInformation().getDonorContacts(), ampContext, request);
             }
             // MOFED contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Mofed Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,"MOFED contact information", myForm
-                        .getContactInformation().getMofedContacts(),ampContext, request);
+                buildContactInfoOutput(eshContactInfoTable, "MOFED contact information", 
+                		myForm.getContactInformation().getMofedContacts(), ampContext, request);
             }
             // Sec Min funding contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,	"Sector Ministry contact information", myForm
-                        .getContactInformation().getSectorMinistryContacts(), ampContext, request);
+                buildContactInfoOutput(eshContactInfoTable,	"Sector Ministry contact information", 
+                		myForm.getContactInformation().getSectorMinistryContacts(), ampContext, request);
             }
             // Project Coordinator contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,	"Proj. Coordinator contact information", myForm					.getContactInformation()
-                        .getProjCoordinatorContacts(), ampContext,request);
+                buildContactInfoOutput(eshContactInfoTable,	"Proj. Coordinator contact information", 
+                		myForm.getContactInformation().getProjCoordinatorContacts(), ampContext, request);
             }
             // Implementing/executing agency contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Implementing Executing Agency Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,"Implementing/Executing Agency contact information",	myForm.getContactInformation()
-                        .getImplExecutingAgencyContacts(), ampContext,request);
+                buildContactInfoOutput(eshContactInfoTable, "Implementing/Executing Agency contact information", 
+                		myForm.getContactInformation().getImplExecutingAgencyContacts(), ampContext, request);
             }
 
-            retVal.add(createSectionTable(eshContactInfoTable, request,
-                    ampContext));
+            retVal.add(createSectionTable(eshContactInfoTable, request, ampContext));
         }
 
         return retVal;

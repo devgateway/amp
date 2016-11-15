@@ -2,14 +2,18 @@ Saiku.events.bind('session:new', function(session) {
 	function new_workspace(args) {
 		Saiku.logger.log("AMPSettings.new_workspace");
 		if (typeof args.workspace.amp_settings == "undefined") {
-			args.workspace.amp_settings = window.AMPSettings.SettingsWidget({
+			window.settingsWidget =  new AMPSettings.SettingsWidget({
+				el:$('#settings-popup'),
 				draggable : true,
 				caller : 'REPORTS',
 				isPopup: true,
 				definitionUrl: '/rest/settings-definitions/reports'
 			});	
-			args.workspace.generalSettings = window.AMPSettings.GeneralSettings();
-			args.workspace.generalSettings.load();
+			args.workspace.amp_settings = window.settingsWidget;
+			
+			window.generalSettings = new AMPSettings.GeneralSettings();		
+			args.workspace.generalSettings = window.generalSettings;
+			generalSettings.load();
 		}
 	}
 

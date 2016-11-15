@@ -20,39 +20,39 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 public class FMEndpoint {
     
     /**
-     * Feature Manager Endpoint 
+     * Provides FM (Feature Manager) settings for the requested options.
+     * 
+     * The settings will be taken from the current (default) FM template.
      * <dl>
-     * <dt>reporting-fields</dt> <dd>true / false (default) - to list or not reporting-fields
-     * <dt>enabled-modules</dt> <dd>true / false (default) - to list or not enabled modules
-     * <dt>detail-modules</dt> <dd><pre>
-     *         Option1: [“all-enabled”] (if present, other entries are skipped)
-     *         Option2: a list of valid module names like [“GIS”], or [“GIS”, “Dashboards”]
-     *         Option3: [] (i.e. None, which is the default if omitted)
-     *         
-     *         Additions:
-     *          <dt>detail-flat</dt> <dd> true (default) / false - if to detail as a flat list or in a tree form
-     *          <dt>full-enabled-paths<dt> <dd> true (default) / false - if only fully enabled paths to detail</dd>
-     *  </pre>
-     * @param config a JSON input. Sample Request:
-     * <pre>
-     *  {
-     *    “reporting-fields” : true,
-     *    “enabled-modules” : true,
-     *    “detail-modules” : [“GIS”,” Dashboards”, ...]
+     * <b>reporting-fields</b><dd>true/false (default) - to list or not reporting-fields</dd>
+     * <b>enabled-modules</b><dd>true/false (default) - to list or not enabled modules</dd>
+     * <b>detail-modules</b>
+     *     <dd>Option1: ["all-enabled"] (if present, other entries are skipped)</dd>
+     *     <dd>Option2: a list of valid module names like ["GIS"], or ["GIS", "Dashboards"]</dd>
+     *     <dd>Option3: [] (i.e. None, which is the default if omitted)</dd>
+     * </br>
+     * <h5>Additions:</h5>
+     * <b>detail-flat</b> <dd>true (default)/false - if to detail as a flat list or in a tree form</dd>
+     * <b>full-enabled-paths</b> <dd>true (default)/false - if only fully enabled paths to detail</dd>
+     * </br>
+     * <h3>Sample Request:</h3><pre>
+     * {
+     *    "reporting-fields" : true,
+     *    "enabled-modules" : true,
+     *    "detail-modules" : ["GIS","Dashboards", ...]
      *    "detail-flat" : true,
      *    "full-enabled-paths" : true
-     *  }
-     * </pre>
-     * @return requested information. Sample Output:
-     * <pre>
+     *  }</pre>
+     * </br>
+     * <h3>Sample Output:</h3><pre>
      * {
-     *  “reporting-fields” : [“Project Title”, “Primary Sector”, ...],
-     *  “enabled-modules” : [“GIS”, “Dashboards”, ...],
-     *  “GIS” : ["/gis-enabled-setting1/enabled-childX", "/enabled-setting2", ...],
+     *  "reporting-fields" : ["Project Title", "Primary Sector", ...],
+     *  "enabled-modules" : ["GIS", "Dashboards", ...],
+     *  "GIS" : ["/gis-enabled-setting1/enabled-childX", "/enabled-setting2", ...],
      *  ...
-     * }
+     * }</pre>
      * 
-     * Use cases:
+     * <h3>Use cases:</h3><pre>
      * 1) Detail flat & fully enabled paths => /Activity Form/Organiation/Donor Organization
      * 2) Detail flat & partial enabled paths => /Activity Form[true]/Organiation[false]/Donor Organization[true]
      * 3) Detail tree & fully enabled paths =>
@@ -70,6 +70,8 @@ public class FMEndpoint {
      *          },
      *          ...
      * </pre>
+     * @param config a JSON object with requested options (see the provided example) 
+     * @return list of FM settings as a JSON Object
      */
 	@POST
 	@Path("/fm")

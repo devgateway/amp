@@ -61,8 +61,8 @@ var process_spec = function(data) {
 
 	templateQuery.reportSpec = data.reportSpec;
 	Settings.RESULTS_PER_PAGE = data.reportMetadata.recordsPerPage;
-	//TODO: fetch from /rest/amp/settings EP 
-	Settings.NUMBER_FORMAT_OPTIONS = Settings.Util.extractSettings(data.reportMetadata.settings);
+	 
+	//Settings.NUMBER_FORMAT_OPTIONS = Settings.Util.extractSettings(window.generalSettings); //not used
 	
 	var report_type = data.reportMetadata.reportType;
 	var report_fieldname = (report_type === "IN_MEMORY") ? "report_token" : "report_id";

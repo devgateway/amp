@@ -124,12 +124,11 @@
 					<digi:trn>Resources</digi:trn>
 				</html:option>
 
-
-				<html:option value="7">
-					<digi:trn>Pledges</digi:trn>
-				</html:option>
-
-
+				<module:display name="Pledges" parentModule="Project Management">
+					<html:option value="7">
+						<digi:trn>Pledges</digi:trn>
+					</html:option>
+				</module:display>
 				
                 <feature:display name="Responsible Organization" module="Organizations">
                 	<field:display name="Search Feature - Responsible Organization" feature="Search Feature">
@@ -265,7 +264,7 @@
 										<c:forEach items="${resultReports}" var="report">
 											<li><a title="<digi:trn>Click here to view the report</digi:trn>"
                                                     onclick="return popup(this,'');"
-                                                    href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}">
+                                                    href="${fn:getReportUrl(report)}">
                                                     ${report.objectFilteredName}
 												</a>
 											</li>

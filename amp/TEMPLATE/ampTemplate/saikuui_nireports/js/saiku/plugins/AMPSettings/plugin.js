@@ -2,12 +2,6 @@ var AMPSettingsView = Backbone.View.extend({
 			events : {
 				'click .edit_amp_settings' : 'add_amp_settings'
 			},
-			
-			SETTINGS : {
-				"currency": "1",
-				"calendar": "2"
-			},
-
 			initialize : function(args) {
 				Saiku.logger.log("AMPSettings.initialize");
 				var self = this;
@@ -23,7 +17,7 @@ var AMPSettingsView = Backbone.View.extend({
 				this.add_button();
 				this.init_settings_widget();
 				this.workspace.toolbar.amp_settings = this.show;
-				$(this.workspace.el).find('.workspace_results').prepend($(this.el).hide());				
+				$(this.workspace.el).find('.workspace_results').prepend($(this.el).hide());					
 			},
 			init_settings_widget: function(){
 				var self  = this;
@@ -35,7 +29,11 @@ var AMPSettingsView = Backbone.View.extend({
 					definitionUrl: '/rest/settings-definitions/reports'
 				});	
 				
-				
+			    
+			    this.settingsWidget.definitions.loaded.done(function() {
+			    	self.settingsWidget.restoreFromSaved(self.settings_data);	
+			    });
+			    
 				Saiku.events.listenTo(this.settingsWidget, 'cancel', function() {
 					self.hide_container();
 				});
@@ -60,8 +58,7 @@ var AMPSettingsView = Backbone.View.extend({
 				Saiku.logger.log("AMPSettings.applySettings");				
 				
 				this.workspace.query.set('settings', settings);
-				window.currentSettings = settings;
-				
+				window.currentSettings = settings;				
 				this.workspace.query.run_query(null, settings);
 				this.settings_button.removeClass('on');
 				$("#settings-popup").hide(); //hide settings dialog
@@ -82,14 +79,14 @@ var AMPSettingsView = Backbone.View.extend({
 				var self = this;
 				$(this.el).toggle();					
 				$(event.target).toggleClass('on');
-				if ($(event.target).hasClass('on')) {
+				if ($(event.target).hasClass('on')) {					
 					this.settingsWidget.show();
 					$('#settings-popup').show();
 				} else {
 					$('#settings-popup').hide();
 				}
-
 			},
+			
 			render : function() {
 				Saiku.logger.log("AMPSettings.render");
 				$(this.el).empty();

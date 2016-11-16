@@ -113,16 +113,15 @@ _.extend(App.prototype, BackboneDash.Events, {
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
       });
-      // TODO: handle translations load failure
-
+      // TODO: handle translations load failure      ​
       this.filter = new Filter({
-        draggable: true,
-        sync: options.sync || BackboneDash.sync,
-        caller: 'DASHBOARD'
-      });
+          draggable: true,
+          sync: options.sync || BackboneDash.sync,
+          caller: 'DASHBOARD'
+        });
 
-      // initialize app components
-      this.view = new MainView({ app: this, el: options.el });
+   	  // initialize app components
+      this.view = new MainView({ app: this, el: options.el });      
 
       _initDefer.resolve(this);
     } catch (e) {
@@ -2355,17 +2354,6 @@ function flash() {
   }
 }
 
-function sessionstorage(){  
-	var uid = new Date;
-	var result;
-	try {
-		sessionStorage.setItem(uid, uid);
-		result = sessionStorage.getItem(uid) == uid;
-		sessionStorage.removeItem(uid);
-		return result && sessionStorage;
-	} catch (exception) {}	  
-}
-
 
 module.exports = function() {
   var missingFeatures = [];  // an empty array will cast to bool false. handy!
@@ -2404,13 +2392,6 @@ module.exports = function() {
       severity: isIE() ? 'major' : 'minor'
     });
   }
-
-  if (!sessionstorage()) {
-	    missingFeatures.push({
-	      feature: 'sessionStorage',
-	      severity: 'minor'
-	    });
-	  }
 
   return missingFeatures;
 };
@@ -3267,25 +3248,6 @@ module.exports = BackboneDash.Collection.extend({
     this.app = options.app;
     this._loaded = new Deferred();
     _.bindAll(this, 'toAPI', 'fromState');
-    if(!this.app.hasIssue('sessionStorage')){
-      //this should be "once", but this collection gets synced 2 times for some reason
-      //TODO: find the reason for above and replace this with "once"
-      this.on("sync", _(function(){
-        try{
-          var settings = JSON.parse(sessionStorage.settings);
-          if("object" == typeof settings && null !== settings){
-            if(settings[1]){
-              this.findWhere({id: "1"}).select(settings[1], false);              
-            }
-            if(settings[2]){
-              this.findWhere({id: "2"}).select(settings[2], false);
-            }
-          }
-        }
-        //we're catching because it will throw if sessionStorage.settings is empty or corrupted
-        catch(e){}
-      }).bind(this));
-    }
   },
 
   parse: function(settings) {
@@ -3744,7 +3706,7 @@ var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
-var template = _.template("<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <% if (model.get('showTotal') === true) { %>\n\t      <span class=\"pull-right big-number\">\n\t        <b class=\"chart-total\"></b>\n\t        <span class=\"chart-currency\"></span>\n\t      </span>\n      <% } %>\n      <div>\n\t      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\n\t      <% if (model.get('chartType') === 'fragmentation') { %>\n\t      \t<% var help_icon_text = app.translator.translateSync('amp.dashboard:chart-heatmap-help-text-' + model.get('heatmap_type'));%>\n\t      \t<img src=\"/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png\" class=\"question_mark nv-series\" data-title=\"<%= help_icon_text %>\">\n\t      <% } %>\n      </div>\n    </div>\n\t\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n      <div class=\"alert alert-warning negative-values-message\" role=\"alert\">\n          <strong data-i18n=\"amp.dashboard:negatives-values\">Negative values are not represented in this chart.</strong><br>\n          <span data-i18n=\"amp.dashboard:negatives-values-parag\">Please switch to bar chart or table view to view all values.</span>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                heatmap: 'stats',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\" <%= model.get('disableResize') ? 'disabled' : ''%>>\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n      \n      <% if (model.get('chartType') === 'fragmentation') { %>\n\t\t<form class=\"form-inline dash-form dash-xaxis-options\" role=\"form\">\n        \t<select class=\"form-control like-btn-sm xaxis-options\">\n            \t<option>...</option>\n            \t<!-- gets populated after settings load -->\n          \t</select>\n          \t<span class=\"cheat-lineheight\"></span>\n        </form>\n        <button type=\"button\" class=\"btn btn-sm btn-default heatmap-switch\">\n            <span data-i18n=\"amp.dashboard:chart-swap-axes\">Swap Axes</span>\n        </button>\n\t <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>");
+var template = _.template("<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <% if (model.get('showTotal') === true) { %>\n\t      <div class=\"pull-right big-number\">\n\t        <b class=\"chart-total\"></b>\n\t        <span class=\"chart-currency\"></span>\n\t      </div>\n      <% } %>\n      <div class=\"chart-title\">\n\t      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\n\t      <% if (model.get('chartType') === 'fragmentation') { %>\n\t      \t<% var help_icon_text = app.translator.translateSync('amp.dashboard:chart-heatmap-help-text-' + model.get('heatmap_type'));%>\n\t      \t<img src=\"/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png\" class=\"question_mark nv-series\" data-title=\"<%= help_icon_text %>\">\n\t      <% } %>\n      </div>\n    </div>\n\t\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n      <div class=\"alert alert-warning negative-values-message\" role=\"alert\">\n          <strong data-i18n=\"amp.dashboard:negatives-values\">Negative values are not represented in this chart.</strong><br>\n          <span data-i18n=\"amp.dashboard:negatives-values-parag\">Please switch to bar chart or table view to view all values.</span>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                heatmap: 'stats',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\" <%= model.get('disableResize') ? 'disabled' : ''%>>\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n      \n      <% if (model.get('chartType') === 'fragmentation') { %>\n\t\t<form class=\"form-inline dash-form dash-xaxis-options\" role=\"form\">\n        \t<select class=\"form-control like-btn-sm xaxis-options\">\n            \t<option>...</option>\n            \t<!-- gets populated after settings load -->\n          \t</select>\n          \t<span class=\"cheat-lineheight\"></span>\n        </form>\n        <button type=\"button\" class=\"btn btn-sm btn-default heatmap-switch\">\n            <span data-i18n=\"amp.dashboard:chart-swap-axes\">Swap Axes</span>\n        </button>\n\t <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>");
 
 
 var adjOptTemplate = _.template('<option value="<%=opt.id%>" ' +
@@ -3787,8 +3749,8 @@ module.exports = BackboneDash.View.extend({
 
     if (this.app.savedDashes.length) {
       // a bit sketch....
-      this.app.state.loadPromise.always(this._stateWait.resolve);
-    } else {
+    	  this.app.state.loadPromise.always(this._stateWait.resolve);
+      } else {
       this._stateWait.resolve();
     }
 
@@ -3819,57 +3781,60 @@ module.exports = BackboneDash.View.extend({
       chart: this.chartEl,
       util: util
     };
-    this.$el.html(template(renderOptions));
-    this.hideExportInPublicView();
-    this.message = this.$('.dash-chart-diagnostic');
-    this.chartContainer = this.$('.dash-chart-wrap');
-
-    if (this.model.get('adjtype') !== void 0) {  // this chart has adj settings
-    	this.app.settings.load().done(_(function() {
-    	this.rendered = true;
-        var adjSettings = this.app.settings.get('0');  // id for Funding Type
-        if (!adjSettings) { 
-        	this.app.report('Could not find Funding Type settings'); 
-        } else {
-        	if (this.model.get('adjtype') === 'FAKE') {
-        		this.model.set('adjtype', adjSettings.get('defaultId'));
-        	}
-        }
-        this.$('.ftype-options').html(
-          _(adjSettings.get('options')).map(function(opt) {
-            return adjOptTemplate({
-              opt: opt,
-              current: (opt.id === this.model.get('adjtype'))
-            });
-          }, this)
-        );
-      }).bind(this));
-    } else {
-        this.rendered = true;
-    }
-    
-    // For heatmaps add some extra combos.
-    if (this.model.get('chartType') === 'fragmentation') {
-    	var heatMapConfigs = this.model.get('heatmap_config').models[0];
-    	var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function(item) {return item.name === self.model.get('name')});
-    	this.$('.xaxis-options').html(
-    		_(thisHeatMapChart.xColumns).map(function(colId) {
-    			var item = _.find(heatMapConfigs.get('columns'), function(item, i) { return i === colId});
-    			var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
-    			return adjOptTemplate({
-    				opt: opt,
-    	            current: (opt.id === this.model.get('xAxisColumn'))
-    	        });
-    	    }, this)
-    	);
-    }
-
-    if (this._stateWait.state() !== 'pending') {
-      this.updateData();
-    }
-
-    this.app.translator.translateDOM(this.el);
-    this.renderedPromise.resolve();
+    // We need to be sure all dependencies have been loaded before processing each chart (specially the templates).
+    $.when(this._stateWait, this.app.filter.loaded, this.app.translator.promise).done(function() {
+    	self.$el.html(template(renderOptions));
+    	self.hideExportInPublicView();
+    	self.message = self.$('.dash-chart-diagnostic');
+    	self.chartContainer = self.$('.dash-chart-wrap');
+	
+	    if (self.model.get('adjtype') !== void 0) {  // this chart has adj settings
+	    	self.app.settings.load().done(_(function() {
+	    		self.rendered = true;
+	        var adjSettings = self.app.settings.get('0');  // id for Funding Type
+	        if (!adjSettings) { 
+	        	self.app.report('Could not find Funding Type settings'); 
+	        } else {
+	        	if (self.model.get('adjtype') === 'FAKE') {
+	        		self.model.set('adjtype', adjSettings.get('defaultId'));
+	        	}
+	        }
+	        self.$('.ftype-options').html(
+	          _(adjSettings.get('options')).map(function(opt) {
+	            return adjOptTemplate({
+	              opt: opt,
+	              current: (opt.id === self.model.get('adjtype'))
+	            });
+	          }, self)
+	        );
+	      }).bind(self));
+	    } else {
+	    	self.rendered = true;
+	    }
+	    
+	    // For heatmaps add some extra combos.
+	    if (self.model.get('chartType') === 'fragmentation') {
+	    	var heatMapConfigs = self.model.get('heatmap_config').models[0];
+	    	var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function(item) {return item.name === self.model.get('name')});
+	    	self.$('.xaxis-options').html(
+	    		_(thisHeatMapChart.xColumns).map(function(colId) {
+	    			var item = _.find(heatMapConfigs.get('columns'), function(item, i) { return i === colId});
+	    			var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
+	    			return adjOptTemplate({
+	    				opt: opt,
+	    	            current: (opt.id === self.model.get('xAxisColumn'))
+	    	        });
+	    	    }, self)
+	    	);
+	    }
+	
+	    if (self._stateWait.state() !== 'pending') {
+	    	self.updateData();
+	    }
+	
+	    self.app.translator.translateDOM(this.el);
+	    self.renderedPromise.resolve();
+    });
     return this;
   },
 
@@ -3923,6 +3888,7 @@ module.exports = BackboneDash.View.extend({
 
     if (this.model.get('chartType') !== 'fragmentation') {
     	this.renderNumbers();
+    	this.fixTitleWidth();
     }
     
     if (this.model.get('chartType') !== 'fragmentation') {
@@ -4002,6 +3968,30 @@ module.exports = BackboneDash.View.extend({
   resetNumbers: function() {
     this.$('.chart-total').html('');
     this.$('.chart-currency').html('');
+  },
+  
+  fixTitleWidth: function() {
+	  var elementsSpace = 10;
+	  var max_lines_on_title = 2;
+	  var charsToRemove = 5;
+	  var title = this.$(".chart-title h2");
+	  var titleWidth = $(title).width();
+	  var containerWidth = this.$(".panel-heading").width();
+	  var amountWidth = this.$(".big-number").width();
+	  if (containerWidth < titleWidth + amountWidth) {
+		  $(title).css('width', (containerWidth - amountWidth - elementsSpace) + 'px');
+		  while (this.calculateTextLines(title) > max_lines_on_title) {
+			  $(title).html($(title).html().substring(0, $(title).html().length - charsToRemove) + '...');
+			  $(title).attr('data-title', this.model.get('title'));
+			  this.addSimpleTooltip(title);
+		  }
+	  }
+  },
+  
+  calculateTextLines: function(object) {
+	  var lineHeight = 24;
+	  var lines = Math.floor($(object).height() / lineHeight);
+	  return lines;
   },
 
   resetLimit: function() {
@@ -4106,21 +4096,20 @@ module.exports = BackboneDash.View.extend({
 		  }
 	    
 		  // Now bind NV tooltip mechanism to hover event for each legend.
-		  if($(elem).data('data-title') || $(elem).data('title')) {
-			  $(elem).hover(function() {
-	    		var offset = $(this).offset();	    		
-	    		//TODO: Check the generation of heatMapChart.js and see if we can set the 'data' field the same way than other charts.
-	    		var title = $(elem).data('data-title') ? $(elem).data('data-title') : $(elem).data('title');
-	    		//TODO: Remove hardcoded html and use a template.
-	    	    nv.tooltip.show([offset.left, offset.top], "<div class='panel panel-primary panel-popover'><div class='panel-heading'>" + title + "</div></div>");
-	    	        
-	    	    // TODO: Find a way to trigger the mouseover on the bar.
-	    	    // $($(this).closest('svg').find(".nv-groups").find(".nv-bar")[i]).trigger('hover');
-	    	   }, function() {
-	    		   nv.tooltip.cleanup();
-	    	   });
-		  }
+		  self.addSimpleTooltip(elem);
 	  });
+  },
+  
+  addSimpleTooltip: function(object) {
+	  if ($(object).data('data-title') || $(object).data('title')) {
+		  $(object).hover(function() {
+			  var title = $(object).data('data-title') ? $(object).data('data-title') : $(object).data('title');
+			  var offset = $(object).offset();
+	    	  nv.tooltip.show([offset.left, offset.top], "<div class='panel panel-primary panel-popover'><div class='panel-heading'>" + title + "</div></div>");
+		  }, function() {
+			  nv.tooltip.cleanup();
+		  });
+	  }
   }
 
 });
@@ -4961,28 +4950,7 @@ module.exports = BackboneDash.View.extend({
 
   changeSetting: function(e) {
     var optionId = e.currentTarget.value;
-    logger.log("Changing", optionId, "setting");
-    //if the browser supports local storage
-    if(!this.app.hasIssue('sessionStorage') && (1 == this.current.get('id') || 2 == this.current.get('id'))){
-      var settings;
-      //try reading the settings JSON from sessionStorage and deserialize it...
-      try{
-        settings = JSON.parse(sessionStorage.settings);
-      }
-      catch(e){}
-      //...regardless of whether that failed or not...
-      finally{
-        //...ensure settings is a normal object...
-        if(!("object" == typeof settings && null !== settings)){
-          //...if it's not, let it be just an empty object
-          settings = {};
-        }
-      }
-      //and after all that paranoia we can now relatively safely persist the settings:
-      var id = this.current.get('id');
-      settings[id] = optionId;
-      sessionStorage.settings = JSON.stringify(settings);
-    }
+    logger.log("Changing", optionId, "setting"); 
     this.current.select(optionId, false);
   },
   
@@ -28441,6 +28409,7 @@ module.exports  = Backbone.Collection.extend({
 * Copyright 2014 jQuery Foundation and other contributors; Licensed MIT */
 /* Afrikaans initialisation for the jQuery UI date picker plugin. */
 /* Written by Renier Pretorius. */
+/*ALTERED FOR AMP -- ADDED TETUM LOCALE*/
 jQuery(function($){
 	$.datepicker.regional['af'] = {
 		closeText: 'Selekteer',
@@ -28751,30 +28720,6 @@ jQuery(function($){
 		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['el']);
 });
-
-/* English/EN initialisation for the jQuery UI date picker plugin. */
-/* Written by Stuart. */
-/*jQuery(function($){
-	$.datepicker.regional['en'] = {
-		closeText: 'Done',
-		prevText: 'Prev',
-		nextText: 'Next',
-		currentText: 'Today',
-		monthNames: ['January','February','March','April','May','June',
-		'July','August','September','October','November','December'],
-		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-		'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-		dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
-		weekHeader: 'Wk',
-		dateFormat: 'dd/mm/yy',
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['en-GB']);
-});*/
 
 /* English/Australia initialisation for the jQuery UI date picker plugin. */
 /* Based on the en-GB initialisation. */
@@ -30108,6 +30053,30 @@ jQuery(function($){
 	$.datepicker.setDefaults($.datepicker.regional['tj']);
 });
 
+/* Tetum (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Alexandru Cartaleanu (acartaleanu@developmentgateway.org). */
+/* LOCAL AMP CODE -- THIS WILL DISAPPEAR */
+jQuery(function($){
+	$.datepicker.regional['tm'] = {
+		closeText: 'Halo',
+		prevText: 'Uluk',
+		nextText: 'Tuir mai',
+		currentText: 'Ohin loron',
+		monthNames: ['Janeiru','Fevreiru','Marsu','Abril','Maiu','Junhu',
+		'Julhu','Agostu','Septembru','Otubru','Novembru','Dezrembru'],
+		monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+		'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dez'],
+		dayNames: ['Dumingu', 'Segunda', 'Tersa', 'Kuarta', 'Kinta', 'Sesta', 'Sabadu'],
+		dayNamesShort: ['Dum', 'Seg', 'Ter', 'Krt', 'Kin', 'Ses', 'Sab'],
+		dayNamesMin: ['Dm','Sg','Tr','Kt','Kn','Ss','Sb'],
+		weekHeader: 'Sm',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['tm']);
+});
 /* Turkish initialisation for the jQuery UI date picker plugin. */
 /* Written by Izzet Emre Erkan (kara@karalamalar.net). */
 jQuery(function($){
@@ -30253,6 +30222,30 @@ jQuery(function($){
 	$.datepicker.setDefaults($.datepicker.regional['zh-TW']);
 });
 
+
+/* English/EN initialisation for the jQuery UI date picker plugin. */
+/* Written by Stuart. */
+jQuery(function($){
+	$.datepicker.regional['en'] = {
+		closeText: 'Done',
+		prevText: 'Prev',
+		nextText: 'Next',
+		currentText: 'Today',
+		monthNames: ['January','February','March','April','May','June',
+		'July','August','September','October','November','December'],
+		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+		'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+		weekHeader: 'Wk',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['en-GB']);
+});
 },{}],69:[function(require,module,exports){
 /*
 

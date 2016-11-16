@@ -1911,6 +1911,37 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		
 		runNiTestCase(spec, "en", executionRateActs, cor);
 	}
+
+	@Test
+	public void testFetchedMeasureTotalAndScaledByThousands() {
+		NiReportModel cor = new NiReportModel("testFetchedMeasureTotalAndScaledByThousands")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 12))",
+						"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 8, colSpan: 4))",
+						"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2))",
+						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Percentage of Total Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Percentage Of Total Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Project Title", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "333,33", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "80,76", "Funding-2014-Actual Disbursements", "135,2", "Funding-2015-Actual Commitments", "123,46", "Funding-2015-Actual Disbursements", "35,57", "Totals-Actual Commitments", "537,55", "Totals-Actual Disbursements", "170,77", "Totals-Percentage of Total Commitments", "100", "Totals-Percentage Of Total Disbursements", "100")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Commitments", "333,33", "Totals-Actual Commitments", "333,33", "Totals-Percentage of Total Commitments", "62,01"),
+								new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Primary Sector", "110 - EDUCATION", "Funding-2014-Actual Commitments", "15", "Totals-Actual Commitments", "15", "Totals-Percentage of Total Commitments", "2,79"),
+								new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Primary Sector", "110 - EDUCATION", "Funding-2014-Actual Commitments", "65,76", "Funding-2014-Actual Disbursements", "80", "Totals-Actual Commitments", "65,76", "Totals-Actual Disbursements", "80", "Totals-Percentage of Total Commitments", "12,23", "Totals-Percentage Of Total Disbursements", "46,85"),
+								new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Primary Sector", "110 - EDUCATION", "Funding-2015-Actual Commitments", "123,46", "Totals-Actual Commitments", "123,46", "Totals-Percentage of Total Commitments", "22,97"),
+								new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Primary Sector", "112 - BASIC EDUCATION", "Funding-2014-Actual Disbursements", "0,2", "Funding-2015-Actual Disbursements", "0,57", "Totals-Actual Disbursements", "0,77", "Totals-Percentage Of Total Disbursements", "0,45"),
+								new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Primary Sector", "110 - EDUCATION", "Funding-2014-Actual Disbursements", "55", "Funding-2015-Actual Disbursements", "35", "Totals-Actual Disbursements", "90", "Totals-Percentage Of Total Disbursements", "52,7")      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testFetchedMeasureTotalAndScaledByThousands",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS),
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+		ReportSettingsImpl settings = new ReportSettingsImpl();
+		settings.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_THOUSANDS);
+		spec.setSettings(settings);
+
+		runNiTestCase(spec, "en", executionRateActs, cor);
+	}
 	
 	@Test
 	public void testFetchedMeasureTotalMissingPrecursor() {

@@ -32,6 +32,7 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
@@ -65,6 +66,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 
@@ -265,6 +267,13 @@ public class ReportWizardAction extends MultiAction {
             myForm.setProjecttitle("Project Title");
         }else{
             myForm.setProjecttitle("");
+        }
+
+        if (!ContentTranslationUtil.multilingualIsEnabled()){
+            //If content translation is not enabled we need to use the default site language
+            myForm.setDefaultLanguage(TLSUtils.getSite().getDefaultLanguage().getCode());
+        } else {
+            myForm.setDefaultLanguage(TLSUtils.getEffectiveLangCode());
         }
 
         if (request.getParameter("type")!=null){
@@ -664,17 +673,18 @@ public class ReportWizardAction extends MultiAction {
         MultilingualInputFieldValues.serialize(ampReport, "name", null, null, request);
 
         if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true")) {
-            callSaikuReport (ampReport.getAmpReportId().intValue(), response,"openReportId", ampReport.hasAvailableMeasures());
+            boolean saiku = ampReport.hasAvailableMeasures() && ampReport.getType().intValue() != ArConstants.REGIONAL_TYPE;
+            callSaikuReport (ampReport.getAmpReportId().intValue(), response,"openReportId", saiku);
         }
         return null;
     }
 
-	private void callSaikuReport(Integer reportId, HttpServletResponse response, String varName, boolean hasAvailableMeasures ) throws IOException {
+	private void callSaikuReport(Integer reportId, HttpServletResponse response, String varName, boolean saiku) throws IOException {
 		PrintWriter out = response.getWriter();
 		StringBuilder responseString = new StringBuilder();
 		responseString.append(varName + "=" + reportId);
 		responseString.append(",");
-		responseString.append("saiku=" + hasAvailableMeasures );
+		responseString.append("saiku=" + saiku);
 		
 		out.write(responseString.toString());
 		out.flush();

@@ -6,7 +6,7 @@ var app = app || {};
 define(
 		[ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView',
 				'views/tabBodyView', 'views/tabBodysView', 'business/tabEvents', 'util/tabUtils',
-				'business/filter/filterManager', 'business/translations/translationManager',
+				'business/filter/filterManager', 'translationManager',
 				'business/widgets/documentsWidgetManager', 'jquery', 'jqueryui' ],
 		function(Marionette, Tabs, Tab, TabItemView, TabItemsView, TabBodyView, TabBodysView, TabEvents, TabUtils,
 				FilterManager, TranslationManager, DocumentsWidgetManager, jQuery) {

@@ -8,7 +8,6 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="globalsettings" %>
 
 <script type="text/javascript">
-<!--
 function checkEmptyEmail(){
 	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 	var address = document.aimUserEmailForm.email.value;
@@ -21,7 +20,7 @@ function checkEmptyEmail(){
 	}
 	if(reg.test(address) == false) {
 		<c:set var="translation">
-		<digi:trn key="error.registration.noemail">you must enter Valid email please check in</digi:trn>
+		<digi:trn key="error.registration.noemail">Please enter a valid email address.</digi:trn>
 		</c:set>
 		alert("${translation}");
     	return false;
@@ -29,7 +28,7 @@ function checkEmptyEmail(){
 	document.aimUserEmailForm.submit();
 }
 
-//-->
+
 </script>
 
 <digi:form name="aimUserEmailForm" type="org.digijava.module.um.form.UserEmailForm" action="/resetUserPassword.do" >

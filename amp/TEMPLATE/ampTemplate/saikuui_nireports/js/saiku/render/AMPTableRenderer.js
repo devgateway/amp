@@ -256,7 +256,7 @@ function isHeaderCellSortable(i, entityName) {
  * returns an imperatively-built totals row html markup
  */
 function buildTotalsRow(page) {
-	var totalRow = "<tr>";
+	var totalRow = "<tr class='level_0'>";
 	var isFirstColumn = true;
 	for (var j = 0; j < this.headerMatrix[this.lastHeaderRow].length; j++) {
 		// This check is for those summarized reports that dont return any
@@ -313,6 +313,7 @@ function generateDataRows(page, options) {
 	this.numberOfRows = (page.pageArea.children !== null ? -1 : 0);
 	this.getNumberOfRows(page.pageArea);
 	this.contentMatrix = new Array(this.numberOfRows);
+	this.rowHierarchyLevel = new Array(this.numberOfRows);
 	for (var i = 0; i < this.numberOfRows; i++) {
 		this.contentMatrix[i] = new Array(this.headerMatrix[this.headerMatrix.length - 1].length);
 	}
@@ -339,7 +340,8 @@ function generateDataRows(page, options) {
 		}
 
 		var applyTotalRowStyle = false;
-		var row = "<tr class='hidden_row' name='" + Saiku.totalBatches + "'>";
+		var level = this.rowHierarchyLevel[i] + 1; // add 1 to account for totals row
+		var row = "<tr class='hidden_row level_" + level + "' name='" + Saiku.totalBatches + "'>";
 		for (var j = 0; j < this.contentMatrix[i].length; j++) {
 			if (!isHiddenColumn(j)) {
 				var cell = "";
@@ -417,10 +419,14 @@ function generateDataRows(page, options) {
 }
 
 function getCellDataStyleClass(contentMatrix, cleanValue, i, j) {
-	var styleClass = " class='row "
+	var styleClass = " class='row ";
 		
 	if (contentMatrix[i][j].color) {
 		styleClass += this.contentMatrix[i][j].color + " ";
+	}
+
+	if (j < this.metadataHierarchies.length) {
+		styleClass += "hier_level_" + (j+1) + " ";
 	}
 	
 	if (cleanValue.tooltip) {
@@ -488,6 +494,7 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 			
 			dataValue.isTotal = node.isTotal;
 			this.contentMatrix[this.currentContentIndexRow][i] = dataValue;
+			this.rowHierarchyLevel[this.currentContentIndexRow] = level;
 		}
 		this.currentContentIndexRow++;
 	} else {

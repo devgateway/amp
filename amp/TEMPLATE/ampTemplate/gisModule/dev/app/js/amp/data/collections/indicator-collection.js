@@ -93,7 +93,6 @@ module.exports = Backbone.Collection.extend({
     	 });   	 
         layer.type = 'joinBoundaries';
         //debugger
-        layer.adminLevel = self._magicConversion(layer.admLevelName);
         layer.tooltip = self._createTooltip(layer); 
         layer.classes = layer.numberOfClasses;        
         return true;
@@ -109,16 +108,6 @@ module.exports = Backbone.Collection.extend({
       .filter(function(model) { return model.get('selected'); });
   },
 
-  _magicConversion: function(textAdm) {
-    var magicWords = {
-      Country: 'adm-0',
-      Region: 'adm-1',
-      Zone: 'adm-2',
-      District: 'adm-3'
-    };
-
-    return magicWords[textAdm];
-  },
   _createTooltip: function(obj){
 	     var tooltip  = '';
 	     if(obj.description){

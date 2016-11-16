@@ -359,15 +359,19 @@ public class SearchUtil {
 				Set<String> keySet = pd.keySet();
 				for (String uuid : keySet) {
 					Node lastVersion = DocumentManagerUtil.getReadNode(uuid, request);
-					NodeWrapper nw = new NodeWrapper(lastVersion);
-					if (keywordMatches(nw, keyword)) {
-						Resource resource = new Resource();
-						resource.setName(nw.getTitle());
-						resource.setUuid(nw.getUuid());
-						resource.setWebLink(nw.getWebLink());
-						if (!resultList.contains(resource)) {
-							resultList.add(resource);
+					if (lastVersion != null) {
+						NodeWrapper nw = new NodeWrapper(lastVersion);
+						if (keywordMatches(nw, keyword)) {
+							Resource resource = new Resource();
+							resource.setName(nw.getTitle());
+							resource.setUuid(nw.getUuid());
+							resource.setWebLink(nw.getWebLink());
+							if (!resultList.contains(resource)) {
+								resultList.add(resource);
+							}
 						}
+					} else {
+						logger.warn("Missing resource in the JCR repository: " + uuid);
 					}
 				}
 

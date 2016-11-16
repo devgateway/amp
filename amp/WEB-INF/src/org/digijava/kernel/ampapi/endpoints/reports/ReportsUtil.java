@@ -19,6 +19,8 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -68,8 +70,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
-
-import net.sf.json.JSONObject;
 
 /**
  * Reports API utility classes
@@ -475,10 +475,7 @@ public class ReportsUtil {
 				somethingAdded = true;
 			}
 		}
-		for(Entry<ReportColumn, List<FilterRule>> elem: oldFilters.getDateFilterRules().entrySet()) {
-			result.getDateFilterRules().put(elem.getKey(), elem.getValue());
-			somethingAdded = true;
-		}
+		
 		if (newFilters == null && !somethingAdded)
 			return newFilters; // do not alter filters if we did nothing
 		
@@ -652,7 +649,7 @@ public class ReportsUtil {
 			copy.removeAll(allowedValues);
 			if (copy.size() > 0) {
                 return new ApiErrorMessage(ReportErrors.LIST_INVALID.id, ReportErrors.LIST_INVALID.description,
-                        listName);
+                        listName + ": [" + StringUtils.join(copy, ", ") + "]");
             }
 		}
 		return null;
@@ -847,5 +844,15 @@ public class ReportsUtil {
         if (spec != null && spec.getSettings() != null && spec.getSettings().getUnitsOption() != null)
             return spec.getSettings().getUnitsOption();
         return AmountsUnits.getDefaultValue();
+	}
+
+	public static String getUrl(AmpReports report) {
+		String prefix;
+		if (report.getType() != null && report.getType().equals((long) ArConstants.REGIONAL_TYPE)){
+			prefix = "/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=";
+		} else {
+			prefix = "/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/";
+		}
+		return prefix + report.getAmpReportId();
 	}
 }

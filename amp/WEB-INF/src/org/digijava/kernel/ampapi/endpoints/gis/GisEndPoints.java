@@ -37,9 +37,11 @@ import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
+import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
@@ -79,17 +81,9 @@ import net.sf.json.JSONSerializer;
  * 
  */
 @Path("gis")
-public class GisEndPoints {
+public class GisEndPoints implements ErrorReportingEndpoint {
 	private static final Logger logger = Logger.getLogger(GisEndPoints.class);
-
-	@Context
-	private HttpServletRequest httpRequest;
-	private String BOUNDARY_PATH = "src" + System.getProperty("file.separator") + "main"
-			+ System.getProperty("file.separator") + "resources" + System.getProperty("file.separator") + "gis"
-			+ System.getProperty("file.separator") + "boundaries" 
-			+ System.getProperty("file.separator");
-
-		
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<AvailableMethod> getAvailableFilters() {
@@ -375,6 +369,7 @@ public class GisEndPoints {
 			if (includeAdmLevel) {
 				json.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
 				json.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
+				json.set(IndicatorEPConstants.ADMIN_LEVEL, IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex());
 			}
             json.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
             json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
@@ -578,20 +573,7 @@ public class GisEndPoints {
 	@Path("/boundaries")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public JSONArray getBoundaries() {
-		String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-		String path = httpRequest.getServletContext().getRealPath("/") + BOUNDARY_PATH + countryIso.toUpperCase()
-				+ System.getProperty("file.separator") + "list.json";
-		JSONArray json = null;
-		try {
-			InputStream is = 
-	                new FileInputStream(path);
-	        String jsonTxt = IOUtils.toString( is );
-	        json = (JSONArray) JSONSerializer.toJSON(jsonTxt);  
-			
-		} catch (IOException e) {
-			logger.warn("couldn't read file " + path, e);
-		}
-		return json;
+		return BoundariesService.getBoundaries();
 	}
 	
 	@GET
@@ -602,4 +584,11 @@ public class GisEndPoints {
 		return ReportsUtil.getApiState(reportConfigId);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class getErrorsClass() {
+		return GisErrors.class;
+	}
 }

@@ -3,7 +3,7 @@
 
 define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html',
 		'text!views/html/filtersItemTemplate.html', 'models/tab', 'text!views/html/invisibleTabLinkTemplate.html',
-		'text!views/html/legendsTemplate.html', 'business/grid/gridManager', 'business/translations/translationManager',
+		'text!views/html/legendsTemplate.html', 'business/grid/gridManager', 'translationManager',
 		'business/filter/filterUtils', 'util/tabUtils', 'jquery', 'jqueryui' ,'models/settings'], function(Marionette, Content, Legend, DynamicContentView,
 		filtersTemplate, filtersItemTemplate, Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager, TranslationManager, FilterUtils,
 		TabUtils, jQuery, Settings) {
@@ -50,7 +50,8 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			// Save default sorters if any.
 			app.TabsApp.currentSorting = FilterUtils.extractSorters(firstContent.get('reportMetadata').get('reportSpec').get('sorters'), 
 					firstContent.get('reportMetadata').get('reportSpec').get('columns'),
-					firstContent.get('reportMetadata').get('reportSpec').get('measures'));
+					firstContent.get('reportMetadata').get('reportSpec').get('measures'),
+					firstContent.get('reportMetadata').get('reportSpec').get('hierarchies'));
 			// Define the views.
 			var FilterItemView = Marionette.ItemView.extend({
 				tagName : 'div',

@@ -98,7 +98,7 @@ public class SelectPledgeProgram extends Action {
 			}
 			
 			if (extraAction.equals("pledge_document_delete")){
-				pledgeForm.deleteUniquelyIdentifiable(pledgeForm.getSelectedDocsList(), Long.parseLong(request.getParameter("id")));
+				pledgeForm.deleteUniquelyIdentifiable(pledgeForm.getSelectedDocs(), Long.parseLong(request.getParameter("id")));
 				return null;
 			}
 			

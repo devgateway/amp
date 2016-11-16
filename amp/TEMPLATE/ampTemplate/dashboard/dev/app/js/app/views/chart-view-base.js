@@ -49,8 +49,8 @@ module.exports = BackboneDash.View.extend({
 
     if (this.app.savedDashes.length) {
       // a bit sketch....
-      this.app.state.loadPromise.always(this._stateWait.resolve);
-    } else {
+    	  this.app.state.loadPromise.always(this._stateWait.resolve);
+      } else {
       this._stateWait.resolve();
     }
 
@@ -81,57 +81,60 @@ module.exports = BackboneDash.View.extend({
       chart: this.chartEl,
       util: util
     };
-    this.$el.html(template(renderOptions));
-    this.hideExportInPublicView();
-    this.message = this.$('.dash-chart-diagnostic');
-    this.chartContainer = this.$('.dash-chart-wrap');
-
-    if (this.model.get('adjtype') !== void 0) {  // this chart has adj settings
-    	this.app.settings.load().done(_(function() {
-    	this.rendered = true;
-        var adjSettings = this.app.settings.get('0');  // id for Funding Type
-        if (!adjSettings) { 
-        	this.app.report('Could not find Funding Type settings'); 
-        } else {
-        	if (this.model.get('adjtype') === 'FAKE') {
-        		this.model.set('adjtype', adjSettings.get('defaultId'));
-        	}
-        }
-        this.$('.ftype-options').html(
-          _(adjSettings.get('options')).map(function(opt) {
-            return adjOptTemplate({
-              opt: opt,
-              current: (opt.id === this.model.get('adjtype'))
-            });
-          }, this)
-        );
-      }).bind(this));
-    } else {
-        this.rendered = true;
-    }
-    
-    // For heatmaps add some extra combos.
-    if (this.model.get('chartType') === 'fragmentation') {
-    	var heatMapConfigs = this.model.get('heatmap_config').models[0];
-    	var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function(item) {return item.name === self.model.get('name')});
-    	this.$('.xaxis-options').html(
-    		_(thisHeatMapChart.xColumns).map(function(colId) {
-    			var item = _.find(heatMapConfigs.get('columns'), function(item, i) { return i === colId});
-    			var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
-    			return adjOptTemplate({
-    				opt: opt,
-    	            current: (opt.id === this.model.get('xAxisColumn'))
-    	        });
-    	    }, this)
-    	);
-    }
-
-    if (this._stateWait.state() !== 'pending') {
-      this.updateData();
-    }
-
-    this.app.translator.translateDOM(this.el);
-    this.renderedPromise.resolve();
+    // We need to be sure all dependencies have been loaded before processing each chart (specially the templates).
+    $.when(this._stateWait, this.app.filter.loaded, this.app.translator.promise).done(function() {
+    	self.$el.html(template(renderOptions));
+    	self.hideExportInPublicView();
+    	self.message = self.$('.dash-chart-diagnostic');
+    	self.chartContainer = self.$('.dash-chart-wrap');
+	
+	    if (self.model.get('adjtype') !== void 0) {  // this chart has adj settings
+	    	self.app.settings.load().done(_(function() {
+	    		self.rendered = true;
+	        var adjSettings = self.app.settings.get('0');  // id for Funding Type
+	        if (!adjSettings) { 
+	        	self.app.report('Could not find Funding Type settings'); 
+	        } else {
+	        	if (self.model.get('adjtype') === 'FAKE') {
+	        		self.model.set('adjtype', adjSettings.get('defaultId'));
+	        	}
+	        }
+	        self.$('.ftype-options').html(
+	          _(adjSettings.get('options')).map(function(opt) {
+	            return adjOptTemplate({
+	              opt: opt,
+	              current: (opt.id === self.model.get('adjtype'))
+	            });
+	          }, self)
+	        );
+	      }).bind(self));
+	    } else {
+	    	self.rendered = true;
+	    }
+	    
+	    // For heatmaps add some extra combos.
+	    if (self.model.get('chartType') === 'fragmentation') {
+	    	var heatMapConfigs = self.model.get('heatmap_config').models[0];
+	    	var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function(item) {return item.name === self.model.get('name')});
+	    	self.$('.xaxis-options').html(
+	    		_(thisHeatMapChart.xColumns).map(function(colId) {
+	    			var item = _.find(heatMapConfigs.get('columns'), function(item, i) { return i === colId});
+	    			var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
+	    			return adjOptTemplate({
+	    				opt: opt,
+	    	            current: (opt.id === self.model.get('xAxisColumn'))
+	    	        });
+	    	    }, self)
+	    	);
+	    }
+	
+	    if (self._stateWait.state() !== 'pending') {
+	    	self.updateData();
+	    }
+	
+	    self.app.translator.translateDOM(this.el);
+	    self.renderedPromise.resolve();
+    });
     return this;
   },
 
@@ -185,6 +188,7 @@ module.exports = BackboneDash.View.extend({
 
     if (this.model.get('chartType') !== 'fragmentation') {
     	this.renderNumbers();
+    	this.fixTitleWidth();
     }
     
     if (this.model.get('chartType') !== 'fragmentation') {
@@ -264,6 +268,30 @@ module.exports = BackboneDash.View.extend({
   resetNumbers: function() {
     this.$('.chart-total').html('');
     this.$('.chart-currency').html('');
+  },
+  
+  fixTitleWidth: function() {
+	  var elementsSpace = 10;
+	  var max_lines_on_title = 2;
+	  var charsToRemove = 5;
+	  var title = this.$(".chart-title h2");
+	  var titleWidth = $(title).width();
+	  var containerWidth = this.$(".panel-heading").width();
+	  var amountWidth = this.$(".big-number").width();
+	  if (containerWidth < titleWidth + amountWidth) {
+		  $(title).css('width', (containerWidth - amountWidth - elementsSpace) + 'px');
+		  while (this.calculateTextLines(title) > max_lines_on_title) {
+			  $(title).html($(title).html().substring(0, $(title).html().length - charsToRemove) + '...');
+			  $(title).attr('data-title', this.model.get('title'));
+			  this.addSimpleTooltip(title);
+		  }
+	  }
+  },
+  
+  calculateTextLines: function(object) {
+	  var lineHeight = 24;
+	  var lines = Math.floor($(object).height() / lineHeight);
+	  return lines;
   },
 
   resetLimit: function() {
@@ -368,21 +396,20 @@ module.exports = BackboneDash.View.extend({
 		  }
 	    
 		  // Now bind NV tooltip mechanism to hover event for each legend.
-		  if($(elem).data('data-title') || $(elem).data('title')) {
-			  $(elem).hover(function() {
-	    		var offset = $(this).offset();	    		
-	    		//TODO: Check the generation of heatMapChart.js and see if we can set the 'data' field the same way than other charts.
-	    		var title = $(elem).data('data-title') ? $(elem).data('data-title') : $(elem).data('title');
-	    		//TODO: Remove hardcoded html and use a template.
-	    	    nv.tooltip.show([offset.left, offset.top], "<div class='panel panel-primary panel-popover'><div class='panel-heading'>" + title + "</div></div>");
-	    	        
-	    	    // TODO: Find a way to trigger the mouseover on the bar.
-	    	    // $($(this).closest('svg').find(".nv-groups").find(".nv-bar")[i]).trigger('hover');
-	    	   }, function() {
-	    		   nv.tooltip.cleanup();
-	    	   });
-		  }
+		  self.addSimpleTooltip(elem);
 	  });
+  },
+  
+  addSimpleTooltip: function(object) {
+	  if ($(object).data('data-title') || $(object).data('title')) {
+		  $(object).hover(function() {
+			  var title = $(object).data('data-title') ? $(object).data('data-title') : $(object).data('title');
+			  var offset = $(object).offset();
+	    	  nv.tooltip.show([offset.left, offset.top], "<div class='panel panel-primary panel-popover'><div class='panel-heading'>" + title + "</div></div>");
+		  }, function() {
+			  nv.tooltip.cleanup();
+		  });
+	  }
   }
 
 });

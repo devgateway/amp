@@ -1,11 +1,22 @@
 package org.digijava.module.aim.action;
 
-import java.awt.Color;
+import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
+
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -148,10 +159,12 @@ public class ExportActivityToWord extends Action {
         ServletContext ampContext = getServlet().getServletContext();
         //to know whether print happens from Public View or not
         HttpSession session = request.getSession();
+        
         TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-        if(teamMember == null) {
-            return mapping.findForward("index");
+        if(teamMember == null && !FeaturesUtil.isVisibleModule("Show Editable Export Formats")) {
+        	return mapping.findForward("index");
         }
+        
         Long actId=null;
         AmpActivityVersion activity=null;
         if(request.getParameter("activityid")!=null){
@@ -1469,12 +1482,6 @@ public class ExportActivityToWord extends Action {
             generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedStartDate(),null);
         }
 
-        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
-            columnName = TranslatorWorker.translateText("Proposed Project Life") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getProposedProjectLife() == null ? ""
-                    : String.valueOf(planning.getProposedProjectLife()), null);
-        }
-
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date")) {
             columnName = TranslatorWorker.translateText("Original Completion Date")+": ";
             generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalCompDate(), null);
@@ -1511,6 +1518,12 @@ public class ExportActivityToWord extends Action {
         commColumnName = "Current Completion Date Comments";
         if(FeaturesUtil.isVisibleField(commColumnName)){
             this.buildCommentsPart("current completion date", commColumnName, allComments, planningSubTable1);
+        }
+
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
+            columnName = TranslatorWorker.translateText("Proposed Project Life") + ": ";
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getProposedProjectLife() == null ? ""
+                    : String.valueOf(planning.getProposedProjectLife()), null);
         }
 
         if(FeaturesUtil.isVisibleField("Duration of Project")){
@@ -1662,43 +1675,43 @@ public class ExportActivityToWord extends Action {
      */
     private List<Table> getContactInfoTables (HttpServletRequest request,	ServletContext ampContext, EditActivityForm myForm) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
-        HttpSession session=request.getSession();
+        HttpSession session = request.getSession();
         ExportSectionHelper eshTitle = new ExportSectionHelper("Contact Information", true).setWidth(100f).setAlign("left");
 
-        if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts")){
-
+        boolean isContactInformationVisible = FeaturesUtil.isVisibleModule("/Activity Form/Contacts") &&
+        		((TeamMember) session.getAttribute(CURRENT_MEMBER) != null || FeaturesUtil.isVisibleFeature("Contacts"));
+        
+        if(isContactInformationVisible) {
             retVal.add(createSectionTable(eshTitle, request, ampContext));
-
             ExportSectionHelper eshContactInfoTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
 
             // Donor funding contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Donor Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,	"Donor funding contact information", myForm
-                        .getContactInformation().getDonorContacts(),ampContext, request);
+                buildContactInfoOutput(eshContactInfoTable,	"Donor funding contact information", 
+                		myForm.getContactInformation().getDonorContacts(), ampContext, request);
             }
             // MOFED contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Mofed Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,"MOFED contact information", myForm
-                        .getContactInformation().getMofedContacts(),ampContext, request);
+                buildContactInfoOutput(eshContactInfoTable, "MOFED contact information", 
+                		myForm.getContactInformation().getMofedContacts(), ampContext, request);
             }
             // Sec Min funding contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,	"Sector Ministry contact information", myForm
-                        .getContactInformation().getSectorMinistryContacts(), ampContext, request);
+                buildContactInfoOutput(eshContactInfoTable,	"Sector Ministry contact information", 
+                		myForm.getContactInformation().getSectorMinistryContacts(), ampContext, request);
             }
             // Project Coordinator contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,	"Proj. Coordinator contact information", myForm					.getContactInformation()
-                        .getProjCoordinatorContacts(), ampContext,request);
+                buildContactInfoOutput(eshContactInfoTable,	"Proj. Coordinator contact information", 
+                		myForm.getContactInformation().getProjCoordinatorContacts(), ampContext, request);
             }
             // Implementing/executing agency contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Implementing Executing Agency Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,"Implementing/Executing Agency contact information",	myForm.getContactInformation()
-                        .getImplExecutingAgencyContacts(), ampContext,request);
+                buildContactInfoOutput(eshContactInfoTable, "Implementing/Executing Agency contact information", 
+                		myForm.getContactInformation().getImplExecutingAgencyContacts(), ampContext, request);
             }
 
-            retVal.add(createSectionTable(eshContactInfoTable, request,
-                    ampContext));
+            retVal.add(createSectionTable(eshContactInfoTable, request, ampContext));
         }
 
         return retVal;
@@ -2885,10 +2898,8 @@ public class ExportActivityToWord extends Action {
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")) {
             columnName = TranslatorWorker.translateText("Status Reason");
-            columnVal = "";
             if (identification.getStatusReason() != null) {
-                columnVal += processHtml(request, identification.getStatusReason());
-                generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
+                generateOverAllTableRows(identificationSubTable1, columnName,processEditTagValue(request, identification.getStatusReason()), null);
             }
         }
 

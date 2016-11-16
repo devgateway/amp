@@ -27,14 +27,14 @@ function validate(){
         else{
         	 var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
      		 if(!reg.test(email)){
-     			errors.push('<digi:trn jsFriendly="true">you must enter Valid email please check in</digi:trn>');
+     			errors.push('<digi:trn jsFriendly="true">Please enter a valid email address.</digi:trn>');
      		 }
         }
         if(isVoid(oldpassword)){
-        	errors.push('<digi:trn jsFriendly="true">Old password is required</digi:trn>');
+        	errors.push('<digi:trn jsFriendly="true">Old password is a required field</digi:trn>');
         }
         if(isVoid(password)){
-        	errors.push('<digi:trn jsFriendly="true">New password is required</digi:trn>');
+        	errors.push('<digi:trn jsFriendly="true">New password is a required field</digi:trn>');
         }  
         if(password != passwordConfirmation){
         	errors.push('<digi:trn jsFriendly="true">Passwords in both fields must be the same</digi:trn>');

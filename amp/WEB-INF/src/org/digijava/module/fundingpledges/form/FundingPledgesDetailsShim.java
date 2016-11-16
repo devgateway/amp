@@ -38,8 +38,8 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 		this.amount = FormatHelper.formatNumber(fpd.getAmount());
 		this.currencyId = getIdFrom(fpd.getCurrency());
 		this.fundingYear = getLongFrom(fpd.getFundingYear());
-		this.fundingDateStart = DateTimeUtil.formatDate(fpd.getFundingDateStart(),AmpARFilter.SDF_OUT_FORMAT_STRING);
-		this.fundingDateEnd = DateTimeUtil.formatDate(fpd.getFundingDateEnd(),AmpARFilter.SDF_OUT_FORMAT_STRING);
+		this.fundingDateStart = DateTimeUtil.formatDate(fpd.getFundingDateStart(), AmpARFilter.SDF_OUT_FORMAT_STRING);
+		this.fundingDateEnd = DateTimeUtil.formatDate(fpd.getFundingDateEnd(), AmpARFilter.SDF_OUT_FORMAT_STRING);
 	}
 	
 	public FundingPledgesDetails buildFundingPledgesDetail(FundingPledges pledge){

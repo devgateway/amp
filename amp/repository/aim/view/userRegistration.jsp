@@ -10,91 +10,52 @@
 
 
 	function optionChanged(flag) {
-
-
-
 		if (flag == 'otype') {
-
 			var index1  = document.aimUserRegisterForm.selectedOrgType.selectedIndex;
-
 			var val1    = document.aimUserRegisterForm.selectedOrgType.options[index1].value;
-
 			var orgType = document.aimUserRegisterForm.orgType.value;
-
 			if ( val1 != "-1") {
-
 				if (val1 != orgType) {
-
 					document.aimUserRegisterForm.orgType.value = val1;
-
 					document.aimUserRegisterForm.actionFlag.value = "typeSelected";
-
 					<digi:context name="selectType" property="context/module/moduleinstance/showRegisterUser.do" />
-
 		   			document.aimUserRegisterForm.action = "<%= selectType %>";
-
 					document.aimUserRegisterForm.target = "_self";
-
 					document.aimUserRegisterForm.submit();
-
 				}
-
 				return false;
-
 			}
-
 			else
-
 				return false;
-
 		}
-
 		if (flag == 'ogroup') {
-
 			var index2  = document.aimUserRegisterForm.selectedOrgGroup.selectedIndex;
-
 			var val2    = document.aimUserRegisterForm.selectedOrgGroup.options[index2].value;
-
 			var orgGrp = document.aimUserRegisterForm.orgGrp.value;
-
 			if ( val2 != "-1") {
-
 				if (val2 != orgGrp) {
-
 					document.aimUserRegisterForm.orgGrp.value = val2;
-
 					document.aimUserRegisterForm.actionFlag.value = "groupSelected";
-
 					<digi:context name="selectGrp" property="context/module/moduleinstance/showRegisterUser.do" />
-
 		   			document.aimUserRegisterForm.action = "<%= selectGrp %>";
-
 					document.aimUserRegisterForm.target = "_self";
-
 					document.aimUserRegisterForm.submit();
-
 				}
-
 				return false;
-
 			}
-
 			else
-
 				return false;
-
 		}
-
 	}
 
 	function isVoid(name){
 		if (name == "" || name == null || name.charAt(0) == ' '){
 	 		return 1;
-		}      
+		}
 		if (!isNaN(name)){
 	 		return 2;
-		}               
-		return 0;                        	
+		}
+		return 0;
 	}
 	
 	function validate(){
@@ -185,7 +146,7 @@
 		var address2 = document.aimUserRegisterForm.emailConfirmation.value;
 		if(reg.test(address) == false||reg.test(address2) == false) {
 			<c:set var="translation">
-			<digi:trn key="error.registration.noemail">you must enter Valid email please check in</digi:trn>
+			<digi:trn key="error.registration.noemail">Please enter a valid email address.</digi:trn>
     		</c:set>
 			alert("${translation}");
         	return false;

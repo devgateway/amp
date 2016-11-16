@@ -62,7 +62,7 @@
 .workspace_results table th.row_total {
 	border-left: 1px none #d5d5d5;
 	border-top: 1px solid #d5d5d5;
-    background: #C7C7C7;
+    background-color: #E8E8E8;
     text-align: right;
 }
 
@@ -100,8 +100,32 @@
 }
 
 .workspace_results table td.total {
-	background: #C7C7C7;
+    background-color: #E8E8E8;
 	font-weight: bold;
+}
+
+tr.level_0 td.total, tr.level_0 th.row_total, .workspace_results table tr th.hier_level_0 {
+    background-color: #B8B8B8;
+}
+
+tr.level_1 td.total, tr.level_1 th.row_total, .workspace_results table tr th.hier_level_1 {
+    background-color: #C8C8C8;
+}
+
+tr.level_2 td.total, tr.level_2 th.row_total, .workspace_results table tr th.hier_level_2 {
+    background-color: #D8D8D8;
+}
+
+tr.level_3 td.total, tr.level_3 th.row_total, .workspace_results table tr th.hier_level_3 {
+    background-color: #E8E8E8;
+}
+
+.workspace_results table tr th.hier_level_2 {
+    border-top: 1px solid #C8C8C8;
+}
+
+.workspace_results table tr th.hier_level_1 {
+    border-top: 1px solid #B8B8B8;
 }
 
 .workspace_results table tbody tr:hover {

@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import static org.dgfoundation.amp.nireports.NiUtils.failIf;
 import static org.dgfoundation.amp.nireports.formulas.NiFormula.*;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_COUNTRY;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_DISTRICT;
@@ -379,6 +378,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		degenerate_dimension(ColumnConstants.AC_CHAPTER, "v_ac_chapters", catsDimension);
 		degenerate_dimension(ColumnConstants.ACCESSION_INSTRUMENT, "v_accession_instruments", catsDimension);
 		degenerate_dimension(ColumnConstants.ACTIVITY_CREATED_BY, "v_activity_creator", usersDimension);
+		no_entity(ColumnConstants.SUB_PROGRAM, "v_activity_subprogram");
 		no_entity(ColumnConstants.AUDIT_SYSTEM, "v_audit_system"); // catsDimension.getLevelColumn("audit_system", LEVEL_CAT_VALUE));
 		no_entity(ColumnConstants.BUDGET_CODE_PROJECT_ID, "v_budget_code_project_id");
 		degenerate_dimension(ColumnConstants.BUDGET_DEPARTMENT, "v_budget_department", departmentsDimension);

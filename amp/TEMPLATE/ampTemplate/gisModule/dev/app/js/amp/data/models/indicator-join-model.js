@@ -16,6 +16,7 @@ const readyStateConnectionEstablished = 1;
 const readyStateRequestReceived = 2;
 const readyStateProcessingRequest = 3;
 const readyStateResponseReady = 4;
+const JOIN_BOUNDARIES_PREFIX = 'J';
 
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
@@ -150,7 +151,13 @@ module.exports = Backbone.Model
 	    return this.lastFetchXhr;
 	  }	  
   },
-  
+  parse: function(response, options){	  
+	  //if from /rest/gis/indicators/ add prefix to id prevent collision
+	  if(this.url.indexOf('/rest/gis/indicators/') !== -1){	
+		  response.id = JOIN_BOUNDARIES_PREFIX +  response.id;
+	  }
+	  return response;	  
+  },
   updatePaletteRange: function() {
     var min = +Infinity,
         max = -Infinity;
@@ -199,7 +206,11 @@ module.exports = Backbone.Model
    },
   _joinDataWithBoundaries: function(boundaryGeoJSON) {
     var self = this;
-    var indexedValues = _.indexBy(this.get('values'), 'geoId');
+    var values = _.map(this.get('values'), function(value){
+    	value.geoId = value.geoId ? $.trim(value.geoId) : value.geoId; 
+    	return value;
+    });
+    var indexedValues = _.indexBy(values, 'geoId');
     if(indexedValues["null"]) {
         indexedValues[0] = indexedValues["null"]; //hack for some countries the geoId is null.
     }
@@ -211,7 +222,8 @@ module.exports = Backbone.Model
         // replace boundary properties with {value: value}
         // TODO... keep the existing properties and just add value?
         // replacing for now, to save weight
-        feature.id = feature.properties[admKey + '_CODE'];
+    	var admCode = feature.properties[admKey + '_CODE'];
+    	feature.id = admCode ? $.trim(admCode) : admCode;
         feature.properties.name = feature.properties[admKey + '_NAME'] || '';
 
         if (!indexedValues[feature.id]) {

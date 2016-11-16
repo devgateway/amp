@@ -1,5 +1,5 @@
 define([ 'marionette', 'text!views/html/saveTabDialogTemplate.html', 'models/tab',
-		'business/translations/translationManager', 'business/filter/filterManager', 'jquery', 'jqueryui' ], function(
+		'translationManager', 'business/filter/filterManager', 'jquery', 'jqueryui' ], function(
 		Marionette, saveTabDialogTemplate, Tab, TranslationManager, FilterManager, jQuery) {
 
 	"use strict";

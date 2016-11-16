@@ -33,20 +33,25 @@ module.exports = BaseControlView.extend({
     var self = this;    
     var layerManager = new LayersManager({sections: self.sections, app: this.app});   
     self.$('.content', self).append(layerManager.render().el);
+   
+    self.app.data.indicators.loadAll().then(function() {  	
+    	
+    	self.addSection(StatisticalLayersConfig.STANDARD);
+    	self.addSection(StatisticalLayersConfig.MY_LAYERS);
+    	self.addSection(StatisticalLayersConfig.SHARED);
+    	
+    	_.each(self.subSections, function(SectionView) {
+  	      /* Note: This object will access the radioButtonGroup
+  	      * of this parent BaseControlView */
+  	      var section = new SectionView({app: self.app, parent: self});    	      
+  	      /* For Mutual Exclusion: */
+  	      self.radioButtonGroup.push(section.collection);
+  	      self.$('.content', self).append(section.render().el);
+  	    });
+  	
+	 });     
     
-    this.addSection(StatisticalLayersConfig.STANDARD);
-    this.addSection(StatisticalLayersConfig.MY_LAYERS);
-    this.addSection(StatisticalLayersConfig.SHARED);
-    _.each(this.subSections, function(SectionView) {
-      /* Note: This object will access the radioButtonGroup
-      * of this parent BaseControlView */
-      var section = new SectionView({app: self.app, parent: self});
-      
-      /* For Mutual Exclusion: */
-      self.radioButtonGroup.push(section.collection);
-
-      self.$('.content', self).append(section.render().el);
-    });
+    
     
     return this;
   },

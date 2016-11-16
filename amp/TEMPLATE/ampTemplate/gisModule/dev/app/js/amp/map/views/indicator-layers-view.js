@@ -57,46 +57,50 @@ module.exports = Backbone.View.extend({
   },
 
   showLayer: function(layer) {
-    var self = this;
-    var loadedLayer = this.leafletLayerMap[layer.cid];
+	  //only show if it is a model, noticed that this function is called twice, with layer as model and layer as a collection
+	  if(layer.constructor.prototype instanceof Backbone.Model){
+		  var self = this;
+		  var loadedLayer = this.leafletLayerMap[layer.cid];
+		  if (loadedLayer === 'loading') {
+			  console.warn('tried to show a layer that is still loading, return');
+			  return;
+		  } else {
+			  //this will be replaced once loadAll is done,
+			  //prevent race condition 'show' calls adding multiple versions of the layer.
+			  this.leafletLayerMap[layer.cid] = 'loading';
+		  }
+		  
+		  layer.loadAll().done(function() {
+			  var layerType = layer.get('type');
+			  if (layerType === 'joinBoundaries') {  // geojson
+				  loadedLayer = self.getNewGeoJSONLayer(layer);
+			  } else if (layerType === 'wms') {
+				  loadedLayer = self.getNewWMSLayer(layer);
+			  } else if (layerType === 'arcgis' || layerType === 'Indicator Layers') {
+				  loadedLayer = self.getNewArcGISLayer(layer);
+			  } else {
+				  console.warn('Map view for layer type not implemented. layer:', layer);
+			  }
+			  self.leafletLayerMap[layer.cid] = loadedLayer;
 
-    if (loadedLayer === 'loading') {
-      console.warn('tried to show a layer that is still loading, return');
-      return;
-    } else {
-      //this will be replaced once loadAll is done,
-      //prevent race condition 'show' calls adding multiple versions of the layer.
-      this.leafletLayerMap[layer.cid] = 'loading';
-    }
-    layer.loadAll().done(function() {
-      var layerType = layer.get('type');
-      if (layerType === 'joinBoundaries') {  // geojson
-        loadedLayer = self.getNewGeoJSONLayer(layer);
-      } else if (layerType === 'wms') {
-        loadedLayer = self.getNewWMSLayer(layer);
-      } else if (layerType === 'arcgis' || layerType === 'Indicator Layers') {
-        loadedLayer = self.getNewArcGISLayer(layer);
-      } else {
-        console.warn('Map view for layer type not implemented. layer:', layer);
-      }
-      self.leafletLayerMap[layer.cid] = loadedLayer;
+			  // only add it to the map if is still selected.      
+			  if (layer.get('selected')) {
+				  self.map.addLayer(loadedLayer);
+				  if (loadedLayer.bringToBack) {
+					  loadedLayer.bringToBack();
+					  //TODO: drs, very dirty way of hiding boundaries so they don't hijack click events
+					  // I need to pull out boundaries into own view.
+					  self.admClustersLayersView.moveBoundaryBack();
+				  }
+				  self.trigger('addedToMap'); //TODO: better way. needed to let map bring structures to front.
+			  }
+			  // This forces to reload indicators if the model changed.
+			  if (layer._changing) {
+				  delete layer._loaded;
+			  }
+		  });    	
+	  }
 
-      // only add it to the map if is still selected.      
-      if (layer.get('selected')) {
-        self.map.addLayer(loadedLayer);
-        if (loadedLayer.bringToBack) {
-          loadedLayer.bringToBack();
-          //TODO: drs, very dirty way of hiding boundaries so they don't hijack click events
-          // I need to pull out boundaries into own view.
-          self.admClustersLayersView.moveBoundaryBack();
-        }
-        self.trigger('addedToMap'); //TODO: better way. needed to let map bring structures to front.
-      }
-      // This forces to reload indicators if the model changed.
-      if (layer._changing) {
-    	  delete layer._loaded;
-      }
-    });
   },
 
   hideLayer: function(layer) {
@@ -172,7 +176,7 @@ module.exports = Backbone.View.extend({
         var value;
         var percentIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_PERCENTAGE});
         var ratioOtherIndicator = self.app.data.indicatorTypes.findWhere({'orig-name': Constants.INDICATOR_TYPE_RATIO_OTHER});
-        if(layerModel.get('gapAnalysis') === false && ((percentIndicator && percentIndicator.get('id') === layerModel.get('indicatorTypeId')) || (ratioOtherIndicator && ratioOtherIndicator.get('id') === layerModel.get('indicatorTypeId')))){
+        if(layerModel.get('gapAnalysis') !== true && ((percentIndicator && percentIndicator.get('id') === layerModel.get('indicatorTypeId')) || (ratioOtherIndicator && ratioOtherIndicator.get('id') === layerModel.get('indicatorTypeId')))){
         	value = ampFormatter.format(feature.properties.value * 100);
         }else{
         	value = ampFormatter.format(feature.properties.value)

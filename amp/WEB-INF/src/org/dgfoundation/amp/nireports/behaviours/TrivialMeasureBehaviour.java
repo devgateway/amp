@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
@@ -37,6 +38,12 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 	public static TrivialMeasureBehaviour getTotalsOnlyInstance() {return totalsOnlyInstance;}
 	
 	protected final TimeRange timeRange;
+
+	/**
+	 * Specified whenever cells produced by this behaviour are scalable by units.
+	 * See also {@link ReportSettings#getUnitsOption()}.
+	 */
+	protected final boolean isScalableByUnits;
 	
 	/**
 	 * horizReductionResult = f(engine, doHorizResult)
@@ -54,9 +61,17 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 		this(timeRange, null);
 	}
 	
-	public TrivialMeasureBehaviour(TimeRange timeRange, BiFunction<NiReportsEngine, BigDecimal, BigDecimal> horizResultPostprocessor) {
+	public TrivialMeasureBehaviour(TimeRange timeRange,
+								   BiFunction<NiReportsEngine, BigDecimal, BigDecimal> horizResultPostprocessor) {
+		this(timeRange, horizResultPostprocessor, true);
+	}
+
+	public TrivialMeasureBehaviour(TimeRange timeRange,
+								   BiFunction<NiReportsEngine, BigDecimal, BigDecimal> horizResultPostprocessor,
+								   boolean isScalableByUnits) {
 		this.timeRange = timeRange;
 		this.horizResultPostprocessor = horizResultPostprocessor;
+		this.isScalableByUnits = isScalableByUnits;
 	}
 		
 	@Override
@@ -73,7 +88,7 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 			res = res.add(toAdd);
 		}
 		//System.err.format("reduced %d cells to %.2f: %s\n", cells.size(), res.doubleValue(), cells.toString());
-		return new NiAmountCell(res, precision);
+		return new NiAmountCell(res, precision, isScalableByUnits);
 	}
 
 	@Override
@@ -84,7 +99,7 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 			BigDecimal zz = horizResultPostprocessor.apply(context, z.amount);
 			if (zz == null)
 				return NiFormulaicAmountCell.FORMULAIC_ZERO;
-			return new NiAmountCell(zz, z.precisionSetting);
+			return new NiAmountCell(zz, z.precisionSetting, isScalableByUnits);
 		}
 		return z;
 	}
@@ -107,7 +122,7 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 		
 		while(it.hasNext())
 			res = res.add(it.next().amount);
-		return new NiAmountCell(res, precisionSetting);
+		return new NiAmountCell(res, precisionSetting, isScalableByUnits);
 	}
 
 	@Override

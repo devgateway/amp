@@ -159,7 +159,7 @@ module.exports = Backbone.Model
   },
   parse: function(response, options){	  
 	  //if from /rest/gis/indicators/ add prefix to id prevent collision
-	  if(this.url.indexOf('/rest/gis/indicators/') !== -1){	
+	  if(!_.isFunction(this.url) && !_.isUndefined(this.url) && this.url.indexOf('/rest/gis/indicators/') !== -1){	
 		  response.id = app.constants.JOIN_BOUNDARIES_PREFIX +  response.id;
 	  }
 	  return response;	  

@@ -12,7 +12,6 @@ var StringUtil = require('../../../libs/local/string-util');
 module.exports = Backbone.Collection.extend({
 
   url: '/rest/gis/indicator-layers',
-
   model: function(attrs) {
     var typeName = attrs.type;
 
@@ -32,7 +31,8 @@ module.exports = Backbone.Collection.extend({
 
   initialize: function(models, options) {
     this.boundaries = options.boundaries;
-    this.settings = options.settings;
+     this.settingsWidget = options.settingsWidget;
+    this.generalSettings = options.generalSettings
   },
 
   loadAll: function() {
@@ -84,15 +84,11 @@ module.exports = Backbone.Collection.extend({
 
       // this is a custom one. API is a bit messy so we do fair bit of manual work.
       if (layer.colorRamp) {
-    	 layer.id = app.constants.JOIN_BOUNDARIES_PREFIX + layer.id;
-    	 self.settings.load().then(function() {
-    	    
-    	   layer.title = StringUtil.getMultilangString(layer,'name', self.settings);
-    	   layer.description = StringUtil.getMultilangString(layer,'description', self.settings);  
-    	   layer.unit = StringUtil.getMultilangString(layer,'unit', self.settings);
-    	 });   	 
-        layer.type = 'joinBoundaries';
-        //debugger
+    	layer.id = app.constants.JOIN_BOUNDARIES_PREFIX + layer.id;    	    	    
+    	layer.title = StringUtil.getMultilangString(layer,'name', self.generalSettings);
+    	layer.description = StringUtil.getMultilangString(layer,'description', self.generalSettings);  
+    	layer.unit = StringUtil.getMultilangString(layer,'unit', self.generalSettings);    	  	 
+        layer.type = 'joinBoundaries';        
         layer.classes = layer.numberOfClasses;        
         return true;
       }

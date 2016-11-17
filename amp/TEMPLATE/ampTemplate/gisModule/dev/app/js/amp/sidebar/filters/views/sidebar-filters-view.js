@@ -25,8 +25,7 @@ module.exports = BaseControlView.extend({
     this.app = options.app;
     BaseControlView.prototype.initialize.apply(this, arguments);
 
-    this.app.data.filter.loaded.then(function() {
-    	console.info('filters loaded');
+    this.app.data.filter.loaded.then(function() {    	
       self.app.state.register(self, 'filters', {
         get: function() { return self.app.data.filter.serialize();},
         set: function(state) {
@@ -34,7 +33,7 @@ module.exports = BaseControlView.extend({
           self.app.data.filter.reset({silent: true});
           // AMP-21118, AMP-19254, AMP-20537: override the "date" range with the GIS-specific one from the settings blob (a hack...)
           if (_.isEmpty(state)){ 
-        	  self.app.data.filter.extractDates(self.app.data.settings.models, state, 'gis-default-min-date', 'gis-default-max-date'); 
+        	  self.app.data.filter.extractDates(self.app.data.generalSettings, state, 'gis-default-min-date', 'gis-default-max-date'); 
           }          
       	  var res = self.app.data.filter.deserialize(state);
           self.app.data.filter.finishedFirstLoad = true; //copy-pasted off AMP-20206, most probably bad code

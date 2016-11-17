@@ -29,7 +29,7 @@ var AMPSettingsView = Backbone.View.extend({
 					definitionUrl: '/rest/settings-definitions/reports'
 				});	
 				
-			    
+			    window.settingsWidget = this.settingsWidget;
 			    this.settingsWidget.definitions.loaded.done(function() {
 			    	self.settingsWidget.restoreFromSaved(self.settings_data);	
 			    });
@@ -57,8 +57,7 @@ var AMPSettingsView = Backbone.View.extend({
 			apply_settings: function(settings) {
 				Saiku.logger.log("AMPSettings.applySettings");				
 				
-				this.workspace.query.set('settings', settings);
-				window.currentSettings = settings;				
+				this.workspace.query.set('settings', settings);								
 				this.workspace.query.run_query(null, settings);
 				this.settings_button.removeClass('on');
 				$("#settings-popup").hide(); //hide settings dialog

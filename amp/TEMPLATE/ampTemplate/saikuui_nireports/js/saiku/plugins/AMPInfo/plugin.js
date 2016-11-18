@@ -17,7 +17,7 @@ var AMPInfo = Backbone.View.extend({
     render: function() {
     	Saiku.logger.log("AMPInfo.render");
 		var filters = this.workspace.query.get('filters');
-		var settings = window.currentSettings;
+		var settings = window.settingsWidget.toAPIFormat();
 		var content = this.render_info(settings);
 		$(this.el).html(content);
 		Saiku.i18n.translate();
@@ -37,6 +37,7 @@ var AMPInfo = Backbone.View.extend({
     },
     
     render_info: function(settings) {
+    	debugger
     	Saiku.logger.log("AMPInfo.render_info");
     	//TODO: Move all these html into a template + view.
     	var content = "<div id='amp_notification' class='amp_notification'><span class='i18n'>{0}</span></div>" 
@@ -45,7 +46,8 @@ var AMPInfo = Backbone.View.extend({
     	content += "<div id='amp_info_filters_block'></div>";
     	content += "</div>";
     	if(settings){
-    		var currencyValue = _.findWhere(_.findWhere(this.workspace.amp_settings.settings_data, {id: '1'}).value.options, {id: settings['1']}).value;
+    		var currencyCode = settings[window.settingsWidget.Constants.CURRENCY_ID];
+    		var currencyValue = window.settingsWidget.definitions.findCurrencyById(currencyCode).value;
         	content += "<div id='amp_info_settings'><h5><span class='i18n'>Currency</span>: " + currencyValue;
         	content += "</h5></div>";
     	}

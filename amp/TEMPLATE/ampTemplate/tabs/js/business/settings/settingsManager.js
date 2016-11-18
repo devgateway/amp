@@ -20,7 +20,7 @@ define(['marionette', 'translationManager',
 			draggable : true,
 			caller : 'TABS',
 			isPopup : true,
-			definitionUrl : '/rest/settings-definitions/gis'
+			definitionUrl : '/rest/settings-definitions/tabs'
 		});
 
 		app.TabsApp.listenTo(app.TabsApp.settingsWidget, 'close', function() {
@@ -29,6 +29,7 @@ define(['marionette', 'translationManager',
 
 		app.TabsApp.listenTo(app.TabsApp.settingsWidget, 'applySettings', function() {
 			GridManager.filter(app.TabsApp.currentTab.get('id'), app.TabsApp.serializedFilters, app.TabsApp.settingsWidget.toAPIFormat());
+			SettingsManager.updateLegend(app.TabsApp.settingsWidget.toAPIFormat());
 			$('#settings-popup').hide();
 		});
 		
@@ -39,6 +40,22 @@ define(['marionette', 'translationManager',
 	SettingsManager.openDialog = function() {		
 		$('#settings-popup').show();
 		app.TabsApp.settingsWidget.show();
+	};
+	
+	SettingsManager.updateLegend = function(appliedSettings){
+		// Update the legend section.
+		var currentLegendModel = app.TabsApp.dynamicContentRegion.currentView.legends.currentView.model;
+        var unitsValue = currentLegendModel.attributes.units;
+		var currencyCode = appliedSettings[app.TabsApp.settingsWidget.Constants.CURRENCY_ID];
+		var currencyValue = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode).value;
+		var legend = new Legend({
+			currencyCode : currencyCode,
+			currencyValue : currencyValue,
+			id : null,
+			units : unitsValue
+		});
+		app.TabsApp.dynamicContentRegion.currentView.legends.currentView.model = legend;
+		app.TabsApp.dynamicContentRegion.currentView.legends.currentView.render();
 	};
 
 	return SettingsManager;

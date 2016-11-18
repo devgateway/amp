@@ -74,10 +74,12 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 
 			// TODO: I know, not the best member names but thats defined in the
 			// endpoint.
-			app.TabsApp.appliedSettings = {
-				"2" : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('calendar').get('ampFiscalCalId'),
-				"1" : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode')
-			};
+			var appliedSettings = {};
+			appliedSettings[app.TabsApp.settingsWidget.Constants.CALENDAR_ID] = firstContent.get('reportMetadata').get('reportSpec').get('settings').get('calendar').get('ampFiscalCalId');
+			appliedSettings[app.TabsApp.settingsWidget.Constants.CURRENCY_ID] = firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode');
+			
+			app.TabsApp.settingsWidget.restoreFromSaved(appliedSettings);
+			
 			app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').models;
 
 			// Render views.
@@ -120,10 +122,15 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				units = TranslationManager.getTranslated("Amounts in millions");
 				break;
 			}
+			
+			
+			
 			var currencyCode = firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode') 
 				? firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode')
-				: app.TabsApp.settings.get('0').defaultId;
-			var currencyValue = _.findWhere(app.TabsApp.settings.get('0').options, {id: currencyCode}).value;
+				: app.TabsApp.settingsWidget.definitions.getDefaultCurrencyId();
+				
+			var currencyValue = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode).value;
+			
 			var legend = new Legend({
 				currencyCode : currencyCode,
 				currencyValue : currencyValue,
@@ -177,7 +184,6 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 
 			// Restart app variables defined for the active tab.
 			app.TabsApp.serializedFilters = null;
-			app.TabsApp.appliedSettings = null;
 			app.TabsApp.currentGrid = null;
 			app.TabsApp.currentTab = null;
 			app.TabsApp.numericFormatOptions = null;

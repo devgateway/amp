@@ -164,7 +164,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils', 
 							// This function is called automatically BEFORE sending the request, so here we can make changes on the POST data.
 							data.MD5 = generateMD5(data.filters, data.settings,  
 									{sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, 
-									id, _.findWhere(app.TabsApp.settings.attributes, {id:'language'}).defaultId);
+									id, app.TabsApp.generalSettings.get('language'));
+							
 							return JSON.stringify(data);
 						},
 						gridComplete : function() {

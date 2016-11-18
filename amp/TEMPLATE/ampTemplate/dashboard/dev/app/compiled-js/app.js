@@ -32197,10 +32197,11 @@ module.exports = {
 }
 },{}],91:[function(require,module,exports){
 
+var jQuery = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 //loading hacks
-var jQuery = require('jquery');
+
 require('jquery-ui/draggable');
 var Config = require('./common/config');
 var Constants = require('./common/constants');
@@ -32208,8 +32209,9 @@ var SettingsDefinitionsCollection = require('./collections/settings-definitions-
 var SettingsView = require('./views/settings-view');
 var GeneralSettings = require('./models/general-settings');
 //jquery is colliding in GIS module, so we only load it if it is not loaded or if there is a jquery loaded but version is older than 2.x.x
-if (window.$ == undefined || $.fn.jquery.split(' ')[0].split('.')[0] < 2) {
-	window.jQuery = window.$ = Backbone.$ = jQuery;
+if (window.$ == undefined || $.fn.jquery.split(' ')[0].split('.')[0] < 2) {	
+	window.jQuery = window.$ = Backbone.$ = jQuery;	
+	$.noConflict(true);
 }
 var bootstrap_enabled = (typeof $().modal == 'function');
 if (bootstrap_enabled) {
@@ -32373,10 +32375,10 @@ module.exports = Backbone.View.extend({
 				appliedSettings : this.appliedSettings,
 				settingsSelections: this.settingsSelections
 			}));
-		}
-		if (settingID === Constants.CURRENCY_ID && _.isUndefined(this.allCurrencies)) {
-			this.allCurrencies = setting.get('value').options;
-		}
+			if (settingID === Constants.CURRENCY_ID && _.isUndefined(this.allCurrencies)) {
+				this.allCurrencies = setting.get('value').options;
+			}
+		}		
 	},
 	appendYearRangeSetting : function() {
 		var yearRangeSetting = this.definitions.findWhere({

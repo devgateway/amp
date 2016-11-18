@@ -26,13 +26,45 @@ public class AmpConfiguration {
 	 * These settings should be supported by almost all API calls.<br>
 	 * Note: most API endpoints will also need to accept a 'settings' object on queries.<br>
 	 * <br>
-	 * Example of 'settings' json object used in API endpoints: 
+	 * Example of 'settings' json object provided as POST input in API endpoints: 
 	 * <pre>
 	 * settings : { "1": "CAD", 
 	 *              "2" : "6", 
 	 *              "yearRange": {"yearFrom":"2005", "yearTo":"2020"}
 	 *            }
 	 * </pre>
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
+     * [
+     *   ...,
+     *   {
+     *    "id": "use-icons-for-sectors-in-project-list",
+     *    "multi": false,
+     *    "name": "Use icons for Sectors in Project List",
+     *    "defaultId": "true",
+     *    "options": [
+     *      {
+     *        "id": "true",
+     *        "name": "true",
+     *        "value": "true"
+     *      }
+     *    ]
+     *   },
+     *   {
+     *    "id": "project-sites",
+     *    "multi": false,
+     *    "name": "Project Sites",
+     *    "defaultId": "true",
+     *    "options": [
+     *    {
+     *      "id": "true",
+     *      "name": "true",
+     *      "value": "true"
+     *    }
+     *   ]
+     *  },
+     *  ...
+     * ]</pre>
 	 * 
 	 * @return a list of setting options
 	 * @see SettingOptions

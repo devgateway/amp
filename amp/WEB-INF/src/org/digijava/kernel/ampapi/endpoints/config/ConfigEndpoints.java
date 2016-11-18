@@ -71,9 +71,13 @@ public class ConfigEndpoints {
      * <h3>Sample Output:</h3><pre>
      *  [
 	 *   {
-	 *    "Link Mode of Payment to Funding Status": "SAVED"
+	 *    "Closed activity status": "SAVED"
 	 *   }
 	 *  ]</pre>
+	 *  
+	 *  
+	 *  </br>
+	 *  Note: Please check /rest/config/getGlobalSettings for parameters description.
 	 * 
 	 * @param globalSettings JSON representation of the global settings
 	 * @return JSON object with all status information (SAVED|INSERTED|NOT A VALID VALUE) 
@@ -130,11 +134,12 @@ public class ConfigEndpoints {
 	 * The global settings JSON object holds information regarding:
 	 * <dt><b>settingName</b><dd> - the name of the global settings
 	 * <dt><b>settingValue</b><dd> - the current value of the settings
-	 * <dt><b>possibleValues</b><dd> - the type of possible values. It could be boolean, double, integer or 
+	 * <dt><b>possibleValues</b><dd> - the type of possible values. Available types are: t_Boolean, t_Integer, t_Double, t_year_default_start, 
+	 * t_year_default_end, t_static_range, t_static_year, t_audit_trial_clenaup, t_components_sort, t_daily_currency_update_hour, t_secure_values, t_timeout_currency_update 
 	 * <dt><b>description</b><dd> - the description of the global settings
 	 * <dt><b>section</b><dd> - the section where the global settings belongs to
 	 * <dt><b>valueTranslatbale</b><dd> - if the global settings has translations
-	 * <dt><b>possibleValuesIds</b><dd> - possible values of the settings
+	 * <dt><b>possibleValuesIds</b><dd> - possible values of the current setting in a { "name1" : "value1", ...} format
 	 * </dl></br></br>
 	 * If the request contains an empty JSON, all global settings will be provided.
 	 * Empty Request: <code>{}</code></br></br>

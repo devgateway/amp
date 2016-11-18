@@ -22,7 +22,7 @@ public class FMEndpoint {
     /**
      * Provides FM (Feature Manager) settings for the requested options.
      * 
-     * The settings will be taken from the current (default) FM template.
+     * The settings will be taken from the current FM template.
      * <dl>
      * <b>reporting-fields</b><dd>true/false (default) - to list or not reporting-fields</dd>
      * <b>enabled-modules</b><dd>true/false (default) - to list or not enabled modules</dd>

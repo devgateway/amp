@@ -24,10 +24,10 @@ module.exports = Backbone.View.extend({
 	     tooltip += obj.description + '. ' ;
 	  }	     
 	  if(obj.createdOn){
-	     tooltip += '<br/> Created on ' + obj.createdOn;
+	     tooltip += '<br/> ' + this.app.translator.translateSync('amp.gis-layers-manager:tooltip-created-on','Created on') + ' ' + obj.createdOn;
 	  }
 	  if(obj.createdBy){
-		 tooltip += ' by ' + obj.createdBy
+		 tooltip += ' ' + this.app.translator.translateSync('amp.gis-layers-manager:tooltip-created-by','by') + ' ' + obj.createdBy;
 	  }	
 	  return tooltip;
   },

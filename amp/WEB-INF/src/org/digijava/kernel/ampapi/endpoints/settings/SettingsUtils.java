@@ -650,7 +650,7 @@ public class SettingsUtils {
 			
 			DecimalFormat format = AmpARFilter.buildCustomFormat(decimalSymbol, groupingSeparator, 
 					maxFractDigitsNum, useGrouping, groupingSize);
-			reportSettings.setCurrencyFormat((DecimalFormat) format.getInstance(new Locale("en", "US")));
+			reportSettings.setCurrencyFormat(format);
 			
 			Double multiplier = PersistenceManager.getDouble(amountFormat.get(SettingsConstants.AMOUNT_UNITS));
 			if (multiplier != null)

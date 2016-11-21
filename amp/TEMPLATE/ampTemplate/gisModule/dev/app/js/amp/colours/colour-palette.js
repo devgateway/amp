@@ -148,7 +148,7 @@ var Palette = Backbone.Model.extend({
 
     var localizedMultipleItem = [
                                  '<span data-i18n="amp.gis:legend-multiple">',
-                                 'Multiple ',
+                                 'Multiple Projects ',
                                  '</span>'
                                ].join('');
     var localizedOthersItem = [

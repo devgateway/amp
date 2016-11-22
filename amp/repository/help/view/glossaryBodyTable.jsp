@@ -89,7 +89,7 @@
 						<tr>
 							<td noWrap align="center" valign="middle">		
 								<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;">
-									<digi:img hspace="2" vspace="2"src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
+									<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
 								</a>
 							</td>
 					

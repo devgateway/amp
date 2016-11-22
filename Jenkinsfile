@@ -1,11 +1,12 @@
 #!groovy
 
 def gitBranch = "${BRANCH_NAME}"
-def gitBranchSane = gitBranch.replaceAll(/[^a-zA-Z0-9_-]/, "-").toLowerCase()
-def gitBranchSaneMin = (gitBranchSane =~ /.*-amp-(\d+)-.*/)[0][1]
-
 println "gitBranch: ${gitBranch}"
+
+def gitBranchSane = gitBranch.replaceAll(/[^a-zA-Z0-9_-]/, "-").toLowerCase()
 println "gitBranchSane: ${gitBranchSane}"
+
+def gitBranchSaneMin = (gitBranchSane =~ /.*-amp-(\d+)-.*/)[0][1]
 println "gitBranchSaneMin: ${gitBranchSaneMin}"
 
 stage('Build') {
@@ -13,9 +14,9 @@ stage('Build') {
         try {
             checkout scm
             withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-                sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP-2.12 -e"
+                sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -e"
                 
-                sh "docker build -q -t localhost:5000/amp-webapp:${gitBranchSane} --build-arg AMP_EXPLODED_WAR=target/amp-AMP-2.12 --build-arg BRANCH='${gitBranch}' amp"
+                sh "docker build -q -t localhost:5000/amp-webapp:${gitBranchSane} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg BRANCH='${gitBranch}' amp"
                 sh "docker push localhost:5000/amp-webapp:${gitBranchSane} > /dev/null"
                 sh "docker rmi localhost:5000/amp-webapp:${gitBranchSane}"
             }

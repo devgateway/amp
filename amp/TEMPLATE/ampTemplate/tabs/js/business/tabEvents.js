@@ -72,14 +72,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				collection : app.TabsApp.filters
 			});
 
-			// TODO: I know, not the best member names but thats defined in the
-			// endpoint.
-			var appliedSettings = {};
-			appliedSettings[app.TabsApp.settingsWidget.Constants.CALENDAR_ID] = firstContent.get('reportMetadata').get('reportSpec').get('settings').get('calendar').get('ampFiscalCalId');
-			appliedSettings[app.TabsApp.settingsWidget.Constants.CURRENCY_ID] = firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode');
-			
-			app.TabsApp.settingsWidget.restoreFromSaved(appliedSettings);
-			
+			app.TabsApp.settingsWidget.restoreFromSaved(firstContent.get('reportMetadata').get('settings').toJSON());			
 			app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').models;
 
 			// Render views.
@@ -125,10 +118,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			
 			
 			
-			var currencyCode = firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode') 
-				? firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode')
-				: app.TabsApp.settingsWidget.definitions.getDefaultCurrencyId();
-				
+			var currencyCode = firstContent.get('reportMetadata').get('settings').get(app.TabsApp.settingsWidget.Constants.CURRENCY_ID) || app.TabsApp.settingsWidget.definitions.getDefaultCurrencyId();
 			var currencyValue = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode).value;
 			
 			var legend = new Legend({

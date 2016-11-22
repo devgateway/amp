@@ -18,7 +18,7 @@ stage('Build') {
             }
         } catch (e) {
             echo "Caught: ${e}"
-            currentBuild.result = "FAILED"
+            currentBuild.result = "FAILURE"
         }
         //step([$class: 'Mailer', recipients: 'amp-developer@developmentgateway.org'])
     }

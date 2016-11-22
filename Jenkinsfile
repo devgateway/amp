@@ -1,12 +1,15 @@
 #!groovy
 
+println env.getEnvironment()
+
 def gitBranch = "${BRANCH_NAME}"
 println "gitBranch: ${gitBranch}"
 
 def gitBranchSane = gitBranch.replaceAll(/[^a-zA-Z0-9_-]/, "-").toLowerCase()
 println "gitBranchSane: ${gitBranchSane}"
 
-def gitBranchSaneMin = (gitBranchSane =~ /.*-amp-(\d+)-.*/)[0][1]
+def gitBranchSaneMin = "24669"
+// (gitBranchSane =~ /.*-amp-(\d+)-.*/)[0][1]
 println "gitBranchSaneMin: ${gitBranchSaneMin}"
 
 stage('Build') {

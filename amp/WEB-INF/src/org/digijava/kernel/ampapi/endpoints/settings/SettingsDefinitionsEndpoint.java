@@ -112,6 +112,20 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
                 getReportYearRangeField(spec));
     }
 
+    /**
+     * Returns setting definitions for tabs.
+     *
+     * @return a list of setting definitions
+     */
+    @GET
+    @Path("/tabs")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public final List<SettingField> getSettingDefinitionsForTabs() {
+        return Arrays.asList(
+                getCurrencyField(),
+                getCalendarField());
+    }
+
     @Override
     public Class getErrorsClass() {
         return SettingsDefinitionsErrors.class;

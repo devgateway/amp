@@ -2,8 +2,10 @@ FROM tomcat:7.0.67-jre8
 
 ARG AMP_EXPLODED_WAR
 ARG AMP_PULL_REQUEST
+ARG AMP_BRANCH
 
 LABEL "pull-request"=$AMP_PULL_REQUEST
+LABEL "branch"=$AMP_BRANCH
 
 ADD docker/wait-for-it.sh bin
 ADD docker/setenv.sh bin

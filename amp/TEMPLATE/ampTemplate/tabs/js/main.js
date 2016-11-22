@@ -37,7 +37,7 @@ require.config({
 			exports : 'Marionette'
 		},
 		jqueryui : {
-			deps : [ 'jquery' ]
+			deps : ['jquery']
 		},
 		documentModel : {
 			deps : [ 'backbone' ],
@@ -52,7 +52,7 @@ require.config({
 			exports : "jQuery.fn.jqGrid"
 		},
 		filtersWidget : {
-			deps : [ 'backbone', 'commonFilterUtils'],
+			deps : ['commonFilterUtils'],
 			exports : 'filtersWidget'
 		},
 		settings : {			

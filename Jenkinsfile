@@ -10,20 +10,14 @@ println "Tag: ${tag}"
 
 stage('Build') {
     node {
-        try {
-            checkout scm
-            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-                sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -e"
-                
-                sh "docker build -q -t localhost:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' amp"
-                sh "docker push localhost:5000/amp-webapp:${tag} > /dev/null"
-                sh "docker rmi localhost:5000/amp-webapp:${tag}"
-            }
-        } catch (e) {
-            echo "Caught: ${e}"
-            currentBuild.result = "FAILURE"
+        checkout scm
+        withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+            sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -e"
+
+            sh "docker build -q -t localhost:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' amp"
+            sh "docker push localhost:5000/amp-webapp:${tag} > /dev/null"
+            sh "docker rmi localhost:5000/amp-webapp:${tag}"
         }
-        //step([$class: 'Mailer', recipients: 'amp-developer@developmentgateway.org'])
     }
 }
 

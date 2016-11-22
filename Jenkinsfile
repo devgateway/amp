@@ -1,6 +1,11 @@
 #!groovy
 
-println env.getEnvironment()
+node {
+    sh 'env > env.txt'
+    readFile('env.txt').split("\r?\n").each {
+        println it
+    }
+}
 
 def gitBranch = "${BRANCH_NAME}"
 println "gitBranch: ${gitBranch}"

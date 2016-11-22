@@ -1,10 +1,9 @@
 #!groovy
 
 node {
-    sh 'env > env.txt'
-    readFile('env.txt').split("\r?\n").each {
-        println it
-    }
+    println "BRANCH_NAME: ${BRANCH_NAME}"
+    println "CHANGE_ID: ${CHANGE_ID}"
+    println "CHANGE_TARGET: ${CHANGE_TARGET}"
 }
 
 def gitBranch = "${BRANCH_NAME}"

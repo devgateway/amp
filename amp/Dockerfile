@@ -1,4 +1,4 @@
-FROM tomcat:7-jre8
+FROM tomcat:7.0.67-jre8
 
 ARG AMP_EXPLODED_WAR
 ARG BRANCH

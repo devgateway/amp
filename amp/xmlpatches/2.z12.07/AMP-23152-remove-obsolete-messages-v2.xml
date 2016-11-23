@@ -13,8 +13,7 @@
 						DELETE FROM dg_message WHERE message_key IN (
 										SELECT message_key from dg_message where message_utf8 IN (
 													'First Name is Blank', 'LastName is Blank', 'New password is required', 'New password is required.', 
-													'Old password is required', 'Old password is required.', 'you must enter Valid email please check in')
-									    );
+													'Old password is required', 'Old password is required.'));
             </lang>
         </script>
     </apply>

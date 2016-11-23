@@ -6,7 +6,6 @@ ARG AMP_BRANCH
 
 LABEL "pull-request"=$AMP_PULL_REQUEST
 LABEL "branch"=$AMP_BRANCH
-LABEL "1"=1
 
 ADD docker/wait-for-it.sh bin
 ADD docker/setenv.sh bin

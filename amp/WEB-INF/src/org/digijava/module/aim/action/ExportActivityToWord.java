@@ -28,6 +28,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
@@ -223,6 +224,44 @@ public class ExportActivityToWord extends Action {
                 //identificationTbl.addCell(identificationTblCell1);
                 doc.add(identificationTbl);
                 doc.add(identificationSubTable1);
+
+                //AGENCY INTERNAL IDS
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Activity Internal IDs")){
+                    Table internalTbl = null;
+                    internalTbl = new Table(1);
+                    internalTbl.setWidth(100);
+                    RtfCell internalTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Agency Internal IDs").toUpperCase(), HEADERFONT));
+                    internalTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    internalTitleCell.setBackgroundColor(CELLCOLORGRAY);
+                    internalTbl.addCell(internalTitleCell);
+
+                    RtfCell internalTblCell1 = new RtfCell();
+                    Table internalSubTable1 = new Table(2);
+                    internalSubTable1.setWidths(new float[]{1f,2f});
+                    internalSubTable1.setWidth(100);
+
+                    cell = new RtfCell();
+                    cell.setColspan(2);
+                    cell.setBorder(0);
+                    columnVal="";
+                    if(activity.getInternalIds()!=null){
+                        for (AmpActivityInternalId internal  : activity.getInternalIds()) {
+                            columnVal+="[" + internal.getOrganisation().getName() + "]";
+                            if(FeaturesUtil.isVisibleModule("/Activity Form/Activity Internal IDs/Internal IDs/internalId")) {
+                                columnVal+="\t\t" + (internal.getInternalId() != null ? internal.getInternalId() : "") + " \n";
+                            } else {
+                                columnVal+=" \n";
+                            }
+                        }
+                    }
+                    p1 = new Paragraph(columnVal,BOLDFONT);
+                    cell.add(p1);
+                    internalSubTable1.addCell(cell);
+                    doc.add(internalTbl);
+                    doc.add(internalSubTable1);
+                    doc.add(new Paragraph(" "));
+                }
+
 
                 /**
                  * Planning step

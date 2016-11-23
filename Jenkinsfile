@@ -21,6 +21,8 @@ stage('Build') {
     }
 }
 
+milestone
+
 stage('Deploy') {
     def country
     timeout(time: 7, unit: 'DAYS') {

@@ -21,7 +21,7 @@ stage('Build') {
     }
 }
 
-milestone
+milestone()
 
 stage('Deploy') {
     def country

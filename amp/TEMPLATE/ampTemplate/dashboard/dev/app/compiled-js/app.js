@@ -32430,8 +32430,12 @@ module.exports = Backbone.View.extend({
 				return item.id === object
 			}));
 		});
-		// select first
-		this.updateSelected(Constants.CURRENCY_ID, availableCurrenciesForCalendar[0]);
+		
+		
+		var selectedCurrency = _.filter(availableCurrenciesForCalendar, function(curr){ return curr === self.settingsSelections[Constants.CURRENCY_ID] ; })[0];
+		var appliedCurrency = _.filter(availableCurrenciesForCalendar, function(curr){ return curr === self.appliedSettings[Constants.CURRENCY_ID] ; })[0];
+		var firstCurrency = availableCurrenciesForCalendar[0];
+		this.updateSelected(Constants.CURRENCY_ID, selectedCurrency || appliedCurrency || firstCurrency);	
 	},
 	updateSelected : function(settingID, selectedID) {
 		// store user selections in a temp object - only transfered to the applied settings if the apply button is clicked

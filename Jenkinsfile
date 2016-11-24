@@ -23,30 +23,31 @@ stage('Build') {
     }
 }
 
-milestone()
-
-def country
-timeout(time: 7, unit: 'DAYS') {
-    country = input message: "Proceed with deploy?", parameters: [choice(choices: 'bfaso\n' +
-            'nepal\n' +
-            'tanzania\n' +
-            'drc\n' +
-            'liberia\n' +
-            'honduras\n' +
-            'timor\n' +
-            'senegal\n' +
-            'gambia\n' +
-            'ethiopia\n' +
-            'civ', name: 'country')]
-}
-
-def host = "amp-${country}-${tag}-tc9.ampsite.net"
-
-milestone()
-
 def deployed = false
+def country
+def host
 
 stage('Deploy') {
+    milestone()
+
+    def country
+    timeout(time: 7, unit: 'DAYS') {
+        country = input message: "Proceed with deploy?", parameters: [choice(choices: 'bfaso\n' +
+                'nepal\n' +
+                'tanzania\n' +
+                'drc\n' +
+                'liberia\n' +
+                'honduras\n' +
+                'timor\n' +
+                'senegal\n' +
+                'gambia\n' +
+                'ethiopia\n' +
+                'civ', name: 'country')]
+    }
+    host = "amp-${country}-${tag}-tc9.ampsite.net"
+
+    milestone()
+
     node {
         sh "ssh sulfur \"cd /opt/docker/amp && ./up.sh ${tag} ${country} ${host}\""
         deployed = true

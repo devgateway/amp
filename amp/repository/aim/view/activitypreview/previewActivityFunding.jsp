@@ -397,7 +397,7 @@
 	                    		</c:if></c:if>
 	                    	
                         		<c:if test="${aimEditActivityForm.funding.showPipeline}"><c:if test="${not empty aimEditActivityForm.funding.totalPipelineCommitments}">
-                        			<c:set var="activity_funding_text"><digi:trn key='aim:totalactualcommittment'> Total Pipeline Commitments</digi:trn></c:set>
+                        			<c:set var="activity_funding_text"><digi:trn key='aim:totalpipelinecommittment'> Total Pipeline Commitments</digi:trn></c:set>
 									<c:set var="activity_funding_amount">${aimEditActivityForm.funding.totalPipelineCommitments}</c:set>
 									<%@include file="preview_activity_funding_detail.jspf" %>
                         		</c:if></c:if>                        	

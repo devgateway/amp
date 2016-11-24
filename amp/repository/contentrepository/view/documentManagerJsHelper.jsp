@@ -426,7 +426,11 @@ font-weight : bold;
 <c:set var="trans_wait">
 	<digi:trn>Please wait a moment...</digi:trn>
 </c:set>
-
+<script type="text/javascript">
+<!--
+var trnWait="${trans_wait}";
+//-->
+</script>
 
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp");
@@ -828,7 +832,9 @@ function WindowControllerObject(bodyContainerEl) {
 
 				//parameters += "&type=team2"
 				//alert(parameters);
+				debugger;
 				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
+				
 				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
 								'ajaxDocumentList=true'+parameters );
 				};
@@ -1071,6 +1077,7 @@ function showMenu(e, obj) {
 /* Function that creates AJAX callback object that is used when receiving 
 document list from server. windowController.datatable field will be set to the created datatable. */
 function getCallbackForOtherDocuments(containerElement, windowController, datatableDivId) {
+	debugger;
 	var num						= YAHOO.amp.num_of_tables - 1;
 	var divId					= "other_markup" + num;
 	if ( datatableDivId != null )

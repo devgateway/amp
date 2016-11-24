@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
-import clover.org.apache.commons.lang.StringUtils;
+import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
+
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -113,7 +114,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
+import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Export Activity to PDF
@@ -2877,8 +2878,7 @@ public class ExportActivityToPDF extends Action {
                         }
 
                         //UNDISBURSED BALANCE
-
-                        if(FeaturesUtil.isVisibleFeature("Undisbursed Balance")){
+                        if (FeaturesUtil.isVisibleFeature("Funding","Undisbursed Balance")) {
                             output=(funding.getUndisbursementbalance() != null && funding.getUndisbursementbalance().length() > 0)?	funding.getUndisbursementbalance() + currencyCode : "";
                             PdfPCell undisbursedBalanceCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("UNDISBURSED BALANCE:")+" \t\t         "+ output+"\n\n",plainFont));
                             undisbursedBalanceCell1.setBorder(0);
@@ -2934,6 +2934,7 @@ public class ExportActivityToPDF extends Action {
                 {
                     addTotalsOutput(fundingTable, "TOTAL PLANNED COMMITMENTS", myForm.getFunding().getTotalPlannedCommitments(), currencyCode);
                     addTotalsOutput(fundingTable, "TOTAL ACTUAL COMMITMENTS", myForm.getFunding().getTotalCommitments(), currencyCode);
+                    addTotalsOutput(fundingTable, "TOTAL PIPELINE COMMITMENTS", myForm.getFunding().getTotalPipelineCommitments(), currencyCode);
                 }
 
 
@@ -2970,7 +2971,7 @@ public class ExportActivityToPDF extends Action {
                 }
 
                 //UNDISBURSED BALANCE
-                if (FeaturesUtil.isVisibleFeature("Undisbursed Balance")) {
+                if (FeaturesUtil.isVisibleFeature("Funding","Undisbursed Balance")) {
                     addTotalsOutput(fundingTable, "UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
                 }
 

@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,6 +12,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.text.DecimalFormat;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -32,8 +35,10 @@ import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 20, 2010
@@ -106,7 +111,10 @@ public class AmpLocationFormTableFeature extends
 				for(AmpActivityLocation item:listModel.getObject())
 					if (item.getLocationPercentage() != null)
 						total += item.getLocationPercentage();
-				return Double.toString(total);
+				
+				DecimalFormat decimalFormat = FormatHelper.getPercentageDefaultFormat(true);
+				
+				return decimalFormat.format(total);
 			}
 		});
 		totalLabel.setOutputMarkupId(true);

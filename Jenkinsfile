@@ -44,8 +44,19 @@ def host = "amp-${country}-${tag}-tc9.ampsite.net"
 
 milestone()
 
+def deployed = false
+
 stage('Deploy') {
     node {
         sh "ssh sulfur \"cd /opt/docker/amp && ./up.sh ${tag} ${country} ${host}\""
+        deployed = true
+    }
+}
+
+stage('Deploy again') {
+    if (!deployed) {
+        node {
+            sh "ssh sulfur \"cd /opt/docker/amp && ./up.sh ${tag} ${country} ${host}\""
+        }
     }
 }

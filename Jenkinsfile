@@ -30,7 +30,6 @@ def host
 stage('Deploy') {
     milestone()
 
-    def country
     timeout(time: 7, unit: 'DAYS') {
         country = input message: "Proceed with deploy?", parameters: [choice(choices: 'bfaso\n' +
                 'nepal\n' +
@@ -44,6 +43,7 @@ stage('Deploy') {
                 'ethiopia\n' +
                 'civ', name: 'country')]
     }
+    
     host = "amp-${country}-${tag}-tc9.ampsite.net"
 
     milestone()

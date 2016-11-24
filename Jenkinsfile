@@ -28,9 +28,8 @@ def country
 def host
 
 stage('Deploy') {
-    milestone()
-
     timeout(time: 7, unit: 'DAYS') {
+        milestone()
         country = input message: "Proceed with deploy?", parameters: [choice(choices: 'bfaso\n' +
                 'nepal\n' +
                 'tanzania\n' +
@@ -42,11 +41,10 @@ stage('Deploy') {
                 'gambia\n' +
                 'ethiopia\n' +
                 'civ', name: 'country')]
+        milestone()
     }
 
     host = "amp-${country}-${tag}-tc9.ampsite.net"
-
-    milestone()
 
     node {
         try {
@@ -59,9 +57,17 @@ stage('Deploy') {
 }
 
 stage('Deploy again') {
-    if (!deployed) {
+    if (deployed) {
+        println 'Already deployed, skipping this step.'
+    } else {
+        timeout(time: 7, unit: 'DAYS') {
+            milestone()
+            input message: "Proceed with repeated deploy for ${country}?"
+            milestone()
+        }
         node {
             sh "ssh sulfur \"cd /opt/docker/amp && ./up.sh ${tag} ${country} ${host}\""
+            currentBuild.result = 'SUCCESS'
         }
     }
 }

@@ -43,14 +43,18 @@ stage('Deploy') {
                 'ethiopia\n' +
                 'civ', name: 'country')]
     }
-    
+
     host = "amp-${country}-${tag}-tc9.ampsite.net"
 
     milestone()
 
     node {
-        sh "ssh sulfur \"cd /opt/docker/amp && ./up.sh ${tag} ${country} ${host}\""
-        deployed = true
+        try {
+            sh "ssh sulfur \"cd /opt/docker/amp && ./up.sh ${tag} ${country} ${host}\""
+            deployed = true
+        } catch (e) {
+            currentBuild.result = 'UNSTABLE'
+        }
     }
 }
 

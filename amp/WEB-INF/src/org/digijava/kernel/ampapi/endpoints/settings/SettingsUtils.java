@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
+import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -489,6 +491,7 @@ public class SettingsUtils {
 		Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
 
 		configureCurrencyCode(reportSettings, settings, setDefaults);
+		configureNumberFormat(reportSettings, settings, setDefaults);
 		configureCalendar(reportSettings, settings, setDefaults);
 		configureYearRange(reportSettings, settings, setDefaults);
 	}
@@ -510,12 +513,12 @@ public class SettingsUtils {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @param reportSettings
 	 * @param settings
 	 * @param setDefaults
 	 */
-	private static void configureNumberFormat(ReportSettingsImpl reportSettings, Map<String, Object> settings, 
+	private static void configureNumberFormat(ReportSettingsImpl reportSettings, Map<String, Object> settings,
 			boolean setDefaults) {
 		// apply numberFormat
 		Map<String, Object> amountFormat = settings == null ? null : 
@@ -528,13 +531,14 @@ public class SettingsUtils {
 			String groupingSeparator  = (String) amountFormat.get(SettingsConstants.GROUP_SEPARATOR);
 			Integer groupingSize  = (Integer) amountFormat.get(SettingsConstants.GROUP_SIZE);
 			
-			DecimalFormat format = AmpARFilter.buildCustomFormat(decimalSymbol, groupingSeparator, 
+			DecimalFormat format = AmpARFilter.buildCustomFormat(decimalSymbol, groupingSeparator,
 					maxFractDigitsNum, useGrouping, groupingSize);
 			reportSettings.setCurrencyFormat(format);
 			
-			Double multiplier = PersistenceManager.getDouble(amountFormat.get(SettingsConstants.AMOUNT_UNITS));
-			if (multiplier != null)
-				reportSettings.setUnitsOption(AmountsUnits.findByMultiplier(multiplier));
+			Integer multiplier = PersistenceManager.getInteger(amountFormat.get(SettingsConstants.AMOUNT_UNITS));
+			if (multiplier != null) {
+                reportSettings.setUnitsOption(AmountsUnits.getForDivider(multiplier));
+            }
 		}
 		
 		if (setDefaults && reportSettings.getCurrencyFormat() == null) {

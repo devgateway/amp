@@ -17,8 +17,15 @@ public class SettingsConstants {
 	public static final String CURRENCY_ID = "currency-code";
 	public static final String CALENDAR_TYPE_ID = "calendar-id";
 	public static final String CALENDAR_CURRENCIES_ID = "calendar-currencies";
+	public static final String AMOUNT_FORMAT_ID = "amount-format";
 	public static final String YEAR_RANGE_ID = "year-range";
-	
+
+	public static final String DECIMAL_SYMBOL = "decimal-symbol";
+	public static final String MAX_FRACT_DIGITS = "max-frac-digits";
+	public static final String USE_GROUPING = "use-grouping";
+	public static final String GROUP_SEPARATOR = "group-separator";
+	public static final String GROUP_SIZE = "group-size";
+
 	public static final String DEFAULT_FUNDING_TYPE_ID = MeasureConstants.ACTUAL_COMMITMENTS;
 	
 	public static final String YEAR_FROM = "from";

@@ -24,7 +24,6 @@
 
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css" />
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/button.css" />
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>

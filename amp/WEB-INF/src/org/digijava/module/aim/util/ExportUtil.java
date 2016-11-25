@@ -9,8 +9,7 @@ import java.util.Set;
 /**
  * Created by anpicca on 24/11/2016.
  */
-public class ExportUtil
-{
+public class ExportUtil {
     private static Logger logger = Logger.getLogger(ExportUtil.class);
 
     public static String buildInternalId(Set<AmpActivityInternalId> internalIds) {
@@ -21,7 +20,7 @@ public class ExportUtil
         return result;
     }
 
-    public static String getInternalData(AmpActivityInternalId internal) {
+    private static String getInternalData(AmpActivityInternalId internal) {
         String result = "[" + internal.getOrganisation().getName() + "] ";
         if (FeaturesUtil.isVisibleModule("/Activity Form/Activity Internal IDs/Internal IDs/internalId")) {
             result += "\t ";

@@ -850,7 +850,7 @@ public class ReportsUtil {
 		if (report.getType() != null && report.getType().equals((long) ArConstants.REGIONAL_TYPE)){
 			prefix = "/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=";
 		} else {
-			prefix = "/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/";
+			prefix = "/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/open/";
 		}
 		return prefix + report.getAmpReportId();
 	}

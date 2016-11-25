@@ -644,8 +644,8 @@ $(document).ready(function() {
 						</c:set>
 						<c:if test="${!aimTeamReportsForm.showTabs}">
 							<a href="${reportLink}"
-							onclick="return popup(this,'');" class="img-padding" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
-							<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
+							onclick="return popup(this,'');" class="img-padding" title="<digi:trn>Click here to view the report in Saiku</digi:trn>">
+							<img src= "/TEMPLATE/ampTemplate/saikuui_reports/images/saiku.png" border="0" /></a>
 						</c:if>
 						<c:set target="${urlParams}" property="event" value="edit" />
 						<logic:equal name="teamLeadFlag" scope="session" value="true"> 

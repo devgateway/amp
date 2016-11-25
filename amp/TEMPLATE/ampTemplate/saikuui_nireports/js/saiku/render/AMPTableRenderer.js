@@ -91,7 +91,7 @@ function getEntityTypeByColumnNumber(headerRowNumber, headerColumnNumber) {
 }
 
 function generateWarningsHtml(data) {
-	var pre = '<div class="niReportWarning">' 
+	var pre = '<div class="reportWarning">' 
 	var post = "</div>";
 	var errors = [];
 	if (data.reportWarnings !== undefined) {
@@ -143,10 +143,10 @@ function generateHeaderHtml(data) {
 	calculateColumnsDisposition();
 	
 	// Generate header HTML.	
-	return generateNiReportHeaderHtml(data.generatedHeaders);
+	return generateReportHeaderHtml(data.generatedHeaders);
 }
 
-function generateNiReportHeaderHtml(headers) {
+function generateReportHeaderHtml(headers) {
 	var header = "<thead>"
 	for(var i = 0; i < headers.length; i++) {
 		header += "<tr class='nireport_header'>";

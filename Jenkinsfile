@@ -79,12 +79,12 @@ stage('Deploy') {
             // Deploy AMP
             sh "ssh sulfur 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
 
-            slackSend(channel: 'amp-ci', color: 'good', message: 'Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes')
+            slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
             deployed = true
         } catch (e) {
-            slackSend(channel: 'amp-ci', color: 'warning', message: 'Deploy AMP - Failed\nFailed to deploy ${changePretty}')
-            
+            slackSend(channel: 'amp-ci', color: 'warning', message: "Deploy AMP - Failed\nFailed to deploy ${changePretty}")
+
             currentBuild.result = 'UNSTABLE'
         }
     }
@@ -104,11 +104,11 @@ stage('Deploy again') {
             try {
                 sh "ssh sulfur 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
 
-                slackSend(channel: 'amp-ci', color: 'good', message: 'Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes')
+                slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
                 currentBuild.result = 'SUCCESS'
             } catch (e) {
-                slackSend(channel: 'amp-ci', color: 'warning', message: 'Deploy AMP - Failed\nFailed to deploy ${changePretty}')
+                slackSend(channel: 'amp-ci', color: 'warning', message: "Deploy AMP - Failed\nFailed to deploy ${changePretty}")
 
                 throw e
             }

@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.core.query.lucene.MoreLikeThis;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
@@ -44,6 +45,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.highlight.Fragmenter;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
@@ -56,7 +58,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.admin.helper.AmpPledgeFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -142,6 +143,9 @@ public class LuceneUtil implements Serializable {
     private static final int CHUNK_SIZE = 10000;
 
     public final static Integer SEARCH_MODE_AND	= 1;
+
+    private static final boolean SEACH_TYPE_FUZZY = true;
+    private static final float MINIMUM_SIMILARITY = 0.5f;
 
     public static AmpLuceneIndexStamp getIdxStamp(String name) throws Exception{
         logger.info("Getting lucene index stamp for index name: " + name);
@@ -1208,45 +1212,71 @@ public class LuceneUtil implements Serializable {
     	}
     	return bld.toString();
     }
-    
-    private static String wrapKeywords(String searchString, String searchMode) {
-    	/*
-    	 Special Lucene symbols:
-    	 + - && || ! ( ) { } [ ] ^ " ~ * ? : \ /
-    	 * */
-    	//this was in the old implementation, no idea why
-    	//let it be here for history
-//      searchString = searchString.replaceAll("\\s\\w{1,2}\\s", " ");
-//      searchString = searchString.replaceAll("^\\w{1,2}\\s", " ");
-//      searchString = searchString.replaceAll("\\s\\w{1,2}$", " ");  
-    	List<String> symbols = Arrays.asList("+", "-", "&&", "||", "!", "(", ")", "{", "}", 
-    										"[", "]", "^", "\"", "~", "*", "?", ":", "\\", "/");
-    	for (String symbol : symbols)
-    		searchString = searchString.replace(symbol, escape(symbol));
-    	StringBuilder bld = new StringBuilder();
-    	for (String word : searchString.split(" ")) {
-    		bld.append(String.format("\"%s\" ", word));
-    	}
-    	return bld.toString().trim();
+
+    private static String buildWrapKeyword(String searchString) {
+        searchString = getWrappedString(searchString);
+        StringBuilder bld = new StringBuilder();
+        for (String word : searchString.split(" ")) {
+            bld.append(String.format("\"%s\"~ ", word));
+        }
+        return bld.toString().trim();
     }
-    
+
+    private static List<FuzzyQuery> buildFuzzyQueryList(String searchString, QueryParser parser) {
+        searchString = getWrappedString(searchString);
+        List<FuzzyQuery> fuzzyTerms = new ArrayList<FuzzyQuery>();
+        for (String word : searchString.split(" ")) {
+            if (StringUtils.isNotBlank(word)) {
+                try {
+                    FuzzyQuery q = new FuzzyQuery(((org.apache.lucene.search.TermQuery) parser.parse(word)).getTerm(), MINIMUM_SIMILARITY);
+                    fuzzyTerms.add(q);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return fuzzyTerms;
+    }
+
+    private static String getWrappedString(String searchString) {
+        List<String> symbols = Arrays.asList("+", "-", "&&", "||", "!", "(", ")", "{", "}",
+                "[", "]", "^", "\"", "~", "*", "?", ":", "\\", "/");
+        for (String symbol : symbols) {
+            searchString = searchString.replace(symbol, escape(symbol));
+        }
+        return searchString;
+    }
+
+    private static boolean isFuzzy() {
+        return SEACH_TYPE_FUZZY;
+    }
+
+    private static Occur getOccur(QueryParser parser) {
+        Occur occur = Occur.SHOULD;
+        if (parser.getDefaultOperator() == QueryParser.AND_OPERATOR) {
+            occur = Occur.MUST;
+        }
+        return occur;
+    }
+
     public static Document[] search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode){
         QueryParser parser = new QueryParser(field, analyzer);
-        if (LuceneUtil.SEARCH_MODE_AND.toString().equals(searchMode)) {
-            parser.setDefaultOperator(QueryParser.AND_OPERATOR);
-        } else {
-            parser.setDefaultOperator(QueryParser.OR_OPERATOR);
-        }
+        parser.setDefaultOperator(getDefaultOperator(searchMode));
         Query query = null;
         Document[] resultDocuments = null;
         Searcher indexSearcher = null;
         try {
             indexSearcher = new IndexSearcher(index);
-            String searchString = wrapKeywords(origSearchString, searchMode);
-            query = parser.parse(searchString);
+
+            if (isFuzzy()) {
+                query = getFuzzyQuery(origSearchString, parser);
+            } else {
+                query = getStandardQuery(origSearchString, parser);
+            }
+
             TopDocs topDocs = indexSearcher.search(query, maxLuceneResults);
-			resultDocuments = new Document[topDocs.totalHits > topDocs.scoreDocs.length ? topDocs.scoreDocs.length
-					: topDocs.totalHits];
+            resultDocuments = new Document[topDocs.totalHits > topDocs.scoreDocs.length ? topDocs.scoreDocs.length
+                    : topDocs.totalHits];
             for (int i = 0; i < topDocs.totalHits; i++) {
                 resultDocuments[i] = indexSearcher.doc(topDocs.scoreDocs[i].doc);
             }
@@ -1270,6 +1300,38 @@ public class LuceneUtil implements Serializable {
         return resultDocuments;
     }
 
+    private static QueryParser.Operator getDefaultOperator(String searchMode) {
+        if (LuceneUtil.SEARCH_MODE_AND.toString().equals(searchMode)) {
+            return QueryParser.AND_OPERATOR;
+        } else {
+            return QueryParser.OR_OPERATOR;
+        }
+    }
+
+    private static Query getStandardQuery(String origSearchString, QueryParser parser) throws ParseException {
+        String searchString;
+        Query query;
+        searchString = buildWrapKeyword(origSearchString);
+        query = parser.parse(searchString);
+        return query;
+    }
+
+    private static Query getFuzzyQuery(String origSearchString, QueryParser parser) {
+        Query query;
+        List<FuzzyQuery> keywords = buildFuzzyQueryList(origSearchString, parser);
+        if (keywords.isEmpty())
+            return null;
+        if (keywords.size() == 1)
+            query = keywords.get(0);
+        else {
+            BooleanQuery q = new BooleanQuery();
+            for (FuzzyQuery fq : keywords) {
+                q.add(new BooleanClause(fq, getOccur(parser)));
+            }
+            query = q;
+        }
+        return query;
+    }
 
     /**
      * Uses {@link isDir()} method to determine whether 

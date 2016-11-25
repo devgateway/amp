@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
-import clover.org.apache.commons.lang.StringUtils;
+import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
+
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -78,6 +79,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
+import org.digijava.module.aim.util.ExportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -113,7 +115,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
+import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Export Activity to PDF
@@ -799,9 +801,16 @@ public class ExportActivityToPDF extends Action {
 					columnName = TranslatorWorker.translateText("Humanitarian Aid");
 					createGeneralInfoRow(mainLayout, columnName, value);
 				}
-			}			
-			
+			}
 
+            //AGENCY INTERNAL IDS
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Activity Internal IDs")) {
+                if (myForm.getInternalIds() != null) {
+                    output = ExportUtil.buildInternalId(myForm.getInternalIds());
+                }
+                columnName = TranslatorWorker.translateText("Agency Internal IDs");
+                createGeneralInfoRow(mainLayout, columnName, output);
+            }
 
             //Planning
             if(FeaturesUtil.isVisibleModule("/Activity Form/Planning")){

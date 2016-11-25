@@ -94,6 +94,8 @@ read more in http://docs.dhtmlx.com/scheduler/recurring_events.html
 -->
 <script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_recurring.js"/>" type="text/javascript"></script>
 
+<script src="<digi:file src="module/calendar/dhtmlxScheduler/property.js"/>" type="text/javascript"></script>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
 <c:set var="printButon"><%=request.getSession().getAttribute("print")%></c:set>

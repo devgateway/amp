@@ -1,10 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -24,7 +26,9 @@ public interface ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.NONE, id = "errors", ui = false)
     default JsonBean getErrors() {
-        return ApiError.toError(errorCollector.collect(getErrorsClass()));
+        JsonBean jsonBean = ApiError.toError(errorCollector.collect(getErrorsClass()));
+        EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);
+        return jsonBean;
     }
 
     /**

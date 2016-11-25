@@ -178,7 +178,7 @@ public class SettingsUtils {
 		}
 		return selectedId;
 	}
-	
+
 	private static String getReportCalendarId(ReportSpecification spec) {
 		String selectedId = null;
 		if (spec.getSettings() != null && spec.getSettings().getCalendar() != null) {
@@ -323,7 +323,7 @@ public class SettingsUtils {
                 FeaturesUtil.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST));
 
 		settings.set("project-sites", FeaturesUtil.isVisibleFeature(GisConstants.PROJECT_SITES));
-		
+
 		settings.set("max-locations-icons", FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.MAX_LOCATIONS_ICONS));
 
 		settings.set("number-format", MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat().toPattern());
@@ -507,6 +507,39 @@ public class SettingsUtils {
 		
 		if (setDefaults && reportSettings.getCurrencyCode() == null)
 			reportSettings.setCurrencyCode(EndpointUtils.getDefaultCurrencyCode());
+	}
+	
+	/**
+	 * 
+	 * @param reportSettings
+	 * @param settings
+	 * @param setDefaults
+	 */
+	private static void configureNumberFormat(ReportSettingsImpl reportSettings, Map<String, Object> settings, 
+			boolean setDefaults) {
+		// apply numberFormat
+		Map<String, Object> amountFormat = settings == null ? null : 
+			(Map<String, Object>) settings.get(SettingsConstants.AMOUNT_FORMAT_ID);
+		if (amountFormat != null) {
+			String decimalSymbol = (String) amountFormat.get(SettingsConstants.DECIMAL_SYMBOL);
+			String maxFractDigits = (String) amountFormat.get(SettingsConstants.MAX_FRACT_DIGITS);
+			Integer maxFractDigitsNum  = maxFractDigits != null && StringUtils.isNumber(maxFractDigits) ? Integer.valueOf(maxFractDigits) : null;
+			Boolean useGrouping  = (Boolean) amountFormat.get(SettingsConstants.USE_GROUPING);
+			String groupingSeparator  = (String) amountFormat.get(SettingsConstants.GROUP_SEPARATOR);
+			Integer groupingSize  = (Integer) amountFormat.get(SettingsConstants.GROUP_SIZE);
+			
+			DecimalFormat format = AmpARFilter.buildCustomFormat(decimalSymbol, groupingSeparator, 
+					maxFractDigitsNum, useGrouping, groupingSize);
+			reportSettings.setCurrencyFormat(format);
+			
+			Double multiplier = PersistenceManager.getDouble(amountFormat.get(SettingsConstants.AMOUNT_UNITS));
+			if (multiplier != null)
+				reportSettings.setUnitsOption(AmountsUnits.findByMultiplier(multiplier));
+		}
+		
+		if (setDefaults && reportSettings.getCurrencyFormat() == null) {
+			reportSettings.setCurrencyFormat(EndpointUtils.getDecimalSymbols());
+		}
 	}
 	
 	/**

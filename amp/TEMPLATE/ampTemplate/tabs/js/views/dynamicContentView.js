@@ -66,15 +66,14 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					  return v.model.get('id') === 'Dates';
 					})[0];
 					datesFilterView._renderDatePickers();
-
-
-					// Show the dialog and fix the position.
+					
 					jQuery(containerName).show();
 					jQuery(containerName).css('position', 'absolute');
 					jQuery(containerName).css('top', 10);
 					jQuery(containerName).css("min-width", jQuery(containerName + " .panel-heading").width() + 32);
-					// Make sure the filter widget is always translated.
-					app.TabsApp.filtersWidget.view.translate();
+
+					app.TabsApp.filtersWidget.showFilters();
+					
 				}
 			});
 			var filterDialog = new FilterDialogContainerView();

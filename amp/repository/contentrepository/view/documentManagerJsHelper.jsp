@@ -426,7 +426,11 @@ font-weight : bold;
 <c:set var="trans_wait">
 	<digi:trn>Please wait a moment...</digi:trn>
 </c:set>
-
+<script type="text/javascript">
+<!--
+var trnWait="${trans_wait}";
+//-->
+</script>
 
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp");
@@ -829,6 +833,7 @@ function WindowControllerObject(bodyContainerEl) {
 				//parameters += "&type=team2"
 				//alert(parameters);
 				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
+				
 				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
 								'ajaxDocumentList=true'+parameters );
 				};

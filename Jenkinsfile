@@ -3,8 +3,15 @@
 // Important: What is BRANCH_NAME?
 // It is branch name for builds triggered from branches.
 // It is PR-<pr-id> for builds triggered from pull requests.
-def tag = BRANCH_NAME.replaceAll(/[^a-zA-Z0-9_-]/, "-").toLowerCase()
+def tag
+if (BRANCH_NAME ==~ /feature\/AMP-\d+.*/) {
+    def jiraId = (BRANCH_NAME =~ /feature\/AMP-(\d+).*/)[0][1]
+    tag = "feature-${jiraId}"
+} else {
+    tag = BRANCH_NAME.replaceAll(/[^a-zA-Z0-9_-]/, "-").toLowerCase()
+}
 
+// Record original branch or pull request for cleanup jobs
 def branch = env.CHANGE_ID == null ? BRANCH_NAME : null
 def pr = env.CHANGE_ID
 
@@ -40,6 +47,9 @@ stage('Build') {
 def deployed = false
 def country
 
+def changePretty = (pr != null) ? "pull request ${pr}" : "branch ${branch}"
+def ampUrl
+
 // If this stage fails then next stage will retry deployment. Otherwise next stage will be skipped.
 stage('Deploy') {
 
@@ -59,6 +69,8 @@ stage('Deploy') {
         milestone()
     }
 
+    ampUrl = "http://amp-${country}-${tag}-tc9.ampsite.net/"
+
     node {
         try {
             // Find latest database version compatible with ${codeVersion}
@@ -67,8 +79,12 @@ stage('Deploy') {
             // Deploy AMP
             sh "ssh sulfur 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
 
+            slackSend(channel: 'amp-ci', color: 'good', message: 'Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes')
+
             deployed = true
         } catch (e) {
+            slackSend(channel: 'amp-ci', color: 'warning', message: 'Deploy AMP - Failed\nFailed to deploy ${changePretty}')
+            
             currentBuild.result = 'UNSTABLE'
         }
     }
@@ -85,8 +101,17 @@ stage('Deploy again') {
             milestone()
         }
         node {
-            sh "ssh sulfur 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
-            currentBuild.result = 'SUCCESS'
+            try {
+                sh "ssh sulfur 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
+
+                slackSend(channel: 'amp-ci', color: 'good', message: 'Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes')
+
+                currentBuild.result = 'SUCCESS'
+            } catch (e) {
+                slackSend(channel: 'amp-ci', color: 'warning', message: 'Deploy AMP - Failed\nFailed to deploy ${changePretty}')
+
+                throw e
+            }
         }
     }
 }

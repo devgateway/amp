@@ -81,6 +81,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
+import org.digijava.module.aim.util.ExportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -808,17 +809,9 @@ public class ExportActivityToPDF extends Action {
             //AGENCY INTERNAL IDS
             if (FeaturesUtil.isVisibleModule("/Activity Form/Activity Internal IDs")) {
                 if (myForm.getInternalIds() != null) {
-                    output="";
-                    for (AmpActivityInternalId internal : myForm.getInternalIds()) {
-                        output+="[" + internal.getOrganisation().getName() + "] ";
-                        if(FeaturesUtil.isVisibleModule("/Activity Form/Activity Internal IDs/Internal IDs/internalId")) {
-                            output+="\t " + (internal.getInternalId() != null ? internal.getInternalId() : "") + "\n";
-                        } else {
-                            output+=" \n";
-                        }
-                    }
+                    output = ExportUtil.buildInternalId(myForm.getInternalIds());
                 }
-                columnName=TranslatorWorker.translateText("Agency Internal IDs");
+                columnName = TranslatorWorker.translateText("Agency Internal IDs");
                 createGeneralInfoRow(mainLayout, columnName, output);
             }
 

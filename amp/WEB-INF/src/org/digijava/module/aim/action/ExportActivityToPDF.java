@@ -35,6 +35,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
@@ -80,6 +81,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
+import org.digijava.module.aim.util.ExportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -802,9 +804,16 @@ public class ExportActivityToPDF extends Action {
 					columnName = TranslatorWorker.translateText("Humanitarian Aid");
 					createGeneralInfoRow(mainLayout, columnName, value);
 				}
-			}			
-			
+			}
 
+            //AGENCY INTERNAL IDS
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Activity Internal IDs")) {
+                if (myForm.getInternalIds() != null) {
+                    output = ExportUtil.buildInternalId(myForm.getInternalIds());
+                }
+                columnName = TranslatorWorker.translateText("Agency Internal IDs");
+                createGeneralInfoRow(mainLayout, columnName, output);
+            }
 
             //Planning
             if(FeaturesUtil.isVisibleModule("/Activity Form/Planning")){

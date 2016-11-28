@@ -36,7 +36,7 @@ public enum AmountsUnits {
 	 */
 	public final int code;
 	/**
-	 * 10^0, 10^-3, 10^-6 etc
+	 * 10^0, 10^3, 10^6 etc
 	 */
 	public final int divider;
 

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.h2.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Utility class for amp settings handling
@@ -169,8 +171,22 @@ public class SettingsUtils {
 		settings.setCurrencyCode(getReportCurrencyCode(spec));
 		settings.setCalendarId(getReportCalendarId(spec));
 		settings.setYearRange(getReportYearRange(spec));
-		
+		settings.setAmountFormat(getReportAmountFormat(spec));
+
 		return settings;
+	}
+
+	@NotNull
+	private static Settings.AmountFormat getReportAmountFormat(ReportSpecification spec) {
+		DecimalFormat decimalFormat = spec.getSettings().getCurrencyFormat();
+		Settings.AmountFormat amountFormat = new Settings.AmountFormat();
+		amountFormat.setNumberDivider(spec.getSettings().getUnitsOption().divider);
+		amountFormat.setMaxFractionDigits(decimalFormat.getMaximumFractionDigits());
+		amountFormat.setDecimalSymbol(decimalFormat.getDecimalFormatSymbols().getDecimalSeparator());
+		amountFormat.setUseGrouping(decimalFormat.isGroupingUsed());
+		amountFormat.setGroupSize(decimalFormat.getGroupingSize());
+		amountFormat.setGroupSeparator(decimalFormat.getDecimalFormatSymbols().getGroupingSeparator());
+		return amountFormat;
 	}
 
 	private static String getReportCurrencyCode(ReportSpecification spec) {
@@ -217,17 +233,73 @@ public class SettingsUtils {
 		return getSettingFieldForOptions(SettingsConstants.FUNDING_TYPE_ID, getFundingTypeSettings());
 	}
 
-	static SettingField getAmountUnitsField() {
-		AmountsUnits defaultAmountUnits = AmountsUnits.getForDivider(AmountsUnits.getDefaultValue().divider);
-		String defaultOption = Integer.toString(defaultAmountUnits.code);
+	static SettingField getReportAmountFormatField() {
+		DecimalFormat format = FormatHelper.getDefaultFormat();
+		final List<SettingField> formatFields = new ArrayList<>();
+
+		// decimal separators
+		final String selectedDecimalSeparator = String.valueOf(format.getDecimalFormatSymbols().getDecimalSeparator());
+
+		formatFields.add(getOptionValueSetting(SettingsConstants.DECIMAL_SYMBOL, null, selectedDecimalSeparator,
+				SettingsConstants.DECIMAL_SEPARATOR_MAP));
+
+		// maximum fraction digits
+		final String selectedMaxFarctDigits = String.valueOf(format.getMaximumFractionDigits());
+		formatFields.add(getOptionValueSetting(SettingsConstants.MAX_FRACT_DIGITS, null, selectedMaxFarctDigits,
+				SettingsConstants.MAX_FRACT_DIGITS_MAP));
+
+		// is grouping used
+		formatFields.add(new SettingField(SettingsConstants.USE_GROUPING, null,
+				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.USE_GROUPING), format.isGroupingUsed()));
+
+		// grouping separator
+		final String selectedGroupSeparator = String.valueOf(format.getDecimalFormatSymbols().getGroupingSeparator());
+		formatFields.add(getOptionValueSetting(SettingsConstants.GROUP_SEPARATOR,
+				SettingsConstants.USE_GROUPING, selectedGroupSeparator,
+				SettingsConstants.GROUP_SEPARATOR_MAP));
+
+		// group size
+		formatFields.add(new SettingField(SettingsConstants.GROUP_SIZE,
+				SettingsConstants.USE_GROUPING,
+				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.GROUP_SIZE), format.getGroupingSize()));
+
+		// amount units
+		final String selectedAmountUnits = String.valueOf(AmountsUnits.getDefaultValue().divider);
+		formatFields.add(getOptionValueSetting(SettingsConstants.AMOUNT_UNITS,
+				SettingsConstants.USE_GROUPING, selectedAmountUnits,
+				SettingsConstants.AMOUNT_UNITS_MAP));
+
+		return new SettingField(SettingsConstants.AMOUNT_FORMAT_ID, null,
+				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.AMOUNT_FORMAT_ID),
+				formatFields);
+	}
+
+	private static SettingField getOptionValueSetting(String settingId, String groupId, String selectedValue,
+				Map<String, String> idValueUnmodifiable) {
 
 		List<SettingOptions.Option> options = new ArrayList<>();
-		for (AmountsUnits units : AmountsUnits.values()) {
-			String divider = Integer.toString(units.divider);
-			options.add(new SettingOptions.Option(Integer.toString(units.code), units.userMessage, divider));
+		Map<String, String> idValue = new LinkedHashMap<>(idValueUnmodifiable);
+		String selectedId = null;
+
+		if (idValue.containsKey(SettingsConstants.CUSTOM) && !idValue.values().contains(selectedValue)) {
+			idValue.put(SettingsConstants.CUSTOM, selectedValue);
 		}
 
-		return getSettingFieldForOptions(SettingsConstants.AMOUNT_UNITS, new SettingOptions(defaultOption, options));
+		for (Map.Entry<String, String> entry : idValue.entrySet()) {
+			if (entry.getValue().equals(selectedValue)) {
+				selectedId = entry.getKey();
+			}
+			String name = SettingsConstants.ID_NAME_MAP.get(entry.getKey());
+			String optionName = (name == null) ? entry.getValue() : name;
+			options.add(new SettingOptions.Option(entry.getKey(), optionName, entry.getValue(), name != null));
+		}
+
+		if (selectedId == null) {
+			selectedId = idValue.entrySet().iterator().next().getKey();
+		}
+
+		String settingName = SettingsConstants.ID_NAME_MAP.get(settingId);
+		return new SettingField(settingId, groupId, settingName, new SettingOptions(selectedId, options));
 	}
 
 	/**

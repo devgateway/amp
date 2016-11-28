@@ -94,7 +94,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -2734,6 +2733,7 @@ public class ExportActivityToWord extends Action {
 			
 			// TOTAL ACTUAL COMMITMENTS
 			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL COMMITMENTS", myForm.getFunding().getTotalCommitments(), currencyCode);
+			addTotalsOutput(fundingTotalsDetails,"TOTAL PIPELINE COMMITMENTS", myForm.getFunding().getTotalPipelineCommitments(), currencyCode);
 		}
 
 		if (mtefExisting) {
@@ -2779,8 +2779,7 @@ public class ExportActivityToWord extends Action {
 			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL DISBURSEMENT ORDERS", myForm.getFunding().getTotalActualDisbursementsOrders(), currencyCode);
 		}
 		// UNDISBURSED BALANCE
-		if (FeaturesUtil
-				.isVisibleFeature("Undisbursed Balance")) {
+        if (FeaturesUtil.isVisibleFeature("Funding","Undisbursed Balance")) {
 			addTotalsOutput(fundingTotalsDetails,"UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
 		}
 		

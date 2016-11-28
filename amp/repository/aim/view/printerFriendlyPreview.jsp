@@ -1678,10 +1678,12 @@ body {background:none;}
 	                         		</td>
                         		</tr>
                         	</logic:notEmpty>
-                        <field:display name="Pipeline" feature="Commitments">
+						<c:if test="${aimEditActivityForm.funding.showPipeline}">
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.totalPipelineCommitments">
 								<tr>
-	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn> TOTAL PIPELINE COMMITMENTS: </digi:trn></td>
+	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+										<digi:trn key='aim:totalpipelinecommittment'> TOTAL PIPELINE COMMITMENTS </digi:trn>:
+									</td>
 	                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
 										<bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" />
 										<bean:write name="aimEditActivityForm" property="currCode" />
@@ -1689,7 +1691,7 @@ body {background:none;}
 									</td>
 	                        	</tr>
 	                        </logic:notEmpty>
-                        </field:display>
+						</c:if>
                         <feature:display module="Funding" name="Disbursement">
 							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedDisbursements">
                        			<tr>

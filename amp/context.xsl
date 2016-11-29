@@ -6,6 +6,7 @@
 	<xsl:param name="jdbc.password"/>
 	<xsl:param name="serverName"/>
 	<xsl:param name="jdbc.db"/>
+	<xsl:param name="jdbc.host"/>
 	<xsl:param name="jdbc.port"/>
 	<xsl:param name="dbName"/>
 	<xsl:param name="jdbc.driverClassName"/>
@@ -21,7 +22,7 @@
 
 
 	<xsl:template match="@url">
-		<xsl:attribute name="url">jdbc:<xsl:value-of select="$dbName"/>://localhost:<xsl:value-of select="$jdbc.port"/>/<xsl:value-of select="$jdbc.db"/>?useUnicode=true&amp;characterEncoding=UTF-8&amp;jdbcCompliantTruncation=false</xsl:attribute>
+		<xsl:attribute name="url">jdbc:<xsl:value-of select="$dbName"/>://<xsl:value-of select="$jdbc.host"/>:<xsl:value-of select="$jdbc.port"/>/<xsl:value-of select="$jdbc.db"/>?useUnicode=true&amp;characterEncoding=UTF-8&amp;jdbcCompliantTruncation=false</xsl:attribute>
 	</xsl:template>
 	
 	<xsl:template match="@monetUrl">

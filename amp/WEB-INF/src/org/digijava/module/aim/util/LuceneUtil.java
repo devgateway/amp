@@ -1213,32 +1213,7 @@ public class LuceneUtil implements Serializable {
     	return bld.toString();
     }
 
-    private static String buildWrapKeyword(String searchString) {
-        searchString = getWrappedString(searchString);
-        StringBuilder bld = new StringBuilder();
-        for (String word : searchString.split(" ")) {
-            bld.append(String.format("\"%s\"~ ", word));
-        }
-        return bld.toString().trim();
-    }
-
-    private static List<FuzzyQuery> buildFuzzyQueryList(String searchString, QueryParser parser) {
-        searchString = getWrappedString(searchString);
-        List<FuzzyQuery> fuzzyTerms = new ArrayList<FuzzyQuery>();
-        for (String word : searchString.split(" ")) {
-            if (StringUtils.isNotBlank(word)) {
-                try {
-                    FuzzyQuery q = new FuzzyQuery(((org.apache.lucene.search.TermQuery) parser.parse(word)).getTerm(), MINIMUM_SIMILARITY);
-                    fuzzyTerms.add(q);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return fuzzyTerms;
-    }
-
-    private static String getWrappedString(String searchString) {
+    private static String getEscapedSearchString(String searchString) {
         List<String> symbols = Arrays.asList("+", "-", "&&", "||", "!", "(", ")", "{", "}",
                 "[", "]", "^", "\"", "~", "*", "?", ":", "\\", "/");
         for (String symbol : symbols) {
@@ -1247,16 +1222,34 @@ public class LuceneUtil implements Serializable {
         return searchString;
     }
 
+    private static String buildWrapKeyword(String searchString) {
+        searchString = getEscapedSearchString(searchString);
+        StringBuilder bld = new StringBuilder();
+        for (String word : searchString.split(" ")) {
+            bld.append(String.format("\"%s\" ", word));
+        }
+        return bld.toString().trim();
+    }
+
+    private static List<FuzzyQuery> buildFuzzyQueryList(String searchString, QueryParser parser) {
+        searchString = parser.escape(searchString);
+        List<FuzzyQuery> fuzzyTerms = new ArrayList<FuzzyQuery>();
+        float minimumSimilarity = getMinimumSimilarity();
+        for (String word : searchString.split(" ")) {
+            if (StringUtils.isNotBlank(word)) {
+                FuzzyQuery q = new FuzzyQuery(new Term(parser.getField(), word), minimumSimilarity);
+                fuzzyTerms.add(q);
+            }
+        }
+        return fuzzyTerms;
+    }
+
     private static boolean isFuzzy() {
         return SEACH_TYPE_FUZZY;
     }
 
-    private static Occur getOccur(QueryParser parser) {
-        Occur occur = Occur.SHOULD;
-        if (parser.getDefaultOperator() == QueryParser.AND_OPERATOR) {
-            occur = Occur.MUST;
-        }
-        return occur;
+    private static float getMinimumSimilarity() {
+        return MINIMUM_SIMILARITY;
     }
 
     public static Document[] search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode){
@@ -1309,28 +1302,34 @@ public class LuceneUtil implements Serializable {
     }
 
     private static Query getStandardQuery(String origSearchString, QueryParser parser) throws ParseException {
-        String searchString;
-        Query query;
-        searchString = buildWrapKeyword(origSearchString);
-        query = parser.parse(searchString);
-        return query;
+        return parser.parse(buildWrapKeyword(origSearchString));
     }
 
     private static Query getFuzzyQuery(String origSearchString, QueryParser parser) {
         Query query;
         List<FuzzyQuery> keywords = buildFuzzyQueryList(origSearchString, parser);
-        if (keywords.isEmpty())
+        Occur occur = getOccur(parser);
+        if (keywords.isEmpty()){
             return null;
-        if (keywords.size() == 1)
+        }
+        if (keywords.size() == 1) {
             query = keywords.get(0);
-        else {
+        } else {
             BooleanQuery q = new BooleanQuery();
             for (FuzzyQuery fq : keywords) {
-                q.add(new BooleanClause(fq, getOccur(parser)));
+                q.add(new BooleanClause(fq, occur));
             }
             query = q;
         }
         return query;
+    }
+
+    private static Occur getOccur(QueryParser parser) {
+        Occur occur = Occur.SHOULD;
+        if (parser.getDefaultOperator() == QueryParser.AND_OPERATOR) {
+            occur = Occur.MUST;
+        }
+        return occur;
     }
 
     /**

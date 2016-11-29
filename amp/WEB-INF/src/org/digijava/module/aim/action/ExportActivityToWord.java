@@ -2,7 +2,7 @@ package org.digijava.module.aim.action;
 
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;

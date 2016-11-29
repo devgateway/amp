@@ -84,7 +84,7 @@ module.exports = Backbone.Model
     return boundaryLoaded;
   },
 
-  loadAll: function(options) {
+loadAll: function(options) {
 	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){		  	  
 		  this.url = '/rest/gis/indicators/' + this.getId(); 
 	  }else if(this.get('type') === 'Indicator Layers'){

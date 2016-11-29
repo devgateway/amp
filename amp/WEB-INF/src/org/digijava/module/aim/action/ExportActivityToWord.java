@@ -2,7 +2,7 @@ package org.digijava.module.aim.action;
 
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -90,6 +90,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
+import org.digijava.module.aim.util.ExportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
@@ -225,6 +226,36 @@ public class ExportActivityToWord extends Action {
                 //identificationTbl.addCell(identificationTblCell1);
                 doc.add(identificationTbl);
                 doc.add(identificationSubTable1);
+
+                //AGENCY INTERNAL IDS
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Activity Internal IDs")) {
+                    Table internalTbl = null;
+                    internalTbl = new Table(1);
+                    internalTbl.setWidth(100);
+                    RtfCell internalTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Agency Internal IDs").toUpperCase(), HEADERFONT));
+                    internalTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    internalTitleCell.setBackgroundColor(CELLCOLORGRAY);
+                    internalTbl.addCell(internalTitleCell);
+
+                    Table internalSubTable1 = new Table(2);
+                    internalSubTable1.setWidths(new float[]{1f, 2f});
+                    internalSubTable1.setWidth(100);
+
+                    cell = new RtfCell();
+                    cell.setColspan(2);
+                    cell.setBorder(0);
+                    columnVal = "";
+                    if (activity.getInternalIds() != null) {
+                        columnVal = ExportUtil.buildInternalId(myForm.getInternalIds());
+                    }
+                    p1 = new Paragraph(columnVal, PLAINFONT);
+                    cell.add(p1);
+                    internalSubTable1.addCell(cell);
+                    doc.add(internalTbl);
+                    doc.add(internalSubTable1);
+                    doc.add(new Paragraph(" "));
+                }
+
 
                 /**
                  * Planning step

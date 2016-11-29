@@ -630,6 +630,40 @@ body {background:none;}
 									</c:if>
 									</module:display>
 <!-- end identification in the same order as previewActivity -->
+
+
+										   <!-- PROJECT INTERNAL IDS SECTION -->
+										   <module:display name="/Activity Form/Activity Internal IDs" parentModule="/Activity Form">
+											   <tr>
+												   <td class="field_name" >
+													   <b>
+														   <digi:trn>Agency Internal IDs</digi:trn>
+													   </b>										</td>
+												   <td bgcolor="#ffffff">
+													   <c:if test="${!empty aimEditActivityForm.internalIds}">
+														   <table width="100%" cellSpacing="2" cellPadding="1">
+															   <c:forEach var="internalObj" items="${aimEditActivityForm.internalIds}">
+																   <tr>
+																	   <td>
+																			<span class="word_break bold">
+																				[${internalObj.organisation.name}]
+																			</span>
+																	   </td>
+																	   <td align="right">
+																		   <module:display name="/Activity Form/Activity Internal IDs/Internal IDs/internalId" parentModule="/Activity Form">
+																				<c:out value="${internalObj.internalId}"/>
+																		   </module:display>
+																	   </td>
+																   </tr>
+															   </c:forEach>
+														   </table>
+													   </c:if>
+												   </td>
+											   </tr>
+										   </module:display>
+										   <!-- END PROJECT INTERNAL IDS SECTION -->
+
+
 									<feature:display name="Budget" module="Project ID and Planning">
 									<tr>
 										<td class="field_name" >

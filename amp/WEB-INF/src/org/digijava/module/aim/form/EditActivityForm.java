@@ -6589,7 +6589,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Issues observations = null;
 	private boolean totDisbIsBiggerThanTotCom;
 	private List<BudgetStructure> budgetStructure;
-	
+	private Set<AmpActivityInternalId> internalIds;
+
 	public EditActivityForm() {
 		reset = false;
 		editAct = false;
@@ -7398,7 +7399,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
     public void setAllEffectivenessIndicators(List<AmpAidEffectivenessIndicator> allEffectivenessIndicators) {
         this.allEffectivenessIndicators = allEffectivenessIndicators;
     }
-	
+
+	public void setInternalIds(Set<AmpActivityInternalId> internalIds) {
+		this.internalIds=internalIds;
+	}
+
+	public Set<AmpActivityInternalId> getInternalIds() {
+		return internalIds;
+	}
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
 	public boolean equals(final java.lang.Object o) {

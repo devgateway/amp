@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-24203</jira>
+    <author>ociubotaru</author>
+    <description>Transform dates in amp_filter_data with format MM/dd/yyyy to dd/MM/yyyy</description>
+    <trigger type="all">
+        <condition type="custom">
+            <script returnVar="val">
+                <lang type="sql">
+                    SELECT settingsvalue FROM amp_global_settings where settingsname='Default Date Format';
+                </lang>
+            </script>
+            <test>val.equals("MM/dd/yyyy")</test>
+        </condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+				update amp_filter_data
+                set "value"=substring("value" from 4 for 2)||'/'||substring("value" from 1 for 2)||'/'||substring("value" from 7 for 4)
+                where property_name in (
+                        'fromDate', 'toDate',
+                        'fromActivityStartDate', 'toActivityStartDate',
+                        'fromActivityActualCompletionDate', 'toActivityActualCompletionDate',
+                        'fromActivityFinalContractingDate', 'toActivityFinalContractingDate',
+                        'fromProposedApprovalDate', 'toProposedApprovalDate',
+                        'fromEffectiveFundingDate', 'toEffectiveFundingDate',
+                        'fromFundingClosingDate', 'toFundingClosingDate')
+                and length("value")=10
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -156,7 +156,7 @@ public class AmpARFilter extends PropertyListable {
 	 * Date string formatted for database serialization
 	 * field not static because SimpleDateFormat is not thread-safe
 	 */
-	private final SimpleDateFormat sdfIn = new SimpleDateFormat(SDF_IN_FORMAT_STRING);
+	private final SimpleDateFormat sdfIn = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
 	
 	/**
 	 * this is true iff this filter has been touched by a "change filters" functionality
@@ -2646,7 +2646,8 @@ public class AmpARFilter extends PropertyListable {
 	 * sets the date in the {@link #sdfIn} format. Will ignore call if fed incorrect data
 	 */
 	public void setFromDate(String fromDate) {
-		if (!FormatHelper.isValidDateString(fromDate, sdfIn)) {
+		if (!FormatHelper.isValidDateString(fromDate, sdfIn))
+		{
 			logger.error("tried to push invalidly-formatted date into AmpARFilter: " + fromDate, new RuntimeException());
 			return;
 		}
@@ -2664,7 +2665,8 @@ public class AmpARFilter extends PropertyListable {
 	 * sets the date in the {@link #sdfIn} format. Will ignore call if fed incorrect data
 	 */
 	public void setToDate(String toDate) {
-		if (!FormatHelper.isValidDateString(toDate, sdfIn))	{
+		if (!FormatHelper.isValidDateString(fromDate, sdfIn))
+		{
 			logger.error("tried to push invalidly-formatted date into AmpARFilter: " + toDate, new RuntimeException());
 			return;
 		}

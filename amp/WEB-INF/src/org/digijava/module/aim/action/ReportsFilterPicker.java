@@ -127,7 +127,8 @@ public class ReportsFilterPicker extends Action {
 	            ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
 	        }
 	        
-			if(request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")){
+			if(request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")) {
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 	    		return mapping.findForward("index");
 	    	}
 	
@@ -250,6 +251,7 @@ public class ReportsFilterPicker extends Action {
 				modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL, reportFilter);
 		} catch (InvalidReportContextException e) {
 			logger.error(e.getMessage(), e);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return mapping.findForward("mydesktop");
 		}
 		

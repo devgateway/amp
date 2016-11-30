@@ -70,7 +70,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForPublicPortal() {
         return Arrays.asList(
-                getAmountUnitsField(),
+                getReportAmountFormatField(),
                 getCurrencyField());
     }
 

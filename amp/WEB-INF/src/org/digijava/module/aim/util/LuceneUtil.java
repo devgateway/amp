@@ -1252,7 +1252,7 @@ public class LuceneUtil implements Serializable {
         return MINIMUM_SIMILARITY;
     }
 
-    public static Document[] search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode){
+    public static Document[] search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode) {
         QueryParser parser = new QueryParser(field, analyzer);
         parser.setDefaultOperator(getDefaultOperator(searchMode));
         Query query = null;
@@ -1267,27 +1267,29 @@ public class LuceneUtil implements Serializable {
                 query = getStandardQuery(origSearchString, parser);
             }
 
-            TopDocs topDocs = indexSearcher.search(query, maxLuceneResults);
-            resultDocuments = new Document[topDocs.totalHits > topDocs.scoreDocs.length ? topDocs.scoreDocs.length
-                    : topDocs.totalHits];
-            for (int i = 0; i < topDocs.totalHits; i++) {
-                resultDocuments[i] = indexSearcher.doc(topDocs.scoreDocs[i].doc);
+            if (query != null) {
+                TopDocs topDocs = indexSearcher.search(query, maxLuceneResults);
+                resultDocuments = new Document[topDocs.totalHits > topDocs.scoreDocs.length ? topDocs.scoreDocs.length
+                        : topDocs.totalHits];
+                for (int i = 0; i < topDocs.totalHits; i++) {
+                    resultDocuments[i] = indexSearcher.doc(topDocs.scoreDocs[i].doc);
+                }
+            } else {
+                resultDocuments = new Document[0];
             }
-
         } catch (BooleanQuery.TooManyClauses e1) {
             //TODO Make lucene search only through the activities from the current workspace
-            String msg	= "Too many clauses found. More than " + maxLuceneResults + ".";
+            String msg = "Too many clauses found. More than " + maxLuceneResults + ".";
             if (retry) {
                 msg += "Will retry with " + maxLuceneResults * 10;
             }
-            logger.warn (msg);
+            logger.warn(msg);
             if (retry) {
                 return LuceneUtil.search(index, field, origSearchString, maxLuceneResults * 10, false, searchMode);
             } else {
                 e1.printStackTrace();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return resultDocuments;
@@ -1309,7 +1311,7 @@ public class LuceneUtil implements Serializable {
         Query query;
         List<FuzzyQuery> keywords = buildFuzzyQueryList(origSearchString, parser);
         Occur occur = getOccur(parser);
-        if (keywords.isEmpty()){
+        if (keywords.isEmpty()) {
             return null;
         }
         if (keywords.size() == 1) {

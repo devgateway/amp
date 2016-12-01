@@ -56,6 +56,12 @@
 	 		<isset property="jdbc.port"/>                              
 	 	</not>
 	 </condition>
+
+	<condition property="jdbc.host" value="localhost">
+		<not>
+			<isset property="jdbc.host"/>
+		</not>
+	</condition>
 	
 	<condition property="antilock" value="false">
 		 	<not>
@@ -675,6 +681,7 @@
 		          <param name="jdbc.user" expression="${jdbc.user}"/>
 				  <param name="jdbc.password" expression="${jdbc.password}"/>
 		      	  <param name="jdbc.db" expression="${jdbc.db}"/>
+		      	  <param name="jdbc.host" expression="${jdbc.host}"/>
 		  	  	  <param name="serverName" expression="${serverName}"/>
 		  	  	  <param name="jdbc.port" expression="${jdbc.port}"/>
 				  <param name="dbName" expression="${dbName}"/>

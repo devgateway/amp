@@ -1237,7 +1237,7 @@ public class LuceneUtil implements Serializable {
         float minimumSimilarity = getMinimumSimilarity();
         for (String word : searchString.split(" ")) {
             if (StringUtils.isNotBlank(word)) {
-                FuzzyQuery q = new FuzzyQuery(new Term(parser.getField(), word), minimumSimilarity);
+                FuzzyQuery q = new FuzzyQuery(new Term(parser.getField(), StringUtils.lowerCase(word)), minimumSimilarity);
                 fuzzyTerms.add(q);
             }
         }

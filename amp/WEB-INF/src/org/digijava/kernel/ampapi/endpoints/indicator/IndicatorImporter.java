@@ -91,8 +91,6 @@ public class IndicatorImporter {
                 }
             }
 
-
-
             int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();
             int indicatorNumberOfCells = 1;
             if (indicatorNumberOfCells + 2 < physicalNumberOfCells) {

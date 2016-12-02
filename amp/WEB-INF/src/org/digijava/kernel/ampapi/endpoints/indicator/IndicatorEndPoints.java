@@ -202,6 +202,8 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     /**
      * Import indicator layers values
      * @param option to indicate mode OVERWRITE or NEW
+     * @param admLevelId to check if the file has same adm level than the indicator
+     *
      */
     @POST
     @Path("/indicator-layer/import")

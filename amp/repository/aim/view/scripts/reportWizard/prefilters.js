@@ -260,7 +260,6 @@ SaveFilters.prototype.saveFilters	= function (e, obj) {
 };
 
 SaveFilters.prototype.success	= function (o) {
-	alert ("saveFilters: " + o.responseText);
 	if ( o.responseText.length > 0 ) {
 		this.panel.hide();
 		if (this.filterObj.hasFilters !== null && this.filterObj.hasFilters !== undefined) {

@@ -2334,13 +2334,21 @@ public class FeaturesUtil {
 		
 		return false;
 	}
-	
-	
+
 	public static boolean isVisibleFeature(String featureName) {
+		return isVisibleFeature(null, featureName) ;
+	}
+
+	public static boolean isVisibleFeature(String moduleName, String featureName) {
 		HttpSession session = TLSUtils.getRequest().getSession();
-		ServletContext ampContext = session.getServletContext();
 		AmpTreeVisibility ampTreeVisibility = FeaturesUtil.getAmpTreeVisibility(session.getServletContext(), session);
-		AmpFeaturesVisibility featureToTest = ampTreeVisibility.getFeatureByNameFromRoot(featureName);
+		AmpFeaturesVisibility featureToTest;
+		if (moduleName != null) {
+			featureToTest = ampTreeVisibility.getFeatureByNameFromModule(moduleName, featureName);
+		} else {
+			featureToTest = ampTreeVisibility.getFeatureByNameFromRoot(featureName);
+		}
+
 		if (featureToTest != null)
 			return featureToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 		return false;

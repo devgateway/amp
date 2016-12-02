@@ -79,6 +79,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
+import org.digijava.module.aim.util.ExportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
@@ -93,7 +94,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -223,6 +223,36 @@ public class ExportActivityToWord extends Action {
                 //identificationTbl.addCell(identificationTblCell1);
                 doc.add(identificationTbl);
                 doc.add(identificationSubTable1);
+
+                //AGENCY INTERNAL IDS
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Activity Internal IDs")) {
+                    Table internalTbl = null;
+                    internalTbl = new Table(1);
+                    internalTbl.setWidth(100);
+                    RtfCell internalTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Agency Internal IDs").toUpperCase(), HEADERFONT));
+                    internalTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    internalTitleCell.setBackgroundColor(CELLCOLORGRAY);
+                    internalTbl.addCell(internalTitleCell);
+
+                    Table internalSubTable1 = new Table(2);
+                    internalSubTable1.setWidths(new float[]{1f, 2f});
+                    internalSubTable1.setWidth(100);
+
+                    cell = new RtfCell();
+                    cell.setColspan(2);
+                    cell.setBorder(0);
+                    columnVal = "";
+                    if (activity.getInternalIds() != null) {
+                        columnVal = ExportUtil.buildInternalId(myForm.getInternalIds());
+                    }
+                    p1 = new Paragraph(columnVal, PLAINFONT);
+                    cell.add(p1);
+                    internalSubTable1.addCell(cell);
+                    doc.add(internalTbl);
+                    doc.add(internalSubTable1);
+                    doc.add(new Paragraph(" "));
+                }
+
 
                 /**
                  * Planning step
@@ -2703,6 +2733,7 @@ public class ExportActivityToWord extends Action {
 			
 			// TOTAL ACTUAL COMMITMENTS
 			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL COMMITMENTS", myForm.getFunding().getTotalCommitments(), currencyCode);
+			addTotalsOutput(fundingTotalsDetails,"TOTAL PIPELINE COMMITMENTS", myForm.getFunding().getTotalPipelineCommitments(), currencyCode);
 		}
 
 		if (mtefExisting) {
@@ -2748,8 +2779,7 @@ public class ExportActivityToWord extends Action {
 			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL DISBURSEMENT ORDERS", myForm.getFunding().getTotalActualDisbursementsOrders(), currencyCode);
 		}
 		// UNDISBURSED BALANCE
-		if (FeaturesUtil
-				.isVisibleFeature("Undisbursed Balance")) {
+        if (FeaturesUtil.isVisibleFeature("Funding","Undisbursed Balance")) {
 			addTotalsOutput(fundingTotalsDetails,"UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
 		}
 		

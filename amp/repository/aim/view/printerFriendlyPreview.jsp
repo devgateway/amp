@@ -630,6 +630,40 @@ body {background:none;}
 									</c:if>
 									</module:display>
 <!-- end identification in the same order as previewActivity -->
+
+
+										   <!-- PROJECT INTERNAL IDS SECTION -->
+										   <module:display name="/Activity Form/Activity Internal IDs" parentModule="/Activity Form">
+											   <tr>
+												   <td class="field_name" >
+													   <b>
+														   <digi:trn>Agency Internal IDs</digi:trn>
+													   </b>										</td>
+												   <td bgcolor="#ffffff">
+													   <c:if test="${!empty aimEditActivityForm.internalIds}">
+														   <table width="100%" cellSpacing="2" cellPadding="1">
+															   <c:forEach var="internalObj" items="${aimEditActivityForm.internalIds}">
+																   <tr>
+																	   <td>
+																			<span class="word_break bold">
+																				[${internalObj.organisation.name}]
+																			</span>
+																	   </td>
+																	   <td align="right">
+																		   <module:display name="/Activity Form/Activity Internal IDs/Internal IDs/internalId" parentModule="/Activity Form">
+																				<c:out value="${internalObj.internalId}"/>
+																		   </module:display>
+																	   </td>
+																   </tr>
+															   </c:forEach>
+														   </table>
+													   </c:if>
+												   </td>
+											   </tr>
+										   </module:display>
+										   <!-- END PROJECT INTERNAL IDS SECTION -->
+
+
 									<feature:display name="Budget" module="Project ID and Planning">
 									<tr>
 										<td class="field_name" >
@@ -1644,10 +1678,12 @@ body {background:none;}
 	                         		</td>
                         		</tr>
                         	</logic:notEmpty>
-                        <field:display name="Pipeline" feature="Commitments">
+						<c:if test="${aimEditActivityForm.funding.showPipeline}">
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.totalPipelineCommitments">
 								<tr>
-	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn> TOTAL PIPELINE COMMITMENTS: </digi:trn></td>
+	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+										<digi:trn key='aim:totalpipelinecommittment'> TOTAL PIPELINE COMMITMENTS </digi:trn>:
+									</td>
 	                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
 										<bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" />
 										<bean:write name="aimEditActivityForm" property="currCode" />
@@ -1655,7 +1691,7 @@ body {background:none;}
 									</td>
 	                        	</tr>
 	                        </logic:notEmpty>
-                        </field:display>
+						</c:if>
                         <feature:display module="Funding" name="Disbursement">
 							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedDisbursements">
                        			<tr>

@@ -8,7 +8,7 @@ module.exports = IndicatorJoinModel.extend({
   type: 'POST',
 
   url: function() {
-    return '/rest/gis/locationstotals/' + this.id.replace('-', '');
+    return '/rest/gis/locationstotals/' + this.id;
   },
 
   initialize: function() {
@@ -85,7 +85,7 @@ module.exports = IndicatorJoinModel.extend({
         // call normal fetch now
         Backbone.Model.prototype.fetch.call(self, options).then(function() {
           deferred.resolve();
-        });      
+        });
     } else {
       console.warn('no settings fail hilight funding!');
       deferred.resolve(null);

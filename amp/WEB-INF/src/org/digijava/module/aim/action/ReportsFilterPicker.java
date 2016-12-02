@@ -127,8 +127,9 @@ public class ReportsFilterPicker extends Action {
 	            ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
 	        }
 	        
-			if(request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")){
-	    		return mapping.findForward("index");
+			if (request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")) {
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+	    		return null;
 	    	}
 	
 	        if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && 
@@ -166,7 +167,8 @@ public class ReportsFilterPicker extends Action {
 						modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_FILTERS, reportFilter);
 					} catch (InvalidReportContextException e) {
 						logger.error(e.getMessage(), e);
-						return mapping.findForward("mydesktop");
+						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+						return null;
 					}
 					
 					return mapping.findForward("forward");
@@ -250,7 +252,8 @@ public class ReportsFilterPicker extends Action {
 				modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL, reportFilter);
 		} catch (InvalidReportContextException e) {
 			logger.error(e.getMessage(), e);
-			return mapping.findForward("mydesktop");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return null;
 		}
 		
 		return mapping.findForward("forward");

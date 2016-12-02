@@ -36,8 +36,7 @@ var AMPInfo = Backbone.View.extend({
         $(this.el).show();
     },
     
-    render_info: function(settings) {
-    	debugger
+    render_info: function(settings) {    	
     	Saiku.logger.log("AMPInfo.render_info");
     	//TODO: Move all these html into a template + view.
     	var content = "<div id='amp_notification' class='amp_notification'><span class='i18n'>{0}</span></div>" 

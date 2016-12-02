@@ -53,7 +53,7 @@ public class IndicatorImporter {
      * @return returns
      * @throws org.digijava.module.aim.exception.AimException
      */
-    public Collection<JsonBean> processExcelFile(InputStream inputStream) {
+    public Collection<JsonBean> processExcelFile(InputStream inputStream, long admLevelId) {
         POIFSFileSystem fsFileSystem = null;
         Collection<JsonBean> locationIndicatorValueList = new ArrayList<JsonBean>();
         Set<String> geoIdsWithProblems = new HashSet<String>();
@@ -85,7 +85,13 @@ public class IndicatorImporter {
 
             if (selectedAdmLevel == null) {
                 errors.addApiErrorMessage(IndicatorErrors.INEXISTANT_ADM_LEVEL, IndicatorEPConstants.ADM_LEVEL_ID + admLevel);
+            } else {
+                if (selectedAdmLevel.getId() != admLevelId) {
+                    errors.addApiErrorMessage(IndicatorErrors.INVALID_IMPORT_INVALID_ADMIN_LEVEL, IndicatorEPConstants.ADM_LEVEL_ID + admLevel);
+                }
             }
+
+
 
             int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();
             int indicatorNumberOfCells = 1;
@@ -171,7 +177,7 @@ public class IndicatorImporter {
         return value;
     }
 
-    public static JsonBean importIndicator(InputStream uploadedInputStream) {
+    public static JsonBean importIndicator(InputStream uploadedInputStream, long admLevelId) {
         JsonBean result = new JsonBean();
         byte[] fileData = new byte[0];
         try {
@@ -183,7 +189,7 @@ public class IndicatorImporter {
         InputStream inputStream = new ByteArrayInputStream(fileData);
 
         IndicatorImporter importer = new IndicatorImporter();
-        Collection<JsonBean> locationIndicatorValueList = importer.processExcelFile(inputStream);
+        Collection<JsonBean> locationIndicatorValueList = importer.processExcelFile(inputStream, admLevelId);
 
         if (!importer.getApiErrors().isEmpty()) {
             EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);

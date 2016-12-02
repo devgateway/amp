@@ -210,9 +210,10 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     public JsonBean importIndicator(
             @FormDataParam("option") long saveOption,
             @FormDataParam("name") String name,
+            @FormDataParam("admLevelId") long admLevelId,
             @FormDataParam("file") InputStream uploadedInputStream
     ) {
-        return IndicatorImporter.importIndicator(uploadedInputStream);
+        return IndicatorImporter.importIndicator(uploadedInputStream, admLevelId);
     }
 
     /**

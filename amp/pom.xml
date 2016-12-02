@@ -1240,10 +1240,6 @@
                         <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
-                            <nodeVersion>v0.12.14</nodeVersion>
-                            <npmVersion>1.4.9</npmVersion>
-                            <!-- optional: where to download node and npm from. Defaults to http://nodejs.org/dist/ -->
-                            <downloadRoot>http://nodejs.org/dist/</downloadRoot>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
                         </configuration>
                     </execution>

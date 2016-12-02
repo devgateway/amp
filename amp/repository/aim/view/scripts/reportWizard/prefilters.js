@@ -1,6 +1,9 @@
 //form3 = aimReportsFilterPickerForm3;// document.getElementsByName('aimReportsFilterPickerForm3')[0];
 // is this file ever used?
 
+// load the TranslationManager object
+$.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
+
 function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessage, loadingDataMessage, 
 				savingDataMessage, cannotSaveFiltersMessage, doReset,settingsPanelName, validationMsgs) {
 	this.connectionFailureMessage	= connectionFailureMessage;
@@ -69,11 +72,11 @@ function failureReportFunction(o) {
 					} else {
 						// timeout to redirect
 						var timeout = 3;
-						
-						// build the error message
-						var errorMessageUserLoggedOut = "<font color='red'><digi:trn jsFriendly='true'>An error has occured</digi:trn>. ";
 
-						errorMessageUserLoggedOut +="<digi:trn jsFriendly='true'>The page will be reloaded in </digi:trn> " + timeout + " <digi:trn jsFriendly='true'>seconds</digi:trn></font>.";
+						// build the error message
+						var errorMessageUserLoggedOut = "<font color='red'>" + TranslationManager.getTranslated('Session is expired') + ". ";
+
+						errorMessageUserLoggedOut += TranslationManager.getTranslated('The page will be reloaded in') + " " + timeout + " " + TranslationManager.getTranslated('seconds') + "</font>.";
 						currentPanel.setBody(errorMessageUserLoggedOut);
 						
 						var timer = setTimeout(function() {
@@ -82,7 +85,7 @@ function failureReportFunction(o) {
 					}
 	            }  catch (x) {
 	            	var errorMessage = "<font color='red'> ";
-	            	errorMessage +="<digi:trn jsFriendly='true'>An error has occured</digi:trn> " + x + "</font>.";
+	            	errorMessage += TranslationManager.getTranslated('An error has occured') + x + "</font>.";
 	            	currentPanel.setBody(errorMessage);
 	            	return;
 	            }
@@ -91,7 +94,7 @@ function failureReportFunction(o) {
 		failure : function(o) {
 			var currentPanel = o.argument instanceof Filters ?  o.argument.filter.filterPanel : o.argument.filter.panel;		
 			var errorMessage = "<font color='red'> ";
-			errorMessage +="<digi:trn jsFriendly='true'>The URL is unreachble</digi:trn> " + o.responseText + "</font>.";
+			errorMessage += TranslationManager.getTranslated('The URL is unreachable') + o.responseText + "</font>.";
 			currentPanel.setBody(errorMessage);
 		},
 		argument: { filter: this}

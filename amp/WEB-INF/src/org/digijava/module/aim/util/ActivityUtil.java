@@ -565,8 +565,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
           components.setDisbursements(new ArrayList());
           components.setExpenditures(new ArrayList());
 
-          Collection<AmpComponentFunding> componentsFunding = ActivityUtil.getFundingComponentActivity(ampComp.
-              getAmpComponentId(), activity.getAmpActivityId());
+          Collection<AmpComponentFunding> componentsFunding = ampComp.getFundings();
           Iterator compFundIterator = componentsFunding.iterator();
           while (compFundIterator.hasNext()) {
             AmpComponentFunding cf = (AmpComponentFunding) compFundIterator.next();

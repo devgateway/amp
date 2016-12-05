@@ -39,9 +39,6 @@ public class AmpComponentsFormSectionFeature extends
 			setModel.setObject(new TreeSet<AmpComponent>());
 		final ListEditor<AmpComponent> list;
 
-		final PropertyModel<Set<AmpComponentFunding>> componentsFundingsSetModel=new 
-			PropertyModel<Set<AmpComponentFunding>>(am, "componentFundings");
-		
 		IModel<List<AmpComponent>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel); 
 
 		list = new ListEditor<AmpComponent>("list", setModel, new AmpComponent.AmpComponentComparator()) {
@@ -57,12 +54,11 @@ public class AmpComponentsFormSectionFeature extends
 					protected void onClick(AjaxRequestTarget target) {
 						AmpComponent c = comp.getModelObject();
 						//Remove all fundings from fundings set
+						final PropertyModel<Set<AmpComponentFunding>> componentsFundingsSetModel=new 
+								PropertyModel<Set<AmpComponentFunding>>(c, "fundings");
 						if (componentsFundingsSetModel.getObject() != null){
 							Iterator<AmpComponentFunding> it = componentsFundingsSetModel.getObject().iterator();
 							while (it.hasNext()) {
-								AmpComponentFunding cf = (AmpComponentFunding) it
-										.next();
-								if (cf.getComponent().equals(c))
 									it.remove();
 							}
 						}

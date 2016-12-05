@@ -23,12 +23,12 @@
 			    
 			    CREATE OR REPLACE VIEW v_ni_component_funding AS 
 			    	SELECT 
-			    		f.activity_id AS amp_activity_id, f.amp_component_id, 
+			    		aac.amp_activity_id AS amp_activity_id, f.amp_component_id, 
 			    		f.amp_component_funding_id, f.amp_component_funding_id AS amp_fund_detail_id, 
 			    		f.transaction_type, f.adjustment_type, f.transaction_date, f.transaction_amount, f.exchange_rate AS fixed_exchange_rate, f.currency_id
   					FROM 
   						amp_component_funding f
-  							JOIN amp_activity_components aac ON f.activity_id = aac.amp_activity_id AND f.amp_component_id = aac.amp_component_id;
+  							JOIN amp_activity_components aac ON f.amp_component_id = aac.amp_component_id;
   				
   				
   				DROP VIEW IF EXISTS v_ni_component_funding_debug CASCADE;

@@ -1989,7 +1989,7 @@ function collapseAll() {
 						</tr>
 						<tr>
 							<td class="prv_right">
-								<digi:trn>Component Funding</digi:trn>									
+								<span class="word_break bold"><digi:trn>Component Fundings</digi:trn></span>									
 							</td>
 						</tr>
 						<module:display name="/Activity Form/Components/Component/Components Commitments" 

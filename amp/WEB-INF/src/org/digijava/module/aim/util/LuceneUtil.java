@@ -1236,9 +1236,25 @@ public class LuceneUtil implements Serializable {
         List<FuzzyQuery> fuzzyTerms = new ArrayList<FuzzyQuery>();
         float minimumSimilarity = getMinimumSimilarity();
         for (String word : searchString.split(" ")) {
-            if (StringUtils.isNotBlank(word)) {
-                FuzzyQuery q = new FuzzyQuery(new Term(parser.getField(), StringUtils.lowerCase(word)), minimumSimilarity);
-                fuzzyTerms.add(q);
+            if (StringUtils.isNotBlank(word) && word.length() > 1) {
+                FuzzyQuery fuzzyQuery = null;
+                try {
+                    Query query = parser.parse(word);
+                    if (query instanceof PhraseQuery) {
+                        if (((PhraseQuery) query).getTerms() != null) {
+                            for (Term term : ((PhraseQuery) query).getTerms()) {
+                                fuzzyQuery = new FuzzyQuery(term, minimumSimilarity);
+                                fuzzyTerms.add(fuzzyQuery);
+                            }
+                        }
+                    } else {
+                        fuzzyQuery = new FuzzyQuery(new Term(parser.getField(), StringUtils.lowerCase(word)), minimumSimilarity);
+                        fuzzyTerms.add(fuzzyQuery);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
         return fuzzyTerms;

@@ -1252,9 +1252,9 @@ public class LuceneUtil implements Serializable {
                         fuzzyTerms.add(fuzzyQuery);
                     }
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    logger.error("Error while building fuzzy query list");
+                    throw new RuntimeException("Error while building fuzzy query list", e);
                 }
-
             }
         }
         return fuzzyTerms;

@@ -30,7 +30,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for dashboards.
-     * <p>Returns definitions the following settings: currency, calendar, calendar currencies, funding type.</p>
+     * <p>Returns definitions for the following settings: currency, calendar, calendar currencies, funding type.</p>
      * <h3>Sample Output:</h3>
      * <pre>
      * [
@@ -74,7 +74,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for GIS.
-     * <p>Returns definitions the following settings: currency, calendar, calendar currencies, funding type.</p>
+     * <p>Returns definitions for the following settings: currency, calendar, calendar currencies, funding type.</p>
      * <h3>Sample Output:</h3>
      * <pre>
      * [
@@ -118,7 +118,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for public portal.
-     * <p>Returns definitions the following settings: amount units, currency.</p>
+     * <p>Returns definitions for the following settings: amount units, currency.</p>
      * <h3>Sample Output:</h3>
      * <pre>
      * [
@@ -161,7 +161,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for reports.
-     * <p>Returns definitions the following settings: currency, calendar, calendar currencies, year range.</p>
+     * <p>Returns definitions for the following settings: currency, calendar, calendar currencies, year range.</p>
      * <h3>Sample Output:</h3>
      * <pre>
      * [
@@ -205,7 +205,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for a specific report.
-     * <p>Returns definitions the following settings: currency, calendar, calendar currencies, year range.</p>
+     * <p>Returns definitions for the following settings: currency, calendar, calendar currencies, year range.</p>
      * <h3>Sample Output:</h3>
      * <pre>
      * [
@@ -256,7 +256,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for tabs.
-     * <p>Returns definitions the following settings: currency, calendar.</p>
+     * <p>Returns definitions for the following settings: currency, calendar.</p>
      * <h3>Sample Output:</h3>
      * <pre>
      * [

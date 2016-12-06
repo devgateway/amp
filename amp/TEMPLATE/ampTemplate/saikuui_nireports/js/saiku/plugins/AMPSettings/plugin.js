@@ -1,7 +1,4 @@
-var AMPSettingsView = Backbone.View.extend({
-			events : {
-				'click .edit_amp_settings' : 'add_amp_settings'
-			},
+var AMPSettingsView = Backbone.View.extend({			
 			initialize : function(args) {
 				Saiku.logger.log("AMPSettings.initialize");
 				var self = this;
@@ -12,7 +9,7 @@ var AMPSettingsView = Backbone.View.extend({
 					id : this.id
 				});
 
-				_.bindAll(this, "render", "show", "add_amp_settings", "hide_container", "apply_settings", "init_settings_widget");
+				_.bindAll(this, "render", "show", "hide_container", "apply_settings", "init_settings_widget","add_button");
 				
 				this.add_button();
 				this.init_settings_widget();
@@ -56,7 +53,6 @@ var AMPSettingsView = Backbone.View.extend({
 			
 			apply_settings: function(settings) {
 				Saiku.logger.log("AMPSettings.applySettings");				
-				
 				this.workspace.query.set('settings', settings);								
 				this.workspace.query.run_query(null, settings);
 				this.settings_button.removeClass('on');
@@ -89,19 +85,7 @@ var AMPSettingsView = Backbone.View.extend({
 			render : function() {
 				Saiku.logger.log("AMPSettings.render");
 				$(this.el).empty();
-			},
-
-			add_amp_settings : function(event) {
-				Saiku.logger.log("AMPSettings.add_amp_settings");
-				var self = this;
-				alert("add_amp_settings: To be implemented");
-			},
-
-			save_amp_settings : function() {
-				Saiku.logger.log("AMPSettings.save_amp_settings");
-				var self = this;
-				alert("save_amp_settings: To be implemented");
-			},
+			}
 
 		});
 Saiku.events.bind('session:new', function(session) {

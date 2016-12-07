@@ -660,7 +660,7 @@ public class ReportsUtil {
 				EPConstants.REPORT_TYPE, EPConstants.DEFAULT_REPORT_TYPE);
 		Integer reportTypeId = EPConstants.REPORT_TYPE_ID_MAP.get(reportType);
 		if (reportTypeId == null) {
-			return new ApiErrorMessage(ReportErrors.REPORT_TYPE_INVALID, config.getString(EPConstants.REPORT_TYPE));
+			return ReportErrors.REPORT_TYPE_INVALID.withDetails(config.getString(EPConstants.REPORT_TYPE));
 		}
 		List<String> activityTypes = (List<String>) config.get(EPConstants.PROJECT_TYPE);
 		if (activityTypes != null) {
@@ -668,7 +668,7 @@ public class ReportsUtil {
 				return ReportErrors.REPORT_TYPE_REQUIRED;
 			}
 			if (!EPConstants.REPORT_TYPE_ACTIVITY_MAP.get(reportType).containsAll(activityTypes)) {
-				return new ApiErrorMessage(ReportErrors.ACTIVITY_TYPE_LIST_INVALID, activityTypes.toString());
+				return ReportErrors.ACTIVITY_TYPE_LIST_INVALID.withDetails(activityTypes.toString());
 			}
 		}
 		return null;

@@ -52,7 +52,7 @@ public class AmpFilterDateUpdateJob {
                             SQLUtils.stringifyObject(newDate), id));
                 }
             } catch (ParseException e) {
-                logger.info(String.format("Failed to convert date from amp_filter_data, id=%d, date=%s, reason=%s",
+                logger.error(String.format("Failed to convert date from amp_filter_data, id=%d, date=%s, reason=%s",
                         id, oldDate, e.getMessage()));
             }
         }

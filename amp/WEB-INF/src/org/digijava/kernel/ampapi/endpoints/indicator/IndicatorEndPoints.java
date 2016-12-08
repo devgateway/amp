@@ -202,6 +202,8 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     /**
      * Import indicator layers values
      * @param option to indicate mode OVERWRITE or NEW
+     * @param admLevelId to check if the file has same adm level than the indicator
+     *
      */
     @POST
     @Path("/indicator-layer/import")
@@ -210,9 +212,10 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     public JsonBean importIndicator(
             @FormDataParam("option") long saveOption,
             @FormDataParam("name") String name,
+            @FormDataParam("admLevelId") long admLevelId,
             @FormDataParam("file") InputStream uploadedInputStream
     ) {
-        return IndicatorImporter.importIndicator(uploadedInputStream);
+        return IndicatorImporter.importIndicator(uploadedInputStream, admLevelId);
     }
 
     /**

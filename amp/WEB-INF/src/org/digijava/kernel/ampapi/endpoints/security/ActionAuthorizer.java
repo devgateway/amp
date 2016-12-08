@@ -1,11 +1,7 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.security;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,9 +11,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
-import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -46,20 +40,20 @@ public class ActionAuthorizer {
 			return;
 		}
 			
+		if (contains(apiMethod.authTypes(), AuthRule.AUTHENTICATED) && TeamUtil.getCurrentMember() == null) {
+			ApiErrorResponse.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
+			return;
+		}
+
 		String methodInfo = String.format("%s %s.%s, authType = %s", containerReq.getMethod(),
-				method.getDeclaringClass().getSimpleName(), method.getName(), apiMethod.authTypes());
-		
-		Map<Integer, ApiErrorMessage> errors = new TreeMap<Integer, ApiErrorMessage>();
+				method.getDeclaringClass().getSimpleName(), method.getName(), Arrays.toString(apiMethod.authTypes()));
+
+		Map<Integer, ApiErrorMessage> errors = new TreeMap<>();
 		
 		for (AuthRule authType : apiMethod.authTypes()) {
 			switch (authType) {
 			case NONE:
 				addError(methodInfo, errors, SecurityErrors.INVALID_API_METHOD, "Mixed authorization with NO authorization");
-				break;
-			case TOKEN:
-				/* AMP-20664: we'll need to refactor so that token authentication done in same place as other authorization actions 
-				verifyTokenMatch(containerReq);
-				*/
 				break;
 			case IN_WORKSPACE:
 				if (!TeamUtil.isUserInWorkspace()) {
@@ -92,37 +86,23 @@ public class ActionAuthorizer {
 			ApiErrorResponse.reportForbiddenAccess(ApiError.toError(errors.values()));
 		}
 	}
-	
-	/**
-	 * Verifies that a valid token is used
-	 */
-	private static void verifyTokenMatch(ContainerRequest containerReq) {
-		ApiErrorMessage error = null;
-		AmpApiToken sessionToken = SecurityUtil.getTokenFromSession();
-		if (sessionToken == null) {
-			error = SecurityErrors.NO_SESSION_TOKEN;
-		} else {
-			String token = containerReq.getHeaderValue("X-Auth-Token");
-			List<ApiErrorMessage>errors = new ArrayList<ApiErrorMessage>();
 
-			SecurityUtil.getAmpApiTokenFromApplication(token, errors);
-			
-			if (errors.size()>0) {
-				error = errors.get(0);
-			} else if (!token.equals(sessionToken.getToken())) {
-				error = SecurityErrors.INVALID_TOKEN;
+	/**
+	 * Returns true if object is present in the array.
+	 */
+	private static <T extends Enum<T>> boolean contains(T[] array, T obj) {
+		for (T item : array) {
+			if (item == obj) {
+				return true;
 			}
 		}
-		if (error != null) {
-			logger.error(error.description);
-			ApiErrorResponse.reportUnauthorisedAccess(error);
-		}
+		return false;
 	}
-	
+
 	/**
 	 * @return true if add activity is allowed
 	 */
-	public static boolean addActivityAllowed() {
+	private static boolean addActivityAllowed() {
 		TeamMember tm = TeamUtil.getCurrentMember();
 		return !TeamUtil.isCurrentMemberAdmin() && tm != null && Boolean.TRUE.equals(tm.getAddActivity()) && 
 				(FeaturesUtil.isVisibleField("Add Activity Button") || FeaturesUtil.isVisibleField("Add SSC Button"));
@@ -135,7 +115,7 @@ public class ActionAuthorizer {
 	 * @param value  new error additional details
 	 */
 	private static void addError(String methodInfo, Map<Integer, ApiErrorMessage> errors, ApiErrorMessage error, String details) {
-		logger.error(methodInfo + ". " + error.toString() + details == null ? "" : " : " + details);
+		logger.error(methodInfo + ". " + error.toString() + (details == null ? "" : " : " + details));
 		if (errors.containsKey(error.id)) {
 			error = errors.get(error.id); 
 		}
@@ -144,5 +124,4 @@ public class ActionAuthorizer {
 		}
 		errors.put(error.id, error);
 	}
-	
 }

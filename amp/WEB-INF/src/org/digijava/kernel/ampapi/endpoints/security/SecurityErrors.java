@@ -37,4 +37,6 @@ public class SecurityErrors {
 
 	public static final ApiErrorMessage INVALID_WORKSPACE = new ApiErrorMessage(12, "Workspace is invalid");
 
+	public static final ApiErrorMessage NOT_AUTHENTICATED = new ApiErrorMessage(13, "Not authenticated");
+
 }

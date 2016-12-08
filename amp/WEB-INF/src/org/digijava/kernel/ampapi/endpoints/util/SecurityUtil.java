@@ -34,7 +34,6 @@ public class SecurityUtil {
 	//TODO for testing
 	public static Integer TOKEN_EXPIRATION=30;
 
-	public static String USER_ENDPOINT_PATH="/security/user";
 
 	@SuppressWarnings("unchecked")
 	public static AmpApiToken generateToken() {

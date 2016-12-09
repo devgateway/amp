@@ -11,22 +11,20 @@ window.app = app;  // for debugging convenience
 app.state.saved.load();
 //app.render();
 
-},{"./app/app-class":2,"./app/models/amp-user.js":15,"./ugly/lib-load-hacks":43,"jquery":"jquery","underscore":"underscore"}],2:[function(require,module,exports){
+},{"./app/app-class":2,"./app/models/amp-user.js":15,"./ugly/lib-load-hacks":40,"jquery":"jquery","underscore":"underscore"}],2:[function(require,module,exports){
 var _ = require('underscore');
 var Deferred = require('jquery').Deferred;
 var BackboneDash = require('./backbone-dash');
 var supportCheck = require('./check-support');
-
 var URLService = require('amp-url/index');
 var State = require('amp-state/index');
 var StateLoadError = require('amp-state/index').StateLoadError;
 
 var Translator = require('amp-translate');
 var Filter = require('amp-filter/src/main');
-var Settings = require('./models/settings-collection');
+var Settings = require('amp-settings/src/index');
 var UserModel = require('./models/amp-user.js');
 var SavedDashes = require('./models/saved-dashes-collection.js');
-
 var MainView = require('./views/main');
 var FailView = require('./views/fail');
 
@@ -49,7 +47,7 @@ _.extend(App.prototype, BackboneDash.Events, {
     this.initialized = _initDefer.promise();
 
     try {
-    	this.settings = new Settings([], { app: this });
+    	
     	this.user = new UserModel()
 
       // check our support level
@@ -113,12 +111,17 @@ _.extend(App.prototype, BackboneDash.Events, {
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
       });
+      
+      this.initSettings();
+      
       // TODO: handle translations load failure      ​
       this.filter = new Filter({
           draggable: true,
           sync: options.sync || BackboneDash.sync,
           caller: 'DASHBOARD'
         });
+       
+      
 
    	  // initialize app components
       this.view = new MainView({ app: this, el: options.el });      
@@ -193,14 +196,22 @@ _.extend(App.prototype, BackboneDash.Events, {
         modalReady.reject('app views did not init');
       });
     return modalReady.promise();
+  },
+  initSettings: function(){
+	this.settingsWidget = new Settings.SettingsWidget({
+	  		draggable : true,
+	  		caller : 'DASHBOARDS',
+	  		isPopup: true,
+	  		definitionUrl: '/rest/settings-definitions/dashboards'
+	});	
+	this.generalSettings = new Settings.GeneralSettings();
+	this.generalSettings.load();	
   }
-
 });
-
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":14,"./models/amp-user.js":15,"./models/saved-dashes-collection.js":25,"./models/settings-collection":27,"./views/fail":37,"./views/main":39,"amp-filter/src/main":70,"amp-state/index":86,"amp-translate":87,"amp-url/index":88,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":14,"./models/amp-user.js":15,"./models/saved-dashes-collection.js":25,"./views/fail":35,"./views/main":37,"amp-filter/src/main":67,"amp-settings/src/index":91,"amp-state/index":95,"amp-translate":96,"amp-url/index":97,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -378,7 +389,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":89,"../../ugly/util":47,"d3":"d3"}],5:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":98,"../../ugly/util":44,"d3":"d3"}],5:[function(require,module,exports){
 /*
  * Drawing a bar chart in AMP? Please use ./chart.js instead.
  */
@@ -428,7 +439,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":89,"../../ugly/util":47,"./customized/heatMapChart":11,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":98,"../../ugly/util":44,"./customized/heatMapChart":11,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
 /*
  * Drawing a multibar chart in AMP? Please use ./chart.js instead.
  */
@@ -489,7 +500,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":89,"./customized/multiBarChart.js":12}],7:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":98,"./customized/multiBarChart.js":12}],7:[function(require,module,exports){
 /*
  * Drawing a pie chart in AMP? Please use ./chart.js instead.
  */
@@ -586,7 +597,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../ugly/util":47,"./common":10,"./customized/pieChart.js":13,"underscore":"underscore"}],8:[function(require,module,exports){
+},{"../../ugly/util":44,"./common":10,"./customized/pieChart.js":13,"underscore":"underscore"}],8:[function(require,module,exports){
 
 var _ = require('underscore');
 var util = require('../../ugly/util');
@@ -700,7 +711,7 @@ function heatmapCharter(data, options) {
 module.exports = {
   charter: charter
 };
-},{"../../ugly/util":47,"./common":10,"underscore":"underscore"}],9:[function(require,module,exports){
+},{"../../ugly/util":44,"./common":10,"underscore":"underscore"}],9:[function(require,module,exports){
 
 var _ = require('underscore');
 var d3 = require('d3');
@@ -737,7 +748,7 @@ function chart(type, data, options) {
     height: void 0,  // should fill container in most cases by default
     width: void 0,
     numberFormatter: d3.format(','),
-    shortFormatter: options.numberFormatter || util.formatKMB(3, app.settings.numberFormatSettings.decimalSeparator),
+    shortFormatter: options.numberFormatter || util.formatKMB(3, app.generalSettings.numberFormatSettings.decimalSeparator),
     addLegend: true,
     trimLabels: true,
     getTTContent: common.defaultGetTTContent,
@@ -756,7 +767,7 @@ function chart(type, data, options) {
 
 module.exports = chart;
 
-},{"../../ugly/util":47,"./_bar":4,"./_heatmap":5,"./_multibar":6,"./_pie":7,"./_table":8,"./common":10,"d3":"d3","underscore":"underscore"}],10:[function(require,module,exports){
+},{"../../ugly/util":44,"./_bar":4,"./_heatmap":5,"./_multibar":6,"./_pie":7,"./_table":8,"./common":10,"d3":"d3","underscore":"underscore"}],10:[function(require,module,exports){
 var nv = window.nv;  // nvd3 is a pain
 var d3 = require('d3');
 var util = require('../../ugly/util');
@@ -935,14 +946,14 @@ function nvCharter(specific) {
 
 function formatNumber(number) {
 	var format = "";
-	if (app.settings.numberFormatSettings.groupSeparator.length > 0) {
+	if (app.generalSettings.numberFormatSettings.groupSeparator.length > 0) {
 		format = "0,0";
 	} else {
 		format = "0";
 	}
-	if (app.settings.numberFormatSettings.numberFormat.indexOf('.') > 0) {
-		var decimalDigits = app.settings.numberFormatSettings.numberFormat.length
-			- app.settings.numberFormatSettings.numberFormat.indexOf('.');
+	if (app.generalSettings.numberFormatSettings.numberFormat.indexOf('.') > 0) {
+		var decimalDigits = app.generalSettings.numberFormatSettings.numberFormat.length
+			- app.generalSettings.numberFormatSettings.numberFormat.indexOf('.');
 		format = format + "." + new Array(decimalDigits).join("0");
 	}
 
@@ -950,8 +961,8 @@ function formatNumber(number) {
 	// delimiters.
 	var ampLang = {
 		delimiters : {
-			thousands : app.settings.numberFormatSettings.groupSeparator,
-			decimal : app.settings.numberFormatSettings.decimalSeparator
+			thousands : app.generalSettings.numberFormatSettings.groupSeparator,
+			decimal : app.generalSettings.numberFormatSettings.decimalSeparator
 		},
 		abbreviations : {
 			thousand : app.translator.translateSync('amp.dashboard:chart-thousand'),
@@ -989,7 +1000,7 @@ module.exports = {
   formatNumber: formatNumber
 };
 
-},{"../../ugly/util":47,"d3":"d3","numeral":49,"underscore":"underscore"}],11:[function(require,module,exports){
+},{"../../ugly/util":44,"d3":"d3","numeral":46,"underscore":"underscore"}],11:[function(require,module,exports){
 nv.models.heatmap = function() {
     "use strict";
 
@@ -1124,9 +1135,9 @@ nv.models.heatMapChart = function() {
         renderWatch.models(heatmap);
 
         selection.each(function(data) {
-        	// Get currency for later.
-        	var currencySettings = _.find(app.settings.models, function(item) {return item.get('id') === '1'});
-        	var selectedCurrency = _.find(currencySettings.get('options'), function(item) {return item.selected === true}).value;
+        	// Get currency for later.        	       	
+        	var currencyId = app.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
+        	var selectedCurrency = app.settingsWidget.definitions.findCurrencyById(currencyId).value;        	
         	var newShortTextLength = !data[0].values.model.get('showFullLegends') ? shortTextLength : 100;
         	
         	var container = d3.select(this);
@@ -2622,7 +2633,7 @@ module.exports = ChartModel.extend({
 	        	return {
 	        		x: item.x,
 	        		y: item.y,
-	        		z: common.formatNumber(item.y /** parseFloat(app.settings.numberMultiplier.name)*/)
+	        		z: common.formatNumber(item.y /** parseFloat(app.generalSettings.numberDivider)*/)
 	        	};
 	        })
 	        .value()
@@ -2820,13 +2831,13 @@ module.exports = BackboneDash.Model.extend({
 
   fetch: function(options) {
     var data = JSON.parse(options.data);
-    data.settings = this.app.settings.toAPI();
+    data.settings = this.app.settingsWidget.toAPIFormat();
 
     if (this.get('adjtype')) {
       // TODO adjtype hard-coding key for now, should get from settings...
-      data.settings = _({}).extend(data.settings, {0: this.get('adjtype')});
+      data.settings = _({}).extend(data.settings, {'funding-type': this.get('adjtype')});
     }
-
+    _.defaults(data.settings,{ 'currency-code': this.app.settingsWidget.definitions.getDefaultCurrencyId()});
     options.data = JSON.stringify(data);
     return BackboneDash.Model.prototype.fetch.call(this, options);
   }
@@ -2917,7 +2928,7 @@ module.exports = ChartModel.extend({
                 special: 'others'
         };
         //AMP-18740: We changed the EP to send raw numbers expressed in units so we need to apply the GS here.
-    	other.z = common.formatNumber(other.y * parseFloat(app.settings.numberMultiplier.name));
+    	other.z = common.formatNumber(other.y / app.generalSettings.numberDivider);
         values.push(other);
     }
 
@@ -3124,239 +3135,6 @@ module.exports = BackboneDash.Collection.extend({
    }
 });
 },{"../backbone-dash":3,"./saved-dash":24,"jquery":"jquery","underscore":"underscore"}],26:[function(require,module,exports){
-var _ = require('underscore');
-var BackboneDash = require('../backbone-dash');
-
-
-module.exports = BackboneDash.Model.extend({
-
-  initialize: function(attrs, options) {
-    this.app = options.app;
-    this.url = options.url;    
-    var _self = this;
-    // In "currencies" collection we add another field with the complete copy for future use. 
-    if (this.originalAllCurrencies === undefined && attrs.id === '1') {
-    	this.set('originalAllCurrencies', []);
-    	_.each(attrs.options, function(item) {
-    		// Need to copy one by one or this list will lose elements when changing calendars.
-    		_self.get('originalAllCurrencies').push(item);
-    	});
-    }
-  },
-
-  select: function(optionId, triggerChange) {
-	var self = this;
-    // unselect old
-    var old = _(this.attributes.options).findWhere({selected: true});
-	if(old !== null && old !== undefined) {
-		delete old.selected;
-	}    
-    // select new
-    var newOpt = _(this.attributes.options).findWhere({id: optionId});
-    if(newOpt !== undefined) {
-    	newOpt.selected = true;
-    } else {
-    	// This can happen if we are loading a saved dashboard and the currency is loaded before the calendar.
-    	if (this.attributes.id === "1") {
-	    	newOpt = _(this.attributes.originalAllCurrencies).findWhere({id: optionId});
-	    	if (newOpt !== undefined) {
-	    		newOpt.selected = true;
-	    	} else {
-	    		console.info('Saved currency was deleted.');
-	    		// Select default currency.
-	    		newOpt = _(this.attributes.originalAllCurrencies).findWhere({id: _.find(self.app.settings.models, function(item) {return item.id === "1";}).get('defaultId')});
-	    		newOpt.selected = true;
-	    	}
-    	}
-    }
-
-    // If we are changing the calendar --> Update list of currencies.
-    if (this.attributes.id === "2") {
-    	var currenciesForThisCalendar = _.find(_.find(self.app.settings.models, function(item) {return item.id === "calendarCurrencies";}).get('options'), function(item2) {return item2.id === optionId}).value.split(',');
-    	var allCurrencies = _.find(self.app.settings.models, function(item) {return item.id === '1'});
-    	// 'options' is linked to the calendar select, now we clean it one by one (assigning to [] will break the view).
-    	for (var i = allCurrencies.get('options').length - 1; i >= 0; i--) {
-    		allCurrencies.get('options').splice(i, 1);
-    	}
-    	// Match the currencies for this calendar with the list of all currencies.
-    	_.each(currenciesForThisCalendar, function(item) {
-    		var auxCurrency = _.find(allCurrencies.get('originalAllCurrencies'), function(item2) {
-    			return item2.id === item;
-    		});
-    		if(auxCurrency !== undefined) {
-    			allCurrencies.get('options').push(auxCurrency);
-    		}
-    	});
-    	// Check if currently selected currency is still valid for the current calendar and make sure we always have a selected currency.
-    	var selectedCurrency = _.find(allCurrencies.get('options'), function(item) {return item.selected === true});
-    	if (selectedCurrency !== undefined) {
-    		if (_.find(allCurrencies.get('originalAllCurrencies'), function(item) {return item.id === selectedCurrency.id}) === undefined) {
-    			selectedCurrency.selected = false;
-    			allCurrencies.get('options')[0].selected = true;
-    		}
-    	} else {
-    		allCurrencies.get('options')[0].selected = true;
-    	}
-    }
-    
-    // Before linking calendar with currencies triggering 'change' was the default behavior.
-    if (triggerChange === true) {
-    	this.trigger('change');  // sort of a hack to do this manually...
-    }
-  },
-  
-  apply: function() {
-	  this.trigger('change');
-  }
-
-});
-
-},{"../backbone-dash":3,"underscore":"underscore"}],27:[function(require,module,exports){
-var Deferred = require('jquery').Deferred;
-var _ = require('underscore');
-var BackboneDash = require('../backbone-dash');
-var Setting = require('./setting');
-
-
-function isIntStr(n) {
-  // test whether a string starts with is a base-10 int
-  return !isNaN(parseInt(n, 10))
-}
-
-
-function tagIf(test, tag) {
-  return function(setting) {
-    if (test(setting)) {
-      setting[tag] = true;
-    }
-    return setting;
-  }
-}
-
-
-module.exports = BackboneDash.Collection.extend({
-
-  url: '/rest/amp/settings',
-
-  model: Setting,
-
-  comparator: 'id',
-  
-  firstTime: true,
-
-  initialize: function(models, options) {
-    this.app = options.app;
-    this._loaded = new Deferred();
-    _.bindAll(this, 'toAPI', 'fromState');
-  },
-
-  parse: function(settings) {
-	this.extractNumberFormatSettings(settings);
-    return _(settings).chain()
-      // mark weird options with non-int keys hidden
-      .map(tagIf(function(setting) { return !isIntStr(setting.id); }, 'ignore'))
-      // mark funding type setting hidden, since it's set per-chart...
-      .map(tagIf(function(setting) { return setting.id === '0'; }, 'ignore'))
-      // ...but also flag it so the charts can see the the funding type options
-      .map(tagIf(function(setting) { return setting.id === '0'; }, 'ftype'))
-      // mark all options as selected per the defaults provided
-      .map(function(setting) {
-        return _(setting).extend({
-          options: _(setting.options).map(tagIf(function(option) {
-            return option.id === setting.defaultId;
-          }, 'selected'))
-        })
-      })
-      .value();
-  },
-
-  load: function() {
-	if(this.firstTime) {
-		this.firstTime = false;
-		
-		if (this._loaded.state() !== 'pending') { return this._loaded.promise(); }
-
-	    this.fetch({app: this.app })
-	      .then(_(function() {
-	        this._loaded.resolve();
-	      }).bind(this))
-	      .fail(_(function() {
-	        this.app.report('Failed to load dashboard settings',
-	          ['Could not connect to the server.']);
-	        this._loaded.reject();
-	      }).bind(this));
-	}    
-    return this._loaded.promise();
-  },
-
-  toAPI: function(overrides) {
-    // format selected filter options the way the api wants
-    // ignored filters are skipped (overrides are never removed though)
-    // overrides should be in the {settingId: settingOptionId} format the api expects
-    if (this.length === 0) { return {}; }  // cop out early if we don't have settings yet
-    return this.chain()
-      .map(function(model) { return model.toJSON(); })
-      .filter(function(setting) { return !setting.ignore; })
-      .reduce(function(apiFormatted, setting) {
-        apiFormatted[setting.id] = _(setting.options)
-          .findWhere({selected: true}).id;
-        return apiFormatted;
-      }, {})
-      .extend(overrides || {})
-      .value();
-  },
-
-  fromState: function(state) {
-	  // Check if the saved calendar still exists.
-	  if (state !== undefined) {
-		  var savedCalendarId = _.find(state, function(item, key) {return key === "2"});  
-		  var savedCalendar = _.find(_.find(this.models, function(item) {return item.id === "2"}).get("options"), function(item2) {return item2.id === savedCalendarId});
-		  if (savedCalendar === undefined) {
-			  // This calendar was deleted, select another.
-			  state["2"] = _.find(this.models, function(item) {return item.id === "2"}).get("options")[0].id;
-		  }
-	  }
-		  
-	  // select options from an array with the same format we send to the api
-	  _(state).each(function(optId, settingId) {
-		  this.get(settingId).select(optId, true);
-	  }, this);
-  },
-
-  getVisible: function() {
-    return this.filter(function(setting) { return !setting.get('ignore'); });
-  },
-  
-  extractNumberFormatSettings: function(settings) {
-	  var numberFormat = {}; 
-	  var foundNF =_.find(settings, function(item) {return item.id === 'number-format'});
-	  numberFormat.numberFormat = _.find(foundNF.options, function(item) { return item.id === foundNF.defaultId}).name || '#,#.#';
-
-	  // If the format pattern doesnt have thousands grouping then ignore 'number-group-separator' param or it will 
-	  // be used by JS to group by thousands (ie: in the 'Others' columns).
-	  if(numberFormat.numberFormat.indexOf(',') !== -1) {
-		  var foundNGS =_.find(settings, function(item) {return item.id === 'number-group-separator'});
-		  numberFormat.groupSeparator = _.find(foundNGS.options, function(item) { return item.id === foundNGS.defaultId}).name || ',';
-	  } else {
-		  numberFormat.groupSeparator = '';
-	  }
-	  var foundDS =_.find(settings, function(item) {return item.id === 'number-decimal-separator'});
-	  numberFormat.decimalSeparator = _.find(foundDS.options, function(item) { return item.id === foundDS.defaultId}).name || '.';
-	  this.app.settings.numberFormatSettings = numberFormat;
-	  
-	  var foundNM =_.find(settings, function(item) {return item.id === 'number-multiplier'});
-	  this.app.settings.numberMultiplier = _.find(foundNM.options, function(item) { return item.id === foundNM.defaultId});
-	  if (this.app.settings.numberMultiplier.name === '1.0') {
-		  this.app.settings.numberMultiplierDescription = 'amp.dashboard:chart-tops-inunits';
-	  } else if(this.app.settings.numberMultiplier.name === '0.001') {
-		  this.app.settings.numberMultiplierDescription = 'amp.dashboard:chart-tops-inthousands';
-	  } else {
-		  this.app.settings.numberMultiplierDescription = 'amp.dashboard:chart-tops-inmillions';
-	  }
-  }
-
-});
-},{"../backbone-dash":3,"./setting":26,"jquery":"jquery","underscore":"underscore"}],28:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
@@ -3405,7 +3183,7 @@ module.exports = ChartViewBase.extend({
     var app = this.app;
     var of = app.translator.translateSync('amp.dashboard:of','of');
     var total = app.translator.translateSync('amp.dashboard:total','total');
-    var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
+    var units = app.translator.translateSync(app.generalSettings.numberDividerDescription);
 
     // IMPORTANT: We assume this chart will ALWAYS show 2 data series.
     /* modify to be like chart-funding-type if adding more series */
@@ -3430,7 +3208,7 @@ module.exports = ChartViewBase.extend({
         '</b>&nbsp<span>' + of + '</span>&nbsp' + context.x.raw +
         '&nbsp<span>' + total + '</span>';
     var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+    var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value; 
     return {tt: {
       heading: header,
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
@@ -3440,7 +3218,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-view-base":33,"d3":"d3","underscore":"underscore"}],29:[function(require,module,exports){
+},{"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],27:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
@@ -3496,7 +3274,7 @@ module.exports = ChartViewBase.extend({
     var app = this.app;
     var of = app.translator.translateSync('amp.dashboard:of','of');
     var total = app.translator.translateSync('amp.dashboard:total','total');
-    var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
+    var units = app.translator.translateSync(app.generalSettings.numberDividerDescription);
 
     var activeTooltipTitles = _.filter(context.data, function(series) {
       return series.disabled !== true;
@@ -3509,7 +3287,7 @@ module.exports = ChartViewBase.extend({
         totalSpan = '&nbsp<span>' + total + '</span>';
     }
     var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;  
+    var currencyName =  app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;  
     return {tt: {
       heading: context.x.raw + ' ' + activeTooltipTitles[context.series.index].key,
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
@@ -3526,7 +3304,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-view-base":33,"d3":"d3","underscore":"underscore"}],30:[function(require,module,exports){
+},{"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],28:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var ModalView = require('./chart-tops-info-modal');
@@ -3563,11 +3341,11 @@ module.exports = ChartViewBase.extend({
   }
 
 });
-},{"./chart-tops-info-modal":31,"./chart-view-base":33,"d3":"d3","underscore":"underscore"}],31:[function(require,module,exports){
+},{"./chart-tops-info-modal":29,"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],29:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var template = _.template("<script type=\"text/javascript\">\r\n\tfunction openPreviewActivity(id) {\r\n\t\twindow.open('/aim/viewActivityPreview.do~public=true~pageId=2~activityId=' + id, '_blank');\r\n\t}\r\n</script>\r\n\r\n<div class='chart-tops-info-category'>\r\n\t<span>\r\n\t\t<b><%= (context.x.fmt || context.x.raw) %></b> - <%= model.get('adjtype')%> -  \t\t\r\n\t\t<span data-i18n=\"<%= app.settings.numberMultiplierDescription %>\"></span>\r\n\t\t<%= model.get('currency') %>\r\n\t</span>\r\n</div>\r\n<div class=\"chart-tops-info-container\">\r\n\t<div class=\"chart-tops-info-content\">\r\n\t\t<% if(error) { %>\r\n\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t<strong><span data-i18n=\"amp.dashboard:error\">Error</span></strong>\r\n\t\t\t\t<span data-i18n=\"amp.dashboard:error-detail\">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>\r\n\t\t\t</div>\r\n\t\t<% } else if(values === undefined) { %>\r\n\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\r\n\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\r\n\t\t<% } else { %>\r\n\t\t\t<% var rowClass = ''; %>\r\n\t\t\t<table>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-amount\">Amount</span></th>\r\n\t\t\t\t</tr>\t\t\t\r\n\t\t\t<% _(values).each(function(row, i) { %>\r\n          \t\t<% \tif (i % 2 === 0) rowClass = 'odd_row';\r\n    \t\t\t\telse rowClass = ''; %>\r\n    \t\t\t<tr class=\"<%=rowClass%>\">\r\n    \t\t\t\t<td>\r\n    \t\t\t\t\t<span class='pointer' onclick='openPreviewActivity(<%=row.id%>)'><%=row.name%></span>\r\n    \t\t\t\t</td>\r\n    \t\t\t\t<td><%=row.formattedAmount%></td>\r\n    \t\t\t</tr>\r\n        \t<% }) %>\r\n        \t</table>\r\n\t\t<% } %>\r\n\t</div>\r\n</div>");
+var template = _.template("<script type=\"text/javascript\">\r\n\tfunction openPreviewActivity(id) {\r\n\t\twindow.open('/aim/viewActivityPreview.do~public=true~pageId=2~activityId=' + id, '_blank');\r\n\t}\r\n</script>\r\n\r\n<div class='chart-tops-info-category'>\r\n\t<span>\r\n\t\t<b><%= (context.x.fmt || context.x.raw) %></b> - <%= model.get('adjtype')%> -  \t\t\r\n\t\t<span data-i18n=\"<%= app.generalSettings.numberDividerDescription %>\"></span>\r\n\t\t<%= model.get('currency') %>\r\n\t</span>\r\n</div>\r\n<div class=\"chart-tops-info-container\">\r\n\t<div class=\"chart-tops-info-content\">\r\n\t\t<% if(error) { %>\r\n\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t<strong><span data-i18n=\"amp.dashboard:error\">Error</span></strong>\r\n\t\t\t\t<span data-i18n=\"amp.dashboard:error-detail\">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>\r\n\t\t\t</div>\r\n\t\t<% } else if(values === undefined) { %>\r\n\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\r\n\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\r\n\t\t<% } else { %>\r\n\t\t\t<% var rowClass = ''; %>\r\n\t\t\t<table>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-amount\">Amount</span></th>\r\n\t\t\t\t</tr>\t\t\t\r\n\t\t\t<% _(values).each(function(row, i) { %>\r\n          \t\t<% \tif (i % 2 === 0) rowClass = 'odd_row';\r\n    \t\t\t\telse rowClass = ''; %>\r\n    \t\t\t<tr class=\"<%=rowClass%>\">\r\n    \t\t\t\t<td>\r\n    \t\t\t\t\t<span class='pointer' onclick='openPreviewActivity(<%=row.id%>)'><%=row.name%></span>\r\n    \t\t\t\t</td>\r\n    \t\t\t\t<td><%=row.formattedAmount%></td>\r\n    \t\t\t</tr>\r\n        \t<% }) %>\r\n        \t</table>\r\n\t\t<% } %>\r\n\t</div>\r\n</div>");
 
 module.exports = BackboneDash.View.extend({
 
@@ -3575,7 +3353,7 @@ module.exports = BackboneDash.View.extend({
 		this.app = options.app;
 		this.context = options.context;
 		this.model = options.model;
-		this.numberMultiplier = app.settings.find(function(item) {return item.id === 'number-multiplier'});
+		this.numberDivider = app.generalSettings.numberDivider;			
 	},
 
 	render: function() {
@@ -3585,14 +3363,14 @@ module.exports = BackboneDash.View.extend({
 			model: this.model,
 			context: this.context,
 			values: undefined,
-			numberMultiplier: this.numberMultiplier
+			numberDivider: this.numberDivider
 		}));
 		app.translator.translateDOM($(".dash-settings-modal"));
 		
 		//TODO: move this code to a new model so the API call is made automatically.
     	var config = this.app.filter.serialize();
-    	config.settings = this.app.settings.toAPI();
-    	config.settings['0'] = this.model.get('adjtype');
+    	config.settings = this.app.settingsWidget.toAPIFormat();
+    	config.settings['funding-type'] = this.model.get('adjtype');
     	$.ajax({
     		method: 'POST',
     		url: self.model.url + '/' + this.context.data[0].values[this.context.x.index].id,
@@ -3607,7 +3385,7 @@ module.exports = BackboneDash.View.extend({
     			model: self.model,
     			context: self.context,
     			values: data.values,
-    			numberMultiplier: self.numberMultiplier
+    			numberDivider: self.numberDivider
     		}));
     		app.translator.translateDOM($(".dash-settings-modal"));
     	}).fail(function(xhr, err) {
@@ -3617,7 +3395,7 @@ module.exports = BackboneDash.View.extend({
 				model: self.model,
 				context: self.context,
 				error: err,
-				numberMultiplier: self.numberMultiplier
+				numberDivider: self.numberDivider
 			}));
 		});
     	
@@ -3625,7 +3403,7 @@ module.exports = BackboneDash.View.extend({
 	},
 
 });
-},{"../backbone-dash":3,"underscore":"underscore"}],32:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],30:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var ModalView = require('./chart-tops-info-modal');
@@ -3660,9 +3438,9 @@ module.exports = ChartViewBase.extend({
 
   getTTContent: function(context) {
 	var ofTotal = app.translator.translateSync("amp.dashboard:of-total","of total");
-	var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
+	var units = app.translator.translateSync(app.generalSettings.numberDividerDescription);
     var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+    var currencyName =  app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
     var percentage = context.y.raw > 0 ?
         d3.format('%')(context.y.raw / this.model.get('totalPositive')) + '</b>&nbsp<span>' + ofTotal:
         "";
@@ -3698,7 +3476,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-tops-info-modal":31,"./chart-view-base":33,"d3":"d3","underscore":"underscore"}],33:[function(require,module,exports){
+},{"./chart-tops-info-modal":29,"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],31:[function(require,module,exports){
 
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
@@ -3755,7 +3533,7 @@ module.exports = BackboneDash.View.extend({
     }
 
     this.listenTo(this.app.filter, 'apply', this.updateData);
-    this.listenTo(this.app.settings, 'change', this.updateData);
+    this.listenTo(this.app.settingsWidget, 'applySettings', this.updateData);
     this.listenTo(this.model, 'change:adjtype', this.render);
     this.listenTo(this.model, 'change:xAxisColumn', this.render);
     this.listenTo(this.model, 'change:limit', this.updateData);
@@ -3767,7 +3545,7 @@ module.exports = BackboneDash.View.extend({
       empty: null
     });
 
-    _.bindAll(this, 'showChart', 'failLoading','hideExportInPublicView');
+    _.bindAll(this, 'showChart', 'failLoading','hideExportInPublicView','extractNumberFormatSettings');
     if (this.getTTContent) { _.bindAll(this, 'getTTContent'); }
     if (this.chartClickHandler) { _.bindAll(this, 'chartClickHandler'); }
   },
@@ -3782,32 +3560,33 @@ module.exports = BackboneDash.View.extend({
       util: util
     };
     // We need to be sure all dependencies have been loaded before processing each chart (specially the templates).
-    $.when(this._stateWait, this.app.filter.loaded, this.app.translator.promise).done(function() {
+    $.when(this._stateWait, this.app.filter.loaded, this.app.translator.promise, this.app.settingsWidget.definitions.loaded, this.app.generalSettings.loaded).done(function() {
+    	
+    	self.extractNumberFormatSettings();
     	self.$el.html(template(renderOptions));
     	self.hideExportInPublicView();
     	self.message = self.$('.dash-chart-diagnostic');
     	self.chartContainer = self.$('.dash-chart-wrap');
 	
 	    if (self.model.get('adjtype') !== void 0) {  // this chart has adj settings
-	    	self.app.settings.load().done(_(function() {
-	    		self.rendered = true;
-	        var adjSettings = self.app.settings.get('0');  // id for Funding Type
+	    	self.rendered = true;
+	        var adjSettings = self.app.settingsWidget.definitions.getFundingTypeSetting(); 	        	
 	        if (!adjSettings) { 
 	        	self.app.report('Could not find Funding Type settings'); 
 	        } else {
 	        	if (self.model.get('adjtype') === 'FAKE') {
-	        		self.model.set('adjtype', adjSettings.get('defaultId'));
+	        		self.model.set('adjtype', adjSettings.get('value').defaultId);
 	        	}
 	        }
 	        self.$('.ftype-options').html(
-	          _(adjSettings.get('options')).map(function(opt) {
+	          _(adjSettings.get('value').options).map(function(opt) {
 	            return adjOptTemplate({
 	              opt: opt,
 	              current: (opt.id === self.model.get('adjtype'))
 	            });
 	          }, self)
 	        );
-	      }).bind(self));
+	      
 	    } else {
 	    	self.rendered = true;
 	    }
@@ -3961,7 +3740,7 @@ module.exports = BackboneDash.View.extend({
     	this.$('.chart-total').html(util.translateLanguage(this.model.get('sumarizedTotal'))); // this shall use the format from the server and translate it in the front end
     }
     var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+   var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;    	
     this.$('.chart-currency').html(currencyName);
   },
 
@@ -4019,8 +3798,8 @@ module.exports = BackboneDash.View.extend({
     this.hideExportInPublicView();
   },
   hideExportInPublicView: function(){
-	  var editableDataExportSetting = this.app.settings.get('hide-editable-export-formats-public-view');
-	  if(this.model.get('view') === 'table' && editableDataExportSetting && editableDataExportSetting.get('defaultId') == "true" && this.app.user.get('logged') == false ){
+	  var editableDataExportSetting = this.app.generalSettings.get('hide-editable-export-formats-public-view');
+	  if(this.model.get('view') === 'table' && editableDataExportSetting == true && this.app.user.get('logged') == false ){
 		  this.$el.find('.download').hide();
 	  }else{
 		  this.$el.find('.download').show();
@@ -4110,11 +3889,37 @@ module.exports = BackboneDash.View.extend({
 			  nv.tooltip.cleanup();
 		  });
 	  }
-  }
+  },
+  extractNumberFormatSettings: function(settings) {
+		  var numberFormat = {}; 
+	      numberFormat.numberFormat = this.app.generalSettings.get('number-format') || '#,#.#';
+
+		  // If the format pattern doesnt have thousands grouping then ignore 'number-group-separator' param or it will 
+		  // be used by JS to group by thousands (ie: in the 'Others' columns).
+		  if(numberFormat.numberFormat.indexOf(',') !== -1) {			  		  
+			  numberFormat.groupSeparator = this.app.generalSettings.get('number-group-separator') || ',';
+		  } else {
+			  numberFormat.groupSeparator = '';
+		  }
+		  			  
+		  numberFormat.decimalSeparator = this.app.generalSettings.get('number-decimal-separator') || '.';
+		  this.app.generalSettings.numberFormatSettings = numberFormat;		
+		  
+		  this.app.generalSettings.numberDivider = this.app.generalSettings.get('number-divider');		  
+		  if (this.app.generalSettings.numberDivider === 1) {
+			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inunits';
+		  } else if(this.app.generalSettings.numberDivider === 1000) {
+			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inthousands';
+		  } else if(this.app.generalSettings.numberDivider === 1000000) {
+			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inmillions';
+		  }else if(this.app.generalSettings.numberDivider === 1000000000) {
+			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inbillions';
+		  }
+	  }
 
 });
 
-},{"../../ugly/util":47,"../backbone-dash":3,"../charts/chart":9,"./download":36,"jquery":"jquery","underscore":"underscore"}],34:[function(require,module,exports){
+},{"../../ugly/util":44,"../backbone-dash":3,"../charts/chart":9,"./download":34,"jquery":"jquery","underscore":"underscore"}],32:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -4187,7 +3992,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"./chart-aid-predictability":28,"./chart-funding-type":29,"./chart-heatmaps":30,"./chart-tops":32,"underscore":"underscore"}],35:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"./chart-aid-predictability":26,"./chart-funding-type":27,"./chart-heatmaps":28,"./chart-tops":30,"underscore":"underscore"}],33:[function(require,module,exports){
 var BackboneDash = require('../backbone-dash');
 var Filters = require('./filters');
 var Settings = require('./settings');
@@ -4216,7 +4021,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"./filters":38,"./settings":41,"./share":42}],36:[function(require,module,exports){
+},{"../backbone-dash":3,"./filters":36,"./settings":38,"./share":39}],34:[function(require,module,exports){
 var _ = require('underscore');
 var baby = require('babyparse');
 var canvg = require('../../ugly/lib-load-hacks').canvg;
@@ -4345,7 +4150,7 @@ module.exports = BackboneDash.View.extend({
 
   prepareCanvas: function(canvas, h, w) {
 	var self = this;
-	var currency = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')});
+	var currency = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency'));
     var currencyName = currency !== undefined ? currency.value : '';
     var ctx = canvas.getContext('2d'),
     	moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + currencyName,
@@ -4414,7 +4219,7 @@ module.exports = BackboneDash.View.extend({
 
   renderCSV: function(csvContainer) {
 	var self = this;
-	var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+	var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
     var data = this.model.get('processed'),
         currency = currencyName,
         adjtype = this.model.get('adjtype') || false,
@@ -4585,7 +4390,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../../ugly/lib-load-hacks":43,"../../ugly/util":47,"../backbone-dash":3,"../charts/chart":9,"babyparse":48,"underscore":"underscore"}],37:[function(require,module,exports){
+},{"../../ugly/lib-load-hacks":40,"../../ugly/util":44,"../backbone-dash":3,"../charts/chart":9,"babyparse":45,"underscore":"underscore"}],35:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -4607,7 +4412,7 @@ module.exports = BackboneDash.View.extend({
 });
 
 
-},{"../backbone-dash":3,"underscore":"underscore"}],38:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],36:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -4630,11 +4435,12 @@ module.exports = BackboneDash.View.extend({
     this.app = options.app;
     this.listenTo(this.app.filter, 'cancel', this.hideFilter);
     this.listenTo(this.app.filter, 'apply', this.applyFilter);
-    this.app.settings.load().done(_(function() {
+    this.app.generalSettings.load().done(_(function() {
       // Extract default dates from Global Settings.
       var blob = {};
       // AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...)
-      this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
+      
+      this.app.filter.extractDates(this.app.generalSettings, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
 
       this.app.filter.loaded.done(_(function() {
         console.info('filters loaded');
@@ -4744,10 +4550,9 @@ module.exports = BackboneDash.View.extend({
   hideFilterDetails: function() {
     this.renderApplied();
   }
-
 });
 
-},{"../../../../../../../reamp/tools/log":89,"../backbone-dash":3,"underscore":"underscore"}],39:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":98,"../backbone-dash":3,"underscore":"underscore"}],37:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -4774,8 +4579,7 @@ module.exports = BackboneDash.View.extend({
   initialize: function(options) {
     this.app = options.app;
         
-    this.app.settings.load();  // maybe should go in render or something
-                               // but we already do other fetches on init so...
+                                   // but we already do other fetches on init so...
     this.app.user.fetch();
     this.controls = new Controls({ app: this.app });
 
@@ -4900,111 +4704,45 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"../models/charts-collection":21,"../models/enabled-charts-collection":22,"../models/heatmaps-config-collection":23,"./charts":34,"./controls":35,"amp-boilerplate":51,"amp-state/index":86,"underscore":"underscore"}],40:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"../models/charts-collection":21,"../models/enabled-charts-collection":22,"../models/heatmaps-config-collection":23,"./charts":32,"./controls":33,"amp-boilerplate":48,"amp-state/index":95,"underscore":"underscore"}],38:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var logger = require('../../../../../../../reamp/tools/log')('amp:dashboards:settings:modal');
-var template = _.template("<div class=\"tab-content filter-options\">\n  <div class=\"tab-pane active\">\n    <ul class=\"sub-filters-titles nav nav-pills nav-stacked\">\n      <% _(settings.getVisible()).each(function(setting) { %>\n        <li <%= setting.id === current.id ? 'class=\"active\"' : '' %>>\n          <a class=\"setting-select\" href=\"#<%= setting.id %>\"><span><%= setting.get('name') %></span></a>\n        </li>\n      <% }) %>\n    </ul>\n    <div class=\"sub-filters-content\">\n      <select class=\"form-control setting-value\">\n        <% _(current.get('options')).each(function(option) { %>\n          <option value=\"<%= option.id %>\" <%= option.selected ? 'selected=\"selected\"' : '' %>><%= option.name %></option>\n        <% }) %>\n      </select>\n    </div>\n  </div>\n</div>\n<div class=\"modal-footer\">\n\t<button type=\"button\" class=\"btn btn-success apply\" data-i18n=\"amp.dashboard:apply\" data-dismiss=\"modal\">Apply</button>\n    <button type=\"button\" class=\"btn btn-primary\" data-i18n=\"amp.dashboard:close\" data-dismiss=\"modal\">Close</button>\n</div>\n");
-
-
+var template = _.template("<div class=\"col-xs-12 col-sm-6 col-md-3\">\n  <div class=\"panel\">\n    <div class=\"panel-body\">\n      <h3 data-i18n=\"amp.dashboard:dashboard-settings\" class=\"inline-heading\" style=\"max-width: 50px;overflow-x: visible\">Settings</h3>\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right dash-settings-button\">\n        <span class=\"glyphicon glyphicon-edit\"></span>\n        <span data-i18n=\"amp.dashboard:settings-edit\">edit settings</span>\n      </button>\n    </div>\n  </div>\n</div>\n<div id=\"amp-settings\" style=\"display:none;\"></div>\n");
 module.exports = BackboneDash.View.extend({
-
-  events: {
-    'click .setting-select': 'selectSetting',
-    'change .setting-value': 'changeSetting',
-    'click .apply': 'applySettings'
-  },
-
-  initialize: function(options) {
-    this.app = options.app;
-    logger.log("Initialized with", options);
-  },
-
-  render: function() {
-    if (!this.current) {
-      this.current = this.app.settings.getVisible()[0];
-      logger.log("Render requested, but there's no  current setting. Trying to guess it");
-    }
-    this.$el.html(template({
-      settings: this.app.settings,
-      current: this.current
-    }));
-    var that = this;
-    logger.onDebug(function(){
-      logger.log("Rendered width current=", that.current.toJSON());
-    });
-    return this;
-  },
-
-  selectSetting: function(e) {
-    e.preventDefault();  // don't change URL
-    var settingId = e.currentTarget.hash.slice(1);  // removes '#'
-    this.current = this.app.settings.get(settingId);
-    var that = this;
-    logger.onDebug(function(){
-      logger.log("Current setting changed to", that.current.toJSON());
-    });
-    this.render();
-  },
-
-  changeSetting: function(e) {
-    var optionId = e.currentTarget.value;
-    logger.log("Changing", optionId, "setting"); 
-    this.current.select(optionId, false);
-  },
-  
-  applySettings: function(e) {
-	  this.current.apply();
-  }
-});
-
-},{"../../../../../../../reamp/tools/log":89,"../backbone-dash":3,"underscore":"underscore"}],41:[function(require,module,exports){
-
-var _ = require('underscore');
-var BackboneDash = require('../backbone-dash');
-var ModalView = require('./settings-modal');
-var template = _.template("<div class=\"col-xs-12 col-sm-6 col-md-3\">\n  <div class=\"panel\">\n    <div class=\"panel-body\">\n      <h3 data-i18n=\"amp.dashboard:dashboard-settings\" class=\"inline-heading\" style=\"max-width: 50px;overflow-x: visible\">Settings</h3>\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right dash-settings-button\">\n        <span class=\"glyphicon glyphicon-edit\"></span>\n        <span data-i18n=\"amp.dashboard:settings-edit\">edit settings</span>\n      </button>\n    </div>\n  </div>\n</div>\n");
-
-
-module.exports = BackboneDash.View.extend({
-
   events: {
     'click .dash-settings-button': 'editSettings'
   },
-
   initialize: function(options) {
-    this.app = options.app;
-    this.modalView = new ModalView({ app: this.app, collection: this.collection });
-
-    this.app.settings._loaded.done(_(function() {
-      this.app.state.register(this, 'settings', {
-        get: this.app.settings.toAPI,
-        set: this.app.settings.fromState
+    this.app = options.app;    
+    this.app.settingsWidget.definitions.loaded.done(_(function() {
+     this.app.state.register(this, 'settings', {
+        get: this.app.settingsWidget.toAPIFormat,
+        set: this.app.settingsWidget.restoreFromSaved
       });
     }).bind(this));
   },
-
   render: function() {
-    this.$el.html(template());  
+    this.$el.html(template()); 
+    this.app.settingsWidget.setElement(this.el.querySelector('#amp-settings'));
     return this;
   },
-
   editSettings: function() {
-	var specialClass = 'dash-settings-modal';
-    this.app.modal('Settings', {
-      specialClass: specialClass,
-      bodyEl: this.modalView.render().el,
-      i18nTitle: 'amp.dashboard:dashboard-settings'
-    });
-    
-    // Translate modal popup.
-    app.translator.translateDOM($("." + specialClass));
-  }
+	var self = this;
+	this.app.settingsWidget.show();
+	this.$('#amp-settings').show();
+	this.app.settingsWidget.on('close', function() {
+		self.$('#amp-settings').hide();
+	});
+	
+	this.app.settingsWidget.on('applySettings', function() {
+		self.$('#amp-settings').hide();
+	});	
+ }
 
 });
 
-},{"../backbone-dash":3,"./settings-modal":40,"underscore":"underscore"}],42:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],39:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -5061,7 +4799,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],43:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],40:[function(require,module,exports){
 // nvd3 goes global sigh... make sure d3 is already global
 /* TODO: in this version of nvd3 v1.7.1, main is not specified in package.json,
  if we ever upgrade to 1.8+, change this back to just require(nvd3) */
@@ -5079,7 +4817,7 @@ module.exports = {
   canvg: window.canvg
 };
 
-},{"../../../node_modules/nvd3/build/nv.d3":50,"./lib-src/canvg":44,"./lib-src/rgbcolor":45,"./underscore-transpose":46}],44:[function(require,module,exports){
+},{"../../../node_modules/nvd3/build/nv.d3":47,"./lib-src/canvg":41,"./lib-src/rgbcolor":42,"./underscore-transpose":43}],41:[function(require,module,exports){
 /*
  * canvg.js - Javascript SVG parser and renderer on Canvas
  * MIT Licensed 
@@ -8038,7 +7776,7 @@ if (typeof(CanvasRenderingContext2D) != 'undefined') {
     }
 }
 
-},{}],45:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 // dependency for canvg
 /**
  * A class to parse color values
@@ -8331,7 +8069,7 @@ function RGBColor(color_string)
 
 module.exports = RGBColor;
 
-},{}],46:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 var _ = require('underscore');
 
 _.mixin({
@@ -8340,7 +8078,7 @@ _.mixin({
   }
 });
 
-},{"underscore":"underscore"}],47:[function(require,module,exports){
+},{"underscore":"underscore"}],44:[function(require,module,exports){
 // hopefully not that ugly, but seemed as good a place as any for this stuff...
 
 var d3 = require('d3');
@@ -8520,7 +8258,7 @@ module.exports = {
   calculateChartHeight: calculateChartHeight
 };
 
-},{"d3":"d3"}],48:[function(require,module,exports){
+},{"d3":"d3"}],45:[function(require,module,exports){
 /*
 	Baby Parse
 	v0.2.1
@@ -9276,7 +9014,7 @@ module.exports = {
 
 }( typeof window !== 'undefined' ? window : this ));
 
-},{}],49:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /*!
  * numeral.js
  * version : 1.5.3
@@ -9957,7 +9695,7 @@ module.exports = {
     }
 }).call(this);
 
-},{}],50:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 /* nvd3 version 1.7.1(https://github.com/novus/nvd3) 2015-02-05 */
 (function(){
 
@@ -21315,7 +21053,7 @@ nv.models.stackedAreaChart = function() {
 
 nv.version = "1.7.1";
 })();
-},{}],51:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -21394,7 +21132,7 @@ module.exports = {
 };
 window.boilerplate = Widget;
 
-},{"./src/views/header-footer-view.js":57,"./src/views/menu-view.js":58,"amp-translate":87,"backbone":"backbone","bootstrap/dist/js/bootstrap":52,"jquery":"jquery","underscore":"underscore"}],52:[function(require,module,exports){
+},{"./src/views/header-footer-view.js":54,"./src/views/menu-view.js":55,"amp-translate":96,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"jquery":"jquery","underscore":"underscore"}],49:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -23672,7 +23410,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],53:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 var Backbone = require('backbone');
 var MenuModel = require('../models/amp-menus-model.js');
 
@@ -23688,7 +23426,7 @@ module.exports = Backbone.Collection.extend({
 
 });
 
-},{"../models/amp-menus-model.js":55,"backbone":"backbone"}],54:[function(require,module,exports){
+},{"../models/amp-menus-model.js":52,"backbone":"backbone"}],51:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -23705,7 +23443,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],55:[function(require,module,exports){
+},{"backbone":"backbone"}],52:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -23723,7 +23461,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],56:[function(require,module,exports){
+},{"backbone":"backbone"}],53:[function(require,module,exports){
 
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -23753,7 +23491,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],57:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],54:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -23841,7 +23579,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"../models/amp-layout-model.js":54,"backbone":"backbone","bootstrap/dist/js/bootstrap":52,"underscore":"underscore"}],58:[function(require,module,exports){
+},{"../models/amp-layout-model.js":51,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],55:[function(require,module,exports){
 
 var Backbone = require('backbone');
 require('bootstrap/dist/js/bootstrap');
@@ -23946,7 +23684,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../collections/amp-menus-collection.js":53,"../models/amp-menus-model.js":55,"./about-view.js":56,"./submenu-compositeview.js":59,"backbone":"backbone","bootstrap/dist/js/bootstrap":52,"underscore":"underscore"}],59:[function(require,module,exports){
+},{"../collections/amp-menus-collection.js":50,"../models/amp-menus-model.js":52,"./about-view.js":53,"./submenu-compositeview.js":56,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],56:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -24012,9 +23750,9 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
-module.exports=require(52)
-},{"C:\\Git\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":52}],61:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],57:[function(require,module,exports){
+module.exports=require(49)
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],58:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -24338,7 +24076,7 @@ $.extend( $.ui, {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],62:[function(require,module,exports){
+},{"jquery":"jquery"}],59:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 
@@ -26381,7 +26119,7 @@ $.datepicker.version = "1.10.4";
 
 })(jQuery);
 
-},{"./core":61,"jquery":"jquery"}],63:[function(require,module,exports){
+},{"./core":58,"jquery":"jquery"}],60:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 require('./mouse');
@@ -27346,7 +27084,7 @@ $.ui.plugin.add("draggable", "zIndex", {
 
 })(jQuery);
 
-},{"./core":61,"./mouse":64,"./widget":65,"jquery":"jquery"}],64:[function(require,module,exports){
+},{"./core":58,"./mouse":61,"./widget":62,"jquery":"jquery"}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./widget');
 
@@ -27520,7 +27258,7 @@ $.widget("ui.mouse", {
 
 })(jQuery);
 
-},{"./widget":65,"jquery":"jquery"}],65:[function(require,module,exports){
+},{"./widget":62,"jquery":"jquery"}],62:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -28045,7 +27783,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],66:[function(require,module,exports){
+},{"jquery":"jquery"}],63:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 var $ = require('jquery');
@@ -28389,7 +28127,7 @@ module.exports = Backbone.Collection.extend({
 	}
 });
 
-},{"../models/generic-filter-model":72,"../models/org-role-filter-model":73,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],67:[function(require,module,exports){
+},{"../models/generic-filter-model":69,"../models/org-role-filter-model":70,"../models/years-filter-model":72,"../models/years-only-filter-model":73,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],64:[function(require,module,exports){
 
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
@@ -28402,7 +28140,7 @@ module.exports  = Backbone.Collection.extend({
 });
 
 
-},{"../models/setting":74,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],68:[function(require,module,exports){
+},{"../models/setting":71,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],65:[function(require,module,exports){
 /*! jQuery UI - v1.10.4 - 2014-01-17
 * http://jqueryui.com
 * Includes: jquery.ui.datepicker-af.js, jquery.ui.datepicker-ar-DZ.js, jquery.ui.datepicker-ar.js, jquery.ui.datepicker-az.js, jquery.ui.datepicker-be.js, jquery.ui.datepicker-bg.js, jquery.ui.datepicker-bs.js, jquery.ui.datepicker-ca.js, jquery.ui.datepicker-cs.js, jquery.ui.datepicker-cy-GB.js, jquery.ui.datepicker-da.js, jquery.ui.datepicker-de.js, jquery.ui.datepicker-el.js, jquery.ui.datepicker-en-AU.js, jquery.ui.datepicker-en-GB.js, jquery.ui.datepicker-en-NZ.js, jquery.ui.datepicker-eo.js, jquery.ui.datepicker-es.js, jquery.ui.datepicker-et.js, jquery.ui.datepicker-eu.js, jquery.ui.datepicker-fa.js, jquery.ui.datepicker-fi.js, jquery.ui.datepicker-fo.js, jquery.ui.datepicker-fr-CA.js, jquery.ui.datepicker-fr-CH.js, jquery.ui.datepicker-fr.js, jquery.ui.datepicker-gl.js, jquery.ui.datepicker-he.js, jquery.ui.datepicker-hi.js, jquery.ui.datepicker-hr.js, jquery.ui.datepicker-hu.js, jquery.ui.datepicker-hy.js, jquery.ui.datepicker-id.js, jquery.ui.datepicker-is.js, jquery.ui.datepicker-it.js, jquery.ui.datepicker-ja.js, jquery.ui.datepicker-ka.js, jquery.ui.datepicker-kk.js, jquery.ui.datepicker-km.js, jquery.ui.datepicker-ko.js, jquery.ui.datepicker-ky.js, jquery.ui.datepicker-lb.js, jquery.ui.datepicker-lt.js, jquery.ui.datepicker-lv.js, jquery.ui.datepicker-mk.js, jquery.ui.datepicker-ml.js, jquery.ui.datepicker-ms.js, jquery.ui.datepicker-nb.js, jquery.ui.datepicker-nl-BE.js, jquery.ui.datepicker-nl.js, jquery.ui.datepicker-nn.js, jquery.ui.datepicker-no.js, jquery.ui.datepicker-pl.js, jquery.ui.datepicker-pt-BR.js, jquery.ui.datepicker-pt.js, jquery.ui.datepicker-rm.js, jquery.ui.datepicker-ro.js, jquery.ui.datepicker-ru.js, jquery.ui.datepicker-sk.js, jquery.ui.datepicker-sl.js, jquery.ui.datepicker-sq.js, jquery.ui.datepicker-sr-SR.js, jquery.ui.datepicker-sr.js, jquery.ui.datepicker-sv.js, jquery.ui.datepicker-ta.js, jquery.ui.datepicker-th.js, jquery.ui.datepicker-tj.js, jquery.ui.datepicker-tr.js, jquery.ui.datepicker-uk.js, jquery.ui.datepicker-vi.js, jquery.ui.datepicker-zh-CN.js, jquery.ui.datepicker-zh-HK.js, jquery.ui.datepicker-zh-TW.js
@@ -30246,7 +29984,7 @@ jQuery(function($){
 		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['en-GB']);
 });
-},{}],69:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 /*
 
 $.Link (part of noUiSlider) - WTFPL */
@@ -30279,7 +30017,7 @@ b,a)})}function X(a){return this.each(function(){var b=c(this).val(),d=this.dest
 end:"mouseup touchend"},f="noUi-target noUi-base noUi-origin noUi-handle noUi-horizontal noUi-vertical noUi-background noUi-connect noUi-ltr noUi-rtl noUi-dragable  noUi-state-drag  noUi-state-tap noUi-active noUi-extended noUi-stacking".split(" ");c.fn.val=function(){var a=arguments,b=c(this[0]);return arguments.length?this.each(function(){(c(this).hasClass(f[0])?B:C).apply(c(this),a)}):(b.hasClass(f[0])?B:C).call(b)};c.noUiSlider={Link:c.Link};c.fn.noUiSlider=function(a,b){return(b?X:W).call(this,
 a)}})(window.jQuery||window.Zepto);
 
-},{}],70:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -30391,27 +30129,20 @@ _.extend(Widget.prototype, Backbone.Events, {
         end: ''
       };
 
-    var defaultMinDate = _.find(settings, function(item) {
-      return item.get('id') === minName;
-    });
-    if (defaultMinDate !== undefined && defaultMinDate.get('name') !== '') {
-      filtersOut.otherFilters.date.start = defaultMinDate.get('name');
+    var defaultMinDate = settings.get(minName);    
+    if (defaultMinDate !== undefined && defaultMinDate !== '') {
+      filtersOut.otherFilters.date.start = defaultMinDate;
     }
-    var defaultMaxDate = _.find(settings, function(item) {
-      return item.get('id') === maxName;
-    });
-    if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
-      filtersOut.otherFilters.date.end = defaultMaxDate.get('name');
+    var defaultMaxDate = settings.get(maxName);
+    if (defaultMaxDate !== undefined && defaultMaxDate !== '') {
+      filtersOut.otherFilters.date.end = defaultMaxDate;
     }
   }
 
 });
 
-
-
 module.exports = Widget;
-
-},{"./lib/jquery-ui-i18n":68,"./views/filters-view":81,"backbone":"backbone","bootstrap/dist/js/bootstrap":60,"jquery":"jquery","jquery-ui/draggable":63,"underscore":"underscore"}],71:[function(require,module,exports){
+},{"./lib/jquery-ui-i18n":65,"./views/filters-view":78,"backbone":"backbone","bootstrap/dist/js/bootstrap":57,"jquery":"jquery","jquery-ui/draggable":60,"underscore":"underscore"}],68:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -30436,7 +30167,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],72:[function(require,module,exports){
+},{"backbone":"backbone"}],69:[function(require,module,exports){
 var _ = require('underscore');
 
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30590,7 +30321,7 @@ module.exports = BaseFilterModel.extend({
 });
 
 
-},{"../models/base-filter-model":71,"../tree/tree-node-model":77,"underscore":"underscore"}],73:[function(require,module,exports){
+},{"../models/base-filter-model":68,"../tree/tree-node-model":74,"underscore":"underscore"}],70:[function(require,module,exports){
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -30645,7 +30376,7 @@ module.exports = GenericFilterModel.extend({
 });
 
 
-},{"../models/generic-filter-model":72,"../tree/tree-node-model":77,"jquery":"jquery"}],74:[function(require,module,exports){
+},{"../models/generic-filter-model":69,"../tree/tree-node-model":74,"jquery":"jquery"}],71:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({
@@ -30658,7 +30389,7 @@ module.exports = Backbone.Model.extend({
 		
 	}
 });
-},{"backbone":"backbone","underscore":"underscore"}],75:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],72:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30793,7 +30524,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":71,"jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
+},{"../models/base-filter-model":68,"jquery":"jquery","underscore":"underscore"}],73:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30855,7 +30586,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":71,"jquery":"jquery","underscore":"underscore"}],77:[function(require,module,exports){
+},{"../models/base-filter-model":68,"jquery":"jquery","underscore":"underscore"}],74:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TreeNodeModel; // declare here to help with ref loop of collection and model
@@ -31128,7 +30859,7 @@ serialize: function(options) {
 
 module.exports = TreeNodeModel;
 
-},{"backbone":"backbone","underscore":"underscore"}],78:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],75:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -31323,7 +31054,7 @@ var TreeNodeView = Backbone.View.extend({
 
 module.exports = TreeNodeView;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
 var _ = require('underscore');
 
 var extractDates = function(settings, filtersOut, minName, maxName) {
@@ -31351,7 +31082,7 @@ module.exports = {
 		extractDates: extractDates
 }
 
-},{"underscore":"underscore"}],80:[function(require,module,exports){
+},{"underscore":"underscore"}],77:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -31395,7 +31126,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],81:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],78:[function(require,module,exports){
 /**
  * this is the view which renders the big Filter contents (the tabs)
  */
@@ -31851,7 +31582,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"../../../../../reamp/tools/log":89,"../collections/all-filters-collection":66,"../collections/settings-collection":67,"../utils/date-utils":79,"../views/top-level-filter-view":83,"amp-translate":87,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],82:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":98,"../collections/all-filters-collection":63,"../collections/settings-collection":64,"../utils/date-utils":76,"../views/top-level-filter-view":80,"amp-translate":96,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
 
 var _ = require('underscore');
 
@@ -31982,7 +31713,7 @@ module.exports = BaseFilterView.extend({
 });
 
 
-},{"../tree/tree-node-view":78,"../views/base-filter-view":80,"underscore":"underscore"}],83:[function(require,module,exports){
+},{"../tree/tree-node-view":75,"../views/base-filter-view":77,"underscore":"underscore"}],80:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -32118,7 +31849,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../../../../../reamp/tools/log":89,"../collections/settings-collection":67,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"../views/generic-filter-view":82,"../views/years-filter-view":84,"../views/years-only-filter-view":85,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],84:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":98,"../collections/settings-collection":64,"../models/years-filter-model":72,"../models/years-only-filter-model":73,"../views/generic-filter-view":79,"../views/years-filter-view":81,"../views/years-only-filter-view":82,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],81:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -32290,7 +32021,7 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../lib/jquery.nouislider.min.js":69,"../views/base-filter-view":80,"jquery-ui/datepicker":62,"underscore":"underscore"}],85:[function(require,module,exports){
+},{"../lib/jquery.nouislider.min.js":66,"../views/base-filter-view":77,"jquery-ui/datepicker":59,"underscore":"underscore"}],82:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -32358,7 +32089,410 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../views/base-filter-view":80,"underscore":"underscore"}],86:[function(require,module,exports){
+},{"../views/base-filter-view":77,"underscore":"underscore"}],83:[function(require,module,exports){
+module.exports=require(49)
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],84:[function(require,module,exports){
+module.exports=require(58)
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":58,"jquery":"jquery"}],85:[function(require,module,exports){
+module.exports=require(60)
+},{"./core":84,"./mouse":86,"./widget":87,"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":60,"jquery":"jquery"}],86:[function(require,module,exports){
+module.exports=require(61)
+},{"./widget":87,"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":61,"jquery":"jquery"}],87:[function(require,module,exports){
+module.exports=require(62)
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":62,"jquery":"jquery"}],88:[function(require,module,exports){
+var Deferred = require('jquery').Deferred;
+var _ = require('underscore');
+var Backbone = require('backbone');
+var Setting = require('../models/settings-definitions');
+var Config = require('../common/config');
+var Constants = require('../common/constants');
+
+module.exports  = Backbone.Collection.extend({
+	model : Setting,
+	comparator: 'id',
+	firstTime: true,
+	initialize: function(models, options) {
+		this.options = options;
+		this.url = options.definitionUrl;
+		this.app = options.app;
+		this.loaded = new Deferred();
+		_.bindAll(this,'load');
+	},
+	parse: function(settings) {
+		return settings;	    
+	},
+	load: function() {
+		if (this.firstTime) {
+			this.firstTime = false;
+			if (this.loaded.state() !== 'pending') { return this.loaded.promise(); }
+			this.fetch({})
+			.then(_(function() {
+				this.loaded.resolve();
+			}).bind(this))
+			.fail(_(function() {			       
+				this.loaded.reject();
+			}).bind(this));
+		}    
+		return this.loaded.promise();
+	},
+	findCurrencyById: function(id){
+		return _.find(this.get(Constants.CURRENCY_ID).get('value').options, function(option){ return option.id === id });		 
+	},
+	findCalendarById: function(id){
+		return _.find(this.get(Constants.CALENDAR_ID).get('value').options, function(option){ return option.id === id });
+	},
+	findFundingTypeById: function(id){
+		return _.find(this.get(Constants.FUNDING_TYPE_ID).get('value').options, function(option){ return option.id === id });
+	},
+	getCurrencySetting: function(){
+		return this.get(Constants.CURRENCY_ID);
+	},
+	getCalendarSetting: function(){
+		return this.get(Constants.CALENDAR_ID);
+	},	
+	getFundingTypeSetting:function(){
+		return this.get(Constants.FUNDING_TYPE_ID);
+	},
+	getDefaultCurrencyId: function(){
+		return this.getCurrencySetting().get('value').defaultId;
+	},
+	getDefaultCalendarId: function(){
+		return this.getCalendarSetting().get('value').defaultId;
+	},
+	getDefaultFundingTypeById: function(){
+		return this.getFundingTypeSetting().get('value').defaultId;
+	},
+	getSelectedOrDefaultCurrencyId : function() {
+	    return this.app.toAPIFormat()[Constants.CURRENCY_ID] || this.getDefaultCurrencyId();
+	},
+	getSelectedOrDefaultCalendarId : function() {
+		return this.app.toAPIFormat()[Constants.CALENDAR_ID] || this.getDefaultCalendarId();
+	},
+	getSelectedOrDefaultFundingTypeId : function() {
+		return this.app.toAPIFormat()[Constants.FUNDING_TYPE_ID] || this.getDefaultFundingTypeById();
+	}
+});
+
+
+},{"../common/config":89,"../common/constants":90,"../models/settings-definitions":93,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],89:[function(require,module,exports){
+module.exports = {
+	IS_POPUP : true
+};
+
+},{}],90:[function(require,module,exports){
+module.exports = {
+	YEAR_RANGE_ID : 'year-range',
+	CALENDAR_ID : 'calendar-id',
+	CURRENCY_ID : 'currency-code',
+	FUNDING_TYPE_ID : 'funding-type',
+	CALENDAR_CURRENCIES_ID : 'calendar-currencies',
+	YEAR_FROM_ID: "from",
+	YEAR_TO_ID: "to",	
+	CONTEXT : {
+		GIS : 'GIS',
+		DASHBOARDS : 'DASHBOARDS',
+		REPORTS : 'REPORTS',
+		TABS : 'TABS'
+	}
+}
+},{}],91:[function(require,module,exports){
+
+var _ = require('underscore');
+var Backbone = require('backbone');
+//loading hacks
+var jQuery = require('jquery');
+require('jquery-ui/draggable');
+var Config = require('./common/config');
+var Constants = require('./common/constants');
+var SettingsDefinitionsCollection = require('./collections/settings-definitions-collection');
+var SettingsView = require('./views/settings-view');
+var GeneralSettings = require('./models/general-settings');
+//jquery is colliding in GIS module, so we only load it if it is not loaded or if there is a jquery loaded but version is older than 2.x.x
+if (window.$ == undefined || $.fn.jquery.split(' ')[0].split('.')[0] < 2) {
+	window.jQuery = window.$ = Backbone.$ = jQuery;
+}
+var bootstrap_enabled = (typeof $().modal == 'function');
+if (bootstrap_enabled) {
+	require('bootstrap/dist/js/bootstrap');
+}
+
+
+function Widget() {
+	this.initialize.apply(this, arguments);
+}
+
+_.extend(Widget.prototype, Backbone.Events, {	
+	Constants: Constants, //expose constants
+	
+	initialize : function(options) {
+		if (_.isUndefined(options) || _.isUndefined(options.definitionUrl) || _.isUndefined(options.caller)) {
+		    throw new Error('definitionUrl and caller are required for the Settings Widget to function correctly.');
+		}
+		
+		options = _.defaults(options, {
+			draggable : true
+		});		
+		options = _.defaults(options, {
+			isPopup : Config.IS_POPUP
+		});		
+		options.app = this;
+		this.definitions = new SettingsDefinitionsCollection([], options);
+		options.definitions = this.definitions;
+		this.view = new SettingsView(options);
+		this.listenTo(this.view, 'all', function() {
+			this.trigger.apply(this, arguments);
+		});
+		this.definitions.load();
+		_.bindAll(this, 'show', 'toAPIFormat', 'restoreFromSaved', 'setElement');				
+	},
+	show : function() {
+		this.view.render();
+	},
+	toAPIFormat : function() {
+		return this.view.getCurrent();
+	},
+	restoreFromSaved : function(state) {
+		return this.view.restoreFromSaved(state);
+	},
+	setElement : function(arguments) {
+		this.view.setElement(arguments);
+	}	
+});
+module.exports = {SettingsWidget: Widget, GeneralSettings: GeneralSettings}
+window.AMPSettings = {SettingsWidget: Widget, GeneralSettings: GeneralSettings};
+},{"./collections/settings-definitions-collection":88,"./common/config":89,"./common/constants":90,"./models/general-settings":92,"./views/settings-view":94,"backbone":"backbone","bootstrap/dist/js/bootstrap":83,"jquery":"jquery","jquery-ui/draggable":85,"underscore":"underscore"}],92:[function(require,module,exports){
+var Deferred = require('jquery').Deferred;
+var _ = require('underscore');
+var Backbone = require('backbone');
+module.exports = Backbone.Model.extend({
+	url: '/rest/amp/settings',	
+	firstTime: true,
+	initialize: function() {
+		this.loaded = new Deferred();
+		_.bindAll(this,'load');
+	},
+	parse: function(settings){
+	  return settings;
+	},	
+	load: function() {
+		if (this.firstTime) {
+			this.firstTime = false;
+			if (this.loaded.state() !== 'pending') { return this.loaded.promise(); }
+			this.fetch({})
+			.then(_(function() {
+				this.loaded.resolve();
+			}).bind(this))
+			.fail(_(function() {			       
+				this.loaded.reject();
+			}).bind(this));
+		}    
+		return this.loaded.promise();
+	}
+});
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],93:[function(require,module,exports){
+var _ = require('underscore');
+var Backbone = require('backbone');
+module.exports = Backbone.Model.extend({	
+});
+},{"backbone":"backbone","underscore":"underscore"}],94:[function(require,module,exports){
+
+var $ = require('jquery');
+var _ = require('underscore');
+var Backbone = require('backbone');
+var Translator = require('amp-translate');
+var Template = "<% if(obj.isPopup) {%>\r\n<div class=\"panel-heading\">\r\n\t\t\t<button type=\"button\" class=\"close cancel\" aria-hidden=\"true\">x</button>\r\n\t\t\t<h3 class=\"panel-title\" data-i18n=\"amp.settings:title\">Settings</h3>\r\n</div>\r\n<%}%>\r\n<div class=\"panel-body\">\t\t\r\n<div class=\"container-fluid\">\r\n  <div class=\"settings\">\r\n    Loading...\r\n  </div>\r\n  <% if(!obj.isPopup) {%>\r\n  <div class=\"form-group\">\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n  </div>\r\n  <%}%>\r\n</div>\r\n</div>\r\n<% if(obj.isPopup) {%>\r\n<div class=\"panel-footer setting-dialog-footer\">\r\n    <button type=\"button\" class=\"btn btn-warning cancel-btn cancel\" data-i18n=\"amp.settings:cancel-button\">Cancel</button>\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n </div>\r\n <%}%>\r\n \r\n \r\n";
+var SelectTemplate = "<div class=\"form-group\">\n  <label class=\"control-label\"><%= obj.setting.name %></label>\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\n  <% _.each(obj.setting.value.options, function(option){ %>\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings[obj.setting.id];%>\n    <option value=\"<%= option.id %>\"  <% if(selected == option.id){ %> selected <% } %> >\n      <%= option.name %>\n    </option>\n  <%}); %>\n  </select>\n</div>\n";
+var YearRangeTemplate = "<div class=\"form-group\"> \r\n<label ><%= obj.name %></label> \r\n <div class=\"row year-range \"> \r\n \r\n </div>  \r\n</div>";
+var YearSelectTemplate = "<div class=\"col-xs-2\">\r\n   <label ><%= obj.setting.name %></label>\r\n </div>\r\n  <div class=\"col-xs-4\">  \r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n  <% _.each(obj.setting.value.options, function(option){ %>\r\n     <% \r\n     var applied = obj.appliedSettings['year-range'] ? obj.appliedSettings['year-range'][obj.setting.id] : null;\r\n     var selected = obj.settingsSelections[obj.setting.id];     \r\n      %>\r\n    <option value=\"<%= option.id %>\"  <% if((selected || applied) == option.id){ %> selected <% } %> >\r\n      <%= option.name %>\r\n    </option>\r\n  <%}); %>\r\n  </select>  \r\n  </div>";
+var Constants = require('../common/constants');
+
+module.exports = Backbone.View.extend({
+	template : _.template(Template),
+	selectTemplate : _.template(SelectTemplate),
+	yearRangeTemplate : _.template(YearRangeTemplate),
+	yearSelectTemplate : _.template(YearSelectTemplate),
+	events : {
+		'click .apply-btn' : 'applySettings',
+		'change select' : 'optionChanged',
+		'click .cancel' : 'close',
+		'click .close' : 'close'
+	},
+	appliedSettings : {},
+	settingsSelections : {},
+	initialize : function(options) {
+		this.definitions = options.definitions;
+		this.isPopup = options.isPopup;
+		this.caller = options.caller;
+		if (options.translator === undefined) {
+			this.createTranslator(true);
+		} else {
+			this.translator = options.translator;
+		}
+		_.bindAll(this, 'render', 'applySettings', 'updateUI', 'appendSetting', 'appendYearRangeSetting', 'configureUI');
+	},
+	render : function() {
+		var self = this;
+		self.$el.html(self.template({
+			isPopup : this.isPopup
+		}));
+		this.settingsSelections = {};
+		this.definitions.load().done(function() {
+			self.updateUI();
+			self.$el.show();
+		});
+		return this;
+	},
+	configureUI : function() {
+		if (this.isPopup) {
+			this.$el.addClass('panel panel-primary amp-settings-dialog');
+			this.$('.panel-heading').show();
+			this.$('.cancel-settings').show();
+		} else {
+			this.$('.panel-heading').hide();
+			this.$('.cancel-settings').hide();
+		}
+	},
+	updateUI : function() {
+		this.configureUI();
+		this.$('.settings').html('');
+		this.appendSetting(Constants.CALENDAR_ID);
+		this.appendSetting(Constants.CURRENCY_ID);
+		if (this.caller !== Constants.CONTEXT.DASHBOARDS) {
+			this.appendSetting(Constants.FUNDING_TYPE_ID);
+		}
+		this.appendYearRangeSetting();
+		this.translate(this.$el);
+	},
+	appendSetting : function(settingID) {
+		var setting = this.definitions.findWhere({
+			id : settingID
+		});
+		if (setting) {
+			this.$('.settings').append(this.selectTemplate({
+				setting : setting.toJSON(),
+				appliedSettings : this.appliedSettings,
+				settingsSelections: this.settingsSelections
+			}));
+		}
+		if (settingID === Constants.CURRENCY_ID && _.isUndefined(this.allCurrencies)) {
+			this.allCurrencies = setting.get('value').options;
+		}
+	},
+	appendYearRangeSetting : function() {
+		var yearRangeSetting = this.definitions.findWhere({
+			id : Constants.YEAR_RANGE_ID
+		});
+		if (yearRangeSetting) {
+			this.$('.settings').append(this.yearRangeTemplate(yearRangeSetting.toJSON()));
+			this.appendYearSelect(yearRangeSetting, Constants.YEAR_FROM_ID);
+			this.appendYearSelect(yearRangeSetting, Constants.YEAR_TO_ID);
+		}
+	},
+	appendYearSelect : function(yearRangeSetting, settingID) {
+		var setting = _.findWhere(yearRangeSetting.get('value'), {
+			id : settingID
+		});
+		this.$('.year-range').append(this.yearSelectTemplate({
+			setting : setting,
+			appliedSettings : this.appliedSettings,
+			settingsSelections: this.settingsSelections
+		}));
+	},
+	getCurrenciesByCalendar : function(calendarId) {
+		var calendarCurrencies = this.definitions.findWhere({
+			id : Constants.CALENDAR_CURRENCIES_ID
+		});
+		var currencies = [];
+		if (calendarCurrencies) {
+			currencies = _.uniq(_.findWhere(calendarCurrencies.get('value').options, {
+				id : calendarId
+			}).value.split(','));
+		}
+		return currencies;
+	},
+	optionChanged : function(evt) {
+		var self = this;
+		var settingID = $(evt.currentTarget).attr('id');
+		var selectedID = $(evt.currentTarget).val();
+		this.updateSelected(settingID, selectedID);
+		if (settingID === Constants.CALENDAR_ID) {
+			this.updateCurrencyList(selectedID);
+			this.updateUI();
+		}
+	},
+	updateCurrencyList : function(selectedCalendarId) {
+		var self = this;
+		// update currency select when calendar changes
+		var availableCurrenciesForCalendar = self.getCurrenciesByCalendar(selectedCalendarId);
+		self.definitions.get(Constants.CURRENCY_ID).get('value').options = [];
+		$.each(availableCurrenciesForCalendar, function(index, object) {
+			self.definitions.get(Constants.CURRENCY_ID).get('value').options.push(_.find(self.allCurrencies, function(item) {
+				return item.id === object
+			}));
+		});
+		// select first
+		this.updateSelected(Constants.CURRENCY_ID, availableCurrenciesForCalendar[0]);
+	},
+	updateSelected : function(settingID, selectedID) {
+		// store user selections in a temp object - only transfered to the applied settings if the apply button is clicked
+		this.settingsSelections[settingID] = selectedID;
+	},
+	updateAppliedSettings : function() {
+		// transfer user selections to applied settings object
+		var self = this;
+		_.each(this.settingsSelections, function(selectedID, settingID) {
+			if (settingID === Constants.YEAR_FROM_ID || settingID === Constants.YEAR_TO_ID) {
+				if (_.isUndefined(self.appliedSettings[Constants.YEAR_RANGE_ID])) {
+					self.appliedSettings[Constants.YEAR_RANGE_ID] = {};
+				}
+				self.appliedSettings[Constants.YEAR_RANGE_ID][settingID] = selectedID;
+			} else {
+				self.appliedSettings[settingID] = selectedID;
+			}
+		});
+		this.settingsSelections = {};
+	},
+	getCurrent : function() {
+		return this.appliedSettings;
+	},
+	restoreFromSaved : function(state) {
+		var self = this;
+		_.each(state, function(v, k) {
+			self.appliedSettings[k] = v;
+		});
+		this.updateUI();
+	},
+	applySettings : function() {
+		this.updateAppliedSettings();
+		this.trigger('applySettings', this.appliedSettings);
+	},
+	close : function() {
+		this.settingsSelections = {};
+		this.trigger('close');
+	},
+	createTranslator : function(force) {
+		var self = this;
+		var translateKeys = JSON.parse("{\r\n  \"amp.settings:title\": \"Settings\",\r\n  \"amp.settings:label-calendar-type\": \"Calendar\",\r\n  \"amp.settings:label-currency\": \"Currency\",\r\n  \"amp.settings:label-funding-type\": \"Funding Type\",\r\n  \"amp.settings:label-year-range\": \"Year Range\",\r\n  \"amp.settings:apply-button\" : \"Apply\",\r\n  \"amp.settings:cancel-button\": \"Cancel\"   \r\n}");
+		if (force === true || self.translator === undefined) {
+			self.translator = new Translator({
+				defaultKeys : translateKeys
+			});
+		}
+	},
+	translate : function(target) {
+		var element = this;
+		if (target !== undefined) {
+			element = target;
+		}
+		if (element.el !== undefined) {
+			this.translator.translateDOM(element.el);
+		} else {
+			this.translator.translateDOM(element);
+		}
+	}
+
+});
+},{"../common/constants":90,"amp-translate":96,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],95:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -32568,7 +32702,7 @@ _.extend(State.prototype, Backbone.Events, {
 State.StateLoadError = StateLoadError;
 module.exports = State;
 
-},{"backbone":"backbone","underscore":"underscore"}],87:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],96:[function(require,module,exports){
 // TODO: move this up a dir, and instantiate and attach to the app
 
 
@@ -32784,7 +32918,7 @@ function Translator(options) {
 
 module.exports = Translator;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],88:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],97:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -32835,7 +32969,7 @@ _.extend(URL.prototype, Backbone.Events, {
 
 module.exports = URL;
 
-},{"backbone":"backbone","underscore":"underscore"}],89:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],98:[function(require,module,exports){
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

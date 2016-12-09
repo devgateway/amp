@@ -32,9 +32,9 @@ module.exports = ChartViewBase.extend({
 
   getTTContent: function(context) {
 	var ofTotal = app.translator.translateSync("amp.dashboard:of-total","of total");
-	var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
+	var units = app.translator.translateSync(app.generalSettings.numberDividerDescription);
     var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+    var currencyName =  app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
     var percentage = context.y.raw > 0 ?
         d3.format('%')(context.y.raw / this.model.get('totalPositive')) + '</b>&nbsp<span>' + ofTotal:
         "";

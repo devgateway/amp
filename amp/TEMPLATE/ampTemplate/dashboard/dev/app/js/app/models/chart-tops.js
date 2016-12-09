@@ -81,7 +81,7 @@ module.exports = ChartModel.extend({
                 special: 'others'
         };
         //AMP-18740: We changed the EP to send raw numbers expressed in units so we need to apply the GS here.
-    	other.z = common.formatNumber(other.y * parseFloat(app.settings.numberMultiplier.name));
+    	other.z = common.formatNumber(other.y / app.generalSettings.numberDivider);
         values.push(other);
     }
 

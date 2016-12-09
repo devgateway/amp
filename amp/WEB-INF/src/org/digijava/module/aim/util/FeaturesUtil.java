@@ -114,7 +114,7 @@ public class FeaturesUtil {
 	{
 		if (amount == null)
 			return null;
-		return amount * AmountsUnits.getDefaultValue().multiplier;
+		return amount / AmountsUnits.getDefaultValue().divider;
 	}
 
 	public static Double applyThousandsForEntry(Double amount) 

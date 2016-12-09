@@ -133,7 +133,7 @@ module.exports = ChartModel.extend({
 	        	return {
 	        		x: item.x,
 	        		y: item.y,
-	        		z: common.formatNumber(item.y /** parseFloat(app.settings.numberMultiplier.name)*/)
+	        		z: common.formatNumber(item.y /** parseFloat(app.generalSettings.numberDivider)*/)
 	        	};
 	        })
 	        .value()

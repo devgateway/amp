@@ -31,6 +31,11 @@
     padding: 10px 15px;
 }
 
+#settings-popup {
+	z-index: 10000;
+	font-size: 14px !important;
+}
+
 /* The icons used by jquery on Tabs. */
 .ui-state-default .ui-icon {
     background-image: url("images/ui-icons_3383bb_256x240.png");

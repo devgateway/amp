@@ -26,7 +26,7 @@ define([ 'underscore', 'backbone', 'documentModel' ], function(_, Backbone, Docu
 						}
 					}
 				},
-				settings : []
+				settings : {}
 			}
 		}
 	});

@@ -51,8 +51,7 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 }
 
 Filters.prototype.success	= function (o) {
-	if ( o.responseText.length > 2 ) {
-		//this.filterPanel.hide();
+	if (o.responseText.length > 2) {
 		this.filterPanel.setBody( o.responseText );
 		this.filterTabs	= new YAHOO.widget.TabView('tabview_container');
 		
@@ -68,13 +67,54 @@ Filters.prototype.success	= function (o) {
 		YAHOO.util.Event.removeListener("filterPickerSubmitButton", "click");
 		YAHOO.util.Event.addListener( "filterPickerSubmitButton", "click", this.saveFilters.saveFilters, this.saveFilters, this.saveFilters ) ;
 		
-	}
-	else {
-		this.filterPanel.setBody ( "<font color='red'>" + this.filterProblemsMessage + "</font>");
+	} else {
+		this.filterPanel.setBody("<font color='red'>" + this.filterProblemsMessage + "</font>");
 	}
 };
-Filters.prototype.failure	= function (o) {
-	this.filterPanel.setBody( "<font color='red'>" + this.connectionFailureMessage + "</font>");
+
+Filters.prototype.failure = function (o) {
+	var isLogged = false;
+	
+	var getUserInformation = {
+		success : function(o) {
+			var response = [];
+			if (o.responseText !== undefined) {
+				try {
+	                // parse the json data
+					response = YAHOO.lang.JSON.parse(o.responseText);
+					// get the json attribute value of the 'logged' attribute
+					isLogged = response['logged'];
+	            }  catch (x) {
+	            	alert("Error occured: " + x);
+	            	return;
+	            }
+			}
+		},
+		failure : function(o) {
+			alert("The URL is unreachble " + o.responseText);
+		}
+	};
+	
+	// get the information about the user 
+	YAHOO.util.Connect.asyncRequest("GET", "/rest/security/layout", getUserInformation);
+	
+	if (isLogged) {
+		// could be some connection issues
+		this.filterPanel.setBody("<font color='red'>" + this.filterProblemsMessage + "</font>");
+	} else {
+		// timeout to redirect
+		var timeout = 5;
+		
+		// build the error message
+		var errorMessage = "<font color='red'><digi:trn jsFriendly='true'>The user is logged out</digi:trn>. ";
+		errorMessage +="<digi:trn jsFriendly='true'>You will be redirected in</digi:trn> " + timeout + " <digi:trn jsFriendly='true'>seconds</digi:trn></font>.";
+		
+		this.filterPanel.setBody(errorMessage);
+		
+		var timer = setTimeout(function() {
+			window.location = '/aim/index.do'
+		}, timeout * 1000);
+	}
 };
 
 Filters.prototype.showFilters	= function(reportContextId) {

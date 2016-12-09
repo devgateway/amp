@@ -1897,6 +1897,16 @@ public class TeamUtil {
  	 	}
  	 	return retValue;
     }
+
+    /**
+     * Uses {@link TLSUtils} to get the current user from session. If there is no user authenticated then this
+     * method returns null.
+     *
+     * @return user
+     */
+    public static User getCurrentUser(){
+        return (User) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_USER);
+    }
     
     /**
      * uses {@link TLSUtils} to get the current request's current member

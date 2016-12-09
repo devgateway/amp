@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -13,6 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -65,6 +68,7 @@ public class SecurityUtil {
 		
 		TLSUtils.getRequest().getSession().setAttribute(USER_TOKEN, apiToken);
 		apiToken.setTeamMember((TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER));
+		apiToken.setUser((User) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_USER));
 		tokens.put(token, apiToken);
 		TLSUtils.getRequest().getServletContext().setAttribute(SecurityUtil.TOKENS, tokens);
 		
@@ -138,12 +142,12 @@ public class SecurityUtil {
 		} else {
 			// If the user has a token in session and the token is valid we will
 			// use that session
-			if (TLSUtils.getRequest().getSession() != null
-					&& TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER) != null) {
+			HttpServletRequest request = TLSUtils.getRequest();
+			HttpSession session = request.getSession();
+			if (session.getAttribute(Constants.CURRENT_MEMBER) != null) {
 				// we check if the user has a token in session and that token is
 				// valid
-				AmpApiToken sessionAapiToken = (AmpApiToken) TLSUtils
-						.getRequest().getSession().getAttribute(USER_TOKEN);
+				AmpApiToken sessionAapiToken = (AmpApiToken) session.getAttribute(USER_TOKEN);
 				if (sessionAapiToken == null) {
 					// the user is logged in but without token
 					error=SecurityErrors.NO_SESSION_TOKEN;
@@ -174,12 +178,10 @@ public class SecurityUtil {
 						error = SecurityErrors.TOKEN_EXPIRED;
 					} else {
 						// we restore the session
-						TLSUtils.getRequest()
-								.getSession()
-								.setAttribute(Constants.CURRENT_MEMBER,
-										apiToken.getTeamMember());
+						session.setAttribute(Constants.CURRENT_USER, apiToken.getUser());
+						session.setAttribute(Constants.CURRENT_MEMBER, apiToken.getTeamMember());
 						//session restored adding a request parameter to remove it later
-						TLSUtils.getRequest().setAttribute(REMOVE_SESSION, "true");
+						request.setAttribute(REMOVE_SESSION, "true");
 					}
 				}
 

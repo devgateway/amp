@@ -40,7 +40,7 @@ public class ActionAuthorizer {
 			return;
 		}
 			
-		if (contains(apiMethod.authTypes(), AuthRule.AUTHENTICATED) && TeamUtil.getCurrentMember() == null) {
+		if (contains(apiMethod.authTypes(), AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
 			ApiErrorResponse.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
 			return;
 		}

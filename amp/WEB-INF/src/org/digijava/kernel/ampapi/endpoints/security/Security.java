@@ -192,6 +192,7 @@ public class Security implements ErrorReportingEndpoint {
 		if(teamMember != null) {
 			session.setAttribute(Constants.CURRENT_MEMBER, teamMember.toTeamMember());
 		}
+		session.setAttribute(Constants.CURRENT_USER, user);
 		session.setAttribute("ampAdmin", user.isGlobalAdmin() ? "yes": "no");
 	}
 

@@ -185,7 +185,7 @@ public class CurrencyService {
 	public static JsonBean getInflationRatesFromSource(Long sourceId) {
 		AmpInflationSource ds = CurrencyInflationUtil.getInflationDataSource(sourceId);
 		if (ds == null) {
-			return ApiError.toError(new ApiErrorMessage(CurrencyErrors.INVALID_SOURCE_ID, String.valueOf(sourceId)));
+			return ApiError.toError(CurrencyErrors.INVALID_SOURCE_ID.withDetails(String.valueOf(sourceId)));
 		}
 		JsonBean result = null;
 		switch (ds.getName()) {

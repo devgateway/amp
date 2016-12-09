@@ -37,7 +37,7 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
      */
     public ApiErrorMessage getApiErrorMessageFromException(Throwable e) {
     	String message = extractMessageFromException(e);
-        return new ApiErrorMessage(INTERNAL_ERROR, message);
+        return INTERNAL_ERROR.withDetails(message);
     }
 
     private String extractMessageFromException(Throwable e) {

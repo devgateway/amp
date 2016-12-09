@@ -61,7 +61,7 @@ public class PossibleValuesEnumerator {
 			Field field = InterchangeUtils.getPotentiallyDiscriminatedField(clazz, fieldName);
 			if (field == null) {
 				List<JsonBean> result = new ArrayList<JsonBean>();
-				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
+				result.add(ApiError.toError(ActivityErrors.FIELD_INVALID.withDetails(fieldName)));
 				return result;
 			}
 			
@@ -81,7 +81,7 @@ public class PossibleValuesEnumerator {
 			Field finalField =  InterchangeUtils.getPotentiallyDiscriminatedField(clazz, longFieldName);
 			if (finalField == null) {
 				List<JsonBean> result = new ArrayList<JsonBean>();
-				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, longFieldName)));
+				result.add(ApiError.toError(ActivityErrors.FIELD_INVALID.withDetails(longFieldName)));
 				return result;
 			} else {
 				String configString = discriminatorOption == null? null : discriminatorOption;
@@ -95,12 +95,12 @@ public class PossibleValuesEnumerator {
 						return getPossibleValuesDirectly(discClass);
 				} catch(ClassNotFoundException exc) {
 					List<JsonBean> result = new ArrayList<JsonBean>();
-					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.DISCRIMINATOR_CLASS_NOT_FOUND, exc.getMessage())));
+					result.add(ApiError.toError(ActivityErrors.DISCRIMINATOR_CLASS_NOT_FOUND.withDetails(exc.getMessage())));
 					return result;
 				} catch (InvocationTargetException | IllegalArgumentException | IllegalAccessException 
 						| SecurityException  | NoSuchMethodException | InstantiationException e) {
 					List<JsonBean> result = new ArrayList<JsonBean>();
-					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR, e.getMessage())));
+					result.add(ApiError.toError(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR.withDetails(e.getMessage())));
 					return result;
 				}				
 				if (InterchangeUtils.isCompositeField(finalField) || configString != null) {

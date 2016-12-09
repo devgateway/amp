@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -25,7 +24,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -479,7 +477,7 @@ public class EndpointUtils {
 		}
 		ApiErrorMessage existing = generalErrors.get(error.id);
 		if (existing != null) {
-			error = new ApiErrorMessage(existing, error.value);
+			error = existing.withDetails(error.values);
 		}
 		generalErrors.put(error.id, error);
 	}

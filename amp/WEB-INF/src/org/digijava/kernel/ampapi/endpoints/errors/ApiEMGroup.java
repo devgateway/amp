@@ -22,7 +22,7 @@ public class ApiEMGroup {
 	public void add(ApiEMGroup anotherErrors) {
 	    for (ApiErrorMessage em: anotherErrors.getAllErrors()) {
 	        if (errorGroups.containsKey(em.id)) {
-	            em = new ApiErrorMessage(errorGroups.get(em.id), em.value);
+	            em = errorGroups.get(em.id).withDetails(em.values);
 	        }
 	        errorGroups.put(em.id, em);
 	    }
@@ -39,9 +39,9 @@ public class ApiEMGroup {
 	 */
 	public void addApiErrorMessage(ApiErrorMessage aemTemplate, String value) {
 		if (errorGroups.containsKey(aemTemplate.id)) {
-			aemTemplate = new ApiErrorMessage(errorGroups.get(aemTemplate.id), value);
+			aemTemplate = errorGroups.get(aemTemplate.id).withDetails(value);
 		} else {
-			aemTemplate = new ApiErrorMessage(aemTemplate, value);
+			aemTemplate = aemTemplate.withDetails(value);
 		}
 		errorGroups.put(aemTemplate.id, aemTemplate);
 	}

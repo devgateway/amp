@@ -146,6 +146,7 @@ public class LuceneUtil implements Serializable {
 
     private static final boolean SEACH_TYPE_FUZZY = true;
     private static final float MINIMUM_SIMILARITY = 0.5f;
+    private static final float MINIMUM_SIMILARITY_TO_NUMBERS = 0.99f;
 
     public static AmpLuceneIndexStamp getIdxStamp(String name) throws Exception{
         logger.info("Getting lucene index stamp for index name: " + name);
@@ -1234,11 +1235,26 @@ public class LuceneUtil implements Serializable {
     private static List<FuzzyQuery> buildFuzzyQueryList(String searchString, QueryParser parser) {
         searchString = parser.escape(searchString);
         List<FuzzyQuery> fuzzyTerms = new ArrayList<FuzzyQuery>();
-        float minimumSimilarity = getMinimumSimilarity();
         for (String word : searchString.split(" ")) {
-            if (StringUtils.isNotBlank(word)) {
-                FuzzyQuery q = new FuzzyQuery(new Term(parser.getField(), StringUtils.lowerCase(word)), minimumSimilarity);
-                fuzzyTerms.add(q);
+            if (StringUtils.isNotBlank(word) && word.length() > 1) {
+                FuzzyQuery fuzzyQuery = null;
+                try {
+                    Query query = parser.parse(word);
+                    if (query instanceof PhraseQuery) {
+                        if (((PhraseQuery) query).getTerms() != null) {
+                            for (Term term : ((PhraseQuery) query).getTerms()) {
+                                fuzzyQuery = new FuzzyQuery(term, getMinimumSimilarity(term.text()));
+                                fuzzyTerms.add(fuzzyQuery);
+                            }
+                        }
+                    } else {
+                        fuzzyQuery = new FuzzyQuery(new Term(parser.getField(), StringUtils.lowerCase(word)), getMinimumSimilarity(word));
+                        fuzzyTerms.add(fuzzyQuery);
+                    }
+                } catch (ParseException e) {
+                    logger.error("Error while building fuzzy query list");
+                    throw new RuntimeException("Error while building fuzzy query list", e);
+                }
             }
         }
         return fuzzyTerms;
@@ -1248,7 +1264,11 @@ public class LuceneUtil implements Serializable {
         return SEACH_TYPE_FUZZY;
     }
 
-    private static float getMinimumSimilarity() {
+    private static float getMinimumSimilarity(String word) {
+        boolean isNumeric = word.chars().allMatch(Character::isDigit);
+        if (isNumeric) {
+            return MINIMUM_SIMILARITY_TO_NUMBERS;
+        }
         return MINIMUM_SIMILARITY;
     }
 

@@ -56,7 +56,7 @@ public class DependencyValidator extends InputValidator {
 	
 	@Override
 	public ApiErrorMessage getErrorMessage() {
-		return new ApiErrorMessage(ActivityErrors.DEPENDENCY_NOT_MET, Joiner.on("; ").join(errors) );
+		return ActivityErrors.DEPENDENCY_NOT_MET.withDetails(errors);
 	}
 
 }

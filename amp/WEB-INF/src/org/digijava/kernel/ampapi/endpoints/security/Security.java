@@ -240,7 +240,7 @@ public class Security implements ErrorReportingEndpoint {
 		SiteDomain currentDomain = RequestUtils.getSiteDomain(httpRequest);
 		String siteUrl = SiteUtils.getSiteURL(currentDomain, httpRequest.getScheme(), httpRequest.getServerPort(), httpRequest
 				.getContextPath());
-		JsonBean layout = SecurityService.getFooter(httpRequest.getServletContext().getRealPath("/")+SITE_CONFIG_PATH,siteUrl,isAdmin);
+		JsonBean layout = SecurityService.getFooter(siteUrl,isAdmin);
 		if (tm != null) {
 			Site site = RequestUtils.getSite(TLSUtils.getRequest());
 			User u;

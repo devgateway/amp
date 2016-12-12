@@ -1,8 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -25,8 +29,26 @@ import com.sun.jersey.spi.container.ContainerRequest;
  * @author Nadejda Mandrescu
  */
 public class ActionAuthorizer {
+
 	protected static final Logger logger = Logger.getLogger(ActionAuthorizer.class);
-	
+
+	private static Map<AuthRule, List<AuthRule>> requiredRules = new HashMap<>();
+
+	static {
+		addRuleDependency(AuthRule.IN_WORKSPACE, AuthRule.AUTHENTICATED);
+		addRuleDependency(AuthRule.IN_ADMIN, AuthRule.AUTHENTICATED);
+		addRuleDependency(AuthRule.ADD_ACTIVITY, AuthRule.IN_WORKSPACE);
+		addRuleDependency(AuthRule.VIEW_ACTIVITY, AuthRule.IN_WORKSPACE);
+		addRuleDependency(AuthRule.EDIT_ACTIVITY, AuthRule.IN_WORKSPACE);
+	}
+
+	private static void addRuleDependency(AuthRule requestedRule, AuthRule requiredRule) {
+		if (!requiredRules.containsKey(requestedRule)) {
+			requiredRules.put(requestedRule, new ArrayList<>());
+		}
+		requiredRules.get(requestedRule).add(requiredRule);
+	}
+
 	/**
 	 * Main process to give authorization to call current method based on its authorization rules 
 	 * @param method the method to authorize
@@ -39,18 +61,20 @@ public class ActionAuthorizer {
 			// no authorization -> nothing to check, skip immediately
 			return;
 		}
-			
-		if (contains(apiMethod.authTypes(), AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
+
+		Set<AuthRule> authRules = getEffectiveRules(apiMethod.authTypes());
+
+		if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
 			ApiErrorResponse.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
 			return;
 		}
 
 		String methodInfo = String.format("%s %s.%s, authType = %s", containerReq.getMethod(),
-				method.getDeclaringClass().getSimpleName(), method.getName(), Arrays.toString(apiMethod.authTypes()));
+				method.getDeclaringClass().getSimpleName(), method.getName(), authRules);
 
 		Map<Integer, ApiErrorMessage> errors = new TreeMap<>();
 		
-		for (AuthRule authType : apiMethod.authTypes()) {
+		for (AuthRule authType : authRules) {
 			switch (authType) {
 			case NONE:
 				addError(methodInfo, errors, SecurityErrors.INVALID_API_METHOD, "Mixed authorization with NO authorization");
@@ -88,15 +112,26 @@ public class ActionAuthorizer {
 	}
 
 	/**
-	 * Returns true if object is present in the array.
+	 * Computes effective rules based on requested rules.
+	 *
+	 * @param requestedRules auth rules requested
+	 * @return effective auth rules
 	 */
-	private static <T extends Enum<T>> boolean contains(T[] array, T obj) {
-		for (T item : array) {
-			if (item == obj) {
-				return true;
+	private static Set<AuthRule> getEffectiveRules(AuthRule[] requestedRules) {
+		Set<AuthRule> effectiveRules = new HashSet<>();
+		for (AuthRule rule : requestedRules) {
+			addDependentRules(effectiveRules, rule);
+		}
+		return effectiveRules;
+	}
+
+	private static void addDependentRules(Set<AuthRule> authRules, AuthRule rule) {
+		authRules.add(rule);
+		if (requiredRules.containsKey(rule)) {
+			for (AuthRule depRule : requiredRules.get(rule)) {
+				addDependentRules(authRules, depRule);
 			}
 		}
-		return false;
 	}
 
 	/**

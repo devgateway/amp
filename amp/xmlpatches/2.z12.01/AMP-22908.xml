@@ -16,15 +16,21 @@
 							WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname LIKE 'Overage Project'))
 						AND amp_report_id IN (
 						SELECT amp_report_id FROM amp_report_column 
-							WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname LIKE 'Overage')
-						);
+							WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname LIKE 'Overage'))
+						AND columnid IN (SELECT columnid FROM amp_columns WHERE columnname LIKE 'Overage');
+						
 				DELETE FROM amp_report_column WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname LIKE 'Overage');
+				
 				DELETE FROM amp_report_hierarchy WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname LIKE 'Overage');
+				
 				DELETE FROM amp_columns WHERE columnname LIKE 'Overage';
+				
 				DROP VIEW IF EXISTS v_overage;
+				
 				DELETE FROM amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name IN ('Overage'));
 				
-				DELETE FROM amp_fields_visibility WHERE name IN ('Overage');				
+				DELETE FROM amp_fields_visibility WHERE name IN ('Overage');
+					
 			</lang>
 		</script>
 	</apply>

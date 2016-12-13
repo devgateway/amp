@@ -123,7 +123,8 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     public final List<SettingField> getSettingDefinitionsForTabs() {
         return Arrays.asList(
                 getCurrencyField(),
-                getCalendarField());
+                getCalendarField(),
+                getCalendarCurrenciesField());
     }
 
     @Override

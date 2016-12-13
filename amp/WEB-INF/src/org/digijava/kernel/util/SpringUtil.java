@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.util;
+package org.digijava.kernel.util;
 
 import javax.servlet.ServletContext;
 

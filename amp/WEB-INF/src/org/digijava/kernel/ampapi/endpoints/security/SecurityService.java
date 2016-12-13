@@ -10,7 +10,7 @@ import org.dgfoundation.amp.menu.MenuUtils;
 import org.digijava.kernel.services.AmpVersionInfo;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.util.SpringUtil;
+import org.digijava.kernel.util.SpringUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.translator.TranslatorWorker;

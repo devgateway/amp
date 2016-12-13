@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.endpoints.util.SpringUtil;
+import org.digijava.kernel.util.SpringUtil;
 import org.digijava.kernel.services.AmpVersionService;
 
 /**

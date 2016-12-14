@@ -29,7 +29,8 @@ import org.digijava.module.aim.helper.TeamMember;
 
 /**
  * AMP Activity Endpoints for Activity Import / Export
- * 
+ *
+ * @implicitParam X-Auth-Token|string|header
  * @author acartaleanu
  */
 @Path("activity")

@@ -19,6 +19,9 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 
+/**
+ * @implicitParam X-Auth-Token|string|header
+ */
 @Path("currency")
 public class Currencies implements ErrorReportingEndpoint {
 	

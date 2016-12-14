@@ -353,6 +353,7 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
      *   “layersIds” : [5,10,11 23, ...]
      * }
      * </pre>
+     * @implicitParam X-Auth-Token|string|header
      * @return no content or errors
      */
     @POST

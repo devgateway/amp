@@ -1506,7 +1506,7 @@
                                     <docletArtifact>
                                         <groupId>com.carma</groupId>
                                         <artifactId>swagger-doclet</artifactId>
-                                        <version>1.0.4.2</version>
+                                        <version>1.0.6</version>
                                     </docletArtifact>
                                     <sourcepath>${project.basedir}/WEB-INF/src/org/digijava/kernel/ampapi</sourcepath>
                                     <reportOutputDirectory>${project.build.outputDirectory}</reportOutputDirectory>

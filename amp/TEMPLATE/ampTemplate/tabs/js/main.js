@@ -16,8 +16,6 @@ require.config({
 		 * 'lib/jqgrid-4.6.0/js2/jquery.jqGrid.src',
 		 */
 		jqgrid : 'lib/one_place/jqgrid-all',		
-		settings : '/TEMPLATE/ampTemplate/node_modules/amp-settings/dist/amp-settings',
-		filtersWidget : '/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter',
 		translationManager: '/TEMPLATE/ampTemplate/script/common/TranslationManager',
 		commonFilterUtils : '/TEMPLATE/ampTemplate/script/common/CommonFilterUtils', 
 		i18next : 'lib/i18next_1.6.3.min',

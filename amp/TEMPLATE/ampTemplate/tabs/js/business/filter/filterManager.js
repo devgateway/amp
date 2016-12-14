@@ -1,5 +1,5 @@
-define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUtils', 'jquery','underscore' ], function(
-		FiltersWidget, GridManager, FilterUtils, jQuery,_) {
+define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','underscore' ], function(
+		 GridManager, FilterUtils, jQuery,_) {
 
 	"use strict";
 
@@ -18,7 +18,7 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 		var container = jQuery(containerName);
 
 		// Create the FilterWidget instance.
-		app.TabsApp.filtersWidget = new FiltersWidget({
+		app.TabsApp.filtersWidget = new ampFilter({
 			el : containerName,
 			draggable : true,
 			caller: 'TAB'

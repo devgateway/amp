@@ -1,6 +1,6 @@
 define(['marionette', 'translationManager',
-		'business/grid/gridManager', 'models/legend', 'jquery','settings'], function(Marionette,
-		TranslationManager, GridManager, Legend, jQuery, Settings) {
+		'business/grid/gridManager', 'models/legend', 'jquery'], function(Marionette,
+		TranslationManager, GridManager, Legend, jQuery) {
 
 	"use strict";
 	
@@ -15,7 +15,7 @@ define(['marionette', 'translationManager',
 	};
 
 	SettingsManager.initialize = function() {
-		app.TabsApp.settingsWidget = new Settings.SettingsWidget({
+		app.TabsApp.settingsWidget = new AMPSettings.SettingsWidget({
 			el : '#settings-popup',
 			draggable : true,
 			caller : 'TABS',
@@ -33,7 +33,7 @@ define(['marionette', 'translationManager',
 			$('#settings-popup').hide();
 		});
 		
-		app.TabsApp.generalSettings = new Settings.GeneralSettings();
+		app.TabsApp.generalSettings = new AMPSettings.GeneralSettings();
 		app.TabsApp.generalSettings.load()
 	};
 

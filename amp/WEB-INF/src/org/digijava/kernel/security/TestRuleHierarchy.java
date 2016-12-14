@@ -1,9 +1,10 @@
-package org.digijava.kernel.ampapi.endpoints.security;
+package org.digijava.kernel.security;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.digijava.kernel.security.RuleHierarchy;
 import org.junit.Assert;
 import org.junit.Test;
 

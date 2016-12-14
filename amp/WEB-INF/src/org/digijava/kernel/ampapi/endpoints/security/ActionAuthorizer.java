@@ -12,6 +12,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.security.RuleHierarchy;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.TeamUtil;
 

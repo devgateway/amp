@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.security;
+package org.digijava.kernel.security;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,10 +15,10 @@ import java.util.Set;
  */
 public class RuleHierarchy<T> {
 
-    private final Map<T, Set<T>> effectiveRules;
+    private final Map<T, Set<T>> reachableInOneOrMoreStepsRules;
 
-    private RuleHierarchy(Map<T, Set<T>> effectiveRules) {
-        this.effectiveRules = effectiveRules;
+    private RuleHierarchy(Map<T, Set<T>> reachableInOneOrMoreStepsRules) {
+        this.reachableInOneOrMoreStepsRules = reachableInOneOrMoreStepsRules;
     }
 
     /**
@@ -31,8 +31,8 @@ public class RuleHierarchy<T> {
         Set<T> response = new HashSet<>();
         for (T rule : rules) {
             response.add(rule);
-            if (effectiveRules.containsKey(rule)) {
-                response.addAll(effectiveRules.get(rule));
+            if (reachableInOneOrMoreStepsRules.containsKey(rule)) {
+                response.addAll(reachableInOneOrMoreStepsRules.get(rule));
             }
         }
         return response;
@@ -51,16 +51,16 @@ public class RuleHierarchy<T> {
         }
 
         public RuleHierarchy<T> build() {
-            Map<T, Set<T>> rules = new HashMap<>();
+            Map<T, Set<T>> reachableRules = new HashMap<>();
 
             for (T rule : reachableInOneStepRules.keySet()) {
-                rules.put(rule, getReachableRules(rule));
+                reachableRules.put(rule, computeReachableRules(rule));
             }
 
-            return new RuleHierarchy<>(rules);
+            return new RuleHierarchy<>(reachableRules);
         }
 
-        private Set<T> getReachableRules(T rule) {
+        private Set<T> computeReachableRules(T rule) {
             Queue<T> queue = new LinkedList<>();
             queue.add(rule);
             Set<T> reachableRules = new HashSet<>();

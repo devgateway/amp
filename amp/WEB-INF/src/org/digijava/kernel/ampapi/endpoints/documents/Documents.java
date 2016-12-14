@@ -1,7 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.documents;
 
-import java.io.IOException;
-import java.util.Collection;
+import org.apache.log4j.Logger;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
+import org.digijava.module.aim.util.DesktopDocumentsUtil;
+import org.digijava.module.contentrepository.helper.DocumentData;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,13 +14,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
-import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.digijava.module.aim.util.DesktopDocumentsUtil;
-import org.digijava.module.contentrepository.helper.DocumentData;
+import java.io.IOException;
+import java.util.Collection;
 
 @Path("documents")
 public class Documents {
@@ -29,6 +28,18 @@ public class Documents {
 	@Context
 	private HttpServletResponse httpResponse;
 
+	/**
+	 * Retrieve a list of top documents.
+	 * </br>
+	 * <dl>
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
+	 * </pre>
+	 *
+	 * @return nothing or error
+	 */
 	@GET
 	@Path("/getTopDocuments")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

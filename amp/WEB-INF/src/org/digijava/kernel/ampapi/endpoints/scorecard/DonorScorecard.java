@@ -1,27 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.scorecard;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.StreamingOutput;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
@@ -38,6 +16,27 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 /**
  * This class should have all endpoints related to the Donor Scorecard -
  * AMP-20002
@@ -49,6 +48,18 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 @Path("scorecard")
 public class DonorScorecard {
 
+
+	/**
+	 * Retrieve an excel file with all the quarters, desired period, donors and the updated projects.
+	 * </br>
+	 * <dl>
+	 * Creates an excel workbook having the headers with all the Quarters spanning the desired period,
+	 * the donors as columns and each cell (for a given donor and quarter) painted with a color depending on the number
+	 * of updated projects for a given donor on a quarter.
+	 * </dl></br></br>
+	 *
+	 * @return StreamingOutput with the excel file
+	 */
 	@GET
 	@Path("/export")
 	@Produces("application/vnd.ms-excel")
@@ -76,8 +87,24 @@ public class DonorScorecard {
 	}
 	
 	/**
-	 * Service used to show Audit Logger Quick View (AMP-20004). 
-	 * Produces a JsonObject with the numbers {oranizations, projects, users}
+	 * Retrieve a quick view of the audit logger .
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>oranizations</b><dd> - the count of active organisations for the past quarter
+	 * <dt><b>projects</b><dd> - the count of projects with action in the past quarter
+	 * <dt><b>users</b><dd> - the count of users logged into the System in the past quarter
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
+	 * {
+	 *   "organizations": 52,
+	 *   "projects": 181,
+	 *   "users": 23
+	 * }</pre>
+	 *
+	 * @return a JSON object with the numbers {oranizations, projects, users}
 	 */
 	@GET
 	@Path("/quickStats")
@@ -94,7 +121,29 @@ public class DonorScorecard {
 	}
 	
 	/**
-	 * Service used to save the donor scorecard settings. Consumes a JsonObject with the fields of settings.
+	 * Save the donor scorecard settings.
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>oranizations</b><dd> - the number of organizations
+	 * <dt><b>projects</b><dd> - the number of projects
+	 * <dt><b>users</b><dd> - the number of users
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Input:</h3><pre>
+	 *{
+	 *    "validationPeriod": true,
+	 *    "percentageThreshold": 10,
+	 *    "validationTime": 5,
+	 *    "categoryValues": [{
+	 *       "id": 1
+	 *    }]
+	 *}</pre>
+	 *
+	 * @param settingsBean a JSONObject with the fields of settings
+	 *
+	 * @return empty or a string with the error
 	 */
 	@POST
 	@Path("/manager/settings")
@@ -148,7 +197,20 @@ public class DonorScorecard {
 	}
 	
 	/**
-	 * Service used to save the noUpdate donors. Consumes a JsonObject with the list of donors.
+	 * Save the noUpdate donors.
+	 * </br>
+	 * <dl>
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Input:</h3><pre>
+	 * {
+	 *   "donorsNoUpdates": [26]
+	 * }</pre>
+	 *
+	 * @param donorsBean a JSONObject with the list of donors.
+	 *
+	 * @return empty or a string with the error
 	 */
 	@POST
 	@Path("/manager/donors/noupdates")
@@ -180,11 +242,46 @@ public class DonorScorecard {
 		
 		return message;
 	}
-	
+
 	/**
-	 * Returns a json object with the list of the filtered donors
-	 * @param jsonObject - filter with a list of donors
-	 * @return jsonObject - list of the filtered donors (key = allFilteredDonors) and noupdate donors (key = noUpdatesFilteredDonors)
+	 * Retrieve and provide a list of the filtered donors.
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>allFilteredDonors</b><dd> - the list of the filtered donors
+	 * <dt><b>noUpdatesFilteredDonors</b><dd> - the list of noupdate donors
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Input:</h3><pre>
+	 * {
+	 *    "donorIds": [671]
+	 * }</pre>
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
+	 * {
+	 *   "allFilteredDonors": [
+	 *     {
+	 *       "id": 22,
+	 *       "name": "Irish Aid"
+	 *     },
+	 *     {
+	 *       "id": 1640,
+	 *       "name": "Anti-Crime Capacity Building Program"
+	 *     },
+	 * 	...
+	 *   ],
+	 *   "noUpdatesFilteredDonors": [
+	 *     {
+	 *       "id": 26,
+	 *       "name": "Irish Aid"
+	 *     }
+	 *   ]
+	 * }</pre>
+	 *
+	 * @param donorsBean a JSONObject with a list of donors
+	 *
+	 * @return a JSON object with a list of the filtered donors
 	 */
 	@POST
 	@Path("/manager/donors/filtered")
@@ -246,10 +343,48 @@ public class DonorScorecard {
 		
 		return jsonBean;
 	}
-	
+
 	/**
-	 * Returns a json object with the list of all the donors. Used for filter tree in Donor Scorecard Manager. 
-	 * @return JsonBean allDonors. The format of the json object { key : [string], title : [string], folder [true|false], children : [array]"
+	 * Retrieve and provide a list of all the donors.
+	 * </br>
+	 * <dl>
+	 * Used for filter tree in Donor Scorecard Manager.
+	 * The JSON object holds information regarding:
+	 * <dt><b>key</b><dd> - the key of the donor
+	 * <dt><b>title</b><dd> - the title of the donors
+	 * <dt><b>folder</b><dd> - true|false
+	 * <dt><b>children</b><dd> - array or childres with the same structure than the donors JSON
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
+	 * {
+	 *   "title": "Donors",
+	 *   "children": [
+	 *     {
+	 *       "key": 1,
+	 *       "title": "Government of Timor-Leste",
+	 *       "folder": true,
+	 *       "children": [
+	 *         {
+	 *           "key": 70,
+	 *           "title": "RDTL Line Ministry",
+	 *           "folder": true,
+	 *           "children": [
+	 *             {
+	 *               "key": 153,
+	 *               "title": "Ministry of Health",
+	 *               "folder": false,
+	 *               "selected": true
+	 *             }
+	 *           ]
+	 *         },
+	 *  ......
+	 *     }
+	 *    ]
+	 *  }</pre>
+	 *
+	 * @return a JSON object with all donors
 	 */
 	@GET
 	@Path("/manager/donors")

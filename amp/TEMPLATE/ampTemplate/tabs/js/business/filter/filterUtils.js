@@ -49,7 +49,9 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 	//TODO: move to CommonFilterUtils.js and merge with the same function on Saiku.
 	FilterUtils.extractFilters = function(content) {
 		var filters = new Filters();
-		var filtersColumnsJson = content.get('columnFilterRules');
+		//TODO: uncomment -  commented out because of the filter strucure changes done in 2.13
+		
+		/*var filtersColumnsJson = content.get('columnFilterRules');
 		jQuery(filtersColumnsJson.keys()).each(function(i, item) {
 			var subElement = filtersColumnsJson.get(item);
 			if (subElement instanceof Backbone.Collection) {
@@ -160,7 +162,7 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 				values : values
 			}); 
 			filters.add(auxFilter);
-		}
+		}*/
 		
 		return filters;
 	};

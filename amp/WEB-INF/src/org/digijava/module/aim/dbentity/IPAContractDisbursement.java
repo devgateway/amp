@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -45,13 +44,9 @@ public class IPAContractDisbursement implements Serializable, Cloneable {
         
         public String getDisbDate() {
         String disbDate = "";
-        try {
-            if (date != null) {
-                disbDate = DateTimeUtil.parseDateForPicker2(date, null);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(IPAContractDisbursement.class.getName()).log(Level.SEVERE, null, ex);
-        }
+		if (date != null) {
+			disbDate = DateTimeUtil.formatDateForPicker2(date, null);
+		}
         return disbDate;
     }
         

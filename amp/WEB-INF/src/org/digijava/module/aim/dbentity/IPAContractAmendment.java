@@ -37,13 +37,8 @@ public class IPAContractAmendment implements Serializable, Cloneable {
 
 	public String getAmendDate() {
 		String amendDate = "";
-		try {
-			if (date != null) {
-				amendDate = DateTimeUtil.parseDateForPicker2(date, null);
-			}
-		} catch (Exception ex) {
-			Logger.getLogger(IPAContractDisbursement.class.getName()).log(
-					Level.SEVERE, null, ex);
+		if (date != null) {
+			amendDate = DateTimeUtil.formatDateForPicker2(date, null);
 		}
 		return amendDate;
 	}

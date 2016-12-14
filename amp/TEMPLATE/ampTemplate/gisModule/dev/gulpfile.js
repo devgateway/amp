@@ -41,6 +41,7 @@ var watchify = require('watchify');
 var gulp = require('gulp');
 var g = require('gulp-load-plugins')();
 var gulpi18nScraper = require('gulp-i18n-scraper');
+var gulpUtil = require('gulp-util');
 var mold = require('mold-source-map');
 //var react = require('gulp-react');
 
@@ -64,7 +65,8 @@ var paths = {
             './node_modules/leaflet.markercluster/dist/**/*.css',
             '../../node_modules/amp-filter/dist/amp-filter.css',
             '../../node_modules/gis-layers-manager/dist/gis-layers-manager.css',
-            './app/js/libs/local/slider/**/*.css'],
+            './app/js/libs/local/slider/**/*.css',
+            '../../node_modules/amp-settings/dist/amp-settings.css'],
       compiledDest: './app/compiled-css/',
       compiled: './app/compiled-css/main.css'
     },
@@ -201,7 +203,7 @@ gulp.task('build', ['clean', 'build-js', 'build-css'/*, 'revision'*/, 'copy-stuf
 gulp.task('build-js', ['clean', 'browserify'], function() {
   return gulp.src(paths.app.scripts.built)
   	//.pipe(react())
-    .pipe(g.streamify(g.uglify))
+    .pipe(g.streamify(g.uglify().on('error', gulpUtil.log)))
     .pipe(gulp.dest(paths.dist.scripts));
 });
 

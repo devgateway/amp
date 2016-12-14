@@ -173,25 +173,24 @@ public class AMPReportExcelExport {
 			}
 		} else if (report.getFilters() != null) {
 			ReportFilters filters = report.getFilters();
-			Map<ReportElement, List<FilterRule>> filterRules = filters.getFilterRules();
-			for (Map.Entry<ReportElement, List<FilterRule>> filter : filterRules.entrySet()) {
-				for (FilterRule filterRule : filter.getValue()) {
-					String entityName = filter.getKey().type.name();
-					if (filter.getKey().entity != null) {
-						entityName = filter.getKey().entity.getEntityName();
-					}
-					String extractedFilter = TranslatorWorker.translateText(entityName);
-					List<String> extractedValues = new ArrayList<String>();
-//					for (Map.Entry<String, String> filterValue : filterRule.valueToName.entrySet()) {
-//						// AMP-21066
-//						if (filterValue != null) {
-//							extractedValues.add(filterValue.getValue());
-//						} else {
-//							extractedValues.add("");
-//						}
-//					}
-					extractedFilters.put(extractedFilter, extractedValues);
+			Map<ReportElement, FilterRule> filterRules = filters.getFilterRules();
+			for (Map.Entry<ReportElement, FilterRule> filter : filterRules.entrySet()) {
+				FilterRule filterRule = filter.getValue();
+				String entityName = filter.getKey().type.name();
+				if (filter.getKey().entity != null) {
+					entityName = filter.getKey().entity.getEntityName();
 				}
+				String extractedFilter = TranslatorWorker.translateText(entityName);
+				List<String> extractedValues = new ArrayList<String>();
+//				for (Map.Entry<String, String> filterValue : filterRule.valueToName.entrySet()) {
+//					// AMP-21066
+//					if (filterValue != null) {
+//						extractedValues.add(filterValue.getValue());
+//					} else {
+//						extractedValues.add("");
+//					}
+//				}
+				extractedFilters.put(extractedFilter, extractedValues);
 			}
 		}
 

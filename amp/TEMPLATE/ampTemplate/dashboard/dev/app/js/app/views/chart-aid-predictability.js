@@ -46,7 +46,7 @@ module.exports = ChartViewBase.extend({
     var app = this.app;
     var of = app.translator.translateSync('amp.dashboard:of','of');
     var total = app.translator.translateSync('amp.dashboard:total','total');
-    var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
+    var units = app.translator.translateSync(app.generalSettings.numberDividerDescription);
 
     // IMPORTANT: We assume this chart will ALWAYS show 2 data series.
     /* modify to be like chart-funding-type if adding more series */
@@ -71,7 +71,7 @@ module.exports = ChartViewBase.extend({
         '</b>&nbsp<span>' + of + '</span>&nbsp' + context.x.raw +
         '&nbsp<span>' + total + '</span>';
     var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+    var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value; 
     return {tt: {
       heading: header,
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',

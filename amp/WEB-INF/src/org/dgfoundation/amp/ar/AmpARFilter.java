@@ -759,10 +759,6 @@ public class AmpARFilter extends PropertyListable {
 		return AmountsUnits.getAmountDivider(computeEffectiveAmountInThousand());
 	}
 	
-	public double getAmountMultiplier() {
-		return AmountsUnits.getAmountMultiplier(computeEffectiveAmountInThousand());
-	}
-	
 	/**
 	 * returns an AmountsUnits instance corresponding to the instance's {@link #amountinthousand} value OR null
 	 * @return

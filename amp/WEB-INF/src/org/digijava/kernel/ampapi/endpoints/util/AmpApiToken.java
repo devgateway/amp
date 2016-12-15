@@ -7,7 +7,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.joda.time.DateTime;
 
 public class AmpApiToken implements Serializable{
-	 
+
 	private static final long serialVersionUID = 8372878787005618060L;
 
 	private User user;
@@ -45,5 +45,9 @@ public class AmpApiToken implements Serializable{
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public boolean isExpired() {
+		return expirationTime.isBeforeNow();
 	}
 }

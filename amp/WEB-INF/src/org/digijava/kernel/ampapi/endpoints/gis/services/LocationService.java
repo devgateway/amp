@@ -185,11 +185,9 @@ public class LocationService {
 		final List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
 
 		if (config != null) {
-			Object otherFilter = config.get("otherFilters");
-			if (otherFilter != null
-					&& ((Map<String, Object>) otherFilter).get("adminLevel") != null) {
-				adminLevel = ((Map<String, Object>) otherFilter).get(
-						"adminLevel").toString();
+			Map otherFilter = (Map) config.get(EPConstants.FILTERS);
+			if (otherFilter != null && otherFilter.get("adminLevel") != null) {
+				adminLevel = otherFilter.get("adminLevel").toString();
 			}
 		}
 		

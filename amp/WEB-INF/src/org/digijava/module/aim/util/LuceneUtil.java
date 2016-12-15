@@ -1248,8 +1248,10 @@ public class LuceneUtil implements Serializable {
                             }
                         }
                     } else {
-                        fuzzyQuery = new FuzzyQuery(new Term(parser.getField(), StringUtils.lowerCase(word)), getMinimumSimilarity(word));
-                        fuzzyTerms.add(fuzzyQuery);
+                        if (query instanceof TermQuery) {
+                            fuzzyQuery = new FuzzyQuery(((TermQuery) query).getTerm(), getMinimumSimilarity(word));
+                            fuzzyTerms.add(fuzzyQuery);
+                        }
                     }
                 } catch (ParseException e) {
                     logger.error("Error while building fuzzy query list");

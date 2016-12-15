@@ -25,6 +25,7 @@ def dbVersion
 stage('Build') {
     node {
         checkout scm
+
         withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
 
             // Build AMP
@@ -36,11 +37,9 @@ stage('Build') {
             // Build Docker images & push it
             sh "docker build -q -t localhost:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' amp"
             sh "docker push localhost:5000/amp-webapp:${tag} > /dev/null"
-
-            // Cleanup after Docker & Maven
-            sh "docker rmi localhost:5000/amp-webapp:${tag}"
-            sh "cd amp && mvn clean -Djdbc.db=dummy"
         }
+
+        deleteDir()
     }
 }
 

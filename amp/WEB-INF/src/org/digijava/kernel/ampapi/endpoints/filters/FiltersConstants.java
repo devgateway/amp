@@ -139,5 +139,6 @@ public class FiltersConstants {
         put(Constants.EXECUTING_AGENCY, EXECUTING_AGENCY);
         put(Constants.BENEFICIARY_AGENCY, BENEFICIARY_AGENCY);
         put(Constants.CONTRACTING_AGENCY, CONTRACTING_AGENCY);
+        put(Constants.RESPONSIBLE_ORGANISATION, RESPONSIBLE_ORGANIZATION);        
     }});
 }

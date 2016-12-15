@@ -101,7 +101,7 @@ public class LocationService {
 		AmpReportFilters filterRules = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 		
 		if(config != null){
-			Map<String, Object> filters = (Map<String, Object>) config.get("filters");
+			Map<String, Object> filters = (Map<String, Object>) config.get(EPConstants.FILTERS);
 			if (filters != null) {
 				filterRules = FilterUtils.getFilterRules(filters, null, filterRules);
 			}

@@ -46,7 +46,6 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -112,28 +111,33 @@ public class Security implements ErrorReportingEndpoint {
 		return createResponse(isAdmin, apiToken, username, teamName, addActivity);
 	}
 
-	@NotNull
-	private String getPort() {
-		String port="";
-		//if we are in secure mode and the port is not 443 or if we are not secure and the port is not 80 we have to add the port to the url
-		if( (this.httpRequest.isSecure() && this.httpRequest.getServerPort()!=443 ) ||( !this.httpRequest.isSecure() && this.httpRequest.getServerPort()!=80 )){
-            port=":"+this.httpRequest.getServerPort();
-        }
-		return port;
-	}
-
 	private JsonBean createResponse(boolean isAdmin, AmpApiToken apiToken, String username, String team, boolean addActivity) {
-		String port = getPort();
 		final JsonBean authenticationResult = new JsonBean();
 		authenticationResult.set("token", apiToken != null && apiToken.getToken() != null ? apiToken.getToken() : null);
 		authenticationResult.set("token-expiration", apiToken != null && apiToken.getExpirationTime() != null ? apiToken.getExpirationTime().getMillis() : null);
-		authenticationResult.set("url", "http"+ (TLSUtils.getRequest().isSecure()?"s":"") +"://"+ TLSUtils.getRequest().getServerName() + port +"/showLayout.do?layout=login");
+		authenticationResult.set("url", getLoginUrl());
 		authenticationResult.set("team", team);
 		authenticationResult.set("user-name", username);
 		authenticationResult.set("is-admin", isAdmin);
-		authenticationResult.set("add-activity", addActivity); //to check if the user can add activity in the selected ws
+		authenticationResult.set("add-activity", team != null && addActivity); //to check if the user can add activity in the selected ws
 		authenticationResult.set("view-activity", !isAdmin); ///at this stage the user can view activities only if you are not admin
 		return authenticationResult;
+	}
+
+	private String getLoginUrl() {
+		String scheme = "http" + (TLSUtils.getRequest().isSecure() ? "s" : "");
+		return scheme + "://" + TLSUtils.getRequest().getServerName() + getPortPart() + "/showLayout.do?layout=login";
+	}
+
+	private String getPortPart() {
+		String portPart = "";
+		//if we are in secure mode and the port is not 443 or if we are not secure and the port is not 80 we have to add the port to the url
+		boolean secure = this.httpRequest.isSecure();
+		int port = this.httpRequest.getServerPort();
+		if ((secure && port != 443) || (!secure && port != 80)) {
+			portPart=":"+ port;
+		}
+		return portPart;
 	}
 
 	/**
@@ -146,41 +150,50 @@ public class Security implements ErrorReportingEndpoint {
 	@Path("/user/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public JsonBean authenticate(final JsonBean authentication) {
-		final String username = authentication.getString("username");
-		final String password = authentication.getString("password");
-		final Integer workspaceId = (Integer) authentication.get("workspaceId");
+		String username = authentication.getString("username");
+		String password = authentication.getString("password");
+		Integer workspaceIdInt = (Integer) authentication.get("workspaceId");
+		Long workspaceId = (workspaceIdInt == null) ? null : workspaceIdInt.longValue();
+
 		if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
 			ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_USER_PASSWORD);
 		}
-		if(workspaceId == null) {
-			ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_WORKSPACE);
-		}
+
 		try {
-			final User user = UserUtils.getUserByEmail(username);
+			User user = UserUtils.getUserByEmail(username);
 			if (user == null || !user.getPassword().equals(password)) {
 				ApiErrorResponse.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
 			}
 
-			final ApiErrorMessage result = ApiAuthentication.login(user, this.httpRequest);
+			ApiErrorMessage result = ApiAuthentication.login(user, this.httpRequest);
 			if (result != null) {
 				ApiErrorResponse.reportForbiddenAccess(result);
 			}
-			final AmpTeam ampTeam = TeamUtil.getAmpTeam(new Long(workspaceId));
-			final AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(username, workspaceId.longValue());
 
-			if (ampTeam == null || teamMember == null) {
+			AmpTeamMember teamMember = getAmpTeamMember(username, workspaceId);
+			if (workspaceId != null && teamMember == null) {
 				ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_TEAM);
 			}
+
 			storeInSession(username, password, teamMember, user);
 
-			final AmpApiToken ampApiToken = SecurityUtil.generateToken();
+			AmpApiToken ampApiToken = SecurityUtil.generateToken();
 
-			return createResponse(user.isGlobalAdmin(), ampApiToken, username, ampTeam.getName(), true);
-		} catch (final Exception e) {
+			String ampTeamName = (teamMember == null) ? null : teamMember.getAmpTeam().getName();
+			return createResponse(user.isGlobalAdmin(), ampApiToken, username, ampTeamName, true);
+		} catch (DgException e) {
 			logger.error("Error trying to login the user", e);
 			ApiErrorResponse.reportError(INTERNAL_SERVER_ERROR, SecurityErrors.INVALID_REQUEST);
 		}
 		return null;
+	}
+
+	private AmpTeamMember getAmpTeamMember(String username, Long workspaceId) {
+		AmpTeamMember teamMember = null;
+		if (workspaceId != null) {
+            teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(username, workspaceId);
+        }
+		return teamMember;
 	}
 
 	private void storeInSession(final String username, final String password, final AmpTeamMember teamMember, final User user) {

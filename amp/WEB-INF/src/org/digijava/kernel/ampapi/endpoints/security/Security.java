@@ -14,7 +14,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.parsers.ParserConfigurationException;
@@ -189,7 +188,7 @@ public class Security implements ErrorReportingEndpoint {
 		return null;
 	}
 
-	public AmpTeamMember getAmpTeamMember(String username, Long workspaceId) {
+	private AmpTeamMember getAmpTeamMember(String username, Long workspaceId) {
 		AmpTeamMember teamMember = null;
 		if (workspaceId != null) {
             teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(username, workspaceId);

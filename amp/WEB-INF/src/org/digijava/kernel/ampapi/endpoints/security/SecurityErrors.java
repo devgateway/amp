@@ -20,8 +20,6 @@ public class SecurityErrors {
 	public static final ApiErrorMessage INVALID_TOKEN = new ApiErrorMessage(3, "Invalid Token");
 	/** Action exists, but it is not allowed, e.g. to edit an activity that current user has no edit rights for */
 	public static final ApiErrorMessage NOT_ALLOWED = new ApiErrorMessage(4, "Not allowed");
-	/** Invalid API Method authorization definition */
-	public static final ApiErrorMessage INVALID_API_METHOD = new ApiErrorMessage(5, "Invalid API Method");
 	/** Token expired */
 	public static final ApiErrorMessage TOKEN_EXPIRED = new ApiErrorMessage(6, "Token expired");
 	/** Invalid Request */

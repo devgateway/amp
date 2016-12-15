@@ -49,8 +49,10 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -759,12 +761,18 @@ public class InterchangeUtils {
 	 * @return true if request is valid to edit an activity
 	 */
 	public static boolean isEditableActivity(ContainerRequest containerReq) {
-		if (!TeamUtil.isUserInWorkspace()) {
-			return false;
-		}
 		Long id = getRequestId(containerReq);
 		// we reuse the same approach as the one done by Project List EP
 		return id != null && ProjectList.getEditableActivityIds(TeamUtil.getCurrentMember()).contains(id);
+	}
+
+	/**
+	 * @return true if add activity is allowed
+	 */
+	public static boolean addActivityAllowed() {
+		TeamMember tm = TeamUtil.getCurrentMember();
+		return tm != null && Boolean.TRUE.equals(tm.getAddActivity()) &&
+				(FeaturesUtil.isVisibleField("Add Activity Button") || FeaturesUtil.isVisibleField("Add SSC Button"));
 	}
 	
 	/**

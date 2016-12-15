@@ -20,9 +20,7 @@ public enum AuthRule {
 	/** edit activity right must be enabled */
 	EDIT_ACTIVITY,
 	/** view activity right must be enabled */
-	VIEW_ACTIVITY,
-	/** action authorized, no special rule to fulfill */
-	NONE;
+	VIEW_ACTIVITY;
 	
 	@Override
 	public String toString() {

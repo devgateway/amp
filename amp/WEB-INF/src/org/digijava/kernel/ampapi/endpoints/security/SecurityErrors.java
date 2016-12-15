@@ -37,4 +37,5 @@ public class SecurityErrors {
 
 	public static final ApiErrorMessage INVALID_WORKSPACE = new ApiErrorMessage(12, "Workspace is invalid");
 
+	public static final ApiErrorMessage PASSWORD_CHANGED = new ApiErrorMessage(13, "User password changed");
 }

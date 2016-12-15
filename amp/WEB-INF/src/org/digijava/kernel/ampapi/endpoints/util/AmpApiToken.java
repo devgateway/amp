@@ -2,8 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.util;
 
 import java.io.Serializable;
 
-import javax.servlet.http.HttpSessionBindingEvent;
-
 import org.digijava.module.aim.helper.TeamMember;
 import org.joda.time.DateTime;
 
@@ -17,7 +15,7 @@ public class AmpApiToken implements Serializable{
 	private TeamMember teamMember;
 	private DateTime expirationTime;
 	private String token;
-	
+	private String password;
 	
 	public AmpApiToken (){
 		
@@ -45,5 +43,17 @@ public class AmpApiToken implements Serializable{
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public boolean isExpired() {
+		return expirationTime.isBeforeNow();
 	}
 }

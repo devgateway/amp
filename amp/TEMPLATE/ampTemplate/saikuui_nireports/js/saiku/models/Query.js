@@ -157,7 +157,7 @@ var Query = Backbone.Model.extend({
     	 * See AMP-19159, AMP-19135 and AMP-18826
     	 */
     	//if (this.firstLoad === false) {
-        	if (filters === undefined) {
+    	    if (filters === undefined) {
         		filters = this.get('filters');
         	}
         	if (settings === undefined) {

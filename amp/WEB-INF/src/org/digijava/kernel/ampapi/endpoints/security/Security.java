@@ -170,11 +170,12 @@ public class Security implements ErrorReportingEndpoint {
 			if (result != null) {
 				ApiErrorResponse.reportForbiddenAccess(result);
 			}
-			AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(username, workspaceId);
 
+			AmpTeamMember teamMember = getAmpTeamMember(username, workspaceId);
 			if (workspaceId != null && teamMember == null) {
 				ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_TEAM);
 			}
+
 			storeInSession(username, password, teamMember, user);
 
 			AmpApiToken ampApiToken = SecurityUtil.generateToken();
@@ -186,6 +187,14 @@ public class Security implements ErrorReportingEndpoint {
 			ApiErrorResponse.reportError(INTERNAL_SERVER_ERROR, SecurityErrors.INVALID_REQUEST);
 		}
 		return null;
+	}
+
+	public AmpTeamMember getAmpTeamMember(String username, Long workspaceId) {
+		AmpTeamMember teamMember = null;
+		if (workspaceId != null) {
+            teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(username, workspaceId);
+        }
+		return teamMember;
 	}
 
 	private void storeInSession(final String username, final String password, final AmpTeamMember teamMember, final User user) {

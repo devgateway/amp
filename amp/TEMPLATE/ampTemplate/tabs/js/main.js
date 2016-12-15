@@ -20,7 +20,7 @@ require.config({
 		commonFilterUtils : '/TEMPLATE/ampTemplate/script/common/CommonFilterUtils', 
 		i18next : 'lib/i18next_1.6.3.min',
 		numeral : 'lib/numeral_1.4.5.min',
-		md5 : '/TEMPLATE/ampTemplate/script/common/md5'
+		objectHash: '/TEMPLATE/ampTemplate/script/common/object-hash-1.1.5/dist/object_hash.js'
 	},
 	shim : {
 		underscore : {

@@ -1,5 +1,5 @@
-define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils', 'md5', 'underscore' ], function(columnsMapping,
-		TranslationManager, TabUtils, md5, _) {
+define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','underscore' ], function(columnsMapping,
+		TranslationManager, TabUtils, _) {
 
 	"use strict";
 

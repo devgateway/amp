@@ -55,13 +55,13 @@ public class ActionAuthorizer {
 		}
 
 		if (authRules.contains(AuthRule.IN_WORKSPACE) && !TeamUtil.isUserInWorkspace()) {
-			ApiErrorMessage errorMessage = new ApiErrorMessage(SecurityErrors.NOT_ALLOWED, "No workspace selected");
+			ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("No workspace selected");
 			ApiErrorResponse.reportForbiddenAccess(errorMessage);
 			return;
 		}
 
 		if (authRules.contains(AuthRule.IN_ADMIN) && !TeamUtil.isCurrentMemberAdmin()) {
-			ApiErrorMessage errorMessage = new ApiErrorMessage(SecurityErrors.NOT_ALLOWED, "You must be logged-in as admin");
+			ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("You must be logged-in as admin");
 			ApiErrorResponse.reportForbiddenAccess(errorMessage);
 			return;
 		}

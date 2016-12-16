@@ -30,7 +30,35 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for dashboards.
-     *
+     * <p>Returns definitions for the following settings: currency, calendar, calendar currencies, funding type.</p>
+     * <h3>Sample Output:</h3>
+     * <pre>
+     * [
+     *   {
+     *     "type": "OPTIONS",
+     *     "id": "currency-code",
+     *     "name": "currency",
+     *     "value": {
+     *       "multi": false,
+     *       "defaultId": "USD",
+     *       "options": [
+     *         {
+     *           "id": "AUD",
+     *           "name": "Australian Dollar",
+     *           "value": "AUD"
+     *         },
+     *         {
+     *           "id": "CAD",
+     *           "name": "Canadian Dollar",
+     *           "value": "CAD"
+     *         },
+     *         ... other options
+     *       ]
+     *     }
+     *   },
+     *   ... other fields
+     * ]
+     * </pre>
      * @return a list of setting definitions
      */
     @GET
@@ -46,7 +74,35 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for GIS.
-     *
+     * <p>Returns definitions for the following settings: currency, calendar, calendar currencies, funding type.</p>
+     * <h3>Sample Output:</h3>
+     * <pre>
+     * [
+     *   {
+     *     "type": "OPTIONS",
+     *     "id": "currency-code",
+     *     "name": "currency",
+     *     "value": {
+     *       "multi": false,
+     *       "defaultId": "USD",
+     *       "options": [
+     *         {
+     *           "id": "AUD",
+     *           "name": "Australian Dollar",
+     *           "value": "AUD"
+     *         },
+     *         {
+     *           "id": "CAD",
+     *           "name": "Canadian Dollar",
+     *           "value": "CAD"
+     *         },
+     *         ... other options
+     *       ]
+     *     }
+     *   },
+     *   ... other fields
+     * ]
+     * </pre>
      * @return a list of setting definitions
      */
     @GET
@@ -62,6 +118,35 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for public portal.
+     * <p>Returns definitions for the following settings: amount units, currency.</p>
+     * <h3>Sample Output:</h3>
+     * <pre>
+     * [
+     *   {
+     *     "type": "OPTIONS",
+     *     "id": "number-divider",
+     *     "name": "Amount units",
+     *     "value": {
+     *       "multi": false,
+     *       "defaultId": "0",
+     *       "options": [
+     *         {
+     *           "id": "0",
+     *           "name": "Amounts are in units",
+     *           "value": "1"
+     *         },
+     *         {
+     *           "id": "1",
+     *           "name": "Amounts are in thousands (000)",
+     *           "value": "1000"
+     *         },
+     *         ... other options
+     *       ]
+     *     }
+     *   },
+     *   ... other fields
+     * ]
+     * </pre>
      *
      * @return a list of setting definitions
      */
@@ -76,7 +161,35 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for reports.
-     *
+     * <p>Returns definitions for the following settings: currency, calendar, calendar currencies, year range.</p>
+     * <h3>Sample Output:</h3>
+     * <pre>
+     * [
+     *   {
+     *     "type": "OPTIONS",
+     *     "id": "currency-code",
+     *     "name": "currency",
+     *     "value": {
+     *       "multi": false,
+     *       "defaultId": "USD",
+     *       "options": [
+     *         {
+     *           "id": "AUD",
+     *           "name": "Australian Dollar",
+     *           "value": "AUD"
+     *         },
+     *         {
+     *           "id": "CAD",
+     *           "name": "Canadian Dollar",
+     *           "value": "CAD"
+     *         },
+     *         ... other options
+     *       ]
+     *     }
+     *   },
+     *   ... other fields
+     * ]
+     * </pre>
      * @return a list of setting definitions
      */
     @GET
@@ -92,7 +205,36 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for a specific report.
-     *
+     * <p>Returns definitions for the following settings: currency, calendar, calendar currencies, year range.</p>
+     * <h3>Sample Output:</h3>
+     * <pre>
+     * [
+     *   {
+     *     "type": "OPTIONS",
+     *     "id": "currency-code",
+     *     "name": "currency",
+     *     "value": {
+     *       "multi": false,
+     *       "defaultId": "USD",
+     *       "options": [
+     *         {
+     *           "id": "AUD",
+     *           "name": "Australian Dollar",
+     *           "value": "AUD"
+     *         },
+     *         {
+     *           "id": "CAD",
+     *           "name": "Canadian Dollar",
+     *           "value": "CAD"
+     *         },
+     *         ... other options
+     *       ]
+     *     }
+     *   },
+     *   ... other fields
+     * ]
+     * </pre>
+     * @param reportId Report Id
      * @return a list of setting definitions
      */
     @GET
@@ -114,7 +256,35 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns setting definitions for tabs.
-     *
+     * <p>Returns definitions for the following settings: currency, calendar.</p>
+     * <h3>Sample Output:</h3>
+     * <pre>
+     * [
+     *   {
+     *     "type": "OPTIONS",
+     *     "id": "currency-code",
+     *     "name": "currency",
+     *     "value": {
+     *       "multi": false,
+     *       "defaultId": "USD",
+     *       "options": [
+     *         {
+     *           "id": "AUD",
+     *           "name": "Australian Dollar",
+     *           "value": "AUD"
+     *         },
+     *         {
+     *           "id": "CAD",
+     *           "name": "Canadian Dollar",
+     *           "value": "CAD"
+     *         },
+     *         ... other options
+     *       ]
+     *     }
+     *   },
+     *   ... other fields
+     * ]
+     * </pre>
      * @return a list of setting definitions
      */
     @GET

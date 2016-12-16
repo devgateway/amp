@@ -32,13 +32,13 @@ module.exports = Backbone.Model.extend({
     var deferred = $.Deferred();
     this.collection.appData.filter.getAllFilters().then(function(allFilters) {
       var matchesFilters = self.attributes.matchesFilters;
-      if (allFilters && allFilters.columnFilters && matchesFilters) {
+      if (allFilters && allFilters && matchesFilters) {
             _.each(matchesFilters, function(v, k) {
           //make sure it's a valid filter
-          if (allFilters.columnFilters[k]) {
+          if (allFilters[k]) {
             //iterate over ids.        	        			  
             _.each(matchesFilters[k], function(id, index) {
-              var matched = _(allFilters.columnFilters[k]).findWhere({id: id});
+              var matched = _(allFilters[k]).findWhere({id: id});
               if (matched) {
                 matchesFilters[k][index] = matched;
               }

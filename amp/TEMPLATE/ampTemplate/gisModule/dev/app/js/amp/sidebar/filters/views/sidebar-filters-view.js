@@ -72,7 +72,6 @@ module.exports = BaseControlView.extend({
 
     // serialized obj is returned in event if needed.
     this.app.data.filter.on('apply', function() {
-      //console.log('serialized', serialized.columnFilters);
       //only collapse ui if it's expanded...otherwise strange bootstrap behaviour.
       if (self.$('.accordion-body.collapse.in').length > 0) {
         self.$('.accordion-body').collapse('hide');

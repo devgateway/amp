@@ -973,6 +973,10 @@ public class DbUtil {
     		.append(" sl where :USER_ID in elements(sl.users)")
     		.append(" and sl.active = true and (sl.expires=false or")
     		.append(" (sl.expires=true and sl.suspendTil > current_date()))");
-    	return PersistenceManager.getSession().createQuery(qs.toString()).setLong("USER_ID", user.getId()).list();
+    	return PersistenceManager.getSession()
+                .createQuery(qs.toString())
+                .setLong("USER_ID", user.getId())
+                .setCacheable(true)
+                .list();
     }
 }

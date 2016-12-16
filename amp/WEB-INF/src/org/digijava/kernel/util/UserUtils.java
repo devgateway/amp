@@ -30,11 +30,10 @@ import java.util.StringTokenizer;
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.HibernateException;
+import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.UserLangPreferences;
@@ -429,6 +428,23 @@ public class UserUtils {
 	/**
 	 * Searches user object by email and returns it. If such user does not
 	 * exists, returns null
+	 * <p>The sole purpose of this function is to handle checked DgException by converting it to
+	 * unchecked exception.</p>
+	 * @param email String User email
+	 * @return User object
+	 * @throws AMPUncheckedException if error occurs
+	 */
+	public static User getUserByEmailRt(String email) {
+		try {
+			return UserUtils.getUserByEmail(email);
+		} catch (DgException e) {
+			throw new AMPUncheckedException(e);
+		}
+	}
+
+	/**
+	 * Searches user object by email and returns it. If such user does not
+	 * exists, returns null
 	 * @param email String User email
 	 * @return User object
 	 * @throws DgException if error occurs
@@ -441,7 +457,8 @@ public class UserUtils {
 			
 			Query query = sess.createQuery("from " + User.class.getName() + " rs where rs.email = :email ");
 			query.setString("email", email);
-			
+			query.setCacheable(true);
+
 			Iterator iter = query.iterate();
 			while (iter.hasNext()) {
 				user = (User) iter.next();

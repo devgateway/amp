@@ -51,8 +51,8 @@ module.exports = Backbone.Model
     // TODO: verify settings works..
     filter.settings = this.collection.settingsWidget.toAPIFormat();
 
-    
-    filter.adminLevel = this._translateADMToMagicWord(this.get('value'));
+    filter.filters = filter.filters || {};
+    filter.filters.adminLevel = this._translateADMToMagicWord(this.get('value'));
 
     options = _.defaults((options || {}), {
       type: 'POST',

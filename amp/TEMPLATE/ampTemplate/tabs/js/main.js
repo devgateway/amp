@@ -19,8 +19,7 @@ require.config({
 		translationManager: '/TEMPLATE/ampTemplate/script/common/TranslationManager',
 		commonFilterUtils : '/TEMPLATE/ampTemplate/script/common/CommonFilterUtils', 
 		i18next : 'lib/i18next_1.6.3.min',
-		numeral : 'lib/numeral_1.4.5.min',
-		objectHash: '/TEMPLATE/ampTemplate/script/common/object-hash-1.1.5/dist/object_hash.js'
+		numeral : 'lib/numeral_1.4.5.min'		
 	},
 	shim : {
 		underscore : {

@@ -61,6 +61,15 @@
 		
 		<!-- END LOADING NEW TABS NECESSARY FILES -->
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate//tabs/js/lib/jquery.min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/tabs/js/lib/jquery-ui.min.js"/>"></script>	
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/common/CommonFilterUtils.js"/>"></script>
+        			
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>		
+        <script type="text/javascript">
+         $.noConflict(true);
+        </script>
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-settings/dist/amp-settings.js"/>"></script> 
 		
         
 	</head>

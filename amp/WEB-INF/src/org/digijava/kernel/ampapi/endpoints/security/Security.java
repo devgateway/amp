@@ -299,12 +299,26 @@ public class Security implements ErrorReportingEndpoint {
 	}
 	
 	/**
-	 * Return the list of workspaces the user has access to
+	 * Return the list of workspaces the user has access to.
 	 *
+	 * <h3>Sample Output:</h3>
+	 * <pre>
+	 * [
+	 *   {
+	 *     "id": 1,
+	 *     "name": "Main workspace"
+	 *   },
+	 *   {
+	 *     "id": 2,
+	 *     "name": "Test workspace"
+	 *   }
+	 * ]
+	 * </pre>
 	 */
 	@GET
     @Path("/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id="workspaces", ui=false, authTypes = AuthRule.AUTHENTICATED)
     public Collection<JsonBean> getWorkspaces() {
         return SecurityService.getWorkspaces();
     }

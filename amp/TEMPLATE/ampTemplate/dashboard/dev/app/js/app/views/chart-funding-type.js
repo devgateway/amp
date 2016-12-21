@@ -53,7 +53,7 @@ module.exports = ChartViewBase.extend({
     var app = this.app;
     var of = app.translator.translateSync('amp.dashboard:of','of');
     var total = app.translator.translateSync('amp.dashboard:total','total');
-    var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
+    var units = app.translator.translateSync(app.generalSettings.numberDividerDescription);
 
     var activeTooltipTitles = _.filter(context.data, function(series) {
       return series.disabled !== true;
@@ -66,7 +66,7 @@ module.exports = ChartViewBase.extend({
         totalSpan = '&nbsp<span>' + total + '</span>';
     }
     var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;  
+    var currencyName =  app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;  
     return {tt: {
       heading: context.x.raw + ' ' + activeTooltipTitles[context.series.index].key,
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',

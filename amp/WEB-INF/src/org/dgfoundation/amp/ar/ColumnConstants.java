@@ -284,7 +284,6 @@ public class ColumnConstants {
 	public static final String SECONDARY_PROGRAM_LEVEL_7 = "Secondary Program Level 7";
 	public static final String SECONDARY_PROGRAM_LEVEL_8 = "Secondary Program Level 8";
 	public static final String SECONDARY_SECTOR = "Secondary Sector";
-	public static final String SECONDARY_SECTOR_ID = "Secondary Sector Id";
 	public static final String SECONDARY_SECTOR_SUB_SECTOR = "Secondary Sector Sub-Sector";
 	public static final String SECONDARY_SECTOR_SUB_SUB_SECTOR = "Secondary Sector Sub-Sub-Sector";
 	public static final String SECTOR_GROUP = "Sector Group";
@@ -330,4 +329,5 @@ public class ColumnConstants {
 	public static final String WORKSPACES = "Workspaces";
 	public static final String EFFECTIVE_FUNDING_DATE = "Effective Funding Date";
 	public static final String FUNDING_CLOSING_DATE = "Funding Closing Date";
+
 }

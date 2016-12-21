@@ -35,7 +35,7 @@ function chart(type, data, options) {
     height: void 0,  // should fill container in most cases by default
     width: void 0,
     numberFormatter: d3.format(','),
-    shortFormatter: options.numberFormatter || util.formatKMB(3, app.settings.numberFormatSettings.decimalSeparator),
+    shortFormatter: options.numberFormatter || util.formatKMB(3, app.generalSettings.numberFormatSettings.decimalSeparator),
     addLegend: true,
     trimLabels: true,
     getTTContent: common.defaultGetTTContent,

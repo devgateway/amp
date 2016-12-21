@@ -1329,51 +1329,51 @@ public class ReportsFilterPicker extends Action {
 		arf.setFromMonth(filterForm.getFromMonth() == null || filterForm.getFromMonth().intValue() == -1 ? null : filterForm.getFromMonth().intValue());
 		arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth().intValue() == -1 ? null : filterForm.getToMonth().intValue());
 
-		arf.setFromDate(filterForm.getFromDate());
-		arf.setToDate(filterForm.getToDate());
+		arf.setFromDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromDate()));
+		arf.setToDate(FilterUtil.convertUiToArFilterDate(filterForm.getToDate()));
 		arf.setDynDateFilterCurrentPeriod(filterForm.getDynamicDateFilter().getCurrentPeriod());
 		arf.setDynDateFilterAmount(filterForm.getDynamicDateFilter().getAmount());
 		arf.setDynDateFilterOperator(filterForm.getDynamicDateFilter().getOperator());
 		arf.setDynDateFilterXPeriod(filterForm.getDynamicDateFilter().getxPeriod());
 		
-		arf.setToActivityStartDate(filterForm.getToActivityStartDate() );
-		arf.setFromActivityStartDate(filterForm.getFromActivityStartDate() );
+		arf.setToActivityStartDate(FilterUtil.convertUiToArFilterDate(filterForm.getToActivityStartDate()));
+		arf.setFromActivityStartDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromActivityStartDate()));
 		arf.setDynActivityStartFilterCurrentPeriod(filterForm.getDynamicActivityStartFilter().getCurrentPeriod());
 		arf.setDynActivityStartFilterAmount(filterForm.getDynamicActivityStartFilter().getAmount());
 		arf.setDynActivityStartFilterOperator(filterForm.getDynamicActivityStartFilter().getOperator());
 		arf.setDynActivityStartFilterXPeriod(filterForm.getDynamicActivityStartFilter().getxPeriod());
 		
 		
-		arf.setFromProposedApprovalDate(filterForm.getFromProposedApprovalDate());
-		arf.setToProposedApprovalDate(filterForm.getToProposedApprovalDate());
+		arf.setFromProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedApprovalDate()));
+		arf.setToProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToProposedApprovalDate()));
 		arf.setDynProposedApprovalFilterCurrentPeriod(filterForm.getDynamicProposedApprovalFilter().getCurrentPeriod());
 		arf.setDynProposedApprovalFilterAmount(filterForm.getDynamicProposedApprovalFilter().getAmount());
 		arf.setDynProposedApprovalFilterOperator(filterForm.getDynamicProposedApprovalFilter().getOperator());
 		arf.setDynProposedApprovalFilterXPeriod(filterForm.getDynamicProposedApprovalFilter().getxPeriod());
 		
-		arf.setToActivityActualCompletionDate(filterForm.getToActivityActualCompletionDate() );
-		arf.setFromActivityActualCompletionDate(filterForm.getFromActivityActualCompletionDate());
+		arf.setToActivityActualCompletionDate(FilterUtil.convertUiToArFilterDate(filterForm.getToActivityActualCompletionDate()));
+		arf.setFromActivityActualCompletionDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromActivityActualCompletionDate()));
 		arf.setDynActivityActualCompletionFilterCurrentPeriod(filterForm.getDynamicActivityActualCompletionFilter().getCurrentPeriod());
 		arf.setDynActivityActualCompletionFilterAmount(filterForm.getDynamicActivityActualCompletionFilter().getAmount());
 		arf.setDynActivityActualCompletionFilterOperator(filterForm.getDynamicActivityActualCompletionFilter().getOperator());
 		arf.setDynActivityActualCompletionFilterXPeriod(filterForm.getDynamicActivityActualCompletionFilter().getxPeriod());
 		
-		arf.setToActivityFinalContractingDate(filterForm.getToActivityFinalContractingDate() );
-		arf.setFromActivityFinalContractingDate(filterForm.getFromActivityFinalContractingDate());
+		arf.setToActivityFinalContractingDate(FilterUtil.convertUiToArFilterDate(filterForm.getToActivityFinalContractingDate()));
+		arf.setFromActivityFinalContractingDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromActivityFinalContractingDate()));
 		arf.setDynActivityFinalContractingFilterCurrentPeriod(filterForm.getDynamicActivityFinalContractingFilter().getCurrentPeriod());
 		arf.setDynActivityFinalContractingFilterAmount(filterForm.getDynamicActivityFinalContractingFilter().getAmount());
 		arf.setDynActivityFinalContractingFilterOperator(filterForm.getDynamicActivityFinalContractingFilter().getOperator());
 		arf.setDynActivityFinalContractingFilterXPeriod(filterForm.getDynamicActivityFinalContractingFilter().getxPeriod());
 
-        arf.setToEffectiveFundingDate(filterForm.getToEffectiveFundingDate());
-        arf.setFromEffectiveFundingDate(filterForm.getFromEffectiveFundingDate());
+        arf.setToEffectiveFundingDate(FilterUtil.convertUiToArFilterDate(filterForm.getToEffectiveFundingDate()));
+        arf.setFromEffectiveFundingDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromEffectiveFundingDate()));
         arf.setDynEffectiveFundingFilterCurrentPeriod(filterForm.getDynamicEffectiveFundingFilter().getCurrentPeriod());
         arf.setDynEffectiveFundingFilterAmount(filterForm.getDynamicEffectiveFundingFilter().getAmount());
         arf.setDynEffectiveFundingFilterOperator(filterForm.getDynamicEffectiveFundingFilter().getOperator());
         arf.setDynEffectiveFundingFilterXPeriod(filterForm.getDynamicEffectiveFundingFilter().getxPeriod());
 
-        arf.setToFundingClosingDate(filterForm.getToFundingClosingDate());
-        arf.setFromFundingClosingDate(filterForm.getFromFundingClosingDate());
+        arf.setToFundingClosingDate(FilterUtil.convertUiToArFilterDate(filterForm.getToFundingClosingDate()));
+        arf.setFromFundingClosingDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromFundingClosingDate()));
         arf.setDynFundingClosingFilterCurrentPeriod(filterForm.getDynamicFundingClosingFilter().getCurrentPeriod());
         arf.setDynFundingClosingFilterAmount(filterForm.getDynamicFundingClosingFilter().getAmount());
         arf.setDynFundingClosingFilterOperator(filterForm.getDynamicFundingClosingFilter().getOperator());

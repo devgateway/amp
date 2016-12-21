@@ -5,12 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -20,10 +19,9 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
-import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.common.Filters;
+import org.digijava.kernel.ampapi.endpoints.common.FiltersEndpoint;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersProcessor;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
@@ -33,39 +31,164 @@ import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.search.util.SearchUtil;
 
 public class FilterUtils {
+
 	protected static Logger logger = Logger.getLogger(FilterUtils.class);
-		
-	public static AmpReportFilters getApiOtherFilters(Map<String, Object> filter, AmpReportFilters filterRules) {
-		for (String columnName : AmpReportsSchema.getInstance().DATE_COLUMN_NAMES) {
-			if (filter.get(columnName) != null) {
-				filterRules = addDateFilterRule(columnName, filter, filterRules);
+
+	public static final FilterUtils INSTANCE = new FilterUtils();
+
+	private Map<String, String> columnNameToId = new HashMap<>();
+	private Map<String, String> idToSimpleColumn = new HashMap<>();
+	private Map<String, String> idToDateColumn = new HashMap<>();
+
+	private FilterUtils() {
+		mapDateColumn(FiltersConstants.ACTUAL_APPROVAL_DATE, ColumnConstants.ACTUAL_APPROVAL_DATE);
+		mapDateColumn(FiltersConstants.ACTUAL_COMPLETION_DATE, ColumnConstants.ACTUAL_COMPLETION_DATE);
+		mapDateColumn(FiltersConstants.ACTUAL_START_DATE, ColumnConstants.ACTUAL_START_DATE);
+		mapDateColumn(FiltersConstants.EFFECTIVE_FUNDING_DATE, ColumnConstants.EFFECTIVE_FUNDING_DATE);
+		mapDateColumn(FiltersConstants.FINAL_DATE_FOR_CONTRACTING, ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
+		mapDateColumn(FiltersConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
+		mapDateColumn(FiltersConstants.PROPOSED_APPROVAL_DATE, ColumnConstants.PROPOSED_APPROVAL_DATE);
+		mapDateColumn(FiltersConstants.PROPOSED_COMPLETION_DATE, ColumnConstants.PROPOSED_COMPLETION_DATE);
+		mapDateColumn(FiltersConstants.PROPOSED_START_DATE, ColumnConstants.PROPOSED_START_DATE);
+
+		mapSimpleColumn(FiltersConstants.APPROVAL_STATUS, ColumnConstants.APPROVAL_STATUS);
+		mapSimpleColumn(FiltersConstants.ARCHIVED, ColumnConstants.ARCHIVED);
+		mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
+		mapSimpleColumn(FiltersConstants.COMPUTED_YEAR, ColumnConstants.COMPUTED_YEAR);
+		mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY);
+		mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_GROUPS, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+		mapSimpleColumn(FiltersConstants.COUNTRY, ColumnConstants.COUNTRY);
+		mapSimpleColumn(FiltersConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.DISASTER_RESPONSE_MARKER);
+		mapSimpleColumn(FiltersConstants.DISTRICT, ColumnConstants.DISTRICT);
+		mapSimpleColumn(FiltersConstants.DONOR_AGENCY, ColumnConstants.DONOR_AGENCY);
+		mapSimpleColumn(FiltersConstants.DONOR_GROUP, ColumnConstants.DONOR_GROUP);
+		mapSimpleColumn(FiltersConstants.DONOR_TYPE, ColumnConstants.DONOR_TYPE);
+		mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY, ColumnConstants.EXECUTING_AGENCY);
+		mapSimpleColumn(FiltersConstants.EXPENDITURE_CLASS, ColumnConstants.EXPENDITURE_CLASS);
+		mapSimpleColumn(FiltersConstants.FINANCING_INSTRUMENT, ColumnConstants.FINANCING_INSTRUMENT);
+		mapSimpleColumn(FiltersConstants.FUNDING_STATUS, ColumnConstants.FUNDING_STATUS);
+		mapSimpleColumn(FiltersConstants.GOVERNMENT_APPROVAL_PROCEDURES, ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
+		mapSimpleColumn(FiltersConstants.HUMANITARIAN_AID, ColumnConstants.HUMANITARIAN_AID);
+		mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY, ColumnConstants.IMPLEMENTING_AGENCY);
+		mapSimpleColumn(FiltersConstants.JOINT_CRITERIA, ColumnConstants.JOINT_CRITERIA);
+		mapSimpleColumn(FiltersConstants.LOCATION, ColumnConstants.LOCATION);
+		mapSimpleColumn(FiltersConstants.MODE_OF_PAYMENT, ColumnConstants.MODE_OF_PAYMENT);
+		mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
+		mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+		mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2);
+		mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
+		mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4);
+		mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5);
+		mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6);
+		mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7);
+		mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8);
+		mapSimpleColumn(FiltersConstants.ON_OFF_TREASURY_BUDGET, ColumnConstants.ON_OFF_TREASURY_BUDGET);
+		mapSimpleColumn(FiltersConstants.PLEDGES_AID_MODALITY, ColumnConstants.PLEDGES_AID_MODALITY);
+		mapSimpleColumn(FiltersConstants.PLEDGES_DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_GROUP);
+		mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+		mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS, ColumnConstants.PLEDGES_PROGRAMS);
+		mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
+		mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS, ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+		mapSimpleColumn(FiltersConstants.PLEDGES_SECTORS, ColumnConstants.PLEDGES_SECTORS);
+		mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS, ColumnConstants.PLEDGES_TERTIARY_SECTORS);
+		mapSimpleColumn(FiltersConstants.PLEDGES_TITLES, ColumnConstants.PLEDGES_TITLES);
+		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM, ColumnConstants.PRIMARY_PROGRAM);
+		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
+		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_2, ColumnConstants.PRIMARY_PROGRAM_LEVEL_2);
+		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_3, ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
+		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_4, ColumnConstants.PRIMARY_PROGRAM_LEVEL_4);
+		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_5, ColumnConstants.PRIMARY_PROGRAM_LEVEL_5);
+		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_6, ColumnConstants.PRIMARY_PROGRAM_LEVEL_6);
+		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_7, ColumnConstants.PRIMARY_PROGRAM_LEVEL_7);
+		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_8, ColumnConstants.PRIMARY_PROGRAM_LEVEL_8);
+		mapSimpleColumn(FiltersConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR);
+		mapSimpleColumn(FiltersConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.PROCUREMENT_SYSTEM, ColumnConstants.PROCUREMENT_SYSTEM);
+		mapSimpleColumn(FiltersConstants.PROJECT_IMPLEMENTING_UNIT, ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
+		mapSimpleColumn(FiltersConstants.REGION, ColumnConstants.REGION);
+		mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
+		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM);
+		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_2, ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);
+		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_3, ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
+		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_4, ColumnConstants.SECONDARY_PROGRAM_LEVEL_4);
+		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_5, ColumnConstants.SECONDARY_PROGRAM_LEVEL_5);
+		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_6, ColumnConstants.SECONDARY_PROGRAM_LEVEL_6);
+		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_7, ColumnConstants.SECONDARY_PROGRAM_LEVEL_7);
+		mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_8, ColumnConstants.SECONDARY_PROGRAM_LEVEL_8);
+		mapSimpleColumn(FiltersConstants.SECONDARY_SECTOR, ColumnConstants.SECONDARY_SECTOR);
+		mapSimpleColumn(FiltersConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.SECTOR_TAG, ColumnConstants.SECTOR_TAG);
+		mapSimpleColumn(FiltersConstants.STATUS, ColumnConstants.STATUS);
+		mapSimpleColumn(FiltersConstants.TEAM, ColumnConstants.TEAM);
+		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM, ColumnConstants.TERTIARY_PROGRAM);
+		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_1, ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
+		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_2, ColumnConstants.TERTIARY_PROGRAM_LEVEL_2);
+		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_3, ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
+		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_4, ColumnConstants.TERTIARY_PROGRAM_LEVEL_4);
+		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_5, ColumnConstants.TERTIARY_PROGRAM_LEVEL_5);
+		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_6, ColumnConstants.TERTIARY_PROGRAM_LEVEL_6);
+		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_7, ColumnConstants.TERTIARY_PROGRAM_LEVEL_7);
+		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_8, ColumnConstants.TERTIARY_PROGRAM_LEVEL_8);
+		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR, ColumnConstants.TERTIARY_SECTOR);
+		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_ASSISTANCE);
+		mapSimpleColumn(FiltersConstants.WORKSPACES, ColumnConstants.WORKSPACES);
+		mapSimpleColumn(FiltersConstants.ZONE, ColumnConstants.ZONE);
+	}
+
+	private void mapSimpleColumn(String filterId, String columnName) {
+		idToSimpleColumn.put(filterId, columnName);
+		columnNameToId.put(columnName, filterId);
+	}
+
+	private void mapDateColumn(String filterId, String columnName) {
+		idToDateColumn.put(filterId, columnName);
+		columnNameToId.put(columnName, filterId);
+	}
+
+	public String idFromColumnName(String columnName) {
+		return columnNameToId.get(columnName);
+	}
+
+	private static AmpReportFilters getApiDateFilters(Map<String, Object> filter, AmpReportFilters filterRules) {
+		for (Entry<String, String> entry : INSTANCE.idToDateColumn.entrySet()) {
+			String filterId = entry.getKey();
+			String columnName = entry.getValue();
+			Map<String, Object> date = (Map<String, Object>) filter.get(filterId);
+			if (date != null) {
+				filterRules = addDateFilterRule(columnName, date, filterRules);
 			}
 		}
-		if (filter.get("date") != null) {
-			filterRules = addDateFilterRule("date", filter, filterRules);
+
+		Map<String, Object> date = (Map<String, Object>) filter.get(FiltersConstants.DATE);
+		if (date != null) {
+			filterRules = addDateFilterRule(null, date, filterRules);
 		}
 
 		return filterRules;
 	}
 
-	private static AmpReportFilters addDateFilterRule(String dateColumn, Map<String, Object> filter,
+	private static AmpReportFilters addDateFilterRule(String dateColumn, Map<String, Object> date,
 	        AmpReportFilters filterRules) {
 		try {
 			if (filterRules == null) {
 				filterRules = new AmpReportFilters();
 			}
-			Map<String, Object> date = (Map<String, Object>) filter.get(dateColumn);
 			String start = denull(String.valueOf(date.get("start")));
 			String end = denull(String.valueOf(date.get("end")));
 			
 			if (start != null || end != null) {
 				SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
-				if (AmpReportsSchema.getInstance().DATE_COLUMN_NAMES.contains(dateColumn)) {
-					filterRules.addDateRangeFilterRule(new ReportColumn(dateColumn),
-							start == null ? null : sdf.parse(start), end == null ? null : sdf.parse(end));
+				Date startDate = start == null ? null : sdf.parse(start);
+				Date endDate = end == null ? null : sdf.parse(end);
+				if (dateColumn != null) {
+					filterRules.addDateRangeFilterRule(new ReportColumn(dateColumn), startDate, endDate);
 				} else {
-					filterRules.addDateRangeFilterRule(start == null ? null : sdf.parse(start), end == null ? null
-							: sdf.parse(end));
+					filterRules.addDateRangeFilterRule(startDate, endDate);
 				}
 			}
 		} catch (AmpApiException | ParseException e) {
@@ -80,7 +203,7 @@ public class FilterUtils {
      * @param s
      * @return
      */
-	public static String denull(String s) {
+	private static String denull(String s) {
 		if (StringUtils.isNotBlank(s) && !s.equalsIgnoreCase("null")) return s;
 		return null;
 	}
@@ -88,27 +211,28 @@ public class FilterUtils {
 	/**
 	 * returns a AmpReportFilters based on the End point parameter
 	 * 
-	 * @param filter
+	 * @param filters
 	 * @return
 	 */
-	public static AmpReportFilters getApiColumnFilter(LinkedHashMap<String, Object> filter, 
+	private static AmpReportFilters getApiColumnFilter(Map<String, Object> filters,
 	        AmpReportFilters filterRules) {
-		if (filter == null) {
+		if (filters == null) {
 			return filterRules;
 		}
 		if (filterRules == null) {
 			filterRules = new AmpReportFilters();
 		}
-		Set<String> validColumns = ConstantsUtil.getConstantsSet(ColumnConstants.class);
-		for (Entry<String, Object> entry : filter.entrySet()) {
-			if (validColumns.contains(entry.getKey())) {
-				if (entry.getValue() instanceof List) {
-					List<String> ids = getStringsFromArray((List<?>) filter.get(entry.getKey()));
-					filterRules.addFilterRule(new ReportColumn(entry.getKey()), new FilterRule(ids, true)); 
+		for (Entry<String, Object> entry : filters.entrySet()) {
+			String column = FilterUtils.INSTANCE.idToSimpleColumn.get(entry.getKey());
+			if (column != null) {
+				Object value = entry.getValue();
+				if (value instanceof List) {
+					List<String> ids = getStringsFromArray((List<?>) value);
+					filterRules.addFilterRule(new ReportColumn(column), new FilterRule(ids, true));
 				} else 
-				if (entry.getValue() != null) {
-					String value = entry.getValue().toString();
-					filterRules.addFilterRule(new ReportColumn(entry.getKey()), new FilterRule(value, true));
+				if (value != null) {
+					String strValue = value.toString();
+					filterRules.addFilterRule(new ReportColumn(column), new FilterRule(strValue, true));
 				}
 			}
 		}
@@ -120,7 +244,7 @@ public class FilterUtils {
 		List<String> s = new ArrayList<String>();
 		for (Object obj : theArray) {
 			if (obj != null) {
-				if(Filters.ANY_BOOLEAN.equals(obj.toString())) {
+				if(FiltersEndpoint.ANY_BOOLEAN.equals(obj.toString())) {
 					s.add(FilterRule.FALSE_VALUE);
 					s.add(FilterRule.TRUE_VALUE);
 				} else {
@@ -131,11 +255,11 @@ public class FilterUtils {
 		return s;
 	}
 	
-	public static List<String> applyKeywordSearch(LinkedHashMap<String, Object> otherFilter) {
-		List<String> activitIds = new ArrayList<String>();
+	public static List<String> applyKeywordSearch(Map<String, Object> filters) {
+		List<String> activitIds = new ArrayList<>();
 
-		if (otherFilter!=null && otherFilter.get("keyword") != null) {
-			String keyword = ((Map<String,Object>)otherFilter).get("keyword").toString();
+		if (filters!=null && filters.get("keyword") != null) {
+			String keyword = filters.get("keyword").toString();
 			Collection<LoggerIdentifiable> activitySearch = SearchUtil
 					.getActivities(keyword,
 							TLSUtils.getRequest(), (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember"));
@@ -148,19 +272,17 @@ public class FilterUtils {
 		return activitIds;
 	}
 	
-	public static AmpReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, 
-			LinkedHashMap<String, Object> otherFilter, List<String> activityIds) {
-		return getFilterRules(columnFilter, otherFilter, activityIds, null);
+	public static AmpReportFilters getFilterRules(Map<String, Object> filters, List<String> activityIds) {
+		return getFilterRules(filters, activityIds, null);
 	}
 			
-	public static AmpReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, 
-			LinkedHashMap<String, Object> otherFilter, List<String> activityIds, AmpReportFilters filterRules) {
-			if(columnFilter!=null){
-				filterRules = FilterUtils.getApiColumnFilter(columnFilter, filterRules);	
-			}
-			if(otherFilter!=null){
-				filterRules = FilterUtils.getApiOtherFilters(otherFilter, filterRules);
-			}
+	public static AmpReportFilters getFilterRules(Map<String, Object> filters,
+			List<String> activityIds, AmpReportFilters filterRules) {
+		if (filters != null) {
+			filterRules = FilterUtils.getApiColumnFilter(filters, filterRules);
+			filterRules = FilterUtils.getApiDateFilters(filters, filterRules);
+			reportIgnoredFilters(filters);
+		}
 		if(activityIds!=null && activityIds.size()>0){
 			//if we have activityIds to add to the filter comming from the search by keyworkd
 			if(filterRules==null){
@@ -172,43 +294,60 @@ public class FilterUtils {
 		}
 		return filterRules;
 	}
-	
+
+	/**
+	 * Reports to log all filters that are ignored by Filters API.
+	 * @param filters filters to check
+	 */
+	private static void reportIgnoredFilters(Map<String, Object> filters) {
+		for (String filterId : filters.keySet()) {
+			if (!isSupportedByFilterApi(filterId)) {
+				logger.warn("Entry not supported by Filter API: " + filterId);
+			}
+		}
+	}
+
+	/**
+	 * Returns true if this filter id is supported by Filter API.
+	 * @param filterId id to check
+	 * @return true if this filter id is supported by Filter API
+	 */
+	private static boolean isSupportedByFilterApi(String filterId) {
+		return FilterUtils.INSTANCE.idToSimpleColumn.containsKey(filterId)
+				|| FilterUtils.INSTANCE.idToDateColumn.containsKey(filterId)
+				|| FiltersConstants.DATE.equals(filterId);
+	}
+
 	/**
 	 * Builds AmpReportFilters based on the json filters request
-	 * @param filtersConfig
+	 * @param filterMap json filters config request
 	 * @return AmpReportFilters
-	 * @see #getFilters(JsonBean, List)
+	 * @see #getFilters(Map, List, AmpReportFilters)
 	 */
-	public static AmpReportFilters getFilters(JsonBean filtersConfig, AmpReportFilters filters) {
-		return getFilters(filtersConfig, null, filters);
+	public static AmpReportFilters getFilters(Map<String, Object> filterMap, AmpReportFilters filters) {
+		return getFilters(filterMap, null, filters);
 	}
 	
 	/**
 	 * Builds AmpReportFilters based on the json filters request and additional options
-	 * @param filtersConfig json filters config request
+	 * @param filterMap json filters config request
 	 * @param activitIds    the list of activities to filter by
 	 * @return AmpReportFilters
 	 */
-	public static AmpReportFilters getFilters(JsonBean filtersConfig, List<String> activitIds,
+	public static AmpReportFilters getFilters(Map<String, Object> filterMap, List<String> activitIds,
 			AmpReportFilters filters) {
 		
 		//we check if we have filter by keyword
-		LinkedHashMap<String, Object> otherFilter = null;
-		if (filtersConfig != null) {
-			otherFilter = (LinkedHashMap<String, Object>) filtersConfig.get("otherFilters");
-			if (activitIds == null) {
-				activitIds = new ArrayList<String>();
-			}
-			activitIds.addAll(FilterUtils.applyKeywordSearch( otherFilter));
+		if (activitIds == null) {
+			activitIds = new ArrayList<>();
 		}
+		activitIds.addAll(FilterUtils.applyKeywordSearch(filterMap));
+
+		filters = FilterUtils.getFilterRules(filterMap, activitIds, filters);
 		
-		filters = FilterUtils.getFilterRules(
-				(LinkedHashMap<String, Object>) filtersConfig.get("columnFilters"),
-				otherFilter, activitIds, filters);
+		FiltersProcessor fProcessor = new FiltersProcessor(filterMap, filters);
 		
-		FiltersProcessor fProcessor = new FiltersProcessor(filtersConfig, filters);
-		
-		return (AmpReportFilters) fProcessor.getFilters();
+		return fProcessor.getFilters();
 	}
 	
 	/**
@@ -238,13 +377,14 @@ public class FilterUtils {
 	}
 
 	/**
-	 * Apply filterRules. In case the spec already have filterRules, append them
-	 * 
-	 * @param config
-	 * @param spec
+	 * Apply filterRules. In case the spec already have filterRules, append them.
+	 *
+	 * @param filterMap map with all filters
+	 * @param spec report specification
+	 * @param months if not null then filter by last N months
 	 */
-	public static void applyFilterRules(JsonBean config, ReportSpecificationImpl spec, Integer months) {
-	    AmpReportFilters filterRules = FilterUtils.getFilters(config, (AmpReportFilters) spec.getFilters());
+	public static void applyFilterRules(Map<String, Object> filterMap, ReportSpecificationImpl spec, Integer months) {
+	    AmpReportFilters filterRules = FilterUtils.getFilters(filterMap, (AmpReportFilters) spec.getFilters());
 		if (months != null) {
 			Calendar cal = Calendar.getInstance();
 			Calendar currentCal = Calendar.getInstance();
@@ -264,5 +404,4 @@ public class FilterUtils {
 			spec.setFilters(filterRules);
 		}
 	}
-
 }

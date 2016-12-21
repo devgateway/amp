@@ -18,8 +18,7 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.collection = this.app.data.activities;
     this.listenTo(this.app.data.filter, 'apply', this.refreshModel);
-    //this.listenTo(this.app.data.settings, 'change:selected', this.refreshModel);
-    this.listenTo(this.app.data.settings, 'applySettings', this.refreshModel);
+    this.listenTo(this.app.data.settingsWidget, 'applySettings', this.refreshModel);
     _.bindAll(this, 'render');
   },
 
@@ -70,17 +69,15 @@ module.exports = Backbone.View.extend({
   // table should show planned comitments and dispursements,
   // otherwise show actual values.
   updatePlannedActualUI: function() {
-    var self = this;
-    this.app.data.settings.load().then(function() {
-      var selected = self.app.data.settings.get('0').get('selected');
-      if (selected.toLowerCase().indexOf('planned') >= 0) {
-        self.$('.setting-actual').hide();
-        self.$('.setting-planned').show();
-      } else {
-        self.$('.setting-actual').show();
-        self.$('.setting-planned').hide();
-      }
-    });
+	  var self = this;
+	  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();		
+	  if (selected.toLowerCase().indexOf('planned') >= 0) {
+		  self.$('.setting-actual').hide();
+		  self.$('.setting-planned').show();
+	  } else {
+		  self.$('.setting-actual').show();
+		  self.$('.setting-planned').hide();
+	  }    
   },
 
   toggleDatasources: function() {

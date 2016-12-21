@@ -23,11 +23,12 @@ module.exports = BackboneDash.View.extend({
     this.app = options.app;
     this.listenTo(this.app.filter, 'cancel', this.hideFilter);
     this.listenTo(this.app.filter, 'apply', this.applyFilter);
-    this.app.settings.load().done(_(function() {
+    this.app.generalSettings.load().done(_(function() {
       // Extract default dates from Global Settings.
       var blob = {};
       // AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...)
-      this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
+      
+      this.app.filter.extractDates(this.app.generalSettings, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
 
       this.app.filter.loaded.done(_(function() {
         console.info('filters loaded');
@@ -137,5 +138,4 @@ module.exports = BackboneDash.View.extend({
   hideFilterDetails: function() {
     this.renderApplied();
   }
-
 });

@@ -23,7 +23,7 @@ module.exports = Backbone.Collection
   initialize: function(models, options) {
     if (options) {
       this.filter = options.filter;
-      this.settings = options.settings;
+      this.settingsWidget = options.settingsWidget;
       this.appData = options.appData;
       this.activities = new Activities([], options);
       this._joinedActivities = null;

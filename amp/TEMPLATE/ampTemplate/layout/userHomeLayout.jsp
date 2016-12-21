@@ -47,6 +47,7 @@
 		<link rel="stylesheet" href="tabs/js/lib/jqgrid-4.6.0/css/ui.jqgrid.css">		
 		<link rel="stylesheet" href="tabs/css/settings.css">
 		<link rel="stylesheet" href="node_modules/amp-filter/dist/amp-filter.css">
+		<link rel="stylesheet" href="node_modules/amp-settings/dist/amp-settings.css">
 		<link rel="stylesheet" href="tabs/css/tabs.css">
 		<script>
 		    // define waitSeconds above require script tag

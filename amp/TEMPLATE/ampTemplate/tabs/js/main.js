@@ -15,7 +15,8 @@ require.config({
 		 * jqgrid_lang : 'lib/jqgrid-4.6.0/js2/i18n/grid.locale-en', jqgrid :
 		 * 'lib/jqgrid-4.6.0/js2/jquery.jqGrid.src',
 		 */
-		jqgrid : 'lib/one_place/jqgrid-all',
+		jqgrid : 'lib/one_place/jqgrid-all',		
+		settings : '/TEMPLATE/ampTemplate/node_modules/amp-settings/dist/amp-settings',
 		filtersWidget : '/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter',
 		translationManager: '/TEMPLATE/ampTemplate/script/common/TranslationManager',
 		commonFilterUtils : '/TEMPLATE/ampTemplate/script/common/CommonFilterUtils', 
@@ -36,7 +37,7 @@ require.config({
 			exports : 'Marionette'
 		},
 		jqueryui : {
-			deps : [ 'jquery' ]
+			deps : ['jquery']
 		},
 		documentModel : {
 			deps : [ 'backbone' ],
@@ -51,8 +52,11 @@ require.config({
 			exports : "jQuery.fn.jqGrid"
 		},
 		filtersWidget : {
-			deps : [ 'backbone', 'commonFilterUtils'],
+			deps : ['commonFilterUtils'],
 			exports : 'filtersWidget'
+		},
+		settings : {			
+			exports: 'settings'
 		},
 		i18next : {
 			deps : [ 'jquery' ]

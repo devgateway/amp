@@ -25,6 +25,7 @@ def dbVersion
 stage('Build') {
     node {
         checkout scm
+
         withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
 
             // Build AMP
@@ -37,10 +38,21 @@ stage('Build') {
             sh "docker build -q -t localhost:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' amp"
             sh "docker push localhost:5000/amp-webapp:${tag} > /dev/null"
 
-            // Cleanup after Docker & Maven
+            // Remove local Docker images
             sh "docker rmi localhost:5000/amp-webapp:${tag}"
-            sh "cd amp && mvn clean -Djdbc.db=dummy"
         }
+
+        // Remove files generated during build
+        sh "rm -rf amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules/"
+        sh "rm -rf amp/TEMPLATE/ampTemplate/gisModule/dev/node/"
+        sh "rm -rf amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/"
+        sh "rm -rf amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node/"
+        sh "rm -rf amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules/"
+        sh "rm -rf amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node/"
+        sh "rm -rf amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules/"
+        sh "rm -rf amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node/"
+        sh "rm -rf amp/target/"
+        sh "rm -rf amp/WEB-INF/lib/"
     }
 }
 

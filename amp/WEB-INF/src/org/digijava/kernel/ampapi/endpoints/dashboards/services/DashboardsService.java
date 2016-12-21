@@ -36,7 +36,9 @@ import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -113,18 +115,12 @@ public class DashboardsService {
 		List<JsonBean> values = new ArrayList<JsonBean>();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTops", ArConstants.DONOR_TYPE);
 
-		AmpReportFilters filterRules = null;
-		LinkedHashMap<String, Object> columnFilters = null;
-		LinkedHashMap<String, Object> otherFilter = null;
+		Map<String, Object> filters = null;
 		if (config != null) {
-			columnFilters = (LinkedHashMap<String, Object>) config.get("columnFilters");
-			otherFilter = (LinkedHashMap<String, Object>) config.get("otherFilters");
+			filters = (Map<String, Object>) config.get(EPConstants.FILTERS);
 		}
-		if (columnFilters == null) {
-			columnFilters = new LinkedHashMap<String, Object>();
-		}
-		if (otherFilter == null) {
-			otherFilter = new LinkedHashMap<String, Object>();
+		if (filters == null) {
+			filters = new LinkedHashMap<>();
 		}
 
 		switch (type.toUpperCase()) {
@@ -190,8 +186,8 @@ public class DashboardsService {
 				}
 			}
 			LinkedHashMap<String, Object> peaceFilter = new LinkedHashMap<String, Object>();
-			peaceFilter.put(MoConstants.PROCUREMENT_SYSTEM, peaceFilterOptions);
-			columnFilters.putAll(peaceFilter);
+			peaceFilter.put(FiltersConstants.PROCUREMENT_SYSTEM, peaceFilterOptions);
+			filters.putAll(peaceFilter);
 
 			break;
 		default:
@@ -208,8 +204,8 @@ public class DashboardsService {
 		// applies settings, including funding type as a measure
 		SettingsUtils.applyExtendedSettings(spec, config);
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
-		
-		filterRules = FilterUtils.getFilterRules(columnFilters, otherFilter, null);
+
+		AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
 		if (filterRules != null) {
 			spec.setFilters(filterRules);
 		}
@@ -268,7 +264,7 @@ public class DashboardsService {
 
 		retlist.set("total", rawTotal);
 		retlist.set("sumarizedTotal",
-				calculateSumarizedTotals(rawTotal * unitsOption.multiplier, spec));
+				calculateSumarizedTotals(rawTotal / unitsOption.divider, spec));
 		// report the total number of tops available
 		retlist.set("maxLimit", maxLimit);
 		retlist.set("totalPositive", totalPositive);
@@ -385,12 +381,10 @@ public class DashboardsService {
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		
-		AmpReportFilters filterRules = null;
+		AmpReportFilters filterRules;
  		if(filter!=null){
- 			LinkedHashMap<String, Object> columnFilters=(LinkedHashMap<String, Object>)filter.get("columnFilters");
- 			LinkedHashMap<String, Object> otherFilter=(LinkedHashMap<String, Object>)filter.get("otherFilters");
-			filterRules = FilterUtils.getFilterRules(columnFilters,
- 					otherFilter, null);
+ 			Map<String, Object> filters=(Map<String, Object>)filter.get(EPConstants.FILTERS);
+			filterRules = FilterUtils.getFilterRules(filters, null);
  			if(filterRules!=null){
  				spec.setFilters(filterRules);
  			} 		
@@ -469,11 +463,9 @@ public class DashboardsService {
 		
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
 				
-		AmpReportFilters filterRules = null;
  		if (filter != null) {
- 			LinkedHashMap<String, Object> columnFilters = (LinkedHashMap<String, Object>) filter.get("columnFilters");
- 			LinkedHashMap<String, Object> otherFilter = (LinkedHashMap<String, Object>) filter.get("otherFilters");
-			filterRules = FilterUtils.getFilterRules(columnFilters, otherFilter, null);
+ 			LinkedHashMap<String, Object> filters = (LinkedHashMap<String, Object>) filter.get(EPConstants.FILTERS);
+			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
  			if (filterRules != null) {
  				spec.setFilters(filterRules);
  			}
@@ -541,18 +533,12 @@ public class DashboardsService {
 		SettingsUtils.applyExtendedSettings(spec, config);
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
 		
-		AmpReportFilters filterRules = null;
-		LinkedHashMap<String, Object> columnFilters = null;
-		LinkedHashMap<String, Object> otherFilter = null;
+		LinkedHashMap<String, Object> filters = null;
 		if (config != null) {
-			columnFilters = (LinkedHashMap<String, Object>) config.get("columnFilters");
-			otherFilter = (LinkedHashMap<String, Object>) config.get("otherFilters");
+			filters = (LinkedHashMap<String, Object>) config.get(EPConstants.FILTERS);
 		}
-		if (columnFilters == null) {
-			columnFilters = new LinkedHashMap<String, Object>();
-		}
-		if (otherFilter == null) {
-			otherFilter = new LinkedHashMap<String, Object>();
+		if (filters == null) {
+			filters = new LinkedHashMap<>();
 		}
 		// Add must-have filters for this chart.
 		ArrayList<AmpCategoryValue> catList = new ArrayList<AmpCategoryValue>(
@@ -564,15 +550,15 @@ public class DashboardsService {
 			}
 		}
 		LinkedHashMap<String, Object> peaceFilter = new LinkedHashMap<String, Object>();
-		peaceFilter.put(MoConstants.PROCUREMENT_SYSTEM, peaceFilterOptions);
-		columnFilters.putAll(peaceFilter);
+		peaceFilter.put(FiltersConstants.PROCUREMENT_SYSTEM, peaceFilterOptions);
+		filters.putAll(peaceFilter);
 		// Add filter for secondary program.
 		LinkedHashMap<String, Object> secondaryProgramFilter = new LinkedHashMap<String, Object>();
 		List<Integer> secondaryProgramIds = new ArrayList<Integer>();
 		secondaryProgramIds.add(id);
-		secondaryProgramFilter.put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, secondaryProgramIds);
-		columnFilters.putAll(secondaryProgramFilter);
-		filterRules = FilterUtils.getFilterRules(columnFilters, otherFilter, null);
+		secondaryProgramFilter.put(FiltersConstants.SECONDARY_PROGRAM_LEVEL_1, secondaryProgramIds);
+		filters.putAll(secondaryProgramFilter);
+		AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
 		if (filterRules != null) {
 			spec.setFilters(filterRules);
 		}
@@ -610,13 +596,13 @@ public class DashboardsService {
 		LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.get("settings");
 		ReportSettingsImpl defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
 		defaultSettings.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
-		if (userSettings.get("1") != null) {
-			defaultSettings.setCurrencyCode(userSettings.get("1").toString());
+		if (userSettings.get(SettingsConstants.CURRENCY_ID) != null) {
+			defaultSettings.setCurrencyCode(userSettings.get(SettingsConstants.CURRENCY_ID).toString());
 		}
 
-		if (userSettings.get("2") != null) {
-			defaultSettings.setCalendar(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(userSettings.get("2")
-					.toString()).longValue()));
+		if (userSettings.get(SettingsConstants.CALENDAR_TYPE_ID) != null) {
+			defaultSettings.setCalendar(FiscalCalendarUtil.getAmpFiscalCalendar(
+					Long.valueOf(userSettings.get(SettingsConstants.CALENDAR_TYPE_ID).toString())));
 		}
 		spec.setSettings(defaultSettings);
 	}

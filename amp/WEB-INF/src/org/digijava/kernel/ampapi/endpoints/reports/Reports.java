@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,6 +51,7 @@ import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -106,7 +109,11 @@ public class Reports implements ErrorReportingEndpoint {
 	@Path("/report/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JSONResult getReport(@PathParam("report_id") Long reportId) {
-		JSONResult report = getReport(DbUtil.getAmpReport(reportId));
+		AmpReports ampReport = DbUtil.getAmpReport(reportId);
+		if (ampReport == null) {
+			ApiErrorResponse.reportError(BAD_REQUEST, ReportErrors.REPORT_NOT_FOUND);
+		}
+		JSONResult report = getReport(ampReport);
 		report.getReportMetadata().setReportType(SAVED);
 		report.getReportMetadata().setReportIdentifier(reportId.toString());
 		return report;
@@ -637,28 +644,6 @@ public class Reports implements ErrorReportingEndpoint {
 	}
 
 	@GET
-	@Path("/report/{report_id}/settings/")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public final Object getSettings(@PathParam("report_id") Long reportId) {
-		AmpARFilter arFilter = FilterUtil.buildFilter(null, reportId);
-		ReportsFilterPickerForm oldFilterForm = new ReportsFilterPickerForm();
-		FilterUtil.populateForm(oldFilterForm, arFilter, reportId);
-		ReportsFilterPicker.fillSettingsFormDropdowns(oldFilterForm, arFilter);
-		Map<String, Object> settings = new HashMap<String, Object>();
-		settings.put("decimalSeparators", oldFilterForm.getAlldecimalSymbols());
-		settings.put("decimalSymbols", oldFilterForm.getAlldecimalSymbols());
-		settings.put("groupSeparators", oldFilterForm.getAllgroupingseparators());
-		settings.put("amountInThousands", oldFilterForm.getAmountinthousands());
-		settings.put("selectedDecimalPlaces", oldFilterForm.getCustomDecimalPlaces());
-		settings.put("selectedDecimalSeparator", oldFilterForm.getCustomDecimalSymbol());
-		settings.put("selectedGroupSeparator", oldFilterForm.getCustomGroupCharacter());
-		settings.put("selectedUseGroupingSeparator", oldFilterForm.getCustomUseGrouping());
-		// settings.put("calendars", oldFilterForm.getCalendars());
-		// settings.put("currencies", oldFilterForm.getCurrencies());
-		return settings;
-	}
-	
-	@GET
 	@Path("/report/columns")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final Map<String, String> getAllowedColumns() {
@@ -697,50 +682,44 @@ public class Reports implements ErrorReportingEndpoint {
 			AmpARFilter newFilters = null;
 
 			// Convert json object back to AmpReportFilters
-			if (formParams.get("filters") != null) {
-				JsonBean filters = new JsonBean();
-				LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get("filters");
-				AmpReportFilters reportFilters = null;
-				if (requestFilters != null) {
-					filters.any().putAll(requestFilters);
-					reportFilters = FilterUtils.getFilters(filters,
-							new AmpReportFilters());
+			Map<String, Object> filterMap = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+			if (filterMap != null) {
+				AmpReportFilters reportFilters = FilterUtils.getFilters(filterMap, new AmpReportFilters());
 
-					// Transform back to legacy AmpARFilters.
-					AmpReportFiltersConverter converter = new AmpReportFiltersConverter(reportFilters);
-					newFilters = converter.buildFilters();
-					// converter.mergeWithOldFilters(oldFilters);
-					
-					if (formParams.getString("sidx") != null && !formParams.getString("sidx").equals("")) {			
-						formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));									
-						logger.info(formParams.get(EPConstants.SORTING));
-						newFilters.setSortByAsc(formParams.getString("sord").equals("asc") ? true : false);
-						
-						String columns = "";
-						for (Map map : ((List<Map>) formParams.get(EPConstants.SORTING))) {
-							String column = map.get("columns").toString();
-							column = column.substring(column.indexOf("[") + 1, column.indexOf("]"));
-							columns += ("/" + column);
-						}
-						newFilters.setSortBy(columns);
-					}
-					
-					if (formParams.get(EPConstants.SETTINGS) != null) {
-						String currency = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("1").toString();
-						String calendar = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("2").toString();
-						newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
-						newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
-					}
-					
-					logger.info(newFilters);
+				// Transform back to legacy AmpARFilters.
+				AmpReportFiltersConverter converter = new AmpReportFiltersConverter(reportFilters);
+				newFilters = converter.buildFilters();
+				// converter.mergeWithOldFilters(oldFilters);
 
-					Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, newFilters);
-					if (report.getFilterDataSet() == null)
-						report.setFilterDataSet(fdSet);
-					else {
-						report.getFilterDataSet().clear();
-						report.getFilterDataSet().addAll(fdSet);
+				if (formParams.getString("sidx") != null && !formParams.getString("sidx").equals("")) {
+					formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));
+					logger.info(formParams.get(EPConstants.SORTING));
+					newFilters.setSortByAsc(formParams.getString("sord").equals("asc") ? true : false);
+
+					String columns = "";
+					for (Map map : ((List<Map>) formParams.get(EPConstants.SORTING))) {
+						String column = map.get("columns").toString();
+						column = column.substring(column.indexOf("[") + 1, column.indexOf("]"));
+						columns += ("/" + column);
 					}
+					newFilters.setSortBy(columns);
+				}
+
+				if (formParams.get(EPConstants.SETTINGS) != null) {
+					String currency = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("1").toString();
+					String calendar = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("2").toString();
+					newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
+					newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
+				}
+
+				logger.info(newFilters);
+
+				Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, newFilters);
+				if (report.getFilterDataSet() == null)
+					report.setFilterDataSet(fdSet);
+				else {
+					report.getFilterDataSet().clear();
+					report.getFilterDataSet().addAll(fdSet);
 				}
 			}
 			

@@ -4,7 +4,6 @@ import static org.dgfoundation.amp.mondrian.MondrianETL.MONDRIAN_EXCHANGE_RATES_
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -20,23 +19,19 @@ import mondrian.spi.DynamicSchemaProcessor;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
-import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportFilters;
-import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.CustomMeasures;
-import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -46,7 +41,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -464,8 +458,14 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		for (Entry<String, List<String>> pair : CustomMeasures.MEASURE_DEPENDENCY.entrySet()) {
 			for (String measure : pair.getValue()) {
 				if (!MondrianMapping.isMeasureDefined(measure)) {
-					Node calculatedMember = XMLGlobals.selectNode(xmlSchema, "//CalculatedMember[@name='" + pair.getKey() + "']");
-					calculatedMember.getParentNode().removeChild(calculatedMember);
+					String expression = "//CalculatedMember[@name='" + pair.getKey() + "']";
+					NodeList nl = XMLGlobals.selectNodes(xmlSchema, expression);
+					if (nl.getLength() > 0) {
+						Node calculatedMember = nl.item(0);
+						calculatedMember.getParentNode().removeChild(calculatedMember);
+					} else {
+						logger.warn("cannot find the node " + expression + " in the XML document!");
+					}
 					break;
 				}
 			}

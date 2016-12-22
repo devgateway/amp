@@ -37,14 +37,8 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 			
 			// Get list of human friendly applied filters we will use in the
 			// accordion.
-			var readableFilters = app.TabsApp.filtersWidget.serializeToModels();
-			
-
-			// Change the format of the object before sending it to the endpoint
-			// for refiltering.
-			var auxFilters = app.TabsApp.serializedFilters;
-			
-			GridManager.filter(app.TabsApp.currentTab.get('id'), auxFilters.filters, app.TabsApp.settingsWidget.toAPIFormat());
+			var readableFilters = app.TabsApp.filtersWidget.serializeToModels();	
+			GridManager.filter(app.TabsApp.currentTab.get('id'), app.TabsApp.serializedFilters.filters, app.TabsApp.settingsWidget.toAPIFormat());
 
 			// Update the accordion with the newly applied filters.
 			FilterUtils.updateFiltersRegion(readableFilters);
@@ -64,14 +58,12 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 	FilterManager.saveTab = function(dialogView) {
 		// If filterWidget was never opened.
 		if (app.TabsApp.serializedFilters === null) {
-			var blob = CommonFilterUtils.convertJavaFiltersToJS(app.TabsApp.filters);
-			app.TabsApp.filtersWidget.deserialize(blob, {
+			app.TabsApp.filtersWidget.deserialize(app.TabsApp.filters, {
 				silent : true
 			});
 			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize();
 		}
-		var transformedFilters = FilterUtils.widgetFiltersToJavaFilters(app.TabsApp.serializedFilters);
-		
+				
 		var reportsInputs = jQuery('[id^="newTabNameInput"]');
 		var reportNames = _.map(reportsInputs, function(input)
 				{ 
@@ -83,7 +75,7 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 		var sidx = (app.TabsApp.currentTab.get('currentSorting') !== null ? app.TabsApp.currentTab.get('currentSorting').sidx : null);
 		var sord = (app.TabsApp.currentTab.get('currentSorting') !== null ? app.TabsApp.currentTab.get('currentSorting').sord : null);
 		var data = JSON.stringify({
-			filters : transformedFilters,
+			filters : app.TabsApp.serializedFilters,
 			reportData : reportNames,
 			sidx: sidx,
 			sord: sord,

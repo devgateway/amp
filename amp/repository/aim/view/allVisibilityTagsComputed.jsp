@@ -35,8 +35,7 @@
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/> 
-<module:display name="GIS DASHBOARD"></module:display> 
+<module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="/GIS"></module:display>
 
 <module:display  name="/Dashboards"></module:display>
@@ -92,8 +91,7 @@
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display> 
-<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display> 
-<module:display name="WIDGETS"></module:display> 
+<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
@@ -121,27 +119,6 @@
 <feature:display name="Activity - Component Step" module="Components"></feature:display>
  <feature:display name="Activity Dashboard" module="M & E"></feature:display>
 
-<feature:display name="Select Base Map" module="Map Module"></feature:display>
-<field:display   name="Show image" feature="Map Options"></field:display>
-<field:display name="Use Esri Online Maps" feature="Select Base Map"></field:display>
-<field:display name="Use Local Base Maps" feature="Select Base Map"></field:display>
-<feature:display name="Map Options" module="Map Module"></feature:display>
-<field:display name="Show Map In Activity Preview" feature="Map Options"></field:display>
-<feature:display name="Printing" module="Map Module"></feature:display>
-<field:display   name="Html Printing" feature="Printing"></field:display>
-<field:display   name="Esri Printing" feature="Printing"></field:display>
-<feature:display name="Use Indicators Maps" module="Map Module"></feature:display>
-<feature:display name="Add activity" module="Map Module"></feature:display>
-<feature:display name="Search  Structures" module="Map Module"></feature:display>
-<feature:display name="Structures" module="Map Module"></feature:display>
-<field:display feature="Structures" name="Show Image"></field:display>
-<feature:display name="Structures On Load" module="Map Module"></feature:display>
-<field:display feature="Structures On Load" name="Structures Show Expanded"></field:display>
-<feature:display name="Show National" module="Map Module"></feature:display>
-<feature:display name="Highlight regions" module="Map Module"></feature:display>
-<feature:display name="Highlight Zones" module="Map Module"></feature:display>
-<feature:display name="Show map in public view" module="Map Module"></feature:display>
-<field:display feature="Structures" name="Structures Column"></field:display>
 <module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
@@ -189,9 +166,7 @@
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
 <feature:display name="Funding Information" module="Funding"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Results Dashboard Data" module="WIDGETS"></feature:display> 
-<feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display> 
-<feature:display name="Issues" module="Issues"></feature:display> 
+<feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Level Links" module="Activity Levels"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display> 
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
@@ -235,13 +210,11 @@
 <feature:display name="Reports Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Save Filters from Desktop" module="Report Generator"></feature:display> 
 <feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Table Widgets" module="WIDGETS"></feature:display> 
-<feature:display name="Target Value" module="PI Reports"></feature:display> 
+<feature:display name="Target Value" module="PI Reports"></feature:display>
 
 <feature:display name="User Help" module="HELP"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display> 
-<feature:display name="Widget Places" module="WIDGETS"></feature:display> 
-<field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
+<field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display>
 <field:display name="Donor Email" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor First Name" feature="Donor Contact Information"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
@@ -701,18 +674,7 @@
 <field:display name="Sub Program Level 7" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub Program Level 8" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub-Program" feature="Budget"></field:display> 
-<field:display name="Sub-Vote" feature="Budget"></field:display> 
-<field:display name="Table CSS class" feature="Table Widgets"></field:display> 
-<field:display name="Table Code" feature="Table Widgets"></field:display> 
-<field:display name="Table Column CSS class" feature="Table Widgets"></field:display> 
-<field:display name="Table Column Code" feature="Table Widgets"></field:display> 
-<field:display name="Table Column HTML Style" feature="Table Widgets"></field:display> 
-<field:display name="Table Column Pattern" feature="Table Widgets"></field:display> 
-<field:display name="Table Column Widgth" feature="Table Widgets"></field:display> 
-<field:display name="Table Place" feature="Table Widgets"></field:display> 
-<field:display name="Table Show name as widget title" feature="Table Widgets"></field:display> 
-<field:display name="Table Style" feature="Table Widgets"></field:display> 
-<field:display name="Table Width" feature="Table Widgets"></field:display> 
+<field:display name="Sub-Vote" feature="Budget"></field:display>
 <field:display name="Target Value" feature="Activity"></field:display> 
 <field:display name="Template Manager" feature="Message Manager"></field:display> 
 <field:display name="Title Text Box" feature="Create Message Form"></field:display> 
@@ -833,10 +795,6 @@
 <field:display name="Budget Sector" feature="Budget"></field:display>
 <field:display name="Budget Organization" feature="Budget"></field:display>
 <field:display name="Budget Program" feature="Budget"></field:display>
-
-<field:display name="Measure Commitment" feature="GIS DASHBOARD"></field:display>
-<field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
-<field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
 
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
 <field:display name="Contracting Agency" feature="Contracting Agency"></field:display> 

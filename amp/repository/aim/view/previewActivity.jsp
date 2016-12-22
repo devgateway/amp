@@ -1421,21 +1421,6 @@ function collapseAll() {
 					</table>
 					<hr/>
 				</c:forEach>
-				<module:display name="GIS DASHBOARD">
-					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
-						<tr> <td colspan="2">
-							<br>
-							<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
-								<bean:define id="selLocIds">
-								<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
-									<bean:write name="selectedLocs" property="locId" />|
-								</c:forEach>
-								</bean:define>
-							</logic:notEmpty>
-						</td></tr>
-					</table>
-					<hr/>
-				</module:display>
 				<field:display name="Show Map In Activity Preview" feature="Map Options">
 					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 					<tr> <td colspan="2">

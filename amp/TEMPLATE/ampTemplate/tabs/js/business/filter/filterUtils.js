@@ -47,198 +47,95 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 	}
 
 	//TODO: move to CommonFilterUtils.js and merge with the same function on Saiku.
-	FilterUtils.extractFilters = function(content) {
-		var filters = new Filters();
-		//TODO: uncomment -  commented out because of the filter strucure changes done in 2.13
+	FilterUtils.extractFilters = function(filtersFromWidgetWithNames) {
+		console.log(filtersFromWidgetWithNames);
+		if(app.TabsApp.filters == undefined){
+			app.TabsApp.filters = new Filters();
+		}
 		
-		/*var filtersColumnsJson = content.get('columnFilterRules');
-		jQuery(filtersColumnsJson.keys()).each(function(i, item) {
-			var subElement = filtersColumnsJson.get(item);
-			if (subElement instanceof Backbone.Collection) {
-
-				var element = subElement.models[0];
-				var content = [];
-				if (element.get('value') !== null) {
-					var auxItem = {};
-					auxItem.id = element.get('value');
-					auxItem.name = element.get('valueToName').attributes[element.get('value')];
-					content.push(auxItem);
-				} else if (element.get('valueToName') !== null) {
-					// This should be .models but the way the endpoint returns
-					// the data breaks backbone.
-					var foundValueToName = false;
-					_.each(element.get('valueToName').attributes, function(item_, i) {
-						// Need to do this because of how js parses these data
-						// and adds an extra element.
-						if (i !== undefined && item_ !== undefined) {
-							var item = {};
-							item.id = i;
-							item.name = item_;
-							if (subElement.name === 'DATE') {
-								item.dateIntervalType = (element.get('max') === item.id ? 'max' : 'min');
-							}
-							content.push(item);
-							foundValueToName = true;
+		if (filtersFromWidgetWithNames.filters !== undefined) {
+			for ( var propertyName in filtersFromWidgetWithNames.filters) {
+				var auxProperty = filtersFromWidgetWithNames.filters[propertyName];	
+				if(auxProperty.modelType === 'DATE-RANGE-VALUES' || auxProperty.modelType === 'YEAR-SINGLE-VALUE'){
+					var dateFilter = FilterUtils._extractDateFilter(propertyName, auxProperty);
+					if(dateFilter){
+						app.TabsApp.filters.add(dateFilter);
+					}
+				}else{
+					_.each(auxProperty.serializedToModels, function(item, i) {
+						var content = [];
+						if (item.length > 0) {
+							_.each(item, function(item2) {
+								content.push({id: 0, name: item2.name, trnName: TranslationManager.getTranslated(item2.name)});
+							});
+							var name = TranslationManager.getTranslated(item[0].levelName.replace('-', ' ')) || item[0].levelName.replace('-', ' ');
+							var filter = new Filter({
+								trnName : name,
+								name: item[0].levelName,
+								values : content
+							});
+							app.TabsApp.filters.add(filter);
 						}
-					});
-					if (!foundValueToName) {
-						// This is a special case for usually for boolean filters with YES and/or NO answer.						
-						_.each(element.get('values').models, function(item_, i) {
-							if (i !== undefined && item_ !== undefined) {
-								var item = {};
-								item[i] = item_.get('value');
-								content = item;
-							}
-						});
-					}
-				}
-				
-				//translate filter values
-				_.each(content,function(item, i) {
-					//for now only true or false were asked to be translated. 
-					//Avoid doing a ajax call for all values if we only need 2.
-					if (item.name === "true" || item.name === "false") {
-						item.trnName = TranslationManager.getTranslated(item.name);
-					 }
-					else {
-						if (item instanceof Array) {
-							item.trnName = item.name;							
-						} else {
-							// This is a special case for boolean filters like Humanitarian Aid that have a different structure so we cant translate anything, just have 0/1.
-							// This forces us to translate 0/1 into Yes/No elsewhere because we cant do "1".trnName = 'Yes'
-						}
-					}
-				});
-				var auxFilter = new Filter({
-					trnName : TranslationManager.getTranslated(item),
-					name: item,
-					values : content
-				});
-				filters.add(auxFilter);
-			}
-		});
+					});	
+				}				
 
-		var filtersDateColumnsJson = content.get('columnDateFilterRules');
-		jQuery(filtersDateColumnsJson.keys()).each(function(i, item) {
-			var subElement = filtersDateColumnsJson.get(item);
-			if (subElement instanceof Backbone.Collection) {
-				var element = subElement.models[0];
-				var content = [];
-				var valueToName = element.get('valueToName');
-				if (element.get('value') !== null) {
-					var auxItem = {};
-					auxItem.id = element.get('value');
-					auxItem.name = valueToName.attributes[element.get('value')];
-					content.push(auxItem);
-				} else if (valueToName !== null) {
-					valueToName = _.without(Object.keys(valueToName.attributes), "id");
-					if (valueToName.length === 2) { // Start and end date OR start date only. 
-						content.push({id: i, name: element.get('valueToName').get(valueToName[0])}, {id: i, name: element.get('valueToName').get(valueToName[1])});
-					} else {
-						// End date only.
-						content.push({id: i, name: null}, {id: i, name: element.get('valueToName').get(valueToName[0])});
-					}
-				}
-				var auxFilter = new Filter({
-					trnName : TranslationManager.getTranslated(item),
-					name: item,
-					values : content
-				});
-				filters.add(auxFilter);
 			}
-		});
+		}		
 		
-		//Process filters that dont come inside the previous categories (ie: computed year).
-		if (content.get('computedYear')) {
-			var values = [];
-			values.push({
-				id : content.get('computedYear'),
-				name : content.get('computedYear'),
-				trnName : content.get('computedYear')
-			});
-			var auxFilter = new Filter({
-				trnName : TranslationManager.getTranslated('Computed Year'),
-				name: 'computedYear',
-				values : values
-			}); 
-			filters.add(auxFilter);
-		}*/
-		
-		return filters;
+		return app.TabsApp.filters;
 	};
 
 	// TODO: after we are sure tab's default filters are EXACTLY the same than
 	// widget filters we can simplify these 2 methods into just one.
-	FilterUtils.updateFiltersRegion = function(filtersFromWidgetWithNames) {
+	FilterUtils.updateFiltersRegion = function(filtersFromWidgetWithNames) {		
 		app.TabsApp.filters.models = [];
 		app.TabsApp.dynamicContentRegion.currentView.filters.currentView.render();
-		
-		if (filtersFromWidgetWithNames.columnFilters !== undefined) {
-			for ( var propertyName in filtersFromWidgetWithNames.columnFilters) {
-				var auxProperty = filtersFromWidgetWithNames.columnFilters[propertyName];				
-				_.each(auxProperty.serializedToModels, function(item, i) {
-					var content = [];
-					if (item.length > 0) {
-						_.each(item, function(item2) {
-							content.push({id: 0, name: item2.name, trnName: TranslationManager.getTranslated(item2.name)});
-						});
-						var name = TranslationManager.getTranslated(item[0].levelName) || item[0].levelName;
-						var filter = new Filter({
-							trnName : name,
-							name: item[0].levelName,
-							values : content
-						});
-						app.TabsApp.filters.models.push(filter);
-					}
-				});				
-			}
-		}
-		if (filtersFromWidgetWithNames.otherFilters !== undefined) {
-			for ( var propertyName in filtersFromWidgetWithNames.otherFilters) {
-				var dateContent = filtersFromWidgetWithNames.otherFilters[propertyName];
-				if (dateContent !== undefined) {
-					var filterObject = {
-							trnName : TranslationManager.getTranslated(propertyName),
-							name : propertyName,
-							values: []
-					};
-					if (dateContent.modelType === 'DATE-RANGE-VALUES') {
-						dateContent.start =  dateContent.start || "" ;
-						dateContent.end =  dateContent.end || "" ;	
-	
-						var startDatePrefix = (dateContent.start.length > 0 && dateContent.end.length === 0) ? "from " : "";
-						var endDatePrefix = (dateContent.start.length === 0 && dateContent.end.length > 0) ? "until " : "";
-						if(dateContent.start.length > 0){
-							filterObject.values.push({
-								id : dateContent.start,
-								name : dateContent.start,
-								trnName : TranslationManager.getTranslated(startDatePrefix) + app.TabsApp.filtersWidget.formatDate(dateContent.start)
-							});
-						}
-						if(dateContent.end.length > 0){
-							filterObject.values.push({
-								id : dateContent.end,
-								name : dateContent.end,
-								trnName : TranslationManager.getTranslated(endDatePrefix) + app.TabsApp.filtersWidget.formatDate(dateContent.end)
-	
-							});	
-						}															 
-					} else if (dateContent.modelType === 'YEAR-SINGLE-VALUE') {
-						dateContent.year = dateContent.year || '';
-						filterObject.values.push({
-							id : dateContent.year,
-							name : dateContent.year,
-							trnName : dateContent.year
-						});
-						filterObject.trnName = dateContent.displayName;
-					}
-					var filter = new Filter(filterObject);
-					app.TabsApp.filters.models.push(filter);
-				}
-			}
-		}
+		FilterUtils.extractFilters(filtersFromWidgetWithNames);
 		app.TabsApp.dynamicContentRegion.currentView.filters.currentView.render();
 	};
+	
+	FilterUtils._extractDateFilter = function(propertyName, auxProperty){
+		var filter;
+		if (auxProperty !== undefined) {
+			var filterObject = {
+					trnName : TranslationManager.getTranslated(propertyName),
+					name : propertyName,
+					values: []
+			};
+			if (auxProperty.modelType === 'DATE-RANGE-VALUES') {
+				auxProperty.start =  auxProperty.start || "" ;
+				auxProperty.end =  auxProperty.end || "" ;	
+
+				var startDatePrefix = (auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "from " : "";
+				var endDatePrefix = (auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "until " : "";
+				if(auxProperty.start.length > 0){
+					filterObject.values.push({
+						id : auxProperty.start,
+						name : auxProperty.start,
+						trnName : TranslationManager.getTranslated(startDatePrefix) + app.TabsApp.filtersWidget.formatDate(auxProperty.start)
+					});
+				}
+				if(auxProperty.end.length > 0){
+					filterObject.values.push({
+						id : auxProperty.end,
+						name : auxProperty.end,
+						trnName : TranslationManager.getTranslated(endDatePrefix) + app.TabsApp.filtersWidget.formatDate(auxProperty.end)
+
+					});	
+				}															 
+			} else if (auxProperty.modelType === 'YEAR-SINGLE-VALUE') {
+				auxProperty.year = auxProperty.year || '';
+				filterObject.values.push({
+					id : auxProperty.year,
+					name : auxProperty.year,
+					trnName : auxProperty.year
+				});
+				filterObject.trnName = auxProperty.displayName;
+			}
+			filter = new Filter(filterObject);			
+		}
+		return filter;
+};
 
 	//copypasted from years-filter-model.js
 	FilterUtils._dateConvert = function(input){

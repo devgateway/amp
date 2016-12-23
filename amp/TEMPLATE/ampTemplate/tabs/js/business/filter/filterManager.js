@@ -37,11 +37,9 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 			
 			// Get list of human friendly applied filters we will use in the
 			// accordion.
-			var readableFilters = app.TabsApp.filtersWidget.serializeToModels();	
 			GridManager.filter(app.TabsApp.currentTab.get('id'), app.TabsApp.serializedFilters.filters, app.TabsApp.settingsWidget.toAPIFormat());
-
 			// Update the accordion with the newly applied filters.
-			FilterUtils.updateFiltersRegion(readableFilters);
+			FilterUtils.updateFiltersRegion(app.TabsApp.filtersWidget.serializeToModels());
 
 			jQuery(container).hide();
 		});
@@ -58,7 +56,7 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 	FilterManager.saveTab = function(dialogView) {
 		// If filterWidget was never opened.
 		if (app.TabsApp.serializedFilters === null) {
-			app.TabsApp.filtersWidget.deserialize(app.TabsApp.filters, {
+			app.TabsApp.filtersWidget.deserialize(app.TabsApp.rawFilters, {
 				silent : true
 			});
 			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize();

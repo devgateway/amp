@@ -45,13 +45,17 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 				render : function(model) {
 					// Close floating accordion if needed.
 					jQuery("#main-dynamic-content-region_" + reportId + " #filters-collapsible-area").accordion('option', 'active', false);
+
+					console.log('filter widget loaded');
+					
 					// Convert report filters to filterwidget filters.
 					var blob = undefined;
 					if (app.TabsApp.serializedFilters === null) {
-						blob = reportFilters;
+						blob = app.TabsApp.rawFilters;
 					} else {
 						blob = app.TabsApp.serializedFilters;
 					}
+					
 					app.TabsApp.filtersWidget.reset({
 						silent : true
 					});

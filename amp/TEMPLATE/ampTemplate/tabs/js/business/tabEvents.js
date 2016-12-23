@@ -43,8 +43,16 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 
 			// --------------------------------------------------------------------------------------//
 			// TODO: Move filters section elsewhere.
-			// Create collection of Filters used for legends.				
-			app.TabsApp.filters = firstContent.rawFilters;
+			// Create collection of Filters used for legends.	
+			app.TabsApp.rawFilters = firstContent.rawFilters;
+
+			app.TabsApp.filtersWidget.deserialize(app.TabsApp.rawFilters, {
+				silent : true
+			});
+			
+			
+			app.TabsApp.filters = FilterUtils.extractFilters(app.TabsApp.filtersWidget.serializeToModels());
+			
 			// Variable to save the current serialized filters from widget.
 			app.TabsApp.serializedFilters = null;
 			// Save default sorters if any.
@@ -81,7 +89,9 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				filters : app.TabsApp.filters
 			});
 			app.TabsApp.dynamicContentRegion.show(dynamicLayoutView);
+			
 			dynamicLayoutView.filters.show(compositeView);
+			
 			// Create accordion for filters area.
 			jQuery("#main-dynamic-content-region_" + app.TabsApp.currentTab.get('id') + " #filters-collapsible-area").accordion({
 				collapsible : true,

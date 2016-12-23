@@ -43,6 +43,7 @@ import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -1383,6 +1384,62 @@ public class ExportActivityToPDF extends Action {
                 createGeneralInfoRow(mainLayout,columnName,identification.getCreatedDate());
             }
 
+            if (FeaturesUtil.isVisibleModule("M & E")) {
+                PdfPCell meCell = new PdfPCell();
+                p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("M & E", locale, siteId)), titleFont);
+                p1.setAlignment(Element.ALIGN_RIGHT);
+                meCell.addElement(p1);
+                meCell.setBackgroundColor(new Color(244, 244, 242));
+                meCell.setBorder(0);
+                mainLayout.addCell(meCell);
+
+                String indicatorToAdd = "";
+
+                if (myForm.getIndicators() != null) {
+                    for (IndicatorActivity indicator : myForm.getIndicators()) {
+                        columnVal = "";
+                        if (FeaturesUtil.isVisibleField("Indicator Name")) {
+                            columnVal += indicator.getIndicator().getCode() + " - " + indicator.getIndicator().getName();
+                        }
+                        if (FeaturesUtil.isVisibleField("Logframe Category")) {
+                            if (indicator.getValues() != null && indicator.getValues().size() > 0) {
+                                columnVal += " - " + ExportUtil.getIndicatorActivityLogFrame(indicator);
+                            }
+                        }
+                        columnVal += "\n";
+                        if (FeaturesUtil.isVisibleField("Sectors")) {
+                            if (indicator.getIndicator().getSectors() != null) {
+                                columnVal += ExportUtil.getIndicatorSectors(indicator);
+                                columnVal += "\n";
+                            }
+                        }
+
+                        for (AmpIndicatorValue value : indicator.getValues()) {
+                            if (value.getValueType() != 3) {
+                                String fieldName = ExportUtil.getIndicatorValueType(value);
+                                columnVal += "\n" + TranslatorWorker.translateText(fieldName) + "\n";
+                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
+                                    columnVal += " " + value.getValue();
+                                }
+                                if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
+                                    columnVal += " " + value.getComment();
+                                }
+                                if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
+                                    columnVal += " " + DateConversion.convertDateToLocalizedString(value.getValueDate());
+                                }
+                                columnVal += "\n";
+                            }
+                        }
+                        indicatorToAdd += columnVal + "\n";
+                    }
+
+                    PdfPCell indicatorCell = new PdfPCell();
+                    p1 = new Paragraph(postprocessText(indicatorToAdd), plainFont);
+                    indicatorCell.addElement(p1);
+                    indicatorCell.setBorder(0);
+                    mainLayout.addCell(indicatorCell);
+                }
+            }
             /**
              * Activity - Performance
              */

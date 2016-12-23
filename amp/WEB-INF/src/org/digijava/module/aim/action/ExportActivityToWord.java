@@ -40,6 +40,7 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -94,6 +95,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -592,6 +594,82 @@ public class ExportActivityToWord extends Action {
                 List<Table> activityCreationFieldsTables = getActivityCreationFieldsTables(	request, myForm);
                 for (Table tbl : activityCreationFieldsTables) {
                     doc.add(tbl);
+                }
+
+                if (FeaturesUtil.isVisibleModule("M & E")) {
+                    Table meTbl = null;
+                    meTbl = new Table(1);
+                    meTbl.setWidth(100);
+                    RtfCell meTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("M & E").toUpperCase(), HEADERFONT));
+                    meTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    meTitleCell.setBackgroundColor(CELLCOLORGRAY);
+                    meTbl.addCell(meTitleCell);
+
+                    if (myForm.getIndicators() != null) {
+                        for (IndicatorActivity indicator : myForm.getIndicators()) {
+                            columnVal = "";
+                            if (FeaturesUtil.isVisibleField("Indicator Name")) {
+                                columnVal = indicator.getIndicator().getCode() + " " + indicator.getIndicator().getName();
+                            }
+                            if (FeaturesUtil.isVisibleField("Logframe Category")) {
+                                if (indicator.getValues() != null && indicator.getValues().size() > 0) {
+                                    columnVal += " - " + ExportUtil.getIndicatorActivityLogFrame(indicator);
+                                }
+                            }
+                            columnVal += "\n";
+                            RtfCell cellName = new RtfCell();
+                            cellName.setBorder(0);
+                            cellName.add(new Paragraph(columnVal, BOLDFONT));
+                            meTbl.addCell(cellName);
+
+                            columnVal = "";
+                            if (FeaturesUtil.isVisibleField("Sectors")) {
+                                if (indicator.getIndicator().getSectors() != null) {
+                                    columnVal += ExportUtil.getIndicatorSectors(indicator);
+                                    columnVal += "\n";
+                                }
+
+                                RtfCell cellSectors = new RtfCell();
+                                cellSectors.setBorder(0);
+                                cellSectors.add(new Paragraph(columnVal, PLAINFONT));
+                                meTbl.addCell(cellSectors);
+                            }
+
+                            for (AmpIndicatorValue value : indicator.getValues()) {
+                                if (value.getValueType() != 3) {
+                                    String fieldName = ExportUtil.getIndicatorValueType(value);
+                                    columnVal = TranslatorWorker.translateText(fieldName);
+                                    RtfCell cellValueTitle = new RtfCell();
+                                    cellValueTitle.setBorder(0);
+                                    cellValueTitle.add(new Paragraph(columnVal, BOLDFONT));
+                                    meTbl.addCell(cellValueTitle);
+
+                                    Table additionalInfoSubTable = new Table(2);
+                                    additionalInfoSubTable.setWidth(80);
+
+                                    if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
+                                        generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Value"), value.getValue().toString(), null);
+                                    }
+                                    if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
+                                        generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Comment"), value.getComment(), null);
+                                    }
+                                    if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
+                                        generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Date"), DateConversion.convertDateToLocalizedString(value.getValueDate()), null);
+                                    }
+
+                                    RtfCell cellValue = new RtfCell();
+                                    cellValue.setBorder(0);
+                                    cellValue.add(additionalInfoSubTable);
+                                    meTbl.addCell(cellValue);
+                                }
+                            }
+
+                        }
+                        applyEmptyCell(meTbl, 1);
+                    }
+
+                    doc.add(meTbl);
+                    doc.add(new Paragraph(" "));
                 }
 
                 List<Table> activityPerformanceTables = getActivityPerformanceTables(request, activity);

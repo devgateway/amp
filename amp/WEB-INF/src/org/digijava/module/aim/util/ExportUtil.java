@@ -2,6 +2,9 @@ package org.digijava.module.aim.util;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.h2.util.StringUtils;
 
 import java.util.Set;
@@ -31,4 +34,31 @@ public class ExportUtil {
         result += " \n";
         return result;
     }
+
+    public static String getIndicatorValueType(AmpIndicatorValue value) {
+        if (value.getValueType() == AmpIndicatorValue.ACTUAL ) {
+            return "Current";
+        } else if (value.getValueType() == AmpIndicatorValue.BASE) {
+            return "Base";
+        } else if (value.getValueType() == AmpIndicatorValue.TARGET) {
+            return "Target";
+        }
+        return null;
+    }
+
+    public static String getIndicatorActivityLogFrame(IndicatorActivity indicator) {
+        if (indicator.getValues() != null && indicator.getValues().size() > 0) {
+            return indicator.getValues().iterator().next().getLogFrame().getValue();
+        }
+        return null;
+    }
+
+    public static String getIndicatorSectors(IndicatorActivity indicator) {
+        String result = "";
+        for (AmpSector sector : indicator.getIndicator().getSectors()) {
+            result += sector.getName() + "\n";
+        }
+        return result;
+    }
+
 }

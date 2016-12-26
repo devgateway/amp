@@ -70,5 +70,7 @@
  	        <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="ORG_ID"/>
  	 	</set>
 		<property name="pledger" column="PLEDGER" type="boolean" />
+		
+		<property name="passwordChangedAt" column="PASSWORD_CHANGED_AT" type="java.time.ZonedDateTime" />		
 	</class>
 </hibernate-mapping>

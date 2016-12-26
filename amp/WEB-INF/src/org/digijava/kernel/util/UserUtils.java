@@ -22,6 +22,7 @@
 
 package org.digijava.kernel.util;
 
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -30,12 +31,8 @@ import java.util.StringTokenizer;
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.dgfoundation.amp.error.AMPUncheckedException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.entity.UserPreferencesPK;
@@ -49,6 +46,9 @@ import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 /**
  * This class containts user-related utillity functions. User must be
@@ -307,6 +307,18 @@ public class UserUtils {
 		return result;
 
 	}
+	
+	/**
+	 * Retrieves users data for the required users ids
+	 * @param userIds the users ids
+	 * @return list of users
+	 */
+	public static List<User> getUsers(List<Long> userIds) {
+	    List<User> users = PersistenceManager.getSession().createQuery("from " + User.class.getName() + " o " + 
+	            "where o.id in (:ids)").setParameterList("ids", userIds).list();
+	    users.forEach(user -> ProxyHelper.initializeObject(user));
+	    return users;
+	}
 
 	/**
 	 * Searchs users with given criteria
@@ -486,6 +498,7 @@ public class UserUtils {
 	public static void setPassword(User user, String password) {
 		user.setPassword(ShaCrypt.crypt(password.trim()).trim());
 		user.setSalt(new Long(password.trim().hashCode()).toString());
+		user.setPasswordChangedAt(ZonedDateTime.now());
 	}
 	
 	/**

@@ -23,6 +23,7 @@
 package org.digijava.kernel.user;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -85,9 +86,8 @@ public class User
     private Set contacts;
     private Long assignedOrgId;
     private AmpUserExtension userExtension;
-
     private Set<AmpOrganisation> assignedOrgs;
-    
+    private ZonedDateTime passwordChangedAt;
 
 
 	public Long getAssignedOrgId() {
@@ -479,5 +479,19 @@ public class User
 	public void setRegion(AmpCategoryValueLocations region) {
 		this.region = region;
 	}
+
+    /**
+     * @return the passwordChangedAt
+     */
+    public ZonedDateTime getPasswordChangedAt() {
+        return passwordChangedAt;
+    }
+
+    /**
+     * @param passwordChangedAt the passwordChangedAt to set
+     */
+    public void setPasswordChangedAt(ZonedDateTime passwordChangedAt) {
+        this.passwordChangedAt = passwordChangedAt;
+    }
 	
 }

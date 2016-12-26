@@ -5,6 +5,47 @@
  */
 package org.digijava.module.aim.form;
 
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
+import org.apache.struts.util.LabelValueBean;
+import org.dgfoundation.amp.exprlogic.MathExpression;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
+import org.digijava.module.aim.dbentity.AmpChapter;
+import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
+import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.BudgetStructure;
+import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.ReferenceDoc;
+import org.digijava.module.aim.helper.SurveyFunding;
+import org.digijava.module.budget.dbentity.AmpBudgetSector;
+import org.digijava.module.budget.dbentity.AmpDepartments;
+import org.digijava.module.contentrepository.helper.DocumentData;
+import org.springframework.beans.BeanWrapperImpl;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,22 +55,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
-import org.apache.struts.util.LabelValueBean;
-import org.dgfoundation.amp.exprlogic.MathExpression;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
-import org.digijava.module.aim.helper.*;
-import org.digijava.module.budget.dbentity.AmpBudgetSector;
-import org.digijava.module.budget.dbentity.AmpDepartments;
-import org.digijava.module.contentrepository.helper.DocumentData;
-import org.springframework.beans.BeanWrapperImpl;
 
 public class EditActivityForm extends ActionForm implements Serializable {
 	private static final long serialVersionUID = -2405474513633165920L;
@@ -88,7 +113,16 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Collection<SurveyFunding> surveyFundings = null;
 	private int draftRedirectedPage;
 	private List<String> warningMessges;
-	
+	private Set <AmpGPISurvey> gpiSurvey;
+
+	public Set<AmpGPISurvey> getGpiSurvey() {
+		return gpiSurvey;
+	}
+
+	public void setGpiSurvey(Set<AmpGPISurvey> gpiSurvey) {
+		this.gpiSurvey = gpiSurvey;
+	}
+
 	public class ActivityContactInfo {
 		private List<AmpActivityContact> activityContacts; //holds all activity contacts
 		private List<AmpActivityContact> mofedContacts;
@@ -6140,7 +6174,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String currentValDate;
 		private String currentValComments;
 		private String indicatorPriorValues;
-		
+
 		@java.lang.SuppressWarnings("all")
 		public IndicatorME() {
 		}

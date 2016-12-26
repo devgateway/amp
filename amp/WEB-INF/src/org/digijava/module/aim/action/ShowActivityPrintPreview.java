@@ -26,6 +26,8 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -106,8 +108,18 @@ public class ShowActivityPrintPreview
 				e.printStackTrace();
 			}
             if(activity != null){
-            	
-            	
+
+                List gpiSurveys = new ArrayList();
+                if (activity.getGpiSurvey() != null) {
+                    for (AmpGPISurvey survey : activity.getGpiSurvey()) {
+                        List<AmpGPISurveyResponse> list = new ArrayList<>(survey.getResponses());
+                        Collections.sort(list, new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
+                        gpiSurveys.add(list);
+                    }
+                    request.setAttribute("gpiSurveys", gpiSurveys);
+                }
+
+
                 //costing
                 Collection euActs = EUActivityUtil.getEUActivities(activity.getAmpActivityId());
       	      	request.setAttribute("costs", euActs);

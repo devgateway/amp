@@ -123,7 +123,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	public AmpReportsScratchpad(NiReportsEngine engine) {
 		this.engine = engine;
 		this.computedMeasuresBlock =  new Memoizer<>(() -> SelectedYearBlock.buildFor(this.engine.spec, forcedNowDate == null ? LocalDate.now() : forcedNowDate));
-		this.computedPledgeIds = new Memoizer<>(() -> new HashSet<>(SQLUtils.fetchLongs(AmpReportsScratchpad.get(engine).connection, "SELECT id FROM amp_funding_pledges")));
+		this.computedPledgeIds = new Memoizer<>(() -> new HashSet<>(SQLUtils.fetchLongs(AmpReportsScratchpad.get(engine).connection, getPledgesIdsQuery())));
 		
 		try {this.connection = PersistenceManager.getJdbcConnection();}
 		catch(Exception e) {throw AlgoUtils.translateException(e);}
@@ -137,6 +137,15 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		this.verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
 			engine.spec.getColumnNames().contains(ColumnConstants.MODE_OF_PAYMENT) &&
 			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);
+	}
+
+	private String getPledgesIdsQuery() {
+		boolean showUnlinkedFunding = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.UNLINKED_FUNDING_IN_PLEDGES_REPORTS);
+		String query = "SELECT id FROM amp_funding_pledges";
+		if (showUnlinkedFunding) {
+			query += " UNION SELECT 999999999";
+		}
+		return query;
 	}
 	
 	public AmpCurrency getUsedCurrency() {

@@ -68,8 +68,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				events : {
 					'click' : "testclick"
 				},
-				testclick : function() {
-					console.log('testclick');
+				testclick : function() {					
 				}
 			});
 			var CompositeItemView = Marionette.CompositeView.extend({
@@ -169,8 +168,6 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 	TabEvents.prototype = {
 		constructor : TabEvents,
 		onCreateTab : function(event, ui) {
-			console.log('create tab');
-
 			var existDefaultTab = jQuery("#tabs-container").attr("data-tab-id");
 			if (existDefaultTab != "null" && existDefaultTab != "" && existDefaultTab != undefined) {
 				TabUtils.activateTabById(Number(existDefaultTab));
@@ -180,8 +177,6 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			TranslationManager.searchAndTranslate();
 		},
 		onActivateTab : function(event, ui) {
-			console.log('activate tab');
-
 			// Restart app variables defined for the active tab.
 			app.TabsApp.serializedFilters = null;
 			app.TabsApp.currentGrid = null;

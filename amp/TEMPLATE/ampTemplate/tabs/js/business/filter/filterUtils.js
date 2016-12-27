@@ -37,7 +37,7 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 				// Look for this column on colums and measures.
 				if (_.find(columns.models, function (item2) {return item.trim() === item2.get('entityName')}) === undefined 
 						&& _.find(measures.models, function (item2) {return item.trim() === item2.get('entityName')}) === undefined) {
-					console.log("Reset sorting.");
+					
 					sorting.sidx = undefined;
 					sorting.sord = undefined;
 				}

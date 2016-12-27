@@ -26,13 +26,9 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 
 		// Register apply and cancel buttons.
 		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'cancel', function() {
-			console.log('filters cancel');
-			// app.TabsApp.serializedFilters =
-			// app.TabsApp.filtersWidget.serialize();
 			jQuery(container).hide();
 		});
-		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'apply', function(data) {
-			console.log('apply filters');
+		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'apply', function(data) {			
 			// Save just applied filters in case the user hits "reset" button.
 			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize() || {};
 			
@@ -74,7 +70,7 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 		var sidx = (app.TabsApp.currentTab.get('currentSorting') !== null ? app.TabsApp.currentTab.get('currentSorting').sidx : null);
 		var sord = (app.TabsApp.currentTab.get('currentSorting') !== null ? app.TabsApp.currentTab.get('currentSorting').sord : null);
 		var data = JSON.stringify({
-			filters : app.TabsApp.serializedFilters,
+			filters : app.TabsApp.serializedFilters ? app.TabsApp.serializedFilters.filters : {},
 			reportData : reportNames,
 			sidx: sidx,
 			sord: sord,

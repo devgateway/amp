@@ -7,11 +7,9 @@ define([ 'underscore', 'backbone', 'documentModel' ], function(_, Backbone, Docu
 		initialize : function() {
 			this.fetch({
 				async : false,
-				error : function(collection, response) {
-					console.log(collection);
+				error : function(collection, response) {					
 				},
-				success : function(collection, response) {
-					console.log(collection);
+				success : function(collection, response) {					
 				}
 			});
 		},

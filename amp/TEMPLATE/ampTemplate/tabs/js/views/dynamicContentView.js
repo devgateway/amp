@@ -31,8 +31,6 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 			TabManager.openSaveTabDialog();
 		},
 		clickFiltersButton : function() {
-			console.log('clickFiltersButton');
-
 			// We need to reset the widget because is shared between all
 			// tabs.
 			app.TabsApp.filtersWidget.reset({
@@ -46,8 +44,6 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					// Close floating accordion if needed.
 					jQuery("#main-dynamic-content-region_" + reportId + " #filters-collapsible-area").accordion('option', 'active', false);
 
-					console.log('filter widget loaded');
-					
 					// Convert report filters to filterwidget filters.
 					var blob = undefined;
 					if (app.TabsApp.serializedFilters === null) {

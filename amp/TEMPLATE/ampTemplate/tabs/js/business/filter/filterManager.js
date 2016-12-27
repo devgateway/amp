@@ -32,6 +32,7 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 			jQuery(container).hide();
 		});
 		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'apply', function(data) {
+			console.log('apply filters');
 			// Save just applied filters in case the user hits "reset" button.
 			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize() || {};
 			

@@ -54,6 +54,10 @@ public class InterchangeDependencyResolver {
 	public final static String DISBURSEMENTS_PRESENT_KEY = "funding_type_disbursements_present";
 	public final static String COMMITMENTS_DISASTER_RESPONSE_REQUIRED = "commitments_disaster_response_required";
 	public final static String DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED = "disbursements_disaster_response_required";
+	public final static String AGREEMENT_CODE_PRESENT_KEY = "agreement_code_required";
+	public final static String AGREEMENT_TITLE_PRESENT_KEY = "agreement_title_required";
+	
+	
 	
 	/*
 	 * End of dependency codes section
@@ -63,9 +67,8 @@ public class InterchangeDependencyResolver {
 	private final static String BUDGET_PATH = "activity_budget";
 	private final static String IMPLEMENTATION_LEVEL_PATH = "implementation_level";
 	private final static String IMPLEMENTATION_LOCATION_PATH = "implementation_location";
-	
-	
-	
+	private final static String AGREEMENT_CODE_PATH = "code";
+	private final static String AGREEMENT_TITLE_PATH = "title";
 	
 	/**
 	 * static constructor to init paths and values
@@ -171,6 +174,19 @@ public class InterchangeDependencyResolver {
 	}
 	
 	/**
+	 * checks whether the field described is present in the map object
+	 * @param value
+	 * @param path
+	 * @return
+	 */
+	private static DependencyCheckResult checkFieldValuePresent(Object value, String path) {
+		if (value instanceof Map && value != null && ((Map<String, Object>)value).get(path) != null)
+			return DependencyCheckResult.VALID;
+		else 
+			return DependencyCheckResult.INVALID_NOT_CONFIGURABLE;
+	}
+	
+	/**
 	 * Performs a check on ids corresponding to AmpLocation objects -- 
 	 * whether those are included in the Implementation Level provided by the activity
 	 * @param e
@@ -216,6 +232,8 @@ public class InterchangeDependencyResolver {
 		case PROJECT_CODE_ON_BUDGET_KEY : return checkProjectCodeOnBudget(value, incomingActivity);
 		case IMPLEMENTATION_LEVEL_PRESENT_KEY: return checkFieldPresent(incomingActivity, IMPLEMENTATION_LEVEL_PATH);
 		case IMPLEMENTATION_LOCATION_PRESENT_KEY: return checkFieldPresent(incomingActivity, IMPLEMENTATION_LOCATION_PATH);
+		case AGREEMENT_CODE_PRESENT_KEY : return checkFieldValuePresent(value, AGREEMENT_CODE_PATH);
+		case AGREEMENT_TITLE_PRESENT_KEY : return checkFieldValuePresent(value, AGREEMENT_TITLE_PATH);
 		case IMPLEMENTATION_LEVEL_VALID_KEY: return checkImplementationLevel(value, incomingActivity);
 		case IMPLEMENTATION_LOCATION_VALID_KEY: return checkImplementationLocation(value, incomingActivity);
 		case COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY: return
@@ -236,7 +254,6 @@ public class InterchangeDependencyResolver {
 		default: throw new RuntimeException("Interchange Dependency Mapper: no dependency found for code " + code);
 		}
 	}
-	
 	
 	/**
 	 * checks whether the implementation location (provided as Object e) 

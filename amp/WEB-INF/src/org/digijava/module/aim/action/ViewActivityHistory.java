@@ -71,7 +71,11 @@ public class ViewActivityHistory extends Action {
 		List<ActivityHistory> activitiesHistory = new ArrayList<>();
 		
 		for (AmpActivityVersion activity : activities) {
-			ActivityHistory auditHistory = getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
+			ActivityHistory auditHistory = null;
+			
+			if (activity.getModifiedBy() == null || activity.getModifiedDate() == null) {
+				auditHistory = getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
+			}
 			
 			ActivityHistory activityHistory = new ActivityHistory();
 			activityHistory.setActivityId(activity.getAmpActivityId());
@@ -92,7 +96,7 @@ public class ViewActivityHistory extends Action {
 	 */
 	private String getModifiedByUserName(AmpActivityVersion actitivity, ActivityHistory auditHistory) {
 		AmpTeamMember modifiedBy = actitivity.getModifiedBy();
-		AmpTeamMember createdBy = actitivity.getModifiedBy();
+		AmpTeamMember createdBy = actitivity.getActivityCreator();
 		AmpTeamMember approvedBy = actitivity.getApprovedBy();
 		
 		if (modifiedBy != null) {

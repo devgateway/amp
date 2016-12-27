@@ -71,6 +71,6 @@
  	 	</set>
 		<property name="pledger" column="PLEDGER" type="boolean" />
 		
-		<property name="passwordChangedAt" column="PASSWORD_CHANGED_AT" type="java.time.ZonedDateTime" />		
+		<property name="passwordChangedAt" column="PASSWORD_CHANGED_AT" type="java.util.Date" />		
 	</class>
 </hibernate-mapping>

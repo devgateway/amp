@@ -3,14 +3,15 @@
  */
 package org.digijava.kernel.ampapi.endpoints.security.services;
 
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.dto.User;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
@@ -29,6 +30,12 @@ import org.digijava.module.um.util.AmpUserUtil;
  */
 public class UserService {
     private static Logger logger = Logger.getLogger(UserService.class);
+    
+    private SimpleDateFormat sdf;
+    
+    public UserService() {
+        this.sdf = new SimpleDateFormat(EPConstants.DATE_TIME_ZONED_FORMAT);
+    }
     
     /**
      * Provides user info for the given user ids 
@@ -50,7 +57,7 @@ public class UserService {
         user.setLastName(ampUser.getLastName());
         user.setEmail(ampUser.getEmail());
         if (ampUser.getPasswordChangedAt() != null) {
-            user.setPasswordChangedAt(ampUser.getPasswordChangedAt().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            user.setPasswordChangedAt(sdf.format(ampUser.getPasswordChangedAt()));
         }
         user.setBanned(ampUser.isBanned());
         user.setActive(ampUser.isActivate());
@@ -67,11 +74,11 @@ public class UserService {
             user.setAssignedOrgId(ampUser.getAssignedOrgId());
         }
         if (!ampUser.getAssignedOrgs().isEmpty()) {
-            user.setAssignedOrgIds(ampUser.getAssignedOrgs().stream().map(org -> org.getAmpOrgId())
-                    .collect(Collectors.toSet()));
+            user.setAssignedOrgIds(new TreeSet<>(ampUser.getAssignedOrgs().stream().map(org -> org.getAmpOrgId())
+                    .collect(Collectors.toSet())));
         }
         if (!ampUser.getGroups().isEmpty()) {
-            user.setGroupKeys(new HashSet<>(((Set<Group>) ampUser.getGroups()).stream().map(group -> group.getKey())
+            user.setGroupKeys(new TreeSet<>(((Set<Group>) ampUser.getGroups()).stream().map(group -> group.getKey())
                     .filter(key -> key != null).collect(Collectors.toSet())));
         }
         return user;

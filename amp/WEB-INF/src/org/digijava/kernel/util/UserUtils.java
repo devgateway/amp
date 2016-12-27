@@ -22,8 +22,9 @@
 
 package org.digijava.kernel.util;
 
-import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -314,6 +315,8 @@ public class UserUtils {
 	 * @return list of users
 	 */
 	public static List<User> getUsers(List<Long> userIds) {
+	    if (userIds == null || userIds.isEmpty())
+	        return Collections.emptyList();
 	    List<User> users = PersistenceManager.getSession().createQuery("from " + User.class.getName() + " o " + 
 	            "where o.id in (:ids)").setParameterList("ids", userIds).list();
 	    users.forEach(user -> ProxyHelper.initializeObject(user));
@@ -498,7 +501,7 @@ public class UserUtils {
 	public static void setPassword(User user, String password) {
 		user.setPassword(ShaCrypt.crypt(password.trim()).trim());
 		user.setSalt(new Long(password.trim().hashCode()).toString());
-		user.setPasswordChangedAt(ZonedDateTime.now());
+		user.setPasswordChangedAt(new Date());
 	}
 	
 	/**

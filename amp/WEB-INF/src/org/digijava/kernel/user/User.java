@@ -23,7 +23,6 @@
 package org.digijava.kernel.user;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -87,7 +86,7 @@ public class User
     private Long assignedOrgId;
     private AmpUserExtension userExtension;
     private Set<AmpOrganisation> assignedOrgs;
-    private ZonedDateTime passwordChangedAt;
+    private Date passwordChangedAt;
 
 
 	public Long getAssignedOrgId() {
@@ -483,14 +482,14 @@ public class User
     /**
      * @return the passwordChangedAt
      */
-    public ZonedDateTime getPasswordChangedAt() {
+    public Date getPasswordChangedAt() {
         return passwordChangedAt;
     }
 
     /**
      * @param passwordChangedAt the passwordChangedAt to set
      */
-    public void setPasswordChangedAt(ZonedDateTime passwordChangedAt) {
+    public void setPasswordChangedAt(Date passwordChangedAt) {
         this.passwordChangedAt = passwordChangedAt;
     }
 	

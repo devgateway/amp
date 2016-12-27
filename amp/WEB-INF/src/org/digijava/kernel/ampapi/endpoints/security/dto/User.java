@@ -4,6 +4,7 @@
 package org.digijava.kernel.ampapi.endpoints.security.dto;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -60,10 +61,10 @@ public class User {
     @JsonProperty(SecurityConstants.ASSIGNED_ORG_ID)
     private Long assignedOrgId;
     @JsonProperty(SecurityConstants.ASSIGNED_ORG_IDS)
-    private Set<Long> assignedOrgIds;
+    private SortedSet<Long> assignedOrgIds;
     
     @JsonProperty(SecurityConstants.GROUP_KEYS)
-    private Set<String> groupKeys;
+    private SortedSet<String> groupKeys;
     
     /**
      * @return the id
@@ -285,7 +286,7 @@ public class User {
     /**
      * @param assignedOrgIds the assignedOrgIds to set
      */
-    public void setAssignedOrgIds(Set<Long> assignedOrgIds) {
+    public void setAssignedOrgIds(SortedSet<Long> assignedOrgIds) {
         this.assignedOrgIds = assignedOrgIds;
     }
 
@@ -299,7 +300,7 @@ public class User {
     /**
      * @param groupKeys the groupKeys to set
      */
-    public void setGroupKeys(Set<String> groupKeys) {
+    public void setGroupKeys(SortedSet<String> groupKeys) {
         this.groupKeys = groupKeys;
     }
 

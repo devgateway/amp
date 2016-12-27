@@ -8,8 +8,6 @@ import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEqua
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.security.dto.User;
 import org.junit.Test;
@@ -19,30 +17,37 @@ import org.junit.Test;
  */
 public class UsersTest {
     private ObjectMapper mapper;
+    private Security securityEP; 
     
     public UsersTest() {
-        this.mapper = new ObjectMapper(); 
+        this.mapper = new ObjectMapper();
+        this.securityEP = new Security();
     }
     
     @Test
-    public void testValidUser() throws JsonParseException, JsonMappingException, IOException {
-        String userStr = "{    \"id\": 3,    \"email\": \"atl@amp.org\",    \"first-name\": \"ATL\",    \"last-name\": \"ATL\",    \"is-banned\": false,    \"is-active\": false,    \"is-pledger\": true,    \"is-admin\": false,    \"lang-iso2\": \"en\",    \"country-iso2\": \"md\",    \"group-keys\": [      \"TRN\",      \"MEM\",      \"EDT\"    ]  }";
+    public void testValidUser() throws IOException {
+        String userStr = "{    \"id\": 3,    \"email\": \"atl@amp.org\",    \"first-name\": \"ATL\",    \"last-name\": \"ATL\",    \"is-banned\": false,    \"is-active\": false,    \"is-pledger\": true,    \"is-admin\": false,    \"lang-iso2\": \"en\",    \"country-iso2\": \"md\",    \"group-keys\": [      \"EDT\",      \"MEM\",      \"TRN\"    ]  }";
         User expected = mapper.readValue(userStr, User.class);
-        User actual = (new Security()).getUsersInfo("3").get(0);
+        User actual = securityEP.getUsersInfo("3").get(0);
         assertReflectionEquals(expected, actual);
     }
     
     @Test
-    public void testUserPasswordChanged() throws JsonParseException, JsonMappingException, IOException {
-        String userStr = "{    \"id\": 12,    \"email\": \"idea@amp.org\",    \"first-name\": \"IDEA\",    \"last-name\": \"Importer\",    \"password-changed-at\": \"2016-12-26T23:31:35.519+02:00\",    \"is-banned\": false,    \"is-active\": false,    \"is-pledger\": false,    \"is-admin\": false,    \"lang-iso2\": \"en\",    \"country-iso2\": \"md\",    \"org-type-id\": 38,    \"org-group-id\": 17,    \"org-id\": 21378,    \"group-keys\": [      \"MEM\",      \"EDT\"    ]  }";
+    public void testUserPasswordChanged() throws IOException {
+        String userStr = "{    \"id\": 12,    \"email\": \"idea@amp.org\",    \"first-name\": \"IDEA\",    \"last-name\": \"Importer\",    \"password-changed-at\": \"2016-12-27T14:09:11.095+02:00\",    \"is-banned\": false,    \"is-active\": false,    \"is-pledger\": false,    \"is-admin\": false,    \"lang-iso2\": \"en\",    \"country-iso2\": \"md\",    \"org-type-id\": 38,    \"org-group-id\": 17,    \"org-id\": 21378,    \"group-keys\": [      \"EDT\",      \"MEM\"    ]  }";
         User expected = mapper.readValue(userStr, User.class);
-        User actual = (new Security()).getUsersInfo("12").get(0);
+        User actual = securityEP.getUsersInfo("12").get(0);
         assertReflectionEquals(expected, actual);
     }
     
     @Test
     public void testInvalidUserIdEmptyListNoException() {
-        assertTrue((new Security()).getUsersInfo("1").isEmpty());
+        assertTrue(securityEP.getUsersInfo("1").isEmpty());
+    }
+    
+    @Test
+    public void testEmptyUserIdEmptyListNoException() {
+        assertTrue(securityEP.getUsersInfo("").isEmpty());
     }
 
 }

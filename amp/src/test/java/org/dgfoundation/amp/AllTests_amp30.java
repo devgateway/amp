@@ -22,13 +22,13 @@ import junit.framework.TestSuite;
 
 /**
  * The main entry point for AMP 3.0 tests.Initializes standalone AMP as part of the discovery process. <br />
- * standalone AMP configuration is taken off standAloneAmpHibernate.cfg.xml <br />
+ * Standalone AMP configuration is taken off standAloneAmpHibernate.cfg.xml <br />
  * 
  * @author Nadejda Mandrescu
  */
 public class AllTests_amp30 {
-public static Test suite() {
-        
+    
+    public static Test suite() {
         setUp();
         
         TestSuite suite = new TestSuite(AllTests_amp30.class.getName());

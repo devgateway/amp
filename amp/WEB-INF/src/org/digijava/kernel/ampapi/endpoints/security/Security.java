@@ -267,6 +267,9 @@ public class Security implements ErrorReportingEndpoint {
 	@ApiMethod(ui = false, id = "users", name = "Users", authTypes = {AuthRule.AUTHENTICATED})
 	public List<org.digijava.kernel.ampapi.endpoints.security.dto.User> getUsersInfo(@QueryParam("ids") String ids) {
 	    return (new UserService()).getUserInfo(EndpointUtils.splitToListOfLongs(ids));
+	    /* we need to change unit test infrastructure to operate with mock application context to do this 
+	    return SpringUtil.getBean(UserService.class).getUserInfo(EndpointUtils.splitToListOfLongs(ids));
+	    */
 	}
 
 	/**

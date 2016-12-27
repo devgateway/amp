@@ -31,12 +31,6 @@ import org.digijava.module.um.util.AmpUserUtil;
 public class UserService {
     private static Logger logger = Logger.getLogger(UserService.class);
     
-    private SimpleDateFormat sdf;
-    
-    public UserService() {
-        this.sdf = new SimpleDateFormat(EPConstants.DATE_TIME_ZONED_FORMAT);
-    }
-    
     /**
      * Provides user info for the given user ids 
      * @param userIds
@@ -57,6 +51,7 @@ public class UserService {
         user.setLastName(ampUser.getLastName());
         user.setEmail(ampUser.getEmail());
         if (ampUser.getPasswordChangedAt() != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat(EPConstants.DATE_TIME_ZONED_FORMAT);
             user.setPasswordChangedAt(sdf.format(ampUser.getPasswordChangedAt()));
         }
         user.setBanned(ampUser.isBanned());

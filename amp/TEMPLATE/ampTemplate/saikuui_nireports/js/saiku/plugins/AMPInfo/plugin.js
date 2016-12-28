@@ -103,19 +103,21 @@ var extract_values = function(object_value) {
 var filtersToHtml = function(filters) {
 	Saiku.logger.log("AMPInfo.filtersToHtml");
 	//TODO: Move all these html into a template + view.
+	
 	var html = "";
-	if (filters.columnFilters != undefined) {
-		for ( var propertyName in filters.columnFilters) {
-			var auxProperty = filters.columnFilters[propertyName];
+	if (filters != undefined) {
+		for ( var propertyName in filters) {
+			var auxProperty = filters[propertyName];
 			var content = [];
 			_.each(auxProperty, function(item, i) {
 				var auxItem = {};
+				
 				if(item.get !== undefined) {
 					auxItem.id = item.get('id');
 					auxItem.name = item.get('name');
-					if (item.get('name') === "true" || item.get('name') === "false") {
-						auxItem.trnName = TranslationManager.getTranslated(item.get('name'));
-						//auxItem.trnName = item.get('name');
+					console.log(item.get('name'));
+					if (item.get('name') === "true" || item.get('name') === "false") {						
+						auxItem.trnName = TranslationManager.getTranslated(item.get('name'));						
 					 }
 					else {
 						auxItem.trnName = item.get('name');
@@ -125,11 +127,12 @@ var filtersToHtml = function(filters) {
 					console.error(JSON.stringify(auxItem) + " not mapped, we need to check why is not a model.");
 				}
 			});
-			/*var name = TranslationManager.getTranslated(auxProperty.filterName) || TranslationManager.getTranslated(propertyName)*/
+			
 			var trnName = auxProperty.filterName || propertyName;
 			html += "<div class='round-filter-group'><b class='i18n'>" + trnName + "</b><br>" + filterContentToHtml(content) + "</div>";
 		}
 	}
+	
 	if (filters.otherFilters != undefined) {
 		for ( var propertyName in filters.otherFilters) {
 			var dateContent = filters.otherFilters[propertyName];

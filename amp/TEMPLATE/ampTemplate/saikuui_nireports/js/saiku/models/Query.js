@@ -59,17 +59,18 @@ var Query = Backbone.Model.extend({
     transformSavedFilters: function() {
     	Saiku.logger.log("Query.transformSavedFilters");
     	var self = this;
-        if (this.firstLoad === true) {
-        	// Get original filters from reports specs.
-        	var auxFilters = self.get('filters');
-	        // Cleanup filters property on this Query.
-        	self.set('filters', undefined);
-	        // TODO: Review this 2-steps process completely.
-	        var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
-	        var blob = CommonFilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
-	        Saiku.logger.log(blob);
-	        // Set these filters reformatted. 
-	        self.set('filters', blob);	       
+        if (this.firstLoad === true) {        	
+        	var  auxFilters = self.get('filters');
+        	
+        	//remove null filters
+        	$.each(auxFilters, function(key, value){
+        	    if (value === "" || value === null){
+        	        delete auxFilters[key];
+        	    }
+        	});
+	       
+        	self.set('filters', undefined);	         
+	        self.set('filters', auxFilters);	       
         }
     },
     
@@ -168,9 +169,9 @@ var Query = Backbone.Model.extend({
         	if(filters) {
         		this.set('filters', filters);
         		filtersApplied = true;
-        		//this.set('filtersWithModels', window.currentFilter.serializeToModels());
+        		
         	}	        	
-    	//}
+    	
 
     	var settingsApplied = false;
     	if(settings) {
@@ -184,11 +185,10 @@ var Query = Backbone.Model.extend({
 
     	exModel = this.workspace.currentQueryModel;
     	exModel.querySettings = {};
-    	//if (this.firstLoad === false) {
-    		exModel.queryModel.filters = this.get('filters');
-    		exModel.queryModel.filtersWithModels = this.get('filtersWithModels');
-    		exModel.queryModel.filtersApplied = filtersApplied;
-    	//}
+    	exModel.queryModel.filters = this.get('filters'); 
+    	exModel.queryModel.filtersWithModels = this.get('filtersWithModels');
+    	exModel.queryModel.filtersApplied = filtersApplied;
+    	
     	exModel.queryModel.settings = this.get('settings');        	
     	exModel.queryModel.settingsApplied = settingsApplied;
     	if(Settings.PAGINATION) {

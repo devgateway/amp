@@ -41,13 +41,14 @@ var AMPGisExport = Backbone.View.extend({
 		// that should be done as part of filters widget improvement as a whole
 				
 		// export to map
+		var filterObject = window.currentFilter.serialize();
 		$.ajax({
 			url : '/rest/data/report/export-to-map/' + reportId,
 			dataType: 'json',
 			type: 'post',
 			contentType: 'application/json',
 			data : JSON.stringify({
-				filters : window.currentFilter.serialize(),
+				filters : filterObject ? filterObject.filters : {},
 				settings : window.settingsWidget.toAPIFormat()
 			})
 		}).done(function(configId) {

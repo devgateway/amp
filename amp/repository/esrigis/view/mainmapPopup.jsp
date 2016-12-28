@@ -20,7 +20,7 @@
       on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
  
-    <digi:ref href="/TEMPLATE/ampTemplate/js_2/leaflet/leaflet.css" type="text/css" rel="stylesheet" />
+    <digi:ref href="/TEMPLATE/ampTemplate/css_2/leaflet.css" type="text/css" rel="stylesheet" />
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/mappopupstyles.css" type="text/css" rel="stylesheet" />
   
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/leaflet.js"/>"></script>

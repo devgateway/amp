@@ -3329,12 +3329,11 @@ public class DbUtil {
 	public static List<AmpAgreement> getAgreementsByCode(String agreementCode) {
 		List<AmpAgreement> agreements = new ArrayList<AmpAgreement>();
 		try {
-			Session session = PersistenceManager.getRequestDBSession();
-			String queryString = new String();
-			queryString = "select agr from " + AmpAgreement.class.getName() + " agr where (agr.code =:agreementCode) ";
-			Query q = session.createQuery(queryString);
-			q.setParameter("agreementCode", StringEscapeUtils.escapeSql(agreementCode));
-			agreements = q.list();
+			agreements = PersistenceManager.getSession()
+					.createQuery("select agr from " + AmpAgreement.class.getName() 
+								+ " agr where (agr.code =:agreementCode) ")
+					.setParameter("agreementCode", StringEscapeUtils.escapeSql(agreementCode))
+					.list();
 		} catch (HibernateException e) {
 			logger.error("Unable to get agreements", e);
 		}

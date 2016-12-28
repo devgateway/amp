@@ -44,7 +44,7 @@ public class AgreementCodeValidator extends InputValidator {
 		// this validator only validates agreement code
 		if (agreementCodePath.equals(fieldPath)) {
 			// validate the agreement code
-			String agreementCode = (String) newFieldParent.get(fieldName);
+			String agreementCode = StringUtils.trim((String) newFieldParent.get(fieldName));
 			if (StringUtils.isBlank(agreementCode)) {
 				isValid = false;
 				missingCode = true;

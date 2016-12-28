@@ -34,7 +34,7 @@ public class AgreementTitleValidator extends InputValidator {
 		// this validator only validates agreement title
 		if (agreementCodeTitle.equals(fieldName)) {
 			// validate the agreement title (not blank)
-			String agreementTitle = (String) newFieldParent.get(fieldName);
+			String agreementTitle = StringUtils.trim((String) newFieldParent.get(fieldName));
 			if (StringUtils.isBlank(agreementTitle)) {
 				return false;
 			} 

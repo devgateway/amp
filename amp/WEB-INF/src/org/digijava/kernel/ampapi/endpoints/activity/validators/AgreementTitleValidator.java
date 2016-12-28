@@ -32,7 +32,7 @@ public class AgreementTitleValidator extends InputValidator {
 		
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
 		// this validator only validates agreement title
-		if (agreementCodeTitle.equals(fieldName)) {
+		if (agreementCodeTitle.equals(fieldPath)) {
 			// validate the agreement title (not blank)
 			String agreementTitle = StringUtils.trim((String) newFieldParent.get(fieldName));
 			if (StringUtils.isBlank(agreementTitle)) {

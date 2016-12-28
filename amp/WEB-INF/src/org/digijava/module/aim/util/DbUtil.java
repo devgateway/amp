@@ -3331,7 +3331,7 @@ public class DbUtil {
 		try {
 			agreements = PersistenceManager.getSession()
 					.createQuery("select agr from " + AmpAgreement.class.getName() 
-								+ " agr where (agr.code =:agreementCode) ")
+								+ " agr where (trim(agr.code) =:agreementCode) ")
 					.setParameter("agreementCode", StringEscapeUtils.escapeSql(agreementCode))
 					.list();
 		} catch (HibernateException e) {

@@ -411,7 +411,13 @@ public class ActivityImporter {
 				childrenNewValues.clear();
 				for (String key : agreementMap.keySet()) {
 					HashMap<String, Object> kv = new HashMap<String, Object>();
-					kv.put(key, agreementMap.get(key));
+					Object val = agreementMap.get(key);
+					
+					if (val instanceof String) {
+						val = StringUtils.trim((String) val);
+					}
+					
+					kv.put(key, val);
 					childrenNewValues.add(kv);
 				}
 			}

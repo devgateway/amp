@@ -14,15 +14,18 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.security.services.UserService;
 import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -207,6 +210,66 @@ public class Security implements ErrorReportingEndpoint {
 		}
 		session.setAttribute(Constants.CURRENT_USER, user);
 		session.setAttribute("ampAdmin", user.isGlobalAdmin() ? "yes": "no");
+	}
+	
+	/**
+	 * Provides a list of users information
+	 * </br>
+	 * <dl>
+	 * Each user info JSON structure from the list, can hold the following fields (only those that are not null):
+	 * <dt><b>id</b><dd> user id
+	 * <dt><b>first-name</b><dd> user first name
+	 * <dt><b>last-name</b><dd> user last name
+	 * <dt><b>email</b><dd> user email address
+	 * <dt><b>password-changed-at</b><dd> timestamp for the last changed, in time zoned ISO-8601 format
+	 * <dt><b>is-banned</b><dd> flags if the user is banned
+	 * <dt><b>is-active</b><dd> flags if the user is active
+	 * <dt><b>is-pledger</b><dd> flags if the user is pledger
+	 * <dt><b>is-admin</b><dd> flags if the user is global AMP admin
+	 * <dt><b>lang-iso2</b><dd> the user preferred language as iso2
+	 * <dt><b>country-iso2</b><dd> user registered country iso2
+	 * <dt><b>org-type-id</b><dd> user organization type id
+	 * <dt><b>org-group-id</b><dd> user organization group id
+	 * <dt><b>org-id</b><dd> user organization id
+	 * <dt><b>assigned-org-id</b><dd> user assigned organization id
+	 * <dt><b>assigned-org-ids</b><dd> user assigned organizations ids
+	 * <dt><b>group-keys</b><dd> user groups keys
+	 * 
+	 * <h3> Sample Output: </h3>
+	 * <pre>
+	 * {
+	 *     "id": 225,
+	 *     "email": "princettav@gmail.com",
+	 *     "first-name": "Princetta",
+	 *     "last-name": "Clinton-Varmah",
+	 *     "password-changed-at": "2016-12-26T20:31:04.828+02:00"
+	 *     "is-banned": false,
+	 *     "is-active": false,
+	 *     "is-pledger": false,
+	 *     "is-admin": false,
+	 *     "lang-iso2": "en",
+	 *     "country-iso2": "lr",
+	 *     "org-type-id": 1,
+	 *     "org-group-id": 6,
+	 *     "org-id": 702,
+	 *     "group-keys": [
+	 *         "MEM",
+	 *         "EDT"
+	 *     ]
+	 * }
+	 * </pre>
+	 * @param ids a comma separated list of users ids for which to provide the information, invalid ids are ignored
+	 * @return a list of User information
+	 */
+	@GET
+    @Path("/users")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "users", name = "Users", authTypes = {AuthRule.AUTHENTICATED})
+	public List<org.digijava.kernel.ampapi.endpoints.security.dto.User> getUsersInfo(@QueryParam("ids") String ids) {
+	    return (new UserService()).getUserInfo(EndpointUtils.splitToListOfLongs(ids));
+	    /* we need to change unit test infrastructure to operate with mock application context to do this 
+	    return SpringUtil.getBean(UserService.class).getUserInfo(EndpointUtils.splitToListOfLongs(ids));
+	    */
 	}
 
 	/**

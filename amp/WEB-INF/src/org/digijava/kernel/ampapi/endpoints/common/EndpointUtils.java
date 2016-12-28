@@ -20,6 +20,7 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -508,6 +509,23 @@ public class EndpointUtils {
 	    Map<String, Set<String>> filtersDef = (Map<String, Set<String>>) TLSUtils.getRequest().getAttribute(EPConstants.JSON_FILTERS);
 	    TLSUtils.getRequest().removeAttribute(EPConstants.JSON_FILTERS);
 	    return filtersDef;
+	}
+	
+	/**
+	 * Converts a comma separated list provided as a string to a List of Longs 
+	 * @param commaSeparatedList a comma separated list represented as a string
+	 * @param clazz
+	 * @return
+	 */
+	public static List<Long> splitToListOfLongs(String commaSeparatedList) {
+	    List<Long> result = new ArrayList<>();
+	    if (StringUtils.isNotBlank(commaSeparatedList)) {
+	        for(String element : commaSeparatedList.split(",")) {
+	            // no validation, leaving any exception to go up
+	            result.add(Long.valueOf(element.trim()));
+	        }
+	    }
+	    return result;
 	}
 
 }

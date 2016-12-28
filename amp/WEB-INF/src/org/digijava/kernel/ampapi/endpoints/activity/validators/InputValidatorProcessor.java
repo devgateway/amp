@@ -36,6 +36,8 @@ public class InputValidatorProcessor {
 			add(new TreeCollectionValidator());
 			add(new DependencyValidator());
 			add(new PrimaryContactValidator());
+			add(new AgreementCodeValidator());
+			add(new AgreementTitleValidator());
 			}};
 	
 	/**

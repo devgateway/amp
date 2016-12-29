@@ -10,6 +10,7 @@ import java.util.List;
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,11 +22,13 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dto.LongListParam;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.security.dto.WorkspaceMember;
 import org.digijava.kernel.ampapi.endpoints.security.services.UserService;
+import org.digijava.kernel.ampapi.endpoints.security.services.WorkspaceMemberService;
 import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -214,7 +217,7 @@ public class Security implements ErrorReportingEndpoint {
 	
 	/**
 	 * Provides a list of users information
-	 * </br>
+	 * <p>
 	 * <dl>
 	 * Each user info JSON structure from the list, can hold the following fields (only those that are not null):
 	 * <dt><b>id</b><dd> user id
@@ -265,10 +268,11 @@ public class Security implements ErrorReportingEndpoint {
     @Path("/users")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "users", name = "Users", authTypes = {AuthRule.AUTHENTICATED})
-	public List<org.digijava.kernel.ampapi.endpoints.security.dto.User> getUsersInfo(@QueryParam("ids") String ids) {
-	    return (new UserService()).getUserInfo(EndpointUtils.splitToListOfLongs(ids));
+	public List<org.digijava.kernel.ampapi.endpoints.security.dto.User> getUsersInfo(
+	        @DefaultValue("") @QueryParam("ids") LongListParam ids) {
+	    return (new UserService()).getUserInfo(ids.param);
 	    /* we need to change unit test infrastructure to operate with mock application context to do this 
-	    return SpringUtil.getBean(UserService.class).getUserInfo(EndpointUtils.splitToListOfLongs(ids));
+	    return SpringUtil.getBean(UserService.class).getUserInfo(ids.param);
 	    */
 	}
 
@@ -359,6 +363,39 @@ public class Security implements ErrorReportingEndpoint {
 		}
 
 		return layout;
+	}
+	
+	/**
+	 * Provides a list of workspace members definition
+	 * <p>
+	 * <dl>
+     * Each workspace member JSON structure from the list will hold the following fields:
+     * <dt><b>id</b><dd> workspace member id
+     * <dt><b>user-id</b><dd> user id
+     * <dt><b>workspace-id</b><dd> workspace id
+     * <dt><b>role-id</b><dd> workspace member role id
+     * 
+     * <h3> Sample Output: </h3>
+     * <pre>
+     * [
+     *   {
+     *       "id": 12,
+     *       "user-id": 1,
+     *       "workspace-id": 100,
+     *       "role-id": 1,
+     *   },
+     *   ...
+     * ]   
+     * </pre>
+	 * @param userIds a comma separate list of user ids
+	 * @return list of workspace members definitions
+	 */
+	@GET
+    @Path("/workspace-members")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "workspace-members", name = "Workspace Members", authTypes = {AuthRule.AUTHENTICATED})
+	public List<WorkspaceMember> getWorkspaceMembers(@DefaultValue("") @QueryParam("user-ids") LongListParam userIds) {
+	    return (new WorkspaceMemberService()).getWorkspaceMembers(userIds.param);
 	}
 	
 	/**

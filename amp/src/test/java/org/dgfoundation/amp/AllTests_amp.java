@@ -7,6 +7,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.digijava.kernel.ampapi.endpoints.security.UsersTest;
+import org.digijava.kernel.ampapi.endpoints.security.WorkspaceMemberTest;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.persistence.HibernateClassLoader;
@@ -21,18 +22,19 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
- * The main entry point for AMP 3.0 tests.Initializes standalone AMP as part of the discovery process. <br />
+ * The main entry point for AMP tests. Initializes standalone AMP as part of the discovery process. <br />
  * Standalone AMP configuration is taken off standAloneAmpHibernate.cfg.xml <br />
  * 
  * @author Nadejda Mandrescu
  */
-public class AllTests_amp30 {
+public class AllTests_amp {
     
     public static Test suite() {
         setUp();
         
-        TestSuite suite = new TestSuite(AllTests_amp30.class.getName());
+        TestSuite suite = new TestSuite(AllTests_amp.class.getName());
         suite.addTest(new JUnit4TestAdapter(UsersTest.class));
+        suite.addTest(new JUnit4TestAdapter(WorkspaceMemberTest.class));
         
         return suite;
     }

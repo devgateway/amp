@@ -46,105 +46,108 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			// Create collection of Filters used for legends.	
 			app.TabsApp.rawFilters = firstContent.rawFilters;
 
-			app.TabsApp.filtersWidget.deserialize(app.TabsApp.rawFilters, {
-				silent : true
-			});
-			
-			
-			app.TabsApp.filters = FilterUtils.extractFilters(app.TabsApp.filtersWidget.serializeToModels());
-			
-			// Variable to save the current serialized filters from widget.
-			app.TabsApp.serializedFilters = null;
-			// Save default sorters if any.
-			app.TabsApp.currentSorting = FilterUtils.extractSorters(firstContent.get('reportMetadata').get('reportSpec').get('sorters'), 
-					firstContent.get('reportMetadata').get('reportSpec').get('columns'),
-					firstContent.get('reportMetadata').get('reportSpec').get('measures'),
-					firstContent.get('reportMetadata').get('reportSpec').get('hierarchies'));
-			// Define the views.
-			var FilterItemView = Marionette.ItemView.extend({
-				tagName : 'div',
-				className : 'round-filter-group',
-				template : jQuery(filtersItemTemplate, '#template-filters').html(),
-				events : {
-					'click' : "testclick"
-				},
-				testclick : function() {					
+			app.TabsApp.filtersWidget.loaded.done(function() {
+				app.TabsApp.filtersWidget.deserialize(app.TabsApp.rawFilters, {
+					silent : true
+				});
+				
+				
+				app.TabsApp.filters = FilterUtils.extractFilters(app.TabsApp.filtersWidget.serializeToModels());
+				
+				// Variable to save the current serialized filters from widget.
+				app.TabsApp.serializedFilters = null;
+				// Save default sorters if any.
+				app.TabsApp.currentSorting = FilterUtils.extractSorters(firstContent.get('reportMetadata').get('reportSpec').get('sorters'), 
+						firstContent.get('reportMetadata').get('reportSpec').get('columns'),
+						firstContent.get('reportMetadata').get('reportSpec').get('measures'),
+						firstContent.get('reportMetadata').get('reportSpec').get('hierarchies'));
+				// Define the views.
+				var FilterItemView = Marionette.ItemView.extend({
+					tagName : 'div',
+					className : 'round-filter-group',
+					template : jQuery(filtersItemTemplate, '#template-filters').html(),
+					events : {
+						'click' : "testclick"
+					},
+					testclick : function() {					
+					}
+				});
+				var CompositeItemView = Marionette.CompositeView.extend({
+					template : jQuery(filtersTemplate, '#template-table-filters').html(),
+					childView : FilterItemView
+				});
+				var compositeView = new CompositeItemView({
+					collection : app.TabsApp.filters
+				});
+
+				app.TabsApp.settingsWidget.restoreFromSaved(firstContent.get('reportMetadata').get('settings').toJSON());			
+				app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').models;
+
+				// Render views.
+				var dynamicLayoutView = new DynamicContentView({
+					id : app.TabsApp.currentTab.get('id'),
+					filters : app.TabsApp.filters
+				});
+				app.TabsApp.dynamicContentRegion.show(dynamicLayoutView);
+				
+				dynamicLayoutView.filters.show(compositeView);
+				
+				// Create accordion for filters area.
+				jQuery("#main-dynamic-content-region_" + app.TabsApp.currentTab.get('id') + " #filters-collapsible-area").accordion({
+					collapsible : true,
+					active : false
+				});
+
+				// --------------------------------------------------------------------------------------//
+				// TODO: make complex view for adding more info in this
+				// section.
+				var LegendView = Marionette.ItemView.extend({
+					template : _.template(legendsTemplate),
+					className : 'legends-container',
+					onShow : function() {
+						jQuery(document).tooltip({
+							items : ('#show-legends-link-' + app.TabsApp.currentTab.get('id')),
+							content : function() {
+								return jQuery('#show_legend_pop_box').html();
+							}
+						});
+					}
+				});
+				var units = "";
+				switch (firstContent.get('reportMetadata').get('reportSpec').get('settings').get('unitsOption')) {
+				case 'AMOUNTS_OPTION_UNITS':
+					units = TranslationManager.getTranslated("Amounts in units");
+					break;
+				case 'AMOUNTS_OPTION_THOUSANDS':
+					units = TranslationManager.getTranslated("Amounts in thousands");
+					break;
+				case 'AMOUNTS_OPTION_MILLIONS':
+					units = TranslationManager.getTranslated("Amounts in millions");
+					break;
 				}
-			});
-			var CompositeItemView = Marionette.CompositeView.extend({
-				template : jQuery(filtersTemplate, '#template-table-filters').html(),
-				childView : FilterItemView
-			});
-			var compositeView = new CompositeItemView({
-				collection : app.TabsApp.filters
-			});
+				
+				
+				
+				var currencyCode = firstContent.get('reportMetadata').get('settings').get(app.TabsApp.settingsWidget.Constants.CURRENCY_ID) || app.TabsApp.settingsWidget.definitions.getDefaultCurrencyId();
+				var currencyValue = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode).value;
+				
+				var legend = new Legend({
+					currencyCode : currencyCode,
+					currencyValue : currencyValue,
+					units : units,
+					id : app.TabsApp.currentTab.get('id')
+				});
+				var legendView = new LegendView({
+					model : legend
+				});
+				dynamicLayoutView.legends.show(legendView);
 
-			app.TabsApp.settingsWidget.restoreFromSaved(firstContent.get('reportMetadata').get('settings').toJSON());			
-			app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').models;
+				TranslationManager.searchAndTranslate();
 
-			// Render views.
-			var dynamicLayoutView = new DynamicContentView({
-				id : app.TabsApp.currentTab.get('id'),
-				filters : app.TabsApp.filters
-			});
-			app.TabsApp.dynamicContentRegion.show(dynamicLayoutView);
+				// --------------------------------------------------------------------------------------//
+				gridManager.populateGrid(app.TabsApp.currentTab.get('id'), dynamicLayoutView, firstContent);
+			});			
 			
-			dynamicLayoutView.filters.show(compositeView);
-			
-			// Create accordion for filters area.
-			jQuery("#main-dynamic-content-region_" + app.TabsApp.currentTab.get('id') + " #filters-collapsible-area").accordion({
-				collapsible : true,
-				active : false
-			});
-
-			// --------------------------------------------------------------------------------------//
-			// TODO: make complex view for adding more info in this
-			// section.
-			var LegendView = Marionette.ItemView.extend({
-				template : _.template(legendsTemplate),
-				className : 'legends-container',
-				onShow : function() {
-					jQuery(document).tooltip({
-						items : ('#show-legends-link-' + app.TabsApp.currentTab.get('id')),
-						content : function() {
-							return jQuery('#show_legend_pop_box').html();
-						}
-					});
-				}
-			});
-			var units = "";
-			switch (firstContent.get('reportMetadata').get('reportSpec').get('settings').get('unitsOption')) {
-			case 'AMOUNTS_OPTION_UNITS':
-				units = TranslationManager.getTranslated("Amounts in units");
-				break;
-			case 'AMOUNTS_OPTION_THOUSANDS':
-				units = TranslationManager.getTranslated("Amounts in thousands");
-				break;
-			case 'AMOUNTS_OPTION_MILLIONS':
-				units = TranslationManager.getTranslated("Amounts in millions");
-				break;
-			}
-			
-			
-			
-			var currencyCode = firstContent.get('reportMetadata').get('settings').get(app.TabsApp.settingsWidget.Constants.CURRENCY_ID) || app.TabsApp.settingsWidget.definitions.getDefaultCurrencyId();
-			var currencyValue = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode).value;
-			
-			var legend = new Legend({
-				currencyCode : currencyCode,
-				currencyValue : currencyValue,
-				units : units,
-				id : app.TabsApp.currentTab.get('id')
-			});
-			var legendView = new LegendView({
-				model : legend
-			});
-			dynamicLayoutView.legends.show(legendView);
-
-			TranslationManager.searchAndTranslate();
-
-			// --------------------------------------------------------------------------------------//
-			gridManager.populateGrid(app.TabsApp.currentTab.get('id'), dynamicLayoutView, firstContent);
 
 		} else if (app.TabsApp.currentTab.get('id') == -1) {
 			// "More Tabs..." tab.

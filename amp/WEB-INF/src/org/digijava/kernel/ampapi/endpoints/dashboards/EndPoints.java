@@ -25,14 +25,14 @@ import net.sf.json.JSONObject;
 /**
  * 
  * @author Diego Dimunzio
- * - All dash boards end points 
+ * - All dashboards end points
  */
 
 @Path("dashboard")
 public class EndPoints implements ErrorReportingEndpoint {
 
 	/**
-	 * Retrieve a list of available top, with their names.
+	 * Retrieve a list of available top for the dashboard charts with their names, that is hardcoded and will return always "Donor Agency", "Region", "Primary Sector"
 	 * </br>
 	 * <dl>
 	 * The JSON object holds information regarding:
@@ -68,7 +68,7 @@ public class EndPoints implements ErrorReportingEndpoint {
 	}
 
 	/**
-	 * Retrieve top donors values for dash boards chart.
+	 * Retrieve top donors values for dashboards chart.
 	 * </br>
 	 * <dl>
 	 * where Type (Chart type) :
@@ -78,10 +78,10 @@ public class EndPoints implements ErrorReportingEndpoint {
 	 *    dg = Donor Group
 	 * </br>
 	 * The JSON object holds information regarding:
-	 * <dt><b>currency</b><dd> - currency of the report
+	 * <dt><b>currency</b><dd> - currency of the report that is going to be run to retrieve the information
 	 * <dt><b>values</b><dd> - an array with a list of donors and the amount
 	 * <dt><b>total</b><dd> -  total amount
-	 * <dt><b>sumarizedTotal</b><dd> - simarozed total amount
+	 * <dt><b>sumarizedTotal</b><dd> - sumarized total amount
 	 * <dt><b>maxLimit</b><dd> - number of donors
 	 * <dt><b>name</b><dd> - name of the report
 	 * </dl></br></br>
@@ -144,15 +144,15 @@ public class EndPoints implements ErrorReportingEndpoint {
 	}
 
 	/**
-	 * Retrieve aid predictability values for dash boards chart.
+	 * Retrieve aid predictability values for dashboards chart.
 	 * </br>
 	 * <dl>
 	 * The JSON object holds information regarding:
 	 * <dt><b>years</b><dd> - an array of years with the funding type and the amount
 	 * <dt><b>totals</b><dd> - total by funding type
-	 * <dt><b>currency</b><dd> - currency of the report
-	 * <dt><b>name</b><dd> - name of the report
-	 * <dt><b>title</b><dd> - title of the report
+	 * <dt><b>currency</b><dd> - currency of the report that is going to be run to retrieve the information
+	 * <dt><b>name</b><dd> - name of the report that is going to be run to retrieve the information
+	 * <dt><b>title</b><dd> - title of the report that is going to be run to retrieve the information
 	 * <dt><b>measure</b><dd> - measure type "disbursements"
 	 * </dl></br></br>
 	 *
@@ -303,7 +303,7 @@ public class EndPoints implements ErrorReportingEndpoint {
 	 *   "title": "Funding type"
 	 * }</pre>
 	 *
-	 * @param config a JSON object with the config
+	 * @param config a JSON object with the configuration that is going to be used by the report to get the funding-type
 	 * @param adjtype a funding type
 	 *
 	 * @return a JSON object
@@ -319,7 +319,7 @@ public class EndPoints implements ErrorReportingEndpoint {
 	}
 
 	/**
-	 * Save the api state.
+	 * Save the state of a chart to be able to share it.
 	 * </br>
 	 * <dl>
 	 * The JSON object holds information regarding:
@@ -338,7 +338,7 @@ public class EndPoints implements ErrorReportingEndpoint {
 	 *     "mapId": 155
 	 * }</pre>
 	 *
-	 * @param pChrat a JSON object with the config
+	 * @param pChart a JSON object with the config
 	 *
 	 * @return a JSON object with the map Id
 	 */
@@ -346,16 +346,16 @@ public class EndPoints implements ErrorReportingEndpoint {
 	@Path("/saved-charts")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "SaveChart")
-	public JsonBean savedMaps(final JsonBean pChrat) {
-		return EndpointUtils.saveApiState(pChrat,"C");
+	public JsonBean savedMaps(final JsonBean pChart) {
+		return EndpointUtils.saveApiState(pChart,"C");
 	}
 
 	/**
-	 * Retrieve a chart query by Id.
+	 * Retrieve a saved chart by Id.
 	 * </br>
 	 * <dl>
 	 * The JSON object holds information regarding:
-	 * <dt><b>id</b><dd> - a map id
+	 * <dt><b>id</b><dd> - map id
 	 * <dt><b>title</b><dd> - a chart title
 	 * <dt><b>description</b><dd> - a chart description
 	 * <dt><b>stateBlob</b><dd> - a chart blob
@@ -388,11 +388,11 @@ public class EndPoints implements ErrorReportingEndpoint {
 	}
 
 	/**
-	 * Retrieve a list of charts.
+	 * Retrieve a list of saved charts.
 	 * </br>
 	 * <dl>
 	 * The JSON object holds information regarding:
-	 * <dt><b>id</b><dd> - a map id
+	 * <dt><b>id</b><dd> - map id
 	 * <dt><b>title</b><dd> - a chart title
 	 * <dt><b>description</b><dd> - a chart description
 	 * <dt><b>created</b><dd> - a creation date

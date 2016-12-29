@@ -608,6 +608,7 @@ public class ExportActivityToWord extends Action {
                     Table meTbl = null;
                     meTbl = new Table(1);
                     meTbl.setWidth(100);
+                    meTbl.setBorder(0);
                     RtfCell meTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("M & E").toUpperCase(), HEADERFONT));
                     meTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
                     meTitleCell.setBackgroundColor(CELLCOLORGRAY);
@@ -671,11 +672,9 @@ public class ExportActivityToWord extends Action {
                                     meTbl.addCell(cellValue);
                                 }
                             }
-
                         }
                         applyEmptyCell(meTbl, 1);
                     }
-
                     doc.add(meTbl);
                     doc.add(new Paragraph(" "));
                 }

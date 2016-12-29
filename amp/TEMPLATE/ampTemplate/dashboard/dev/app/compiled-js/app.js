@@ -27906,7 +27906,7 @@ module.exports = Backbone.Collection.extend({
         break;
         
       default:
-    	  if (attrs.id == 'Dates' || (attrs.id.length > 4 && attrs.id.substring(attrs.id.length - 4) == 'Date')) {
+    	  if (attrs.id == 'Dates' || (attrs.id.length > 4 && attrs.id.substring(attrs.id.length - 4) == 'date')) {
     		  tmpModel = new YearsFilterModel(attrs);  // hacky but less hacky than enumerating them. Long term solution -> the endpoint should return a field telling the type of a field
     	  } else if (attrs.id == 'computed-year') {
     		  tmpModel = new YearsOnlyFilterModel(attrs);
@@ -30448,7 +30448,7 @@ module.exports = BaseFilterModel.extend({
   serialize: function(options) {
 	// AMP-21041: Enabled filtering by start OR end date.
     if (this.get('selectedStart') || this.get('selectedEnd')) {
-    	  var key = _.first(this.get('columns')) !='N/A' ? _.first(this.get('columns')): 'date';    	   	  
+    	  var key = this.get('id').toLowerCase();    	   	  
     	  var obj = {};
     	  if(options.wholeModel === true){
     		  obj[key] = {			
@@ -30483,7 +30483,7 @@ module.exports = BaseFilterModel.extend({
   },
   
   deserialize: function(obj) {
-	var key = _.first(this.get('columns')) !='N/A' ? _.first(this.get('columns')) : 'date';
+	var key = this.get('id').toLowerCase();
 	if (obj && obj[key]) {
 	  this.set('selectedStart', this._dateConvert(obj[key].start));
 	  this.set('selectedEnd', this._dateConvert(obj[key].end));

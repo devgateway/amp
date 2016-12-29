@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
     <c:if test="${not empty aimEditActivityForm.indicators}">
         <table width="100%">
@@ -103,7 +104,7 @@
                                         </td>
                                         <td width="50%">
                                             <field:display name="Comments ${fieldName} Value" feature="Activity">
-                                                <span class="word_break">${value.comment}</span>
+                                                <span class="word_break">${fn:escapeXml(value.comment)}</span>
                                             </field:display>
                                         </td>
                                         <td width="20%">

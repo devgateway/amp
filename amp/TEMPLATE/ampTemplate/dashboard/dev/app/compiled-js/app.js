@@ -211,7 +211,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":14,"./models/amp-user.js":15,"./models/saved-dashes-collection.js":25,"./views/fail":35,"./views/main":37,"amp-filter/src/main":68,"amp-settings/src/index":92,"amp-state/index":96,"amp-translate":97,"amp-url/index":98,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":14,"./models/amp-user.js":15,"./models/saved-dashes-collection.js":25,"./views/fail":35,"./views/main":37,"amp-filter/src/main":67,"amp-settings/src/index":91,"amp-state/index":95,"amp-translate":96,"amp-url/index":97,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -389,7 +389,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":99,"../../ugly/util":44,"d3":"d3"}],5:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":98,"../../ugly/util":44,"d3":"d3"}],5:[function(require,module,exports){
 /*
  * Drawing a bar chart in AMP? Please use ./chart.js instead.
  */
@@ -439,7 +439,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":99,"../../ugly/util":44,"./customized/heatMapChart":11,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":98,"../../ugly/util":44,"./customized/heatMapChart":11,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
 /*
  * Drawing a multibar chart in AMP? Please use ./chart.js instead.
  */
@@ -500,7 +500,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":99,"./customized/multiBarChart.js":12}],7:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":98,"./customized/multiBarChart.js":12}],7:[function(require,module,exports){
 /*
  * Drawing a pie chart in AMP? Please use ./chart.js instead.
  */
@@ -4431,39 +4431,25 @@ module.exports = BackboneDash.View.extend({
   },
 
   initialize: function(options) {
+	var self = this;
     this.finishedFirstLoad = false;
     this.app = options.app;
     this.listenTo(this.app.filter, 'cancel', this.hideFilter);
     this.listenTo(this.app.filter, 'apply', this.applyFilter);
-    this.app.generalSettings.load().done(_(function() {
-      // Extract default dates from Global Settings.
-      var blob = {};
-      // AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...)
-      
-      this.app.filter.extractDates(this.app.generalSettings, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
-
-      this.app.filter.loaded.done(_(function() {
-        console.info('filters loaded');
+    this.app.generalSettings.load().done(_(function() {     
+      this.app.filter.loaded.done(_(function() {        
         this.app.state.register(this, 'filters', {
-          // namespace serialized filters so we can hook in extra state to store
-          // later if desired (anything dashboards-ui related, for example)
-          get: _(function() {
-            return {
-              filter: this.app.filter.serialize()
-            };
+            get: _(function() {
+             return this.app.filter.serialize();            
           }).bind(this),
-          set: _(function(state) {
-            if (_.isEmpty(state.filter)){            
-              filtersViewLog.log('Using default filter dates.');
-              // AMP-21118: Dont override all filters, just dates section.
-              state.filter.otherFilters = blob.otherFilters;
+          set: _(function(state) {        	
+            if (_.isEmpty(state)){            
+            	self.app.filter.extractDates(self.app.generalSettings, state, 'dashboard-default-min-date', 'dashboard-default-max-date');
             }
-            this.app.filter.deserialize(state.filter);
+            this.app.filter.deserialize(state);
             this.app.filter.finishedFirstLoad = true;
           }).bind(this),
-          empty: {
-            filter: {}
-          }
+          empty: {}
         });
       }).bind(this));
     }).bind(this));
@@ -4483,10 +4469,9 @@ module.exports = BackboneDash.View.extend({
     return this;
   },
 
-  renderApplied: function() {
-    var filters = this.app.filter.serializeToModels();
-    var countApplied = _(filters.columnFilters).keys().length;
-    countApplied += _(filters.otherFilters).keys().length;
+  renderApplied: function() {	  
+    var filterObject = this.app.filter.serializeToModels();
+    var countApplied = _(filterObject.filters).keys().length;
     this.$('.applied-filters').html(summaryTemplate({ countApplied: countApplied }));
     this.app.translator.translateDOM(this.el);
   },
@@ -4507,52 +4492,57 @@ module.exports = BackboneDash.View.extend({
   },
 
   showFilterDetails: function() {
-    var filters = this.app.filter.serializeToModels();
-    var applied = _(filters.columnFilters).map(function(filter, key) {
-      return {
-        name: filter.filterName || key,
-        id: key.replace(/[^\w]/g, ''), // remove anything non-alphanum
-        detail: _(filter).map(function(value) {
-          if (value.attributes !== undefined) {
-            return value.get('name');
-          } else {
-            // To fix problem with dates.
-            if (value !== key && value !== filter.filterName) {
-              return value;
-            }
-          }
-        })
-      };
+	var self = this;
+    var filterObject = this.app.filter.serializeToModels(); 
+    var applied = _(filterObject.filters).map(function(filter, key) {
+      var filterField = filterObject.filters[key];
+      if(filterField.modelType === 'YEAR-SINGLE-VALUE' || filterField.modelType === 'DATE-RANGE-VALUES'){
+    	  return self.getAppliedDateObject(filterObject,key);
+      } else {
+    	  return {
+    	        name: filter.filterName || key,
+    	        id: key.replace(/[^\w]/g, ''), // remove anything non-alphanum
+    	        detail: _(filter).map(function(value) {
+    	          if (value.attributes !== undefined) {
+    	            return value.get('name');
+    	          } else {
+    	            // To fix problem with dates.
+    	            if (value !== key && value !== filter.filterName) {
+    	              return value;
+    	            }
+    	          }
+    	        })
+    	      };  
+      }
+      
     });
-    if (filters.otherFilters) {
-      _.each(Object.keys(filters.otherFilters), function (filterKey) {
-          var filterField = filters.otherFilters[filterKey];
-          var dateRangeText = '';
-          if(filterKey === 'date') {
-            dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
-          } else if(filterKey === 'computedYear') {
-            dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
-          } else {
-            dateRangeText = app.translator.translateSync("amp.dashboard:" + filterKey.replace(/[^\w]/g, '-'), filterKey);
-          }
-          var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
-          applied.push({
-            id: filterKey.replace(/[^\w]/g, '-'),
-            name: dateRangeText,
-            detail: [detail]
-          });
-      });
-    }
+    
     this.$('.applied-filters').html(detailsTemplate({ applied: applied }));
     this.app.translator.translateDOM(this.el);
   },
-
+  getAppliedDateObject: function(filterObject, filterKey){
+	  var filterField = filterObject.filters[filterKey];
+	  var dateRangeText = '';
+	  if(filterKey === 'date') {
+		  dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
+	  } else if(filterKey === 'computed-year') {
+		  dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
+	  } else {
+		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterKey.replace(/[^\w]/g, '-'), filterKey);
+	  }
+	  var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
+	  return {
+		  id: filterKey.replace(/[^\w]/g, '-'),
+		  name: dateRangeText,
+		  detail: [detail]
+		};	  
+  },
   hideFilterDetails: function() {
     this.renderApplied();
   }
 });
 
-},{"../../../../../../../reamp/tools/log":99,"../backbone-dash":3,"underscore":"underscore"}],37:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":98,"../backbone-dash":3,"underscore":"underscore"}],37:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -4704,7 +4694,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"../models/charts-collection":21,"../models/enabled-charts-collection":22,"../models/heatmaps-config-collection":23,"./charts":32,"./controls":33,"amp-boilerplate":48,"amp-state/index":96,"underscore":"underscore"}],38:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"../models/charts-collection":21,"../models/enabled-charts-collection":22,"../models/heatmaps-config-collection":23,"./charts":32,"./controls":33,"amp-boilerplate":48,"amp-state/index":95,"underscore":"underscore"}],38:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -21153,7 +21143,7 @@ module.exports = {
 };
 window.boilerplate = Widget;
 
-},{"./src/models/amp-layout-model.js":51,"./src/views/footer-view.js":54,"./src/views/header-view.js":55,"amp-translate":97,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"jquery":"jquery","underscore":"underscore"}],49:[function(require,module,exports){
+},{"./src/models/amp-layout-model.js":51,"./src/views/footer-view.js":54,"./src/views/header-view.js":55,"amp-translate":96,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"jquery":"jquery","underscore":"underscore"}],49:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -27918,7 +27908,7 @@ module.exports = Backbone.Collection.extend({
       default:
     	  if (attrs.id == 'Dates' || (attrs.id.length > 4 && attrs.id.substring(attrs.id.length - 4) == 'Date')) {
     		  tmpModel = new YearsFilterModel(attrs);  // hacky but less hacky than enumerating them. Long term solution -> the endpoint should return a field telling the type of a field
-    	  } else if (attrs.id == 'computedYear') {
+    	  } else if (attrs.id == 'computed-year') {
     		  tmpModel = new YearsOnlyFilterModel(attrs);
     	  } else {
     		  tmpModel = new GenericFilterModel(attrs);
@@ -28023,10 +28013,14 @@ module.exports = Backbone.Collection.extend({
         }
 
         if (tmpJSON.data.length > 0) {
-        	//The role name is Donor and the back end, for donor, is expecting either Donor Id or Donor Agency
-          var currentFilterId = role.get('name') + (role.get('name') === 'Donor'? " Agency":"");
-          tmpJSON.data = self._setFilterId(tmpJSON.data, currentFilterId);
-          self.add(new OrgRoleFilterModel(tmpJSON));
+        	var currentFilterId;
+        	if (role.get('filterId')) {
+        		currentFilterId = role.get('filterId');
+        	} else {
+        		currentFilterId = role.get('name') + " Id";
+        	}        	
+        	tmpJSON.data = self._setFilterId(tmpJSON.data, currentFilterId);            
+        	self.add(new OrgRoleFilterModel(tmpJSON));
         }
       });
 
@@ -28072,12 +28066,11 @@ module.exports = Backbone.Collection.extend({
 		var self = this;
 		orgTypesJSON = _.filter(orgTypesJSON, function(type) {
 			type.children = self._filterOrgs(type.children, roleID);
-	
 			_.each(type.children, function(group) {
-				group.filterId = 'Donor Group';
+				group.filterId = 'donor-group';
 			});	
 
-			type.filterId = 'Donor Type';
+			type.filterId = 'donor-type';
 			type.isSelectable = false; // stops tree from creating 'unkown' children.
 			return (type.children.length > 0);
 		});
@@ -28148,20 +28141,7 @@ module.exports = Backbone.Collection.extend({
 	}
 });
 
-},{"../models/generic-filter-model":70,"../models/org-role-filter-model":71,"../models/years-filter-model":73,"../models/years-only-filter-model":74,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],65:[function(require,module,exports){
-
-var Deferred = require('jquery').Deferred;
-var _ = require('underscore');
-var Backbone = require('backbone');
-var Setting = require('../models/setting');
-
-module.exports  = Backbone.Collection.extend({
-		model : Setting,
-		url : '/rest/amp/settings'
-});
-
-
-},{"../models/setting":72,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],66:[function(require,module,exports){
+},{"../models/generic-filter-model":70,"../models/org-role-filter-model":71,"../models/years-filter-model":72,"../models/years-only-filter-model":73,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],65:[function(require,module,exports){
 /*! jQuery UI - v1.10.4 - 2014-01-17
 * http://jqueryui.com
 * Includes: jquery.ui.datepicker-af.js, jquery.ui.datepicker-ar-DZ.js, jquery.ui.datepicker-ar.js, jquery.ui.datepicker-az.js, jquery.ui.datepicker-be.js, jquery.ui.datepicker-bg.js, jquery.ui.datepicker-bs.js, jquery.ui.datepicker-ca.js, jquery.ui.datepicker-cs.js, jquery.ui.datepicker-cy-GB.js, jquery.ui.datepicker-da.js, jquery.ui.datepicker-de.js, jquery.ui.datepicker-el.js, jquery.ui.datepicker-en-AU.js, jquery.ui.datepicker-en-GB.js, jquery.ui.datepicker-en-NZ.js, jquery.ui.datepicker-eo.js, jquery.ui.datepicker-es.js, jquery.ui.datepicker-et.js, jquery.ui.datepicker-eu.js, jquery.ui.datepicker-fa.js, jquery.ui.datepicker-fi.js, jquery.ui.datepicker-fo.js, jquery.ui.datepicker-fr-CA.js, jquery.ui.datepicker-fr-CH.js, jquery.ui.datepicker-fr.js, jquery.ui.datepicker-gl.js, jquery.ui.datepicker-he.js, jquery.ui.datepicker-hi.js, jquery.ui.datepicker-hr.js, jquery.ui.datepicker-hu.js, jquery.ui.datepicker-hy.js, jquery.ui.datepicker-id.js, jquery.ui.datepicker-is.js, jquery.ui.datepicker-it.js, jquery.ui.datepicker-ja.js, jquery.ui.datepicker-ka.js, jquery.ui.datepicker-kk.js, jquery.ui.datepicker-km.js, jquery.ui.datepicker-ko.js, jquery.ui.datepicker-ky.js, jquery.ui.datepicker-lb.js, jquery.ui.datepicker-lt.js, jquery.ui.datepicker-lv.js, jquery.ui.datepicker-mk.js, jquery.ui.datepicker-ml.js, jquery.ui.datepicker-ms.js, jquery.ui.datepicker-nb.js, jquery.ui.datepicker-nl-BE.js, jquery.ui.datepicker-nl.js, jquery.ui.datepicker-nn.js, jquery.ui.datepicker-no.js, jquery.ui.datepicker-pl.js, jquery.ui.datepicker-pt-BR.js, jquery.ui.datepicker-pt.js, jquery.ui.datepicker-rm.js, jquery.ui.datepicker-ro.js, jquery.ui.datepicker-ru.js, jquery.ui.datepicker-sk.js, jquery.ui.datepicker-sl.js, jquery.ui.datepicker-sq.js, jquery.ui.datepicker-sr-SR.js, jquery.ui.datepicker-sr.js, jquery.ui.datepicker-sv.js, jquery.ui.datepicker-ta.js, jquery.ui.datepicker-th.js, jquery.ui.datepicker-tj.js, jquery.ui.datepicker-tr.js, jquery.ui.datepicker-uk.js, jquery.ui.datepicker-vi.js, jquery.ui.datepicker-zh-CN.js, jquery.ui.datepicker-zh-HK.js, jquery.ui.datepicker-zh-TW.js
@@ -30005,7 +29985,7 @@ jQuery(function($){
 		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['en-GB']);
 });
-},{}],67:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 /*
 
 $.Link (part of noUiSlider) - WTFPL */
@@ -30038,7 +30018,7 @@ b,a)})}function X(a){return this.each(function(){var b=c(this).val(),d=this.dest
 end:"mouseup touchend"},f="noUi-target noUi-base noUi-origin noUi-handle noUi-horizontal noUi-vertical noUi-background noUi-connect noUi-ltr noUi-rtl noUi-dragable  noUi-state-drag  noUi-state-tap noUi-active noUi-extended noUi-stacking".split(" ");c.fn.val=function(){var a=arguments,b=c(this[0]);return arguments.length?this.each(function(){(c(this).hasClass(f[0])?B:C).apply(c(this),a)}):(b.hasClass(f[0])?B:C).call(b)};c.noUiSlider={Link:c.Link};c.fn.noUiSlider=function(a,b){return(b?X:W).call(this,
 a)}})(window.jQuery||window.Zepto);
 
-},{}],68:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -30138,32 +30118,34 @@ _.extend(Widget.prototype, Backbone.Events, {
   },
   /**
    * searches the settings array of models for the ones which hold the min/max values instructed to and, if found,
-   * writes them in filtersOut.otherFilters.date.{start}{end}
+   * writes them in filtersOut.date.{start}{end}
    *
    * use it as an utility function (it does not reference 'this', so
    * it is safe to use it at any point in the lifecycle of the widget
    */
   extractDates: function(settings, filtersOut, minName, maxName) {
-    filtersOut.otherFilters = filtersOut.otherFilters || {};
-    filtersOut.otherFilters.date = filtersOut.otherFilters.date || {
-        start: '',
-        end: ''
-      };
+	  filtersOut = filtersOut || {};  
+	  if(_.isUndefined(filtersOut.date) || _.isEmpty(filtersOut.date)){
+		  filtersOut.date = filtersOut.date || {
+			  start: '',
+			  end: ''
+		  };
 
-    var defaultMinDate = settings.get(minName);    
-    if (defaultMinDate !== undefined && defaultMinDate !== '') {
-      filtersOut.otherFilters.date.start = defaultMinDate;
-    }
-    var defaultMaxDate = settings.get(maxName);
-    if (defaultMaxDate !== undefined && defaultMaxDate !== '') {
-      filtersOut.otherFilters.date.end = defaultMaxDate;
-    }
+		  var defaultMinDate = settings.get(minName);    
+		  if (defaultMinDate !== undefined && defaultMinDate !== '') {
+			  filtersOut.date.start = defaultMinDate;
+		  }
+		  var defaultMaxDate = settings.get(maxName);
+		  if (defaultMaxDate !== undefined && defaultMaxDate !== '') {
+			  filtersOut.date.end = defaultMaxDate;
+		  }
+	  }    
   }
 
 });
 
 module.exports = Widget;
-},{"./lib/jquery-ui-i18n":66,"./views/filters-view":79,"backbone":"backbone","bootstrap/dist/js/bootstrap":58,"jquery":"jquery","jquery-ui/draggable":61,"underscore":"underscore"}],69:[function(require,module,exports){
+},{"./lib/jquery-ui-i18n":65,"./views/filters-view":78,"backbone":"backbone","bootstrap/dist/js/bootstrap":58,"jquery":"jquery","jquery-ui/draggable":61,"underscore":"underscore"}],68:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -30188,7 +30170,13 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],70:[function(require,module,exports){
+},{"backbone":"backbone"}],69:[function(require,module,exports){
+var _ = require('underscore');
+var Backbone = require('backbone');
+module.exports = Backbone.Model.extend({
+	url: '/rest/amp/settings'
+});
+},{"backbone":"backbone","underscore":"underscore"}],70:[function(require,module,exports){
 var _ = require('underscore');
 
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30342,7 +30330,7 @@ module.exports = BaseFilterModel.extend({
 });
 
 
-},{"../models/base-filter-model":69,"../tree/tree-node-model":75,"underscore":"underscore"}],71:[function(require,module,exports){
+},{"../models/base-filter-model":68,"../tree/tree-node-model":74,"underscore":"underscore"}],71:[function(require,module,exports){
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -30397,20 +30385,7 @@ module.exports = GenericFilterModel.extend({
 });
 
 
-},{"../models/generic-filter-model":70,"../tree/tree-node-model":75,"jquery":"jquery"}],72:[function(require,module,exports){
-var _ = require('underscore');
-var Backbone = require('backbone');
-module.exports = Backbone.Model.extend({
-	defaults : {
-		id : "",
-		multi : "",
-		name : "",
-		defaultId : "",
-		options : []
-		
-	}
-});
-},{"backbone":"backbone","underscore":"underscore"}],73:[function(require,module,exports){
+},{"../models/generic-filter-model":70,"../tree/tree-node-model":74,"jquery":"jquery"}],72:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30470,19 +30445,23 @@ module.exports = BaseFilterModel.extend({
     return data;
   },
 
-  serialize: function() {
+  serialize: function(options) {
 	// AMP-21041: Enabled filtering by start OR end date.
     if (this.get('selectedStart') || this.get('selectedEnd')) {
-    	  var key = _.first(this.get('columns')) !='N/A' ? _.first(this.get('columns')): 'date';
-    	  //console.log('serializing years-filter-model for ' + key + ', start = ' + this.get('selectedStart') + ', end = ' + this.get('selectedEnd'));    	  
+    	  var key = _.first(this.get('columns')) !='N/A' ? _.first(this.get('columns')): 'date';    	   	  
     	  var obj = {};
-    	  obj[key] = {
-				  //start: this._dateConvert(this.get('selectedStart')),
-				  //end: this._dateConvert(this.get('selectedEnd'))
-				  start: this.get('selectedStart'),
-				  end: this.get('selectedEnd'),
-				  modelType: this.get('modelType')
-			 };
+    	  if(options.wholeModel === true){
+    		  obj[key] = {			
+    				  modelType : this.get('modelType'),    		  
+    				  start: this.get('selectedStart'),
+    				  end: this.get('selectedEnd')			  
+    			 };
+    	  } else {
+    		  obj[key] = {				  
+    				  start: this.get('selectedStart'),
+    				  end: this.get('selectedEnd')			  
+    			 }; 
+    	  }
     	  return obj;
     } else {
       return null;
@@ -30545,7 +30524,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":69,"jquery":"jquery","underscore":"underscore"}],74:[function(require,module,exports){
+},{"../models/base-filter-model":68,"jquery":"jquery","underscore":"underscore"}],73:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30575,15 +30554,19 @@ module.exports = BaseFilterModel.extend({
 		return data;
 	},
 
-	serialize : function() {	
+	serialize : function(options) {	
 		if (this.get('selectedYear')) {
 			var key = this.get('id');
 			var obj = {};
-			obj[key] = {
-				year : this.get('selectedYear'),
-				modelType : this.get('modelType'),
-				displayName : this.get('name')
-			};
+			if(options.wholeModel === true){
+				obj[key] = {
+						year : this.get('selectedYear'),
+						modelType : this.get('modelType'),
+						displayName : this.get('name')
+					};
+			} else {
+				obj[key] = this.get('selectedYear');	
+			}	
 			return obj;
 		} else {
 			return null;
@@ -30593,8 +30576,7 @@ module.exports = BaseFilterModel.extend({
 	deserialize : function(obj) {
 		var key = this.get('id');
 		if (obj && obj[key]) {
-			this.set('selectedYear', obj[key].year);
-			this.set('displayName', obj[key].displayName);
+			this.set('selectedYear', obj[key]);			
 		} else {
 			this.reset();
 		}
@@ -30607,7 +30589,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":69,"jquery":"jquery","underscore":"underscore"}],75:[function(require,module,exports){
+},{"../models/base-filter-model":68,"jquery":"jquery","underscore":"underscore"}],74:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TreeNodeModel; // declare here to help with ref loop of collection and model
@@ -30880,7 +30862,7 @@ serialize: function(options) {
 
 module.exports = TreeNodeModel;
 
-},{"backbone":"backbone","underscore":"underscore"}],76:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],75:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -31075,35 +31057,33 @@ var TreeNodeView = Backbone.View.extend({
 
 module.exports = TreeNodeView;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],77:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
 var _ = require('underscore');
 
 var extractDates = function(settings, filtersOut, minName, maxName) {
-    filtersOut.otherFilters = filtersOut.otherFilters || {};
-    filtersOut.otherFilters.date = filtersOut.otherFilters.date || {
-        start: '',
-        end: ''
-      };
+	filtersOut = filtersOut || {};  
+	if(_.isUndefined(filtersOut.date) || _.isEmpty(filtersOut.date)){
+		  filtersOut.date = filtersOut.date || {
+			  start: '',
+			  end: ''
+		  };
 
-    var defaultMinDate = _.find(settings, function(item) {
-      return item.get('id') === minName;
-    });
-    if (defaultMinDate !== undefined && defaultMinDate.get('name') !== '') {
-      filtersOut.otherFilters.date.start = defaultMinDate.get('name');
-    }
-    var defaultMaxDate = _.find(settings, function(item) {
-      return item.get('id') === maxName;
-    });
-    if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
-      filtersOut.otherFilters.date.end = defaultMaxDate.get('name');
-    }
+		  var defaultMinDate = settings.get(minName);    
+		  if (defaultMinDate !== undefined && defaultMinDate !== '') {
+			  filtersOut.date.start = defaultMinDate;
+		  }
+		  var defaultMaxDate = settings.get(maxName);
+		  if (defaultMaxDate !== undefined && defaultMaxDate !== '') {
+			  filtersOut.date.end = defaultMaxDate;
+		  }
+	  }  
   }
 
 module.exports = {
 		extractDates: extractDates
 }
 
-},{"underscore":"underscore"}],78:[function(require,module,exports){
+},{"underscore":"underscore"}],77:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -31133,10 +31113,8 @@ module.exports = Backbone.View.extend({
     this.titleEl = this.titleTemplate(this.model.toJSON());
     this.$titleEl = $(this.titleEl);
     this.$titleEl.on('click', function(evt) {
-      // console.log('handling the click on low-level titleEl...'); CONSTANTIN TEMP COMMENT WHILE LEARNING FILTERS
       $(this).siblings().removeClass('active');
       $(this).addClass('active');
-
       self.$el.html('');
       self.renderFilters();
       return false;
@@ -31147,7 +31125,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],78:[function(require,module,exports){
 /**
  * this is the view which renders the big Filter contents (the tabs)
  */
@@ -31166,7 +31144,7 @@ var Template = "<%\n  // this renders the \"big\" filter list (the tabs)\n%>\n<d
 var TitleTemplate = "<%\n// renders the title of a tab \n%>\n<li class=\"\"><a data-i18n=\"amp.gis:pane-filters-<%= name.replace(/ /g,'') %>\" href=\"#filter-pane-<%= name.replace(/ /g,'') %>\" role=\"tab\" data-toggle=\"tab\"><%= name %></a></li>\n";
 var filtersViewLog = require("../../../../../reamp/tools/log")('amp:filters:top-level:view');
 
-var SettingsCollection = require('../collections/settings-collection');
+var GeneralSettings = require('../models/general-settings');
 
 var DateUtils = require('../utils/date-utils');
 
@@ -31196,7 +31174,7 @@ module.exports = Backbone.View.extend({
     var self = this;
     this.draggable = options.draggable;
     this.caller = options.caller;
-    this.settings = new SettingsCollection();
+    this.settings = new GeneralSettings();
     this.settings.fetch();
     
     this.dateFormatMappings = [];
@@ -31239,31 +31217,13 @@ module.exports = Backbone.View.extend({
 
   },
 
-  
-//  
-//  _generateFilterViewInstance : function(keyname) {
-//	  return new TopLevelFilterView({name:filterInstancesNames[keyname], translator: this.translator, translate: this.translate});
-//  },	  					  
-	  					
-  
-  _createTopLevelFilterViews: function() {
-    //this.filterViewsInstances = {
+  _createTopLevelFilterViews: function() {    
     		for (key in filterInstancesNames) {
     			if (filterInstancesNames.hasOwnProperty(key)) {
     				
     				this.filterViewsInstances[key] = new TopLevelFilterView({name:filterInstancesNames[key], translator: this.translator, translate: this.translate, filterView: this});
     			}
-    		}
-    		/*
-      donors: new TopLevelFilterView({name:'Funding Organizations', translator: this.translator, translate: this.translate}),
-      sectors: new TopLevelFilterView({name:'Sector', translator: this.translator, translate: this.translate}),
-      programs: new TopLevelFilterView({name:'Programs', translator: this.translator, translate: this.translate}),
-      activity: new TopLevelFilterView({name:'Activity', translator: this.translator, translate: this.translate}),
-      allAgencies: new TopLevelFilterView({name:'All Agencies', translator: this.translator, translate: this.translate}),
-      financials: new TopLevelFilterView({name:'Financial', translator: this.translator, translate: this.translate}),
-      locations: new TopLevelFilterView({name:'Location', translator: this.translator, translate: this.translate}),
-      others: new TopLevelFilterView({name:'Other', translator: this.translator, translate: this.translate})
-    };*/
+    		}    		
   },
 
 
@@ -31280,11 +31240,10 @@ module.exports = Backbone.View.extend({
       this.$el.show();
 
       this._getFilterList().done(function() {
-//    	self.cleanupUnusedTabs(); 
         self.renderFilters();
         self.translate(this.$el);
       });
-      //debugger; // AMP-20617  wth does thing not work in saiku?
+      
       // handle click on a Tab's title: http://getbootstrap.com/javascript/#tabs-events
       $(document).on('shown.bs.tab click', "ul.nav.filter-titles>li>a[data-toggle='tab']", function (e) {  // <- this line makes little sense but works in Saiku/Tabs also
         //this.$el.find("ul.nav.filter-titles>li>a[data-toggle='tab']").on('shown.bs.tab', function (e) {   // <- this line works in anything except Saiku/Tabs
@@ -31292,9 +31251,6 @@ module.exports = Backbone.View.extend({
          * the 'click' event added because (weirdly) the shown.bs.tab event not being fired AT ALL under Saiku/Tabs. Until this is investigated
          * on GIS/Dashboard tabs this second event is superfluous
          */
-
-        //e.target // newly activated tab
-        //e.relatedTarget // previous active tab
 
         var activeTab = $(e.target.parentElement).index(); // shameful hack, but haven't been able to find a cleaner solution
         var oldTabNr = e.relatedTarget ? $(e.relatedTarget.parentElement).index() : -1;
@@ -31352,7 +31308,6 @@ module.exports = Backbone.View.extend({
     var activeTitleNumber = this.$('.filter-titles').attr('active-tab-number') || 0;
 
     for (var filterView in this.filterViewsInstances) {
-//    	console.log(filterView);
       if (this.filterViewsInstances.hasOwnProperty(filterView)) {
     	  contained = false;
     	  var index;
@@ -31370,7 +31325,6 @@ module.exports = Backbone.View.extend({
     		  
         var tmpFilterView = this.filterViewsInstances[filterView];
         renderingTitleNumber = renderingTitleNumber + 1;
-        // console.log('rendering top-level-filter-view ' + tmpFilterView.name); CONSTANTIN - comment to be removed once filters sanitisation is done
         this.$('.filter-titles').append(tmpFilterView.renderTitle().titleEl);
         var active = renderingTitleNumber == activeTitleNumber;
         this.$('.filter-options').append(tmpFilterView.renderFilters(active).el);
@@ -31388,19 +31342,19 @@ module.exports = Backbone.View.extend({
 
   _createFilterViews: function(tmpModel) {
     // TODO: magic strings are dangerous, config somewhere...
-    switch (tmpModel.get('group')) {
+	switch (tmpModel.get('group')) {
       case 'ActivityBudgetList':
-      case 'TypeOfAssistanceList':
-      case 'ModeOfPaymentList':
-      case 'ExpenditureClassList':
-      case 'FinancingInstrumentsList':
-      case 'FundingStatus':
-      case 'effectiveFundingDate':
-      case 'fundingClosingDate':
+      case 'type-of-assistance':
+      case 'mode-of-payment':
+      case 'expenditure-class':
+      case 'financing-instrument':
+      case 'funding-status':
+      case 'effective-funding-date':
+      case 'funding-closing-date':
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
-      case 'ActivityStatusList':
-      case 'ActivityApprovalStatus':
+      case 'status':
+      case 'approval-status':
         this.filterViewsInstances.activity.filterCollection.add(tmpModel);
         break;
       case 'Programs':
@@ -31415,7 +31369,7 @@ module.exports = Backbone.View.extend({
       case 'Role':
         this.filterViewsInstances.allAgencies.filterCollection.add(tmpModel);
         break;
-      case 'LocationList':
+      case 'location':
         this.filterViewsInstances.locations.filterCollection.add(tmpModel);
         break;
       default:
@@ -31469,16 +31423,14 @@ module.exports = Backbone.View.extend({
   //TODO: move from view to all-collection
   serialize: function(options) {
     var self = this;
-    var serializedFilters = {'columnFilters':{}, 'otherFilters':{} };
+    var serializedFilters = {filters:{}};
 
     this.allFilters.each(function(filter) {
       // TODO: build a util for bettermerge that concat's array if
       // duplicate keys in objects...
       if (filter.get('id') || filter.url) {
-        if (filter.get('modelType') === 'DATE-RANGE-VALUES') {
-          _.extend(serializedFilters.otherFilters, filter.serialize(options));
-        } else if (filter.get('modelType') === 'YEAR-SINGLE-VALUE') {
-            _.extend(serializedFilters.otherFilters, filter.serialize(options));
+        if (filter.get('modelType') === 'DATE-RANGE-VALUES' || filter.get('modelType') === 'YEAR-SINGLE-VALUE') {
+          _.extend(serializedFilters.filters, filter.serialize(options));
         } else {
           var serialized = filter.serialize(options);
           if (options.wholeModel === true) {
@@ -31489,7 +31441,7 @@ module.exports = Backbone.View.extend({
               serialized[keys[0]].serializedToModels = self.serializeToModels(filter);
             }
           }
-          _.extend(serializedFilters.columnFilters, serialized);
+          _.extend(serializedFilters.filters, serialized);
         }
       }
     });
@@ -31497,29 +31449,27 @@ module.exports = Backbone.View.extend({
     //remove empty / false values.
     _.each(serializedFilters, function(v, k) {
       if(!v || _.isEmpty(v)) {
-        delete serializedFilters[k];
+        delete serializedFilters.filters[k];
       }
     });
 
     return serializedFilters;
   },
- deserialize: function(blob, options) {
+ deserialize: function(filtersObject, options) {
+	var blob = filtersObject.filters || {};
     if (blob) {
       if(_.isUndefined(this.initialFilters)){
     	  this.initialFilters = blob;
       }     
       var that = this;
       that.allFilters.each(function(filter) {
+    	filter.reset();
         if (filter.get('id') || filter.url) {
           if(filter.get('modelType') === 'DATE-RANGE-VALUES') {
-            if (_.isEmpty(blob.otherFilters)){ 
-            	that.setDefaultDates(blob);
-            }            
-            filter.deserialize(blob.otherFilters);
-          } else if (filter.get('modelType') === 'YEAR-SINGLE-VALUE') {
-        	  filter.deserialize(blob.otherFilters);  
+         	that.setDefaultDates(blob);            
+            filter.deserialize(blob);
           } else{
-            filter.deserialize(blob.columnFilters);
+            filter.deserialize(blob);
           }
         }
       });
@@ -31547,10 +31497,8 @@ module.exports = Backbone.View.extend({
 	 var blob = !_.isUndefined(this.initialFilters) ? JSON.parse(JSON.stringify(this.initialFilters)) : {};//clone initial filters
     this.allFilters.each(function(filter) {
     if (filter.get('modelType') === 'DATE-RANGE-VALUES') {
-    	 if (_.isEmpty(blob.otherFilters)){ 
-    		 self.setDefaultDates(blob);
-         }   	 
-    	 filter.deserialize(blob.otherFilters);
+    	 self.setDefaultDates(blob);          	 
+    	 filter.deserialize(blob);
      }else{
     	 filter.reset();
      }      
@@ -31569,9 +31517,9 @@ module.exports = Backbone.View.extend({
 		  return this.dFormat;
 	  }	
 	  
-	  var dateFormatSetting = this.settings.findWhere({ id: 'default-date-format' });
-	  if(dateFormatSetting && dateFormatSetting.get("options") && dateFormatSetting.get("options").length > 0){			
-			var foundMapping =_.findWhere(this.dateFormatMappings, {ampformat: dateFormatSetting.get("options")[0].name});
+	  var dateFormatSetting = this.settings.get('default-date-format');
+	  if(dateFormatSetting){			
+			var foundMapping =_.findWhere(this.dateFormatMappings, {ampformat: dateFormatSetting});
 			if(foundMapping){
 				this.dFormat = foundMapping.datepickerformat;
 			}
@@ -31588,14 +31536,14 @@ module.exports = Backbone.View.extend({
    setDefaultDates: function(blob){
 	 var self = this;
   	 if(self.caller === "DASHBOARD"){
-  		 return DateUtils.extractDates(self.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date'); 	 
+  		 return DateUtils.extractDates(self.settings, blob, 'dashboard-default-min-date', 'dashboard-default-max-date'); 	 
   	 }else if(self.caller === "GIS"){
-  		return DateUtils.extractDates(self.settings.models, blob, 'gis-default-min-date', 'gis-default-max-date');
+  		return DateUtils.extractDates(self.settings, blob, 'gis-default-min-date', 'gis-default-max-date');
   	 }
   	 return blob
    },
   cancel: function() {
-    if(this.filterStash){
+	if(this.filterStash){    	
       this.deserialize(this.filterStash, {silent: true});
     }
     this.trigger('cancel', this.filterStash);
@@ -31603,7 +31551,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"../../../../../reamp/tools/log":99,"../collections/all-filters-collection":64,"../collections/settings-collection":65,"../utils/date-utils":77,"../views/top-level-filter-view":81,"amp-translate":97,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],80:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":98,"../collections/all-filters-collection":64,"../models/general-settings":69,"../utils/date-utils":76,"../views/top-level-filter-view":80,"amp-translate":96,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
 
 var _ = require('underscore');
 
@@ -31622,12 +31570,6 @@ module.exports = BaseFilterView.extend({
   _loaded: null,
 
   events:{
-    // attach in filter render instead since these events are attached to the el object
-    // and then namespaced. this means that the way we re-use
-    // DOM elements will accidentally trigger multiple events.
-    // 'click  .select-all': '_selectAll',
-    // 'click  .select-none': '_selectNone',
-    //'keyup input.search-text': 'searchKeyUp'
   },
 
   initialize:function(options) {
@@ -31718,23 +31660,19 @@ module.exports = BaseFilterView.extend({
   _selectAll: function() {
     // force trigger even if already this state (important for half-fill ui
     this.model.get('tree').set('selected', false);
-    this.model.get('tree').set('selected', true);
-    //this.model.get('tree').set('selected', true, {silent: true });
-    //.model.get('tree').trigger('change:selected', this.model.get('tree'), null, {propogation:false});
+    this.model.get('tree').set('selected', true);    
   },
 
   _selectNone: function() {
     // force trigger even if already this state (important for half-fill ui)
     this.model.get('tree').set('selected', true);
-    this.model.get('tree').set('selected', false);
-    // this.model.get('tree').set('selected', false, {silent: true });
-    // this.model.get('tree').trigger('change:selected', this.model.get('tree'), null, {propogation:false});
+    this.model.get('tree').set('selected', false);    
   }
 
 });
 
 
-},{"../tree/tree-node-view":76,"../views/base-filter-view":78,"underscore":"underscore"}],81:[function(require,module,exports){
+},{"../tree/tree-node-view":75,"../views/base-filter-view":77,"underscore":"underscore"}],80:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -31751,7 +31689,6 @@ var YearsFilterModel = require('../models/years-filter-model');
 var YearsOnlyFilterModel = require('../models/years-only-filter-model');
 
 var filtersViewLog = require("../../../../../reamp/tools/log")('amp:filters:top-level:view');
-var SettingsCollection = require('../collections/settings-collection');
 
 //TODO: rename to 'group' to be consistent
 // Parent base view for filters.
@@ -31793,12 +31730,7 @@ module.exports = Backbone.View.extend({
     this.$el.html(this.contentTemplate());
     // renders the tabs of the filter (one tab for each filterCollection element)
     this.filterCollection.each(function(filter) {
-      filtersViewLog.onDebug(function(){
-        // Constantin: harmless debug message to be removed once the filters sanitisation is done
-        // @Constantin, we can do bettr than this, senpai!
-        //filtersViewLog.log('rendering filter', filter.get('name'));
-      });
-    	if (filter instanceof YearsFilterModel) {    		
+        	if (filter instanceof YearsFilterModel) {    		
     		view = new YearsFilterView({
     			model:filter,
     			el: self.$('.sub-filters-content'),
@@ -31870,7 +31802,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../../../../../reamp/tools/log":99,"../collections/settings-collection":65,"../models/years-filter-model":73,"../models/years-only-filter-model":74,"../views/generic-filter-view":80,"../views/years-filter-view":82,"../views/years-only-filter-view":83,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],82:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":98,"../models/years-filter-model":72,"../models/years-only-filter-model":73,"../views/generic-filter-view":79,"../views/years-filter-view":81,"../views/years-only-filter-view":82,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],81:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -31893,10 +31825,8 @@ module.exports = BaseFilterView.extend({
     this.model = options.model;
     this.translator = options.translator;
     this.translate = options.translate;    
-//    console.log("just built a years-filter-view for " + self.model.get('name'));
-    this._loaded = this.model.fetch().then(function() {
-    	//console.log("just loaded a years-filter-view for: " + JSON.stringify({name: self.model.get('name'), start: self.model.get('selectedStart'), end: self.model.get('selectedEnd')}));
-    });
+
+    this._loaded = this.model.fetch().then(function() { });
 
     this.listenTo(this.model, 'change', this._updateTitle);
   },
@@ -31932,8 +31862,6 @@ module.exports = BaseFilterView.extend({
 
     this.$('#start-date').datepicker({
       defaultDate: this.model.get('selectedStart'),
-      //minDate: this.model.get('startYear'),
-      //maxDate: this.model.get('endYear'),
       dateFormat: this.filterView.getDateFormat(),
       changeMonth: true,
       changeYear: true,
@@ -31941,15 +31869,12 @@ module.exports = BaseFilterView.extend({
       yearRange: 'c-60:c+60',
       onClose: function(selectedDate) {
         self.$('#end-date').datepicker('option', 'minDate', selectedDate);        
-        self.model.set('selectedStart', $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self.filterView.getDateFormat(), selectedDate)));
-        // self._updateTitle();
+        self.model.set('selectedStart', $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self.filterView.getDateFormat(), selectedDate)));        
       }
     });    
 
     this.$('#end-date').datepicker({
       defaultDate: this.model.get('selectedEnd'),
-      //minDate: this.model.get('startYear'),
-      //maxDate: this.model.get('endYear'),
       dateFormat: this.filterView.getDateFormat(),
       changeMonth: true,
       changeYear: true,
@@ -31957,21 +31882,15 @@ module.exports = BaseFilterView.extend({
       yearRange: 'c-60:c+60',
       onClose: function(selectedDate) {
         self.$('#start-date').datepicker('option', 'maxDate', selectedDate);        
-        self.model.set('selectedEnd', $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self.filterView.getDateFormat(), selectedDate)));
-        // self._updateTitle();
+        self.model.set('selectedEnd', $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self.filterView.getDateFormat(), selectedDate)));        
       }
     });
 
-    //this.$('#start-date').val(this.model.get('selectedStart'));
-    //this.$('#end-date').val(this.model.get('selectedEnd'));
-    
     // Set the language for datepickers here (instead of doing it in filters-view.js) to prevent race conditions that would set the wrong language.
-    var languageSetting = this.filterView.settings.findWhere({id:'language'});
-	if (languageSetting) {
-		var lang = languageSetting.get('defaultId') 
+    var lang = this.filterView.settings.get('language');
+	if (lang) {
 		//English is default so we dont set it.
-        lang = (lang === 'en') ?  '' : lang; 
-		//console.log('setting date picker lang: ' + lang);
+        lang = (lang === 'en') ?  '' : lang; 		
 		$.datepicker.setDefaults($.datepicker.regional[lang]);
 	}
   },
@@ -32042,7 +31961,7 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../lib/jquery.nouislider.min.js":67,"../views/base-filter-view":78,"jquery-ui/datepicker":60,"underscore":"underscore"}],83:[function(require,module,exports){
+},{"../lib/jquery.nouislider.min.js":66,"../views/base-filter-view":77,"jquery-ui/datepicker":60,"underscore":"underscore"}],82:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -32055,30 +31974,21 @@ module.exports = BaseFilterView.extend({
 	_loaded : null,
 	initialize : function(options) {
 		var self = this;
-
 		this.filterView = options.filterView;
 		BaseFilterView.prototype.initialize.apply(this, [ options ]);
 		this.model = options.model;
 		this.translator = options.translator;
 		this.translate = options.translate;
-		this._loaded = this.model.fetch().then(function() {
-			/*console.log("just loaded a years-only-filter-view for: " + JSON.stringify({
-				name : self.model.get('name')
-			}));*/
-		});
-
+		this._loaded = this.model.fetch().then(function() {});
 		this.listenTo(this.model, 'change', this._updateTitle);
 	},
 
 	renderFilters : function() {
 		var self = this;
 		BaseFilterView.prototype.renderFilters.apply(this);
-
 		this.$el.html(this.template(this.model.toJSON()));
-
 		this._loaded.then(function() {
 			self._renderSelector();
-
 			// We need to re-translate some strings from the right panel.
 			self.translate(self);
 		});
@@ -32110,17 +32020,17 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../views/base-filter-view":78,"underscore":"underscore"}],84:[function(require,module,exports){
+},{"../views/base-filter-view":77,"underscore":"underscore"}],83:[function(require,module,exports){
 module.exports=require(49)
-},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],85:[function(require,module,exports){
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],84:[function(require,module,exports){
 module.exports=require(59)
-},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":59,"jquery":"jquery"}],86:[function(require,module,exports){
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":59,"jquery":"jquery"}],85:[function(require,module,exports){
 module.exports=require(61)
-},{"./core":85,"./mouse":87,"./widget":88,"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":61,"jquery":"jquery"}],87:[function(require,module,exports){
+},{"./core":84,"./mouse":86,"./widget":87,"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":61,"jquery":"jquery"}],86:[function(require,module,exports){
 module.exports=require(62)
-},{"./widget":88,"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":62,"jquery":"jquery"}],88:[function(require,module,exports){
+},{"./widget":87,"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":62,"jquery":"jquery"}],87:[function(require,module,exports){
 module.exports=require(63)
-},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":63,"jquery":"jquery"}],89:[function(require,module,exports){
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":63,"jquery":"jquery"}],88:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -32195,12 +32105,12 @@ module.exports  = Backbone.Collection.extend({
 });
 
 
-},{"../common/config":90,"../common/constants":91,"../models/settings-definitions":94,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],90:[function(require,module,exports){
+},{"../common/config":89,"../common/constants":90,"../models/settings-definitions":93,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],89:[function(require,module,exports){
 module.exports = {
 	IS_POPUP : true
 };
 
-},{}],91:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 module.exports = {
 	YEAR_RANGE_ID : 'year-range',
 	CALENDAR_ID : 'calendar-id',
@@ -32216,7 +32126,7 @@ module.exports = {
 		TABS : 'TABS'
 	}
 }
-},{}],92:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 
 var jQuery = require('jquery');
 var _ = require('underscore');
@@ -32282,7 +32192,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 });
 module.exports = {SettingsWidget: Widget, GeneralSettings: GeneralSettings}
 window.AMPSettings = {SettingsWidget: Widget, GeneralSettings: GeneralSettings};
-},{"./collections/settings-definitions-collection":89,"./common/config":90,"./common/constants":91,"./models/general-settings":93,"./views/settings-view":95,"backbone":"backbone","bootstrap/dist/js/bootstrap":84,"jquery":"jquery","jquery-ui/draggable":86,"underscore":"underscore"}],93:[function(require,module,exports){
+},{"./collections/settings-definitions-collection":88,"./common/config":89,"./common/constants":90,"./models/general-settings":92,"./views/settings-view":94,"backbone":"backbone","bootstrap/dist/js/bootstrap":83,"jquery":"jquery","jquery-ui/draggable":85,"underscore":"underscore"}],92:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -32311,12 +32221,12 @@ module.exports = Backbone.Model.extend({
 		return this.loaded.promise();
 	}
 });
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],94:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],93:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({	
 });
-},{"backbone":"backbone","underscore":"underscore"}],95:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],94:[function(require,module,exports){
 
 var $ = require('jquery');
 var _ = require('underscore');
@@ -32518,7 +32428,7 @@ module.exports = Backbone.View.extend({
 	}
 
 });
-},{"../common/constants":91,"amp-translate":97,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],96:[function(require,module,exports){
+},{"../common/constants":90,"amp-translate":96,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],95:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -32728,7 +32638,7 @@ _.extend(State.prototype, Backbone.Events, {
 State.StateLoadError = StateLoadError;
 module.exports = State;
 
-},{"backbone":"backbone","underscore":"underscore"}],97:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],96:[function(require,module,exports){
 // TODO: move this up a dir, and instantiate and attach to the app
 
 
@@ -32944,7 +32854,7 @@ function Translator(options) {
 
 module.exports = Translator;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],98:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],97:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -32995,7 +32905,7 @@ _.extend(URL.prototype, Backbone.Events, {
 
 module.exports = URL;
 
-},{"backbone":"backbone","underscore":"underscore"}],99:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],98:[function(require,module,exports){
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

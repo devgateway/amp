@@ -164,7 +164,10 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 
 	public String getLogFrame() {
 		if (this.getValues() != null && this.getValues().size() > 0) {
-			return this.getValues().iterator().next().getLogFrame().getValue();
+			AmpIndicatorValue indicatorValue = this.getValues().iterator().next();
+			if (indicatorValue != null && indicatorValue.getLogFrame() != null) {
+				return indicatorValue.getLogFrame().getValue();
+			}
 		}
 		return "";
 	}

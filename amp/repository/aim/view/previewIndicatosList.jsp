@@ -47,7 +47,7 @@
                     <td width="10%" valign="top">
                         <field:display name="Logframe Category" feature="Activity">
                             <c:if test="${not empty indicator.values}">
-                                <span class="word_break bold">${indicator.values.iterator().next().logFrame.value}</span>
+                                <span class="word_break bold">${indicator.logFrame}</span>
                             </c:if>
                         </field:display>
                     </td>

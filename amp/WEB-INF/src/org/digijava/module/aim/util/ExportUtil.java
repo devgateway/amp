@@ -46,13 +46,6 @@ public class ExportUtil {
         return null;
     }
 
-    public static String getIndicatorActivityLogFrame(IndicatorActivity indicator) {
-        if (indicator.getValues() != null && indicator.getValues().size() > 0) {
-            return indicator.getValues().iterator().next().getLogFrame().getValue();
-        }
-        return null;
-    }
-
     public static String getIndicatorSectors(IndicatorActivity indicator) {
         String result = "";
         for (AmpSector sector : indicator.getIndicator().getSectors()) {

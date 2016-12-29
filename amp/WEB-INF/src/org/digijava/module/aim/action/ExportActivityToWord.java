@@ -613,7 +613,7 @@ public class ExportActivityToWord extends Action {
                             }
                             if (FeaturesUtil.isVisibleField("Logframe Category")) {
                                 if (indicator.getValues() != null && indicator.getValues().size() > 0) {
-                                    columnVal += " - " + ExportUtil.getIndicatorActivityLogFrame(indicator);
+                                    columnVal += " - " + indicator.getLogFrame();
                                 }
                             }
                             columnVal += "\n";

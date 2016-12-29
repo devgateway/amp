@@ -1,13 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.util.Output;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.util.Output;
 
 
 /**
@@ -162,5 +161,13 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 		// TODO Auto-generated method stub
 		return super.clone();
 	}
+
+	public String getLogFrame() {
+		if (this.getValues() != null && this.getValues().size() > 0) {
+			return this.getValues().iterator().next().getLogFrame().getValue();
+		}
+		return "";
+	}
+
 	
 }

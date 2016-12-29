@@ -1722,10 +1722,10 @@ function collapseAll() {
 			<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%" >
 				<tr bgcolor="#f0f0f0">
 					<td>
-						<digi:trn key="aim:cost">Name</digi:trn>
+						<digi:trn key="aim:name">Name</digi:trn>
 					</td>
 					<td>
-						<digi:trn key="aim:cost">Percentage</digi:trn>
+						<digi:trn key="aim:percentage">Percentage</digi:trn>
 					</td>
 				</tr>
 				<c:forEach var="budgetStructure" items="${aimEditActivityForm.budgetStructure}" >

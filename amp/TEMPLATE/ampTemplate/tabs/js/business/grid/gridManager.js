@@ -1,5 +1,5 @@
-define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils', 'md5', 'underscore' ], function(columnsMapping,
-		TranslationManager, TabUtils, md5, _) {
+define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','underscore' ], function(columnsMapping,
+		TranslationManager, TabUtils, _) {
 
 	"use strict";
 
@@ -109,12 +109,6 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils', 
 							columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
 							filters : null
 						},
-						serializeGridData : function(postData) {
-							if (postData.sidx && postData.sord) {
-								postData.sidx = postData.sidx.replace(/ asc/g, ' ' + postData.sord);
-							}
-							return JSON.stringify(postData);
-						},
 						jsonReader : {
 							repeatitems : false,
 							root : function(obj) {
@@ -162,6 +156,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils', 
 						},
 						serializeGridData: function (data) {
 							// This function is called automatically BEFORE sending the request, so here we can make changes on the POST data.
+							if (data.sidx && data.sord) {
+								data.sidx = data.sidx.replace(/ asc/g, ' ' + data.sord);
+							}
 							data.MD5 = generateMD5(data.filters, data.settings,  
 									{sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, 
 									id, app.TabsApp.generalSettings.get('language'));

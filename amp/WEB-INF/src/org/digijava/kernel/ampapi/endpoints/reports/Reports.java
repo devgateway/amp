@@ -706,8 +706,8 @@ public class Reports implements ErrorReportingEndpoint {
 				}
 
 				if (formParams.get(EPConstants.SETTINGS) != null) {
-					String currency = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("1").toString();
-					String calendar = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("2").toString();
+					String currency = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get(SettingsConstants.CURRENCY_ID).toString();
+					String calendar = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get(SettingsConstants.CALENDAR_TYPE_ID).toString();
 					newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
 					newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
 				}

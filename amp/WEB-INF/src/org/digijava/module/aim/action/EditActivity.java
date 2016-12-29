@@ -41,6 +41,8 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
@@ -987,8 +989,19 @@ public class EditActivity extends Action {
           }
           eaForm.getIdentification().setAmpId(activity.getAmpId());
 
-          if (activity.getStatusReason() != null)
+           if (activity.getStatusReason() != null)
               eaForm.getIdentification().setStatusReason(activity.getStatusReason());
+
+            List gpiSurveys = new ArrayList();
+            if (activity.getGpiSurvey() != null) {
+                eaForm.setGpiSurvey(activity.getGpiSurvey());
+                for (AmpGPISurvey survey : activity.getGpiSurvey()) {
+                    List<AmpGPISurveyResponse> list = new ArrayList<>(survey.getResponses());
+                    Collections.sort(list, new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
+                    gpiSurveys.add(list);
+                }
+                request.setAttribute("gpiSurveys", gpiSurveys);
+            }
 
           if (null != activity.getLineMinRank()) {
               eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().toString());

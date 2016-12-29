@@ -60,6 +60,7 @@
 		</script>		
 		
 		<!-- END LOADING NEW TABS NECESSARY FILES -->
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/lib/object_hash.js"></script>
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate//tabs/js/lib/jquery.min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/tabs/js/lib/jquery-ui.min.js"/>"></script>	

@@ -38,6 +38,8 @@ import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
@@ -575,6 +577,12 @@ public class ExportActivityToWord extends Action {
                     doc.add(tbl);
                 }
 
+                List<Table> gpiTables = getGpiTables(request,
+                        ampContext, myForm);
+                for (Table tbl : gpiTables) {
+                    doc.add(tbl);
+                }
+
                 addProjectCostTables(myForm, request, ampContext, myForm.getFunding().getProProjCost(), 
                 		"Proposed Project Cost", doc);
                 addProjectCostTables(myForm, request, ampContext, myForm.getFunding().getRevProjCost(), 
@@ -686,6 +694,7 @@ public class ExportActivityToWord extends Action {
                 for (Table tbl : structures1) {
                     doc.add(tbl);
                 }
+
             }
 
             //close document
@@ -1415,6 +1424,41 @@ public class ExportActivityToWord extends Action {
                 retVal.add(createSectionTable(sectionHelper, request,
                         ampContext));
             }
+
+        }
+        return retVal;
+    }
+
+    private List<Table> getGpiTables(HttpServletRequest request,
+                                     ServletContext ampContext, EditActivityForm myForm)
+            throws WorkerException, BadElementException {
+        List<Table> retVal = new ArrayList<Table>();
+        if (FeaturesUtil.isVisibleModule("/Activity Form/GPI")) {
+            boolean createTable = false;
+            ExportSectionHelper sectionHelper = new ExportSectionHelper(
+                    "GPI", true);
+            retVal.add(createSectionTable(sectionHelper, request, ampContext));
+
+            sectionHelper = new ExportSectionHelper(null, false);
+
+            for (AmpGPISurvey survey : myForm.getGpiSurvey()) {
+                List<AmpGPISurveyResponse> list = new ArrayList<>(survey.getResponses());
+                Collections.sort(list, new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
+                String indicatorName = "";
+                for (AmpGPISurveyResponse response : list) {
+                    if (!indicatorName.equals(response.getAmpQuestionId().getAmpIndicatorId().getName())) {
+                        indicatorName = response.getAmpQuestionId().getAmpIndicatorId().getName();
+                        ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(indicatorName, null, null, true);
+                        sectionHelper.addRowData(rowData);
+                    }
+                    String responseText = (response.getResponse() != null ? response.getResponse() : "");
+                    ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
+                            response.getAmpQuestionId().getQuestionText(), null, null, true).addRowData(responseText);
+                    sectionHelper.addRowData(rowData);
+                }
+            }
+
+            retVal.add(createSectionTable(sectionHelper, request, ampContext));
 
         }
         return retVal;

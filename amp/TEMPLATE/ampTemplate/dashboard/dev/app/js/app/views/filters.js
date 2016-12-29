@@ -113,7 +113,7 @@ module.exports = BackboneDash.View.extend({
 	  var dateRangeText = '';
 	  if(filterKey === 'date') {
 		  dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
-	  } else if(filterKey === 'computedYear') {
+	  } else if(filterKey === 'computed-year') {
 		  dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
 	  } else {
 		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterKey.replace(/[^\w]/g, '-'), filterKey);

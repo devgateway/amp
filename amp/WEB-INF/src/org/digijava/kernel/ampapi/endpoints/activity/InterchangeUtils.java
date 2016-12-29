@@ -83,7 +83,7 @@ public class InterchangeUtils {
 		addUnderscoredTitlesToMap(AmpActivityFields.class);
 	}
 	
-	private static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+	public static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 	private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>();
 	
 	public static String getDiscriminatedFieldTitle(String fieldName) {

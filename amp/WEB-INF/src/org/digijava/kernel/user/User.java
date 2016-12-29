@@ -492,5 +492,8 @@ public class User
     public void setPasswordChangedAt(Date passwordChangedAt) {
         this.passwordChangedAt = passwordChangedAt;
     }
-	
+
+    public void updateLastModified() {
+        setLastModified(new Date());
+    }
 }

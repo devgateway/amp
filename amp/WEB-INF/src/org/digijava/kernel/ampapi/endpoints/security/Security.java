@@ -21,7 +21,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
@@ -30,6 +29,7 @@ import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
+import org.digijava.kernel.ampapi.endpoints.util.types.ListOfLongs;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
@@ -265,8 +265,9 @@ public class Security implements ErrorReportingEndpoint {
     @Path("/users")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "users", name = "Users", authTypes = {AuthRule.AUTHENTICATED})
-	public List<org.digijava.kernel.ampapi.endpoints.security.dto.User> getUsersInfo(@QueryParam("ids") String ids) {
-	    return (new UserService()).getUserInfo(EndpointUtils.splitToListOfLongs(ids));
+	public List<org.digijava.kernel.ampapi.endpoints.security.dto.User> getUsersInfo(
+			@QueryParam("ids") ListOfLongs ids) {
+	    return (new UserService()).getUserInfo(ids);
 	    /* we need to change unit test infrastructure to operate with mock application context to do this 
 	    return SpringUtil.getBean(UserService.class).getUserInfo(EndpointUtils.splitToListOfLongs(ids));
 	    */

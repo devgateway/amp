@@ -11,7 +11,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.security.dto.User;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
@@ -51,7 +51,7 @@ public class UserService {
         user.setLastName(ampUser.getLastName());
         user.setEmail(ampUser.getEmail());
         if (ampUser.getPasswordChangedAt() != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat(EPConstants.DATE_TIME_ZONED_FORMAT);
+            SimpleDateFormat sdf = new SimpleDateFormat(InterchangeUtils.ISO8601_DATE_FORMAT);
             user.setPasswordChangedAt(sdf.format(ampUser.getPasswordChangedAt()));
         }
         user.setBanned(ampUser.isBanned());

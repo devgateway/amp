@@ -56,6 +56,11 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	 * FOR TESTCASES ONLY. In case it is non-null, for computed measures this value will be used in lieu of LocalDate.now()
 	 */
 	public static LocalDate forcedNowDate;
+
+	/**
+	 * FOR TESTCASES ONLY. When non-null will override the corresponding global setting.
+	 */
+	public static Boolean displayUnlinkedFundingInPledgesReports;
 	
 	/**
 	 * caching area for i18n fetchers
@@ -140,12 +145,19 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	}
 
 	private String getPledgesIdsQuery() {
-		boolean showUnlinkedFunding = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.UNLINKED_FUNDING_IN_PLEDGES_REPORTS);
 		String query = "SELECT id FROM amp_funding_pledges";
-		if (showUnlinkedFunding) {
+		if (isDisplayUnlinkedFundingInPledgesReports()) {
 			query += " UNION SELECT 999999999";
 		}
 		return query;
+	}
+
+	private boolean isDisplayUnlinkedFundingInPledgesReports() {
+		if (displayUnlinkedFundingInPledgesReports != null) {
+			return displayUnlinkedFundingInPledgesReports;
+		} else {
+			return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.UNLINKED_FUNDING_IN_PLEDGES_REPORTS);
+		}
 	}
 	
 	public AmpCurrency getUsedCurrency() {

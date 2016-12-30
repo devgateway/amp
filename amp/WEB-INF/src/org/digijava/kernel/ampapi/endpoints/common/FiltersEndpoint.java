@@ -227,9 +227,9 @@ public class FiltersEndpoint {
 	 * @return
 	 */
 	@GET
-	@Path("/dates/")
+	@Path("/date/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Dates", id = "Dates", tab = EPConstants.TAB_OTHER)
+	@ApiMethod(ui = true, name = "Date", id = "date", tab = EPConstants.TAB_OTHER)
 	public JsonBean getDates(){
 		JsonBean date = new JsonBean();
 		date.set("startYear", 1985);

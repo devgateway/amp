@@ -119,6 +119,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import clover.com.google.common.base.Strings;
 import clover.org.apache.commons.lang.StringUtils;
 
 /**
@@ -1445,7 +1446,7 @@ public class ExportActivityToPDF extends Action {
                                     columnVal += " " + value.getValue();
                                 }
                                 if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
-                                    columnVal += " " + value.getComment();
+                                    columnVal += " " + Strings.nullToEmpty(value.getComment());
                                 }
                                 if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
                                     columnVal += " " + DateConversion.convertDateToLocalizedString(value.getValueDate());

@@ -431,7 +431,8 @@ public class Security implements ErrorReportingEndpoint {
 	@Path("/workspace-settings")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "workspace-settings", name = "Workspace Settings", authTypes = AuthRule.AUTHENTICATED)
-	public List<AmpApplicationSettings> getWorkspaceSettings(@DefaultValue("") @QueryParam("ids") LongListParam ids) {
+	public List<AmpApplicationSettings> getWorkspaceSettings(
+			@DefaultValue("") @QueryParam("workspace-ids") LongListParam ids) {
 		return DbUtil.getTeamAppSettings(ids.param);
 	}
 	

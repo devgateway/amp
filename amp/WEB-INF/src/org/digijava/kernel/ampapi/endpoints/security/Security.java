@@ -366,7 +366,7 @@ public class Security implements ErrorReportingEndpoint {
 	}
 	
 	/**
-	 * Provides a list of workspace members definition
+	 * Provides a list of workspace member definition
 	 * <p>
 	 * <dl>
      * Each workspace member JSON structure from the list will hold the following fields:
@@ -387,15 +387,15 @@ public class Security implements ErrorReportingEndpoint {
      *   ...
      * ]   
      * </pre>
-	 * @param userIds a comma separate list of user ids
-	 * @return list of workspace members definitions
+	 * @param userIds a comma separate list of workspace member ids
+	 * @return list of workspace member definitions
 	 */
 	@GET
-    @Path("/workspace-members")
+    @Path("/workspace-member")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "workspace-members", name = "Workspace Members", authTypes = {AuthRule.AUTHENTICATED})
-	public List<WorkspaceMember> getWorkspaceMembers(@DefaultValue("") @QueryParam("user-ids") LongListParam userIds) {
-	    return (new WorkspaceMemberService()).getWorkspaceMembers(userIds.param);
+    @ApiMethod(ui = false, id = "workspace-member", name = "Workspace Member", authTypes = {AuthRule.AUTHENTICATED})
+	public List<WorkspaceMember> getWorkspaceMembers(@DefaultValue("") @QueryParam("ids") LongListParam ids) {
+	    return (new WorkspaceMemberService()).getWorkspaceMembers(ids.param);
 	}
 	
 	/**

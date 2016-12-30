@@ -13,6 +13,8 @@
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <buildVersion>2.12-SNAPSHOT</buildVersion>
+        <buildSource></buildSource>
+        <buildDate></buildDate>
         <jersey.version>1.18</jersey.version>
         <saiku.version>3.0-RC2</saiku.version>
         <saiku3.version>3.0-RC2-DG</saiku3.version>
@@ -1002,6 +1004,13 @@
                         <resource>
                             <directory>.</directory>
                             <includes>
+                                <include>TEMPLATE/ampTemplate/site-config.xml</include>
+                            </includes>
+                           <filtering>true</filtering>
+                        </resource>
+                        <resource>
+                            <directory>.</directory>
+                            <includes>
                                 <include>**/*</include>
                             </includes>
                             <excludes>
@@ -1009,6 +1018,16 @@
                                 <exclude>WEB-INF/src/**</exclude>
                                 <exclude>.settings/**</exclude>
                                 <exclude>.externalToolBuilders/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/site-config.xml</exclude>
+                                <exclude>TEMPLATE/ampTemplate/gisModule/dev/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/gisModule/dev/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/**</exclude>
+                                <exclude>src/**</exclude>
+                                <exclude>target/**</exclude>
                             </excludes>
                         </resource>
                     </webResources>
@@ -1116,7 +1135,10 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>0.0.15</version>
+                <version>1.3</version>
+                <configuration>
+                    <nodeVersion>v6.9.2</nodeVersion>
+                </configuration>
                 <executions>
                     <!-- Installing node and npm  for GIS-->
                     <execution>
@@ -1128,10 +1150,6 @@
                         <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
-                            <nodeVersion>v0.10.29</nodeVersion>
-                            <npmVersion>1.3.8</npmVersion>
-                            <!-- optional: where to download node and npm from. Defaults to http://nodejs.org/dist/ -->
-                            <downloadRoot>http://nodejs.org/dist/</downloadRoot>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
@@ -1145,10 +1163,6 @@
                         <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
-                            <nodeVersion>v0.12.14</nodeVersion>
-                            <npmVersion>1.4.9</npmVersion>
-                            <!-- optional: where to download node and npm from. Defaults to http://nodejs.org/dist/ -->
-                            <downloadRoot>http://nodejs.org/dist/</downloadRoot>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
@@ -1187,10 +1201,6 @@
                         <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
-                            <nodeVersion>v0.12.14</nodeVersion>
-                            <npmVersion>1.4.9</npmVersion>
-                            <!-- optional: where to download node and npm from. Defaults to http://nodejs.org/dist/ -->
-                            <downloadRoot>http://nodejs.org/dist/</downloadRoot>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
@@ -1273,8 +1283,6 @@
 <!--                             <goal>install-node-and-npm</goal> -->
 <!--                         </goals> -->
 <!--                         <configuration> -->
-<!--                             <nodeVersion>v0.10.29</nodeVersion> -->
-<!--                             <npmVersion>1.3.8</npmVersion> -->
 <!--                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
 <!--                         </configuration> -->
 <!--                     </execution> -->
@@ -1311,8 +1319,6 @@
 <!--                             <goal>install-node-and-npm</goal> -->
 <!--                         </goals> -->
 <!--                         <configuration> -->
-<!--                             <nodeVersion>v0.10.29</nodeVersion> -->
-<!--                             <npmVersion>1.3.8</npmVersion> -->
 <!--                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
 <!--                         </configuration> -->
 <!--                     </execution> -->

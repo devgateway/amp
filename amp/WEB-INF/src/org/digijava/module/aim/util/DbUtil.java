@@ -38,6 +38,7 @@ import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
@@ -87,6 +88,7 @@ import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -96,6 +98,8 @@ import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
 import com.tonbeller.wcf.utils.SqlUtils;
+
+import clover.org.apache.commons.lang.StringEscapeUtils;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -3310,5 +3314,23 @@ public class DbUtil {
 	
 	public static void clearPendingChanges() {
 	    PersistenceManager.getSession().clear();
+	}
+	
+	/*
+	 * Get all agreements with the specified code
+	 */
+	public static List<AmpAgreement> getAgreementsByCode(String agreementCode) {
+		List<AmpAgreement> agreements = new ArrayList<AmpAgreement>();
+		try {
+			agreements = PersistenceManager.getSession()
+					.createQuery("select agr from " + AmpAgreement.class.getName() 
+								+ " agr where (trim(agr.code) =:agreementCode) ")
+					.setParameter("agreementCode", StringEscapeUtils.escapeSql(agreementCode))
+					.list();
+		} catch (HibernateException e) {
+			logger.error("Unable to get agreements", e);
+		}
+
+		return agreements;
 	}
 }

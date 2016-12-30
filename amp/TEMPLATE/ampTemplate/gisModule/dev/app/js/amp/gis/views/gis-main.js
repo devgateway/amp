@@ -44,7 +44,7 @@ module.exports = Backbone.View.extend({
         showDGFooter: false,
         useSingleRowHeader: true
       });
-    $.when(headerWidget.menu.menuRendered).then(function() {
+    $.when(headerWidget.layoutFetched).then(function() {
       $('.dropdown-toggle').dropdown();
     });
 

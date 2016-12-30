@@ -24,6 +24,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
@@ -119,6 +120,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import clover.com.google.common.base.Strings;
 
 
 public class ExportActivityToWord extends Action {
@@ -660,7 +662,7 @@ public class ExportActivityToWord extends Action {
                                         generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Value"), value.getValue().toString(), null);
                                     }
                                     if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
-                                        generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Comment"), value.getComment(), null);
+                                        generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Comment"), DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);
                                     }
                                     if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
                                         generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Date"), DateConversion.convertDateToLocalizedString(value.getValueDate()), null);

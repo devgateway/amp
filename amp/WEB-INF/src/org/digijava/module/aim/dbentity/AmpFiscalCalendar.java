@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonValue;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.nireports.TranslatedDate;
@@ -51,6 +52,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
 	/**
 	 * @return
 	 */
+	@JsonValue
 	public Long getAmpFiscalCalId() {
 		return ampFiscalCalId;
 	}

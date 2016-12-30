@@ -16,6 +16,7 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
+import org.codehaus.jackson.annotate.JsonValue;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -175,6 +176,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		this.measures = measures;
 	}
 
+	@JsonValue
 	public Long getAmpReportId() {
 		return ampReportId;
 	}

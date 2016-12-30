@@ -4,12 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 
 /**
  * @author Octavian Ciubotaru
@@ -27,8 +26,7 @@ public class ISO8601TimeStamp extends Date {
             SimpleDateFormat format = new SimpleDateFormat(InterchangeUtils.ISO8601_DATE_FORMAT);
             return format.parse(value).getTime();
         } catch (ParseException e) {
-            ApiErrorResponse.reportError(Response.Status.BAD_REQUEST, INVALID_TIMESTAMP);
-            return -1; // never called
+            throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, INVALID_TIMESTAMP);
         }
     }
 }

@@ -7,5 +7,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
  */
 public class CommonErrors {
 
+    public static final ApiErrorMessage INVALID_TIMESTAMP = new ApiErrorMessage(2, "Timestamp format is invalid.");
 
 }

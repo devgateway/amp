@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
 /**
  * @author Octavian Ciubotaru
@@ -21,16 +21,16 @@ public class SystemDiff {
     private boolean workspaces;
 
     @JsonProperty("workspace-members")
-    private IncrementalListDiff<Long> workspaceMembers;
+    private ListDiff<Long> workspaceMembers;
 
     @JsonProperty
-    private IncrementalListDiff<Long> users;
+    private ListDiff<Long> users;
 
     @JsonProperty
-    private IncrementalListDiff<String> activities;
+    private ListDiff<String> activities;
 
     @JsonProperty
-    private ListDiff<String> translations;
+    private TranslationsDiff translations;
 
     public void updateTimestamp(Date timestamp) {
         if (this.timestamp == null || this.timestamp.before(timestamp)) {
@@ -50,25 +50,25 @@ public class SystemDiff {
         this.workspaces = workspaces;
     }
 
-    public void setWorkspaceMembers(IncrementalListDiff<Long> workspaceMembers) {
+    public void setWorkspaceMembers(ListDiff<Long> workspaceMembers) {
         this.workspaceMembers = workspaceMembers;
     }
 
-    public void setUsers(IncrementalListDiff<Long> users) {
+    public void setUsers(ListDiff<Long> users) {
         this.users = users;
     }
 
-    public void setActivities(IncrementalListDiff<String> activities) {
+    public void setActivities(ListDiff<String> activities) {
         this.activities = activities;
     }
 
-    public void setTranslations(ListDiff<String> translations) {
+    public void setTranslations(TranslationsDiff translations) {
         this.translations = translations;
     }
 
     public String getTimestamp() {
         if (timestamp != null) {
-            return new SimpleDateFormat(InterchangeUtils.ISO8601_DATE_FORMAT).format(timestamp);
+            return new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT).format(timestamp);
         } else {
             return null;
         }

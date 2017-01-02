@@ -26,6 +26,38 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
 
     private SyncService syncService = SpringUtil.getBean(SyncService.class);
 
+    /**
+     * Returns list of objects that were changed in specific period of time.
+     * <p>Inputs:<ul>
+     * <li><em>user-ids</em> - comma separated list of user ids for which to display changes
+     * <li><em>last-sync-time</em> - optional timestamp of last synchronization time in ISO8601 format
+     * </ul>
+     * <h3>Example request:</h3>?user-ids=1,2,3&last-sync-time=2016-12-27T18:05:30.320+0200
+     * <h3>Example response:</h3><pre>
+     * {
+     *   "timestamp": "2016-12-29T00:00:00.000+0200",
+     *   "workspaces": false,
+     *   "global-settings": true,
+     *   "users": {
+     *     "removed": [1],
+     *     "saved": [2, 3]
+     *   },
+     *   "activities": {
+     *     "removed": [],
+     *     "saved": ["1", "2"]
+     *   },
+     *   "translations": {
+     *     "removed": [],
+     *     "saved": [],
+     *     "incremental": false
+     *   },
+     *   "workspace-members": {
+     *     "removed": [8],
+     *     "saved": [16, 17]
+     *   }
+     * }
+     * </pre></p>
+     */
     @GET
     public SystemDiff computeSync(
             @DefaultValue("") @QueryParam("user-ids") ListOfLongs userIds,

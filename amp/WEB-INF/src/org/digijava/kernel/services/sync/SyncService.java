@@ -21,13 +21,14 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.digijava.kernel.services.sync.model.AmpOfflineChangelog;
-import org.digijava.kernel.services.sync.model.ListDiff;
+import org.digijava.kernel.services.sync.model.TranslationsDiff;
 import org.digijava.kernel.services.sync.model.SystemDiff;
-import org.digijava.kernel.services.sync.model.IncrementalListDiff;
+import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.module.aim.helper.Constants;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,11 +37,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class SyncService implements InitializingBean {
 
-    private SimpleJdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     private static final String COLUMNS = "entity_name, entity_id, operation_name, operation_time";
 
     private static final RowMapper<AmpOfflineChangelog> ROW_MAPPER = new AmpOfflineChangelogMapper();
+    private static final RowMapper<Long> ID_MAPPER = new SingleColumnRowMapper<>(Long.class);
 
     private static class AmpOfflineChangelogMapper implements RowMapper<AmpOfflineChangelog> {
 
@@ -59,7 +61,7 @@ public class SyncService implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         Context initialContext = new InitialContext();
         DataSource dataSource = (DataSource) initialContext.lookup(Constants.UNIFIED_JNDI_ALIAS);
-        jdbcTemplate = new SimpleJdbcTemplate(dataSource);
+        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     public SystemDiff diff(List<Long> userIds, Date lastSyncTime) {
@@ -69,44 +71,43 @@ public class SyncService implements InitializingBean {
         updateDiffForWorkspaceMembers(systemDiff, userIds, lastSyncTime);
         updateDiffForUsers(systemDiff, userIds, lastSyncTime);
 
-        systemDiff.setActivities(new IncrementalListDiff<>(Collections.emptyList(), Collections.emptyList()));
-        systemDiff.setTranslations(new ListDiff<>());
+        systemDiff.setActivities(new ListDiff<>(Collections.emptyList(), Collections.emptyList()));
+        systemDiff.setTranslations(new TranslationsDiff());
 
         return systemDiff;
     }
 
     private void updateDiffForUsers(SystemDiff systemDiff, List<Long> userIds, Date lastSyncTime) {
+        if (lastSyncTime == null) {
+            systemDiff.setUsers(new ListDiff<>(Collections.emptyList(), userIds));
+        } else {
+            List<AmpOfflineChangelog> changelogs = findChangedUsers(userIds, lastSyncTime);
+
+            List<Long> saved = new ArrayList<>();
+            for (AmpOfflineChangelog changelog : changelogs) {
+                systemDiff.updateTimestamp(changelog.getOperationTime());
+                saved.add(changelog.getEntityIdAsLong());
+            }
+
+            systemDiff.setUsers(new ListDiff<>(Collections.emptyList(), saved));
+        }
+    }
+
+    private List<AmpOfflineChangelog> findChangedUsers(List<Long> userIds, Date lastSyncTime) {
         Map<String, Object> args = new HashMap<>();
         args.put("lastSyncTime", lastSyncTime);
         args.put("userIds", userIds);
 
-        List<AmpOfflineChangelog> changelogs = jdbcTemplate.query(
+        return jdbcTemplate.query(
                 "select null::varchar, id::varchar, null::varchar, last_modified " +
-                "from dg_user " +
-                "where last_modified > :lastSyncTime " +
-                "and id in (:userIds)", ROW_MAPPER, args);
-
-        List<Long> saved = new ArrayList<>();
-        for (AmpOfflineChangelog changelog : changelogs) {
-            systemDiff.updateTimestamp(changelog.getOperationTime());
-            saved.add(changelog.getEntityIdAsLong());
-        }
-
-        systemDiff.setUsers(new IncrementalListDiff<>(Collections.emptyList(), saved));
+                        "from dg_user " +
+                        "where last_modified > :lastSyncTime " +
+                        "and id in (:userIds)", args, ROW_MAPPER);
     }
 
     private void updateDiffsForWsAndGs(SystemDiff systemDiff, Date lastSyncTime) {
         if (lastSyncTime != null) {
-
-            Map<String, Object> args = new HashMap<>();
-            args.put("lastSyncTime", lastSyncTime);
-            args.put("entities", Arrays.asList(GLOBAL_SETTINGS, WORKSPACES));
-
-            List<AmpOfflineChangelog> changelogs = jdbcTemplate.query(
-                    "select " + COLUMNS + " " +
-                    "from amp_offline_changelog " +
-                    "where operation_time > :lastSyncTime " +
-                    "and entity_name in (:entities)", ROW_MAPPER, args);
+            List<AmpOfflineChangelog> changelogs = findChangedWsAndGs(lastSyncTime);
 
             for (AmpOfflineChangelog changelog : changelogs) {
                 if (changelog.getEntityName().equals(GLOBAL_SETTINGS)) {
@@ -123,33 +124,64 @@ public class SyncService implements InitializingBean {
         }
     }
 
+    private List<AmpOfflineChangelog> findChangedWsAndGs(Date lastSyncTime) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("lastSyncTime", lastSyncTime);
+        args.put("entities", Arrays.asList(GLOBAL_SETTINGS, WORKSPACES));
+
+        return jdbcTemplate.query(
+                "select " + COLUMNS + " " +
+                "from amp_offline_changelog " +
+                "where operation_time > :lastSyncTime " +
+                "and entity_name in (:entities)", args, ROW_MAPPER);
+    }
+
     private void updateDiffForWorkspaceMembers(SystemDiff systemDiff, List<Long> userIds, Date lastSyncTime) {
+        if (lastSyncTime == null) {
+            List<Long> workspaceMemberIds = findWorkspaceMembers(userIds);
+
+            systemDiff.setWorkspaceMembers(new ListDiff<>(Collections.emptyList(), workspaceMemberIds));
+        } else {
+            List<AmpOfflineChangelog> changelogs = findChangedWorkspaceMembers(userIds, lastSyncTime);
+
+            List<Long> removed = new ArrayList<>();
+            List<Long> saved = new ArrayList<>();
+
+            for (AmpOfflineChangelog changelog : changelogs) {
+                if (changelog.getOperationName().equals(DELETED)) {
+                    removed.add(changelog.getEntityIdAsLong());
+                }
+                if (changelog.getOperationName().equals(UPDATED)) {
+                    saved.add(changelog.getEntityIdAsLong());
+                }
+                systemDiff.updateTimestamp(changelog.getOperationTime());
+            }
+
+            systemDiff.setWorkspaceMembers(new ListDiff<>(removed, saved));
+        }
+    }
+
+    private List<Long> findWorkspaceMembers(List<Long> userIds) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("userIds", userIds);
+
+        return jdbcTemplate.query(
+                "select amp_team_mem_id from amp_team_member where user_ in (:userIds)",
+                args, ID_MAPPER);
+    }
+
+    private List<AmpOfflineChangelog> findChangedWorkspaceMembers(List<Long> userIds, Date lastSyncTime) {
         Map<String, Object> args = new HashMap<>();
         args.put("lastSyncTime", lastSyncTime);
         args.put("entity", WORKSPACE_MEMBER);
         args.put("userIds", userIds);
         args.put("deleted", DELETED);
 
-        List<AmpOfflineChangelog> changelogs = jdbcTemplate.query("select " + COLUMNS + " " +
+        return jdbcTemplate.query("select " + COLUMNS + " " +
                 "from amp_offline_changelog " +
                 "where operation_time > :lastSyncTime " +
                 "and entity_name = :entity " +
                 "and (entity_id in (select amp_team_mem_id::varchar from amp_team_member where user_ in (:userIds)) " +
-                "or operation_name = :deleted)", ROW_MAPPER, args);
-
-        List<Long> removed = new ArrayList<>();
-        List<Long> saved = new ArrayList<>();
-
-        for (AmpOfflineChangelog changelog : changelogs) {
-            if (changelog.getOperationName().equals(DELETED)) {
-                removed.add(changelog.getEntityIdAsLong());
-            }
-            if (changelog.getOperationName().equals(UPDATED)) {
-                saved.add(changelog.getEntityIdAsLong());
-            }
-            systemDiff.updateTimestamp(changelog.getOperationTime());
-        }
-
-        systemDiff.setWorkspaceMembers(new IncrementalListDiff<>(removed, saved));
+                "or operation_name = :deleted)", args, ROW_MAPPER);
     }
 }

@@ -82,8 +82,7 @@ public class InterchangeUtils {
 	static {
 		addUnderscoredTitlesToMap(AmpActivityFields.class);
 	}
-	
-	public static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+
 	private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>();
 	
 	public static String getDiscriminatedFieldTitle(String fieldName) {
@@ -830,7 +829,7 @@ public class InterchangeUtils {
 	
 	protected static SimpleDateFormat getDateFormatter() {
 		if (DATE_FORMATTER.get() == null) {
-			DATE_FORMATTER.set(new SimpleDateFormat(ISO8601_DATE_FORMAT));
+			DATE_FORMATTER.set(new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT));
 		}
 		return DATE_FORMATTER.get();
 	}

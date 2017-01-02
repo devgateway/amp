@@ -23,12 +23,12 @@ import org.digijava.kernel.persistence.PersistenceManager;
 public class WorkspaceMemberService {
     private static Logger logger = Logger.getLogger(WorkspaceMemberService.class);
    
-    public List<WorkspaceMember> getWorkspaceMembers(List<Long> userIds) {
+    public List<WorkspaceMember> getWorkspaceMembers(List<Long> ids) {
         List<WorkspaceMember> wsMermbers = new ArrayList<>();
         String sqlQuery = "SELECT atm.amp_team_mem_id, atm.user_, atm.amp_team_id, atmr.role "
                 + "FROM amp_team_member atm "
                 + "LEFT JOIN amp_team_member_roles atmr ON atmr.amp_team_mem_role_id = atm.amp_member_role_id "
-                + "WHERE user_ in (" + Util.toCSStringForIN(userIds) + ")";
+                + "WHERE atm.amp_team_mem_id in (" + Util.toCSStringForIN(ids) + ")";
         Consumer<ResultSet> resultSetConsumer = (rs) -> {
             WorkspaceMember wsMember = new WorkspaceMember();
             try {

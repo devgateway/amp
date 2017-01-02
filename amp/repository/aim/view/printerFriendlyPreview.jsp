@@ -3101,7 +3101,57 @@ body {background:none;}
 									</feature:display>
 								  </logic:present>
 
-
+									<!-- GPI -->
+									<module:display name="/Activity Form/GPI" parentModule="/Activity Form">
+										<bean:define id="gpiSurvey" name="gpiSurveys" scope="request" toScope="page"
+													 type="java.util.Collection"/>
+										<c:if test="${not empty gpiSurvey}">
+											<tr>
+												<td vAlign="top" class="field_name">
+													<b><digi:trn>GPI</digi:trn></b>
+												</td>
+												<td vAlign="top">
+													<c:set var="currentIndicatorName" value=""/>
+													<logic:iterate name="gpiSurveys" id="gpiSurvey"
+																   type="java.util.Collection" indexId="gpiId">
+														<logic:iterate name="gpiSurvey" id="gpiresponse"
+																	   type="org.digijava.module.aim.dbentity.AmpGPISurveyResponse">
+															<table width="100%" cellSpacing="2" cellPadding="1"
+																   style="font-size:11px;" border="0">
+																<c:if test="${!currentIndicatorName.equals(gpiresponse.ampQuestionId.ampIndicatorId.name)}">
+																	<c:set var="currentIndicatorName"
+																		   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
+																	<tr>
+																		<td bgcolor="#eeeeee"
+																			style="text-transform: uppercase;">
+																			<c:set var="indicatorName"
+																				   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
+																			<span class="word_break bold">${indicatorName}</span>
+																		</td>
+																	</tr>
+																</c:if>
+																<tr>
+																	<td width=85%>
+																		<c:set var="questionText"
+																			   value="${gpiresponse.ampQuestionId.questionText}"/>
+																		<span class="word_break bold">${questionText}</span>
+																		<c:set var="responseText"
+																			   value="${gpiresponse.response}"/>
+																		<lu>
+																			<li>
+																				<span class="word_break bold">${responseText}</span>
+																			</li>
+																		</lu>
+																	</td>
+																</tr>
+															</table>
+														</logic:iterate>
+													</logic:iterate>
+												</td>
+											</tr>
+										</c:if>
+									</module:display>
+									<!-- END GPI -->
 
 
 <field:display name="Activity Created By" feature="Identification">

@@ -25,15 +25,10 @@ module.exports = Backbone.Collection
   /* If _pageSize > 0 then use pagination and fetchMore, otherwise ignore pagination */
   fetch: function(options) {
     var self = this;
-    var payload = {otherFilters: {}};
+    var payload = {};
     var activityFetch;
     var isFetchMore = false;
     var preserveURL = this.url;
-
-    /* TODO nice to have: if otherFilters and columnFilters
-     * had their own object on API, separate from settings, etc.
-     * Currently all on the same data level.
-     **/
 
     /* get filters if set (not applicable for getActivities) */
     if (this.appData.filter) {

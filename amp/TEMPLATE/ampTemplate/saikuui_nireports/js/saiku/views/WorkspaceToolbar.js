@@ -189,11 +189,14 @@ var WorkspaceToolbar = Backbone.View.extend({
         }
     },
     hideEditableFormatsPublicView: function(){
-        if(window.currentSettings[Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS] !== undefined && window.currentSettings[Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS] == 'true' && user.get('logged') == false){
-       	$(this.el).find('a.export_xls').addClass('disabled_toolbar');            	
-        	$(this.el).find('a.export_csv').addClass('disabled_toolbar');
-        	$(this.el).find('a.export_dual_currency').addClass('disabled_toolbar');
-        }
+    	$.when(window.generalSettings.loaded).then(function(){
+    		if(window.generalSettings.get(Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS) !== undefined && window.generalSettings.get(Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS) == true && user.get('logged') == false){
+    	       	$(this.el).find('a.export_xls').addClass('disabled_toolbar');            	
+    	        	$(this.el).find('a.export_csv').addClass('disabled_toolbar');
+    	        	$(this.el).find('a.export_dual_currency').addClass('disabled_toolbar');
+    	        }
+		});
+        
        	
        },
     template: function() {

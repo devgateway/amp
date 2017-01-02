@@ -125,14 +125,6 @@ function initializeTranslations(){
 															</div>
 														</td>
 													</tr>
-													<feature:display name="Structures" module="Map Module">
-													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_9">
-															<div class="selector_type_cont" onclick="changeTab(9)">
-																<digi:trn>Structure Types</digi:trn>
-															</div></td>	
-													</tr>
-													</feature:display>
 													<tr style="cursor: pointer;">
 														<td class="side_opt_sel" id="general_selector_8">
 															<div class="selector_type_cont" onclick="changeTab(8)">
@@ -570,16 +562,6 @@ function initializeTranslations(){
 														<html:optionsCollection property="filter.years" label="key" value="value" />
 													</html:select>
 												</td>
-												<feature:display name="Peacebuilding Markers" module="Map Module">
-												<td>
-													<b><digi:trn>Peacebuilding Marker</digi:trn>:</b>
-												</td>	
-												<td>
-													<html:select styleId="selected_Peacebuilding_Marker_Id" property="filter.selectedPeacebuildingMarkerId" styleClass="dropdwn_sm" style="width:70px;">
-														<html:optionsCollection property="filter.peacebuildingMarkers" label="value" value="id" />
-													</html:select>
-												</td>
-												</feature:display>
 											</tr>
 										</table>
 									</div>

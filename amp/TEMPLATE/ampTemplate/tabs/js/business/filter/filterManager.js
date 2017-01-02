@@ -1,5 +1,5 @@
-define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUtils', 'jquery','underscore' ], function(
-		FiltersWidget, GridManager, FilterUtils, jQuery,_) {
+define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','underscore' ], function(
+		 GridManager, FilterUtils, jQuery,_) {
 
 	"use strict";
 
@@ -18,7 +18,7 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 		var container = jQuery(containerName);
 
 		// Create the FilterWidget instance.
-		app.TabsApp.filtersWidget = new FiltersWidget({
+		app.TabsApp.filtersWidget = new ampFilter({
 			el : containerName,
 			draggable : true,
 			caller: 'TAB'
@@ -44,7 +44,7 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 			// Change the format of the object before sending it to the endpoint
 			// for refiltering.
 			var auxFilters = app.TabsApp.serializedFilters;
-			GridManager.filter(app.TabsApp.currentTab.get('id'), auxFilters, app.TabsApp.appliedSettings);
+			GridManager.filter(app.TabsApp.currentTab.get('id'), auxFilters, app.TabsApp.settingsWidget.toAPIFormat());
 
 			// Update the accordion with the newly applied filters.
 			FilterUtils.updateFiltersRegion(readableFilters);
@@ -87,7 +87,7 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 			reportData : reportNames,
 			sidx: sidx,
 			sord: sord,
-			settings: app.TabsApp.appliedSettings
+			settings: app.TabsApp.settingsWidget.toAPIFormat()
 		});
 		var tabId = app.TabsApp.currentTab.get('id');
 		jQuery.ajax({

@@ -41,7 +41,7 @@ module.exports = Backbone.Collection
   fetch: function(options) {
     // TODO: this is running twice on structures load... is that ok??
     var self = this;
-    var payload = {otherFilters: {}};
+    var payload = {};
 
     // cancel last request if not complete.
     if (this._lastFetch && this._lastFetch.readyState > 0 && this._lastFetch.readyState < 4) {

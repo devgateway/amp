@@ -711,45 +711,6 @@
                     <div class="admin_landing_page_box_cont">
                       <div class="admin_landing_page_box_title"><digi:trn>Results dashboard tools</digi:trn></div>
                       <table border="0" cellspacing="2" cellpadding="2">
-                        <feature:display  name="Results Dashboard Data" module="WIDGETS">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="translation">
-                                <digi:trn invisibleLinks="true">Click here to view Results Dashboard Data Manager</digi:trn>
-                              </c:set>
-                              <a href="/widget/indSectRegManager.do" title="${translation}">
-                                <digi:trn>Results Dashboard Data Manager</digi:trn>
-                              </a>
-                            </td>
-                          </tr>
-                        </feature:display>
-                        <feature:display  name="Indicator chart Widgets" module="WIDGETS">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="translation">
-                                <digi:trn invisibleLinks="true">Click here to view Indicator Chart Widgets Manager</digi:trn>
-                              </c:set>
-                              <a href="/widget/indicatorchartwidgets.do" title="${translation}">
-                                <digi:trn>Indicator Chart Widget Manager</digi:trn>
-                              </a>
-                            </td>
-                          </tr>
-                        </feature:display>
-                        <feature:display  name="Table Widgets" module="WIDGETS">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="translation">
-                                <digi:trn key="widgets:clickToViewTableWidgetAdmin" invisibleLinks="true">Click here to view Table Widgets Manager</digi:trn>
-                              </c:set>
-                              <digi:link module="widget" href="/adminTableWidgets.do" title="${translation}">
-                                <digi:trn key="widgets:tableWidgetManager">Table Widget Manager</digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
-                        </feature:display>
                         <module:display name="Result Matrix Settings" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
@@ -765,19 +726,6 @@
                             </td>
                           </tr>
                         </module:display>
-                        <feature:display  name="Widget Places" module="WIDGETS">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="translation">
-                                <digi:trn key="widget:clickToViewWidgetPlaceAdmin" invisibleLinks="true">Click here to view Widgets Place Manager</digi:trn>
-                              </c:set>
-                              <a href="/widget/widgetplaces.do" title="${translation}">
-                                <digi:trn key="widget:widgetPlaceManager">Widget Place Manager</digi:trn>
-                              </a>
-                            </td>
-                          </tr>
-                        </feature:display>
                         <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>

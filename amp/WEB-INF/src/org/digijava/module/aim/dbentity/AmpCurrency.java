@@ -2,7 +2,6 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonValue;
 import org.dgfoundation.amp.nireports.NiCurrency;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -86,7 +85,6 @@ public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Ident
 	/**
 	 * @return Returns the currencyCode.
 	 */
-	@JsonValue
 	public String getCurrencyCode() {
 		return currencyCode;
 	}

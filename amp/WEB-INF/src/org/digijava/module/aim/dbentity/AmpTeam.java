@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonValue;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
@@ -143,7 +142,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 	/**
 	 * @return ampTeamId
 	 */
-	@JsonValue
 	public Long getAmpTeamId() {
 		return ampTeamId;
 	}

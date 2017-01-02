@@ -8,53 +8,43 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.digijava.kernel.ampapi.endpoints.security.serializers.AmpApplicationSettingsSerializer;
 
 @SuppressWarnings("serial")
+@JsonSerialize(using = AmpApplicationSettingsSerializer.class)
 public class AmpApplicationSettings implements Serializable {
 
-	@JsonProperty("id")
 	private Long ampAppSettingsId;
 
 	private AmpTeam team;
 
-	@JsonProperty("default-records-per-page")
 	private Integer defaultRecordsPerPage;
 
-	@JsonProperty("report-start-year")
 	private Integer reportStartYear;
 
-	@JsonProperty("report-end-year")
 	private Integer reportEndYear;
-	
+
 	private AmpCurrency currency;
 
-	@JsonProperty("fiscal-calendar")
 	private AmpFiscalCalendar fiscalCalendar;
 
 	private String language;
 	
 	private String validation;
 
-	@JsonProperty("show-all-countries")
     private Boolean showAllCountries = false;
 
-	@JsonProperty("default-team-report")
 	private AmpReports defaultTeamReport;
 
-	@JsonProperty("default-reports-per-page")
 	private Integer defaultReportsPerPage;
 
-	@JsonProperty("allow-add-team-res")
     private Integer allowAddTeamRes;
 
-	@JsonProperty("allow-share-team-res")
     private Integer allowShareTeamRes; //across the workspaces
 
-	@JsonProperty("allow-publishing-resources")
     private Integer allowPublishingResources;
 
-	@JsonProperty("number-of-pages-to-display")
     private Integer numberOfPagesToDisplay;
     
     public Boolean getShowAllCountries() {

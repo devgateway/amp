@@ -33,6 +33,6 @@ public class SecurityErrors {
 	public static final ApiErrorMessage INVALID_WORKSPACE = new ApiErrorMessage(12, "Workspace is invalid");
 	public static final ApiErrorMessage PASSWORD_CHANGED = new ApiErrorMessage(13, "User password changed");
 	public static final ApiErrorMessage NOT_AUTHENTICATED = new ApiErrorMessage(14, "Not authenticated");
-	public static final ApiErrorMessage UNSECURE_CONNECTION = new ApiErrorMessage(14, "Secure connection is required");
+	public static final ApiErrorMessage UNSECURE_CONNECTION = new ApiErrorMessage(15, "Secure connection is required");
 
 }

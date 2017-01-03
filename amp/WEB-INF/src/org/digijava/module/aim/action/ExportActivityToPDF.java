@@ -1451,28 +1451,27 @@ public class ExportActivityToPDF extends Action {
                         meTable.addCell(sectortsCell);
 
                         for (AmpIndicatorValue value : indicator.getValues()) {
-                            if (value.getValueType() != 3) {
-                                columnVal = "";
-                                String fieldName = ExportUtil.getIndicatorValueType(value);
-                                PdfPCell indicatorTypeCell = new PdfPCell();
-                                indicatorTypeCell.addElement(new Paragraph(postprocessText(fieldName), titleFont));
-                                indicatorTypeCell.setBorder(0);
-                                meTable.addCell(indicatorTypeCell);
+                            columnVal = "";
+                            String fieldName = ExportUtil.getIndicatorValueType(value);
+                            PdfPCell indicatorTypeCell = new PdfPCell();
+                            indicatorTypeCell.addElement(new Paragraph(postprocessText(TranslatorWorker.translateText(fieldName)), titleFont));
+                            indicatorTypeCell.setBorder(0);
+                            meTable.addCell(indicatorTypeCell);
 
-                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
-                                    columnVal += valueLabel + ": " + value.getValue() + "\n";
-                                }
-                                if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
-                                    columnVal += commentLabel + ": " + Strings.nullToEmpty(value.getComment()) + "\n";
-                                }
-                                if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
-                                    columnVal += dateLabel + ": " + DateConversion.convertDateToLocalizedString(value.getValueDate()) + "\n";
-                                }
-                                PdfPCell valuesCell = new PdfPCell();
-                                valuesCell.addElement(new Paragraph(postprocessText(columnVal), plainFont));
-                                valuesCell.setBorder(0);
-                                meTable.addCell(valuesCell);
+                            if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
+                                columnVal += valueLabel + ": " + value.getValue() + "\n";
                             }
+                            if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
+                                columnVal += commentLabel + ": " + Strings.nullToEmpty(value.getComment()) + "\n";
+                            }
+                            if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
+                                columnVal += dateLabel + ": " + DateConversion.convertDateToLocalizedString(value.getValueDate()) + "\n";
+                            }
+                            PdfPCell valuesCell = new PdfPCell();
+                            valuesCell.addElement(new Paragraph(postprocessText(columnVal), plainFont));
+                            valuesCell.setBorder(0);
+                            meTable.addCell(valuesCell);
+
                         }
                     }
 

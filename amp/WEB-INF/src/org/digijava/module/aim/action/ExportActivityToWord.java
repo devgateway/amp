@@ -617,6 +617,10 @@ public class ExportActivityToWord extends Action {
                     meTbl.addCell(meTitleCell);
 
                     if (myForm.getIndicators() != null) {
+                        String valueLabel = TranslatorWorker.translateText("Value");
+                        String commentLabel = TranslatorWorker.translateText("Comment");
+                        String dateLabel = TranslatorWorker.translateText("Date");
+
                         for (IndicatorActivity indicator : myForm.getIndicators()) {
                             columnVal = "";
                             if (FeaturesUtil.isVisibleField("Indicator Name")) {
@@ -647,32 +651,32 @@ public class ExportActivityToWord extends Action {
                             }
 
                             for (AmpIndicatorValue value : indicator.getValues()) {
-                                if (value.getValueType() != 3) {
-                                    String fieldName = ExportUtil.getIndicatorValueType(value);
-                                    columnVal = TranslatorWorker.translateText(fieldName);
-                                    RtfCell cellValueTitle = new RtfCell();
-                                    cellValueTitle.setBorder(0);
-                                    cellValueTitle.add(new Paragraph(columnVal, BOLDFONT));
-                                    meTbl.addCell(cellValueTitle);
 
-                                    Table additionalInfoSubTable = new Table(2);
-                                    additionalInfoSubTable.setWidth(80);
+                                String fieldName = ExportUtil.getIndicatorValueType(value);
+                                columnVal = TranslatorWorker.translateText(fieldName);
+                                RtfCell cellValueTitle = new RtfCell();
+                                cellValueTitle.setBorder(0);
+                                cellValueTitle.add(new Paragraph(columnVal, BOLDFONT));
+                                meTbl.addCell(cellValueTitle);
 
-                                    if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
-                                        generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Value"), value.getValue().toString(), null);
-                                    }
-                                    if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
-                                        generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Comment"), DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);
-                                    }
-                                    if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
-                                        generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Date"), DateConversion.convertDateToLocalizedString(value.getValueDate()), null);
-                                    }
+                                Table additionalInfoSubTable = new Table(2);
+                                additionalInfoSubTable.setWidth(80);
 
-                                    RtfCell cellValue = new RtfCell();
-                                    cellValue.setBorder(0);
-                                    cellValue.add(additionalInfoSubTable);
-                                    meTbl.addCell(cellValue);
+                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, valueLabel, value.getValue().toString(), null);
                                 }
+                                if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, commentLabel, DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);
+                                }
+                                if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, dateLabel, DateConversion.convertDateToLocalizedString(value.getValueDate()), null);
+                                }
+
+                                RtfCell cellValue = new RtfCell();
+                                cellValue.setBorder(0);
+                                cellValue.add(additionalInfoSubTable);
+                                meTbl.addCell(cellValue);
+
                             }
                         }
                         applyEmptyCell(meTbl, 1);

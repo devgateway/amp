@@ -42,6 +42,8 @@ public class ExportUtil {
             return "Base";
         } else if (value.getValueType() == AmpIndicatorValue.TARGET) {
             return "Target";
+        } else if (value.getValueType() == AmpIndicatorValue.REVISED) {
+            return "Revised Target";
         }
         return null;
     }

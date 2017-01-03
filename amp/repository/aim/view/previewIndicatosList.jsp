@@ -80,9 +80,9 @@
                                 </td>
                             </tr>
                             <c:forEach var="value" items="${indicator.values}">
-                                <c:if test="${value.valueType != 3}">
-                                    <tr>
-                                        <td width="20%"><span class="word_break bold">
+
+                                <tr>
+                                    <td width="20%"><span class="word_break bold">
 												<c:set var="fieldName"></c:set>
 												<c:choose>
                                                     <c:when test="${value.valueType == 1}">
@@ -94,31 +94,36 @@
                                                     <c:when test="${value.valueType == 0}">
                                                         <c:set var="fieldName">Target</c:set>
                                                     </c:when>
+                                                    <c:when test="${value.valueType == 3}">
+                                                        <c:set var="fieldName">Revised Target</c:set>
+                                                    </c:when>
                                                 </c:choose>
 												<digi:trn key="me:target">${fieldName}</digi:trn>
 												</span></td>
-                                        <td width="10%">
-                                            <field:display name="Indicator ${fieldName} Value" feature="Activity">
-                                                <span class="word_break"><aim:formatNumber value="${value.value}"/></span>
-                                            </field:display>
-                                        </td>
-                                        <td width="50%">
-                                            <field:display name="Comments ${fieldName} Value" feature="Activity">
-                                                <span class="word_break">${fn:escapeXml(value.comment)}</span>
-                                            </field:display>
-                                        </td>
-                                        <td width="20%">
-                                            <field:display name="Date ${fieldName} Value" feature="Activity">
-                                                <span class="word_break"><fmt:formatDate type="date" value="${value.valueDate}" dateStyle="short"/></span>
-                                            </field:display>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5" width="100%">
-                                            <hr/>
-                                        </td>
-                                    </tr>
-                                </c:if>
+                                    <td width="10%">
+                                        <field:display name="Indicator ${fieldName} Value" feature="Activity">
+                                            <span class="word_break"><aim:formatNumber value="${value.value}"/></span>
+                                        </field:display>
+                                    </td>
+                                    <td width="50%">
+                                        <field:display name="Comments ${fieldName} Value" feature="Activity">
+                                            <span class="word_break">${fn:escapeXml(value.comment)}</span>
+                                        </field:display>
+                                    </td>
+                                    <td width="20%">
+                                        <field:display name="Date ${fieldName} Value" feature="Activity">
+                                            <span class="word_break"><fmt:formatDate type="date"
+                                                                                     value="${value.valueDate}"
+                                                                                     dateStyle="short"/></span>
+                                        </field:display>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" width="100%">
+                                        <hr/>
+                                    </td>
+                                </tr>
+
                             </c:forEach>
                         </table>
                     </td>

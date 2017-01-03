@@ -1417,8 +1417,7 @@ public class ExportActivityToPDF extends Action {
                 meCell.setBorder(0);
                 mainLayout.addCell(meCell);
 
-                String indicatorToAdd = "";
-
+                PdfPTable meTable = new PdfPTable(1);
                 if (myForm.getIndicators() != null) {
                     for (IndicatorActivity indicator : myForm.getIndicators()) {
                         columnVal = "";
@@ -1430,38 +1429,51 @@ public class ExportActivityToPDF extends Action {
                                 columnVal += " - " + indicator.getLogFrame();
                             }
                         }
-                        columnVal += "\n";
+
+                        PdfPCell indicatorNameCell = new PdfPCell();
+                        indicatorNameCell.addElement(new Paragraph(postprocessText(columnVal), titleFont));
+                        indicatorNameCell.setBorder(0);
+                        meTable.addCell(indicatorNameCell);
+                        columnVal = "";
                         if (FeaturesUtil.isVisibleField("Sectors")) {
                             if (indicator.getIndicator().getSectors() != null) {
-                                columnVal += ExportUtil.getIndicatorSectors(indicator);
-                                columnVal += "\n";
+                                columnVal += ExportUtil.getIndicatorSectors(indicator) + "\n";
                             }
                         }
+
+                        PdfPCell sectortsCell = new PdfPCell();
+                        sectortsCell.addElement(new Paragraph(postprocessText(columnVal), plainFont));
+                        sectortsCell.setBorder(0);
+                        meTable.addCell(sectortsCell);
 
                         for (AmpIndicatorValue value : indicator.getValues()) {
                             if (value.getValueType() != 3) {
+                                columnVal = "";
                                 String fieldName = ExportUtil.getIndicatorValueType(value);
-                                columnVal += "\n" + TranslatorWorker.translateText(fieldName) + "\n";
+                                PdfPCell indicatorTypeCell = new PdfPCell();
+                                indicatorTypeCell.addElement(new Paragraph(postprocessText(fieldName), titleFont));
+                                indicatorTypeCell.setBorder(0);
+                                meTable.addCell(indicatorTypeCell);
+
                                 if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
-                                    columnVal += " " + value.getValue();
+                                    columnVal += TranslatorWorker.translateText("Value") + ": " + value.getValue() + "\n";
                                 }
                                 if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
-                                    columnVal += " " + Strings.nullToEmpty(value.getComment());
+                                    columnVal += TranslatorWorker.translateText("Comment") + ": " + Strings.nullToEmpty(value.getComment()) + "\n";
                                 }
                                 if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
-                                    columnVal += " " + DateConversion.convertDateToLocalizedString(value.getValueDate());
+                                    columnVal += TranslatorWorker.translateText("Date") + ": " + DateConversion.convertDateToLocalizedString(value.getValueDate()) + "\n";
                                 }
-                                columnVal += "\n";
+                                PdfPCell valuesCell = new PdfPCell();
+                                valuesCell.addElement(new Paragraph(postprocessText(columnVal), plainFont));
+                                valuesCell.setBorder(0);
+                                meTable.addCell(valuesCell);
                             }
                         }
-                        indicatorToAdd += columnVal + "\n";
                     }
 
-                    PdfPCell indicatorCell = new PdfPCell();
-                    p1 = new Paragraph(postprocessText(indicatorToAdd), plainFont);
-                    indicatorCell.addElement(p1);
-                    indicatorCell.setBorder(0);
-                    mainLayout.addCell(indicatorCell);
+                    mainLayout.addCell(meTable);
+                    mainLayout.addCell(new Paragraph("\n"));
                 }
             }
             /**

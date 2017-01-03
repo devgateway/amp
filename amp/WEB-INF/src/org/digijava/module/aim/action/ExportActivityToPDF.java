@@ -1419,6 +1419,10 @@ public class ExportActivityToPDF extends Action {
 
                 PdfPTable meTable = new PdfPTable(1);
                 if (myForm.getIndicators() != null) {
+                    String valueLabel = TranslatorWorker.translateText("Value");
+                    String commentLabel = TranslatorWorker.translateText("Comment");
+                    String dateLabel = TranslatorWorker.translateText("Date");
+
                     for (IndicatorActivity indicator : myForm.getIndicators()) {
                         columnVal = "";
                         if (FeaturesUtil.isVisibleField("Indicator Name")) {
@@ -1456,13 +1460,13 @@ public class ExportActivityToPDF extends Action {
                                 meTable.addCell(indicatorTypeCell);
 
                                 if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
-                                    columnVal += TranslatorWorker.translateText("Value") + ": " + value.getValue() + "\n";
+                                    columnVal += valueLabel + ": " + value.getValue() + "\n";
                                 }
                                 if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
-                                    columnVal += TranslatorWorker.translateText("Comment") + ": " + Strings.nullToEmpty(value.getComment()) + "\n";
+                                    columnVal += commentLabel + ": " + Strings.nullToEmpty(value.getComment()) + "\n";
                                 }
                                 if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
-                                    columnVal += TranslatorWorker.translateText("Date") + ": " + DateConversion.convertDateToLocalizedString(value.getValueDate()) + "\n";
+                                    columnVal += dateLabel + ": " + DateConversion.convertDateToLocalizedString(value.getValueDate()) + "\n";
                                 }
                                 PdfPCell valuesCell = new PdfPCell();
                                 valuesCell.addElement(new Paragraph(postprocessText(columnVal), plainFont));

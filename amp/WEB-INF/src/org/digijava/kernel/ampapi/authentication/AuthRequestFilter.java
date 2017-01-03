@@ -13,8 +13,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.security.Security;
-import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
+import org.digijava.kernel.ampapi.endpoints.security.ApiAuthorization;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
@@ -57,13 +56,8 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         
         addDefaultTreeVisibility();
 
-		String token = containerReq.getHeaderValue("X-Auth-Token");
-		if (token != null) {
-			SecurityUtil.validateTokenAndRestoreSession(token);
-		}
-
-		Security.authorize(containerReq);
-
+		ApiAuthorization.authorize(containerReq);
+		
         return containerReq;
 	}
 	

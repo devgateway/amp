@@ -9,6 +9,8 @@ package org.digijava.kernel.ampapi.endpoints.security;
  * @author Nadejda Mandrescu
  */
 public enum AuthRule {
+    /** allow execution only over a secure connection */
+    SECURED,
 	/** allow execution only for authenticated sessions */
 	AUTHENTICATED,
 	/** request must be issued within a selected workspace */

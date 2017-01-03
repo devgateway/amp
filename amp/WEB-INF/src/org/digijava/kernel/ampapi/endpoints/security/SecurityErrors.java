@@ -28,15 +28,11 @@ public class SecurityErrors {
 	public static final ApiErrorMessage USER_BANNED = new ApiErrorMessage(8, "User Banned");
 	/** User is not part of any team */
 	public static final ApiErrorMessage NO_TEAM = new ApiErrorMessage(9, "User is not part of any team");
-
 	public static final ApiErrorMessage INVALID_TEAM = new ApiErrorMessage(10, "Invalid Team");
-
 	public static final ApiErrorMessage INVALID_USER_PASSWORD = new ApiErrorMessage(11, "Username or password are invalid");
-
 	public static final ApiErrorMessage INVALID_WORKSPACE = new ApiErrorMessage(12, "Workspace is invalid");
-
 	public static final ApiErrorMessage PASSWORD_CHANGED = new ApiErrorMessage(13, "User password changed");
-
 	public static final ApiErrorMessage NOT_AUTHENTICATED = new ApiErrorMessage(14, "Not authenticated");
+	public static final ApiErrorMessage UNSECURE_CONNECTION = new ApiErrorMessage(14, "Secure connection is required");
 
 }

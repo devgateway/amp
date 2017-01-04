@@ -17,53 +17,6 @@
 		  <put name="title">Global Partnership Indicators</put>
 		  <put-item name="body" file="gpi_N.jsp"/>
 		</layout>
-		
-		<layout name="gisDashboardLayout" extends="default" file="gisDashboardlayout.jsp">
-			<put name="title">Results Matrix</put>
-			<put-item name="widget1" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget2" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget3" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget4" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget5" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget6" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget7" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget8" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget9" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget10" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget11" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget12" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget13" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget14" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget15" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget16" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="pieChart" module="widget" instance="default" teaser="teaserOfSectorByDonor"/>
-			<put-item name="body" module="gis" page="gisDashboard"/>
-		</layout>
-
-		<layout name="gisDashboardPublicLayout" extends="default" file="gisDashboardPublicLayout.jsp">
-			<put name="title">Aid Management Platform</put>
-			<put-item name="body" module="gis" page="gisDashboard"/>
-			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
-			<put-item name="footer" layout="footerLayout"/>
-
-		</layout>
-
-		<layout name="gisSettingsLayout" extends="default" file="gisSettingsLayout.jsp">
-			<put name="title">Aid Management Platform</put>
-			<put-item name="body" module="gis" page="gisSettings"/>
-			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
-			<put-item name="footer" layout="footerLayout"/>
-
-		</layout>
-
-
-		<layout name="gisRegReportLayout" extends="default" file="gisRegReportLayout.jsp">
-			<put name="title">GIS Regional Report</put>
-			<put-item name="body" module="gis" page="gisRegionReport"/>
-		</layout>
-
 
 		<layout name="helpLayout" file="helpLayout.jsp">
 			<put name="title">Help</put>
@@ -796,10 +749,6 @@
             </module>
             <module name="budgetexport">
             	<page>reportWrapper</page>
-            </module>
-            <module name="esrigis">
-				<page>mainmap</page>
-				<page>mainmapPopup</page>
             </module>
         </page-group>
 	</site-layout>

@@ -114,7 +114,7 @@ public class FiltersEndpoint {
 				activityStatus.add(sjb);
 			}
 			activityStatus = orderByProperty (activityStatus,NAME_PROPERTY);
-			as.set("filterId", ColumnConstants.APPROVAL_STATUS);
+			as.set("filterId", FiltersConstants.APPROVAL_STATUS);
 			as.set("name", TranslatorWorker.translateText(ColumnConstants.APPROVAL_STATUS));
 			as.set("values",activityStatus);
 		}

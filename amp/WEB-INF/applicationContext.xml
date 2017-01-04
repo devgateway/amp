@@ -10,7 +10,11 @@
                     http://www.springframework.org/schema/security 
                     http://www.springframework.org/schema/security/spring-security-3.1.xsd
 					http://www.springframework.org/schema/context
-           			http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+					http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<beans:import resource="classpath:/applicationContext.xml" />
+
+	<beans:import resource="saiku/context.xml" />
 
 	<!-- by default allow displaying of the flag -->
 	<http pattern="/aim/default/displayFlag.do**" security="none" />

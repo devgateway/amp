@@ -172,7 +172,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected int getReportSelectedYear() {
-		return AmpReportFilters.getReportSelectedYear(currentReport.get());
+		return AmpReportFilters.getReportSelectedYear(currentReport.get(), Calendar.getInstance().get(Calendar.YEAR));
 	}
 	
 	/**

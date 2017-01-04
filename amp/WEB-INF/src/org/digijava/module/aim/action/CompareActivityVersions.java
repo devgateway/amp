@@ -142,7 +142,8 @@ public class CompareActivityVersions extends DispatchAction {
 					}
 				}
 				
-				// AMP-25074 - retrieve information about who modified and when from amp_audit_logger (if it is empty in the activity object)
+				// AMP-25074 - retrieve information about who and when modified the activity 
+				// from amp_audit_logger (if it is empty in the activity object)
 				if (StringUtils.equals(fields[i].getName(), "modifiedBy")) {
 					auxResult1 = ActivityUtil.getModifiedByUserName(vForm.getActivityOne(), auditHistory1);
 					auxResult2 = ActivityUtil.getModifiedByUserName(vForm.getActivityTwo(), auditHistory2);
@@ -202,7 +203,7 @@ public class CompareActivityVersions extends DispatchAction {
 							output.setOriginalValueOutput(new Object[] { auxResult1, auxResult2 });
 						} else {
 							if ("modifiedBy".equals(fields[i].getName())) {
-								// this field cannot be used for merging
+								// this field cannot be used in merging
 								output.setBlockSingleChangeOutput(true);
 							}
 							

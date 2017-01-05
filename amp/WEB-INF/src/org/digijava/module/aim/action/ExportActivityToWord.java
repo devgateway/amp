@@ -661,7 +661,7 @@ public class ExportActivityToWord extends Action {
                             for (AmpIndicatorValue value : indicator.getValues()) {
 
                                 String fieldName = ExportUtil.getIndicatorValueType(value);
-                                columnVal = TranslatorWorker.translateText(fieldName);
+                                columnVal = TranslatorWorker.translateText(ExportUtil.INDICATOR_VALUE_NAME.get(value.getValueType()));
                                 RtfCell cellValueTitle = new RtfCell();
                                 cellValueTitle.setBorder(0);
                                 cellValueTitle.add(new Paragraph(columnVal, BOLDFONT));

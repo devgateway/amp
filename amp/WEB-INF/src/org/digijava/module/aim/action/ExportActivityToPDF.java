@@ -1456,7 +1456,7 @@ public class ExportActivityToPDF extends Action {
                             columnVal = "";
                             String fieldName = ExportUtil.getIndicatorValueType(value);
                             PdfPCell indicatorTypeCell = new PdfPCell();
-                            indicatorTypeCell.addElement(new Paragraph(postprocessText(TranslatorWorker.translateText(fieldName)), titleFont));
+                            indicatorTypeCell.addElement(new Paragraph(postprocessText(TranslatorWorker.translateText(ExportUtil.INDICATOR_VALUE_NAME.get(value.getValueType()))), titleFont));
                             indicatorTypeCell.setBorder(0);
                             meTable.addCell(indicatorTypeCell);
 

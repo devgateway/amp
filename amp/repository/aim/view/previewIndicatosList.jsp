@@ -87,18 +87,22 @@
 												<c:choose>
                                                     <c:when test="${value.valueType == 1}">
                                                         <c:set var="fieldName">Current</c:set>
+                                                        <c:set var="fieldNameLabel">Current Value</c:set>
                                                     </c:when>
                                                     <c:when test="${value.valueType == 2}">
                                                         <c:set var="fieldName">Base</c:set>
+                                                        <c:set var="fieldNameLabel">Base Value</c:set>
                                                     </c:when>
                                                     <c:when test="${value.valueType == 0}">
                                                         <c:set var="fieldName">Target</c:set>
+                                                        <c:set var="fieldNameLabel">Target Value</c:set>
                                                     </c:when>
                                                     <c:when test="${value.valueType == 3}">
                                                         <c:set var="fieldName">Revised Target</c:set>
+                                                        <c:set var="fieldNameLabel">Revised Target Value</c:set>
                                                     </c:when>
                                                 </c:choose>
-												<digi:trn key="me:target">${fieldName}</digi:trn>
+												<digi:trn key="me:${fieldNameLabel}">${fieldNameLabel}</digi:trn>
 												</span></td>
                                     <td width="10%">
                                         <field:display name="Indicator ${fieldName} Value" feature="Activity">

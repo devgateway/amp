@@ -25,50 +25,17 @@
 				<td bgcolor="#999999"><strong><digi:trn>Date</digi:trn></strong></td>
 				<td bgcolor="#999999"><strong><digi:trn>Action</digi:trn></strong></td>
 			</tr>
-			<c:forEach items="${aimViewActivityHistoryForm.activities}" var="item"
-				varStatus="status">
+			<c:forEach items="${aimViewActivityHistoryForm.activities}" var="item" varStatus="status">
 				<tr>
-				<c:if test="${item.modifiedBy eq null}">
-					<td>
-					<input name="compareCheckboxes" type="checkbox" value="${item.ampActivityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
-					</td>
-					<td>
-						<%-- ${item.activityCreator.user.firstNames} ${item.activityCreator.user.lastName} --%>
-						<digi:trn>not available</digi:trn>
-						<c:if test="${empty item.activityCreator.user.firstNames}">
-						<digi:trn>Empty</digi:trn>
-						</c:if>
-					</td>
-					<td>
-						<fmt:formatDate type="both" value="${item.createdDate}"
-						dateStyle="short" timeStyle="short" /> 
-						<c:if test="${empty item.createdDate}">
-						<digi:trn>Empty</digi:trn>
-						</c:if>
-					</td>
-					<td>
-						<c:if test="${aimViewActivityHistoryForm.activityId ne item.ampActivityId}">
-							<logic:equal  name="aimViewActivityHistoryForm" property="enableadvanceoptions" value="true">
-								<div onclick="javascript:setVersion(${item.ampActivityId})" style="color:black;cursor:pointer;">
-									<digi:trn>Make this the current version</digi:trn>
-								</div>
-							</logic:equal>
-						</c:if>
-						<c:if test="${aimViewActivityHistoryForm.activityId eq item.ampActivityId}">
-							<strong><digi:trn>Current Version</digi:trn></strong>
-						</c:if>
-					</td>
-				</c:if>
-				<c:if test="${item.modifiedBy ne null}"> 
 					<td>
 					<logic:notEmpty name="currentMember" scope="session">
-						<input name="compareCheckboxes" type="checkbox" value="${item.ampActivityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
+						<input name="compareCheckboxes" type="checkbox" value="${item.activityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
 					</logic:notEmpty>
 					</td>
 					<td>
-						${item.modifiedBy.user.firstNames}  ${item.modifiedBy.user.lastName}
-						<c:if test="${empty item.modifiedBy.user.firstNames}">
-						<digi:trn>Empty</digi:trn>
+						${item.modifiedBy}
+						<c:if test="${empty item.modifiedBy}">
+						<digi:trn>Not Available</digi:trn>
 						</c:if>
 					</td>
 					<td>
@@ -79,18 +46,17 @@
 						</c:if>
 					</td>
 					<td>
-						<c:if test="${aimViewActivityHistoryForm.activityId ne item.ampActivityId}">
+						<c:if test="${aimViewActivityHistoryForm.activityId ne item.activityId}">
 							<logic:equal name="aimViewActivityHistoryForm" property="enableadvanceoptions" value="true">
-								<div onclick="javascript:setVersion(${item.ampActivityId})" style="color:black;cursor:pointer;">
+								<div onclick="javascript:setVersion(${item.activityId})" style="color:black;cursor:pointer;">
 									<digi:trn>Make this the current version</digi:trn>
 								</div>
 							</logic:equal>
 						</c:if>
-						<c:if test="${aimViewActivityHistoryForm.activityId eq item.ampActivityId}">
+						<c:if test="${aimViewActivityHistoryForm.activityId eq item.activityId}">
 							<strong><digi:trn>Current Version</digi:trn></strong>
 						</c:if>
 					</td>
-				</c:if>
 				</tr>
 			</c:forEach>
 		</table>

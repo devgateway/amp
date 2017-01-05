@@ -32,17 +32,17 @@ public class WorkspaceMemberTest extends AmpTestCase {
     public void testValidUser() throws IOException {
         String wsMemberStr = "[  {\"id\": 13,\"user-id\": 12,\"workspace-id\": 4,\"role-id\": 2  },  {\"id\": 16,\"user-id\": 12,\"workspace-id\": 6,\"role-id\": 2  }]";
         WorkspaceMember[] expected = mapper.readValue(wsMemberStr, WorkspaceMember[].class);
-        List<WorkspaceMember> actual = securityEP.getWorkspaceMembers(new ListOfLongs("12"));
+        List<WorkspaceMember> actual = securityEP.getWorkspaceMembers(new ListOfLongs("13,16"));
         assertReflectionEquals(expected, actual.toArray());
     }
     
    @Test
-    public void testInvalidUserIdEmptyListNoException() {
+    public void testInvalidWorkspaceMemberIdEmptyListNoException() {
         assertTrue(securityEP.getWorkspaceMembers(new ListOfLongs("1")).isEmpty());
     }
     
     @Test
-    public void testEmptyUserIdEmptyListNoException() {
+    public void testEmptyWorkspaceMemberIdEmptyListNoException() {
         assertTrue(securityEP.getWorkspaceMembers(new ListOfLongs("")).isEmpty());
     }
     

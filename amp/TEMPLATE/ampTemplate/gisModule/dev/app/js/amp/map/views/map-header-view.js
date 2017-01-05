@@ -21,9 +21,8 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var title = this.app.data.title.current;
-    var selectedFilters = this.app.data.filter.serializeToModels();
-
-    this.$el.html(this.template({title: title, filters: selectedFilters}));
+    var selectedFilters = this.app.data.filter.serialize();
+    this.$el.html(this.template({title: title, filters: selectedFilters.filters}));
     return this;
   }
 

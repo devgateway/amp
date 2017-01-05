@@ -74,7 +74,7 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 		runInEngineContext(
 				Arrays.asList("Pure MTEF Project"),
 				engine -> {
-					List<?> cells = sorted(engine.schema.getColumns().get("MTEF 2011/2012").fetch(engine));
+					List<?> cells = sorted(engine.schema.getColumns().get("MTEF 2011").fetch(engine));
 					assertEquals("[(actId: 19, amt: 33888 on 2011-01-01, coos: {{agrs.agr=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21699)}}, meta: {MetaInfoSet: [type_of_assistance: default type of assistance, source_org: 21699, source_role: DN]}]",
 						cells.toString());
 				});
@@ -82,7 +82,7 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 		runInEngineContext(
 				Arrays.asList("Pure MTEF Project"),
 				engine -> {
-					List<?> cells2 = sorted(engine.schema.getColumns().get("MTEF 2012/2013").fetch(engine));
+					List<?> cells2 = sorted(engine.schema.getColumns().get("MTEF 2012").fetch(engine));
 					assertEquals("[]", // directed transaction
 						cells2.toString());
 				});
@@ -93,7 +93,7 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 		runInEngineContext(
 			Arrays.asList("activity with directed MTEFs"),
 			engine -> {
-				List<?> cells = sorted(engine.schema.getColumns().get("Real MTEF 2011/2012").fetch(engine));
+				List<?> cells = sorted(engine.schema.getColumns().get("Real MTEF 2011").fetch(engine));
 				assertEquals("[" +
 					"(actId: 73, amt: 50000 on 2011-01-01, coos: {{agrs.agr=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: 2096), cats.Type Of Assistance=(level: 1, id: 2124), orgs.DN=(level: 2, id: 21696)}}, meta: {MetaInfoSet: [recipient_role: BA, directed_transaction_flow: EXEC-BENF, type_of_assistance: second type of assistance, source_org: 21696, source_role: EA, mode_of_payment: Non-Cash, recipient_org: 21702]}, " +
 					"(actId: 73, amt: 110500 on 2011-01-01, coos: {{agrs.agr=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2125), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21698)}}, meta: {MetaInfoSet: [recipient_role: EA, directed_transaction_flow: IMPL-EXEC, type_of_assistance: default type of assistance, source_org: 21698, source_role: IA, mode_of_payment: Direct payment, recipient_org: 21694]}"

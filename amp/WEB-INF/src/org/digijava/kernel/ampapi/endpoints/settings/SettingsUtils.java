@@ -597,14 +597,13 @@ public class SettingsUtils {
 			(Map<String, Object>) settings.get(SettingsConstants.AMOUNT_FORMAT_ID);
 		if (amountFormat != null) {
 			String decimalSymbol = (String) amountFormat.get(SettingsConstants.DECIMAL_SYMBOL);
-			String maxFractDigits = (String) amountFormat.get(SettingsConstants.MAX_FRACT_DIGITS);
-			Integer maxFractDigitsNum  = maxFractDigits != null && StringUtils.isNumber(maxFractDigits) ? Integer.valueOf(maxFractDigits) : null;
+			Integer maxFractDigits = (Integer) amountFormat.get(SettingsConstants.MAX_FRACT_DIGITS);
 			Boolean useGrouping  = (Boolean) amountFormat.get(SettingsConstants.USE_GROUPING);
 			String groupingSeparator  = (String) amountFormat.get(SettingsConstants.GROUP_SEPARATOR);
 			Integer groupingSize  = (Integer) amountFormat.get(SettingsConstants.GROUP_SIZE);
 			
 			DecimalFormat format = AmpARFilter.buildCustomFormat(decimalSymbol, groupingSeparator,
-					maxFractDigitsNum, useGrouping, groupingSize);
+					maxFractDigits, useGrouping, groupingSize);
 			reportSettings.setCurrencyFormat(format);
 			
 			Integer multiplier = PersistenceManager.getInteger(amountFormat.get(SettingsConstants.AMOUNT_UNITS));

@@ -253,7 +253,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     *     11,22,32,43 									<br/>
     *   ] 												<br/>
     * }, 												<br/>
-    * "otherFilters":{  								<br/>
+    * "filters":{  										<br/>
     *   "date":{  										<br/>
     *      "start":"1967-01-01",						<br/>
     *      "end":"2015-12-31"							<br/>

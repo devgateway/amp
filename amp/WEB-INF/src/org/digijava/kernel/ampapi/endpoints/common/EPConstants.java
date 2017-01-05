@@ -82,8 +82,6 @@ public class EPConstants {
 	// settings
 	public static final String SETTINGS = "settings";
 	
-	public static final String DATE_TIME_ZONED_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
-	
 	// map import/export
 	public static final String API_STATE_TITLE = "title";
 	public static final String API_STATE_DESCRIPTION = "description";
@@ -139,5 +137,6 @@ public class EPConstants {
 	public static final String TAB_LOCATIONS = "Location";
 	public static final String TAB_OTHER= "Other";
 	public static final String TAB_UNASSIGNED= "Unassigned";
-	
+
+	public static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 }

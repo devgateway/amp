@@ -17,6 +17,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.junit.After;
 import org.junit.Test;
 
 /**
@@ -33,10 +34,6 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 			"Eth Water",
 			"activity with directed MTEFs"
 		);
-	
-	public NiComputedMeasuresTests() {
-		super("NiComputedMeasuresTests");
-	}
 	
 	@Override
 	protected NiReportExecutor getNiExecutor(List<String> activityNames) {
@@ -292,7 +289,7 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 	}
 	
 	
-	@Override
+	@After
 	public void tearDown() {
 		AmpReportsScratchpad.forcedNowDate = null;
 	}

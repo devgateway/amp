@@ -20,10 +20,6 @@ import java.math.BigDecimal;
  */
 public class ExpressionTreeTestcases extends AmpTestCase {
 	
-	public ExpressionTreeTestcases() {
-		super("expression tree testcases");
-	}
-	
 	Map<String, BigDecimal> vars = new HashMap<String, BigDecimal>() {{
 		put("one", BigDecimal.ONE);
 		put("zero", BigDecimal.ZERO);

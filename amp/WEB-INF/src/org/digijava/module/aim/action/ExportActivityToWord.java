@@ -620,35 +620,43 @@ public class ExportActivityToWord extends Action {
                         String valueLabel = TranslatorWorker.translateText("Value");
                         String commentLabel = TranslatorWorker.translateText("Comment");
                         String dateLabel = TranslatorWorker.translateText("Date");
+                        String nameLabel = TranslatorWorker.translateText("Name");
+                        String codeLabel = TranslatorWorker.translateText("Code");
+                        String logFrameLabel = TranslatorWorker.translateText("LogFrame");
+                        String sectorsLabel = TranslatorWorker.translateText("Sectors");
 
                         for (IndicatorActivity indicator : myForm.getIndicators()) {
-                            columnVal = "";
+                            Table headerTable = new Table(4);
+                            headerTable.setWidth(99);
+                            headerTable.setWidths(new int[]{ 3, 1, 1, 2 });
+                            headerTable.getDefaultCell().setBorder(0);
+                            headerTable.getDefaultCell().setBackgroundColor(new Color(244, 244, 242));
+                            headerTable.addCell(nameLabel);
+                            headerTable.addCell(codeLabel);
+                            headerTable.addCell(logFrameLabel);
+                            headerTable.addCell(sectorsLabel);
+                            headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
+
                             if (FeaturesUtil.isVisibleField("Indicator Name")) {
-                                columnVal = indicator.getIndicator().getCode() + " " + indicator.getIndicator().getName();
+                                headerTable.addCell(new Paragraph(indicator.getIndicator().getName(), BOLDFONT));
+                                headerTable.addCell(indicator.getIndicator().getCode());
                             }
                             if (FeaturesUtil.isVisibleField("Logframe Category")) {
                                 if (indicator.getValues() != null && indicator.getValues().size() > 0) {
-                                    columnVal += " - " + indicator.getLogFrame();
+                                    headerTable.addCell(indicator.getLogFrame() + "\n");
                                 }
                             }
-                            columnVal += "\n";
-                            RtfCell cellName = new RtfCell();
-                            cellName.setBorder(0);
-                            cellName.add(new Paragraph(columnVal, BOLDFONT));
-                            meTbl.addCell(cellName);
-
-                            columnVal = "";
+                            
                             if (FeaturesUtil.isVisibleField("Sectors")) {
                                 if (indicator.getIndicator().getSectors() != null) {
-                                    columnVal += ExportUtil.getIndicatorSectors(indicator);
-                                    columnVal += "\n";
+                                    headerTable.addCell(ExportUtil.getIndicatorSectors(indicator) + "\n");
                                 }
-
-                                RtfCell cellSectors = new RtfCell();
-                                cellSectors.setBorder(0);
-                                cellSectors.add(new Paragraph(columnVal, PLAINFONT));
-                                meTbl.addCell(cellSectors);
                             }
+
+                            RtfCell headerCell = new RtfCell();
+                            headerCell.setBorder(0);
+                            headerCell.add(headerTable);
+                            meTbl.addCell(headerCell);
 
                             for (AmpIndicatorValue value : indicator.getValues()) {
 
@@ -679,10 +687,9 @@ public class ExportActivityToWord extends Action {
 
                             }
                         }
-                        applyEmptyCell(meTbl, 1);
+
                     }
                     doc.add(meTbl);
-                    doc.add(new Paragraph(" "));
                 }
 
                 List<Table> activityPerformanceTables = getActivityPerformanceTables(request, activity);

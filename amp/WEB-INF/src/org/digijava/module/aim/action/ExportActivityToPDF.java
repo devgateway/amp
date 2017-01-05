@@ -2,16 +2,10 @@ package org.digijava.module.aim.action;
 
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
+import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
-import com.lowagie.text.ListItem;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
+import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
@@ -1418,37 +1412,45 @@ public class ExportActivityToPDF extends Action {
                 mainLayout.addCell(meCell);
 
                 PdfPTable meTable = new PdfPTable(1);
+                meTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
                 if (myForm.getIndicators() != null) {
                     String valueLabel = TranslatorWorker.translateText("Value");
                     String commentLabel = TranslatorWorker.translateText("Comment");
                     String dateLabel = TranslatorWorker.translateText("Date");
+                    String nameLabel = TranslatorWorker.translateText("Name");
+                    String codeLabel = TranslatorWorker.translateText("Code");
+                    String logFrameLabel = TranslatorWorker.translateText("LogFrame");
+                    String sectorsLabel = TranslatorWorker.translateText("Sectors");
 
                     for (IndicatorActivity indicator : myForm.getIndicators()) {
-                        columnVal = "";
+                        PdfPTable headerTable = new PdfPTable(4);
+                        headerTable.setWidths(new int[]{ 3, 1, 1, 2 });
+                        headerTable.setTotalWidth(100);
+                        headerTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+                        headerTable.getDefaultCell().setBackgroundColor(new Color(244, 244, 242));
+                        headerTable.addCell(nameLabel);
+                        headerTable.addCell(codeLabel);
+                        headerTable.addCell(logFrameLabel);
+                        headerTable.addCell(sectorsLabel);
+                        headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
+
                         if (FeaturesUtil.isVisibleField("Indicator Name")) {
-                            columnVal += indicator.getIndicator().getCode() + " - " + indicator.getIndicator().getName();
+                            headerTable.addCell(new Paragraph(postprocessText(indicator.getIndicator().getName()), titleFont));
+                            headerTable.addCell(indicator.getIndicator().getCode());
                         }
                         if (FeaturesUtil.isVisibleField("Logframe Category")) {
                             if (indicator.getValues() != null && indicator.getValues().size() > 0) {
-                                columnVal += " - " + indicator.getLogFrame();
+                                headerTable.addCell(indicator.getLogFrame());
                             }
                         }
 
-                        PdfPCell indicatorNameCell = new PdfPCell();
-                        indicatorNameCell.addElement(new Paragraph(postprocessText(columnVal), titleFont));
-                        indicatorNameCell.setBorder(0);
-                        meTable.addCell(indicatorNameCell);
-                        columnVal = "";
                         if (FeaturesUtil.isVisibleField("Sectors")) {
                             if (indicator.getIndicator().getSectors() != null) {
-                                columnVal += ExportUtil.getIndicatorSectors(indicator) + "\n";
+                                headerTable.addCell(ExportUtil.getIndicatorSectors(indicator) + "\n");
                             }
                         }
 
-                        PdfPCell sectortsCell = new PdfPCell();
-                        sectortsCell.addElement(new Paragraph(postprocessText(columnVal), plainFont));
-                        sectortsCell.setBorder(0);
-                        meTable.addCell(sectortsCell);
+                        meTable.addCell(headerTable);
 
                         for (AmpIndicatorValue value : indicator.getValues()) {
                             columnVal = "";

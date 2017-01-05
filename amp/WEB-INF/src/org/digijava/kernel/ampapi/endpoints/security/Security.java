@@ -42,6 +42,7 @@ import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.util.SpringUtil;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -269,11 +270,8 @@ public class Security implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "users", name = "Users", authTypes = {AuthRule.AUTHENTICATED})
 	public List<org.digijava.kernel.ampapi.endpoints.security.dto.User> getUsersInfo(
-            @DefaultValue("") @QueryParam("ids") ListOfLongs ids) {
-	    return (new UserService()).getUserInfo(ids);
-	    /* we need to change unit test infrastructure to operate with mock application context to do this 
-	    return SpringUtil.getBean(UserService.class).getUserInfo(ids.param);
-	    */
+	        @DefaultValue("") @QueryParam("ids") ListOfLongs ids) {
+        return SpringUtil.getBean(UserService.class).getUserInfo(ids);
 	}
 
 	/**
@@ -394,8 +392,8 @@ public class Security implements ErrorReportingEndpoint {
     @Path("/workspace-member")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "workspace-member", name = "Workspace Member", authTypes = {AuthRule.AUTHENTICATED})
-	public List<WorkspaceMember> getWorkspaceMembers(@DefaultValue("") @QueryParam("user-ids") ListOfLongs userIds) {
-	    return (new WorkspaceMemberService()).getWorkspaceMembers(userIds);
+	public List<WorkspaceMember> getWorkspaceMembers(@DefaultValue("") @QueryParam("ids") ListOfLongs ids) {
+        return SpringUtil.getBean(WorkspaceMemberService.class).getWorkspaceMembers(ids);
 	}
 
 	/**

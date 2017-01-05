@@ -20,7 +20,6 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -510,5 +509,4 @@ public class EndpointUtils {
 	    TLSUtils.getRequest().removeAttribute(EPConstants.JSON_FILTERS);
 	    return filtersDef;
 	}
-
 }

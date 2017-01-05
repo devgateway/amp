@@ -1,7 +1,4 @@
-/**
- * 
- */
-package org.digijava.kernel.ampapi.endpoints.dto;
+package org.digijava.kernel.ampapi.endpoints.util.types;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,23 +6,21 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * A simple comma separated list of longs 
- * 
- * @author Nadejda Mandrecsu
+ * @author Octavian Ciubotaru
  */
-public class LongListParam {
-    public final List<Long> param; 
-    public LongListParam(String str) {
-        this.param = splitToListOfLongs(str);
+public class ListOfLongs extends ArrayList<Long> {
+
+    public ListOfLongs(String value) {
+        super(splitToListOfLongs(value));
     }
-    
+
     /**
-     * Converts a comma separated list provided as a string to a List of Longs 
+     * Converts a comma separated list provided as a string to a List of Longs
      * @param commaSeparatedList a comma separated list represented as a string
      * @param clazz
      * @return
      */
-    public static List<Long> splitToListOfLongs(String commaSeparatedList) {
+    private static List<Long> splitToListOfLongs(String commaSeparatedList) {
         List<Long> result = new ArrayList<>();
         if (StringUtils.isNotBlank(commaSeparatedList)) {
             for(String element : commaSeparatedList.split(",")) {
@@ -35,5 +30,4 @@ public class LongListParam {
         }
         return result;
     }
-
 }

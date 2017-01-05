@@ -33,7 +33,7 @@ public class UsersTest extends AbstractIntegrationTest {
     
     @Test
     public void testUserPasswordChanged() throws IOException {
-        String userStr = "{    \"id\": 12,    \"email\": \"idea@amp.org\",    \"first-name\": \"IDEA\",    \"last-name\": \"Importer\",    \"password-changed-at\": \"2016-12-27T14:09:11.095+02:00\",    \"is-banned\": false,    \"is-active\": false,    \"is-pledger\": false,    \"is-admin\": false,    \"lang-iso2\": \"en\",    \"country-iso2\": \"md\",    \"org-type-id\": 38,    \"org-group-id\": 17,    \"org-id\": 21378,    \"group-keys\": [      \"EDT\",      \"MEM\"    ]  }";
+        String userStr = "{    \"id\": 12,    \"email\": \"idea@amp.org\",    \"first-name\": \"IDEA\",    \"last-name\": \"Importer\",    \"password-changed-at\": \"2016-12-27T14:09:11.095+0200\",    \"is-banned\": false,    \"is-active\": false,    \"is-pledger\": false,    \"is-admin\": false,    \"lang-iso2\": \"en\",    \"country-iso2\": \"md\",    \"org-type-id\": 38,    \"org-group-id\": 17,    \"org-id\": 21378,    \"group-keys\": [      \"EDT\",      \"MEM\"    ]  }";
         User expected = mapper.readValue(userStr, User.class);
         User actual = userService.getUserInfo(Collections.singletonList(12L)).get(0);
         assertReflectionEquals(expected, actual);

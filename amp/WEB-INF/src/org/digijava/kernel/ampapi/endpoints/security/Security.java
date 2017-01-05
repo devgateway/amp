@@ -22,7 +22,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.dto.LongListParam;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
@@ -33,6 +32,7 @@ import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
+import org.digijava.kernel.ampapi.endpoints.util.types.ListOfLongs;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
@@ -270,8 +270,8 @@ public class Security implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "users", name = "Users", authTypes = {AuthRule.AUTHENTICATED})
 	public List<org.digijava.kernel.ampapi.endpoints.security.dto.User> getUsersInfo(
-	        @DefaultValue("") @QueryParam("ids") LongListParam ids) {
-	    return SpringUtil.getBean(UserService.class).getUserInfo(ids.param);
+	        @DefaultValue("") @QueryParam("ids") ListOfLongs ids) {
+        return SpringUtil.getBean(UserService.class).getUserInfo(ids);
 	}
 
 	/**
@@ -372,7 +372,7 @@ public class Security implements ErrorReportingEndpoint {
      * <dt><b>user-id</b><dd> user id
      * <dt><b>workspace-id</b><dd> workspace id
      * <dt><b>role-id</b><dd> workspace member role id
-     * 
+     *
      * <h3> Sample Output: </h3>
      * <pre>
      * [
@@ -383,7 +383,7 @@ public class Security implements ErrorReportingEndpoint {
      *       "role-id": 1,
      *   },
      *   ...
-     * ]   
+     * ]
      * </pre>
 	 * @param userIds a comma separate list of workspace member ids
 	 * @return list of workspace member definitions
@@ -392,10 +392,10 @@ public class Security implements ErrorReportingEndpoint {
     @Path("/workspace-member")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "workspace-member", name = "Workspace Member", authTypes = {AuthRule.AUTHENTICATED})
-	public List<WorkspaceMember> getWorkspaceMembers(@DefaultValue("") @QueryParam("ids") LongListParam ids) {
-	    return SpringUtil.getBean(WorkspaceMemberService.class).getWorkspaceMembers(ids.param);
+	public List<WorkspaceMember> getWorkspaceMembers(@DefaultValue("") @QueryParam("ids") ListOfLongs ids) {
+        return SpringUtil.getBean(WorkspaceMemberService.class).getWorkspaceMembers(ids);
 	}
-	
+
 	/**
 	 * Return the list of workspaces the user has access to.
 	 *

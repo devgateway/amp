@@ -3,7 +3,6 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
@@ -603,10 +602,5 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 				ColumnConstants.DISASTER_RESPONSE_MARKER, Arrays.asList(2l), true); // no
 			
 		runNiTestCase(cor, spec, acts);
-	}
-	
-	@Override
-	public void setUp() {
-		AllTests_amp212.setUp();
 	}
 }

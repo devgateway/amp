@@ -8,6 +8,7 @@ import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -163,6 +164,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 	}
 	
 	@Test
+	@Ignore
 	public void testMtefProjectionsAsColumns() {
 		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-split-mtef-projections-as-columns",
 				ColumnReportDataModel.withColumns("AMP-21275-split-mtef-projections-as-columns",
@@ -192,6 +194,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 	}
 	
 	@Test
+	@Ignore
 	public void testMtefProjectionsAsColumnsNoMtefs() {
 		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-split-mtef-projections-as-columns-small",
 				ColumnReportDataModel.withColumns("AMP-21275-split-mtef-projections-as-columns-small",
@@ -216,6 +219,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 	}
 	
 	@Test
+	@Ignore
 	public void testMtefProjectionsAllAsColumns() {
 		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-all-plain-mtefs",
 				ColumnReportDataModel.withColumns("AMP-21275-all-plain-mtefs",
@@ -247,6 +251,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 	}
 	
 	@Test
+	@Ignore
 	public void testMtefProjectionsAllAsColumnsRare() {
 		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-all-plain-mtefs-rare",
 				ColumnReportDataModel.withColumns("AMP-21275-all-plain-mtefs-rare",
@@ -274,6 +279,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 	}
 	
 	@Test
+	@Ignore
 	public void testMtefProjectionsAllAsColumnsVeryRare() {
 		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-all-plain-mtefs-very-rare",
 				ColumnReportDataModel.withColumns("AMP-21275-all-plain-mtefs-very-rare",

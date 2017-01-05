@@ -59,11 +59,12 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 						silent : true
 					});
 					
-					datesFilterView = app.TabsApp.filtersWidget.view.filterViewsInstances.others.viewList.filter(function(v) {
-					  return v.model.get('id') === 'Dates';
+					var datesFilterView = app.TabsApp.filtersWidget.view.filterViewsInstances.others.viewList.filter(function(v) {
+					  return v.model.get('id') === 'date';
 					})[0];
-					datesFilterView._renderDatePickers();
-					
+					if(datesFilterView){
+						datesFilterView._renderDatePickers();
+					}					
 					jQuery(containerName).show();
 					jQuery(containerName).css('position', 'absolute');
 					jQuery(containerName).css('top', 10);

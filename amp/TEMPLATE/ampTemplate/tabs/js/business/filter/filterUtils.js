@@ -69,7 +69,7 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 							_.each(item, function(item2) {
 								content.push({id: 0, name: item2.name, trnName: TranslationManager.getTranslated(item2.name)});
 							});
-							var name = TranslationManager.getTranslated(item[0].levelName.replace('-', ' ')) || item[0].levelName.replace('-', ' ');
+							var name = TranslationManager.getTranslated(item[0].levelName.replace(/-/g, " ")) || item[0].levelName.replace(/-/g, " ");									
 							var filter = new Filter({
 								trnName : name,
 								name: item[0].levelName,
@@ -97,9 +97,9 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 	
 	FilterUtils._extractDateFilter = function(propertyName, auxProperty){
 		var filter;
-		if (auxProperty !== undefined) {
+		if (auxProperty !== undefined) {			
 			var filterObject = {
-					trnName : TranslationManager.getTranslated(propertyName),
+					trnName : TranslationManager.getTranslated(propertyName.replace(/-/g, " ")),
 					name : propertyName,
 					values: []
 			};

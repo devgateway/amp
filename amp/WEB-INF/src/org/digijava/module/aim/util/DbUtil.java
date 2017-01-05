@@ -729,6 +729,21 @@ public class DbUtil {
 		return ampAppSettings;
 	}
 
+	public static List<AmpApplicationSettings> getTeamAppSettings(List<Long> teamIds) {
+		if (teamIds.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		String queryString = "from "
+				+ AmpApplicationSettings.class.getName()
+				+ " a where a.team.ampTeamId in (:teamIds)";
+
+		return PersistenceManager.getSession()
+				.createQuery(queryString)
+				.setParameterList("teamIds", teamIds)
+				.list();
+	}
+
 	public static AmpApplicationSettings getTeamAppSettingsMemberNotNull(
 			Long teamId) {
 		Session session = null;

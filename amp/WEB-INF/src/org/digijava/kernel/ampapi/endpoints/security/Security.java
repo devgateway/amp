@@ -44,10 +44,12 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.SpringUtil;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -394,6 +396,42 @@ public class Security implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "workspace-member", name = "Workspace Member", authTypes = {AuthRule.AUTHENTICATED})
 	public List<WorkspaceMember> getWorkspaceMembers(@DefaultValue("") @QueryParam("ids") ListOfLongs ids) {
         return SpringUtil.getBean(WorkspaceMemberService.class).getWorkspaceMembers(ids);
+	}
+
+	/**
+	 * Returns workspace settings for a list of workspaces.
+	 *
+	 * <h3>Sample Output:</h3>
+	 * <pre>
+	 * [
+	 *   {
+	 *     "team": 60,
+	 *     "currency": "USD",
+	 *     "language": "en",
+	 *     "validation": "allEdits",
+	 *     "id": 71,
+	 *     "default-records-per-page": 100,
+	 *     "report-start-year": 0,
+	 *     "report-end-year": 0,
+	 *     "fiscal-calendar": 4,
+	 *     "show-all-countries": false,
+	 *     "default-team-report": null,
+	 *     "default-reports-per-page": 0,
+	 *     "allow-add-team-res": 1,
+	 *     "allow-share-team-res": 1,
+	 *     "allow-publishing-resources": 1,
+	 *     "number-of-pages-to-display": null
+	 *   }
+	 * ]
+	 * </pre>
+	 */
+	@GET
+	@Path("/workspace-settings")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "workspace-settings", name = "Workspace Settings", authTypes = AuthRule.AUTHENTICATED)
+	public List<AmpApplicationSettings> getWorkspaceSettings(
+			@DefaultValue("") @QueryParam("workspace-ids") ListOfLongs ids) {
+		return DbUtil.getTeamAppSettings(ids);
 	}
 
 	/**

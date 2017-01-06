@@ -8,13 +8,6 @@ import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getFun
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportAmountFormatField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportYearRangeField;
 
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.util.DbUtil;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -22,6 +15,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.Arrays;
 import java.util.List;
+
+import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * This endpoint returns settings definitions for each module.
@@ -201,9 +201,9 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForReports() {
         return Arrays.asList(
-                //getCurrencyField(),
-                //getCalendarField(),
-                //getCalendarCurrenciesField(),
+                getCurrencyField(),
+                getCalendarField(),
+                getCalendarCurrenciesField(),
                 getReportYearRangeField());
     }
 

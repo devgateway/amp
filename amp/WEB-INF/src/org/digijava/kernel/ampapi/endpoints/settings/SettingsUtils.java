@@ -1,5 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.currency.ConstantCurrency;
@@ -35,17 +46,6 @@ import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.h2.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
-
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Utility class for amp settings handling

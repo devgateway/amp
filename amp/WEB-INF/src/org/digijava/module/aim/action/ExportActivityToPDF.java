@@ -1452,8 +1452,6 @@ public class ExportActivityToPDF extends Action {
 
                         meTable.addCell(headerTable);
 
-                        indicator.getValuesSorted();
-
                         for (AmpIndicatorValue value : indicator.getValuesSorted()) {
                             columnVal = "";
                             String fieldName = ExportUtil.getIndicatorValueType(value);

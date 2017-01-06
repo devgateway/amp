@@ -1,10 +1,8 @@
 package org.digijava.kernel.lucene.analyzers;
 
-import java.io.Reader;
-
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
+import org.apache.lucene.util.Version;
 
 /**
  * Spanish analyzer for Lucene.
@@ -72,16 +70,16 @@ public class SpanishAnalyzer extends Analyzer {
 	
 
 	public SpanishAnalyzer() {
-		analyzer = new SnowballAnalyzer("Spanish", SPANISH_STOP_WORDS);
+		analyzer = new SnowballAnalyzer(Version.LATEST, "Spanish");
+	}
+
+	@Override
+	protected TokenStreamComponents createComponents(String s) {
+		return null;
 	}
 
 	public SpanishAnalyzer(String stopWords[]) {
-		analyzer = new SnowballAnalyzer("Spanish", stopWords);
-	}
-	
-	@Override
-	public TokenStream tokenStream(String fieldName, Reader reader) {
-		return analyzer.tokenStream(fieldName, reader);
+		analyzer = new SnowballAnalyzer(Version.LATEST, "Spanish");
 	}
 
 }

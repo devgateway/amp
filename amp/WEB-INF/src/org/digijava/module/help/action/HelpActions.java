@@ -1,42 +1,8 @@
 package org.digijava.module.help.action;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.search.Hits;
+import org.apache.lucene.search.TopDocs;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -68,6 +34,37 @@ import org.digijava.module.help.util.HelpUtil;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.xml.sax.InputSource;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 
 public class HelpActions extends DispatchAction {
@@ -249,7 +246,7 @@ public class HelpActions extends DispatchAction {
 		//for lucene these two is called suffix of index, it does not know about module instances. 
 		String suffix = moduleInstance + "_" + locale;
 		//perform search
-		Hits hits = LuceneWorker.search(HelpTopicHelper.class, key, request.getSession().getServletContext(), suffix);
+		TopDocs hits = LuceneWorker.search(HelpTopicHelper.class, key, request.getSession().getServletContext(), suffix);
 		//converts hits to list of helper beans
 		List<HelpTopicHelper> topics = LuceneWorker.hitsToSortedList(hits,HelpTopicHelper.class, suffix);
 		if (topics!=null){
@@ -366,13 +363,14 @@ public class HelpActions extends DispatchAction {
 	     		if(key.length() != 0){
 					 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
 					 //System.out.println("Key:"+key);
-					 Hits hits =  LuceneUtil.helpSearch("title", key, request.getSession().getServletContext());
-			
+					TopDocs hits =  LuceneUtil.helpSearch("title", key, request.getSession().getServletContext());
+
+
 			         String artikleTitle;
 					 
 					 HelpForm help = (HelpForm) form;	
 					 //System.out.println("hits.length():"+hits.length());
-					  int hitCount = hits.length();   
+					  int hitCount = hits.totalHits;
 			    	   
 			    	  if(hitCount == 0){
 			    		
@@ -385,7 +383,7 @@ public class HelpActions extends DispatchAction {
 			    		  for(int i=0; (i < hitCount && i < 10); i++){
 			    		
 			
-			    		  Document doc = hits.doc(i);
+			    		  Document doc = LuceneUtil.getHelpSearchDoc(i, request.getSession().getServletContext());
 			    		  	if(doc.get("lang").equals(locale)){  
 			    			  
 						   String title = doc.get("title");

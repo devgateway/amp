@@ -1,17 +1,17 @@
 package org.digijava.kernel.lucene;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Hit;
+import org.apache.lucene.search.ScoreDoc;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.impl.org.LucOrganisationModule;
 import org.digijava.module.help.lucene.LucHelpModule;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Lucene Module interface.
@@ -118,5 +118,5 @@ public interface LucModule<E> extends Serializable {
 	 * @return bean of E
 	 * @throws IOException
 	 */
-	E hitToItem(Hit hit) throws IOException;
+	E hitToItem(ScoreDoc hit) throws IOException;
 }

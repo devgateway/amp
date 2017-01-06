@@ -8,8 +8,10 @@ import java.util.regex.Pattern;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Hit;
+import org.apache.lucene.search.ScoreDoc;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LangSupport;
 import org.digijava.kernel.lucene.LucModule;
@@ -129,17 +131,25 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 
 		//Filter title and body from HTML tags.
 		textToIndex = HTML_STRIPPER.replaceAll(textToIndex, " "); // this will slow down, but wee need to strip out many things..
-		
+
+		FieldType fieldType = new FieldType();
+		fieldType.setTokenized(false);
+		fieldType.setStored(true);
+
+		FieldType fieldTypeTokenized = new FieldType();
+		fieldTypeTokenized.setTokenized(true);
+		fieldTypeTokenized.setStored(false);
+		fieldTypeTokenized.setIndexOptions(IndexOptions.DOCS);
 		//create lucene fields
 		//All fields are stored but not tokenized. One combined field is tokenized and not stored.
-		Field id		= new Field(ID_FIELD_TERM, 		item.getId().toString(), 	Field.Store.YES, Field.Index.UN_TOKENIZED);
-		Field title_key	= new Field(FIELD_TITLE_KEY, 	titleTrnKey, 				Field.Store.YES, Field.Index.UN_TOKENIZED);
-		Field title		= new Field(FIELD_TITLE, 		titleText, 					Field.Store.YES, Field.Index.UN_TOKENIZED);
-		Field body_key	= new Field(FIELD_BODY_KEY, 	item.getBodyKey(), 			Field.Store.YES, Field.Index.UN_TOKENIZED);
-		Field body		= new Field(FIELD_BODY, 		bodyText, 					Field.Store.YES, Field.Index.UN_TOKENIZED);
-		Field lang_iso	= new Field(FIELD_LANG_ISO, 	item.getLangIso(), 			Field.Store.YES, Field.Index.UN_TOKENIZED);
-		Field instance	= new Field(FIELD_INSTANCE_NAME,item.getModuleInstance(), 	Field.Store.YES, Field.Index.UN_TOKENIZED);
-		Field indexed	= new Field(FIELD_INDEXED_TEXT, textToIndex, 				Field.Store.NO,  Field.Index.TOKENIZED);
+		Field id		= new Field(ID_FIELD_TERM, 		item.getId().toString(), 	fieldType);
+		Field title_key	= new Field(FIELD_TITLE_KEY, 	titleTrnKey, 				fieldType);
+		Field title		= new Field(FIELD_TITLE, 		titleText, 					fieldType);
+		Field body_key	= new Field(FIELD_BODY_KEY, 	item.getBodyKey(), 			fieldType);
+		Field body		= new Field(FIELD_BODY, 		bodyText, 					fieldType);
+		Field lang_iso	= new Field(FIELD_LANG_ISO, 	item.getLangIso(), 			fieldType);
+		Field instance	= new Field(FIELD_INSTANCE_NAME,item.getModuleInstance(), 	fieldType);
+		Field indexed	= new Field(FIELD_INDEXED_TEXT, textToIndex, 				fieldTypeTokenized);
 		//add fields to document
 		Document doc 	= new Document();
 		doc.add(indexed);
@@ -216,23 +226,13 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 	}
 
 	@Override
-	public long getSerialVersionUID() {
-		return serialVersionUID;
+	public HelpTopicHelper hitToItem(ScoreDoc hit) throws IOException {
+		return null;
 	}
 
 	@Override
-	public HelpTopicHelper hitToItem(Hit hit) throws IOException {
-		Document doc = hit.getDocument();
-		HelpTopicHelper topic = new HelpTopicHelper();
-		topic.setTitle(doc.get(FIELD_TITLE));
-		topic.setBody(doc.get(FIELD_BODY));
-		topic.setId(Long.valueOf(doc.get(ID_FIELD_TERM)));
-		topic.setTitleKey(doc.get(FIELD_TITLE_KEY));
-		topic.setBodyKey(doc.get(FIELD_BODY_KEY));
-		topic.setLangIso(doc.get(FIELD_LANG_ISO));
-		topic.setModuleInstance(doc.get(FIELD_INSTANCE_NAME));
-		topic.setSortIndex(new Float(hit.getScore()));
-		return topic;
+	public long getSerialVersionUID() {
+		return serialVersionUID;
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package org.digijava.module.aim.util;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,9 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.core.query.lucene.MoreLikeThis;
 import org.apache.log4j.Logger;
@@ -37,21 +37,37 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriter.MaxFieldLength;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.*;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FuzzyQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.PhraseQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.highlight.Fragmenter;
 import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
@@ -145,7 +161,7 @@ public class LuceneUtil implements Serializable {
     public final static Integer SEARCH_MODE_AND	= 1;
 
     private static final boolean SEACH_TYPE_FUZZY = true;
-    private static final float MINIMUM_SIMILARITY = 0.5f;
+    private static final float MINIMUM_SIMILARITY = 0.3f;
     private static final float MINIMUM_SIMILARITY_TO_NUMBERS = 0.99f;
 
     public static AmpLuceneIndexStamp getIdxStamp(String name) throws Exception{
@@ -257,7 +273,7 @@ public class LuceneUtil implements Serializable {
     	
     	File idxStamp = new File(sc.getRealPath("/") + LUCENE_BASE_DIR + "/" + indexSuffix + LUCENE_STAMP_EXT);
     	File idxDir = new File(sc.getRealPath("/") + indexDirectory);
-    	boolean deleteIndex = false;
+    	boolean deleteIndex = true;
     	
     	checkStamp:{
     		if (idxStamp.exists()){
@@ -354,14 +370,15 @@ public class LuceneUtil implements Serializable {
     		int mId = getMaxId(pledge);
     		long startTime = System.currentTimeMillis();
     		try {
-				IndexWriter fsWriter = new IndexWriter(idxDir, analyzer, true);
-				
+                Directory directory = FSDirectory.open(Paths.get(sc.getRealPath("/") + indexDirectory));
+                IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+                IndexWriter fsWriter = new IndexWriter(directory, iwc);
+
 				int chunkNo = 0;
 		
 				while (createIndex(chunkNo, mId, fsWriter) != null){
 					chunkNo++;
 				}
-				fsWriter.optimize();
 				fsWriter.close();
 				long stopTime = System.currentTimeMillis();
 				
@@ -502,7 +519,6 @@ public class LuceneUtil implements Serializable {
                     x.title = rs.getString("name");
                     list.put(x.id, x);
                     isNext = rs.next();
-                    //
                 }
                 // the correct view is v_amp_id, the view with name v_ampid
                 // is not used
@@ -518,7 +534,6 @@ public class LuceneUtil implements Serializable {
                     if (x != null)
                         x.amp_id = rs.getString("amp_id");
                     isNext = rs.next();
-                    //
                 }
 
                 qryStr = String.format("SELECT vt.* FROM v_description vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
@@ -533,7 +548,6 @@ public class LuceneUtil implements Serializable {
                     if (x != null)
                         x.description = rs.getString("ebody");
                     isNext = rs.next();
-                    //
                 }
 
                 qryStr = String.format("SELECT vt.* FROM v_objectives vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
@@ -548,7 +562,6 @@ public class LuceneUtil implements Serializable {
                     if (x != null)
                         x.objective = rs.getString("ebody");
                     isNext = rs.next();
-                    //
                 }
 
                 qryStr = String.format("SELECT vt.* FROM v_purposes vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
@@ -565,7 +578,6 @@ public class LuceneUtil implements Serializable {
                     if (x != null)
                         x.purpose = rs.getString("ebody");
                     isNext = rs.next();
-                    //
                 }
 
                 qryStr = String.format("SELECT vt.* FROM v_results vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
@@ -582,24 +594,7 @@ public class LuceneUtil implements Serializable {
                     if (x != null)
                         x.results = rs.getString("ebody");
                     isNext = rs.next();
-                    //
                 }
-//
-//				// Bolivia contract number
-//				qryStr = "select * from v_convenio_numcont where amp_activity_id >= " + chunkStart
-//						+ " and amp_activity_id < " + chunkEnd + " ";
-//				rs = st.executeQuery(qryStr);
-//				rs.last();
-//				logger.info("Starting iteration of " + rs.getRow() + " results!");
-//				isNext = rs.first();
-//				while (isNext) {
-//					int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-//					x = (Items) list.get(actId);
-//					if (x != null)
-//						x.numcont = rs.getString("numcont");
-//					isNext = rs.next();
-//					//
-//				}
 
                 // Bolivia component code
                 qryStr = String.format("SELECT vt.* FROM v_bolivia_component_code vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
@@ -624,6 +619,7 @@ public class LuceneUtil implements Serializable {
                 rs.last();
                 logger.info("Starting iteration of " + rs.getRow() + " new budget codes!");
                 isNext = rs.first();
+
                 while (isNext) {
                     int actId = Integer.parseInt(rs.getString("activity"));
                     x = (Items) list.get(actId);
@@ -631,22 +627,6 @@ public class LuceneUtil implements Serializable {
                         x.newBudgetNumber = rs.getString("budget_codes");
                     isNext = rs.next();
                 }
-
-                // New fields for Senegal.
-				/*
-				 * qryStr =
-				 * "select * from v_senegal_cris_budget where amp_activity_id >= "
-				 * + chunkStart + " and amp_activity_id < " + chunkEnd + " "; rs
-				 * = st.executeQuery(qryStr); rs.last();
-				 * logger.info("Starting iteration of " + rs.getRow() +
-				 * " amp_activity_components!"); isNext = rs.first();
-				 * 
-				 * while (isNext) { int currActId =
-				 * rs.getInt("amp_activity_id"); x = (Items)
-				 * list.get(currActId); x.CRIS = rs.getString("cris_number");
-				 * x.budgetNumber = rs.getString("budget_number"); isNext =
-				 * rs.next(); }
-				 */
 
                 logger.info("Building the index ");
                 Iterator it = list.values().iterator();
@@ -666,7 +646,6 @@ public class LuceneUtil implements Serializable {
                 list.clear();
 
                 try {
-                    indexWriter.optimize();
                     // indexWriter.close();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -682,8 +661,8 @@ public class LuceneUtil implements Serializable {
     static Map<String, String> digestDocument(Document doc)
     {
         Map<String, String> res = new LinkedHashMap<String, String>();
-        List<Field> fields = doc.getFields();
-        for(Field field:fields)
+        List<IndexableField> fields = doc.getFields();
+        for(IndexableField field:fields)
         {
             res.put(field.name(), field.stringValue());
             //if (field.name().equals("id") && field.stringValue().equals("4892"))
@@ -712,13 +691,15 @@ public class LuceneUtil implements Serializable {
 
     public static int deletePledge(String idx, String field, String search){
         Term term = new Term(field, search);
-        IndexReader indexReader;
         try {
-            indexReader = IndexReader.open(idx);
+            Directory directory = FSDirectory.open(Paths.get(idx));
+            IndexWriterConfig iwc = new IndexWriterConfig(LuceneUtil.analyzer);
+            IndexWriter indexWriter = new IndexWriter(directory, iwc);
+
             //listDocuments(indexReader);
-            int ret = indexReader.deleteDocuments(term);
-            indexReader.close();
-            return ret;
+            indexWriter.deleteDocuments(term);
+            indexWriter.close();
+            return 1;
         } catch (Exception e) {
             logger.error("error deleting pledge from Lucene index", e);
             return 0;
@@ -729,11 +710,12 @@ public class LuceneUtil implements Serializable {
         Term term = new Term(field, search);
         IndexReader indexReader;
         try {
-            indexReader = IndexReader.open(idx);
-            //listDocuments(indexReader);
-            int ret = indexReader.deleteDocuments(term);
-            indexReader.close();
-            return ret;
+            Directory directory = FSDirectory.open(Paths.get(idx));
+            IndexWriterConfig iwc = new IndexWriterConfig(LuceneUtil.analyzer);
+            IndexWriter indexWriter = new IndexWriter(directory, iwc);
+            indexWriter.deleteDocuments(term);
+            indexWriter.close();
+            return 1;
         } catch (Exception e) {
             logger.error("error deleting activity from Lucene index", e);
             return 0;
@@ -791,7 +773,7 @@ public class LuceneUtil implements Serializable {
 		String all = new String("");
 
 		if (pledgeId != null){
-            doc.add(new Field(ID_FIELD, pledgeId.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.add(new StringField(ID_FIELD, pledgeId.toString(), Field.Store.YES));
             //all = all.concat(" " + actId);
         }
 		
@@ -810,9 +792,15 @@ public class LuceneUtil implements Serializable {
          // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process. 
             try {
 	            if ("title".equals(field)){
-	                doc.add(new Field(field, luceneValue, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+                    FieldType fieldType = new FieldType();
+                    fieldType.setStoreTermVectors(true);
+                    fieldType.setStoreTermVectorPositions(true);
+                    fieldType.setTokenized(true);
+                    fieldType.setStored(true);
+                    fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS);
+	                doc.add(new Field(field, luceneValue, fieldType));
 	            } else {
-	                doc.add(new Field(field, luceneValue, Field.Store.NO, Field.Index.ANALYZED));
+                    doc.add(new TextField(field, luceneValue, Field.Store.NO));
 	            }
             } catch (Exception e) {
             	logger.error("Error reindexing document - field:" + field + " - value:" + luceneValue);
@@ -821,26 +809,15 @@ public class LuceneUtil implements Serializable {
             all = all.concat(" " + luceneValue);
         }
 
-/*
-        if (projectId != null){
-			doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.ANALYZED));
-			all = all.concat(" " + projectId);
-		}
-		if (title != null){
-			doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
-			all = all.concat(" " + title);
-		}*/
 		if (additionalInfo!= null && additionalInfo.length()>0){
-			doc.add(new Field("additionalInfo", additionalInfo, Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new TextField("additionalInfo", additionalInfo, Field.Store.NO));
 			all = all.concat(" " + additionalInfo);
 		}
-		
-		
-		
+
 		if (all.length() == 0)
 			return null;
-		
-		doc.add(new Field("all", all, Field.Store.NO, Field.Index.ANALYZED));
+
+        doc.add(new TextField("all", all, Field.Store.NO));
 		return doc;
 	}    
 
@@ -859,7 +836,7 @@ public class LuceneUtil implements Serializable {
         Document doc = new Document();
         String all = "";
         if (actId != null){
-            doc.add(new Field(ID_FIELD, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
+            doc.add(new StringField(ID_FIELD, actId, Field.Store.YES));
             //all = all.concat(" " + actId);
         }
 
@@ -879,15 +856,18 @@ public class LuceneUtil implements Serializable {
                     // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process.
                     try {
                         if ("name".equals(field)){
-                            	/*logger.info("Adding activity name to lucene index. Name: "+translation.getTranslation()
-                            			+" Locale: "+translation.getLocale());*/
+                            FieldType fieldType = new FieldType();
+                            fieldType.setStoreTermVectors(true);
+                            fieldType.setStoreTermVectorPositions(true);
+                            fieldType.setTokenized(true);
+                            fieldType.setStored(true);
+                            fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS);
                             doc.add(new Field(field + "_" + translation.getLocale(),
                                     translation.getTranslation(),
-                                    Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+                                    fieldType));
                         } else {
-                            doc.add(new Field(field + "_" + translation.getLocale(),
-                                    translation.getTranslation(),
-                                    Field.Store.NO, Field.Index.ANALYZED));
+                            doc.add(new TextField(field + "_" + translation.getLocale(),
+                                    translation.getTranslation(),Field.Store.NO));
                         }
                     } catch (Exception e) {
                         logger.error("Error reindexing document - field:" + field +
@@ -899,56 +879,53 @@ public class LuceneUtil implements Serializable {
             } else {
                 if (regularFieldNames.get(field) != null) {
                     // no translations in the DB: this is an old untranslated entity
+                    FieldType fieldType = new FieldType();
+                    fieldType.setStoreTermVectors(true);
+                    fieldType.setStoreTermVectorPositions(true);
+                    fieldType.setTokenized(true);
+                    fieldType.setStored(true);
+                    fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS);
                     doc.add(new Field(field,
                             regularFieldNames.get(field),
-                            Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+                            fieldType));
                     all = all.concat(" " + regularFieldNames.get(field));
                 }
             }
         }
 	
-	/*
-	        if (projectId != null){
-				doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.ANALYZED));
-				all = all.concat(" " + projectId);
-			}
-			if (title != null){
-				doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
-				all = all.concat(" " + title);
-			}*/
         if (description != null && description.length()>0){
-            doc.add(new Field("description", description, Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new TextField("description", description, Field.Store.NO));
             all = all.concat(" " + description);
         }
         if (objective != null && objective.length()>0){
-            doc.add(new Field("objective", objective, Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new TextField("objective", objective, Field.Store.NO));
             all = all.concat(" " + objective);
         }
         if (purpose != null && purpose.length()>0){
-            doc.add(new Field("purpose", purpose, Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new TextField("purpose", purpose, Field.Store.NO));
             all = all.concat(" " + purpose);
         }
         if (results != null && results.length()>0){
-            doc.add(new Field("results", results, Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new TextField("results", results, Field.Store.NO));
             all = all.concat(" " + results);
         }
 
         //
         if (numcont != null && numcont.length()>0){
-            doc.add(new Field("numcont", numcont, Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new TextField("numcont", numcont, Field.Store.NO));
             all = all.concat(" " + numcont);
         }
 
         if (CRIS != null && CRIS.length() > 0) {
-            doc.add(new Field("CRIS", CRIS, Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new TextField("CRIS", CRIS, Field.Store.NO));
             all = all.concat(" " + CRIS);
         }
         if (budgetNumber != null && budgetNumber.length() > 0) {
-            doc.add(new Field("budgetNumber", budgetNumber, Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new TextField("budgetNumber", budgetNumber, Field.Store.NO));
             all = all.concat(" " + budgetNumber);
         }
         if (newBudgetNumber != null && newBudgetNumber.length() > 0 ) {
-            doc.add(new Field("newBudgetNumber", newBudgetNumber, Field.Store.NO, Field.Index.ANALYZED));
+            doc.add(new TextField("newBudgetNumber", newBudgetNumber, Field.Store.NO));
             all = all.concat(" " + newBudgetNumber);
         }
 
@@ -957,7 +934,7 @@ public class LuceneUtil implements Serializable {
 
             for (String value : componentcodes) {
                 if (value!=null){
-                    doc.add(new Field("componentcode_"+String.valueOf(i), value, Field.Store.NO, Field.Index.ANALYZED));
+                    doc.add(new TextField("componentcode_"+String.valueOf(i), value, Field.Store.NO));
                     all = all.concat(" " + value);
                 }
                 i++;
@@ -969,7 +946,7 @@ public class LuceneUtil implements Serializable {
         if (all.length() == 0)
             return null;
 
-        doc.add(new Field("all", all, Field.Store.NO, Field.Index.ANALYZED));
+        doc.add(new TextField("all", all, Field.Store.NO));
         return doc;
     }
 
@@ -982,18 +959,14 @@ public class LuceneUtil implements Serializable {
                 if (nrDeleted != 1)
                     logger.warn("Lucene.addUpdateActivity(): deleted " + nrDeleted + " activities from index, normal value would be: 1");
             }
-
-            IndexWriter indexWriter = null;
-            indexWriter = new IndexWriter(rootRealPath + PLEDGE_INDEX_DIRECTORY, LuceneUtil.analyzer, false, MaxFieldLength.LIMITED);
-//				indexWriter = new IndexWriter(rootRealPath + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
-            // Util.getEditorBody(site,act.getDescription(),navigationLanguage);
-            Document doc = null;
-            doc = pledge2Document(newfakePledge.getAmpId(), newfakePledge.getName(), newfakePledge.getAdditionalInfo());
+            Directory directory = FSDirectory.open(Paths.get(rootRealPath + PLEDGE_INDEX_DIRECTORY));
+            IndexWriterConfig iwc = new IndexWriterConfig(LuceneUtil.analyzer);
+            IndexWriter indexWriter = new IndexWriter(directory, iwc);
+            Document doc = pledge2Document(newfakePledge.getAmpId(), newfakePledge.getName(), newfakePledge.getAdditionalInfo());
 
             if (doc != null) {
                 try {
                     indexWriter.addDocument(doc);
-                    indexWriter.optimize();
                     indexWriter.close();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1021,9 +994,9 @@ public class LuceneUtil implements Serializable {
                 if (nrDeleted != 1)
                     logger.warn("Lucene.addUpdateActivity(): deleted " + nrDeleted + " activities from index, normal value would be: 1");
             }
-            IndexWriter indexWriter = null;
-            indexWriter = new IndexWriter(rootRealPath + ACTIVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
-            // Util.getEditorBody(site,act.getDescription(),navigationLanguage);
+            Directory directory = FSDirectory.open(Paths.get(rootRealPath + PLEDGE_INDEX_DIRECTORY));
+            IndexWriterConfig iwc = new IndexWriterConfig(LuceneUtil.analyzer);
+            IndexWriter indexWriter = new IndexWriter(directory, iwc);
             Document doc = null;
 
             ArrayList<String> componentsCode = new ArrayList<String>();
@@ -1046,7 +1019,6 @@ public class LuceneUtil implements Serializable {
             if (doc != null) {
                 try {
                     indexWriter.addDocument(doc);
-                    indexWriter.optimize();
                     indexWriter.close();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1125,15 +1097,15 @@ public class LuceneUtil implements Serializable {
                                                                String origSearchString,
                                                                String langCode,
                                                                int maxLuceneResults) {
-        Searcher indexSearcher = null;
+        IndexSearcher indexSearcher = null;
         IndexReader ir = null;
         logger.info("Searching similar activities with title:  " + origSearchString + " with language " + langCode
                 + " on Lucene directory: " + index);
         try {
-            ir = IndexReader.open(index);
+            ir = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
             logger.info("Lucene index reader has " + ir.numDocs()
                     + " docs in it");
-            indexSearcher = new IndexSearcher(index);
+            indexSearcher = new IndexSearcher(ir);
 
             MoreLikeThis mlt = new MoreLikeThis(ir);
             mlt.setMinDocFreq(1);
@@ -1195,12 +1167,6 @@ public class LuceneUtil implements Serializable {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-            try {
-                indexSearcher.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
         return null;
     }
@@ -1243,13 +1209,13 @@ public class LuceneUtil implements Serializable {
                     if (query instanceof PhraseQuery) {
                         if (((PhraseQuery) query).getTerms() != null) {
                             for (Term term : ((PhraseQuery) query).getTerms()) {
-                                fuzzyQuery = new FuzzyQuery(term, getMinimumSimilarity(term.text()));
+                                fuzzyQuery = new FuzzyQuery(term, 2);
                                 fuzzyTerms.add(fuzzyQuery);
                             }
                         }
                     } else {
                         if (query instanceof TermQuery) {
-                            fuzzyQuery = new FuzzyQuery(((TermQuery) query).getTerm(), getMinimumSimilarity(word));
+                            fuzzyQuery = new FuzzyQuery(((TermQuery) query).getTerm(), 2);
                             fuzzyTerms.add(fuzzyQuery);
                         }
                     }
@@ -1279,9 +1245,12 @@ public class LuceneUtil implements Serializable {
         parser.setDefaultOperator(getDefaultOperator(searchMode));
         Query query = null;
         Document[] resultDocuments = null;
-        Searcher indexSearcher = null;
+
+        IndexReader reader = null;
+        IndexSearcher indexSearcher = null;
         try {
-            indexSearcher = new IndexSearcher(index);
+            reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
+            indexSearcher = new IndexSearcher(reader);
 
             if (isFuzzy()) {
                 query = getFuzzyQuery(origSearchString, parser);
@@ -1290,11 +1259,13 @@ public class LuceneUtil implements Serializable {
             }
 
             if (query != null) {
+
                 TopDocs topDocs = indexSearcher.search(query, maxLuceneResults);
                 resultDocuments = new Document[topDocs.totalHits > topDocs.scoreDocs.length ? topDocs.scoreDocs.length
                         : topDocs.totalHits];
                 for (int i = 0; i < topDocs.totalHits; i++) {
                     resultDocuments[i] = indexSearcher.doc(topDocs.scoreDocs[i].doc);
+                    logger.warn(resultDocuments[i].getFields().get(1) + " " + topDocs.scoreDocs[i].score);
                 }
             } else {
                 resultDocuments = new Document[0];
@@ -1339,11 +1310,11 @@ public class LuceneUtil implements Serializable {
         if (keywords.size() == 1) {
             query = keywords.get(0);
         } else {
-            BooleanQuery q = new BooleanQuery();
+            BooleanQuery.Builder q = new BooleanQuery.Builder();
             for (FuzzyQuery fq : keywords) {
                 q.add(new BooleanClause(fq, occur));
             }
-            query = q;
+            query = q.build();
         }
         return query;
     }
@@ -1367,7 +1338,6 @@ public class LuceneUtil implements Serializable {
      */
 
     public static void createHelp(ServletContext sc, ModuleInstance modInstance , String lang) throws  DgException{
-//		boolean createDir = LuceneUtil.checkHelpDir(sc);
         boolean createDir = LuceneUtil.checkHelpDir(sc,modInstance,lang);
 
         if(!createDir){
@@ -1401,8 +1371,7 @@ public class LuceneUtil implements Serializable {
         Date date ;
 
         try{
-            //Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") +  HELP_INDEX_DIRECTORY);
-            Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") +  HELP_INDEX_DIRECTORY +"/" + modInstance.getInstanceName()+"_"+lang);
+            Long lastLucModDay = null; //IndexReader.lastModified(sc.getRealPath("/") +  HELP_INDEX_DIRECTORY +"/" + modInstance.getInstanceName()+"_"+lang);
 
             formatter  = new SimpleDateFormat();
             String leastUpDate = formatter.format(lastLucModDay);
@@ -1450,27 +1419,40 @@ public class LuceneUtil implements Serializable {
      * @param searchString
      * @return founded hits
      */
-    public static Hits helpSearch(String field, String searchString, ServletContext sc){
+    public static TopDocs helpSearch(String field, String searchString, ServletContext sc){
 
         QueryParser parser = new QueryParser(field, analyzer);
         Query query = null;
-        Hits hits = null;
+        TopDocs hits = null;
         Document document = new Document();
 
-        Searcher indexSearcher = null;
         try {
             if(searchString != null){
-                indexSearcher = new IndexSearcher(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
+                IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(sc.getRealPath("/") + HELP_INDEX_DIRECTORY)));
+                IndexSearcher indexSearcher = new IndexSearcher(reader);
                 searchString = searchString.trim();
                 query = parser.parse("+"+searchString+"*");
 
-                hits = indexSearcher.search(query);
+                hits = indexSearcher.search(query, 2000);
             }
         } catch (Exception e1) {
             e1.printStackTrace();
         }
 
         return hits;
+    }
+
+    public static Document getHelpSearchDoc(int doc, ServletContext sc) {
+
+        Document document = null;
+        try {
+            IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(sc.getRealPath("/") + HELP_INDEX_DIRECTORY)));
+            IndexSearcher indexSearcher = new IndexSearcher(reader);
+            document = indexSearcher.doc(doc);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return document;
     }
 
     /**
@@ -1480,9 +1462,10 @@ public class LuceneUtil implements Serializable {
      * @param searchString
      * @return highlight object
      * @throws java.io.IOException
-     * @throws org.apache.lucene.queryParser.ParseException
+     * @throws org.apache.lucene.queryparser.classic.ParseException
+     * @throws org.apache.lucene.search.highlight.InvalidTokenOffsetsException
      */
-    public static Object highlighter(Field field,String searchString, ServletContext sc) throws IOException, ParseException{
+    public static Object highlighter(Field field,String searchString, ServletContext sc) throws IOException, ParseException, InvalidTokenOffsetsException{
         Query query = null;
         QueryParser parser = new QueryParser("article", analyzer);
 
@@ -1496,9 +1479,9 @@ public class LuceneUtil implements Serializable {
      * Returns highlighted object
      *
      */
-    private static Object highlight(Field field, Query query, ServletContext sc) throws IOException {
+    private static Object highlight(Field field, Query query, ServletContext sc) throws IOException, InvalidTokenOffsetsException {
 
-        query.rewrite(IndexReader.open(sc.getRealPath("/") + HELP_INDEX_DIRECTORY));
+        query.rewrite(DirectoryReader.open(FSDirectory.open(Paths.get(sc.getRealPath("/") + HELP_INDEX_DIRECTORY))));
         QueryScorer scorer = new QueryScorer(query);
         SimpleHTMLFormatter formatter =
                 new SimpleHTMLFormatter("<span class=\"highlight\">",
@@ -1544,10 +1527,10 @@ public class LuceneUtil implements Serializable {
     public static Document createHelpDocument(String article, String title,String titTrnKey,String lang){
 
         Document document = new Document();
-        document.add(new Field("title",title,Field.Store.YES,Field.Index.ANALYZED));
-        document.add(new Field("titletrnKey",titTrnKey,Field.Store.YES,Field.Index.ANALYZED));
-        document.add(new Field("article",article,Field.Store.YES,Field.Index.ANALYZED));
-        document.add(new Field("lang",lang,Field.Store.YES,Field.Index.ANALYZED));
+        document.add(new TextField("title",title,Field.Store.YES));
+        document.add(new TextField("titletrnKey",titTrnKey,Field.Store.YES));
+        document.add(new TextField("article",article,Field.Store.YES ));
+        document.add(new TextField("lang",lang,Field.Store.YES ));
         return document;
 
     }
@@ -1561,8 +1544,16 @@ public class LuceneUtil implements Serializable {
      */
 
     public static boolean checkHelpDir(ServletContext sc,ModuleInstance modInstance, String lang){
-        //boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
-        boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + HELP_INDEX_DIRECTORY+"/"+modInstance.getInstanceName()+"_"+lang);
+        boolean createDir = false;
+
+        try {
+            Directory directory = FSDirectory.open(Paths.get(sc.getRealPath("/") + HELP_INDEX_DIRECTORY + "/" + modInstance.getInstanceName() + "_" + lang));
+            createDir = DirectoryReader.indexExists(directory);
+
+        } catch (IOException e) {
+            logger.error("Error while checking indexExists.");
+        }
+
         return createDir;
     }
 
@@ -1578,7 +1569,8 @@ public class LuceneUtil implements Serializable {
     public static void indexHelpDocument(Document document, ServletContext sc) throws IOException {
         try{
 
-            boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
+            Directory directory = FSDirectory.open(Paths.get(sc.getRealPath("/") + HELP_INDEX_DIRECTORY));
+            boolean createDir = DirectoryReader.indexExists(directory);
 
             if(createDir == false){
                 createDir= true;
@@ -1587,9 +1579,9 @@ public class LuceneUtil implements Serializable {
             }
 
             StandardAnalyzer analyzer  = new StandardAnalyzer();
-            IndexWriter writer = new IndexWriter(sc.getRealPath("/") + HELP_INDEX_DIRECTORY, analyzer, createDir);
+            IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+            IndexWriter writer = new IndexWriter(directory, iwc);
             writer.addDocument(document);
-            writer.optimize();
             writer.close();
         } catch (IOException e) {
             logger.error("", e);
@@ -1605,13 +1597,13 @@ public class LuceneUtil implements Serializable {
     @Deprecated
     public static void deleteHelp(String field, String search, ServletContext sc){
         Term term = new Term(field,search);
-        Directory directory;
-        IndexReader indexReader;
 
         try {
-            indexReader = IndexReader.open(sc.getRealPath("/") + HELP_INDEX_DIRECTORY);
-            Integer deleted = indexReader.deleteDocuments(term);
-            indexReader.close();
+            Directory directory = FSDirectory.open(Paths.get(sc.getRealPath("/") + HELP_INDEX_DIRECTORY));
+            IndexWriterConfig iwc = new IndexWriterConfig(LuceneUtil.analyzer);
+            IndexWriter indexWriter = new IndexWriter(directory, iwc);
+            indexWriter.deleteDocuments(term);
+            indexWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1428,10 +1428,10 @@ public class ExportActivityToPDF extends Action {
                         headerTable.setTotalWidth(100);
                         headerTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
                         headerTable.getDefaultCell().setBackgroundColor(new Color(244, 244, 242));
-                        headerTable.addCell(nameLabel);
-                        headerTable.addCell(codeLabel);
-                        headerTable.addCell(logFrameLabel);
-                        headerTable.addCell(sectorsLabel);
+                        headerTable.addCell(new Paragraph(postprocessText(nameLabel), plainFont));
+                        headerTable.addCell(new Paragraph(postprocessText(codeLabel), plainFont));
+                        headerTable.addCell(new Paragraph(postprocessText(logFrameLabel), plainFont));
+                        headerTable.addCell(new Paragraph(postprocessText(sectorsLabel), plainFont));
                         headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
 
                         if (FeaturesUtil.isVisibleField("Indicator Name")) {

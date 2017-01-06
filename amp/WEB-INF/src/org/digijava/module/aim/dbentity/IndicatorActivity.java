@@ -3,10 +3,14 @@ package org.digijava.module.aim.dbentity;
 import org.digijava.module.aim.util.Output;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -172,5 +176,16 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 		return "";
 	}
 
-	
+	public List<AmpIndicatorValue> getValuesSorted() {
+		Map<Integer, AmpIndicatorValue> tree = new TreeMap<Integer, AmpIndicatorValue>();
+
+		//Order used in Activity form
+		List<Integer> listSorted = Arrays.asList(AmpIndicatorValue.BASE, AmpIndicatorValue.TARGET, AmpIndicatorValue.REVISED, AmpIndicatorValue.ACTUAL);
+
+		for (AmpIndicatorValue value : this.getValues()) {
+			tree.put(listSorted.indexOf(value.getValueType()), value);
+		}
+
+		return new ArrayList<AmpIndicatorValue>(tree.values());
+	}
 }

@@ -79,7 +79,7 @@
                                     <digi:trn key="me:date">Date</digi:trn>
                                 </td>
                             </tr>
-                            <c:forEach var="value" items="${indicator.values}">
+                            <c:forEach var="value" items="${indicator.valuesSorted}">
 
                                 <tr>
                                     <td width="20%"><span class="word_break bold">

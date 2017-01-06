@@ -658,7 +658,7 @@ public class ExportActivityToWord extends Action {
                             headerCell.add(headerTable);
                             meTbl.addCell(headerCell);
 
-                            for (AmpIndicatorValue value : indicator.getValues()) {
+                            for (AmpIndicatorValue value : indicator.getValuesSorted()) {
 
                                 String fieldName = ExportUtil.getIndicatorValueType(value);
                                 columnVal = TranslatorWorker.translateText(ExportUtil.INDICATOR_VALUE_NAME.get(value.getValueType()));

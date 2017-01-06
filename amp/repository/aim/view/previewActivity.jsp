@@ -1423,7 +1423,7 @@ function collapseAll() {
 				</c:forEach>
 				<module:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
 					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
-					<tr> <td colspan="2"> aaaaaaaaaaaaaaaaaaaaaaa
+					<tr> <td colspan="2">
 						<script type="text/javascript">
 						<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
 							coordinates.push('<c:out value="${selectedLocs.lat}"/>;<c:out value="${selectedLocs.lon}"/>;<c:out value="${selectedLocs.locationName}"/>');

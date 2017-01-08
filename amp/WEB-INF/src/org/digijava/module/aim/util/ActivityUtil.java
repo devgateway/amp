@@ -35,6 +35,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
@@ -45,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
+import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -61,11 +63,13 @@ import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.helper.ActivityHistory;
 import org.digijava.module.aim.helper.ActivityItem;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
@@ -94,6 +98,8 @@ import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 import org.joda.time.Period;
+
+import clover.org.apache.commons.lang.StringUtils;
 
 public class ActivityUtil {
 
@@ -1886,6 +1892,82 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 			e.printStackTrace();
 		}
 		return ret;
+	}
+
+	/** Get the user first name and last name  who modified (created) the activity.
+	 * @param actitivity
+	 * @param modifiedByInfo
+	 * @param auditHistory
+	 * @return
+	 */
+	public static String getModifiedByUserName(AmpActivityVersion actitivity, ActivityHistory auditHistory) {
+		AmpTeamMember modifiedBy = actitivity.getModifiedBy();
+		AmpTeamMember createdBy = actitivity.getActivityCreator();
+		AmpTeamMember approvedBy = actitivity.getApprovedBy();
+		
+		if (modifiedBy != null) {
+			return String.format("%s %s", modifiedBy.getUser().getFirstNames(), modifiedBy.getUser().getLastName());
+		} else if(auditHistory != null) {
+			return auditHistory.getModifiedBy();
+		} else if (approvedBy != null) {
+			return String.format("%s %s", approvedBy.getUser().getFirstNames(), approvedBy.getUser().getLastName());
+		} else if (createdBy != null) {
+			return String.format("%s %s", createdBy.getUser().getFirstNames(), createdBy.getUser().getLastName());
+		}
+		
+		return "";
+	}
+	
+	/** Get modified date
+	 * @param activity
+	 * @param auditHistory
+	 * @param activityHistory
+	 */
+	public static Date getModifiedByDate(AmpActivityVersion activity, ActivityHistory auditHistory) {
+		if (activity.getUpdatedDate() != null) {
+			return activity.getUpdatedDate();
+		} else if (activity.getModifiedDate() != null) {
+			return activity.getModifiedDate();
+		} else if (auditHistory != null) {
+			return auditHistory.getModifiedDate();
+		} else if (activity.getApprovalDate() != null) {
+			return activity.getApprovalDate();
+		} else if (activity.getCreatedDate() != null) {
+			return activity.getCreatedDate();
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Get audit info about the activity from amp_audit_logger table
+	 * @param activityId
+	 * @return
+	 */
+	public static ActivityHistory getModifiedByInfoFromAuditLogger(Long activityId) {
+		ActivityHistory logActivityHistory = new ActivityHistory();
+		List<AmpAuditLogger> activityLogObjects = AuditLoggerUtil.getActivityLogObjects(activityId.toString());
+		
+		for(AmpAuditLogger aal : activityLogObjects) {
+			if (StringUtils.isNotEmpty(aal.getEditorName())) {
+				logActivityHistory.setModifiedBy(aal.getEditorName());
+				logActivityHistory.setModifiedDate(aal.getLoggedDate());
+				return logActivityHistory;
+			} else if (StringUtils.isNotEmpty(aal.getEditorEmail())) {
+				try {
+					User u = UserUtils.getUserByEmail(aal.getEditorEmail());
+					if (u != null) {
+						logActivityHistory.setModifiedBy(String.format("%s %s", u.getFirstNames(), u.getLastName()));
+						logActivityHistory.setModifiedDate(aal.getLoggedDate());
+						return logActivityHistory;
+					}
+				} catch (DgException e) {
+					logger.error(e);				
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 } // End

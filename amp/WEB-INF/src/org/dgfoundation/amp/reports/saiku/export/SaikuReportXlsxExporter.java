@@ -1,12 +1,13 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
 import java.io.ByteArrayOutputStream;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
@@ -184,7 +185,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 * @param report
 	 */
 	protected void renderReportTableHeader(Workbook wb, Sheet sheet, GeneratedReport report) {
-		int hiddenColumnsCnt = 0;
+		List<Integer> hiddenColumnPositions = new ArrayList<>();
 		Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
 		
 		for(int i=0; i < report.generatedHeaders.size(); i++) {
@@ -192,11 +193,13 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 			for(HeaderCell headerCell : report.generatedHeaders.get(i)) {
 				
 				if (isHiddenColumn(headerCell.originalName)) {
-					hiddenColumnsCnt++;
+					hiddenColumnPositions.add(headerCell.getStartColumn());
 					continue;
 				}
 				
-				int cellColumnPos = headerCell.getStartColumn() - hiddenColumnsCnt;
+				// when a column (not measure) is splitted (like MTEFs columns), we need to calculate the position of hidden columns
+				int offsetPosition = getOffsetPositionOfHiddenColumns(hiddenColumnPositions, headerCell.getStartColumn());
+				int cellColumnPos = headerCell.getStartColumn() - offsetPosition;
 				Cell cell = row.createCell(cellColumnPos);
 				cell.setCellValue(headerCell.getName());
 				setMaxColWidth(sheet, cell, cellColumnPos);
@@ -530,6 +533,14 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 
 	protected boolean isHiddenColumn(String columnName) {
 		return columnName.equals("Draft") || columnName.equals("Approval Status");
+	}
+	
+	private int getOffsetPositionOfHiddenColumns(List<Integer> hiddenColumnPositions, int columnPosition) {
+		int offsetPosition = hiddenColumnPositions.stream().filter(
+				i -> i < columnPosition)
+		.collect(Collectors.toList()).size();
+		
+		return offsetPosition;
 	}
 	
 	protected String getReportSheetName() {

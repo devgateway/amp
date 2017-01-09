@@ -1446,7 +1446,7 @@ public class ExportActivityToPDF extends Action {
 
                         if (FeaturesUtil.isVisibleField("Sectors")) {
                             if (indicator.getIndicator().getSectors() != null) {
-                                headerTable.addCell(ExportUtil.getIndicatorSectors(indicator) + "\n");
+                                headerTable.addCell(new Paragraph(postprocessText(ExportUtil.getIndicatorSectors(indicator) + "\n"), titleFont));
                             }
                         }
 

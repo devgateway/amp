@@ -1615,6 +1615,14 @@ function collapseAll() {
 				<digi:trn>M &amp; E</digi:trn>
 			</span>	
 		</legend>
+
+		<!-- M & E  indicators list -->
+		<div id="melistdiv" class="toggleDiv">
+			<bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"/>
+			<jsp:include page="previewIndicatosList.jsp"/>
+		</div>
+		<!-- END M & E  indicators list -->
+
 		<div id="mediv" class="toggleDiv">
 			<table>
 				<field:display name="Activity Performance"  feature="Activity Dashboard">
@@ -1699,10 +1707,10 @@ function collapseAll() {
 			<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%" >
 				<tr bgcolor="#f0f0f0">
 					<td>
-						<digi:trn key="aim:cost">Name</digi:trn>					
+						<digi:trn key="aim:name">Name</digi:trn>
 					</td>
 					<td>
-						<digi:trn key="aim:cost">Percentage</digi:trn>					
+						<digi:trn key="aim:percentage">Percentage</digi:trn>
 					</td>
 				</tr>
 				<c:forEach var="budgetStructure" items="${aimEditActivityForm.budgetStructure}" >

@@ -638,6 +638,9 @@ public class Reports implements ErrorReportingEndpoint {
 			case AMPReportExportConstants.PDF:
 				exporter = SaikuReportExportType.PDF;
 				break;
+			case AMPReportExportConstants.XML:
+				exporter = SaikuReportExportType.XML;
+				break;
 		}
 		
 		return exporter.executor.newInstance().exportReport(report, dualReport);

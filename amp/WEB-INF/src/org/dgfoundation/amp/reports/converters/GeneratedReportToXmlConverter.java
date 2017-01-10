@@ -1,5 +1,10 @@
 package org.dgfoundation.amp.reports.converters;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.List;
+import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -7,6 +12,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSettings;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.reports.saiku.export.SaikuExportFilterUtils;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -19,6 +28,8 @@ import clover.org.apache.commons.lang.StringEscapeUtils;
 public class GeneratedReportToXmlConverter {
 	
 	private GeneratedReport report;
+	private Document xmlDocument;
+	
 	
 	public GeneratedReportToXmlConverter(GeneratedReport report) {
 		super();
@@ -28,46 +39,44 @@ public class GeneratedReportToXmlConverter {
 	public Document convert() throws ParserConfigurationException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-		Document xmlDocument = docBuilder.newDocument();
-		renderXmlReport(xmlDocument);
+		xmlDocument = docBuilder.newDocument();
+		
+		buildXmlReport();
 		
 		return xmlDocument;
 	}
 	
-	private void renderXmlReport(Document xmlDocument) {
+	private void buildXmlReport() {
 		Element rootElement = xmlDocument.createElement("report");
 		xmlDocument.appendChild(rootElement);
 		
-		buildReportOutput(xmlDocument, rootElement);
-		buildReportConfig(xmlDocument, rootElement);
+		buildReportOutput(rootElement);
+		buildReportConfig(rootElement);
 	}
 
 	/**
-	 * @param xmlDocument
 	 * @param parentElement
 	 */
-	private void buildReportOutput(Document xmlDocument, Element parentElement) {
+	private void buildReportOutput(Element parentElement) {
 		Element outputElement = xmlDocument.createElement("output");
 		parentElement.appendChild(outputElement);
 		
-		buildReportHeaders(xmlDocument, outputElement);
-		buildReportContents(xmlDocument, outputElement);
+		buildReportHeaders(outputElement);
+		buildReportContents(outputElement);
 	}
 
 	/**
 	 * 
-	 * @param xmlDocument
 	 * @param outputElement
 	 */
-	private void buildReportContents(Document xmlDocument, Element parentElement) {
-		buildReportArea(xmlDocument, parentElement, report.reportContents);
+	private void buildReportContents(Element parentElement) {
+		buildReportArea(parentElement, report.reportContents);
 	}
 
 	/**
-	 * @param xmlDocument
 	 * @param parentElement
 	 */
-	private void buildReportArea(Document xmlDocument, Element parentElement, ReportArea reportArea) {
+	private void buildReportArea(Element parentElement, ReportArea reportArea) {
 		Element reportAreaElement = xmlDocument.createElement("reportArea");
 		parentElement.appendChild(reportAreaElement);
 		
@@ -78,77 +87,145 @@ public class GeneratedReportToXmlConverter {
 			Element cellElement = xmlDocument.createElement("cell");
 			contentsElement.appendChild(cellElement);
 			
-			createTextElement(xmlDocument, cellElement, "columnName", roc.getHierarchicalName());
-			createTextElement(xmlDocument, cellElement, "value", rc.displayedValue);
+			createTextElement(cellElement, "columnName", roc.getHierarchicalName());
+			createTextElement(cellElement, "value", rc.displayedValue);
 		});
 		
 		Element childrenElement = xmlDocument.createElement("children");
 		reportAreaElement.appendChild(childrenElement);
 		
 		if (reportArea.getChildren() != null) {
-			reportArea.getChildren().forEach(ra -> buildReportArea(xmlDocument, childrenElement, ra));
+			reportArea.getChildren().forEach(ra -> buildReportArea(childrenElement, ra));
 		}
 	}
 
 	/**
-	 * @param xmlDocument
 	 * @param parentElement
 	 */
-	private void buildReportHeaders(Document xmlDocument, Element parentElement) {
+	private void buildReportHeaders(Element parentElement) {
 		Element headersElement = xmlDocument.createElement("headers");
 		parentElement.appendChild(headersElement);
 		
 		report.leafHeaders.stream()
 						.filter(roc -> !isHiddenColumn(roc.originalColumnName))
-						.forEach(roc -> buildHeaderElement(xmlDocument, roc, headersElement));
+						.forEach(roc -> buildHeaderElement(roc, headersElement));
 	}
 
 	/**
 	 * 
-	 * @param xmlDocument 
 	 * @param reportOutputColumn
 	 * @param parentElement
 	 */
-	private void buildHeaderElement(Document xmlDocument, ReportOutputColumn reportOutputColumn, Element parentElement) {
+	private void buildHeaderElement(ReportOutputColumn reportOutputColumn, Element parentElement) {
 		Element columnElement = xmlDocument.createElement("column");
 		parentElement.appendChild(columnElement);
 		
-		createTextElement(xmlDocument, columnElement, "name", reportOutputColumn.columnName);
-		createTextElement(xmlDocument, columnElement, "description", reportOutputColumn.description);
-		createTextElement(xmlDocument, columnElement, "hierarchicalName", reportOutputColumn.getHierarchicalName());
+		createTextElement(columnElement, "name", reportOutputColumn.columnName);
+		createTextElement(columnElement, "description", reportOutputColumn.description);
+		createTextElement(columnElement, "hierarchicalName", reportOutputColumn.getHierarchicalName());
 		
 		Element headerParentColumn = xmlDocument.createElement("parentColumn");
 		columnElement.appendChild(headerParentColumn);
 		
 		if (reportOutputColumn.parentColumn != null) {
-			buildHeaderElement(xmlDocument, reportOutputColumn.parentColumn, columnElement);
+			buildHeaderElement(reportOutputColumn.parentColumn, columnElement);
 		}
 	}
 
 	/**
-	 * @param xmlDocument
 	 * @param parentElement
 	 */
-	private void buildReportConfig(Document xmlDocument, Element parentElement) {
+	private void buildReportConfig(Element parentElement) {
 		Element configElement = xmlDocument.createElement("config");
 		parentElement.appendChild(configElement);
 		
-		Element sortingElement = xmlDocument.createElement("sorting");
-		configElement.appendChild(sortingElement);
-		
-		Element filtersElement = xmlDocument.createElement("filters");
-		configElement.appendChild(filtersElement);
-		
-		Element settingsElement = xmlDocument.createElement("settings");
-		configElement.appendChild(settingsElement);
+		buildSortingElements(configElement);
+		buildFiltersElements(configElement);
+		buildSettingsElements(configElement);
 	}
 	
 	/**
-	 * @param xmlDocument
+	 * @param configElement
+	 */
+	private void buildSortingElements(Element configElement) {
+		Element sortingElement = xmlDocument.createElement("sorting");
+		configElement.appendChild(sortingElement);
+		report.spec.getSorters().forEach(sorter -> {
+			Element sortElement = xmlDocument.createElement("sort");
+			String pathName = sorter.hierPath.get(0);
+			
+			if (!sorter.isHierarchySorter(report.spec.getHierarchyNames())) {
+				pathName = sorter.buildPath("][", NiReportsEngine.FUNDING_COLUMN_NAME, NiReportsEngine.TOTALS_COLUMN_NAME);
+			}
+			
+			sortElement.setAttribute("asc", Boolean.toString(sorter.ascending));
+			sortElement.setTextContent(StringEscapeUtils.escapeXml("[" + pathName + "]"));
+			sortingElement.appendChild(sortElement);
+		});
+	}
+
+	/**
+	 * @param configElement
+	 */
+	private void buildSettingsElements(Element configElement) {
+		Element settingsElement = xmlDocument.createElement("settings");
+		configElement.appendChild(settingsElement);
+		
+		ReportSettings settings = report.spec.getSettings();
+		
+		createTextElement(settingsElement, SettingsConstants.CURRENCY_ID, settings.getCurrencyCode());
+		createTextElement(settingsElement, SettingsConstants.CALENDAR_TYPE_ID, Long.toString(settings.getCalendar().getIdentifier()));
+		
+		Element yearRangeElement = xmlDocument.createElement(SettingsConstants.YEAR_RANGE_ID);
+		settingsElement.appendChild(yearRangeElement);
+		createTextElement(yearRangeElement, SettingsConstants.YEAR_FROM, settings.getYearRangeFilter().min);
+		createTextElement(yearRangeElement, SettingsConstants.YEAR_TO, settings.getYearRangeFilter().max);
+		
+		Element amountFormatElement = xmlDocument.createElement(SettingsConstants.AMOUNT_FORMAT_ID);
+		settingsElement.appendChild(amountFormatElement);
+		
+		DecimalFormat amountFormat = settings.getCurrencyFormat();
+		DecimalFormatSymbols ds = amountFormat.getDecimalFormatSymbols();
+		createTextElement(amountFormatElement, SettingsConstants.AMOUNT_UNITS, String.valueOf(settings.getUnitsOption().divider));
+		createTextElement(amountFormatElement, SettingsConstants.MAX_FRACT_DIGITS, String.valueOf(amountFormat.getMaximumFractionDigits()));
+		createTextElement(amountFormatElement, SettingsConstants.DECIMAL_SYMBOL, String.valueOf(ds.getDecimalSeparator()));
+		createTextElement(amountFormatElement, SettingsConstants.USE_GROUPING, String.valueOf(amountFormat.isGroupingUsed()));
+		createTextElement(amountFormatElement, SettingsConstants.GROUP_SEPARATOR, String.valueOf(ds.getGroupingSeparator()));
+		createTextElement(amountFormatElement, SettingsConstants.GROUP_SIZE, String.valueOf(amountFormat.getGroupingSize()));
+	}
+
+	/**
+	 * @param configElement
+	 */
+	private void buildFiltersElements(Element configElement) {
+		Element filtersElement = xmlDocument.createElement("filters");
+		configElement.appendChild(filtersElement);
+		
+		Map<String, List<String>> extractedFilters = SaikuExportFilterUtils.getFilterValuesForIds(report.spec.getFilters());
+		
+		//TODO create objects holding the information about the columnNames, ReportElements and list of values
+		
+		for (Map.Entry<String, List<String>> filter : extractedFilters.entrySet()) {
+			Element filterElement = xmlDocument.createElement("filter");
+			filtersElement.appendChild(filterElement);
+			
+			createTextElement(filterElement, "name", filter.getKey());
+			//createTextElement(filterElement, "type", filter.getKey());
+			
+			Element filterValuesElement = xmlDocument.createElement("values");
+			filtersElement.appendChild(filterValuesElement);
+			
+			for (String filterValue : filter.getValue()) {
+				createTextElement(filterValuesElement, "value", filterValue);
+			}
+		}
+	}
+
+	/**
 	 * @param parentElement
 	 * @param textContent
 	 */
-	private void createTextElement(Document xmlDocument, Element parentElement, String elementName, String textContent) {
+	private void createTextElement(Element parentElement, String elementName, String textContent) {
 		Element textElmenet = xmlDocument.createElement(elementName);
 		textElmenet.setTextContent(StringEscapeUtils.escapeXml(textContent));
 		parentElement.appendChild(textElmenet);

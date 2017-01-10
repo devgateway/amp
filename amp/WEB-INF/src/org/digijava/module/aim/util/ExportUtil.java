@@ -2,8 +2,14 @@ package org.digijava.module.aim.util;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.h2.util.StringUtils;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -31,4 +37,33 @@ public class ExportUtil {
         result += " \n";
         return result;
     }
+
+    public static final Map<Integer, String> INDICATOR_VALUE_NAME = Collections.unmodifiableMap(new HashMap<Integer, String>() {{
+        put(AmpIndicatorValue.ACTUAL, "Current Value");
+        put(AmpIndicatorValue.BASE, "Base Value");
+        put(AmpIndicatorValue.TARGET, "Target Value");
+        put(AmpIndicatorValue.REVISED, "Revised Target Value");
+    }});
+
+    public static String getIndicatorValueType(AmpIndicatorValue value) {
+        if (value.getValueType() == AmpIndicatorValue.ACTUAL ) {
+            return "Current";
+        } else if (value.getValueType() == AmpIndicatorValue.BASE) {
+            return "Base";
+        } else if (value.getValueType() == AmpIndicatorValue.TARGET) {
+            return "Target";
+        } else if (value.getValueType() == AmpIndicatorValue.REVISED) {
+            return "Revised Target";
+        }
+        return null;
+    }
+
+    public static String getIndicatorSectors(IndicatorActivity indicator) {
+        String result = "";
+        for (AmpSector sector : indicator.getIndicator().getSectors()) {
+            result += sector.getName() + "\n";
+        }
+        return result;
+    }
+
 }

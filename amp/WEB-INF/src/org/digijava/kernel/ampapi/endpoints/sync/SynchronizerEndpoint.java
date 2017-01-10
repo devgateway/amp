@@ -102,22 +102,13 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     *     "access-type": "Team",
     *     "permission-strategy": "Full Access",
     *     "workspace-filters": {
-    *       "amountinthousand": 0,
-    *       "calendarType": "1",
-    *       "customusegroupings": true,
     *       "selectedActivityPledgesSettings": -1,
     *       "searchMode": "0",
     *       "workspaceonly": false,
-    *       "decimalseparator": ",",
-    *       "renderStartYear": 2000,
-    *       "sortByAsc": true,
-    *       "maximumFractionDigits": 0,
     *       "showArchived": false,
     *       "computedYear": 2015,
-    *       "renderEndYear": 2015,
     *       "workspaces": [1, 2, 3, 8, 9, 11, 12, 15],
-    *       "justSearch": false,
-    *       "groupingsize": 3
+    *       "justSearch": false
     *     }
     *   },
     *   ...

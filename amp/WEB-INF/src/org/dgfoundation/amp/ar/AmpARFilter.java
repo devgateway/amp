@@ -17,6 +17,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -109,6 +110,10 @@ public class AmpARFilter extends PropertyListable {
 	 * holding my nose while writing this. This id should behave like "a pledge report without any filters whatsoever"
 	 */
 	public final static long DUMMY_SUPPLEMENTARY_PLEDGE_FETCHING_REPORT_ID = -996L;
+	
+	public static final List<String> SETTINGS_PROPERTIES = Arrays.asList("amountinthousand", "calendarType", 
+	        "customusegroupings", "decimalseparator", "groupingsize", "maximumFractionDigits", "renderEndYear", 
+	        "renderStartYear", "sortByAsc", "sortBy");
 	
 	public final static Map<String, Integer> activityApprovalStatus = Collections.unmodifiableMap(new HashMap<String, Integer>(){{
 		this.put("Existing Unvalidated", 0);

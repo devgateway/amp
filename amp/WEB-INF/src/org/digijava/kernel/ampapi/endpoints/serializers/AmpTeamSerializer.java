@@ -13,6 +13,7 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.digijava.module.aim.dbentity.AmpTeam;
 
@@ -23,8 +24,6 @@ import org.digijava.module.aim.dbentity.AmpTeam;
  * @author Nadejda Mandrescu
  */
 public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
-    private static final List<String> remappable = Arrays.asList(Boolean.class.getName(), Integer.class.getName());
-    
     private ObjectMapper mapper = new ObjectMapper();
     
     @Override
@@ -50,8 +49,10 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
         if (ampTeam.getFilterDataSet() != null && !ampTeam.getFilterDataSet().isEmpty()) {
             Map<String, Object> filters = new TreeMap<String, Object>();
             for (AmpTeamFilterData filter : ampTeam.getFilterDataSet()) {
-                if (StringUtils.isNotBlank(filter.getValue()))
+                if (!AmpARFilter.SETTINGS_PROPERTIES.contains(filter.getPropertyName()) 
+                        && StringUtils.isNotBlank(filter.getValue())) {
                     filters.put(filter.getPropertyName(), getFilterValue(filter, filters.get(filter.getPropertyName())));
+                }
             }
             writeField("workspace-filters", filters);
         }
@@ -63,17 +64,11 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
             set.add(Long.valueOf(filter.getValue()));
             return set;
         }
-        // bugs with filters like "calendarType" stored as "org.digijava.module.aim.dbentity.AmpFiscalCalendar"
-        if (remappable.contains(filter.getPropertyClassName())) {
-            try {
-                Object value = mapper.readValue(filter.getValue(), Class.forName(filter.getPropertyClassName()));
-                return value;
-            } catch (ClassNotFoundException | IOException e) {
-                throw new IOException(e);
-            }
-        } else {
-            // TODO: this can be removed once filters structure is fixed
-            return filter.getValue();
+        try {
+            Object value = mapper.readValue(filter.getValue(), Class.forName(filter.getPropertyClassName()));
+            return value;
+        } catch (ClassNotFoundException | IOException e) {
+            throw new IOException(e);
         }
     }
 }

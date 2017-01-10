@@ -1,5 +1,7 @@
 package org.dgfoundation.amp;
 
+import java.util.HashSet;
+
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -7,6 +9,8 @@ import org.apache.struts.mock.MockHttpServletRequest;
 import org.apache.struts.mock.MockHttpSession;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -46,6 +50,7 @@ public class StandaloneAMPInitializer {
             InternationalizedViewsRepository.i18Models.size(); // force init outside of testcases
 
             populateMockRequest();
+            configureMockTranslationRequest();
 
             SETUP = true;
         } catch(Exception e) {
@@ -57,6 +62,12 @@ public class StandaloneAMPInitializer {
         MockHttpServletRequest mockRequest = new MockHttpServletRequest(new MockHttpSession());
         TLSUtils.populate(mockRequest, SiteUtils.getDefaultSiteDomain(SiteUtils.getDefaultSite()));
         return mockRequest;
+    }
+    
+    public static void configureMockTranslationRequest() {
+        TranslationSettings trnSettings = new TranslationSettings(TLSUtils.getEffectiveLangCode(), 
+                new HashSet<>(SiteUtils.getUserLanguagesCodes(TLSUtils.getSite())));
+        TLSUtils.getRequest().setAttribute(EPConstants.TRANSLATIONS, trnSettings);
     }
 
     private static void configureLog4j() {

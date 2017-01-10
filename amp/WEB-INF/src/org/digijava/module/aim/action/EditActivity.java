@@ -655,6 +655,9 @@ public class EditActivity extends Action {
         eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
 
         eaForm.setInternalIds(activity.getInternalIds());
+        if (activity.getIndicators() != null && activity.getIndicators().size() > 0) {
+            eaForm.setIndicators(activity.getIndicators());
+        }
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());

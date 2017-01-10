@@ -24,6 +24,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
@@ -42,6 +43,7 @@ import org.digijava.module.aim.dbentity.AmpGPISurvey;
 import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -96,6 +98,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -117,6 +120,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import clover.com.google.common.base.Strings;
 
 
 public class ExportActivityToWord extends Action {
@@ -600,6 +604,92 @@ public class ExportActivityToWord extends Action {
                 List<Table> activityCreationFieldsTables = getActivityCreationFieldsTables(	request, myForm);
                 for (Table tbl : activityCreationFieldsTables) {
                     doc.add(tbl);
+                }
+
+                if (FeaturesUtil.isVisibleModule("M & E")) {
+                    Table meTbl = null;
+                    meTbl = new Table(1);
+                    meTbl.setWidth(100);
+                    meTbl.setBorder(0);
+                    RtfCell meTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("M & E").toUpperCase(), HEADERFONT));
+                    meTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    meTitleCell.setBackgroundColor(CELLCOLORGRAY);
+                    meTbl.addCell(meTitleCell);
+
+                    if (myForm.getIndicators() != null) {
+                        String valueLabel = TranslatorWorker.translateText("Value");
+                        String commentLabel = TranslatorWorker.translateText("Comment");
+                        String dateLabel = TranslatorWorker.translateText("Date");
+                        String nameLabel = TranslatorWorker.translateText("Name");
+                        String codeLabel = TranslatorWorker.translateText("Code");
+                        String logFrameLabel = TranslatorWorker.translateText("LogFrame");
+                        String sectorsLabel = TranslatorWorker.translateText("Sectors");
+
+                        for (IndicatorActivity indicator : myForm.getIndicators()) {
+                            Table headerTable = new Table(4);
+                            headerTable.setWidth(99);
+                            headerTable.setWidths(new int[]{ 3, 1, 1, 2 });
+                            headerTable.getDefaultCell().setBorder(0);
+                            headerTable.getDefaultCell().setBackgroundColor(new Color(244, 244, 242));
+                            headerTable.addCell(nameLabel);
+                            headerTable.addCell(codeLabel);
+                            headerTable.addCell(logFrameLabel);
+                            headerTable.addCell(sectorsLabel);
+                            headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
+
+                            if (FeaturesUtil.isVisibleField("Indicator Name")) {
+                                headerTable.addCell(new Paragraph(indicator.getIndicator().getName(), BOLDFONT));
+                                headerTable.addCell(indicator.getIndicator().getCode());
+                            }
+                            if (FeaturesUtil.isVisibleField("Logframe Category")) {
+                                if (indicator.getValues() != null && indicator.getValues().size() > 0) {
+                                    headerTable.addCell(indicator.getLogFrame() + "\n");
+                                }
+                            }
+                            
+                            if (FeaturesUtil.isVisibleField("Sectors")) {
+                                if (indicator.getIndicator().getSectors() != null) {
+                                    headerTable.addCell(ExportUtil.getIndicatorSectors(indicator) + "\n");
+                                }
+                            }
+
+                            RtfCell headerCell = new RtfCell();
+                            headerCell.setBorder(0);
+                            headerCell.add(headerTable);
+                            meTbl.addCell(headerCell);
+
+                            for (AmpIndicatorValue value : indicator.getValuesSorted()) {
+
+                                String fieldName = ExportUtil.getIndicatorValueType(value);
+                                columnVal = TranslatorWorker.translateText(ExportUtil.INDICATOR_VALUE_NAME.get(value.getValueType()));
+                                RtfCell cellValueTitle = new RtfCell();
+                                cellValueTitle.setBorder(0);
+                                cellValueTitle.add(new Paragraph(columnVal, BOLDFONT));
+                                meTbl.addCell(cellValueTitle);
+
+                                Table additionalInfoSubTable = new Table(2);
+                                additionalInfoSubTable.setWidth(80);
+
+                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, valueLabel, value.getValue().toString(), null);
+                                }
+                                if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, commentLabel, DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);
+                                }
+                                if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, dateLabel, DateConversion.convertDateToLocalizedString(value.getValueDate()), null);
+                                }
+
+                                RtfCell cellValue = new RtfCell();
+                                cellValue.setBorder(0);
+                                cellValue.add(additionalInfoSubTable);
+                                meTbl.addCell(cellValue);
+
+                            }
+                        }
+
+                    }
+                    doc.add(meTbl);
                 }
 
                 List<Table> activityPerformanceTables = getActivityPerformanceTables(request, activity);

@@ -1,12 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.documents;
 
-import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.digijava.module.aim.util.DesktopDocumentsUtil;
-import org.digijava.module.contentrepository.helper.DocumentData;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
@@ -16,6 +9,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.Collection;
+
+import org.apache.log4j.Logger;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
+import org.digijava.module.aim.util.DesktopDocumentsUtil;
+import org.digijava.module.contentrepository.helper.DocumentData;
 
 @Path("documents")
 public class Documents {
@@ -29,9 +29,11 @@ public class Documents {
 	private HttpServletResponse httpResponse;
 
 	/**
-	 * Retrieve a list of documents.
+	 * Retrieve a list of documents order by document's date.
 	 * </br>
 	 * <dl>
+	 * This EP needs a logged in user and will return a list of as maximum 5 documents, this documents can be privates or team's documents.
+	 * If no user is logged in, return to an empty list.
 	 * The JSON object holds information regarding:
 	 * <dt><b>name</b><dd> - the name of document
 	 * <dt><b>uuid</b><dd> - the uuid of document

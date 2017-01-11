@@ -1,21 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.scorecard;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
-import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardExcelExporter;
-import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardNoUpdateDonor;
-import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardService;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
-import org.digijava.module.aim.dbentity.AmpScorecardOrganisation;
-import org.digijava.module.aim.dbentity.AmpScorecardSettings;
-import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -33,6 +17,22 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
+import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardExcelExporter;
+import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardNoUpdateDonor;
+import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardService;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
+import org.digijava.module.aim.dbentity.AmpScorecardOrganisation;
+import org.digijava.module.aim.dbentity.AmpScorecardSettings;
+import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -200,6 +200,7 @@ public class DonorScorecard {
 	 * Save the noUpdate donors.
 	 * </br>
 	 * <dl>
+	 * Used in Scorecard Manager (admin section), receive a list of donors that are not to be excluded in the scorecard.
 	 * </dl></br></br>
 	 *
 	 * </br>
@@ -247,6 +248,7 @@ public class DonorScorecard {
 	 * Retrieve and provide a list of the filtered donors.
 	 * </br>
 	 * <dl>
+	 * Used in Scorecard Manager (admin section), receive the list of selected donors in the scorecard manager that are to be excluded in the scorecard.
 	 * The JSON object holds information regarding:
 	 * <dt><b>allFilteredDonors</b><dd> - the list of the filtered donors
 	 * <dt><b>noUpdatesFilteredDonors</b><dd> - the list of noupdate donors
@@ -281,7 +283,7 @@ public class DonorScorecard {
 	 *
 	 * @param donorsBean a JSONObject with a list of donors
 	 *
-	 * @return a JSON object with a list of the filtered donors
+	 * @return a JSON object with a list of donors
 	 */
 	@POST
 	@Path("/manager/donors/filtered")

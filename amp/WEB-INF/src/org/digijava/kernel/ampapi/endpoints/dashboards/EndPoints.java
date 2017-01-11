@@ -1,14 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards;
 
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
-import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,6 +9,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 import net.sf.json.JSONObject;
 
@@ -32,9 +32,11 @@ import net.sf.json.JSONObject;
 public class EndPoints implements ErrorReportingEndpoint {
 
 	/**
-	 * Retrieve a list of available top for the dashboard charts with their names, that is hardcoded and will return always "Donor Agency", "Region", "Primary Sector"
+	 * Retrieve a list of available top for the dashboard charts with their names.
 	 * </br>
 	 * <dl>
+	 * This EP was hardcoded and will return always "Donor Agency", "Region", "Primary Sector".
+	 * </br>
 	 * The JSON object holds information regarding:
 	 * <dt><b>id</b><dd> - the id of top
 	 * <dt><b>name</b><dd> - the name of top
@@ -534,6 +536,7 @@ public class EndPoints implements ErrorReportingEndpoint {
 	 * Provides possible HeatMap Configurations.
 	 * </br>
 	 * <dl>
+	 * This EP doesn't receive any parameters and return a list of the visibly columns, a list of charts and the colors to use for every threshold.
 	 * </dl></br></br>
 	 *
 	 * <h3>Sample Output:</h3><pre>

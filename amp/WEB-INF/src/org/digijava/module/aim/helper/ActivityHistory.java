@@ -1,8 +1,5 @@
 package org.digijava.module.aim.helper;
 
-import java.util.Date;
-
-
 /** bean used for holding information about user (first and last name) who modified the activity
  * 
  * @author Viorel Chihai
@@ -12,13 +9,13 @@ public class ActivityHistory {
 
 	private Long activityId;
 	private String modifiedBy;
-	private Date modifiedDate;
+	private String modifiedDate;
 	
 	public ActivityHistory() {
 		
 	}
 	
-	public ActivityHistory(Long activityId, String modifiedBy, Date modifiedDate) {
+	public ActivityHistory(Long activityId, String modifiedBy, String modifiedDate) {
 		super();
 		this.activityId = activityId;
 		this.modifiedBy = modifiedBy;
@@ -33,11 +30,11 @@ public class ActivityHistory {
 		this.activityId = activityId;
 	}
 
-	public Date getModifiedDate() {
+	public String getModifiedDate() {
 		return modifiedDate;
 	}
 
-	public void setModifiedDate(Date modifiedDate) {
+	public void setModifiedDate(String modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
 

@@ -39,8 +39,7 @@
 						</c:if>
 					</td>
 					<td>
-						<fmt:formatDate type="both" value="${item.modifiedDate}"
-						dateStyle="short" timeStyle="short" /> 
+						${item.modifiedDate}
 						<c:if test="${empty item.modifiedDate}">
 						<digi:trn>Empty</digi:trn>
 						</c:if>

@@ -61,7 +61,7 @@ public class ViewUserProfile
             if (user != null) {
                 member = TeamMemberUtil.getAmpTeamMember(user);
             } else {
-                member = TeamMemberUtil.getAmpTeamMember(userId);
+                member = TeamMemberUtil.getAmpTeamMemberByUserId(userId);
             }
             
             if (member == null) {

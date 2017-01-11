@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -62,14 +64,11 @@ import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.action.ReportsFilterPicker;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -397,12 +396,14 @@ public class Reports implements ErrorReportingEndpoint {
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX, false);
 	}
+	
 	@POST
 	@Path("/saikureport/export/xls/run/{report_token}")
 	@Produces({"application/vnd.ms-excel" })
 	public final Response exportXlsSaikuReport(String query, @PathParam("report_token") Integer reportToken) {
 		return exportInMemorySaikuReport(query,reportToken,AMPReportExportConstants.XLSX);
 	}	
+	
 	@POST
 	@Path("/saikureport/export/csv/{report_id}")
 	@Produces({"text/csv"})
@@ -411,13 +412,32 @@ public class Reports implements ErrorReportingEndpoint {
 		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.CSV, false);
 
 	}
+	
 	@POST
 	@Path("/saikureport/export/csv/run/{report_token}")
 	@Produces({"text/csv"})
 	public final Response exportCsvSaikuReport(String query, @PathParam("report_token") Integer reportToken,
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 
-		return exportInMemorySaikuReport(query, reportToken,AMPReportExportConstants.CSV);
+		return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.CSV);
+	}
+	
+	@POST
+	@Path("/saikureport/export/xml/{report_id}")
+	@Produces({"application/xml"})
+	public final Response exportXmlSaikuReport(String query, @PathParam("report_id") Long reportId, 
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XML, false);
+
+	}
+	
+	@POST
+	@Path("/saikureport/export/xml/run/{report_token}")
+	@Produces({"application/xml"})
+	public final Response exportXmlSaikuReport(String query, @PathParam("report_token") Integer reportToken,
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+
+		return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.XML);
 	}
 	
 	@POST
@@ -433,7 +453,7 @@ public class Reports implements ErrorReportingEndpoint {
 	@Path("/saikureport/export/pdf/run/{report_token}")
 	@Produces({"application/pdf"})
 	public final Response exportPdfSaikuReport(String query, @PathParam("report_token") Integer reportToken) {
-		return exportInMemorySaikuReport(query, reportToken,AMPReportExportConstants.PDF);
+		return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.PDF);
 	}
 	
 	@POST
@@ -579,6 +599,7 @@ public class Reports implements ErrorReportingEndpoint {
 			
 			if (doc != null) {
 				logger.info("Send export data to browser...");
+				
 				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
 						.header("content-disposition", "attachment; filename = " + fileName)
 						.header("content-length", doc.length).build();
@@ -594,9 +615,16 @@ public class Reports implements ErrorReportingEndpoint {
 
 	public String getExportFileName(AmpReports ampReport, String type) {
 		
-		String filename = ampReport != null ? ampReport.getName() : "export";
+		String filename = ampReport != null ? StringUtils.trim(ampReport.getName()) : "export";
+		filename = String.format("%s", filename.replaceAll(" ", "_"));
+		
+		try {
+			filename = URLEncoder.encode(filename, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e);
+		}
+		
 		filename += "." + type;
-		filename = String.format("\"%s\"", filename.replaceAll(" ", "_"));
 		
 		return filename;
 	}

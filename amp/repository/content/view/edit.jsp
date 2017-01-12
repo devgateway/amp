@@ -178,7 +178,7 @@ div.fakefile2 input {
         <!-- </tr> -->
         <tr>
           <td colspan="2" align=center><span class=subtitle-blue>
-            <digi:trn><b style="font-size:12px;">Add/Edit content</b></digi:trn>
+            <b style="font-size:12px;"><digi:trn>Add/Edit content</digi:trn></b>
             </span> </td>
         </tr>
         <tr>

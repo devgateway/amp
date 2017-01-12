@@ -27,8 +27,7 @@ var AMPInfo = Backbone.View.extend({
 			animate : "linear",
 			activate: function (event, ui) {
 				$("#amp_info_filters_block").empty();
-				var modelFilters = window.currentFilter.serializeToModels();
-				console.log(modelFilters);
+				var modelFilters = window.currentFilter.serializeToModels();				
 				$("#amp_info_filters_block").html(filtersToHtml(modelFilters.filters || {}));
 				Saiku.i18n.translate();
 			}

@@ -4,17 +4,19 @@
 package org.digijava.kernel.ampapi.endpoints.serializers;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 
 
@@ -45,6 +47,13 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
         writeField("permission-strategy", ampTeam.getPermissionStrategy());
         writeField("fm-template-id", ampTeam.getFmTemplate() == null ? null : ampTeam.getFmTemplate().getId());
         writeField("workspace-prefix", ampTeam.getWorkspacePrefix() == null ? null : ampTeam.getWorkspacePrefix().getValue());
+        
+        if (Boolean.TRUE.equals(ampTeam.getComputation()) && ampTeam.getOrganizations() != null 
+                && !ampTeam.getOrganizations().isEmpty()) {
+            List<Long> computedOrgs = ((Collection<AmpOrganisation>) ampTeam.getOrganizations()).stream()
+                    .map(org -> org.getAmpOrgId()).collect(Collectors.toList());
+            writeField("organizations", computedOrgs);
+        }
         
         if (ampTeam.getFilterDataSet() != null && !ampTeam.getFilterDataSet().isEmpty()) {
             Map<String, Object> filters = new TreeMap<String, Object>();

@@ -1930,7 +1930,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		} else if (activity.getModifiedDate() != null) {
 			return activity.getModifiedDate();
 		} else if (auditHistory != null) {
-			return FormatHelper.parseDate2(auditHistory.getModifiedDate());
+			return auditHistory.getModifiedDate();
 		} else if (activity.getApprovalDate() != null) {
 			return activity.getApprovalDate();
 		} else if (activity.getCreatedDate() != null) {
@@ -1952,14 +1952,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		for(AmpAuditLogger aal : activityLogObjects) {
 			if (StringUtils.isNotEmpty(aal.getEditorName())) {
 				logActivityHistory.setModifiedBy(aal.getEditorName());
-				logActivityHistory.setModifiedDate(FormatHelper.formatDate(aal.getLoggedDate()));
+				logActivityHistory.setModifiedDate(aal.getLoggedDate());
 				return logActivityHistory;
 			} else if (StringUtils.isNotEmpty(aal.getEditorEmail())) {
 				try {
 					User u = UserUtils.getUserByEmail(aal.getEditorEmail());
 					if (u != null) {
 						logActivityHistory.setModifiedBy(String.format("%s %s", u.getFirstNames(), u.getLastName()));
-						logActivityHistory.setModifiedDate(FormatHelper.formatDate(aal.getLoggedDate()));
+						logActivityHistory.setModifiedDate(aal.getLoggedDate());
 						return logActivityHistory;
 					}
 				} catch (DgException e) {

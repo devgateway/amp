@@ -17,8 +17,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -49,6 +49,9 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
+import org.dgfoundation.amp.reports.saiku.export.SaikuReportExporter;
+import org.dgfoundation.amp.reports.xml.CustomReport;
+import org.dgfoundation.amp.reports.xml.XmlReportUtil;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -217,6 +220,20 @@ public class Reports implements ErrorReportingEndpoint {
 		return getReportResultByPage(formParams, reportId);
 	}
 	
+	@POST
+	@Path("/report/custom/paginate")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
+	/**
+	 * Generates a custom xml report.  
+	 * 
+	 * @param formParams {@link ReportsUtil#getReportResultByPage form parameters}
+	 * @return Response in xml format result for the report
+	 */
+	public final Response getXmlCustomReport(CustomReport customReport) {
+		return getXmlReportResponse(customReport, null);
+	}
+
 	/**
 	 * Retrieves report data for the specified reportId and a given page number
 	 *  
@@ -227,10 +244,27 @@ public class Reports implements ErrorReportingEndpoint {
 	 */
 	@POST
 	@Path("/report/{report_id}/paginate")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JsonBean getReportResultByPage(JsonBean formParams,
 			@PathParam("report_id") Long reportId) {
 		return ReportsUtil.getReportResultByPage(reportId, formParams);
+	}
+	
+	/**
+	 * Retrieves report data for the specified reportId and a given page number
+	 *  
+	 * @param reportId    report Id
+	 * @param formParams  {@link ReportsUtil#getReportResultByPage form parameters}
+	 * @return JsonBean result for the requested page and pagination information
+	 * @see ReportsUtil#getReportResultByPage
+	 */
+	@POST
+	@Path("/report/{report_id}/paginate")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
+	public final Response getReportResultByPage(CustomReport customReport, @PathParam("report_id") Long reportId) {
+		return getXmlReportResponse(customReport, reportId);
 	}
 	
 	@POST
@@ -909,5 +943,39 @@ public class Reports implements ErrorReportingEndpoint {
 	@Override
 	public Class getErrorsClass() {
 		return ReportErrors.class;
+	}
+	
+	/** Method used to create a xml Response for a specific report
+	 * @param customReport
+	 * @param reportId
+	 * @return
+	 */
+	private Response getXmlReportResponse(CustomReport customReport, Long reportId) {
+		JsonBean formParams = XmlReportUtil.convertXmlCustomReportToJsonObj(customReport);
+		ReportsUtil.validateReportConfig(formParams, true);
+		
+		if (reportId == null) {
+			// we need reportId only to store the report result in cache
+			reportId = (long) formParams.getString(EPConstants.REPORT_NAME).hashCode();
+			formParams.set(EPConstants.IS_CUSTOM, true);
+		}
+		
+		try {
+			GeneratedReport generatedReport = ReportsUtil.getGeneratedReport(reportId, formParams);
+			SaikuReportExporter xmlExporter = SaikuReportExportType.XML.executor.newInstance();
+			byte[] doc = xmlExporter.exportReport(generatedReport, null);
+			
+			if (doc != null) {
+				logger.info("Send export data to browser...");
+				
+				return Response.ok(doc, MediaType.APPLICATION_XML).build();
+			} else {
+				logger.error("XML" + " report export is null");
+				return Response.serverError().build();
+			}
+		} catch (Exception e) {
+			logger.error("error while generating report", e);
+			return Response.serverError().build();
+		}
 	}
 }

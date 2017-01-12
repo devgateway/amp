@@ -227,7 +227,8 @@ public class GeneratedReportToXmlConverter {
 	 */
 	private void createTextElement(Element parentElement, String elementName, String textContent) {
 		Element textElmenet = xmlDocument.createElement(elementName);
-		textElmenet.setTextContent(StringEscapeUtils.escapeXml(textContent));
+		//TODO update commons.lang to 3.3 in order to use StringEscapeUtils.escapeXml(textContent);
+		textElmenet.setTextContent(textContent);
 		parentElement.appendChild(textElmenet);
 	}
 

@@ -27,9 +27,8 @@ var AMPInfo = Backbone.View.extend({
 			animate : "linear",
 			activate: function (event, ui) {
 				$("#amp_info_filters_block").empty();
-				var modelFilters = window.currentFilter.serializeToModels();
-//				FilterUtils.updateFiltersRegion(modelFilters);
-				$("#amp_info_filters_block").html(filtersToHtml(modelFilters));
+				var modelFilters = window.currentFilter.serializeToModels();				
+				$("#amp_info_filters_block").html(filtersToHtml(modelFilters.filters || {}));
 				Saiku.i18n.translate();
 			}
 		});
@@ -104,76 +103,43 @@ var filtersToHtml = function(filters) {
 	Saiku.logger.log("AMPInfo.filtersToHtml");
 	//TODO: Move all these html into a template + view.
 	var html = "";
-	if (filters.columnFilters != undefined) {
-		for ( var propertyName in filters.columnFilters) {
-			var auxProperty = filters.columnFilters[propertyName];
+	if (filters != undefined) {
+		for ( var propertyName in filters) {
+			var auxProperty = filters[propertyName];
 			var content = [];
-			_.each(auxProperty, function(item, i) {
-				var auxItem = {};
-				if(item.get !== undefined) {
-					auxItem.id = item.get('id');
-					auxItem.name = item.get('name');
-					if (item.get('name') === "true" || item.get('name') === "false") {
-						auxItem.trnName = TranslationManager.getTranslated(item.get('name'));
-						//auxItem.trnName = item.get('name');
-					 }
-					else {
-						auxItem.trnName = item.get('name');
-					}
-					content.push(auxItem);
-				} else {
-					console.error(JSON.stringify(auxItem) + " not mapped, we need to check why is not a model.");
+			if(auxProperty.modelType === 'YEAR-SINGLE-VALUE' || auxProperty.modelType === 'DATE-RANGE-VALUES'){
+				var filter = createDateFilterObject(filters, propertyName);
+				if(filter && filter.values.length > 0){
+					html += "<div class='round-filter-group'><b class='i18n'>" + filter.trnName + "</b><br>" + filterContentToHtml(filter.values) + "</div>";						
 				}
-			});
-			/*var name = TranslationManager.getTranslated(auxProperty.filterName) || TranslationManager.getTranslated(propertyName)*/
-			var trnName = auxProperty.filterName || propertyName;
-			html += "<div class='round-filter-group'><b class='i18n'>" + trnName + "</b><br>" + filterContentToHtml(content) + "</div>";
+				
+			} else {
+				_.each(auxProperty, function(item, i) {
+					var auxItem = {};				
+					if(item.get !== undefined) {
+						auxItem.id = item.get('id');
+						auxItem.name = item.get('name');
+						
+						if (item.get('name') === "true" || item.get('name') === "false") {						
+							auxItem.trnName = TranslationManager.getTranslated(item.get('name'));						
+						 }
+						else {
+							auxItem.trnName = item.get('name');
+						}
+						content.push(auxItem);
+					} else {
+						console.error(JSON.stringify(auxItem) + " not mapped, we need to check why is not a model.");
+					}
+				});
+				
+				var trnName = auxProperty.filterName || propertyName;
+				html += "<div class='round-filter-group'><b class='i18n'>" + trnName + "</b><br>" + filterContentToHtml(content) + "</div>";
+			}	
+			
 		}
 	}
-	if (filters.otherFilters != undefined) {
-		for ( var propertyName in filters.otherFilters) {
-			var dateContent = filters.otherFilters[propertyName];
-			if (dateContent != undefined) {
-				var filter = {
-					trnName : TranslationManager.getTranslated(propertyName), 
-					name : propertyName,
-					values:[]
-				};
-				if (dateContent.modelType === 'DATE-RANGE-VALUES') {
-					dateContent.start = dateContent.start || "";
-					dateContent.end = dateContent.end || "";
-					
-					var startDatePrefix = TranslationManager.getTranslated((dateContent.start.length > 0 && dateContent.end.length === 0) ? "from" : "") + '&nbsp;';
-					var endDatePrefix = TranslationManager.getTranslated((dateContent.start.length === 0 && dateContent.end.length > 0) ? "until" : "") + '&nbsp';
-					
-					if(dateContent.start.length > 0){
-						filter.values.push({
-							id : dateContent.start,
-							name : dateContent.start,
-							trnName : startDatePrefix + window.currentFilter.formatDate(dateContent.start) 
-						});
-					}
-					
-					if(dateContent.end.length > 0){
-						filter.values.push({
-							id : dateContent.end,
-							name : dateContent.end,
-							trnName : endDatePrefix + window.currentFilter.formatDate(dateContent.end) 					
-						});		
-					}									
-				} else if (dateContent.modelType === 'YEAR-SINGLE-VALUE') {
-					dateContent.year = dateContent.year || '';
-					filter.values.push({
-						id : dateContent.year,
-						name : dateContent.year,
-						trnName : dateContent.year
-					});
-					filter.trnName = dateContent.displayName;
-				}
-				html += "<div class='round-filter-group'><b class='i18n'>" + filter.trnName + "</b><br>" + filterContentToHtml(filter.values) + "</div>";
-			}
-		}
-	}
+	
+	
 	return html;
 }
 
@@ -185,6 +151,51 @@ var filterContentToHtml = function(content) {
 	});
 	return html;
 }
+
+var createDateFilterObject= function(filters, propertyName){	
+	var auxProperty = filters[propertyName];
+	var filter;	
+	if (auxProperty != undefined) {
+		filter = {
+				trnName : TranslationManager.getTranslated(propertyName), 
+				name : propertyName,
+				values:[]
+		};	
+		if (auxProperty.modelType === 'DATE-RANGE-VALUES') {
+			auxProperty.start = auxProperty.start || "";
+			auxProperty.end = auxProperty.end || "";
+
+			var startDatePrefix = TranslationManager.getTranslated((auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "from" : "") + '&nbsp;';
+			var endDatePrefix = TranslationManager.getTranslated((auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "until" : "") + '&nbsp';
+
+			if(auxProperty.start.length > 0){
+				filter.values.push({
+					id : auxProperty.start,
+					name : auxProperty.start,
+					trnName : startDatePrefix + window.currentFilter.formatDate(auxProperty.start) 
+				});
+			}
+
+			if(auxProperty.end.length > 0){
+				filter.values.push({
+					id : auxProperty.end,
+					name : auxProperty.end,
+					trnName : endDatePrefix + window.currentFilter.formatDate(auxProperty.end) 					
+				});		
+			}									
+		} else if (auxProperty.modelType === 'YEAR-SINGLE-VALUE') {
+			if(auxProperty.year){				
+				filter.values.push({
+					id : auxProperty.year,
+					name : auxProperty.year,
+					trnName : auxProperty.year
+				});
+			}			
+			filter.trnName = auxProperty.displayName;
+		}
+	}
+	return filter;
+};
 
 /**
  * Start Plugin

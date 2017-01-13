@@ -1,7 +1,7 @@
 import * as AMP from "amp/architecture";
 import * as NewConstantCurrency from "./new.jsx";
 import * as Entry from "./entry.jsx";
-import {SETTINGS, CONSTANT_CURRENCIES} from "amp/config/endpoints";
+import { DEFLATOR_SETTINGS, CONSTANT_CURRENCIES } from "amp/config/endpoints";
 import {fetchJson, postJson} from "amp/tools";
 import React from "react";
 import {showSave, RequestStatus} from "../tools";
@@ -46,7 +46,8 @@ function parseConstantCurrencies(blueprint, data){
 
 
 export var init = (currenciesPromise, translationsPromise) => {
-  var calendarsPromise = fetchJson(SETTINGS).then(settings => settings[1].options.reduce(parseCalendars, new AMP.Model()));
+    var calendarsPromise = fetchJson(DEFLATOR_SETTINGS).then(settings =>
+        settings[0].value.options.reduce(parseCalendars, new AMP.Model()));
   var entryPromise = Entry.init(calendarsPromise, currenciesPromise, translationsPromise);
   //constant currencies depend on entryPromise model blueprint
   var constantCurrenciesPromise = Promise.all([entryPromise, fetchJson(CONSTANT_CURRENCIES)])

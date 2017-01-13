@@ -107,20 +107,28 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 				auxProperty.start =  auxProperty.start || "" ;
 				auxProperty.end =  auxProperty.end || "" ;	
 
-				var startDatePrefix = (auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "from " : "";
-				var endDatePrefix = (auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "until " : "";
+				var startDatePrefix = (auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "From " : "";
+				var endDatePrefix = (auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "Until " : "";
 				if(auxProperty.start.length > 0){
 					filterObject.values.push({
 						id : auxProperty.start,
 						name : auxProperty.start,
-						trnName : TranslationManager.getTranslated(startDatePrefix) + app.TabsApp.filtersWidget.formatDate(auxProperty.start)
+						trnName : TranslationManager.getTranslated(startDatePrefix) + " " + app.TabsApp.filtersWidget.formatDate(auxProperty.start)
 					});
+				}
+				if(auxProperty.start.length > 0 && auxProperty.end.length > 0){
+					filterObject.values.push({
+						id : "date-separator",
+						name : "date-separator",
+						trnName : " - "
+
+					});	
 				}
 				if(auxProperty.end.length > 0){
 					filterObject.values.push({
 						id : auxProperty.end,
 						name : auxProperty.end,
-						trnName : TranslationManager.getTranslated(endDatePrefix) + app.TabsApp.filtersWidget.formatDate(auxProperty.end)
+						trnName : TranslationManager.getTranslated(endDatePrefix) + " " + app.TabsApp.filtersWidget.formatDate(auxProperty.end)
 
 					});	
 				}															 

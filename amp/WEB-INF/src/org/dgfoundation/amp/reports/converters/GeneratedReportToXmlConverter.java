@@ -21,11 +21,37 @@ import org.w3c.dom.Element;
 
 import clover.org.apache.commons.lang.StringEscapeUtils;
 
-/**
+/** A utility class to convert a GenerateReport to XML Document
  * @author Viorel Chihai
  *
  */
 public class GeneratedReportToXmlConverter {
+	
+	private static final String ELEMENT_REPORT_ROOT = "report";
+	private static final String ELEMENT_REPORT_OUTPUT = "output";
+	private static final String ELEMENT_REPORT_AREA = "reportArea";
+	private static final String ELEMENT_REPORT_CONTENTS = "contents";
+	private static final String ELEMENT_REPORT_AREA_CHILDREN = "children";
+	private static final String ELEMENT_REPORT_CELL = "cell";
+	private static final String ELEMENT_REPORT_CELL_COLUMN_NAME = "columnName";
+	private static final String ELEMENT_REPORT_CELL_VALUE = "value";
+	
+	private static final String ELEMENT_REPORT_HEADERS = "headers";
+	private static final String ELEMENT_REPORT_HEADER_COLUMN = "column";
+	private static final String ELEMENT_REPORT_HEADER_PARENT_COLUMN = "parentColumn";
+	private static final String ELEMENT_REPORT_HEADER_COLUMN_HIERARCHICAL_NAME = "hierarchicalName";
+	private static final String ELEMENT_REPORT_HEADER_COLUMN_DESCRIPTION = "description";
+	private static final String ELEMENT_REPORT_HEADER_COLUMN_NAME = "name";
+
+	private static final String ELEMENT_REPORT_CONFIG = "config";
+	private static final String ELEMENT_REPORT_CONFIG_SETTINGS = "settings";
+	private static final String ELEMENT_REPORT_CONFIG_SORTING = "sorting";
+	private static final String ELEMENT_REPORT_CONFIG_FILTERS = "filters";
+	private static final String ELEMENT_REPORT_CONFIG_FILTERS_FILTER = "filter";
+	private static final String ELEMENT_REPORT_FILTERS_FILTER_NAME = "name";
+	private static final String ELEMENT_REPORT_FILTERS_FILTER_VALUE = "value";
+	
+	private static final String ATTRIBUTE_REPORT_CONFIG_SORT = "sort";
 	
 	private GeneratedReport report;
 	private Document xmlDocument;
@@ -47,7 +73,7 @@ public class GeneratedReportToXmlConverter {
 	}
 	
 	private void buildXmlReport() {
-		Element rootElement = xmlDocument.createElement("report");
+		Element rootElement = xmlDocument.createElement(ELEMENT_REPORT_ROOT);
 		xmlDocument.appendChild(rootElement);
 		
 		buildReportOutput(rootElement);
@@ -58,7 +84,7 @@ public class GeneratedReportToXmlConverter {
 	 * @param parentElement
 	 */
 	private void buildReportOutput(Element parentElement) {
-		Element outputElement = xmlDocument.createElement("output");
+		Element outputElement = xmlDocument.createElement(ELEMENT_REPORT_OUTPUT);
 		parentElement.appendChild(outputElement);
 		
 		buildReportHeaders(outputElement);
@@ -77,21 +103,21 @@ public class GeneratedReportToXmlConverter {
 	 * @param parentElement
 	 */
 	private void buildReportArea(Element parentElement, ReportArea reportArea) {
-		Element reportAreaElement = xmlDocument.createElement("reportArea");
+		Element reportAreaElement = xmlDocument.createElement(ELEMENT_REPORT_AREA);
 		parentElement.appendChild(reportAreaElement);
 		
-		Element contentsElement = xmlDocument.createElement("contents");
+		Element contentsElement = xmlDocument.createElement(ELEMENT_REPORT_CONTENTS);
 		reportAreaElement.appendChild(contentsElement);
 		
 		reportArea.getContents().forEach((roc, rc) -> {
-			Element cellElement = xmlDocument.createElement("cell");
+			Element cellElement = xmlDocument.createElement(ELEMENT_REPORT_CELL);
 			contentsElement.appendChild(cellElement);
 			
-			createTextElement(cellElement, "columnName", roc.getHierarchicalName());
-			createTextElement(cellElement, "value", rc.displayedValue);
+			createTextElement(cellElement, ELEMENT_REPORT_CELL_COLUMN_NAME, roc.getHierarchicalName());
+			createTextElement(cellElement, ELEMENT_REPORT_CELL_VALUE, rc.displayedValue);
 		});
 		
-		Element childrenElement = xmlDocument.createElement("children");
+		Element childrenElement = xmlDocument.createElement(ELEMENT_REPORT_AREA_CHILDREN);
 		reportAreaElement.appendChild(childrenElement);
 		
 		if (reportArea.getChildren() != null) {
@@ -103,7 +129,7 @@ public class GeneratedReportToXmlConverter {
 	 * @param parentElement
 	 */
 	private void buildReportHeaders(Element parentElement) {
-		Element headersElement = xmlDocument.createElement("headers");
+		Element headersElement = xmlDocument.createElement(ELEMENT_REPORT_HEADERS);
 		parentElement.appendChild(headersElement);
 		
 		report.leafHeaders.stream()
@@ -117,14 +143,14 @@ public class GeneratedReportToXmlConverter {
 	 * @param parentElement
 	 */
 	private void buildHeaderElement(ReportOutputColumn reportOutputColumn, Element parentElement) {
-		Element columnElement = xmlDocument.createElement("column");
+		Element columnElement = xmlDocument.createElement(ELEMENT_REPORT_HEADER_COLUMN);
 		parentElement.appendChild(columnElement);
 		
-		createTextElement(columnElement, "name", reportOutputColumn.columnName);
-		createTextElement(columnElement, "description", reportOutputColumn.description);
-		createTextElement(columnElement, "hierarchicalName", reportOutputColumn.getHierarchicalName());
+		createTextElement(columnElement, ELEMENT_REPORT_HEADER_COLUMN_NAME, reportOutputColumn.columnName);
+		createTextElement(columnElement, ELEMENT_REPORT_HEADER_COLUMN_DESCRIPTION, reportOutputColumn.description);
+		createTextElement(columnElement, ELEMENT_REPORT_HEADER_COLUMN_HIERARCHICAL_NAME, reportOutputColumn.getHierarchicalName());
 		
-		Element headerParentColumn = xmlDocument.createElement("parentColumn");
+		Element headerParentColumn = xmlDocument.createElement(ELEMENT_REPORT_HEADER_PARENT_COLUMN);
 		columnElement.appendChild(headerParentColumn);
 		
 		if (reportOutputColumn.parentColumn != null) {
@@ -136,7 +162,7 @@ public class GeneratedReportToXmlConverter {
 	 * @param parentElement
 	 */
 	private void buildReportConfig(Element parentElement) {
-		Element configElement = xmlDocument.createElement("config");
+		Element configElement = xmlDocument.createElement(ELEMENT_REPORT_CONFIG);
 		parentElement.appendChild(configElement);
 		
 		buildSortingElements(configElement);
@@ -148,10 +174,10 @@ public class GeneratedReportToXmlConverter {
 	 * @param configElement
 	 */
 	private void buildSortingElements(Element configElement) {
-		Element sortingElement = xmlDocument.createElement("sorting");
+		Element sortingElement = xmlDocument.createElement(ELEMENT_REPORT_CONFIG_SORTING);
 		configElement.appendChild(sortingElement);
 		report.spec.getSorters().forEach(sorter -> {
-			Element sortElement = xmlDocument.createElement("sort");
+			Element sortElement = xmlDocument.createElement(ATTRIBUTE_REPORT_CONFIG_SORT);
 			String pathName = sorter.hierPath.get(0);
 			
 			if (!sorter.isHierarchySorter(report.spec.getHierarchyNames())) {
@@ -168,7 +194,7 @@ public class GeneratedReportToXmlConverter {
 	 * @param configElement
 	 */
 	private void buildSettingsElements(Element configElement) {
-		Element settingsElement = xmlDocument.createElement("settings");
+		Element settingsElement = xmlDocument.createElement(ELEMENT_REPORT_CONFIG_SETTINGS);
 		configElement.appendChild(settingsElement);
 		
 		ReportSettings settings = report.spec.getSettings();
@@ -198,7 +224,7 @@ public class GeneratedReportToXmlConverter {
 	 * @param configElement
 	 */
 	private void buildFiltersElements(Element configElement) {
-		Element filtersElement = xmlDocument.createElement("filters");
+		Element filtersElement = xmlDocument.createElement(ELEMENT_REPORT_CONFIG_FILTERS);
 		configElement.appendChild(filtersElement);
 		
 		Map<String, List<String>> extractedFilters = SaikuExportFilterUtils.getFilterValuesForIds(report.spec.getFilters());
@@ -206,17 +232,17 @@ public class GeneratedReportToXmlConverter {
 		//TODO create objects holding the information about the columnNames, ReportElements and list of values
 		
 		for (Map.Entry<String, List<String>> filter : extractedFilters.entrySet()) {
-			Element filterElement = xmlDocument.createElement("filter");
+			Element filterElement = xmlDocument.createElement(ELEMENT_REPORT_CONFIG_FILTERS_FILTER);
 			filtersElement.appendChild(filterElement);
 			
-			createTextElement(filterElement, "name", filter.getKey());
+			createTextElement(filterElement, ELEMENT_REPORT_FILTERS_FILTER_NAME, filter.getKey());
 			//createTextElement(filterElement, "type", filter.getKey());
 			
 			Element filterValuesElement = xmlDocument.createElement("values");
 			filterElement.appendChild(filterValuesElement);
 			
 			for (String filterValue : filter.getValue()) {
-				createTextElement(filterValuesElement, "value", filterValue);
+				createTextElement(filterValuesElement, ELEMENT_REPORT_FILTERS_FILTER_VALUE, filterValue);
 			}
 		}
 	}

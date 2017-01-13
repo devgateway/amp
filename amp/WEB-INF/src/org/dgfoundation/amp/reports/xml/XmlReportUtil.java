@@ -1,11 +1,16 @@
 package org.dgfoundation.amp.reports.xml;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.json.JSONObject;
+import org.json.XML;
 
 public class XmlReportUtil {
 
@@ -67,5 +72,27 @@ public class XmlReportUtil {
 
 		return reportConfig;
 	}
-
+	
+	public static String convertErrorJsonObjToXmlString(JsonBean obj) {
+		JsonBean responseErrorBean = new JsonBean();
+		Map<String, Collection<Object>> errorBeans = (Map<String, Collection<Object>>) obj.get("error");
+		List<Map<String, Object>> errors = new ArrayList<>();
+		
+		for(String key : errorBeans.keySet()) {
+			Map<String, Object> err = new HashMap<>();
+			Collection<Object> error = errorBeans.get(key);
+			err.put("code", key);
+			err.put("value", error);
+			errors.add(err);
+		}
+		
+		Map<String, Object> errorsMap = new HashMap<>();
+		errorsMap.put("error", errors);
+		responseErrorBean.set("errors", errorsMap);
+		
+		JSONObject o = new JSONObject(responseErrorBean.asJsonString());
+		String xmlString = XML.toString(o);
+		
+		return xmlString;
+	}
 }

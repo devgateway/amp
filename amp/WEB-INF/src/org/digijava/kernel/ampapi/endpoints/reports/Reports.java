@@ -206,7 +206,7 @@ public class Reports implements ErrorReportingEndpoint {
 	 * Generates a custom report.  
 	 * 
 	 * @param formParams {@link ReportsUtil#getReportResultByPage form parameters}
-	 * @return JsonBean result for the requested page and pagination information
+	 * @return Response xml result for the requested custom reports
 	 * @see ReportsUtil#getReportResultByPage
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
@@ -227,7 +227,7 @@ public class Reports implements ErrorReportingEndpoint {
 	/**
 	 * Generates a custom xml report.  
 	 * 
-	 * @param formParams {@link ReportsUtil#getReportResultByPage form parameters}
+	 * @param formParams {@link Reports#getXmlReportResponse form parameters}
 	 * @return Response in xml format result for the report
 	 */
 	public final Response getXmlCustomReport(CustomReport customReport) {
@@ -256,14 +256,14 @@ public class Reports implements ErrorReportingEndpoint {
 	 *  
 	 * @param reportId    report Id
 	 * @param formParams  {@link ReportsUtil#getReportResultByPage form parameters}
-	 * @return JsonBean result for the requested page and pagination information
-	 * @see ReportsUtil#getReportResultByPage
+	 * @return XML result for the requested page and pagination information
+	 * @see Reports#getXmlReportResponse
 	 */
 	@POST
 	@Path("/report/{report_id}/paginate")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
-	public final Response getReportResultByPage(CustomReport customReport, @PathParam("report_id") Long reportId) {
+	public final Response getXmlReportResult(CustomReport customReport, @PathParam("report_id") Long reportId) {
 		return getXmlReportResponse(customReport, reportId);
 	}
 	
@@ -952,9 +952,13 @@ public class Reports implements ErrorReportingEndpoint {
 	 */
 	private Response getXmlReportResponse(CustomReport customReport, Long reportId) {
 		JsonBean formParams = XmlReportUtil.convertXmlCustomReportToJsonObj(customReport);
-		ReportsUtil.validateReportConfig(formParams, true);
 		
 		if (reportId == null) {
+			JsonBean validationErrorJson = ReportsUtil.validateReportConfig(formParams, true);
+			if (validationErrorJson != null) {
+				String xmlErros = XmlReportUtil.convertErrorJsonObjToXmlString(validationErrorJson);
+				return Response.ok(xmlErros, MediaType.APPLICATION_XML).build();
+			}
 			// we need reportId only to store the report result in cache
 			reportId = (long) formParams.getString(EPConstants.REPORT_NAME).hashCode();
 			formParams.set(EPConstants.IS_CUSTOM, true);

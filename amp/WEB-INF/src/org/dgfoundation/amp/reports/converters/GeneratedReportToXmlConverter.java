@@ -213,7 +213,7 @@ public class GeneratedReportToXmlConverter {
 			//createTextElement(filterElement, "type", filter.getKey());
 			
 			Element filterValuesElement = xmlDocument.createElement("values");
-			filtersElement.appendChild(filterValuesElement);
+			filterElement.appendChild(filterValuesElement);
 			
 			for (String filterValue : filter.getValue()) {
 				createTextElement(filterValuesElement, "value", filterValue);

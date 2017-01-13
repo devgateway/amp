@@ -1,0 +1,130 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="report">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="output">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="headers">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="column" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:string" name="name"/>
+                          <xs:element type="xs:string" name="description"/>
+                          <xs:element type="xs:string" name="hierarchicalName"/>
+                          <xs:element type="xs:string" name="parentColumn"/>
+                          <xs:element name="column" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:string" name="name"/>
+                                <xs:element type="xs:string" name="description"/>
+                                <xs:element type="xs:string" name="hierarchicalName"/>
+                                <xs:element type="xs:string" name="parentColumn"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="reportArea">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="contents">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="cell" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:string" name="columnName"/>
+                                <xs:element type="xs:string" name="value"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element type="xs:string" name="children"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="config">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="sorting">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="sort">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="asc"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="filters">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="filter" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:string" name="name"/>
+                          <xs:element name="values">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:string" name="value" maxOccurs="unbounded" minOccurs="0"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="settings">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="currency-code"/>
+                    <xs:element type="xs:int" name="calendar-id" nillable="true"/>
+                    <xs:element name="year-range">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:int" name="from" nillable="true"/>
+                          <xs:element type="xs:int" name="to" nillable="true"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="amount-format">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:int" name="number-divider" nillable="true"/>
+                          <xs:element type="xs:int" name="max-frac-digits" nillable="true"/>
+                          <xs:element type="xs:string" name="decimal-symbol"/>
+                          <xs:element type="xs:string" name="use-grouping"/>
+                          <xs:element type="xs:string" name="group-separator"/>
+                          <xs:element type="xs:int" name="group-size" nillable="true"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -107,8 +107,8 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 				auxProperty.start =  auxProperty.start || "" ;
 				auxProperty.end =  auxProperty.end || "" ;	
 
-				var startDatePrefix = (auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "From " : "";
-				var endDatePrefix = (auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "Until " : "";
+				var startDatePrefix = (auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "From" : "";
+				var endDatePrefix = (auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "Until" : "";
 				if(auxProperty.start.length > 0){
 					filterObject.values.push({
 						id : auxProperty.start,

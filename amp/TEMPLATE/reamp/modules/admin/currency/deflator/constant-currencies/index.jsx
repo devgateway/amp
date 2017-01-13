@@ -47,7 +47,8 @@ function parseConstantCurrencies(blueprint, data){
 
 export var init = (currenciesPromise, translationsPromise) => {
     var calendarsPromise = fetchJson(DEFLATOR_SETTINGS).then(settings =>
-        settings[0].value.options.reduce(parseCalendars, new AMP.Model()));
+        settings[2].value.options.reduce(parseCalendars, new AMP.Model())
+    );
   var entryPromise = Entry.init(calendarsPromise, currenciesPromise, translationsPromise);
   //constant currencies depend on entryPromise model blueprint
   var constantCurrenciesPromise = Promise.all([entryPromise, fetchJson(CONSTANT_CURRENCIES)])

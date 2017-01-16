@@ -1,12 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  * Structure used to store user specified settings.
  *
  * @author Octavian Ciubotaru
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Settings {
 
     @JsonProperty(SettingsConstants.CURRENCY_ID)

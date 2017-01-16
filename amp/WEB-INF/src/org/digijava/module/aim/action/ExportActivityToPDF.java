@@ -2,16 +2,10 @@ package org.digijava.module.aim.action;
 
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
+import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
-import com.lowagie.text.ListItem;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
+import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
@@ -45,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpGPISurvey;
 import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -118,6 +113,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import clover.com.google.common.base.Strings;
 import clover.org.apache.commons.lang.StringUtils;
 
 /**
@@ -1406,6 +1402,85 @@ public class ExportActivityToPDF extends Action {
                 createGeneralInfoRow(mainLayout,columnName,identification.getCreatedDate());
             }
 
+            if (FeaturesUtil.isVisibleModule("M & E")) {
+                PdfPCell meCell = new PdfPCell();
+                p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("M & E", locale, siteId)), titleFont);
+                p1.setAlignment(Element.ALIGN_RIGHT);
+                meCell.addElement(p1);
+                meCell.setBackgroundColor(new Color(244, 244, 242));
+                meCell.setBorder(0);
+                mainLayout.addCell(meCell);
+
+                PdfPTable meTable = new PdfPTable(1);
+                meTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+                if (myForm.getIndicators() != null) {
+                    String valueLabel = TranslatorWorker.translateText("Value");
+                    String commentLabel = TranslatorWorker.translateText("Comment");
+                    String dateLabel = TranslatorWorker.translateText("Date");
+                    String nameLabel = TranslatorWorker.translateText("Name");
+                    String codeLabel = TranslatorWorker.translateText("Code");
+                    String logFrameLabel = TranslatorWorker.translateText("LogFrame");
+                    String sectorsLabel = TranslatorWorker.translateText("Sectors");
+
+                    for (IndicatorActivity indicator : myForm.getIndicators()) {
+                        PdfPTable headerTable = new PdfPTable(4);
+                        headerTable.setWidths(new int[]{ 3, 1, 1, 2 });
+                        headerTable.setTotalWidth(100);
+                        headerTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+                        headerTable.getDefaultCell().setBackgroundColor(new Color(244, 244, 242));
+                        headerTable.addCell(new Paragraph(postprocessText(nameLabel), plainFont));
+                        headerTable.addCell(new Paragraph(postprocessText(codeLabel), plainFont));
+                        headerTable.addCell(new Paragraph(postprocessText(logFrameLabel), plainFont));
+                        headerTable.addCell(new Paragraph(postprocessText(sectorsLabel), plainFont));
+                        headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
+
+                        if (FeaturesUtil.isVisibleField("Indicator Name")) {
+                            headerTable.addCell(new Paragraph(postprocessText(indicator.getIndicator().getName()), titleFont));
+                            headerTable.addCell(indicator.getIndicator().getCode());
+                        }
+                        if (FeaturesUtil.isVisibleField("Logframe Category")) {
+                            if (indicator.getValues() != null && indicator.getValues().size() > 0) {
+                                headerTable.addCell(indicator.getLogFrame());
+                            }
+                        }
+
+                        if (FeaturesUtil.isVisibleField("Sectors")) {
+                            if (indicator.getIndicator().getSectors() != null) {
+                                headerTable.addCell(new Paragraph(postprocessText(ExportUtil.getIndicatorSectors(indicator) + "\n"), titleFont));
+                            }
+                        }
+
+                        meTable.addCell(headerTable);
+
+                        for (AmpIndicatorValue value : indicator.getValuesSorted()) {
+                            columnVal = "";
+                            String fieldName = ExportUtil.getIndicatorValueType(value);
+                            PdfPCell indicatorTypeCell = new PdfPCell();
+                            indicatorTypeCell.addElement(new Paragraph(postprocessText(TranslatorWorker.translateText(ExportUtil.INDICATOR_VALUE_NAME.get(value.getValueType()))), titleFont));
+                            indicatorTypeCell.setBorder(0);
+                            meTable.addCell(indicatorTypeCell);
+
+                            if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
+                                columnVal += valueLabel + ": " + value.getValue() + "\n";
+                            }
+                            if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
+                                columnVal += commentLabel + ": " + Strings.nullToEmpty(value.getComment()) + "\n";
+                            }
+                            if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
+                                columnVal += dateLabel + ": " + DateConversion.convertDateToLocalizedString(value.getValueDate()) + "\n";
+                            }
+                            PdfPCell valuesCell = new PdfPCell();
+                            valuesCell.addElement(new Paragraph(postprocessText(columnVal), plainFont));
+                            valuesCell.setBorder(0);
+                            meTable.addCell(valuesCell);
+
+                        }
+                    }
+
+                    mainLayout.addCell(meTable);
+                    mainLayout.addCell(new Paragraph("\n"));
+                }
+            }
             /**
              * Activity - Performance
              */

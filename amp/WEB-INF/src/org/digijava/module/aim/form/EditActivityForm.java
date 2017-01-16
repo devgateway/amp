@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -6624,6 +6625,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private boolean totDisbIsBiggerThanTotCom;
 	private List<BudgetStructure> budgetStructure;
 	private Set<AmpActivityInternalId> internalIds;
+	private Set<IndicatorActivity> indicators;
 
 	public EditActivityForm() {
 		reset = false;
@@ -7441,6 +7443,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public Set<AmpActivityInternalId> getInternalIds() {
 		return internalIds;
 	}
+
+	public Set<IndicatorActivity> getIndicators() {
+		return indicators;
+	}
+
+	public void setIndicators(Set<IndicatorActivity> indicators) {
+		this.indicators = indicators;
+	}
+
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
 	public boolean equals(final java.lang.Object o) {

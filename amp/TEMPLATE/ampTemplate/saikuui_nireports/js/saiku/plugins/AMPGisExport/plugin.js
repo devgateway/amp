@@ -48,7 +48,7 @@ var AMPGisExport = Backbone.View.extend({
 			type: 'post',
 			contentType: 'application/json',
 			data : JSON.stringify({
-				filters : filterObject ? filterObject.filters : {},
+				filters : filterObject || {},
 				settings : window.settingsWidget.toAPIFormat()
 			})
 		}).done(function(configId) {

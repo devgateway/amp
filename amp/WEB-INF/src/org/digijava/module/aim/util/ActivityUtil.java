@@ -616,12 +616,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
    */
   // this function is to get the fundings for the components along with the activity Id
 
-  public static Collection<AmpComponentFunding> getFundingComponentActivity(Long componentId, Long activityId) {
+  public static Collection<AmpComponentFunding> getFundingComponentActivity(Long componentId) {
 	  logger.debug(" inside getting the funding.....");
 	  String qryStr = "select a from " + AmpComponentFunding.class.getName() +
           " a " +
-          "where amp_component_id = '" + componentId + "' and activity_id = '" + activityId +
-          "'";
+          "where amp_component_id = '" + componentId + "'";
       Query qry = PersistenceManager.getSession().createQuery(qryStr);
       return qry.list();
   }

@@ -1008,7 +1008,7 @@ public class ShowActivityPrintPreview
 
 
 			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(
-					tempComp.getComponentId(), actId);
+					tempComp.getComponentId());
 			Iterator cItr = fundingComponentActivity.iterator();
 			while (cItr.hasNext()) {
 				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr

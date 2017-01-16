@@ -164,6 +164,23 @@ public class LuceneUtil implements Serializable {
         }
     }
 
+    public static boolean isAmpId(String keyword) {
+        logger.info("Checking if keyword " + keyword + " is an amp id: ");
+        String queryStr = "select activity from " + AmpActivity.class.getName() + " activity " +
+                " where activity.ampId=:keyword";
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+
+            org.hibernate.Query query = session.createQuery(queryStr);
+            query.setString("keyword", keyword);
+
+            return (query.list().size() > 0);
+        } catch (Exception e) {
+            logger.info("Cannot check amp id:" + keyword, e);
+            return false;
+        }
+    }
+
     /**
      * Deletes all stamps from db with specified name.
      * @param name
@@ -1235,7 +1252,8 @@ public class LuceneUtil implements Serializable {
     private static List<FuzzyQuery> buildFuzzyQueryList(String searchString, QueryParser parser) {
         searchString = parser.escape(searchString);
         List<FuzzyQuery> fuzzyTerms = new ArrayList<FuzzyQuery>();
-        for (String word : searchString.split(" ")) {
+        String[] keywords = searchString.split(" ");
+        for (String word : keywords) {
             if (StringUtils.isNotBlank(word) && word.length() > 1) {
                 FuzzyQuery fuzzyQuery = null;
                 try {
@@ -1268,7 +1286,7 @@ public class LuceneUtil implements Serializable {
 
     private static float getMinimumSimilarity(String word) {
         boolean isNumeric = word.chars().allMatch(Character::isDigit);
-        if (isNumeric) {
+        if (isNumeric || isAmpId(word)) {
             return MINIMUM_SIMILARITY_TO_NUMBERS;
         }
         return MINIMUM_SIMILARITY;

@@ -150,7 +150,35 @@ public class Security implements ErrorReportingEndpoint {
 	}
 
 	/**
-	 * This is hack EP to avoid Digest Authentication in Activity EP.
+	 * Authenticate user with via API.
+	 * <p>This endpoint is used to authenticate users via API. Mandatory fields are username and password. Password
+	 * value is a sha1 hash of the actual password. Third parameter is workspaceId which allows to preselect
+	 * active workspace.</p>
+	 * Workspace parameter is optional. If specified all with calls issued with the provided token will be handled
+	 * for respective workspace.
+	 *
+	 * <h3>Sample input:</h3>
+	 * <pre>
+	 * {
+	 *   "username": "atl@amp.org",
+	 *   "password": "a7848b4c1b75cb7bb7449069fe0e114b730c0448",
+	 *   "workspaceId": 4
+	 * }
+	 * </pre>
+	 *
+	 * <h3>Sample output:</h3>
+	 * <pre>
+	 * {
+	 *   "token": "34bf1c55-f2d1-43bb-bef4-e98b6077f66f",
+	 *   "token-expiration": 1483433179305,
+	 *   "url": "http://localhost:8080/showLayout.do?layout=login",
+	 *   "team": "Espace de Travail Cellule Technique du COMOREX",
+	 *   "user-name": "atl@amp.org",
+	 *   "is-admin": false,
+	 *   "add-activity": true,
+	 *   "view-activity": true
+	 * }
+	 * </pre>
 	 *
 	 * @param authentication Json bean with username/password/workspace information
 	 * @return JSON with the response, error or user info

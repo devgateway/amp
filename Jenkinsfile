@@ -25,6 +25,7 @@ def dbVersion
 stage('Build') {
     node {
         checkout scm
+
         withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
 
             // Build AMP

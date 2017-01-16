@@ -41,6 +41,8 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -109,6 +111,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1325,6 +1328,26 @@ public class ExportActivityToPDF extends Action {
              * Build IPA contracting
              */
             buildContractsPart(myForm, request, mainLayout);
+
+            //GPI
+            if (FeaturesUtil.isVisibleModule("/Activity Form/GPI")) {
+                PdfPCell gpiCell1 = new PdfPCell();
+                p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("GPI", locale, siteId)) + ":", titleFont);
+                p1.setAlignment(Element.ALIGN_RIGHT);
+                gpiCell1.setBorder(0);
+                gpiCell1.addElement(p1);
+                gpiCell1.setBackgroundColor(new Color(244, 244, 242));
+                mainLayout.addCell(gpiCell1);
+
+                PdfPCell gpiCell2 = new PdfPCell();
+                gpiCell2.setBorder(0);
+                PdfPTable gpiTable = new PdfPTable(1);
+
+                buildGpiSurveyOutput(gpiTable, myForm.getGpiSurvey());
+
+                gpiCell2.addElement(gpiTable);
+                mainLayout.addCell(gpiCell2);
+            }
 
             /**
              * Activity created by
@@ -3388,6 +3411,47 @@ public class ExportActivityToPDF extends Action {
         }
         mainLayout.addCell(cell2);
     }
+
+    /**
+     * builds GPI survey
+     */
+    private void buildGpiSurveyOutput(PdfPTable gpiTable, Set<AmpGPISurvey> surveys) throws WorkerException {
+        if ((surveys != null && !surveys.isEmpty())) {
+            PdfPCell surveyCell = new PdfPCell();
+            surveyCell.setBorder(1);
+            surveyCell.setBorderColor(new Color(201, 201, 199));
+            com.lowagie.text.List surveyList = new com.lowagie.text.List(false); //not numbered list
+            surveyList.setListSymbol(new Chunk("\u2022"));
+
+            for (AmpGPISurvey survey : surveys) {
+                List<AmpGPISurveyResponse> list = new ArrayList<>(survey.getResponses());
+                Collections.sort(list, new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
+                String indicatorName = "";
+                for (AmpGPISurveyResponse response : list) {
+                    if (!indicatorName.equals(response.getAmpQuestionId().getAmpIndicatorId().getName())) {
+                        indicatorName = response.getAmpQuestionId().getAmpIndicatorId().getName();
+                        Paragraph paragraph = new Paragraph(new Paragraph(new Phrase(postprocessText(TranslatorWorker.translateText(indicatorName)), titleFont)));
+                        PdfPCell indicatorNameCell = new PdfPCell(paragraph);
+                        indicatorNameCell.setBorder(0);
+                        indicatorNameCell.setBackgroundColor(new Color(255, 255, 255));
+                        gpiTable.addCell(indicatorNameCell);
+                    }
+                    String responseText = (response.getResponse() != null ? response.getResponse() : "");
+                    Paragraph paragraph = new Paragraph(new Paragraph(new Phrase(postprocessText(response.getAmpQuestionId().getQuestionText()) + "  " + responseText, plainFont)));
+                    PdfPCell questionCell = new PdfPCell(paragraph);
+                    questionCell.setBorder(0);
+                    questionCell.setBackgroundColor(new Color(255, 255, 255));
+                    gpiTable.addCell(questionCell);
+                }
+            }
+
+
+            PdfPCell emptyCell = new PdfPCell(new Paragraph(" "));
+            emptyCell.setBorder(0);
+            gpiTable.addCell(emptyCell);
+        }
+    }
+
 
     /**
      * builds all related organizations Info that should be exported to PDF

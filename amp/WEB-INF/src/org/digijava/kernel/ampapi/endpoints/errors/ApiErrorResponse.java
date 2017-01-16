@@ -91,15 +91,16 @@ public class ApiErrorResponse {
 	 * @param error	 JSON with the error details
 	 */
 	public static void reportError(Response.Status status, JsonBean error) {
-		logger.error(String.format("[HTTP %d] Error response = %s", status.getStatusCode(), error.toString()));
-		
-		ResponseBuilder builder = Response.status(status).
-				entity(error).
-				type(MediaType.APPLICATION_JSON);
-		
-		Response response = builder.build();
-		
-		throw new WebApplicationException(response);
+		throw new WebApplicationException(buildResponse(status, error));
 	}
+	
+	public static Response buildResponse(Response.Status status, JsonBean error) {
+	    logger.error(String.format("[HTTP %d] Error response = %s", status.getStatusCode(), error.toString()));
+        ResponseBuilder builder = Response.status(status).
+                entity(error).
+                type(MediaType.APPLICATION_JSON);
+        
+        return builder.build();
+    }
 	
 }

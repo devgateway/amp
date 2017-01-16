@@ -74,13 +74,13 @@ public class DynamicColumnsUtil {
 	private static void buildMtefColumns(ServletContext sCtx, String namePrefix, String aliasPrefix, Set<Integer> mtefYears) {
 		for (Integer year: mtefYears) {
 			AmpColumns	col		= new AmpColumns();
-			col.setColumnName(namePrefix + " " + year + "/" + (year+1));
+			col.setColumnName(namePrefix + " " + year);
 			col.setAliasName(aliasPrefix + year);
 			col.setExtractorView("v_mtef_funding");
 			col.setTokenExpression(col.getColumnName());
 			col.setCellType("org.dgfoundation.amp.ar.cell.ComputedAmountCell");
 			
-			logger.info("Adding " + namePrefix + " column for year " + year + "/" + (year+1) );
+			logger.info("Adding " + namePrefix + " column for year " + year);
 			dynamicallyCreateNewColumn(col, "Funding Information", sCtx);
 		}
 

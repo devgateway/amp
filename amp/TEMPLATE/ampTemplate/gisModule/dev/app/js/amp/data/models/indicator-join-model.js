@@ -110,7 +110,7 @@ module.exports = Backbone.Model
   fetch: function(){	
 	  var self = this;
 	  	  
-	  var filter = {otherFilters: {}};
+	  var filter = {};
 	  if (app.data.filter) {
 		  _.extend(filter, app.data.filter.serialize());
 	  }

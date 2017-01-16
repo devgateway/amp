@@ -1,5 +1,5 @@
-define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'translationManager',
-		'business/grid/gridManager', 'models/legend', 'jquery', 'jqueryui' ], function(Marionette, settingsDialogTemplate,
+define(['marionette', 'translationManager',
+		'business/grid/gridManager', 'models/legend', 'jquery'], function(Marionette,
 		TranslationManager, GridManager, Legend, jQuery) {
 
 	"use strict";
@@ -15,98 +15,47 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'translati
 	};
 
 	SettingsManager.initialize = function() {
-		var SettingDialogContainerView = Marionette.ItemView.extend({
-			template : _.template(settingsDialogTemplate)
+		app.TabsApp.settingsWidget = new AMPSettings.SettingsWidget({
+			el : '#settings-popup',
+			draggable : true,
+			caller : 'TABS',
+			isPopup : true,
+			definitionUrl : '/rest/settings-definitions/tabs'
 		});
-		var settings = app.TabsApp.settings;
-		// TODO: Replace some of the default values with the ones
-		// for this tab.
-		if (app.TabsApp.appliedSettings != null) {
-			settings.set('selectedCurrency', app.TabsApp.appliedSettings["1"]);
-		}
-		if (app.TabsApp.appliedSettings != null) {
-			settings.set('selectedCalendar', app.TabsApp.appliedSettings["2"]);
-		}
-		var settingsDialog = new SettingDialogContainerView({
-			model : settings
+
+		app.TabsApp.listenTo(app.TabsApp.settingsWidget, 'close', function() {
+			$('#settings-popup').hide();
 		});
-		settingsDialog.render();
-		jQuery(settingsDialog.el).dialog({
-			modal : true,
-			title : TranslationManager.getTranslated("Settings"),
-			width : 'auto',
-			position: { my: "center bottom", at: "center center", of: window },
-			close: function() {
-				jQuery(settingsDialog.el).dialog('destroy').remove();
-			}
+
+		app.TabsApp.listenTo(app.TabsApp.settingsWidget, 'applySettings', function() {
+			GridManager.filter(app.TabsApp.currentTab.get('id'), app.TabsApp.serializedFilters, app.TabsApp.settingsWidget.toAPIFormat());
+			SettingsManager.updateLegend(app.TabsApp.settingsWidget.toAPIFormat());
+			$('#settings-popup').hide();
 		});
-		jQuery(".buttonify").button();
-		$('#settings-missing-values-error').hide();
-		TranslationManager.searchAndTranslate();
 		
-		// Register apply button click.
-		jQuery(".settings-container #applySettingsBtn").on("click", function() {
-			if($('#currency').val() === null || $('#calendar').val() === null) {
-				$('#settings-missing-values-error').show();
-				TranslationManager.searchAndTranslate();
-				return false;
-			}
-			
-			jQuery('#calendar').removeAttr('selected');
-			jQuery('#currency').removeAttr('selected');
-
-			/* settingsDialog.model.get('currency'),settingsDialog.model.get('calendar') */
-
-			// Save selected settings for later.
-			app.TabsApp.appliedSettings = {
-				"1" : jQuery("#currency").val(),
-				"2" : jQuery("#calendar").val()
-			};
-			
-			GridManager.filter(app.TabsApp.currentTab.get('id'), app.TabsApp.serializedFilters, app.TabsApp.appliedSettings);
-
-            var currentLegendModel = app.TabsApp.dynamicContentRegion.currentView.legends.currentView.model;
-            var unitsValue = currentLegendModel.attributes.units;
-            var currencyValue = _.findWhere(app.TabsApp.settings.get('0').options, {id: app.TabsApp.appliedSettings["1"]}).value;
-
-			// Update the legend section.
-			var legend = new Legend({
-				currencyCode : app.TabsApp.appliedSettings["1"],
-				currencyValue : currencyValue,
-				id : null,
-				units : unitsValue
-			});
-			app.TabsApp.dynamicContentRegion.currentView.legends.currentView.model = legend;
-			app.TabsApp.dynamicContentRegion.currentView.legends.currentView.render();
-
-			// Destroy the dialog to unbind the event.
-			jQuery(settingsDialog.el).dialog('close');
-		});
-
-		//Register calendar change.
-		jQuery(".settings-container #calendar").on("change", function() {
-			var calendarSelect = $('.settings-container #calendar');
-			var currencySelect = $('.settings-container #currency');
-			var selectedCalendar = $(calendarSelect).val();				
-			var calendarCurrencies = _.find(app.TabsApp.settings.attributes, function(item) {return item.id === 'calendarCurrencies'}).options;
-			//Note: uniq is used because the list has duplicated currencies.
-			var availableCurrenciesForCalendar = _.uniq(_.findWhere(calendarCurrencies, {id: selectedCalendar}).value.split(","));
-			var allCurrencies = _.find(app.TabsApp.settings.attributes, function(item) {return item.id === '1'}).options;
-			$(currencySelect).empty();
-			$.each(availableCurrenciesForCalendar, function(index, object) {   
-				$(currencySelect)
-			         .append($("<option></option>")
-			         .attr("value", object)
-			         .text(_.find(allCurrencies, function(item){return item.id === object}).name)); 
-			});
-			$(currencySelect).val(availableCurrenciesForCalendar[0]);
-		});
-		app.TabsApp.settingsDialogView = settingsDialog;
+		app.TabsApp.generalSettings = new AMPSettings.GeneralSettings();
+		app.TabsApp.generalSettings.load()
 	};
 
-	SettingsManager.openDialog = function() {
-		this.initialize();
-		jQuery(app.TabsApp.settingsDialogView.el).dialog('open');
+	SettingsManager.openDialog = function() {		
+		$('#settings-popup').show();
+		app.TabsApp.settingsWidget.show();
+	};
+	
+	SettingsManager.updateLegend = function(appliedSettings){
+		// Update the legend section.
+		var currentLegendModel = app.TabsApp.dynamicContentRegion.currentView.legends.currentView.model;
+        var unitsValue = currentLegendModel.attributes.units;
+		var currencyCode = appliedSettings[app.TabsApp.settingsWidget.Constants.CURRENCY_ID];
+		var currencyValue = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode).value;
+		var legend = new Legend({
+			currencyCode : currencyCode,
+			currencyValue : currencyValue,
+			id : null,
+			units : unitsValue
+		});
+		app.TabsApp.dynamicContentRegion.currentView.legends.currentView.model = legend;
+		app.TabsApp.dynamicContentRegion.currentView.legends.currentView.render();
 	};
 
 	return SettingsManager;

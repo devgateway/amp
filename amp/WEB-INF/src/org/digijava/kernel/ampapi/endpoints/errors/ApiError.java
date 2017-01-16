@@ -40,7 +40,10 @@ public class ApiError {
 	
 	public final static String UNKOWN_ERROR = "Unknown Error";
 	
-	/**  Will store the mapping between the component and it's Id (C). */
+	/**
+	 *  Stores the mapping between the component and it's Id (C).
+	 *  Component id 0 is reserved for all errors that are not tied to any component.
+	 */
 	private final static Map<String, Integer> COMPONENT_ID_CLASS_MAP = new HashMap<String, Integer>() {{
 		put(InterchangeEndpoints.class.getName(), 1);
 		put(Security.class.getName(), 2);
@@ -160,7 +163,7 @@ public class ApiError {
 	 * @return the id of the error
 	 */
 	private static String getErrorId(int componentId, int errorId) {
-		if (componentId != 0) {
+		if (componentId != 0 && errorId < 100) {
 			return String.format(API_ERROR_PATTERN, componentId, errorId);
 		} else {
 			return String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, errorId);

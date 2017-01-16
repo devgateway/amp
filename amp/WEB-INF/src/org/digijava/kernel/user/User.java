@@ -85,9 +85,8 @@ public class User
     private Set contacts;
     private Long assignedOrgId;
     private AmpUserExtension userExtension;
-
     private Set<AmpOrganisation> assignedOrgs;
-    
+    private Date passwordChangedAt;
 
 
 	public Long getAssignedOrgId() {
@@ -479,5 +478,22 @@ public class User
 	public void setRegion(AmpCategoryValueLocations region) {
 		this.region = region;
 	}
-	
+
+    /**
+     * @return the passwordChangedAt
+     */
+    public Date getPasswordChangedAt() {
+        return passwordChangedAt;
+    }
+
+    /**
+     * @param passwordChangedAt the passwordChangedAt to set
+     */
+    public void setPasswordChangedAt(Date passwordChangedAt) {
+        this.passwordChangedAt = passwordChangedAt;
+    }
+
+    public void updateLastModified() {
+        setLastModified(new Date());
+    }
 }

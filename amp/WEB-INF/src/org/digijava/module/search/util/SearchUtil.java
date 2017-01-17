@@ -288,7 +288,7 @@ public class SearchUtil {
 		newQuery = newQuery.addScalar("draft", org.hibernate.type.StandardBasicTypes.BOOLEAN);
 
 		LinkedHashMap<Long, LoggerIdentifiable> sortingActivities = new LinkedHashMap<>();
-		for (Long i : filter.getActivitySorters()) {
+		for (Long i : filter.getAmpActivityIdOrder()) {
             sortingActivities.put(i,null);
 		}
 

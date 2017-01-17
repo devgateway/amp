@@ -601,16 +601,7 @@ public class AmpARFilter extends PropertyListable {
 	private String sortBy;
 	private Boolean sortByAsc;
 	private List<String> hierarchySorters;
-
-	public List<Long> getActivitySorters() {
-		return activitySorters;
-	}
-
-	public void setActivitySorters(List<Long> activitySorters) {
-		this.activitySorters = activitySorters;
-	}
-
-	private List<Long> activitySorters;
+	private List<Long> ampActivityIdOrder;
 
 	private Set<AmpCategoryValue> projectImplementingUnits; 
 	
@@ -820,7 +811,7 @@ public class AmpARFilter extends PropertyListable {
 		this.setProjectImplementingUnits(null);
 		this.setSortByAsc(true);
 		this.setHierarchySorters(new ArrayList<String>());
-		this.setActivitySorters(new ArrayList<Long>());
+		this.setAmpActivityIdOrder(new ArrayList<Long>());
 		this.budgetExport = false;
 		
 		HttpServletRequest request = TLSUtils.getRequest();
@@ -1546,7 +1537,7 @@ public class AmpARFilter extends PropertyListable {
                 } else {
                     LUCENE_ID_LIST = LUCENE_ID_LIST + "," + doc.get("id");
                 }
-				activitySorters.add(Long.parseLong(doc.get("id")));
+				ampActivityIdOrder.add(Long.parseLong(doc.get("id")));
             }
 
             logger.info("Lucene ID List:" + LUCENE_ID_LIST);
@@ -3184,7 +3175,15 @@ public class AmpARFilter extends PropertyListable {
 	public void setHierarchySorters(List<String> hierarchySorters) {
 		this.hierarchySorters = cleanupHierarchySorters(hierarchySorters);
 	}
-	
+
+	public List<Long> getAmpActivityIdOrder() {
+		return ampActivityIdOrder;
+	}
+
+	public void setAmpActivityIdOrder(List<Long> ampActivityIdOrder) {
+		this.ampActivityIdOrder = ampActivityIdOrder;
+	}
+
 	/** for each given sorting key only keeps the last entry */
 	protected List<String> cleanupHierarchySorters(List<String> in) {
 		if (in == null || in.isEmpty())

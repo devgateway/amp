@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -161,23 +162,6 @@ public class LuceneUtil implements Serializable {
             return ((AmpLuceneIndexStamp)query.uniqueResult());
         } catch (Exception e) {
             throw new Exception("Cannot get index stamp for:"+name,e);
-        }
-    }
-
-    public static boolean isAmpId(String keyword) {
-        logger.info("Checking if keyword " + keyword + " is an amp id: ");
-        String queryStr = "select activity from " + AmpActivity.class.getName() + " activity " +
-                " where activity.ampId=:keyword";
-        try {
-            Session session = PersistenceManager.getRequestDBSession();
-
-            org.hibernate.Query query = session.createQuery(queryStr);
-            query.setString("keyword", keyword);
-
-            return (query.list().size() > 0);
-        } catch (Exception e) {
-            logger.info("Cannot check amp id:" + keyword, e);
-            return false;
         }
     }
 
@@ -1253,6 +1237,7 @@ public class LuceneUtil implements Serializable {
         searchString = parser.escape(searchString);
         List<FuzzyQuery> fuzzyTerms = new ArrayList<FuzzyQuery>();
         String[] keywords = searchString.split(" ");
+        Set<String> ampIds = ActivityUtil.findExistingAmpIds(keywords);
         for (String word : keywords) {
             if (StringUtils.isNotBlank(word) && word.length() > 1) {
                 FuzzyQuery fuzzyQuery = null;
@@ -1261,13 +1246,13 @@ public class LuceneUtil implements Serializable {
                     if (query instanceof PhraseQuery) {
                         if (((PhraseQuery) query).getTerms() != null) {
                             for (Term term : ((PhraseQuery) query).getTerms()) {
-                                fuzzyQuery = new FuzzyQuery(term, getMinimumSimilarity(term.text()));
+                                fuzzyQuery = new FuzzyQuery(term, getMinimumSimilarity(term.text(), ampIds.contains(term.text())));
                                 fuzzyTerms.add(fuzzyQuery);
                             }
                         }
                     } else {
                         if (query instanceof TermQuery) {
-                            fuzzyQuery = new FuzzyQuery(((TermQuery) query).getTerm(), getMinimumSimilarity(word));
+                            fuzzyQuery = new FuzzyQuery(((TermQuery) query).getTerm(), getMinimumSimilarity(word, ampIds.contains(word)));
                             fuzzyTerms.add(fuzzyQuery);
                         }
                     }
@@ -1284,9 +1269,9 @@ public class LuceneUtil implements Serializable {
         return SEACH_TYPE_FUZZY;
     }
 
-    private static float getMinimumSimilarity(String word) {
+    private static float getMinimumSimilarity(String word, boolean isAmpId) {
         boolean isNumeric = word.chars().allMatch(Character::isDigit);
-        if (isNumeric || isAmpId(word)) {
+        if (isNumeric || isAmpId) {
             return MINIMUM_SIMILARITY_TO_NUMBERS;
         }
         return MINIMUM_SIMILARITY;

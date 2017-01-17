@@ -1237,7 +1237,7 @@ public class LuceneUtil implements Serializable {
         searchString = parser.escape(searchString);
         List<FuzzyQuery> fuzzyTerms = new ArrayList<FuzzyQuery>();
         String[] keywords = searchString.split(" ");
-        Set<String> ampIds = ActivityUtil.findExistingAmpIds(keywords);
+        Set<String> ampIds = ActivityUtil.findExistingAmpIds(Arrays.asList(keywords));
         for (String word : keywords) {
             if (StringUtils.isNotBlank(word) && word.length() > 1) {
                 FuzzyQuery fuzzyQuery = null;

@@ -1970,28 +1970,15 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		return null;
 	}
 
-	public static Set<String> findExistingAmpIds(String[] candidates) {
-		Set<String> result = new TreeSet<>();
-		String ampIds = "";
-		for (String candiate : candidates) {
-			ampIds += "'" + candiate + "' ,";
-		}
+	public static Set<String> findExistingAmpIds(Collection<String> candidates) {
 
-		if (ampIds.length() > 1) {
-			ampIds = ampIds.substring(0, ampIds.length() - 1);
-		}
-
-		String queryStr = "select activity from " + AmpActivity.class.getName() + " activity " +
-				" where activity.ampId in ( " + ampIds + " ) ";
+		String queryStr = "select activity.ampId from " + AmpActivity.class.getName() + " activity " +
+				" where activity.ampId in ( " + Util.toCSString(candidates) + " ) ";
 
 		Session session = PersistenceManager.getRequestDBSession();
-		org.hibernate.Query query = session.createQuery(queryStr);
+		Query qry = session.createQuery(queryStr);
 
-		List<AmpActivity> activities = query.list();
-		for (AmpActivity activitie : activities) {
-			result.add(activitie.getAmpId());
-		}
-		return result;
+		return new HashSet<String>(((List<String>) qry.list()));
 	}
 
 } // End

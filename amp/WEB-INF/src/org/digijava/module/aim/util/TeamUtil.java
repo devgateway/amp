@@ -1802,6 +1802,23 @@ public class TeamUtil {
         } 
         return teams;
     }
+    
+    /**
+     * Retrieves all workspaces with option to filter out management and / or private workspaces
+     * @param includeManagement if to keep management workspaces
+     * @param includePrivate if to keep private workspaces
+     * @return the result list workspaces
+     */
+    public static List<AmpTeam> getAllTeams(boolean includeManagement, boolean includePrivate) {
+        String where = "";
+        if (!includeManagement)
+            where += " o.accessType != 'management' " + (includePrivate ? "" : " and ");
+        if (!includePrivate)
+            where += " o.isolated in (null, false)";
+        if (where != "")
+            where = "where " + where;
+        return PersistenceManager.getSession().createQuery(" from " + AmpTeam.class.getName() + " o " + where).list();
+    }
 
     public static Set<AmpTeam> getAmpLevel0Teams(Long ampTeamId) {
         Session session = null;

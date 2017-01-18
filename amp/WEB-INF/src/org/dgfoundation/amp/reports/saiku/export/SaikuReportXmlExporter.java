@@ -2,15 +2,15 @@ package org.dgfoundation.amp.reports.saiku.export;
 
 import java.io.ByteArrayOutputStream;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
 
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.reports.converters.GeneratedReportToXmlConverter;
-import org.w3c.dom.Document;
+import org.dgfoundation.amp.reports.xml.ObjectFactory;
+import org.dgfoundation.amp.reports.xml.Report;
 
 /**
  * @author Viorel Chihai
@@ -22,19 +22,14 @@ public class SaikuReportXmlExporter implements SaikuReportExporter {
 	public byte[] exportReport(GeneratedReport report, GeneratedReport dualReport) throws Exception {
 		// Convert the report into xml document
 		GeneratedReportToXmlConverter xmlConverter = new GeneratedReportToXmlConverter(report);
-		Document xmlDocument = xmlConverter.convert();
-		DOMSource source = new DOMSource(xmlDocument);
+		Report xmlReport = xmlConverter.convert();
+		JAXBContext jc = JAXBContext.newInstance(Report.class);
 		
-		// Convert the stream where the xml document will be saved
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		StreamResult streamResult = new StreamResult(baos);
 		
-		// Transform the xml document
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		transformer.transform(source, streamResult);
+		Marshaller m = jc.createMarshaller();
+		ObjectFactory xmlReportObjFactory = new ObjectFactory();
+		m.marshal(xmlReportObjFactory.createReport(xmlReport), baos);
 		
 		baos.flush();
 		baos.close();

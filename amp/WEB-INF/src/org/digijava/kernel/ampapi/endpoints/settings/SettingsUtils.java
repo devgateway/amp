@@ -46,7 +46,6 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.h2.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Utility class for amp settings handling
@@ -176,11 +175,16 @@ public class SettingsUtils {
 		return settings;
 	}
 
-	@NotNull
 	private static Settings.AmountFormat getReportAmountFormat(ReportSpecification spec) {
 		DecimalFormat decimalFormat = spec.getSettings().getCurrencyFormat();
+		if (decimalFormat == null) {
+			return null;
+		}
 		Settings.AmountFormat amountFormat = new Settings.AmountFormat();
-		amountFormat.setNumberDivider(spec.getSettings().getUnitsOption().divider);
+		AmountsUnits unitsOption = spec.getSettings().getUnitsOption();
+		if (unitsOption != null) {
+			amountFormat.setNumberDivider(unitsOption.divider);
+		}
 		amountFormat.setMaxFractionDigits(decimalFormat.getMaximumFractionDigits());
 		amountFormat.setDecimalSymbol(decimalFormat.getDecimalFormatSymbols().getDecimalSeparator());
 		amountFormat.setUseGrouping(decimalFormat.isGroupingUsed());
@@ -642,10 +646,10 @@ public class SettingsUtils {
 	 * @param setDefaults: if true AND there is no range setting in @reportSettings, then reportSettings will be populated with the workspace/system's default 
 	 */
 	public static void configureYearRange(ReportSettingsImpl reportSettings, Map<String, Object> settings, boolean setDefaults) {
-	    // keep existing if no new settings are applied 
+	    // keep existing if no new settings are applied
 	    if (reportSettings.getYearRangeFilter() != null && settings == null)
 	        return;
-		
+
 		// apply year range settings
 		Integer start = null;
 		Integer end = null;
@@ -655,20 +659,19 @@ public class SettingsUtils {
                 start = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_FROM));
             if (yearRange.get(SettingsConstants.YEAR_TO)!=null)
                 end = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_TO));
-		} else {
+		} else if (setDefaults) {
 			start = AmpARFilter.getDefaultStartYear(reportSettings.getCalendar());
 			end = AmpARFilter.getDefaultEndYear(reportSettings.getCalendar());
 		}
-		
+
 		// clear previous year settings
 		reportSettings.setYearRangeFilter(null);
 		reportSettings.setOldCalendar(null);
-		// TODO: update settings to store [ALL, ALL] range just to reflect
-		// the previous selection
-		if (!(start == -1 && end == -1)) {
+		// TODO: update settings to store [ALL, ALL] range just to reflect the previous selection
+		start = (start == null || start == -1) ? null : start;
+		end = (end == null || end == -1) ? null : end;
+		if (start != null || end != null) {
 			try {
-				start = start == -1 ? null : start;
-				end = end == -1 ? null : end;
 				reportSettings.setYearsRangeFilterRule(start, end);
 			} catch (Exception e) {
 				logger.error(e.getMessage());

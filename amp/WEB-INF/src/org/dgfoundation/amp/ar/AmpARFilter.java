@@ -436,6 +436,8 @@ public class AmpARFilter extends PropertyListable {
 
 	private String fromProposedApprovalDate;	// view: v_actual_proposed_date, column name: [Proposed Approval Date], translated in Nepal as [Date of Agreement]
 	private String toProposedApprovalDate;		// view: v_actual_proposed_date, column name: [Proposed Approval Date], translated in Nepal as [Date of Agreement]
+	private String fromProposedStartDate;
+	private String toProposedStartDate;
 	private String dynProposedApprovalFilterCurrentPeriod;
 	private Integer dynProposedApprovalFilterAmount;
 	private String dynProposedApprovalFilterOperator;
@@ -2679,18 +2681,11 @@ public class AmpARFilter extends PropertyListable {
 	 * @return a ['from', 'to'] pair for ActivityStartDate range or [null, null] if none is configured
 	 */
 	public Date[] buildFromAndToActivityStartDateAsDate() {
-		boolean noFrom = fromActivityStartDate == null || fromActivityStartDate.length() == 0;
-		boolean noTo = toActivityStartDate == null || toActivityStartDate.length() == 0;
-		if (noFrom && noTo) {
-			Date[] dates = this.calculateDateFiltersAsDate(this.dynActivityStartFilterCurrentPeriod, this.dynActivityStartFilterAmount, this.dynActivityStartFilterOperator, this.dynActivityStartFilterXPeriod);
-			return dates;
-		}
-		try {
-			return new Date[]{(noFrom ? null : sdfIn.parse(fromActivityStartDate)), (noTo ? null : sdfIn.parse(toActivityStartDate))};
-		}
-		catch(ParseException e) {
-			logger.error("invalid date trickled into AmpARFilter::fromActivityStartDate!", e); // SHOULD NOT HAPPEN!
-			return null;
+		Date[] dateRange = buildFromAndTo(fromActivityStartDate, toActivityStartDate);
+		if (dateRange != null) {
+			return dateRange;
+		} else {
+			return calculateDateFiltersAsDate(this.dynActivityStartFilterCurrentPeriod, this.dynActivityStartFilterAmount, this.dynActivityStartFilterOperator, this.dynActivityStartFilterXPeriod);
 		}
 	}
 
@@ -2709,18 +2704,11 @@ public class AmpARFilter extends PropertyListable {
 	 * @return a ['from', 'to'] pair for ProposedApprovalDate range or [null, null] if none is configured
 	 */
 	public Date[] buildFromAndToProposedApprovalDateAsDate() {
-		boolean noFrom = fromProposedApprovalDate == null || fromProposedApprovalDate.length() == 0;
-		boolean noTo = toProposedApprovalDate == null || toProposedApprovalDate.length() == 0;
-		if (noFrom && noTo) {
-			Date[] dates = this.calculateDateFiltersAsDate(this.dynProposedApprovalFilterCurrentPeriod, this.dynProposedApprovalFilterAmount, this.dynProposedApprovalFilterOperator, this.dynProposedApprovalFilterXPeriod);
-			return dates;
-		}
-		try {
-			return new Date[]{(noFrom ? null : sdfIn.parse(fromProposedApprovalDate)), (noTo ? null : sdfIn.parse(toProposedApprovalDate))};
-		}
-		catch(ParseException e) {
-			logger.error("invalid date trickled into AmpARFilter::fromProposedApprovalDate!", e); // SHOULD NOT HAPPEN!
-			return null;
+		Date[] dateRange = buildFromAndTo(fromProposedApprovalDate, toProposedApprovalDate);
+		if (dateRange != null) {
+			return dateRange;
+		} else {
+			return calculateDateFiltersAsDate(this.dynProposedApprovalFilterCurrentPeriod, this.dynProposedApprovalFilterAmount, this.dynProposedApprovalFilterOperator, this.dynProposedApprovalFilterXPeriod);
 		}
 	}
 
@@ -2734,6 +2722,26 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setToProposedApprovalDate(String toProposedApprovalDate) {
 		this.toProposedApprovalDate = toProposedApprovalDate;
+	}
+
+	public String getFromProposedStartDate() {
+		return fromProposedStartDate;
+	}
+
+	public void setFromProposedStartDate(String fromProposedStartDate) {
+		this.fromProposedStartDate = fromProposedStartDate;
+	}
+
+	public String getToProposedStartDate() {
+		return toProposedStartDate;
+	}
+
+	public void setToProposedStartDate(String toProposedStartDate) {
+		this.toProposedStartDate = toProposedStartDate;
+	}
+
+	public Date[] buildFromAndToProposedStartDateAsDate() {
+		return buildFromAndTo(fromProposedStartDate, toProposedStartDate);
 	}
 
 	/**
@@ -2763,18 +2771,11 @@ public class AmpARFilter extends PropertyListable {
 	 * @return a ['from', 'to'] pair for ActivityActualCompletionDate range or [null, null] if none is configured
 	 */
 	public Date[] buildFromAndToActivityActualCompletionDateAsDate() {
-		boolean noFrom = fromActivityActualCompletionDate == null || fromActivityActualCompletionDate.length() == 0;
-		boolean noTo = toActivityActualCompletionDate == null || toActivityActualCompletionDate.length() == 0;
-		if (noFrom && noTo) {
-			Date[] dates = this.calculateDateFiltersAsDate(this.dynActivityActualCompletionFilterCurrentPeriod, this.dynActivityActualCompletionFilterAmount, this.dynActivityActualCompletionFilterOperator, this.dynActivityActualCompletionFilterXPeriod);
-			return dates;
-		}
-		try {
-			return new Date[]{(noFrom ? null : sdfIn.parse(fromActivityActualCompletionDate)), (noTo ? null : sdfIn.parse(toActivityActualCompletionDate))};
-		}
-		catch(ParseException e) {
-			logger.error("invalid date trickled into AmpARFilter::fromActivityActualCompletionDate!", e); // SHOULD NOT HAPPEN!
-			return null;
+		Date[] dateRange = buildFromAndTo(fromActivityActualCompletionDate, toActivityActualCompletionDate);
+		if (dateRange != null) {
+			return dateRange;
+		} else {
+			return calculateDateFiltersAsDate(this.dynActivityActualCompletionFilterCurrentPeriod, this.dynActivityActualCompletionFilterAmount, this.dynActivityActualCompletionFilterOperator, this.dynActivityActualCompletionFilterXPeriod);
 		}
 	}
 
@@ -2987,18 +2988,11 @@ public class AmpARFilter extends PropertyListable {
 	 * @return a ['from', 'to'] pair for ActivityFinalContractingDate range or [null, null] if none is configured
 	 */
 	public Date[] buildFromAndToActivityFinalContractingDateAsDate() {
-		boolean noFrom = fromActivityFinalContractingDate == null || fromActivityFinalContractingDate.length() == 0;
-		boolean noTo = toActivityFinalContractingDate == null || toActivityFinalContractingDate.length() == 0;
-		if (noFrom && noTo) {
-			Date[] dates = this.calculateDateFiltersAsDate(this.dynActivityFinalContractingFilterCurrentPeriod, this.dynActivityFinalContractingFilterAmount, this.dynActivityFinalContractingFilterOperator, this.dynActivityFinalContractingFilterXPeriod);
-			return dates;
-		}
-		try {
-			return new Date[]{(noFrom ? null : sdfIn.parse(fromActivityFinalContractingDate)), (noTo ? null : sdfIn.parse(toActivityFinalContractingDate))};
-		}
-		catch(ParseException e) {
-			logger.error("invalid date trickled into AmpARFilter::fromActivityFinalContractingDate!", e); // SHOULD NOT HAPPEN!
-			return null;
+		Date[] dateRange = buildFromAndTo(fromActivityFinalContractingDate, toActivityFinalContractingDate);
+		if (dateRange != null) {
+			return dateRange;
+		} else {
+			return calculateDateFiltersAsDate(this.dynActivityFinalContractingFilterCurrentPeriod, this.dynActivityFinalContractingFilterAmount, this.dynActivityFinalContractingFilterOperator, this.dynActivityFinalContractingFilterXPeriod);
 		}
 	}
 
@@ -3006,18 +3000,11 @@ public class AmpARFilter extends PropertyListable {
 	 * @return a ['from', 'to'] pair for EffectiveFundingDate range or [null, null] if none is configured
 	 */
 	public Date[] buildFromAndToEffectiveFundingDateAsDate() {
-		boolean noFrom = StringUtils.isBlank(fromEffectiveFundingDate);
-		boolean noTo = StringUtils.isBlank(toEffectiveFundingDate);
-		if (noFrom && noTo) {
-			Date[] dates = this.calculateDateFiltersAsDate(this.dynEffectiveFundingFilterCurrentPeriod, this.dynEffectiveFundingFilterAmount, this.dynEffectiveFundingFilterOperator, this.dynEffectiveFundingFilterXPeriod);
-			return dates;
-		}
-		try {
-			return new Date[]{(noFrom ? null : sdfIn.parse(fromEffectiveFundingDate)), (noTo ? null : sdfIn.parse(toEffectiveFundingDate))};
-		}
-		catch(ParseException e) {
-			logger.error("invalid date trickled into AmpARFilter::fromEffectiveFundingDate!", e); // SHOULD NOT HAPPEN!
-			return null;
+		Date[] dateRange = buildFromAndTo(fromEffectiveFundingDate, toEffectiveFundingDate);
+		if (dateRange != null) {
+			return dateRange;
+		} else {
+			return calculateDateFiltersAsDate(this.dynEffectiveFundingFilterCurrentPeriod, this.dynEffectiveFundingFilterAmount, this.dynEffectiveFundingFilterOperator, this.dynEffectiveFundingFilterXPeriod);
 		}
 	}
 
@@ -3025,18 +3012,26 @@ public class AmpARFilter extends PropertyListable {
 	 * @return a ['from', 'to'] pair for FundingClosingDate range or [null, null] if none is configured
 	 */
 	public Date[] buildFromAndToFundingClosingDateAsDate() {
-		boolean noFrom = StringUtils.isBlank(fromFundingClosingDate);
-		boolean noTo = StringUtils.isBlank(toFundingClosingDate);
+		Date[] dateRange = buildFromAndTo(fromFundingClosingDate, toFundingClosingDate);
+		if (dateRange != null) {
+			return dateRange;
+		} else {
+			return calculateDateFiltersAsDate(this.dynFundingClosingFilterCurrentPeriod, this.dynFundingClosingFilterAmount, this.dynFundingClosingFilterOperator, this.dynFundingClosingFilterXPeriod);
+		}
+	}
+
+	private Date[] buildFromAndTo(String from, String to) {
+		boolean noFrom = StringUtils.isEmpty(from);
+		boolean noTo = StringUtils.isEmpty(to);
 		if (noFrom && noTo) {
-			Date[] dates = this.calculateDateFiltersAsDate(this.dynFundingClosingFilterCurrentPeriod, this.dynFundingClosingFilterAmount, this.dynFundingClosingFilterOperator, this.dynFundingClosingFilterXPeriod);
-			return dates;
-		}
-		try {
-			return new Date[]{(noFrom ? null : sdfIn.parse(fromFundingClosingDate)), (noTo ? null : sdfIn.parse(toFundingClosingDate))};
-		}
-		catch(ParseException e) {
-			logger.error("invalid date trickled into AmpARFilter::fromFundingClosingDate!", e); // SHOULD NOT HAPPEN!
 			return null;
+		} else {
+			try {
+				return new Date[]{(noFrom ? null : sdfIn.parse(from)), (noTo ? null : sdfIn.parse(to))};
+			} catch (ParseException e) {
+				logger.error("invalid date trickled into AmpARFilter!", e); // SHOULD NOT HAPPEN!
+				return null;
+			}
 		}
 	}
 

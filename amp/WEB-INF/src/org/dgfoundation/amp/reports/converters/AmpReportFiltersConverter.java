@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,12 +16,13 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -68,6 +68,8 @@ public class AmpReportFiltersConverter {
 
 		// Donors section.
 		addFilter(ColumnConstants.DONOR_AGENCY, AmpOrganisation.class, "donnorgAgency", true);
+		addFilter(ColumnConstants.DONOR_TYPE, AmpOrgType.class, "donorTypes", true);
+		addFilter(ColumnConstants.DONOR_GROUP, AmpOrgGroup.class, "donorGroups", true);
 
 		// Related organizations section.
 		addFilter(ColumnConstants.BENEFICIARY_AGENCY, AmpOrganisation.class, "beneficiaryAgency", true);
@@ -137,12 +139,14 @@ public class AmpReportFiltersConverter {
 		addFilter(ColumnConstants.WORKSPACES, AmpTeam.class, "workspaces", true);
 		addFilter(ColumnConstants.FUNDING_STATUS, AmpCategoryValue.class, "fundingStatus", true);
 		addFilter(ColumnConstants.MODE_OF_PAYMENT, AmpCategoryValue.class, "modeOfPayment", true);
+		addFilter(ColumnConstants.EXPENDITURE_CLASS, AmpCategoryValue.class, "expenditureClass", true);
 		
 		// Other section.
 		addFilter(ColumnConstants.HUMANITARIAN_AID, Integer.class, "humanitarianAid", true);
 		addFilter(ColumnConstants.DISASTER_RESPONSE_MARKER, Integer.class, "disasterResponse", true);
 		addDateRangeFilter(ColumnConstants.ACTUAL_START_DATE, "fromActivityStartDate", "toActivityStartDate");
 		addDateRangeFilter(ColumnConstants.PROPOSED_APPROVAL_DATE, "fromProposedApprovalDate", "toProposedApprovalDate");
+		addDateRangeFilter(ColumnConstants.PROPOSED_START_DATE, "fromProposedStartDate", "toProposedStartDate");
 		addDateRangeFilter(ColumnConstants.ACTUAL_COMPLETION_DATE, "fromActivityActualCompletionDate", "toActivityActualCompletionDate");
 		addDateRangeFilter(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "fromActivityFinalContractingDate", "toActivityFinalContractingDate");
 		addDateRangeFilter(ColumnConstants.EFFECTIVE_FUNDING_DATE, "fromEffectiveFundingDate", "toEffectiveFundingDate");
@@ -234,7 +238,6 @@ public class AmpReportFiltersConverter {
 		try {
 			Method setterFromMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(fromMethod), java.lang.String.class);
 			Method setterToMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(toMethod), java.lang.String.class);			
-			SimpleDateFormat originalFormat = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
 			ReportElement filterElement = null;
 			if (mondrianFilterColumnName.equalsIgnoreCase(TRANSACTION_DATE)) {
 				filterElement = new ReportElement(ElementType.DATE);
@@ -243,8 +246,8 @@ public class AmpReportFiltersConverter {
 			}
 			FilterRule filterRule = this.filters.getAllFilterRules().get(filterElement);
 			if (filterRule != null) {
-				String fromDate = originalFormat.format(DateTimeUtil.fromJulianNumberToDate(filterRule.min));
-				String toDate = originalFormat.format(DateTimeUtil.fromJulianNumberToDate(filterRule.max));
+				String fromDate = convertJulianNrToDefaultDateFormat(filterRule.min);
+				String toDate = convertJulianNrToDefaultDateFormat(filterRule.max);
 
 				// Use reflection to call the setter.
 				setterFromMethod.invoke(this.ampARFilter, fromDate);
@@ -252,8 +255,17 @@ public class AmpReportFiltersConverter {
 				logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + fromDate + " / " + toDate);
 			}
 		} catch (Exception e) {
-			logger.error(e, e);
+			logger.error("Failed to add date range filter.", e);
 		}
+	}
+
+	private String convertJulianNrToDefaultDateFormat(String julianNumber) {
+		Date fromDateTrue = DateTimeUtil.fromJulianNumberToDate(julianNumber);
+		if (fromDateTrue == null) {
+			return null;
+		}
+		SimpleDateFormat format = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
+		return format.format(fromDateTrue);
 	}
 	
 	/**

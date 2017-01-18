@@ -750,6 +750,9 @@
             <module name="budgetexport">
             	<page>reportWrapper</page>
             </module>
+			<module name="esrigis">
+				<page>mainmapPopup</page>
+			</module>
         </page-group>
 	</site-layout>
 </site-config>

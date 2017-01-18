@@ -29,6 +29,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -49,9 +50,9 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
-import org.dgfoundation.amp.reports.saiku.export.SaikuReportExporter;
-import org.dgfoundation.amp.reports.xml.CustomReport;
-import org.dgfoundation.amp.reports.xml.XmlReportUtil;
+import org.dgfoundation.amp.reports.xml.ObjectFactory;
+import org.dgfoundation.amp.reports.xml.Report;
+import org.dgfoundation.amp.reports.xml.ReportParameter;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -206,7 +207,7 @@ public class Reports implements ErrorReportingEndpoint {
 	 * Generates a custom report.  
 	 * 
 	 * @param formParams {@link ReportsUtil#getReportResultByPage form parameters}
-	 * @return Response xml result for the requested custom reports
+	 * @return Response JsonBean result for the requested page and pagination information
 	 * @see ReportsUtil#getReportResultByPage
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
@@ -220,18 +221,21 @@ public class Reports implements ErrorReportingEndpoint {
 		return getReportResultByPage(formParams, reportId);
 	}
 	
-	@POST
-	@Path("/report/custom/paginate")
-	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
 	/**
 	 * Generates a custom xml report.  
 	 * 
 	 * @param formParams {@link Reports#getXmlReportResponse form parameters}
 	 * @return Response in xml format result for the report
 	 */
-	public final Response getXmlCustomReport(CustomReport customReport) {
-		return getXmlReportResponse(customReport, null);
+	@POST
+	@Path("/report/custom/paginate")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
+	public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter) {
+		Report xmlReport = ApiXMLService.getXmlReport(reportParameter, null);
+		ObjectFactory xmlReportObjFactory = new ObjectFactory();
+		
+		return xmlReportObjFactory.createReport(xmlReport);
 	}
 
 	/**
@@ -263,8 +267,11 @@ public class Reports implements ErrorReportingEndpoint {
 	@Path("/report/{report_id}/paginate")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
-	public final Response getXmlReportResult(CustomReport customReport, @PathParam("report_id") Long reportId) {
-		return getXmlReportResponse(customReport, reportId);
+	public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter, @PathParam("report_id") Long reportId) {
+		Report xmlReport = ApiXMLService.getXmlReport(reportParameter, reportId);
+		ObjectFactory xmlReportObjFactory = new ObjectFactory();
+		
+		return xmlReportObjFactory.createReport(xmlReport);
 	}
 	
 	@POST
@@ -943,43 +950,5 @@ public class Reports implements ErrorReportingEndpoint {
 	@Override
 	public Class getErrorsClass() {
 		return ReportErrors.class;
-	}
-	
-	/** Method used to create a xml Response for a specific report
-	 * @param customReport
-	 * @param reportId
-	 * @return
-	 */
-	private Response getXmlReportResponse(CustomReport customReport, Long reportId) {
-		JsonBean formParams = XmlReportUtil.convertXmlCustomReportToJsonObj(customReport);
-		
-		if (reportId == null) {
-			JsonBean validationErrorJson = ReportsUtil.validateReportConfig(formParams, true);
-			if (validationErrorJson != null) {
-				String xmlErros = XmlReportUtil.convertErrorJsonObjToXmlString(validationErrorJson);
-				return Response.ok(xmlErros, MediaType.APPLICATION_XML).build();
-			}
-			// we need reportId only to store the report result in cache
-			reportId = (long) formParams.getString(EPConstants.REPORT_NAME).hashCode();
-			formParams.set(EPConstants.IS_CUSTOM, true);
-		}
-		
-		try {
-			GeneratedReport generatedReport = ReportsUtil.getGeneratedReport(reportId, formParams);
-			SaikuReportExporter xmlExporter = SaikuReportExportType.XML.executor.newInstance();
-			byte[] doc = xmlExporter.exportReport(generatedReport, null);
-			
-			if (doc != null) {
-				logger.info("Send export data to browser...");
-				
-				return Response.ok(doc, MediaType.APPLICATION_XML).build();
-			} else {
-				logger.error("XML" + " report export is null");
-				return Response.serverError().build();
-			}
-		} catch (Exception e) {
-			logger.error("error while generating report", e);
-			return Response.serverError().build();
-		}
 	}
 }

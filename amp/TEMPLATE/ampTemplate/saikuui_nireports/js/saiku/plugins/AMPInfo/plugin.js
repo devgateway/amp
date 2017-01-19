@@ -110,7 +110,7 @@ var filtersToHtml = function(filters) {
 			if(auxProperty.modelType === 'YEAR-SINGLE-VALUE' || auxProperty.modelType === 'DATE-RANGE-VALUES'){
 				var filter = createDateFilterObject(filters, propertyName);
 				if(filter && filter.values.length > 0){
-					html += "<div class='round-filter-group'><b class='i18n'>" + filter.trnName + "</b><br>" + filterContentToHtml(filter.values) + "</div>";						
+					html += "<div class='round-filter-group'><b class='i18n'>" + filter.trnName.replace(/-/g, " ") + "</b><br>" + filterContentToHtml(filter.values) + "</div>";						
 				}
 				
 			} else {
@@ -133,7 +133,7 @@ var filtersToHtml = function(filters) {
 				});
 				
 				var trnName = auxProperty.filterName || propertyName;
-				html += "<div class='round-filter-group'><b class='i18n'>" + trnName + "</b><br>" + filterContentToHtml(content) + "</div>";
+				html += "<div class='round-filter-group'><b class='i18n'>" + trnName.replace(/-/g, " ") + "</b><br>" + filterContentToHtml(content) + "</div>";
 			}	
 			
 		}
@@ -165,14 +165,14 @@ var createDateFilterObject= function(filters, propertyName){
 			auxProperty.start = auxProperty.start || "";
 			auxProperty.end = auxProperty.end || "";
 
-			var startDatePrefix = TranslationManager.getTranslated((auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "from" : "") + '&nbsp;';
-			var endDatePrefix = TranslationManager.getTranslated((auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "until" : "") + '&nbsp';
+			var startDatePrefix = TranslationManager.getTranslated((auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "From" : "") + '&nbsp;';
+			var endDatePrefix = TranslationManager.getTranslated((auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "Until" : "") + '&nbsp';
 
 			if(auxProperty.start.length > 0){
 				filter.values.push({
 					id : auxProperty.start,
 					name : auxProperty.start,
-					trnName : startDatePrefix + window.currentFilter.formatDate(auxProperty.start) 
+					trnName : startDatePrefix + " " + window.currentFilter.formatDate(auxProperty.start) 
 				});
 			}
 
@@ -180,7 +180,7 @@ var createDateFilterObject= function(filters, propertyName){
 				filter.values.push({
 					id : auxProperty.end,
 					name : auxProperty.end,
-					trnName : endDatePrefix + window.currentFilter.formatDate(auxProperty.end) 					
+					trnName : endDatePrefix + " " + window.currentFilter.formatDate(auxProperty.end) 					
 				});		
 			}									
 		} else if (auxProperty.modelType === 'YEAR-SINGLE-VALUE') {

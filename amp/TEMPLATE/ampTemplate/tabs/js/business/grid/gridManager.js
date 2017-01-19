@@ -462,13 +462,13 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 			//console.log(partialTotals);
 		}
 		jQuery.ajax({
-	        url: 'http://local.amp.org:8080/rest/permissions/activity-can-do/' 
+	        url: '/rest/permissions/activity-can-do/' 
 	        	+ _.pluck(rows, app.TabsApp.COLUMN_ACTIVITY_ID).toString(),
 	        success: function (result) {
 	        	activityEditPermissions = result;
 	        },
 	        error:function(error){
-	        	alert (error);
+	        	console.log(error);
 	        },
 	        async: false
 	    });

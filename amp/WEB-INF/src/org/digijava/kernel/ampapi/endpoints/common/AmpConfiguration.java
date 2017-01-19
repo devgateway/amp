@@ -107,7 +107,16 @@ public class AmpConfiguration {
 
 	/**
 	 * Returns all AMP Global Settings.
-	 * @return a map containing all global settings, key is setting name and value is setting value.
+	 * <p>Response is a map containing all global settings where key is setting name and value is setting value.
+	 * <h3>Sample Output:</h3>
+	 * <pre>
+	 * {
+	 *   "Base Currency": "USD",
+	 *   "Default Date Format": "dd/MM/yyyy",
+	 *   "Resource List Sort Column": "date_DESC",
+	 *   "ECS Enabled": "true"
+	 * }
+	 * </pre>
 	 */
 	@GET
 	@Path("global-settings")

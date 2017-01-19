@@ -9,7 +9,7 @@ import javax.ws.rs.ext.Provider;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorException;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 
@@ -31,8 +31,8 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     public Response toResponse(Exception e) {
         logger.error("ApiExceptionMapper: ", e);
         
-        if (e instanceof ApiErrorException) {
-    		ApiErrorException apiException = (ApiErrorException) e;
+        if (e instanceof ApiRuntimeException) {
+    		ApiRuntimeException apiException = (ApiRuntimeException) e;
     		return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(), httpRequest.getContentType());
     	}
 

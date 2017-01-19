@@ -228,7 +228,7 @@ public class Reports implements ErrorReportingEndpoint {
 	 * @return Response in xml format result for the report
 	 */
 	@POST
-	@Path("/report/custom/paginate")
+	@Path("/report/custom")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
 	public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter) {
@@ -261,7 +261,7 @@ public class Reports implements ErrorReportingEndpoint {
 	 * @see Reports#getXmlReportResponse
 	 */
 	@POST
-	@Path("/report/{report_id}/paginate")
+	@Path("/report/{report_id}")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
 	public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter, @PathParam("report_id") Long reportId) {

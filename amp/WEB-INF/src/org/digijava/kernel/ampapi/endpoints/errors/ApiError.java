@@ -138,11 +138,11 @@ public class ApiError {
         }
     }
 	
-	private static JsonBean getResultErrorBean(Object errorBean) {
+	private static JsonBean getResultErrorBean(Map<String, Collection<Object>> errors) {
         processErrorResponseStatus();
 
 		JsonBean resultErrorBean = new JsonBean();
-		resultErrorBean.set(JSON_ERROR_CODE, errorBean);
+		resultErrorBean.set(JSON_ERROR_CODE, errors);
 		
 		return resultErrorBean;
 	}

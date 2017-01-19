@@ -3,16 +3,12 @@
  */
 package org.digijava.kernel.ampapi.endpoints.errors;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.reports.xml.XmlReportUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -26,9 +22,6 @@ public class ApiErrorResponse {
 	
 	public static final String UNKOWN_ERROR = "Unkown Error";
 	public static final String INTERNAL_ERROR = "Internal Error";
-	
-	@Context
-	private HttpServletRequest httpRequest;
 	
 	/**
 	 * Reports HTTP 500 (Internal Server Error) with the given message
@@ -114,6 +107,6 @@ public class ApiErrorResponse {
 	public static void reportError(Response.Status status, JsonBean error) {
 		logger.error(String.format("[HTTP %d] Error response = %s", status.getStatusCode(), error.toString()));
 
-		throw new ApiErrorException(status, error);
+		throw new ApiRuntimeException(status, error);
 	}
 }

@@ -8,7 +8,7 @@ import org.dgfoundation.amp.reports.xml.Report;
 import org.dgfoundation.amp.reports.xml.ReportParameter;
 import org.dgfoundation.amp.reports.xml.XmlReportUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorException;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
@@ -29,7 +29,7 @@ public class ApiXMLService {
 		if (reportId == null) {
 			JsonBean errorValidJson = ReportsUtil.validateReportConfig(formParams, true);
 			if (errorValidJson != null) {
-				throw new ApiErrorException(Response.Status.BAD_REQUEST, errorValidJson);
+				throw new ApiRuntimeException(Response.Status.BAD_REQUEST, errorValidJson);
 			}
 			
 			// we need reportId only to store the report result in cache

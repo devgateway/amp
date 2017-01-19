@@ -2795,10 +2795,10 @@ module.exports = ChartModel.extend({
 			var auxAxis = yColumn;
 			yColumn = xColumn;
 			xColumn = auxAxis;
-		}
-		
-		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn, yCount: self.get('yLimit')}; 		
-		paramsForHeatMap.filters =  JSON.parse(options.data);
+		}		
+		var paramsForHeatMap = {xCount: self.get('xLimit'), xColumn: xColumn, yColumn: yColumn, yCount: self.get('yLimit')};		
+		var filterObject = JSON.parse(options.data);		
+		paramsForHeatMap.filters = (filterObject && filterObject.filters) ? filterObject.filters : {}; 
 		options.data = JSON.stringify(paramsForHeatMap);
 
 		return ChartModel.prototype.fetch.call(this, options);
@@ -27906,7 +27906,8 @@ module.exports = Backbone.Collection.extend({
         break;
         
       default:
-    	  if (attrs.id == 'date' || (attrs.id.length > 4 && attrs.id.substring(attrs.id.length - 4) == 'date')) {
+    	  
+    	  if (attrs.id == 'date' || (attrs.id.indexOf('-date') != -1 ) || (attrs.id.indexOf('date-') != -1 )) {
     		  tmpModel = new YearsFilterModel(attrs);  // hacky but less hacky than enumerating them. Long term solution -> the endpoint should return a field telling the type of a field
     	  } else if (attrs.id == 'computed-year') {
     		  tmpModel = new YearsOnlyFilterModel(attrs);

@@ -1,10 +1,9 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -17,6 +16,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ViewActivityHistoryForm;
 import org.digijava.module.aim.helper.ActivityHistory;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -73,7 +73,7 @@ public class ViewActivityHistory extends Action {
 			ActivityHistory activityHistory = new ActivityHistory();
 			activityHistory.setActivityId(activity.getAmpActivityId());
 			activityHistory.setModifiedBy(ActivityUtil.getModifiedByUserName(activity, auditHistory));
-			activityHistory.setModifiedDate(ActivityUtil.getModifiedByDate(activity, auditHistory));
+			activityHistory.setModifiedDate(FormatHelper.formatDate(ActivityUtil.getModifiedByDate(activity, auditHistory)));
 			
 			activitiesHistory.add(activityHistory);
 		}

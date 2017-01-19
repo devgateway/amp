@@ -601,7 +601,8 @@ public class AmpARFilter extends PropertyListable {
 	private String sortBy;
 	private Boolean sortByAsc;
 	private List<String> hierarchySorters;
-	
+	private List<Long> ampActivityIdOrder;
+
 	private Set<AmpCategoryValue> projectImplementingUnits; 
 	
 	/**
@@ -810,6 +811,7 @@ public class AmpARFilter extends PropertyListable {
 		this.setProjectImplementingUnits(null);
 		this.setSortByAsc(true);
 		this.setHierarchySorters(new ArrayList<String>());
+		this.setAmpActivityIdOrder(new ArrayList<Long>());
 		this.budgetExport = false;
 		
 		HttpServletRequest request = TLSUtils.getRequest();
@@ -1524,11 +1526,6 @@ public class AmpARFilter extends PropertyListable {
 			//shouldn't enter here if not using an httprequest!
 
             String LUCENE_ID_LIST = "";
-//			HttpSession session = request.getSession();
-//			ServletContext ampContext = session.getServletContext();
-//			Directory idx = (Directory) ampContext
-//				.getAttribute(Constants.LUCENE_INDEX);
-
             searchMode = params.getLuceneSearchModeParam();
 
             Document[] docs = LuceneUtil.search(params.getLuceneRealPath() + LuceneUtil.ACTIVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
@@ -1540,8 +1537,7 @@ public class AmpARFilter extends PropertyListable {
                 } else {
                     LUCENE_ID_LIST = LUCENE_ID_LIST + "," + doc.get("id");
                 }
-                // AmpActivity act =
-                // ActivityUtil.getAmpActivity(Long.parseLong(doc.get("id")));
+				ampActivityIdOrder.add(Long.parseLong(doc.get("id")));
             }
 
             logger.info("Lucene ID List:" + LUCENE_ID_LIST);
@@ -3179,7 +3175,15 @@ public class AmpARFilter extends PropertyListable {
 	public void setHierarchySorters(List<String> hierarchySorters) {
 		this.hierarchySorters = cleanupHierarchySorters(hierarchySorters);
 	}
-	
+
+	public List<Long> getAmpActivityIdOrder() {
+		return ampActivityIdOrder;
+	}
+
+	public void setAmpActivityIdOrder(List<Long> ampActivityIdOrder) {
+		this.ampActivityIdOrder = ampActivityIdOrder;
+	}
+
 	/** for each given sorting key only keeps the last entry */
 	protected List<String> cleanupHierarchySorters(List<String> in) {
 		if (in == null || in.isEmpty())

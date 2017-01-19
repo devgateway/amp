@@ -246,8 +246,8 @@ public class AmpReportFiltersConverter {
 			}
 			FilterRule filterRule = this.filters.getAllFilterRules().get(filterElement);
 			if (filterRule != null) {
-				String fromDate = convertJulianNrToDefaultDateFormat(filterRule.min);
-				String toDate = convertJulianNrToDefaultDateFormat(filterRule.max);
+				String fromDate = DateTimeUtil.convertJulianNrToDefaultDateFormat(filterRule.min);
+				String toDate = DateTimeUtil.convertJulianNrToDefaultDateFormat(filterRule.max);
 
 				// Use reflection to call the setter.
 				setterFromMethod.invoke(this.ampARFilter, fromDate);
@@ -259,15 +259,6 @@ public class AmpReportFiltersConverter {
 		}
 	}
 
-	private String convertJulianNrToDefaultDateFormat(String julianNumber) {
-		Date fromDateTrue = DateTimeUtil.fromJulianNumberToDate(julianNumber);
-		if (fromDateTrue == null) {
-			return null;
-		}
-		SimpleDateFormat format = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
-		return format.format(fromDateTrue);
-	}
-	
 	/**
 	 * Merge all fields that have not been populated in the build process.
 	 * 

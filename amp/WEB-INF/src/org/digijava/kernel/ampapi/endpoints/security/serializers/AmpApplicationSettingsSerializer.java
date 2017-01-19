@@ -19,7 +19,7 @@ public class AmpApplicationSettingsSerializer extends JsonSerializer<AmpApplicat
         jgen.writeStartObject();
 
         writeField("id", value.getAmpAppSettingsId(), jgen, provider);
-        writeField("team", value.getTeam() != null ? value.getTeam().getAmpTeamId() : null, jgen, provider);
+        writeField("workspace-id", value.getTeam() != null ? value.getTeam().getAmpTeamId() : null, jgen, provider);
         writeField("default-records-per-page", value.getDefaultRecordsPerPage(), jgen, provider);
         writeField("report-start-year", value.getReportStartYear(), jgen, provider);
         writeField("report-end-year", value.getReportEndYear(), jgen, provider);

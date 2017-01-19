@@ -180,12 +180,12 @@ var WorkspaceToolbar = Backbone.View.extend({
         } else {
         	$(this.el).find('a.export_to_map').addClass('disabled_toolbar');
         }
-    	
+
         this.reflect_properties();
         if(_.isUndefined(_.findWhere(enabledASFM.get('ADMINISTRATIVE SECTION'), '/ADMINISTRATIVE SECTION/Currency deflator'))) {
-            $(this.el).find('a.export_dual_currency').hide();
+          $(this.el).find('a.export_dual_currency').hide();
         } else {
-            $(this.el).find('a.export_dual_currency').show();
+          $(this.el).find('a.export_dual_currency').css('display', 'block');
         }
     },
     hideEditableFormatsPublicView: function(){
@@ -401,15 +401,15 @@ var WorkspaceToolbar = Backbone.View.extend({
     	Saiku.logger.log("WorkspaceToolbar.export_amp_dual_currency");
         var that = this;
         if(!this.deflatedCurrenciesPromise){
-            this.deflatedCurrenciesPromise = $.get("/rest/amp/settings")
+            this.deflatedCurrenciesPromise = $.get("/rest/settings-definitions/reports")
                 .then(function(settings){
                     return settings.filter(function(setting){
-                        return setting.id == "1";
+                        return setting.id == "currency-code";
                     })[0]
                 })
                 .then(function(setting){
-                    return setting.options.filter(function(currency){
-                        return currency.id != setting.defaultId
+                    return setting.value.options.filter(function(currency){
+                        return currency.id != setting.value.defaultId
                     })
                 })
             ;

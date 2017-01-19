@@ -224,7 +224,7 @@ public class Reports implements ErrorReportingEndpoint {
 	/**
 	 * Generates a custom xml report.  
 	 * 
-	 * @param formParams {@link Reports#getXmlReportResponse form parameters}
+	 * @param reportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
 	 * @return Response in xml format result for the report
 	 */
 	@POST
@@ -232,10 +232,7 @@ public class Reports implements ErrorReportingEndpoint {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
 	public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter) {
-		Report xmlReport = ApiXMLService.getXmlReport(reportParameter, null);
-		ObjectFactory xmlReportObjFactory = new ObjectFactory();
-		
-		return xmlReportObjFactory.createReport(xmlReport);
+		return getXmlReportResult(reportParameter, null);
 	}
 
 	/**
@@ -258,8 +255,8 @@ public class Reports implements ErrorReportingEndpoint {
 	/**
 	 * Retrieves report data for the specified reportId and a given page number
 	 *  
-	 * @param reportId    report Id
-	 * @param formParams  {@link ReportsUtil#getReportResultByPage form parameters}
+	 * @param reportId report Id
+	 * @param ReportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
 	 * @return XML result for the requested page and pagination information
 	 * @see Reports#getXmlReportResponse
 	 */

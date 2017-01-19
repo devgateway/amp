@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -1235,7 +1236,9 @@ public class LuceneUtil implements Serializable {
     private static List<FuzzyQuery> buildFuzzyQueryList(String searchString, QueryParser parser) {
         searchString = parser.escape(searchString);
         List<FuzzyQuery> fuzzyTerms = new ArrayList<FuzzyQuery>();
-        for (String word : searchString.split(" ")) {
+        String[] keywords = searchString.split(" ");
+        Set<String> ampIds = ActivityUtil.findExistingAmpIds(Arrays.asList(keywords));
+        for (String word : keywords) {
             if (StringUtils.isNotBlank(word) && word.length() > 1) {
                 FuzzyQuery fuzzyQuery = null;
                 try {
@@ -1243,13 +1246,13 @@ public class LuceneUtil implements Serializable {
                     if (query instanceof PhraseQuery) {
                         if (((PhraseQuery) query).getTerms() != null) {
                             for (Term term : ((PhraseQuery) query).getTerms()) {
-                                fuzzyQuery = new FuzzyQuery(term, getMinimumSimilarity(term.text()));
+                                fuzzyQuery = new FuzzyQuery(term, getMinimumSimilarity(term.text(), ampIds.contains(term.text())));
                                 fuzzyTerms.add(fuzzyQuery);
                             }
                         }
                     } else {
                         if (query instanceof TermQuery) {
-                            fuzzyQuery = new FuzzyQuery(((TermQuery) query).getTerm(), getMinimumSimilarity(word));
+                            fuzzyQuery = new FuzzyQuery(((TermQuery) query).getTerm(), getMinimumSimilarity(word, ampIds.contains(word)));
                             fuzzyTerms.add(fuzzyQuery);
                         }
                     }
@@ -1266,9 +1269,9 @@ public class LuceneUtil implements Serializable {
         return SEACH_TYPE_FUZZY;
     }
 
-    private static float getMinimumSimilarity(String word) {
+    private static float getMinimumSimilarity(String word, boolean isAmpId) {
         boolean isNumeric = word.chars().allMatch(Character::isDigit);
-        if (isNumeric) {
+        if (isNumeric || isAmpId) {
             return MINIMUM_SIMILARITY_TO_NUMBERS;
         }
         return MINIMUM_SIMILARITY;

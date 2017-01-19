@@ -1969,5 +1969,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		
 		return null;
 	}
-	
+
+	public static Set<String> findExistingAmpIds(Collection<String> candidates) {
+
+		String queryStr = "select activity.ampId from " + AmpActivity.class.getName() + " activity " +
+				" where activity.ampId in ( " + Util.toCSString(candidates) + " ) ";
+
+		Session session = PersistenceManager.getRequestDBSession();
+		Query qry = session.createQuery(queryStr);
+
+		return new HashSet<String>(((List<String>) qry.list()));
+	}
+
 } // End

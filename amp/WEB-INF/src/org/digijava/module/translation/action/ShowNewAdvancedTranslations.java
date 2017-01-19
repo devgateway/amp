@@ -1,5 +1,8 @@
 package org.digijava.module.translation.action;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -8,13 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.search.Hits;
+import org.apache.lucene.search.TopDocs;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -116,9 +115,9 @@ public class ShowNewAdvancedTranslations extends Action{
 			ServletContext context = request.getSession().getServletContext();
 			
 			//get results from Lucene
-			Hits hits = LuceneWorker.search(Message.class, trnForm.getSearchTerm(), context, langCode);
-			logger.debug("Lucen found "+hits.length()+" records");
-			if (hits !=null && hits.length()>0){
+			TopDocs hits = LuceneWorker.search(Message.class, trnForm.getSearchTerm(), context, langCode);
+			logger.debug("Lucen found " + hits.totalHits + " records");
+			if (hits !=null && hits.totalHits > 0){
 				
 				
 				//compensate list additions and deletions
@@ -133,18 +132,18 @@ public class ShowNewAdvancedTranslations extends Action{
 
 				
 				
-				if(stopItemNo>hits.length()){
-					stopItemNo=hits.length();
+				if(stopItemNo > hits.totalHits){
+					stopItemNo = hits.totalHits;
 				}
 				
-				totalPages = (int) Math.ceil((hits.length() + groupsList.size()) / itemsPerPage);
+				totalPages = (int) Math.ceil((hits.totalHits + groupsList.size()) / itemsPerPage);
 				
 				//Store for keys of all found translations.
 				Map<String, Float> scoresByKeys = new HashMap<String, Float>();
 
 				for (int i = startItemNo; i < stopItemNo; i++) {
-					Document doc = hits.doc(i);
-					float score = hits.score(i);
+					Document doc = null; //TODO: hits.doc();
+					float score = 1l; //TODO: hits.score(i);
 					String key = doc.get(LucTranslationModule.FIELD_KEY);
 					Float oldScore = scoresByKeys.get(key);
 					//add only higher values

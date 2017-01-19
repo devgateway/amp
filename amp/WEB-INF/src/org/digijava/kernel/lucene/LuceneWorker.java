@@ -1,34 +1,37 @@
 package org.digijava.kernel.lucene;
 
+import javax.servlet.ServletContext;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Hit;
-import org.apache.lucene.search.Hits;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -158,7 +161,14 @@ public class LuceneWorker {
 	 */
 	private static boolean checkIndexDirExists(LucModule<?> module, ServletContext context){
 		String dir = getModuleDirPath(module, context);
-		boolean exists = IndexReader.indexExists(dir);
+		boolean exists = false;
+		try {
+			Directory directory = FSDirectory.open(Paths.get(dir));
+			exists = DirectoryReader.indexExists(directory);
+		} catch (IOException e) {
+			logger.error("Error while checking indexExists.");
+		}
+
 		if(!exists){
 			logInfo(module,"Index directory missing. Need rebuild.");
 		}
@@ -268,7 +278,9 @@ public class LuceneWorker {
 			logInfo(module,"Loading items to index...");
 			List<E> items = module.getItemsToIndex();
 			long startTime = System.currentTimeMillis();
-			IndexWriter writer = new IndexWriter(dir, analyzer, true);
+			Directory directory = FSDirectory.open(Paths.get(dir));
+			IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+			IndexWriter writer = new IndexWriter(directory, iwc);
 			if (items!=null && items.size()>0){
 				logInfo(module,"Creating index for "+items.size()+" items. This may take some time...");
 				for (E item : items) {
@@ -278,7 +290,6 @@ public class LuceneWorker {
 			}else{
 				logInfo(module,"Creating empty index.");
 			}
-			writer.optimize();
 			writer.close();
 			long stopTime = System.currentTimeMillis();
 			long seconds = (stopTime - startTime)/1000;
@@ -436,7 +447,9 @@ public class LuceneWorker {
 				Document doc = module.convertToDocument(item);
 				String dir = getModuleDirPath(module, context);
 				Analyzer analyzer = module.getAnalyzer();
-				IndexWriter writer = new IndexWriter(dir, analyzer, false);
+				Directory directory = FSDirectory.open(Paths.get(dir));
+				IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+				IndexWriter writer = new IndexWriter(directory, iwc);
 				writer.addDocument(doc);
                 writer.close();
 			} catch (IOException e) {
@@ -474,28 +487,17 @@ public class LuceneWorker {
 		try {
 			if (module!=null){
 				String dir = getModuleDirPath(module, context);
-				IndexReader reader = IndexReader.open(dir);
 				Term term = module.getIdFieldTerm(item);
-				reader.deleteDocuments(term);
-				reader.close();
+
+				Directory directory = FSDirectory.open(Paths.get(dir));
+				IndexWriterConfig iwc = new IndexWriterConfig(LuceneUtil.analyzer);
+				IndexWriter indexWriter = new IndexWriter(directory, iwc);
+				indexWriter.deleteDocuments(term);
+				indexWriter.close();
 			}
 		} catch (IOException e) {
 			throw new DgException("Cannot delete item from index",e);
 		}
-	}
-	
-	/**
-	 * Search items in index.
-	 * Module (index to be searched) is determined from clazz parameter.
-	 * @param <E> 
-	 * @param clazz
-	 * @param textToSearch search term.
-	 * @param context
-	 * @return hits in index sorted by relevance
-	 * @throws DgException
-	 */
-	public static <E> Hits search(Class<E> clazz, String textToSearch, ServletContext context) throws DgException{
-		return search(clazz, textToSearch, context, null);
 	}
 
 	/**
@@ -506,29 +508,31 @@ public class LuceneWorker {
 	 * @param clazz
 	 * @param textToSearch
 	 * @param context
-	 * @param classNameSuffix suffix for classes to separate them by some feature in different indexes. 
+	 * @param suffix suffix for classes to separate them by some feature in different indexes.
 	 * @return
 	 * @throws DgException
 	 */
-	public static <E> Hits search(Class<E> clazz, String textToSearch, ServletContext context, String suffix) throws DgException{
-		Hits hits = null;
+	public static <E> TopDocs search(Class<E> clazz, String textToSearch, ServletContext context, String suffix) throws DgException{
+		TopDocs results;
 		try {
 			LucModule<E> module = getModule(clazz, suffix);
 			String dir = getModuleDirPath(module, context);
 			String[] searchFieldNames = module.getSearchFieldNames();
 			String searchText = textToSearch;
 			Analyzer analyzer = module.getAnalyzer();
-			IndexSearcher searcher = new IndexSearcher(dir);
+			IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(dir)));
+			IndexSearcher searcher = new IndexSearcher(reader);
 			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(searchFieldNames, analyzer);
 			String escapedSearchText = QueryParser.escape(searchText);
 			Query query = queryParser.parse(escapedSearchText);
-			hits = searcher.search(query);
+
+			results = searcher.search(query,2000);
 		} catch (IOException e1) {
 			throw new DgException("Cannot search index",e1);
 		} catch (ParseException e2) {
 			throw new DgException("Cannot search index",e2);
 		}
-		return hits;
+		return results;
 	}
 
 	/**
@@ -539,7 +543,7 @@ public class LuceneWorker {
 	 * @return
 	 * @throws IOException
 	 */
-	public static <E> List<E> hitsToSortedList(Hits hits, Class<E> clazz) throws IOException{
+	public static <E> List<E> hitsToSortedList(TopDocs hits, Class<E> clazz) throws IOException{
 		return hitsToSortedList(hits, clazz, null);
 	}
 
@@ -553,14 +557,12 @@ public class LuceneWorker {
 	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
-	public static <E> List<E> hitsToSortedList(Hits hits, Class<E> clazz, String suffix) throws IOException{
+	public static <E> List<E> hitsToSortedList(TopDocs hits, Class<E> clazz, String suffix) throws IOException{
 		LucModule<E> module = getModule(clazz,suffix);
 		List<E> items = null;
-		if (hits!=null && hits.length()>0){
-			items = new ArrayList<E>(hits.length());
-			Iterator<Hit> iterator = hits.iterator();
-			while (iterator.hasNext()) {
-				Hit hit = iterator.next();
+		if (hits!=null && hits.totalHits > 0){
+			items = new ArrayList<E>(hits.totalHits);
+			for(ScoreDoc hit : hits.scoreDocs) {
 				E item = module.hitToItem(hit);
 				items.add(item);
 			}

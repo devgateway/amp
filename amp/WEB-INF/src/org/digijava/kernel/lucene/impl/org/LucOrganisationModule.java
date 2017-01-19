@@ -1,20 +1,20 @@
 package org.digijava.kernel.lucene.impl.org;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Hit;
-import org.digijava.kernel.exception.DgException;
+import org.apache.lucene.search.ScoreDoc;
 import org.digijava.kernel.lucene.LucModule;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.DbUtil;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Organization module for lucene.
@@ -65,8 +65,9 @@ public class LucOrganisationModule implements LucModule<AmpOrganisation> {
 	@Override
 	public Document convertToDocument(AmpOrganisation item) {
 		Document doc = new Document();
-		Field orgId = new Field(FIELD_ID,item.getAmpOrgId().toString(), Field.Store.YES, Field.Index.UN_TOKENIZED);
-		Field orgName = new Field(FIELD_NAME,item.getName(), Field.Store.YES, Field.Index.TOKENIZED);
+		Field orgId = new StringField(FIELD_ID,item.getAmpOrgId().toString(), Field.Store.YES);
+		Field orgName = new TextField(FIELD_NAME,item.getName(), Field.Store.YES);
+
 		doc.add(orgId);
 		doc.add(orgName);
 		return doc;
@@ -85,7 +86,7 @@ public class LucOrganisationModule implements LucModule<AmpOrganisation> {
 	}
 
 	@Override
-	public AmpOrganisation hitToItem(Hit hit) throws IOException {
+	public AmpOrganisation hitToItem(ScoreDoc hit) throws IOException {
 		// TODO Auto-generated method stub
 		return null;
 	}

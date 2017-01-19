@@ -204,4 +204,13 @@
     </example>  
   </function>
 
+  <function>
+    <description>
+      Returns the correct url for specific report. It can point to legacy or nireports.
+    </description>
+    <name>getReportUrl</name>
+    <function-class>org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil</function-class>
+    <function-signature>java.lang.String getUrl(org.digijava.module.aim.dbentity.AmpReports)</function-signature>
+  </function>
+
 </taglib>

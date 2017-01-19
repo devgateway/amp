@@ -253,12 +253,12 @@ public class Reports implements ErrorReportingEndpoint {
 	}
 	
 	/**
-	 * Retrieves report data for the specified reportId and a given page number
+	 * Retrieves report data in XML format for the specified reportId
 	 *  
 	 * @param reportId report Id
 	 * @param ReportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
-	 * @return XML result for the requested page and pagination information
-	 * @see Reports#getXmlReportResponse
+	 * @return XML result for the specified reportId
+	 * @see ApiXMLService#getXmlReport
 	 */
 	@POST
 	@Path("/report/{report_id}")

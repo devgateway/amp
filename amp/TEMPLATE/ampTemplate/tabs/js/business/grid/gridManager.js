@@ -216,11 +216,12 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									return item.activityId.toString() === id && 
 									_.contains(item.permissions, 'EDIT');
 									});
+								/*
 								if(!activityPermission || activityPermission === undefined){
 									link = '';
 									iconvalidated = '';
 									iconedit = '';
-								}
+								}*/
 								row.className = className + ' status_1';
 								jQuery(row.cells[0]).html(link);
 								

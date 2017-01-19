@@ -427,13 +427,33 @@ public class Security implements ErrorReportingEndpoint {
 	}
 
 	/**
-	 * Returns workspace settings for a list of workspaces.
+	 * Returns workspace settings for a specified workspaces.
+	 *
+	 * <p>Each workspace setting JSON structure from the list will hold the following fields:
+	 * <dl>
+	 * <dt><b>id</b><dd> - workspace setting id
+	 * <dt><b>workspace-id</b><dd> - workspace id
+	 * <dt><b>default-records-per-page</b><dd> - number of rows in report
+	 * <dt><b>number-of-pages-to-display</b><dd> - maximum number of pages in report
+	 * <dt><b>report-start-year</b><dd> - in reports, display year columns starting from this year
+	 * <dt><b>report-end-year</b><dd> - in reports, display year columns up to this year
+	 * <dt><b>currency</b><dd> - currency code
+	 * <dt><b>fiscal-calendar</b><dd> - id of the fiscal calendar
+	 * <dt><b>language</b><dd> - language
+	 * <dt><b>validation</b><dd> - activity validation setting
+	 * <dt><b>show-all-countries</b><dd> - whenever all countries should be displayed in filters
+	 * <dt><b>default-team-report</b><dd> - default displayed report id
+	 * <dt><b>default-reports-per-page</b><dd> - number of reports per page
+	 * <dt><b>allow-add-team-res</b><dd> - documents adding policy (1-3)
+	 * <dt><b>allow-share-team-res</b><dd> - documents sharing policy (1-2)
+	 * <dt><b>allow-publishing-resources</b><dd> - documents sharing policy (1-3)
+	 * </dl>
 	 *
 	 * <h3>Sample Output:</h3>
 	 * <pre>
 	 * [
 	 *   {
-	 *     "team": 60,
+	 *     "workspace-id": 60,
 	 *     "currency": "USD",
 	 *     "language": "en",
 	 *     "validation": "allEdits",

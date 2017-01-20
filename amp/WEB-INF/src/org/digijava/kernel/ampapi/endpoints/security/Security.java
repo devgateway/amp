@@ -88,45 +88,46 @@ public class Security implements ErrorReportingEndpoint {
 	@Path("/user/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public JsonBean user() {
-		boolean isAdmin;
-
 		AmpApiToken apiToken = SecurityUtil.getTokenFromSession();
 
-		isAdmin ="yes".equals(httpRequest.getSession().getAttribute("ampAdmin"));
+		boolean isAdmin ="yes".equals(httpRequest.getSession().getAttribute("ampAdmin"));
 		
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-		String username = null;
 		String teamName = null;
 		boolean addActivity = false;
-		//if the user is admin the he doesn't have a workspace assigned
- 
-		if (tm != null) {
-			username = tm.getMemberName();
-			if (!isAdmin) {
-				AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-				AmpTeam team = ampTeamMember.getAmpTeam();
-				teamName = team.getName();
-				// if the user is logged in without a token, we generate one
-				if (apiToken == null) {
-					// if no token is present in session we generate one
-					apiToken = SecurityUtil.generateToken();
-				}
-				
-				addActivity = FeaturesUtil.isVisibleField("Add Activity Button") && Boolean.TRUE.equals(team.getAddActivity());
+
+		User user;
+
+		// if the user is admin the he doesn't have a workspace assigned
+		if (!isAdmin) {
+			AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+			AmpTeam team = ampTeamMember.getAmpTeam();
+			teamName = team.getName();
+
+			// if the user is logged in without a token, we generate one
+			if (apiToken == null) {
+				// if no token is present in session we generate one
+				apiToken = SecurityUtil.generateToken();
 			}
 
+			user = apiToken.getUser();
+
+			addActivity = FeaturesUtil.isVisibleField("Add Activity Button") && Boolean.TRUE.equals(team.getAddActivity());
+		} else {
+			user = UserUtils.getUser(tm.getMemberId());
 		}
-		
-		return createResponse(isAdmin, apiToken, username, teamName, addActivity);
+
+		return createResponse(isAdmin, apiToken, user, teamName, addActivity);
 	}
 
-	private JsonBean createResponse(boolean isAdmin, AmpApiToken apiToken, String username, String team, boolean addActivity) {
+	private JsonBean createResponse(boolean isAdmin, AmpApiToken apiToken, User user, String team, boolean addActivity) {
 		final JsonBean authenticationResult = new JsonBean();
-		authenticationResult.set("token", apiToken != null && apiToken.getToken() != null ? apiToken.getToken() : null);
+		authenticationResult.set("token", apiToken != null ? apiToken.getToken() : null);
 		authenticationResult.set("token-expiration", apiToken != null && apiToken.getExpirationTime() != null ? apiToken.getExpirationTime().getMillis() : null);
 		authenticationResult.set("url", getLoginUrl());
 		authenticationResult.set("team", team);
-		authenticationResult.set("user-name", username);
+		authenticationResult.set("user-name", user.getName());
+		authenticationResult.set("user-id", user.getId());
 		authenticationResult.set("is-admin", isAdmin);
 		authenticationResult.set("add-activity", team != null && addActivity); //to check if the user can add activity in the selected ws
 		authenticationResult.set("view-activity", !isAdmin); ///at this stage the user can view activities only if you are not admin
@@ -174,6 +175,7 @@ public class Security implements ErrorReportingEndpoint {
 	 *   "url": "http://localhost:8080/showLayout.do?layout=login",
 	 *   "team": "Espace de Travail Cellule Technique du COMOREX",
 	 *   "user-name": "atl@amp.org",
+	 *   "user-id": 2,
 	 *   "is-admin": false,
 	 *   "add-activity": true,
 	 *   "view-activity": true
@@ -217,7 +219,7 @@ public class Security implements ErrorReportingEndpoint {
 			AmpApiToken ampApiToken = SecurityUtil.generateToken();
 
 			String ampTeamName = (teamMember == null) ? null : teamMember.getAmpTeam().getName();
-			return createResponse(user.isGlobalAdmin(), ampApiToken, username, ampTeamName, true);
+			return createResponse(user.isGlobalAdmin(), ampApiToken, user, ampTeamName, true);
 		} catch (DgException e) {
 			logger.error("Error trying to login the user", e);
 			ApiErrorResponse.reportError(INTERNAL_SERVER_ERROR, SecurityErrors.INVALID_REQUEST);

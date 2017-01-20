@@ -136,6 +136,7 @@ public class Reports implements ErrorReportingEndpoint {
 		try {
 			spec = AmpReportsToReportSpecification.convert(ampReport);
 		} catch (Exception e1) {
+			logger.error("Failed to convert report.", e1);
 			JSONResult result = new JSONResult();
 			result.setErrorMessage(e1.getMessage());
 			return result;

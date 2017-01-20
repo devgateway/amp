@@ -35,18 +35,12 @@ var AMPFilters = Backbone.View.extend({
 					$('#filter-popup').hide();
 				});
 				Saiku.events.listenTo(window.currentFilter, 'apply', function(data) {
-					var filters = window.currentFilter.serialize();
-					
-					// Until we refactor the Filter Widget we will transform some filters here before sending the params to the backend.
-					CommonFilterUtils.transformParametersForBackend(filters);
-										
-					self.workspace.query.run_query(filters, null);
+					var filterObject = window.currentFilter.serialize();					
+					self.workspace.query.run_query(filterObject.filters || {}, null);
 					self.filters_button.removeClass('on');
-
 					$('#filter-popup').hide();
 				});
 				
-				//this.workspace.query.initFilters();
 				this.parseSavedFilters(this);
 			},
 			
@@ -54,11 +48,12 @@ var AMPFilters = Backbone.View.extend({
 				Saiku.logger.log("AMPFilters.parseSavedFilters");
 		        if (window.currentFilter !== undefined) {
 		            window.currentFilter.loaded.done(function() {
-			            var auxFilters = obj.workspace.query.get('filters');
-			            window.currentFilter.deserialize(auxFilters, {
+			            var auxFilters = obj.workspace.query.get('filters');			            
+			            window.currentFilter.deserialize({filters: FilterUtils.processFilters(auxFilters)}, {
 			            	silent : true
 			            });
-		            });
+		            });		            
+		            
 		        }
 			},
 			

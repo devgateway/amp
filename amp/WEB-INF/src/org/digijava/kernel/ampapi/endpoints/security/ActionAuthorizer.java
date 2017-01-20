@@ -12,6 +12,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.security.RuleHierarchy;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.TeamUtil;
@@ -28,6 +29,7 @@ public class ActionAuthorizer {
 	protected static final Logger logger = Logger.getLogger(ActionAuthorizer.class);
 
 	private static RuleHierarchy<AuthRule> ruleHierarchy = new RuleHierarchy.Builder<AuthRule>()
+	        .addRuleDependency(AuthRule.AUTHENTICATED, AuthRule.SECURED)
 			.addRuleDependency(AuthRule.IN_WORKSPACE, AuthRule.AUTHENTICATED)
 			.addRuleDependency(AuthRule.IN_ADMIN, AuthRule.AUTHENTICATED)
 			.addRuleDependency(AuthRule.ADD_ACTIVITY, AuthRule.IN_WORKSPACE)
@@ -46,8 +48,19 @@ public class ActionAuthorizer {
 			// no authorization -> nothing to check, skip immediately
 			return;
 		}
-
+		
 		Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
+		
+		String token = containerReq.getHeaderValue(SecurityConstants.TOKEN_HEADER_PARAM);
+		// we require secure access to sensitive EPs
+		if ((authRules.contains(AuthRule.SECURED) || token != null) && !containerReq.isSecure()) {
+		    // To be enabled once we are ready to use secure connections on the dev/test setup
+		    if (false)
+		    ApiErrorResponse.reportUnauthorisedAccess(SecurityErrors.UNSECURE_CONNECTION);
+		}
+        if (token != null) {
+            SecurityUtil.validateTokenAndRestoreSession(token);
+        }		
 
 		if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
 			ApiErrorResponse.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);

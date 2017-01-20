@@ -60,8 +60,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.xml.sax.SAXException;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-
 /**
  * This class should have all security / permissions related methods
  * 
@@ -87,6 +85,7 @@ public class Security implements ErrorReportingEndpoint {
 	@GET
 	@Path("/user/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "user", ui = false, authTypes = {AuthRule.SECURED})
 	public JsonBean user() {
 		AmpApiToken apiToken = SecurityUtil.getTokenFromSession();
 
@@ -188,6 +187,7 @@ public class Security implements ErrorReportingEndpoint {
 	@POST
 	@Path("/user/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "user", ui = false, authTypes = {AuthRule.SECURED})
 	public JsonBean authenticate(final JsonBean authentication) {
 		String username = authentication.getString("username");
 		String password = authentication.getString("password");
@@ -508,14 +508,6 @@ public class Security implements ErrorReportingEndpoint {
     public Collection<JsonBean> getWorkspaces() {
         return SecurityService.getWorkspaces();
     }
-
-	/**
-	 * Authorizes Container Request
-	 * @param containerReq
-	 */
-	public static void authorize(ContainerRequest containerReq) {
-		ApiAuthorization.authorize(containerReq);
-	}
 	
 	/**
 	 * THIS IS FOR DEBUG ONLY. Must be disabled on production.

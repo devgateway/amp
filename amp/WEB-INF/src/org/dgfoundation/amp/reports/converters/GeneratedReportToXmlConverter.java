@@ -91,13 +91,14 @@ public class GeneratedReportToXmlConverter {
 	private Contents getContents(org.dgfoundation.amp.newreports.ReportArea reportArea) {
 		Contents contents = new Contents();
 
-		reportArea.getContents().forEach((roc, rc) -> {
-			Cell cell = new Cell();
-
-			cell.setColumnName(roc.getHierarchicalName());
-			cell.setValue(rc.displayedValue);
-			contents.getCell().add(cell);
-		});
+		reportArea.getContents().entrySet().stream()
+				.filter(e -> !isHiddenColumn(e.getKey().originalColumnName))
+				.forEach(e -> {
+								Cell cell = new Cell();
+								cell.setColumnName(e.getKey().getHierarchicalName());
+								cell.setValue(e.getValue().displayedValue);
+								contents.getCell().add(cell);
+							});
 
 		return contents;
 	}

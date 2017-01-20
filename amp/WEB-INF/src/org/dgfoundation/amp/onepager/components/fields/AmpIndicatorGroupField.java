@@ -49,18 +49,18 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
 	}
 
 
-	public AmpIndicatorGroupField(String id, IModel<Double> val, IModel<Date> valueDate, IModel<String> comment, String fmName, String fieldPrefix) {
+	public AmpIndicatorGroupField(String id, IModel<Double> val, IModel<Date> valueDate, IModel<String> comment, String fmName, String fieldPrefix, boolean isRequired) {
 		super(id, fmName, true);
 		this.fmType = AmpFMTypes.MODULE;
 		
 		value = new AmpTextFieldPanel<Double>("value", val, fieldPrefix + " Value", false, false);
-		value.getTextContainer().setRequired(true);
+		value.getTextContainer().setRequired(isRequired);
         value.getTextContainer().setType(Double.class);
 		add(value);
 		
 		date = new AmpDatePickerFieldPanel("valueDate", valueDate, fieldPrefix + " Date");
 		if (fieldPrefix.compareTo("Revised") != 0)
-			date.getDate().setRequired(true);
+			date.getDate().setRequired(isRequired);
 		add(date);
 		
 		AmpTextAreaFieldPanel comments = new AmpTextAreaFieldPanel("comment", comment, fieldPrefix + " Comments", false);

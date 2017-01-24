@@ -6,10 +6,13 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	var gridBaseName = 'tab_grid_';
 	var gridPagerBaseName = 'tab_grid_pager_';
 	var partialTotals = null;
-
+	var activityEditPermissions={};
+	
 	// This variable will contain the mappings between different column names
 	// (tab structure vs report data).
 	var headers = [];
+	// this variable will contain information regarding whether the user can or cannot
+	// view or edit an activity regarding permissions configruation
 
 	function GridManager() {
 		if (!(this instanceof GridManager)) {
@@ -92,7 +95,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 			var colModel = columnsMapping.createJQGridColumnModel(tableStructure);
 			var grandTotals = null;
 			var numberOfPages = null;
-			var na = TranslationManager.getTranslated('N/A');
+			var na = TranslationManager.getTranslated('N/A');			
 			jQuery(grid).jqGrid(
 					{
 						caption : false,
@@ -191,7 +194,6 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							if(app.TabsApp.settings.workspacePrefix){
 								onePagerParameter = app.TabsApp.settings.workspacePrefix.replace('_', '').toLowerCase();
 							}
-
 							for (iRow = 0; iRow < cRows; iRow++) {
 								row = this.rows[iRow];
 								className = row.className;
@@ -210,7 +212,16 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
 								var link = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id + "'>";
 								
-								
+								var activityPermission = _.find(activityEditPermissions, function(item){
+									return item.activityId.toString() === id && 
+									_.contains(item.permissions, 'EDIT');
+									});
+								/*
+								if(!activityPermission || activityPermission === undefined){
+									link = '';
+									iconvalidated = '';
+									iconedit = '';
+								}*/
 								row.className = className + ' status_1';
 								jQuery(row.cells[0]).html(link);
 								
@@ -293,8 +304,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								var x = getApprovalStatus(draft, approvalStatus);
 								if (x === statusMapping.Approved) {
 									row.className = className + ' status_1';
-									// Create link to edit activity.
-									if (teamtype !== app.TabsApp.MANAGER_TYPE) {
+									if (teamtype !== app.TabsApp.MANAGER_TYPE && activityPermission) {
+										//check if its editalb
 										jQuery(row.cells[0]).html(iconedit + link);
 									} else {
 										jQuery(row.cells[0]).html(link);
@@ -451,6 +462,17 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 			//console.log(rows);
 			//console.log(partialTotals);
 		}
+		jQuery.ajax({
+	        url: '/rest/permissions/activity-can-do/' 
+	        	+ _.pluck(rows, app.TabsApp.COLUMN_ACTIVITY_ID).toString(),
+	        success: function (result) {
+	        	activityEditPermissions = result;
+	        },
+	        error:function(error){
+	        	console.log(error);
+	        },
+	        async: false
+	    });
 		return rows;
 	}
 	

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -54,9 +55,6 @@ public class GeneratedReportToXmlConverter {
 		return xmlReport;
 	}
 
-	/**
-	 * @param parentElement
-	 */
 	private Output getReportOutput() {
 		Output output = new Output();
 		output.setHeaders(getReportHeaders());
@@ -65,16 +63,12 @@ public class GeneratedReportToXmlConverter {
 		return output;
 	}
 
-	/**
-	 * 
-	 * @param outputElement
-	 */
 	private ReportArea getOutputReportArea() {
 		return getReportArea(generatedReport.reportContents);
 	}
 
 	/**
-	 * @param parentElement
+	 * @param reportArea
 	 */
 	private ReportArea getReportArea(org.dgfoundation.amp.newreports.ReportArea reportArea) {
 		ReportArea xmlReportArea = new ReportArea();
@@ -91,18 +85,24 @@ public class GeneratedReportToXmlConverter {
 	private Contents getContents(org.dgfoundation.amp.newreports.ReportArea reportArea) {
 		Contents contents = new Contents();
 
-		reportArea.getContents().entrySet().stream()
-				.filter(e -> !isHiddenColumn(e.getKey().originalColumnName))
-				.forEach(e -> {
-								Cell cell = new Cell();
-								cell.setColumnName(e.getKey().getHierarchicalName());
-								cell.setValue(e.getValue().displayedValue);
-								contents.getCell().add(cell);
-							});
+		generatedReport.leafHeaders.stream()
+			.filter(roc -> !isHiddenColumn(roc.originalColumnName))
+			.forEach(roc -> {
+				ReportCell rc = reportArea.getContents().get(roc) != null ? reportArea.getContents().get(roc) : roc.emptyCell;
+				Cell cell = new Cell();
+				cell.setColumnName(roc.getHierarchicalName());
+				cell.setValue(rc.displayedValue);
+				contents.getCell().add(cell);
+			});
 
 		return contents;
 	}
 
+	/**
+	 * 
+	 * @param reportArea
+	 * @return children of reportArea
+	 */
 	private Children getChildren(org.dgfoundation.amp.newreports.ReportArea reportArea) {
 		Children children = new Children();
 
@@ -113,9 +113,6 @@ public class GeneratedReportToXmlConverter {
 		return children;
 	}
 
-	/**
-	 * @param parentElement
-	 */
 	private Headers getReportHeaders() {
 		Headers headers = new Headers();
 
@@ -128,7 +125,7 @@ public class GeneratedReportToXmlConverter {
 	/**
 	 * 
 	 * @param reportOutputColumn
-	 * @param parentElement
+	 * @return column 
 	 */
 	private Column getHeaderColumn(ReportOutputColumn reportOutputColumn) {
 		Column headerColumn = new Column();
@@ -146,9 +143,6 @@ public class GeneratedReportToXmlConverter {
 		return headerColumn;
 	}
 
-	/**
-	 * @param parentElement
-	 */
 	private Config getReportConfig() {
 		Config reportConfig = new Config();
 
@@ -159,9 +153,6 @@ public class GeneratedReportToXmlConverter {
 		return reportConfig;
 	}
 
-	/**
-	 * @param configElement
-	 */
 	private Sorting getReportSorting() {
 		Sorting sorting = new Sorting();
 
@@ -182,9 +173,6 @@ public class GeneratedReportToXmlConverter {
 		return sorting;
 	}
 
-	/**
-	 * @param configElement
-	 */
 	private Settings getReportSettings() {
 		Settings xmlSettings = new Settings();
 		ReportSettings settings = generatedReport.spec.getSettings();

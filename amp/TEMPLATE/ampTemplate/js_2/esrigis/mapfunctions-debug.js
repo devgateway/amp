@@ -590,10 +590,6 @@ function createPeaceBuildingFeatureLayer() {
 								});
 								infoTemplateContent += "</tr></table>";
 								
-									// visualization form and url will not work since old dashboards were removed in AMP-23740
-									infoTemplateContent +=  "</td></tr><tr><td colspan='2'><a href='/visualization/launchDashboard.do?fromMap=true&reset=true&id=" + dashboardId + "&filter.regionId=${DB_ID}' target='_new'>Dashboard</a>"
-									+ "</td></tr></table>";
-								
 								feature.setInfoTemplate(new esri.InfoTemplate(translate('Funding'),infoTemplateContent));
 								
 							});
@@ -1719,8 +1715,7 @@ function MapFindStructure(activity, structureGraphicLayer) {
 	var tabTemplate = "<div id='infotabs' class='infotab'>"
 
 		+ "<a class='tab_vis_link' id='aStrInfo' href='#' onclick='changeTabStructureInfo(true);' style='display: none;'>Show Info</a>"
-		+ "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>Show Image</a>"
-		
+
 		+ "<div id='strInfo' ><br /><br />"+ noTabTemplate +"</div>"
 		+ "<div id='strImage' align='center' style='display:none;' >${Structure Image}</div>"
 		+ "</div>";

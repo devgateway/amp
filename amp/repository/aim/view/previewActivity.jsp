@@ -1421,7 +1421,7 @@ function collapseAll() {
 					</table>
 					<hr/>
 				</c:forEach>
-				<field:display name="Show Map In Activity Preview" feature="Map Options">
+				<module:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
 					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 					<tr> <td colspan="2">
 						<script type="text/javascript">
@@ -1433,7 +1433,7 @@ function collapseAll() {
 					</td> </tr>
 					</table>
 					<hr/>
-					</field:display>
+				</module:display>
 			</c:if>
 		</module:display>
 		<module:display name="/Activity Form/Location/Implementation Level" parentModule="/Activity Form/Location">
@@ -3372,9 +3372,9 @@ function collapseAll() {
   </tr>
 </table>
 </c:if>
-<field:display name="Show Map In Activity Preview" feature="Map Options">
+<module:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
  <div id="locationPopupMap" style="visibility:hidden;width:4px; height:3px;position:relative;"></div>
-</field:display>
+</module:display>
 
 <!-- MAIN CONTENT PART END -->
 </digi:form>

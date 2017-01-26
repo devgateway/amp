@@ -115,14 +115,12 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 				blob.columnFilters[item.name + ' Sub-Sub-Sector'] = blob.columnFilters[item.name];
 				break;
 				
-			case 'DATE':
-				// FilterUtils.fillDateBlob(blob.otherFilters.date,
-				// item.attributes);
+			case 'DATE':				
 				var newDate = {};
 				_.map(item.values, function(item_, i) {						
-					if (item_.dateIntervalType === "min") {
+					if (item_.dateIntervalType === "min" || item_.type === "min") {
 						newDate['start'] = item_.name;
-					} else if (item_.dateIntervalType === "max") {
+					} else if (item_.dateIntervalType === "max" || item_.type === "max") {
 						newDate['end'] = item_.name;
 					}
 					return newDate;

@@ -1,11 +1,10 @@
 package org.digijava.module.aim.action;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -22,7 +21,9 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ViewActivityHistoryForm;
 import org.digijava.module.aim.helper.ActivityHistory;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -73,92 +74,18 @@ public class ViewActivityHistory extends Action {
 		for (AmpActivityVersion activity : activities) {
 			ActivityHistory auditHistory = null;
 			
-			if (activity.getModifiedBy() == null || activity.getModifiedDate() == null) {
-				auditHistory = getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
+			if (activity.getModifiedBy() == null || (activity.getUpdatedDate() == null && activity.getModifiedDate() == null)) {
+				auditHistory = ActivityUtil.getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
 			}
 			
 			ActivityHistory activityHistory = new ActivityHistory();
 			activityHistory.setActivityId(activity.getAmpActivityId());
-			activityHistory.setModifiedBy(getModifiedByUserName(activity, auditHistory));
-			activityHistory.setModifiedDate(getModifiedByDate(activity, auditHistory));
+			activityHistory.setModifiedBy(ActivityUtil.getModifiedByUserName(activity, auditHistory));
+			activityHistory.setModifiedDate(FormatHelper.formatDate(ActivityUtil.getModifiedByDate(activity, auditHistory)));
 			
 			activitiesHistory.add(activityHistory);
 		}
 		
 		return activitiesHistory;
-	}
-
-	/** Get the user first name and last name  who modified (created) the activity.
-	 * @param actitivity
-	 * @param modifiedByInfo
-	 * @param auditHistory
-	 * @return
-	 */
-	private String getModifiedByUserName(AmpActivityVersion actitivity, ActivityHistory auditHistory) {
-		AmpTeamMember modifiedBy = actitivity.getModifiedBy();
-		AmpTeamMember createdBy = actitivity.getActivityCreator();
-		AmpTeamMember approvedBy = actitivity.getApprovedBy();
-		
-		if (modifiedBy != null) {
-			return String.format("%s %s", modifiedBy.getUser().getFirstNames(), modifiedBy.getUser().getLastName());
-		} else if(auditHistory != null) {
-			return auditHistory.getModifiedBy();
-		} else if (approvedBy != null) {
-			return String.format("%s %s", approvedBy.getUser().getFirstNames(), approvedBy.getUser().getLastName());
-		} else if (createdBy != null) {
-			return String.format("%s %s", createdBy.getUser().getFirstNames(), createdBy.getUser().getLastName());
-		}
-		
-		return "";
-	}
-	
-	/** Get modified date
-	 * @param activity
-	 * @param auditHistory
-	 * @param activityHistory
-	 */
-	private Date getModifiedByDate(AmpActivityVersion activity, ActivityHistory auditHistory) {
-		if (activity.getModifiedDate() != null) {
-			return activity.getModifiedDate();
-		} else if (auditHistory != null) {
-			return auditHistory.getModifiedDate();
-		} else if (activity.getApprovalDate() != null) {
-			return activity.getApprovalDate();
-		} else if (activity.getCreatedDate() != null) {
-			return activity.getCreatedDate();
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Get audit info about the activity from amp_audit_logger table
-	 * @param activityId
-	 * @return
-	 */
-	private ActivityHistory getModifiedByInfoFromAuditLogger(Long activityId) {
-		ActivityHistory logActivityHistory = new ActivityHistory();
-		List<AmpAuditLogger> activityLogObjects = AuditLoggerUtil.getActivityLogObjects(activityId.toString());
-		
-		for(AmpAuditLogger aal : activityLogObjects) {
-			if (StringUtils.isNotEmpty(aal.getEditorName())) {
-				logActivityHistory.setModifiedBy(aal.getEditorName());
-				logActivityHistory.setModifiedDate(aal.getLoggedDate());
-				return logActivityHistory;
-			} else if (StringUtils.isNotEmpty(aal.getEditorEmail())) {
-				try {
-					User u = UserUtils.getUserByEmail(aal.getEditorEmail());
-					if (u != null) {
-						logActivityHistory.setModifiedBy(String.format("%s %s", u.getFirstNames(), u.getLastName()));
-						logActivityHistory.setModifiedDate(aal.getLoggedDate());
-						return logActivityHistory;
-					}
-				} catch (DgException e) {
-					logger.error(e);				
-				}
-			}
-		}
-		
-		return null;
 	}
 }

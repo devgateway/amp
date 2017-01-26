@@ -85,6 +85,9 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
             	dateField.setAccessible(true);
             	return sdfApiOut.format(sdfIn.parse((String) dateField.get(arFilter)));
             }
+            if (String.class.equals(clazz)) {
+            	return filter.getValue();
+            }
             Object value = mapper.readValue(filter.getValue(), clazz);
             return value;
         } catch (Exception e) {

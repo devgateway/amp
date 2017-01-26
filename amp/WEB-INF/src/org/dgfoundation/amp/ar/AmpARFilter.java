@@ -108,6 +108,7 @@ public class AmpARFilter extends PropertyListable {
 			"fromActivityActualCompletionDate", "toActivityActualCompletionDate",
 			"fromActivityFinalContractingDate", "toActivityFinalContractingDate",
 			"fromActivityStartDate", "toActivityStartDate",
+			"fromProposedStartDate", "toProposedStartDate",
 			"fromEffectiveFundingDate", "toEffectiveFundingDate",
 			"fromFundingClosingDate", "toFundingClosingDate",
 			"fromProposedApprovalDate", "toProposedApprovalDate"));

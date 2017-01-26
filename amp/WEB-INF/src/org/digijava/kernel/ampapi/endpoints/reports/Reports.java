@@ -156,6 +156,7 @@ public class Reports implements ErrorReportingEndpoint {
 		metadata.setQueryName(DEFAULT_QUERY_NAME);
 		metadata.setConnection(DEFAULT_CONNECTION_NAME);
 		metadata.setSchema(DEFAULT_SCHEMA_NAME);
+		metadata.setReportUpdatedDate(ampReport.getUpdatedDate().getTime());
 
 		result.setReportMetadata(metadata);
 		

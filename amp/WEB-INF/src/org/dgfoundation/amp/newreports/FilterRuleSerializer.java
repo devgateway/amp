@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.SerializerProvider;
 import org.codehaus.jackson.map.ser.std.SerializerBase;
+import org.digijava.module.aim.util.AmpMath;
 
 /**
  * @author Octavian Ciubotaru
@@ -33,7 +34,7 @@ public class FilterRuleSerializer extends SerializerBase<FilterRule> {
     }
 
     private void writeValue(FilterRule rule, JsonGenerator jgen) throws IOException {
-        jgen.writeString(rule.value);
+        writeCorrectType(rule.value, jgen);
     }
 
     private void writeValues(FilterRule rule, JsonGenerator jgen) throws IOException {
@@ -42,9 +43,33 @@ public class FilterRuleSerializer extends SerializerBase<FilterRule> {
         } else {
             jgen.writeStartArray();
             for (String value : rule.values) {
-                jgen.writeString(value);
+                writeCorrectType(value, jgen);
             }
             jgen.writeEndArray();
+        }
+    }
+
+    private void writeCorrectType(String value, JsonGenerator jgen) throws IOException {
+        if (value.chars().allMatch(Character::isDigit)) {
+            if (AmpMath.isLong(value)) {
+                jgen.writeNumber(Long.valueOf(value));
+            } else {
+                jgen.writeNumber(Integer.valueOf(value));
+            }
+        } else {
+            jgen.writeString(value);
+        }
+    }
+
+    private void writeCorrectTypeField(String name, String value, JsonGenerator jgen) throws IOException {
+        if (value.chars().allMatch(Character::isDigit)) {
+            if (AmpMath.isLong(value)) {
+                jgen.writeNumberField(name, Long.valueOf(value));
+            } else {
+                jgen.writeNumberField(name, Integer.valueOf(value));
+            }
+        } else {
+            jgen.writeStringField(name, value);
         }
     }
 
@@ -54,10 +79,10 @@ public class FilterRuleSerializer extends SerializerBase<FilterRule> {
         } else {
             jgen.writeStartObject();
             if (rule.min != null && rule.valueToName.get(rule.min) != null) {
-                jgen.writeStringField("start", rule.valueToName.get(rule.min));
+                writeCorrectTypeField("start", rule.valueToName.get(rule.min), jgen);
             }
             if (rule.max != null && rule.valueToName.get(rule.max) != null) {
-                jgen.writeStringField("end", rule.valueToName.get(rule.max));
+                writeCorrectTypeField("end", rule.valueToName.get(rule.max), jgen);
             }
             jgen.writeEndObject();
         }

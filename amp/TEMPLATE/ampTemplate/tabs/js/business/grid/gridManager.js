@@ -30,8 +30,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 	 */
 	GridManager.filter = function(id, jsonFilters, settings) {
 		// Until we refactor the Filter Widget we will transform some filters here before sending the params to the backend.
-		CommonFilterUtils.transformParametersForBackend(jsonFilters);
-		
+						
 		var grid = jQuery("#" + gridBaseName + id);
 		jQuery(grid).jqGrid('clearGridData');
 		jQuery(grid).jqGrid('setGridParam', {

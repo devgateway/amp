@@ -88,10 +88,8 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
             if (String.class.equals(clazz)) {
             	return filter.getValue();
             }
-            Object value = mapper.readValue(filter.getValue(), clazz);
-            return value;
+            return mapper.readValue(filter.getValue(), clazz);
         } catch (Exception e) {
-            System.out.println(filter.toString());
             throw new IOException(e);
         }
     }

@@ -22,9 +22,11 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
+import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.aim.util.SectorUtil;
@@ -147,6 +149,7 @@ public class AmpARFilterConverter {
 	private void addActivityDatesFilters() {
 		addActivityDateFilter(arFilter.buildFromAndToActivityStartDateAsDate(), ColumnConstants.ACTUAL_START_DATE);
 		addActivityDateFilter(arFilter.buildFromAndToProposedApprovalDateAsDate(), ColumnConstants.PROPOSED_APPROVAL_DATE);
+		addActivityDateFilter(arFilter.buildFromAndToProposedStartDateAsDate(), ColumnConstants.PROPOSED_START_DATE);
 		addActivityDateFilter(arFilter.buildFromAndToActivityActualCompletionDateAsDate(), ColumnConstants.ACTUAL_COMPLETION_DATE);
 		addActivityDateFilter(arFilter.buildFromAndToActivityFinalContractingDateAsDate(), ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
 		addActivityDateFilter(arFilter.buildFromAndToEffectiveFundingDateAsDate(), ColumnConstants.EFFECTIVE_FUNDING_DATE);
@@ -215,20 +218,41 @@ public class AmpARFilterConverter {
 	
 	/** adds programs and national objectives filters */
 	private void addProgramAndNationalObjectivesFilters() {
-		addFilter(arFilter.getSelectedPrimaryPrograms(), 
-				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_PROGRAMS : ColumnConstants.PRIMARY_PROGRAM));
-		addFilter(arFilter.getSelectedSecondaryPrograms(), 
-				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_PROGRAMS : ColumnConstants.SECONDARY_PROGRAM));
+		addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PRIMARY_PROGRAM);
+
+		addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.SECONDARY_PROGRAM);
+
 		//TODO: how to detect tertiary programs
 		//addFilter(arFilter.get(), 
 		//		(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_PROGRAMS : ColumnConstants.TERTIARY_PROGRAM), entityType);
-		
-		addFilter(arFilter.getSelectedNatPlanObj(), 
-				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES : ColumnConstants.NATIONAL_PLANNING_OBJECTIVES));
+
+		addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
 		
 		if (!arFilter.isPledgeFilter()) {
 			//TBD national plan objectives levels 1-8?
 		}
+	}
+
+	private void addMultiLevelFilter(Collection<AmpTheme> themes, String columnName) {
+		if (themes != null) {
+			themes.stream()
+					.collect(Collectors.groupingBy(t -> findLevelColumnName(columnName, t)))
+					.forEach((levelColumnName, levelThemes) -> addFilter(levelThemes, levelColumnName));
+		}
+	}
+
+	private String findLevelColumnName(String columnName, AmpTheme ampTheme) {
+		AmpTheme current = ampTheme;
+		int depth = 0;
+		while (current.getParentThemeId() != null) {
+			current = current.getParentThemeId();
+			depth++;
+		}
+		String levelColumnName = columnName + " Level " + depth;
+		if (arFilter.isPledgeFilter()) {
+			levelColumnName = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumnName, levelColumnName);
+		}
+		return levelColumnName;
 	}
 	
 	private void addLocationFilters() {

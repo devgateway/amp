@@ -203,44 +203,30 @@ CommonFilterUtils.calculateMD5FromParameters = function (model, id, lang) {
 	
 	if (model.queryModel.filters) {
 		// Everything non-date filters.
-		if (model.queryModel.filters.columnFilters) {
-			var columnFilters = {};
-			for (var property in model.queryModel.filters.columnFilters) {
+		if (model.queryModel.filters) {
+			var filters = {};
+			for (var property in model.queryModel.filters) {
 				// To avoid problems with prototype´s properties.
-				if (model.queryModel.filters.columnFilters.hasOwnProperty(property)) {
+				if (model.queryModel.filters.hasOwnProperty(property)) {
 					// Sort ID's.
-					columnFilters[property] = _.sortBy(model.queryModel.filters.columnFilters[property], function(item) {return item;});
+					filters[property] = _.sortBy(model.queryModel.filters[property], function(item) {return item;});
 				}
 			}
 			// Now sort the properties of the object so stringify will return the same string.
 			var auxPropertiesArray = [];
-			for (var property in columnFilters) {
+			for (var property in filters) {
 				auxPropertiesArray.push(property);
 			}
 			var sortedFilters = {};
 			auxPropertiesArray = auxPropertiesArray.sort();
 			_.each(auxPropertiesArray, function(item) {
-				sortedFilters[item] = columnFilters[item];
+				sortedFilters[item] = filters[item];
 			})
-			parameters.filters.columnFilters = sortedFilters;
+			parameters.filters = sortedFilters;
 		}
 		
-		// Date filters.
-		if (model.queryModel.filters.otherFilters) {
-			// Sort the properties by name so stringify will return the same string.
-			var auxPropertiesArray = [];
-			for (var property in model.queryModel.filters.otherFilters) {
-				auxPropertiesArray.push(property);
-			}
-			var sortedFilters = {};
-			auxPropertiesArray = auxPropertiesArray.sort();
-			_.each(auxPropertiesArray, function(item) {
-				sortedFilters[item] = model.queryModel.filters.otherFilters[item];
-			})
-			parameters.filters.otherFilters = sortedFilters;
-		}
+		
 	}    	
-	
 	if (model.queryModel.settings) {
 		var auxSettings = model.queryModel.settings;
 		// Now sort the properties of the object so stringify will return the same string.

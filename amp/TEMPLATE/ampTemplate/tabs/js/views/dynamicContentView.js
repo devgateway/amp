@@ -31,8 +31,6 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 			TabManager.openSaveTabDialog();
 		},
 		clickFiltersButton : function() {
-			console.log('clickFiltersButton');
-
 			// We need to reset the widget because is shared between all
 			// tabs.
 			app.TabsApp.filtersWidget.reset({
@@ -46,15 +44,14 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					// Close floating accordion if needed.
 					jQuery("#main-dynamic-content-region_" + reportId + " #filters-collapsible-area").accordion('option', 'active', false);
 
-					console.log('filter widget loaded');
-					
 					// Convert report filters to filterwidget filters.
 					var blob = undefined;
 					if (app.TabsApp.serializedFilters === null) {
-						blob = CommonFilterUtils.convertJavaFiltersToJS(reportFilters);
+						blob = app.TabsApp.rawFilters;
 					} else {
 						blob = app.TabsApp.serializedFilters;
 					}
+					
 					app.TabsApp.filtersWidget.reset({
 						silent : true
 					});
@@ -62,11 +59,12 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 						silent : true
 					});
 					
-					datesFilterView = app.TabsApp.filtersWidget.view.filterViewsInstances.others.viewList.filter(function(v) {
-					  return v.model.get('id') === 'Dates';
+					var datesFilterView = app.TabsApp.filtersWidget.view.filterViewsInstances.others.viewList.filter(function(v) {
+					  return v.model.get('id') === 'date';
 					})[0];
-					datesFilterView._renderDatePickers();
-					
+					if(datesFilterView){
+						datesFilterView._renderDatePickers();
+					}					
 					jQuery(containerName).show();
 					jQuery(containerName).css('position', 'absolute');
 					jQuery(containerName).css('top', 10);

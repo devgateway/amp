@@ -14,6 +14,7 @@
    "Export XLS":"Exporter sous Excel",
    "Export XLS (without styles)": "Exporter sous Excel (sans styles)",
    "Export CSV":"Exporter en CSV",
+   "Export XML":"Exporter en XML",
    "Drill Through":"Détails",
    "Cubes":"Cubes",
    "Refresh Cubes (Clear Cache)":"Rafraîchir le cube (Effacer le cache)",

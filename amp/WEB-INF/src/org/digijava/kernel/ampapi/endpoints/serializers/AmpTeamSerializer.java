@@ -26,7 +26,6 @@ import org.digijava.module.aim.dbentity.AmpTeam;
  */
 public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
     private ObjectMapper mapper = new ObjectMapper();
-    private AmpARFilter arFilter;
     private final ThreadLocal<SimpleDateFormat> sdfIn = new ThreadLocal<>();
     private final ThreadLocal<SimpleDateFormat> sdfApiOut = new ThreadLocal<>();
     
@@ -68,19 +67,20 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
         }
         
         if (ampTeam.getFilterDataSet() != null && !ampTeam.getFilterDataSet().isEmpty()) {
-        	arFilter = FilterUtil.buildFilterFromSource(ampTeam);
+            AmpARFilter arFilter = FilterUtil.buildFilterFromSource(ampTeam);
             Map<String, Object> filters = new TreeMap<String, Object>();
             for (AmpTeamFilterData filter : ampTeam.getFilterDataSet()) {
                 if (!AmpARFilter.SETTINGS_PROPERTIES.contains(filter.getPropertyName()) 
                         && StringUtils.isNotBlank(filter.getValue())) {
-                    filters.put(filter.getPropertyName(), getFilterValue(filter, filters.get(filter.getPropertyName())));
+                    Object filterValue = getFilterValue(filter, filters.get(filter.getPropertyName()), arFilter);
+                    filters.put(filter.getPropertyName(), filterValue);
                 }
             }
             writeField("workspace-filters", filters);
         }
     }
     
-    private Object getFilterValue(AmpTeamFilterData filter, Object existing) throws IOException {
+    private Object getFilterValue(AmpTeamFilterData filter, Object existing, AmpARFilter arFilter) throws IOException {
         try {
             Class<?> clazz = Class.forName(filter.getPropertyClassName());
             if (Collection.class.isAssignableFrom(clazz)) {

@@ -27,11 +27,21 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
     private ObjectMapper mapper = new ObjectMapper();
     private AmpARFilter arFilter;
-    private final SimpleDateFormat sdfIn = new SimpleDateFormat(AmpARFilter.SDF_IN_FORMAT_STRING);
-    private final SimpleDateFormat sdfApiOut = new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT);
+    private final ThreadLocal<SimpleDateFormat> sdfIn = new ThreadLocal<>();
+    private final ThreadLocal<SimpleDateFormat> sdfApiOut = new ThreadLocal<>();
+    
+    private void init() {
+        if (sdfIn.get() == null) {
+            sdfIn.set(new SimpleDateFormat(AmpARFilter.SDF_IN_FORMAT_STRING));
+        }
+        if (sdfApiOut.get() == null) {
+            sdfApiOut.set(new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT));
+        }
+    }
     
     @Override
     protected void serialize(AmpTeam ampTeam) throws IOException {
+        init();
         writeField("id", ampTeam.getAmpTeamId());
         writeField("name", getTranslations("name"));
         writeField("description", getTranslations("description"));
@@ -83,7 +93,7 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
             	// no dynamic dates filter conversion, just passing that config further as it is 
             	Field dateField = AmpARFilter.class.getDeclaredField(filter.getPropertyName());
             	dateField.setAccessible(true);
-            	return sdfApiOut.format(sdfIn.parse((String) dateField.get(arFilter)));
+            	return sdfApiOut.get().format(sdfIn.get().parse((String) dateField.get(arFilter)));
             }
             if (String.class.equals(clazz)) {
             	return filter.getValue();

@@ -417,7 +417,7 @@ public class Security implements ErrorReportingEndpoint {
      *   ...
      * ]
      * </pre>
-	 * @param userIds a comma separate list of workspace member ids
+	 * @param ids a comma separate list of workspace member ids
 	 * @return list of workspace member definitions
 	 */
 	@GET

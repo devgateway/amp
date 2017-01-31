@@ -194,12 +194,12 @@ CommonFilterUtils.transformParametersForBackend = function(filters) {
  * This function will calculate the MD5 string of the parameters that define a report's result: id, filters, etc.
  * Also will make some cleanup and reordering to get the same MD5 for the "same" parameters.
  */
-CommonFilterUtils.calculateMD5FromParameters = function (model, id, lang) {	
+CommonFilterUtils.calculateMD5FromParameters = function (model, id, lang, timestamp) {	
 	var parameters = {filters: {}, settings: {}, id: null, lang : null, timestamp : null};
 	
 	parameters.id = id;
 	parameters.lang = lang;
-	parameters.timestamp = this.timestamp;
+	parameters.timestamp = timestamp;
 	
 	if (model.queryModel.filters) {
 		// Everything non-date filters.

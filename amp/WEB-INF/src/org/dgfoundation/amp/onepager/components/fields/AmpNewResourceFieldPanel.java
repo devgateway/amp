@@ -4,6 +4,9 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +40,9 @@ import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.kernel.ampapi.endpoints.mimetype.MimeTypeManager;
+import org.digijava.kernel.ampapi.endpoints.mimetype.MimeTypeValidationResponse;
+import org.digijava.kernel.ampapi.endpoints.mimetype.MimeTypeValidationStatus;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -57,11 +63,16 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
     private boolean pathSelected;
 	private boolean urlSelected;
 	private boolean urlFormatValid;
+	private boolean contentValid;
 	
-	static final private String defaultMsg = "*" + TranslatorUtil.getTranslatedText("Please enter title");
-	static final private String urlNotSelected = "*" + TranslatorUtil.getTranslatedText("URL not selected");
-	static final private String filePathNotSelected = "*" + TranslatorUtil.getTranslatedText("File not submited or upload has not finished");
-	static final private String wrongUrlFormat = "*" + TranslatorUtil.getTranslatedText("Wrong url format. Please enter valid url");
+	static final private String DEFAULT_MESSAGE = "*" + TranslatorUtil.getTranslatedText("Please enter title");
+	static final private String URL_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("URL not selected");
+	static final private String FILE_PATH_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("File not submited or upload has not finished");
+	static final private String WRONG_URL_FORMAT = "*" + TranslatorUtil.getTranslatedText("Wrong url format. Please enter valid url");
+	static final private String CONTENT_TYPE_NOT_ALLOWED = "*"	+ TranslatorUtil.getTranslatedText("Content type not allowed");
+	static final private String CONTENT_TYPE_EXTENSION_MISMATCH = "*" + TranslatorUtil.getTranslatedText("File name extension doesn't match the actual file format");
+	static final private String CONTENT_TYPE_INTERNAL_ERROR = "*" + TranslatorUtil.getTranslatedText("Internal error during the content validation");
+	
 	boolean webLinkFormatCorrect;
 	private  Model<String> newResourceIdModel = new Model <String> ();
 
@@ -244,7 +255,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
         form.add(cancel);
         
         webLinkFeedbackContainer = new WebMarkupContainer("webLinkFeedbackContainer");
-        webLinkFeedbackLabel = new Label("webLinkFeedbackLabel", new Model<String>(defaultMsg));
+        webLinkFeedbackLabel = new Label("webLinkFeedbackLabel", new Model<String>(DEFAULT_MESSAGE));
 		webLinkFeedbackContainer.setOutputMarkupId(true);
 		webLinkFeedbackContainer.setOutputMarkupPlaceholderTag(true);
 		webLinkFeedbackContainer.setVisible(false);
@@ -257,6 +268,8 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		boolean noErrors = true;
 		TemporaryDocument resource = tempDocModel.getObject();
         boolean titleSelected = !(resource.getTitle() == null || resource.getTitle().length() == 0);
+        
+        String conentValidationMessage = "";
                 
 		if (newResourceIsWebLink){
 			if (resource.getWebLink() == null || resource.getWebLink().length() == 0) {
@@ -275,29 +288,54 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 					urlFormatValid = true;
 				}
 			}			
-		} else {
-            pathSelected = resource.getFile() != null;
+		}else {
+			pathSelected = resource.getFile() != null;
+			if (pathSelected) {
+				// validate the content of the file AMP-24920
+				contentValid = false;
+				try {
+					MimeTypeManager mimeTypeManager = MimeTypeManager.getInstance();
+					InputStream is = new BufferedInputStream(resource.getFile().getInputStream());
+					MimeTypeValidationResponse validationResponse = mimeTypeManager.validateMimeType(is, resource.getFile().getClientFileName());
+					if (validationResponse.getStatus() != MimeTypeValidationStatus.ALLOWED) {
+						if (validationResponse.getStatus() == MimeTypeValidationStatus.NOT_ALLOWED) {
+							conentValidationMessage = CONTENT_TYPE_NOT_ALLOWED + ": " + validationResponse.getDescription()
+									+ " [" + validationResponse.getContentName() + "]";
+						} else if (validationResponse.getStatus() == MimeTypeValidationStatus.CONTENT_EXTENSION_MISMATCH) {
+							conentValidationMessage = CONTENT_TYPE_EXTENSION_MISMATCH + ": ["
+									+ validationResponse.getExtension() + ", " + validationResponse.getContentName()
+									+ "]";
+						} else {
+							conentValidationMessage = CONTENT_TYPE_INTERNAL_ERROR;
+						}
+					} else {
+						contentValid = true;
+					}
+				} catch (IOException e) {
+					conentValidationMessage = CONTENT_TYPE_INTERNAL_ERROR;
+				}
+			}
 		}
-			
-		if (titleSelected && ((pathSelected && ! newResourceIsWebLink)
-                || (newResourceIsWebLink && urlSelected && urlFormatValid))) {
+
+		if (titleSelected && ((pathSelected && contentValid && !newResourceIsWebLink)
+				|| (newResourceIsWebLink && urlSelected && urlFormatValid))) {
 			webLinkFeedbackContainer.setVisible(false);
 		} else {
 			webLinkFeedbackContainer.setVisible(true);
-			if(!titleSelected) {
-				webLinkFeedbackLabel.setDefaultModelObject(defaultMsg);
-				noErrors = false;
-			} else if(! pathSelected && ! newResourceIsWebLink) {
-				webLinkFeedbackLabel.setDefaultModelObject(filePathNotSelected);
-				noErrors = false;
-			} else if (! urlSelected && newResourceIsWebLink) {
-				webLinkFeedbackLabel.setDefaultModelObject(urlNotSelected);
-				noErrors = false;
-			} else if (! urlFormatValid && newResourceIsWebLink) {
-				webLinkFeedbackLabel.setDefaultModelObject(wrongUrlFormat);
-				noErrors = false;
+			noErrors = false;
+			if (!titleSelected) {
+				webLinkFeedbackLabel.setDefaultModelObject(DEFAULT_MESSAGE);
+			} else if (!pathSelected && !newResourceIsWebLink) {
+				webLinkFeedbackLabel.setDefaultModelObject(FILE_PATH_NOT_SELECTED);
+			} else if (!contentValid && !newResourceIsWebLink) {
+				webLinkFeedbackLabel.setDefaultModelObject(conentValidationMessage);
+			} else if (!urlSelected && newResourceIsWebLink) {
+				webLinkFeedbackLabel.setDefaultModelObject(URL_NOT_SELECTED);
+			} else if (!urlFormatValid && newResourceIsWebLink) {
+				webLinkFeedbackLabel.setDefaultModelObject(WRONG_URL_FORMAT);
 			}
 		}
+		
 		return noErrors;
 	}
 	

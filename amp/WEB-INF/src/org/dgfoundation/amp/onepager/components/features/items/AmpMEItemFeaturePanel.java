@@ -4,11 +4,9 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -134,11 +132,11 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 			}
 		}
 
-		final AmpIndicatorGroupField base = new AmpIndicatorGroupField("base", new PropertyModel(baseVal, "value"), new PropertyModel(baseVal, "valueDate"), new PropertyModel(baseVal, "comment"), "Base Value", "Base");
+		final AmpIndicatorGroupField base = new AmpIndicatorGroupField("base", new PropertyModel(baseVal, "value"), new PropertyModel(baseVal, "valueDate"), new PropertyModel(baseVal, "comment"), "Base Value", "Base", true);
 		base.setOutputMarkupId(true);
 		add(base);
 		
-		final AmpIndicatorGroupField target = new AmpIndicatorGroupField("target", new PropertyModel(targetVal, "value"), new PropertyModel(targetVal, "valueDate"), new PropertyModel(targetVal, "comment"), "Target Value", "Target");
+		final AmpIndicatorGroupField target = new AmpIndicatorGroupField("target", new PropertyModel(targetVal, "value"), new PropertyModel(targetVal, "valueDate"), new PropertyModel(targetVal, "comment"), "Target Value", "Target", true);
         target.setIgnorePermissions(true);
 		if (valuesSet.getObject()){
 			target.setEnabled(false);
@@ -148,7 +146,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 		target.setOutputMarkupId(true);
 		add(target);
 
-		final AmpIndicatorGroupField revised = new AmpIndicatorGroupField("revised", new PropertyModel(revisedVal, "value"), new PropertyModel(revisedVal, "valueDate"), new PropertyModel(revisedVal, "comment"), "Revised Value", "Revised");
+		final AmpIndicatorGroupField revised = new AmpIndicatorGroupField("revised", new PropertyModel(revisedVal, "value"), new PropertyModel(revisedVal, "valueDate"), new PropertyModel(revisedVal, "comment"), "Revised Value", "Revised", false);
 		if (valuesSet.getObject())
 			revised.setVisibilityAllowed(true);
 		else
@@ -156,7 +154,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 		revised.setOutputMarkupId(true);
 		add(revised);
 
-		final AmpIndicatorGroupField current = new AmpIndicatorGroupField("current", new PropertyModel(currentVal, "value"), new PropertyModel(currentVal, "valueDate"), new PropertyModel(currentVal, "comment"), "Current Value", "Current");
+		final AmpIndicatorGroupField current = new AmpIndicatorGroupField("current", new PropertyModel(currentVal, "value"), new PropertyModel(currentVal, "valueDate"), new PropertyModel(currentVal, "comment"), "Current Value", "Current", true);
 		current.setOutputMarkupId(true);
 		add(current);
 		
@@ -184,16 +182,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 				tmp.setIndValId(null); //for hibernate to think it's a new object
 				vals.add(tmp);
 				
-				//revised data should be the same target data when first init
-				tmp = (AmpIndicatorValue) revisedVal.clone(); 
-				if(tmp.getValue()==null&&tmp.getValueDate()==null){
-					tmp.setValue(targetVal.getValue());
-					tmp.setValueDate(targetVal.getValueDate());
-					tmp.setComment(targetVal.getComment());
-					revised.getValue().getTextContainer().setModelObject(targetVal.getValue());
-					revised.getDate().getDate().setModelObject(targetVal.getValueDate());
-				}
-				
+				tmp = (AmpIndicatorValue) revisedVal.clone();
 				tmp.setLogFrame(logFrame);
 				tmp.setRisk(riskVal);
 				tmp.setIndicatorConnection(conn.getObject());

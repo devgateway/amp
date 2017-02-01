@@ -1,11 +1,20 @@
 package org.digijava.kernel.ampapi.endpoints.mimetype;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.apache.tika.detect.DefaultDetector;
+import org.apache.tika.detect.Detector;
+import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
 import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypeException;
@@ -127,5 +136,74 @@ public class MimeTypeManager {
 				});
 		
 		return mimeTypesToBeInserted;
+	}
+	
+	/**
+	 * Validate if is allowed to upload the file
+	 * 
+	 * @param file to validate
+	 * @return MimeTypeValidationResponse containing the status of the validation
+	 */
+	public MimeTypeValidationResponse validateMimeType(File file) {
+		try {
+			return validateMimeType(new FileInputStream(file), file.getName());
+		} catch (FileNotFoundException e) {
+			logger.error("IOException during the mime type validation ", e);
+			return new MimeTypeValidationResponse(MimeTypeValidationStatus.INTERNAL_ERROR); 
+		}
+	}
+	
+	/**
+	 * Validate if the InputStream has a mime type allowed for uploading. 
+	 * The file name is used for checking the matching the mime type of the stream.
+	 * 
+	 * @param is
+	 * @param fileName
+	 * @return MimeTypeValidationResponse containing the status of the validation
+	 */
+	public MimeTypeValidationResponse validateMimeType(InputStream is, String fileName) {
+		String extension = FilenameUtils.EXTENSION_SEPARATOR + FilenameUtils.getExtension(fileName);
+		try {
+		    Metadata md = new Metadata();
+		    md.set(Metadata.RESOURCE_NAME_KEY, fileName);
+		    Detector detector = new DefaultDetector();
+
+		    MediaType mediaType = detector.detect(is, md);
+			String mimeTypeName = mediaType.toString();
+			
+			if (isMimeTypeAllowed(mimeTypeName)) {
+				return new MimeTypeValidationResponse(MimeTypeValidationStatus.ALLOWED);
+			}
+			
+			MimeType mimeType = MimeTypes.getDefaultMimeTypes().forName(mimeTypeName);
+			
+			if (!mimeType.getExtensions().contains(extension)) {
+				return new MimeTypeValidationResponse(MimeTypeValidationStatus.CONTENT_EXTENSION_MISMATCH, mimeTypeName, mimeType.getDescription(), extension);
+			}
+			
+			return new MimeTypeValidationResponse(MimeTypeValidationStatus.NOT_ALLOWED, mimeTypeName, mimeType.getDescription());
+		} catch (IOException e) {
+			logger.error("Error in detecting content type of the stream ", e);
+			return new MimeTypeValidationResponse(MimeTypeValidationStatus.INTERNAL_ERROR); 
+		} catch (MimeTypeException e) {
+			logger.error("Invalid media type name ", e);
+			return new MimeTypeValidationResponse(MimeTypeValidationStatus.INTERNAL_ERROR); 
+		}
+	}
+	
+	/**
+	 * Checks if the content type is allowed (Exists in DB)
+	 * 
+	 * @param contentTypeName
+	 * @return 
+	 */
+	private boolean isMimeTypeAllowed(String mimeTypeName) {
+		List<AmpMimeType> allowedMimeTypes = getAllowedMimeTypes();
+		
+		Set<String>  allowedMimeTypeNames= allowedMimeTypes.stream()
+											.map(m -> m.getName())
+											.collect(Collectors.toSet());
+		
+		return allowedMimeTypeNames.contains(mimeTypeName);
 	}
 }

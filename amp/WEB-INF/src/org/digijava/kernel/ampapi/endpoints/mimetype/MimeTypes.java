@@ -11,6 +11,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpMimeType;
 
 /**
@@ -57,6 +59,7 @@ public class MimeTypes {
 	@POST
 	@Path("allowed")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "allowed-mimetypes", authTypes = {AuthRule.IN_ADMIN}, ui = false)
 	public Response setAllowedMimetypes(Set<String> allowedContentMimeType) {
 		MimeTypeManager mimeTypeManager = MimeTypeManager.getInstance();
 		

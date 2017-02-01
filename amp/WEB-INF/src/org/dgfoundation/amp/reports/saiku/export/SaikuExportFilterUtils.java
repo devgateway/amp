@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -14,6 +15,7 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportFilters;
+import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema.NamedElemType;
@@ -108,6 +110,10 @@ public class SaikuExportFilterUtils {
 		
 		if (AmpReportsSchema.getInstance().isBooleanColumn(columnName)) {
 			return getBooleanValues(filter.getValue());
+		}
+		
+		if (filter.getValue().filterType == FilterType.SINGLE_VALUE) {
+			return Stream.of(filter.getValue().value).collect(Collectors.toList());
 		}
 		
 		return filter.getValue().values.stream().collect(Collectors.toList());

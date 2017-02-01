@@ -138,6 +138,10 @@
     <xjc destdir="${gen-src}" schema="./doc/xmlpatcher.xsd" package="org.digijava.module.xmlpatcher.jaxb">
          <produces dir="${gen-src}" includes="org/digijava/module/xmlpatcher/jaxb/*.java"/>
     </xjc>
+  	
+	<xjc destdir="${gen-src}" schema="./src/main/resources/schemas/report.xsd" package="org.dgfoundation.amp.reports.xml">
+  		<produces dir="${gen-src}" includes="org/dgfoundation/amp/report/xml/*.java"/>
+	</xjc>
    </target>
 	  
     <target name="testResources">

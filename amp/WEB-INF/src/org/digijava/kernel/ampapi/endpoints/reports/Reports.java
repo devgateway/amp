@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -27,6 +29,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -47,6 +50,9 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
+import org.dgfoundation.amp.reports.xml.ObjectFactory;
+import org.dgfoundation.amp.reports.xml.Report;
+import org.dgfoundation.amp.reports.xml.ReportParameter;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -62,14 +68,11 @@ import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.action.ReportsFilterPicker;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -205,7 +208,7 @@ public class Reports implements ErrorReportingEndpoint {
 	 * Generates a custom report.  
 	 * 
 	 * @param formParams {@link ReportsUtil#getReportResultByPage form parameters}
-	 * @return JsonBean result for the requested page and pagination information
+	 * @return Response JsonBean result for the requested page and pagination information
 	 * @see ReportsUtil#getReportResultByPage
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
@@ -220,6 +223,20 @@ public class Reports implements ErrorReportingEndpoint {
 	}
 	
 	/**
+	 * Generates a custom xml report.  
+	 * 
+	 * @param reportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
+	 * @return Response in xml format result for the report
+	 */
+	@POST
+	@Path("/report/custom")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
+	public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter) {
+		return getXmlReportResult(reportParameter, null);
+	}
+
+	/**
 	 * Retrieves report data for the specified reportId and a given page number
 	 *  
 	 * @param reportId    report Id
@@ -229,10 +246,30 @@ public class Reports implements ErrorReportingEndpoint {
 	 */
 	@POST
 	@Path("/report/{report_id}/paginate")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JsonBean getReportResultByPage(JsonBean formParams,
 			@PathParam("report_id") Long reportId) {
 		return ReportsUtil.getReportResultByPage(reportId, formParams);
+	}
+	
+	/**
+	 * Retrieves report data in XML format for the specified reportId
+	 *  
+	 * @param reportId report Id
+	 * @param ReportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
+	 * @return XML result for the specified reportId
+	 * @see ApiXMLService#getXmlReport
+	 */
+	@POST
+	@Path("/report/{report_id}")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
+	public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter, @PathParam("report_id") Long reportId) {
+		Report xmlReport = ApiXMLService.getXmlReport(reportParameter, reportId);
+		ObjectFactory xmlReportObjFactory = new ObjectFactory();
+		
+		return xmlReportObjFactory.createReport(xmlReport);
 	}
 	
 	@POST
@@ -398,12 +435,14 @@ public class Reports implements ErrorReportingEndpoint {
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX, false);
 	}
+	
 	@POST
 	@Path("/saikureport/export/xls/run/{report_token}")
 	@Produces({"application/vnd.ms-excel" })
 	public final Response exportXlsSaikuReport(String query, @PathParam("report_token") Integer reportToken) {
 		return exportInMemorySaikuReport(query,reportToken,AMPReportExportConstants.XLSX);
 	}	
+	
 	@POST
 	@Path("/saikureport/export/csv/{report_id}")
 	@Produces({"text/csv"})
@@ -412,13 +451,32 @@ public class Reports implements ErrorReportingEndpoint {
 		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.CSV, false);
 
 	}
+	
 	@POST
 	@Path("/saikureport/export/csv/run/{report_token}")
 	@Produces({"text/csv"})
 	public final Response exportCsvSaikuReport(String query, @PathParam("report_token") Integer reportToken,
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 
-		return exportInMemorySaikuReport(query, reportToken,AMPReportExportConstants.CSV);
+		return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.CSV);
+	}
+	
+	@POST
+	@Path("/saikureport/export/xml/{report_id}")
+	@Produces({"application/xml"})
+	public final Response exportXmlSaikuReport(String query, @PathParam("report_id") Long reportId, 
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XML, false);
+
+	}
+	
+	@POST
+	@Path("/saikureport/export/xml/run/{report_token}")
+	@Produces({"application/xml"})
+	public final Response exportXmlSaikuReport(String query, @PathParam("report_token") Integer reportToken,
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+
+		return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.XML);
 	}
 	
 	@POST
@@ -434,7 +492,7 @@ public class Reports implements ErrorReportingEndpoint {
 	@Path("/saikureport/export/pdf/run/{report_token}")
 	@Produces({"application/pdf"})
 	public final Response exportPdfSaikuReport(String query, @PathParam("report_token") Integer reportToken) {
-		return exportInMemorySaikuReport(query, reportToken,AMPReportExportConstants.PDF);
+		return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.PDF);
 	}
 	
 	@POST
@@ -580,6 +638,7 @@ public class Reports implements ErrorReportingEndpoint {
 			
 			if (doc != null) {
 				logger.info("Send export data to browser...");
+				
 				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
 						.header("content-disposition", "attachment; filename = " + fileName)
 						.header("content-length", doc.length).build();
@@ -595,9 +654,16 @@ public class Reports implements ErrorReportingEndpoint {
 
 	public String getExportFileName(AmpReports ampReport, String type) {
 		
-		String filename = ampReport != null ? ampReport.getName() : "export";
+		String filename = ampReport != null ? StringUtils.trim(ampReport.getName()) : "export";
+		filename = String.format("%s", filename.replaceAll(" ", "_"));
+		
+		try {
+			filename = URLEncoder.encode(filename, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e);
+		}
+		
 		filename += "." + type;
-		filename = String.format("\"%s\"", filename.replaceAll(" ", "_"));
 		
 		return filename;
 	}
@@ -638,6 +704,9 @@ public class Reports implements ErrorReportingEndpoint {
 				break;
 			case AMPReportExportConstants.PDF:
 				exporter = SaikuReportExportType.PDF;
+				break;
+			case AMPReportExportConstants.XML:
+				exporter = SaikuReportExportType.XML;
 				break;
 		}
 		

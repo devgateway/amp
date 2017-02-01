@@ -8,10 +8,10 @@
 	<description>Populate tables with indicator 1 data</description>
 	<apply>
 	<script>
-		<lang delimiter=";" type="postgres">
+	<lang delimiter=";" type="postgres">
    --indicator 1
-    INSERT INTO amp_gpi_ni_indicator(amp_gpi_ni_indicator_id, code, description)
-    VALUES (nextval('amp_gpi_ni_indicator_seq'), '1', 'Extent of use of country results frameworks by co-operation providers');
+    INSERT INTO amp_gpi_ni_indicator(amp_gpi_ni_indicator_id, code, name, description)
+    VALUES (nextval('amp_gpi_ni_indicator_seq'), '1', 'Indicator 1', 'Extent of use of country results frameworks by co-operation providers');
 
    -- indicator 1 questions   
      

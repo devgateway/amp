@@ -209,6 +209,7 @@ public class EndPoints implements ErrorReportingEndpoint {
 	 *     }, …
 	 *     ]
 	 * }
+	 * @implicitParam X-Auth-Token|string|header
 	 * @return JSON structure of HeatMap Administrative Settings
 	 */
 	@GET
@@ -233,6 +234,7 @@ public class EndPoints implements ErrorReportingEndpoint {
 	 *         ...
 	 *     }
 	 * }
+	 * @implicitParam X-Auth-Token|string|header
 	 * @param config
 	 * @return
 	 * @throws Exception 

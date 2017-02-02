@@ -629,7 +629,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		if (sorting !== null) {
 			model.queryModel.sorting = sorting;
 		}
-		var md5 = CommonFilterUtils.calculateMD5FromParameters(model, id, lang);
+		var md5 = CommonFilterUtils.calculateMD5FromParameters(model, id, lang, null);
 		return md5;
 	}
 });

@@ -45,6 +45,8 @@ import org.digijava.kernel.ampapi.endpoints.mimetype.MimeTypeValidationResponse;
 import org.digijava.kernel.ampapi.endpoints.mimetype.MimeTypeValidationStatus;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
@@ -288,32 +290,34 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 					urlFormatValid = true;
 				}
 			}			
-		}else {
+		} else {
 			pathSelected = resource.getFile() != null;
+			contentValid = true;
 			if (pathSelected) {
 				// validate the content of the file AMP-24920
-				contentValid = false;
-				try {
-					MimeTypeManager mimeTypeManager = MimeTypeManager.getInstance();
-					InputStream is = new BufferedInputStream(resource.getFile().getInputStream());
-					MimeTypeValidationResponse validationResponse = mimeTypeManager.validateMimeType(is, resource.getFile().getClientFileName());
-					if (validationResponse.getStatus() != MimeTypeValidationStatus.ALLOWED) {
-						if (validationResponse.getStatus() == MimeTypeValidationStatus.NOT_ALLOWED) {
-							conentValidationMessage = CONTENT_TYPE_NOT_ALLOWED + ": " + validationResponse.getDescription()
-									+ " [" + validationResponse.getContentName() + "]";
-						} else if (validationResponse.getStatus() == MimeTypeValidationStatus.CONTENT_EXTENSION_MISMATCH) {
-							conentValidationMessage = CONTENT_TYPE_EXTENSION_MISMATCH + ": ["
-									+ validationResponse.getExtension() + ", " + validationResponse.getContentName()
-									+ "]";
-						} else {
-							conentValidationMessage = CONTENT_TYPE_INTERNAL_ERROR;
-						}
-					} else {
-						contentValid = true;
+				if (isEnabledMimeTypeValidation()) {
+					try {
+						MimeTypeManager mimeTypeManager = MimeTypeManager.getInstance();
+						InputStream is = new BufferedInputStream(resource.getFile().getInputStream());
+						MimeTypeValidationResponse validationResponse = mimeTypeManager.validateMimeType(is, resource.getFile().getClientFileName());
+						if (validationResponse.getStatus() != MimeTypeValidationStatus.ALLOWED) {
+							if (validationResponse.getStatus() == MimeTypeValidationStatus.NOT_ALLOWED) {
+								conentValidationMessage = CONTENT_TYPE_NOT_ALLOWED + ": " + validationResponse.getDescription()
+										+ " [" + validationResponse.getContentName() + "]";
+							} else if (validationResponse.getStatus() == MimeTypeValidationStatus.CONTENT_EXTENSION_MISMATCH) {
+								conentValidationMessage = CONTENT_TYPE_EXTENSION_MISMATCH + ": ["
+										+ validationResponse.getExtension() + ", " + validationResponse.getContentName()
+										+ "]";
+							} else {
+								conentValidationMessage = CONTENT_TYPE_INTERNAL_ERROR;
+							}
+							contentValid = false;
+						} 
+					} catch (IOException e) {
+						conentValidationMessage = CONTENT_TYPE_INTERNAL_ERROR;
+						contentValid = false;
 					}
-				} catch (IOException e) {
-					conentValidationMessage = CONTENT_TYPE_INTERNAL_ERROR;
-				}
+				} 
 			}
 		}
 
@@ -337,6 +341,14 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		}
 		
 		return noErrors;
+	}
+
+
+	/**
+	 * 
+	 */
+	private boolean isEnabledMimeTypeValidation() {
+		return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);
 	}
 	
 	private String generateResourceKey(String id) {

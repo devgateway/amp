@@ -208,8 +208,12 @@ CommonFilterUtils.calculateMD5FromParameters = function (model, id, lang, timest
 			for (var property in model.queryModel.filters) {
 				// To avoid problems with prototype´s properties.
 				if (model.queryModel.filters.hasOwnProperty(property)) {
-					// Sort ID's.
-					filters[property] = _.sortBy(model.queryModel.filters[property], function(item) {return item;});
+					// Sort ID's.					
+					if(_.isArray(model.queryModel.filters[property])){
+						filters[property] = _.sortBy(model.queryModel.filters[property], function(item) {return item;});
+					}else{
+						filters[property] = model.queryModel.filters[property];
+					}					
 				}
 			}
 			// Now sort the properties of the object so stringify will return the same string.

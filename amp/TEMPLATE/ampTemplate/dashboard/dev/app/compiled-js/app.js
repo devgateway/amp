@@ -23507,7 +23507,7 @@ var Backbone = require('backbone');
 var _ = require('underscore');
 require('bootstrap/dist/js/bootstrap');
 
-var Template = "<style>\r\n    .footerText {\r\n    padding: 0;\r\n    font-family: arial;\r\n    font-size: 11px;\r\n    border: 0px;\r\n    }\r\n    .footer {\r\n    background-color: #8B8B8B;\r\n    color: #FFF;\r\n    margin-top: 0;\r\n    padding-bottom: 10px;\r\n    padding-top: 10px;\r\n    text-align: center;\r\n    }\r\n    .dgf_footer {\r\n    color: #8B8B8B;\r\n    line-height: 18px;\r\n    text-align: center;\r\n    background-color:white;\r\n    padding-top:10px;\r\n    }\r\n    .dgf_footer img {\r\n    line-height: 18px;\r\n    margin-bottom: 5px;\r\n    }\r\n    .loading{   \r\n      margin: 10px 20px 10px 20px;\r\n    }\r\n    \r\n</style>\r\n\r\n<div class=\"footer footerText\">\r\n    AMP <b><%=  properties.ampVersion %></b> build <b><%=  properties.buildDate %></b> - <%= properties.footerText %>\r\n    <% if(showAdminLinks == true  && properties.adminLinks != undefined) { %>\r\n    <a href='<%=  properties.adminLinks[0].url %>'><%=  properties.adminLinks[0].name %></a>\r\n    <a href='<%=  properties.adminLinks[1].url %>'><%=  properties.adminLinks[1].name %></digi:trn></a>\r\n    <% } %>\r\n</div>\r\n<% if(showDGFooter == true)  { %>\r\n<div class=\"dgf_footer footerText\">\r\n    <img src=\"/TEMPLATE/ampTemplate/img_2/dgf_logo_bottom.gif\" class=\"dgf_logo_footer\">\r\n    <br/>\r\n    Development Gateway\r\n    <br/>\r\n    1110 Vermont Ave, NW, Suite 500\r\n    <br/>\r\n    Washington, DC 20005 USA\r\n    <br/>\r\n    info@developmentgateway.org, Tel: +1.202.572.9200, Fax: +1 202.572.9290\r\n</div>\r\n<% } %>\r\n\r\n<% if(properties.trackingEnabled === true) { %>\r\n<!-- Piwik\r\nSite id can be checked here: http://stats.ampsite.net/index.php?module=SitesManager&action=index&idSite=1&period=range&date=last30\r\nAlso,the wiki for piwik: https://wiki.dgfoundation.org/display/AMPDOC/Integrating+AMP+with+Piwik\r\n-->\r\n<script type=\"text/javascript\">\r\n\t  var _paq = _paq || [];\r\n    if (window.PiwikAlreadyFetched === undefined ) {\r\n      _paq.push(['setUserId', \"<%= properties.email %>\"]);\r\n      _paq.push(['setCustomVariable',\r\n          1,\r\n          \"Workspace|WID\",\r\n          \"<%= properties.workspace %>|<%= properties.workspaceId %>\",\r\n          \"page\"]);\r\n  \t  _paq.push([\"trackPageView\"]);\r\n  \t  _paq.push([\"enableLinkTracking\"]);\r\n\r\n      /* TDK: keep track of whether we put the script DOM node on the page already\r\n       *   in case the page reparses this javascript on another modification.\r\n       */\r\n      window.PiwikAlreadyFetched = true;\r\n\r\n      /* Stock Piwik code: */\r\n  \t  (function() {\r\n  \t    var u=\"<%=  properties.trackingUrl %>\";\r\n  \t    _paq.push([\"setTrackerUrl\", u+\"piwik.php\"]);\r\n  \t    _paq.push([\"setSiteId\", \"<%=properties.siteId %>\"]);\r\n  \t    var d=document, g=d.createElement(\"script\"), s=d.getElementsByTagName(\"script\")[0]; g.type=\"text/javascript\";\r\n  \t    g.defer=true; g.async=true; g.src=u+\"piwik.js\"; s.parentNode.insertBefore(g,s);\r\n  \t  })();\r\n    }\r\n\t</script>\r\n<!-- End Piwik Code -->\r\n<% } %>\r\n";
+var Template = "<style>\r\n    .footerText {\r\n    padding: 0;\r\n    font-family: arial;\r\n    font-size: 11px;\r\n    border: 0px;\r\n    }\r\n    .footer {\r\n    background-color: #8B8B8B;\r\n    color: #FFF;\r\n    margin-top: 0;\r\n    padding-bottom: 10px;\r\n    padding-top: 10px;\r\n    text-align: center;\r\n    }\r\n    .dgf_footer {\r\n    color: #8B8B8B;\r\n    line-height: 18px;\r\n    text-align: center;\r\n    background-color:white;\r\n    padding-top:10px;\r\n    }\r\n    .dgf_footer img {\r\n    line-height: 18px;\r\n    margin-bottom: 5px;\r\n    }\r\n    .loading{   \r\n      margin: 10px 20px 10px 20px;\r\n    }\r\n    \r\n</style>\r\n\r\n<div class=\"footer footerText\">\r\n    AMP <b><%=  properties.ampVersion %></b> build <b><%=  properties.buildDate %></b> - <%= properties.footerText %>\r\n    <% if(showAdminLinks == true  && properties.adminLinks != undefined) { %>\r\n    <a href='<%=  properties.adminLinks[0].url %>'><%=  properties.adminLinks[0].name %></a>\r\n    <% } %>\r\n</div>\r\n<% if(showDGFooter == true)  { %>\r\n<div class=\"dgf_footer footerText\">\r\n    <img src=\"/TEMPLATE/ampTemplate/img_2/dgf_logo_bottom.gif\" class=\"dgf_logo_footer\">\r\n    <br/>\r\n    Development Gateway\r\n    <br/>\r\n    1110 Vermont Ave, NW, Suite 500\r\n    <br/>\r\n    Washington, DC 20005 USA\r\n    <br/>\r\n    info@developmentgateway.org, Tel: +1.202.572.9200, Fax: +1 202.572.9290\r\n</div>\r\n<% } %>\r\n\r\n<% if(properties.trackingEnabled === true) { %>\r\n<!-- Piwik\r\nSite id can be checked here: http://stats.ampsite.net/index.php?module=SitesManager&action=index&idSite=1&period=range&date=last30\r\nAlso,the wiki for piwik: https://wiki.dgfoundation.org/display/AMPDOC/Integrating+AMP+with+Piwik\r\n-->\r\n<script type=\"text/javascript\">\r\n\t  var _paq = _paq || [];\r\n    if (window.PiwikAlreadyFetched === undefined ) {\r\n      _paq.push(['setUserId', \"<%= properties.email %>\"]);\r\n      _paq.push(['setCustomVariable',\r\n          1,\r\n          \"Workspace|WID\",\r\n          \"<%= properties.workspace %>|<%= properties.workspaceId %>\",\r\n          \"page\"]);\r\n  \t  _paq.push([\"trackPageView\"]);\r\n  \t  _paq.push([\"enableLinkTracking\"]);\r\n\r\n      /* TDK: keep track of whether we put the script DOM node on the page already\r\n       *   in case the page reparses this javascript on another modification.\r\n       */\r\n      window.PiwikAlreadyFetched = true;\r\n\r\n      /* Stock Piwik code: */\r\n  \t  (function() {\r\n  \t    var u=\"<%=  properties.trackingUrl %>\";\r\n  \t    _paq.push([\"setTrackerUrl\", u+\"piwik.php\"]);\r\n  \t    _paq.push([\"setSiteId\", \"<%=properties.siteId %>\"]);\r\n  \t    var d=document, g=d.createElement(\"script\"), s=d.getElementsByTagName(\"script\")[0]; g.type=\"text/javascript\";\r\n  \t    g.defer=true; g.async=true; g.src=u+\"piwik.js\"; s.parentNode.insertBefore(g,s);\r\n  \t  })();\r\n    }\r\n\t</script>\r\n<!-- End Piwik Code -->\r\n<% } %>\r\n";
 var LayoutModel = require('../models/amp-layout-model.js');
 
 module.exports = Backbone.View.extend({
@@ -30644,7 +30644,7 @@ TreeNodeModel = Backbone.Model.extend({
 // merge based on filterId as we serialize....
 // options.wholeModel returns whole Models instead of just ids
 // options.includeUnselected returns full tree, even if nodes are not selected.
-// Code explicitly ignores Donor Group,Donor Type and the rest of the organizations.
+// Code explicitly ignores donor-group,donor-type and the rest of the organizations.
 //   they only have FilterIds for deserialize for backwards compatibility.
 // TODO: consider pulling out options.includeUnselected into its own function getAllFilters()
 serialize: function(options) {
@@ -30675,8 +30675,8 @@ serialize: function(options) {
 	*/
     
     if (options.includeUnselected) {
-    	if (this.get('filterId') && this.get('filterId') !== 'Donor Group' && this.get('filterId') !== 'Donor Type' 
-    		&& this.get('filterId') !== 'Implementing Agency' && this.get('filterId') !== 'Beneficiary Agency' && this.get('filterId') !== 'Executing Agency' && this.get('filterId') !== 'Responsible Organization') {
+    	if (this.get('filterId') && this.get('filterId') !== 'donor-group' && this.get('filterId') !== 'donor-type' 
+    		&& this.get('filterId') !== 'implementing-agency' && this.get('filterId') !== 'beneficiary-agency' && this.get('filterId') !== 'executing-agency' && this.get('filterId') !== 'responsible-organization') {
     			tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
     	} else{
     		tmpSerialized.unassigned = (options.wholeModel? [this]:[this.id]);
@@ -30685,8 +30685,8 @@ serialize: function(options) {
     } else {
     	if (children.length > 0) {
     		// If all children are selected, and we have our own filterId, then just use our id, don't recurse.
-    		if (this.get('numSelected') >= this.get('numPossible') && this.get('filterId') && this.get('filterId') !== 'Donor Group' && this.get('filterId') !== 'Donor Type' 
-    			&& this.get('filterId') !== 'Implementing Agency' && this.get('filterId') !== 'Beneficiary Agency' && this.get('filterId') !== 'Executing Agency' && this.get('filterId') !== 'Responsible Organization') {
+    		if (this.get('numSelected') >= this.get('numPossible') && this.get('filterId') && this.get('filterId') !== 'donor-group' && this.get('filterId') !== 'donor-type' 
+    			&& this.get('filterId') !== 'implementing-agency' && this.get('filterId') !== 'beneficiary-agency' && this.get('filterId') !== 'executing-agency' && this.get('filterId') !== 'responsible-organization') {
     			if (this.id === undefined) // top level of a non-hierarchical group (like type of assistance)
        				this._serializeChildren(tmpSerialized, children, options);
         		else
@@ -30697,8 +30697,8 @@ serialize: function(options) {
       } else {
     	  //no children so just return self.
     	  if (this.get('selected')) {
-    		  if (this.get('filterId') && this.get('filterId') !== 'Donor Group' && this.get('filterId') !== 'Donor Type' 
-    			  && this.get('filterId') !== 'Implementing Agency' && this.get('filterId') !== 'Beneficiary Agency' && this.get('filterId') !== 'Executing Agency' && this.get('filterId') !== 'Responsible Organization') {
+    		  if (this.get('filterId') && this.get('filterId') !== 'donor-group' && this.get('filterId') !== 'donor-type' 
+    			  && this.get('filterId') !== 'implementing-agency' && this.get('filterId') !== 'beneficiary-agency' && this.get('filterId') !== 'executing-agency' && this.get('filterId') !== 'responsible-organization') {
     			  	tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
     		  } else {
     			  tmpSerialized.unassigned = (options.wholeModel? [this]:[this.id]);
@@ -30753,6 +30753,10 @@ serialize: function(options) {
     }
 
     if(blob[this.get('filterId')]){
+    	if(this.get('filterId') == 'implementing-agency'){
+	      console.log(this.attributes)
+        }
+    		
       if (_(blob[this.get('filterId')]).indexOf(this.id) > -1) {
         this.set('selected', true, {propagation: true});
       } else if (children.length === 0) {
@@ -32236,7 +32240,7 @@ var Translator = require('amp-translate');
 var Template = "<% if(obj.isPopup) {%>\r\n<div class=\"panel-heading\">\r\n\t\t\t<button type=\"button\" class=\"close cancel\" aria-hidden=\"true\">x</button>\r\n\t\t\t<h3 class=\"panel-title\" data-i18n=\"amp.settings:title\">Settings</h3>\r\n</div>\r\n<%}%>\r\n<div class=\"panel-body\">\t\t\r\n<div class=\"container-fluid\">\r\n  <div class=\"settings\">\r\n    Loading...\r\n  </div>\r\n  <% if(!obj.isPopup) {%>\r\n  <div class=\"form-group\">\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n  </div>\r\n  <%}%>\r\n</div>\r\n</div>\r\n<% if(obj.isPopup) {%>\r\n<div class=\"panel-footer setting-dialog-footer\">\r\n    <button type=\"button\" class=\"btn btn-warning cancel-btn cancel\" data-i18n=\"amp.settings:cancel-button\">Cancel</button>\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n </div>\r\n <%}%>\r\n \r\n \r\n";
 var SelectTemplate = "<div class=\"form-group\">\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\n  <% _.each(obj.setting.value.options, function(option){ %>\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings[obj.setting.id];%>\n    <option value=\"<%= option.id %>\"  <% if(selected == option.id){ %> selected <% } %> >\n      <%= option.name %>\n    </option>\n  <%}); %>\n  </select>\n</div>\n";
 var YearRangeTemplate = "<div class=\"form-group\"> \r\n<label data-i18n=\"amp.settings:label-<%= obj.id %>\"><%= obj.name %></label> \r\n <div class=\"row year-range \"> \r\n \r\n </div>  \r\n</div>";
-var YearSelectTemplate = "<div class=\"col-xs-2\">\r\n   <label data-i18n=\"amp.settings:label-<%= obj.setting.id %>\" ><%= obj.setting.name %></label>\r\n </div>\r\n  <div class=\"col-xs-4\">  \r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n  <% _.each(obj.setting.value.options, function(option){ %>\r\n     <% \r\n     var applied = obj.appliedSettings['year-range'] ? obj.appliedSettings['year-range'][obj.setting.id] : null;\r\n     var selected = obj.settingsSelections[obj.setting.id];     \r\n      %>\r\n    <option value=\"<%= option.id %>\"  <% if((selected || applied) == option.id){ %> selected <% } %> >\r\n      <%= option.name %>\r\n    </option>\r\n  <%}); %>\r\n  </select>  \r\n  </div>";
+var YearSelectTemplate = "<div class=\"col-xs-2\">\r\n   <label data-i18n=\"amp.settings:label-<%= obj.setting.id %>\" ><%= obj.setting.name %></label>\r\n </div>\r\n  <div class=\"col-xs-4\">\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n    <%\r\n      var applied = obj.appliedSettings['year-range'] ? obj.appliedSettings['year-range'][obj.setting.id] : null;\r\n      var selected = obj.settingsSelections[obj.setting.id];\r\n    %>\r\n    <option data-i18n=\"amp.settings:all\" value=\"-1\"<% if((selected || applied) == -1){ %> selected <% } %>>All</option>\r\n    <% for (i = obj.setting.from; i <= obj.setting.to; i++) { %>\r\n      <option value=\"<%= i %>\"<% if((selected || applied) == i){ %> selected <% } %>>\r\n      <%= i %>\r\n      </option>\r\n    <% } %>\r\n  </select>\r\n  </div>";
 var Constants = require('../common/constants');
 
 module.exports = Backbone.View.extend({
@@ -32336,14 +32340,18 @@ module.exports = Backbone.View.extend({
 		});
 		if (yearRangeSetting) {
 			this.$('.settings').append(this.yearRangeTemplate(yearRangeSetting.toJSON()));
-			this.appendYearSelect(yearRangeSetting, Constants.YEAR_FROM_ID);
-			this.appendYearSelect(yearRangeSetting, Constants.YEAR_TO_ID);
+			this.appendYearSelect(yearRangeSetting.get('value'), Constants.YEAR_FROM_ID);
+			this.appendYearSelect(yearRangeSetting.get('value'), Constants.YEAR_TO_ID);
 		}
 	},
 	appendYearSelect : function(yearRangeSetting, settingID) {
-		var setting = _.findWhere(yearRangeSetting.get('value'), {
-			id : settingID
-		});
+		var setting = {
+			"name" : settingID,
+			"id" : settingID,
+			"from" : yearRangeSetting['from'],
+			"to" : yearRangeSetting['to']
+		};
+
 		this.$('.year-range').append(this.yearSelectTemplate({
 			setting : setting,
 			appliedSettings : this.appliedSettings,
@@ -32428,7 +32436,7 @@ module.exports = Backbone.View.extend({
 	},
 	createTranslator : function(force) {
 		var self = this;
-		var translateKeys = JSON.parse("{\r\n  \"amp.settings:title\": \"Settings\",\r\n  \"amp.settings:label-calendar-id\": \"Calendar\",\r\n  \"amp.settings:label-currency-code\": \"Currency\",\r\n  \"amp.settings:label-funding-type\": \"Funding Type\",\r\n  \"amp.settings:label-year-range\": \"Year Range\",\r\n  \"amp.settings:label-from\": \"From:\",\r\n  \"amp.settings:label-to\": \"To:\",\r\n  \"amp.settings:apply-button\" : \"Apply\",\r\n  \"amp.settings:cancel-button\": \"Cancel\"   \r\n}");
+		var translateKeys = JSON.parse("{\r\n  \"amp.settings:title\": \"Settings\",\r\n  \"amp.settings:label-calendar-id\": \"Calendar\",\r\n  \"amp.settings:label-currency-code\": \"Currency\",\r\n  \"amp.settings:label-funding-type\": \"Funding Type\",\r\n  \"amp.settings:label-year-range\": \"Year Range\",\r\n  \"amp.settings:label-from\": \"From:\",\r\n  \"amp.settings:label-to\": \"To:\",\r\n  \"amp.settings:apply-button\" : \"Apply\",\r\n  \"amp.settings:cancel-button\": \"Cancel\",\r\n  \"amp.settings:all\": \"All\"\r\n}");
 		if (force === true || self.translator === undefined) {
 			self.translator = new Translator({
 				defaultKeys : translateKeys

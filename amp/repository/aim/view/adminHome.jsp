@@ -741,6 +741,7 @@
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Dashboard Manager</digi:trn>
                               </c:set>
+                                 <a href="/TEMPLATE/reamp/modules/admin/dashboard/index.html"
                                  title="${translation}">
                                 <digi:trn>Dashboard Manager</digi:trn>
                               </a>

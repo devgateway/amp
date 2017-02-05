@@ -1277,6 +1277,9 @@ function toggleView(elementId, iconId, isMinus) {
 	}
 	return isMinus;
 }
+
+$.getScript("/TEMPLATE/ampTemplate/script/common/FileTypeValidator.js");
+
 /* Configures the form with id typeId */
 function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOfPublication, index, category) {
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML = '';
@@ -1441,22 +1444,27 @@ function validateAddDocument() {
 	}
 
 	var webUrlVisible=document.getElementById('tr_url');
-	if(webUrlVisible.style.display=='none' && document.forms['crDocumentManagerForm'].fileData.value == ''){ //adding document
-		msg = msg + "${translation_validation_filedata}"+'<br>';
-	}
-	if(webUrlVisible.style.display!='none' && document.forms['crDocumentManagerForm'].webLink.value == ''){ //adding url
+	if(webUrlVisible.style.display=='none') { 
+		if(document.forms['crDocumentManagerForm'].fileData.value == '') { //adding document
+			msg = msg + "${translation_validation_filedata}"+'<br>';
+		} else if(!FileTypeValidator.isValid(fileData.value)) {
+			msg = msg + FileTypeValidator.errorMessage +'! <br>';
+		}
+	} else if(document.forms['crDocumentManagerForm'].webLink.value == '') { //adding url
 		msg = msg + "${translation_validation_url}"+'<br>' ;
-	}else if(webUrlVisible.style.display!='none'){
+	} else {
 		var enteredWebLink = document.forms['crDocumentManagerForm'].webLink.value;
 		var found	= urlFormat.test(enteredWebLink); //urlFormat.exec(enteredWebLink);//		
-		if ( found == false) {
+		if (found == false) {
 			msg = msg + "${translation_url_format}"+'<br>' ;
-			
 		}
 	}
+	
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
-	if (msg.length == 0)
+	if (msg.length == 0) {
 			return true;
+	}
+	
 	return false;
 }
 

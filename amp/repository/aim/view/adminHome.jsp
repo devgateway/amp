@@ -754,9 +754,9 @@
 									src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
 								<td class="admin_box_label">
 									<c:set var="translation">
-										<digi:trn invisibleLinks="true">Click here to view File-type manager</digi:trn>
+										<digi:trn invisibleLinks="true">Click here to view Document manager admin</digi:trn>
 									</c:set> 
-									<a href="/TEMPLATE/reamp/modules/admin/file-type-manager/dev.html"
+									<a href="/TEMPLATE/reamp/modules/admin/document-manager-admin/dev.html"
 									title="${translation}"> <digi:trn>Resource manager admin</digi:trn>
 									</a></td>
 							</tr>

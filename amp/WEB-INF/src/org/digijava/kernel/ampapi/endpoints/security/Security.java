@@ -209,6 +209,8 @@ public class Security implements ErrorReportingEndpoint {
 				ApiErrorResponse.reportForbiddenAccess(result);
 			}
 
+			invalidateExistingSession();
+
 			AmpTeamMember teamMember = getAmpTeamMember(username, workspaceId);
 			if (workspaceId != null && teamMember == null) {
 				ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_TEAM);
@@ -225,6 +227,13 @@ public class Security implements ErrorReportingEndpoint {
 			ApiErrorResponse.reportError(INTERNAL_SERVER_ERROR, SecurityErrors.INVALID_REQUEST);
 		}
 		return null;
+	}
+
+	public void invalidateExistingSession() {
+		HttpSession session = httpRequest.getSession(false);
+		if (session != null) {
+            session.invalidate();
+        }
 	}
 
 	private AmpTeamMember getAmpTeamMember(String username, Long workspaceId) {

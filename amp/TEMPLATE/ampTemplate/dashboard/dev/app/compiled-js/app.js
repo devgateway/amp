@@ -30608,16 +30608,11 @@ TreeNodeModel = Backbone.Model.extend({
     children: null,     // type TreeNodeCollection
     isSelectable: false  // is this node itself selectable (ie. should it have an 'unkown' child)
   },
-
+  ignoreList: ['donor-group', 'donor-type', 'implementing-agency', 'beneficiary-agency', 'executing-agency', 'responsible-organization'],//list of filterIds to ignore when serializing
   initialize:function(obj) {
     var self = this;
     var childrenCollection = new TreeNodeCollection();
     this.set('children', childrenCollection);
-    
-    /* TODO-CONSTANTIN: temporary comment until I am finished learning Filters frontend 
-     console.log("building a tree node model for: " + JSON.stringify(obj));
-     */
-    
     //iterate over children
     if (Array.isArray(obj.children)) {
       _.each(obj.children, function(child) {
@@ -30648,45 +30643,19 @@ TreeNodeModel = Backbone.Model.extend({
 //   they only have FilterIds for deserialize for backwards compatibility.
 // TODO: consider pulling out options.includeUnselected into its own function getAllFilters()
 serialize: function(options) {
-	  var tmpSerialized = {};
-	  var children = this.get('children');
-
-    /**
-	        
-	     
-	  +--^----------,--------,-----,--------^-,
-	  | |||||||||   `--------'     |          O
-	  `+---------------------------^----------|
-	    `\_,---------,---------,--------------'
-	      / XXXXXX /'|       /'
-	     / XXXXXX /  `\    /'                      TO INVESTIGATE: why is this function called for 4 times (!!!) per each item when pressing "apply"?
-	    / XXXXXX /`-------'
-	   / XXXXXX /
-	  / XXXXXX /
-	 (________(                
-	   
-	    
-	// 
-	//    if ((this.get('name')== 'Yes') || (this.get('name') == 'No') || (this.get('name') == 'All') || this.get('name') == 'Humanitarian Aid' || this.get('name') == 'Disaster Response Marker') {
-	//    	console.log('serializing node with name ' + this.get('name') + ", selected: " + this.get('selected'));
-	//
-	//    	debugger;
-	//    }
-	*/
-    
-    if (options.includeUnselected) {
-    	if (this.get('filterId') && this.get('filterId') !== 'donor-group' && this.get('filterId') !== 'donor-type' 
-    		&& this.get('filterId') !== 'implementing-agency' && this.get('filterId') !== 'beneficiary-agency' && this.get('filterId') !== 'executing-agency' && this.get('filterId') !== 'responsible-organization') {
+	 var tmpSerialized = {};
+	 var children = this.get('children');
+     if (options.includeUnselected) {
+    	if (this.get('filterId') && !this._isInIgnoreList(this.get('filterId'))) {
     			tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
     	} else{
     		tmpSerialized.unassigned = (options.wholeModel? [this]:[this.id]);
     	}
     	this._serializeChildren(tmpSerialized, children, options);
-    } else {
+     } else {
     	if (children.length > 0) {
     		// If all children are selected, and we have our own filterId, then just use our id, don't recurse.
-    		if (this.get('numSelected') >= this.get('numPossible') && this.get('filterId') && this.get('filterId') !== 'donor-group' && this.get('filterId') !== 'donor-type' 
-    			&& this.get('filterId') !== 'implementing-agency' && this.get('filterId') !== 'beneficiary-agency' && this.get('filterId') !== 'executing-agency' && this.get('filterId') !== 'responsible-organization') {
+    		if (this.get('numSelected') >= this.get('numPossible') && this.get('filterId') && !this._isInIgnoreList(this.get('filterId'))) {
     			if (this.id === undefined) // top level of a non-hierarchical group (like type of assistance)
        				this._serializeChildren(tmpSerialized, children, options);
         		else
@@ -30697,8 +30666,7 @@ serialize: function(options) {
       } else {
     	  //no children so just return self.
     	  if (this.get('selected')) {
-    		  if (this.get('filterId') && this.get('filterId') !== 'donor-group' && this.get('filterId') !== 'donor-type' 
-    			  && this.get('filterId') !== 'implementing-agency' && this.get('filterId') !== 'beneficiary-agency' && this.get('filterId') !== 'executing-agency' && this.get('filterId') !== 'responsible-organization') {
+    		  if (this.get('filterId') && !this._isInIgnoreList(this.get('filterId')) ) {
     			  	tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
     		  } else {
     			  tmpSerialized.unassigned = (options.wholeModel? [this]:[this.id]);
@@ -30709,8 +30677,10 @@ serialize: function(options) {
    this._mergeUnassigned(tmpSerialized);
    return tmpSerialized;
 },
-
-  _serializeChildren: function(tmpSerialized, children, options){
+_isInIgnoreList:  function(filterId){
+ return this.ignoreList.indexOf(filterId) > -1;
+},
+_serializeChildren: function(tmpSerialized, children, options){
     children.each(function(child) {
       var serializedChild = child.serialize(options);
       _.each(serializedChild, function(v,k){

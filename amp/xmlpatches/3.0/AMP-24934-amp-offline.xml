@@ -67,16 +67,16 @@
                 $BODY$
                 LANGUAGE plpgsql VOLATILE; @@@
 
-                CREATE TRIGGER update_offline_changelog_trg AFTER INSERT OR UPDATE OR DELETE ON amp_global_settings
+                CREATE TRIGGER gs_update_offline_changelog_trg AFTER INSERT OR UPDATE OR DELETE ON amp_global_settings
                 FOR EACH ROW EXECUTE PROCEDURE update_offline_changelog() @@@
 
-                CREATE TRIGGER update_offline_changelog_trg AFTER INSERT OR UPDATE OR DELETE ON amp_team
+                CREATE TRIGGER t_update_offline_changelog_trg AFTER INSERT OR UPDATE OR DELETE ON amp_team
                 FOR EACH ROW EXECUTE PROCEDURE update_offline_changelog() @@@
 
-                CREATE TRIGGER update_offline_changelog_trg AFTER INSERT OR UPDATE OR DELETE ON amp_team_member
+                CREATE TRIGGER tm_update_offline_changelog_trg AFTER INSERT OR UPDATE OR DELETE ON amp_team_member
                 FOR EACH ROW EXECUTE PROCEDURE update_offline_changelog() @@@
 
-                CREATE TRIGGER update_offline_changelog_trg AFTER INSERT OR UPDATE OR DELETE ON dg_message
+                CREATE TRIGGER m_update_offline_changelog_trg AFTER INSERT OR UPDATE OR DELETE ON dg_message
                 FOR EACH ROW EXECUTE PROCEDURE update_offline_changelog() @@@
 
             </lang>

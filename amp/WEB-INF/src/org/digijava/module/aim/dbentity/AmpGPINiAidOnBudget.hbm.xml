@@ -12,9 +12,7 @@
 		</id>
 			
 		<property name="amount" column="amount" type="java.lang.Double" />	
-		<property name="date" column="date" type="java.util.Date" />	
-		<property name="remark" column="remark" type="text" />
-				
+		<property name="date" column="date" type="java.util.Date" />			
 						
 		<many-to-one name="currencyId" column="currency_id"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"

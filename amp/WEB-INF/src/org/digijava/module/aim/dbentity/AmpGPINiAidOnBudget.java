@@ -10,7 +10,7 @@ public class AmpGPINiAidOnBudget implements Serializable {
 	private AmpCurrency currencyId;
 	private AmpOrganisation donorId;
 	private Double amount;
-	private String remark;
+	
 	private Date date;
 	
 	public Long getAmpGPINiAidOnBudgetId() {
@@ -37,12 +37,7 @@ public class AmpGPINiAidOnBudget implements Serializable {
 	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
-	public String getRemark() {
-		return remark;
-	}
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+	
 	public Date getDate() {
 		return date;
 	}

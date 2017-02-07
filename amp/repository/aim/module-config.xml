@@ -156,6 +156,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiQuestionOption</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurvey</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse</hibernate-class>		
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiDonorNotes</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFeature</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSiteFlag</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpHomeThumbnail</hibernate-class>

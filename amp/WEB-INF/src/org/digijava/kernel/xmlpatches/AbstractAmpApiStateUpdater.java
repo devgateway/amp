@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,21 +20,12 @@ abstract class AbstractAmpApiStateUpdater {
      * Updates amp_api_state table to reflect changes to stateblobs.
      */
     public void update() {
-        Session session = PersistenceManager.openNewSession();
-        Transaction tx = session.beginTransaction();
-        try {
-            session.doWork(connection -> {
-                Map<Long, String> states = SQLUtils.collectKeyValue(connection, "select id, stateblob from amp_api_state");
-                for (Map.Entry<Long, String> state : states.entrySet()) {
-                    updateApiState(connection, state.getKey(), state.getValue());
-                }
-            });
-        } catch (Throwable e) {
-            tx.rollback();
-            throw e;
-        } finally {
-            PersistenceManager.closeSession(session);
-        }
+        PersistenceManager.doWorkInTransaction(connection -> {
+            Map<Long, String> states = SQLUtils.collectKeyValue(connection, "select id, stateblob from amp_api_state");
+            for (Map.Entry<Long, String> state : states.entrySet()) {
+                updateApiState(connection, state.getKey(), state.getValue());
+            }
+        });
     }
 
     /**

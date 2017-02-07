@@ -22,7 +22,6 @@
 
 package org.digijava.kernel.persistence;
 
-import java.io.Closeable;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -41,7 +40,6 @@ import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.startup.HibernateSessionRequestFilter;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -56,6 +54,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.jdbc.Work;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metadata.ClassMetadata;
 
@@ -757,4 +756,20 @@ public class PersistenceManager {
         catch(Exception e){};
     }
 
+    /**
+     * Execute Work in a new session and wrapped by a transaction. Useful for xml batch bsh scripts.
+     * @param work work to be executed
+     */
+    public static void doWorkInTransaction(Work work) {
+        Session session = PersistenceManager.openNewSession();
+        Transaction tx = session.beginTransaction();
+        try {
+            session.doWork(work);
+        } catch (Throwable e) {
+            tx.rollback();
+            throw e;
+        } finally {
+            PersistenceManager.closeSession(session);
+        }
+    }
 }

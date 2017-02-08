@@ -12,7 +12,6 @@ import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.digijava.kernel.services.sync.model.ListDiff;
-import org.digijava.kernel.services.sync.model.TranslationsDiff;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,7 +31,7 @@ public class TestAmpOfflineDiff {
         diff.setWorkspaceMembers(new ListDiff<>(Collections.emptyList(), Arrays.asList(1L, 2L)));
         diff.setUsers(new ListDiff<>(Collections.emptyList(), Collections.singletonList(122L)));
         diff.setActivities(new ListDiff<>(Collections.singletonList("a"), Arrays.asList("b", "c")));
-        diff.setTranslations(new TranslationsDiff());
+        diff.setTranslations(true);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String diffAsJsonString = objectMapper.writeValueAsString(diff);

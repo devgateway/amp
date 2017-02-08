@@ -21,7 +21,7 @@
       "$ref": "#/definitions/incrementalDiffForStrings"
     },
     "translations": {
-      "$ref": "#/definitions/diffForStrings"
+      "type": "boolean"
     }
   },
   "required": ["workspaces", "global-settings", "workspace-members", "users", "activities"],
@@ -61,21 +61,6 @@
         }
       },
       "required": ["removed", "saved"]
-    },
-    "diffForStrings": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/incrementalDiffForStrings"
-        },
-        {
-          "properties": {
-            "incremental": {
-              "type": "boolean"
-            }
-          },
-          "required": ["incremental"]
-        }
-      ]
     }
   }
 }

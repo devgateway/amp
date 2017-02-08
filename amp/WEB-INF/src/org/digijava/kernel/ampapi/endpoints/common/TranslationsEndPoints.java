@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -20,13 +20,10 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.TranslationManager;
 
@@ -115,5 +112,45 @@ public class TranslationsEndPoints {
 			}
 		}
 		return languages;
+	}
+
+	/**
+	 * Translate a list of labels in multiple languages at once.
+	 * Query parameters:
+	 * <ul><li>translations - pipe separated list of two letter locale codes</ul>
+	 * </p>
+	 * If translations are not specified then the default one is used.
+	 * <p>
+	 * Request body is a list of labels.
+	 *
+	 * <h3>Sample Request:</h3>
+	 * GET /rest/translations/translate?translations=en|fr
+	 * <p>
+	 * Body:
+	 * <pre>
+	 * ["User", "Password"]
+	 * </pre>
+	 *
+	 * <h3>Sample Response:</h3>
+	 * <pre>
+	 * {
+	 *   "User": {
+	 *     "en": "user",
+	 *     "fr": "utilisateur"
+	 *   },
+	 *   "Password": {
+	 *     "en": "Password",
+	 *     "fr": "Mot de Passe"
+	 *   }
+	 * }
+	 * </pre>
+	 * @implicitParam translations|string|query
+	 */
+	@POST
+	@Path("/translate")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Map<String, Map<String, String>> translateLabels(List<String> labels) {
+	 	return TranslationUtil.translateLabels(labels);
 	}
 }

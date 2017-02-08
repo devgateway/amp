@@ -1,10 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -28,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Content Translator
@@ -325,4 +331,15 @@ public class TranslationUtil {
         return field;
     }
 
+    public static Map<String, Map<String, String>> translateLabels(List<String> labels) {
+        return labels.stream().collect(Collectors.toMap(Function.identity(), TranslationUtil::translateLabel));
+    }
+
+    public static Map<String, String> translateLabel(String label) {
+        Set<String> trnLocaleCodes = InterchangeUtils.getTranslationSettings().getTrnLocaleCodes();
+        Site site = SiteUtils.getDefaultSite();
+        return trnLocaleCodes.stream().collect(
+                Collectors.toMap(Function.identity(),
+                        locale -> TranslatorWorker.translateText(label, locale, site)));
+    }
 }

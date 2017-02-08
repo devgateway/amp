@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -54,6 +55,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metadata.ClassMetadata;
@@ -757,14 +759,37 @@ public class PersistenceManager {
     }
 
     /**
-     * Execute Work in a new session and wrapped by a transaction. Useful for xml batch bsh scripts.
+     * Execute Work in a new session and wrapped by a transaction.
+     * Useful for accessing db outside of http request.
      * @param work work to be executed
      */
     public static void doWorkInTransaction(Work work) {
+        doInTransaction(session -> {
+            session.doWork(work);
+            return Void.class;
+        });
+    }
+
+    /**
+     * Execute ReturningWork in a new session and wrapped by a transaction.
+     * Useful for accessing db outside of http request.
+     * @param returningWork returning work to be executed
+     */
+    public static <T> T doReturningWorkInTransaction(ReturningWork<T> returningWork) {
+        return doInTransaction(session -> session.doReturningWork(returningWork));
+    }
+
+    /**
+     * Execute a function inside a transaction.
+     * @param fn takes as input hibernate session
+     * @param <R> return type
+     * @return result of the function
+     */
+    private static <R> R doInTransaction(Function<Session, R> fn) {
         Session session = PersistenceManager.openNewSession();
         Transaction tx = session.beginTransaction();
         try {
-            session.doWork(work);
+            return fn.apply(session);
         } catch (Throwable e) {
             tx.rollback();
             throw e;

@@ -172,6 +172,15 @@
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
+
+	<filter>
+		<filter-name>ampOfflineClientDetector</filter-name>
+		<filter-class>org.digijava.kernel.ampapi.filters.AmpOfflineClientDetectorFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ampOfflineClientDetector</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
 	
 	<!-- Jersey Servlet  -->
 	<servlet>

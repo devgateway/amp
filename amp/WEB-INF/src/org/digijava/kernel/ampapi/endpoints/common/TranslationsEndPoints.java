@@ -36,8 +36,11 @@ public class TranslationsEndPoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<AvailableMethod> getAvailableFilters() {
 		return EndpointUtils.getAvailableMethods(TranslationsEndPoints.class.getName());
-	}	
-	
+	}
+
+	/**
+	 * @implicitParam User-Agent|string|header
+	 */
 	@POST
 	@Path("/label-translations")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -47,6 +50,9 @@ public class TranslationsEndPoints {
 		return getLangPack(null, param);
 	}
 
+	/**
+	 * @implicitParam User-Agent|string|header
+	 */
 	@POST
 	@Path("/translate-labels/{langCode}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -147,6 +153,7 @@ public class TranslationsEndPoints {
 	 * }
 	 * </pre>
 	 * @implicitParam translations|string|query
+	 * @implicitParam User-Agent|string|header
 	 */
 	@POST
 	@Path("/translate")

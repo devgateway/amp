@@ -1,11 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toMap;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteUtils;
@@ -33,7 +37,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Content Translator
@@ -331,15 +334,43 @@ public class TranslationUtil {
         return field;
     }
 
+    /**
+     * Translates a list of labels in multiple languages and returns them grouped by label and locale.
+     *
+     * @param labels labels to be translated
+     * @return translated labels grouped by label and locale
+     */
     public static Map<String, Map<String, String>> translateLabels(List<String> labels) {
-        return labels.stream().collect(Collectors.toMap(Function.identity(), TranslationUtil::translateLabel));
+        return labels.stream().collect(toMap(Function.identity(), TranslationUtil::translateLabel));
     }
 
-    public static Map<String, String> translateLabel(String label) {
+    /**
+     * Translate one label in multiple languages and return translaitons grouped by locale.
+     * @param label label to be translated
+     * @return translated labels grouped by locale
+     */
+    private static Map<String, String> translateLabel(String label) {
         Set<String> trnLocaleCodes = InterchangeUtils.getTranslationSettings().getTrnLocaleCodes();
         Site site = SiteUtils.getDefaultSite();
-        return trnLocaleCodes.stream().collect(
-                Collectors.toMap(Function.identity(),
-                        locale -> TranslatorWorker.translateText(label, locale, site)));
+        return trnLocaleCodes.stream()
+                .collect(toMap(Function.identity(), locale -> TranslatorWorker.translateText(label, locale, site)));
+    }
+
+    /**
+     * Group translations by label, then by locale.
+     *
+     * Note: This output is prepared for AMP Offline thus translations are grouped by label instead of key.
+     * There are cases when two different keys have the same label. This leads to a situation when we cannot build
+     * this map because of collisions. In order to deal with this reality we are filtering all translations for which
+     * key does not coincide with hash of label. {@link Translation#labelMatchesKey()}
+     *
+     * @param translations a list of translation to be grouped
+     * @return translated labels grouped by label and locale
+     */
+    public static Map<String, Map<String, String>> groupByLabelAndLocale(List<Translation> translations) {
+        return translations.stream()
+                .filter(Translation::labelMatchesKey)
+                .collect(groupingBy(Translation::getLabel,
+                        toMap(Translation::getLocale, Translation::getTranslatedLabel)));
     }
 }

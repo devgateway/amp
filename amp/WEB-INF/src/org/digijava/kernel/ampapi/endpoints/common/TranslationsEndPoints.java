@@ -117,11 +117,13 @@ public class TranslationsEndPoints {
 	/**
 	 * Translate a list of labels in multiple languages at once.
 	 * Query parameters:
-	 * <ul><li>translations - pipe separated list of two letter locale codes</ul>
+	 * <ul><li>translations - optional pipe separated list of two letter locale codes</ul>
 	 * </p>
 	 * If translations are not specified then the default one is used.
 	 * <p>
 	 * Request body is a list of labels.
+	 * <p>
+	 * Response body is map of translation grouped by labels and locale code.
 	 *
 	 * <h3>Sample Request:</h3>
 	 * GET /rest/translations/translate?translations=en|fr

@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.sync;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -11,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
@@ -19,6 +21,7 @@ import org.digijava.kernel.ampapi.endpoints.util.types.ISO8601TimeStamp;
 import org.digijava.kernel.ampapi.endpoints.util.types.ListOfLongs;
 import org.digijava.kernel.services.sync.SyncService;
 import org.digijava.kernel.services.sync.model.SystemDiff;
+import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SpringUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.TeamUtil;
@@ -124,6 +127,54 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     public List<AmpTeam> getWorkspaces(@DefaultValue("false") @QueryParam("management") Boolean includeManagement,
             @DefaultValue("false") @QueryParam("private") Boolean includePrivate) {
         return TeamUtil.getAllTeams(includeManagement, includePrivate);
+    }
+
+    /**
+     * Returns translations that were changed since last sync.
+     *
+     * For initial sync last-sync-time must be omitted. In this case it will return all translations. For incremental
+     * updates clients should specify last-sync-time returned by last call to GET /sync.
+     * <p>
+     * If a translation to a requested language is missing then it will also be missing in response. There is no
+     * fallback mechanism that returns translation from default or English language.
+     * <p>
+     * Query parameters:
+     * <ul><li>translations - optional pipe separated list of two letter locale codes
+     * <li>last-sync-time - optional timestamp of last synchronization time in ISO8601 format</ul>
+     * </p>
+     * If translations are not specified then the default one is used.
+     * <p>
+     * Response body is map of translation grouped by labels and locale code.
+     *
+     * <h3>Sample Request:</h3>
+     * GET /rest/translations/translate?translations=en|it
+     * <p>
+     * Body:
+     * <pre>
+     * ["User", "Password"]
+     * </pre>
+     *
+     * <h3>Sample Response:</h3>
+     * <pre>
+     * {
+     *   "User": {
+     *     "en": "user",
+     *     "it": "utente"
+     *   },
+     *   "Password": {
+     *     "en": "Password"
+     *   }
+     * }
+     * </pre>
+     * @implicitParam translations|string|query
+     */
+    @GET
+    @Path("/translations")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Map<String, Map<String, String>> getTranslationsToSync(
+            @QueryParam("last-sync-time") ISO8601TimeStamp lastSyncTime) {
+        List<Translation> translations = syncService.getTranslationsToSync(lastSyncTime);
+        return TranslationUtil.groupByLabelAndLocale(translations);
     }
 
     @Override

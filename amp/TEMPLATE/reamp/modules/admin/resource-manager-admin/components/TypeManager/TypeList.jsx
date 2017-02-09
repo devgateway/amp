@@ -1,7 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import TypeList from '../TypeManager/TypeList.jsx'
-
-export default class HomePage extends Component {
+export default class TypeList extends Component {
 
     // This seems to be a way to validate this component receives some props.
     /*    static propTypes = {
@@ -35,16 +32,9 @@ export default class HomePage extends Component {
         console.log('render');
 
         return (
-            <div >
-                <div>
-                    {this.__('amp.resource-manager:resource-manager-title')}
-                </div>
-                <div>
-                    <TypeList/>
-                </div>
+            <div>
+                El de adentro:{this.__('amp.resource-manager:resource-manager-title')}
             </div>
         );
     }
 }
-
-//http://stackoverflow.com/questions/33455166/how-to-set-up-babel-6-stage-0-with-react-and-webpack

@@ -28,7 +28,8 @@ define(['marionette', 'translationManager',
 		});
 
 		app.TabsApp.listenTo(app.TabsApp.settingsWidget, 'applySettings', function() {
-			GridManager.filter(app.TabsApp.currentTab.get('id'), app.TabsApp.serializedFilters, app.TabsApp.settingsWidget.toAPIFormat());
+			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize() || {};
+			GridManager.filter(app.TabsApp.currentTab.get('id'), app.TabsApp.serializedFilters.filters, app.TabsApp.settingsWidget.toAPIFormat());
 			SettingsManager.updateLegend(app.TabsApp.settingsWidget.toAPIFormat());
 			$('#settings-popup').hide();
 		});

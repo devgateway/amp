@@ -32,14 +32,7 @@ public class ReportAreaForTests extends ReportAreaImpl {
 	
 	public ReportAreaForTests(AreaOwner owner, String...contents) {
 		this.owner = owner;
-		
-		switch(contents.length) {
-			case 0:
-				return;
-				
-			default:
-				this.contents = buildContents(contents);
-		}
+		this.contents = buildContents(contents);
 	}
 	
 	public ReportAreaForTests withChildren(ReportArea...children) {

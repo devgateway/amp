@@ -108,6 +108,12 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			"third activity with agreements",
 			"activity with tertiary_program"
 		);
+
+	final List<String> indicatorActs = Arrays.asList(
+			"activity 1 with agreement",
+			"activity 1 with indicators",
+			"activity 2 with indicators"
+	);
 	
 	final static List<String> hierarchiesToTry = Arrays.asList(
 			ColumnConstants.STATUS, ColumnConstants.IMPLEMENTATION_LEVEL, 

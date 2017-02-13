@@ -19,10 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				CREATE OR REPLACE VIEW v_indicator_actualvalue AS
-				SELECT con.activity_id AS amp_activity_id, val.value AS name, con.id AS amp_me_indicator_id
-				FROM amp_indicator_connection con, amp_indicator_values val
-				WHERE val.ind_connect_id = con.id AND val.value_type = 1 AND con.sub_clazz::text = 'a'::text;
+				CREATE OR REPLACE VIEW v_indicator_risk AS
+				SELECT con.activity_id AS amp_activity_id, max(rr.rating_name) AS risk, con.id AS indicator_connection_id
+				FROM amp_indicator_connection con, amp_indicator_values val, amp_indicator_risk_ratings rr
+				WHERE val.ind_connect_id = con.id AND con.sub_clazz::text = 'a'::text AND val.risk=rr.amp_ind_risk_ratings_id
+				GROUP BY con.activity_id, con.id;
 			</lang>
 		</script>
 	</apply>

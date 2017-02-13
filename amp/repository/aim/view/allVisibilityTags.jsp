@@ -185,7 +185,8 @@
 <field:display name="Non-archived Activities" feature="Workspace Info"></field:display>
 <field:display name="Archived Activities" feature="Workspace Info"></field:display>
 <feature:display name="Language Option" module="Tools"></feature:display>
-<feature:display name="Activity" module="M & E"></feature:display> 
+<feature:display name="Activity" module="M & E"></feature:display>
+<feature:display name="M & E" module="M & E"></feature:display>
 <feature:display name="AddMessageButton" module="Messages"></feature:display> 
 <feature:display name="Admin - Component Type" module="Components"></feature:display> 
 <feature:display name="Admin - Component" module="Components"></feature:display> 
@@ -687,14 +688,25 @@ deleted 6 fields, do not reinsert
 <field:display name="Implementing Agency" feature="Implementing Agency"></field:display>
 <field:display name="Inbox Alert" feature="Alert tab"></field:display> 
 <field:display name="Inbox Message" feature="Message tab"></field:display> 
-<field:display name="Indicator Base Value" feature="Activity"></field:display> 
-<field:display name="Indicator Current Value" feature="Activity"></field:display> 
-<field:display name="Indicator Description" feature="Activity"></field:display> 
+<field:display name="Indicator Base Value" feature="Activity"></field:display>
+<field:display name="Indicator Base Date" feature="M & E"></field:display>
+<field:display name="Indicator Base Comment" feature="M & E"></field:display>
+<field:display name="Indicator Current Value" feature="Activity"></field:display>
+<field:display name="Indicator Current Date" feature="M & E"></field:display>
+<field:display name="Indicator Current Comment" feature="M & E"></field:display>
+<field:display name="Indicator Description" feature="Activity"></field:display>
 <field:display name="Indicator ID" feature="Activity"></field:display> 
-<field:display name="Indicator Name" feature="Activity"></field:display> 
-<field:display name="Indicator Target Value" feature="Activity"></field:display> 
-<field:display name="Indicator Type" feature="Admin"></field:display> 
-<field:display name="Indicator code" feature="Admin"></field:display> 
+<field:display name="Indicator Name" feature="Activity"></field:display>
+<field:display name="Indicator Creation Date" feature="M & E"></field:display>
+<field:display name="Indicator Sector" feature="M & E"></field:display>
+<field:display name="Indicator Revised Target Value" feature="M & E"></field:display>
+<field:display name="Indicator Revised Target Date" feature="M & E"></field:display>
+<field:display name="Indicator Revised Target Comment" feature="M & E"></field:display>
+<field:display name="Indicator Target Value" feature="Activity"></field:display>
+<field:display name="Indicator Target Date" feature="M & E"></field:display>
+<field:display name="Indicator Target Comment" feature="M & E"></field:display>
+<field:display name="Indicator Type" feature="Admin"></field:display>
+<field:display name="Indicator code" feature="Admin"></field:display>
 <field:display name="Admin Indicator name" feature="Admin"></field:display> 
 <field:display name="Internal Financing" feature="Admin NPD"></field:display> 
 <field:display name="Issue Date" feature="Issues"></field:display> 

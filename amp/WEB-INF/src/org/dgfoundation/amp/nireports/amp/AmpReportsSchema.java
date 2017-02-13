@@ -66,15 +66,14 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ComponentsDimension;
+import org.dgfoundation.amp.nireports.amp.dimensions.IndicatorConnectionDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
-import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
@@ -141,6 +140,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimension pledgesDimension = SqlSourcedNiDimension.buildDegenerateDimension("pledges", "amp_funding_pledges", "id");
 	public final static NiDimension usersDimension = SqlSourcedNiDimension.buildDegenerateDimension("users", "dg_user", "id");
 	public final static NiDimension departmentsDimension = SqlSourcedNiDimension.buildDegenerateDimension("departments", "amp_departments", "id_department");
+	public final static IndicatorConnectionDimension indicatorsDimension = IndicatorConnectionDimension.instance;
 	    
 	/**
 	 * the pseudocolumn of the header Splitter for cells which are funding flows
@@ -207,7 +207,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Sum of Actual Disbursements / Sum (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). ");
 		put(null, null);
 	}};
-	
+
+	// the indicator-based NiDimensionUsage's
+	public final static NiDimensionUsage INDICATOR_DIM_USG = indicatorsDimension.getDimensionUsage("Indicator");
+	public final static LevelColumn INDICATOR_LEVEL_COLUMN = INDICATOR_DIM_USG.getLevelColumn(IndicatorConnectionDimension.LEVEL_INDICATOR);
+	public final static LevelColumn INDICATOR_CONN_LEVEL_COLUMN = INDICATOR_DIM_USG.getLevelColumn(IndicatorConnectionDimension.LEVEL_INDICATOR_CONN);
+
 	// the organisation-based NiDimensionUsage's
 	public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage(Constants.FUNDING_AGENCY);
 	public final static NiDimensionUsage IA_DIM_USG = orgsDimension.getDimensionUsage(Constants.IMPLEMENTING_AGENCY);
@@ -347,6 +352,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.RESULTS, "v_results", DG_EDITOR_POSTPROCESSOR);
 		no_entity(ColumnConstants.PURPOSE, "v_purposes", DG_EDITOR_POSTPROCESSOR);
 		no_entity(ColumnConstants.PROGRAM_DESCRIPTION, "v_program_description", DG_EDITOR_POSTPROCESSOR);
+
+		addIndicatorColumns();
+
 		degenerate_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit", catsDimension);
 		no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
 		
@@ -564,7 +572,35 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
 		
 	}
-	
+
+	private void addIndicatorColumns() {
+		single_dimension(ColumnConstants.INDICATOR_NAME, "v_indicator_name", INDICATOR_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.INDICATOR_TYPE, "v_indicator_type", INDICATOR_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.INDICATOR_DESCRIPTION, "v_indicator_description", INDICATOR_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.INDICATOR_CODE, "v_indicator_code", INDICATOR_LEVEL_COLUMN);
+		date_column(ColumnConstants.INDICATOR_CREATION_DATE, "v_indicator_creation_date", INDICATOR_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.INDICATOR_SECTOR, "v_indicator_sectors", INDICATOR_LEVEL_COLUMN);
+
+		single_dimension(ColumnConstants.INDICATOR_RISK, "v_indicator_risk", INDICATOR_CONN_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "v_indicator_logframe_category", INDICATOR_CONN_LEVEL_COLUMN);
+
+		single_dimension(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue", INDICATOR_CONN_LEVEL_COLUMN);
+		date_column(ColumnConstants.INDICATOR_ACTUAL_DATE, "v_indicator_actual_date", INDICATOR_CONN_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.INDICATOR_ACTUAL_COMMENT, "v_indicator_actual_comment", INDICATOR_CONN_LEVEL_COLUMN);
+
+		single_dimension(ColumnConstants.INDICATOR_BASE_VALUE, "v_indicator_basevalue", INDICATOR_CONN_LEVEL_COLUMN);
+		date_column(ColumnConstants.INDICATOR_BASE_DATE, "v_indicator_base_date", INDICATOR_CONN_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.INDICATOR_BASE_COMMENT, "v_indicator_base_comment", INDICATOR_CONN_LEVEL_COLUMN);
+
+		single_dimension(ColumnConstants.INDICATOR_TARGET_VALUE, "v_indicator_targetvalue", INDICATOR_CONN_LEVEL_COLUMN);
+		date_column(ColumnConstants.INDICATOR_TARGET_DATE, "v_indicator_target_date", INDICATOR_CONN_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.INDICATOR_TARGET_COMMENT, "v_indicator_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
+
+		single_dimension(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, "v_indicator_revised_target_value", INDICATOR_CONN_LEVEL_COLUMN);
+		date_column(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, "v_indicator_revised_target_date", INDICATOR_CONN_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, "v_indicator_revised_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
+	}
+
 	protected void addFormulaMeasures() {
 		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
 		addFormulaAverageComputedMeasure(MeasureConstants.AVERAGE_DISBURSEMENT_RATE, PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));

@@ -384,16 +384,9 @@ NormalReportManager.prototype.checkMeasures	= function () {
 	var ulEl			= document.getElementById("dest_measures_ul") ;
 	var items			= ulEl.getElementsByTagName("li");
 	measuresMustEl		= document.getElementById("measuresMust");
-	if ( items.length > 0 ) {		
-		measuresMustEl.style.visibility="hidden";
-		this.enableSave();
-		return true;
-	}
-	else {
-		measuresMustEl.style.visibility="";
-		this.disableSave();
-		return false;
-	}
+	measuresMustEl.style.visibility="hidden";
+	this.enableSave();
+	return true;
 };
 
 NormalReportManager.prototype.checkHierarchies	= function () {

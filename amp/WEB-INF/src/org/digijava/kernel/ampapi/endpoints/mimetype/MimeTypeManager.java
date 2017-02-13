@@ -95,7 +95,7 @@ public class MimeTypeManager {
 	 * 
 	 * @param updatedMimeTypes
 	 */
-	public void updateMimeTypesConfig(Set<String> updatedMimeTypes) {
+	public void updateMimeTypesConfig(List<String> updatedMimeTypes) {
 		Session session = PersistenceManager.getCurrentSession();
 		
 		List<AmpMimeType> mimeTypesToBeDeleted = getMimeTypesToBeDeleted(updatedMimeTypes);
@@ -109,7 +109,7 @@ public class MimeTypeManager {
 	 * @param updatedMimeTypes
 	 * @return
 	 */
-	private List<AmpMimeType> getMimeTypesToBeDeleted(Set<String> updatedMimeTypes) {
+	private List<AmpMimeType> getMimeTypesToBeDeleted(List<String> updatedMimeTypes) {
 		List<AmpMimeType> mimeTypesToBeDeleted = getDbAmpMimeTypes().stream()
 				.filter(m -> !updatedMimeTypes.contains(m.getName()))
 				.collect(Collectors.toList());

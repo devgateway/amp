@@ -1,8 +1,8 @@
 // @flow
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import Home from "../components/HomePage/Home";
-import * as HomePageActions from "../actions/HomeActions.jsx";
+import App from "../components/Layout/App.jsx";
+import * as AppActions from "../actions/AppActions";
 
 function mapStateToProps(state) {
     console.log('mapStateToProps');
@@ -12,7 +12,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch, ownProps) {
     console.log('mapDispatchToPropsHomePageActions');
-    return bindActionCreators(HomePageActions, dispatch, ownProps);
+    return bindActionCreators(AppActions, dispatch, ownProps);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

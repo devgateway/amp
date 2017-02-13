@@ -1,8 +1,7 @@
 // @flow
-import { STATE_TRANSLATIONS_LOADED } from '../actions/StartUpAction.jsx';
+import { STATE_TRANSLATIONS_LOADED } from "../actions/StartUpAction.jsx";
 
 const defaultState = {
-    loading: false,
     translations: {}
 };
 
@@ -16,10 +15,8 @@ export default function startUp(state: Object = defaultState, action: Object) {
     console.log('HomePage');
     switch (action.type) {
         case STATE_TRANSLATIONS_LOADED:
-            debugger;
             return Object.assign({}, state, {
-                loggedIn: true,
-                translations:action.actionData.translations,
+                translations: action.actionData.translations,
             });
         default:
             return state;

@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import TypeList from '../TypeManager/TypeList.jsx'
+import React, { Component, PropTypes } from "react";
+import TypeList from "./TypeManager/TypeList.jsx";
 
 export default class HomePage extends Component {
 
@@ -20,31 +20,23 @@ export default class HomePage extends Component {
     }
 
     componentDidMount() {
-        debugger;
-        console.log(this.props);
+        this.props.loadAvailableTypes();
+        this.props.loadAllowedTypes();
     }
 
     render() {
-        /*
-         const { options, value } = this.state;
-         const selectedCount = value.length;
-         const availableCount = options.length - selectedCount;
-         */
         this.__ = key => this.props.startUp.translations[key];
-
-        console.log('render');
-
         return (
             <div >
                 <div>
                     {this.__('amp.resource-manager:resource-manager-title')}
                 </div>
                 <div>
-                    <TypeList/>
+                    <TypeList mimeTypesAvailable={this.props.homePage.mimeTypesAvailable}
+                              mimeTypesAllowed={this.props.homePage.mimeTypesAllowed}
+                              saveAllowedTypes={this.props.saveAllowedTypes}/>
                 </div>
             </div>
         );
     }
 }
-
-//http://stackoverflow.com/questions/33455166/how-to-set-up-babel-6-stage-0-with-react-and-webpack

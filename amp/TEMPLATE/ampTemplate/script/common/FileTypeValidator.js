@@ -5,7 +5,7 @@ Utility class for validation file types by extensions
 */
 
 FileTypeValidator = {
-	rootURL : '/rest/mimetypes/allowed',
+	rootURL : '/rest/filetypes/allowed',
 	enabled : false,
 	errorMessage: 'The file does not have a valid extension',
 	extensions : [], 

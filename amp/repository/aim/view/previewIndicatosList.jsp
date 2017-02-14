@@ -116,9 +116,7 @@
                                     </td>
                                     <td width="20%">
                                         <field:display name="Date ${fieldName} Value" feature="Activity">
-                                            <span class="word_break"><fmt:formatDate type="date"
-                                                                                     value="${value.valueDate}"
-                                                                                     dateStyle="short"/></span>
+                                            <span class="word_break"><aim:formatDate value="${value.valueDate}"> </aim:formatDate></span>
                                         </field:display>
                                     </td>
                                 </tr>

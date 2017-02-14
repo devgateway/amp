@@ -290,6 +290,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	protected final static AmpFundingColumn donorFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_DONOR_FUNDING, "v_ni_donor_funding");
 	protected final static AmpFundingColumn pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding");
 	protected final static AmpFundingColumn componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding");
+
+	/**
+	 * Hierarchies that are allowed only for measureless reports.
+	 * Since Indicators are not linked to funding we cannot use hierarchies by indicator since it would lead to double counting.
+	 */
+	public static final List<String> ONLY_MEASURELESS_HIERARCHIES = Arrays.asList(ColumnConstants.INDICATOR_NAME);
 	
 	/**
 	 * the constructor defines all the columns and measures of the schema. Since this involves scanning the database quite a lot, this constructor is SLOW

@@ -128,6 +128,10 @@ YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
 YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"]= new Array(
 	);
 
+YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"]= new Array(
+	'Indicator Name'
+);
+
 function insertColInfo (id, name) {
 		YAHOO.amp.reportwizard.colIdToName[id]=name;
 }
@@ -244,3 +248,14 @@ function generateHierarchies(e) {
 	repManager.showHideHierarchies();
 }
 
+function findMeasurelessOnlyHiers(hiersColIds) {
+	return hiersColIds.map(colIdToName).filter(isMeasurelessOnlyHierarchy);
+}
+
+function isMeasurelessOnlyHierarchy(colName) {
+	return YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"].indexOf(colName) !== -1
+}
+
+function colIdToName(id) {
+	return YAHOO.amp.reportwizard.colIdToName[id];
+}

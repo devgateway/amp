@@ -675,10 +675,10 @@ public class ExportActivityToWord extends Action {
                                 if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
                                     generateOverAllTableRows(additionalInfoSubTable, valueLabel, (value.getValue() != null ? value.getValue().toString() : null), null);
                                 }
-                                if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
+                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Comment")) {
                                     generateOverAllTableRows(additionalInfoSubTable, commentLabel, DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);
                                 }
-                                if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
+                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Date")) {
                                     generateOverAllTableRows(additionalInfoSubTable, dateLabel, (value.getValueDate() != null ? DateConversion.convertDateToLocalizedString(value.getValueDate()) : null), null);
                                 }
 

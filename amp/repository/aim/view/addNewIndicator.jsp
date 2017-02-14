@@ -64,7 +64,7 @@ function addNewIndicator(){
     return false;
   }
   
-  <field:display name="Indicator Type" feature="Admin">
+  <field:display name="Admin Indicator Type" feature="Admin">
   
   if(document.aimNewIndicatorForm.type.value!="A"&&document.aimNewIndicatorForm.type.value!="D"){
       <c:set var="translation">
@@ -244,7 +244,7 @@ function closeWindow() {
             </td>
           </tr>
           </field:display>
-          <field:display name="Indicator code" feature="Admin"></field:display>
+          <field:display name="Admin Indicator code" feature="Admin"></field:display>
           <tr>
             <td class="addNewIndicatorLabel">
             	<digi:trn key="admin:indicatorcode">
@@ -257,7 +257,7 @@ function closeWindow() {
             </td>
           </tr>
           
-          <field:display name="Indicator Type" feature="Admin">
+          <field:display name="Admin Indicator Type" feature="Admin">
           <tr>
           	<td class="addNewIndicatorLabel"><digi:trn key="admin:indicatorType">Indicator Type</digi:trn>: <span style="color:Red;">*</span></td>
           	<td><html:select name="aimNewIndicatorForm" property="type" styleId="selectSorting">          		

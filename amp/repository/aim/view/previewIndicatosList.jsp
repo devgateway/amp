@@ -14,17 +14,17 @@
             <c:forEach var="indicator" items="${aimEditActivityForm.indicators}">
                 <tr bgcolor="#f0f0f0">
                     <td width="40%">
-                        <field:display name="Indicator Name" feature="Activity">
+`                        <field:display name="Indicator Name" feature="M & E">
                             <digi:trn key="me:name">Name</digi:trn>
                         </field:display>
                     </td>
                     <td width="10%">
-                        <field:display name="Indicator Name" feature="Activity">
+                        <field:display name="Indicator Name" feature="M & E">
                             <digi:trn key="me:code">Code</digi:trn>
                         </field:display>
                     </td>
                     <td width="10%">
-                        <field:display name="Logframe Category" feature="Activity">
+                        <field:display name="Logframe Category" feature="M & E">
                             <digi:trn key="me:logFrame">LogFrame</digi:trn>
                         </field:display>
                     </td>
@@ -36,17 +36,17 @@
                 </tr>
                 <tr>
                     <td width="40%" valign="top">
-                        <field:display name="Indicator Name" feature="Activity">
+                        <field:display name="Indicator Name" feature="M & E">
                             <span class="word_break bold">${indicator.indicator.name}</span>
                         </field:display>
                     </td>
                     <td width="10%" valign="top">
-                        <field:display name="Indicator Name" feature="Activity">
+                        <field:display name="Indicator Name" feature="M & E">
                             <span class="word_break bold">${indicator.indicator.code}</span>
                         </field:display>
                     </td>
                     <td width="10%" valign="top">
-                        <field:display name="Logframe Category" feature="Activity">
+                        <field:display name="Logframe Category" feature="M & E">
                             <c:if test="${not empty indicator.values}">
                                 <span class="word_break bold">${indicator.logFrame}</span>
                             </c:if>
@@ -105,17 +105,17 @@
 												<digi:trn key="me:${fieldNameLabel}">${fieldNameLabel}</digi:trn>
 												</span></td>
                                     <td width="10%">
-                                        <field:display name="Indicator ${fieldName} Value" feature="Activity">
+                                        <field:display name="Indicator ${fieldName} Value" feature="M & E">
                                             <span class="word_break"><aim:formatNumber value="${value.value}"/></span>
                                         </field:display>
                                     </td>
                                     <td width="50%">
-                                        <field:display name="Comments ${fieldName} Value" feature="Activity">
+                                        <field:display name="Indicator ${fieldName} Comment" feature="M & E">
                                             <span class="word_break">${fn:escapeXml(value.comment)}</span>
                                         </field:display>
                                     </td>
                                     <td width="20%">
-                                        <field:display name="Date ${fieldName} Value" feature="Activity">
+                                        <field:display name="Indicator ${fieldName} Date" feature="M & E">
                                             <span class="word_break"><fmt:formatDate type="date"
                                                                                      value="${value.valueDate}"
                                                                                      dateStyle="short"/></span>

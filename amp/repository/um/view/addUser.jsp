@@ -475,6 +475,13 @@
 													</html:checkbox></td>
 											</tr>
 											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align="right"  class="formCheckContainer"><digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn></td>
+												<td class=f-names align="left">
+													<html:checkbox property="nationalCoordinator" styleClass="inp-text">
+													</html:checkbox></td>
+											</tr>
+											<tr>
 												<td>&nbsp;</td>
 												<td align="right" class="addUserButContainer">
 													<c:set var="btnSubmit">

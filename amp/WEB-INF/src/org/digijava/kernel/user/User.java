@@ -433,7 +433,7 @@ public class User
 	public void setPledger(Boolean pledger) {
 		this.pledger = pledger;
 	}
-
+	
 	@Override
 	public int compareTo(Object o) {
 		// TODO Auto-generated method stub

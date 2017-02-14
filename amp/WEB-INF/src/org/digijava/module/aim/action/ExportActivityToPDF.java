@@ -1463,10 +1463,10 @@ public class ExportActivityToPDF extends Action {
                             if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
                                 columnVal += valueLabel + ": " + value.getValue() + "\n";
                             }
-                            if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
+                            if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Comment")) {
                                 columnVal += commentLabel + ": " + Strings.nullToEmpty(value.getComment()) + "\n";
                             }
-                            if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
+                            if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Date")) {
                                 columnVal += dateLabel + ": " + DateConversion.convertDateToLocalizedString(value.getValueDate()) + "\n";
                             }
                             PdfPCell valuesCell = new PdfPCell();

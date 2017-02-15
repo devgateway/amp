@@ -73,7 +73,7 @@ var process_spec = function(data) {
 		columns : data.reportMetadata.reportSpec.columns,
 		report_type : data.reportMetadata.reportSpec.reportType,
 		settings_data: data.reportMetadata.settings,
-		report_updated_date: data.reportMetadata.reportUpdatedDate
+		page_timestamp: + new Date()
 	};
 	defaults[report_fieldname] = report_identifier;
 	var model = Backbone.Model.extend({

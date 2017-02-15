@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports.schema;
 
 import java.util.Optional;
 
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.nireports.Cell;
 
 /**
@@ -18,10 +19,14 @@ import org.dgfoundation.amp.nireports.Cell;
 public abstract class NiReportColumn<K extends Cell> extends NiReportedEntity<K> {
 	
 	public final Optional<NiDimension.LevelColumn> levelColumn;
-	protected boolean transactionLevelHierarchy = false; 
-		
+	protected boolean transactionLevelHierarchy = false;
+
 	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, Behaviour<?> behaviour, String description) {
-		super(name, behaviour, description);
+		this(name, new LocalizableLabel(name), levelColumn, behaviour, description);
+	}
+
+	protected NiReportColumn(String name, LocalizableLabel label, NiDimension.LevelColumn levelColumn, Behaviour<?> behaviour, String description) {
+		super(name, label, behaviour, description);
 		this.levelColumn = Optional.ofNullable(levelColumn);
 	}
 		

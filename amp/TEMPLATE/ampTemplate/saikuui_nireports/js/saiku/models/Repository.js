@@ -106,7 +106,7 @@ var SavedQuery = Backbone.Model.extend({
             settings_data: model.get('settings_data'),
             hierarchies: model.get('hierarchies'),
             columns: model.get('columns'),
-            report_updated_date: model.get('report_updated_date')
+            page_timestamp: model.get('page_timestamp')
         },{
             name: filename
         });

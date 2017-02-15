@@ -1,30 +1,30 @@
-package org.digijava.kernel.ampapi.endpoints.mimetype;
+package org.digijava.kernel.ampapi.endpoints.filetype;
 
 /**
- *  This class represents a response obtained from the mime type validation
+ *  This class represents a response obtained from the file type validation
  * 
  * @author Viorel Chihai
  *
  */
-public class MimeTypeValidationResponse {
+public class FileTypeValidationResponse {
 
-	MimeTypeValidationStatus status;
+	FileTypeValidationStatus status;
 	
 	String contentName;
 	String description;
 	String extension;
 	
-	public MimeTypeValidationResponse(MimeTypeValidationStatus status) {
+	public FileTypeValidationResponse(FileTypeValidationStatus status) {
 		this.status = status;
 	}
 	
-	public MimeTypeValidationResponse(MimeTypeValidationStatus status, String contentName, String description) {
+	public FileTypeValidationResponse(FileTypeValidationStatus status, String contentName, String description) {
 		this.status = status;
 		this.contentName = contentName;
 		this.description = description;
 	}
 	
-	public MimeTypeValidationResponse(MimeTypeValidationStatus status, String contentName, String description, String extension) {
+	public FileTypeValidationResponse(FileTypeValidationStatus status, String contentName, String description, String extension) {
 		super();
 		this.status = status;
 		this.contentName = contentName;
@@ -32,11 +32,11 @@ public class MimeTypeValidationResponse {
 		this.extension = extension;
 	}
 
-	public MimeTypeValidationStatus getStatus() {
+	public FileTypeValidationStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(MimeTypeValidationStatus status) {
+	public void setStatus(FileTypeValidationStatus status) {
 		this.status = status;
 	}
 

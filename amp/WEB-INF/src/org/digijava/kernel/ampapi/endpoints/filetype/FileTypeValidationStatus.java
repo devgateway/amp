@@ -1,7 +1,7 @@
-package org.digijava.kernel.ampapi.endpoints.mimetype;
+package org.digijava.kernel.ampapi.endpoints.filetype;
 
 /**
- * Possible mime type validation statuses
+ * Possible file type validation statuses
  * *  <li>{@link #ALLOWED}</li>
  * *  <li>{@link #NOT_ALLOWED}</li>
  * *  <li>{@link #CONTENT_EXTENSION_MISMATCH}</li>
@@ -9,7 +9,7 @@ package org.digijava.kernel.ampapi.endpoints.mimetype;
  * @author Viorel Chihai
  *
  */
-public enum MimeTypeValidationStatus {
+public enum FileTypeValidationStatus {
 	
 	ALLOWED(),
 	

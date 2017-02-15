@@ -11,7 +11,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * @author Viorel Chihai
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class AmpMimeType {
+public class AmpFileType {
 
 	Long id;
 
@@ -21,16 +21,21 @@ public class AmpMimeType {
 	@JsonProperty("description")
 	String description;
 
+	@JsonProperty("mimeTypes")
+	List<String> mimeTypes;
+	
 	@JsonProperty("extensions")
 	List<String> extensions;
+	
 
-	public AmpMimeType() {
+	public AmpFileType() {
 	}
 
-	public AmpMimeType(String name, String description, List<String> extensions) {
+	public AmpFileType(String name, String description, List<String> mimeTypes, List<String> extensions) {
 		super();
 		this.name = name;
 		this.description = description;
+		this.mimeTypes = mimeTypes;
 		this.extensions = extensions;
 	}
 
@@ -61,8 +66,17 @@ public class AmpMimeType {
 	public List<String> getExtensions() {
 		return extensions;
 	}
-
+	
 	public void setExtensions(List<String> extensions) {
 		this.extensions = extensions;
 	}
+
+	public List<String> getMimeTypes() {
+		return mimeTypes;
+	}
+
+	public void setMimeTypes(List<String> mimeTypes) {
+		this.mimeTypes = mimeTypes;
+	}
+	
 }

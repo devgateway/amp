@@ -673,7 +673,7 @@ public class ExportActivityToWord extends Action {
                                 additionalInfoSubTable.setWidth(80);
 
                                 if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
-                                    generateOverAllTableRows(additionalInfoSubTable, valueLabel, (value.getValue() != null ? value.getValue().toString() : null), null);
+                                    generateOverAllTableRows(additionalInfoSubTable, valueLabel, (value.getValue() != null ? FormatHelper.formatNumber(value.getValue()) : null), null);
                                 }
                                 if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
                                     generateOverAllTableRows(additionalInfoSubTable, commentLabel, DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);

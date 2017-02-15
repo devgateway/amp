@@ -424,7 +424,7 @@ public class AddUserForm  extends ValidatorForm {
 
         siteId = null;
         addWorkspace=false;
-       
+        nationalCoordinator = false;
     }
 
     /**

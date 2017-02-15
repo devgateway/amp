@@ -472,6 +472,17 @@ public class User
    		return false;
 	}
 
+	public boolean hasNationalCoordinatorGroup(){
+		boolean result = false;
+		Set<Group> groups = this.groups;
+		for (Group group : groups) {
+			if (group.isNationalCoordinatorGroup()) {
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
 	public AmpCategoryValueLocations getRegion() {
 		return region;
 	}

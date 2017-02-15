@@ -283,15 +283,10 @@ public class ViewEditUser extends Action {
                     if(uForm.getWorkspaces() == null){
                     	uForm.setWorkspaces(TeamUtil.getAllTeams());
                     }
-                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());      
                     
-                    Set<Group> groups = user.getGroups();                    
-                    for(Group group : groups){
-                    	if(group.isNationalCoordinatorGroup()){
-                    		uForm.setNationalCoordinator(true);
-                    		break;
-                    	}
-                    }
+                    uForm.setNationalCoordinator(user.hasNationalCoordinatorGroup());
+                   
 //                }
             }
         } else {        	
@@ -349,6 +344,7 @@ public class ViewEditUser extends Action {
 
                     user.setUserLangPreferences(userLangPreferences);
                     user.setPledger(uForm.getPledger());
+                    
                     if (uForm.getNationalCoordinator()) {
                     	user.getGroups().add(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));                    	
                     } else {

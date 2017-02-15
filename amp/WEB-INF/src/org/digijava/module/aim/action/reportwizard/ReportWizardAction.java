@@ -10,8 +10,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -30,9 +28,6 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
-import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
@@ -292,12 +287,7 @@ public class ReportWizardAction extends MultiAction {
         request.getSession().setAttribute(ReportsFilterPicker.PLEDGE_REPORT_REQUEST_ATTRIBUTE, Boolean.toString(typereport == ArConstants.PLEDGES_TYPE)); //WARNING: When merging with 2.4, using ReportContextData attribute instead of storing in the session
         request.setAttribute(MULTILINGUAL_REPORT_PREFIX + "_title", new MultilingualInputFieldValues(AmpReports.class, myForm.getReportId(), "name", null, null));
 
-        Map<String, List<AmpColumns>> ampTreeColumns = this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnListFiltered(), typereport, request.getSession());
-        myForm.setAmpTreeColumns(ampTreeColumns);
-
-        Map<String, String> localizedColumnNames = buildLocalizedColumnNames(ampTreeColumns);
-        myForm.setLocalizedColumnNames(localizedColumnNames);
-
+        myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnListFiltered(),typereport,request.getSession()));
         if (typereport==ArConstants.PLEDGES_TYPE || myForm.getReportType().equalsIgnoreCase("pledge")){
             myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyTypeFiltered("P"));
         } else if (myForm.getReportType().equalsIgnoreCase("donor")){
@@ -323,23 +313,6 @@ public class ReportWizardAction extends MultiAction {
             return mapping.findForward("showTab" + onePager);
         else
             return mapping.findForward("showReport" + onePager);
-    }
-
-    public Map<String, String> buildLocalizedColumnNames(Map<String, List<AmpColumns>> ampTreeColumns) {
-        return ampTreeColumns.values()
-                    .stream()
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toMap(AmpColumns::getColumnName, this::getLocalizedColumnName));
-    }
-
-    private String getLocalizedColumnName(AmpColumns column) {
-        String columnName = column.getColumnName();
-        NiReportColumn<?> niReportColumn = AmpReportsSchema.getInstance().getColumns().get(columnName);
-        if (niReportColumn != null) {
-            return niReportColumn.label.toString();
-        } else {
-            return TranslatorWorker.translateText(columnName);
-        }
     }
 
     public ActionForward getJSONrepType(ActionMapping mapping, ActionForm form,

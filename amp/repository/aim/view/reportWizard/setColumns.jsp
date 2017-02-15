@@ -47,7 +47,6 @@
 		<font size="3">
 		<ul id="dhtmlgoodies_tree" class="DHTMLSuite_tree">
 			<bean:define name="aimReportWizardForm" property="ampTreeColumns" id="ampTreeColumns" type="java.util.Map"  toScope="page"/>
-			<bean:define name="aimReportWizardForm" property="localizedColumnNames" id="localizedColumnNames" type="java.util.Map"  toScope="page"/>
 			<li noDrag="true">
 				<a id="1" style="font-size: 12px;color:#0e69b3;text-decoration:none"><digi:trn key="aim:report:AMP" >AMP</digi:trn></a>
 				<ul class="nodragul" style="margin-left: 0px;" >
@@ -65,7 +64,7 @@
 											<input type="checkbox" style='line-height:15px; margin-top:6px;' id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>" name="selectedColumns" value="<bean:write name="ampColumnFromTree" property="columnId"/>"/>
 											<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 11px;text-decoration:none"></a>
 											<span style="font-size: 11px; text-decoration:none">
-												<c:out value="${localizedColumnNames[ampColumnFromTree.columnName]}"/>
+												<digi:colNameTrn><bean:write name="ampColumnFromTree" property="columnName"/></digi:colNameTrn>
 												<logic:notEmpty name="ampColumnFromTree" property="description">
 													<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}">${ampColumnFromTree.description}</digi:trn>">
 												</logic:notEmpty>

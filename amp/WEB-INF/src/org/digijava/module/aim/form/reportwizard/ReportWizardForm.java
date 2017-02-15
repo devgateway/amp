@@ -22,7 +22,6 @@ public class ReportWizardForm extends ActionForm {
 	private Long reportId = null;
 	private AmpTeamMember ampTeamMember = null;
 	private Map<String, List<AmpColumns>> ampTreeColumns;
-	private Map<String, String> localizedColumnNames;
 	private Collection<AmpMeasures> ampMeasures = null;
 	private String reportType = "donor";
 	private Boolean desktopTab = false;
@@ -75,11 +74,7 @@ public class ReportWizardForm extends ActionForm {
 	public Map<String, List<AmpColumns>> getAmpTreeColumns() {
 		return this.ampTreeColumns;
 	}
-
-	public Map<String, String> getLocalizedColumnNames() {
-		return localizedColumnNames;
-	}
-
+	
 	@java.lang.SuppressWarnings("all")
 	public Collection<AmpMeasures> getAmpMeasures() {
 		return this.ampMeasures;
@@ -216,11 +211,7 @@ public class ReportWizardForm extends ActionForm {
 	public void setAmpTreeColumns(final Map<String, List<AmpColumns>> ampTreeColumns) {
 		this.ampTreeColumns = ampTreeColumns;
 	}
-
-	public void setLocalizedColumnNames(Map<String, String> localizedColumnNames) {
-		this.localizedColumnNames = localizedColumnNames;
-	}
-
+	
 	@java.lang.SuppressWarnings("all")
 	public void setAmpMeasures(final Collection<AmpMeasures> ampMeasures) {
 		this.ampMeasures = ampMeasures;

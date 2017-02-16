@@ -254,9 +254,10 @@ public class Security implements ErrorReportingEndpoint {
 			session.setAttribute(Constants.CURRENT_MEMBER, teamMember.toTeamMember());
 		}
 		session.setAttribute(Constants.CURRENT_USER, user);
-		session.setAttribute("ampAdmin", user.isGlobalAdmin() ? "yes": "no");
+
+		session.setAttribute("ampAdmin", ApiAuthentication.isAdmin(user, TLSUtils.getRequest()) ? "yes": "no");
 	}
-	
+
 	/**
 	 * Provides a list of users information
 	 * <p>
@@ -362,7 +363,6 @@ public class Security implements ErrorReportingEndpoint {
 				.getContextPath());
 		JsonBean layout = SecurityService.getFooter(siteUrl,isAdmin);
 		if (tm != null) {
-			Site site = RequestUtils.getSite(TLSUtils.getRequest());
 			User u;
 			try {
 				u = UserUtils.getUserByEmail(tm.getEmail());
@@ -370,9 +370,8 @@ public class Security implements ErrorReportingEndpoint {
 				layout.set("email", null);
 				return layout;
 			}
-			Subject subject = UserUtils.getUserSubject(u);
 
-			boolean siteAdmin = DgSecurityManager.permitted(subject, site, ResourcePermission.INT_ADMIN);
+			boolean siteAdmin = ApiAuthentication.isAdmin(u, TLSUtils.getRequest());
 			layout.set("logged",true);
 			layout.set("email", u.getEmail());
 			layout.set("userId",u.getId());

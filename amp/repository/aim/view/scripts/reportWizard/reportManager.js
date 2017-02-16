@@ -13,7 +13,7 @@ function createPreview () {
 	if ( (colArray.length != 0 && !summary) || hierArray.length != 0 ) {
 		divElWrapper.style.display		= "";
 		fakeDivEl.style.display		= "";
-		new ReportPreviewEngine(populateRPS(new ReportPreviewSettings())).renderTable('previewBodySectionDiv');		
+		new ReportPreviewEngine(populateRPS(new ReportPreviewSettings()));
 	}
 	else {
 		fakeDivEl.style.display		= "none";
@@ -36,10 +36,11 @@ function populateRPS(rpSettings) {
 		}
 	}
 	if ( measArray == null || measArray.length == 0 ) {
-		measArray.push(repManagerParams.previewUnselectedMeasureTrn);
+		measArray.push("Actual Commitments");
 	}
 	
 	var period			= getReportPeriod();
+	rpSettings.reportPeriod		= period;
 	if (  period == "M" ) {
 		rpSettings.months		= true;
 	}

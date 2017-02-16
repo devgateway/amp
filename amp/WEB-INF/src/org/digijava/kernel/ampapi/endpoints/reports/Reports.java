@@ -5,6 +5,7 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,10 +35,13 @@ import javax.xml.bind.JAXBElement;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -200,6 +204,27 @@ public class Reports implements ErrorReportingEndpoint {
 	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
 		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 		return EndpointUtils.runReport(spec);
+	}
+
+	@POST
+	@Path("/report/preview")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public final String getReportResult(JsonBean formParams) {
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
+		String groupingOption = (String) formParams.get("groupingOption");
+		switch(groupingOption) {
+			case "A": spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
+			case "Q": spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
+			case "M": spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
+			default:
+				spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
+				break;
+		}
+		ReportsUtil.update(spec,formParams);
+		SettingsUtils.applySettings(spec, formParams, true);
+		FilterUtils.applyFilterRules((Map<String, Object>) formParams.get(EPConstants.FILTERS), spec,null);
+
+		return AmpReportsSchema.getRenderedReport(spec);
 	}
 	
 	@POST

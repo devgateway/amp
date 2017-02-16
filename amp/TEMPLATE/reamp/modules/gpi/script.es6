@@ -1,10 +1,10 @@
-import Home from "./components/index.jsx";
+import App from "./containers/App.jsx";
 import ReactDOM from "react-dom";
 import React from "react";
-import boilerplate from "../../../../ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js";
+import boilerplate from "../../../ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js";
 
 ReactDOM.render(
-  <Home />,
+  <App />,
   document.getElementById('gpi-data')
 );
 

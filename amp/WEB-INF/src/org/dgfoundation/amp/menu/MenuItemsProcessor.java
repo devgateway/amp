@@ -108,7 +108,7 @@ public class MenuItemsProcessor {
 			break;
 		case MenuConstants.GPI_DATA:
 			AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); 
-			visible = atm.getUser().hasNationalCoordinatorGroup() && atm.getUser().hasVerifiedDonor();
+			visible = atm.getUser().hasNationalCoordinatorGroup() || atm.getUser().hasVerifiedDonor();
 			break;
 		}
 		// if requestURL (the actual referrer) filter is specified, then display this menu item only for a referrer that matches it

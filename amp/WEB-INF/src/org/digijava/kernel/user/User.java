@@ -472,6 +472,10 @@ public class User
    		return false;
 	}
   
+	/**
+	 * Checks if user has a verified org and the org is role donor
+	 * @return 
+	 */
 	public boolean hasVerifiedDonor(){
 		if(this.assignedOrgId == null && this.assignedOrgs.size() == 0) return false;
 				

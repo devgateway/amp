@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.DefaultValue;
@@ -34,11 +33,8 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.ampapi.endpoints.util.types.ListOfLongs;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.security.DgSecurityManager;
-import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
@@ -90,6 +86,11 @@ public class Security implements ErrorReportingEndpoint {
 	public JsonBean user() {
 		AmpApiToken apiToken = SecurityUtil.getTokenFromSession();
 
+		// if the user is logged in without a token, we generate one
+		if (apiToken == null) {
+			apiToken = SecurityUtil.generateToken();
+		}
+
 		boolean isAdmin ="yes".equals(httpRequest.getSession().getAttribute("ampAdmin"));
 		
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
@@ -103,12 +104,6 @@ public class Security implements ErrorReportingEndpoint {
 			AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
 			AmpTeam team = ampTeamMember.getAmpTeam();
 			teamName = team.getName();
-
-			// if the user is logged in without a token, we generate one
-			if (apiToken == null) {
-				// if no token is present in session we generate one
-				apiToken = SecurityUtil.generateToken();
-			}
 
 			user = apiToken.getUser();
 

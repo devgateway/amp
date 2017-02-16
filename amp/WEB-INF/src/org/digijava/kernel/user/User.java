@@ -471,7 +471,20 @@ public class User
    		}
    		return false;
 	}
-
+  
+	public boolean hasVerifiedDonor(){
+		if(this.assignedOrgId == null && this.assignedOrgs.size() == 0) return false;
+				
+		if(this.assignedOrgId != null && org.digijava.module.aim.util.DbUtil.hasDonorRole(this.assignedOrgId)) return true;
+		
+		Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
+   		while(it.hasNext()){
+   			AmpOrganisation currentOrganization = it.next();
+   			if( org.digijava.module.aim.util.DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
+   				return true;
+   		}
+   		return false;		
+	}
 	public boolean hasNationalCoordinatorGroup(){
 		boolean result = false;
 		Set<Group> groups = this.groups;

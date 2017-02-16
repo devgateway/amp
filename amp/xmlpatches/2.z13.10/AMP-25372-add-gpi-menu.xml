@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-25372</jira>
+	<keyword>menu</keyword>
+	<author>gmutuhu</author>
+	<description>Add menu entry for GPI Data</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				insert into amp_menu_entry (id,parent_id,name,title,url,position,flags) values
+				(nextval('amp_menu_entry_seq'),(select id from amp_menu_entry where name = 'Desktop'),'GPI Data','GPI Data','/TEMPLATE/reamp/modules/admin/gpi/index.html',7,null);
+				INSERT INTO amp_menu_entry_view(menu_id, view_type) 
+				VALUES ((SELECT id FROM amp_menu_entry WHERE name = 'GPI Data'), 2);				
+				
+				update amp_menu_entry set position = 6 where name = 'Pledges' and parent_id = (select id from amp_menu_entry where name = 'Desktop');
+                update amp_menu_entry set position = 8 where name = 'Change Workspace' and parent_id = (select id from amp_menu_entry where name = 'Desktop');
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

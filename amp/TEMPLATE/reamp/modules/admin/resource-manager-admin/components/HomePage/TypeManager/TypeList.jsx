@@ -1,131 +1,162 @@
-import React, { Component, PropTypes, Button } from "react";
-import FilteredMultiSelect from "react-filtered-multiselect";
+import FilteredMultiSelect from 'react-filtered-multiselect';
+import React, { Component, PropTypes, Button } from 'react';
+import { Alert } from 'react-bootstrap';
+import { delay } from 'amp/tools';
+require('../../Layout/App.less');
+const ALERT_TYPE = {
+    NONE: "none",
+    SUCCESS: "success",
+    ERROR: "danger"
+};
 
-/*
- export default class TypeList extends Component {
-
- constructor() {
- super();
- console.log('constructor');
-
- this.handleChange = this.handleChange.bind(this);
- }
-
- handleChange(e) {
- console.log(e);
- }
-
- componentDidMount() {
- debugger;
- console.log(this.props);
- }
-
- handleChange(value) {
- console.log(value);
- //this.state.({value});
- }
-
-
- render() {
- const options = [
- { value: 1, text: 'Item One' },
- { value: 2, text: 'Item Two' }
- ]
- debugger;
- return (
- <div className="row">
- <div className="col-md-5">
- <FilteredMultiSelect
- classNames={BOOTSTRAP_CLASSES}
- onChange={this.handleChange}
- options={options}
- />
- </div>
- </div>
- );
- }
- }*/
 export default class TypeList extends Component {
 
     constructor() {
+
         super();
         this.state = {
-            selectedOptions: undefined
-        }
-        ;
-        console.log('constructor');
+            selectedOptions: [],
+            availableOptions: [],
+            initialized: false,
+            alert: ALERT_TYPE.NONE,
+            alertMsg: ''
+        };
         this.handleDeselect = this.handleDeselect.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.hideAlert = this.hideAlert.bind(this);
+        this.getAlert = this.getAlert.bind(this);
     }
 
     handleDeselect(deselectedOptions) {
-        var selectedOptions = this.state.selectedOptions.slice()
+        let selectedOptions = this.state.selectedOptions.slice();
         deselectedOptions.forEach(option => {
             selectedOptions.splice(selectedOptions.indexOf(option), 1)
-        })
+        });
         this.setState({ selectedOptions });
     }
 
-    componentDidMount() {
-        debugger;
+    sortOptions(a, b) {
+        if (a.name > b.name) {
+            return 1;
+        }
+        if (a.name < b.name) {
+            return -1;
+        }
+        // a must be equal to b
+        return 0;
+
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!this.state.initialized && nextProps.areListloaded) {
+            const selectedOptions = nextProps.typesAllowed;
+            const availableOptions = nextProps.typesAvailable;
+            availableOptions.sort((a, b) => {
+                return this.sortOptions(a, b);
+            });
+            const initialized = true;
+            this.setState({ initialized, selectedOptions, availableOptions });
+        }
+
+        if (nextProps.alert !== ALERT_TYPE.NONE) {
+            const { alert, alertMsg } = nextProps;
+            this.setState({ alert, alertMsg });
+        }
     }
 
     handleSelect(selectedOptions) {
-        selectedOptions.sort((a, b) => a.id - b.id);
+        selectedOptions.sort((a, b) => {
+            return this.sortOptions(a, b);
+        });
         this.setState({ selectedOptions });
     }
 
-    handleName() {
-        return "name";
+    getAlert() {
+
+        if (this.state.alert !== ALERT_TYPE.NONE) {
+            let isSuccess = this.state.alert === ALERT_TYPE.SUCCESS;
+            if (isSuccess) {
+                delay(2000).then(this.hideAlert);
+            }
+            return (
+                <Alert ref="errorAlert" bsStyle={this.state.alert} className="resultAlert" bsClass="alert"
+                       onDismiss={this.hideAlert}>
+                    {isSuccess ? this.__('amp.resource-manager:sucess') : this.state.alertMsg}
+                </Alert>);
+        } else return '';
+    }
+
+    hideAlert() {
+        this.setState({ alert: ALERT_TYPE.NONE });
     }
 
     render() {
-        debugger;
-        let { mimeTypesAvailable } = this.props;
+        let infoAlert = this.getAlert();
+        this.__ = key => this.props.translations[key];
         const { saveAllowedTypes } = this.props;
-        this.state.selectedOptions = this.state.selectedOptions || this.props.mimeTypesAllowed;
+        const typeToFilter = this.__('amp.resource-manager:type-to-filter');
+        const buttonAdd = this.__('amp.resource-manager:button-add');
+        return (
+            <div>
+                <h2 className="subTitle">{this.__('amp.resource-manager:type-list-title')}</h2>
+                <div className="row">
 
-        return <div className="row">
-            <div className="col-md-5">
-                <FilteredMultiSelect
-                    buttonText="Add"
-                    classNames={{
+                    <div className="col-md-5">
+                        <FilteredMultiSelect
+                            buttonText={this.__('amp.resource-manager:button-add')}
+                            placeholder={typeToFilter}
+                            classNames={{
                     filter: 'form-control',
                     select: 'form-control',
                     button: 'btn btn btn-block btn-default',
                     buttonActive: 'btn btn btn-block btn-primary'
                     }}
-                    onChange={this.handleSelect}
-                    options={mimeTypesAvailable}
-                    selectedOptions={this.state.selectedOptions}
-                    textProp={handleName}
-                    valueProp="name"
-                    size="20"
-                />
-            </div>
-            <div className="col-md-5">
-                <FilteredMultiSelect
-                    buttonText="Remove"
-                    classNames={{
+                            onChange={this.handleSelect}
+                            options={this.state.availableOptions}
+                            selectedOptions={this.state.selectedOptions}
+                            textProp="description"
+                            valueProp="name"
+                            size="16"
+                        />
+                    </div>
+                    <div className="col-md-5">
+                        <FilteredMultiSelect
+                            buttonText={this.__('amp.resource-manager:button-remove')}
+                            placeholder={typeToFilter}
+                            classNames={{
                     filter: 'form-control',
                     select: 'form-control',
                     button: 'btn btn btn-block btn-default',
                     buttonActive: 'btn btn btn-block btn-danger'
                     }}
-                    onChange={this.handleDeselect}
-                    options={this.state.selectedOptions}
-                    textProp="description"
-                    valueProp="name"
-                    size="20"
-                />
+                            onChange={this.handleDeselect}
+                            options={this.state.selectedOptions}
+                            textProp="description"
+                            valueProp="name"
+                            size="16"
+                        />
+                    </div>
+                </div>
+                <div className="acceptButton">
+                    <button type="button" className="btn btn-primary"
+                            onClick={() => {
+                                saveAllowedTypes(this.state.selectedOptions);
+                            }}>Aceptar
+                    </button>
+                    {infoAlert}
+                </div>
             </div>
-            <div className="col-md-5">
-                <button type="button"
-                        onClick={() => {saveAllowedTypes(selectedOptions);}}>Aceptar
-                </button>
-            </div>
-            <div className="col-md-5">Cancelar</div>
-        </div>
+        );
+
     }
 
+    static translations() {
+        return {
+            "amp.resource-manager:type-list-title": "Type list manager",
+            "amp.resource-manager:type-to-filter": "Start typing to filter",
+            "amp.resource-manager:button-add": "Add",
+            "amp.resource-manager:button-remove": "Remove   "
+        }
+
+    }
 }

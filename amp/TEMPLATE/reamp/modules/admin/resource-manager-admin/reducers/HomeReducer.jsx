@@ -2,23 +2,27 @@
 import {
     STATE_TYPES_LOADED,
     STATE_TYPES_LOADING,
+    STATE_ALLOWED_TYPES_ERROR,
     STATE_ALLOWED_TYPES_LOADING,
-    STATE_ALLOWED_TYPES_LOADED
-} from "../actions/HomeActions.jsx";
-
+    STATE_ALLOWED_TYPES_LOADED,
+    STATE_ALLOWED_TYPES_SAVE_SAVING,
+    STATE_ALLOWED_TYPES_SAVE_SAVED,
+    STATE_ALLOWED_TYPES_SAVE_ERROR
+} from '../actions/HomeActions.jsx';
+import { ALERT_TYPE } from '../utils/constants.jsx';
 const defaultState = {
     loadingTypesAvailable: false,
-    mimeTypesAvailable: [],
+    typesLoaded: false,
+    typesAvailable: [],
     loadingTypesAllowed: false,
-    mimeTypesAllowed: [],
+    allowedLoaded: false,
+    typesAllowed: [],
+    alert: ALERT_TYPE.NONE,
+    alertMsg: '',
+    isSavingTypes: false
+
 };
 
-/**
- * This reducer saves info related to the login process only.
- * @param state
- * @param action
- * @returns {*}
- */
 export default function homePage(state: Object = defaultState, action: Object) {
     console.log('HomePage');
     switch (action.type) {
@@ -26,10 +30,12 @@ export default function homePage(state: Object = defaultState, action: Object) {
             return Object.assign({}, state, {
                 loadingTypesAvailable: true
             });
+            isSavingTypes
         case STATE_TYPES_LOADED:
             return Object.assign({}, state, {
                     loadingTypesAvailable: false,
-                    mimeTypesAvailable: action.actionData,
+                    typesLoaded: true,
+                    typesAvailable: action.actionData,
                 }
             )
             break;
@@ -41,11 +47,36 @@ export default function homePage(state: Object = defaultState, action: Object) {
         case STATE_ALLOWED_TYPES_LOADED:
 
             return Object.assign({}, state, {
-                    loadingTypesAvailable: false,
-                    mimeTypesAllowed: action.actionData,
+                    loadingTypesAllowed: false,
+                    allowedLoaded: true,
+                    typesAllowed: action.actionData,
                 }
             )
             break;
+        case STATE_ALLOWED_TYPES_SAVE_SAVING:
+            return Object.assign({}, state, {
+                isSavingTypes: true
+            });
+            break;
+
+        case STATE_ALLOWED_TYPES_SAVE_SAVED:
+
+            return Object.assign({}, state, {
+                isSavingTypes: false,
+                alert: ALERT_TYPE.SUCCESS
+            });
+            break;
+
+        case STATE_ALLOWED_TYPES_SAVE_ERROR:
+        case STATE_ALLOWED_TYPES_ERROR:
+            debugger;
+            return Object.assign({}, state, {
+                isSavingTypes: false,
+                alert: ALERT_TYPE.ERROR,
+                alertMsg: action.actionData
+            });
+            break;
+
         default:
             return state;
     }

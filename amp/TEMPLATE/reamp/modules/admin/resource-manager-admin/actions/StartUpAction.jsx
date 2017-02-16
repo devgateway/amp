@@ -1,12 +1,14 @@
-import { store } from '../script.es6'
-import * as AMP from "amp/architecture";
-import { loadTranslations } from "amp/modules/translate";
+import { store } from '../script.es6';
+import * as AMP from 'amp/architecture';
+import { loadTranslations } from 'amp/modules/translate';
+import Home from '../components/HomePage/Home.jsx';
 
 export const STATE_TRANSLATIONS_LOADED = 'STATE_TRANSLATIONS_LOADED';
 
 export function resourceManagerStartUp() {
+    const translations = Home.translations();
     return new Promise((resolve, reject) => {
-        let toTranslate = new AMP.Model(translations).toJS();
+        let toTranslate = new AMP.Model().toJS();
         loadTranslations(translations).then(trns => {
             toTranslate = trns;
             console.log(trns);
@@ -18,6 +20,3 @@ export function resourceManagerStartUp() {
         resolve();
     });
 }
-let translations = {
-    'amp.resource-manager:resource-manager-title': 'Resource manager Admin',
-};

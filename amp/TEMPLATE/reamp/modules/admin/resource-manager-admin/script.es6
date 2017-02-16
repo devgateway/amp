@@ -10,9 +10,6 @@ import { resourceManagerStartUp } from './actions/StartUpAction.jsx';
 import AppPage from './containers/AppPage.jsx';
 import boilerplate from "../../../../ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js";
 
-//import './app.global.css';
-
-
 export const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);
 

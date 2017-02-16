@@ -1,18 +1,16 @@
 // @flow
 import React, { Component, PropTypes } from 'react';
-//import styles from './App.css';
+import styles from './App.less';
 
 
 export default class App extends Component {
 
     constructor(props, context) {
-        // This is a bit anti-pattern but still valid when you need Redux store
-        // without having to connect the component (https://github.com/reactjs/react-redux/issues/108).
-        // NOT for being used everywhere.
         super(props, context);
     }
     /*
-    static propTypes = {
+
+        static propTypes = {
         children: PropTypes.element.isRequired
     };
 

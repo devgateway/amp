@@ -53,17 +53,30 @@ public class AIHelper {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Retrieves amp_activity_id (internal_id) from main JSON request
 	 * @param root
 	 * @return Long representation or null if invalid or missing
 	 */
 	public static Long getActivityIdOrNull(JsonBean root) {
-		String idStr = String.valueOf(root.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
-		if (NumberUtils.isDigits(idStr)) 
-			return Long.valueOf(idStr);
-		return null;
+		return longOrNull(root.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
 	}
-	
+
+	/**
+	 * Retrieves team id from JSON activity.
+	 * @param root
+	 * @return Long representation or null if invalid or missing
+	 */
+	public static Long getTeamIdOrNull(JsonBean root) {
+		return longOrNull(root.get(ActivityEPConstants.TEAM_FIELD_NAME));
+	}
+
+	private static Long longOrNull(Object obj) {
+		try {
+			return Long.valueOf(String.valueOf(obj));
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
 }

@@ -155,6 +155,17 @@ public class ProjectList {
 		
 		return getEditableActivityIds(tm, query);
 	}
+
+	/**
+	 * Get list of editable activity ids for the team member.
+	 * Useful for cases when you need to check list of editable activities for a team member that is not a principal.
+	 * I.e. this team member is not authenticated right now.
+	 * @return List<Long> with the editable activity Ids
+	 */
+	public static List<Long> getEditableActivityIdsNoSession(TeamMember tm) {
+		String query = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
+		return getEditableActivityIds(tm, query);
+	}
 	
 	/**
 	 * Get the activities ids for the current workspace

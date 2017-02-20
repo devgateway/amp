@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,10 +34,12 @@ import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
+import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -55,8 +58,10 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.Identifiable;
@@ -169,7 +174,21 @@ public class ActivityImporter {
 		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields(true);
 		// get existing activity if this is an update request
 		Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
-		// check if any error were already detected in upper layers 
+
+		AmpTeamMember teamMember;
+		try {
+			teamMember = getAmpTeamMember(AIHelper.getTeamIdOrNull(newJson));
+		} catch (RuntimeException e) {
+			logger.error("Failed to find team member.", e);
+			return Collections.singletonList(SecurityErrors.INVALID_TEAM);
+		}
+
+		List<ApiErrorMessage> messages = checkPermissions(update, ampActivityId, teamMember);
+		if (!messages.isEmpty()) {
+			return messages;
+		}
+
+		// check if any error were already detected in upper layers
 		Map<Integer, ApiErrorMessage> existingErrors = (TreeMap<Integer, ApiErrorMessage>) newJson.get(ActivityEPConstants.INVALID);
 		
 		if (existingErrors != null && existingErrors.size() > 0) {
@@ -222,7 +241,7 @@ public class ActivityImporter {
 				// save new activity
 				prepareToSave();
 				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
-						translations, currentMember, Boolean.TRUE.equals(newActivity.getDraft()), 
+						translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
 						PersistenceManager.getRequestDBSession(), false, false);
 				postProcess();
 			} else {
@@ -247,6 +266,69 @@ public class ActivityImporter {
 		}
 		
 		return new ArrayList<ApiErrorMessage>(errors.values());
+	}
+
+	/**
+	 * Check if specified team member can add/edit the activity in question.
+	 *
+	 * @param update true for edit, false for add
+	 * @param ampActivityId activity id to check, used only for edit case
+	 * @param teamMember team member to check
+	 * @return list of errors, in case of success list will be empty
+	 */
+	private List<ApiErrorMessage> checkPermissions(boolean update, Long ampActivityId, AmpTeamMember teamMember) {
+		if (update) {
+			return checkEditPermissions(teamMember, ampActivityId);
+		} else {
+			return checkAddPermissions(teamMember);
+		}
+	}
+
+	/**
+	 * Check if team member can add activities.
+	 */
+	private List<ApiErrorMessage> checkAddPermissions(AmpTeamMember teamMember) {
+		if (!InterchangeUtils.addActivityAllowed(new TeamMember(teamMember))) {
+			return Collections.singletonList(SecurityErrors.NOT_ALLOWED.withDetails("Adding activity is not allowed"));
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
+	/**
+	 * Check if team member can edit the activity.
+	 */
+	private List<ApiErrorMessage> checkEditPermissions(AmpTeamMember ampTeamMember, Long activityId) {
+		if (!InterchangeUtils.isEditableActivity(new TeamMember(ampTeamMember), activityId)) {
+			return Collections.singletonList(SecurityErrors.NOT_ALLOWED.withDetails("No right to edit this activity"));
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
+	/**
+	 * If teamId is specified, then try to find team membership for currently authenticated user. Otherwise use
+	 * team membership stored in session.
+	 *
+	 * @param teamId    teamId to search
+	 * @return			team membership or a RuntimeException in case teamId is wrong or user is not part of the team
+	 */
+	private AmpTeamMember getAmpTeamMember(Long teamId) {
+		if (teamId == null) {
+            return currentMember;
+        } else {
+            AmpTeam team = TeamUtil.getAmpTeam(teamId);
+
+            User user = currentMember.getUser();
+
+			AmpTeamMember  teamMember = TeamMemberUtil.getAmpTeamMemberByUserByTeam(user, team);
+
+            if (teamMember == null) {
+                throw new RuntimeException(String.format("User %s is not part of team with id %d.",
+                        user.getEmail(), team.getAmpTeamId()));
+            }
+			return teamMember;
+		}
 	}
 	
 	/**

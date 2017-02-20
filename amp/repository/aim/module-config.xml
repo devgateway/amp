@@ -94,6 +94,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpAuditLogger</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpScorecardSettings</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpResourceManagerSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpScorecardOrganisation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpDataFreezeSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFieldsVisibility</hibernate-class>

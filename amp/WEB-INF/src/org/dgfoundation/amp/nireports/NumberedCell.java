@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.collections.ComparatorUtils;
 import org.dgfoundation.amp.newreports.ReportSettings;
 
 /**
@@ -23,19 +24,6 @@ public interface NumberedCell extends Comparable {
 	public default int compareTo(Object oth) {
 		NumberedCell other = (NumberedCell) oth;
 		
-		boolean f1 = getAmount() == null;
-		boolean f2 = other == null || other.getAmount() == null;
-		
-		if (f1 ^ f2) {
-			if (f1) {
-				return -1;
-			} else {
-				return 1;
-			}
-		} else if (f1 && f2) {
-			return 0;
-		} 
-		
-		return getAmount().compareTo(other.getAmount());
+		return ComparatorUtils.nullLowComparator(null).compare(getAmount(), other.getAmount());
 	}
 }

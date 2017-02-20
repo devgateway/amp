@@ -30,9 +30,7 @@ public class ActionAuthorizer {
 	private static RuleHierarchy<AuthRule> ruleHierarchy = new RuleHierarchy.Builder<AuthRule>()
 			.addRuleDependency(AuthRule.IN_WORKSPACE, AuthRule.AUTHENTICATED)
 			.addRuleDependency(AuthRule.IN_ADMIN, AuthRule.AUTHENTICATED)
-			.addRuleDependency(AuthRule.ADD_ACTIVITY, AuthRule.IN_WORKSPACE)
 			.addRuleDependency(AuthRule.VIEW_ACTIVITY, AuthRule.IN_WORKSPACE)
-			.addRuleDependency(AuthRule.EDIT_ACTIVITY, AuthRule.IN_WORKSPACE)
 			.build();
 
 	/**
@@ -71,12 +69,6 @@ public class ActionAuthorizer {
 
 		Map<Integer, ApiErrorMessage> errors = new TreeMap<>();
 
-		if (authRules.contains(AuthRule.ADD_ACTIVITY) && !InterchangeUtils.addActivityAllowed()) {
-			addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "Adding activity is not allowed");
-		}
-		if (authRules.contains(AuthRule.EDIT_ACTIVITY) && !InterchangeUtils.isEditableActivity(containerReq)) {
-			addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "No right to edit this activity");
-		}
 		if (authRules.contains(AuthRule.VIEW_ACTIVITY) && !InterchangeUtils.isViewableActivity(containerReq)) {
 			addError(methodInfo, errors, SecurityErrors.INVALID_REQUEST, "Activity doesn't exist or is not the latest version");
 		}

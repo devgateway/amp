@@ -49,7 +49,8 @@ public class ActivityEPConstants {
 	// fields constants
 	public static final String AMP_ACTIVITY_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
 	public static final String AMP_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID);
-	
+	public static final String TEAM_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.TEAM);
+
 	// field types
 	public static final String FIELD_TYPE_LIST = "list";
 	public static final String FIELD_TYPE_STRING = "string";

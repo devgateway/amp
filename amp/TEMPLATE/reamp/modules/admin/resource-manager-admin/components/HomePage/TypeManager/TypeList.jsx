@@ -36,13 +36,12 @@ export default class TypeList extends Component {
     }
 
     sortOptions(a, b) {
-        if (a.name > b.name) {
+        if (a.description > b.description) {
             return 1;
         }
-        if (a.name < b.name) {
+        if (a.description < b.description) {
             return -1;
         }
-        // a must be equal to b
         return 0;
 
     }
@@ -155,7 +154,7 @@ export default class TypeList extends Component {
             "amp.resource-manager:type-list-title": "Type list manager",
             "amp.resource-manager:type-to-filter": "Start typing to filter",
             "amp.resource-manager:button-add": "Add",
-            "amp.resource-manager:button-remove": "Remove   "
+            "amp.resource-manager:button-remove": "Remove"
         }
 
     }

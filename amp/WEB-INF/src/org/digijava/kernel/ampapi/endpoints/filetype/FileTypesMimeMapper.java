@@ -14,7 +14,7 @@ public class FileTypesMimeMapper {
 	public final static String FILE_TYPE_PROJECT = "msproject";
 	public final static String FILE_TYPE_VISIO = "msvisio";
 	public final static String FILE_TYPE_PDF = "pdf";
-	public final static String FILE_TYPE_ARCHIVE = "archive";
+	public final static String FILE_TYPE_ARCHIVE = "zipArchive";
 	public final static String FILE_TYPE_LIBREOFFICE_SHEETS = "libreofficesheets";
 	public final static String FILE_TYPE_LIBREOFFICE_DOCUMENTS = "libreofficedocuments";
 	public final static String FILE_TYPE_CSV = "csv";

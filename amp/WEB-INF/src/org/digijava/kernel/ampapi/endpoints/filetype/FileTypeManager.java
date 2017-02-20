@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,6 +57,8 @@ public class FileTypeManager {
 		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_PHOTOSHOP, "PSD"));
 		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_RTF, "Rich Text Format"));
 		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_TXT, "Text Files"));
+		
+		allFileTypes.sort((p1, p2) -> p1.getDescription().compareTo(p2.getDescription()));
 	}
 	
 	/**

@@ -36,6 +36,10 @@ public class SettingsConstants {
 	public static final String YEAR_TO = "to";
 	public static final String YEAR_ALL = "all";
 	
+	public static final String SORT_COLUMN = "sort-column";
+	public static final String MAXIMUN_FILE_SIZE = "maximun-file-size";
+	public static final String LIMIT_FILE_TO_UPLOAD = "limit-file-to-upload";
+	
 	public static final String NO_LIMIT = "noLimit";
 	public static final String CUSTOM = "custom";
 
@@ -62,6 +66,9 @@ public class SettingsConstants {
 		put(YEAR_FROM, "From:");
 		put(YEAR_TO, "To:");
 		put(YEAR_ALL, "All");
+		put(SORT_COLUMN,"Resource List Sort Column");
+		put(MAXIMUN_FILE_SIZE,"Maximum File Size");
+		put(LIMIT_FILE_TO_UPLOAD,"Limit file type for upload");
 	}});
 
 	public static final String DOT = "dot";
@@ -100,7 +107,23 @@ public class SettingsConstants {
 		put(AMOUNT_UNITS_1000000, "1000000");
 		put(AMOUNT_UNITS_1000000000, "1000000000");
 	}});
-	
+	/** {id,value} map for Resource List Sort Column**/
+	public static final Map<String, String> SORT_COLUMN_MAP = Collections.unmodifiableMap(new LinkedHashMap<String, String>() {{
+		put("resource_title_ASC","Title ASCENDING");
+		put("resource_title_DESC","Title DESCENDING");
+		put("type_ASC","Type ASCENDING");
+		put("type_DESC","Type DESCENDING");
+		put("file_name_ASC","File name ASCENDING");
+		put("file_name_DESC","File name DESCENDING");
+		put("date_ASC","Date ASCENDING");
+		put("date_DESC","Date DESCENDING");
+		put("yearOfPublication_ASC","Publ. Year ASCENDING");
+		put("yearOfPublication_DESC","Publ. Year DESCENDING");
+		put("size_ASC","Size ASCENDING");
+		put("size_DESC","Size DESCENDING");
+		put("cm_doc_type_ASC","Document type ASCENDING");
+		put("cm_doc_type_DESC","Document type DESCENDING");
+	}});
 	public static final Map<String, String> YEAR_MAP = Collections.unmodifiableMap(new LinkedHashMap<String, String>() {{
 		put(YEAR_ALL, "-1");
 	}});

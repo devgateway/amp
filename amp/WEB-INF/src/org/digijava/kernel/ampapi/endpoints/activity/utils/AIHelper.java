@@ -64,12 +64,12 @@ public class AIHelper {
 	}
 
 	/**
-	 * Retrieves team id from JSON activity.
+	 * Retrieves modified_by from JSON activity.
 	 * @param root
 	 * @return Long representation or null if invalid or missing
 	 */
-	public static Long getTeamIdOrNull(JsonBean root) {
-		return longOrNull(root.get(ActivityEPConstants.TEAM_FIELD_NAME));
+	public static Long getModifiedByOrNull(JsonBean root) {
+		return longOrNull(root.get(ActivityEPConstants.MODIFIED_BY_FIELD_NAME));
 	}
 
 	private static Long longOrNull(Object obj) {

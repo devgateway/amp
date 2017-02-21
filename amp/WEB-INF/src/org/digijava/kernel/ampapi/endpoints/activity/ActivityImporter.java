@@ -175,12 +175,10 @@ public class ActivityImporter {
 		// get existing activity if this is an update request
 		Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
 
-		AmpTeamMember teamMember;
-		try {
-			teamMember = getAmpTeamMember(AIHelper.getTeamIdOrNull(newJson));
-		} catch (RuntimeException e) {
-			logger.error("Failed to find team member.", e);
-			return Collections.singletonList(SecurityErrors.INVALID_TEAM);
+		AmpTeamMember teamMember = getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
+		if (teamMember == null) {
+			return Collections.singletonList(
+					SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
 		}
 
 		List<ApiErrorMessage> messages = checkPermissions(update, ampActivityId, teamMember);
@@ -222,7 +220,7 @@ public class ActivityImporter {
 				
 				newActivity = oldActivity;
 				// REFACTOR: we may no longer need to use old activity
-				oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, TeamUtil.getCurrentAmpTeamMember());
+				oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, teamMember);
 				oldActivity.setAmpId(newActivity.getAmpId());
 				oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup());
 				
@@ -268,6 +266,16 @@ public class ActivityImporter {
 		return new ArrayList<ApiErrorMessage>(errors.values());
 	}
 
+	public AmpTeamMember getAmpTeamMember(Long modifiedBy) {
+		AmpTeamMember teamMember;
+		if (modifiedBy == null) {
+			teamMember = currentMember;
+		} else {
+			teamMember = TeamMemberUtil.getAmpTeamMember(modifiedBy);
+		}
+		return teamMember;
+	}
+
 	/**
 	 * Check if specified team member can add/edit the activity in question.
 	 *
@@ -306,31 +314,6 @@ public class ActivityImporter {
 		}
 	}
 
-	/**
-	 * If teamId is specified, then try to find team membership for currently authenticated user. Otherwise use
-	 * team membership stored in session.
-	 *
-	 * @param teamId    teamId to search
-	 * @return			team membership or a RuntimeException in case teamId is wrong or user is not part of the team
-	 */
-	private AmpTeamMember getAmpTeamMember(Long teamId) {
-		if (teamId == null) {
-            return currentMember;
-        } else {
-            AmpTeam team = TeamUtil.getAmpTeam(teamId);
-
-            User user = currentMember.getUser();
-
-			AmpTeamMember  teamMember = TeamMemberUtil.getAmpTeamMemberByUserByTeam(user, team);
-
-            if (teamMember == null) {
-                throw new RuntimeException(String.format("User %s is not part of team with id %d.",
-                        user.getEmail(), team.getAmpTeamId()));
-            }
-			return teamMember;
-		}
-	}
-	
 	/**
 	 * Recursive method (through ->validateAndImport->validateSubElements->[this method]
 	 * that attempts to validate the incoming JSON and import its data. 

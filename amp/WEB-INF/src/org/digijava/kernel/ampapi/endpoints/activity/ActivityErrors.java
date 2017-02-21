@@ -42,5 +42,6 @@ public class ActivityErrors {
 	public static final ApiErrorMessage AGREEMENT_CODE_REQUIRED = new ApiErrorMessage(26, "Agreement code is required");
 	public static final ApiErrorMessage AGREEMENT_CODE_UNIQUE = new ApiErrorMessage(27, "Agreement code should be unique");
 	public static final ApiErrorMessage AGREEMENT_TITLE_REQUIRED = new ApiErrorMessage(26, "Agreement title is required");
+	public static final ApiErrorMessage ORGANIZATION_ROLE_NOT_DECLARED = new ApiErrorMessage(27, "Organization role not declared");
 
 }

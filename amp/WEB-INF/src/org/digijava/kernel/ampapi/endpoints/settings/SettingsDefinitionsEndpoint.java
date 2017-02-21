@@ -7,6 +7,7 @@ import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCur
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getFundingTypeField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportAmountFormatField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportYearRangeField;
+import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getResourceManagerSettings;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

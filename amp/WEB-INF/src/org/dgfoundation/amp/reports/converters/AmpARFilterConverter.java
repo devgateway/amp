@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -183,38 +184,64 @@ public class AmpARFilterConverter {
 	}
 	
 	/** adds primary, secondary and tertiary sectors to the filters if specified */
-	protected void addSectorFilters() {
-		addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECTORS : ColumnConstants.PRIMARY_SECTOR);
-		addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_SECTORS : ColumnConstants.SECONDARY_SECTOR);
-		addSectorSchemeFilters(arFilter.getSelectedTertiarySectors(), "Tertiary", arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_SECTORS : ColumnConstants.TERTIARY_SECTOR);
+	private void addSectorFilters() {
+		addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PRIMARY_SECTOR);
+		addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", ColumnConstants.SECONDARY_SECTOR);
+		addSectorSchemeFilters(arFilter.getSelectedTertiarySectors(), "Tertiary", ColumnConstants.TERTIARY_SECTOR);
 		
 		if (!arFilter.isPledgeFilter())
 			addSectorSchemeFilters(arFilter.getSelectedTagSectors(), "Tag", ColumnConstants.SECTOR_TAG);
 	}
 
-	protected void addSectorSchemeFilters(Set<AmpSector> selectedEntries, String scheme, String columnName) {
+	private void addSectorSchemeFilters(Set<AmpSector> selectedEntries, String scheme, String columnName) {
 		if (selectedEntries == null || selectedEntries.isEmpty())
 			return;
 
 		Map<Long, AmpSector> sectorsByIds = selectedEntries.stream().collect(Collectors.toMap(z -> z.getAmpSectorId(), z -> z));
-		Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(SectorUtil.distributeSectorsByScheme(selectedEntries), sectorsByIds);
-		addFilter(sectorsByScheme.get(scheme), columnName);
+		Map<String, List<AmpSector>> sectorsByScheme = distributeEntities(SectorUtil.distributeSectorsByScheme(selectedEntries), sectorsByIds);
+
+
+		List<AmpSector> ampSectors = sectorsByScheme.get(scheme);
+		if (ampSectors != null) {
+			ampSectors.stream()
+					.collect(Collectors.groupingBy(s -> findSubSectorColumnName(columnName, s)))
+					.forEach((levelColumn, levelSectors) -> addFilter(levelSectors, levelColumn));
+		}
 	}
-	
-	protected Map<String, List<NameableOrIdentifiable>> distributeEntities(Map<String, List<Long>> distributedIds, Map<Long, ? extends NameableOrIdentifiable> input) {
-		Map<String, List<NameableOrIdentifiable>> res = new HashMap<>();
+
+	private String findSubSectorColumnName(String columnName, AmpSector sector) {
+		AmpSector current = sector;
+		int depth = 0;
+		while (current.getParentSectorId() != null) {
+			current = current.getParentSectorId();
+			depth++;
+		}
+		String levelColumn;
+		if (depth == 0) {
+			levelColumn = columnName;
+		} else {
+			levelColumn = columnName + " " + StringUtils.repeat("Sub-", depth) + "Sector";
+		}
+		if (arFilter.isPledgeFilter()) {
+			levelColumn = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumn, levelColumn);
+		}
+		return levelColumn;
+	}
+
+	private <T> Map<String, List<T>> distributeEntities(Map<String, List<Long>> distributedIds, Map<Long, T> input) {
+		Map<String, List<T>> res = new HashMap<>();
 		
 		for(String scheme:distributedIds.keySet()) {
-			res.put(scheme, new ArrayList<NameableOrIdentifiable>());
+			res.put(scheme, new ArrayList<>());
 			for(Long id:distributedIds.get(scheme)) {
-				NameableOrIdentifiable entity = input.get(id);
+				T entity = input.get(id);
 				if (entity == null)
 					throw new RuntimeException("bug while restoring backmap for id: " + id + ", scheme: " + scheme);
 				res.get(scheme).add(entity);
 			}
 		}			
 		return res;
-	};
+	}
 	
 	/** adds programs and national objectives filters */
 	private void addProgramAndNationalObjectivesFilters() {

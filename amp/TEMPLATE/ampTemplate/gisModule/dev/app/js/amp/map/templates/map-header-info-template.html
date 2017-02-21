@@ -1,6 +1,4 @@
-<span class="map-title"><%= obj.title %></span>
+<span class="map-title"><%= obj.title && obj.title.length > 0 ? obj.title + ', ': '' %></span>
 <span class="map-filter-summary small">
-<% if(obj.filters && obj.filters.date ){ %>
- , <%= this.app.data.filter.formatDate(obj.filters.date.start) %> - <%= this.app.data.filter.formatDate(obj.filters.date.end) %>
- <% }%></span>
+<%= obj.dates.join(' - ') %></span>
 <!--<small class='pull-right'>1997-1999</small>-->

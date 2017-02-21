@@ -22,8 +22,26 @@ module.exports = Backbone.View.extend({
   render: function() {
     var title = this.app.data.title.current;
     var selectedFilters = this.app.data.filter.serialize();
-    this.$el.html(this.template({title: title, filters: selectedFilters.filters}));
+    this.$el.html(this.template({title: title, dates: this.prepareDateFilters(selectedFilters.filters)}));
     return this;
+  },
+  prepareDateFilters: function(filters){
+	  var dates = [];
+	  if(filters && filters.date){
+		  filters.date.start = filters.date.start || "";
+		  filters.date.end = filters.date.end || "";		  
+		  if(filters.date.start.length > 0){
+			  var startDatePrefix = (filters.date.end.length === 0) ? this.app.translator.translateSync("amp.gis:date-from", "From ")  : "";
+			  filters.date.start =  startDatePrefix  + " " + this.app.data.filter.formatDate(filters.date.start);
+			  dates.push(filters.date.start);  
+		  }
+		  if(filters.date.end.length > 0){
+			  var endDatePrefix = (filters.date.start.length === 0) ? this.app.translator.translateSync("amp.gis:date-until", "Until ")  : "";			  
+			  filters.date.end =  endDatePrefix + " " + this.app.data.filter.formatDate(filters.date.end);			  
+			  dates.push(filters.date.end);
+		  }
+	  }
+	  return dates	 
   }
 
 });

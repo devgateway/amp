@@ -3,6 +3,7 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -17,6 +18,7 @@ import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.junit.Test;
 
 /**
@@ -27,6 +29,10 @@ import org.junit.Test;
  *
  */
 public class AmpSchemaPledgesTests extends ReportingTestCase {
+	
+	public AmpSchemaPledgesTests() {
+		super("AmpSchemaPledgesTests");
+	}
 	
 	final List<String> acts = Arrays.asList(
 			"activity 1 with agreement",
@@ -1133,5 +1139,10 @@ public class AmpSchemaPledgesTests extends ReportingTestCase {
 				assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, BasicSanityChecks.fundingGrandTotalsDigester).toString());
 			}
 		}
+	}
+
+	@Override
+	public void setUp() {
+		AllTests_amp212.setUp();
 	}
 }

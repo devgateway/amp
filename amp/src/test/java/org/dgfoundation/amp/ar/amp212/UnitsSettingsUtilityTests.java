@@ -1,9 +1,11 @@
+/**
+ * 
+ */
 package org.dgfoundation.amp.ar.amp212;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -11,6 +13,10 @@ import org.junit.Test;
  * @author Nadejda Mandrescu
  */
 public class UnitsSettingsUtilityTests extends ReportingTestCase {
+	
+	public UnitsSettingsUtilityTests() {
+		super("settings mondrian tests");
+	}
 	
 	@Test
 	public void testAmountUnitsValues() {
@@ -31,10 +37,5 @@ public class UnitsSettingsUtilityTests extends ReportingTestCase {
 	public void testCrashes() {
 		shouldFail(() -> AmountsUnits.getForValue(15));
 		shouldFail(() -> AmountsUnits.getAmountDivider(12));
-	}
-
-	@BeforeClass
-	public static void setUp() {
-		// this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
 	}
 }

@@ -18,9 +18,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-/**
- * @implicitParam X-Auth-Token|string|header
- */
 @Path("currency")
 public class Currencies implements ErrorReportingEndpoint {
 	

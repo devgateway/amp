@@ -19,18 +19,20 @@ import org.dgfoundation.amp.nireports.NiUtils;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 
-import org.junit.Assert;
+import junit.framework.TestCase;
 
 /**
  * intermediary class for holding various utility methods for testcases
  * @author Dolghier Constantin
  *
  */
-public abstract class AmpTestCase extends Assert
+public abstract class AmpTestCase extends TestCase
 {
-	final BigDecimal BIG_DECIMAL_EPSI = BigDecimal.valueOf(0.0001d);
+	public AmpTestCase(String name) {
+		super(name);
+	}
 
-	public static final double DELTA_6 = 0.000001d;
+	final BigDecimal BIG_DECIMAL_EPSI = BigDecimal.valueOf(0.0001d);
 
 	public void shouldFail(AmpRunnable runnable){
 		shouldFail(runnable, null);

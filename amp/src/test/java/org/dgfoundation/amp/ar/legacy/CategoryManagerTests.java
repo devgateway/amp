@@ -3,13 +3,26 @@ package org.dgfoundation.amp.ar.legacy;
 
 import static org.digijava.module.categorymanager.util.CategoryConstants.*;
 
-import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.junit.Test;
 
-public class CategoryManagerTests extends ReportsTestCase {
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
-	@Test
+public class CategoryManagerTests extends TestCase
+{
+	private CategoryManagerTests(String name) {
+		super(name);
+	}
+		
+	public static Test suite()
+	{
+		TestSuite suite = new TestSuite(CategoryManagerTests.class.getName());
+		suite.addTest(new CategoryManagerTests("testHardCodedCategoryValueBasics"));
+		suite.addTest(new CategoryManagerTests("testHardCodedCategoryValueErrors"));
+		return suite;
+	}
+	
 	public void testHardCodedCategoryValueBasics()
 	{
 		assertTrue(ADJUSTMENT_TYPE_ACTUAL.existsInDatabase());
@@ -20,8 +33,7 @@ public class CategoryManagerTests extends ReportsTestCase {
 		assertTrue(ADJUSTMENT_TYPE_ACTUAL.equalsCategoryValue(acv));
 		assertFalse(ADJUSTMENT_TYPE_ACTUAL.equalsCategoryValue(ADJUSTMENT_TYPE_PLANNED.getAmpCategoryValueFromDB()));
 	}
-
-	@Test
+	
 	public void testHardCodedCategoryValueErrors()
 	{
 		HardCodedCategoryValue nonExistingValueHcv = new HardCodedCategoryValue("adjustment_type", "DUMMY_VALUE", false);
@@ -45,4 +57,6 @@ public class CategoryManagerTests extends ReportsTestCase {
 		assertFalse(nonExistingValueHcv.equalsCategoryValue(null));
 		assertFalse(nonExistingCategoryHcv.equalsCategoryValue(null));
 	}
+	
 }
+

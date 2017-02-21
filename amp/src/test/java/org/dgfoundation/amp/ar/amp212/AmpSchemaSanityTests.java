@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
@@ -64,6 +65,10 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		"Real SSC Activity 1",
 		"Real SSC Activity 2"
 	);
+	
+	public AmpSchemaSanityTests() {
+		super("AmpReportsSchema sanity tests");
+	}
 	
 	final static GrandTotalsDigest proposedProjectCostDigester = new GrandTotalsDigest(z -> z.equals("RAW / Proposed Project Amount") || z.startsWith("RAW / Revised Project Amount"));
 	final static String correctTotalsPPC = "{RAW / Proposed Project Amount=4781901.715878, RAW / Revised Project Amount=4412539.842263}";
@@ -2039,5 +2044,10 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		} finally {
 			TestcasesReportsSchema.disableToAMoPSplitting = true;
 		}
+	}
+
+	@Override
+	public void setUp() {
+		AllTests_amp212.setUp();
 	}
 }

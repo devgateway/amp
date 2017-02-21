@@ -13,7 +13,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
@@ -148,7 +147,7 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY, pickIdOnly=true)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY)
-	protected User lastImportedBy;
+    protected AmpTeamMember lastImportedBy;
 
 	@Interchangeable(fieldTitle = "Equal Oportunity", importable = true, fmPath = "/Activity Form/Cross Cutting Issues/Equal Opportunity")
 	@VersionableFieldTextEditor(fieldTitle = "Equal Oportunity")
@@ -1607,11 +1606,11 @@ LoggerIdentifiable, Cloneable {
             this.lastImportedAt = lastImportedAt;
         }
 
-        public User getLastImportedBy() {
+        public AmpTeamMember getLastImportedBy() {
             return lastImportedBy;
         }
 
-        public void setLastImportedBy(User lastImportedBy) {
+        public void setLastImportedBy(AmpTeamMember lastImportedBy) {
             this.lastImportedBy = lastImportedBy;
         }
 

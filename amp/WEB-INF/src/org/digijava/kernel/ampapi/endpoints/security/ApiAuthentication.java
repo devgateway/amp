@@ -27,25 +27,15 @@ import java.util.List;
 public final class ApiAuthentication {
 
     public static ApiErrorMessage login(final User currentUser, final HttpServletRequest request) {
-        ApiErrorMessage errorMessage = performSecurityChecks(currentUser, request);
+        final SiteDomain siteDomain = RequestUtils.retreiveSiteDomain(request);
+        final Site site = siteDomain.getSite();
+        final Subject subject = UserUtils.getUserSubject(currentUser);
+        final boolean siteAdmin = DgSecurityManager.permitted(subject, site,
+                ResourcePermission.INT_ADMIN);
 
-        if (errorMessage != null) {
-            SecurityContextHolder.getContext().setAuthentication(null);
-            return errorMessage;
-        }
-
-        AuditLoggerUtil.logUserLogin(request, currentUser, Constants.LOGIN_ACTION);
-
-        return null;
-    }
-
-    public static ApiErrorMessage performSecurityChecks(final User currentUser, final HttpServletRequest request) {
         if(currentUser.isBanned()) { // user is banned
+            SecurityContextHolder.getContext().setAuthentication(null);
             return SecurityErrors.USER_BANNED;
-        }
-
-        if (isAdmin(currentUser, request)) {
-            return null;
         }
 
         /*
@@ -57,28 +47,28 @@ public final class ApiAuthentication {
          */
         final Collection members = TeamMemberUtil.getTeamMembers(currentUser.getEmail());
         if(members == null || members.size() == 0) {
-            // The user is a registered user but not a team member
-            return SecurityErrors.NO_TEAM;
+            if(!siteAdmin) { // user is a site Admin
+                // The user is a registered user but not a team member
+                SecurityContextHolder.getContext().setAuthentication(null);
+                return SecurityErrors.NO_TEAM;
+            }
         }
 
         //Suspended login
         final List<SuspendLogin> su = UmUtil.getUserSuspendReasons (currentUser);
         if (su != null && !su.isEmpty()) {
-            final List<String> suReasons = new ArrayList<>();
-            for (SuspendLogin suObject : su) {
-                suReasons.add(suObject.getReasonText());
+            if(!siteAdmin) {
+                final List<String> suReasons = new ArrayList<>();
+                for (SuspendLogin suObject : su) {
+                    suReasons.add(suObject.getReasonText());
+                }
+                SecurityContextHolder.getContext().setAuthentication(null);
+                return new ApiErrorMessage(10, suReasons.toString());
             }
-            return new ApiErrorMessage(10, suReasons.toString());
         }
 
+
+        AuditLoggerUtil.logUserLogin(request, currentUser, Constants.LOGIN_ACTION);
         return null;
-    }
-
-    public static boolean isAdmin(User currentUser, HttpServletRequest request) {
-        SiteDomain siteDomain = RequestUtils.retreiveSiteDomain(request);
-        Site site = siteDomain.getSite();
-        Subject subject = UserUtils.getUserSubject(currentUser);
-
-        return DgSecurityManager.permitted(subject, site, ResourcePermission.INT_ADMIN);
     }
 }

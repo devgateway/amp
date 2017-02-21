@@ -284,8 +284,7 @@ public class Constants
 	public static final String GLOBAL_SETTINGS = "globalSettings";
 
 	// Session attributes names
-
-	public static final String CURRENT_USER = "currentUser";
+	
 	public static final String CURRENT_MEMBER = "currentMember";
 	public static final String FILTER_PARAMS = "filterParams";
 

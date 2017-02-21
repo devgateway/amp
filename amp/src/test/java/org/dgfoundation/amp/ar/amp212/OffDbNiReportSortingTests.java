@@ -1,10 +1,19 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
-import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * 
@@ -15,8 +24,11 @@ import org.junit.BeforeClass;
  */
 public class OffDbNiReportSortingTests extends SortingSanityChecks {
 	
+	static Logger log = Logger.getLogger(OffDbNiReportSortingTests.class);
+	
 	HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
 	public OffDbNiReportSortingTests() {
+		super("NiReportsSorting tests");
 		nrRunReports = 0;
 	}
 	
@@ -31,8 +43,8 @@ public class OffDbNiReportSortingTests extends SortingSanityChecks {
 		return getOfflineExecutor(activityNames);
 	}
 	
-	@BeforeClass
-	public static void setUp() {
-		// this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
+	@Override
+	public void tearDown() {
+		//System.err.format("Sanity checks %s have run %d reports\n", this.getName(), nrRunReports);
 	}
 }

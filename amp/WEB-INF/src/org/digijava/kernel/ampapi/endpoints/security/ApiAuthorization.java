@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package org.digijava.kernel.ampapi.endpoints.security;
 
 import java.lang.reflect.Method;
@@ -51,7 +54,8 @@ public class ApiAuthorization {
 		for (Method m : apiMethods) {
 			ApiMethod apiMethod = m.getAnnotation(ApiMethod.class);
 			// no need to remember methods we don't need to authorize
-			if (apiMethod.authTypes().length == 0) {
+			if (apiMethod.authTypes().length == 0 || 
+					apiMethod.authTypes().length == 1 && AuthRule.NONE.equals(apiMethod.authTypes()[0])) {
 				continue;
 			}
 			Class<?> clazz = m.getDeclaringClass();

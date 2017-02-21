@@ -36,6 +36,7 @@ import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 
@@ -44,7 +45,7 @@ import org.dgfoundation.amp.testutils.AmpTestCase;
  * @author Dolghier Constantin
  *
  */
-public abstract class NiTestCase extends AmpTestCase {
+public class NiTestCase extends AmpTestCase {
 	
 	final String TCN = "TotalColumnsName";
 	
@@ -55,7 +56,8 @@ public abstract class NiTestCase extends AmpTestCase {
 	
 	final NiReportsSchema schema;
 	
-	protected NiTestCase(NiReportsSchema schema) {
+	protected NiTestCase(String name, NiReportsSchema schema) {
+		super(name);
 		this.schema = schema;
 	}
 	

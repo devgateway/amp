@@ -111,6 +111,13 @@
 			org.digijava.module.aim.patches.DBPatcher:patchAMPDB
 		</param-value>
 	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/spring/application-context.xml
+			/WEB-INF/saiku/context.xml
+		</param-value>
+	</context-param>
 
 
 	<!-- Apache Wicket -->

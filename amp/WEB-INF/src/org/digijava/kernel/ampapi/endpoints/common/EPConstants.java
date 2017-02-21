@@ -137,6 +137,5 @@ public class EPConstants {
 	public static final String TAB_LOCATIONS = "Location";
 	public static final String TAB_OTHER= "Other";
 	public static final String TAB_UNASSIGNED= "Unassigned";
-
-	public static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+	
 }

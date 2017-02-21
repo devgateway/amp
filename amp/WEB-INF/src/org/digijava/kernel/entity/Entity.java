@@ -35,7 +35,7 @@ import java.util.Date;
 public abstract class Entity
     implements Principal {
 
-    protected Long id;
+    private Long id;
     protected String name;
     private Entity creationEntity;
     private Date creationDate;

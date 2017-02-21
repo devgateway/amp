@@ -111,6 +111,7 @@ public class LocationService {
 			// If the admin level is country we filter only to show projects at
 			// the country of the current installation
 			final ValueWrapper<String> countryId = new ValueWrapper<String>("");
+			final ValueWrapper<String> countryGeoCode = new ValueWrapper<String>("");
 			final ValueWrapper<String> countryName = new ValueWrapper<String>("");
 			PersistenceManager.getSession().doWork(new Work() {
 				public void execute(Connection conn) throws SQLException {
@@ -126,15 +127,10 @@ public class LocationService {
 			});
 
 			filterRules.addFilterRule(new ReportColumn(ColumnConstants.COUNTRY), new FilterRule(countryId.value, true));
-			admLevelToGeoCode = Collections.unmodifiableMap(new HashMap<String, String>() {
-				{
-					this.put(countryName.value, countryId.value);
-				}
-			});
-		} else {
-			//we only get the geocodes if !country level
-			admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
-		}
+			
+		} 
+		
+		admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
 		spec.setFilters(filterRules);
 		
 		String currcode = FilterUtils.getSettingbyName(config, SettingsConstants.CURRENCY_ID);

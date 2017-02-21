@@ -3,10 +3,10 @@
  */
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import java.util.List;
-
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import java.util.List;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 /**
@@ -20,10 +20,12 @@ public class SettingField {
 		INT_VALUE,
 		STR_VALUE,
 		BOOL_VALUE,
+		RANGE_VALUE,
 		/** A list of Options */
 		OPTIONS,
 		/** A list of nested SettingField-s */
 		FIELDS;
+
 	};
 	/** 
 	 * Field type
@@ -54,6 +56,10 @@ public class SettingField {
 	
 	public SettingField(String id, String groupId, String name, boolean value) {
 		this(FieldType.BOOL_VALUE, id, groupId, name, value);
+	}
+
+	public SettingField(String id, String groupId, String name, SettingRange value) {
+		this(FieldType.RANGE_VALUE, id, groupId, name, value);
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.newreports;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -111,12 +112,12 @@ public class AmpReportFilters extends ReportFiltersImpl {
 		filterRules.put(elem, filterRule);
 	}
 	
-	public static int getReportSelectedYear(ReportSpecification spec, int defaultYear) {
+	public static int getReportSelectedYear(ReportSpecification spec) {
 		AmpReportFilters filters = (AmpReportFilters) spec.getFilters();
 		Integer year = filters == null ? null : filters.getComputedYear();
-		// if not set, then use default year
+		// if not set, then it means Current Year
 		if (year == null) {
-			year = defaultYear;
+			year = Calendar.getInstance().get(Calendar.YEAR);
 		}
 		return year;
 	}

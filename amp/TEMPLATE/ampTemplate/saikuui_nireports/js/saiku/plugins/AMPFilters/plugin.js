@@ -49,7 +49,7 @@ var AMPFilters = Backbone.View.extend({
 		        if (window.currentFilter !== undefined) {
 		            window.currentFilter.loaded.done(function() {
 			            var auxFilters = obj.workspace.query.get('filters');			            
-			            window.currentFilter.deserialize({filters: FilterUtils.processFilters(auxFilters)}, {
+			            window.currentFilter.deserialize({filters: auxFilters}, {
 			            	silent : true
 			            });
 		            });		            

@@ -4,29 +4,47 @@ import java.util.List;
 import java.util.TreeMap;
 
 import org.apache.struts.mock.MockHttpServletRequest;
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.dgfoundation.amp.testutils.AmpRunnable;
-import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * multilingual editor tests
  * @author Dolghier Constantin
  *
  */
-public class MultilingualTests28 extends ReportsTestCase {
-
-	private static List<String> locales;
+public class MultilingualTests28 extends AmpTestCase
+{
+	protected List<String> locales;
 	
-	@Test
+	private MultilingualTests28(String name)
+	{
+		super(name);		
+	}
+	
+	public static Test suite()
+	{
+		TestSuite suite = new TestSuite(MultilingualTests28.class.getName());
+		suite.addTest(new MultilingualTests28("testLoadingMultilingual"));
+		suite.addTest(new MultilingualTests28("testLoadingMultilingualNotAllLanguages"));
+		//suite.addTest(new MultilingualTests28("testSerializationAllLanguagesFilled"));
+		return suite;
+	}
+	
+	
 	public void testLoadingMultilingual()
 	{
 		MultilingualInputFieldValues mifv = new MultilingualInputFieldValues(AmpReports.class, 52L, "name", null, locales);
@@ -38,7 +56,6 @@ public class MultilingualTests28 extends ReportsTestCase {
 				new TreeMap<String, String>(mifv.getTranslations()).toString());
 	}
 
-	@Test
 	public void testLoadingMultilingualNotAllLanguages()
 	{
 		MultilingualInputFieldValues mifv = new MultilingualInputFieldValues(AmpReports.class, 53L, "name", null, locales);
@@ -53,8 +70,6 @@ public class MultilingualTests28 extends ReportsTestCase {
 	/**
 	 * postgres is hanging on this testcase - investigate in better times why
 	 */
-	@Test
-	@Ignore
 	public void testSerializationAllLanguagesFilled()
 	{
 		Session session = PersistenceManager.getSession();
@@ -122,8 +137,10 @@ public class MultilingualTests28 extends ReportsTestCase {
 		//MultilingualInputFieldValues.serialize(report, "name", null, mySession, request);
 	}
 	
-	@Before
-    public void setUp() {
-        locales = TranslatorUtil.getLanguages();
+	@Override
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        this.locales = TranslatorUtil.getLanguages();                
     }
 }

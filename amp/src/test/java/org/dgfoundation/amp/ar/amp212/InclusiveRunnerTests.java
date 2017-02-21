@@ -4,7 +4,6 @@ import java.util.function.LongFunction;
 
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -21,6 +20,10 @@ public class InclusiveRunnerTests extends AmpTestCase {
 	 */
 	public final static LongFunction<String> TESTCASES_FORMATTER = z -> String.format("%d ms", Math.round(z / 50.0) * 50);
 	
+	public InclusiveRunnerTests() {
+		super("inclusive runner tests");
+	}
+		
 	/**
 	 * busy wait (busy waiting is more stable then waiting, so easier to testcases timing code)
 	 * @param millies
@@ -79,7 +82,6 @@ public class InclusiveRunnerTests extends AmpTestCase {
 	}
 	
 	@Test
-	@Ignore
 	public void testThreads() throws InterruptedException {
 		InclusiveTimer timer = new InclusiveTimer("threaded bench");
 		Thread thr1 = new Thread(() -> timer.run("thread 1", () -> {

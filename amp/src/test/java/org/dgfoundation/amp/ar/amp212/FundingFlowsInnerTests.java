@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
+import org.dgfoundation.amp.nireports.schema.DimensionLevel;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -28,7 +30,7 @@ import org.junit.Test;
 public class FundingFlowsInnerTests extends NiTestCase {
 		
 	public FundingFlowsInnerTests() {
-		super(HardcodedReportsTestSchema.getInstance());
+		super("FundingFlows tests", HardcodedReportsTestSchema.getInstance());
 	}
 	
 	@Test

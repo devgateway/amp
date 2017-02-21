@@ -934,7 +934,7 @@ public class ActivityImporter {
 	 */
 	protected void prepareToSave() {
         newActivity.setLastImportedAt(new Date());
-        newActivity.setLastImportedBy(currentMember.getUser());
+        newActivity.setLastImportedBy(currentMember);
 
 		newActivity.setChangeType(ChangeType.IMPORT.name());
 		// configure draft status on import only, since on update we'll change to draft based on RequiredValidator

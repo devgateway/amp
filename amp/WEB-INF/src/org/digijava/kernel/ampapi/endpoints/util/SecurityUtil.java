@@ -6,25 +6,17 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
-import org.digijava.kernel.ampapi.endpoints.security.ApiAuthentication;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.joda.time.DateTime;
-
 /**
  * Utility class to handle API security related issues
  * @author Julian de Anquin
@@ -42,6 +34,7 @@ public class SecurityUtil {
 	//TODO for testing
 	public static Integer TOKEN_EXPIRATION=30;
 
+	public static String USER_ENDPOINT_PATH="/security/user";
 
 	@SuppressWarnings("unchecked")
 	public static AmpApiToken generateToken() {
@@ -66,18 +59,13 @@ public class SecurityUtil {
 		TLSUtils.getRequest().getSession().setAttribute(USER_TOKEN, null);
 		String token = UUID.randomUUID().toString();
 		// We create the ampampi object
-
-		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-		User user = (User) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_USER);
-
+		
 		AmpApiToken apiToken = new AmpApiToken();
 		apiToken.setToken(token);
 		apiToken.setExpirationTime(new DateTime().plusMinutes(TOKEN_EXPIRATION));
-		apiToken.setTeamMember(teamMember);
-        apiToken.setUser(user);
-
+		
 		TLSUtils.getRequest().getSession().setAttribute(USER_TOKEN, apiToken);
-
+		apiToken.setTeamMember((TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER));
 		tokens.put(token, apiToken);
 		TLSUtils.getRequest().getServletContext().setAttribute(SecurityUtil.TOKENS, tokens);
 		
@@ -94,7 +82,8 @@ public class SecurityUtil {
 		AmpApiToken apiToken = (AmpApiToken) TLSUtils.getRequest().getSession().getAttribute(USER_TOKEN);
 		if (apiToken != null) {
 
-			if (apiToken.isExpired()) {
+			DateTime now = new DateTime();
+			if (now.isAfter(apiToken.getExpirationTime())) {
 				//token expired remove from session and from application
 
 				TLSUtils.getRequest().getSession().setAttribute(USER_TOKEN,null);
@@ -133,14 +122,10 @@ public class SecurityUtil {
             if (requestApiToken == null) {
 				errors.add(SecurityErrors.NO_SESSION_TOKEN);
 			} else {
-                if (requestApiToken.isExpired()) {
+                if (new DateTime().isAfter(requestApiToken.getExpirationTime())) {
                     logger.debug(SecurityErrors.TOKEN_EXPIRED.description);
                     errors.add(SecurityErrors.TOKEN_EXPIRED);
                 }
-                ApiErrorMessage errorMessage = validateToken(requestApiToken);
-				if (errorMessage != null) {
-					errors.add(errorMessage);
-				}
             }
 		}
 		return requestApiToken;
@@ -154,26 +139,22 @@ public class SecurityUtil {
 		} else {
 			// If the user has a token in session and the token is valid we will
 			// use that session
-			HttpServletRequest request = TLSUtils.getRequest();
-			HttpSession session = request.getSession();
-			if (session.getAttribute(Constants.CURRENT_MEMBER) != null) {
+			if (TLSUtils.getRequest().getSession() != null
+					&& TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER) != null) {
 				// we check if the user has a token in session and that token is
 				// valid
-				AmpApiToken sessionAapiToken = (AmpApiToken) session.getAttribute(USER_TOKEN);
+				AmpApiToken sessionAapiToken = (AmpApiToken) TLSUtils
+						.getRequest().getSession().getAttribute(USER_TOKEN);
 				if (sessionAapiToken == null) {
 					// the user is logged in but without token
 					error=SecurityErrors.NO_SESSION_TOKEN;
 				} else {
-					if (sessionAapiToken.isExpired()) {
+					if (new DateTime().isAfter(sessionAapiToken.getExpirationTime())) {
 						// the token in session has expired trhow exception
 						error = SecurityErrors.TOKEN_EXPIRED;
 					} else {
-						error = validateToken(sessionAapiToken);
-
-						if (error == null) {
-							return;// no session needs to be restored since the user
-							// has a token in session and its valid
-						}
+						return;// no session needs to be restored since the user
+								// has a token in session and its valid
 					}
 				}
 
@@ -189,15 +170,17 @@ public class SecurityUtil {
 						error = SecurityErrors.INVALID_TOKEN;
 					}
 				} else {
-					if (apiToken.isExpired()) {
+					if (new DateTime().isAfter(apiToken.getExpirationTime())) {
 						// the toke has expired
 						error = SecurityErrors.TOKEN_EXPIRED;
 					} else {
 						// we restore the session
-						session.setAttribute(Constants.CURRENT_USER, apiToken.getUser());
-						session.setAttribute(Constants.CURRENT_MEMBER, apiToken.getTeamMember());
+						TLSUtils.getRequest()
+								.getSession()
+								.setAttribute(Constants.CURRENT_MEMBER,
+										apiToken.getTeamMember());
 						//session restored adding a request parameter to remove it later
-						request.setAttribute(REMOVE_SESSION, "true");
+						TLSUtils.getRequest().setAttribute(REMOVE_SESSION, "true");
 					}
 				}
 
@@ -208,51 +191,6 @@ public class SecurityUtil {
 			ApiErrorResponse.reportUnauthorisedAccess(error);
 		}
 	}
-
-	/**
-	 * Checks validity of the token. Token becomes invalid if user:
-	 * <ul><li>was blocked
-	 * <li>was removed from the team
-	 * <li>changed password
-	 * </ul>
-	 * @return null if no errors, otherwise the error describing the reason
-	 */
-	private static ApiErrorMessage validateToken(AmpApiToken ampApiToken) {
-		String email = ampApiToken.getUser().getEmail();
-
-		User user = UserUtils.getUserByEmailRt(email);
-
-		ApiErrorMessage errorMessage = ApiAuthentication.performSecurityChecks(user, TLSUtils.getRequest());
-		if (errorMessage != null) {
-			return errorMessage;
-		}
-
-		if (ampApiToken.getTeamMember() != null && isNotInWorkspace(ampApiToken.getTeamMember().getTeamId(), email)) {
-			return SecurityErrors.INVALID_TEAM;
-		}
-
-		if (isPasswordChanged(ampApiToken, user)) {
-			return SecurityErrors.PASSWORD_CHANGED;
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns true if user is still part of the workspace.
-	 */
-	private static boolean isNotInWorkspace(Long workspaceId, String email) {
-		AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(email, workspaceId);
-		return teamMember == null;
-	}
-
-	/**
-	 * Returns true if password changed since the token was created.
-	 */
-	private static boolean isPasswordChanged(AmpApiToken ampApiToken, User user) {
-		return !user.getPassword().equals(ampApiToken.getUser().getPassword());
-	}
-
 	/** Remove token from application level
 	 * @param sc ServletContext
 	 * @param token token to remove

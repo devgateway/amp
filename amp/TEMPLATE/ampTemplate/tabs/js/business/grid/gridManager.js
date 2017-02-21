@@ -28,7 +28,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 	/**
 	 * Apply filters and refresh the grid.
 	 */
-	GridManager.filter = function(id, jsonFilters, settings) {
+	GridManager.filter = function(id, jsonFilters, settings) {		
 		// Until we refactor the Filter Widget we will transform some filters here before sending the params to the backend.
 						
 		var grid = jQuery("#" + gridBaseName + id);
@@ -64,6 +64,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 	};
 
 	GridManager.populateGrid = function(id, dynamicLayoutView, firstContent) {
+		app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize() || {};		
 		var TableSectionView = Marionette.ItemView.extend({
 			template : '#grid-template'
 		});
@@ -106,7 +107,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 							page : 1,
 							regenerate : true,
 							columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
-							filters : null
+							filters : app.TabsApp.serializedFilters.filters
 						},
 						jsonReader : {
 							repeatitems : false,
@@ -629,7 +630,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		if (sorting !== null) {
 			model.queryModel.sorting = sorting;
 		}
-		var md5 = CommonFilterUtils.calculateMD5FromParameters(model, id, lang);
+		var md5 = CommonFilterUtils.calculateMD5FromParameters(model, id, lang, null);
 		return md5;
 	}
 });

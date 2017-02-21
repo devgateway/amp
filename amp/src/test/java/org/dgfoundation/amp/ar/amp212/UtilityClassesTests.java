@@ -1,10 +1,17 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Collection;
+import java.util.function.Function;
 
+import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
+import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
+
 
 /**
  * 
@@ -12,9 +19,12 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class UtilityClassesTests {
+public class UtilityClassesTests extends AmpTestCase {
 	
-
+	public UtilityClassesTests() {
+		super("utility classes tests");
+	}
+		
 	@Test
 	public void testTimeRange() {
 		assertTrue(TimeRange.MONTH.compareTo(TimeRange.YEAR) > 0);

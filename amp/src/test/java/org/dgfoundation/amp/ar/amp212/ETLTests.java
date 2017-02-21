@@ -3,11 +3,14 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.DateRateInfo;
 import org.dgfoundation.amp.currencyconvertor.ExchangeRates;
 import org.dgfoundation.amp.currencyconvertor.OneCurrencyCalculator;
+import org.dgfoundation.amp.mondrian.currencies.CurrencyETL;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTableDescription;
 import org.dgfoundation.amp.mondrian.PercentagesDistribution;
@@ -20,8 +23,14 @@ import org.junit.Test;
  * @author Dolghier Constantin
  *
  */
-public class ETLTests extends AmpTestCase {
+public class ETLTests extends AmpTestCase
+{
 	
+	public ETLTests(String name)
+	{
+		super(name);
+	}
+
 	@Test
 	public void testMondrianTableDescription() {
 		// test that idColumnNames = null means to it mirroring indexedColumns and is iterated in the right sequence
@@ -72,6 +81,7 @@ public class ETLTests extends AmpTestCase {
 		System.out.println(res);
 	}
 	
+	@Test
 	protected void testPercentage(String cor, String errors, Long idToAddIfEmpty, Pair... entries) {
 		NumberedTypedEntity activity = new NumberedTypedEntity(1);
 		PercentagesDistribution perc = new PercentagesDistribution(activity, "primary_sector_id");
@@ -129,17 +139,17 @@ public class ETLTests extends AmpTestCase {
 		DateRateInfo dri = new DateRateInfo(10, 0, 5.5);
 		assertEquals(dri.requestedDate, 10);
 		assertEquals(dri.minDateDelta, 0);
-		assertEquals(dri.rate, 5.5, DELTA_6);
+		assertEquals(dri.rate, 5.5);
 		
 		dri = new DateRateInfo(3, -2, 5.5);
 		assertEquals(dri.requestedDate, 3);
 		assertEquals(dri.minDateDelta, 2);
-		assertEquals(dri.rate, 5.5, DELTA_6);
+		assertEquals(dri.rate, 5.5);
 		
 		dri = new DateRateInfo(3, 2, 5.5);
 		assertEquals(dri.requestedDate, 3);
 		assertEquals(dri.minDateDelta, 2);
-		assertEquals(dri.rate, 5.5, DELTA_6);
+		assertEquals(dri.rate, 5.5);
 	}
 	
 	@Test
@@ -175,12 +185,12 @@ public class ETLTests extends AmpTestCase {
 		DateRateInfo rateA = new DateRateInfo(10, 0, 21.0);
 		DateRateInfo rateB = new DateRateInfo(12, 2, 31.0);
 
-		assertEquals(21.0, OneCurrencyCalculator.chooseBestRate(rateA, rateB), DELTA_6);
-		assertEquals(1/21.0, OneCurrencyCalculator.chooseBestRate(rateB, rateA), DELTA_6);
+		assertEquals(21.0, OneCurrencyCalculator.chooseBestRate(rateA, rateB));
+		assertEquals(1/21.0, OneCurrencyCalculator.chooseBestRate(rateB, rateA));
 		
 		rateB = new DateRateInfo(10, 0, 10);
-		assertEquals(21.0, OneCurrencyCalculator.chooseBestRate(rateA, rateB), DELTA_6); // should favour direct exchange rate
-		assertEquals(10.0, OneCurrencyCalculator.chooseBestRate(rateB, rateA), DELTA_6); // should favour direct exchange rate
+		assertEquals(21.0, OneCurrencyCalculator.chooseBestRate(rateA, rateB)); // should favour direct exchange rate
+		assertEquals(10.0, OneCurrencyCalculator.chooseBestRate(rateB, rateA)); // should favour direct exchange rate
 		
 		rateA = new DateRateInfo(15, 3, 8);
 		rateB = new DateRateInfo(19, 1, 0.12);
@@ -228,4 +238,12 @@ public class ETLTests extends AmpTestCase {
 			assertEquals("comparing on day " + day, cor.get(day), calc.getRate(day), 0.001);
 		}
 	}
+	
+	@Override
+    protected void setUp() throws Exception
+    {
+		//TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
+		super.setUp();
+        // do nothing now                
+    }
 }

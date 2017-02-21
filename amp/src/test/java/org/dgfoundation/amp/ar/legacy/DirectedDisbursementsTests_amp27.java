@@ -1,29 +1,69 @@
 package org.dgfoundation.amp.ar.legacy;
 
+import java.util.HashSet;
+import java.util.List;
+
 import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
 import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.*;
+import org.digijava.kernel.persistence.HibernateClassLoader;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.hibernate.Query;
+
+import org.hibernate.cfg.*;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * testcase for Directed Disbursements (AMP-15337)
+ * this can only be run IFF amp has been started standalone. For this, AllTests.setUp() should have been run previously (typically called by AllTests.suite() as part of the JUnit discovery process)
  * Identical to the AMP-2.6 testcases, but the locale is hardcoded to Russian
  * @author Dolghier Constantin
  *
  */
 public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 {
+	public DirectedDisbursementsTests_amp27(String name) {
+		super(name);
+	}
+		
+	public static Test suite()
+	{
+		TestSuite suite = new TestSuite(DirectedDisbursementsTests_amp27.class.getName());
+//		suite.addTest(new DirectedDisbursementsTests_amp27("testFlatReport"));
+		suite.addTest(new DirectedDisbursementsTests_amp27("testByBeneficiaryRu"));
+		suite.addTest(new DirectedDisbursementsTests_amp27("testByBeneficiaryEn"));		
+		suite.addTest(new DirectedDisbursementsTests_amp27("testByDonorRu"));
+		suite.addTest(new DirectedDisbursementsTests_amp27("testByDonorEn"));
+		suite.addTest(new DirectedDisbursementsTests_amp27("testByImplementingEn"));
+		suite.addTest(new DirectedDisbursementsTests_amp27("testByImplementingRu"));
+//		suite.addTest(new DirectedDisbursementsTests_amp27("testDonorAgencyFlat"));
+//		suite.addTest(new DirectedDisbursementsTests_amp27("testDonorAgencyHier"));
+//		suite.addTest(new DirectedDisbursementsTests_amp27("testByExecuting"));
+//		suite.addTest(new DirectedDisbursementsTests_amp27("testActualDisbursementsNotDoubleCounted"));
+		
+		return suite;
+	}
+		
+	protected List<AmpActivity> getAllActivities() throws Exception
+	{
+		 org.hibernate.Session session = PersistenceManager.getRequestDBSession();
+	      String qryStr = "select a from " + AmpActivity.class.getName() + " a ";
+	      Query qry = session.createQuery(qryStr);
+	      return (List<AmpActivity>) qry.list();
+	}
+		
 	/**
 	 * a flat report containing RealDisbursements of a single activity
 	 */
-	@Test
-	@Ignore
 	public void testFlatReport()
 	{
 		// ========================= one more report ===============================
@@ -50,7 +90,6 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 	/**
 	 * same report as {@link #testFlatReport()}, but with a hierarchy by Beneficiary Agency
 	 */
-	@Test
 	public void testByBeneficiaryEn()
 	{
 		/// ========================= one more report ===============================
@@ -87,7 +126,6 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 	/**
 	 * same report as {@link #testFlatReport()}, but with a hierarchy by Beneficiary Agency
 	 */
-	@Test
 	public void testByBeneficiaryRu()
 	{
 		/// ========================= one more report ===============================
@@ -125,7 +163,6 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 	/**
 	 * same report as {@link #testFlatReport()}, but with a hierarchy by Donor Agency
 	 */
-	@Test
 	public void testByDonorRu()
 	{
 		/// ========================= one more report ===============================
@@ -174,7 +211,6 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 	/**
 	 * same report as {@link #testFlatReport()}, but with a hierarchy by Donor Agency
 	 */
-	@Test
 	public void testByDonorEn()
 	{
 		/// ========================= one more report ===============================
@@ -221,9 +257,7 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 	}	
 	/**
 	 * same report as {@link #testFlatReport()}, but with a hierarchy by Executing Agency
-	 */
-	@Test
-	@Ignore
+	 */	
 	public void testByExecuting()
 	{
 		/// ========================= one more report ===============================
@@ -261,9 +295,7 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 		runReportTest("by executing Directed Disbursements Report", "AMP-15337-real-disbursements-by-executing", new String[] {"Eth Water"}, by_exec_ddr_correct);
 				
 	}
-
-	@Test
-	@Ignore
+	
 	public void testActualDisbursementsNotDoubleCounted()
 	{
 		GroupReportModel by_exec_ddr_correct = GroupReportModel.withGroupReports("AMP-15988-actual-disbursements-doublecounting-real-disbursements",
@@ -311,8 +343,6 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 	/**
 	 * "Donor Agency" column for an activity with multiple donors and intermediary donors
 	 */
-	@Test
-	@Ignore
 	public void testDonorAgencyFlat()
 	{
 		// ========================= one more report ===============================
@@ -333,8 +363,6 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 		runReportTest("flat Donor Agency Report", "AMP-16093-no-hier", new String[] {"Eth Water"}, fddr_correct);
 	}
 
-	@Test
-	@Ignore
 	public void testDonorAgencyHier()
 	{
 		// ========================= one more report ===============================
@@ -375,7 +403,6 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 		runReportTest("hier Donor Agency Report", "AMP-16093-with-hier", new String[] {"Eth Water"}, fddr_correct);
 	}
 
-	@Test
 	public void testByImplementingEn()
 	{
 		// ========================= one more report ===============================
@@ -409,8 +436,7 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 		
 		runReportTest("hier Implementing Agency report En", "AMP-15337-real-disbursements-by-implementing", new String[] {"Eth Water"}, fddr_correct, null, "en");
 	}
-
-	@Test
+	
 	public void testByImplementingRu()
 	{
 		// ========================= one more report ===============================

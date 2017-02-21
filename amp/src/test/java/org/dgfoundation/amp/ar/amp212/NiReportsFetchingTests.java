@@ -8,6 +8,7 @@ import java.util.Set;
 
 import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 
+import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -30,6 +31,10 @@ import org.junit.Test;
  *
  */
 public class NiReportsFetchingTests extends ReportingTestCase {
+
+	public NiReportsFetchingTests() {
+		super("AmpReportsSchema fetching tests");
+	}
 
 	@Test
 	public void testSpeed() throws AMPException {
@@ -236,5 +241,9 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 			+ "]";
 			assertEquals(cor, cells.toString());
 		});
+	}
+	@Override
+	public void setUp() {
+		AllTests_amp212.setUp();
 	}
 }

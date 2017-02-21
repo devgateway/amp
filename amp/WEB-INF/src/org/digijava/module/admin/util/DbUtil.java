@@ -634,8 +634,6 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 
-            user.updateLastModified();
-
 //beginTransaction();
 
 			session.update(user);

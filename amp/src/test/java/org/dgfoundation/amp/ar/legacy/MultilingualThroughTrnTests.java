@@ -2,19 +2,36 @@ package org.dgfoundation.amp.ar.legacy;
 
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 
+import junit.framework.Test;
+
+import junit.framework.TestSuite;
+
+import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
+
 import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
 import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
-import org.junit.Ignore;
-import org.junit.Test;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 
-public class MultilingualThroughTrnTests extends ReportsTestCase {
-
-	@Test
-	@Ignore
+public class MultilingualThroughTrnTests extends ReportsTestCase
+{
+	public MultilingualThroughTrnTests(String name)
+	{
+		super(name);
+	}
+	
+	public static Test suite()
+	{
+		TestSuite suite = new TestSuite(MultilingualThroughTrnTests.class.getName());
+		suite.addTest(new MultilingualThroughTrnTests("testFlat"));
+		suite.addTest(new MultilingualThroughTrnTests("testHierByTypeOfAssistance"));
+		suite.addTest(new MultilingualThroughTrnTests("testHierByImplLevel"));
+		
+		return suite;
+	}
+	
 	public void testHierByImplLevel()
 	{
 		GroupReportModel fddr_correct = 
@@ -198,8 +215,7 @@ public class MultilingualThroughTrnTests extends ReportsTestCase {
 
 
 	}
-
-	@Test
+	
 	public void testHierByTypeOfAssistance()
 	{
 		GroupReportModel fddr_correct = 
@@ -324,9 +340,7 @@ public class MultilingualThroughTrnTests extends ReportsTestCase {
 				"Проект КЮЮ 1", "Проект КЮЮ 2", "crazy funding 1"}, 
 				fddr_correct, null, "ru");
 	}
-
-	@Test
-	@Ignore
+	
 	public void testFlat()
 	{
 		GroupReportModel fddr_correct = 

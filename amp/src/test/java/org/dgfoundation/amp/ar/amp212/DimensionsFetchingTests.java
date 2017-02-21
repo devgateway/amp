@@ -19,6 +19,10 @@ public class DimensionsFetchingTests extends ReportingTestCase {
 	
 	protected final AmpReportsSchema schema = AmpReportsSchema.getInstance();
 	
+	public DimensionsFetchingTests() {
+		super("Dimension fetching tests");
+	}
+
 	@Test
 	public void testOrganisationsFetching() {
 		DimensionSnapshot snapshot = schema.orgsDimension.getDimensionData();

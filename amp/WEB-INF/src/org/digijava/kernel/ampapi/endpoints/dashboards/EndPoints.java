@@ -588,9 +588,9 @@ public class EndPoints implements ErrorReportingEndpoint {
 	 *     “name” : “Dark Red”
 	 *     }, …
 	 *     ]
-	 * }
-	 * @implicitParam X-Auth-Token|string|header
-	 * @return JSON structure of HeatMap Administrative Settings
+	 * }</pre>
+	 *
+	 * @return a JSON object with the structure of HeatMap Administrative Settings
 	 */
 	@GET
     @Path("/heat-map/settings")
@@ -618,11 +618,11 @@ public class EndPoints implements ErrorReportingEndpoint {
 	 *         “1234” : [“Invalid color threshold”]
 	 *         ...
 	 *     }
-	 * }
-	 * @implicitParam X-Auth-Token|string|header
-	 * @param config
-	 * @return
-	 * @throws Exception 
+	 * }</pre>
+	 *
+	 * @param config a JSON object with the config
+	 *
+	 * @return a JSON object empty on success, or result with errors
 	 */
 	@POST
     @Path("/heat-map/settings")

@@ -9,8 +9,8 @@ package org.digijava.kernel.ampapi.endpoints.security;
  * @author Nadejda Mandrescu
  */
 public enum AuthRule {
-	/** allow execution only for authenticated sessions */
-	AUTHENTICATED,
+	/** API Token must be action authorized, no special rule to fulfill */
+	TOKEN, 
 	/** request must be issued within a selected workspace */
 	IN_WORKSPACE,
 	/** request must be issued by a logged-in admin */
@@ -20,7 +20,9 @@ public enum AuthRule {
 	/** edit activity right must be enabled */
 	EDIT_ACTIVITY,
 	/** view activity right must be enabled */
-	VIEW_ACTIVITY;
+	VIEW_ACTIVITY,
+	/** action authorized, no special rule to fulfill */
+	NONE;
 	
 	@Override
 	public String toString() {

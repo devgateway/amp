@@ -138,7 +138,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@POST
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "addProject", ui = false)
+	@ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "addProject", ui = false)
 	public JsonBean addProject(JsonBean newJson) {
         return InterchangeUtils.importActivity(newJson, false, uri.getBaseUri() + "activity");
 	}
@@ -153,7 +153,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@POST
 	@Path("/{projectId}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "updateProject", ui = false)
+	@ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "updateProject", ui = false)
 	public JsonBean updateProject(@PathParam("projectId") Long projectId, JsonBean newJson) {
 		/*
 		 * Originally it was defined as PUT to avoid these type of issues checked here.

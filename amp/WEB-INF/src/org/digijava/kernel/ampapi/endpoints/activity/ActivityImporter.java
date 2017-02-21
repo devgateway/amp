@@ -103,7 +103,7 @@ public class ActivityImporter {
 	private boolean isDraftFMEnabled;
 	private boolean isMultilingual;
 	private TranslationSettings trnSettings;
-	private AmpTeamMember currentMember;
+	private User currentUser;
 	private String sourceURL;
     private String endpointContextPath;
     // latest activity id in case there was attempt to update older version of an activity
@@ -112,7 +112,7 @@ public class ActivityImporter {
     protected void init(JsonBean newJson, boolean update, String endpointContextPath) {
 		this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
 		this.update = update;
-        this.currentMember = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+		this.currentUser = TeamUtil.getCurrentUser();
 		this.newJson = newJson;
 		this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
 		this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
@@ -267,11 +267,11 @@ public class ActivityImporter {
 	}
 
 	public AmpTeamMember getAmpTeamMember(Long modifiedBy) {
-		AmpTeamMember teamMember;
-		if (modifiedBy == null) {
-			teamMember = currentMember;
-		} else {
+		AmpTeamMember teamMember = null;
+		if (modifiedBy != null) {
 			teamMember = TeamMemberUtil.getAmpTeamMember(modifiedBy);
+		} else if (TeamMemberUtil.getLoggedInTeamMember() != null) {
+			teamMember = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
 		}
 		return teamMember;
 	}
@@ -959,7 +959,7 @@ public class ActivityImporter {
 					}
 				} else if (editor == null) {
 					// create new
-					editor = DbUtil.createEditor(currentMember.getUser(), langCode, sourceURL, key, null, translation,
+					editor = DbUtil.createEditor(currentUser, langCode, sourceURL, key, null, translation,
                             "Activities API", TLSUtils.getRequest());
 					DbUtil.saveEditor(editor);
 				} else if (!editor.getBody().equals(translation)) {
@@ -999,7 +999,7 @@ public class ActivityImporter {
 	 */
 	protected void prepareToSave() {
         newActivity.setLastImportedAt(new Date());
-        newActivity.setLastImportedBy(currentMember.getUser());
+        newActivity.setLastImportedBy(currentUser);
 
 		newActivity.setChangeType(ChangeType.IMPORT.name());
 		// configure draft status on import only, since on update we'll change to draft based on RequiredValidator

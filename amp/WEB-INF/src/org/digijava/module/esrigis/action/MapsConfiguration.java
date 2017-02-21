@@ -1,16 +1,5 @@
 package org.digijava.module.esrigis.action;
 
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.validator.UrlValidator;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -23,6 +12,16 @@ import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.form.MapsConfigurationForm;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class MapsConfiguration extends DispatchAction {
 	private static Logger logger = Logger.getLogger(MapsConfiguration.class);
@@ -203,139 +202,4 @@ public class MapsConfiguration extends DispatchAction {
 		}
 	}
 	
-//	
-//	public ActionForward MapList(ActionMapping mapping, ActionForm form,
-//			HttpServletRequest request, HttpServletResponse response)
-//			throws java.lang.Exception {
-//		MapsConfigurationForm cform = (MapsConfigurationForm) form;
-//		Collection<AmpMapConfig> maps = new ArrayList<AmpMapConfig>();
-//		maps = DbHelper.getMaps();
-//		for (Iterator iterator = maps.iterator(); iterator.hasNext();) {
-//			AmpMapConfig mapConfig = (AmpMapConfig) iterator.next();
-//			switch (mapConfig.getMapType()) {
-//			case 1:
-//				cform.setBasemap(mapConfig.getMapUrl());
-//				break;
-//			case 2:
-//				cform.setMainmap(mapConfig.getMapUrl());
-//				cform.setAdmin1(mapConfig.getCountyField());
-//				cform.setAdmin2(mapConfig.getDistrictField());
-//				cform.setGeoid(mapConfig.getGeoIdField());
-//				break;
-//			case 4:
-//				cform.setGeometry(mapConfig.getMapUrl());
-//				break;
-//			case 5:
-//				cform.setApi(mapConfig.getMapUrl());
-//				break;
-//			case 7:
-//				cform.setGeolocator(mapConfig.getMapUrl());
-//				break;
-//			case 8:
-//				cform.setBasemapsroot(mapConfig.getMapUrl());
-//				break;
-//			case 9:
-//				cform.setNational(mapConfig.getMapUrl());
-//				break;
-//			case 10:
-//				cform.setPoverty(mapConfig.getMapUrl());
-//				break;
-//			case 11:
-//				cform.setPopulation(mapConfig.getMapUrl());
-//				break;
-//			default:
-//				break;
-//			}
-//		}
-//
-//		return mapping.findForward("list");
-//	}
-
-//	public ActionForward saveOld(ActionMapping mapping, ActionForm form,
-//			HttpServletRequest request, HttpServletResponse response)
-//			throws Exception {
-//
-//		MapsConfigurationForm cform = (MapsConfigurationForm) form;
-//		Collection<AmpMapConfig> maps = new ArrayList<AmpMapConfig>();
-//		maps = DbHelper.getMaps();
-//		AmpMapConfig maptosave = null;
-//		Integer maptype = new Integer(cform.getSelectedtype());
-//		for (Iterator iterator = maps.iterator(); iterator.hasNext();) {
-//			AmpMapConfig MapConfig = (AmpMapConfig) iterator.next();
-//			if (MapConfig.getMapType() == maptype) {
-//				maptosave = MapConfig;
-//				break;
-//			}
-//		}
-//		if (maptosave != null) {
-//			maptosave.setMapType(maptype);
-//			maptosave.setMapUrl(cform.getSelectedurl().trim());
-//			if (!"".equalsIgnoreCase(cform.getSelectedadmin1())) {
-//				maptosave.setCountyField(cform.getSelectedadmin1().trim());
-//			}
-//			if (!"".equalsIgnoreCase(cform.getSelectedadmin2())) {
-//				maptosave.setDistrictField(cform.getSelectedadmin2().trim());
-//			}
-//			if (!"".equalsIgnoreCase(cform.getSelectedgeoid())) {
-//				maptosave.setGeoIdField(cform.getSelectedgeoid().trim());
-//			}
-//		} else {
-//			maptosave = new AmpMapConfig();
-//			maptosave.setMapType(maptype);
-//			maptosave.setMapUrl(cform.getSelectedurl().trim());
-//			if (!"".equalsIgnoreCase(cform.getSelectedadmin1())) {
-//				maptosave.setCountyField(cform.getSelectedadmin1().trim());
-//			}
-//			if (!"".equalsIgnoreCase(cform.getSelectedadmin2())) {
-//				maptosave.setDistrictField(cform.getSelectedadmin2().trim());
-//			}
-//			if (!"".equalsIgnoreCase(cform.getSelectedgeoid())) {
-//				maptosave.setGeoIdField(cform.getSelectedgeoid().trim());
-//			}
-//		}
-//		if (!"".equalsIgnoreCase(maptosave.getMapUrl())) {
-//			DbHelper.saveMapConfig(maptosave);
-//		}
-//		return MapList(mapping, cform, request, response);
-//
-//	}
-//
-//	public ActionForward savelegend(ActionMapping mapping, ActionForm form,
-//			HttpServletRequest request, HttpServletResponse response)
-//			throws Exception {
-//		MapsConfigurationForm cform = (MapsConfigurationForm) form;
-//		FormFile myFile = cform.getLegend();
-//		String contentType = myFile.getContentType();
-//		// povertymap.png
-//		String fileName = "";
-//		if (cform.getSelectedlegend()==1){
-//			fileName="legend-poverty.jpg";
-//		}else{
-//			fileName="population-legend.jpg";
-//		}
-//		
-//		byte[] fileData = myFile.getFileData();
-//		String filePath = getServlet().getServletContext().getRealPath("/")
-//				+ "TEMPLATE/ampTemplate/img_2/gis";
-//		if (!fileName.equals("")) {
-//			//System.out.println("Server path:" + filePath);
-//
-//			// Create file
-//			
-//			File fileToCreate = new File(filePath, fileName);
-//
-//			// If file does not exists create file
-//			//if (!fileToCreate.exists()) {
-//				FileOutputStream fileOutStream = new FileOutputStream(fileToCreate,false);
-//
-//				fileOutStream.write(myFile.getFileData());
-//				fileOutStream.flush();
-//				fileOutStream.close();
-//			//}
-//
-//		}
-//		return MapList(mapping, cform, request, response);
-//
-//	}
-
 }

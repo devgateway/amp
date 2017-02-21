@@ -3,10 +3,10 @@
  */
 package org.digijava.kernel.ampapi.endpoints.errors;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -32,17 +32,31 @@ public class ApiErrorResponse {
 	}
 
     /**
-     * Builds response with HTTP 500 (Internal Server Error) with the given message
-     * @param msg the API Error
+     * Builds response with specific status, media type and given JsonBean
+     * @param status 
+     * @param errorBean the Error JsonBean
+     * @param mediaType the MediaType
      */
-    public static Response buildGenericError(ApiErrorMessage msg) {
-        JsonBean formattedMessage = ApiError.toError(msg);
+    public static Response buildGenericError(Status status, JsonBean errorBean, String mediaType) {
         
-        ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+    	Object formattedMessage = mediaType.equals(MediaType.APPLICATION_XML) ? 
+        						ApiError.toXmlErrorString(errorBean) : errorBean;
+        
+        ResponseBuilder builder = Response.status(status)
         		.entity(formattedMessage)
-        		.type(MediaType.APPLICATION_JSON);
+        		.type(mediaType);
         
         return builder.build();
+    }
+    
+    /**
+     * Builds response with HTTP 500 (Internal Server Error) with the given message
+     * @param status 
+     * @param msg the API Error
+     */
+    public static Response buildGenericError(Status status, ApiErrorMessage msg, String mediaType) {
+        
+    	return buildGenericError(status, ApiError.toError(msg), mediaType);
     }
 	
 	/**
@@ -102,5 +116,4 @@ public class ApiErrorResponse {
         
         return builder.build();
     }
-	
 }

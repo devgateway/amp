@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.settings;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -209,11 +208,11 @@ public class SettingsUtils {
 		return selectedId;
 	}
 	
-	private static Settings.YearRange getReportYearRange(ReportSpecification spec) {
-		Settings.YearRange yearRange = null;
+	private static SettingRange getReportYearRange(ReportSpecification spec) {
+		SettingRange yearRange = null;
 
 		if (spec != null && spec.getSettings() != null && spec.getSettings().getYearRangeFilter() != null) {
-			yearRange = new Settings.YearRange();
+			yearRange = new SettingRange(SettingRange.Type.INT_VALUE);
 			yearRange.setFrom(getReportYear(spec.getSettings().getYearRangeFilter().min));
 			yearRange.setTo(getReportYear(spec.getSettings().getYearRangeFilter().max));
 		}
@@ -323,55 +322,22 @@ public class SettingsUtils {
 	 * @return field that defines the year range in reports
 	 */
 	static SettingField getReportYearRangeField(ReportSpecification spec) {
-		SettingOptions yearsOptions = getReportYearsOptions();
 
-		Settings.YearRange range = getReportYearRange(spec);
+		SettingRange range = getReportYearRange(spec);
 		if (range == null) {
-			range = new Settings.YearRange();
+			range = new SettingRange(SettingRange.Type.INT_VALUE);
 			range.setFrom(EndpointUtils.getDefaultReportStartYear());
 			range.setTo(EndpointUtils.getDefaultReportEndYear());
 		}
 
-		List<SettingField> rangeFields = Arrays.asList(
-				getSelectedOptions(range.getFrom(), yearsOptions, SettingsConstants.YEAR_FROM),
-				getSelectedOptions(range.getTo(), yearsOptions, SettingsConstants.YEAR_TO));
-
 		return new SettingField(SettingsConstants.YEAR_RANGE_ID, null,
-				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.YEAR_RANGE_ID), rangeFields);
+				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.YEAR_RANGE_ID), range);
 	}
 	
 	private static String getReportYear(String year) {
 		if (year == null || MoConstants.FILTER_UNDEFINED_MAX.equals(year))
 			return SettingsConstants.YEAR_ALL;
 		return year;
-	}
-	
-	/**
-	 * @return report default year list options
-	 */
-	private static SettingOptions getReportYearsOptions() {
-		// build year  options
-		List<SettingOptions.Option> options = new ArrayList<SettingOptions.Option>();
-		Long optionRangeStart = FeaturesUtil.getGlobalSettingValueLong(Constants.GlobalSettings.YEAR_RANGE_START);
-		Long optionRangeEnd = optionRangeStart +  
-				FeaturesUtil.getGlobalSettingValueLong(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE);
-		
-		// add "All" option
-		SettingOptions.Option yearOption = new SettingOptions.Option(
-				SettingsConstants.YEAR_ALL, 
-				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.YEAR_ALL),
-				SettingsConstants.YEAR_MAP.get(SettingsConstants.YEAR_ALL),
-				true);
-		options.add(yearOption);
-		
-		// add actual years list to select from  
-		for (long year =  optionRangeStart; year <= optionRangeEnd; year++ ) {
-			final String yearStr = String.valueOf(year);
-			yearOption = new SettingOptions.Option(yearStr, yearStr);
-			options.add(yearOption);
-		}
-		
-		return new SettingOptions(null, options);
 	}
 	
 	private static SettingField getSelectedOptions(String selectedId, SettingOptions defaults, String id) {

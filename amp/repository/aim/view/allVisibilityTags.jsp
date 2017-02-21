@@ -116,7 +116,6 @@
 
 <feature:display name="Aid Effectiveness" module="Aid Effectiveness"></feature:display>
 
-<field:display  name="Show image" feature="Map Options"></field:display>
 <module:display name="Organization Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <feature:display name="Organization Manager Type" module="Organization Manager" ></feature:display>
 

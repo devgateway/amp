@@ -5,19 +5,15 @@
 
 package org.digijava.module.aim.helper;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -28,20 +24,15 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivityVersion ;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.jfree.chart.ChartFactory;
@@ -435,7 +426,9 @@ public class ChartGenerator {
 					targetValue = getSmallStuff(ampIndValue, "target", siteId, langCode); 
 				break;
 			case AmpIndicatorValue.REVISED:
-				targetValue = getSmallStuff(ampIndValue, "target", siteId, langCode); 
+				if (ampIndValue.getValue() != null) {
+					targetValue = getSmallStuff(ampIndValue, "target", siteId, langCode);
+				}
 				break;
 		}
 		return new PerformanceChartValues(baseValue, actualValue, targetValue);

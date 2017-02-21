@@ -12,10 +12,6 @@
             <digi:trn key="admin:adminLink">Admin</digi:trn>
         </a>
       </td>
-
-      <td>
-           <a href='<digi:site property="url"/>/admin/switchDevelopmentMode.do'><digi:trn key="admin:devMode">User/Dev Mode</digi:trn></a>
-       </td>
     </tr>
   </table>
 </digi:secure>

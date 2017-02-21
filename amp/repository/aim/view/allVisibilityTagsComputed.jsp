@@ -40,7 +40,7 @@
 
 <module:display  name="/Dashboards"></module:display>
 <feature:display name="Top Donors" module="/Dashboards"/>
-<field:display name="Show Names As Acronyms" feature="Top Donors""/>
+<field:display name="Show Names As Acronyms" feature="Top Donors"/>
 <feature:display name="Top Regions" module="/Dashboards"/>
 <feature:display name="Top Sectors" module="/Dashboards"/>
 <feature:display name="Top Donor Group" module="/Dashboards"/>

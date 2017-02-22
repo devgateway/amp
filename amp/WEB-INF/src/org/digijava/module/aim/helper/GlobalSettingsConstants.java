@@ -206,6 +206,8 @@ public class GlobalSettingsConstants {
 
     public static final String  IMPORT_PROCESSOR_URL = "Import processor endpoint URL";
 
+    public static final String  NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION = "Number of days before automatic validation";
+
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value
      */

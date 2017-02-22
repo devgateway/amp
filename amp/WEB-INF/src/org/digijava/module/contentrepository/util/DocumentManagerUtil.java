@@ -43,6 +43,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
+import org.digijava.module.aim.util.SettingsUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.action.DocumentManager;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
@@ -676,10 +677,9 @@ public class DocumentManagerUtil {
 	
 	public static boolean checkFileSize(FormFile formFile, ActionMessages errors) {
 		long maxFileSizeInBytes		= Long.MAX_VALUE;
-		long maxFileSizeInMBytes	= Long.MAX_VALUE;
-		String maxFileSizeGS		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE); // File size in MB
-		if (maxFileSizeGS != null) {
-				maxFileSizeInMBytes		= Integer.parseInt( maxFileSizeGS );
+		Integer maxFileSizeInMBytes = SettingsUtil.getMaximunFileSize(); // File size in MB
+		
+		if (maxFileSizeInMBytes != null) {
 				maxFileSizeInBytes		= 1024 * 1024 * maxFileSizeInMBytes; 
 		}
 		if ( formFile.getFileSize() > maxFileSizeInBytes) {

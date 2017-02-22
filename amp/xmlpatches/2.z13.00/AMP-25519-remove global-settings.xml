@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-25519</jira>
+    <keyword>remove global setting</keyword>
+    <author>jdeanquin</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+			insert into amp_resource_manager_settings (id,sort_column,maximun_file_size,limit_file_to_upload)
+			values( nextval('amp_resource_manager_settings_seq') ,
+				(select settingsvalue from amp_global_settings where settingsname ='Resource List Sort Column'),
+				(select settingsvalue from amp_global_settings where settingsname ='Maximum File Size')::Integer,
+				(select case when (select settingsvalue from amp_global_settings where settingsname ='Limit file type for upload' )='true' then true else false end ) );
+
+				delete from amp_global_settings where settingsname ='Resource List Sort Column';
+				delete from amp_global_settings where settingsname ='Maximum File Size';
+				delete from amp_global_settings where settingsname ='Limit file type for upload';
+				drop view if exists v_g_settings_resource_columns;
+
+				delete from util_global_settings_possible_ where setting_name ='Resources Columns';
+			</lang>
+        </script>
+    </apply>
+</tns:patch>

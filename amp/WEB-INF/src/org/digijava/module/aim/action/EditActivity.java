@@ -5,6 +5,26 @@
 
 package org.digijava.module.aim.action;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.jcr.Node;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -113,27 +133,8 @@ import org.digijava.module.gateperm.core.GatePermConst;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
-import javax.jcr.Node;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-
-/**
+ /**
  * Loads the activity details of the activity specified in the form bean
  * variable 'activityId' to the EditActivityForm bean instance
  *
@@ -294,7 +295,7 @@ public class EditActivity extends Action {
             } else {
                 if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
                     if (hasTeamLeadOrValidator) {
-                        eaForm.getWarningMessges().add("The activity is awaiting approval.");
+                        eaForm.getWarningMessges().add(String.format("The activity is awaiting approval and will be automatically approved within %s days.", daysToValidation(activity.getUpdatedDate())));
                     } else {
                         eaForm.getWarningMessges().add("This activity cannot be validated because there is no Workspace Manager.");
                     }
@@ -1990,4 +1991,16 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 		eaForm.getWarningMessges().add(TranslatorWorker.translateText("An error occurred when loading the page. Please contact the AMP administrator."));
 		logger.error(e.getMessage(), e);
 	}
+
+     private int daysBetween(Date d1, Date d2) {
+         return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+     }
+
+     private int daysToValidation(Date updatedDate) {
+         int result;
+         int daysBetween = daysBetween(updatedDate, new Date());
+         String daysBeforeValidation = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION);
+         result = (Integer.parseInt(daysBeforeValidation) - daysBetween);
+         return result <= 0 ? 1 : result;
+     }
 }

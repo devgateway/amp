@@ -908,6 +908,30 @@ public class ExportActivityToWord extends Action {
             sectionHelper.addRowData(rowData);
         }
 
+        /**
+         * Activity created in workspace
+         */
+        if (identification.getTeam()!= null){
+
+            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
+                    TranslatorWorker.translateText("Created in workspace"), null, null, true).addRowData(TranslatorWorker.translateText(identification.getTeam().getAccessType()));
+            sectionHelper.addRowData(rowData);
+
+            rowData = new ExportSectionHelperRowData(
+                    TranslatorWorker.translateText("Computation"), null, null, true).addRowData(identification.getTeam().getComputation() ?
+                    TranslatorWorker.translateText("Yes") :
+                    TranslatorWorker.translateText("No"));
+            sectionHelper.addRowData(rowData);
+        }
+
+        /**
+         * Activity Last Updated by
+         */
+        if (FeaturesUtil.isVisibleField("Activity Last Updated by")) {
+            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
+                    "Activity Last Updated by", null, null, true).addRowData(identification.getModifiedBy().getUser().getFirstNames() + " " + identification.getModifiedBy().getUser().getLastName());
+            sectionHelper.addRowData(rowData);
+        }
 
         /**
          * Activity updated on
@@ -3748,7 +3772,7 @@ public class ExportActivityToWord extends Action {
             columnVal += identification.getTeam().getTeamLead().getUser().getLastName()+" ";
             columnVal += identification.getTeam().getTeamLead().getUser().getEmail();
         }
-        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Data Team Leader")+": ",columnVal,CELLCOLORGRAY);
+        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Workspace Manager")+": ",columnVal,CELLCOLORGRAY);
 
         int emptyRowsAmount = rowAmountForCell1>=rowAmountForCell2?(rowAmountForCell1 - rowAmountForCell2):(rowAmountForCell2 - rowAmountForCell1);
         for (int i=0;i<emptyRowsAmount;i++){

@@ -1383,6 +1383,14 @@ public class ExportActivityToPDF extends Action {
             }
 
             /**
+             * Activity Last Updated by
+             */
+            if (FeaturesUtil.isVisibleField("Activity Last Updated by")) {
+                columnName = TranslatorWorker.translateText("Activity Last Updated by");
+                createGeneralInfoRow(mainLayout, columnName, identification.getModifiedBy().getUser().getFirstNames() + " " + identification.getModifiedBy().getUser().getLastName());
+            }
+
+            /**
              * Activity updated on
              */
             if(FeaturesUtil.isVisibleField("Activity Updated On")){

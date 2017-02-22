@@ -1,10 +1,24 @@
-import App from "./containers/App.jsx";
+import React from 'react';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { Router, hashHistory, Route, IndexRoute } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 import ReactDOM from "react-dom";
-import React from "react";
+import configureStore from './store/configureStore.jsx';
+import App from "./containers/App.jsx";
 import boilerplate from "../../../ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js";
 
+export const store = configureStore();
+const history = syncHistoryWithStore(hashHistory, store);
+
 ReactDOM.render(
-  <App />,
+  
+  <Provider store={store}>
+            <Router history={history} store={store}>
+                <Route path="/" component={App}>                   
+                </Route>
+            </Router>
+        </Provider>,
   document.getElementById('gpi-data')
 );
 

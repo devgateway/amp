@@ -11,7 +11,12 @@ module.exports = {
        'webpack-dev-server/client?http://localhost:3000',
        'webpack/hot/only-dev-server',
        './modules/admin/dashboard/script.es6'
-    ]
+    ],
+    "gpi/script": [
+        'webpack-dev-server/client?http://localhost:3000',
+        'webpack/hot/only-dev-server',
+        './modules/gpi/script.es6'
+     ]
     //"filters/script": [
     //  'webpack-dev-server/client?http://localhost:3000',
     //  'webpack/hot/only-dev-server',

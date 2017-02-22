@@ -156,8 +156,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		indName.setOutputMarkupId(true);
 		indName.setTextContainerDefaultMaxSize();
 		add(indName);
-		
-		add(new AmpTextAreaFieldPanel("indDesc", new PropertyModel<String>(newInd, "description"), "Description", false, AmpFMTypes.MODULE));
+
+		add(new AmpTextAreaFieldPanel("indDesc", new PropertyModel<String>(newInd, "description"), "Indicator Description", false, AmpFMTypes.MODULE));
 		AmpTextFieldPanel<String> indCode = new AmpTextFieldPanel<String>("indCode", new PropertyModel<String>(newInd, "code"), "Code", AmpFMTypes.MODULE,Boolean.TRUE);
 		//indCode.getTextContainer().setRequired(true);
 		indCode.setTextContainerDefaultMaxSize();

@@ -235,9 +235,7 @@ function closeWindow() {
           <field:display name="Admin Description" feature="Admin">
           <tr id="trDescription">
             <td valign="top" class="addNewIndicatorLabel">
-            <digi:trn key="admin:decription">
-            Description:
-            </digi:trn>
+            <digi:trn>Indicator Description</digi:trn>
             </td>
             <td>
               <html:textarea property="description" styleId="txtDescription" style="font-family:verdana;font-size:11px;width:200px;"></html:textarea>

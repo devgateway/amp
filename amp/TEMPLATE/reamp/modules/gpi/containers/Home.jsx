@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import AidOnBudgetList from "../components/AidOnBudgetList.jsx"; 
 
 export default class App extends Component {
 
@@ -20,35 +21,9 @@ export default class App extends Component {
 
                 <div className="tab-content panel">
                  <div role="tabpanel" className="tab-pane active" id="indicator1">
-                  Indicator 1 Data
-                     <table className="table table-striped">
-                                    <thead>
-                                      <tr>
-                                        <th>Date</th>
-                                        <th>Donor Agency</th>
-                                        <th>Amount</th>
-                                        <th>Currency</th>
-                                        <th>Action</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr>
-                                        <th scope="row">21/01/2017</th>
-                                        <td>USAID</td>
-                                        <td>$20,000,000</td>
-                                        <td>USD</td>
-                                        <td>EDI</td>                      
-                                      </tr>
-                                       <tr>
-                                        <th scope="row">21/01/2017</th>
-                                        <td>Australia</td>
-                                        <td>$30,000,000</td>
-                                        <td>USD</td>
-                                        <td>EDI</td>                      
-                                      </tr>
-                                     
-                                    </tbody>
-                                  </table>
+                  
+                   <AidOnBudgetList/>
+                  
                   </div>
                       
                    <div role="tabpanel" className="tab-pane" id="indicator6">Indicator 6 Data</div>                  

@@ -8,8 +8,7 @@ export default class App extends Component {
         super(props, context);
     }
   
-    render() {
-        console.log('render');
+    render() {       
         return (
               <Home />
         );

@@ -20,8 +20,8 @@ import org.digijava.module.aim.dbentity.AmpFileType;
  * 
  * @author Viorel Chihai
  */
-@Path("filetypes")
-public class FileTypes {
+@Path("resourcemanager")
+public class ResourceManager {
 	
 	/** 
 	 * Get available file types supported by AMP
@@ -29,6 +29,7 @@ public class FileTypes {
 	 * @return a list of AmpFileType objects
 	 */
 	@GET
+	@Path("file-types")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<AmpFileType> getAllFiletypes() {
 		FileTypeManager fileTypeManager = FileTypeManager.getInstance();
@@ -42,7 +43,7 @@ public class FileTypes {
 	 * @return a list of allowed AmpFileType objects
 	 */
 	@GET
-	@Path("allowed")
+	@Path("file-types-allowed")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<AmpFileType> getAllowedFileTypes() {
 		FileTypeManager fileTypeManager = FileTypeManager.getInstance();
@@ -57,7 +58,7 @@ public class FileTypes {
 	 * @return
 	 */
 	@POST
-	@Path("allowed")
+	@Path("file-types-allowed")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	// @ApiMethod(id = "allowed-filetypes", authTypes = {AuthRule.IN_ADMIN}, ui = false)
 	public Response setAllowedFiletypes(Set<String> allowedFileType) {

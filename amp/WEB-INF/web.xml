@@ -392,6 +392,10 @@
 		<taglib-location>/WEB-INF/globalsettings.tld</taglib-location>
 	</taglib>
 	<taglib>
+		<taglib-uri>/taglib/resourcesettings</taglib-uri>
+		<taglib-location>/WEB-INF/resourcesettings.tld</taglib-location>
+	</taglib>
+	<taglib>
 		<taglib-uri>/taglib/aim</taglib-uri>
 		<taglib-location>/WEB-INF/aim.tld</taglib-location>
 	</taglib>

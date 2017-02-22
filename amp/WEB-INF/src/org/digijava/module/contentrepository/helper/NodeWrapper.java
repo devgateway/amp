@@ -63,56 +63,49 @@ public class NodeWrapper{
 		this.node	= node;
 	}
 	
-	public NodeWrapper(DocumentManagerForm myForm, HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionMessages errors) {
-		
-		FormFile formFile		= myForm.getFileData();		
-		boolean isAUrl			= false;
-		if ( myForm.getWebLink() != null && myForm.getWebLink().length() > 0 )
-			isAUrl				= true;
+	public NodeWrapper(DocumentManagerForm myForm, HttpServletRequest myRequest, Node parentNode, boolean isANewVersion, ActionMessages errors) {
+		FormFile formFile = myForm.getFileData();		
+		boolean isAUrl = false;
+		if (myForm.getWebLink() != null && myForm.getWebLink().length() > 0) {
+			isAUrl = true;
+		}
 		
 		try {
-			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
-			Node newNode 	= null;
+			TeamMember teamMember = (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
+			Node newNode = null;
 			long docType = 0;
-			if (isANewVersion){
+			if (isANewVersion) {
 				Property docTypeProp = parentNode.getProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
 				docType = docTypeProp.getLong();
-				newNode		= parentNode;
+				newNode	= parentNode;
 				newNode.checkout();
-			}
-			else{
+			} else {
 				String encTitle	= URLEncoder.encode(myForm.getDocTitle(), "UTF-8");
 				docType = myForm.getDocType();
-				newNode	= parentNode.addNode( encTitle );
+				newNode	= parentNode.addNode(encTitle);
 				newNode.addMixin("mix:versionable");
 			}
 			
-			
-			if (isANewVersion){
-				int vernum	= DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), myRequest);
-				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);
-			}
-			else{
-				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)1.0);
+			if (isANewVersion) {
+				int vernum = DocumentManagerUtil.getNextVersionNumber(newNode.getIdentifier(), myRequest);
+				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double) vernum);
+			} else {
+				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double) 1.0);
 			}
 			
-			String contentType			= null;
-			//HashMap errors = new HashMap();
-			if ( isAUrl ){
-				String link				= DocumentManagerUtil.processUrl(myForm.getWebLink(), myForm);
+			String contentType = null;
+			if (isAUrl) {
+				String link = DocumentManagerUtil.processUrl(myForm.getWebLink(), myForm);
 				if (link != null) {
-					newNode.setProperty ( CrConstants.PROPERTY_WEB_LINK, link );
-					contentType				= CrConstants.URL_CONTENT_TYPE;
+					newNode.setProperty(CrConstants.PROPERTY_WEB_LINK, link);
+					contentType	= CrConstants.URL_CONTENT_TYPE;
+				} else {
+					errorAppeared = true;
 				}
-				else
-					errorAppeared	= true;
-			}
-			else{
-				////System.out.println("NodeWrapper.NodeWrapper() 1");
-				if ( !DocumentManagerUtil.checkFileSize(formFile, errors) ) {
-					errorAppeared	= true;
-				}
-				else {
+			} else {
+				if (!DocumentManagerUtil.validateFile(formFile, errors)) {
+					errorAppeared = true;
+				} else {
 					newNode.setProperty(CrConstants.PROPERTY_DATA, formFile.getInputStream());
 					
 					contentType				= formFile.getContentType();
@@ -123,30 +116,31 @@ public class NodeWrapper{
 				}
 			}
 			
-			if ( !errorAppeared ) {
-				Calendar yearOfPublicationDate=null;
-				Long selYearOfPublication=myForm.getYearOfPublication();
-				if(selYearOfPublication!=null && selYearOfPublication.intValue()!=-1){
-					yearOfPublicationDate=Calendar.getInstance();
+			if (!errorAppeared) {
+				Calendar yearOfPublicationDate = null;
+				Long selYearOfPublication = myForm.getYearOfPublication();
+				if (selYearOfPublication != null && selYearOfPublication.intValue() != -1) {
+					yearOfPublicationDate = Calendar.getInstance();
 					yearOfPublicationDate.set(selYearOfPublication.intValue(), 1, 1);
 				}
+				
 				String docIndex = myForm.getDocIndex();
 				String docCategory = myForm.getDocCategory();
 				populateNode(isANewVersion, newNode, myForm.getDocTitle(), myForm.getDocDescription(), myForm.getDocNotes(), 
-					contentType, docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate, docIndex, docCategory);
+					contentType, docType, teamMember.getEmail(), teamMember.getTeamId(), yearOfPublicationDate, docIndex, docCategory);
 			}
 			
-			this.node		= newNode;
+			this.node = newNode;
 
 		} catch(RepositoryException e) {
 			ActionMessage error	= new ActionMessage("error.contentrepository.addFile:badPath");
-			errors.add("title",error);
-			e.printStackTrace();
-			errorAppeared	= true;
+			errors.add("title", error);
+			logger.error(error.getValues(), e);
+			errorAppeared = true;
 		} 
 		catch (Exception e) {
-			e.printStackTrace();
-			errorAppeared	= true;
+			logger.error(e);
+			errorAppeared = true;
 		}		
 	}
 	

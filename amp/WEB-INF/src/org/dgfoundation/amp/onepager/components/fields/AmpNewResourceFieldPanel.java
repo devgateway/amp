@@ -69,16 +69,11 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 
 	static final private String DEFAULT_MESSAGE = "*" + TranslatorUtil.getTranslatedText("Please enter title");
 	static final private String URL_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("URL not selected");
-	static final private String FILE_PATH_NOT_SELECTED = "*"
-			+ TranslatorUtil.getTranslatedText("File not submited or upload has not finished");
-	static final private String WRONG_URL_FORMAT = "*"
-			+ TranslatorUtil.getTranslatedText("Wrong url format. Please enter valid url");
-	static final private String CONTENT_TYPE_NOT_ALLOWED = "*"
-			+ TranslatorUtil.getTranslatedText("Content type not allowed");
-	static final private String CONTENT_TYPE_EXTENSION_MISMATCH = "*"
-			+ TranslatorUtil.getTranslatedText("File name extension doesn't match the actual file format");
-	static final private String CONTENT_TYPE_INTERNAL_ERROR = "*"
-			+ TranslatorUtil.getTranslatedText("Internal error during the content validation");
+	static final private String FILE_PATH_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("File not submited or upload has not finished");
+	static final private String WRONG_URL_FORMAT = "*" + TranslatorUtil.getTranslatedText("Wrong url format. Please enter valid url");
+	static final private String CONTENT_TYPE_NOT_ALLOWED = "*" + TranslatorUtil.getTranslatedText("Content type not allowed");
+	static final private String CONTENT_TYPE_EXTENSION_MISMATCH = "*" + TranslatorUtil.getTranslatedText("File name extension doesn't match the actual file format");
+	static final private String CONTENT_TYPE_INTERNAL_ERROR = "*" + TranslatorUtil.getTranslatedText("Internal error during the content validation");
 
 	boolean webLinkFormatCorrect;
 	private Model<String> newResourceIdModel = new Model<String>();
@@ -318,8 +313,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 								conentValidationMessage = CONTENT_TYPE_NOT_ALLOWED + ": "
 										+ validationResponse.getDescription() + " ["
 										+ validationResponse.getContentName() + "]";
-							} else if (validationResponse
-									.getStatus() == FileTypeValidationStatus.CONTENT_EXTENSION_MISMATCH) {
+							} else if (validationResponse.getStatus() == FileTypeValidationStatus.CONTENT_EXTENSION_MISMATCH) {
 								conentValidationMessage = CONTENT_TYPE_EXTENSION_MISMATCH + ": ["
 										+ validationResponse.getExtension() + ", " + validationResponse.getContentName()
 										+ "]";

@@ -332,57 +332,54 @@ public class DocumentManager extends Action {
 				throw new Exception("No TeamMember found in HttpSession !");
 			}			
 			
-			
-			if ( myForm.getType() != null && myForm.getType().equals("private") ) {
+			if (myForm.getType() != null && myForm.getType().equals("private") ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
-					Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, userHomeNode, false, errors);
-					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() )
-							nodeWrapper.saveNode(jcrWriteSession);
+					Node userHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
+					NodeWrapper nodeWrapper = new NodeWrapper(myForm, request, userHomeNode, false, errors);
+					if (nodeWrapper != null && !nodeWrapper.isErrorAppeared()) {
+						nodeWrapper.saveNode(jcrWriteSession);
+					}
 				}
 			}
-			if ( myForm.getType() != null && myForm.getType().equals("team") && DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) {
-				
+			if (myForm.getType() != null && myForm.getType().equals("team") && DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
-					Node teamHomeNode			= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, teamHomeNode , false, errors);
-					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
+					Node teamHomeNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
+					NodeWrapper nodeWrapper = new NodeWrapper(myForm, request, teamHomeNode, false, errors);
+					if (nodeWrapper != null && !nodeWrapper.isErrorAppeared()) {
 						nodeWrapper.saveNode(jcrWriteSession);
 					}
 					//update team's last approved version id- If new team document is created,it's uuid is last approved
-					createVersionApprovalStatus(request,true,nodeWrapper);
+					createVersionApprovalStatus(request, true, nodeWrapper);
 				}
 			}
-			if ( myForm.getType() != null && myForm.getType().equals("version") && myForm.getUuid() != null ) {
+			if (myForm.getType() != null && myForm.getType().equals("version") && myForm.getUuid() != null) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
-					Node vNode		= DocumentManagerUtil.getWriteNode(myForm.getUuid(), request);
+					Node vNode = DocumentManagerUtil.getWriteNode(myForm.getUuid(), request);
 
 					/**
 					 * approval is not needed for version,if current member is TL, or he is creator of this node(base node,not version)
 					 * or if tm's are allowed to add versions
 					 */
-					Boolean hasVersioningRightsWithoutApprovalNeeded=DocumentManagerRights.hasVersioningRights(vNode, request);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, vNode , true, errors);
+					Boolean hasVersioningRightsWithoutApprovalNeeded = DocumentManagerRights.hasVersioningRights(vNode, request);
+					NodeWrapper nodeWrapper = new NodeWrapper(myForm, request, vNode , true, errors);
                     vNode.setProperty(CrConstants.PROPERTY_ADDING_DATE, Calendar.getInstance());
-					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
+					if (nodeWrapper != null && !nodeWrapper.isErrorAppeared()) {
 						nodeWrapper.saveNode(jcrWriteSession);
-						if ( nodeWrapper.isTeamDocument() ) {
+						if (nodeWrapper.isTeamDocument()) {
 							myForm.setType("team");
 							createVersionApprovalStatus(request,hasVersioningRightsWithoutApprovalNeeded,nodeWrapper);							
 						}
 					}					
 				}
 			}
-			myForm.setYearOfPublication(null);
-			//myForm.setMyPersonalDocuments(  this.getPrivateDocuments(teamMember, jcrWriteSession.getRootNode(), request)  );
-			//myForm.setMyTeamDocuments( this.getTeamDocuments(teamMember, jcrWriteSession.getRootNode(), request) );
-			//myForm.setSharedDocuments(this.getSharedDocuments(teamMember, request,true));
-		}catch (Exception e) {
-			// TODO Auto-generated catch block
 			
-			e.printStackTrace();
+			myForm.setYearOfPublication(null);
+			
+		} catch (Exception e) {
+			logger.error("Error during the save of the document", e);
 			return false;
 		}
+		
 		return true;
 	}
 

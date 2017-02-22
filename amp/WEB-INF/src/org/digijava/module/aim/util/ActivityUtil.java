@@ -1004,7 +1004,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		  throw new RuntimeException(e);
 	  }
   }
-  
+
+	public static List<AmpActivityVersion> getActivitiesPendingValidation(List<Long> ids) {
+
+		String queryString = String.format(
+				"select ampAct from %s ampAct WHERE "
+						+ " amp_activity_id in ( %s ) and draft=false ",
+				AmpActivityVersion.class.getName(), org.dgfoundation.amp.Util.toCSString(ids) );
+		return PersistenceManager.getSession()
+				.createQuery(queryString)
+				.list();
+
+	}
 
   /*
    * get the list of all the activities

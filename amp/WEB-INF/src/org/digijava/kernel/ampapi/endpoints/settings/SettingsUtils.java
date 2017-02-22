@@ -662,9 +662,9 @@ public class SettingsUtils {
 		List<SettingOptions.Option> options = new ArrayList<>();
 
 		for (String sortOption : SettingsConstants.SORT_COLUMN_MAP.keySet()) {
-			SettingOptions.Option currencyOption = new SettingOptions.Option(sortOption,
+			SettingOptions.Option resourceSortingOption = new SettingOptions.Option(sortOption,
 					SettingsConstants.SORT_COLUMN_MAP.get(sortOption));
-			options.add(currencyOption);
+			options.add(resourceSortingOption);
 		}
 		
 		String defaultId = "";
@@ -690,7 +690,7 @@ public class SettingsUtils {
 	static List<SettingField> getResourceManagerSettings() {
 		List<SettingField> settingFieldList = new ArrayList<>();
 		AmpResourceManagerSettings currentSettings = DbUtil.getResourceManagerSettings();
-		settingFieldList.add(getIntSetting(SettingsConstants.MAXIMUN_FILE_SIZE, currentSettings.getMaximunFileSize()));
+		settingFieldList.add(getIntSetting(SettingsConstants.MAXIMUM_FILE_SIZE, currentSettings.getMaximumFileSize()));
 		settingFieldList.add(getBooleanSetting(SettingsConstants.LIMIT_FILE_TO_UPLOAD, currentSettings.isLimitFileToUpload()));
 		settingFieldList.add(getSettingFieldForOptions(SettingsConstants.SORT_COLUMN, getSortSetting(currentSettings)));
 		

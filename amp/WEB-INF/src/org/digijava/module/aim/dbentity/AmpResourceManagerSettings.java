@@ -9,7 +9,7 @@ public class AmpResourceManagerSettings implements Serializable {
 	private Long ampResourceManagerSettingsId;
 
 	private String sortColumn;
-	private Integer maximunFileSize;
+	private Integer maximumFileSize;
 	private boolean limitFileToUpload;
 
 	public Long getAmpResourceManagerSettingsId() {
@@ -28,12 +28,12 @@ public class AmpResourceManagerSettings implements Serializable {
 		this.sortColumn = sortColumn;
 	}
 
-	public Integer getMaximunFileSize() {
-		return maximunFileSize;
+	public Integer getMaximumFileSize() {
+		return maximumFileSize;
 	}
 
-	public void setMaximunFileSize(Integer maximunFileSize) {
-		this.maximunFileSize = maximunFileSize;
+	public void setMaximumFileSize(Integer maximumFileSize) {
+		this.maximumFileSize = maximumFileSize;
 	}
 
 	public boolean isLimitFileToUpload() {

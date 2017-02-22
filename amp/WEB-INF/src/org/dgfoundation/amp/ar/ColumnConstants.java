@@ -333,7 +333,7 @@ public class ColumnConstants {
 	public static final String INDICATOR_NAME = "Indicator Name";
 	public static final String INDICATOR_TYPE = "Indicator Type";
 	public static final String INDICATOR_DESCRIPTION = "Indicator Description";
-	public static final String INDICATOR_CODE = "Indicator code";
+	public static final String INDICATOR_CODE = "Indicator Code";
 	public static final String INDICATOR_CREATION_DATE = "Indicator Creation Date";
 	public static final String INDICATOR_SECTOR = "Indicator Sector";
 	public static final String INDICATOR_RISK = "Risk";

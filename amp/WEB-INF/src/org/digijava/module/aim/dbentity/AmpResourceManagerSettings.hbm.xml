@@ -11,7 +11,7 @@
 
 		
 		<property name="sortColumn" column="sort_column" type="java.lang.String" />
-		<property name="maximunFileSize" column="maximun_file_size" type="java.lang.Integer" />
+		<property name="maximumFileSize" column="maximum_file_size" type="java.lang.Integer" />
 		<property name="limitFileToUpload" column="limit_file_to_upload" type="java.lang.Boolean" />
 	</class>
 </hibernate-mapping>

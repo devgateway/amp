@@ -1,6 +1,9 @@
 package org.digijava.module.contentrepository.util;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,6 +37,9 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeManager;
+import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationResponse;
+import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationStatus;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
@@ -676,27 +682,64 @@ public class DocumentManagerUtil {
 	}
 	
 	public static boolean checkFileSize(FormFile formFile, ActionMessages errors) {
-		long maxFileSizeInBytes		= Long.MAX_VALUE;
+		long maxFileSizeInBytes	= Long.MAX_VALUE;
 		Integer maxFileSizeInMBytes = SettingsUtil.getMaximunFileSize(); // File size in MB
 		
 		if (maxFileSizeInMBytes != null) {
-				maxFileSizeInBytes		= 1024 * 1024 * maxFileSizeInMBytes; 
+			maxFileSizeInBytes = 1024 * 1024 * maxFileSizeInMBytes; 
 		}
-		if ( formFile.getFileSize() > maxFileSizeInBytes) {
-			errors.add("title",
-					new ActionMessage("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes)
-					);
-			
-			return false;
-			}
-		if (formFile.getFileSize()<1){
-			errors.add("title", 
-					new ActionMessage("error.contentrepository.addFile.badPath")
-					);
+		
+		if (formFile.getFileSize() > maxFileSizeInBytes) {
+			errors.add("title",	new ActionMessage("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes));
 			
 			return false;
 		}
+		
+		if (formFile.getFileSize() < 1) {
+			errors.add("title", new ActionMessage("error.contentrepository.addFile.badPath"));
+			
+			return false;
+		}
+		
 		return true;
+	}
+	
+	public static boolean checkFileContentType(FormFile formFile, ActionMessages errors) {
+		boolean contentValid = true;
+		if (SettingsUtil.isLimitFileToUpload()) {
+			try {
+				FileTypeManager mimeTypeManager = FileTypeManager.getInstance();
+				InputStream is = new BufferedInputStream(formFile.getInputStream());
+				FileTypeValidationResponse validationResponse = mimeTypeManager.validateFileType(is, formFile.getFileName());
+				if (validationResponse.getStatus() != FileTypeValidationStatus.ALLOWED) {
+					if (validationResponse.getStatus() == FileTypeValidationStatus.NOT_ALLOWED) {
+						errors.add("title",
+								new ActionMessage("error.contentrepository.addFile.contentNotAllowed", 
+										validationResponse.getDescription(), validationResponse.getContentName()));
+					} else if (validationResponse.getStatus() == FileTypeValidationStatus.CONTENT_EXTENSION_MISMATCH) {
+						errors.add("title", 
+								new ActionMessage("error.contentrepository.addFile.contentExtensionMismatch", 
+										formFile.getFileName(), validationResponse.getContentName()));
+					} else {
+						errors.add("title", new ActionMessage("error.contentrepository.addFile.internalError"));
+					}
+					contentValid = false;
+				}
+			} catch (IOException e) {
+				logger.error("Error during the validation of the file", e);
+				errors.add("title", new ActionMessage("error.contentrepository.addFile.internalError"));
+				contentValid = false;
+			}
+		}
+		
+		return contentValid;
+	}
+	
+	public static boolean validateFile(FormFile formFile, ActionMessages errors) {
+		boolean hasValidSize = checkFileSize(formFile, errors);
+		boolean hasValidContentType = checkFileContentType(formFile, errors);
+		
+		return hasValidSize && hasValidContentType;
 	}
 	
 	public static boolean checkStringAsNodeTitle (String string) {

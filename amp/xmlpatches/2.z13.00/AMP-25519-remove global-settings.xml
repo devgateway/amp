@@ -8,18 +8,25 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-			insert into amp_resource_manager_settings (id,sort_column,maximun_file_size,limit_file_to_upload)
-			values( nextval('amp_resource_manager_settings_seq') ,
-				(select settingsvalue from amp_global_settings where settingsname ='Resource List Sort Column'),
-				(select settingsvalue from amp_global_settings where settingsname ='Maximum File Size')::Integer,
-				(select case when (select settingsvalue from amp_global_settings where settingsname ='Limit file type for upload' )='true' then true else false end ) );
+				INSERT INTO amp_resource_manager_settings (id, sort_column, maximum_file_size, limit_file_to_upload)
+				VALUES
+					(nextval('amp_resource_manager_settings_seq'),
+					(SELECT settingsvalue FROM amp_global_settings WHERE settingsname = 'Resource List Sort Column'),
+					(SELECT settingsvalue FROM amp_global_settings WHERE settingsname = 'Maximum File Size')::Integer,
+					(SELECT 
+						CASE WHEN (SELECT settingsvalue FROM amp_global_settings WHERE settingsname = 'Limit file type for upload') = 'true' 
+							THEN true 
+							ELSE false 
+						END)
+					);
 
-				delete from amp_global_settings where settingsname ='Resource List Sort Column';
-				delete from amp_global_settings where settingsname ='Maximum File Size';
-				delete from amp_global_settings where settingsname ='Limit file type for upload';
-				drop view if exists v_g_settings_resource_columns;
+				DELETE FROM amp_global_settings WHERE settingsname = 'Resource List Sort Column';
+				DELETE FROM amp_global_settings WHERE settingsname = 'Maximum File Size';
+				DELETE FROM amp_global_settings WHERE settingsname = 'Limit file type for upload';
+				
+				DROP VIEW IF exists v_g_settings_resource_columns;
 
-				delete from util_global_settings_possible_ where setting_name ='Resources Columns';
+				DELETE FROM util_global_settings_possible_ WHERE setting_name = 'Resources Columns';
 			</lang>
         </script>
     </apply>

@@ -1,6 +1,8 @@
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/resourcesettings" prefix="rs" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
@@ -575,7 +577,7 @@ myTable.enhanceMarkup = function(markupName) {
 
 function sortColumn() {
 	//debugger;
-	var columnSettingString = '<gs:value name="<%=GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN %>" />';
+	var columnSettingString = '<rs:value name="<%=SettingsConstants.SORT_COLUMN %>" />';
 	// the setting has the value [ColumnName]_[ASC/DESC];
 	
 	var separatorPos = columnSettingString.lastIndexOf('_');

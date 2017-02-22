@@ -666,20 +666,24 @@ public class SettingsUtils {
 					SettingsConstants.SORT_COLUMN_MAP.get(sortOption));
 			options.add(currencyOption);
 		}
+		
 		String defaultId = "";
 		if (currentSettings != null) {
 			defaultId = currentSettings.getSortColumn();
 		}
+		
 		return new SettingOptions(defaultId, options);
 	}
 
 	private static SettingField getIntSetting(String id, int value) {
 		String name = SettingsConstants.ID_NAME_MAP.get(id);
+		
 		return new SettingField(id, null, name, value);
 	}
 
 	private static SettingField getBooleanSetting(String id, boolean value) {
 		String name = SettingsConstants.ID_NAME_MAP.get(id);
+		
 		return new SettingField(id, null, name, value);
 	}
 
@@ -687,9 +691,9 @@ public class SettingsUtils {
 		List<SettingField> settingFieldList = new ArrayList<>();
 		AmpResourceManagerSettings currentSettings = DbUtil.getResourceManagerSettings();
 		settingFieldList.add(getIntSetting(SettingsConstants.MAXIMUN_FILE_SIZE, currentSettings.getMaximunFileSize()));
-		settingFieldList
-				.add(getBooleanSetting(SettingsConstants.LIMIT_FILE_TO_UPLOAD, currentSettings.isLimitFileToUpload()));
+		settingFieldList.add(getBooleanSetting(SettingsConstants.LIMIT_FILE_TO_UPLOAD, currentSettings.isLimitFileToUpload()));
 		settingFieldList.add(getSettingFieldForOptions(SettingsConstants.SORT_COLUMN, getSortSetting(currentSettings)));
+		
 		return settingFieldList;
 	}
 

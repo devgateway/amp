@@ -107,6 +107,7 @@ public class SettingsConstants {
 		put(AMOUNT_UNITS_1000000, "1000000");
 		put(AMOUNT_UNITS_1000000000, "1000000000");
 	}});
+	
 	/** {id,value} map for Resource List Sort Column**/
 	public static final Map<String, String> SORT_COLUMN_MAP = Collections.unmodifiableMap(new LinkedHashMap<String, String>() {{
 		put("resource_title_ASC","Title ASCENDING");
@@ -124,6 +125,7 @@ public class SettingsConstants {
 		put("cm_doc_type_ASC","Document type ASCENDING");
 		put("cm_doc_type_DESC","Document type DESCENDING");
 	}});
+	
 	public static final Map<String, String> YEAR_MAP = Collections.unmodifiableMap(new LinkedHashMap<String, String>() {{
 		put(YEAR_ALL, "-1");
 	}});

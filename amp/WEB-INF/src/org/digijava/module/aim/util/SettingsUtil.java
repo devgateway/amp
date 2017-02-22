@@ -3,36 +3,32 @@ package org.digijava.module.aim.util;
 import org.digijava.module.aim.dbentity.AmpResourceManagerSettings;
 
 public class SettingsUtil {
+	
 	public static String getSortColumn() {
-		{
-			if (getResourceManagerSettings() == null) {
-				return null;
-			} else {
-				return getResourceManagerSettings().getSortColumn();
-			}
+		if (getResourceManagerSettings() != null) {
+			return getResourceManagerSettings().getSortColumn();
 		}
+
+		return null;
 	}
 
 	public static Integer getMaximunFileSize() {
-		{
-			if (getResourceManagerSettings() == null) {
-				return null;
-			} else {
-				return getResourceManagerSettings().getMaximunFileSize();
-			}
+		if (getResourceManagerSettings() != null) {
+			return getResourceManagerSettings().getMaximunFileSize();
 		}
+
+		return null;
 	}
 
 	public static boolean isLimitFileToUpload() {
-		if (getResourceManagerSettings() == null) {
-			return false;
-		} else {
+		if (getResourceManagerSettings() != null) {
 			return getResourceManagerSettings().isLimitFileToUpload();
 		}
+
+		return false;
 	}
 
 	public static AmpResourceManagerSettings getResourceManagerSettings() {
-		return org.digijava.module.aim.util.DbUtil.getResourceManagerSettings();
+		return DbUtil.getResourceManagerSettings();
 	}
-
 }

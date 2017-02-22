@@ -20,9 +20,13 @@
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
 				CREATE OR REPLACE VIEW v_indicator_type AS
-				SELECT con.activity_id AS amp_activity_id, case ind.type when 'A' then 'Ascending'::varchar(255) when 'D' then 'Descending'::varchar(255) else null::varchar(255) end "type", ind.indicator_id AS amp_me_indicator_id
-				FROM amp_indicator_connection con, amp_indicator ind
-				WHERE ind.indicator_id = con.indicator_id AND con.sub_clazz::text = 'a'::text;
+				  SELECT
+					con.activity_id amp_activity_id,
+					CASE ind.type WHEN 'A' THEN 'Ascending'::varchar(255) WHEN 'D' THEN 'Descending'::varchar(255) ELSE null::varchar(255) END "type",
+					ind.indicator_id amp_me_indicator_id,
+					CASE ind.type WHEN 'A' THEN 1::bigint WHEN 'D' THEN 2::bigint ELSE 3::bigint END id
+				  FROM amp_indicator_connection con, amp_indicator ind
+				  WHERE ind.indicator_id = con.indicator_id AND con.sub_clazz::text = 'a'::text;
 			]]></lang>
 		</script>
 	</apply>

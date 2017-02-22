@@ -10,7 +10,7 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				insert into amp_menu_entry (id,parent_id,name,title,url,position,flags) values
-				(nextval('amp_menu_entry_seq'),(select id from amp_menu_entry where name = 'Desktop'),'GPI Data','GPI Data','/TEMPLATE/reamp/modules/admin/gpi/index.html',7,null);
+				(nextval('amp_menu_entry_seq'),(select id from amp_menu_entry where name = 'Desktop'),'GPI Data','GPI Data','/TEMPLATE/reamp/modules/gpi/index.html',7,null);
 				INSERT INTO amp_menu_entry_view(menu_id, view_type) 
 				VALUES ((SELECT id FROM amp_menu_entry WHERE name = 'GPI Data'), 2);				
 				

@@ -3357,7 +3357,7 @@ public class DbUtil {
 		} catch (Exception e) {
 			logger.error("Exception from hasDonorRole()", e);
 		}
-		return result;
 		
+		return result;	
 	}
 }

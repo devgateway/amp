@@ -10,7 +10,7 @@
 	<script>
 	<lang delimiter=";" type="postgres">
 	
-	INSERT INTO dg_group (SELECT nextval('dg_group_seq'), false, localtimestamp, null, localtimestamp, null, null, 'National Coordinators', 3, 'NCO');
+		INSERT INTO dg_group (SELECT nextval('dg_group_seq'), false, localtimestamp, null, localtimestamp, null, null, 'National Coordinators', 3, 'NCO');
     
     </lang>
 	</script>

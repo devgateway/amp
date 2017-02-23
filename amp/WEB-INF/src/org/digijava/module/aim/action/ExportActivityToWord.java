@@ -608,7 +608,7 @@ public class ExportActivityToWord extends Action {
                     doc.add(tbl);
                 }
 
-                if (FeaturesUtil.isVisibleModule("M & E")) {
+                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E")) {
                     Table meTbl = null;
                     meTbl = new Table(1);
                     meTbl.setWidth(100);
@@ -639,20 +639,20 @@ public class ExportActivityToWord extends Action {
                             headerTable.addCell(sectorsLabel);
                             headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
 
-                            if (FeaturesUtil.isVisibleField("Indicator Name")) {
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Name")) {
                                 headerTable.addCell(new Paragraph(indicator.getIndicator().getName(), BOLDFONT));
+                            }
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Code")) {
                                 headerTable.addCell(indicator.getIndicator().getCode());
                             }
-                            if (FeaturesUtil.isVisibleField("Logframe Category")) {
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/Logframe Category")) {
                                 if (indicator.getValues() != null && indicator.getValues().size() > 0) {
                                     headerTable.addCell(indicator.getLogFrame() + "\n");
                                 }
                             }
                             
-                            if (FeaturesUtil.isVisibleField("Sectors")) {
-                                if (indicator.getIndicator().getSectors() != null) {
-                                    headerTable.addCell(ExportUtil.getIndicatorSectors(indicator) + "\n");
-                                }
+                            if (indicator.getIndicator().getSectors() != null) {
+                                headerTable.addCell(ExportUtil.getIndicatorSectors(indicator) + "\n");
                             }
 
                             RtfCell headerCell = new RtfCell();
@@ -672,13 +672,13 @@ public class ExportActivityToWord extends Action {
                                 Table additionalInfoSubTable = new Table(2);
                                 additionalInfoSubTable.setWidth(80);
 
-                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Value")) {
                                     generateOverAllTableRows(additionalInfoSubTable, valueLabel, (value.getValue() != null ? value.getValue().toString() : null), null);
                                 }
-                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Comment")) {
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Comments")) {
                                     generateOverAllTableRows(additionalInfoSubTable, commentLabel, DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);
                                 }
-                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Date")) {
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Date")) {
                                     generateOverAllTableRows(additionalInfoSubTable, dateLabel, (value.getValueDate() != null ? DateConversion.convertDateToLocalizedString(value.getValueDate()) : null), null);
                                 }
 

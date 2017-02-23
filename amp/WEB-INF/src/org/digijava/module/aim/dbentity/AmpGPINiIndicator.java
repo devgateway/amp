@@ -11,6 +11,7 @@ public class AmpGPINiIndicator implements Serializable{
 	private String name;
 	private String description;
 	private Set<AmpGPINiQuestion> questions;
+	
 	public Long getAmpGPINiIndicatorId() {
 		return ampGPINiIndicatorId;
 	}

@@ -55,8 +55,4 @@ public class AmpGPINiSurveyResponse implements Serializable {
 	public void setResourceUuid(String resourceUuid) {
 		this.resourceUuid = resourceUuid;
 	}
-	
-	
-	
-
 }

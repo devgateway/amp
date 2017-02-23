@@ -321,7 +321,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	 * <p>
 	 * Returns definitions for the following settings: resource manager.
 	 * </p>
-	 * <h3>Sample Output:</h3> TODO update output
+	 * <h3>Sample Output:</h3> 
 	 * 
 	 * <pre>
 	 *	[

@@ -15,23 +15,27 @@ function setupFileUpload(componentId, componentUrl, componentParamName){
             minFileSize: 1,
             maxFileSize: 20000000,
             add: function (e, data) {
-                //$.each(data.files, function (index, file) {
-                //    alert('Added file: ' + file.name);
-                //});
-            	if (!FileTypeValidator.isValid(data.files[0].name)) {
+            	try {
+	            	if (!FileTypeValidator.isValid(data.files[0].name)) {
+	            		alert(FileTypeValidator.errorMessage);
+	            		$('#uploadLabel').text(FileTypeValidator.errorMessage);
+	            		$(this).find('[role=fileUploadedMsg]').html('');
+	                    $(this).find('[role=fileUploadedMsg]').hide();
+	            	} else if (data.files[0].size > parseFloat("${uploadMaxFileSize}")) {
+	            		alert("${uploadFailedTooBigMsg}");
+	            		$('#uploadLabel').text("${uploadNoFileLabel}");
+	            		$(this).find('[role=fileUploadedMsg]').html('');
+	                    $(this).find('[role=fileUploadedMsg]').hide();
+	            	} else {
+		            	$(this).find('[role=fileUploadedMsg]').show();
+		                $(this).find('[role=fileUploadedMsg]').html(" \"" + "${uploadStartedMsg}" + data.files[0].size + "\" bytes");            	
+		                data.submit();
+	            	}
+            	} catch(err) {
             		alert(FileTypeValidator.errorMessage);
             		$('#uploadLabel').text(FileTypeValidator.errorMessage);
             		$(this).find('[role=fileUploadedMsg]').html('');
                     $(this).find('[role=fileUploadedMsg]').hide();
-            	} else if (data.files[0].size > parseFloat("${uploadMaxFileSize}")) {
-            		alert("${uploadFailedTooBigMsg}");
-            		$('#uploadLabel').text("${uploadNoFileLabel}");
-            		$(this).find('[role=fileUploadedMsg]').html('');
-                    $(this).find('[role=fileUploadedMsg]').hide();
-            	} else {
-	            	$(this).find('[role=fileUploadedMsg]').show();
-	                $(this).find('[role=fileUploadedMsg]').html(" \"" + "${uploadStartedMsg}" + data.files[0].size + "\" bytes");            	
-	                data.submit();
             	}
             },
             done: function (e, data){

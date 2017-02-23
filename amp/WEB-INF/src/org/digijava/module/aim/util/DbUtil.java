@@ -3179,23 +3179,5 @@ public class DbUtil {
 
 		return agreements;
 	}
-	/**
-	 * Returns the row for resource manager settiongs
-	 * @return
-	 */
-	public static AmpResourceManagerSettings getResourceManagerSettings() {
-		Session session = null;
-		Query qry = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "from " + AmpResourceManagerSettings.class.getName();
-			qry = session.createQuery(queryString);
-			return (AmpResourceManagerSettings) qry.uniqueResult();
-		} catch (Exception e) {
-			logger.error("Unable to get AmpResourceManagerSettings");
-		}
-		return null;
-	}
 
 }

@@ -27,6 +27,8 @@ public class GlobalSettingsConstants {
     public static final String FISCAL_YEAR_END_DATE = "Fiscal Year End Date";
     
     public static final String SYSTEM_YEAR = "system";
+
+    public static final String CR_MAX_FILE_SIZE = "Maximum File Size";
     
     public static final String ACTIVITY_LEVEL = "Activity Levels";
 
@@ -104,6 +106,8 @@ public class GlobalSettingsConstants {
 
     public static final String REPORTS_EMPTY_VALUES_AS_ZERO_XLS= "Show empty values as zero in Reports export to XLS";
 	
+    public static final String DEFAULT_RESOURCES_SORT_COLUMN = "Resource List Sort Column";
+
 	public static final String DAILY_CURRENCY_RATES_UPDATE_ENALBLED = "Daily Currency Rates Update Enabled";
 	
 	public static final String DAILY_CURRENCY_RATES_UPDATE_HOUR = "Daily Currency Rates Update Hour";
@@ -202,6 +206,8 @@ public class GlobalSettingsConstants {
 
     public static final String  IMPORT_PROCESSOR_URL = "Import processor endpoint URL";
     
+    public static final String  LIMIT_FILE_TYPE_FOR_UPLOAD = "Limit file type for upload";
+
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value
      */

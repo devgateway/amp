@@ -37,11 +37,13 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.ResourceManagerSettingsUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
@@ -657,43 +659,51 @@ public class SettingsUtils {
 	 * @param currentSettings
 	 * @return general currency settings
 	 */
-	private static SettingOptions getSortSetting(AmpResourceManagerSettings currentSettings) {
+	private static SettingOptions getSortSetting(String sortColumn) {
+
 		// build currency options
+		List<KeyValue> sortOptions = org.digijava.module.admin.util.DbUtil
+				.getPossibleValues(SettingsConstants.SORT_COLUMN_VIEW);
+
 		List<SettingOptions.Option> options = new ArrayList<>();
 
-		for (String sortOption : SettingsConstants.SORT_COLUMN_MAP.keySet()) {
-			SettingOptions.Option resourceSortingOption = new SettingOptions.Option(sortOption,
-					SettingsConstants.SORT_COLUMN_MAP.get(sortOption));
+		for (KeyValue sortOption : sortOptions) {
+			SettingOptions.Option resourceSortingOption = new SettingOptions.Option(sortOption.getKey(),
+					sortOption.getValue());
 			options.add(resourceSortingOption);
 		}
-		
+
 		String defaultId = "";
-		if (currentSettings != null) {
-			defaultId = currentSettings.getSortColumn();
+		if (sortColumn != null) {
+			defaultId = sortColumn;
 		}
-		
+
 		return new SettingOptions(defaultId, options);
 	}
 
 	private static SettingField getIntSetting(String id, int value) {
 		String name = SettingsConstants.ID_NAME_MAP.get(id);
-		
+
 		return new SettingField(id, null, name, value);
 	}
 
 	private static SettingField getBooleanSetting(String id, boolean value) {
 		String name = SettingsConstants.ID_NAME_MAP.get(id);
-		
+
 		return new SettingField(id, null, name, value);
 	}
 
 	static List<SettingField> getResourceManagerSettings() {
 		List<SettingField> settingFieldList = new ArrayList<>();
-		AmpResourceManagerSettings currentSettings = DbUtil.getResourceManagerSettings();
-		settingFieldList.add(getIntSetting(SettingsConstants.MAXIMUM_FILE_SIZE, currentSettings.getMaximumFileSize()));
-		settingFieldList.add(getBooleanSetting(SettingsConstants.LIMIT_FILE_TO_UPLOAD, currentSettings.isLimitFileToUpload()));
-		settingFieldList.add(getSettingFieldForOptions(SettingsConstants.SORT_COLUMN, getSortSetting(currentSettings)));
-		
+		// refactor to look at global settings
+
+		settingFieldList.add(
+				getIntSetting(SettingsConstants.MAXIMUM_FILE_SIZE, ResourceManagerSettingsUtil.getMaximunFileSize()));
+		settingFieldList.add(getBooleanSetting(SettingsConstants.LIMIT_FILE_TO_UPLOAD,
+				ResourceManagerSettingsUtil.isLimitFileToUpload()));
+		settingFieldList.add(getSettingFieldForOptions(SettingsConstants.SORT_COLUMN,
+				getSortSetting(ResourceManagerSettingsUtil.getSortColumn())));
+
 		return settingFieldList;
 	}
 

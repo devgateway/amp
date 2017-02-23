@@ -6,7 +6,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.digijava.module.aim.util.SettingsUtil;
+import org.digijava.module.aim.util.ResourceManagerSettingsUtil;
 
 public class ResourceSettingsValueTagClass extends BodyTagSupport {
 
@@ -23,7 +23,7 @@ public class ResourceSettingsValueTagClass extends BodyTagSupport {
 	@Override
 	public int doStartTag() throws JspException {
 		try {
-			String settingValue = SettingsUtil.getResourceSettingValue(name);
+			String settingValue = ResourceManagerSettingsUtil.getResourceSettingValue(name);
 			JspWriter out = pageContext.getOut();
 
 			if (settingValue != null) {

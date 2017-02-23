@@ -45,6 +45,7 @@ import org.digijava.kernel.user.GroupPermission;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.admin.exception.AdminException;
+import org.digijava.module.aim.helper.KeyValue;
 
 public class DbUtil {
 
@@ -821,5 +822,17 @@ public class DbUtil {
 					"Unable to modify site", ex);
 		}
 	}
+	public static List<KeyValue> getPossibleValues(String tableName) {
+		List<KeyValue> ret = new ArrayList<>();
+		
+		if (tableName == null || tableName.length() == 0)
+			return ret;
 
+		List<Object[]> ls 	= PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+		for(Object[] obj:ls){
+			KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]), PersistenceManager.getString(obj[1]));
+			ret.add( keyValue );
+		}
+		return ret;
+	}
 }

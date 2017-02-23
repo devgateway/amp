@@ -29,6 +29,7 @@ import org.dgfoundation.amp.menu.MenuStructure;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -157,7 +158,7 @@ public class GlobalSettings extends Action {
 			Collection<KeyValue> possibleValues		= null;
 			Map<String, String> possibleValuesDictionary	= null;
 			if ( possibleValuesTable != null && possibleValuesTable.length() != 0 && possibleValuesTable.startsWith("v_") ) {
-				possibleValues				= this.getPossibleValues(possibleValuesTable);
+				possibleValues				= DbUtil.getPossibleValues(possibleValuesTable);
 				possibleValuesDictionary	= new HashMap<String, String>();
 				for(KeyValue keyValue:possibleValues){
 					possibleValuesDictionary.put(keyValue.getKey(), keyValue.getValue());
@@ -300,23 +301,7 @@ public class GlobalSettings extends Action {
 			}
 		}
 	}
-
-
-
-	private List<KeyValue> getPossibleValues(String tableName) {
-		List<KeyValue> ret = new ArrayList<>();
-		
-		if (tableName == null || tableName.length() == 0)
-			return ret;
-
-		List<Object[]> ls 	= PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
-		for(Object[] obj:ls){
-			KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]), PersistenceManager.getString(obj[1]));
-			ret.add( keyValue );
-		}
-		return ret;
-	}
-
+	
 	private void  updateGlobalSetting(Long id, String value) {
 
 		Session session 	= null;

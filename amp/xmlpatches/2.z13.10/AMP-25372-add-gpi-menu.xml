@@ -9,13 +9,13 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				insert into amp_menu_entry (id,parent_id,name,title,url,position,flags) values
-				(nextval('amp_menu_entry_seq'),(select id from amp_menu_entry where name = 'Desktop'),'GPI Data','GPI Data','/TEMPLATE/reamp/modules/gpi/index.html',7,null);
+				INSERT INTO amp_menu_entry (id, parent_id, name, title, url, position, flags) VALUES
+				(nextval('amp_menu_entry_seq'), (SELECT id FROM amp_menu_entry WHERE name = 'Desktop'), 'GPI Data', 'GPI Data', '/TEMPLATE/reamp/modules/gpi/index.html', 7, null);
 				INSERT INTO amp_menu_entry_view(menu_id, view_type) 
 				VALUES ((SELECT id FROM amp_menu_entry WHERE name = 'GPI Data'), 2);				
 				
-				update amp_menu_entry set position = 6 where name = 'Pledges' and parent_id = (select id from amp_menu_entry where name = 'Desktop');
-                update amp_menu_entry set position = 8 where name = 'Change Workspace' and parent_id = (select id from amp_menu_entry where name = 'Desktop');
+				UPDATE amp_menu_entry SET position = 6 WHERE name = 'Pledges' and parent_id = (SELECT id FROM amp_menu_entry WHERE name = 'Desktop');
+                UPDATE amp_menu_entry SET position = 8 WHERE name = 'Change Workspace' and parent_id = (SELECT id FROM amp_menu_entry WHERE name = 'Desktop');
 			</lang>
 		</script>
 	</apply>

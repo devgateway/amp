@@ -1450,7 +1450,7 @@ function validateAddDocument() {
 		if(document.forms['crDocumentManagerForm'].fileData.value == '') { //adding document
 			msg = msg + "${translation_validation_filedata}"+'<br>';
 		} else if(!FileTypeValidator.isValid(fileData.value)) {
-			msg = msg + FileTypeValidator.errorMessage +'! <br>';
+			msg = msg + FileTypeValidator.errorMessage +'<br>';
 		}
 	} else if(document.forms['crDocumentManagerForm'].webLink.value == '') { //adding url
 		msg = msg + "${translation_validation_url}"+'<br>' ;

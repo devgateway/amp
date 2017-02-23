@@ -93,7 +93,7 @@ public class ViewAmp
         // No menber info means that we could not set it automatically
         LoginForm lForm = (LoginForm) form; // login form instance
        
-        session.setAttribute("currentUser", user);
+        session.setAttribute(Constants.CURRENT_USER, user);
 		lForm.setMembers(members);
 
         Collection<AmpCategoryValue> workspaceGroups = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.WORKSPACE_GROUP_KEY);

@@ -29,7 +29,8 @@ import org.digijava.module.aim.helper.TeamMember;
 
 /**
  * AMP Activity Endpoints for Activity Import / Export
- * 
+ *
+ * @implicitParam X-Auth-Token|string|header
  * @author acartaleanu
  */
 @Path("activity")
@@ -51,7 +52,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@GET
 	@Path("fields/{fieldName}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_WORKSPACE}, id = "getValues", ui = false)
+	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
 	public List<JsonBean> getValues(@PathParam("fieldName") String fieldName) {
 		return PossibleValuesEnumerator.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
 	}
@@ -64,7 +65,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@GET
 	@Path("fields")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_WORKSPACE}, id = "getFields", ui = false)
+	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getFields", ui = false)
 	public List<JsonBean> getAvailableFields() {
 		return FieldsEnumerator.getAllAvailableFields();
 	}
@@ -86,7 +87,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@GET
 	@Path("/projects")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_WORKSPACE}, id = "getProjectList", ui = false)
+	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getProjectList", ui = false)
 	public Collection<JsonBean> getProjects(@QueryParam ("pid") String pid,@QueryParam("offset") Integer offset, @QueryParam("count") Integer count) {
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
 		Collection<JsonBean> activityCollection = ProjectList.getActivityList(pid, tm);
@@ -109,7 +110,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@GET
 	@Path("/projects/{projectId}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.VIEW_ACTIVITY}, id = "getProject", ui = false)
+	@ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProject", ui = false)
 	public JsonBean getProject(@PathParam("projectId") Long projectId) {
 		return InterchangeUtils.getActivity(projectId);
 	}
@@ -123,7 +124,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@POST
 	@Path("/projects/{projectId}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.VIEW_ACTIVITY}, id = "getProjectsFilter", ui = false)
+	@ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProjectsFilter", ui = false)
 	public JsonBean getProject(@PathParam("projectId") Long projectId, JsonBean filter) {
 		return InterchangeUtils.getActivity(projectId, filter);
 	}
@@ -137,7 +138,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@POST
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.ADD_ACTIVITY}, id = "addProject", ui = false)
+	@ApiMethod(authTypes = AuthRule.ADD_ACTIVITY, id = "addProject", ui = false)
 	public JsonBean addProject(JsonBean newJson) {
         return InterchangeUtils.importActivity(newJson, false, uri.getBaseUri() + "activity");
 	}
@@ -152,7 +153,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@POST
 	@Path("/{projectId}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.EDIT_ACTIVITY}, id = "updateProject", ui = false)
+	@ApiMethod(authTypes = AuthRule.EDIT_ACTIVITY, id = "updateProject", ui = false)
 	public JsonBean updateProject(@PathParam("projectId") Long projectId, JsonBean newJson) {
 		/*
 		 * Originally it was defined as PUT to avoid these type of issues checked here.

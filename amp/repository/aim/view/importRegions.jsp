@@ -131,9 +131,7 @@ div.fakefile2 input {
 								<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 							</c:set> <digi:link href="/admin.do" title="${translation}" module="aim">
 								<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
-							</digi:link>&nbsp;&gt;&nbsp; <digi:trn>
-								<span style="color: #000000">Region Manager</span>
-							</digi:trn></td>
+							</digi:link>&nbsp;&gt;&nbsp; <span style="color: #000000"><digi:trn>Region Manager</digi:trn></span></td>
 					<!-- End navigation -->
 				</tr>
 				<tr>

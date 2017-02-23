@@ -11,7 +11,7 @@ public class AmpGPINiQuestion implements Serializable{
 	private String description;
 	private String type;
 	private Integer index;
-	private Boolean allowMutiple;
+	private Boolean allowMultiple;
 	private Boolean requiresDataEntry;
 	private Set<AmpGPINiQuestionOption> options;
 	
@@ -51,11 +51,11 @@ public class AmpGPINiQuestion implements Serializable{
 	public void setIndex(Integer index) {
 		this.index = index;
 	}
-	public Boolean getAllowMutiple() {
-		return allowMutiple;
+	public Boolean getAllowMultiple() {
+		return allowMultiple;
 	}
-	public void setAllowMutiple(Boolean allowMutiple) {
-		this.allowMutiple = allowMutiple;
+	public void setAllowMultiple(Boolean allowMultiple) {
+		this.allowMultiple = allowMultiple;
 	}
 	public Boolean getRequiresDataEntry() {
 		return requiresDataEntry;

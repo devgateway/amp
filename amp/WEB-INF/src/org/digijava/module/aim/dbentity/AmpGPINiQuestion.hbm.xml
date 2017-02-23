@@ -14,7 +14,7 @@
 		<property name="description" column="description" type="text" />
 		<property name="type" column="type" type="java.lang.String" />
 		<property name="index" column="index" type="java.lang.Integer" />
-		<property name="allowMutiple" column="allow_mutiple" type="java.lang.Boolean" />
+		<property name="allowMultiple" column="allow_multiple" type="java.lang.Boolean" />
 		<property name="requiresDataEntry" column="requires_data_entry" type="java.lang.Boolean" />
 		
 		<many-to-one name="ampGPINiIndicatorId" column="amp_gpi_ni_indicator_id"

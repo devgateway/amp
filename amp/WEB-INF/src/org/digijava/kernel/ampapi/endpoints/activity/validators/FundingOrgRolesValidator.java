@@ -128,6 +128,6 @@ public class FundingOrgRolesValidator extends InputValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.ORGANIZATION_ROLE_NOT_DECLARED;
+        return ActivityErrors.ORGANIZATION_ROLE_PAIR_NOT_DECLARED;
     }
 }

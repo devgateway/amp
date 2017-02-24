@@ -18,12 +18,12 @@
 	</trigger> 
 	<apply>
 		<script>
-			<lang delimiter=";" type="postgres">
+			<lang delimiter=";" type="postgres"><![CDATA[
 				CREATE OR REPLACE VIEW v_indicator_actual_comment AS
-				SELECT con.activity_id AS amp_activity_id, val.comment_ AS name, con.id AS indicator_connection_id
-				FROM amp_indicator_connection con, amp_indicator_values val
-				WHERE val.ind_connect_id = con.id AND val.value_type = 1 AND con.sub_clazz::text = 'a'::text;
-			</lang>
+				  SELECT con.activity_id AS amp_activity_id, val.comment_ AS name, con.id AS indicator_connection_id, con.indicator_id
+				  FROM amp_indicator_connection con, amp_indicator_values val
+				  WHERE val.ind_connect_id = con.id AND val.value_type = 1 AND con.sub_clazz::text = 'a'::text;
+			]]></lang>
 		</script>
 	</apply>
 </tns:patch>

@@ -23,8 +23,7 @@
 				  SELECT con.activity_id AS amp_activity_id, ind.description AS name, ind.indicator_id AS amp_me_indicator_id
 				  FROM amp_indicator_connection con, amp_indicator ind
 				  WHERE ind.indicator_id = con.indicator_id
-				  AND con.sub_clazz::text = 'a'::text
-				  AND ind.description is not null;
+				  AND con.sub_clazz::text = 'a'::text;
 			]]></lang>
 		</script>
 	</apply>

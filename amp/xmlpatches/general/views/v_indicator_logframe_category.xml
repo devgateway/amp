@@ -20,22 +20,19 @@
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
 				CREATE OR REPLACE VIEW v_indicator_logframe_category AS
-				  SELECT v.amp_activity_id, acv.category_value::text logframe_category, v.indicator_connection_id, v.acv_id id
+				  SELECT v.amp_activity_id, acv.category_value::text logframe_category, v.indicator_connection_id, v.acv_id id, v.indicator_id
 				  FROM
 					(
 					  SELECT
 						con.activity_id amp_activity_id,
 						con.id          indicator_connection_id,
-						max(acv.id)     acv_id
-					  FROM amp_indicator_connection con, amp_indicator_values val, amp_category_value acv, amp_category_class acc
+						max(val.ind_val_category)     acv_id,
+						con.indicator_id
+					  FROM amp_indicator_connection con, amp_indicator_values val
 					  WHERE val.ind_connect_id = con.id
 							AND con.sub_clazz::text = 'a'::text
-							AND val.ind_val_category = acv.id
-							AND acv.amp_category_class_id = acc.id
-							AND acc.keyname::text = 'logframe'::text
 					  GROUP BY con.activity_id, con.id
-					) v, amp_category_value acv
-				  WHERE v.acv_id=acv.id;
+					) v LEFT JOIN amp_category_value acv ON v.acv_id=acv.id;
 			]]></lang>
 		</script>
 	</apply>

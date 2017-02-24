@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.dgfoundation.amp.algo.AmpCollections.any;
+import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
@@ -24,7 +25,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
  * the behaviour of a {@link DateCell}-populated column.
  * These columns have no trail cells. 
  * One notable thing about their behaviour is that, upon horizontally reducing multiple {@link DateCell} instances into a {@link NiDateCell} one, 
- * the dates are displayed in <i>chronological order</i> (see {@link NiDateCell#sortedValues})
+ * the dates are displayed in <i>chronological order</i>.
  * @author Dolghier Constantin
  *
  */
@@ -37,7 +38,7 @@ public class DateTokenBehaviour implements Behaviour<NiDateCell> {
 		return TimeRange.NONE;
 	}
 	
-	private DateTokenBehaviour(){}
+	protected DateTokenBehaviour(){}
 	
 	@Override
 	public NiDateCell doHorizontalReduce(List<NiCell> cells) {
@@ -46,12 +47,12 @@ public class DateTokenBehaviour implements Behaviour<NiDateCell> {
 			DateCell cell = (DateCell) niCell.getCell();
 			entityIdsValues.put(cell.entityId, cell.date);
 		}
-		return new NiDateCell(any(entityIdsValues.keySet(), -1l), entityIdsValues);
+		return new NiDateCell(sorted(entityIdsValues.values()), any(entityIdsValues.keySet(), -1l), entityIdsValues);
 	}
 
 	@Override
 	public NiDateCell getZeroCell() {
-		return new NiDateCell(-1l, Collections.emptyMap());
+		return new NiDateCell(Collections.emptyList(), -1l, Collections.emptyMap());
 	}
 
 	@Override

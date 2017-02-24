@@ -64,6 +64,7 @@
 	sections.add("funding");
 	sections.add("date");
 	sections.add("user");
+	sections.add("resources");
 %>
 
 

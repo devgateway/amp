@@ -9,8 +9,8 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-				update amp_global_settings set section='Resources' 
-				where settingsname in ('Resource List Sort Column','Maximum File Size','Limit file type for upload');
+				UPDATE amp_global_settings SET section = 'resources' 
+				WHERE settingsname IN ('Resource List Sort Column', 'Maximum File Size', 'Limit file type for upload');
             </lang>
         </script>
     </apply>

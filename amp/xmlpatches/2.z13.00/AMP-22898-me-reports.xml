@@ -41,6 +41,12 @@
                   'Current Value', 'Base Value', 'Target Value', 'Revised Target Value',
                   'Date Revised Target Value', 'Date Target Value', 'Date Base Value', 'Date Current Value')
                 and parent=(select id from amp_features_visibility where name='Activity');
+
+                update amp_modules_visibility set name='/Activity Form/M&E/Indicator Description' where name='/Activity Form/M&E/Description';
+
+                -- rename Indicator code -> Indicator Code
+                update amp_fields_visibility set name='Indicator Code' where name='Indicator code' and parent=(select id from amp_features_visibility where name='M & E');
+
             ]]></lang>
         </script>
     </apply>

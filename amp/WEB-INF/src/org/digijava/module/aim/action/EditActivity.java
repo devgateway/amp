@@ -115,6 +115,7 @@ import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -295,7 +296,11 @@ public class EditActivity extends Action {
             } else {
                 if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
                     if (hasTeamLeadOrValidator) {
-                        eaForm.getWarningMessges().add(String.format("The activity is awaiting approval and will be automatically approved within %s days.", daysToValidation(activity.getUpdatedDate())));
+                        if (isAutomaticValidationEnabled()) {
+                            eaForm.getWarningMessges().add(String.format("The activity is awaiting approval and will be automatically approved within %s days.", daysToValidation(activity.getUpdatedDate())));
+                        } else {
+                            eaForm.getWarningMessges().add("The activity is awaiting approval.");
+                        }
                     } else {
                         eaForm.getWarningMessges().add("This activity cannot be validated because there is no Workspace Manager.");
                     }
@@ -2002,5 +2007,9 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
          String daysBeforeValidation = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION);
          result = (Integer.parseInt(daysBeforeValidation) - daysBetween);
          return result <= 0 ? 1 : result;
+     }
+
+     private boolean isAutomaticValidationEnabled() {
+         return (QuartzJobUtils.getJobByClassFullname(Constants.AUTOMATIC_VALIDATION_JOB_CLASS_NAME) == null ? false : true);
      }
 }

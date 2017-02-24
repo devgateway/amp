@@ -23,13 +23,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.jcr.Node;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -43,9 +40,29 @@ import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAgreement;
+import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
+import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureImg;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
@@ -91,45 +108,73 @@ public class ActivityUtil {
 	 * @param am
 	 */
 	public static void saveActivity(AmpActivityModel am, boolean draft,boolean rejected){
-		Session session = AmpActivityModel.getHibernateSession();
+
 		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())){
 			logger.error("WRONG LANGUAGE: TLSUtils(" + TLSUtils.getLangCode() + ") vs Wicket(" + wicketSession.getLocale().getLanguage() + ")");
 		}
-		
+
+		AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
+
+		ServletContext sc = wicketSession.getHttpSession().getServletContext();
+
 		AmpActivityVersion oldA = am.getObject();
+
+		AmpActivityVersion newA = saveActivity(oldA, am.getTranslationHashMap().values(), ampCurrentMember, wicketSession.getSite(), wicketSession.getLocale(), sc.getRealPath("/"), draft, rejected, true);
+
+		am.setObject(newA);
+
+		ActivityGatekeeper.unlockActivity(String.valueOf(am.getId()), am.getEditingKey());
+		AmpActivityModel.endConversation();
+	}
+
+	/**
+	 * Method used to save an Activity/ActivityVersion depending
+	 * on activation of versioning option
+	 *
+	 * @param oldA
+	 * @param values
+	 * @param ampCurrentMember
+	 * @param site
+	 * @param locale
+	 * @param rootRealPath
+	 * @param draft
+	 * @param rejected
+	 */
+	public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, boolean rejected, boolean isActivityForm){
+		Session session;
+		if (isActivityForm) {
+			session = AmpActivityModel.getHibernateSession();
+		} else {
+			session = PersistenceManager.getSession();
+		}
 
 		boolean newActivity = oldA.getAmpActivityId() == null;
 		AmpActivityVersion a=null;
-		try 
+		try
 		{
-			AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
-			a = saveActivityNewVersion(am.getObject(), am.getTranslationHashMap().values(), 
-					ampCurrentMember, draft, session, rejected, true);
-			am.setObject(a);
+			a = saveActivityNewVersion(oldA, values,
+					ampCurrentMember, draft, session, rejected, isActivityForm);
+
 		} catch (Exception exception) {
-			logger.error("Error saving activity:", exception); // Log the exception			
+			logger.error("Error saving activity:", exception); // Log the exception
 			throw new RuntimeException("Can't save activity:", exception);
 
 		} finally {
-			ActivityGatekeeper.unlockActivity(String.valueOf(am.getId()), am.getEditingKey());
-			AmpActivityModel.endConversation();
-	        
+
 			if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(a.getApprovalStatus())) {
-            	new ActivityValidationWorkflowTrigger(a);
-            }
-	        
+				new ActivityValidationWorkflowTrigger(a);
+			}
+
 			try {
-				ServletContext sc = wicketSession.getHttpSession().getServletContext();
-				Site site = wicketSession.getSite();
-				Locale locale = wicketSession.getLocale();
-				LuceneUtil.addUpdateActivity(sc.getRealPath("/"), !newActivity, site, locale, am.getObject(), oldA);
+				LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA);
 			} catch (Exception e) {
 				logger.error("error while trying to update lucene logs:", e);
-			}		
+			}
 		}
+		return a;
 	}
-	
+
 	/**
 	 * saves a new version of an activity
 	 * returns newActivity
@@ -309,7 +354,10 @@ public class ActivityUtil {
 
 	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity,boolean rejected) {
 		Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
-		ApplicationSettings appSettings = TeamUtil.getCurrentMember().getAppSettings();
+		ApplicationSettings appSettings = null;
+		if (TeamUtil.getCurrentMember() != null) {
+			appSettings = TeamUtil.getCurrentMember().getAppSettings();
+		}
 		String validation = appSettings != null ? appSettings.getValidation() : 
 			org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
 		

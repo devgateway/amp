@@ -7,7 +7,7 @@ Utility class for validation file types by extensions
 FileTypeValidator = {
 	rootURL : '/rest/resourcemanager/file-types-allowed',
 	settingsURL: '/rest/settings-definitions/resource-manager',
-	errorMessage: 'The file does not have a valid extension!',
+	errorMessage: 'The uploaded file does not have an allowed extension!',
 	exceptionMessage : 'The file type validation has not been initialized!',
 	extensions : [], 
 	

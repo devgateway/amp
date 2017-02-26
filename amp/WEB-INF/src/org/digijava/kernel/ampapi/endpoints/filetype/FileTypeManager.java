@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -184,17 +185,16 @@ public class FileTypeManager {
 		    MediaType mediaType = detector.detect(is, md);
 			String mimeTypeName = mediaType.toString();
 			
+			MimeType mimeType = MimeTypes.getDefaultMimeTypes().forName(mimeTypeName);
+			if (!mimeType.getExtensions().contains(extension)) {
+				return new FileTypeValidationResponse(FileTypeValidationStatus.CONTENT_EXTENSION_MISMATCH, mimeTypeName, getFileTypeDescription(mimeType), extension);
+			}
+			
 			if (isMimeTypeAllowed(mimeTypeName)) {
 				return new FileTypeValidationResponse(FileTypeValidationStatus.ALLOWED);
 			}
 			
-			MimeType mimeType = MimeTypes.getDefaultMimeTypes().forName(mimeTypeName);
-			
-			if (!mimeType.getExtensions().contains(extension)) {
-				return new FileTypeValidationResponse(FileTypeValidationStatus.CONTENT_EXTENSION_MISMATCH, mimeTypeName, mimeType.getDescription(), extension);
-			}
-			
-			return new FileTypeValidationResponse(FileTypeValidationStatus.NOT_ALLOWED, mimeTypeName, mimeType.getDescription());
+			return new FileTypeValidationResponse(FileTypeValidationStatus.NOT_ALLOWED, mimeTypeName, getFileTypeDescription(mimeType));
 		} catch (IOException e) {
 			logger.error("Error in detecting content type of the stream ", e);
 			return new FileTypeValidationResponse(FileTypeValidationStatus.INTERNAL_ERROR); 
@@ -239,5 +239,11 @@ public class FileTypeManager {
 		fileType.setExtensions(extensions);
 		
 		return fileType;
+	}
+	
+	private String getFileTypeDescription(MimeType mimeType) {
+		Optional<AmpFileType> fileType = allFileTypes.stream().filter(ft -> ft.getMimeTypes().contains(mimeType.getName())).findFirst();
+		
+		return fileType.isPresent() ? fileType.get().getDescription() : mimeType.getDescription();
 	}
 }

@@ -58,9 +58,9 @@ public class GPIDataService {
 		JsonBean data = new JsonBean();
 		data.set(GPIEPConstants.FIELD_ID, aidOnBudget.getAmpGPINiAidOnBudgetId());
 		data.set(GPIEPConstants.FIELD_DONOR_ID, aidOnBudget.getDonorId().getAmpOrgId());
-		data.set(GPIEPConstants.FIELD_CURRENCY_CODE, aidOnBudget.getCurrencyId().getCurrencyCode());
+		data.set(GPIEPConstants.FIELD_CURRENCY_CODE, aidOnBudget.getCurrency().getCurrencyCode());
 		data.set(GPIEPConstants.FIELD_AMOUNT, aidOnBudget.getAmount());
-		data.set(GPIEPConstants.FIELD_DATE, FormatHelper.formatDate(aidOnBudget.getDate()));
+		data.set(GPIEPConstants.FIELD_DATE, FormatHelper.formatDate(aidOnBudget.getIndicatorDate()));
 		return data;
 	}
 
@@ -77,7 +77,7 @@ public class GPIDataService {
 
 		if (data.get(GPIEPConstants.FIELD_CURRENCY_CODE) != null) {
 			String currencyCode = data.getString((GPIEPConstants.FIELD_CURRENCY_CODE));
-			aidOnBudget.setCurrencyId(CurrencyUtil.getAmpcurrency(currencyCode));
+			aidOnBudget.setCurrency(CurrencyUtil.getAmpcurrency(currencyCode));
 		}
 
 		if (data.getString(GPIEPConstants.FIELD_DONOR_ID) != null) {
@@ -91,7 +91,7 @@ public class GPIDataService {
 
 		if (data.getString(GPIEPConstants.FIELD_DATE) != null) {
 			Date date = DateTimeUtil.parseDate(data.getString(GPIEPConstants.FIELD_DATE), GPIEPConstants.DATE_FORMAT);
-			aidOnBudget.setDate(date);
+			aidOnBudget.setIndicatorDate(date);
 		}
 
 		return aidOnBudget;

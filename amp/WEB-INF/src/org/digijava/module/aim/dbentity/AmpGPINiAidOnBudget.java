@@ -4,46 +4,53 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class AmpGPINiAidOnBudget implements Serializable {
-	
+
 	private static final long serialVersionUID = -8747493117052602462L;
+
 	private Long ampGPINiAidOnBudgetId;
-	private AmpCurrency currencyId;
-	private AmpOrganisation donorId;
+	private AmpCurrency currency;
+	private AmpOrganisation donor;
 	private Double amount;
-	
-	private Date date;
-	
+	private Date indicatorDate;
+
 	public Long getAmpGPINiAidOnBudgetId() {
 		return ampGPINiAidOnBudgetId;
 	}
+
 	public void setAmpGPINiAidOnBudgetId(Long ampGPINiAidOnBudgetId) {
 		this.ampGPINiAidOnBudgetId = ampGPINiAidOnBudgetId;
 	}
-	public AmpCurrency getCurrencyId() {
-		return currencyId;
+
+	public AmpCurrency getCurrency() {
+		return currency;
 	}
-	public void setCurrencyId(AmpCurrency currencyId) {
-		this.currencyId = currencyId;
+
+	public void setCurrency(AmpCurrency currency) {
+		this.currency = currency;
 	}
+
 	public AmpOrganisation getDonorId() {
-		return donorId;
+		return donor;
 	}
-	public void setDonorId(AmpOrganisation donorId) {
-		this.donorId = donorId;
+
+	public void setDonor(AmpOrganisation donor) {
+		this.donor = donor;
 	}
+
 	public Double getAmount() {
 		return amount;
 	}
+
 	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
-	
-	public Date getDate() {
-		return date;
+
+	public Date getIndicatorDate() {
+		return indicatorDate;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+
+	public void setIndicatorDate(Date indicatorDate) {
+		this.indicatorDate = indicatorDate;
 	}
-	
-	
+
 }

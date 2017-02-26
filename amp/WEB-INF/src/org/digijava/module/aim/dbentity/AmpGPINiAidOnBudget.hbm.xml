@@ -12,16 +12,14 @@
 		</id>
 			
 		<property name="amount" column="amount" type="java.lang.Double" />	
-		<property name="date" column="date" type="java.util.Date" />			
+		<property name="indicatorDate" column="indicator_date" type="java.util.Date" />			
 						
-		<many-to-one name="currencyId" column="currency_id"
+		<many-to-one name="currency" column="currency_id"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"
 			not-null="true" index = "amp_gpi_ni_aid_on_budget_currency_id"/>
 			
-		<many-to-one name="donorId" column="donor_id"
+		<many-to-one name="donor" column="donor_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"
 			not-null="true"  index="idx_amp_gpi_ni_aid_on_budget_donor_id"/>
-			
-
 	</class>
 </hibernate-mapping>

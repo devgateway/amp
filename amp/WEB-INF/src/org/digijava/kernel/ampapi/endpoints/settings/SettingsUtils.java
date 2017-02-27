@@ -32,7 +32,6 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpResourceManagerSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -687,6 +686,12 @@ public class SettingsUtils {
 		return new SettingField(id, null, name, value);
 	}
 
+	private static SettingField getStringSetting(String id, String value) {
+		String name = SettingsConstants.ID_NAME_MAP.get(id);
+
+		return new SettingField(id, null, name, value);
+	}
+
 	private static SettingField getBooleanSetting(String id, boolean value) {
 		String name = SettingsConstants.ID_NAME_MAP.get(id);
 
@@ -699,8 +704,8 @@ public class SettingsUtils {
 
 		settingFieldList.add(
 				getIntSetting(SettingsConstants.MAXIMUM_FILE_SIZE, ResourceManagerSettingsUtil.getMaximunFileSize()));
-		settingFieldList.add(getBooleanSetting(SettingsConstants.LIMIT_FILE_TO_UPLOAD,
-				ResourceManagerSettingsUtil.isLimitFileToUpload()));
+		settingFieldList.add(getStringSetting(SettingsConstants.LIMIT_FILE_TO_UPLOAD,
+				ResourceManagerSettingsUtil.isLimitFileToUpload() + ""));
 		settingFieldList.add(getSettingFieldForOptions(SettingsConstants.SORT_COLUMN,
 				getSortSetting(ResourceManagerSettingsUtil.getSortColumn())));
 

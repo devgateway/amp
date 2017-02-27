@@ -711,7 +711,7 @@
 									<c:set var="translation">
 										<digi:trn invisibleLinks="true">Click here to view Document manager admin</digi:trn>
 									</c:set> 
-									<a href="/TEMPLATE/reamp/modules/admin/resource-manager-admin/index.html"
+									<a href="/TEMPLATE/reamp/modules/admin/resource-manager-admin/dev.html"
 									title="${translation}"> <digi:trn>Resource Manager</digi:trn>
 									</a>
 								</td>

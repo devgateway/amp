@@ -1,13 +1,8 @@
 import FilteredMultiSelect from 'react-filtered-multiselect';
 import React, { Component, PropTypes, Button } from 'react';
-import { Alert } from 'react-bootstrap';
 import { delay } from 'amp/tools';
 require('../../Layout/App.less');
-const ALERT_TYPE = {
-    NONE: "none",
-    SUCCESS: "success",
-    ERROR: "danger"
-};
+
 
 export default class TypeList extends Component {
 
@@ -18,13 +13,10 @@ export default class TypeList extends Component {
             selectedOptions: [],
             availableOptions: [],
             initialized: false,
-            alert: ALERT_TYPE.NONE,
-            alertMsg: ''
         };
         this.handleDeselect = this.handleDeselect.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
-        this.hideAlert = this.hideAlert.bind(this);
-        this.getAlert = this.getAlert.bind(this);
+
     }
 
     handleDeselect(deselectedOptions) {
@@ -32,6 +24,7 @@ export default class TypeList extends Component {
         deselectedOptions.forEach(option => {
             selectedOptions.splice(selectedOptions.indexOf(option), 1)
         });
+        this.props.handleSelectedChangeAllowedTypes(selectedOptions);
         this.setState({ selectedOptions });
     }
 
@@ -57,40 +50,18 @@ export default class TypeList extends Component {
             this.setState({ initialized, selectedOptions, availableOptions });
         }
 
-        if (nextProps.alert !== ALERT_TYPE.NONE) {
-            const { alert, alertMsg } = nextProps;
-            this.setState({ alert, alertMsg });
-        }
     }
 
     handleSelect(selectedOptions) {
         selectedOptions.sort((a, b) => {
             return this.sortOptions(a, b);
         });
+        this.props.handleSelectedChanged(selectedOptions);
         this.setState({ selectedOptions });
     }
 
-    getAlert() {
-
-        if (this.state.alert !== ALERT_TYPE.NONE) {
-            let isSuccess = this.state.alert === ALERT_TYPE.SUCCESS;
-            if (isSuccess) {
-                delay(2000).then(this.hideAlert);
-            }
-            return (
-                <Alert ref="errorAlert" bsStyle={this.state.alert} className="resultAlert" bsClass="alert"
-                       onDismiss={this.hideAlert}>
-                    {isSuccess ? this.__('amp.resource-manager:sucess') : this.state.alertMsg}
-                </Alert>);
-        } else return '';
-    }
-
-    hideAlert() {
-        this.setState({ alert: ALERT_TYPE.NONE });
-    }
 
     render() {
-        let infoAlert = this.getAlert();
         this.__ = key => this.props.translations[key];
         const { saveAllowedTypes } = this.props;
         const typeToFilter = this.__('amp.resource-manager:type-to-filter');
@@ -136,14 +107,6 @@ export default class TypeList extends Component {
                         />
                     </div>
                 </div>
-                <div className="acceptButton">
-                    <button type="button" className="btn btn-primary"
-                            onClick={() => {
-                                saveAllowedTypes(this.state.selectedOptions);
-                            }}>  {this.__('amp.resource-manager:button-accept')}
-                    </button>
-                    {infoAlert}
-                </div>
             </div>
         );
 
@@ -154,8 +117,7 @@ export default class TypeList extends Component {
             "amp.resource-manager:type-list-title": "Type list manager",
             "amp.resource-manager:type-to-filter": "Start typing to filter",
             "amp.resource-manager:button-add": "Add",
-            "amp.resource-manager:button-remove": "Remove",
-            "amp.resource-manager:button-accept": "Accept"
+            "amp.resource-manager:button-remove": "Remove"
         }
 
     }

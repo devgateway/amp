@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 
 /**
  * Settings related constants
@@ -68,9 +69,9 @@ public class SettingsConstants {
 		put(YEAR_FROM, "From:");
 		put(YEAR_TO, "To:");
 		put(YEAR_ALL, "All");
-		put(SORT_COLUMN, "Resource List Sort Column");
-		put(MAXIMUM_FILE_SIZE, "Maximum File Size");
-		put(LIMIT_FILE_TO_UPLOAD, "Limit file type for upload");
+		put(SORT_COLUMN,GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN );
+		put(MAXIMUM_FILE_SIZE, GlobalSettingsConstants.CR_MAX_FILE_SIZE );
+		put(LIMIT_FILE_TO_UPLOAD,GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);
 	}});
 
 	public static final String DOT = "dot";

@@ -6,15 +6,19 @@ export const STATE_ALLOWED_TYPES_LOADING = 'STATE_ALLOWED_TYPES_LOADING';
 export const STATE_ALLOWED_TYPES_LOADED = 'STATE_ALLOWED_TYPES_LOADED';
 export const STATE_ALLOWED_TYPES_ERROR = 'STATE_ALLOWED_TYPES_ERROR';
 
-export const STATE_ALLOWED_TYPES_SAVE_SAVING = 'STATE_ALLOWED_TYPES_SAVE_SAVING';
-export const STATE_ALLOWED_TYPES_SAVE_SAVED = 'STATE_ALLOWED_TYPES_SAVE_SAVED';
-export const STATE_ALLOWED_TYPES_SAVE_ERROR = 'STATE_ALLOWED_TYPES_SAVE_ERROR';
+export const STATE_SETTINGS_SAVE_SAVING = 'STATE_SETTINGS_SAVING';
+export const STATE_SETTINGS_SAVE_SAVED = 'STATE_SETTINGS_SAVED';
+export const STATE_SETTINGS_SAVE_ERROR = 'STATE_SETTINGS_ERROR';
 
+export const STATE_SETTINGS_LOADING = 'STATE_SETTINGS_LOADING';
+export const STATE_SETTINGS_LOADED = 'STATE_SETTINGS_LOADED';
+export const STATE_SETTINGS_ERROR = 'STATE_SETTINGS_ERROR';
 import {
     ALLOWED_FILE_TYPES_ENDPOINT,
     REST_BASE,
     AVAILABLE_FILE_TYPES_ENDPOINT,
-    SAVE_FILE_TYPES_ENDPOINT
+    SAVE_FILE_TYPES_ENDPOINT,
+    SETTINGS_ENDPOINT
 } from '../utils/constants.jsx';
 import { postJson, delay, fetchJson } from 'amp/tools';
 
@@ -26,7 +30,33 @@ export function loadAction() {
         };
     };
 }
-
+function _loadSettings() {
+    return new Promise((resolve, reject) => {
+        fetchJson(REST_BASE + SETTINGS_ENDPOINT).then((settings) => {
+            resolve(settings)
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+}
+export function loadSettings() {
+    return (dispatch, ownProps) => {
+        dispatch(_sendingRequest(STATE_SETTINGS_LOADING));
+        _loadSettings().then((settings) => {
+            dispatch({
+                    type: STATE_SETTINGS_LOADED,
+                    actionData: settings
+                }
+            );
+        }).catch((error) => {
+            dispatch({
+                    type: STATE_SETTINGS_ERROR,
+                    actionData: error
+                }
+            );
+        });
+    }
+}
 export function loadAvailableTypes() {
     return (dispatch, ownProps) => {
         dispatch(_sendingRequest(STATE_TYPES_LOADING));
@@ -75,33 +105,42 @@ export function loadAllowedTypes() {
     }
 }
 
-export function saveAllowedTypes(saveAllowedTypes) {
+export function saveSettings(saveAllowedTypes, settingsValuesSelected) {
+
     return (dispatch, ownProps) => {
-        _sendingRequest(STATE_ALLOWED_TYPES_SAVE_SAVING);
+        _sendingRequest(STATE_SETTINGS_SAVE_SAVING);
         let allowedTypesToSave = [];
         saveAllowedTypes.forEach((element) => {
             allowedTypesToSave.push(element.name);
         });
-        postJson(REST_BASE + SAVE_FILE_TYPES_ENDPOINT, allowedTypesToSave).then((result) => {
+        let valuesToSave = {};
+        valuesToSave.allowedFileType = allowedTypesToSave;
+        valuesToSave.resourceSettings = {};
+        valuesToSave.resourceSettings['maximum-file-size'] = settingsValuesSelected.maximumFileSize;
+        valuesToSave.resourceSettings['sort-column'] = settingsValuesSelected.resourceSortOption.toString();
+        valuesToSave.resourceSettings['limit-file-to-upload'] = settingsValuesSelected.limitFileToUpload === 1 ? "true" : "false";
+
+        postJson(REST_BASE + SAVE_FILE_TYPES_ENDPOINT, valuesToSave).then((result) => {
             if (result.status === 500) {
                 throw result.statusText;
             } else {
+                //once settings are saved we send them to the reducer
+                //so they are properly saved in redux props
                 dispatch({
-                        type: STATE_ALLOWED_TYPES_SAVE_SAVED,
-                        actionData: ''
+                        type: STATE_SETTINGS_SAVE_SAVED,
+                        actionData: valuesToSave
                     }
                 );
             }
 
         }).catch((error) => {
             dispatch({
-                    type: STATE_ALLOWED_TYPES_SAVE_ERROR,
+                    type: STATE_SETTINGS_SAVE_ERROR,
                     actionData: error
                 }
             );
         });
-        console.log(saveAllowedTypes);
-        console.log('save allowed types');
+
     }
 }
 

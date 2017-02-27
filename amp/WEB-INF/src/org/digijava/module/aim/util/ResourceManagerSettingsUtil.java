@@ -2,7 +2,6 @@ package org.digijava.module.aim.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
-import org.digijava.module.aim.dbentity.AmpResourceManagerSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 
 /**

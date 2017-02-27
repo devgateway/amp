@@ -1,5 +1,6 @@
 import FilteredMultiSelect from 'react-filtered-multiselect';
 import React, { Component, PropTypes, Button } from 'react';
+import { Alert, Glyphicon } from 'react-bootstrap';
 import { delay } from 'amp/tools';
 require('../../Layout/App.less');
 
@@ -70,6 +71,17 @@ export default class TypeList extends Component {
             <div>
                 <h2 className="subTitle">{this.__('amp.resource-manager:type-list-title')}</h2>
                 <div className="row">
+                    <div className="col-md-5">
+                        <Alert><Glyphicon
+                            glyph="info-sign"/><span
+                            className="infoText">{this.__('amp.resource-manager:explanation-left')}</span>
+                        </Alert>
+                    </div>
+                    <div className="col-md-5"><Alert><Glyphicon glyph="info-sign"/><span className="infoText">
+                        {this.__('amp.resource-manager:explanation-right')}</span></Alert>
+                    </div>
+                </div>
+                < div className="row">
 
                     <div className="col-md-5">
                         <FilteredMultiSelect
@@ -89,7 +101,8 @@ export default class TypeList extends Component {
                             size="16"
                         />
                     </div>
-                    <div className="col-md-5">
+                    < div
+                        className="col-md-5">
                         <FilteredMultiSelect
                             buttonText={this.__('amp.resource-manager:button-remove')}
                             placeholder={typeToFilter}
@@ -105,10 +118,11 @@ export default class TypeList extends Component {
                             valueProp="name"
                             size="16"
                         />
-                    </div>
-                </div>
-            </div>
-        );
+                    < / div >
+                < / div >
+            < / div >
+        )
+            ;
 
     }
 
@@ -117,7 +131,11 @@ export default class TypeList extends Component {
             "amp.resource-manager:type-list-title": "Type list manager",
             "amp.resource-manager:type-to-filter": "Start typing to filter",
             "amp.resource-manager:button-add": "Add",
-            "amp.resource-manager:button-remove": "Remove"
+            "amp.resource-manager:button-remove": "Remove",
+            "amp.resource-manager:explanation-left": "Select from the list which file types you would like to be allowed " +
+            "in AMP uploads. Select and click \"Add\" to select the allowable file types.",
+            "amp.resource-manager:explanation-right": "Selected file types that are allowed to be uploaded in AMP. " +
+            "To remove any options from the allowed file types, select and click \"Remove\".",
         }
 
     }

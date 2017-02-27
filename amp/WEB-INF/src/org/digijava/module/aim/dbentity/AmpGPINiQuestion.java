@@ -28,7 +28,7 @@ public class AmpGPINiQuestion implements Serializable {
 		this.ampGPINiQuestionId = ampGPINiQuestionId;
 	}
 
-	public AmpGPINiIndicator getAmpGPINiIndicatorId() {
+	public AmpGPINiIndicator getAmpGPINiIndicator() {
 		return ampGPINiIndicator;
 	}
 

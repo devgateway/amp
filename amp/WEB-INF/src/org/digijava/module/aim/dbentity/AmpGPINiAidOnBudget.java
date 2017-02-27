@@ -29,7 +29,7 @@ public class AmpGPINiAidOnBudget implements Serializable {
 		this.currency = currency;
 	}
 
-	public AmpOrganisation getDonorId() {
+	public AmpOrganisation getDonor() {
 		return donor;
 	}
 

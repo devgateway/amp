@@ -12,8 +12,8 @@
 		</id>
 					
 		<property name="code" column="code" type="java.lang.String" not-null="true" />
+		<property name="optionText" column="option_text" type="text" /> 
 		<property name="description" column="description" type="text" />
-		<property name="questionText" column="question_text" type="text" /> 
 		
 		<many-to-one name="ampGPINiQuestion" column="amp_gpi_ni_question_id"
 			class="org.digijava.module.aim.dbentity.AmpGPINiQuestion" cascade="none" not-null="true" />		

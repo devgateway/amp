@@ -9,7 +9,7 @@ public class AmpGPINiQuestionOption implements Serializable {
 	private Long ampGPINiQuestionOptionId;
 	private AmpGPINiQuestion ampGPINiQuestion;
 	private String code;
-	private String questionText;
+	private String optionText;
 	private String description;
 
 	public Long getAmpGPINiQuestionOptionId() {
@@ -36,12 +36,12 @@ public class AmpGPINiQuestionOption implements Serializable {
 		this.code = code;
 	}
 	
-	public String getQuestionText() {
-		return questionText;
+	public String getOptionText() {
+		return optionText;
 	}
 
-	public void setQuestionText(String questionText) {
-		this.questionText = questionText;
+	public void setOptionText(String optionText) {
+		this.optionText = optionText;
 	}
 
 	public String getDescription() {

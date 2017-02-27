@@ -57,7 +57,7 @@ public class GPIDataService {
 	private static JsonBean modelToJsonBean(AmpGPINiAidOnBudget aidOnBudget) {
 		JsonBean data = new JsonBean();
 		data.set(GPIEPConstants.FIELD_ID, aidOnBudget.getAmpGPINiAidOnBudgetId());
-		data.set(GPIEPConstants.FIELD_DONOR_ID, aidOnBudget.getDonorId().getAmpOrgId());
+		data.set(GPIEPConstants.FIELD_DONOR_ID, aidOnBudget.getDonor().getAmpOrgId());
 		data.set(GPIEPConstants.FIELD_CURRENCY_CODE, aidOnBudget.getCurrency().getCurrencyCode());
 		data.set(GPIEPConstants.FIELD_AMOUNT, aidOnBudget.getAmount());
 		data.set(GPIEPConstants.FIELD_DATE, FormatHelper.formatDate(aidOnBudget.getIndicatorDate()));
@@ -82,7 +82,7 @@ public class GPIDataService {
 
 		if (data.getString(GPIEPConstants.FIELD_DONOR_ID) != null) {
 			Long donorId = Long.parseLong(String.valueOf(data.get(GPIEPConstants.FIELD_DONOR_ID)));
-			aidOnBudget.setDonorId(GPIDbUtils.getOrganisation(donorId));
+			aidOnBudget.setDonor(GPIDbUtils.getOrganisation(donorId));
 		}
 
 		if (data.get(GPIEPConstants.FIELD_AMOUNT) != null) {

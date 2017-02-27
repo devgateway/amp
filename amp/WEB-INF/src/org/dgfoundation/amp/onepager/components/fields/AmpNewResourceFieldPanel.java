@@ -309,7 +309,10 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 
 							} else if (validationResponse.getStatus() == FileTypeValidationStatus.CONTENT_EXTENSION_MISMATCH) {
 								conentValidationMessage = CONTENT_TYPE_EXTENSION_MISMATCH + ": ["
-										+ validationResponse.getExtension() + ", " + validationResponse.getContentName()
+										+ resource.getFile().getClientFileName() + " "
+										+ TranslatorUtil.getTranslatedText("is a ") + " "
+										+ validationResponse.getDescription() + " ("
+										+ validationResponse.getContentName() + ")"
 										+ "]";
 							} else {
 								conentValidationMessage = CONTENT_TYPE_INTERNAL_ERROR;

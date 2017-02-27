@@ -721,7 +721,7 @@ public class DocumentManagerUtil {
 					} else if (validationResponse.getStatus() == FileTypeValidationStatus.CONTENT_EXTENSION_MISMATCH) {
 						errors.add("title", 
 								new ActionMessage("error.contentrepository.addFile.contentExtensionMismatch", 
-										formFile.getFileName(), validationResponse.getContentName()));
+										formFile.getFileName(), validationResponse.getDescription(), validationResponse.getContentName()));
 					} else {
 						errors.add("title", new ActionMessage("error.contentrepository.addFile.internalError"));
 					}

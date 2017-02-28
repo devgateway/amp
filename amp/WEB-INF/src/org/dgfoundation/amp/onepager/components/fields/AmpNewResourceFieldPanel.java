@@ -71,8 +71,8 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 	static final private String URL_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("URL not selected");
 	static final private String FILE_PATH_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("File not submited or upload has not finished");
 	static final private String WRONG_URL_FORMAT = "*" + TranslatorUtil.getTranslatedText("Wrong url format. Please enter valid url");
-	static final private String CONTENT_TYPE_NOT_ALLOWED = "*" + TranslatorUtil.getTranslatedText("Content type not allowed");
-	static final private String CONTENT_TYPE_EXTENSION_MISMATCH = "*" + TranslatorUtil.getTranslatedText("File name extension doesn't match the actual file format");
+	static final private String CONTENT_TYPE_NOT_ALLOWED = "*" + TranslatorUtil.getTranslatedText("Content type not allowed:");
+	static final private String CONTENT_TYPE_EXTENSION_MISMATCH = "*" + TranslatorUtil.getTranslatedText("File extension does not match the actual file format:");
 	static final private String CONTENT_TYPE_INTERNAL_ERROR = "*" + TranslatorUtil.getTranslatedText("Internal error during the content validation");
 
 
@@ -303,17 +303,15 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 						FileTypeValidationResponse validationResponse = mimeTypeManager.validateFileType(is, resource.getFile().getClientFileName());
 						if (validationResponse.getStatus() != FileTypeValidationStatus.ALLOWED) {
 							if (validationResponse.getStatus() == FileTypeValidationStatus.NOT_ALLOWED) {
-								conentValidationMessage = CONTENT_TYPE_NOT_ALLOWED + ": "
-										+ validationResponse.getDescription() + " ["
-										+ validationResponse.getContentName() + "]";
+								conentValidationMessage = CONTENT_TYPE_NOT_ALLOWED + " "
+										+ validationResponse.getDescription();
 
 							} else if (validationResponse.getStatus() == FileTypeValidationStatus.CONTENT_EXTENSION_MISMATCH) {
-								conentValidationMessage = CONTENT_TYPE_EXTENSION_MISMATCH + ": ["
+								conentValidationMessage = CONTENT_TYPE_EXTENSION_MISMATCH + " "
 										+ resource.getFile().getClientFileName() + " "
 										+ TranslatorUtil.getTranslatedText("is a ") + " "
 										+ validationResponse.getDescription() + " ("
-										+ validationResponse.getContentName() + ")"
-										+ "]";
+										+ validationResponse.getContentName() + ")";
 							} else {
 								conentValidationMessage = CONTENT_TYPE_INTERNAL_ERROR;
 							}

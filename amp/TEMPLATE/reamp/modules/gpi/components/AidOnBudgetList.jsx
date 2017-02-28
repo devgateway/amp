@@ -45,10 +45,11 @@ export default class AidOnBudgetList extends Component {
     showErrors() {              
          return (this.state.errors.length > 0 && <div className="alert alert-danger" role="alert">
                   {this.state.errors.map(error => 
-                      <span>{this.props.translations[error.messageKey]} <br/></span>
+                      <span>{this.props.translations[error.messageKey]}<br/></span>
                     )}
               </div>) 
     }
+    
     showInfoMessages() {
         return (this.state.infoMessages.length > 0 &&
                <div className="alert alert-info" role="alert">
@@ -69,8 +70,8 @@ export default class AidOnBudgetList extends Component {
                 <span className="success-green"> (insert data to the new field)</span>
                 <span> / </span> <span className="glyphicon glyphicon-ok-circle success-green"> </span> <span > Click the Save Symbol to save the added data row</span>
                 </div>                 
-                </div>
-                {this.showErrors()} 
+                </div>  
+                {this.showErrors()}
                 {this.showInfoMessages()} 
                 <table className="table table-striped">
                 <thead>
@@ -96,7 +97,7 @@ export default class AidOnBudgetList extends Component {
     }
 }
 
-function mapStateToProps(state, ownProps) {  
+function mapStateToProps(state, ownProps) {       
         return {
         aidOnBudgetList: state.aidOnBudget.aidOnBudgetList || [],
         errors: state.aidOnBudget.errors || [],

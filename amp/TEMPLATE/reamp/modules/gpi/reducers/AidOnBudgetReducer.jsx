@@ -12,7 +12,11 @@ export default function aidOnBudgetReducer(state: Object = defaultState.data, ac
         return action.data;
     case 'AID_ON_BUDGET_SAVE_SUCCESS':
         var data = {};
-        data.aidOnBudgetList = [...state.aidOnBudgetList.filter(aidOnBudget => aidOnBudget.id !== action.data.aidOnBudget.id),  Object.assign({}, action.data.aidOnBudget)]
+        if (action.data.errors && action.data.errors.length > 0) {
+            data.aidOnBudgetList = [...state.aidOnBudgetList]
+        } else {
+            data.aidOnBudgetList = [...state.aidOnBudgetList.filter(aidOnBudget => aidOnBudget.id !== action.data.aidOnBudget.id),  Object.assign({}, action.data.aidOnBudget)]
+        }        
         data.errors = action.data.errors || [];
         data.infoMessages = action.data.infoMessages || [];       
         return data;

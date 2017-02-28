@@ -5,13 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.hibernate.Session;
-import org.apache.log4j.Logger;
 
 /**
  * 
@@ -19,8 +17,6 @@ import org.apache.log4j.Logger;
  *
  */
 public class GPIDataService {
-	private static Logger logger = Logger.getLogger(GPIDataService.class);
-
 	public static JsonBean getAidOnBudgetById(Long id) {
 		AmpGPINiAidOnBudget aidOnBudget = GPIUtils.getAidOnBudgetById(id);
 		if (aidOnBudget != null)
@@ -84,16 +80,22 @@ public class GPIDataService {
 	}
 	
 	public static JsonBean saveAidOnBudget(JsonBean data) {
-		JsonBean result = null;
+		JsonBean result = new JsonBean();		
 		AmpGPINiAidOnBudget aidOnBudget = getAidOnBudget(data);		
-		GPIUtils.saveAidOnBudget(aidOnBudget);
-		result = modelToJsonBean(aidOnBudget);
+		if(aidOnBudget.getAmpGPINiAidOnBudgetId() == null && GPIUtils.similarRecordExists(aidOnBudget.getDate(), aidOnBudget.getDonorId().getAmpOrgId())){
+			return ApiError.toError(GPIErrors.DATE_DONOR_COMBINATION_EXISTS);
+		}
+		
+		GPIUtils.saveAidOnBudget(aidOnBudget);		
+		result.set(GPIEPConstants.RESULT, GPIEPConstants.SAVED);
+		result.set(GPIEPConstants.DATA, modelToJsonBean(aidOnBudget));
 		return result;
 	}
 	
 	public static JsonBean delete(Long id) {	
 		JsonBean result = new JsonBean();
-		GPIUtils.delete(id);		
+		GPIUtils.delete(id);
+		result.set(GPIEPConstants.RESULT, GPIEPConstants.DELETED);
 		return result;		
 	}
 }

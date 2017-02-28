@@ -30,13 +30,22 @@ export function loadAidOnBudgetList() {
 export function save(data){      
     return function(dispatch) {
         return aidOnBudgetApi.save(data).then(response => {
-            const result = {
-                    aidOnBudget: response,
-                    infoMessages: [{messageKey: 'amp.gpi-data-aid-on-budget:save-successful'}]
-            };
+            const result = {};
+            if (response.result === "saved") {
+                result.aidOnBudget = response.data;
+                result.infoMessages = [{messageKey: 'amp.gpi-data-aid-on-budget:save-successful'}];
+            } 
+            
+            if (response.error) {                 
+                result.errors = []
+                for (var error in response.error) {                    
+                    let messageKey = 'amp.gpi-data-aid-on-budget:server-errors-' + error;
+                    result.errors.push({messageKey: messageKey});
+                }
+            }
             
           dispatch(saveSuccess(result));
-        }).catch(error => {
+        }).catch(error => {          
           throw(error);
         });
       };

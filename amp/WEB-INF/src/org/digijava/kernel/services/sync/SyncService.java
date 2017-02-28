@@ -217,15 +217,12 @@ public class SyncService implements InitializingBean {
         Set<String> localeCodes = InterchangeUtils.getTranslationSettings().getTrnLocaleCodes();
         Site site = SiteUtils.getDefaultSite();
 
-        if (lastSyncTime != null) {
-            return findChangedAmpOfflineTranslations(lastSyncTime, localeCodes, site);
-        } else {
-            return findAllAmpOfflineTranslations(localeCodes, site);
-        }
+        return findChangedAmpOfflineTranslations(lastSyncTime, localeCodes, site);
     }
 
     /**
-     * Returns all changed translations for AMP Offline.
+     * Returns all translations for AMP Offline. If lastSyncTime is specified then return only translations changed
+     * since that time.
      *
      * @param lastSyncTime last sync time
      * @param localeCodes locales to look up
@@ -234,50 +231,32 @@ public class SyncService implements InitializingBean {
      */
     private List<Translation> findChangedAmpOfflineTranslations(Date lastSyncTime, Set<String> localeCodes, Site site) {
         Map<String, Object> args = new HashMap<>();
-        args.put("lastSyncTime", lastSyncTime);
-        args.put("entity", TRANSLATION);
         args.put("siteId", site.getId().toString());
         args.put("localeCodes", localeCodes);
 
-        return jdbcTemplate.query(
-                "select m.message_key \"key\", m_orig.orig_message \"label\", m.lang_iso locale, m.message_utf8 translatedLabel " +
-                "from amp_offline_changelog cl " +
-                "  join dg_message m on cl.entity_id = m.message_key " +
-                "  left join dg_message m_orig on cl.entity_id = m_orig.message_key " +
-                "where cl.operation_time > :lastSyncTime " +
-                "and cl.entity_name = :entity " +
-                "and m.amp_offline = true " +
-                "and m.site_id = :siteId " +
-                "and m.lang_iso in (:localeCodes) " +
-                "and m_orig.site_id = :siteId " +
-                "and m_orig.orig_message is not null " +
-                "and m_orig.lang_iso = 'en'",
-                args,
-                TRANSLATION_ROW_MAPPER);
-    }
+        String messageKeyFilter = "";
+        if (lastSyncTime != null) {
+            messageKeyFilter = "and m_orig.message_key in (" +
+                    "select entity_id " +
+                    "from amp_offline_changelog " +
+                    "where operation_time > :lastSyncTime " +
+                    "and entity_name = :entity)";
 
-    /**
-     * Returns all translations for AMP Offline.
-     *
-     * @param localeCodes locales to look up
-     * @param site site
-     * @return list of translations
-     */
-    private List<Translation> findAllAmpOfflineTranslations(Set<String> localeCodes, Site site) {
-        Map<String, Object> args = new HashMap<>();
-        args.put("siteId", site.getId().toString());
-        args.put("localeCodes", localeCodes);
+            args.put("lastSyncTime", lastSyncTime);
+            args.put("entity", TRANSLATION);
+        }
 
         return jdbcTemplate.query(
-                "select m.message_key \"key\", m_orig.orig_message \"label\", m.lang_iso locale, m.message_utf8 translatedLabel " +
+                "select m.message_key \"key\", coalesce(m_orig.orig_message, m_orig.message_utf8) \"label\", " +
+                "  m.lang_iso locale, m.message_utf8 translatedLabel " +
                 "from dg_message m " +
                 "  left join dg_message m_orig on m.message_key = m_orig.message_key " +
                 "where m.amp_offline = true " +
                 "and m.site_id = :siteId " +
                 "and m.lang_iso in (:localeCodes) " +
                 "and m_orig.site_id = :siteId " +
-                "and m_orig.orig_message is not null " +
-                "and m_orig.lang_iso = 'en'",
+                "and m_orig.lang_iso = 'en' "+
+                messageKeyFilter,
                 args,
                 TRANSLATION_ROW_MAPPER);
     }

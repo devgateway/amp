@@ -13,14 +13,13 @@ class AidOnBudgetApi {
     });
   }
 
-  static save(aidOnBudget) {
-    
+  static save(aidOnBudget) {    
     const request = new Request('/rest/gpi/aid-on-budget', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(aidOnBudget)
     });
-    debugger
+    
     return fetch(request).then(response => {
       return response.json();
     }).catch(error => {

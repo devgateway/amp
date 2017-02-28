@@ -673,7 +673,7 @@ public class ExportActivityToWord extends Action {
                                 additionalInfoSubTable.setWidth(80);
 
                                 if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Value")) {
-                                    generateOverAllTableRows(additionalInfoSubTable, valueLabel, (value.getValue() != null ? value.getValue().toString() : null), null);
+                                    generateOverAllTableRows(additionalInfoSubTable, valueLabel, (value.getValue() != null ? FormatHelper.formatNumber(value.getValue()) : null), null);
                                 }
                                 if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Comments")) {
                                     generateOverAllTableRows(additionalInfoSubTable, commentLabel, DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);

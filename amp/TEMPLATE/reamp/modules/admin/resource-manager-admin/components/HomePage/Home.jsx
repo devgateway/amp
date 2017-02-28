@@ -20,7 +20,7 @@ export default class HomePage extends Component {
         };
         this.hideAlert = this.hideAlert.bind(this);
         this.getAlert = this.getAlert.bind(this);
-        this.handleSelectedChangeAllowedTypes = this.handleSelectedChangeAllowedTypes.bind(this);
+        this.handleSelectedChanged = this.handleSelectedChanged.bind(this);
         this.handleSelectedChangeSettings = this.handleSelectedChangeSettings.bind(this);
     }
 
@@ -50,7 +50,7 @@ export default class HomePage extends Component {
         }
     }
 
-    handleSelectedChangeAllowedTypes(selectedAllowedTypes) {
+    handleSelectedChanged(selectedAllowedTypes) {
         this.state.selectedAllowedTypes = selectedAllowedTypes;
     }
 
@@ -90,7 +90,7 @@ export default class HomePage extends Component {
                     />
                     <TypeList typesAvailable={this.props.homePage.typesAvailable || []}
                               typesAllowed={this.props.homePage.typesAllowed || []}
-                              handleSelectedChanged={this.handleSelectedChangeAllowedTypes}
+                              handleSelectedChanged={this.handleSelectedChanged}
                               areListloaded={this.state.areListloaded}
                               translations={this.props.startUp.translations}
                     />

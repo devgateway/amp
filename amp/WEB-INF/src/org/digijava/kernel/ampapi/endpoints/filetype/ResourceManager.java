@@ -78,21 +78,17 @@ public class ResourceManager {
 	// = false)
 	@SuppressWarnings("unchecked")
 	public Response saveSettings(JsonBean settings) throws AMPException {
-
 		// TODO catch exception
 		List<String> allowedFileType = (List<String>) settings.get("allowedFileType");
-		Map<String, String> map = (Map<String, String>) settings.get("resourceSettings");
+		Map<String, Object> map = (Map<String, Object>) settings.get("resourceSettings");
 		for (String settingKey : map.keySet()) {
-			Log.debug("saving " + SettingsConstants.ID_NAME_MAP.get(settingKey));
 			String value = map.get(settingKey).toString();
 			DbUtil.updateGlobalSetting(SettingsConstants.ID_NAME_MAP.get(settingKey), value);
 		}
 		// after updating we rebuild global settings cache
 		FeaturesUtil.buildGlobalSettingsCache(FeaturesUtil.getGlobalSettings());
 		FileTypeManager fileTypeManager = FileTypeManager.getInstance();
-
 		fileTypeManager.updateFileTypesConfig(new LinkedHashSet<String>(allowedFileType));
-
 		return Response.ok().build();
 	}
 

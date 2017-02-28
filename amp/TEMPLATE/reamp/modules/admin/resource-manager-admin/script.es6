@@ -13,7 +13,7 @@ import boilerplate from "../../../../ampTemplate/node_modules/amp-boilerplate/di
 export const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);
 
-resourceManagerStartUp().then(() => {
+resourceManagerStartUp(store).then(() => {
     render(
         <Provider store={store}>
             <Router history={history} store={store}>

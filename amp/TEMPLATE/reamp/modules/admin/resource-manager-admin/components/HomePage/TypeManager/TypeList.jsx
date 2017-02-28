@@ -25,7 +25,7 @@ export default class TypeList extends Component {
         deselectedOptions.forEach(option => {
             selectedOptions.splice(selectedOptions.indexOf(option), 1)
         });
-        this.props.handleSelectedChangeAllowedTypes(selectedOptions);
+        this.props.handleSelectedChanged(selectedOptions);
         this.setState({ selectedOptions });
     }
 

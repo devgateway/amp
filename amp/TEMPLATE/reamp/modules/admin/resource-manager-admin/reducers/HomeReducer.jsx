@@ -67,7 +67,6 @@ export default function homePage(state: Object = defaultState, action: Object) {
 
         case STATE_SETTINGS_SAVE_SAVED:
             let newState = Object.assign({}, state);
-            debugger;
             newState.settingsList[0].value = action.actionData.resourceSettings['maximum-file-size'];
             newState.settingsList[1].value = action.actionData.resourceSettings['limit-file-to-upload'];
             newState.settingsList[2].value.defaultId = action.actionData.resourceSettings['sort-column'];

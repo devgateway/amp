@@ -3,56 +3,70 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 public class AmpGPINiSurveyResponse implements Serializable {
-	
+
 	private static final long serialVersionUID = -6656563271238273140L;
+	
 	private Long ampGPINiSurveyResponseId;
-	private AmpGPINiSurvey ampGPINiSurveyId;
-	private AmpGPINiQuestion ampGPINiQuestionId;
+	private AmpGPINiSurvey ampGPINiSurvey;
+	private AmpGPINiQuestion ampGPINiQuestion;
 	private Long integerResponse;
 	private String textResponse;
-	private AmpGPINiQuestionOption questionOptionId;	
-	private String resourceUuid;
-	
+	private AmpGPINiQuestionOption questionOption;
+	private String resourceUUID;
+
 	public Long getAmpGPINiSurveyResponseId() {
 		return ampGPINiSurveyResponseId;
 	}
+
 	public void setAmpGPINiSurveyResponseId(Long ampGPINiSurveyResponseId) {
 		this.ampGPINiSurveyResponseId = ampGPINiSurveyResponseId;
 	}
-	public AmpGPINiSurvey getAmpGPINiSurveyId() {
-		return ampGPINiSurveyId;
+
+	public AmpGPINiSurvey getAmpGPINiSurvey() {
+		return ampGPINiSurvey;
 	}
-	public void setAmpGPINiSurveyId(AmpGPINiSurvey ampGPINiSurveyId) {
-		this.ampGPINiSurveyId = ampGPINiSurveyId;
+
+	public void setAmpGPINiSurvey(AmpGPINiSurvey ampGPINiSurvey) {
+		this.ampGPINiSurvey = ampGPINiSurvey;
 	}
-	public AmpGPINiQuestion getAmpGPINiQuestionId() {
-		return ampGPINiQuestionId;
+
+	public AmpGPINiQuestion getAmpGPINiQuestion() {
+		return ampGPINiQuestion;
 	}
-	public void setAmpGPINiQuestionId(AmpGPINiQuestion ampGPINiQuestionId) {
-		this.ampGPINiQuestionId = ampGPINiQuestionId;
+
+	public void setAmpGPINiQuestion(AmpGPINiQuestion ampGPINiQuestion) {
+		this.ampGPINiQuestion = ampGPINiQuestion;
 	}
+
 	public Long getIntegerResponse() {
 		return integerResponse;
 	}
+
 	public void setIntegerResponse(Long integerResponse) {
 		this.integerResponse = integerResponse;
 	}
+
 	public String getTextResponse() {
 		return textResponse;
 	}
+
 	public void setTextResponse(String textResponse) {
 		this.textResponse = textResponse;
 	}
-	public AmpGPINiQuestionOption getQuestionOptionId() {
-		return questionOptionId;
+
+	public AmpGPINiQuestionOption getQuestionOption() {
+		return questionOption;
 	}
-	public void setQuestionOptionId(AmpGPINiQuestionOption questionOptionId) {
-		this.questionOptionId = questionOptionId;
+
+	public void setQuestionOption(AmpGPINiQuestionOption questionOption) {
+		this.questionOption = questionOption;
 	}
-	public String getResourceUuid() {
-		return resourceUuid;
+
+	public String getResourceUUID() {
+		return resourceUUID;
 	}
-	public void setResourceUuid(String resourceUuid) {
-		this.resourceUuid = resourceUuid;
+
+	public void setResourceUUID(String resourceUUID) {
+		this.resourceUUID = resourceUUID;
 	}
 }

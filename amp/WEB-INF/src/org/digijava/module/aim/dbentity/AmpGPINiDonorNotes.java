@@ -3,9 +3,11 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 public class AmpGPINiDonorNotes implements Serializable {
+	
 	private static final long serialVersionUID = 7801819300013809821L;
+	
 	private Long ampGPINiDonorNotesId;
-	private AmpOrganisation donorId;
+	private AmpOrganisation donor;
 	private String notes;
 
 	public Long getAmpGPINiDonorNotesId() {
@@ -16,12 +18,12 @@ public class AmpGPINiDonorNotes implements Serializable {
 		this.ampGPINiDonorNotesId = ampGPINiDonorNotesId;
 	}
 
-	public AmpOrganisation getDonorId() {
-		return donorId;
+	public AmpOrganisation getDonor() {
+		return donor;
 	}
 
-	public void setDonorId(AmpOrganisation donorId) {
-		this.donorId = donorId;
+	public void setDonor(AmpOrganisation donor) {
+		this.donor = donor;
 	}
 
 	public String getNotes() {
@@ -31,4 +33,5 @@ public class AmpGPINiDonorNotes implements Serializable {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
+	
 }

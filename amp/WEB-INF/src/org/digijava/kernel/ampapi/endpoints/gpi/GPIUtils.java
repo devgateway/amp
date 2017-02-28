@@ -53,7 +53,7 @@ public class GPIUtils {
 	
 	public static boolean similarRecordExists(Date date, Long donorId){
 		Session dbSession = PersistenceManager.getSession();	    		
-        String queryString = "select gpi from " + AmpGPINiAidOnBudget.class.getName() + " gpi where gpi.donorId.ampOrgId=:orgId and year(gpi.date)=:indicatorYear";
+        String queryString = "select gpi from " + AmpGPINiAidOnBudget.class.getName() + " gpi where gpi.donor.ampOrgId=:orgId and year(gpi.indicatorDate)=:indicatorYear";
         Query query = dbSession.createQuery(queryString);
         query.setParameter("orgId", donorId);        
         Calendar calendar = Calendar.getInstance();

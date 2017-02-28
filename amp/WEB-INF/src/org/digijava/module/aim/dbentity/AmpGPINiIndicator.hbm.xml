@@ -11,8 +11,8 @@
 			</generator>
 		</id>
 		
-		<property name="name" column="name" type="java.lang.String" />
-		<property name="code" column="code" type="java.lang.String" />
+		<property name="name" column="name" type="java.lang.String" not-null="true" />
+		<property name="code" column="code" type="java.lang.String" not-null="true" />
 		<property name="description" column="description" type="text" />
 		
 		<set name="questions" table="AMP_GPI_NI_QUESTION" inverse="true" lazy="true"

@@ -4,36 +4,53 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-public class AmpGPINiSurvey implements Serializable {
+import org.apache.commons.collections.ComparatorUtils;
+import org.apache.struts.tiles.taglib.GetAttributeTag;
+
+public class AmpGPINiSurvey implements Serializable, Comparable<AmpGPINiSurvey> {
+	
 	private static final long serialVersionUID = -4889980304099658852L;
+	
 	private Long ampGPINiSurveyId;
 	private Date surveyDate;
-	private AmpActivityVersion ampActivityId;
+	private AmpActivityVersion activity;
 	private Set<AmpGPINiSurveyResponse> responses;
-	
+
 	public Long getAmpGPINiSurveyId() {
 		return ampGPINiSurveyId;
 	}
+
 	public void setAmpGPINiSurveyId(Long ampGPINiSurveyId) {
 		this.ampGPINiSurveyId = ampGPINiSurveyId;
 	}
+
 	public Date getSurveyDate() {
 		return surveyDate;
 	}
+
 	public void setSurveyDate(Date surveyDate) {
 		this.surveyDate = surveyDate;
 	}
-	public AmpActivityVersion getAmpActivityId() {
-		return ampActivityId;
+
+	public AmpActivityVersion getActivity() {
+		return activity;
 	}
-	public void setAmpActivityId(AmpActivityVersion ampActivityId) {
-		this.ampActivityId = ampActivityId;
+
+	public void setActivity(AmpActivityVersion activity) {
+		this.activity = activity;
 	}
+
 	public Set<AmpGPINiSurveyResponse> getResponses() {
 		return responses;
 	}
+
 	public void setResponses(Set<AmpGPINiSurveyResponse> responses) {
 		this.responses = responses;
+	}
+
+	@Override
+	public int compareTo(AmpGPINiSurvey o) {
+		return ComparatorUtils.nullLowComparator(null).compare(getActivity(), o.getActivity());
 	}
 
 }

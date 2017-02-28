@@ -1,12 +1,17 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Set;
 
-public class AmpGPINiQuestion implements Serializable{
+import org.apache.commons.collections.ComparatorUtils;
+
+public class AmpGPINiQuestion implements Serializable {
+	
 	private static final long serialVersionUID = 6751072241262868712L;
+	
 	private Long ampGPINiQuestionId;
-	private AmpGPINiIndicator ampGPINiIndicatorId;
+	private AmpGPINiIndicator ampGPINiIndicator;
 	private String code;
 	private String description;
 	private String type;
@@ -14,60 +19,86 @@ public class AmpGPINiQuestion implements Serializable{
 	private Boolean allowMultiple;
 	private Boolean requiresDataEntry;
 	private Set<AmpGPINiQuestionOption> options;
-	
+
 	public Long getAmpGPINiQuestionId() {
 		return ampGPINiQuestionId;
 	}
+
 	public void setAmpGPINiQuestionId(Long ampGPINiQuestionId) {
 		this.ampGPINiQuestionId = ampGPINiQuestionId;
 	}
-	public AmpGPINiIndicator getAmpGPINiIndicatorId() {
-		return ampGPINiIndicatorId;
+
+	public AmpGPINiIndicator getAmpGPINiIndicator() {
+		return ampGPINiIndicator;
 	}
-	public void setAmpGPINiIndicatorId(AmpGPINiIndicator ampGPINiIndicatorId) {
-		this.ampGPINiIndicatorId = ampGPINiIndicatorId;
+
+	public void setAmpGPINiIndicator(AmpGPINiIndicator ampGPINiIndicator) {
+		this.ampGPINiIndicator = ampGPINiIndicator;
 	}
+
 	public String getCode() {
 		return code;
 	}
+
 	public void setCode(String code) {
 		this.code = code;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
+
 	public Integer getIndex() {
 		return index;
 	}
+
 	public void setIndex(Integer index) {
 		this.index = index;
 	}
+
 	public Boolean getAllowMultiple() {
 		return allowMultiple;
 	}
+
 	public void setAllowMultiple(Boolean allowMultiple) {
 		this.allowMultiple = allowMultiple;
 	}
+
 	public Boolean getRequiresDataEntry() {
 		return requiresDataEntry;
 	}
+
 	public void setRequiresDataEntry(Boolean requiresDataEntry) {
 		this.requiresDataEntry = requiresDataEntry;
 	}
+
 	public Set<AmpGPINiQuestionOption> getOptions() {
 		return options;
 	}
+
 	public void setOptions(Set<AmpGPINiQuestionOption> options) {
 		this.options = options;
 	}
-	
+
+	public static class GPINiQuestionComparator implements Comparator<AmpGPINiQuestion>, Serializable {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int compare(AmpGPINiQuestion arg0, AmpGPINiQuestion arg1) {
+			return ComparatorUtils.nullLowComparator(null).compare(arg0.getIndex(), arg1.getIndex());
+		}
+	}
+
 }

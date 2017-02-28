@@ -39,10 +39,10 @@ public class GPIDataService {
 	private static JsonBean modelToJsonBean(AmpGPINiAidOnBudget aidOnBudget) {
 		JsonBean data = new JsonBean();
 		data.set(GPIEPConstants.FIELD_ID, aidOnBudget.getAmpGPINiAidOnBudgetId());
-		data.set(GPIEPConstants.FIELD_DONOR_ID, aidOnBudget.getDonorId().getAmpOrgId());
-		data.set(GPIEPConstants.FIELD_CURRENCY_CODE, aidOnBudget.getCurrencyId().getCurrencyCode());
-		data.set(GPIEPConstants.FIELD_AMOUNT, aidOnBudget.getAmount());
-		data.set(GPIEPConstants.FIELD_DATE, DateTimeUtil.formatDate(aidOnBudget.getDate(), GPIEPConstants.DATE_FORMAT));		
+		data.set(GPIEPConstants.FIELD_DONOR_ID, aidOnBudget.getDonor().getAmpOrgId());
+		data.set(GPIEPConstants.FIELD_CURRENCY_CODE, aidOnBudget.getCurrency().getCurrencyCode());
+		data.set(GPIEPConstants.FIELD_AMOUNT, aidOnBudget.getAmount());		
+		data.set(GPIEPConstants.FIELD_DATE, DateTimeUtil.formatDate(aidOnBudget.getIndicatorDate(), GPIEPConstants.DATE_FORMAT));		
 		return data;
 	}
 
@@ -59,12 +59,12 @@ public class GPIDataService {
 
 		if (data.get(GPIEPConstants.FIELD_CURRENCY_CODE) != null) {
 			String currencyCode = data.getString((GPIEPConstants.FIELD_CURRENCY_CODE));
-			aidOnBudget.setCurrencyId(CurrencyUtil.getAmpcurrency(currencyCode));
+			aidOnBudget.setCurrency(CurrencyUtil.getAmpcurrency(currencyCode));
 		}
 
 		if (data.getString(GPIEPConstants.FIELD_DONOR_ID) != null) {
 			Long donorId = Long.parseLong(String.valueOf(data.get(GPIEPConstants.FIELD_DONOR_ID)));
-			aidOnBudget.setDonorId(GPIUtils.getOrganisation(donorId));
+			aidOnBudget.setDonor(GPIUtils.getOrganisation(donorId));
 		}
 
 		if (data.get(GPIEPConstants.FIELD_AMOUNT) != null) {
@@ -73,7 +73,7 @@ public class GPIDataService {
 
 		if (data.getString(GPIEPConstants.FIELD_DATE) != null) {
 			Date date = DateTimeUtil.parseDate(data.getString(GPIEPConstants.FIELD_DATE), GPIEPConstants.DATE_FORMAT);
-			aidOnBudget.setDate(date);
+			aidOnBudget.setIndicatorDate(date);
 		}
 
 		return aidOnBudget;
@@ -82,7 +82,7 @@ public class GPIDataService {
 	public static JsonBean saveAidOnBudget(JsonBean data) {
 		JsonBean result = new JsonBean();		
 		AmpGPINiAidOnBudget aidOnBudget = getAidOnBudget(data);		
-		if(aidOnBudget.getAmpGPINiAidOnBudgetId() == null && GPIUtils.similarRecordExists(aidOnBudget.getDate(), aidOnBudget.getDonorId().getAmpOrgId())){
+		if(aidOnBudget.getAmpGPINiAidOnBudgetId() == null && GPIUtils.similarRecordExists(aidOnBudget.getIndicatorDate(), aidOnBudget.getDonor().getAmpOrgId())){
 			return ApiError.toError(GPIErrors.DATE_DONOR_COMBINATION_EXISTS);
 		}
 		

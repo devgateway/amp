@@ -12,7 +12,7 @@
 		</id>
 			
 		<property name="notes" column="notes" type="text" />			
-		<many-to-one name="donorId" column="donor_id"
+		<many-to-one name="donor" column="donor_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"
 			not-null="true"  index="idx_amp_gpi_ni_donor_notes_donor_id"/>			
 

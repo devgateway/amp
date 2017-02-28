@@ -56,7 +56,7 @@ export default class AidOnBudgetRow extends Component {
             errors.push({messageKey: 'amp.gpi-data-aid-on-budget:validation-currency-required'})
         }
         
-        if(this.isUndefinedOrBlank('date')){
+        if(this.isUndefinedOrBlank('indicatorDate')){
             errors.push({messageKey: 'amp.gpi-data-aid-on-budget:validation-date-required'}) 
         }
                
@@ -84,7 +84,7 @@ export default class AidOnBudgetRow extends Component {
         if(date){
             const aidOnBudget = this.state.aidOnBudget; 
             const formartedDate = moment(date, this.state.displayDateFormat).format(this.state.endPointDateFormat);
-            aidOnBudget['date'] = formartedDate;
+            aidOnBudget['indicatorDate'] = formartedDate;
             this.setState({aidOnBudget: aidOnBudget});
             this.toggleDatePicker(); 
         }        
@@ -118,7 +118,7 @@ export default class AidOnBudgetRow extends Component {
             return ( <tr >
                     <td scope="row" >                                   
                     <div className="date-container">
-                    <span className="date-input-container"><input type="text" value={this.toDateDisplayFormat(this.state.aidOnBudget.date)} readOnly className="date-input" />    
+                    <span className="date-input-container"><input type="text" value={this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)} readOnly className="date-input" />    
                     </span><span className = "datepicker-toggle glyphicon glyphicon-calendar " onClick={this.toggleDatePicker}> </span></div>
                     <div className="datepicker-container"> 
                     {this.state.showDatePicker &&
@@ -126,7 +126,7 @@ export default class AidOnBudgetRow extends Component {
                         hideFooter={true}
                         ref="date" 
                         locale={'en'} 
-                        date={this.toDateDisplayFormat(this.state.aidOnBudget.date)} 
+                        date={this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)} 
                         onChange={this.onDateChange} 
                         expanded={false}
                         dateFormat={this.state.displayDateFormat}

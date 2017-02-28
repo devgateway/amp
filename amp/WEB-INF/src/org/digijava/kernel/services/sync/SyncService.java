@@ -32,7 +32,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -41,7 +40,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SyncService implements InitializingBean {
 
-    private SimpleJdbcTemplate simpleJdbcTemplate;
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     private static final String COLUMNS = "entity_name, entity_id, operation_name, operation_time";
@@ -67,7 +65,6 @@ public class SyncService implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         Context initialContext = new InitialContext();
         DataSource dataSource = (DataSource) initialContext.lookup(Constants.UNIFIED_JNDI_ALIAS);
-        simpleJdbcTemplate = new SimpleJdbcTemplate(dataSource);
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
@@ -89,11 +86,14 @@ public class SyncService implements InitializingBean {
             return true;
         }
 
-        Long count = simpleJdbcTemplate.queryForLong(
+        Map<String, Object> args = new HashMap<>();
+        args.put("lastSyncTime", lastSyncTime);
+
+        Long count = jdbcTemplate.queryForLong(
                 "select count(m.message_key) from dg_message m, amp_offline_changelog cl " +
                 "where m.message_key = cl.entity_id " +
                 "and m.amp_offline = true " +
-                "and operation_time > ?", lastSyncTime);
+                "and operation_time > :lastSyncTime", args);
 
         return count > 0;
     }

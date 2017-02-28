@@ -71,7 +71,7 @@ export default class AidOnBudgetRow extends Component {
     }
     
     isUndefinedOrBlank(field) {
-        const result = false;
+        var result = false;
         const aidOnBudget = this.state.aidOnBudget;
         if(aidOnBudget[field] === '' || !aidOnBudget[field]){
             result = true;

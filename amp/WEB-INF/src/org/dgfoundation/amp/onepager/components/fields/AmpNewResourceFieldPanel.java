@@ -67,13 +67,13 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 	private boolean urlFormatValid;
 	private boolean contentValid;
 	
-	static final private String DEFAULT_MESSAGE = "*" + TranslatorUtil.getTranslatedText("Please enter title");
-	static final private String URL_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("URL not selected");
-	static final private String FILE_PATH_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("File not submited or upload has not finished");
-	static final private String WRONG_URL_FORMAT = "*" + TranslatorUtil.getTranslatedText("Wrong url format. Please enter valid url");
-	static final private String CONTENT_TYPE_NOT_ALLOWED = "*" + TranslatorUtil.getTranslatedText("Content type not allowed:");
-	static final private String CONTENT_TYPE_EXTENSION_MISMATCH = "*" + TranslatorUtil.getTranslatedText("File extension does not match the actual file format:");
-	static final private String CONTENT_TYPE_INTERNAL_ERROR = "*" + TranslatorUtil.getTranslatedText("Internal error during the content validation");
+	final private String DEFAULT_MESSAGE = "*" + TranslatorUtil.getTranslatedText("Please enter title");
+	final private String URL_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("URL not selected");
+	final private String FILE_PATH_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("File not submited or upload has not finished");
+	final private String WRONG_URL_FORMAT = "*" + TranslatorUtil.getTranslatedText("Wrong url format. Please enter valid url");
+	final private String CONTENT_TYPE_NOT_ALLOWED = "*" + TranslatorUtil.getTranslatedText("Content type not allowed:");
+	final private String CONTENT_TYPE_EXTENSION_MISMATCH = "*" + TranslatorUtil.getTranslatedText("File extension does not match the actual file format:");
+	final private String CONTENT_TYPE_INTERNAL_ERROR = "*" + TranslatorUtil.getTranslatedText("Internal error during the content validation");
 
 
 	boolean webLinkFormatCorrect;

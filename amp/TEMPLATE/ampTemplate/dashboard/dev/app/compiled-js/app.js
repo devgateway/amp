@@ -28052,6 +28052,7 @@ module.exports = Backbone.Collection.extend({
   // filter orgs tree to only orgs that appear as the given roleID
   _filterOrgs: function(orgGroupsJSON, roleID) {
     orgGroupsJSON = _.filter(orgGroupsJSON, function(group) {
+      group.isOrgGroup = true;
       group.children = _.filter(group.children, function(org) {
         return (org.rolesIds.indexOf(roleID) > -1);
       });
@@ -30609,6 +30610,7 @@ TreeNodeModel = Backbone.Model.extend({
     isSelectable: false  // is this node itself selectable (ie. should it have an 'unkown' child)
   },
   ignoreList: ['donor-group', 'donor-type', 'implementing-agency', 'beneficiary-agency', 'executing-agency', 'responsible-organization'],//list of filterIds to ignore when serializing
+  ignoreOrgGroupList: ['implementing-agency','beneficiary-agency', 'executing-agency', 'responsible-organization'], // for this filterIds we do not deserialize org groups to avoid issues with same ids
   initialize:function(obj) {
     var self = this;
     var childrenCollection = new TreeNodeCollection();
@@ -30723,15 +30725,22 @@ _serializeChildren: function(tmpSerialized, children, options){
     }
 
     if(blob[this.get('filterId')]){    		
-      if (_(blob[this.get('filterId')]).indexOf(this.id) > -1) {
-        this.set('selected', true, {propagation: true});
-      } else if (children.length === 0) {
-        this.set('selected', false, {propagation: true});
-      }
+        if (this.isInFilters(blob, this.id)){    		  
+          this.set('selected', true, {propagation: true});
+        } else if (children.length === 0) {
+          this.set('selected', false, {propagation: true});
+        }
     }
   },
 
-
+  isInFilters: function(blob, id){	 
+	  var result = false;
+	  if (!(this.ignoreOrgGroupList.indexOf(this.get('filterId')) > -1 &&  this.get('isOrgGroup') == true)){			  
+		 result = (blob[this.get('filterId')]).indexOf(this.id) > -1
+	  }	  
+	  return result;
+  },
+  
   _onSelectChange:function(model, argument, options) {
     var self = this;
     var children = this.get('children');

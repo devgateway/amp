@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -144,7 +145,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimension usersDimension = SqlSourcedNiDimension.buildDegenerateDimension("users", "dg_user", "id");
 	public final static NiDimension departmentsDimension = SqlSourcedNiDimension.buildDegenerateDimension("departments", "amp_departments", "id_department");
 	public final static IndicatorConnectionDimension indicatorsDimension = IndicatorConnectionDimension.instance;
-	    
+
 	/**
 	 * the pseudocolumn of the header Splitter for cells which are funding flows
 	 */
@@ -299,7 +300,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * Since Indicators are not linked to funding we cannot use hierarchies by indicator since it would lead to double counting.
 	 */
 	public static final List<String> ONLY_MEASURELESS_HIERARCHIES = Arrays.asList(ColumnConstants.INDICATOR_NAME);
-	
+
 	/**
 	 * the constructor defines all the columns and measures of the schema. Since this involves scanning the database quite a lot, this constructor is SLOW
 	 */
@@ -705,20 +706,22 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	protected void addMtefColumns() {
 		for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
 			
-			addColumn(new MtefColumn("MTEF " + mtefYear, mtefYear, 
+			addColumn(new MtefColumn("MTEF " + mtefYear, new LocalizableLabel("MTEF {0,number,#}", mtefYear), mtefYear,
 					"MTEF", false, Optional.empty()).withGroup("Funding Information"));
 
-			MtefColumn pipelineMtefColumn = (MtefColumn) new MtefColumn("Pipeline MTEF Projections " + mtefYear, mtefYear, 
+			MtefColumn pipelineMtefColumn = (MtefColumn) new MtefColumn("Pipeline MTEF Projections " + mtefYear,
+					new LocalizableLabel("Pipeline MTEF Projections {0,number,#}", mtefYear), mtefYear,
 					"Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)).withGroup("Funding Information");			
 			this.pipelineMtefColumns.put(mtefYear, pipelineMtefColumn);
 			addColumn(pipelineMtefColumn);
 
-			MtefColumn projectionMtefColumn = (MtefColumn) new MtefColumn("Projection MTEF Projections " + mtefYear, mtefYear, 
+			MtefColumn projectionMtefColumn = (MtefColumn) new MtefColumn("Projection MTEF Projections " + mtefYear,
+					new LocalizableLabel("Projection MTEF Projections {0,number,#}", mtefYear), mtefYear,
 					"Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)).withGroup("Funding Information");
 			this.projectionMtefColumns.put(mtefYear, projectionMtefColumn);
 			addColumn(projectionMtefColumn);
 			
-			addColumn(new MtefColumn("Real MTEF " + mtefYear, mtefYear, 
+			addColumn(new MtefColumn("Real MTEF " + mtefYear, new LocalizableLabel("Real MTEF {0,number,#}", mtefYear), mtefYear,
 					"Real MTEF", true, Optional.empty()).withGroup("Funding Information"));
 		}
 	}
@@ -1064,7 +1067,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		col.allowNulls(true);
 		return addColumn(col);
 	}
-	
+
 	private AmpReportsSchema single_dimension(String columnName, String view, LevelColumn levelColumn) {
 		return addColumn(SimpleTextColumn.fromView(columnName, view, levelColumn));
 	}
@@ -1128,7 +1131,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		col.allowNulls(true);
 		return addColumn(col);
 	}
-	
+
 	protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();
 	
 	@Override

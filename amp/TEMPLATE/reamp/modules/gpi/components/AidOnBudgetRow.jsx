@@ -152,18 +152,17 @@ export default class AidOnBudgetRow extends Component {
                     )}
                     </select>
                     </td>
-                    <td> <span className="glyphicon glyphicon-ok-circle success-green" onClick={this.save}> </span></td>                      
+                    <td> <span className="glyphicon glyphicon-ok-circle success-green" onClick={this.save}> </span><span className="glyphicon glyphicon-remove" onClick={this.deleteAidOnBudget}></span></td>                      
             </tr>)
             
         }
         return (
                 <tr>
-                <th scope="row">{this.toDateDisplayFormat(this.state.aidOnBudget.date)}</th>
+                <th scope="row">{this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)}</th>
                 <td>{this.getOrgName(this.state.aidOnBudget.donorId)}</td>
                 <td>{this.state.aidOnBudget.amount}</td>
                 <td>{this.state.aidOnBudget.currencyCode} </td>
-                <td><span className="glyphicon glyphicon-pencil" onClick={this.toggleEdit}></span></td>
-                <td><span className="glyphicon glyphicon-remove" onClick={this.deleteAidOnBudget}></span></td>
+                <td><span className="glyphicon glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-remove" onClick={this.deleteAidOnBudget}></span></td>                
                 </tr>
                 
         );

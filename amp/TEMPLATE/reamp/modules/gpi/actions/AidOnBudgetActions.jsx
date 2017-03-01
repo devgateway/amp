@@ -10,6 +10,13 @@ export function deleteSuccess(data){
     return {type: 'AID_ON_BUDGET_DELETE_SUCCESS', data: data } 
 }
 
+export function addNewAidOnBudget() {
+    return {type: 'ADD_AID_ON_BUDGET', data: {aidOnBudget: {}} } 
+}
+
+export function updateAidOnBudget(aidOnBudget) {
+    return {type: 'UPDATE_AID_ON_BUDGET', data: {aidOnBudget: aidOnBudget, errors: [], infoMessages:[]} } 
+}
 
 export function loadAidOnBudgetList() {
       return function(dispatch) {
@@ -53,14 +60,26 @@ export function save(data){
 
 export function deleteAidOnBudget(data) {
     return function(dispatch) {
-        return aidOnBudgetApi.deleteAidOnBudget(data).then(response => {
-          const result = {
-                  aidOnBudget: data,
-                  infoMessages: [{messageKey: 'amp.gpi-data-aid-on-budget:delete-successful'}]
-          };
-          dispatch(deleteSuccess(result));
-        }).catch(error => {
-          throw(error);
-        });
+        if (data.id) {
+            return aidOnBudgetApi.deleteAidOnBudget(data).then(response => {
+                const result = {
+                        aidOnBudget: data,
+                        infoMessages: [{messageKey: 'amp.gpi-data-aid-on-budget:delete-successful'}]
+                };
+                dispatch(deleteSuccess(result));
+              }).catch(error => {
+                throw(error);
+              });   
+        } else {
+            const result = {
+                    aidOnBudget: data,
+                    infoMessages: [{messageKey: 'amp.gpi-data-aid-on-budget:delete-successful'}]
+            };
+            dispatch(deleteSuccess(result));
+        }        
       }; 
+}
+
+export function saveAllEdits() {
+    
 }

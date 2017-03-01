@@ -11,4 +11,5 @@ public class GPIEPConstants {
 	public static String DELETED = "deleted";
 	public static String SAVED = "saved";
 	public static String DATA = "data";
+	public static String CID = "cid";
 }

@@ -87,8 +87,13 @@ public class GPIDataService {
 		}
 		
 		GPIUtils.saveAidOnBudget(aidOnBudget);		
+		JsonBean saved = modelToJsonBean(aidOnBudget);
+		if (data.get(GPIEPConstants.CID) != null) {
+			saved.set(GPIEPConstants.CID, data.get(GPIEPConstants.CID));
+		}
+		
 		result.set(GPIEPConstants.RESULT, GPIEPConstants.SAVED);
-		result.set(GPIEPConstants.DATA, modelToJsonBean(aidOnBudget));
+		result.set(GPIEPConstants.DATA, saved);
 		return result;
 	}
 	

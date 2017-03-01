@@ -9,8 +9,7 @@ import { Alert } from 'react-bootstrap';
 export default class AidOnBudgetList extends Component {    
     constructor(props, context) {      
         super(props, context);
-        this.state = {
-                addNew: false,
+        this.state = {                
                 errors: [],
                 infoMessages:[]
         };
@@ -28,14 +27,11 @@ export default class AidOnBudgetList extends Component {
     }
     
     componentWillReceiveProps(nextProps) { 
-        this.setState({errors: nextProps.errors, infoMessages:  nextProps.infoMessages});
-        if(nextProps.errors.length === 0){
-            this.setState({addNew: false}); 
-        }
+        this.setState({errors: nextProps.errors, infoMessages:  nextProps.infoMessages});        
     }
     
     addNew() {
-        this.setState({addNew: true});
+        this.props.actions.addNewAidOnBudget();       
     }
     
     onError(errors) {
@@ -69,6 +65,7 @@ export default class AidOnBudgetList extends Component {
                 <span  onClick={this.addNew}> Add Data</span>
                 <span className="success-green"> (insert data to the new field)</span>
                 <span> / </span> <span className="glyphicon glyphicon-ok-circle success-green"> </span> <span > Click the Save Symbol to save the added data row</span>
+                <span className="float-right"> <button type="button" className="btn btn-success">Save all Edits</button></span>
                 </div>                 
                 </div>  
                 {this.showErrors()}
@@ -84,11 +81,9 @@ export default class AidOnBudgetList extends Component {
                 </tr>
                 </thead>
                 <tbody>
-                {this.state.addNew &&
-                    <AidOnBudgetRow aidOnBudget={{}}  currencyList={this.props.currencyList} orgList={this.props.orgList} isEditing = {true} onError={this.onError}/>
-                }
+               
                 {this.props.aidOnBudgetList.map(aidOnBudget => 
-                <AidOnBudgetRow aidOnBudget={aidOnBudget} key={aidOnBudget.id} currencyList={this.props.currencyList} orgList={this.props.orgList} isEditing = {false} onError={this.onError}/>  
+                <AidOnBudgetRow aidOnBudget={aidOnBudget} key={aidOnBudget.id} currencyList={this.props.currencyList} orgList={this.props.orgList} isEditing = {!aidOnBudget.id} onError={this.onError} key={aidOnBudget.id || 'c' + aidOnBudget.cid}/>  
                 )}                
                 </tbody>
                 </table>                 
@@ -97,7 +92,7 @@ export default class AidOnBudgetList extends Component {
     }
 }
 
-function mapStateToProps(state, ownProps) {       
+function mapStateToProps(state, ownProps) {         
         return {
         aidOnBudgetList: state.aidOnBudget.aidOnBudgetList || [],
         errors: state.aidOnBudget.errors || [],

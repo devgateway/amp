@@ -123,8 +123,10 @@ public class AmpConfiguration {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui=false, id = "global-settings", authTypes = AuthRule.AUTHENTICATED)
 	public Map<String, String> getGlobalSettings() {
-		return FeaturesUtil.getGlobalSettings().stream().collect(Collectors.toMap(
-				AmpGlobalSettings::getGlobalSettingsName,
-				AmpGlobalSettings::getGlobalSettingsValue));
+		return FeaturesUtil.getGlobalSettings().stream()
+				.filter(s -> s.getGlobalSettingsValue() != null)
+				.collect(Collectors.toMap(
+						AmpGlobalSettings::getGlobalSettingsName,
+						AmpGlobalSettings::getGlobalSettingsValue));
 	}
 }

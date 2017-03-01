@@ -12,7 +12,7 @@
         <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <buildVersion>2.13-SNAPSHOT</buildVersion>
+        <buildVersion>3.0-SNAPSHOT</buildVersion>
         <buildSource></buildSource>
         <buildDate></buildDate>
         <jersey.version>1.19</jersey.version>

@@ -1812,7 +1812,7 @@ public class TeamUtil {
     public static List<AmpTeam> getAllTeams(boolean includeManagement, boolean includePrivate) {
         String where = "";
         if (!includeManagement)
-            where += " o.accessType != 'management' " + (includePrivate ? "" : " and ");
+            where += " o.accessType != 'Management' " + (includePrivate ? "" : " and ");
         if (!includePrivate)
             where += " o.isolated in (null, false)";
         if (where != "")

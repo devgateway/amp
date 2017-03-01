@@ -55,6 +55,7 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
         writeField("use-filter", ampTeam.getUseFilter());
         writeField("parent-workspace-id", ampTeam.getParentTeamId() == null ? null : ampTeam.getParentTeamId().getAmpTeamId());
         writeField("access-type", ampTeam.getAccessType());
+        writeField("is-private", ampTeam.getIsolated());
         writeField("permission-strategy", ampTeam.getPermissionStrategy());
         writeField("fm-template-id", ampTeam.getFmTemplate() == null ? null : ampTeam.getFmTemplate().getId());
         writeField("workspace-prefix", ampTeam.getWorkspacePrefix() == null ? null : ampTeam.getWorkspacePrefix().getValue());

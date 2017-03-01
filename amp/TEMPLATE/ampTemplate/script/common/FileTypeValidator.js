@@ -19,9 +19,9 @@ FileTypeValidator = {
 			success: function(data) {
 				FileTypeValidator.validationEnabled = data == null 
 					? false 
-					: data.filter(function(a) {
+					: (data.filter(function(a) {
 							return a.id=='limit-file-to-upload'}
-						)[0].value;
+						)[0].value == 'true');
 				}
 		});
 		

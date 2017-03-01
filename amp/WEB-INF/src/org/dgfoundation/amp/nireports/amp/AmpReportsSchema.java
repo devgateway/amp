@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -70,11 +71,9 @@ import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
-import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
@@ -660,20 +659,22 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	protected void addMtefColumns() {
 		for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
 			
-			addColumn(new MtefColumn("MTEF " + mtefYear, mtefYear, 
+			addColumn(new MtefColumn("MTEF " + mtefYear, new LocalizableLabel("MTEF {0,number,#}", mtefYear), mtefYear,
 					"MTEF", false, Optional.empty()).withGroup("Funding Information"));
 
-			MtefColumn pipelineMtefColumn = (MtefColumn) new MtefColumn("Pipeline MTEF Projections " + mtefYear, mtefYear, 
+			MtefColumn pipelineMtefColumn = (MtefColumn) new MtefColumn("Pipeline MTEF Projections " + mtefYear,
+					new LocalizableLabel("Pipeline MTEF Projections {0,number,#}", mtefYear), mtefYear,
 					"Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)).withGroup("Funding Information");			
 			this.pipelineMtefColumns.put(mtefYear, pipelineMtefColumn);
 			addColumn(pipelineMtefColumn);
 
-			MtefColumn projectionMtefColumn = (MtefColumn) new MtefColumn("Projection MTEF Projections " + mtefYear, mtefYear, 
+			MtefColumn projectionMtefColumn = (MtefColumn) new MtefColumn("Projection MTEF Projections " + mtefYear,
+					new LocalizableLabel("Projection MTEF Projections {0,number,#}", mtefYear), mtefYear,
 					"Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)).withGroup("Funding Information");
 			this.projectionMtefColumns.put(mtefYear, projectionMtefColumn);
 			addColumn(projectionMtefColumn);
 			
-			addColumn(new MtefColumn("Real MTEF " + mtefYear, mtefYear, 
+			addColumn(new MtefColumn("Real MTEF " + mtefYear, new LocalizableLabel("Real MTEF {0,number,#}", mtefYear), mtefYear,
 					"Real MTEF", true, Optional.empty()).withGroup("Funding Information"));
 		}
 	}

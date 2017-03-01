@@ -430,15 +430,14 @@ function submitForm(action){
 																				<td align="center" class="report_inside"
 																					style="font-size: 11px;" bgcolor="${color}"><c:forEach
 																						var="hierarchy" items="${report.hierarchies}">
-																						<digi:trn
-																							key="aim:report:${hierarchy.column.columnName}">${hierarchy.column.columnName}</digi:trn>
+																						<digi:colNameTrn>${hierarchy.column.columnName}</digi:colNameTrn>
+
 																						<br />
 																					</c:forEach>&nbsp;</td>
 																				<td align="center" class="report_inside"
 																					style="font-size: 11px;" bgcolor="${color}"><c:forEach
 																						var="column" items="${report.columns}">
-																						<digi:trn
-																							key="aim:report:${column.column.columnName}">${column.column.columnName}</digi:trn>
+																						<digi:colNameTrn>${column.column.columnName}</digi:colNameTrn>
 																						<br />
 																					</c:forEach></td>
 																				<td align="center" class="report_inside"

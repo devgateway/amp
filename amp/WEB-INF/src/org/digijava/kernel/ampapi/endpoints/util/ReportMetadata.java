@@ -17,7 +17,6 @@ public class ReportMetadata {
 	private String queryName = "";
 	private String reportType = "";
 	private String reportIdentifier = ""; // This will either be a report ID from the DB for saved reports, or a token for temporary reports
-	private long reportUpdatedDate;
 
 	public String getName() {
 		return name;
@@ -97,11 +96,5 @@ public class ReportMetadata {
 	public void setReportIdentifier(String reportIdentifier) {
 		this.reportIdentifier = reportIdentifier;
 	}
-	public long getReportUpdatedDate() {
-		return reportUpdatedDate;
-	}
-	public void setReportUpdatedDate(long reportUpdatedDate) {
-		this.reportUpdatedDate = reportUpdatedDate;
-	}
-	
+
 }

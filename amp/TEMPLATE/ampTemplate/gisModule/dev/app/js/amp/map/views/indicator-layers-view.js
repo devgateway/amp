@@ -181,7 +181,7 @@ module.exports = Backbone.View.extend({
         	value = ampFormatter.format(feature.properties.value)
         }        
         
-        var fundingPopupTemplate = value ? ['<strong>', feature.properties.name, '</strong>',
+        var fundingPopupTemplate = feature.properties.value ? ['<strong>', feature.properties.name, '</strong>',
                         '<br/>', formattedTitleString, '',
                         value, ' ', unit].join('') : ['<strong>', feature.properties.name, '</strong>',
                                                       '<br/>', self.app.translator.translateSync("amp.gis:popup-no-data","No Data")].join('');

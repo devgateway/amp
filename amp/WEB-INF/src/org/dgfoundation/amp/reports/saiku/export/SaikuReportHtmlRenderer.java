@@ -167,7 +167,7 @@ public class SaikuReportHtmlRenderer {
 			renderTableRow(tableData, reportArea, level+1);
 		}
 		
-		if (level > 0)
+		if (level > 0 && report.hasMeasures())
 			renderSubTotalRow(tableData, reportContents, level);
 	}
 	
@@ -191,14 +191,18 @@ public class SaikuReportHtmlRenderer {
 	}
 	
 	private int getRowsSpan(ReportArea reportContents) {
-		int rowSpan = 1;
 		if (reportContents.getChildren() != null) {
+			int rowSpan = 0;
+			if (report.hasMeasures()) {
+				rowSpan++;
+			}
 			for (ReportArea reportArea : reportContents.getChildren()) {
 				rowSpan += getRowsSpan(reportArea);
 			}
+			return rowSpan;
+		} else {
+			return 1;
 		}
-		
-		return rowSpan;
 	}
 
 	/**Renders the totals of the table (the last row)

@@ -167,8 +167,9 @@ public class SaikuReportHtmlRenderer {
 			renderTableRow(tableData, reportArea, level+1);
 		}
 		
-		if (level > 0 && report.hasMeasures())
+		if (level > 0 && report.hasMeasures()) {
 			renderSubTotalRow(tableData, reportContents, level);
+		}
 	}
 	
 	/**Renders the subtotals hieararchy row

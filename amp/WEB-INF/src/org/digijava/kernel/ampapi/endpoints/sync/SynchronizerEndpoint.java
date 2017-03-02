@@ -100,6 +100,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     *     "is-cross-team-validation": false,
     *     "use-filter": true,
     *     "access-type": "Team",
+    *     "is-private": "false",
     *     "permission-strategy": "Full Access",
     *     "workspace-filters": {
     *       "selectedActivityPledgesSettings": -1,

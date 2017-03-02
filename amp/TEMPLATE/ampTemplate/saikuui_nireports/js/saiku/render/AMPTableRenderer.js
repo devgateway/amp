@@ -28,10 +28,15 @@ this.hiddenColumnNames = undefined;
 this.ACTIVITY_STATUS_CODES = undefined;
 this.PLEDGE_ID_ADDER = 800000000; // java-side constant, taken MondrianETL
 this.rowsFromBatch = 100;
+var hideSubTotals = false;
 
 AMPTableRenderer.prototype.render = function(data, options) {
 	Saiku.logger.log('AMPTableRenderer.render INIT');
 	window.saiku_time = new Date().getTime();
+
+	var measures = data.workspace.query.attributes.measures;
+	var hasMeasures = (measures instanceof Array) && measures.length > 0;
+	hideSubTotals = !hasMeasures;
 
 	if (data !== undefined && data.page !== null && data.page.pageArea !== null && !data.isEmpty) {
 		ACTIVITY_STATUS_CODES = data.colorSettings.activityStatusCodes;
@@ -314,8 +319,10 @@ function generateDataRows(page, options) {
 	var self = this;
 	var content = "";
 	// Transform the tree data structure to 2d matrix.
-	this.numberOfRows = (page.pageArea.children !== null ? -1 : 0);
-	this.getNumberOfRows(page.pageArea);
+	this.numberOfRows = this.getNumberOfRows(page.pageArea);
+	if (page.pageArea.children !== null && !hideSubTotals) {
+		this.numberOfRows--;
+	}
 	this.contentMatrix = new Array(this.numberOfRows);
 	this.rowHierarchyLevel = new Array(this.numberOfRows);
 	for (var i = 0; i < this.numberOfRows; i++) {
@@ -463,7 +470,7 @@ function findGroupVertically(matrix, i, j) {
 			// Due to the way the tree data is structured we don't need to check
 			// for cells with the same value than the one being compared but
 			// with empty cells.
-			if (k > 0 && matrix[k][j].displayedValue === matrix[k-1][j].displayedValue) {
+			if (k > 0 && matchesPreviousRow(matrix, k, j)) {
 				count++;
 				// Mark the cell so we don't draw it later.
 				matrix[k][j].isGrouped = true;
@@ -474,6 +481,19 @@ function findGroupVertically(matrix, i, j) {
 		}
 	}
 	return count;
+}
+
+/**
+ * Returns true if previous row (i-1) matches current row (i) for all columns
+ * starting at 0 and ending at jmax inclusive.
+ */
+function matchesPreviousRow(matrix, i, jmax) {
+	for (j = 0; j <= jmax; j++) {
+		if (matrix[i][j].displayedValue !== matrix[i-1][j].displayedValue) {
+			return false;
+		}
+	}
+	return true;
 }
 
 /**
@@ -507,13 +527,15 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 		for (var i = 0; i < node.children.length; i++) {
 			extractDataFromTree(node.children[i], node, level + 1, i === node.children.length - 1, hierarchiesData);
 		}
-		// Add the node that represents the subtotal.
-		node.children = null;
-		node.isTotal = true;
-		if (isLastSubNode) {
-			node.contents[colName].isGrouped = true;
+		if (!this.hideSubTotals) {
+			// Add the node that represents the subtotal.
+			node.children = null;
+			node.isTotal = true;
+			if (isLastSubNode) {
+				node.contents[colName].isGrouped = true;
+			}
+			extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchiesData);
 		}
-		extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchiesData);
 	}
 }
 
@@ -521,12 +543,16 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
  * Return the number of rows (adding the total rows per category).
  */
 function getNumberOfRows(node) {
+	var c = 0;
 	if (node.children !== null) {
 		for (var i = 0; i < node.children.length; i++) {
-			getNumberOfRows(node.children[i]);
+			c += getNumberOfRows(node.children[i]);
 		}
 	}
-	this.numberOfRows++;
+	if (!hideSubTotals || node.children == null) {
+		c++;
+	}
+	return c;
 }
 
 /**

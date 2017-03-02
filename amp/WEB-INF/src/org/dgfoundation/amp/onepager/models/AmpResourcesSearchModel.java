@@ -44,7 +44,7 @@ public class AmpResourcesSearchModel extends
 				Node n = (Node) nit.next();
 				NodeWrapper nw = new NodeWrapper(n);
 				if(input != null && input.length() >0){
-					if(nw.getFullName().equals(input)){
+					if(nw.getTitle().equals(input)){
 						ret.add(nw);
 					}
 				}else{

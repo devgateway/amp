@@ -285,18 +285,20 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 			
 			int rowPosInit = row.getRowNum();
 			int rowPos = renderTableRow(sheet, report, reportArea, level+1, row);
-			CellRangeAddress hierarchyCell = new CellRangeAddress(rowPosInit, rowPos, level, level);
-			if (hierarchyCell.getNumberOfCells()  > 1)
-				sheet.addMergedRegion(hierarchyCell);
-			row = sheet.createRow(rowPos + 1);
+			if (level == 0 || report.hasMeasures()) {
+				CellRangeAddress hierarchyCell = new CellRangeAddress(rowPosInit, rowPos, level, level);
+				if (hierarchyCell.getNumberOfCells() > 1)
+					sheet.addMergedRegion(hierarchyCell);
+				row = sheet.createRow(rowPos + 1);
+			}
 		}
-		
-		if (level > 0)
+
+		if (level > 0 && report.hasMeasures())
 			renderSubTotalRow(sheet, report, reportContents, level, row);
 		
 		return row.getRowNum();
 	}
-	
+
 	/**
 	 * @param sheet
 	 * @param report

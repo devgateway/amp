@@ -81,6 +81,7 @@ public class ReportsUtil {
     
 	protected static final Logger logger = Logger.getLogger(ReportsUtil.class);
 
+	//describing the timeframe by which to group funding data in the report
 	public static final String GROUPING_YEARLY = "A";
 	public static final String GROUPING_QUARTERLY = "Q";
 	public static final String GROUPING_MONTHLY = "M";

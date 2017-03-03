@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 /*
 * @ author Govind G Dalwani
 */
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -23,12 +24,11 @@ import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
-import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.menu.MenuStructure;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
-import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -62,6 +62,7 @@ public class GlobalSettings extends Action {
 		boolean refreshGlobalSettingsCache			= false;
 		boolean regenerateCCExchanteRates = false;
 		HttpSession session = request.getSession();
+		errors = new ActionMessages();
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
 		} else {
@@ -79,12 +80,8 @@ public class GlobalSettings extends Action {
 	
 			logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
 			dailyCurrencyRatesChanges(gsForm);
-			try {
-				DbUtil.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
-			} catch (AMPException ex) {
-				ActionMessage ae = new ActionMessage("error.aim.globalSettings.valueIsNotOfType", ex.getMessage());
-				errors.add("title", ae);
-			}
+			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
+			//ActionMessages errors = new ActionMessages();
 			auditTrialCleanerChanges(gsForm);
 			refreshGlobalSettingsCache	= true;			
 		}
@@ -108,14 +105,7 @@ public class GlobalSettings extends Action {
 					regenerateCCExchanteRates = true;
 				}
 				// allow empty fields, like Public Portal URL when Public Portal = false
-				//we ad a struts error that was added befor inside the methods
-				try {
-					DbUtil.updateGlobalSetting(id, newValue);
-				} catch (AMPException ex) {
-
-					ActionMessage ae = new ActionMessage("error.aim.globalSettings.valueIsNotOfType", ex.getMessage());
-					errors.add("title", ae);
-				}
+				this.updateGlobalSetting(id, newValue);
 			}
 			
 			//this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
@@ -164,7 +154,7 @@ public class GlobalSettings extends Action {
 			Collection<KeyValue> possibleValues		= null;
 			Map<String, String> possibleValuesDictionary	= null;
 			if ( possibleValuesTable != null && possibleValuesTable.length() != 0 && possibleValuesTable.startsWith("v_") ) {
-				possibleValues				= DbUtil.getPossibleValues(possibleValuesTable);
+				possibleValues				= this.getPossibleValues(possibleValuesTable);
 				possibleValuesDictionary	= new HashMap<String, String>();
 				for(KeyValue keyValue:possibleValues){
 					possibleValuesDictionary.put(keyValue.getKey(), keyValue.getValue());
@@ -307,9 +297,76 @@ public class GlobalSettings extends Action {
 			}
 		}
 	}
-	
 
 
+
+	private List<KeyValue> getPossibleValues(String tableName) {
+		List<KeyValue> ret = new ArrayList<>();
+		
+		if (tableName == null || tableName.length() == 0)
+			return ret;
+
+		List<Object[]> ls 	= PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+		for(Object[] obj:ls){
+			KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]), PersistenceManager.getString(obj[1]));
+			ret.add( keyValue );
+		}
+		return ret;
+	}
+
+    private void updateGlobalSetting(Long id, String value) {
+
+        Session session = null;
+        String qryStr = null;
+        Query qry = null;
+        Transaction tx = null;
+        try {
+            session = PersistenceManager.getSession();
+//beginTransaction();
+
+            qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id ";
+            qry = session.createQuery(qryStr);
+            qry.setLong("id", id.longValue());
+            AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
+
+            ags.setGlobalSettingsValue(value);
+            boolean changeValue = this.testCriterion(ags);
+
+            if (changeValue)
+                ags.setGlobalSettingsValue(value);
+            //tx.commit();
+
+        } catch (Exception ex) {
+            logger.error("Exception : " + ex.getMessage());
+            ex.printStackTrace(System.out);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception rbf) {
+                    logger.error("Rollback failed !");
+                }
+            }
+        }
+    }
+
+    /**
+	 *
+	 * @param ags the AmpGlobalSettings whos value should be changed
+	 * @return true if value is of the specified type (as returned by AmpGlobalSettings.getGlobalSettingsPossibleValues() )
+	 */
+	private boolean testCriterion(AmpGlobalSettings ags) {
+		String criterion = ags.getGlobalSettingsPossibleValues();
+		if (criterion != null && criterion.startsWith("t_")) {
+			boolean isValid = ConfigHelper.validateGlobalSetting(ags);
+			if (!isValid) {
+				ActionMessage ae = new ActionMessage("error.aim.globalSettings.valueIsNotOfType", ags.getGlobalSettingsName(), criterion.substring(2));
+				errors.add("title", ae);
+			}
+			return isValid;
+		}
+
+		return true;
+	}
 
 
     /**

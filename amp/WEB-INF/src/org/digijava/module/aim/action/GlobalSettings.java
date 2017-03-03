@@ -4,7 +4,6 @@ package org.digijava.module.aim.action;
 */
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +26,7 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.menu.MenuStructure;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -39,7 +39,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.services.auditcleaner.AuditCleaner;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -66,6 +65,7 @@ public class GlobalSettings extends Action {
 		boolean refreshGlobalSettingsCache			= false;
 		boolean regenerateCCExchanteRates = false;
 		HttpSession session = request.getSession();
+		errors = new ActionMessages();
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
 		} else {
@@ -317,87 +317,57 @@ public class GlobalSettings extends Action {
 		return ret;
 	}
 
-	private void  updateGlobalSetting(Long id, String value) {
+    private void updateGlobalSetting(Long id, String value) {
 
-		Session session 	= null;
-		String qryStr 		= null;
-		Query qry 			= null;
-		Transaction tx		= null;
-		try{
-				session					= PersistenceManager.getSession();
+        Session session = null;
+        String qryStr = null;
+        Query qry = null;
+        Transaction tx = null;
+        try {
+            session = PersistenceManager.getSession();
 //beginTransaction();
 
-				qryStr 					= "select gs from "+ AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id " ;
-				qry 					= session.createQuery(qryStr);
-				qry.setLong ("id", id.longValue());
-				AmpGlobalSettings ags	= (AmpGlobalSettings) qry.list().get(0);
+            qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id ";
+            qry = session.createQuery(qryStr);
+            qry.setLong("id", id.longValue());
+            AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
 
-				boolean changeValue		= this.testCriterion(ags, value);
+            ags.setGlobalSettingsValue(value);
+            boolean changeValue = this.testCriterion(ags);
 
-				if (changeValue)
-						ags.setGlobalSettingsValue(value);
-				//tx.commit();
+            if (changeValue)
+                ags.setGlobalSettingsValue(value);
+            //tx.commit();
 
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Rollback failed !");
-				}
-			}
-		}
-	}
-	/**
+        } catch (Exception ex) {
+            logger.error("Exception : " + ex.getMessage());
+            ex.printStackTrace(System.out);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception rbf) {
+                    logger.error("Rollback failed !");
+                }
+            }
+        }
+    }
+
+    /**
 	 *
 	 * @param ags the AmpGlobalSettings whos value should be changed
-	 * @param value the new value that should be applied
 	 * @return true if value is of the specified type (as returned by AmpGlobalSettings.getGlobalSettingsPossibleValues() )
 	 */
-	private boolean testCriterion (AmpGlobalSettings ags, String value) {
-		String criterion		= ags.getGlobalSettingsPossibleValues();
-		if ( criterion!=null && criterion.startsWith("t_")  ) {
-			if (criterion.equals("t_Integer") || criterion.equals("t_static_range") ){
-				try{
-					Integer.parseInt(value);
-					return true;
-				}
-				catch(Exception E) { // value is not an integer
-					ActionMessage ae	= new ActionMessage("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
-					errors.add("title", ae);
-					return false;
-				}
+	private boolean testCriterion(AmpGlobalSettings ags) {
+		String criterion = ags.getGlobalSettingsPossibleValues();
+		if (criterion != null && criterion.startsWith("t_")) {
+			boolean isValid = ConfigHelper.validateGlobalSetting(ags);
+			if (!isValid) {
+				ActionMessage ae = new ActionMessage("error.aim.globalSettings.valueIsNotOfType", ags.getGlobalSettingsName(), criterion.substring(2));
+				errors.add("title", ae);
 			}
-			if (criterion.equals("t_Year")||criterion.equals("t_static_year")||criterion.equals("t_static_range")||
-					criterion.equals("t_year_default_start")||criterion.equals("t_year_default_end")){
-				try{
-					int intValue	= Integer.parseInt(value);
-					if (intValue!=-1 && (intValue < 1000 || intValue > 2999  ))
-						return false;
-					return true;
-				}
-				catch(Exception E) { // value is not a year
-					ActionMessage ae	= new ActionMessage("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
-					errors.add("title", ae);
-					return false;
-				}
-			}
-			if (criterion.equals("t_Date")){
-				try{
-					Date testDate	= DateTimeUtil.parseDate(value);
-					return true;
-				}
-				catch(Exception E) { // value is not an Date
-					ActionMessage ae	= new ActionMessage("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
-					errors.add("title", ae);
-					return false;
-				}
-			}
-
+			return isValid;
 		}
+
 		return true;
 	}
 

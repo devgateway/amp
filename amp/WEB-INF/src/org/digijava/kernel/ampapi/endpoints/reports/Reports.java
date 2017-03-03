@@ -213,9 +213,9 @@ public class Reports implements ErrorReportingEndpoint {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
 		String groupingOption = (String) formParams.get("groupingOption");
 		switch(groupingOption) {
-			case "A": spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
-			case "Q": spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
-			case "M": spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
+			case ReportsUtil.GROUPING_YEARLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
+			case ReportsUtil.GROUPING_QUARTERLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
+			case ReportsUtil.GROUPING_MONTHLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
 			default:
 				spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
 				break;

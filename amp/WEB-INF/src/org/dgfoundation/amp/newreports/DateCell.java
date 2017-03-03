@@ -11,8 +11,8 @@ import org.dgfoundation.amp.algo.AmpCollections;
  *
  */
 public final class DateCell extends IdentifiedReportCell {
-	
+
 	public DateCell(Comparable<?> comparableToken, String formattedValue, long entityId, Map<Long, LocalDate> entitiesIdsValues) {
-		super(comparableToken, formattedValue, entityId, AmpCollections.remap(entitiesIdsValues, LocalDate::toString, null));
+		super(comparableToken, formattedValue, entityId, AmpCollections.remap(entitiesIdsValues, date -> String.valueOf(date), null));
 	}
 }

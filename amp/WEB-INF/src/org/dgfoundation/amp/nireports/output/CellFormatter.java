@@ -4,9 +4,8 @@ import static org.dgfoundation.amp.algo.AmpCollections.any;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,7 +27,6 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
@@ -100,11 +98,18 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 
 	@Override
 	public ReportCell visit(NiDateCell cell, CellColumn currentColumn) {
-		List<String> formattedDates = cell.sortedValues.stream().map(date -> dateFormatter.format(date)).collect(Collectors.toList());
-		String formattedValue = String.join(", ", formattedDates);
+		String formattedValue = cell.values.stream().map(this::formatDate).collect(Collectors.joining(", "));
 		return new DateCell(cell.comparableToken, formattedValue, cell.entityId, cell.entitiesIdsValues);
 	}
-	
+
+	private String formatDate(LocalDate date) {
+		if (date != null) {
+			return dateFormatter.format(date);
+		} else {
+			return "";
+		}
+	}
+
 	protected String translate(String str) {
 		return translator.apply(str);
 	}

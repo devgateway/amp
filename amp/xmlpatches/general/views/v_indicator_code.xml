@@ -2,9 +2,9 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../doc/xmlpatcher.xsd ">
-	<jira>AMP-14167</jira>
+	<jira>AMP-25155</jira>
 	<keyword>Views</keyword>
-	<author>Alexandru Artimon</author>
+	<author>Octavian Ciubotaru</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -18,12 +18,12 @@
 	</trigger> 
 	<apply>
 		<script>
-			<lang delimiter=";" type="postgres"><![CDATA[
-				CREATE OR REPLACE VIEW v_indicator_actualvalue AS
-				  SELECT con.activity_id AS amp_activity_id, val.value AS name, con.id AS amp_me_indicator_id, con.indicator_id
-				  FROM amp_indicator_connection con, amp_indicator_values val
-				  WHERE val.ind_connect_id = con.id AND val.value_type = 1 AND con.sub_clazz::text = 'a'::text;
-			]]></lang>
+			<lang delimiter=";" type="postgres">
+				CREATE OR REPLACE VIEW v_indicator_code AS
+				SELECT con.activity_id AS amp_activity_id, ind.code, ind.indicator_id AS amp_me_indicator_id
+				FROM amp_indicator_connection con, amp_indicator ind
+				WHERE ind.indicator_id = con.indicator_id AND con.sub_clazz::text = 'a'::text;
+       		</lang>
 		</script>
 	</apply>
 </tns:patch>

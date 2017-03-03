@@ -330,4 +330,29 @@ public class ColumnConstants {
 	public static final String EFFECTIVE_FUNDING_DATE = "Effective Funding Date";
 	public static final String FUNDING_CLOSING_DATE = "Funding Closing Date";
 
+	public static final String INDICATOR_NAME = "Indicator Name";
+	public static final String INDICATOR_TYPE = "Indicator Type";
+	public static final String INDICATOR_DESCRIPTION = "Indicator Description";
+	public static final String INDICATOR_CODE = "Indicator Code";
+	public static final String INDICATOR_CREATION_DATE = "Indicator Creation Date";
+	public static final String INDICATOR_SECTOR = "Indicator Sector";
+	public static final String INDICATOR_RISK = "Risk";
+	public static final String INDICATOR_LOGFRAME_CATEGORY = "Logframe Category";
+
+	public static final String INDICATOR_ACTUAL_VALUE = "Indicator Current Value";
+	public static final String INDICATOR_ACTUAL_DATE = "Indicator Current Date";
+	public static final String INDICATOR_ACTUAL_COMMENT = "Indicator Current Comment";
+
+	public static final String INDICATOR_BASE_VALUE = "Indicator Base Value";
+	public static final String INDICATOR_BASE_DATE = "Indicator Base Date";
+	public static final String INDICATOR_BASE_COMMENT = "Indicator Base Comment";
+
+	public static final String INDICATOR_TARGET_VALUE = "Indicator Target Value";
+	public static final String INDICATOR_TARGET_DATE = "Indicator Target Date";
+	public static final String INDICATOR_TARGET_COMMENT = "Indicator Target Comment";
+
+	public static final String INDICATOR_REVISED_TARGET_VALUE = "Indicator Revised Target Value";
+	public static final String INDICATOR_REVISED_TARGET_DATE = "Indicator Revised Target Date";
+	public static final String INDICATOR_REVISED_TARGET_COMMENT = "Indicator Revised Target Comment";
+
 }

@@ -310,7 +310,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	/**
-	 * generates a new instance with new {@link #rasterizedHeaders} and {@link #leafColumns}, but sharing the same {@link #rootColumn}
+	 * generates a new instance with new {@link NiHeaderInfo#rasterizedHeaders} and {@link NiHeaderInfo#leafColumns}, but sharing the same {@link NiHeaderInfo#rootColumn}
 	 * @param filter
 	 * @return
 	 */
@@ -398,10 +398,10 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * @return
 	 */
 	protected boolean fundingFiltersIds() {
-		//spec.isDisplayEmptyFundingRowsInNonHierarchicalReports() &&
-		return filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME) // there is any predicate operating on Funding 
+		return !spec.getMeasures().isEmpty() && // not measureless
+                (filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME) // there is any predicate operating on Funding
 				|| // or we are filtering on a transaction-level hierarchy and should hide empty rows
-				(isHideEmptyFundingRowsWhenFilteringByTransactionHier() && isFilteringOnTransactionLevelHierarchy());
+				(isHideEmptyFundingRowsWhenFilteringByTransactionHier() && isFilteringOnTransactionLevelHierarchy()));
 	}
 
 	private boolean isHideEmptyFundingRowsWhenFilteringByTransactionHier() {
@@ -422,7 +422,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		//Set<Long> idsToKeep = funding.stream().map(cell -> cell.activityId).collect(Collectors.toSet());
 		Set<Long> idsToKeep = new HashSet<>();
 		reportRunMeasures.stream().map(z -> fetchedMeasures.get(z).data.keySet()).forEach(ids -> idsToKeep.addAll(ids));
-		
+
 		fetchedColumns.forEach((colName, colContents) -> {
 			if (!colName.equals(FUNDING_COLUMN_NAME))
 				colContents.retainIds(idsToKeep);
@@ -683,7 +683,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 
 	/**
-	 * <strong>HAS A SIDE EFFECT</strong>: fills {@link #actualMeasures} and {@link #requestedMeasures} <br />
+	 * <strong>HAS A SIDE EFFECT</strong>: fills {@link #actualMeasures} and {@link #reportRunMeasures} <br />
 	 * returns a list of the support measures of the ones mandated by the report. This function will become an one-liner when NiReports will become the reference reporting engine
 	 * @return
 	 */

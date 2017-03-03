@@ -73,7 +73,6 @@ public class NiReportHtmlRenderer {
 		logger.error(reportRenderTime);
 		logger.error(reportSize);
 		
-		//return String.format("%s\n%s%s", pageHeader, renderedReport, "</body></html>");
 		return String.format("%s", renderedReport);
 
 	}

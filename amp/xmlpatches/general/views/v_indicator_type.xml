@@ -2,9 +2,9 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../doc/xmlpatcher.xsd ">
-	<jira>AMP-14167</jira>
+	<jira>AMP-25155</jira>
 	<keyword>Views</keyword>
-	<author>Alexandru Artimon</author>
+	<author>Octavian Ciubotaru</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -19,10 +19,14 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
-				CREATE OR REPLACE VIEW v_indicator_actualvalue AS
-				  SELECT con.activity_id AS amp_activity_id, val.value AS name, con.id AS amp_me_indicator_id, con.indicator_id
-				  FROM amp_indicator_connection con, amp_indicator_values val
-				  WHERE val.ind_connect_id = con.id AND val.value_type = 1 AND con.sub_clazz::text = 'a'::text;
+				CREATE OR REPLACE VIEW v_indicator_type AS
+				  SELECT
+					con.activity_id amp_activity_id,
+					CASE ind.type WHEN 'A' THEN 'Ascending'::varchar(255) WHEN 'D' THEN 'Descending'::varchar(255) ELSE null::varchar(255) END "type",
+					ind.indicator_id amp_me_indicator_id,
+					CASE ind.type WHEN 'A' THEN 1::bigint WHEN 'D' THEN 2::bigint ELSE 3::bigint END id
+				  FROM amp_indicator_connection con, amp_indicator ind
+				  WHERE ind.indicator_id = con.indicator_id AND con.sub_clazz::text = 'a'::text;
 			]]></lang>
 		</script>
 	</apply>

@@ -58,7 +58,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.AmpMath;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -818,7 +817,6 @@ public class ReportWizardAction extends MultiAction {
         Collection<AmpFieldsVisibility> ampAllFields = FeaturesUtil.getAMPFieldsVisibility();
         Collection<AmpColumns> allAmpColumns = formColumns;
 
-        TreeSet<String> ampThemes = new TreeSet<String>();
         TreeSet<AmpColumnsOrder> ampThemesOrdered = new TreeSet<AmpColumnsOrder>();
 
         ArrayList<AmpColumnsOrder> ampColumnsOrder = (ArrayList<AmpColumnsOrder>) ampContext.getAttribute("ampColumnsOrder");
@@ -853,7 +851,6 @@ public class ReportWizardAction extends MultiAction {
             ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);
             ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
             ampColumnsVisibles.add(ampColumnVisibilityObj);
-            ampThemes.add(ampFieldVisibility.getParent().getName());
 
             if (type == ArConstants.PLEDGES_TYPE)
             {
@@ -867,13 +864,13 @@ public class ReportWizardAction extends MultiAction {
             }
             else
             {
-                AmpColumnsOrder aco = ampColumnsOrderByName.get(ampFieldVisibility.getParent().getName());
+                AmpColumnsOrder aco = ampColumnsOrderByName.get(getThemeName(ampFieldVisibility.getParent().getName()));
                 if (aco == null)
                     continue;
 
                 if (!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)
                         && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){
-                    ampThemesOrdered.add(aco);
+                     ampThemesOrdered.add(aco);
                 }
             }
         }
@@ -888,7 +885,7 @@ public class ReportWizardAction extends MultiAction {
             for (AmpColumnsVisibility acv:ampColumnsVisibles)
             {
                 //iterations2 ++;
-                if(themeName.compareTo(acv.getParent().getName()) == 0)
+                if(themeName.equals(getThemeName(acv.getParent().getName())))
                 {
                     aux.add( acv.getAmpColumn() );
                     added	= true;
@@ -902,6 +899,18 @@ public class ReportWizardAction extends MultiAction {
         }
         //System.err.println("iterations1 = " + iterations1 + ", iterations 2 = " + iterations2);
         return ampTreeColumn;
+    }
+
+    /**
+     * Get theme name from feature name. Usually theme name matches feature name, but in some cases it was not
+     * possible to do so. Indicator columns are grouped under /Monitoring & Evaluation/M & E/Reports, in this case
+     * this mechanism allows to swap Reports with M & E.
+     *
+     * @param featureName feature name
+     * @return theme name
+     */
+    private String getThemeName(String featureName) {
+        return "Reports".equals(featureName) ? "M & E" : featureName;
     }
 
     public static void invokeSetterForBeanPropertyWithAnnotation (Object beanObj, Class annotationClass, Object [] params ) throws Exception {

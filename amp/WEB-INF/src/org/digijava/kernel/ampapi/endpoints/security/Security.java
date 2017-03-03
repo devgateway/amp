@@ -101,13 +101,15 @@ public class Security implements ErrorReportingEndpoint {
 
 		// if the user is admin the he doesn't have a workspace assigned
 		if (!isAdmin) {
-			AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-			AmpTeam team = ampTeamMember.getAmpTeam();
-			teamName = team.getName();
+			if (tm != null) {
+				AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+				AmpTeam team = ampTeamMember.getAmpTeam();
+				teamName = team.getName();
+				addActivity = FeaturesUtil.isVisibleField("Add Activity Button")
+						&& Boolean.TRUE.equals(team.getAddActivity());
+			}
 
 			user = apiToken.getUser();
-
-			addActivity = FeaturesUtil.isVisibleField("Add Activity Button") && Boolean.TRUE.equals(team.getAddActivity());
 		} else {
 			user = UserUtils.getUser(tm.getMemberId());
 		}

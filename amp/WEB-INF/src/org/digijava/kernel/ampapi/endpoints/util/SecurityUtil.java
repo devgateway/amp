@@ -70,11 +70,7 @@ public class SecurityUtil {
 		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
 		User user = (User) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_USER);
 
-		AmpApiToken apiToken = new AmpApiToken();
-		apiToken.setToken(token);
-		apiToken.setExpirationTime(new DateTime().plusMinutes(TOKEN_EXPIRATION));
-		apiToken.setTeamMember(teamMember);
-        apiToken.setUser(user);
+		AmpApiToken apiToken = new AmpApiToken(token, user, teamMember, new DateTime().plusMinutes(TOKEN_EXPIRATION));
 
 		TLSUtils.getRequest().getSession().setAttribute(USER_TOKEN, apiToken);
 

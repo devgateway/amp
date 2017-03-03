@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.helper.TeamMember;
@@ -15,36 +16,27 @@ public class AmpApiToken implements Serializable{
 	private DateTime expirationTime;
 	private String token;
 
-	public User getUser() {
-		return user;
+	public AmpApiToken(String token, User user, TeamMember teamMember, DateTime expirationTime) {
+		this.token = Objects.requireNonNull(token);
+		this.user = Objects.requireNonNull(user);
+		this.teamMember = teamMember;
+		this.expirationTime = Objects.requireNonNull(expirationTime);
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public User getUser() {
+		return user;
 	}
 
 	public TeamMember getTeamMember() {
 		return teamMember;
 	}
 
-	public void setTeamMember(TeamMember teamMember) {
-		this.teamMember = teamMember;
-	}
-
 	public DateTime getExpirationTime() {
 		return expirationTime;
 	}
 
-	public void setExpirationTime(DateTime expirationTime) {
-		this.expirationTime = expirationTime;
-	}
-
 	public String getToken() {
 		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public boolean isExpired() {

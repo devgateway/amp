@@ -11,7 +11,16 @@ export function gpiStartUp() {
             toTranslate = trns;
                 store.dispatch({
                 type: STATE_TRANSLATIONS_LOADED,
-                actionData: { translations: toTranslate }
+                actionData: { 
+                    translations: toTranslate,
+                    translate: function(messageKey, params = {}){
+                        var message = toTranslate[messageKey];
+                        for(var key in params) {
+                            message = message.replace('__' + key + '__', params[key]);
+                        }
+                        return message;
+                    }                    
+                }
             });
         });
         resolve();

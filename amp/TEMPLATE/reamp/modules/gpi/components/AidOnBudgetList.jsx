@@ -15,9 +15,9 @@ export default class AidOnBudgetList extends Component {
         };
         
         this.addNew = this.addNew.bind(this);
-        this.onError = this.onError.bind(this);
         this.showErrors = this.showErrors.bind(this);
         this.showInfoMessages = this.showInfoMessages.bind(this);
+        this.saveAllEdits = this.saveAllEdits.bind(this);
     }
     
     componentWillMount() {        
@@ -34,15 +34,19 @@ export default class AidOnBudgetList extends Component {
         this.props.actions.addNewAidOnBudget();       
     }
     
-    onError(errors) {
-        this.setState({errors: errors, infoMessages: []});
-    }   
-    
-    showErrors() {              
-         return (this.state.errors.length > 0 && <div className="alert alert-danger" role="alert">
-                  {this.state.errors.map(error => 
+   saveAllEdits() {
+       const list = this.props.aidOnBudgetList.filter(aidOnBudget => {return aidOnBudget.isEditing})
+       this.props.actions.saveAllEdits(list)
+   }
+   
+   showErrors() {        
+         const errors = this.state.errors.filter(error => {return !error.id && !error.cid });         
+         return (errors.length > 0 && <div className="alert alert-danger" role="alert">
+                  {errors.map(error => 
+                  {     
                       <span>{this.props.translations[error.messageKey]}<br/></span>
-                    )}
+                  }
+                  )}
               </div>) 
     }
     
@@ -50,7 +54,7 @@ export default class AidOnBudgetList extends Component {
         return (this.state.infoMessages.length > 0 &&
                <div className="alert alert-info" role="alert">
                    {this.state.infoMessages.map(info =>
-                      <span>{this.props.translations[info.messageKey]} <br/></span>
+                      <span>{this.props.translate(info.messageKey, info.params)} <br/></span>
               )}
              </div>) 
     }
@@ -63,9 +67,9 @@ export default class AidOnBudgetList extends Component {
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-plus" onClick={this.addNew}></span>
                 <span  onClick={this.addNew}> Add Data</span>
-                <span className="success-green"> (insert data to the new field)</span>
-                <span> / </span> <span className="glyphicon glyphicon-ok-circle success-green"> </span> <span > Click the Save Symbol to save the added data row</span>
-                <span className="float-right"> <button type="button" className="btn btn-success">Save all Edits</button></span>
+                <span className="success-color"> (insert data to the new field)</span>
+                <span> / </span> <span className="glyphicon glyphicon-ok-circle success-color"> </span> <span > Click the Save Symbol to save the added data row</span>
+                <span className="float-right"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>Save all Edits</button></span>
                 </div>                 
                 </div>  
                 {this.showErrors()}
@@ -73,17 +77,17 @@ export default class AidOnBudgetList extends Component {
                 <table className="table table-striped">
                 <thead>
                 <tr>
-                <th>{this.props.translations['amp.gpi-data-aid-on-budget:date']}</th>
-                <th>{this.props.translations['amp.gpi-data-aid-on-budget:donor-agency']}</th>
-                <th>{this.props.translations['amp.gpi-data-aid-on-budget:amount']}</th>
-                <th>{this.props.translations['amp.gpi-data-aid-on-budget:currency']}</th>
+                <th></th>
+                <th>{this.props.translations['amp.gpi-data-aid-on-budget:date']}<span className="error-color" >*</span></th>
+                <th>{this.props.translations['amp.gpi-data-aid-on-budget:donor-agency']}<span className="error-color" >*</span></th>
+                <th>{this.props.translations['amp.gpi-data-aid-on-budget:amount']}<span className="error-color" >*</span></th>
+                <th>{this.props.translations['amp.gpi-data-aid-on-budget:currency']}<span className="error-color" >*</span></th>
                 <th>{this.props.translations['amp.gpi-data-aid-on-budget:action']}</th>
                 </tr>
                 </thead>
-                <tbody>
-               
+                <tbody>               
                 {this.props.aidOnBudgetList.map(aidOnBudget => 
-                <AidOnBudgetRow aidOnBudget={aidOnBudget} key={aidOnBudget.id} currencyList={this.props.currencyList} orgList={this.props.orgList} isEditing = {!aidOnBudget.id} onError={this.onError} key={aidOnBudget.id || 'c' + aidOnBudget.cid}/>  
+                <AidOnBudgetRow aidOnBudget={aidOnBudget} key={aidOnBudget.id} currencyList={this.props.currencyList} orgList={this.props.orgList} key={aidOnBudget.id || 'c' + aidOnBudget.cid} errors={this.props.errors}/>  
                 )}                
                 </tbody>
                 </table>                 
@@ -92,14 +96,15 @@ export default class AidOnBudgetList extends Component {
     }
 }
 
-function mapStateToProps(state, ownProps) {         
+function mapStateToProps(state, ownProps) { 
         return {
         aidOnBudgetList: state.aidOnBudget.aidOnBudgetList || [],
         errors: state.aidOnBudget.errors || [],
         infoMessages: state.aidOnBudget.infoMessages || [],        
         currencyList: state.commonLists.currencyList || [],
         orgList: state.commonLists.orgList || [],
-        translations: state.startUp.translations
+        translations: state.startUp.translations,
+        translate: state.startUp.translate
     }
 }
 

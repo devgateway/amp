@@ -41,8 +41,9 @@ public class GPIDataService {
 		data.set(GPIEPConstants.FIELD_ID, aidOnBudget.getAmpGPINiAidOnBudgetId());
 		data.set(GPIEPConstants.FIELD_DONOR_ID, aidOnBudget.getDonor().getAmpOrgId());
 		data.set(GPIEPConstants.FIELD_CURRENCY_CODE, aidOnBudget.getCurrency().getCurrencyCode());
-		data.set(GPIEPConstants.FIELD_AMOUNT, aidOnBudget.getAmount());		
-		data.set(GPIEPConstants.FIELD_DATE, DateTimeUtil.formatDate(aidOnBudget.getIndicatorDate(), GPIEPConstants.DATE_FORMAT));		
+		data.set(GPIEPConstants.FIELD_AMOUNT, aidOnBudget.getAmount());
+		data.set(GPIEPConstants.FIELD_DATE,
+				DateTimeUtil.formatDate(aidOnBudget.getIndicatorDate(), GPIEPConstants.DATE_FORMAT));
 		return data;
 	}
 
@@ -78,29 +79,60 @@ public class GPIDataService {
 
 		return aidOnBudget;
 	}
-	
+
 	public static JsonBean saveAidOnBudget(JsonBean data) {
-		JsonBean result = new JsonBean();		
-		AmpGPINiAidOnBudget aidOnBudget = getAidOnBudget(data);		
-		if(aidOnBudget.getAmpGPINiAidOnBudgetId() == null && GPIUtils.similarRecordExists(aidOnBudget.getIndicatorDate(), aidOnBudget.getDonor().getAmpOrgId())){
-			return ApiError.toError(GPIErrors.DATE_DONOR_COMBINATION_EXISTS);
+		JsonBean result = new JsonBean();
+		List<JsonBean> validationErrors = validate(data);
+		if (validationErrors.size() == 0) {
+			AmpGPINiAidOnBudget aidOnBudget = getAidOnBudget(data);
+			GPIUtils.saveAidOnBudget(aidOnBudget);
+			JsonBean saved = modelToJsonBean(aidOnBudget);
+			result.set(GPIEPConstants.DATA, saved);
+			result.set(GPIEPConstants.RESULT, GPIEPConstants.SAVED);
+			if (data.get(GPIEPConstants.CID) != null) {
+				saved.set(GPIEPConstants.CID, data.get(GPIEPConstants.CID));
+			}
+		} else {
+			result.set(GPIEPConstants.DATA, data);
+			result.set(GPIEPConstants.RESULT, GPIEPConstants.SAVE_FAILED);
+			result.set(GPIEPConstants.ERRORS, validationErrors);
 		}
-		
-		GPIUtils.saveAidOnBudget(aidOnBudget);		
-		JsonBean saved = modelToJsonBean(aidOnBudget);
-		if (data.get(GPIEPConstants.CID) != null) {
-			saved.set(GPIEPConstants.CID, data.get(GPIEPConstants.CID));
-		}
-		
-		result.set(GPIEPConstants.RESULT, GPIEPConstants.SAVED);
-		result.set(GPIEPConstants.DATA, saved);
+
 		return result;
 	}
-	
-	public static JsonBean delete(Long id) {	
+
+	public static List<JsonBean> validate(JsonBean data) {
+		List<JsonBean> validationErrors = new ArrayList<>();
+		Long donorId = Long.parseLong(String.valueOf(data.get(GPIEPConstants.FIELD_DONOR_ID)));
+		Date date = DateTimeUtil.parseDate(data.getString(GPIEPConstants.FIELD_DATE), GPIEPConstants.DATE_FORMAT);
+		Long id = null;
+		if (data.get(GPIEPConstants.FIELD_ID) != null) {
+			id = Long.parseLong(String.valueOf(data.get(GPIEPConstants.FIELD_ID)));
+		}
+
+		if (GPIUtils.similarRecordExists(id, donorId, date)) {
+			JsonBean error = new JsonBean();
+			error.set(ApiError.getErrorCode(GPIErrors.DATE_DONOR_COMBINATION_EXISTS),
+					GPIErrors.DATE_DONOR_COMBINATION_EXISTS.description);
+			validationErrors.add(error);
+		}
+
+		return validationErrors;
+	}
+
+	public static List<JsonBean> saveAllEdits(List<JsonBean> aidOnBudgetList) {
+		List<JsonBean> results = new ArrayList<>();
+		for (JsonBean aidOnBudget : aidOnBudgetList) {
+			results.add(saveAidOnBudget(aidOnBudget));
+		}
+
+		return results;
+	}
+
+	public static JsonBean delete(Long id) {
 		JsonBean result = new JsonBean();
 		GPIUtils.delete(id);
 		result.set(GPIEPConstants.RESULT, GPIEPConstants.DELETED);
-		return result;		
+		return result;
 	}
 }

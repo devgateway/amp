@@ -1,11 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
-import java.util.Calendar;
+
 import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.hibernate.Session;
@@ -51,15 +50,20 @@ public class GPIUtils {
 		}		
 	}
 	
-	public static boolean similarRecordExists(Date date, Long donorId){
+	public static boolean similarRecordExists(Long ampGPINiAidOnBudgetId, Long donorId, Date indicatorDate){
 		Session dbSession = PersistenceManager.getSession();	    		
-        String queryString = "select gpi from " + AmpGPINiAidOnBudget.class.getName() + " gpi where gpi.donor.ampOrgId=:orgId and year(gpi.indicatorDate)=:indicatorYear";
+        String queryString = "select gpi from " + AmpGPINiAidOnBudget.class.getName() + " gpi where gpi.donor.ampOrgId=:orgId and gpi.indicatorDate = :indicatorDate";
+        if (ampGPINiAidOnBudgetId != null){
+        	queryString += " and gpi.ampGPINiAidOnBudgetId != :ampGPINiAidOnBudgetId ";
+        }
+        
         Query query = dbSession.createQuery(queryString);
-        query.setParameter("orgId", donorId);        
-        Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-	    int year = calendar.get(Calendar.YEAR);	    
-        query.setParameter("indicatorYear",year);        
+        query.setParameter("orgId", donorId);            
+        query.setParameter("indicatorDate", indicatorDate); 
+        if (ampGPINiAidOnBudgetId != null){
+        	query.setParameter("ampGPINiAidOnBudgetId", ampGPINiAidOnBudgetId);
+        } 
+        
         return query.list().size() > 0;                   
 	}
 }

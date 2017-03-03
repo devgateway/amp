@@ -9,7 +9,9 @@ public class GPIEPConstants {
 	public static String DATE_FORMAT = "yyyy-MM-dd";
 	public static String RESULT = "result";
 	public static String DELETED = "deleted";
-	public static String SAVED = "saved";
+	public static String SAVED = "SAVED";
+	public static String SAVE_FAILED = "SAVE_FAILED";
 	public static String DATA = "data";
 	public static String CID = "cid";
+	public static String ERRORS = "errors";
 }

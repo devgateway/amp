@@ -10,5 +10,7 @@ export const initialTranslations = {
         'amp.gpi-data-aid-on-budget:validation-currency-required': ' Currency is required',
         'amp.gpi-data-aid-on-budget:validation-date-required': 'Date is required',
         'amp.gpi-data-aid-on-budget:delete-successful': 'Record deleted successfully',
-        'amp.gpi-data-aid-on-budget:save-successful': 'Record was saved successfully'
+        'amp.gpi-data-aid-on-budget:save-successful': 'Record was saved successfully',
+        'amp.gpi-data-aid-on-budget:save-all': '__saved__ of __total__ rows were saved successfully.',
+        'amp.gpi-data-aid-on-budget:server-errors-0001': 'Please select a unique date or donor agency.'
 };

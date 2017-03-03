@@ -13,11 +13,12 @@ class AidOnBudgetApi {
     });
   }
 
-  static save(aidOnBudget) {    
-    const request = new Request('/rest/gpi/aid-on-budget', {
+  static save(data) { 
+    const url = Array.isArray(data) ? '/rest/gpi/aid-on-budget/save-all' : '/rest/gpi/aid-on-budget';
+    const request = new Request(url, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(aidOnBudget)
+      body: JSON.stringify(data)
     });
     
     return fetch(request).then(response => {
@@ -26,6 +27,7 @@ class AidOnBudgetApi {
       return error;
     });
   }
+  
   
   static deleteAidOnBudget(aidOnBudget) {      
       const request = new Request('/rest/gpi/aid-on-budget/' + aidOnBudget.id, {

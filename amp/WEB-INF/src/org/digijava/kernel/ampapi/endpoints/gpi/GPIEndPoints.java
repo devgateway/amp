@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
+import java.util.List;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -40,6 +42,15 @@ public class GPIEndPoints {
 	public JsonBean saveAidOnBudget(JsonBean aidOnBudget) {
 		return GPIDataService.saveAidOnBudget(aidOnBudget);
 	}
+	
+	@POST
+	@Path("/aid-on-budget/save-all")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "saveAllEdits", ui = false)
+	public List<JsonBean> saveAllEdits(List<JsonBean> aidOnBudgetList) {
+		return GPIDataService.saveAllEdits(aidOnBudgetList);
+	}
+	
 	
 	@DELETE
     @Path("/aid-on-budget/{id}")

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
@@ -122,7 +123,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	 * delegates to {@link #AmpFundingColumn(String, String, Behaviour)} with {@link TrivialMeasureBehaviour} as a behaviour
 	 */
 	public AmpFundingColumn(String columnName, String viewName) {
-		this(columnName, viewName, TrivialMeasureBehaviour.getInstance());
+		this(columnName, new LocalizableLabel(columnName), viewName, TrivialMeasureBehaviour.getInstance());
 	}
 
 	/**
@@ -133,8 +134,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	 * @param viewName the name of the PostgreSQL view to fetch data from
 	 * @param behaviour the behaviour of the column
 	 */
-	protected AmpFundingColumn(String columnName, String viewName, Behaviour<?> behaviour) {
-		super(columnName, null, viewName, behaviour);
+	protected AmpFundingColumn(String columnName, LocalizableLabel label, String viewName, Behaviour<?> behaviour) {
+		super(columnName, label, null, viewName, behaviour);
 		this.invalidationDetector = new ActivityInvalidationDetector();
 		Set<String> ic = new HashSet<>();
 		for(String col:FUNDING_VIEW_COLUMNS.values())

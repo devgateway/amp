@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../doc/xmlpatcher.xsd ">
+	<jira>AMP-14167</jira>
+	<keyword>Views</keyword>
+	<author>Alexandru Artimon</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres"><![CDATA[
+				CREATE OR REPLACE VIEW v_indicator_risk AS
+				  SELECT v.activity_id amp_activity_id, rr.rating_name::text risk, v.indicator_connection_id, v.rr_id id, v.indicator_id FROM
+					(
+					  SELECT con.activity_id, max(rr.amp_ind_risk_ratings_id) rr_id, con.id AS indicator_connection_id, con.indicator_id
+					  FROM amp_indicator_connection con, amp_indicator_values val
+						LEFT JOIN amp_indicator_risk_ratings rr ON val.risk=rr.amp_ind_risk_ratings_id
+					  WHERE val.ind_connect_id = con.id AND con.sub_clazz::text = 'a'::text
+					  GROUP BY con.activity_id, con.id
+					) v
+					LEFT JOIN amp_indicator_risk_ratings rr ON v.rr_id = rr.amp_ind_risk_ratings_id;
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

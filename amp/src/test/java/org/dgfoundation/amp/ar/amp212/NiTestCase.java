@@ -135,7 +135,7 @@ public class NiTestCase extends AmpTestCase {
 		NiReportedEntity<?> entity = schema.getColumns().containsKey(name) ? schema.getColumns().get(name) : schema.getMeasures().get(name);
 		NiUtils.failIf(entity == null, () -> String.format("unknown entity: %s", name));
 		return cachedColumns.computeIfAbsent(name, z -> 
-			new CellColumn(z, new ColumnContents(Collections.emptyList()), null, entity, null));
+			new CellColumn(z, entity.label, new ColumnContents(Collections.emptyList()), null, entity, null));
 	}
 	
 	/** accepts a list as input (String columnName, List<Cell> contents) */

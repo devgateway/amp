@@ -1224,9 +1224,9 @@ function removeGuest(obj) {
 											</div>
 												
 											<br/><br/>
-												
-												
-												<digi:trn key="calendar:Description"><b>Description</b></digi:trn><span style="font-size:11px;" id="descCharCounter"></span>
+
+
+												<b><digi:trn key="calendar:Description">Description</digi:trn></b><span style="font-size:11px;" id="descCharCounter"></span>
 											    <div class="charcounter-progress-container" style="width: 100%">
 											    	<div id="descProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
 											    </div>
@@ -1245,7 +1245,7 @@ function removeGuest(obj) {
     <td valign=top style="font-size:12px;">
 	<hr />
 	<font color="red" size="3px">*</font>
-    <digi:trn key="calendar:Attendee"><b style="font-size:12px;">Attendee</b></digi:trn><br />
+		<b style="font-size:12px;"><digi:trn key="calendar:Attendee">Attendee</digi:trn></b><br />
 	<div class="msg_receivers">
 		<logic:empty name="calendarEventForm" property="teamMapValues">
 			<div class="msg_lbl">No receivers</div>

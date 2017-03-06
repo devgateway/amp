@@ -24,7 +24,7 @@ public class GPIEndPoints {
 	@ApiMethod(id = "getAidOnBudgetList", ui = false)
 	public JsonBean getAidOnBudgetList(@QueryParam("offset") Integer offset, @QueryParam("count") Integer count,
 			@QueryParam("orderby") String orderBy, @QueryParam("sort") String sort) {
-		return GPIDataService.getAidOnBudgetList();
+		return GPIDataService.getAidOnBudgetList(offset, count, orderBy, sort);
 	}
 
 	@GET
@@ -42,7 +42,7 @@ public class GPIEndPoints {
 	public JsonBean saveAidOnBudget(JsonBean aidOnBudget) {
 		return GPIDataService.saveAidOnBudget(aidOnBudget);
 	}
-	
+
 	@POST
 	@Path("/aid-on-budget/save-all")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -50,13 +50,12 @@ public class GPIEndPoints {
 	public List<JsonBean> saveAllEdits(List<JsonBean> aidOnBudgetList) {
 		return GPIDataService.saveAllEdits(aidOnBudgetList);
 	}
-	
-	
+
 	@DELETE
-    @Path("/aid-on-budget/{id}")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "deleteAidOnBudgetById", ui = false)
-    public JsonBean deleteIndicatorById(@PathParam("id") long id) {
-        return GPIDataService.delete(id);
-    }
+	@Path("/aid-on-budget/{id}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "deleteAidOnBudgetById", ui = false)
+	public JsonBean deleteIndicatorById(@PathParam("id") long id) {
+		return GPIDataService.delete(id);
+	}
 }

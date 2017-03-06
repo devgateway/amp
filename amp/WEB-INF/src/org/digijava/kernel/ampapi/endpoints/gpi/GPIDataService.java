@@ -25,14 +25,17 @@ public class GPIDataService {
 			return null;
 	}
 
-	public static JsonBean getAidOnBudgetList() {
-		List<AmpGPINiAidOnBudget> aidOnBudgetList = GPIUtils.getAidOnBudgetList();
+	public static JsonBean getAidOnBudgetList(Integer offset, Integer count, String orderBy, String sort) {
+		Integer total = GPIUtils.getCount();
+		List<AmpGPINiAidOnBudget> aidOnBudgetList = GPIUtils.getAidOnBudgetList(offset, count, orderBy, sort, total);
 		JsonBean data = new JsonBean();
 		List<JsonBean> lst = new ArrayList<>();
 		for (AmpGPINiAidOnBudget aidOnBudget : aidOnBudgetList) {
 			lst.add(modelToJsonBean(aidOnBudget));
 		}
+
 		data.set("data", lst);
+		data.set(GPIEPConstants.TOTAL_RECORDS, total);
 		return data;
 	}
 

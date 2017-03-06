@@ -28,15 +28,18 @@ export default class AidOnBudgetRow extends Component {
         this.onDateChange = this.onDateChange.bind(this);  
         this.deleteAidOnBudget = this.deleteAidOnBudget.bind(this); 
     }
+    
     toggleEdit() {
         const aidOnBudget = this.state.aidOnBudget;
         aidOnBudget.isEditing = true;
         this.setState({aidOnBudget: aidOnBudget});
         this.props.actions.updateAidOnBudget(aidOnBudget);        
     }
+    
     toggleDatePicker(){
         this.setState({showDatePicker: !this.state.showDatePicker});
     }
+    
     onChange(event){
         const errors = [];
         const field = event.target.name;
@@ -68,16 +71,23 @@ export default class AidOnBudgetRow extends Component {
     }
     
     save() {
-       this.props.actions.save(this.state.aidOnBudget);                
+        this.props.actions.save(this.state.aidOnBudget);                
     }
+    
     deleteAidOnBudget() {
         if(confirm("This will delete the row. Do you want to proceed?")){
             this.props.actions.deleteAidOnBudget(this.state.aidOnBudget); 
         }        
     }
+    
     getOrgName(id) {
         var org = this.props.orgList.filter(org => org.id === id)[0];
         return org ? org.name : '';
+    }
+    
+    getCurrencyName(currencyCode) {
+        var currency = this.props.currencyList.filter(currency => currency.id === currencyCode)[0];
+        return currency ? currency.name : '';
     }
     
     getErrors(){
@@ -88,10 +98,10 @@ export default class AidOnBudgetRow extends Component {
                     id="error-popover"
                     title="Errors">
                     {errors.map(error => 
-                      <span>{this.props.translations[error.messageKey]}<br/></span>
+                    <span>{this.props.translations[error.messageKey]}<br/></span>
                     )} 
                     </Popover>
-                  );
+            );
             return (<OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={errorPopover}>
                     <span className="glyphicon glyphicon-exclamation-sign error-color">                  
                     </span>
@@ -99,15 +109,14 @@ export default class AidOnBudgetRow extends Component {
             );
             
         }
-      
+        
     }
     
-    render() {
-                
+    render() {        
         if (this.props.aidOnBudget.isEditing) {         
             return ( <tr>
                     <td className="error-column">
-                     {this.getErrors()}      
+                    {this.getErrors()}      
                     </td>
                     <td scope="row" >                                   
                     <div className="date-container">
@@ -149,13 +158,14 @@ export default class AidOnBudgetRow extends Component {
             </tr>)
             
         }
+        
         return (
                 <tr>
                 <td></td>
                 <th scope="row">{this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)}</th>
                 <td>{this.getOrgName(this.state.aidOnBudget.donorId)}</td>
                 <td>{this.state.aidOnBudget.amount}</td>
-                <td>{this.state.aidOnBudget.currencyCode} </td>
+                <td>{this.getCurrencyName(this.state.aidOnBudget.currencyCode)} </td>
                 <td><span className="glyphicon glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-remove" onClick={this.deleteAidOnBudget}></span></td>                
                 </tr>
                 

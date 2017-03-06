@@ -3,15 +3,26 @@ const defaultState = {
             aidOnBudgetList:[],
             errors: [],
             infoMessages: [],
-            cid: 1
-        }
+            cid: 1,
+            paging:  {
+                recordsPerPage: 10,
+                offset: 0,
+                currentPageNumber: 1,
+                totalPageCount : 1
+             },
+             sorting: {
+                 orderBy: 'ampGPINiAidOnBudgetId',
+                 sortOrder: 'desc'
+             }             
+           }
 };
 
 export default function aidOnBudgetReducer(state: Object = defaultState.data, action: Object) {    
     switch (action.type) {
     case 'LOAD_AID_ON_BUDGET_LIST_SUCCESS':
-        action.data.cid = state.cid;
-        return action.data;
+        const data = Object.assign({}, action.data)
+        data.cid = state.cid;               
+        return data;
     case 'AID_ON_BUDGET_ON_SAVE':
         var data = {};
         if (action.data.errors && action.data.errors.length > 0) {
@@ -22,6 +33,8 @@ export default function aidOnBudgetReducer(state: Object = defaultState.data, ac
         data.errors = action.data.errors || [];
         data.infoMessages = action.data.infoMessages || []; 
         data.cid = state.cid;
+        data.paging = state.paging;
+        data.sorting = state.sorting;
         return data;
     case 'AID_ON_BUDGET_ON_SAVE_ALL_EDITS':        
         var data = {};
@@ -36,6 +49,8 @@ export default function aidOnBudgetReducer(state: Object = defaultState.data, ac
         data.errors = action.data.errors || [];
         data.infoMessages = action.data.infoMessages || []; 
         data.cid = state.cid;
+        data.paging = state.paging;
+        data.sorting = state.sorting;
         return data;        
     case 'AID_ON_BUDGET_DELETE_SUCCESS':
         var data = {};
@@ -43,6 +58,8 @@ export default function aidOnBudgetReducer(state: Object = defaultState.data, ac
         data.errors = action.data.errors || [];
         data.infoMessages = action.data.infoMessages || []; 
         data.cid = state.cid;
+        data.paging = state.paging;
+        data.sorting = state.sorting;
         return data;
     case 'ADD_AID_ON_BUDGET':
         var data = {};
@@ -51,14 +68,18 @@ export default function aidOnBudgetReducer(state: Object = defaultState.data, ac
         data.errors = [];
         data.infoMessages = [];
         data.cid = ++state.cid;
+        data.paging = state.paging;
+        data.sorting = state.sorting;
         return data; 
     case 'UPDATE_AID_ON_BUDGET':
         var data = {};
         data.aidOnBudgetList =  state.aidOnBudgetList.map(function(aidOnBudget) { return ((aidOnBudget.id && aidOnBudget.id === action.data.aidOnBudget.id) || (aidOnBudget.cid && aidOnBudget.cid === action.data.aidOnBudget.cid)) ? Object.assign({}, action.data.aidOnBudget) : aidOnBudget; });     
         data.errors = action.data.errors || [];
         data.infoMessages = action.data.infoMessages || []; 
-        data.cid = state.cid;        
-        return data;
+        data.cid = state.cid; 
+        data.paging = state.paging;
+        data.sorting = state.sorting;
+        return data;   
     default:            
         return state;
     }

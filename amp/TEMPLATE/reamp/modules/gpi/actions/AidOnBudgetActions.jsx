@@ -23,16 +23,20 @@ export function updateAidOnBudget(aidOnBudget) {
     return {type: 'UPDATE_AID_ON_BUDGET', data: {aidOnBudget: aidOnBudget, errors: [], infoMessages:[]} } 
 }
 
-export function loadAidOnBudgetList() {
+export function loadAidOnBudgetList(data) {
     return function(dispatch) {
-        return aidOnBudgetApi.getAidOnBudgetList().then(response => {
-            var data = {
-                    aidOnBudgetList: response.data,
+        return aidOnBudgetApi.getAidOnBudgetList(data).then(response => {           
+            var results = {
+                    aidOnBudgetList: response.data,                    
                     errors: [],
-                    infoMessages: []        
+                    infoMessages: []                    
             };
             
-            dispatch(getAidOnBudgetListSuccess(data));
+            results.paging = data.paging;
+            results.paging.totalRecords = response.totalRecords;
+            results.paging.totalPageCount = Math.ceil(results.paging.totalRecords / results.paging.recordsPerPage);
+            results.sorting = data.sorting;            
+            dispatch(getAidOnBudgetListSuccess(results));
         }).catch(error => {
             throw(error);
         });

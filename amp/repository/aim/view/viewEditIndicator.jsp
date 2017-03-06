@@ -234,9 +234,7 @@ function closeWindow() {
           </tr>
           <tr id="trDescription">
             <td valign="top">
-            <digi:trn key="admin:decription">
-            Description:
-            </digi:trn>
+            <digi:trn>Indicator Description</digi:trn>:
             </td>
             <td>
               <html:textarea property="description" styleId="txtDescription" style="font-family:verdana;font-size:11px;width:200px;"></html:textarea>

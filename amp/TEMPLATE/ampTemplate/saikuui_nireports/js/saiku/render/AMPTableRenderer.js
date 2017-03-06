@@ -306,6 +306,10 @@ function generateContentHtml(page, options) {
 	return content;
 }
 
+function valueOrNbsp(val) {
+	return val ? val : "&nbsp;";
+}
+
 function generateDataRows(page, options) {
 	var self = this;
 	var content = "";
@@ -386,7 +390,7 @@ function generateDataRows(page, options) {
 					}
 
 					cell = "<th" + styleClass + rowSpan + ">";
-					cell += coloredPrefix + escapeHtml(cleanValue.text);
+					cell += coloredPrefix + valueOrNbsp(escapeHtml(cleanValue.text));
 					cell += "</th>";
 				} else {
 					// Change amount styles if is a subtotal.

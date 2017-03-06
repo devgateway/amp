@@ -1,3 +1,5 @@
+$.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
+
 function createPreview () {
 	var divElWrapper	= document.getElementById("previewSectionDiv");
 	var divEl			= document.getElementById("previewBodySectionDiv");
@@ -381,26 +383,19 @@ NormalReportManager.prototype.checkMeasures	= function () {
 	}
 	actualCommitmentsMustEl.hide();
 	
-	var ulEl			= document.getElementById("dest_measures_ul") ;
-	var items			= ulEl.getElementsByTagName("li");
 	measuresMustEl		= document.getElementById("measuresMust");
-	if ( items.length > 0 ) {		
-		measuresMustEl.style.visibility="hidden";
-		this.enableSave();
-		return true;
-	}
-	else {
-		measuresMustEl.style.visibility="";
-		this.disableSave();
-		return false;
-	}
+	measuresMustEl.style.visibility="hidden";
+	this.enableSave();
+	return true;
 };
 
 NormalReportManager.prototype.checkHierarchies	= function () {
 	var ulEl			= document.getElementById("dest_hierarchies_ul") ;
 	var colsUlEl		= document.getElementById("dest_col_ul") ;
+	var measUlEl			= document.getElementById("dest_measures_ul") ;
 	var items			= ulEl.getElementsByTagName("li");
 	var colItems		= colsUlEl.getElementsByTagName("li");
+	var measItems			= measUlEl.getElementsByTagName("li");
 	var incompatible = false;
 	var imcomplist = new Array();
 	
@@ -446,6 +441,16 @@ NormalReportManager.prototype.checkHierarchies	= function () {
 	else {
 		hierarchiesMustEl					= document.getElementById("hierarchiesSummaryMust");
 		hierarchiesMustEl.style.visibility	= "hidden";
+	}
+
+	var wMeasurelessHiers = document.getElementById("measurelessOnlyHiersNotAllowed");
+	var measurelessOnlyHiers = findMeasurelessOnlyHiers(Array.prototype.slice.call(items).map(getColDbId));
+	if (measItems.length > 0 && measurelessOnlyHiers.length > 0) {
+		wMeasurelessHiers.style.visibility	= "";
+		document.getElementById("measurelessOnlyHiersNotAllowedList").innerHTML = measurelessOnlyHiers.map(TranslationManager.getTranslated).join();
+		retValue = false;
+	} else {
+		wMeasurelessHiers.style.visibility	= "hidden";
 	}
 	
 	if ( retValue ) {

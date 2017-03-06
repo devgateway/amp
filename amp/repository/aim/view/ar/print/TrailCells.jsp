@@ -31,9 +31,9 @@
 							<c:set var="key">
 								aim:reportbuilder:${name}
 							</c:set>
-							<digi:trn key="${key}">
+							<digi:colNameTrn>
 								<c:out value="${name}"></c:out>
-							</digi:trn>
+							</digi:colNameTrn>
 						</logic:iterate>
 					 </td>
 					<td width="50%" style="text-align: right;text-transform: uppercase;border-bottom: 1px dotted;font-size: 8pt;padding-left: 10px"><jsp:include page="<%=viewable.getViewerPath()%>" /></td>

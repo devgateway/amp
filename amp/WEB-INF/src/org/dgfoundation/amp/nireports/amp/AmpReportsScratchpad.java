@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Memoizer;
@@ -27,6 +28,7 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.TranslatedDate;
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
@@ -137,8 +139,17 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		this.verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
 			engine.spec.getColumnNames().contains(ColumnConstants.MODE_OF_PAYMENT) &&
 			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);
+
+		NiUtils.failIf(hasMeasuresAndOnlyMeasurelessHiers(engine),
+				String.format("Found hierarchies %s that can be used only in measureless reports!",
+						CollectionUtils.intersection(engine.spec.getHierarchyNames(), AmpReportsSchema.ONLY_MEASURELESS_HIERARCHIES)));
 	}
-	
+
+	private boolean hasMeasuresAndOnlyMeasurelessHiers(NiReportsEngine engine) {
+		return !engine.spec.getMeasures().isEmpty()
+						&& CollectionUtils.containsAny(engine.spec.getHierarchyNames(), AmpReportsSchema.ONLY_MEASURELESS_HIERARCHIES);
+	}
+
 	public AmpCurrency getUsedCurrency() {
 		return usedCurrency;
 	}

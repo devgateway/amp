@@ -25,17 +25,24 @@ export function updateAidOnBudget(aidOnBudget) {
 
 export function loadAidOnBudgetList(data) {
     return function(dispatch) {
-        return aidOnBudgetApi.getAidOnBudgetList(data).then(response => {           
+        return aidOnBudgetApi.getAidOnBudgetList(data).then(response => {
+            
             var results = {
-                    aidOnBudgetList: response.data,                    
+                    aidOnBudgetList: [],                    
                     errors: [],
                     infoMessages: []                    
             };
             
             results.paging = data.paging;
-            results.paging.totalRecords = response.totalRecords;
-            results.paging.totalPageCount = Math.ceil(results.paging.totalRecords / results.paging.recordsPerPage);
-            results.sorting = data.sorting;            
+            results.sorting = data.sorting;             
+            if (response.error) {
+                results.errors = extractErrors(response.error);                
+            } else {
+                results.aidOnBudgetList = response.data;
+                results.paging.totalRecords = response.totalRecords;
+                results.paging.totalPageCount = Math.ceil(results.paging.totalRecords / results.paging.recordsPerPage);                
+            }  
+            
             dispatch(getAidOnBudgetListSuccess(results));
         }).catch(error => {
             throw(error);
@@ -52,41 +59,47 @@ export function save(data){
             result.errors = errors;
             result.infoMessages = [];
             return dispatch(onSave(result));            
-        } else {
-            return aidOnBudgetApi.save(data).then(response => {
-                const result = {errors: []};
-                result.aidOnBudget = response.data;
-                if (response.result === "SAVED") {                    
-                    result.aidOnBudget.isEditing = false;
-                    result.infoMessages = [{messageKey: 'amp.gpi-data-aid-on-budget:save-successful'}];
-                } else if (response.result === "SAVE_FAILED"){
-                    result.aidOnBudget.isEditing = true;
-                    if (response.errors) {                       
-                        response.errors.forEach(function(error){
-                            for (var key in error) {                    
-                                let messageKey = 'amp.gpi-data-aid-on-budget:server-errors-' + key;
-                                result.errors.push({messageKey: messageKey, id: result.aidOnBudget.id, cid: result.aidOnBudget.cid});
-                            }
-                        }); 
-                    }                    
+        } 
+        
+        return aidOnBudgetApi.save(data).then(response => {
+            const result = {errors: []};
+            result.aidOnBudget = response.data || data;
+            if (response.result === "SAVED") {                    
+                result.aidOnBudget.isEditing = false;
+                result.infoMessages = [{messageKey: 'amp.gpi-data-aid-on-budget:save-successful'}];
+            } 
+            
+            if (response.errors || response.error) {
+                result.aidOnBudget.isEditing = true;
+                if(response.errors){
+                    result.errors = [...extractErrors(response.errors , result.aidOnBudget)] 
                 }
                 
-                dispatch(onSave(result));
-            }).catch(error => {          
-                throw(error);
-            });            
-        }      
+                if(response.error){
+                    result.errors = [...extractErrors(response.error , result.aidOnBudget)]
+                }                
+            }
+            
+            dispatch(onSave(result));
+        }).catch(error => {          
+            throw(error);
+        });            
+        
     };
 }
 
 export function deleteAidOnBudget(data) {
     return function(dispatch) {
-        if (data.id) {
+        if (data.id) {            
             return aidOnBudgetApi.deleteAidOnBudget(data).then(response => {
-                const result = {
-                        aidOnBudget: data,
-                        infoMessages: [{messageKey: 'amp.gpi-data-aid-on-budget:delete-successful'}]
-                };
+                const result = {infoMessages: [], errors: []};
+                result.aidOnBudget = data;
+                if(response.error){
+                    result.errors = [...extractErrors(response.error , result.aidOnBudget)]
+                } else{
+                    result.infoMessages = [{messageKey: 'amp.gpi-data-aid-on-budget:delete-successful'}]; 
+                }
+                
                 dispatch(deleteSuccess(result));
             }).catch(error => {
                 throw(error);
@@ -115,36 +128,44 @@ export function saveAllEdits(aidOnBudgetList) {
             result.errors = allErrors;
             result.infoMessages = [];
             return dispatch(onSaveAllEdits(result));            
-        } else {
-            return aidOnBudgetApi.save(aidOnBudgetList).then(response => {
-                const result = {errors:[], infoMessages: []};
-                const list = [];
-                for(var item of response){                    
-                    if (item.result === "SAVED"){
-                        item.data.isEditing = false;
-                        list.push(item.data);                       
-                    } else {                        
-                        allErrors = [...allErrors, ...extractErrors(item, item.data)]
-                    }                    
-                }               
-                
-                result.aidOnBudgetList = list;
-                result.errors = allErrors;
-                if (list.length > 0) {
-                    var params = {};
-                    params.saved = list.length;
-                    params.total = aidOnBudgetList.length;
-                    result.infoMessages = [{messageKey: 'amp.gpi-data-aid-on-budget:save-all', params: params}];  
-                }                
-                               
-                dispatch(onSaveAllEdits(result));
-            }).catch(error => {          
-                throw(error);
-            });            
-        }      
+        } 
+        
+        
+        return aidOnBudgetApi.save(aidOnBudgetList).then(response => {
+            const result = {errors:[], infoMessages: []};
+            
+            if (response.error) {
+                results.errors = extractErrors(response.error); 
+                return dispatch(onSaveAllEdits(result));
+            }
+            
+            const list = [];
+            for (var item of response) {                    
+                if (item.result === "SAVED"){
+                    item.data.isEditing = false;
+                    list.push(item.data);                       
+                } else {                        
+                    allErrors = [...allErrors, ...extractErrors(item.errors, item.data)]
+                }                    
+            }               
+            
+            result.aidOnBudgetList = list;
+            result.errors = [...result.errors, ...allErrors];
+            if (list.length > 0) {
+                var params = {};
+                params.saved = list.length;
+                params.total = aidOnBudgetList.length;
+                result.infoMessages = [{messageKey: 'amp.gpi-data-aid-on-budget:save-all', params: params}];  
+            }                
+            
+            dispatch(onSaveAllEdits(result));
+        }).catch(error => {          
+            throw(error);
+        });            
     };
     
 }
+
 
 function validate(aidOnBudget){
     const errors = [];
@@ -167,17 +188,29 @@ function validate(aidOnBudget){
     return errors
 }
 
-function extractErrors(response, aidOnBudget) {
-    var errorMessages = [];
-    if (response.errors) {  
-        response.errors.forEach(function(error){
+function extractErrors(errors, aidOnBudget) {
+    var errorMessages = [];    
+    if (errors) {  
+        console.log(errors)
+        errors = Array.isArray(errors) ? errors : [errors];
+        errors.forEach(function(error){
+            
             for (var key in error) {                    
                 let messageKey = 'amp.gpi-data-aid-on-budget:server-errors-' + key;
-                errorMessages.push({messageKey: messageKey, id: aidOnBudget.id, cid: aidOnBudget.cid});
+                let message = {messageKey: messageKey}; 
+                if (aidOnBudget && aidOnBudget.id) {
+                    message.id = aidOnBudget.id;
+                }
+                
+                if (aidOnBudget && aidOnBudget.cid) {
+                    message.cid = aidOnBudget.cid;
+                }
+                
+                errorMessages.push(message);
             }
         }); 
     }  
-   
+       
     return errorMessages;
 }
 

@@ -11,12 +11,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 @Path("gpi")
-public class GPIEndPoints {
+public class GPIEndPoints implements ErrorReportingEndpoint {
 
 	@GET
 	@Path("/aid-on-budget")
@@ -58,4 +58,12 @@ public class GPIEndPoints {
 	public JsonBean deleteIndicatorById(@PathParam("id") long id) {
 		return GPIDataService.delete(id);
 	}
+	
+	 /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Class getErrorsClass() {
+        return GPIErrors.class;
+    }
 }

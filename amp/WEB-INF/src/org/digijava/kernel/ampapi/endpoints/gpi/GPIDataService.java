@@ -6,9 +6,14 @@ import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -18,6 +23,10 @@ import org.digijava.module.common.util.DateTimeUtil;
  */
 public class GPIDataService {
 	public static JsonBean getAidOnBudgetById(Long id) {
+		if(hasGPIDataRights() == false){
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+		
 		AmpGPINiAidOnBudget aidOnBudget = GPIUtils.getAidOnBudgetById(id);
 		if (aidOnBudget != null)
 			return modelToJsonBean(aidOnBudget);
@@ -26,6 +35,10 @@ public class GPIDataService {
 	}
 
 	public static JsonBean getAidOnBudgetList(Integer offset, Integer count, String orderBy, String sort) {
+		if(hasGPIDataRights() == false){
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+		
 		Integer total = GPIUtils.getCount();
 		List<AmpGPINiAidOnBudget> aidOnBudgetList = GPIUtils.getAidOnBudgetList(offset, count, orderBy, sort, total);
 		JsonBean data = new JsonBean();
@@ -84,6 +97,10 @@ public class GPIDataService {
 	}
 
 	public static JsonBean saveAidOnBudget(JsonBean data) {
+		if(hasGPIDataRights() == false){
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+		
 		JsonBean result = new JsonBean();
 		List<JsonBean> validationErrors = validate(data);
 		if (validationErrors.size() == 0) {
@@ -124,18 +141,35 @@ public class GPIDataService {
 	}
 
 	public static List<JsonBean> saveAllEdits(List<JsonBean> aidOnBudgetList) {
+		if(hasGPIDataRights() == false){
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+		
 		List<JsonBean> results = new ArrayList<>();
 		for (JsonBean aidOnBudget : aidOnBudgetList) {
 			results.add(saveAidOnBudget(aidOnBudget));
 		}
-
+		
 		return results;
 	}
 
 	public static JsonBean delete(Long id) {
+		if(hasGPIDataRights() == false){
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+		
 		JsonBean result = new JsonBean();
 		GPIUtils.delete(id);
 		result.set(GPIEPConstants.RESULT, GPIEPConstants.DELETED);
 		return result;
+	}
+	
+	public static boolean hasGPIDataRights() {
+		//TODO: Fix - TeamUtil.getCurrentMember() returns null
+		/*TeamMember tm = TeamUtil.getCurrentMember();
+		AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); 
+		return atm.getUser().hasNationalCoordinatorGroup() || atm.getUser().hasVerifiedDonor();
+		*/
+		return true;
 	}
 }

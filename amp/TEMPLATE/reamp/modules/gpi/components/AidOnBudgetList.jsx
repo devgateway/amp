@@ -84,12 +84,10 @@ export default class AidOnBudgetList extends Component {
     }
     
     showErrors() {        
-        const errors = this.state.errors.filter(error => {return !error.id && !error.cid });         
+        const errors = this.props.errors.filter(error => {return !error.id && !error.cid });
         return (errors.length > 0 && <div className="alert alert-danger" role="alert">
-                {errors.map(error => 
-                {     
-                    <span>{this.props.translations[error.messageKey]}<br/></span>
-                }
+                {errors.map(error =>                    
+                    <span>{this.props.translations[error.messageKey]} <br/></span>                
                 )}
         </div>) 
     }

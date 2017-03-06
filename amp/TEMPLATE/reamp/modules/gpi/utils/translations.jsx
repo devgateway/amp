@@ -12,5 +12,6 @@ export const initialTranslations = {
         'amp.gpi-data-aid-on-budget:delete-successful': 'Record deleted successfully',
         'amp.gpi-data-aid-on-budget:save-successful': 'Record was saved successfully',
         'amp.gpi-data-aid-on-budget:save-all': '__saved__ of __total__ rows were saved successfully.',
-        'amp.gpi-data-aid-on-budget:server-errors-0001': 'Please select a unique date or donor agency.'
+        'amp.gpi-data-aid-on-budget:server-errors-0001': 'Please select a unique date or donor agency.',
+        'amp.gpi-data-aid-on-budget:server-errors-0002': 'Unauthorised operation. Please login with an account that has GPI data entry rights.'
 };

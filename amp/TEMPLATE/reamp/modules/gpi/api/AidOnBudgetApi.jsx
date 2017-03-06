@@ -3,7 +3,8 @@ class AidOnBudgetApi {
     static getAidOnBudgetList(data) { 
         const url = '/rest/gpi/aid-on-budget?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;    
         const request = new Request(url, {
-            method: 'GET'      
+            method: 'GET',
+            headers: {'Content-Type':'application/json'}
         });
         
         return fetch(request).then(response => {
@@ -31,7 +32,8 @@ class AidOnBudgetApi {
     
     static deleteAidOnBudget(aidOnBudget) {      
         const request = new Request('/rest/gpi/aid-on-budget/' + aidOnBudget.id, {
-            method: 'DELETE'        
+            method: 'DELETE',
+            headers: {'Content-Type':'application/json'}
         });
         return fetch(request).then(response => {
             return response.json();

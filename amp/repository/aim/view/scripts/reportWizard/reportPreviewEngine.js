@@ -2,41 +2,18 @@ function ReportPreviewSettings() {
 	this.reportPeriod = "A";
 	this.years		= true;
 	this.quarters	= true;
-	this.quartersLength	= 3;
 	this.months		= false;
-	this.monthsLength	= 3;
-	this.startYear	= new Date().getFullYear() - 3;
-	this.endYear	= new Date().getFullYear();
 	this.yearsLength	= 3;
+	this.startYear	= new Date().getFullYear() - this.yearsLength;
+	this.endYear	= new Date().getFullYear();
 	this.summary	= false;
 	this.totalsOnly	= false;
 	
 	this.columns		= ["Project Title","Donor Agency"];
 	this.measures		= ["Commitments", "Disbursements"];
 	this.hierarchies	= ["Primary Sector"];
-	
-	this.fundingName		= repManagerParams.previewFundingTrn;
-	this.totalCostName		= repManagerParams.previewTotalCostTrn;
-	this.reportTotalsName	= repManagerParams.previewReportTotalsTrn;
-	
-	//this.monthNames		= ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
 	this.monthNames			= repManagerParams.monthNames;
-	this.quarterNames		= ["Q1","Q2","Q3","Q4"];
-	
-	this.reportTableId	= "reportTable";
-	this.reportTableClass	= "html2ReportTable inside";
-	
-	this.rowHeaderClass		= "reportHeader";
-	this.cellHeaderClass	= "reportHeader";
-	this.reportTotalsClass	= "reportTotals";
-	
-	this.hierarchyCellClass		= "hierarchyCell";
-	this.textCellClass			= "clsTableCellDataHtml";
-	
-	this.hierarchyLevelClasses	= ["firstLevel","secondLevel","thirdLevel", "fourthLevel", "fifthLevel"];
-	
-	this.numOfActivities	= 2;
-	this.rowsPerHierarchy	= 2;
 	
 }
 

@@ -276,7 +276,8 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Program Description", importable = true, fmPath = "/Activity Form/Program/Program Description")
 	@VersionableFieldTextEditor(fieldTitle = "Program Description")
 	protected String programDescription;
-	
+
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.TEAM, pickIdOnly = true)
 	@VersionableFieldSimple(fieldTitle = "Team")
 	protected AmpTeam team;
 	//@VersionableCollection(fieldTitle = "Members")
@@ -672,7 +673,7 @@ LoggerIdentifiable, Cloneable {
 	
 	protected Date modifiedDate;
 
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly=true)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly=true, importable = true)
 	@VersionableFieldSimple(fieldTitle = "Modified By")
 	protected AmpTeamMember modifiedBy;
 	

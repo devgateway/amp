@@ -760,20 +760,19 @@ public class InterchangeUtils {
 	}
 
 	/**
-	 * @param containerReq current request
-	 * @return true if request is valid to edit an activity
+	 * @param teamMember    team member
+	 * @param activityId    activity id
+	 * @return true if team member can edit the activity
 	 */
-	public static boolean isEditableActivity(ContainerRequest containerReq) {
-		Long id = getRequestId(containerReq);
+	public static boolean isEditableActivity(TeamMember teamMember, Long activityId) {
 		// we reuse the same approach as the one done by Project List EP
-		return id != null && ProjectList.getEditableActivityIds(TeamUtil.getCurrentMember()).contains(id);
+		return activityId != null && ProjectList.getEditableActivityIdsNoSession(teamMember).contains(activityId);
 	}
 
 	/**
 	 * @return true if add activity is allowed
 	 */
-	public static boolean addActivityAllowed() {
-		TeamMember tm = TeamUtil.getCurrentMember();
+	public static boolean addActivityAllowed(TeamMember tm) {
 		return tm != null && Boolean.TRUE.equals(tm.getAddActivity()) &&
 				(FeaturesUtil.isVisibleField("Add Activity Button") || FeaturesUtil.isVisibleField("Add SSC Button"));
 	}

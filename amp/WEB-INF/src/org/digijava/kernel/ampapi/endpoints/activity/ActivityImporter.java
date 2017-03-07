@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,10 +34,12 @@ import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
+import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -55,8 +58,10 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.Identifiable;
@@ -98,7 +103,7 @@ public class ActivityImporter {
 	private boolean isDraftFMEnabled;
 	private boolean isMultilingual;
 	private TranslationSettings trnSettings;
-	private AmpTeamMember currentMember;
+	private User currentUser;
 	private String sourceURL;
     private String endpointContextPath;
     // latest activity id in case there was attempt to update older version of an activity
@@ -107,7 +112,7 @@ public class ActivityImporter {
     protected void init(JsonBean newJson, boolean update, String endpointContextPath) {
 		this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
 		this.update = update;
-        this.currentMember = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+		this.currentUser = TeamUtil.getCurrentUser();
 		this.newJson = newJson;
 		this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
 		this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
@@ -169,7 +174,19 @@ public class ActivityImporter {
 		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields(true);
 		// get existing activity if this is an update request
 		Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
-		// check if any error were already detected in upper layers 
+
+		AmpTeamMember teamMember = getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
+		if (teamMember == null) {
+			return Collections.singletonList(
+					SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
+		}
+
+		List<ApiErrorMessage> messages = checkPermissions(update, ampActivityId, teamMember);
+		if (!messages.isEmpty()) {
+			return messages;
+		}
+
+		// check if any error were already detected in upper layers
 		Map<Integer, ApiErrorMessage> existingErrors = (TreeMap<Integer, ApiErrorMessage>) newJson.get(ActivityEPConstants.INVALID);
 		
 		if (existingErrors != null && existingErrors.size() > 0) {
@@ -203,7 +220,7 @@ public class ActivityImporter {
 				
 				newActivity = oldActivity;
 				// REFACTOR: we may no longer need to use old activity
-				oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, TeamUtil.getCurrentAmpTeamMember());
+				oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, teamMember);
 				oldActivity.setAmpId(newActivity.getAmpId());
 				oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup());
 				
@@ -222,7 +239,7 @@ public class ActivityImporter {
 				// save new activity
 				prepareToSave();
 				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
-						translations, currentMember, Boolean.TRUE.equals(newActivity.getDraft()), 
+						translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
 						PersistenceManager.getRequestDBSession(), false, false);
 				postProcess();
 			} else {
@@ -248,7 +265,55 @@ public class ActivityImporter {
 		
 		return new ArrayList<ApiErrorMessage>(errors.values());
 	}
-	
+
+	public AmpTeamMember getAmpTeamMember(Long modifiedBy) {
+		AmpTeamMember teamMember = null;
+		if (modifiedBy != null) {
+			teamMember = TeamMemberUtil.getAmpTeamMember(modifiedBy);
+		} else if (TeamMemberUtil.getLoggedInTeamMember() != null) {
+			teamMember = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+		}
+		return teamMember;
+	}
+
+	/**
+	 * Check if specified team member can add/edit the activity in question.
+	 *
+	 * @param update true for edit, false for add
+	 * @param ampActivityId activity id to check, used only for edit case
+	 * @param teamMember team member to check
+	 * @return list of errors, in case of success list will be empty
+	 */
+	private List<ApiErrorMessage> checkPermissions(boolean update, Long ampActivityId, AmpTeamMember teamMember) {
+		if (update) {
+			return checkEditPermissions(teamMember, ampActivityId);
+		} else {
+			return checkAddPermissions(teamMember);
+		}
+	}
+
+	/**
+	 * Check if team member can add activities.
+	 */
+	private List<ApiErrorMessage> checkAddPermissions(AmpTeamMember teamMember) {
+		if (!InterchangeUtils.addActivityAllowed(new TeamMember(teamMember))) {
+			return Collections.singletonList(SecurityErrors.NOT_ALLOWED.withDetails("Adding activity is not allowed"));
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
+	/**
+	 * Check if team member can edit the activity.
+	 */
+	private List<ApiErrorMessage> checkEditPermissions(AmpTeamMember ampTeamMember, Long activityId) {
+		if (!InterchangeUtils.isEditableActivity(new TeamMember(ampTeamMember), activityId)) {
+			return Collections.singletonList(SecurityErrors.NOT_ALLOWED.withDetails("No right to edit this activity"));
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
 	/**
 	 * Recursive method (through ->validateAndImport->validateSubElements->[this method]
 	 * that attempts to validate the incoming JSON and import its data. 
@@ -894,7 +959,7 @@ public class ActivityImporter {
 					}
 				} else if (editor == null) {
 					// create new
-					editor = DbUtil.createEditor(currentMember.getUser(), langCode, sourceURL, key, null, translation,
+					editor = DbUtil.createEditor(currentUser, langCode, sourceURL, key, null, translation,
                             "Activities API", TLSUtils.getRequest());
 					DbUtil.saveEditor(editor);
 				} else if (!editor.getBody().equals(translation)) {
@@ -934,7 +999,7 @@ public class ActivityImporter {
 	 */
 	protected void prepareToSave() {
         newActivity.setLastImportedAt(new Date());
-        newActivity.setLastImportedBy(currentMember.getUser());
+        newActivity.setLastImportedBy(currentUser);
 
 		newActivity.setChangeType(ChangeType.IMPORT.name());
 		// configure draft status on import only, since on update we'll change to draft based on RequiredValidator

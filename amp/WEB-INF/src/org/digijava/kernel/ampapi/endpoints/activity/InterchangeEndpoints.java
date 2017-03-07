@@ -16,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -66,8 +65,8 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@Path("fields")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getFields", ui = false)
-	public List<JsonBean> getAvailableFields() {
-		return FieldsEnumerator.getAllAvailableFields();
+	public List<APIField> getAvailableFields() {
+		return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields(AmpActivityFields.class);
 	}
 	
 	/**

@@ -6,11 +6,11 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Map;
 
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Validates if required data is provided
@@ -30,12 +30,12 @@ public class RequiredValidator extends InputValidator {
 	}
 	
 	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
-		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
+	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
+						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+		String fieldName = fieldDescription.getFieldName();
 		Object fieldValue = newFieldParent.get(fieldName);
-		String requiredStatus = fieldDescription.getString(ActivityEPConstants.REQUIRED);
-		boolean importable = Boolean.valueOf(fieldDescription.getString(ActivityEPConstants.IMPORTABLE));
+		String requiredStatus = fieldDescription.getRequired();
+		boolean importable = fieldDescription.isImportable();
 		// don't care if value has something
 		if (importable && fieldValue == null) {
 			if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {

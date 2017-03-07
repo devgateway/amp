@@ -153,11 +153,17 @@ public class ConfigHelper {
 			case T_TIMEOUT_CURRENCY_UPDATE:
 			case T_AUDIT_TRIAL_CLENAUP:
 			case T_STATIC_RANGE:
-				isValid = isValidNumber(Integer.class, ampGlobalSetting.getGlobalSettingsValue());
-				int integerValue = Integer.parseInt(ampGlobalSetting.getGlobalSettingsValue());
-				if ((T_INTEGER_NON_NEGATIVE.equals(ampGlobalSetting.getGlobalSettingsPossibleValues()) && isValid && integerValue < 0) ||
-						(T_INTEGER_POSITIVE.equals(ampGlobalSetting.getGlobalSettingsPossibleValues()) && isValid && integerValue <= 0)) {
+				try {
+					isValid = isValidNumber(Integer.class, ampGlobalSetting.getGlobalSettingsValue());
+				} catch (Exception e) { // value is not a valid value
 					isValid = false;
+				}
+				if (isValid) {
+					int integerValue = Integer.parseInt(ampGlobalSetting.getGlobalSettingsValue());
+					if ((T_INTEGER_NON_NEGATIVE.equals(ampGlobalSetting.getGlobalSettingsPossibleValues()) && integerValue < 0) ||
+							(T_INTEGER_POSITIVE.equals(ampGlobalSetting.getGlobalSettingsPossibleValues()) && integerValue <= 0)) {
+						isValid = false;
+					}
 				}
 				break;
 			case T_YEAR:

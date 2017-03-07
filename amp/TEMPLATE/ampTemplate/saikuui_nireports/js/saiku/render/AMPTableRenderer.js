@@ -423,7 +423,7 @@ function generateDataRows(page, options) {
 }
 
 function getCellDataStyleClass(contentMatrix, cleanValue, i, j) {
-	var styleClass = " class='row ";
+	var styleClass = " class='row " + contentMatrix[i][j].formatType + " ";
 		
 	if (contentMatrix[i][j].color) {
 		styleClass += this.contentMatrix[i][j].color + " ";
@@ -487,7 +487,7 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 			var dataValue = node.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
 			// Save isTotal flag.
 			if (dataValue === null || dataValue === undefined) {				
-				 dataValue = {displayedValue: ""};				
+				 dataValue = {displayedValue: "", formatType: "text"};				
 			}
 			if (dataValue.displayedValue === "" && i < level) {
 				dataValue.displayedValue = hierarchiesData[i].displayedValue;
@@ -497,6 +497,7 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 			}
 			
 			dataValue.isTotal = node.isTotal;
+			dataValue.formatType = this.headerMatrix[this.lastHeaderRow][i].formatType;
 			this.contentMatrix[this.currentContentIndexRow][i] = dataValue;
 			this.rowHierarchyLevel[this.currentContentIndexRow] = level;
 		}

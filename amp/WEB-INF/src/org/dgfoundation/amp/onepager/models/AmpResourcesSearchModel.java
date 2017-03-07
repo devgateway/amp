@@ -11,8 +11,10 @@ import java.util.Map;
 
 import javax.jcr.Node;
 
+import org.apache.wicket.Session;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
+import org.digijava.kernel.request.Site;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
@@ -35,21 +37,27 @@ public class AmpResourcesSearchModel extends
 	protected Collection<NodeWrapper> load() {
 		ArrayList<NodeWrapper> ret = new ArrayList<NodeWrapper>();
 		try {
-			AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
+			AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
 			javax.jcr.Session jcrWriteSession = DocumentManagerUtil.getWriteSession(SessionUtil.getCurrentServletRequest());
 
-			Node otherHomeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession , s.getCurrentMember());
+			Node otherHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, s.getCurrentMember());
 			Iterator<Node> nit = otherHomeNode.getNodes();
 			while (nit.hasNext()) {
 				Node n = (Node) nit.next();
 				NodeWrapper nw = new NodeWrapper(n);
-				if(input != null && input.length() >0){
-					if(nw.getTitle().equals(input)){
+				if (input != null && input.length() > 0) {
+					String title = nw.getTitle();
+					if (title == null) {
+						AmpAuthWebSession session = (AmpAuthWebSession) Session.get();
+						Site site = session.getSite();
+						title = nw.getTranslatedTitleByLang(site.getDefaultLanguage().getCode());
+					}
+					if (title != null && title.toLowerCase().startsWith(input.trim().toLowerCase())) {
 						ret.add(nw);
 					}
-				}else{
+				} else {
 					ret.add(nw);
-				}				
+				}
 			}
 			return ret;
 		} catch (Exception e) {

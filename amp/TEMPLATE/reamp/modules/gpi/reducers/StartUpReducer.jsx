@@ -10,6 +10,7 @@ export default function startUp(state: Object = defaultState, action: Object) {
         case STATE_TRANSLATIONS_LOADED:
             return Object.assign({}, state, {
                 translations: action.actionData.translations,
+                translate: action.actionData.translate
             });
         default:
             return state;

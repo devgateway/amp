@@ -6,14 +6,18 @@ import java.util.Set;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.struts.tiles.taglib.GetAttributeTag;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 public class AmpGPINiSurvey implements Serializable, Comparable<AmpGPINiSurvey> {
 	
 	private static final long serialVersionUID = -4889980304099658852L;
 	
 	private Long ampGPINiSurveyId;
+	
 	private Date surveyDate;
-	private AmpActivityVersion activity;
+	
+	private AmpOrgRole ampOrgRole;
+	
 	private Set<AmpGPINiSurveyResponse> responses;
 
 	public Long getAmpGPINiSurveyId() {
@@ -32,12 +36,12 @@ public class AmpGPINiSurvey implements Serializable, Comparable<AmpGPINiSurvey> 
 		this.surveyDate = surveyDate;
 	}
 
-	public AmpActivityVersion getActivity() {
-		return activity;
+	public AmpOrgRole getAmpOrgRole() {
+		return ampOrgRole;
 	}
 
-	public void setActivity(AmpActivityVersion activity) {
-		this.activity = activity;
+	public void setAmpOrgRole(AmpOrgRole ampOrgRole) {
+		this.ampOrgRole = ampOrgRole;
 	}
 
 	public Set<AmpGPINiSurveyResponse> getResponses() {
@@ -50,7 +54,7 @@ public class AmpGPINiSurvey implements Serializable, Comparable<AmpGPINiSurvey> 
 
 	@Override
 	public int compareTo(AmpGPINiSurvey o) {
-		return ComparatorUtils.nullLowComparator(null).compare(getActivity(), o.getActivity());
+		return ComparatorUtils.nullLowComparator(null).compare(getAmpOrgRole(), o.getAmpOrgRole());
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.Set;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
@@ -29,6 +30,9 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	private Set <AmpOrgRoleBudget> budgets;
 	@Interchangeable(fieldTitle="Additional Info", importable=true)
 	private String additionalInfo;
+	
+	@VersionableCollection(fieldTitle = "GPI Ni Survey")
+	private AmpGPINiSurvey gpiNiSurvey;
 	
 	
     public Float getPercentage() {
@@ -202,7 +206,17 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	public Set<AmpOrgRoleBudget> getBudgets() {
 		return budgets;
 	}
+	
 	public void setBudgets(Set<AmpOrgRoleBudget> budgets) {
 		this.budgets = budgets;
 	}
+	
+	public AmpGPINiSurvey getGpiNiSurvey() {
+		return gpiNiSurvey;
+	}
+	
+	public void setGpiNiSurvey(AmpGPINiSurvey gpiNiSurvey) {
+		this.gpiNiSurvey = gpiNiSurvey;
+	}
+	
 }	

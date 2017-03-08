@@ -55,8 +55,8 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	@Path("/aid-on-budget/{id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(id = "deleteAidOnBudgetById", ui = false)
-	public JsonBean deleteIndicatorById(@PathParam("id") long id) {
-		return GPIDataService.delete(id);
+	public JsonBean deleteAidOnBudgetById(@PathParam("id") long id) {
+		return GPIDataService.deleteAidOnBudgetById(id);
 	}
 	
 	 /**

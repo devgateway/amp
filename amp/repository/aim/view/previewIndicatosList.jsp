@@ -121,9 +121,7 @@
                                     <td width="20%">
                                         <module:display name="/Activity Form/M&E/ME Item/${fieldName} Value/${fieldName} Date"
                                                         parentModule="/Activity Form/M&E/ME Item/${fieldName} Value">
-                                            <span class="word_break"><fmt:formatDate type="date"
-                                                                                     value="${value.valueDate}"
-                                                                                     dateStyle="short"/></span>
+                                            <span class="word_break"><aim:formatDate value="${value.valueDate}"> </aim:formatDate></span>
                                         </module:display>
                                     </td>
                                 </tr>

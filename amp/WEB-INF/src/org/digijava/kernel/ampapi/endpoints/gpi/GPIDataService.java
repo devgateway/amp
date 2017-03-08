@@ -153,7 +153,7 @@ public class GPIDataService {
 		return results;
 	}
 
-	public static JsonBean delete(Long id) {
+	public static JsonBean deleteAidOnBudgetById(Long id) {
 		if(hasGPIDataRights() == false){
 			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
 		}

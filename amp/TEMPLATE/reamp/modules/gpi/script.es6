@@ -13,7 +13,7 @@ export const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);
 
 
-gpiStartUp().then(() => {
+gpiStartUp(store).then(() => {
 
 ReactDOM.render(
   

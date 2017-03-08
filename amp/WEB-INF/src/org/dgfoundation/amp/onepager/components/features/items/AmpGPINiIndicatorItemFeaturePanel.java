@@ -15,6 +15,7 @@ import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.digijava.module.aim.dbentity.AmpGPINiIndicator;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion;
+import org.digijava.module.aim.dbentity.AmpGPINiSurvey;
 
 /**
  * @author Viorel Chihai
@@ -24,7 +25,7 @@ public class AmpGPINiIndicatorItemFeaturePanel extends AmpFeaturePanel<AmpGPINiI
 
 	private static final long serialVersionUID = 3285773837906913394L;
 
-	public AmpGPINiIndicatorItemFeaturePanel(String id, String fmName, final IModel<AmpGPINiIndicator> indicator) {
+	public AmpGPINiIndicatorItemFeaturePanel(String id, String fmName, final IModel<AmpGPINiIndicator> indicator, final IModel<AmpGPINiSurvey> survey) {
 		super(id, indicator, fmName, true);
 
 		Label indicatorNameLabel = new TrnLabel("indicatorName", new PropertyModel<String>(indicator, "name"));
@@ -49,7 +50,7 @@ public class AmpGPINiIndicatorItemFeaturePanel extends AmpFeaturePanel<AmpGPINiI
 		ListView<AmpGPINiQuestion> list = new ListView<AmpGPINiQuestion>("listQuestions", listModel) {
 			@Override
 			protected void populateItem(final ListItem<AmpGPINiQuestion> item) {
-				item.add(new AmpGPINiQuestionItemFeaturePanel("questionItem", item.getModel()));
+				item.add(new AmpGPINiQuestionItemFeaturePanel("questionItem", item.getModel(), survey));
 			}
 		};
 		

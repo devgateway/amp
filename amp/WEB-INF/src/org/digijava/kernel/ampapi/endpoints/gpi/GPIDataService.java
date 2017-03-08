@@ -57,7 +57,7 @@ public class GPIDataService {
 		data.set(GPIEPConstants.FIELD_ID, aidOnBudget.getAmpGPINiAidOnBudgetId());
 		data.set(GPIEPConstants.FIELD_DONOR_ID, aidOnBudget.getDonor().getAmpOrgId());
 		data.set(GPIEPConstants.FIELD_CURRENCY_CODE, aidOnBudget.getCurrency().getCurrencyCode());
-		data.set(GPIEPConstants.FIELD_AMOUNT, aidOnBudget.getAmount());
+		data.set(GPIEPConstants.FIELD_AMOUNT, aidOnBudget.getAmount());		
 		data.set(GPIEPConstants.FIELD_DATE,
 				DateTimeUtil.formatDate(aidOnBudget.getIndicatorDate(), GPIEPConstants.DATE_FORMAT));
 		return data;

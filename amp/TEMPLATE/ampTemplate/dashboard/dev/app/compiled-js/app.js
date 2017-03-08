@@ -3773,70 +3773,67 @@ module.exports = BackboneDash.View.extend({
   },
 
   render: function() {
-	var self = this;
-	this.renderedPromise = new Deferred();
-    var renderOptions = {
-      views: this.chartViews,
-      model: this.model,
-      chart: this.chartEl,
-      util: util
-    };
-    // We need to be sure all dependencies have been loaded before processing each chart (specially the templates).
-    $.when(this._stateWait, this.app.filter.loaded, this.app.translator.promise).done(function() {
-    	self.$el.html(template(renderOptions));
-    	self.hideExportInPublicView();
-    	self.message = self.$('.dash-chart-diagnostic');
-    	self.chartContainer = self.$('.dash-chart-wrap');
-	
-	    if (self.model.get('adjtype') !== void 0) {  // this chart has adj settings
-	    	self.app.settings.load().done(_(function() {
-	    		self.rendered = true;
-	        var adjSettings = self.app.settings.get('0');  // id for Funding Type
+		var self = this;
+		this.renderedPromise = new Deferred();
+	    var renderOptions = {
+	      views: this.chartViews,
+	      model: this.model,
+	      chart: this.chartEl,
+	      util: util
+	    };
+	    this.$el.html(template(renderOptions));
+	    this.hideExportInPublicView();
+	    this.message = this.$('.dash-chart-diagnostic');
+	    this.chartContainer = this.$('.dash-chart-wrap');
+
+	    if (this.model.get('adjtype') !== void 0) {  // this chart has adj settings
+	    	this.app.settings.load().done(_(function() {
+	    	this.rendered = true;
+	        var adjSettings = this.app.settings.get('0');  // id for Funding Type
 	        if (!adjSettings) { 
-	        	self.app.report('Could not find Funding Type settings'); 
+	        	this.app.report('Could not find Funding Type settings'); 
 	        } else {
-	        	if (self.model.get('adjtype') === 'FAKE') {
-	        		self.model.set('adjtype', adjSettings.get('defaultId'));
+	        	if (this.model.get('adjtype') === 'FAKE') {
+	        		this.model.set('adjtype', adjSettings.get('defaultId'));
 	        	}
 	        }
-	        self.$('.ftype-options').html(
+	        this.$('.ftype-options').html(
 	          _(adjSettings.get('options')).map(function(opt) {
 	            return adjOptTemplate({
 	              opt: opt,
-	              current: (opt.id === self.model.get('adjtype'))
+	              current: (opt.id === this.model.get('adjtype'))
 	            });
-	          }, self)
+	          }, this)
 	        );
-	      }).bind(self));
+	      }).bind(this));
 	    } else {
-	    	self.rendered = true;
+	        this.rendered = true;
 	    }
 	    
 	    // For heatmaps add some extra combos.
-	    if (self.model.get('chartType') === 'fragmentation') {
-	    	var heatMapConfigs = self.model.get('heatmap_config').models[0];
+	    if (this.model.get('chartType') === 'fragmentation') {
+	    	var heatMapConfigs = this.model.get('heatmap_config').models[0];
 	    	var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function(item) {return item.name === self.model.get('name')});
-	    	self.$('.xaxis-options').html(
+	    	this.$('.xaxis-options').html(
 	    		_(thisHeatMapChart.xColumns).map(function(colId) {
 	    			var item = _.find(heatMapConfigs.get('columns'), function(item, i) { return i === colId});
 	    			var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
 	    			return adjOptTemplate({
 	    				opt: opt,
-	    	            current: (opt.id === self.model.get('xAxisColumn'))
+	    	            current: (opt.id === this.model.get('xAxisColumn'))
 	    	        });
-	    	    }, self)
+	    	    }, this)
 	    	);
 	    }
-	
-	    if (self._stateWait.state() !== 'pending') {
-	    	self.updateData();
+
+	    if (this._stateWait.state() !== 'pending') {
+	      this.updateData();
 	    }
-	
-	    self.app.translator.translateDOM(this.el);
-	    self.renderedPromise.resolve();
-    });
-    return this;
-  },
+
+	    this.app.translator.translateDOM(this.el);
+	    this.renderedPromise.resolve();
+	    return this;
+	  },
 
   updateData: function() {
 	if(this.app.rendered !== true) { return; }  
@@ -30058,7 +30055,7 @@ jQuery(function($){
 /* LOCAL AMP CODE -- THIS WILL DISAPPEAR */
 jQuery(function($){
 	$.datepicker.regional['tm'] = {
-		closeText: 'Halo',
+		closeText: 'Halo ona',
 		prevText: 'Uluk',
 		nextText: 'Tuir mai',
 		currentText: 'Ohin loron',

@@ -893,10 +893,10 @@ public class ExportActivityToWord extends Action {
         HttpSession session=request.getSession();
         ExportSectionHelper sectionHelper = new ExportSectionHelper(null)
                 .setWidth(100).setAlign("left");
+
         /**
          * Activity created by
          */
-
         if (FeaturesUtil.isVisibleField("Activity Created By")) {
             String actCreatedByString = identification.getActAthEmail() == null ? "(unknown)" :
                     identification.getActAthFirstName() + " "
@@ -905,6 +905,35 @@ public class ExportActivityToWord extends Action {
             ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
                     "Activity created by", null, null, true)
                     .addRowData(actCreatedByString);
+            sectionHelper.addRowData(rowData);
+        }
+
+        /**
+         * Activity created on
+         */
+        if (FeaturesUtil.isVisibleField("Activity Created On")) {
+            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
+                    "Activity created on", null, null, true).addRowData(identification
+                    .getCreatedDate());
+            sectionHelper.addRowData(rowData);
+        }
+
+        /**
+         * Activity Last Updated by
+         */
+        if (FeaturesUtil.isVisibleField("Activity Last Updated by")) {
+            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
+                    "Activity last updated by", null, null, true).addRowData(identification.getModifiedBy().getUser().getFirstNames() + " " + identification.getModifiedBy().getUser().getLastName());
+            sectionHelper.addRowData(rowData);
+        }
+
+        /**
+         * Activity updated on
+         */
+        if (FeaturesUtil.isVisibleField("Activity Updated On")) {
+            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
+                    "Activity updated on", null, null, true).addRowData(identification
+                    .getUpdatedDate());
             sectionHelper.addRowData(rowData);
         }
 
@@ -918,30 +947,16 @@ public class ExportActivityToWord extends Action {
             sectionHelper.addRowData(rowData);
 
             rowData = new ExportSectionHelperRowData(
+                    TranslatorWorker.translateText("Workspace manager"), null, null, true).addRowData(identification.getTeam().getTeamLead().getUser().getFirstNames() + " " + identification.getTeam().getTeamLead().getUser().getLastName());
+            sectionHelper.addRowData(rowData);
+
+            rowData = new ExportSectionHelperRowData(
                     TranslatorWorker.translateText("Computation"), null, null, true).addRowData(identification.getTeam().getComputation() ?
                     TranslatorWorker.translateText("Yes") :
                     TranslatorWorker.translateText("No"));
             sectionHelper.addRowData(rowData);
         }
 
-        /**
-         * Activity Last Updated by
-         */
-        if (FeaturesUtil.isVisibleField("Activity Last Updated by")) {
-            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Activity Last Updated by", null, null, true).addRowData(identification.getModifiedBy().getUser().getFirstNames() + " " + identification.getModifiedBy().getUser().getLastName());
-            sectionHelper.addRowData(rowData);
-        }
-
-        /**
-         * Activity updated on
-         */
-        if (FeaturesUtil.isVisibleField("Activity Updated On")) {
-            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Updated On", null, null, true).addRowData(identification
-                    .getUpdatedDate());
-            sectionHelper.addRowData(rowData);
-        }
 
         /**
          * Activity updated by
@@ -958,14 +973,6 @@ public class ExportActivityToWord extends Action {
             sectionHelper.addRowData(rowData);
         }
 
-        /**
-         * Activity created on
-         */
-        if (FeaturesUtil.isVisibleField("Activity Created On")) {
-            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Created On", null, null, true).addRowData(identification
-                    .getCreatedDate());
-        }
         retVal.add(createSectionTable(sectionHelper, request, ampContext));
         return retVal;
     }

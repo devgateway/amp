@@ -1366,27 +1366,18 @@ public class ExportActivityToPDF extends Action {
             }
 
             /**
-             * Activity created in workspace
+             *  Activity created on
              */
-            if (identification.getTeam()!= null){
-                columnName=TranslatorWorker.translateText("Created in workspace");
-                createGeneralInfoRow(mainLayout, columnName, identification.getTeam()
-                        + " "
-                        + TranslatorWorker.translateText(identification.getTeam().getAccessType()));
-
-
-                columnName=TranslatorWorker.translateText("Computation");
-                createGeneralInfoRow(mainLayout,columnName, Boolean.TRUE.equals(identification.getTeam().getComputation()) ?
-                        TranslatorWorker.translateText("Yes") :
-                        TranslatorWorker.translateText("No"));
-
+            if(FeaturesUtil.isVisibleField("Activity Created On")){
+                columnName=TranslatorWorker.translateText("Activity created on");
+                createGeneralInfoRow(mainLayout,columnName,identification.getCreatedDate());
             }
 
             /**
              * Activity Last Updated by
              */
             if (FeaturesUtil.isVisibleField("Activity Last Updated by")) {
-                columnName = TranslatorWorker.translateText("Activity Last Updated by");
+                columnName = TranslatorWorker.translateText("Activity last updated by");
                 createGeneralInfoRow(mainLayout, columnName, identification.getModifiedBy().getUser().getFirstNames() + " " + identification.getModifiedBy().getUser().getLastName());
             }
 
@@ -1394,8 +1385,32 @@ public class ExportActivityToPDF extends Action {
              * Activity updated on
              */
             if(FeaturesUtil.isVisibleField("Activity Updated On")){
-                columnName=TranslatorWorker.translateText("Updated On");
+                columnName=TranslatorWorker.translateText("Activity updated on");
                 createGeneralInfoRow(mainLayout,columnName,identification.getUpdatedDate());
+            }
+
+            if (identification.getTeam()!= null){
+                /**
+                 * Activity created in workspace
+                 */
+                columnName=TranslatorWorker.translateText("Created in workspace");
+                createGeneralInfoRow(mainLayout, columnName, identification.getTeam()
+                        + " "
+                        + TranslatorWorker.translateText(identification.getTeam().getAccessType()));
+
+                /**
+                 * Workspace manager
+                 */
+                if (FeaturesUtil.isVisibleField("Data Team Leader")) {
+                    columnName = TranslatorWorker.translateText("Workspace manager");
+                    createGeneralInfoRow(mainLayout, columnName, identification.getTeam().getTeamLead().getUser().getFirstNames() + " " + identification.getTeam().getTeamLead().getUser().getLastName());
+                }
+
+                columnName=TranslatorWorker.translateText("Computation");
+                createGeneralInfoRow(mainLayout,columnName, Boolean.TRUE.equals(identification.getTeam().getComputation()) ?
+                        TranslatorWorker.translateText("Yes") :
+                        TranslatorWorker.translateText("No"));
+
             }
 
             /**
@@ -1409,14 +1424,6 @@ public class ExportActivityToPDF extends Action {
                     output=user.getFirstNames()+" "+user.getLastName()+"-"+user.getEmail();
                 }
                 createGeneralInfoRow(mainLayout,columnName,output);
-            }
-
-            /**
-             *  Activity created on
-             */
-            if(FeaturesUtil.isVisibleField("Activity Created On")){
-                columnName=TranslatorWorker.translateText("Created On");
-                createGeneralInfoRow(mainLayout,columnName,identification.getCreatedDate());
             }
 
             if (FeaturesUtil.isVisibleModule("M & E")) {

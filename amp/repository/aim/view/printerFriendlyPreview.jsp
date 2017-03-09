@@ -3180,6 +3180,50 @@ body {background:none;}
 											<c:out value="${aimEditActivityForm.identification.actAthEmail}"/>
 										</td>
 									</tr>
+										<field:display name="Activity Created On" feature="Identification">
+											<logic:notEmpty name="aimEditActivityForm" property="identification.createdDate">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:activityCreatedOn">
+																Activity created on</digi:trn>
+														</b>								</td>
+													<td bgcolor="#ffffff">
+														<c:out value="${aimEditActivityForm.identification.createdDate}"/>										</td>
+												</tr>
+											</logic:notEmpty>
+										</field:display>
+
+										<field:display name="Activity Last Updated by" feature="Identification">
+											<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:activityLastUpdatedBy">Activity Last Updated by</digi:trn>
+														</b>
+													</td>
+													<td bgcolor="#ffffff">
+														<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
+														<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
+													</td>
+												</tr>
+											</logic:notEmpty>
+										</field:display>
+
+										<field:display name="Activity Updated On" feature="Identification">
+											<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:activityUpdatedOn">Activity updated on</digi:trn>
+														</b>
+													</td>
+													<td bgcolor="#ffffff">
+														<c:out value="${aimEditActivityForm.identification.updatedDate}"/>
+													</td>
+												</tr>
+											</logic:notEmpty>
+										</field:display>
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -3195,6 +3239,30 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
+										<logic:notEmpty name="aimEditActivityForm" property="identification.team">
+											<field:display name="Data Team Leader" feature="Identification">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:workspaceManager">
+																Workspace manager</digi:trn>
+														</b>
+													</td>
+
+													<td bgcolor="#ffffff">
+											<span class="word_break">
+												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
+											</span>
+														<span class="word_break">
+												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
+											</span>
+														<span class="word_break">
+												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
+											</span>
+													</td>
+												</tr>
+											</field:display>
+										</logic:notEmpty>
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -3210,35 +3278,6 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-									</field:display>
-									<field:display name="Activity Last Updated by" feature="Identification">
-										<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
-											<tr>
-												<td class="field_name" >
-													<b>
-														<digi:trn key="aim:activityLastUpdatedBy">Activity Last Updated by</digi:trn>
-													</b>
-												</td>
-												<td bgcolor="#ffffff">
-													<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
-													<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
-												</td>
-											</tr>
-										</logic:notEmpty>
-									</field:display>
-									<field:display name="Activity Updated On" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:activityUpdatedOn">Activity updated on</digi:trn>
-											</b>
-										</td>
-<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.identification.updatedDate}"/>
-										</td>
-									</tr>
-									</logic:notEmpty>
 									</field:display>
 									<field:display name="Activity Updated By" feature="Identification">
 									<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
@@ -3263,43 +3302,7 @@ body {background:none;}
 									</tr>
 									</logic:notEmpty>
 									</field:display>
-									<field:display name="Activity Created On" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="identification.createdDate">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:activityCreatedOn">
-										    Activity created on</digi:trn>
-											</b>								</td>
-<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.identification.createdDate}"/>										</td>
-									</tr>
-									</logic:notEmpty>
-									</field:display>
-									<logic:notEmpty name="aimEditActivityForm" property="identification.team">
-									<field:display name="Data Team Leader" feature="Identification">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:workspaceManager">
-												Workspace Manager</digi:trn>
-											</b>
-										</td>
 
-										<td bgcolor="#ffffff">
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
-											</span>
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
-											</span>
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
-											</span>
-										</td>
-									</tr>
-									</field:display>
-									</logic:notEmpty>
 
 									<logic:notEmpty name="aimEditActivityForm" property="structures">
 

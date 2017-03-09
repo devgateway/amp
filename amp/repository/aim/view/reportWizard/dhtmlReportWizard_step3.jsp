@@ -72,6 +72,10 @@
 										</digi:trn>
 									</font>
 									</span>
+									<span id="hierNotCompatibleWithAmountCols" style="color: red; visibility: hidden;">*
+										<digi:trn>The following hierarchies are not compatible with amount & MTEF columns:</digi:trn>
+										<span id="hierNotCompatibleWithAmountColsList"></span>
+									</span>
 								</td>
 							</tr>
 						

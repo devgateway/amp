@@ -452,6 +452,19 @@ NormalReportManager.prototype.checkHierarchies	= function () {
 	} else {
 		wMeasurelessHiers.style.visibility	= "hidden";
 	}
+
+	var warnAmtColumns = document.getElementById("hierNotCompatibleWithAmountCols");
+	var amtColumns = Array.prototype.slice.call(colItems)
+		.map(getColDbId)
+		.map(colIdToName)
+		.filter(isAmountColumn);
+	if (measurelessOnlyHiers.length > 0 && amtColumns.length > 0) {
+		warnAmtColumns.style.visibility	= "";
+		document.getElementById("hierNotCompatibleWithAmountColsList").innerHTML = measurelessOnlyHiers.map(TranslationManager.getTranslated).join();
+		retValue = false;
+	} else {
+		warnAmtColumns.style.visibility	= "hidden";
+	}
 	
 	if ( retValue ) {
 		this.enableTab(3);

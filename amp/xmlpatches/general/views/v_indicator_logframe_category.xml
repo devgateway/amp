@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../doc/xmlpatcher.xsd ">
+	<jira>AMP-14167</jira>
+	<keyword>Views</keyword>
+	<author>Alexandru Artimon</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres"><![CDATA[
+				CREATE OR REPLACE VIEW v_indicator_logframe_category AS
+				  SELECT v.amp_activity_id, acv.category_value::text logframe_category, v.indicator_connection_id, v.acv_id id, v.indicator_id
+				  FROM
+					(
+					  SELECT
+						con.activity_id amp_activity_id,
+						con.id          indicator_connection_id,
+						max(val.ind_val_category)     acv_id,
+						con.indicator_id
+					  FROM amp_indicator_connection con, amp_indicator_values val
+					  WHERE val.ind_connect_id = con.id
+							AND con.sub_clazz::text = 'a'::text
+					  GROUP BY con.activity_id, con.id
+					) v LEFT JOIN amp_category_value acv ON v.acv_id=acv.id;
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

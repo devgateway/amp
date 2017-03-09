@@ -14,52 +14,54 @@
             <c:forEach var="indicator" items="${aimEditActivityForm.indicators}">
                 <tr bgcolor="#f0f0f0">
                     <td width="40%">
-                        <field:display name="Indicator Name" feature="Activity">
+                        <module:display name="/Activity Form/M&E/Name"
+                                        parentModule="/Activity Form/M&E">
                             <digi:trn key="me:name">Name</digi:trn>
-                        </field:display>
+                        </module:display>
                     </td>
                     <td width="10%">
-                        <field:display name="Indicator Name" feature="Activity">
+                        <module:display name="/Activity Form/M&E/Code"
+                                        parentModule="/Activity Form/M&E">
                             <digi:trn key="me:code">Code</digi:trn>
-                        </field:display>
+                        </module:display>
                     </td>
                     <td width="10%">
-                        <field:display name="Logframe Category" feature="Activity">
+                        <module:display name="/Activity Form/M&E/ME Item/Logframe Category"
+                                        parentModule="/Activity Form/M&E/ME Item">
                             <digi:trn key="me:logFrame">LogFrame</digi:trn>
-                        </field:display>
+                        </module:display>
                     </td>
                     <td width="40%">
-                        <field:display name="Sectors" feature="Admin">
-                            <digi:trn key="me:sectors">Sectors</digi:trn>
-                        </field:display>
+                        <digi:trn key="me:sectors">Sectors</digi:trn>
                     </td>
                 </tr>
                 <tr>
                     <td width="40%" valign="top">
-                        <field:display name="Indicator Name" feature="Activity">
+                        <module:display name="/Activity Form/M&E/Name"
+                                        parentModule="/Activity Form/M&E">
                             <span class="word_break bold">${indicator.indicator.name}</span>
-                        </field:display>
+                        </module:display>
                     </td>
                     <td width="10%" valign="top">
-                        <field:display name="Indicator Name" feature="Activity">
+                        <module:display name="/Activity Form/M&E/Code"
+                                        parentModule="/Activity Form/M&E">
                             <span class="word_break bold">${indicator.indicator.code}</span>
-                        </field:display>
+                        </module:display>
                     </td>
                     <td width="10%" valign="top">
-                        <field:display name="Logframe Category" feature="Activity">
+                        <module:display name="/Activity Form/M&E/ME Item/Logframe Category"
+                                        parentModule="/Activity Form/M&E/ME Item">
                             <c:if test="${not empty indicator.values}">
                                 <span class="word_break bold">${indicator.logFrame}</span>
                             </c:if>
-                        </field:display>
+                        </module:display>
                     </td>
                     <td width="40%" valign="top">
-                        <field:display name="Sectors" feature="Admin">
-                            <c:forEach var="sector" items="${indicator.indicator.sectors}">
-                                <ul>
-                                    <li><span class="word_break bold">${sector.name}</span></li>
-                                </ul>
-                            </c:forEach>
-                        </field:display>
+                        <c:forEach var="sector" items="${indicator.indicator.sectors}">
+                            <ul>
+                                <li><span class="word_break bold">${sector.name}</span></li>
+                            </ul>
+                        </c:forEach>
                     </td>
                 </tr>
                 <tr>
@@ -98,28 +100,29 @@
                                                         <c:set var="fieldNameLabel">Target Value</c:set>
                                                     </c:when>
                                                     <c:when test="${value.valueType == 3}">
-                                                        <c:set var="fieldName">Revised Target</c:set>
+                                                        <c:set var="fieldName">Revised</c:set>
                                                         <c:set var="fieldNameLabel">Revised Target Value</c:set>
                                                     </c:when>
                                                 </c:choose>
 												<digi:trn key="me:${fieldNameLabel}">${fieldNameLabel}</digi:trn>
 												</span></td>
                                     <td width="10%">
-                                        <field:display name="Indicator ${fieldName} Value" feature="Activity">
+                                        <module:display name="/Activity Form/M&E/ME Item/${fieldName} Value/${fieldName} Value"
+                                                        parentModule="/Activity Form/M&E/ME Item/${fieldName} Value">
                                             <span class="word_break"><aim:formatNumber value="${value.value}"/></span>
-                                        </field:display>
+                                        </module:display>
                                     </td>
                                     <td width="50%">
-                                        <field:display name="Comments ${fieldName} Value" feature="Activity">
+                                        <module:display name="/Activity Form/M&E/ME Item/${fieldName} Value/${fieldName} Comments"
+                                                        parentModule="/Activity Form/M&E/ME Item/${fieldName} Value">
                                             <span class="word_break">${fn:escapeXml(value.comment)}</span>
-                                        </field:display>
+                                        </module:display>
                                     </td>
                                     <td width="20%">
-                                        <field:display name="Date ${fieldName} Value" feature="Activity">
-                                            <span class="word_break"><fmt:formatDate type="date"
-                                                                                     value="${value.valueDate}"
-                                                                                     dateStyle="short"/></span>
-                                        </field:display>
+                                        <module:display name="/Activity Form/M&E/ME Item/${fieldName} Value/${fieldName} Date"
+                                                        parentModule="/Activity Form/M&E/ME Item/${fieldName} Value">
+                                            <span class="word_break"><aim:formatDate value="${value.valueDate}"> </aim:formatDate></span>
+                                        </module:display>
                                     </td>
                                 </tr>
                                 <tr>

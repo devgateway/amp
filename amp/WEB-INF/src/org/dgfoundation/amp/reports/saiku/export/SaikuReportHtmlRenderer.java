@@ -128,10 +128,10 @@ public class SaikuReportHtmlRenderer {
 					continue;
 				}
 				
-				String cellClass = "data";
+				String cellClass = roc.getFormatType();
 				if (!report.spec.getColumnNames().contains(roc.originalColumnName)) {
 					cellClass = "measure";
-				}
+				} 
 				
 				tblData.append("<td class='" + cellClass + "'>");
 				tblData.append(getCellValue(reportContents, roc));

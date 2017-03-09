@@ -111,6 +111,7 @@ var Palette = Backbone.Model.extend({
     function makeTest(bucket) {
       return function(value) {
         return bucket && value >= bucket[0] && value <= bucket[1];
+        
       };
     }
 

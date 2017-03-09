@@ -273,9 +273,9 @@
 														<td class="inside">
 															<logic:iterate name="ampReports" property="hierarchies" id="hierarchy" >
                                 <li class="bullet">
-                                	<digi:trn key="aim:report:${hierarchy.column.columnName}">
+                                    <digi:colNameTrn>
                                 		${hierarchy.column.columnName}
-                                	</digi:trn>
+                                    </digi:colNameTrn>
                                 </li>
                               </logic:iterate>
 														</td>
@@ -284,14 +284,14 @@
                                 <logic:iterate name="ampReports" property="columns" id="column" indexId="index"  >
                                   <%if (index.intValue()%2==0){ %>
                                     <li class="bullet">                                      
-                                    	<digi:trn key="aim:report:${column.column.columnName}">
+                                    	<digi:colNameTrn>
                                       	<bean:write name="column" property="column.columnName" />
-                                    	</digi:trn>
+                                    	</digi:colNameTrn>
                                   <% } else {%>
                                     ,
-                                    	<digi:trn key="aim:report:${column.column.columnName}">
+                                    	<digi:colNameTrn>
                                       	<bean:write name="column" property="column.columnName" />
-                                    	</digi:trn>
+                                    	</digi:colNameTrn>
                                     </li>
                                   <%} %>
                                 </logic:iterate>

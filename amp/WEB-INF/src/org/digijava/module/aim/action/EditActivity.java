@@ -131,6 +131,7 @@ import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
@@ -308,6 +309,7 @@ public class EditActivity extends Action {
             }
         	Map scope=new HashMap();
         	scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
+        	PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY, activity);
         	gatePermEditAllowed = activity.canDo(GatePermConst.Actions.EDIT, scope);
         }
     }

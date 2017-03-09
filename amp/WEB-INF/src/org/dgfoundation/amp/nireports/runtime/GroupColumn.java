@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.nireports.NiUtils;
 
 /**
@@ -26,8 +27,8 @@ public class GroupColumn extends Column {
 	 * @param subColumns if null, then instance is mutable, else immutable
 	 * @param parent
 	 */
-	public GroupColumn(String name, List<Column> subColumns, GroupColumn parent, NiColSplitCell splitCell) {
-		super(name, parent, splitCell);
+	public GroupColumn(String name, LocalizableLabel label, List<Column> subColumns, GroupColumn parent, NiColSplitCell splitCell) {
+		super(name, label, parent, splitCell);
 		if (subColumns != null) {
 			subColumns.forEach(z -> NiUtils.failIf(z.getParent() != this, String.format("trying to add a foreing child %s to %s", z.getHierName(), this.getHierName())));
 		}

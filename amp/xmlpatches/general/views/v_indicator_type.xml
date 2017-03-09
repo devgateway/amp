@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../doc/xmlpatcher.xsd ">
+	<jira>AMP-25155</jira>
+	<keyword>Views</keyword>
+	<author>Octavian Ciubotaru</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres"><![CDATA[
+				CREATE OR REPLACE VIEW v_indicator_type AS
+				  SELECT
+					con.activity_id amp_activity_id,
+					CASE ind.type WHEN 'A' THEN 'Ascending'::varchar(255) WHEN 'D' THEN 'Descending'::varchar(255) ELSE null::varchar(255) END "type",
+					ind.indicator_id amp_me_indicator_id,
+					CASE ind.type WHEN 'A' THEN 1::bigint WHEN 'D' THEN 2::bigint ELSE 3::bigint END id
+				  FROM amp_indicator_connection con, amp_indicator ind
+				  WHERE ind.indicator_id = con.indicator_id AND con.sub_clazz::text = 'a'::text;
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

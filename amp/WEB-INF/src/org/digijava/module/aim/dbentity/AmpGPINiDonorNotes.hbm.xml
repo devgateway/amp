@@ -11,7 +11,8 @@
 			</generator>
 		</id>
 			
-		<property name="notes" column="notes" type="text" />			
+		<property name="notes" column="notes" type="text" />	
+		<property name="notesDate" column="notes_date" type="java.util.Date" />		
 		<many-to-one name="donor" column="donor_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"
 			not-null="true"  index="idx_amp_gpi_ni_donor_notes_donor_id"/>			

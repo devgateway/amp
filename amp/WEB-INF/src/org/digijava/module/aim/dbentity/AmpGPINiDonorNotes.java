@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class AmpGPINiDonorNotes implements Serializable {
 	
@@ -9,6 +10,7 @@ public class AmpGPINiDonorNotes implements Serializable {
 	private Long ampGPINiDonorNotesId;
 	private AmpOrganisation donor;
 	private String notes;
+	private Date notesDate;
 
 	public Long getAmpGPINiDonorNotesId() {
 		return ampGPINiDonorNotesId;
@@ -32,6 +34,14 @@ public class AmpGPINiDonorNotes implements Serializable {
 
 	public void setNotes(String notes) {
 		this.notes = notes;
+	}
+
+	public Date getNotesDate() {
+		return notesDate;
+	}
+
+	public void setNotesDate(Date notesDate) {
+		this.notesDate = notesDate;
 	}
 	
 }

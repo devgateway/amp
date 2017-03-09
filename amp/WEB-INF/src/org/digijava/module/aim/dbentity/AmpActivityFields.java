@@ -13,6 +13,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
@@ -147,7 +148,7 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY, pickIdOnly=true)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY)
-    protected AmpTeamMember lastImportedBy;
+	protected User lastImportedBy;
 
 	@Interchangeable(fieldTitle = "Equal Oportunity", importable = true, fmPath = "/Activity Form/Cross Cutting Issues/Equal Opportunity")
 	@VersionableFieldTextEditor(fieldTitle = "Equal Oportunity")
@@ -204,7 +205,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set<AmpActivityLocation> locations ;
 	
-	@Interchangeable(fieldTitle = "Org. Role", importable = true, fmPath = "/Activity Form/Organizations")
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.ORG_ROLE, importable = true, fmPath = "/Activity Form/Organizations")
 	@VersionableCollection(fieldTitle = "Org. Role")
 	@InterchangeableDiscriminator(discriminatorField = "orgRoleConfig.name", settings = {
 			@Interchangeable(fieldTitle = "Donor Organization", importable=true, discriminatorOption = Constants.FUNDING_AGENCY, fmPath = FMVisibility.ANY_FM + "/Activity Form/Organizations/Donor Organization|/Activity Form/Funding/Search Funding Organizations/Search Organizations",
@@ -275,7 +276,8 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Program Description", importable = true, fmPath = "/Activity Form/Program/Program Description")
 	@VersionableFieldTextEditor(fieldTitle = "Program Description")
 	protected String programDescription;
-	
+
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.TEAM, pickIdOnly = true)
 	@VersionableFieldSimple(fieldTitle = "Team")
 	protected AmpTeam team;
 	//@VersionableCollection(fieldTitle = "Members")
@@ -671,7 +673,7 @@ LoggerIdentifiable, Cloneable {
 	
 	protected Date modifiedDate;
 
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly=true)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly=true, importable = true)
 	@VersionableFieldSimple(fieldTitle = "Modified By")
 	protected AmpTeamMember modifiedBy;
 	
@@ -1606,11 +1608,11 @@ LoggerIdentifiable, Cloneable {
             this.lastImportedAt = lastImportedAt;
         }
 
-        public AmpTeamMember getLastImportedBy() {
+        public User getLastImportedBy() {
             return lastImportedBy;
         }
 
-        public void setLastImportedBy(AmpTeamMember lastImportedBy) {
+        public void setLastImportedBy(User lastImportedBy) {
             this.lastImportedBy = lastImportedBy;
         }
 

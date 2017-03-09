@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.DefaultValue;
@@ -34,11 +33,8 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.ampapi.endpoints.util.types.ListOfLongs;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.security.DgSecurityManager;
-import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
@@ -90,6 +86,11 @@ public class Security implements ErrorReportingEndpoint {
 	public JsonBean user() {
 		AmpApiToken apiToken = SecurityUtil.getTokenFromSession();
 
+		// if the user is logged in without a token, we generate one
+		if (apiToken == null) {
+			apiToken = SecurityUtil.generateToken();
+		}
+
 		boolean isAdmin ="yes".equals(httpRequest.getSession().getAttribute("ampAdmin"));
 		
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
@@ -100,19 +101,15 @@ public class Security implements ErrorReportingEndpoint {
 
 		// if the user is admin the he doesn't have a workspace assigned
 		if (!isAdmin) {
-			AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-			AmpTeam team = ampTeamMember.getAmpTeam();
-			teamName = team.getName();
-
-			// if the user is logged in without a token, we generate one
-			if (apiToken == null) {
-				// if no token is present in session we generate one
-				apiToken = SecurityUtil.generateToken();
+			if (tm != null) {
+				AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+				AmpTeam team = ampTeamMember.getAmpTeam();
+				teamName = team.getName();
+				addActivity = FeaturesUtil.isVisibleField("Add Activity Button")
+						&& Boolean.TRUE.equals(team.getAddActivity());
 			}
 
 			user = apiToken.getUser();
-
-			addActivity = FeaturesUtil.isVisibleField("Add Activity Button") && Boolean.TRUE.equals(team.getAddActivity());
 		} else {
 			user = UserUtils.getUser(tm.getMemberId());
 		}
@@ -209,6 +206,8 @@ public class Security implements ErrorReportingEndpoint {
 				ApiErrorResponse.reportForbiddenAccess(result);
 			}
 
+			invalidateExistingSession();
+
 			AmpTeamMember teamMember = getAmpTeamMember(username, workspaceId);
 			if (workspaceId != null && teamMember == null) {
 				ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_TEAM);
@@ -225,6 +224,13 @@ public class Security implements ErrorReportingEndpoint {
 			ApiErrorResponse.reportError(INTERNAL_SERVER_ERROR, SecurityErrors.INVALID_REQUEST);
 		}
 		return null;
+	}
+
+	public void invalidateExistingSession() {
+		HttpSession session = httpRequest.getSession(false);
+		if (session != null) {
+            session.invalidate();
+        }
 	}
 
 	private AmpTeamMember getAmpTeamMember(String username, Long workspaceId) {
@@ -245,9 +251,10 @@ public class Security implements ErrorReportingEndpoint {
 			session.setAttribute(Constants.CURRENT_MEMBER, teamMember.toTeamMember());
 		}
 		session.setAttribute(Constants.CURRENT_USER, user);
-		session.setAttribute("ampAdmin", user.isGlobalAdmin() ? "yes": "no");
+
+		session.setAttribute("ampAdmin", ApiAuthentication.isAdmin(user, TLSUtils.getRequest()) ? "yes": "no");
 	}
-	
+
 	/**
 	 * Provides a list of users information
 	 * <p>
@@ -353,7 +360,6 @@ public class Security implements ErrorReportingEndpoint {
 				.getContextPath());
 		JsonBean layout = SecurityService.getFooter(siteUrl,isAdmin);
 		if (tm != null) {
-			Site site = RequestUtils.getSite(TLSUtils.getRequest());
 			User u;
 			try {
 				u = UserUtils.getUserByEmail(tm.getEmail());
@@ -361,9 +367,8 @@ public class Security implements ErrorReportingEndpoint {
 				layout.set("email", null);
 				return layout;
 			}
-			Subject subject = UserUtils.getUserSubject(u);
 
-			boolean siteAdmin = DgSecurityManager.permitted(subject, site, ResourcePermission.INT_ADMIN);
+			boolean siteAdmin = ApiAuthentication.isAdmin(u, TLSUtils.getRequest());
 			layout.set("logged",true);
 			layout.set("email", u.getEmail());
 			layout.set("userId",u.getId());

@@ -83,7 +83,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 	/**
 	 * the dimensions whose {@link NiDimensionUsage} instances are ORed between themselves while filtering (please see the contract for {@link #shouldCollapseDimension(NiDimension)}
 	 */
-	Set<String> ORED_DIMENSIONS = new HashSet<>(Arrays.asList("locs", "sectors", "progs"));
+	Set<String> ORED_DIMENSIONS = new HashSet<>(Arrays.asList("locs", "sectors", "progs", "orgs"));
 	
 	Set<String> locationColumns = new HashSet<>(Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
 

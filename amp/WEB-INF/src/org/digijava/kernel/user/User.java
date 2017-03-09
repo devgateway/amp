@@ -43,9 +43,10 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.util.Identifiable;
 
 public class User
-    extends Entity implements Serializable, Comparable{
+    extends Entity implements Serializable, Comparable, Identifiable {
 
     private Subject subject;
     private String firstNames;
@@ -118,6 +119,11 @@ public class User
         this.active = false;
         //this.registeredThrough = Session.site;
 
+    }
+
+    @Override
+    public Object getIdentifier() {
+        return id;
     }
 
     /**

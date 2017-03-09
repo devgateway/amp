@@ -21,12 +21,16 @@ import javax.sql.DataSource;
 
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.request.Site;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.digijava.kernel.services.sync.model.ActivityChange;
 import org.digijava.kernel.services.sync.model.AmpOfflineChangelog;
 import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -45,8 +49,12 @@ public class SyncService implements InitializingBean {
     private static final String COLUMNS = "entity_name, entity_id, operation_name, operation_time";
 
     private static final RowMapper<AmpOfflineChangelog> ROW_MAPPER = new AmpOfflineChangelogMapper();
+
     private static final RowMapper<Long> ID_MAPPER = new SingleColumnRowMapper<>(Long.class);
     private static final RowMapper<Translation> TRANSLATION_ROW_MAPPER = new BeanPropertyRowMapper<>(Translation.class);
+
+    private static final BeanPropertyRowMapper<ActivityChange> ACTIVITY_CHANGE_ROW_MAPPER =
+            new BeanPropertyRowMapper<>(ActivityChange.class);
 
     private static class AmpOfflineChangelogMapper implements RowMapper<AmpOfflineChangelog> {
 
@@ -74,8 +82,8 @@ public class SyncService implements InitializingBean {
         updateDiffsForWsAndGs(systemDiff, lastSyncTime);
         updateDiffForWorkspaceMembers(systemDiff, userIds, lastSyncTime);
         updateDiffForUsers(systemDiff, userIds, lastSyncTime);
+        updateDiffsForActivities(systemDiff, userIds, lastSyncTime);
 
-        systemDiff.setActivities(new ListDiff<>(Collections.emptyList(), Collections.emptyList()));
         systemDiff.setTranslations(shouldSyncTranslations(lastSyncTime));
 
         return systemDiff;
@@ -96,6 +104,46 @@ public class SyncService implements InitializingBean {
                 "and operation_time > :lastSyncTime", args);
 
         return count > 0;
+    }
+
+    private void updateDiffsForActivities(SystemDiff systemDiff, List<Long> userIds, Date lastSyncTime) {
+        List<ActivityChange> changes = getActivityChanges(userIds, lastSyncTime);
+
+        List<String> deleted = new ArrayList<>();
+        List<String> modified = new ArrayList<>();
+
+        for (ActivityChange change : changes) {
+            if (change.getDeleted()) {
+                deleted.add(change.getAmpId());
+            } else {
+                modified.add(change.getAmpId());
+            }
+            systemDiff.updateTimestamp(change.getModifiedDate());
+        }
+
+        systemDiff.setActivities(new ListDiff<>(deleted, modified));
+    }
+
+    private List<ActivityChange> getActivityChanges(List<Long> userIds, Date lastSyncTime) {
+        List<AmpTeamMember> teamMembers = TeamMemberUtil.getTeamMembers(userIds);
+        String workspaceActivitiesQuery = WorkspaceFilter.getViewableActivitiesIdByTeams(teamMembers);
+
+        Map<String, Object> args = new HashMap<>();
+
+        String restriction;
+        if (lastSyncTime == null) {
+            restriction = "and deleted <> true";
+        } else {
+            restriction = "and modified_date > :lastSyncTime";
+            args.put("lastSyncTime", lastSyncTime);
+        }
+
+        String sql = String.format(
+                "select amp_id ampId, modified_date modifiedDate, deleted " +
+                "from amp_activity " +
+                "where amp_activity_id in (%s) %s", workspaceActivitiesQuery, restriction);
+
+        return jdbcTemplate.query(sql, args, ACTIVITY_CHANGE_ROW_MAPPER);
     }
 
     private void updateDiffForUsers(SystemDiff systemDiff, List<Long> userIds, Date lastSyncTime) {

@@ -79,6 +79,7 @@ public class InterchangeUtils {
 	/**map from discriminator title (i.e. "Primary Sectors") to actual field name (i.e. "Sectors")
 	 */
 	private static Map<String, String> discriminatorMap = new HashMap<String, String> ();
+	public static Map<String, List<String>> discriminatedFieldsByFieldTitle = new HashMap<>();
 	static {
 		addUnderscoredTitlesToMap(AmpActivityFields.class);
 	}
@@ -140,6 +141,9 @@ public class InterchangeUtils {
 						underscoreToTitleMap.put(underscorify(ants.fieldTitle()), ants.fieldTitle());
 						titleToUnderscoreMap.put(ants.fieldTitle(), underscorify(ants.fieldTitle()));
 						discriminatorMap.put(ants.fieldTitle(), ant.fieldTitle());
+						discriminatedFieldsByFieldTitle
+								.computeIfAbsent(ant.fieldTitle(), z -> new ArrayList())
+								.add(underscorify(ants.fieldTitle()));
 					}
 				}
 				if (!isSimpleType(getClassOfField(field)) && !ant.pickIdOnly())
@@ -756,20 +760,19 @@ public class InterchangeUtils {
 	}
 
 	/**
-	 * @param containerReq current request
-	 * @return true if request is valid to edit an activity
+	 * @param teamMember    team member
+	 * @param activityId    activity id
+	 * @return true if team member can edit the activity
 	 */
-	public static boolean isEditableActivity(ContainerRequest containerReq) {
-		Long id = getRequestId(containerReq);
+	public static boolean isEditableActivity(TeamMember teamMember, Long activityId) {
 		// we reuse the same approach as the one done by Project List EP
-		return id != null && ProjectList.getEditableActivityIds(TeamUtil.getCurrentMember()).contains(id);
+		return activityId != null && ProjectList.getEditableActivityIdsNoSession(teamMember).contains(activityId);
 	}
 
 	/**
 	 * @return true if add activity is allowed
 	 */
-	public static boolean addActivityAllowed() {
-		TeamMember tm = TeamUtil.getCurrentMember();
+	public static boolean addActivityAllowed(TeamMember tm) {
 		return tm != null && Boolean.TRUE.equals(tm.getAddActivity()) &&
 				(FeaturesUtil.isVisibleField("Add Activity Button") || FeaturesUtil.isVisibleField("Add SSC Button"));
 	}

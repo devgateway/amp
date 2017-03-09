@@ -3,6 +3,13 @@
  */
 package org.digijava.kernel.ampapi.endpoints.security;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
@@ -20,7 +27,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -114,11 +120,7 @@ public class SecurityService {
 			adminLink.set(EPConstants.LINK_NAME, EPConstants.ADMIN_LINK_NAME);
 			adminLink.set(EPConstants.LINK_URL, siteUrl + "/admin");
 
-			JsonBean userDevLink = new JsonBean();
-			userDevLink.set(EPConstants.LINK_NAME, EPConstants.USERDEV_LINK_NAME);
-			userDevLink.set(EPConstants.LINK_URL, siteUrl + "/admin/switchDevelopmentMode.do");
 			links.add(adminLink);
-			links.add(userDevLink);
 			jsonItem.set(EPConstants.ADMIN_LINKS, links);
 		}
 		return jsonItem;

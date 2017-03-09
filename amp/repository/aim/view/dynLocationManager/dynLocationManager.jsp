@@ -329,7 +329,14 @@
 		<input type="button" value="Cancel" class="buttonx" onclick="closeExportPanel();"/>
 	</form>
 </div>
-
+<div style="display: none;">
+	<form id="addNewLocationForm"  method="post" action="/aim/addNewLocation.do">
+		<input type="hidden" name="parentCatValId" />
+		<input type="hidden" name="parentLocationId" />
+		<input type="hidden" name="editedId" />		
+		<input type="hidden" name="event" />
+	</form> 
+</div>
 <div style="display: none;">
 	<form id="dynLocationManagerForm" action="/aim/dynLocationManager.do" method="post">
 		<input type="hidden" name="treeStructure" />

@@ -191,7 +191,6 @@ function validate(aidOnBudget){
 function extractErrors(errors, aidOnBudget) {
     var errorMessages = [];    
     if (errors) {  
-        console.log(errors)
         errors = Array.isArray(errors) ? errors : [errors];
         errors.forEach(function(error){
             

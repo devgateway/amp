@@ -9,7 +9,7 @@ import DatePicker from 'react-date-picker';
 import moment from 'moment';
 require('react-date-picker/base.css');
 require('react-date-picker/theme/hackerone.css');
-require('../styles/aid-on-budget.less');
+require('../styles/main.less');
 import * as aidOnBudgetActions from '../actions/AidOnBudgetActions.jsx';
 import * as startUp from '../actions/StartUpAction.jsx';
 export default class AidOnBudgetRow extends Component {

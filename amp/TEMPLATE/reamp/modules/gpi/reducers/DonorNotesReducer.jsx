@@ -18,7 +18,7 @@ const defaultState = {
 };
 
 export default function donorNotesReducer(state: Object = defaultState.data, action: Object) {    
-    switch (action.type) {
+    switch (action.type) {    
     case 'DONOR_NOTES_ON_SAVE':
         var data = {};
         if (action.data.errors && action.data.errors.length > 0) {
@@ -47,7 +47,16 @@ export default function donorNotesReducer(state: Object = defaultState.data, act
         data.cid = state.cid;
         data.paging = state.paging;
         data.sorting = state.sorting;
-        return data;   
+        return data;        
+    case 'DONOR_NOTES_DELETE_SUCCESS':
+        var data = {};
+        data.donorNotesList = [...state.donorNotesList.filter(donorNotes => donorNotes.id !== action.data.donorNotes.id || donorNotes.cid !== action.data.donorNotes.cid)]
+        data.errors = action.data.errors || [];
+        data.infoMessages = action.data.infoMessages || []; 
+        data.cid = state.cid;
+        data.paging = state.paging;
+        data.sorting = state.sorting;
+        return data;
     case 'ADD_DONOR_NOTES':
         var data = {};
         action.data.donorNotes.cid = state.cid;

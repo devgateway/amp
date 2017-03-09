@@ -230,7 +230,6 @@ public class GPIDataService {
 		
 		return donorNotes;
 	}
-	
 	private static JsonBean modelToJsonBean(AmpGPINiDonorNotes donorNotes) {
 		JsonBean data = new JsonBean();		
 		data.set(GPIEPConstants.FIELD_ID, donorNotes.getAmpGPINiDonorNotesId());
@@ -245,6 +244,15 @@ public class GPIDataService {
 		return validationErrors;
 
 	}
+	
+	public static JsonBean deleteDonorNotesById(Long id) {
+		
+		JsonBean result = new JsonBean();
+		GPIUtils.deleteDonorNotes(id);
+		result.set(GPIEPConstants.RESULT, GPIEPConstants.DELETED);
+		return result;
+	}
+	
 	
 
 }

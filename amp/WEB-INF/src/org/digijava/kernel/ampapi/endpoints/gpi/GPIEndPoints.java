@@ -75,7 +75,17 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	public List<JsonBean> saveAllDonorNotes(List<JsonBean> donorNotes) {
 		List<JsonBean> notes = new ArrayList<>();
 		return notes;
+	}	
+	
+	@DELETE
+	@Path("/donor-notes/{id}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "deleteDonorNotesId", ui = false)
+	public JsonBean deleteDonorNotesById(@PathParam("id") long id) {
+		return GPIDataService.deleteDonorNotesById(id);		
 	}
+	
+	
 	
 	 /**
      * {@inheritDoc}

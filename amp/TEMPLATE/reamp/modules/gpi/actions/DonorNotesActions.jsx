@@ -17,6 +17,10 @@ export function updateDonorNotes(donorNotes) {
     return {type: 'UPDATE_DONOR_NOTES', data: {donorNotes: donorNotes, errors: [], infoMessages:[]} } 
 }
 
+export function deleteSuccess(data){
+    return {type: 'DONOR_NOTES_DELETE_SUCCESS', data: data } 
+}
+
 export function save(data){    
     return function(dispatch) {
         const errors = Utils.validateDonorNotes(data);
@@ -105,4 +109,30 @@ export function saveAllEdits(donorNotesList) {
         });            
     };
     
+}
+
+export function deleteDonorNotes(data) {
+    return function(dispatch) {
+        if (data.id) {            
+            return donorNotesApi.deleteDonorNotes(data).then(response => {
+                const result = {infoMessages: [], errors: []};
+                result.donorNotes = data;
+                if(response.error){
+                    result.errors = [...Utils.extractErrors(response.error , result.donorNotes)]
+                } else{
+                    result.infoMessages = [{messageKey: 'amp.gpi-data-donor-notes:delete-successful'}]; 
+                }
+                
+                dispatch(deleteSuccess(result));
+            }).catch(error => {
+                throw(error);
+            });   
+        } else {
+            const result = {
+                    donorNotes: data,
+                    infoMessages: [{messageKey: 'amp.gpi-data-donor-notes:delete-successful'}]
+            };
+            dispatch(deleteSuccess(result));
+        }        
+    }; 
 }

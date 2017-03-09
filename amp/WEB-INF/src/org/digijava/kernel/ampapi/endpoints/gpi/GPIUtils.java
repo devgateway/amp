@@ -107,6 +107,17 @@ public class GPIUtils {
 		}
 	}
 	
+	public static void deleteDonorNotes(Long id) {
+		AmpGPINiDonorNotes donorNotes = GPIUtils.getDonorNotesById(id);
+		Session session = null;
+		try {
+			session = PersistenceManager.getSession();
+			session.delete(donorNotes);
+		} catch (Exception e) {
+			logger.error("Exception from delete: " + e.getMessage());
+		}
+	}
+	
 	public static boolean isValidSortColumn(String columnName) {
 		return GPIEPConstants.SORT_FIELDS.containsKey(columnName);
 	}

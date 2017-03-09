@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -57,6 +58,23 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	@ApiMethod(id = "deleteAidOnBudgetById", ui = false)
 	public JsonBean deleteAidOnBudgetById(@PathParam("id") long id) {
 		return GPIDataService.deleteAidOnBudgetById(id);
+	}
+	
+	@POST
+	@Path("/donor-notes")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "saveDonorNotes", ui = false)
+	public JsonBean saveDonorNotes(JsonBean donorNotes) {
+		return GPIDataService.saveDonorNotes(donorNotes);
+	}
+	
+	@POST
+	@Path("/donor-notes/save-all")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "saveAllDonorNotes", ui = false)
+	public List<JsonBean> saveAllDonorNotes(List<JsonBean> donorNotes) {
+		List<JsonBean> notes = new ArrayList<>();
+		return notes;
 	}
 	
 	 /**

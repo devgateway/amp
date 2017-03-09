@@ -12,6 +12,8 @@ public class GPIEPConstants {
 	public static final String FIELD_CURRENCY_CODE = "currencyCode";
 	public static final String FIELD_CURRENCY = "currency";
 	public static final String FIELD_ID = "id";
+	public static final String FIELD_NOTES = "notes";
+	public static final String FIELD_NOTES_DATE = "notesDate";
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
 	public static final String RESULT = "result";
 	public static final String DELETED = "deleted";
@@ -27,6 +29,10 @@ public class GPIEPConstants {
 	public static final String TOTAL_RECORDS = "totalRecords";
 	public static final String ORDER_ASC = "asc";
 	public static final String ORDER_DESC = "desc";
+	
+	
+	public static final String DEFAULT_DONOR_NOTES_SORT_COLUMN = "notesDate";
+	
 	public static final Map<String, String> SORT_FIELDS = Collections.unmodifiableMap(new HashMap<String, String>() {{
 	        put(FIELD_AMOUNT, "amount");
 	        put(FIELD_DATE, "indicatorDate");
@@ -34,4 +40,6 @@ public class GPIEPConstants {
 	        put(FIELD_CURRENCY, "currency.currencyName"); 
 	        put(DEFAULT_SORT_COLUMN, "ampGPINiAidOnBudgetId");
 	    }});	
+	
+		
 }

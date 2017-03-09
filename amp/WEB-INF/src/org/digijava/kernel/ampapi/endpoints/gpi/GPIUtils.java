@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
+import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.hibernate.Session;
 import org.hibernate.Query;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -25,9 +26,9 @@ public class GPIUtils {
 			String sort, Integer total) {
 		Integer maxResults = count == null ? GPIEPConstants.DEFAULT_RECORDS_PER_PAGE : count;
 		Integer startAt = (offset == null || offset > total) ? GPIEPConstants.DEFAULT_OFFSET : offset;
-		String orderByColumn = (orderBy == null || !isValidSortColumn(orderBy)) ? GPIEPConstants.DEFAULT_SORT_COLUMN
+		String orderByColumn = (orderBy == null || isValidSortColumn(orderBy) == false) ? GPIEPConstants.DEFAULT_SORT_COLUMN
 				: orderBy;
-		String sortOrder = (sort == null || !isValidSortOrder(sort)) ? GPIEPConstants.ORDER_DESC : sort;
+		String sortOrder = (sort == null || isValidSortOrder(sort) == false) ? GPIEPConstants.ORDER_DESC : sort;
 
 		Session dbSession = PersistenceManager.getSession();
 		String queryString = "select gpi from " + AmpGPINiAidOnBudget.class.getName() + " gpi order by "
@@ -38,21 +39,16 @@ public class GPIUtils {
 		return query.list();
 
 	}
+	
 
-	public static boolean isValidSortColumn(String columnName) {
-		return GPIEPConstants.SORT_FIELDS.containsKey(columnName);
-	}
-
-	public static boolean isValidSortOrder(String sort) {
-		return GPIEPConstants.ORDER_ASC.equals(sort) || GPIEPConstants.ORDER_DESC.equals(sort);
-	}
-
-	public static Integer getCount() {
+	public static Integer getAidOnBudgetCount() {
 		Session dbSession = PersistenceManager.getSession();
 		String queryString = "select count(*) from " + AmpGPINiAidOnBudget.class.getName();
 		Query query = dbSession.createQuery(queryString);
 		return (Integer) query.uniqueResult();
 	}
+	
+	
 
 	public static AmpOrganisation getOrganisation(Long id) {
 		return (AmpOrganisation) PersistenceManager.getSession().get(AmpOrganisation.class, id);
@@ -68,14 +64,14 @@ public class GPIUtils {
 		}
 	}
 
-	public static void delete(Long id) {
+	public static void deleteAidOnBudget(Long id) {
 		AmpGPINiAidOnBudget aidOnBudget = GPIUtils.getAidOnBudgetById(id);
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
 			session.delete(aidOnBudget);
 		} catch (Exception e) {
-			logger.error("Exception from saveAidOnBudget: " + e.getMessage());
+			logger.error("Exception from deleteAidOnBudget: " + e.getMessage());
 		}
 	}
 
@@ -95,6 +91,28 @@ public class GPIUtils {
 		}
 
 		return query.list().size() > 0;
+	}
+	
+	public static AmpGPINiDonorNotes getDonorNotesById(Long id) {
+		return (AmpGPINiDonorNotes) PersistenceManager.getSession().get(AmpGPINiDonorNotes.class, id);
+	}
+	
+	public static void saveDonorNotes(AmpGPINiDonorNotes donorNotes) {
+		Session session = null;
+		try {
+			session = PersistenceManager.getSession();
+			session.saveOrUpdate(donorNotes);
+		} catch (Exception e) {
+			logger.error("Exception from saveDonorNotes: " + e.getMessage());
+		}
+	}
+	
+	public static boolean isValidSortColumn(String columnName) {
+		return GPIEPConstants.SORT_FIELDS.containsKey(columnName);
+	}
+
+	public static boolean isValidSortOrder(String sort) {
+		return GPIEPConstants.ORDER_ASC.equals(sort) || GPIEPConstants.ORDER_DESC.equals(sort);
 	}
 	
 	

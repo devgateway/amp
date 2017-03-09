@@ -13,5 +13,16 @@ export const initialTranslations = {
         'amp.gpi-data-aid-on-budget:save-successful': 'Record was saved successfully',
         'amp.gpi-data-aid-on-budget:save-all': '__saved__ of __total__ rows were saved successfully.',
         'amp.gpi-data-aid-on-budget:server-errors-0001': 'Please select a unique date or donor agency.',
-        'amp.gpi-data-aid-on-budget:server-errors-0002': 'Unauthorised operation. Please login with an account that has GPI data entry rights.'
+        'amp.gpi-data-aid-on-budget:server-errors-0002': 'Unauthorised operation. Please login with an account that has GPI data entry rights.',
+        'amp.gpi-data-donor-notes:title': 'Indicator 1',
+        'amp.gpi-data-donor-notes:date': 'Date',
+        'amp.gpi-data-donor-notes:donor-agency': 'Donor Agency',
+        'amp.gpi-data-donor-notes:notes': 'Notes',
+        'amp.gpi-data-donor-notes:action': 'Action',        
+        'amp.gpi-data-donor-notes:validation-donor-agency-required': 'Donor Agency is required',
+        'amp.gpi-data-donor-notes:validation-date-required': 'Date is required',
+        'amp.gpi-data-donor-notes:delete-successful': 'Record deleted successfully',
+        'amp.gpi-data-donor-notes:save-successful': 'Record was saved successfully',
+        'amp.gpi-data-donor-notes:save-all': '__saved__ of __total__ rows were saved successfully.',        
+        'amp.gpi-data-donor-notes:validation-notes-required': 'Notes is required'
 };

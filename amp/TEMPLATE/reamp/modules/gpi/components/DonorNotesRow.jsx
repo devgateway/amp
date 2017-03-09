@@ -1,0 +1,175 @@
+import React, { Component, PropTypes } from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import { FormControl } from 'react-bootstrap';
+import { Popover } from 'react-bootstrap';
+import { OverlayTrigger } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import DatePicker from 'react-date-picker';
+import moment from 'moment';
+require('react-date-picker/base.css');
+require('react-date-picker/theme/hackerone.css');
+require('../styles/main.less');
+import * as donorNotesActions from '../actions/DonorNotesActions.jsx';
+import * as startUp from '../actions/StartUpAction.jsx';
+export default class DonorNotesRow extends Component {
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+                donorNotes: this.props.donorNotes,                                
+                showDatePicker:false,
+                displayDateFormat: 'DD/MMM/YYYY',
+                endPointDateFormat: 'YYYY-MM-DD'
+        };
+        this.toggleEdit = this.toggleEdit.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.save = this.save.bind(this);
+        this.toggleDatePicker =  this.toggleDatePicker.bind(this);
+        this.onDateChange = this.onDateChange.bind(this);  
+        this.deleteDonorNotes = this.deleteDonorNotes.bind(this); 
+    }
+    
+    toggleEdit() {
+        const donorNotes = this.state.donorNotes;
+        donorNotes.isEditing = true;
+        this.setState({donorNotes: donorNotes});
+        this.props.actions.updateDonorNotes(donorNotes);        
+    }
+    
+    toggleDatePicker(){
+        this.setState({showDatePicker: !this.state.showDatePicker});
+    }
+    
+    onChange(event){
+        const errors = [];
+        const field = event.target.name;
+        const value = event.target.value;        
+        const donorNotes = this.state.donorNotes;        
+        donorNotes[field] = event.target.value;
+        this.setState({donorNotes: donorNotes});
+        this.props.actions.updateDonorNotes(donorNotes);               
+    }    
+    
+    onDateChange(date){
+        if(date){
+            const donorNotes = this.state.donorNotes; 
+            const formartedDate = moment(date, this.state.displayDateFormat).format(this.state.endPointDateFormat);
+            donorNotes['notesDate'] = formartedDate;
+            this.setState({donorNotes: donorNotes});
+            this.props.actions.updateDonorNotes(donorNotes); 
+            this.toggleDatePicker(); 
+        }        
+    }
+    
+    toDateDisplayFormat(date) {
+        var result;
+        if(date) {
+            result = moment(date, this.state.endPointDateFormat).format(this.state.displayDateFormat);           
+        }  
+        
+        return result        
+    }
+    
+    save() {
+        this.props.actions.save(this.state.donorNotes);                
+    }
+    
+    deleteDonorNotes() {
+        if(confirm("This will delete the row. Do you want to proceed?")){
+            this.props.actions.deleteDonorNotes(this.state.donorNotes); 
+        }        
+    }
+    
+    getOrgName(id) {
+        var org = this.props.orgList.filter(org => org.id === id)[0];
+        return org ? org.name : '';
+    }
+     
+    getErrors(){
+        const errors = this.props.errors.filter(error => {return (error.id && error.id === this.state.donorNotes.id) || (error.cid && error.cid === this.state.donorNotes.cid)})
+        if(errors.length > 0){
+            const errorPopover = (
+                    <Popover
+                    id="error-popover"
+                    title="Errors">
+                    {errors.map(error => 
+                    <span>{this.props.translations[error.messageKey]}<br/></span>
+                    )} 
+                    </Popover>
+            );
+            return (<OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={errorPopover}>
+                    <span className="glyphicon glyphicon-exclamation-sign error-color">                  
+                    </span>
+                    </OverlayTrigger>                
+            );
+            
+        }
+        
+    }
+    
+    render() {        
+        if (this.props.donorNotes.isEditing) {         
+            return ( <tr>
+                    <td className="error-column">
+                    {this.getErrors()}      
+                    </td>
+                    <td scope="row" >                                   
+                    <div className="date-container">
+                    <span className="date-input-container"><input type="text" value={this.toDateDisplayFormat(this.state.donorNotes.notesDate)} readOnly className="date-input" />    
+                    </span><span className = "datepicker-toggle glyphicon glyphicon-calendar " onClick={this.toggleDatePicker}> </span></div>
+                    <div className="datepicker-container"> 
+                    {this.state.showDatePicker &&
+                        <DatePicker 
+                        hideFooter={true}
+                        ref="date" 
+                        locale={'en'} 
+                        date={this.toDateDisplayFormat(this.state.donorNotes.notesDate)} 
+                        onChange={this.onDateChange} 
+                        expanded={false}
+                        dateFormat={this.state.displayDateFormat}
+                        />  
+                    }
+                    </div>
+                    </td>
+                    <td>
+                    
+                    <select name="donorId" className="form-control" value={this.state.donorNotes.donorId} onChange={this.onChange}>
+                    <option value="">Select Donor</option>
+                    {this.props.orgList.map(org => 
+                    <option value={org.id}  key={org.id} >{org.name}</option>
+                    )}
+                    </select> 
+                    
+                    </td> 
+                    <td>
+                    <textarea name="notes" className="form-control" onChange={this.onChange}>{this.state.donorNotes.notes}</textarea>
+                    </td>
+                    <td> <span className="glyphicon glyphicon-ok-circle success-color" onClick={this.save}> </span><span className="glyphicon glyphicon-remove" onClick={this.deleteDonorNotes}></span></td>                      
+            </tr>)
+            
+        }
+        
+        return (
+                <tr>
+                <td></td>
+                <th scope="row">{this.toDateDisplayFormat(this.state.donorNotes.notesDate)}</th>
+                <td>{this.getOrgName(this.state.donorNotes.donorId)}</td>
+                <td className="notes-column">{this.state.donorNotes.notes}</td>
+                <td><span className="glyphicon glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-remove" onClick={this.deleteDonorNotes}></span></td>                
+                </tr>
+                
+        );
+    }
+}
+
+function mapStateToProps(state, ownProps) {     
+    return {
+        translations: state.startUp.translations     
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {actions: bindActionCreators(donorNotesActions, dispatch)}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DonorNotesRow);

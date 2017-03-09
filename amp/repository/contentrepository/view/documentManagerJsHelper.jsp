@@ -1461,7 +1461,6 @@ function validateAddDocument() {
 			msg = msg + "${translation_url_format}"+'<br>' ;
 		}
 	}
-	
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
 	if (msg.length == 0) {
 			return true;

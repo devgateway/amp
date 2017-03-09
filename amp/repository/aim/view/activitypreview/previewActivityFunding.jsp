@@ -144,6 +144,21 @@
 																	</tr>
 																</logic:notEmpty>
 																
+																<logic:notEmpty name="funding" property="concessionalityLevel">
+																	<tr>
+																		<td align="left" width="150"><a
+																			title='<digi:trn jsFriendly="true">Concessionality Leve</digi:trn>'>
+																		<digi:trn>Concessionality Level</digi:trn>
+																		</a></td>
+																		<td width="1">:</td>
+																		<td align="left">
+																			<logic:notEmpty name="funding" property="concessionalityLevel">
+																				<b><digi:trn><bean:write name="funding" property="concessionalityLevel.value"/></digi:trn></b>
+																			</logic:notEmpty>
+																		</td>
+																	</tr>
+																</logic:notEmpty>
+																
 																<logic:notEmpty name="funding" property="ratificationDate">
 																<tr>
 																	<td align="left" width="150">

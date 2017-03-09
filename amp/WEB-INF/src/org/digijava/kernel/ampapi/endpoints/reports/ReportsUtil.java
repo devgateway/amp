@@ -281,6 +281,7 @@ public class ReportsUtil {
 			if (Boolean.TRUE.equals(formParams.get(EPConstants.IS_CUSTOM))) { 
 				String reportName = formParams.getString(EPConstants.REPORT_NAME);
 				spec = EndpointUtils.getReportSpecification(formParams, reportName);
+				SettingsUtils.applySettings(spec, formParams, true);
 			} else {
 				if (Boolean.TRUE.equals(formParams.get(EPConstants.IS_DYNAMIC))) {
 					try {

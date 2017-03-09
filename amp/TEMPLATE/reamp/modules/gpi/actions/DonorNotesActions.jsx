@@ -13,6 +13,10 @@ export function addNewDonorNotes() {
     return {type: 'ADD_DONOR_NOTES', data: {donorNotes: {isEditing: true}} } 
 }
 
+export function updateDonorNotes(donorNotes) {
+    return {type: 'UPDATE_DONOR_NOTES', data: {donorNotes: donorNotes, errors: [], infoMessages:[]} } 
+}
+
 export function save(data){    
     return function(dispatch) {
         const errors = Utils.validateDonorNotes(data);

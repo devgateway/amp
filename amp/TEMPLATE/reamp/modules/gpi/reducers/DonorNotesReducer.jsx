@@ -18,7 +18,7 @@ const defaultState = {
 };
 
 export default function donorNotesReducer(state: Object = defaultState.data, action: Object) {    
-    switch (action.type) {   
+    switch (action.type) {
     case 'DONOR_NOTES_ON_SAVE':
         var data = {};
         if (action.data.errors && action.data.errors.length > 0) {
@@ -26,6 +26,22 @@ export default function donorNotesReducer(state: Object = defaultState.data, act
         } else {
             data.donorNotesList = state.donorNotesList.map(function(donorNotes) { return ((donorNotes.id && donorNotes.id === action.data.donorNotes.id) || (donorNotes.cid && donorNotes.cid === action.data.donorNotes.cid)) ? Object.assign({}, action.data.donorNotes) : donorNotes; });
         }   
+        data.errors = action.data.errors || [];
+        data.infoMessages = action.data.infoMessages || []; 
+        data.cid = state.cid;
+        data.paging = state.paging;
+        data.sorting = state.sorting;
+        return data;
+    case 'DONOR_NOTES_ON_SAVE_ALL_EDITS':        
+        var data = {};
+        data.donorNotesList = state.donorNotesList.map(function(donorNotes) { 
+            var found = action.data.donorNotesList.find(obj =>{ obj
+                return ((donorNotes.id && donorNotes.id === obj.id) || (donorNotes.cid && donorNotes.cid === obj.cid))     
+            })
+            
+            return found ? Object.assign({}, found) : donorNotes;            
+        });
+        
         data.errors = action.data.errors || [];
         data.infoMessages = action.data.infoMessages || []; 
         data.cid = state.cid;
@@ -41,7 +57,16 @@ export default function donorNotesReducer(state: Object = defaultState.data, act
         data.cid = ++state.cid;
         data.paging = state.paging;
         data.sorting = state.sorting;
-        return data;    
+        return data; 
+    case 'UPDATE_DONOR_NOTES':
+        var data = {};
+        data.donorNotesList =  state.donorNotesList.map(function(donorNotes) { return ((donorNotes.id && donorNotes.id === action.data.donorNotes.id) || (donorNotes.cid && donorNotes.cid === action.data.donorNotes.cid)) ? Object.assign({}, action.data.donorNotes) : donorNotes; });     
+        data.errors = action.data.errors || [];
+        data.infoMessages = action.data.infoMessages || []; 
+        data.cid = state.cid; 
+        data.paging = state.paging;
+        data.sorting = state.sorting;
+        return data;   
     default:            
         return state;
     }

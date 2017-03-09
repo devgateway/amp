@@ -41,5 +41,9 @@ public class GPIEPConstants {
 	        put(DEFAULT_SORT_COLUMN, "ampGPINiAidOnBudgetId");
 	    }});	
 	
-		
+	public static final Map<String, String> DONOR_NOTES_SORT_FIELDS = Collections.unmodifiableMap(new HashMap<String, String>() {{
+        put(FIELD_NOTES_DATE, "notesDate");
+        put(FIELD_NOTES, "notes");
+        
+    }});	
 }

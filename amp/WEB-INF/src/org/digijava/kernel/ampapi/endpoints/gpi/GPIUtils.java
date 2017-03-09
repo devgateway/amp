@@ -107,6 +107,31 @@ public class GPIUtils {
 		}
 	}
 	
+	public static Integer getDonorNotesCount() {
+		Session dbSession = PersistenceManager.getSession();
+		String queryString = "select count(*) from " + AmpGPINiDonorNotes.class.getName();
+		Query query = dbSession.createQuery(queryString);
+		return (Integer) query.uniqueResult();
+	}
+	
+	public static List<AmpGPINiDonorNotes> getDonorNotesList(Integer offset, Integer count, String orderBy,
+			String sort, Integer total) {
+		Integer maxResults = count == null ? GPIEPConstants.DEFAULT_RECORDS_PER_PAGE : count;
+		Integer startAt = (offset == null || offset > total) ? GPIEPConstants.DEFAULT_OFFSET : offset;
+		String orderByColumn = (orderBy == null) ? GPIEPConstants.DEFAULT_DONOR_NOTES_SORT_COLUMN
+				: orderBy;
+		String sortOrder = (sort == null) ? GPIEPConstants.ORDER_DESC : sort;
+
+		Session dbSession = PersistenceManager.getSession();
+		String queryString = "select donorNotes from " + AmpGPINiDonorNotes.class.getName() + " donorNotes order by "
+				+ GPIEPConstants.DONOR_NOTES_SORT_FIELDS.get(orderByColumn) + " " + sortOrder;
+		Query query = dbSession.createQuery(queryString);
+		query.setFirstResult(startAt);
+		query.setMaxResults(maxResults);
+		return query.list();
+
+	}	
+		
 	public static void deleteDonorNotes(Long id) {
 		AmpGPINiDonorNotes donorNotes = GPIUtils.getDonorNotesById(id);
 		Session session = null;

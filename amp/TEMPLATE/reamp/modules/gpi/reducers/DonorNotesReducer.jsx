@@ -18,7 +18,11 @@ const defaultState = {
 };
 
 export default function donorNotesReducer(state: Object = defaultState.data, action: Object) {    
-    switch (action.type) {    
+    switch (action.type) {
+    case 'LOAD_DONOR_NOTES_LIST_SUCCESS':
+        const data = Object.assign({}, action.data)
+        data.cid = state.cid;               
+        return data;
     case 'DONOR_NOTES_ON_SAVE':
         var data = {};
         if (action.data.errors && action.data.errors.length > 0) {

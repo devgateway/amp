@@ -244,6 +244,21 @@ public class GPIDataService {
 		return validationErrors;
 
 	}
+
+	public static JsonBean getDonorNotesList(Integer offset, Integer count, String orderBy, String sort) {
+		Integer total = GPIUtils.getDonorNotesCount();
+		List<AmpGPINiDonorNotes>  notesList = GPIUtils.getDonorNotesList(offset, count, orderBy, sort, total);
+		JsonBean data = new JsonBean();
+		List<JsonBean> lst = new ArrayList<>();
+		
+		for (AmpGPINiDonorNotes notes : notesList) {
+			lst.add(modelToJsonBean(notes));
+		}
+		
+		data.set("data", lst);
+		data.set(GPIEPConstants.TOTAL_RECORDS, total);
+		return data;
+	}
 	
 	public static JsonBean deleteDonorNotesById(Long id) {
 		

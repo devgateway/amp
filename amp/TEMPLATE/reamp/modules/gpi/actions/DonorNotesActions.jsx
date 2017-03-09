@@ -1,6 +1,14 @@
 import donorNotesApi from '../api/DonorNotesApi.jsx';
 import Utils from '../common/utils.jsx';
 
+export function getDonorNotesListSuccess(data){
+    return {type: 'LOAD_DONOR_NOTES_LIST_SUCCESS', data: data }
+}
+
+export function deleteSuccess(data){
+    return {type: 'DONOR_NOTES_DELETE_SUCCESS', data: data } 
+}
+
 export function onSave(data){
     return {type: 'DONOR_NOTES_ON_SAVE', data: data } 
 }
@@ -17,8 +25,32 @@ export function updateDonorNotes(donorNotes) {
     return {type: 'UPDATE_DONOR_NOTES', data: {donorNotes: donorNotes, errors: [], infoMessages:[]} } 
 }
 
-export function deleteSuccess(data){
-    return {type: 'DONOR_NOTES_DELETE_SUCCESS', data: data } 
+
+export function loadDonorNotesList(data) {
+    return function(dispatch) {
+        return donorNotesApi.getDonorNotesList(data).then(response => {
+            
+            var results = {
+                    donorNotesList: [],                    
+                    errors: [],
+                    infoMessages: []                    
+            };
+            
+            results.paging = data.paging;
+            results.sorting = data.sorting;             
+            if (response.error) {
+                results.errors = Utils.extractErrors(response.error);                
+            } else {
+                results.donorNotesList = response.data;
+                results.paging.totalRecords = response.totalRecords;
+                results.paging.totalPageCount = Math.ceil(results.paging.totalRecords / results.paging.recordsPerPage);                
+            }  
+            
+            dispatch(getDonorNotesListSuccess(results));
+        }).catch(error => {
+            throw(error);
+        });
+    };
 }
 
 export function save(data){    
@@ -57,6 +89,32 @@ export function save(data){
         });            
         
     };
+}
+
+export function deleteDonorNotes(data) {
+    return function(dispatch) {
+        if (data.id) {            
+            return donorNotesApi.deleteDonorNotes(data).then(response => {
+                const result = {infoMessages: [], errors: []};
+                result.donorNotes = data;
+                if(response.error){
+                    result.errors = [...Utils.extractErrors(response.error , result.donorNotes)]
+                } else{
+                    result.infoMessages = [{messageKey: 'amp.gpi-data-donor-notes:delete-successful'}]; 
+                }
+                
+                dispatch(deleteSuccess(result));
+            }).catch(error => {
+                throw(error);
+            });   
+        } else {
+            const result = {
+                    donorNotes: data,
+                    infoMessages: [{messageKey: 'amp.gpi-data-donor-notes:delete-successful'}]
+            };
+            dispatch(deleteSuccess(result));
+        }        
+    }; 
 }
 
 export function saveAllEdits(donorNotesList) {
@@ -109,30 +167,4 @@ export function saveAllEdits(donorNotesList) {
         });            
     };
     
-}
-
-export function deleteDonorNotes(data) {
-    return function(dispatch) {
-        if (data.id) {            
-            return donorNotesApi.deleteDonorNotes(data).then(response => {
-                const result = {infoMessages: [], errors: []};
-                result.donorNotes = data;
-                if(response.error){
-                    result.errors = [...Utils.extractErrors(response.error , result.donorNotes)]
-                } else{
-                    result.infoMessages = [{messageKey: 'amp.gpi-data-donor-notes:delete-successful'}]; 
-                }
-                
-                dispatch(deleteSuccess(result));
-            }).catch(error => {
-                throw(error);
-            });   
-        } else {
-            const result = {
-                    donorNotes: data,
-                    infoMessages: [{messageKey: 'amp.gpi-data-donor-notes:delete-successful'}]
-            };
-            dispatch(deleteSuccess(result));
-        }        
-    }; 
 }

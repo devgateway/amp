@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -51,8 +52,8 @@ public class InputValidatorProcessor {
 	 * @param errors 			map to store errors 
 	 * @return true if the current field passes the full validation chain
 	 */
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newParent, Map<String, Object> oldParent, 
-			JsonBean fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors) {
+	public boolean isValid(ActivityImporter importer, Map<String, Object> newParent, Map<String, Object> oldParent,
+						   APIField fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors) {
 		boolean valid = true;
 		String fieldName = fieldPath.substring(fieldPath.lastIndexOf("~") + 1);
 		for (InputValidator current : validators) {

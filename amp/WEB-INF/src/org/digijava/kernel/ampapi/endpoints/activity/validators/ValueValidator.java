@@ -6,6 +6,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 import java.util.List;
 import java.util.Map;
 
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
@@ -33,10 +34,10 @@ public class ValueValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
+						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 		
-		boolean importable = (boolean) fieldDescription.get(ActivityEPConstants.IMPORTABLE);
+		boolean importable = fieldDescription.isImportable();
 		// input type, allowed input will be verified before, so nothing check here 
 		if (!importable)
 			return true;
@@ -50,10 +51,10 @@ public class ValueValidator extends InputValidator {
 		List<JsonBean> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
 		
 		if (possibleValues.size() != 0) {
-			Object value = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
+			Object value = newFieldParent.get(fieldDescription.getFieldName());
 			
 			if (value != null) {
-				boolean idOnly = Boolean.TRUE.equals(fieldDescription.get(ActivityEPConstants.ID_ONLY));
+				boolean idOnly = fieldDescription.isIdOnly();
 				// convert to string the ids to avoid long-integer comparison
 				value = idOnly ? value.toString() : value;
 				
@@ -78,13 +79,14 @@ public class ValueValidator extends InputValidator {
 
 
 	private boolean isValidPercentage(Map<String, Object> newFieldParent,
-			JsonBean fieldDescription) {
+			APIField fieldDescription) {
 		this.isValidPercentage  = true;
-		if (fieldDescription.get(ActivityEPConstants.PERCENTAGE) == null)
+		if (!fieldDescription.getPercentage()) {
 			return true; //this doesn't contain a percentage-based field
+		}
 
 		//attempt to get the number out of this one
-		Double val = InterchangeUtils.getDoubleFromJsonNumber(newFieldParent.get(fieldDescription.get(ActivityEPConstants.FIELD_NAME)));
+		Double val = InterchangeUtils.getDoubleFromJsonNumber(newFieldParent.get(fieldDescription.getFieldName()));
 		if (val == null || val < ActivityEPConstants.EPSILON || val - 100.0 > ActivityEPConstants.EPSILON) {
 			this.isValidPercentage = false;
 			return false;
@@ -93,13 +95,13 @@ public class ValueValidator extends InputValidator {
 		return true;
 	}
 
-	protected boolean isValidLength(Map<String, Object> newFieldParent, JsonBean fieldDescription) {
+	protected boolean isValidLength(Map<String, Object> newFieldParent, APIField fieldDescription) {
 		isValidLength = true;
-		Integer maxLength = (Integer) fieldDescription.get(ActivityEPConstants.FIELD_LENGTH); 
+		Integer maxLength = fieldDescription.getFieldLength();
 		if (maxLength != null) {
-			Object obj = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
+			Object obj = newFieldParent.get(fieldDescription.getFieldName());
 			if (obj != null) {
-				if (!Boolean.TRUE.equals(fieldDescription.get(ActivityEPConstants.TRANSLATABLE))) {
+				if (fieldDescription.isTranslatable()) {
 					isValidLength = isValidLength(obj, maxLength);
 				} else if (Map.class.isAssignableFrom(obj.getClass())) {
 					for (Object trn : ((Map) obj).values()) {

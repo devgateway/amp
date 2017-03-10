@@ -171,7 +171,8 @@ public class ActivityImporter {
 		init(newJson, update, endpointContextPath);
 		
 		// retrieve fields definition for internal use
-		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields(true);
+		List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR
+				.getAllAvailableFields(AmpActivityVersion.class);
 		// get existing activity if this is an update request
 		Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
 
@@ -327,13 +328,13 @@ public class ActivityImporter {
 	 * @param fieldPath the underscorified path to the field currently validated & imported
 	 * @return currently updated object or null if any validation error occurred
 	 */
-	protected Object validateAndImport(Object newParent, Object oldParent, List<JsonBean> fieldsDef, 
+	protected Object validateAndImport(Object newParent, Object oldParent, List<APIField> fieldsDef,
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
 		Set<String> fields = new HashSet<String>(newJsonParent.keySet());
 		// process all valid definitions
-		for (JsonBean fieldDef : fieldsDef) {
+		for (APIField fieldDef : fieldsDef) {
 			newParent = validateAndImport(newParent, oldParent, fieldDef, newJsonParent, oldJsonParent, fieldPath);
-			fields.remove(fieldDef.get(ActivityEPConstants.FIELD_NAME));
+			fields.remove(fieldDef.getFieldName());
 		}
 		
 		// and error anything remained
@@ -376,7 +377,7 @@ public class ActivityImporter {
 	 * @param fieldPath underscorified path to the field
 	 * @return currently updated object or null if any validation error occurred
 	 */
-	protected Object validateAndImport(Object newParent, Object oldParent, JsonBean fieldDef,
+	protected Object validateAndImport(Object newParent, Object oldParent, APIField fieldDef,
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
 		String fieldName = getFieldName(fieldDef, newJsonParent);
 		String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
@@ -401,13 +402,13 @@ public class ActivityImporter {
 	 * @param newJsonParent
 	 * @return
 	 */
-	protected String getFieldName(JsonBean fieldDef, Map<String, Object> newJsonParent) {
+	protected String getFieldName(APIField fieldDef, Map<String, Object> newJsonParent) {
 		if (fieldDef == null) {
 			if (newJsonParent != null && newJsonParent.keySet().size() == 1) {
 				return newJsonParent.keySet().iterator().next();
 			}
 		} else {
-			return fieldDef.getString(ActivityEPConstants.FIELD_NAME);
+			return fieldDef.getFieldName();
 		}
 		return null;
 	}
@@ -422,18 +423,18 @@ public class ActivityImporter {
 	 * @param fieldPath
 	 * @return currently updated object or null if any validation error occurred
 	 */
-	protected Object validateSubElements(JsonBean fieldDef, Object newParent, Object oldParent, Object newJsonValue, 
+	protected Object validateSubElements(APIField fieldDef, Object newParent, Object oldParent, Object newJsonValue,
 			Object oldJsonValue, String fieldPath) {
 		// simulate temporarily fieldDef
-		fieldDef = fieldDef == null ? new JsonBean() : fieldDef;
-		String fieldType = fieldDef.getString(ActivityEPConstants.FIELD_TYPE);
+		fieldDef = fieldDef == null ? new APIField() : fieldDef;
+		String fieldType = fieldDef.getFieldType();
 		/* 
 		 * Sub-elements by default are valid when not provided. 
 		 * Current field will be verified below and reported as invalid if sub-elements are mandatory and are not provided. 
 		 */
 		
 		// skip children validation immediately if only ID is expected
-		boolean idOnly = Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.ID_ONLY));
+		boolean idOnly = fieldDef.isIdOnly();
 		if (idOnly)
 			return newParent;
 		
@@ -441,13 +442,13 @@ public class ActivityImporter {
 		
 		// first validate all sub-elements
 		@SuppressWarnings("unchecked")
-		List<JsonBean> childrenFields = (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN);
+		List<APIField> childrenFields = fieldDef.getChildren();
 		List<Map<String, Object>> childrenNewValues = getChildrenValues(newJsonValue, isList);
 		List<Map<String, Object>> childrenOldValues = getChildrenValues(oldJsonValue, isList);
 		
 		// validate children, even if it is not a list -> to notify wrong entries
 		if ((isList || childrenFields != null && childrenFields.size() > 0) && childrenNewValues != null) {
-			String actualFieldName = fieldDef.getString(ActivityEPConstants.FIELD_NAME_INTERNAL);
+			String actualFieldName = fieldDef.getFieldNameInternal();
 			Field newField = getField(newParent, actualFieldName);
 			// REFACTOR: remove old parent and field usage, not relevant anymore
 			Field oldField = getField(oldParent, actualFieldName);
@@ -491,7 +492,7 @@ public class ActivityImporter {
 			Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
 			while (iterNew.hasNext()) {
 				Map<String, Object> newChild = iterNew.next();
-				JsonBean childFieldDef = getMatchedFieldDef(newChild, childrenFields);
+				APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
 				Map<String, Object> oldChild = getMatchedOldValue(childFieldDef, childrenOldValues);
 				
 				if (oldChild != null) {
@@ -538,12 +539,12 @@ public class ActivityImporter {
 	 * @param jsonValue
 	 * @return
 	 */
-	private Long getElementId(JsonBean fieldDefOfAnObject, Object jsonValue) {
-		List<JsonBean> children  = (List<JsonBean>) fieldDefOfAnObject.get(ActivityEPConstants.CHILDREN);
+	private Long getElementId(APIField fieldDefOfAnObject, Object jsonValue) {
+		List<APIField> children = fieldDefOfAnObject.getChildren();
 		if (children != null && jsonValue != null) {
-			for (JsonBean childDef : children) {
-				if (Boolean.TRUE.equals(childDef.get(ActivityEPConstants.ID))) {
-					String idFieldName = childDef.getString(ActivityEPConstants.FIELD_NAME);
+			for (APIField childDef : children) {
+				if (childDef.isId()) {
+					String idFieldName = childDef.getFieldName();
 					String idStr = String.valueOf(((List<Map<String, Object>>) jsonValue).get(0).get(idFieldName));
 					if (StringUtils.isNumeric(idStr))
 						return Long.valueOf(idStr);
@@ -610,15 +611,15 @@ public class ActivityImporter {
 	 * @param newJson
 	 * @return 
 	 */
-	protected Object setNewField(Object newParent, JsonBean fieldDef, Map<String, Object> newJsonParent, 
+	protected Object setNewField(Object newParent, APIField fieldDef, Map<String, Object> newJsonParent,
 			String fieldPath) {
-		boolean importable = Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.IMPORTABLE));
+		boolean importable = fieldDef.isImportable();
 		
 		// note again: only checks in scope of this method are done here
 		
-		String fieldName = (String) fieldDef.get(ActivityEPConstants.FIELD_NAME);
-		String actualFieldName = (String) fieldDef.get(ActivityEPConstants.FIELD_NAME_INTERNAL);
-		String fieldType = (String) fieldDef.get(ActivityEPConstants.FIELD_TYPE);
+		String fieldName = fieldDef.getFieldName();
+		String actualFieldName = fieldDef.getFieldNameInternal();
+		String fieldType = fieldDef.getFieldType();
 		Object fieldValue = newJsonParent.get(fieldName);
 		Field objField = getField(newParent, actualFieldName);
 		if (objField == null) {
@@ -692,9 +693,9 @@ public class ActivityImporter {
 		return field;
 	}
 	
-	protected Map<String, Object> getMatchedOldValue(JsonBean childDef, List<Map<String, Object>> oldValues) {
+	protected Map<String, Object> getMatchedOldValue(APIField childDef, List<Map<String, Object>> oldValues) {
 		if (childDef != null && oldValues != null && oldValues.size() > 0) {
-			String fieldName = (String) childDef.get(ActivityEPConstants.FIELD_NAME);
+			String fieldName = childDef.getFieldName();
 			if (StringUtils.isNotBlank(fieldName)) {
 				for (Map<String, Object> oldValue : oldValues) {
 					if (oldValue.containsKey(fieldName)) {
@@ -707,7 +708,7 @@ public class ActivityImporter {
 		return null;
 	}
 	
-	protected JsonBean getMatchedFieldDef(Map<String, Object> newValue, List<JsonBean> fieldDefs) {
+	protected APIField getMatchedFieldDef(Map<String, Object> newValue, List<APIField> fieldDefs) {
 		if (fieldDefs != null && fieldDefs.size() > 0) {
 			// if we have only 1 child element, then this is a list of elements and only this definition is expected
 			// or new value is empty, but we expect something
@@ -718,8 +719,8 @@ public class ActivityImporter {
 				// TODO: if more than 1 value
 				String fieldName = newValue.keySet().iterator().next();
 				if (StringUtils.isNotBlank(fieldName)) {
-					for (JsonBean childDef : fieldDefs) {
-						if (fieldName.equals(childDef.get(ActivityEPConstants.FIELD_NAME))) {
+					for (APIField childDef : fieldDefs) {
+						if (fieldName.equals(childDef.getFieldName())) {
 							return childDef;
 						}
 					}
@@ -748,15 +749,15 @@ public class ActivityImporter {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected Object getNewValue(Field field, Object parentObj, Object jsonValue, JsonBean fieldDef, String fieldPath) {
+	protected Object getNewValue(Field field, Object parentObj, Object jsonValue, APIField fieldDef, String fieldPath) {
 		boolean isCollection = Collection.class.isAssignableFrom(field.getType());
 		if (jsonValue == null && !isCollection)
 			return null;
 		
 		Object value = null;
-		String fieldType = (String) fieldDef.get(ActivityEPConstants.FIELD_TYPE);
+		String fieldType = fieldDef.getFieldType();
 		List<JsonBean> allowedValues = getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
-		boolean idOnly = Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.ID_ONLY));
+		boolean idOnly = fieldDef.isIdOnly();
 		
 		// this is an object reference
 		if (!isCollection && idOnly) {
@@ -806,7 +807,7 @@ public class ActivityImporter {
 					value = InterchangeUtils.parseISO8601Date((String) jsonValue);
 				} else if (String.class.equals(field.getType())) {
 					// check if this is a translatable that expects multiple entries
-					value = extractTranslationsOrSimpleValue(field, parentObj, jsonValue, fieldDef);
+					value = extractTranslationsOrSimpleValue(field, parentObj, jsonValue);
 				} else {
 					// a valueOf should work
 					Method valueOf = field.getType().getDeclaredMethod("valueOf", String.class);
@@ -818,12 +819,13 @@ public class ActivityImporter {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
-		} else if (allowedValues != null && allowedValues.size() > 0 && fieldDef != null){
+		} else if (allowedValues != null && allowedValues.size() > 0) {
 			// => this is an object => it has children elements
-			if (fieldDef.get(ActivityEPConstants.CHILDREN) != null) {
-				for (JsonBean childDef : (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN)) {
-					if (Boolean.TRUE.equals(childDef.get(ActivityEPConstants.ID))) {
-						Long id = ((Integer) ((Map<String, Object>) jsonValue).get(childDef.getString(ActivityEPConstants.FIELD_NAME))).longValue();
+			if (fieldDef.getChildren() != null) {
+				for (APIField childDef : fieldDef.getChildren()) {
+					if (childDef.isId()) {
+						Map<String, Object> jsonValueMap = (Map<String, Object>) jsonValue;
+						Long id = ((Integer) jsonValueMap.get(childDef.getFieldName())).longValue();
 						value = InterchangeUtils.getObjectById(field.getType(), id);
 						break;
 					}
@@ -843,7 +845,7 @@ public class ActivityImporter {
 		return value;
 	}
 	
-	protected String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue, JsonBean fieldDef) {
+	protected String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
 		TranslationType trnType = trnSettings.getTranslatableType(field);
 		// no translation expected
 		if (TranslationType.NONE == trnType) {

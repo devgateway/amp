@@ -314,40 +314,39 @@ public class GlobalSettings extends Action {
 		return ret;
 	}
 
-    private void updateGlobalSetting(Long id, String value) {
+	private void updateGlobalSetting(Long id, String value) {
 
-        Session session = null;
-        String qryStr = null;
-        Query qry = null;
-        Transaction tx = null;
-        try {
-            session = PersistenceManager.getSession();
-//beginTransaction();
+		Session session = null;
+		String qryStr = null;
+		Query qry = null;
+		Transaction tx = null;
+		try {
+			session = PersistenceManager.getSession();
 
-            qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id ";
-            qry = session.createQuery(qryStr);
-            qry.setLong("id", id.longValue());
-            AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
+			qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id ";
+			qry = session.createQuery(qryStr);
+			qry.setLong("id", id.longValue());
+			AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
+			String currentValue = ags.getGlobalSettingsValue();
 
-            ags.setGlobalSettingsValue(value);
-            boolean changeValue = this.testCriterion(ags);
+			ags.setGlobalSettingsValue(value);
+			boolean changeValue = this.testCriterion(ags);
 
-            if (changeValue)
-                ags.setGlobalSettingsValue(value);
-            //tx.commit();
+			if (!changeValue)
+				ags.setGlobalSettingsValue(currentValue);
 
-        } catch (Exception ex) {
-            logger.error("Exception : " + ex.getMessage());
-            ex.printStackTrace(System.out);
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (Exception rbf) {
-                    logger.error("Rollback failed !");
-                }
-            }
-        }
-    }
+		} catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Rollback failed !");
+				}
+			}
+		}
+	}
 
     /**
 	 *

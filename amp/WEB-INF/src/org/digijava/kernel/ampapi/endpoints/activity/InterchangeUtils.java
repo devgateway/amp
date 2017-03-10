@@ -738,7 +738,8 @@ public class InterchangeUtils {
 		}
 		
 		for (String filteredItem : filteredItems) {
-			List<JsonBean> possibleValues = PossibleValuesEnumerator.getPossibleValuesForField(filteredItem, AmpActivityFields.class, null);
+			List<JsonBean> possibleValues = PossibleValuesEnumerator.INSTANCE
+					.getPossibleValuesForField(filteredItem, AmpActivityFields.class, null);
 			if (possibleValues.size() == 1) {
 				Object error = possibleValues.get(0).get(ApiError.JSON_ERROR_CODE);
 				if( error != null) {

@@ -54,7 +54,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
 	public List<JsonBean> getValues(@PathParam("fieldName") String fieldName) {
-		return PossibleValuesEnumerator.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
+		return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
 	}
 	
 	/**

@@ -3,34 +3,20 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.hibernate.jdbc.Work;
-import org.hibernate.proxy.HibernateProxyHelper;
-
-import clover.org.apache.commons.lang.StringUtils;
-
 
 /**
  * AMP Activity Endpoint for Possible Values -- /activity/fields/:fieldName
@@ -41,7 +27,15 @@ import clover.org.apache.commons.lang.StringUtils;
 public class PossibleValuesEnumerator {
 	
 	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
-	
+
+	public static final PossibleValuesEnumerator INSTANCE = new PossibleValuesEnumerator(new AmpPossibleValuesDAO());
+
+	private PossibleValuesDAO possibleValuesDAO;
+
+	public PossibleValuesEnumerator(PossibleValuesDAO possibleValuesDAO) {
+		this.possibleValuesDAO = possibleValuesDAO;
+	}
+
 	/**
 	 * recursive method that gets possible values that can be held by a field
 	 * @param longFieldName underscorified field name 
@@ -49,7 +43,7 @@ public class PossibleValuesEnumerator {
 	 * @param discriminatorOption recursive option to be passed down if there was a discriminator option higher up
 	 * @return JSON object containing the possible values that can be held by the field
 	 */
-	public static List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz, String discriminatorOption) {
+	public List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz, String discriminatorOption) {
 
 		String fieldName = "";
 		if (longFieldName.contains("~")) {
@@ -100,7 +94,12 @@ public class PossibleValuesEnumerator {
 				} catch (InvocationTargetException | IllegalArgumentException | IllegalAccessException 
 						| SecurityException  | NoSuchMethodException | InstantiationException e) {
 					List<JsonBean> result = new ArrayList<JsonBean>();
-					result.add(ApiError.toError(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR.withDetails(e.getMessage())));
+					Throwable t = e;
+					if (e instanceof InvocationTargetException) {
+						t = ((InvocationTargetException) e).getTargetException();
+					}
+					result.add(ApiError.toError(
+							ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR.withDetails(t.getMessage())));
 					return result;
 				}				
 				if (InterchangeUtils.isCompositeField(finalField) || configString != null) {
@@ -124,7 +123,7 @@ public class PossibleValuesEnumerator {
 	 * @throws InvocationTargetException
 	 * @throws InstantiationException
 	 */
-	private static List<JsonBean> getPossibleValuesDirectly(Class<? extends FieldsDiscriminator> discClass) 
+	private List<JsonBean> getPossibleValuesDirectly(Class<? extends FieldsDiscriminator> discClass)
 			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, 
 			InvocationTargetException, InstantiationException {
 		Method m = discClass.getMethod("getPossibleValues");
@@ -148,19 +147,16 @@ public class PossibleValuesEnumerator {
 	 * @param configValue
 	 * @return
 	 */
-	private static List<JsonBean> getPossibleValuesForComplexField(Field field, String configValue) {
+	private List<JsonBean> getPossibleValuesForComplexField(Field field, String configValue) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
-		if (configValue == null) {
-			return getPossibleValuesForField(field);
-		}
 		/*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
 		List<Object[]> items;
 		Class<?> clazz = InterchangeUtils.getClassOfField(field);
 		if (clazz.equals(AmpSector.class)) {
-			items = getSpecialCaseObjectList(configValue, "all_sectors_with_levels",
+			items = possibleValuesDAO.getSpecialCaseObjectList(configValue, "all_sectors_with_levels",
 					 "ampSectorId", "name", "sector_config_name", "amp_sector_id", AmpSector.class);
 		} else if (clazz.equals(AmpTheme.class)) {
-			items = getSpecialCaseObjectList(configValue, "all_programs_with_levels",
+			items = possibleValuesDAO.getSpecialCaseObjectList(configValue, "all_programs_with_levels",
 					 "ampThemeId", "name", "program_setting_name", "amp_theme_id", AmpTheme.class);
 		} else if (clazz.equals(AmpCategoryValue.class)){
 			return getPossibleCategoryValues(field, configValue);
@@ -175,54 +171,13 @@ public class PossibleValuesEnumerator {
 	}
 	
 	/**
-	 * Method that wraps generic approaches for the programs, sector and org. role entities
-	 * @param configType
-	 * @param configTableName
-	 * @param entityIdColumnName
-	 * @param conditionColumnName
-	 * @param idColumnName
-	 * @param clazz
-	 * @return
-	 */
-	private static List<Object[]> getSpecialCaseObjectList(final String configType, final String configTableName, 
-					 String entityIdColumnName, String entityValueColumnName, final String conditionColumnName, 
-					 final String idColumnName,  Class<?> clazz) {
-		final List<Long> itemIds = new ArrayList<Long>();
-		PersistenceManager.getSession().doWork(new Work() {
-			public void execute(Connection conn) throws SQLException {
-				String allSectorsQuery = "SELECT "+ idColumnName +" FROM "+ configTableName+" WHERE "+ conditionColumnName + 
-										 "='" + configType +"'" +
-										 " ORDER BY " + idColumnName;
-				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
-					ResultSet rs = rsi.rs;
-					while (rs.next()) 
-						itemIds.add(rs.getLong(idColumnName));
-					rs.close();
-				}
-			}
-		});		
-		
-		if (itemIds.size() == 0) {
-			return new ArrayList<Object[]>();
-		}
-		
-		String ids = StringUtils.join(itemIds, ",");
-		String queryString = "select cls." + entityIdColumnName + ", " +
-				"cls." + entityValueColumnName + " " +
-				" from " + clazz.getName() + " cls where cls."+ entityIdColumnName + " in (" + ids + ")";
-		
-		List<Object[]> objectList = InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
-		return objectList;
-	}
-	
-	/**
 	 * Generic method for obtaining possible values for most cases (without any fancy special cases)
 	 * @param field
 	 * @return
 	 */
 	
 	@SuppressWarnings("unchecked")
-	private static List<JsonBean> getPossibleValuesForField(Field field) {
+	private List<JsonBean> getPossibleValuesForField(Field field) {
 		if (!InterchangeUtils.isFieldEnumerable(field))
 			return new ArrayList<JsonBean>();
 		List<JsonBean> result = new ArrayList<JsonBean>();
@@ -231,7 +186,7 @@ public class PossibleValuesEnumerator {
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))
 			return getPossibleCategoryValues(field, null);
 		if (clazz.isAssignableFrom(AmpLocation.class))
-			return getPossibleLocations(field);
+			return getPossibleLocations();
 		Field[] fields = InterchangeUtils.getClassOfField(field).getDeclaredFields();
 		String idFieldName = null;
 		String valueFieldName = null;
@@ -250,11 +205,7 @@ public class PossibleValuesEnumerator {
 			LOGGER.error(err);
 			return result;
 		}
-		String queryString = "SELECT cls."+idFieldName +
-							", cls." + valueFieldName +
-							" FROM " + clazz.getName() + " cls "+ 
-							"ORDER BY " + idFieldName;
-		List<Object[]> objectList = InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
+		List<Object[]> objectList = possibleValuesDAO.getGenericValues(clazz, idFieldName, valueFieldName);
 		result = setProperties(objectList, result, false);
 //		for (Object obj : objectList) {
 //			JsonBean item = null;
@@ -269,22 +220,11 @@ public class PossibleValuesEnumerator {
 //		}
 		return result;
 	}
-	
-	private static List<JsonBean> getPossibleLocations(Field field) {
-		List <JsonBean> result = new ArrayList<JsonBean>();
-		Interchangeable ant = field.getAnnotation(Interchangeable.class);
-		String queryString = "SELECT loc.id, acvl.name, parentLoc.id, parentLoc.name" +
-				" ,parentCat.id, parentCat.value" +
-					" from "+ AmpLocation.class.getName() + " loc " +
-					" LEFT JOIN loc.location as acvl" +
-					" LEFT JOIN acvl.parentLocation as parentLoc" +
-					" LEFT JOIN acvl.parentCategoryValue as parentCat" +
-					" ORDER BY loc.id";
-		@SuppressWarnings("unchecked")
-		List<Object[]> objColList = (List<Object[]>) InterchangeUtils
-				.getSessionWithPendingChanges().createQuery(queryString).list();
 
-		for (Object[] item : objColList){
+	private List<JsonBean> getPossibleLocations() {
+		List<JsonBean> result = new ArrayList<>();
+
+		for (Object[] item : possibleValuesDAO.getPossibleLocations()) {
 			Long id = ((Number)(item[0])).longValue();
 			String value = ((String)(item[1]));
 			Long parentLocationId = item[2] == null? null : ((Number)(item[2])).longValue();
@@ -313,18 +253,14 @@ public class PossibleValuesEnumerator {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private static List<JsonBean> getPossibleCategoryValues(Field field, String discriminatorOption) {
+	private List<JsonBean> getPossibleCategoryValues(Field field, String discriminatorOption) {
 		List <JsonBean> result = new ArrayList<JsonBean>();
 		Interchangeable ant = field.getAnnotation(Interchangeable.class);
 		if (StringUtils.isBlank(discriminatorOption)) {
 			discriminatorOption = ant.discriminatorOption();
 		}
 		if (StringUtils.isNotBlank(discriminatorOption)) {
-			String queryString = "SELECT acv.id, acv.value, acv.deleted from " + AmpCategoryValue.class.getName() + " acv "
-					+ "WHERE acv.ampCategoryClass.keyName ='" + discriminatorOption + "' ORDER BY acv.id";
-			@SuppressWarnings("unchecked")
-			List<Object[]> objColList = (List<Object[]>) InterchangeUtils
-					.getSessionWithPendingChanges().createQuery(queryString).list();
+			List<Object[]> objColList = possibleValuesDAO.getCategoryValues(discriminatorOption);
 
 			result = setProperties(objColList, result, true);
 			return result;
@@ -335,7 +271,7 @@ public class PossibleValuesEnumerator {
 		return result; 
 	}
 	
-	private static List<JsonBean> setProperties(List<Object[]> objColList, List<JsonBean> result, boolean checkDeleted) {
+	private List<JsonBean> setProperties(List<Object[]> objColList, List<JsonBean> result, boolean checkDeleted) {
 		
 		for (Object[] item : objColList){
 			Long id = ((Number)(item[0])).longValue();

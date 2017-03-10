@@ -3176,8 +3176,7 @@ body {background:none;}
 										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/>
-											<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> -
-											<c:out value="${aimEditActivityForm.identification.actAthEmail}"/>
+											<c:out value="${aimEditActivityForm.identification.actAthLastName}"/>
 										</td>
 									</tr>
 										<field:display name="Activity Created On" feature="Identification">
@@ -3254,7 +3253,7 @@ body {background:none;}
 												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
 											</span>
 														<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
+												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/> -
 											</span>
 														<span class="word_break">
 												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
@@ -3279,30 +3278,6 @@ body {background:none;}
 										</td>
 									</tr>
 									</field:display>
-									<field:display name="Activity Updated By" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:activityUpdatedBy">
-										    Activity updated by</digi:trn>
-											</b>
-										</td>
-										<td bgcolor="#ffffff">
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
-											</span>
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>	-
-											</span>
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.modifiedBy.user.email}"/>
-											</span>
-											</td>
-									</tr>
-									</logic:notEmpty>
-									</field:display>
-
 
 									<logic:notEmpty name="aimEditActivityForm" property="structures">
 

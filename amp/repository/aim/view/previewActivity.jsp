@@ -581,7 +581,7 @@ function collapseAll() {
 			<digi:trn>Workspace manager</digi:trn>: <br/>
 			<b>
 				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
-				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/> -
 				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
 			</b>
 		</field:display>

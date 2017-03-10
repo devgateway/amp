@@ -1,6 +1,8 @@
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/resourcesettings" prefix="rs" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
@@ -577,7 +579,7 @@ myTable.enhanceMarkup = function(markupName) {
 
 function sortColumn() {
 	//debugger;
-	var columnSettingString = '<gs:value name="<%=GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN %>" />';
+	var columnSettingString = '<rs:value name="<%=SettingsConstants.SORT_COLUMN %>" />';
 	// the setting has the value [ColumnName]_[ASC/DESC];
 	
 	var separatorPos = columnSettingString.lastIndexOf('_');
@@ -1279,6 +1281,9 @@ function toggleView(elementId, iconId, isMinus) {
 	}
 	return isMinus;
 }
+
+$.getScript("/TEMPLATE/ampTemplate/script/common/FileTypeValidator.js");
+
 /* Configures the form with id typeId */
 function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOfPublication, index, category) {
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML = '';
@@ -1443,17 +1448,19 @@ function validateAddDocument() {
 	}
 
 	var webUrlVisible=document.getElementById('tr_url');
-	if(webUrlVisible.style.display=='none' && document.forms['crDocumentManagerForm'].fileData.value == ''){ //adding document
-		msg = msg + "${translation_validation_filedata}"+'<br>';
-	}
-	if(webUrlVisible.style.display!='none' && document.forms['crDocumentManagerForm'].webLink.value == ''){ //adding url
+	if(webUrlVisible.style.display=='none') { 
+		if(document.forms['crDocumentManagerForm'].fileData.value == '') { //adding document
+			msg = msg + "${translation_validation_filedata}"+'<br>';
+		} else if(!FileTypeValidator.isValid(fileData.value)) {
+			msg = msg + FileTypeValidator.errorMessage +'<br>';
+		}
+	} else if(document.forms['crDocumentManagerForm'].webLink.value == '') { //adding url
 		msg = msg + "${translation_validation_url}"+'<br>' ;
-	}else if(webUrlVisible.style.display!='none'){
+	} else {
 		var enteredWebLink = document.forms['crDocumentManagerForm'].webLink.value;
 		var found	= urlFormat.test(enteredWebLink); //urlFormat.exec(enteredWebLink);//		
-		if ( found == false) {
+		if (found == false) {
 			msg = msg + "${translation_url_format}"+'<br>' ;
-			
 		}
 	}
 
@@ -1462,8 +1469,10 @@ function validateAddDocument() {
 	}
 
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
-	if (msg.length == 0)
+	if (msg.length == 0) {
 			return true;
+	}
+	
 	return false;
 }
 

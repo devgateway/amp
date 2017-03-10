@@ -36,6 +36,7 @@
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Custom Fields" parentModule="PROJECT MANAGEMENT"></module:display>
+
 <module:display name="Content Repository" parentModule="Resources"></module:display>
 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -82,6 +83,7 @@
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Public View Content" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Resource Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Public Filter Manager" parentModule="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 

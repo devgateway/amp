@@ -98,8 +98,8 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Budget Structure'
                 , 'Indirect On Budget'
                 , 'Humanitarian Aid'
-                , 'Disaster Response Marker'
                 , 'Concessionality Level'
+                , 'Disaster Response Marker'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

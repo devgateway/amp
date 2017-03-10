@@ -1874,8 +1874,8 @@ public class DgUtil {
 		return src;
 	}
 
-	public static String cleanHtmlTags(String content) {
-		if (content == null) {
+    public static String cleanHtmlTags(String content) {
+        if (content == null) {
             return null;
         }
         String noTags = Jsoup.clean(content, Whitelist.none());

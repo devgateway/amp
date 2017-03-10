@@ -74,7 +74,6 @@ public class GPIDataService {
 		} else {
 			aidOnBudget = new AmpGPINiAidOnBudget();
 		}
-
 		
 		return aidOnBudget;
 	}
@@ -98,8 +97,8 @@ public class GPIDataService {
 			Date date = DateTimeUtil.parseDate(data.getString(GPIEPConstants.FIELD_DATE), GPIEPConstants.DATE_FORMAT);
 			aidOnBudget.setIndicatorDate(date);
 		}
+		
 		return aidOnBudget;
-
 	}
 
 	public static JsonBean saveAidOnBudget(JsonBean data) {
@@ -127,6 +126,19 @@ public class GPIDataService {
 
 		return result;
 	}
+	
+	public static List<JsonBean> saveAidOnBudget(List<JsonBean> aidOnBudgetList) {
+		if (hasGPIDataRights() == false) {
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+
+		List<JsonBean> results = new ArrayList<>();
+		for (JsonBean aidOnBudget : aidOnBudgetList) {
+			results.add(saveAidOnBudget(aidOnBudget));
+		}
+
+		return results;
+	}
 
 	public static List<JsonBean> validateAidOnBudget(JsonBean data) {
 		List<JsonBean> validationErrors = new ArrayList<>();
@@ -147,19 +159,6 @@ public class GPIDataService {
 		return validationErrors;
 	}
 
-	public static List<JsonBean> saveAllEdits(List<JsonBean> aidOnBudgetList) {
-		if (hasGPIDataRights() == false) {
-			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
-		}
-
-		List<JsonBean> results = new ArrayList<>();
-		for (JsonBean aidOnBudget : aidOnBudgetList) {
-			results.add(saveAidOnBudget(aidOnBudget));
-		}
-
-		return results;
-	}
-
 	public static JsonBean deleteAidOnBudgetById(Long id) {
 		if (hasGPIDataRights() == false) {
 			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
@@ -169,17 +168,6 @@ public class GPIDataService {
 		GPIUtils.deleteAidOnBudget(id);
 		result.set(GPIEPConstants.RESULT, GPIEPConstants.DELETED);
 		return result;
-	}
-
-	public static boolean hasGPIDataRights() {
-		// TODO: Fix - TeamUtil.getCurrentMember() returns null
-		/*
-		 * TeamMember tm = TeamUtil.getCurrentMember(); AmpTeamMember atm =
-		 * TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); return
-		 * atm.getUser().hasNationalCoordinatorGroup() ||
-		 * atm.getUser().hasVerifiedDonor();
-		 */
-		return true;
 	}
 
 	public static JsonBean saveDonorNotes(JsonBean data) {
@@ -203,6 +191,14 @@ public class GPIDataService {
 
 		}
 		return result;
+	}
+	
+	public static List<JsonBean> saveDonorNotes(List<JsonBean> donorNotesList) {
+		List<JsonBean> results = new ArrayList<>();
+		for (JsonBean donorNotes : donorNotesList) {
+			results.add(saveDonorNotes(donorNotes));
+		}
+		return results;
 	}
 	
 	private static AmpGPINiDonorNotes getOrCreateDonorNotes(JsonBean data){
@@ -230,6 +226,7 @@ public class GPIDataService {
 		
 		return donorNotes;
 	}
+	
 	private static JsonBean modelToJsonBean(AmpGPINiDonorNotes donorNotes) {
 		JsonBean data = new JsonBean();		
 		data.set(GPIEPConstants.FIELD_ID, donorNotes.getAmpGPINiDonorNotesId());
@@ -266,8 +263,17 @@ public class GPIDataService {
 		GPIUtils.deleteDonorNotes(id);
 		result.set(GPIEPConstants.RESULT, GPIEPConstants.DELETED);
 		return result;
+	}	
+	
+	public static boolean hasGPIDataRights() {
+		// TODO: Fix - TeamUtil.getCurrentMember() returns null
+		/*
+		 * TeamMember tm = TeamUtil.getCurrentMember(); AmpTeamMember atm =
+		 * TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); return
+		 * atm.getUser().hasNationalCoordinatorGroup() ||
+		 * atm.getUser().hasVerifiedDonor();
+		 */
+		return true;
 	}
-	
-	
 
 }

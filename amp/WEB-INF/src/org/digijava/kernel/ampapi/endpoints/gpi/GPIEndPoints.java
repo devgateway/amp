@@ -49,7 +49,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(id = "saveAllEdits", ui = false)
 	public List<JsonBean> saveAllEdits(List<JsonBean> aidOnBudgetList) {
-		return GPIDataService.saveAllEdits(aidOnBudgetList);
+		return GPIDataService.saveAidOnBudget(aidOnBudgetList);
 	}
 
 	@DELETE
@@ -73,8 +73,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(id = "saveAllDonorNotes", ui = false)
 	public List<JsonBean> saveAllDonorNotes(List<JsonBean> donorNotes) {
-		List<JsonBean> notes = new ArrayList<>();
-		return notes;
+		return GPIDataService.saveDonorNotes(donorNotes);
 	}
 	
 	@GET
@@ -93,8 +92,6 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	public JsonBean deleteDonorNotesById(@PathParam("id") long id) {
 		return GPIDataService.deleteDonorNotesById(id);		
 	}
-	
-	
 	
 	 /**
      * {@inheritDoc}

@@ -1881,5 +1881,5 @@ public class DgUtil {
         String noTags = Jsoup.clean(content, Whitelist.none());
         String noNbsp = noTags.replace("&nbsp;", " ");
         return StringUtils.normalizeSpace(StringEscapeUtils.unescapeHtml4(noNbsp));
-	}
+    }
 }

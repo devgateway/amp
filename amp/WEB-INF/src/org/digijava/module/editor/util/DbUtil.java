@@ -37,6 +37,7 @@ import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.text.regex.RegexBatch;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;

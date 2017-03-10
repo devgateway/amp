@@ -28,9 +28,7 @@ public class GPIEPConstants {
 	public static final String DEFAULT_SORT_ORDER = "desc";
 	public static final String TOTAL_RECORDS = "totalRecords";
 	public static final String ORDER_ASC = "asc";
-	public static final String ORDER_DESC = "desc";
-	
-	
+	public static final String ORDER_DESC = "desc";	
 	public static final String DEFAULT_DONOR_NOTES_SORT_COLUMN = "notesDate";
 	
 	public static final Map<String, String> SORT_FIELDS = Collections.unmodifiableMap(new HashMap<String, String>() {{
@@ -44,6 +42,7 @@ public class GPIEPConstants {
 	public static final Map<String, String> DONOR_NOTES_SORT_FIELDS = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put(FIELD_NOTES_DATE, "notesDate");
         put(FIELD_NOTES, "notes");
+        put(FIELD_DONOR, "donor.name");
         
     }});	
 }

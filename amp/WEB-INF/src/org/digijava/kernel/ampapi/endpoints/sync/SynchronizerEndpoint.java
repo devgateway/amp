@@ -37,10 +37,6 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns list of objects that were changed in specific period of time.
-     * <p>Inputs:<ul>
-     * <li><em>user-ids</em> - comma separated list of user ids for which to display changes
-     * <li><em>last-sync-time</em> - optional timestamp of last synchronization time in ISO8601 format
-     * </ul>
      * <h3>Example request:</h3>?user-ids=1,2,3&last-sync-time=2016-12-27T18:05:30.320+0200
      * <h3>Example response:</h3><pre>
      * {
@@ -65,7 +61,9 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
      *     "saved": [16, 17]
      *   }
      * }
-     * </pre></p>
+     * </pre>
+     * @param userIds comma separated list of user ids for which to display changes
+     * @param lastSyncTime optional timestamp of last synchronization time in ISO8601 format
      */
     @GET
     public SystemDiff computeSync(
@@ -139,12 +137,6 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
      * If a translation to a requested language is missing then it will also be missing in response. There is no
      * fallback mechanism that returns translation from default or English language.
      * <p>
-     * Query parameters:
-     * <ul><li>translations - optional pipe separated list of two letter locale codes
-     * <li>last-sync-time - optional timestamp of last synchronization time in ISO8601 format</ul>
-     * </p>
-     * If translations are not specified then the default one is used.
-     * <p>
      * Response body is map of translation grouped by labels and locale code.
      *
      * <h3>Sample Request:</h3>
@@ -167,7 +159,8 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
      *   }
      * }
      * </pre>
-     * @implicitParam translations|string|query
+     * @param lastSyncTime optional timestamp of last synchronization time in ISO8601 format
+     * @implicitParam translations|string|query|false|||||false|pipe separated list of language codes
      */
     @GET
     @Path("/translations")

@@ -1318,7 +1318,8 @@ public class ActivityImporter {
 	public List<JsonBean> getPossibleValuesForFieldCached(String fieldPath, 
 			Class<AmpActivityFields> clazz, Object object) {
 		if (!possibleValuesCached.containsKey(fieldPath)) {
-			possibleValuesCached.put(fieldPath, PossibleValuesEnumerator.getPossibleValuesForField(fieldPath, clazz, null));
+			possibleValuesCached.put(fieldPath, PossibleValuesEnumerator.INSTANCE
+					.getPossibleValuesForField(fieldPath, clazz, null));
 		}
 		return possibleValuesCached.get(fieldPath);
 	}

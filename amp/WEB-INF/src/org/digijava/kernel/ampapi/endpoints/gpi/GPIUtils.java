@@ -36,19 +36,16 @@ public class GPIUtils {
 		Query query = dbSession.createQuery(queryString);
 		query.setFirstResult(startAt);
 		query.setMaxResults(maxResults);
+		
 		return query.list();
-
-	}
-	
+	}	
 
 	public static Integer getAidOnBudgetCount() {
 		Session dbSession = PersistenceManager.getSession();
 		String queryString = "select count(*) from " + AmpGPINiAidOnBudget.class.getName();
 		Query query = dbSession.createQuery(queryString);
 		return (Integer) query.uniqueResult();
-	}
-	
-	
+	}	
 
 	public static AmpOrganisation getOrganisation(Long id) {
 		return (AmpOrganisation) PersistenceManager.getSession().get(AmpOrganisation.class, id);
@@ -129,7 +126,6 @@ public class GPIUtils {
 		query.setFirstResult(startAt);
 		query.setMaxResults(maxResults);
 		return query.list();
-
 	}	
 		
 	public static void deleteDonorNotes(Long id) {

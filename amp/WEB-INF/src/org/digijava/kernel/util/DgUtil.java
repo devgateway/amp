@@ -45,6 +45,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
@@ -66,7 +68,6 @@ import org.digijava.kernel.security.ModuleInstancePermission;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.security.SitePermission;
 import org.digijava.kernel.service.ServiceManager;
-import org.digijava.kernel.text.regex.RegexBatch;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.user.UserInfo;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -77,38 +78,11 @@ import org.digijava.module.aim.util.DbUtil;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 public class DgUtil {
 	
-	/**
-	 * Flags used for regex matching to strip out all unneeded html.
-	 * Can combine multiple patterns like this = Pattern.DOTALL | Pattern.MULTILINE; 
-	 */
-	private static final int REGEX_FLAGS = Pattern.DOTALL;
-	
-	/**
-	 * Regexes split and ordered so that it will leave only 
-	 * text required for Lucene indexing.  
-	 */
-	private static final String[] HTML_STRIP_REGEXES = 
-	{
-			"<!--.*?-->"						//commented texts
-			, "<!DOCTYPE.*?>"					//doc type tags
-			, "<head.*?>.*?</head>"				//head tag with content
-			, "<script.*?>.*?</script>"			//script tag with content
-			, "<style.*?>.*?</style>"			//style tag with content
-			, "<(link|input|a|br|hr|meta).*?>"	//some tags
-			, "<\\s*?[a-z]+(:[a-z0-9]+)?.*?>"	//Beginnings of tags 
-			, "</\\s*?[a-z]+(:[a-z0-9]+)?.*?>"	//Endings of tags
-			, "&[a-z]*?;"						//&nbsp; and things like that
-			,"\\s{2,}"							//multiple spaces
-	};
-	
-	/**
-	 * Stripps html tags from text.
-	 */
-	private static final RegexBatch htmlStripper = new RegexBatch(HTML_STRIP_REGEXES,REGEX_FLAGS);
-
     private static Logger logger = I18NHelper.getKernelLogger(DgUtil.class);
 
     private static final int FASTSPLIT_MAXSIZE = 2048;
@@ -1901,11 +1875,11 @@ public class DgUtil {
 	}
 
 	public static String cleanHtmlTags(String content) {
-		if (content != null) {
-			RegexBatch batch = new RegexBatch(HTML_STRIP_REGEXES,REGEX_FLAGS);
-			content = batch.replaceAll(content, " ");
-		}
-		
-		return content;
+		if (content == null) {
+            return null;
+        }
+        String noTags = Jsoup.clean(content, Whitelist.none());
+        String noNbsp = noTags.replace("&nbsp;", " ");
+        return StringUtils.normalizeSpace(StringEscapeUtils.unescapeHtml4(noNbsp));
 	}
 }

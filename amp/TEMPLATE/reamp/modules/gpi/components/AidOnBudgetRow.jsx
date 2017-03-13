@@ -12,14 +12,13 @@ require('react-date-picker/theme/hackerone.css');
 require('../styles/main.less');
 import * as aidOnBudgetActions from '../actions/AidOnBudgetActions.jsx';
 import * as startUp from '../actions/StartUpAction.jsx';
+import * as Constants from '../common/constants.jsx';
 export default class AidOnBudgetRow extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
                 aidOnBudget: this.props.aidOnBudget,                                
-                showDatePicker:false,
-                displayDateFormat: 'DD/MMM/YYYY',
-                endPointDateFormat: 'YYYY-MM-DD'
+                showDatePicker:false 
         };
         this.toggleEdit = this.toggleEdit.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -53,19 +52,23 @@ export default class AidOnBudgetRow extends Component {
     
     onDateChange(date){
         if(date){
-            const aidOnBudget = this.state.aidOnBudget; 
-            const formartedDate = moment(date, this.state.displayDateFormat).format(this.state.endPointDateFormat);
-            aidOnBudget['indicatorDate'] = formartedDate;
+            const aidOnBudget = this.state.aidOnBudget;                               
+            const formatedDate = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
+            aidOnBudget['indicatorDate'] = formatedDate;
             this.setState({aidOnBudget: aidOnBudget});
             this.props.actions.updateAidOnBudget(aidOnBudget); 
             this.toggleDatePicker(); 
         }        
     }
     
+    getDisplayDateFormat() {
+        return (this.props.settings && this.props.settings[Constants.DATE_FORMAT_SETTING]) ? this.props.settings[Constants.DATE_FORMAT_SETTING].toUpperCase() : Constants.DEFAULT_UI_DATE_FORMAT;  
+    }
+    
     toDateDisplayFormat(date) {
         var result;
         if(date) {
-            result = moment(date, this.state.endPointDateFormat).format(this.state.displayDateFormat);           
+            result = moment(date, Constants.EP_DATE_FORMAT).format(this.getDisplayDateFormat());           
         }  
         
         return result        
@@ -94,7 +97,7 @@ export default class AidOnBudgetRow extends Component {
     getErrorsForField(field){
         var errors = this.props.errors.filter(error => {return ((error.id && error.id === this.state.aidOnBudget.id) || (error.cid && error.cid === this.state.aidOnBudget.cid) && error.affectedFields && error.affectedFields.includes(field) )})
         return  errors; 
-     }
+    }
     
     render() {        
         if (this.props.aidOnBudget.isEditing) {         
@@ -112,7 +115,7 @@ export default class AidOnBudgetRow extends Component {
                         date={this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)} 
                         onChange={this.onDateChange} 
                         expanded={false}
-                        dateFormat={this.state.displayDateFormat}
+                        dateFormat={this.getDisplayDateFormat()}
                         />  
                     }
                     </div>
@@ -145,29 +148,29 @@ export default class AidOnBudgetRow extends Component {
                     <td> <span className="glyphicon glyphicon-ok-circle success-color" onClick={this.save}> </span><span className="glyphicon glyphicon-remove" onClick={this.deleteAidOnBudget}></span></td>                      
             </tr>)
             
+            }
+            
+            return (
+                    <tr>                
+                    <th scope="row">{this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)}</th>
+                    <td>{this.getOrgName(this.state.aidOnBudget.donorId)}</td>
+                    <td>{this.state.aidOnBudget.amount}</td>
+                    <td>{this.getCurrencyName(this.state.aidOnBudget.currencyCode)} </td>
+                    <td><span className="glyphicon glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-remove" onClick={this.deleteAidOnBudget}></span></td>                
+                    </tr>
+                    
+            );
         }
-        
-        return (
-                <tr>                
-                <th scope="row">{this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)}</th>
-                <td>{this.getOrgName(this.state.aidOnBudget.donorId)}</td>
-                <td>{this.state.aidOnBudget.amount}</td>
-                <td>{this.getCurrencyName(this.state.aidOnBudget.currencyCode)} </td>
-                <td><span className="glyphicon glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-remove" onClick={this.deleteAidOnBudget}></span></td>                
-                </tr>
-                
-        );
     }
-}
-
-function mapStateToProps(state, ownProps) {     
-    return {
-        translations: state.startUp.translations     
+    
+    function mapStateToProps(state, ownProps) {     
+        return {
+            translations: state.startUp.translations     
+        }
     }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {actions: bindActionCreators(aidOnBudgetActions, dispatch)}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AidOnBudgetRow);
+    
+    function mapDispatchToProps(dispatch) {
+        return {actions: bindActionCreators(aidOnBudgetActions, dispatch)}
+    }
+    
+    export default connect(mapStateToProps, mapDispatchToProps)(AidOnBudgetRow);

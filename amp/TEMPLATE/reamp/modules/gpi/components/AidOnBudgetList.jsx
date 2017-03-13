@@ -29,6 +29,7 @@ export default class AidOnBudgetList extends Component {
         this.props.actions.loadAidOnBudgetList({paging: this.props.paging, sorting: this.props.sorting}); 
         this.props.actions.getCurrencyList();
         this.props.actions.getOrgList();
+        this.props.actions.getSettings();
     }
     
     componentWillReceiveProps(nextProps) { 
@@ -90,7 +91,7 @@ export default class AidOnBudgetList extends Component {
         });
         
         return (this.props.errors.length > 0 && <div className="alert alert-danger" role="alert">
-           {messages}
+                {messages}
         </div>) 
     }
     
@@ -142,7 +143,7 @@ export default class AidOnBudgetList extends Component {
                 </thead>
                 <tbody>               
                 {this.props.aidOnBudgetList.map(aidOnBudget => 
-                <AidOnBudgetRow aidOnBudget={aidOnBudget} key={aidOnBudget.id} currencyList={this.props.currencyList} orgList={this.props.orgList} key={aidOnBudget.id || 'c' + aidOnBudget.cid} errors={this.props.errors}/>  
+                <AidOnBudgetRow aidOnBudget={aidOnBudget} key={aidOnBudget.id} currencyList={this.props.currencyList} orgList={this.props.orgList} settings={this.props.settings} key={aidOnBudget.id || 'c' + aidOnBudget.cid} errors={this.props.errors}/>  
                 )}                
                 </tbody>
                 </table> 
@@ -180,6 +181,7 @@ function mapStateToProps(state, ownProps) {
         infoMessages: state.aidOnBudget.infoMessages || [],        
         currencyList: state.commonLists.currencyList || [],
         orgList: state.commonLists.orgList || [],
+        settings: state.commonLists.settings || {},
         translations: state.startUp.translations,
         translate: state.startUp.translate
     }

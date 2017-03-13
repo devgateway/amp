@@ -83,12 +83,14 @@ export default class DonorNotesList extends Component {
         this.props.actions.saveAllEdits(list)
     }
     
-    showErrors() {        
-        const errors = this.props.errors.filter(error => {return !error.id && !error.cid });
-        return (errors.length > 0 && <div className="alert alert-danger" role="alert">
-                {errors.map(error =>                    
-                    <span>{this.props.translations[error.messageKey]} <br/></span>                
-                )}
+    showErrors() {           
+        const messages = [];        
+        this.props.errors.forEach(error =>{
+            messages.push(<span>{this.props.translations[error.messageKey]} <br/></span>  )
+        });
+        
+        return (this.props.errors.length > 0 && <div className="alert alert-danger" role="alert">
+           {messages}
         </div>) 
     }
     

@@ -27,6 +27,7 @@ export default class DonorNotesRow extends Component {
         this.toggleDatePicker =  this.toggleDatePicker.bind(this);
         this.onDateChange = this.onDateChange.bind(this);  
         this.deleteDonorNotes = this.deleteDonorNotes.bind(this); 
+        this.getErrorsForField = this.getErrorsForField.bind(this);
     }
     
     toggleEdit() {
@@ -84,38 +85,20 @@ export default class DonorNotesRow extends Component {
         var org = this.props.orgList.filter(org => org.id === id)[0];
         return org ? org.name : '';
     }
-     
-    getErrors(){
-        const errors = this.props.errors.filter(error => {return (error.id && error.id === this.state.donorNotes.id) || (error.cid && error.cid === this.state.donorNotes.cid)})
-        if(errors.length > 0){
-            const errorPopover = (
-                    <Popover
-                    id="error-popover"
-                    title="Errors">
-                    {errors.map(error => 
-                    <span>{this.props.translations[error.messageKey]}<br/></span>
-                    )} 
-                    </Popover>
-            );
-            return (<OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={errorPopover}>
-                    <span className="glyphicon glyphicon-exclamation-sign error-color">                  
-                    </span>
-                    </OverlayTrigger>                
-            );
-            
-        }
-        
+      
+    getErrorsForField(field){
+      var errors = this.props.errors.filter(error => {return ((error.id && error.id === this.state.donorNotes.id) || (error.cid && error.cid === this.state.donorNotes.cid) && error.affectedFields && error.affectedFields.includes(field) )})
+      return  errors; 
     }
     
     render() {        
         if (this.props.donorNotes.isEditing) {         
             return ( <tr>
-                    <td className="error-column">
-                    {this.getErrors()}      
+                    <td className="error-column">                        
                     </td>
                     <td scope="row" >                                   
-                    <div className="date-container">
-                    <span className="date-input-container"><input type="text" value={this.toDateDisplayFormat(this.state.donorNotes.notesDate)} readOnly className="date-input" />    
+                    <div className={this.getErrorsForField('notesDate').length > 0 ? 'form-group date-container has-error' : 'form-group date-container' }>
+                    <span className="date-input-container"><input type="text" value={this.toDateDisplayFormat(this.state.donorNotes.notesDate)} readOnly className="date-input form-control" />    
                     </span><span className = "datepicker-toggle glyphicon glyphicon-calendar " onClick={this.toggleDatePicker}> </span></div>
                     <div className="datepicker-container"> 
                     {this.state.showDatePicker &&
@@ -133,16 +116,20 @@ export default class DonorNotesRow extends Component {
                     </td>
                     <td>
                     
+                    <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>
                     <select name="donorId" className="form-control" value={this.state.donorNotes.donorId} onChange={this.onChange}>
                     <option value="">Select Donor</option>
                     {this.props.orgList.map(org => 
                     <option value={org.id}  key={org.id} >{org.name}</option>
                     )}
                     </select> 
+                    </div>
                     
                     </td> 
                     <td>
-                    <textarea name="notes" className="form-control" onChange={this.onChange}>{this.state.donorNotes.notes}</textarea>
+                    <div className={this.getErrorsForField('notes').length > 0 ? 'form-group has-error' : 'form-group' }>                    
+                    <textarea name="notes" className="form-control"  onChange={this.onChange}>{this.state.donorNotes.notes}</textarea>
+                    </div>
                     </td>
                     <td> <span className="glyphicon glyphicon-ok-circle success-color" onClick={this.save}> </span><span className="glyphicon glyphicon-remove" onClick={this.deleteDonorNotes}></span></td>                      
             </tr>)

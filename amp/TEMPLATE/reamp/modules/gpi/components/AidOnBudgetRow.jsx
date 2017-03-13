@@ -65,7 +65,7 @@ export default class AidOnBudgetRow extends Component {
         return (this.props.settings && this.props.settings[Constants.DATE_FORMAT_SETTING]) ? this.props.settings[Constants.DATE_FORMAT_SETTING].toUpperCase() : Constants.DEFAULT_UI_DATE_FORMAT;  
     }
     
-    toDateDisplayFormat(date) {
+    toDisplayDateFormat(date) {
         var result;
         if(date) {
             result = moment(date, Constants.EP_DATE_FORMAT).format(this.getDisplayDateFormat());           
@@ -104,7 +104,7 @@ export default class AidOnBudgetRow extends Component {
             return ( <tr>                    
                     <td scope="row" >                                   
                     <div className={this.getErrorsForField('indicatorDate').length > 0 ? 'form-group date-container has-error' : 'form-group date-container' }>
-                    <span className="date-input-container"><input type="text" value={this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)} readOnly className="date-input form-control" />    
+                    <span className="date-input-container"><input type="text" value={this.toDisplayDateFormat(this.state.aidOnBudget.indicatorDate)} readOnly className="date-input form-control" />    
                     </span><span className = "datepicker-toggle glyphicon glyphicon-calendar " onClick={this.toggleDatePicker}> </span></div>
                     <div className="datepicker-container"> 
                     {this.state.showDatePicker &&
@@ -112,7 +112,7 @@ export default class AidOnBudgetRow extends Component {
                         hideFooter={true}
                         ref="date" 
                         locale={'en'} 
-                        date={this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)} 
+                        date={this.toDisplayDateFormat(this.state.aidOnBudget.indicatorDate)} 
                         onChange={this.onDateChange} 
                         expanded={false}
                         dateFormat={this.getDisplayDateFormat()}
@@ -152,7 +152,7 @@ export default class AidOnBudgetRow extends Component {
             
             return (
                     <tr>                
-                    <th scope="row">{this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)}</th>
+                    <th scope="row">{this.toDisplayDateFormat(this.state.aidOnBudget.indicatorDate)}</th>
                     <td>{this.getOrgName(this.state.aidOnBudget.donorId)}</td>
                     <td>{this.state.aidOnBudget.amount}</td>
                     <td>{this.getCurrencyName(this.state.aidOnBudget.currencyCode)} </td>

@@ -8,7 +8,7 @@ import org.apache.commons.collections.ComparatorUtils;
 import org.apache.struts.tiles.taglib.GetAttributeTag;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
-public class AmpGPINiSurvey implements Serializable, Comparable<AmpGPINiSurvey> {
+public class AmpGPINiSurvey implements Serializable, Cloneable, Comparable<AmpGPINiSurvey> {
 	
 	private static final long serialVersionUID = -4889980304099658852L;
 	
@@ -56,5 +56,10 @@ public class AmpGPINiSurvey implements Serializable, Comparable<AmpGPINiSurvey> 
 	public int compareTo(AmpGPINiSurvey o) {
 		return ComparatorUtils.nullLowComparator(null).compare(getAmpOrgRole(), o.getAmpOrgRole());
 	}
-
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
+	}
 }

@@ -3,12 +3,12 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
@@ -31,10 +31,9 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	@Interchangeable(fieldTitle="Additional Info", importable=true)
 	private String additionalInfo;
 	
-	@VersionableCollection(fieldTitle = "GPI Ni Survey")
+	@Interchangeable(fieldTitle = "GPI Ni Survey")
 	private AmpGPINiSurvey gpiNiSurvey;
-	
-	
+		
     public Float getPercentage() {
 		return percentage;
 	}
@@ -150,10 +149,35 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	
 	@Override
 	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
-		AmpOrgRole aux = (AmpOrgRole) clone();
-		aux.activity = newActivity;
-		aux.ampOrgRoleId = null;
-		return aux;
+		AmpOrgRole clonedAmpOrgRole = (AmpOrgRole) clone();
+		clonedAmpOrgRole.activity = newActivity;
+		clonedAmpOrgRole.ampOrgRoleId = null;
+		
+		if (gpiNiSurvey != null) {
+			AmpGPINiSurvey clonedSurvey = (AmpGPINiSurvey) gpiNiSurvey.clone();
+			clonedSurvey.setAmpGPINiSurveyId(null);
+			clonedSurvey.setAmpOrgRole(clonedAmpOrgRole);
+	
+			if (clonedSurvey.getResponses() != null) {
+				final Set<AmpGPINiSurveyResponse> clonedSurveyResponses = new HashSet<AmpGPINiSurveyResponse>();
+				clonedSurvey.getResponses().forEach(r -> {
+					try {
+						AmpGPINiSurveyResponse clonedResponse = (AmpGPINiSurveyResponse) r.clone();
+						clonedResponse.setAmpGPINiSurveyResponseId(null);
+						clonedResponse.setAmpGPINiSurvey(clonedSurvey);
+						clonedSurveyResponses.add(clonedResponse);
+					} catch (CloneNotSupportedException e) {
+						throw new RuntimeException(e);
+					}
+				});
+				clonedSurvey.getResponses().clear();
+				clonedSurvey.getResponses().addAll(clonedSurveyResponses);
+			}
+			
+			clonedAmpOrgRole.setGpiNiSurvey(clonedSurvey);
+		}
+		
+		return clonedAmpOrgRole;
 	}
 	@Override
 	public Object clone() throws CloneNotSupportedException {

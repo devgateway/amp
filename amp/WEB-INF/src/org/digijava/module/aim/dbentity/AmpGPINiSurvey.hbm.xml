@@ -12,7 +12,7 @@
 		</id>			
 		<property name="surveyDate" column="survey_date" type="java.util.Date" />		
 				
-		<many-to-one name="ampOrgRole" column="amp_org_role_id"
+		<many-to-one name="ampOrgRole" column="amp_org_role_id"  
 			class="org.digijava.module.aim.dbentity.AmpOrgRole"
 			not-null="true" unique="true"/>
 			

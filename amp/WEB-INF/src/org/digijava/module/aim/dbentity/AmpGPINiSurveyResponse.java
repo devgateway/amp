@@ -2,7 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-public class AmpGPINiSurveyResponse implements Serializable {
+public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -6656563271238273140L;
 	
@@ -69,4 +69,8 @@ public class AmpGPINiSurveyResponse implements Serializable {
 	public void setResourceUUID(String resourceUUID) {
 		this.resourceUUID = resourceUUID;
 	}
+	
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	};
 }

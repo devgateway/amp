@@ -12,7 +12,12 @@
 		</id>			
 		<property name="code" column="code" type="java.lang.String" not-null="true" />
 		<property name="description" column="description" type="text" />
-		<property name="type" column="type" type="java.lang.String" />
+		<property name="type" column="type">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">org.digijava.module.aim.dbentity.AmpGPINiQuestion$GPINiQuestionType</param>
+				<param name="useNamed">true</param>
+			</type>
+		</property>
 		<property name="index" column="index" type="java.lang.Integer" />
 		<property name="allowMultiple" column="allow_multiple" type="java.lang.Boolean" />
 		<property name="requiresDataEntry" column="requires_data_entry" type="java.lang.Boolean" />

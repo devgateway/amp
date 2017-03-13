@@ -31,7 +31,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 	/**
 	 * Map<DONOR_REPORT_COLUMN, corresponding PLEDGE_REPORT_COLUMN>
 	 */
-    final static Map<String, String> DONOR_COLUMNS_TO_PLEDGE_COLUMNS = new HashMap<String, String>() {{
+    public static final Map<String, String> DONOR_COLUMNS_TO_PLEDGE_COLUMNS = new HashMap<String, String>() {{
     	put(ColumnConstants.PROJECT_TITLE, ColumnConstants.PLEDGES_TITLES);
         put(ColumnConstants.STATUS, ColumnConstants.PLEDGE_STATUS);
         put(ColumnConstants.MODALITIES, ColumnConstants.PLEDGES_AID_MODALITY);
@@ -83,7 +83,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 	/**
 	 * the dimensions whose {@link NiDimensionUsage} instances are ORed between themselves while filtering (please see the contract for {@link #shouldCollapseDimension(NiDimension)}
 	 */
-	Set<String> ORED_DIMENSIONS = new HashSet<>(Arrays.asList("locs", "sectors", "progs"));
+	Set<String> ORED_DIMENSIONS = new HashSet<>(Arrays.asList("locs", "sectors", "progs", "orgs"));
 	
 	Set<String> locationColumns = new HashSet<>(Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
 

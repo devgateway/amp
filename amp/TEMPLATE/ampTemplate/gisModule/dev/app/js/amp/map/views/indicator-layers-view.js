@@ -122,13 +122,12 @@ module.exports = Backbone.View.extend({
         featureValue = feature.properties.value;
         // sets colour for each polygon
         colour = layerModel.palette.colours.find(function(colour) {
-          return colour.get('test').call(colour, featureValue);
+        	return colour.get('test').call(colour, featureValue);
         });
-        if (!colour) {
-
+        if (!colour || featureValue == null) {
           colour = {hex: function() {return '#354';}};
           console.warn('No colour matched for the value ' + featureValue);
-          //throw new Error('No colour matched for the value ' + featureValue);
+          
         }
         return {
           color: colour.hex(),
@@ -175,7 +174,7 @@ module.exports = Backbone.View.extend({
 			  value = ampFormatter.format(feature.properties.value)
 		  }        
 
-		  var fundingPopupTemplate = value ? ['<strong>', feature.properties.name, '</strong>',
+		  var fundingPopupTemplate = feature.properties.value ? ['<strong>', feature.properties.name, '</strong>',
 		                                      '<br/>', formattedTitleString, '',
 		                                      value, ' ', unit].join('') : ['<strong>', feature.properties.name, '</strong>',
 		                                                                    '<br/>', self.app.translator.translateSync("amp.gis:popup-no-data","No Data")].join('');

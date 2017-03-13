@@ -2,17 +2,28 @@ package org.digijava.module.aim.action;
 
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Chunk;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Table;
-import com.lowagie.text.rtf.RtfWriter2;
-import com.lowagie.text.rtf.table.RtfCell;
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -24,6 +35,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
@@ -38,8 +50,11 @@ import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -94,27 +109,20 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.awt.*;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Table;
+import com.lowagie.text.rtf.RtfWriter2;
+import com.lowagie.text.rtf.table.RtfCell;
+
+import clover.com.google.common.base.Strings;
 
 
 public class ExportActivityToWord extends Action {
@@ -573,6 +581,12 @@ public class ExportActivityToWord extends Action {
                     doc.add(tbl);
                 }
 
+                List<Table> gpiTables = getGpiTables(request,
+                        ampContext, myForm);
+                for (Table tbl : gpiTables) {
+                    doc.add(tbl);
+                }
+
                 addProjectCostTables(myForm, request, ampContext, myForm.getFunding().getProProjCost(), 
                 		"Proposed Project Cost", doc);
                 addProjectCostTables(myForm, request, ampContext, myForm.getFunding().getRevProjCost(), 
@@ -594,6 +608,92 @@ public class ExportActivityToWord extends Action {
                     doc.add(tbl);
                 }
 
+                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E")) {
+                    Table meTbl = null;
+                    meTbl = new Table(1);
+                    meTbl.setWidth(100);
+                    meTbl.setBorder(0);
+                    RtfCell meTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("M & E").toUpperCase(), HEADERFONT));
+                    meTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    meTitleCell.setBackgroundColor(CELLCOLORGRAY);
+                    meTbl.addCell(meTitleCell);
+
+                    if (myForm.getIndicators() != null) {
+                        String valueLabel = TranslatorWorker.translateText("Value");
+                        String commentLabel = TranslatorWorker.translateText("Comment");
+                        String dateLabel = TranslatorWorker.translateText("Date");
+                        String nameLabel = TranslatorWorker.translateText("Name");
+                        String codeLabel = TranslatorWorker.translateText("Code");
+                        String logFrameLabel = TranslatorWorker.translateText("LogFrame");
+                        String sectorsLabel = TranslatorWorker.translateText("Sectors");
+
+                        for (IndicatorActivity indicator : myForm.getIndicators()) {
+                            Table headerTable = new Table(4);
+                            headerTable.setWidth(99);
+                            headerTable.setWidths(new int[]{ 3, 1, 1, 2 });
+                            headerTable.getDefaultCell().setBorder(0);
+                            headerTable.getDefaultCell().setBackgroundColor(new Color(244, 244, 242));
+                            headerTable.addCell(nameLabel);
+                            headerTable.addCell(codeLabel);
+                            headerTable.addCell(logFrameLabel);
+                            headerTable.addCell(sectorsLabel);
+                            headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
+
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Name")) {
+                                headerTable.addCell(new Paragraph(indicator.getIndicator().getName(), BOLDFONT));
+                            }
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Code")) {
+                                headerTable.addCell(indicator.getIndicator().getCode());
+                            }
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/Logframe Category")) {
+                                if (indicator.getValues() != null && indicator.getValues().size() > 0) {
+                                    headerTable.addCell(indicator.getLogFrame() + "\n");
+                                }
+                            }
+                            
+                            if (indicator.getIndicator().getSectors() != null) {
+                                headerTable.addCell(ExportUtil.getIndicatorSectors(indicator) + "\n");
+                            }
+
+                            RtfCell headerCell = new RtfCell();
+                            headerCell.setBorder(0);
+                            headerCell.add(headerTable);
+                            meTbl.addCell(headerCell);
+
+                            for (AmpIndicatorValue value : indicator.getValuesSorted()) {
+
+                                String fieldName = ExportUtil.getIndicatorValueType(value);
+                                columnVal = TranslatorWorker.translateText(ExportUtil.INDICATOR_VALUE_NAME.get(value.getValueType()));
+                                RtfCell cellValueTitle = new RtfCell();
+                                cellValueTitle.setBorder(0);
+                                cellValueTitle.add(new Paragraph(columnVal, BOLDFONT));
+                                meTbl.addCell(cellValueTitle);
+
+                                Table additionalInfoSubTable = new Table(2);
+                                additionalInfoSubTable.setWidth(80);
+
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Value")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, valueLabel, (value.getValue() != null ? FormatHelper.formatNumber(value.getValue()) : null), null);
+                                }
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Comments")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, commentLabel, DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);
+                                }
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Date")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, dateLabel, (value.getValueDate() != null ? DateConversion.convertDateToLocalizedString(value.getValueDate()) : null), null);
+                                }
+
+                                RtfCell cellValue = new RtfCell();
+                                cellValue.setBorder(0);
+                                cellValue.add(additionalInfoSubTable);
+                                meTbl.addCell(cellValue);
+
+                            }
+                        }
+
+                    }
+                    doc.add(meTbl);
+                }
+
                 List<Table> activityPerformanceTables = getActivityPerformanceTables(request, activity);
                 for (Table tbl : activityPerformanceTables) {
                     doc.add(tbl);
@@ -608,6 +708,7 @@ public class ExportActivityToWord extends Action {
                 for (Table tbl : structures1) {
                     doc.add(tbl);
                 }
+
             }
 
             //close document
@@ -1337,6 +1438,41 @@ public class ExportActivityToWord extends Action {
                 retVal.add(createSectionTable(sectionHelper, request,
                         ampContext));
             }
+
+        }
+        return retVal;
+    }
+
+    private List<Table> getGpiTables(HttpServletRequest request,
+                                     ServletContext ampContext, EditActivityForm myForm)
+            throws WorkerException, BadElementException {
+        List<Table> retVal = new ArrayList<Table>();
+        if (FeaturesUtil.isVisibleModule("/Activity Form/GPI")) {
+            boolean createTable = false;
+            ExportSectionHelper sectionHelper = new ExportSectionHelper(
+                    "GPI", true);
+            retVal.add(createSectionTable(sectionHelper, request, ampContext));
+
+            sectionHelper = new ExportSectionHelper(null, false);
+
+            for (AmpGPISurvey survey : myForm.getGpiSurvey()) {
+                List<AmpGPISurveyResponse> list = new ArrayList<>(survey.getResponses());
+                Collections.sort(list, new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
+                String indicatorName = "";
+                for (AmpGPISurveyResponse response : list) {
+                    if (!indicatorName.equals(response.getAmpQuestionId().getAmpIndicatorId().getName())) {
+                        indicatorName = response.getAmpQuestionId().getAmpIndicatorId().getName();
+                        ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(indicatorName, null, null, true);
+                        sectionHelper.addRowData(rowData);
+                    }
+                    String responseText = (response.getResponse() != null ? response.getResponse() : "");
+                    ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
+                            response.getAmpQuestionId().getQuestionText(), null, null, true).addRowData(responseText);
+                    sectionHelper.addRowData(rowData);
+                }
+            }
+
+            retVal.add(createSectionTable(sectionHelper, request, ampContext));
 
         }
         return retVal;

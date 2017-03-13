@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -22,9 +23,11 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
+import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.aim.util.SectorUtil;
@@ -147,6 +150,7 @@ public class AmpARFilterConverter {
 	private void addActivityDatesFilters() {
 		addActivityDateFilter(arFilter.buildFromAndToActivityStartDateAsDate(), ColumnConstants.ACTUAL_START_DATE);
 		addActivityDateFilter(arFilter.buildFromAndToProposedApprovalDateAsDate(), ColumnConstants.PROPOSED_APPROVAL_DATE);
+		addActivityDateFilter(arFilter.buildFromAndToProposedStartDateAsDate(), ColumnConstants.PROPOSED_START_DATE);
 		addActivityDateFilter(arFilter.buildFromAndToActivityActualCompletionDateAsDate(), ColumnConstants.ACTUAL_COMPLETION_DATE);
 		addActivityDateFilter(arFilter.buildFromAndToActivityFinalContractingDateAsDate(), ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
 		addActivityDateFilter(arFilter.buildFromAndToEffectiveFundingDateAsDate(), ColumnConstants.EFFECTIVE_FUNDING_DATE);
@@ -180,55 +184,102 @@ public class AmpARFilterConverter {
 	}
 	
 	/** adds primary, secondary and tertiary sectors to the filters if specified */
-	protected void addSectorFilters() {
-		addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECTORS : ColumnConstants.PRIMARY_SECTOR);
-		addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_SECTORS : ColumnConstants.SECONDARY_SECTOR);
-		addSectorSchemeFilters(arFilter.getSelectedTertiarySectors(), "Tertiary", arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_SECTORS : ColumnConstants.TERTIARY_SECTOR);
+	private void addSectorFilters() {
+		addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PRIMARY_SECTOR);
+		addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", ColumnConstants.SECONDARY_SECTOR);
+		addSectorSchemeFilters(arFilter.getSelectedTertiarySectors(), "Tertiary", ColumnConstants.TERTIARY_SECTOR);
 		
 		if (!arFilter.isPledgeFilter())
 			addSectorSchemeFilters(arFilter.getSelectedTagSectors(), "Tag", ColumnConstants.SECTOR_TAG);
 	}
 
-	protected void addSectorSchemeFilters(Set<AmpSector> selectedEntries, String scheme, String columnName) {
+	private void addSectorSchemeFilters(Set<AmpSector> selectedEntries, String scheme, String columnName) {
 		if (selectedEntries == null || selectedEntries.isEmpty())
 			return;
 
 		Map<Long, AmpSector> sectorsByIds = selectedEntries.stream().collect(Collectors.toMap(z -> z.getAmpSectorId(), z -> z));
-		Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(SectorUtil.distributeSectorsByScheme(selectedEntries), sectorsByIds);
-		addFilter(sectorsByScheme.get(scheme), columnName);
+		Map<String, List<AmpSector>> sectorsByScheme = distributeEntities(SectorUtil.distributeSectorsByScheme(selectedEntries), sectorsByIds);
+
+
+		List<AmpSector> ampSectors = sectorsByScheme.get(scheme);
+		if (ampSectors != null) {
+			ampSectors.stream()
+					.collect(Collectors.groupingBy(s -> findSubSectorColumnName(columnName, s)))
+					.forEach((levelColumn, levelSectors) -> addFilter(levelSectors, levelColumn));
+		}
 	}
-	
-	protected Map<String, List<NameableOrIdentifiable>> distributeEntities(Map<String, List<Long>> distributedIds, Map<Long, ? extends NameableOrIdentifiable> input) {
-		Map<String, List<NameableOrIdentifiable>> res = new HashMap<>();
+
+	private String findSubSectorColumnName(String columnName, AmpSector sector) {
+		AmpSector current = sector;
+		int depth = 0;
+		while (current.getParentSectorId() != null) {
+			current = current.getParentSectorId();
+			depth++;
+		}
+		String levelColumn;
+		if (depth == 0) {
+			levelColumn = columnName;
+		} else {
+			levelColumn = columnName + " " + StringUtils.repeat("Sub-", depth) + "Sector";
+		}
+		if (arFilter.isPledgeFilter()) {
+			levelColumn = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumn, levelColumn);
+		}
+		return levelColumn;
+	}
+
+	private <T> Map<String, List<T>> distributeEntities(Map<String, List<Long>> distributedIds, Map<Long, T> input) {
+		Map<String, List<T>> res = new HashMap<>();
 		
 		for(String scheme:distributedIds.keySet()) {
-			res.put(scheme, new ArrayList<NameableOrIdentifiable>());
+			res.put(scheme, new ArrayList<>());
 			for(Long id:distributedIds.get(scheme)) {
-				NameableOrIdentifiable entity = input.get(id);
+				T entity = input.get(id);
 				if (entity == null)
 					throw new RuntimeException("bug while restoring backmap for id: " + id + ", scheme: " + scheme);
 				res.get(scheme).add(entity);
 			}
 		}			
 		return res;
-	};
+	}
 	
 	/** adds programs and national objectives filters */
 	private void addProgramAndNationalObjectivesFilters() {
-		addFilter(arFilter.getSelectedPrimaryPrograms(), 
-				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_PROGRAMS : ColumnConstants.PRIMARY_PROGRAM));
-		addFilter(arFilter.getSelectedSecondaryPrograms(), 
-				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_PROGRAMS : ColumnConstants.SECONDARY_PROGRAM));
+		addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PRIMARY_PROGRAM);
+
+		addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.SECONDARY_PROGRAM);
+
 		//TODO: how to detect tertiary programs
 		//addFilter(arFilter.get(), 
 		//		(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_PROGRAMS : ColumnConstants.TERTIARY_PROGRAM), entityType);
-		
-		addFilter(arFilter.getSelectedNatPlanObj(), 
-				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES : ColumnConstants.NATIONAL_PLANNING_OBJECTIVES));
+
+		addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
 		
 		if (!arFilter.isPledgeFilter()) {
 			//TBD national plan objectives levels 1-8?
 		}
+	}
+
+	private void addMultiLevelFilter(Collection<AmpTheme> themes, String columnName) {
+		if (themes != null) {
+			themes.stream()
+					.collect(Collectors.groupingBy(t -> findLevelColumnName(columnName, t)))
+					.forEach((levelColumnName, levelThemes) -> addFilter(levelThemes, levelColumnName));
+		}
+	}
+
+	private String findLevelColumnName(String columnName, AmpTheme ampTheme) {
+		AmpTheme current = ampTheme;
+		int depth = 0;
+		while (current.getParentThemeId() != null) {
+			current = current.getParentThemeId();
+			depth++;
+		}
+		String levelColumnName = columnName + " Level " + depth;
+		if (arFilter.isPledgeFilter()) {
+			levelColumnName = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumnName, levelColumnName);
+		}
+		return levelColumnName;
 	}
 	
 	private void addLocationFilters() {

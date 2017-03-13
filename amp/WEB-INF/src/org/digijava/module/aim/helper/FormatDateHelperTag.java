@@ -1,8 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -15,18 +14,18 @@ public class FormatDateHelperTag extends BodyTagSupport {
 	 */
 	
 	private static final long serialVersionUID = 1L;
-	private Timestamp value;
-	
+	private Date value;
+
 	@Override
 	public int doStartTag() throws JspException {
 		try {
 
 			JspWriter out = pageContext.getOut();
-			Timestamp time = getValue();
-			String result="";
-			if (value!=null)
-				result = DateConversion.convertDateToLocalizedString( new Date(value.getTime()) );
-			
+			String result = "";
+			if (value != null) {
+				result = DateConversion.convertDateToLocalizedString(value);
+			}
+
 			out.write(result);
 			return super.doStartTag();
 		} catch (IOException ioe) {
@@ -48,11 +47,12 @@ public class FormatDateHelperTag extends BodyTagSupport {
 		return EVAL_PAGE;
 	}
 
-	public void setValue(Timestamp value) {
+	public void setValue(Date value) {
 		this.value = value;
 	}
 
-	public Timestamp getValue() {
+	public Date getValue() {
 		return value;
 	}
+
 }

@@ -114,7 +114,7 @@ public class FiltersEndpoint {
 				activityStatus.add(sjb);
 			}
 			activityStatus = orderByProperty (activityStatus,NAME_PROPERTY);
-			as.set("filterId", ColumnConstants.APPROVAL_STATUS);
+			as.set("filterId", FiltersConstants.APPROVAL_STATUS);
 			as.set("name", TranslatorWorker.translateText(ColumnConstants.APPROVAL_STATUS));
 			as.set("values",activityStatus);
 		}
@@ -227,9 +227,9 @@ public class FiltersEndpoint {
 	 * @return
 	 */
 	@GET
-	@Path("/dates/")
+	@Path("/date/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Dates", id = "Dates", tab = EPConstants.TAB_OTHER)
+	@ApiMethod(ui = true, name = "Date", id = "date", tab = EPConstants.TAB_OTHER)
 	public JsonBean getDates(){
 		JsonBean date = new JsonBean();
 		date.set("startYear", 1985);
@@ -913,7 +913,7 @@ public class FiltersEndpoint {
     @Path("/computed-year")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.COMPUTED_YEAR, name = "Computed Year",
-        columns = ColumnConstants.COMPUTED_YEAR, tab = EPConstants.TAB_OTHER)
+        columns = ColumnConstants.COMPUTED_YEAR, filterType = {FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
     public SettingField getComputedYear() {
 	    return FiltersBuilder.buildComputedYears();
 	}

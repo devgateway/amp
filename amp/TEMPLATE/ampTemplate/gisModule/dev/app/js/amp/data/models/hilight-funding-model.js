@@ -65,7 +65,7 @@ module.exports = IndicatorJoinModel.extend({
 
   fetch: function(options) {
     var self = this;
-    var payload = {otherFilters: {}};
+    var payload = {};
     var deferred = $.Deferred();
 
     // get filters

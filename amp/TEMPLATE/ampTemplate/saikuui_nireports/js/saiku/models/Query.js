@@ -43,7 +43,6 @@ var Query = Backbone.Model.extend({
         this.model = _.extend({ name: this.uuid }, SaikuQueryTemplate);
         this.helper = new SaikuQueryHelper(this);
         this.result = new Result({ limit: Settings.RESULT_LIMIT }, { query: this });
-        this.timestamp = new Date().getTime();
 
         //Start Custom Code for Pagination
        	this.set({page:1});
@@ -54,22 +53,23 @@ var Query = Backbone.Model.extend({
         //End Custom Code for Pagination
         
         this.transformSavedFilters();
-    },    
+    },
     
     transformSavedFilters: function() {
     	Saiku.logger.log("Query.transformSavedFilters");
     	var self = this;
-        if (this.firstLoad === true) {
-        	// Get original filters from reports specs.
-        	var auxFilters = self.get('filters');
-	        // Cleanup filters property on this Query.
-        	self.set('filters', undefined);
-	        // TODO: Review this 2-steps process completely.
-	        var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
-	        var blob = CommonFilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
-	        Saiku.logger.log(blob);
-	        // Set these filters reformatted. 
-	        self.set('filters', blob);	       
+        if (this.firstLoad === true) {        	
+        	var  auxFilters = self.get('filters');
+        	
+        	//remove null filters
+        	$.each(auxFilters, function(key, value){
+        	    if (value === "" || value === null){
+        	        delete auxFilters[key];
+        	    }
+        	});
+	       
+        	self.set('filters', undefined);	         
+	        self.set('filters', auxFilters);	       
         }
     },
     
@@ -168,9 +168,9 @@ var Query = Backbone.Model.extend({
         	if(filters) {
         		this.set('filters', filters);
         		filtersApplied = true;
-        		//this.set('filtersWithModels', window.currentFilter.serializeToModels());
+        		
         	}	        	
-    	//}
+    	
 
     	var settingsApplied = false;
     	if(settings) {
@@ -184,11 +184,10 @@ var Query = Backbone.Model.extend({
 
     	exModel = this.workspace.currentQueryModel;
     	exModel.querySettings = {};
-    	//if (this.firstLoad === false) {
-    		exModel.queryModel.filters = this.get('filters');
-    		exModel.queryModel.filtersWithModels = this.get('filtersWithModels');
-    		exModel.queryModel.filtersApplied = filtersApplied;
-    	//}
+    	exModel.queryModel.filters = this.get('filters'); 
+    	exModel.queryModel.filtersWithModels = this.get('filtersWithModels');
+    	exModel.queryModel.filtersApplied = filtersApplied;
+    	
     	exModel.queryModel.settings = this.get('settings');        	
     	exModel.queryModel.settingsApplied = settingsApplied;
     	if(Settings.PAGINATION) {
@@ -205,7 +204,7 @@ var Query = Backbone.Model.extend({
         this.firstLoad = false;
         
         Saiku.logger.log("QueryRouter.calculateMD5FromParameters");
-        exModel.MD5 = CommonFilterUtils.calculateMD5FromParameters(exModel, this.get('report_id'), Saiku.i18n.locale);
+        exModel.MD5 = CommonFilterUtils.calculateMD5FromParameters(exModel, this.get('report_id'), Saiku.i18n.locale, this.get('page_timestamp'));
         exModel.querySettings.info = this.get('info');
 
         // Run it

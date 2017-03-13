@@ -131,6 +131,7 @@ $.noConflict(true);
 <script type="text/javascript" src="js/saiku/models/Repository.js"></script>
 <script type="text/javascript" src="js/saiku/models/Result.js"></script>
 <script type="text/javascript" src="js/saiku/plugins/AMPFilters/FilterUtils.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/lib/object_hash.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/CommonFilterUtils.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"></script>
 <script type="text/javascript" src="js/saiku/models/Query.js"></script>
@@ -144,7 +145,6 @@ $.noConflict(true);
 <script type="text/javascript" src="js/saiku/plugins/I18n/plugin.js"></script>
 <script type="text/javascript" src="js/saiku/plugins/Sorting/plugin.js"></script>
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/md5.js"></script>
 
 <!-- CCC dependencies -->
 <script type="text/javascript" src="js/saiku/plugins/CCC_Chart/jquery.tipsy.js"></script>
@@ -236,13 +236,16 @@ $.noConflict(true);
             <li><a href="#export_amp_pdf"
                 class="i18n export_pdf button disabled_toolbar sprite"
                 title="Export PDF"></a></li>
+			<li><a href="#export_amp_xml"
+                class="i18n export_xml button disabled_toolbar sprite"
+                title="Export XML"></a></li>
             <li><a href="#switch_to_mdx"
                 class="i18n switch_to_mdx button disabled_toolbar"
                 title="Switch to MDX Mode"></a></li>
             <li class="seperator">
                 <a href="#export_amp_dual_currency"
                   class="i18n export_dual_currency button disabled_toolbar sprite"
-                  title="Dual currency report export"/></a></li>
+                  title="Dual currency report export"></a></li>
         </ul>
 </script>
 

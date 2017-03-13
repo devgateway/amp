@@ -110,7 +110,7 @@ module.exports = Backbone.Model
   fetch: function(){	
 	  var self = this;
 	  	  
-	  var filter = {otherFilters: {}};
+	  var filter = {};
 	  if (app.data.filter) {
 		  _.extend(filter, app.data.filter.serialize());
 	  }
@@ -216,10 +216,12 @@ module.exports = Backbone.Model
     	value.geoId = value.geoId ? $.trim(value.geoId) : value.geoId; 
     	return value;
     });
+   
     var indexedValues = _.indexBy(values, 'geoId');
     if(indexedValues["null"]) {
         indexedValues[0] = indexedValues["null"]; //hack for some countries the geoId is null.
     }
+       
     var admKey = this.get('adminLevel').replace('-', '').toUpperCase();
 
     // copy boundary geoJSON, and inject data
@@ -230,21 +232,14 @@ module.exports = Backbone.Model
         // replacing for now, to save weight
     	var admCode = feature.properties[admKey + '_CODE'];
     	feature.id = admCode ? $.trim(admCode) : admCode;
-        feature.properties.name = feature.properties[admKey + '_NAME'] || '';
-
-        if (!indexedValues[feature.id]) {
-          indexedValues[feature.id] = {value: 0};
-          self.palette.set({min: 0});
-        }
-
+        feature.properties.name = feature.properties[admKey + '_NAME'] || '';       
         return _.extend(feature, {
           properties: _.extend(feature.properties, {
-            value: indexedValues[feature.id].value
+            value: indexedValues[feature.id] ? indexedValues[feature.id].value : null 
           })
         });
       })
     });
-
     this.set('geoJSON', geoJSON);
   }
 

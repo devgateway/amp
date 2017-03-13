@@ -1,7 +1,7 @@
 package org.dgfoundation.amp.nireports;
 
 import java.time.LocalDate;
-import java.util.Objects;
+import java.util.Comparator;
 import java.util.Optional;
 
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
@@ -16,28 +16,34 @@ public final class DateCell extends Cell {
 
 	/** the payload - the held date */
 	public final LocalDate date;
-	
+	public final MetaInfoSet metaInfo;
+
+	private static final Comparator<LocalDate> dateComparator = Comparator.nullsFirst(Comparator.naturalOrder());
+
 	public DateCell(LocalDate date, long activityId, long entityId, Optional<LevelColumn> levelColumn) {
+		this(date, activityId, entityId, MetaInfoSet.empty(), levelColumn);
+	}
+
+	public DateCell(LocalDate date, long activityId, long entityId, MetaInfoSet metaInfo, Optional<LevelColumn> levelColumn) {
 		super(activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
-		Objects.requireNonNull(date);
 		this.date = date;
+		this.metaInfo = metaInfo.freeze();
 	}
 
 	@Override
 	public DateCell changeOwnerId(long newActivityId) {
-		return new DateCell(this.date, newActivityId, this.entityId, this.mainLevel);
+		return new DateCell(this.date, newActivityId, this.entityId, metaInfo, this.mainLevel);
 	}
 
 	@Override
-	/** always empty */
 	public MetaInfoSet getMetaInfo() {
-		return MetaInfoSet.empty();
+		return metaInfo;
 	}
 
 	@Override
 	public int compareTo(Object o) {
 		DateCell dc = (DateCell) o;
-		return date.compareTo(dc.date);
+		return dateComparator.compare(date, dc.date);
 	}
 
 	@Override
@@ -45,10 +51,10 @@ public final class DateCell extends Cell {
 		String entityStr = this.entityId > 0 ? String.format(", eid: %d", this.entityId) : "";
 		return String.format("%s (id: %d%s, coos: %s)", date, this.activityId, entityStr, coordinates);
 	}
-	
+
 	@Override
 	public String getDisplayedValue() {
-		return date.toString();
+		return String.valueOf(date);
 	}
 
 }

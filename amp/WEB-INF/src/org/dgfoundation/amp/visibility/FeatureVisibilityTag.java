@@ -142,7 +142,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 					Map scope=PermissionUtil.getScope(pageContext.getSession());
 					AmpFeaturesVisibility ampFeatureFromTree=ampTreeVisibility.getFeatureByNameFromRoot(getName());
 					TeamMember teamMember 	= (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-					if (teamMember!=null && !teamMember.getTeamHead())
+					if (teamMember!=null )//&& !teamMember.getTeamHead())
 					{
 						PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
 						ServletRequest request = pageContext.getRequest();

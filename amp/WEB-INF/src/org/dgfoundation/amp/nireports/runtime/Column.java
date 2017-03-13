@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports.runtime;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 
 /**
@@ -13,6 +14,8 @@ import org.dgfoundation.amp.nireports.ReportHeadingCell;
 public abstract class Column {
 	
 	public final String name;
+
+	public final LocalizableLabel label;
 	
 	/**
 	 * null for root columns or where does not make sense
@@ -42,15 +45,16 @@ public abstract class Column {
 	public abstract List<CellColumn> getLeafColumns();
 	public abstract List<Column> getChildrenStartingAtDepth(int depth);
 			
-	protected Column(String name, GroupColumn parent, NiColSplitCell splitCell) {
+	protected Column(String name, LocalizableLabel label, GroupColumn parent, NiColSplitCell splitCell) {
 		this.name = name;
+		this.label = label;
 		this.parent = parent;
 		this.splitCell = splitCell;
 		this.hierarchicalName = parent == null ? name : String.format("%s / %s", parent.getHierName(), name);
 	}
 	
 	public GroupColumn asGroupColumn(List<Column> subColumns, GroupColumn newParent) {
-		return new GroupColumn(this.name, subColumns, newParent, this.splitCell);
+		return new GroupColumn(this.name, this.label, subColumns, newParent, this.splitCell);
 	}
 	
 	public String getHierName() {

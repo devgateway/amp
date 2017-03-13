@@ -2,23 +2,27 @@ package org.digijava.module.aim.action;
 
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.ListItem;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfPTableEvent;
-import com.lowagie.text.pdf.PdfWriter;
-import com.lowagie.text.pdf.draw.LineSeparator;
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -41,8 +45,11 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -96,25 +103,26 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.awt.*;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.ListItem;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfPTableEvent;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.draw.LineSeparator;
 
+import clover.com.google.common.base.Strings;
 import clover.org.apache.commons.lang.StringUtils;
 
 /**
@@ -1326,6 +1334,26 @@ public class ExportActivityToPDF extends Action {
              */
             buildContractsPart(myForm, request, mainLayout);
 
+            //GPI
+            if (FeaturesUtil.isVisibleModule("/Activity Form/GPI")) {
+                PdfPCell gpiCell1 = new PdfPCell();
+                p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("GPI", locale, siteId)) + ":", titleFont);
+                p1.setAlignment(Element.ALIGN_RIGHT);
+                gpiCell1.setBorder(0);
+                gpiCell1.addElement(p1);
+                gpiCell1.setBackgroundColor(new Color(244, 244, 242));
+                mainLayout.addCell(gpiCell1);
+
+                PdfPCell gpiCell2 = new PdfPCell();
+                gpiCell2.setBorder(0);
+                PdfPTable gpiTable = new PdfPTable(1);
+
+                buildGpiSurveyOutput(gpiTable, myForm.getGpiSurvey());
+
+                gpiCell2.addElement(gpiTable);
+                mainLayout.addCell(gpiCell2);
+            }
+
             /**
              * Activity created by
              */
@@ -1383,6 +1411,85 @@ public class ExportActivityToPDF extends Action {
                 createGeneralInfoRow(mainLayout,columnName,identification.getCreatedDate());
             }
 
+            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E")) {
+                PdfPCell meCell = new PdfPCell();
+                p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("M & E", locale, siteId)), titleFont);
+                p1.setAlignment(Element.ALIGN_RIGHT);
+                meCell.addElement(p1);
+                meCell.setBackgroundColor(new Color(244, 244, 242));
+                meCell.setBorder(0);
+                mainLayout.addCell(meCell);
+
+                PdfPTable meTable = new PdfPTable(1);
+                meTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+                if (myForm.getIndicators() != null) {
+                    String valueLabel = TranslatorWorker.translateText("Value");
+                    String commentLabel = TranslatorWorker.translateText("Comment");
+                    String dateLabel = TranslatorWorker.translateText("Date");
+                    String nameLabel = TranslatorWorker.translateText("Name");
+                    String codeLabel = TranslatorWorker.translateText("Code");
+                    String logFrameLabel = TranslatorWorker.translateText("LogFrame");
+                    String sectorsLabel = TranslatorWorker.translateText("Sectors");
+
+                    for (IndicatorActivity indicator : myForm.getIndicators()) {
+                        PdfPTable headerTable = new PdfPTable(4);
+                        headerTable.setWidths(new int[]{ 3, 1, 1, 2 });
+                        headerTable.setTotalWidth(100);
+                        headerTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+                        headerTable.getDefaultCell().setBackgroundColor(new Color(244, 244, 242));
+                        headerTable.addCell(new Paragraph(postprocessText(nameLabel), plainFont));
+                        headerTable.addCell(new Paragraph(postprocessText(codeLabel), plainFont));
+                        headerTable.addCell(new Paragraph(postprocessText(logFrameLabel), plainFont));
+                        headerTable.addCell(new Paragraph(postprocessText(sectorsLabel), plainFont));
+                        headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
+
+                        if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Name")) {
+                            headerTable.addCell(new Paragraph(postprocessText(indicator.getIndicator().getName()), titleFont));
+                        }
+                        if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Code")) {
+                            headerTable.addCell(indicator.getIndicator().getCode());
+                        }
+                        if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/Logframe Category")) {
+                            if (indicator.getValues() != null && indicator.getValues().size() > 0) {
+                                headerTable.addCell(indicator.getLogFrame());
+                            }
+                        }
+
+                        if (indicator.getIndicator().getSectors() != null) {
+                            headerTable.addCell(new Paragraph(postprocessText(ExportUtil.getIndicatorSectors(indicator) + "\n"), titleFont));
+                        }
+
+                        meTable.addCell(headerTable);
+
+                        for (AmpIndicatorValue value : indicator.getValuesSorted()) {
+                            columnVal = "";
+                            String fieldName = ExportUtil.getIndicatorValueType(value);
+                            PdfPCell indicatorTypeCell = new PdfPCell();
+                            indicatorTypeCell.addElement(new Paragraph(postprocessText(TranslatorWorker.translateText(ExportUtil.INDICATOR_VALUE_NAME.get(value.getValueType()))), titleFont));
+                            indicatorTypeCell.setBorder(0);
+                            meTable.addCell(indicatorTypeCell);
+
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Value")) {
+                                columnVal += valueLabel + ": " + Strings.nullToEmpty(FormatHelper.formatNumber(value.getValue())) + "\n";
+                            }
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Comments")) {
+                                columnVal += commentLabel + ": " + Strings.nullToEmpty(value.getComment()) + "\n";
+                            }
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Date")) {
+                                columnVal += dateLabel + ": " + DateConversion.convertDateToLocalizedString(value.getValueDate()) + "\n";
+                            }
+                            PdfPCell valuesCell = new PdfPCell();
+                            valuesCell.addElement(new Paragraph(postprocessText(columnVal), plainFont));
+                            valuesCell.setBorder(0);
+                            meTable.addCell(valuesCell);
+
+                        }
+                    }
+
+                    mainLayout.addCell(meTable);
+                    mainLayout.addCell(new Paragraph("\n"));
+                }
+            }
             /**
              * Activity - Performance
              */
@@ -3388,6 +3495,47 @@ public class ExportActivityToPDF extends Action {
         }
         mainLayout.addCell(cell2);
     }
+
+    /**
+     * builds GPI survey
+     */
+    private void buildGpiSurveyOutput(PdfPTable gpiTable, Set<AmpGPISurvey> surveys) throws WorkerException {
+        if ((surveys != null && !surveys.isEmpty())) {
+            PdfPCell surveyCell = new PdfPCell();
+            surveyCell.setBorder(1);
+            surveyCell.setBorderColor(new Color(201, 201, 199));
+            com.lowagie.text.List surveyList = new com.lowagie.text.List(false); //not numbered list
+            surveyList.setListSymbol(new Chunk("\u2022"));
+
+            for (AmpGPISurvey survey : surveys) {
+                List<AmpGPISurveyResponse> list = new ArrayList<>(survey.getResponses());
+                Collections.sort(list, new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
+                String indicatorName = "";
+                for (AmpGPISurveyResponse response : list) {
+                    if (!indicatorName.equals(response.getAmpQuestionId().getAmpIndicatorId().getName())) {
+                        indicatorName = response.getAmpQuestionId().getAmpIndicatorId().getName();
+                        Paragraph paragraph = new Paragraph(new Paragraph(new Phrase(postprocessText(TranslatorWorker.translateText(indicatorName)), titleFont)));
+                        PdfPCell indicatorNameCell = new PdfPCell(paragraph);
+                        indicatorNameCell.setBorder(0);
+                        indicatorNameCell.setBackgroundColor(new Color(255, 255, 255));
+                        gpiTable.addCell(indicatorNameCell);
+                    }
+                    String responseText = (response.getResponse() != null ? response.getResponse() : "");
+                    Paragraph paragraph = new Paragraph(new Paragraph(new Phrase(postprocessText(response.getAmpQuestionId().getQuestionText()) + "  " + responseText, plainFont)));
+                    PdfPCell questionCell = new PdfPCell(paragraph);
+                    questionCell.setBorder(0);
+                    questionCell.setBackgroundColor(new Color(255, 255, 255));
+                    gpiTable.addCell(questionCell);
+                }
+            }
+
+
+            PdfPCell emptyCell = new PdfPCell(new Paragraph(" "));
+            emptyCell.setBorder(0);
+            gpiTable.addCell(emptyCell);
+        }
+    }
+
 
     /**
      * builds all related organizations Info that should be exported to PDF

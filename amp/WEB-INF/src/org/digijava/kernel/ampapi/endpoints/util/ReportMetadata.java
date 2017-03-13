@@ -96,5 +96,5 @@ public class ReportMetadata {
 	public void setReportIdentifier(String reportIdentifier) {
 		this.reportIdentifier = reportIdentifier;
 	}
-	
+
 }

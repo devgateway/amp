@@ -34,7 +34,7 @@ module.exports = Backbone.Model
   },
 
   fetch: function(options) {
-    var filter = {otherFilters: {}};
+    var filter = {};
 
     // TODO: move lastFetchXhr code into a mixin or something...
     //Stop last fetch before doing new one.
@@ -51,7 +51,8 @@ module.exports = Backbone.Model
     // TODO: verify settings works..
     filter.settings = this.collection.settingsWidget.toAPIFormat();
 
-    filter.otherFilters.adminLevel = this._translateADMToMagicWord(this.get('value'));
+    filter.filters = filter.filters || {};
+    filter.filters.adminLevel = this._translateADMToMagicWord(this.get('value'));
 
     options = _.defaults((options || {}), {
       type: 'POST',

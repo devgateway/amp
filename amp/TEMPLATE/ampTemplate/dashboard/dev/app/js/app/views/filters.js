@@ -19,39 +19,25 @@ module.exports = BackboneDash.View.extend({
   },
 
   initialize: function(options) {
+	var self = this;
     this.finishedFirstLoad = false;
     this.app = options.app;
     this.listenTo(this.app.filter, 'cancel', this.hideFilter);
     this.listenTo(this.app.filter, 'apply', this.applyFilter);
-    this.app.generalSettings.load().done(_(function() {
-      // Extract default dates from Global Settings.
-      var blob = {};
-      // AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...)
-      
-      this.app.filter.extractDates(this.app.generalSettings, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
-
-      this.app.filter.loaded.done(_(function() {
-        console.info('filters loaded');
+    this.app.generalSettings.load().done(_(function() {     
+      this.app.filter.loaded.done(_(function() {        
         this.app.state.register(this, 'filters', {
-          // namespace serialized filters so we can hook in extra state to store
-          // later if desired (anything dashboards-ui related, for example)
-          get: _(function() {
-            return {
-              filter: this.app.filter.serialize()
-            };
+            get: _(function() {
+             return this.app.filter.serialize();            
           }).bind(this),
-          set: _(function(state) {
-            if (_.isEmpty(state.filter)){            
-              filtersViewLog.log('Using default filter dates.');
-              // AMP-21118: Dont override all filters, just dates section.
-              state.filter.otherFilters = blob.otherFilters;
+          set: _(function(state) {        	
+            if (_.isEmpty(state)){            
+            	self.app.filter.extractDates(self.app.generalSettings, state, 'dashboard-default-min-date', 'dashboard-default-max-date');
             }
-            this.app.filter.deserialize(state.filter);
+            this.app.filter.deserialize(state);
             this.app.filter.finishedFirstLoad = true;
           }).bind(this),
-          empty: {
-            filter: {}
-          }
+          empty: {}
         });
       }).bind(this));
     }).bind(this));
@@ -71,10 +57,9 @@ module.exports = BackboneDash.View.extend({
     return this;
   },
 
-  renderApplied: function() {
-    var filters = this.app.filter.serializeToModels();
-    var countApplied = _(filters.columnFilters).keys().length;
-    countApplied += _(filters.otherFilters).keys().length;
+  renderApplied: function() {	  
+    var filterObject = this.app.filter.serializeToModels();
+    var countApplied = _(filterObject.filters).keys().length;
     this.$('.applied-filters').html(summaryTemplate({ countApplied: countApplied }));
     this.app.translator.translateDOM(this.el);
   },
@@ -95,46 +80,51 @@ module.exports = BackboneDash.View.extend({
   },
 
   showFilterDetails: function() {
-    var filters = this.app.filter.serializeToModels();
-    var applied = _(filters.columnFilters).map(function(filter, key) {
-      return {
-        name: filter.filterName || key,
-        id: key.replace(/[^\w]/g, ''), // remove anything non-alphanum
-        detail: _(filter).map(function(value) {
-          if (value.attributes !== undefined) {
-            return value.get('name');
-          } else {
-            // To fix problem with dates.
-            if (value !== key && value !== filter.filterName) {
-              return value;
-            }
-          }
-        })
-      };
+	var self = this;
+    var filterObject = this.app.filter.serializeToModels(); 
+    var applied = _(filterObject.filters).map(function(filter, key) {
+      var filterField = filterObject.filters[key];
+      if(filterField.modelType === 'YEAR-SINGLE-VALUE' || filterField.modelType === 'DATE-RANGE-VALUES'){
+    	  return self.getAppliedDateObject(filterObject,key);
+      } else {
+    	  return {
+    	        name: filter.filterName || key,
+    	        id: key.replace(/[^\w]/g, ''), // remove anything non-alphanum
+    	        detail: _(filter).map(function(value) {
+    	          if (value.attributes !== undefined) {
+    	            return value.get('name');
+    	          } else {
+    	            // To fix problem with dates.
+    	            if (value !== key && value !== filter.filterName) {
+    	              return value;
+    	            }
+    	          }
+    	        })
+    	      };  
+      }
+      
     });
-    if (filters.otherFilters) {
-      _.each(Object.keys(filters.otherFilters), function (filterKey) {
-          var filterField = filters.otherFilters[filterKey];
-          var dateRangeText = '';
-          if(filterKey === 'date') {
-            dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
-          } else if(filterKey === 'computedYear') {
-            dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
-          } else {
-            dateRangeText = app.translator.translateSync("amp.dashboard:" + filterKey.replace(/[^\w]/g, '-'), filterKey);
-          }
-          var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
-          applied.push({
-            id: filterKey.replace(/[^\w]/g, '-'),
-            name: dateRangeText,
-            detail: [detail]
-          });
-      });
-    }
+    
     this.$('.applied-filters').html(detailsTemplate({ applied: applied }));
     this.app.translator.translateDOM(this.el);
   },
-
+  getAppliedDateObject: function(filterObject, filterKey){
+	  var filterField = filterObject.filters[filterKey];
+	  var dateRangeText = '';
+	  if(filterKey === 'date') {
+		  dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
+	  } else if(filterKey === 'computed-year') {
+		  dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
+	  } else {
+		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterKey.replace(/[^\w]/g, '-'), filterKey);
+	  }
+	  var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
+	  return {
+		  id: filterKey.replace(/[^\w]/g, '-'),
+		  name: dateRangeText,
+		  detail: [detail]
+		};	  
+  },
   hideFilterDetails: function() {
     this.renderApplied();
   }

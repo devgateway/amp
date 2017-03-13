@@ -1421,7 +1421,7 @@ function collapseAll() {
 					</table>
 					<hr/>
 				</c:forEach>
-				<field:display name="Show Map In Activity Preview" feature="Map Options">
+				<module:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
 					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 					<tr> <td colspan="2">
 						<script type="text/javascript">
@@ -1433,7 +1433,7 @@ function collapseAll() {
 					</td> </tr>
 					</table>
 					<hr/>
-					</field:display>
+				</module:display>
 			</c:if>
 		</module:display>
 		<module:display name="/Activity Form/Location/Implementation Level" parentModule="/Activity Form/Location">
@@ -1615,6 +1615,14 @@ function collapseAll() {
 				<digi:trn>M &amp; E</digi:trn>
 			</span>	
 		</legend>
+
+		<!-- M & E  indicators list -->
+		<div id="melistdiv" class="toggleDiv">
+			<bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"/>
+			<jsp:include page="previewIndicatosList.jsp"/>
+		</div>
+		<!-- END M & E  indicators list -->
+
 		<div id="mediv" class="toggleDiv">
 			<table>
 				<field:display name="Activity Performance"  feature="Activity Dashboard">
@@ -1699,10 +1707,10 @@ function collapseAll() {
 			<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%" >
 				<tr bgcolor="#f0f0f0">
 					<td>
-						<digi:trn key="aim:cost">Name</digi:trn>					
+						<digi:trn key="aim:name">Name</digi:trn>
 					</td>
 					<td>
-						<digi:trn key="aim:cost">Percentage</digi:trn>					
+						<digi:trn key="aim:percentage">Percentage</digi:trn>
 					</td>
 				</tr>
 				<c:forEach var="budgetStructure" items="${aimEditActivityForm.budgetStructure}" >
@@ -3290,7 +3298,67 @@ function collapseAll() {
 <!-- end IPA Contracting -->
 </feature:display>
 
+<!-- GPI -->
+		<module:display name="/Activity Form/GPI" parentModule="/Activity Form">
+			<fieldset>
+				<legend>
+			<span class=legend_label id="gpilink" style="cursor: pointer;">
+				<digi:trn>GPI</digi:trn>
+			</span>
+				</legend>
+				<div class="field_text_big">
+					<div id="gpi" class="toggleDiv" style="display: block;">
+						<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+							<bean:define id="gpiSurvey" name="gpiSurveys" scope="request" toScope="page"
+										 type="java.util.Collection"/>
 
+							<c:set var="currentIndicatorName" value=""/>
+							<logic:iterate name="gpiSurveys" id="gpiSurvey"
+										   type="java.util.Collection" indexId="gpiId">
+								<logic:iterate name="gpiSurvey" id="gpiresponse"
+											   type="org.digijava.module.aim.dbentity.AmpGPISurveyResponse">
+
+									<c:if test="${!currentIndicatorName.equals(gpiresponse.ampQuestionId.ampIndicatorId.name)}">
+										<c:set var="currentIndicatorName"
+											   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
+										<tr>
+											<td bgcolor="#eeeeee" style="text-transform: uppercase;">
+												<c:set var="indicatorName"
+													   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
+												<span class="word_break bold">${indicatorName}</span>
+											</td>
+										</tr>
+									</c:if>
+									<tr>
+										<td>
+											<c:set var="questionText"
+												   value="${gpiresponse.ampQuestionId.questionText}"/>
+											<span class="word_break bold">${questionText}</span>
+											<c:set var="responseText" value="${gpiresponse.response}"/>
+											<lu>
+												<li>
+													<span class="word_break bold">${responseText}</span>
+												</li>
+											</lu>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<hr/>
+										</td>
+									</tr>
+
+								</logic:iterate>
+
+							</logic:iterate>
+
+						</table>
+					</div>
+
+				</div>
+			</fieldset>
+		</module:display>
+		<!-- end GPI -->
 
 <%@include file="previewActivityStructures.jsp" %>
 <br/>
@@ -3304,9 +3372,9 @@ function collapseAll() {
   </tr>
 </table>
 </c:if>
-<field:display name="Show Map In Activity Preview" feature="Map Options">
+<module:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
  <div id="locationPopupMap" style="visibility:hidden;width:4px; height:3px;position:relative;"></div>
-</field:display>
+</module:display>
 
 <!-- MAIN CONTENT PART END -->
 </digi:form>

@@ -50,4 +50,12 @@ public abstract class ReportCell implements Comparable<ReportCell> {
 	@Override public String toString() {
 		return String.format("[%s]", this.displayedValue);
 	}
+	
+	/** extract the format type of the cell
+	 * 
+	 * @return format type (text|number|date)
+	 */
+	public String extractFormatType() {
+		return ReportColumnFormatType.TEXT.toString();
+	}
 }

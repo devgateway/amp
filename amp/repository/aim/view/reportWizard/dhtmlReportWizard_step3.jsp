@@ -46,7 +46,7 @@
 								</td>					
 								</tr>
 								<tr>
-								<td colspan="3">
+								<td colspan="3" align="center" valign="top">
 									<span id="hierarchiesMust" style="visibility: hidden;">
 									<font color="red">*
 										<c:choose> 
@@ -71,6 +71,10 @@
 											You cannot Select Primary and Secondary Sectors as hierarchies
 										</digi:trn>
 									</font>
+									</span>
+									<br>
+									<span id="measureOrHierarchyMust3" class="color: red">
+										* <digi:trn>Must select at least one measure or hierarchy</digi:trn>
 									</span>
 								</td>
 							</tr>

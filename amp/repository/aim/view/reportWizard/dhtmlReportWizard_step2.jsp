@@ -92,5 +92,12 @@
 				</span>
 			</td>
 		</tr>
+		<tr>
+			<td align="center" valign="top">
+				<span id="measureOrHierarchyMust2" class="color: red">
+					* <digi:trn>Must select at least one measure or hierarchy</digi:trn>
+				</span>
+			</td>
+		</tr>
 	</table>
 </div>

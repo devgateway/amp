@@ -20,6 +20,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
@@ -107,7 +108,7 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 			}
 		};
 
-		Model<AmpGPINiSurvey> surveyModel = Model.of(donor.getObject().getGpiNiSurvey());
+		PropertyModel<AmpGPINiSurvey> surveyModel = new PropertyModel<AmpGPINiSurvey>(donor, "gpiNiSurvey");
 		
 		final ListView<AmpGPINiIndicator> indicatorList = new ListView<AmpGPINiIndicator>("listIndicators", listModel) {
 			@Override
@@ -115,11 +116,6 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 				AmpGPINiIndicator indicator = item.getModelObject();
 				AmpGPINiIndicatorItemFeaturePanel ig = new AmpGPINiIndicatorItemFeaturePanel("indicatorItem", indicator.getName(), item.getModel(), surveyModel);
 				item.add(ig);
-			}
-			
-			@Override
-			public boolean isVisible() {
-				return donor.getObject().getGpiNiSurvey() != null;
 			}
 		};
 		

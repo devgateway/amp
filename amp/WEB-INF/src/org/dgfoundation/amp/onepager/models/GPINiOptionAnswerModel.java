@@ -21,7 +21,7 @@ public class GPINiOptionAnswerModel extends Model<String> {
 	
 	@Override
 	public void setObject(String object) {
-		if (object == null){
+		if (object == null) {
 			sourceModel.setObject(null);
 		}
 		else

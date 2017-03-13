@@ -14,10 +14,11 @@ public class AmpGPINiQuestion implements Serializable {
 	private AmpGPINiIndicator ampGPINiIndicator;
 	private String code;
 	private String description;
-	private String type;
+	private GPINiQuestionType type;
 	private Integer index;
 	private Boolean allowMultiple;
 	private Boolean requiresDataEntry;
+	
 	private Set<AmpGPINiQuestionOption> options;
 
 	public Long getAmpGPINiQuestionId() {
@@ -52,11 +53,11 @@ public class AmpGPINiQuestion implements Serializable {
 		this.description = description;
 	}
 
-	public String getType() {
+	public GPINiQuestionType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(GPINiQuestionType type) {
 		this.type = type;
 	}
 
@@ -100,5 +101,10 @@ public class AmpGPINiQuestion implements Serializable {
 			return ComparatorUtils.nullLowComparator(null).compare(arg0.getIndex(), arg1.getIndex());
 		}
 	}
-
+	
+	/**
+	 * type of responses for the GPI ni question
+	 */
+	public enum GPINiQuestionType {DECIMAL, INTEGER, MULTIPLE_CHOICE, FREE_TEXT, LINK, DOCUMENT, NA}
+	
 }

@@ -238,8 +238,21 @@ public class GPIDataService {
 
 	private static List<JsonBean> validateDonorNotes(JsonBean data) {
 		List<JsonBean> validationErrors = new ArrayList<>();
-		return validationErrors;
+		Long donorId = Long.parseLong(String.valueOf(data.get(GPIEPConstants.FIELD_DONOR_ID)));
+		Date date = DateTimeUtil.parseDate(data.getString(GPIEPConstants.FIELD_NOTES_DATE), GPIEPConstants.DATE_FORMAT);
+		Long id = null;
+		if (data.get(GPIEPConstants.FIELD_ID) != null) {
+			id = Long.parseLong(String.valueOf(data.get(GPIEPConstants.FIELD_ID)));
+		}
 
+		if (GPIUtils.checkRecordExists(id, donorId, date)) {
+			JsonBean error = new JsonBean();
+			error.set(ApiError.getErrorCode(GPIErrors.DATE_DONOR_COMBINATION_EXISTS),
+					GPIErrors.DATE_DONOR_COMBINATION_EXISTS.description);
+			validationErrors.add(error);
+		}
+
+		return validationErrors;
 	}
 
 	public static JsonBean getDonorNotesList(Integer offset, Integer count, String orderBy, String sort) {

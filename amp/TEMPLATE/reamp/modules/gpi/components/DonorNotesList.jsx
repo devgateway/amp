@@ -84,9 +84,9 @@ export default class DonorNotesList extends Component {
     }
     
     showErrors() {           
-        const messages = [];        
-        this.props.errors.forEach(error =>{
-            messages.push(<span>{this.props.translations[error.messageKey]} <br/></span>  )
+        const messages = [];    
+        this.props.errors.forEach((error, index) =>{
+            messages.push(<span key={index}>{this.props.translations[error.messageKey]} <br/></span>  )
         });
         
         return (this.props.errors.length > 0 && <div className="alert alert-danger" role="alert">
@@ -97,8 +97,8 @@ export default class DonorNotesList extends Component {
     showInfoMessages() {
         return (this.state.infoMessages.length > 0 &&
                 <div className="alert alert-info" role="alert">
-                {this.state.infoMessages.map(info =>
-                <span>{this.props.translate(info.messageKey, info.params)} <br/></span>
+                {this.state.infoMessages.map((info, index) =>
+                <span  key={index} >{this.props.translate(info.messageKey, info.params)} <br/></span>
                 )}
         </div>) 
     }

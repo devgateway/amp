@@ -90,6 +90,24 @@ public class GPIUtils {
 		return query.list().size() > 0;
 	}
 	
+	public static boolean checkRecordExists(Long donorNotesId, Long donorId, Date notesDate) {
+		Session dbSession = PersistenceManager.getSession();
+		String queryString = "select donorNotes from " + AmpGPINiDonorNotes.class.getName()
+				+ " donorNotes where donorNotes.donor.ampOrgId=:orgId and donorNotes.notesDate = :notesDate";
+		if (donorNotesId != null) {
+			queryString += " and donorNotes.ampGPINiDonorNotesId != :donorNotesId ";
+		}
+
+		Query query = dbSession.createQuery(queryString);
+		query.setParameter("orgId", donorId);
+		query.setParameter("notesDate", notesDate);
+		if (donorNotesId != null) {
+			query.setParameter("donorNotesId", donorNotesId);
+		}
+
+		return query.list().size() > 0;
+	}
+	
 	public static AmpGPINiDonorNotes getDonorNotesById(Long id) {
 		return (AmpGPINiDonorNotes) PersistenceManager.getSession().get(AmpGPINiDonorNotes.class, id);
 	}

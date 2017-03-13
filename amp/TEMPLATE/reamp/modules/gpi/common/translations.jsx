@@ -25,5 +25,6 @@ export const initialTranslations = {
         'amp.gpi-data-donor-notes:save-successful': 'Record was saved successfully',
         'amp.gpi-data-donor-notes:save-all': '__saved__ of __total__ rows were saved successfully.',        
         'amp.gpi-data-donor-notes:validation-notes-required': 'Notes is required',
-        'amp.gpi-data:validation-all-fields-required': 'All fields required'
+        'amp.gpi-data:validation-all-fields-required': 'All fields required',
+        'amp.gpi-data:server-errors-0001': 'Please select a unique date'
 };

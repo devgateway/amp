@@ -137,7 +137,7 @@ export default class DonorNotesList extends Component {
                 <th></th>
                 <th><span data-field="notesDate" onClick={this.sort} >{this.props.translations['amp.gpi-data-donor-notes:date']}</span><span className="error-color" >*</span><span className = {this.showSortCaret('notesDate')} ></span></th>
                 <th><span data-field="donor"  onClick={this.sort}>{this.props.translations['amp.gpi-data-donor-notes:donor-agency']}</span><span className="error-color" >*</span><span className = {this.showSortCaret('donor')} ></span></th>
-                <th><span data-field="donor"  onClick={this.sort}>{this.props.translations['amp.gpi-data-donor-notes:notes']}</span><span className="error-color" >*</span><span className = {this.showSortCaret('donor')} ></span></th>
+                <th>{this.props.translations['amp.gpi-data-donor-notes:notes']}<span className="error-color" >*</span></th>
                 <th>{this.props.translations['amp.gpi-data-donor-notes:action']}</th>
                 </tr>
                 </thead>

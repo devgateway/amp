@@ -132,6 +132,7 @@ public class ColumnReportData extends ReportData {
 		List<ColumnReportData> newChildren = new ArrayList<>();
 		boolean isTransactionLevel = context.schema.isTransactionLevelHierarchy(schemaColumn, context);
 		boolean keepEmptyFundingRows = context.spec.isDisplayEmptyFundingRows() && !isTransactionLevel;
+		boolean isMeasurelessReport = context.spec.getMeasures().isEmpty();
 		
 		for(long catId:orderedCatIds) {
 			//NiCell splitCell = splitters.get(catId).get(0); // choose any, because they all have the same coordinates
@@ -150,8 +151,8 @@ public class ColumnReportData extends ReportData {
 //				if (cc.getHierName().equals("RAW / Funding / 2006 / Actual Commitments"))
 //					System.err.format("splitting %s.%s by %s.%s; %d cells became %d: %s\n", this, cc.getHierName(), z.getHierName(), splitCell.toString(), oldContents.countCells(), newContents.countCells(), newContents);
 				subContents.put(cc, newContents);
-				
-				if (cc.getBehaviour().isKeepingSubreports())
+
+				if (cc.getBehaviour().isKeepingSubreports() || (isMeasurelessReport && (!isTransactionLevel || cc.entity == schemaColumn)))
 					entitiesWithFunding.addAll(newContents.data.keySet());
 			}
 			if (!keepEmptyFundingRows)

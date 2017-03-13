@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.nireports.Cell;
@@ -17,7 +17,6 @@ import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
-import org.dgfoundation.amp.nireports.schema.DimensionLevel;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -50,7 +49,7 @@ public class FundingFlowsInnerTests extends NiTestCase {
 		
 		// should return True for both null and non-null column
 		assertTrue(beh.shouldDeleteLeafIfEmpty(null));
-		assertTrue(beh.shouldDeleteLeafIfEmpty(new CellColumn("some-name", new ColumnContents(Collections.emptyList()), null, schema.getColumns().get(ColumnConstants.PROJECT_TITLE), null)));
+		assertTrue(beh.shouldDeleteLeafIfEmpty(new CellColumn("some-name", new LocalizableLabel("some-name"), new ColumnContents(Collections.emptyList()), null, schema.getColumns().get(ColumnConstants.PROJECT_TITLE), null)));
 	}
 
 	@SuppressWarnings("static-access")

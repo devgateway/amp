@@ -311,7 +311,9 @@ font-weight : bold;
 <c:set var="translation_validation_url">
 			<digi:trn>Please specify a Url !</digi:trn>
 </c:set>
-
+<c:set var="translation_upload_failed_too_big">
+	<digi:trn>${uploadFailedTooBigMsg}</digi:trn>
+</c:set>
 <c:set var="translation_url_format">
 			<digi:trn>Please specify correct Url !</digi:trn>
 </c:set>
@@ -1454,10 +1456,19 @@ function validateAddDocument() {
 			
 		}
 	}
+
+    if (document.forms['crDocumentManagerForm'].fileData.files[0].size > ${uploadMaxFileSize}) {
+        msg = msg + showFailedTooBigMsg('${translation_upload_failed_too_big}', ${maxFileSizeGS}) + '<br>';
+    }
+
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
 	if (msg.length == 0)
 			return true;
 	return false;
+}
+
+function showFailedTooBigMsg(msg, maxFileSizeGS){
+	return msg.replace('{size}', maxFileSizeGS);
 }
 
 function setHeightOfDiv(divId, maxLimit, value ){
@@ -1557,7 +1568,6 @@ function createToolTips(containerElement) {
 			createToolTip(elements[i], containerElement);
 		}
 	}
-	
 }
 
 function createToolTip (id, containerElement) {

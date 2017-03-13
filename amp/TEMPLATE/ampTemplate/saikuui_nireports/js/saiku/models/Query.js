@@ -53,7 +53,7 @@ var Query = Backbone.Model.extend({
         //End Custom Code for Pagination
         
         this.transformSavedFilters();
-    },    
+    },
     
     transformSavedFilters: function() {
     	Saiku.logger.log("Query.transformSavedFilters");
@@ -204,7 +204,7 @@ var Query = Backbone.Model.extend({
         this.firstLoad = false;
         
         Saiku.logger.log("QueryRouter.calculateMD5FromParameters");
-        exModel.MD5 = CommonFilterUtils.calculateMD5FromParameters(exModel, this.get('report_id'), Saiku.i18n.locale, this.get('report_updated_date'));
+        exModel.MD5 = CommonFilterUtils.calculateMD5FromParameters(exModel, this.get('report_id'), Saiku.i18n.locale, this.get('page_timestamp'));
         exModel.querySettings.info = this.get('info');
 
         // Run it

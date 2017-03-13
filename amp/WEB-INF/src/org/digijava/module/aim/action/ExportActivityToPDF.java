@@ -1401,7 +1401,9 @@ public class ExportActivityToPDF extends Action {
                  */
                 if (FeaturesUtil.isVisibleField("Data Team Leader")) {
                     columnName = TranslatorWorker.translateText("Workspace manager");
-                    createGeneralInfoRow(mainLayout, columnName, identification.getTeam().getTeamLead().getUser().getFirstNames() + " " + identification.getTeam().getTeamLead().getUser().getLastName() + " - " + identification.getTeam().getTeamLead().getUser().getEmail());
+                    createGeneralInfoRow(mainLayout, columnName, identification.getTeam().getTeamLead().getUser().getFirstNames()
+                            + " " + identification.getTeam().getTeamLead().getUser().getLastName() + " - "
+                            + identification.getTeam().getTeamLead().getUser().getEmail());
                 }
 
                 columnName=TranslatorWorker.translateText("Computation");
@@ -1409,15 +1411,6 @@ public class ExportActivityToPDF extends Action {
                         TranslatorWorker.translateText("Yes") :
                         TranslatorWorker.translateText("No"));
 
-            }
-
-
-            /**
-             *  Activity created on
-             */
-            if(FeaturesUtil.isVisibleField("Activity Created On")){
-                columnName=TranslatorWorker.translateText("Created On");
-                createGeneralInfoRow(mainLayout,columnName,identification.getCreatedDate());
             }
 
             if (FeaturesUtil.isVisibleModule("/Activity Form/M&E")) {

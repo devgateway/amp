@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.features.items;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
@@ -57,6 +59,7 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 				AmpGPINiSurvey as = new AmpGPINiSurvey();
 				as.setAmpOrgRole(donor.getObject());
 				as.setSurveyDate(new Date());
+				as.setResponses(new HashSet<>());
 				donor.getObject().setGpiNiSurvey(as);
 
 				target.add(parent);
@@ -104,12 +107,13 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 			}
 		};
 
+		Model<AmpGPINiSurvey> surveyModel = Model.of(donor.getObject().getGpiNiSurvey());
 		
 		final ListView<AmpGPINiIndicator> indicatorList = new ListView<AmpGPINiIndicator>("listIndicators", listModel) {
 			@Override
 			protected void populateItem(ListItem<AmpGPINiIndicator> item) {
 				AmpGPINiIndicator indicator = item.getModelObject();
-				AmpGPINiIndicatorItemFeaturePanel ig = new AmpGPINiIndicatorItemFeaturePanel("indicatorItem", indicator.getName(), item.getModel());
+				AmpGPINiIndicatorItemFeaturePanel ig = new AmpGPINiIndicatorItemFeaturePanel("indicatorItem", indicator.getName(), item.getModel(), surveyModel);
 				item.add(ig);
 			}
 			

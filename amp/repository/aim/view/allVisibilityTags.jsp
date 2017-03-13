@@ -324,6 +324,7 @@
 <field:display feature="Funding Information" name="Expenditure Class"></field:display>
 <field:display feature="Funding Information" name="Effective Funding Date"></field:display>
 <field:display feature="Funding Information" name="Funding Closing Date"></field:display>
+<field:display feature="Funding Information" name="Concessionality Level"></field:display>
 <field:display feature="Government Contact Information" name="Government Email"></field:display> 
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 

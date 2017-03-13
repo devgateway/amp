@@ -164,6 +164,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		res.put(ColumnConstants.RELATED_PLEDGES, "pledge_id");
 		res.put(ColumnConstants.EXPENDITURE_CLASS, "expenditure_class_id");
 		res.put(ColumnConstants.AGREEMENT_CODE, "agreement_id");
+		res.put(ColumnConstants.CONCESSIONALITY_LEVEL, "concessionality_level_id");
 		return res;
 	}
 		
@@ -198,7 +199,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		new ImmutablePair<>(MetaCategory.MODE_OF_PAYMENT, "mode_of_payment_id"),
 		new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id"),
 		new ImmutablePair<>(MetaCategory.SOURCE_ORG, "donor_org_id"),
-		new ImmutablePair<>(MetaCategory.EXPENDITURE_CLASS, "expenditure_class_id")
+		new ImmutablePair<>(MetaCategory.EXPENDITURE_CLASS, "expenditure_class_id"),
+		new ImmutablePair<>(MetaCategory.CONCESSIONALITY_LEVEL, "concessionality_level_id")
 	);
 	
 	/**
@@ -209,7 +211,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	protected synchronized FundingFetcherContext resetCache(NiReportsEngine engine) {
 		engine.timer.putMetaInNode("resetCache", true);
 		//Map<Long, String> adjTypeValue = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN ('%s', '%s')", CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY));
-		Map<Long, String> acvs = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN('%s', '%s', '%s', '%s', '%s')", CategoryConstants.EXPENDITURE_CLASS_KEY, CategoryConstants.TYPE_OF_ASSISTENCE_KEY, CategoryConstants.MODE_OF_PAYMENT_KEY, CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY));
+		Map<Long, String> acvs = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN('%s', '%s', '%s', '%s', '%s', '%s')", CategoryConstants.EXPENDITURE_CLASS_KEY, CategoryConstants.TYPE_OF_ASSISTENCE_KEY, CategoryConstants.MODE_OF_PAYMENT_KEY, CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY, CategoryConstants.CONCESSIONALITY_LEVEL_KEY));
 		Map<Long, String> roles = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("SELECT amp_role_id, role_code FROM amp_role", CategoryConstants.ADJUSTMENT_TYPE_KEY));
 		
 		return new FundingFetcherContext(new DifferentialCache<CategAmountCellProto>(invalidationDetector.getLastProcessedFullEtl()), roles, acvs);
@@ -310,6 +312,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				addMetaIfIdValueExists(metaSet, "expenditure_class_id", MetaCategory.EXPENDITURE_CLASS, rs.rs, context.acvs);
 				addMetaIfIdValueExists(metaSet, "terms_assist_id", MetaCategory.TYPE_OF_ASSISTANCE, rs.rs, context.acvs);
 				addMetaIfIdValueExists(metaSet, "mode_of_payment_id", MetaCategory.MODE_OF_PAYMENT, rs.rs, context.acvs);
+				addMetaIfIdValueExists(metaSet, "concessionality_level_id", MetaCategory.CONCESSIONALITY_LEVEL, rs.rs, context.acvs);
 				
 				// add the directed-transactions meta, if appliable
 				if (metaSet.hasMetaInfo(MetaCategory.SOURCE_ROLE.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ROLE.category)

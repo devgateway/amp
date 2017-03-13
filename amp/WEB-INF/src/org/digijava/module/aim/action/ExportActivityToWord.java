@@ -2522,6 +2522,8 @@ public class ExportActivityToWord extends Action {
                                 eshDonorInfo, "Funding Status", funding.getFundingStatus(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment",
                                 eshDonorInfo, "Mode of Payment", funding.getModeOfPayment(), true);
+                        addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level",
+                                eshDonorInfo, "Concessionality Level", funding.getConcessionalityLevel(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective",
                                 eshDonorInfo, "Donor Objective", funding.getDonorObjective(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Conditions",
@@ -2660,6 +2662,11 @@ public class ExportActivityToWord extends Action {
                         String modeOfPayment = fnd.getModeOfPayment() != null ? fnd.getModeOfPayment().getValue() : " ";
                         eshDonorInfo.addRowData((new ExportSectionHelperRowData("Mode of Payment", null, null, true))
                                 .addRowData(modeOfPayment));
+                    }
+                    if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level")) {
+                        String concessionalityLevel = fnd.getConcessionalityLevel() != null ? fnd.getConcessionalityLevel().getValue() : " ";
+                        eshDonorInfo.addRowData((new ExportSectionHelperRowData("Concessionality Level", null, null, true))
+                                .addRowData(concessionalityLevel));
                     }
                 }
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective") && (fnd.getDonorObjective() != null)) {

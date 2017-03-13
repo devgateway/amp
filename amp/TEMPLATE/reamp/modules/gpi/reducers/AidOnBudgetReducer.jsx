@@ -11,7 +11,7 @@ const defaultState = {
                 totalPageCount : 1
              },
              sorting: {
-                 orderBy: 'ampGPINiAidOnBudgetId',
+                 orderBy: 'indicatorDate',
                  sortOrder: 'desc'
              }             
            }

@@ -1,4 +1,5 @@
 import aidOnBudgetApi from '../api/AidOnBudgetApi.jsx';
+import Utils from '../common/utils.jsx';
 export function getAidOnBudgetListSuccess(data){
     return {type: 'LOAD_AID_ON_BUDGET_LIST_SUCCESS', data: data }
 }
@@ -36,7 +37,7 @@ export function loadAidOnBudgetList(data) {
             results.paging = data.paging;
             results.sorting = data.sorting;             
             if (response.error) {
-                results.errors = extractErrors(response.error);                
+                results.errors = Utils.extractErrors(response.error);                
             } else {
                 results.aidOnBudgetList = response.data;
                 results.paging.totalRecords = response.totalRecords;
@@ -52,7 +53,7 @@ export function loadAidOnBudgetList(data) {
 
 export function save(data){    
     return function(dispatch) {
-        const errors = validate(data);
+        const errors = Utils.validateAidOnBudget(data);
         if(errors.length > 0 ){
             const result = {};
             result.aidOnBudget = data;
@@ -72,11 +73,11 @@ export function save(data){
             if (response.errors || response.error) {
                 result.aidOnBudget.isEditing = true;
                 if(response.errors){
-                    result.errors = [...extractErrors(response.errors , result.aidOnBudget)] 
+                    result.errors = [...Utils.extractErrors(response.errors , result.aidOnBudget)] 
                 }
                 
                 if(response.error){
-                    result.errors = [...extractErrors(response.error , result.aidOnBudget)]
+                    result.errors = [...Utils.extractErrors(response.error , result.aidOnBudget)]
                 }                
             }
             
@@ -95,7 +96,7 @@ export function deleteAidOnBudget(data) {
                 const result = {infoMessages: [], errors: []};
                 result.aidOnBudget = data;
                 if(response.error){
-                    result.errors = [...extractErrors(response.error , result.aidOnBudget)]
+                    result.errors = [...Utils.extractErrors(response.error , result.aidOnBudget)]
                 } else{
                     result.infoMessages = [{messageKey: 'amp.gpi-data-aid-on-budget:delete-successful'}]; 
                 }
@@ -118,7 +119,7 @@ export function saveAllEdits(aidOnBudgetList) {
     return function(dispatch) {
         var allErrors = [];
         for (var aidOnBudget of aidOnBudgetList) {
-            const errors = validate(aidOnBudget);
+            const errors = Utils.validateAidOnBudget(aidOnBudget);
             allErrors = [...allErrors, ...errors];
         }
         
@@ -135,7 +136,7 @@ export function saveAllEdits(aidOnBudgetList) {
             const result = {errors:[], infoMessages: []};
             
             if (response.error) {
-                results.errors = extractErrors(response.error); 
+                results.errors = Utils.extractErrors(response.error); 
                 return dispatch(onSaveAllEdits(result));
             }
             
@@ -145,7 +146,7 @@ export function saveAllEdits(aidOnBudgetList) {
                     item.data.isEditing = false;
                     list.push(item.data);                       
                 } else {                        
-                    allErrors = [...allErrors, ...extractErrors(item.errors, item.data)]
+                    allErrors = [...allErrors, ...Utils.extractErrors(item.errors, item.data)]
                 }                    
             }               
             
@@ -164,64 +165,4 @@ export function saveAllEdits(aidOnBudgetList) {
         });            
     };
     
-}
-
-
-function validate(aidOnBudget){
-    const errors = [];
-    if (!isNumber(aidOnBudget['amount']) || isUndefinedOrBlank(aidOnBudget, 'amount')){
-        errors.push({messageKey: 'amp.gpi-data-aid-on-budget:validation-amount-invalid', id: aidOnBudget.id, cid: aidOnBudget.cid});            
-    } 
-    
-    if(isUndefinedOrBlank(aidOnBudget, 'donorId')){
-        errors.push({messageKey: 'amp.gpi-data-aid-on-budget:validation-donor-agency-required', id: aidOnBudget.id, cid: aidOnBudget.cid});
-    }
-    
-    if(isUndefinedOrBlank(aidOnBudget, 'currencyCode')){
-        errors.push({messageKey: 'amp.gpi-data-aid-on-budget:validation-currency-required', id: aidOnBudget.id, cid: aidOnBudget.cid});
-    }
-    
-    if(isUndefinedOrBlank(aidOnBudget, 'indicatorDate')){
-        errors.push({messageKey: 'amp.gpi-data-aid-on-budget:validation-date-required', id: aidOnBudget.id, cid: aidOnBudget.cid}); 
-    }
-    
-    return errors
-}
-
-function extractErrors(errors, aidOnBudget) {
-    var errorMessages = [];    
-    if (errors) {  
-        errors = Array.isArray(errors) ? errors : [errors];
-        errors.forEach(function(error){
-            
-            for (var key in error) {                    
-                let messageKey = 'amp.gpi-data-aid-on-budget:server-errors-' + key;
-                let message = {messageKey: messageKey}; 
-                if (aidOnBudget && aidOnBudget.id) {
-                    message.id = aidOnBudget.id;
-                }
-                
-                if (aidOnBudget && aidOnBudget.cid) {
-                    message.cid = aidOnBudget.cid;
-                }
-                
-                errorMessages.push(message);
-            }
-        }); 
-    }  
-       
-    return errorMessages;
-}
-
-function isNumber(input) {
-    return typeof(input) != "boolean" && !isNaN(input);
-}
-
-function isUndefinedOrBlank(aidOnBudget, field) {
-    var result = false;
-    if(aidOnBudget[field] === '' || !aidOnBudget[field]){
-        result = true;
-    }
-    
-    return result;        
 }

@@ -83,20 +83,22 @@ export default class AidOnBudgetList extends Component {
         this.props.actions.saveAllEdits(list)
     }
     
-    showErrors() {        
-        const errors = this.props.errors.filter(error => {return !error.id && !error.cid });
-        return (errors.length > 0 && <div className="alert alert-danger" role="alert">
-                {errors.map(error =>                    
-                    <span>{this.props.translations[error.messageKey]} <br/></span>                
-                )}
+    showErrors() {           
+        const messages = [];    
+        this.props.errors.forEach((error, index) =>{
+            messages.push(<span key={index}>{this.props.translations[error.messageKey]} <br/></span>  )
+        });
+        
+        return (this.props.errors.length > 0 && <div className="alert alert-danger" role="alert">
+           {messages}
         </div>) 
     }
     
     showInfoMessages() {
         return (this.state.infoMessages.length > 0 &&
                 <div className="alert alert-info" role="alert">
-                {this.state.infoMessages.map(info =>
-                <span>{this.props.translate(info.messageKey, info.params)} <br/></span>
+                {this.state.infoMessages.map((info, index) =>
+                <span  key={index} >{this.props.translate(info.messageKey, info.params)} <br/></span>
                 )}
         </div>) 
     }
@@ -130,8 +132,7 @@ export default class AidOnBudgetList extends Component {
                 {this.showInfoMessages()} 
                 <table className="table table-striped">
                 <thead>
-                <tr>
-                <th></th>
+                <tr>                
                 <th><span data-field="indicatorDate" onClick={this.sort} >{this.props.translations['amp.gpi-data-aid-on-budget:date']}</span><span className="error-color" >*</span><span className = {this.showSortCaret('indicatorDate')} ></span></th>
                 <th><span data-field="donor"  onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:donor-agency']}</span><span className="error-color" >*</span><span className = {this.showSortCaret('donor')} ></span></th>
                 <th><span data-field="amount" onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:amount']}</span><span className="error-color" >*</span><span className = {this.showSortCaret('amount')} ></span></th>

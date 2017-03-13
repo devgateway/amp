@@ -27,6 +27,7 @@ export default class AidOnBudgetRow extends Component {
         this.toggleDatePicker =  this.toggleDatePicker.bind(this);
         this.onDateChange = this.onDateChange.bind(this);  
         this.deleteAidOnBudget = this.deleteAidOnBudget.bind(this); 
+        this.getErrorsForField = this.getErrorsForField.bind(this);
     }
     
     toggleEdit() {
@@ -90,37 +91,17 @@ export default class AidOnBudgetRow extends Component {
         return currency ? currency.name : '';
     }
     
-    getErrors(){
-        const errors = this.props.errors.filter(error => {return (error.id && error.id === this.state.aidOnBudget.id) || (error.cid && error.cid === this.state.aidOnBudget.cid)})
-        if(errors.length > 0){
-            const errorPopover = (
-                    <Popover
-                    id="error-popover"
-                    title="Errors">
-                    {errors.map(error => 
-                    <span>{this.props.translations[error.messageKey]}<br/></span>
-                    )} 
-                    </Popover>
-            );
-            return (<OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={errorPopover}>
-                    <span className="glyphicon glyphicon-exclamation-sign error-color">                  
-                    </span>
-                    </OverlayTrigger>                
-            );
-            
-        }
-        
-    }
+    getErrorsForField(field){
+        var errors = this.props.errors.filter(error => {return ((error.id && error.id === this.state.aidOnBudget.id) || (error.cid && error.cid === this.state.aidOnBudget.cid) && error.affectedFields && error.affectedFields.includes(field) )})
+        return  errors; 
+     }
     
     render() {        
         if (this.props.aidOnBudget.isEditing) {         
-            return ( <tr>
-                    <td className="error-column">
-                    {this.getErrors()}      
-                    </td>
+            return ( <tr>                    
                     <td scope="row" >                                   
-                    <div className="date-container">
-                    <span className="date-input-container"><input type="text" value={this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)} readOnly className="date-input" />    
+                    <div className={this.getErrorsForField('indicatorDate').length > 0 ? 'form-group date-container has-error' : 'form-group date-container' }>
+                    <span className="date-input-container"><input type="text" value={this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)} readOnly className="date-input form-control" />    
                     </span><span className = "datepicker-toggle glyphicon glyphicon-calendar " onClick={this.toggleDatePicker}> </span></div>
                     <div className="datepicker-container"> 
                     {this.state.showDatePicker &&
@@ -137,22 +118,29 @@ export default class AidOnBudgetRow extends Component {
                     </div>
                     </td>
                     <td>
-                    
+                    <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>
                     <select name="donorId" className="form-control" value={this.state.aidOnBudget.donorId} onChange={this.onChange}>
                     <option value="">Select Donor</option>
                     {this.props.orgList.map(org => 
                     <option value={org.id}  key={org.id} >{org.name}</option>
                     )}
                     </select>
-                    
+                    </div>
                     </td>
-                    <td><input type="text" name="amount" className="form-control" placeholder="" value={this.state.aidOnBudget.amount} onChange={this.onChange} /></td>
-                    <td><select name="currencyCode" value={this.state.aidOnBudget.currencyCode} className="form-control" onChange={this.onChange}>
+                    <td>
+                    <div className={this.getErrorsForField('amount').length > 0 ? 'form-group has-error' : 'form-group' }>
+                    <input type="text" name="amount" className="form-control" placeholder="" value={this.state.aidOnBudget.amount} onChange={this.onChange} />
+                    </div>
+                    </td>
+                    <td>
+                    <div className={this.getErrorsForField('currencyCode').length > 0 ? 'form-group has-error' : 'form-group' }>                    
+                    <select name="currencyCode" value={this.state.aidOnBudget.currencyCode} className="form-control" onChange={this.onChange}>
                     <option value="">Select Currency</option>
                     {this.props.currencyList.map(currency => 
                     <option value={currency.id} key={currency.id} >{currency.name}</option>
                     )}
                     </select>
+                    </div>                    
                     </td>
                     <td> <span className="glyphicon glyphicon-ok-circle success-color" onClick={this.save}> </span><span className="glyphicon glyphicon-remove" onClick={this.deleteAidOnBudget}></span></td>                      
             </tr>)
@@ -160,8 +148,7 @@ export default class AidOnBudgetRow extends Component {
         }
         
         return (
-                <tr>
-                <td></td>
+                <tr>                
                 <th scope="row">{this.toDateDisplayFormat(this.state.aidOnBudget.indicatorDate)}</th>
                 <td>{this.getOrgName(this.state.aidOnBudget.donorId)}</td>
                 <td>{this.state.aidOnBudget.amount}</td>

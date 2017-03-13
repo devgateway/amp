@@ -20,66 +20,55 @@ const defaultState = {
 export default function aidOnBudgetReducer(state: Object = defaultState.data, action: Object) {    
     switch (action.type) {
     case 'LOAD_AID_ON_BUDGET_LIST_SUCCESS':
-        const data = Object.assign({}, action.data)
-        data.cid = state.cid;               
-        return data;
+        var newState = Object.assign({}, action.data);        
+        newState.cid = state.cid;               
+        return newState;
     case 'AID_ON_BUDGET_ON_SAVE':
-        var data = {};
-        if (action.data.errors && action.data.errors.length > 0) {
-            data.aidOnBudgetList = [...state.aidOnBudgetList]
+        var newState = Object.assign({}, state);
+        var actionData = Object.assign({}, action.data);
+        if (actionData.errors && actionData.errors.length > 0) {
+            newState.aidOnBudgetList = [...newState.aidOnBudgetList]
         } else {
-            data.aidOnBudgetList = state.aidOnBudgetList.map(function(aidOnBudget) { return ((aidOnBudget.id && aidOnBudget.id === action.data.aidOnBudget.id) || (aidOnBudget.cid && aidOnBudget.cid === action.data.aidOnBudget.cid)) ? Object.assign({}, action.data.aidOnBudget) : aidOnBudget; });
+            newState.aidOnBudgetList = newState.aidOnBudgetList.map(function(aidOnBudget) { return ((aidOnBudget.id && aidOnBudget.id === actionData.aidOnBudget.id) || (aidOnBudget.cid && aidOnBudget.cid === actionData.aidOnBudget.cid)) ? Object.assign({}, actionData.aidOnBudget) : aidOnBudget; });
         }   
-        data.errors = action.data.errors || [];
-        data.infoMessages = action.data.infoMessages || []; 
-        data.cid = state.cid;
-        data.paging = state.paging;
-        data.sorting = state.sorting;
-        return data;
+        newState.errors = actionData.errors || [];
+        newState.infoMessages = actionData.infoMessages || [];         
+        return newState;
     case 'AID_ON_BUDGET_ON_SAVE_ALL_EDITS':        
-        var data = {};
-        data.aidOnBudgetList = state.aidOnBudgetList.map(function(aidOnBudget) { 
-            var found = action.data.aidOnBudgetList.find(obj =>{ obj
+        var newState = Object.assign({}, state);
+        var actionData = Object.assign({}, action.data);
+        newState.aidOnBudgetList = newState.aidOnBudgetList.map(function(aidOnBudget) { 
+            var found = actionData.aidOnBudgetList.find(obj =>{ obj
                 return ((aidOnBudget.id && aidOnBudget.id === obj.id) || (aidOnBudget.cid && aidOnBudget.cid === obj.cid))     
-            })
-            
+            });            
             return found ? Object.assign({}, found) : aidOnBudget;            
-        });
-        
-        data.errors = action.data.errors || [];
-        data.infoMessages = action.data.infoMessages || []; 
-        data.cid = state.cid;
-        data.paging = state.paging;
-        data.sorting = state.sorting;
-        return data;        
+        });        
+        newState.errors = actionData.errors || [];
+        newState.infoMessages = actionData.infoMessages || [];        
+        return newState;     
     case 'AID_ON_BUDGET_DELETE_SUCCESS':
-        var data = {};
-        data.aidOnBudgetList = [...state.aidOnBudgetList.filter(aidOnBudget => aidOnBudget.id !== action.data.aidOnBudget.id || aidOnBudget.cid !== action.data.aidOnBudget.cid)]
-        data.errors = action.data.errors || [];
-        data.infoMessages = action.data.infoMessages || []; 
-        data.cid = state.cid;
-        data.paging = state.paging;
-        data.sorting = state.sorting;
-        return data;
+        var newState = Object.assign({}, state);
+        var actionData = Object.assign({}, action.data);
+        newState.aidOnBudgetList = [...newState.aidOnBudgetList.filter(aidOnBudget => aidOnBudget.id !== actionData.aidOnBudget.id || aidOnBudget.cid !== actionData.aidOnBudget.cid)]
+        newState.errors = actionData.errors || [];
+        newState.infoMessages = actionData.infoMessages || []; 
+        return newState;
     case 'ADD_AID_ON_BUDGET':
-        var data = {};
-        action.data.aidOnBudget.cid = state.cid;
-        data.aidOnBudgetList = [Object.assign({}, action.data.aidOnBudget), ...state.aidOnBudgetList];
-        data.errors = [];
-        data.infoMessages = [];
-        data.cid = ++state.cid;
-        data.paging = state.paging;
-        data.sorting = state.sorting;
-        return data; 
+        var newState = Object.assign({}, state);
+        var actionData = Object.assign({}, action.data);
+        actionData.aidOnBudget.cid = state.cid;
+        newState.aidOnBudgetList = [Object.assign({}, actionData.aidOnBudget), ...newState.aidOnBudgetList];
+        newState.errors = [];
+        newState.infoMessages = [];
+        newState.cid = ++newState.cid;        
+        return newState; 
     case 'UPDATE_AID_ON_BUDGET':
-        var data = {};
-        data.aidOnBudgetList =  state.aidOnBudgetList.map(function(aidOnBudget) { return ((aidOnBudget.id && aidOnBudget.id === action.data.aidOnBudget.id) || (aidOnBudget.cid && aidOnBudget.cid === action.data.aidOnBudget.cid)) ? Object.assign({}, action.data.aidOnBudget) : aidOnBudget; });     
-        data.errors = action.data.errors || [];
-        data.infoMessages = action.data.infoMessages || []; 
-        data.cid = state.cid; 
-        data.paging = state.paging;
-        data.sorting = state.sorting;
-        return data;   
+        var newState = Object.assign({}, state);
+        var actionData = Object.assign({}, action.data);
+        newState.aidOnBudgetList =  newState.aidOnBudgetList.map(function(aidOnBudget) { return ((aidOnBudget.id && aidOnBudget.id === actionData.aidOnBudget.id) || (aidOnBudget.cid && aidOnBudget.cid === actionData.aidOnBudget.cid)) ? Object.assign({}, actionData.aidOnBudget) : aidOnBudget; });     
+        newState.errors = actionData.errors || [];
+        newState.infoMessages = actionData.infoMessages || [];         
+        return newState;   
     default:            
         return state;
     }

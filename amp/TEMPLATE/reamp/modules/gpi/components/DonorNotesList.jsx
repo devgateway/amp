@@ -29,6 +29,7 @@ export default class DonorNotesList extends Component {
         this.props.actions.loadDonorNotesList({paging: this.props.paging, sorting: this.props.sorting}); 
         this.props.actions.getCurrencyList();
         this.props.actions.getOrgList();
+        this.props.actions.getSettings();
     }
     
     componentWillReceiveProps(nextProps) { 
@@ -142,7 +143,7 @@ export default class DonorNotesList extends Component {
                 </thead>
                 <tbody>               
                 {this.props.donorNotesList.map(donorNotes => 
-                <DonorNotesRow donorNotes={donorNotes} key={donorNotes.id} currencyList={this.props.currencyList} orgList={this.props.orgList} key={donorNotes.id || 'c' + donorNotes.cid} errors={this.props.errors}/>  
+                <DonorNotesRow donorNotes={donorNotes} key={donorNotes.id} currencyList={this.props.currencyList} orgList={this.props.orgList} settings={this.props.settings} key={donorNotes.id || 'c' + donorNotes.cid} errors={this.props.errors}/>  
                 )}                
                 </tbody>
                 </table> 
@@ -180,6 +181,7 @@ function mapStateToProps(state, ownProps) {
         infoMessages: state.donorNotes.infoMessages || [],        
         currencyList: state.commonLists.currencyList || [],
         orgList: state.commonLists.orgList || [],
+        settings: state.commonLists.settings || {},
         translations: state.startUp.translations,
         translate: state.startUp.translate
     }

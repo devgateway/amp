@@ -12,14 +12,13 @@ require('react-date-picker/theme/hackerone.css');
 require('../styles/main.less');
 import * as donorNotesActions from '../actions/DonorNotesActions.jsx';
 import * as startUp from '../actions/StartUpAction.jsx';
+import * as Constants from '../common/constants.jsx';
 export default class DonorNotesRow extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
                 donorNotes: this.props.donorNotes,                                
-                showDatePicker:false,
-                displayDateFormat: 'DD/MMM/YYYY',
-                endPointDateFormat: 'YYYY-MM-DD'
+                showDatePicker: false                
         };
         this.toggleEdit = this.toggleEdit.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -54,7 +53,7 @@ export default class DonorNotesRow extends Component {
     onDateChange(date){
         if(date){
             const donorNotes = this.state.donorNotes; 
-            const formartedDate = moment(date, this.state.displayDateFormat).format(this.state.endPointDateFormat);
+            const formartedDate = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
             donorNotes['notesDate'] = formartedDate;
             this.setState({donorNotes: donorNotes});
             this.props.actions.updateDonorNotes(donorNotes); 
@@ -62,14 +61,18 @@ export default class DonorNotesRow extends Component {
         }        
     }
     
-    toDateDisplayFormat(date) {
+    getDisplayDateFormat() {
+        return (this.props.settings && this.props.settings[Constants.DATE_FORMAT_SETTING]) ? this.props.settings[Constants.DATE_FORMAT_SETTING].toUpperCase() : Constants.DEFAULT_UI_DATE_FORMAT;  
+    }
+    
+    toDisplayDateFormat(date) {
         var result;
         if(date) {
-            result = moment(date, this.state.endPointDateFormat).format(this.state.displayDateFormat);           
+            result = moment(date, Constants.EP_DATE_FORMAT).format(this.getDisplayDateFormat());           
         }  
         
         return result        
-    }
+    }   
     
     save() {
         this.props.actions.save(this.state.donorNotes);                
@@ -85,10 +88,10 @@ export default class DonorNotesRow extends Component {
         var org = this.props.orgList.filter(org => org.id === id)[0];
         return org ? org.name : '';
     }
-      
+    
     getErrorsForField(field){
-      var errors = this.props.errors.filter(error => {return ((error.id && error.id === this.state.donorNotes.id) || (error.cid && error.cid === this.state.donorNotes.cid) && error.affectedFields && error.affectedFields.includes(field) )})
-      return  errors; 
+        var errors = this.props.errors.filter(error => {return ((error.id && error.id === this.state.donorNotes.id) || (error.cid && error.cid === this.state.donorNotes.cid) && error.affectedFields && error.affectedFields.includes(field) )})
+        return  errors; 
     }
     
     render() {        
@@ -98,7 +101,7 @@ export default class DonorNotesRow extends Component {
                     </td>
                     <td scope="row" >                                   
                     <div className={this.getErrorsForField('notesDate').length > 0 ? 'form-group date-container has-error' : 'form-group date-container' }>
-                    <span className="date-input-container"><input type="text" value={this.toDateDisplayFormat(this.state.donorNotes.notesDate)} readOnly className="date-input form-control" />    
+                    <span className="date-input-container"><input type="text" value={this.toDisplayDateFormat(this.state.donorNotes.notesDate)} readOnly className="date-input form-control" />    
                     </span><span className = "datepicker-toggle glyphicon glyphicon-calendar " onClick={this.toggleDatePicker}> </span></div>
                     <div className="datepicker-container"> 
                     {this.state.showDatePicker &&
@@ -106,10 +109,10 @@ export default class DonorNotesRow extends Component {
                         hideFooter={true}
                         ref="date" 
                         locale={'en'} 
-                        date={this.toDateDisplayFormat(this.state.donorNotes.notesDate)} 
+                        date={this.toDisplayDateFormat(this.state.donorNotes.notesDate)} 
                         onChange={this.onDateChange} 
                         expanded={false}
-                        dateFormat={this.state.displayDateFormat}
+                        dateFormat={this.getDisplayDateFormat()}
                         />  
                     }
                     </div>
@@ -134,29 +137,29 @@ export default class DonorNotesRow extends Component {
                     <td> <span className="glyphicon glyphicon-ok-circle success-color" onClick={this.save}> </span><span className="glyphicon glyphicon-remove" onClick={this.deleteDonorNotes}></span></td>                      
             </tr>)
             
+            }
+            
+            return (
+                    <tr>
+                    <td></td>
+                    <th scope="row">{this.toDisplayDateFormat(this.state.donorNotes.notesDate)}</th>
+                    <td>{this.getOrgName(this.state.donorNotes.donorId)}</td>
+                    <td className="notes-column">{this.state.donorNotes.notes}</td>
+                    <td><span className="glyphicon glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-remove" onClick={this.deleteDonorNotes}></span></td>                
+                    </tr>
+                    
+            );
         }
-        
-        return (
-                <tr>
-                <td></td>
-                <th scope="row">{this.toDateDisplayFormat(this.state.donorNotes.notesDate)}</th>
-                <td>{this.getOrgName(this.state.donorNotes.donorId)}</td>
-                <td className="notes-column">{this.state.donorNotes.notes}</td>
-                <td><span className="glyphicon glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-remove" onClick={this.deleteDonorNotes}></span></td>                
-                </tr>
-                
-        );
     }
-}
-
-function mapStateToProps(state, ownProps) {     
-    return {
-        translations: state.startUp.translations     
+    
+    function mapStateToProps(state, ownProps) {     
+        return {
+            translations: state.startUp.translations     
+        }
     }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {actions: bindActionCreators(donorNotesActions, dispatch)}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DonorNotesRow);
+    
+    function mapDispatchToProps(dispatch) {
+        return {actions: bindActionCreators(donorNotesActions, dispatch)}
+    }
+    
+    export default connect(mapStateToProps, mapDispatchToProps)(DonorNotesRow);

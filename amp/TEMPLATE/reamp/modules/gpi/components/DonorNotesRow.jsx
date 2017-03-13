@@ -126,9 +126,9 @@ export default class DonorNotesRow extends Component {
                     </div>
                     
                     </td> 
-                    <td>
+                    <td className="notes-column">
                     <div className={this.getErrorsForField('notes').length > 0 ? 'form-group has-error' : 'form-group' }>                    
-                    <textarea name="notes" className="form-control"  onChange={this.onChange}>{this.state.donorNotes.notes}</textarea>
+                    <textarea name="notes" className="form-control" rows="5" onChange={this.onChange}>{this.state.donorNotes.notes}</textarea>
                     </div>
                     </td>
                     <td> <span className="glyphicon glyphicon-ok-circle success-color" onClick={this.save}> </span><span className="glyphicon glyphicon-remove" onClick={this.deleteDonorNotes}></span></td>                      

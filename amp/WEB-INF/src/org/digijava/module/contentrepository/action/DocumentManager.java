@@ -25,18 +25,17 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
+import org.apache.wicket.util.lang.Bytes;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
-import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
 import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion;
 import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
@@ -99,6 +98,12 @@ public class DocumentManager extends Action {
 		AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
 		boolean shareWithoutApprovalNeeded=((sett!=null && sett.getAllowAddTeamRes()!=null && sett.getAllowAddTeamRes().intValue()>=CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER) || teamMember.getTeamHead());
 		request.setAttribute("shareWithoutApprovalNeeded", shareWithoutApprovalNeeded);
+
+		String maxFileSizeGS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
+		request.setAttribute("uploadFailedTooBigMsg", "The file size limit is {size} MB. This file exceeds the limit.");
+		request.setAttribute("maxFileSizeGS", maxFileSizeGS);
+		request.setAttribute("uploadMaxFileSize", Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
+
 		return mapping.findForward("forward");
 	}
 	

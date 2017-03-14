@@ -139,7 +139,7 @@ public class SaikuReportHtmlRenderer {
 	}
 
 	private String cellClassFor(ReportOutputColumn roc) {
-		String cellClass = "data";
+		String cellClass = roc.getFormatType();
 		if (!report.spec.getColumnNames().contains(roc.originalColumnName)) {
             cellClass = "measure";
         }
@@ -226,7 +226,7 @@ public class SaikuReportHtmlRenderer {
 	private Stream<ReportOutputColumn> columns() {
 		return report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName));
 	}
-	
+
 	private boolean isHiddenColumn(String columnName) {
 		return columnName.equals("Draft") || columnName.equals("Approval Status");
 	}

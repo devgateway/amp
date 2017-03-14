@@ -56,7 +56,6 @@ public class ConfigHelper {
 	private static final Logger logger = Logger.getLogger(ConfigHelper.class);
 	/**
 	 * Retrieves the class specified as type for Generics
-	 * @param field
 	 * @return
 	 */
 	public static ArrayList<String> getValidSettings() {
@@ -125,23 +124,23 @@ public class ConfigHelper {
 	
 	/**
 	 * Validate settingValue
-	 * @param object
+	 * @param ampGlobalSetting
+	 * @param value
 	 * @return boolean
 	 */
-
-	public static boolean validateGlobalSetting(AmpGlobalSettings ampGlobalSetting) {
+	public static boolean validateGlobalSetting(AmpGlobalSettings ampGlobalSetting, String value) {
 		boolean isValid = false;
 		List<KeyValue> possiblesValues = ConfigHelper.getPossibleValues(ampGlobalSetting.getGlobalSettingsPossibleValues());
 		switch (ampGlobalSetting.getGlobalSettingsPossibleValues()) {
 			case T_BOOLEAN:
-				isValid = "true".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue()) || "false".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue());
+				isValid = "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
 				break;
 			case T_SECURE_VALUES:
-				isValid = "on".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue()) || "off".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue());
+				isValid = "on".equalsIgnoreCase(value) || "off".equalsIgnoreCase(value);
 				break;
 			case T_DATE:
 				try {
-					Date testDate = DateTimeUtil.parseDate(ampGlobalSetting.getGlobalSettingsValue());
+					Date testDate = DateTimeUtil.parseDate(value);
 					isValid = true;
 				} catch (Exception e) { // value is not an Date
 					isValid = false;
@@ -154,12 +153,12 @@ public class ConfigHelper {
 			case T_AUDIT_TRIAL_CLENAUP:
 			case T_STATIC_RANGE:
 				try {
-					isValid = isValidNumber(Integer.class, ampGlobalSetting.getGlobalSettingsValue());
+					isValid = isValidNumber(Integer.class, value);
 				} catch (Exception e) { // value is not a valid value
 					isValid = false;
 				}
 				if (isValid) {
-					int integerValue = Integer.parseInt(ampGlobalSetting.getGlobalSettingsValue());
+					int integerValue = Integer.parseInt(value);
 					if ((T_INTEGER_NON_NEGATIVE.equals(ampGlobalSetting.getGlobalSettingsPossibleValues()) && integerValue < 0) ||
 							(T_INTEGER_POSITIVE.equals(ampGlobalSetting.getGlobalSettingsPossibleValues()) && integerValue <= 0)) {
 						isValid = false;
@@ -170,8 +169,8 @@ public class ConfigHelper {
 			case T_YEAR_DEFAULT_START:
 			case T_YEAR_DEFAULT_END:
 			case T_STATIC_YEAR:
-				isValid = isValidNumber(Integer.class, ampGlobalSetting.getGlobalSettingsValue());
-				int currentValue = Integer.parseInt(ampGlobalSetting.getGlobalSettingsValue());
+				isValid = isValidNumber(Integer.class, value);
+				int currentValue = Integer.parseInt(value);
 				if (isValid && currentValue != -1 && (currentValue < 1000 || currentValue > 2999)) {
 					isValid = false;
 				} else {
@@ -179,7 +178,7 @@ public class ConfigHelper {
 				}
 				break;
 			case T_DOUBLE:
-				isValid = isValidNumber(Double.class, ampGlobalSetting.getGlobalSettingsValue());
+				isValid = isValidNumber(Double.class, value);
 				break;
 			case NULL_VALUE:
 			case "":
@@ -188,13 +187,13 @@ public class ConfigHelper {
 				break;
 			case T_DAILY_CURRENCY_UPDATE_HOUR:
 				Pattern pattern = Pattern.compile(TIMEOUT_CURRENCY_UPDATE_PATTERN);
-				Matcher matcher = pattern.matcher(ampGlobalSetting.getGlobalSettingsValue());
+				Matcher matcher = pattern.matcher(value);
 				isValid = matcher.matches();
 				break;
 			default:
 				if (possiblesValues != null) {
-					for (KeyValue value : possiblesValues) {
-						if (ampGlobalSetting.getGlobalSettingsValue().equals(value.getKey())) {
+					for (KeyValue val : possiblesValues) {
+						if (value.equals(val.getKey())) {
 							isValid = true;
 						}
 					}

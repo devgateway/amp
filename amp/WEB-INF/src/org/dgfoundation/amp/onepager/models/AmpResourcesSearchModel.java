@@ -11,12 +11,13 @@ import java.util.Map;
 
 import javax.jcr.Node;
 
-import org.apache.wicket.Session;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import clover.org.jfree.util.StringUtils;
 
 /**
  * @author aartimon@dginternational.org
@@ -32,27 +33,23 @@ public class AmpResourcesSearchModel extends
 	}
 
 	private static final long serialVersionUID = 8211300754918658832L;
-	
+
 	@Override
 	protected Collection<NodeWrapper> load() {
 		ArrayList<NodeWrapper> ret = new ArrayList<NodeWrapper>();
 		try {
-			AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+			AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 			javax.jcr.Session jcrWriteSession = DocumentManagerUtil.getWriteSession(SessionUtil.getCurrentServletRequest());
 
-			Node otherHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, s.getCurrentMember());
+			Node otherHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, session.getCurrentMember());
 			Iterator<Node> nit = otherHomeNode.getNodes();
+			input = (!org.apache.commons.lang.StringUtils.isEmpty(input) ? input.trim() : input);
 			while (nit.hasNext()) {
 				Node n = (Node) nit.next();
 				NodeWrapper nw = new NodeWrapper(n);
 				if (input != null && input.length() > 0) {
-					String title = nw.getTitle();
-					if (title == null) {
-						AmpAuthWebSession session = (AmpAuthWebSession) Session.get();
-						Site site = session.getSite();
-						title = nw.getTranslatedTitleByLang(site.getDefaultLanguage().getCode());
-					}
-					if (title != null && title.toLowerCase().startsWith(input.trim().toLowerCase())) {
+					String title = getTitle(session, nw);
+					if (title != null && StringUtils.startsWithIgnoreCase(title, input)) {
 						ret.add(nw);
 					}
 				} else {
@@ -63,6 +60,15 @@ public class AmpResourcesSearchModel extends
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private String getTitle(AmpAuthWebSession session, NodeWrapper nw) {
+		String title = nw.getTitle();
+		if (title == null) {
+			Site site = session.getSite();
+			title = nw.getTranslatedTitleByLang(site.getDefaultLanguage().getCode());
+		}
+		return title;
 	}
 
 }

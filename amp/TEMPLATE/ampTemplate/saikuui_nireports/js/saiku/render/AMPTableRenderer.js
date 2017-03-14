@@ -28,7 +28,7 @@ this.hiddenColumnNames = undefined;
 this.ACTIVITY_STATUS_CODES = undefined;
 this.PLEDGE_ID_ADDER = 800000000; // java-side constant, taken MondrianETL
 this.rowsFromBatch = 100;
-var hideSubTotals = false;
+var measureless = false;
 
 AMPTableRenderer.prototype.render = function(data, options) {
 	Saiku.logger.log('AMPTableRenderer.render INIT');
@@ -36,7 +36,7 @@ AMPTableRenderer.prototype.render = function(data, options) {
 
 	var measures = data.workspace.query.attributes.measures;
 	var hasMeasures = (measures instanceof Array) && measures.length > 0;
-	hideSubTotals = !hasMeasures;
+	measureless = !hasMeasures;
 
 	if (data !== undefined && data.page !== null && data.page.pageArea !== null && !data.isEmpty) {
 		ACTIVITY_STATUS_CODES = data.colorSettings.activityStatusCodes;
@@ -301,7 +301,8 @@ function generateContentHtml(page, options) {
 
 	// Add last row with totals.
 	var totalsRowNeeded =
-		(this.lastHeaderRow  >= 0) && // there exists a header 
+		(this.lastHeaderRow  >= 0) && // there exists a header
+		(!this.measureless) &&
 		(this.metadataHierarchies.length + this.metadataColumns.length <= this.headerMatrix[this.lastHeaderRow].length);
 
 	var totalRow = totalsRowNeeded ? buildTotalsRow(page) : "";
@@ -320,7 +321,7 @@ function generateDataRows(page, options) {
 	var content = "";
 	// Transform the tree data structure to 2d matrix.
 	this.numberOfRows = this.getNumberOfRows(page.pageArea);
-	if (page.pageArea.children !== null && !hideSubTotals) {
+	if (page.pageArea.children !== null && !measureless) {
 		this.numberOfRows--;
 	}
 	this.contentMatrix = new Array(this.numberOfRows);
@@ -527,7 +528,7 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 		for (var i = 0; i < node.children.length; i++) {
 			extractDataFromTree(node.children[i], node, level + 1, i === node.children.length - 1, hierarchiesData);
 		}
-		if (!this.hideSubTotals) {
+		if (!this.measureless) {
 			// Add the node that represents the subtotal.
 			node.children = null;
 			node.isTotal = true;
@@ -549,7 +550,7 @@ function getNumberOfRows(node) {
 			c += getNumberOfRows(node.children[i]);
 		}
 	}
-	if (!hideSubTotals || node.children == null) {
+	if (!measureless || node.children == null) {
 		c++;
 	}
 	return c;

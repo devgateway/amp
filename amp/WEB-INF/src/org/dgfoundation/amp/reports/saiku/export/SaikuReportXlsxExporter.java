@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
@@ -26,6 +27,7 @@ import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.HeaderCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -70,8 +72,6 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 */
 	protected AmountsUnits amountUnits = null;
 
-	private List<Runnable> pendingWork = new ArrayList<>();
-	
 	/**
 	 * generates a workbook containing data about 1 or 2 reports. Normally you'd want both reports to actually be the
 	 * same one generated in different currencies, but the code does not care and you can put as different reports as
@@ -229,13 +229,15 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 */
 	protected void renderReportData(SXSSFSheet sheet, GeneratedReport report) {
 		if (report.reportContents.getChildren() == null) {
-			renderTableRow(sheet, report, report.reportContents, 0);
+			renderTableRow(sheet, report, report.reportContents, 0, new ArrayList<>());
 		} else {
 			for (ReportArea subReportArea : report.reportContents.getChildren()) {
-				renderTableRow(sheet, report, subReportArea, 0);
+				renderTableRow(sheet, report, subReportArea, 0, new ArrayList<>());
 			}
 		}
-		renderTableTotals(sheet, report, report.reportContents);
+		if (report.hasMeasures()) {
+			renderTableTotals(sheet, report, report.reportContents);
+		}
 	}
 
 	/**
@@ -246,18 +248,27 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 * @param row
 	 * @return
 	 */
-	protected void renderTableRow(SXSSFSheet sheet, GeneratedReport report, ReportArea reportContents, int level) {
+	protected void renderTableRow(SXSSFSheet sheet, GeneratedReport report, ReportArea reportContents, int level,
+			List<HierarchyCell> hierarchyCells) {
 		if (reportContents.getChildren() != null) {
-			renderGroupRow(sheet, report, reportContents, level);
+			renderGroupRow(sheet, report, reportContents, level, hierarchyCells);
 		} else {
 			Row row = sheet.createRow(sheet.getLastRowNum() + 1);
 
+			hierarchyCells.forEach(c -> {
+				Cell cell = row.createCell(c.column);
+				cell.setCellValue(c.value);
+				cell.setCellStyle(template.getHierarchyStyle());
+				setMaxColWidth(sheet, cell, c.column);
+			});
+			hierarchyCells.clear();
+
 			IntWrapper intWrapper = new IntWrapper();
-			report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {
+			columns(report).forEach(roc -> {
 				if (!(report.spec.getHierarchies().size() > 0 && intWrapper.value < level - 1)) {
 					ReportCell rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
 					createCell(sheet, row, intWrapper.value, rc);
-				} 
+				}
 				intWrapper.inc();
 			});
 
@@ -266,15 +277,11 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	}
 
 	/**
-	 * Executes any pending work before flushing rows and then flushes the rows to disk.
-	 * Currently used to create cells in hierarchical columns.
+	 * Flushes the rows to disk.
 	 *
 	 * @param sheet the sheet to flush
 	 */
 	private void flushRows(SXSSFSheet sheet) {
-		pendingWork.forEach(Runnable::run);
-		pendingWork.clear();
-
 		try {
             sheet.flushRows(IN_MEMORY_ROWS);
         } catch (IOException e) {
@@ -290,13 +297,14 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 * @param row
 	 * @return
 	 */
-	protected void renderGroupRow(SXSSFSheet sheet, GeneratedReport report, ReportArea reportContents, int level) {
+	protected void renderGroupRow(SXSSFSheet sheet, GeneratedReport report, ReportArea reportContents, int level,
+			List<HierarchyCell> hierarchyCells) {
 		int rowPosInit = sheet.getLastRowNum();
 
-		pendingWork.add(() -> createHierarchyCell(sheet, reportContents, level, rowPosInit));
+		hierarchyCells.add(new HierarchyCell(level, reportContents.getOwner().debugString));
 
 		for (ReportArea subReportArea : reportContents.getChildren()) {
-			renderTableRow(sheet, report, subReportArea, level + 1);
+			renderTableRow(sheet, report, subReportArea, level + 1, hierarchyCells);
 		}
 
 		if (report.hasMeasures()) {
@@ -313,14 +321,6 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		}
 	}
 
-	private void createHierarchyCell(SXSSFSheet sheet, ReportArea reportContents, int level, int rowPosInit) {
-		Row initRow = sheet.getRow(rowPosInit + 1);
-		Cell cell = initRow.createCell(level);
-		cell.setCellValue(reportContents.getOwner().debugString);
-		cell.setCellStyle(template.getHierarchyStyle());
-		setMaxColWidth(sheet, cell, level);
-	}
-
 	/**
 	 * @param sheet
 	 * @param report
@@ -331,7 +331,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	protected void renderSubTotalRow(Sheet sheet, GeneratedReport report, ReportArea reportContents, int level) {
 		Row row = sheet.createRow(sheet.getLastRowNum() + 1);
 		IntWrapper intWrapper = new IntWrapper();
-		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {
+		columns(report).forEach(roc -> {
 			if (intWrapper.value > level) {
 				ReportCell rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
 				Cell cell = createCell(sheet, row, intWrapper.value, rc);
@@ -349,12 +349,16 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	protected void renderTableTotals(Sheet sheet, GeneratedReport report, ReportArea reportContents) {
 		IntWrapper intWrapper = new IntWrapper();
 		Row row = sheet.createRow(sheet.getLastRowNum() + 1);
-		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {	
+		columns(report).forEach(roc -> {
 			ReportCell rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
 			Cell cell = createTotalCell(sheet, row, intWrapper.value, report, rc);
 			cell.setCellStyle(template.getTotalNumberStyle());
 			intWrapper.inc();
 		});
+	}
+
+	private Stream<ReportOutputColumn> columns(GeneratedReport report) {
+		return report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName));
 	}
 	
 	/**
@@ -581,5 +585,16 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	
 	protected String getSummarySheetName() {
 		return this.summarySheetName;
+	}
+
+	private static class HierarchyCell {
+
+		private int column;
+		private String value;
+
+		HierarchyCell(int column, String value) {
+			this.column = column;
+			this.value = value;
+		}
 	}
 }

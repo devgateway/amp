@@ -10,14 +10,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-
-import clover.org.jfree.util.StringUtils;
 
 /**
  * @author aartimon@dginternational.org
@@ -39,15 +39,15 @@ public class AmpResourcesSearchModel extends
 		ArrayList<NodeWrapper> ret = new ArrayList<NodeWrapper>();
 		try {
 			AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
-			javax.jcr.Session jcrWriteSession = DocumentManagerUtil.getWriteSession(SessionUtil.getCurrentServletRequest());
+			Session jcrWriteSession = DocumentManagerUtil.getWriteSession(SessionUtil.getCurrentServletRequest());
 
 			Node otherHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, session.getCurrentMember());
 			Iterator<Node> nit = otherHomeNode.getNodes();
-			input = (!org.apache.commons.lang.StringUtils.isEmpty(input) ? input.trim() : input);
+			input = (!StringUtils.isEmpty(input) ? input.trim() : input);
 			while (nit.hasNext()) {
 				Node n = (Node) nit.next();
 				NodeWrapper nw = new NodeWrapper(n);
-				if (input != null && input.length() > 0) {
+				if (!StringUtils.isEmpty(input)) {
 					String title = getTitle(session, nw);
 					if (title != null && StringUtils.startsWithIgnoreCase(title, input)) {
 						ret.add(nw);

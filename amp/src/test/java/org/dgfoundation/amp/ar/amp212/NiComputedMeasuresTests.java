@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
@@ -297,10 +296,5 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 	@After
 	public void tearDown() {
 		AmpReportsScratchpad.forcedNowDate = null;
-	}
-	
-	@Override
-	public void setUp() {
-		AllTests_amp212.setUp();
 	}
 }

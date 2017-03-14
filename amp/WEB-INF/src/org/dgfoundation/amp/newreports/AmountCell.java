@@ -37,4 +37,9 @@ public final class AmountCell extends ReportCell {
 			return value == null ? "" : String.valueOf(value);
 		return formatter.format(value);
 	}
+	
+	@Override
+	public String extractFormatType() {
+		return ReportColumnFormatType.NUMBER.toString();
+	}
 }

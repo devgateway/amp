@@ -110,13 +110,13 @@ public class DbUtil {
 		return filter(text, false);
 
 	}
-	
-	
-	
+
 	/**
-	 * Used in the AMP-23713.xml patch. 
-	 * Can be reused for other tables, but highly inadvisable to be edited itself. 
-	 * @param tableName the tablename
+	 * Used in the AMP-23713.xml patch. Can be reused for other tables, but
+	 * highly inadvisable to be edited itself.
+	 * 
+	 * @param tableName
+	 *            the tablename
 	 */
 	public static void removeReferencedConstraints(String tableName) {
 		for (String query : generateFkeyConRemovalQueries(tableName)) {
@@ -127,24 +127,24 @@ public class DbUtil {
 	}
 
 	/**
-	 * Generates queries that would drop all foreign key constraints pointing to specified table.
-	 * Used in AMP-23713.xml, reuse, but do not edit
-	 * @param tableName the table name to have foreign keys stripped
+	 * Generates queries that would drop all foreign key constraints pointing to
+	 * specified table. Used in AMP-23713.xml, reuse, but do not edit
+	 * 
+	 * @param tableName
+	 *            the table name to have foreign keys stripped
 	 * @return
 	 */
 	private static List<String> generateFkeyConRemovalQueries(String tableName) {
 		return PersistenceManager.getSession().doReturningWork(conn -> {
-			String query = "SELECT 'ALTER TABLE '|| clazz.relname ||' DROP CONSTRAINT '||constr.conname||';' AS query " + 
-					"FROM pg_constraint constr, pg_class clazz, pg_class clazz_f " +
-					"WHERE constr.conrelid = clazz.oid " +
-					"AND constr.contype ='f' " +
-					"AND constr.confrelid = clazz_f.oid " +
-					"AND clazz_f.relname ='%s'; ";
+			String query = "SELECT 'ALTER TABLE '|| clazz.relname ||' DROP CONSTRAINT '||constr.conname||';' AS query "
+					+ "FROM pg_constraint constr, pg_class clazz, pg_class clazz_f "
+					+ "WHERE constr.conrelid = clazz.oid " + "AND constr.contype ='f' "
+					+ "AND constr.confrelid = clazz_f.oid " + "AND clazz_f.relname ='%s'; ";
 			query = String.format(query, tableName);
 			return SQLUtils.fetchAsList(conn, query, 1);
 		});
 	}
-	
+
 	public static String filter(String text, boolean acute) {
 
 		String result = null;
@@ -205,9 +205,7 @@ public class DbUtil {
 			session = PersistenceManager.getRequestDBSession();
 			// beginTransaction();
 			//
-			String queryString = "select tm from "
-					+ AmpTeamMember.class.getName()
-					+ " tm where (tm.ampTeam=:teamId)";
+			String queryString = "select tm from " + AmpTeamMember.class.getName() + " tm where (tm.ampTeam=:teamId)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("teamId", teamId, LongType.INSTANCE);
 			//
@@ -215,9 +213,7 @@ public class DbUtil {
 			if (col != null && col.size() > 0) {
 				for (int i = 0; i < reportId.length; i++) {
 					if (reportId[i] != null) {
-						queryString = "select r from "
-								+ AmpReports.class.getName()
-								+ " r where (r.ampReportId=:repId)";
+						queryString = "select r from " + AmpReports.class.getName() + " r where (r.ampReportId=:repId)";
 						qry = session.createQuery(queryString);
 						qry.setParameter("repId", reportId[i], LongType.INSTANCE);
 						Iterator itr = qry.list().iterator();
@@ -230,17 +226,12 @@ public class DbUtil {
 								 */
 								ampReport.getMembers().removeAll(col);
 								if (ampReport.getDesktopTabSelections() != null) {
-									for (AmpDesktopTabSelection adts : ampReport
-											.getDesktopTabSelections()) {
-										if (adts.getOwner().getAmpTeam()
-												.getAmpTeamId().equals(teamId)) {
-											adts.getOwner()
-													.getDesktopTabSelections()
-													.remove(adts);
+									for (AmpDesktopTabSelection adts : ampReport.getDesktopTabSelections()) {
+										if (adts.getOwner().getAmpTeam().getAmpTeamId().equals(teamId)) {
+											adts.getOwner().getDesktopTabSelections().remove(adts);
 											adts.setOwner(null);
 											adts.setReport(null);
-											ampReport.getDesktopTabSelections()
-													.remove(adts);
+											ampReport.getDesktopTabSelections().remove(adts);
 										}
 									}
 								}
@@ -251,17 +242,14 @@ public class DbUtil {
 						/*
 						 * removing the teams association with the report
 						 */
-						queryString = "select tr from "
-								+ AmpTeamReports.class.getName()
-								+ " tr where (tr.team=:teamId) and "
-								+ " (tr.report=:repId)";
+						queryString = "select tr from " + AmpTeamReports.class.getName()
+								+ " tr where (tr.team=:teamId) and " + " (tr.report=:repId)";
 						qry = session.createQuery(queryString);
 						qry.setParameter("teamId", teamId, LongType.INSTANCE);
 						qry.setParameter("repId", reportId[i], LongType.INSTANCE);
 						itr = qry.list().iterator();
 						if (itr.hasNext()) {
-							AmpTeamReports ampTeamRep = (AmpTeamReports) itr
-									.next();
+							AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
 							ampTeamRep.setReport(null);
 							ampTeamRep.setTeam(null);
 							session.save(ampTeamRep);
@@ -287,17 +275,17 @@ public class DbUtil {
 	 * @param teamId
 	 *            The team id of the team to which the reports are to be
 	 *            assigned
-	 * @param teamMemberId the teamMemer           
+	 * @param teamMemberId
+	 *            the teamMemer
 	 */
-	public static void addTeamReports(Long reportId[], Long teamId,Long ampMemberId) {
+	public static void addTeamReports(Long reportId[], Long teamId, Long ampMemberId) {
 		Session session = null;
 
 		try {
 			session = PersistenceManager.getSession();
 			// beginTransaction();
 
-			String queryString = "select tm from " + AmpTeam.class.getName()
-					+ " tm where (tm.ampTeamId=:teamId)";
+			String queryString = "select tm from " + AmpTeam.class.getName() + " tm where (tm.ampTeamId=:teamId)";
 
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("teamId", teamId, LongType.INSTANCE);
@@ -308,9 +296,7 @@ public class DbUtil {
 			}
 			if (team != null) {
 				if (reportId != null && reportId.length > 0) {
-					queryString = "select rep from "
-							+ AmpReports.class.getName()
-							+ " rep where rep.ampReportId in (";
+					queryString = "select rep from " + AmpReports.class.getName() + " rep where rep.ampReportId in (";
 					StringBuffer temp = new StringBuffer();
 					for (int i = 0; i < reportId.length; i++) {
 						temp.append(reportId[i]);
@@ -326,15 +312,11 @@ public class DbUtil {
 					while (itr.hasNext()) {
 						AmpReports report = (AmpReports) itr.next();
 						if (report != null) {
-							String tempQry = "select teamRep from "
-									+ AmpTeamReports.class.getName()
-									+ " teamRep where (teamRep.team=:tId) and "
-									+ " (teamRep.report=:rId)";
+							String tempQry = "select teamRep from " + AmpTeamReports.class.getName()
+									+ " teamRep where (teamRep.team=:tId) and " + " (teamRep.report=:rId)";
 							Query tmpQry = session.createQuery(tempQry);
-							tmpQry.setParameter("tId", team.getAmpTeamId(),
-									LongType.INSTANCE);
-							tmpQry.setParameter("rId", report.getAmpReportId(),
-									LongType.INSTANCE);
+							tmpQry.setParameter("tId", team.getAmpTeamId(), LongType.INSTANCE);
+							tmpQry.setParameter("rId", report.getAmpReportId(), LongType.INSTANCE);
 							Iterator tmpItr = tmpQry.list().iterator();
 							if (!tmpItr.hasNext()) {
 								AmpTeamReports tr = new AmpTeamReports();
@@ -344,23 +326,26 @@ public class DbUtil {
 								session.save(tr);
 							}
 						}
-						
-//						//here we should 
 
-						AmpTeamMember ampTeamMember =null;
-						//if(report.getOwnerId()!=null){
-						//	ampTeamMember=(AmpTeamMember) session.get(AmpTeamMember.class, report.getOwnerId().getAmpTeamMemId());	
-						//}else {
-							ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, ampMemberId);	
-						//}					
+						// //here we should
+
+						AmpTeamMember ampTeamMember = null;
+						// if(report.getOwnerId()!=null){
+						// ampTeamMember=(AmpTeamMember)
+						// session.get(AmpTeamMember.class,
+						// report.getOwnerId().getAmpTeamMemId());
+						// }else {
+						ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, ampMemberId);
+						// }
 						Set reportSet = ampTeamMember.getReports();
-						//reportSet.add(ampReports);  // Not needed because it is set from ampReports object
+						// reportSet.add(ampReports); // Not needed because it
+						// is set from ampReports object
 						report.getMembers().add(ampTeamMember);
-						session.saveOrUpdate(ampTeamMember);						
-						
+						session.saveOrUpdate(ampTeamMember);
+
 					}
 				}
-			}			
+			}
 			// tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from addTeamReports()");
@@ -386,16 +371,14 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select f from "
-					+ AmpFundingDetail.class.getName() + " f "
+			String queryString = "select f from " + AmpFundingDetail.class.getName() + " f "
 					+ "where (f.contract=:cId) and f.transactionType=1";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("cId", c.getId(), LongType.INSTANCE);
 			fundingDetails = qry.list();
 
 		} catch (Exception ex) {
-			logger.error("Unable to get fundingDetails (disbursements) of an IPA contract:"
-					+ ex);
+			logger.error("Unable to get fundingDetails (disbursements) of an IPA contract:" + ex);
 		}
 		return fundingDetails;
 	}
@@ -408,8 +391,7 @@ public class DbUtil {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select aaii.* from amp_activity_internal_id aaii "
 					+ "where aaii.amp_activity_id=:actId";
-			Query qry = session.createSQLQuery(queryString).addEntity(
-					AmpActivityInternalId.class);
+			Query qry = session.createSQLQuery(queryString).addEntity(AmpActivityInternalId.class);
 			qry.setParameter("actId", actId, LongType.INSTANCE);
 			col = qry.list();
 		} catch (Exception ex) {
@@ -417,7 +399,7 @@ public class DbUtil {
 		}
 		return col;
 	}
-	
+
 	public static AmpRole getAmpRole(String roleCode) {
 		Session session = null;
 		AmpRole role = null;
@@ -425,8 +407,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 
-			String queryString = "select r from " + AmpRole.class.getName()
-					+ " r " + "where (r.roleCode=:code)";
+			String queryString = "select r from " + AmpRole.class.getName() + " r " + "where (r.roleCode=:code)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("code", roleCode, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
@@ -441,6 +422,7 @@ public class DbUtil {
 
 	/**
 	 * this is probably useless
+	 * 
 	 * @param c
 	 * @param id
 	 * @return
@@ -448,9 +430,9 @@ public class DbUtil {
 	public static Object getObject(Class<?> c, Serializable id) {
 		return PersistenceManager.getSession().load(c, id);
 	}
-	
+
 	public static <T> T getObjectOrNull(Class<T> c, Serializable id) {
-	    return (T) PersistenceManager.getSession().get(c, id);
+		return (T) PersistenceManager.getSession().get(c, id);
 	}
 
 	public static EUActivity getEuActivity(Long id) {
@@ -467,8 +449,7 @@ public class DbUtil {
 			}
 
 		} catch (Exception e) {
-			logger.error("Uanble to get object of class "
-					+ EUActivity.class.getName() + " width id=" + id
+			logger.error("Uanble to get object of class " + EUActivity.class.getName() + " width id=" + id
 					+ ". Error was:" + e);
 		}
 		return o;
@@ -476,6 +457,7 @@ public class DbUtil {
 
 	/**
 	 * returns null on non-existing organisation
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -489,15 +471,14 @@ public class DbUtil {
 			Hibernate.initialize(organization.getRecipients());
 			Hibernate.initialize(organization.getOrganizationBudgetInfos());
 			if (organization.getOrganizationBudgetInfos() != null) {
-				for (AmpOrganizationBudgetInformation budgetInfo : organization
-						.getOrganizationBudgetInfos()) {
+				for (AmpOrganizationBudgetInformation budgetInfo : organization.getOrganizationBudgetInfos()) {
 					Hibernate.initialize(budgetInfo.getOrganizations());
 				}
 			}
 		} catch (Exception ex) {
-			//logger.error("Unable to get organisation from database", ex);
+			// logger.error("Unable to get organisation from database", ex);
 		}
-		//logger.debug("Getting organisation successfully ");
+		// logger.debug("Getting organisation successfully ");
 		return organization;
 	}
 
@@ -509,14 +490,12 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = new String();
-			queryString = "select f from " + AmpFunding.class.getName()
-					+ " f where (f.ampActivityId=:ampActivityId) ";
+			queryString = "select f from " + AmpFunding.class.getName() + " f where (f.ampActivityId=:ampActivityId) ";
 			q = session.createQuery(queryString);
 			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
 			ampFundings = q.list();
 		} catch (Exception ex) {
-			logger.error("Unable to get AmpFunding collection from database",
-					ex);
+			logger.error("Unable to get AmpFunding collection from database", ex);
 		}
 		logger.debug("DbUtil : getAmpFunding(ampActivityId) returning collection of size  "
 				+ (ampFundings != null ? ampFundings.size() : 0));
@@ -528,11 +507,8 @@ public class DbUtil {
 	}
 
 	public static List<AmpActivity> getCreatedOrEditedActivities(Long ampTeamId) {
-		String queryString = "select act from "
-				+ AmpActivity.class.getName()
-				+ " act where (act.team=:ampTeamId)"
-				+ " and (act.approvalStatus in ("
-				+ Constants.ACTIVITY_NEEDS_APPROVAL_STATUS + ") ) "
+		String queryString = "select act from " + AmpActivity.class.getName() + " act where (act.team=:ampTeamId)"
+				+ " and (act.approvalStatus in (" + Constants.ACTIVITY_NEEDS_APPROVAL_STATUS + ") ) "
 				+ " and act.draft != :draftValue";
 		Query q = PersistenceManager.getSession().createQuery(queryString);
 		q.setParameter("ampTeamId", ampTeamId, LongType.INSTANCE);
@@ -542,8 +518,7 @@ public class DbUtil {
 	}
 
 	public static String getActivityApprovalStatus(Long actId) {
-		String qry = "select act.approvalStatus from "
-				+ AmpActivityVersion.class.getName()
+		String qry = "select act.approvalStatus from " + AmpActivityVersion.class.getName()
 				+ " act where act.ampActivityId=:actId";
 		Query q = PersistenceManager.getSession().createQuery(qry);
 		q.setParameter("actId", actId, LongType.INSTANCE);
@@ -552,7 +527,7 @@ public class DbUtil {
 			return res.get(0);
 		return null;
 	}
-	
+
 	public static List<AmpFiscalCalendar> getAllFisCalenders() {
 		Session session = null;
 		Query qry = null;
@@ -560,8 +535,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select f from "
-					+ AmpFiscalCalendar.class.getName() + " f";
+			String queryString = "select f from " + AmpFiscalCalendar.class.getName() + " f";
 			qry = session.createQuery(queryString);
 			fisCals = qry.list();
 		} catch (Exception e) {
@@ -578,15 +552,13 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "from "
-					+ AmpFiscalCalendar.class.getName()
+			String queryString = "from " + AmpFiscalCalendar.class.getName()
 					+ " where startMonthNum=:start and startDayNum=:start and yearOffset=:offset";
 			qry = session.createQuery(queryString);
 			qry.setParameter("start", new Integer(1), IntegerType.INSTANCE);
 			qry.setParameter("offset", new Integer(0), IntegerType.INSTANCE);
 			if (qry.list().size() != 0)
-				fid = ((AmpFiscalCalendar) qry.list().get(0))
-						.getAmpFiscalCalId();
+				fid = ((AmpFiscalCalendar) qry.list().get(0)).getAmpFiscalCalId();
 		} catch (Exception ex) {
 			logger.error("Unable to get base fiscal calendar" + ex);
 			ex.printStackTrace(System.out);
@@ -601,12 +573,10 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select f from "
-					+ AmpFiscalCalendar.class.getName() + " f "
+			String queryString = "select f from " + AmpFiscalCalendar.class.getName() + " f "
 					+ "where f.baseCal=:baseCalParam order by f.name";
 			qry = session.createQuery(queryString);
-			qry.setParameter("baseCalParam",
-					BaseCalendar.BASE_GREGORIAN.getValue(), StringType.INSTANCE);
+			qry.setParameter("baseCalParam", BaseCalendar.BASE_GREGORIAN.getValue(), StringType.INSTANCE);
 
 			if (qry.list() != null)
 				calendar = ((AmpFiscalCalendar) qry.list().get(0));
@@ -616,20 +586,15 @@ public class DbUtil {
 		return calendar;
 	}
 
-	public static Collection<AmpActivityVersion> getAllactivitiesRelatedToOrg(
-			Long orgId) {
+	public static Collection<AmpActivityVersion> getAllactivitiesRelatedToOrg(Long orgId) {
 		Session session = null;
 		Query qry = null;
 		Collection<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>();
 		try {
 			session = PersistenceManager.getSession();
-			String queryString = "select role.activity from "
-					+ AmpOrgRole.class.getName()
-					+ " role,"
-					+ AmpActivity.class.getName()
-					+ " a "
-					+ " where role.activity = a.ampActivityId and role.organisation="
-					+ orgId;
+			String queryString = "select role.activity from " + AmpOrgRole.class.getName() + " role,"
+					+ AmpActivity.class.getName() + " a "
+					+ " where role.activity = a.ampActivityId and role.organisation=" + orgId;
 			qry = session.createQuery(queryString);
 			activities = qry.list();
 		} catch (Exception e) {
@@ -645,9 +610,9 @@ public class DbUtil {
 		int activitiesCount = 0;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select count(*) from "
-					+ AmpActivityInternalId.class.getName()
-					+ " f,"+AmpActivityGroup.class.getName()+" g where f.ampActivity = g.ampActivityLastVersion and (f.organisation=:orgId)";
+			String queryString = "select count(*) from " + AmpActivityInternalId.class.getName() + " f,"
+					+ AmpActivityGroup.class.getName()
+					+ " g where f.ampActivity = g.ampActivityLastVersion and (f.organisation=:orgId)";
 			qry = session.createQuery(queryString);
 			qry.setParameter("orgId", orgId, LongType.INSTANCE);
 			activitiesCount = (Integer) qry.uniqueResult();
@@ -669,8 +634,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select u from " + User.class.getName()
-					+ " u where (u.email=:email)";
+			String queryString = "select u from " + User.class.getName() + " u where (u.email=:email)";
 			qry = session.createQuery(queryString);
 			qry.setParameter("email", email, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
@@ -701,8 +665,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from "
-					+ AmpApplicationSettings.class.getName()
+			String queryString = "select a from " + AmpApplicationSettings.class.getName()
 					+ " a where (a.defaultTeamReport=:repId)";
 			qry = session.createQuery(queryString);
 			qry.setLong("repId", reportId);
@@ -721,24 +684,21 @@ public class DbUtil {
 	}
 
 	public static AmpApplicationSettings getTeamAppSettings(Long teamId) {
-	
-		String queryString = "from "
-				+ AmpApplicationSettings.class.getName()
-				+ " a where (a.team.ampTeamId=:teamId)";
-		AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) PersistenceManager.getSession().createQuery(queryString).setLong("teamId", teamId).uniqueResult();
+
+		String queryString = "from " + AmpApplicationSettings.class.getName() + " a where (a.team.ampTeamId=:teamId)";
+		AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) PersistenceManager.getSession()
+				.createQuery(queryString).setLong("teamId", teamId).uniqueResult();
 		return ampAppSettings;
 	}
 
-	public static AmpApplicationSettings getTeamAppSettingsMemberNotNull(
-			Long teamId) {
+	public static AmpApplicationSettings getTeamAppSettingsMemberNotNull(Long teamId) {
 		Session session = null;
 		Query qry = null;
 		AmpApplicationSettings ampAppSettings = null;
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from "
-					+ AmpApplicationSettings.class.getName()
+			String queryString = "select a from " + AmpApplicationSettings.class.getName()
 					+ " a where (a.team=:teamId) ";
 			qry = session.createQuery(queryString);
 			qry.setLong("teamId", teamId);
@@ -804,8 +764,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select r from " + AmpReports.class.getName()
-					+ " r " + "where (r.ampReportId=:id)";
+			String queryString = "select r from " + AmpReports.class.getName() + " r " + "where (r.ampReportId=:id)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
@@ -825,8 +784,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select r from "
-					+ AmpReportLog.class.getName() + " r "
+			String queryString = "select r from " + AmpReportLog.class.getName() + " r "
 					+ "where (r.report=:id and r.member.ampTeamMemId=:member)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("id", report_id, LongType.INSTANCE);
@@ -859,7 +817,7 @@ public class DbUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static <T> Collection<T> getAll(Class<T> object){
+	public static <T> Collection<T> getAll(Class<T> object) {
 		return getAll(object, PersistenceManager.getSession());
 	}
 
@@ -892,8 +850,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select c from " + Country.class.getName()
-					+ " c " + "where (c.iso=:iso)";
+			String queryString = "select c from " + Country.class.getName() + " c " + "where (c.iso=:iso)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("iso", iso, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
@@ -915,8 +872,7 @@ public class DbUtil {
 
 		try {
 			sess = PersistenceManager.getRequestDBSession();
-			String queryString = "select o from "
-					+ AmpOrganisation.class.getName()
+			String queryString = "select o from " + AmpOrganisation.class.getName()
 					+ " o where (o.ampFiscalCalId=:ampFisCalId) and (o.deleted is null or o.deleted = false) ";
 			qry = sess.createQuery(queryString);
 			qry.setParameter("ampFisCalId", fiscalCalId, LongType.INSTANCE);
@@ -932,8 +888,7 @@ public class DbUtil {
 
 	}
 
-	public static List<AmpCurrency> getFiscalCalConstantCurrencies(
-			Long fiscalCalId) {
+	public static List<AmpCurrency> getFiscalCalConstantCurrencies(Long fiscalCalId) {
 
 		Session sess = null;
 		List<AmpCurrency> list = null;
@@ -941,21 +896,19 @@ public class DbUtil {
 
 		try {
 			sess = PersistenceManager.getRequestDBSession();
-			String queryString = "select o from "
-					+ AmpCurrency.class.getName()
+			String queryString = "select o from " + AmpCurrency.class.getName()
 					+ " o where (o.calendar=:ampFisCalId) and o.activeFlag = 1 and virtual = true";
 			qry = sess.createQuery(queryString);
 			qry.setLong("ampFisCalId", fiscalCalId);
 			list = qry.list();
-			
+
 		} catch (Exception e) {
 			logger.error("Exception from getFiscalCalConstantCurrencies()", e);
 		}
 		return list;
 	}
-	
-	public static Collection<AmpApplicationSettings> getFiscalCalSettings(
-			Long fiscalCalId) {
+
+	public static Collection<AmpApplicationSettings> getFiscalCalSettings(Long fiscalCalId) {
 
 		Session sess = null;
 		Collection<AmpApplicationSettings> col = null;
@@ -963,8 +916,7 @@ public class DbUtil {
 
 		try {
 			sess = PersistenceManager.getRequestDBSession();
-			String queryString = "select o from "
-					+ AmpApplicationSettings.class.getName()
+			String queryString = "select o from " + AmpApplicationSettings.class.getName()
 					+ " o where (o.fiscalCalendar=:ampFisCalId)";
 			qry = sess.createQuery(queryString);
 			qry.setLong("ampFisCalId", fiscalCalId);
@@ -979,23 +931,19 @@ public class DbUtil {
 		return col;
 	}
 
-    public static List<AmpOrganisation> searchForOrganisation(String keyword, Long orgType) {
-        return searchForOrganisation(keyword, orgType, (long[]) null);
-    }
+	public static List<AmpOrganisation> searchForOrganisation(String keyword, Long orgType) {
+		return searchForOrganisation(keyword, orgType, (long[]) null);
+	}
 
 	public static List<AmpOrganisation> searchForOrganisation(String keyword, Long orgType, long[] excludeIds) {
 		keyword = keyword.toLowerCase();
-        StringBuilder queryString = new StringBuilder();
+		StringBuilder queryString = new StringBuilder();
 
 		String organizationName = AmpOrganisation.hqlStringForName("org");
-		queryString.append(" select org from ")
-                   .append(AmpOrganisation.class.getName()).append(" org ")
-                   .append(" inner join org.orgGrpId grp ")
-                   .append(" where(lower(org.acronym) like '%")
-                   .append(keyword)
-                   .append("%' or lower(" + organizationName + ") like '%")
-                   .append(keyword)
-                   .append("%') and grp.orgType=:orgType and (org.deleted is null or org.deleted = false)");
+		queryString.append(" select org from ").append(AmpOrganisation.class.getName()).append(" org ")
+				.append(" inner join org.orgGrpId grp ").append(" where(lower(org.acronym) like '%").append(keyword)
+				.append("%' or lower(" + organizationName + ") like '%").append(keyword)
+				.append("%') and grp.orgType=:orgType and (org.deleted is null or org.deleted = false)");
 
 		appendNotIn("org.ampOrgId", excludeIds, queryString);
 
@@ -1004,24 +952,24 @@ public class DbUtil {
 		return qry.list();
 	}
 
-    public static List<AmpOrganisation> searchForOrganisation(String keyword) {
-        return searchForOrganisation(keyword, (long[]) null);
-    }
+	public static List<AmpOrganisation> searchForOrganisation(String keyword) {
+		return searchForOrganisation(keyword, (long[]) null);
+	}
 
 	public static List<AmpOrganisation> searchForOrganisation(String keyword, long[] excludeIds) {
 		keyword = keyword.toLowerCase();
-        StringBuilder queryString = new StringBuilder();
+		StringBuilder queryString = new StringBuilder();
 
 		String organizationName = AmpOrganisation.hqlStringForName("org");
-		queryString.append("select distinct org from ")
-                   .append(AmpOrganisation.class.getName()).append(" org ")
-                   .append("where (lower(acronym) like :keyword")//.append(keyword)
-                   .append(" or lower(" + organizationName + ") like :keyword")//.append(keyword) 
-                   .append(") and (org.deleted is null or org.deleted = false) ");
+		queryString.append("select distinct org from ").append(AmpOrganisation.class.getName()).append(" org ")
+				.append("where (lower(acronym) like :keyword")// .append(keyword)
+				.append(" or lower(" + organizationName + ") like :keyword")// .append(keyword)
+				.append(") and (org.deleted is null or org.deleted = false) ");
 
 		appendNotIn("org.ampOrgId", excludeIds, queryString);
-		Query q = PersistenceManager.getSession().createQuery(queryString.toString()).setParameter("keyword", '%' + keyword + '%');
-		
+		Query q = PersistenceManager.getSession().createQuery(queryString.toString()).setParameter("keyword",
+				'%' + keyword + '%');
+
 		return q.list();
 	}
 
@@ -1031,20 +979,16 @@ public class DbUtil {
 	 * 
 	 * @author Dare
 	 */
-	public static List<AmpOrganisation> searchForOrganisation(String namesFirstLetter,
-			String keyword) {
+	public static List<AmpOrganisation> searchForOrganisation(String namesFirstLetter, String keyword) {
 		if (keyword.length() != 0) {
 			keyword = keyword.toLowerCase();
 		}
 		namesFirstLetter = namesFirstLetter.toLowerCase();
 
 		String organizationName = AmpOrganisation.hqlStringForName("org");
-		String queryString = "select distinct org from "
-				+ AmpOrganisation.class.getName() + " org "
-				+ "where ((lower(acronym) like '%" + keyword
-				+ "%' and lower(" + organizationName + ") like '" + namesFirstLetter
-				+ "%') or lower(" + organizationName + ") like '" + namesFirstLetter + "%"
-				+ keyword
+		String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
+				+ "where ((lower(acronym) like '%" + keyword + "%' and lower(" + organizationName + ") like '"
+				+ namesFirstLetter + "%') or lower(" + organizationName + ") like '" + namesFirstLetter + "%" + keyword
 				+ "%') and (org.deleted is null or org.deleted = false)";
 		return PersistenceManager.getSession().createQuery(queryString).list();
 	}
@@ -1056,47 +1000,44 @@ public class DbUtil {
 	 * 
 	 * @author Mouhamad
 	 */
-	public static List<AmpOrganisation> searchForOrganisation(String namesFirstLetter,
-			String keyword, Long orgType) {
+	public static List<AmpOrganisation> searchForOrganisation(String namesFirstLetter, String keyword, Long orgType) {
 		if (keyword.length() != 0) {
 			keyword = keyword.toLowerCase();
 		}
 		namesFirstLetter = namesFirstLetter.toLowerCase();
 
 		String organizationName = AmpOrganisation.hqlStringForName("org");
-		String queryString = "select distinct org from "
-				+ AmpOrganisation.class.getName()
-				+ " org inner join org.orgGrpId grp "
-				+ "where grp.orgType=:orgType and ((lower(acronym) like '%"
-				+ keyword + "%' and lower(" + organizationName + ") like '" + namesFirstLetter
-				+ "%') or lower(" + organizationName + ") like '" + namesFirstLetter + "%"
-				+ keyword
+		String queryString = "select distinct org from " + AmpOrganisation.class.getName()
+				+ " org inner join org.orgGrpId grp " + "where grp.orgType=:orgType and ((lower(acronym) like '%"
+				+ keyword + "%' and lower(" + organizationName + ") like '" + namesFirstLetter + "%') or lower("
+				+ organizationName + ") like '" + namesFirstLetter + "%" + keyword
 				+ "%') and (org.deleted is null or org.deleted = false)";
 		Query qry = PersistenceManager.getSession().createQuery(queryString);
 		qry.setParameter("orgType", orgType, LongType.INSTANCE);
 		return qry.list();
 	}
 
-    public static List<AmpOrganisation> searchForOrganisationByType(Long orgType) {
-        return searchForOrganisationByType(orgType, null);
-    }
+	public static List<AmpOrganisation> searchForOrganisationByType(Long orgType) {
+		return searchForOrganisationByType(orgType, null);
+	}
 
-    /**
-     * returns list of all Organisations which belong to a group which belongs to a type and do not have an id in the exclusion area
-     * @param orgType
-     * @param excludeIds
-     * @return
-     */
+	/**
+	 * returns list of all Organisations which belong to a group which belongs
+	 * to a type and do not have an id in the exclusion area
+	 * 
+	 * @param orgType
+	 * @param excludeIds
+	 * @return
+	 */
 	public static List<AmpOrganisation> searchForOrganisationByType(Long orgType, long[] excludeIds) {
 
 		try {
 			Session session = PersistenceManager.getRequestDBSession();
 			StringBuilder queryString = new StringBuilder();
-			queryString.append("select distinct org from ")
-                    .append(AmpOrganisation.class.getName()).append(" org ")
-                    .append(" inner join org.orgGrpId grp where grp.orgType=:orgType and (org.deleted is null or org.deleted = false)");
+			queryString.append("select distinct org from ").append(AmpOrganisation.class.getName()).append(" org ")
+					.append(" inner join org.orgGrpId grp where grp.orgType=:orgType and (org.deleted is null or org.deleted = false)");
 
-            appendNotIn("org.ampOrgId", excludeIds, queryString);
+			appendNotIn("org.ampOrgId", excludeIds, queryString);
 
 			Query qry = session.createQuery(queryString.toString());
 			qry.setLong("orgType", orgType);
@@ -1106,38 +1047,42 @@ public class DbUtil {
 		}
 	}
 
-    /**
-     * Appends the NOT IN criteria to the queryString
-     * @param columnName
-     * @param excludeIds
-     * @param queryString
-     * @return
-     */
-    private static StringBuilder appendNotIn(String columnName, long[] excludeIds, StringBuilder queryString) {
-        if (excludeIds != null && excludeIds.length > 0) {
-            queryString.append(" and (").append(columnName).append(" not in (");
-            for (long orgId : excludeIds) {
-                queryString.append(orgId).append(",");
-            }
-            // remove last comma
-            queryString.setLength(queryString.length() - 1);
-            queryString.append("))");
-        }
-        return queryString;
-    }
+	/**
+	 * Appends the NOT IN criteria to the queryString
+	 * 
+	 * @param columnName
+	 * @param excludeIds
+	 * @param queryString
+	 * @return
+	 */
+	private static StringBuilder appendNotIn(String columnName, long[] excludeIds, StringBuilder queryString) {
+		if (excludeIds != null && excludeIds.length > 0) {
+			queryString.append(" and (").append(columnName).append(" not in (");
+			for (long orgId : excludeIds) {
+				queryString.append(orgId).append(",");
+			}
+			// remove last comma
+			queryString.setLength(queryString.length() - 1);
+			queryString.append("))");
+		}
+		return queryString;
+	}
 
-    public static ArrayList<AmpOrganisation> getAmpOrganisations() {
-        return getAmpOrganisations(null);
-    }
+	public static ArrayList<AmpOrganisation> getAmpOrganisations() {
+		return getAmpOrganisations(null);
+	}
 
-    /**
-     * Returns list of amp organizations, excluding the <code>excludeIds</code>
-     * @param excludeIds if not null, the organizations with these ids will be excluded from the search result
-     * @return
-     */
+	/**
+	 * Returns list of amp organizations, excluding the <code>excludeIds</code>
+	 * 
+	 * @param excludeIds
+	 *            if not null, the organizations with these ids will be excluded
+	 *            from the search result
+	 * @return
+	 */
 	public static ArrayList<AmpOrganisation> getAmpOrganisations(long[] excludeIds) {
 
-        Session session = null;
+		Session session = null;
 		Query q = null;
 		ArrayList<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
 		StringBuilder queryString = new StringBuilder();
@@ -1145,12 +1090,12 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 
-            queryString.append(" select org from ").append(AmpOrganisation.class.getName()).append(" org ");
-            queryString.append(" where (org.deleted is null or org.deleted = false)");
+			queryString.append(" select org from ").append(AmpOrganisation.class.getName()).append(" org ");
+			queryString.append(" where (org.deleted is null or org.deleted = false)");
 
-            appendNotIn("org.ampOrgId", excludeIds, queryString);
+			appendNotIn("org.ampOrgId", excludeIds, queryString);
 
-            queryString.append(" order by org.name");
+			queryString.append(" order by org.name");
 
 			q = session.createQuery(queryString.toString());
 			if (q.list() != null && q.list().size() > 0) {
@@ -1158,14 +1103,12 @@ public class DbUtil {
 			}
 
 		} catch (Exception ex) {
-			logger.error("Unable to get Amp organisation names  from database "
-					+ ex.getMessage());
+			logger.error("Unable to get Amp organisation names  from database " + ex.getMessage());
 		}
 		return organizations;
 	}
 
-	public static List<AmpOrganisation> getAmpOrganisations(Long orgId,
-			Long groupId, Long typeId) {
+	public static List<AmpOrganisation> getAmpOrganisations(Long orgId, Long groupId, Long typeId) {
 		Session session = null;
 		Query q = null;
 		List<AmpOrganisation> organizations = null;
@@ -1182,11 +1125,10 @@ public class DbUtil {
 			boolean groupCond = groupId != null && groupId != -1;
 			boolean typeCond = typeId != null && typeId != -1;
 
-			queryString
-					.append(" where (org.deleted is null or org.deleted = false) ");
+			queryString.append(" where (org.deleted is null or org.deleted = false) ");
 			/*
-			 * if (orgCond || groupCond || typeCond) {
-			 * queryString.append(" where 1=1 "); }
+			 * if (orgCond || groupCond || typeCond) { queryString.append(
+			 * " where 1=1 "); }
 			 */
 			if (groupCond) {
 				queryString.append(" and grp.ampOrgGrpId=:groupId ");
@@ -1212,24 +1154,23 @@ public class DbUtil {
 			organizations = q.list();
 
 		} catch (Exception ex) {
-			logger.error("Unable to get Amp organisation names  from database "
-					+ ex.getMessage());
+			logger.error("Unable to get Amp organisation names  from database " + ex.getMessage());
 		}
 		return organizations;
 	}
-	
+
 	/**
-	 * returns a sorted-by-name list of @link {@link OrganizationSkeleton} instances selected by a HQL query <br />
+	 * returns a sorted-by-name list of @link {@link OrganizationSkeleton}
+	 * instances selected by a HQL query <br />
 	 * the query should be of the for, "SELECT ampOrgId, ampOrgName ..."
+	 * 
 	 * @param query
 	 * @return
 	 */
-	public static List<OrganizationSkeleton> getOrgSkeletonsFromQuery(Query query)
-	{
+	public static List<OrganizationSkeleton> getOrgSkeletonsFromQuery(Query query) {
 		ArrayList<OrganizationSkeleton> res = new ArrayList<OrganizationSkeleton>();
 		List<Object[]> lst = query.list();
-		for(Object[] item:lst)
-		{
+		for (Object[] item : lst) {
 			OrganizationSkeleton skel = new OrganizationSkeleton();
 			skel.setAmpOrgId(PersistenceManager.getLong(item[0]));
 			skel.setName(PersistenceManager.getString(item[1]));
@@ -1238,28 +1179,29 @@ public class DbUtil {
 		Collections.sort(res);
 		return res;
 	}
-	
+
 	/**
-	 * returns a representation of the organizations in the database (lightweight, composed of of @link {@link OrganizationSkeleton}).<br />
-	 * they are grouped by ampOrgGroup 
+	 * returns a representation of the organizations in the database
+	 * (lightweight, composed of of @link {@link OrganizationSkeleton}).<br />
+	 * they are grouped by ampOrgGroup
+	 * 
 	 * @return
 	 */
-	public static java.util.Map<Long, Set<OrganizationSkeleton>> getOrgSkeletonGroupedByGroupId()
-	{	
+	public static java.util.Map<Long, Set<OrganizationSkeleton>> getOrgSkeletonGroupedByGroupId() {
 		java.util.Map<Long, Set<OrganizationSkeleton>> res = new java.util.HashMap<Long, Set<OrganizationSkeleton>>();
-		
-		String queryString = "select org.orgGrpId.ampOrgGrpId, org.ampOrgId, " + AmpOrganisation.hqlStringForName("org") + " FROM " + AmpOrganisation.class.getName()
+
+		String queryString = "select org.orgGrpId.ampOrgGrpId, org.ampOrgId, " + AmpOrganisation.hqlStringForName("org")
+				+ " FROM " + AmpOrganisation.class.getName()
 				+ " org where (org.deleted is null or org.deleted = false)";
-		
+
 		Query q = PersistenceManager.getSession().createQuery(queryString);
-		
+
 		List<Object[]> lst = q.list();
-		for(Object[] item:lst)
-		{
-			OrganizationSkeleton skel = new OrganizationSkeleton();			
+		for (Object[] item : lst) {
+			OrganizationSkeleton skel = new OrganizationSkeleton();
 			skel.setAmpOrgId(PersistenceManager.getLong(item[1]));
 			skel.setName(PersistenceManager.getString(item[2]));
-			
+
 			Long orgGrpId = PersistenceManager.getLong(item[0]);
 			if (!res.containsKey(orgGrpId))
 				res.put(orgGrpId, new java.util.TreeSet<OrganizationSkeleton>());
@@ -1267,25 +1209,26 @@ public class DbUtil {
 		}
 		return res;
 	}
-	
+
 	/**
-	 * returns a sorted-by-name list of @link {@link OrganizationSkeleton} 
-	 * @param orgGroupId - orgGroupId to filter by. If equals null -> no filtering
+	 * returns a sorted-by-name list of @link {@link OrganizationSkeleton}
+	 * 
+	 * @param orgGroupId
+	 *            - orgGroupId to filter by. If equals null -> no filtering
 	 * @return
 	 */
-	public static List<OrganizationSkeleton> getOrgSkeletonByGroupId(Long orgGroupId)
-	{
+	public static List<OrganizationSkeleton> getOrgSkeletonByGroupId(Long orgGroupId) {
 		String orgGrpCondition = orgGroupId == null ? "1=1" : "org.orgGrpId=:orgGroupId";
-		
-		String queryString = "select org.ampOrgId, " + AmpOrganisation.hqlStringForName("org") + " FROM " + AmpOrganisation.class.getName()
-				+ " org where " + orgGrpCondition + " and (org.deleted is null or org.deleted = false)";
-		
+
+		String queryString = "select org.ampOrgId, " + AmpOrganisation.hqlStringForName("org") + " FROM "
+				+ AmpOrganisation.class.getName() + " org where " + orgGrpCondition
+				+ " and (org.deleted is null or org.deleted = false)";
+
 		Query q = PersistenceManager.getSession().createQuery(queryString);
 		if (orgGroupId != null)
 			q.setLong("orgGroupId", orgGroupId);
-		return getOrgSkeletonsFromQuery(q);	
+		return getOrgSkeletonsFromQuery(q);
 	}
-	
 
 	public static List<AmpOrganisation> getOrganisationByGroupId(Long orgGroupId) {
 		Session session = null;
@@ -1295,33 +1238,33 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			queryString = " select org from "
-					+ AmpOrganisation.class.getName()
+			queryString = " select org from " + AmpOrganisation.class.getName()
 					+ " org where org.orgGrpId=:orgGroupId and (org.deleted is null or org.deleted = false) order by org.name ";
 			q = session.createQuery(queryString);
 			q.setLong("orgGroupId", orgGroupId);
 			organizations = q.list();
 		} catch (Exception ex) {
-			logger.error("Unable to get Amp organisation names  from database "
-					+ ex.getMessage());
+			logger.error("Unable to get Amp organisation names  from database " + ex.getMessage());
 		}
 		return organizations;
 	}
 
-	public static List<OrganizationSkeleton> getDonorOrganisationByGroupId(Long orgGroupId, boolean publicView)
-	{
+	public static List<OrganizationSkeleton> getDonorOrganisationByGroupId(Long orgGroupId, boolean publicView) {
 		List<OrganizationSkeleton> organizations = new ArrayList<OrganizationSkeleton>();
 		StringBuilder queryString = new StringBuilder(
 				"SELECT DISTINCT(orgRole.organisation.ampOrgId) FROM " + AmpOrgRole.class.getName() + " orgRole");
-		
-		queryString.append(" where orgRole.role.roleCode='DN' and (orgRole.activity.draft = false OR orgRole.activity.draft is null) ");
-		
+
+		queryString.append(
+				" where orgRole.role.roleCode='DN' and (orgRole.activity.draft = false OR orgRole.activity.draft is null) ");
+
 		if (orgGroupId != null && orgGroupId != -1) {
 			queryString.append(" and orgRole.organisation.orgGrpId=:orgGroupId ");
 		}
-		
+
 		if (publicView) {
-			queryString.append(String.format(" and orgRole.activity.approvalStatus in ('%s', '%s') and orgRole.activity.team.parentTeamId is not null ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
+			queryString.append(String.format(
+					" and orgRole.activity.approvalStatus in ('%s', '%s') and orgRole.activity.team.parentTeamId is not null ",
+					Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
 		}
 
 		Query query = PersistenceManager.getSession().createQuery(queryString.toString());
@@ -1330,8 +1273,10 @@ public class DbUtil {
 		}
 
 		String orgIds = Util.toCSStringForIN(query.list());
-		
-		return getOrgSkeletonsFromQuery(PersistenceManager.getSession().createQuery("SELECT org.ampOrgId, " + AmpOrganisation.hqlStringForName("org") + " FROM " + AmpOrganisation.class.getName() + " org WHERE org.ampOrgId IN (" + orgIds + ")"));
+
+		return getOrgSkeletonsFromQuery(PersistenceManager.getSession()
+				.createQuery("SELECT org.ampOrgId, " + AmpOrganisation.hqlStringForName("org") + " FROM "
+						+ AmpOrganisation.class.getName() + " org WHERE org.ampOrgId IN (" + orgIds + ")"));
 	}
 
 	/**
@@ -1347,10 +1292,8 @@ public class DbUtil {
 		try {
 			AmpOrgType tBil = getAmpOrgTypeByCode("BIL");
 			AmpOrgType tMul = getAmpOrgTypeByCode("MUL");
-			bilOrgGroups = searchForOrganisationGroupByType(tBil
-					.getAmpOrgTypeId());
-			mulOrgGroups = searchForOrganisationGroupByType(tMul
-					.getAmpOrgTypeId());
+			bilOrgGroups = searchForOrganisationGroupByType(tBil.getAmpOrgTypeId());
+			mulOrgGroups = searchForOrganisationGroupByType(tMul.getAmpOrgTypeId());
 			if (bilOrgGroups != null) {
 				orgGroups.addAll(bilOrgGroups);
 			}
@@ -1359,8 +1302,7 @@ public class DbUtil {
 			}
 
 		} catch (Exception ex) {
-			logger.error("Unable to get Amp organisation names  from database "
-					+ ex.getMessage());
+			logger.error("Unable to get Amp organisation names  from database " + ex.getMessage());
 
 		}
 		return orgGroups;
@@ -1376,9 +1318,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select distinct gr from "
-					+ AmpOrgGroup.class.getName()
-					+ " gr "
+			String queryString = "select distinct gr from " + AmpOrgGroup.class.getName() + " gr "
 					+ " inner join gr.orgType t where t.orgTypeIsGovernmental is NULL or t.orgTypeIsGovernmental=false order by gr.orgGrpName asc";
 			qry = session.createQuery(queryString);
 			groups = qry.list();
@@ -1394,8 +1334,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			oldInd = (AmpAhsurveyIndicator) session.load(
-					AmpAhsurveyIndicator.class, ind.getAmpIndicatorId());
+			oldInd = (AmpAhsurveyIndicator) session.load(AmpAhsurveyIndicator.class, ind.getAmpIndicatorId());
 
 			oldInd.setAmpIndicatorId(ind.getAmpIndicatorId());
 			oldInd.setCalcFormulas(ind.getCalcFormulas());
@@ -1432,7 +1371,7 @@ public class DbUtil {
 		}
 		return ampOrgType;
 	}
-	
+
 	public static ArrayList<AmpOrgType> getAmpOrgTypes() {
 		Session session = null;
 		Query qry = null;
@@ -1440,10 +1379,10 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select f from " + AmpOrgType.class.getName()+ " f ";
+			String queryString = "select f from " + AmpOrgType.class.getName() + " f ";
 			qry = session.createQuery(queryString);
 			org_types = (ArrayList<AmpOrgType>) qry.list();
-			
+
 		} catch (Exception e) {
 			logger.error("Unable to get Org Type", e);
 		}
@@ -1451,9 +1390,7 @@ public class DbUtil {
 	}
 
 	public static List<AmpFundingDetail> getFundingDetWithCurrId(Long currId) {
-		String queryString = "select f from "
-				+ AmpFundingDetail.class.getName()
-				+ " f where (f.ampCurrencyId=:currId)";
+		String queryString = "select f from " + AmpFundingDetail.class.getName() + " f where (f.ampCurrencyId=:currId)";
 		Query qry = PersistenceManager.getSession().createQuery(queryString);
 		qry.setParameter("currId", currId, LongType.INSTANCE);
 		return qry.list();
@@ -1466,17 +1403,19 @@ public class DbUtil {
 	public static void update(Object object) {
 		PersistenceManager.getSession().update(object);
 	}
-	
+
 	public static void updateField(String className, Long id, String fieldName, Object newValue) {
 		try {
-			 Session session = PersistenceManager.getRequestDBSession();
-			 String idName = PersistenceManager.sf().getClassMetadata(className).getIdentifierPropertyName();
-			 Query query = session.createQuery("update " + className + " c set c."+fieldName + "=:val where c."+ idName + "=:id");
-			 query.setParameter("val", newValue);
-			 query.setParameter("id", id);
-			 query.executeUpdate();
+			Session session = PersistenceManager.getRequestDBSession();
+			String idName = PersistenceManager.sf().getClassMetadata(className).getIdentifierPropertyName();
+			Query query = session
+					.createQuery("update " + className + " c set c." + fieldName + "=:val where c." + idName + "=:id");
+			query.setParameter("val", newValue);
+			query.setParameter("id", id);
+			query.executeUpdate();
 		} catch (Exception ex) {
-			logger.error(String.format("Could not update \"%s.%s\"=\"%s\". Cause: %s",  className, fieldName,  String.valueOf(newValue), ex.getMessage()));
+			logger.error(String.format("Could not update \"%s.%s\"=\"%s\". Cause: %s", className, fieldName,
+					String.valueOf(newValue), ex.getMessage()));
 		}
 	}
 
@@ -1498,28 +1437,25 @@ public class DbUtil {
 		try {
 			Session sess = PersistenceManager.getRequestDBSession();
 			// beginTransaction();
-			Set<AmpOrganisationContact> organisationContacts = org
-					.getOrganizationContacts(); // form org contacts
+			Set<AmpOrganisationContact> organisationContacts = org.getOrganizationContacts(); // form
+																								// org
+																								// contacts
 			/**
 			 * contact information
 			 */
 
 			if (org.getAmpOrgId() != null) { // edit
-				List<AmpOrganisationContact> orgDBContacts = ContactInfoUtil
-						.getOrganizationContacts(org.getAmpOrgId());
+				List<AmpOrganisationContact> orgDBContacts = ContactInfoUtil.getOrganizationContacts(org.getAmpOrgId());
 				// if organization contains contact,which is not in form contact
 				// list, we should remove it
 				if (orgDBContacts != null && orgDBContacts.size() > 0) {
-					Iterator<AmpOrganisationContact> iter = orgDBContacts
-							.iterator();
+					Iterator<AmpOrganisationContact> iter = orgDBContacts.iterator();
 					while (iter.hasNext()) {
 						AmpOrganisationContact dbOrgContact = iter.next();
 						int count = 0;
 						if (organisationContacts != null) {
 							for (AmpOrganisationContact formOrgCont : organisationContacts) {
-								if (formOrgCont.getId() != null
-										&& formOrgCont.getId().equals(
-												dbOrgContact.getId())) {
+								if (formOrgCont.getId() != null && formOrgCont.getId().equals(dbOrgContact.getId())) {
 									count++;
 									break;
 								}
@@ -1529,8 +1465,7 @@ public class DbUtil {
 											// contact,which is not in contact
 											// list, we should remove it
 							AmpOrganisationContact orgCont = (AmpOrganisationContact) sess
-									.get(AmpOrganisationContact.class,
-											dbOrgContact.getId());
+									.get(AmpOrganisationContact.class, dbOrgContact.getId());
 							AmpContact cont = orgCont.getContact();
 							sess.delete(orgCont);
 							cont.getOrganizationContacts().remove(orgCont);
@@ -1544,26 +1479,20 @@ public class DbUtil {
 			if (organisationContacts != null) {
 				// this will remove all organisation contact which are linked to
 				// this organisation
-				for (Iterator iterator = organisationContacts.iterator(); iterator
-						.hasNext();) {
-					AmpOrganisationContact ampOrganisationContact = (AmpOrganisationContact) iterator
-							.next();
+				for (Iterator iterator = organisationContacts.iterator(); iterator.hasNext();) {
+					AmpOrganisationContact ampOrganisationContact = (AmpOrganisationContact) iterator.next();
 					if (org.getAmpOrgId() != null) {
 						if (ampOrganisationContact.getId() != null) {
 							// AmpContact
 							// cont=ampOrganisationContact.getContact();
 							AmpOrganisationContact contToBeRemoved = (AmpOrganisationContact) sess
-									.get(AmpOrganisationContact.class,
-											ampOrganisationContact.getId());
+									.get(AmpOrganisationContact.class, ampOrganisationContact.getId());
 							if (contToBeRemoved != null) {
-								AmpContact ampContact = contToBeRemoved
-										.getContact();
+								AmpContact ampContact = contToBeRemoved.getContact();
 								sess.delete(contToBeRemoved);
-								ampContact.getOrganizationContacts().remove(
-										contToBeRemoved);
+								ampContact.getOrganizationContacts().remove(contToBeRemoved);
 								sess.update(ampContact);
-								org.getOrganizationContacts().remove(
-										contToBeRemoved);
+								org.getOrganizationContacts().remove(contToBeRemoved);
 							}
 
 						}
@@ -1576,13 +1505,11 @@ public class DbUtil {
 					AmpContact contact = organizationContact.getContact();
 					AmpContact ampContact = null;
 					if (contact.getId() != null) { // contact already exists.
-						ampContact = (AmpContact) sess.get(AmpContact.class,
-								contact.getId());
+						ampContact = (AmpContact) sess.get(AmpContact.class, contact.getId());
 						ampContact.setName(contact.getName());
 						ampContact.setLastname(contact.getLastname());
 						ampContact.setTitle(contact.getTitle());
-						ampContact.setOrganisationName(contact
-								.getOrganisationName());
+						ampContact.setOrganisationName(contact.getOrganisationName());
 						ampContact.setCreator(contact.getCreator());
 						ampContact.setShared(true);
 						ampContact.setOfficeaddress(contact.getOfficeaddress());
@@ -1598,8 +1525,7 @@ public class DbUtil {
 
 					// save properties
 					if (contact.getProperties() != null) {
-						for (AmpContactProperty formProperty : contact
-								.getProperties()) {
+						for (AmpContactProperty formProperty : contact.getProperties()) {
 							if (ampContact != null) {
 								formProperty.setContact(ampContact);
 							} else {
@@ -1612,8 +1538,7 @@ public class DbUtil {
 					// link org to cont
 					AmpOrganisationContact newOrgCont = new AmpOrganisationContact();
 					organizationContact.setOrganisation(org);
-					organizationContact.setPrimaryContact(organizationContact
-							.getPrimaryContact());
+					organizationContact.setPrimaryContact(organizationContact.getPrimaryContact());
 					if (ampContact != null) {
 						organizationContact.setContact(ampContact);
 					} else {
@@ -1635,7 +1560,7 @@ public class DbUtil {
 	public static void delete(Object object) throws JDBCException {
 		PersistenceManager.getSession().delete(object);
 	}
-	
+
 	public static void deleteOrg(AmpOrganisation org) throws JDBCException {
 		Session sess = PersistenceManager.getSession();
 		org.setDeleted(true);
@@ -1659,7 +1584,7 @@ public class DbUtil {
 			logger.error("Error while trying to delete Lucene db stamps: ", e);
 		}
 	}
-	
+
 	public static void deleteAllNoUpdateOrgs(final boolean toExclude) {
 		Connection con;
 		try {
@@ -1668,7 +1593,8 @@ public class DbUtil {
 				@Override
 				public void execute(Connection con) throws SQLException {
 					con.setAutoCommit(false);
-					con.createStatement().execute("DELETE FROM amp_scorecard_organisation where to_exclude=" + toExclude);
+					con.createStatement()
+							.execute("DELETE FROM amp_scorecard_organisation where to_exclude=" + toExclude);
 					con.commit();
 
 				}
@@ -1677,11 +1603,10 @@ public class DbUtil {
 			logger.error("Error while trying to delete Lucene db stamps: ", e);
 		}
 	}
-	
-	public static Collection getQuarters(Long ampFundingId,
-			Integer transactionType, Integer adjustmentType, Integer fiscalYear) {
-		logger.debug("getQuarters() with ampFundingId="
-				+ ampFundingId.longValue() + " fiscalYear=" + fiscalYear);
+
+	public static Collection getQuarters(Long ampFundingId, Integer transactionType, Integer adjustmentType,
+			Integer fiscalYear) {
+		logger.debug("getQuarters() with ampFundingId=" + ampFundingId.longValue() + " fiscalYear=" + fiscalYear);
 
 		Session session = null;
 		Query q = null;
@@ -1690,18 +1615,14 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = new String();
-			queryString = "select f.fiscalQuarter from "
-					+ AmpFundingDetail.class.getName()
-					+ " f where (f.ampFundingId=:ampFundingId) "
-					+ " and (f.transactionType=:transactionType) "
-					+ " and (f.adjustmentType=:adjustmentType) "
-					+ " and (f.fiscalYear=:fiscalYear) "
+			queryString = "select f.fiscalQuarter from " + AmpFundingDetail.class.getName()
+					+ " f where (f.ampFundingId=:ampFundingId) " + " and (f.transactionType=:transactionType) "
+					+ " and (f.adjustmentType=:adjustmentType) " + " and (f.fiscalYear=:fiscalYear) "
 					+ " group by f.fiscalQuarter";
 
 			q = session.createQuery(queryString);
 			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
-			q.setParameter("transactionType", transactionType,
-					IntegerType.INSTANCE);
+			q.setParameter("transactionType", transactionType, IntegerType.INSTANCE);
 			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
 			q.setParameter("fiscalYear", fiscalYear, IntegerType.INSTANCE);
 			c = q.list();
@@ -1710,11 +1631,9 @@ public class DbUtil {
 			logger.error("Unable to get  Quarters from database", ex);
 		}
 
-		logger.debug("getQuarters() collection size returned : "
-				+ (c != null ? c.size() : 0));
+		logger.debug("getQuarters() collection size returned : " + (c != null ? c.size() : 0));
 		return c;
 	}
-
 
 	public static Collection<AmpOrganisation> getDonors() {
 		Session session = null;
@@ -1723,8 +1642,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = new String();
-			queryString = "select distinct f.ampDonorOrgId, f.ampDonorOrgId.name  from "
-					+ AmpFunding.class.getName()
+			queryString = "select distinct f.ampDonorOrgId, f.ampDonorOrgId.name  from " + AmpFunding.class.getName()
 					+ " f  order by f.ampDonorOrgId.name";
 			q = session.createQuery(queryString);
 			logger.debug("No of Donors : " + q.list().size());
@@ -1743,33 +1661,29 @@ public class DbUtil {
 	}
 
 	public static List<AmpOrganisation> getOrganisations() {
-		String queryString = "select distinct org from "
-				+ AmpOrganisation.class.getName()
+		String queryString = "select distinct org from " + AmpOrganisation.class.getName()
 				+ " org  join  org.calendar  cal where (org.deleted is null or org.deleted = false) ";
 		return PersistenceManager.getSession().createQuery(queryString).list();
 	}
 
 	public static List<AmpOrganisation> getAllDonorOrgs() {
-		String queryString = "select distinct org from "
-				+ AmpFunding.class.getName()
-				+ " f inner join f.ampDonorOrgId org "
-				+ " order by org.acronym asc";
+		String queryString = "select distinct org from " + AmpFunding.class.getName()
+				+ " f inner join f.ampDonorOrgId org " + " order by org.acronym asc";
 		return PersistenceManager.getSession().createQuery(queryString).list();
 	}
 
 	/**
 	 * gets the skeletons of all the OrgGroups in the database
+	 * 
 	 * @return
 	 */
-	public static List<OrgGroupSkeleton> getAllOrgGroupSkeletons()
-	{
+	public static List<OrgGroupSkeleton> getAllOrgGroupSkeletons() {
 		List<OrgGroupSkeleton> col = new ArrayList<OrgGroupSkeleton>();
 
 		String orgGrpNameHql = AmpOrgGroup.hqlStringForName("c");
 		String queryString = "select c.ampOrgGrpId, " + orgGrpNameHql + " FROM " + AmpOrgGroup.class.getName() + " c";
 		Query qry = PersistenceManager.getSession().createQuery(queryString);
-		for(Object[] grpInfo:((List<Object[]>) qry.list()))
-		{
+		for (Object[] grpInfo : ((List<Object[]>) qry.list())) {
 			OrgGroupSkeleton skel = new OrgGroupSkeleton();
 			skel.setAmpOrgGrpId(PersistenceManager.getLong(grpInfo[0]));
 			skel.setOrgGrpName(PersistenceManager.getString(grpInfo[1]));
@@ -1778,8 +1692,11 @@ public class DbUtil {
 		Collections.sort(col);
 		return col;
 	}
+
 	/**
-	 * generates a list of all AmpOrgGroup elements which have deleted =null or deleted = false
+	 * generates a list of all AmpOrgGroup elements which have deleted =null or
+	 * deleted = false
+	 * 
 	 * @return
 	 */
 	public static List<AmpOrgGroup> getAllVisibleOrgGroups() {
@@ -1787,8 +1704,7 @@ public class DbUtil {
 			Session session = PersistenceManager.getRequestDBSession();
 			String orgGrpNameHql = AmpOrgGroup.hqlStringForName("c");
 			String queryString = "select c from " + AmpOrgGroup.class.getName() + " c"
-					+ " WHERE c.deleted IS NULL OR c.deleted = false"
-					+ " order by lower(" + orgGrpNameHql + ") asc";
+					+ " WHERE c.deleted IS NULL OR c.deleted = false" + " order by lower(" + orgGrpNameHql + ") asc";
 			Query qry = session.createQuery(queryString);
 			return qry.list();
 		} catch (Exception e) {
@@ -1797,12 +1713,13 @@ public class DbUtil {
 			return null;
 		}
 	}
+
 	public static List<AmpOrgGroup> getAllOrgGroups() {
 		try {
 			Session session = PersistenceManager.getRequestDBSession();
 			String orgGrpNameHql = AmpOrgGroup.hqlStringForName("c");
-			String queryString = "select c from " + AmpOrgGroup.class.getName()
-					+ " c order by lower(" + orgGrpNameHql + ") asc";
+			String queryString = "select c from " + AmpOrgGroup.class.getName() + " c order by lower(" + orgGrpNameHql
+					+ ") asc";
 			Query qry = session.createQuery(queryString);
 			return qry.list();
 		} catch (Exception e) {
@@ -1813,11 +1730,11 @@ public class DbUtil {
 	}
 
 	public static List<OrgTypeSkeleton> getAllOrgTypesFaster() {
-			Session session = null;
-			List<OrgTypeSkeleton> col = OrgTypeSkeleton.populateTypeSkeletonList();
-			return col;
-	}	
-	
+		Session session = null;
+		List<OrgTypeSkeleton> col = OrgTypeSkeleton.populateTypeSkeletonList();
+		return col;
+	}
+
 	public static Collection<AmpOrgType> getAllOrgTypes() {
 		Session session = null;
 		Collection<AmpOrgType> col = new ArrayList<AmpOrgType>();
@@ -1825,8 +1742,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String orgTypeHql = AmpOrgType.hqlStringForName("c");
-			String queryString = "select c from " + AmpOrgType.class.getName()
-					+ " c order by " + orgTypeHql + " asc";
+			String queryString = "select c from " + AmpOrgType.class.getName() + " c order by " + orgTypeHql + " asc";
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
@@ -1835,25 +1751,26 @@ public class DbUtil {
 		}
 		return col;
 	}
-	
-	public static Collection<AmpOrgGroup> getAllContractingAgencyGroupsOfPortfolio()
-	{
+
+	public static Collection<AmpOrgGroup> getAllContractingAgencyGroupsOfPortfolio() {
 		if (AmpCaching.getInstance().allContractingAgencyGroupsOfPortfolio != null)
 			return new ArrayList<AmpOrgGroup>(AmpCaching.getInstance().allContractingAgencyGroupsOfPortfolio);
-		
+
 		Session session = null;
 		List<AmpOrgGroup> col = new ArrayList();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_group", "aog", 
-					new HashMap<String, String>(){{
-						put("org_grp_name", InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall("aog.amp_org_grp_id"));
-					}});
+			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_group", "aog", new HashMap<String, String>() {
+				{
+					put("org_grp_name", InternationalizedModelDescription
+							.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall("aog.amp_org_grp_id"));
+				}
+			});
 			String idsQueryString = String.format("SELECT DISTINCT amp_org_grp_id FROM v_contracting_agency_groups");
-			String queryString = "SELECT " + rewrittenColumns + " FROM amp_org_group aog WHERE aog.amp_org_grp_id IN (" + idsQueryString + ")";
+			String queryString = "SELECT " + rewrittenColumns + " FROM amp_org_group aog WHERE aog.amp_org_grp_id IN ("
+					+ idsQueryString + ")";
 
-			Query qry = session.createSQLQuery(queryString).addEntity(
-					AmpOrgGroup.class);
+			Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgGroup.class);
 			col = qry.list();
 		} catch (Exception e) {
 			logger.error("Exception from getAllContractingAgencyGroupsOfPortfolio()", e);
@@ -1861,23 +1778,26 @@ public class DbUtil {
 		AmpCaching.getInstance().allContractingAgencyGroupsOfPortfolio = new ArrayList<AmpOrgGroup>(col);
 		return col;
 	}
-	
+
 	public static List<OrgGroupSkeleton> getAllOrgGroupsOfPortfolioFaster() {
-//		if (AmpCaching.getInstance().allOrgGroupsOfPortfolio != null)
-//			return new ArrayList<OrgGroupSkeleton>(AmpCaching.getInstance().allOrgGroupsOfPortfolio);
+		// if (AmpCaching.getInstance().allOrgGroupsOfPortfolio != null)
+		// return new
+		// ArrayList<OrgGroupSkeleton>(AmpCaching.getInstance().allOrgGroupsOfPortfolio);
 
 		Session session = null;
 		List<OrgGroupSkeleton> col = null;
-		
+
 		try {
 			col = OrgGroupSkeleton.populateSkeletonOrgGroupsList();
 		} catch (Exception e) {
 			logger.error("Got exception from getAllOrgGroupsOfPortfolio()", e);
 		}
 		return col;
-	}	
+	}
+
 	/**
 	 * fetches DONOR org groups of the database portfolio
+	 * 
 	 * @return
 	 */
 	public static List<AmpOrgGroup> getAllOrgGroupsOfPortfolio() {
@@ -1888,16 +1808,17 @@ public class DbUtil {
 		List<AmpOrgGroup> col = new ArrayList<AmpOrgGroup>();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_group", "aog", 
-						new HashMap<String, String>(){{
-							put("org_grp_name", InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall("aog.amp_org_grp_id"));
-						}});
+			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_group", "aog", new HashMap<String, String>() {
+				{
+					put("org_grp_name", InternationalizedModelDescription
+							.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall("aog.amp_org_grp_id"));
+				}
+			});
 			String queryString = "select distinct " + rewrittenColumns + " from amp_org_group aog "
 					+ "inner join amp_organisation ao on (ao.org_grp_id = aog.amp_org_grp_id) "
 					+ "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) "
 					+ "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) where (ao.deleted is null or ao.deleted = false) ";
-			Query qry = session.createSQLQuery(queryString).addEntity(
-					AmpOrgGroup.class);
+			Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgGroup.class);
 			col = qry.list();
 		} catch (Exception e) {
 			logger.error("Got exception from getAllOrgGroupsOfPortfolio()", e);
@@ -1909,23 +1830,24 @@ public class DbUtil {
 	public static List<AmpOrgType> getAllOrgTypesOfPortfolio() {
 		if (AmpCaching.getInstance().allOrgTypesOfPortfolio != null)
 			return new ArrayList<AmpOrgType>(AmpCaching.getInstance().allOrgTypesOfPortfolio);
-		
+
 		Session session = null;
 		List<AmpOrgType> col = new ArrayList<AmpOrgType>();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_type", "aot", 
-				new HashMap<String, String>(){{
-					put("org_type", InternationalizedModelDescription.getForProperty(AmpOrgType.class, "orgType").getSQLFunctionCall("aot.amp_org_type_id"));
-				}});
+			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_type", "aot", new HashMap<String, String>() {
+				{
+					put("org_type", InternationalizedModelDescription.getForProperty(AmpOrgType.class, "orgType")
+							.getSQLFunctionCall("aot.amp_org_type_id"));
+				}
+			});
 
-			String queryString = "select distinct " + rewrittenColumns +" from amp_org_type aot "
+			String queryString = "select distinct " + rewrittenColumns + " from amp_org_type aot "
 					+ "inner join amp_org_group aog on (aot.amp_org_type_id=aog.org_type ) "
 					+ "inner join amp_organisation ao on (aog.amp_org_grp_id=ao.org_grp_id ) "
 					+ "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) "
 					+ "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) where (ao.deleted is null or ao.deleted = false) ";
-			Query qry = session.createSQLQuery(queryString).addEntity(
-					AmpOrgType.class);
+			Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgType.class);
 			col = qry.list();
 		} catch (Exception e) {
 			logger.error("Exception from getAllOrgTypesOfPortfolio()", e);
@@ -1949,8 +1871,8 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String orgGrpName = AmpOrgGroup.hqlStringForName("l");
-			String queryString = "select l from " + AmpOrgGroup.class.getName()
-					+ " l " + "where (" + orgGrpName + "=:name)";
+			String queryString = "select l from " + AmpOrgGroup.class.getName() + " l " + "where (" + orgGrpName
+					+ "=:name)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("name", name, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
@@ -1964,51 +1886,50 @@ public class DbUtil {
 		return grp;
 	}
 
-	
 	/**
 	 * Gets the deleted amp org group with specified name, if it exists
-	 * @param name name of the amp org group
-	 * @param id not sure we need this
+	 * 
+	 * @param name
+	 *            name of the amp org group
+	 * @param id
+	 *            not sure we need this
 	 * @return the amp org group if it exists, null otherwise
 	 */
 	public static AmpOrgGroup getDeletedAmpOrgGroups(String name, Long id) {
-//		boolean deletedOrgGroupExists = false;
+		// boolean deletedOrgGroupExists = false;
 		AmpOrgGroup result = null;
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String orgGrpName = AmpOrgGroup.hqlStringForName("l");
-			String queryString = "select l from "
-					+ AmpOrgGroup.class.getName() + " l "
-					+ "where upper(" + orgGrpName + ") like upper(:name) "
-					+ "AND (l.deleted = true)";
-//			if (id != null) {
-//				queryString += " and l.ampOrgGrpId!=" + id;
-//			}
+			String queryString = "select l from " + AmpOrgGroup.class.getName() + " l " + "where upper(" + orgGrpName
+					+ ") like upper(:name) " + "AND (l.deleted = true)";
+			// if (id != null) {
+			// queryString += " and l.ampOrgGrpId!=" + id;
+			// }
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("name", name, StringType.INSTANCE);
 			result = (AmpOrgGroup) qry.uniqueResult();
-//			Integer amount = (Integer) qry.uniqueResult();
-//			if (amount != null && amount.intValue() > 0) {
-//				deletedOrgGroupExists = true;
-//			}
+			// Integer amount = (Integer) qry.uniqueResult();
+			// if (amount != null && amount.intValue() > 0) {
+			// deletedOrgGroupExists = true;
+			// }
 		} catch (Exception e) {
 			logger.error("Unable to get Org Group" + e);
 		}
 		return result;
-//		return deletedOrgGroupExists;
-		
+		// return deletedOrgGroupExists;
+
 	}
-	
+
 	public static boolean checkAmpOrgGroupDuplication(String name, Long id) {
 		boolean duplicateName = false;
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String orgGrpName = AmpOrgGroup.hqlStringForName("l");
-			String queryString = "select count(l) from "
-					+ AmpOrgGroup.class.getName() + " l "
-					+ "where upper(" + orgGrpName + ") like upper(:name) ";
+			String queryString = "select count(l) from " + AmpOrgGroup.class.getName() + " l " + "where upper("
+					+ orgGrpName + ") like upper(:name) ";
 			if (id != null) {
 				queryString += " and l.ampOrgGrpId!=" + id;
 			}
@@ -2032,10 +1953,8 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String orgGrpName = AmpOrgGroup.hqlStringForName("org");
-			String queryString = "select org from "
-					+ AmpOrgGroup.class.getName() + " org "
-					+ " where org.orgType=:orgType"
-					+ " AND org.deleted IS NULL OR org.deleted = false";
+			String queryString = "select org from " + AmpOrgGroup.class.getName() + " org "
+					+ " where org.orgType=:orgType" + " AND org.deleted IS NULL OR org.deleted = false";
 			queryString += "  order by " + orgGrpName;
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("orgType", orgType, LongType.INSTANCE);
@@ -2046,8 +1965,7 @@ public class DbUtil {
 		return col;
 	}
 
-	public static Collection<AmpOrgGroup> searchForOrganisationGroup(
-			String keyword, Long orgType) {
+	public static Collection<AmpOrgGroup> searchForOrganisationGroup(String keyword, Long orgType) {
 		Session session = null;
 		Collection col = null;
 		keyword = keyword.toLowerCase();
@@ -2055,10 +1973,8 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String orgGrpName = AmpOrgGroup.hqlStringForName("org");
-			String queryString = "select org from "
-					+ AmpOrgGroup.class.getName() + " org "
-					+ " where lower(" + orgGrpName + ") like '%" + keyword
-					+ "%') and org.orgType=:orgType";
+			String queryString = "select org from " + AmpOrgGroup.class.getName() + " org " + " where lower("
+					+ orgGrpName + ") like '%" + keyword + "%') and org.orgType=:orgType";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("orgType", orgType, LongType.INSTANCE);
 			col = qry.list();
@@ -2068,8 +1984,7 @@ public class DbUtil {
 		return col;
 	}
 
-	public static Collection<AmpOrgGroup> searchForOrganisationGroup(
-			String keyword) {
+	public static Collection<AmpOrgGroup> searchForOrganisationGroup(String keyword) {
 		Session session = null;
 		Collection col = null;
 		keyword = keyword.toLowerCase();
@@ -2077,10 +1992,8 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String orgGrpName = AmpOrgGroup.hqlStringForName("org");
-			String queryString = "select distinct org from "
-					+ AmpOrgGroup.class.getName() + " org "
-					+ " where lower(" + orgGrpName + ") like '%" + keyword
-					+ "%' or lower(org.orgGrpCode) like '%" + keyword + "%'";
+			String queryString = "select distinct org from " + AmpOrgGroup.class.getName() + " org " + " where lower("
+					+ orgGrpName + ") like '%" + keyword + "%' or lower(org.orgGrpCode) like '%" + keyword + "%'";
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception ex) {
@@ -2097,8 +2010,8 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String orgName = AmpOrganisation.hqlStringForName("o");
-			String queryString = "select o from " + AmpOrgGroup.class.getName()
-					+ " o order by " + AmpOrgGroup.hqlStringForName("o") + " asc";
+			String queryString = "select o from " + AmpOrgGroup.class.getName() + " o order by "
+					+ AmpOrgGroup.hqlStringForName("o") + " asc";
 			qry = session.createQuery(queryString);
 			organisation = qry.list();
 		} catch (Exception e) {
@@ -2109,8 +2022,7 @@ public class DbUtil {
 	}
 
 	public static List<AmpOrganisation> getOrgByGroup(Long Id) {
-		String queryString = "select o from "
-				+ AmpOrganisation.class.getName()
+		String queryString = "select o from " + AmpOrganisation.class.getName()
 				+ " o where (o.orgGrpId=:orgGrpId) and (o.deleted is null or o.deleted = false) ";
 		Query qry = PersistenceManager.getSession().createQuery(queryString);
 		qry.setParameter("orgGrpId", Id, LongType.INSTANCE);
@@ -2125,8 +2037,7 @@ public class DbUtil {
 
 		try {
 			sess = PersistenceManager.getRequestDBSession();
-			queryString = "select o from " + AmpOrgGroup.class.getName()
-					+ " o where (o.orgType=:orgTypeId)";
+			queryString = "select o from " + AmpOrgGroup.class.getName() + " o where (o.orgType=:orgTypeId)";
 			qry = sess.createQuery(queryString);
 			qry.setParameter("orgTypeId", Id, LongType.INSTANCE);
 			if (null != qry.list() && qry.list().size() > 0) {
@@ -2150,14 +2061,12 @@ public class DbUtil {
 		try {
 			sess = PersistenceManager.getRequestDBSession();
 			if ("create".equals(action)) {
-				queryString = "select o from "
-						+ AmpOrganisation.class.getName()
+				queryString = "select o from " + AmpOrganisation.class.getName()
 						+ " o where (o.orgCode=:code) and (o.deleted is null or o.deleted = false) ";
 				qry = sess.createQuery(queryString);
 				qry.setParameter("code", code, StringType.INSTANCE);
 			} else if ("edit".equals(action)) {
-				queryString = "select o from "
-						+ AmpOrganisation.class.getName()
+				queryString = "select o from " + AmpOrganisation.class.getName()
 						+ " o where (o.orgCode=:code) and (o.ampOrgId!=:id) and (o.deleted is null or o.deleted = false) ";
 				qry = sess.createQuery(queryString);
 				qry.setParameter("code", code, StringType.INSTANCE);
@@ -2172,9 +2081,7 @@ public class DbUtil {
 	}
 
 	public static List<AmpOrganisation> getOrganisationAsCollection(Long id) {
-		String queryString = "select o from "
-				+ AmpOrganisation.class.getName()
-				+ " o "
+		String queryString = "select o from " + AmpOrganisation.class.getName() + " o "
 				+ "where (o.ampOrgId=:id) and (o.deleted is null or o.deleted = false) ";
 		Query qry = PersistenceManager.getSession().createQuery(queryString);
 		qry.setParameter("id", id, LongType.INSTANCE);
@@ -2188,8 +2095,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select o from " + AmpField.class.getName()
-					+ " o " + "where (o.fieldName=:com)";
+			String queryString = "select o from " + AmpField.class.getName() + " o " + "where (o.fieldName=:com)";
 			qry = session.createQuery(queryString);
 			qry.setParameter("com", com);
 			Iterator itr = qry.list().iterator();
@@ -2213,8 +2119,7 @@ public class DbUtil {
 		Query qry = null;
 
 		session = PersistenceManager.getSession();
-		String queryString = "select o from " + AmpComments.class.getName()
-				+ " o "
+		String queryString = "select o from " + AmpComments.class.getName() + " o "
 				+ "where (o.ampFieldId=:fid) and (o.ampActivityId=:aid)";
 		qry = session.createQuery(queryString);
 		qry.setParameter("fid", fid, LongType.INSTANCE);
@@ -2222,18 +2127,17 @@ public class DbUtil {
 		return qry.list();
 	}
 
-	public static List<AmpComments> getAllCommentsByActivityId(Long aid){
+	public static List<AmpComments> getAllCommentsByActivityId(Long aid) {
 		return getAllCommentsByActivityId(aid, PersistenceManager.getSession());
 	}
-	
+
 	public static List<AmpComments> getAllCommentsByActivityId(Long aid, Session session) {
-		String queryString = "select o from " + AmpComments.class.getName()
-				+ " o " + "where (o.ampActivityId=:aid)";
+		String queryString = "select o from " + AmpComments.class.getName() + " o " + "where (o.ampActivityId=:aid)";
 		Query qry = session.createQuery(queryString);
 		qry.setParameter("aid", aid, LongType.INSTANCE);
 		return qry.list();
 	}
-	
+
 	public static List<AmpActivityBudgetStructure> getBudgetStructure(Long aid) {
 		Session session = null;
 		Query qry = null;
@@ -2241,8 +2145,8 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select o from " + AmpActivityBudgetStructure.class.getName()
-					+ " o " + "where (o.activity=:aid)";
+			String queryString = "select o from " + AmpActivityBudgetStructure.class.getName() + " o "
+					+ "where (o.activity=:aid)";
 			qry = session.createQuery(queryString);
 			qry.setParameter("aid", aid, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
@@ -2262,8 +2166,8 @@ public class DbUtil {
 		Group group = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String qryStr = "select grp from " + Group.class.getName()
-					+ " grp " + "where (grp.key=:key) and (grp.site=:sid)";
+			String qryStr = "select grp from " + Group.class.getName() + " grp "
+					+ "where (grp.key=:key) and (grp.site=:sid)";
 			Query qry = session.createQuery(qryStr);
 			qry.setParameter("key", key, StringType.INSTANCE);
 			qry.setParameter("sid", siteId, LongType.INSTANCE);
@@ -2279,6 +2183,7 @@ public class DbUtil {
 
 	/**
 	 * to be removed as soon as NOONE is using PI
+	 * 
 	 * @param surveyId
 	 * @param activityId
 	 * @return
@@ -2293,13 +2198,11 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String qry = "select indc from "
-					+ AmpAhsurveyIndicator.class.getName()
+			String qry = "select indc from " + AmpAhsurveyIndicator.class.getName()
 					+ " indc order by indicator_number asc";
 			Collection indicatorColl = session.createQuery(qry).list();
 
-			AmpAhsurvey svy = (AmpAhsurvey) session.get(AmpAhsurvey.class,
-					surveyId);
+			AmpAhsurvey svy = (AmpAhsurvey) session.get(AmpAhsurvey.class, surveyId);
 			// response = svy.getResponses();
 			/*
 			 * qry = "select res from " + AmpAhsurvey.class.getName() +
@@ -2319,14 +2222,11 @@ public class DbUtil {
 			query.setParameter("surveyId", surveyId, LongType.INSTANCE);
 			response = query.list();
 
-			qry = "select fund from "
-					+ AmpFunding.class.getName()
+			qry = "select fund from " + AmpFunding.class.getName()
 					+ " fund where (fund.ampDonorOrgId=:donorId) and (fund.ampActivityId=:activityId)";
 			query = session.createQuery(qry);
-			query.setParameter("donorId", svy.getAmpDonorOrgId().getAmpOrgId(),
-					LongType.INSTANCE);
-			query.setParameter("activityId", svy.getAmpActivityId()
-					.getAmpActivityId(), LongType.INSTANCE);
+			query.setParameter("donorId", svy.getAmpDonorOrgId().getAmpOrgId(), LongType.INSTANCE);
+			query.setParameter("activityId", svy.getAmpActivityId().getAmpActivityId(), LongType.INSTANCE);
 			fundingSet = query.list();
 
 			if (response.size() < 1) // new survey
@@ -2340,10 +2240,7 @@ public class DbUtil {
 				ind.setIndicatorCode(indc.getIndicatorCode());
 				ind.setName(indc.getName());
 				ind.setQuestion(new ArrayList());
-				iter2 = session
-						.createFilter(indc.getQuestions(),
-								"order by this.questionNumber asc").list()
-						.iterator();
+				iter2 = session.createFilter(indc.getQuestions(), "order by this.questionNumber asc").list().iterator();
 				// iter2 = session.createFilter(((AmpAhsurveyIndicator)
 				// session.load(AmpAhsurveyIndicator.class,
 				// indc.getAmpIndicatorId())).getQuestions(),
@@ -2358,13 +2255,10 @@ public class DbUtil {
 					if (flag) { // response is blank in case of new survey
 						iter3 = response.iterator();
 						while (iter3.hasNext()) {
-							AmpAhsurveyResponse res = (AmpAhsurveyResponse) iter3
-									.next();
-							if (res.getAmpQuestionId().getAmpQuestionId()
-									.equals(q.getAmpQuestionId())) {
+							AmpAhsurveyResponse res = (AmpAhsurveyResponse) iter3.next();
+							if (res.getAmpQuestionId().getAmpQuestionId().equals(q.getAmpQuestionId())) {
 								if (q.getQuestionNumber().intValue() == 1) {
-									if ("yes".equalsIgnoreCase(res
-											.getResponse()))
+									if ("yes".equalsIgnoreCase(res.getResponse()))
 										ansFlag = true;
 								}
 
@@ -2376,41 +2270,27 @@ public class DbUtil {
 								// then calculate
 								// difference(%) between planned & actual
 								// disbursement(s)
-								if ("calculated".equalsIgnoreCase(q
-										.getAmpTypeId().getName())) {
+								if ("calculated".equalsIgnoreCase(q.getAmpTypeId().getName())) {
 									if (q.getQuestionNumber().intValue() == 10) {
 										if (ansFlag) {
-											Iterator itr4 = fundingSet
-													.iterator();
+											Iterator itr4 = fundingSet.iterator();
 											Iterator itr5 = null;
 											double actual = 0.0;
 											double planned = 0.0;
 											AmpFundingDetail fd = null;
 											while (itr4.hasNext()) {
-												AmpFunding ampf = (AmpFunding) itr4
-														.next();
-												itr5 = ampf.getFundingDetails()
-														.iterator();
+												AmpFunding ampf = (AmpFunding) itr4.next();
+												itr5 = ampf.getFundingDetails().iterator();
 												while (itr5.hasNext()) {
-													fd = (AmpFundingDetail) itr5
-															.next();
-													if (fd.getTransactionType()
-															.intValue() == 1) {
-														if (fd.getAdjustmentType()
-																.getValue()
+													fd = (AmpFundingDetail) itr5.next();
+													if (fd.getTransactionType().intValue() == 1) {
+														if (fd.getAdjustmentType().getValue()
 																.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED
 																		.getValueKey()))
-															planned += fd
-																	.getTransactionAmount()
-																	.floatValue();
-														else if (fd
-																.getAdjustmentType()
-																.getValue()
-																.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL
-																		.getValueKey()))
-															actual += fd
-																	.getTransactionAmount()
-																	.floatValue();
+															planned += fd.getTransactionAmount().floatValue();
+														else if (fd.getAdjustmentType().getValue().equals(
+																CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()))
+															actual += fd.getTransactionAmount().floatValue();
 													}
 												}
 											}
@@ -2418,13 +2298,9 @@ public class DbUtil {
 											if (planned == 0.0)
 												res.setResponse("nil");
 											else {
-												NumberFormat formatter = new DecimalFormat(
-														"#.##");
-												Double percent = new Double(
-														(actual * 100)
-																/ planned);
-												res.setResponse(formatter
-														.format(percent));
+												NumberFormat formatter = new DecimalFormat("#.##");
+												Double percent = new Double((actual * 100) / planned);
+												res.setResponse(formatter.format(percent));
 											}
 										} else
 											res.setResponse(null);
@@ -2458,8 +2334,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String qry = "select svy from " + AmpAhsurvey.class.getName()
-					+ " svy where (svy.ampAHSurveyId=:surveyId)";
+			String qry = "select svy from " + AmpAhsurvey.class.getName() + " svy where (svy.ampAHSurveyId=:surveyId)";
 			Query q = session.createQuery(qry);
 			q.setParameter("surveyId", surveyId, LongType.INSTANCE);
 			survey = (AmpAhsurvey) q.list().get(0);
@@ -2475,8 +2350,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String qry = "select indc from "
-					+ AmpAhsurveyIndicator.class.getName()
+			String qry = "select indc from " + AmpAhsurveyIndicator.class.getName()
 					+ " indc order by indicator_number asc";
 			responses = session.createQuery(qry).list();
 
@@ -2492,11 +2366,10 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String qry = "select indc from "
-					+ AmpAhsurveyIndicator.class.getName()
+			String qry = "select indc from " + AmpAhsurveyIndicator.class.getName()
 					+ " indc where (indc.ampIndicatorId=:id)";
-			indc = (AmpAhsurveyIndicator) session.createQuery(qry)
-					.setParameter("id", id, LongType.INSTANCE).list().get(0);
+			indc = (AmpAhsurveyIndicator) session.createQuery(qry).setParameter("id", id, LongType.INSTANCE).list()
+					.get(0);
 
 		} catch (Exception ex) {
 			logger.debug("Unable to get survey indicator : " + ex.getMessage());
@@ -2504,7 +2377,7 @@ public class DbUtil {
 		}
 		return indc;
 	}
-	
+
 	public static Collection<AmpGPISurveyIndicator> getAllGPISurveyIndicators(boolean onlyWithQuestions) {
 		Collection responses = new ArrayList();
 		Session session = null;
@@ -2512,7 +2385,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String qry = "select indc from " + AmpGPISurveyIndicator.class.getName() + " indc ";
-			if(onlyWithQuestions) {
+			if (onlyWithQuestions) {
 				qry += " where total_question > 0 ";
 			}
 			qry += " order by indicator_code asc";
@@ -2524,25 +2397,25 @@ public class DbUtil {
 		return responses;
 	}
 
-	/* get amp ME indicator value of a particular activity specified by ampActId */
+	/*
+	 * get amp ME indicator value of a particular activity specified by ampActId
+	 */
 	public static Collection getActivityMEIndValue(Long ampActId) {
-    	Session session = null;
-        Collection col = null;
-        Query qry = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select indAct from "
-                + IndicatorActivity.class.getName()
-                + " indAct "
-                + " where (indAct.activity=:ampActId)";
-            qry = session.createQuery(queryString);
-            qry.setParameter("ampActId", ampActId, LongType.INSTANCE);
-            col = qry.list();
-        } catch (Exception e1) {
-            logger.error("could not retrieve AmpReportSector " + e1.getMessage());
-            e1.printStackTrace(System.out);
-        }
-        return col;
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select indAct from " + IndicatorActivity.class.getName() + " indAct "
+					+ " where (indAct.activity=:ampActId)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampActId", ampActId, LongType.INSTANCE);
+			col = qry.list();
+		} catch (Exception e1) {
+			logger.error("could not retrieve AmpReportSector " + e1.getMessage());
+			e1.printStackTrace(System.out);
+		}
+		return col;
 	}
 
 	public static Collection<CountryBean> getTranlatedCountries(HttpServletRequest request) {
@@ -2553,8 +2426,8 @@ public class DbUtil {
 			trnCnCol = new ArrayList<>();
 			List<Country> cnCol = FeaturesUtil.getAllDgCountries();
 			updateCountryNameTranslations(request, cnCol);
-			
-			for (Country cn:cnCol) {
+
+			for (Country cn : cnCol) {
 				CountryBean trnCn = new CountryBean();
 				trnCn.setId(cn.getCountryId());
 				trnCn.setIso(cn.getIso());
@@ -2565,7 +2438,7 @@ public class DbUtil {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
-		
+
 		List<CountryBean> sortedCountrieList = new ArrayList<>(trnCnCol);
 		Collections.sort(sortedCountrieList, new HelperTrnCountryNameComparator(navLang.getCode()));
 		return sortedCountrieList;
@@ -2574,23 +2447,25 @@ public class DbUtil {
 	public static void updateCountryNameTranslations(HttpServletRequest request, Collection<Country> countries) {
 		org.digijava.kernel.entity.Locale navLang = RequestUtils.getNavigationLanguage(request);
 		Site site = RequestUtils.getSite(request);
-		Map<String, List<Country>> countriesByMsgKey = AmpCollections.distribute(countries, Country.DISTRIBUTE_BY_MSGKEY);
-		
+		Map<String, List<Country>> countriesByMsgKey = AmpCollections.distribute(countries,
+				Country.DISTRIBUTE_BY_MSGKEY);
+
 		try {
 			long start = System.currentTimeMillis();
 			String queryString = "select msg from " + Message.class.getName() + " msg"
-						+ " where (msg.key IN (:msgLangKey)) and (msg.siteId=:siteId) and (msg.locale=:locale)";
+					+ " where (msg.key IN (:msgLangKey)) and (msg.siteId=:siteId) and (msg.locale=:locale)";
 
 			Query qry = PersistenceManager.getSession().createQuery(queryString);
 			qry.setString("siteId", site.getId().toString());
 			qry.setString("locale", navLang.getCode());
 			qry.setParameterList("msgLangKey", countriesByMsgKey.keySet());
-			
+
 			List<Message> translations = qry.list();
-			logger.error("found " + translations.size() + " entries in " + (System.currentTimeMillis() - start) + " millies");
-			for(Message msg:translations) {
+			logger.error("found " + translations.size() + " entries in " + (System.currentTimeMillis() - start)
+					+ " millies");
+			for (Message msg : translations) {
 				if (msg.getKey() != null && !msg.getKey().isEmpty() && countriesByMsgKey.containsKey(msg.getKey())) {
-					for(Country c:countriesByMsgKey.get(msg.getKey()))
+					for (Country c : countriesByMsgKey.get(msg.getKey()))
 						c.setCountryName(msg.getMessage());
 				}
 			}
@@ -2599,62 +2474,62 @@ public class DbUtil {
 		}
 	}
 
-//	public static Country getTranlatedCountry(HttpServletRequest request,
-//			Country country) {
-//		Session session = null;
-//		Collection msgCol = null;
-//		Query qry = null;
-//
-//		org.digijava.kernel.entity.Locale navLang = RequestUtils
-//				.getNavigationLanguage(request);
-//		Site site = RequestUtils.getSite(request);
-//
-//		try {
-//			if (country != null) {
-//				session = PersistenceManager.getRequestDBSession();
-//				long start = System.currentTimeMillis();
-//				String queryString = "select msg "
-//						+ " from "
-//						+ Message.class.getName()
-//						+ " msg"
-//						+ " where (msg.key=:msgLangKey) and (msg.siteId=:siteId) and (msg.locale=:locale)";
-//
-//				qry = session.createQuery(queryString);
-//				qry.setParameter("siteId", site.getId().toString(),
-//						StringType.INSTANCE);
-//				qry.setParameter("locale", navLang.getCode(), StringType.INSTANCE);
-//				qry.setParameter("msgLangKey", country.getMessageLangKey(),
-//						StringType.INSTANCE);
-//				msgCol = qry.list();
-//				logger.error("found " + msgCol.size() + " entries in " + (System.currentTimeMillis() - start) + " millies");
-//
-//				if (msgCol != null && msgCol.size() != 0) {
-//					for (Iterator msgIter = msgCol.iterator(); msgIter
-//							.hasNext();) {
-//						Message msg = (Message) msgIter.next();
-//						if (msg != null) {
-//							country.setCountryName(msg.getMessage());
-//							break;
-//						}
-//					}
-//				}
-//			}
-//		} catch (Exception ex) {
-//			throw new RuntimeException(ex);
-//		}
-//		return country;
-//	}
+	// public static Country getTranlatedCountry(HttpServletRequest request,
+	// Country country) {
+	// Session session = null;
+	// Collection msgCol = null;
+	// Query qry = null;
+	//
+	// org.digijava.kernel.entity.Locale navLang = RequestUtils
+	// .getNavigationLanguage(request);
+	// Site site = RequestUtils.getSite(request);
+	//
+	// try {
+	// if (country != null) {
+	// session = PersistenceManager.getRequestDBSession();
+	// long start = System.currentTimeMillis();
+	// String queryString = "select msg "
+	// + " from "
+	// + Message.class.getName()
+	// + " msg"
+	// + " where (msg.key=:msgLangKey) and (msg.siteId=:siteId) and
+	// (msg.locale=:locale)";
+	//
+	// qry = session.createQuery(queryString);
+	// qry.setParameter("siteId", site.getId().toString(),
+	// StringType.INSTANCE);
+	// qry.setParameter("locale", navLang.getCode(), StringType.INSTANCE);
+	// qry.setParameter("msgLangKey", country.getMessageLangKey(),
+	// StringType.INSTANCE);
+	// msgCol = qry.list();
+	// logger.error("found " + msgCol.size() + " entries in " +
+	// (System.currentTimeMillis() - start) + " millies");
+	//
+	// if (msgCol != null && msgCol.size() != 0) {
+	// for (Iterator msgIter = msgCol.iterator(); msgIter
+	// .hasNext();) {
+	// Message msg = (Message) msgIter.next();
+	// if (msg != null) {
+	// country.setCountryName(msg.getMessage());
+	// break;
+	// }
+	// }
+	// }
+	// }
+	// } catch (Exception ex) {
+	// throw new RuntimeException(ex);
+	// }
+	// return country;
+	// }
 
-	public static void deleteUserExt(AmpOrgGroup orgGrp, AmpOrgType orgType,
-			AmpOrganisation org) {
+	public static void deleteUserExt(AmpOrgGroup orgGrp, AmpOrgType orgType, AmpOrganisation org) {
 		Session session = null;
 		Query query;
 		if (orgGrp != null || orgType != null || org != null) {
 			try {
 				Object relatedObj = null;
 				session = PersistenceManager.getRequestDBSession();
-				String qhl = "delete from " + AmpUserExtension.class.getName()
-						+ " ext where ";
+				String qhl = "delete from " + AmpUserExtension.class.getName() + " ext where ";
 				if (orgGrp != null) {
 					qhl += " ext.orgGroup=:relatedObj";
 					relatedObj = orgGrp;
@@ -2720,8 +2595,7 @@ public class DbUtil {
 		}
 	}
 
-	public static class HelperTrnCountryNameComparator implements
-			Comparator<CountryBean> {
+	public static class HelperTrnCountryNameComparator implements Comparator<CountryBean> {
 		Locale locale;
 		Collator collator;
 
@@ -2742,8 +2616,7 @@ public class DbUtil {
 		}
 	}
 
-	public static class HelperAmpOrgGroupNameComparator implements
-			Comparator<AmpOrgGroup> {
+	public static class HelperAmpOrgGroupNameComparator implements Comparator<AmpOrgGroup> {
 		Locale locale;
 		Collator collator;
 
@@ -2756,8 +2629,7 @@ public class DbUtil {
 		}
 
 		public int compare(AmpOrgGroup o1, AmpOrgGroup o2) {
-			if (collator == null)
-			{
+			if (collator == null) {
 				collator = Collator.getInstance(locale);
 				collator.setStrength(Collator.TERTIARY);
 			}
@@ -2767,29 +2639,28 @@ public class DbUtil {
 		}
 	}
 
-    public static class HelperAmpSectorNameComparator implements
-    	Comparator<AmpSector> {
- 	 	 	 	Locale locale;
- 	 	 	 	Collator collator;
- 	 	 	 	public HelperAmpSectorNameComparator() {
- 	 	 	 		this.locale = new Locale("en", "EN");
- 	 	 	 	}
- 	 	 	 	
- 	 	 	 	public HelperAmpSectorNameComparator(String iso) {
- 	 	 	 		this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
- 	 	 	 	}
- 	 	 	 	
- 	 	 	 	@Override
- 	 	 	 	public int compare(AmpSector o1, AmpSector o2) {
- 	 	 	 		if (collator == null)
- 	 	 	 			{
- 	 	 	 				collator = Collator.getInstance(locale);
- 	 	 	 				collator.setStrength(Collator.TERTIARY);
- 	 	 	 			}
- 	 	 	 		int result = collator.compare(o1.getName(), o2.getName());
- 	 	 	 		return result;
- 	 	 	 	}
- 	 	 	 }       	
+	public static class HelperAmpSectorNameComparator implements Comparator<AmpSector> {
+		Locale locale;
+		Collator collator;
+
+		public HelperAmpSectorNameComparator() {
+			this.locale = new Locale("en", "EN");
+		}
+
+		public HelperAmpSectorNameComparator(String iso) {
+			this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+		}
+
+		@Override
+		public int compare(AmpSector o1, AmpSector o2) {
+			if (collator == null) {
+				collator = Collator.getInstance(locale);
+				collator.setStrength(Collator.TERTIARY);
+			}
+			int result = collator.compare(o1.getName(), o2.getName());
+			return result;
+		}
+	}
 
 	/**
 	 * This class is used for sorting AmpOrgGroup by code.
@@ -2797,8 +2668,7 @@ public class DbUtil {
 	 * @author Dare Roinishvili
 	 * 
 	 */
-	public static class HelperAmpOrgGroupCodeComparator implements
-			Comparator<AmpOrgGroup> {
+	public static class HelperAmpOrgGroupCodeComparator implements Comparator<AmpOrgGroup> {
 		Locale locale;
 		Collator collator;
 
@@ -2814,8 +2684,8 @@ public class DbUtil {
 			collator = Collator.getInstance(locale);
 			collator.setStrength(Collator.TERTIARY);
 
-			int result = (o1.getOrgGrpCode() != null && o2.getOrgGrpCode() != null) ? collator
-					.compare(o1.getOrgGrpCode(), o2.getOrgGrpCode()) : 0;
+			int result = (o1.getOrgGrpCode() != null && o2.getOrgGrpCode() != null)
+					? collator.compare(o1.getOrgGrpCode(), o2.getOrgGrpCode()) : 0;
 			return result;
 		}
 	}
@@ -2826,8 +2696,7 @@ public class DbUtil {
 	 * @author Dare Roinishvili
 	 * 
 	 */
-	public static class HelperAmpOrgGroupTypeComparator implements
-			Comparator<AmpOrgGroup> {
+	public static class HelperAmpOrgGroupTypeComparator implements Comparator<AmpOrgGroup> {
 		public int compare(AmpOrgGroup o1, AmpOrgGroup o2) {
 			AmpOrgType o1Type = o1.getOrgType();
 			AmpOrgType o2Type = o2.getOrgType();
@@ -2835,8 +2704,7 @@ public class DbUtil {
 		}
 	}
 
-	public static class HelperAmpOrgTypeNameComparator implements
-			Comparator<AmpOrgType> {
+	public static class HelperAmpOrgTypeNameComparator implements Comparator<AmpOrgType> {
 		Locale locale;
 		Collator collator;
 
@@ -2863,8 +2731,7 @@ public class DbUtil {
 	 * @author Dare Roinishvili
 	 * 
 	 */
-	public static class HelperAmpOrganisationNameComparator implements
-			Comparator<AmpOrganisation> {
+	public static class HelperAmpOrganisationNameComparator implements Comparator<AmpOrganisation> {
 		Locale locale;
 		Collator collator;
 
@@ -2881,8 +2748,7 @@ public class DbUtil {
 			collator.setStrength(Collator.TERTIARY);
 
 			int result = (o1.getName() == null || o2.getName() == null) ? 0
-					: collator.compare(o1.getName().toLowerCase(), o2.getName()
-							.toLowerCase());
+					: collator.compare(o1.getName().toLowerCase(), o2.getName().toLowerCase());
 			return result;
 		}
 	}
@@ -2893,8 +2759,7 @@ public class DbUtil {
 	 * @author Dare Roinishvili
 	 * 
 	 */
-	public static class HelperAmpOrganisatonAcronymComparator implements
-			Comparator<AmpOrganisation> {
+	public static class HelperAmpOrganisatonAcronymComparator implements Comparator<AmpOrganisation> {
 		Locale locale;
 		Collator collator;
 
@@ -2934,8 +2799,7 @@ public class DbUtil {
 	 * @author Dare Roinishvili
 	 * 
 	 */
-	public static class HelperAmpOrganisationGroupComparator implements
-			Comparator<AmpOrganisation> {
+	public static class HelperAmpOrganisationGroupComparator implements Comparator<AmpOrganisation> {
 		Locale locale;
 		Collator collator;
 
@@ -2954,26 +2818,25 @@ public class DbUtil {
 			// such long and complicated case is necessary because orgType maybe
 			// empty for organisation
 
-			AmpOrgGroup oo1=o1.getOrgGrpId();
-			AmpOrgGroup oo2=o2.getOrgGrpId();
-			if(oo1!=null && oo2!=null){
-			AmpOrgType orgType1 = oo1.getOrgType();
-			AmpOrgType orgType2 = oo2.getOrgType();
-			
-			if (orgType1 != null && orgType2 != null) {
-				result = new HelperAmpOrgTypeNameComparator().compare(orgType1,
-						orgType2);
-			} else if (orgType2 == null && orgType1 != null) {
-				result = collator.compare(orgType1.getOrgType(), "");
-			} else if (orgType1 == null && orgType2 != null) {
-				result = collator.compare("", orgType2.getOrgType());
-			}
-			}else{
-				if(oo1==null && oo2!=null){
+			AmpOrgGroup oo1 = o1.getOrgGrpId();
+			AmpOrgGroup oo2 = o2.getOrgGrpId();
+			if (oo1 != null && oo2 != null) {
+				AmpOrgType orgType1 = oo1.getOrgType();
+				AmpOrgType orgType2 = oo2.getOrgType();
+
+				if (orgType1 != null && orgType2 != null) {
+					result = new HelperAmpOrgTypeNameComparator().compare(orgType1, orgType2);
+				} else if (orgType2 == null && orgType1 != null) {
+					result = collator.compare(orgType1.getOrgType(), "");
+				} else if (orgType1 == null && orgType2 != null) {
+					result = collator.compare("", orgType2.getOrgType());
+				}
+			} else {
+				if (oo1 == null && oo2 != null) {
 					AmpOrgType orgType2 = oo2.getOrgType();
 					result = collator.compare("", orgType2.getOrgType());
-				}else{
-					if(oo2==null && oo1!=null){
+				} else {
+					if (oo2 == null && oo1 != null) {
 						AmpOrgType orgType1 = oo1.getOrgType();
 						result = collator.compare(orgType1.getOrgType(), "");
 					}
@@ -2984,7 +2847,6 @@ public class DbUtil {
 		}
 	}
 
-
 	/**
 	 * This class is used for sorting organisation by Type. such long and
 	 * complicated case is necessary because orgType maybe empty for
@@ -2993,8 +2855,7 @@ public class DbUtil {
 	 * @author Dare Roinisvili
 	 * 
 	 */
-	public static class HelperAmpOrganisationTypeComparator implements
-			Comparator<AmpOrganisation> {
+	public static class HelperAmpOrganisationTypeComparator implements Comparator<AmpOrganisation> {
 		Locale locale;
 		Collator collator;
 
@@ -3015,8 +2876,7 @@ public class DbUtil {
 			AmpOrgType orgType1 = o1.getOrgGrpId().getOrgType();
 			AmpOrgType orgType2 = o2.getOrgGrpId().getOrgType();
 			if (orgType1 != null && orgType2 != null) {
-				result = new HelperAmpOrgTypeNameComparator().compare(orgType1,
-						orgType2);
+				result = new HelperAmpOrgTypeNameComparator().compare(orgType1, orgType2);
 			} else if (orgType2 == null && orgType1 != null) {
 				result = collator.compare(orgType1.getOrgType(), "");
 			} else if (orgType1 == null && orgType2 != null) {
@@ -3036,9 +2896,8 @@ public class DbUtil {
 		try {
 			sess = PersistenceManager.getRequestDBSession();
 			String orgName = AmpOrganisation.hqlStringForName("o");
-			queryString = "select o from "
-					+ AmpOrganisation.class.getName()
-					+ " o where (TRIM(" + orgName + ")=:orgName) and (o.deleted is null or o.deleted = false) ";
+			queryString = "select o from " + AmpOrganisation.class.getName() + " o where (TRIM(" + orgName
+					+ ")=:orgName) and (o.deleted is null or o.deleted = false) ";
 			qry = sess.createQuery(queryString);
 			qry.setString("orgName", name);
 
@@ -3062,8 +2921,7 @@ public class DbUtil {
 	 * @author dare
 	 * 
 	 */
-	public static class IndicatorValuesComparatorByTypeAndYear implements
-			Comparator<AmpPrgIndicatorValue> {
+	public static class IndicatorValuesComparatorByTypeAndYear implements Comparator<AmpPrgIndicatorValue> {
 		public int compare(AmpPrgIndicatorValue o1, AmpPrgIndicatorValue o2) {
 			int retValue = 0;
 			String o1Year = "";
@@ -3088,82 +2946,68 @@ public class DbUtil {
 														// sort them in
 														// order:base actual
 														// target
-				retValue = -(new Integer(o1.getValueType())
-						.compareTo(new Integer(o2.getValueType())));
+				retValue = -(new Integer(o1.getValueType()).compareTo(new Integer(o2.getValueType())));
 			}
 			return retValue;
 		}
 	}
 
-	public static class AmpIndicatorValuesComparatorByTypeAndYear implements
-			Comparator<AmpIndicatorValue> {
+	public static class AmpIndicatorValuesComparatorByTypeAndYear implements Comparator<AmpIndicatorValue> {
 
 		public int compare(AmpIndicatorValue o1, AmpIndicatorValue o2) {
 			AmpPrgIndicatorValue val1 = new AmpPrgIndicatorValue();
 			AmpPrgIndicatorValue val2 = new AmpPrgIndicatorValue();
 
 			val1.setValueType(o1.getValueType());
-			val1.setCreationDate(DateConversion.convertDateToString(o1
-					.getValueDate()));
+			val1.setCreationDate(DateConversion.convertDateToString(o1.getValueDate()));
 
 			val2.setValueType(o2.getValueType());
-			val2.setCreationDate(DateConversion.convertDateToString(o2
-					.getValueDate()));
-			return new IndicatorValuesComparatorByTypeAndYear().compare(val1,
-					val2);
+			val2.setCreationDate(DateConversion.convertDateToString(o2.getValueDate()));
+			return new IndicatorValuesComparatorByTypeAndYear().compare(val1, val2);
 		}
 
 	}
 
-
-	public static int getOrgTypesAmount(String name, Long groupId)
-			throws Exception {
+	public static int getOrgTypesAmount(String name, Long groupId) throws Exception {
 		Session sess = null;
 		Query qry = null;
 		int count = 0;
 		try {
 			sess = PersistenceManager.getRequestDBSession();
 			String orgTypeName = AmpOrgType.hqlStringForName("o");
-			String queryString = "select count(*) from "
-					+ AmpOrgType.class.getName()
-					+ " o where upper(" + orgTypeName + ") like upper('" + name + "')";
+			String queryString = "select count(*) from " + AmpOrgType.class.getName() + " o where upper(" + orgTypeName
+					+ ") like upper('" + name + "')";
 			if (groupId != null && groupId.longValue() != 0) {
 				queryString += " and o.ampOrgTypeId!=" + groupId;
 			}
 			qry = sess.createQuery(queryString);
 			count = ((Integer) qry.uniqueResult()).intValue();
 		} catch (Exception e) {
-			logger.error("Exception while getting org types amount:"
-					+ e.getMessage());
+			logger.error("Exception while getting org types amount:" + e.getMessage());
 		}
 		return count;
 	}
 
-	public static int getOrgTypesByCode(String code, Long typeId)
-			throws Exception {
+	public static int getOrgTypesByCode(String code, Long typeId) throws Exception {
 		Session sess = null;
 		Query qry = null;
 		int count = 0;
 		try {
 			sess = PersistenceManager.getRequestDBSession();
-			String queryString = "select count(*) from "
-					+ AmpOrgType.class.getName()
-					+ " o where upper(o.orgTypeCode) like upper('" + code
-					+ "')";
+			String queryString = "select count(*) from " + AmpOrgType.class.getName()
+					+ " o where upper(o.orgTypeCode) like upper('" + code + "')";
 			if (typeId != null && typeId.longValue() != 0) {
 				queryString += " and o.ampOrgTypeId!=" + typeId;
 			}
 			qry = sess.createQuery(queryString);
 			count = ((Integer) qry.uniqueResult()).intValue();
 		} catch (Exception e) {
-			logger.error("Exception while getting org types by code:"
-					+ e.getMessage());
+			logger.error("Exception while getting org types by code:" + e.getMessage());
 		}
 		return count;
 	}
 
-	public static class HelperAmpOrgRecipientByOrgName implements
-			Comparator<AmpOrgRecipient> {
+	public static class HelperAmpOrgRecipientByOrgName implements Comparator<AmpOrgRecipient> {
 
 		Locale locale;
 		Collator collator;
@@ -3179,9 +3023,8 @@ public class DbUtil {
 		public int compare(AmpOrgRecipient o1, AmpOrgRecipient o2) {
 			collator = Collator.getInstance(locale);
 			collator.setStrength(Collator.TERTIARY);
-			return collator.compare(o1.getOrganization().getName()
-					.toLowerCase(), o2.getOrganization().getName()
-					.toLowerCase());
+			return collator.compare(o1.getOrganization().getName().toLowerCase(),
+					o2.getOrganization().getName().toLowerCase());
 
 		}
 	}
@@ -3190,8 +3033,7 @@ public class DbUtil {
 		public int compare(Object obj1, Object obj2) {
 			User user1 = (User) obj1;
 			User user2 = (User) obj2;
-			return user1.getName().trim()
-					.compareToIgnoreCase(user2.getName().trim());
+			return user1.getName().trim().compareToIgnoreCase(user2.getName().trim());
 		}
 	}
 
@@ -3199,8 +3041,7 @@ public class DbUtil {
 		public int compare(Object obj1, Object obj2) {
 			User user1 = (User) obj1;
 			User user2 = (User) obj2;
-			return user2.getName().trim()
-					.compareToIgnoreCase(user1.getName().trim());
+			return user2.getName().trim().compareToIgnoreCase(user1.getName().trim());
 		}
 	}
 
@@ -3255,12 +3096,11 @@ public class DbUtil {
 	}
 
 	public static String getValidationFromTeamAppSettings(Long ampTeamId) {
-		String validation = (String) PersistenceManager.getSession().createQuery(
-				"select a.validation from " + AmpApplicationSettings.class.getName() + " a where (a.team=" + ampTeamId + ") "
-				).uniqueResult();
+		String validation = (String) PersistenceManager.getSession().createQuery("select a.validation from "
+				+ AmpApplicationSettings.class.getName() + " a where (a.team=" + ampTeamId + ") ").uniqueResult();
 		return StringUtils.isNotEmpty(validation) ? validation : null;
 	}
-	
+
 	public static AmpStructureImg getStructureImage(Long structureId, Long imgId) {
 		Session session = null;
 		Query qry = null;
@@ -3268,8 +3108,8 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select o from " + AmpStructureImg.class.getName()
-					+ " o " + "where (o.structure.ampStructureId=:structureId and o.id=:imgId)";
+			String queryString = "select o from " + AmpStructureImg.class.getName() + " o "
+					+ "where (o.structure.ampStructureId=:structureId and o.id=:imgId)";
 			qry = session.createQuery(queryString);
 			qry.setParameter("structureId", structureId, LongType.INSTANCE);
 			qry.setParameter("imgId", imgId, LongType.INSTANCE);
@@ -3283,7 +3123,7 @@ public class DbUtil {
 		}
 		return image;
 	}
-	
+
 	public static AmpStructureImg getMostRecentlyUploadedStructureImage(Long structureId) {
 		Session session = null;
 		Query qry = null;
@@ -3291,11 +3131,10 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select o from " + AmpStructureImg.class.getName()
-					+ " o " + "where o.structure.ampStructureId=:structureId and o.creationTime=" + 
-					"(select max(o1.creationTime) from  "
-					+ AmpStructureImg.class.getName()+ " o1 " + 
-					" where o1.structure.ampStructureId=:structureId)";
+			String queryString = "select o from " + AmpStructureImg.class.getName() + " o "
+					+ "where o.structure.ampStructureId=:structureId and o.creationTime="
+					+ "(select max(o1.creationTime) from  " + AmpStructureImg.class.getName() + " o1 "
+					+ " where o1.structure.ampStructureId=:structureId)";
 			qry = session.createQuery(queryString);
 			qry.setParameter("structureId", structureId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
@@ -3308,19 +3147,19 @@ public class DbUtil {
 		}
 		return image;
 	}
-	
+
 	public static void saveOrUpdate(List<?> list) throws Exception {
-	    for (Object obj : list)
-            saveOrUpdateObject(obj);
+		for (Object obj : list)
+			saveOrUpdateObject(obj);
 	}
-	
+
 	public static void clearPendingChanges() {
-	    PersistenceManager.getSession().clear();
+		PersistenceManager.getSession().clear();
 	}
-	
+
 	public static List<AmpColorThreshold> getColorThresholds() {
-	    return PersistenceManager.getSession().createCriteria(AmpColorThreshold.class)
-	            .addOrder(org.hibernate.criterion.Order.asc("thresholdStart")).list();
+		return PersistenceManager.getSession().createCriteria(AmpColorThreshold.class)
+				.addOrder(org.hibernate.criterion.Order.asc("thresholdStart")).list();
 	}
 
 	/*
@@ -3330,14 +3169,14 @@ public class DbUtil {
 		List<AmpAgreement> agreements = new ArrayList<AmpAgreement>();
 		try {
 			agreements = PersistenceManager.getSession()
-					.createQuery("select agr from " + AmpAgreement.class.getName() 
-								+ " agr where (trim(agr.code) =:agreementCode) ")
-					.setParameter("agreementCode", StringEscapeUtils.escapeSql(agreementCode))
-					.list();
+					.createQuery("select agr from " + AmpAgreement.class.getName()
+							+ " agr where (trim(agr.code) =:agreementCode) ")
+					.setParameter("agreementCode", StringEscapeUtils.escapeSql(agreementCode)).list();
 		} catch (HibernateException e) {
 			logger.error("Unable to get agreements", e);
 		}
 
 		return agreements;
 	}
+
 }

@@ -130,8 +130,22 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 
 	/**
 	 * Retrieve project by AMP Id.
+	 *
+	 * <h3>Sample Output:</h3><pre>
+	 * {
+	 *   "project_impact": null,
+	 *   "project_management": null,
+	 *   "internal_id": 10827,
+	 *   "amp_id": "112007154460",
+	 *   "project_title": "Activity title",
+	 *   "description": "Activity description",
+	 *   "lessons_learned": null,
+	 *   ...
+	 * }
+	 * </pre>
+	 *
 	 * @param ampId AMP Id
-	 * @return project with full set of configured fields and their values
+	 * @return Project with full set of configured fields and their values.
 	 */
 	@GET
 	@Path("/project")

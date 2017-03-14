@@ -115,10 +115,10 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	}
 	
 	/**
-	 * Provides full project information 
+	 * Provides full project information
 	 * @param projectId project id
 	 * @param filter jsonBean with a list of fields that will be displayed
-	 * @return project with full set of configured fields and their values 
+	 * @return project with full set of configured fields and their values
 	 */
 	@POST
 	@Path("/projects/{projectId}")
@@ -127,7 +127,34 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	public JsonBean getProject(@PathParam("projectId") Long projectId, JsonBean filter) {
 		return InterchangeUtils.getActivity(projectId, filter);
 	}
-	
+
+	/**
+	 * Retrieve project by AMP Id.
+	 *
+	 * <h3>Sample Output:</h3><pre>
+	 * {
+	 *   "project_impact": null,
+	 *   "project_management": null,
+	 *   "internal_id": 10827,
+	 *   "amp_id": "112007154460",
+	 *   "project_title": "Activity title",
+	 *   "description": "Activity description",
+	 *   "lessons_learned": null,
+	 *   ...
+	 * }
+	 * </pre>
+	 *
+	 * @param ampId AMP Id
+	 * @return Project with full set of configured fields and their values.
+	 */
+	@GET
+	@Path("/project")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProjectByAmpId", ui = false)
+	public JsonBean getProjectByAmpId(@QueryParam("amp-id") String ampId) {
+		return InterchangeUtils.getActivityByAmpId(ampId);
+	}
+
 	/**
 	 * Imports an activity
 	 * 

@@ -242,6 +242,9 @@
         
         <!-- Visibility -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpVisibilityRule</hibernate-class>
+        
+        <!-- Allowed MimeTypes -->
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpFileType</hibernate-class>
 
 	</hibernate-classes>
 	<!-- AIM classes End-->

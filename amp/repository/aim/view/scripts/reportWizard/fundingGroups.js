@@ -100,6 +100,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Humanitarian Aid'
                 , 'Concessionality Level'
                 , 'Disaster Response Marker'
+                , 'Indicator Name'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
@@ -127,6 +128,10 @@ YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
 
 YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"]= new Array(
 	);
+
+YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"]= new Array(
+	'Indicator Name'
+);
 
 function insertColInfo (id, name) {
 		YAHOO.amp.reportwizard.colIdToName[id]=name;
@@ -244,3 +249,25 @@ function generateHierarchies(e) {
 	repManager.showHideHierarchies();
 }
 
+function findMeasurelessOnlyHiers(hiersColIds) {
+	return hiersColIds.map(colIdToName).filter(isMeasurelessOnlyHierarchy);
+}
+
+function isMeasurelessOnlyHierarchy(colName) {
+	return YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"].indexOf(colName) !== -1
+}
+
+var mtefPattern = /MTEF \d\d\d\d/;
+var pipelineMtefPattern = /Pipeline MTEF Projections \d\d\d\d/;
+var projectionMtefPattern = /Projection MTEF Projections \d\d\d\d/;
+var realMtefPattern = /Real MTEF \d\d\d\d/;
+
+function isAmountColumn(colName) {
+	return colName == 'Proposed Project Amount' || colName == 'Revised Project Amount'
+		|| mtefPattern.test(colName) || pipelineMtefPattern.test(colName) || projectionMtefPattern.test(colName)
+		|| realMtefPattern.test(colName);
+}
+
+function colIdToName(id) {
+	return YAHOO.amp.reportwizard.colIdToName[id];
+}

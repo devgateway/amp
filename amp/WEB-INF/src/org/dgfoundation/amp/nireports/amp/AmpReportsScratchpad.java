@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import static org.apache.commons.collections.CollectionUtils.containsAny;
+import static org.apache.commons.collections.CollectionUtils.intersection;
+
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -137,8 +140,23 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		this.verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
 			engine.spec.getColumnNames().contains(ColumnConstants.MODE_OF_PAYMENT) &&
 			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);
+
+		checkMeasurelessHierarchies(engine.spec);
 	}
-	
+
+	private void checkMeasurelessHierarchies(ReportSpecification spec) {
+		List<String> amountColumns = AmpReportsSchema.getInstance().getAmountColumns();
+		List<String> onlyMeasurelessHierarchies = AmpReportsSchema.ONLY_MEASURELESS_HIERARCHIES;
+
+		if ((!spec.getMeasures().isEmpty() || containsAny(spec.getColumnNames(), amountColumns))
+				&& containsAny(spec.getHierarchyNames(), onlyMeasurelessHierarchies)) {
+
+			throw new RuntimeException(
+					String.format("Found hierarchies %s that can be used only in measureless reports!",
+					intersection(spec.getHierarchyNames(), onlyMeasurelessHierarchies)));
+		}
+	}
+
 	public AmpCurrency getUsedCurrency() {
 		return usedCurrency;
 	}

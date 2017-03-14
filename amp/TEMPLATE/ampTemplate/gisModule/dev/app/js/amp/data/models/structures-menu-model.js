@@ -21,6 +21,7 @@ module.exports = Backbone.Model
     this.appData = options.appData;
     this.filter = options.filter;
     this.structuresCollection = this.appData.structures;
+    this.attachListeners();
   },
 
   addedState: function() {

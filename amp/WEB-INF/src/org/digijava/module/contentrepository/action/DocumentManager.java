@@ -25,18 +25,17 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
+import org.apache.wicket.util.lang.Bytes;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
-import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
 import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion;
 import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
@@ -99,6 +98,12 @@ public class DocumentManager extends Action {
 		AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
 		boolean shareWithoutApprovalNeeded=((sett!=null && sett.getAllowAddTeamRes()!=null && sett.getAllowAddTeamRes().intValue()>=CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER) || teamMember.getTeamHead());
 		request.setAttribute("shareWithoutApprovalNeeded", shareWithoutApprovalNeeded);
+
+		String maxFileSizeGS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
+		request.setAttribute("uploadFailedTooBigMsg", "The file size limit is {size} MB. This file exceeds the limit.");
+		request.setAttribute("maxFileSizeGS", maxFileSizeGS);
+		request.setAttribute("uploadMaxFileSize", Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
+
 		return mapping.findForward("forward");
 	}
 	
@@ -332,57 +337,54 @@ public class DocumentManager extends Action {
 				throw new Exception("No TeamMember found in HttpSession !");
 			}			
 			
-			
-			if ( myForm.getType() != null && myForm.getType().equals("private") ) {
+			if (myForm.getType() != null && myForm.getType().equals("private") ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
-					Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, userHomeNode, false, errors);
-					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() )
-							nodeWrapper.saveNode(jcrWriteSession);
+					Node userHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
+					NodeWrapper nodeWrapper = new NodeWrapper(myForm, request, userHomeNode, false, errors);
+					if (nodeWrapper != null && !nodeWrapper.isErrorAppeared()) {
+						nodeWrapper.saveNode(jcrWriteSession);
+					}
 				}
 			}
-			if ( myForm.getType() != null && myForm.getType().equals("team") && DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) {
-				
+			if (myForm.getType() != null && myForm.getType().equals("team") && DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
-					Node teamHomeNode			= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, teamHomeNode , false, errors);
-					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
+					Node teamHomeNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
+					NodeWrapper nodeWrapper = new NodeWrapper(myForm, request, teamHomeNode, false, errors);
+					if (nodeWrapper != null && !nodeWrapper.isErrorAppeared()) {
 						nodeWrapper.saveNode(jcrWriteSession);
 					}
 					//update team's last approved version id- If new team document is created,it's uuid is last approved
-					createVersionApprovalStatus(request,true,nodeWrapper);
+					createVersionApprovalStatus(request, true, nodeWrapper);
 				}
 			}
-			if ( myForm.getType() != null && myForm.getType().equals("version") && myForm.getUuid() != null ) {
+			if (myForm.getType() != null && myForm.getType().equals("version") && myForm.getUuid() != null) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
-					Node vNode		= DocumentManagerUtil.getWriteNode(myForm.getUuid(), request);
+					Node vNode = DocumentManagerUtil.getWriteNode(myForm.getUuid(), request);
 
 					/**
 					 * approval is not needed for version,if current member is TL, or he is creator of this node(base node,not version)
 					 * or if tm's are allowed to add versions
 					 */
-					Boolean hasVersioningRightsWithoutApprovalNeeded=DocumentManagerRights.hasVersioningRights(vNode, request);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, vNode , true, errors);
+					Boolean hasVersioningRightsWithoutApprovalNeeded = DocumentManagerRights.hasVersioningRights(vNode, request);
+					NodeWrapper nodeWrapper = new NodeWrapper(myForm, request, vNode , true, errors);
                     vNode.setProperty(CrConstants.PROPERTY_ADDING_DATE, Calendar.getInstance());
-					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
+					if (nodeWrapper != null && !nodeWrapper.isErrorAppeared()) {
 						nodeWrapper.saveNode(jcrWriteSession);
-						if ( nodeWrapper.isTeamDocument() ) {
+						if (nodeWrapper.isTeamDocument()) {
 							myForm.setType("team");
 							createVersionApprovalStatus(request,hasVersioningRightsWithoutApprovalNeeded,nodeWrapper);							
 						}
 					}					
 				}
 			}
-			myForm.setYearOfPublication(null);
-			//myForm.setMyPersonalDocuments(  this.getPrivateDocuments(teamMember, jcrWriteSession.getRootNode(), request)  );
-			//myForm.setMyTeamDocuments( this.getTeamDocuments(teamMember, jcrWriteSession.getRootNode(), request) );
-			//myForm.setSharedDocuments(this.getSharedDocuments(teamMember, request,true));
-		}catch (Exception e) {
-			// TODO Auto-generated catch block
 			
-			e.printStackTrace();
+			myForm.setYearOfPublication(null);
+			
+		} catch (Exception e) {
+			logger.error("Error during the save of the document", e);
 			return false;
 		}
+		
 		return true;
 	}
 

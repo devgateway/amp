@@ -101,7 +101,8 @@ public class UpdateWorkspace extends Action {
 			newTeam.setComputation(uwForm.getComputation());
 			newTeam.setCrossteamvalidation(uwForm.getCrossteamvalidation());
 			newTeam.setIsolated(uwForm.getIsolated());
-			
+ 	                newTeam.setAddActivity(uwForm.getAddActivity());
+	
 			if (!newTeam.getIsolated()) {
 				newTeam.setAddActivity(uwForm.getAddActivity());
 				newTeam.setUseFilter(uwForm.getUseFilter());

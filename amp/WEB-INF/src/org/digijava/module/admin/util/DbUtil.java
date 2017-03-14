@@ -23,6 +23,7 @@
 package org.digijava.module.admin.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +35,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionMessage;
+import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.onepager.web.pages.AmpExceptionPage;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
@@ -45,12 +49,13 @@ import org.digijava.kernel.user.GroupPermission;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.admin.exception.AdminException;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.common.util.DateTimeUtil;
 
 public class DbUtil {
 
 	private static Logger logger = Logger.getLogger(DbUtil.class);
-
-	
 
 	public static List getAvailableLanguages() throws AdminException {
 
@@ -58,35 +63,29 @@ public class DbUtil {
 		List languages = null;
 		try {
 			session = PersistenceManager.getSession();
-			Query q = session.createQuery("from " +
-					Locale.class.getName() +
-			" rs where rs.available=true");
+			Query q = session.createQuery("from " + Locale.class.getName() + " rs where rs.available=true");
 			languages = q.list();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get language list from database", ex);
-			throw new AdminException(
-					"Unable to get language list from database", ex);
+			throw new AdminException("Unable to get language list from database", ex);
 		}
 		return languages;
 	}
+
 	public static boolean isAvailableLanguage(String code) throws AdminException {
-		boolean available=false;
+		boolean available = false;
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			Query q = session.createQuery("from " +
-					Locale.class.getName() +
-			" l where l.available=true and l.code=:code");
+			Query q = session
+					.createQuery("from " + Locale.class.getName() + " l where l.available=true and l.code=:code");
 			q.setString("code", code);
-			if(q.uniqueResult()!=null){
-				available=true;
+			if (q.uniqueResult() != null) {
+				available = true;
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get language from database", ex);
-			throw new AdminException(
-					"Unable to get language list from database", ex);
+			throw new AdminException("Unable to get language list from database", ex);
 		}
 
 		return available;
@@ -96,15 +95,13 @@ public class DbUtil {
 		Session sess = null;
 		try {
 			sess = PersistenceManager.getSession();
-//beginTransaction();
+			// beginTransaction();
 
 			sess.save(site);
-			//tx.commit();
-		}
-		catch (Exception ex) {
+			// tx.commit();
+		} catch (Exception ex) {
 			logger.debug("Unable to create site", ex);
-			throw new AdminException(
-					"Unable to create site", ex);
+			throw new AdminException("Unable to create site", ex);
 		}
 	}
 
@@ -112,7 +109,7 @@ public class DbUtil {
 		Session sess = null;
 		try {
 			sess = PersistenceManager.getSession();
-//beginTransaction();
+			// beginTransaction();
 
 			Iterator iter = site.getModuleInstances().iterator();
 			while (iter.hasNext()) {
@@ -141,14 +138,12 @@ public class DbUtil {
 			}
 
 			sess.saveOrUpdate(site);
-			//tx.commit();
-		}
-		catch (Exception ex) {
+			// tx.commit();
+		} catch (Exception ex) {
 
 			logger.debug("Unable to modify site", ex);
 
-			throw new AdminException(
-					"Unable to modify site", ex);
+			throw new AdminException("Unable to modify site", ex);
 		}
 	}
 
@@ -158,20 +153,21 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getSession();
 			site = (Site) session.load(Site.class, id);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get Site ", ex);
 			throw new AdminException("Unable to get Site ", ex);
 		}
 		return site;
 	}
 
-
 	/**
 	 * Returns group, read from database
-	 * @param id group identity
+	 * 
+	 * @param id
+	 *            group identity
 	 * @return group, read from database
-	 * @throws AdminException if any error occurs
+	 * @throws AdminException
+	 *             if any error occurs
 	 */
 	public static Group getGroup(Long id) throws AdminException {
 		Group group = null;
@@ -180,8 +176,7 @@ public class DbUtil {
 			session = PersistenceManager.getSession();
 			group = (Group) session.load(Group.class, id);
 
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get Group ", ex);
 			throw new AdminException("Unable to get Group ", ex);
 		}
@@ -218,7 +213,7 @@ public class DbUtil {
 		Session sess = null;
 		try {
 			sess = PersistenceManager.getSession();
-//beginTransaction();
+			// beginTransaction();
 
 			Iterator iter = group.getPermissions().iterator();
 			while (iter.hasNext()) {
@@ -230,12 +225,10 @@ public class DbUtil {
 			}
 
 			sess.saveOrUpdate(group);
-			//tx.commit();
-		}
-		catch (Exception ex) {
+			// tx.commit();
+		} catch (Exception ex) {
 			logger.debug("Unable to modify Group ", ex);
-			throw new AdminException(
-					"Unable to modify Group", ex);
+			throw new AdminException("Unable to modify Group", ex);
 		}
 	}
 
@@ -244,14 +237,11 @@ public class DbUtil {
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
-			Query query = session.createQuery("from " + Site.class.getName() +
-											  " s order by s.name");
+			Query query = session.createQuery("from " + Site.class.getName() + " s order by s.name");
 			sites = query.list();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get sites list from database ", ex);
-			throw new AdminException("Unable to get sites list from database ",
-					ex);
+			throw new AdminException("Unable to get sites list from database ", ex);
 		}
 		return sites;
 	}
@@ -261,21 +251,19 @@ public class DbUtil {
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
-			Query query = session.createQuery("from " + Site.class.getName() +
-											  " s where s.parentId is null order by s.name");
+			Query query = session
+					.createQuery("from " + Site.class.getName() + " s where s.parentId is null order by s.name");
 			sites = query.list();
-		}
-		catch (Exception ex) {
-			logger.debug("Unable to get top level sites list from database ",
-					ex);
-			throw new AdminException(
-					"Unable to get top level sites list from database ", ex);
+		} catch (Exception ex) {
+			logger.debug("Unable to get top level sites list from database ", ex);
+			throw new AdminException("Unable to get top level sites list from database ", ex);
 		}
 		return sites;
 	}
 
 	public static List getGroupUsers(Long id) throws AdminException {
-		ArrayList users = new ArrayList(); ;
+		ArrayList users = new ArrayList();
+		;
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
@@ -286,46 +274,41 @@ public class DbUtil {
 				users.add(user);
 			}
 
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get Users group ", ex);
 			throw new AdminException("Unable to get Users group ", ex);
 		}
 		return users;
 	}
 
-	public static void removeUserFromGroup(Long groupId, Long userId) throws
-	AdminException {
+	public static void removeUserFromGroup(Long groupId, Long userId) throws AdminException {
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
-//beginTransaction();
+			// beginTransaction();
 			Group group = (Group) session.load(Group.class, groupId);
 			User user = (User) session.load(User.class, userId);
 			user.getGroups().remove(group);
-			//tx.commit();
-		}
-		catch (Exception ex) {
+			// tx.commit();
+		} catch (Exception ex) {
 			logger.debug("Unable to remove User from group ", ex);
 
 			throw new AdminException("Unable to remove User from group ", ex);
 		}
 	}
 
-	public static void addUsersToGroup(Long groupId, Long[] userIds) throws
-	AdminException {
+	public static void addUsersToGroup(Long groupId, Long[] userIds) throws AdminException {
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
-//beginTransaction();
+			// beginTransaction();
 			Group group = (Group) session.load(Group.class, groupId);
 			for (int i = 0; i < userIds.length; i++) {
 				User user = (User) session.load(User.class, userIds[i]);
 				user.getGroups().add(group);
 			}
-			//tx.commit();
-		}
-		catch (Exception ex) {
+			// tx.commit();
+		} catch (Exception ex) {
 			logger.debug("Unable to add Users to group ", ex);
 			throw new AdminException("Unable to add Users to group ", ex);
 		}
@@ -350,11 +333,11 @@ public class DbUtil {
 			siteKey = "%" + siteKey + "%";
 			domainUrl = "%" + domainUrl + "%";
 
-			String queryString = "select distinct s from " + SiteDomain.class.getName() +
-			" d, " + Site.class.getName() + " s where (d.site.id = s.id) " +
-			" and (lower(s.name) like :siteKey or lower(s.siteId) like :siteKey " +
-			" or lower(d.siteDbDomain) like :siteKey or lower(d.sitePath) like :siteKey " +
-			" or lower(d.siteDbDomain || d.sitePath) like :domainUrl)"; 
+			String queryString = "select distinct s from " + SiteDomain.class.getName() + " d, " + Site.class.getName()
+					+ " s where (d.site.id = s.id) "
+					+ " and (lower(s.name) like :siteKey or lower(s.siteId) like :siteKey "
+					+ " or lower(d.siteDbDomain) like :siteKey or lower(d.sitePath) like :siteKey "
+					+ " or lower(d.siteDbDomain || d.sitePath) like :domainUrl)";
 			Query query = session.createQuery(queryString);
 			query.setString("siteKey", siteKey);
 			query.setString("domainUrl", domainUrl);
@@ -367,11 +350,9 @@ public class DbUtil {
 				}
 			}
 
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get site list from database ", ex);
-			throw new AdminException(
-					"Unable to get site list from database", ex);
+			throw new AdminException("Unable to get site list from database", ex);
 		}
 		return siteList;
 	}
@@ -385,7 +366,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getSession();
 			site = (Site) session.load(Site.class, id);
-//beginTransaction();
+			// beginTransaction();
 
 			Iterator iterator;
 
@@ -438,33 +419,29 @@ public class DbUtil {
 
 			session.delete(site);
 
-			//tx.commit();
+			// tx.commit();
 
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get site list from database ", ex);
-			throw new AdminException(
-					"Unable to get site list from database", ex);
+			throw new AdminException("Unable to get site list from database", ex);
 		}
 	}
 
-	public static Site getSite(String domain, String path) throws
-	AdminException {
+	public static Site getSite(String domain, String path) throws AdminException {
 		Site site = null;
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
 			Iterator iter = null;
 			if (path == null) {
-				String queryString = "select sd.site from " + SiteDomain.class.getName() +
-				" sd where sd.siteDbDomain=:siteDomain and sd.sitePath is null";
+				String queryString = "select sd.site from " + SiteDomain.class.getName()
+						+ " sd where sd.siteDbDomain=:siteDomain and sd.sitePath is null";
 				Query query = session.createQuery(queryString);
 				query.setString("siteDomain", domain);
 				iter = query.iterate();
-			}
-			else {
-				String queryString = "select sd.site from " + SiteDomain.class.getName() +
-				" sd where sd.siteDbDomain=:siteDomain and sd.sitePath=:sitePath";
+			} else {
+				String queryString = "select sd.site from " + SiteDomain.class.getName()
+						+ " sd where sd.siteDbDomain=:siteDomain and sd.sitePath=:sitePath";
 				Query query = session.createQuery(queryString);
 				query.setString("siteDomain", domain);
 				query.setString("sitePath", path);
@@ -475,109 +452,91 @@ public class DbUtil {
 				site = (Site) iter.next();
 				break;
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get site from database ", ex);
 			throw new AdminException("Unable to get site from database ", ex);
 		}
 		return site;
 	}
 
-	public static ModuleInstance getModuleInstance(Long id) throws
-	AdminException {
+	public static ModuleInstance getModuleInstance(Long id) throws AdminException {
 		ModuleInstance moduleInstance = null;
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
-			moduleInstance = (ModuleInstance) session.load(ModuleInstance.class,
-					id);
+			moduleInstance = (ModuleInstance) session.load(ModuleInstance.class, id);
 
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get Module Instance from database ", ex);
-			throw new AdminException(
-					"Unable to get Module Instance from database ", ex);
+			throw new AdminException("Unable to get Module Instance from database ", ex);
 		}
 		return moduleInstance;
 	}
 
 	public static List<ModuleInstance> getReferencedInstances(Long siteId) throws AdminException {
 		try {
-			String queryString = " from " + ModuleInstance.class.getName() +
-			 					 " m where m.site.id != :siteId and m.realInstance is not null" +
-			 					 " and m.realInstance.site.id = :siteId " +
-			 					 " order by m.site.name, m.moduleName, m.instanceName";
+			String queryString = " from " + ModuleInstance.class.getName()
+					+ " m where m.site.id != :siteId and m.realInstance is not null"
+					+ " and m.realInstance.site.id = :siteId " + " order by m.site.name, m.moduleName, m.instanceName";
 			Query query = PersistenceManager.getSession().createQuery(queryString);
 			query.setLong("siteId", siteId);
 			return query.list();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get Referenced Instances from database ", ex);
 			throw new AdminException("Unable to get Referenced Instances from database ", ex);
 		}
 	}
 
-	public static List getSitesToReference(Long siteId, String module) throws
-	AdminException {
+	public static List getSitesToReference(Long siteId, String module) throws AdminException {
 		List sites = null;
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
-			
-			String queryString = "select distinct mi.site from " + ModuleInstance.class.getName() +
-			 					 " mi where mi.site.id != :siteId and mi.moduleName = :moduleName " +
-			 					 " and mi.realInstance is null";
+
+			String queryString = "select distinct mi.site from " + ModuleInstance.class.getName()
+					+ " mi where mi.site.id != :siteId and mi.moduleName = :moduleName "
+					+ " and mi.realInstance is null";
 			Query query = session.createQuery(queryString);
 			query.setLong("siteId", siteId);
 			query.setString("moduleName", module);
 
-			sites =  query.list();
-		}
-		catch (Exception ex) {
+			sites = query.list();
+		} catch (Exception ex) {
 			logger.debug("Unable to get sites list from database ", ex);
-			throw new AdminException("Unable to get sites list from database ",
-					ex);
-		}
-		finally {
+			throw new AdminException("Unable to get sites list from database ", ex);
+		} finally {
 			try {
 				if (session != null) {
-					//PersistenceManager.releaseSession(session);
-                    session.close();
+					// PersistenceManager.releaseSession(session);
+					session.close();
 				}
-			}
-			catch (Exception ex1) {
+			} catch (Exception ex1) {
 				logger.warn("releaseSession() failed ", ex1);
 			}
 		}
 		return sites;
 	}
 
-	public static void updateSiteInstance(ModuleInstance instance) throws
-	AdminException {
+	public static void updateSiteInstance(ModuleInstance instance) throws AdminException {
 		Session sess = null;
 		try {
-			sess = PersistenceManager.
-			getSession();
-//beginTransaction();
+			sess = PersistenceManager.getSession();
+			// beginTransaction();
 
 			sess.update(instance);
-			//tx.commit();
-		}
-		catch (Exception ex) {
+			// tx.commit();
+		} catch (Exception ex) {
 
 			logger.debug("Unable to update ModuleInstance ", ex);
-			throw new AdminException(
-					"Unable to update ModuleInstance", ex);
+			throw new AdminException("Unable to update ModuleInstance", ex);
 		}
 	}
 
-	public static void editSiteInstances(Site site, List otherInstances) throws
-	AdminException {
+	public static void editSiteInstances(Site site, List otherInstances) throws AdminException {
 		Session sess = null;
 		try {
-			sess = org.digijava.kernel.persistence.PersistenceManager.
-			getSession();
-//beginTransaction();
+			sess = org.digijava.kernel.persistence.PersistenceManager.getSession();
+			// beginTransaction();
 
 			Iterator iter = otherInstances.iterator();
 			while (iter.hasNext()) {
@@ -599,12 +558,10 @@ public class DbUtil {
 			}
 
 			sess.saveOrUpdate(site);
-			//tx.commit();
-		}
-		catch (Exception ex) {
+			// tx.commit();
+		} catch (Exception ex) {
 			logger.debug("Unable to modify site ", ex);
-			throw new AdminException(
-					"Unable to modify site", ex);
+			throw new AdminException("Unable to modify site", ex);
 		}
 	}
 
@@ -625,78 +582,67 @@ public class DbUtil {
 				if (item.getRealInstance() == null) {
 					if (passed) {
 						buff.append(",");
-					}
-					else {
+					} else {
 						passed = true;
 					}
-					buff.append("'").append(item.getModuleInstanceId()).append(
-					"'");
+					buff.append("'").append(item.getModuleInstanceId()).append("'");
 				}
 			}
 
 			if (passed) {
-				String queryString = "select distinct p.group from " + GroupPermission.class.getName() +
-									 " p where p.group.site.id != :siteId and p.permissionType = :permissionType " +
-									 " and p.targetName in (" +buff.toString() + ")";
+				String queryString = "select distinct p.group from " + GroupPermission.class.getName()
+						+ " p where p.group.site.id != :siteId and p.permissionType = :permissionType "
+						+ " and p.targetName in (" + buff.toString() + ")";
 				Query query = session.createQuery(queryString);
 				query.setLong("siteId", siteId);
 				query.setInteger("permissionType", new Integer(GroupPermission.MODULE_INSTANCE_PERMISSION));
 
 				groupList = query.list();
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get group list from database ", ex);
-			throw new AdminException(
-					"Unable to get group list from database", ex);
+			throw new AdminException("Unable to get group list from database", ex);
 		}
 		return groupList;
 	}
 
-	public static void updateUser(User user) throws
-	AdminException {
+	public static void updateUser(User user) throws AdminException {
 
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
 
-//beginTransaction();
+			// beginTransaction();
 
 			session.update(user);
 
-			//tx.commit();
+			// tx.commit();
 
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to update user information into database", ex);
-			throw new AdminException(
-					"Unable to update user information into database", ex);
+			throw new AdminException("Unable to update user information into database", ex);
 		}
 	}
 
-	public static List getInheritedPermissions(Long groupId) throws
-	AdminException {
+	public static List getInheritedPermissions(Long groupId) throws AdminException {
 		Session session = null;
 		List result = null;
 		try {
 			session = PersistenceManager.getSession();
 			result = getInheritedPermissions(groupId, session);
 
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get permissions from database", ex);
-			throw new AdminException("Unable to get permissions from database",
-					ex);
+			throw new AdminException("Unable to get permissions from database", ex);
 		}
 		return result;
 	}
 
-	private static List getInheritedPermissions(Long groupId, Session session) throws
-	Exception {
+	private static List getInheritedPermissions(Long groupId, Session session) throws Exception {
 		List permissions = null;
 
-		String queryString = "from " + Group.class.getName() + " gr where " +
-		" gr.site.inheritSecurity = :inheritSecurity and gr.parentId = :parentId";
+		String queryString = "from " + Group.class.getName() + " gr where "
+				+ " gr.site.inheritSecurity = :inheritSecurity and gr.parentId = :parentId";
 
 		Query query = session.createQuery(queryString);
 		query.setBoolean("inheritSecurity", Boolean.TRUE);
@@ -720,75 +666,62 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getSession();
 			locales = session.createQuery("from " + Locale.class.getName()).list();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get locales list from database", ex);
-			throw new AdminException(
-					"Unable to get locales list from database", ex);
+			throw new AdminException("Unable to get locales list from database", ex);
 		}
 		return locales;
 	}
 
-
-
-	public static void updateLocale(Locale locale) throws
-	AdminException {
+	public static void updateLocale(Locale locale) throws AdminException {
 
 		Session session = null;
 
 		try {
 			session = PersistenceManager.getSession();
-			Locale oldLoc=(Locale)session.get(Locale.class, locale.getCode());
+			Locale oldLoc = (Locale) session.get(Locale.class, locale.getCode());
 			oldLoc.setAvailable(locale.isAvailable());
 			oldLoc.setLeftToRight(locale.getLeftToRight());
 
-//beginTransaction();
+			// beginTransaction();
 			if (locale.getMessageLangKey() == null) {
 				locale.setMessageLangKey("ln:" + locale.getCode());
 			}
 
 			session.update(oldLoc);
 
-			//tx.commit();
+			// tx.commit();
 
+		} catch (Exception ex) {
+
+			logger.debug("Unable to update locale information into database", ex);
+			throw new AdminException("Unable to update locale information into database", ex);
 		}
-		catch (Exception ex) {
-
-			logger.debug("Unable to update locale information into database",
-					ex);
-			throw new AdminException(
-					"Unable to update locale information into database", ex);
-		}
-
 
 	}
+
 	public static List getCommonInstances() throws AdminException {
 		List commonInstances = new ArrayList();
 		Session session = null;
-		Query q =null;
+		Query q = null;
 		try {
 			session = PersistenceManager.getSession();
-			q = session.createQuery("from " + ModuleInstance.class.getName() +
-					" m where m.site is null" +
-			" order by m.moduleName");
+			q = session.createQuery(
+					"from " + ModuleInstance.class.getName() + " m where m.site is null" + " order by m.moduleName");
 
 			commonInstances = q.list();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.debug("Unable to get sites list from database ", ex);
-			throw new AdminException("Unable to get sites list from database ",
-					ex);
+			throw new AdminException("Unable to get sites list from database ", ex);
 		}
 		return commonInstances;
 	}
 
-	public static void editCommonInstances(List newInstances) throws
-	AdminException {
+	public static void editCommonInstances(List newInstances) throws AdminException {
 		Session session = null;
 		try {
-			session = org.digijava.kernel.persistence.PersistenceManager.
-			getSession();
-//beginTransaction();
+			session = org.digijava.kernel.persistence.PersistenceManager.getSession();
+			// beginTransaction();
 
 			List commonInstances = getCommonInstances();
 
@@ -810,14 +743,12 @@ public class DbUtil {
 				iter = commonInstances.iterator();
 				while (iter.hasNext()) {
 					ModuleInstance oldInstance = (ModuleInstance) iter.next();
-					ModuleInstance newInstance = (ModuleInstance) newInstancesMap.
-					get(
-							oldInstance.getModuleInstanceId());
+					ModuleInstance newInstance = (ModuleInstance) newInstancesMap
+							.get(oldInstance.getModuleInstanceId());
 
 					if (newInstance != null) {
 						session.update(newInstance);
-					}
-					else {
+					} else {
 						session.delete(oldInstance);
 					}
 				}
@@ -825,27 +756,130 @@ public class DbUtil {
 				iter = newInstances.iterator();
 				while (iter.hasNext()) {
 					ModuleInstance newInstance = (ModuleInstance) iter.next();
-					ModuleInstance oldInstance = (ModuleInstance) oldInstancesMap.
-					get(
-							newInstance.getModuleInstanceId());
+					ModuleInstance oldInstance = (ModuleInstance) oldInstancesMap
+							.get(newInstance.getModuleInstanceId());
 
 					if (oldInstance != null) {
 						session.update(newInstance);
-					}
-					else {
+					} else {
 						session.save(newInstance);
 					}
 				}
 
 			}
 
-			//tx.commit();
-		}
-		catch (Exception ex) {
+			// tx.commit();
+		} catch (Exception ex) {
 			logger.debug("Unable to modify site ", ex);
-			throw new AdminException(
-					"Unable to modify site", ex);
+			throw new AdminException("Unable to modify site", ex);
 		}
 	}
 
+	public static List<KeyValue> getPossibleValues(String tableName) {
+		List<KeyValue> ret = new ArrayList<>();
+
+		if (tableName == null || tableName.length() == 0)
+			return ret;
+
+		List<Object[]> ls = PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+		for (Object[] obj : ls) {
+			KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]),
+					PersistenceManager.getString(obj[1]));
+			ret.add(keyValue);
+		}
+		return ret;
+	}
+	public static void updateGlobalSetting(String name, String value) throws AMPException {
+		Session session = null;
+		String qryStr = null;
+		Query qry = null;
+		session = PersistenceManager.getSession();
+		qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalSettingsName = :globalSettingsName ";
+		qry = session.createQuery(qryStr);
+		qry.setString("globalSettingsName", name);
+		AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
+		updateGlobalSetting(ags, value);
+	}
+	public static void updateGlobalSetting(Long id, String value) throws AMPException {
+
+		Session session = null;
+		String qryStr = null;
+		Query qry = null;
+		session = PersistenceManager.getSession();
+		qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id ";
+		qry = session.createQuery(qryStr);
+		qry.setLong("id", id.longValue());
+		
+		AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
+		updateGlobalSetting(ags, value);
+	}
+	public static void updateGlobalSetting(AmpGlobalSettings ags, String value) throws AMPException {
+		boolean changeValue = testCriterion(ags, value);
+		if (changeValue){
+			ags.setGlobalSettingsValue(value);
+			//PersistenceManager.getSession().update(ags);
+		}
+		
+	}
+	/**
+	 *
+	 * @param ags
+	 *            the AmpGlobalSettings whos value should be changed
+	 * @param value
+	 *            the new value that should be applied
+	 * @return true if value is of the specified type (as returned by
+	 *         AmpGlobalSettings.getGlobalSettingsPossibleValues() )
+	 */
+	public static boolean testCriterion(AmpGlobalSettings ags, String value) throws AMPException {
+		String criterion = ags.getGlobalSettingsPossibleValues();
+		if (criterion != null && criterion.startsWith("t_")) {
+			if (criterion.equals("t_Integer") || criterion.equals("t_static_range")) {
+				try {
+					Integer.parseInt(value);
+					return true;
+				} catch (NumberFormatException E) { // value is not an integer
+					throw new AMPException(criterion.substring(2));
+					/*
+					 * ActionMessage ae = new ActionMessage(
+					 * "error.aim.globalSettings.valueIsNotOfType",
+					 * criterion.substring(2)); errors.add("title", ae); return
+					 * false;
+					 */
+				}
+			}
+			if (criterion.equals("t_Year") || criterion.equals("t_static_year") || criterion.equals("t_static_range")
+					|| criterion.equals("t_year_default_start") || criterion.equals("t_year_default_end")) {
+				try {
+					int intValue = Integer.parseInt(value);
+					if (intValue != -1 && (intValue < 1000 || intValue > 2999))
+						return false;
+					return true;
+				} catch (NumberFormatException E) { // value is not a year
+					throw new AMPException(criterion.substring(2));
+					/*
+					 * ActionMessage ae = new ActionMessage(
+					 * "error.aim.globalSettings.valueIsNotOfType",
+					 * criterion.substring(2)); errors.add("title", ae); return
+					 * false;
+					 */
+				}
+			}
+			if (criterion.equals("t_Date")) {
+				try {
+					Date testDate = DateTimeUtil.parseDate(value);
+					return true;
+				} catch (Exception E) { // value is not an Date
+					throw new AMPException(criterion.substring(2));
+					/*
+					 * ActionMessage ae = new ActionMessage(
+					 * "error.aim.globalSettings.valueIsNotOfType",
+					 * criterion.substring(2)); errors.add("title", ae); return
+					 * false;
+					 */
+				}
+			}
+
+		}
+		return true;
+	}
 }

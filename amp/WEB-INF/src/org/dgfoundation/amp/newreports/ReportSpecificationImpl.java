@@ -271,9 +271,11 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		
 		for(String columnName:columns)
 			spec.addColumn(new ReportColumn(columnName));
-		
-		for(String measureName:measures)
-			spec.addMeasure(new ReportMeasure(measureName));
+
+		if (measures != null) {
+			for (String measureName : measures)
+				spec.addMeasure(new ReportMeasure(measureName));
+		}
 		
 		if (hierarchies != null) {
 			for(String hierarchyName:hierarchies) {

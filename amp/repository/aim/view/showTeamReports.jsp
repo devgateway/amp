@@ -578,9 +578,7 @@ $(document).ready(function() {
 							<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; width: 20%;" bgcolor="<%=color%>">
 								<ul>
 									<logic:iterate name="report" property="hierarchies" id="hierarchy" >
-										<li> <digi:trn key="aim:report:${hierarchy.column.columnName}">
-												<bean:write name="hierarchy" property="column.columnName" />
-										</digi:trn> </li>
+										<li> <digi:colNameTrn><bean:write name="hierarchy" property="column.columnName" /></digi:colNameTrn> </li>
 									</logic:iterate>
 								</ul>
 							</td>
@@ -591,14 +589,10 @@ $(document).ready(function() {
 									<logic:iterate name="report" property="columns" id="column" indexId="index">
 										<%if (index.intValue()%2==0){ %>
 											<li>
-												<digi:trn key="aim:report:${column.column.columnName}">
-													<bean:write name="column" property="column.columnName" />
-												</digi:trn>
+												<digi:colNameTrn><bean:write name="column" property="column.columnName" /></digi:colNameTrn>
 										<% } else {%>
 										,
-											<digi:trn key="aim:report:${column.column.columnName}">
-													<bean:write name="column" property="column.columnName" />
-												</digi:trn>
+												<digi:colNameTrn><bean:write name="column" property="column.columnName" /></digi:colNameTrn>
 											</li>
 										<%} %>
 	 								</logic:iterate>

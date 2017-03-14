@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -66,15 +67,17 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ComponentsDimension;
+import org.dgfoundation.amp.nireports.amp.dimensions.IndicatorConnectionDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
-import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
+import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
+import org.dgfoundation.amp.nireports.amp.indicators.IndicatorIdMetaInfoProvider;
+import org.dgfoundation.amp.nireports.amp.indicators.IndicatorTextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
@@ -141,7 +144,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimension pledgesDimension = SqlSourcedNiDimension.buildDegenerateDimension("pledges", "amp_funding_pledges", "id");
 	public final static NiDimension usersDimension = SqlSourcedNiDimension.buildDegenerateDimension("users", "dg_user", "id");
 	public final static NiDimension departmentsDimension = SqlSourcedNiDimension.buildDegenerateDimension("departments", "amp_departments", "id_department");
-	    
+	public final static IndicatorConnectionDimension indicatorsDimension = IndicatorConnectionDimension.instance;
+
 	/**
 	 * the pseudocolumn of the header Splitter for cells which are funding flows
 	 */
@@ -207,7 +211,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Sum of Actual Disbursements / Sum (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). ");
 		put(null, null);
 	}};
-	
+
+	// the indicator-based NiDimensionUsage's
+	public final static NiDimensionUsage INDICATOR_DIM_USG = indicatorsDimension.getDimensionUsage("Indicator");
+	public final static LevelColumn INDICATOR_LEVEL_COLUMN = INDICATOR_DIM_USG.getLevelColumn(IndicatorConnectionDimension.LEVEL_INDICATOR);
+	public final static LevelColumn INDICATOR_CONN_LEVEL_COLUMN = INDICATOR_DIM_USG.getLevelColumn(IndicatorConnectionDimension.LEVEL_INDICATOR_CONN);
+
 	// the organisation-based NiDimensionUsage's
 	public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage(Constants.FUNDING_AGENCY);
 	public final static NiDimensionUsage IA_DIM_USG = orgsDimension.getDimensionUsage(Constants.IMPLEMENTING_AGENCY);
@@ -285,7 +294,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	protected final static AmpFundingColumn donorFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_DONOR_FUNDING, "v_ni_donor_funding");
 	protected final static AmpFundingColumn pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding");
 	protected final static AmpFundingColumn componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding");
-	
+
+	/**
+	 * Hierarchies that are allowed only for measureless reports.
+	 * Since Indicators are not linked to funding we cannot use hierarchies by indicator since it would lead to double counting.
+	 */
+	public static final List<String> ONLY_MEASURELESS_HIERARCHIES = Arrays.asList(ColumnConstants.INDICATOR_NAME);
+
+	private List<String> amountColumns = new ArrayList<>();
+
 	/**
 	 * the constructor defines all the columns and measures of the schema. Since this involves scanning the database quite a lot, this constructor is SLOW
 	 */
@@ -347,6 +364,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.RESULTS, "v_results", DG_EDITOR_POSTPROCESSOR);
 		no_entity(ColumnConstants.PURPOSE, "v_purposes", DG_EDITOR_POSTPROCESSOR);
 		no_entity(ColumnConstants.PROGRAM_DESCRIPTION, "v_program_description", DG_EDITOR_POSTPROCESSOR);
+
+		addIndicatorColumns();
+
 		degenerate_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit", catsDimension);
 		no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
 		
@@ -525,7 +545,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMtefColumns();
 		addPseudoComputedColumns();
 		addColumn(new PPCColumn(ColumnConstants.PROPOSED_PROJECT_AMOUNT, "v_proposed_cost"));
+		amountColumns.add(ColumnConstants.PROPOSED_PROJECT_AMOUNT);
 		addColumn(new PPCColumn(ColumnConstants.REVISED_PROJECT_AMOUNT, "v_revised_project_cost"));
+		amountColumns.add(ColumnConstants.REVISED_PROJECT_AMOUNT);
 		
 		date_column(ColumnConstants.ACTIVITY_CREATED_ON, "v_creation_date");
 		date_column(ColumnConstants.ACTIVITY_UPDATED_ON, "v_updated_date");
@@ -564,7 +586,35 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
 		
 	}
-	
+
+	private void addIndicatorColumns() {
+		indicator_single_dimension(ColumnConstants.INDICATOR_NAME, "v_indicator_name", INDICATOR_LEVEL_COLUMN);
+		indicator_single_dimension(ColumnConstants.INDICATOR_TYPE, "v_indicator_type", INDICATOR_LEVEL_COLUMN);
+		indicator_single_dimension(ColumnConstants.INDICATOR_DESCRIPTION, "v_indicator_description", INDICATOR_LEVEL_COLUMN);
+		indicator_single_dimension(ColumnConstants.INDICATOR_CODE, "v_indicator_code", INDICATOR_LEVEL_COLUMN);
+		indicator_date_column(ColumnConstants.INDICATOR_CREATION_DATE, "v_indicator_creation_date", INDICATOR_LEVEL_COLUMN);
+		indicator_single_dimension(ColumnConstants.INDICATOR_SECTOR, "v_indicator_sectors", INDICATOR_LEVEL_COLUMN);
+
+		indicator_single_dimension(ColumnConstants.INDICATOR_RISK, "v_indicator_risk", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_single_dimension(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "v_indicator_logframe_category", INDICATOR_CONN_LEVEL_COLUMN);
+
+		indicator_single_dimension(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_date_column(ColumnConstants.INDICATOR_ACTUAL_DATE, "v_indicator_actual_date", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_single_dimension(ColumnConstants.INDICATOR_ACTUAL_COMMENT, "v_indicator_actual_comment", INDICATOR_CONN_LEVEL_COLUMN);
+
+		indicator_single_dimension(ColumnConstants.INDICATOR_BASE_VALUE, "v_indicator_basevalue", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_date_column(ColumnConstants.INDICATOR_BASE_DATE, "v_indicator_base_date", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_single_dimension(ColumnConstants.INDICATOR_BASE_COMMENT, "v_indicator_base_comment", INDICATOR_CONN_LEVEL_COLUMN);
+
+		indicator_single_dimension(ColumnConstants.INDICATOR_TARGET_VALUE, "v_indicator_targetvalue", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_date_column(ColumnConstants.INDICATOR_TARGET_DATE, "v_indicator_target_date", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_single_dimension(ColumnConstants.INDICATOR_TARGET_COMMENT, "v_indicator_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
+
+		indicator_single_dimension(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, "v_indicator_revised_target_value", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_date_column(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, "v_indicator_revised_target_date", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_single_dimension(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, "v_indicator_revised_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
+	}
+
 	protected void addFormulaMeasures() {
 		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
 		addFormulaAverageComputedMeasure(MeasureConstants.AVERAGE_DISBURSEMENT_RATE, PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
@@ -659,22 +709,32 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		
 	protected void addMtefColumns() {
 		for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
-			
-			addColumn(new MtefColumn("MTEF " + mtefYear, mtefYear, 
-					"MTEF", false, Optional.empty()).withGroup("Funding Information"));
 
-			MtefColumn pipelineMtefColumn = (MtefColumn) new MtefColumn("Pipeline MTEF Projections " + mtefYear, mtefYear, 
+			PsqlSourcedColumn<CategAmountCell> mtefColumn = new MtefColumn(
+					"MTEF " + mtefYear, new LocalizableLabel("MTEF {0,number,#}", mtefYear), mtefYear,
+					"MTEF", false, Optional.empty()).withGroup("Funding Information");
+			addColumn(mtefColumn);
+			amountColumns.add(mtefColumn.getName());
+
+			MtefColumn pipelineMtefColumn = (MtefColumn) new MtefColumn("Pipeline MTEF Projections " + mtefYear,
+					new LocalizableLabel("Pipeline MTEF Projections {0,number,#}", mtefYear), mtefYear,
 					"Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)).withGroup("Funding Information");			
 			this.pipelineMtefColumns.put(mtefYear, pipelineMtefColumn);
 			addColumn(pipelineMtefColumn);
+			amountColumns.add(pipelineMtefColumn.getName());
 
-			MtefColumn projectionMtefColumn = (MtefColumn) new MtefColumn("Projection MTEF Projections " + mtefYear, mtefYear, 
+			MtefColumn projectionMtefColumn = (MtefColumn) new MtefColumn("Projection MTEF Projections " + mtefYear,
+					new LocalizableLabel("Projection MTEF Projections {0,number,#}", mtefYear), mtefYear,
 					"Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)).withGroup("Funding Information");
 			this.projectionMtefColumns.put(mtefYear, projectionMtefColumn);
 			addColumn(projectionMtefColumn);
-			
-			addColumn(new MtefColumn("Real MTEF " + mtefYear, mtefYear, 
-					"Real MTEF", true, Optional.empty()).withGroup("Funding Information"));
+			amountColumns.add(projectionMtefColumn.getName());
+
+			PsqlSourcedColumn<CategAmountCell> realMtefColumn = new MtefColumn(
+					"Real MTEF " + mtefYear, new LocalizableLabel("Real MTEF {0,number,#}", mtefYear), mtefYear,
+					"Real MTEF", true, Optional.empty()).withGroup("Funding Information");
+			addColumn(realMtefColumn);
+			amountColumns.add(realMtefColumn.getName());
 		}
 	}
 	
@@ -1010,7 +1070,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		NiUtils.failIf(!whitelistedDegenerateDimensions.contains(dimension), dimension.toString() + " is not whitelisted as a shortcut degenerate dimension");
 		return single_dimension(columnName, view, dimension.getLevelColumn(columnName, dimension.depth - 1)); // taking the leaves
 	}
-	
+
+	private AmpReportsSchema indicator_single_dimension(String columnName, String view, LevelColumn levelColumn) {
+		SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn, IndicatorTextualTokenBehaviour.instance);
+		if (levelColumn == INDICATOR_CONN_LEVEL_COLUMN) {
+			col.withMetaInfoProvider(IndicatorIdMetaInfoProvider.instance);
+		}
+		col.allowNulls(true);
+		return addColumn(col);
+	}
+
 	private AmpReportsSchema single_dimension(String columnName, String view, LevelColumn levelColumn) {
 		return addColumn(SimpleTextColumn.fromView(columnName, view, levelColumn));
 	}
@@ -1065,7 +1134,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	private AmpReportsSchema date_column(String columnName, String viewName, LevelColumn levelColumn) {
 		return addColumn(new DateColumn(columnName, levelColumn, viewName));
 	}
-	
+
+	private AmpReportsSchema indicator_date_column(String columnName, String viewName, LevelColumn levelColumn) {
+		DateColumn col = new DateColumn(columnName, levelColumn, viewName, IndicatorDateTokenBehaviour.instance);
+		if (levelColumn == INDICATOR_CONN_LEVEL_COLUMN) {
+			col.withMetaInfoProvider(IndicatorIdMetaInfoProvider.instance);
+		}
+		col.allowNulls(true);
+		return addColumn(col);
+	}
+
 	protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();
 	
 	@Override
@@ -1360,5 +1438,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	public final static boolean isBetween(long value, long min, long max) {
 		return value >= min && value <= max;
+	}
+
+	/**
+	 * Returns columns that contain funding amounts and behave like measures.
+	 * @return
+	 */
+	public List<String> getAmountColumns() {
+		return amountColumns;
 	}
 }

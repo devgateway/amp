@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
-import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 import static org.dgfoundation.amp.algo.AmpCollections.orderedListWrapper;
 
 /**
@@ -25,16 +24,16 @@ public class NiDateCell extends NiOutCell {
 	 */
 	public final Map<Long, LocalDate> entitiesIdsValues;
 	
-	public final List<LocalDate> sortedValues;
+	public final List<LocalDate> values;
 	
 	@SuppressWarnings("rawtypes")
 	public final Comparable comparableToken;
 	
-	public NiDateCell(long entityId, Map<Long, LocalDate> entitiesIdsValues) {
+	public NiDateCell(List<LocalDate> values, long entityId, Map<Long, LocalDate> entitiesIdsValues) {
 		this.entityId = entityId;
 		this.entitiesIdsValues = entitiesIdsValues;
-		this.sortedValues = sorted(entitiesIdsValues.values());
-		this.comparableToken = orderedListWrapper(sortedValues);
+		this.values = values;
+		this.comparableToken = orderedListWrapper(values);
 	}
 		
 	@Override
@@ -45,7 +44,7 @@ public class NiDateCell extends NiOutCell {
 
 	@Override
 	public String getDisplayedValue() {
-		return sortedValues.isEmpty() ? "" : sortedValues.toString();
+		return values.isEmpty() ? "" : values.toString();
 	}
 
 	@Override

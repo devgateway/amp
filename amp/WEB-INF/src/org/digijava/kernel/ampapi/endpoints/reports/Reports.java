@@ -159,7 +159,6 @@ public class Reports implements ErrorReportingEndpoint {
 		metadata.setQueryName(DEFAULT_QUERY_NAME);
 		metadata.setConnection(DEFAULT_CONNECTION_NAME);
 		metadata.setSchema(DEFAULT_SCHEMA_NAME);
-		metadata.setReportUpdatedDate(ampReport.getUpdatedDate().getTime());
 
 		result.setReportMetadata(metadata);
 		
@@ -387,7 +386,7 @@ public class Reports implements ErrorReportingEndpoint {
 		
 		// AMP-19189 - add columns used for coloring the project title and amp id (but not for summary reports).
 		List<String> extraColumns = new ArrayList<String>();
-		if (spec.getColumns().size() != spec.getHierarchies().size()) {
+		if (spec.getColumns().size() != spec.getHierarchies().size() && !spec.getMeasures().isEmpty()) {
 			extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 			extraColumns.add(ColumnConstants.DRAFT);
 			queryObject.set(EPConstants.ADD_COLUMNS, extraColumns);

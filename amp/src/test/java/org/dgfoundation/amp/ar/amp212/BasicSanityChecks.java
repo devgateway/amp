@@ -104,6 +104,12 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			"third activity with agreements",
 			"activity with tertiary_program"
 		);
+
+	final List<String> indicatorActs = Arrays.asList(
+			"activity 1 with agreement",
+			"activity 1 with indicators",
+			"activity 2 with indicators"
+	);
 	
 	final static List<String> hierarchiesToTry = Arrays.asList(
 			ColumnConstants.STATUS, ColumnConstants.IMPLEMENTATION_LEVEL, 
@@ -906,7 +912,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 				null, 
 				GroupingCriteria.GROUPING_MONTHLY);
 		spec.setDisplayTimeRangeSubtotals(false);
-		
+
 		spec.setDisplayEmptyFundingColumns(true);
 		runNiTestCase(
 				spec,
@@ -1938,7 +1944,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 
 		runNiTestCase(spec, "en", executionRateActs, cor);
 	}
-	
+
 	@Test
 	public void testFetchedMeasureTotalMissingPrecursor() {
 		NiReportModel cor = new NiReportModel("testFetchedMeasureTotalMissingPrecursor")
@@ -2008,6 +2014,354 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			GroupingCriteria.GROUPING_YEARLY);
 		
 		runNiTestCase(spec, "en", executionRateActs, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportNoHier() {
+		NiReportModel cor = new NiReportModel("testMeasurelessReportNoHier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 1))",
+						"(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
+								new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
+								new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
+								new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR"),
+								new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed"),
+								new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+								new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components"),
+								new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents"),
+								new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water"),
+								new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
+								new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity"),
+								new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+								new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1"),
+								new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2"),
+								new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1"),
+								new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2"),
+								new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1"),
+								new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones"),
+								new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages"),
+								new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages"),
+								new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge"),
+								new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program"),
+								new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program"),
+								new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program"),
+								new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1"),
+								new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2"),
+								new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending"),
+								new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency"),
+								new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting"),
+								new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components"),
+								new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components"),
+								new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity"),
+								new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement"),
+								new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements"),
+								new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements"),
+								new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement"),
+								new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements"),
+								new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms"),
+								new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response"),
+								new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs"),
+								new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+								new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity"),
+								new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+								new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportNoHier",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE),
+				null,
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportWithHier() {
+		NiReportModel cor = new NiReportModel("testMeasurelessReportWithHier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 2))",
+						"(Country: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Country", "", "Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Country", "Moldova", 8977))
+										.withContents("Project Title", "", "Country", "Moldova")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
+												new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
+												new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
+												new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR"),
+												new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed"),
+												new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+												new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components"),
+												new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents"),
+												new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water"),
+												new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
+												new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity"),
+												new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+												new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1"),
+												new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2"),
+												new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1"),
+												new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2"),
+												new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1"),
+												new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones"),
+												new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages"),
+												new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages"),
+												new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge"),
+												new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program"),
+												new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1"),
+												new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2"),
+												new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending"),
+												new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency"),
+												new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components"),
+												new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components"),
+												new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity"),
+												new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement"),
+												new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements"),
+												new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements"),
+												new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement"),
+												new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements"),
+												new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms"),
+												new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response"),
+												new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs"),
+												new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+												new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity"),
+												new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+												new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")        ),
+								new ReportAreaForTests(new AreaOwner("Country", "Country: Undefined", -999999999)).withContents("Project Title", "", "Country", "Country: Undefined")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportWithHier",
+				Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.PROJECT_TITLE),
+				null,
+				Arrays.asList(ColumnConstants.COUNTRY),
+				GroupingCriteria.GROUPING_YEARLY);
+
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportWithFilteringByRegion() {
+		NiReportModel cor = new NiReportModel("testMeasurelessReportWithFilteringByRegion")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 2))",
+						"(Region: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Region", "", "Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(17), "Region", "Anenii Noi County", "Project Title", "Proposed Project Cost 2 - EUR"),
+								new ReportAreaForTests(new AreaOwner(18), "Region", "Anenii Noi County", "Project Title", "Test MTEF directed"),
+								new ReportAreaForTests(new AreaOwner(21), "Region", "Anenii Noi County", "Project Title", "activity with components"),
+								new ReportAreaForTests(new AreaOwner(24), "Region", "Anenii Noi County", "Project Title", "Eth Water"),
+								new ReportAreaForTests(new AreaOwner(27), "Region", "Anenii Noi County", "Project Title", "mtef activity 2"),
+								new ReportAreaForTests(new AreaOwner(28), "Region", "Anenii Noi County", "Project Title", "ptc activity 1"),
+								new ReportAreaForTests(new AreaOwner(29), "Region", "Anenii Noi County", "Project Title", "ptc activity 2"),
+								new ReportAreaForTests(new AreaOwner(30), "Region", "Anenii Noi County", "Project Title", "SSC Project 1"),
+								new ReportAreaForTests(new AreaOwner(33), "Region", "Anenii Noi County", "Project Title", "Activity with Zones"),
+								new ReportAreaForTests(new AreaOwner(36), "Region", "Anenii Noi County", "Project Title", "Activity With Zones and Percentages"),
+								new ReportAreaForTests(new AreaOwner(40), "Region", "Anenii Noi County", "Project Title", "SubNational no percentages")      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportWithFilteringByRegion",
+				Arrays.asList(ColumnConstants.REGION, ColumnConstants.PROJECT_TITLE),
+				null,
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+		spec.setFilters(buildSimpleFilter(ColumnConstants.REGION, "9085"/*"Anenii Noi County"*/, true));
+
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportWithFilteringByFunding() {
+		NiReportModel cor = new NiReportModel("testMeasurelessReportNoHier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 1))",
+						"(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
+								new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
+								new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed"),
+								new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+								new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water"),
+								new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
+								new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity"),
+								new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+								new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1"),
+								new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2"),
+								new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1"),
+								new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2"),
+								new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1"),
+								new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones"),
+								new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages"),
+								new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages"),
+								new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge"),
+								new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program"),
+								new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program"),
+								new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program"),
+								new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1"),
+								new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency"),
+								new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting"),
+								new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components"),
+								new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity"),
+								new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement"),
+								new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements"),
+								new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements"),
+								new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement"),
+								new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements"),
+								new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms"),
+								new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response"),
+								new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs"),
+								new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+								new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity"),
+								new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+								new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportNoHier",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE),
+				null,
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+		spec.setFilters(buildSimpleFilter(ColumnConstants.TYPE_OF_ASSISTANCE, "2119"/*"default type of assistance"*/, true));
+
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportWithFundingLevelFilteringAndHier(){
+		NiReportModel cor = new NiReportModel("testMeasurelessReportWithFundingLevelFilteringAndHier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 2))",
+						"(Type Of Assistance: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Type Of Assistance", "", "Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
+										.withContents("Project Title", "", "Type Of Assistance", "default type of assistance")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
+												new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
+												new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed"),
+												new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+												new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water"),
+												new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
+												new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity"),
+												new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+												new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1"),
+												new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2"),
+												new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1"),
+												new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2"),
+												new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1"),
+												new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones"),
+												new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages"),
+												new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages"),
+												new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge"),
+												new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program"),
+												new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1"),
+												new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency"),
+												new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting"),
+												new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components"),
+												new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity"),
+												new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement"),
+												new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements"),
+												new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements"),
+												new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement"),
+												new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements"),
+												new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms"),
+												new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response"),
+												new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs"),
+												new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+												new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity"),
+												new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+												new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportWithFundingLevelFilteringAndHier",
+				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PROJECT_TITLE),
+				null,
+				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE),
+				GroupingCriteria.GROUPING_TOTALS_ONLY);
+		spec.setFilters(buildSimpleFilter(ColumnConstants.TYPE_OF_ASSISTANCE, "2119"/*"default type of assistance"*/, true));
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportWithFilteringAndHier() {
+		NiReportModel cor = new NiReportModel("testMeasurelessReportWithHier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 2))",
+						"(Country: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Country", "", "Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Country", "Moldova", 8977))
+										.withContents("Project Title", "", "Country", "Moldova")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
+												new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
+												new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
+												new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR"),
+												new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed"),
+												new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+												new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components"),
+												new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents"),
+												new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water"),
+												new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
+												new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity"),
+												new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+												new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1"),
+												new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2"),
+												new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1"),
+												new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2"),
+												new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1"),
+												new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones"),
+												new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages"),
+												new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages"),
+												new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge"),
+												new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program"),
+												new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1"),
+												new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2"),
+												new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending"),
+												new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency"),
+												new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components"),
+												new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components"),
+												new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity"),
+												new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement"),
+												new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements"),
+												new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements"),
+												new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement"),
+												new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements"),
+												new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms"),
+												new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response"),
+												new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs"),
+												new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+												new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity"),
+												new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+												new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportWithHier",
+				Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.PROJECT_TITLE),
+				null,
+				Arrays.asList(ColumnConstants.COUNTRY),
+				GroupingCriteria.GROUPING_YEARLY);
+		spec.setFilters(buildSimpleFilter(ColumnConstants.COUNTRY, "8977"/*"Moldova"*/, true));
+
+		runNiTestCase(spec, "en", acts, cor);
 	}
 
 	@Test

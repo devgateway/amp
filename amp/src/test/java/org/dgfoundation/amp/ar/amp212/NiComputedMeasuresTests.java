@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
@@ -170,6 +171,10 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 						MeasureConstants.CURRENT_MONTH_DISBURSEMENTS, MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS),
 				null,
 				GroupingCriteria.GROUPING_TOTALS_ONLY);
+		
+		AmpReportFilters filters = new AmpReportFilters(new HashMap<>());
+		filters.setComputedYear(2016);
+		spec.setFilters(filters);
 
 		runNiTestCase(spec, "en", Arrays.asList("activity-weird-funding", "expenditure class", 
 				"Activity with planned disbursements", "execution rate activity"), cor);
@@ -292,5 +297,10 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 	@After
 	public void tearDown() {
 		AmpReportsScratchpad.forcedNowDate = null;
+	}
+	
+	@Override
+	public void setUp() {
+		AllTests_amp212.setUp();
 	}
 }

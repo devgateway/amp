@@ -32,7 +32,7 @@ public class AmpIndicator implements Serializable
 //	@Interchangeable(fieldTitle="Category")
 	private int category;
     @TranslatableField
-//    @Interchangeable(fieldTitle="Description",fmPath="/Activity Form/M&E/Description")
+//    @Interchangeable(fieldTitle="Description",fmPath="/Activity Form/M&E/Indicator Description")
 	private String description;
 //    @Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
     @Validators (unique="/Activity Form/M&E/uniqueSectorsValidator")

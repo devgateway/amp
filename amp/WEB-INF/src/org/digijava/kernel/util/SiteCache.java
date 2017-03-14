@@ -255,15 +255,8 @@ public class SiteCache implements Runnable {
             }
         }
         catch (Exception ex) {
-            if (session != null) {
-                session.getTransaction().rollback();
-            }
             logger.error("load() failed ",ex);
             throw new DgException("load() failed ",ex);
-        } finally {
-            if (session != null) {
-                session.getTransaction().commit();
-            }
         }
 
         Iterator iter = siteCache.values().iterator();

@@ -1,8 +1,6 @@
 package org.digijava.kernel.services.sync;
 
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.GLOBAL_SETTINGS;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACES;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_MEMBER;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.*;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.UPDATED;
 
@@ -15,17 +13,21 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.request.Site;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.services.sync.model.ActivityChange;
 import org.digijava.kernel.services.sync.model.AmpOfflineChangelog;
-import org.digijava.kernel.services.sync.model.TranslationsDiff;
-import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.ListDiff;
+import org.digijava.kernel.services.sync.model.SystemDiff;
+import org.digijava.kernel.services.sync.model.Translation;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -49,6 +51,7 @@ public class SyncService implements InitializingBean {
     private static final RowMapper<AmpOfflineChangelog> ROW_MAPPER = new AmpOfflineChangelogMapper();
 
     private static final RowMapper<Long> ID_MAPPER = new SingleColumnRowMapper<>(Long.class);
+    private static final RowMapper<Translation> TRANSLATION_ROW_MAPPER = new BeanPropertyRowMapper<>(Translation.class);
 
     private static final BeanPropertyRowMapper<ActivityChange> ACTIVITY_CHANGE_ROW_MAPPER =
             new BeanPropertyRowMapper<>(ActivityChange.class);
@@ -81,9 +84,26 @@ public class SyncService implements InitializingBean {
         updateDiffForUsers(systemDiff, userIds, lastSyncTime);
         updateDiffsForActivities(systemDiff, userIds, lastSyncTime);
 
-        systemDiff.setTranslations(new TranslationsDiff());
+        systemDiff.setTranslations(shouldSyncTranslations(lastSyncTime));
 
         return systemDiff;
+    }
+
+    private boolean shouldSyncTranslations(Date lastSyncTime) {
+        if (lastSyncTime == null) {
+            return true;
+        }
+
+        Map<String, Object> args = new HashMap<>();
+        args.put("lastSyncTime", lastSyncTime);
+
+        Long count = jdbcTemplate.queryForLong(
+                "select count(m.message_key) from dg_message m, amp_offline_changelog cl " +
+                "where m.message_key = cl.entity_id " +
+                "and m.amp_offline = true " +
+                "and operation_time > :lastSyncTime", args);
+
+        return count > 0;
     }
 
     private void updateDiffsForActivities(SystemDiff systemDiff, List<Long> userIds, Date lastSyncTime) {
@@ -232,5 +252,60 @@ public class SyncService implements InitializingBean {
                 "and entity_name = :entity " +
                 "and (entity_id in (select amp_team_mem_id::varchar from amp_team_member where user_ in (:userIds)) " +
                 "or operation_name = :deleted)", args, ROW_MAPPER);
+    }
+
+    /**
+     * Returns translations that should be synchronized with AMP Offline. Parameter lastSyncTime can be null in which
+     * case all translations will be returned.
+     *
+     * @param lastSyncTime time of last sync operation
+     * @return list of translations
+     */
+    public List<Translation> getTranslationsToSync(Date lastSyncTime) {
+        Set<String> localeCodes = InterchangeUtils.getTranslationSettings().getTrnLocaleCodes();
+        Site site = SiteUtils.getDefaultSite();
+
+        return findChangedAmpOfflineTranslations(lastSyncTime, localeCodes, site);
+    }
+
+    /**
+     * Returns all translations for AMP Offline. If lastSyncTime is specified then return only translations changed
+     * since that time.
+     *
+     * @param lastSyncTime last sync time
+     * @param localeCodes locales to look up
+     * @param site site
+     * @return list of changed translations
+     */
+    private List<Translation> findChangedAmpOfflineTranslations(Date lastSyncTime, Set<String> localeCodes, Site site) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("siteId", site.getId().toString());
+        args.put("localeCodes", localeCodes);
+
+        String messageKeyFilter = "";
+        if (lastSyncTime != null) {
+            messageKeyFilter = "and m_orig.message_key in (" +
+                    "select entity_id " +
+                    "from amp_offline_changelog " +
+                    "where operation_time > :lastSyncTime " +
+                    "and entity_name = :entity)";
+
+            args.put("lastSyncTime", lastSyncTime);
+            args.put("entity", TRANSLATION);
+        }
+
+        return jdbcTemplate.query(
+                "select m.message_key \"key\", coalesce(m_orig.orig_message, m_orig.message_utf8) \"label\", " +
+                "  m.lang_iso locale, m.message_utf8 translatedLabel " +
+                "from dg_message m " +
+                "  left join dg_message m_orig on m.message_key = m_orig.message_key " +
+                "where m.amp_offline = true " +
+                "and m.site_id = :siteId " +
+                "and m.lang_iso in (:localeCodes) " +
+                "and m_orig.site_id = :siteId " +
+                "and m_orig.lang_iso = 'en' "+
+                messageKeyFilter,
+                args,
+                TRANSLATION_ROW_MAPPER);
     }
 }

@@ -30,7 +30,7 @@ public class SystemDiff {
     private ListDiff<String> activities;
 
     @JsonProperty
-    private TranslationsDiff translations;
+    private boolean translations;
 
     public void updateTimestamp(Date timestamp) {
         if (this.timestamp == null || this.timestamp.before(timestamp)) {
@@ -62,7 +62,7 @@ public class SystemDiff {
         this.activities = activities;
     }
 
-    public void setTranslations(TranslationsDiff translations) {
+    public void setTranslations(boolean translations) {
         this.translations = translations;
     }
 

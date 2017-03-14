@@ -7,7 +7,7 @@
     <author>ociubotaru</author>
     <apply>
         <script>
-            <lang delimiter="@" type="postgres">
+            <lang delimiter="@@@" type="postgres">
 
                 create table amp_offline_changelog (
                     id bigint primary key,

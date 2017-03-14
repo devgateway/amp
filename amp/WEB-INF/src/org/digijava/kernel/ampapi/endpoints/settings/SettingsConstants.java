@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 
 /**
  * Settings related constants
@@ -36,8 +37,14 @@ public class SettingsConstants {
 	public static final String YEAR_TO = "to";
 	public static final String YEAR_ALL = "all";
 	
+	public static final String SORT_COLUMN = "sort-column";
+	public static final String MAXIMUM_FILE_SIZE = "maximum-file-size";
+	public static final String LIMIT_FILE_TO_UPLOAD = "limit-file-to-upload";
+	public static final String SORT_COLUMN_VIEW="v_g_settings_resource_columns";
+	
 	public static final String NO_LIMIT = "noLimit";
 	public static final String CUSTOM = "custom";
+	
 
 	/** {id, value} map for settings fields ID-NAME map */
 	public static final Map<String, String> ID_NAME_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
@@ -62,6 +69,9 @@ public class SettingsConstants {
 		put(YEAR_FROM, "From:");
 		put(YEAR_TO, "To:");
 		put(YEAR_ALL, "All");
+		put(SORT_COLUMN,GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN );
+		put(MAXIMUM_FILE_SIZE, GlobalSettingsConstants.CR_MAX_FILE_SIZE );
+		put(LIMIT_FILE_TO_UPLOAD,GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);
 	}});
 
 	public static final String DOT = "dot";

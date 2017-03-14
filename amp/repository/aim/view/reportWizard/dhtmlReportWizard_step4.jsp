@@ -56,7 +56,7 @@
 										<div id="actualCommitmentsMust" style="color: red; display: none">
 											* "<digi:trn>Actual Commitments</digi:trn>" <digi:trn>should be selected when a report is configured to also show pledges</digi:trn>
 										</div>
-										<div id="measurelessOnlyHiersNotAllowed" style="color: red; visibility: hidden;">
+										<div id="measurelessOnlyHiersNotAllowed" style="color: red; display: none;">
 											* <digi:trn>The following hierarchies can be used only in reports without measures:</digi:trn>
 											  <div id="measurelessOnlyHiersNotAllowedList"></div>
 										</div>
@@ -66,7 +66,7 @@
 									</td>
 									<td>&nbsp;</td>
 									<td align="center" valign="top">
-										<span id="measuresLimit" style="visibility: hidden">
+										<span id="measuresLimit" style="display: none">
 											<font color="red">* 
 												<digi:trn key="rep:wizard:hint:limit2measures">
 													You cannot select more than 2 measures in a desktop tab

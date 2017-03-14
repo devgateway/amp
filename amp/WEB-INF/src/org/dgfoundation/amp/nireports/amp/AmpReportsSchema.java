@@ -301,6 +301,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 */
 	public static final List<String> ONLY_MEASURELESS_HIERARCHIES = Arrays.asList(ColumnConstants.INDICATOR_NAME);
 
+	private List<String> amountColumns = new ArrayList<>();
+
 	/**
 	 * the constructor defines all the columns and measures of the schema. Since this involves scanning the database quite a lot, this constructor is SLOW
 	 */
@@ -543,7 +545,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMtefColumns();
 		addPseudoComputedColumns();
 		addColumn(new PPCColumn(ColumnConstants.PROPOSED_PROJECT_AMOUNT, "v_proposed_cost"));
+		amountColumns.add(ColumnConstants.PROPOSED_PROJECT_AMOUNT);
 		addColumn(new PPCColumn(ColumnConstants.REVISED_PROJECT_AMOUNT, "v_revised_project_cost"));
+		amountColumns.add(ColumnConstants.REVISED_PROJECT_AMOUNT);
 		
 		date_column(ColumnConstants.ACTIVITY_CREATED_ON, "v_creation_date");
 		date_column(ColumnConstants.ACTIVITY_UPDATED_ON, "v_updated_date");
@@ -705,24 +709,32 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		
 	protected void addMtefColumns() {
 		for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
-			
-			addColumn(new MtefColumn("MTEF " + mtefYear, new LocalizableLabel("MTEF {0,number,#}", mtefYear), mtefYear,
-					"MTEF", false, Optional.empty()).withGroup("Funding Information"));
+
+			PsqlSourcedColumn<CategAmountCell> mtefColumn = new MtefColumn(
+					"MTEF " + mtefYear, new LocalizableLabel("MTEF {0,number,#}", mtefYear), mtefYear,
+					"MTEF", false, Optional.empty()).withGroup("Funding Information");
+			addColumn(mtefColumn);
+			amountColumns.add(mtefColumn.getName());
 
 			MtefColumn pipelineMtefColumn = (MtefColumn) new MtefColumn("Pipeline MTEF Projections " + mtefYear,
 					new LocalizableLabel("Pipeline MTEF Projections {0,number,#}", mtefYear), mtefYear,
 					"Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)).withGroup("Funding Information");			
 			this.pipelineMtefColumns.put(mtefYear, pipelineMtefColumn);
 			addColumn(pipelineMtefColumn);
+			amountColumns.add(pipelineMtefColumn.getName());
 
 			MtefColumn projectionMtefColumn = (MtefColumn) new MtefColumn("Projection MTEF Projections " + mtefYear,
 					new LocalizableLabel("Projection MTEF Projections {0,number,#}", mtefYear), mtefYear,
 					"Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)).withGroup("Funding Information");
 			this.projectionMtefColumns.put(mtefYear, projectionMtefColumn);
 			addColumn(projectionMtefColumn);
-			
-			addColumn(new MtefColumn("Real MTEF " + mtefYear, new LocalizableLabel("Real MTEF {0,number,#}", mtefYear), mtefYear,
-					"Real MTEF", true, Optional.empty()).withGroup("Funding Information"));
+			amountColumns.add(projectionMtefColumn.getName());
+
+			PsqlSourcedColumn<CategAmountCell> realMtefColumn = new MtefColumn(
+					"Real MTEF " + mtefYear, new LocalizableLabel("Real MTEF {0,number,#}", mtefYear), mtefYear,
+					"Real MTEF", true, Optional.empty()).withGroup("Funding Information");
+			addColumn(realMtefColumn);
+			amountColumns.add(realMtefColumn.getName());
 		}
 	}
 	
@@ -1426,5 +1438,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	public final static boolean isBetween(long value, long min, long max) {
 		return value >= min && value <= max;
+	}
+
+	/**
+	 * Returns columns that contain funding amounts and behave like measures.
+	 * @return
+	 */
+	public List<String> getAmountColumns() {
+		return amountColumns;
 	}
 }

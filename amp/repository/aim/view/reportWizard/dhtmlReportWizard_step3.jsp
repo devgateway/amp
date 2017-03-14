@@ -47,7 +47,7 @@
 								</tr>
 								<tr>
 								<td colspan="3" align="center" valign="top">
-									<span id="hierarchiesMust" style="visibility: hidden;">
+									<span id="hierarchiesMust" style="display: none;">
 									<font color="red">*
 										<c:choose> 
 											<c:when test="${myForm.budgetExporter }">
@@ -59,13 +59,13 @@
 										</c:choose>
 									</font>
 									</span>
-									<span id="hierarchiesSummaryMust" style="visibility: hidden;">
+									<span id="hierarchiesSummaryMust" style="display: none;">
 									<font color="red">*
 											<digi:trn>Only in summary reports can all columns be hierarchies</digi:trn>
 									</font>
 									</span>
 									<br>
-									<span id="incompatiblehierarchies" style="visibility: hidden;">
+									<span id="incompatiblehierarchies" style="display: none;">
 									<font color="red">* 
 										<digi:trn key="rep:wizard:hint:notmorehierarchies">
 											You cannot Select Primary and Secondary Sectors as hierarchies
@@ -75,6 +75,11 @@
 									<br>
 									<span id="measureOrHierarchyMust3" class="color: red">
 										* <digi:trn>Must select at least one measure or hierarchy</digi:trn>
+									</span>
+                                    <br>
+									<span id="hierNotCompatibleWithAmountCols" style="color: red; display: none;">*
+										<digi:trn>The following hierarchies are not compatible with amount &amp; MTEF columns:</digi:trn>
+										<span id="hierNotCompatibleWithAmountColsList"></span>
 									</span>
 								</td>
 							</tr>

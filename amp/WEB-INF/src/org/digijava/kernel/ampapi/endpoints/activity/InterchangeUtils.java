@@ -425,6 +425,11 @@ public class InterchangeUtils {
 	public static boolean isVersionableTextField(Field field) {
 		return field.getAnnotation(VersionableFieldTextEditor.class) != null;
 	}
+
+	public static JsonBean getActivityByAmpId(String ampId) {
+		Long activityId = ActivityUtil.findActivityIdByAmpId(ampId);
+		return getActivity(activityId);
+	}
 	
 	/**
 	 * Activity Export as JSON
@@ -782,7 +787,13 @@ public class InterchangeUtils {
 	 * @return true if request is valid to view an activity
 	 */
 	public static boolean isViewableActivity(ContainerRequest containerReq) {
-		Long id = getRequestId(containerReq);
+		Long id;
+		if (containerReq.getQueryParameters().containsKey("amp-id")) {
+			String ampId = containerReq.getQueryParameters().getFirst("amp-id");
+			id = ActivityUtil.findActivityIdByAmpId(ampId);
+		} else {
+			id = getRequestId(containerReq);
+		}
 		// we reuse the same approach as the one done by Project List EP
 		// however there are some known issues: AMP-20496
 		return id != null && ProjectList.getViewableActivityIds(TeamUtil.getCurrentMember()).contains(id);
@@ -1091,4 +1102,4 @@ public class InterchangeUtils {
 		
 		return null;
 	}
-} 
+}

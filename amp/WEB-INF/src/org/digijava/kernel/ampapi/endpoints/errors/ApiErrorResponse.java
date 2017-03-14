@@ -3,6 +3,8 @@
  */
 package org.digijava.kernel.ampapi.endpoints.errors;
 
+import java.util.Optional;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -39,13 +41,15 @@ public class ApiErrorResponse {
      * @param mediaType the MediaType
      */
     public static Response buildGenericError(Status status, JsonBean errorBean, String mediaType) {
-        
-    	Object formattedMessage = mediaType.equals(MediaType.APPLICATION_XML) ? 
-        						ApiError.toXmlErrorString(errorBean) : errorBean;
-        
+
+    	String responseMediaType = Optional.ofNullable(mediaType).orElse(MediaType.APPLICATION_JSON);
+
+		Object formattedMessage = responseMediaType.equals(MediaType.APPLICATION_XML)
+				? ApiError.toXmlErrorString(errorBean) : errorBean;
+
         ResponseBuilder builder = Response.status(status)
         		.entity(formattedMessage)
-        		.type(mediaType);
+        		.type(responseMediaType);
         
         return builder.build();
     }

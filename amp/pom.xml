@@ -974,6 +974,12 @@
             <artifactId>embedphantomjs</artifactId>
             <version>2.9</version>
         </dependency>
+        
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.14</version>
+		</dependency>
 
     </dependencies>
 

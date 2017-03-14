@@ -24,11 +24,13 @@ import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
+import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.menu.MenuStructure;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -83,8 +85,12 @@ public class GlobalSettings extends Action {
 	
 			logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
 			dailyCurrencyRatesChanges(gsForm);
-			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
-			//ActionMessages errors = new ActionMessages();
+			try {
+				DbUtil.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
+			} catch (AMPException ex) {
+				ActionMessage ae = new ActionMessage("error.aim.globalSettings.valueIsNotOfType", ex.getMessage());
+				errors.add("title", ae);
+			}
 			auditTrialCleanerChanges(gsForm);
 			refreshGlobalSettingsCache	= true;			
 		}
@@ -108,7 +114,14 @@ public class GlobalSettings extends Action {
 					regenerateCCExchanteRates = true;
 				}
 				// allow empty fields, like Public Portal URL when Public Portal = false
-				this.updateGlobalSetting(id, newValue);
+				//we ad a struts error that was added befor inside the methods
+				try {
+					DbUtil.updateGlobalSetting(id, newValue);
+				} catch (AMPException ex) {
+
+					ActionMessage ae = new ActionMessage("error.aim.globalSettings.valueIsNotOfType", ex.getMessage());
+					errors.add("title", ae);
+				}
 			}
 			
 			//this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
@@ -157,7 +170,7 @@ public class GlobalSettings extends Action {
 			Collection<KeyValue> possibleValues		= null;
 			Map<String, String> possibleValuesDictionary	= null;
 			if ( possibleValuesTable != null && possibleValuesTable.length() != 0 && possibleValuesTable.startsWith("v_") ) {
-				possibleValues				= this.getPossibleValues(possibleValuesTable);
+				possibleValues				= DbUtil.getPossibleValues(possibleValuesTable);
 				possibleValuesDictionary	= new HashMap<String, String>();
 				for(KeyValue keyValue:possibleValues){
 					possibleValuesDictionary.put(keyValue.getKey(), keyValue.getValue());
@@ -300,6 +313,7 @@ public class GlobalSettings extends Action {
 			}
 		}
 	}
+	
 
 
 

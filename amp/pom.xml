@@ -987,6 +987,12 @@
             <scope>test</scope>
         </dependency>
 
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.14</version>
+		</dependency>
+
     </dependencies>
 
     <build>
@@ -1007,6 +1013,11 @@
         </resources>
 
         <plugins>
+            <plugin>
+                <groupId>org.developmentgateway</groupId>
+                <artifactId>inccheckstyle-maven-plugin</artifactId>
+                <version>0.1</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>

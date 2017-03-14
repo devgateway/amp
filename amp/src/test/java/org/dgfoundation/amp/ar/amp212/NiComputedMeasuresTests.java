@@ -170,6 +170,10 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 						MeasureConstants.CURRENT_MONTH_DISBURSEMENTS, MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS),
 				null,
 				GroupingCriteria.GROUPING_TOTALS_ONLY);
+		
+		AmpReportFilters filters = new AmpReportFilters(new HashMap<>());
+		filters.setComputedYear(2016);
+		spec.setFilters(filters);
 
 		runNiTestCase(spec, "en", Arrays.asList("activity-weird-funding", "expenditure class", 
 				"Activity with planned disbursements", "execution rate activity"), cor);

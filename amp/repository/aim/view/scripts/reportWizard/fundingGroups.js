@@ -256,6 +256,17 @@ function isMeasurelessOnlyHierarchy(colName) {
 	return YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"].indexOf(colName) !== -1
 }
 
+var mtefPattern = /MTEF \d\d\d\d/;
+var pipelineMtefPattern = /Pipeline MTEF Projections \d\d\d\d/;
+var projectionMtefPattern = /Projection MTEF Projections \d\d\d\d/;
+var realMtefPattern = /Real MTEF \d\d\d\d/;
+
+function isAmountColumn(colName) {
+	return colName == 'Proposed Project Amount' || colName == 'Revised Project Amount'
+		|| mtefPattern.test(colName) || pipelineMtefPattern.test(colName) || projectionMtefPattern.test(colName)
+		|| realMtefPattern.test(colName);
+}
+
 function colIdToName(id) {
 	return YAHOO.amp.reportwizard.colIdToName[id];
 }

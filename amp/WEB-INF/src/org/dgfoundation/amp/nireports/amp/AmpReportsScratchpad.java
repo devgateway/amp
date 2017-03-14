@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import static org.apache.commons.collections.CollectionUtils.containsAny;
+import static org.apache.commons.collections.CollectionUtils.intersection;
+
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -9,7 +12,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Memoizer;
@@ -28,7 +30,6 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.TranslatedDate;
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
@@ -140,14 +141,20 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 			engine.spec.getColumnNames().contains(ColumnConstants.MODE_OF_PAYMENT) &&
 			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);
 
-		NiUtils.failIf(hasMeasuresAndOnlyMeasurelessHiers(engine),
-				String.format("Found hierarchies %s that can be used only in measureless reports!",
-						CollectionUtils.intersection(engine.spec.getHierarchyNames(), AmpReportsSchema.ONLY_MEASURELESS_HIERARCHIES)));
+		checkMeasurelessHierarchies(engine.spec);
 	}
 
-	private boolean hasMeasuresAndOnlyMeasurelessHiers(NiReportsEngine engine) {
-		return !engine.spec.getMeasures().isEmpty()
-						&& CollectionUtils.containsAny(engine.spec.getHierarchyNames(), AmpReportsSchema.ONLY_MEASURELESS_HIERARCHIES);
+	private void checkMeasurelessHierarchies(ReportSpecification spec) {
+		List<String> amountColumns = AmpReportsSchema.getInstance().getAmountColumns();
+		List<String> onlyMeasurelessHierarchies = AmpReportsSchema.ONLY_MEASURELESS_HIERARCHIES;
+
+		if ((!spec.getMeasures().isEmpty() || containsAny(spec.getColumnNames(), amountColumns))
+				&& containsAny(spec.getHierarchyNames(), onlyMeasurelessHierarchies)) {
+
+			throw new RuntimeException(
+					String.format("Found hierarchies %s that can be used only in measureless reports!",
+					intersection(spec.getHierarchyNames(), onlyMeasurelessHierarchies)));
+		}
 	}
 
 	public AmpCurrency getUsedCurrency() {

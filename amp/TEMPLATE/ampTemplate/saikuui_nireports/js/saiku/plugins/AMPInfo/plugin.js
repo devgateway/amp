@@ -176,6 +176,15 @@ var createDateFilterObject= function(filters, propertyName){
 				});
 			}
 
+			if(auxProperty.start.length > 0 && auxProperty.end.length > 0){
+				filter.values.push({
+					id : "date-separator",
+					name : "date-separator",
+					trnName : " - "
+
+				});	
+			}
+			
 			if(auxProperty.end.length > 0){
 				filter.values.push({
 					id : auxProperty.end,

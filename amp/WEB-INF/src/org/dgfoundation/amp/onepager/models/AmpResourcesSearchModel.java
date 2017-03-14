@@ -49,7 +49,7 @@ public class AmpResourcesSearchModel extends
 				NodeWrapper nw = new NodeWrapper(n);
 				if (!StringUtils.isEmpty(input)) {
 					String title = getTitle(session, nw);
-					if (title != null && StringUtils.startsWithIgnoreCase(title, input)) {
+					if (StringUtils.startsWithIgnoreCase(title, input)) {
 						ret.add(nw);
 					}
 				} else {

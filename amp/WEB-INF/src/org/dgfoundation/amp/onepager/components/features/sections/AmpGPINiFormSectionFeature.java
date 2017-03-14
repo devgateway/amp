@@ -35,7 +35,7 @@ public class AmpGPINiFormSectionFeature extends AmpFormSectionFeaturePanel {
 		super(id, fmName, am);
 
 		PropertyModel<Set<AmpOrgRole>> orgRoles = new PropertyModel<Set<AmpOrgRole>>(am, "orgrole");
-		AbstractReadOnlyModel<List<AmpOrgRole>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(orgRoles);
+		AbstractReadOnlyModel<List<AmpOrgRole>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(orgRoles, AmpOrgRole.BY_ACRONYM_AND_NAME_COMPARATOR);
 		FilteredListModel<AmpOrgRole> filteredListModel = new FilteredListModel<AmpOrgRole>(listModel.getObject()) {
 			private static final long serialVersionUID = 1L;
 
@@ -50,9 +50,7 @@ public class AmpGPINiFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 			@Override
 			protected void populateItem(ListItem<AmpOrgRole> item) {
-				AmpGPINiOrgRoleItemFeaturePanel orgRoleItem = new AmpGPINiOrgRoleItemFeaturePanel("item", "GPI NI Survey", item.getModel(), AmpGPINiFormSectionFeature.this);
-				//orgRoleItem.setVisibilityAllowed(true);
-				orgRoleItem.setVisible(hasDonorFundings(item.getModelObject()));
+				AmpGPINiOrgRoleItemFeaturePanel orgRoleItem = new AmpGPINiOrgRoleItemFeaturePanel("item", "GPI NI Survey", item.getModel(), am, AmpGPINiFormSectionFeature.this);
 				item.add(orgRoleItem);
 			}
 		};
@@ -80,5 +78,4 @@ public class AmpGPINiFormSectionFeature extends AmpFormSectionFeaturePanel {
 		
 		return false;
 	}
-
 }

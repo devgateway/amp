@@ -2,6 +2,9 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
+import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
+
 public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -6656563271238273140L;
@@ -73,4 +76,26 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	};
+	
+	public boolean isEmpty() {
+		if (ampGPINiQuestion != null) {
+			switch(ampGPINiQuestion.getType()) {
+				case INTEGER:
+					return integerResponse != null;
+				case DECIMAL:
+				case FREE_TEXT:
+					return StringUtils.isNotBlank(textResponse);
+				case LINK:
+				case DOCUMENT:
+					return StringUtils.isNotBlank(resourceUUID);
+				case MULTIPLE_CHOICE:
+					return questionOption != null;
+				
+				default:
+					return StringUtils.isNotBlank(textResponse);
+			}
+		}
+		
+		return false;
+	}
 }

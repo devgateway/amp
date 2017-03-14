@@ -71,7 +71,6 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 					new PropertyModel<AmpGPINiQuestionOption>(responseModel, "questionOption"), 
 					options, 
 					new ChoiceRenderer<AmpGPINiQuestionOption>("description", "ampGPINiQuestionOptionId"));
-			
 			add(answer);
 			WebMarkupContainer hidden = new WebMarkupContainer("answerInput");
 			hidden.setVisible(false);

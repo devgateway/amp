@@ -27,7 +27,6 @@ import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.menu.MenuStructure;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.admin.util.DbUtil;
@@ -42,9 +41,6 @@ import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.services.auditcleaner.AuditCleaner;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class GlobalSettings extends Action {
 	private static Logger logger 				= Logger.getLogger(GlobalSettings.class);
@@ -116,7 +112,9 @@ public class GlobalSettings extends Action {
 				// allow empty fields, like Public Portal URL when Public Portal = false
 				//we ad a struts error that was added befor inside the methods
 				try {
+
 					DbUtil.updateGlobalSetting(id, newValue);
+
 				} catch (AMPException ex) {
 
 					ActionMessage ae = new ActionMessage("error.aim.globalSettings.valueIsNotOfType", ex.getMessage());
@@ -330,60 +328,6 @@ public class GlobalSettings extends Action {
 		}
 		return ret;
 	}
-
-	private void updateGlobalSetting(Long id, String value) {
-
-		Session session = null;
-		String qryStr = null;
-		Query qry = null;
-		Transaction tx = null;
-		try {
-			session = PersistenceManager.getSession();
-
-			qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id ";
-			qry = session.createQuery(qryStr);
-			qry.setLong("id", id.longValue());
-			AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
-			String currentValue = ags.getGlobalSettingsValue();
-
-			ags.setGlobalSettingsValue(value);
-			boolean changeValue = this.testCriterion(ags);
-
-			if (!changeValue)
-				ags.setGlobalSettingsValue(currentValue);
-
-		} catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Rollback failed !");
-				}
-			}
-		}
-	}
-
-    /**
-	 *
-	 * @param ags the AmpGlobalSettings whos value should be changed
-	 * @return true if value is of the specified type (as returned by AmpGlobalSettings.getGlobalSettingsPossibleValues() )
-	 */
-	private boolean testCriterion(AmpGlobalSettings ags) {
-		String criterion = ags.getGlobalSettingsPossibleValues();
-		if (criterion != null && criterion.startsWith("t_")) {
-			boolean isValid = ConfigHelper.validateGlobalSetting(ags);
-			if (!isValid) {
-				ActionMessage ae = new ActionMessage("error.aim.globalSettings.valueIsNotOfType", ags.getGlobalSettingsName(), criterion.substring(2));
-				errors.add("title", ae);
-			}
-			return isValid;
-		}
-
-		return true;
-	}
-
 
     /**
      * This method is potentially dangerous since does not consider leap years

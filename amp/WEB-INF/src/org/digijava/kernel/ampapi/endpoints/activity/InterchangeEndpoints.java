@@ -1,8 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -53,6 +59,56 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
 	public List<JsonBean> getValues(@PathParam("fieldName") String fieldName) {
+		return possibleValuesFor(fieldName);
+	}
+
+	/**
+	 * Returns a list of possible values for each requested field.
+	 * <h3>Sample request:</h3><pre>
+	 * ["fundings~donor_organization_id", "approval_status"]
+	 * </pre>
+	 * <h3>Sample response:</h3><pre>
+	 * {
+	 *   "fundings~donor_organization_id": [
+	 *     {
+	 *       "id": 1,
+	 *       "value": "Donor 1"
+	 *     },
+	 *     {
+	 *       "id": 2,
+	 *       "value": "Donor 2"
+	 *     }
+	 *   ],
+	 *   "approval_status": [
+	 *     {
+	 *       "id": "1",
+	 *       "value": "approved"
+	 *     },
+	 *     {
+	 *       "id": "2",
+	 *       "value": "edited"
+	 *     }
+	 *   ]
+	 * }
+	 * </pre>
+	 * @param fields list of activity fields
+	 * @return list of possible values grouped by field
+	 */
+	@POST
+	@Path("field/values")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getMultiValues", ui = false)
+	public Map<String, List<JsonBean>> getValues(List<String> fields) {
+		if (fields == null) {
+			return Collections.emptyMap();
+		}
+		return fields.stream()
+				.filter(Objects::nonNull)
+				.distinct()
+				.collect(toMap(identity(), this::possibleValuesFor));
+	}
+
+	private List<JsonBean> possibleValuesFor(String fieldName) {
 		return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
 	}
 	

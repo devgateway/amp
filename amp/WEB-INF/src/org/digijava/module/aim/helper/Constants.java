@@ -435,4 +435,6 @@ public class Constants
      public static final String LOGIN_ACTION="login";
      public static final String SENT_REMINDER="sentReminder";
      public static final String UNASSIGNED_ACTIVITY_LIST="unassignedActivityList";
+
+	public static final String AUTOMATIC_VALIDATION_JOB_CLASS_NAME = "org.digijava.module.message.jobs.ActivityAutomaticValidationJob" ;
 }

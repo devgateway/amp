@@ -92,7 +92,7 @@ public class SaikuReportExcelTemplate {
 		subTotalLvl1.setAlignment(CellStyle.ALIGN_RIGHT);
 		subTotalLvl1.setWrapText(true);
 		subTotalLvl1.setFont(fontHeaderAndTotal);
-		subTotals.put(1, subTotalLvl1);
+		subTotals.put(0, subTotalLvl1);
 
 		CellStyle subTotalLvl2 = wb.createCellStyle();
 		subTotalLvl2.setFillPattern(CellStyle.SOLID_FOREGROUND);
@@ -100,7 +100,7 @@ public class SaikuReportExcelTemplate {
 		subTotalLvl2.setAlignment(CellStyle.ALIGN_RIGHT);
 		subTotalLvl2.setWrapText(true);
 		subTotalLvl2.setFont(fontHeaderAndTotal);
-		subTotals.put(2, subTotalLvl2);
+		subTotals.put(1, subTotalLvl2);
 
 		CellStyle subTotalLvl3 = wb.createCellStyle();
 		subTotalLvl3.setFillPattern(CellStyle.SOLID_FOREGROUND);
@@ -108,7 +108,7 @@ public class SaikuReportExcelTemplate {
 		subTotalLvl3.setAlignment(CellStyle.ALIGN_RIGHT);
 		subTotalLvl3.setWrapText(true);
 		subTotalLvl3.setFont(fontHeaderAndTotal);
-		subTotals.put(3, subTotalLvl3);
+		subTotals.put(2, subTotalLvl3);
 
 		hierarchyStyle = wb.createCellStyle();
 		hierarchyStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);

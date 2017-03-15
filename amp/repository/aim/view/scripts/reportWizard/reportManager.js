@@ -484,7 +484,6 @@ NormalReportManager.prototype.checkColumns	= function () {
 		columnsMustEl	= document.getElementById("columnsMust");
 		columnsMustEl.style.display="none";
 		this.enableTab(2);
-		return true;
 	}
 	else {
 		columnsMustEl	= document.getElementById("columnsMust");
@@ -492,7 +491,34 @@ NormalReportManager.prototype.checkColumns	= function () {
 		this.disableTab(2);
 		return false;
 	}
-};
+
+	var summary	= getHideActivities();
+	var hierItems = document.getElementById("dest_hierarchies_ul").getElementsByTagName("li");
+	var measItems = document.getElementById("dest_measures_ul").getElementsByTagName("li");
+	var hierAndMeasMustEl2	= document.getElementById("measureOrHierarchyMust2");
+	var hierAndMeasMustEl3	= document.getElementById("measureOrHierarchyMust3");
+	var hierAndMeasMustEl4	= document.getElementById("measureOrHierarchyMust4");
+	if (summary && hierItems.length == 0 && measItems.length == 0) {
+		displayEl(hierAndMeasMustEl2);
+		displayEl(hierAndMeasMustEl3);
+		displayEl(hierAndMeasMustEl4);
+		return false;
+	} else {
+		hideEl(hierAndMeasMustEl2);
+		hideEl(hierAndMeasMustEl3);
+		hideEl(hierAndMeasMustEl4);
+	}
+
+	return true;
+}
+
+function hideEl(el) {
+	el.style.display = "none";
+}
+
+function displayEl(el) {
+	el.style.display = "";
+}
 
 NormalReportManager.prototype.checkReportName	= function () {
 	var saveBtn = document.getElementById("last_save_button");

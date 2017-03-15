@@ -219,6 +219,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	 
 	public NiReportRunResult execute() {
+		if (spec.getMeasures().isEmpty() && spec.getHierarchies().isEmpty() && spec.isSummaryReport()) {
+			throw new RuntimeException("Summary reports without hierarchies and measures are not supported.");
+		}
 		try(SchemaSpecificScratchpad pad = schema.generateScratchpad(this)) {
 			this.schemaSpecificScratchpad = pad;
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());

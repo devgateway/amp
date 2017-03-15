@@ -279,7 +279,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
 <h1 style="text-align:left;" class="admintitle">General Settings</h1>
-<digi:errors/>
+
 <logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
 	<logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett" type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
 		<script type="text/javascript">

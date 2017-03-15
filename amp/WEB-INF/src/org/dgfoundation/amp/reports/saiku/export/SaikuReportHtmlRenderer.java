@@ -2,9 +2,11 @@ package org.dgfoundation.amp.reports.saiku.export;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Stream;
 
-import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
@@ -76,13 +78,11 @@ public class SaikuReportHtmlRenderer {
 	private void renderReportTableHeader(StringBuilder tableHeader) {
 		tableHeader.append("<thead>");
 		
-		report.generatedHeaders.stream().forEach(headerCells -> {
+		report.generatedHeaders.forEach(headerCells -> {
 			tableHeader.append("<tr>");
 			headerCells.stream().filter(headerCell -> !isHiddenColumn(headerCell.originalName)).forEach(headerCell -> {
-				tableHeader.append("<th class='col' ");
-				tableHeader.append("rowSpan='" + headerCell.getRowSpan() + "' colSpan='" + headerCell.getColSpan() + "'>");
-				tableHeader.append(headerCell.getName());
-				tableHeader.append("</th>");
+				tableHeader.append(String.format("<th class='col' rowSpan='%d' colSpan='%d'>%s</th>",
+						headerCell.getRowSpan(), headerCell.getColSpan(), HtmlUtils.htmlEscape(headerCell.getName())));
 			});
 			
 			// AMP-22554 - ugly hack in order to make iText library render the generated html table correctly 
@@ -101,8 +101,16 @@ public class SaikuReportHtmlRenderer {
 	}
 	
 	private void renderTableData(StringBuilder tblData) {
-		renderTableRow(tblData, report.reportContents, 0);
-		renderTableTotals(tblData, report.reportContents);
+		if (report.reportContents.getChildren() == null) {
+			renderTableRow(tblData, report.reportContents, 0, new ArrayList<>());
+		} else {
+			for (ReportArea subReportArea : report.reportContents.getChildren()) {
+				renderTableRow(tblData, subReportArea, 0, new ArrayList<>());
+			}
+		}
+		if (report.hasMeasures()) {
+			renderTableTotals(tblData, report.reportContents);
+		}
 	}
 
 
@@ -111,38 +119,33 @@ public class SaikuReportHtmlRenderer {
 	 * @param reportContents
 	 * @param level - the hierarchy level
 	 */
-	private void renderTableRow(StringBuilder tblData, ReportArea reportContents, int level) {
+	private void renderTableRow(StringBuilder tblData, ReportArea reportContents, int level, List<String> cells) {
 		if (reportContents.getChildren() != null) {
-			renderGroupRow(tblData, reportContents, level);
+			renderGroupRow(tblData, reportContents, level + 1, cells);
 		} else {
-			// Totals are rendered in another renderTableTotals
-			if (level == 0) {
-				tblData.append("<tr>");
-			}
-			
-			int hierCnt = report.spec.getHierarchies().size();
-			for (int i = hierCnt; i < report.leafHeaders.size(); i++) {
-				ReportOutputColumn roc = report.leafHeaders.get(i);
-				
-				if (isHiddenColumn(roc.originalColumnName)) {
-					continue;
-				}
-				
-				String cellClass = roc.getFormatType();
-				if (!report.spec.getColumnNames().contains(roc.originalColumnName)) {
-					cellClass = "measure";
-				} 
-				
-				tblData.append("<td class='" + cellClass + "'>");
+			tblData.append("<tr>");
+
+			cells.forEach(tblData::append);
+			cells.clear();
+
+			columns().skip(level).forEach(roc -> {
+				tblData.append("<td class='").append(cellClassFor(roc)).append("'>");
 				tblData.append(getCellValue(reportContents, roc));
 				tblData.append("</td>");
-			}
-			
+			});
+
 			tblData.append("</tr>");
-			tblData.append("<tr>");
 		}
 	}
-	
+
+	private String cellClassFor(ReportOutputColumn roc) {
+		String cellClass = roc.getFormatType();
+		if (!report.spec.getColumnNames().contains(roc.originalColumnName)) {
+            cellClass = "measure";
+        }
+		return cellClass;
+	}
+
 	private String getCellValue(ReportArea reportContents, ReportOutputColumn roc) {
 		String value = reportContents.getContents().containsKey(roc) ? reportContents.getContents().get(roc).displayedValue : roc.emptyCell.displayedValue;
 		
@@ -154,21 +157,17 @@ public class SaikuReportHtmlRenderer {
 	 * @param reportContents
 	 * @param level - the hierarchy level
 	 */
-	private void renderGroupRow(StringBuilder tableData, ReportArea reportContents, int level) {
-		if (level == 0) {
-			tableData.append("<tr>");
-		}
-		
+	private void renderGroupRow(StringBuilder tableData, ReportArea reportContents, int level, List<String> cells) {
+		String cellText = HtmlUtils.htmlEscape(reportContents.getOwner().debugString);
+		cells.add(String.format("<td rowspan='%d'>%s</td>", getRowsSpan(reportContents), cellText));
+
 		for (ReportArea reportArea : reportContents.getChildren()) {
-			if (reportArea.getNrEntities() > 0) {
-				tableData.append(String.format("<td rowspan='%d'>%s</td>", getRowsSpan(reportArea), HtmlUtils.htmlEscape(reportArea.getOwner().debugString)));
-			} 
-			
-			renderTableRow(tableData, reportArea, level+1);
+			renderTableRow(tableData, reportArea, level, cells);
 		}
 		
-		if (level > 0)
+		if (report.hasMeasures()) {
 			renderSubTotalRow(tableData, reportContents, level);
+		}
 	}
 	
 	/**Renders the subtotals hieararchy row
@@ -177,28 +176,30 @@ public class SaikuReportHtmlRenderer {
 	 * @param level
 	 */
 	private void renderSubTotalRow(StringBuilder tableData, ReportArea reportContents, int level) {
-		IntWrapper intWrapper = new IntWrapper();
-		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {
-			if (intWrapper.value >= level) {
-				tableData.append("<td class='total'>");
-				tableData.append(getCellValue(reportContents, roc));
-				tableData.append("</td>");
-			}
-			intWrapper.inc();
+		tableData.append("<tr>");
+
+		columns().skip(level).forEach(roc -> {
+			tableData.append("<td class='total'>");
+			tableData.append(getCellValue(reportContents, roc));
+			tableData.append("</td>");
 		});
 		
-		tableData.append("</tr><tr>");
+		tableData.append("</tr>");
 	}
 	
 	private int getRowsSpan(ReportArea reportContents) {
-		int rowSpan = 1;
 		if (reportContents.getChildren() != null) {
+			int rowSpan = 0;
+			if (report.hasMeasures()) {
+				rowSpan++;
+			}
 			for (ReportArea reportArea : reportContents.getChildren()) {
 				rowSpan += getRowsSpan(reportArea);
 			}
+			return rowSpan;
+		} else {
+			return 1;
 		}
-		
-		return rowSpan;
 	}
 
 	/**Renders the totals of the table (the last row)
@@ -206,22 +207,26 @@ public class SaikuReportHtmlRenderer {
 	 * @param reportContents
 	 */
 	private void renderTableTotals(StringBuilder tableData, ReportArea reportContents) {
-		IntWrapper intWrapper = new IntWrapper();
-		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {
+		tableData.append("<tr>");
+
+		tableData.append("<td class='total measure'>");
+		tableData.append("<b>").append(TranslatorWorker.translateText("Report Totals"));
+		tableData.append("(").append(report.reportContents.getNrEntities()).append(")</b>");
+		tableData.append("</td>");
+
+		columns().skip(1).forEach(roc -> {
 			tableData.append("<td class='total measure'>");
-			if (intWrapper.value == 0) {
-				tableData.append("<b>" + TranslatorWorker.translateText("Report Totals") + "");
-				tableData.append("(" + report.reportContents.getNrEntities() + ")</b>");
-				intWrapper.inc();
-			} else {
-				tableData.append(getCellValue(reportContents, roc));
-			}
+			tableData.append(getCellValue(reportContents, roc));
 			tableData.append("</td>");
 		});
 		
 		tableData.append("</tr>");
 	}
-	
+
+	private Stream<ReportOutputColumn> columns() {
+		return report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName));
+	}
+
 	private boolean isHiddenColumn(String columnName) {
 		return columnName.equals("Draft") || columnName.equals("Approval Status");
 	}

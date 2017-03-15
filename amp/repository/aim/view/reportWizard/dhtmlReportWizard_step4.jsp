@@ -56,11 +56,13 @@
 										<div id="actualCommitmentsMust" style="color: red; display: none">
 											* "<digi:trn>Actual Commitments</digi:trn>" <digi:trn>should be selected when a report is configured to also show pledges</digi:trn>
 										</div>
-										<span id="measurelessOnlyHiersNotAllowed" style="color: red; display: none;">
+										<div id="measurelessOnlyHiersNotAllowed" style="color: red; display: none;">
 											* <digi:trn>The following hierarchies can be used only in reports without measures:</digi:trn>
-											  <span id="measurelessOnlyHiersNotAllowedList">
-										</span>
-									</span>
+											  <div id="measurelessOnlyHiersNotAllowedList"></div>
+										</div>
+										<div id="measureOrHierarchyMust4" class="color: red">
+											* <digi:trn>Must select at least one measure or hierarchy</digi:trn>
+										</div>
 									</td>
 									<td>&nbsp;</td>
 									<td align="center" valign="top">

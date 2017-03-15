@@ -33,7 +33,7 @@ public class SystemDiff {
     private boolean translations;
 
     public void updateTimestamp(Date timestamp) {
-        if (this.timestamp == null || this.timestamp.before(timestamp)) {
+        if (this.timestamp == null || (timestamp != null && this.timestamp.before(timestamp))) {
             this.timestamp = timestamp;
         }
     }

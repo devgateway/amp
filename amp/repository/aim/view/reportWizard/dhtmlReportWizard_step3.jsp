@@ -73,7 +73,7 @@
 									</font>
 									</span>
 									<br>
-									<span id="measureOrHierarchyMust3" class="color: red">
+									<span id="measureOrHierarchyMust3" class="color: red" style="display: none;">
 										* <digi:trn>Must select at least one measure or hierarchy</digi:trn>
 									</span>
                                     <br>

@@ -108,7 +108,7 @@ public class ConfigEndpoints {
 
 					ConfigHelper.getGlobalSetting(ampGlobalSetting, setting);
 					
-					if (ConfigHelper.validateGlobalSetting(ampGlobalSetting, ampGlobalSetting.getGlobalSettingsValue())) {
+					if (ConfigHelper.validateGlobalSetting(ampGlobalSetting)) {
 						FeaturesUtil.updateGlobalSetting(ampGlobalSetting);
 	
 						result.set(globalSettingName, (isNew ? INSERTED : SAVED));

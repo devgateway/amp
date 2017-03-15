@@ -23,28 +23,35 @@
 package org.digijava.module.admin.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionMessage;
 import org.dgfoundation.amp.error.AMPException;
-import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
+import org.dgfoundation.amp.onepager.web.pages.AmpExceptionPage;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.GroupPermission;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.KeyValue;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.digijava.module.common.util.DateTimeUtil;
 
 public class DbUtil {
 
@@ -778,21 +785,75 @@ public class DbUtil {
 		qry.setLong("id", id.longValue());
 		
 		AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
-
 		updateGlobalSetting(ags, value);
 	}
-
 	public static void updateGlobalSetting(AmpGlobalSettings ags, String value) throws AMPException {
+		boolean changeValue = testCriterion(ags, value);
+		if (changeValue){
+			ags.setGlobalSettingsValue(value);
+			//PersistenceManager.getSession().update(ags);
+		}
+		
+	}
+	/**
+	 *
+	 * @param ags
+	 *            the AmpGlobalSettings whos value should be changed
+	 * @param value
+	 *            the new value that should be applied
+	 * @return true if value is of the specified type (as returned by
+	 *         AmpGlobalSettings.getGlobalSettingsPossibleValues() )
+	 */
+	public static boolean testCriterion(AmpGlobalSettings ags, String value) throws AMPException {
 		String criterion = ags.getGlobalSettingsPossibleValues();
 		if (criterion != null && criterion.startsWith("t_")) {
-			boolean isValid = ConfigHelper.validateGlobalSetting(ags, value);
-			if (!isValid) {
-				throw new AMPException(ags.getGlobalSettingsName());
+			if (criterion.equals("t_Integer") || criterion.equals("t_static_range")) {
+				try {
+					Integer.parseInt(value);
+					return true;
+				} catch (NumberFormatException E) { // value is not an integer
+					throw new AMPException(criterion.substring(2));
+					/*
+					 * ActionMessage ae = new ActionMessage(
+					 * "error.aim.globalSettings.valueIsNotOfType",
+					 * criterion.substring(2)); errors.add("title", ae); return
+					 * false;
+					 */
+				}
 			}
+			if (criterion.equals("t_Year") || criterion.equals("t_static_year") || criterion.equals("t_static_range")
+					|| criterion.equals("t_year_default_start") || criterion.equals("t_year_default_end")) {
+				try {
+					int intValue = Integer.parseInt(value);
+					if (intValue != -1 && (intValue < 1000 || intValue > 2999))
+						return false;
+					return true;
+				} catch (NumberFormatException E) { // value is not a year
+					throw new AMPException(criterion.substring(2));
+					/*
+					 * ActionMessage ae = new ActionMessage(
+					 * "error.aim.globalSettings.valueIsNotOfType",
+					 * criterion.substring(2)); errors.add("title", ae); return
+					 * false;
+					 */
+				}
+			}
+			if (criterion.equals("t_Date")) {
+				try {
+					Date testDate = DateTimeUtil.parseDate(value);
+					return true;
+				} catch (Exception E) { // value is not an Date
+					throw new AMPException(criterion.substring(2));
+					/*
+					 * ActionMessage ae = new ActionMessage(
+					 * "error.aim.globalSettings.valueIsNotOfType",
+					 * criterion.substring(2)); errors.add("title", ae); return
+					 * false;
+					 */
+				}
+			}
+
 		}
-
-		ags.setGlobalSettingsValue(value);
-
+		return true;
 	}
-
 }

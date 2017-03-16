@@ -97,7 +97,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@POST
 	@Path("field/values")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getMultiValues", ui = false)
+	@ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getMultiValues", ui = false)
 	public Map<String, List<JsonBean>> getValues(List<String> fields) {
 		if (fields == null) {
 			return Collections.emptyMap();

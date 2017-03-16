@@ -33,7 +33,7 @@ export const initialTranslations = {
         'amp.gpi-data:button-save-all-edits': 'Save all Edits',
         'amp.gpi-data:button-previous': 'Previous',
         'amp.gpi-data:button-next': 'Next',
-        'amp.gpi-data:delete-prompt': 'The row will deleted. Do you want to proceed?',
+        'amp.gpi-data:delete-prompt': 'Are you sure you want to delete?',
         'amp.gpi-data:select-donor': '-- Select Donor --',
         'amp.gpi-data:select-currency': '-- Select Currency --'
         

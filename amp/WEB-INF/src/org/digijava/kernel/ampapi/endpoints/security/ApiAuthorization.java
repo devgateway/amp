@@ -56,7 +56,8 @@ public class ApiAuthorization {
 			}
 			Class<?> clazz = m.getDeclaringClass();
 			String classPath = clazz.isAnnotationPresent(Path.class) ? clazz.getAnnotation(Path.class).value() : "";
-			String currentPath = m.getAnnotation(Path.class).value();
+			Path pathAnnotation = m.getAnnotation(Path.class);
+			String currentPath = pathAnnotation != null ? pathAnnotation.value() : "";
 			// detect URL reference of the method in a special format, like GET/activity/fields
 			String methodRef = getMethodReference(getMethodType(m), classPath, currentPath);
 			// store the regex for parameterized queries

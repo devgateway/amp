@@ -126,7 +126,12 @@ public class SyncService implements InitializingBean {
 
     private List<ActivityChange> getActivityChanges(List<Long> userIds, Date lastSyncTime) {
         List<AmpTeamMember> teamMembers = TeamMemberUtil.getTeamMembers(userIds);
-        String workspaceActivitiesQuery = WorkspaceFilter.getViewableActivitiesIdByTeams(teamMembers);
+        String workspaceActivitiesQuery;
+        if (teamMembers.isEmpty()) {
+            workspaceActivitiesQuery = "-1";
+        } else {
+            workspaceActivitiesQuery = WorkspaceFilter.getViewableActivitiesIdByTeams(teamMembers);
+        }
 
         Map<String, Object> args = new HashMap<>();
 

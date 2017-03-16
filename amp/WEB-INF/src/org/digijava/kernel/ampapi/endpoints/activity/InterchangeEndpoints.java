@@ -125,6 +125,15 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 		return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields(AmpActivityFields.class);
 	}
 	
+	// TODO remove it as part of AMP-25568
+	@GET
+	@Path("fields-no-workspace")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getDefaultFields", ui = false)
+	public List<APIField> getAvailableFieldsBasedOnDefaultFM() {
+		return getAvailableFields();
+	}
+	
 	/**
 	 * Returns a JSON object with the list of all projects on the system, including its view and edit status for the current logged user.
 	 * If the user can view the project, the 'view' property of the project is set to true. False otherwise.

@@ -54,7 +54,7 @@ public class ValueValidator extends InputValidator {
 			Object value = newFieldParent.get(fieldDescription.getFieldName());
 			
 			if (value != null) {
-				boolean idOnly = fieldDescription.isIdOnly();
+				boolean idOnly = Boolean.TRUE.equals(fieldDescription.isIdOnly());
 				// convert to string the ids to avoid long-integer comparison
 				value = idOnly ? value.toString() : value;
 				
@@ -81,7 +81,7 @@ public class ValueValidator extends InputValidator {
 	private boolean isValidPercentage(Map<String, Object> newFieldParent,
 			APIField fieldDescription) {
 		this.isValidPercentage  = true;
-		if (!fieldDescription.getPercentage()) {
+		if (!Boolean.TRUE.equals(fieldDescription.getPercentage())) {
 			return true; //this doesn't contain a percentage-based field
 		}
 
@@ -101,7 +101,7 @@ public class ValueValidator extends InputValidator {
 		if (maxLength != null) {
 			Object obj = newFieldParent.get(fieldDescription.getFieldName());
 			if (obj != null) {
-				if (fieldDescription.isTranslatable()) {
+				if (Boolean.TRUE.equals(fieldDescription.isTranslatable())) {
 					isValidLength = isValidLength(obj, maxLength);
 				} else if (Map.class.isAssignableFrom(obj.getClass())) {
 					for (Object trn : ((Map) obj).values()) {

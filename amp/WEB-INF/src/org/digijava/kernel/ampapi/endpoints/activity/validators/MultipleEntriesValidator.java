@@ -27,7 +27,7 @@ public class MultipleEntriesValidator extends InputValidator {
 	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
 						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 		boolean isValid = true;
-		boolean multipleValuesAllowed = fieldDescription.isMultipleValues();
+		boolean multipleValuesAllowed = Boolean.TRUE.equals(fieldDescription.isMultipleValues());
 		String fieldName = fieldDescription.getFieldName();
 		Object fieldValue = newFieldParent.get(fieldName);
 		if (!multipleValuesAllowed && hasManyElements(fieldValue)) {

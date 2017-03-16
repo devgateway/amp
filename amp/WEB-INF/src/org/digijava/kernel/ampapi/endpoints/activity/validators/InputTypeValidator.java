@@ -65,7 +65,7 @@ public class InputTypeValidator extends InputValidator {
 		
 		switch (fieldType) {
 		case ActivityEPConstants.FIELD_TYPE_STRING :
-			return isStringValid(item, fieldDescription.isTranslatable(),
+			return isStringValid(item, Boolean.TRUE.equals(fieldDescription.isTranslatable()),
 					importer.getTrnSettings().getAllowedLangCodes());
 		case ActivityEPConstants.FIELD_TYPE_DATE: return isValidDate(item);
 		case ActivityEPConstants.FIELD_TYPE_FLOAT: return isValidFloat(item);

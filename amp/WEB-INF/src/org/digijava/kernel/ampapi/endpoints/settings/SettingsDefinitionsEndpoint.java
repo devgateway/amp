@@ -78,7 +78,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	@Path("/dashboards")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final List<SettingField> getSettingDefinitionsForDashboards() {
-		return Arrays.asList(getCurrencyField(), getCalendarField(), getCalendarCurrenciesField(),
+		return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
 				getFundingTypeField());
 	}
 
@@ -124,7 +124,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	@Path("/gis")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final List<SettingField> getSettingDefinitionsForGisModule() {
-		return Arrays.asList(getCurrencyField(), getCalendarField(), getCalendarCurrenciesField(),
+		return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
 				getFundingTypeField());
 	}
 
@@ -169,7 +169,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	@Path("/public")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final List<SettingField> getSettingDefinitionsForPublicPortal() {
-		return Arrays.asList(getReportAmountFormatField(), getCurrencyField());
+		return Arrays.asList(getReportAmountFormatField(), getCurrencyField(true));
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	@Path("/reports")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final List<SettingField> getSettingDefinitionsForReports() {
-		return Arrays.asList(getCurrencyField(), getCalendarField(), getCalendarCurrenciesField(),
+		return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
 				getReportYearRangeField());
 	}
 
@@ -268,7 +268,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 		}
 
 		ReportSpecification spec = AmpReportsToReportSpecification.convert(ampReport);
-		return Arrays.asList(getCurrencyField(), getCalendarField(), getCalendarCurrenciesField(),
+		return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
 				getReportYearRangeField(spec));
 	}
 
@@ -313,7 +313,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	@Path("/tabs")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final List<SettingField> getSettingDefinitionsForTabs() {
-		return Arrays.asList(getCurrencyField(), getCalendarField(), getCalendarCurrenciesField());
+		return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField());
 	}
 
 	/**
@@ -373,6 +373,49 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 		return getResourceManagerSettings();
 	}
 
+	/**
+	 * Returns setting definitions for gpi data entry.
+	 * <p>
+	 * Returns definitions for the following settings: currency (does not include deflated currencies)
+	 * </p>
+	 * <h3>Sample Output:</h3>
+	 * 
+	 * <pre>
+	 * [
+	 *   {
+	 *     "type": "OPTIONS",
+	 *     "id": "currency-code",
+	 *     "name": "currency",
+	 *     "value": {
+	 *       "multi": false,
+	 *       "defaultId": "USD",
+	 *       "options": [
+	 *         {
+	 *           "id": "AUD",
+	 *           "name": "Australian Dollar",
+	 *           "value": "AUD"
+	 *         },
+	 *         {
+	 *           "id": "CAD",
+	 *           "name": "Canadian Dollar",
+	 *           "value": "CAD"
+	 *         },
+	 *         ... other options
+	 *       ]
+	 *     }
+	 *   } 
+	 * ]
+	 * </pre>
+	 * 
+	 * @return a list of setting definitions
+	 */
+	@GET
+	@Path("/gpi")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public final List<SettingField> getSettingDefinitionsForGPI() {
+        return Arrays.asList(getCurrencyField(false));
+    }
+	
 	@Override
 	public Class getErrorsClass() {
 		return SettingsDefinitionsErrors.class;

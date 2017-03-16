@@ -1,7 +1,7 @@
 class CommonListsApi {
     
     static getCurrencyList() {
-        const request = new Request('/rest/settings-definitions/reports', {
+        const request = new Request('/rest/settings-definitions/gpi', {
             method: 'GET'      
         });
         

@@ -172,7 +172,7 @@ public class ActivityImporter {
 		
 		// retrieve fields definition for internal use
 		List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR
-				.getAllAvailableFields(AmpActivityVersion.class);
+				.getAllAvailableFields(AmpActivityFields.class);
 		// get existing activity if this is an update request
 		Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
 
@@ -434,7 +434,7 @@ public class ActivityImporter {
 		 */
 		
 		// skip children validation immediately if only ID is expected
-		boolean idOnly = fieldDef.isIdOnly();
+		boolean idOnly = Boolean.TRUE.equals(fieldDef.isIdOnly());
 		if (idOnly)
 			return newParent;
 		
@@ -543,7 +543,7 @@ public class ActivityImporter {
 		List<APIField> children = fieldDefOfAnObject.getChildren();
 		if (children != null && jsonValue != null) {
 			for (APIField childDef : children) {
-				if (childDef.isId()) {
+				if (Boolean.TRUE.equals(childDef.isId())) {
 					String idFieldName = childDef.getFieldName();
 					String idStr = String.valueOf(((List<Map<String, Object>>) jsonValue).get(0).get(idFieldName));
 					if (StringUtils.isNumeric(idStr))
@@ -757,7 +757,7 @@ public class ActivityImporter {
 		Object value = null;
 		String fieldType = fieldDef.getFieldType();
 		List<JsonBean> allowedValues = getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
-		boolean idOnly = fieldDef.isIdOnly();
+		boolean idOnly = Boolean.TRUE.equals(fieldDef.isIdOnly());
 		
 		// this is an object reference
 		if (!isCollection && idOnly) {
@@ -823,7 +823,7 @@ public class ActivityImporter {
 			// => this is an object => it has children elements
 			if (fieldDef.getChildren() != null) {
 				for (APIField childDef : fieldDef.getChildren()) {
-					if (childDef.isId()) {
+					if (Boolean.TRUE.equals(childDef.isId())) {
 						Map<String, Object> jsonValueMap = (Map<String, Object>) jsonValue;
 						Long id = ((Integer) jsonValueMap.get(childDef.getFieldName())).longValue();
 						value = InterchangeUtils.getObjectById(field.getType(), id);

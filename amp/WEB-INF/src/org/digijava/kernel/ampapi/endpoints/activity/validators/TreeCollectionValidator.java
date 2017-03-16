@@ -50,7 +50,7 @@ public class TreeCollectionValidator extends InputValidator {
 	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
 						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 		String fieldName = fieldDescription.getFieldName();
-		boolean treeCollectionField = fieldDescription.getTreeCollectionConstraint();
+		boolean treeCollectionField = Boolean.TRUE.equals(fieldDescription.getTreeCollectionConstraint());
 		String uniqueField = fieldDescription.getUniqueConstraint();
 		
 		if (treeCollectionField) {

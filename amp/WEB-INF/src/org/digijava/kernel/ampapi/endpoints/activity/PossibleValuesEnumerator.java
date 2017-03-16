@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -64,7 +65,7 @@ public class PossibleValuesEnumerator {
 				configString =  InterchangeUtils.getConfigValue(fieldName, field);
 			}
 			
-			return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), 
+			return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1),
 					InterchangeUtils.getClassOfField(field), configString);
 		} else {
 			/*
@@ -80,7 +81,7 @@ public class PossibleValuesEnumerator {
 			} else {
 				String configString = discriminatorOption == null? null : discriminatorOption;
 				if (InterchangeUtils.isCompositeField(finalField)) {
-					configString =  InterchangeUtils.getConfigValue(longFieldName, finalField);	
+					configString =  InterchangeUtils.getConfigValue(longFieldName, finalField);
 				}
 
 				try {
@@ -99,7 +100,7 @@ public class PossibleValuesEnumerator {
 						t = ((InvocationTargetException) e).getTargetException();
 					}
 					result.add(ApiError.toError(
-							ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR.withDetails(t.getMessage())));
+							ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR.withDetails(Objects.toString(t.getMessage()))));
 					return result;
 				}				
 				if (InterchangeUtils.isCompositeField(finalField) || configString != null) {
@@ -110,7 +111,7 @@ public class PossibleValuesEnumerator {
 			}
 		}
 	}
-	
+
 	/**
 	 * method employed for the scenario that possible values are to be obtained from
 	 * a FieldsDiscriminator-derived class, instead of the usual database queries

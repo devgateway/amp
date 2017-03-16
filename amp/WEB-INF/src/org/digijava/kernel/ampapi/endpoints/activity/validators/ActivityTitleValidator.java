@@ -44,7 +44,7 @@ public class ActivityTitleValidator extends InputValidator {
 			String lang = importer.getTrnSettings().getDefaultLangCode();
 			// it's always required & type is validated earlier
 			String activityTitle = null;
-			if (fieldDescription.isTranslatable()) {
+			if (Boolean.TRUE.equals(fieldDescription.isTranslatable())) {
 				activityTitle = (String) ((Map<String, Object>) newFieldParent.get(fieldName)).get(lang);
 			} else {
 				activityTitle = (String) newFieldParent.get(fieldName);

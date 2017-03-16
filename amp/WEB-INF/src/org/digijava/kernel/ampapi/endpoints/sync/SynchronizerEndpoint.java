@@ -66,6 +66,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
      * @param lastSyncTime optional timestamp of last synchronization time in ISO8601 format
      */
     @GET
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "computeSync", ui = false)
     public SystemDiff computeSync(
             @DefaultValue("") @QueryParam("user-ids") ListOfLongs userIds,
             @QueryParam("last-sync-time") ISO8601TimeStamp lastSyncTime) {

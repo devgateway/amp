@@ -26,5 +26,16 @@ export const initialTranslations = {
         'amp.gpi-data-donor-notes:save-all': '__saved__ of __total__ rows were saved successfully.',        
         'amp.gpi-data-donor-notes:validation-notes-required': 'Notes is required',
         'amp.gpi-data:validation-all-fields-required': 'All fields required',
-        'amp.gpi-data:server-errors-0001': 'Please select a unique date'
+        'amp.gpi-data:server-errors-0001': 'Please select a unique date',
+        'amp.gpi-data:add-new': 'Add New',
+        'amp.gpi-data:insert-data': '(insert data to the new field)',
+        'amp.gpi-data:click-save': 'Click the Save Symbol to save the added data row',
+        'amp.gpi-data:button-save-all-edits': 'Save all Edits',
+        'amp.gpi-data:button-previous': 'Previous',
+        'amp.gpi-data:button-next': 'Next',
+        'amp.gpi-data:delete-prompt': 'The row will deleted. Do you want to proceed?',
+        'amp.gpi-data:select-donor': '-- Select Donor --',
+        'amp.gpi-data:select-currency': '-- Select Currency --'
+        
+        
 };

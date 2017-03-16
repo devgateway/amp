@@ -79,7 +79,7 @@ export default class AidOnBudgetRow extends Component {
     }
     
     deleteAidOnBudget() {
-        if(confirm("This will delete the row. Do you want to proceed?")){
+        if(confirm(this.props.translations['amp.gpi-data:delete-prompt'])){
             this.props.actions.deleteAidOnBudget(this.state.aidOnBudget); 
         }        
     }
@@ -123,7 +123,7 @@ export default class AidOnBudgetRow extends Component {
                     <td>
                     <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>
                     <select name="donorId" className="form-control" value={this.state.aidOnBudget.donorId} onChange={this.onChange}>
-                    <option value="">Select Donor</option>
+                    <option value="">{this.props.translations['amp.gpi-data:select-donor']}</option>
                     {this.props.orgList.map(org => 
                     <option value={org.id}  key={org.id} >{org.name}</option>
                     )}
@@ -138,7 +138,7 @@ export default class AidOnBudgetRow extends Component {
                     <td>
                     <div className={this.getErrorsForField('currencyCode').length > 0 ? 'form-group has-error' : 'form-group' }>                    
                     <select name="currencyCode" value={this.state.aidOnBudget.currencyCode} className="form-control" onChange={this.onChange}>
-                    <option value="">Select Currency</option>
+                    <option value="">{this.props.translations['amp.gpi-data:select-currency']}</option>
                     {this.props.currencyList.map(currency => 
                     <option value={currency.id} key={currency.id} >{currency.name}</option>
                     )}

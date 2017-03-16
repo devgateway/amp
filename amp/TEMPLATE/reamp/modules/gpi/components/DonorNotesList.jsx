@@ -123,10 +123,10 @@ export default class DonorNotesList extends Component {
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-plus" onClick={this.addNew}></span>
-                <span  onClick={this.addNew}> Add Data</span>
-                <span className="success-color"> (insert data to the new field)</span>
-                <span> / </span> <span className="glyphicon glyphicon-ok-circle success-color"> </span> <span > Click the Save Symbol to save the added data row</span>
-                <span className="float-right"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>Save all Edits</button></span>
+                <span  onClick={this.addNew}>{this.props.translations['amp.gpi-data:add-new']} </span>
+                <span className="success-color">{this.props.translations['amp.gpi-data:insert-data']}</span>
+                <span> / </span> <span className="glyphicon glyphicon-ok-circle success-color"> </span> <span >{this.props.translations['amp.gpi-data:click-save']}</span>
+                <span className="float-right"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>{this.props.translations['amp.gpi-data:button-save-all-edits']}</button></span>
                 </div>                 
                 </div>  
                 {this.showErrors()}
@@ -153,7 +153,7 @@ export default class DonorNotesList extends Component {
                     <li className={this.props.paging.currentPageNumber == 1 ? 'page-item disabled': 'page-item' }>
                     <a className="page-link previ pagination-link" aria-label="Previous" data-page="-"  onClick={this.goToPreviousPage}>
                     <span aria-hidden="true" data-page="-">&laquo;</span>
-                <span className="sr-only">Previous</span>
+                <span className="sr-only">{this.props.translations['amp.gpi-data:button-previous']}</span>
                 </a>
                 </li>                     
                 {pages.map(pageNumber => 
@@ -162,7 +162,7 @@ export default class DonorNotesList extends Component {
                 <li className={this.props.paging.currentPageNumber == this.props.paging.totalPageCount ? 'page-item disabled': 'page-item' }>
                 <a className="page-link pagination-link"  aria-label="Next" data-page="+" onClick={this.goToNextPage}>
                 <span aria-hidden="true" data-page="+">&raquo;</span>
-                <span className="sr-only">Next</span>
+                <span className="sr-only">{this.props.translations['amp.gpi-data:button-next']}</span>
                 </a>
                 </li>
                 </ul>

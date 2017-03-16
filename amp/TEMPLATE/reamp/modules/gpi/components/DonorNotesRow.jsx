@@ -78,8 +78,8 @@ export default class DonorNotesRow extends Component {
         this.props.actions.save(this.state.donorNotes);                
     }
     
-    deleteDonorNotes() {
-        if(confirm("This will delete the row. Do you want to proceed?")){
+    deleteDonorNotes() {        
+        if(confirm(this.props.translations['amp.gpi-data:delete-prompt'])){
             this.props.actions.deleteDonorNotes(this.state.donorNotes); 
         }        
     }
@@ -121,7 +121,7 @@ export default class DonorNotesRow extends Component {
                     
                     <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>
                     <select name="donorId" className="form-control" value={this.state.donorNotes.donorId} onChange={this.onChange}>
-                    <option value="">Select Donor</option>
+                    <option value="">{this.props.translations['amp.gpi-data:select-donor']}</option>
                     {this.props.orgList.map(org => 
                     <option value={org.id}  key={org.id} >{org.name}</option>
                     )}

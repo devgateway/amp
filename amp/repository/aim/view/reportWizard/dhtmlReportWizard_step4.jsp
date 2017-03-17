@@ -60,7 +60,7 @@
 											* <digi:trn>The following hierarchies can be used only in reports without measures:</digi:trn>
 											  <span id="measurelessOnlyHiersNotAllowed4List"></span>
 										</div>
-										<div id="measureOrHierarchyMust4" class="color: red">
+										<div id="measureOrHierarchyMust4" class="color: red" style="display: none;">
 											* <digi:trn>Must select at least one measure or hierarchy</digi:trn>
 										</div>
 									</td>

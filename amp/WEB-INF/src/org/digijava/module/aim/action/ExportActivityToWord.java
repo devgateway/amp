@@ -34,7 +34,6 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
@@ -603,11 +602,6 @@ public class ExportActivityToWord extends Action {
                     doc.add(tbl);
                 }
 
-                List<Table> activityCreationFieldsTables = getActivityCreationFieldsTables(	request, myForm);
-                for (Table tbl : activityCreationFieldsTables) {
-                    doc.add(tbl);
-                }
-
                 if (FeaturesUtil.isVisibleModule("/Activity Form/M&E")) {
                     Table meTbl = null;
                     meTbl = new Table(1);
@@ -639,13 +633,11 @@ public class ExportActivityToWord extends Action {
                             headerTable.addCell(sectorsLabel);
                             headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
 
-                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Name")) {
+                            if (FeaturesUtil.isVisibleField("Indicator Name")) {
                                 headerTable.addCell(new Paragraph(indicator.getIndicator().getName(), BOLDFONT));
-                            }
-                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Code")) {
                                 headerTable.addCell(indicator.getIndicator().getCode());
                             }
-                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/Logframe Category")) {
+                            if (FeaturesUtil.isVisibleField("Logframe Category")) {
                                 if (indicator.getValues() != null && indicator.getValues().size() > 0) {
                                     headerTable.addCell(indicator.getLogFrame() + "\n");
                                 }
@@ -672,13 +664,13 @@ public class ExportActivityToWord extends Action {
                                 Table additionalInfoSubTable = new Table(2);
                                 additionalInfoSubTable.setWidth(80);
 
-                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Value")) {
+                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
                                     generateOverAllTableRows(additionalInfoSubTable, valueLabel, (value.getValue() != null ? FormatHelper.formatNumber(value.getValue()) : null), null);
                                 }
-                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Comments")) {
+                                if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
                                     generateOverAllTableRows(additionalInfoSubTable, commentLabel, DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);
                                 }
-                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Date")) {
+                                if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
                                     generateOverAllTableRows(additionalInfoSubTable, dateLabel, (value.getValueDate() != null ? DateConversion.convertDateToLocalizedString(value.getValueDate()) : null), null);
                                 }
 
@@ -882,67 +874,6 @@ public class ExportActivityToWord extends Action {
             }
 
         }
-        return retVal;
-    }
-
-    private List<Table> getActivityCreationFieldsTables(
-            HttpServletRequest request, EditActivityForm myForm)
-            throws WorkerException, BadElementException {
-        List<Table> retVal = new ArrayList<Table>();
-        ServletContext ampContext = getServlet().getServletContext();
-        HttpSession session=request.getSession();
-        ExportSectionHelper sectionHelper = new ExportSectionHelper(null)
-                .setWidth(100).setAlign("left");
-        /**
-         * Activity created by
-         */
-
-        if (FeaturesUtil.isVisibleField("Activity Created By")) {
-            String actCreatedByString = identification.getActAthEmail() == null ? "(unknown)" :
-                    identification.getActAthFirstName() + " "
-                            + identification.getActAthLastName() + "-"
-                            + identification.getActAthEmail();
-            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Activity created by", null, null, true)
-                    .addRowData(actCreatedByString);
-            sectionHelper.addRowData(rowData);
-        }
-
-
-        /**
-         * Activity updated on
-         */
-        if (FeaturesUtil.isVisibleField("Activity Updated On")) {
-            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Updated On", null, null, true).addRowData(identification
-                    .getUpdatedDate());
-            sectionHelper.addRowData(rowData);
-        }
-
-        /**
-         * Activity updated by
-         */
-        if (FeaturesUtil.isVisibleField("Activity Updated By")) {
-            String output = "";
-            if (identification.getModifiedBy() != null) {
-                User user = identification.getModifiedBy().getUser();
-                output = user.getFirstNames() + " " + user.getLastName() + "-"
-                        + user.getEmail();
-            }
-            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Activity Updated By", null, null, true).addRowData(output);
-            sectionHelper.addRowData(rowData);
-        }
-
-        /**
-         * Activity created on
-         */
-        if (FeaturesUtil.isVisibleField("Activity Created On")) {
-            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Created On", null, null, true).addRowData(identification
-                    .getCreatedDate());
-        }
-        retVal.add(createSectionTable(sectionHelper, request, ampContext));
         return retVal;
     }
 
@@ -3603,10 +3534,10 @@ public class ExportActivityToWord extends Action {
     private Table createOverallInformationTable(HttpServletRequest request,	EditActivityForm myForm, ServletContext ampContext, String currency)throws BadElementException, Exception, WorkerException {
         String columnVal;
         HttpSession session=request.getSession();
-        Table overAllTable = new Table(3); //overall table contains 3 subtables: funding informaiton, activity creation information , all amounts are in {curr] information
+        Table overAllTable = new Table(2); //overall table contains 2 subtables: funding informaiton, activity creation information.
         overAllTable.setWidth(100);
         overAllTable.setBorder(0);
-        overAllTable.setWidths(new float[]{2f,2f,1f});
+        overAllTable.setWidths(new float[]{2f,2f});
         overAllTable.setBackgroundColor(CELLCOLORGRAY);
         overAllTable.setPadding(0);
 
@@ -3694,85 +3625,69 @@ public class ExportActivityToWord extends Action {
         overAllTable.addCell(overallFundingCell);
 
         //second cell of overall table is additional info
-        int rowAmountForCell2 = 5; //there are 5 rows in additional information
-        RtfCell additionalInfoCell=new RtfCell();
+        RtfCell additionalInfoCell = new RtfCell();
         additionalInfoCell.setBackgroundColor(CELLCOLORGRAY);
         additionalInfoCell.setBorder(0);
         additionalInfoCell.setVerticalAlignment(Element.ALIGN_TOP);
         Table additionalInfoSubTable = new Table(2);
         additionalInfoSubTable.setWidth(100);
 
-        columnVal = "";
-        if(identification.getActAthFirstName()!=null){
-            columnVal +=  identification.getActAthFirstName();
+        /**
+         * Activity created by
+         */
+        if (FeaturesUtil.isVisibleField("Activity Created By")) {
+            String firstName = identification.getActAthFirstName() == null ? "" : identification.getActAthFirstName();
+            String lastName = identification.getActAthLastName() == null ? "" : identification.getActAthLastName();
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Activity created by")
+                    + ": ", firstName + " " + lastName, CELLCOLORGRAY);
         }
-        if(identification.getActAthLastName()!=null){
-            columnVal += " "+ identification.getActAthLastName();
-        }
-        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Activity created by")+": ",columnVal,CELLCOLORGRAY);
 
-        columnVal = "";
-        if(identification.getCreatedBy() != null)
-        {
-            if(identification.getCreatedBy().getAmpTeam().getName()!=null){
-                columnVal +=  identification.getCreatedBy().getAmpTeam().getName();
-            }
-            if(identification.getCreatedBy().getAmpTeam().getAccessType()!=null){
-                columnVal += "-" + TranslatorWorker.translateText(identification.getCreatedBy().getAmpTeam().getAccessType());
-            }
+        /**
+         * Activity created on
+         */
+        if (FeaturesUtil.isVisibleField("Activity Created On")) {
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Activity created on")
+                    + ": ", identification.getCreatedDate(), CELLCOLORGRAY);
         }
-        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Workspace of creator")+": ",columnVal,CELLCOLORGRAY);
 
-        columnVal = "";
-        if(identification.getCreatedBy() != null)
-        {
-            if(identification.getCreatedBy().getAmpTeam().getComputation()){
-                columnVal += TranslatorWorker.translateText("yes");
-            }else{
-                columnVal += TranslatorWorker.translateText("no");
-            }
+        /**
+         * Activity Last Updated by
+         */
+        if (FeaturesUtil.isVisibleField("Activity Last Updated by")) {
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Activity last updated by")
+                    + ": ", identification.getModifiedBy().getUser().getFirstNames() + " "
+                    + identification.getModifiedBy().getUser().getLastName(), CELLCOLORGRAY);
         }
-        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Computation")+": ",columnVal,CELLCOLORGRAY);
 
-        columnVal = "";
-        if(identification.getCreatedDate()!=null){
-            columnVal += identification.getCreatedDate();
+        /**
+         * Activity updated on
+         */
+        if (FeaturesUtil.isVisibleField("Activity Updated On")) {
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Activity updated on")
+                    + ": ", identification.getUpdatedDate(), CELLCOLORGRAY);
         }
-        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Activity created on")+": ",columnVal,CELLCOLORGRAY);
 
-        columnVal = "";
-        if (identification.getTeam() != null
-                && identification.getTeam().getTeamLead() != null
-                && identification.getTeam().getTeamLead().getUser() != null) {
-            columnVal += identification.getTeam().getTeamLead().getUser().getFirstNames()+" ";
-            columnVal += identification.getTeam().getTeamLead().getUser().getLastName()+" ";
-            columnVal += identification.getTeam().getTeamLead().getUser().getEmail();
-        }
-        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Data Team Leader")+": ",columnVal,CELLCOLORGRAY);
+        /**
+         * Activity created in workspace
+         */
+        if (identification.getTeam() != null) {
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Created in workspace")
+                    + ": ", identification.getTeam().getName()
+                    + " - "
+                    + TranslatorWorker.translateText(identification.getTeam().getAccessType()), CELLCOLORGRAY);
 
-        int emptyRowsAmount = rowAmountForCell1>=rowAmountForCell2?(rowAmountForCell1 - rowAmountForCell2):(rowAmountForCell2 - rowAmountForCell1);
-        for (int i=0;i<emptyRowsAmount;i++){
-            generateOverAllTableRows(additionalInfoSubTable,"","",CELLCOLORGRAY);
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Workspace manager")
+                    + ": ", identification.getTeam().getTeamLead().getUser().getFirstNames() + " " + identification.getTeam().getTeamLead().getUser().getLastName() + " - "
+                    + identification.getTeam().getTeamLead().getUser().getEmail(), CELLCOLORGRAY);
+
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Computation") + ": ", identification.getTeam().getComputation() ?
+                    TranslatorWorker.translateText("Yes") :
+                    TranslatorWorker.translateText("No"), CELLCOLORGRAY);
         }
 
         additionalInfoCell.add(additionalInfoSubTable);
         overAllTable.addCell(additionalInfoCell);
 
-        //3rd cell is for currency
-        /*
-		RtfCell currencyInfoCell=new RtfCell();	            
-		currencyInfoCell.setBorder(0);
-		Table currencyInfoSubTable = new Table(1);
-		currencyInfoSubTable.setWidth(100);
-		RtfCell mycell = new RtfCell(new Paragraph(TranslatorWorker.translateText("All amounts are in ") + currency, PLAINFONT));
-		mycell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-		mycell.setVerticalAlignment(Element.ALIGN_TOP);
-		mycell.setBackgroundColor(CELLCOLORGRAY);
-		mycell.setRowspan(rowAmountForCell1>rowAmountForCell2?rowAmountForCell1:rowAmountForCell2);
-		currencyInfoSubTable.addCell(mycell);
-		
-		currencyInfoCell.add(currencyInfoSubTable);	            
-		overAllTable.addCell(currencyInfoCell); */
         return overAllTable;
     }
 

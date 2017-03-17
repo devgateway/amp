@@ -71,6 +71,11 @@ export default class TypeList extends Component {
             <div>
                 <h2 className="subTitle">{this.__('amp.resource-manager:type-list-title')}</h2>
                 <div className="row">
+                    <div className="col-md-5"><h4>{this.__('amp.resource-manager:available-file-type')}</h4>
+                    </div>
+                    <div className="col-md-5"><h4>{this.__('amp.resource-manager:allowed-file-type')}</h4></div>
+                </div>
+                <div className="row">
                     <div className="col-md-5">
                         <Alert><Glyphicon
                             glyph="info-sign"/><span
@@ -128,6 +133,8 @@ export default class TypeList extends Component {
 
     static translations() {
         return {
+            "amp.resource-manager:available-file-type": "Available file types",
+            "amp.resource-manager:allowed-file-type": "Allowed file types",
             "amp.resource-manager:type-list-title": "Type list manager",
             "amp.resource-manager:type-to-filter": "Start typing to filter",
             "amp.resource-manager:button-add": "Add",

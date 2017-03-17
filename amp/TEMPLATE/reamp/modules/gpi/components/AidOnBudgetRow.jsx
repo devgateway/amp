@@ -10,7 +10,6 @@ import moment from 'moment';
 require('react-date-picker/base.css');
 require('react-date-picker/theme/hackerone.css');
 require('../styles/main.less');
-import {Typeahead} from 'react-bootstrap-typeahead'; 
 import * as aidOnBudgetActions from '../actions/AidOnBudgetActions.jsx';
 import * as startUp from '../actions/StartUpAction.jsx';
 import * as Constants from '../common/constants.jsx';
@@ -144,15 +143,12 @@ export default class AidOnBudgetRow extends Component {
                     <td>
                     <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>
                     <br/>
-                    <Typeahead
-                    bodyContainer={false}
-                    labelKey="name"
-                    options={this.props.orgList}
-                    placeholder={this.props.translations['amp.gpi-data:select-donor']}
-                    onChange={this.onOrgChange} 
-                    selected={this.props.orgList.filter(org => {return org.id === this.state.aidOnBudget.donorId})}
-                    clearButton={true}
-                    />                     
+                    <select name="donorId" className="form-control" value={this.state.aidOnBudget.donorId} onChange={this.onChange}>
+                    <option value="">{this.props.translations['amp.gpi-data:select-donor']}</option>
+                    {this.props.orgList.map(org => 
+                    <option value={org.id}  key={org.id} >{org.name}</option>
+                    )}
+                    </select>                   
                     </div>
                     </td>
                     <td>

@@ -215,7 +215,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@GET
 	@Path("/project")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProjectByAmpId", ui = false)
+	@ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectByAmpId", ui = false)
 	public JsonBean getProjectByAmpId(@QueryParam("amp-id") String ampId) {
 		return InterchangeUtils.getActivityByAmpId(ampId);
 	}

@@ -149,6 +149,11 @@ function checkIfColIsHierarchy(id) {
 		}
 	}
 	if (fgArray == null) return false;
+
+	if (repManager.forDesktopTabs
+		&& YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"].indexOf(colName) >= 0) {
+		return false;
+	}
 	
 	for (j=0; j<fgArray.length; j++) {
 		if ( fgArray[j]==colName ) 

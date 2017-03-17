@@ -334,7 +334,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	 *		{
 	 *		"type": "BOOL_VALUE",
 	 *		"id": "limit-file-to-upload",
-	 *		"name": "Limit file type for upload",
+	 *		"name": "Limit upload of file types",
 	 *		"value": true
 	 *		},
 	 *		{

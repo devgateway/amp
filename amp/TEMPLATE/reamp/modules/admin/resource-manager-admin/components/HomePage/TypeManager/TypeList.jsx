@@ -135,7 +135,7 @@ export default class TypeList extends Component {
         return {
             "amp.resource-manager:available-file-type": "Available file types",
             "amp.resource-manager:allowed-file-type": "Allowed file types",
-            "amp.resource-manager:type-list-title": "Type list manager",
+            "amp.resource-manager:type-list-title": "File type upload manager",
             "amp.resource-manager:type-to-filter": "Start typing to filter",
             "amp.resource-manager:button-add": "Add",
             "amp.resource-manager:button-remove": "Remove",

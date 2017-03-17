@@ -10,6 +10,7 @@ import moment from 'moment';
 require('react-date-picker/base.css');
 require('react-date-picker/theme/hackerone.css');
 require('../styles/main.less');
+import {Typeahead} from 'react-bootstrap-typeahead'; 
 import * as aidOnBudgetActions from '../actions/AidOnBudgetActions.jsx';
 import * as startUp from '../actions/StartUpAction.jsx';
 import * as Constants from '../common/constants.jsx';
@@ -27,6 +28,7 @@ export default class AidOnBudgetRow extends Component {
         this.onDateChange = this.onDateChange.bind(this);  
         this.deleteAidOnBudget = this.deleteAidOnBudget.bind(this); 
         this.getErrorsForField = this.getErrorsForField.bind(this);
+        this.onOrgChange = this.onOrgChange.bind(this);
     }
     
     toggleEdit() {
@@ -44,11 +46,20 @@ export default class AidOnBudgetRow extends Component {
         const errors = [];
         const field = event.target.name;
         const value = event.target.value;        
-        const aidOnBudget = this.state.aidOnBudget;        
-        aidOnBudget[field] = event.target.value;
-        this.setState({aidOnBudget: aidOnBudget});
-        this.props.actions.updateAidOnBudget(aidOnBudget);               
+        this.onValueChange(field, value);   
     }    
+    
+    onValueChange(field, value) {
+        const aidOnBudget = this.state.aidOnBudget;   
+        if(field === 'donorId'){
+            aidOnBudget[field] = parseInt(value);
+        }else{
+            aidOnBudget[field] = value;   
+        }
+        
+        this.setState({aidOnBudget: aidOnBudget});
+        this.props.actions.updateAidOnBudget(aidOnBudget);
+    }
     
     onDateChange(date){
         if(date){
@@ -99,8 +110,16 @@ export default class AidOnBudgetRow extends Component {
         return  errors; 
     }
     
+    onOrgChange(selected){        
+        if (selected.length > 0) {           
+           this.onValueChange('donorId', selected[0].id); 
+        } else {
+            this.onValueChange('donorId', null);
+        }   
+    }
+    
     render() {        
-        if (this.props.aidOnBudget.isEditing) {         
+        if (this.props.aidOnBudget.isEditing) {           
             return ( <tr>                    
                     <td scope="row" >                                   
                     <div className={this.getErrorsForField('indicatorDate').length > 0 ? 'form-group date-container has-error' : 'form-group date-container' }>
@@ -121,13 +140,16 @@ export default class AidOnBudgetRow extends Component {
                     </div>
                     </td>
                     <td>
-                    <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>
-                    <select name="donorId" className="form-control" value={this.state.aidOnBudget.donorId} onChange={this.onChange}>
-                    <option value="">{this.props.translations['amp.gpi-data:select-donor']}</option>
-                    {this.props.orgList.map(org => 
-                    <option value={org.id}  key={org.id} >{org.name}</option>
-                    )}
-                    </select>
+                    <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>                    
+                    <Typeahead
+                    bodyContainer={false}
+                    labelKey="name"
+                    options={this.props.orgList}
+                    placeholder={this.props.translations['amp.gpi-data:select-donor']}
+                    onChange={this.onOrgChange} 
+                    selected={this.props.orgList.filter(org => {return org.id === this.state.aidOnBudget.donorId})}
+                    clearButton={true}
+                    />                    
                     </div>
                     </td>
                     <td>

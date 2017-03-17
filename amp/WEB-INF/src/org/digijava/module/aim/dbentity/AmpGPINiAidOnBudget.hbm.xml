@@ -11,7 +11,7 @@
 			</generator>
 		</id>
 			
-		<property name="amount" column="amount" type="java.lang.Double" />	
+		<property name="amount" column="amount" type="java.lang.Double" access="field" />	
 		<property name="indicatorDate" column="indicator_date" type="java.util.Date" />			
 						
 		<many-to-one name="currency" column="currency_id"

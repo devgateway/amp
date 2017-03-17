@@ -35,7 +35,10 @@ export const initialTranslations = {
         'amp.gpi-data:button-next': 'Next',
         'amp.gpi-data:delete-prompt': 'Are you sure you want to delete?',
         'amp.gpi-data:select-donor': '-- Select Donor --',
-        'amp.gpi-data:select-currency': '-- Select Currency --'
+        'amp.gpi-data:select-currency': '-- Select Currency --',
+        'amp.gpi-data:amount-in-1': 'Amounts in Units',
+        'amp.gpi-data:amount-in-1000': 'Amounts in Thousands (000)',
+        'amp.gpi-data:amount-in-1000000': 'Amounts in Millions (000 000)'
         
         
 };

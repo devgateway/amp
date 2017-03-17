@@ -6,6 +6,7 @@ import * as aidOnBudgetActions from '../actions/AidOnBudgetActions.jsx';
 import * as commonListsActions from  '../actions/CommonListsActions.jsx';
 import * as startUp from '../actions/StartUpAction.jsx';
 import { Alert } from 'react-bootstrap';
+import DecimalFormat from '../common/decimal-format.jsx';
 export default class AidOnBudgetList extends Component {    
     constructor(props, context) {      
         super(props, context);
@@ -116,7 +117,8 @@ export default class AidOnBudgetList extends Component {
     }
     
     render() {       
-        const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);        
+        const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);  
+        const numberFormatter = new DecimalFormat(this.props.settings['number-format'] || "");
         return (
                 <div >                
                 <h2>{this.props.translations['amp.gpi-data-aid-on-budget:title']}</h2>
@@ -131,6 +133,10 @@ export default class AidOnBudgetList extends Component {
                 </div>  
                 {this.showErrors()}
                 {this.showInfoMessages()} 
+                {(this.props.settings['number-divider'] != 1) &&
+                    <span className="error-color">{this.props.translations['amp.gpi-data:amount-in-' + this.props.settings['number-divider']]}</span>                    
+                }
+                
                 <table className="table table-striped">
                 <thead>
                 <tr>                
@@ -143,7 +149,7 @@ export default class AidOnBudgetList extends Component {
                 </thead>
                 <tbody>               
                 {this.props.aidOnBudgetList.map(aidOnBudget => 
-                <AidOnBudgetRow aidOnBudget={aidOnBudget} key={aidOnBudget.id} currencyList={this.props.currencyList} orgList={this.props.orgList} settings={this.props.settings} key={aidOnBudget.id || 'c' + aidOnBudget.cid} errors={this.props.errors}/>  
+                <AidOnBudgetRow aidOnBudget={aidOnBudget} key={aidOnBudget.id} currencyList={this.props.currencyList} orgList={this.props.orgList} settings={this.props.settings} key={aidOnBudget.id || 'c' + aidOnBudget.cid} errors={this.props.errors} numberFormatter={numberFormatter}/>  
                 )}                
                 </tbody>
                 </table> 

@@ -53,7 +53,7 @@ export default class AidOnBudgetRow extends Component {
         const aidOnBudget = this.state.aidOnBudget;   
         if(field === 'donorId'){
             aidOnBudget[field] = parseInt(value);
-        }else{
+        } else {
             aidOnBudget[field] = value;   
         }
         
@@ -123,9 +123,11 @@ export default class AidOnBudgetRow extends Component {
             return ( <tr>                    
                     <td scope="row" >                                   
                     <div className={this.getErrorsForField('indicatorDate').length > 0 ? 'form-group date-container has-error' : 'form-group date-container' }>
+                    <br/>
                     <span className="date-input-container"><input type="text" value={this.toDisplayDateFormat(this.state.aidOnBudget.indicatorDate)} readOnly className="date-input form-control" />    
                     </span><span className = "datepicker-toggle glyphicon glyphicon-calendar " onClick={this.toggleDatePicker}> </span></div>
                     <div className="datepicker-container"> 
+                    
                     {this.state.showDatePicker &&
                         <DatePicker 
                         hideFooter={true}
@@ -140,7 +142,8 @@ export default class AidOnBudgetRow extends Component {
                     </div>
                     </td>
                     <td>
-                    <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>                    
+                    <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>
+                    <br/>
                     <Typeahead
                     bodyContainer={false}
                     labelKey="name"
@@ -149,16 +152,18 @@ export default class AidOnBudgetRow extends Component {
                     onChange={this.onOrgChange} 
                     selected={this.props.orgList.filter(org => {return org.id === this.state.aidOnBudget.donorId})}
                     clearButton={true}
-                    />                    
+                    />                     
                     </div>
                     </td>
                     <td>
                     <div className={this.getErrorsForField('amount').length > 0 ? 'form-group has-error' : 'form-group' }>
+                    {this.props.numberFormatter.format(this.state.aidOnBudget.amount)} <br/>
                     <input type="text" name="amount" className="form-control" placeholder="" value={this.state.aidOnBudget.amount} onChange={this.onChange} />
                     </div>
                     </td>
                     <td>
-                    <div className={this.getErrorsForField('currencyCode').length > 0 ? 'form-group has-error' : 'form-group' }>                    
+                    <div className={this.getErrorsForField('currencyCode').length > 0 ? 'form-group has-error' : 'form-group' }>
+                    <br/>
                     <select name="currencyCode" value={this.state.aidOnBudget.currencyCode} className="form-control" onChange={this.onChange}>
                     <option value="">{this.props.translations['amp.gpi-data:select-currency']}</option>
                     {this.props.currencyList.map(currency => 
@@ -167,7 +172,7 @@ export default class AidOnBudgetRow extends Component {
                     </select>
                     </div>                    
                     </td>
-                    <td> <span className="glyphicon glyphicon-ok-circle success-color" onClick={this.save}> </span><span className="glyphicon glyphicon-remove" onClick={this.deleteAidOnBudget}></span></td>                      
+                    <td><br/> <span className="glyphicon glyphicon-ok-circle success-color" onClick={this.save}> </span><span className="glyphicon glyphicon-remove" onClick={this.deleteAidOnBudget}></span></td>                      
             </tr>)
             
             }
@@ -176,7 +181,7 @@ export default class AidOnBudgetRow extends Component {
                     <tr>                
                     <th scope="row">{this.toDisplayDateFormat(this.state.aidOnBudget.indicatorDate)}</th>
                     <td>{this.getOrgName(this.state.aidOnBudget.donorId)}</td>
-                    <td>{this.state.aidOnBudget.amount}</td>
+                    <td>{this.props.numberFormatter.format(this.state.aidOnBudget.amount)}</td>
                     <td>{this.getCurrencyName(this.state.aidOnBudget.currencyCode)} </td>
                     <td><span className="glyphicon glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-remove" onClick={this.deleteAidOnBudget}></span></td>                
                     </tr>

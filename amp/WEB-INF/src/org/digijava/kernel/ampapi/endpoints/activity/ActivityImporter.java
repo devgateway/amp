@@ -212,7 +212,7 @@ public class ActivityImporter {
 			InterchangeUtils.getSessionWithPendingChanges();
 			
 			if (oldActivity != null) {
-				key = ActivityGatekeeper.lockActivity(activityId, TeamUtil.getCurrentAmpTeamMember().getAmpTeamMemId());
+				key = ActivityGatekeeper.lockActivity(activityId, teamMember.getAmpTeamMemId());
 				
 				if (key == null){ //lock not acquired
 					logger.error("Cannot aquire lock during IATI update for activity " + activityId);

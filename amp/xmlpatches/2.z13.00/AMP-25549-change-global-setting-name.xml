@@ -2,10 +2,10 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-25344</jira>
+	<jira>AMP-25549</jira>
 	<keyword>global settings</keyword>
 	<author>jdeanquin</author>
-	<description>Hide global settings</description>
+	<description>Change setting name</description>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">

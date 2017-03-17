@@ -328,7 +328,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	 *		{
 	 *		"type": "INT_VALUE",
 	 *		"id": "maximunm-file-size",
-	 *		"name": "Maximum File Size",
+	 *		"name": "Maximum File Size (MB)",
 	 *		"value": 12
 	 *		},
 	 *		{

@@ -28,7 +28,7 @@ public class GlobalSettingsConstants {
     
     public static final String SYSTEM_YEAR = "system";
 
-    public static final String CR_MAX_FILE_SIZE = "Maximum File Size";
+    public static final String CR_MAX_FILE_SIZE = "Maximum File Size (MB)";
     
     public static final String ACTIVITY_LEVEL = "Activity Levels";
 

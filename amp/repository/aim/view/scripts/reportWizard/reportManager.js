@@ -627,6 +627,8 @@ NormalReportManager.prototype.cancelWizard	= function () {
 }
 NormalReportManager.prototype.showHideHierarchies	= function(){};
 
+NormalReportManager.prototype.forDesktopTabs = false;
+
 
 TabReportManager.prototype					= new NormalReportManager();
 TabReportManager.prototype.constructor		= TabReportManager;
@@ -689,6 +691,7 @@ TabReportManager.prototype.checkMeasures	= function () {
 TabReportManager.prototype.cancelWizard	= function () {
 	window.location = "/viewTeamReports.do?tabs=true";
 }
+TabReportManager.prototype.forDesktopTabs = true;
 
 OPTabReportManager.prototype.showHideHierarchies	= function(){};
 

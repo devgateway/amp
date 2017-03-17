@@ -94,7 +94,7 @@
 		</tr>
 		<tr>
 			<td align="center" valign="top">
-				<span id="measureOrHierarchyMust2" class="color: red">
+				<span id="measureOrHierarchyMust2" class="color: red" style="display: none;">
 					* <digi:trn>Must select at least one measure or hierarchy</digi:trn>
 				</span>
 			</td>

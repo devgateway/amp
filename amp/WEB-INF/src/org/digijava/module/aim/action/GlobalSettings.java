@@ -2,7 +2,6 @@ package org.digijava.module.aim.action;
 /*
 * @ author Govind G Dalwani
 */
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;

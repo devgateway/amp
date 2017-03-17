@@ -47,7 +47,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td align="center" valign="top">
+									<td colspan="3" align="center" valign="top">
 										<div id="measuresMust" style="color: red">
 											* <digi:trn key="rep:wizard:hint:mustselectmeasure">
 													Must select at least one measure
@@ -63,16 +63,9 @@
 										<div id="measureOrHierarchyMust4" class="color: red" style="display: none;">
 											* <digi:trn>Must select at least one measure or hierarchy</digi:trn>
 										</div>
-									</td>
-									<td>&nbsp;</td>
-									<td align="center" valign="top">
-										<span id="measuresLimit" style="display: none">
-											<font color="red">* 
-												<digi:trn key="rep:wizard:hint:limit2measures">
-													You cannot select more than 2 measures in a desktop tab
-												</digi:trn>
-											</font>
-										</span>
+										<div id="measuresLimit" style="color: red; display: none">
+											* <digi:trn key="rep:wizard:hint:limit2measures">You cannot select more than 2 measures in a desktop tab</digi:trn>
+										</div>
 									</td>
 								</tr>
 							</table>

@@ -362,37 +362,6 @@ public class InterchangeUtils {
 	}
 	
 	/**
-	 * seems unused anywhere
-	 * @param field
-	 * @return
-	 */
-	@Deprecated
-	public static Method getCustomInterchangeableMethod (Field field) {
-		InterchangeableDiscriminator disc = field.getAnnotation(InterchangeableDiscriminator.class);
-		if (disc != null) {
-			String methodName = disc.method();
-			try {
-				InterchangeUtils.class.getDeclaredMethod(methodName);
-			} catch (Exception exc) {
-				
-				return null;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Seems unused anywhere
-	 * @param field
-	 * @return
-	 */
-	@Deprecated
-	public static boolean hasCustomInterchangeableMethod(Field field) {
-		InterchangeableDiscriminator disc = field.getAnnotation(InterchangeableDiscriminator.class);
-		return (disc != null) && disc.method().length() > 0;
-	}
-
-	/**
 	 * Obtains the discriminator class of the field, if it has one
 	 * @param field
 	 * @return null if the field doesn't have a discriminator class attached, otherwise -- the class

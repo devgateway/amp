@@ -83,7 +83,6 @@ export default class HomePage extends Component {
         return (
             <div >
                 <h1>{this.__('amp.resource-manager:resource-manager-title')}</h1>
-                <div>
                     <Settings translations={this.props.startUp.translations} settingsList={this.state.settingsList}
                               settingsLoaded={this.state.settingsLoaded}
                               handleSelectedChangeSettings={this.handleSelectedChangeSettings}
@@ -94,7 +93,6 @@ export default class HomePage extends Component {
                               areListloaded={this.state.areListloaded}
                               translations={this.props.startUp.translations}
                     />
-                </div>
                 <div className="acceptButton">
                     <button type="button" className="btn btn-primary"
                             onClick={() => {
@@ -111,7 +109,7 @@ export default class HomePage extends Component {
         return {
             ...TypeList.translations(),
             ...Settings.translations(),
-            'amp.resource-manager:resource-manager-title': 'Resource manager Admin',
+            'amp.resource-manager:resource-manager-title': 'Resource Manager',
             'amp.resource-manager:sucess': 'Sucess',
             "amp.resource-manager:button-accept": "Save changes"
         }

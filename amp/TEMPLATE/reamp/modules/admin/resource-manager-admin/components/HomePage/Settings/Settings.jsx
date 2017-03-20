@@ -92,44 +92,42 @@ export default class Settings extends Component {
     render() {
         this.__ = key => this.props.translations[key];
         return <div>
-            <div>
-                <div>
-                    <span>{this.state.limitFileToUpload.name}</span>
-                </div>
-                <div>
-                    <Checkbox
-                        checked={this.state.limitFileToUpload.valueSelected}
-                        onChange={this.onChangeLimitFileToUpload}
-                    />
+            <div className="row settingsRow">
+                <div className="col-sm-5 settingsName settingsCol topCol"><span className="settingsText settingsTitle">{this.__('amp.resource-manager:setting')}</span></div>
+                <div className="col-sm-5 settingsCol topCol rightCol"><span className="settingsText settingsTitle">{this.__('amp.resource-manager:value')}</span>
                 </div>
             </div>
-            <div>
-                <div>
-                    <span>{this.state.maximumFileSize.name}</span>
+            <div className="row settingsRow">
+                <div className="col-sm-5 settingsName settingsCol "><span className="settingsText">{this.state.limitFileToUpload.name}</span></div>
+                <div className="col-sm-5 settingsCol  rightCol "><Checkbox
+                    checked={this.state.limitFileToUpload.valueSelected}
+                    onChange={this.onChangeLimitFileToUpload}/>
                 </div>
-                <div>
-                    <NumberInput
-                        id="price"
-                        type="number"
-                        onChange={this.onMaximunFileSizeChange}
-                        value={this.state.maximumFileSize.valueSelected}
-                        placeholder={this.__('amp.resource-manager:please-enter-value')}
-                        min={0}
-                        max={100}
-                        format="0"
-                    /></div>
             </div>
-            <div>
-                <span>{this.state.resourceSortOption.name}</span><Select
-                name="form-field-name"
-                value={this.state.resourceSortOption.valueSelected}
-                options={this.state.resourceSortOption.options}
-                onChange={this.onResourceSortOptionChange}
-                labelKey="name"
-                valueKey="value"
-                className="sortListSelect"
-            />
-
+            <div className="row settingsRow">
+                <div className="col-sm-5 settingsName settingsCol"><span className="settingsText">{this.state.maximumFileSize.name}</span></div>
+                <div className="col-sm-5 settingsCol rightCol"><NumberInput
+                    id="price"
+                    type="number"
+                    onChange={this.onMaximunFileSizeChange}
+                    value={this.state.maximumFileSize.valueSelected}
+                    placeholder={this.__('amp.resource-manager:please-enter-value')}
+                    min={0}
+                    max={100}
+                    format="0"
+                /></div>
+            </div>
+            <div className="row settingsRow">
+                <div className="col-sm-5 settingsName settingsCol"><span className="settingsText">{this.state.resourceSortOption.name}</span></div>
+                <div className="col-sm-5 settingsCol rightCol"><Select
+                    name="form-field-name"
+                    value={this.state.resourceSortOption.valueSelected}
+                    options={this.state.resourceSortOption.options}
+                    onChange={this.onResourceSortOptionChange}
+                    labelKey="name"
+                    valueKey="value"
+                    className="sortListSelect selectSetting"
+                /></div>
             </div>
         </div>
     }
@@ -137,7 +135,10 @@ export default class Settings extends Component {
     static translations() {
         return {
             "amp.resource-manager:limit-file-to-upload": "Limit file to upload",
-            "amp.resource-manager:please-enter-value": "Please enter value"
+            "amp.resource-manager:please-enter-value": "Please enter value",
+            "amp.resource-manager:setting": "Setting",
+            "amp.resource-manager:value": "Value"
+
         }
     }
 }

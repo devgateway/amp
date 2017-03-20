@@ -15,7 +15,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.junit.Before;
 import org.junit.Rule;
@@ -106,48 +106,13 @@ public class PossibleValuesEnumeratorTest {
                         + "{\"id\":\"5\",\"value\":\"not_approved\"},{\"id\":\"6\",\"value\":\"rejected\"}]");
     }
 
-    private static class WithNonexistentDiscriminator {
-
+    private static class WithThrowingProvider {
         @Interchangeable(fieldTitle = "Field")
-        @InterchangeableDiscriminator(discriminatorClass = "noSuchClass")
+        @PossibleValues(ThrowingPossibleValuesProvider.class)
         private String field;
     }
 
-    @Test
-    public void testNonExistentDiscriminator() throws IOException {
-        assertJsonEquals(possibleValuesFor(WithNonexistentDiscriminator.class, "field"),
-                "[{\"error\":{\"0011\":[\"(Cannot find discriminator class) noSuchClass\"]}}]");
-    }
-
-    private static class WithDiscriminatorNotImplements {
-
-        @Interchangeable(fieldTitle = "Field")
-        @InterchangeableDiscriminator(discriminatorClass = "org.digijava.kernel.ampapi.endpoints.activity."
-                + "PossibleValuesEnumeratorTest$DiscriminatorNotImplements")
-        private String field;
-    }
-
-    @SuppressWarnings("unused")
-    static class DiscriminatorNotImplements {
-    }
-
-    @Test
-    public void testDiscriminatorNotImplements() throws IOException {
-        assertJsonEquals(possibleValuesFor(WithDiscriminatorNotImplements.class, "field"),
-                "[{\"error\":{\"0013\":[\"(Error when accessing a method from the discriminator class) "
-                        + "org.digijava.kernel.ampapi.endpoints.activity."
-                        + "PossibleValuesEnumeratorTest$DiscriminatorNotImplements.getPossibleValues()\"]}}]");
-    }
-
-    private static class WithDiscriminatorThrows {
-        @Interchangeable(fieldTitle = "Field")
-        @InterchangeableDiscriminator(discriminatorClass = "org.digijava.kernel.ampapi.endpoints.activity."
-                + "PossibleValuesEnumeratorTest$DiscriminatorThrows")
-        private String field;
-    }
-
-    @SuppressWarnings("unused")
-    static class DiscriminatorThrows extends FieldsDiscriminator {
+    static class ThrowingPossibleValuesProvider extends PossibleValuesProvider {
         @Override
         public Map<String, ?> getPossibleValues() {
             throw new RuntimeException("some reason");
@@ -171,7 +136,7 @@ public class PossibleValuesEnumeratorTest {
 
     @Test
     public void testDiscriminatorThrows() throws IOException {
-        assertJsonEquals(possibleValuesFor(WithDiscriminatorThrows.class, "field"),
+        assertJsonEquals(possibleValuesFor(WithThrowingProvider.class, "field"),
                 "[{\"error\":{\"0013\":["
                         + "\"(Error when accessing a method from the discriminator class) some reason\"]}}]");
     }

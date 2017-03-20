@@ -273,17 +273,6 @@ public class FieldsEnumeratorTest {
         assertEqualsSingle(expected, actual);
     }
 
-    private static class DiscriminatorClassMissing {
-        @Interchangeable(fieldTitle = "field")
-        @InterchangeableDiscriminator(discriminatorField = "type", discriminatorClass = "mustnotexist")
-        private Long field;
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testDiscriminatorClassMissing() {
-        fieldsFor(DiscriminatorClassMissing.class);
-    }
-
     private static class InternalConstraints {
 
         @Interchangeable(fieldTitle = "1", validators = @Validators(maxSize = "maxSizeFmName"))

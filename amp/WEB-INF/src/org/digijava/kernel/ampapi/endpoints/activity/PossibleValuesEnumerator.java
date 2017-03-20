@@ -1,8 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -85,22 +83,15 @@ public class PossibleValuesEnumerator {
 				}
 
 				try {
-					Class<? extends FieldsDiscriminator> discClass = InterchangeUtils.getDiscriminatorClass(finalField);
-					if (discClass != null)
-						return getPossibleValuesDirectly(discClass);
-				} catch(ClassNotFoundException exc) {
-					List<JsonBean> result = new ArrayList<JsonBean>();
-					result.add(ApiError.toError(ActivityErrors.DISCRIMINATOR_CLASS_NOT_FOUND.withDetails(exc.getMessage())));
-					return result;
-				} catch (InvocationTargetException | IllegalArgumentException | IllegalAccessException 
-						| SecurityException  | NoSuchMethodException | InstantiationException e) {
-					List<JsonBean> result = new ArrayList<JsonBean>();
-					Throwable t = e;
-					if (e instanceof InvocationTargetException) {
-						t = ((InvocationTargetException) e).getTargetException();
+					Class<? extends PossibleValuesProvider> providerClass =
+							InterchangeUtils.getPossibleValuesProvider(finalField);
+					if (providerClass != null) {
+						return getPossibleValuesDirectly(providerClass);
 					}
-					result.add(ApiError.toError(
-							ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR.withDetails(Objects.toString(t.getMessage()))));
+				} catch (Exception e) {
+					List<JsonBean> result = new ArrayList<JsonBean>();
+					result.add(ApiError.toError(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR
+							.withDetails(Objects.toString(e.getMessage()))));
 					return result;
 				}				
 				if (InterchangeUtils.isCompositeField(finalField) || configString != null) {
@@ -114,31 +105,27 @@ public class PossibleValuesEnumerator {
 
 	/**
 	 * method employed for the scenario that possible values are to be obtained from
-	 * a FieldsDiscriminator-derived class, instead of the usual database queries
-	 * @param discClass
+	 * a PossibleValuesProvider-derived class, instead of the usual database queries
+	 * @param possibleValuesProviderClass
 	 * @return
-	 * @throws NoSuchMethodException
-	 * @throws SecurityException
 	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
 	 * @throws InstantiationException
+	 * @throws SecurityException
+	 * @throws ExceptionInInitializerError
 	 */
-	private List<JsonBean> getPossibleValuesDirectly(Class<? extends FieldsDiscriminator> discClass)
-			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, 
-			InvocationTargetException, InstantiationException {
-		Method m = discClass.getMethod("getPossibleValues");
-		FieldsDiscriminator discObj = discClass.newInstance();
-		Map<String, Object> vals = (Map<String, Object>) m.invoke(discObj);
-		List<JsonBean> result = new ArrayList<JsonBean>();
-		for (Map.Entry<String, Object> entry : vals.entrySet()) {
+	private List<JsonBean> getPossibleValuesDirectly(
+			Class<? extends PossibleValuesProvider> possibleValuesProviderClass)
+			throws IllegalAccessException, InstantiationException {
+		PossibleValuesProvider provider = possibleValuesProviderClass.newInstance();
+		Map<String, ?> vals = provider.getPossibleValues();
+		List<JsonBean> result = new ArrayList<>();
+		for (Map.Entry<String, ?> entry : vals.entrySet()) {
 			JsonBean bean = new JsonBean();
 			bean.set("id", entry.getKey());
 			bean.set("value", entry.getValue());
 			result.add(bean);
 		}
 		return result;
-		
 	}
 	
 	/**

@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.digijava.kernel.ampapi.endpoints.activity.FieldsDiscriminator;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 
-public class ApprovalStatusDiscriminator extends FieldsDiscriminator {
+public class ApprovalStatusPossibleValuesProvider extends PossibleValuesProvider {
 
 	@Override
 	public Map<String, Object> getPossibleValues() {

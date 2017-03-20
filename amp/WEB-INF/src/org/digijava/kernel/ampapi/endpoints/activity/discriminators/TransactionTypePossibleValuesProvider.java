@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.ArConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.FieldsDiscriminator;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-public class TransactionTypeDiscriminator extends FieldsDiscriminator {
+public class TransactionTypePossibleValuesProvider extends PossibleValuesProvider {
 	
 	@Override
 	public Map<String, Object> getPossibleValues() {

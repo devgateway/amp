@@ -43,7 +43,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -761,15 +761,13 @@ public class ActivityImporter {
 		
 		// this is an object reference
 		if (!isCollection && idOnly) {
-			InterchangeableDiscriminator discr = field.getAnnotation(InterchangeableDiscriminator.class);
-			if (discr != null && discr.discriminatorClass().length() > 0) {
+			Class<? extends PossibleValuesProvider> providerClass = InterchangeUtils.getPossibleValuesProvider(field);
+			if (providerClass != null) {
 				try {
-					@SuppressWarnings("unchecked")
-					Class<FieldsDiscriminator> discrClass = (Class<FieldsDiscriminator>) Class.forName(discr.discriminatorClass());
-					FieldsDiscriminator disc = discrClass.newInstance();
-					return disc.toAmpFormat(jsonValue);
-				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-					throw new RuntimeException("Cannot instantiate discriminator class " + discr.discriminatorClass());
+					PossibleValuesProvider provider = providerClass.newInstance();
+					return provider.toAmpFormat(jsonValue);
+				} catch (InstantiationException | IllegalAccessException e) {
+					throw new RuntimeException("Could not convert value to AMP object.", e);
 				}				
 			}
 			return getObjectReferencedById(field.getType(), ((Number)jsonValue).longValue());

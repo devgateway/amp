@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CostTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -49,8 +51,7 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
 	protected Double funAmount;
 	
 	@Interchangeable(fieldTitle = "Currency Code", importable = true, fmPath = FMVisibility.PARENT_FM + "/Currency")
-	@InterchangeableDiscriminator(discriminatorField="currencyCode", 
-		discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyDiscriminator")
+	@PossibleValues(CurrencyPossibleValuesProvider.class)
 	@VersionableFieldSimple(fieldTitle = "Currency Code")
 	protected String currencyCode;
 	
@@ -59,8 +60,7 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
 	protected Date funDate;
 	
 	@Interchangeable(fieldTitle = "Funding Type", importable = true)
-	@InterchangeableDiscriminator(discriminatorField="funType",
-		discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.CostTypeDiscriminator")
+	@PossibleValues(CostTypePossibleValuesProvider.class)
 	protected FundingType funType;
 
 	/**

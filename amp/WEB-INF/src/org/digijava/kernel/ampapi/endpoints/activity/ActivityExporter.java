@@ -5,7 +5,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,12 +15,11 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -91,7 +89,7 @@ public class ActivityExporter {
 	private void readFieldValue(Field field, Object fieldInstance, Object parentObject, JsonBean resultJson, 
 			String fieldPath, Deque<Interchangeable> intchStack) throws IllegalArgumentException, 
 	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
-		
+
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 		InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 		
@@ -127,22 +125,23 @@ public class ActivityExporter {
 							Class<? extends Object> parentClassName = parentObject == null ? field.getDeclaringClass() : parentObject.getClass();
 							resultJson.set(fieldTitle, InterchangeUtils.getTranslationValues(field, parentClassName, fieldValue, InterchangeUtils.getId(parentObject)));
 						} else {
-							resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath, intchStack));
+							Class<? extends PossibleValuesProvider> providerClass =
+									InterchangeUtils.getPossibleValuesProvider(field);
+							if (providerClass != null) {
+								resultJson.set(InterchangeUtils.underscorify(interchangeable.fieldTitle()),
+										getJsonValue(providerClass, fieldValue));
+							} else {
+								resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath, intchStack));
+							}
 						}
 					}
 				}
 			} else {
 				if (isFiltered(filteredFieldPath)) {
-					
-					Long id;
-					if (discriminator != null && discriminator.discriminatorClass().length() > 0) {
-						try {
-							Class<FieldsDiscriminator> discClass = (Class<FieldsDiscriminator>) Class.forName(discriminator.discriminatorClass());
-							id = (Long) discClass.newInstance().getIdOf(fieldValue);
-							resultJson.set(fieldTitle, id);	
-						} catch (ClassNotFoundException | InstantiationException e) {
-							throw new RuntimeException("Couldn't instantiate discriminator class "+ discriminator.discriminatorClass());
-						}
+					Class<? extends PossibleValuesProvider> providerClass =
+							InterchangeUtils.getPossibleValuesProvider(field);
+					if (providerClass != null) {
+						resultJson.set(fieldTitle, getIdValue(providerClass, fieldValue));
 					} else {
 						resultJson.set(fieldTitle, InterchangeUtils.getId(fieldValue));
 					}
@@ -189,21 +188,6 @@ public class ActivityExporter {
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 		InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 		Interchangeable[] settings = discriminator.settings();
-		
-		try {
-			Class<? extends FieldsDiscriminator> discClass = InterchangeUtils.getDiscriminatorClass(field);
-			
-			if (discClass != null) {
-				resultJson.set(InterchangeUtils.underscorify(interchangeable.fieldTitle()), getDiscriminatorValue(discClass, object));
-				return;
-			}
-		} catch(ClassNotFoundException e) {
-			logger.error("Discriminator class not found. " 	+ e.getMessage());
-			throw new RuntimeException(e);
-		} catch (InstantiationException e) {
-			logger.error("Error in creating instance of class. " 	+ e.getMessage());
-			throw new RuntimeException(e);
-		}
 		
 		intchStack.push(interchangeable);
 		
@@ -300,16 +284,25 @@ public class ActivityExporter {
 	
 	/**
 	 * 
-	 * @param discClass Discriminator Class that will be used to load the values of the object
+	 * @param providerClass Provider class that will be used to load the values of the object
 	 * @param fieldValue Object which will be used to retrieve the custom value
 	 * @return object Custom value of the object  
 	 */
-	private Object getDiscriminatorValue(Class<? extends FieldsDiscriminator> discClass, Object fieldValue) 
-			throws NoSuchMethodException, SecurityException, InstantiationException, 
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		
-		FieldsDiscriminator discObj = discClass.newInstance();
-		
-		return discObj.toJsonOutput(fieldValue);
+	private Object getJsonValue(Class<? extends PossibleValuesProvider> providerClass, Object fieldValue) {
+		try {
+			PossibleValuesProvider providerObj = providerClass.newInstance();
+			return providerObj.toJsonOutput(fieldValue);
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException("Failed to obtain json value.", e);
+		}
+	}
+
+	private Object getIdValue(Class<? extends PossibleValuesProvider> providerClass, Object fieldValue) {
+		try {
+			PossibleValuesProvider providerObj = providerClass.newInstance();
+			return providerObj.getIdOf(fieldValue);
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException("Failed to obtain id value.", e);
+		}
 	}
 }

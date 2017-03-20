@@ -38,6 +38,7 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -362,21 +363,16 @@ public class InterchangeUtils {
 	}
 	
 	/**
-	 * Obtains the discriminator class of the field, if it has one
+	 * Obtains the possible values provider class of the field, if it has one
 	 * @param field
-	 * @return null if the field doesn't have a discriminator class attached, otherwise -- the class
-	 * @throws ClassNotFoundException
+	 * @return null if the field doesn't have a provider class attached, otherwise -- the class
 	 */
-	public static Class<? extends FieldsDiscriminator> getDiscriminatorClass(Field field) throws ClassNotFoundException {
-		InterchangeableDiscriminator ant = field.getAnnotation(InterchangeableDiscriminator.class);
-		if (ant != null && !ant.discriminatorClass().equals("")) {
-			String className = ant.discriminatorClass();
-			@SuppressWarnings("unchecked")
-			Class<? extends FieldsDiscriminator> result = (Class<? extends FieldsDiscriminator>) Class.forName(className);
-			return result;
+	public static Class<? extends PossibleValuesProvider> getPossibleValuesProvider(Field field) {
+		PossibleValues ant = field.getAnnotation(PossibleValues.class);
+		if (ant != null) {
+			return ant.value();
 		}
 		return null;
-		
 	}
 	
 	public static boolean isCompositeField(Field field) {

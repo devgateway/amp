@@ -9,8 +9,10 @@ import java.util.Map;
  * employ special procedures in obtaining possible values and 
  * specific activity values in for a full project information
  */
-public abstract class FieldsDiscriminator {
+public abstract class PossibleValuesProvider {
+
 	public abstract Map<String, ?> getPossibleValues();
+
 	/**
 	 * Generates a JSON-friendly representation of the object provided, 
 	 * with an implied logical conversion for correspondence to AF
@@ -21,19 +23,9 @@ public abstract class FieldsDiscriminator {
 	 * 
 	 * @param obj the object to be converted
 	 */
-
-	protected Object value;
-	
-//	public FieldsDiscriminator(Object value) {
-//		this.value = value;
-//	}
-//	
 	public abstract Object toJsonOutput(Object value);
 	
 	public abstract Long getIdOf(Object value);
 
 	public abstract Object toAmpFormat(Object obj);	
-//	public abstract Object toAmpFormat();
-	
-//	public abstract Class getJsonOutputType();
 }

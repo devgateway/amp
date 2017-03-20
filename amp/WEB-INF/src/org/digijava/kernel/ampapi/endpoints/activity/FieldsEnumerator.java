@@ -174,7 +174,7 @@ public class FieldsEnumerator {
 				continue;
 			}
 			intchStack.push(interchangeable);
-			if (!InterchangeUtils.isCompositeField(field) || hasFieldDiscriminatorClass(field)) {
+			if (!InterchangeUtils.isCompositeField(field)) {
 				if (fmService.isVisible(interchangeable.fmPath(), intchStack)) {
 					APIField descr = describeField(field, intchStack);
 					if (descr != null) {
@@ -201,15 +201,6 @@ public class FieldsEnumerator {
 		return result;
 	}
 	
-	private static boolean hasFieldDiscriminatorClass(Field field) {
-		try {
-			return InterchangeUtils.getDiscriminatorClass(field) != null;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-	}
-
 	/**
 	 * Picks available translations for a string (supposedly field name)
 	 * 

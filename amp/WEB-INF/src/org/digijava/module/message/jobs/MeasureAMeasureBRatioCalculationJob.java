@@ -53,6 +53,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 	protected static Logger logger = Logger.getLogger(MeasureAMeasureBRatioCalculationJob.class);
 	private static Double DEFAULT_PERCENTAGE = 1D;
 	private static BigDecimal HUNDRED = new BigDecimal(100);
+	private static Integer DAYS_AFTER_QUARTER = 25;
 
 	@Override
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -91,7 +92,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
 			Date lowerDateReport = null;
 			Date upperDateReport = null;
-			// we first need to check if we are 25 days after the last quarter
+			// we first need to check if we are DAYS_AFTER_QUARTER days after the last quarter
 			// ended
 			Quarter previousQuarter = checkIfShouldRunReport();
 			if (previousQuarter != null) {
@@ -228,7 +229,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 						public void execute(Connection conn) throws SQLException {
 							
 							SQLUtils.executeQuery(conn, String.format("insert into amp_global_event_log "+ 
-							" select  (select max(id)+1 from amp_global_event_log) ,now(),'%s','%s',amp_version,amp_version_encoded  "+
+							" select  nextval('amp_global_event_log_id_seq') ,now(),'%s','%s',amp_version,amp_version_encoded  "+
 							" from amp_global_event_log where id =(select max(id) from amp_global_event_log where event_name='AMP startup') "
 								, eventName, quarter));
 						}
@@ -245,7 +246,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 				}
 			} else {
 				// should run report
-				logger.error(this.getClass() + " Should not run since its not 25 days after the last quarter ended or it has already run for this quarter");
+				logger.error(this.getClass() + " Should not run since its not DAYS_AFTER_QUARTER days after the last quarter ended or it has already run for this quarter");
 			}
 		} else {
 			logger.error(this.getClass() + " could not run because the team is not correctly configured for setting "
@@ -260,10 +261,10 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
 		Quarter currentQuarter = new Quarter(fiscalCalendar, new Date());
 
-		DateTime lastQuarterStartDayPlus25 = new DateTime(currentQuarter.getPreviousQuarter().getQuarterEndDate());
-		lastQuarterStartDayPlus25 = lastQuarterStartDayPlus25.plusDays(25);
+		DateTime lastQuarterStartDayPlusDAYS_AFTER_QUARTER = new DateTime(currentQuarter.getPreviousQuarter().getQuarterEndDate());
+		lastQuarterStartDayPlusDAYS_AFTER_QUARTER = lastQuarterStartDayPlusDAYS_AFTER_QUARTER.plusDays(DAYS_AFTER_QUARTER);
 
-		//we check if we are 25 days after the quarter has ended and that it has not run for that quarter
+		//we check if we are DAYS_AFTER_QUARTER days after the quarter has ended and that it has not run for that quarter
 		final ValueWrapper<Boolean> shouldRunJob = new ValueWrapper<Boolean>(true);
 		try {
 			final String previousQuarterName = currentQuarter.getPreviousQuarter().toString();
@@ -285,7 +286,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 			logger.error("could get last job run for this quarter", e);
 		}
 
-		if (shouldRunJob.value && today.isAfter((lastQuarterStartDayPlus25) ) ) {
+		if (shouldRunJob.value && today.isAfter((lastQuarterStartDayPlusDAYS_AFTER_QUARTER) ) ) {
 
 			return currentQuarter.getPreviousQuarter();
 		} else {

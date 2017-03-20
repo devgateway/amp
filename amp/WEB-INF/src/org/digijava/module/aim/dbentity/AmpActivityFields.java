@@ -380,7 +380,7 @@ LoggerIdentifiable, Cloneable {
 
 	@Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")
 	@VersionableCollection(fieldTitle = "Activity Contacts")
-	@InterchangeableDiscriminator(discriminatorField = "contactType", discriminatorClass = "", settings = {
+	@InterchangeableDiscriminator(discriminatorField = "contactType", settings = {
 			@Interchangeable(fieldTitle = ActivityFieldsConstants.DONOR_CONTACT, importable = true, discriminatorOption = Constants.DONOR_CONTACT, 
 							fmPath = "/Activity Form/Contacts/Donor Contact Information", 
 							validators = @Validators(unique = "/Activity Form/Contacts/Donor Contact Information")),

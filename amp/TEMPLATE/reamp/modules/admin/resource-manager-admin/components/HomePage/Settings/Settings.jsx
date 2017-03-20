@@ -93,20 +93,20 @@ export default class Settings extends Component {
         this.__ = key => this.props.translations[key];
         return <div>
             <div className="row settingsRow">
-                <div className="col-sm-2 settingsName settingsCol topCol"><span className="settingsText settingsTitle">{this.__('amp.resource-manager:setting')}</span></div>
-                <div className="col-sm-4 settingsCol topCol rightCol"><span className="settingsText settingsTitle">{this.__('amp.resource-manager:value')}</span>
+                <div className="col-sm-5 settingsName settingsCol topCol"><span className="settingsText settingsTitle">{this.__('amp.resource-manager:setting')}</span></div>
+                <div className="col-sm-5 settingsCol topCol rightCol"><span className="settingsText settingsTitle">{this.__('amp.resource-manager:value')}</span>
                 </div>
             </div>
             <div className="row settingsRow">
-                <div className="col-sm-2 settingsName settingsCol "><span className="settingsText">{this.state.limitFileToUpload.name}</span></div>
-                <div className="col-sm-4 settingsCol  rightCol "><Checkbox
+                <div className="col-sm-5 settingsName settingsCol "><span className="settingsText">{this.state.limitFileToUpload.name}</span></div>
+                <div className="col-sm-5 settingsCol  rightCol "><Checkbox
                     checked={this.state.limitFileToUpload.valueSelected}
                     onChange={this.onChangeLimitFileToUpload}/>
                 </div>
             </div>
             <div className="row settingsRow">
-                <div className="col-sm-2 settingsName settingsCol"><span className="settingsText">{this.state.maximumFileSize.name}</span></div>
-                <div className="col-sm-4 settingsCol rightCol"><NumberInput
+                <div className="col-sm-5 settingsName settingsCol"><span className="settingsText">{this.state.maximumFileSize.name}</span></div>
+                <div className="col-sm-5 settingsCol rightCol"><NumberInput
                     id="price"
                     type="number"
                     onChange={this.onMaximunFileSizeChange}
@@ -118,8 +118,8 @@ export default class Settings extends Component {
                 /></div>
             </div>
             <div className="row settingsRow">
-                <div className="col-sm-2 settingsName settingsCol"><span className="settingsText">{this.state.resourceSortOption.name}</span></div>
-                <div className="col-sm-4 settingsCol rightCol"><Select
+                <div className="col-sm-5 settingsName settingsCol"><span className="settingsText">{this.state.resourceSortOption.name}</span></div>
+                <div className="col-sm-5 settingsCol rightCol"><Select
                     name="form-field-name"
                     value={this.state.resourceSortOption.valueSelected}
                     options={this.state.resourceSortOption.options}

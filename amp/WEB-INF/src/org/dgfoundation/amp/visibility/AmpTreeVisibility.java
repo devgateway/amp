@@ -5,11 +5,6 @@
  */
 package org.dgfoundation.amp.visibility;
 
-import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
-import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
@@ -17,6 +12,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.dgfoundation.amp.ar.MeasureConstants;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
+import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 
 /**
  * @author dan
@@ -116,29 +117,33 @@ public class AmpTreeVisibility implements Serializable{
 				.getRoot();
 		if (module.getSubmodules().isEmpty()) {
 			for (Iterator jt = module.getSortedAlphaItems().iterator(); jt
-					.hasNext();) // getItems
+					.hasNext(); ) // getItems
 			{
 				AmpFeaturesVisibility feature = (AmpFeaturesVisibility) jt
 						.next();
-				AmpTreeVisibility featureNode = new AmpTreeVisibility();
-				featureNode.setRoot(feature);
-				featureNode.setItems(new ConcurrentHashMap());
-				for (Iterator kt = feature.getSortedAlphaItems().iterator(); kt
-						.hasNext();)// getItems
-				{
-					AmpFieldsVisibility field = (AmpFieldsVisibility) kt.next();
-					AmpTreeVisibility fieldNode = new AmpTreeVisibility();
-					fieldNode.setRoot(field);
-					fieldNode.setItems(null);
-					featureNode.getItems().put(field.getName(), fieldNode);
+				if (!MeasureConstants.INTERNAL_USE_MEASURES.contains(feature.getName())) {
+					AmpTreeVisibility featureNode = new AmpTreeVisibility();
+
+					featureNode.setRoot(feature);
+
+					featureNode.setItems(new ConcurrentHashMap());
+					for (Iterator kt = feature.getSortedAlphaItems().iterator(); kt
+							.hasNext(); )// getItems
+					{
+						AmpFieldsVisibility field = (AmpFieldsVisibility) kt.next();
+						AmpTreeVisibility fieldNode = new AmpTreeVisibility();
+						fieldNode.setRoot(field);
+						fieldNode.setItems(null);
+						featureNode.getItems().put(field.getName(), fieldNode);
+					}
+					moduleNode.getItems().put(feature.getName(), featureNode);
 				}
-				moduleNode.getItems().put(feature.getName(), featureNode);
 			}
 			return 0;
 		}
 
 		for (Iterator it = module.getSortedAlphaSubModules().iterator(); it
-				.hasNext();) {
+				.hasNext(); ) {
 			AmpModulesVisibility moduleAux = (AmpModulesVisibility) it.next();
 			AmpTreeVisibility moduleNodeAux = new AmpTreeVisibility();
 			moduleNodeAux.setRoot(moduleAux);

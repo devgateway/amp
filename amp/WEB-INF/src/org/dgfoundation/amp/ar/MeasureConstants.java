@@ -3,6 +3,9 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Constants for Measure Names. <b>
  * Values are pulled from amp_measures.measurename 
@@ -88,4 +91,6 @@ public class MeasureConstants {
 	public static final String FORECAST_EXECUTION_RATE = "Forecast Execution Rate";
 
 	public static final String ALWAYS_PRESENT = "Always Present";
+
+	public static final List<String> INTERNAL_USE_MEASURES = Arrays.asList(PROPOSED_PROJECT_AMOUNT_PER_PROJECT);
 }

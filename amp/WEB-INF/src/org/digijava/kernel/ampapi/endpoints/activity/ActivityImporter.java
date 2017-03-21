@@ -32,6 +32,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
@@ -449,9 +450,9 @@ public class ActivityImporter {
 		// validate children, even if it is not a list -> to notify wrong entries
 		if ((isList || childrenFields != null && childrenFields.size() > 0) && childrenNewValues != null) {
 			String actualFieldName = fieldDef.getFieldNameInternal();
-			Field newField = getField(newParent, actualFieldName);
+			Field newField = ReflectionUtil.getField(newParent, actualFieldName);
 			// REFACTOR: remove old parent and field usage, not relevant anymore
-			Field oldField = getField(oldParent, actualFieldName);
+			Field oldField = ReflectionUtil.getField(oldParent, actualFieldName);
 			Object newFieldValue = null;
 			Object oldFieldValue = null;
 			Class<?> subElementClass = null;
@@ -621,7 +622,7 @@ public class ActivityImporter {
 		String actualFieldName = fieldDef.getFieldNameInternal();
 		String fieldType = fieldDef.getFieldType();
 		Object fieldValue = newJsonParent.get(fieldName);
-		Field objField = getField(newParent, actualFieldName);
+		Field objField = ReflectionUtil.getField(newParent, actualFieldName);
 		if (objField == null) {
 			// cannot set
 			logger.error("Actual Field not found: " + actualFieldName + ", fieldPath: " + fieldPath);
@@ -669,28 +670,6 @@ public class ActivityImporter {
 			}
 		}
 		return newParent;
-	}
-	
-	protected Field getField(Object parent, String actualFieldName) {
-		if (parent == null) {
-			return null;
-		}
-		Field field = null;
-		try {
-			Class<?> clazz = parent.getClass();
-			while (field == null && !clazz.equals(Object.class)) {
-				try {
-					field = clazz.getDeclaredField(actualFieldName);
-					field.setAccessible(true);
-				} catch (NoSuchFieldException ex) {
-					clazz = clazz.getSuperclass();
-				}
-			}
-		} catch (Exception e) {
-			logger.error(e);
-			throw new RuntimeException(e);
-		}
-		return field;
 	}
 	
 	protected Map<String, Object> getMatchedOldValue(APIField childDef, List<Map<String, Object>> oldValues) {

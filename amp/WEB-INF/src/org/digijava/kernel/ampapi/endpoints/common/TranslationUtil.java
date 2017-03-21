@@ -169,7 +169,7 @@ public class TranslationUtil {
      * @return
      */
     public String extractTranslationsOrSimpleValue(String fieldName, Object parentObj, Object jsonValue) {
-        return extractTranslationsOrSimpleValue(getField(parentObj, fieldName), parentObj, jsonValue);
+        return extractTranslationsOrSimpleValue(ReflectionUtil.getField(parentObj, fieldName), parentObj, jsonValue);
     }
 
     public String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
@@ -310,28 +310,6 @@ public class TranslationUtil {
         if (trnSettings.isMultilingual())
             translations.addAll(trnList);
         return value;
-    }
-
-    protected static Field getField(Object parent, String actualFieldName) {
-        if (parent == null) {
-            return null;
-        }
-        Field field = null;
-        try {
-            Class<?> clazz = parent.getClass();
-            while (field == null && !clazz.equals(Object.class)) {
-                try {
-                    field = clazz.getDeclaredField(actualFieldName);
-                    field.setAccessible(true);
-                } catch (NoSuchFieldException ex) {
-                    clazz = clazz.getSuperclass();
-                }
-            }
-        } catch (Exception e) {
-            logger.error(e);
-            throw new RuntimeException(e);
-        }
-        return field;
     }
 
     /**

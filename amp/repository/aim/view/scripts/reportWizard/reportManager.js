@@ -443,14 +443,23 @@ NormalReportManager.prototype.checkHierarchies	= function () {
 		hierarchiesMustEl.style.display	= "none";
 	}
 
-	var wMeasurelessHiers = document.getElementById("measurelessOnlyHiersNotAllowed");
+	var disableNextTab = true;
+	var wMeasurelessHiers3 = document.getElementById("measurelessOnlyHiersNotAllowed3");
+	var wMeasurelessHiers4 = document.getElementById("measurelessOnlyHiersNotAllowed4");
+	var wMeasurelessHiers3List = document.getElementById("measurelessOnlyHiersNotAllowed3List");
+	var wMeasurelessHiers4List = document.getElementById("measurelessOnlyHiersNotAllowed4List");
 	var measurelessOnlyHiers = findMeasurelessOnlyHiers(Array.prototype.slice.call(items).map(getColDbId));
 	if (measItems.length > 0 && measurelessOnlyHiers.length > 0) {
-		wMeasurelessHiers.style.display	= "";
-		document.getElementById("measurelessOnlyHiersNotAllowedList").innerHTML = measurelessOnlyHiers.map(TranslationManager.getTranslated).join();
+		displayEl(wMeasurelessHiers3);
+		displayEl(wMeasurelessHiers4);
+		var list = measurelessOnlyHiers.map(TranslationManager.getTranslated).join();
+        wMeasurelessHiers3List.innerHTML = list;
+        wMeasurelessHiers4List.innerHTML = list;
+        disableNextTab = false;
 		retValue = false;
 	} else {
-		wMeasurelessHiers.style.display	= "none";
+        hideEl(wMeasurelessHiers3);
+        hideEl(wMeasurelessHiers4);
 	}
 
 	var warnAmtColumns = document.getElementById("hierNotCompatibleWithAmountCols");
@@ -465,16 +474,13 @@ NormalReportManager.prototype.checkHierarchies	= function () {
 	} else {
 		warnAmtColumns.style.display	= "none";
 	}
-	
-	if ( retValue ) {
+
+	if (retValue || !disableNextTab) {
 		this.enableTab(3);
-		return true;
-	}
-	else {
+	} else {
 		this.disableTab(3);
-		return false;
 	}
-	
+	return retValue;
 };
 
 NormalReportManager.prototype.checkColumns	= function () {

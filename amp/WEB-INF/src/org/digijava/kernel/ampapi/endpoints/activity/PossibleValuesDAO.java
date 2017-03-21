@@ -11,9 +11,9 @@ public interface PossibleValuesDAO {
 
     List<Object[]> getGenericValues(Class<?> clazz, String idFieldName, String valueFieldName);
 
-    List<Object[]> getSpecialCaseObjectList(String configType, String configTableName,
-            String entityIdColumnName, String entityValueColumnName,
-            String conditionColumnName, String idColumnName, Class<?> clazz);
+    List<Object[]> getThemes(String configType);
+
+    List<Object[]> getSectors(String configType);
 
     List<Object[]> getPossibleLocations();
 }

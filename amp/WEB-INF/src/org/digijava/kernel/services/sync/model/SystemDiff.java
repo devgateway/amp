@@ -2,6 +2,7 @@ package org.digijava.kernel.services.sync.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -28,6 +29,9 @@ public class SystemDiff {
 
     @JsonProperty
     private ListDiff<String> activities;
+
+    @JsonProperty("possible-values-fields")
+    private List<String> possibleValuesFields;
 
     @JsonProperty
     private boolean translations;
@@ -64,6 +68,10 @@ public class SystemDiff {
 
     public void setTranslations(boolean translations) {
         this.translations = translations;
+    }
+
+    public void setPossibleValuesFields(List<String> possibleValuesFields) {
+        this.possibleValuesFields = possibleValuesFields;
     }
 
     public String getTimestamp() {

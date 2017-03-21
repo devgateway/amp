@@ -2,17 +2,30 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -29,10 +42,70 @@ public class PossibleValuesEnumerator {
 
 	public static final PossibleValuesEnumerator INSTANCE = new PossibleValuesEnumerator(new AmpPossibleValuesDAO());
 
+	private static final Map<Class<?>, List<String>> ENTITY_CLASS_TO_SYNC_ENTITIES;
+
+	static {
+		Map<Class<?>, List<String>> map = new HashMap<>();
+		map.put(AmpCategoryValue.class, Arrays.asList(SyncConstants.Entities.CATEGORY_VALUE));
+		map.put(AmpLocation.class, Arrays.asList(SyncConstants.Entities.LOCATION,
+				SyncConstants.Entities.CATEGORY_VALUE_LOCATION, SyncConstants.Entities.CATEGORY_VALUE));
+		map.put(AmpSector.class, Arrays.asList(SyncConstants.Entities.SECTOR));
+		map.put(AmpTheme.class, Arrays.asList(SyncConstants.Entities.THEME));
+		map.put(AmpOrganisation.class, Arrays.asList(SyncConstants.Entities.ORGANISATION));
+		map.put(AmpRole.class, Arrays.asList(SyncConstants.Entities.ROLE));
+		map.put(AmpCurrency.class, Arrays.asList(SyncConstants.Entities.CURRENCY));
+		map.put(AmpContact.class, Arrays.asList(SyncConstants.Entities.CONTACT));
+		map.put(AmpActivityProgramSettings.class, Arrays.asList(SyncConstants.Entities.ACTIVITY_PROGRAM_SETTINGS));
+		ENTITY_CLASS_TO_SYNC_ENTITIES = Collections.unmodifiableMap(map);
+	}
+
 	private PossibleValuesDAO possibleValuesDAO;
 
 	public PossibleValuesEnumerator(PossibleValuesDAO possibleValuesDAO) {
 		this.possibleValuesDAO = possibleValuesDAO;
+	}
+
+	/**
+	 * Returns all sync entities that need to be monitored for possible value changes.
+	 * @return a list of sync entities
+	 */
+	public Set<String> getAllSyncEntities() {
+		return PossibleValuesEnumerator.ENTITY_CLASS_TO_SYNC_ENTITIES.values().stream()
+				.flatMap(Collection::stream)
+				.collect(Collectors.toSet());
+	}
+
+	/**
+	 * Returns a predicate that can filter fields that depend on specific changelog entities.
+	 * @param syncEntities sync entities that have changed
+	 * @return field filter
+	 */
+	public Predicate<Field> fieldsDependingOn(Set<String> syncEntities) {
+		List<Class<?>> targetClasses = new ArrayList<>();
+		PossibleValuesEnumerator.ENTITY_CLASS_TO_SYNC_ENTITIES.forEach((k, v) -> {
+			if (v.stream().anyMatch(syncEntities::contains)) {
+				targetClasses.add(k);
+			}
+		});
+		return classOfFieldIs(assignableFromAny(targetClasses));
+	}
+
+	/**
+	 * Wrapper for a predicate that tests field's class.
+	 * @param p field's class predicate
+	 * @return field predicate
+	 */
+	private Predicate<Field> classOfFieldIs(Predicate<Class<?>> p) {
+		return field -> p.test(InterchangeUtils.getClassOfField(field));
+	}
+
+	/**
+	 * Returns true if predicate's class is assignable from any of the classes specified as parameter.
+	 * @param classes classes to test against
+	 * @return a predicate
+	 */
+	private Predicate<Class<?>> assignableFromAny(List<Class<?>> classes) {
+		return clazz -> classes.stream().anyMatch(clazz::isAssignableFrom);
 	}
 
 	/**
@@ -141,11 +214,9 @@ public class PossibleValuesEnumerator {
 		List<Object[]> items;
 		Class<?> clazz = InterchangeUtils.getClassOfField(field);
 		if (clazz.equals(AmpSector.class)) {
-			items = possibleValuesDAO.getSpecialCaseObjectList(configValue, "all_sectors_with_levels",
-					 "ampSectorId", "name", "sector_config_name", "amp_sector_id", AmpSector.class);
+			items = possibleValuesDAO.getSectors(configValue);
 		} else if (clazz.equals(AmpTheme.class)) {
-			items = possibleValuesDAO.getSpecialCaseObjectList(configValue, "all_programs_with_levels",
-					 "ampThemeId", "name", "program_setting_name", "amp_theme_id", AmpTheme.class);
+			items = possibleValuesDAO.getThemes(configValue);
 		} else if (clazz.equals(AmpCategoryValue.class)){
 			return getPossibleCategoryValues(field, configValue);
 		} else if (clazz.equals(AmpFundingAmount.class)){
@@ -195,17 +266,6 @@ public class PossibleValuesEnumerator {
 		}
 		List<Object[]> objectList = possibleValuesDAO.getGenericValues(clazz, idFieldName, valueFieldName);
 		result = setProperties(objectList, result, false);
-//		for (Object obj : objectList) {
-//			JsonBean item = null;
-//			try {
-//				item = setProperties(obj);
-//			} catch (Exception exc) {
-//				LOGGER.error(exc.getMessage());
-//				throw new RuntimeException(exc);
-//			}
-//			if (item != null)
-//				result.add(item);
-//		}
 		return result;
 	}
 

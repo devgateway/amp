@@ -630,8 +630,7 @@ public class InterchangeUtils {
 		return InterchangeableClassMapper.containsSimpleClass(clazz);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static Class getClassOfField(Field field) {
+	public static Class<?> getClassOfField(Field field) {
 		if (!isCollection(field))
 			return field.getType();
 		else

@@ -10,13 +10,15 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
+import java.util.function.Predicate;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 
 /**
  * AMP Activity Endpoints for Activity Import / Export
@@ -265,5 +267,79 @@ public class FieldsEnumerator {
 		
 		return null;
 	}
-	
+
+	public List<String> findFieldPaths(Predicate<Field> fieldFilter) {
+		FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
+		visit(AmpActivityFields.class, visitor, new VisitorContext());
+		return visitor.fields;
+	}
+
+	private class FieldNameCollectingVisitor implements InterchangeVisitor {
+
+		private List<String> fields = new ArrayList<>();
+
+		private Predicate<Field> fieldFilter;
+
+		FieldNameCollectingVisitor(Predicate<Field> fieldFilter) {
+			this.fieldFilter = fieldFilter;
+		}
+
+		@Override
+		public void visit(Field field, String fieldName, VisitorContext context) {
+			if (fieldFilter.test(field)) {
+				StringJoiner fieldPath = new StringJoiner("~");
+				context.pathStack.descendingIterator().forEachRemaining(fieldPath::add);
+				fields.add(fieldPath.toString());
+			}
+		}
+	}
+
+	public interface InterchangeVisitor {
+		void visit(Field field, String fieldName, VisitorContext context);
+	}
+
+	private class VisitorContext {
+		private Deque<String> pathStack = new ArrayDeque<>();
+		private Deque<Interchangeable> interchangeableStack = new ArrayDeque<>();
+	}
+
+	// TODO how to reuse this logic?
+	private void visit(Class<?> clazz, InterchangeVisitor visitor, VisitorContext context) {
+		for (Field field : clazz.getDeclaredFields()) {
+			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+			if (ant != null) {
+				context.interchangeableStack.push(ant);
+				if (!InterchangeUtils.isCompositeField(field)) {
+					if (fmService.isVisible(ant.fmPath(), context.interchangeableStack)) {
+						visit(field, InterchangeUtils.underscorify(ant.fieldTitle()), ant, visitor, context);
+					}
+				} else {
+					InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
+					Interchangeable[] settings = antd.settings();
+					for (Interchangeable ants : settings) {
+						if (fmService.isVisible(ants.fmPath(), context.interchangeableStack)) {
+							context.interchangeableStack.push(ants);
+							visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ant, visitor, context);
+							context.interchangeableStack.pop();
+						}
+					}
+				}
+				context.interchangeableStack.pop();
+			}
+		}
+	}
+
+	private void visit(Field field, String fieldName, Interchangeable ant, InterchangeVisitor visitor,
+			VisitorContext context) {
+		context.pathStack.push(InterchangeUtils.underscorify(fieldName));
+
+		visitor.visit(field, fieldName, context);
+
+		Class classOfField = InterchangeUtils.getClassOfField(field);
+		if (!InterchangeUtils.isSimpleType(classOfField) && !ant.pickIdOnly()) {
+			visit(classOfField, visitor, context);
+		}
+
+		context.pathStack.pop();
+	}
 }

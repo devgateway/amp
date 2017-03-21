@@ -159,7 +159,7 @@ public class PossibleValuesEnumeratorTest {
 
     @Test
     public void testSpecialCaseAmpSector() throws IOException {
-        when(possibleValuesDAO.getSpecialCaseObjectList(any(), any(), any(), any(), any(), any(), any()))
+        when(possibleValuesDAO.getSectors(any()))
                 .thenReturn(Arrays.asList(
                         values(1, "Sector 1"),
                         values(2, "Sector 2")
@@ -170,7 +170,7 @@ public class PossibleValuesEnumeratorTest {
 
     @Test
     public void testSpecialCaseAmpTheme() throws IOException {
-        when(possibleValuesDAO.getSpecialCaseObjectList(any(), any(), any(), any(), any(), any(), any()))
+        when(possibleValuesDAO.getThemes(any()))
                 .thenReturn(Arrays.asList(
                         values(1, "Theme 1"),
                         values(2, "Theme 2")

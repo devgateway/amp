@@ -4,6 +4,7 @@ import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.*;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.UPDATED;
 
+import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,15 +12,20 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.request.Site;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.services.sync.model.ActivityChange;
@@ -51,10 +57,14 @@ public class SyncService implements InitializingBean {
     private static final RowMapper<AmpOfflineChangelog> ROW_MAPPER = new AmpOfflineChangelogMapper();
 
     private static final RowMapper<Long> ID_MAPPER = new SingleColumnRowMapper<>(Long.class);
+    private static final RowMapper<String> STR_MAPPER = new SingleColumnRowMapper<>(String.class);
     private static final RowMapper<Translation> TRANSLATION_ROW_MAPPER = new BeanPropertyRowMapper<>(Translation.class);
 
     private static final BeanPropertyRowMapper<ActivityChange> ACTIVITY_CHANGE_ROW_MAPPER =
             new BeanPropertyRowMapper<>(ActivityChange.class);
+
+    private PossibleValuesEnumerator possibleValuesEnumerator = PossibleValuesEnumerator.INSTANCE;
+    private FieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.PRIVATE_ENUMERATOR;
 
     private static class AmpOfflineChangelogMapper implements RowMapper<AmpOfflineChangelog> {
 
@@ -86,6 +96,8 @@ public class SyncService implements InitializingBean {
 
         systemDiff.setTranslations(shouldSyncTranslations(lastSyncTime));
 
+        systemDiff.setPossibleValuesFields(findChangedPossibleValuesFields(lastSyncTime));
+
         return systemDiff;
     }
 
@@ -104,6 +116,27 @@ public class SyncService implements InitializingBean {
                 "and operation_time > :lastSyncTime", args);
 
         return count > 0;
+    }
+
+    private List<String> findChangedPossibleValuesFields(Date lastSyncTime) {
+        Set<String> changedEntities;
+        if (lastSyncTime == null) {
+            changedEntities = possibleValuesEnumerator.getAllSyncEntities();
+        } else {
+            Map<String, Object> args = new HashMap<>();
+            args.put("entities", possibleValuesEnumerator.getAllSyncEntities());
+            args.put("lastSyncTime", lastSyncTime);
+
+            List<String> entityList = jdbcTemplate.query(
+                    "select distinct cl.entity_name "
+                            + "from amp_offline_changelog cl "
+                            + "where cl.entity_name in (:entities) "
+                            + "and cl.operation_time > :lastSyncTime", args, STR_MAPPER);
+
+            changedEntities = new HashSet<>(entityList);
+        }
+        Predicate<Field> fieldFilter = possibleValuesEnumerator.fieldsDependingOn(changedEntities);
+        return fieldsEnumerator.findFieldPaths(fieldFilter);
     }
 
     private void updateDiffsForActivities(SystemDiff systemDiff, List<Long> userIds, Date lastSyncTime) {

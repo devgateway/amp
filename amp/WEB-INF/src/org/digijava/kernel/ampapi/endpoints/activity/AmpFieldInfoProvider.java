@@ -20,16 +20,44 @@ import org.hibernate.persister.entity.AbstractEntityPersister;
  */
 public class AmpFieldInfoProvider implements FieldInfoProvider {
 
-    private TranslationSettings trnSettings = TranslationSettings.getCurrent();
+    private Class<?> rootClass;
+
+    private final Object lock = new Object();
 
     private Map<Field, String> fieldTypes;
     private Map<Field, Integer> fieldMaxLengths;
 
-    public AmpFieldInfoProvider(Class<?> clazz) {
+    public AmpFieldInfoProvider(Class<?> rootClass) {
+        this.rootClass = rootClass;
+    }
+
+    public Integer getMaxLength(Field field) {
+        initializeIfNeeded();
+        return fieldMaxLengths.get(field);
+    }
+
+    @Override
+    public boolean isTranslatable(Field field) {
+        return TranslationSettings.getCurrent().isTranslatable(field);
+    }
+
+    public String getType(Field field) {
+        initializeIfNeeded();
+        return fieldTypes.get(field);
+    }
+
+    private void initializeIfNeeded() {
+        synchronized (lock) {
+            if (fieldTypes == null) {
+                initialize();
+            }
+        }
+    }
+
+    public void initialize() {
         fieldTypes = new HashMap<>();
         fieldMaxLengths = new HashMap<>();
-
-        fillFieldsLengthInformation(clazz);
+        fillFieldsLengthInformation(rootClass);
     }
 
     private void fillFieldsLengthInformation(Class<?> clazz) {
@@ -91,18 +119,5 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
             wClass = (Class<?>) wClass.getGenericSuperclass();
         }
         return interFields;
-    }
-
-    public String getType(Field field) {
-        return fieldTypes.get(field);
-    }
-
-    public Integer getMaxLength(Field field) {
-        return fieldMaxLengths.get(field);
-    }
-
-    @Override
-    public boolean isTranslatable(Field field) {
-        return trnSettings.isTranslatable(field);
     }
 }

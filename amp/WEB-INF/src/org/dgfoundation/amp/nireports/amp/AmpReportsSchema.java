@@ -944,16 +944,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 *  Therefore, an empty row for said measure is added.
 	 */
 	public Set<String> synchronizeAmpMeasureBackport() {
+		final Set<String> notSerializedMeasures = new HashSet<>(Arrays.asList(
+				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT
+		));
 		return PersistenceManager.getSession().doReturningWork(conn -> {
 			Set<String> inDbMeasures = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "measurename", "amp_measures"), 1));
-			Set<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).collect(Collectors.toSet());
-			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, z, "A", this.measures.get(z).description)).collect(Collectors.toList());	
+			Set<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).filter(z -> !notSerializedMeasures.contains(z)).collect(Collectors.toSet());
+			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, z, "A", this.measures.get(z).description)).collect(Collectors.toList());
 			if (values.size() > 0) {
 				SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type", "description"), values);
 				MeasuresVisibility.resetMeasuresList();
 			}
 			return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
-		}); 
+		});
 	}
 	
 	/**

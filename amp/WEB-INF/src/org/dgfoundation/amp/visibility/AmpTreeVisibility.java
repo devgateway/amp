@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
@@ -121,23 +120,21 @@ public class AmpTreeVisibility implements Serializable{
 			{
 				AmpFeaturesVisibility feature = (AmpFeaturesVisibility) jt
 						.next();
-				if (!MeasureConstants.INTERNAL_USE_MEASURES.contains(feature.getName())) {
-					AmpTreeVisibility featureNode = new AmpTreeVisibility();
+				AmpTreeVisibility featureNode = new AmpTreeVisibility();
 
-					featureNode.setRoot(feature);
+				featureNode.setRoot(feature);
 
-					featureNode.setItems(new ConcurrentHashMap());
-					for (Iterator kt = feature.getSortedAlphaItems().iterator(); kt
-							.hasNext(); )// getItems
-					{
-						AmpFieldsVisibility field = (AmpFieldsVisibility) kt.next();
-						AmpTreeVisibility fieldNode = new AmpTreeVisibility();
-						fieldNode.setRoot(field);
-						fieldNode.setItems(null);
-						featureNode.getItems().put(field.getName(), fieldNode);
-					}
-					moduleNode.getItems().put(feature.getName(), featureNode);
+				featureNode.setItems(new ConcurrentHashMap());
+				for (Iterator kt = feature.getSortedAlphaItems().iterator(); kt
+						.hasNext(); )// getItems
+				{
+					AmpFieldsVisibility field = (AmpFieldsVisibility) kt.next();
+					AmpTreeVisibility fieldNode = new AmpTreeVisibility();
+					fieldNode.setRoot(field);
+					fieldNode.setItems(null);
+					featureNode.getItems().put(field.getName(), fieldNode);
 				}
+				moduleNode.getItems().put(feature.getName(), featureNode);
 			}
 			return 0;
 		}

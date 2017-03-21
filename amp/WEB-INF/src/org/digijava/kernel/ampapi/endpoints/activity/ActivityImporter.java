@@ -37,6 +37,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -341,7 +342,7 @@ public class ActivityImporter {
 		// and error anything remained
 		// note: due to AMP-20766, we won't be able to fully detect invalid children
 		String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
-		if (fields.size() > 0) {
+		if (fields.size() > 0 && !ignoreUnknownFields()) {
 			newParent = null;
 			for (String invalidField : fields) {
 				// no need to go through deep-first validation flow
@@ -350,6 +351,10 @@ public class ActivityImporter {
 		}
 		
 		return newParent;
+	}
+
+	private boolean ignoreUnknownFields() {
+		return AmpOfflineModeHolder.isAmpOfflineMode();
 	}
 
 	/**

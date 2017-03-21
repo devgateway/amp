@@ -3634,8 +3634,9 @@ module.exports = BackboneDash.View.extend({
     this.app.translator.getTranslations()
       .done(_(function() {  // defer here to prevent a race with translations loading
 
-        /* TODO: Do we really want to localize this and slow things?*/
-        //this.app.translator.translateDOM(this.el);
+    	if (this.model.get('chartType') === 'fragmentation') {
+    		this.app.translator.translateDOM(this.el);
+    	}
 
         this.model.fetch({
           type: 'POST',  // TODO: move fetch options to model?
@@ -23763,7 +23764,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],58:[function(require,module,exports){
 module.exports=require(49)
-},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],59:[function(require,module,exports){
+},{"C:\\Git\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],59:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -32002,15 +32003,15 @@ module.exports = BaseFilterView.extend({
 
 },{"../views/base-filter-view":77,"underscore":"underscore"}],83:[function(require,module,exports){
 module.exports=require(49)
-},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],84:[function(require,module,exports){
+},{"C:\\Git\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],84:[function(require,module,exports){
 module.exports=require(59)
-},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":59,"jquery":"jquery"}],85:[function(require,module,exports){
+},{"C:\\Git\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":59,"jquery":"jquery"}],85:[function(require,module,exports){
 module.exports=require(61)
-},{"./core":84,"./mouse":86,"./widget":87,"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":61,"jquery":"jquery"}],86:[function(require,module,exports){
+},{"./core":84,"./mouse":86,"./widget":87,"C:\\Git\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":61,"jquery":"jquery"}],86:[function(require,module,exports){
 module.exports=require(62)
-},{"./widget":87,"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":62,"jquery":"jquery"}],87:[function(require,module,exports){
+},{"./widget":87,"C:\\Git\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":62,"jquery":"jquery"}],87:[function(require,module,exports){
 module.exports=require(63)
-},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":63,"jquery":"jquery"}],88:[function(require,module,exports){
+},{"C:\\Git\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":63,"jquery":"jquery"}],88:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');

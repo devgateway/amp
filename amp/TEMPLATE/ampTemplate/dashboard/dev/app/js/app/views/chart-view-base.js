@@ -157,6 +157,7 @@ module.exports = BackboneDash.View.extend({
       .done(_(function() {  // defer here to prevent a race with translations loading
 
     	if (this.model.get('chartType') === 'fragmentation') {
+    		// We need this for AMP-25599.
     		this.app.translator.translateDOM(this.el);
     	}
 

@@ -55,7 +55,7 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
 		AmpActivityVersion auxActivity = null;
         try {
         	auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null, 
-        			member, oldActivity.getDraft(), session, false, false);
+        			member, oldActivity.getDraft(), session, false, false, false);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new RuntimeException(e);

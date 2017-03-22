@@ -116,17 +116,15 @@ public class AmpTreeVisibility implements Serializable{
 				.getRoot();
 		if (module.getSubmodules().isEmpty()) {
 			for (Iterator jt = module.getSortedAlphaItems().iterator(); jt
-					.hasNext(); ) // getItems
+					.hasNext();) // getItems
 			{
 				AmpFeaturesVisibility feature = (AmpFeaturesVisibility) jt
 						.next();
 				AmpTreeVisibility featureNode = new AmpTreeVisibility();
-
 				featureNode.setRoot(feature);
-
 				featureNode.setItems(new ConcurrentHashMap());
 				for (Iterator kt = feature.getSortedAlphaItems().iterator(); kt
-						.hasNext(); )// getItems
+						.hasNext();)// getItems
 				{
 					AmpFieldsVisibility field = (AmpFieldsVisibility) kt.next();
 					AmpTreeVisibility fieldNode = new AmpTreeVisibility();
@@ -140,7 +138,7 @@ public class AmpTreeVisibility implements Serializable{
 		}
 
 		for (Iterator it = module.getSortedAlphaSubModules().iterator(); it
-				.hasNext(); ) {
+				.hasNext();) {
 			AmpModulesVisibility moduleAux = (AmpModulesVisibility) it.next();
 			AmpTreeVisibility moduleNodeAux = new AmpTreeVisibility();
 			moduleNodeAux.setRoot(moduleAux);

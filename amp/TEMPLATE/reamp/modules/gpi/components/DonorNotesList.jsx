@@ -28,7 +28,7 @@ export default class DonorNotesList extends Component {
     componentWillMount() {        
         this.props.actions.loadDonorNotesList({paging: this.props.paging, sorting: this.props.sorting}); 
         this.props.actions.getCurrencyList();
-        this.props.actions.getOrgList();
+        this.props.actions.getOrgList(true);
         this.props.actions.getSettings();
     }
     
@@ -143,7 +143,7 @@ export default class DonorNotesList extends Component {
                 </thead>
                 <tbody>               
                 {this.props.donorNotesList.map(donorNotes => 
-                <DonorNotesRow donorNotes={donorNotes} key={donorNotes.id} currencyList={this.props.currencyList} orgList={this.props.orgList} settings={this.props.settings} key={donorNotes.id || 'c' + donorNotes.cid} errors={this.props.errors}/>  
+                <DonorNotesRow donorNotes={donorNotes} key={donorNotes.id} currencyList={this.props.currencyList} verifiedOrgList={this.props.verifiedOrgList} settings={this.props.settings} key={donorNotes.id || 'c' + donorNotes.cid} errors={this.props.errors}/>  
                 )}                
                 </tbody>
                 </table> 
@@ -180,7 +180,7 @@ function mapStateToProps(state, ownProps) {
         errors: state.donorNotes.errors || [],
         infoMessages: state.donorNotes.infoMessages || [],        
         currencyList: state.commonLists.currencyList || [],
-        orgList: state.commonLists.orgList || [],
+        verifiedOrgList: state.commonLists.verifiedOrgList || [],
         settings: state.commonLists.settings || {},
         translations: state.startUp.translations,
         translate: state.startUp.translate

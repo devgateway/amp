@@ -1,5 +1,5 @@
-class CommonListsApi {
-    
+import { postJson, delay, fetchJson } from 'amp/tools';
+class CommonListsApi {    
     static getCurrencyList() {
         const request = new Request('/rest/settings-definitions/gpi', {
             method: 'GET'      
@@ -12,16 +12,16 @@ class CommonListsApi {
         });
     }
     
-    static getOrgList() {     
-        const request = new Request('/rest/filters/orgs', {
-            method: 'GET'      
+    static getOrgList(verifiedOrgs) {  
+         var url = verifiedOrgs ? '/rest/gpi/users-verified-orgs' : '/rest/filters/orgs';
+         return new Promise((resolve, reject) => {
+            fetchJson(url).then((orgList) => {
+                resolve(orgList)
+            }).catch((error) => {
+                reject(error);
+            });
         });
         
-        return fetch(request).then(response => {
-            return response.json();
-        }).catch(error => {
-            return error;
-        });
     }
     
     static getSettings() {     

@@ -85,7 +85,7 @@ export default class DonorNotesRow extends Component {
     }
     
     getOrgName(id) {
-        var org = this.props.orgList.filter(org => org.id === id)[0];
+        var org = this.props.verifiedOrgList.filter(org => org.id === id)[0];
         return org ? org.name : '';
     }
     
@@ -122,7 +122,7 @@ export default class DonorNotesRow extends Component {
                     <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>
                     <select name="donorId" className="form-control" value={this.state.donorNotes.donorId} onChange={this.onChange}>
                     <option value="">{this.props.translations['amp.gpi-data:select-donor']}</option>
-                    {this.props.orgList.map(org => 
+                    {this.props.verifiedOrgList.map(org => 
                     <option value={org.id}  key={org.id} >{org.name}</option>
                     )}
                     </select> 

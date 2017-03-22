@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.gpi;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -10,7 +11,12 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -283,6 +289,34 @@ public class GPIDataService {
 		 * atm.getUser().hasVerifiedDonor();
 		 */
 		return true;
+	}
+	
+	public static List<JsonBean> getUsersVerifiedOrganizations() {
+		TeamMember tm = TeamUtil.getCurrentMember();
+		AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+		Set<AmpOrganisation> verifiedOrgs = atm.getUser().getAssignedOrgs();
+		List<JsonBean> orgs = new ArrayList<>();
+		AmpOrganisation assignedOrg = null;
+
+		if (atm.getUser().getAssignedOrgId() != null && atm.getUser().getAssignedOrgId() > 0) {
+			assignedOrg = org.digijava.module.aim.util.DbUtil.getOrganisation(atm.getUser().getAssignedOrgId());
+			JsonBean org = new JsonBean();
+			org.set("id", assignedOrg.getAmpOrgId());
+			org.set("name", assignedOrg.getName());
+			orgs.add(org);
+		}
+
+		for (AmpOrganisation verifiedOrg : verifiedOrgs) {
+			if (assignedOrg == null
+					|| (assignedOrg != null && assignedOrg.getAmpOrgId().equals(verifiedOrg.getAmpOrgId()) == false)) {
+				JsonBean org = new JsonBean();
+				org.set("id", verifiedOrg.getAmpOrgId());
+				org.set("name", verifiedOrg.getName());
+				orgs.add(org);
+			}
+		}
+
+		return orgs;
 	}
 
 }

@@ -29,7 +29,7 @@ export default class AidOnBudgetList extends Component {
     componentWillMount() {        
         this.props.actions.loadAidOnBudgetList({paging: this.props.paging, sorting: this.props.sorting}); 
         this.props.actions.getCurrencyList();
-        this.props.actions.getOrgList();
+        this.props.actions.getOrgList(false);
         this.props.actions.getSettings();
     }
     
@@ -81,8 +81,8 @@ export default class AidOnBudgetList extends Component {
     }
     
     saveAllEdits() {
-        const list = this.props.aidOnBudgetList.filter(aidOnBudget => {return aidOnBudget.isEditing})
-        this.props.actions.saveAllEdits(list)
+        const list = this.props.aidOnBudgetList.filter(aidOnBudget => {return aidOnBudget.isEditing});
+        this.props.actions.saveAllEdits(list);
     }
     
     showErrors() {           

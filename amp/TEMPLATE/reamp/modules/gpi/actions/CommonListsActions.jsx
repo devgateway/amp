@@ -8,14 +8,23 @@ export function getOrgListSuccess(orgList){
     return {type: 'LOAD_ORG_LIST_SUCCESS', orgList: orgList}
 }
 
+export function getVerifiedOrgListSuccess(verifiedOrgList){
+    return {type: 'LOAD_VERIFIED_ORG_LIST_SUCCESS', verifiedOrgList: verifiedOrgList}
+}
+
 export function getSettingsSuccess(settings){
     return {type: 'LOAD_SETTINGS_SUCCESS', settings: settings}
 }
 
-export function getOrgList(){
+export function getOrgList(verifiedOrgs){
     return function(dispatch) {
-        return commonListsApi.getOrgList().then(response => {
-            dispatch(getOrgListSuccess(response));
+        return commonListsApi.getOrgList(verifiedOrgs).then(response => {
+            if (verifiedOrgs) {                
+                dispatch(getVerifiedOrgListSuccess(response));
+            } else{
+                dispatch(getOrgListSuccess(response));  
+            }
+            
         }).catch(error => {
             throw(error);
         });

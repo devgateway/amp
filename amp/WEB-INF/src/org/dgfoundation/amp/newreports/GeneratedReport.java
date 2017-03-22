@@ -80,6 +80,10 @@ public class GeneratedReport {
 		this.reportWarnings = reportWarnings;
 		this.isEmpty = isEmpty;
 	}
+
+	public boolean hasMeasures() {
+		return !spec.getMeasures().isEmpty();
+	}
 	
 }
 

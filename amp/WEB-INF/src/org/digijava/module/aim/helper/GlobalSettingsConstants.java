@@ -28,7 +28,7 @@ public class GlobalSettingsConstants {
     
     public static final String SYSTEM_YEAR = "system";
 
-    public static final String CR_MAX_FILE_SIZE = "Maximum File Size";
+    public static final String CR_MAX_FILE_SIZE = "Maximum file size (MB)";
     
     public static final String ACTIVITY_LEVEL = "Activity Levels";
 
@@ -106,7 +106,7 @@ public class GlobalSettingsConstants {
 
     public static final String REPORTS_EMPTY_VALUES_AS_ZERO_XLS= "Show empty values as zero in Reports export to XLS";
 	
-    public static final String DEFAULT_RESOURCES_SORT_COLUMN = "Resource List Sort Column";
+    public static final String DEFAULT_RESOURCES_SORT_COLUMN = "Resource list sort column";
 
 	public static final String DAILY_CURRENCY_RATES_UPDATE_ENALBLED = "Daily Currency Rates Update Enabled";
 	
@@ -206,7 +206,9 @@ public class GlobalSettingsConstants {
 
     public static final String  IMPORT_PROCESSOR_URL = "Import processor endpoint URL";
     
-    public static final String  LIMIT_FILE_TYPE_FOR_UPLOAD = "Limit file type for upload";
+    public static final String  LIMIT_FILE_TYPE_FOR_UPLOAD = "Limit upload of file types";
+
+    public static final String  NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION = "Number of days before automatic validation";
 
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value

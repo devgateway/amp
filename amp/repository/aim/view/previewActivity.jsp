@@ -540,50 +540,62 @@ function collapseAll() {
 	<legend>
 		<span class=legend_label><digi:trn>Additional info</digi:trn></span>	</legend>
 	<div class="field_text_big word_break">
-	<digi:trn>Activity created by</digi:trn>: <br/>
-		<b> 
-			<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/> 
-			<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> 
+		<digi:trn>Activity created by</digi:trn>: <br/>
+		<b>
+			<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/>
+			<c:out value="${aimEditActivityForm.identification.actAthLastName}"/>
 		</b>
 		<hr/>
-	<digi:trn>Created in workspace</digi:trn>: <br />
-	<c:if test="${aimEditActivityForm.identification.team !=null}">
-		<b>
-			<c:out value="${aimEditActivityForm.identification.team.name}"/> -
-			<digi:trn>
-				<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
-			</digi:trn>
-		</b>
-	</c:if>
-	<hr />
- 	<digi:trn>Computation</digi:trn>: <br/>
-	<b>
-		<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
-			<digi:trn key="aim:yes">Yes</digi:trn>
-		</c:if> 
-		<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
-			<digi:trn key="aim:no">No</digi:trn>
+		<digi:trn>Activity created on</digi:trn>:<br/>
+		<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
+		<hr/>
+		<field:display name="Activity Last Updated by" feature="Identification">
+			<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
+				<digi:trn>Activity last updated by</digi:trn>: <br/>
+				<b>
+					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
+					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
+				</b>
+			</logic:notEmpty>
+		</field:display>
+		<hr/>
+		<field:display name="Activity Updated On" feature="Identification">
+			<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
+				<digi:trn>Activity updated on</digi:trn>: <br/>
+				<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
+			</logic:notEmpty>
+		</field:display>
+		<hr/>
+
+		<digi:trn>Created in workspace</digi:trn>: <br/>
+		<c:if test="${aimEditActivityForm.identification.team !=null}">
+			<b>
+				<c:out value="${aimEditActivityForm.identification.team.name}"/> -
+				<digi:trn>
+					<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
+				</digi:trn>
+			</b>
 		</c:if>
-	</b>
-	<hr/>
-	<digi:trn>Activity created on</digi:trn>:<br/>
-	<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
-	<hr />
-	<field:display name="Activity Updated On" feature="Identification">
-		<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
-			<digi:trn>Activity updated on</digi:trn>: <br />
-			<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
-		</logic:notEmpty>
-	</field:display>
-	<hr />
-	<field:display name="Data Team Leader" feature="Identification">
-		<digi:trn>Data Team Leader</digi:trn>: <br />
+		<hr/>
+		<field:display name="Data Team Leader" feature="Identification">
+			<digi:trn>Workspace manager</digi:trn>: <br/>
+			<b>
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/> -
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
+			</b>
+		</field:display>
+
+		<hr/>
+		<digi:trn>Computation</digi:trn>: <br/>
 		<b>
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/> 
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
-		</b>	
-	</field:display>
+			<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
+				<digi:trn key="aim:yes">Yes</digi:trn>
+			</c:if>
+			<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
+				<digi:trn key="aim:no">No</digi:trn>
+			</c:if>
+		</b>
 	
 	</div>
 </fieldset>	

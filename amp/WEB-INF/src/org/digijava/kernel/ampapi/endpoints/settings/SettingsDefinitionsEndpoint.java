@@ -328,13 +328,13 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	 *		{
 	 *		"type": "INT_VALUE",
 	 *		"id": "maximunm-file-size",
-	 *		"name": "Maximum File Size",
+	 *		"name": "Maximum File Size (MB)",
 	 *		"value": 12
 	 *		},
 	 *		{
 	 *		"type": "BOOL_VALUE",
 	 *		"id": "limit-file-to-upload",
-	 *		"name": "Limit file type for upload",
+	 *		"name": "Limit upload of file types",
 	 *		"value": true
 	 *		},
 	 *		{

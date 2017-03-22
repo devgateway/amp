@@ -3,7 +3,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'utf8');
-
+var SettingsUtils = require('../../../libs/local/settings-utils.js');
 
 module.exports = Backbone.View.extend({
 
@@ -24,32 +24,10 @@ module.exports = Backbone.View.extend({
         colourBuckets: self.model.structuresCollection.palette.colours,
         selectedVertical: self.model.get('filterVertical')
       };
-
-      //TODO: Move this code to a config class.
-      //IT IS REPEATED IN map/views/structures-view.js
-      var MAX_NUM_FOR_ICONS = 0;
-      var useIconsForSectors = _.find(app.data.settings.models, function(item) {
-        return (item.id === 'use-icons-for-sectors-in-project-list');
-      });
-      var maxLocationIcons = _.find(app.data.settings.models, function(item) {
-        return (item.id === 'max-locations-icons');
-      });
-      if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
-        if (maxLocationIcons !== undefined && maxLocationIcons.get('name') !== '') {
-          if (maxLocationIcons.get('name') === '0') {
-            MAX_NUM_FOR_ICONS = 99999; //always show
-          } else {
-            MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'), 10);
-          }
-        } else {
-          MAX_NUM_FOR_ICONS = 0;
-        }
-      } else {
-        MAX_NUM_FOR_ICONS = 0;
-      }
-
+      
+      var maxNumberOfIcons = SettingsUtils.getMaxNumberOfIcons(app.data.settings);
       // render icons if available
-      if (self.model.structuresCollection.length < MAX_NUM_FOR_ICONS &&
+      if (self.model.structuresCollection.length < maxNumberOfIcons &&
         self.model.get('filterVertical') === 'Primary Sector') {
         renderObject.imageBuckets = self.model.iconMappings;
         renderObject.palletteElements = self.model.structuresCollection.palette.get('elements');
@@ -70,7 +48,7 @@ module.exports = Backbone.View.extend({
       }).then(function(legendPopoverList) {
         var legendPopover = [legendPopoverList['amp.gis:legend-popover'],
           ' ',
-          MAX_NUM_FOR_ICONS,
+          maxNumberOfIcons,
           ' ',
           legendPopoverList['amp.gis:legend-popover-2']
         ].join('');

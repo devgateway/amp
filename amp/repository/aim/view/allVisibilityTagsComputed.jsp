@@ -91,7 +91,8 @@
 <module:display name="Report Types" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
-<module:display name="Tab Generator" parentModule="REPORTING"></module:display> 
+<module:display name="Tab Generator" parentModule="REPORTING"></module:display>
+<feature:display name="Enable Saiku icon in Tab Manager" module="Tab Generator"></feature:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display> 
 <module:display name="WIDGETS"></module:display> 
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>

@@ -44,7 +44,6 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -1824,25 +1823,10 @@ public class ExportActivityToWord extends Action {
         if (contacts != null && contacts.size() > 0) {
             String output = "";
             for (AmpActivityContact cont : contacts) {
-                String contactName = cont.getContact().getName() + " "
-                        + cont.getContact().getLastname();
-
+                output = ExportUtil.getContactInformation(cont.getContact());
                 ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                        contactName, null, null, true);
+                        output, null, null, true);
 
-                Set<AmpContactProperty> contactProperties = cont.getContact()
-                        .getProperties();
-                String emails = "";
-                if (contactProperties != null) {
-                    for (AmpContactProperty email : contactProperties) {
-                        if (email.getName().equals(
-                                Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
-                            emails += email.getValue() + "; ";
-                        }
-                    }
-                }
-
-                rowData.addRowData(emails);
                 eshContactInfoTable.addRowData(rowData);
             }
         }

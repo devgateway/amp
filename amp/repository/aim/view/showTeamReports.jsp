@@ -636,11 +636,20 @@ $(document).ready(function() {
 						<c:set target="${urlParams}" property="rid">
 							<bean:write name="report" property="ampReportId" />
 						</c:set>
+
+						<c:set var="showViewReportIcon" value="false"></c:set>
 						<c:if test="${!aimTeamReportsForm.showTabs}">
-							<a href="${reportLink}"
-							onclick="return popup(this,'');" class="img-padding" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
-							<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
+							<c:set var="showViewReportIcon" value="true"></c:set>
 						</c:if>
+						<%if(FeaturesUtil.isVisibleFeature("Enable Saiku icon in Tab Manager")){ %>
+							<c:set var="showViewReportIcon" value="true"></c:set>
+						<%}%>
+						<c:if test="${showViewReportIcon == true}">
+							<a href="${reportLink}"
+							   onclick="return popup(this,'');" class="img-padding" title="<digi:trn>Click here to view the report</digi:trn>">
+								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
+						</c:if>
+
 						<c:set target="${urlParams}" property="event" value="edit" />
 						<logic:equal name="teamLeadFlag" scope="session" value="true"> 
 							<c:set var="translation">

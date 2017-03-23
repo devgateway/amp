@@ -67,7 +67,7 @@ export default class HomePage extends Component {
             return (
                 <Alert ref="errorAlert" bsStyle={this.state.alert} className="resultAlert" bsClass="alert"
                        onDismiss={this.hideAlert}>
-                    {isSuccess ? this.__('amp.resource-manager:sucess') : this.state.alertMsg}
+                    {isSuccess ? this.__('amp.resource-manager:success') : this.state.alertMsg}
                 </Alert>);
         } else return '';
     }
@@ -110,7 +110,7 @@ export default class HomePage extends Component {
             ...TypeList.translations(),
             ...Settings.translations(),
             'amp.resource-manager:resource-manager-title': 'Resource Manager',
-            'amp.resource-manager:sucess': 'Sucess',
+            'amp.resource-manager:': 'Success',
             "amp.resource-manager:button-accept": "Save changes"
         }
     }

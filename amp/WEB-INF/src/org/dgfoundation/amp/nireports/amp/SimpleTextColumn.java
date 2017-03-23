@@ -28,6 +28,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
  */
 public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 
+	protected TextExtractor textExtractor = ResultSet::getString;
 	protected Function<String, String> postprocessor = Function.identity();
 
 	private MetaInfoGenerator metaInfoGenerator;
@@ -52,7 +53,8 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 
 	@Override
 	protected TextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
-		String text = postprocessor.apply(rs.getString(2));
+		String rawText = textExtractor.extract(rs, 2);
+		String text = postprocessor.apply(rawText);
 		
 		if (!allowNulls && text == null)
 			return null;
@@ -98,6 +100,11 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 		return this;
 	}
 
+	public SimpleTextColumn withTextExtractor(TextExtractor textExtractor) {
+		this.textExtractor = textExtractor;
+		return this;
+	}
+
 	public SimpleTextColumn allowNulls(boolean allowNulls) {
 		this.allowNulls = allowNulls;
 		return this;
@@ -111,5 +118,10 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 	@Override
 	public List<ReportRenderWarning> performCheck(){
 		return null;
+	}
+
+	public interface TextExtractor {
+
+		String extract(ResultSet rs, int index) throws SQLException;
 	}
 }

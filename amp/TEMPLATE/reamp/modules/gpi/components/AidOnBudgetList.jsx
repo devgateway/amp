@@ -124,10 +124,10 @@ export default class AidOnBudgetList extends Component {
                 <h2>{this.props.translations['amp.gpi-data-aid-on-budget:title']}</h2>
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">
-                <span className="glyphicon glyphicon-plus" onClick={this.addNew}></span>
+                <span className="glyphicon glyphicon-big glyphicon-plus" onClick={this.addNew}></span>
                 <span  onClick={this.addNew}>{this.props.translations['amp.gpi-data:add-new']} </span>
                 <span className="success-color">{this.props.translations['amp.gpi-data:insert-data']}</span>
-                <span> / </span> <span className="glyphicon glyphicon-ok-circle success-color"> </span> <span >{this.props.translations['amp.gpi-data:click-save']}</span>
+                <span> / </span> <span className="glyphicon glyphicon-big glyphicon-ok-circle success-color"> </span> <span >{this.props.translations['amp.gpi-data:click-save']}</span>
                 <span className="float-right"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>{this.props.translations['amp.gpi-data:button-save-all-edits']}</button></span>
                 </div>                 
                 </div>  
@@ -144,7 +144,7 @@ export default class AidOnBudgetList extends Component {
                 <th><span data-field="donor"  onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:donor-agency']}</span><span className="error-color" >*</span><span className = {this.showSortCaret('donor')} ></span></th>
                 <th><span data-field="amount" onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:amount']}</span><span className="error-color" >*</span><span className = {this.showSortCaret('amount')} ></span></th>
                 <th><span data-field="currency" onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:currency']}</span><span className="error-color" >*</span><span className = {this.showSortCaret('currency')} ></span></th>
-                <th>{this.props.translations['amp.gpi-data-aid-on-budget:action']}</th>
+                <th className="actions-column">{this.props.translations['amp.gpi-data-aid-on-budget:action']}</th>
                 </tr>
                 </thead>
                 <tbody>               

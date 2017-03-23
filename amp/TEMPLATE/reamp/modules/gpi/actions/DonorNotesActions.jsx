@@ -117,6 +117,16 @@ export function deleteDonorNotes(data) {
     }; 
 }
 
+export function removeFromState(data) {
+    return function(dispatch) {
+        const result = {
+                donorNotes: data,
+                infoMessages: []
+        };
+        dispatch(deleteSuccess(result))  
+    };    
+}
+
 export function saveAllEdits(donorNotesList) {
     return function(dispatch) {
         var allErrors = [];

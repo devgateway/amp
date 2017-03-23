@@ -27,13 +27,24 @@ export default class DonorNotesRow extends Component {
         this.onDateChange = this.onDateChange.bind(this);  
         this.deleteDonorNotes = this.deleteDonorNotes.bind(this); 
         this.getErrorsForField = this.getErrorsForField.bind(this);
+        this.cancel = this.cancel.bind(this);
     }
     
     toggleEdit() {
-        const donorNotes = this.state.donorNotes;
+        const donorNotes = this.props.donorNotes;
+        var origDonorNotes = Object.assign({}, donorNotes);
         donorNotes.isEditing = true;
-        this.setState({donorNotes: donorNotes});
+        this.setState({origDonorNotes: origDonorNotes});
         this.props.actions.updateDonorNotes(donorNotes);        
+    }
+    
+    cancel() {
+        const origDonorNotes = this.state.origDonorNotes;
+        if(origDonorNotes && origDonorNotes.id) {
+           this.props.actions.updateDonorNotes(origDonorNotes);  
+        } else {
+            this.props.actions.removeFromState(this.props.donorNotes);
+        }        
     }
     
     toggleDatePicker(){
@@ -44,18 +55,16 @@ export default class DonorNotesRow extends Component {
         const errors = [];
         const field = event.target.name;
         const value = event.target.value;        
-        const donorNotes = this.state.donorNotes;        
+        const donorNotes = this.props.donorNotes;        
         donorNotes[field] = event.target.value;
-        this.setState({donorNotes: donorNotes});
         this.props.actions.updateDonorNotes(donorNotes);               
     }    
     
     onDateChange(date){
         if(date){
-            const donorNotes = this.state.donorNotes; 
+            const donorNotes = this.props.donorNotes; 
             const formartedDate = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
             donorNotes['notesDate'] = formartedDate;
-            this.setState({donorNotes: donorNotes});
             this.props.actions.updateDonorNotes(donorNotes); 
             this.toggleDatePicker(); 
         }        
@@ -75,12 +84,12 @@ export default class DonorNotesRow extends Component {
     }   
     
     save() {
-        this.props.actions.save(this.state.donorNotes);                
+        this.props.actions.save(this.props.donorNotes);                
     }
     
     deleteDonorNotes() {        
         if(confirm(this.props.translations['amp.gpi-data:delete-prompt'])){
-            this.props.actions.deleteDonorNotes(this.state.donorNotes); 
+            this.props.actions.deleteDonorNotes(this.props.donorNotes); 
         }        
     }
     
@@ -90,7 +99,7 @@ export default class DonorNotesRow extends Component {
     }
     
     getErrorsForField(field){
-        var errors = this.props.errors.filter(error => {return ((error.id && error.id === this.state.donorNotes.id) || (error.cid && error.cid === this.state.donorNotes.cid) && error.affectedFields && error.affectedFields.includes(field) )})
+        var errors = this.props.errors.filter(error => {return ((error.id && error.id === this.props.donorNotes.id) || (error.cid && error.cid === this.props.donorNotes.cid) && error.affectedFields && error.affectedFields.includes(field) )})
         return  errors; 
     }
     
@@ -101,15 +110,15 @@ export default class DonorNotesRow extends Component {
                     </td>
                     <td scope="row" >                                   
                     <div className={this.getErrorsForField('notesDate').length > 0 ? 'form-group date-container has-error' : 'form-group date-container' }>
-                    <span className="date-input-container"><input type="text" value={this.toDisplayDateFormat(this.state.donorNotes.notesDate)} readOnly className="date-input form-control" />    
-                    </span><span className = "datepicker-toggle glyphicon glyphicon-calendar " onClick={this.toggleDatePicker}> </span></div>
+                    <span className="date-input-container"><input type="text" value={this.toDisplayDateFormat(this.props.donorNotes.notesDate)} readOnly className="date-input form-control" />    
+                    </span><span className = "datepicker-toggle glyphicon glyphicon-custom glyphicon-calendar " onClick={this.toggleDatePicker}> </span></div>
                     <div className="datepicker-container"> 
                     {this.state.showDatePicker &&
                         <DatePicker 
                         hideFooter={true}
                         ref="date" 
                         locale={'en'} 
-                        date={this.toDisplayDateFormat(this.state.donorNotes.notesDate)} 
+                        date={this.toDisplayDateFormat(this.props.donorNotes.notesDate)} 
                         onChange={this.onDateChange} 
                         expanded={false}
                         dateFormat={this.getDisplayDateFormat()}
@@ -120,7 +129,7 @@ export default class DonorNotesRow extends Component {
                     <td>
                     
                     <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>
-                    <select name="donorId" className="form-control" value={this.state.donorNotes.donorId} onChange={this.onChange}>
+                    <select name="donorId" className="form-control" value={this.props.donorNotes.donorId} onChange={this.onChange}>
                     <option value="">{this.props.translations['amp.gpi-data:select-donor']}</option>
                     {this.props.verifiedOrgList.map(org => 
                     <option value={org.id}  key={org.id} >{org.name}</option>
@@ -131,10 +140,13 @@ export default class DonorNotesRow extends Component {
                     </td> 
                     <td className="notes-column">
                     <div className={this.getErrorsForField('notes').length > 0 ? 'form-group has-error' : 'form-group' }>                    
-                    <textarea name="notes" className="form-control" rows="5" onChange={this.onChange}>{this.state.donorNotes.notes}</textarea>
+                    <textarea name="notes" className="form-control" rows="5" onChange={this.onChange}>{this.props.donorNotes.notes}</textarea>
                     </div>
                     </td>
-                    <td> <span className="glyphicon glyphicon-ok-circle success-color" onClick={this.save}> </span><span className="glyphicon glyphicon-remove" onClick={this.deleteDonorNotes}></span></td>                      
+                    <td>
+                       <span className="glyphicon glyphicon-custom glyphicon-ok-circle success-color" onClick={this.save}> </span>
+                       <span className="glyphicon glyphicon-custom glyphicon-remove-sign" onClick={this.cancel}></span>
+                    </td>                      
             </tr>)
             
             }
@@ -142,10 +154,10 @@ export default class DonorNotesRow extends Component {
             return (
                     <tr>
                     <td></td>
-                    <th scope="row">{this.toDisplayDateFormat(this.state.donorNotes.notesDate)}</th>
-                    <td>{this.getOrgName(this.state.donorNotes.donorId)}</td>
-                    <td className="notes-column">{this.state.donorNotes.notes}</td>
-                    <td><span className="glyphicon glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-remove" onClick={this.deleteDonorNotes}></span></td>                
+                    <th scope="row">{this.toDisplayDateFormat(this.props.donorNotes.notesDate)}</th>
+                    <td>{this.getOrgName(this.props.donorNotes.donorId)}</td>
+                    <td className="notes-column">{this.props.donorNotes.notes}</td>
+                    <td><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDonorNotes}></span></td>                
                     </tr>
                     
             );

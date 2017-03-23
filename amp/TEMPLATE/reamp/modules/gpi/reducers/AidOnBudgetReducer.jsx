@@ -64,8 +64,10 @@ export default function aidOnBudgetReducer(state: Object = defaultState.data, ac
         return newState; 
     case 'UPDATE_AID_ON_BUDGET':
         var newState = Object.assign({}, state);
-        var actionData = Object.assign({}, action.data);
-        newState.aidOnBudgetList =  newState.aidOnBudgetList.map(function(aidOnBudget) { return ((aidOnBudget.id && aidOnBudget.id === actionData.aidOnBudget.id) || (aidOnBudget.cid && aidOnBudget.cid === actionData.aidOnBudget.cid)) ? Object.assign({}, actionData.aidOnBudget) : aidOnBudget; });     
+        var actionData = Object.assign({}, action.data);        
+        newState.aidOnBudgetList =  newState.aidOnBudgetList.map(function(aidOnBudget) { 
+            return ((aidOnBudget.id && aidOnBudget.id === actionData.aidOnBudget.id) || (aidOnBudget.cid && aidOnBudget.cid === actionData.aidOnBudget.cid)) ? Object.assign({}, actionData.aidOnBudget) : aidOnBudget;
+            });        
         newState.errors = actionData.errors || [];
         newState.infoMessages = actionData.infoMessages || [];         
         return newState;   

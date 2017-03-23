@@ -115,6 +115,16 @@ export function deleteAidOnBudget(data) {
     }; 
 }
 
+export function removeFromState(data) {
+    return function(dispatch) {
+        const result = {
+                aidOnBudget: data,
+                infoMessages: []
+        };
+        dispatch(deleteSuccess(result));  
+    }    
+}
+
 export function saveAllEdits(aidOnBudgetList) {
     return function(dispatch) {
         var allErrors = [];

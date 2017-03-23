@@ -36,6 +36,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -241,7 +242,7 @@ public class ActivityImporter {
 				prepareToSave();
 				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
 						translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
-						PersistenceManager.getRequestDBSession(), false, false);
+						PersistenceManager.getRequestDBSession(), false, false, true);
 				postProcess();
 			} else {
 				// undo any pending changes
@@ -1003,12 +1004,20 @@ public class ActivityImporter {
         newActivity.setLastImportedAt(new Date());
         newActivity.setLastImportedBy(currentUser);
 
-		newActivity.setChangeType(ChangeType.IMPORT.name());
+		newActivity.setChangeType(determineChangeType().toString());
 		// configure draft status on import only, since on update we'll change to draft based on RequiredValidator
 		if (!update) {
 			newActivity.setDraft(isDraftFMEnabled);
 		}
 		initDefaults();
+	}
+
+	private ChangeType determineChangeType() {
+		if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+			return ChangeType.AMP_OFFLINE;
+		} else {
+			return ChangeType.IMPORT;
+		}
 	}
 	
 	/**

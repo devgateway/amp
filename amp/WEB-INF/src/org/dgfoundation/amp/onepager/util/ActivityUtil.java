@@ -100,7 +100,7 @@ public class ActivityUtil {
 		{
 			AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
 			a = saveActivityNewVersion(am.getObject(), am.getTranslationHashMap().values(), 
-					ampCurrentMember, draft, session, rejected, true);
+					ampCurrentMember, draft, session, rejected, true, false);
 			am.setObject(a);
 		} catch (Exception exception) {
 			logger.error("Error saving activity:", exception); // Log the exception			
@@ -129,14 +129,14 @@ public class ActivityUtil {
 	 * saves a new version of an activity
 	 * returns newActivity
 	 */
-	public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a, Collection<AmpContentTranslation> translations, 
-			AmpTeamMember ampCurrentMember, boolean draft, Session session, boolean rejected, boolean isActivityForm) throws Exception
+	public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
+			Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
+			Session session, boolean rejected, boolean isActivityForm, boolean isImporter) throws Exception
 	{
 		//saveFundingOrganizationRole(a);
 		AmpActivityVersion oldA = a;
 		boolean newActivity = false;
-		boolean isImporter = ChangeType.IMPORT.name().equals(a.getChangeType());
-		
+
 		if (a.getAmpActivityId() == null){
 			a.setActivityCreator(ampCurrentMember);
 			a.setActivityCreator(ampCurrentMember);

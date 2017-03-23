@@ -265,7 +265,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 
 			IntWrapper intWrapper = new IntWrapper();
 			columns(report).forEach(roc -> {
-				if (!(report.spec.getHierarchies().size() > 0 && intWrapper.value < level - 1)) {
+				if (!(report.spec.getHierarchies().size() > 0 && intWrapper.value < level)) {
 					ReportCell rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
 					createCell(sheet, row, intWrapper.value, rc);
 				}

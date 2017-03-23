@@ -17,8 +17,7 @@ export default class App extends Component {
         this.props.actions.getUserInfo();  
     }
    
-    render() {  
-        console.log(this.props);   
+    render() {             
         return (
             <div >
                 <div>

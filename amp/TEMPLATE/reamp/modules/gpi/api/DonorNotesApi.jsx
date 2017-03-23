@@ -1,3 +1,4 @@
+import { postJson, delay, fetchJson } from 'amp/tools';
 class DonorNotesApi {    
     static save(data) { 
         const url = Array.isArray(data) ? '/rest/gpi/donor-notes/save-all' : '/rest/gpi/donor-notes';
@@ -16,15 +17,12 @@ class DonorNotesApi {
     
     static getDonorNotesList(data) { 
         const url = '/rest/gpi/donor-notes?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;    
-        const request = new Request(url, {
-            method: 'GET',
-            headers: {'Content-Type':'application/json'}
-        });
-        
-        return fetch(request).then(response => {
-            return response.json();
-        }).catch(error => {
-            return error;
+        return new Promise((resolve, reject) => {
+            fetchJson(url).then((response) => {
+                resolve(response)
+            }).catch((error) => {
+                reject(error);
+            });
         });
     }
     

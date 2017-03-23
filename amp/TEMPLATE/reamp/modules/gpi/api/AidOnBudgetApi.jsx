@@ -1,16 +1,14 @@
+import { postJson, delay, fetchJson } from 'amp/tools';
 class AidOnBudgetApi {  
     
     static getAidOnBudgetList(data) { 
         const url = '/rest/gpi/aid-on-budget?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;    
-        const request = new Request(url, {
-            method: 'GET',
-            headers: {'Content-Type':'application/json'}
-        });
-        
-        return fetch(request).then(response => {
-            return response.json();
-        }).catch(error => {
-            return error;
+        return new Promise((resolve, reject) => {
+            fetchJson(url).then((response) => {
+                resolve(response)
+            }).catch((error) => {
+                reject(error);
+            });
         });
     }
     

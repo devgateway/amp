@@ -1,8 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
@@ -138,14 +139,31 @@ public class GPIUtils {
 		String sortOrder = (sort == null) ? GPIEPConstants.ORDER_DESC : sort;
 
 		Session dbSession = PersistenceManager.getSession();
-		String queryString = "select donorNotes from " + AmpGPINiDonorNotes.class.getName() + " donorNotes order by "
+		String queryString = "select donorNotes from " + AmpGPINiDonorNotes.class.getName() + " donorNotes where donorNotes.donor.ampOrgId in (:donorIds) order by "
 				+ GPIEPConstants.DONOR_NOTES_SORT_FIELDS.get(orderByColumn) + " " + sortOrder;
 		Query query = dbSession.createQuery(queryString);
 		query.setFirstResult(startAt);
 		query.setMaxResults(maxResults);
+		query.setParameterList("donorIds",getVerifiedOrgsList());
 		return query.list();
 	}	
+
+	public static Set<Long> getVerifiedOrgsList(){
+		TeamMember tm = TeamUtil.getCurrentMember();
+		AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+		Set<Long> orgs = new HashSet<>();
 		
+		if (atm.getUser().getAssignedOrgId() != null) {
+			orgs.add(atm.getUser().getAssignedOrgId());
+		}
+
+		for (AmpOrganisation verifiedOrg : atm.getUser().getAssignedOrgs()) {
+			orgs.add(verifiedOrg.getAmpOrgId());
+		}
+
+		return orgs;
+	}
+	
 	public static void deleteDonorNotes(Long id) {
 		AmpGPINiDonorNotes donorNotes = GPIUtils.getDonorNotesById(id);
 		Session session = null;

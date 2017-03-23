@@ -1,4 +1,4 @@
-const defaultState = {currencyList:[], orgList:[], settings:{}, verifiedOrgList: []};
+const defaultState = {currencyList:[], orgList:[], settings:{}, verifiedOrgList: [], userInfo:{}};
 
 export default function commonListsReducer(state: Object = defaultState, action: Object) { 
     switch (action.type) {
@@ -17,7 +17,11 @@ export default function commonListsReducer(state: Object = defaultState, action:
     case 'LOAD_SETTINGS_SUCCESS': 
         var newState = Object.assign({}, state); 
         newState.settings = action.settings
-        return  newState;  
+        return  newState;
+    case 'LOAD_USER_INFO_SUCCESS': 
+        var newState = Object.assign({}, state); 
+        newState.userInfo = action.userInfo
+        return  newState;        
     default:            
         return state;
     }

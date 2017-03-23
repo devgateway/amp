@@ -16,6 +16,10 @@ export function getSettingsSuccess(settings){
     return {type: 'LOAD_SETTINGS_SUCCESS', settings: settings}
 }
 
+export function getUserInfoSuccess(userInfo){
+    return {type: 'LOAD_USER_INFO_SUCCESS', userInfo: userInfo}
+}
+
 export function getOrgList(verifiedOrgs){
     return function(dispatch) {
         return commonListsApi.getOrgList(verifiedOrgs).then(response => {
@@ -52,6 +56,16 @@ export function getSettings(){
     return function(dispatch) {
         return commonListsApi.getSettings().then(response => {
             dispatch(getSettingsSuccess(response));
+        }).catch(error => {
+            throw(error);
+        });
+    }
+}
+
+export function getUserInfo(){
+    return function(dispatch) {
+        return commonListsApi.getUserInfo().then(response => {
+            dispatch(getUserInfoSuccess(response));
         }).catch(error => {
             throw(error);
         });

@@ -174,6 +174,16 @@ public final class Util {
 	 * @author mihai 06.05.2007
 	 */
 	public static String toCSString(Collection<?> col) {
+		return toCSString(col, true);
+	}
+	/**
+	 * Returns comma separated list of the values in the collection
+	 * 
+	 * @param col the collection
+	 * @return the comma separated string
+	 * @author mihai 06.05.2007
+	 */
+	public static String toCSString(Collection<?> col, boolean addQuoteToString) {
 		if (col == null || col.size() == 0)
 			return "";
 		
@@ -189,15 +199,19 @@ public final class Util {
 				ret.append(",");
 			
 			Object item = element;
-			if (element instanceof Identifiable) item = ((Identifiable) element).getIdentifier();
-			
-			if (item instanceof String)
-				ret.append("'" + SQLUtils.sqlEscapeStr(item.toString()) + "'");
-			else if (item instanceof PropertyListable)
-				ret.append(((PropertyListable)item).getBeanName());			
-			else
-				ret.append(item.toString());
-			
+			if (element instanceof Identifiable)
+				item = ((Identifiable) element).getIdentifier();
+
+			if (item instanceof String) {
+				ret.append((addQuoteToString ? "'" : "") + SQLUtils.sqlEscapeStr(item.toString())
+						+ (addQuoteToString ? "'" : ""));
+			} else {
+				if (item instanceof PropertyListable) {
+					ret.append(((PropertyListable) item).getBeanName());
+				} else {
+					ret.append(item.toString());
+				}
+			}
 			isFirst = false;
 		}
 		return ret.toString();

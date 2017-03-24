@@ -38,6 +38,7 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -362,52 +363,16 @@ public class InterchangeUtils {
 	}
 	
 	/**
-	 * seems unused anywhere
+	 * Obtains the possible values provider class of the field, if it has one
 	 * @param field
-	 * @return
+	 * @return null if the field doesn't have a provider class attached, otherwise -- the class
 	 */
-	@Deprecated
-	public static Method getCustomInterchangeableMethod (Field field) {
-		InterchangeableDiscriminator disc = field.getAnnotation(InterchangeableDiscriminator.class);
-		if (disc != null) {
-			String methodName = disc.method();
-			try {
-				InterchangeUtils.class.getDeclaredMethod(methodName);
-			} catch (Exception exc) {
-				
-				return null;
-			}
+	public static Class<? extends PossibleValuesProvider> getPossibleValuesProvider(Field field) {
+		PossibleValues ant = field.getAnnotation(PossibleValues.class);
+		if (ant != null) {
+			return ant.value();
 		}
 		return null;
-	}
-	
-	/**
-	 * Seems unused anywhere
-	 * @param field
-	 * @return
-	 */
-	@Deprecated
-	public static boolean hasCustomInterchangeableMethod(Field field) {
-		InterchangeableDiscriminator disc = field.getAnnotation(InterchangeableDiscriminator.class);
-		return (disc != null) && disc.method().length() > 0;
-	}
-
-	/**
-	 * Obtains the discriminator class of the field, if it has one
-	 * @param field
-	 * @return null if the field doesn't have a discriminator class attached, otherwise -- the class
-	 * @throws ClassNotFoundException
-	 */
-	public static Class<? extends FieldsDiscriminator> getDiscriminatorClass(Field field) throws ClassNotFoundException {
-		InterchangeableDiscriminator ant = field.getAnnotation(InterchangeableDiscriminator.class);
-		if (ant != null && !ant.discriminatorClass().equals("")) {
-			String className = ant.discriminatorClass();
-			@SuppressWarnings("unchecked")
-			Class<? extends FieldsDiscriminator> result = (Class<? extends FieldsDiscriminator>) Class.forName(className);
-			return result;
-		}
-		return null;
-		
 	}
 	
 	public static boolean isCompositeField(Field field) {
@@ -665,8 +630,7 @@ public class InterchangeUtils {
 		return InterchangeableClassMapper.containsSimpleClass(clazz);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static Class getClassOfField(Field field) {
+	public static Class<?> getClassOfField(Field field) {
 		if (!isCollection(field))
 			return field.getType();
 		else

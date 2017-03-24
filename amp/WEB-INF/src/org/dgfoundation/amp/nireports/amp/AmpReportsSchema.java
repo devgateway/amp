@@ -598,23 +598,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		indicator_single_dimension(ColumnConstants.INDICATOR_RISK, "v_indicator_risk", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "v_indicator_logframe_category", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue",
-				INDICATOR_CONN_LEVEL_COLUMN, DoubleTextExtractor.INSTANCE);
+		indicator_double_column(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_ACTUAL_DATE, "v_indicator_actual_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_ACTUAL_COMMENT, "v_indicator_actual_comment", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_BASE_VALUE, "v_indicator_basevalue",
-				INDICATOR_CONN_LEVEL_COLUMN, DoubleTextExtractor.INSTANCE);
+		indicator_double_column(ColumnConstants.INDICATOR_BASE_VALUE, "v_indicator_basevalue", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_BASE_DATE, "v_indicator_base_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_BASE_COMMENT, "v_indicator_base_comment", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_TARGET_VALUE, "v_indicator_targetvalue",
-				INDICATOR_CONN_LEVEL_COLUMN, DoubleTextExtractor.INSTANCE);
+		indicator_double_column(ColumnConstants.INDICATOR_TARGET_VALUE, "v_indicator_targetvalue", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_TARGET_DATE, "v_indicator_target_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_TARGET_COMMENT, "v_indicator_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, "v_indicator_revised_target_value",
-				INDICATOR_CONN_LEVEL_COLUMN, DoubleTextExtractor.INSTANCE);
+		indicator_double_column(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, "v_indicator_revised_target_value", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, "v_indicator_revised_target_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, "v_indicator_revised_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
 	}
@@ -1076,17 +1072,18 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 
 	private AmpReportsSchema indicator_single_dimension(String columnName, String view, LevelColumn levelColumn) {
-		return indicator_single_dimension(columnName, view, levelColumn, null);
-	}
-
-	private AmpReportsSchema indicator_single_dimension(String columnName, String view, LevelColumn levelColumn, SimpleTextColumn.TextExtractor textExtractor) {
-		SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn, IndicatorTextualTokenBehaviour.instance);
+		SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn, IndicatorTextualTokenBehaviour.textInstance);
 		if (levelColumn == INDICATOR_CONN_LEVEL_COLUMN) {
 			col.withMetaInfoProvider(IndicatorIdMetaInfoProvider.instance);
 		}
 		col.allowNulls(true);
-		if (textExtractor != null) {
-			col.withTextExtractor(textExtractor);
+		return addColumn(col);
+	}
+
+	private AmpReportsSchema indicator_double_column(String columnName, String view, LevelColumn levelColumn) {
+		DoubleColumn col = new DoubleColumn(columnName, levelColumn, view, IndicatorTextualTokenBehaviour.doubleInstance);
+		if (levelColumn == INDICATOR_CONN_LEVEL_COLUMN) {
+			col.withMetaInfoProvider(IndicatorIdMetaInfoProvider.instance);
 		}
 		return addColumn(col);
 	}

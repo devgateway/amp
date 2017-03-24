@@ -110,7 +110,7 @@ export default class HomePage extends Component {
             ...TypeList.translations(),
             ...Settings.translations(),
             'amp.resource-manager:resource-manager-title': 'Resource Manager',
-            'amp.resource-manager:': 'Success',
+            'amp.resource-manager:success:': 'Success',
             "amp.resource-manager:button-accept": "Save changes"
         }
     }

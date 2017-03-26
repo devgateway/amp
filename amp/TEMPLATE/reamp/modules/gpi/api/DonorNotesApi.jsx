@@ -1,17 +1,13 @@
-import { postJson, delay, fetchJson } from 'amp/tools';
+import { postJson, delay, fetchJson, deleteJson } from 'amp/tools';
 class DonorNotesApi {    
     static save(data) { 
-        const url = Array.isArray(data) ? '/rest/gpi/donor-notes/save-all' : '/rest/gpi/donor-notes';
-        const request = new Request(url, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify(data)
-        });
-        
-        return fetch(request).then(response => {
-            return response.json();
-        }).catch(error => {
-            return error;
+        const url = Array.isArray(data) ? '/rest/gpi/donor-notes/save-all' : '/rest/gpi/donor-notes';        
+        return new Promise((resolve, reject) => {
+            postJson(url, data).then((response) => {
+                resolve(response.json())
+            }).catch((error) => {
+                reject(error);
+            });
         });
     }
     
@@ -26,17 +22,14 @@ class DonorNotesApi {
         });
     }
     
-    static deleteDonorNotes(donorNotes) {      
-        const request = new Request('/rest/gpi/donor-notes/' + donorNotes.id, {
-            method: 'DELETE',
-            headers: {'Content-Type':'application/json'}
-        });
-        return fetch(request).then(response => {
-            return response.json();
-        }).catch(error => {
-            return error;
-        })
-        
+    static deleteDonorNotes(donorNotes) {          
+        return new Promise((resolve, reject) => {
+            deleteJson('/rest/gpi/donor-notes/' + donorNotes.id, {}).then(response => {
+                resolve(response.json());
+            }).catch(error => {
+                reject(error);
+            });
+        });          
     }
     
 }

@@ -1,15 +1,14 @@
 import { postJson, delay, fetchJson } from 'amp/tools';
 class CommonListsApi {    
-    static getCurrencyList() {
-        const request = new Request('/rest/settings-definitions/gpi', {
-            method: 'GET'      
+    static getCurrencyList() {              
+        return new Promise((resolve, reject) => {
+            fetchJson('/rest/settings-definitions/gpi').then((response) => {
+                resolve(response);
+            }).catch((error) => {
+                reject(error);
+            });
         });
         
-        return fetch(request).then(response => {
-            return response.json();
-        }).catch(error => {
-            return error;
-        });
     }
     
     static getOrgList(verifiedOrgs) {  
@@ -24,16 +23,14 @@ class CommonListsApi {
         
     }
     
-    static getSettings() {     
-        const request = new Request('/rest/amp/settings', {
-            method: 'GET'      
-        });
-        
-        return fetch(request).then(response => {
-            return response.json();
-        }).catch(error => {
-            return error;
-        });
+    static getSettings() {          
+        return new Promise((resolve, reject) => {
+           fetchJson('/rest/amp/settings').then((response) => {
+               resolve(response);
+           }).catch((error) => {
+               reject(error);
+           });
+       });   
     }
     
     static getUserInfo(){

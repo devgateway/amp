@@ -56,6 +56,10 @@ public class GPIDataService {
 	}
 
 	private static JsonBean modelToJsonBean(AmpGPINiAidOnBudget aidOnBudget) {
+		if (hasGPIDataRights() == false) {
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+		
 		JsonBean data = new JsonBean();
 		data.set(GPIEPConstants.FIELD_ID, aidOnBudget.getAmpGPINiAidOnBudgetId());
 		data.set(GPIEPConstants.FIELD_DONOR_ID, aidOnBudget.getDonor().getAmpOrgId());
@@ -67,6 +71,10 @@ public class GPIDataService {
 	}
 
 	private static AmpGPINiAidOnBudget getAidOnBudget(JsonBean data) {
+		if (hasGPIDataRights() == false) {
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+		
 		Long id;
 		AmpGPINiAidOnBudget aidOnBudget = null;
 		if (data.getString(GPIEPConstants.FIELD_ID) != null
@@ -80,7 +88,7 @@ public class GPIDataService {
 		return aidOnBudget;
 	}
 	
-	public static AmpGPINiAidOnBudget updateModel(AmpGPINiAidOnBudget aidOnBudget, JsonBean data){
+	private static AmpGPINiAidOnBudget updateModel(AmpGPINiAidOnBudget aidOnBudget, JsonBean data){
 		if (data.get(GPIEPConstants.FIELD_CURRENCY_CODE) != null) {
 			String currencyCode = data.getString((GPIEPConstants.FIELD_CURRENCY_CODE));
 			aidOnBudget.setCurrency(CurrencyUtil.getAmpcurrency(currencyCode));
@@ -142,7 +150,7 @@ public class GPIDataService {
 		return results;
 	}
 
-	public static List<JsonBean> validateAidOnBudget(JsonBean data) {
+	private static List<JsonBean> validateAidOnBudget(JsonBean data) {
 		List<JsonBean> validationErrors = new ArrayList<>();
 		Long donorId = Long.parseLong(String.valueOf(data.get(GPIEPConstants.FIELD_DONOR_ID)));
 		Date date = DateTimeUtil.parseDate(data.getString(GPIEPConstants.FIELD_DATE), GPIEPConstants.DATE_FORMAT);
@@ -173,6 +181,10 @@ public class GPIDataService {
 	}
 
 	public static JsonBean saveDonorNotes(JsonBean data) {
+		if (hasGPIDataRights() == false) {
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+		
 		JsonBean result = new JsonBean();
 		List<JsonBean> validationErrors = validateDonorNotes(data);
 
@@ -196,6 +208,10 @@ public class GPIDataService {
 	}
 	
 	public static List<JsonBean> saveDonorNotes(List<JsonBean> donorNotesList) {
+		if (hasGPIDataRights() == false) {
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+		
 		List<JsonBean> results = new ArrayList<>();
 		for (JsonBean donorNotes : donorNotesList) {
 			results.add(saveDonorNotes(donorNotes));
@@ -258,6 +274,10 @@ public class GPIDataService {
 	}
 
 	public static JsonBean getDonorNotesList(Integer offset, Integer count, String orderBy, String sort) {
+		if (hasGPIDataRights() == false) {
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+		
 		Integer total = GPIUtils.getDonorNotesCount();
 		List<AmpGPINiDonorNotes>  notesList = GPIUtils.getDonorNotesList(offset, count, orderBy, sort, total);
 		JsonBean data = new JsonBean();
@@ -273,6 +293,9 @@ public class GPIDataService {
 	}
 	
 	public static JsonBean deleteDonorNotesById(Long id) {
+		if (hasGPIDataRights() == false) {
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
 		
 		JsonBean result = new JsonBean();
 		GPIUtils.deleteDonorNotes(id);
@@ -280,18 +303,17 @@ public class GPIDataService {
 		return result;
 	}	
 	
-	public static boolean hasGPIDataRights() {
-		// TODO: Fix - TeamUtil.getCurrentMember() returns null
-		/*
-		 * TeamMember tm = TeamUtil.getCurrentMember(); AmpTeamMember atm =
-		 * TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); return
-		 * atm.getUser().hasNationalCoordinatorGroup() ||
-		 * atm.getUser().hasVerifiedDonor();
-		 */
-		return true;
+	private static boolean hasGPIDataRights() {		
+		 TeamMember tm = TeamUtil.getCurrentMember(); AmpTeamMember atm =
+		 TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); 
+		 return atm.getUser().hasNationalCoordinatorGroup() || atm.getUser().hasVerifiedDonor();		 
 	}
 	
 	public static List<JsonBean> getUsersVerifiedOrganizations() {
+		if (hasGPIDataRights() == false) {
+			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+		}
+		
 		TeamMember tm = TeamUtil.getCurrentMember();
 		AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
 		Set<AmpOrganisation> verifiedOrgs = atm.getUser().getAssignedOrgs();

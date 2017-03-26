@@ -1,4 +1,4 @@
-import { postJson, delay, fetchJson } from 'amp/tools';
+import { postJson, delay, fetchJson, deleteJson } from 'amp/tools';
 class AidOnBudgetApi {  
     
     static getAidOnBudgetList(data) { 
@@ -13,32 +13,25 @@ class AidOnBudgetApi {
     }
     
     static save(data) { 
-        const url = Array.isArray(data) ? '/rest/gpi/aid-on-budget/save-all' : '/rest/gpi/aid-on-budget';
-        const request = new Request(url, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify(data)
-        });
-        
-        return fetch(request).then(response => {
-            return response.json();
-        }).catch(error => {
-            return error;
-        });
-    }
+        const url = Array.isArray(data) ? '/rest/gpi/aid-on-budget/save-all' : '/rest/gpi/aid-on-budget'; 
+        return new Promise((resolve, reject) => {
+            postJson(url, data).then(response => {
+                resolve(response.json());
+            }).catch(error => {
+                reject(error);
+            });
+        });        
+    }    
     
-    
-    static deleteAidOnBudget(aidOnBudget) {      
-        const request = new Request('/rest/gpi/aid-on-budget/' + aidOnBudget.id, {
-            method: 'DELETE',
-            headers: {'Content-Type':'application/json'}
-        });
-        return fetch(request).then(response => {
-            return response.json();
-        }).catch(error => {
-            return error;
-        })
-        
+    static deleteAidOnBudget(aidOnBudget) {        
+        var url = '/rest/gpi/aid-on-budget/' + aidOnBudget.id;         
+        return new Promise((resolve, reject) => {
+            deleteJson(url, {}).then(response => {
+                resolve(response.json());
+            }).catch(error => {
+                reject(error);
+            });
+        });  
     }
     
 }

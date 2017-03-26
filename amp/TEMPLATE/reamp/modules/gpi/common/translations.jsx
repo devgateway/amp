@@ -26,7 +26,7 @@ export const initialTranslations = {
         'amp.gpi-data-donor-notes:save-all': '__saved__ of __total__ rows were saved successfully.',        
         'amp.gpi-data-donor-notes:validation-notes-required': 'Notes is required',
         'amp.gpi-data:validation-all-fields-required': 'All fields required',
-        'amp.gpi-data:server-errors-0001': 'Please select a unique date',
+        'amp.gpi-data:server-errors-0001': 'Please select a unique date or donor agency.',
         'amp.gpi-data:add-new': 'Add New',
         'amp.gpi-data:insert-data': '(insert data to the new field)',
         'amp.gpi-data:click-save': 'Click the Save Symbol to save the added data row',

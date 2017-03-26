@@ -19,12 +19,24 @@ export function obj2arr(obj){
 export var identity = whatever => whatever
 
 export function fetchJson(url) {
-  return fetch(url, {credentials: 'same-origin'}).then(callFunc('json'))
+  return fetch(url, {credentials: 'same-origin', headers: {'Content-Type': 'application/json'}}).then(callFunc('json'))
 }
 
 export function postJson(endpoint, payload){
   return fetch(endpoint, {
     method: 'post',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+}
+
+export function deleteJson(endpoint, payload){
+  return fetch(endpoint, {
+    method: 'delete',
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',

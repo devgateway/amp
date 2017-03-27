@@ -3480,7 +3480,7 @@ public class ExportActivityToPDF extends Action {
         if (contacts != null && contacts.size() > 0) {
             String output = "";
             for (AmpActivityContact cont : contacts) {
-                output = ExportUtil.getContactInformation(cont.getContact());
+                output += ExportUtil.getContactInformation(cont.getContact());
             }
             paragraph = new Paragraph(output, plainFont);
             paragraph.setAlignment(Element.ALIGN_LEFT);

@@ -3,12 +3,11 @@ class Utils {
         return typeof(input) != "boolean" && !isNaN(input);
     }
     
-    static isUndefinedOrBlank(obj, field) {
+    static isUndefinedOrBlank(obj, field) {        
         var result = false;
-        if(obj[field] === '' || !obj[field]){
+        if (obj[field] === '' || !obj[field]) {
             result = true;
-        }
-        
+        }        
         return result;        
     }
     
@@ -20,9 +19,9 @@ class Utils {
             message = {messageKey: 'amp.gpi-data:validation-all-fields-required', id: aidOnBudget.id, cid: aidOnBudget.cid, affectedFields:['amount']};                        
         }  
         
-        this.checkRequiredField(aidOnBudget,'donorId', message);
-        this.checkRequiredField(aidOnBudget,'currencyCode', message);
-        this.checkRequiredField(aidOnBudget,'indicatorDate', message);         
+        message = this.checkRequiredField(aidOnBudget,'donorId', message);
+        message = this.checkRequiredField(aidOnBudget,'currencyCode', message);
+        message = this.checkRequiredField(aidOnBudget,'indicatorDate', message);         
         if (message) {
             errors.push(message);
         }
@@ -51,7 +50,7 @@ class Utils {
            } else {
                message = {messageKey: 'amp.gpi-data:validation-all-fields-required', id: obj.id, cid: obj.cid, affectedFields:[field]}
            }              
-       }
+       }       
        return message;
    }
     

@@ -7,6 +7,7 @@ import { OverlayTrigger } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import DatePicker from 'react-date-picker';
 import moment from 'moment';
+import {Typeahead} from 'react-bootstrap-typeahead'; 
 require('react-date-picker/base.css');
 require('react-date-picker/theme/hackerone.css');
 require('../styles/main.less');
@@ -61,7 +62,7 @@ export default class AidOnBudgetRow extends Component {
     onValueChange(field, value) {
         const aidOnBudget = this.props.aidOnBudget;   
         if(field === 'donorId'){
-            aidOnBudget[field] = parseInt(value);
+            aidOnBudget[field] = value ? parseInt(value) : '';
         } else {
             aidOnBudget[field] = value;   
         }
@@ -116,7 +117,8 @@ export default class AidOnBudgetRow extends Component {
         return  errors; 
     }
     
-    onOrgChange(selected){        
+    onOrgChange(selected){
+        console.log(selected);
         if (selected.length > 0) {           
            this.onValueChange('donorId', selected[0].id); 
         } else {
@@ -148,15 +150,18 @@ export default class AidOnBudgetRow extends Component {
                     </div>
                     </td>
                     <td>
-                    <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>
+                    <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group ' }>
                     <br/>
-                    <select name="donorId" className="form-control" value={this.props.aidOnBudget.donorId} onChange={this.onChange}>
-                    <option value="">{this.props.translations['amp.gpi-data:select-donor']}</option>
-                    {this.props.orgList.map(org => 
-                    <option value={org.id}  key={org.id} >{org.name}</option>
-                    )}
-                    </select>                   
-                    </div>
+                    <Typeahead
+                    bodyContainer={false}
+                    labelKey="name"
+                    options={this.props.orgList}
+                    placeholder={this.props.translations['amp.gpi-data:select-donor']}
+                    onChange={this.onOrgChange} 
+                    selected={this.props.orgList.filter(org => {return org.id === this.props.aidOnBudget.donorId})}
+                    clearButton={true}
+                    />                   
+                    </div>                    
                     </td>
                     <td>
                     <div className={this.getErrorsForField('amount').length > 0 ? 'form-group has-error' : 'form-group' }>

@@ -6,6 +6,7 @@ import { Popover } from 'react-bootstrap';
 import { OverlayTrigger } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import DatePicker from 'react-date-picker';
+import {Typeahead} from 'react-bootstrap-typeahead';
 import moment from 'moment';
 require('react-date-picker/base.css');
 require('react-date-picker/theme/hackerone.css');
@@ -28,6 +29,7 @@ export default class DonorNotesRow extends Component {
         this.deleteDonorNotes = this.deleteDonorNotes.bind(this); 
         this.getErrorsForField = this.getErrorsForField.bind(this);
         this.cancel = this.cancel.bind(this);
+        this.onOrgChange = this.onOrgChange.bind(this);
     }
     
     toggleEdit() {
@@ -103,6 +105,16 @@ export default class DonorNotesRow extends Component {
         return  errors; 
     }
     
+    onOrgChange(selected){
+        let donorNotes = this.props.donorNotes;                 
+        if (selected.length > 0) {    
+            donorNotes.donorId = selected[0].id;            
+        } else {
+            donorNotes.donorId = null;
+        } 
+        this.props.actions.updateDonorNotes(donorNotes); 
+    }
+    
     render() {        
         if (this.props.donorNotes.isEditing) {         
             return ( <tr>
@@ -127,16 +139,17 @@ export default class DonorNotesRow extends Component {
                     </div>
                     </td>
                     <td>
-                    
                     <div className={this.getErrorsForField('donorId').length > 0 ? 'form-group has-error' : 'form-group' }>
-                    <select name="donorId" className="form-control" value={this.props.donorNotes.donorId} onChange={this.onChange}>
-                    <option value="">{this.props.translations['amp.gpi-data:select-donor']}</option>
-                    {this.props.verifiedOrgList.map(org => 
-                    <option value={org.id}  key={org.id} >{org.name}</option>
-                    )}
-                    </select> 
-                    </div>
-                    
+                    <Typeahead
+                    bodyContainer={false}
+                    labelKey="name"
+                    options={this.props.verifiedOrgList}
+                    placeholder={this.props.translations['amp.gpi-data:select-donor']}
+                    onChange={this.onOrgChange} 
+                    selected={this.props.verifiedOrgList.filter(org => {return org.id === this.props.donorNotes.donorId})}
+                    clearButton={true}
+                    />
+                    </div>                    
                     </td> 
                     <td className="notes-column">
                     <div className={this.getErrorsForField('notes').length > 0 ? 'form-group has-error' : 'form-group' }>                    

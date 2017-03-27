@@ -33,6 +33,7 @@
                     </c:if>
                 </c:if>
 			</c:forEach>
+            ;
 		</div>
 	</c:forEach>
 </c:if>

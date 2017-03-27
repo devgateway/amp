@@ -46,7 +46,7 @@ public class ExportUtil {
 
             telephones = contactProperties.stream().filter(z -> Constants.CONTACT_PROPERTY_NAME_PHONE.equals(z.getName())).limit(2).map(entry -> entry.getValue()).collect(Collectors.joining(", "));
         }
-        output += contact.getName() + " " + contact.getLastname() + (clover.org.apache.commons.lang.StringUtils.isNotEmpty(emails) ? " - " + emails : "") + (clover.org.apache.commons.lang.StringUtils.isNotEmpty(telephones) ? " - " + telephones : "");
+        output += contact.getName() + " " + contact.getLastname() + (clover.org.apache.commons.lang.StringUtils.isNotEmpty(emails) ? " - " + emails : "") + (clover.org.apache.commons.lang.StringUtils.isNotEmpty(telephones) ? " - " + telephones : "") + ";\n";
         return output;
     }
 }

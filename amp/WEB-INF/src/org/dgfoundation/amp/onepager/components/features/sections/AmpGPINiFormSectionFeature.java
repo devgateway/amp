@@ -15,9 +15,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpGPINiOrgRoleItemFeaturePanel;
-import org.dgfoundation.amp.onepager.events.OrganisationUpdateEvent;
+import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
-import org.dgfoundation.amp.onepager.models.FilteredListModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -35,22 +34,18 @@ public class AmpGPINiFormSectionFeature extends AmpFormSectionFeaturePanel {
 		super(id, fmName, am);
 
 		PropertyModel<Set<AmpOrgRole>> orgRoles = new PropertyModel<Set<AmpOrgRole>>(am, "orgrole");
-		AbstractReadOnlyModel<List<AmpOrgRole>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(orgRoles, AmpOrgRole.BY_ACRONYM_AND_NAME_COMPARATOR);
-		FilteredListModel<AmpOrgRole> filteredListModel = new FilteredListModel<AmpOrgRole>(listModel.getObject()) {
-			private static final long serialVersionUID = 1L;
+		AbstractReadOnlyModel<List<AmpOrgRole>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(
+				orgRoles, 
+				AmpOrgRole.BY_ACRONYM_AND_NAME_COMPARATOR, 
+				AmpGPINiFormSectionFeature::hasDonorFundings);
 
-			@Override
-			protected boolean accept(AmpOrgRole o) {
-				return hasDonorFundings(o);
-			}
-		};
-		
-		final ListView<AmpOrgRole> list = new ListView<AmpOrgRole>("list", filteredListModel) {
+		final ListView<AmpOrgRole> list = new ListView<AmpOrgRole>("list", listModel) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<AmpOrgRole> item) {
-				AmpGPINiOrgRoleItemFeaturePanel orgRoleItem = new AmpGPINiOrgRoleItemFeaturePanel("item", "GPI NI Survey", item.getModel(), am, AmpGPINiFormSectionFeature.this);
+				AmpGPINiOrgRoleItemFeaturePanel orgRoleItem = new AmpGPINiOrgRoleItemFeaturePanel("item", 
+						"GPI NI Survey", item.getModel(), am, AmpGPINiFormSectionFeature.this);
 				item.add(orgRoleItem);
 			}
 		};
@@ -58,10 +53,10 @@ public class AmpGPINiFormSectionFeature extends AmpFormSectionFeaturePanel {
 		list.setOutputMarkupId(true);
 		setOutputMarkupId(true);
 		add(list);
-		add(UpdateEventBehavior.of(OrganisationUpdateEvent.class));
+		add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
 	}
 	
-	private boolean hasDonorFundings(AmpOrgRole donor) {
+	private static boolean hasDonorFundings(AmpOrgRole donor) {
 		AmpActivityVersion activity = donor.getActivity();
 		
 		for (AmpFunding f : activity.getFunding()) {

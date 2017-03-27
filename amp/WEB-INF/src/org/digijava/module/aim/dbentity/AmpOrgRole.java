@@ -11,6 +11,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.aim.util.SerializableComparator;
 
 
 public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable
@@ -198,7 +199,9 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 		}
 	}
 	
-	public final static Comparator<AmpOrgRole> BY_ACRONYM_AND_NAME_COMPARATOR = new Comparator<AmpOrgRole>() {
+	public final static Comparator<AmpOrgRole> BY_ACRONYM_AND_NAME_COMPARATOR = new SerializableComparator<AmpOrgRole>() {
+		private static final long serialVersionUID = 1935052796869929272L;
+
 		@Override
 		public int compare(AmpOrgRole o1, AmpOrgRole o2) {
 			if (o1 == null || o1.getOrganisation() == null ||o1.getOrganisation().getAcronymAndName() == null)
@@ -209,7 +212,9 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 		}
 	};
 	
-	public final static Comparator<AmpOrgRole> BY_ORG_AND_ROLE = new Comparator<AmpOrgRole>() {
+	public final static Comparator<AmpOrgRole> BY_ORG_AND_ROLE = new SerializableComparator<AmpOrgRole>() {
+		private static final long serialVersionUID = 2047345669087531206L;
+
 		@Override
 		public int compare(AmpOrgRole o1, AmpOrgRole o2) {
 			if (o1 == null && o2 == null)

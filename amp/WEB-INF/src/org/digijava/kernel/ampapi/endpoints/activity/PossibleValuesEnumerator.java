@@ -279,6 +279,12 @@ public class PossibleValuesEnumerator {
 			String parentLocationName = item[3] == null? null : ((String)(item[3]));
 			Long categoryValueId = item[4] == null? null : ((Number)(item[4])).longValue();
 			String categoryValueName = item[5] == null? null : ((String)(item[5]));
+
+			// FIXME remove this filter during AMP-25735
+			if (value == null && parentLocationId == null && parentLocationName == null
+					&& categoryValueId == null && categoryValueName == null) {
+				continue;
+			}
 			
 			JsonBean bean = new JsonBean();
 			bean.set("id", id);

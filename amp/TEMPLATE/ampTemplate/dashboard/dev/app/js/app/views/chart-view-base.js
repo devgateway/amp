@@ -132,8 +132,9 @@ module.exports = BackboneDash.View.extend({
 	    if (self._stateWait.state() !== 'pending') {
 	    	self.updateData();
 	    }
-	
+
 	    self.app.translator.translateDOM(this.el);
+        self.$el.find('[data-toggle="tooltip"]').tooltip();
 	    self.renderedPromise.resolve();
     });
     return this;
@@ -146,6 +147,7 @@ module.exports = BackboneDash.View.extend({
       this.message.html('Loading...').attr('data-i18n', 'amp.dashboard:chart-loading-saved-settings');
       app.translator.translateDOM($('.chart-container'));
       //this.message.fadeIn(100);
+      debugger;
       return;
     }
 

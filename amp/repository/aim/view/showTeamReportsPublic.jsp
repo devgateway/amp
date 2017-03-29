@@ -459,7 +459,7 @@ function submitForm(action){
 																						<c:set target="${urlParams}" property="event" value="edit" />
 
 																						<a href="${reportLink}"
-						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the report</digi:trn>">
 						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
 																						
 																						<c:set var="showExportExcelSetting" scope="page" value="true"/>

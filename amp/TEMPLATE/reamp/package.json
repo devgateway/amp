@@ -55,6 +55,7 @@
     "whatwg-fetch": "^0.9.0"
   },
   "dependencies": {
+    "rc-checkbox": "^1.5.0",
     "react-filtered-multiselect": "^0.4.2",
     "react-number-input": "^15.0.0-rc2",
     "react-select": "^1.0.0-rc.3"

@@ -217,41 +217,6 @@ public class APIField {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        APIField field = (APIField) o;
-        return Objects.equals(fieldName, field.fieldName)
-                && Objects.equals(translatable, field.translatable)
-                && Objects.equals(activity, field.activity)
-                && Objects.equals(fieldType, field.fieldType)
-                && Objects.equals(fieldNameInternal, field.fieldNameInternal)
-                && Objects.equals(required, field.required)
-                && Objects.equals(id, field.id)
-                && Objects.equals(idOnly, field.idOnly)
-                && Objects.equals(importable, field.importable)
-                && Objects.equals(multipleValues, field.multipleValues)
-                && Objects.equals(uniqueConstraint, field.uniqueConstraint)
-                && Objects.equals(percentageConstraint, field.percentageConstraint)
-                && Objects.equals(treeCollectionConstraint, field.treeCollectionConstraint)
-                && Objects.equals(fieldLength, field.fieldLength)
-                && Objects.equals(children, field.children)
-                && Objects.equals(dependencies, field.dependencies)
-                && Objects.equals(percentage, field.percentage);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(fieldName, fieldType, fieldNameInternal, required, id, idOnly, importable, translatable,
-                multipleValues, activity, uniqueConstraint, percentageConstraint, treeCollectionConstraint,
-                fieldLength, children, dependencies, percentage);
-    }
-
-    @Override
     public String toString() {
         return "APIField{" + "fieldName='" + fieldName + '\'' + ", id=" + id + ", fieldType='" + fieldType + '\''
                 + ", fieldLabel=" + fieldLabel + ", fieldNameInternal='" + fieldNameInternal + '\'' + ", required='"

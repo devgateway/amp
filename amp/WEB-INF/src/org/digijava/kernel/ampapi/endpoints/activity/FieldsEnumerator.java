@@ -13,12 +13,18 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.util.ProgramUtil;
 
 /**
  * AMP Activity Endpoints for Activity Import / Export
@@ -93,7 +99,7 @@ public class FieldsEnumerator {
 		
 
 		apiField.setFieldLabel(InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
-		apiField.setRequired(InterchangeUtils.getRequiredValue(field, intchStack, fmService));
+		apiField.setRequired(getRequiredValue(intchStack, fmService));
 		apiField.setImportable(interchangeable.importable());
 		if (interchangeable.percentageConstraint()){
 			apiField.setPercentage(true);
@@ -118,22 +124,22 @@ public class FieldsEnumerator {
 		
 		if (!InterchangeUtils.isSimpleType(field.getType())) {
 			if (InterchangeUtils.isCollection(field)) {
-				if (!InterchangeUtils.hasMaxSizeValidatorEnabled(field, intchStack, fmService)
+				if (!hasMaxSizeValidatorEnabled(field, intchStack)
 						&& interchangeable.multipleValues()) {
 					apiField.setMultipleValues(true);
 				} else {
 					apiField.setMultipleValues(false);
 				}
 				
-				if (InterchangeUtils.hasPercentageValidatorEnabled(field, intchStack, fmService)) {
+				if (hasPercentageValidatorEnabled(intchStack)) {
 					apiField.setPercentageConstraint(getPercentageConstraint(field, intchStack));
 				}
 				
-				if (InterchangeUtils.hasUniqueValidatorEnabled(field, intchStack, fmService)) {
+				if (hasUniqueValidatorEnabled(intchStack)) {
 					apiField.setUniqueConstraint(getUniqueConstraint(field, intchStack));
 				}
 				
-				if (InterchangeUtils.hasTreeCollectionValidatorEnabled(field, intchStack, fmService)) {
+				if (hasTreeCollectionValidatorEnabled(intchStack)) {
 					apiField.setTreeCollectionConstraint(true);
 				}
 			}
@@ -202,7 +208,7 @@ public class FieldsEnumerator {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Picks available translations for a string (supposedly field name)
 	 * 
@@ -249,10 +255,6 @@ public class FieldsEnumerator {
 	
 	/**
 	 * Describes each @Interchangeable field of a class
-	 * @param parentInterchangeable 
-	 * 
-	 * @param clazz the class to be described
-	 * @return
 	 */
 	private String getUniqueConstraint(Field field, Deque<Interchangeable> intchStack) {
 		Class<?> genericClass = InterchangeUtils.getGenericClass(field);
@@ -341,5 +343,114 @@ public class FieldsEnumerator {
 		}
 
 		context.pathStack.pop();
+	}
+
+	/**
+	 * Gets the field required value.
+	 *
+	 * @param Field the field to get its required value
+	 * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false,
+	 * N (no) = not required. .
+	 */
+	private String getRequiredValue(Deque<Interchangeable> intchStack, FMService fmService) {
+		Interchangeable fieldIntch = intchStack.peek();
+		String requiredValue = ActivityEPConstants.FIELD_NOT_REQUIRED;
+		String required = fieldIntch.required();
+
+		if (required.equals(ActivityEPConstants.REQUIRED_ALWAYS)) {
+			requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+		} else if (required.equals(ActivityEPConstants.REQUIRED_ND)
+				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && fmService.isVisible(required, intchStack))
+				|| (hasRequiredValidatorEnabled(intchStack))) {
+			requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
+		}
+		return requiredValue;
+	}
+
+	/**
+	 * Determine if the field contains unique validator
+	 * @param intchStack
+	 * @return boolean if the field contains unique validator
+	 */
+	private boolean hasUniqueValidatorEnabled(Deque<Interchangeable> intchStack) {
+		return hasValidatorEnabled(intchStack, ActivityEPConstants.UNIQUE_VALIDATOR_NAME);
+	}
+
+	/**
+	 * Determine if the field contains tree collection validator
+	 * @param intchStack
+	 * @return boolean if the field contains tree collection validator
+	 */
+	private boolean hasTreeCollectionValidatorEnabled(Deque<Interchangeable> intchStack) {
+		return hasValidatorEnabled(intchStack, ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME);
+	}
+
+	/**
+	 * Determine if the field contains maxsize validator
+	 * @param intchStack
+	 * @return boolean if the field contains maxsize validator
+	 */
+	private boolean hasMaxSizeValidatorEnabled(Field field, Deque<Interchangeable> intchStack) {
+		if (AmpActivityProgram.class.equals(InterchangeUtils.getGenericClass(field))) {
+			try {
+				AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(
+						intchStack.peek().discriminatorOption());
+				return setting != null && !setting.isAllowMultiple();
+			} catch (DgException e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			return hasValidatorEnabled(intchStack, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
+		}
+	}
+
+	/**
+	 * Determine if the field contains required validator
+	 * @param intchStack
+	 * @return boolean if the field contains required validator
+	 */
+	private boolean hasRequiredValidatorEnabled(Deque<Interchangeable> intchStack) {
+		return hasValidatorEnabled(intchStack, ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME);
+	}
+
+	/**
+	 * Determine if the field contains percentage validator
+	 * @param intchStack
+	 * @return boolean if the field contains percentage validator
+	 */
+	private boolean hasPercentageValidatorEnabled(Deque<Interchangeable> intchStack) {
+		return hasValidatorEnabled(intchStack, ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME);
+	}
+
+	/**
+	 * Determine if the field contains a certain validator
+	 * @param intchStack
+	 * @param validatorName the name of the validator (unique, maxSize, minSize, percentage, treeCollection)
+	 * @return boolean if the field contains unique validator
+	 */
+	private boolean hasValidatorEnabled(Deque<Interchangeable> intchStack, String validatorName) {
+		boolean isEnabled = false;
+		Interchangeable interchangeable = intchStack.peek();
+		Validators validators = interchangeable.validators();
+
+		String validatorFmPath = "";
+
+		if (ActivityEPConstants.UNIQUE_VALIDATOR_NAME.equals(validatorName)) {
+			validatorFmPath = validators.unique();
+		} else if (ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME.equals(validatorName)) {
+			validatorFmPath = validators.maxSize();
+		} else if (ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME.equals(validatorName)) {
+			validatorFmPath = validators.minSize();
+		} else if (ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME.equals(validatorName)) {
+			validatorFmPath = validators.percentage();
+		} else if (ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME.equals(validatorName)) {
+			validatorFmPath = validators.treeCollection();
+		}
+
+		if (StringUtils.isNotBlank(validatorFmPath)) {
+			isEnabled = fmService.isVisible(validatorFmPath, intchStack);
+		}
+
+		return isEnabled;
 	}
 }

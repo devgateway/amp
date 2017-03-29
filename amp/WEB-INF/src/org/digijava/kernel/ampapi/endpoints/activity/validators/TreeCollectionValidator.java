@@ -58,7 +58,7 @@ public class TreeCollectionValidator extends InputValidator {
 			Set<Long> idValues = new HashSet<Long>();
 			
 			if (fieldValue != null && fieldValue.size() > 1) {
-				Field field = InterchangeUtils.getFieldByLongName(fieldName, true);
+				Field field = InterchangeUtils.getFieldByLongName(fieldName);
 				
 				if (StringUtils.isBlank(uniqueField) || field == null) {
 					throw new RuntimeException("The treeCollectionValidator cannot check the field that does not have fields with unique constraint");

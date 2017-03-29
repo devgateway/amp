@@ -68,6 +68,7 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.ReportConstants;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -300,9 +301,9 @@ public class Reports implements ErrorReportingEndpoint {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
 		String groupingOption = (String) formParams.get("groupingOption");
 		switch(groupingOption) {
-			case ReportsUtil.GROUPING_YEARLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
-			case ReportsUtil.GROUPING_QUARTERLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
-			case ReportsUtil.GROUPING_MONTHLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
+			case ReportConstants.GROUPING_YEARLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
+			case ReportConstants.GROUPING_QUARTERLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
+			case ReportConstants.GROUPING_MONTHLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
 			default:
 				spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
 				break;
@@ -370,7 +371,7 @@ public class Reports implements ErrorReportingEndpoint {
 	 * Retrieves report data in XML format for the specified reportId
 	 *  
 	 * @param reportId report Id
-	 * @param ReportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
+	 * @param reportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
 	 * @return XML result for the specified reportId
 	 * @see ApiXMLService#getXmlReport
 	 */

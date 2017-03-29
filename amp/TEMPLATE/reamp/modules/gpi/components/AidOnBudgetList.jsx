@@ -149,7 +149,7 @@ export default class AidOnBudgetList extends Component {
                 </thead>
                 <tbody>               
                 {this.props.aidOnBudgetList.map(aidOnBudget => 
-                <AidOnBudgetRow aidOnBudget={aidOnBudget} key={aidOnBudget.id} currencyList={this.props.currencyList} orgList={this.props.orgList} settings={this.props.settings} key={aidOnBudget.id || 'c' + aidOnBudget.cid} errors={this.props.errors} numberFormatter={numberFormatter}/>  
+                <AidOnBudgetRow aidOnBudget={aidOnBudget} currencyList={this.props.currencyList} orgList={this.props.orgList} settings={this.props.settings} key={aidOnBudget.id || 'c' + aidOnBudget.cid} errors={this.props.errors} numberFormatter={numberFormatter}/>  
                 )}                
                 </tbody>
                 </table> 

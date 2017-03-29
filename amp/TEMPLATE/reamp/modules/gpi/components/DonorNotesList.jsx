@@ -143,7 +143,7 @@ export default class DonorNotesList extends Component {
                 </thead>
                 <tbody>               
                 {this.props.donorNotesList.map(donorNotes => 
-                <DonorNotesRow donorNotes={donorNotes} key={donorNotes.id} currencyList={this.props.currencyList} verifiedOrgList={this.props.verifiedOrgList} settings={this.props.settings} key={donorNotes.id || 'c' + donorNotes.cid} errors={this.props.errors}/>  
+                <DonorNotesRow donorNotes={donorNotes} currencyList={this.props.currencyList} verifiedOrgList={this.props.verifiedOrgList} settings={this.props.settings} key={donorNotes.id || 'c' + donorNotes.cid} errors={this.props.errors}/>  
                 )}                
                 </tbody>
                 </table> 

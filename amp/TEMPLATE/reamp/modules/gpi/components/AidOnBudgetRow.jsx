@@ -117,8 +117,7 @@ export default class AidOnBudgetRow extends Component {
         return  errors; 
     }
     
-    onOrgChange(selected){
-        console.log(selected);
+    onOrgChange(selected){        
         if (selected.length > 0) {           
            this.onValueChange('donorId', selected[0].id); 
         } else {

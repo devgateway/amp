@@ -42,7 +42,7 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 	private static final String INDICATOR_9B_CODE = "9b";
 
 	public AmpGPINiOrgRoleItemFeaturePanel(String id, String fmName, final IModel<AmpOrgRole> donor, 
-											IModel<AmpActivityVersion> am, final AmpGPINiFormSectionFeature parent) {
+						IModel<AmpActivityVersion> am, final AmpGPINiFormSectionFeature parent) throws Exception {
 		super(id, donor, fmName, true);
 		
 		setDefaultModel(new CompoundPropertyModel<AmpOrgRole>(donor));

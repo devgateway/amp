@@ -44,9 +44,13 @@ public class AmpGPINiFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 			@Override
 			protected void populateItem(ListItem<AmpOrgRole> item) {
-				AmpGPINiOrgRoleItemFeaturePanel orgRoleItem = new AmpGPINiOrgRoleItemFeaturePanel("item", 
-						"GPI NI Survey", item.getModel(), am, AmpGPINiFormSectionFeature.this);
-				item.add(orgRoleItem);
+				try {
+					AmpGPINiOrgRoleItemFeaturePanel orgRoleItem = new AmpGPINiOrgRoleItemFeaturePanel("item", 
+							"GPI NI Survey", item.getModel(), am, AmpGPINiFormSectionFeature.this);
+					item.add(orgRoleItem);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		};
 		

@@ -35,9 +35,12 @@ import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.upload.FileItemEx;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
+import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
+import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -57,6 +60,8 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
+import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -291,7 +296,8 @@ public class ActivityUtil {
 			
 			saveIndicators(a, session);
 
-			saveResources(a, session); 
+			saveActivityResources(a, session); 
+			saveActivityGPINiResources(a, session);
 			saveEditors(session, createNewVersion); 
 			saveComments(a, session,draft); 
 		}
@@ -678,23 +684,182 @@ public class ActivityUtil {
 		return agreements;
 	}
 
-	private static void saveResources(AmpActivityVersion a, Session session) {
-		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
-		
-		HttpServletRequest req = SessionUtil.getCurrentServletRequest();
-		
-		if (a.getActivityDocuments() == null)
+	private static void saveActivityResources(AmpActivityVersion a, Session session) {
+		AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+
+		if (a.getActivityDocuments() == null) {
 			a.setActivityDocuments(new HashSet<AmpActivityDocument>());
+		}
 
-		HashSet<TemporaryDocument> newResources = s.getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
+		HashSet<TemporaryActivityDocument> newResources = s.getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
 		HashSet<AmpActivityDocument> deletedResources = s.getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
-        HashSet<TemporaryDocument> existingTitles = s.getMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES);
+		HashSet<TemporaryActivityDocument> existingTitles = s.getMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES);
 
-        /*
-         * update titles
-         */
-        if (existingTitles != null) {
-            for (TemporaryDocument d : existingTitles) {
+		// update titles
+		updateResourcesTitles(newResources, deletedResources, existingTitles);
+
+		// remove old resources
+		deleteResources(a, deletedResources);
+
+		// insert new resources in the system
+		insertResources(a, newResources);
+	}
+
+	/**
+	 * @param a
+	 * @param newResources
+	 */
+	private static void insertResources(AmpActivityVersion a, HashSet<TemporaryActivityDocument> newResources) {
+		if (newResources != null) {
+			for (TemporaryActivityDocument temp : newResources) {
+				TemporaryDocumentData tdd = new TemporaryDocumentData();
+				tdd.setTitle(temp.getTitle());
+				tdd.setName(temp.getFileName());
+				tdd.setDescription(temp.getDescription());
+				tdd.setNotes(temp.getNote());
+				if (temp.getTranslatedTitleList() != null) {
+					Map<String, String> translatedTitleMap = new HashMap<String, String>();
+					for (ResourceTranslation titleTranslation : temp.getTranslatedTitleList()) {
+						translatedTitleMap.put(titleTranslation.getLocale(), titleTranslation.getTranslation());
+					}
+					tdd.setTranslatedTitles(translatedTitleMap);
+				}
+
+				if (temp.getTranslatedDescriptionList() != null) {
+					Map<String, String> translatedDescMap = new HashMap<String, String>();
+					for (ResourceTranslation descTranslation : temp.getTranslatedDescriptionList()) {
+						translatedDescMap.put(descTranslation.getLocale(), descTranslation.getTranslation());
+					}
+					tdd.setTranslatedDescriptions(translatedDescMap);
+				}
+
+				if (temp.getTranslatedNoteList() != null) {
+					Map<String, String> translatedNoteMap = new HashMap<String, String>();
+					for (ResourceTranslation noteTranslation : temp.getTranslatedDescriptionList()) {
+						translatedNoteMap.put(noteTranslation.getLocale(), noteTranslation.getTranslation());
+					}
+					tdd.setTranslatedNotes(translatedNoteMap);
+				}
+
+				if (temp.getType() != null)
+					tdd.setCmDocTypeId(temp.getType().getId());
+				if (temp.getDate() != null)
+					tdd.setDate(temp.getDate().getTime());
+				if (temp.getYear() != null)
+					tdd.setYearofPublication(temp.getYear());
+				if (temp.getWebLink() == null || temp.getWebLink().length() == 0) {
+					if (temp.getFile() != null) {
+						tdd.setFileSize(temp.getFile().getSize());
+						tdd.setFormFile(generateFormFile(temp.getFile()));
+					}
+				}
+
+				tdd.setWebLink(temp.getWebLink());
+
+				ActionMessages messages = new ActionMessages();
+				try {
+					NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
+
+					AmpActivityDocument aad = new AmpActivityDocument();
+					aad.setAmpActivity(a);
+					aad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
+					if (node != null) {
+						aad.setUuid(node.getUuid());
+					} else {
+						aad.setUuid(temp.getExistingDocument().getUuid());
+					}
+					a.getActivityDocuments().add(aad);
+				} catch (JCRSessionException ex) {
+					// we catch the exception and show a warning, but allow the activity to be saved
+					logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
+							+ " will not be saved.", ex);
+				}
+			}
+		}
+	}
+
+	/**
+	 * For Document Manager compatibility purposes
+	 * @param file 
+	 */
+	private static FormFile generateFormFile(FileUpload file) {
+		FormFile formFile = new FormFile() {
+
+			@Override
+			public void setFileSize(int arg0) {
+			}
+
+			@Override
+			public void setFileName(String arg0) {
+			}
+
+			@Override
+			public void setContentType(String arg0) {
+			}
+
+			@Override
+			public InputStream getInputStream() throws FileNotFoundException, IOException {
+				return file.getInputStream();
+			}
+
+			@Override
+			public int getFileSize() {
+				return (int) file.getSize();
+			}
+
+			@Override
+			public String getFileName() {
+				return file.getClientFileName();
+			}
+
+			@Override
+			public byte[] getFileData() throws FileNotFoundException, IOException {
+				return file.getBytes();
+			}
+
+			@Override
+			public String getContentType() {
+				return file.getContentType();
+			}
+
+			@Override
+			public void destroy() {
+			}
+		};
+
+		return formFile;
+	}
+
+	/**
+	 * @param a
+	 * @param deletedResources
+	 */
+	private static void deleteResources(AmpActivityVersion a, HashSet<AmpActivityDocument> deletedResources) {
+		if (deletedResources != null){
+			for (AmpActivityDocument tmpDoc : deletedResources) {
+				Iterator<AmpActivityDocument> it2 = a.getActivityDocuments().iterator();
+				while (it2.hasNext()) {
+					AmpActivityDocument existDoc = (AmpActivityDocument) it2.next();
+					if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0){
+						it2.remove();
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param newResources
+	 * @param deletedResources
+	 * @param existingTitles
+	 */
+	private static void updateResourcesTitles(HashSet<TemporaryActivityDocument> newResources,
+			HashSet<AmpActivityDocument> deletedResources, HashSet<TemporaryActivityDocument> existingTitles) {
+		if (existingTitles != null) {
+        	HttpServletRequest req = SessionUtil.getCurrentServletRequest();
+        	
+            for (TemporaryActivityDocument d : existingTitles) {
                 Node node = DocumentManagerUtil.getWriteNode(d.getExistingDocument().getUuid(), req);
                 if (node != null && d != null) {
                     NodeWrapper nw = new NodeWrapper(node);
@@ -733,88 +898,6 @@ public class ActivityUtil {
                                 logger.error("Error while getting data stream from JCR:", e);
                             }
 
-
-                            class FileItemEx implements FileItem{
-                                private String contentType;
-                                private String fileName;
-                                private Bytes fileSize;
-                                private InputStream fileData;
-                                public FileItemEx(String fileNameIn, String contentTypeIn, InputStream fileDataIn, Bytes fileSizeIn) {
-                                    fileName = fileNameIn;
-                                    contentType = contentTypeIn;
-                                    fileData = fileDataIn;
-                                    fileSize = fileSizeIn;
-                                }
-                                @Override
-                                public InputStream getInputStream() throws IOException {
-                                    return fileData;
-                                }
-
-                                @Override
-                                public String getContentType() {
-                                    return contentType;
-                                }
-
-                                @Override
-                                public String getName() {
-                                    return fileName;
-                                }
-
-                                @Override
-                                public boolean isInMemory() {
-                                    return false;
-                                }
-
-                                @Override
-                                public long getSize() {
-                                	if (fileSize == null)
-                                		return 0;
-                                    return fileSize.bytes();
-                                }
-
-                                @Override
-                                public byte[] get() {
-                                    return new byte[0];
-                                }
-
-                                @Override
-                                public String getString(String s) throws UnsupportedEncodingException {
-                                    return null;
-                                }
-
-                                @Override
-                                public String getString() {
-                                    return null;
-                                }
-
-                                @Override
-                                public void write(File file) {}
-
-                                @Override
-                                public void delete() {}
-
-                                @Override
-                                public String getFieldName() {
-                                    return null;
-                                }
-
-                                @Override
-                                public void setFieldName(String s) {}
-
-                                @Override
-                                public boolean isFormField() {
-                                    return false;
-                                }
-
-                                @Override
-                                public void setFormField(boolean b) {}
-
-                                @Override
-                                public OutputStream getOutputStream() throws IOException {
-                                    return null;
-                                }
-                            }
-
                             FileUpload file = new FileUpload(new FileItemEx(fileName, contentType, fileData, fileSize));
                             d.setFile(file);
 						    newResources.add(d);
@@ -824,148 +907,9 @@ public class ActivityUtil {
                 }
             }
         }
-
-
-		/*
-		 * remove old resources
-		 */
-		if (deletedResources != null){
-			for (AmpActivityDocument tmpDoc : deletedResources) {
-				Iterator<AmpActivityDocument> it2 = a.getActivityDocuments().iterator();
-				while (it2.hasNext()) {
-					AmpActivityDocument existDoc = (AmpActivityDocument) it2.next();
-					if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0){
-						it2.remove();
-						break;
-					}
-				}
-			}
-		}
-		
-		/*
-		 * Add new resources
-		 */
-		if (newResources != null){
-			for (TemporaryDocument temp : newResources) {
-				TemporaryDocumentData tdd = new TemporaryDocumentData(); 
-				tdd.setTitle(temp.getTitle());
-				tdd.setName(temp.getFileName());
-				tdd.setDescription(temp.getDescription());
-				tdd.setNotes(temp.getNote());
-				if (temp.getTranslatedTitleList() != null) {
-					Map <String,String> translatedTitleMap = new HashMap<String,String>();
-					for (ResourceTranslation titleTranslation:temp.getTranslatedTitleList()) {
-						translatedTitleMap.put(titleTranslation.getLocale(), titleTranslation.getTranslation());
-					}
-					tdd.setTranslatedTitles(translatedTitleMap);
-				}
-			
-				
-				if (temp.getTranslatedDescriptionList() != null) {
-					Map<String, String> translatedDescMap = new HashMap<String, String>();
-					for (ResourceTranslation descTranslation : temp.getTranslatedDescriptionList()) {
-						translatedDescMap.put(descTranslation.getLocale(), descTranslation.getTranslation());
-					}
-					tdd.setTranslatedDescriptions(translatedDescMap);
-				}
-				
-				if (temp.getTranslatedNoteList() != null) {
-					Map<String, String> translatedNoteMap = new HashMap<String, String>();
-					for (ResourceTranslation noteTranslation : temp.getTranslatedDescriptionList()) {
-						translatedNoteMap.put(noteTranslation.getLocale(), noteTranslation.getTranslation());
-					}
-					tdd.setTranslatedNotes(translatedNoteMap);
-				}
-				
-				if(temp.getType()!=null)
-					tdd.setCmDocTypeId(temp.getType().getId());
-				if (temp.getDate() != null)
-					tdd.setDate(temp.getDate().getTime());
-				if (temp.getYear() != null)
-					tdd.setYearofPublication(temp.getYear());
-				if (temp.getWebLink() == null || temp.getWebLink().length() == 0){
-                    if (temp.getFile() != null){
-
-                        tdd.setFileSize(temp.getFile().getSize());
-
-                        final FileUpload file = temp.getFile();
-                        /**
-                         * For Document Manager compatibility purposes
-                         */
-                        final FormFile formFile = new FormFile() {
-
-                            @Override
-                            public void setFileSize(int arg0) {
-                            }
-
-                            @Override
-                            public void setFileName(String arg0) {
-                            }
-
-                            @Override
-                            public void setContentType(String arg0) {
-                            }
-
-                            @Override
-                            public InputStream getInputStream() throws FileNotFoundException,
-                                    IOException {
-                                return file.getInputStream();
-                            }
-
-                            @Override
-                            public int getFileSize() {
-                                return (int) file.getSize();
-                            }
-
-                            @Override
-                            public String getFileName() {
-                                return file.getClientFileName();
-                            }
-
-                            @Override
-                            public byte[] getFileData() throws FileNotFoundException, IOException {
-                                return file.getBytes();
-                            }
-
-                            @Override
-                            public String getContentType() {
-                                return file.getContentType();
-                            }
-
-                            @Override
-                            public void destroy() {
-                            }
-                        };
-                        tdd.setFormFile(formFile);
-                    }
-				}
-				
-				tdd.setWebLink(temp.getWebLink());
-				
-				ActionMessages messages = new ActionMessages();
-				try {
-					NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
-
-					AmpActivityDocument aad = new AmpActivityDocument();
-					aad.setAmpActivity(a);
-					aad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
-					if (node != null) {
-						aad.setUuid(node.getUuid());
-					}
-					else  {
-						aad.setUuid(temp.getExistingDocument().getUuid());
-					}
-					a.getActivityDocuments().add(aad);
-				} catch (JCRSessionException ex) {
-					//we catch the exception and show a warning, but allow the activity to be saved
-					logger.warn("The JCR Session couldn't be opened. The document "+tdd.getName() +" will not be saved.",ex);
-				}
-			}
-		}
-		
 	}
 
-	private static void populateTranslatedTitles(TemporaryDocument d, NodeWrapper nw) {
+	private static void populateTranslatedTitles(TemporaryActivityDocument d, NodeWrapper nw) {
 		List<ResourceTranslation> translatedTitles = d.getTranslatedTitleList();
 		if (translatedTitles == null) {
 			translatedTitles = new ArrayList<ResourceTranslation>();
@@ -983,6 +927,83 @@ public class ActivityUtil {
 		translatedTitles.add(new ResourceTranslation(d.getExistingDocument().getUuid(), d
 				.getTitle(), TLSUtils.getLangCode()));
 		d.setTranslatedTitleList(translatedTitles);
+	}
+	
+	private static void saveActivityGPINiResources(AmpActivityVersion a, Session session) {
+		AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+
+		HashSet<TemporaryGPINiDocument> newResources = s.getMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS);
+		HashSet<AmpGPINiSurveyResponseDocument> deletedResources = s.getMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS);
+
+		// remove old resources
+		deleteGPINiResources(deletedResources);
+
+		// insert new resources in the system
+		insertGPINiResources(a, newResources);
+	}
+	
+	/**
+	 * @param a
+	 * @param deletedResources
+	 */
+	private static void deleteGPINiResources(HashSet<AmpGPINiSurveyResponseDocument> deletedResources) {
+		if (deletedResources != null) {
+			for (AmpGPINiSurveyResponseDocument tmpDoc : deletedResources) {
+				AmpGPINiSurveyResponse surveyResponse = tmpDoc.getSurveyResponse();
+				Set<AmpGPINiSurveyResponseDocument> docsToBeRemoved = surveyResponse.getSupportingDocuments().stream()
+						.filter(d -> d.getUuid().equals(tmpDoc.getUuid()))
+						.collect(Collectors.toSet());
+
+				surveyResponse.getSupportingDocuments().removeAll(docsToBeRemoved);
+			}
+		}
+	}
+	
+	/**
+	 * @param a
+	 * @param newResources
+	 */
+	private static void insertGPINiResources(AmpActivityVersion a, HashSet<TemporaryGPINiDocument> newResources) {
+		if (newResources != null) {
+			for (TemporaryGPINiDocument temp : newResources) {
+				AmpGPINiSurveyResponse surveyResponse = temp.getSurveyResponse();
+				
+				TemporaryDocumentData tdd = new TemporaryDocumentData();
+				tdd.setTitle(temp.getTitle());
+				tdd.setName(temp.getFileName());
+
+				if (temp.getDate() != null)
+					tdd.setDate(temp.getDate().getTime());
+				if (temp.getWebLink() == null || temp.getWebLink().length() == 0) {
+					if (temp.getFile() != null) {
+						tdd.setFileSize(temp.getFile().getSize());
+						tdd.setFormFile(generateFormFile(temp.getFile()));
+					}
+				}
+
+				tdd.setWebLink(temp.getWebLink());
+
+				ActionMessages messages = new ActionMessages();
+				try {
+					NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
+
+					AmpGPINiSurveyResponseDocument responseDocument = new AmpGPINiSurveyResponseDocument();
+					responseDocument.setSurveyResponse(surveyResponse);
+					
+					if (node != null) {
+						responseDocument.setUuid(node.getUuid());
+					} else {
+						responseDocument.setUuid(temp.getExistingDocument().getUuid());
+					}
+					
+					surveyResponse.getSupportingDocuments().add(responseDocument);
+				} catch (JCRSessionException ex) {
+					// we catch the exception and show a warning, but allow the activity to be saved
+					logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
+							+ " will not be saved.", ex);
+				}
+			}
+		}
 	}
 
 	private static void saveIndicators(AmpActivityVersion a, Session session) throws Exception {

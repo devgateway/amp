@@ -166,6 +166,21 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 						AmpGPINiSurveyResponse clonedResponse = (AmpGPINiSurveyResponse) r.clone();
 						clonedResponse.setAmpGPINiSurveyResponseId(null);
 						clonedResponse.setAmpGPINiSurvey(clonedSurvey);
+						if (clonedResponse.getSupportingDocuments() != null) {
+							final Set<AmpGPINiSurveyResponseDocument> clDocuments = new HashSet<AmpGPINiSurveyResponseDocument>();
+							clonedResponse.getSupportingDocuments().forEach(d -> {
+								try {
+									AmpGPINiSurveyResponseDocument clDoc = (AmpGPINiSurveyResponseDocument) d.clone();
+									clDoc.setSurveyResponse(null);
+									clDocuments.add(clDoc);
+								} catch (CloneNotSupportedException e) {
+									throw new RuntimeException(e);
+								}
+							});
+							clonedResponse.getSupportingDocuments().clear();
+							clonedResponse.getSupportingDocuments().addAll(clDocuments);
+						}
+						
 						clonedSurveyResponses.add(clonedResponse);
 					} catch (CloneNotSupportedException e) {
 						throw new RuntimeException(e);

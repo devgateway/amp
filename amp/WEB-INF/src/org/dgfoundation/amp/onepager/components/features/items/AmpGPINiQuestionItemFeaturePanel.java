@@ -2,6 +2,7 @@ package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -15,6 +16,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpGPINiResourcesFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpGPINiSurveyResourcesFormTableFeature;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesFormTableFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpNewResourceFieldPanel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
@@ -29,7 +35,8 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 
 	private static final long serialVersionUID = 2026765260335404697L;
 
-	public AmpGPINiQuestionItemFeaturePanel(String id, final IModel<AmpGPINiQuestion> surveyQuestion, final IModel<AmpGPINiSurvey> survey) {
+	public AmpGPINiQuestionItemFeaturePanel(String id, final IModel<AmpGPINiQuestion> surveyQuestion, 
+			final IModel<AmpGPINiSurvey> survey) {
 		super(id);
 		Label questionIndex = new Label("questionIndex", new PropertyModel<String>(surveyQuestion, "index"));
 		add(questionIndex);
@@ -59,7 +66,7 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 		if (type.equals(GPINiQuestionType.INTEGER)) {
 			TextField<String> input = new TextField<String>("answerInput", new PropertyModel<String>(responseModel, "integerResponse"));
 			add(input);
-			WebMarkupContainer hidden = new WebMarkupContainer("answerRadio");
+			WebMarkupContainer hidden = new WebMarkupContainer("answerContainer");
 			hidden.setVisible(false);
 			add(hidden);
 		} else if (type.equals(GPINiQuestionType.MULTIPLE_CHOICE)) {
@@ -67,7 +74,7 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 			options.addAll(surveyQuestion.getObject().getOptions());
 			Collections.sort(options, (o1, o2) -> o1.getAmpGPINiQuestionOptionId().compareTo(o2.getAmpGPINiQuestionOptionId()));
 			
-			RadioChoice<AmpGPINiQuestionOption> answer = new RadioChoice<AmpGPINiQuestionOption>("answerRadio", 
+			RadioChoice<AmpGPINiQuestionOption> answer = new RadioChoice<AmpGPINiQuestionOption>("answerContainer", 
 					new PropertyModel<AmpGPINiQuestionOption>(responseModel, "questionOption"), 
 					options, 
 					new ChoiceRenderer<AmpGPINiQuestionOption>("description", "ampGPINiQuestionOptionId"));
@@ -75,10 +82,17 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 			WebMarkupContainer hidden = new WebMarkupContainer("answerInput");
 			hidden.setVisible(false);
 			add(hidden);
-		} else if (type.equals(GPINiQuestionType.LINK) || true) {
-			TextField<String> input = new TextField<String>("answerInput", new PropertyModel<String>(responseModel, "textResponse"));
-			add(input);
-			WebMarkupContainer hidden = new WebMarkupContainer("answerRadio");
+		} else if (type.equals(GPINiQuestionType.LINK)) {
+			try {
+				final AmpGPINiResourcesFormSectionFeature resourceContainer = new AmpGPINiResourcesFormSectionFeature("answerContainer", "resources", responseModel);
+				resourceContainer.setOutputMarkupId(true);
+				resourceContainer.setVisible(true);
+				add(resourceContainer);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			WebMarkupContainer hidden = new WebMarkupContainer("answerInput");
 			hidden.setVisible(false);
 			add(hidden);
 		}

@@ -1,9 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
 
 public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 
@@ -15,7 +15,7 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 	private Long integerResponse;
 	private String textResponse;
 	private AmpGPINiQuestionOption questionOption;
-	private String resourceUUID;
+	private Set<AmpGPINiSurveyResponseDocument> supportingDocuments;
 
 	public Long getAmpGPINiSurveyResponseId() {
 		return ampGPINiSurveyResponseId;
@@ -65,18 +65,18 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 		this.questionOption = questionOption;
 	}
 
-	public String getResourceUUID() {
-		return resourceUUID;
-	}
-
-	public void setResourceUUID(String resourceUUID) {
-		this.resourceUUID = resourceUUID;
-	}
-	
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	};
 	
+	public Set<AmpGPINiSurveyResponseDocument> getSupportingDocuments() {
+		return supportingDocuments;
+	}
+
+	public void setSupportingDocuments(Set<AmpGPINiSurveyResponseDocument> supportingDocuments) {
+		this.supportingDocuments = supportingDocuments;
+	}
+
 	public boolean isEmpty() {
 		if (ampGPINiQuestion != null) {
 			switch(ampGPINiQuestion.getType()) {
@@ -87,7 +87,7 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 					return StringUtils.isNotBlank(textResponse);
 				case LINK:
 				case DOCUMENT:
-					return StringUtils.isNotBlank(resourceUUID);
+					return supportingDocuments != null && !supportingDocuments.isEmpty();
 				case MULTIPLE_CHOICE:
 					return questionOption != null;
 				

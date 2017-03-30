@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
@@ -13,9 +14,8 @@ public final class AmpFieldsEnumerator {
     static {
         AmpFieldInfoProvider provider = new AmpFieldInfoProvider(AmpActivityVersion.class);
         AMPFMService fmService = new AMPFMService();
-        AMPTranslatorService translatorService = new AMPTranslatorService();
-        PUBLIC_ENUMERATOR = new FieldsEnumerator(provider, fmService, translatorService, false);
-        PRIVATE_ENUMERATOR = new FieldsEnumerator(provider, fmService, translatorService, true);
+        PUBLIC_ENUMERATOR = new FieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE, false);
+        PRIVATE_ENUMERATOR = new FieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE, true);
     }
 
     private AmpFieldsEnumerator() {

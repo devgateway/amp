@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NOT_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LIST;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LONG;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_STRING;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.TYPE_VARCHAR;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -14,12 +14,17 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -51,6 +56,7 @@ public class FieldsEnumeratorTest {
     @Before
     public void setUp() throws Exception {
         when(fmService.isVisible(any(), any())).thenReturn(true);
+        when(fmService.isVisible(eq("fm hidden"), any())).thenReturn(false);
 
         when(translatorService.getAllTranslationOfBody(any(), any())).thenAnswer(invocation -> {
             String s = (String) invocation.getArguments()[0];
@@ -108,6 +114,7 @@ public class FieldsEnumeratorTest {
 
         APIField expected = newStringField();
         expected.setFieldName("one_field");
+        expected.setFieldLabel(fieldLabelFor("One Field"));
 
         assertEqualsSingle(expected, actual);
     }
@@ -141,25 +148,74 @@ public class FieldsEnumeratorTest {
         List<APIField> actual = fieldsFor(Composition.class);
 
         APIField expected = newListField();
-        expected.setChildren(Arrays.asList(newLongField()));
+        APIField nestedField = newLongField();
+//        nestedField.setFieldLabel(fieldLabelFor(nestedField.getFieldName()));
+        expected.setChildren(Arrays.asList(nestedField));
 
         assertEqualsSingle(expected, actual);
     }
 
     private static class RequiredFieldClass {
 
-        @Interchangeable(fieldTitle = "field", required = REQUIRED_ALWAYS)
-        private String field;
+        @Interchangeable(fieldTitle = "field_not_required_implicit")
+        private String fieldNotRequiredImplicit;
+
+        @Interchangeable(fieldTitle = "field_not_required_explicit", required = ActivityEPConstants.REQUIRED_NONE)
+        private String fieldNotRequiredExplicit;
+
+        @Interchangeable(fieldTitle = "field_required_always", required = ActivityEPConstants.REQUIRED_ALWAYS)
+        private String fieldRequiredAlways;
+
+        @Interchangeable(fieldTitle = "field_required_non_draft", required = ActivityEPConstants.REQUIRED_ND)
+        private String fieldRequiredNonDraft;
+
+        @Interchangeable(fieldTitle = "field_required_fm_visible", required = "fm visible")
+        private String fieldRequiredFmEntryVisible;
+
+        @Interchangeable(fieldTitle = "field_required_fm_hidden", required = "fm hidden")
+        private String fieldRequiredFmEntryHidden;
+
+        @Interchangeable(fieldTitle = "field_required_min_size_on", validators = @Validators(minSize = "fm visible"))
+        private String fieldRequiredMinSizeOn;
+
+        @Interchangeable(fieldTitle = "field_required_min_size_off", validators = @Validators(minSize = "fm hidden"))
+        private String fieldRequiredMinSizeOff;
+
+        @Interchangeable(fieldTitle = "field_required_and_min_size_on", required = "fm hidden",
+                validators = @Validators(minSize = "fm visible"))
+        private String fieldRequiredFmEntryAndMinSizeValidatorOn;
+
+        @Interchangeable(fieldTitle = "field_required_and_min_size_off", required = "fm hidden",
+                validators = @Validators(minSize = "fm hidden"))
+        private String fieldRequiredFmEntryAndMinSizeValidatorOff;
     }
 
     @Test
     public void testRequired() {
         List<APIField> actual = fieldsFor(RequiredFieldClass.class);
 
-        APIField expected = newStringField();
-        expected.setRequired(FIELD_ALWAYS_REQUIRED);
+        List<APIField> expected = Arrays.asList(
+                newRequiredField("field_not_required_implicit", FIELD_NOT_REQUIRED),
+                newRequiredField("field_not_required_explicit", FIELD_NOT_REQUIRED),
+                newRequiredField("field_required_always", FIELD_ALWAYS_REQUIRED),
+                newRequiredField("field_required_non_draft", FIELD_NON_DRAFT_REQUIRED),
+                newRequiredField("field_required_fm_visible", FIELD_NON_DRAFT_REQUIRED),
+                newRequiredField("field_required_fm_hidden", FIELD_NOT_REQUIRED),
+                newRequiredField("field_required_min_size_on", FIELD_NON_DRAFT_REQUIRED),
+                newRequiredField("field_required_min_size_off", FIELD_NOT_REQUIRED),
+                newRequiredField("field_required_and_min_size_on", FIELD_NON_DRAFT_REQUIRED),
+                newRequiredField("field_required_and_min_size_off", FIELD_NOT_REQUIRED)
+        );
 
-        assertEqualsSingle(expected, actual);
+        assertEqualsDigest(expected, actual);
+    }
+
+    private APIField newRequiredField(String fieldName, String required) {
+        APIField field = newStringField();
+        field.setFieldName(fieldName);
+        field.setFieldLabel(fieldLabelFor(fieldName));
+        field.setRequired(required);
+        return field;
     }
 
     private static class ImportableFieldClass {
@@ -231,44 +287,26 @@ public class FieldsEnumeratorTest {
 
         @Interchangeable(fieldTitle = "field")
         @InterchangeableDiscriminator(discriminatorField = "type", settings = {
-                @Interchangeable(fieldTitle = "Type A", discriminatorOption = "a", fmPath = "a"),
-                @Interchangeable(fieldTitle = "Type B", discriminatorOption = "b")
+                @Interchangeable(fieldTitle = "type_a", discriminatorOption = "a", fmPath = "fm hidden"),
+                @Interchangeable(fieldTitle = "type_b", discriminatorOption = "b")
         })
         private Long field;
 
         @Interchangeable(fieldTitle = "field2")
         @InterchangeableDiscriminator(discriminatorField = "type", settings = {
-                @Interchangeable(fieldTitle = "Type C", discriminatorOption = "c"),
-                @Interchangeable(fieldTitle = "Type D", discriminatorOption = "d")
+                @Interchangeable(fieldTitle = "type_c", discriminatorOption = "c"),
+                @Interchangeable(fieldTitle = "type_d", discriminatorOption = "d")
         })
         private Object field2;
     }
 
     @Test
-    public void testDiscriminated() {
+    public void testDiscriminatedField() {
         List<APIField> actual = fieldsFor(DiscriminatedClass.class);
-
-        APIField expected1 = newLongField();
-        expected1.setFieldName("type_a");
-
-        APIField expected2 = newLongField();
-        expected2.setFieldName("type_b");
-
-        assertEquals(Arrays.asList(expected1, expected2), actual);
-    }
-
-    @Test
-    public void testInvisibleDiscriminatedField() {
-        FMService invisibleFmService = mock(FMService.class);
-
-        when(invisibleFmService.isVisible(any(), any())).thenReturn(true);
-        when(invisibleFmService.isVisible(eq("a"), any())).thenReturn(false);
-
-        List<APIField> actual = new FieldsEnumerator(provider, invisibleFmService, translatorService, false)
-                .getAllAvailableFields(DiscriminatedClass.class);
 
         APIField expected = newLongField();
         expected.setFieldName("type_b");
+        expected.setFieldLabel(fieldLabelFor("type_b"));
 
         assertEqualsSingle(expected, actual);
     }
@@ -312,9 +350,11 @@ public class FieldsEnumeratorTest {
         APIField expected1 = newListField();
         expected1.setMultipleValues(false);
         expected1.setFieldName("1");
+        expected1.setFieldLabel(fieldLabelFor("1"));
 
         APIField expected2 = newListField();
         expected2.setFieldName("2");
+        expected2.setFieldLabel(fieldLabelFor("2"));
         expected2.setMultipleValues(true);
 
         APIField expected3child = newLongField();
@@ -322,6 +362,7 @@ public class FieldsEnumeratorTest {
 
         APIField expected3 = newListField();
         expected3.setFieldName("3");
+        expected3.setFieldLabel(fieldLabelFor("3"));
         expected3.setPercentageConstraint("field");
         expected3.setChildren(Arrays.asList(expected3child));
         expected3.setMultipleValues(true);
@@ -330,20 +371,23 @@ public class FieldsEnumeratorTest {
 
         APIField expected4 = newListField();
         expected4.setFieldName("4");
+        expected4.setFieldLabel(fieldLabelFor("4"));
         expected4.setUniqueConstraint("field");
         expected4.setChildren(Arrays.asList(expected4child));
         expected4.setMultipleValues(true);
 
         APIField expected5 = newListField();
         expected5.setFieldName("5");
+        expected5.setFieldLabel(fieldLabelFor("5"));
         expected5.setTreeCollectionConstraint(true);
         expected5.setMultipleValues(true);
 
         APIField expected6 = newListField();
         expected6.setFieldName("6");
+        expected6.setFieldLabel(fieldLabelFor("6"));
         expected6.setMultipleValues(true);
 
-        assertEquals(Arrays.asList(expected1, expected2, expected3, expected4, expected5, expected6), actual);
+        assertEqualsDigest(Arrays.asList(expected1, expected2, expected3, expected4, expected5, expected6), actual);
     }
 
     @Test
@@ -352,6 +396,7 @@ public class FieldsEnumeratorTest {
 
         APIField expected = newStringField();
         expected.setFieldName("one_field");
+        expected.setFieldLabel(fieldLabelFor("One Field"));
         expected.setFieldNameInternal("field");
 
         assertEqualsSingle(expected, fields);
@@ -372,21 +417,23 @@ public class FieldsEnumeratorTest {
 
         APIField expected1 = newListField();
         expected1.setFieldName("field1");
+        expected1.setFieldLabel(fieldLabelFor("field1"));
         expected1.setFieldNameInternal("activity1");
         expected1.setActivity(true);
 
         APIField expected2 = newLongField();
         expected2.setFieldName("field2");
+        expected2.setFieldLabel(fieldLabelFor("field2"));
         expected2.setFieldNameInternal("activity2");
         expected2.setIdOnly(true);
         expected2.setActivity(true);
 
-        assertEquals(Arrays.asList(expected1, expected2), fields);
+        assertEqualsDigest(Arrays.asList(expected1, expected2), fields);
     }
 
     private static class MaxLen {
 
-        @Interchangeable(fieldTitle = "noMaxLen")
+        @Interchangeable(fieldTitle = "field")
         private String noMaxLen;
     }
 
@@ -395,7 +442,6 @@ public class FieldsEnumeratorTest {
         List<APIField> fields = fieldsFor(MaxLen.class);
 
         APIField expected = newStringField();
-        expected.setFieldName("nomaxlen");
         expected.setFieldLength(null);
 
         assertEqualsSingle(expected, fields);
@@ -414,6 +460,22 @@ public class FieldsEnumeratorTest {
 
         assertEquals(1, fields.size());
         assertEquals("One Field", fields.get(0).getFieldLabel().get("EN"));
+    }
+
+    private static class Dependencies {
+
+        @Interchangeable(fieldTitle = "field", dependencies = {"dep1", "dep2"})
+        private String field;
+    }
+
+    @Test
+    public void testDependencies() {
+        List<APIField> fields = fieldsFor(Dependencies.class);
+
+        APIField expected = newStringField();
+        expected.setDependencies(Arrays.asList("dep1", "dep2"));
+
+        assertEqualsSingle(expected, fields);
     }
 
     private APIField newListField() {
@@ -441,11 +503,12 @@ public class FieldsEnumeratorTest {
         field.setFieldName("field");
         field.setRequired(FIELD_NOT_REQUIRED);
         field.setImportable(false);
+        field.setFieldLabel(fieldLabelFor("field"));
         return field;
     }
 
-    private <T> void assertEqualsSingle(T expected, List<T> actual) {
-        assertEquals(Arrays.asList(expected), actual);
+    private void assertEqualsSingle(APIField expected, List<APIField> actual) {
+        assertEqualsDigest(Arrays.asList(expected), actual);
     }
 
     private List<APIField> fieldsFor(Class<?> theClass) {
@@ -456,5 +519,26 @@ public class FieldsEnumeratorTest {
     private List<APIField> fieldsForInternal(Class<?> theClass) {
         return new FieldsEnumerator(provider, fmService, translatorService, true)
                 .getAllAvailableFields(theClass);
+    }
+
+    private void assertEqualsDigest(List<APIField> expected, List<APIField> actual) {
+        assertEquals(
+                expected.stream().map(this::digest).collect(Collectors.toList()),
+                actual.stream().map(this::digest).collect(Collectors.toList()));
+    }
+
+    private JsonBean fieldLabelFor(String baseText) {
+        JsonBean fieldLabel = new JsonBean();
+        fieldLabel.set("en", baseText + " en");
+        fieldLabel.set("fr", baseText + " fr");
+        return fieldLabel;
+    }
+
+    private <T> String digest(T obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create digest for " + obj, e);
+        }
     }
 }

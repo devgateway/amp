@@ -57,7 +57,7 @@ public abstract class AmpJsonSerializer<T extends Identifiable> extends JsonSeri
      * @throws IOException 
      */
     protected Object getTranslations(String fieldName) throws IOException {
-        TranslationSettings translationSettings = InterchangeUtils.getTranslationSettings();
+        TranslationSettings translationSettings = TranslationSettings.getCurrent();
         // set translations to all translations, not only requested
         translationSettings.setTrnLocaleCodes(new HashSet<String>(SiteUtils.getUserLanguagesCodes(TLSUtils.getSite())));
         Class<T> clazz = (Class<T>) value.get().getClass();

@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 
 import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.request.Site;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
@@ -301,7 +301,7 @@ public class SyncService implements InitializingBean {
      * @return list of translations
      */
     public List<Translation> getTranslationsToSync(Date lastSyncTime) {
-        Set<String> localeCodes = InterchangeUtils.getTranslationSettings().getTrnLocaleCodes();
+        Set<String> localeCodes = TranslationSettings.getCurrent().getTrnLocaleCodes();
         Site site = SiteUtils.getDefaultSite();
 
         return findChangedAmpOfflineTranslations(lastSyncTime, localeCodes, site);

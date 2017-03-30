@@ -2735,34 +2735,16 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
 						<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
-						<c:forEach var="donorContact" items="${aimEditActivityForm.contactInformation.donorContacts}">
-							<div>		
-								<span class="word_break bold"><c:out value="${donorContact.contact.name}" /></span> 
-								<span class="word_break bold"><c:out value="${donorContact.contact.lastname}"/></span> - 
-								<c:forEach var="property" items="${donorContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /> </span>;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+						<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.donorContacts}" />
+						<%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if> 
 				</module:display>	
 				<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
 						<digi:trn>MOFED contact information</digi:trn>:&nbsp;
-						<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${mofedContact.contact.name}" /></span> 
-								<span class="word_break bold"><c:out value="${mofedContact.contact.lastname}"/> </span>- 
-								<c:forEach var="property" items="${mofedContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.mofedContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if> 
 				</module:display>
@@ -2770,17 +2752,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
 						<digi:trn>Project Coordinator Contact Information</digi:trn>:&nbsp;
-						<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.name}"/></span>
-								<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.lastname}" /></span>-
-								<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.projCoordinatorContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if>
 				</module:display>
@@ -2788,17 +2761,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
 						<digi:trn>Sector Ministry Contact Information</digi:trn>:&nbsp;
-						<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.name}" /></span>
-								<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.lastname}" /></span> -
-								<c:forEach var="property" items="${sectorMinistryContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span>;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.sectorMinistryContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if> 
 				</module:display>
@@ -2806,17 +2770,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information"  parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
 						<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>:&nbsp;
-						<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.name}" /></span>
-								<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.lastname}" /></span> -
-								<c:forEach var="property" items="${implExecAgencyContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 					</c:if>
 				</module:display>
 			</div>

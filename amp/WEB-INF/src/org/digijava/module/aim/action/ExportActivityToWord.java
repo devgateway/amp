@@ -633,11 +633,11 @@ public class ExportActivityToWord extends Action {
                             headerTable.addCell(sectorsLabel);
                             headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
 
-                            if (FeaturesUtil.isVisibleField("Indicator Name")) {
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Name")) {
                                 headerTable.addCell(new Paragraph(indicator.getIndicator().getName(), BOLDFONT));
                                 headerTable.addCell(indicator.getIndicator().getCode());
                             }
-                            if (FeaturesUtil.isVisibleField("Logframe Category")) {
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/Logframe Category")) {
                                 if (indicator.getValues() != null && indicator.getValues().size() > 0) {
                                     headerTable.addCell(indicator.getLogFrame() + "\n");
                                 }
@@ -664,13 +664,13 @@ public class ExportActivityToWord extends Action {
                                 Table additionalInfoSubTable = new Table(2);
                                 additionalInfoSubTable.setWidth(80);
 
-                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Value")) {
                                     generateOverAllTableRows(additionalInfoSubTable, valueLabel, (value.getValue() != null ? FormatHelper.formatNumber(value.getValue()) : null), null);
                                 }
-                                if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Comments")) {
                                     generateOverAllTableRows(additionalInfoSubTable, commentLabel, DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);
                                 }
-                                if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Date")) {
                                     generateOverAllTableRows(additionalInfoSubTable, dateLabel, (value.getValueDate() != null ? DateConversion.convertDateToLocalizedString(value.getValueDate()) : null), null);
                                 }
 

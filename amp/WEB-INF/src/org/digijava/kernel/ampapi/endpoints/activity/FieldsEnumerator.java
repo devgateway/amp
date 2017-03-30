@@ -15,6 +15,7 @@ import java.util.function.Predicate;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;

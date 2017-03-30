@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity;
+package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.Collection;
 import java.util.List;

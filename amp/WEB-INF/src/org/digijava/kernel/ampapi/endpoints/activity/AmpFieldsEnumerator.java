@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**

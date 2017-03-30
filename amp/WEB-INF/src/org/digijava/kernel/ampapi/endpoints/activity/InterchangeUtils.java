@@ -35,6 +35,7 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTe
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
@@ -140,7 +141,7 @@ public class InterchangeUtils {
 			}
 		}
 	}
-	
+
 	/**
 	 * Gets the value at the specified path from the JSON description of the activity. 
 	 * 
@@ -272,7 +273,19 @@ public class InterchangeUtils {
 		}
 		return null;
 	}
-	
+
+	public static Class<?> getPossibleValuesClass(Field field) {
+		Class<? extends PossibleValuesProvider> provider = getPossibleValuesProvider(field);
+		if (provider == null) {
+			return null;
+		}
+		PossibleValuesEntity possibleValuesEntity = provider.getAnnotation(PossibleValuesEntity.class);
+		if (possibleValuesEntity == null) {
+			return null;
+		}
+		return possibleValuesEntity.value();
+	}
+
 	public static boolean isCompositeField(Field field) {
 		return field.getAnnotation(InterchangeableDiscriminator.class) != null;
 	}
@@ -402,7 +415,7 @@ public class InterchangeUtils {
 	private static String getJsonStringValue(String value) {
 		return StringUtils.isBlank(value) ? null : value;
 	}
-	
+
 	/**
 	 * Gets a date formatted in ISO 8601 format. If the date is null, returns null.
 	 * 
@@ -429,7 +442,7 @@ public class InterchangeUtils {
 	
 	/**
 	 * TODO replace this method with (PropertyUtils or PropertyUtilsBean).getProperty()
-	 * generates a string that should hit with the getter method name 
+	 * generates a string that should hit with the getter method name
 	 * @param fieldName
 	 * @return
 	 */
@@ -465,7 +478,7 @@ public class InterchangeUtils {
 		Long id = (Long) identifiableObject.getIdentifier(); 
 		return id;
 	}
-	
+
 	public static boolean isSimpleType(Class<?> clazz) {
 		return InterchangeableClassMapper.containsSimpleClass(clazz);
 	}
@@ -666,7 +679,7 @@ public class InterchangeUtils {
 	public static boolean isAmpActivityVersion(Class<?> clazz) {
 		return clazz.isAssignableFrom(AmpActivityVersion.class);
 	}
-	
+
 	/**
 	 * This is a special adjusted Session with FlusMode = Commit so that Hiberante doesn't try to commit intermediate 
 	 * changes while we still query some information

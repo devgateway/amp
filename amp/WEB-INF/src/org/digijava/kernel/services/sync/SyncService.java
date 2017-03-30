@@ -135,7 +135,6 @@ public class SyncService implements InitializingBean {
                             + "and cl.operation_time > :lastSyncTime", args, STR_MAPPER);
 
             Set<String> changedEntities = new HashSet<>(entityList);
-            changedEntities.remove(SyncConstants.Entities.CATEGORY_VALUE);
             fieldFilter = possibleValuesEnumerator.fieldsDependingOn(changedEntities);
         }
         return fieldsEnumerator.findFieldPaths(fieldFilter);

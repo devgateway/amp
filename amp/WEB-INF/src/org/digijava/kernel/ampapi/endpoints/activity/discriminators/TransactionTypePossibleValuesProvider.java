@@ -5,11 +5,13 @@ import java.util.Map;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
+import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+@PossibleValuesEntity(AmpCategoryValue.class)
 public class TransactionTypePossibleValuesProvider extends PossibleValuesProvider {
 	
 	@Override

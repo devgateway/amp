@@ -1,6 +1,3 @@
-/**
- * Copyright (c) 2011 Development Gateway (www.developmentgateway.org)
- */
 package org.dgfoundation.amp.onepager.helper;
 
 import java.util.List;

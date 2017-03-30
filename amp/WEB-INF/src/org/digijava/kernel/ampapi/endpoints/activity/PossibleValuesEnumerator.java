@@ -76,18 +76,59 @@ public class PossibleValuesEnumerator {
 	}
 
 	/**
-	 * Returns a predicate that can filter fields that depend on specific changelog entities.
+	 * Returns a predicate that matches all fields that have possible values.
+	 * @return a predicate
+	 */
+	public Predicate<Field> fieldsWithPossibleValues() {
+		List<Class<?>> entityClasses = getEntityClasses(getAllSyncEntities());
+		return classOfFieldIs(assignableFromAny(entityClasses))
+				.or(fieldHasPossibleValuesProvider());
+	}
+
+	/**
+	 * Returns a predicate that matches all fields that have a possible values provider.
+	 * @return a predicate.
+	 */
+	private Predicate<Field> fieldHasPossibleValuesProvider() {
+		return field -> InterchangeUtils.getPossibleValuesProvider(field) != null;
+	}
+
+	/**
+	 * Returns a predicate that matches fields that depend on specific changelog entities.
 	 * @param syncEntities sync entities that have changed
 	 * @return field filter
 	 */
 	public Predicate<Field> fieldsDependingOn(Set<String> syncEntities) {
+		List<Class<?>> targetClasses = getEntityClasses(syncEntities);
+		return classOfFieldIs(assignableFromAny(targetClasses))
+				.or(classOfPossibleValuesIs(assignableFromAny(targetClasses)));
+	}
+
+	/**
+	 * Return a list of hibernate entity classes that are associated with the requested changelog entities.
+	 * @param syncEntities changelog entities
+	 * @return a list of hibernate entity types
+	 */
+	private List<Class<?>> getEntityClasses(Set<String> syncEntities) {
 		List<Class<?>> targetClasses = new ArrayList<>();
 		PossibleValuesEnumerator.ENTITY_CLASS_TO_SYNC_ENTITIES.forEach((k, v) -> {
 			if (v.stream().anyMatch(syncEntities::contains)) {
 				targetClasses.add(k);
 			}
 		});
-		return classOfFieldIs(assignableFromAny(targetClasses));
+		return targetClasses;
+	}
+
+	/**
+	 * Predicate that filters fields by the properties of possible values class.
+	 * @param classPredicate predicate for possible values class
+	 * @return a predicate
+	 */
+	private Predicate<Field> classOfPossibleValuesIs(Predicate<Class<?>> classPredicate) {
+		return field -> {
+			Class<?> entityClass = InterchangeUtils.getPossibleValuesClass(field);
+			return entityClass != null && classPredicate.test(entityClass);
+		};
 	}
 
 	/**

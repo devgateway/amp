@@ -31,6 +31,7 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.services.sync.model.ActivityChange;
 import org.digijava.kernel.services.sync.model.AmpOfflineChangelog;
 import org.digijava.kernel.services.sync.model.ListDiff;
+import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SiteUtils;
@@ -119,9 +120,9 @@ public class SyncService implements InitializingBean {
     }
 
     private List<String> findChangedPossibleValuesFields(Date lastSyncTime) {
-        Set<String> changedEntities;
+        Predicate<Field> fieldFilter;
         if (lastSyncTime == null) {
-            changedEntities = possibleValuesEnumerator.getAllSyncEntities();
+            fieldFilter = possibleValuesEnumerator.fieldsWithPossibleValues();
         } else {
             Map<String, Object> args = new HashMap<>();
             args.put("entities", possibleValuesEnumerator.getAllSyncEntities());
@@ -133,9 +134,10 @@ public class SyncService implements InitializingBean {
                             + "where cl.entity_name in (:entities) "
                             + "and cl.operation_time > :lastSyncTime", args, STR_MAPPER);
 
-            changedEntities = new HashSet<>(entityList);
+            Set<String> changedEntities = new HashSet<>(entityList);
+            changedEntities.remove(SyncConstants.Entities.CATEGORY_VALUE);
+            fieldFilter = possibleValuesEnumerator.fieldsDependingOn(changedEntities);
         }
-        Predicate<Field> fieldFilter = possibleValuesEnumerator.fieldsDependingOn(changedEntities);
         return fieldsEnumerator.findFieldPaths(fieldFilter);
     }
 

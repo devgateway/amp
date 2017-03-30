@@ -39,6 +39,7 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTe
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -373,6 +374,18 @@ public class InterchangeUtils {
 			return ant.value();
 		}
 		return null;
+	}
+
+	public static Class<?> getPossibleValuesClass(Field field) {
+		Class<? extends PossibleValuesProvider> provider = getPossibleValuesProvider(field);
+		if (provider == null) {
+			return null;
+		}
+		PossibleValuesEntity possibleValuesEntity = provider.getAnnotation(PossibleValuesEntity.class);
+		if (possibleValuesEntity == null) {
+			return null;
+		}
+		return possibleValuesEntity.value();
 	}
 	
 	public static boolean isCompositeField(Field field) {

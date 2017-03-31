@@ -27,10 +27,10 @@ export const initialTranslations = {
         'amp.gpi-data-donor-notes:validation-notes-required': 'Notes is required',
         'amp.gpi-data:validation-all-fields-required': 'All fields required',
         'amp.gpi-data:server-errors-0001': 'Please select a unique date or donor agency.',
-        'amp.gpi-data:add-new': 'Add New',
+        'amp.gpi-data:add-new': 'Add new',
         'amp.gpi-data:insert-data': '(insert data to the new field)',
-        'amp.gpi-data:click-save': 'Click the Save Symbol to save the added data row',
-        'amp.gpi-data:button-save-all-edits': 'Save all Edits',
+        'amp.gpi-data:click-save': 'Click the Save icon to save the added data row',
+        'amp.gpi-data:button-save-all-edits': 'Save all edits',
         'amp.gpi-data:button-previous': 'Previous',
         'amp.gpi-data:button-next': 'Next',
         'amp.gpi-data:delete-prompt': 'Are you sure you want to delete?',
@@ -38,7 +38,8 @@ export const initialTranslations = {
         'amp.gpi-data:select-currency': '-- Select Currency --',
         'amp.gpi-data:amount-in-1': 'Amounts in Units',
         'amp.gpi-data:amount-in-1000': 'Amounts in Thousands (000)',
-        'amp.gpi-data:amount-in-1000000': 'Amounts in Millions (000 000)'
-        
+        'amp.gpi-data:amount-in-1000000': 'Amounts in Millions (000 000)',
+        'amp.gpi-data-aid-on-budget:header-info': 'Aid is on budgets which are subject to parliamentary scrutiny',
+        'amp.gpi-data-donor-notes:header-info': 'Development co-operation is focused on results that meet developing countries’ priorities'
         
 };

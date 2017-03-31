@@ -119,11 +119,12 @@ export default class DonorNotesList extends Component {
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);        
         return (
                 <div >                
-                <h2>{this.props.translations['amp.gpi-data-donor-notes:title']}</h2>
+                <br/>
+                <p>{this.props.translations['amp.gpi-data-donor-notes:header-info']}</p>
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-big glyphicon-plus" onClick={this.addNew}></span>
-                <span  onClick={this.addNew}>{this.props.translations['amp.gpi-data:add-new']} </span>
+                <span  onClick={this.addNew}>&nbsp;{this.props.translations['amp.gpi-data:add-new']} </span>
                 <span className="success-color">{this.props.translations['amp.gpi-data:insert-data']}</span>
                 <span> / </span> <span className="glyphicon glyphicon-big glyphicon-ok-circle success-color"> </span> <span >{this.props.translations['amp.gpi-data:click-save']}</span>
                 <span className="float-right"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>{this.props.translations['amp.gpi-data:button-save-all-edits']}</button></span>
@@ -135,9 +136,9 @@ export default class DonorNotesList extends Component {
                 <thead>
                 <tr>
                 <th></th>
-                <th><span data-field="notesDate" onClick={this.sort} >{this.props.translations['amp.gpi-data-donor-notes:date']}</span><span className="error-color" >*</span><span className = {this.showSortCaret('notesDate')} ></span></th>
-                <th><span data-field="donor"  onClick={this.sort}>{this.props.translations['amp.gpi-data-donor-notes:donor-agency']}</span><span className="error-color" >*</span><span className = {this.showSortCaret('donor')} ></span></th>
-                <th>{this.props.translations['amp.gpi-data-donor-notes:notes']}<span className="error-color" >*</span></th>
+                <th><span data-field="notesDate" onClick={this.sort} ><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:date']}&nbsp;</span><span className = {this.showSortCaret('notesDate')} ></span></th>
+                <th><span data-field="donor"  onClick={this.sort}><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:donor-agency']}&nbsp;</span><span className = {this.showSortCaret('donor')} ></span></th>
+                <th><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:notes']}</th>
                 <th className="actions-column">{this.props.translations['amp.gpi-data-donor-notes:action']}</th>
                 </tr>
                 </thead>

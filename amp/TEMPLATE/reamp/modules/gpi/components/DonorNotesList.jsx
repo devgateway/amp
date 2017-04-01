@@ -23,6 +23,7 @@ export default class DonorNotesList extends Component {
         this.goToPreviousPage = this.goToPreviousPage.bind(this);
         this.sort = this.sort.bind(this); 
         this.showSortCaret =  this.showSortCaret.bind(this);
+        this.isEditing = this.isEditing.bind(this);
     }
     
     componentWillMount() {        
@@ -56,27 +57,30 @@ export default class DonorNotesList extends Component {
     }
     
     goToPage(pageNumber){
-        const loadParams = {};
-        loadParams.paging = this.props.paging;
-        loadParams.sorting = this.props.sorting;
-        loadParams.paging.currentPageNumber = pageNumber;
-        loadParams.paging.offset = ((pageNumber - 1) * this.props.paging.recordsPerPage);  
-        this.props.actions.loadDonorNotesList(loadParams);  
+        if(this.isEditing() == false){
+            const loadParams = {};
+            loadParams.paging = this.props.paging;
+            loadParams.sorting = this.props.sorting;
+            loadParams.paging.currentPageNumber = pageNumber;
+            loadParams.paging.offset = ((pageNumber - 1) * this.props.paging.recordsPerPage);  
+            this.props.actions.loadDonorNotesList(loadParams);   
+        }        
     }
     
     sort(event) {
-        const field = event.target.getAttribute('data-field'); 
-        const loadParams = {};
-        loadParams.paging = this.props.paging;
-        loadParams.sorting = this.props.sorting;
-        if (loadParams.sorting.orderBy === field) {
-            loadParams.sorting.sortOrder = loadParams.sorting.sortOrder === 'asc' ? 'desc' : 'asc';
-        } else {
-            loadParams.sorting.orderBy = field;
-            loadParams.sorting.sortOrder = 'asc';
-        }         
-        this.props.actions.loadDonorNotesList(loadParams);  
-        
+        if(this.isEditing() == false){
+            const field = event.target.getAttribute('data-field'); 
+            const loadParams = {};
+            loadParams.paging = this.props.paging;
+            loadParams.sorting = this.props.sorting;
+            if (loadParams.sorting.orderBy === field) {
+                loadParams.sorting.sortOrder = loadParams.sorting.sortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+                loadParams.sorting.orderBy = field;
+                loadParams.sorting.sortOrder = 'asc';
+            }         
+            this.props.actions.loadDonorNotesList(loadParams);    
+        }       
     }
     
     saveAllEdits() {
@@ -114,6 +118,10 @@ export default class DonorNotesList extends Component {
         
         return className;
     }
+    
+    isEditing(){
+        return this.props.donorNotesList.filter(donorNotes => {return donorNotes.isEditing}).length > 0;       
+     }
     
     render() {       
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);        

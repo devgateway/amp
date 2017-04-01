@@ -161,8 +161,8 @@ public class GPIDataService {
 
 		if (GPIUtils.similarRecordExists(id, donorId, date)) {
 			JsonBean error = new JsonBean();
-			error.set(ApiError.getErrorCode(GPIErrors.DATE_DONOR_COMBINATION_EXISTS),
-					GPIErrors.DATE_DONOR_COMBINATION_EXISTS.description);
+			error.set(ApiError.getErrorCode(GPIErrors.AID_ON_BUDGET_DATE_DONOR_COMBINATION_EXISTS),
+					GPIErrors.AID_ON_BUDGET_DATE_DONOR_COMBINATION_EXISTS.description);
 			validationErrors.add(error);
 		}
 
@@ -265,8 +265,8 @@ public class GPIDataService {
 
 		if (GPIUtils.checkRecordExists(id, donorId, date)) {
 			JsonBean error = new JsonBean();
-			error.set(ApiError.getErrorCode(GPIErrors.DATE_DONOR_COMBINATION_EXISTS),
-					GPIErrors.DATE_DONOR_COMBINATION_EXISTS.description);
+			error.set(ApiError.getErrorCode(GPIErrors.DONOR_NOTES_DATE_DONOR_COMBINATION_EXISTS),
+					GPIErrors.DONOR_NOTES_DATE_DONOR_COMBINATION_EXISTS.description);
 			validationErrors.add(error);
 		}
 

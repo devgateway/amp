@@ -464,15 +464,7 @@
 												<c:if test="${!umAddUserForm.registrationByEmail}">
 													<html:checkbox property="sendEmail"	styleClass="inp-text" disabled="true" >
 													</html:checkbox></td>
-												</c:if>
-													
-											</tr>
-											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align="right"  class="formCheckContainer"><digi:trn key="um:assignToWorkspace">Assign to Workspace</digi:trn></td>
-												<td class=f-names align="left">
-													<html:checkbox property="addWorkspace" styleClass="inp-text">
-													</html:checkbox></td>
+												</c:if>													
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
@@ -481,6 +473,13 @@
 													<html:checkbox property="nationalCoordinator" styleClass="inp-text">
 													</html:checkbox></td>
 											</tr>
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align="right"  class="formCheckContainer"><digi:trn key="um:assignToWorkspace">Assign to Workspace</digi:trn></td>
+												<td class=f-names align="left">
+													<html:checkbox property="addWorkspace" styleClass="inp-text">
+													</html:checkbox></td>
+											</tr>											
 											<tr>
 												<td>&nbsp;</td>
 												<td align="right" class="addUserButContainer">

@@ -113,7 +113,7 @@ export default class AidOnBudgetRow extends Component {
     }
     
     getErrorsForField(field){
-        var errors = this.props.errors.filter(error => {return ((error.id && error.id === this.props.aidOnBudget.id) || (error.cid && error.cid === this.props.aidOnBudget.cid) && error.affectedFields && error.affectedFields.includes(field) )})
+        var errors = this.props.errors.filter(error => {return (((error.id && error.id === this.props.aidOnBudget.id) || (error.cid && error.cid === this.props.aidOnBudget.cid)) && error.affectedFields && error.affectedFields.includes(field) )})
         return  errors; 
     }
     

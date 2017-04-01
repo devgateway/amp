@@ -100,8 +100,8 @@ export default class DonorNotesRow extends Component {
         return org ? org.name : '';
     }
     
-    getErrorsForField(field){
-        var errors = this.props.errors.filter(error => {return ((error.id && error.id === this.props.donorNotes.id) || (error.cid && error.cid === this.props.donorNotes.cid) && error.affectedFields && error.affectedFields.includes(field) )})
+    getErrorsForField(field){        
+        var errors = this.props.errors.filter(error => {return (((error.id && error.id === this.props.donorNotes.id) || (error.cid && error.cid === this.props.donorNotes.cid)) && error.affectedFields && error.affectedFields.includes(field) )})
         return  errors; 
     }
     

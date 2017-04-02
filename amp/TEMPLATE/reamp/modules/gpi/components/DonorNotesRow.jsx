@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import { FormControl } from 'react-bootstrap';
-import { Popover } from 'react-bootstrap';
 import { OverlayTrigger } from 'react-bootstrap';
+import {Tooltip } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import DatePicker from 'react-date-picker';
 import {Typeahead} from 'react-bootstrap-typeahead';
@@ -14,13 +14,16 @@ require('../styles/main.less');
 import * as donorNotesActions from '../actions/DonorNotesActions.jsx';
 import * as startUp from '../actions/StartUpAction.jsx';
 import * as Constants from '../common/constants.jsx';
+
 export default class DonorNotesRow extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
                 donorNotes: this.props.donorNotes,                                
-                showDatePicker: false                
-        };
+                showDatePicker: false, 
+                showFullText: false,
+                shortTextLength: 55
+        };        
         this.toggleEdit = this.toggleEdit.bind(this);
         this.onChange = this.onChange.bind(this);
         this.save = this.save.bind(this);
@@ -30,6 +33,7 @@ export default class DonorNotesRow extends Component {
         this.getErrorsForField = this.getErrorsForField.bind(this);
         this.cancel = this.cancel.bind(this);
         this.onOrgChange = this.onOrgChange.bind(this);
+        this.toggleNotes = this.toggleNotes.bind(this);
     }
     
     toggleEdit() {
@@ -61,6 +65,10 @@ export default class DonorNotesRow extends Component {
         donorNotes[field] = event.target.value;
         this.props.actions.updateDonorNotes(donorNotes);               
     }    
+    
+    toggleNotes() {
+        this.setState({showFullText: !this.state.showFullText});
+    }
     
     onDateChange(date){
         if(date){
@@ -163,13 +171,35 @@ export default class DonorNotesRow extends Component {
             </tr>)
             
             }
+            var notes = this.props.donorNotes.notes || '';
+            var toggleTitle = this.state.showFullText ? this.props.translations['amp.gpi-data-donor-notes:collapse-text'] : this.props.translations['amp.gpi-data-donor-notes:expand-text'];
+            
+            const tooltip = (
+                    <Tooltip >{toggleTitle}</Tooltip>
+                    
+            );
             
             return (
                     <tr>
                     <td></td>
                     <th scope="row">{this.toDisplayDateFormat(this.props.donorNotes.notesDate)}</th>
                     <td>{this.getOrgName(this.props.donorNotes.donorId)}</td>
-                    <td className="notes-column">{this.props.donorNotes.notes}</td>
+                    <td className={this.state.showFullText ? 'notes-column' : 'notes-column notes-column-short'}>        
+                    {notes.length > this.state.shortTextLength && this.state.showFullText == false &&
+                        <span> { notes.substring(0, this.state.shortTextLength - 1) } </span>  
+                    } 
+                    
+                    {notes.length > this.state.shortTextLength &&                       
+                        <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={tooltip}>
+                        <span className= {this.state.showFullText ? 'notes-toggle glyphicon glyphicon glyphicon-chevron-up' : 'notes-toggle glyphicon glyphicon-chevron-down'} onClick = {this.toggleNotes}></span>                 
+                        </OverlayTrigger>                         
+                    }
+                    
+                    {(notes.length <= this.state.shortTextLength || this.state.showFullText) &&
+                        <div className="notes-container"> {notes} </div>
+                    }
+                    
+                    </td>
                     <td><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDonorNotes}></span></td>                
                     </tr>
                     

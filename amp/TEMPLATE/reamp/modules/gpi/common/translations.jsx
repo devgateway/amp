@@ -17,7 +17,7 @@ export const initialTranslations = {
         'amp.gpi-data-donor-notes:title': 'Indicator 1',
         'amp.gpi-data-donor-notes:date': 'Date',
         'amp.gpi-data-donor-notes:donor-agency': 'Donor Agency',
-        'amp.gpi-data-donor-notes:notes': 'Notes',
+        'amp.gpi-data-donor-notes:notes': 'Remarks',
         'amp.gpi-data-donor-notes:action': 'Action',        
         'amp.gpi-data-donor-notes:validation-donor-agency-required': 'Donor Agency is required',
         'amp.gpi-data-donor-notes:validation-date-required': 'Date is required',
@@ -41,6 +41,9 @@ export const initialTranslations = {
         'amp.gpi-data:amount-in-1000': 'Amounts in Thousands (000)',
         'amp.gpi-data:amount-in-1000000': 'Amounts in Millions (000 000)',
         'amp.gpi-data-aid-on-budget:header-info': 'Aid is on budgets which are subject to parliamentary scrutiny',
-        'amp.gpi-data-donor-notes:header-info': 'Development co-operation is focused on results that meet developing countries’ priorities'
+        'amp.gpi-data-donor-notes:header-info': 'Development co-operation is focused on results that meet developing countries’ priorities',
+        'amp.gpi-data-donor-notes:expand-text': 'Expand',
+        'amp.gpi-data-donor-notes:collapse-text': 'Collapse'
+        
         
 };

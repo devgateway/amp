@@ -101,7 +101,8 @@
 <module:display name="Filter Section" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
-<module:display name="Tab Generator" parentModule="REPORTING"></module:display> 
+<module:display name="Tab Generator" parentModule="REPORTING"></module:display>
+<feature:display name="Enable Saiku icon in Tab Manager" module="Tab Generator"></feature:display>
 <module:display name="Tools" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <module:display name="Resources"></module:display>

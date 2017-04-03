@@ -1021,7 +1021,6 @@ public class DEImportBuilder {
 							FundingDetailType fundingDetailType = (FundingDetailType) itComm.next();
 							AmpComponentFunding acf= new AmpComponentFunding();
 							acf.setComponent(ampComp);
-							acf.setActivity(activity);
 							addFundingDetailToAmpCompFund(acf,fundingDetailType, org.digijava.module.aim.helper.Constants.COMMITMENT);
 							//acfs.add(acf);
 							temp.add(acf);
@@ -1033,7 +1032,6 @@ public class DEImportBuilder {
 							FundingDetailType fundingDetailType = (FundingDetailType) itComm.next();
 							AmpComponentFunding acf= new AmpComponentFunding();
 							acf.setComponent(ampComp);
-							acf.setActivity(activity);
 							addFundingDetailToAmpCompFund(acf,fundingDetailType, org.digijava.module.aim.helper.Constants.DISBURSEMENT);
 							//acfs.add(acf);
 							temp1.add(acf);
@@ -1045,7 +1043,6 @@ public class DEImportBuilder {
 							FundingDetailType fundingDetailType = (FundingDetailType) itComm.next();
 							AmpComponentFunding acf= new AmpComponentFunding();
 							acf.setComponent(ampComp);
-							acf.setActivity(activity);
 							addFundingDetailToAmpCompFund(acf,fundingDetailType, org.digijava.module.aim.helper.Constants.EXPENDITURE);
 							//acfs.add(acf);
 							temp2.add(acf);

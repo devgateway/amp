@@ -682,8 +682,11 @@ public class AmpARFilter extends PropertyListable {
 		
 		setCalendarType(getWorkspaceCalendar());
 		AmpApplicationSettings settings = getEffectiveSettings();
-		if (settings != null)
+		if (settings != null) {
 			this.setCurrency(settings.getCurrency());
+		} else {
+			this.setCurrency(CurrencyUtil.getBaseCurrency());
+		}		
 		initRenderStartEndYears(settings);
 	}
 	

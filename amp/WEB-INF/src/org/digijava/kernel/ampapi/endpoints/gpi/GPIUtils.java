@@ -125,8 +125,9 @@ public class GPIUtils {
 	
 	public static Integer getDonorNotesCount() {
 		Session dbSession = PersistenceManager.getSession();
-		String queryString = "select count(*) from " + AmpGPINiDonorNotes.class.getName();
+		String queryString = "select count(*) from " + AmpGPINiDonorNotes.class.getName() + " donorNotes where donorNotes.donor.ampOrgId in (:donorIds)";
 		Query query = dbSession.createQuery(queryString);
+		query.setParameterList("donorIds", getVerifiedOrgsList());
 		return (Integer) query.uniqueResult();
 	}
 	
@@ -144,7 +145,7 @@ public class GPIUtils {
 		Query query = dbSession.createQuery(queryString);
 		query.setFirstResult(startAt);
 		query.setMaxResults(maxResults);
-		query.setParameterList("donorIds",getVerifiedOrgsList());
+		query.setParameterList("donorIds", getVerifiedOrgsList());
 		return query.list();
 	}	
 

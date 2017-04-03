@@ -22,6 +22,7 @@ import org.apache.tika.mime.MediaType;
 import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
+import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFileType;
 import org.hibernate.Session;
@@ -37,27 +38,58 @@ public class FileTypeManager {
 	
 	private static FileTypeManager fileTypeManager;
 	private List<AmpFileType> allFileTypes;
-	
+
 	private FileTypeManager() {
 		allFileTypes = new ArrayList<>();
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_WORD, "MS Word"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_EXCEL, "MS Excel"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_POWERPOINT, "MS PowerPoint"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_PROJECT, "MS Project"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_VISIO, "MS Visio"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_PDF, "PDF"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_ARCHIVE, "Zip Files"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_LIBREOFFICE_SHEETS, "Libre Office spreadsheets"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_LIBREOFFICE_DOCUMENTS, "Libre Office documents"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_CSV, "CSV"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_PNG, "PNG"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_GIF, "GIF"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_JPEG, "JPEG"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_BMP, "BMP"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TIFF, "TIFF"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_PHOTOSHOP, "PSD"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_RTF, "Rich Text Format"));
-		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_TXT, "Text Files"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_WORD, "MS Word ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_WORD), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_EXCEL, "MS Excel ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_EXCEL), false) + ")"));
+		allFileTypes
+				.add(createFileType(FileTypesMimeMapper.FILE_TYPE_POWERPOINT,
+						"MS PowerPoint ("
+								+ Util.toCSString(
+										this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_POWERPOINT), false)
+								+ ")"));
+		allFileTypes
+				.add(createFileType(FileTypesMimeMapper.FILE_TYPE_PROJECT,
+						"MS Project ("
+								+ Util.toCSString(
+										this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_POWERPOINT), false)
+								+ ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_VISIO, "MS Visio ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_VISIO), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_PDF, "PDF ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_PDF), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_ARCHIVE, "Zip Files ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_ARCHIVE), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_LIBREOFFICE_SHEETS,
+				"Libre Office spreadsheets ("
+						+ Util.toCSString(
+								this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_LIBREOFFICE_SHEETS), false)
+						+ ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_LIBREOFFICE_DOCUMENTS,
+				"Libre Office documents (" + Util.toCSString(
+						this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_LIBREOFFICE_DOCUMENTS), false)
+						+ ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_CSV, "CSV ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_CSV), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_PNG, "PNG ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_PNG), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_GIF, "GIF ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_GIF), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_JPEG, "JPEG ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_JPEG), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_BMP, "BMP ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_BMP), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TIFF, "TIFF ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TIFF), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_PHOTOSHOP, "PSD ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_PHOTOSHOP), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_RTF, "Rich Text Format ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_RTF), false) + ")"));
+		allFileTypes.add(createFileType(FileTypesMimeMapper.FILE_TYPE_TXT, "Text Files ("
+				+ Util.toCSString(this.getExtensionsFromMimeType(FileTypesMimeMapper.FILE_TYPE_TXT), false) + ")"));
 		
 		allFileTypes.sort((p1, p2) -> p1.getDescription().compareTo(p2.getDescription()));
 	}
@@ -246,4 +278,18 @@ public class FileTypeManager {
 		
 		return fileType.isPresent() ? fileType.get().getDescription() : mimeType.getDescription();
 	}
+
+	private List<String> getExtensionsFromMimeType(String fileType) {
+		List<String> extensions = new ArrayList<String>();
+		try {
+
+			for (String mimeType : FileTypesMimeMapper.FILE_MIME_TYPES.get(fileType)) {
+
+				extensions.addAll(MimeTypes.getDefaultMimeTypes().forName(mimeType).getExtensions());
+			}
+		} catch (MimeTypeException e) {
+			logger.error("Cannot get file type", e);
+		}
+		return extensions;
+	}	
 }

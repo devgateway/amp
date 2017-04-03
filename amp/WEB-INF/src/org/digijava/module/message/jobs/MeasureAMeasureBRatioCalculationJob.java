@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +30,11 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
+import org.digijava.kernel.ampapi.endpoints.security.Security;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.startup.BuildVersionVerifier;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -50,7 +53,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 	protected static Logger logger = Logger.getLogger(MeasureAMeasureBRatioCalculationJob.class);
 	private static Double DEFAULT_PERCENTAGE = 1D;
 	private static BigDecimal HUNDRED = new BigDecimal(100);
-	private DateTime previousFireTime;
+	private static Integer DAYS_AFTER_QUARTER = 25;
 
 	@Override
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -58,9 +61,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 		if (TLSUtils.getRequest() == null) {
 			TLSUtils.populateMockTlsUtils();
 		}
-		if (context.getTrigger().getPreviousFireTime() != null) {
-			previousFireTime = new DateTime(context.getTrigger().getPreviousFireTime());
-		}
+		
 		Long ampTeamId = FeaturesUtil
 				.getGlobalSettingValueLong(GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FUNDING_GAP_NOTIFICATION);
 		final ValueWrapper<Long> ampTeamMemberId = new ValueWrapper<Long>(null);
@@ -91,7 +92,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
 			Date lowerDateReport = null;
 			Date upperDateReport = null;
-			// we first need to check if we are 25 days after the last quarter
+			// we first need to check if we are DAYS_AFTER_QUARTER days after the last quarter
 			// ended
 			Quarter previousQuarter = checkIfShouldRunReport();
 			if (previousQuarter != null) {
@@ -219,6 +220,21 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 					} catch (Exception e) {
 						logger.error("Cannot execute JOB", e);
 					}
+				//after the job was run we store an event in global event log
+
+					final String eventName=MeasureAMeasureBRatioCalculationJob.class.getName();
+					final String quarter=previousQuarter.toString();
+					PersistenceManager.getSession().doWork(new Work(){
+						@Override
+						public void execute(Connection conn) throws SQLException {
+							
+							SQLUtils.executeQuery(conn, String.format("insert into amp_global_event_log "+ 
+							" select  nextval('amp_global_event_log_id_seq') ,now(),'%s','%s',amp_version,amp_version_encoded  "+
+							" from amp_global_event_log where id =(select max(id) from amp_global_event_log where event_name='AMP startup') "
+								, eventName, quarter));
+						}
+					});
+
 				} else {
 					// in this case the measures were configured but not visible
 					// any
@@ -230,7 +246,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 				}
 			} else {
 				// should run report
-				logger.error(this.getClass() + " Shouldnt run since its not 25 days after the last quarter ended ");
+				logger.error(this.getClass() + " Should not run since its not DAYS_AFTER_QUARTER days after the last quarter ended or it has already run for this quarter");
 			}
 		} else {
 			logger.error(this.getClass() + " could not run because the team is not correctly configured for setting "
@@ -241,16 +257,37 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 	private Quarter checkIfShouldRunReport() {
 		Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		AmpFiscalCalendar fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(gsCalendarId);
+		DateTime today = new DateTime();
 
 		Quarter currentQuarter = new Quarter(fiscalCalendar, new Date());
 
-		DateTime lastQuarterStartDayPlus25 = new DateTime(currentQuarter.getPreviousQuarter().getQuarterEndDate());
-		lastQuarterStartDayPlus25 = lastQuarterStartDayPlus25.plusDays(25);
+		DateTime lastQuarterStartDayPlusDAYS_AFTER_QUARTER = new DateTime(currentQuarter.getPreviousQuarter().getQuarterEndDate());
+		lastQuarterStartDayPlusDAYS_AFTER_QUARTER = lastQuarterStartDayPlusDAYS_AFTER_QUARTER.plusDays(DAYS_AFTER_QUARTER);
 
-		// we at least have
-		if (previousFireTime == null || previousFireTime.isBefore(lastQuarterStartDayPlus25)) {
-			// if the last fire date is before 25 days after the quarter has
-			// ended
+		//we check if we are DAYS_AFTER_QUARTER days after the quarter has ended and that it has not run for that quarter
+		final ValueWrapper<Boolean> shouldRunJob = new ValueWrapper<Boolean>(true);
+		try {
+			final String previousQuarterName = currentQuarter.getPreviousQuarter().toString();
+			final String eventName = MeasureAMeasureBRatioCalculationJob.class.getName();
+			PersistenceManager.getSession().doWork(new Work() {
+				public void execute(Connection conn) throws SQLException {
+					String query = String.format(
+							"select * from amp_global_event_log where event_name ='%s' and message='%s'", eventName,
+							previousQuarterName);
+					RsInfo shouldRunJobRS = SQLUtils.rawRunQuery(conn, query, null);
+					while (shouldRunJobRS.rs.next()) {
+						shouldRunJob.value = false;
+					}
+					shouldRunJobRS.close();
+				}
+
+			});
+		} catch (Exception e) {
+			logger.error("could get last job run for this quarter", e);
+		}
+
+		if (shouldRunJob.value && today.isAfter((lastQuarterStartDayPlusDAYS_AFTER_QUARTER) ) ) {
+
 			return currentQuarter.getPreviousQuarter();
 		} else {
 

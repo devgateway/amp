@@ -128,9 +128,14 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 
 			@Override
 			protected boolean accept(AmpGPINiIndicator indicator) {
+				
+				/**
+				 * the indicator 9B should be always visible 
+				 
 				if (indicator.getCode().equals(INDICATOR_9B_CODE)) {
 					return hasDonorConcessionalityLevelFundings(am, donor);
 				}
+				*/
 				
 				return true;
 			}
@@ -156,6 +161,12 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 		add(indicatorPanel);
 	}
 	
+	/**
+	 * Checks if the donor's fundings has concessionality field populated
+	 * @param am
+	 * @param donorModel
+	 * @return
+	 */
 	private boolean hasDonorConcessionalityLevelFundings(IModel<AmpActivityVersion> am, IModel<AmpOrgRole> donorModel) {
 		AmpActivityVersion activity = am.getObject();
 		AmpOrgRole donor = donorModel.getObject();

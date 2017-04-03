@@ -9,7 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -45,11 +47,24 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 						IModel<AmpActivityVersion> am, final AmpGPINiFormSectionFeature parent) throws Exception {
 		super(id, donor, fmName, true);
 		
-		setDefaultModel(new CompoundPropertyModel<AmpOrgRole>(donor));
-
-		Label indicatorNameLabel = new Label("organisation.name");
+		PropertyModel<String> orgName = new PropertyModel<String>(donor, "organisation.name");
+		
+		Label indicatorNameURLLabel = new Label("organisationNameURL", orgName) {
+			@Override
+			public boolean isVisible() {
+				return donor.getObject().getGpiNiSurvey() != null;
+			}
+		};
+		add(indicatorNameURLLabel);
+		
+		Label indicatorNameLabel = new Label("organisationName", orgName) {
+			@Override
+			public boolean isVisible() {
+				return donor.getObject().getGpiNiSurvey() == null;
+			}
+		};
 		add(indicatorNameLabel);
-
+		
 		final AmpLinkField newItem = new AmpAddLinkField("addNewItem", "Add new item") {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
@@ -61,6 +76,7 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 
 				target.add(parent);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
+				target.appendJavaScript("$('#" + getDonorToggleId(donor.getObject().getAmpOrgRoleId())  + "').show();");
 			}
 
 			@Override
@@ -133,7 +149,11 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 			}
 		};
 		
-		add(indicatorList);
+		WebMarkupContainer indicatorPanel = new WebMarkupContainer("indicatorPanel");
+		indicatorPanel.add(new AttributeModifier("id", getDonorToggleId(donor.getObject().getAmpOrgRoleId())));
+		indicatorPanel.add(indicatorList);
+		
+		add(indicatorPanel);
 	}
 	
 	private boolean hasDonorConcessionalityLevelFundings(IModel<AmpActivityVersion> am, IModel<AmpOrgRole> donorModel) {
@@ -146,5 +166,9 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 			.findAny();
 		
 		return fundingWithConcessionalityLevel.isPresent();
+	}
+	
+	private String getDonorToggleId(Long ampOrgRoleId) {
+		return "indicatorPanel_" + ampOrgRoleId;
 	}
 }

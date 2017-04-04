@@ -2,6 +2,8 @@ package org.digijava.module.aim.action;
 /*
 * @ author Govind G Dalwani
 */
+
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -68,6 +70,7 @@ public class GlobalSettings extends Action {
 		boolean refreshGlobalSettingsCache			= false;
 		boolean regenerateCCExchanteRates = false;
 		HttpSession session = request.getSession();
+		errors = new ActionMessages();
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
 		} else {
@@ -103,7 +106,7 @@ public class GlobalSettings extends Action {
 			AmpGlobalSettings projectValidationSetting = FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.PROJECTS_VALIDATION);
 			AmpGlobalSettings baseCurrencyGS = FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.BASE_CURRENCY);
 			while (token.hasMoreTokens()) {
-				String element = token.nextToken();
+				String element = URLDecoder.decode(token.nextToken(), "UTF-8");
 				String[] nameValue = element.split("=");				
 				Long id = getLongOrNull(nameValue[0]);
 				String newValue = nameValue.length < 2 ? "" : nameValue[1];
@@ -116,7 +119,9 @@ public class GlobalSettings extends Action {
 				// allow empty fields, like Public Portal URL when Public Portal = false
 				//we ad a struts error that was added befor inside the methods
 				try {
+
 					DbUtil.updateGlobalSetting(id, newValue);
+
 				} catch (AMPException ex) {
 
 					ActionMessage ae = new ActionMessage("error.aim.globalSettings.valueIsNotOfType", ex.getMessage());
@@ -317,6 +322,19 @@ public class GlobalSettings extends Action {
 
 
 
+	private List<KeyValue> getPossibleValues(String tableName) {
+		List<KeyValue> ret = new ArrayList<>();
+		
+		if (tableName == null || tableName.length() == 0)
+			return ret;
+
+		List<Object[]> ls 	= PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+		for(Object[] obj:ls){
+			KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]), PersistenceManager.getString(obj[1]));
+			ret.add( keyValue );
+		}
+		return ret;
+	}
 
     /**
      * This method is potentially dangerous since does not consider leap years

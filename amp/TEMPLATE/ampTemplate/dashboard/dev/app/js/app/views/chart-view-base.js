@@ -147,7 +147,6 @@ module.exports = BackboneDash.View.extend({
       this.message.html('Loading...').attr('data-i18n', 'amp.dashboard:chart-loading-saved-settings');
       app.translator.translateDOM($('.chart-container'));
       //this.message.fadeIn(100);
-      debugger;
       return;
     }
 

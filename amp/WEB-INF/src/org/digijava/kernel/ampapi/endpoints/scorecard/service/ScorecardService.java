@@ -123,6 +123,7 @@ public class ScorecardService {
 						+ " FROM amp_audit_logger l, amp_activity_version a, amp_org_role r  "
 						+ " WHERE objecttype = 'org.digijava.module.aim.dbentity.AmpActivityVersion' "
 						+ " AND a.amp_activity_id = l.objectid:: integer  " + " AND r.activity=a.amp_activity_id  "
+						+ " AND not exists(select 1 from amp_organisation ao where ao.deleted = true and ao.amp_org_id=r.organisation) "
 						+ " AND    (EXISTS (  SELECT af.amp_donor_org_id "
 						+ " FROM   amp_funding af, amp_activity_version v, amp_team t WHERE  r.organisation = af.amp_donor_org_id "
 						+ " AND v.amp_activity_id = af.amp_activity_id AND v.amp_activity_id=a.amp_activity_id AND v.deleted is false AND (a.draft = false OR a.draft is null) "
@@ -534,7 +535,10 @@ public class ScorecardService {
 	 */
 	private Map<Long, Map<String, ColoredCell>> countActivityUpdates(List<ActivityUpdate> activityUpdates,
 			Map<Long, Map<String, ColoredCell>> data) {
+		int i=0;
+		try{
 		for (ActivityUpdate activityUpdate : activityUpdates) {
+			i++;
 			Long donorId = activityUpdate.getDonorId();
 			Quarter quarter = new Quarter(fiscalCalendar, activityUpdate.getModifyDate());
 			ColoredCell cell = data.get(donorId).get(quarter.toString());
@@ -547,7 +551,11 @@ public class ScorecardService {
 				}
 			}
 			cell.getUpdatedActivites().add(activityUpdate.getActivityId());
+		}}catch(Exception e){
+			System.out.println(i);
+			throw e;
 		}
+		
 		return data;
 	}
 

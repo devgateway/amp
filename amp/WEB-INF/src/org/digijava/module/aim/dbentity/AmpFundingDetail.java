@@ -18,25 +18,64 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem {
 	
+	public static class FundingDetailComparatorByTransactionDateAsc implements Comparator<AmpFundingDetail>, Serializable {
+
+		@Override
+		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+			if (arg0.getTransactionDate() != null && arg1.getTransactionDate() != null){ 
+				return arg0.getTransactionDate().compareTo(arg1.getTransactionDate());
+			}else{
+				if(arg0.getTransactionDate()==null){
+					return 1;
+				}else{
+					return -1;
+				}
+			}
+		}
+	}
+	public static class FundingDetailComparatorByTransactionDateDesc implements Comparator<AmpFundingDetail>, Serializable {
+
+		@Override
+		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+			if (arg0.getTransactionDate() != null && arg1.getTransactionDate() != null){ 
+				return arg1.getTransactionDate().compareTo(arg0.getTransactionDate());
+			}else{
+				if(arg0.getTransactionDate()==null){
+					return -1;
+				}else{
+					return 1;
+				}
+			}
+		}
+	}	
 	//IATI-check: not to be ignored!
 	public static class FundingDetailComparator implements Comparator<AmpFundingDetail>, Serializable {
-		
-		
+
 		/**
 		 */
 		private static final long serialVersionUID = 1L;
-		
+
 		@Override
 		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
-			if (arg0.getTransactionDate() != null && arg0.getTransactionAmount() != null && arg0.getAdjustmentType() != null) {
-				if (arg0.getTransactionDate() != null && arg1.getTransactionDate() != null && arg0.getTransactionDate().compareTo(arg1.getTransactionDate()) != 0) return arg0.getTransactionDate().compareTo(arg1.getTransactionDate());
-				if (arg0.getTransactionDate() != null && arg1.getTransactionDate() == null) return -1;
-				if (arg0.getTransactionDate() == null && arg1.getTransactionDate() != null) return 1;
+
+			if (arg0.getTransactionDate() != null && arg0.getTransactionAmount() != null
+					&& arg0.getAdjustmentType() != null) {
+				if (arg0.getTransactionDate() != null && arg1.getTransactionDate() != null
+						&& arg0.getTransactionDate().compareTo(arg1.getTransactionDate()) != 0)
+					return arg0.getTransactionDate().compareTo(arg1.getTransactionDate());
+				if (arg0.getTransactionDate() != null && arg1.getTransactionDate() == null)
+					return -1;
+				if (arg0.getTransactionDate() == null && arg1.getTransactionDate() != null)
+					return 1;
 			}
-			if (arg0.getReportingDate() != null && arg1.getReportingDate() != null) return arg0.getReportingDate().compareTo(arg1.getReportingDate());
-			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() != null) return arg0.getAmpFundDetailId().compareTo(arg1.getAmpFundDetailId());
-			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() == null) return -1;
-			if (arg0.getAmpFundDetailId() == null && arg1.getAmpFundDetailId() != null) return 1;
+			if (arg0.getReportingDate() != null && arg1.getReportingDate() != null)
+				return arg0.getReportingDate().compareTo(arg1.getReportingDate());
+			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() != null)
+				return arg0.getAmpFundDetailId().compareTo(arg1.getAmpFundDetailId());
+			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() == null)
+				return -1;
+			if (arg0.getAmpFundDetailId() == null && arg1.getAmpFundDetailId() != null)
+				return 1;
 			return arg0.hashCode() - arg1.hashCode();
 		}
 	}

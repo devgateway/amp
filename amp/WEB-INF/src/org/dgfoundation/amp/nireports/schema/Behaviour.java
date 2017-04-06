@@ -132,6 +132,9 @@ public interface Behaviour<V extends NiOutCell> {
 			if (cellCoo.id == ColumnReportData.UNALLOCATED_ID && splitterIsUndefined)
 				continue; // undefineds match
 			IdsAcceptor acceptor = acceptors.get(dimUsage);
+			if (acceptor == null) {
+				continue;
+			}
 			boolean isAcceptable = acceptor.isAcceptable(cellCoo);
 			if (!isAcceptable)
 				return false;

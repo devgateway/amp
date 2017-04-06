@@ -1,9 +1,12 @@
 package org.dgfoundation.amp.nireports;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
  * a {@link Cell} which holds a text. Coordinates are either empty or with a single entry, depending on the #mainLevel)
@@ -13,21 +16,27 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 public final class TextCell extends Cell {
 
 	public final String text;
-	public final MetaInfoSet metaInfo;
+    public final MetaInfoSet metaInfo;
 
-	public TextCell(String text, long activityId, long entityId, Optional<LevelColumn> levelColumn) {
-		this(text, activityId, entityId, MetaInfoSet.empty(), levelColumn);
+    public TextCell(String text, long activityId, long entityId, Optional<LevelColumn> levelColumn) {
+        this(text, activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
+    }
+
+	public TextCell(String text, long activityId, long entityId,
+			Map<NiDimensionUsage, Coordinate> coordinates, Optional<LevelColumn> levelColumn) {
+    	this(text, activityId, entityId, MetaInfoSet.empty(), coordinates, levelColumn);
 	}
-
-	public TextCell(String text, long activityId, long entityId, MetaInfoSet metaInfo, Optional<LevelColumn> levelColumn) {
-		super(activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
+	
+	public TextCell(String text, long activityId, long entityId, MetaInfoSet metaInfo,
+            Map<NiDimensionUsage, Coordinate> coordinates, Optional<LevelColumn> levelColumn) {
+		super(activityId, entityId, coordinates, levelColumn);
 		this.text = (text == null) ? "" : text;
-		this.metaInfo = metaInfo.freeze();
+        this.metaInfo = metaInfo.freeze();
 	}
 	
 	@Override
 	public TextCell changeOwnerId(long newActivityId) {
-		return new TextCell(this.text, newActivityId, this.entityId, metaInfo, this.mainLevel);
+		return new TextCell(text, newActivityId, entityId, metaInfo, coordinates, mainLevel);
 	}
 
 	@Override

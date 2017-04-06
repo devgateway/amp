@@ -270,6 +270,7 @@ public class ReportWizardAction extends MultiAction {
         myForm.setPublicReport(false);
         myForm.setWorkspaceLinked(false);
         myForm.setAllowEmptyFundingColumns(false);
+        myForm.setSplitByFunding(false);
         myForm.setUseFilters(false);
         myForm.setBudgetExporter(false);
         myForm.setReportCategory(new Long(0));
@@ -412,6 +413,7 @@ public class ReportWizardAction extends MultiAction {
         myForm.setWorkspaceLinked(ampReport.getWorkspaceLinked());
         myForm.setHideActivities( ampReport.getHideActivities() );
         myForm.setAllowEmptyFundingColumns( ampReport.getAllowEmptyFundingColumns() );
+        myForm.setSplitByFunding(ampReport.getSplitByFunding());
         myForm.setAlsoShowPledges(ampReport.getAlsoShowPledges());
         if(ampReport.getReportCategory() !=null){
             myForm.setReportCategory(ampReport.getReportCategory().getId());
@@ -495,6 +497,7 @@ public class ReportWizardAction extends MultiAction {
         }
         myForm.setWorkspaceLinked(Boolean.valueOf(request.getParameter("workspaceLinked"))); //Struts for some reason ignores this field and I am tired of it
         myForm.setAlsoShowPledges(Boolean.valueOf(request.getParameter("alsoShowPledges")));
+        myForm.setSplitByFunding(Boolean.valueOf(request.getParameter("splitByFunding")));
 
         TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
         
@@ -551,6 +554,7 @@ public class ReportWizardAction extends MultiAction {
             }
 
             ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns());
+            ampReport.setSplitByFunding(myForm.getSplitByFunding());
             ampReport.setBudgetExporter(myForm.getBudgetExporter() != null && myForm.getBudgetExporter());
 
             ampReport.setColumns( new HashSet<AmpReportColumn>() );

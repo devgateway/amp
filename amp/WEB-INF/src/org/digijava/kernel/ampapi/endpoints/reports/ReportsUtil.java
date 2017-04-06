@@ -245,7 +245,10 @@ public class ReportsUtil {
 		if (original.get(EPConstants.ADD_COLUMNS) != null) {
 			newParams.set(EPConstants.ADD_COLUMNS, original.get(EPConstants.ADD_COLUMNS));
 		}
-		
+		if (original.get(EPConstants.ADD_HIERARCHIES) != null) {
+			newParams.set(EPConstants.ADD_HIERARCHIES, original.get(EPConstants.ADD_HIERARCHIES));
+		}
+
 		if (original.get(EPConstants.MD5_TOKEN) != null) {
 			newParams.set(EPConstants.MD5_TOKEN, original.get(EPConstants.MD5_TOKEN));
 		}
@@ -397,7 +400,7 @@ public class ReportsUtil {
 			List<ReportColumn> existingColumns = new ArrayList<ReportColumn>();
 			existingColumns.addAll(spec.getColumns());
 			for (String columnName : hierarchies) {
-				ReportColumn column = new ReportColumn(columnName);
+				ReportColumn column = new ReportColumn(columnName, hideSubtotals(columnName));
 				if (!spec.getHierarchies().contains(column)) {
 					//add as a column if not present 
 					if (!existingColumns.contains(column)) {
@@ -410,7 +413,11 @@ public class ReportsUtil {
 			spec.getColumns().addAll(existingColumns);
 		}
 	}
-	
+
+	private static boolean hideSubtotals(String columnName) {
+		return ColumnConstants.FUNDING_ID.equals(columnName);
+	}
+
 	private static void addMeasures(ReportSpecification spec, JsonBean formParams) {
 		//add new measures if not present
 		if (formParams.get(EPConstants.ADD_MEASURES) != null) {

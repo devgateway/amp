@@ -223,8 +223,8 @@ public class Reports implements ErrorReportingEndpoint {
 	}
 	
 	/**
-	 * Generates a custom xml report.  
-	 * 
+	 * Generates a custom xml report.
+	 *
 	 * @param reportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
 	 * @return Response in xml format result for the report
 	 */
@@ -255,7 +255,7 @@ public class Reports implements ErrorReportingEndpoint {
 	
 	/**
 	 * Retrieves report data in XML format for the specified reportId
-	 *  
+	 *
 	 * @param reportId report Id
 	 * @param ReportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
 	 * @return XML result for the specified reportId
@@ -268,10 +268,10 @@ public class Reports implements ErrorReportingEndpoint {
 	public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter, @PathParam("report_id") Long reportId) {
 		Report xmlReport = ApiXMLService.getXmlReport(reportParameter, reportId);
 		ObjectFactory xmlReportObjFactory = new ObjectFactory();
-		
+
 		return xmlReportObjFactory.createReport(xmlReport);
 	}
-	
+
 	@POST
 	@Path("/report/{report_id}/result/jqGrid")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -281,15 +281,24 @@ public class Reports implements ErrorReportingEndpoint {
 	 */
 	public final JsonBean getReportResultForTabGrid(JsonBean formParams, 
 			@PathParam("report_id") Long reportId) {
-		
+
+		AmpReports ampReport = DbUtil.getAmpReport(reportId);
+
+		List<String> extraHierarchies = new ArrayList<>();
+
 		// TODO: normally all extra columns should come from formParams
 		List<String> extraColumns = new ArrayList<String>();
 		extraColumns.add(ColumnConstants.ACTIVITY_ID);
 		extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 		extraColumns.add(ColumnConstants.DRAFT);
 		//extraColumns.add(ColumnConstants.TEAM_ID);  // TODO: this column never worked in NiReports - is it needed by Tabs now?
+		if (ampReport.getSplitByFunding()) {
+			extraColumns.add(ColumnConstants.FUNDING_ID);
+			extraHierarchies.add(ColumnConstants.FUNDING_ID);
+		}
 		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
-		
+		formParams.set(EPConstants.ADD_HIERARCHIES, extraHierarchies);
+
 		// Convert jqgrid sorting params into ReportUtils sorting params.
 		if (formParams.getString("sidx") != null) {			
 			formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));
@@ -383,15 +392,26 @@ public class Reports implements ErrorReportingEndpoint {
 				throw new RuntimeException("Cannot restore report from session: " + reportId);
 			}
 		}
-		
+
+		AmpReports ampReport = DbUtil.getAmpReport(reportId);
+
+		List<String> extraColumns = new ArrayList<>();
+		List<String> extraHierarchies = new ArrayList<>();
+
 		// AMP-19189 - add columns used for coloring the project title and amp id (but not for summary reports).
-		List<String> extraColumns = new ArrayList<String>();
 		if (spec.getColumns().size() != spec.getHierarchies().size() && !spec.getMeasures().isEmpty()) {
 			extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 			extraColumns.add(ColumnConstants.DRAFT);
-			queryObject.set(EPConstants.ADD_COLUMNS, extraColumns);
 		}
-		
+
+		if (ampReport.getSplitByFunding()) {
+			extraColumns.add(ColumnConstants.FUNDING_ID);
+			extraHierarchies.add(ColumnConstants.FUNDING_ID);
+		}
+
+		queryObject.set(EPConstants.ADD_COLUMNS, extraColumns);
+		queryObject.set(EPConstants.ADD_HIERARCHIES, extraHierarchies);
+
 		JsonBean report = ReportsUtil.getReportResultByPage(reportId,
 				ReportsUtil.convertSaikuParamsToReports(queryObject));
 		
@@ -435,14 +455,14 @@ public class Reports implements ErrorReportingEndpoint {
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX, false);
 	}
-	
+
 	@POST
 	@Path("/saikureport/export/xls/run/{report_token}")
 	@Produces({"application/vnd.ms-excel" })
 	public final Response exportXlsSaikuReport(String query, @PathParam("report_token") Integer reportToken) {
 		return exportInMemorySaikuReport(query,reportToken,AMPReportExportConstants.XLSX);
 	}	
-	
+
 	@POST
 	@Path("/saikureport/export/csv/{report_id}")
 	@Produces({"text/csv"})
@@ -451,7 +471,7 @@ public class Reports implements ErrorReportingEndpoint {
 		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.CSV, false);
 
 	}
-	
+
 	@POST
 	@Path("/saikureport/export/csv/run/{report_token}")
 	@Produces({"text/csv"})
@@ -464,12 +484,12 @@ public class Reports implements ErrorReportingEndpoint {
 	@POST
 	@Path("/saikureport/export/xml/{report_id}")
 	@Produces({"application/xml"})
-	public final Response exportXmlSaikuReport(String query, @PathParam("report_id") Long reportId, 
+	public final Response exportXmlSaikuReport(String query, @PathParam("report_id") Long reportId,
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XML, false);
 
 	}
-	
+
 	@POST
 	@Path("/saikureport/export/xml/run/{report_token}")
 	@Produces({"application/xml"})
@@ -478,7 +498,7 @@ public class Reports implements ErrorReportingEndpoint {
 
 		return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.XML);
 	}
-	
+
 	@POST
 	@Path("/saikureport/export/pdf/{report_id}")
 	@Produces({"application/pdf"})
@@ -638,7 +658,7 @@ public class Reports implements ErrorReportingEndpoint {
 			
 			if (doc != null) {
 				logger.info("Send export data to browser...");
-				
+
 				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
 						.header("content-disposition", "attachment; filename = " + fileName)
 						.header("content-length", doc.length).build();
@@ -656,13 +676,13 @@ public class Reports implements ErrorReportingEndpoint {
 		
 		String filename = ampReport != null ? StringUtils.trim(ampReport.getName()) : "export";
 		filename = String.format("%s", filename.replaceAll(" ", "_"));
-		
+
 		try {
 			filename = URLEncoder.encode(filename, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			logger.error(e);
 		}
-		
+
 		filename += "." + type;
 		
 		return filename;

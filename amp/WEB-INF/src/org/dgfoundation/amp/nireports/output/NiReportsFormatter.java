@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports.output;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -7,10 +9,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.Stack;
+import java.util.TreeSet;
 import java.util.function.Supplier;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.newreports.AreaOwner;
@@ -19,6 +24,7 @@ import org.dgfoundation.amp.newreports.HeaderCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
@@ -53,13 +59,21 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	
 	protected final CellVisitor<ReportCell> cellFormatter;
 	protected final List<CellColumn> leafColumns;
-	
+
+	private final Set<String> virtualHierarcies;
+
 	public NiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, CellVisitor<ReportCell> cellFormatter) {
 		this.runResult = runResult;
+		this.virtualHierarcies = ImmutableSet.copyOf(spec.getHierarchies().stream()
+				.filter(ReportColumn::isHideSubtotals)
+				.map(ReportColumn::getColumnName)
+				.collect(toList()));
 		this.leafColumns = runResult.headers.leafColumns;
 		this.spec = spec;
 		this.reportAreaSupplier = () -> new ReportAreaImpl();
 		this.cellFormatter = cellFormatter;
+		// FIXME this is a hack, this code should belong to the same class/method the hierarchy was added
+		spec.getHierarchies().removeAll(spec.getHierarchies().stream().filter(ReportColumn::isHideSubtotals).collect(toList()));
 		buildHeaders();
 	}
 	
@@ -94,8 +108,58 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		List<ReportOutputColumn> remappedLeaves = AmpCollections.relist(leafColumns, niColumn -> niColumnToROC.get(niColumn)); 
 		leafHeaders = needToGenerateDummyColumn ?
 			buildArrayList(rootHeaders.get(0), remappedLeaves) : remappedLeaves;
+		pruneHeaders();
 	}
-	
+
+	/**
+	 * Unfortunately our hierarchy cannot be removed any soon earlier and we have to deal with this rigid structure
+	 * of headers. Warning: some nasty code to recompute startColumn & colSpan after some of the columns were removed.
+	 *
+	 * FIXME Good news, this code enables easier removal of hidden columns like Draft and Project Status
+	 * FIXME that are treated specifically in many places
+	 */
+	private void pruneHeaders() {
+		TreeSet<Integer> removedIdx = new TreeSet<>();
+		for (List<HeaderCell> headerRow : generatedHeaders) {
+			for (HeaderCell headerCell : headerRow) {
+				if (virtualHierarcies.contains(headerCell.originalName)) {
+					for (int i = 0; i < headerCell.getColSpan(); i++) {
+						removedIdx.add(headerCell.getStartColumn() + i);
+					}
+				}
+			}
+		}
+
+		List<List<HeaderCell>> prunedHeaders = new ArrayList<>();
+		for (List<HeaderCell> headerRow : generatedHeaders) {
+			List<HeaderCell> newHeaderRow = new ArrayList<>();
+			for (HeaderCell headerCell : headerRow) {
+				if (!virtualHierarcies.contains(headerCell.originalName)) {
+					int startColumn = headerCell.getStartColumn();
+					int colSpan = headerCell.getColSpan();
+					int newStartColumn = startColumn - removedIdx.headSet(startColumn).size();
+					int newColSpan = colSpan - removedIdx.subSet(startColumn, startColumn + colSpan).size();
+					HeaderCell newHeaderCell = new HeaderCell(
+							headerCell.getStartRow(), headerCell.getTotalRowSpan(), headerCell.getRowSpan(),
+							newStartColumn, newColSpan, headerCell.getName(), headerCell.originalName,
+							headerCell.fullOriginalName, headerCell.description);
+					newHeaderRow.add(newHeaderCell);
+				}
+			}
+			prunedHeaders.add(newHeaderRow);
+		}
+
+		generatedHeaders = prunedHeaders;
+
+		rootHeaders = rootHeaders.stream()
+				.filter(h -> !virtualHierarcies.contains(h.originalColumnName))
+				.collect(toList());
+
+		leafHeaders = leafHeaders.stream()
+				.filter(h -> !virtualHierarcies.contains(h.originalColumnName))
+				.collect(toList());
+	}
+
 	/**
 	 * for you LISP lovers - cons :D. Constructs a new list formed by prepending an item to a list
 	 * @param elem
@@ -168,8 +232,8 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		ReportAreaImpl row = reportAreaSupplier.get();
 		row.setOwner(new AreaOwner(id));
 		Map<ReportOutputColumn, ReportCell> rowData = new LinkedHashMap<>();
-		for(int i = hiersStack.size(); i < runResult.headers.leafColumns.size(); i++) {
-			CellColumn niCellColumn = runResult.headers.leafColumns.get(i);
+		for(int i = hiersStack.size(); i < leafColumns.size(); i++) {
+			CellColumn niCellColumn = leafColumns.get(i);
 			ReportCell reportCell = convert(crd.contents.get(niCellColumn).get(id), niCellColumn);
 			if (reportCell != null)
 				rowData.put(niColumnToROC.get(niCellColumn), reportCell);
@@ -193,13 +257,17 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		List<ReportArea> rchildren = new ArrayList<>();
 		for(NiReportData child:grd.subreports) {
 			hiersStack.push(child.splitter);
-			rchildren.add(child.accept(this));
+			ReportAreaImpl childReportArea = child.accept(this);
+			if (child instanceof NiGroupReportData && virtualHierarcies.contains(((NiGroupReportData) child).splitterColumn)) {
+				childReportArea.setChildren(childReportArea.getChildren().stream().flatMap(c -> c.getChildren().stream()).collect(toList()));
+			}
+			rchildren.add(childReportArea);
 			hiersStack.pop();
 		}
 		res.setChildren(rchildren);
 		return res;
 	}
-	
+
 	/**
 	 * initializes a {@link ReportAreaImpl} given the configured {@link #reportAreaSupplier} and populates the fields which are common to all {@link NiReportData} subclasses
 	 * @param nrd

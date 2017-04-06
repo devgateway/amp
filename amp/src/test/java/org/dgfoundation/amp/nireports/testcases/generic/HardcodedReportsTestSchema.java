@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
 
 import static org.dgfoundation.amp.nireports.testcases.TestModelConstants.*;
+import static org.dgfoundation.amp.nireports.testcases.generic.HardcodedCells.degenerate;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.Memoizer;
@@ -34,9 +34,8 @@ import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
@@ -82,11 +81,24 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 	public final static Map<String, Long> activityNames = generateActivityNamesMap();
 	
 	public static Set<String> workspaceFilter = activityNames.keySet();
+
+	public final static NiDimension.LevelColumn MODE_OF_PAYMENT_LC = degenerate(catsDimension, ColumnConstants.MODE_OF_PAYMENT);
+	public final static NiDimension.LevelColumn FUNDING_STATUS_LC = degenerate(catsDimension, ColumnConstants.FUNDING_STATUS);
+	public final static NiDimension.LevelColumn FINANCING_INSTRUMENT_LC = degenerate(catsDimension, ColumnConstants.FINANCING_INSTRUMENT);
+	public final static NiDimension.LevelColumn TYPE_OF_ASSISTANCE_LC = degenerate(catsDimension, ColumnConstants.TYPE_OF_ASSISTANCE);
+
+	public static List<NiDimension.NiDimensionUsage> SUB_DIMENSION_USAGES = Arrays.asList(
+			MODE_OF_PAYMENT_LC.dimensionUsage,
+			DONOR_DIM_USG,
+			FUNDING_STATUS_LC.dimensionUsage,
+			FINANCING_INSTRUMENT_LC.dimensionUsage,
+			TYPE_OF_ASSISTANCE_LC.dimensionUsage
+	);
 	
 	public HardcodedReportsTestSchema() { 
 		//2x degenerate dimensions
-		addTextColumn(ColumnConstants.STATUS, new StatusCells(activityNames, catsDimension.getEntityIds(), catsDimension));
-		addTextColumn(ColumnConstants.IMPLEMENTATION_LEVEL, new ImplementationLevelCells(activityNames, catsDimension.getEntityIds(), catsDimension));
+		addTextColumn(ColumnConstants.STATUS, new StatusCells(activityNames, catsDimension.getEntityIds(), degenerate(catsDimension, ColumnConstants.STATUS)));
+		addTextColumn(ColumnConstants.IMPLEMENTATION_LEVEL, new ImplementationLevelCells(activityNames, catsDimension.getEntityIds(), degenerate(catsDimension, ColumnConstants.IMPLEMENTATION_LEVEL)));
 		//2x hierarchical percentages dimensions (like Primary Sectors > Primary Sector Subsectors)
 		addPercentageColumn(ColumnConstants.PRIMARY_SECTOR, new PrimarySectorCells(activityNames, secsDimension.getEntityIds(), PS_DIM_USG.getLevelColumn(LEVEL_SECTOR)));
 		addPercentageColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, new PrimarySectorSubSectorCells(activityNames, secsDimension.getEntityIds(), PS_DIM_USG.getLevelColumn(LEVEL_SUBSECTOR)));
@@ -113,10 +125,10 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 		addTextColumn(ColumnConstants.DONOR_GROUP, new DonorGroupCells(activityNames, orgsDimension.getEntityIds(), DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANIZATION_GROUP)));
 		addTextColumn(ColumnConstants.DONOR_TYPE, new DonorTypeCells(activityNames, orgsDimension.getEntityIds(), DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANIZATION_TYPE)));
 		
-		addTextColumn(ColumnConstants.FINANCING_INSTRUMENT, new FinancingInstrumentCells(activityNames, catsDimension.getEntityIds(), catsDimension));
-		addTextColumn(ColumnConstants.TYPE_OF_ASSISTANCE, new TypeOfAssistanceCells(activityNames, catsDimension.getEntityIds(), catsDimension));
-		addTextColumn(ColumnConstants.MODE_OF_PAYMENT, new ModeOfPaymentCells(activityNames, catsDimension.getEntityIds(), catsDimension));
-		addTextColumn(ColumnConstants.FUNDING_STATUS, new FundingStatusCells(activityNames, catsDimension.getEntityIds(), catsDimension));
+		addTextColumn(ColumnConstants.FINANCING_INSTRUMENT, new FinancingInstrumentCells(activityNames, catsDimension.getEntityIds(), FINANCING_INSTRUMENT_LC));
+		addTextColumn(ColumnConstants.TYPE_OF_ASSISTANCE, new TypeOfAssistanceCells(activityNames, catsDimension.getEntityIds(), TYPE_OF_ASSISTANCE_LC));
+		addTextColumn(ColumnConstants.MODE_OF_PAYMENT, new ModeOfPaymentCells(activityNames, catsDimension.getEntityIds(), MODE_OF_PAYMENT_LC));
+		addTextColumn(ColumnConstants.FUNDING_STATUS, new FundingStatusCells(activityNames, catsDimension.getEntityIds(), FUNDING_STATUS_LC));
 		
 		addDateColumn(ColumnConstants.ACTIVITY_CREATED_ON, new ActivityCreatedOnCells(activityNames, activityNames, null));
 		addDateColumn(ColumnConstants.ACTIVITY_UPDATED_ON, new ActivityUpdatedOnCells(activityNames, activityNames, null));

@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.codegenerators.FundingCellEntry;
 import org.dgfoundation.amp.codegenerators.FundingColumnGenerator;
 import org.dgfoundation.amp.nireports.CategAmountCell;
@@ -75,10 +76,10 @@ public abstract class AbstractFundingColumn extends HardcodedCells<CategAmountCe
 		addToMetaIfExistsDirectly(TestModelConstants.SOURCE_ROLE, source_role, mis);
 		addToMetaIfExistsDirectly(TestModelConstants.ADJUSTMENT_TYPE, adjustment_type, mis);
 		addToCoordsIfExists(donorDimUsg.getLevelColumn(2), TestModelConstants.DONOR_ORG_ID, donor_org, coos);
-		addToCoordsIfExists(degenerate(cats, "funding_status"), TestModelConstants.FUNDING_STATUS_ID, funding_status, coos);
-		addToCoordsIfExists(degenerate(cats, "mode_of_payment"), TestModelConstants.MODE_OF_PAYMENT_ID, mode_of_payment, coos);
-		addToCoordsIfExists(degenerate(cats, "type_of_assistance"), TestModelConstants.TERMS_ASSIST_ID, terms_assist, coos);
-		addToCoordsIfExists(degenerate(cats, "fin_instr"), TestModelConstants.FINANCING_INSTRUMENT_ID, financing_instrument, coos);
+		addToCoordsIfExists(degenerate(cats, ColumnConstants.FUNDING_STATUS), TestModelConstants.FUNDING_STATUS_ID, funding_status, coos);
+		addToCoordsIfExists(degenerate(cats, ColumnConstants.MODE_OF_PAYMENT), TestModelConstants.MODE_OF_PAYMENT_ID, mode_of_payment, coos);
+		addToCoordsIfExists(degenerate(cats, ColumnConstants.TYPE_OF_ASSISTANCE), TestModelConstants.TERMS_ASSIST_ID, terms_assist, coos);
+		addToCoordsIfExists(degenerate(cats, ColumnConstants.FINANCING_INSTRUMENT), TestModelConstants.FINANCING_INSTRUMENT_ID, financing_instrument, coos);
 		
 		return new CategAmountCell(activityIds.get(activityTitle), 
 				new MonetaryAmount(new BigDecimal(amount), null, null, parsedDate, precisionSetting), 

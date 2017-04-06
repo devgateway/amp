@@ -1,14 +1,6 @@
 package org.dgfoundation.amp.codegenerators;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
-
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.apache.commons.lang.WordUtils;
-import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
  * Class for generating NiColumns.
@@ -39,17 +31,12 @@ public abstract class ColumnGenerator extends CodeGenerator {
 			"import java.util.List;\n" +
 			"import java.util.Map;\n" +
 			"import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;\n" + 
-			"import org.dgfoundation.amp.nireports.schema.NiDimension;\n" + 
-			"import org.dgfoundation.amp.testmodels.nicolumns.HardcodedCells;\n" + 
 			"\n" +
 			String.format("import org.dgfoundation.amp.nireports.%s;\n", clazz.getSimpleName()) +
 			"\n" +
 			"\n" +
 			String.format("public class %s extends HardcodedCells<%s>{\n", getCanonicalNameWithCells(this.name), clazz.getSimpleName()) +
 			"\n" +
-			String.format("	public %s(Map<String, Long> activityNames, Map<String, Long> entityNames, NiDimension dim, String key) {\n", getCanonicalNameWithCells(this.name)) +
-			"		super(activityNames, entityNames, degenerate(dim, key));\n" +
-			"	}\n" +
 			String.format("	public %s(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {\n", getCanonicalNameWithCells(this.name)) +
 			"		super(activityNames, entityNames, lc);\n" +
 			"	}\n" +

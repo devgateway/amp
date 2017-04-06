@@ -236,15 +236,24 @@ public class Reports implements ErrorReportingEndpoint {
 	 */
 	public final JsonBean getReportResultForTabGrid(JsonBean formParams, 
 			@PathParam("report_id") Long reportId) {
-		
+
+		AmpReports ampReport = DbUtil.getAmpReport(reportId);
+
+		List<String> extraHierarchies = new ArrayList<>();
+
 		// TODO: normally all extra columns should come from formParams
 		List<String> extraColumns = new ArrayList<String>();
 		extraColumns.add(ColumnConstants.ACTIVITY_ID);
 		extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 		extraColumns.add(ColumnConstants.DRAFT);
 		//extraColumns.add(ColumnConstants.TEAM_ID);  // TODO: this column never worked in NiReports - is it needed by Tabs now?
+		if (ampReport.getSplitByFunding()) {
+			extraColumns.add(ColumnConstants.FUNDING_ID);
+			extraHierarchies.add(ColumnConstants.FUNDING_ID);
+		}
 		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
-		
+		formParams.set(EPConstants.ADD_HIERARCHIES, extraHierarchies);
+
 		// Convert jqgrid sorting params into ReportUtils sorting params.
 		if (formParams.getString("sidx") != null) {			
 			formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));
@@ -338,15 +347,26 @@ public class Reports implements ErrorReportingEndpoint {
 				throw new RuntimeException("Cannot restore report from session: " + reportId);
 			}
 		}
-		
+
+		AmpReports ampReport = DbUtil.getAmpReport(reportId);
+
+		List<String> extraColumns = new ArrayList<>();
+		List<String> extraHierarchies = new ArrayList<>();
+
 		// AMP-19189 - add columns used for coloring the project title and amp id (but not for summary reports).
-		List<String> extraColumns = new ArrayList<String>();
 		if (spec.getColumns().size() != spec.getHierarchies().size()) {
 			extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 			extraColumns.add(ColumnConstants.DRAFT);
-			queryObject.set(EPConstants.ADD_COLUMNS, extraColumns);
 		}
-		
+
+		if (ampReport.getSplitByFunding()) {
+			extraColumns.add(ColumnConstants.FUNDING_ID);
+			extraHierarchies.add(ColumnConstants.FUNDING_ID);
+		}
+
+		queryObject.set(EPConstants.ADD_COLUMNS, extraColumns);
+		queryObject.set(EPConstants.ADD_HIERARCHIES, extraHierarchies);
+
 		JsonBean report = ReportsUtil.getReportResultByPage(reportId,
 				ReportsUtil.convertSaikuParamsToReports(queryObject));
 		

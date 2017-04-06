@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+import org.dgfoundation.amp.nireports.amp.SubDimensions;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
@@ -209,5 +210,10 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 			return BigDecimal.valueOf(n.doubleValue());
 		
 		throw new RuntimeException(String.format("cannot convert instances of class %s to BigDecimal", n.getClass().getName()));
+	}
+
+	@Override
+	public SubDimensions getSubDimensions() {
+		return null;
 	}
 }

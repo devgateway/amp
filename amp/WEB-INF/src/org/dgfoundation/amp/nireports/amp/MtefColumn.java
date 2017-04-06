@@ -18,9 +18,11 @@ public class MtefColumn extends AmpFundingColumn {
 	public final Optional<Long> adjustmentTypeCode;
 	public final boolean directed;
 
-	public MtefColumn(String columnName, int mtefYear, String totalColumnName, boolean directed, Optional<HardCodedCategoryValue> adjustmentType) {
+	public MtefColumn(String columnName, int mtefYear, String totalColumnName,
+			boolean directed, Optional<HardCodedCategoryValue> adjustmentType, SubDimensions subDimensions) {
 		super(columnName, "v_ni_mtef_funding",
-			directed ? new DirectedMeasureBehaviour(totalColumnName) : new MtefBehaviour(totalColumnName));
+			directed ? new DirectedMeasureBehaviour(totalColumnName) : new MtefBehaviour(totalColumnName),
+			subDimensions);
 		this.mtefYear = mtefYear;
 		this.adjustmentTypeCode = adjustmentType.map(z -> z.existsInDatabase() ? z.getIdInDatabase() : -1);
 		this.directed = directed;

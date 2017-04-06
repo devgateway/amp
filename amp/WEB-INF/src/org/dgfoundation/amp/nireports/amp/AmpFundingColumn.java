@@ -15,10 +15,8 @@ import java.util.Set;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.diffcaching.ActivityInvalidationDetector;
@@ -36,7 +34,6 @@ import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -89,14 +86,6 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	public final static String ENTITY_COMPONENT_FUNDING = "Component Funding";
 	
 	/**
-	 * Map<amp_column_name, view_column_name>
-	 * the coordinates-defining view columns supported by the maximum extent of the AMP schema.
-	 */
-	public final static Map<String, String> FUNDING_VIEW_COLUMNS = Collections.unmodifiableMap(_buildFundingViewFilter());
-	
-	public final static Memoizer<Map<String, LevelColumn>> OPTIONAL_DIMENSION_COLS = new Memoizer<>(() -> buildOptionalDimensionCols());
-		
-	/**
 	 * the cell prototypes cache, plus some auxiliary info
 	 */
 	protected final ExpiringCacher<Boolean, NiReportsEngine, FundingFetcherContext> cacher;
@@ -117,12 +106,14 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	 * the number of seconds to keep fetched prototypes in memory 
 	 */
 	public final static int CACHE_TTL_SECONDS = 10 * 60;
-	
+
+	private SubDimensions subDimensions;
+
 	/**
 	 * delegates to {@link #AmpFundingColumn(String, String, Behaviour)} with {@link TrivialMeasureBehaviour} as a behaviour
 	 */
-	public AmpFundingColumn(String columnName, String viewName) {
-		this(columnName, viewName, TrivialMeasureBehaviour.getInstance());
+	public AmpFundingColumn(String columnName, String viewName, SubDimensions subDimensions) {
+		this(columnName, viewName, TrivialMeasureBehaviour.getInstance(), subDimensions);
 	}
 
 	/**
@@ -133,11 +124,12 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	 * @param viewName the name of the PostgreSQL view to fetch data from
 	 * @param behaviour the behaviour of the column
 	 */
-	protected AmpFundingColumn(String columnName, String viewName, Behaviour<?> behaviour) {
+	protected AmpFundingColumn(String columnName, String viewName, Behaviour<?> behaviour, SubDimensions subDimensions) {
 		super(columnName, null, viewName, behaviour);
 		this.invalidationDetector = new ActivityInvalidationDetector();
+		this.subDimensions = subDimensions;
 		Set<String> ic = new HashSet<>();
-		for(String col:FUNDING_VIEW_COLUMNS.values())
+		for(String col : subDimensions.getColumnIdNames().values())
 			if (!this.viewColumns.contains(col))
 				ic.add(col); // ignore missing NiDimension-bearing viewcolumns
 		for(String col:AmpCollections.relist(longColumnsToFetch, z -> z.v))
@@ -148,26 +140,6 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	}
 
 	/**
-	 * builds the constant map from (amp-column-which-is-the-leaf-of-a-NiDimensionUsage) to (view-column-name). <br />
-	 * This forces that all funding-bearing views read by the AMP schema to have same-named view-columns for same-NiDimensionUsage's!
-	 * @return
-	 */
-	private static Map<String, String> _buildFundingViewFilter() {
-		Map<String, String> res = new HashMap<>();
-		res.put(ColumnConstants.TYPE_OF_ASSISTANCE, "terms_assist_id");
-		res.put(ColumnConstants.FINANCING_INSTRUMENT, "financing_instrument_id");
-		res.put(ColumnConstants.DONOR_AGENCY, "donor_org_id");
-		res.put(ColumnConstants.MODE_OF_PAYMENT, "mode_of_payment_id");
-		res.put(ColumnConstants.FUNDING_STATUS, "funding_status_id");
-		res.put(ColumnConstants.DISASTER_RESPONSE_MARKER, "disaster_response_code");
-		res.put(ColumnConstants.PLEDGES_AID_MODALITY, "aid_modality_id");
-		res.put(ColumnConstants.RELATED_PLEDGES, "pledge_id");
-		res.put(ColumnConstants.EXPENDITURE_CLASS, "expenditure_class_id");
-		res.put(ColumnConstants.AGREEMENT_CODE, "agreement_id");
-		return res;
-	}
-		
-	/**
 	 * returns true IFF the column has been specified as being transaction-level and the current funding view has not it blacklisted.
 	 * This is a hack to accommodate AMP's "multiple schemas per schema"
 	 * @param col
@@ -176,19 +148,12 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	public boolean isTransactionLevelHierarchy(NiReportColumn<?> col) {
 		if (!col.isTransactionLevelHierarchy())
 			return false;
-		String viewName = FUNDING_VIEW_COLUMNS.get(col.name);
+		String viewName = subDimensions.getColumnIdNames().get(col.name);
 		if (viewName == null)
 			return true;
 		return !ignoredColumns.contains(viewName);
 	}
-	
-	protected static Map<String, LevelColumn> buildOptionalDimensionCols() {
-		Map<String, NiReportColumn<?>> cols = AmpReportsSchema.getInstance().getColumns();
-		Map<String, LevelColumn> res = new HashMap<>();
-		FUNDING_VIEW_COLUMNS.forEach((colName, viewColName) -> res.put(viewColName, cols.get(colName).levelColumn.get()));
-		return res;
-	}
-	
+
 	/**
 	 * columns of type long which are optional
 	 */
@@ -281,10 +246,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 						addMetaIfLongExists(metaSet, longOptionalColumn.k, rs.rs, longOptionalColumn.v);
 				
 				// fetch the coordinates for the non-disabled NiDimensionUsage's
-				for(Map.Entry<String, LevelColumn> optDim:OPTIONAL_DIMENSION_COLS.get().entrySet())
-					if (!ignoredColumns.contains(optDim.getKey()))
-						addCoordinateIfLongExists(coos, rs.rs, optDim.getKey(), optDim.getValue());
-				
+				addSubActivityCoordinates(coos, engine, rs.rs);
+
 				if (this.name.equals(ENTITY_PLEDGE_FUNDING))
 				    addCoordinateIfLongExists(coos, rs.rs, "related_project_id", schema.ACT_LEVEL_COLUMN);
 				

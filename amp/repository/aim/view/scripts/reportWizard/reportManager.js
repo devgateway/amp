@@ -9,7 +9,7 @@ function createPreview () {
 	var colArray		= getSelectedFieldsNames("dest_col_ul");
 	var hierArray		= getSelectedFieldsNames("dest_hierarchies_ul");
 	var summary			= getHideActivities();
-	
+
 	if ( (colArray.length != 0 && !summary) || hierArray.length != 0 ) {
 		divElWrapper.style.display		= "";
 		fakeDivEl.style.display		= "";
@@ -284,15 +284,15 @@ NormalReportManager.prototype.disableToolbarButton	= function (btn) {
 };
 
 NormalReportManager.prototype.checkSteps	= function () {
-	createPreview();
 	if ( this.checkReportDetails() )
 		if ( this.checkColumns() )
 			if ( this.checkHierarchies() )
+                createPreview();
 				if ( this.checkMeasures() ) {
 						this.checkReportName() ;
 						return;
 				}
-	
+
 	// If any of the checks above fails the save should be disabled
 	this.disableSave();
 };

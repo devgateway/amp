@@ -133,7 +133,7 @@ module.exports = BackboneDash.View.extend({
 	    	self.updateData();
 	    }
 
-	    self.app.translator.translateDOM(this.el);
+	    self.app.translator.translateDOM(self.$el);
         self.$el.find('[data-toggle="tooltip"]').tooltip();
 	    self.renderedPromise.resolve();
     });

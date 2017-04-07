@@ -140,6 +140,7 @@
 "amp.dashboard:chart-tooltip-pie-chart[title]":"View data in pie chart",
 "amp.dashboard:chart-tooltip-bar-chart[title]":"View data in bar chart",
 "amp.dashboard:chart-tooltip-table-chart[title]":"View data in table format",
+"amp.dashboard:chart-tooltip-multibar-chart[title]":"View data in multibar chart",
 "amp.dashboard:chart-tooltip-download-chart[title]":"Download image or table",
 "amp.dashboard:chart-tooltip-expand-chart[title]":"Expand chart",
 "amp.dashboard:chart-tooltip-collapse-chart[title]":"Collapse chart",

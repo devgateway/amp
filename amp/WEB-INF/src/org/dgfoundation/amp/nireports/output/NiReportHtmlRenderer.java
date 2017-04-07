@@ -215,6 +215,7 @@ public class NiReportHtmlRenderer {
             contents = FormatHelper.formatDate(simpleDateFormat.parse(cell.getDisplayedValue()));
         } catch (Exception e) {
             logger.error("Error to get date:", e);
+			contents = ensureMaxLen(cell.getDisplayedValue(), 50);
         }
 		return contents;
 	}

@@ -284,15 +284,17 @@ NormalReportManager.prototype.disableToolbarButton	= function (btn) {
 };
 
 NormalReportManager.prototype.checkSteps	= function () {
-	if ( this.checkReportDetails() )
-		if ( this.checkColumns() )
-			if ( this.checkHierarchies() )
-                createPreview();
-				if ( this.checkMeasures() ) {
-						this.checkReportName() ;
-						return;
-				}
-
+	if ( this.checkReportDetails() ) {
+    	if (this.checkColumns()) {
+        	if (this.checkHierarchies()) {
+          		createPreview();
+          		if (this.checkMeasures()) {
+            		this.checkReportName();
+            		return;
+          		}
+        	}
+      	}
+    }
 	// If any of the checks above fails the save should be disabled
 	this.disableSave();
 };

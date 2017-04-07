@@ -7,6 +7,7 @@ import * as commonListsActions from  '../actions/CommonListsActions.jsx';
 import * as startUp from '../actions/StartUpAction.jsx';
 import { Alert } from 'react-bootstrap';
 import DecimalFormat from '../common/decimal-format.jsx';
+import Utils from '../common/utils.jsx';
 export default class AidOnBudgetList extends Component {    
     constructor(props, context) {      
         super(props, context);
@@ -134,7 +135,7 @@ export default class AidOnBudgetList extends Component {
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-big glyphicon-plus" onClick={this.addNew}></span>
-                <span  onClick={this.addNew} className="add-new-text">&nbsp;{this.props.translations['amp.gpi-data:add-new']} </span>
+                <span  onClick={this.addNew} className="add-new-text">&nbsp;{ Utils.capitalizeFirst(this.props.translations['amp.gpi-data:add-new']) } </span>
                 <span className="insert-data-text">{this.props.translations['amp.gpi-data:insert-data']}</span>
                 <span> / </span> <span className="glyphicon glyphicon-big glyphicon-ok-circle success-color"> </span> <span className="click-save-text" >{this.props.translations['amp.gpi-data:click-save']}</span>
                 <span className="float-right"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>{this.props.translations['amp.gpi-data:button-save-all-edits']}</button></span>
@@ -152,7 +153,7 @@ export default class AidOnBudgetList extends Component {
                 <th className="date-column"><span className="error-color" >*&nbsp;</span><span data-field="indicatorDate" onClick={this.sort} >{this.props.translations['amp.gpi-data-aid-on-budget:date']}</span>&nbsp;<span className = {this.showSortCaret('indicatorDate')} ></span></th>
                 <th><span className="error-color" >*&nbsp;</span><span data-field="donor"  onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:donor-agency']}</span>&nbsp;<span className = {this.showSortCaret('donor')} ></span></th>
                 <th><span className="error-color" >*&nbsp;</span><span data-field="amount" onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:amount']}</span>&nbsp;<span className = {this.showSortCaret('amount')} ></span></th>
-                <th><span className="error-color" >*&nbsp;</span><span data-field="currency" onClick={this.sort} className = "capitalize">{this.props.translations['amp.gpi-data-aid-on-budget:currency']}</span>&nbsp;<span className = {this.showSortCaret('currency')} ></span></th>
+                <th><span className="error-color" >*&nbsp;</span><span data-field="currency" onClick={this.sort} >{Utils.capitalizeFirst(this.props.translations['amp.gpi-data-aid-on-budget:currency'])}</span>&nbsp;<span className = {this.showSortCaret('currency')} ></span></th>
                 <th className="actions-column">{this.props.translations['amp.gpi-data-aid-on-budget:action']}</th>
                 </tr>
                 </thead>

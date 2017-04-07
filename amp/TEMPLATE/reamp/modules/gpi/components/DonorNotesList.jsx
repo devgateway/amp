@@ -6,6 +6,7 @@ import * as donorNotesActions from '../actions/DonorNotesActions.jsx';
 import * as commonListsActions from  '../actions/CommonListsActions.jsx';
 import * as startUp from '../actions/StartUpAction.jsx';
 import { Alert } from 'react-bootstrap';
+import Utils from '../common/utils.jsx';
 export default class DonorNotesList extends Component {    
     constructor(props, context) {      
         super(props, context);
@@ -108,7 +109,7 @@ export default class DonorNotesList extends Component {
         </div>) 
     }
     
-    showSortCaret(field){        
+    showSortCaret(field) {        
         var className = '';         
         if(this.props.sorting.sortOrder == 'asc' && field === this.props.sorting.orderBy){
             className = 'glyphicon glyphicon-chevron-up';
@@ -132,7 +133,7 @@ export default class DonorNotesList extends Component {
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-big glyphicon-plus" onClick={this.addNew}></span>
-                <span  onClick={this.addNew} className="add-new-text">&nbsp;{this.props.translations['amp.gpi-data:add-new']} </span>
+                <span  onClick={this.addNew} className="add-new-text">{Utils.capitalizeFirst(this.props.translations['amp.gpi-data:add-new'])} </span>
                 <span className="insert-data-text">{this.props.translations['amp.gpi-data:insert-data']}</span>
                 <span> / </span> <span className="glyphicon glyphicon-big glyphicon-ok-circle success-color"> </span> <span className="click-save-text" >{this.props.translations['amp.gpi-data:click-save']}</span>
                 <span className="float-right"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>{this.props.translations['amp.gpi-data:button-save-all-edits']}</button></span>

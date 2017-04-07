@@ -486,8 +486,8 @@ public class ActivityUtil {
 			act.setDraft(false);
 		act.setAmpActivityGroup(group);
 		
-		if (act.getComponentFundings() != null)
-			act.getComponentFundings().size();
+		if (act.getComponents() != null)
+			act.getComponents().size();
 		if (act.getCosts() != null)
 			act.getCosts().size();
 		if (act.getMember() != null)
@@ -503,23 +503,30 @@ public class ActivityUtil {
 	}
 
 
-	private static void updateComponentFunding(AmpActivityVersion a,
-			Session session) {
-		if (a.getComponentFundings() == null || a.getComponents() == null)
+	private static void updateComponentFunding(AmpActivityVersion a, Session session) {
+		Set<AmpComponent> components = a.getComponents();
+		
+		if (components == null) {
 			return;
-		Iterator<AmpComponentFunding> it1 = a.getComponentFundings().iterator();
-		while (it1.hasNext()) {
-			AmpComponentFunding cf = (AmpComponentFunding) it1
-					.next();
-			Iterator<AmpComponent> it2 = a.getComponents().iterator();
-			while (it2.hasNext()) {
-				AmpComponent comp = (AmpComponent) it2.next();
-				if (comp.getTitle().compareTo(cf.getComponent().getTitle()) == 0){
-					cf.setComponent(comp);
-					break;
+		}
+		
+		Iterator<AmpComponent> componentIterator = components.iterator();
+		while (componentIterator.hasNext()) {
+			AmpComponent ampComponent = componentIterator.next();
+
+			if (Hibernate.isInitialized(ampComponent.getFundings())) {
+				if (ampComponent.getFundings() != null) {
+					Iterator<AmpComponentFunding> ampComponentFundingsIterator = ampComponent.getFundings().iterator();
+
+					while (ampComponentFundingsIterator.hasNext()) {
+						AmpComponentFunding acf = ampComponentFundingsIterator.next();
+
+						if (acf.getTransactionAmount() == null) {
+							ampComponentFundingsIterator.remove();
+						}
+					}
 				}
 			}
-			session.saveOrUpdate(cf);
 		}
 	}
 

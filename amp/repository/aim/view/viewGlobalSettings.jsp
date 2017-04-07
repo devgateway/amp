@@ -230,7 +230,7 @@ function saveAllSettings(){
             if (typeof gsElement.gsfValue != "undefined") {
             	var opt = gsElement.gsfValue;
                 var val = gsElement.gsfValue.value;
-                allvalues = allvalues + id + "=" + val + "&";
+                allvalues = allvalues + id + "=" + encodeURIComponent(val) + "&";
                 console.log('allvalues = ' + allvalues);
 			} else {
             	// Code for multiselect.
@@ -247,7 +247,7 @@ function saveAllSettings(){
                         val = val + selected[index].value + ';';
 					}
 				}
-                val = val + "&";
+                val = encodeURIComponent(val) + "&";
                 allvalues = allvalues + val;
         	}
     	}

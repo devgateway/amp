@@ -598,19 +598,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		indicator_single_dimension(ColumnConstants.INDICATOR_RISK, "v_indicator_risk", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "v_indicator_logframe_category", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_double_column(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_ACTUAL_DATE, "v_indicator_actual_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_ACTUAL_COMMENT, "v_indicator_actual_comment", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_BASE_VALUE, "v_indicator_basevalue", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_double_column(ColumnConstants.INDICATOR_BASE_VALUE, "v_indicator_basevalue", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_BASE_DATE, "v_indicator_base_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_BASE_COMMENT, "v_indicator_base_comment", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_TARGET_VALUE, "v_indicator_targetvalue", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_double_column(ColumnConstants.INDICATOR_TARGET_VALUE, "v_indicator_targetvalue", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_TARGET_DATE, "v_indicator_target_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_TARGET_COMMENT, "v_indicator_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, "v_indicator_revised_target_value", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_double_column(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, "v_indicator_revised_target_value", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, "v_indicator_revised_target_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, "v_indicator_revised_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
 	}
@@ -944,16 +944,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 *  Therefore, an empty row for said measure is added.
 	 */
 	public Set<String> synchronizeAmpMeasureBackport() {
+		final Set<String> notSerializedMeasures = new HashSet<>(Arrays.asList(
+				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT
+		));
 		return PersistenceManager.getSession().doReturningWork(conn -> {
 			Set<String> inDbMeasures = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "measurename", "amp_measures"), 1));
-			Set<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).collect(Collectors.toSet());
-			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, z, "A", this.measures.get(z).description)).collect(Collectors.toList());	
+			Set<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).filter(z -> !notSerializedMeasures.contains(z)).collect(Collectors.toSet());
+			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, z, "A", this.measures.get(z).description)).collect(Collectors.toList());
 			if (values.size() > 0) {
 				SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type", "description"), values);
 				MeasuresVisibility.resetMeasuresList();
 			}
 			return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
-		}); 
+		});
 	}
 	
 	/**
@@ -1072,11 +1075,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 
 	private AmpReportsSchema indicator_single_dimension(String columnName, String view, LevelColumn levelColumn) {
-		SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn, IndicatorTextualTokenBehaviour.instance);
+		SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn, IndicatorTextualTokenBehaviour.textInstance);
 		if (levelColumn == INDICATOR_CONN_LEVEL_COLUMN) {
 			col.withMetaInfoProvider(IndicatorIdMetaInfoProvider.instance);
 		}
 		col.allowNulls(true);
+		return addColumn(col);
+	}
+
+	private AmpReportsSchema indicator_double_column(String columnName, String view, LevelColumn levelColumn) {
+		DoubleColumn col = new DoubleColumn(columnName, levelColumn, view, IndicatorTextualTokenBehaviour.doubleInstance);
+		if (levelColumn == INDICATOR_CONN_LEVEL_COLUMN) {
+			col.withMetaInfoProvider(IndicatorIdMetaInfoProvider.instance);
+		}
 		return addColumn(col);
 	}
 

@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 /*
 * @ author Govind G Dalwani
 */
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -99,7 +100,7 @@ public class GlobalSettings extends Action {
 			AmpGlobalSettings projectValidationSetting = FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.PROJECTS_VALIDATION);
 			AmpGlobalSettings baseCurrencyGS = FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.BASE_CURRENCY);
 			while (token.hasMoreTokens()) {
-				String element = token.nextToken();
+				String element = URLDecoder.decode(token.nextToken(), "UTF-8");
 				String[] nameValue = element.split("=");				
 				Long id = getLongOrNull(nameValue[0]);
 				String newValue = nameValue.length < 2 ? "" : nameValue[1];

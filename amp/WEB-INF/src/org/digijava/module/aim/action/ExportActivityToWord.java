@@ -44,7 +44,6 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -633,11 +632,11 @@ public class ExportActivityToWord extends Action {
                             headerTable.addCell(sectorsLabel);
                             headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
 
-                            if (FeaturesUtil.isVisibleField("Indicator Name")) {
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Name")) {
                                 headerTable.addCell(new Paragraph(indicator.getIndicator().getName(), BOLDFONT));
                                 headerTable.addCell(indicator.getIndicator().getCode());
                             }
-                            if (FeaturesUtil.isVisibleField("Logframe Category")) {
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/Logframe Category")) {
                                 if (indicator.getValues() != null && indicator.getValues().size() > 0) {
                                     headerTable.addCell(indicator.getLogFrame() + "\n");
                                 }
@@ -664,13 +663,13 @@ public class ExportActivityToWord extends Action {
                                 Table additionalInfoSubTable = new Table(2);
                                 additionalInfoSubTable.setWidth(80);
 
-                                if (FeaturesUtil.isVisibleField("Indicator " + fieldName + " Value")) {
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Value")) {
                                     generateOverAllTableRows(additionalInfoSubTable, valueLabel, (value.getValue() != null ? FormatHelper.formatNumber(value.getValue()) : null), null);
                                 }
-                                if (FeaturesUtil.isVisibleField("Comments " + fieldName + " Value")) {
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Comments")) {
                                     generateOverAllTableRows(additionalInfoSubTable, commentLabel, DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);
                                 }
-                                if (FeaturesUtil.isVisibleField("Date " + fieldName + " Value")) {
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Date")) {
                                     generateOverAllTableRows(additionalInfoSubTable, dateLabel, (value.getValueDate() != null ? DateConversion.convertDateToLocalizedString(value.getValueDate()) : null), null);
                                 }
 
@@ -1824,25 +1823,10 @@ public class ExportActivityToWord extends Action {
         if (contacts != null && contacts.size() > 0) {
             String output = "";
             for (AmpActivityContact cont : contacts) {
-                String contactName = cont.getContact().getName() + " "
-                        + cont.getContact().getLastname();
-
+                output = ExportUtil.getContactInformation(cont.getContact());
                 ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                        contactName, null, null, true);
+                        output, null, null, true);
 
-                Set<AmpContactProperty> contactProperties = cont.getContact()
-                        .getProperties();
-                String emails = "";
-                if (contactProperties != null) {
-                    for (AmpContactProperty email : contactProperties) {
-                        if (email.getName().equals(
-                                Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
-                            emails += email.getValue() + "; ";
-                        }
-                    }
-                }
-
-                rowData.addRowData(emails);
                 eshContactInfoTable.addRowData(rowData);
             }
         }

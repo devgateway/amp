@@ -535,10 +535,7 @@ public class ScorecardService {
 	 */
 	private Map<Long, Map<String, ColoredCell>> countActivityUpdates(List<ActivityUpdate> activityUpdates,
 			Map<Long, Map<String, ColoredCell>> data) {
-		int i=0;
-		try{
 		for (ActivityUpdate activityUpdate : activityUpdates) {
-			i++;
 			Long donorId = activityUpdate.getDonorId();
 			Quarter quarter = new Quarter(fiscalCalendar, activityUpdate.getModifyDate());
 			ColoredCell cell = data.get(donorId).get(quarter.toString());
@@ -551,11 +548,7 @@ public class ScorecardService {
 				}
 			}
 			cell.getUpdatedActivites().add(activityUpdate.getActivityId());
-		}}catch(Exception e){
-			System.out.println(i);
-			throw e;
 		}
-		
 		return data;
 	}
 

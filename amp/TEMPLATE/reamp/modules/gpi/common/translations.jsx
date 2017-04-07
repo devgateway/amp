@@ -43,7 +43,8 @@ export const initialTranslations = {
         'amp.gpi-data-aid-on-budget:header-info': 'Aid is on budgets which are subject to parliamentary scrutiny',
         'amp.gpi-data-donor-notes:header-info': 'Development co-operation is focused on results that meet developing countries’ priorities',
         'amp.gpi-data-donor-notes:expand-text': 'Expand',
-        'amp.gpi-data-donor-notes:collapse-text': 'Collapse'
+        'amp.gpi-data-donor-notes:collapse-text': 'Collapse',
+        'amp.gpi-data:date-icon:tooltip': 'Click on this calendar icon to show or hide the date picker'
         
         
 };

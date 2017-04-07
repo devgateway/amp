@@ -144,6 +144,7 @@ export default class AidOnBudgetRow extends Component {
                         onChange={this.onDateChange} 
                         expanded={false}
                         dateFormat={this.getDisplayDateFormat()}
+                        onClickOutside = {this.toggleDatePicker}
                         />  
                     }
                     </div>
@@ -189,7 +190,7 @@ export default class AidOnBudgetRow extends Component {
             
             return (
                     <tr>                
-                    <th scope="row">{this.toDisplayDateFormat(this.props.aidOnBudget.indicatorDate)}</th>
+                    <td scope="row">{this.toDisplayDateFormat(this.props.aidOnBudget.indicatorDate)}</td>
                     <td>{this.getOrgName(this.props.aidOnBudget.donorId)}</td>
                     <td>{this.props.numberFormatter.format(this.props.aidOnBudget.amount)}</td>
                     <td>{this.getCurrencyName(this.props.aidOnBudget.currencyCode)} </td>

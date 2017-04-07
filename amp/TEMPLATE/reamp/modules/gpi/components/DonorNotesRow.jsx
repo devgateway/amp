@@ -124,14 +124,25 @@ export default class DonorNotesRow extends Component {
     }
     
     render() {        
-        if (this.props.donorNotes.isEditing) {         
+        if (this.props.donorNotes.isEditing) {  
+            
+            let dateToolTip = (
+                    <Tooltip id="date-icon-tooltip">{this.props.translations['amp.gpi-data:date-icon:tooltip']}</Tooltip>                    
+            );
+            
+            let datePickerIcon = ( 
+                    <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={dateToolTip}>
+                    <span className = "datepicker-toggle glyphicon glyphicon-custom glyphicon-calendar " onClick={this.toggleDatePicker}> </span>
+                    </OverlayTrigger>
+            )
+            
             return ( <tr>
                     <td className="error-column">                        
                     </td>
                     <td scope="row" >                                   
                     <div className={this.getErrorsForField('notesDate').length > 0 ? 'form-group date-container has-error' : 'form-group date-container' }>
                     <span className="date-input-container"><input type="text" value={this.toDisplayDateFormat(this.props.donorNotes.notesDate)} readOnly className="date-input form-control" />    
-                    </span><span className = "datepicker-toggle glyphicon glyphicon-custom glyphicon-calendar " onClick={this.toggleDatePicker}> </span></div>
+                    </span>{datePickerIcon}</div>
                     <div className="datepicker-container"> 
                     {this.state.showDatePicker &&
                         <DatePicker 
@@ -174,15 +185,12 @@ export default class DonorNotesRow extends Component {
             var notes = this.props.donorNotes.notes || '';
             var toggleTitle = this.state.showFullText ? this.props.translations['amp.gpi-data-donor-notes:collapse-text'] : this.props.translations['amp.gpi-data-donor-notes:expand-text'];
             
-            const tooltip = (
-                    <Tooltip >{toggleTitle}</Tooltip>
-                    
-            );
+            const tooltip = (<Tooltip id="notes-toggle-tooltip">{toggleTitle}</Tooltip>);
             
             return (
                     <tr>
                     <td></td>
-                    <th scope="row">{this.toDisplayDateFormat(this.props.donorNotes.notesDate)}</th>
+                    <td scope="row">{this.toDisplayDateFormat(this.props.donorNotes.notesDate)}</td>
                     <td>{this.getOrgName(this.props.donorNotes.donorId)}</td>
                     <td className={this.state.showFullText ? 'notes-column' : 'notes-column notes-column-short'}>        
                     {notes.length > this.state.shortTextLength && this.state.showFullText == false &&

@@ -1,6 +1,7 @@
-.date-container{
-  width: 130px;
+body {
+font-family: "Open Sans";
 }
+
 .datepicker-container{
   z-index: 100; 
   position: absolute !important; 
@@ -20,7 +21,7 @@
 }
 
 .datepicker-toggle{
-  margin: 0px; 
+  margin: 0px 0px 0px 5px; 
   display: inline-block; 
 }
 
@@ -53,6 +54,7 @@
     width: 40%;    
 }
 
+
 .notes-column-short{    
     overflow: hidden;
 }
@@ -62,6 +64,7 @@
  width: 90%;
  height: auto;
  float:left;
+ word-wrap: break-word;
   }
 
 .notes-toggle{
@@ -119,9 +122,33 @@
 .nav-tabs>li>a {
     border: 1px solid #ddd;
     background: #f9f9f9;
-    color: #777;
+    color: #999999;
+    font-size: 13px;
 }
 
 .nav-tabs>li.active>a {
     font-weight: bold;
+    color: #354052;
+    font-size: 14px;
+}
+
+.add-new-text, .click-save-text {
+ font-size: 13pt;
+ color: #7f8fa4;
+}
+
+.insert-data-text {
+ font-size: 12pt;
+ color: #65b457;
+}
+th {
+ font-size: 13pt;
+ color: #7f8fa4;
+ font-weight: 600;
+}
+
+td {
+ font-size: 13px;
+ color: #354052;
+ font-weight: 600;
 }

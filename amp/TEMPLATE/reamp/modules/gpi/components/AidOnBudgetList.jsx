@@ -134,9 +134,9 @@ export default class AidOnBudgetList extends Component {
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-big glyphicon-plus" onClick={this.addNew}></span>
-                <span onClick={this.addNew}>&nbsp;{this.props.translations['amp.gpi-data:add-new']} </span>
-                <span className="success-color">{this.props.translations['amp.gpi-data:insert-data']}</span>
-                <span> / </span> <span className="glyphicon glyphicon-big glyphicon-ok-circle success-color"> </span> <span >{this.props.translations['amp.gpi-data:click-save']}</span>
+                <span  onClick={this.addNew} className="add-new-text">&nbsp;{this.props.translations['amp.gpi-data:add-new']} </span>
+                <span className="insert-data-text">{this.props.translations['amp.gpi-data:insert-data']}</span>
+                <span> / </span> <span className="glyphicon glyphicon-big glyphicon-ok-circle success-color"> </span> <span className="click-save-text" >{this.props.translations['amp.gpi-data:click-save']}</span>
                 <span className="float-right"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>{this.props.translations['amp.gpi-data:button-save-all-edits']}</button></span>
                 </div>                 
                 </div>  

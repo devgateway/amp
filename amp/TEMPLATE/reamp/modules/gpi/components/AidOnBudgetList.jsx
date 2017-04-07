@@ -138,13 +138,15 @@ export default class AidOnBudgetList extends Component {
                 <span  onClick={this.addNew} className="add-new-text">&nbsp;{ Utils.capitalizeFirst(this.props.translations['amp.gpi-data:add-new']) } </span>
                 <span className="insert-data-text">{this.props.translations['amp.gpi-data:insert-data']}</span>
                 <span> / </span> <span className="glyphicon glyphicon-big glyphicon-ok-circle success-color"> </span> <span className="click-save-text" >{this.props.translations['amp.gpi-data:click-save']}</span>
+                <span> / </span><span className="required-fields">{this.props.translations['amp.gpi-data:required-fields']}</span>
                 <span className="float-right"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>{this.props.translations['amp.gpi-data:button-save-all-edits']}</button></span>
+                
                 </div>                 
                 </div>  
                 {this.showErrors()}
                 {this.showInfoMessages()} 
                 {(this.props.settings['number-divider'] != 1) &&
-                    <span className="error-color">{this.props.translations['amp.gpi-data:amount-in-' + this.props.settings['number-divider']]}</span>                    
+                    <span className="amount-units">{this.props.translations['amp.gpi-data:amount-in-' + this.props.settings['number-divider']]}</span>                    
                 }
                 
                 <table className="table table-striped">

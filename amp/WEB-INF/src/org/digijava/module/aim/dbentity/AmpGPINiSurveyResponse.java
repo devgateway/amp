@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -66,7 +67,25 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 	}
 
 	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+		AmpGPINiSurveyResponse clonedResponse = new AmpGPINiSurveyResponse();
+		clonedResponse.setAmpGPINiSurveyResponseId(null);
+		clonedResponse.setAmpGPINiQuestion(this.ampGPINiQuestion);
+		if (clonedResponse.getSupportingDocuments() != null && clonedResponse.getSupportingDocuments().size() > 0) {
+			final Set<AmpGPINiSurveyResponseDocument> clDocuments = new HashSet<AmpGPINiSurveyResponseDocument>();
+			clonedResponse.getSupportingDocuments().forEach(d -> {
+				try {
+					AmpGPINiSurveyResponseDocument clDoc = (AmpGPINiSurveyResponseDocument) d.clone();
+					clDoc.setSurveyResponse(null);
+					clDocuments.add(clDoc);
+				} catch (CloneNotSupportedException e) {
+					throw new RuntimeException(e);
+				}
+			});
+			clonedResponse.getSupportingDocuments().clear();
+			clonedResponse.getSupportingDocuments().addAll(clDocuments);
+		}
+		
+		return clonedResponse;
 	};
 	
 	public Set<AmpGPINiSurveyResponseDocument> getSupportingDocuments() {

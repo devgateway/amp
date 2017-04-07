@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import { FormControl } from 'react-bootstrap';
-import { Popover } from 'react-bootstrap';
 import { OverlayTrigger } from 'react-bootstrap';
+import {Tooltip } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import DatePicker from 'react-date-picker';
 import moment from 'moment';
@@ -127,14 +127,25 @@ export default class AidOnBudgetRow extends Component {
     
     render() {        
         if (this.props.aidOnBudget.isEditing) {           
+            
+            let dateToolTip = (
+                    <Tooltip id="date-icon-tooltip">{this.props.translations['amp.gpi-data:date-icon:tooltip']}</Tooltip>                    
+            );
+            
+            let datePickerIcon = ( 
+                    <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={dateToolTip}>
+                    <span className = "datepicker-toggle glyphicon glyphicon-custom glyphicon-calendar " onClick={this.toggleDatePicker}> </span>
+                    </OverlayTrigger>
+            )
+            
             return ( <tr>                    
                     <td scope="row" >                                   
                     <div className={this.getErrorsForField('indicatorDate').length > 0 ? 'form-group date-container has-error' : 'form-group date-container' }>
                     <br/>
                     <span className="date-input-container"><input type="text" value={this.toDisplayDateFormat(this.props.aidOnBudget.indicatorDate)} readOnly className="date-input form-control" />    
-                    </span><span className = "datepicker-toggle glyphicon glyphicon-custom glyphicon-calendar " onClick={this.toggleDatePicker}> </span></div>
-                    <div className="datepicker-container"> 
-                    
+                    </span>{datePickerIcon}                    
+                    </div>
+                    <div className="datepicker-container">                     
                     {this.state.showDatePicker &&
                         <DatePicker 
                         hideFooter={true}

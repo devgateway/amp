@@ -149,7 +149,7 @@ export default class AidOnBudgetList extends Component {
                 <table className="table table-striped">
                 <thead>
                 <tr>                
-                <th><span className="error-color" >*&nbsp;</span><span data-field="indicatorDate" onClick={this.sort} >{this.props.translations['amp.gpi-data-aid-on-budget:date']}</span>&nbsp;<span className = {this.showSortCaret('indicatorDate')} ></span></th>
+                <th className="date-column"><span className="error-color" >*&nbsp;</span><span data-field="indicatorDate" onClick={this.sort} >{this.props.translations['amp.gpi-data-aid-on-budget:date']}</span>&nbsp;<span className = {this.showSortCaret('indicatorDate')} ></span></th>
                 <th><span className="error-color" >*&nbsp;</span><span data-field="donor"  onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:donor-agency']}</span>&nbsp;<span className = {this.showSortCaret('donor')} ></span></th>
                 <th><span className="error-color" >*&nbsp;</span><span data-field="amount" onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:amount']}</span>&nbsp;<span className = {this.showSortCaret('amount')} ></span></th>
                 <th><span className="error-color" >*&nbsp;</span><span data-field="currency" onClick={this.sort} className = "capitalize">{this.props.translations['amp.gpi-data-aid-on-budget:currency']}</span>&nbsp;<span className = {this.showSortCaret('currency')} ></span></th>

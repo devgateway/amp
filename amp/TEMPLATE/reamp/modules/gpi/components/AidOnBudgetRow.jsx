@@ -175,9 +175,9 @@ export default class AidOnBudgetRow extends Component {
                     </div>                    
                     </td>
                     <td>
-                    <div className={this.getErrorsForField('amount').length > 0 ? 'form-group has-error' : 'form-group' }>
+                    <div className={this.getErrorsForField('amount').length > 0 ? 'form-group has-error amount-column' : 'form-group amount-column' }>
                     {this.props.numberFormatter.format(this.props.aidOnBudget.amount)} <br/>
-                    <input type="text" name="amount" className="form-control" placeholder="" value={this.props.aidOnBudget.amount} onChange={this.onChange} />
+                    <input type="text" name="amount" className="form-control amount-column" placeholder="" value={this.props.aidOnBudget.amount} onChange={this.onChange} />
                     </div>
                     </td>
                     <td>
@@ -203,7 +203,7 @@ export default class AidOnBudgetRow extends Component {
                     <tr>                
                     <td scope="row">{this.toDisplayDateFormat(this.props.aidOnBudget.indicatorDate)}</td>
                     <td>{this.getOrgName(this.props.aidOnBudget.donorId)}</td>
-                    <td>{this.props.numberFormatter.format(this.props.aidOnBudget.amount)}</td>
+                    <td className="amount-column">{this.props.numberFormatter.format(this.props.aidOnBudget.amount)}</td>
                     <td>{this.getCurrencyName(this.props.aidOnBudget.currencyCode)} </td>
                     <td><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteAidOnBudget}></span></td>                
                     </tr>

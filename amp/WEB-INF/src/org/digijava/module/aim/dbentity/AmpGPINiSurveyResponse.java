@@ -70,6 +70,9 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 		AmpGPINiSurveyResponse clonedResponse = new AmpGPINiSurveyResponse();
 		clonedResponse.setAmpGPINiSurveyResponseId(null);
 		clonedResponse.setAmpGPINiQuestion(this.ampGPINiQuestion);
+		clonedResponse.setTextResponse(this.textResponse);
+		clonedResponse.setIntegerResponse(this.integerResponse);
+		clonedResponse.setQuestionOption(this.questionOption);
 		if (clonedResponse.getSupportingDocuments() != null && clonedResponse.getSupportingDocuments().size() > 0) {
 			final Set<AmpGPINiSurveyResponseDocument> clDocuments = new HashSet<AmpGPINiSurveyResponseDocument>();
 			clonedResponse.getSupportingDocuments().forEach(d -> {
@@ -100,18 +103,18 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 		if (ampGPINiQuestion != null) {
 			switch(ampGPINiQuestion.getType()) {
 				case INTEGER:
-					return integerResponse != null;
+					return integerResponse == null;
 				case DECIMAL:
 				case FREE_TEXT:
-					return StringUtils.isNotBlank(textResponse);
+					return StringUtils.isBlank(textResponse);
 				case LINK:
 				case DOCUMENT:
-					return supportingDocuments != null && !supportingDocuments.isEmpty();
+					return supportingDocuments == null || supportingDocuments.isEmpty();
 				case MULTIPLE_CHOICE:
-					return questionOption != null;
+					return questionOption == null;
 				
 				default:
-					return StringUtils.isNotBlank(textResponse);
+					return StringUtils.isBlank(textResponse);
 			}
 		}
 		

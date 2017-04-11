@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.newreports;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,7 +44,7 @@ public interface ReportSpecification extends Cloneable {
 	 * @return
 	 */
 	public Set<ReportColumn> getHierarchies();
-	
+
 	public ReportFilters getFilters();
 	
 	/** @return {@link ReportSettings} - settings of the current report */
@@ -120,4 +121,15 @@ public interface ReportSpecification extends Cloneable {
 	}
 
 	public boolean isDisplayTimeRangeSubTotals();
+
+	/**
+	 * List of hierarchies that must be added before executing the report and then removed from output.
+	 * This is a side-car information. It is not used directly by reports engine.
+	 * @return
+	 */
+	default Set<ReportColumn> getInvisibleHierarchies() {
+		return Collections.emptySet();
+	}
+
+	ReportSpecification clone();
 }

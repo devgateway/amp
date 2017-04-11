@@ -20,6 +20,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	protected String reportName = null;
 	protected Set<ReportColumn> columns = new LinkedHashSet<ReportColumn>();
 	protected Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
+	protected Set<ReportColumn> invisibleHierarchies = new LinkedHashSet<>();
 	protected Set<ReportMeasure> measures = new LinkedHashSet<ReportMeasure>();
 	protected ReportFilters filters = null;
 	protected ReportSettings settings = null;
@@ -106,7 +107,17 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		this.hierarchies.clear();
 		this.hierarchies.addAll(hierarchies);
 	}
-	
+
+	@Override
+	public Set<ReportColumn> getInvisibleHierarchies() {
+		return invisibleHierarchies;
+	}
+
+	public void setInvisibleHierarchies(Set<ReportColumn> invisibleHierarchies) {
+		this.invisibleHierarchies.clear();
+		this.invisibleHierarchies.addAll(invisibleHierarchies);
+	}
+
 	@Override
 	public ReportFilters getFilters() {
 		return filters;
@@ -304,5 +315,19 @@ public class ReportSpecificationImpl implements ReportSpecification {
 
 	public void setDisplayTimeRangeSubtotals(Boolean displayTimeRangeSubtotals) {
 		this.displayTimeRangeSubtotals = displayTimeRangeSubtotals;
+	}
+
+	@Override
+	public ReportSpecification clone() {
+    	try {
+			ReportSpecificationImpl spec = (ReportSpecificationImpl) super.clone();
+			spec.columns = new LinkedHashSet<>(this.columns);
+			spec.hierarchies = new LinkedHashSet<>(this.hierarchies);
+			spec.invisibleHierarchies = new LinkedHashSet<>(this.invisibleHierarchies);
+			spec.measures = new LinkedHashSet<>(this.measures);
+			return spec;
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError(e);
+		}
 	}
 }

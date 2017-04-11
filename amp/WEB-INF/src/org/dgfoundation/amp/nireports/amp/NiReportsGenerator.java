@@ -68,7 +68,15 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 				spec.getColumnNames(), spec.getHierarchyNames(), spec.getMeasureNames(), spec.getFilters() == null ? null : spec.getFilters().getAllFilterRules(), apiReport.reportContents.getNrEntities()));
 		return apiReport;
 	}
-	
+
+	@Override
+	public ReportSpecification decorateSpec(ReportSpecification origSpec) {
+		ReportSpecification spec = super.decorateSpec(origSpec).clone();
+		spec.getHierarchies().addAll(spec.getInvisibleHierarchies());
+		spec.getColumns().addAll(spec.getInvisibleHierarchies());
+		return spec;
+	}
+
 	protected void writeRunNodeToDatabase(RunNode node, long wallclockTime) {
 		PersistenceManager.getSession().doWork(conn -> {
 			List<String> columnNames = Arrays.asList("name", "totaltime", "wallclocktime", "data");

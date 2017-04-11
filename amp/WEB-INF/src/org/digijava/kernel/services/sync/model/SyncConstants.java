@@ -15,10 +15,13 @@ public class SyncConstants {
         public static final String WORKSPACES = "workspaces";
         public static final String WORKSPACE_MEMBER = "workspace member";
         public static final String TRANSLATION = "translation";
+        public static final String CATEGORY_CLASS = "category class";
         public static final String CATEGORY_VALUE = "category value";
         public static final String LOCATION = "location";
         public static final String CATEGORY_VALUE_LOCATION = "category value location";
         public static final String SECTOR = "sector";
+        public static final String SECTOR_SCHEME = "sector scheme";
+        public static final String CLASSIFICATION_CONFIG = "classification config";
         public static final String THEME = "theme";
         public static final String ORGANISATION = "organisation";
         public static final String ROLE = "role";

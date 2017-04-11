@@ -2,22 +2,20 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.services.sync.model.SyncConstants;
+import org.digijava.kernel.services.sync.model.SyncConstants.Entities;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -42,22 +40,19 @@ public class PossibleValuesEnumerator {
 
 	public static final PossibleValuesEnumerator INSTANCE = new PossibleValuesEnumerator(new AmpPossibleValuesDAO());
 
-	private static final Map<Class<?>, List<String>> ENTITY_CLASS_TO_SYNC_ENTITIES;
-
-	static {
-		Map<Class<?>, List<String>> map = new HashMap<>();
-		map.put(AmpCategoryValue.class, Arrays.asList(SyncConstants.Entities.CATEGORY_VALUE));
-		map.put(AmpLocation.class, Arrays.asList(SyncConstants.Entities.LOCATION,
-				SyncConstants.Entities.CATEGORY_VALUE_LOCATION, SyncConstants.Entities.CATEGORY_VALUE));
-		map.put(AmpSector.class, Arrays.asList(SyncConstants.Entities.SECTOR));
-		map.put(AmpTheme.class, Arrays.asList(SyncConstants.Entities.THEME));
-		map.put(AmpOrganisation.class, Arrays.asList(SyncConstants.Entities.ORGANISATION));
-		map.put(AmpRole.class, Arrays.asList(SyncConstants.Entities.ROLE));
-		map.put(AmpCurrency.class, Arrays.asList(SyncConstants.Entities.CURRENCY));
-		map.put(AmpContact.class, Arrays.asList(SyncConstants.Entities.CONTACT));
-		map.put(AmpActivityProgramSettings.class, Arrays.asList(SyncConstants.Entities.ACTIVITY_PROGRAM_SETTINGS));
-		ENTITY_CLASS_TO_SYNC_ENTITIES = Collections.unmodifiableMap(map);
-	}
+	private static final Multimap<Class<?>, String> ENTITY_CLASS_TO_SYNC_ENTITIES =
+			new ImmutableMultimap.Builder<Class<?>, String>()
+				.putAll(AmpCategoryValue.class, Entities.CATEGORY_VALUE, Entities.CATEGORY_CLASS)
+				.putAll(AmpLocation.class, Entities.LOCATION, Entities.CATEGORY_VALUE_LOCATION,
+						Entities.CATEGORY_VALUE, Entities.CATEGORY_CLASS)
+				.putAll(AmpSector.class, Entities.SECTOR, Entities.SECTOR_SCHEME, Entities.CLASSIFICATION_CONFIG)
+				.putAll(AmpTheme.class, Entities.THEME, Entities.ACTIVITY_PROGRAM_SETTINGS)
+				.putAll(AmpOrganisation.class, Entities.ORGANISATION)
+				.putAll(AmpRole.class, Entities.ROLE)
+				.putAll(AmpCurrency.class, Entities.CURRENCY)
+				.putAll(AmpContact.class, Entities.CONTACT)
+				.putAll(AmpActivityProgramSettings.class, Entities.ACTIVITY_PROGRAM_SETTINGS)
+				.build();
 
 	private PossibleValuesDAO possibleValuesDAO;
 
@@ -70,9 +65,7 @@ public class PossibleValuesEnumerator {
 	 * @return a list of sync entities
 	 */
 	public Set<String> getAllSyncEntities() {
-		return PossibleValuesEnumerator.ENTITY_CLASS_TO_SYNC_ENTITIES.values().stream()
-				.flatMap(Collection::stream)
-				.collect(Collectors.toSet());
+		return new HashSet<>(PossibleValuesEnumerator.ENTITY_CLASS_TO_SYNC_ENTITIES.values());
 	}
 
 	/**
@@ -111,7 +104,7 @@ public class PossibleValuesEnumerator {
 	 */
 	private List<Class<?>> getEntityClasses(Set<String> syncEntities) {
 		List<Class<?>> targetClasses = new ArrayList<>();
-		PossibleValuesEnumerator.ENTITY_CLASS_TO_SYNC_ENTITIES.forEach((k, v) -> {
+		PossibleValuesEnumerator.ENTITY_CLASS_TO_SYNC_ENTITIES.asMap().forEach((k, v) -> {
 			if (v.stream().anyMatch(syncEntities::contains)) {
 				targetClasses.add(k);
 			}

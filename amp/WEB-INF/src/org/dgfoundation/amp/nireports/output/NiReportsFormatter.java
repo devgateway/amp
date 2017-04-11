@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.output;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +16,6 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.function.Supplier;
 
-import com.google.common.collect.ImmutableSet;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.newreports.AreaOwner;
@@ -60,20 +60,15 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	protected final CellVisitor<ReportCell> cellFormatter;
 	protected final List<CellColumn> leafColumns;
 
-	private final Set<String> virtualHierarcies;
+	private final Set<String> hiddenColumns;
 
 	public NiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, CellVisitor<ReportCell> cellFormatter) {
 		this.runResult = runResult;
-		this.virtualHierarcies = ImmutableSet.copyOf(spec.getHierarchies().stream()
-				.filter(ReportColumn::isHideSubtotals)
-				.map(ReportColumn::getColumnName)
-				.collect(toList()));
+		this.hiddenColumns = spec.getInvisibleHierarchies().stream().map(ReportColumn::getColumnName).collect(toSet());
 		this.leafColumns = runResult.headers.leafColumns;
 		this.spec = spec;
 		this.reportAreaSupplier = () -> new ReportAreaImpl();
 		this.cellFormatter = cellFormatter;
-		// FIXME this is a hack, this code should belong to the same class/method the hierarchy was added
-		spec.getHierarchies().removeAll(spec.getHierarchies().stream().filter(ReportColumn::isHideSubtotals).collect(toList()));
 		buildHeaders();
 	}
 	
@@ -122,7 +117,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		TreeSet<Integer> removedIdx = new TreeSet<>();
 		for (List<HeaderCell> headerRow : generatedHeaders) {
 			for (HeaderCell headerCell : headerRow) {
-				if (virtualHierarcies.contains(headerCell.originalName)) {
+				if (hiddenColumns.contains(headerCell.originalName)) {
 					for (int i = 0; i < headerCell.getColSpan(); i++) {
 						removedIdx.add(headerCell.getStartColumn() + i);
 					}
@@ -134,7 +129,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		for (List<HeaderCell> headerRow : generatedHeaders) {
 			List<HeaderCell> newHeaderRow = new ArrayList<>();
 			for (HeaderCell headerCell : headerRow) {
-				if (!virtualHierarcies.contains(headerCell.originalName)) {
+				if (!hiddenColumns.contains(headerCell.originalName)) {
 					int startColumn = headerCell.getStartColumn();
 					int colSpan = headerCell.getColSpan();
 					int newStartColumn = startColumn - removedIdx.headSet(startColumn).size();
@@ -152,11 +147,11 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		generatedHeaders = prunedHeaders;
 
 		rootHeaders = rootHeaders.stream()
-				.filter(h -> !virtualHierarcies.contains(h.originalColumnName))
+				.filter(h -> !hiddenColumns.contains(h.originalColumnName))
 				.collect(toList());
 
 		leafHeaders = leafHeaders.stream()
-				.filter(h -> !virtualHierarcies.contains(h.originalColumnName))
+				.filter(h -> !hiddenColumns.contains(h.originalColumnName))
 				.collect(toList());
 	}
 
@@ -258,7 +253,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		for(NiReportData child:grd.subreports) {
 			hiersStack.push(child.splitter);
 			ReportAreaImpl childReportArea = child.accept(this);
-			if (child instanceof NiGroupReportData && virtualHierarcies.contains(((NiGroupReportData) child).splitterColumn)) {
+			if (child instanceof NiGroupReportData && hiddenColumns.contains(((NiGroupReportData) child).splitterColumn)) {
 				childReportArea.setChildren(childReportArea.getChildren().stream().flatMap(c -> c.getChildren().stream()).collect(toList()));
 			}
 			rchildren.add(childReportArea);

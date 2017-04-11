@@ -25,7 +25,7 @@ public class NiReportExecutor {
 	}
 
 	public<K> K executeReport(ReportSpecification spec, NiReportOutputBuilder<K> outputBuilder) {
-		NiReportsEngine engine = new NiReportsEngine(schema, spec);
+		NiReportsEngine engine = new NiReportsEngine(schema, decorateSpec(spec));
 		NiReportRunResult reportRun = engine.execute();
 		consume(reportRun);
 		long start = System.currentTimeMillis();
@@ -33,6 +33,15 @@ public class NiReportExecutor {
 		long delta = System.currentTimeMillis() - start;
 		logger.warn(String.format("converting output to external API took %d millies", delta));
 		return res;
+	}
+
+	/**
+	 * Decorate the spec right before sending it to report engine.
+	 * @param spec original spec
+	 * @return decorated spec
+	 */
+	public ReportSpecification decorateSpec(ReportSpecification spec) {
+		return spec;
 	}
 
 	public String renderReport(ReportSpecification spec) {

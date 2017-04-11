@@ -23,6 +23,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
 import org.dgfoundation.amp.onepager.models.GPIYesNoAnswerModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
 import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpGPISurveyQuestion;
@@ -117,7 +118,7 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
 						return object != null ? object.toString() : "";
 					}
 				};
-				final String[] elements = new String[] { "Yes", "No" };
+				final String[] elements = new String[] { TranslatorWorker.translateText("Yes"), TranslatorWorker.translateText("No") };
 				AmpGroupFieldPanel<String> yesNoField = new AmpGroupFieldPanel<String>("answer", 
 						new GPIYesNoAnswerModel(new PropertyModel<String>(PersistentObjectModel.getModel(response), "response")), 
 						Arrays.asList(elements), 

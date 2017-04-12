@@ -116,6 +116,7 @@ module.exports = Backbone.Model
     920: 'NGO_Support.svg',
     930: 'Refugees.svg',
     998: 'Unspecified.svg'    
-  }
-
+  },
+  
+  DEFAULT_ICON_CODE: '998' //if no icon can be found using the sector code in the activity, default to unspecified
 });

@@ -177,7 +177,7 @@ module.exports = Backbone.View
       }
     }
     
-    var icon = this.structureMenuModel.iconMappings[sectorCode] || this.structureMenuModel.iconMappings['998'];    
+    var icon = this.structureMenuModel.iconMappings[sectorCode] || this.structureMenuModel.iconMappings[this.structureMenuModel.DEFAULT_ICON_CODE];    
     var pointIcon = L.icon({
       iconUrl: 'img/map-icons/' + icon,
       iconSize:     [25, 25], // size of the icon

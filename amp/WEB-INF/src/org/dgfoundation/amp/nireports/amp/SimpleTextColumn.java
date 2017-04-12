@@ -11,8 +11,6 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.amp.diff.TextColumnKeyBuilder;
 import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
-import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
-import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
@@ -33,10 +31,6 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 
 	protected Function<String, String> postprocessor = Function.identity();
 
-	private MetaInfoGenerator metaInfoGenerator;
-
-	private MetaInfoProvider metaInfoProvider = MetaInfoProvider.empty;
-
 	private boolean allowNulls;
 
 	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
@@ -49,22 +43,15 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 	}
 	
 	@Override
-	public synchronized List<TextCell> fetch(NiReportsEngine engine) {
-		metaInfoGenerator = new MetaInfoGenerator();
-		return super.fetch(engine);
-	}
-
-	@Override
 	protected TextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
 		String text = postprocessor.apply(rs.getString(2));
 		
 		if (!allowNulls && text == null)
 			return null;
 
-        MetaInfoSet metaInfo = metaInfoProvider.provide(engine, rs, metaInfoGenerator);
         Long entityId = rs.getLong(withoutEntity ? 1 : 3);
         Map<NiDimensionUsage, Coordinate> coos = buildCoordinates(entityId, engine, rs);
-        return new TextCell(text, rs.getLong(1), entityId, metaInfo, coos, this.levelColumn);
+        return new TextCell(text, rs.getLong(1), entityId, coos, this.levelColumn);
 	}
 
 	public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn, Behaviour<NiTextCell> behaviour) {
@@ -93,11 +80,6 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 	public SimpleTextColumn withPostprocessor(Function<String, String> postprocessor) {
 	 		this.postprocessor = postprocessor;
 	 		return this;
-	}
-
-	public SimpleTextColumn withMetaInfoProvider(MetaInfoProvider provider) {
-		this.metaInfoProvider = provider;
-		return this;
 	}
 
 	public SimpleTextColumn allowNulls(boolean allowNulls) {

@@ -17,8 +17,7 @@ public enum MetaCategory {
 	SOURCE_ORG("source_org"),
 	RECIPIENT_ROLE("recipient_role"),
 	RECIPIENT_ORG("recipient_org"),
-	DIRECTED_TRANSACTION_FLOW("directed_transaction_flow"),
-	INDICATOR_ID("indicator_id");
+	DIRECTED_TRANSACTION_FLOW("directed_transaction_flow");
 	
 	public final String category;
 	private MetaCategory(String category) {

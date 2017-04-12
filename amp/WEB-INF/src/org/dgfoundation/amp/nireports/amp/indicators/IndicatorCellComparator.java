@@ -3,24 +3,29 @@ package org.dgfoundation.amp.nireports.amp.indicators;
 import java.util.Comparator;
 
 import org.apache.commons.collections.ComparatorUtils;
-import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
  * NiCell comparator for indicator values.
- * Indicator level cells are ordered by {@link org.dgfoundation.amp.nireports.Cell.entityId}.
- * Indicator connection level cells are ordered first by indicator id from metadata and then by entityId.
+ * Indicator cells are ordered by indicator hierarchy coordinates.
  * This behaviour allows to align multiple indicator values inside one cell in such a way that nth value from any
  * indicator column is related to the same indicator usage.
+ * Lastly the values in the cell are ordered by text value, because Indicator Sectors can have multiple values for
+ * the same indicator.
  *
  * @author Octavian Ciubotaru
  */
 public class IndicatorCellComparator implements Comparator<NiCell> {
 
-    public static final Comparator<NiCell> instance = new IndicatorCellComparator();
-
     private static final Comparator nullLowComparator =
             ComparatorUtils.nullLowComparator(ComparatorUtils.naturalComparator());
+
+    public IndicatorCellComparator(NiDimensionUsage indicatorDimensionUsage) {
+        this.indicatorDimensionUsage = indicatorDimensionUsage;
+    }
+
+    private NiDimensionUsage indicatorDimensionUsage;
 
     @Override
     public int compare(NiCell c1, NiCell c2) {
@@ -28,17 +33,10 @@ public class IndicatorCellComparator implements Comparator<NiCell> {
         if (c != 0) {
             return c;
         }
-        c = Long.compare(c1.getCell().entityId, c2.getCell().entityId);
-        if (c != 0) {
-            return c;
-        }
         return c1.getCell().compareTo(c2.getCell());
     }
 
     private Object getIndicatorIdFrom(NiCell niCell) {
-        if (niCell.getCell().getMetaInfo().hasMetaInfo(MetaCategory.INDICATOR_ID.category)) {
-            return niCell.getCell().getMetaInfo().getMetaInfo(MetaCategory.INDICATOR_ID.category).getValue();
-        }
-        return null;
+        return niCell.getCell().coordinates.get(indicatorDimensionUsage).id;
     }
 }

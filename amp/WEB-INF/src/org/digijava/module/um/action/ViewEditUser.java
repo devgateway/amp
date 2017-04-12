@@ -205,16 +205,8 @@ public class ViewEditUser extends Action {
                 uForm.setLastName(user.getLastName());
                 uForm.setName(user.getName());
                 uForm.setUrl(user.getUrl());
-                uForm.setAssignedOrgId(user.getAssignedOrgId());
                 uForm.getAssignedOrgs().addAll(user.getAssignedOrgs());
                 uForm.setPledger(user.getPledger());
-                if(user.getAssignedOrgId()!=null && user.getAssignedOrgId() > 0) {
-                    uForm.setOrgs(new ArrayList<AmpOrganisation>());
-                    AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
-                    if(organization != null){
-                    	uForm.getOrgs().add(organization);
-                    }
-                }
                 uForm.setBanReadOnly(user.isBanned());
 
 
@@ -329,8 +321,6 @@ public class ViewEditUser extends Action {
                     user.getAssignedOrgs().clear();
      	 	 	 	user.getAssignedOrgs().addAll(uForm.getAssignedOrgs());
                     
-     	 	 	 	user.setAssignedOrgId(uForm.getAssignedOrgId());
-
                     user.setUrl(uForm.getUrl());
 
                     SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);

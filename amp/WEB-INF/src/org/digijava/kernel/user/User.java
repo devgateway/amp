@@ -83,21 +83,9 @@ public class User
     private boolean globalAdmin;
     private String organizationTypeOther;
     private Set contacts;
-    private Long assignedOrgId;
     private AmpUserExtension userExtension;
 
     private Set<AmpOrganisation> assignedOrgs;
-    
-
-
-	public Long getAssignedOrgId() {
-		return assignedOrgId;
-	}
-
-	public void setAssignedOrgId(Long assignedOrgId) {
-		this.assignedOrgId = assignedOrgId;
-	}
-
 	public User() {}
 
     public User(String email, String firstNames, String lastName) {
@@ -459,9 +447,7 @@ public class User
    	}
    	
 	public boolean hasVerifiedOrganizationId(Long ampOrgId) {
-   		//First, check if the user has the Funding Organization in the property this.getAssignedOrgId()
    		if(ampOrgId == null) return false;
-   		if(this.assignedOrgId != null && this.assignedOrgId.equals(ampOrgId)) return true;
    		//If it's not there, check in the Set<AmpOrganisation> assignedOrgs
    		Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
    		while(it.hasNext()){

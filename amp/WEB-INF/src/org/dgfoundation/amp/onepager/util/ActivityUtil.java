@@ -521,14 +521,16 @@ public class ActivityUtil {
 			AmpComponent ampComponent = componentIterator.next();
 
 			if (Hibernate.isInitialized(ampComponent.getFundings())) {
-				Iterator<AmpComponentFunding> ampComponentFundingsIterator = ampComponent.getFundings().iterator();
-				
-				while(ampComponentFundingsIterator.hasNext()) {
-					AmpComponentFunding acf = ampComponentFundingsIterator.next();
-					
-					if (acf.getTransactionAmount() == null) {
-						ampComponentFundingsIterator.remove();
-					} 
+				if (ampComponent.getFundings() != null) {
+					Iterator<AmpComponentFunding> ampComponentFundingsIterator = ampComponent.getFundings().iterator();
+
+					while (ampComponentFundingsIterator.hasNext()) {
+						AmpComponentFunding acf = ampComponentFundingsIterator.next();
+
+						if (acf.getTransactionAmount() == null) {
+							ampComponentFundingsIterator.remove();
+						}
+					}
 				}
 			}
 		}

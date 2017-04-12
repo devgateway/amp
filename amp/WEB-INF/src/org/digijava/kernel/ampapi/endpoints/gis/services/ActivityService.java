@@ -31,12 +31,15 @@ import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.util.SectorUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -142,8 +145,22 @@ public class ActivityService {
 					}
 				} else {
 				    IdentifiedReportCell idReportCell = (IdentifiedReportCell) row.get(reportOutputColumn);
-				    Set<Long> ids = idReportCell.entitiesIdsValues == null ? null : idReportCell.entitiesIdsValues.keySet();
-					filters.set(reportOutputColumn.originalColumnName, ids);
+				    Set<Long> ids = idReportCell.entitiesIdsValues == null ? null : idReportCell.entitiesIdsValues.keySet();					
+					if (reportOutputColumn.originalColumnName.equals(ColumnConstants.PRIMARY_SECTOR)) {
+						List<SimpleJsonBean> sectors = new ArrayList<>();
+						for (Long id : ids) {
+							AmpSector ampSector = SectorUtil.getAmpSector(id);
+							SimpleJsonBean sector = new SimpleJsonBean();
+							sector.setId(ampSector.getAmpSectorId());
+							sector.setCode(ampSector.getSectorCodeOfficial());
+							sector.setName(ampSector.getName());						
+							sectors.add(sector);
+						}
+						
+						filters.set(reportOutputColumn.originalColumnName, sectors);
+					} else {
+						filters.set(reportOutputColumn.originalColumnName, ids);
+					}
 				}
 			}
 			activity.set("matchesFilters", filters);

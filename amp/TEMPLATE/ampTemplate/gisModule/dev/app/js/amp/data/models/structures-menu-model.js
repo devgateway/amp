@@ -89,6 +89,7 @@ module.exports = Backbone.Model
 	1: 'None.svg',
     100: 'Social.svg',
     110: 'Education.svg',
+    113: 'Education.svg',
     120: 'Health.svg',
     130: 'Population.svg',
     140: 'Water.svg',
@@ -114,7 +115,7 @@ module.exports = Backbone.Model
     910: 'CostDonor.svg',
     920: 'NGO_Support.svg',
     930: 'Refugees.svg',
-    998: 'Unspecified.svg'
+    998: 'Unspecified.svg'    
   }
 
 });

@@ -176,12 +176,10 @@ module.exports = Backbone.View
         }
       }
     }
-    if (!this.structureMenuModel.iconMappings[sectorCode]){
-    	sectorCode = '998';
-    } 
     
+    var icon = this.structureMenuModel.iconMappings[sectorCode] || this.structureMenuModel.iconMappings['998'];    
     var pointIcon = L.icon({
-      iconUrl: 'img/map-icons/' + this.structureMenuModel.iconMappings[sectorCode],
+      iconUrl: 'img/map-icons/' + icon,
       iconSize:     [25, 25], // size of the icon
       iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
       popupAnchor:  [-3, -6]  // point from which the popup should open relative to the iconAnchor

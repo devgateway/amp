@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -372,5 +373,16 @@ public class AmpCollections {
 				return k;
 		}
 		return null;
+	}
+
+	/**
+	 * A stateful predicate that can be used to filter distinct objects by some key.
+	 * @param keyExtractor key extractor
+	 * @param <T> type of filtered object
+	 * @return predicate that will return true if the object was seen for the first time
+	 */
+	public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+		Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+		return t -> seen.putIfAbsent(keyExtractor.apply(t), true) == null;
 	}
 }

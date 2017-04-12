@@ -100,6 +100,10 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Humanitarian Aid'
                 , 'Disaster Response Marker'
                 , 'Indicator Name'
+                , 'Logframe Category'
+                , 'Risk'
+                , 'Indicator Sector'
+                , 'Indicator Type'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
@@ -129,7 +133,11 @@ YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"]= new Array(
 	);
 
 YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"]= new Array(
-	'Indicator Name'
+	  'Indicator Name'
+    , 'Logframe Category'
+    , 'Risk'
+    , 'Indicator Sector'
+    , 'Indicator Type'
 );
 
 function insertColInfo (id, name) {

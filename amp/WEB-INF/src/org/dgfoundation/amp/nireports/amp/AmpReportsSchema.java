@@ -12,7 +12,6 @@ import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimensi
 import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_ROOT;
 import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSECTOR;
 import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSUBSECTOR;
-//import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_ALL_SECTORS;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_ALL_IDS;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_1;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_2;
@@ -68,13 +67,11 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ComponentsDimension;
-import org.dgfoundation.amp.nireports.amp.dimensions.IndicatorConnectionDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
-import org.dgfoundation.amp.nireports.amp.indicators.IndicatorIdMetaInfoProvider;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorTextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
@@ -139,14 +136,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static ProgramsDimension progsDimension = ProgramsDimension.instance;
 	public final static CategoriesDimension catsDimension = CategoriesDimension.instance;
 	public final static ComponentsDimension compsDimension = ComponentsDimension.instance;
-//	public final static UsersDimension usersDimension = UsersDimension.instance;
 	public final static BooleanDimension boolDimension = new BooleanDimension("bool", 1l, 2l); // corroborate with FilterRule.TRUE_VALUE
 	public final static NiDimension agreementsDimension = SqlSourcedNiDimension.buildDegenerateDimension("agrs", "amp_agreement", "id");
 	public final static NiDimension activitiesDimension = SqlSourcedNiDimension.buildDegenerateDimension("acts", "amp_activity_version", "amp_activity_id");
 	public final static NiDimension pledgesDimension = SqlSourcedNiDimension.buildDegenerateDimension("pledges", "amp_funding_pledges", "id");
 	public final static NiDimension usersDimension = SqlSourcedNiDimension.buildDegenerateDimension("users", "dg_user", "id");
 	public final static NiDimension departmentsDimension = SqlSourcedNiDimension.buildDegenerateDimension("departments", "amp_departments", "id_department");
-	public final static IndicatorConnectionDimension indicatorsDimension = IndicatorConnectionDimension.instance;
+	public final static NiDimension indicatorsDimension = SqlSourcedNiDimension.buildDegenerateDimension("indicators", "amp_indicator", "indicator_id");
+	public final static NiDimension indicatorRiskRatingsDimension = SqlSourcedNiDimension.buildDegenerateDimension("risks", "amp_indicator_risk_ratings", "amp_ind_risk_ratings_id");
 	public final static NiDimension fundingDimension = SqlSourcedNiDimension.buildDegenerateDimension("funding", "amp_funding", "amp_funding_id");
 
 	/**
@@ -217,8 +214,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
 	// the indicator-based NiDimensionUsage's
 	public final static NiDimensionUsage INDICATOR_DIM_USG = indicatorsDimension.getDimensionUsage("Indicator");
-	public final static LevelColumn INDICATOR_LEVEL_COLUMN = INDICATOR_DIM_USG.getLevelColumn(IndicatorConnectionDimension.LEVEL_INDICATOR);
-	public final static LevelColumn INDICATOR_CONN_LEVEL_COLUMN = INDICATOR_DIM_USG.getLevelColumn(IndicatorConnectionDimension.LEVEL_INDICATOR_CONN);
+	public final static LevelColumn INDICATOR_LEVEL_COLUMN = INDICATOR_DIM_USG.getLevelColumn(0);
 
 	// the organisation-based NiDimensionUsage's
 	public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage(Constants.FUNDING_AGENCY);
@@ -268,7 +264,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * the callback called on DG_EDITOR-backed text columns
 	 */
 	public final static Function<String, String> DG_EDITOR_POSTPROCESSOR = DgUtil::cleanHtmlTags;
-	
+
+	private IndicatorTextualTokenBehaviour indicatorTextualTokenBehaviour =
+			IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, true);
+
+	private IndicatorTextualTokenBehaviour indicatorSectorTokenBehaviour =
+			IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, false);
+
+	private IndicatorTextualTokenBehaviour indicatorDoubleTokenBehaviour =
+			IndicatorTextualTokenBehaviour.forDouble(INDICATOR_DIM_USG);
+
+	private IndicatorDateTokenBehaviour indicatorDateTokenBehaviour =
+			new IndicatorDateTokenBehaviour(INDICATOR_DIM_USG);
+
 	private static AmpReportsSchema instance = new AmpReportsSchema();
 		
 	/**
@@ -315,6 +323,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			.put(ColumnConstants.EXPENDITURE_CLASS, "expenditure_class_id") // detail
 			.put(ColumnConstants.AGREEMENT_CODE, "agreement_id")
 			.put(ColumnConstants.FUNDING_ID, "funding_id")
+			.put(ColumnConstants.INDICATOR_NAME, "me_indicator_id")
+			.put(ColumnConstants.INDICATOR_SECTOR, "me_indicator_sector_id")
+			.put(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "me_indicator_logframe_id")
+			.put(ColumnConstants.INDICATOR_RISK, "me_indicator_risk_id")
+			.put(ColumnConstants.INDICATOR_TYPE, "me_indicator_type_id")
 			.build());
 
 	/**
@@ -616,31 +629,31 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 
     private void addIndicatorColumns() {
-        indicator_single_dimension(ColumnConstants.INDICATOR_NAME, "v_indicator_name", INDICATOR_LEVEL_COLUMN);
-        indicator_single_dimension(ColumnConstants.INDICATOR_TYPE, "v_indicator_type", INDICATOR_LEVEL_COLUMN);
-        indicator_single_dimension(ColumnConstants.INDICATOR_DESCRIPTION, "v_indicator_description", INDICATOR_LEVEL_COLUMN);
-        indicator_single_dimension(ColumnConstants.INDICATOR_CODE, "v_indicator_code", INDICATOR_LEVEL_COLUMN);
-        indicator_date_column(ColumnConstants.INDICATOR_CREATION_DATE, "v_indicator_creation_date", INDICATOR_LEVEL_COLUMN);
-        indicator_single_dimension(ColumnConstants.INDICATOR_SECTOR, "v_indicator_sectors", INDICATOR_LEVEL_COLUMN);
+		indicator_single_dimension(ColumnConstants.INDICATOR_NAME, "v_indicator_name", INDICATOR_LEVEL_COLUMN);
+		indicator_degenerate_dimension(ColumnConstants.INDICATOR_TYPE, "v_indicator_type", boolDimension);
+		indicator_no_entity(ColumnConstants.INDICATOR_DESCRIPTION, "v_indicator_description");
+		indicator_no_entity(ColumnConstants.INDICATOR_CODE, "v_indicator_code");
+        indicator_date_column(ColumnConstants.INDICATOR_CREATION_DATE, "v_indicator_creation_date");
+		indicator_single_dimension(ColumnConstants.INDICATOR_SECTOR, "v_indicator_sectors", RAW_SCT_LEVEL_COLUMN, indicatorSectorTokenBehaviour);
 
-        indicator_single_dimension(ColumnConstants.INDICATOR_RISK, "v_indicator_risk", INDICATOR_CONN_LEVEL_COLUMN);
-        indicator_single_dimension(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "v_indicator_logframe_category", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_degenerate_dimension(ColumnConstants.INDICATOR_RISK, "v_indicator_risk", indicatorRiskRatingsDimension);
+		indicator_degenerate_dimension(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "v_indicator_logframe_category", catsDimension);
 
-        indicator_double_column(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue", INDICATOR_CONN_LEVEL_COLUMN);
-        indicator_date_column(ColumnConstants.INDICATOR_ACTUAL_DATE, "v_indicator_actual_date", INDICATOR_CONN_LEVEL_COLUMN);
-        indicator_single_dimension(ColumnConstants.INDICATOR_ACTUAL_COMMENT, "v_indicator_actual_comment", INDICATOR_CONN_LEVEL_COLUMN);
+        indicator_double_column(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue");
+		indicator_date_column(ColumnConstants.INDICATOR_ACTUAL_DATE, "v_indicator_actual_date");
+		indicator_no_entity(ColumnConstants.INDICATOR_ACTUAL_COMMENT, "v_indicator_actual_comment");
 
-        indicator_double_column(ColumnConstants.INDICATOR_BASE_VALUE, "v_indicator_basevalue", INDICATOR_CONN_LEVEL_COLUMN);
-        indicator_date_column(ColumnConstants.INDICATOR_BASE_DATE, "v_indicator_base_date", INDICATOR_CONN_LEVEL_COLUMN);
-        indicator_single_dimension(ColumnConstants.INDICATOR_BASE_COMMENT, "v_indicator_base_comment", INDICATOR_CONN_LEVEL_COLUMN);
+        indicator_double_column(ColumnConstants.INDICATOR_BASE_VALUE, "v_indicator_basevalue");
+		indicator_date_column(ColumnConstants.INDICATOR_BASE_DATE, "v_indicator_base_date");
+		indicator_no_entity(ColumnConstants.INDICATOR_BASE_COMMENT, "v_indicator_base_comment");
 
-        indicator_double_column(ColumnConstants.INDICATOR_TARGET_VALUE, "v_indicator_targetvalue", INDICATOR_CONN_LEVEL_COLUMN);
-        indicator_date_column(ColumnConstants.INDICATOR_TARGET_DATE, "v_indicator_target_date", INDICATOR_CONN_LEVEL_COLUMN);
-        indicator_single_dimension(ColumnConstants.INDICATOR_TARGET_COMMENT, "v_indicator_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
+        indicator_double_column(ColumnConstants.INDICATOR_TARGET_VALUE, "v_indicator_targetvalue");
+		indicator_date_column(ColumnConstants.INDICATOR_TARGET_DATE, "v_indicator_target_date");
+		indicator_no_entity(ColumnConstants.INDICATOR_TARGET_COMMENT, "v_indicator_target_comment");
 
-        indicator_double_column(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, "v_indicator_revised_target_value", INDICATOR_CONN_LEVEL_COLUMN);
-        indicator_date_column(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, "v_indicator_revised_target_date", INDICATOR_CONN_LEVEL_COLUMN);
-        indicator_single_dimension(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, "v_indicator_revised_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
+        indicator_double_column(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, "v_indicator_revised_target_value");
+		indicator_date_column(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, "v_indicator_revised_target_date");
+		indicator_no_entity(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, "v_indicator_revised_target_comment");
     }
 
 	protected void addFormulaMeasures() {
@@ -1101,20 +1114,22 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return single_dimension(columnName, view, dimension.getLevelColumn(columnName, dimension.depth - 1)); // taking the leaves
 	}
 
+	private AmpReportsSchema indicator_degenerate_dimension(String columnName, String view, NiDimension dimension) {
+		return indicator_single_dimension(columnName, view, dimension.getLevelColumn(columnName, dimension.depth - 1));
+	}
+
 	private AmpReportsSchema indicator_single_dimension(String columnName, String view, LevelColumn levelColumn) {
-		SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn, IndicatorTextualTokenBehaviour.textInstance);
-		if (levelColumn == INDICATOR_CONN_LEVEL_COLUMN) {
-			col.withMetaInfoProvider(IndicatorIdMetaInfoProvider.instance);
-		}
+		return indicator_single_dimension(columnName, view, levelColumn, indicatorTextualTokenBehaviour);
+	}
+
+	private AmpReportsSchema indicator_single_dimension(String columnName, String view, LevelColumn levelColumn, Behaviour<NiTextCell> behaviour) {
+		SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn, behaviour);
 		col.allowNulls(true);
 		return addColumn(col);
 	}
 
-	private AmpReportsSchema indicator_double_column(String columnName, String view, LevelColumn levelColumn) {
-		DoubleColumn col = new DoubleColumn(columnName, levelColumn, view, IndicatorTextualTokenBehaviour.doubleInstance);
-		if (levelColumn == INDICATOR_CONN_LEVEL_COLUMN) {
-			col.withMetaInfoProvider(IndicatorIdMetaInfoProvider.instance);
-		}
+	private AmpReportsSchema indicator_double_column(String columnName, String view) {
+		DoubleColumn col = new DoubleColumn(columnName, null, view, indicatorDoubleTokenBehaviour);
 		return addColumn(col);
 	}
 
@@ -1139,7 +1154,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return addColumn(SimpleTextColumn.fromViewWithoutEntity(columnName, view).withPostprocessor(postprocessor));
 	}
 
-	
+	private AmpReportsSchema indicator_no_entity(String columnName, String view) {
+		SimpleTextColumn col = SimpleTextColumn.fromViewWithoutEntity(columnName, view, indicatorTextualTokenBehaviour);
+		col.allowNulls(true);
+		return addColumn(col);
+	}
+
 	private AmpReportsSchema with_percentage(String columnName, String viewName, NiDimensionUsage dimUsg, int level) {
 		Map<NiDimensionUsage, PercentagesCorrector> correctors = 
 			PsqlSourcedColumn.keyColumnName(viewName, "amp_activity_id").equals("amp_activity_id") ? PERCENTAGE_CORRECTORS : PLEDGES_PERCENTAGE_CORRECTORS;
@@ -1173,11 +1193,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return addColumn(new DateColumn(columnName, levelColumn, viewName));
 	}
 
-	private AmpReportsSchema indicator_date_column(String columnName, String viewName, LevelColumn levelColumn) {
-		DateColumn col = new DateColumn(columnName, levelColumn, viewName, IndicatorDateTokenBehaviour.instance);
-		if (levelColumn == INDICATOR_CONN_LEVEL_COLUMN) {
-			col.withMetaInfoProvider(IndicatorIdMetaInfoProvider.instance);
-		}
+	private AmpReportsSchema indicator_date_column(String columnName, String viewName) {
+		DateColumn col = new DateColumn(columnName, null, viewName, indicatorDateTokenBehaviour);
 		col.allowNulls(true);
 		return addColumn(col);
 	}

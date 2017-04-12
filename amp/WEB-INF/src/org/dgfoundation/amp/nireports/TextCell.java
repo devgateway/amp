@@ -16,32 +16,25 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 public final class TextCell extends Cell {
 
 	public final String text;
-    public final MetaInfoSet metaInfo;
 
     public TextCell(String text, long activityId, long entityId, Optional<LevelColumn> levelColumn) {
         this(text, activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
     }
 
-	public TextCell(String text, long activityId, long entityId,
-			Map<NiDimensionUsage, Coordinate> coordinates, Optional<LevelColumn> levelColumn) {
-    	this(text, activityId, entityId, MetaInfoSet.empty(), coordinates, levelColumn);
-	}
-	
-	public TextCell(String text, long activityId, long entityId, MetaInfoSet metaInfo,
-            Map<NiDimensionUsage, Coordinate> coordinates, Optional<LevelColumn> levelColumn) {
+	public TextCell(String text, long activityId, long entityId, Map<NiDimensionUsage, Coordinate> coordinates,
+			Optional<LevelColumn> levelColumn) {
 		super(activityId, entityId, coordinates, levelColumn);
 		this.text = (text == null) ? "" : text;
-        this.metaInfo = metaInfo.freeze();
 	}
 	
 	@Override
 	public TextCell changeOwnerId(long newActivityId) {
-		return new TextCell(text, newActivityId, entityId, metaInfo, coordinates, mainLevel);
+		return new TextCell(text, newActivityId, entityId, coordinates, mainLevel);
 	}
 
 	@Override
 	public MetaInfoSet getMetaInfo() {
-		return metaInfo;
+		return MetaInfoSet.empty();
 	}
 
 	@Override

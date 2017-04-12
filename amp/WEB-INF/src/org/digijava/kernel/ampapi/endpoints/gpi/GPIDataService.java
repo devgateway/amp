@@ -318,26 +318,14 @@ public class GPIDataService {
 		AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
 		Set<AmpOrganisation> verifiedOrgs = atm.getUser().getAssignedOrgs();
 		List<JsonBean> orgs = new ArrayList<>();
-		AmpOrganisation assignedOrg = null;
-
-		if (atm.getUser().getAssignedOrgId() != null && atm.getUser().getAssignedOrgId() > 0) {
-			assignedOrg = org.digijava.module.aim.util.DbUtil.getOrganisation(atm.getUser().getAssignedOrgId());
-			JsonBean org = new JsonBean();
-			org.set("id", assignedOrg.getAmpOrgId());
-			org.set("name", assignedOrg.getName());
-			orgs.add(org);
-		}
-
-		for (AmpOrganisation verifiedOrg : verifiedOrgs) {
-			if (assignedOrg == null
-					|| (assignedOrg != null && assignedOrg.getAmpOrgId().equals(verifiedOrg.getAmpOrgId()) == false)) {
+		
+		for (AmpOrganisation verifiedOrg : verifiedOrgs) {			
 				JsonBean org = new JsonBean();
 				org.set("id", verifiedOrg.getAmpOrgId());
 				org.set("name", verifiedOrg.getName());
-				orgs.add(org);
-			}
+				orgs.add(org);			
 		}
-
+		
 		return orgs;
 	}
 

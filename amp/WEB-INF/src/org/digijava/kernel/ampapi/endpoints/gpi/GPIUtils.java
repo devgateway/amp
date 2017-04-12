@@ -154,10 +154,6 @@ public class GPIUtils {
 		AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
 		Set<Long> orgs = new HashSet<>();
 		
-		if (atm.getUser().getAssignedOrgId() != null) {
-			orgs.add(atm.getUser().getAssignedOrgId());
-		}
-
 		for (AmpOrganisation verifiedOrg : atm.getUser().getAssignedOrgs()) {
 			orgs.add(verifiedOrg.getAmpOrgId());
 		}

@@ -82,7 +82,7 @@ public class IndicatorUtils {
         indicatorJson.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
-        indicatorJson.set(IndicatorEPConstants.ADM_X, getAdmX(indicator));
+        indicatorJson.set(IndicatorEPConstants.ADMIN_LEVEL, IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex());        
         indicatorJson.set(IndicatorEPConstants.IS_POPULATION, indicator.isPopulation());
         indicatorJson.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : 
             indicator.getIndicatorType().getId());
@@ -127,6 +127,7 @@ public class IndicatorUtils {
         indicatorJson.set(IndicatorEPConstants.ID, (long) System.identityHashCode(indicator));
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getValue());
+        indicatorJson.set(IndicatorEPConstants.ADMIN_LEVEL, IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex());
         indicatorJson.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
 
         if (indicator.getColorRamp() != null) {

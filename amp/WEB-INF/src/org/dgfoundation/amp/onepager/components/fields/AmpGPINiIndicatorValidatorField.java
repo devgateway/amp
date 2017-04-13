@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.helper.GPINiResponseComponentInput;
 import org.dgfoundation.amp.onepager.validators.AmpGPINiIndicatorValidator;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
@@ -50,7 +49,7 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
 			public String getObject() {
 				List<String> ret = new ArrayList<String>();
 				for (AmpGPINiSurveyResponse response : collectionModel.getObject()) {
-					if (response.getAmpGPINiQuestion().getType() != GPINiQuestionType.LINK && response.isEmpty()) {
+					if (isResponseEmpty(response)) {
 						ret.add("Q" + response.getAmpGPINiQuestion().getCode());
 					}
 				}
@@ -63,5 +62,27 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
 		};
 
 		return model;
+	}
+
+	protected boolean isResponseEmpty(AmpGPINiSurveyResponse response) {
+		if (response.getAmpGPINiQuestion().getType() != GPINiQuestionType.LINK) {
+			// the 10b response can be null when the question 10a has the respons 'No'
+			if (response.getAmpGPINiQuestion().getCode().equals("10b")) {
+				boolean isDependentResponsePresent = response.getAmpGPINiSurvey().getResponses()
+				.stream()
+				.filter(r -> r.getAmpGPINiQuestion().getCode().equals("10a"))
+				.findAny()
+				.map(r -> r.getQuestionOption())
+				.map(o -> o.getDescription())
+				.filter(d -> d.equals("Yes"))
+				.isPresent();
+				
+				return isDependentResponsePresent && response.isEmpty();
+			}
+			
+			return response.isEmpty();
+		}
+		
+		return false;
 	}
 }

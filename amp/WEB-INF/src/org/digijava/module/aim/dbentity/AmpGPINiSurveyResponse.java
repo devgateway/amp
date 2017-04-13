@@ -110,6 +110,7 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 				case LINK:
 				case DOCUMENT:
 					return supportingDocuments == null || supportingDocuments.isEmpty();
+				case SINGLE_CHOICE:
 				case MULTIPLE_CHOICE:
 					return questionOption == null;
 				

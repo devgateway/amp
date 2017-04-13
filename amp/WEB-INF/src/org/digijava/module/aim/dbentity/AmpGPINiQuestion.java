@@ -105,6 +105,6 @@ public class AmpGPINiQuestion implements Serializable {
 	/**
 	 * type of responses for the GPI ni question
 	 */
-	public enum GPINiQuestionType {DECIMAL, INTEGER, MULTIPLE_CHOICE, FREE_TEXT, LINK, DOCUMENT, NA}
+	public enum GPINiQuestionType {DECIMAL, INTEGER, SINGLE_CHOICE, MULTIPLE_CHOICE, FREE_TEXT, LINK, DOCUMENT, NA}
 	
 }

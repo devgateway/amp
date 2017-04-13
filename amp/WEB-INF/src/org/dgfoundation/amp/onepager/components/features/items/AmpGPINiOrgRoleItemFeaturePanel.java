@@ -25,6 +25,8 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpGPINiFormSe
 import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpLinkField;
+import org.dgfoundation.amp.onepager.events.GPINiQuestionUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.FilteredListModel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;

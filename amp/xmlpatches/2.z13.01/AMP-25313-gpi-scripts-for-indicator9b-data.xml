@@ -28,7 +28,7 @@
 				
 				INSERT INTO amp_gpi_ni_question(amp_gpi_ni_question_id, amp_gpi_ni_indicator_id, code, description, type, allow_multiple, index, requires_data_entry)
 				VALUES (nextval('amp_gpi_ni_question_seq'), (SELECT amp_gpi_ni_indicator_id FROM amp_gpi_ni_indicator where code = '9b'), '4', 
-				' Does the project use national procurement systems?', 'MULTIPLE_CHOICE', false, 4, true);
+				'Does the project use national procurement systems?', 'MULTIPLE_CHOICE', false, 4, true);
 							
 							
 				-- indicator 9b question options for

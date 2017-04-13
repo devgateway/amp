@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.jcr.Node;
 
@@ -83,11 +84,16 @@ public class AmpGPINiSurveyResourcesFormTableFeature
 
 			@Override
 			public List<TemporaryGPINiDocument> getObject() {
-				HashSet<TemporaryGPINiDocument> newItems = getSession()
-						.getMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS);
+				Set<TemporaryGPINiDocument> allResourcesNewItems = 
+						getSession().getMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS);
 				
-				if (newItems == null)
-					newItems = new HashSet<TemporaryGPINiDocument>();
+				Set<TemporaryGPINiDocument> newResponseResourceItems = new HashSet<>();
+				
+				if (allResourcesNewItems != null) {
+					newResponseResourceItems = allResourcesNewItems.stream()
+					.filter(item -> item.getSurveyResponse().equals(responseModel.getObject()))
+					.collect(Collectors.toSet());
+				}
 
 				HashSet<AmpGPINiSurveyResponseDocument> delItems = Optional
 						.ofNullable(getSession().getMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS))
@@ -101,9 +107,6 @@ public class AmpGPINiSurveyResourcesFormTableFeature
 
 				ret.addAll(existingTmpDocs);
 
-				if (responseModel.getObject().getSupportingDocuments() == null)
-					responseModel.getObject().setSupportingDocuments(new HashSet<AmpGPINiSurveyResponseDocument>());
-
 				for (AmpGPINiSurveyResponseDocument d : setModel.getObject()) {
 					if (delItems.contains(d)) {
 						for (TemporaryGPINiDocument td : existingTmpDocs) {
@@ -115,7 +118,7 @@ public class AmpGPINiSurveyResourcesFormTableFeature
 					}
 				}
 
-				ret.addAll(newItems);
+				ret.addAll(newResponseResourceItems);
 
 				return ret;
 			}

@@ -88,18 +88,18 @@
 				VALUES (nextval('amp_gpi_ni_question_option_seq'), (SELECT amp_gpi_ni_question.amp_gpi_ni_question_id FROM amp_gpi_ni_question 
 				JOIN amp_gpi_ni_indicator on amp_gpi_ni_indicator.amp_gpi_ni_indicator_id = amp_gpi_ni_question.amp_gpi_ni_indicator_id
 				WHERE amp_gpi_ni_indicator.code = '1' AND amp_gpi_ni_question.code = '6'), '03', 
-							'Yes (institutional /ministry plan)');
+							'Yes (institutional/ministry plan)');
 		
 				INSERT INTO amp_gpi_ni_question_option(amp_gpi_ni_question_option_id, amp_gpi_ni_question_id, code, description)
 				VALUES (nextval('amp_gpi_ni_question_option_seq'), (SELECT amp_gpi_ni_question.amp_gpi_ni_question_id FROM amp_gpi_ni_question 
 				JOIN amp_gpi_ni_indicator on amp_gpi_ni_indicator.amp_gpi_ni_indicator_id = amp_gpi_ni_question.amp_gpi_ni_indicator_id
 				WHERE amp_gpi_ni_indicator.code = '1' AND amp_gpi_ni_question.code = '6'), '04', 
-							'Yes (joint gov’t-donor strategy)');
+							'Yes (joint government-donor strategy)');
 		
 				INSERT INTO amp_gpi_ni_question_option(amp_gpi_ni_question_option_id, amp_gpi_ni_question_id, code, description)
 				VALUES (nextval('amp_gpi_ni_question_option_seq'), (SELECT amp_gpi_ni_question.amp_gpi_ni_question_id FROM amp_gpi_ni_question 
 				JOIN amp_gpi_ni_indicator on amp_gpi_ni_indicator.amp_gpi_ni_indicator_id = amp_gpi_ni_question.amp_gpi_ni_indicator_id
-				WHERE amp_gpi_ni_indicator.code = '1' AND amp_gpi_ni_question.code = '6'), '05', 'Yes (other  Gov’t planning tools)');
+				WHERE amp_gpi_ni_indicator.code = '1' AND amp_gpi_ni_question.code = '6'), '05', 'Yes (other government planning tools)');
 		
 				INSERT INTO amp_gpi_ni_question_option(amp_gpi_ni_question_option_id, amp_gpi_ni_question_id, code, description)
 				VALUES (nextval('amp_gpi_ni_question_option_seq'), (SELECT amp_gpi_ni_question.amp_gpi_ni_question_id FROM amp_gpi_ni_question 

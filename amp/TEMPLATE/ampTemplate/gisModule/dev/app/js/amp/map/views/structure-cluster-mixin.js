@@ -87,10 +87,10 @@ module.exports = {
       }
 
       //icons need to be abit bigger than plain circles, so bump up by 2
+      var icon = self.structureMenuModel.iconMappings[sectorCode] || self.structureMenuModel.iconMappings[self.structureMenuModel.DEFAULT_ICON_CODE];
       marker = new L.circleDivIcon(Math.max(18, size + 2), {
         className: 'marker-cluster ',
-        html: '<img src="img/map-icons/' +
-          self.structureMenuModel.iconMappings[sectorCode] +
+        html: '<img src="img/map-icons/' + icon +
           '"><div class="text">' + markers.length + '</div>',
         color: '#444',
         fillColor: '#fff',

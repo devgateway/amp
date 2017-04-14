@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,6 +14,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.OnePagerUtil.SerializablePredicate;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpGPINiDependentQuestionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpGPINiIndicatorValidatorField;
 import org.dgfoundation.amp.onepager.events.GPINiQuestionUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
@@ -23,21 +26,41 @@ import org.digijava.module.aim.dbentity.AmpGPINiSurvey;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 
 /**
+ * The panel of the GPI Ni Survey Indicator
+ * 
  * @author Viorel Chihai
  * @since Mar 02, 2017
  */
 public class AmpGPINiIndicatorItemFeaturePanel extends AmpFeaturePanel<AmpGPINiIndicator> {
 
 	private static final long serialVersionUID = 3285773837906913394L;
-	AmpGPINiIndicatorValidatorField responsesValidationField;
+	List<AmpCollectionValidatorField<AmpGPINiSurveyResponse, String>> validationFields = new ArrayList<>();
 
 	public AmpGPINiIndicatorItemFeaturePanel(String id, String fmName, final IModel<AmpGPINiIndicator> indicator,
 			final IModel<AmpGPINiSurvey> survey) {
+		
 		super(id, indicator, fmName, true);
 
 		Label indicatorNameLabel = new TrnLabel("indicatorName", new PropertyModel<String>(indicator, "name"));
 		add(indicatorNameLabel);
 
+		AbstractReadOnlyModel<List<AmpGPINiQuestion>> questionListModel = getQuestionListModel(indicator, survey);
+		ListView<AmpGPINiQuestion> list = getGPINiQuestionPanelList(survey, questionListModel);
+		add(list);
+		
+		add(UpdateEventBehavior.of(GPINiQuestionUpdateEvent.class));
+
+		IModel<List<AmpGPINiSurveyResponse>> responseListModel = getSurveyResponseListModel(survey);
+		addSurveyValidationFields(responseListModel);
+	}
+
+	/**
+	 * @param indicator
+	 * @param survey
+	 * @return
+	 */
+	private AbstractReadOnlyModel<List<AmpGPINiQuestion>> getQuestionListModel(
+			final IModel<AmpGPINiIndicator> indicator, final IModel<AmpGPINiSurvey> survey) {
 		PropertyModel<Set<AmpGPINiQuestion>> indicatorQuestions = 
 				new PropertyModel<Set<AmpGPINiQuestion>>(indicator, "questions");
 		
@@ -45,7 +68,16 @@ public class AmpGPINiIndicatorItemFeaturePanel extends AmpFeaturePanel<AmpGPINiI
 				indicatorQuestions, 
 				new AmpGPINiQuestion.GPINiQuestionComparator(), 
 				isVisible(survey.getObject().getResponses()));
+		return listModel;
+	}
 
+	/**
+	 * @param survey
+	 * @param listModel
+	 * @return
+	 */
+	private ListView<AmpGPINiQuestion> getGPINiQuestionPanelList(final IModel<AmpGPINiSurvey> survey,
+			AbstractReadOnlyModel<List<AmpGPINiQuestion>> listModel) {
 		final ListView<AmpGPINiQuestion> list = new ListView<AmpGPINiQuestion>("listQuestions", listModel) {
 			
 			private static final long serialVersionUID = 1L;
@@ -53,7 +85,7 @@ public class AmpGPINiIndicatorItemFeaturePanel extends AmpFeaturePanel<AmpGPINiI
 			@Override
 			protected void populateItem(final ListItem<AmpGPINiQuestion> item) {
 				AmpGPINiQuestionItemFeaturePanel questionPanel = new AmpGPINiQuestionItemFeaturePanel("questionItem",
-						item.getModel(), survey, responsesValidationField) {
+						item.getModel(), survey, validationFields) {
 					
 					private static final long serialVersionUID = 1L;
 				};
@@ -62,7 +94,14 @@ public class AmpGPINiIndicatorItemFeaturePanel extends AmpFeaturePanel<AmpGPINiI
 				item.add(questionPanel);
 			}
 		};
-		
+		return list;
+	}
+	
+	/**
+	 * @param survey
+	 * @return
+	 */
+	private IModel<List<AmpGPINiSurveyResponse>> getSurveyResponseListModel(final IModel<AmpGPINiSurvey> survey) {
 		IModel<List<AmpGPINiSurveyResponse>> listResponseComponentModel = 
 				new AbstractReadOnlyModel<List<AmpGPINiSurveyResponse>>() {
 			
@@ -80,17 +119,28 @@ public class AmpGPINiIndicatorItemFeaturePanel extends AmpFeaturePanel<AmpGPINiI
 				return responseList;
 			}
 		};
-
-		responsesValidationField = new AmpGPINiIndicatorValidatorField("surveyResponsesValidator", 
-				listResponseComponentModel, "surveyResponsesValidator") {
-					
-			private static final long serialVersionUID = 1L;
+		return listResponseComponentModel;
+	}
+	
+	/**
+	 * @param listResponseComponentModel
+	 */
+	private void addSurveyValidationFields(IModel<List<AmpGPINiSurveyResponse>> listResponseComponentModel) {
+		AmpGPINiIndicatorValidatorField responsesValidationField = 
+				new AmpGPINiIndicatorValidatorField("surveyResponsesValidator", 
+						listResponseComponentModel, "surveyResponsesValidator") {
 		};
-		responsesValidationField.setOutputMarkupId(true);
 		add(responsesValidationField);
-
-		add(list);
-		add(UpdateEventBehavior.of(GPINiQuestionUpdateEvent.class));
+		
+		
+		AmpGPINiDependentQuestionValidatorField dependentValidationField = 
+				new AmpGPINiDependentQuestionValidatorField("surveyDependentQuestionValidator", 
+						listResponseComponentModel, "surveyDependentQuestionValidator", "7") {
+		};
+		add(dependentValidationField);
+		
+		validationFields.add(responsesValidationField);
+		validationFields.add(dependentValidationField);
 	}
 	
 	/**

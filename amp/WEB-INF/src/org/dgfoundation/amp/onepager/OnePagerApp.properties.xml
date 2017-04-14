@@ -21,4 +21,5 @@
 	<entry key="BiggerDateOutOfRange">Please enter date bigger than ${year}</entry>
 	<entry key="DoubleFormatConverter">The value "${input}" is not a valid number (${format})</entry>
 	<entry key="AmpGPINiIndicatorValidator">The following questions are required: ${label}</entry>
+	<entry key="AmpGPINiDependentQuestionValidator">${label} should only have values less than or equal to ${dest}</entry>
 </properties>

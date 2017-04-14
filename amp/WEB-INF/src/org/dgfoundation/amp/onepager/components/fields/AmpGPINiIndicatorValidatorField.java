@@ -12,8 +12,7 @@ import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 
 /**
  * This field can be used to validate the GPI Ni responses and show an error
- * message when one of them is not populated It checks the responses form
- * component using the converted input
+ * message when one of the questions is not populated.
  * 
  * @author Viorel Chihai
  *
@@ -48,22 +47,26 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
 			@Override
 			public String getObject() {
 				List<String> ret = new ArrayList<String>();
+				
 				for (AmpGPINiSurveyResponse response : collectionModel.getObject()) {
 					if (isResponseEmpty(response)) {
 						ret.add("Q" + response.getAmpGPINiQuestion().getCode());
 					}
 				}
 
-				if (ret.size() > 0)
-					return ret.toString();
-
-				return "";
+				return ret.size() > 0 ? ret.toString() : "";
 			}
 		};
 
 		return model;
 	}
 
+	/**
+	 * Check if the response has a value or not
+	 * 
+	 * @param response
+	 * @return true if is empty
+	 */
 	protected boolean isResponseEmpty(AmpGPINiSurveyResponse response) {
 		if (response.getAmpGPINiQuestion().getType() != GPINiQuestionType.LINK) {
 			// the 10b response can be null when the question 10a has the respons 'No'

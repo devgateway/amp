@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.Stack;
@@ -65,7 +66,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	public NiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, CellVisitor<ReportCell> cellFormatter) {
 		this.runResult = runResult;
 		this.hiddenColumns = spec.getInvisibleHierarchies().stream().map(ReportColumn::getColumnName).collect(toSet());
-		this.leafColumns = runResult.headers.leafColumns;
+		this.leafColumns = runResult.headers.leafColumns.stream().filter(c -> !hiddenColumns.contains(c.name)).collect(toList());
 		this.spec = spec;
 		this.reportAreaSupplier = () -> new ReportAreaImpl();
 		this.cellFormatter = cellFormatter;
@@ -253,14 +254,36 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		for(NiReportData child:grd.subreports) {
 			hiersStack.push(child.splitter);
 			ReportAreaImpl childReportArea = child.accept(this);
-			if (child instanceof NiGroupReportData && hiddenColumns.contains(((NiGroupReportData) child).splitterColumn)) {
-				childReportArea.setChildren(childReportArea.getChildren().stream().flatMap(c -> c.getChildren().stream()).collect(toList()));
+			if (hasHiddenHierarchy(child)) {
+				childReportArea.setChildren(getGrandChildren(childReportArea));
 			}
 			rchildren.add(childReportArea);
 			hiersStack.pop();
 		}
 		res.setChildren(rchildren);
 		return res;
+	}
+
+	/**
+	 * Returns true if niReportData is a group report data which is split by a hierarchy we want to hide.
+	 * @param niReportData report data to check
+	 * @return true in report data represents a hidden hierarchy
+	 */
+	public boolean hasHiddenHierarchy(NiReportData niReportData) {
+		return niReportData instanceof NiGroupReportData
+				&& hiddenColumns.contains(((NiGroupReportData) niReportData).splitterColumn);
+	}
+
+	/**
+	 * Returns grand children. Used to skip one level of hierarchy.
+	 * @param reportArea report area with children
+	 * @return returns list of grand children or null
+	 */
+	private List<ReportArea> getGrandChildren(ReportAreaImpl reportArea) {
+		List<ReportArea> newChildren = reportArea.getChildren().stream()
+				.flatMap(c -> Optional.ofNullable(c.getChildren()).orElse(Collections.emptyList()).stream())
+				.collect(toList());
+		return newChildren.isEmpty() ? null : newChildren;
 	}
 
 	/**

@@ -175,6 +175,13 @@ public class AlgoUtils {
 		return new RuntimeException(e);
 	}
 	
+	
+	public static <K, V> Map<V, K> reverseIntoHashMap(Map<K, V> toBeReversed) {
+		Map<V, K> res = new HashMap<>();
+		toBeReversed.forEach((key, value) -> res.put(value, key));
+		return res;
+	}
+	
 	/**
 	 * use it for inverting parent-child relationships
 	 * @return

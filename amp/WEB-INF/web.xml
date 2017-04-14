@@ -297,7 +297,6 @@
 				/repository/parisindicator/struts-config.xml,
 				/repository/search/struts-config.xml,
 				/repository/content/struts-config.xml,
-				/repository/visualization/struts-config.xml,
 				/repository/xmlpatcher/struts-config.xml,
 				/repository/esrigis/struts-config.xml,
 				/repository/budgetexport/struts-config.xml,
@@ -391,6 +390,10 @@
 	<taglib>
 		<taglib-uri>/taglib/globalsettings</taglib-uri>
 		<taglib-location>/WEB-INF/globalsettings.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>/taglib/resourcesettings</taglib-uri>
+		<taglib-location>/WEB-INF/resourcesettings.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/aim</taglib-uri>

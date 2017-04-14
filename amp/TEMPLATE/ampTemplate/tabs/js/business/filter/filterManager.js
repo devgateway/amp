@@ -1,5 +1,5 @@
-define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUtils', 'jquery','underscore' ], function(
-		FiltersWidget, GridManager, FilterUtils, jQuery,_) {
+define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','underscore' ], function(
+		 GridManager, FilterUtils, jQuery,_) {
 
 	"use strict";
 
@@ -18,7 +18,7 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 		var container = jQuery(containerName);
 
 		// Create the FilterWidget instance.
-		app.TabsApp.filtersWidget = new FiltersWidget({
+		app.TabsApp.filtersWidget = new ampFilter({
 			el : containerName,
 			draggable : true,
 			caller: 'TAB'
@@ -26,28 +26,17 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 
 		// Register apply and cancel buttons.
 		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'cancel', function() {
-			console.log('filters cancel');
-			// app.TabsApp.serializedFilters =
-			// app.TabsApp.filtersWidget.serialize();
 			jQuery(container).hide();
 		});
-		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'apply', function(data) {
-			console.log('filters apply');
+		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'apply', function(data) {			
 			// Save just applied filters in case the user hits "reset" button.
-			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize();
-			console.log(app.TabsApp.serializedFilters);
+			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize() || {};
+			
 			// Get list of human friendly applied filters we will use in the
 			// accordion.
-			var readableFilters = app.TabsApp.filtersWidget.serializeToModels();
-			console.log(readableFilters);
-
-			// Change the format of the object before sending it to the endpoint
-			// for refiltering.
-			var auxFilters = app.TabsApp.serializedFilters;
-			GridManager.filter(app.TabsApp.currentTab.get('id'), auxFilters, app.TabsApp.appliedSettings);
-
+			GridManager.filter(app.TabsApp.currentTab.get('id'), app.TabsApp.serializedFilters.filters, app.TabsApp.settingsWidget.toAPIFormat());
 			// Update the accordion with the newly applied filters.
-			FilterUtils.updateFiltersRegion(readableFilters);
+			FilterUtils.updateFiltersRegion(app.TabsApp.filtersWidget.serializeToModels());
 
 			jQuery(container).hide();
 		});
@@ -64,14 +53,12 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 	FilterManager.saveTab = function(dialogView) {
 		// If filterWidget was never opened.
 		if (app.TabsApp.serializedFilters === null) {
-			var blob = CommonFilterUtils.convertJavaFiltersToJS(app.TabsApp.filters);
-			app.TabsApp.filtersWidget.deserialize(blob, {
+			app.TabsApp.filtersWidget.deserialize(app.TabsApp.rawFilters, {
 				silent : true
 			});
 			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize();
 		}
-		var transformedFilters = FilterUtils.widgetFiltersToJavaFilters(app.TabsApp.serializedFilters);
-		
+				
 		var reportsInputs = jQuery('[id^="newTabNameInput"]');
 		var reportNames = _.map(reportsInputs, function(input)
 				{ 
@@ -83,11 +70,11 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 		var sidx = (app.TabsApp.currentTab.get('currentSorting') !== null ? app.TabsApp.currentTab.get('currentSorting').sidx : null);
 		var sord = (app.TabsApp.currentTab.get('currentSorting') !== null ? app.TabsApp.currentTab.get('currentSorting').sord : null);
 		var data = JSON.stringify({
-			filters : transformedFilters,
+			filters : app.TabsApp.serializedFilters ? app.TabsApp.serializedFilters.filters : {},
 			reportData : reportNames,
 			sidx: sidx,
 			sord: sord,
-			settings: app.TabsApp.appliedSettings
+			settings: app.TabsApp.settingsWidget.toAPIFormat()
 		});
 		var tabId = app.TabsApp.currentTab.get('id');
 		jQuery.ajax({

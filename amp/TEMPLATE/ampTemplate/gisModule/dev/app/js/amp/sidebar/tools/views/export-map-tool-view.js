@@ -21,14 +21,8 @@ module.exports = Backbone.View.extend({
 
   render: function() {
 	  var self = this;
-  	this.app.data.settings.load().then(function(){
-  		
-        var foundPS = _.find(self.app.data.settings.models, function(item) {
-            return item.get('id') === 'project-sites';
-          });
-
-        //occasionally, foundPS.attributes.selected will be undefined, so we have to dig through the attributes
-        if (foundPS !== undefined && foundPS.attributes.options[0].value !== 'true') {
+  	  var foundPS = self.app.data.generalSettings.get('project-sites');         
+        if (foundPS !== true) {
         	//need to remove project-sites
         	//find the index of project-sites in projectLayerCollection
 //        	var index = undefined;
@@ -41,17 +35,15 @@ module.exports = Backbone.View.extend({
     	    // append is important because 'share' is inside same el
 //        	var value = $(self.template()).find('button.hideable').css('display','none').html();
         	
-        	self.$el.append(self.template());
+        	self.$el.append(self.template());        	
         	self.$el.find('button.hideable').css('display', 'none')
         } else {
     	    // append is important because 'share' is inside same el
-    	    self.$el.append(self.template());
-        	
+    	    self.$el.append(self.template());        	
         }
   		
-  		
-  	});
-    return this;
+        self.app.translator.translateDOM(self.el);  	
+        return this;
   },
 
   // can't call it export because that's a reserved word.

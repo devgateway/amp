@@ -61,6 +61,8 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
@@ -113,6 +115,7 @@ import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -124,16 +127,16 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
 
-/**
+ /**
  * Loads the activity details of the activity specified in the form bean
  * variable 'activityId' to the EditActivityForm bean instance
  *
@@ -294,7 +297,11 @@ public class EditActivity extends Action {
             } else {
                 if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
                     if (hasTeamLeadOrValidator) {
-                        eaForm.getWarningMessges().add("The activity is awaiting approval.");
+                        if (isAutomaticValidationEnabled()) {
+                            eaForm.getWarningMessges().add(String.format("The activity is awaiting approval and will be automatically approved within %s days.", daysToValidation(activity.getUpdatedDate())));
+                        } else {
+                            eaForm.getWarningMessges().add("The activity is awaiting approval.");
+                        }
                     } else {
                         eaForm.getWarningMessges().add("This activity cannot be validated because there is no Workspace Manager.");
                     }
@@ -302,6 +309,7 @@ public class EditActivity extends Action {
             }
         	Map scope=new HashMap();
         	scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
+        	PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY, activity);
         	gatePermEditAllowed = activity.canDo(GatePermConst.Actions.EDIT, scope);
         }
     }
@@ -654,6 +662,11 @@ public class EditActivity extends Action {
         }
         eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
 
+        eaForm.setInternalIds(activity.getInternalIds());
+        if (activity.getIndicators() != null && activity.getIndicators().size() > 0) {
+            eaForm.setIndicators(activity.getIndicators());
+        }
+
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
         if (ampCategoryValue != null)
@@ -983,10 +996,20 @@ public class EditActivity extends Action {
                                     trim());
           }
           eaForm.getIdentification().setAmpId(activity.getAmpId());
-          Editor reason=org.digijava.module.editor.util.DbUtil.getEditor(activity.getStatusReason(),langCode);
-          if(reason!=null){
-            eaForm.getIdentification().setStatusReason(reason.getBody());
-          }
+
+           if (activity.getStatusReason() != null)
+              eaForm.getIdentification().setStatusReason(activity.getStatusReason());
+
+            List gpiSurveys = new ArrayList();
+            if (activity.getGpiSurvey() != null) {
+                eaForm.setGpiSurvey(activity.getGpiSurvey());
+                for (AmpGPISurvey survey : activity.getGpiSurvey()) {
+                    List<AmpGPISurveyResponse> list = new ArrayList<>(survey.getResponses());
+                    Collections.sort(list, new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
+                    gpiSurveys.add(list);
+                }
+                request.setAttribute("gpiSurveys", gpiSurveys);
+            }
 
           if (null != activity.getLineMinRank()) {
               eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().toString());
@@ -1185,9 +1208,9 @@ public class EditActivity extends Action {
           eaForm.getFunding().setShowTriangularSsc(CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.isActiveInDatabase());
 
           String toCurrCode=null;
-          if (tm != null)
+          if (tm != null && tm.getAppSettings() != null)
               toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
-          else{
+          else {
         	  toCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
           }
 
@@ -1607,12 +1630,12 @@ public class EditActivity extends Action {
     	crossteamcheck = true;
     } else {
     	//check if the activity belongs to the team where the user is logged.
-    	if (teamMember != null) {
+    	if (teamMember != null && teamMember.getTeamId() != null && activity.getTeam() != null && activity.getTeam().getAmpTeamId() != null) {
     		crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
     	}
     }
     
-    if (teamMember != null){
+    if (teamMember != null && teamMember.getTeamAccessType() != null){
     	Long ampTeamId = teamMember.getTeamId();
     	boolean teamLeadFlag    = teamMember.getTeamHead() || teamMember.isApprover();
     	boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
@@ -1872,8 +1895,8 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 			tempComp.setDisbursements(new ArrayList<FundingDetail>());
 			tempComp.setExpenditures(new ArrayList<FundingDetail>());
 
-			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
-			Iterator cItr = fundingComponentActivity.iterator();
+			Collection<AmpComponentFunding> fundingComponentActivity = temp.getFundings();
+			Iterator<AmpComponentFunding> cItr = fundingComponentActivity.iterator();
 
 			while (cItr.hasNext()) {
 				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr.next();
@@ -1975,4 +1998,20 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 		eaForm.getWarningMessges().add(TranslatorWorker.translateText("An error occurred when loading the page. Please contact the AMP administrator."));
 		logger.error(e.getMessage(), e);
 	}
+
+     private int daysBetween(Date d1, Date d2) {
+         return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+     }
+
+     private int daysToValidation(Date updatedDate) {
+         int result;
+         int daysBetween = daysBetween(updatedDate, new Date());
+         String daysBeforeValidation = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION);
+         result = (Integer.parseInt(daysBeforeValidation) - daysBetween);
+         return result <= 0 ? 1 : result;
+     }
+
+     private boolean isAutomaticValidationEnabled() {
+         return (QuartzJobUtils.getJobByClassFullname(Constants.AUTOMATIC_VALIDATION_JOB_CLASS_NAME) == null ? false : true);
+     }
 }

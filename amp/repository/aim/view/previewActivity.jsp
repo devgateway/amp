@@ -535,58 +535,67 @@ function collapseAll() {
 				<b> ${aimEditActivityForm.funding.deliveryRate}</b>
 				<hr/>
 			</field:display> 
-			<field:display name="Consumption rate" feature="Funding Information">
-				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Expenditures / Actual Disbursements * 100</digi:trn>" width="10" height=10 border="0">
-				<digi:trn>Consumption rate</digi:trn>:<br/>
-				<b>${aimEditActivityForm.funding.consumptionRate}</b>		
-			</field:display>
 	</fieldset>	
 	<fieldset>
 	<legend>
 		<span class=legend_label><digi:trn>Additional info</digi:trn></span>	</legend>
 	<div class="field_text_big word_break">
-	<digi:trn>Activity created by</digi:trn>: <br/>
-		<b> 
-			<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/> 
-			<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> 
+		<digi:trn>Activity created by</digi:trn>: <br/>
+		<b>
+			<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/>
+			<c:out value="${aimEditActivityForm.identification.actAthLastName}"/>
 		</b>
 		<hr/>
-	<digi:trn>Created in workspace</digi:trn>: <br />
-	<b>
-		<c:out value="${aimEditActivityForm.identification.team.name}"/> -
-		<digi:trn>
-		    <c:out value="${aimEditActivityForm.identification.team.accessType}"/>
-		</digi:trn>
-	</b>
-	<hr />
- 	<digi:trn>Computation</digi:trn>: <br/>
-	<b>
-		<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
-			<digi:trn key="aim:yes">Yes</digi:trn>
-		</c:if> 
-		<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
-			<digi:trn key="aim:no">No</digi:trn>
+		<digi:trn>Activity created on</digi:trn>:<br/>
+		<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
+		<hr/>
+		<field:display name="Activity Last Updated by" feature="Identification">
+			<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
+				<digi:trn>Activity last updated by</digi:trn>: <br/>
+				<b>
+					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
+					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
+				</b>
+			</logic:notEmpty>
+		</field:display>
+		<hr/>
+		<field:display name="Activity Updated On" feature="Identification">
+			<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
+				<digi:trn>Activity updated on</digi:trn>: <br/>
+				<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
+			</logic:notEmpty>
+		</field:display>
+		<hr/>
+
+		<digi:trn>Created in workspace</digi:trn>: <br/>
+		<c:if test="${aimEditActivityForm.identification.team !=null}">
+			<b>
+				<c:out value="${aimEditActivityForm.identification.team.name}"/> -
+				<digi:trn>
+					<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
+				</digi:trn>
+			</b>
 		</c:if>
-	</b>
-	<hr/>
-	<digi:trn>Activity created on</digi:trn>:<br/>
-	<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
-	<hr />
-	<field:display name="Activity Updated On" feature="Identification">
-		<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
-			<digi:trn>Activity updated on</digi:trn>: <br />
-			<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
-		</logic:notEmpty>
-	</field:display>
-	<hr />
-	<field:display name="Data Team Leader" feature="Identification">
-		<digi:trn>Data Team Leader</digi:trn>: <br />
+		<hr/>
+		<field:display name="Data Team Leader" feature="Identification">
+			<digi:trn>Workspace manager</digi:trn>: <br/>
+			<b>
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/> -
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
+			</b>
+		</field:display>
+
+		<hr/>
+		<digi:trn>Computation</digi:trn>: <br/>
 		<b>
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/> 
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
-		</b>	
-	</field:display>
+			<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
+				<digi:trn key="aim:yes">Yes</digi:trn>
+			</c:if>
+			<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
+				<digi:trn key="aim:no">No</digi:trn>
+			</c:if>
+		</b>
 	
 	</div>
 </fieldset>	
@@ -629,7 +638,8 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:statusReason">Status Reason</digi:trn>:&nbsp;
 				<c:if test="${not empty aimEditActivityForm.identification.statusReason}">
-                    <span class="word_break bold">${fn:trim(aimEditActivityForm.identification.statusReason)}</span>
+					<c:set var="projstatusReason" value="${aimEditActivityForm.identification.statusReason}"/>
+					<span class="word_break bold"><digi:edit key="${projstatusReason}"></digi:edit></span>
 				</c:if>
 				<hr />
 			</module:display>
@@ -760,9 +770,11 @@ function collapseAll() {
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<span class="word_break"><c:out value="${aimEditActivityForm.identification.projectImpact}"/></span>
+					<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
 				</bean:define>
-				<jsp:include page="largeTextPropertyView.jsp" />
+				<span class="word_break">
+					<jsp:include page="largeTextPropertyView.jsp" />
+				</span>
 			</logic:present>
 			
 		 	<logic:present name="aimEditActivityForm" property="identification.activitySummary"> 
@@ -770,27 +782,33 @@ function collapseAll() {
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<span class="word_break"><c:out value="${aimEditActivityForm.identification.activitySummary}"/></span>
+					<c:out value="${aimEditActivityForm.identification.activitySummary}"/>
 				</bean:define>
-				<jsp:include page="largeTextPropertyView.jsp" />
+				<span class="word_break">
+					<jsp:include page="largeTextPropertyView.jsp" />
+				</span>
 		 	</logic:present> 
 			<logic:present name="aimEditActivityForm" property="identification.conditionality">
 				<bean:define id="moduleName" value="/Activity Form/Identification/Conditionalities" toScope="request"/>
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Conditionalities" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<span class="word_break"><c:out value="${aimEditActivityForm.identification.conditionality}"/></span>
+					<c:out value="${aimEditActivityForm.identification.conditionality}"/>
 				</bean:define>
-				<jsp:include page="largeTextPropertyView.jsp" />
+				<span class="word_break">
+					<jsp:include page="largeTextPropertyView.jsp" />
+				</span>
 			</logic:present>
 			<logic:present name="aimEditActivityForm" property="identification.projectManagement">
 				<bean:define id="moduleName" value="/Activity Form/Identification/Project Management" toScope="request"/>
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Project Management" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
-					<span class="word_break"><c:out value="${aimEditActivityForm.identification.projectManagement}"/></span>
+					<c:out value="${aimEditActivityForm.identification.projectManagement}"/>
 				</bean:define>
-				<jsp:include page="largeTextPropertyView.jsp" />
+				<span class="word_break">
+					<jsp:include page="largeTextPropertyView.jsp" />
+				</span>
 			</logic:present>
 			<module:display name="/Activity Form/Identification/Purpose" parentModule="/Activity Form/Identification">
 				<digi:trn >Purpose</digi:trn>:<br />
@@ -1189,6 +1207,37 @@ function collapseAll() {
 	</div>
 </fieldset>
 
+<!-- PROJECT INTERNAL IDS SECTION -->
+<module:display name="/Activity Form/Activity Internal IDs" parentModule="/Activity Form">
+	<fieldset>
+		<legend>
+			<span class=legend_label id="internallink" style="cursor: pointer;">
+				<digi:trn>Agency Internal IDs</digi:trn>
+			</span>
+		</legend>
+		<div id="internaldiv" class="toggleDiv">
+			<c:if test="${!empty aimEditActivityForm.internalIds}">
+				<c:forEach var="internalObj" items="${aimEditActivityForm.internalIds}">
+					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
+						<tr>
+							<td width="85%">
+								<b>[${internalObj.organisation.name}]</b>
+							</td>
+							<td width="15%" align="right" valign=top>
+								<module:display name="/Activity Form/Activity Internal IDs/Internal IDs/internalId" parentModule="/Activity Form">
+									<b><c:out value="${internalObj.internalId}"/></b>
+								</module:display>
+							</td>
+						</tr>
+					</table>
+					<hr/>
+				</c:forEach>
+			</c:if>
+		</div>
+	</fieldset>
+</module:display>
+<!-- END PROJECT INTERNAL IDS SECTION -->
+
 <!-- PLANNING SECTION -->
 <module:display name="/Activity Form/Planning" parentModule="/Activity Form">	
 <fieldset>
@@ -1230,12 +1279,6 @@ function collapseAll() {
 			<digi:trn>Actual Start Date </digi:trn>:&nbsp;
 			<b>${aimEditActivityForm.planning.revisedStartDate}</b>
 		</module:display>
-		
-		<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
-            <hr>
-            <digi:trn>Proposed Project Life</digi:trn>:&nbsp;
-            <b>${aimEditActivityForm.planning.proposedProjectLife}</b>
-        </module:display>
 		
 		<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
@@ -1317,9 +1360,15 @@ function collapseAll() {
 			<digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;
 			<b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b>
 		</module:display>
-		
-		<hr>
-		<field:display name="Duration of Project" feature="Planning"> 
+
+		<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
+			<hr>
+			<digi:trn>Proposed Project Life</digi:trn>:&nbsp;
+			<b>${aimEditActivityForm.planning.proposedProjectLife}</b>
+		</module:display>
+
+		<field:display name="Duration of Project" feature="Planning">
+			<hr>
 			<digi:trn>Duration of project</digi:trn>:&nbsp;
 			<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
 			    <b>${aimEditActivityForm.planning.projectPeriod}</b>&nbsp;<digi:trn>Months</digi:trn>
@@ -1384,22 +1433,7 @@ function collapseAll() {
 					</table>
 					<hr/>
 				</c:forEach>
-				<module:display name="GIS DASHBOARD">
-					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
-						<tr> <td colspan="2">
-							<br>
-							<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
-								<bean:define id="selLocIds">
-								<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
-									<bean:write name="selectedLocs" property="locId" />|
-								</c:forEach>
-								</bean:define>
-							</logic:notEmpty>
-						</td></tr>
-					</table>
-					<hr/>
-				</module:display>
-				<field:display name="Show Map In Activity Preview" feature="Map Options">
+				<module:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
 					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 					<tr> <td colspan="2">
 						<script type="text/javascript">
@@ -1411,7 +1445,7 @@ function collapseAll() {
 					</td> </tr>
 					</table>
 					<hr/>
-					</field:display>
+				</module:display>
 			</c:if>
 		</module:display>
 		<module:display name="/Activity Form/Location/Implementation Level" parentModule="/Activity Form/Location">
@@ -1453,46 +1487,60 @@ function collapseAll() {
 <!-- LOCATIONS SECTION -->
 <module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
 	<c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" />
-	<c:set var="programs_name"><digi:trn>National Plan</digi:trn></c:set>
-	<%@include file="activitypreview/programs.jspf" %>
+	<c:set var="programs_name"></c:set>
+	<fieldset>
+		<legend>
+			<span class="legend_label" style="cursor: pointer;"><digi:trn>National Plan</digi:trn></span>
+		</legend>
+		<div class="toggleDiv">
+		<%@include file="activitypreview/programs.jspf" %>
+		</div>
+	</fieldset>
 </module:display>
 
 <!-- PROGRAM SECTION -->
 <module:display name="/Activity Form/Program" parentModule="/Activity Form">
-	<c:set var="programs_list" value="${aimEditActivityForm.programs.primaryPrograms}" />
-	<c:set var="programs_name"><digi:trn>Program</digi:trn></c:set>
-	<%@include file="activitypreview/programs.jspf" %>
-</module:display>
-<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
-	<c:set var="programs_list" value="${aimEditActivityForm.programs.secondaryPrograms}" />
-	<c:set var="programs_name"><digi:trn>Secondary Programs</digi:trn></c:set>
-	<%@include file="activitypreview/programs.jspf" %>
-</module:display>
-<module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
-	<c:set var="programs_list" value="${aimEditActivityForm.programs.tertiaryPrograms}" />
-	<c:set var="programs_name"><digi:trn>Tertiary Programs</digi:trn></c:set>
-	<%@include file="activitypreview/programs.jspf" %>
+<fieldset>
+	<legend>
+		<span class="legend_label" style="cursor: pointer;"><digi:trn>Program</digi:trn></span>
+	</legend>
+	<div class="toggleDiv">
+		<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form">
+			<c:set var="programs_list" value="${aimEditActivityForm.programs.primaryPrograms}" />
+			<c:set var="programs_name"><digi:trn>Primary Programs</digi:trn></c:set>
+			<%@include file="activitypreview/programs.jspf" %>
+		</module:display>
+		<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
+			<c:set var="programs_list" value="${aimEditActivityForm.programs.secondaryPrograms}" />
+			<c:set var="programs_name"><digi:trn>Secondary Programs</digi:trn></c:set>
+			<%@include file="activitypreview/programs.jspf" %>
+		</module:display>
+		<module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
+			<c:set var="programs_list" value="${aimEditActivityForm.programs.tertiaryPrograms}" />
+			<c:set var="programs_name"><digi:trn>Tertiary Programs</digi:trn></c:set>
+			<%@include file="activitypreview/programs.jspf" %>
+		</module:display>
+		<!-- program description -->
+		<module:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
+			<c:set var="programDescription" value="${aimEditActivityForm.programs.programDescription}" />
+			<c:if test="${not empty programDescription}">
+				<span class="word_break"><digi:trn>Program Description</digi:trn></span>
+				<table width="100%" cellSpacing="2" cellPadding="1" style="font-size: 11px;">
+					<tr>
+						<td width="85%">
+							<span class="word_break bold"><digi:edit key="${programDescription}" /></span>
+						</td>
+					</tr>
+				</table>
+				<hr>
+			</c:if>
+		</module:display>
+		<!-- end program description -->
+	</div>
+</fieldset>
 </module:display>
 <!-- END PROGRAM SECTION -->
-<!-- program description --> 
-					<module:display name="/Activity Form/Program/Program Description"
-						parentModule="/Activity Form/Program">
-						<c:set var="programDescription" value="${aimEditActivityForm.programs.programDescription}" />
-						<c:if test="${not empty programDescription}">
-							<fieldset>
-								<legend>
-									<span class="legend_label" style="cursor: pointer;"><digi:trn>Program Description</digi:trn></span>
-								</legend>
-								<div class="toggleDiv">
-									<table width="100%" cellSpacing="2" cellPadding="1" style="font-size: 11px;">
-										<tr> <td width="85%">
-											<span class="word_break bold"><digi:edit key="${programDescription}" /></span>
-										</td> </tr>
-									</table>
-								</div>
-							</fieldset>
-						</c:if>
-					</module:display> <!-- end program description -->
+
 <!-- SECTORS SECTION -->
 <module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
 <fieldset>
@@ -1554,7 +1602,7 @@ function collapseAll() {
 		</module:display>
 	</c:forEach>		
 	<c:if test="${not empty aimEditActivityForm.components.activityComponentes}">
-		ss<digi:trn>Components</digi:trn>:&nbsp;
+		<digi:trn>Components</digi:trn>:&nbsp;
 		<table>
 			<c:forEach var="compo" items="${aimEditActivityForm.components.activityComponentes}">
 			<tr>
@@ -1579,6 +1627,14 @@ function collapseAll() {
 				<digi:trn>M &amp; E</digi:trn>
 			</span>	
 		</legend>
+
+		<!-- M & E  indicators list -->
+		<div id="melistdiv" class="toggleDiv">
+			<bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"/>
+			<jsp:include page="previewIndicatosList.jsp"/>
+		</div>
+		<!-- END M & E  indicators list -->
+
 		<div id="mediv" class="toggleDiv">
 			<table>
 				<field:display name="Activity Performance"  feature="Activity Dashboard">
@@ -1663,10 +1719,10 @@ function collapseAll() {
 			<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%" >
 				<tr bgcolor="#f0f0f0">
 					<td>
-						<digi:trn key="aim:cost">Name</digi:trn>					
+						<digi:trn key="aim:name">Name</digi:trn>
 					</td>
 					<td>
-						<digi:trn key="aim:cost">Percentage</digi:trn>					
+						<digi:trn key="aim:percentage">Percentage</digi:trn>
 					</td>
 				</tr>
 				<c:forEach var="budgetStructure" items="${aimEditActivityForm.budgetStructure}" >
@@ -1938,7 +1994,7 @@ function collapseAll() {
 						</tr>
 						<tr>
 							<td class="prv_right">
-								<digi:trn>Component Funding</digi:trn>									
+								<span class="word_break bold"><digi:trn>Component Fundings</digi:trn></span>									
 							</td>
 						</tr>
 						<module:display name="/Activity Form/Components/Component/Components Commitments" 
@@ -2289,35 +2345,36 @@ function collapseAll() {
 	</legend>
 	<div id="documnetsdiv" class="toggleDiv">
 	<c:if test="${ (!empty aimEditActivityForm.documents.documents) || (!empty aimEditActivityForm.documents.crDocuments)}">
-		<table width="100%" cellSpacing="0" cellPadding="0">
+		<table width="100%" cellSpacing="1" cellPadding="5" cellSpacing="0" cellPadding="0">
 			<logic:notEmpty name="aimEditActivityForm" property="documents.documents" >
 				<logic:iterate name="aimEditActivityForm" property="documents.documents" id="docs" type="org.digijava.module.aim.helper.Documents">
 					<c:if test="${docs.isFile == true}">
 						<tr>
 							<td>
-								<table width="100%" class="box-border-nopadding">
-									<tr bgcolor="#f0f0f0">
+								<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+									<tr>
 										<td vAlign="center" align="left">&nbsp;
-											<span class="word_break bold"><c:out value="${docs.title}"/></span> - &nbsp;&nbsp;&nbsp;<i>
+											<span class="word_break bold"><c:out value="${docs.title}"/></span>&nbsp;&nbsp;-&nbsp;&nbsp;<i>
 											<c:out value="${docs.fileName}"/></i> 
 											<logic:notEqual name="docs" property="docDescription" value=" ">
 												<br/>&nbsp;
-												<b><digi:trn>Description</digi:trn>:</b>
+												<digi:trn>Description</digi:trn>:
 												&nbsp;<span class="word_break bold"><bean:write name="docs" property="docDescription" /></span>
 											</logic:notEqual> 
 											<logic:notEmpty name="docs" property="date">
 												<br />&nbsp;
-												<b><digi:trn>Date</digi:trn>:</b>
-												&nbsp;<c:out value="${docs.date}" />
+												<digi:trn>Date</digi:trn>:
+												<b>&nbsp;<c:out value="${docs.date}" /></b>
 											</logic:notEmpty> 
 											<logic:notEmpty name="docs" property="docType">
 												<br />&nbsp;
-												<b><digi:trn>Document Type</digi:trn>:</b>&nbsp;
+												<digi:trn>Document Type</digi:trn>:&nbsp;
 												<span class="word_break bold"><bean:write name="docs" property="docType" /></span>
 											</logic:notEmpty>
 										</td>
 									</tr>
 								</table>
+								<hr />
 							</td>
 						</tr>
 					</c:if>
@@ -2327,35 +2384,33 @@ function collapseAll() {
 				<tr>
 					<td>
 						<logic:iterate name="aimEditActivityForm" property="documents.crDocuments" id="crDoc">
-						<table width="100%" class="box-border-nopadding">
-								<tr bgcolor="#f0f0f0">
+						<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+								<tr>
 									<td vAlign="center" align="left">
-										&nbsp;<b><c:out value="${crDoc.title}"/></b> - &nbsp;&nbsp;&nbsp;
+										&nbsp;<b><c:out value="${crDoc.title}"/></b>&nbsp;&nbsp;-&nbsp;&nbsp;
 										<i><c:out value="${crDoc.name}"/></i>
 										<c:set var="translation">
 											<digi:trn>Click here to download document</digi:trn>
 										</c:set> 
-										<%-- <a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>"
-											onclick="window.location='/contentrepository/downloadFile.do?uuid=<c:out value="${crDoc.uuid}"/>'"
-											title="${translation}">
-											<img src="/repository/contentrepository/view/images/check_out.gif" border="0" >
-										</a> --%>
 										<a id="<c:out value="${crDoc.uuid}"/>" target="_blank" href="${crDoc.generalLink}" title="${translation}">
 											<img src="/repository/contentrepository/view/images/check_out.gif" border="0">
 										</a>
 										<logic:notEmpty name="crDoc" property="description">
 											<br/>&nbsp;
-											<b><digi:trn>Description</digi:trn>:</b>&nbsp;
-											<bean:write name="crDoc" property="description" />
+											<digi:trn>Description</digi:trn>:&nbsp;
+											<b><bean:write name="crDoc" property="description" /></b>
 										</logic:notEmpty> 
 										<logic:notEmpty name="crDoc" property="calendar">
 											<br/>&nbsp;
-											<b><digi:trn>Date</digi:trn>:</b>
-											&nbsp;<c:out value="${crDoc.calendar}" />
-										</logic:notEmpty>									</td>
+											<digi:trn>Date</digi:trn>:
+											<b>&nbsp;<c:out value="${crDoc.calendar}" /></b>
+										</logic:notEmpty>
+									</td>
 								</tr>
 							</table>
-						</logic:iterate>					</td>
+							<hr />
+						</logic:iterate>
+					</td>
 				</tr>
 			</logic:notEmpty>
 		</table>
@@ -2680,34 +2735,16 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
 						<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
-						<c:forEach var="donorContact" items="${aimEditActivityForm.contactInformation.donorContacts}">
-							<div>		
-								<span class="word_break bold"><c:out value="${donorContact.contact.name}" /></span> 
-								<span class="word_break bold"><c:out value="${donorContact.contact.lastname}"/></span> - 
-								<c:forEach var="property" items="${donorContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /> </span>;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+						<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.donorContacts}" />
+						<%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if> 
 				</module:display>	
 				<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
 						<digi:trn>MOFED contact information</digi:trn>:&nbsp;
-						<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${mofedContact.contact.name}" /></span> 
-								<span class="word_break bold"><c:out value="${mofedContact.contact.lastname}"/> </span>- 
-								<c:forEach var="property" items="${mofedContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.mofedContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if> 
 				</module:display>
@@ -2715,17 +2752,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
 						<digi:trn>Project Coordinator Contact Information</digi:trn>:&nbsp;
-						<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.name}"/></span>
-								<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.lastname}" /></span>-
-								<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.projCoordinatorContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if>
 				</module:display>
@@ -2733,17 +2761,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
 						<digi:trn>Sector Ministry Contact Information</digi:trn>:&nbsp;
-						<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.name}" /></span>
-								<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.lastname}" /></span> -
-								<c:forEach var="property" items="${sectorMinistryContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span>;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.sectorMinistryContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if> 
 				</module:display>
@@ -2751,17 +2770,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information"  parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
 						<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>:&nbsp;
-						<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.name}" /></span>
-								<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.lastname}" /></span> -
-								<c:forEach var="property" items="${implExecAgencyContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 					</c:if>
 				</module:display>
 			</div>
@@ -3255,7 +3265,67 @@ function collapseAll() {
 <!-- end IPA Contracting -->
 </feature:display>
 
+<!-- GPI -->
+		<module:display name="/Activity Form/GPI" parentModule="/Activity Form">
+			<fieldset>
+				<legend>
+			<span class=legend_label id="gpilink" style="cursor: pointer;">
+				<digi:trn>GPI</digi:trn>
+			</span>
+				</legend>
+				<div class="field_text_big">
+					<div id="gpi" class="toggleDiv" style="display: block;">
+						<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+							<bean:define id="gpiSurvey" name="gpiSurveys" scope="request" toScope="page"
+										 type="java.util.Collection"/>
 
+							<c:set var="currentIndicatorName" value=""/>
+							<logic:iterate name="gpiSurveys" id="gpiSurvey"
+										   type="java.util.Collection" indexId="gpiId">
+								<logic:iterate name="gpiSurvey" id="gpiresponse"
+											   type="org.digijava.module.aim.dbentity.AmpGPISurveyResponse">
+
+									<c:if test="${!currentIndicatorName.equals(gpiresponse.ampQuestionId.ampIndicatorId.name)}">
+										<c:set var="currentIndicatorName"
+											   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
+										<tr>
+											<td bgcolor="#eeeeee" style="text-transform: uppercase;">
+												<c:set var="indicatorName"
+													   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
+												<span class="word_break bold">${indicatorName}</span>
+											</td>
+										</tr>
+									</c:if>
+									<tr>
+										<td>
+											<c:set var="questionText"
+												   value="${gpiresponse.ampQuestionId.questionText}"/>
+											<span class="word_break bold">${questionText}</span>
+											<c:set var="responseText" value="${gpiresponse.response}"/>
+											<lu>
+												<li>
+													<span class="word_break bold">${responseText}</span>
+												</li>
+											</lu>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<hr/>
+										</td>
+									</tr>
+
+								</logic:iterate>
+
+							</logic:iterate>
+
+						</table>
+					</div>
+
+				</div>
+			</fieldset>
+		</module:display>
+		<!-- end GPI -->
 
 <%@include file="previewActivityStructures.jsp" %>
 <br/>
@@ -3269,9 +3339,9 @@ function collapseAll() {
   </tr>
 </table>
 </c:if>
-<field:display name="Show Map In Activity Preview" feature="Map Options">
+<module:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
  <div id="locationPopupMap" style="visibility:hidden;width:4px; height:3px;position:relative;"></div>
-</field:display>
+</module:display>
 
 <!-- MAIN CONTENT PART END -->
 </digi:form>

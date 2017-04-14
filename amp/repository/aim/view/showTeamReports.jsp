@@ -466,6 +466,7 @@ $(document).ready(function() {
 						type="org.digijava.module.aim.dbentity.AmpReports">
 						<tr onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
                               							onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" >
+							<c:set var="reportLink" value="${fn:getReportUrl(report)}" />
 							<%if(idx.intValue()%2==1) color = "#dbe5f1"; %>
 							<%if(idx.intValue()%2!=1) color = "#ffffff"; %>
 							<td align="center" class="inside" style="padding-right: 10px; padding-left: 10px;" bgcolor="<%=color%>">
@@ -478,15 +479,6 @@ $(document).ready(function() {
 							</td>
 							<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
 								<c:if test="${!aimTeamReportsForm.showTabs}">
-									<% if (report.getType()!=null && report.getType().equals((long) ArConstants.REGIONAL_TYPE)){ %>
-									<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
-									<% } else { %>
-									<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
-									<% } %>
-									<!-- link to the report under the Legacy engine
-										left here for debug reasons
-										/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=REPORT_ID
-	 								-->
 									<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">
 										<b> <p style="display: inline; max-width: 400px; white-space: normal" title='<c:out value="${report.name}"/>'>
 											<c:choose>
@@ -586,9 +578,7 @@ $(document).ready(function() {
 							<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; width: 20%;" bgcolor="<%=color%>">
 								<ul>
 									<logic:iterate name="report" property="hierarchies" id="hierarchy" >
-										<li> <digi:trn key="aim:report:${hierarchy.column.columnName}">
-												<bean:write name="hierarchy" property="column.columnName" />
-										</digi:trn> </li>
+										<li> <digi:colNameTrn><bean:write name="hierarchy" property="column.columnName" /></digi:colNameTrn> </li>
 									</logic:iterate>
 								</ul>
 							</td>
@@ -599,14 +589,10 @@ $(document).ready(function() {
 									<logic:iterate name="report" property="columns" id="column" indexId="index">
 										<%if (index.intValue()%2==0){ %>
 											<li>
-												<digi:trn key="aim:report:${column.column.columnName}">
-													<bean:write name="column" property="column.columnName" />
-												</digi:trn>
+												<digi:colNameTrn><bean:write name="column" property="column.columnName" /></digi:colNameTrn>
 										<% } else {%>
 										,
-											<digi:trn key="aim:report:${column.column.columnName}">
-													<bean:write name="column" property="column.columnName" />
-												</digi:trn>
+												<digi:colNameTrn><bean:write name="column" property="column.columnName" /></digi:colNameTrn>
 											</li>
 										<%} %>
 	 								</logic:iterate>
@@ -650,11 +636,20 @@ $(document).ready(function() {
 						<c:set target="${urlParams}" property="rid">
 							<bean:write name="report" property="ampReportId" />
 						</c:set>
+
+						<c:set var="showViewReportIcon" value="false"></c:set>
 						<c:if test="${!aimTeamReportsForm.showTabs}">
-							<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
-							onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
-							<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
+							<c:set var="showViewReportIcon" value="true"></c:set>
 						</c:if>
+						<%if(FeaturesUtil.isVisibleFeature("Enable Saiku icon in Tab Manager")){ %>
+							<c:set var="showViewReportIcon" value="true"></c:set>
+						<%}%>
+						<c:if test="${showViewReportIcon == true}">
+							<a href="${reportLink}"
+							   onclick="return popup(this,'');" class="img-padding" title="<digi:trn>Click here to view the report</digi:trn>">
+								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
+						</c:if>
+
 						<c:set target="${urlParams}" property="event" value="edit" />
 						<logic:equal name="teamLeadFlag" scope="session" value="true"> 
 							<c:set var="translation">
@@ -668,12 +663,12 @@ $(document).ready(function() {
 							<c:choose>
 								<c:when test="${report.budgetExporter}">
 									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true&type=${report.type}" title="${translation}">
-										<img src= "/repository/message/view/images/edit.gif" border="0" />
+										<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 									</digi:link>
 								</c:when>
 								<c:otherwise>
 									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
-										<img src= "/repository/message/view/images/edit.gif" border="0" />
+										<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 									</digi:link> 
 								</c:otherwise>
 							</c:choose>&nbsp;
@@ -688,7 +683,7 @@ $(document).ready(function() {
 								</c:if>
 							</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src= "/repository/message/view/images/trash_12.gif" border="0" />
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" class="img-padding" />
 								</digi:link>
 						</logic:equal>
 						<logic:equal name="teamLeadFlag" scope="session" value="false">
@@ -703,7 +698,7 @@ $(document).ready(function() {
 									</c:if>
 								</c:set>
 								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
-									<img src= "/repository/message/view/images/edit.gif" border="0" />
+									<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 								</digi:link>
 								<c:set var="translation">
 									<c:if test="${aimTeamReportsForm.showTabs}">
@@ -716,7 +711,7 @@ $(document).ready(function() {
 									</c:if>
 								</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src= "/repository/message/view/images/trash_12.gif" border="0" />
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" class="img-padding" />
 								</digi:link>
 							</logic:equal>    
 						</logic:present>

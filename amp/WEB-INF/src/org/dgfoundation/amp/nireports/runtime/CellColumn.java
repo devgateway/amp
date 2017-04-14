@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 
 import static java.util.Collections.emptyList;
 
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
@@ -28,12 +29,12 @@ public class CellColumn extends Column {
 	public final Behaviour<?> behaviour;
 	public final NiReportedEntity<?> entity;
 		
-	public CellColumn(String name, ColumnContents contents, GroupColumn parent, NiReportedEntity<?> entity, NiColSplitCell splitCell) {
-		this(name, contents, parent, entity, entity.getBehaviour(), splitCell);
+	public CellColumn(String name, LocalizableLabel label, ColumnContents contents, GroupColumn parent, NiReportedEntity<?> entity, NiColSplitCell splitCell) {
+		this(name, label, contents, parent, entity, entity.getBehaviour(), splitCell);
 	}
 	
-	public CellColumn(String name, ColumnContents contents, GroupColumn parent, NiReportedEntity<?> entity, Behaviour<?> behaviour, NiColSplitCell splitCell) {
-		super(name, parent, splitCell);
+	public CellColumn(String name, LocalizableLabel label, ColumnContents contents, GroupColumn parent, NiReportedEntity<?> entity, Behaviour<?> behaviour, NiColSplitCell splitCell) {
+		super(name, label, parent, splitCell);
 		NiUtils.failIf(contents == null, "CellColumn should have a non-null contents");
 		this.contents = contents;
 		this.behaviour = behaviour;
@@ -59,8 +60,9 @@ public class CellColumn extends Column {
 		List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet());
 		for(ComparableValue<String> key:subColumnNames) {
 			res.addColumn(
-				new CellColumn(key.getValue(), 
-					new ColumnContents(Optional.ofNullable(values.get(key)).orElse(emptyList())), 
+				new CellColumn(key.getValue(),
+					new LocalizableLabel(key.getValue()),
+					new ColumnContents(Optional.ofNullable(values.get(key)).orElse(emptyList())),
 					res, 
 					this.entity,
 					strategy.getBehaviour(key, this),

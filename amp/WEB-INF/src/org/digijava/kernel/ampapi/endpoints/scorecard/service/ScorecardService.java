@@ -100,7 +100,7 @@ public class ScorecardService {
 	}
 
 	/**
-	 * Returns the list of all ActivityUpdates that occurred on the system
+	 * Returns the list of all ActivityUpdates that occurred on the system except the ones from private WS
 	 * 
 	 * @param allowedStatuses
 	 * @return List<ActivityUpdate> , list with all ActivityUpdates
@@ -109,9 +109,9 @@ public class ScorecardService {
 		final List<ActivityUpdate> activityUpdateList = new ArrayList<ActivityUpdate>();
 		int startYear = getDefaultStartYear();
 		int endYear = getDefaultEndYear();
-		String gsCalendarId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		Date startDate = CalendarUtil.getStartDate(Long.valueOf(gsCalendarId), startYear);
-		Date endDate = CalendarUtil.getEndDate(Long.valueOf(gsCalendarId), endYear);
+		Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		Date startDate = CalendarUtil.getStartDate(gsCalendarId, startYear);
+		Date endDate = CalendarUtil.getEndDate(gsCalendarId, endYear);
 		String pattern = "yyyy-MM-dd";
 		final String formattedStartDate = new SimpleDateFormat(pattern).format(startDate);
 		final String formattedEndDate = new SimpleDateFormat(pattern).format(endDate);
@@ -123,6 +123,7 @@ public class ScorecardService {
 						+ " FROM amp_audit_logger l, amp_activity_version a, amp_org_role r  "
 						+ " WHERE objecttype = 'org.digijava.module.aim.dbentity.AmpActivityVersion' "
 						+ " AND a.amp_activity_id = l.objectid:: integer  " + " AND r.activity=a.amp_activity_id  "
+						+ " AND not exists(select 1 from amp_organisation ao where ao.deleted = true and ao.amp_org_id=r.organisation) "
 						+ " AND    (EXISTS (  SELECT af.amp_donor_org_id "
 						+ " FROM   amp_funding af, amp_activity_version v, amp_team t WHERE  r.organisation = af.amp_donor_org_id "
 						+ " AND v.amp_activity_id = af.amp_activity_id AND v.amp_activity_id=a.amp_activity_id AND v.deleted is false AND (a.draft = false OR a.draft is null) "
@@ -169,7 +170,9 @@ public class ScorecardService {
 	 * 
 	 * @param toExlcude
 	 * @return List<ScorecardNoUpdateDonor> , list with donors 
-	 * if toExclude param is true, the method will return all the donors except the excluded donors
+	 * if toExclude param is true, the method will return all the donors except:
+	 * - excluded donors 
+	 * - donors without activities in non-private WS
 	 * if toExclude param is false, the method will return the no update donors
 	 */
 	public List<ScorecardNoUpdateDonor> getScorecardDonors(final boolean toExlcude) {
@@ -183,10 +186,12 @@ public class ScorecardService {
 				String query = "SELECT (o.amp_org_id) amp_org_id, o.name, o.acronym FROM  amp_organisation o WHERE o.amp_org_id IN ("
 						+ "SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_org_role aor, amp_role r "
 						+ "WHERE (o.amp_org_id = aor.organisation AND aor.role = r.amp_role_id AND r.role_code = 'DN') "
+						+ "AND activity NOT IN (select amp_activity_id from amp_activity_version where amp_team_id IN (SELECT amp_team_id from amp_team where isolated = true))"
 						+ "UNION "
 						+ "SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_funding af, amp_activity_version v, amp_role r   "          
 						+ "WHERE  o.amp_org_id = af.amp_donor_org_id  AND v.amp_activity_id = af.amp_activity_id  AND (v.deleted is false) "
 						+ "AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN') "
+						+ "AND v.amp_team_id NOT IN (SELECT amp_team_id from amp_team where isolated = true)"
 						+ ") AND (o.deleted IS NULL OR o.deleted = false ) " 
 						+ "AND o.amp_org_id ";
 				
@@ -229,12 +234,9 @@ public class ScorecardService {
 	 * @return the default start year for generating the donor scorecard
 	 */
 	private int getDefaultStartYear() {
-		String defaultStartYear = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
-		int startYear = DEFAULT_START_YEAR;
-		if (defaultStartYear != null && !"".equalsIgnoreCase(defaultStartYear)
-				&& Integer.parseInt(defaultStartYear) > 0) {
-			startYear = Integer.parseInt(defaultStartYear);
-		}
+		int defaultStartYear = FeaturesUtil.getGlobalSettingValueInteger(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
+		int startYear = defaultStartYear > 0 ? defaultStartYear : DEFAULT_START_YEAR;
+		
 		return startYear;
 	}
 
@@ -245,11 +247,9 @@ public class ScorecardService {
 	 * @return the default end year for generating the donor scorecard
 	 */
 	private int getDefaultEndYear() {
-		String defaultEndYear = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
-		int endYear = Calendar.getInstance().get(Calendar.YEAR);
-		if (defaultEndYear != null && !"".equalsIgnoreCase(defaultEndYear) && Integer.parseInt(defaultEndYear) > 0) {
-			endYear = Integer.parseInt(defaultEndYear);
-		}
+		int defaultEndYear = FeaturesUtil.getGlobalSettingValueInteger(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
+		int endYear = defaultEndYear > 0 ? defaultEndYear : Calendar.getInstance().get(Calendar.YEAR);
+		
 		return endYear;
 	}
 
@@ -283,24 +283,26 @@ public class ScorecardService {
 		final List<Quarter> quarters = new ArrayList<Quarter>();
 		int startYear = getDefaultStartYear();
 		int endYear = getDefaultEndYear();
-		String gsCalendarId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		Date startDate = CalendarUtil.getStartDate(Long.valueOf(gsCalendarId), startYear);
-		Date endDate = CalendarUtil.getEndDate(Long.valueOf(gsCalendarId), endYear);
+		
+		Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		long startTime = CalendarUtil.getStartDate(gsCalendarId, startYear).getTime();
+		long endTime = CalendarUtil.getEndDate(gsCalendarId, endYear).getTime();
+		
 		try {
 			ICalendarWorker worker = fiscalCalendar.getworker();
-			Date currentDate = new Date(startDate.getTime());
-			int index = 1;
-			while (currentDate.compareTo(endDate) < 1) {
+			while (startTime < endTime) {
+				long currentTime = startTime;
 				for (int i = 1; i <= 4; i++) {
-					worker.setTime(currentDate);
+					worker.setTime(new Date(currentTime));
 					Quarter quarter = new Quarter(fiscalCalendar, i, worker.getYear());
 					quarters.add(quarter);
 					Calendar cal = Calendar.getInstance();
-					cal.setTime(startDate);
-					cal.add(Calendar.MONTH, 3 * index);
-					index++;
-					currentDate.setTime(cal.getTimeInMillis());
+					cal.setTimeInMillis(startTime);
+					cal.add(Calendar.MONTH, 3 * i);
+					currentTime = cal.getTimeInMillis();
 				}
+				startYear++;
+				startTime = CalendarUtil.getStartDate(gsCalendarId, startYear).getTime();
 			}
 		} catch (Exception e) {
 			logger.error("Couldn't generate quarters ", e);
@@ -392,7 +394,8 @@ public class ScorecardService {
 							+ "from amp_activity_version a, amp_org_role r,amp_organisation o,amp_activities_categoryvalues c,amp_category_value v "+
 							" WHERE  r.activity=a.amp_activity_id  AND a.amp_activity_id = c.amp_activity_id "+
 							"AND c.amp_categoryvalue_id = v.id "+
-							"AND v.amp_category_class_id = (select id from amp_category_class where keyname='activity_status') ";
+							"AND v.amp_category_class_id = (select id from amp_category_class where keyname='activity_status') " +
+							"AND a.amp_team_id NOT IN (SELECT amp_team_id from amp_team where isolated = true) ";
 					if (!status.equals("")) {
 						query += "AND c.amp_categoryvalue_id in (" + status + " ) ";
 					}
@@ -503,7 +506,8 @@ public class ScorecardService {
                         + "AND (a.draft = false OR a.draft is null) "
 						+ "AND c.amp_categoryvalue_id = v.id "
 						+ "AND  v.amp_category_class_id = (select id from amp_category_class where "
-						+ " keyname='activity_status') ";
+						+ " keyname='activity_status') "
+						+ "AND a.amp_team_id NOT IN (SELECT amp_team_id from amp_team where isolated = true) ";
 				if (!status.equals("")) {
 					query += "AND c.amp_categoryvalue_id in (" + status + " ) ";
 				}

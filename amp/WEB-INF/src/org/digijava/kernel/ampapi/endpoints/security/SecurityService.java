@@ -3,6 +3,14 @@
  */
 package org.digijava.kernel.ampapi.endpoints.security;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
@@ -19,12 +27,6 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.w3c.dom.Document;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 /**
  * Security Endpoint related services like menu, footer, user
  * 
@@ -34,7 +36,7 @@ public class SecurityService {
 
 	private static final Logger logger = Logger.getLogger(SecurityService.class);
 	private static String ampVersion;
-	private static String buildDate;
+	private static String releaseDate;
 	
 	/**
 	 * @return json structure for the current view + user + state menu
@@ -102,7 +104,7 @@ public class SecurityService {
 				.getGlobalSettingValueBoolean(GlobalSettingsConstants.ENABLE_SITE_TRACKING);
 		String siteId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.TRACKING_SITE_ID);
 		String trackingUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.TRACKING_SITE_URL);
-		jsonItem.set(EPConstants.BUILD_DATE, buildDate);
+		jsonItem.set(EPConstants.BUILD_DATE, releaseDate);
 		jsonItem.set(EPConstants.AMP_VERSION, ampVersion);
 		jsonItem.set(EPConstants.TRACKING_ENABLED, trackingEnabled);
 		jsonItem.set(EPConstants.SITE_ID, siteId);
@@ -115,11 +117,7 @@ public class SecurityService {
 			adminLink.set(EPConstants.LINK_NAME, EPConstants.ADMIN_LINK_NAME);
 			adminLink.set(EPConstants.LINK_URL, siteUrl + "/admin");
 
-			JsonBean userDevLink = new JsonBean();
-			userDevLink.set(EPConstants.LINK_NAME, EPConstants.USERDEV_LINK_NAME);
-			userDevLink.set(EPConstants.LINK_URL, siteUrl + "/admin/switchDevelopmentMode.do");
 			links.add(adminLink);
-			links.add(userDevLink);
 			jsonItem.set(EPConstants.ADMIN_LINKS, links);
 		}
 		return jsonItem;
@@ -132,19 +130,34 @@ public class SecurityService {
 	 * 'ampVersion' values
 	 */
 	private static void populateBuildValues(String filePath) {
-		if (buildDate == null || ampVersion == null) {
+		if (releaseDate == null || ampVersion == null) {
 			try {
 				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder builder = docFactory.newDocumentBuilder();
 				Document doc;
 				doc = builder.parse(filePath);
-				buildDate = doc.getDoctype().getEntities().getNamedItem("buildDate").getTextContent();
+				
 				ampVersion = doc.getDoctype().getEntities().getNamedItem("ampVersion").getTextContent();
+				releaseDate = doc.getDoctype().getEntities().getNamedItem("releaseDate").getTextContent();
+				
+				String buildSource = doc.getDoctype().getEntities().getNamedItem("buildSource").getTextContent();
+				String buildDate = doc.getDoctype().getEntities().getNamedItem("buildDate").getTextContent();
+				
+				// if buildSource is empty it shouldn't be added to the footer. 
+				// if buildDate is empty it shouldn't replace the release date.
+				// In PROD and STG this props should be empty
+				if (StringUtils.isNotEmpty(buildSource)) {
+					ampVersion += buildSource;
+				}
+				
+				if (StringUtils.isNotEmpty(buildDate)) {
+					releaseDate = buildDate;
+				}
+				
 			} catch (Exception e) {
 				logger.error("Couldn't parse xml file " + filePath, e);
 			}
 		}
-
 	}
 	
 	public static Collection<JsonBean> getWorkspaces() {

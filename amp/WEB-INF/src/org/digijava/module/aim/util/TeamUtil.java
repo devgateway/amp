@@ -134,8 +134,10 @@ public class TeamUtil {
     public static Set<AmpTeam> getRelatedTeamsForTeams(Collection<AmpTeam> teams) {
     	Set<AmpTeam> result = new HashSet<AmpTeam>();
     	for (AmpTeam ampTeam : teams) {
-    		result.add(ampTeam);
-    		result.addAll(TeamUtil.getAmpLevel0Teams(ampTeam.getAmpTeamId()));
+    		if (ampTeam != null) {
+	    		result.add(ampTeam);
+	    		result.addAll(TeamUtil.getAmpLevel0Teams(ampTeam.getAmpTeamId()));
+    		}
     	}
     	return result;
     }
@@ -1901,7 +1903,11 @@ public class TeamUtil {
      * @return
      */
     public static TeamMember getCurrentMember(){
-    	return (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
+        if (TLSUtils.getRequest() != null) {
+            return (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
+        } else {
+            return null;
+        }
     }
     
     /**
@@ -1966,5 +1972,15 @@ public class TeamUtil {
     		catch(UnsupportedOperationException e) {}; // for testcases
     	}
         return res;
+    }
+    
+    public static void getTeams(AmpTeam team, List<AmpTeam> teams) {
+        teams.add(team);
+        Collection<AmpTeam> childrenTeams =  TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
+        if (childrenTeams != null) {
+            for (AmpTeam tm : childrenTeams) {
+                getTeams(tm, teams);
+            }
+        }
     }
 }

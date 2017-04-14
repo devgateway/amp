@@ -5,28 +5,26 @@ define([ 'underscore', 'backbone', 'documentModel' ], function(_, Backbone, Docu
 	var Content = Backbone.DocumentModel.extend({
 		urlRoot : '/rest/data/report/',
 		initialize : function() {
-			console.log('Initialized Content object');
 			this.fetch({
 				async : false,
-				error : function(collection, response) {
-					console.log('error loading content from server');
+				error : function(collection, response) {					
 				},
-				success : function(collection, response) {
-					console.log(response);
+				success : function(collection, response) {					
 				}
 			});
 		},
+		parse : function(resp, xhr) {
+			 var data =(resp.data) ? resp.data: resp;			 
+			 this.rawFilters = {filters: data.reportMetadata.reportSpec.filters || {} };  	
+			 return data;
+		},		
 		defaults : {
 			reportMetadata : {
 				name : '',
 				reportSpec : {
-					filters : {
-						filterRules : {
-
-						}
-					}
+					filters : {}
 				},
-				settings : []
+				settings : {}
 			}
 		}
 	});

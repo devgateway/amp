@@ -1907,10 +1907,15 @@ public class ProgramUtil {
         public static List<String> getAllProgramColumnNames() {
             List<String> cNames = new ArrayList<String>();
             for (String base : NAME_TO_COLUMN_MAP.values()) {
-                cNames.add(base);
                 for (int i = 1; i < 9; i++)
                     cNames.add(String.format("%s Level %d", base, i));
             }
             return cNames;
         }
- }
+	public static AmpTheme getTopLevelProgram(AmpTheme program) {
+		if (program.getParentThemeId() != null && program.getIndlevel() > 1) {
+			program = getTopLevelProgram(program.getParentThemeId());
+		}
+		return program;
+	}
+}

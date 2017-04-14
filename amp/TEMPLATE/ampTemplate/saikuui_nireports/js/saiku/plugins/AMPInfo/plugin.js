@@ -17,7 +17,7 @@ var AMPInfo = Backbone.View.extend({
     render: function() {
     	Saiku.logger.log("AMPInfo.render");
 		var filters = this.workspace.query.get('filters');
-		var settings = window.currentSettings;
+		var settings = window.settingsWidget.toAPIFormat();
 		var content = this.render_info(settings);
 		$(this.el).html(content);
 		Saiku.i18n.translate();
@@ -27,16 +27,15 @@ var AMPInfo = Backbone.View.extend({
 			animate : "linear",
 			activate: function (event, ui) {
 				$("#amp_info_filters_block").empty();
-				var modelFilters = window.currentFilter.serializeToModels();
-//				FilterUtils.updateFiltersRegion(modelFilters);
-				$("#amp_info_filters_block").html(filtersToHtml(modelFilters));
+				var modelFilters = window.currentFilter.serializeToModels();				
+				$("#amp_info_filters_block").html(filtersToHtml(modelFilters.filters || {}));
 				Saiku.i18n.translate();
 			}
 		});
         $(this.el).show();
     },
     
-    render_info: function(settings) {
+    render_info: function(settings) {    	
     	Saiku.logger.log("AMPInfo.render_info");
     	//TODO: Move all these html into a template + view.
     	var content = "<div id='amp_notification' class='amp_notification'><span class='i18n'>{0}</span></div>" 
@@ -45,7 +44,8 @@ var AMPInfo = Backbone.View.extend({
     	content += "<div id='amp_info_filters_block'></div>";
     	content += "</div>";
     	if(settings){
-    		var currencyValue = _.findWhere(_.findWhere(this.workspace.amp_settings.settings_data, {id: '1'}).value.options, {id: settings['1']}).value;
+    		var currencyCode = settings[window.settingsWidget.Constants.CURRENCY_ID];
+    		var currencyValue = window.settingsWidget.definitions.findCurrencyById(currencyCode).value;
         	content += "<div id='amp_info_settings'><h5><span class='i18n'>Currency</span>: " + currencyValue;
         	content += "</h5></div>";
     	}
@@ -103,76 +103,43 @@ var filtersToHtml = function(filters) {
 	Saiku.logger.log("AMPInfo.filtersToHtml");
 	//TODO: Move all these html into a template + view.
 	var html = "";
-	if (filters.columnFilters != undefined) {
-		for ( var propertyName in filters.columnFilters) {
-			var auxProperty = filters.columnFilters[propertyName];
+	if (filters != undefined) {
+		for ( var propertyName in filters) {
+			var auxProperty = filters[propertyName];
 			var content = [];
-			_.each(auxProperty, function(item, i) {
-				var auxItem = {};
-				if(item.get !== undefined) {
-					auxItem.id = item.get('id');
-					auxItem.name = item.get('name');
-					if (item.get('name') === "true" || item.get('name') === "false") {
-						auxItem.trnName = TranslationManager.getTranslated(item.get('name'));
-						//auxItem.trnName = item.get('name');
-					 }
-					else {
-						auxItem.trnName = item.get('name');
-					}
-					content.push(auxItem);
-				} else {
-					console.error(JSON.stringify(auxItem) + " not mapped, we need to check why is not a model.");
+			if(auxProperty.modelType === 'YEAR-SINGLE-VALUE' || auxProperty.modelType === 'DATE-RANGE-VALUES'){
+				var filter = createDateFilterObject(filters, propertyName);
+				if(filter && filter.values.length > 0){
+					html += "<div class='round-filter-group'><b class='i18n'>" + filter.trnName.replace(/-/g, " ") + "</b><br>" + filterContentToHtml(filter.values) + "</div>";						
 				}
-			});
-			/*var name = TranslationManager.getTranslated(auxProperty.filterName) || TranslationManager.getTranslated(propertyName)*/
-			var trnName = auxProperty.filterName || propertyName;
-			html += "<div class='round-filter-group'><b class='i18n'>" + trnName + "</b><br>" + filterContentToHtml(content) + "</div>";
+				
+			} else {
+				_.each(auxProperty, function(item, i) {
+					var auxItem = {};				
+					if(item.get !== undefined) {
+						auxItem.id = item.get('id');
+						auxItem.name = item.get('name');
+						
+						if (item.get('name') === "true" || item.get('name') === "false") {						
+							auxItem.trnName = TranslationManager.getTranslated(item.get('name'));						
+						 }
+						else {
+							auxItem.trnName = item.get('name');
+						}
+						content.push(auxItem);
+					} else {
+						console.error(JSON.stringify(auxItem) + " not mapped, we need to check why is not a model.");
+					}
+				});
+				
+				var trnName = auxProperty.filterName || propertyName;
+				html += "<div class='round-filter-group'><b class='i18n'>" + trnName.replace(/-/g, " ") + "</b><br>" + filterContentToHtml(content) + "</div>";
+			}	
+			
 		}
 	}
-	if (filters.otherFilters != undefined) {
-		for ( var propertyName in filters.otherFilters) {
-			var dateContent = filters.otherFilters[propertyName];
-			if (dateContent != undefined) {
-				var filter = {
-					trnName : TranslationManager.getTranslated(propertyName), 
-					name : propertyName,
-					values:[]
-				};
-				if (dateContent.modelType === 'DATE-RANGE-VALUES') {
-					dateContent.start = dateContent.start || "";
-					dateContent.end = dateContent.end || "";
-					
-					var startDatePrefix = TranslationManager.getTranslated((dateContent.start.length > 0 && dateContent.end.length === 0) ? "from" : "") + '&nbsp;';
-					var endDatePrefix = TranslationManager.getTranslated((dateContent.start.length === 0 && dateContent.end.length > 0) ? "until" : "") + '&nbsp';
-					
-					if(dateContent.start.length > 0){
-						filter.values.push({
-							id : dateContent.start,
-							name : dateContent.start,
-							trnName : startDatePrefix + window.currentFilter.formatDate(dateContent.start) 
-						});
-					}
-					
-					if(dateContent.end.length > 0){
-						filter.values.push({
-							id : dateContent.end,
-							name : dateContent.end,
-							trnName : endDatePrefix + window.currentFilter.formatDate(dateContent.end) 					
-						});		
-					}									
-				} else if (dateContent.modelType === 'YEAR-SINGLE-VALUE') {
-					dateContent.year = dateContent.year || '';
-					filter.values.push({
-						id : dateContent.year,
-						name : dateContent.year,
-						trnName : dateContent.year
-					});
-					filter.trnName = dateContent.displayName;
-				}
-				html += "<div class='round-filter-group'><b class='i18n'>" + filter.trnName + "</b><br>" + filterContentToHtml(filter.values) + "</div>";
-			}
-		}
-	}
+	
+	
 	return html;
 }
 
@@ -184,6 +151,55 @@ var filterContentToHtml = function(content) {
 	});
 	return html;
 }
+
+var createDateFilterObject= function(filters, propertyName){	
+	var auxProperty = filters[propertyName];
+	var filter;	
+	if (auxProperty != undefined) {
+		filter = {
+				trnName : TranslationManager.getTranslated(propertyName), 
+				name : propertyName,
+				values:[]
+		};	
+		if (auxProperty.modelType === 'DATE-RANGE-VALUES') {
+			auxProperty.start = auxProperty.start || "";
+			auxProperty.end = auxProperty.end || "";
+
+			var startDatePrefix = TranslationManager.getTranslated((auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "From" : "");
+			var endDatePrefix = TranslationManager.getTranslated((auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "Until" : "");
+			var trnName = "";
+			
+			if(auxProperty.start.length > 0 ){
+				trnName = startDatePrefix + " " + window.currentFilter.formatDate(auxProperty.start);				
+			}			
+						
+			if(auxProperty.end.length > 0){
+				if(auxProperty.start.length > 0){
+					trnName += " - ";
+				}
+				trnName += endDatePrefix + " " + window.currentFilter.formatDate(auxProperty.end);					
+			}	
+			
+			filter.values.push({
+				id : auxProperty.end + auxProperty.start ,
+				name : auxProperty.end + auxProperty.start,
+				trnName : trnName 					
+			});	
+			
+			
+		} else if (auxProperty.modelType === 'YEAR-SINGLE-VALUE') {
+			if(auxProperty.year){				
+				filter.values.push({
+					id : auxProperty.year,
+					name : auxProperty.year,
+					trnName : auxProperty.year
+				});
+			}			
+			filter.trnName = auxProperty.displayName;
+		}
+	}
+	return filter;
+};
 
 /**
  * Start Plugin

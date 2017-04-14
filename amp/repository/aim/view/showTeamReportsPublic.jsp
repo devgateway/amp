@@ -15,7 +15,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
 
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.PUBLIC_VIEW %>" compareWith="On" onTrueEvalBody="true">
+<%if(FeaturesUtil.isVisibleModule("Public Reports")){ %> 
 
 <!-- this is for the nice tooltip widgets -->
 
@@ -340,14 +340,11 @@ function submitForm(action){
 																				<c:set var="nameTooltip">
 																					<digi:trn>Click here to view the Report</digi:trn>
 																				</c:set>
+																				<c:set var="reportLink" value="${fn:getReportUrl(report)}" />
 																				<td class="report_inside" style="font-size: 11px;"
 																					bgcolor="${color}">
 																					<div class="t_sm" title="${report.name}">
 																					
-																						<%-- <c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/> --%>
-																						
-																						<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
-																					    
 																						<a
 																							href="${reportLink}"
 																							onclick="return popup(this,'');"
@@ -433,15 +430,14 @@ function submitForm(action){
 																				<td align="center" class="report_inside"
 																					style="font-size: 11px;" bgcolor="${color}"><c:forEach
 																						var="hierarchy" items="${report.hierarchies}">
-																						<digi:trn
-																							key="aim:report:${hierarchy.column.columnName}">${hierarchy.column.columnName}</digi:trn>
+																						<digi:colNameTrn>${hierarchy.column.columnName}</digi:colNameTrn>
+
 																						<br />
 																					</c:forEach>&nbsp;</td>
 																				<td align="center" class="report_inside"
 																					style="font-size: 11px;" bgcolor="${color}"><c:forEach
 																						var="column" items="${report.columns}">
-																						<digi:trn
-																							key="aim:report:${column.column.columnName}">${column.column.columnName}</digi:trn>
+																						<digi:colNameTrn>${column.column.columnName}</digi:colNameTrn>
 																						<br />
 																					</c:forEach></td>
 																				<td align="center" class="report_inside"
@@ -462,8 +458,8 @@ function submitForm(action){
 																						</c:set>
 																						<c:set target="${urlParams}" property="event" value="edit" />
 
-																						<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
-						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+																						<a href="${reportLink}"
+						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the report</digi:trn>">
 						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
 																						
 																						<c:set var="showExportExcelSetting" scope="page" value="true"/>
@@ -630,7 +626,7 @@ function submitForm(action){
 			</tr>
 		</table>
 	</digi:form>
-</gs:test>
+<%}%>
 
 
 <script>

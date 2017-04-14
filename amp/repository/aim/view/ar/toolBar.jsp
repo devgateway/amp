@@ -332,19 +332,7 @@ addLoadEvent(addpanel);
 				</logic:equal>
 			</td>
 		</feature:display>
-					
-		<module:display name="Map Module">
-			<td noWrap align=left valign="center">
-				<logic:notEqual name="viewable" property="totalUniqueRows" value="0">
-					<a href="/esrigis/mainmap.do?exportreport=true&ampReportId=${ampReportId}" target="_blank" title="<digi:trn>Export to Map</digi:trn>">
-						<img alt="Export to Map" src="module/aim/images/globe-icon_2.png" hspace="2" vspace="2" border="0">
-					</a>
-				</logic:notEqual>
-				<logic:equal name="viewable" property="totalUniqueRows" value="0">
-					<img alt="Export to Map" src="module/aim/images/globe-icon_2_gray.png" hspace="2" vspace="2" border="0" title="Report is empty. Nothing to export">
-				</logic:equal>
-			</td>
-		</module:display>
+
 	</tr>
 </table>
 </div>

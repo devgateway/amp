@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.jcr.Node;
@@ -242,7 +244,7 @@ public class SearchUtil {
 	}
 
 	public static Collection<LoggerIdentifiable> getActivities(String keyword, HttpServletRequest request, TeamMember tm) {
-		Collection<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
+
 		StopWatch.reset("Search");
 
 		String workspaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
@@ -285,6 +287,11 @@ public class SearchUtil {
 		newQuery = newQuery.addScalar("approval_status", org.hibernate.type.StandardBasicTypes.STRING);
 		newQuery = newQuery.addScalar("draft", org.hibernate.type.StandardBasicTypes.BOOLEAN);
 
+		LinkedHashMap<Long, LoggerIdentifiable> sortingActivities = new LinkedHashMap<>();
+		for (Long i : filter.getAmpActivityIdOrder()) {
+            sortingActivities.put(i,null);
+		}
+
 		// StopWatch.next("Search", true,"mycomment 2");
 		// ignore the warning
 		List<Object[]> items = newQuery.list();
@@ -301,10 +308,11 @@ public class SearchUtil {
 			AmpActivityFake activity = new AmpActivityFake(name, ampId, ampActivityId);
 			activity.setDraft(draft);
 			activity.setStatus(status);
-			resultList.add(activity);
+            sortingActivities.put(activity.getAmpActivityId(), activity);
 		}
 		// StopWatch.next("Search", true,"mycomment 3");
-		return resultList;
+        sortingActivities.values().removeIf(Objects::isNull);
+		return sortingActivities.values();
 	}
 
 	public static Collection<LoggerIdentifiable> getResources(String keyword, HttpServletRequest request, TeamMember tm) {
@@ -359,15 +367,19 @@ public class SearchUtil {
 				Set<String> keySet = pd.keySet();
 				for (String uuid : keySet) {
 					Node lastVersion = DocumentManagerUtil.getReadNode(uuid, request);
-					NodeWrapper nw = new NodeWrapper(lastVersion);
-					if (keywordMatches(nw, keyword)) {
-						Resource resource = new Resource();
-						resource.setName(nw.getTitle());
-						resource.setUuid(nw.getUuid());
-						resource.setWebLink(nw.getWebLink());
-						if (!resultList.contains(resource)) {
-							resultList.add(resource);
+					if (lastVersion != null) {
+						NodeWrapper nw = new NodeWrapper(lastVersion);
+						if (keywordMatches(nw, keyword)) {
+							Resource resource = new Resource();
+							resource.setName(nw.getTitle());
+							resource.setUuid(nw.getUuid());
+							resource.setWebLink(nw.getWebLink());
+							if (!resultList.contains(resource)) {
+								resultList.add(resource);
+							}
 						}
+					} else {
+						logger.warn("Missing resource in the JCR repository: " + uuid);
 					}
 				}
 

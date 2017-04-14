@@ -144,7 +144,8 @@ body {background:none;}
                                               </td>
                                               <td bgcolor="#FFFFFF">
                                                 <span class="word_break">
-                                                	<c:out value="${aimEditActivityForm.identification.statusReason}" escapeXml="false" />
+                                                	<c:set var="objStatusReason" value="${aimEditActivityForm.identification.statusReason}" />
+													<span class="word_break"><digi:edit key="${objStatusReason}"></digi:edit></span>
 												</span>
                                               </td>
                                         </tr>
@@ -295,9 +296,7 @@ body {background:none;}
 											<td bgcolor="#ffffff">
 												<c:if test="${not empty aimEditActivityForm.identification.lessonsLearned}">
 													<bean:define id="lessonsLearnedKey">
-													<span class="word_break">
 														<c:out value="${aimEditActivityForm.identification.lessonsLearned}"/>
-														</span>
 													</bean:define>
 													<span class="word_break bold">
 														<digi:edit key="${lessonsLearnedKey}"></digi:edit>
@@ -631,6 +630,40 @@ body {background:none;}
 									</c:if>
 									</module:display>
 <!-- end identification in the same order as previewActivity -->
+
+
+										   <!-- PROJECT INTERNAL IDS SECTION -->
+										   <module:display name="/Activity Form/Activity Internal IDs" parentModule="/Activity Form">
+											   <tr>
+												   <td class="field_name" >
+													   <b>
+														   <digi:trn>Agency Internal IDs</digi:trn>
+													   </b>										</td>
+												   <td bgcolor="#ffffff">
+													   <c:if test="${!empty aimEditActivityForm.internalIds}">
+														   <table width="100%" cellSpacing="2" cellPadding="1">
+															   <c:forEach var="internalObj" items="${aimEditActivityForm.internalIds}">
+																   <tr>
+																	   <td>
+																			<span class="word_break bold">
+																				[${internalObj.organisation.name}]
+																			</span>
+																	   </td>
+																	   <td align="right">
+																		   <module:display name="/Activity Form/Activity Internal IDs/Internal IDs/internalId" parentModule="/Activity Form">
+																				<c:out value="${internalObj.internalId}"/>
+																		   </module:display>
+																	   </td>
+																   </tr>
+															   </c:forEach>
+														   </table>
+													   </c:if>
+												   </td>
+											   </tr>
+										   </module:display>
+										   <!-- END PROJECT INTERNAL IDS SECTION -->
+
+
 									<feature:display name="Budget" module="Project ID and Planning">
 									<tr>
 										<td class="field_name" >
@@ -816,15 +849,6 @@ body {background:none;}
 													</td>
 												</tr>
 												</module:display>
-												<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
-                                                    <tr>
-                                                        <td width="32%"><digi:trn>Proposed Project Life</digi:trn></td>
-                                                        <td width="1">:</td>
-                                                        <td align="left">
-                                                            ${aimEditActivityForm.planning.proposedProjectLife}
-                                                        </td>
-                                                    </tr>
-                                                </module:display>
 
 												<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 												<tr>
@@ -962,6 +986,16 @@ body {background:none;}
 													<td colspan="3">&nbsp;</td>
 												</tr>
 												</c:if>
+
+													<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
+														<tr>
+															<td width="32%"><digi:trn>Proposed Project Life</digi:trn></td>
+															<td width="1">:</td>
+															<td align="left">
+																	${aimEditActivityForm.planning.proposedProjectLife}
+															</td>
+														</tr>
+													</module:display>
 
 												<field:display name="Duration of Project" feature="Planning">
 												<c:if test="${!aimEditActivityForm.editAct}">
@@ -1524,7 +1558,8 @@ body {background:none;}
 																				</logic:notEmpty>
 																			</field:display>
 
-																			<field:display name="Agreement" feature="Funding Information">
+																			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
+																					parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																				<logic:notEmpty name="funding" property="title">
                                                                               		<tr>
                                                                                 		<td align="left" width="339">
@@ -1549,7 +1584,7 @@ body {background:none;}
                                                                                   		</td>
                                                                               		</tr>
 																				</logic:notEmpty>
-																			</field:display>
+																			</module:display>
 																			
 				                                                            </table>
                                                                            </td>
@@ -1643,10 +1678,12 @@ body {background:none;}
 	                         		</td>
                         		</tr>
                         	</logic:notEmpty>
-                        <field:display name="Pipeline" feature="Commitments">
+						<c:if test="${aimEditActivityForm.funding.showPipeline}">
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.totalPipelineCommitments">
 								<tr>
-	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn> TOTAL PIPELINE COMMITMENTS: </digi:trn></td>
+	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+										<digi:trn key='aim:totalpipelinecommittment'> TOTAL PIPELINE COMMITMENTS </digi:trn>:
+									</td>
 	                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
 										<bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" />
 										<bean:write name="aimEditActivityForm" property="currCode" />
@@ -1654,7 +1691,7 @@ body {background:none;}
 									</td>
 	                        	</tr>
 	                        </logic:notEmpty>
-                        </field:display>
+						</c:if>
                         <feature:display module="Funding" name="Disbursement">
 							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedDisbursements">
                        			<tr>
@@ -1761,15 +1798,6 @@ body {background:none;}
                         	</logic:notEmpty>
                         </feature:display>
 
-                        <logic:notEmpty name="aimEditActivityForm" property="funding.consumptionRate">
-                        	<tr>
-                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:undisbursedBalance"> Consumption Rate</digi:trn>: </td>
-                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-									<b>${aimEditActivityForm.funding.consumptionRate}</b>
-                                	&nbsp;
-                            	</td>
-                        	</tr>
-                        </logic:notEmpty>
                         <logic:notEmpty name="aimEditActivityForm" property="funding.deliveryRate">
 							<tr>
                             	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn>Delivery Rate</digi:trn>: </td>
@@ -2731,25 +2759,8 @@ body {background:none;}
 													<digi:trn>Donor funding contact information</digi:trn>
 												</td>
 												<td>
-													<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
-														<c:forEach var="donorContact" items="${aimEditActivityForm.contactInformation.donorContacts}">
-															<div>
-															<span class="word_break">
-																<c:out value="${donorContact.contact.name}"/>
-															</span>
-															<span class="word_break"> 
-																<c:out value="${donorContact.contact.lastname}"/> -
-															</span>
-																<c:forEach var="property" items="${donorContact.contact.properties}">
-																	<c:if test="${property.name=='contact email'}">
-																	<span class="word_break">
-																		<c:out value="${property.value}"/> ;
-																	</span>
-																	</c:if>
-																</c:forEach>
-															</div>
-														</c:forEach>
-													</c:if>
+													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.donorContacts}" />
+													<%@include file="activitypreview/contactInformation.jspf" %>
 												</td>
 											</tr>
 											</module:display>
@@ -2759,25 +2770,8 @@ body {background:none;}
 													<digi:trn>MOFED contact information</digi:trn>
 												</td>
 												<td>
-													<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
-														<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
-															<div>
-															<span class="word_break">
-																<c:out value="${mofedContact.contact.name}"/>
-															</span>
-															<span class="word_break">
-																<c:out value="${mofedContact.contact.lastname}"/> -
-															</span>
-																<c:forEach var="property" items="${mofedContact.contact.properties}">
-																	<c:if test="${property.name=='contact email'}">
-																	<span class="word_break">
-																		<c:out value="${property.value}"/> ;
-																	</span>
-																	</c:if>
-																</c:forEach>
-															</div>
-														</c:forEach>
-													</c:if>
+													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.mofedContacts}" />
+													<%@include file="activitypreview/contactInformation.jspf" %>
 												</td>
 											</tr>
 											</module:display>
@@ -2787,25 +2781,8 @@ body {background:none;}
 													<digi:trn>Project Coordinator Contact Information</digi:trn>
 												</td>
 												<td>
-													<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
-														<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
-															<div>
-															<span class="word_break">
-																<c:out value="${projCoordinatorContact.contact.name}"/>
-															</span>
-															<span class="word_break">
-																<c:out value="${projCoordinatorContact.contact.lastname}"/> -
-															</span>
-																<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
-																	<c:if test="${property.name=='contact email'}">
-																	<span class="word_break">
-																		<c:out value="${property.value}"/> ;
-																	</span>
-																	</c:if>
-																</c:forEach>
-															</div>
-														</c:forEach>
-													</c:if>
+													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.projCoordinatorContacts}" />
+													<%@include file="activitypreview/contactInformation.jspf" %>
 												</td>
 											</tr>
 											</module:display>
@@ -2815,27 +2792,8 @@ body {background:none;}
 													<digi:trn>Sector Ministry Contact Information</digi:trn>
 												</td>
 												<td>
-													<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
-														<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
-															<div>
-															<span class="word_break">
-																<c:out value="${sectorMinistryContact.contact.name}"/>
-															</span>
-															<span class="word_break">
-																<c:out value="${sectorMinistryContact.contact.lastname}"/> -
-															</span>
-															<span class="word_break">
-																<c:forEach var="property" items="${sectorMinistryContact.contact.properties}">
-															</span>
-																	<c:if test="${property.name=='contact email'}">
-																	<span class="word_break">
-																		<c:out value="${property.value}"/>;
-																	</span>
-																	</c:if>
-																</c:forEach>
-															</div>
-														</c:forEach>
-													</c:if>
+													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.sectorMinistryContacts}" />
+													<%@include file="activitypreview/contactInformation.jspf" %>
 												</td>
 											</tr>
 										</module:display>
@@ -2845,30 +2803,25 @@ body {background:none;}
 													<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>
 												</td>
 												<td>
-													<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
-														<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
-															<div>
-															<span class="word_break">
-																<c:out value="${implExecAgencyContact.contact.name}"/>
-															</span>
-															<span class="word_break">
-																<c:out value="${implExecAgencyContact.contact.lastname}"/> -
-															</span>
-																<c:forEach var="property" items="${implExecAgencyContact.contact.properties}">
-																	<c:if test="${property.name=='contact email'}">
-																	<span class="word_break">
-																		<c:out value="${property.value}"/> ;
-																	</span>
-																	</c:if>
-																</c:forEach>
-															</div>
-														</c:forEach>
-													</c:if>
+													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}" />
+													<%@include file="activitypreview/contactInformation.jspf" %>
 												</td>
 											</tr>
 										</module:display>
 									</module:display>
-
+									<!-- M & E  SECTION -->
+									<module:display name="M & E" parentModule="MONITORING AND EVALUATING">
+										<tr>
+											<td class="field_name" >
+												<b><digi:trn>M &amp; E</digi:trn></b>
+											</td>
+											<td>
+                                                <bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"/>
+                                                <jsp:include page="previewIndicatosList.jsp"/>
+											</td>
+										</tr>
+									</module:display>
+									<!-- END M & E  SECTION -->
 							 		<field:display name="Activity Performance"  feature="Activity Dashboard">
 									<tr>
 										<td class="field_name">
@@ -3073,10 +3026,60 @@ body {background:none;}
 									</feature:display>
 								  </logic:present>
 
+									<!-- GPI -->
+									<module:display name="/Activity Form/GPI" parentModule="/Activity Form">
+										<bean:define id="gpiSurvey" name="gpiSurveys" scope="request" toScope="page"
+													 type="java.util.Collection"/>
+										<c:if test="${not empty gpiSurvey}">
+											<tr>
+												<td vAlign="top" class="field_name">
+													<b><digi:trn>GPI</digi:trn></b>
+												</td>
+												<td vAlign="top">
+													<c:set var="currentIndicatorName" value=""/>
+													<logic:iterate name="gpiSurveys" id="gpiSurvey"
+																   type="java.util.Collection" indexId="gpiId">
+														<logic:iterate name="gpiSurvey" id="gpiresponse"
+																	   type="org.digijava.module.aim.dbentity.AmpGPISurveyResponse">
+															<table width="100%" cellSpacing="2" cellPadding="1"
+																   style="font-size:11px;" border="0">
+																<c:if test="${!currentIndicatorName.equals(gpiresponse.ampQuestionId.ampIndicatorId.name)}">
+																	<c:set var="currentIndicatorName"
+																		   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
+																	<tr>
+																		<td bgcolor="#eeeeee"
+																			style="text-transform: uppercase;">
+																			<c:set var="indicatorName"
+																				   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
+																			<span class="word_break bold">${indicatorName}</span>
+																		</td>
+																	</tr>
+																</c:if>
+																<tr>
+																	<td width=85%>
+																		<c:set var="questionText"
+																			   value="${gpiresponse.ampQuestionId.questionText}"/>
+																		<span class="word_break bold">${questionText}</span>
+																		<c:set var="responseText"
+																			   value="${gpiresponse.response}"/>
+																		<lu>
+																			<li>
+																				<span class="word_break bold">${responseText}</span>
+																			</li>
+																		</lu>
+																	</td>
+																</tr>
+															</table>
+														</logic:iterate>
+													</logic:iterate>
+												</td>
+											</tr>
+										</c:if>
+									</module:display>
+									<!-- END GPI -->
 
 
-
-<field:display name="Activity Created By" feature="Identification">
+									<field:display name="Activity Created By" feature="Identification">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -3086,85 +3089,108 @@ body {background:none;}
 										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/>
-											<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> -
-											<c:out value="${aimEditActivityForm.identification.actAthEmail}"/>
+											<c:out value="${aimEditActivityForm.identification.actAthLastName}"/>
 										</td>
 									</tr>
-									</field:display>
-									<field:display name="Activity Updated On" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:activityUpdatedOn">Activity updated on</digi:trn>
-											</b>
-										</td>
-<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.identification.updatedDate}"/>
-										</td>
-									</tr>
-									</logic:notEmpty>
-									</field:display>
-									<field:display name="Activity Updated By" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:activityUpdatedBy">
-										    Activity updated by</digi:trn>
-											</b>
-										</td>
-										<td bgcolor="#ffffff">
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
-											</span>
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>	-
-											</span>
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.modifiedBy.user.email}"/>
-											</span>
-											</td>
-									</tr>
-									</logic:notEmpty>
-									</field:display>
-									<field:display name="Activity Created On" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="identification.createdDate">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:activityCreatedOn">
-										    Activity created on</digi:trn>
-											</b>								</td>
-<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.identification.createdDate}"/>										</td>
-									</tr>
-									</logic:notEmpty>
-									</field:display>
-									<logic:notEmpty name="aimEditActivityForm" property="identification.team">
-									<field:display name="Data Team Leader" feature="Identification">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:activityTeamLeader">
-										    Data Team Leader</digi:trn>
-											</b>
-										</td>
+										<field:display name="Activity Created On" feature="Identification">
+											<logic:notEmpty name="aimEditActivityForm" property="identification.createdDate">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:activityCreatedOn">
+																Activity created on</digi:trn>
+														</b>								</td>
+													<td bgcolor="#ffffff">
+														<c:out value="${aimEditActivityForm.identification.createdDate}"/>										</td>
+												</tr>
+											</logic:notEmpty>
+										</field:display>
 
+										<field:display name="Activity Last Updated by" feature="Identification">
+											<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:activityLastUpdatedBy">Activity Last Updated by</digi:trn>
+														</b>
+													</td>
+													<td bgcolor="#ffffff">
+														<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
+														<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
+													</td>
+												</tr>
+											</logic:notEmpty>
+										</field:display>
+
+										<field:display name="Activity Updated On" feature="Identification">
+											<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:activityUpdatedOn">Activity updated on</digi:trn>
+														</b>
+													</td>
+													<td bgcolor="#ffffff">
+														<c:out value="${aimEditActivityForm.identification.updatedDate}"/>
+													</td>
+												</tr>
+											</logic:notEmpty>
+										</field:display>
+									<tr>
+										<td class="field_name" >
+											<b>
+											<digi:trn key="aim:createdInWorkspace">Created in workspace</digi:trn>
+											</b>
+										</td>
 										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.team !=null}">
+												<c:out value="${aimEditActivityForm.identification.team.name}"/> -
+												<digi:trn>
+													<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
+												</digi:trn>
+											</c:if>
+										</td>
+									</tr>
+										<logic:notEmpty name="aimEditActivityForm" property="identification.team">
+											<field:display name="Data Team Leader" feature="Identification">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:workspaceManager">
+																Workspace manager</digi:trn>
+														</b>
+													</td>
+
+													<td bgcolor="#ffffff">
 											<span class="word_break">
 												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
 											</span>
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
+														<span class="word_break">
+												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/> -
 											</span>
-											<span class="word_break">
+														<span class="word_break">
 												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
 											</span>
+													</td>
+												</tr>
+											</field:display>
+										</logic:notEmpty>
+									<tr>
+										<td class="field_name" >
+											<b>
+											<digi:trn key="aim:computation">Computation</digi:trn>
+											</b>
+										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
+												<digi:trn key="aim:yes">Yes</digi:trn>
+											</c:if>
+											<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
+												<digi:trn key="aim:no">No</digi:trn>
+											</c:if>
 										</td>
 									</tr>
 									</field:display>
-									</logic:notEmpty>
 
 									<logic:notEmpty name="aimEditActivityForm" property="structures">
 

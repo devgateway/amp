@@ -1,6 +1,9 @@
 //form3 = aimReportsFilterPickerForm3;// document.getElementsByName('aimReportsFilterPickerForm3')[0];
 // is this file ever used?
 
+// load the TranslationManager object
+$.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
+
 function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessage, loadingDataMessage, 
 				savingDataMessage, cannotSaveFiltersMessage, doReset,settingsPanelName, validationMsgs) {
 	this.connectionFailureMessage	= connectionFailureMessage;
@@ -50,9 +53,59 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 	this.hasFilters				= document.getElementById("hasFilters");
 }
 
+// This method is used both by Filter Panel and Settings Panel.
+function failureReportFunction(o) {
+	var isLogged = false;
+	var getUserInformation = {
+		success : function(o) {
+			var response = [];
+			var currentPanel = o.argument.filter instanceof Filters ?  o.argument.filter.filterPanel : o.argument.filter.panel;			
+			if (o.responseText !== undefined) {
+				try {
+	                // parse the json data
+					response = YAHOO.lang.JSON.parse(o.responseText);
+					// get the json attribute value of the 'logged' attribute
+					isLogged = response['logged'];
+					if (isLogged) {
+						// could be some connection issues
+						currentPanel.setBody("<font color='red'>" + this.filterProblemsMessage + "</font>");
+					} else {
+						// timeout to redirect
+						var timeout = 3;
+
+						// build the error message
+						var errorMessageUserLoggedOut = "<font color='red'>" + TranslationManager.getTranslated('Session is expired') + ". ";
+
+						errorMessageUserLoggedOut += TranslationManager.getTranslated('The page will be reloaded in') + " " + timeout + " " + TranslationManager.getTranslated('seconds') + "</font>.";
+						currentPanel.setBody(errorMessageUserLoggedOut);
+						
+						var timer = setTimeout(function() {
+							window.location.reload();
+						}, timeout * 1000);
+					}
+	            }  catch (x) {
+	            	var errorMessage = "<font color='red'> ";
+	            	errorMessage += TranslationManager.getTranslated('An error has occured') + x + "</font>.";
+	            	currentPanel.setBody(errorMessage);
+	            	return;
+	            }
+			}
+		},
+		failure : function(o) {
+			var currentPanel = o.argument instanceof Filters ?  o.argument.filter.filterPanel : o.argument.filter.panel;		
+			var errorMessage = "<font color='red'> ";
+			errorMessage += TranslationManager.getTranslated('The URL is unreachable') + o.responseText + "</font>.";
+			currentPanel.setBody(errorMessage);
+		},
+		argument: { filter: this}
+	};
+	
+	// get the information about the user 
+	YAHOO.util.Connect.asyncRequest("GET", "/rest/security/layout", getUserInformation);
+};
+
 Filters.prototype.success	= function (o) {
-	if ( o.responseText.length > 2 ) {
-		//this.filterPanel.hide();
+	if (o.responseText.length > 2) {
 		this.filterPanel.setBody( o.responseText );
 		this.filterTabs	= new YAHOO.widget.TabView('tabview_container');
 		
@@ -68,14 +121,12 @@ Filters.prototype.success	= function (o) {
 		YAHOO.util.Event.removeListener("filterPickerSubmitButton", "click");
 		YAHOO.util.Event.addListener( "filterPickerSubmitButton", "click", this.saveFilters.saveFilters, this.saveFilters, this.saveFilters ) ;
 		
-	}
-	else {
-		this.filterPanel.setBody ( "<font color='red'>" + this.filterProblemsMessage + "</font>");
+	} else {
+		this.filterPanel.setBody("<font color='red'>" + this.filterProblemsMessage + "</font>");
 	}
 };
-Filters.prototype.failure	= function (o) {
-	this.filterPanel.setBody( "<font color='red'>" + this.connectionFailureMessage + "</font>");
-};
+
+Filters.prototype.failure = failureReportFunction;
 
 Filters.prototype.showFilters	= function(reportContextId) {
 	var avoidIECacheParam 	=	"&time=" + new Date().getTime(); 
@@ -94,7 +145,7 @@ Filters.prototype.showFilters	= function(reportContextId) {
 	this.fixZIndex("#new_mask", 3);
 };
 
-Filters.prototype.showSettings	= function() {
+Filters.prototype.showSettings	= function(reportContextId) {
 	initFormatPopup();
 	this.saveFilters	= new SaveFilters(this, true);
 	var element = document.getElementById("customFormat");
@@ -212,7 +263,6 @@ SaveFilters.prototype.saveFilters	= function (e, obj) {
 };
 
 SaveFilters.prototype.success	= function (o) {
-	//alert ("saveFilters: " + o.responseText);
 	if ( o.responseText.length > 0 ) {
 		this.panel.hide();
 		if (this.filterObj.hasFilters !== null && this.filterObj.hasFilters !== undefined) {
@@ -227,9 +277,7 @@ SaveFilters.prototype.success	= function (o) {
 		this.panel.setBody (this.filterObj.cannotSaveFiltersMessage);
 };
 
-SaveFilters.prototype.failure	= function (o) {
-	this.panel.setBody( "<font color='red'>" + this.connectionFailureMessage + "</font>");
-};
+SaveFilters.prototype.failure = failureReportFunction;
 
 function initFormatPopup(){
 	

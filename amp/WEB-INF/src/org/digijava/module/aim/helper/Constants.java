@@ -116,7 +116,6 @@ public class Constants
 	public static final Integer CURRENT = new Integer(2);
 	
 	public static final String USER_WORKSPACES="USER_WORKSPACES";
-	public static final String MENU_DASHBOARDS="MENU_DASHBOARDS";
 	//Removed by Govind
 	//public static  String COUNTRY_ISO = "";
 	//public static  String COUNTRY = "";
@@ -436,4 +435,6 @@ public class Constants
      public static final String LOGIN_ACTION="login";
      public static final String SENT_REMINDER="sentReminder";
      public static final String UNASSIGNED_ACTIVITY_LIST="unassignedActivityList";
+
+	public static final String AUTOMATIC_VALIDATION_JOB_CLASS_NAME = "org.digijava.module.message.jobs.ActivityAutomaticValidationJob" ;
 }

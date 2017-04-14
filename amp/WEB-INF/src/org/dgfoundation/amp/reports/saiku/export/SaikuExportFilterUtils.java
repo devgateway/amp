@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -14,6 +15,7 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportFilters;
+import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema.NamedElemType;
@@ -44,9 +46,9 @@ public class SaikuExportFilterUtils {
 	public static Map<String, List<String>> getFilterValuesForIds(ReportFilters filters) {
 		Map<String, List<String>> extractedFilters = new HashMap<String, List<String>>();
 		if (filters != null) {
-			Map<ReportElement, List<FilterRule>> filterRules = filters.getAllFilterRules();
+			Map<ReportElement, FilterRule> filterRules = filters.getAllFilterRules();
 			
-			for (Map.Entry<ReportElement, List<FilterRule>> filter : filterRules.entrySet()) {
+			for (Map.Entry<ReportElement, FilterRule> filter : filterRules.entrySet()) {
 				if (filter.getValue() != null) {
 					switch(filter.getKey().type) {
 						case ENTITY: {
@@ -79,26 +81,26 @@ public class SaikuExportFilterUtils {
 		return extractedFilters;
 	}
 	
-	private static List<String> getEntityValuesNames(Entry<ReportElement, List<FilterRule>> filter, String columnName) {
+	private static List<String> getEntityValuesNames(Entry<ReportElement, FilterRule> filter, String columnName) {
 		NamedElemType elemType = AmpReportsSchema.getInstance().getNamedElemType(columnName);
 		
 		if (elemType != NamedElemType.UNKNOWN) {
 			if (elemType == NamedElemType.DATE) {
 				return getDateValues(filter.getValue());
 			} else {
-				Set<Long> allIds = filter.getValue().stream().flatMap(fr -> fr.addIds(null).stream()).collect(Collectors.toSet());
+				Set<Long> allIds = filter.getValue().addIds(null).stream().collect(Collectors.toSet());
 				return new ArrayList<String>(fetchEntities(elemType, columnName, allIds).values());
 			}
 		} 
 		
 		if (ColumnConstants.APPROVAL_STATUS.equals(columnName)) {
-			List<String> vals = filter.getValue().stream().flatMap(fr -> fr.values.stream()).collect(Collectors.toList());
+			List<String> vals = filter.getValue().values.stream().collect(Collectors.toList());
 			vals.replaceAll(status -> TranslatorWorker.translateText(FilterUtils.getApprovalStatusByNumber(new Integer(status))));
 			return vals;
 		} 
 		
 		if (ColumnConstants.TEAM.equals(columnName)) {
-			Set<Long> allIds = filter.getValue().stream().flatMap(fr -> fr.addIds(null).stream()).collect(Collectors.toSet());
+			Set<Long> allIds = filter.getValue().addIds(null).stream().collect(Collectors.toSet());
 			Map<Long, String> entities = new HashMap<Long, String>();
 			TeamUtil.getAllTeams().stream().filter(team -> allIds.contains(team.getAmpTeamId())).forEach(team -> {
 				entities.put(team.getAmpTeamId(), team.getName());
@@ -110,7 +112,11 @@ public class SaikuExportFilterUtils {
 			return getBooleanValues(filter.getValue());
 		}
 		
-		return filter.getValue().stream().flatMap(fr -> fr.values.stream()).collect(Collectors.toList());
+		if (filter.getValue().filterType == FilterType.SINGLE_VALUE) {
+			return Stream.of(filter.getValue().value).collect(Collectors.toList());
+		}
+		
+		return filter.getValue().values.stream().collect(Collectors.toList());
 	}
 
 	/**
@@ -166,30 +172,26 @@ public class SaikuExportFilterUtils {
 		return entities;
 	}
 	
-	private static List<String> getDateValues(List<FilterRule> rules) {
+	private static List<String> getDateValues(FilterRule rule) {
 		List<String> values = new ArrayList<String>();
-		
-		for(FilterRule rule : rules) {
-			values.add(DateTimeUtil.formatDate(DateTimeUtil.fromJulianNumberToDate(rule.min)));
-			values.add(DateTimeUtil.formatDate(DateTimeUtil.fromJulianNumberToDate(rule.max)));
-		}
-		
+
+		values.add(DateTimeUtil.formatDate(DateTimeUtil.fromJulianNumberToDate(rule.min)));
+		values.add(DateTimeUtil.formatDate(DateTimeUtil.fromJulianNumberToDate(rule.max)));
+
 		return values;
 	}
 	
-	private static List<String> getBooleanValues(List<FilterRule> rules) {
+	private static List<String> getBooleanValues(FilterRule rule) {
 		List<String> values = new ArrayList<String>();
 
-		for(FilterRule rule : rules) {
-			 if (rule.values != null) {
-				if (rule.values.size() > 1) {
-					values.add(TranslatorWorker.translateText("All") + ": " + TranslatorWorker.translateText("Yes") + "/" + TranslatorWorker.translateText("No"));
-				} else {
-					values.add(FilterRule.TRUE_VALUE.equals(rule.values.get(0)) ? TranslatorWorker.translateText("Yes") : TranslatorWorker.translateText("No"));
-				}
+		if (rule.values != null) {
+			if (rule.values.size() > 1) {
+				values.add(TranslatorWorker.translateText("All") + ": " + TranslatorWorker.translateText("Yes") + "/" + TranslatorWorker.translateText("No"));
+			} else {
+				values.add(FilterRule.TRUE_VALUE.equals(rule.values.get(0)) ? TranslatorWorker.translateText("Yes") : TranslatorWorker.translateText("No"));
 			}
 		}
-		
+
 		return values;
 	}
 }

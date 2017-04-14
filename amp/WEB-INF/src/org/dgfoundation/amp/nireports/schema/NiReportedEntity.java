@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports.schema;
 
 import java.util.List;
 
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -17,12 +18,18 @@ public abstract class NiReportedEntity<K extends Cell> {
 	
 	protected final Behaviour<?> behaviour;
 	public final String name;
+	public final LocalizableLabel label;
 	public final String description;
 	public final String representingString;
-	
+
 	protected NiReportedEntity(String name, Behaviour<?> behaviour, String description) {
+		this(name, new LocalizableLabel(name), behaviour, description);
+	}
+
+	protected NiReportedEntity(String name, LocalizableLabel label, Behaviour<?> behaviour, String description) {
 		NiUtils.failIf(behaviour == null, () -> String.format("trying to define entity <%s> with null behaviour", name));
 		this.name = name;
+		this.label = label;
 		this.behaviour = behaviour;
 		this.description = description;
 		this.representingString = String.format("%s %s", this.getClass().getName(), getName());

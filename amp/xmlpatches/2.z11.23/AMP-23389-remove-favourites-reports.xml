@@ -13,7 +13,7 @@
 				
 				DELETE from amp_menu_entry where name = 'Favourite Reports';
 				
-				UPDATE amp_menu_entry SET url = '/viewTeamReports.do?tabs=false&reset=true' WHERE name  = 'All Reports';
+				UPDATE amp_menu_entry SET url = '/viewTeamReports.do?tabs=false&amp;reset=true' WHERE name  = 'All Reports';
 			</lang>
 		</script>
 	</apply>

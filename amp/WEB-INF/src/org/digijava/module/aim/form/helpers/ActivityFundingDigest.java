@@ -72,7 +72,6 @@ public class ActivityFundingDigest {
 	private double regionTotalDisb;
 	private Collection orderedFundingOrganizations;
 	private Collection financingBreakdown = null;
-	private String consumptionRate;
 	private String deliveryRate;
 	// Add Funding fields
 	private Collection organizations;
@@ -275,12 +274,8 @@ public class ActivityFundingDigest {
 			this.setTotalBilateralSscCommitments(formatTotals(activityTotalCalculations.getTotBilateralSscComm()));
 			this.setTotalTriangularSscCommitments(formatTotals(activityTotalCalculations.getTotTriangularSscComm()));
 		}
-		// calculate consumption and delivery rates
-		if (activityTotalCalculations.getTotActualExp() != null && activityTotalCalculations.getTotActualExp().doubleValue() != 0 && activityTotalCalculations.getTotActualDisb() != null && activityTotalCalculations.getTotActualDisb().doubleValue() != 0) {
-			double consumptionRate = activityTotalCalculations.getTotActualExp().doubleValue() / activityTotalCalculations.getTotActualDisb().doubleValue();
-			NumberFormat formatter = DecimalFormat.getPercentInstance();
-			this.setConsumptionRate(formatter.format(consumptionRate));
-		}
+		// calculate delivery rates
+
 		if (activityTotalCalculations.getTotActualComm() != null && activityTotalCalculations.getTotActualComm().doubleValue() != 0 && activityTotalCalculations.getTotActualDisb() != null && activityTotalCalculations.getTotActualDisb().doubleValue() != 0) {
 			double deliveryRate = activityTotalCalculations.getTotActualDisb().doubleValue() / activityTotalCalculations.getTotActualComm().doubleValue();
 			NumberFormat formatter = DecimalFormat.getPercentInstance();
@@ -617,11 +612,6 @@ public class ActivityFundingDigest {
 	@java.lang.SuppressWarnings("all")
 	public Collection getFinancingBreakdown() {
 		return this.financingBreakdown;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getConsumptionRate() {
-		return this.consumptionRate;
 	}
 	
 	@java.lang.SuppressWarnings("all")
@@ -1033,11 +1023,6 @@ public class ActivityFundingDigest {
 	}
 	
 	@java.lang.SuppressWarnings("all")
-	public void setConsumptionRate(final String consumptionRate) {
-		this.consumptionRate = consumptionRate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
 	public void setDeliveryRate(final String deliveryRate) {
 		this.deliveryRate = deliveryRate;
 	}
@@ -1372,9 +1357,6 @@ public class ActivityFundingDigest {
 		final java.lang.Object this$financingBreakdown = this.getFinancingBreakdown();
 		final java.lang.Object other$financingBreakdown = other.getFinancingBreakdown();
 		if (this$financingBreakdown == null ? other$financingBreakdown != null : !this$financingBreakdown.equals(other$financingBreakdown)) return false;
-		final java.lang.Object this$consumptionRate = this.getConsumptionRate();
-		final java.lang.Object other$consumptionRate = other.getConsumptionRate();
-		if (this$consumptionRate == null ? other$consumptionRate != null : !this$consumptionRate.equals(other$consumptionRate)) return false;
 		final java.lang.Object this$deliveryRate = this.getDeliveryRate();
 		final java.lang.Object other$deliveryRate = other.getDeliveryRate();
 		if (this$deliveryRate == null ? other$deliveryRate != null : !this$deliveryRate.equals(other$deliveryRate)) return false;
@@ -1549,8 +1531,6 @@ public class ActivityFundingDigest {
 		result = result * PRIME + ($orderedFundingOrganizations == null ? 0 : $orderedFundingOrganizations.hashCode());
 		final java.lang.Object $financingBreakdown = this.getFinancingBreakdown();
 		result = result * PRIME + ($financingBreakdown == null ? 0 : $financingBreakdown.hashCode());
-		final java.lang.Object $consumptionRate = this.getConsumptionRate();
-		result = result * PRIME + ($consumptionRate == null ? 0 : $consumptionRate.hashCode());
 		final java.lang.Object $deliveryRate = this.getDeliveryRate();
 		result = result * PRIME + ($deliveryRate == null ? 0 : $deliveryRate.hashCode());
 		final java.lang.Object $organizations = this.getOrganizations();
@@ -1637,6 +1617,6 @@ public class ActivityFundingDigest {
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
 	public java.lang.String toString() {
-		return "ActivityFundingDigest(proProjCost=" + this.getProProjCost() + ", proposedAnnualBudgets=" + this.getProposedAnnualBudgets() + ", fundingOrganizations=" + this.getFundingOrganizations() + ", donorObjective=" + this.getDonorObjective() + ", fundingDetails=" + this.getFundingDetails() + ", totalCommitments=" + this.getTotalCommitments() + ", totalPlannedCommitments=" + this.getTotalPlannedCommitments() + ", totalPlannedRoF=" + this.getTotalPlannedRoF() + ", totalPlannedEDD=" + this.getTotalPlannedEDD() + ", totalActualRoF=" + this.getTotalActualRoF() + ", totalActualEDD=" + this.getTotalActualEDD() + ", totalPipelineCommitments=" + this.getTotalPipelineCommitments() + ", totalOdaSscCommitments=" + this.getTotalOdaSscCommitments() + ", totalTriangularSscCommitments=" + this.getTotalTriangularSscCommitments() + ", totalBilateralSscCommitments=" + this.getTotalBilateralSscCommitments() + ", totalCommitmentsDouble=" + this.getTotalCommitmentsDouble() + ", totalDisbursements=" + this.getTotalDisbursements() + ", totalExpenditures=" + this.getTotalExpenditures() + ", totalPlannedExpenditures=" + this.getTotalPlannedExpenditures() + ", totalPlannedDisbursements=" + this.getTotalPlannedDisbursements() + ", totalPlannedDisbursementsOrders=" + this.getTotalPlannedDisbursementsOrders() + ", totalActualDisbursementsOrders=" + this.getTotalActualDisbursementsOrders() + ", unDisbursementsBalance=" + this.getUnDisbursementsBalance() + ", totalMtefProjections=" + this.getTotalMtefProjections() + ", fixerate=" + this.isFixerate() + ", regionTotalDisb=" + this.getRegionTotalDisb() + ", orderedFundingOrganizations=" + this.getOrderedFundingOrganizations() + ", financingBreakdown=" + this.getFinancingBreakdown() + ", consumptionRate=" + this.getConsumptionRate() + ", deliveryRate=" + this.getDeliveryRate() + ", organizations=" + this.getOrganizations() + ", validcurrencies=" + this.getValidcurrencies() + ", pledgeslist=" + this.getPledgeslist() + ", dupFunding=" + this.isDupFunding() + ", orgName=" + this.getOrgName() + ", assistanceType=" + this.getAssistanceType() + ", modality=" + this.getModality() + ", fundingStatus=" + this.getFundingStatus() + ", modeOfPayment=" + this.getModeOfPayment() + ", availableMTEFProjectionYears=" + this.getAvailableMTEFProjectionYears() + ", projections=" + this.getProjections() + ", orgFundingId=" + this.getOrgFundingId() + ", sourceRole=" + this.getSourceRole() + ", numComm=" + this.getNumComm() + ", numDisb=" + this.getNumDisb() + ", numExp=" + this.getNumExp() + ", numDisbOrder=" + this.getNumDisbOrder() + ", numProjections=" + this.getNumProjections() + ", disbOrderId=" + this.getDisbOrderId() + ", signatureDate=" + this.getSignatureDate() + ", reportingDate=" + this.getReportingDate() + ", plannedStartDate=" + this.getPlannedStartDate() + ", plannedCompletionDate=" + this.getPlannedCompletionDate() + ", actualStartDate=" + this.getActualStartDate() + ", actualCompletionDate=" + this.getActualCompletionDate() + ", fundingConditions=" + this.getFundingConditions() + ", firstSubmit=" + this.isFirstSubmit() + ", event=" + this.getEvent() + ", editFunding=" + this.isEditFunding() + ", fundDonor=" + this.getFundDonor() + ", fundingId=" + this.getFundingId() + ", fundingRegionId=" + this.getFundingRegionId() + ", fundingRegions=" + this.getFundingRegions() + ", selRegFundings=" + java.util.Arrays.deepToString(this.getSelRegFundings()) + ", regionalFundings=" + this.getRegionalFundings() + ", selFundingOrgs=" + java.util.Arrays.deepToString(this.getSelFundingOrgs()) + ", orgId=" + this.getOrgId() + ", offset=" + this.getOffset() + ", indexId=" + this.getIndexId() + ", transIndexId=" + this.getTransIndexId() + ", fundingCurrCode=" + this.getFundingCurrCode() + ", selectedMTEFProjectionYear=" + this.getSelectedMTEFProjectionYear() + ", capitalSpendingPercentage=" + this.getCapitalSpendingPercentage() + ", showActual=" + this.isShowActual() + ", showPlanned=" + this.isShowPlanned() + ", showPipeline=" + this.isShowPipeline() + ", showOfficialDevelopmentAid=" + this.isShowOfficialDevelopmentAid() + ", showBilateralSsc=" + this.isShowBilateralSsc() + ", showTriangularSsc=" + this.isShowTriangularSsc() + ")";
+		return "ActivityFundingDigest(proProjCost=" + this.getProProjCost() + ", proposedAnnualBudgets=" + this.getProposedAnnualBudgets() + ", fundingOrganizations=" + this.getFundingOrganizations() + ", donorObjective=" + this.getDonorObjective() + ", fundingDetails=" + this.getFundingDetails() + ", totalCommitments=" + this.getTotalCommitments() + ", totalPlannedCommitments=" + this.getTotalPlannedCommitments() + ", totalPlannedRoF=" + this.getTotalPlannedRoF() + ", totalPlannedEDD=" + this.getTotalPlannedEDD() + ", totalActualRoF=" + this.getTotalActualRoF() + ", totalActualEDD=" + this.getTotalActualEDD() + ", totalPipelineCommitments=" + this.getTotalPipelineCommitments() + ", totalOdaSscCommitments=" + this.getTotalOdaSscCommitments() + ", totalTriangularSscCommitments=" + this.getTotalTriangularSscCommitments() + ", totalBilateralSscCommitments=" + this.getTotalBilateralSscCommitments() + ", totalCommitmentsDouble=" + this.getTotalCommitmentsDouble() + ", totalDisbursements=" + this.getTotalDisbursements() + ", totalExpenditures=" + this.getTotalExpenditures() + ", totalPlannedExpenditures=" + this.getTotalPlannedExpenditures() + ", totalPlannedDisbursements=" + this.getTotalPlannedDisbursements() + ", totalPlannedDisbursementsOrders=" + this.getTotalPlannedDisbursementsOrders() + ", totalActualDisbursementsOrders=" + this.getTotalActualDisbursementsOrders() + ", unDisbursementsBalance=" + this.getUnDisbursementsBalance() + ", totalMtefProjections=" + this.getTotalMtefProjections() + ", fixerate=" + this.isFixerate() + ", regionTotalDisb=" + this.getRegionTotalDisb() + ", orderedFundingOrganizations=" + this.getOrderedFundingOrganizations() + ", financingBreakdown=" + this.getFinancingBreakdown() + ", deliveryRate=" + this.getDeliveryRate() + ", organizations=" + this.getOrganizations() + ", validcurrencies=" + this.getValidcurrencies() + ", pledgeslist=" + this.getPledgeslist() + ", dupFunding=" + this.isDupFunding() + ", orgName=" + this.getOrgName() + ", assistanceType=" + this.getAssistanceType() + ", modality=" + this.getModality() + ", fundingStatus=" + this.getFundingStatus() + ", modeOfPayment=" + this.getModeOfPayment() + ", availableMTEFProjectionYears=" + this.getAvailableMTEFProjectionYears() + ", projections=" + this.getProjections() + ", orgFundingId=" + this.getOrgFundingId() + ", sourceRole=" + this.getSourceRole() + ", numComm=" + this.getNumComm() + ", numDisb=" + this.getNumDisb() + ", numExp=" + this.getNumExp() + ", numDisbOrder=" + this.getNumDisbOrder() + ", numProjections=" + this.getNumProjections() + ", disbOrderId=" + this.getDisbOrderId() + ", signatureDate=" + this.getSignatureDate() + ", reportingDate=" + this.getReportingDate() + ", plannedStartDate=" + this.getPlannedStartDate() + ", plannedCompletionDate=" + this.getPlannedCompletionDate() + ", actualStartDate=" + this.getActualStartDate() + ", actualCompletionDate=" + this.getActualCompletionDate() + ", fundingConditions=" + this.getFundingConditions() + ", firstSubmit=" + this.isFirstSubmit() + ", event=" + this.getEvent() + ", editFunding=" + this.isEditFunding() + ", fundDonor=" + this.getFundDonor() + ", fundingId=" + this.getFundingId() + ", fundingRegionId=" + this.getFundingRegionId() + ", fundingRegions=" + this.getFundingRegions() + ", selRegFundings=" + java.util.Arrays.deepToString(this.getSelRegFundings()) + ", regionalFundings=" + this.getRegionalFundings() + ", selFundingOrgs=" + java.util.Arrays.deepToString(this.getSelFundingOrgs()) + ", orgId=" + this.getOrgId() + ", offset=" + this.getOffset() + ", indexId=" + this.getIndexId() + ", transIndexId=" + this.getTransIndexId() + ", fundingCurrCode=" + this.getFundingCurrCode() + ", selectedMTEFProjectionYear=" + this.getSelectedMTEFProjectionYear() + ", capitalSpendingPercentage=" + this.getCapitalSpendingPercentage() + ", showActual=" + this.isShowActual() + ", showPlanned=" + this.isShowPlanned() + ", showPipeline=" + this.isShowPipeline() + ", showOfficialDevelopmentAid=" + this.isShowOfficialDevelopmentAid() + ", showBilateralSsc=" + this.isShowBilateralSsc() + ", showTriangularSsc=" + this.isShowTriangularSsc() + ")";
 	}
 }

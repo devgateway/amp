@@ -35,7 +35,9 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 	protected void renderReportData(SXSSFSheet sheet, GeneratedReport report) {
 		Row row = sheet.createRow(initHeaderRowOffset + report.generatedHeaders.size());
 		renderTableRow(sheet, report, report.reportContents, 0, row, new ArrayList<>());
-		renderTableTotals(sheet, report, report.reportContents);
+		if (report.hasMeasures()) {
+			renderTableTotals(sheet, report, report.reportContents);
+		}
 	}
 	
 	
@@ -74,7 +76,6 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 	 * @return
 	 */
 	protected int renderTableRow(SXSSFSheet sheet, GeneratedReport report, ReportArea reportContents, int level, Row row, List<ReportCell> _hierarchies) {
-		System.out.println("Rendering row: " + reportContents.getContents().values());
 		this.flushCounter++;
 		List<ReportCell> hierarchies = new ArrayList<>(_hierarchies);
 		if (reportContents.getChildren() != null ) {
@@ -84,8 +85,8 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 			}
 			return renderGroupRow(sheet, report, reportContents, level, row, hierarchies);
 		} else {
-			// Totals are rendered in renderTableTotals method()
-			if (level == 0) {
+			// Totals are rendered in renderTableTotals method(). If it is summaryReport with one dummy column, we need to show the row with data
+			if (level == 0 && !hasReportGeneratedDummyColumn(report)) {
 				return row.getRowNum();
 			}
 			
@@ -117,7 +118,6 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 	
 	@SuppressWarnings("unused")
 	protected int renderGroupRow(SXSSFSheet sheet, GeneratedReport report, ReportArea reportContents, int level, Row row, List<ReportCell> _hierarchies) {
-		System.out.println("Rendering group: " + reportContents.getContents().values());
 		List<ReportCell> hierarchies = new ArrayList<>();
 		//hierarchies are kind of immutable in this implementation
 		hierarchies.addAll(_hierarchies);

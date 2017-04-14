@@ -2,17 +2,15 @@ var _ = require('underscore');
 var Deferred = require('jquery').Deferred;
 var BackboneDash = require('./backbone-dash');
 var supportCheck = require('./check-support');
-
 var URLService = require('amp-url/index');
 var State = require('amp-state/index');
 var StateLoadError = require('amp-state/index').StateLoadError;
 var fs = require('fs');
 var Translator = require('amp-translate');
 var Filter = require('amp-filter/src/main');
-var Settings = require('./models/settings-collection');
+var Settings = require('amp-settings/src/index');
 var UserModel = require('./models/amp-user.js');
 var SavedDashes = require('./models/saved-dashes-collection.js');
-
 var MainView = require('./views/main');
 var FailView = require('./views/fail');
 
@@ -35,7 +33,7 @@ _.extend(App.prototype, BackboneDash.Events, {
     this.initialized = _initDefer.promise();
 
     try {
-    	this.settings = new Settings([], { app: this });
+    	
     	this.user = new UserModel()
 
       // check our support level
@@ -100,16 +98,20 @@ _.extend(App.prototype, BackboneDash.Events, {
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
       });
-      // TODO: handle translations load failure
-
+      
+      this.initSettings();
+      
+      // TODO: handle translations load failure      ​
       this.filter = new Filter({
-        draggable: true,
-        sync: options.sync || BackboneDash.sync,
-        caller: 'DASHBOARD'
-      });
+          draggable: true,
+          sync: options.sync || BackboneDash.sync,
+          caller: 'DASHBOARD'
+        });
+       
+      
 
-      // initialize app components
-      this.view = new MainView({ app: this, el: options.el });
+   	  // initialize app components
+      this.view = new MainView({ app: this, el: options.el });      
 
       _initDefer.resolve(this);
     } catch (e) {
@@ -181,9 +183,17 @@ _.extend(App.prototype, BackboneDash.Events, {
         modalReady.reject('app views did not init');
       });
     return modalReady.promise();
+  },
+  initSettings: function(){
+	this.settingsWidget = new Settings.SettingsWidget({
+	  		draggable : true,
+	  		caller : 'DASHBOARDS',
+	  		isPopup: true,
+	  		definitionUrl: '/rest/settings-definitions/dashboards'
+	});	
+	this.generalSettings = new Settings.GeneralSettings();
+	this.generalSettings.load();	
   }
-
 });
-
 
 module.exports = App;

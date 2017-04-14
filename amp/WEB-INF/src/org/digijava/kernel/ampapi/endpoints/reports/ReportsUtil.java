@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,18 +13,20 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -44,7 +46,6 @@ import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.dgfoundation.amp.utils.BoundedList;
@@ -66,12 +67,18 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
-import net.sf.json.JSONObject;
-
+/**
+ * Reports API utility classes
+ * 
+ * @author Nadejda Mandrescu
+ */
 public class ReportsUtil {
+    // TODO: the class grow up too much, we need to split it
+    
 	protected static final Logger logger = Logger.getLogger(ReportsUtil.class);
 
 	/**
@@ -423,10 +430,8 @@ public class ReportsUtil {
 	
 	public static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams, 
 			AmpFiscalCalendar oldCalendar) {
-		JsonBean filters = new JsonBean();
-		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get(EPConstants.FILTERS);
-		if (requestFilters != null) {
-			filters.any().putAll(requestFilters);
+		Map<String, Object> filterMap = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+		if (filterMap != null) {
 			AmpReportFilters newFilters = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 			if (spec.getFilters() != null) {
 				// TODO: we need calendar + date to be linked in UI as well OR make same form for filters and settings
@@ -437,8 +442,8 @@ public class ReportsUtil {
 					//newFilters.setOldCalendar(oldCalendar);
 				}
 			}
-			
-			AmpReportFilters formFilters = FilterUtils.getFilters(filters, newFilters);
+
+			AmpReportFilters formFilters = FilterUtils.getFilters(filterMap, newFilters);
 			AmpReportFilters stickyFilters = copyStickyMtefEntries((AmpReportFilters) spec.getFilters(), formFilters);
 			spec.setFilters(stickyFilters);
 		}
@@ -462,16 +467,13 @@ public class ReportsUtil {
 		
 		// set filters even if they are empty, that means filters are cleared up
 		// copy MTEF-hacky entries from old widget to new widget, since these are supposed to be sticky (not present in the filter form)
-		for(Entry<ReportElement, List<FilterRule>> elem: oldFilters.getFilterRules().entrySet()) {
+		for(Entry<ReportElement, FilterRule> elem: oldFilters.getFilterRules().entrySet()) {
 			if (MtefConverter.MTEF_DATE_ELEMENT_TYPES.contains(elem.getKey().type)) {
 				result.getFilterRules().put(elem.getKey(), elem.getValue());
 				somethingAdded = true;
 			}
 		}
-		for(Entry<ReportColumn, List<FilterRule>> elem: oldFilters.getDateFilterRules().entrySet()) {
-			result.getDateFilterRules().put(elem.getKey(), elem.getValue());
-			somethingAdded = true;
-		}
+		
 		if (newFilters == null && !somethingAdded)
 			return newFilters; // do not alter filters if we did nothing
 		
@@ -656,7 +658,7 @@ public class ReportsUtil {
 				EPConstants.REPORT_TYPE, EPConstants.DEFAULT_REPORT_TYPE);
 		Integer reportTypeId = EPConstants.REPORT_TYPE_ID_MAP.get(reportType);
 		if (reportTypeId == null) {
-			return new ApiErrorMessage(ReportErrors.REPORT_TYPE_INVALID, config.getString(EPConstants.REPORT_TYPE));
+			return ReportErrors.REPORT_TYPE_INVALID.withDetails(config.getString(EPConstants.REPORT_TYPE));
 		}
 		List<String> activityTypes = (List<String>) config.get(EPConstants.PROJECT_TYPE);
 		if (activityTypes != null) {
@@ -664,7 +666,7 @@ public class ReportsUtil {
 				return ReportErrors.REPORT_TYPE_REQUIRED;
 			}
 			if (!EPConstants.REPORT_TYPE_ACTIVITY_MAP.get(reportType).containsAll(activityTypes)) {
-				return new ApiErrorMessage(ReportErrors.ACTIVITY_TYPE_LIST_INVALID, activityTypes.toString());
+				return ReportErrors.ACTIVITY_TYPE_LIST_INVALID.withDetails(activityTypes.toString());
 			}
 		}
 		return null;
@@ -820,5 +822,36 @@ public class ReportsUtil {
 		return ampReport;
 	}
 	
+	/**
+	 * The decimal format to be used for this report (the configured or the default one)
+	 * @param spec report specification
+	 * @return decimal format for report amounts
+	 */
+	public static DecimalFormat getDecimalFormatOrDefault(ReportSpecification spec) {
+	    if (spec != null && spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null)
+            return spec.getSettings().getCurrencyFormat();
+        return FormatHelper.getDefaultFormat();
+	}
 	
+	/**
+	 * The amounts unit configured or the default one to be used for the specified report
+	 * @param spec report specification
+	 * @return amount units
+	 */
+	public static AmountsUnits getAmountsUnitsOrDefault(ReportSpecification spec) {
+        if (spec != null && spec.getSettings() != null && spec.getSettings().getUnitsOption() != null)
+            return spec.getSettings().getUnitsOption();
+        return AmountsUnits.getDefaultValue();
+	}
+	
+
+	public static String getUrl(AmpReports report) {
+		String prefix;
+		if (report.getType() != null && report.getType().equals((long) ArConstants.REGIONAL_TYPE)){
+			prefix = "/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=";
+		} else {
+			prefix = "/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/";
+		}
+		return prefix + report.getAmpReportId();
+	}
 }

@@ -35,14 +35,6 @@
 
 	<http pattern="/aim/registerUser.do**" security="none" />
 	
-	<http pattern="/visualization/dataDispatcher.do**" security="none" />
-	
-	<http pattern="/visualization/exportProjectList.do**" security="none" />
-	
-	<!--http pattern="/visualization/launchDashboard.do**" security="none" /-->
-	
-	<http pattern="/visualization/launchGraph.do**" security="none" />
-	
 	<http pattern="/aim/csvExport.do**" security="none" />
 	
 	<http pattern="/viewNewAdvancedReport.do**" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
@@ -69,14 +61,7 @@
   
 	<http pattern="/aim/default/previewActivity.do**" security="none" />
 	
-	<http pattern="/visualization/pdfExport.do**" security="none" />
-	
-	<http pattern="/visualization/wordExport.do**" security="none" />
-	
-	<http pattern="/visualization/excelExport.do**" security="none" />
-	
-	<http pattern="/visualization/showProjectsList.do**" security="none" />
-		<!-- report wizard --> 
+	<!-- report wizard --> 
 	<http pattern="/reportWizard.do**" security="none" />
 	<http pattern="/aim/reportWizard.do**" security="none" />
   	<!-- 
@@ -101,7 +86,7 @@
 	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
     <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
     <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
-    <http pattern="/src/main/resources/gis/boundaries/**" security="none" />
+    <http pattern="/gis/boundaries/**" security="none" />
 	
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />
@@ -134,9 +119,6 @@
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
    -->
-     <http pattern="/visualization/launchDashboard.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
     <http pattern="/calendar/showCalendarView.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>

@@ -1,3 +1,5 @@
+$.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
+
 function createPreview () {
 	var divElWrapper	= document.getElementById("previewSectionDiv");
 	var divEl			= document.getElementById("previewBodySectionDiv");
@@ -361,8 +363,9 @@ NormalReportManager.prototype.callbackRepTypeCall = {
 
 NormalReportManager.prototype.checkReportDetails	= function () {
 	this.enableTab(1);
-	return true;
-
+	// regional reports are not supported by nireports yet
+	// we either have to be logged in or choose a report different from regional
+	return currentMemberInSession || getReportType() != "regional";
 };
 
 NormalReportManager.prototype.checkMeasures	= function () {
@@ -380,26 +383,19 @@ NormalReportManager.prototype.checkMeasures	= function () {
 	}
 	actualCommitmentsMustEl.hide();
 	
-	var ulEl			= document.getElementById("dest_measures_ul") ;
-	var items			= ulEl.getElementsByTagName("li");
 	measuresMustEl		= document.getElementById("measuresMust");
-	if ( items.length > 0 ) {		
-		measuresMustEl.style.visibility="hidden";
-		this.enableSave();
-		return true;
-	}
-	else {
-		measuresMustEl.style.visibility="";
-		this.disableSave();
-		return false;
-	}
+	measuresMustEl.style.display="none";
+	this.enableSave();
+	return true;
 };
 
 NormalReportManager.prototype.checkHierarchies	= function () {
 	var ulEl			= document.getElementById("dest_hierarchies_ul") ;
 	var colsUlEl		= document.getElementById("dest_col_ul") ;
+	var measUlEl			= document.getElementById("dest_measures_ul") ;
 	var items			= ulEl.getElementsByTagName("li");
 	var colItems		= colsUlEl.getElementsByTagName("li");
+	var measItems			= measUlEl.getElementsByTagName("li");
 	var incompatible = false;
 	var imcomplist = new Array();
 	
@@ -416,46 +412,75 @@ NormalReportManager.prototype.checkHierarchies	= function () {
 	}
 	if (incompatible){
 		hierarchiesMustEl					= document.getElementById("incompatiblehierarchies");
-		hierarchiesMustEl.style.visibility	= "";
+		hierarchiesMustEl.style.display	= "";
 		retValue	= false;
 	}else {
 		hierarchiesMustEl					= document.getElementById("incompatiblehierarchies");
-		hierarchiesMustEl.style.visibility	= "hidden";
+		hierarchiesMustEl.style.display	= "none";
 		//this.enableTab(3);
 	}
 	
 	if ( items.length > this.maxHierarchies ) {
 		hierarchiesMustEl					= document.getElementById("hierarchiesMust");
-		hierarchiesMustEl.style.visibility	= "";
+		hierarchiesMustEl.style.display	= "";
 		retValue							= false;
 //		this.disableTab(3);
 //		return false;
 	}
 	else {
 		hierarchiesMustEl					= document.getElementById("hierarchiesMust");
-		hierarchiesMustEl.style.visibility	= "hidden";
+		hierarchiesMustEl.style.display	= "none";
 //		this.enableTab(3);
 //		return true;
 	}
 	if (items.length > 0 && items.length == colItems.length && !getHideActivities() ) {
 		hierarchiesMustEl					= document.getElementById("hierarchiesSummaryMust");
-		hierarchiesMustEl.style.visibility	= "";
+		hierarchiesMustEl.style.display	= "";
 		retValue							= false;
 	}
 	else {
 		hierarchiesMustEl					= document.getElementById("hierarchiesSummaryMust");
-		hierarchiesMustEl.style.visibility	= "hidden";
+		hierarchiesMustEl.style.display	= "none";
 	}
-	
-	if ( retValue ) {
+
+	var disableNextTab = true;
+	var wMeasurelessHiers3 = document.getElementById("measurelessOnlyHiersNotAllowed3");
+	var wMeasurelessHiers4 = document.getElementById("measurelessOnlyHiersNotAllowed4");
+	var wMeasurelessHiers3List = document.getElementById("measurelessOnlyHiersNotAllowed3List");
+	var wMeasurelessHiers4List = document.getElementById("measurelessOnlyHiersNotAllowed4List");
+	var measurelessOnlyHiers = findMeasurelessOnlyHiers(Array.prototype.slice.call(items).map(getColDbId));
+	if (measItems.length > 0 && measurelessOnlyHiers.length > 0) {
+		displayEl(wMeasurelessHiers3);
+		displayEl(wMeasurelessHiers4);
+		var list = measurelessOnlyHiers.map(TranslationManager.getTranslated).join();
+        wMeasurelessHiers3List.innerHTML = list;
+        wMeasurelessHiers4List.innerHTML = list;
+        disableNextTab = false;
+		retValue = false;
+	} else {
+        hideEl(wMeasurelessHiers3);
+        hideEl(wMeasurelessHiers4);
+	}
+
+	var warnAmtColumns = document.getElementById("hierNotCompatibleWithAmountCols");
+	var amtColumns = Array.prototype.slice.call(colItems)
+		.map(getColDbId)
+		.map(colIdToName)
+		.filter(isAmountColumn);
+	if (measurelessOnlyHiers.length > 0 && amtColumns.length > 0) {
+		warnAmtColumns.style.display	= "";
+		document.getElementById("hierNotCompatibleWithAmountColsList").innerHTML = measurelessOnlyHiers.map(TranslationManager.getTranslated).join();
+		retValue = false;
+	} else {
+		warnAmtColumns.style.display	= "none";
+	}
+
+	if (retValue || !disableNextTab) {
 		this.enableTab(3);
-		return true;
-	}
-	else {
+	} else {
 		this.disableTab(3);
-		return false;
 	}
-	
+	return retValue;
 };
 
 NormalReportManager.prototype.checkColumns	= function () {
@@ -463,17 +488,43 @@ NormalReportManager.prototype.checkColumns	= function () {
 	var items			= ulEl.getElementsByTagName("li");
 	if ( items.length > 0 ) {
 		columnsMustEl	= document.getElementById("columnsMust");
-		columnsMustEl.style.visibility="hidden";
+		columnsMustEl.style.display="none";
 		this.enableTab(2);
-		return true;
 	}
 	else {
 		columnsMustEl	= document.getElementById("columnsMust");
-		columnsMustEl.style.visibility="";
+		columnsMustEl.style.display="";
 		this.disableTab(2);
 		return false;
 	}
-};
+
+	var summary	= getHideActivities();
+	var hierItems = document.getElementById("dest_hierarchies_ul").getElementsByTagName("li");
+	var measItems = document.getElementById("dest_measures_ul").getElementsByTagName("li");
+	var hierAndMeasMustEl2	= document.getElementById("measureOrHierarchyMust2");
+	var hierAndMeasMustEl3	= document.getElementById("measureOrHierarchyMust3");
+	var hierAndMeasMustEl4	= document.getElementById("measureOrHierarchyMust4");
+	if (summary && hierItems.length == 0 && measItems.length == 0) {
+		displayEl(hierAndMeasMustEl2);
+		displayEl(hierAndMeasMustEl3);
+		displayEl(hierAndMeasMustEl4);
+		return false;
+	} else {
+		hideEl(hierAndMeasMustEl2);
+		hideEl(hierAndMeasMustEl3);
+		hideEl(hierAndMeasMustEl4);
+	}
+
+	return true;
+}
+
+function hideEl(el) {
+	el.style.display = "none";
+}
+
+function displayEl(el) {
+	el.style.display = "";
+}
 
 NormalReportManager.prototype.checkReportName	= function () {
 	var saveBtn = document.getElementById("last_save_button");
@@ -582,6 +633,8 @@ NormalReportManager.prototype.cancelWizard	= function () {
 }
 NormalReportManager.prototype.showHideHierarchies	= function(){};
 
+NormalReportManager.prototype.forDesktopTabs = false;
+
 
 TabReportManager.prototype					= new NormalReportManager();
 TabReportManager.prototype.constructor		= TabReportManager;
@@ -593,9 +646,9 @@ TabReportManager.prototype.checkColumns	= function () {
 	var items			= ulEl.getElementsByTagName("li");
 	if ( items.length > 0 && items.length <= 3 ) {
 		columnsMustEl	= document.getElementById("columnsMust");
-		columnsMustEl.style.visibility="hidden";
+		columnsMustEl.style.display="none";
 		columnsLimitEl	= document.getElementById("columnsLimit");
-		columnsLimitEl.style.visibility="hidden";
+		columnsLimitEl.style.display="none";
 		this.enableTab(2);
 		
 		return true;
@@ -605,13 +658,13 @@ TabReportManager.prototype.checkColumns	= function () {
 		columnsMustEl	= document.getElementById("columnsMust");
 		columnsLimitEl	= document.getElementById("columnsLimit");
 		if ( items.length == 0 )
-			columnsMustEl.style.visibility="visible";
+			columnsMustEl.style.display="";
 		else
-			columnsMustEl.style.visibility="hidden";
+			columnsMustEl.style.display="none";
 		if ( items.length > 3 )
-			columnsLimitEl.style.visibility="visible";
+			columnsLimitEl.style.display="";
 		else
-			columnsLimitEl.style.visibility="hidden";
+			columnsLimitEl.style.display="none";
 		this.disableTab(2);
 		
 		return false;
@@ -623,20 +676,20 @@ TabReportManager.prototype.checkMeasures	= function () {
 	measuresMustEl		= document.getElementById("measuresMust");
 	measuresLimitEl		= document.getElementById("measuresLimit");
 	if ( items.length > 0 && items.length <= 2) {
-		measuresMustEl.style.visibility="hidden";
-		measuresLimitEl.style.visibility="hidden";
+		measuresMustEl.style.display="none";
+		measuresLimitEl.style.display="none";
 		this.enableSave();
 		return true;
 	}
 	else {
 		if ( items.length == 0 )
-			measuresMustEl.style.visibility		= "visible";
+			measuresMustEl.style.display		= "";
 		else
-			measuresMustEl.style.visibility		= "hidden";
+			measuresMustEl.style.display		= "none";
 		if ( items.length > 2 )
-			measuresLimitEl.style.visibility	= "visible";
+			measuresLimitEl.style.display	= "";
 		else
-			measuresLimitEl.style.visibility	= "hidden";
+			measuresLimitEl.style.display	= "none";
 		this.disableSave();
 		return false;
 	}
@@ -644,6 +697,7 @@ TabReportManager.prototype.checkMeasures	= function () {
 TabReportManager.prototype.cancelWizard	= function () {
 	window.location = "/viewTeamReports.do?tabs=true";
 }
+TabReportManager.prototype.forDesktopTabs = true;
 
 OPTabReportManager.prototype.showHideHierarchies	= function(){};
 

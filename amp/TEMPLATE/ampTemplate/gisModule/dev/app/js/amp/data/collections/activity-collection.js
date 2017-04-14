@@ -25,15 +25,10 @@ module.exports = Backbone.Collection
   /* If _pageSize > 0 then use pagination and fetchMore, otherwise ignore pagination */
   fetch: function(options) {
     var self = this;
-    var payload = {otherFilters: {}};
+    var payload = {};
     var activityFetch;
     var isFetchMore = false;
     var preserveURL = this.url;
-
-    /* TODO nice to have: if otherFilters and columnFilters
-     * had their own object on API, separate from settings, etc.
-     * Currently all on the same data level.
-     **/
 
     /* get filters if set (not applicable for getActivities) */
     if (this.appData.filter) {
@@ -41,8 +36,8 @@ module.exports = Backbone.Collection
     }
 
     /* include "settings", only if there is something to send. DO NOT send blank settings. */
-    if (this.appData.settings && !_.isEmpty(this.appData.settings.serialize())) {
-      payload.settings = this.appData.settings.serialize();
+    if (this.appData.settingsWidget && !_.isEmpty(this.appData.settingsWidget.toAPIFormat())) {
+      payload.settings = this.appData.settingsWidget.toAPIFormat();
     }
 
     /* These will always need to be reset when you do a raw fetch
@@ -168,8 +163,8 @@ module.exports = Backbone.Collection
       if (this.appData.filter) {
         _.extend(payload, this.appData.filter.serialize());
       }
-      if (this.appData.settings && !_.isEmpty(this.appData.settings.serialize())) {
-        payload.settings = this.appData.settings.serialize();
+      if (this.appData.settingsWidget && !_.isEmpty(this.appData.settingsWidget.toAPIFormat())) {
+        payload.settings = this.appData.settingsWidget.toAPIFormat();
       }
 
       Backbone.Collection.prototype.fetch.call(this, {

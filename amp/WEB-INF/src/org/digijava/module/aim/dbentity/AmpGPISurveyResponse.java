@@ -1,10 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.util.Output;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.util.Output;
+import java.util.Comparator;
 
 public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializable {
 
@@ -59,6 +59,20 @@ public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializabl
 
 	public void setAmpGPISurveyId(AmpGPISurvey ampGPISurveyId) {
 		this.ampGPISurveyId = ampGPISurveyId;
+	}
+
+	public static class AmpGPISurveyResponseComparator implements Comparator<AmpGPISurveyResponse>, Serializable {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public int compare(AmpGPISurveyResponse arg0, AmpGPISurveyResponse arg1) {
+			if (arg0.getAmpQuestionId() != null && arg1.getAmpQuestionId() != null) {
+				return arg0.getAmpQuestionId().getQuestionNumber().compareTo(arg1.getAmpQuestionId().getQuestionNumber());
+			}
+			return arg0.hashCode() - arg1.hashCode();
+		}
+
 	}
 
 	@Override

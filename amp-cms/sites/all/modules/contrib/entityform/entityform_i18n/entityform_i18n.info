@@ -1,6 +1,0 @@
-name = Entityform translation
-description = Translate entityform types.
-dependencies[] = entityform
-dependencies[] = i18n_string
-package = Multilingual - Internationalization
-core = 7.x

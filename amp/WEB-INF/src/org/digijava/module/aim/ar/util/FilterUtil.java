@@ -1,11 +1,15 @@
 package org.digijava.module.aim.ar.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
@@ -14,12 +18,16 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class FilterUtil {
-	
+
+	private static Logger logger = Logger.getLogger(FilterUtil.class);
+
 	/**
 	 * pumps data from the form to the filter
 	 * @param report
@@ -158,50 +166,50 @@ public class FilterUtil {
 		form.setFromMonth( filter.getFromMonth() );
 		form.setToMonth( filter.getToMonth() );
 		
-		form.setFromDate(filter.getFromDate());
-		form.setToDate(filter.getToDate());
+		form.setFromDate(convertArFilterToUiDate(filter.getFromDate()));
+		form.setToDate(convertArFilterToUiDate(filter.getToDate()));
 		form.getDynamicDateFilter().setCurrentPeriod(filter.getDynDateFilterCurrentPeriod());
 		form.getDynamicDateFilter().setAmount(filter.getDynDateFilterAmount());
 		form.getDynamicDateFilter().setOperator(filter.getDynDateFilterOperator());
 		form.getDynamicDateFilter().setxPeriod(filter.getDynDateFilterXPeriod());
 		
-		form.setToActivityStartDate(filter.getToActivityStartDate());
-		form.setFromActivityStartDate(filter.getFromActivityStartDate());
+		form.setToActivityStartDate(convertArFilterToUiDate(filter.getToActivityStartDate()));
+		form.setFromActivityStartDate(convertArFilterToUiDate(filter.getFromActivityStartDate()));
 		form.getDynamicActivityStartFilter().setCurrentPeriod(filter.getDynActivityStartFilterCurrentPeriod());
 		form.getDynamicActivityStartFilter().setAmount(filter.getDynActivityStartFilterAmount());
 		form.getDynamicActivityStartFilter().setOperator(filter.getDynActivityStartFilterOperator());
 		form.getDynamicActivityStartFilter().setxPeriod(filter.getDynActivityStartFilterXPeriod());
 		
-		form.setToActivityActualCompletionDate(filter.getToActivityActualCompletionDate() );
-		form.setFromActivityActualCompletionDate(filter.getFromActivityActualCompletionDate());
+		form.setToActivityActualCompletionDate(convertArFilterToUiDate(filter.getToActivityActualCompletionDate()));
+		form.setFromActivityActualCompletionDate(convertArFilterToUiDate(filter.getFromActivityActualCompletionDate()));
 		form.getDynamicActivityActualCompletionFilter().setCurrentPeriod(filter.getDynActivityActualCompletionFilterCurrentPeriod());
 		form.getDynamicActivityActualCompletionFilter().setAmount(filter.getDynActivityActualCompletionFilterAmount());
 		form.getDynamicActivityActualCompletionFilter().setOperator(filter.getDynActivityActualCompletionFilterOperator());
 		form.getDynamicActivityActualCompletionFilter().setxPeriod(filter.getDynActivityActualCompletionFilterXPeriod());
 
-		form.setToActivityFinalContractingDate(filter.getToActivityFinalContractingDate());
-		form.setFromActivityFinalContractingDate(filter.getFromActivityFinalContractingDate());
+		form.setToActivityFinalContractingDate(convertArFilterToUiDate(filter.getToActivityFinalContractingDate()));
+		form.setFromActivityFinalContractingDate(convertArFilterToUiDate(filter.getFromActivityFinalContractingDate()));
 		form.getDynamicActivityFinalContractingFilter().setCurrentPeriod(filter.getDynActivityFinalContractingFilterCurrentPeriod());
 		form.getDynamicActivityFinalContractingFilter().setAmount(filter.getDynActivityFinalContractingFilterAmount());
 		form.getDynamicActivityFinalContractingFilter().setOperator(filter.getDynActivityFinalContractingFilterOperator());
 		form.getDynamicActivityFinalContractingFilter().setxPeriod(filter.getDynActivityFinalContractingFilterXPeriod());
 		
-		form.setToProposedApprovalDate(filter.getToProposedApprovalDate());
-		form.setFromProposedApprovalDate(filter.getFromProposedApprovalDate());
+		form.setToProposedApprovalDate(convertArFilterToUiDate(filter.getToProposedApprovalDate()));
+		form.setFromProposedApprovalDate(convertArFilterToUiDate(filter.getFromProposedApprovalDate()));
 		form.getDynamicProposedApprovalFilter().setCurrentPeriod(filter.getDynProposedApprovalFilterCurrentPeriod());
 		form.getDynamicProposedApprovalFilter().setAmount(filter.getDynProposedApprovalFilterAmount());
 		form.getDynamicProposedApprovalFilter().setOperator(filter.getDynProposedApprovalFilterOperator());
 		form.getDynamicProposedApprovalFilter().setxPeriod(filter.getDynProposedApprovalFilterXPeriod());
 
-        form.setToEffectiveFundingDate(filter.getToEffectiveFundingDate());
-        form.setFromEffectiveFundingDate(filter.getFromEffectiveFundingDate());
+        form.setToEffectiveFundingDate(convertArFilterToUiDate(filter.getToEffectiveFundingDate()));
+        form.setFromEffectiveFundingDate(convertArFilterToUiDate(filter.getFromEffectiveFundingDate()));
         form.getDynamicEffectiveFundingFilter().setCurrentPeriod(filter.getDynEffectiveFundingFilterCurrentPeriod());
         form.getDynamicEffectiveFundingFilter().setAmount(filter.getDynEffectiveFundingFilterAmount());
         form.getDynamicEffectiveFundingFilter().setOperator(filter.getDynEffectiveFundingFilterOperator());
         form.getDynamicEffectiveFundingFilter().setxPeriod(filter.getDynEffectiveFundingFilterXPeriod());
 
-        form.setToFundingClosingDate(filter.getToFundingClosingDate());
-        form.setFromFundingClosingDate(filter.getFromFundingClosingDate());
+        form.setToFundingClosingDate(convertArFilterToUiDate(filter.getToFundingClosingDate()));
+        form.setFromFundingClosingDate(convertArFilterToUiDate(filter.getFromFundingClosingDate()));
         form.getDynamicFundingClosingFilter().setCurrentPeriod(filter.getDynFundingClosingFilterCurrentPeriod());
         form.getDynamicFundingClosingFilter().setAmount(filter.getDynFundingClosingFilterAmount());
         form.getDynamicFundingClosingFilter().setOperator(filter.getDynFundingClosingFilterOperator());
@@ -396,6 +404,33 @@ public class FilterUtil {
 			arf.setSecondaryPrograms(null);
 			arf.setSelectedSecondaryPrograms(null);
 			arf.setRelatedSecondaryProgs(null);
+		}
+	}
+
+	public static String convertUiToArFilterDate(String date) {
+		String arPattern = AmpARFilter.SDF_IN_FORMAT_STRING;
+		String uiPattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+		return convertDateFormat(date, uiPattern, arPattern);
+	}
+
+	private static String convertArFilterToUiDate(String date) {
+		String arPattern = AmpARFilter.SDF_IN_FORMAT_STRING;
+		String uiPattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+		return convertDateFormat(date, arPattern, uiPattern);
+	}
+
+	private static String convertDateFormat(String date, String parsePattern, String formatPattern) {
+		if (StringUtils.isBlank(date)) {
+			return date;
+		} else {
+			try {
+				SimpleDateFormat formatter = new SimpleDateFormat(formatPattern);
+				SimpleDateFormat parser = new SimpleDateFormat(parsePattern);
+				return formatter.format(parser.parse(date));
+			} catch (ParseException e) {
+				logger.error(String.format("Date formatted incorrectly %s, expected format is %s.", date, parsePattern), e);
+				return null;
+			}
 		}
 	}
 }

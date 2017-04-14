@@ -1,14 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
-import java.util.List;
-
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
+import org.digijava.kernel.ampapi.endpoints.settings.Settings;
 
 public class ReportMetadata {
 	private String name = "";
 	private ReportSpecificationImpl reportSpec;
-	private List<SettingField> settings;
+	private Settings settings;
 	private int recordsPerPage;
 	
 	private String connection = "";
@@ -71,13 +69,13 @@ public class ReportMetadata {
 	/**
 	 * @return the settings
 	 */
-	public List<SettingField> getSettings() {
+	public Settings getSettings() {
 		return settings;
 	}
 	/**
 	 * @param settings the settings to set
 	 */
-	public void setSettings(List<SettingField> settings) {
+	public void setSettings(Settings settings) {
 		this.settings = settings;
 	}
 	public int getRecordsPerPage() {
@@ -98,5 +96,5 @@ public class ReportMetadata {
 	public void setReportIdentifier(String reportIdentifier) {
 		this.reportIdentifier = reportIdentifier;
 	}
-	
+
 }

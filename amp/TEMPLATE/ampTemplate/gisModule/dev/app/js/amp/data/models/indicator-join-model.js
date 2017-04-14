@@ -5,6 +5,7 @@ var Backbone = require('backbone');
 var husl = require('husl');
 
 var TopojsonLibrary = require('../../../libs/local/topojson.js');
+var StringUtil = require('../../../libs/local/string-util');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var Palette = require('../../colours/colour-palette');
 var IndicatorLayerLocalStorage = require('../indicator-layer-localstorage');
@@ -24,6 +25,12 @@ module.exports = Backbone.Model
       this.trigger(show ? 'show' : 'hide', this);
     });
     
+    this.listenTo(this, 'change:values', function() {   
+    	this.analyzeValues(); 
+    	this.updatePaletteRange();
+        this.trigger('valuesChanged', this);
+     });
+    
     this.listenTo(this, 'change:selectedGapAnalysis', function(blah, show) {
         this.trigger('sync', this);
     });
@@ -33,23 +40,30 @@ module.exports = Backbone.Model
     this.listenTo(app.data.filter, 'apply', function(blah, show) {
         this.trigger('applyFilter', this);
     });
-    this.listenTo(app.data.settings, 'applySettings', function(blah, show) {
+    this.listenTo(app.data.settingsWidget, 'applySettings', function(blah, show) {
         this.trigger('applySettings', this);
     });
-
-    var numStops = this.get('classes') || 5;
-    var values = this.get('values') || [];
-
-    this.palette = new Palette.FromRange({stops: numStops, seed: this.get('id'), values: values });
-
-    // set color based on ramp, if one is provided.
-    if (this.get('colorRamp') && this.get('colorRamp').length > 0) {
-      var colorHex = this.get('colorRamp')[0].color; //choose last or first colour from ramp.
-      this.palette.set('rootHue', husl.fromHex(colorHex)[0]);//Math.floor(seedrandom(options.seed)() * 360));
-    }
-        
+    this.initializePalette();        
   },
+  initializePalette: function() {
+	  var numStops = this.get('classes') || 5;
+	  var values = this.get('values') || [];
+	  this.palette = new Palette.FromRange({stops: numStops, seed: this.get('id'), values: values });
 
+	  if (this.get('colorRamp') && this.get('colorRamp').length > 0) {
+		  //use the colors provided, if the colorRamp has multiple colors. By default it uses shades of the same color generated in colour-palette.js
+		  if (this.get('isMultiColor') === true && numStops <= this.get('colorRamp').length) {
+			  var multiColorSet = [];
+			  _.each(this.get('colorRamp'),function(colorRamp) {
+				  multiColorSet.push(husl.fromHex(colorRamp.color));
+			  });           	
+			  this.palette.set('multiColorSet', multiColorSet);         
+		  } else {
+			  var colorHex = this.get('colorRamp')[0].color; //choose last or first colour from ramp.
+			  this.palette.set('rootHue', husl.fromHex(colorHex)[0]);//Math.floor(seedrandom(options.seed)() * 360));
+		  }      
+	  } 
+  },
   loadBoundary: function() {
     // Phil's ideal way of being able to join with non-hosted boundaries.:
     // var boundaryLink = this.get('joinBoundariesLink');  // TODO: handle IDs vs links consitently
@@ -70,37 +84,41 @@ module.exports = Backbone.Model
                                  .first()
                                  .value();
         var boundaries = TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
-        self.updatePaletteRange();
-
-        self._joinDataWithBoundaries(boundaries);
+        self._joinDataWithBoundaries(boundaries);               
       });
 
     return boundaryLoaded;
   },
 
-  loadAll: function(options) {	 
-	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){
-		  this.url = '/rest/gis/indicators/' + this.get('id') 
+  loadAll: function(options) {
+	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){		  	  
+		  this.url = '/rest/gis/indicators/' + this.getId(); 
 	  }else if(this.get('type') === 'Indicator Layers'){
 		  this.url = '/rest/gis/indicator-layers/' + this.get('id');
-	  }		  
+	  }	
 	  return when(this.load(options), this.loadBoundary()).promise().done(function() {
 		  $('#map-loading').hide();
 	  });
   },
-  
+  getId: function(){
+	  var id = this.get('id');
+	  if(typeof this.get('id') === 'string' || this.get('id') instanceof String){
+		  id = parseInt(this.get('id').replace( /^\D+/g, ''));
+      }	
+	  return id
+  },
   fetch: function(){	
 	  var self = this;
 	  	  
-	  var filter = {otherFilters: {}};
+	  var filter = {};
 	  if (app.data.filter) {
 		  _.extend(filter, app.data.filter.serialize());
 	  }
-	  var settings = app.data.settings.serialize();	  	  
+	  var settings = app.data.settingsWidget.toAPIFormat();	  	  
 	  
 	  if(this.attributes.isStoredInLocalStorage === true){		  
 		  IndicatorLayerLocalStorage.cleanUp();
-		  var layer = IndicatorLayerLocalStorage.findById(this.attributes.id);
+		  var layer = IndicatorLayerLocalStorage.findById(this.getId());
 		  if(!_.isUndefined(layer)){
 			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);			  
 			  var params = {};
@@ -112,9 +130,11 @@ module.exports = Backbone.Model
 				  params.data = JSON.stringify(_.extend(params.data, filter));
 			  } else {
 				  // If gap analysis is NOT selected then we send the data from localStorage anyway, the EP will return it without changes.
-				  // This is needed because after the gap analysis is selected we cant render again the original public layer.				  
+				  // This is needed because after the gap analysis is selected we cant render again the original public layer.	
+				  
 				  this.url = '/rest/gis/process-public-layer';
-				  layer.unit = (layer.unit instanceof Object) ? Object.keys(layer.unit)[0] : layer.unit; // Needed preprocess for popups.
+				  layer.unit = StringUtil.getMultilangString(layer,'unit', app.data.generalSettings); // Needed preprocess for popups.
+				  layer.description = StringUtil.getMultilangString(layer,'description', app.data.generalSettings);				  
 				  params.data = JSON.stringify(layer);
 			  }			  
 			  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
@@ -137,7 +157,13 @@ module.exports = Backbone.Model
 	    return this.lastFetchXhr;
 	  }	  
   },
-    
+  parse: function(response, options){	  
+	  //if from /rest/gis/indicators/ add prefix to id prevent collision
+	  if(!_.isFunction(this.url) && !_.isUndefined(this.url) && this.url.indexOf('/rest/gis/indicators/') !== -1){	
+		  response.id = app.constants.JOIN_BOUNDARIES_PREFIX +  response.id;
+	  }
+	  return response;	  
+  },
   updatePaletteRange: function() {
     var min = +Infinity,
         max = -Infinity;
@@ -152,13 +178,50 @@ module.exports = Backbone.Model
     });
     this.palette.set({min: min, max: max, values: this.get('values')});
   },
-
+  //check if all values are integers
+  _valuesAreIntegers: function(){
+	  if(this.get('values')){
+		  var integerValues = this.get('values').filter(function(item){
+			  return item.value % 1 === 0;  
+		  });	  
+		  return integerValues.length === this.get('values').length;  
+	  }
+	  return false 
+   },
+   //find max value
+   _getMaxValue: function(){
+	   var result = -Infinity;
+	   if(this.get('values')){
+		   var values = _.pluck(this.get('values'),'value');
+		   result =  _.max(values);
+	   }	  
+	   return result;
+   },   
+   _getMinValue: function(){
+	   var result = +Infinity;
+	   if(this.get('values')){
+		   var values = _.pluck(this.get('values'),'value');
+		   result =  _.min(values);
+	   }	  
+	   return result;
+   },  
+   analyzeValues: function(){
+	   this.maxValue = this._getMaxValue();
+   	   this.minValue = this._getMinValue();
+   	   this.valuesAreIntegers = this._valuesAreIntegers(); 
+   },
   _joinDataWithBoundaries: function(boundaryGeoJSON) {
     var self = this;
-    var indexedValues = _.indexBy(this.get('values'), 'geoId');
+    var values = _.map(this.get('values'), function(value){
+    	value.geoId = value.geoId ? $.trim(value.geoId) : value.geoId; 
+    	return value;
+    });
+   
+    var indexedValues = _.indexBy(values, 'geoId');
     if(indexedValues["null"]) {
         indexedValues[0] = indexedValues["null"]; //hack for some countries the geoId is null.
     }
+       
     var admKey = this.get('adminLevel').replace('-', '').toUpperCase();
 
     // copy boundary geoJSON, and inject data
@@ -167,22 +230,22 @@ module.exports = Backbone.Model
         // replace boundary properties with {value: value}
         // TODO... keep the existing properties and just add value?
         // replacing for now, to save weight
-        feature.id = feature.properties[admKey + '_CODE'];
-        feature.properties.name = feature.properties[admKey + '_NAME'] || '';
-
-        if (!indexedValues[feature.id]) {
-          indexedValues[feature.id] = {value: 0};
-          self.palette.set({min: 0});
-        }
-
+    	var admCode = feature.properties[admKey + '_CODE'];
+    	feature.id = admCode ? $.trim(admCode) : admCode;
+        feature.properties.name = feature.properties[admKey + '_NAME'] || ''; 
+        
+        var value = null;
+        if (!_.isUndefined(indexedValues[feature.id]) && !_.isNull(indexedValues[feature.id])) {
+        	value = indexedValues[feature.id].value;
+        } 
+        
         return _.extend(feature, {
           properties: _.extend(feature.properties, {
-            value: indexedValues[feature.id].value
+            value: value 
           })
         });
       })
     });
-
     this.set('geoJSON', geoJSON);
   }
 

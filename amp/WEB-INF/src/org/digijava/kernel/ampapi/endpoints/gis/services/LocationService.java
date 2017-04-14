@@ -37,6 +37,7 @@ import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -100,10 +101,9 @@ public class LocationService {
 		AmpReportFilters filterRules = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 		
 		if(config != null){
-			Object columnFilters = config.get("columnFilters");
-			if(columnFilters!=null){
-				filterRules = FilterUtils.getApiColumnFilter(
-						(LinkedHashMap<String, Object>) config.get("columnFilters"), filterRules);	
+			Map<String, Object> filters = (Map<String, Object>) config.get(EPConstants.FILTERS);
+			if (filters != null) {
+				filterRules = FilterUtils.getFilterRules(filters, null, filterRules);
 			}
  		}
 		Map<String, String> admLevelToGeoCode;
@@ -111,6 +111,7 @@ public class LocationService {
 			// If the admin level is country we filter only to show projects at
 			// the country of the current installation
 			final ValueWrapper<String> countryId = new ValueWrapper<String>("");
+			final ValueWrapper<String> countryGeoCode = new ValueWrapper<String>("");
 			final ValueWrapper<String> countryName = new ValueWrapper<String>("");
 			PersistenceManager.getSession().doWork(new Work() {
 				public void execute(Connection conn) throws SQLException {
@@ -126,16 +127,10 @@ public class LocationService {
 			});
 
 			filterRules.addFilterRule(new ReportColumn(ColumnConstants.COUNTRY), new FilterRule(countryId.value, true));
-			//if country level we only return the current country with 0 has GeoCode
-			admLevelToGeoCode = Collections.unmodifiableMap(new HashMap<String, String>() {
-				{
-					this.put(countryName.value, "0");
-				}
-			});
-		} else {
-			//we only get the geocodes if !country level
-			admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
-		}
+			
+		} 
+		
+		admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
 		spec.setFilters(filterRules);
 		
 		String currcode = FilterUtils.getSettingbyName(config, SettingsConstants.CURRENCY_ID);
@@ -186,11 +181,9 @@ public class LocationService {
 		final List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
 
 		if (config != null) {
-			Object otherFilter = config.get("otherFilters");
-			if (otherFilter != null
-					&& ((Map<String, Object>) otherFilter).get("adminLevel") != null) {
-				adminLevel = ((Map<String, Object>) otherFilter).get(
-						"adminLevel").toString();
+			Map filters = (Map) config.get(EPConstants.FILTERS);
+			if (filters != null && filters.get("adminLevel") != null) {
+				adminLevel = filters.get("adminLevel").toString();
 			}
 		}
 		
@@ -316,10 +309,14 @@ public class LocationService {
 		SettingsUtils.applyExtendedSettings(spec, config);
 		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
 		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
-		
-		AmpReportFilters filterRules = FilterUtils.getFilters(config, new AmpReportFilters((AmpFiscalCalendar) mrs.getCalendar()));
-		if (filterRules != null) {
-			spec.setFilters(filterRules);
+
+		if (config != null) {
+			Map<String, Object> filterMap = (Map<String, Object>) config.get(EPConstants.FILTERS);
+			AmpReportFilters filterRules = FilterUtils.getFilters(filterMap, new AmpReportFilters(mrs.getCalendar()));
+
+			if (filterRules != null) {
+				spec.setFilters(filterRules);
+			}
 		}
 
 		GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, outSettings);

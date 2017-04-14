@@ -62,8 +62,12 @@ public interface ReportSpecification extends Cloneable {
 	 * @return whether rows with no funding data should be displayed or not
 	 */
 	public boolean isDisplayEmptyFundingRows();
-	
-	
+
+	/**
+	 * @return whether rows with no funding data should be displayed when filtering by transaction hierarchy
+	 */
+	public boolean isDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy();
+
 	/** 
 	 * @return whether textual cells with no data should display "" (if true) or "[columnName] unspecified" (if false) 
 	 */
@@ -115,5 +119,5 @@ public interface ReportSpecification extends Cloneable {
 		return new LinkedHashSet<>(getMeasures().stream().map(z -> z.getMeasureName()).collect(Collectors.toList()));
 	}
 
-	public Boolean isDisplayTimeRangeSubTotals();
+	public boolean isDisplayTimeRangeSubTotals();
 }

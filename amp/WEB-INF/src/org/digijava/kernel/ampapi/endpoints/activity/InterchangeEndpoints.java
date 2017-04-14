@@ -17,6 +17,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -32,7 +33,7 @@ import org.digijava.module.aim.helper.TeamMember;
  * @author acartaleanu
  */
 @Path("activity")
-public class InterchangeEndpoints {
+public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	
 	@Context
 	private HttpServletRequest httpRequest;
@@ -162,10 +163,17 @@ public class InterchangeEndpoints {
 			// invalidating
 			String details = "url project_id = " + projectId + ", json " + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME +
 					" = " + internalId;
-			EndpointUtils.addGeneralError(newJson, new ApiErrorMessage(ActivityErrors.UPDATE_ID_MISMATCH, details));
+			EndpointUtils.addGeneralError(newJson, ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details));
 		}
 
 		return InterchangeUtils.importActivity(newJson, true, uri.getBaseUri() + "activity");
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class getErrorsClass() {
+		return ActivityErrors.class;
+	}
 }

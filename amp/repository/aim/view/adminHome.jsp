@@ -8,7 +8,6 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/gis-layers-manager.css">
 
 <jsp:include page="teamPagesHeader.jsp"  />
 <jsp:include page="allVisibilityTags.jsp" />
@@ -326,7 +325,7 @@
                           <tr>
                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                            <td>
-                             <a href="#" onclick="showLayerManager();return false;">
+                             <a href="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/index.html" >
                                 <digi:trn>GIS Layers Manager</digi:trn>
                              </a>
                            </td>                          
@@ -464,7 +463,7 @@
                             </td>
                           </tr>
                         </module:display>
-                        <%--<module:display name="Interchange Result" parentModule="ADMINISTRATIVE SECTION">--%>
+                        <module:display name="Interchange Result" parentModule="ADMINISTRATIVE SECTION">
                         <tr>
                           <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                           <td class="admin_box_label">
@@ -476,7 +475,7 @@
                             </digi:link>
                           </td>
                         </tr>
-                        <%--</module:display>--%>
+                        </module:display>
                       </table>
 
                     </div></td>
@@ -704,6 +703,20 @@
                             </td>
                           </tr>
                         </module:display>
+                        <module:display name="Resource Manager" parentModule="ADMINISTRATIVE SECTION">
+							<tr>
+								<td><img width="16" align="left"
+									src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+								<td class="admin_box_label">
+									<c:set var="translation">
+										<digi:trn invisibleLinks="true">Click here to view Document manager admin</digi:trn>
+									</c:set> 
+									<a href="/TEMPLATE/reamp/modules/admin/resource-manager-admin/index.html"
+									title="${translation}"> <digi:trn>Resource Manager</digi:trn>
+									</a>
+								</td>
+							</tr>
+                        </module:display>
                       </table>
 
                     </div></td>
@@ -712,45 +725,6 @@
                     <div class="admin_landing_page_box_cont">
                       <div class="admin_landing_page_box_title"><digi:trn>Results dashboard tools</digi:trn></div>
                       <table border="0" cellspacing="2" cellpadding="2">
-                        <feature:display  name="Results Dashboard Data" module="WIDGETS">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="translation">
-                                <digi:trn invisibleLinks="true">Click here to view Results Dashboard Data Manager</digi:trn>
-                              </c:set>
-                              <a href="/widget/indSectRegManager.do" title="${translation}">
-                                <digi:trn>Results Dashboard Data Manager</digi:trn>
-                              </a>
-                            </td>
-                          </tr>
-                        </feature:display>
-                        <feature:display  name="Indicator chart Widgets" module="WIDGETS">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="translation">
-                                <digi:trn invisibleLinks="true">Click here to view Indicator Chart Widgets Manager</digi:trn>
-                              </c:set>
-                              <a href="/widget/indicatorchartwidgets.do" title="${translation}">
-                                <digi:trn>Indicator Chart Widget Manager</digi:trn>
-                              </a>
-                            </td>
-                          </tr>
-                        </feature:display>
-                        <feature:display  name="Table Widgets" module="WIDGETS">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="translation">
-                                <digi:trn key="widgets:clickToViewTableWidgetAdmin" invisibleLinks="true">Click here to view Table Widgets Manager</digi:trn>
-                              </c:set>
-                              <digi:link module="widget" href="/adminTableWidgets.do" title="${translation}">
-                                <digi:trn key="widgets:tableWidgetManager">Table Widget Manager</digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
-                        </feature:display>
                         <module:display name="Result Matrix Settings" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
@@ -763,32 +737,6 @@
                                   Result Matrix/GIS Settings
                                 </digi:trn>
                               </digi:link>
-                            </td>
-                          </tr>
-                        </module:display>
-                        <feature:display  name="Widget Places" module="WIDGETS">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="translation">
-                                <digi:trn key="widget:clickToViewWidgetPlaceAdmin" invisibleLinks="true">Click here to view Widgets Place Manager</digi:trn>
-                              </c:set>
-                              <a href="/widget/widgetplaces.do" title="${translation}">
-                                <digi:trn key="widget:widgetPlaceManager">Widget Place Manager</digi:trn>
-                              </a>
-                            </td>
-                          </tr>
-                        </feature:display>
-                        <module:display name="Dashboard Manager" parentModule="Visualization Dashboards">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="translation">
-                                <digi:trn key="widget:clickToViewWidgetPlaceAdmin" invisibleLinks="true">Click here to view Dashboard Manager</digi:trn>
-                              </c:set>
-                              <a href="/visualization/viewDashboardsList.do" title="${translation}">
-                                <digi:trn>Dashboard Manager</digi:trn>
-                              </a>
                             </td>
                           </tr>
                         </module:display>
@@ -807,14 +755,14 @@
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Dashboard Manager</digi:trn>
                               </c:set>
-                              <a href="/TEMPLATE/reamp/modules/admin/dashboard/index.html"
+                                 <a href="/TEMPLATE/reamp/modules/admin/dashboard/index.html"
                                  title="${translation}">
                                 <digi:trn>Dashboard Manager</digi:trn>
                               </a>
                             </td>
                           </tr>
                         </module:display>
-                      </table>
+					</table>
                     </div></td>
                 </tr>
               </table>
@@ -830,22 +778,3 @@
     </td>
   </tr>
 </table>
-<div id="layers-manager-popup" style="display:none;"></div>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/gis-layers-manager.js"/>"></script>
-<script language="JavaScript">
-
-       var gisLayersManager = new window.gisLayersManager({
-     		draggable: true,
-	        caller: 'ADMIN',
-	        el: $('#layers-manager-popup')
-		  });
-              
-        gisLayersManager.on('cancel', function() { 	      
- 	       $('#layers-manager-popup').hide();
- 	    });
-       
-       function showLayerManager() {
-    	     gisLayersManager.show(); 
-    	     $('#layers-manager-popup').show();
-    	}
-</script>

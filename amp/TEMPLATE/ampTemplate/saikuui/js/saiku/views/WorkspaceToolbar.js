@@ -539,15 +539,15 @@ var WorkspaceToolbar = Backbone.View.extend({
     export_amp_dual_currency: function(){
         var that = this;
         if(!this.deflatedCurrenciesPromise){
-            this.deflatedCurrenciesPromise = $.get("/rest/amp/settings")
+            this.deflatedCurrenciesPromise = $.get("/rest/settings-definitions/reports")
                 .then(function(settings){
                     return settings.filter(function(setting){
-                        return setting.id == "1";
+                        return setting.id == "currency-code";
                     })[0]
                 })
                 .then(function(setting){
-                    return setting.options.filter(function(currency){
-                        return currency.id != setting.defaultId
+                    return setting.value.options.filter(function(currency){
+                        return currency.id != setting.value.defaultId
                     })
                 })
             ;

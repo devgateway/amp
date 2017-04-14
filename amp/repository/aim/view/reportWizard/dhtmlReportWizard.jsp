@@ -24,7 +24,6 @@
 
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css" />
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/button.css" />
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
@@ -84,7 +83,9 @@
 	selectedCols						= new Array();
 	selectedHiers						= new Array();
 	selectedMeas						= new Array();
-		
+	var defaultLanguage = '${aimReportWizardForm.defaultLanguage}';
+	var emptyCurrentLanguage = '<digi:trn jsFriendly="true" key="rep:format:currentLanguageEmpty">Please enter a report name in current language</digi:trn>';
+
 	if ( "true" == "${myForm.budgetExporter}" )	
 		NormalReportManager.prototype.maxHierarchies = 5;
 	
@@ -138,7 +139,8 @@
 	}
 
 	
-	YAHOO.util.Event.addListener(window, "load", initializeDragAndDrop) ;
+	YAHOO.util.Event.addListener(window, "load", initializeDragAndDrop);
+
 </script>
 
 <style type="text/css">
@@ -185,6 +187,7 @@ body {
 	
 	<html:hidden name="aimReportWizardForm" property="projecttitle"/>
 	<html:hidden name="aimReportWizardForm" property="desktopTab"/>
+
 	<logic:present name="currentMember" scope="session">
 		<bean:define id="member" name="currentMember" scope="session" toScope="request" />
 	</logic:present>

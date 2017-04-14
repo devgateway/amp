@@ -20,16 +20,14 @@ package org.digijava.module.common.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
+import org.digijava.module.translation.exotic.AmpDateFormatter;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -60,59 +58,34 @@ public class DateTimeUtil {
         return date;
     }
 
-    public static String getGlobalPattern() {
-    	String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+
+	public static String getGlobalPattern() {
+		String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
 		if (pattern == null){
 			pattern = Constants.CALENDAR_DATE_FORMAT;
 		}
 		pattern = pattern.replace('m', 'M');
 		return pattern;
-    }
-    
-    public static SimpleDateFormat getGlobalSimpleDateFormatter() {
-		return new SimpleDateFormat(getGlobalPattern(), Locale.forLanguageTag(TLSUtils.getEffectiveLangCode()));
-    }
-    
-    public static SimpleDateFormat getGlobalSimpleDateFormatter(Locale locale) {
-		return new SimpleDateFormat(getGlobalPattern(), locale);
-    }
-    
-    public static Locale getLocale() {
-    	return Locale.forLanguageTag(TLSUtils.getEffectiveLangCode());
-    }
-    
-    public static DateTimeFormatter getGlobalDateTimeFormatter() {
-    	return DateTimeFormatter.ofPattern(getGlobalPattern()).withLocale(getLocale());
-    }
-    
+	}
+	
 	/**
 	 * Formats date using pattern from global settings
 	 * @param date
 	 * @return
 	 */
-	public static String formatDateLocalized(Date date, Locale locale){
-		if (date == null) return null;
-		return getGlobalSimpleDateFormatter(locale).format(date);
-	}
-	
-	public static String formatDateLocalized(Date date) {
-		return formatDateLocalized(date, getLocale());
+	public static String formatDateLocalized(Date date){
+		AmpDateFormatter formatter = AmpDateFormatterFactory.getLocalizedFormatter();
+		return formatter.format(date);
 	}
 	
 	public static String formatDate(Date date) {
-		return formatDateLocalized(date, Locale.getDefault());
+		AmpDateFormatter formatter = AmpDateFormatterFactory.getDefaultFormatter();
+		return formatter.format(date);
 	}
 	
-	/**
-	 * Formats date using the supplied date pattern
-	 * @param date
-	 * @return
-	 */
-	public static String formatDate(Date date, String format){		
-		if (date == null) return null;		
-		SimpleDateFormat formater = new SimpleDateFormat(format);
-		String result = formater.format(date);
-		return result;
+	public static String formatDate(Date date, String pattern) {
+		AmpDateFormatter formatter = AmpDateFormatterFactory.getDefaultFormatter(pattern);
+		return formatter.format(date);
 	}
 	
 	public static Date parseDate(String date) throws Exception{
@@ -153,7 +126,7 @@ public class DateTimeUtil {
     	return result;
 	}
 
-	public static String parseDateForPicker2(Date date, String format) throws Exception{
+	public static String formatDateForPicker2(Date date, String format) {
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
 		String pattern = null;
 		if (format == null) {
@@ -181,6 +154,22 @@ public class DateTimeUtil {
                     result = formaterCont.format(date);
                 }
 		return result;
+	}
+
+	/**
+	 * Converts Julian day number to default date format. Julian number can be null.
+	 *
+	 * @param julianNumber julian day number as string
+	 * @return date using default date format
+	 */
+	public static String convertJulianNrToDefaultDateFormat(String julianNumber) {
+		Date fromDateTrue = DateTimeUtil.fromJulianNumberToDate(julianNumber);
+		if (fromDateTrue == null) {
+			return null;
+		}
+		String defaultFormatPattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+		SimpleDateFormat format = new SimpleDateFormat(defaultFormatPattern);
+		return format.format(fromDateTrue);
 	}
 		
 	public static int toJulianDayNumber(LocalDate date) {

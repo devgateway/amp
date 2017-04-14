@@ -67,13 +67,13 @@ public class ActivityService {
 		List<JsonBean> activities=new ArrayList<JsonBean>();
 		
 		//we check if we have filter by keyword
-		LinkedHashMap<String, Object> otherFilter=null;
+		LinkedHashMap<String, Object> filters = null;
 		if (config != null) {
-			otherFilter=(LinkedHashMap<String, Object>)config.get("otherFilters");
-			if(activitIds==null){
-				activitIds=new ArrayList<String>();
+			filters = (LinkedHashMap<String, Object>) config.get(EPConstants.FILTERS);
+			if (activitIds == null) {
+				activitIds = new ArrayList<>();
 			}
-			activitIds.addAll(FilterUtils.applyKeywordSearch( otherFilter));
+			activitIds.addAll(FilterUtils.applyKeywordSearch(filters));
 		}
 		
 		
@@ -108,9 +108,7 @@ public class ActivityService {
  		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
  		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 
-		AmpReportFilters filterRules = FilterUtils.getFilterRules(
-				(LinkedHashMap<String, Object>) config.get("columnFilters"),
-				otherFilter, activitIds);
+		AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, activitIds);
 		if(filterRules!=null){
 			spec.setFilters(filterRules);
 		}
@@ -127,7 +125,7 @@ public class ActivityService {
 
  		for (ReportArea reportArea : ll) {
 			JsonBean activity = new JsonBean();
-			JsonBean filters = new JsonBean();
+			JsonBean matchesFilters = new JsonBean();
 			Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
 			Set<ReportOutputColumn> col = row.keySet();
 			for (ReportOutputColumn reportOutputColumn : col) {
@@ -143,10 +141,10 @@ public class ActivityService {
 				} else {
 				    IdentifiedReportCell idReportCell = (IdentifiedReportCell) row.get(reportOutputColumn);
 				    Set<Long> ids = idReportCell.entitiesIdsValues == null ? null : idReportCell.entitiesIdsValues.keySet();
-					filters.set(reportOutputColumn.originalColumnName, ids);
+					matchesFilters.set(reportOutputColumn.originalColumnName, ids);
 				}
 			}
-			activity.set("matchesFilters", filters);
+			activity.set("matchesFilters", matchesFilters);
 			activities.add(activity);
 		}
 		JsonBean list = new JsonBean();
@@ -211,8 +209,8 @@ public class ActivityService {
 	
 	if (config != null) {
 	    SettingsUtils.applySettings(spec, config, true);
+		FilterUtils.applyFilterRules((Map<String, Object>) config.get(EPConstants.FILTERS), spec,null);
 	}
-	FilterUtils.applyFilterRules(config, spec,null);	
 	GeneratedReport report = EndpointUtils.runReport(spec);
 	
 	//ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);

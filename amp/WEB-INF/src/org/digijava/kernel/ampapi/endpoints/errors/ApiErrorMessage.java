@@ -1,7 +1,7 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.errors;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Defines API Error Message template and stores custom value if needed
@@ -23,7 +23,7 @@ public class ApiErrorMessage {
 	/** (Optional) Error message prefix, custom value, e.g. "Missing fields: " */
 	public final String prefix;
 	/** (Optional) Error details (e.g. "project_title"), without prefix */
-	public final String value;
+	public final List<String> values;
 	
 	/**
 	 * Defines an ApiErrorMessage 
@@ -43,27 +43,44 @@ public class ApiErrorMessage {
 	public ApiErrorMessage(Integer id, String description) {
 		this(id, description, null, null);
 	}
-	
-	/**
-	 * Configures an {@link #ApiErrorMessage(Integer, String, String)} with more details
-	 * @param aem general error definition, see {@link #ApiErrorMessage(Integer, String, String)}
-	 * @param value details, see {@link #value}
-	 */
-	public ApiErrorMessage(ApiErrorMessage aem, String value) {
-		this(aem.id, aem.description, aem.prefix, aem.value == null ? value : aem.value + ", " + value);
-	}
-	
-	private ApiErrorMessage(int id, String description, String prefix, String value) {
+
+	private ApiErrorMessage(int id, String description, String prefix, List<String> values) {
 		if (id <0 || id > 99) {
-			throw new RuntimeException(String.format("Invalid id = %n, must be within [0..99] range.", id));
+			throw new RuntimeException(String.format("Invalid id = %d, must be within [0..99] range.", id));
 		}
 		if (description == null) {
-			throw new RuntimeException(String.format("Description is mandatory"));
+			throw new RuntimeException("Description is mandatory");
 		}
 		this.id = id;
 		this.description = description;
 		this.prefix = prefix;
-		this.value = value;
+		this.values = values;
+	}
+
+	/**
+	 * Configures an {@link #ApiErrorMessage(Integer, String, String)} with more details
+	 * @param value details, see {@link #values}
+	 */
+	public ApiErrorMessage withDetails(String value) {
+		List<String> newValues = new ArrayList<>();
+		if (values != null) {
+			newValues.addAll(values);
+		}
+		newValues.add(value);
+		return new ApiErrorMessage(id, description, prefix, newValues);
+	}
+
+	/**
+	 * Configures an {@link #ApiErrorMessage(Integer, String, String)} with more details
+	 * @param values details, see {@link #values}
+	 */
+	public ApiErrorMessage withDetails(List<String> values) {
+		List<String> newValues = new ArrayList<>();
+		if (values != null) {
+			newValues.addAll(values);
+		}
+		newValues.addAll(values);
+		return new ApiErrorMessage(id, description, prefix, newValues);
 	}
 	
 	@Override
@@ -76,7 +93,7 @@ public class ApiErrorMessage {
 		return "[" + id + "] " + 
 				(prefix == null ? "" : "(" + prefix + ") ")
 				+ description +
-				(value == null ? "" :  " : " + value); 
+				(values == null ? "" :  " : " + values);
 	}
 
 }

@@ -36,6 +36,9 @@ public class InputValidatorProcessor {
 			add(new TreeCollectionValidator());
 			add(new DependencyValidator());
 			add(new PrimaryContactValidator());
+			add(new AgreementCodeValidator());
+			add(new AgreementTitleValidator());
+			add(new FundingOrgRolesValidator());
 			}};
 	
 	/**
@@ -99,7 +102,10 @@ public class InputValidatorProcessor {
 		
 		// record general errors for the request
 		ApiErrorMessage generalError = errors.get(error.id);
-		generalError = new ApiErrorMessage(generalError == null ? error : generalError, fieldPath);
+		if (generalError == null) {
+			generalError = error;
+		}
+		generalError = generalError.withDetails(fieldPath);
 		errors.put(error.id, generalError);
 	}
 	

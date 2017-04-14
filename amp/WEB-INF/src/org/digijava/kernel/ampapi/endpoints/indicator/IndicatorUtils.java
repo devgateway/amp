@@ -1,5 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,6 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONSerializer;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
@@ -25,10 +33,12 @@ import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
@@ -72,7 +82,7 @@ public class IndicatorUtils {
         indicatorJson.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
-        indicatorJson.set(IndicatorEPConstants.ADM_X, getAdmX(indicator));
+        indicatorJson.set(IndicatorEPConstants.ADMIN_LEVEL, IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex());
         indicatorJson.set(IndicatorEPConstants.IS_POPULATION, indicator.isPopulation());
         indicatorJson.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : 
             indicator.getIndicatorType().getId());
@@ -117,6 +127,7 @@ public class IndicatorUtils {
         indicatorJson.set(IndicatorEPConstants.ID, (long) System.identityHashCode(indicator));
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
         indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getValue());
+        indicatorJson.set(IndicatorEPConstants.ADMIN_LEVEL, IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex());
         indicatorJson.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
 
         if (indicator.getColorRamp() != null) {
@@ -178,7 +189,7 @@ public class IndicatorUtils {
 
     public static JsonBean getList(Collection<AmpIndicatorLayer> indicatorLayers, Integer offset, Integer count) {
 
-        offset = Math.min(indicatorLayers.size(), offset == null ? 0 : offset);
+        offset = Math.min(indicatorLayers.size(), (offset == null || offset >= indicatorLayers.size()) ? 0 : offset);
         count = (count == null ? IndicatorEPConstants.DEFAULT_COUNT : count);
         int totalPageCount = (indicatorLayers.size() % count == 0 ? (indicatorLayers.size() / count) : (indicatorLayers.size() / count) + 1);
 
@@ -262,7 +273,7 @@ public class IndicatorUtils {
     public static JsonBean getIndicatorsAndLocationValues(Long indicatorId, JsonBean input, boolean isGapAnalysis) {
         AmpIndicatorLayer indicator = (AmpIndicatorLayer) DbUtil.getObjectOrNull(AmpIndicatorLayer.class, indicatorId);
         if (indicator == null) {
-            return ApiError.toError(new ApiErrorMessage(IndicatorErrors.INVALID_ID, String.valueOf(indicatorId)));
+            return ApiError.toError(IndicatorErrors.INVALID_ID.withDetails(String.valueOf(indicatorId)));
         }
         return getIndicatorsAndLocationValues(indicator, input, isGapAnalysis);
     }

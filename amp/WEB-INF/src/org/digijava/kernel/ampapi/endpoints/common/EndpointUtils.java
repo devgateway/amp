@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -25,7 +24,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -122,7 +120,24 @@ public class EndpointUtils {
 		if(appSettings != null && appSettings.getReportStartYear()!=null && appSettings.getReportStartYear() > 0)
 			return String.valueOf(appSettings.getReportStartYear());
 		return FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
-	} 
+	}
+
+	/**
+	 * @return range START year
+	 */
+	public static String getRangeStartYear() {
+		return FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START);
+	}
+
+	/**
+	 * @return range END year
+	 */
+	public static String getRangeEndYear() {
+		Long yearFrom = Long.parseLong(getRangeStartYear());
+		Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+		Long yearTo = yearFrom + countYear;
+		return yearTo.toString();
+	}
 	
 	/**
 	 * @return report default END year selection
@@ -479,7 +494,7 @@ public class EndpointUtils {
 		}
 		ApiErrorMessage existing = generalErrors.get(error.id);
 		if (existing != null) {
-			error = new ApiErrorMessage(existing, error.value);
+			error = existing.withDetails(error.values);
 		}
 		generalErrors.put(error.id, error);
 	}

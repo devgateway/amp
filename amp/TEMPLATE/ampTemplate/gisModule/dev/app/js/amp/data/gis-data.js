@@ -17,7 +17,8 @@ var Indicators = require('./collections/indicator-collection');
 var StructuresMenu = require('./models/structures-menu-model'); /*a.k.a. structures */
 var ADMClusters = require('./collections/adm-cluster-collection');
 var HilightFundingCollection = require('./collections/hilight-funding-collection');
-var Settings = require('./collections/settings-collection');
+var Settings = require('amp-settings/src/index');
+
 
 var Structures = require('./collections/structures-collection'); /*a.k.a. structures */
 var IndicatorTypes = require('./collections/indicator-type-collection');
@@ -48,18 +49,27 @@ _.extend(GISData.prototype, Backbone.Events, {
 	    this.filter.view._getFilterList();
 
 	    this.boundaries = new Boundaries();
-	    this.settings = new Settings();
+	   this.settingsWidget = new Settings.SettingsWidget({
+	  		draggable : true,
+	  		caller : 'GIS',
+	  		isPopup: false,
+	  		definitionUrl: '/rest/settings-definitions/gis'
+	   });
+	
+	   this.generalSettings = new Settings.GeneralSettings();
+	   this.generalSettings.load();
+	    
 	    this.indicatorTypes = new IndicatorTypes();
 	    this.user = new User();
 	    this.activities = new Activities([], {
-	      settings: this.settings,
+	      settingsWidget: this.settingsWidget,
 	      filter: this.filter,
 	      pageSize: 15,
 	      appData: this
 	    });
 
 	    this.structures = new Structures([], {
-	      settings: this.settings,
+	      settingsWidget: this.settingsWidget,
 	      filter: this.filter,
 	      appData: this
 	    });
@@ -67,23 +77,23 @@ _.extend(GISData.prototype, Backbone.Events, {
 	    this.structuresMenu = new StructuresMenu([
 	      {}  // just the one model, all defaults
 	    ], {
-	    	settings:this.settings,
+	      settingsWidget: this.settingsWidget,
 	      filter: this.filter,
 	      appData: this
 	    });
 
 
-	    this.indicators = new Indicators([], { boundaries: this.boundaries, settings: this.settings});
+	    this.indicators = new Indicators([], { boundaries: this.boundaries, settingsWidget: this.settingsWidget, generalSettings: this.generalSettings});
 
 	    this.admClusters = new ADMClusters([], {
 	      boundaries: this.boundaries,
 	      filter: this.filter,
-	      settings: this.settings
+	      settingsWidget: this.settingsWidget
 	    });
 
 	    // TODO get these from the api
 	    this.hilightFundingCollection = new HilightFundingCollection([],
-	      { boundaries: this.boundaries, filter: this.filter, settings: this.settings });  
+	      { boundaries: this.boundaries, filter: this.filter, settingsWidget: this.settingsWidget });  
 	 
 	    // bubble indicator events on the data object
 	    this.listenTo(this.indicators, 'all', this.bubbleLayerEvents('indicator'));
@@ -109,15 +119,12 @@ _.extend(GISData.prototype, Backbone.Events, {
       this._stateWait.resolve();
     }
 
-    $.when(this.filter.loaded, this._stateWait).then(function() {
+    $.when(this.filter.loaded, this._stateWait, this.settingsWidget.definitions.loaded,this.generalSettings.loaded).then(function() {
       self.boundaries.load();
-      self.indicators.loadAll();
       self.indicatorTypes.load();
-
       //drs attach indicotr listnerneros here
 
       self.structuresMenu.attachListeners();
-
       self.admClusters.load();
       self.admClusters.attachListeners();
       self.hilightFundingCollection.load();

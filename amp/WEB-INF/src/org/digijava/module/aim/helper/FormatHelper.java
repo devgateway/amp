@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -14,6 +15,7 @@ import org.apache.wicket.util.convert.converter.AbstractNumberConverter;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
 /**
  * @author Sebastian Dimunzio 
@@ -235,7 +237,6 @@ public class FormatHelper {
     	return parseDate(sDate, Locale.getDefault());
     }
     
-    
     private static GregorianCalendar parseDate(String sDate, Locale locale){
     	if (sDate == null) return null;
     	String defaultFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
@@ -248,20 +249,11 @@ public class FormatHelper {
     		throw new RuntimeException("The source string doesn't conform to format \"" + defaultFormat + "\"", e);
     	}
     }
-   
-    
-    public static Date parseLocalizedDate2(String sDate){
-		try {
-			return FormatHelper.parseLocalizedDate(sDate).getTime();
-		} catch (Exception e) {
-			logger.error("Can't parse date " + sDate, e);
-			return null;
-		}
-	}
     
 	public static Date parseDate2(String sDate){
 		try {
-			return FormatHelper.parseDate(sDate).getTime();
+			LocalDate ld = AmpDateFormatterFactory.getDefaultFormatter().parseDate(sDate);
+			return java.sql.Date.valueOf(ld);
 		} catch (Exception e) {
 			logger.error("Can't parse date " + sDate, e);
 			return null;

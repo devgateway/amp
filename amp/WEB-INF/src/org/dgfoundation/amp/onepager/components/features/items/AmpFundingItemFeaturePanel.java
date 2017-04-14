@@ -137,25 +137,6 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			}
 		});
 		
-		AmpAjaxLinkField addNewFunding= new AmpAjaxLinkField("addAnotherFunding","New Funding Item","New Funding Item") {			
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				parent.addFundingItem(fundingModel.getObject());
-				target.add(parent);
-				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
-				if (isTabView) {
-					//when adding a new funding search for the correct index
-					//parent.getTabsList()
-					int index = parent.calculateTabIndex(fundingModel.getObject().getAmpDonorOrgId(),
-							fundingModel.getObject().getSourceRole());
-					
-					target.appendJavaScript("switchTabs("+ index +");");
-				}
-			}
-		};
-		
 		
 		AmpTextAreaFieldPanel donorObjective = new AmpTextAreaFieldPanel("donorObjective", new PropertyModel<String>(fundingModel,"donorObjective"), "Donor Objective", false);
 		wmc.add(donorObjective);
@@ -330,8 +311,6 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				"expenditures", fundingModel,"Expenditures",Constants.EXPENDITURE);
 		wmc.add(expenditures);
 
-		add(addNewFunding);
-		
 		
 	}
 

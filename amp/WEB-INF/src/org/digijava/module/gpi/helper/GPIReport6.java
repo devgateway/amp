@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
@@ -79,7 +80,7 @@ public class GPIReport6 extends GPIAbstractReport {
 		double fromExchangeRate;
 		double toExchangeRate;
 		
-		BigDecimal multiplier = BigDecimal.valueOf(AmountsUnits.getDefaultValue().multiplier);
+		BigDecimal divider = BigDecimal.valueOf(AmountsUnits.getDefaultValue().divider);
 
 		if (setup != null) {
 			try {
@@ -117,7 +118,7 @@ public class GPIReport6 extends GPIAbstractReport {
 								new java.sql.Date(transactionDate.getTime()));
 					}
 					BigDecimal amount = new BigDecimal(CurrencyWorker.convert1((Double) data[7], fromExchangeRate, toExchangeRate));
-					amount = amount.multiply(multiplier);
+					amount = amount.divide(divider);
 
 					// This is Actual or Planned for funding.
 					String auxCategoryValue = data[10].toString();
@@ -389,7 +390,7 @@ public class GPIReport6 extends GPIAbstractReport {
 		for (int i = 0; i < endYear + 1 - startYear; i++) {
 			GPIReport6Row auxRow = new GPIReport6Row();
 			AmpOrgGroup auxDonorGroup = new AmpOrgGroup();
-			auxDonorGroup.setOrgGrpName(GPIConstants.ALL_DONORS);
+			auxDonorGroup.setOrgGrpName(TranslatorWorker.translateText(GPIConstants.ALL_DONORS));
 			auxDonorGroup.setAmpOrgGrpId(new Long(0));
 			auxRow.setDonorGroup(auxDonorGroup);
 			auxRow.setColumn1(sumCol1[i]);

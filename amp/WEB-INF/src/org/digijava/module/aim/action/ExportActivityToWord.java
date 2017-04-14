@@ -1,11 +1,22 @@
 package org.digijava.module.aim.action;
 
-import java.awt.Color;
+import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
+
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -23,7 +34,7 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
@@ -33,13 +44,15 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -79,6 +92,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
+import org.digijava.module.aim.util.ExportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
@@ -106,6 +120,7 @@ import com.lowagie.text.Table;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
 
+import clover.com.google.common.base.Strings;
 
 
 public class ExportActivityToWord extends Action {
@@ -148,10 +163,12 @@ public class ExportActivityToWord extends Action {
         ServletContext ampContext = getServlet().getServletContext();
         //to know whether print happens from Public View or not
         HttpSession session = request.getSession();
+        
         TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-        if(teamMember == null) {
-            return mapping.findForward("index");
+        if(teamMember == null && !FeaturesUtil.isVisibleModule("Show Editable Export Formats")) {
+        	return mapping.findForward("index");
         }
+        
         Long actId=null;
         AmpActivityVersion activity=null;
         if(request.getParameter("activityid")!=null){
@@ -212,6 +229,36 @@ public class ExportActivityToWord extends Action {
                 //identificationTbl.addCell(identificationTblCell1);
                 doc.add(identificationTbl);
                 doc.add(identificationSubTable1);
+
+                //AGENCY INTERNAL IDS
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Activity Internal IDs")) {
+                    Table internalTbl = null;
+                    internalTbl = new Table(1);
+                    internalTbl.setWidth(100);
+                    RtfCell internalTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Agency Internal IDs").toUpperCase(), HEADERFONT));
+                    internalTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    internalTitleCell.setBackgroundColor(CELLCOLORGRAY);
+                    internalTbl.addCell(internalTitleCell);
+
+                    Table internalSubTable1 = new Table(2);
+                    internalSubTable1.setWidths(new float[]{1f, 2f});
+                    internalSubTable1.setWidth(100);
+
+                    cell = new RtfCell();
+                    cell.setColspan(2);
+                    cell.setBorder(0);
+                    columnVal = "";
+                    if (activity.getInternalIds() != null) {
+                        columnVal = ExportUtil.buildInternalId(myForm.getInternalIds());
+                    }
+                    p1 = new Paragraph(columnVal, PLAINFONT);
+                    cell.add(p1);
+                    internalSubTable1.addCell(cell);
+                    doc.add(internalTbl);
+                    doc.add(internalSubTable1);
+                    doc.add(new Paragraph(" "));
+                }
+
 
                 /**
                  * Planning step
@@ -532,6 +579,12 @@ public class ExportActivityToWord extends Action {
                     doc.add(tbl);
                 }
 
+                List<Table> gpiTables = getGpiTables(request,
+                        ampContext, myForm);
+                for (Table tbl : gpiTables) {
+                    doc.add(tbl);
+                }
+
                 addProjectCostTables(myForm, request, ampContext, myForm.getFunding().getProProjCost(), 
                 		"Proposed Project Cost", doc);
                 addProjectCostTables(myForm, request, ampContext, myForm.getFunding().getRevProjCost(), 
@@ -548,9 +601,88 @@ public class ExportActivityToWord extends Action {
                     doc.add(tbl);
                 }
 
-                List<Table> activityCreationFieldsTables = getActivityCreationFieldsTables(	request, myForm);
-                for (Table tbl : activityCreationFieldsTables) {
-                    doc.add(tbl);
+                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E")) {
+                    Table meTbl = null;
+                    meTbl = new Table(1);
+                    meTbl.setWidth(100);
+                    meTbl.setBorder(0);
+                    RtfCell meTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("M & E").toUpperCase(), HEADERFONT));
+                    meTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    meTitleCell.setBackgroundColor(CELLCOLORGRAY);
+                    meTbl.addCell(meTitleCell);
+
+                    if (myForm.getIndicators() != null) {
+                        String valueLabel = TranslatorWorker.translateText("Value");
+                        String commentLabel = TranslatorWorker.translateText("Comment");
+                        String dateLabel = TranslatorWorker.translateText("Date");
+                        String nameLabel = TranslatorWorker.translateText("Name");
+                        String codeLabel = TranslatorWorker.translateText("Code");
+                        String logFrameLabel = TranslatorWorker.translateText("LogFrame");
+                        String sectorsLabel = TranslatorWorker.translateText("Sectors");
+
+                        for (IndicatorActivity indicator : myForm.getIndicators()) {
+                            Table headerTable = new Table(4);
+                            headerTable.setWidth(99);
+                            headerTable.setWidths(new int[]{ 3, 1, 1, 2 });
+                            headerTable.getDefaultCell().setBorder(0);
+                            headerTable.getDefaultCell().setBackgroundColor(new Color(244, 244, 242));
+                            headerTable.addCell(nameLabel);
+                            headerTable.addCell(codeLabel);
+                            headerTable.addCell(logFrameLabel);
+                            headerTable.addCell(sectorsLabel);
+                            headerTable.getDefaultCell().setBackgroundColor(new Color(255, 255, 255));
+
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Name")) {
+                                headerTable.addCell(new Paragraph(indicator.getIndicator().getName(), BOLDFONT));
+                                headerTable.addCell(indicator.getIndicator().getCode());
+                            }
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/Logframe Category")) {
+                                if (indicator.getValues() != null && indicator.getValues().size() > 0) {
+                                    headerTable.addCell(indicator.getLogFrame() + "\n");
+                                }
+                            }
+                            
+                            if (indicator.getIndicator().getSectors() != null) {
+                                headerTable.addCell(ExportUtil.getIndicatorSectors(indicator) + "\n");
+                            }
+
+                            RtfCell headerCell = new RtfCell();
+                            headerCell.setBorder(0);
+                            headerCell.add(headerTable);
+                            meTbl.addCell(headerCell);
+
+                            for (AmpIndicatorValue value : indicator.getValuesSorted()) {
+
+                                String fieldName = ExportUtil.getIndicatorValueType(value);
+                                columnVal = TranslatorWorker.translateText(ExportUtil.INDICATOR_VALUE_NAME.get(value.getValueType()));
+                                RtfCell cellValueTitle = new RtfCell();
+                                cellValueTitle.setBorder(0);
+                                cellValueTitle.add(new Paragraph(columnVal, BOLDFONT));
+                                meTbl.addCell(cellValueTitle);
+
+                                Table additionalInfoSubTable = new Table(2);
+                                additionalInfoSubTable.setWidth(80);
+
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Value")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, valueLabel, (value.getValue() != null ? FormatHelper.formatNumber(value.getValue()) : null), null);
+                                }
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Comments")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, commentLabel, DgUtil.trimChars(Strings.nullToEmpty(value.getComment())), null);
+                                }
+                                if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/" + fieldName + " Date")) {
+                                    generateOverAllTableRows(additionalInfoSubTable, dateLabel, (value.getValueDate() != null ? DateConversion.convertDateToLocalizedString(value.getValueDate()) : null), null);
+                                }
+
+                                RtfCell cellValue = new RtfCell();
+                                cellValue.setBorder(0);
+                                cellValue.add(additionalInfoSubTable);
+                                meTbl.addCell(cellValue);
+
+                            }
+                        }
+
+                    }
+                    doc.add(meTbl);
                 }
 
                 List<Table> activityPerformanceTables = getActivityPerformanceTables(request, activity);
@@ -567,6 +699,7 @@ public class ExportActivityToWord extends Action {
                 for (Table tbl : structures1) {
                     doc.add(tbl);
                 }
+
             }
 
             //close document
@@ -740,67 +873,6 @@ public class ExportActivityToWord extends Action {
             }
 
         }
-        return retVal;
-    }
-
-    private List<Table> getActivityCreationFieldsTables(
-            HttpServletRequest request, EditActivityForm myForm)
-            throws WorkerException, BadElementException {
-        List<Table> retVal = new ArrayList<Table>();
-        ServletContext ampContext = getServlet().getServletContext();
-        HttpSession session=request.getSession();
-        ExportSectionHelper sectionHelper = new ExportSectionHelper(null)
-                .setWidth(100).setAlign("left");
-        /**
-         * Activity created by
-         */
-
-        if (FeaturesUtil.isVisibleField("Activity Created By")) {
-            String actCreatedByString = identification.getActAthEmail() == null ? "(unknown)" :
-                    identification.getActAthFirstName() + " "
-                            + identification.getActAthLastName() + "-"
-                            + identification.getActAthEmail();
-            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Activity created by", null, null, true)
-                    .addRowData(actCreatedByString);
-            sectionHelper.addRowData(rowData);
-        }
-
-
-        /**
-         * Activity updated on
-         */
-        if (FeaturesUtil.isVisibleField("Activity Updated On")) {
-            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Updated On", null, null, true).addRowData(identification
-                    .getUpdatedDate());
-            sectionHelper.addRowData(rowData);
-        }
-
-        /**
-         * Activity updated by
-         */
-        if (FeaturesUtil.isVisibleField("Activity Updated By")) {
-            String output = "";
-            if (identification.getModifiedBy() != null) {
-                User user = identification.getModifiedBy().getUser();
-                output = user.getFirstNames() + " " + user.getLastName() + "-"
-                        + user.getEmail();
-            }
-            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Activity Updated By", null, null, true).addRowData(output);
-            sectionHelper.addRowData(rowData);
-        }
-
-        /**
-         * Activity created on
-         */
-        if (FeaturesUtil.isVisibleField("Activity Created On")) {
-            ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Created On", null, null, true).addRowData(identification
-                    .getCreatedDate());
-        }
-        retVal.add(createSectionTable(sectionHelper, request, ampContext));
         return retVal;
     }
 
@@ -1301,6 +1373,41 @@ public class ExportActivityToWord extends Action {
         return retVal;
     }
 
+    private List<Table> getGpiTables(HttpServletRequest request,
+                                     ServletContext ampContext, EditActivityForm myForm)
+            throws WorkerException, BadElementException {
+        List<Table> retVal = new ArrayList<Table>();
+        if (FeaturesUtil.isVisibleModule("/Activity Form/GPI")) {
+            boolean createTable = false;
+            ExportSectionHelper sectionHelper = new ExportSectionHelper(
+                    "GPI", true);
+            retVal.add(createSectionTable(sectionHelper, request, ampContext));
+
+            sectionHelper = new ExportSectionHelper(null, false);
+
+            for (AmpGPISurvey survey : myForm.getGpiSurvey()) {
+                List<AmpGPISurveyResponse> list = new ArrayList<>(survey.getResponses());
+                Collections.sort(list, new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
+                String indicatorName = "";
+                for (AmpGPISurveyResponse response : list) {
+                    if (!indicatorName.equals(response.getAmpQuestionId().getAmpIndicatorId().getName())) {
+                        indicatorName = response.getAmpQuestionId().getAmpIndicatorId().getName();
+                        ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(indicatorName, null, null, true);
+                        sectionHelper.addRowData(rowData);
+                    }
+                    String responseText = (response.getResponse() != null ? response.getResponse() : "");
+                    ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
+                            response.getAmpQuestionId().getQuestionText(), null, null, true).addRowData(responseText);
+                    sectionHelper.addRowData(rowData);
+                }
+            }
+
+            retVal.add(createSectionTable(sectionHelper, request, ampContext));
+
+        }
+        return retVal;
+    }
+
     private List<Table> getRelatedDocsTables(HttpServletRequest request,
                                              ServletContext ampContext, EditActivityForm myForm)
             throws WorkerException, BadElementException {
@@ -1469,12 +1576,6 @@ public class ExportActivityToWord extends Action {
             generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedStartDate(),null);
         }
 
-        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
-            columnName = TranslatorWorker.translateText("Proposed Project Life") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getProposedProjectLife() == null ? ""
-                    : String.valueOf(planning.getProposedProjectLife()), null);
-        }
-
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date")) {
             columnName = TranslatorWorker.translateText("Original Completion Date")+": ";
             generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalCompDate(), null);
@@ -1511,6 +1612,12 @@ public class ExportActivityToWord extends Action {
         commColumnName = "Current Completion Date Comments";
         if(FeaturesUtil.isVisibleField(commColumnName)){
             this.buildCommentsPart("current completion date", commColumnName, allComments, planningSubTable1);
+        }
+
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
+            columnName = TranslatorWorker.translateText("Proposed Project Life") + ": ";
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getProposedProjectLife() == null ? ""
+                    : String.valueOf(planning.getProposedProjectLife()), null);
         }
 
         if(FeaturesUtil.isVisibleField("Duration of Project")){
@@ -1662,43 +1769,43 @@ public class ExportActivityToWord extends Action {
      */
     private List<Table> getContactInfoTables (HttpServletRequest request,	ServletContext ampContext, EditActivityForm myForm) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
-        HttpSession session=request.getSession();
+        HttpSession session = request.getSession();
         ExportSectionHelper eshTitle = new ExportSectionHelper("Contact Information", true).setWidth(100f).setAlign("left");
 
-        if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts")){
-
+        boolean isContactInformationVisible = FeaturesUtil.isVisibleModule("/Activity Form/Contacts") &&
+        		((TeamMember) session.getAttribute(CURRENT_MEMBER) != null || FeaturesUtil.isVisibleFeature("Contacts"));
+        
+        if(isContactInformationVisible) {
             retVal.add(createSectionTable(eshTitle, request, ampContext));
-
             ExportSectionHelper eshContactInfoTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
 
             // Donor funding contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Donor Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,	"Donor funding contact information", myForm
-                        .getContactInformation().getDonorContacts(),ampContext, request);
+                buildContactInfoOutput(eshContactInfoTable,	"Donor funding contact information", 
+                		myForm.getContactInformation().getDonorContacts(), ampContext, request);
             }
             // MOFED contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Mofed Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,"MOFED contact information", myForm
-                        .getContactInformation().getMofedContacts(),ampContext, request);
+                buildContactInfoOutput(eshContactInfoTable, "MOFED contact information", 
+                		myForm.getContactInformation().getMofedContacts(), ampContext, request);
             }
             // Sec Min funding contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,	"Sector Ministry contact information", myForm
-                        .getContactInformation().getSectorMinistryContacts(), ampContext, request);
+                buildContactInfoOutput(eshContactInfoTable,	"Sector Ministry contact information", 
+                		myForm.getContactInformation().getSectorMinistryContacts(), ampContext, request);
             }
             // Project Coordinator contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,	"Proj. Coordinator contact information", myForm					.getContactInformation()
-                        .getProjCoordinatorContacts(), ampContext,request);
+                buildContactInfoOutput(eshContactInfoTable,	"Proj. Coordinator contact information", 
+                		myForm.getContactInformation().getProjCoordinatorContacts(), ampContext, request);
             }
             // Implementing/executing agency contact information
             if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Implementing Executing Agency Contact Information")) {
-                buildContactInfoOutput(eshContactInfoTable,"Implementing/Executing Agency contact information",	myForm.getContactInformation()
-                        .getImplExecutingAgencyContacts(), ampContext,request);
+                buildContactInfoOutput(eshContactInfoTable, "Implementing/Executing Agency contact information", 
+                		myForm.getContactInformation().getImplExecutingAgencyContacts(), ampContext, request);
             }
 
-            retVal.add(createSectionTable(eshContactInfoTable, request,
-                    ampContext));
+            retVal.add(createSectionTable(eshContactInfoTable, request, ampContext));
         }
 
         return retVal;
@@ -1716,25 +1823,10 @@ public class ExportActivityToWord extends Action {
         if (contacts != null && contacts.size() > 0) {
             String output = "";
             for (AmpActivityContact cont : contacts) {
-                String contactName = cont.getContact().getName() + " "
-                        + cont.getContact().getLastname();
-
+                output = ExportUtil.getContactInformation(cont.getContact());
                 ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                        contactName, null, null, true);
+                        output, null, null, true);
 
-                Set<AmpContactProperty> contactProperties = cont.getContact()
-                        .getProperties();
-                String emails = "";
-                if (contactProperties != null) {
-                    for (AmpContactProperty email : contactProperties) {
-                        if (email.getName().equals(
-                                Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
-                            emails += email.getValue() + "; ";
-                        }
-                    }
-                }
-
-                rowData.addRowData(emails);
                 eshContactInfoTable.addRowData(rowData);
             }
         }
@@ -2539,7 +2631,7 @@ public class ExportActivityToWord extends Action {
                 String toCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
                 
                 TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-                if (tm != null) 
+				if (tm != null && tm.getAppSettings() != null) 
                     toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
                 
                 if (structuredFundings.size() > 0) {
@@ -2692,6 +2784,7 @@ public class ExportActivityToWord extends Action {
 			
 			// TOTAL ACTUAL COMMITMENTS
 			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL COMMITMENTS", myForm.getFunding().getTotalCommitments(), currencyCode);
+			addTotalsOutput(fundingTotalsDetails,"TOTAL PIPELINE COMMITMENTS", myForm.getFunding().getTotalPipelineCommitments(), currencyCode);
 		}
 
 		if (mtefExisting) {
@@ -2737,16 +2830,10 @@ public class ExportActivityToWord extends Action {
 			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL DISBURSEMENT ORDERS", myForm.getFunding().getTotalActualDisbursementsOrders(), currencyCode);
 		}
 		// UNDISBURSED BALANCE
-		if (FeaturesUtil
-				.isVisibleFeature("Undisbursed Balance")) {
+        if (FeaturesUtil.isVisibleFeature("Funding","Undisbursed Balance")) {
 			addTotalsOutput(fundingTotalsDetails,"UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
 		}
 		
-		// Consumption Rate
-        if (myForm.getFunding().getConsumptionRate()!=null && myForm.getFunding().getConsumptionRate().length()>0) {
-    		addTotalsOutput(fundingTotalsDetails,"Consumption Rate", myForm.getFunding().getConsumptionRate(), null);
-        }
-
 		// Delivery Rate
         if (myForm.getFunding().getDeliveryRate() != null && myForm.getFunding().getDeliveryRate().length() > 0) {
         	addTotalsOutput(fundingTotalsDetails,"Delivery Rate", myForm.getFunding().getDeliveryRate(), null);
@@ -2885,10 +2972,9 @@ public class ExportActivityToWord extends Action {
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")) {
             columnName = TranslatorWorker.translateText("Status Reason");
-            columnVal = "";
             if (identification.getStatusReason() != null) {
-                columnVal += processHtml(request, identification.getStatusReason());
-                generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
+                generateOverAllTableRows(identificationSubTable1, columnName,
+                        processEditTagValue(request, identification.getStatusReason()), null);
             }
         }
 
@@ -3432,10 +3518,10 @@ public class ExportActivityToWord extends Action {
     private Table createOverallInformationTable(HttpServletRequest request,	EditActivityForm myForm, ServletContext ampContext, String currency)throws BadElementException, Exception, WorkerException {
         String columnVal;
         HttpSession session=request.getSession();
-        Table overAllTable = new Table(3); //overall table contains 3 subtables: funding informaiton, activity creation information , all amounts are in {curr] information
+        Table overAllTable = new Table(2); //overall table contains 2 subtables: funding informaiton, activity creation information.
         overAllTable.setWidth(100);
         overAllTable.setBorder(0);
-        overAllTable.setWidths(new float[]{2f,2f,1f});
+        overAllTable.setWidths(new float[]{2f,2f});
         overAllTable.setBackgroundColor(CELLCOLORGRAY);
         overAllTable.setPadding(0);
 
@@ -3519,110 +3605,73 @@ public class ExportActivityToWord extends Action {
             rowAmountForCell1++;
         }
 
-//		//if(FeaturesUtil.isVisibleField("Delivery rate", ampContext))
-//		{
-//			if(myForm.getFunding().getDeliveryRate()!=null){
-//				columnVal =  myForm.getFunding().getDeliveryRate();
-//			}else{
-//				columnVal = "";
-//			}
-//			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Delivery rate")+": ",columnVal,CELLCOLORGRAY);
-//			rowAmountForCell1++;
-//		}
-//		
-//		//if(FeaturesUtil.isVisibleField("Consumption rate", ampContext))
-//		{
-//			if(myForm.getFunding().getConsumptionRate()!=null){
-//				columnVal =  myForm.getFunding().getConsumptionRate();
-//			}else{
-//				columnVal = "";
-//			}
-//			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Consumption rate")+": ",columnVal,CELLCOLORGRAY);	
-//			rowAmountForCell1++;
-//		}	            
         overallFundingCell.add(overAllFundingSubTable);
         overAllTable.addCell(overallFundingCell);
 
         //second cell of overall table is additional info
-        int rowAmountForCell2 = 5; //there are 5 rows in additional information
-        RtfCell additionalInfoCell=new RtfCell();
+        RtfCell additionalInfoCell = new RtfCell();
         additionalInfoCell.setBackgroundColor(CELLCOLORGRAY);
         additionalInfoCell.setBorder(0);
         additionalInfoCell.setVerticalAlignment(Element.ALIGN_TOP);
         Table additionalInfoSubTable = new Table(2);
         additionalInfoSubTable.setWidth(100);
 
-        columnVal = "";
-        if(identification.getActAthFirstName()!=null){
-            columnVal +=  identification.getActAthFirstName();
+        /**
+         * Activity created by
+         */
+        if (FeaturesUtil.isVisibleField("Activity Created By")) {
+            String firstName = identification.getActAthFirstName() == null ? "" : identification.getActAthFirstName();
+            String lastName = identification.getActAthLastName() == null ? "" : identification.getActAthLastName();
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Activity created by")
+                    + ": ", firstName + " " + lastName, CELLCOLORGRAY);
         }
-        if(identification.getActAthLastName()!=null){
-            columnVal += " "+ identification.getActAthLastName();
-        }
-        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Activity created by")+": ",columnVal,CELLCOLORGRAY);
 
-        columnVal = "";
-        if(identification.getCreatedBy() != null)
-        {
-            if(identification.getCreatedBy().getAmpTeam().getName()!=null){
-                columnVal +=  identification.getCreatedBy().getAmpTeam().getName();
-            }
-            if(identification.getCreatedBy().getAmpTeam().getAccessType()!=null){
-                columnVal += "-" + TranslatorWorker.translateText(identification.getCreatedBy().getAmpTeam().getAccessType());
-            }
+        /**
+         * Activity created on
+         */
+        if (FeaturesUtil.isVisibleField("Activity Created On")) {
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Activity created on")
+                    + ": ", identification.getCreatedDate(), CELLCOLORGRAY);
         }
-        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Workspace of creator")+": ",columnVal,CELLCOLORGRAY);
 
-        columnVal = "";
-        if(identification.getCreatedBy() != null)
-        {
-            if(identification.getCreatedBy().getAmpTeam().getComputation()){
-                columnVal += TranslatorWorker.translateText("yes");
-            }else{
-                columnVal += TranslatorWorker.translateText("no");
-            }
+        /**
+         * Activity Last Updated by
+         */
+        if (FeaturesUtil.isVisibleField("Activity Last Updated by")) {
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Activity last updated by")
+                    + ": ", identification.getModifiedBy().getUser().getFirstNames() + " "
+                    + identification.getModifiedBy().getUser().getLastName(), CELLCOLORGRAY);
         }
-        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Computation")+": ",columnVal,CELLCOLORGRAY);
 
-        columnVal = "";
-        if(identification.getCreatedDate()!=null){
-            columnVal += identification.getCreatedDate();
+        /**
+         * Activity updated on
+         */
+        if (FeaturesUtil.isVisibleField("Activity Updated On")) {
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Activity updated on")
+                    + ": ", identification.getUpdatedDate(), CELLCOLORGRAY);
         }
-        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Activity created on")+": ",columnVal,CELLCOLORGRAY);
 
-        columnVal = "";
-        if (identification.getTeam() != null
-                && identification.getTeam().getTeamLead() != null
-                && identification.getTeam().getTeamLead().getUser() != null) {
-            columnVal += identification.getTeam().getTeamLead().getUser().getFirstNames()+" ";
-            columnVal += identification.getTeam().getTeamLead().getUser().getLastName()+" ";
-            columnVal += identification.getTeam().getTeamLead().getUser().getEmail();
-        }
-        generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Data Team Leader")+": ",columnVal,CELLCOLORGRAY);
+        /**
+         * Activity created in workspace
+         */
+        if (identification.getTeam() != null) {
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Created in workspace")
+                    + ": ", identification.getTeam().getName()
+                    + " - "
+                    + TranslatorWorker.translateText(identification.getTeam().getAccessType()), CELLCOLORGRAY);
 
-        int emptyRowsAmount = rowAmountForCell1>=rowAmountForCell2?(rowAmountForCell1 - rowAmountForCell2):(rowAmountForCell2 - rowAmountForCell1);
-        for (int i=0;i<emptyRowsAmount;i++){
-            generateOverAllTableRows(additionalInfoSubTable,"","",CELLCOLORGRAY);
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Workspace manager")
+                    + ": ", identification.getTeam().getTeamLead().getUser().getFirstNames() + " " + identification.getTeam().getTeamLead().getUser().getLastName() + " - "
+                    + identification.getTeam().getTeamLead().getUser().getEmail(), CELLCOLORGRAY);
+
+            generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Computation") + ": ", identification.getTeam().getComputation() ?
+                    TranslatorWorker.translateText("Yes") :
+                    TranslatorWorker.translateText("No"), CELLCOLORGRAY);
         }
 
         additionalInfoCell.add(additionalInfoSubTable);
         overAllTable.addCell(additionalInfoCell);
 
-        //3rd cell is for currency
-        /*
-		RtfCell currencyInfoCell=new RtfCell();	            
-		currencyInfoCell.setBorder(0);
-		Table currencyInfoSubTable = new Table(1);
-		currencyInfoSubTable.setWidth(100);
-		RtfCell mycell = new RtfCell(new Paragraph(TranslatorWorker.translateText("All amounts are in ") + currency, PLAINFONT));
-		mycell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-		mycell.setVerticalAlignment(Element.ALIGN_TOP);
-		mycell.setBackgroundColor(CELLCOLORGRAY);
-		mycell.setRowspan(rowAmountForCell1>rowAmountForCell2?rowAmountForCell1:rowAmountForCell2);
-		currencyInfoSubTable.addCell(mycell);
-		
-		currencyInfoCell.add(currencyInfoSubTable);	            
-		overAllTable.addCell(currencyInfoCell); */
         return overAllTable;
     }
 

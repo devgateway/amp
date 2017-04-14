@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Set;
+
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.IdValuePair;
@@ -26,9 +28,9 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 	public final String viewName;
 	public final String mainColumn;
 	
-	public SqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, 
+	public SqlSourcedColumn(String columnName, LocalizableLabel label, NiDimension.LevelColumn levelColumn, String viewName,
 			String mainColumn, Behaviour<?> behaviour, String description) {
-		super(columnName, levelColumn, behaviour, description);
+		super(columnName, label, levelColumn, behaviour, description);
 		this.viewName = viewName;
 		this.mainColumn = mainColumn;
 	}

@@ -28,11 +28,12 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	//private boolean summaryReport = false;
 	protected boolean displayEmptyFundingColumns = false;
 	protected boolean displayEmptyFundingRows = false;
+	protected boolean displayEmptyFundingRowsWhenFilteringByTransactionHierarchy = false;
 	protected boolean emptyOutputForUnspecifiedData = true;
 	protected boolean alsoShowPledges = false;
 	protected boolean summaryReport = false;
 	protected ReportCollapsingStrategy reportCollapsingStrategy = ReportCollapsingStrategy.UNKNOWNS;
-	protected Boolean displayTimeRangeSubtotals;
+	protected boolean displayTimeRangeSubtotals = true;
 	
     /**
      * If the report query results in empty data
@@ -209,6 +210,14 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		return this.displayEmptyFundingRows;
 	}
 
+	public boolean isDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy() {
+		return displayEmptyFundingRowsWhenFilteringByTransactionHierarchy;
+	}
+
+	public void setDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy(boolean v) {
+		this.displayEmptyFundingRowsWhenFilteringByTransactionHierarchy = v;
+	}
+
 	@Override
 	public boolean isEmptyOutputForUnspecifiedData() {
 		return emptyOutputForUnspecifiedData;
@@ -262,9 +271,11 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		
 		for(String columnName:columns)
 			spec.addColumn(new ReportColumn(columnName));
-		
-		for(String measureName:measures)
-			spec.addMeasure(new ReportMeasure(measureName));
+
+		if (measures != null) {
+			for (String measureName : measures)
+				spec.addMeasure(new ReportMeasure(measureName));
+		}
 		
 		if (hierarchies != null) {
 			for(String hierarchyName:hierarchies) {
@@ -289,7 +300,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	}
 
 	@Override
-	public Boolean isDisplayTimeRangeSubTotals() {
+	public boolean isDisplayTimeRangeSubTotals() {
 		return displayTimeRangeSubtotals;
 	}
 

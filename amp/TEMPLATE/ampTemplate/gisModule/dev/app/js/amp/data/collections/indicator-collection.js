@@ -6,12 +6,12 @@ var ArcGISDynamicLayerIndicator = require('../models/indicator-arcgis-dynamicLay
 var WMSIndicator = require('../models/indicator-wms-model');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var IndicatorLayerLocalStorage = require('../indicator-layer-localstorage');
+var StringUtil = require('../../../libs/local/string-util');
 
 /* Backbone Collection IndicatorLayers (RENAME FILE) */
 module.exports = Backbone.Collection.extend({
 
   url: '/rest/gis/indicator-layers',
-
   model: function(attrs) {
     var typeName = attrs.type;
 
@@ -31,7 +31,8 @@ module.exports = Backbone.Collection.extend({
 
   initialize: function(models, options) {
     this.boundaries = options.boundaries;
-    this.settings = options.settings;
+     this.settingsWidget = options.settingsWidget;
+    this.generalSettings = options.generalSettings
   },
 
   loadAll: function() {
@@ -83,16 +84,11 @@ module.exports = Backbone.Collection.extend({
 
       // this is a custom one. API is a bit messy so we do fair bit of manual work.
       if (layer.colorRamp) {
-    	 self.settings.load().then(function() {
-    	    
-    	   layer.title = self.getMultilangString(layer,'name');
-    	   layer.description = self.getMultilangString(layer,'description');  
-    	   layer.unit = self.getMultilangString(layer,'unit');
-    	 });   	 
-        layer.type = 'joinBoundaries';
-        //debugger
-        layer.adminLevel = self._magicConversion(layer.admLevelName);
-        layer.tooltip = self._createTooltip(layer); 
+    	layer.id = app.constants.JOIN_BOUNDARIES_PREFIX + layer.id;    	    	    
+    	layer.title = StringUtil.getMultilangString(layer,'name', self.generalSettings);
+    	layer.description = StringUtil.getMultilangString(layer,'description', self.generalSettings);  
+    	layer.unit = StringUtil.getMultilangString(layer,'unit', self.generalSettings);    	  	 
+        layer.type = 'joinBoundaries';        
         layer.classes = layer.numberOfClasses;        
         return true;
       }
@@ -102,46 +98,8 @@ module.exports = Backbone.Collection.extend({
 
     return parsedData;
   },
-  getMultilangString: function(layer,field){  
-	  var currentLanguage = this.settings.findWhere({id:'language'}).get('defaultId');
-	  var defaultLanguage = this.settings.findWhere({id: 'default-language'}).get('defaultId');	    
-	  var result = '';
-	  if(!_.isUndefined(layer[field])){
-		  result = layer[field][currentLanguage];
-		  if(_.isUndefined(result) || _.isNull(result)){
-			  result = layer[field][defaultLanguage] || '';
-		  } 
-	  }	 
-	  return result;  	
-  },
   getSelected: function() {
     return this.chain()
       .filter(function(model) { return model.get('selected'); });
-  },
-
-  _magicConversion: function(textAdm) {
-    var magicWords = {
-      Country: 'adm-0',
-      Region: 'adm-1',
-      Zone: 'adm-2',
-      District: 'adm-3'
-    };
-
-    return magicWords[textAdm];
-  },
-  _createTooltip: function(obj){
-	     var tooltip  = '';
-	     if(obj.description){
-	       tooltip += obj.description + '. ' ;
-	     }
-	     
-	     if(obj.createdOn){
-	      tooltip += '&#013; Created on ' + obj.createdOn + '. ';
-	     }
-	     if(obj.createdBy){
-		      tooltip += '&#013; Created by ' + obj.createdBy + '. ';
-		 }
-	     return tooltip;
-}
-
+  }
 });

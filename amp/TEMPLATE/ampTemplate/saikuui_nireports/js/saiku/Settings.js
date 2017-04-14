@@ -26,7 +26,7 @@ var Settings = {
     RESULTS_PER_PAGE: 10,
     USE_AMP_LANGUAGE: true,
     DEFAULT_LANGUAGE: "en",
-    DEFAULT_PAGE_TITLE: 'Aid Management Platform - NiReports'
+    DEFAULT_PAGE_TITLE: 'Aid Management Platform - Reports'
 };
 
 /**
@@ -214,34 +214,6 @@ Settings.Util.createLanguage = function(auxSettings) {
 		}
 	};
 	return ret;
-}
-
-Settings.Util.extractSettings = function(settings) {
-	Saiku.logger.log("Settings.extractSettings");
-	var options = {
-		currentThousandSeparator : null,
-		currentDecimalSeparator : null,
-		useGrouping : false,
-		maxDecimalDigits : 0,
-		groupSize : 0
-	};
-
-	var amountFormat = _.findWhere(settings, {id:"amountFormat"});
-	var decimalSymbolDefinitions = _.findWhere(amountFormat.value, {id:"decimalSymbol"}).value;
-	var decimalSymbol = _.findWhere(decimalSymbolDefinitions.options, {id: decimalSymbolDefinitions.defaultId}).value;
-	options.currentDecimalSeparator = decimalSymbol;
-	var decimalPlacesDefinitions = _.findWhere(amountFormat.value, {id:"maxFracDigits"}).value;
-	var decimalPlaces = _.findWhere(decimalPlacesDefinitions.options, {id: decimalPlacesDefinitions.defaultId}).value;
-	options.maxDecimalDigits = decimalPlaces;
-	var useGrouping = _.findWhere(amountFormat.value, {id:"useGrouping"}).value;
-	options.useGrouping = useGrouping;
-	var groupSize = _.findWhere(amountFormat.value, {id:"groupSize"}).value;
-	options.groupSize = groupSize;
-	var groupSeparatorDefinitions = _.findWhere(amountFormat.value, {id:"groupSeparator"}).value;
-	var groupSeparator = _.findWhere(groupSeparatorDefinitions.options, {id: groupSeparatorDefinitions.defaultId}).value;
-	options.currentThousandSeparator = groupSeparator;
-
-	return options;
 };
 
 Settings.AMP_GLOBAL_SETTINGS = {

@@ -25,7 +25,8 @@ public class LocationSkeleton extends HierEntitySkeleton<LocationSkeleton> {
      * @return a map of all locations from amp_category_value_location, indexed by their id'sstatic
      */
     public static Map<Long, LocationSkeleton> populateSkeletonLocationsList() {
-    	return HierEntitySkeleton.fetchTree("amp_category_value_location", "", new EntityFetcher<LocationSkeleton>() {
+    	String condition = " WHERE deleted IS NOT TRUE";
+    	return HierEntitySkeleton.fetchTree("amp_category_value_location", condition, new EntityFetcher<LocationSkeleton>() {
     		@Override public LocationSkeleton fetch(ResultSet rs) throws SQLException {
     			return new LocationSkeleton(nullInsteadOfZero(rs.getLong("id")), 
 					 	rs.getString("location_name"), 

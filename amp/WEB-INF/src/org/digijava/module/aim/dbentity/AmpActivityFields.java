@@ -204,7 +204,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set<AmpActivityLocation> locations ;
 	
-	@Interchangeable(fieldTitle = "Org. Role", importable = true, fmPath = "/Activity Form/Organizations")
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.ORG_ROLE, importable = true, fmPath = "/Activity Form/Organizations")
 	@VersionableCollection(fieldTitle = "Org. Role")
 	@InterchangeableDiscriminator(discriminatorField = "orgRoleConfig.name", settings = {
 			@Interchangeable(fieldTitle = "Donor Organization", importable=true, discriminatorOption = Constants.FUNDING_AGENCY, fmPath = FMVisibility.ANY_FM + "/Activity Form/Organizations/Donor Organization|/Activity Form/Funding/Search Funding Organizations/Search Organizations",
@@ -411,8 +411,8 @@ LoggerIdentifiable, Cloneable {
 	protected Set<AmpStructure> structures;
 
 //	@Interchangeable(fieldTitle = "Component Fundings", importable = true, fmPath = "/Activity Form/Components")
-	@VersionableCollection(fieldTitle = "Component Fundings")
-	protected Set<AmpComponentFunding> componentFundings;
+//	@VersionableCollection(fieldTitle = "Component Fundings")
+//	protected Set<AmpComponentFunding> componentFundings;
 
 	@Interchangeable(fieldTitle = "Proposed Start Date", importable = true, fmPath = "/Activity Form/Planning/Proposed Start Date", required = "/Activity Form/Planning/Required Validator for Proposed Start Date")
 	@VersionableFieldSimple(fieldTitle = "Proposed Start Date")
@@ -1882,14 +1882,14 @@ LoggerIdentifiable, Cloneable {
 			this.projectComments = projectComments;
 		}
 
-		public void setComponentFundings(Set<AmpComponentFunding> componentFundings) {
-			this.componentFundings = componentFundings;
-		}
-
-		public Set<AmpComponentFunding> getComponentFundings() {
-			return componentFundings;
-		}
-
+//		public Set<AmpComponentFunding> getComponentFundings() {
+//			Set<AmpComponentFunding> res = new HashSet<>();
+//			for(AmpComponent ampComponent:this.getComponents()) {
+//				res.addAll(ampComponent.getFundings());
+//			}
+//			return res;
+//		}
+		
 		public AmpActivityGroup getAmpActivityGroup() {
 			return ampActivityGroup;
 		}

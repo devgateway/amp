@@ -10,7 +10,7 @@ module.exports = BackboneDash.View.extend({
 		this.app = options.app;
 		this.context = options.context;
 		this.model = options.model;
-		this.numberMultiplier = app.settings.find(function(item) {return item.id === 'number-multiplier'});
+		this.numberDivider = app.generalSettings.numberDivider;			
 	},
 
 	render: function() {
@@ -20,14 +20,14 @@ module.exports = BackboneDash.View.extend({
 			model: this.model,
 			context: this.context,
 			values: undefined,
-			numberMultiplier: this.numberMultiplier
+			numberDivider: this.numberDivider
 		}));
 		app.translator.translateDOM($(".dash-settings-modal"));
 		
 		//TODO: move this code to a new model so the API call is made automatically.
     	var config = this.app.filter.serialize();
-    	config.settings = this.app.settings.toAPI();
-    	config.settings['0'] = this.model.get('adjtype');
+    	config.settings = this.app.settingsWidget.toAPIFormat();
+    	config.settings['funding-type'] = this.model.get('adjtype');
     	$.ajax({
     		method: 'POST',
     		url: self.model.url + '/' + this.context.data[0].values[this.context.x.index].id,
@@ -42,7 +42,7 @@ module.exports = BackboneDash.View.extend({
     			model: self.model,
     			context: self.context,
     			values: data.values,
-    			numberMultiplier: self.numberMultiplier
+    			numberDivider: self.numberDivider
     		}));
     		app.translator.translateDOM($(".dash-settings-modal"));
     	}).fail(function(xhr, err) {
@@ -52,7 +52,7 @@ module.exports = BackboneDash.View.extend({
 				model: self.model,
 				context: self.context,
 				error: err,
-				numberMultiplier: self.numberMultiplier
+				numberDivider: self.numberDivider
 			}));
 		});
     	

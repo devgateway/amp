@@ -108,6 +108,12 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			"third activity with agreements",
 			"activity with tertiary_program"
 		);
+
+	final List<String> indicatorActs = Arrays.asList(
+			"activity 1 with agreement",
+			"activity 1 with indicators",
+			"activity 2 with indicators"
+	);
 	
 	final static List<String> hierarchiesToTry = Arrays.asList(
 			ColumnConstants.STATUS, ColumnConstants.IMPLEMENTATION_LEVEL, 
@@ -881,6 +887,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 				null, 
 				GroupingCriteria.GROUPING_QUARTERLY);
 		spec.setDisplayEmptyFundingColumns(true);
+		spec.setDisplayTimeRangeSubtotals(false);
 		runNiTestCase(
 				spec,
 				"en", 
@@ -908,7 +915,8 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
 				null, 
 				GroupingCriteria.GROUPING_MONTHLY);
-		
+		spec.setDisplayTimeRangeSubtotals(false);
+
 		spec.setDisplayEmptyFundingColumns(true);
 		runNiTestCase(
 				spec,
@@ -1940,7 +1948,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 
 		runNiTestCase(spec, "en", executionRateActs, cor);
 	}
-	
+
 	@Test
 	public void testFetchedMeasureTotalMissingPrecursor() {
 		NiReportModel cor = new NiReportModel("testFetchedMeasureTotalMissingPrecursor")
@@ -2010,6 +2018,354 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			GroupingCriteria.GROUPING_YEARLY);
 		
 		runNiTestCase(spec, "en", executionRateActs, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportNoHier() {
+		NiReportModel cor = new NiReportModel("testMeasurelessReportNoHier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 1))",
+						"(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
+								new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
+								new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
+								new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR"),
+								new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed"),
+								new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+								new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components"),
+								new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents"),
+								new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water"),
+								new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
+								new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity"),
+								new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+								new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1"),
+								new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2"),
+								new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1"),
+								new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2"),
+								new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1"),
+								new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones"),
+								new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages"),
+								new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages"),
+								new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge"),
+								new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program"),
+								new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program"),
+								new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program"),
+								new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1"),
+								new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2"),
+								new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending"),
+								new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency"),
+								new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting"),
+								new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components"),
+								new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components"),
+								new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity"),
+								new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement"),
+								new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements"),
+								new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements"),
+								new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement"),
+								new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements"),
+								new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms"),
+								new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response"),
+								new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs"),
+								new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+								new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity"),
+								new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+								new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportNoHier",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE),
+				null,
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportWithHier() {
+		NiReportModel cor = new NiReportModel("testMeasurelessReportWithHier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 2))",
+						"(Country: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Country", "", "Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Country", "Moldova", 8977))
+										.withContents("Project Title", "", "Country", "Moldova")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
+												new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
+												new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
+												new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR"),
+												new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed"),
+												new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+												new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components"),
+												new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents"),
+												new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water"),
+												new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
+												new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity"),
+												new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+												new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1"),
+												new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2"),
+												new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1"),
+												new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2"),
+												new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1"),
+												new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones"),
+												new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages"),
+												new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages"),
+												new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge"),
+												new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program"),
+												new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1"),
+												new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2"),
+												new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending"),
+												new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency"),
+												new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components"),
+												new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components"),
+												new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity"),
+												new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement"),
+												new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements"),
+												new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements"),
+												new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement"),
+												new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements"),
+												new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms"),
+												new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response"),
+												new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs"),
+												new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+												new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity"),
+												new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+												new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")        ),
+								new ReportAreaForTests(new AreaOwner("Country", "Country: Undefined", -999999999)).withContents("Project Title", "", "Country", "Country: Undefined")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportWithHier",
+				Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.PROJECT_TITLE),
+				null,
+				Arrays.asList(ColumnConstants.COUNTRY),
+				GroupingCriteria.GROUPING_YEARLY);
+
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportWithFilteringByRegion() {
+		NiReportModel cor = new NiReportModel("testMeasurelessReportWithFilteringByRegion")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 2))",
+						"(Region: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Region", "", "Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(17), "Region", "Anenii Noi County", "Project Title", "Proposed Project Cost 2 - EUR"),
+								new ReportAreaForTests(new AreaOwner(18), "Region", "Anenii Noi County", "Project Title", "Test MTEF directed"),
+								new ReportAreaForTests(new AreaOwner(21), "Region", "Anenii Noi County", "Project Title", "activity with components"),
+								new ReportAreaForTests(new AreaOwner(24), "Region", "Anenii Noi County", "Project Title", "Eth Water"),
+								new ReportAreaForTests(new AreaOwner(27), "Region", "Anenii Noi County", "Project Title", "mtef activity 2"),
+								new ReportAreaForTests(new AreaOwner(28), "Region", "Anenii Noi County", "Project Title", "ptc activity 1"),
+								new ReportAreaForTests(new AreaOwner(29), "Region", "Anenii Noi County", "Project Title", "ptc activity 2"),
+								new ReportAreaForTests(new AreaOwner(30), "Region", "Anenii Noi County", "Project Title", "SSC Project 1"),
+								new ReportAreaForTests(new AreaOwner(33), "Region", "Anenii Noi County", "Project Title", "Activity with Zones"),
+								new ReportAreaForTests(new AreaOwner(36), "Region", "Anenii Noi County", "Project Title", "Activity With Zones and Percentages"),
+								new ReportAreaForTests(new AreaOwner(40), "Region", "Anenii Noi County", "Project Title", "SubNational no percentages")      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportWithFilteringByRegion",
+				Arrays.asList(ColumnConstants.REGION, ColumnConstants.PROJECT_TITLE),
+				null,
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+		spec.setFilters(buildSimpleFilter(ColumnConstants.REGION, "9085"/*"Anenii Noi County"*/, true));
+
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportWithFilteringByFunding() {
+		NiReportModel cor = new NiReportModel("testMeasurelessReportNoHier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 1))",
+						"(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
+								new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
+								new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed"),
+								new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+								new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water"),
+								new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
+								new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity"),
+								new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+								new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1"),
+								new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2"),
+								new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1"),
+								new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2"),
+								new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1"),
+								new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones"),
+								new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages"),
+								new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages"),
+								new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge"),
+								new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program"),
+								new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program"),
+								new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program"),
+								new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1"),
+								new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency"),
+								new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting"),
+								new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components"),
+								new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity"),
+								new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement"),
+								new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements"),
+								new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements"),
+								new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement"),
+								new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements"),
+								new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms"),
+								new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response"),
+								new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs"),
+								new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+								new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity"),
+								new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+								new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportNoHier",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE),
+				null,
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+		spec.setFilters(buildSimpleFilter(ColumnConstants.TYPE_OF_ASSISTANCE, "2119"/*"default type of assistance"*/, true));
+
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportWithFundingLevelFilteringAndHier(){
+		NiReportModel cor = new NiReportModel("testMeasurelessReportWithFundingLevelFilteringAndHier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 2))",
+						"(Type Of Assistance: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Type Of Assistance", "", "Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119))
+										.withContents("Project Title", "", "Type Of Assistance", "default type of assistance")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
+												new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
+												new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed"),
+												new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+												new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water"),
+												new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
+												new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity"),
+												new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+												new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1"),
+												new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2"),
+												new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1"),
+												new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2"),
+												new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1"),
+												new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones"),
+												new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages"),
+												new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages"),
+												new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge"),
+												new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program"),
+												new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1"),
+												new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency"),
+												new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting"),
+												new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components"),
+												new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity"),
+												new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement"),
+												new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements"),
+												new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements"),
+												new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement"),
+												new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements"),
+												new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms"),
+												new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response"),
+												new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs"),
+												new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+												new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity"),
+												new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+												new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportWithFundingLevelFilteringAndHier",
+				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PROJECT_TITLE),
+				null,
+				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE),
+				GroupingCriteria.GROUPING_TOTALS_ONLY);
+		spec.setFilters(buildSimpleFilter(ColumnConstants.TYPE_OF_ASSISTANCE, "2119"/*"default type of assistance"*/, true));
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testMeasurelessReportWithFilteringAndHier() {
+		NiReportModel cor = new NiReportModel("testMeasurelessReportWithHier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 2))",
+						"(Country: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Country", "", "Project Title", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Country", "Moldova", 8977))
+										.withContents("Project Title", "", "Country", "Moldova")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
+												new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
+												new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
+												new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR"),
+												new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed"),
+												new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+												new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components"),
+												new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents"),
+												new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water"),
+												new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
+												new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity"),
+												new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+												new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1"),
+												new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2"),
+												new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1"),
+												new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2"),
+												new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1"),
+												new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones"),
+												new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages"),
+												new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages"),
+												new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge"),
+												new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program"),
+												new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program"),
+												new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1"),
+												new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2"),
+												new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending"),
+												new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency"),
+												new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components"),
+												new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components"),
+												new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity"),
+												new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement"),
+												new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements"),
+												new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements"),
+												new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement"),
+												new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements"),
+												new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms"),
+												new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response"),
+												new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs"),
+												new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+												new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity"),
+												new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+												new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportWithHier",
+				Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.PROJECT_TITLE),
+				null,
+				Arrays.asList(ColumnConstants.COUNTRY),
+				GroupingCriteria.GROUPING_YEARLY);
+		spec.setFilters(buildSimpleFilter(ColumnConstants.COUNTRY, "8977"/*"Moldova"*/, true));
+
+		runNiTestCase(spec, "en", acts, cor);
 	}
 
 	@Test
@@ -2091,22 +2447,22 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 	}
 
 	@Test
-	public void testMonthlyReportWithTimeRangeSubTotals() {
-		NiReportModel cor = new NiReportModel("testMonthlyReportWithTimeRangeSubTotals")
+	public void testMonthlyReportNotAffectedByTimeRangeSubTotals() {
+		NiReportModel cor = new NiReportModel("testMonthlyReportNotAffectedByTimeRangeSubTotals")
 				.withHeaders(Arrays.asList(
-						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 5, colStart: 0, colSpan: 30))",
-						"(Financing Instrument: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 4, colStart: 1, colSpan: 28));(Totals: (startRow: 1, rowSpan: 3, totalRowSpan: 4, colStart: 29, colSpan: 1))",
-						"(2006: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 2));(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 5, colSpan: 3));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 8, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 10, colSpan: 4));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 14, colSpan: 7));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 21, colSpan: 8))",
-						"(April: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 1));(Total: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1));(February: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1));(Total: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1));(August: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 1));(November: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 1));(Total: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 1));(September: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 1));(Total: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 1));(August: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 1));(November: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 1));(December: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 12, colSpan: 1));(Total: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 13, colSpan: 1));(February: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 14, colSpan: 1));(March: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 15, colSpan: 1));(April: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 16, colSpan: 1));(July: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 17, colSpan: 1));(November: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 18, colSpan: 1));(December: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 19, colSpan: 1));(Total: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 20, colSpan: 1));(January: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 21, colSpan: 1));(March: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 22, colSpan: 1));(April: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 23, colSpan: 1));(June: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 24, colSpan: 1));(August: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 25, colSpan: 1));(September: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 26, colSpan: 1));(October: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 27, colSpan: 1));(Total: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 28, colSpan: 1))",
-						"(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 22, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 23, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 24, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 25, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 26, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 27, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 28, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 29, colSpan: 1))"))
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 5, colStart: 0, colSpan: 23))",
+						"(Financing Instrument: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 4, colStart: 1, colSpan: 21));(Totals: (startRow: 1, rowSpan: 3, totalRowSpan: 4, colStart: 22, colSpan: 1))",
+						"(2006: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 1));(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 1));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 5, colSpan: 1));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 6, colSpan: 3));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 9, colSpan: 6));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 15, colSpan: 7))",
+						"(April: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 1));(February: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1));(August: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1));(November: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1));(September: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 1));(August: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 1));(November: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 1));(December: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 1));(February: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 1));(March: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 1));(April: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 1));(July: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 12, colSpan: 1));(November: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 13, colSpan: 1));(December: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 14, colSpan: 1));(January: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 15, colSpan: 1));(March: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 16, colSpan: 1));(April: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 17, colSpan: 1));(June: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 18, colSpan: 1));(August: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 19, colSpan: 1));(September: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 20, colSpan: 1));(October: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 21, colSpan: 1))",
+						"(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 22, colSpan: 1))"))
 				.withWarnings(Arrays.asList())
 				.withBody(      new ReportAreaForTests(null)
-						.withContents("Financing Instrument", "", "Funding-2006-April-Actual Commitments", "96,840,58", "Funding-2006-Total-Actual Commitments", "96,840,58", "Funding-2009-February-Actual Commitments", "100,000", "Funding-2009-Total-Actual Commitments", "100,000", "Funding-2011-August-Actual Commitments", "213,231", "Funding-2011-November-Actual Commitments", "999,888", "Funding-2011-Total-Actual Commitments", "1,213,119", "Funding-2012-September-Actual Commitments", "25,000", "Funding-2012-Total-Actual Commitments", "25,000", "Funding-2013-August-Actual Commitments", "1,678,753", "Funding-2013-November-Actual Commitments", "2,670,000", "Funding-2013-December-Actual Commitments", "3,493,333", "Funding-2013-Total-Actual Commitments", "7,842,086", "Funding-2014-February-Actual Commitments", "75,000", "Funding-2014-March-Actual Commitments", "147,000", "Funding-2014-April-Actual Commitments", "7,700,000", "Funding-2014-July-Actual Commitments", "33,000", "Funding-2014-November-Actual Commitments", "77,760,63", "Funding-2014-December-Actual Commitments", "127,053,14", "Funding-2014-Total-Actual Commitments", "8,159,813,77", "Funding-2015-January-Actual Commitments", "45,000", "Funding-2015-March-Actual Commitments", "704,445", "Funding-2015-April-Actual Commitments", "383,000", "Funding-2015-June-Actual Commitments", "67,000", "Funding-2015-August-Actual Commitments", "555,000", "Funding-2015-September-Actual Commitments", "123,456", "Funding-2015-October-Actual Commitments", "93,930,84", "Funding-2015-Total-Actual Commitments", "1,971,831,84", "Totals-Actual Commitments", "19,408,691,19")
+						.withContents("Financing Instrument", "", "Funding-2006-April-Actual Commitments", "96,840,58", "Funding-2009-February-Actual Commitments", "100,000", "Funding-2011-August-Actual Commitments", "213,231", "Funding-2011-November-Actual Commitments", "999,888", "Funding-2012-September-Actual Commitments", "25,000", "Funding-2013-August-Actual Commitments", "1,678,753", "Funding-2013-November-Actual Commitments", "2,670,000", "Funding-2013-December-Actual Commitments", "3,493,333", "Funding-2014-February-Actual Commitments", "75,000", "Funding-2014-March-Actual Commitments", "147,000", "Funding-2014-April-Actual Commitments", "7,700,000", "Funding-2014-July-Actual Commitments", "33,000", "Funding-2014-November-Actual Commitments", "77,760,63", "Funding-2014-December-Actual Commitments", "127,053,14", "Funding-2015-January-Actual Commitments", "45,000", "Funding-2015-March-Actual Commitments", "704,445", "Funding-2015-April-Actual Commitments", "383,000", "Funding-2015-June-Actual Commitments", "67,000", "Funding-2015-August-Actual Commitments", "555,000", "Funding-2015-September-Actual Commitments", "123,456", "Funding-2015-October-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "19,408,691,19")
 						.withChildren(
-								new ReportAreaForTests(new AreaOwner("Financing Instrument", "default financing instrument", 2120), "Funding-2006-April-Actual Commitments", "0", "Funding-2006-Total-Actual Commitments", "0", "Funding-2009-February-Actual Commitments", "100,000", "Funding-2009-Total-Actual Commitments", "100,000", "Funding-2011-August-Actual Commitments", "213,231", "Funding-2011-November-Actual Commitments", "999,888", "Funding-2011-Total-Actual Commitments", "1,213,119", "Funding-2012-September-Actual Commitments", "25,000", "Funding-2012-Total-Actual Commitments", "25,000", "Funding-2013-August-Actual Commitments", "1,678,753", "Funding-2013-November-Actual Commitments", "0", "Funding-2013-December-Actual Commitments", "3,271,111", "Funding-2013-Total-Actual Commitments", "4,949,864", "Funding-2014-February-Actual Commitments", "75,000", "Funding-2014-March-Actual Commitments", "147,000", "Funding-2014-April-Actual Commitments", "3,300,000", "Funding-2014-July-Actual Commitments", "0", "Funding-2014-November-Actual Commitments", "12,000", "Funding-2014-December-Actual Commitments", "0", "Funding-2014-Total-Actual Commitments", "3,534,000", "Funding-2015-January-Actual Commitments", "0", "Funding-2015-March-Actual Commitments", "580,745", "Funding-2015-April-Actual Commitments", "0", "Funding-2015-June-Actual Commitments", "0", "Funding-2015-August-Actual Commitments", "0", "Funding-2015-September-Actual Commitments", "0", "Funding-2015-October-Actual Commitments", "0", "Funding-2015-Total-Actual Commitments", "580,745", "Totals-Actual Commitments", "10,402,728", "Financing Instrument", "default financing instrument"),
-								new ReportAreaForTests(new AreaOwner("Financing Instrument", "second financing instrument", 2125), "Funding-2006-April-Actual Commitments", "96,840,58", "Funding-2006-Total-Actual Commitments", "96,840,58", "Funding-2009-February-Actual Commitments", "0", "Funding-2009-Total-Actual Commitments", "0", "Funding-2011-August-Actual Commitments", "0", "Funding-2011-November-Actual Commitments", "0", "Funding-2011-Total-Actual Commitments", "0", "Funding-2012-September-Actual Commitments", "0", "Funding-2012-Total-Actual Commitments", "0", "Funding-2013-August-Actual Commitments", "0", "Funding-2013-November-Actual Commitments", "2,670,000", "Funding-2013-December-Actual Commitments", "222,222", "Funding-2013-Total-Actual Commitments", "2,892,222", "Funding-2014-February-Actual Commitments", "0", "Funding-2014-March-Actual Commitments", "0", "Funding-2014-April-Actual Commitments", "4,400,000", "Funding-2014-July-Actual Commitments", "33,000", "Funding-2014-November-Actual Commitments", "65,760,63", "Funding-2014-December-Actual Commitments", "127,053,14", "Funding-2014-Total-Actual Commitments", "4,625,813,77", "Funding-2015-January-Actual Commitments", "45,000", "Funding-2015-March-Actual Commitments", "123,700", "Funding-2015-April-Actual Commitments", "383,000", "Funding-2015-June-Actual Commitments", "67,000", "Funding-2015-August-Actual Commitments", "555,000", "Funding-2015-September-Actual Commitments", "123,456", "Funding-2015-October-Actual Commitments", "93,930,84", "Funding-2015-Total-Actual Commitments", "1,391,086,84", "Totals-Actual Commitments", "9,005,963,19", "Financing Instrument", "second financing instrument")      ));
+								new ReportAreaForTests(new AreaOwner("Financing Instrument", "default financing instrument", 2120), "Funding-2006-April-Actual Commitments", "0", "Funding-2009-February-Actual Commitments", "100,000", "Funding-2011-August-Actual Commitments", "213,231", "Funding-2011-November-Actual Commitments", "999,888", "Funding-2012-September-Actual Commitments", "25,000", "Funding-2013-August-Actual Commitments", "1,678,753", "Funding-2013-November-Actual Commitments", "0", "Funding-2013-December-Actual Commitments", "3,271,111", "Funding-2014-February-Actual Commitments", "75,000", "Funding-2014-March-Actual Commitments", "147,000", "Funding-2014-April-Actual Commitments", "3,300,000", "Funding-2014-July-Actual Commitments", "0", "Funding-2014-November-Actual Commitments", "12,000", "Funding-2014-December-Actual Commitments", "0", "Funding-2015-January-Actual Commitments", "0", "Funding-2015-March-Actual Commitments", "580,745", "Funding-2015-April-Actual Commitments", "0", "Funding-2015-June-Actual Commitments", "0", "Funding-2015-August-Actual Commitments", "0", "Funding-2015-September-Actual Commitments", "0", "Funding-2015-October-Actual Commitments", "0", "Totals-Actual Commitments", "10,402,728", "Financing Instrument", "default financing instrument"),
+								new ReportAreaForTests(new AreaOwner("Financing Instrument", "second financing instrument", 2125), "Funding-2006-April-Actual Commitments", "96,840,58", "Funding-2009-February-Actual Commitments", "0", "Funding-2011-August-Actual Commitments", "0", "Funding-2011-November-Actual Commitments", "0", "Funding-2012-September-Actual Commitments", "0", "Funding-2013-August-Actual Commitments", "0", "Funding-2013-November-Actual Commitments", "2,670,000", "Funding-2013-December-Actual Commitments", "222,222", "Funding-2014-February-Actual Commitments", "0", "Funding-2014-March-Actual Commitments", "0", "Funding-2014-April-Actual Commitments", "4,400,000", "Funding-2014-July-Actual Commitments", "33,000", "Funding-2014-November-Actual Commitments", "65,760,63", "Funding-2014-December-Actual Commitments", "127,053,14", "Funding-2015-January-Actual Commitments", "45,000", "Funding-2015-March-Actual Commitments", "123,700", "Funding-2015-April-Actual Commitments", "383,000", "Funding-2015-June-Actual Commitments", "67,000", "Funding-2015-August-Actual Commitments", "555,000", "Funding-2015-September-Actual Commitments", "123,456", "Funding-2015-October-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "9,005,963,19", "Financing Instrument", "second financing instrument")      ));
 
-		ReportSpecificationImpl spec = buildSpecification("testMonthlyReportWithTimeRangeSubTotals",
+		ReportSpecificationImpl spec = buildSpecification("testMonthlyReportNotAffectedByTimeRangeSubTotals",
 				Arrays.asList(ColumnConstants.FINANCING_INSTRUMENT),
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
 				Arrays.asList(ColumnConstants.FINANCING_INSTRUMENT),

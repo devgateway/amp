@@ -56,6 +56,12 @@
 	 		<isset property="jdbc.port"/>                              
 	 	</not>
 	 </condition>
+
+	<condition property="jdbc.host" value="localhost">
+		<not>
+			<isset property="jdbc.host"/>
+		</not>
+	</condition>
 	
 	<condition property="antilock" value="false">
 		 	<not>
@@ -99,31 +105,18 @@
         </fileset>
     </path>
 
-	<target name="get-jvm">
-	    <condition property="jvm.ok">
-	          <equals arg1="${ant.java.version}" arg2="${jvm.version}"/>
-	    </condition>	<property name="clean.db" value="amp_clean"/>
-	</target>
-
-	  <target name="check-jvm" depends="get-jvm" unless="jvm.ok">
-	    <fail message="Wrong JVM - ${ant.java.version}. JVM version has to be ${jvm.version}. Please change your JDK accordingly and rebuild."/>
-	  </target>
-	
-
 <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
     <classpath refid="xjc.classpath" />
   </taskdef>
 
-    <!-- Check timestamp on files -->
-    <target name="prepare" depends="check-jvm">
-        <tstamp/>
-	    <echo message="JVM OK - ${ant.java.version}"/>
-        <mkdir  dir="${classes}"/>
-    </target>
-
-  <!--compile Java source files-->
-	
-  <target name="jaxb" description="Compile all Java source files">
+  <!--Generate Java source files-->
+	<!-- Note on migration to maven:
+	Tried to run XJC with org.jvnet.jaxb2.maven2:maven-jaxb2-plugin:0.12.3 plugin and could not generate all
+	classes using one execution (hence one configuration) since most of these schemas use same target namespace and
+	have clashing names. To overcome this limitation, I had to configure multiple executions of this plugin and repeat
+	somewhat long configuration (30-40 lines) for each XJC invocation. I therefore leave this ant script 'as is' since
+	it is more concise here as ant script than a maven configuration would be. -->
+  <target name="jaxb" description="Generate JAXB Java source files">
     <echo message="Compiling the schema..." />
     <mkdir dir="${gen-src}" />   	
     <xjc destdir="${gen-src}" schema="./doc/IDML2.0.xsd" package="org.digijava.module.dataExchange.jaxb">
@@ -145,33 +138,12 @@
     <xjc destdir="${gen-src}" schema="./doc/xmlpatcher.xsd" package="org.digijava.module.xmlpatcher.jaxb">
          <produces dir="${gen-src}" includes="org/digijava/module/xmlpatcher/jaxb/*.java"/>
     </xjc>
+  	
+	<xjc destdir="${gen-src}" schema="./src/main/resources/schemas/report.xsd" package="org.dgfoundation.amp.reports.xml">
+  		<produces dir="${gen-src}" includes="org/dgfoundation/amp/report/xml/*.java"/>
+	</xjc>
    </target>
 	  
-
-
-    <!-- Copy any resource or configuration files -->
-    <target name="resources">
-        <copy todir="${classes}" includeEmptyDirs="no">
-            <fileset dir="${src}">
-            	<patternset>
-            		<exclude name="CVS/*"/>
-                	<include name="**/*.conf"/>
-                	<include name="**/*.properties"/>
-	                <include name="**/*.xml"/>
-    	            <include name="**/*.ccf"/>
-        	        <include name="**/*.xsl"/>
-            	    <include name="**/*.xsd"/>
-					<include name="**/*.jrxml"/>
-					<include name="initSQL/*.sql"/>
-            		<include name="**/*.js"/>
-            		<include name="**/*.css"/>
-            		<include name="**/*.html"/>
-            		<include name="**/*.ttf" />
-    	        </patternset>
-            </fileset>
-        </copy>
-    </target>
-
     <target name="testResources">
         <copy todir="${classes}" includeEmptyDirs="no">
             <fileset dir="${test}">
@@ -281,15 +253,11 @@
         </javac>
     </target>
 
-    <!-- Normal build of application -->
-    <target name="compile" depends="prepare,resources,jaxb">
-    	<property name="cp" refid="compile.classpath"/>
-    	<echo message="Classpath = ${cp}"/>
-        <javac srcdir="${src};${gen-src}" destdir="${classes}" deprecation="off" debug="${debug}" source="1.8" target="1.8" fork="yes" memoryMaximumSize="1024m" encoding="utf8">
-            <classpath refid="compile.classpath"/>
-        </javac>
-    </target>
-    
+	<target name="compile">
+		<!-- Since maven is compiling this ant task does nothing. Keeping it here because otherwise will have
+		     to edit all dependent tasks. -->
+	</target>
+
     <target name="standalone">
 		<java classname="org.dgfoundation.amp.StandaloneAMPStartup" fork="true">
 		    <classpath refid="run.classpath"/>
@@ -358,7 +326,7 @@
 
 
     <!-- Build entire project -->
-    <target name="project" depends="clean,prepare,compile,javadoc"/>
+    <target name="project" depends="clean,compile,javadoc"/>
 
 
     <!-- compile and deploy to the folder specified in digijava.deploy -->
@@ -717,6 +685,7 @@
 		          <param name="jdbc.user" expression="${jdbc.user}"/>
 				  <param name="jdbc.password" expression="${jdbc.password}"/>
 		      	  <param name="jdbc.db" expression="${jdbc.db}"/>
+		      	  <param name="jdbc.host" expression="${jdbc.host}"/>
 		  	  	  <param name="serverName" expression="${serverName}"/>
 		  	  	  <param name="jdbc.port" expression="${jdbc.port}"/>
 				  <param name="dbName" expression="${dbName}"/>

@@ -11,21 +11,10 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 
-<!-- Dependencies -->
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container_core-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection-min.js"/>"></script>
-        
 <!-- Source File -->
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event.js"/>"></script> 
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container-min.js"/>"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
         
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="/module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="/module/aim/scripts/dscript120_ar_style.js"/>"></script>
-
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 
@@ -555,12 +544,14 @@ function addOrganisation(orgId, orgName){
 	} 
 
     function isGuestAllreadyAdded(guest){
-	  var selreceivers=document.getElementById('selreceivers');
-	  for(var j=0; j<selreceivers.length;j++){
-	    if(selreceivers.options[j].value=='g:'+guest){
-	      return true;
-	    }
-	  }
+	  var selreceivers = document.getElementById('selreceivers');
+		if (selreceivers != null) {
+			for (var j = 0; j < selreceivers.length; j++) {
+				if (selreceivers.options[j].value == 'g:' + guest) {
+					return true;
+				}
+			}
+		}
 	  return false
 	}
   
@@ -637,9 +628,11 @@ function addOrganisation(orgId, orgName){
 
   function selectAllOrgs() {
     var orglist = document.getElementById('organizationList');
-    for(var i=0; i<orglist.options.length; i++){
-      orglist.options[i].selected=true;
-    }
+	  if (orglist != null) {
+		  for (var i = 0; i < orglist.options.length; i++) {
+			  orglist.options[i].selected = true;
+		  }
+	  }
     //document.getElementById('organizationList').option.selectAll;
     return true;
   }
@@ -1231,9 +1224,9 @@ function removeGuest(obj) {
 											</div>
 												
 											<br/><br/>
-												
-												
-												<digi:trn key="calendar:Description"><b>Description</b></digi:trn><span style="font-size:11px;" id="descCharCounter"></span>
+
+
+												<b><digi:trn key="calendar:Description">Description</digi:trn></b><span style="font-size:11px;" id="descCharCounter"></span>
 											    <div class="charcounter-progress-container" style="width: 100%">
 											    	<div id="descProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
 											    </div>
@@ -1252,7 +1245,7 @@ function removeGuest(obj) {
     <td valign=top style="font-size:12px;">
 	<hr />
 	<font color="red" size="3px">*</font>
-    <digi:trn key="calendar:Attendee"><b style="font-size:12px;">Attendee</b></digi:trn><br />
+		<b style="font-size:12px;"><digi:trn key="calendar:Attendee">Attendee</digi:trn></b><br />
 	<div class="msg_receivers">
 		<logic:empty name="calendarEventForm" property="teamMapValues">
 			<div class="msg_lbl">No receivers</div>

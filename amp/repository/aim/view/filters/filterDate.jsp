@@ -18,7 +18,7 @@
 			<c:out value="${dateentity.additionalSearchString}" />
 		</div></td>
 
-	<td><html:text readonly="true"
+	<td><html:text readonly="true" name="reqBeanSetterObject"
 			property="${dateentity.actionFormProperty}"
 			styleId="filter_input_${dateentity.uniqueId }"
 			styleClass="dateInputMarker" />

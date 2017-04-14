@@ -12,6 +12,7 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
+import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
@@ -40,6 +41,9 @@ public class CategAmountCellProto extends Cell {
 		this.metaInfo = metaInfo;
 		this.fixed_exchange_rate = fixed_exchange_rate;
 		this.transactionDate = transactionMoment.toLocalDate();
+		
+		NiUtils.failIf(origAmount == null, String.format("Amount cannot be null for %s", this));
+		NiUtils.failIf(origCurrency == null, String.format("Currency cannot be null for %s", this));
 	}
 	
 	/**
@@ -75,11 +79,11 @@ public class CategAmountCellProto extends Cell {
 
 	@Override
 	public String getDisplayedValue() {
-		return String.format("CategAmountCellProto, actId: %d, %d %s on %s", activityId, this.origAmount, origCurrency.getCurrencyCode(), this.transactionDate);
+		return String.format("CategAmountCellProto, actId: %d, %d %s on %s", activityId, this.origAmount, origCurrency, this.transactionDate);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(actId: %d, amt: %s %s, coos: {%s}, meta: {%s}", this.activityId, origAmount, origCurrency.getCurrencyCode(), AmpCollections.sortedMap(coordinates, (a, b) -> a.toString().compareTo(b.toString())), metaInfo);
+		return String.format("(actId: %d, amt: %s %s, coos: {%s}, meta: {%s}", this.activityId, origAmount, origCurrency, AmpCollections.sortedMap(coordinates, (a, b) -> a.toString().compareTo(b.toString())), metaInfo);
 	}
 }

@@ -66,7 +66,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	public NiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, CellVisitor<ReportCell> cellFormatter) {
 		this.runResult = runResult;
 		this.hiddenColumns = spec.getInvisibleHierarchies().stream().map(ReportColumn::getColumnName).collect(toSet());
-		this.leafColumns = runResult.headers.leafColumns.stream().filter(c -> !hiddenColumns.contains(c.name)).collect(toList());
+		this.leafColumns = runResult.headers.leafColumns;
 		this.spec = spec;
 		this.reportAreaSupplier = () -> new ReportAreaImpl();
 		this.cellFormatter = cellFormatter;
@@ -230,6 +230,9 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		Map<ReportOutputColumn, ReportCell> rowData = new LinkedHashMap<>();
 		for(int i = hiersStack.size(); i < leafColumns.size(); i++) {
 			CellColumn niCellColumn = leafColumns.get(i);
+			if (hiddenColumns.contains(niCellColumn.name)) {
+				continue;
+			}
 			ReportCell reportCell = convert(crd.contents.get(niCellColumn).get(id), niCellColumn);
 			if (reportCell != null)
 				rowData.put(niColumnToROC.get(niCellColumn), reportCell);
@@ -253,34 +256,32 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		List<ReportArea> rchildren = new ArrayList<>();
 		for(NiReportData child:grd.subreports) {
 			hiersStack.push(child.splitter);
-			ReportAreaImpl childReportArea = child.accept(this);
-			if (hasHiddenHierarchy(child)) {
-				childReportArea.setChildren(getGrandChildren(childReportArea));
-			}
-			rchildren.add(childReportArea);
+			rchildren.add(child.accept(this));
 			hiersStack.pop();
+		}
+		if (hasHiddenHierarchy(grd)) {
+			rchildren = getGrandChildren(rchildren);
 		}
 		res.setChildren(rchildren);
 		return res;
 	}
 
 	/**
-	 * Returns true if niReportData is a group report data which is split by a hierarchy we want to hide.
-	 * @param niReportData report data to check
-	 * @return true in report data represents a hidden hierarchy
+	 * Returns true if group report data is split by a hierarchy we want to hide.
+	 * @param niGroupReportData group report data to check
+	 * @return true in group report data represents a hidden hierarchy
 	 */
-	public boolean hasHiddenHierarchy(NiReportData niReportData) {
-		return niReportData instanceof NiGroupReportData
-				&& hiddenColumns.contains(((NiGroupReportData) niReportData).splitterColumn);
+	private boolean hasHiddenHierarchy(NiGroupReportData niGroupReportData) {
+		return hiddenColumns.contains(niGroupReportData.splitterColumn);
 	}
 
 	/**
 	 * Returns grand children. Used to skip one level of hierarchy.
-	 * @param reportArea report area with children
+	 * @param children list of report areas
 	 * @return returns list of grand children or null
 	 */
-	private List<ReportArea> getGrandChildren(ReportAreaImpl reportArea) {
-		List<ReportArea> newChildren = reportArea.getChildren().stream()
+	private List<ReportArea> getGrandChildren(List<ReportArea> children) {
+		List<ReportArea> newChildren = children.stream()
 				.flatMap(c -> Optional.ofNullable(c.getChildren()).orElse(Collections.emptyList()).stream())
 				.collect(toList());
 		return newChildren.isEmpty() ? null : newChildren;
@@ -320,6 +321,9 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		Map<ReportOutputColumn, ReportCell> res = new LinkedHashMap<>();
 		for(int i = hiersStack.size(); i < leafColumns.size(); i++) {
 			CellColumn niCellColumn = leafColumns.get(i);
+			if (hiddenColumns.contains(niCellColumn.name)) {
+				continue;
+			}
 			ReportCell reportCell = convert(niReportData.trailCells.get(niCellColumn), niCellColumn);
 			if (reportCell != null)
 				res.put(niColumnToROC.get(niCellColumn), reportCell);

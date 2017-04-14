@@ -34,16 +34,23 @@ module.exports = Backbone.Model.extend({
       var matchesFilters = self.attributes.matchesFilters;
       if (allFilters && allFilters.columnFilters && matchesFilters) {
             _.each(matchesFilters, function(v, k) {
-          //make sure it's a valid filter
-          if (allFilters.columnFilters[k]) {
-            //iterate over ids.        	        			  
-            _.each(matchesFilters[k], function(id, index) {
-              var matched = _(allFilters.columnFilters[k]).findWhere({id: id});
-              if (matched) {
-                matchesFilters[k][index] = matched;
-              }
-            });
-          }
+           if (k == 'Primary Sector') {
+        	   _.each(matchesFilters[k], function(sector, index) {
+        		   matchesFilters[k][index] = new Backbone.Model(sector);                   
+                 });        	   
+           } else {
+        	 //make sure it's a valid filter
+               if (allFilters.columnFilters[k]) {
+                 //iterate over ids.        	        			  
+                 _.each(matchesFilters[k], function(id, index) {
+                   var matched = _(allFilters.columnFilters[k]).findWhere({id: id});
+                   if (matched) {
+                     matchesFilters[k][index] = matched;
+                   }
+                 });
+               }  
+           }
+          
         });
         self.set('matchesFilters', matchesFilters);
       }

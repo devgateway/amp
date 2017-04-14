@@ -2,6 +2,7 @@ package org.dgfoundation.amp.ar.amp212;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.AllTests_amp212;
@@ -11,6 +12,7 @@ import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
@@ -2045,6 +2047,57 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		} finally {
 			TestcasesReportsSchema.disableToAMoPSplitting = true;
 		}
+	}
+
+	@Test
+	public void testSplitByFunding() {
+		NiReportModel cor = new NiReportModel("test split by funding")
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Project Title", "crazy funding 1", 32))
+										.withContents("Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333", "Project Title", "crazy funding 1")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(32), "Totals-Actual Commitments", "111,111"),
+												new ReportAreaForTests(new AreaOwner(32), "Totals-Actual Commitments", "222,222")        )      ));
+
+		List<String> acts = Arrays.asList("crazy funding 1");
+
+		ReportSpecificationImpl spec = buildSpecification("test split by funding",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.FUNDING_ID),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.FUNDING_ID), GroupingCriteria.GROUPING_YEARLY);
+		spec.setInvisibleHierarchies(Collections.singleton(new ReportColumn(ColumnConstants.FUNDING_ID)));
+
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testSplitByFundingDoesNotAffectSummaryReports() {
+		NiReportModel cor = new NiReportModel("test split by funding does not affect summary")
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Project Title", "crazy funding 1", 32), "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333", "Project Title", "crazy funding 1")      ));
+
+		List<String> acts = Arrays.asList("crazy funding 1");
+
+		ReportSpecificationImpl specWithSplit = buildSpecification("test split by funding does not affect summary",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.FUNDING_ID),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.FUNDING_ID), GroupingCriteria.GROUPING_YEARLY);
+		specWithSplit.setInvisibleHierarchies(Collections.singleton(new ReportColumn(ColumnConstants.FUNDING_ID)));
+		specWithSplit.setSummaryReport(true);
+
+		runNiTestCase(specWithSplit, "en", acts, cor);
+
+		ReportSpecificationImpl specWithoutSplit = buildSpecification("test split by funding does not affect summary",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+				Arrays.asList(ColumnConstants.PROJECT_TITLE), GroupingCriteria.GROUPING_YEARLY);
+		specWithoutSplit.setSummaryReport(true);
+
+		runNiTestCase(specWithoutSplit, "en", acts, cor);
 	}
 
 	@Override

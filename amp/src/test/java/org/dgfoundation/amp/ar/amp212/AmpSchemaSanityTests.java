@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -73,7 +74,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	}
 	
 	final static GrandTotalsDigest proposedProjectCostDigester = new GrandTotalsDigest(z -> z.equals("RAW / Proposed Project Amount") || z.startsWith("RAW / Revised Project Amount"));
-	final static String correctTotalsPPC = "{RAW / Proposed Project Amount=4781901.715878, RAW / Revised Project Amount=4412539.842263}";
+	final static String correctTotalsPPC = "{RAW / Proposed Project Amount=5096901.715878, RAW / Revised Project Amount=4412539.842263}";
 	
 	@Override
 	protected NiReportExecutor getNiExecutor(List<String> activityNames) {
@@ -176,14 +177,18 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	@Test
 	public void testProposedProjectCostDoesNotChangeTotals() throws Exception {
 		
-		ReportSpecificationImpl initSpec = buildSpecification("initSpec", 
+		List<String> allActs = new ArrayList<>();
+		allActs.addAll(acts);
+		allActs.addAll(sscActs);
+
+		ReportSpecificationImpl initSpec = buildSpecification("initSpec",
 				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.REVISED_PROJECT_AMOUNT), 
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
 				null, 
 				GroupingCriteria.GROUPING_YEARLY);
 		 		
-		assertEquals(correctTotalsPPC, buildDigest(initSpec, acts, proposedProjectCostDigester).toString());
-				
+		assertEquals(correctTotalsPPC, buildDigest(initSpec, allActs, proposedProjectCostDigester).toString());
+
 		// single-hierarchy reports
 		for(boolean isSummary:Arrays.asList(true, false)) {
 			for(String hierName:hierarchiesToTry) {
@@ -193,7 +198,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 						Arrays.asList(hierName), 
 						GroupingCriteria.GROUPING_YEARLY);
 				spec.setSummaryReport(isSummary);
-				assertEquals(spec.getReportName(), correctTotalsPPC, buildDigest(spec, acts, proposedProjectCostDigester).toString());
+				assertEquals(spec.getReportName(), correctTotalsPPC, buildDigest(spec, allActs, proposedProjectCostDigester).toString());
 			}
 		}
 	}

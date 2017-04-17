@@ -58,7 +58,8 @@ import org.digijava.module.aim.helper.Constants;
 public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 
 	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
-			Arrays.asList(ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE)));
+			Arrays.asList(ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE,
+					ColumnConstants.DONOR_AGENCY, ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_TYPE)));
 
 	public final static OrganizationsTestDimension orgsDimension = OrganizationsTestDimension.instance;
 	public final static LocationsTestDimension locsDimension = LocationsTestDimension.instance;

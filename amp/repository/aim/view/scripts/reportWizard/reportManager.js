@@ -25,7 +25,6 @@ function populateRPS(rpSettings) {
 	var colArray		= getSelectedFieldsRealNames("dest_col_ul", false);
 	var hierArray		= getSelectedFieldsRealNames("dest_hierarchies_ul", false);
 	var measArray		= getSelectedFieldsRealNames("dest_measures_ul", true);
-	debugger;
 	for ( var i=0; i<hierArray.length; i++ ) {
 		var hier	= hierArray[i];
 		for (var j = 0; j < colArray.length; j++) {

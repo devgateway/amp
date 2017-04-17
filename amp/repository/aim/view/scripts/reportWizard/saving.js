@@ -161,7 +161,6 @@ function getSelectedFieldsRealNames( ulId, isMeasure ) {
 
 	var fields		= ulEl.getElementsByTagName( "input" );
 	for ( var i=0; i<fields.length; i++ ) {
-        debugger;
         var fieldName;
         if (isMeasure) {
             fieldName = getMeasureInfo( fields[i].value );

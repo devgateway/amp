@@ -137,14 +137,41 @@ function getSelectedFieldsNames( ulId ) {
 	return ret;	
 }
 
-function getSelectedFieldsRealNames( ulId ) {
+function getColInfo (id) {
+    var colName	= YAHOO.amp.reportwizard.colIdToName[id];
+    if ( colName == null ) {
+        return undefined;
+    } else {
+        return colName;
+    }
+}
+
+function getMeasureInfo (id) {
+    var measureName	= YAHOO.amp.reportwizard.measureIdToName[id];
+    if ( measureName == null ) {
+        return undefined;
+    } else {
+        return measureName;
+    }
+}
+
+function getSelectedFieldsRealNames( ulId, isMeasure ) {
 	var ret			= new Array();
 	var ulEl		= document.getElementById( ulId );
 
 	var fields		= ulEl.getElementsByTagName( "input" );
 	for ( var i=0; i<fields.length; i++ ) {
-        var field		= document.getElementById( "columnName_" + fields[i].value );
-		ret.push(field.value);
+        debugger;
+        var fieldName;
+        if (isMeasure) {
+            fieldName = getMeasureInfo( fields[i].value );
+        } else {
+            fieldName = getColInfo( fields[i].value );
+		}
+
+		if (fieldName) {
+            ret.push(fieldName);
+        }
 	}
 	return ret;
 }

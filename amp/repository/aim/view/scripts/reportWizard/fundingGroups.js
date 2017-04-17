@@ -1,5 +1,6 @@
 YAHOO.namespace("YAHOO.amp.reportwizard");
 YAHOO.amp.reportwizard.colIdToName		= new Array();
+YAHOO.amp.reportwizard.measureIdToName	= new Array();
 YAHOO.amp.reportwizard.fundingGroups	= new Array();
 YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				 'A.C. Chapter'
@@ -130,6 +131,11 @@ YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"]= new Array(
 function insertColInfo (id, name) {
 		YAHOO.amp.reportwizard.colIdToName[id]=name;
 }
+
+function insertMeasureInfo (id, name) {
+		YAHOO.amp.reportwizard.measureIdToName[id]=name;
+}
+
 
 function checkIfColIsHierarchy(id) {
 	var reportGroupDivEl		= document.getElementById("reportGroupDiv") ;

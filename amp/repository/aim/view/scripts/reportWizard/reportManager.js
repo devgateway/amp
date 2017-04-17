@@ -6,8 +6,8 @@ function createPreview () {
 	var fakeDivEl	= document.getElementById("fakePreviewSectionDiv");
 	divEl.innerHTML	= "";
 	
-	var colArray		= getSelectedFieldsNames("dest_col_ul");
-	var hierArray		= getSelectedFieldsNames("dest_hierarchies_ul");
+	var colArray		= getSelectedFieldsRealNames("dest_col_ul");
+	var hierArray		= getSelectedFieldsRealNames("dest_hierarchies_ul");
 	var summary			= getHideActivities();
 
 	if ( (colArray.length != 0 && !summary) || hierArray.length != 0 ) {
@@ -22,9 +22,9 @@ function createPreview () {
 }
 
 function populateRPS(rpSettings) {
-	var colArray		= getSelectedFieldsNames("dest_col_ul");
-	var hierArray		= getSelectedFieldsNames("dest_hierarchies_ul");
-	var measArray		= getSelectedFieldsNames("dest_measures_ul");
+	var colArray		= getSelectedFieldsRealNames("dest_col_ul");
+	var hierArray		= getSelectedFieldsRealNames("dest_hierarchies_ul");
+	var measArray		= getSelectedFieldsRealNames("dest_measures_ul");
 	for ( var i=0; i<hierArray.length; i++ ) {
 		var hier	= hierArray[i];
 		for (var j = 0; j < colArray.length; j++) {

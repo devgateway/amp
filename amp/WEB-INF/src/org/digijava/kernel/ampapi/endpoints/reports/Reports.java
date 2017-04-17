@@ -54,6 +54,7 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
+import org.dgfoundation.amp.reports.saiku.export.SaikuReportHtmlRenderer;
 import org.dgfoundation.amp.reports.xml.ObjectFactory;
 import org.dgfoundation.amp.reports.xml.Report;
 import org.dgfoundation.amp.reports.xml.ReportParameter;
@@ -311,8 +312,10 @@ public class Reports implements ErrorReportingEndpoint {
 		ReportsUtil.update(spec,formParams);
 		SettingsUtils.applySettings(spec, formParams, true);
 		FilterUtils.applyFilterRules((Map<String, Object>) formParams.get(EPConstants.FILTERS), spec,null);
+		GeneratedReport report = EndpointUtils.runReport(spec);
+		SaikuReportHtmlRenderer htmlRenederer = new SaikuReportHtmlRenderer(report);
 
-		return AmpReportsSchema.getRenderedReport(spec);
+		return htmlRenederer.renderReportAsHtml(false).toString();
 	}
 	
 	@POST

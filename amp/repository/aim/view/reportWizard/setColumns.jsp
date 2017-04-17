@@ -62,6 +62,7 @@
 									<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">
 										<li class="" draggable="true" style="white-space:nowrap; background-color: #E1E1E1; border:1px solid #CECECE; margin-bottom: 5px; margin-top: 5px; padding: 1px; text-align: left; font-size: 11px; vertical-align: middle;">
 											<input type="checkbox" style='line-height:15px; margin-top:6px;' id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>" name="selectedColumns" value="<bean:write name="ampColumnFromTree" property="columnId"/>"/>
+											<input type="hidden" id="columnName_<bean:write name="ampColumnFromTree" property="columnId"/>" name="columnName_<bean:write name="ampColumnFromTree" property="columnId"/>" value="<bean:write name="ampColumnFromTree" property="columnName"/>"/>
 											<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 11px;text-decoration:none"></a>
 											<span style="font-size: 11px; text-decoration:none">
 												<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>

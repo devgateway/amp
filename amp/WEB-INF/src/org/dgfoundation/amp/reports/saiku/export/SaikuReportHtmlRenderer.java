@@ -26,15 +26,23 @@ public class SaikuReportHtmlRenderer {
 	}
 	
 	public StringBuilder renderReportAsHtml() {
+		return renderReportAsHtml(true);
+	}
+
+	public StringBuilder renderReportAsHtml(boolean showReportBodyInfo) {
 		StringBuilder reportHtml = new StringBuilder();
-		
+
 		reportHtml.append("<!DOCTYPE html><html><head><title></title></head><body>");
-		renderReportBody(reportHtml);
+		if (showReportBodyInfo){
+			renderReportBody(reportHtml);
+		} else {
+			renderReportTable(reportHtml);
+		}
 		reportHtml.append("</body></html>");
-		
+
 		return reportHtml;
 	}
-	
+
 	/** Renders the body of the Report HTML
 	 * @param res
 	 */

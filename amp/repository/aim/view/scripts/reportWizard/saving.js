@@ -137,6 +137,18 @@ function getSelectedFieldsNames( ulId ) {
 	return ret;	
 }
 
+function getSelectedFieldsRealNames( ulId ) {
+	var ret			= new Array();
+	var ulEl		= document.getElementById( ulId );
+
+	var fields		= ulEl.getElementsByTagName( "input" );
+	for ( var i=0; i<fields.length; i++ ) {
+        var field		= document.getElementById( "columnName_" + fields[i].value );
+		ret.push(field.value);
+	}
+	return ret;
+}
+
 function SaveReportEngine ( savingMessage, failureMessage ) {
 	this.failureMessage	= failureMessage;
 	this.savingMessage	= savingMessage;

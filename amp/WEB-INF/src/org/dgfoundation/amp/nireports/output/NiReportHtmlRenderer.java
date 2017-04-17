@@ -9,12 +9,10 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
-import org.dgfoundation.amp.nireports.output.nicells.NiDateCell;
-import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
-import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
-import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
+import org.dgfoundation.amp.nireports.output.nicells.*;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -138,7 +136,19 @@ public class NiReportHtmlRenderer {
 			CellColumn leafHeader = headers.leafColumns.get(i);
 			//BigDecimal percentage = crd.hierarchies.calculatePercentage(leafHeader.getBehaviour().getHierarchiesListener());
 			NiOutCell cell = elem.trailCells.get(leafHeader);
-			String contents = i < headers.nrHierarchies || cell == null ? "" : ensureMaxLen(cell.getDisplayedValue(), 50);
+			String contents = "";
+			if (cell instanceof NiAmountCell) {
+				if (i < headers.nrHierarchies || cell == null) {
+					contents = "";
+				} else {
+					logger.error("amount " + ((NiAmountCell) cell).amount);
+					if (((NiAmountCell) cell).amount == null) {
+						logger.error("amount " + ((NiAmountCell) cell).amount);
+					} else {
+						contents = ensureMaxLen(FormatHelper.getDecimalFormatNotRounded().format(((NiAmountCell) cell).amount), 50);
+					}
+				}
+			}
 			bld.append("<td class='nireport_data_cell ni_hierarchyLevel");
 			bld.append(level + 1);
 			bld.append(" ni_trailcell'>");
@@ -194,9 +204,21 @@ public class NiReportHtmlRenderer {
 					} else {
 						contents = formatDate(cell);
 					}
-				} else {
+				} if (cell instanceof NiAmountCell) {
+					if (cell == null) {
+						contents = Optional.ofNullable(leafHeader.getBehaviour().getEmptyCell(spec)).orElse(NiTextCell.EMPTY).getDisplayedValue();
+					} else {
+						logger.error("amount " + ((NiAmountCell) cell).amount);
+						if (((NiAmountCell) cell).amount == null){
+							logger.error("amount " + ((NiAmountCell) cell).amount);
+						} else {
+							contents = FormatHelper.getDecimalFormatNotRounded().format(((NiAmountCell) cell).amount);
+						}
+					}
+				}
+				else {
 					contents = (cell == null ? Optional.ofNullable(leafHeader.getBehaviour().getEmptyCell(spec)).orElse(NiTextCell.EMPTY).getDisplayedValue()
-							: ensureMaxLen(cell.getDisplayedValue(), 50));
+							: DgUtil.dehtmlize(ensureMaxLen(cell.getDisplayedValue(), 50)));
 				}
 
 				bld.append("<td class='nireport_data_cell'>");

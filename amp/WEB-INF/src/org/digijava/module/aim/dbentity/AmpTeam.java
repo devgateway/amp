@@ -33,9 +33,10 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versionable,*/ FilterDataSetInterface<AmpTeamFilterData>,  
 									NameableOrIdentifiable {
 	private static final Logger logger = Logger.getLogger(AmpTeam.class);
+	@Interchangeable(fieldTitle = "id", id = true)
 	private Long ampTeamId;
 	@TranslatableField
-    @Interchangeable(fieldTitle = "name")
+    @Interchangeable(fieldTitle = "name", value = true)
 	private String name;
 	
 	private Boolean addActivity;

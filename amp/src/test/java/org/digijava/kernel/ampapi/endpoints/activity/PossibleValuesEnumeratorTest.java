@@ -17,6 +17,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -90,12 +91,19 @@ public class PossibleValuesEnumeratorTest {
 
     @Test
     public void testPossibleValuesForGeneric() throws IOException {
-        when(possibleValuesDAO.getGenericValues(any(), any(), any())).thenReturn(Arrays.asList(
-                values(1, "Donor"),
-                values(2, "Implementing Agency")
+        when(possibleValuesDAO.getGenericValues(any())).thenReturn(Arrays.asList(
+                ampRole(1, "Donor"),
+                ampRole(2, "Implementing Agency")
         ));
         assertJsonEquals(possibleValuesFor("donor_organization~role"),
                 "[{\"id\":1,\"value\":\"Donor\"},{\"id\":2,\"value\":\"Implementing Agency\"}]");
+    }
+
+    private AmpRole ampRole(long id, String value) {
+        AmpRole role = new AmpRole();
+        role.setAmpRoleId(id);
+        role.setName(value);
+        return role;
     }
 
     @Test

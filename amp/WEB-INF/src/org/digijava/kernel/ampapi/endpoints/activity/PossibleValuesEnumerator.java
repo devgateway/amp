@@ -1,7 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import static java.util.stream.Collectors.toList;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +14,18 @@ import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterchangeableValueProvider;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.services.sync.model.SyncConstants.Entities;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -25,6 +34,8 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -52,6 +63,9 @@ public class PossibleValuesEnumerator {
 				.putAll(AmpCurrency.class, Entities.CURRENCY)
 				.putAll(AmpContact.class, Entities.CONTACT)
 				.putAll(AmpActivityProgramSettings.class, Entities.ACTIVITY_PROGRAM_SETTINGS)
+				.putAll(AmpTeamMember.class, Entities.WORKSPACE_MEMBER)
+				.putAll(AmpTeam.class, Entities.WORKSPACES)
+				.putAll(User.class, Entities.USER)
 				.build();
 
 	private PossibleValuesDAO possibleValuesDAO;
@@ -272,35 +286,67 @@ public class PossibleValuesEnumerator {
 	@SuppressWarnings("unchecked")
 	private List<JsonBean> getPossibleValuesForField(Field field) {
 		if (!InterchangeUtils.isFieldEnumerable(field))
-			return new ArrayList<JsonBean>();
-		List<JsonBean> result = new ArrayList<JsonBean>();
-		Class<?> clazz = InterchangeUtils.getClassOfField(field);
-		
+			return new ArrayList<>();
+		Class clazz = InterchangeUtils.getClassOfField(field);
+
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))
 			return getPossibleCategoryValues(field, null);
 		if (clazz.isAssignableFrom(AmpLocation.class))
 			return getPossibleLocations();
-		Field[] fields = InterchangeUtils.getClassOfField(field).getDeclaredFields();
+		return getPossibleValuesGenericCase(clazz);
+	}
+
+	private <T> List<JsonBean> getPossibleValuesGenericCase(Class<T> clazz) {
+		Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
 		String idFieldName = null;
 		String valueFieldName = null;
 		for (Field passField : fields) {
 			Interchangeable ant = passField.getAnnotation(Interchangeable.class);
-			if (ant != null) {
-				if (ant.id())
-					idFieldName = passField.getName();
-				if (ant.value())
-					valueFieldName = passField.getName();
+			if (ant.id()) {
+				idFieldName = passField.getName();
+			}
+			if (ant.value()) {
+				valueFieldName = passField.getName();
 			}
 		}
-		if (idFieldName == null || valueFieldName == null) {
-			String err = "Cannot provide possible values for " + clazz.getName() + 
-					" since we need both 'id' and 'value' fields configured";
-			LOGGER.error(err);
-			return result;
+		InterchangeableValueProvider<T> valueProvider = null;
+		if (valueFieldName != null) {
+			valueProvider = new GenericInterchangeableValueProvider<>(valueFieldName);
 		}
-		List<Object[]> objectList = possibleValuesDAO.getGenericValues(clazz, idFieldName, valueFieldName);
-		result = setProperties(objectList, result, false);
-		return result;
+		if (valueProvider == null && clazz.isAnnotationPresent(InterchangeableValue.class)) {
+			valueProvider = getInterchangeableValueProvider(clazz);
+		}
+		if (idFieldName == null || valueProvider == null) {
+			String err = "Cannot provide possible values for " + clazz.getName()
+					+ " since we need both 'id' and 'value' fields configured";
+			LOGGER.error(err);
+			return Collections.emptyList();
+		}
+		List<T> objectList = possibleValuesDAO.getGenericValues(clazz);
+		String finalIdFieldName = idFieldName;
+		InterchangeableValueProvider<T> finalValueProvider = valueProvider;
+		return objectList.stream().map(o -> getGenericBean(o, finalIdFieldName, finalValueProvider)).collect(toList());
+	}
+
+	private <T> InterchangeableValueProvider<T> getInterchangeableValueProvider(Class<T> clazz) {
+		InterchangeableValue annotation = clazz.getAnnotation(InterchangeableValue.class);
+		try {
+            return annotation.value().newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to instantiate value provider for " + clazz, e);
+        }
+	}
+
+	private <T> JsonBean getGenericBean(T object, String idProperty, InterchangeableValueProvider<T> valueProvider) {
+		try {
+			//JsonBean jsonBean = new ActivityExporter().getJsonBean(object);
+			JsonBean jsonBean = new JsonBean();
+			jsonBean.set("id", PropertyUtils.getProperty(object, idProperty));
+			jsonBean.set("value", valueProvider.getValue(object));
+			return jsonBean;
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException("Failed to extract possible value object from " + object, e);
+		}
 	}
 
 	private List<JsonBean> getPossibleLocations() {
@@ -319,10 +365,8 @@ public class PossibleValuesEnumerator {
 					&& categoryValueId == null && categoryValueName == null) {
 				continue;
 			}
-			
-			JsonBean bean = new JsonBean();
-			bean.set("id", id);
-			bean.set("value", value);
+
+			JsonBean bean = getIdValueBean(id, value);
 			JsonBean extraInfo = new JsonBean();
 			extraInfo.set("parent_location_id", parentLocationId);
 			extraInfo.set("parent_location_name", parentLocationName);
@@ -367,15 +411,16 @@ public class PossibleValuesEnumerator {
 			boolean itemGood = !checkDeleted || Boolean.FALSE.equals((Boolean)(item[2])); 
 //			Boolean deleted = ((Boolean)(item[2]));
 			if (itemGood) {
-				JsonBean bean = new JsonBean();
-				bean.set("id", id);
-				bean.set("value", value);
-				result.add(bean);
+				result.add(getIdValueBean(id, value));
 			}
-			
 		}
 		return result;
 	}
 
-
+	private JsonBean getIdValueBean(Long id, String value) {
+		JsonBean bean = new JsonBean();
+		bean.set("id", id);
+		bean.set("value", value);
+		return bean;
+	}
 }

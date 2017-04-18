@@ -14,6 +14,7 @@ public class SyncConstants {
         public static final String GLOBAL_SETTINGS = "global settings";
         public static final String WORKSPACES = "workspaces";
         public static final String WORKSPACE_MEMBER = "workspace member";
+        public static final String USER = "user";
         public static final String TRANSLATION = "translation";
         public static final String CATEGORY_CLASS = "category class";
         public static final String CATEGORY_VALUE = "category value";

@@ -83,11 +83,10 @@ public class AmpReportsToReportSpecification {
 	}
 
 	private void configureInvisibleHierarchies() {
-		LinkedHashSet<ReportColumn> invisibleHierarchies = new LinkedHashSet<>();
 		if (report.getSplitByFunding()) {
-			invisibleHierarchies.add(new ReportColumn(ColumnConstants.FUNDING_ID));
+			spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_ID));
+			spec.addInvisibleHierarchy(new ReportColumn(ColumnConstants.FUNDING_ID));
 		}
-		spec.setInvisibleHierarchies(invisibleHierarchies);
 	}
 
 	private void configureReportData() {

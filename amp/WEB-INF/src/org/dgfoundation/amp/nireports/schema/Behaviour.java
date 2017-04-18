@@ -19,6 +19,7 @@ import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.output.NiReportData;
+import org.dgfoundation.amp.nireports.output.NiRowId;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
@@ -169,7 +170,7 @@ public interface Behaviour<V extends NiOutCell> {
 	 * builds the trail cells for ColumnReportData 
 	 */
 	@SuppressWarnings("unchecked")
-	public default NiOutCell buildColumnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<Long, NiOutCell>> mappedContents) {
+	public default NiOutCell buildColumnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<NiRowId, NiOutCell>> mappedContents) {
 		return doVerticalReduce((Collection<V>) mappedContents.get(cc).values());
 	}
 

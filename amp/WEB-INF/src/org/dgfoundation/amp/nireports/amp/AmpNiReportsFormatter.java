@@ -13,7 +13,6 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.output.NiReportsFormatter;
@@ -47,6 +46,7 @@ public class AmpNiReportsFormatter extends NiReportsFormatter {
 	protected static OutputSettings defaultOutputSettings(ReportSpecification spec) {
 		LinkedHashSet<ReportColumn> columns = new LinkedHashSet<>(spec.getColumns());
 		columns.removeAll(spec.getHierarchies());
+		columns.removeAll(spec.getInvisibleHierarchies());
 		Set<String> idsValuesColumns = columns.isEmpty() ? Collections.emptySet() : new HashSet<>(Arrays.asList(columns.iterator().next().getColumnName()));
 		return new OutputSettings(idsValuesColumns);
 	}

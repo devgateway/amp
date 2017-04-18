@@ -45,6 +45,11 @@ public interface ReportSpecification extends Cloneable {
 	 */
 	public Set<ReportColumn> getHierarchies();
 
+	/**
+	 * List of hierarchies that must be added before executing the report and then removed from output.
+	 */
+	Set<ReportColumn> getInvisibleHierarchies();
+
 	public ReportFilters getFilters();
 	
 	/** @return {@link ReportSettings} - settings of the current report */
@@ -115,6 +120,12 @@ public interface ReportSpecification extends Cloneable {
 	public default Set<String> getHierarchyNames() {
 		return new LinkedHashSet<>(getHierarchies().stream().map(z -> z.getColumnName()).collect(Collectors.toList()));
 	}
+
+	default Set<String> getInvisibleHierarchyNames() {
+		return new LinkedHashSet<>(getInvisibleHierarchies().stream()
+				.map(ReportColumn::getColumnName)
+				.collect(Collectors.toList()));
+	}
 	
 	public default Set<String> getMeasureNames() {
 		return new LinkedHashSet<>(getMeasures().stream().map(z -> z.getMeasureName()).collect(Collectors.toList()));
@@ -122,14 +133,4 @@ public interface ReportSpecification extends Cloneable {
 
 	public boolean isDisplayTimeRangeSubTotals();
 
-	/**
-	 * List of hierarchies that must be added before executing the report and then removed from output.
-	 * This is a side-car information. It is not used directly by reports engine.
-	 * @return
-	 */
-	default Set<ReportColumn> getInvisibleHierarchies() {
-		return Collections.emptySet();
-	}
-
-	ReportSpecification clone();
 }

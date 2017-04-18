@@ -3,7 +3,6 @@ package org.dgfoundation.amp.ar.amp212;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.AllTests_amp212;
@@ -2071,7 +2070,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.FUNDING_ID),
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
 				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.FUNDING_ID), GroupingCriteria.GROUPING_YEARLY);
-		spec.setInvisibleHierarchies(Collections.singleton(new ReportColumn(ColumnConstants.FUNDING_ID)));
+		spec.addInvisibleHierarchy(new ReportColumn(ColumnConstants.FUNDING_ID));
 
 		runNiTestCase(spec, "en", acts, cor);
 	}
@@ -2092,7 +2091,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.FUNDING_ID),
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
 				Arrays.asList(ColumnConstants.FUNDING_ID), GroupingCriteria.GROUPING_YEARLY);
-		spec.setInvisibleHierarchies(Collections.singleton(new ReportColumn(ColumnConstants.FUNDING_ID)));
+		spec.addInvisibleHierarchy(new ReportColumn(ColumnConstants.FUNDING_ID));
 
 		runNiTestCase(spec, "en", acts, cor);
 	}
@@ -2111,7 +2110,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.FUNDING_ID),
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
 				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.FUNDING_ID), GroupingCriteria.GROUPING_YEARLY);
-		specWithSplit.setInvisibleHierarchies(Collections.singleton(new ReportColumn(ColumnConstants.FUNDING_ID)));
+		specWithSplit.addInvisibleHierarchy(new ReportColumn(ColumnConstants.FUNDING_ID));
 		specWithSplit.setSummaryReport(true);
 
 		runNiTestCase(specWithSplit, "en", acts, cor);

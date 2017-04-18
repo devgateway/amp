@@ -63,7 +63,7 @@ public class PossibleValuesEnumerator {
 				.putAll(AmpCurrency.class, Entities.CURRENCY)
 				.putAll(AmpContact.class, Entities.CONTACT)
 				.putAll(AmpActivityProgramSettings.class, Entities.ACTIVITY_PROGRAM_SETTINGS)
-				.putAll(AmpTeamMember.class, Entities.WORKSPACE_MEMBER)
+				.putAll(AmpTeamMember.class, Entities.WORKSPACE_MEMBER, Entities.USER)
 				.putAll(AmpTeam.class, Entities.WORKSPACES)
 				.putAll(User.class, Entities.USER)
 				.build();

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.output.NiReportData;
+import org.dgfoundation.amp.nireports.output.NiRowId;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
@@ -45,7 +46,7 @@ public abstract class GeneratedColumnBehaviour<K extends Cell, V extends NiOutCe
 	}	
 	
 	public abstract V buildGroupTrailCell(GroupReportData grd, CellColumn cc, List<NiReportData> visitedChildren);
-	public abstract V buildColumnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<Long, NiOutCell>> mappedContents);
+	public abstract V buildColumnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<NiRowId, NiOutCell>> mappedContents);
 	
 	@Override
 	public V getZeroCell() {

@@ -43,7 +43,7 @@ public class NiReportDataOutputter implements ReportDataVisitor<NiReportData> {
 	/**
 	 * builds the trail cells for ColumnReportData 
 	 */
-	Map<CellColumn, NiOutCell> buildTrailCells(ColumnReportData crd, Map<CellColumn, Map<Long, NiOutCell>> mappedContents) {
+	Map<CellColumn, NiOutCell> buildTrailCells(ColumnReportData crd, Map<CellColumn, Map<NiRowId, NiOutCell>> mappedContents) {
 		return headers.leafColumns.stream().collect(toMap(Function.identity(), cellColumn -> 
 			cellColumn.getBehaviour().buildColumnTrailCell(crd, cellColumn, mappedContents)));
 	}
@@ -51,7 +51,7 @@ public class NiReportDataOutputter implements ReportDataVisitor<NiReportData> {
 	@Override
 	public NiReportData visitLeaf(ColumnReportData crd) {
 		//System.out.format("visiting leaf %s", crd);
-		Map<CellColumn, Map<Long, NiOutCell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(cellColumn.getBehaviour(), engine), null);
+		Map<CellColumn, Map<NiRowId, NiOutCell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(cellColumn.getBehaviour(), engine), null);
 		return new NiColumnReportData(contents, buildTrailCells(crd, contents), crd.splitter);
 	}
 

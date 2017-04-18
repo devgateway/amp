@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.nireports.output;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -10,11 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.Stack;
-import java.util.TreeSet;
 import java.util.function.Supplier;
 
 import org.apache.log4j.Logger;
@@ -25,7 +19,6 @@ import org.dgfoundation.amp.newreports.HeaderCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
@@ -60,12 +53,9 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	
 	protected final CellVisitor<ReportCell> cellFormatter;
 	protected final List<CellColumn> leafColumns;
-
-	private final Set<String> hiddenColumns;
-
+	
 	public NiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, CellVisitor<ReportCell> cellFormatter) {
 		this.runResult = runResult;
-		this.hiddenColumns = spec.getInvisibleHierarchies().stream().map(ReportColumn::getColumnName).collect(toSet());
 		this.leafColumns = runResult.headers.leafColumns;
 		this.spec = spec;
 		this.reportAreaSupplier = () -> new ReportAreaImpl();
@@ -81,7 +71,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	
 	/** build generated headers and compute ReportOutputColumn's */
 	protected void buildHeaders() {
-		boolean needToGenerateDummyColumn = spec.isSummaryReport() && (spec.getHierarchies() == null || spec.getHierarchies().isEmpty());
+		boolean needToGenerateDummyColumn = spec.isSummaryReport() && spec.getHierarchies().isEmpty();
 		for (int i = 1; i < runResult.headers.rasterizedHeaders.size(); i++) {
 			SortedMap<Integer, Column> niHeaderRow = runResult.headers.rasterizedHeaders.get(i);
 			List<HeaderCell> ampHeaderRow = new ArrayList<HeaderCell>();
@@ -104,58 +94,8 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		List<ReportOutputColumn> remappedLeaves = AmpCollections.relist(leafColumns, niColumn -> niColumnToROC.get(niColumn)); 
 		leafHeaders = needToGenerateDummyColumn ?
 			buildArrayList(rootHeaders.get(0), remappedLeaves) : remappedLeaves;
-		pruneHeaders();
 	}
-
-	/**
-	 * Unfortunately our hierarchy cannot be removed any soon earlier and we have to deal with this rigid structure
-	 * of headers. Warning: some nasty code to recompute startColumn & colSpan after some of the columns were removed.
-	 *
-	 * FIXME Good news, this code enables easier removal of hidden columns like Draft and Project Status
-	 * FIXME that are treated specifically in many places
-	 */
-	private void pruneHeaders() {
-		TreeSet<Integer> removedIdx = new TreeSet<>();
-		for (List<HeaderCell> headerRow : generatedHeaders) {
-			for (HeaderCell headerCell : headerRow) {
-				if (hiddenColumns.contains(headerCell.originalName)) {
-					for (int i = 0; i < headerCell.getColSpan(); i++) {
-						removedIdx.add(headerCell.getStartColumn() + i);
-					}
-				}
-			}
-		}
-
-		List<List<HeaderCell>> prunedHeaders = new ArrayList<>();
-		for (List<HeaderCell> headerRow : generatedHeaders) {
-			List<HeaderCell> newHeaderRow = new ArrayList<>();
-			for (HeaderCell headerCell : headerRow) {
-				if (!hiddenColumns.contains(headerCell.originalName)) {
-					int startColumn = headerCell.getStartColumn();
-					int colSpan = headerCell.getColSpan();
-					int newStartColumn = startColumn - removedIdx.headSet(startColumn).size();
-					int newColSpan = colSpan - removedIdx.subSet(startColumn, startColumn + colSpan).size();
-					HeaderCell newHeaderCell = new HeaderCell(
-							headerCell.getStartRow(), headerCell.getTotalRowSpan(), headerCell.getRowSpan(),
-							newStartColumn, newColSpan, headerCell.getName(), headerCell.originalName,
-							headerCell.fullOriginalName, headerCell.description);
-					newHeaderRow.add(newHeaderCell);
-				}
-			}
-			prunedHeaders.add(newHeaderRow);
-		}
-
-		generatedHeaders = prunedHeaders;
-
-		rootHeaders = rootHeaders.stream()
-				.filter(h -> !hiddenColumns.contains(h.originalColumnName))
-				.collect(toList());
-
-		leafHeaders = leafHeaders.stream()
-				.filter(h -> !hiddenColumns.contains(h.originalColumnName))
-				.collect(toList());
-	}
-
+	
 	/**
 	 * for you LISP lovers - cons :D. Constructs a new list formed by prepending an item to a list
 	 * @param elem
@@ -224,15 +164,12 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	 * @param id the id of the entity to convert
 	 * @return
 	 */
-	protected ReportAreaImpl renderCrdRow(NiColumnReportData crd, long id) {
+	protected ReportAreaImpl renderCrdRow(NiColumnReportData crd, NiRowId id) {
 		ReportAreaImpl row = reportAreaSupplier.get();
-		row.setOwner(new AreaOwner(id));
+		row.setOwner(new AreaOwner(id.id));
 		Map<ReportOutputColumn, ReportCell> rowData = new LinkedHashMap<>();
-		for(int i = hiersStack.size(); i < leafColumns.size(); i++) {
-			CellColumn niCellColumn = leafColumns.get(i);
-			if (hiddenColumns.contains(niCellColumn.name)) {
-				continue;
-			}
+		for(int i = hiersStack.size(); i < runResult.headers.leafColumns.size(); i++) {
+			CellColumn niCellColumn = runResult.headers.leafColumns.get(i);
 			ReportCell reportCell = convert(crd.contents.get(niCellColumn).get(id), niCellColumn);
 			if (reportCell != null)
 				rowData.put(niColumnToROC.get(niCellColumn), reportCell);
@@ -259,34 +196,10 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 			rchildren.add(child.accept(this));
 			hiersStack.pop();
 		}
-		if (hasHiddenHierarchy(grd)) {
-			rchildren = getGrandChildren(rchildren);
-		}
 		res.setChildren(rchildren);
 		return res;
 	}
-
-	/**
-	 * Returns true if group report data is split by a hierarchy we want to hide.
-	 * @param niGroupReportData group report data to check
-	 * @return true in group report data represents a hidden hierarchy
-	 */
-	private boolean hasHiddenHierarchy(NiGroupReportData niGroupReportData) {
-		return hiddenColumns.contains(niGroupReportData.splitterColumn);
-	}
-
-	/**
-	 * Returns grand children. Used to skip one level of hierarchy.
-	 * @param children list of report areas
-	 * @return returns list of grand children or null
-	 */
-	private List<ReportArea> getGrandChildren(List<ReportArea> children) {
-		List<ReportArea> newChildren = children.stream()
-				.flatMap(c -> Optional.ofNullable(c.getChildren()).orElse(Collections.emptyList()).stream())
-				.collect(toList());
-		return newChildren.isEmpty() ? null : newChildren;
-	}
-
+	
 	/**
 	 * initializes a {@link ReportAreaImpl} given the configured {@link #reportAreaSupplier} and populates the fields which are common to all {@link NiReportData} subclasses
 	 * @param nrd
@@ -321,9 +234,6 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		Map<ReportOutputColumn, ReportCell> res = new LinkedHashMap<>();
 		for(int i = hiersStack.size(); i < leafColumns.size(); i++) {
 			CellColumn niCellColumn = leafColumns.get(i);
-			if (hiddenColumns.contains(niCellColumn.name)) {
-				continue;
-			}
 			ReportCell reportCell = convert(niReportData.trailCells.get(niCellColumn), niCellColumn);
 			if (reportCell != null)
 				res.put(niColumnToROC.get(niCellColumn), reportCell);

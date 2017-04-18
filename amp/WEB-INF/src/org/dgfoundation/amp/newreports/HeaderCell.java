@@ -20,19 +20,12 @@ public class HeaderCell extends ReportHeadingCell {
 	public final String fullOriginalName;
 	
 	public final String description;
-
-	public HeaderCell(int startRow, int totalRowSpan, int rowSpan, int startColumn, int colSpan,
-			ReportOutputColumn roc) {
-		this(startRow, totalRowSpan, rowSpan, startColumn, colSpan, roc.columnName, roc.originalColumnName,
-				roc.getHierarchicalName(), roc.description);
-	}
-
-	public HeaderCell(int startRow, int totalRowSpan, int rowSpan, int startColumn, int colSpan, String name,
-			String originalName, String fullOriginalName, String description) {
-		super(startRow, totalRowSpan, rowSpan, startColumn, colSpan, name);
-		this.originalName = originalName;
-		this.fullOriginalName = fullOriginalName;
-		this.description  = description;
+	
+	public HeaderCell(int startRow, int totalRowSpan, int rowSpan, int startColumn, int colSpan, ReportOutputColumn roc) {
+		super(startRow, totalRowSpan, rowSpan, startColumn, colSpan, roc.columnName);
+		this.originalName = roc.originalColumnName;
+		this.fullOriginalName = roc.getHierarchicalName();
+		this.description  = roc.description;
 	}
 	
 	public HeaderCell(ReportHeadingCell niHeaderCell, ReportOutputColumn roc, int colStartDelta) {

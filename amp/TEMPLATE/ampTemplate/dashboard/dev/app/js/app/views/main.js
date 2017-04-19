@@ -42,7 +42,7 @@ module.exports = BackboneDash.View.extend({
         // The same endpoint will send an error if 'DASHBOARDS' is not active in the Feature Manager.
         window.location = '/';
     }
-    
+    debugger;
     var col = [];
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Donors'})) {
     	col.push(new TopsChart(
@@ -67,7 +67,7 @@ module.exports = BackboneDash.View.extend({
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Aid Predictability'})) {
     	col.push(new PredictabilityChart(
   	          { name: 'Aid Predictability' },
-	          { app: this.app, url: '/rest/dashboard/aid-predictability' }));
+	          { app: this.app, url: '/resDASHBOARDSt/dashboard/aid-predictability' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Funding Type'})) {
     	col.push(new FundingTypeChart(
@@ -117,7 +117,7 @@ module.exports = BackboneDash.View.extend({
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Primary Programs'})) {
         col.push(new TopsChart(
               { name: 'Top Primary Programs', big: false, view: 'bar' },
-              { app: this.app, url: '/rest/dashboard/tops/PP' }));
+              { app: this.app, url: '/rest/dashboard/tops-primary-programs' }));
     }
        
     var chartsCollection = new Charts(col, { app: this.app });

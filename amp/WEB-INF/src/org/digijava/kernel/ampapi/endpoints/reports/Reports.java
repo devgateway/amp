@@ -315,7 +315,7 @@ public class Reports implements ErrorReportingEndpoint {
 		GeneratedReport report = EndpointUtils.runReport(spec);
 		SaikuReportHtmlRenderer htmlRenederer = new SaikuReportHtmlRenderer(report);
 
-		return htmlRenederer.renderReportAsHtml(false).toString();
+		return htmlRenederer.renderTable().toString();
 	}
 	
 	@POST

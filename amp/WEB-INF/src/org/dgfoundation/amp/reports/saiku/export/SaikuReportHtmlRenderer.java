@@ -24,21 +24,21 @@ public class SaikuReportHtmlRenderer {
 	public SaikuReportHtmlRenderer(GeneratedReport report) {
 		this.report = report;
 	}
-	
-	public StringBuilder renderReportAsHtml() {
-		return renderReportAsHtml(true);
-	}
 
-	public StringBuilder renderReportAsHtml(boolean showReportBodyInfo) {
+	public StringBuilder renderFullHtml() {
 		StringBuilder reportHtml = new StringBuilder();
 
 		reportHtml.append("<!DOCTYPE html><html><head><title></title></head><body>");
-		if (showReportBodyInfo){
-			renderReportBody(reportHtml);
-		} else {
-			renderReportTable(reportHtml);
-		}
+		renderReportBody(reportHtml);
 		reportHtml.append("</body></html>");
+
+		return reportHtml;
+	}
+
+	public StringBuilder renderTable() {
+		StringBuilder reportHtml = new StringBuilder();
+
+		renderReportTable(reportHtml);
 
 		return reportHtml;
 	}

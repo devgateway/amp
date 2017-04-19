@@ -301,14 +301,7 @@ public class Reports implements ErrorReportingEndpoint {
 	public final String getReportResult(JsonBean formParams) {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
 		String groupingOption = (String) formParams.get("groupingOption");
-		switch(groupingOption) {
-			case ReportConstants.GROUPING_YEARLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
-			case ReportConstants.GROUPING_QUARTERLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
-			case ReportConstants.GROUPING_MONTHLY: spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
-			default:
-				spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
-				break;
-		}
+		ReportsUtil.setGroupingCriteria(spec, groupingOption);
 		ReportsUtil.update(spec,formParams);
 		SettingsUtils.applySettings(spec, formParams, true);
 		FilterUtils.applyFilterRules((Map<String, Object>) formParams.get(EPConstants.FILTERS), spec,null);
@@ -317,7 +310,7 @@ public class Reports implements ErrorReportingEndpoint {
 
 		return htmlRenederer.renderTable().toString();
 	}
-	
+
 	@POST
 	@Path("/report/custom/paginate")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

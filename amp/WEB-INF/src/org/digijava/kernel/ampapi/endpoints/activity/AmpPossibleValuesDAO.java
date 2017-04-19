@@ -21,6 +21,8 @@ import org.hibernate.jdbc.Work;
  */
 public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
+    private static final String CACHE = "org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO";
+
     @Override
     public List<Object[]> getCategoryValues(String discriminatorOption) {
         String queryString = "SELECT acv.id, acv.value, acv.deleted from " + AmpCategoryValue.class.getName() + " acv "
@@ -29,10 +31,12 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     }
 
     @Override
-    public List<Object[]> getGenericValues(Class<?> clazz, String idFieldName, String valueFieldName) {
-        String queryString = "SELECT cls." + idFieldName + ", cls." + valueFieldName
-                + " FROM " + clazz.getName() + " cls ORDER BY " + idFieldName;
-        return query(queryString);
+    public <T> List<T> getGenericValues(Class<T> entity) {
+        return InterchangeUtils.getSessionWithPendingChanges()
+                .createCriteria(entity)
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .list();
     }
 
     @Override

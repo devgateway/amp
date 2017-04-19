@@ -19,7 +19,6 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -61,20 +60,33 @@ public class ActivityExporter {
 			this.filteredFields = (List<String>) filter.get(ActivityEPConstants.FILTER_FIELDS);
 		}
 		
-		Field[] fields = activity.getClass().getSuperclass().getDeclaredFields();
+		return getJsonBean(activity);
+	}
+
+	public JsonBean getJsonBean(Object object) throws DgException {
+		JsonBean resultJson = new JsonBean();
+
+		Field[] fields = getClassOf(object).getDeclaredFields();
 
 		for (Field field : fields) {
 			try {
-				readFieldValue(field, activity, activity, resultJson, null, new ArrayDeque<Interchangeable>());
+				readFieldValue(field, object, object, resultJson, null, new ArrayDeque<>());
 			} catch (IllegalArgumentException | IllegalAccessException
 					| NoSuchMethodException | SecurityException
 					| InvocationTargetException e) {
-				logger.error("Coudn't read activity fields with id: " + activity.getAmpActivityId() + ". " 	+ e.getMessage());
-				throw new RuntimeException(e);
+				throw new RuntimeException(String.format("Couldn't convert object %s to json.", object), e);
 			}
 		}
-		
+
 		return resultJson;
+	}
+
+	private Class<?> getClassOf(Object object) {
+		if (object instanceof AmpActivityVersion) {
+			return object.getClass().getSuperclass();
+		} else {
+			return object.getClass();
+		}
 	}
 	
 	/**

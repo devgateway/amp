@@ -9,7 +9,7 @@ public interface PossibleValuesDAO {
 
     List<Object[]> getCategoryValues(String discriminatorOption);
 
-    List<Object[]> getGenericValues(Class<?> clazz, String idFieldName, String valueFieldName);
+    <T> List<T> getGenericValues(Class<T> entity);
 
     List<Object[]> getThemes(String configType);
 

@@ -20,6 +20,7 @@ import javax.ws.rs.core.PathSegment;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
@@ -92,13 +93,15 @@ public class InterchangeUtils {
 	 */
 	public static boolean isFieldEnumerable(Field inputField) {
 		Class<?> clazz = getClassOfField(inputField);
-		if (isSimpleType(clazz))
+		if (isSimpleType(clazz)) {
 			return false;
-		Field[] fields = clazz.getDeclaredFields();
+		}
+		Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
 		for (Field field : fields) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class); 
-			if ( ant != null && ant.id())
+			if (ant.id()) {
 				return true;
+			}
 		}
 		return false;
 	}

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.output.NiRowId;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
@@ -95,12 +96,12 @@ public class ColumnContents {
 		return res;
 	}
 	
-	public Map<Long, NiOutCell> flatten(Behaviour<?> behaviour, NiReportsEngine context) {
-		Map<Long, NiOutCell> res = new HashMap<>();
+	public Map<NiRowId, NiOutCell> flatten(Behaviour<?> behaviour, NiReportsEngine context) {
+		Map<NiRowId, NiOutCell> res = new HashMap<>();
 		for(long id:data.keySet()) {
 			List<NiCell> cells = data.get(id);
 			NiOutCell z = behaviour.horizontalReduce(cells, context);
-			res.put(id, z);
+			res.put(new NiRowId(id), z);
 		}
 		return res;
 	}

@@ -18,15 +18,15 @@ import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
  *
  */
 public class NiColumnReportData extends NiReportData {
-	public final Map<CellColumn, Map<Long, NiOutCell>> contents;
+	public final Map<CellColumn, Map<NiRowId, NiOutCell>> contents;
 	
 	/** READONLY view of {@link #rawOrderedIds} */
-	public final List<Long> orderedIds;
+	public final List<NiRowId> orderedIds;
 	
 	/** MUTABLE the ids in the order they should be output (according to sorting criteria). In case no sorting is applied, ids are sorted numerically */
-	protected final List<Long> rawOrderedIds;
+	private final List<NiRowId> rawOrderedIds;
 	
-	public NiColumnReportData(Map<CellColumn, Map<Long, NiOutCell>> contents, Map<CellColumn, NiOutCell> trailCells, NiSplitCell splitterCell) {
+	public NiColumnReportData(Map<CellColumn, Map<NiRowId, NiOutCell>> contents, Map<CellColumn, NiOutCell> trailCells, NiSplitCell splitterCell) {
 		super(trailCells, contents.values().stream().flatMap(z -> z.keySet().stream()).collect(Collectors.toSet()), splitterCell);
 		this.contents = Collections.unmodifiableMap(contents);
 		this.rawOrderedIds = new ArrayList<>(this.ids);
@@ -34,7 +34,7 @@ public class NiColumnReportData extends NiReportData {
 		this.orderedIds = Collections.unmodifiableList(rawOrderedIds);
 	}	
 
-	public void reorder(Comparator<Long> sorter) {
+	public void reorder(Comparator<NiRowId> sorter) {
 		this.rawOrderedIds.sort(sorter);
 	}
 	
@@ -47,7 +47,7 @@ public class NiColumnReportData extends NiReportData {
 	public int computeRowSpan(boolean summaryReport) {
 		if (summaryReport)
 			return 1;
-		return getIds().size() + 1;
+		return ids.size() + 1;
 	}
 
 	@Override

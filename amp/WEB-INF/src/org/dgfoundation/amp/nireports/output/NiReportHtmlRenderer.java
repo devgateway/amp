@@ -171,7 +171,7 @@ public class NiReportHtmlRenderer {
 		if (spec.isSummaryReport())
 			return bld; // trail cells are rendered elsewhere
 		boolean isFirstId = true;
-		for(Long id:crd.orderedIds) {
+		for(NiRowId id:crd.orderedIds) {
 			if (level == 0 || !isFirstId)
 				bld.append("<tr>");
 			isFirstId = false;

@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
@@ -71,7 +73,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	}
 	
 	final static GrandTotalsDigest proposedProjectCostDigester = new GrandTotalsDigest(z -> z.equals("RAW / Proposed Project Amount") || z.startsWith("RAW / Revised Project Amount"));
-	final static String correctTotalsPPC = "{RAW / Proposed Project Amount=4781901.715878, RAW / Revised Project Amount=4412539.842263}";
+	final static String correctTotalsPPC = "{RAW / Proposed Project Amount=5096901.715878, RAW / Revised Project Amount=4412539.842263}";
 	
 	@Override
 	protected NiReportExecutor getNiExecutor(List<String> activityNames) {
@@ -174,14 +176,18 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	@Test
 	public void testProposedProjectCostDoesNotChangeTotals() throws Exception {
 		
-		ReportSpecificationImpl initSpec = buildSpecification("initSpec", 
+		List<String> allActs = new ArrayList<>();
+		allActs.addAll(acts);
+		allActs.addAll(sscActs);
+
+		ReportSpecificationImpl initSpec = buildSpecification("initSpec",
 				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.REVISED_PROJECT_AMOUNT), 
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
 				null, 
 				GroupingCriteria.GROUPING_YEARLY);
 		 		
-		assertEquals(correctTotalsPPC, buildDigest(initSpec, acts, proposedProjectCostDigester).toString());
-				
+		assertEquals(correctTotalsPPC, buildDigest(initSpec, allActs, proposedProjectCostDigester).toString());
+
 		// single-hierarchy reports
 		for(boolean isSummary:Arrays.asList(true, false)) {
 			for(String hierName:hierarchiesToTry) {
@@ -191,7 +197,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 						Arrays.asList(hierName), 
 						GroupingCriteria.GROUPING_YEARLY);
 				spec.setSummaryReport(isSummary);
-				assertEquals(spec.getReportName(), correctTotalsPPC, buildDigest(spec, acts, proposedProjectCostDigester).toString());
+				assertEquals(spec.getReportName(), correctTotalsPPC, buildDigest(spec, allActs, proposedProjectCostDigester).toString());
 			}
 		}
 	}
@@ -2045,6 +2051,78 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		} finally {
 			TestcasesReportsSchema.disableToAMoPSplitting = true;
 		}
+	}
+
+	@Test
+	public void testSplitByFundingSimpleHierarchy() {
+		NiReportModel cor = new NiReportModel("test split by funding simple hierarchy")
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Type Of Assistance", "", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Project Title", "crazy funding 1", 32))
+										.withContents("Type Of Assistance", "", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333", "Project Title", "crazy funding 1")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(32), "Type Of Assistance", "default type of assistance", "Funding-2013-Actual Commitments", "111,111", "Totals-Actual Commitments", "111,111"),
+												new ReportAreaForTests(new AreaOwner(32), "Type Of Assistance", "second type of assistance", "Funding-2013-Actual Commitments", "222,222", "Totals-Actual Commitments", "222,222")        )      ));
+
+		List<String> acts = Arrays.asList("crazy funding 1");
+
+		ReportSpecificationImpl spec = buildSpecification("test split by funding simple hierarchy",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.FUNDING_ID),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.FUNDING_ID), GroupingCriteria.GROUPING_YEARLY);
+		spec.addInvisibleHierarchy(new ReportColumn(ColumnConstants.FUNDING_ID));
+
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testSplitByFundingNoHierarchy() {
+		NiReportModel cor = new NiReportModel("test split by funding no hierarchy")
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Project Title", "", "Type Of Assistance", "", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Type Of Assistance", "default type of assistance", "Funding-2013-Actual Commitments", "111,111", "Totals-Actual Commitments", "111,111"),
+								new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Type Of Assistance", "second type of assistance", "Funding-2013-Actual Commitments", "222,222", "Totals-Actual Commitments", "222,222")      ));
+
+		List<String> acts = Arrays.asList("crazy funding 1");
+
+		ReportSpecificationImpl spec = buildSpecification("test split by funding no hierarchy",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.FUNDING_ID),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+				Arrays.asList(ColumnConstants.FUNDING_ID), GroupingCriteria.GROUPING_YEARLY);
+		spec.addInvisibleHierarchy(new ReportColumn(ColumnConstants.FUNDING_ID));
+
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testSplitByFundingDoesNotAffectSummaryReports() {
+		NiReportModel cor = new NiReportModel("test split by funding does not affect summary")
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Project Title", "crazy funding 1", 32), "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333", "Project Title", "crazy funding 1")      ));
+
+		List<String> acts = Arrays.asList("crazy funding 1");
+
+		ReportSpecificationImpl specWithSplit = buildSpecification("test split by funding does not affect summary",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.FUNDING_ID),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.FUNDING_ID), GroupingCriteria.GROUPING_YEARLY);
+		specWithSplit.addInvisibleHierarchy(new ReportColumn(ColumnConstants.FUNDING_ID));
+		specWithSplit.setSummaryReport(true);
+
+		runNiTestCase(specWithSplit, "en", acts, cor);
+
+		ReportSpecificationImpl specWithoutSplit = buildSpecification("test split by funding does not affect summary",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+				Arrays.asList(ColumnConstants.PROJECT_TITLE), GroupingCriteria.GROUPING_YEARLY);
+		specWithoutSplit.setSummaryReport(true);
+
+		runNiTestCase(specWithoutSplit, "en", acts, cor);
 	}
 
 	@Override

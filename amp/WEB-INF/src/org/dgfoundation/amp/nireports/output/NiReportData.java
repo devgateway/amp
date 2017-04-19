@@ -18,16 +18,12 @@ import org.dgfoundation.amp.nireports.runtime.ReportData;
 public abstract class NiReportData {
 	public final Map<CellColumn, NiOutCell> trailCells;
 	public final NiSplitCell splitter;
-	public final Set<Long> ids;
+	public final Set<NiRowId> ids;
 	
-	protected NiReportData(Map<CellColumn, NiOutCell> trailCells, Set<Long> ids, NiSplitCell splitter) {
+	protected NiReportData(Map<CellColumn, NiOutCell> trailCells, Set<NiRowId> ids, NiSplitCell splitter) {
 		this.trailCells = Collections.unmodifiableMap(trailCells);
 		this.splitter = splitter;
 		this.ids = Collections.unmodifiableSet(ids);
-	}
-	
-	public Set<Long> getIds() {
-		return ids;
 	}
 	
 	public NiSplitCell getSplitter() {

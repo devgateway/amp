@@ -539,7 +539,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	}
 	
 	protected boolean hasReportGeneratedDummyColumn(GeneratedReport report) {
-		 return report.spec.isSummaryReport() && (report.spec.getHierarchies() == null || report.spec.getHierarchies().isEmpty());
+		 return report.spec.isSummaryReport() && report.spec.getHierarchies().isEmpty();
 	}
 	
 	private int getOffsetPositionOfHiddenColumns(List<Integer> hiddenColumnPositions, int columnPosition) {

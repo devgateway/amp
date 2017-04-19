@@ -22,7 +22,7 @@
     DROP VIEW IF EXISTS v_ni_mtef_funding CASCADE;
     CREATE OR REPLACE VIEW v_ni_mtef_funding AS 
     SELECT
-        f.amp_activity_id, f.amp_funding_id, m.amp_fund_mtef_projection_id AS amp_fund_mtef_projection_id,
+        f.amp_activity_id, f.amp_funding_id as funding_id, m.amp_fund_mtef_projection_id AS amp_fund_mtef_projection_id,
         m.amp_projected_categoryvalue_id AS adjustment_type,
         EXTRACT(year FROM m.projection_date) AS mtef_year,
         m.projection_date AS transaction_date, m.amount AS transaction_amount,
@@ -48,7 +48,7 @@
 	CREATE VIEW v_ni_mtef_funding_debug AS
 		SELECT
 			vdf.amp_activity_id, aa.name AS activity_name,
-			vdf.amp_funding_id, vdf.amp_fund_mtef_projection_id,
+			vdf.funding_id, vdf.amp_fund_mtef_projection_id,
 			vdf.adjustment_type, adjtype.category_value AS adjustment_type_name,
 			vdf.mtef_year,
 			vdf.transaction_date, vdf.transaction_amount,

@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
@@ -70,11 +71,9 @@ import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
-import org.dgfoundation.amp.nireports.behaviours.AverageAmountBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.VarianceMeasureBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
@@ -126,7 +125,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
 			Arrays.asList(
 				ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.RELATED_PROJECTS, 
-				ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.RELATED_PLEDGES, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.EXPENDITURE_CLASS, ColumnConstants.AGREEMENT_CODE)));
+				ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.RELATED_PLEDGES, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.EXPENDITURE_CLASS, ColumnConstants.AGREEMENT_CODE, ColumnConstants.DONOR_AGENCY,
+				ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_TYPE, ColumnConstants.FUNDING_ID)));
 	
 	public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
 	public final static LocationsDimension locsDimension = LocationsDimension.instance;
@@ -141,7 +141,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimension pledgesDimension = SqlSourcedNiDimension.buildDegenerateDimension("pledges", "amp_funding_pledges", "id");
 	public final static NiDimension usersDimension = SqlSourcedNiDimension.buildDegenerateDimension("users", "dg_user", "id");
 	public final static NiDimension departmentsDimension = SqlSourcedNiDimension.buildDegenerateDimension("departments", "amp_departments", "id_department");
-	    
+	public final static NiDimension fundingDimension = SqlSourcedNiDimension.buildDegenerateDimension("funding", "amp_funding", "amp_funding_id");
+
 	/**
 	 * the pseudocolumn of the header Splitter for cells which are funding flows
 	 */
@@ -216,7 +217,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Sum of Actual Disbursements / Sum (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). ");
 		put(null, null);
 	}};
-	
+
 	// the organisation-based NiDimensionUsage's
 	public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage(Constants.FUNDING_AGENCY);
 	public final static NiDimensionUsage IA_DIM_USG = orgsDimension.getDimensionUsage(Constants.IMPLEMENTING_AGENCY);
@@ -291,10 +292,29 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return instance;
 	}
 	
-	protected final static AmpFundingColumn donorFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_DONOR_FUNDING, "v_ni_donor_funding");
-	protected final static AmpFundingColumn pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding");
-	protected final static AmpFundingColumn componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding");
-	
+	private AmpFundingColumn donorFundingColumn;
+	private AmpFundingColumn pledgeFundingColumn;
+	private AmpFundingColumn componentFundingColumn;
+
+	/**
+	 * Map<amp_column_name, view_column_name>
+	 * the coordinates-defining view columns supported by the maximum extent of the AMP schema.
+	 * This forces that all column views read by the AMP schema to have same-named view-columns for same-NiDimensionUsage's!
+	 */
+	private SubDimensions subDimensions = new SubDimensions(new ImmutableMap.Builder<String, String>()
+			.put(ColumnConstants.TYPE_OF_ASSISTANCE, "terms_assist_id")
+			.put(ColumnConstants.FINANCING_INSTRUMENT, "financing_instrument_id")
+			.put(ColumnConstants.DONOR_AGENCY, "donor_org_id")
+			.put(ColumnConstants.MODE_OF_PAYMENT, "mode_of_payment_id")
+			.put(ColumnConstants.FUNDING_STATUS, "funding_status_id")
+			.put(ColumnConstants.DISASTER_RESPONSE_MARKER, "disaster_response_code") // detail
+			.put(ColumnConstants.PLEDGES_AID_MODALITY, "aid_modality_id") // pledge
+			.put(ColumnConstants.RELATED_PLEDGES, "related_pledge_id") // pledge
+			.put(ColumnConstants.EXPENDITURE_CLASS, "expenditure_class_id") // detail
+			.put(ColumnConstants.AGREEMENT_CODE, "agreement_id")
+			.put(ColumnConstants.FUNDING_ID, "funding_id")
+			.build());
+
 	/**
 	 * the constructor defines all the columns and measures of the schema. Since this involves scanning the database quite a lot, this constructor is SLOW
 	 */
@@ -372,7 +392,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		degenerate_dimension(ColumnConstants.TYPE_OF_IMPLEMENTATION, "v_type_of_implementation", catsDimension);
 		no_dimension(ColumnConstants.APPROVAL_STATUS, "v_approval_status");
 		no_dimension(ColumnConstants.FILTERED_APPROVAL_STATUS, "v_filtered_approval_status");
-		
+
+		degenerate_dimension(ColumnConstants.FUNDING_ID, "v_funding_id", fundingDimension);
+
 		// views with only 2 columns
 		no_entity(ColumnConstants.DRAFT, "v_drafts");
 		degenerate_dimension(ColumnConstants.AC_CHAPTER, "v_ac_chapters", catsDimension);
@@ -574,11 +596,17 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addDividingMeasure(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, MeasureConstants.ACTUAL_DISBURSEMENTS, false);
 		addMeasure(new ForecastExecutionRateMeasure(MeasureConstants.FORECAST_EXECUTION_RATE));
 		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
-		
-		
+
+
 		this.DATE_COLUMN_NAMES = this.getColumns().keySet().stream().filter(z -> this.getNamedElemType(z) == NamedElemType.DATE).collect(Collectors.toSet());
+
+		subDimensions.initialize(getColumns());
+
+		donorFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_DONOR_FUNDING, "v_ni_donor_funding", subDimensions);
+		pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding", subDimensions);
+		componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding", subDimensions);
 	}
-	
+
 	protected void addFormulaMeasures() {
 		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
 		addFormulaAverageComputedMeasure(MeasureConstants.AVERAGE_DISBURSEMENT_RATE, PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
@@ -674,21 +702,21 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	protected void addMtefColumns() {
 		for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
 			
-			addColumn(new MtefColumn("MTEF " + mtefYear, mtefYear, 
-					"MTEF", false, Optional.empty()).withGroup("Funding Information"));
+			addColumn(new MtefColumn("MTEF " + mtefYear, mtefYear,
+					"MTEF", false, Optional.empty(), subDimensions).withGroup("Funding Information"));
 
-			MtefColumn pipelineMtefColumn = (MtefColumn) new MtefColumn("Pipeline MTEF Projections " + mtefYear, mtefYear, 
-					"Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)).withGroup("Funding Information");			
+			MtefColumn pipelineMtefColumn = (MtefColumn) new MtefColumn("Pipeline MTEF Projections " + mtefYear, mtefYear,
+					"Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE), subDimensions).withGroup("Funding Information");
 			this.pipelineMtefColumns.put(mtefYear, pipelineMtefColumn);
 			addColumn(pipelineMtefColumn);
 
-			MtefColumn projectionMtefColumn = (MtefColumn) new MtefColumn("Projection MTEF Projections " + mtefYear, mtefYear, 
-					"Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)).withGroup("Funding Information");
+			MtefColumn projectionMtefColumn = (MtefColumn) new MtefColumn("Projection MTEF Projections " + mtefYear, mtefYear,
+					"Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION), subDimensions).withGroup("Funding Information");
 			this.projectionMtefColumns.put(mtefYear, projectionMtefColumn);
 			addColumn(projectionMtefColumn);
 			
-			addColumn(new MtefColumn("Real MTEF " + mtefYear, mtefYear, 
-					"Real MTEF", true, Optional.empty()).withGroup("Funding Information"));
+			addColumn(new MtefColumn("Real MTEF " + mtefYear, mtefYear,
+					"Real MTEF", true, Optional.empty(), subDimensions).withGroup("Funding Information"));
 		}
 	}
 	
@@ -866,7 +894,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			ColumnConstants.GEOCODE,
 			ColumnConstants.LOCATION,
 			ColumnConstants.DONOR_ID,
-			ColumnConstants.EXPENDITURE_CLASS
+			ColumnConstants.EXPENDITURE_CLASS,
+			ColumnConstants.FUNDING_ID
 		));
 		return PersistenceManager.getSession().doReturningWork(conn -> {
 			Set<String> inDbColumns = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "columnname", "amp_columns"), 1));
@@ -1015,7 +1044,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 
 	List<NiDimension> whitelistedDegenerateDimensions = 
-			Arrays.asList(catsDimension, agreementsDimension, boolDimension, usersDimension, departmentsDimension);
+			Arrays.asList(catsDimension, agreementsDimension, boolDimension, usersDimension, departmentsDimension,
+					fundingDimension);
 	
 	
 	/**
@@ -1029,7 +1059,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		NiUtils.failIf(!whitelistedDegenerateDimensions.contains(dimension), dimension.toString() + " is not whitelisted as a shortcut degenerate dimension");
 		return single_dimension(columnName, view, dimension.getLevelColumn(columnName, dimension.depth - 1)); // taking the leaves
 	}
-	
+
 	private AmpReportsSchema single_dimension(String columnName, String view, LevelColumn levelColumn) {
 		return addColumn(SimpleTextColumn.fromView(columnName, view, levelColumn));
 	}
@@ -1037,7 +1067,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	private AmpReportsSchema single_dimension(String columnName, String view, LevelColumn levelColumn, Function<String, String> postprocessor) {
 		return addColumn(SimpleTextColumn.fromView(columnName, view, levelColumn).withPostprocessor(postprocessor));
 	}
-	
+
 	private AmpReportsSchema no_entity(String columnName, String view, Behaviour<NiTextCell> behaviour) {
 		return addColumn(SimpleTextColumn.fromViewWithoutEntity(columnName, view, behaviour));
 	}
@@ -1084,7 +1114,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	private AmpReportsSchema date_column(String columnName, String viewName, LevelColumn levelColumn) {
 		return addColumn(new DateColumn(columnName, levelColumn, viewName));
 	}
-	
+
 	protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();
 	
 	@Override
@@ -1379,5 +1409,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	public final static boolean isBetween(long value, long min, long max) {
 		return value >= min && value <= max;
+	}
+
+	@Override
+	public SubDimensions getSubDimensions() {
+		return subDimensions;
 	}
 }

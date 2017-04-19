@@ -67,7 +67,7 @@ module.exports = BackboneDash.View.extend({
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Aid Predictability'})) {
     	col.push(new PredictabilityChart(
   	          { name: 'Aid Predictability' },
-	          { app: this.app, url: '/resDASHBOARDSt/dashboard/aid-predictability' }));
+	          { app: this.app, url: '/rest/dashboard/aid-predictability' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Funding Type'})) {
     	col.push(new FundingTypeChart(

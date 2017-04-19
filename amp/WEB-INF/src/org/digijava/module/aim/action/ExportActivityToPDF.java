@@ -34,7 +34,6 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
@@ -43,7 +42,6 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
 import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
@@ -1357,23 +1355,55 @@ public class ExportActivityToPDF extends Action {
             /**
              * Activity created by
              */
-            if(FeaturesUtil.isVisibleField("Activity Created By")){
-                columnName=TranslatorWorker.translateText("Activity created by");
-                String firstName = identification.getActAthFirstName() == null ? "":identification.getActAthFirstName();
-                String lastName = identification.getActAthLastName() == null ? "":identification.getActAthLastName();
-                String email = identification.getActAthEmail() == null ? "":identification.getActAthEmail();
-                createGeneralInfoRow(mainLayout,columnName,firstName+" "+lastName+"-"+email);
+            if (FeaturesUtil.isVisibleField("Activity Created By")) {
+                columnName = TranslatorWorker.translateText("Activity created by");
+                String firstName = identification.getActAthFirstName() == null ? "" : identification.getActAthFirstName();
+                String lastName = identification.getActAthLastName() == null ? "" : identification.getActAthLastName();
+                createGeneralInfoRow(mainLayout, columnName, firstName + " " + lastName);
             }
 
             /**
-             * Activity created in workspace
+             *  Activity created on
              */
+            if(FeaturesUtil.isVisibleField("Activity Created On")){
+                columnName=TranslatorWorker.translateText("Activity created on");
+                createGeneralInfoRow(mainLayout,columnName,identification.getCreatedDate());
+            }
+
+            /**
+             * Activity Last Updated by
+             */
+            if (FeaturesUtil.isVisibleField("Activity Last Updated by")) {
+                columnName = TranslatorWorker.translateText("Activity last updated by");
+                createGeneralInfoRow(mainLayout, columnName, identification.getModifiedBy().getUser().getFirstNames() + " " + identification.getModifiedBy().getUser().getLastName());
+            }
+
+            /**
+             * Activity updated on
+             */
+            if(FeaturesUtil.isVisibleField("Activity Updated On")){
+                columnName=TranslatorWorker.translateText("Activity updated on");
+                createGeneralInfoRow(mainLayout,columnName,identification.getUpdatedDate());
+            }
+
             if (identification.getTeam()!= null){
+                /**
+                 * Activity created in workspace
+                 */
                 columnName=TranslatorWorker.translateText("Created in workspace");
-                createGeneralInfoRow(mainLayout, columnName, identification.getTeam()
-                        + " "
+                createGeneralInfoRow(mainLayout, columnName, identification.getTeam().getName()
+                        + " - "
                         + TranslatorWorker.translateText(identification.getTeam().getAccessType()));
 
+                /**
+                 * Workspace manager
+                 */
+                if (FeaturesUtil.isVisibleField("Data Team Leader")) {
+                    columnName = TranslatorWorker.translateText("Workspace manager");
+                    createGeneralInfoRow(mainLayout, columnName, identification.getTeam().getTeamLead().getUser().getFirstNames()
+                            + " " + identification.getTeam().getTeamLead().getUser().getLastName() + " - "
+                            + identification.getTeam().getTeamLead().getUser().getEmail());
+                }
 
                 columnName=TranslatorWorker.translateText("Computation");
                 createGeneralInfoRow(mainLayout,columnName, Boolean.TRUE.equals(identification.getTeam().getComputation()) ?
@@ -1382,36 +1412,8 @@ public class ExportActivityToPDF extends Action {
 
             }
 
-            /**
-             * Activity updated on
-             */
-            if(FeaturesUtil.isVisibleField("Activity Updated On")){
-                columnName=TranslatorWorker.translateText("Updated On");
-                createGeneralInfoRow(mainLayout,columnName,identification.getUpdatedDate());
-            }
-
-            /**
-             * Activity updated by
-             */
-            if(FeaturesUtil.isVisibleField("Activity Updated By")){
-                columnName=TranslatorWorker.translateText("Activity Updated By");
-                output="";
-                if(identification.getModifiedBy()!=null){
-                    User user=identification.getModifiedBy().getUser();
-                    output=user.getFirstNames()+" "+user.getLastName()+"-"+user.getEmail();
-                }
-                createGeneralInfoRow(mainLayout,columnName,output);
-            }
-
-            /**
-             *  Activity created on
-             */
-            if(FeaturesUtil.isVisibleField("Activity Created On")){
-                columnName=TranslatorWorker.translateText("Created On");
-                createGeneralInfoRow(mainLayout,columnName,identification.getCreatedDate());
-            }
-
             if (FeaturesUtil.isVisibleModule("/Activity Form/M&E")) {
+
                 PdfPCell meCell = new PdfPCell();
                 p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("M & E", locale, siteId)), titleFont);
                 p1.setAlignment(Element.ALIGN_RIGHT);
@@ -3459,37 +3461,28 @@ public class ExportActivityToPDF extends Action {
     /**
      * builds donor,MOFED,Sec.Ministry and Proj.Coord. Contacts info output
      */
-    private void buildContactInfoOutput(PdfPTable mainLayout,String contactType, Collection<AmpActivityContact> contacts,ServletContext ampContext) throws WorkerException{
+    private void buildContactInfoOutput(PdfPTable mainLayout, String contactType, Collection<AmpActivityContact> contacts, ServletContext ampContext) throws WorkerException {
 
         if (!hasContents(contacts))
             return;
 
-        PdfPCell cell1=new PdfPCell();
+        PdfPCell cell1 = new PdfPCell();
         cell1.setBorder(0);
-        cell1.setBackgroundColor(new Color(244,244,242));
-        Paragraph paragraph=new Paragraph(TranslatorWorker.translateText(contactType),titleFont);
+        cell1.setBackgroundColor(new Color(244, 244, 242));
+        Paragraph paragraph = new Paragraph(TranslatorWorker.translateText(contactType), titleFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
         cell1.addElement(paragraph);
         mainLayout.addCell(cell1);
 
-        PdfPCell cell2=new PdfPCell();
+        PdfPCell cell2 = new PdfPCell();
         cell2.setBorder(0);
-        cell2.setBackgroundColor(new Color(255,255,255));
-        if(contacts!=null && contacts.size()>0){
-            String output="";
+        cell2.setBackgroundColor(new Color(255, 255, 255));
+        if (contacts != null && contacts.size() > 0) {
+            String output = "";
             for (AmpActivityContact cont : contacts) {
-                Set<AmpContactProperty> contactProperties=cont.getContact().getProperties();
-                String emails="";
-                if(contactProperties!=null){
-                    for (AmpContactProperty email : contactProperties) {
-                        if(email.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-                            emails+=email.getValue()+"; ";
-                        }
-                    }
-                }
-                output+=cont.getContact().getName()+" "+cont.getContact().getLastname()+"- "+emails+ "\n";
+                output += ExportUtil.getContactInformation(cont.getContact());
             }
-            paragraph=new Paragraph(output,plainFont);
+            paragraph = new Paragraph(output, plainFont);
             paragraph.setAlignment(Element.ALIGN_LEFT);
             cell2.addElement(paragraph);
         }

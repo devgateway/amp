@@ -6,11 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.function.BiFunction;
 
+import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.DoubleCell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 
 /**
  * This behaviour matches {@link TextualTokenBehaviour} with the exception of how horizontal reduce is done.
@@ -21,20 +26,35 @@ import org.dgfoundation.amp.nireports.runtime.NiCell;
  */
 public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
 
-    public static final IndicatorTextualTokenBehaviour instance = new IndicatorTextualTokenBehaviour();
+    public static final IndicatorTextualTokenBehaviour textInstance =
+            new IndicatorTextualTokenBehaviour((engine, cell) -> ((TextCell) cell).text);
 
-    private IndicatorTextualTokenBehaviour() {
+    public static final IndicatorTextualTokenBehaviour doubleInstance =
+            new IndicatorTextualTokenBehaviour((engine, cell) -> formatDouble(engine, ((DoubleCell) cell).value));
+
+    private BiFunction<NiReportsEngine, Cell, String> formatter;
+
+    private IndicatorTextualTokenBehaviour(BiFunction<NiReportsEngine, Cell, String> formatter) {
+        this.formatter = formatter;
     }
 
     @Override
-    public NiTextCell doHorizontalReduce(List<NiCell> cells) {
-        StringJoiner text = new StringJoiner(", ");
+    public NiTextCell horizontalReduce(List<NiCell> cells, NiReportsEngine context) {
+        StringJoiner reducedText = new StringJoiner(", ");
         Map<Long, String> entityIdsValues = new HashMap<>();
         cells.stream().sorted(IndicatorCellComparator.instance).forEach(niCell -> {
-            TextCell cell = (TextCell) niCell.getCell();
-            text.add(cell.text);
-            entityIdsValues.put(cell.entityId, cell.text);
+            Cell cell = niCell.getCell();
+            String text = formatter.apply(context, cell);
+            reducedText.add(text);
+            entityIdsValues.put(cell.entityId, text);
         });
-        return new NiTextCell(text.toString(), any(entityIdsValues.keySet(), -1L), entityIdsValues);
+        return new NiTextCell(reducedText.toString(), any(entityIdsValues.keySet(), -1L), entityIdsValues);
+    }
+
+    private static String formatDouble(NiReportsEngine engine, Double value) {
+        if (value == null) {
+            return "";
+        }
+        return ReportsUtil.getDecimalFormatOrDefault(engine.spec).format(value);
     }
 }

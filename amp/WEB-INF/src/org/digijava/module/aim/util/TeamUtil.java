@@ -1903,7 +1903,11 @@ public class TeamUtil {
      * @return
      */
     public static TeamMember getCurrentMember(){
-    	return (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
+        if (TLSUtils.getRequest() != null) {
+            return (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
+        } else {
+            return null;
+        }
     }
     
     /**

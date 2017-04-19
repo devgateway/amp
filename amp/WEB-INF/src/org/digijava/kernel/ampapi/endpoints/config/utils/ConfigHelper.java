@@ -5,6 +5,7 @@ package org.digijava.kernel.ampapi.endpoints.config.utils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,6 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.common.util.DateTimeUtil;
 
 
 /**
@@ -31,26 +33,29 @@ public class ConfigHelper {
 	private static final String SETTINGS_NAME = "settingName";
 	private static final String VALUE_TRANSLATABLE = "valueTranslatable";
 	private static final String ORG_DIGIJAVA_MODULE_AIM_HELPER_GLOBAL_SETTINGS_CONSTANTS = "org.digijava.module.aim.helper.GlobalSettingsConstants";
-	
-	private static final String T_BOOLEAN = "t_Boolean";
-	private static final String T_INTEGER = "t_Integer";
-	private static final String T_YEAR_DEFAULT_START = "t_year_default_start";
-	private static final String T_YEAR_DEFAULT_END = "t_year_default_end";
-	private static final String T_STATIC_RANGE = "t_static_range";
-	private static final String T_DOUBLE = "t_Double";
-	private static final String T_STATIC_YEAR = "t_static_year";
-	private static final String T_AUDIT_TRIAL_CLENAUP = "t_audit_trial_clenaup";
-	private static final String T_COMPONENTS_SORT = "t_components_sort";
-	private static final String T_DAILY_CURRENCY_UPDATE_HOUR = "t_daily_currency_update_hour";
-	private static final String T_SECURE_VALUES = "t_secure_values";
-	private static final String T_TIMEOUT_CURRENCY_UPDATE = "t_timeout_currency_update";
+
+	public static final String T_BOOLEAN = "t_Boolean";
+	public static final String T_INTEGER = "t_Integer";
+	public static final String T_INTEGER_NON_NEGATIVE = "t_Integer_non_negative";
+	public static final String T_INTEGER_POSITIVE = "t_Integer_positive";
+	public static final String T_YEAR_DEFAULT_START = "t_year_default_start";
+	public static final String T_YEAR_DEFAULT_END = "t_year_default_end";
+	public static final String T_STATIC_RANGE = "t_static_range";
+	public static final String T_DOUBLE = "t_Double";
+	public static final String T_STATIC_YEAR = "t_static_year";
+	public static final String T_YEAR = "t_year";
+	public static final String T_AUDIT_TRIAL_CLENAUP = "t_audit_trial_clenaup";
+	public static final String T_COMPONENTS_SORT = "t_components_sort";
+	public static final String T_DAILY_CURRENCY_UPDATE_HOUR = "t_daily_currency_update_hour";
+	public static final String T_SECURE_VALUES = "t_secure_values";
+	public static final String T_TIMEOUT_CURRENCY_UPDATE = "t_timeout_currency_update";
+	public static final String T_DATE = "t_Date";
 
 	private static final String NULL_VALUE = "null";
 	private static final String TIMEOUT_CURRENCY_UPDATE_PATTERN = "(1[012]|0[1-9]):[0-5][0-9](\\s)?(?i)(am|pm)";
 	private static final Logger logger = Logger.getLogger(ConfigHelper.class);
 	/**
 	 * Retrieves the class specified as type for Generics
-	 * @param field
 	 * @return
 	 */
 	public static ArrayList<String> getValidSettings() {
@@ -119,55 +124,84 @@ public class ConfigHelper {
 	
 	/**
 	 * Validate settingValue
-	 * @param object
+	 * @param ampGlobalSetting
+	 * @param value
 	 * @return boolean
 	 */
-	public static boolean validateGlobalSetting(AmpGlobalSettings ampGlobalSetting) {
+	public static boolean validateGlobalSetting(AmpGlobalSettings ampGlobalSetting, String value) {
 		boolean isValid = false;
-		List<KeyValue> possiblesValues = ConfigHelper.getPossibleValues(ampGlobalSetting.getGlobalSettingsPossibleValues());	
-		switch(ampGlobalSetting.getGlobalSettingsPossibleValues()) {
-        case T_BOOLEAN:
-        	isValid = "true".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue()) || "false".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue());
-        	break;
-        case T_SECURE_VALUES:
-        	isValid = "on".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue()) || "off".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue());
-        	break;        	
-        case T_INTEGER: case T_TIMEOUT_CURRENCY_UPDATE: case T_AUDIT_TRIAL_CLENAUP: case T_STATIC_RANGE: 
-        	isValid = isValidNumber(Integer.class,ampGlobalSetting.getGlobalSettingsValue());
-        	break;
-        case T_YEAR_DEFAULT_START: case T_YEAR_DEFAULT_END: case T_STATIC_YEAR:
-        	isValid = isValidNumber(Integer.class,ampGlobalSetting.getGlobalSettingsValue());
-        	int currentValue = Integer.parseInt(ampGlobalSetting.getGlobalSettingsValue());
-        	if (isValid && currentValue!=-1 && (currentValue < 1000 || currentValue > 2999  )) {
-        		isValid = false;
-        	} else {
-        		isValid = true;
-        	}
-        	break;
-        case T_DOUBLE:
-        	isValid = isValidNumber(Double.class,ampGlobalSetting.getGlobalSettingsValue());
-        	break;
-        case NULL_VALUE: case "": case T_COMPONENTS_SORT: 
-        	isValid = true;
-        	break;
-        case T_DAILY_CURRENCY_UPDATE_HOUR:
-        	Pattern pattern = Pattern.compile(TIMEOUT_CURRENCY_UPDATE_PATTERN);
-			Matcher matcher = pattern.matcher(ampGlobalSetting.getGlobalSettingsValue());
-			isValid = matcher.matches();
-        	break;
-        default:
-    		if (possiblesValues!=null) {
-    			for (KeyValue value : possiblesValues) {
-    				if (ampGlobalSetting.getGlobalSettingsValue().equals(value.getKey()) ) {
-    					isValid = true;
-    				}
-    			}
-    		}
-            break;
+		List<KeyValue> possiblesValues = ConfigHelper.getPossibleValues(ampGlobalSetting.getGlobalSettingsPossibleValues());
+		switch (ampGlobalSetting.getGlobalSettingsPossibleValues()) {
+			case T_BOOLEAN:
+				isValid = "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
+				break;
+			case T_SECURE_VALUES:
+				isValid = "on".equalsIgnoreCase(value) || "off".equalsIgnoreCase(value);
+				break;
+			case T_DATE:
+				try {
+					Date testDate = DateTimeUtil.parseDate(value);
+					isValid = true;
+				} catch (Exception e) { // value is not an Date
+					isValid = false;
+				}
+				break;
+			case T_INTEGER:
+			case T_INTEGER_NON_NEGATIVE:
+			case T_INTEGER_POSITIVE:
+			case T_TIMEOUT_CURRENCY_UPDATE:
+			case T_AUDIT_TRIAL_CLENAUP:
+			case T_STATIC_RANGE:
+				try {
+					isValid = isValidNumber(Integer.class, value);
+				} catch (Exception e) { // value is not a valid value
+					isValid = false;
+				}
+				if (isValid) {
+					int integerValue = Integer.parseInt(value);
+					if ((T_INTEGER_NON_NEGATIVE.equals(ampGlobalSetting.getGlobalSettingsPossibleValues()) && integerValue < 0) ||
+							(T_INTEGER_POSITIVE.equals(ampGlobalSetting.getGlobalSettingsPossibleValues()) && integerValue <= 0)) {
+						isValid = false;
+					}
+				}
+				break;
+			case T_YEAR:
+			case T_YEAR_DEFAULT_START:
+			case T_YEAR_DEFAULT_END:
+			case T_STATIC_YEAR:
+				isValid = isValidNumber(Integer.class, value);
+				int currentValue = Integer.parseInt(value);
+				if (isValid && currentValue != -1 && (currentValue < 1000 || currentValue > 2999)) {
+					isValid = false;
+				} else {
+					isValid = true;
+				}
+				break;
+			case T_DOUBLE:
+				isValid = isValidNumber(Double.class, value);
+				break;
+			case NULL_VALUE:
+			case "":
+			case T_COMPONENTS_SORT:
+				isValid = true;
+				break;
+			case T_DAILY_CURRENCY_UPDATE_HOUR:
+				Pattern pattern = Pattern.compile(TIMEOUT_CURRENCY_UPDATE_PATTERN);
+				Matcher matcher = pattern.matcher(value);
+				isValid = matcher.matches();
+				break;
+			default:
+				if (possiblesValues != null) {
+					for (KeyValue val : possiblesValues) {
+						if (value.equals(val.getKey())) {
+							isValid = true;
+						}
+					}
+				}
+				break;
 		}
 		return isValid;
 	}
-	
 	/**
 	* Does a try catch (Exception) on parsing the given string to the given type
 	*

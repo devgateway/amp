@@ -540,50 +540,62 @@ function collapseAll() {
 	<legend>
 		<span class=legend_label><digi:trn>Additional info</digi:trn></span>	</legend>
 	<div class="field_text_big word_break">
-	<digi:trn>Activity created by</digi:trn>: <br/>
-		<b> 
-			<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/> 
-			<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> 
+		<digi:trn>Activity created by</digi:trn>: <br/>
+		<b>
+			<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/>
+			<c:out value="${aimEditActivityForm.identification.actAthLastName}"/>
 		</b>
 		<hr/>
-	<digi:trn>Created in workspace</digi:trn>: <br />
-	<c:if test="${aimEditActivityForm.identification.team !=null}">
-		<b>
-			<c:out value="${aimEditActivityForm.identification.team.name}"/> -
-			<digi:trn>
-				<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
-			</digi:trn>
-		</b>
-	</c:if>
-	<hr />
- 	<digi:trn>Computation</digi:trn>: <br/>
-	<b>
-		<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
-			<digi:trn key="aim:yes">Yes</digi:trn>
-		</c:if> 
-		<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
-			<digi:trn key="aim:no">No</digi:trn>
+		<digi:trn>Activity created on</digi:trn>:<br/>
+		<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
+		<hr/>
+		<field:display name="Activity Last Updated by" feature="Identification">
+			<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
+				<digi:trn>Activity last updated by</digi:trn>: <br/>
+				<b>
+					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
+					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
+				</b>
+			</logic:notEmpty>
+		</field:display>
+		<hr/>
+		<field:display name="Activity Updated On" feature="Identification">
+			<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
+				<digi:trn>Activity updated on</digi:trn>: <br/>
+				<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
+			</logic:notEmpty>
+		</field:display>
+		<hr/>
+
+		<digi:trn>Created in workspace</digi:trn>: <br/>
+		<c:if test="${aimEditActivityForm.identification.team !=null}">
+			<b>
+				<c:out value="${aimEditActivityForm.identification.team.name}"/> -
+				<digi:trn>
+					<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
+				</digi:trn>
+			</b>
 		</c:if>
-	</b>
-	<hr/>
-	<digi:trn>Activity created on</digi:trn>:<br/>
-	<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
-	<hr />
-	<field:display name="Activity Updated On" feature="Identification">
-		<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
-			<digi:trn>Activity updated on</digi:trn>: <br />
-			<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
-		</logic:notEmpty>
-	</field:display>
-	<hr />
-	<field:display name="Data Team Leader" feature="Identification">
-		<digi:trn>Data Team Leader</digi:trn>: <br />
+		<hr/>
+		<field:display name="Data Team Leader" feature="Identification">
+			<digi:trn>Workspace manager</digi:trn>: <br/>
+			<b>
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/> -
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
+			</b>
+		</field:display>
+
+		<hr/>
+		<digi:trn>Computation</digi:trn>: <br/>
 		<b>
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/> 
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
-		</b>	
-	</field:display>
+			<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
+				<digi:trn key="aim:yes">Yes</digi:trn>
+			</c:if>
+			<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
+				<digi:trn key="aim:no">No</digi:trn>
+			</c:if>
+		</b>
 	
 	</div>
 </fieldset>	
@@ -1982,7 +1994,7 @@ function collapseAll() {
 						</tr>
 						<tr>
 							<td class="prv_right">
-								<digi:trn>Component Funding</digi:trn>									
+								<span class="word_break bold"><digi:trn>Component Fundings</digi:trn></span>									
 							</td>
 						</tr>
 						<module:display name="/Activity Form/Components/Component/Components Commitments" 
@@ -2723,34 +2735,16 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
 						<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
-						<c:forEach var="donorContact" items="${aimEditActivityForm.contactInformation.donorContacts}">
-							<div>		
-								<span class="word_break bold"><c:out value="${donorContact.contact.name}" /></span> 
-								<span class="word_break bold"><c:out value="${donorContact.contact.lastname}"/></span> - 
-								<c:forEach var="property" items="${donorContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /> </span>;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+						<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.donorContacts}" />
+						<%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if> 
 				</module:display>	
 				<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
 						<digi:trn>MOFED contact information</digi:trn>:&nbsp;
-						<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${mofedContact.contact.name}" /></span> 
-								<span class="word_break bold"><c:out value="${mofedContact.contact.lastname}"/> </span>- 
-								<c:forEach var="property" items="${mofedContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.mofedContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if> 
 				</module:display>
@@ -2758,17 +2752,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
 						<digi:trn>Project Coordinator Contact Information</digi:trn>:&nbsp;
-						<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.name}"/></span>
-								<span class="word_break bold"><c:out value="${projCoordinatorContact.contact.lastname}" /></span>-
-								<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.projCoordinatorContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if>
 				</module:display>
@@ -2776,17 +2761,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
 						<digi:trn>Sector Ministry Contact Information</digi:trn>:&nbsp;
-						<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.name}" /></span>
-								<span class="word_break bold"><c:out value="${sectorMinistryContact.contact.lastname}" /></span> -
-								<c:forEach var="property" items="${sectorMinistryContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span>;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.sectorMinistryContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 						<hr>
 					</c:if> 
 				</module:display>
@@ -2794,17 +2770,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information"  parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
 						<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>:&nbsp;
-						<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
-							<div>
-								<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.name}" /></span>
-								<span class="word_break bold"><c:out value="${implExecAgencyContact.contact.lastname}" /></span> -
-								<c:forEach var="property" items="${implExecAgencyContact.contact.properties}">
-									<c:if test="${property.name=='contact email'}">
-										<span class="word_break bold"><c:out value="${property.value}" /></span> ;
-									</c:if>
-								</c:forEach>
-							</div>
-						</c:forEach>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}" />
+                        <%@include file="activitypreview/contactInformation.jspf" %>
 					</c:if>
 				</module:display>
 			</div>

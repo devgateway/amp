@@ -301,6 +301,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 */
 	public static final List<String> ONLY_MEASURELESS_HIERARCHIES = Arrays.asList(ColumnConstants.INDICATOR_NAME);
 
+	private List<String> amountColumns = new ArrayList<>();
+
 	/**
 	 * the constructor defines all the columns and measures of the schema. Since this involves scanning the database quite a lot, this constructor is SLOW
 	 */
@@ -543,7 +545,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMtefColumns();
 		addPseudoComputedColumns();
 		addColumn(new PPCColumn(ColumnConstants.PROPOSED_PROJECT_AMOUNT, "v_proposed_cost"));
+		amountColumns.add(ColumnConstants.PROPOSED_PROJECT_AMOUNT);
 		addColumn(new PPCColumn(ColumnConstants.REVISED_PROJECT_AMOUNT, "v_revised_project_cost"));
+		amountColumns.add(ColumnConstants.REVISED_PROJECT_AMOUNT);
 		
 		date_column(ColumnConstants.ACTIVITY_CREATED_ON, "v_creation_date");
 		date_column(ColumnConstants.ACTIVITY_UPDATED_ON, "v_updated_date");
@@ -594,19 +598,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		indicator_single_dimension(ColumnConstants.INDICATOR_RISK, "v_indicator_risk", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "v_indicator_logframe_category", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_double_column(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_ACTUAL_DATE, "v_indicator_actual_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_ACTUAL_COMMENT, "v_indicator_actual_comment", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_BASE_VALUE, "v_indicator_basevalue", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_double_column(ColumnConstants.INDICATOR_BASE_VALUE, "v_indicator_basevalue", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_BASE_DATE, "v_indicator_base_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_BASE_COMMENT, "v_indicator_base_comment", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_TARGET_VALUE, "v_indicator_targetvalue", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_double_column(ColumnConstants.INDICATOR_TARGET_VALUE, "v_indicator_targetvalue", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_TARGET_DATE, "v_indicator_target_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_TARGET_COMMENT, "v_indicator_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
 
-		indicator_single_dimension(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, "v_indicator_revised_target_value", INDICATOR_CONN_LEVEL_COLUMN);
+		indicator_double_column(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, "v_indicator_revised_target_value", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_date_column(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, "v_indicator_revised_target_date", INDICATOR_CONN_LEVEL_COLUMN);
 		indicator_single_dimension(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, "v_indicator_revised_target_comment", INDICATOR_CONN_LEVEL_COLUMN);
 	}
@@ -705,24 +709,32 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		
 	protected void addMtefColumns() {
 		for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
-			
-			addColumn(new MtefColumn("MTEF " + mtefYear, new LocalizableLabel("MTEF {0,number,#}", mtefYear), mtefYear,
-					"MTEF", false, Optional.empty()).withGroup("Funding Information"));
+
+			PsqlSourcedColumn<CategAmountCell> mtefColumn = new MtefColumn(
+					"MTEF " + mtefYear, new LocalizableLabel("MTEF {0,number,#}", mtefYear), mtefYear,
+					"MTEF", false, Optional.empty()).withGroup("Funding Information");
+			addColumn(mtefColumn);
+			amountColumns.add(mtefColumn.getName());
 
 			MtefColumn pipelineMtefColumn = (MtefColumn) new MtefColumn("Pipeline MTEF Projections " + mtefYear,
 					new LocalizableLabel("Pipeline MTEF Projections {0,number,#}", mtefYear), mtefYear,
 					"Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)).withGroup("Funding Information");			
 			this.pipelineMtefColumns.put(mtefYear, pipelineMtefColumn);
 			addColumn(pipelineMtefColumn);
+			amountColumns.add(pipelineMtefColumn.getName());
 
 			MtefColumn projectionMtefColumn = (MtefColumn) new MtefColumn("Projection MTEF Projections " + mtefYear,
 					new LocalizableLabel("Projection MTEF Projections {0,number,#}", mtefYear), mtefYear,
 					"Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)).withGroup("Funding Information");
 			this.projectionMtefColumns.put(mtefYear, projectionMtefColumn);
 			addColumn(projectionMtefColumn);
-			
-			addColumn(new MtefColumn("Real MTEF " + mtefYear, new LocalizableLabel("Real MTEF {0,number,#}", mtefYear), mtefYear,
-					"Real MTEF", true, Optional.empty()).withGroup("Funding Information"));
+			amountColumns.add(projectionMtefColumn.getName());
+
+			PsqlSourcedColumn<CategAmountCell> realMtefColumn = new MtefColumn(
+					"Real MTEF " + mtefYear, new LocalizableLabel("Real MTEF {0,number,#}", mtefYear), mtefYear,
+					"Real MTEF", true, Optional.empty()).withGroup("Funding Information");
+			addColumn(realMtefColumn);
+			amountColumns.add(realMtefColumn.getName());
 		}
 	}
 	
@@ -932,16 +944,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 *  Therefore, an empty row for said measure is added.
 	 */
 	public Set<String> synchronizeAmpMeasureBackport() {
+		final Set<String> notSerializedMeasures = new HashSet<>(Arrays.asList(
+				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT
+		));
 		return PersistenceManager.getSession().doReturningWork(conn -> {
 			Set<String> inDbMeasures = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "measurename", "amp_measures"), 1));
-			Set<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).collect(Collectors.toSet());
-			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, z, "A", this.measures.get(z).description)).collect(Collectors.toList());	
+			Set<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).filter(z -> !notSerializedMeasures.contains(z)).collect(Collectors.toSet());
+			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, z, "A", this.measures.get(z).description)).collect(Collectors.toList());
 			if (values.size() > 0) {
 				SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type", "description"), values);
 				MeasuresVisibility.resetMeasuresList();
 			}
 			return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
-		}); 
+		});
 	}
 	
 	/**
@@ -1060,11 +1075,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 
 	private AmpReportsSchema indicator_single_dimension(String columnName, String view, LevelColumn levelColumn) {
-		SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn, IndicatorTextualTokenBehaviour.instance);
+		SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn, IndicatorTextualTokenBehaviour.textInstance);
 		if (levelColumn == INDICATOR_CONN_LEVEL_COLUMN) {
 			col.withMetaInfoProvider(IndicatorIdMetaInfoProvider.instance);
 		}
 		col.allowNulls(true);
+		return addColumn(col);
+	}
+
+	private AmpReportsSchema indicator_double_column(String columnName, String view, LevelColumn levelColumn) {
+		DoubleColumn col = new DoubleColumn(columnName, levelColumn, view, IndicatorTextualTokenBehaviour.doubleInstance);
+		if (levelColumn == INDICATOR_CONN_LEVEL_COLUMN) {
+			col.withMetaInfoProvider(IndicatorIdMetaInfoProvider.instance);
+		}
 		return addColumn(col);
 	}
 
@@ -1426,5 +1449,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	public final static boolean isBetween(long value, long min, long max) {
 		return value >= min && value <= max;
+	}
+
+	/**
+	 * Returns columns that contain funding amounts and behave like measures.
+	 * @return
+	 */
+	public List<String> getAmountColumns() {
+		return amountColumns;
 	}
 }

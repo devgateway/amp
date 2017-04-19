@@ -6,7 +6,6 @@
 package org.dgfoundation.amp.visibility;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -164,7 +163,8 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	   				//AMP-9768
 	   				AmpActivityVersion editedActivity=(AmpActivityVersion) PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY);
 	   				boolean sameTeamAsEditedActivity=false;
-	   				if(editedActivity!=null && editedActivity.getTeam()!=null && editedActivity.getTeam().getAmpTeamId().equals(teamMember.getTeamId())) sameTeamAsEditedActivity=true;
+					if (editedActivity != null && editedActivity.getTeam() != null && teamMember != null && editedActivity.getTeam().getAmpTeamId().equals(teamMember.getTeamId()))
+						sameTeamAsEditedActivity = true;
 	   				
 	   				//TODO AMP-2579 this IF was added to fix null pointer temporary.
 	   				if (teamMember!=null && ! (teamMember.getTeamHead() && sameTeamAsEditedActivity)){

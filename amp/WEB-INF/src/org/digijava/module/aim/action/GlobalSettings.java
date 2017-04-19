@@ -2,9 +2,9 @@ package org.digijava.module.aim.action;
 /*
 * @ author Govind G Dalwani
 */
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +25,12 @@ import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
+import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.menu.MenuStructure;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -39,11 +41,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.services.auditcleaner.AuditCleaner;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class GlobalSettings extends Action {
 	private static Logger logger 				= Logger.getLogger(GlobalSettings.class);
@@ -66,6 +64,7 @@ public class GlobalSettings extends Action {
 		boolean refreshGlobalSettingsCache			= false;
 		boolean regenerateCCExchanteRates = false;
 		HttpSession session = request.getSession();
+		errors = new ActionMessages();
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
 		} else {
@@ -83,8 +82,12 @@ public class GlobalSettings extends Action {
 	
 			logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
 			dailyCurrencyRatesChanges(gsForm);
-			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
-			//ActionMessages errors = new ActionMessages();
+			try {
+				DbUtil.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
+			} catch (AMPException ex) {
+				ActionMessage ae = new ActionMessage("error.aim.globalSettings.valueIsNotOfType", ex.getMessage());
+				errors.add("title", ae);
+			}
 			auditTrialCleanerChanges(gsForm);
 			refreshGlobalSettingsCache	= true;			
 		}
@@ -97,7 +100,7 @@ public class GlobalSettings extends Action {
 			AmpGlobalSettings projectValidationSetting = FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.PROJECTS_VALIDATION);
 			AmpGlobalSettings baseCurrencyGS = FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.BASE_CURRENCY);
 			while (token.hasMoreTokens()) {
-				String element = token.nextToken();
+				String element = URLDecoder.decode(token.nextToken(), "UTF-8");
 				String[] nameValue = element.split("=");				
 				Long id = getLongOrNull(nameValue[0]);
 				String newValue = nameValue.length < 2 ? "" : nameValue[1];
@@ -108,7 +111,16 @@ public class GlobalSettings extends Action {
 					regenerateCCExchanteRates = true;
 				}
 				// allow empty fields, like Public Portal URL when Public Portal = false
-				this.updateGlobalSetting(id, newValue);
+				//we ad a struts error that was added befor inside the methods
+				try {
+
+					DbUtil.updateGlobalSetting(id, newValue);
+
+				} catch (AMPException ex) {
+
+					ActionMessage ae = new ActionMessage("error.aim.globalSettings.valueIsNotOfType", ex.getMessage());
+					errors.add("title", ae);
+				}
 			}
 			
 			//this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
@@ -157,7 +169,7 @@ public class GlobalSettings extends Action {
 			Collection<KeyValue> possibleValues		= null;
 			Map<String, String> possibleValuesDictionary	= null;
 			if ( possibleValuesTable != null && possibleValuesTable.length() != 0 && possibleValuesTable.startsWith("v_") ) {
-				possibleValues				= this.getPossibleValues(possibleValuesTable);
+				possibleValues				= DbUtil.getPossibleValues(possibleValuesTable);
 				possibleValuesDictionary	= new HashMap<String, String>();
 				for(KeyValue keyValue:possibleValues){
 					possibleValuesDictionary.put(keyValue.getKey(), keyValue.getValue());
@@ -300,6 +312,7 @@ public class GlobalSettings extends Action {
 			}
 		}
 	}
+	
 
 
 
@@ -316,91 +329,6 @@ public class GlobalSettings extends Action {
 		}
 		return ret;
 	}
-
-	private void  updateGlobalSetting(Long id, String value) {
-
-		Session session 	= null;
-		String qryStr 		= null;
-		Query qry 			= null;
-		Transaction tx		= null;
-		try{
-				session					= PersistenceManager.getSession();
-//beginTransaction();
-
-				qryStr 					= "select gs from "+ AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id " ;
-				qry 					= session.createQuery(qryStr);
-				qry.setLong ("id", id.longValue());
-				AmpGlobalSettings ags	= (AmpGlobalSettings) qry.list().get(0);
-
-				boolean changeValue		= this.testCriterion(ags, value);
-
-				if (changeValue)
-						ags.setGlobalSettingsValue(value);
-				//tx.commit();
-
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Rollback failed !");
-				}
-			}
-		}
-	}
-	/**
-	 *
-	 * @param ags the AmpGlobalSettings whos value should be changed
-	 * @param value the new value that should be applied
-	 * @return true if value is of the specified type (as returned by AmpGlobalSettings.getGlobalSettingsPossibleValues() )
-	 */
-	private boolean testCriterion (AmpGlobalSettings ags, String value) {
-		String criterion		= ags.getGlobalSettingsPossibleValues();
-		if ( criterion!=null && criterion.startsWith("t_")  ) {
-			if (criterion.equals("t_Integer") || criterion.equals("t_static_range") ){
-				try{
-					Integer.parseInt(value);
-					return true;
-				}
-				catch(Exception E) { // value is not an integer
-					ActionMessage ae	= new ActionMessage("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
-					errors.add("title", ae);
-					return false;
-				}
-			}
-			if (criterion.equals("t_Year")||criterion.equals("t_static_year")||criterion.equals("t_static_range")||
-					criterion.equals("t_year_default_start")||criterion.equals("t_year_default_end")){
-				try{
-					int intValue	= Integer.parseInt(value);
-					if (intValue!=-1 && (intValue < 1000 || intValue > 2999  ))
-						return false;
-					return true;
-				}
-				catch(Exception E) { // value is not a year
-					ActionMessage ae	= new ActionMessage("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
-					errors.add("title", ae);
-					return false;
-				}
-			}
-			if (criterion.equals("t_Date")){
-				try{
-					Date testDate	= DateTimeUtil.parseDate(value);
-					return true;
-				}
-				catch(Exception E) { // value is not an Date
-					ActionMessage ae	= new ActionMessage("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
-					errors.add("title", ae);
-					return false;
-				}
-			}
-
-		}
-		return true;
-	}
-
 
     /**
      * This method is potentially dangerous since does not consider leap years

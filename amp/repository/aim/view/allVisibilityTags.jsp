@@ -36,6 +36,7 @@
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Custom Fields" parentModule="PROJECT MANAGEMENT"></module:display>
+
 <module:display name="Content Repository" parentModule="Resources"></module:display>
 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -83,6 +84,7 @@
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Public View Content" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Resource Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Public Filter Manager" parentModule="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -100,7 +102,8 @@
 <module:display name="Filter Section" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
-<module:display name="Tab Generator" parentModule="REPORTING"></module:display> 
+<module:display name="Tab Generator" parentModule="REPORTING"></module:display>
+<feature:display name="Enable Saiku icon in Tab Manager" module="Tab Generator"></feature:display>
 <module:display name="Tools" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <module:display name="Resources"></module:display>

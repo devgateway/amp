@@ -63,6 +63,7 @@
 "amp.dashboard:chart-ResponsibleOrganizations": "Responsible Organizations",
 "amp.dashboard:chart-BeneficiaryAgencies": "Beneficiary Agencies",
 "amp.dashboard:chart-ExecutingAgencies": "Executing Agencies",
+"amp.dashboard:chart-PrimaryPrograms": "Primary Programs",
 "amp.dashboard:chart-ImplementingAgencies": "Implementing Agencies",
 "amp.dashboard:chart-Peace-buildingandState-buildingGoals": "Peace-building and State-building Goals",
 "amp.dashboard:predictability-planned": "Planned",

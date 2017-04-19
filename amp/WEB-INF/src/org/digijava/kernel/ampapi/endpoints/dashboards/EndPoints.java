@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards;
 
+import java.util.List;
+
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -8,7 +10,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
@@ -30,6 +31,73 @@ import net.sf.json.JSONObject;
 
 @Path("dashboard")
 public class EndPoints implements ErrorReportingEndpoint {
+
+	/**
+	 * Retrieve top primary programs values for dashboards chart.
+	 * </br>
+	 * <dl>This EPs was added for trainning propose
+	 * </br>
+	 * The JSON object holds information regarding:
+	 * <dt><b>currency</b><dd> - currency of the report that is going to be run to retrieve the information
+	 * <dt><b>values</b><dd> - an array with a list of primary programs and the amount
+	 * <dt><b>total</b><dd> -  total amount
+	 * <dt><b>sumarizedTotal</b><dd> - sumarized total amount
+	 * <dt><b>maxLimit</b><dd> - number of donors
+	 * <dt><b>name</b><dd> - name of the report
+	 * </dl></br></br>
+	 *
+	 * <h3>Sample Input:</h3><pre>
+	 * {
+	 * 	"filters": {},
+	 * 	"settings": {
+	 * 	    "funding-type": ["Actual Commitments","Actual Disbursements"],
+	 * 	    "currency-code": "USD",
+	 * 	    "calendar-id": "123",
+	 * 	    "year-range": {
+	 * 	        "from": "2014",
+	 * 	        "to": "2015"
+	 * 	    }
+	 * 	}
+	 * }</pre>
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
+	 * {
+	 *   "currency": "USD",
+	 *   "values": [
+	 *   {
+	 *       "name": "Maintaining Agriculture as Major Source of Economic Growth",
+	 *       "id": 14,
+	 *       "amount": 61983413972.30137,
+	 *       "formattedAmount": "61,983,413,972.301"
+	 *   },
+	 *   {
+	 *       "name": "Enhancing Expansion and Quality of Infrastructure Development",
+	 *       "id": 16,
+	 *       "amount": 989470974.186616,
+	 *       "formattedAmount": "989,470,974.187"
+	 *   },
+	 *     ....
+	 *   ],
+	 *   "total": 2398018313.370719,
+	 *   "sumarizedTotal": "2,4B",
+	 *   "maxLimit": 85,
+	 *   "totalPositive": 2398018313.3707194,
+	 *   "name": "Top Primary Programs",
+	 *   "title": "Top Primary Programs"
+	 * }</pre>
+	 *
+	 * @param config a JSON object with the config
+	 * @param limit limit of result. default 5.
+	 * @return a JSON objects with a tops primary programs
+	 */
+	@POST
+	@Path("/tops-primary-programs")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "topsPrimaryPrograms", authTypes = {AuthRule.IN_WORKSPACE})
+	public JsonBean getTopsPrimaryPrograms(JsonBean config, @DefaultValue("5") @QueryParam("limit") Integer limit) {
+		String type = "PP"; //new type ( Primary Program Level 1 ) added to use in honduras trainning
+		return DashboardsService.getTops(type, limit, config);
+	}
 
 	/**
 	 * Retrieve a list of available top for the dashboard charts with their names.

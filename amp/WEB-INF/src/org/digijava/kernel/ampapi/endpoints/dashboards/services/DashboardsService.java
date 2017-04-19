@@ -169,6 +169,11 @@ public class DashboardsService {
 			title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_GROUPS);
 			name = DashboardConstants.TOP_DONOR_GROUPS;
 			break;
+		case "PP":
+			spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1));
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_PRIMARY_PROGRAMS);
+			name = DashboardConstants.TOP_PRIMARY_PROGRAMS;
+			break;
 		case "NDD":
 			spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM));
 			name = DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS;

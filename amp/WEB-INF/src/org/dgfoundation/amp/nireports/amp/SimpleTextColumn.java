@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports.amp;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
@@ -15,6 +16,8 @@ import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
  * a simple text column which fetches its input from a view which contains 3 or more columns: <br />
@@ -37,13 +40,14 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 	private boolean allowNulls;
 
 	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
-		super(columnName, levelColumn, viewName, TextColumnKeyBuilder.instance, TextualTokenBehaviour.instance);
+		this(columnName, levelColumn, viewName, TextualTokenBehaviour.instance);
 	}
 
-	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<NiTextCell> behaviour) {
+	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName,
+			Behaviour<NiTextCell> behaviour) {
 		super(columnName, levelColumn, viewName, TextColumnKeyBuilder.instance, behaviour);
 	}
-
+	
 	@Override
 	public synchronized List<TextCell> fetch(NiReportsEngine engine) {
 		metaInfoGenerator = new MetaInfoGenerator();
@@ -57,12 +61,10 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 		if (!allowNulls && text == null)
 			return null;
 
-		MetaInfoSet metaInfo = metaInfoProvider.provide(engine, rs, metaInfoGenerator);
-		
-		if (withoutEntity)
-			return new TextCell(text, rs.getLong(1), rs.getLong(1), metaInfo, this.levelColumn);
-		else
-			return new TextCell(text, rs.getLong(1), rs.getLong(3), metaInfo, this.levelColumn);
+        MetaInfoSet metaInfo = metaInfoProvider.provide(engine, rs, metaInfoGenerator);
+        Long entityId = rs.getLong(withoutEntity ? 1 : 3);
+        Map<NiDimensionUsage, Coordinate> coos = buildCoordinates(entityId, engine, rs);
+        return new TextCell(text, rs.getLong(1), entityId, metaInfo, coos, this.levelColumn);
 	}
 
 	public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn, Behaviour<NiTextCell> behaviour) {
@@ -102,7 +104,7 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 		this.allowNulls = allowNulls;
 		return this;
 	}
-	
+
 	@Override
 	public boolean getKeptInSummaryReports() {
 		return false;

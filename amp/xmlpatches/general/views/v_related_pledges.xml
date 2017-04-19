@@ -18,14 +18,21 @@
 	</trigger> 
 	<apply>
 		<script>
-			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_related_pledges AS 
-			    		SELECT distinct aa.amp_activity_id, p.title, aa.amp_activity_id AS act_id
-			    		FROM amp_funding_detail fd 
-			    			JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id
-			    			JOIN amp_activity_version aa ON fu.amp_activity_id = aa.amp_activity_id
-			    			JOIN v_pledges_titles p ON p.pledge_id = fd.pledge_id;
-			</lang>
+			<lang delimiter=";" type="postgres"><![CDATA[
+				CREATE OR REPLACE VIEW v_related_pledges AS
+				  SELECT distinct aa.amp_activity_id, p.title, aa.amp_activity_id AS act_id,
+					fu.type_of_assistance_category_va as terms_assist_id,
+					fu.financing_instr_category_value as financing_instrument_id,
+					fu.amp_donor_org_id as donor_org_id,
+					fu.mode_of_payment_category_va as mode_of_payment_id,
+					fu.funding_status_category_va as funding_status_id,
+					fu.agreement as agreement_id,
+					fu.amp_funding_id as funding_id
+				  FROM amp_funding_detail fd
+					JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id
+					JOIN amp_activity_version aa ON fu.amp_activity_id = aa.amp_activity_id
+					JOIN v_pledges_titles p ON p.pledge_id = fd.pledge_id;
+			]]></lang>
 		</script>
 	</apply>
 </tns:patch>

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-14167</jira>
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../doc/xmlpatcher.xsd ">
+	<jira>AMP-25597</jira>
 	<keyword>Views</keyword>
-	<author>Alexandru Artimon</author>
-	<description>recreate view, this will always be the last version of the view</description>
+	<keyword>Agreement</keyword>
+	<author>Octavian Ciubotaru</author>
+	<description>Views for agreement (parliamentary date)</description>
 	<trigger type="all">
 		<condition type="custom">
 			<script returnVar="val">
@@ -19,8 +20,8 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
-				CREATE OR REPLACE VIEW v_funding_org_id AS
-				  SELECT f.amp_activity_id, f.financing_id AS funding_org_id,
+				CREATE OR REPLACE VIEW v_agreement_parlimentary_date AS
+				  SELECT DISTINCT f.amp_activity_id, ag.parlimentary_date, ag.id, (ag.title::text || ' - '::text) || ag.code::text AS "Agreement Title + Code", ag.code AS "Agreement Code", o.name AS "Donor Agency", o.amp_org_id, ag.title AS agreement_title,
 					f.type_of_assistance_category_va as terms_assist_id,
 					f.financing_instr_category_value as financing_instrument_id,
 					f.amp_donor_org_id as donor_org_id,
@@ -28,10 +29,8 @@
 					f.funding_status_category_va as funding_status_id,
 					f.agreement as agreement_id,
 					f.amp_funding_id as funding_id
-				  FROM amp_funding f
-					JOIN amp_activity_version a ON f.amp_activity_id = a.amp_activity_id
-												   AND f.financing_id IS NOT NULL
-												   AND f.financing_id != '';
+				  FROM amp_agreement ag, amp_funding f, amp_organisation o
+				  WHERE f.agreement = ag.id AND f.amp_donor_org_id = o.amp_org_id AND ag.parlimentary_date IS NOT NULL;
 			]]></lang>
 		</script>
 	</apply>

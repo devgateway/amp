@@ -3,9 +3,9 @@ package org.dgfoundation.amp.nireports.testcases.generic;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 import org.dgfoundation.amp.nireports.PercentageTextCell;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 
 public class DistrictCells extends HardcodedCells<PercentageTextCell>{
@@ -39,15 +39,25 @@ public class DistrictCells extends HardcodedCells<PercentageTextCell>{
 			cell("Activity with Zones", "", -9108, 0.500000),
 			cell("Activity With Zones and Percentages", "", -9110, 0.200000),
 			cell("Activity With Zones and Percentages", "", -9111, 0.800000),
+			cell("activity-weird-funding", "", -9088, 0.400000),
+			cell("activity-weird-funding", "", -9092, 0.600000),
 			cell("activity-with-unfunded-components", "", -9114, 1.000000),
 			cell("activity_with_disaster_response", "", -8977, 1.000000),
+			cell("arrears test", "", -9110, 1.000000),
 			cell("crazy funding 1", "", -9086, 1.000000),
 			cell("date-filters-activity", "", -8977, 1.000000),
+			cell("department/division", "", -9103, 1.000000),
 			cell("Eth Water", "", -9085, 1.000000),
 			cell("execution rate activity", "", -9088, 0.500000),
 			cell("execution rate activity", "", -9091, 0.500000),
+			cell("expenditure class", "", -9088, 1.000000),
 			cell("mtef activity 1", "", -8977, 1.000000),
 			cell("mtef activity 2", "", -9085, 1.000000),
+			cell("PID: original", "", -9086, 1.000000),
+			cell("PID: original > actual", "", -8977, 1.000000),
+			cell("PID: original, actual", "", -9086, 1.000000),
+			cell("PID: original, proposed", "", -9110, 1.000000),
+			cell("PID: original, proposed, actual", "", -9086, 1.000000),
 			cell("pledged 2", "", -9087, 1.000000),
 			cell("pledged education activity 1", "", -9089, 1.000000),
 			cell("Project with documents", "", -9086, 1.000000),
@@ -56,6 +66,9 @@ public class DistrictCells extends HardcodedCells<PercentageTextCell>{
 			cell("ptc activity 1", "", -9085, 1.000000),
 			cell("ptc activity 2", "", -9085, 1.000000),
 			cell("Pure MTEF Project", "", -9087, 1.000000),
+			cell("Real SSC Activity 1", "", -9086, 1.000000),
+			cell("Real SSC Activity 2", "", -8977, 1.000000),
+			cell("second with disaster response", "", -9087, 1.000000),
 			cell("SSC Project 1", "", -9085, 1.000000),
 			cell("SSC Project 2", "", -9092, 1.000000),
 			cell("SubNational no percentages", "", -9085, 0.500000),
@@ -65,8 +78,8 @@ public class DistrictCells extends HardcodedCells<PercentageTextCell>{
 			cell("Test MTEF directed", "", -9085, 1.000000),
 			cell("third activity with agreements", "", -9088, 1.000000),
 			cell("Unvalidated activity", "", -8977, 1.000000),
-			cell("with weird currencies", "", -8977, 1.000000)
-		);
+			cell("with annual ppc and actual comm", "", -9086, 1.000000),
+			cell("with weird currencies", "", -8977, 1.000000));
 	}
 
 }

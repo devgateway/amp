@@ -3,9 +3,9 @@ package org.dgfoundation.amp.nireports.testcases.generic;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 import org.dgfoundation.amp.nireports.PercentageTextCell;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 
 public class CountryCells extends HardcodedCells<PercentageTextCell>{
@@ -35,14 +35,23 @@ public class CountryCells extends HardcodedCells<PercentageTextCell>{
 			cell("activity with tertiary_program", "Moldova", 8977, 1.000000),
 			cell("Activity with Zones", "Moldova", 8977, 1.000000),
 			cell("Activity With Zones and Percentages", "Moldova", 8977, 1.000000),
+			cell("activity-weird-funding", "Moldova", 8977, 1.000000),
 			cell("activity-with-unfunded-components", "Moldova", 8977, 1.000000),
 			cell("activity_with_disaster_response", "Moldova", 8977, 1.000000),
+			cell("arrears test", "Moldova", 8977, 1.000000),
 			cell("crazy funding 1", "Moldova", 8977, 1.000000),
 			cell("date-filters-activity", "Moldova", 8977, 1.000000),
+			cell("department/division", "Moldova", 8977, 1.000000),
 			cell("Eth Water", "Moldova", 8977, 1.000000),
 			cell("execution rate activity", "Moldova", 8977, 1.000000),
+			cell("expenditure class", "Moldova", 8977, 1.000000),
 			cell("mtef activity 1", "Moldova", 8977, 1.000000),
 			cell("mtef activity 2", "Moldova", 8977, 1.000000),
+			cell("PID: original", "Moldova", 8977, 1.000000),
+			cell("PID: original > actual", "Moldova", 8977, 1.000000),
+			cell("PID: original, actual", "Moldova", 8977, 1.000000),
+			cell("PID: original, proposed", "Moldova", 8977, 1.000000),
+			cell("PID: original, proposed, actual", "Moldova", 8977, 1.000000),
 			cell("pledged 2", "Moldova", 8977, 1.000000),
 			cell("pledged education activity 1", "Moldova", 8977, 1.000000),
 			cell("Project with documents", "Moldova", 8977, 1.000000),
@@ -51,6 +60,9 @@ public class CountryCells extends HardcodedCells<PercentageTextCell>{
 			cell("ptc activity 1", "Moldova", 8977, 1.000000),
 			cell("ptc activity 2", "Moldova", 8977, 1.000000),
 			cell("Pure MTEF Project", "Moldova", 8977, 1.000000),
+			cell("Real SSC Activity 1", "Moldova", 8977, 1.000000),
+			cell("Real SSC Activity 2", "Moldova", 8977, 1.000000),
+			cell("second with disaster response", "Moldova", 8977, 1.000000),
 			cell("SSC Project 1", "Moldova", 8977, 1.000000),
 			cell("SSC Project 2", "Moldova", 8977, 1.000000),
 			cell("SubNational no percentages", "Moldova", 8977, 1.000000),
@@ -59,6 +71,7 @@ public class CountryCells extends HardcodedCells<PercentageTextCell>{
 			cell("Test MTEF directed", "Moldova", 8977, 1.000000),
 			cell("third activity with agreements", "Moldova", 8977, 1.000000),
 			cell("Unvalidated activity", "Moldova", 8977, 1.000000),
+			cell("with annual ppc and actual comm", "Moldova", 8977, 1.000000),
 			cell("with weird currencies", "Moldova", 8977, 1.000000));
 	}
 

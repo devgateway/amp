@@ -35,9 +35,6 @@ function populateRPS(rpSettings) {
 			}
 		}
 	}
-	if ( measArray == null || measArray.length == 0 ) {
-		measArray.push("Actual Commitments");
-	}
 	
 	var period			= getReportPeriod();
 	rpSettings.reportPeriod		= period;

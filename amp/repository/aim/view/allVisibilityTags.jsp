@@ -45,6 +45,7 @@
 
 <module:display  name="/Dashboards"></module:display>
 <feature:display name="Top Donors" module="/Dashboards"/>
+<feature:display name="Top Primary Programs" module="/Dashboards"/>
 <field:display name="Show Names As Acronyms" feature="Top Donors"/>
 <feature:display name="Top Regions" module="/Dashboards"/>
 <feature:display name="Top Sectors" module="/Dashboards"/>

@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.nireports.output;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Optional;
 import java.util.SortedMap;
 
@@ -9,14 +7,11 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
-import org.dgfoundation.amp.nireports.output.nicells.NiDateCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * renders the result of running a NiReport to a html string. See {@link NiReportOutputBuilder}.
@@ -25,10 +20,9 @@ import org.jetbrains.annotations.Nullable;
  *
  */
 public class NiReportHtmlRenderer {
-
+	
 	protected static final Logger logger = Logger.getLogger(NiReportHtmlRenderer.class);
-	private static final String DATE_PATTERN = "[yyyy-MM-dd]";
-
+	
 	final NiReportData report;
 	final NiHeaderInfo headers;
 	final ReportSpecification spec;
@@ -79,7 +73,7 @@ public class NiReportHtmlRenderer {
 		logger.error(reportRenderTime);
 		logger.error(reportSize);
 		
-		return String.format("%s", renderedReport);
+		return String.format("%s\n%s%s", pageHeader, renderedReport, "</body></html>");
 
 	}
 	
@@ -186,19 +180,9 @@ public class NiReportHtmlRenderer {
 				CellColumn leafHeader = headers.leafColumns.get(i);
 				//BigDecimal percentage = crd.hierarchies.calculatePercentage(leafHeader.getBehaviour().getHierarchiesListener());
 				NiOutCell cell = crd.contents.get(leafHeader).get(id);
-				String contents = null;
-
-				if (cell instanceof NiDateCell) {
-					if (cell == null) {
-						contents = Optional.ofNullable(leafHeader.getBehaviour().getEmptyCell(spec)).orElse(NiTextCell.EMPTY).getDisplayedValue();
-					} else {
-						contents = formatDate(cell);
-					}
-				} else {
-					contents = (cell == null ? Optional.ofNullable(leafHeader.getBehaviour().getEmptyCell(spec)).orElse(NiTextCell.EMPTY).getDisplayedValue()
-							: ensureMaxLen(cell.getDisplayedValue(), 50));
-				}
-
+				String contents = cell == null ? Optional.ofNullable(leafHeader.getBehaviour().getEmptyCell(spec)).orElse(NiTextCell.EMPTY).getDisplayedValue() 
+						: ensureMaxLen(cell.getDisplayedValue(), 50);
+				
 				bld.append("<td class='nireport_data_cell'>");
 				bld.append(contents);
 				bld.append("</td>");
@@ -207,19 +191,7 @@ public class NiReportHtmlRenderer {
 		}
 		return bld;
 	}
-
-	private String formatDate(NiOutCell cell) {
-		String contents = "";
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN);
-		try {
-            contents = FormatHelper.formatDate(simpleDateFormat.parse(cell.getDisplayedValue()));
-        } catch (Exception e) {
-            logger.error("Error to get date:", e);
-			contents = ensureMaxLen(cell.getDisplayedValue(), 50);
-        }
-		return contents;
-	}
-
+	
 	protected String ensureMaxLen(String s, int maxLen) {
 		if (s.length() <= maxLen)
 			return s;

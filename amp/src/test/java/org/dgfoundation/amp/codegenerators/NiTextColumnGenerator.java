@@ -3,12 +3,12 @@ package org.dgfoundation.amp.codegenerators;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.nireports.TextCell;
-import org.digijava.kernel.persistence.PersistenceManager;
-
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
  * Code generator for NiTextColumn cells. 
@@ -23,11 +23,13 @@ public class NiTextColumnGenerator extends ColumnGenerator {
 		public final String aavname;
 		public final String text;
 		public final long id;
+		public final Map<NiDimensionUsage, Coordinate> coos;
 		
-		public Entry(String aavname, String name, long id) {
+		public Entry(String aavname, String name, long id, Map<NiDimensionUsage, Coordinate> coos) {
 			this.aavname = anon(aavname);
 			this.text = cleanupOrAnon(name);
 			this.id = id;
+			this.coos = coos;
 		}
 		
 		@Override
@@ -37,7 +39,7 @@ public class NiTextColumnGenerator extends ColumnGenerator {
 	}
 	
 	public String cleanupOrAnon(String str) {
-		return this.name == ColumnConstants.PROJECT_TITLE ? anon(str) : cleanup(str);
+		return name.equals(ColumnConstants.PROJECT_TITLE) ? anon(str) : cleanup(str);
 	}
 	
 	public NiTextColumnGenerator(String columnName) {
@@ -48,13 +50,13 @@ public class NiTextColumnGenerator extends ColumnGenerator {
 	private List<Entry> populateList() {
 		final List<Entry> entries = new ArrayList<>();
 		runInEngineContext( 
-				new ArrayList<String>(getActivityNames().values()), 
+				new ArrayList<>(getActivityNames().values()),
 				eng -> {
 					Map<Long, String> activityNames = getActivityNames();
 					@SuppressWarnings("unchecked")
 					List<TextCell> cells = (List<TextCell>) eng.schema.getColumns().get(name).fetch(eng);
 					for (TextCell cell : cells) {
-						entries.add(new Entry(activityNames.get(cell.activityId), cell.text, cell.entityId));
+						entries.add(new Entry(activityNames.get(cell.activityId), cell.text, cell.entityId, cell.coordinates));
 					}
 					entries.sort((Entry e1, Entry e2) -> {
 						if (e1.aavname.equalsIgnoreCase(e2.aavname))
@@ -66,19 +68,18 @@ public class NiTextColumnGenerator extends ColumnGenerator {
 		return entries;
 	}
 	
-		@Override
+	@Override
 	public String generate() {
-		StringBuilder strb = new StringBuilder();
-		strb.append("Arrays.asList(\n");
-		for (int i = 0; i < entries.size(); i++) {
-			Entry ent = entries.get(i);
-			strb.append("\t\tcell(");
-			strb.append(String.format("%s, %s, %s", escape(ent.aavname), escape(ent.text), ent.id));
-			strb.append(")");
-			if (i < entries.size() - 1)
-				strb.append(",\n");
-		}
-		strb.append(");");
-		return strb.toString();
+		StringJoiner cellsCode = new StringJoiner(",");
+		entries.forEach(ent -> cellsCode.add(String.format("\n\t\t\tcell(%s, %s, %s,\n\t\t\t\tcoos(%s))",
+				escape(ent.aavname), escape(ent.text), ent.id, coosCode(ent))));
+		return "Arrays.asList(" + cellsCode.toString() + ");";
+	}
+
+	private String coosCode(Entry ent) {
+		StringJoiner coosCode = new StringJoiner(",");
+		ent.coos.forEach((k, v) -> coosCode.add(String.format("\n\t\t\t\t\tentry(%s, %s, %d, %d)",
+				escape(k.dimension.name), escape(k.instanceName), v.level, v.id)));
+		return coosCode.toString();
 	}
 }

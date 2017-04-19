@@ -21,13 +21,11 @@ import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.dgfoundation.amp.nireports.amp.AmpFundingColumn;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
-import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -65,13 +63,6 @@ public class FundingColumnGenerator extends ColumnGenerator {
 			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id")
 			);	
 			
-	protected Map<String, LevelColumn> buildOptionalDimensionCols(NiReportsSchema schema) {
-		Map<String, NiReportColumn<?>> cols = schema.getColumns();
-		Map<String, LevelColumn> res = new HashMap<>();
-		AmpFundingColumn.FUNDING_VIEW_COLUMNS.forEach((colName, viewColName) -> res.put(viewColName, cols.get(colName).levelColumn.get()));
-		return res;
-	}
-	
 	private List<FundingCellEntry> populateList() {
 		final List<FundingCellEntry> entries = new ArrayList<>();
 		runInEngineContext( 

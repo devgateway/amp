@@ -1,18 +1,15 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
 
 import org.dgfoundation.amp.nireports.DateCell;
 
 
 public class ActivityCreatedOnCells extends HardcodedCells<DateCell>{
 
-	public ActivityCreatedOnCells(Map<String, Long> activityNames, Map<String, Long> entityNames, NiDimension dim, String key) {
-		super(activityNames, entityNames, degenerate(dim, key));
-	}
 	public ActivityCreatedOnCells(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {
 		super(activityNames, entityNames, lc);
 	}
@@ -38,15 +35,24 @@ public class ActivityCreatedOnCells extends HardcodedCells<DateCell>{
 		dateCell("activity with tertiary_program", "2014-03-28"),
 		dateCell("Activity with Zones", "2013-12-23"),
 		dateCell("Activity With Zones and Percentages", "2013-12-23"),
+		dateCell("activity-weird-funding", "2016-05-05"),
 		dateCell("activity-with-unfunded-components", "2014-12-15"),
 		dateCell("activity_with_disaster_response", "2015-08-24"),
+		dateCell("arrears test", "2016-04-27"),
 		dateCell("crazy funding 1", "2013-12-20"),
 		dateCell("date-filters-activity", "2013-09-21"),
+		dateCell("department/division", "2016-06-10"),
 		dateCell("Eth Water", "2013-08-01"),
 		dateCell("execution rate activity", "2015-10-19"),
+		dateCell("expenditure class", "2016-05-02"),
 		dateCell("mtef activity 1", "2013-08-05"),
 		dateCell("mtef activity 2", "2013-08-05"),
 		dateCell("new activity with contracting", "2014-11-26"),
+		dateCell("PID: original", "2016-04-27"),
+		dateCell("PID: original > actual", "2016-04-27"),
+		dateCell("PID: original, actual", "2016-04-27"),
+		dateCell("PID: original, proposed", "2016-04-27"),
+		dateCell("PID: original, proposed, actual", "2016-04-27"),
 		dateCell("pledged 2", "2014-04-29"),
 		dateCell("pledged education activity 1", "2014-04-29"),
 		dateCell("Project with documents", "2013-11-18"),
@@ -55,6 +61,9 @@ public class ActivityCreatedOnCells extends HardcodedCells<DateCell>{
 		dateCell("ptc activity 1", "2013-08-19"),
 		dateCell("ptc activity 2", "2013-08-19"),
 		dateCell("Pure MTEF Project", "2013-10-11"),
+		dateCell("Real SSC Activity 1", "2014-02-20"),
+		dateCell("Real SSC Activity 2", "2014-02-20"),
+		dateCell("second with disaster response", "2016-06-28"),
 		dateCell("SSC Project 1", "2013-08-20"),
 		dateCell("SSC Project 2", "2013-08-20"),
 		dateCell("SubNational no percentages", "2014-02-21"),
@@ -63,6 +72,7 @@ public class ActivityCreatedOnCells extends HardcodedCells<DateCell>{
 		dateCell("Test MTEF directed", "2013-10-10"),
 		dateCell("third activity with agreements", "2015-03-22"),
 		dateCell("Unvalidated activity", "2015-01-25"),
+		dateCell("with annual ppc and actual comm", "2016-08-05"),
 		dateCell("with weird currencies", "2015-12-15")
 );
 	}

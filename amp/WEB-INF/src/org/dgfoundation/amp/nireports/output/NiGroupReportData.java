@@ -32,10 +32,10 @@ public class NiGroupReportData extends NiReportData {
 	/**
 	 * an in-place modifiable list of children. Should not be accessed outside this class!
 	 */
-	protected final List<NiReportData> rawSubreports;
+	private final List<NiReportData> rawSubreports;
 
 	public NiGroupReportData(List<NiReportData> subreports, Map<CellColumn, NiOutCell> trailCells, NiSplitCell splitter) {
-		super(trailCells, subreports.stream().flatMap(z -> z.getIds().stream()).collect(Collectors.toSet()), splitter);
+		super(trailCells, subreports.stream().flatMap(z -> z.ids.stream()).collect(Collectors.toSet()), splitter);
 		this.rawSubreports = new ArrayList<>(subreports);
 		this.subreports = Collections.unmodifiableList(rawSubreports);
 		this.splitterColumn = this.rawSubreports.isEmpty() ? null : this.rawSubreports.get(0).getGeneratingColumn();

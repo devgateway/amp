@@ -68,11 +68,6 @@ function ReportPreviewEngine (rpSettings) {
 
 function setPreview(parentElId, data) {
 	this.parentEl	= document.getElementById(parentElId);
-	this.tableEl	= document.createElement("TABLE");
-	this.tableEl.setAttribute("align","center");
-	this.tableBodyEl	= document.createElement("TBODY");
-
-	this.tableEl.appendChild(this.tableBodyEl);
 	this.parentEl.innerHTML		= data;
 }
 

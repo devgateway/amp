@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -446,12 +447,27 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	public List<JsonBean> getUsersVerifiedOrganizations() {
 		return GPIDataService.getUsersVerifiedOrganizations();
 	}
+	
+	/**
+	 * Retrieves the gpi report for specified indicator
+	 * 
+	 * @param indicatorCode
+	 * @param formParams
+	 * @return
+	 */
+	@POST
+	@Path("/report/{indicatorCode}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getGpiReport", ui = false)
+	public GPIReport getGPIReport(@PathParam("indicatorCode") String indicatorCode, JsonBean formParams) {
+		return GPIReportService.getInstance().getGPIReport(indicatorCode, formParams);
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Class getErrorsClass() {
+	public Class<GPIErrors> getErrorsClass() {
 		return GPIErrors.class;
 	}
 }

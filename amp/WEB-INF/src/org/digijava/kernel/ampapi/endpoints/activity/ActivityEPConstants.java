@@ -71,8 +71,15 @@ public class ActivityEPConstants {
 	
 	// floating comparison constant
 	public static final Double EPSILON = 0.0001;
-	
+
+	private static final String FUNDING_ITEM_FM_PATH = "/Activity Form/Funding/Funding Group/Funding Item";
+
 	// some FM paths
-	public static final String COMMITMENTS_DISASTER_RESPONSE_FM_PATH = "/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Disaster Response";
-	public static final String DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH = "/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disaster Response";
+	public static final String COMMITMENTS_DISASTER_RESPONSE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Commitments/Commitments Table/Disaster Response";
+	public static final String DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Disbursements/Disbursements Table/Disaster Response";
+
+	public static final String COMMITMENTS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Commitments/Commitments Table/Pledges";
+	public static final String DISBURSEMENTS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Disbursements/Disbursements Table/Pledges";
+	public static final String ESTIMATED_DISBURSEMENTS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Estimated Disbursements/Estimated Disbursements Table/Pledges";
+	public static final String RELEASE_OF_FUNDS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Release of Funds/Release of Funds Table/Pledges";
 }

@@ -31,7 +31,6 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.services.sync.model.ActivityChange;
 import org.digijava.kernel.services.sync.model.AmpOfflineChangelog;
 import org.digijava.kernel.services.sync.model.ListDiff;
-import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SiteUtils;
@@ -224,18 +223,22 @@ public class SyncService implements InitializingBean {
                 if (changelog.getEntityName().equals(WORKSPACES)) {
                     systemDiff.setWorkspaces(true);
                 }
+                if (changelog.getEntityName().equals(WORKSPACE_SETTINGS)) {
+                    systemDiff.setWorkspaceSettings(true);
+                }
                 systemDiff.updateTimestamp(changelog.getOperationTime());
             }
         } else {
             systemDiff.setGlobalSettings(true);
             systemDiff.setWorkspaces(true);
+            systemDiff.setWorkspaceSettings(true);
         }
     }
 
     private List<AmpOfflineChangelog> findChangedWsAndGs(Date lastSyncTime) {
         Map<String, Object> args = new HashMap<>();
         args.put("lastSyncTime", lastSyncTime);
-        args.put("entities", Arrays.asList(GLOBAL_SETTINGS, WORKSPACES));
+        args.put("entities", Arrays.asList(GLOBAL_SETTINGS, WORKSPACES, WORKSPACE_SETTINGS));
 
         return jdbcTemplate.query(
                 "select " + COLUMNS + " " +

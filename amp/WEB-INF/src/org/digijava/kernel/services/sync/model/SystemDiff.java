@@ -21,6 +21,9 @@ public class SystemDiff {
     @JsonProperty
     private boolean workspaces;
 
+    @JsonProperty("workspace-settings")
+    private boolean workspaceSettings;
+
     @JsonProperty("workspace-members")
     private ListDiff<Long> workspaceMembers;
 
@@ -52,6 +55,10 @@ public class SystemDiff {
 
     public void setWorkspaces(boolean workspaces) {
         this.workspaces = workspaces;
+    }
+
+    public void setWorkspaceSettings(boolean workspaceSettings) {
+        this.workspaceSettings = workspaceSettings;
     }
 
     public void setWorkspaceMembers(ListDiff<Long> workspaceMembers) {

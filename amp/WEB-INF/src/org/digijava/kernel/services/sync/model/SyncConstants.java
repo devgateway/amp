@@ -13,6 +13,7 @@ public class SyncConstants {
     public static class Entities {
         public static final String GLOBAL_SETTINGS = "global settings";
         public static final String WORKSPACES = "workspaces";
+        public static final String WORKSPACE_SETTINGS = "workspace settings";
         public static final String WORKSPACE_MEMBER = "workspace member";
         public static final String USER = "user";
         public static final String TRANSLATION = "translation";

@@ -42,6 +42,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
      * {
      *   "timestamp": "2016-12-29T00:00:00.000+0200",
      *   "workspaces": false,
+     *   "workspace-settings": false,
      *   "global-settings": true,
      *   "users": {
      *     "removed": [1],

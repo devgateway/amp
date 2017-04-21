@@ -43,7 +43,7 @@ module.exports = Backbone.View.extend({
 		  } else {
 			  MAX_NUM_FOR_ICONS = 0;
 		  }
-
+		  debugger;
 		  // render icons if available
 		  if (self.model.structuresCollection.length < MAX_NUM_FOR_ICONS &&
 				  self.model.get('filterVertical') === 'Primary Sector') {

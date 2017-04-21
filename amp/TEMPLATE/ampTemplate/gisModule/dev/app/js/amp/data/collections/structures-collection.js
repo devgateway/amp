@@ -103,12 +103,18 @@ module.exports = Backbone.Collection
 
         // activity.attributes is a dirty way of checking if already a model...
         // if not joined yet, then join structure to parent activity.
+        
         if (!(activity && activity.attributes)) {
           var match = self.activities.find(function(model) {
             return model.id === structure.get('activityZero');
           });
+          match.joinFilters();
           structure.set('activity', match);
+        } else if (activity.attributes) {
+        	activity.joinFilters();
         }
+        
+        
       });
 
       // all activites joined filters

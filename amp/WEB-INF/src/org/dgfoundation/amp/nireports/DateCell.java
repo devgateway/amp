@@ -1,11 +1,14 @@
 package org.dgfoundation.amp.nireports;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Comparator;
 import java.util.Optional;
 
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
  * a {@link Cell} which holds a date. Coordinates are empty unless it has a mainLevel (in which case it will have exactly one coordinate, as per the general contract of {@link Cell})
@@ -16,23 +19,24 @@ public final class DateCell extends Cell {
 
 	/** the payload - the held date */
 	public final LocalDate date;
-	public final MetaInfoSet metaInfo;
+    public final MetaInfoSet metaInfo;
 
-	private static final Comparator<LocalDate> dateComparator = Comparator.nullsFirst(Comparator.naturalOrder());
+    private static final Comparator<LocalDate> dateComparator = Comparator.nullsFirst(Comparator.naturalOrder());
 
-	public DateCell(LocalDate date, long activityId, long entityId, Optional<LevelColumn> levelColumn) {
-		this(date, activityId, entityId, MetaInfoSet.empty(), levelColumn);
-	}
+    public DateCell(LocalDate date, long activityId, long entityId, Optional<LevelColumn> levelColumn) {
+        this(date, activityId, entityId, MetaInfoSet.empty(), buildCoordinates(levelColumn, entityId), levelColumn);
+    }
 
-	public DateCell(LocalDate date, long activityId, long entityId, MetaInfoSet metaInfo, Optional<LevelColumn> levelColumn) {
-		super(activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
+    public DateCell(LocalDate date, long activityId, long entityId, MetaInfoSet metaInfo,
+            Map<NiDimensionUsage, Coordinate> coos, Optional<LevelColumn> levelColumn) {
+		super(activityId, entityId, coos, levelColumn);
 		this.date = date;
 		this.metaInfo = metaInfo.freeze();
 	}
 
 	@Override
 	public DateCell changeOwnerId(long newActivityId) {
-		return new DateCell(this.date, newActivityId, this.entityId, metaInfo, this.mainLevel);
+		return new DateCell(date, newActivityId, entityId, metaInfo, coordinates, mainLevel);
 	}
 
 	@Override

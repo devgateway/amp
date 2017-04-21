@@ -130,6 +130,6 @@ public class SaikuReportCsvExporter implements SaikuReportExporter {
 	}
 	
 	protected boolean hasReportGeneratedDummyColumn(GeneratedReport report) {
-		 return report.spec.isSummaryReport() && (report.spec.getHierarchies() == null || report.spec.getHierarchies().isEmpty());
+		 return report.spec.isSummaryReport() && report.spec.getHierarchies().isEmpty();
 	}
 }

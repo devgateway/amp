@@ -121,7 +121,7 @@ gulp.task('clean', function() {
 gulp.task('build-js', ['browserify'], function() {
   return gulp.src(paths.scripts.compiled + 'app.js')
     //.pipe(react())
-    //.pipe($.streamify($.uglify)) // CONSTANTIN - comment this one for development
+    .pipe($.streamify($.uglify)) // CONSTANTIN - comment this one for development
     .pipe(gulp.dest(paths.dist + 'compiled-js/'));
 });
 

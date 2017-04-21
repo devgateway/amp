@@ -165,7 +165,6 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		res.put(ColumnConstants.RELATED_PLEDGES, "pledge_id");
 		res.put(ColumnConstants.EXPENDITURE_CLASS, "expenditure_class_id");
 		res.put(ColumnConstants.AGREEMENT_CODE, "agreement_id");
-		res.put(ColumnConstants.CONCESSIONALITY_LEVEL, "concessionality_level_id");
 		return res;
 	}
 		

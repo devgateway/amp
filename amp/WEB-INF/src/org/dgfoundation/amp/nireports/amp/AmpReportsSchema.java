@@ -129,7 +129,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
 			Arrays.asList(
 				ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.RELATED_PROJECTS, 
-				ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.RELATED_PLEDGES, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.EXPENDITURE_CLASS, ColumnConstants.AGREEMENT_CODE, ColumnConstants.CONCESSIONALITY_LEVEL)));
+				ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.RELATED_PLEDGES, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.EXPENDITURE_CLASS, ColumnConstants.AGREEMENT_CODE)));
 	
 	public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
 	public final static LocationsDimension locsDimension = LocationsDimension.instance;
@@ -381,8 +381,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		degenerate_dimension(ColumnConstants.TYPE_OF_COOPERATION, "v_type_of_cooperation", catsDimension);
 		degenerate_dimension(ColumnConstants.TYPE_OF_IMPLEMENTATION, "v_type_of_implementation", catsDimension);
 		no_dimension(ColumnConstants.APPROVAL_STATUS, "v_approval_status");
-		no_dimension(ColumnConstants.FILTERED_APPROVAL_STATUS, "v_filtered_approval_status");
 		degenerate_dimension(ColumnConstants.CONCESSIONALITY_LEVEL, "v_concessionality_level", catsDimension);
+		no_dimension(ColumnConstants.FILTERED_APPROVAL_STATUS, "v_filtered_approval_status");
 		
 		// views with only 2 columns
 		no_entity(ColumnConstants.DRAFT, "v_drafts");

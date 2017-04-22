@@ -986,8 +986,11 @@ public class ActivityImporter {
         newActivity.setLastImportedBy(currentUser);
 
 		newActivity.setChangeType(determineChangeType().toString());
-		// configure draft status on import only, since on update we'll change to draft based on RequiredValidator
-		if (!update) {
+		if (update) {
+			if (isDraftFMEnabled && saveAsDraft) {
+				newActivity.setDraft(true);
+			}
+		} else {
 			newActivity.setDraft(isDraftFMEnabled);
 		}
 		initDefaults();

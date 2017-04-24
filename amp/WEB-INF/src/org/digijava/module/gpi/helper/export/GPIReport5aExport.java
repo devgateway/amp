@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gpi.helper.row.GPIReport5aRow;
@@ -48,8 +47,7 @@ public class GPIReport5aExport extends GPIAbstractExport {
 				+ " "
 				+ TranslatorWorker.translateText("Report", this.getLangCode(), this.getSite().getId()));
 		parameters.put("GPI_COL1", TranslatorWorker.translateText("Donors", this.getLangCode(), this.getSite().getId()));
-		parameters.put("GPI_COL2", TranslatorWorker.translateText("Disbursement Year", this.getLangCode(), this
-				.getSite().getId()));
+		parameters.put("GPI_COL2", TranslatorWorker.translateText("Disbursement Year"));
 		parameters.put("GPI_COL3", TranslatorWorker.translateText(
 				"Actual Disbursements", this.getLangCode(), this
 						.getSite().getId()));

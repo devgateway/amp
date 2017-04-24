@@ -8,7 +8,6 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
-import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -392,9 +391,7 @@ public abstract class FilteringSanityChecks extends ReportingTestCase {
 				        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Primary Sector", "112 - BASIC EDUCATION", "Donor Group", "International", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321"),
 				        new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Primary Sector", "130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH", "Donor Group", "American", "Funding-2010-Actual Disbursements", "453,213", "Funding-2011-Actual Commitments", "999,888", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213"),
 				        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Primary Sector", "110 - EDUCATION", "Donor Group", "National", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
-				        new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Primary Sector", "110 - EDUCATION", "Donor Group", "National"),
 				        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Primary Sector", "110 - EDUCATION", "Donor Group", "American, European", "Funding-2013-Actual Disbursements", "525,000", "Totals-Actual Disbursements", "525,000"),
-				        new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Primary Sector", "110 - EDUCATION", "Donor Group", "International"),
 				        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Primary Sector", "110 - EDUCATION", "Donor Group", "National", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
 				        new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Primary Sector", "110 - EDUCATION", "Donor Group", "American", "Funding-2013-Actual Commitments", "333,222", "Totals-Actual Commitments", "333,222"),
 				        new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Primary Sector", "112 - BASIC EDUCATION", "Donor Group", "American", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845"),
@@ -1018,11 +1015,8 @@ public abstract class FilteringSanityChecks extends ReportingTestCase {
 			      .withChildren(
 			        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Donor Group", "International", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321"),
 			        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Donor Group", "National", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
-			        new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Donor Group", "National"),
 			        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Donor Group", "Default Group, European", "Funding-2013-Actual Disbursements", "130,000", "Totals-Actual Disbursements", "130,000"),
-			        new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Donor Group", "International"),
 			        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Donor Group", "National", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
-			        new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Donor Group", "Default Group"),
 			        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Donor Group", "Default Group", "Funding-2013-Actual Commitments", "666,777", "Totals-Actual Commitments", "666,777"),
 			        new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Donor Group", "Default Group", "Funding-2013-Actual Commitments", "111,333", "Funding-2013-Actual Disbursements", "555,111", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111"),
 			        new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Donor Group", "Default Group", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333"),
@@ -1049,7 +1043,6 @@ public abstract class FilteringSanityChecks extends ReportingTestCase {
 			        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Donor Group", "National", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
 			        new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Donor Group", "International", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Disbursements", "75,000", "Totals-Actual Disbursements", "110,000"),
 			        new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Donor Group", "National", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000"),
-			        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Donor Group", "Default Group"),
 			        new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Donor Group", "National", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2015-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "97,562,98")      ));
 
 		ReportSpecificationImpl spec = buildSpecForFiltering("flat filter by not donor group",

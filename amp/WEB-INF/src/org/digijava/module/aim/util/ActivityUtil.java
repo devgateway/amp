@@ -78,6 +78,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -572,8 +573,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
           components.setDisbursements(new ArrayList());
           components.setExpenditures(new ArrayList());
 
-          Collection<AmpComponentFunding> componentsFunding = ActivityUtil.getFundingComponentActivity(ampComp.
-              getAmpComponentId(), activity.getAmpActivityId());
+          Collection<AmpComponentFunding> componentsFunding = ampComp.getFundings();
           Iterator compFundIterator = componentsFunding.iterator();
           while (compFundIterator.hasNext()) {
             AmpComponentFunding cf = (AmpComponentFunding) compFundIterator.next();
@@ -630,12 +630,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
    */
   // this function is to get the fundings for the components along with the activity Id
 
-  public static Collection<AmpComponentFunding> getFundingComponentActivity(Long componentId, Long activityId) {
+  public static Collection<AmpComponentFunding> getFundingComponentActivity(Long componentId) {
 	  logger.debug(" inside getting the funding.....");
 	  String qryStr = "select a from " + AmpComponentFunding.class.getName() +
           " a " +
-          "where amp_component_id = '" + componentId + "' and activity_id = '" + activityId +
-          "'";
+          "where amp_component_id = '" + componentId + "'";
       Query qry = PersistenceManager.getSession().createQuery(qryStr);
       return qry.list();
   }
@@ -1011,7 +1010,23 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		  throw new RuntimeException(e);
 	  }
   }
-  
+
+	public static List<AmpActivityVersion> getActivitiesPendingValidation() {
+
+		String daysToValidation = FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION);
+
+		String queryString = String.format(
+				"select ampAct from %s ampAct WHERE amp_activity_id in ( select act.ampActivityId from %s act "
+				+ " where draft = false and not amp_team_id is null and "
+						+ " date_updated <= ( current_date - %s ) and approval_status in ( %s ))" ,
+				AmpActivityVersion.class.getName(), AmpActivity.class.getName(), daysToValidation, Constants.ACTIVITY_NEEDS_APPROVAL_STATUS);
+
+		return PersistenceManager.getSession()
+				.createQuery(queryString)
+				.list();
+
+	}
 
   /*
    * get the list of all the activities

@@ -29,8 +29,9 @@
 
   <% } else if (obj.imageBuckets) {
     _.each(palletteElements ,function(element) {
+      var icon =  obj.imageBuckets[element.code] || obj.imageBuckets[obj.DEFAULT_ICON_CODE];
       if(element.code && element.name){ %>
-        <div><img src="img/map-icons/<%= obj.imageBuckets[element.code] %>" width="19px"> <%= element.name %></div>
+        <div><img src="img/map-icons/<%= icon %>" width="19px"> <%= element.name %></div>
   <% }
    }); %>
 

@@ -22,11 +22,11 @@ import org.dgfoundation.amp.nireports.output.NiReportDataVisitor;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.output.NiReportsFormatter;
+import org.dgfoundation.amp.nireports.output.NiRowId;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import static org.dgfoundation.amp.algo.AmpCollections.relist;
 
 public class ReportModelGenerator implements NiReportOutputBuilder<NiReportModel> {
@@ -89,7 +89,7 @@ public class ReportModelGenerator implements NiReportOutputBuilder<NiReportModel
 		@Override
 		public List<String> visit(NiColumnReportData crd) {
 			preamble(crd);
-			for(long id:crd.ids) {
+			for(NiRowId id:crd.ids) {
 				List<String> row = new ArrayList<>();
 				for(int i = 0; i < depth; i++)
 					row.add("\t");

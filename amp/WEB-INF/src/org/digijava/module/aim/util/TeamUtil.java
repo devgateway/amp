@@ -1802,7 +1802,7 @@ public class TeamUtil {
         } 
         return teams;
     }
-    
+
     /**
      * Retrieves all workspaces with option to filter out management and / or private workspaces
      * @param includeManagement if to keep management workspaces
@@ -1924,13 +1924,17 @@ public class TeamUtil {
     public static User getCurrentUser(){
         return (User) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_USER);
     }
-    
+
     /**
      * uses {@link TLSUtils} to get the current request's current member
      * @return
      */
     public static TeamMember getCurrentMember(){
-    	return (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        if (TLSUtils.getRequest() != null) {
+            return (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        } else {
+            return null;
+        }
     }
     
     /**

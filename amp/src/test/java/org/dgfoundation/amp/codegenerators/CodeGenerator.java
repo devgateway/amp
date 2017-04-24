@@ -24,8 +24,8 @@ import org.digijava.kernel.persistence.PersistenceManager;
  */
 public abstract class CodeGenerator {
 	
-	public static String PACKAGE_NAME = "drc";
-	public static boolean OBFUSCATE_TEXT = true;
+	public static String PACKAGE_NAME = "nireports.testcases.generic";
+	public static boolean OBFUSCATE_TEXT = false;
 	
 	public abstract String generate();
 	protected abstract String getFilePart1();
@@ -41,9 +41,9 @@ public abstract class CodeGenerator {
 	}
 	
 	public String getPath() {
-		String path = "/home/simple/Desktop/codegen/" 
+		String path = "/home/octavian/codegen/" ;
 		//String path = System.getProperty("user.dir")
-				+ "/src/test/java/org/dgfoundation/amp/" + PACKAGE_NAME + "/nicolumns/"; 
+//				+ "/src/test/java/org/dgfoundation/amp/" + PACKAGE_NAME + "/nicolumns/";
 		return path;
 	}
 	

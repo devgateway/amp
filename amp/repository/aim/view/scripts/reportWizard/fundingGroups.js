@@ -1,5 +1,6 @@
 YAHOO.namespace("YAHOO.amp.reportwizard");
 YAHOO.amp.reportwizard.colIdToName		= new Array();
+YAHOO.amp.reportwizard.measureIdToName	= new Array();
 YAHOO.amp.reportwizard.fundingGroups	= new Array();
 YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				 'A.C. Chapter'
@@ -136,6 +137,11 @@ function insertColInfo (id, name) {
 		YAHOO.amp.reportwizard.colIdToName[id]=name;
 }
 
+function insertMeasureInfo (id, name) {
+		YAHOO.amp.reportwizard.measureIdToName[id]=name;
+}
+
+
 function checkIfColIsHierarchy(id) {
 	var reportGroupDivEl		= document.getElementById("reportGroupDiv") ;
 	var radios					= reportGroupDivEl.getElementsByTagName("input");
@@ -149,6 +155,11 @@ function checkIfColIsHierarchy(id) {
 		}
 	}
 	if (fgArray == null) return false;
+
+	if (repManager.forDesktopTabs
+		&& YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"].indexOf(colName) >= 0) {
+		return false;
+	}
 	
 	for (j=0; j<fgArray.length; j++) {
 		if ( fgArray[j]==colName ) 

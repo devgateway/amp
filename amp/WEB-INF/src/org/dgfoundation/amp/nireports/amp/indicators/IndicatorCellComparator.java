@@ -28,7 +28,11 @@ public class IndicatorCellComparator implements Comparator<NiCell> {
         if (c != 0) {
             return c;
         }
-        return Long.compare(c1.getCell().entityId, c2.getCell().entityId);
+        c = Long.compare(c1.getCell().entityId, c2.getCell().entityId);
+        if (c != 0) {
+            return c;
+        }
+        return c1.getCell().compareTo(c2.getCell());
     }
 
     private Object getIndicatorIdFrom(NiCell niCell) {

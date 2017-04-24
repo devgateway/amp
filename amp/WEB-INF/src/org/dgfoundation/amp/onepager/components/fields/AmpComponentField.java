@@ -34,7 +34,7 @@ public class AmpComponentField extends AmpFeaturePanel<Boolean>{
 		this.fmType = AmpFMTypes.MODULE;
 		
 		final PropertyModel<Set<AmpComponentFunding>> componentsSetModel=new 
-				PropertyModel<Set<AmpComponentFunding>>(activityModel, "componentFundings");
+				PropertyModel<Set<AmpComponentFunding>>(componentModel, "fundings");
 		if (componentsSetModel.getObject() == null)
 			componentsSetModel.setObject(new HashSet());
 		

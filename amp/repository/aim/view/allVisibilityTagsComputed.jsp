@@ -14,7 +14,7 @@
 <module:display name="ADMIN" parentModule="Messaging System"></module:display> 
 <module:display name="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Resource Manager" parentModule="ADMINISTRATIVE SECTION"></module:display> 
+<module:display name="Resource Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
@@ -91,7 +91,10 @@
 <module:display name="Report Types" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
-<module:display name="Tab Generator" parentModule="REPORTING"></module:display> 
+<module:display name="Tab Generator" parentModule="REPORTING"></module:display>
+<feature:display name="Enable Saiku icon in Tab Manager" module="Tab Generator"></feature:display>
+<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
+<module:display name="Tab Generator" parentModule="REPORTING"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
@@ -702,7 +705,7 @@
 <field:display name="Undisbursed Cumulative Balance" feature="Funding Information"></field:display> 
 <field:display name="Undisbursed Funds" feature="Funding Information"></field:display> 
 <field:display name="Unexpended Funds" feature="Funding Information"></field:display> 
-<field:display name="Delivery rate" feature="Funding Information"></field:display> 
+<field:display name="Delivery rate" feature="Funding Information"></field:display>
 <field:display name="Validate Mandatory Regional Percentage" feature="Location"></field:display> 
 <field:display name="Verifications" feature="Identification"></field:display> 
 <field:display name="View Schemes Link" feature="Sectors"></field:display> 

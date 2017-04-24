@@ -73,13 +73,67 @@ public abstract class HardcodedCells<K extends Cell> {
 	 * Create simple text cell
 	 * @param activityName the activity title
 	 * @param text
-	 * @param entityId the id of the cell 
+	 * @param entityId the id of the cell
 	 * @return
 	 */
 	protected TextCell cell(String activityName, String text, long entityId) {
 		return new TextCell(text, activityIds.get(activityName), entityId, levelColumn);
 	}
 
+	/**
+	 * Create simple text cell
+	 * @param activityName the activity title
+	 * @param text
+	 * @param entityId the id of the cell
+	 * @param coos coordinates of this cell
+	 * @return
+	 */
+	protected TextCell cell(String activityName, String text, long entityId, Map<NiDimensionUsage, Coordinate> coos) {
+		return new TextCell(text, activityIds.get(activityName), entityId, coos, levelColumn);
+	}
+
+	protected Map<NiDimensionUsage, Coordinate> coos(CoordinateEntry ...entries) {
+		Map<NiDimensionUsage, Coordinate> coos = new HashMap<>();
+		for (CoordinateEntry entry : entries) {
+			LevelColumn lc = findSubLevelColumn(entry);
+			if (lc != null) {
+				coos.put(lc.dimensionUsage, lc.getCoordinate(entry.id));
+			}
+			if (levelColumn.isPresent()) {
+				lc = levelColumn.get();
+				if (entry.dimensionName.equals(lc.dimensionUsage.dimension.name)
+						&& entry.instanceName.equals(lc.dimensionUsage.instanceName)
+						&& entry.level == lc.level) {
+					coos.put(lc.dimensionUsage, lc.getCoordinate(entry.id));
+				}
+			}
+		}
+		return coos;
+	}
+
+	private LevelColumn findSubLevelColumn(CoordinateEntry entry) {
+		return HardcodedReportsTestSchema.SUB_DIMENSION_USAGES.stream()
+				.filter(du -> du.dimension.name.equals(entry.dimensionName) && du.instanceName.equals(entry.instanceName))
+				.map(du -> du.getLevelColumn(entry.level))
+				.findFirst()
+				.orElse(null);
+	}
+
+	public static CoordinateEntry entry(String dimensionName, String instanceName, int level, long id) {
+		CoordinateEntry entry = new CoordinateEntry();
+		entry.dimensionName = dimensionName;
+		entry.instanceName = instanceName;
+		entry.level = level;
+		entry.id = id;
+		return entry;
+	}
+
+	public static class CoordinateEntry {
+		private String dimensionName;
+		private String instanceName;
+		private int level;
+		private long id;
+	}
 	
 	protected Map<NiDimensionUsage, Coordinate> coos(long entityId) {
 		if (!this.levelColumn.isPresent())

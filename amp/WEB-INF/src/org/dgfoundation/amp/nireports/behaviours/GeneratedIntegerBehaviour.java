@@ -6,6 +6,7 @@ import java.util.function.BiFunction;
 
 import org.dgfoundation.amp.nireports.IntCell;
 import org.dgfoundation.amp.nireports.output.NiReportData;
+import org.dgfoundation.amp.nireports.output.NiRowId;
 import org.dgfoundation.amp.nireports.output.nicells.NiIntCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
@@ -35,12 +36,12 @@ public abstract class GeneratedIntegerBehaviour extends GeneratedColumnBehaviour
 	}
 
 	@Override
-	public NiIntCell buildColumnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<Long, NiOutCell>> mappedContents) {
+	public NiIntCell buildColumnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<NiRowId, NiOutCell>> mappedContents) {
 		return new NiIntCell(columnTrailCell(crd, cc, mappedContents), -1);
 	}
 
 	protected abstract long groupTrailCell(GroupReportData grd, CellColumn cc, List<NiReportData> visitedChildren);
-	protected abstract long columnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<Long, NiOutCell>> mappedContents);
+	protected abstract long columnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<NiRowId, NiOutCell>> mappedContents);
 	
 	
 	/**
@@ -49,7 +50,7 @@ public abstract class GeneratedIntegerBehaviour extends GeneratedColumnBehaviour
 	 * @param crdFormula
 	 * @return
 	 */
-	public static GeneratedIntegerBehaviour withFormulas(BiFunction<GroupReportData, List<NiReportData>, Long> grdFormula, BiFunction<ColumnReportData, Map<CellColumn, Map<Long, NiOutCell>>, Long> crdFormula) {
+	public static GeneratedIntegerBehaviour withFormulas(BiFunction<GroupReportData, List<NiReportData>, Long> grdFormula, BiFunction<ColumnReportData, Map<CellColumn, Map<NiRowId, NiOutCell>>, Long> crdFormula) {
 		return new GeneratedIntegerBehaviour() {
 						
 			@Override
@@ -58,7 +59,7 @@ public abstract class GeneratedIntegerBehaviour extends GeneratedColumnBehaviour
 			}
 			
 			@Override
-			protected long columnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<Long, NiOutCell>> mappedContents) {
+			protected long columnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<NiRowId, NiOutCell>> mappedContents) {
 				return crdFormula.apply(crd, mappedContents);
 			}
 		};

@@ -78,7 +78,35 @@ import com.google.common.collect.HashBiMap;
 public class ReportWizardAction extends MultiAction {
 
     public static final String MULTILINGUAL_REPORT_PREFIX = "multilingual_report";
-	private static Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
+
+    private static final Map<String, Integer> ME_COLUMNS_ORDER = new HashMap<>();
+    static {
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_NAME, 1);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_CODE, 2);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_SECTOR, 3);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_DESCRIPTION, 4);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TYPE, 5);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_CREATION_DATE, 6);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, 7);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_BASE_VALUE, 8);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_BASE_DATE, 9);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_BASE_COMMENT, 10);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TARGET_VALUE, 11);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TARGET_DATE, 12);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TARGET_COMMENT, 13);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, 14);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, 15);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, 16);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_ACTUAL_VALUE, 17);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_ACTUAL_DATE, 18);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_ACTUAL_COMMENT, 19);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_RISK, 20);
+    }
+
+    private static final Comparator<AmpColumns> ME_COLS_COMPARATOR =
+            Comparator.comparing(c -> ME_COLUMNS_ORDER.getOrDefault(c.getColumnName(), 999));
+
+    private static Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
     
     private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
 
@@ -242,6 +270,7 @@ public class ReportWizardAction extends MultiAction {
         myForm.setPublicReport(false);
         myForm.setWorkspaceLinked(false);
         myForm.setAllowEmptyFundingColumns(false);
+        myForm.setSplitByFunding(false);
         myForm.setUseFilters(false);
         myForm.setBudgetExporter(false);
         myForm.setReportCategory(new Long(0));
@@ -384,6 +413,7 @@ public class ReportWizardAction extends MultiAction {
         myForm.setWorkspaceLinked(ampReport.getWorkspaceLinked());
         myForm.setHideActivities( ampReport.getHideActivities() );
         myForm.setAllowEmptyFundingColumns( ampReport.getAllowEmptyFundingColumns() );
+        myForm.setSplitByFunding(ampReport.getSplitByFunding());
         myForm.setAlsoShowPledges(ampReport.getAlsoShowPledges());
         if(ampReport.getReportCategory() !=null){
             myForm.setReportCategory(ampReport.getReportCategory().getId());
@@ -467,6 +497,7 @@ public class ReportWizardAction extends MultiAction {
         }
         myForm.setWorkspaceLinked(Boolean.valueOf(request.getParameter("workspaceLinked"))); //Struts for some reason ignores this field and I am tired of it
         myForm.setAlsoShowPledges(Boolean.valueOf(request.getParameter("alsoShowPledges")));
+        myForm.setSplitByFunding(Boolean.valueOf(request.getParameter("splitByFunding")));
 
         TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
         
@@ -523,6 +554,7 @@ public class ReportWizardAction extends MultiAction {
             }
 
             ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns());
+            ampReport.setSplitByFunding(myForm.getSplitByFunding());
             ampReport.setBudgetExporter(myForm.getBudgetExporter() != null && myForm.getBudgetExporter());
 
             ampReport.setColumns( new HashSet<AmpReportColumn>() );
@@ -894,6 +926,9 @@ public class ReportWizardAction extends MultiAction {
             }
             if(added)
             {
+                if (themeName.equals("M & E")) {
+                    aux.sort(ME_COLS_COMPARATOR);
+                }
                 ampTreeColumn.put(themeName, aux);
             }
         }

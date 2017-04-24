@@ -6,7 +6,17 @@
 
 
 <script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<script type="text/javascript">
+(function(){
+	 var newscript = document.createElement('script');
+     newscript.type = 'text/javascript';
+     newscript.async = true;
+     newscript.src = '<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>';
+     if(jQuery === undefined && $ === undefined){
+  		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(newscript);
+     }
+})();
+</script>  
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.class.min.js"/>" ></script>
 
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/md5-min.js"/>" ></script>

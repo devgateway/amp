@@ -22,7 +22,7 @@ export default class DonorNotesRow extends Component {
                 donorNotes: this.props.donorNotes,                                
                 showDatePicker: false, 
                 showFullText: false,
-                shortTextLength: 100
+                shortTextLength: 55
         };        
         this.toggleEdit = this.toggleEdit.bind(this);
         this.onChange = this.onChange.bind(this);

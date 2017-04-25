@@ -76,6 +76,7 @@ import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorIdMetaInfoProvider;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorTextualTokenBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.FilteredMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
@@ -297,6 +298,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	private AmpFundingColumn donorFundingColumn ;
 	private AmpFundingColumn pledgeFundingColumn ;
 	private AmpFundingColumn componentFundingColumn;
+	private AmpFundingColumn gpiFundingColumn;
 
 	/**
 	 * Map<amp_column_name, view_column_name>
@@ -601,6 +603,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addUnfilteredTrivialMeasures();
 		addFundingFlowMeasures();
 		addTaggedMeasures();
+		addFilteredTrivialMeasures();
 		addComputedLinearMeasures();
 		addSscMeasures();
 		addFormulaMeasures();
@@ -614,6 +617,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         donorFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_DONOR_FUNDING, "v_ni_donor_funding", subDimensions);
         pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding", subDimensions);
         componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding", subDimensions);
+        gpiFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_GPI_FUNDING, "v_ni_gpi_funding", subDimensions);
 	}
 
     private void addIndicatorColumns() {
@@ -999,6 +1003,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return this;
 	}
 	
+	private AmpReportsSchema addFilteredTrivialMeasures() {
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES, Constants.DISBURSEMENT, "Actual", false, false, new FilteredMeasureBehaviour(MetaCategory.GPI_9B_Q1, 1L)));
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES, Constants.DISBURSEMENT, "Actual", false, false, new FilteredMeasureBehaviour(MetaCategory.GPI_9B_Q2, 1L)));
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.NATIONAL_AUDITING_PROCEDURES, Constants.DISBURSEMENT, "Actual", false, false, new FilteredMeasureBehaviour(MetaCategory.GPI_9B_Q3, 1L)));
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES, Constants.DISBURSEMENT, "Actual", false, false, new FilteredMeasureBehaviour(MetaCategory.GPI_9B_Q4, 1L)));
+		return this;
+	}
+	
 	private AmpReportsSchema addTrivialMeasures() {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false, cac -> cac.activityId > MondrianETL.PLEDGE_ID_ADDER));
 		
@@ -1200,6 +1212,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 				
 			case ArConstants.COMPONENT_TYPE:
 				return componentFundingColumn;
+			
+			case ArConstants.GPI_TYPE:
+				return gpiFundingColumn;
 				
 			default:
 				throw new RuntimeException(String.format("report type %d not implemented in NiReports yet", engine.spec.getReportType()));

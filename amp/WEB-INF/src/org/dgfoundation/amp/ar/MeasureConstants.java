@@ -50,6 +50,10 @@ public class MeasureConstants {
 	public static final String PLANNED_CLASSIFIED_EXPENDITURES  = "Planned Classified Expenditures";
 	public static final String UNCOMMITTED_CUMULATIVE_BALANCE = "Uncommitted Cumulative Balance";
 	public static final String UNDISBURSED_CUMULATIVE_BALANCE = "Undisbursed Cumulative Balance";
+	public static final String NATIONAL_BUDGET_EXECUTION_PROCEDURES = "National Budget Execution Procedures";
+	public static final String NATIONAL_FINANCIAL_REPORTING_PROCEDURES = "National Financial Reporting Procedures";
+	public static final String NATIONAL_AUDITING_PROCEDURES = "National Auditing Procedures";
+	public static final String NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES = "National Procurement Execution Procedures";
 	
 	 
 	//type = D (?)

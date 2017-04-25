@@ -7,6 +7,8 @@ import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputBuilder;
 import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.reports.ReportPaginationUtils;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
@@ -40,9 +42,13 @@ public class GPIReportService {
 //		}
 		//TODO refactor the way how each gpi report spec is created
 		
+		int page = (Integer) EndpointUtils.getSingleValue(formParams, "page", 0);
+		int recordsPerPage = EndpointUtils.getSingleValue(formParams, "recordsPerPage", 
+				ReportPaginationUtils.getRecordsNumberPerPage());
+		
 		GeneratedReport generatedReport = GPIReportUtils.getGeneratedReportForIndicator(indicatorCode, formParams);
 		GPIReportBuilder gpiReportBuilder = new GPIReportBuilder(generatedReport, getGPIReportOutputBuilder(indicatorCode));
-		GPIReport gpiReport = gpiReportBuilder.build();
+		GPIReport gpiReport = gpiReportBuilder.build(page, recordsPerPage);
 
 		return gpiReport;
 	}

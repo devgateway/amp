@@ -17,6 +17,11 @@ module.exports = {
         'webpack/hot/only-dev-server',
         './modules/gpi/script.es6'
      ],
+     "gpi-reports/script": [
+         'webpack-dev-server/client?http://localhost:3000',
+         'webpack/hot/only-dev-server',
+         './modules/gpi-reports/script.es6'
+      ],
      "admin/resource-manager-admin/script": [
           'webpack-dev-server/client?http://localhost:3000',
           'webpack/hot/only-dev-server',

@@ -10,25 +10,15 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
-import org.apache.jackrabbit.core.persistence.PersistenceManager;
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.action.GlobalSettings;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.Output;
 import org.digijava.module.message.dbentity.AmpMessageState;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.jdbc.Work;
 
 public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*/ {
 
@@ -61,6 +51,8 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
 	public Set<AmpReports> getReports() {
 		return this.reports;
 	}
+
+	private Boolean deleted;
 
 	/**
 	 * @return ampTeam
@@ -118,8 +110,6 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
 		this.user = user;
 	}
 
-
-
 	public Set<AmpActivityVersion> getActivities() {
 		return activities;
 	}
@@ -128,26 +118,13 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
 		this.activities = activities;
 	}
 
-
-
-//    /**
-//     * @return Returns the links.
-//     */
-//    public Set getLinks() {
-//        return links;
-//    }
-//    /**
-//     * @param links The links to set.
-//     */
-//    public void setLinks(Set links) {
-//        this.links = links;
-//    }
 	/**
 	 * @return Returns the editableFundingOrgs.
 	 */
 	public Set getEditableFundingOrgs() {
 		return editableFundingOrgs;
 	}
+
 	/**
 	 * @param editableFundingOrgs The editableFundingOrgs to set.
 	 */
@@ -188,6 +165,14 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
 		this.publishDocPermission = publishDocPermission;
 	}
 
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
 	@Override
 	public boolean equals(Object oth)
 	{
@@ -204,36 +189,11 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
 		return String.format("User: %s, team %s", user.getName(), ampTeam.getName());
 	}
 	
-	/*
-	@Override
-	public boolean equalsForVersioning(Object obj) {
-		return this.equals(obj);
-	}
-    @Override
-	public Object getValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-    @Override
-	public Output getOutput() {
-		return new Output(null, new String[] { user.getLastName(), ", ", user.getFirstNames() }, new Object[] { "" });
-	}
-
-	@Override
-	public Object prepareMerge(AmpActivityVersion newActivity) {
-		this.activities = new HashSet<AmpActivityVersion>();
-		this.activities.add(newActivity);
-		return this;
-	}*/
-	
-	
-	
 	public TeamMember toTeamMember()
 	{
 		return new TeamMember(this);
 	}
-	
-	
+
     //uses AmpARFilter and is ridiculously slow
     public boolean isActivityValidatableByUser(Long ampActivityId) {
 		AmpTeam ampTeam = this.getAmpTeam();
@@ -262,5 +222,5 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
 	public Object getIdentifier() {
 		return this.ampTeamMemId;
 	}
-    
+
 }

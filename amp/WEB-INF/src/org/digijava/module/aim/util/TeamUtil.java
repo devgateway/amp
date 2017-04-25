@@ -481,7 +481,7 @@ public class TeamUtil {
                                              .getAmpTeamId());
                 qryStr = "select count(*) from "
                     + AmpTeamMember.class.getName() + " t "
-                    + "where (t.ampTeam=:teamId)";
+                    + "where (t.deleted is null or t.deleted = false) and (t.ampTeam=:teamId)";
                 qry = session.createQuery(qryStr);
                 qry.setParameter("teamId", team.getAmpTeamId(), LongType.INSTANCE);
                 Iterator itr1 = qry.list().iterator();
@@ -643,7 +643,7 @@ public class TeamUtil {
         try {
             session = PersistenceManager.getSession();
             qryStr = "select count(*) from " + AmpTeamMember.class.getName()
-                + " tm" + " where (tm.ampTeam=:teamId)";
+                + " tm" + " where (tm.deleted is null or tm.deleted = false) and (tm.ampTeam=:teamId)";
             qry = session.createQuery(qryStr);
             qry.setParameter("teamId", teamId, LongType.INSTANCE);
 
@@ -914,7 +914,7 @@ public class TeamUtil {
             qryStr ="select tm  from "
                     + AmpTeamMember.class.getName() 
                     + " tm inner join tm.ampTeam t "+
-                    " inner join tm.user u where u.email=:email and t.ampTeamId=:teamId";
+                    " inner join tm.user u where (tm.deleted is null or tm.deleted = false) and u.email=:email and t.ampTeamId=:teamId";
          
             qry = session.createQuery(qryStr);
             qry.setString("email", email);

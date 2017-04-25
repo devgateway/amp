@@ -30,6 +30,7 @@ import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
@@ -61,6 +62,7 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
+import org.digijava.kernel.ampapi.endpoints.util.ReportConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -355,7 +357,30 @@ public class ReportsUtil {
 		
 		return spec;
 	}
-	
+
+	/**
+	 * Updates report specification with the grouping criteria
+	 * @param spec - the specification that will be updated
+	 * @param groupingOption
+	 * @return the updated spec
+	 */
+	public static void setGroupingCriteria(ReportSpecificationImpl spec, String groupingOption) {
+		switch (groupingOption) {
+			case ReportConstants.GROUPING_YEARLY:
+				spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+				break;
+			case ReportConstants.GROUPING_QUARTERLY:
+				spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY);
+				break;
+			case ReportConstants.GROUPING_MONTHLY:
+				spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY);
+				break;
+			default:
+				spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
+				break;
+		}
+	}
+
 	private static void addColumns(ReportSpecification spec, JsonBean formParams) {
 		//adding new columns if not present
 		if (formParams.get(EPConstants.ADD_COLUMNS) != null) {
@@ -694,7 +719,7 @@ public class ReportsUtil {
 	 * Exports current report configuration to the map
 	 * 
 	 * @param config
-	 * @param exportId
+	 * @param reportId
 	 * @return
 	 */
 	public static String exportToMap(final JsonBean config, final Long reportId) {

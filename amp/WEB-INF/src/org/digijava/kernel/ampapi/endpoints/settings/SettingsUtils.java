@@ -216,6 +216,8 @@ public class SettingsUtils {
 			yearRange = new SettingRange(SettingRange.Type.INT_VALUE);
 			yearRange.setFrom(getReportYear(spec.getSettings().getYearRangeFilter().min));
 			yearRange.setTo(getReportYear(spec.getSettings().getYearRangeFilter().max));
+            yearRange.setRangeFrom(EndpointUtils.getRangeStartYear());
+            yearRange.setRangeTo(EndpointUtils.getRangeEndYear());
 		}
 
 		return yearRange;
@@ -326,6 +328,8 @@ public class SettingsUtils {
 			range = new SettingRange(SettingRange.Type.INT_VALUE);
 			range.setFrom(EndpointUtils.getDefaultReportStartYear());
 			range.setTo(EndpointUtils.getDefaultReportEndYear());
+			range.setRangeFrom(EndpointUtils.getRangeStartYear());
+			range.setRangeTo(EndpointUtils.getRangeEndYear());
 		}
 
 		return new SettingField(SettingsConstants.YEAR_RANGE_ID, null,
@@ -655,7 +659,7 @@ public class SettingsUtils {
 	}
 
 	/**
-	 * @param currentSettings
+	 * @param sortColumn
 	 * @return general currency settings
 	 */
 	private static SettingOptions getSortSetting(String sortColumn) {

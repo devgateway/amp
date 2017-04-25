@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
@@ -389,7 +390,7 @@ public class GPIReport9b extends GPIAbstractReport {
 		for (int i = 0; i < endYear + 1 - startYear; i++) {
 			GPIReport9bRow auxRow = new GPIReport9bRow();
 			AmpOrgGroup auxDonorGroup = new AmpOrgGroup();
-			auxDonorGroup.setOrgGrpName(GPIConstants.ALL_DONORS);
+			auxDonorGroup.setOrgGrpName(TranslatorWorker.translateText(GPIConstants.ALL_DONORS));
 			auxDonorGroup.setAmpOrgGrpId(new Long(0));
 			auxRow.setDonorGroup(auxDonorGroup);
 			auxRow.setColumn1(sumCol1[i]);

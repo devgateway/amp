@@ -27,6 +27,7 @@ public class HardcodedActivities {
 	}
 	
 	private void populateMaps() {
+
 		activity("activity 1 with agreement", 65);
 		activity("Activity 2 with multiple agreements", 66);
 		activity("Activity Linked With Pledge", 41);
@@ -45,16 +46,24 @@ public class HardcodedActivities {
 		activity("activity with tertiary_program", 45);
 		activity("Activity with Zones", 33);
 		activity("Activity With Zones and Percentages", 36);
+		activity("activity-weird-funding", 88);
 		activity("activity-with-unfunded-components", 61);
 		activity("activity_with_disaster_response", 71);
-		activity("arrears test", 81);
+		activity("arrears test", 80);
 		activity("crazy funding 1", 32);
 		activity("date-filters-activity", 26);
+		activity("department/division", 90);
 		activity("Eth Water", 24);
 		activity("execution rate activity", 77);
+		activity("expenditure class", 87);
 		activity("mtef activity 1", 25);
 		activity("mtef activity 2", 27);
 		activity("new activity with contracting", 53);
+		activity("PID: original", 84);
+		activity("PID: original > actual", 83);
+		activity("PID: original, actual", 82);
+		activity("PID: original, proposed", 85);
+		activity("PID: original, proposed, actual", 81);
 		activity("pledged 2", 48);
 		activity("pledged education activity 1", 46);
 		activity("Project with documents", 23);
@@ -63,6 +72,9 @@ public class HardcodedActivities {
 		activity("ptc activity 1", 28);
 		activity("ptc activity 2", 29);
 		activity("Pure MTEF Project", 19);
+		activity("Real SSC Activity 1", 39);
+		activity("Real SSC Activity 2", 38);
+		activity("second with disaster response", 92);
 		activity("SSC Project 1", 30);
 		activity("SSC Project 2", 31);
 		activity("SubNational no percentages", 40);
@@ -71,23 +83,23 @@ public class HardcodedActivities {
 		activity("Test MTEF directed", 18);
 		activity("third activity with agreements", 67);
 		activity("Unvalidated activity", 64);
+		activity("with annual ppc and actual comm", 94);
 		activity("with weird currencies", 79);
-		
+
 		// cells below have been added manually (no AMP correspondent). They should be restored manually in case this file is overwritten by codegen
 		activity("custom_1", 700);
-	}
-	
-	public Map<Long, String> getActNamesMap() {
+}
+public Map<Long, String> getActNamesMap() {
 		return actNames;
 	}
-	
-	public List<String> getActNamesList() {
-		return new ArrayList<String>(actNames.values());
-	}
-	
-	
-	public Map<String, Long> getActIdsMap() {
-		return actIds;
-	}
-	
+
+public List<String> getActNamesList() {
+	return new ArrayList<String>(actNames.values());
 }
+
+
+public Map<String, Long> getActIdsMap() {
+	return actIds;
+}
+}
+

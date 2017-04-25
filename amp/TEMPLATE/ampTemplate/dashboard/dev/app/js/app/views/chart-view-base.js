@@ -132,8 +132,9 @@ module.exports = BackboneDash.View.extend({
 	    if (self._stateWait.state() !== 'pending') {
 	    	self.updateData();
 	    }
-	
-	    self.app.translator.translateDOM(this.el);
+
+	    self.app.translator.translateDOM(self.$el);
+        self.$el.find('[data-toggle="tooltip"]').tooltip();
 	    self.renderedPromise.resolve();
     });
     return this;
@@ -156,8 +157,10 @@ module.exports = BackboneDash.View.extend({
     this.app.translator.getTranslations()
       .done(_(function() {  // defer here to prevent a race with translations loading
 
-        /* TODO: Do we really want to localize this and slow things?*/
-        //this.app.translator.translateDOM(this.el);
+    	if (this.model.get('chartType') === 'fragmentation') {
+    		// We need this for AMP-25599.
+    		this.app.translator.translateDOM(this.el);
+    	}
 
         this.model.fetch({
           type: 'POST',  // TODO: move fetch options to model?

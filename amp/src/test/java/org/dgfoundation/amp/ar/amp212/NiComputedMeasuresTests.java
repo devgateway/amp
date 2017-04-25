@@ -250,12 +250,16 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 9))",
 						"(Donor Agency: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Proposed Project Amount: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 6))",
 						"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Cumulative Commitment: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Cumulative Disbursement: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Uncommitted Cumulative Balance: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Undisbursed Cumulative Balance: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))"))
-					.withWarnings(Arrays.asList())
-					.withBody(      new ReportAreaForTests(null).withContents("Donor Agency", "", "Project Title", "", "Proposed Project Amount", "0", "Totals-Actual Commitments", "67,000", "Totals-Actual Disbursements", "0", "Totals-Cumulative Commitment", "150,000", "Totals-Cumulative Disbursement", "0", "Totals-Uncommitted Cumulative Balance", "-150,000", "Totals-Undisbursed Cumulative Balance", "150,000")
-				      .withChildren(
-				        new ReportAreaForTests(new AreaOwner("Donor Agency", "Finland", 21698)).withContents("Project Title", "", "Proposed Project Amount", "0", "Totals-Actual Commitments", "67,000", "Totals-Actual Disbursements", "0", "Totals-Cumulative Commitment", "150,000", "Totals-Cumulative Disbursement", "0", "Totals-Uncommitted Cumulative Balance", "-150,000", "Totals-Undisbursed Cumulative Balance", "150,000", "Donor Agency", "Finland")
-				        .withChildren(
-				          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "67,000", "Totals-Cumulative Commitment", "150,000", "Totals-Uncommitted Cumulative Balance", "-150,000", "Totals-Undisbursed Cumulative Balance", "150,000")        )      ));
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Donor Agency", "", "Project Title", "", "Proposed Project Amount", "0", "Totals-Actual Commitments", "67,000", "Totals-Actual Disbursements", "0", "Totals-Cumulative Commitment", "150,000", "Totals-Cumulative Disbursement", "0", "Totals-Uncommitted Cumulative Balance", "-150,000", "Totals-Undisbursed Cumulative Balance", "150,000")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Donor Agency", "Finland", 21698)).withContents("Project Title", "", "Proposed Project Amount", "0", "Totals-Actual Commitments", "67,000", "Totals-Actual Disbursements", "0", "Totals-Cumulative Commitment", "150,000", "Totals-Cumulative Disbursement", "0", "Totals-Uncommitted Cumulative Balance", "0", "Totals-Undisbursed Cumulative Balance", "150,000", "Donor Agency", "Finland")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "67,000", "Totals-Cumulative Commitment", "150,000", "Totals-Undisbursed Cumulative Balance", "150,000")        ),
+								new ReportAreaForTests(new AreaOwner("Donor Agency", "Donor Agency: Undefined", -999999999)).withContents("Project Title", "", "Proposed Project Amount", "0", "Totals-Actual Commitments", "0", "Totals-Actual Disbursements", "0", "Totals-Cumulative Commitment", "0", "Totals-Cumulative Disbursement", "0", "Totals-Uncommitted Cumulative Balance", "-150,000", "Totals-Undisbursed Cumulative Balance", "0", "Donor Agency", "Donor Agency: Undefined")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Uncommitted Cumulative Balance", "-150,000")        )      ));
 		
 		ReportSpecificationImpl spec = buildSpecification("Linear columns ignoring filters: Undisbursed Cumulative Balance, Uncommitted Cumulative Balance"
 				+ "with hierarchy ",

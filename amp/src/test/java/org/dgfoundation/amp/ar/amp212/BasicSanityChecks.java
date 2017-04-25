@@ -119,7 +119,8 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT,
 			ColumnConstants.IMPLEMENTING_AGENCY, ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, ColumnConstants.IMPLEMENTING_AGENCY_TYPE,
 			ColumnConstants.DONOR_AGENCY, ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_TYPE,
-			ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS);
+			ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS,
+			ColumnConstants.FUNDING_ID);
 
 //	protected ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
 //		return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
@@ -2467,5 +2468,33 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		spec.setDisplayTimeRangeSubtotals(true);
 
 		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testSubDimensionColumnFiltering() {
+		NiReportModel cor = new NiReportModel("testMonthlyReportNotAffectedByTimeRangeSubTotals")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 4))",
+						"(Donor Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Financing Instrument: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 3, colSpan: 1))",
+						"(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Donor Agency", "", "Financing Instrument", "", "Funding-2015-Actual Commitments", "1,200", "Totals-Actual Commitments", "1,200")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Donor Agency", "UNDP", 21695)).withContents("Financing Instrument", "", "Funding-2015-Actual Commitments", "700", "Totals-Actual Commitments", "700", "Donor Agency", "UNDP")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(66), "Financing Instrument", "second financing instrument", "Funding-2015-Actual Commitments", "700", "Totals-Actual Commitments", "700")        ),
+								new ReportAreaForTests(new AreaOwner("Donor Agency", "USAID", 21696)).withContents("Financing Instrument", "", "Funding-2015-Actual Commitments", "500", "Totals-Actual Commitments", "500", "Donor Agency", "USAID")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(66), "Financing Instrument", "default financing instrument", "Funding-2015-Actual Commitments", "500", "Totals-Actual Commitments", "500")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testMonthlyReportNotAffectedByTimeRangeSubTotals",
+				Arrays.asList(ColumnConstants.DONOR_AGENCY, ColumnConstants.FINANCING_INSTRUMENT),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+				Arrays.asList(ColumnConstants.DONOR_AGENCY),
+				GroupingCriteria.GROUPING_YEARLY);
+
+		runNiTestCase(spec, "en", Arrays.asList("Activity 2 with multiple agreements"), cor);
 	}
 }

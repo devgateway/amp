@@ -219,6 +219,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	 
 	public NiReportRunResult execute() {
+		if (spec.getMeasures().isEmpty() && spec.getHierarchies().isEmpty() && spec.isSummaryReport()) {
+			throw new RuntimeException("Summary reports without hierarchies and measures are not supported.");
+		}
 		try(SchemaSpecificScratchpad pad = schema.generateScratchpad(this)) {
 			this.schemaSpecificScratchpad = pad;
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
@@ -299,7 +302,10 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		this.fullHeaders = headers;
 		Predicate<Column> yearRangeSetting = z -> z.splitCell != null && z.splitCell.entityType.equals(PSEUDOCOLUMN_YEAR) && !isAcceptableYear((Integer) z.splitCell.info.comparable);
 		Predicate<Column> emptyLeaf = z -> (z instanceof CellColumn) && isEmptyAndDeleteable((CellColumn) z);
-		this.headers = new NiHeaderInfo(this, pruneHeaders(this.headers.rootColumn, yearRangeSetting.or(emptyLeaf)), headers.nrHierarchies);
+		Set<String> hiddenHierarchies = spec.getInvisibleHierarchyNames();
+		Predicate<Column> isHiddenHierarchy = c -> hiddenHierarchies.contains(c.name);
+		Predicate<Column> columnFilter = yearRangeSetting.or(emptyLeaf).or(isHiddenHierarchy);
+		this.headers = new NiHeaderInfo(this, pruneHeaders(this.headers.rootColumn, columnFilter), headers.nrHierarchies);
 		this.reportOutput = this.reportOutput.accept(new NiReportOutputCleaner(this.headers));
 		if (spec.getSorters() != null && !spec.getSorters().isEmpty())
 			timer.run("sorting", this::sortOutput);
@@ -406,7 +412,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 
 	private boolean isHideEmptyFundingRowsWhenFilteringByTransactionHier() {
 		// hide empty rows if we have hierarchies (because filtering must be equal to hierarchies)
-		return !spec.getHierarchies().isEmpty()
+		return !actualHierarchies.isEmpty()
 				|| // or we have non-hierarchical report and spec say to hide empty rows
 				!spec.isDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy();
 	}
@@ -663,6 +669,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	protected List<NiReportColumn<? extends Cell>> getReportColumns() {
 		List<NiReportColumn<? extends Cell>> res = new ArrayList<>();
 		this.actualHierarchies = new LinkedHashSet<>(spec.getHierarchyNames()); //AmpCollections.prefixUnion(filters.getMandatoryHierarchies(), spec.getHierarchyNames());
+		this.actualHierarchies.addAll(spec.getInvisibleHierarchyNames());
 		this.actualColumns = new LinkedHashSet<>(spec.getColumnNames()); //AmpCollections.prefixUnion(filters.getMandatoryHierarchies(), spec.getColumnNames());
 		this.orderedColumns = new LinkedHashSet<>();
 		//this.virtualHierarchies = AmpCollections.difference(filters.getMandatoryHierarchies(), spec.getHierarchyNames());

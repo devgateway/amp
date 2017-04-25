@@ -642,20 +642,21 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
-            qryStr = "select count(*) from " + AmpTeamMember.class.getName()
-                + " tm" + " where (tm.deleted is null or tm.deleted = false) and (tm.ampTeam=:teamId)";
+            qryStr = "select count(*) from " + AmpTeamMember.class.getName() + " tm "
+                    + " where (tm.deleted is null or tm.deleted = false) "
+                    + " and (tm.ampTeam=:teamId)";
             qry = session.createQuery(qryStr);
             qry.setParameter("teamId", teamId, LongType.INSTANCE);
 
             Iterator itr = qry.list().iterator();
-            if(itr.hasNext()) {
+            if (itr.hasNext()) {
                 Integer cnt = (Integer) itr.next();
                 logger.info("cnt.intValue = " + cnt.intValue());
-                if(cnt.intValue() > 0)
+                if (cnt.intValue() > 0)
                     memExist = true;
             }
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return memExist;

@@ -333,7 +333,9 @@ public class UpdateWorkspace extends Action {
 
 				return mapping.findForward("forward");
 			}
-			
+
+			TeamMemberUtil.deleteRemovedTeamMembers(teamId);
+
 			TeamUtil.removeTeam(teamId);
 		}
 		uwForm.setReset(true);

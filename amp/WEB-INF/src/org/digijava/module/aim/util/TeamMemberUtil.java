@@ -249,7 +249,88 @@ public class TeamMemberUtil {
 		} 
 		return members;
 	}
-	
+
+	public static List<AmpTeamMember> getRemovedTeamMembers(Long teamId) {
+
+		Session session = null;
+		Query qry = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select tm from "
+					+ AmpTeamMember.class.getName() + " tm " +
+					" inner join tm.ampTeam t " +
+					" inner join tm.ampMemberRole role " +
+					" where tm.deleted = true and t.ampTeamId=:teamId ";
+			qry = session.createQuery(queryString);
+			qry.setLong("teamId", teamId);
+		} catch (Exception e) {
+			logger.error("Unable to get team member", e);
+		}
+		return qry.list();
+	}
+
+	public static void deleteRemovedTeamMembers(Long teamId) {
+		Session session = PersistenceManager.getSession();
+
+		List<AmpTeamMember> removedTeamMembers = TeamMemberUtil.getRemovedTeamMembers(teamId);
+		for (AmpTeamMember member : removedTeamMembers) {
+			AmpTeamMember teamHead = getTeamHead(member.getAmpTeam().getAmpTeamId());
+
+			Collection<AmpActivityVersion> relatedActivities = ActivityUtil.getActivitiesRelatedToAmpTeamMember(session,
+					member.getAmpTeamMemId());
+			removeLinksFromATMToActivity(session, relatedActivities, member, teamHead);
+
+			session.delete(member);
+		}
+
+	}
+
+	private static void removeLinksFromATMToActivity(Session session, Collection activities, AmpTeamMember atm, AmpTeamMember teamHead) {
+		if (activities == null || atm == null) {
+			return;
+		}
+		Query qry = null;
+
+		for (Object activity : activities) {
+			AmpActivityVersion act = (AmpActivityVersion) activity;
+
+			if (act.getModifiedBy() != null && act.getModifiedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId())) {
+				String queryString = "update " + AmpActivityVersion.class.getName() +
+						" v set v.modifiedBy = null where v.ampActivityId=" + act.getAmpActivityId();
+				qry = session.createQuery(queryString);
+				qry.executeUpdate();
+			}
+
+			if (act.getActivityCreator() != null && act.getActivityCreator().getAmpTeamMemId().equals(atm.getAmpTeamMemId())) {
+				String queryString = "update " + AmpActivityVersion.class.getName() +
+						" v set v.activityCreator = null where v.ampActivityId=" + act.getAmpActivityId();
+				qry = session.createQuery(queryString);
+				qry.executeUpdate();
+			}
+			if (act.getApprovedBy() != null && act.getApprovedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId())) {
+				//if we are deleting the team leader we shouldn't set him as TL
+				if ((teamHead != null) && (!atm.getAmpTeamMemId().equals(teamHead.getAmpTeamMemId()))) {
+					//act.setApprovedBy(teamHead);
+					String queryString = "update " + AmpActivityVersion.class.getName() +
+							" v set v.approvedBy.ampTeamMemId = " + teamHead.getAmpTeamMemId()
+							+ " where v.ampActivityId=" + act.getAmpActivityId();
+					qry = session.createQuery(queryString);
+					qry.executeUpdate();
+				} else {
+					String queryString = "update " + AmpActivityVersion.class.getName() +
+							" v set v.approvedBy = null where v.ampActivityId=" + act.getAmpActivityId();
+					qry = session.createQuery(queryString);
+					qry.executeUpdate();
+				}
+			}
+
+			if (act.getMember() != null) {
+				act.getMember().remove(atm);
+			}
+			session.update(act);
+		}
+	}
 
 	public static Collection getMembersUsingRole(Long roleId) {
 		Session session = null;

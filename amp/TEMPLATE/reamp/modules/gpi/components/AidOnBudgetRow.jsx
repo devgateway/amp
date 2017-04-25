@@ -125,6 +125,19 @@ export default class AidOnBudgetRow extends Component {
         }   
     }
     
+    formatAmount(amount){
+        if(amount == 0) {
+            return amount;
+        } else {
+           var formatted = this.props.numberFormatter.format(amount);
+           //return 0 instead of formatted zero e.g 0.000
+           if(formatted == 0){
+              return 0;
+           }
+           return formatted;
+        }          
+    }
+    
     render() {        
         if (this.props.aidOnBudget.isEditing) {           
             
@@ -203,7 +216,7 @@ export default class AidOnBudgetRow extends Component {
                     <tr>                
                     <td scope="row">{this.toDisplayDateFormat(this.props.aidOnBudget.indicatorDate)}</td>
                     <td>{this.getOrgName(this.props.aidOnBudget.donorId)}</td>
-                    <td className="amount-column">{this.props.numberFormatter.format(this.props.aidOnBudget.amount)}</td>
+                    <td className="amount-column">{this.formatAmount(this.props.aidOnBudget.amount)}</td>
                     <td>{this.getCurrencyName(this.props.aidOnBudget.currencyCode)} </td>
                     <td><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteAidOnBudget}></span></td>                
                     </tr>

@@ -34,7 +34,7 @@ export default class DonorNotesRow extends Component {
         this.cancel = this.cancel.bind(this);
         this.onOrgChange = this.onOrgChange.bind(this);
         this.toggleNotes = this.toggleNotes.bind(this);
-    }
+     }
     
     toggleEdit() {
         const donorNotes = this.props.donorNotes;
@@ -123,6 +123,24 @@ export default class DonorNotesRow extends Component {
         this.props.actions.updateDonorNotes(donorNotes); 
     }
     
+    showTextToggle() {        
+        var notes = this.props.donorNotes.notes || '';
+        var toggleTitle = this.state.showFullText ? this.props.translations['amp.gpi-data-donor-notes:collapse-text'] : this.props.translations['amp.gpi-data-donor-notes:expand-text'];
+        const tooltip = (<Tooltip id="notes-toggle-tooltip">{toggleTitle}</Tooltip>);
+       if(notes.length > this.state.shortTextLength && this.state.showFullText == false) {                
+            return (<OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={tooltip}>
+            <span className= {this.state.showFullText ? 'notes-toggle glyphicon glyphicon glyphicon-chevron-up' : 'notes-toggle glyphicon glyphicon-chevron-down'} onClick = {this.toggleNotes}></span>                 
+            </OverlayTrigger>);                        
+        }
+       
+       if(this.state.showFullText){
+           return (<OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={tooltip}>
+           <span className= {this.state.showFullText ? 'notes-toggle glyphicon glyphicon glyphicon-chevron-up' : 'notes-toggle glyphicon glyphicon-chevron-down'} onClick = {this.toggleNotes}></span>                 
+           </OverlayTrigger>);
+       }
+        
+    }
+    
     render() {        
         if (this.props.donorNotes.isEditing) {  
             
@@ -183,9 +201,8 @@ export default class DonorNotesRow extends Component {
             
             }
             var notes = this.props.donorNotes.notes || '';
-            var toggleTitle = this.state.showFullText ? this.props.translations['amp.gpi-data-donor-notes:collapse-text'] : this.props.translations['amp.gpi-data-donor-notes:expand-text'];
+            var toggleTitle = this.state.showFullText ? this.props.translations['amp.gpi-data-donor-notes:collapse-text'] : this.props.translations['amp.gpi-data-donor-notes:expand-text'];        
             
-            const tooltip = (<Tooltip id="notes-toggle-tooltip">{toggleTitle}</Tooltip>);
             
             return (
                     <tr>
@@ -193,20 +210,13 @@ export default class DonorNotesRow extends Component {
                     <td scope="row">{this.toDisplayDateFormat(this.props.donorNotes.notesDate)}</td>
                     <td>{this.getOrgName(this.props.donorNotes.donorId)}</td>
                     <td className={this.state.showFullText ? 'notes-column' : 'notes-column notes-column-short'}>        
-                    {notes.length > this.state.shortTextLength && this.state.showFullText == false &&
-                        <span> { notes.substring(0, this.state.shortTextLength - 1) } </span>  
-                    } 
-                    
-                    {notes.length > this.state.shortTextLength &&                       
-                        <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={tooltip}>
-                        <span className= {this.state.showFullText ? 'notes-toggle glyphicon glyphicon glyphicon-chevron-up' : 'notes-toggle glyphicon glyphicon-chevron-down'} onClick = {this.toggleNotes}></span>                 
-                        </OverlayTrigger>                         
-                    }
+                    {notes.length > this.state.shortTextLength && this.state.showFullText == false &&   
+                        <div className="notes-container"> { notes.substring(0, this.state.shortTextLength - 1) } {this.showTextToggle()}</div>                 
+                    }                   
                     
                     {(notes.length <= this.state.shortTextLength || this.state.showFullText) &&
-                        <div className="notes-container"> {notes} </div>
-                    }
-                    
+                        <div className="notes-container"> { notes} {this.showTextToggle()}</div>
+                    }                    
                     </td>
                     <td><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDonorNotes}></span></td>                
                     </tr>

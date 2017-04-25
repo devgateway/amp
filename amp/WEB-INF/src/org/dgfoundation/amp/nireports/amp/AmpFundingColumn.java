@@ -85,6 +85,11 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	 * {@link #getName()} in case this column is used to fetch "Component Funding"
 	 */
 	public final static String ENTITY_COMPONENT_FUNDING = "Component Funding";
+	
+	/**
+	 * {@link #getName()} in case this column is used to fetch GPI Funding"
+	 */
+	public final static String ENTITY_GPI_FUNDING = "GPI Funding";
 
 	/**
 	 * the cell prototypes cache, plus some auxiliary info
@@ -165,7 +170,11 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id"),
 		new ImmutablePair<>(MetaCategory.SOURCE_ORG, "donor_org_id"),
 		new ImmutablePair<>(MetaCategory.EXPENDITURE_CLASS, "expenditure_class_id"),
-		new ImmutablePair<>(MetaCategory.CONCESSIONALITY_LEVEL, "concessionality_level_id")
+		new ImmutablePair<>(MetaCategory.CONCESSIONALITY_LEVEL, "concessionality_level_id"),
+		new ImmutablePair<>(MetaCategory.GPI_9B_Q1, "gpi_9b_q1"),
+		new ImmutablePair<>(MetaCategory.GPI_9B_Q2, "gpi_9b_q2"),
+		new ImmutablePair<>(MetaCategory.GPI_9B_Q3, "gpi_9b_q3"),
+		new ImmutablePair<>(MetaCategory.GPI_9B_Q4, "gpi_9b_q4")
 	);
 	
 	/**

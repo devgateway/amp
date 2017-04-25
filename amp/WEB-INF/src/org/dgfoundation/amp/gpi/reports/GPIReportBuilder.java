@@ -27,16 +27,16 @@ public class GPIReportBuilder {
 		this.gpiReportOutputBuilder = outputBuilder;
 	}
 
-	public GPIReport build() {
+	public GPIReport build(int page, int recordsPerPage) {
 		GPIReport gpiReport = new GPIReport();
 		gpiReport.setSettings(getReportSettings());
-		gpiReport.setOutput(getReportOutput());
+		gpiReport.setPage(getReportPage(page, recordsPerPage));
 
 		return gpiReport;
 	}
 
-	protected GPIReportOutput getReportOutput() {
-		return gpiReportOutputBuilder.build(generatedReport);
+	protected GPIReportPage getReportPage(int page, int recordsPerPage) {
+		return gpiReportOutputBuilder.buildGPIReportPage(generatedReport, page, recordsPerPage);
 	}
 
 	private Settings getReportSettings() {

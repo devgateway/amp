@@ -23,6 +23,10 @@ public class GPIReportOutputColumn implements Comparable<GPIReportOutputColumn> 
 	public GPIReportOutputColumn(ReportOutputColumn roc) {
 		this(roc.columnName, roc.originalColumnName, roc.description);
 	}
+	
+	public GPIReportOutputColumn(String originalColumnName) {
+		this(originalColumnName, originalColumnName, null);
+	}
 			
 	public GPIReportOutputColumn(String columnName, String originalColumnName) {
 		this(columnName, originalColumnName, null);

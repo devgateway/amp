@@ -11,20 +11,20 @@ import org.digijava.kernel.ampapi.endpoints.settings.Settings;
 public class GPIReport {
 
 	/**
-	 * Report Output 
+	 * Report Page 
 	 */
-	protected GPIReportOutput output;
+	protected GPIReportPage page;
 
 	protected Settings settings;
 	
 	protected boolean isEmpty;
 
-	public GPIReportOutput getOutput() {
-		return output;
+	public GPIReportPage getPage() {
+		return page;
 	}
 
-	public void setOutput(GPIReportOutput output) {
-		this.output = output;
+	public void setPage(GPIReportPage page) {
+		this.page = page;
 	}
 
 	public Settings getSettings() {
@@ -36,8 +36,8 @@ public class GPIReport {
 	}
 
 	public boolean isEmpty() {
-		if (this.output != null) {
-			return this.output.getContents().isEmpty();
+		if (this.page != null) {
+			return this.page.getContents().isEmpty();
 		}
 		
 		return true;

@@ -31,7 +31,7 @@ public class GPIReportUtils {
 	 */
 	public static GeneratedReport getGeneratedReportForIndicator9b(JsonBean formParams) {
 		
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_9b, ArConstants.DONOR_TYPE);
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_9b, ArConstants.GPI_TYPE);
 		
 		String hierarchyColumn = getHierarchyColumn(formParams);
 		if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
@@ -42,8 +42,10 @@ public class GPIReportUtils {
 			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		}
 		
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.NATIONAL_AUDITING_PROCEDURES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES));
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		spec.setSummaryReport(true);
 		

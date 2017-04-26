@@ -25,7 +25,6 @@ public class SecurityConstants {
     public static final String ORG_TYPE_ID = "org-type-id";
     public static final String ORG_GROUP_ID = "org-group-id";
     public static final String ORG_ID = "org-id";
-    public static final String ASSIGNED_ORG_ID = "assigned-org-id";
     public static final String ASSIGNED_ORG_IDS = "assigned-org-ids";
     public static final String GROUP_KEYS = "group-keys";
     

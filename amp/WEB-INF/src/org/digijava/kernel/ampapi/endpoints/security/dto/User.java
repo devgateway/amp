@@ -58,8 +58,6 @@ public class User {
     @JsonProperty(SecurityConstants.ORG_ID)
     private Long orgId;
     
-    @JsonProperty(SecurityConstants.ASSIGNED_ORG_ID)
-    private Long assignedOrgId;
     @JsonProperty(SecurityConstants.ASSIGNED_ORG_IDS)
     private SortedSet<Long> assignedOrgIds;
     
@@ -260,20 +258,6 @@ public class User {
      */
     public void setOrgId(Long orgId) {
         this.orgId = orgId;
-    }
-    
-    /**
-     * @return the assignedOrgId
-     */
-    public Long getAssignedOrgId() {
-        return assignedOrgId;
-    }
-    
-    /**
-     * @param assignedOrgId the assignedOrgId to set
-     */
-    public void setAssignedOrgId(Long assignedOrgId) {
-        this.assignedOrgId = assignedOrgId;
     }
     
     /**

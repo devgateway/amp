@@ -73,9 +73,6 @@ public class UserService {
             user.setCountryIso2(ampUser.getCountry().getIso());
         }
         setSelectedOrgDetails(user, ampUser);
-        if (ampUser.getAssignedOrgId() != null && ampUser.getAssignedOrgId() != -1) {
-            user.setAssignedOrgId(ampUser.getAssignedOrgId());
-        }
         if (!ampUser.getAssignedOrgs().isEmpty()) {
             user.setAssignedOrgIds(new TreeSet<>(ampUser.getAssignedOrgs().stream().map(new Function<AmpOrganisation, Long>() {
                 @Override

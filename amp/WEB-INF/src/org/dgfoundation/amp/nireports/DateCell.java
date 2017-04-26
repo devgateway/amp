@@ -19,29 +19,27 @@ public final class DateCell extends Cell {
 
 	/** the payload - the held date */
 	public final LocalDate date;
-    public final MetaInfoSet metaInfo;
 
     private static final Comparator<LocalDate> dateComparator = Comparator.nullsFirst(Comparator.naturalOrder());
 
     public DateCell(LocalDate date, long activityId, long entityId, Optional<LevelColumn> levelColumn) {
-        this(date, activityId, entityId, MetaInfoSet.empty(), buildCoordinates(levelColumn, entityId), levelColumn);
+        this(date, activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
     }
 
-    public DateCell(LocalDate date, long activityId, long entityId, MetaInfoSet metaInfo,
-            Map<NiDimensionUsage, Coordinate> coos, Optional<LevelColumn> levelColumn) {
+    public DateCell(LocalDate date, long activityId, long entityId, Map<NiDimensionUsage, Coordinate> coos,
+			Optional<LevelColumn> levelColumn) {
 		super(activityId, entityId, coos, levelColumn);
 		this.date = date;
-		this.metaInfo = metaInfo.freeze();
 	}
 
 	@Override
 	public DateCell changeOwnerId(long newActivityId) {
-		return new DateCell(date, newActivityId, entityId, metaInfo, coordinates, mainLevel);
+		return new DateCell(date, newActivityId, entityId, coordinates, mainLevel);
 	}
 
 	@Override
 	public MetaInfoSet getMetaInfo() {
-		return metaInfo;
+		return MetaInfoSet.empty();
 	}
 
 	@Override

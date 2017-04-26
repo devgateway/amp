@@ -31,6 +31,8 @@ public abstract class GPIReportOutputBuilder  {
 	protected abstract List<GPIReportOutputColumn> buildHeaders(GeneratedReport generatedReport);
 	
 	protected abstract List<Map<GPIReportOutputColumn, String>> getReportContents(GeneratedReport generatedReport);
+	
+	protected abstract List<Map<GPIReportOutputColumn, String>> getReportContentsSummary(GeneratedReport generatedReport);
 
 	/**
 	 * Build the report page data based on generatedReport
@@ -64,6 +66,21 @@ public abstract class GPIReportOutputBuilder  {
 		output.setCurrentPageNumber(page);
 		output.setRecordsPerPage(recordsPerPage);
 		output.setTotalPageCount(pages);
+
+		return output;
+	}
+	
+	/**
+	 * Build the report summary data based on generatedReport
+	 * 
+	 * @param generatedReport
+	 * @return
+	 */
+	public GPIReportPage buildGPIReportPageSummary(GeneratedReport generatedReport) {
+		GPIReportPage output = new GPIReportPage();
+		
+		List<Map<GPIReportOutputColumn, String>> allContents = getReportContentsSummary(generatedReport);
+		output.setContents(allContents);
 
 		return output;
 	}

@@ -11,6 +11,7 @@ public class GPIReportConstants {
 	public static final String COLUMN_YEAR = "Year";
 	
 	public static final String HIERARCHY_PARAMETER = "hierarchy";
+	public static final String SUMMARY_PARAMETER = "summary";
 	public static final String HIERARCHY_DONOR_GROUP = "donor-group";
 	public static final String HIERARCHY_DONOR_AGENCY = "donor-agency";
 

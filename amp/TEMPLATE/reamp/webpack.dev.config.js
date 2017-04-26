@@ -12,10 +12,10 @@ module.exports = {
        'webpack/hot/only-dev-server',
        './modules/admin/dashboard/script.es6'
     ],
-    "gpi/script": [
+    "gpi-data/script": [
         'webpack-dev-server/client?http://localhost:3000',
         'webpack/hot/only-dev-server',
-        './modules/gpi/script.es6'
+        './modules/gpi-data/script.es6'
      ],
      "gpi-reports/script": [
          'webpack-dev-server/client?http://localhost:3000',

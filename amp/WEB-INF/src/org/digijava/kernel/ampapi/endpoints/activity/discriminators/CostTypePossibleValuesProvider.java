@@ -16,14 +16,14 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
  */
 public class CostTypePossibleValuesProvider extends PossibleValuesProvider {
 
-	private static final List<PossibleValue> options = new ImmutableList.Builder<PossibleValue>()
+	private static final List<PossibleValue> OPTIONS = new ImmutableList.Builder<PossibleValue>()
 			.add(new PossibleValue(PROPOSED.name(), PROPOSED.name()))
 			.add(new PossibleValue(REVISED.name(), REVISED.name()))
 			.build();
 
 	@Override
 	public List<PossibleValue> getPossibleValues() {
-		return options;
+		return OPTIONS;
 	}
 
 	@Override

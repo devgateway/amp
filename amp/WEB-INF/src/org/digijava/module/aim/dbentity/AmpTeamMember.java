@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.AmpARFilterParams;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -173,6 +175,10 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
 		this.deleted = deleted;
 	}
 
+	public boolean isSoftDeleted() {
+		return Boolean.TRUE.equals(deleted);
+	}
+
 	@Override
 	public boolean equals(Object oth)
 	{
@@ -204,9 +210,9 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
 			af = FilterUtil.buildFilter(ampTeam, null);
 		}
 
-		af.generateFilterQuery((org.dgfoundation.amp.ar.AmpARFilterParams.getParamsForWorkspaceFilter(this.toTeamMember(), ampActivityId)));
+		af.generateFilterQuery((AmpARFilterParams.getParamsForWorkspaceFilter(this.toTeamMember(), ampActivityId)));
 		
-		try(Connection conn = org.digijava.kernel.persistence.PersistenceManager.getJdbcConnection()){
+		try(Connection conn = PersistenceManager.getJdbcConnection()){
 				
 			ResultSet rs = conn.createStatement().executeQuery(af.getGeneratedFilterQuery());
 			//if there would be many results, we would have a "while rs.next"

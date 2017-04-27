@@ -264,28 +264,31 @@ public class AmpUserUtil {
 		}
 		return retVal;
 	}
-       public static List<String> searchUsesers(String searchStr, Long teamId) throws Exception {
-        Session session = null;
-        String queryString = null;
-        Query query = null;
-        List<String> users = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            queryString = "select distinct concat(u.firstNames,' ',u.lastName) from " + User.class.getName() + 
-                    " u where  lower(concat(u.firstNames,' ',u.lastName)) like lower(:searchStr) and u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
-			" tm where (tm.deleted is null or tm.deleted = false) and tm.ampTeam.ampTeamId=:teamId) and u.banned=:banned order by concat(u.firstNames,' ',u.lastName)";
-            query = session.createQuery(queryString);
-            query.setString("searchStr", searchStr + "%");
-            query.setLong("teamId", teamId);
-            query.setBoolean("banned", false);  
-            users = query.list();
-        } catch (Exception ex) {
-            logger.error("couldn't load user " + ex.getMessage(), ex);
-        }
+
+	public static List<String> searchUsesers(String searchStr, Long teamId) throws Exception {
+		Session session = null;
+		String queryString = null;
+		Query query = null;
+		List<String> users = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "select distinct concat(u.firstNames,' ',u.lastName) from " + User.class.getName()
+					+ " u where  lower(concat(u.firstNames,' ',u.lastName)) like lower(:searchStr) and u.id not in "
+					+ " (select tm.user.id from " + AmpTeamMember.class.getName()
+					+ " tm where (tm.deleted is null or tm.deleted = false) and tm.ampTeam.ampTeamId=:teamId) "
+					+ " and u.banned=:banned order by concat(u.firstNames,' ',u.lastName)";
+			query = session.createQuery(queryString);
+			query.setString("searchStr", searchStr + "%");
+			query.setLong("teamId", teamId);
+			query.setBoolean("banned", false);
+			users = query.list();
+		} catch (Exception ex) {
+			logger.error("couldn't load user " + ex.getMessage(), ex);
+		}
 
 
-        return users;
-    }
+		return users;
+	}
 
        public static List<String> getUserReminder(Date lastActivity){
     	Session session = null;

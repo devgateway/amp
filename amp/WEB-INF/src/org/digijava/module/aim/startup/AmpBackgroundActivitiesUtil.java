@@ -195,8 +195,9 @@ public class AmpBackgroundActivitiesUtil
         User user = createActivityUserIfNeeded(u);
 
         AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByUserByTeam(user, team);
-        if (teamMember != null && !teamMember.getDeleted())
+        if (teamMember != null && !teamMember.isSoftDeleted()) {
             return teamMember;
+        }
 
         AmpTeamMemberRoles role = TeamMemberUtil.getWorkspaceMemberTeamMemberRole();
         if (teamMember == null) {

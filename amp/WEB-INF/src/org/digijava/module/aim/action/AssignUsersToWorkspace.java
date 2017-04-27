@@ -32,7 +32,8 @@ import org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger;
 public class AssignUsersToWorkspace extends Action {
 	private static Logger logger = Logger.getLogger(AssignUsersToWorkspace.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+								 HttpServletResponse response) throws java.lang.Exception {
 
 		String redirectWhere = request.getParameter("addedFrom");
 
@@ -52,7 +53,8 @@ public class AssignUsersToWorkspace extends Action {
 			Site site = RequestUtils.retreiveSiteDomain(request).getSite();
 			boolean siteAdmin = UserUtils.isAdmin(user, site);
 			if (siteAdmin) { // should  be impossible to add admin
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.addTeamMember.teamMemberIsAdmin"));
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.addTeamMember"
+						+ ".teamMemberIsAdmin"));
 				saveErrors(request, errors);
 				tmForm.setSomeError(true);
 				logger.debug("Member is Admin");
@@ -60,8 +62,9 @@ public class AssignUsersToWorkspace extends Action {
 				return mapping.findForward("error");
 			}
 			AmpTeamMember atm = TeamMemberUtil.getAmpTeamMemberByUserByTeam(user, ampTeam);
-			if (atm != null && !atm.getDeleted()) {
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.addTeamMember.teamMemberAlreadyExist"));
+			if (atm != null && !atm.isSoftDeleted()) {
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.addTeamMember"
+						+ ".teamMemberAlreadyExist"));
 				saveErrors(request, errors);
 				tmForm.setSomeError(true);
 				logger.debug("Team Member already exist");

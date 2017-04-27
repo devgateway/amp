@@ -289,7 +289,7 @@ LoggerIdentifiable, Cloneable {
 	//protected AmpTeamMember updatedBy; !!! Use modifiedBy
 	
 	@Interchangeable(fieldTitle = "Project Costs", importable = true)
-	@InterchangeableDiscriminator(discriminatorField = "type",
+	@InterchangeableDiscriminator(discriminatorField = "funType",
 		settings = {
 			@Interchangeable(fieldTitle = "PPC Amount", importable = true, discriminatorOption = "0", multipleValues = false,
 					fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost"),

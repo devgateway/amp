@@ -507,15 +507,7 @@ public class ActivityImporter {
 				Object res = null;
 				if (isCollection) {
 					try {
-						Long objId = getElementId(fieldDef, newJsonValue);
-						Object newSubElement = null;
-						// TODO: make it generic. Given unexpected need to support, I have to proceed very custom...
-						boolean isAFA = AmpFundingAmount.class.isAssignableFrom(subElementClass);
-						if (isAFA && objId != null) {	
-							newSubElement = getObjectReferencedById(subElementClass, objId);
-						} else {
-							newSubElement = subElementClass.newInstance();
-						}
+						Object newSubElement = subElementClass.newInstance();
 						res = validateAndImport(newSubElement, null, childrenFields, newChild, oldChild, fieldPath);
 					} catch (InstantiationException | IllegalAccessException e) {
 						logger.error(e.getMessage());

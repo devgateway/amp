@@ -8,14 +8,69 @@ export default class App extends Component {
 
     constructor(props, context) {      
         super(props, context);
+        this.showFilters = this.showFilters.bind(this);
+        this.showSettings = this.showSettings.bind(this);
     }
     
-    componentWillMount() {           
+    componentWillMount() { 
+        this.filter = new ampFilter({
+            draggable: true,
+            caller: 'REPORTS'
+          });
+        
+        this.settingsWidget = new AMPSettings.SettingsWidget({
+            draggable : true,
+            caller : 'REPORTS',
+            isPopup: true,
+            definitionUrl: '/rest/settings-definitions/reports'
+    });
+       
+    }
+    
+    showFilters() {
+        this.filter.setElement(this.refs.filterPopup);
+        this.filter.showFilters();
+        $(this.refs.filterPopup).show();
+              
+        this.filter.on('cancel', function() {
+            console.log('close ....');
+            $(this.refs.filterPopup).hide();
+        }.bind(this));
+
+        this.filter.on('apply', function() {
+            $(this.refs.filterPopup).hide();
+        }.bind(this));
+    }
+    
+    showSettings() {
+        this.settingsWidget.setElement(this.refs.settingsPopup);
+        
+        this.settingsWidget.definitions.loaded.done(function() {
+            this.settingsWidget.show();   
+        }.bind(this));        
+        
+        $(this.refs.settingsPopup).show();
+        
+        this.settingsWidget.on('close', function() {
+            console.log('close ....');
+            $(this.refs.settingsPopup).hide();
+        }.bind(this));
+
+        this.settingsWidget.on('applySettings', function() {
+            $(this.refs.settingsPopup).hide();
+        }.bind(this));
     }
    
-    render() {             
-        return (
+    render() {       
+        
+      return (
             <div >
+              <div id="filter-popup" ref="filterPopup"> </div>
+              <div id="amp-settings" ref="settingsPopup"> </div>
+              <div> 
+              <button type="button" className="btn btn-success" onClick = {this.showFilters}>Filters</button>
+              <button type="button" className="btn btn-success" onClick = {this.showSettings}>Settings</button>
+              </div>
              <label className="page-title">{this.props.translations['amp.gpi-reports:title']}</label> 
              <div >
              <div>

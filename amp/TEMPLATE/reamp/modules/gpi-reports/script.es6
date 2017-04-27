@@ -6,7 +6,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import ReactDOM from "react-dom";
 import configureStore from './store/configureStore.jsx';
 import App from "./containers/App.jsx";
-import boilerplate from "../../../ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js";
+//import boilerplate from "../../../ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js";
 import { startUp } from './actions/StartUpAction.jsx';
 
 export const store = configureStore();
@@ -27,4 +27,6 @@ ReactDOM.render(
  );
 
 });
-new boilerplate.layout({showLogin: false});
+
+
+new boilerplate({showLogin: false});

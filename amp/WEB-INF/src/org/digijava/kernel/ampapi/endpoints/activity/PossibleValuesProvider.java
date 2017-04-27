@@ -1,6 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.Map;
+import java.util.List;
 /**
  * 
  * @author acartaleanu
@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public abstract class PossibleValuesProvider {
 
-	public abstract Map<String, ?> getPossibleValues();
+	public abstract List<PossibleValue> getPossibleValues();
 
 	/**
 	 * Generates a JSON-friendly representation of the object provided, 

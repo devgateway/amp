@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import javax.ws.rs.core.Response;
+
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +25,8 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterchangeableValueProvider;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.services.sync.model.SyncConstants.Entities;
 import org.digijava.kernel.user.User;
@@ -163,7 +170,7 @@ public class PossibleValuesEnumerator {
 	 * @param discriminatorOption recursive option to be passed down if there was a discriminator option higher up
 	 * @return JSON object containing the possible values that can be held by the field
 	 */
-	public List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz, String discriminatorOption) {
+	public List<PossibleValue> getPossibleValuesForField(String longFieldName, Class<?> clazz, String discriminatorOption) {
 
 		String fieldName = "";
 		if (longFieldName.contains("~")) {
@@ -174,9 +181,7 @@ public class PossibleValuesEnumerator {
 			fieldName = longFieldName.substring(0, longFieldName.indexOf('~') );
 			Field field = InterchangeUtils.getPotentiallyDiscriminatedField(clazz, fieldName);
 			if (field == null) {
-				List<JsonBean> result = new ArrayList<JsonBean>();
-				result.add(ApiError.toError(ActivityErrors.FIELD_INVALID.withDetails(fieldName)));
-				return result;
+				throw newBadRequestException(ActivityErrors.FIELD_INVALID.withDetails(fieldName));
 			}
 			
 			String configString = discriminatorOption == null? null : discriminatorOption;
@@ -194,9 +199,7 @@ public class PossibleValuesEnumerator {
 			 * */
 			Field finalField =  InterchangeUtils.getPotentiallyDiscriminatedField(clazz, longFieldName);
 			if (finalField == null) {
-				List<JsonBean> result = new ArrayList<JsonBean>();
-				result.add(ApiError.toError(ActivityErrors.FIELD_INVALID.withDetails(longFieldName)));
-				return result;
+				throw newBadRequestException(ActivityErrors.FIELD_INVALID.withDetails(longFieldName));
 			} else {
 				String configString = discriminatorOption == null? null : discriminatorOption;
 				if (InterchangeUtils.isCompositeField(finalField)) {
@@ -210,11 +213,9 @@ public class PossibleValuesEnumerator {
 						return getPossibleValuesDirectly(providerClass);
 					}
 				} catch (Exception e) {
-					List<JsonBean> result = new ArrayList<JsonBean>();
-					result.add(ApiError.toError(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR
-							.withDetails(Objects.toString(e.getMessage()))));
-					return result;
-				}				
+					throw newBadRequestException(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR
+							.withDetails(Objects.toString(e.getMessage())));
+				}
 				if (InterchangeUtils.isCompositeField(finalField) || configString != null) {
 					return getPossibleValuesForComplexField(finalField, configString);
 				}
@@ -222,6 +223,10 @@ public class PossibleValuesEnumerator {
 				return getPossibleValuesForField(finalField);
 			}
 		}
+	}
+
+	private ApiRuntimeException newBadRequestException(ApiErrorMessage message) {
+		return new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(message));
 	}
 
 	/**
@@ -234,19 +239,11 @@ public class PossibleValuesEnumerator {
 	 * @throws SecurityException
 	 * @throws ExceptionInInitializerError
 	 */
-	private List<JsonBean> getPossibleValuesDirectly(
+	private List<PossibleValue> getPossibleValuesDirectly(
 			Class<? extends PossibleValuesProvider> possibleValuesProviderClass)
 			throws IllegalAccessException, InstantiationException {
 		PossibleValuesProvider provider = possibleValuesProviderClass.newInstance();
-		Map<String, ?> vals = provider.getPossibleValues();
-		List<JsonBean> result = new ArrayList<>();
-		for (Map.Entry<String, ?> entry : vals.entrySet()) {
-			JsonBean bean = new JsonBean();
-			bean.set("id", entry.getKey());
-			bean.set("value", entry.getValue());
-			result.add(bean);
-		}
-		return result;
+		return provider.getPossibleValues();
 	}
 	
 	/**
@@ -256,8 +253,7 @@ public class PossibleValuesEnumerator {
 	 * @param configValue
 	 * @return
 	 */
-	private List<JsonBean> getPossibleValuesForComplexField(Field field, String configValue) {
-		List<JsonBean> result = new ArrayList<JsonBean>();
+	private List<PossibleValue> getPossibleValuesForComplexField(Field field, String configValue) {
 		/*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
 		List<Object[]> items;
 		Class<?> clazz = InterchangeUtils.getClassOfField(field);
@@ -268,13 +264,12 @@ public class PossibleValuesEnumerator {
 		} else if (clazz.equals(AmpCategoryValue.class)){
 			return getPossibleCategoryValues(field, configValue);
 		} else if (clazz.equals(AmpFundingAmount.class)){
-			return new ArrayList<JsonBean>();
+			return Collections.emptyList();
 		} else {
 			//not a complex field, after all
 			return getPossibleValuesForField(field);
 		}
-		result = setProperties(items, result, false);
-		return result;
+		return setProperties(items, false);
 	}
 	
 	/**
@@ -284,7 +279,7 @@ public class PossibleValuesEnumerator {
 	 */
 	
 	@SuppressWarnings("unchecked")
-	private List<JsonBean> getPossibleValuesForField(Field field) {
+	private List<PossibleValue> getPossibleValuesForField(Field field) {
 		if (!InterchangeUtils.isFieldEnumerable(field))
 			return new ArrayList<>();
 		Class clazz = InterchangeUtils.getClassOfField(field);
@@ -349,33 +344,40 @@ public class PossibleValuesEnumerator {
 		}
 	}
 
-	private List<JsonBean> getPossibleLocations() {
-		List<JsonBean> result = new ArrayList<>();
+	private List<PossibleValue> getPossibleLocations() {
+		ListMultimap<Long, PossibleValue> groupedValues = ArrayListMultimap.create();
 
-		for (Object[] item : possibleValuesDAO.getPossibleLocations()) {
-			Long id = ((Number)(item[0])).longValue();
-			String value = ((String)(item[1]));
-			Long parentLocationId = item[2] == null? null : ((Number)(item[2])).longValue();
-			String parentLocationName = item[3] == null? null : ((String)(item[3]));
-			Long categoryValueId = item[4] == null? null : ((Number)(item[4])).longValue();
-			String categoryValueName = item[5] == null? null : ((String)(item[5]));
+		Map<Long, Long> locCatToLocId = new HashMap<>();
+
+		List<Object[]> possibleLocations = possibleValuesDAO.getPossibleLocations();
+		for (Object[] item : possibleLocations) {
+			Long locId = ((Number)(item[0])).longValue();
+			Long locCatId = ((Number)(item[1])).longValue();
+			locCatToLocId.put(locCatId, locId);
+		}
+
+		for (Object[] item : possibleLocations) {
+			Long locId = ((Number)(item[0])).longValue();
+			String locCatName = ((String)(item[2]));
+			Long parentLocCatId = item[3] == null? null : ((Number)(item[3])).longValue();
+			String parentLocCatName = item[4] == null? null : ((String)(item[4]));
+			Long categoryValueId = item[5] == null? null : ((Number)(item[5])).longValue();
+			String categoryValueName = item[6] == null? null : ((String)(item[6]));
 
 			// FIXME remove this filter during AMP-25735
-			if (value == null && parentLocationId == null && parentLocationName == null
+			if (locCatName == null && parentLocCatId == null && parentLocCatName == null
 					&& categoryValueId == null && categoryValueName == null) {
 				continue;
 			}
 
-			JsonBean bean = getIdValueBean(id, value);
-			JsonBean extraInfo = new JsonBean();
-			extraInfo.set("parent_location_id", parentLocationId);
-			extraInfo.set("parent_location_name", parentLocationName);
-			extraInfo.set("implementation_level_id", categoryValueId);
-			extraInfo.set("implementation_location_name", categoryValueName);
-			bean.set("extra_info", extraInfo);
-			result.add(bean);
+			Long parentLocId = locCatToLocId.get(parentLocCatId);
+
+			LocationExtraInfo extraInfo = new LocationExtraInfo(parentLocId, parentLocCatName,
+					categoryValueId, categoryValueName);
+
+			groupedValues.put(parentLocId, new PossibleValue(locId, locCatName, extraInfo));
 		}
-		return result;		
+		return convertToHierarchical(groupedValues);
 	}
 
 	/**
@@ -385,42 +387,50 @@ public class PossibleValuesEnumerator {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private List<JsonBean> getPossibleCategoryValues(Field field, String discriminatorOption) {
-		List <JsonBean> result = new ArrayList<JsonBean>();
+	private List<PossibleValue> getPossibleCategoryValues(Field field, String discriminatorOption) {
 		Interchangeable ant = field.getAnnotation(Interchangeable.class);
 		if (StringUtils.isBlank(discriminatorOption)) {
 			discriminatorOption = ant.discriminatorOption();
 		}
 		if (StringUtils.isNotBlank(discriminatorOption)) {
 			List<Object[]> objColList = possibleValuesDAO.getCategoryValues(discriminatorOption);
-
-			result = setProperties(objColList, result, true);
-			return result;
+			return setProperties(objColList, true);
 		} else {
 			LOGGER.error("discriminatorOption is not configured for CategoryValue [" + field.getName() + "]");
 		}
 		
-		return result; 
+		return Collections.emptyList();
 	}
 	
-	private List<JsonBean> setProperties(List<Object[]> objColList, List<JsonBean> result, boolean checkDeleted) {
-		
+	private List<PossibleValue> setProperties(List<Object[]> objColList, boolean checkDeleted) {
+		ListMultimap<Long, PossibleValue> groupedValues = ArrayListMultimap.create();
 		for (Object[] item : objColList){
 			Long id = ((Number)(item[0])).longValue();
 			String value = ((String)(item[1]));
-			boolean itemGood = !checkDeleted || Boolean.FALSE.equals((Boolean)(item[2])); 
+			boolean itemGood = !checkDeleted || Boolean.FALSE.equals((Boolean)(item[2]));
+			Long parentId = (!checkDeleted && item.length > 2) ? (Long) item[2] : null;
 //			Boolean deleted = ((Boolean)(item[2]));
 			if (itemGood) {
-				result.add(getIdValueBean(id, value));
+				PossibleValue possibleValue = new PossibleValue(id, value);
+				groupedValues.put(parentId, possibleValue);
 			}
 		}
-		return result;
+
+		return convertToHierarchical(groupedValues);
 	}
 
-	private JsonBean getIdValueBean(Long id, String value) {
-		JsonBean bean = new JsonBean();
-		bean.set("id", id);
-		bean.set("value", value);
-		return bean;
+	private List<PossibleValue> convertToHierarchical(ListMultimap<Long, PossibleValue> groupedValues) {
+		return convertToHierarchical(groupedValues.get(null), groupedValues);
+	}
+
+	private List<PossibleValue> convertToHierarchical(List<PossibleValue> flatValues,
+			ListMultimap<Long, PossibleValue> groupedValues) {
+		List<PossibleValue> hierarchicalValues = new ArrayList<>();
+		for (PossibleValue possibleValue : flatValues) {
+			Long id = (Long) possibleValue.getId();
+			List<PossibleValue> children = convertToHierarchical(groupedValues.get(id), groupedValues);
+			hierarchicalValues.add(possibleValue.withChildren(children));
+		}
+		return hierarchicalValues;
 	}
 }

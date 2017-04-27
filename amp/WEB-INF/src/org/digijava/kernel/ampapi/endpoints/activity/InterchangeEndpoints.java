@@ -104,6 +104,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	 * ]
 	 * </pre>
 	 *
+	 * @implicitParam Accept|string|header
 	 * @param fieldName, the Activity field title, underscorified (see <InterchangeUtils.underscorify for details>
 	 * @return list of JsonBean objects, each representing a possible value
 	 */
@@ -180,6 +181,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	 *   ]
 	 * }
 	 * </pre>
+	 * @implicitParam Accept|string|header
 	 * @param fields list of activity fields
 	 * @return list of possible values grouped by field
 	 */

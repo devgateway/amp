@@ -267,8 +267,6 @@ public class PossibleValuesEnumerator {
 			items = possibleValuesDAO.getThemes(configValue);
 		} else if (clazz.equals(AmpCategoryValue.class)){
 			return getPossibleCategoryValues(field, configValue);
-		} else if (clazz.equals(AmpFundingAmount.class)){
-			return new ArrayList<JsonBean>();
 		} else {
 			//not a complex field, after all
 			return getPossibleValuesForField(field);

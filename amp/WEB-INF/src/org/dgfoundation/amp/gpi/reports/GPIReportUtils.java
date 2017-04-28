@@ -2,6 +2,7 @@ package org.dgfoundation.amp.gpi.reports;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -56,8 +57,7 @@ public class GPIReportUtils {
 				spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 			}
 			spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-		}
-		
+		} 
 		
 		for (String mtefColumn : getMTEFColumnsForIndicator5b()) {
 			spec.addColumn(new ReportColumn(mtefColumn));
@@ -164,9 +164,9 @@ public class GPIReportUtils {
 	public static List<String> getMTEFColumnsForIndicator5b() {
 		List<String> mtefColumns = new ArrayList<>();
 		
-		int mtefYear = 2010;
-		for (int i = 0; i < 3; i++) {
-			mtefColumns.add("MTEF " + (mtefYear + i));
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		for (int i = 1; i <= 3; i++) {
+			mtefColumns.add("MTEF " + (currentYear + i));
 		}
 		
 		return mtefColumns;

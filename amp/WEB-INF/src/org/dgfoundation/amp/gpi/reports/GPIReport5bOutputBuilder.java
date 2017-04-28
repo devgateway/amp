@@ -55,7 +55,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 			if (!getColumns().keySet().contains(roc.originalColumnName) && !roc.columnName.equals(MTEF_NAME)) {
-				headers.add(new GPIReportOutputColumn(roc));
+				headers.add(createGPIColumnFromMTEF(roc));
 			}
 		}
 
@@ -84,10 +84,10 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 					rc = rc != null ? rc : TextCell.EMPTY;
 					if (GPIReportUtils.getMTEFColumnsForIndicator5b().contains(roc.columnName)) {
 						if ((((AmountCell) rc).extractValue() > 0)) {
-							columns.put(new GPIReportOutputColumn(roc), MTEF_FUNDINGS_YES);
+							columns.put(createGPIColumnFromMTEF(roc), MTEF_FUNDINGS_YES);
 							sum++;
 						} else {
-							columns.put(new GPIReportOutputColumn(roc), MTEF_FUNDINGS_NO);
+							columns.put(createGPIColumnFromMTEF(roc), MTEF_FUNDINGS_NO);
 						}
 						
 					} else if (roc.parentColumn == null) {
@@ -104,6 +104,14 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 		}
 
 		return contents;
+	}
+
+	/**
+	 * @param roc
+	 * @return
+	 */
+	private GPIReportOutputColumn createGPIColumnFromMTEF(ReportOutputColumn roc) {
+		return new GPIReportOutputColumn(roc.columnName.replaceFirst(MTEF_NAME + " ", ""), 	roc.originalColumnName);
 	}
 	
 	/**

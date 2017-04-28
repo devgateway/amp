@@ -1,9 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
@@ -15,13 +17,12 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 public class TransactionTypePossibleValuesProvider extends PossibleValuesProvider {
 	
 	@Override
-	public Map<String, Object> getPossibleValues() {
-		Map<String, Object> valuesMap = new HashMap<String, Object>();
+	public List<PossibleValue> getPossibleValues() {
+		List<PossibleValue> values = new ArrayList<>();
 		for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet()) {
-			valuesMap.put(entry.getValue().toString(), entry.getKey());
+			values.add(new PossibleValue(entry.getValue().toString(), entry.getKey()));
 		}
-		
-		return valuesMap;
+		return values;
 	}
 	
 	@Override

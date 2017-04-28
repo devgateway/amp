@@ -4,9 +4,9 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.collect.ImmutableList;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -63,6 +63,26 @@ public class PossibleValue {
 
     public List<PossibleValue> getChildren() {
         return children;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        PossibleValue that = (PossibleValue) o;
+        return Objects.equals(id, that.id)
+                && Objects.equals(value, that.value)
+                && Objects.equals(extraInfo, that.extraInfo)
+                && Objects.equals(children, that.children);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, value, extraInfo, children);
     }
 
     public static List<PossibleValue> flattenPossibleValues(List<PossibleValue> possibleValues) {

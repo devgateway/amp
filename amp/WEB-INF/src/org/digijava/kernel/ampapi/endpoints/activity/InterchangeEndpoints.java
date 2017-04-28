@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -18,13 +17,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
@@ -44,9 +43,6 @@ import org.digijava.module.aim.helper.TeamMember;
  */
 @Path("activity")
 public class InterchangeEndpoints implements ErrorReportingEndpoint {
-	
-	@Context
-	private HttpServletRequest httpRequest;
 
     @Context
     private UriInfo uri;
@@ -112,11 +108,10 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@Path("fields/{fieldName}")
 	@Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
 	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
-	public Response getPossibleValuesFlat(@PathParam("fieldName") String fieldName,
-			@Context HttpServletRequest request) {
+	public Response getPossibleValuesFlat(@PathParam("fieldName") String fieldName) {
 		List<PossibleValue> possibleValues = possibleValuesFor(fieldName);
 		MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
-		if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(request.getHeader(HttpHeaders.ACCEPT))) {
+		if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
 			responseType = AmpMediaType.POSSIBLE_VALUES_V2_JSON_TYPE;
 		} else {
 			possibleValues = PossibleValue.flattenPossibleValues(possibleValues);
@@ -189,7 +184,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@Path("field/values")
 	@Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
 	@ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getMultiValues", ui = false)
-	public Response getValues(List<String> fields, @Context HttpServletRequest request) {
+	public Response getValues(List<String> fields) {
 		Map<String, List<PossibleValue>> response;
 		if (fields == null) {
 			response = Collections.emptyMap();
@@ -200,7 +195,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 					.collect(toMap(identity(), this::possibleValuesFor));
 		}
 		MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
-		if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(request.getHeader(HttpHeaders.ACCEPT))) {
+		if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
 			responseType = AmpMediaType.POSSIBLE_VALUES_V2_JSON_TYPE;
 		} else {
 			response = AmpCollections.remap(response, PossibleValue::flattenPossibleValues);

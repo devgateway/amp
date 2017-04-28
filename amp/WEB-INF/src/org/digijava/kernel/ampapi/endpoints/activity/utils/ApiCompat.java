@@ -17,4 +17,13 @@ public final class ApiCompat {
     public static void setRequestedMediaType(String requestedMediaType) {
         requestedMediaTypeTL.set(requestedMediaType);
     }
+
+    public static void withRequestedMediaType(String mediaType, Runnable r) {
+        try {
+            requestedMediaTypeTL.set(mediaType);
+            r.run();
+        } finally {
+            requestedMediaTypeTL.remove();
+        }
+    }
 }

@@ -28,8 +28,4 @@ public class ApiRuntimeException extends RuntimeException {
 	public JsonBean getError() {
 		return error;
 	}
-
-	public Object getUnwrappedError() {
-		return error.get(ApiError.JSON_ERROR_CODE);
-	}
 }

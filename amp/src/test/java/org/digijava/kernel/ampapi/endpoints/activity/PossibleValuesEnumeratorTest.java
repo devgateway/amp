@@ -1,18 +1,18 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.struts.mock.MockHttpServletRequest;
 import org.apache.struts.mock.MockHttpSession;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
@@ -48,22 +48,14 @@ public class PossibleValuesEnumeratorTest {
 
     @Test
     public void testEmptyField() throws IOException {
-        try {
-            possibleValuesFor("");
-            fail();
-        } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) \"]}}");
-        }
+        assertJsonEquals(possibleValuesFor(""),
+                "[{\"error\":{\"0007\":[\"(Invalid field) \"]}}]");
     }
 
     @Test
     public void testInvalidField() throws IOException {
-        try {
-            possibleValuesFor("no_such_field");
-            fail();
-        } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
-        }
+        assertJsonEquals(possibleValuesFor("no_such_field"),
+                "[{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}]");
     }
 
     @Test
@@ -88,12 +80,8 @@ public class PossibleValuesEnumeratorTest {
 
     @Test
     public void testNestedInvalid() throws IOException {
-        try {
-            possibleValuesFor("no_such_field~id");
-            fail();
-        } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
-        }
+        assertJsonEquals(possibleValuesFor("no_such_field~id"),
+                "[{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}]");
     }
 
     @Test
@@ -121,9 +109,9 @@ public class PossibleValuesEnumeratorTest {
     @Test
     public void testDiscriminatorClass() throws IOException {
         assertJsonEquals(possibleValuesFor("approval_status"),
-                "[{\"id\":\"1\",\"value\":\"approved\"},{\"id\":\"5\",\"value\":\"not_approved\"},"
-                        + "{\"id\":\"3\",\"value\":\"startedapproved\"},{\"id\":\"2\",\"value\":\"edited\"},"
-                        + "{\"id\":\"6\",\"value\":\"rejected\"},{\"id\":\"4\",\"value\":\"started\"}]");
+                "[{\"id\":\"1\",\"value\":\"approved\"},{\"id\":\"2\",\"value\":\"edited\"},"
+                        + "{\"id\":\"3\",\"value\":\"startedapproved\"},{\"id\":\"4\",\"value\":\"started\"},"
+                        + "{\"id\":\"5\",\"value\":\"not_approved\"},{\"id\":\"6\",\"value\":\"rejected\"}]");
     }
 
     private static class WithThrowingProvider {
@@ -134,7 +122,7 @@ public class PossibleValuesEnumeratorTest {
 
     static class ThrowingPossibleValuesProvider extends PossibleValuesProvider {
         @Override
-        public List<PossibleValue> getPossibleValues() {
+        public Map<String, ?> getPossibleValues() {
             throw new RuntimeException("some reason");
         }
 
@@ -156,13 +144,9 @@ public class PossibleValuesEnumeratorTest {
 
     @Test
     public void testDiscriminatorThrows() throws IOException {
-        try {
-            possibleValuesFor(WithThrowingProvider.class, "field");
-            fail();
-        } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError(), "{\"error\":{\"0013\":["
-                    + "\"(Error when accessing a method from the discriminator class) some reason\"]}}");
-        }
+        assertJsonEquals(possibleValuesFor(WithThrowingProvider.class, "field"),
+                "[{\"error\":{\"0013\":["
+                        + "\"(Error when accessing a method from the discriminator class) some reason\"]}}]");
     }
 
     @Test
@@ -206,15 +190,16 @@ public class PossibleValuesEnumeratorTest {
     @Test
     public void testStraightCaseAmpLocation() throws IOException {
         when(possibleValuesDAO.getPossibleLocations()).thenReturn(Arrays.asList(
-                        values(101, 1, "Loc 1", null, null, 50, "Country"),
-                        values(102, 2, "Loc 2", 1, "Loc 1", 51, "Commune")
+                        values(1, "Loc 1", null, null, null, null),
+                        values(2, "Loc 2", 1, "Loc 1", 0, "Loc 0")
                 ));
         assertJsonEquals(possibleValuesFor("locations~location"),
-                "[{\"id\":101,\"value\":\"Loc 1\",\"children\":[{\"id\":102,\"value\":\"Loc 2\","
-                        + "\"extra_info\":{\"parent_location_id\":101,\"parent_location_name\":\"Loc 1\","
-                        + "\"implementation_level_id\":51,\"implementation_location_name\":\"Commune\"}}],"
-                        + "\"extra_info\":{\"parent_location_id\":null,\"parent_location_name\":null,"
-                        + "\"implementation_level_id\":50,\"implementation_location_name\":\"Country\"}}]");
+                "[{\"id\":1,\"value\":\"Loc 1\","
+                + "\"extra_info\":{\"parent_location_id\":null,\"parent_location_name\":null,"
+                + "\"implementation_level_id\":null,\"implementation_location_name\":null}},"
+                + "{\"id\":2,\"value\":\"Loc 2\","
+                + "\"extra_info\":{\"parent_location_id\":1,\"parent_location_name\":\"Loc 1\","
+                + "\"implementation_level_id\":0,\"implementation_location_name\":\"Loc 0\"}}]");
     }
 
     private Object[] values(Object... values) {
@@ -223,14 +208,14 @@ public class PossibleValuesEnumeratorTest {
 
     private void assertJsonEquals(Object actualObj, String expectedJson) throws IOException {
         String actualJson = new ObjectMapper().writeValueAsString(actualObj);
-        assertEquals(expectedJson, actualJson);
+        assertEquals(actualJson, expectedJson);
     }
 
-    private List<PossibleValue> possibleValuesFor(String field) {
+    private List<JsonBean> possibleValuesFor(String field) {
         return possibleValuesFor(AmpActivityFields.class, field);
     }
 
-    private List<PossibleValue> possibleValuesFor(Class<?> theClass, String field) {
+    private List<JsonBean> possibleValuesFor(Class<?> theClass, String field) {
         return new PossibleValuesEnumerator(possibleValuesDAO)
                 .getPossibleValuesForField(field, theClass, null);
     }

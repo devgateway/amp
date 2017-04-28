@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -18,12 +19,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.dgfoundation.amp.algo.AmpCollections;
-import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
-import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
@@ -43,90 +40,34 @@ import org.digijava.module.aim.helper.TeamMember;
  */
 @Path("activity")
 public class InterchangeEndpoints implements ErrorReportingEndpoint {
+	
+	@Context
+	private HttpServletRequest httpRequest;
 
     @Context
     private UriInfo uri;
 
 	/**
-	 * Returns a list of JSON objects, each describing a possible value that might be specified in an activity field
-	 * If Accept: application/vnd.possible-values-v2+json is used then possible values will be represented in a tree
-	 * structure.
-	 *
-	 * <h3>Sample response (flat):</h3><pre>
-	 * [
-	 *   {
-	 *     "id": 539,
-	 *     "value": "Cote d'Ivoire",
-	 *     "extra_info": {
-	 *       "parent_location_id": null,
-	 *       "parent_location_name": null,
-	 *       "implementation_level_id": 76,
-	 *       "implementation_location_name": "Country"
-	 *     }
-	 *   },
-	 *   {
-	 *     "id": 796,
-	 *     "value": "BAGOUE",
-	 *     "extra_info": {
-	 *       "parent_location_id": 539,
-	 *       "parent_location_name": "Cote d'Ivoire",
-	 *       "implementation_level_id": 77,
-	 *       "implementation_location_name": "Region"
-	 *     }
-	 *   }
-	 * ]
-	 * </pre>
-	 *
-	 * <h3>Sample response (tree):</h3><pre>
-	 * [
-	 *   {
-	 *     "id": 539,
-	 *     "value": "Cote d'Ivoire",
-	 *     "children": [
-	 *       {
-	 *         "id": 796,
-	 *         "value": "BAGOUE",
-	 *         "extra_info": {
-	 *           "implementation_level_id": 77,
-	 *           "implementation_location_name": "Region"
-	 *         }
-	 *       }
-	 *     ],
-	 *     "extra_info": {
-	 *       "implementation_level_id": 76,
-	 *       "implementation_location_name": "Country"
-	 *     }
-	 *   }
-	 * ]
-	 * </pre>
-	 *
-	 * @implicitParam Accept|string|header
+	 * Returns a list of JSON objects, each describing a possible value that might be specified 
+	 * in an activity field
+	 * 
 	 * @param fieldName, the Activity field title, underscorified (see <InterchangeUtils.underscorify for details>
 	 * @return list of JsonBean objects, each representing a possible value
 	 */
 	@GET
 	@Path("fields/{fieldName}")
-	@Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
-	public Response getPossibleValuesFlat(@PathParam("fieldName") String fieldName) {
-		List<PossibleValue> possibleValues = possibleValuesFor(fieldName);
-		MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
-		if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
-			responseType = AmpMediaType.POSSIBLE_VALUES_V2_JSON_TYPE;
-		} else {
-			possibleValues = PossibleValue.flattenPossibleValues(possibleValues);
-		}
-		return Response.ok(possibleValues, responseType).build();
+	public List<JsonBean> getValues(@PathParam("fieldName") String fieldName) {
+		return possibleValuesFor(fieldName);
 	}
 
 	/**
 	 * Returns a list of possible values for each requested field.
-	 * If Accept: application/vnd.possible-values-v2+json is used then possible values will be represented in a tree
-	 * structure.
 	 * <h3>Sample request:</h3><pre>
 	 * ["fundings~donor_organization_id", "approval_status"]
 	 * </pre>
-	 * <h3>Sample response (flat):</h3><pre>
+	 * <h3>Sample response:</h3><pre>
 	 * {
 	 *   "fundings~donor_organization_id": [
 	 *     {
@@ -150,60 +91,24 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	 *   ]
 	 * }
 	 * </pre>
-	 * <h3>Sample response (tree):</h3><pre>
-	 * {
-	 *   "fundings~donor_organization_id": [
-	 *     {
-	 *       "id": 1,
-	 *       "value": "Donor 1"
-	 *     },
-	 *     {
-	 *       "id": 2,
-	 *       "value": "Donor 2"
-	 *     }
-	 *   ],
-	 *   "locations~locations": [
-	 *     {
-	 *       "id": "1",
-	 *       "value": "Cote d'Ivoire",
-	 *       "children": [
-	 *         {
-	 *       	"id": 796,
-	 *       	"value": "BAGOUE"
-	 *         }
-	 *       ]
-	 *     }
-	 *   ]
-	 * }
-	 * </pre>
-	 * @implicitParam Accept|string|header
 	 * @param fields list of activity fields
 	 * @return list of possible values grouped by field
 	 */
 	@POST
 	@Path("field/values")
-	@Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getMultiValues", ui = false)
-	public Response getValues(List<String> fields) {
-		Map<String, List<PossibleValue>> response;
+	public Map<String, List<JsonBean>> getValues(List<String> fields) {
 		if (fields == null) {
-			response = Collections.emptyMap();
-		} else {
-			response = fields.stream()
-					.filter(Objects::nonNull)
-					.distinct()
-					.collect(toMap(identity(), this::possibleValuesFor));
+			return Collections.emptyMap();
 		}
-		MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
-		if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
-			responseType = AmpMediaType.POSSIBLE_VALUES_V2_JSON_TYPE;
-		} else {
-			response = AmpCollections.remap(response, PossibleValue::flattenPossibleValues);
-		}
-		return Response.ok(response, responseType).build();
+		return fields.stream()
+				.filter(Objects::nonNull)
+				.distinct()
+				.collect(toMap(identity(), this::possibleValuesFor));
 	}
 
-	private List<PossibleValue> possibleValuesFor(String fieldName) {
+	private List<JsonBean> possibleValuesFor(String fieldName) {
 		return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
 	}
 	

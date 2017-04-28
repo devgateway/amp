@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.List;
@@ -8,8 +11,8 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 
 /**
@@ -45,8 +48,7 @@ public class ValueValidator extends InputValidator {
 		if (!isValidPercentage(newFieldParent, fieldDescription)) 
 			return false;
 		
-		List<PossibleValue> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath,
-				AmpActivityFields.class);
+		List<JsonBean> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
 		
 		if (possibleValues.size() != 0) {
 			Object value = newFieldParent.get(fieldDescription.getFieldName());
@@ -56,15 +58,13 @@ public class ValueValidator extends InputValidator {
 				// convert to string the ids to avoid long-integer comparison
 				value = idOnly ? value.toString() : value;
 				
-				for (PossibleValue option: possibleValues) {
+				for (JsonBean option: possibleValues) {
 					if (idOnly) {
-						if (value.equals(option.getId().toString())) {
+						if (value.equals(option.getString(ActivityEPConstants.ID)))
 							return true;
-						}
 					} else {
-						if (value.equals(option.getValue())) {
-							return true;
-						}
+						if (value.equals(option.get(ActivityEPConstants.VALUE)))
+							return true;						
 					}
 				}
 				// wrong value configured if it is not found in allowed options 

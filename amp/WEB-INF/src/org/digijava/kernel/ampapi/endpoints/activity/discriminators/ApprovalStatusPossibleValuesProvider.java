@@ -1,21 +1,19 @@
 package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 
 public class ApprovalStatusPossibleValuesProvider extends PossibleValuesProvider {
 
 	@Override
-	public List<PossibleValue> getPossibleValues() {
-		List<PossibleValue> values = new ArrayList<>();
+	public Map<String, Object> getPossibleValues() {
+		Map<String, Object> valuesMap = new HashMap<String, Object>();
 		for (Map.Entry<String, Integer> entry : AmpARFilter.activityStatusToNr.entrySet())
-			values.add(new PossibleValue(entry.getValue().toString(), entry.getKey()));
-		return values;
+			valuesMap.put(entry.getValue().toString(), entry.getKey());
+		return valuesMap;
 	}
 
 	@Override

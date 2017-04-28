@@ -14,7 +14,7 @@ import org.junit.Test;
 public class PossibleValueTest {
 
     @Test
-    public void testFlatten() throws Exception {
+    public void testFlattenSingle() throws Exception {
         PossibleValue possibleValue = new PossibleValue(1L, "Parent")
                 .withChildren(Collections.singletonList(new PossibleValue(2L, "Child")));
         List<PossibleValue> actualPossibleValues = PossibleValue.flattenPossibleValues(possibleValue);

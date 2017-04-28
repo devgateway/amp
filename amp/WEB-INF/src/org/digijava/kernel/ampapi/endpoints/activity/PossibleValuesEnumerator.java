@@ -350,8 +350,10 @@ public class PossibleValuesEnumerator {
 		List<Object[]> possibleLocations = possibleValuesDAO.getPossibleLocations();
 		for (Object[] item : possibleLocations) {
 			Long locId = ((Number)(item[0])).longValue();
-			Long locCatId = ((Number)(item[1])).longValue();
-			locCatToLocId.put(locCatId, locId);
+			Long locCatId = item[1] == null ? null : ((Number)(item[1])).longValue(); // FIXME should be non-null AMP-25735
+			if (locCatId != null) {
+				locCatToLocId.put(locCatId, locId);
+			}
 		}
 
 		for (Object[] item : possibleLocations) {

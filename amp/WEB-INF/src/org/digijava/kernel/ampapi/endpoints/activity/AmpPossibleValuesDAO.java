@@ -42,15 +42,13 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     @Override
     public List<Object[]> getSectors(String configType) {
         return getSpecialCaseObjectList(configType, "all_sectors_with_levels",
-                "ampSectorId", "name", "parentSectorId.ampSectorId",
-                "sector_config_name", "amp_sector_id", AmpSector.class);
+                "ampSectorId", "name", "sector_config_name", "amp_sector_id", AmpSector.class);
     }
 
     @Override
     public List<Object[]> getThemes(String configType) {
         return getSpecialCaseObjectList(configType, "all_programs_with_levels",
-                "ampThemeId", "name", "parentThemeId.ampThemeId",
-                "program_setting_name", "amp_theme_id", AmpTheme.class);
+                "ampThemeId", "name", "program_setting_name", "amp_theme_id", AmpTheme.class);
     }
 
     /**
@@ -64,7 +62,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
      * @return
      */
     private List<Object[]> getSpecialCaseObjectList(final String configType, final String configTableName,
-            String entityIdColumnName, String entityValueColumnName, String entityParentIdColumnName,
+            String entityIdColumnName, String entityValueColumnName,
             final String conditionColumnName, final String idColumnName, Class<?> clazz) {
 
         final List<Long> itemIds = new ArrayList<Long>();
@@ -88,7 +86,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
         String ids = StringUtils.join(itemIds, ",");
         String queryString = "select cls." + entityIdColumnName + ", "
-                + "cls." + entityValueColumnName + ", cls." + entityParentIdColumnName + " "
+                + "cls." + entityValueColumnName + " "
                 + " from " + clazz.getName() + " cls where cls." + entityIdColumnName + " in (" + ids + ")";
 
         return query(queryString);
@@ -98,12 +96,12 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     public List<Object[]> getPossibleLocations() {
         // FIXME location once added in admin is saved only in AmpCategoryValueLocations
         // FIXME who is responsible for creating missing entries in AmpLocation?
-        String queryString = "SELECT loc.id, acvl.id, acvl.name, acvlParent.id, acvlParent.name, "
-                + "parentCat.id, parentCat.value "
-                + " FROM " + AmpLocation.class.getName() + " loc "
-                + " LEFT JOIN loc.location AS acvl"
-                + " LEFT JOIN acvl.parentLocation AS acvlParent"
-                + " LEFT JOIN acvl.parentCategoryValue AS parentCat"
+        String queryString = "SELECT loc.id, acvl.name, parentLoc.id, parentLoc.name"
+                + " ,parentCat.id, parentCat.value"
+                + " from " + AmpLocation.class.getName() + " loc "
+                + " LEFT JOIN loc.location as acvl"
+                + " LEFT JOIN acvl.parentLocation as parentLoc"
+                + " LEFT JOIN acvl.parentCategoryValue as parentCat"
                 + " ORDER BY loc.id";
         return query(queryString);
     }

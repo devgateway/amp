@@ -28,7 +28,6 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -553,14 +552,18 @@ public class InterchangeUtils {
 				return false;
 			}
 		}
-
-		try {
-			for (String field : filteredItems) {
-				PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(field, AmpActivityFields.class, null);
+		
+		for (String filteredItem : filteredItems) {
+			List<JsonBean> possibleValues = PossibleValuesEnumerator.INSTANCE
+					.getPossibleValuesForField(filteredItem, AmpActivityFields.class, null);
+			if (possibleValues.size() == 1) {
+				Object error = possibleValues.get(0).get(ApiError.JSON_ERROR_CODE);
+				if( error != null) {
+					result.set(ApiError.JSON_ERROR_CODE, error);
+					
+					return false;
+				}
 			}
-		} catch (ApiRuntimeException e) {
-			result.set(ApiError.JSON_ERROR_CODE, e.getUnwrappedError());
-			return false;
 		}
 		
 		return true;

@@ -1,9 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
-
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -13,13 +12,12 @@ import org.digijava.module.aim.util.CurrencyUtil;
 public class CurrencyPossibleValuesProvider extends PossibleValuesProvider {
 	
 	@Override
-	public List<PossibleValue> getPossibleValues() {
+	public Map<String, Object> getPossibleValues() {
 		List<AmpCurrency> currencies = CurrencyUtil.getActiveAmpCurrencyByCode();
-		List<PossibleValue> values = new ArrayList<>();
-		for (AmpCurrency currency : currencies) {
-			values.add(new PossibleValue(currency.getCurrencyCode(), currency.getCurrencyCode()));
-		}
-		return values;
+		Map<String, Object> valuesMap = new HashMap<String, Object>();
+		for (AmpCurrency currency : currencies)
+			valuesMap.put(currency.getCurrencyCode(), currency.getCurrencyCode());
+		return valuesMap;
 	}
 	
 	@Override

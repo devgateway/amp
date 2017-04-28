@@ -1,12 +1,11 @@
+/**
+ * 
+ */
 package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
 
-import static org.digijava.module.aim.dbentity.AmpFundingAmount.FundingType.PROPOSED;
-import static org.digijava.module.aim.dbentity.AmpFundingAmount.FundingType.REVISED;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.List;
-
-import com.google.common.collect.ImmutableList;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
 
@@ -15,15 +14,14 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
  * @author Nadejda Mandrescu
  */
 public class CostTypePossibleValuesProvider extends PossibleValuesProvider {
-
-	private static final List<PossibleValue> OPTIONS = new ImmutableList.Builder<PossibleValue>()
-			.add(new PossibleValue(PROPOSED.name(), PROPOSED.name()))
-			.add(new PossibleValue(REVISED.name(), REVISED.name()))
-			.build();
+	private static final Map<String, String> options = new HashMap<String, String>() {{
+		put(AmpFundingAmount.FundingType.PROPOSED.name(), AmpFundingAmount.FundingType.PROPOSED.name());
+		put(AmpFundingAmount.FundingType.REVISED.name(), AmpFundingAmount.FundingType.REVISED.name());
+	}};
 
 	@Override
-	public List<PossibleValue> getPossibleValues() {
-		return OPTIONS;
+	public Map<String, ?> getPossibleValues() {
+		return options;
 	}
 
 	@Override

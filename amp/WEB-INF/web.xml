@@ -181,15 +181,6 @@
 		<filter-name>ampOfflineClientDetector</filter-name>
 		<url-pattern>/rest/*</url-pattern>
 	</filter-mapping>
-
-	<filter>
-		<filter-name>apiCompatFilter</filter-name>
-		<filter-class>org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompatFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>apiCompatFilter</filter-name>
-		<url-pattern>/rest/*</url-pattern>
-	</filter-mapping>
 	
 	<!-- Jersey Servlet  -->
 	<servlet>

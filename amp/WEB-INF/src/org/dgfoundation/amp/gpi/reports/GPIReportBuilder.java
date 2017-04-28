@@ -27,16 +27,25 @@ public class GPIReportBuilder {
 		this.gpiReportOutputBuilder = outputBuilder;
 	}
 
-	public GPIReport build(int page, int recordsPerPage) {
+	public GPIReport build(boolean isSummary, int page, int recordsPerPage) {
 		GPIReport gpiReport = new GPIReport();
 		gpiReport.setSettings(getReportSettings());
-		gpiReport.setPage(getReportPage(page, recordsPerPage));
+		if (isSummary) {
+			gpiReport.setPage(getSummaryPage());
+		} else {
+			gpiReport.setPage(getReportPage(page, recordsPerPage));
+		}
+		
 
 		return gpiReport;
 	}
-
+	
 	protected GPIReportPage getReportPage(int page, int recordsPerPage) {
 		return gpiReportOutputBuilder.buildGPIReportPage(generatedReport, page, recordsPerPage);
+	}
+	
+	protected GPIReportPage getSummaryPage() {
+		return gpiReportOutputBuilder.buildGPIReportPageSummary(generatedReport);
 	}
 
 	private Settings getReportSettings() {

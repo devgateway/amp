@@ -282,13 +282,13 @@ public class InternationalizedViewsRepository {
 						addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id", AmpOrgType.class, "orgType")));
 
 				addViewDef(this, new I18nViewDescription("v_indicator_description").
-						addColumnDef(new I18nViewColumnDescription("name", "amp_me_indicator_id", AmpIndicator.class, "description")));
+						addColumnDef(new I18nViewColumnDescription("name", "me_indicator_id", AmpIndicator.class, "description")));
 
 				addViewDef(this, new I18nViewDescription("v_indicator_name").
-						addColumnDef(new I18nViewColumnDescription("name", "amp_me_indicator_id", AmpIndicator.class, "name")));
+						addColumnDef(new I18nViewColumnDescription("name", "me_indicator_id", AmpIndicator.class, "name")));
 
 				addSimpleTranslatedView(this, "v_indicator_risk", "risk", "id");
-				addSimpleTranslatedView(this, "v_indicator_type", "type", "id");
+				addSimpleTranslatedView(this, "v_indicator_type", "value", "id");
 				addSimpleTranslatedView(this, "v_indicator_logframe_category", "logframe_category", "id");
 
 				addViewDef(this, new I18nViewDescription("v_indicator_sectors").

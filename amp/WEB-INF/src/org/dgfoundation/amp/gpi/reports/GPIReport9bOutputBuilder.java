@@ -42,6 +42,14 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 					MeasureConstants.NATIONAL_AUDITING_PROCEDURES,
 					MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES
 			)));
+	
+	public final static Set<String> SUMMARY_NUMBERS = Collections.unmodifiableSet(
+			new HashSet<>(Arrays.asList(
+					MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES,
+					MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES,
+					MeasureConstants.NATIONAL_AUDITING_PROCEDURES,
+					MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES
+			)));
 
 	/**
 	 * build the headers of the report
@@ -117,6 +125,30 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 				Map<GPIReportOutputColumn, String> o2) -> o1.get(yearColumn).compareTo(o2.get(yearColumn));
 		
 		contents.sort(byYear);
+		
+		return contents;
+	}
+	
+	/**
+	 * build the contents of the report
+	 * 
+	 * @param generatedReport
+	 * @return
+	 */
+	@Override
+	protected List<Map<GPIReportOutputColumn, String>> getReportContentsSummary(GeneratedReport generatedReport) {
+		List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
+
+		Map<GPIReportOutputColumn, String> columns = new HashMap<>();
+		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
+			ReportCell rc = generatedReport.reportContents.getContents().get(roc);
+			rc = rc != null ? rc : TextCell.EMPTY;
+			if (SUMMARY_NUMBERS.contains(roc.originalColumnName)) {
+				columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
+			}
+		}
+		
+		contents.add(columns);
 		
 		return contents;
 	}

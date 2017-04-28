@@ -19,7 +19,6 @@ public enum MetaCategory {
 	RECIPIENT_ROLE("recipient_role"),
 	RECIPIENT_ORG("recipient_org"),
 	DIRECTED_TRANSACTION_FLOW("directed_transaction_flow"),
-	INDICATOR_ID("indicator_id"),
 	GPI_9B_Q1("gpi_9b_q1"),
 	GPI_9B_Q2("gpi_9b_q2"),
 	GPI_9B_Q3("gpi_9b_q3"),

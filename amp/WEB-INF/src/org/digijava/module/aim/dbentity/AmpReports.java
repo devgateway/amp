@@ -127,6 +127,16 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	
 	private AmpCategoryValue reportCategory;
 
+	private Boolean splitByFunding = false;
+
+	public Boolean getSplitByFunding() {
+		return splitByFunding;
+	}
+
+	public void setSplitByFunding(Boolean splitByFunding) {
+		this.splitByFunding = splitByFunding;
+	}
+
 	public Set<AmpReportLog> getLogs() {
 		return logs;
 	}

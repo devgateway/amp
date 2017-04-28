@@ -1,8 +1,10 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+
 import org.dgfoundation.amp.nireports.PercentageTextCell;
 
 
@@ -25,6 +27,7 @@ public class PrimaryProgramLevel2Cells extends HardcodedCells<PercentageTextCell
 			cell("Activity with primary_tertiary_program", "", -3, 0.500000),
 			cell("activity_with_disaster_response", "", -3, 1.000000),
 			cell("execution rate activity", "", -2, 1.000000),
+			cell("second with disaster response", "", -2, 1.000000),
 			cell("with weird currencies", "", -3, 0.330000),
 			cell("with weird currencies", "", -2, 0.670000));
 	}

@@ -55,6 +55,7 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean forceNameOverwrite = false;
 	private Boolean runReport = false;
 	private String defaultLanguage = "";
+	private Boolean splitByFunding = false;
 
 	@java.lang.SuppressWarnings("all")
 	public ReportWizardForm() {
@@ -360,6 +361,14 @@ public class ReportWizardForm extends ActionForm {
 
 	public void setDefaultLanguage(String defaultLanguage) {
 		this.defaultLanguage=defaultLanguage;
+	}
+
+	public Boolean getSplitByFunding() {
+		return splitByFunding;
+	}
+
+	public void setSplitByFunding(Boolean splitByFunding) {
+		this.splitByFunding = splitByFunding;
 	}
 
 	@java.lang.Override

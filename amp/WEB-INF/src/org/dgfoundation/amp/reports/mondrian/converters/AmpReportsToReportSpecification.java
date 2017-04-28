@@ -1,13 +1,7 @@
-/**
- * 
- */
 package org.dgfoundation.amp.reports.mondrian.converters;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,13 +12,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.mondrian.MondrianETL;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -78,8 +69,9 @@ public class AmpReportsToReportSpecification {
 		configureReportData();
 		configureNonEmpty();
 		configureHierarchies();
+		configureInvisibleHierarchies();
 		configureSorting();
-		
+
 		spec.setEmptyOutputForUnspecifiedData(report.getDrilldownTab() == null || !report.getDrilldownTab());
 		spec.setAlsoShowPledges(report.shouldInjectPledgeColumnsAsProjectColumns());
 		
@@ -89,7 +81,14 @@ public class AmpReportsToReportSpecification {
 		spec.setFilters(arFilterTranslator.buildFilters());
 		return spec;
 	}
-	
+
+	private void configureInvisibleHierarchies() {
+		if (report.getSplitByFunding()) {
+			spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_ID));
+			spec.addInvisibleHierarchy(new ReportColumn(ColumnConstants.FUNDING_ID));
+		}
+	}
+
 	private void configureReportData() {
 		spec.setSummaryReport(report.getHideActivities());
 		if (report.getHideActivities()) {

@@ -30,6 +30,13 @@ function getAlsoShowPledges() {
 	return checkboxObject.checked;
 }
 
+function getSplitByFunding() {
+    if (aimReportWizardForm.splitByFunding == null)
+        return false;
+    var checkboxObject = aimReportWizardForm.splitByFunding;
+    return checkboxObject.checked;
+}
+
 function getReportTitleEl() {
 	var divEl	= document.getElementById("titlePanelBody");
 	var titleEl	= divEl.getElementsByTagName("input")[0];
@@ -313,7 +320,8 @@ SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
 							"&publicReport="+getPublicReport() +
 							"&workspaceLinked="+getWorkspaceLinked() +
 							"&alsoShowPledges="+getAlsoShowPledges() +
-							//"&onlyShowProjectsRelatedPledges=" + getOnlyShowProjectsRelatedPledges() + 
+							"&splitByFunding="+getSplitByFunding() +
+							//"&onlyShowProjectsRelatedPledges=" + getOnlyShowProjectsRelatedPledges() +
 							"&hideActivities="+getHideActivities() +
 							"&useFilters="+getUseFilters()+
 							"&openReport=" + openReport +

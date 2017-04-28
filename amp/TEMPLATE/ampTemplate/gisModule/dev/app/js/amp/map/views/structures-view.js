@@ -5,6 +5,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 var StructureClusterMixin = require('./structure-cluster-mixin');
+var SettingsUtils = require('../../../libs/local/settings-utils.js');
 
 var ProjectSiteTemplate = fs.readFileSync(__dirname + '/../templates/structure-template.html', 'utf8');
 
@@ -29,7 +30,7 @@ module.exports = Backbone.View
   ZOOM_BREAKPOINT: 11, //11 is real # for zoom resize
   SMALL_ICON_RADIUS: 4,
   BIG_ICON_RADIUS: 6,
-  MAX_NUM_FOR_ICONS: -1,
+  maxNumberOfIcons: -1,
 
   // Calculate based on: var boundary0 = self.app.data.boundaries.get('adm-0');
   currentRadius: null,
@@ -119,32 +120,11 @@ module.exports = Backbone.View
                           feature.geometry.coordinates[0]);
 
     // Calculate only one time and not for all points (we can have thousands).
-    if (self.MAX_NUM_FOR_ICONS === -1) {
-      //TODO: Move this code to a config class.
-      var useIconsForSectors = _.find(app.data.settings.models, function(item) {
-        return (item.id === 'use-icons-for-sectors-in-project-list');
-      });
-      var maxIcons = _.find(app.data.settings.models, function(item) {
-        return (item.id === 'max-locations-icons');
-      });
-
-      /* maxIcons is maxLocationIcons */
-      if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
-        if (maxIcons !== undefined && maxIcons.get('name') !== '') {
-          if (maxIcons.get('name') === '0') {
-            self.MAX_NUM_FOR_ICONS = 99999; //always show
-          } else {
-            self.MAX_NUM_FOR_ICONS = parseInt(maxIcons.get('name'), 10);
-          }
-        } else {
-          self.MAX_NUM_FOR_ICONS = 0;
-        }
-      } else {
-        self.MAX_NUM_FOR_ICONS = 0;
-      }
-      console.log('MAX_NUM_FOR_ICONS: ' + self.MAX_NUM_FOR_ICONS);
+    if (self.maxNumberOfIcons === -1) {
+      self.maxNumberOfIcons = SettingsUtils.getMaxNumberOfIcons(app.data.settings);     
     }
-    if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
+    
+    if (self.rawData.features.length < self.maxNumberOfIcons &&
       self.structureMenuModel.get('filterVertical') === 'Primary Sector') {
       // create icon
       marker = self._createSectorMarker(latlng, feature);
@@ -175,7 +155,7 @@ module.exports = Backbone.View
 
 
   // 1. SVG Icon: works well with agresive clustering: aprox 40 px range
-  // or if < MAX_NUM_FOR_ICONS icons. Best on FF
+  // or if < maxNumberOfIcons icons. Best on FF
   _createSectorMarker: function(latlng, feature) {
     var sectorCode = 0; // temp code for catchall...
     var filterVertical = this.structureMenuModel.get('filterVertical');
@@ -196,8 +176,10 @@ module.exports = Backbone.View
         }
       }
     }
+    
+    var icon = this.structureMenuModel.iconMappings[sectorCode] || this.structureMenuModel.iconMappings[this.structureMenuModel.DEFAULT_ICON_CODE];    
     var pointIcon = L.icon({
-      iconUrl: 'img/map-icons/' + this.structureMenuModel.iconMappings[sectorCode],
+      iconUrl: 'img/map-icons/' + icon,
       iconSize:     [25, 25], // size of the icon
       iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
       popupAnchor:  [-3, -6]  // point from which the popup should open relative to the iconAnchor

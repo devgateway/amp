@@ -11,6 +11,8 @@ import org.dgfoundation.amp.nireports.DateCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -20,7 +22,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  *
  */
 public class DateColumn extends AmpDifferentialColumn<DateCell, Boolean> {
-	
+
 	public DateColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
 		super(columnName, levelColumn, viewName, (engine, col) -> true, DateTokenBehaviour.instance);
 	}
@@ -37,7 +39,9 @@ public class DateColumn extends AmpDifferentialColumn<DateCell, Boolean> {
 		LocalDate date = sqlDate.toLocalDate();
 //		if (date == null)
 //			return null;
-		return new DateCell(date, rs.getLong(1), this.levelColumn.isPresent() ? rs.getLong(3) : DateTimeUtil.toJulianDayNumber(date), this.levelColumn);
+        long entityId = this.levelColumn.isPresent() ? rs.getLong(3) : DateTimeUtil.toJulianDayNumber(date);
+        Map<NiDimensionUsage, Coordinate> coos = buildCoordinates(entityId, engine, rs);
+		return new DateCell(date, rs.getLong(1), entityId, coos, this.levelColumn);
 	}
 	
 	@Override

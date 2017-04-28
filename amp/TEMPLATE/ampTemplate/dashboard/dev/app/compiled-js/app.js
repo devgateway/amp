@@ -3855,8 +3855,10 @@ module.exports = BackboneDash.View.extend({
     this.app.translator.getTranslations()
       .done(_(function() {  // defer here to prevent a race with translations loading
 
-        /* TODO: Do we really want to localize this and slow things?*/
-        //this.app.translator.translateDOM(this.el);
+    	if (this.model.get('chartType') === 'fragmentation') {
+    		// We need this for AMP-25599.
+    		this.app.translator.translateDOM(this.el);
+    	}
 
         this.model.fetch({
           type: 'POST',  // TODO: move fetch options to model?
@@ -30058,7 +30060,7 @@ jQuery(function($){
 /* LOCAL AMP CODE -- THIS WILL DISAPPEAR */
 jQuery(function($){
 	$.datepicker.regional['tm'] = {
-		closeText: 'Halo',
+		closeText: 'Halo ona',
 		prevText: 'Uluk',
 		nextText: 'Tuir mai',
 		currentText: 'Ohin loron',

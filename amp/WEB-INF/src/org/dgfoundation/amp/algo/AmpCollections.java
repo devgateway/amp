@@ -157,7 +157,7 @@ public class AmpCollections {
 		res.removeAll(s2);
 		return res;
 	}
-	
+
 	/**
 	 * returns a map which is the result of applying a function to all the elements of a map
 	 * @param in
@@ -172,7 +172,14 @@ public class AmpCollections {
 			out.put(entry.getKey(), mapper.apply(entry.getKey(), entry.getValue()));
 		return out;
 	}
-	
+
+	/**
+	 * A short hand version of {@link #remap(Map, Function, Map)}.
+	 */
+	public static <K, V, Z> Map<K, Z> remap(Map<K, V> in, Function<V, Z> mapper) {
+		return remap(in, mapper, null);
+	}
+
 	/**
 	 * returns a map which is the result of applying a function to all the values of a map
 	 * @param in

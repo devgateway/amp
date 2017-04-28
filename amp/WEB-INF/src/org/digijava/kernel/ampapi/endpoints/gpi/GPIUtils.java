@@ -73,7 +73,7 @@ public class GPIUtils {
 		}
 	}
 
-	public static boolean similarRecordExists(Long ampGPINiAidOnBudgetId, Long donorId, Date indicatorDate) {
+	public static boolean checkAidOnBudgetExists(Long ampGPINiAidOnBudgetId, Long donorId, Date indicatorDate) {
 		Session dbSession = PersistenceManager.getSession();
 		String queryString = "select gpi from " + AmpGPINiAidOnBudget.class.getName()
 				+ " gpi where gpi.donor.ampOrgId=:orgId and gpi.indicatorDate = :indicatorDate";
@@ -91,10 +91,10 @@ public class GPIUtils {
 		return query.list().size() > 0;
 	}
 	
-	public static boolean checkRecordExists(Long donorNotesId, Long donorId, Date notesDate) {
+	public static boolean checkDonorNotesExists(Long donorNotesId, Long donorId, Date notesDate, String indicatorCode) {
 		Session dbSession = PersistenceManager.getSession();
 		String queryString = "select donorNotes from " + AmpGPINiDonorNotes.class.getName()
-				+ " donorNotes where donorNotes.donor.ampOrgId=:orgId and donorNotes.notesDate = :notesDate";
+				+ " donorNotes where donorNotes.donor.ampOrgId=:orgId and donorNotes.notesDate = :notesDate and indicatorCode = :indicatorCode";
 		if (donorNotesId != null) {
 			queryString += " and donorNotes.ampGPINiDonorNotesId != :donorNotesId ";
 		}
@@ -102,6 +102,7 @@ public class GPIUtils {
 		Query query = dbSession.createQuery(queryString);
 		query.setParameter("orgId", donorId);
 		query.setParameter("notesDate", notesDate);
+		query.setParameter("indicatorCode", indicatorCode);
 		if (donorNotesId != null) {
 			query.setParameter("donorNotesId", donorNotesId);
 		}
@@ -123,16 +124,17 @@ public class GPIUtils {
 		}
 	}
 	
-	public static Integer getDonorNotesCount() {
+	public static Integer getDonorNotesCount(String indicatorCode) {
 		Session dbSession = PersistenceManager.getSession();
-		String queryString = "select count(*) from " + AmpGPINiDonorNotes.class.getName() + " donorNotes where donorNotes.donor.ampOrgId in (:donorIds)";
+		String queryString = "select count(*) from " + AmpGPINiDonorNotes.class.getName() + " donorNotes where donorNotes.donor.ampOrgId in (:donorIds) and indicatorCode = :indicatorCode";
 		Query query = dbSession.createQuery(queryString);
 		query.setParameterList("donorIds", getVerifiedOrgsList());
+		query.setString("indicatorCode", indicatorCode);
 		return (Integer) query.uniqueResult();
 	}
 	
 	public static List<AmpGPINiDonorNotes> getDonorNotesList(Integer offset, Integer count, String orderBy,
-			String sort, Integer total) {
+			String sort, Integer total, String indicatorCode) {
 		Integer maxResults = count == null ? GPIEPConstants.DEFAULT_RECORDS_PER_PAGE : count;
 		Integer startAt = (offset == null || offset > total) ? GPIEPConstants.DEFAULT_OFFSET : offset;
 		String orderByColumn = (orderBy == null) ? GPIEPConstants.DEFAULT_DONOR_NOTES_SORT_COLUMN
@@ -140,12 +142,13 @@ public class GPIUtils {
 		String sortOrder = (sort == null) ? GPIEPConstants.ORDER_DESC : sort;
 
 		Session dbSession = PersistenceManager.getSession();
-		String queryString = "select donorNotes from " + AmpGPINiDonorNotes.class.getName() + " donorNotes where donorNotes.donor.ampOrgId in (:donorIds) order by "
+		String queryString = "select donorNotes from " + AmpGPINiDonorNotes.class.getName() + " donorNotes where donorNotes.donor.ampOrgId in (:donorIds) and indicatorCode = :indicatorCode order by "
 				+ GPIEPConstants.DONOR_NOTES_SORT_FIELDS.get(orderByColumn) + " " + sortOrder;
 		Query query = dbSession.createQuery(queryString);
 		query.setFirstResult(startAt);
 		query.setMaxResults(maxResults);
 		query.setParameterList("donorIds", getVerifiedOrgsList());
+		query.setString("indicatorCode", indicatorCode);
 		return query.list();
 	}	
 

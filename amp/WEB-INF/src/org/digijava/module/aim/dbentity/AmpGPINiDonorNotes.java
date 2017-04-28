@@ -11,6 +11,7 @@ public class AmpGPINiDonorNotes implements Serializable {
 	private AmpOrganisation donor;
 	private String notes;
 	private Date notesDate;
+	private String indicatorCode;
 
 	public Long getAmpGPINiDonorNotesId() {
 		return ampGPINiDonorNotesId;
@@ -42,6 +43,14 @@ public class AmpGPINiDonorNotes implements Serializable {
 
 	public void setNotesDate(Date notesDate) {
 		this.notesDate = notesDate;
+	}
+
+	public String getIndicatorCode() {
+		return indicatorCode;
+	}
+
+	public void setIndicatorCode(String indicatorCode) {
+		this.indicatorCode = indicatorCode;
 	}
 	
 }

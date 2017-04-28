@@ -14,6 +14,7 @@ public class GPIEPConstants {
 	public static final String FIELD_ID = "id";
 	public static final String FIELD_NOTES = "notes";
 	public static final String FIELD_NOTES_DATE = "notesDate";
+	public static final String FIELD_INDICATOR_CODE = "indicatorCode";
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
 	public static final String RESULT = "result";
 	public static final String DELETED = "deleted";

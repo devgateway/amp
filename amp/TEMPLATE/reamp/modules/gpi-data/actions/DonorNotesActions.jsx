@@ -17,23 +17,24 @@ export function onSaveAllEdits(data){
     return {type: 'DONOR_NOTES_ON_SAVE_ALL_EDITS', data: data } 
 }
 
-export function addNewDonorNotes() {
-    return {type: 'ADD_DONOR_NOTES', data: {donorNotes: {isEditing: true}} } 
+export function addNewDonorNotes(indicatorCode) {    
+    return {type: 'ADD_DONOR_NOTES', data: {donorNotes: {isEditing: true, indicatorCode: indicatorCode}, indicatorCode: indicatorCode} } 
 }
 
-export function updateDonorNotes(donorNotes) {
-    return {type: 'UPDATE_DONOR_NOTES', data: {donorNotes: donorNotes, errors: [], infoMessages:[]} } 
+export function updateDonorNotes(donorNotes, indicatorCode) {
+    return {type: 'UPDATE_DONOR_NOTES', data: {donorNotes: donorNotes, errors: [], infoMessages:[], indicatorCode: indicatorCode} } 
 }
 
 
-export function loadDonorNotesList(data) {
+export function loadDonorNotesList(data, indicatorCode) {
     return function(dispatch) {
-        return donorNotesApi.getDonorNotesList(data).then(response => {
+        return donorNotesApi.getDonorNotesList(data, indicatorCode).then(response => {
             
             var results = {
                     donorNotesList: [],                    
                     errors: [],
-                    infoMessages: []                    
+                    infoMessages: [],
+                    indicatorCode: indicatorCode
             };
             
             results.paging = data.paging;
@@ -53,7 +54,7 @@ export function loadDonorNotesList(data) {
     };
 }
 
-export function save(data){    
+export function save(data, indicatorCode){    
     return function(dispatch) {
         const errors = Utils.validateDonorNotes(data);
         if(errors.length > 0 ){
@@ -61,11 +62,12 @@ export function save(data){
             result.donorNotes = data;
             result.errors = errors;
             result.infoMessages = [];
+            result.indicatorCode = indicatorCode;
             return dispatch(onSave(result));            
         } 
         
         return donorNotesApi.save(data).then(response => {
-            const result = {errors: []};
+            const result = {errors: [], indicatorCode: indicatorCode};
             result.donorNotes = response.data || data;
             if (response.result === "SAVED") {                    
                 result.donorNotes.isEditing = false;
@@ -82,7 +84,7 @@ export function save(data){
                     result.errors = [...Utils.extractErrors(response.error , result.donorNotes)]
                 }                
             }
-            
+   
             dispatch(onSave(result));
         }).catch(error => {          
             throw(error);
@@ -91,11 +93,11 @@ export function save(data){
     };
 }
 
-export function deleteDonorNotes(data) {
+export function deleteDonorNotes(data, indicatorCode) {
     return function(dispatch) {
         if (data.id) {            
             return donorNotesApi.deleteDonorNotes(data).then(response => {
-                const result = {infoMessages: [], errors: []};
+                const result = {infoMessages: [], errors: [], indicatorCode: indicatorCode};
                 result.donorNotes = data;
                 if(response.error){
                     result.errors = [...Utils.extractErrors(response.error , result.donorNotes)]
@@ -110,24 +112,26 @@ export function deleteDonorNotes(data) {
         } else {
             const result = {
                     donorNotes: data,
-                    infoMessages: [{messageKey: 'amp.gpi-data-donor-notes:delete-successful'}]
+                    infoMessages: [{messageKey: 'amp.gpi-data-donor-notes:delete-successful'}],
+                    indicatorCode: indicatorCode
             };
             dispatch(deleteSuccess(result));
         }        
     }; 
 }
 
-export function removeFromState(data) {
+export function removeFromState(data, indicatorCode) {
     return function(dispatch) {
         const result = {
                 donorNotes: data,
-                infoMessages: []
+                infoMessages: [],
+                indicatorCode: indicatorCode
         };
         dispatch(deleteSuccess(result))  
     };    
 }
 
-export function saveAllEdits(donorNotesList) {
+export function saveAllEdits(donorNotesList, indicatorCode) {
     return function(dispatch) {
         var allErrors = [];
         for (var donorNotes of donorNotesList) {
@@ -140,12 +144,13 @@ export function saveAllEdits(donorNotesList) {
             result.donorNotesList = donorNotesList;
             result.errors = allErrors;
             result.infoMessages = [];
+            result.indicatorCode = indicatorCode;
             return dispatch(onSaveAllEdits(result));            
         } 
         
         
         return donorNotesApi.save(donorNotesList).then(response => {
-            const result = {errors:[], infoMessages: []};
+            const result = {errors:[], infoMessages: [], indicatorCode: indicatorCode};
             
             if (response.error) {
                 results.errors = Utils.extractErrors(response.error); 

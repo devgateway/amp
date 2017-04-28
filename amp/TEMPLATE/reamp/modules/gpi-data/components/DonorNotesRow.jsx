@@ -41,15 +41,15 @@ export default class DonorNotesRow extends Component {
         var origDonorNotes = Object.assign({}, donorNotes);
         donorNotes.isEditing = true;
         this.setState({origDonorNotes: origDonorNotes});
-        this.props.actions.updateDonorNotes(donorNotes);        
+        this.props.actions.updateDonorNotes(donorNotes, this.props.indicatorCode);        
     }
     
     cancel() {
         const origDonorNotes = this.state.origDonorNotes;
         if(origDonorNotes && origDonorNotes.id) {
-           this.props.actions.updateDonorNotes(origDonorNotes);  
+           this.props.actions.updateDonorNotes(origDonorNotes, this.props.indicatorCode);  
         } else {
-            this.props.actions.removeFromState(this.props.donorNotes);
+            this.props.actions.removeFromState(this.props.donorNotes, this.props.indicatorCode);
         }        
     }
     
@@ -63,7 +63,7 @@ export default class DonorNotesRow extends Component {
         const value = event.target.value;        
         const donorNotes = this.props.donorNotes;        
         donorNotes[field] = event.target.value;
-        this.props.actions.updateDonorNotes(donorNotes);               
+        this.props.actions.updateDonorNotes(donorNotes, this.props.indicatorCode);               
     }    
     
     toggleNotes() {
@@ -75,7 +75,7 @@ export default class DonorNotesRow extends Component {
             const donorNotes = this.props.donorNotes; 
             const formartedDate = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
             donorNotes['notesDate'] = formartedDate;
-            this.props.actions.updateDonorNotes(donorNotes); 
+            this.props.actions.updateDonorNotes(donorNotes, this.props.indicatorCode); 
             this.toggleDatePicker(); 
         }        
     }
@@ -94,12 +94,12 @@ export default class DonorNotesRow extends Component {
     }   
     
     save() {
-        this.props.actions.save(this.props.donorNotes);                
+        this.props.actions.save(this.props.donorNotes, this.props.indicatorCode);                
     }
     
     deleteDonorNotes() {        
         if(confirm(this.props.translations['amp.gpi-data:delete-prompt'])){
-            this.props.actions.deleteDonorNotes(this.props.donorNotes); 
+            this.props.actions.deleteDonorNotes(this.props.donorNotes, this.props.indicatorCode); 
         }        
     }
     
@@ -120,7 +120,7 @@ export default class DonorNotesRow extends Component {
         } else {
             donorNotes.donorId = null;
         } 
-        this.props.actions.updateDonorNotes(donorNotes); 
+        this.props.actions.updateDonorNotes(donorNotes, this.props.indicatorCode); 
     }
     
     showTextToggle() {        

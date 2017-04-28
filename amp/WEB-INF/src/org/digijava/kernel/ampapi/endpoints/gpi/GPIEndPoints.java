@@ -385,12 +385,12 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	 * @return a json object containing a list of donors notes and paging information
 	 */
 	@GET
-	@Path("/donor-notes")
+	@Path("/donor-notes/{indicatorCode}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getDonorNotesList", ui = false)
-	public JsonBean getDonorNotesList(@QueryParam("offset") Integer offset, @QueryParam("count") Integer count,
+	public JsonBean getDonorNotesList(@PathParam("indicatorCode") String indicatorCode, @QueryParam("offset") Integer offset, @QueryParam("count") Integer count,
 			@QueryParam("orderby") String orderBy, @QueryParam("sort") String sort) {
-		return GPIDataService.getDonorNotesList(offset, count, orderBy, sort);
+		return GPIDataService.getDonorNotesList(offset, count, orderBy, sort, indicatorCode);
 	}
 
 	/**

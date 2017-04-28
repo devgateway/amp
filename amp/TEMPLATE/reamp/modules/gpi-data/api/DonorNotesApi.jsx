@@ -11,8 +11,8 @@ class DonorNotesApi {
         });
     }
     
-    static getDonorNotesList(data) { 
-        const url = '/rest/gpi/donor-notes?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;    
+    static getDonorNotesList(data, indicatorCode) { 
+        const url = '/rest/gpi/donor-notes/'+ indicatorCode + '?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;    
         return new Promise((resolve, reject) => {
             fetchJson(url).then((response) => {
                 resolve(response)

@@ -28,7 +28,7 @@ export default class DonorNotesList extends Component {
     }
     
     componentWillMount() {        
-        this.props.actions.loadDonorNotesList({paging: this.props.paging, sorting: this.props.sorting}); 
+        this.props.actions.loadDonorNotesList({paging: this.props.paging, sorting: this.props.sorting}, this.props.indicatorCode); 
         this.props.actions.getCurrencyList();
         this.props.actions.getOrgList(true);
         this.props.actions.getSettings();
@@ -39,7 +39,7 @@ export default class DonorNotesList extends Component {
     }
     
     addNew() {
-        this.props.actions.addNewDonorNotes();       
+        this.props.actions.addNewDonorNotes(this.props.indicatorCode);       
     }
     
     goToClickedPage(event){
@@ -64,7 +64,7 @@ export default class DonorNotesList extends Component {
             loadParams.sorting = this.props.sorting;
             loadParams.paging.currentPageNumber = pageNumber;
             loadParams.paging.offset = ((pageNumber - 1) * this.props.paging.recordsPerPage);  
-            this.props.actions.loadDonorNotesList(loadParams);   
+            this.props.actions.loadDonorNotesList(loadParams, this.props.indicatorCode);   
         }        
     }
     
@@ -80,13 +80,13 @@ export default class DonorNotesList extends Component {
                 loadParams.sorting.orderBy = field;
                 loadParams.sorting.sortOrder = 'asc';
             }         
-            this.props.actions.loadDonorNotesList(loadParams);    
+            this.props.actions.loadDonorNotesList(loadParams, this.props.indicatorCode);    
         }       
     }
     
     saveAllEdits() {
         const list = this.props.donorNotesList.filter(donorNotes => {return donorNotes.isEditing})
-        this.props.actions.saveAllEdits(list)
+        this.props.actions.saveAllEdits(list, this.props.indicatorCode)
     }
     
     showErrors() {           
@@ -101,9 +101,9 @@ export default class DonorNotesList extends Component {
     }
     
     showInfoMessages() {
-        return (this.state.infoMessages.length > 0 &&
+        return (this.props.infoMessages.length > 0 &&
                 <div className="alert alert-info" role="alert">
-                {this.state.infoMessages.map((info, index) =>
+                {this.props.infoMessages.map((info, index) =>
                 <span  key={index} >{this.props.translate(info.messageKey, info.params)} <br/></span>
                 )}
         </div>) 
@@ -129,7 +129,7 @@ export default class DonorNotesList extends Component {
         return (
                 <div >                
                 <br/>
-                <p>{this.props.translations['amp.gpi-data-donor-notes:header-info']}</p>
+                <p>{this.props.translations['amp.gpi-data-donor-notes-indicator' + this.props.indicatorCode + ':header-info']}</p>
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-plus" onClick={this.addNew}></span>
@@ -154,7 +154,7 @@ export default class DonorNotesList extends Component {
                 </thead>
                 <tbody>               
                 {this.props.donorNotesList.map(donorNotes => 
-                <DonorNotesRow donorNotes={donorNotes} currencyList={this.props.currencyList} verifiedOrgList={this.props.verifiedOrgList} settings={this.props.settings} key={donorNotes.id || 'c' + donorNotes.cid} errors={this.props.errors}/>  
+                <DonorNotesRow indicatorCode = {this.props.indicatorCode} donorNotes={donorNotes} currencyList={this.props.currencyList} verifiedOrgList={this.props.verifiedOrgList} settings={this.props.settings} key={donorNotes.id || 'c' + donorNotes.cid} errors={this.props.errors}/>  
                 )}                
                 </tbody>
                 </table> 
@@ -183,13 +183,14 @@ export default class DonorNotesList extends Component {
     }
 }
 
-function mapStateToProps(state, ownProps) { 
+function mapStateToProps(state, ownProps) {   
+    var donorNotes = state.donorNotes[ownProps.indicatorCode];
     return {
-        donorNotesList: state.donorNotes.donorNotesList || [],
-        paging: state.donorNotes.paging,
-        sorting: state.donorNotes.sorting,
-        errors: state.donorNotes.errors || [],
-        infoMessages: state.donorNotes.infoMessages || [],        
+        donorNotesList: donorNotes.donorNotesList || [],
+        paging: donorNotes.paging,
+        sorting: donorNotes.sorting,
+        errors: donorNotes.errors || [],
+        infoMessages: donorNotes.infoMessages || [],        
         currencyList: state.commonLists.currencyList || [],
         verifiedOrgList: state.commonLists.verifiedOrgList || [],
         settings: state.commonLists.settings || {},

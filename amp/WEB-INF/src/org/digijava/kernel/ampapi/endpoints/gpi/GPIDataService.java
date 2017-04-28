@@ -159,7 +159,7 @@ public class GPIDataService {
 			id = Long.parseLong(String.valueOf(data.get(GPIEPConstants.FIELD_ID)));
 		}
 
-		if (GPIUtils.similarRecordExists(id, donorId, date)) {
+		if (GPIUtils.checkAidOnBudgetExists(id, donorId, date)) {
 			JsonBean error = new JsonBean();
 			error.set(ApiError.getErrorCode(GPIErrors.AID_ON_BUDGET_DATE_DONOR_COMBINATION_EXISTS),
 					GPIErrors.AID_ON_BUDGET_DATE_DONOR_COMBINATION_EXISTS.description);
@@ -242,6 +242,8 @@ public class GPIDataService {
 			donorNotes.setDonor(GPIUtils.getOrganisation(donorId));
 		}
 		
+		donorNotes.setIndicatorCode(data.getString(GPIEPConstants.FIELD_INDICATOR_CODE));
+		
 		return donorNotes;
 	}
 	
@@ -250,6 +252,7 @@ public class GPIDataService {
 		data.set(GPIEPConstants.FIELD_ID, donorNotes.getAmpGPINiDonorNotesId());
 		data.set(GPIEPConstants.FIELD_DONOR_ID, donorNotes.getDonor().getAmpOrgId());
 		data.set(GPIEPConstants.FIELD_NOTES, donorNotes.getNotes());
+		data.set(GPIEPConstants.FIELD_INDICATOR_CODE, donorNotes.getIndicatorCode());
 		data.set(GPIEPConstants.FIELD_NOTES_DATE, DateTimeUtil.formatDate(donorNotes.getNotesDate(), GPIEPConstants.DATE_FORMAT));
 		return data;
 	}
@@ -263,7 +266,7 @@ public class GPIDataService {
 			id = Long.parseLong(String.valueOf(data.get(GPIEPConstants.FIELD_ID)));
 		}
 
-		if (GPIUtils.checkRecordExists(id, donorId, date)) {
+		if (GPIUtils.checkDonorNotesExists(id, donorId, date, data.getString(GPIEPConstants.FIELD_INDICATOR_CODE))) {
 			JsonBean error = new JsonBean();
 			error.set(ApiError.getErrorCode(GPIErrors.DONOR_NOTES_DATE_DONOR_COMBINATION_EXISTS),
 					GPIErrors.DONOR_NOTES_DATE_DONOR_COMBINATION_EXISTS.description);
@@ -273,13 +276,13 @@ public class GPIDataService {
 		return validationErrors;
 	}
 
-	public static JsonBean getDonorNotesList(Integer offset, Integer count, String orderBy, String sort) {
+	public static JsonBean getDonorNotesList(Integer offset, Integer count, String orderBy, String sort, String indicatorCode) {
 		if (hasGPIDataRights() == false) {
 			ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
 		}
 		
-		Integer total = GPIUtils.getDonorNotesCount();
-		List<AmpGPINiDonorNotes>  notesList = GPIUtils.getDonorNotesList(offset, count, orderBy, sort, total);
+		Integer total = GPIUtils.getDonorNotesCount(indicatorCode);
+		List<AmpGPINiDonorNotes>  notesList = GPIUtils.getDonorNotesList(offset, count, orderBy, sort, total, indicatorCode);
 		JsonBean data = new JsonBean();
 		List<JsonBean> lst = new ArrayList<>();
 		

@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
 import org.dgfoundation.amp.gpi.reports.GPIReport;
+import org.dgfoundation.amp.gpi.reports.GPIReport5bOutputBuilder;
 import org.dgfoundation.amp.gpi.reports.GPIReport9bOutputBuilder;
 import org.dgfoundation.amp.gpi.reports.GPIReportBuilder;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
@@ -81,11 +82,14 @@ public class GPIReportService {
 	 * @return GPIReportOutputBuilder
 	 */
 	private GPIReportOutputBuilder getGPIReportOutputBuilder(String indicatorCode) {
-		if (indicatorCode.equals(GPIReportConstants.REPORT_9b)) {
+		switch (indicatorCode) {
+		case GPIReportConstants.REPORT_5b:
+			return new GPIReport5bOutputBuilder();
+		case GPIReportConstants.REPORT_9b:
 			return new GPIReport9bOutputBuilder();
+		default:
+			return null;
 		}
-		
-		return null;
 	}
 
 }

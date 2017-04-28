@@ -6,4 +6,4 @@ export const INFLATION_RATES = CURRENCIES + '/inflation-rates';
 export const CONSTANT_CURRENCIES = CURRENCIES + '/constant-currencies';
 export const DEFLATOR_SETTINGS = API_BASE + '/Settings-definitions/reports';
 export const DASHBOARD_BASE = API_BASE + '/dashboard';
-export const HEAT_MAP_ADMIN = DASHBOARD_BASE + '/heat-map/Settings';
+export const HEAT_MAP_ADMIN = DASHBOARD_BASE + '/heat-map/settings';

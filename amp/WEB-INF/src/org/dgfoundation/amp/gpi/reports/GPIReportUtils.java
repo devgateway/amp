@@ -17,6 +17,8 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -47,32 +49,24 @@ public class GPIReportUtils {
 		
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5b, ArConstants.GPI_TYPE);
 		
-		if (!isSummary)  {
-			String hierarchyColumn = getHierarchyColumn(formParams);
-			if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
-				spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
-				spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
-			} else {
-				spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-				spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-			}
-			spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-		} 
-		
-		for (String mtefColumn : getMTEFColumnsForIndicator5b()) {
-			spec.addColumn(new ReportColumn(mtefColumn));
+		String hierarchyColumn = getHierarchyColumn(formParams);
+		if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
+		} else {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		}
 		
-		spec.setSummaryReport(true);
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		
- 		if(formParams != null){
+ 		if(formParams != null) {
  			Map<String, Object> filters= (Map<String, Object>) formParams.get(EPConstants.FILTERS);
  			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
  			
  			if(filterRules == null) {
  				filterRules = new AmpReportFilters();
- 			} else if (!isSummary) {
- 				filterRules.getFilterRules().clear();
  			}
  			
  			ReportElement elem = new ReportElement(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
@@ -85,6 +79,22 @@ public class GPIReportUtils {
  		}
  		
  		SettingsUtils.applySettings(spec, formParams, true);
+ 		
+ 		ReportSettingsImpl reportSettings = (ReportSettingsImpl) spec.getSettings();
+		if (reportSettings.getYearRangeFilter() == null) {
+			int year = Calendar.getInstance().get(Calendar.YEAR);
+			try {
+				reportSettings.setYearsRangeFilterRule(year, year);
+			} catch (Exception e) {
+				throw new RuntimeException("Cannot set year filter for settings: " + year);
+			}
+		}
+ 		
+ 		for (String mtefColumn : getMTEFColumnsForIndicator5b(spec)) {
+			spec.addColumn(new ReportColumn(mtefColumn));
+		}
+		
+		spec.setSummaryReport(true);
 		
  		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
  		
@@ -161,12 +171,13 @@ public class GPIReportUtils {
 		return false;
 	}
 
-	public static List<String> getMTEFColumnsForIndicator5b() {
+	public static List<String> getMTEFColumnsForIndicator5b(ReportSpecification spec) {
 		List<String> mtefColumns = new ArrayList<>();
 		
-		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		int year = Integer.parseInt(spec.getSettings().getYearRangeFilter().min);
+		
 		for (int i = 1; i <= 3; i++) {
-			mtefColumns.add("MTEF " + (currentYear + i));
+			mtefColumns.add("MTEF " + (year + i));
 		}
 		
 		return mtefColumns;

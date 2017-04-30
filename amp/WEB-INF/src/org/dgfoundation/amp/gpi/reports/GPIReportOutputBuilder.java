@@ -15,10 +15,11 @@ import org.dgfoundation.amp.newreports.GeneratedReport;
  *
  */
 public abstract class GPIReportOutputBuilder  {
-	
+
 	protected Map<String, GPIReportOutputColumn> columns = new HashMap<>();
 	
-	public GPIReportOutputBuilder() {};
+	public GPIReportOutputBuilder() {
+	};
 	
 	protected Map<String, GPIReportOutputColumn> getColumns() {
 		return Collections.unmodifiableMap(columns);
@@ -32,7 +33,7 @@ public abstract class GPIReportOutputBuilder  {
 	
 	protected abstract List<Map<GPIReportOutputColumn, String>> getReportContents(GeneratedReport generatedReport);
 	
-	protected abstract List<Map<GPIReportOutputColumn, String>> getReportContentsSummary(GeneratedReport generatedReport);
+	protected abstract List<Map<GPIReportOutputColumn, String>> getReportSummary(GeneratedReport generatedReport);
 
 	/**
 	 * Build the report page data based on generatedReport
@@ -55,7 +56,7 @@ public abstract class GPIReportOutputBuilder  {
 		int pages = page;
 		
 		if (recordsPerPage != -1) {
-			pages = (allContents.size() + recordsPerPage -1) / recordsPerPage;
+			pages = (allContents.size() + recordsPerPage - 1) / recordsPerPage;
 			allContents = paginate(allContents, start, recordsPerPage);
 			if (allContents.size() > 0 && page == 0) {
 				page = 1;
@@ -79,7 +80,7 @@ public abstract class GPIReportOutputBuilder  {
 	public GPIReportPage buildGPIReportPageSummary(GeneratedReport generatedReport) {
 		GPIReportPage output = new GPIReportPage();
 		
-		List<Map<GPIReportOutputColumn, String>> allContents = getReportContentsSummary(generatedReport);
+		List<Map<GPIReportOutputColumn, String>> allContents = getReportSummary(generatedReport);
 		output.setContents(allContents);
 
 		return output;

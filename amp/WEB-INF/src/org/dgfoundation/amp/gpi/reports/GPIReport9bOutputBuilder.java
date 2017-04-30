@@ -122,7 +122,7 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 		}
 
 		Comparator<Map<GPIReportOutputColumn, String>> byYear = (Map<GPIReportOutputColumn, String> o1,
-				Map<GPIReportOutputColumn, String> o2) -> o1.get(yearColumn).compareTo(o2.get(yearColumn));
+				Map<GPIReportOutputColumn, String> o2) -> o2.get(yearColumn).compareTo(o1.get(yearColumn));
 		
 		contents.sort(byYear);
 		
@@ -136,7 +136,7 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	@Override
-	protected List<Map<GPIReportOutputColumn, String>> getReportContentsSummary(GeneratedReport generatedReport) {
+	protected List<Map<GPIReportOutputColumn, String>> getReportSummary(GeneratedReport generatedReport) {
 		List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
 
 		Map<GPIReportOutputColumn, String> columns = new HashMap<>();

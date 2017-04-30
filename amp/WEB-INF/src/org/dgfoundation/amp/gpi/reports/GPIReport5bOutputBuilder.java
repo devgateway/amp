@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -19,7 +20,7 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.TextCell;
 
 /**
- * A utility class to transform a GeneratedReport to GPI Report 9b
+ * A utility class to transform a GeneratedReport to GPI Report 5b
  * 
  * @author Viorel Chihai
  *
@@ -54,7 +55,9 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 		List<GPIReportOutputColumn> headers = new ArrayList<>();
 
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
-			if (!getColumns().keySet().contains(roc.originalColumnName) && !roc.columnName.equals(MTEF_NAME)) {
+			if (!getColumns().keySet().contains(roc.originalColumnName) 
+					&& !roc.columnName.equals(MTEF_NAME) 
+					&& !roc.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
 				headers.add(createGPIColumnFromMTEF(roc));
 			}
 		}
@@ -77,13 +80,13 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 		if (generatedReport.reportContents.getChildren() != null) {
 			for (ReportArea reportArea : generatedReport.reportContents.getChildren()) {
 				Map<GPIReportOutputColumn, String> columns = new HashMap<>();
-				
 				double sum = 0;
 				for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 					ReportCell rc = reportArea.getContents().get(roc);
 					rc = rc != null ? rc : TextCell.EMPTY;
-					if (GPIReportUtils.getMTEFColumnsForIndicator5b().contains(roc.columnName)) {
-						if ((((AmountCell) rc).extractValue() > 0)) {
+					
+					if (GPIReportUtils.getMTEFColumnsForIndicator5b(generatedReport.spec).contains(roc.columnName)) {
+						if (((AmountCell) rc).extractValue() > 0) {
 							columns.put(createGPIColumnFromMTEF(roc), MTEF_FUNDINGS_YES);
 							sum++;
 						} else {
@@ -95,9 +98,8 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 					}
 				}
 				
-				BigDecimal percentage =  new BigDecimal((sum / 3) * 100).setScale(0, RoundingMode.UP);
-				columns.put(new GPIReportOutputColumn(COLUMN_INDICATOR_5B), percentage + "%");
-				
+				BigDecimal percentageDisb =  new BigDecimal((sum / 3) * 100).setScale(0, RoundingMode.UP);
+				columns.put(new GPIReportOutputColumn(COLUMN_INDICATOR_5B), percentageDisb + "%");
 				contents.add(columns);
 				
 			}
@@ -107,28 +109,77 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 	}
 
 	/**
-	 * @param roc
-	 * @return
-	 */
-	private GPIReportOutputColumn createGPIColumnFromMTEF(ReportOutputColumn roc) {
-		return new GPIReportOutputColumn(roc.columnName.replaceFirst(MTEF_NAME + " ", ""), 	roc.originalColumnName);
-	}
-	
-	/**
-	 * build the contents of the report
+	 * Calculate the summary number (indicator 5b on country level)
 	 * 
 	 * @param generatedReport
 	 * @return
 	 */
 	@Override
-	protected List<Map<GPIReportOutputColumn, String>> getReportContentsSummary(GeneratedReport generatedReport) {
+	protected List<Map<GPIReportOutputColumn, String>> getReportSummary(GeneratedReport generatedReport) {
 		List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
-
 		Map<GPIReportOutputColumn, String> indicator = new HashMap<>();
-		indicator.put(new GPIReportOutputColumn(COLUMN_INDICATOR_5B), "20%");
 		
-		contents.add(indicator);
+		if (generatedReport.reportContents.getChildren() != null) {
+			double totalDisbursements = getTotalDisbursements(generatedReport);
+			double indicator5bSum = 0;
+			
+			for (ReportArea reportArea : generatedReport.reportContents.getChildren()) {
+				double mtefYearsWithYes = 0;
+				double donorDisbursements = 0;
+				for (ReportOutputColumn roc : generatedReport.leafHeaders) {
+					ReportCell rc = reportArea.getContents().get(roc);
+					rc = rc != null ? rc : TextCell.EMPTY;
+					if (GPIReportUtils.getMTEFColumnsForIndicator5b(generatedReport.spec).contains(roc.columnName)) {
+						if (((AmountCell) rc).extractValue() > 0) {
+							mtefYearsWithYes++;
+						} 
+					}
+					
+					if (roc.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)
+							&& !roc.parentColumn.columnName.equals("Totals")) {
+						ReportCell disbRc = reportArea.getContents().get(roc);
+						donorDisbursements = ((AmountCell) disbRc).extractValue();
+					}
+				}
+				
+				indicator5bSum += donorDisbursements * mtefYearsWithYes;
+			}
+			
+			double indicator5bResult = (indicator5bSum * 100) / (totalDisbursements * 3);
+			BigDecimal percentageIndicator5b =  new BigDecimal(indicator5bResult).setScale(0, RoundingMode.UP);
+			indicator.put(new GPIReportOutputColumn(COLUMN_INDICATOR_5B), percentageIndicator5b + "%");
+			contents.add(indicator);
+		}
 		
 		return contents;
+	}
+	
+	/**
+	 * Get the total disbursements from the report trail cells
+	 * 
+	 * @param generatedReport
+	 * @return
+	 */
+	private double getTotalDisbursements(GeneratedReport generatedReport) {
+		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
+			if (roc.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)
+					&& !roc.parentColumn.columnName.equals("Totals")) {
+				
+				ReportCell rc = generatedReport.reportContents.getContents().get(roc);
+				return ((AmountCell) rc).extractValue();
+			}
+		}
+		
+		throw new RuntimeException("The report doesnt't have the column " + MeasureConstants.ACTUAL_DISBURSEMENTS);
+	}
+
+	/**
+	 * Replace the column name from 'MTEF xxxx' to 'xxxx'
+	 * 
+	 * @param roc
+	 * @return
+	 */
+	private GPIReportOutputColumn createGPIColumnFromMTEF(ReportOutputColumn roc) {
+		return new GPIReportOutputColumn(roc.columnName.replaceFirst(MTEF_NAME + " ", ""), 	roc.originalColumnName);
 	}
 }

@@ -4,5 +4,9 @@ export const initialTranslations = {
         'amp.gpi-reports:indicator5a-title': 'Indicator 5a',
         'amp.gpi-reports:indicator5b-title': 'Indicator 5b',
         'amp.gpi-reports:indicator6-title': 'Indicator 6',
-        'amp.gpi-reports:indicator9b-title': 'Indicator 9b'            
+        'amp.gpi-reports:indicator9b-title': 'Indicator 9b',
+        'amp.gpi-reports:filter-button': 'Filters',
+        'amp.gpi-reports:settings-button': 'Settings',
+        'amp.gpi-reports:other-years': 'Other Years',
+        'amp.gpi-reports:all-donors': 'All Donors'
 };

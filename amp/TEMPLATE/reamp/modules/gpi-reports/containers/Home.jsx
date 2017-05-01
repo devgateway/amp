@@ -3,74 +3,26 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as startUp from '../actions/StartUpAction.jsx';
 require('../styles/main.less');
+import Report9b from "../components/Report9b";
 
 export default class App extends Component {
 
     constructor(props, context) {      
         super(props, context);
-        this.showFilters = this.showFilters.bind(this);
-        this.showSettings = this.showSettings.bind(this);
-    }
-    
-    componentWillMount() { 
-        this.filter = new ampFilter({
-            draggable: true,
-            caller: 'REPORTS'
-          });
-        
-        this.settingsWidget = new AMPSettings.SettingsWidget({
-            draggable : true,
-            caller : 'REPORTS',
-            isPopup: true,
-            definitionUrl: '/rest/settings-definitions/reports'
-    });
        
     }
     
-    showFilters() {
-        this.filter.setElement(this.refs.filterPopup);
-        this.filter.showFilters();
-        $(this.refs.filterPopup).show();
-              
-        this.filter.on('cancel', function() {
-            console.log('close ....');
-            $(this.refs.filterPopup).hide();
-        }.bind(this));
-
-        this.filter.on('apply', function() {
-            $(this.refs.filterPopup).hide();
-        }.bind(this));
+    componentWillMount() { 
+      
+       
     }
-    
-    showSettings() {
-        this.settingsWidget.setElement(this.refs.settingsPopup);
-        
-        this.settingsWidget.definitions.loaded.done(function() {
-            this.settingsWidget.show();   
-        }.bind(this));        
-        
-        $(this.refs.settingsPopup).show();
-        
-        this.settingsWidget.on('close', function() {
-            console.log('close ....');
-            $(this.refs.settingsPopup).hide();
-        }.bind(this));
-
-        this.settingsWidget.on('applySettings', function() {
-            $(this.refs.settingsPopup).hide();
-        }.bind(this));
-    }
+   
    
     render() {       
         
       return (
             <div >
-              <div id="filter-popup" ref="filterPopup"> </div>
-              <div id="amp-settings" ref="settingsPopup"> </div>
-              <div> 
-              <button type="button" className="btn btn-success" onClick = {this.showFilters}>Filters</button>
-              <button type="button" className="btn btn-success" onClick = {this.showSettings}>Settings</button>
-              </div>
+             
              <label className="page-title">{this.props.translations['amp.gpi-reports:title']}</label> 
              <div >
              <div>
@@ -106,7 +58,7 @@ export default class App extends Component {
                </div>              
                <div role="tabpanel" className = 'tab-pane' id="indicator5b"> Indicator 5b </div>
                <div role="tabpanel" className = 'tab-pane' id="indicator6"> Indicator 6 </div>
-               <div role="tabpanel" className = 'tab-pane' id="indicator9b"> Indicator 9b </div>
+               <div role="tabpanel" className = 'tab-pane fade in' id="indicator9b"> <Report9b/> </div>
              </div>
 
            </div>

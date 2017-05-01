@@ -4,6 +4,7 @@ import static org.digijava.module.aim.dbentity.AmpFundingAmount.FundingType.PROP
 import static org.digijava.module.aim.dbentity.AmpFundingAmount.FundingType.REVISED;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
@@ -17,16 +18,14 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
  */
 public class CostTypePossibleValuesProvider extends PossibleValuesProvider {
 
-	private static final List<PossibleValue> OPTIONS = new ImmutableList.Builder<PossibleValue>()
-			.add(new PossibleValue(PROPOSED.name(), PROPOSED.name(),
-					TranslationUtil.translateLabel(PROPOSED.title + " Project Cost")))
-			.add(new PossibleValue(REVISED.name(), REVISED.name(),
-					TranslationUtil.translateLabel(REVISED.title + " Project Cost")))
-			.build();
-
 	@Override
 	public List<PossibleValue> getPossibleValues() {
-		return OPTIONS;
+		Map<String, String> ppcTranslations = TranslationUtil.translateLabel(PROPOSED.title + " Project Cost");
+		Map<String, String> rpcTranslations = TranslationUtil.translateLabel(REVISED.title + " Project Cost");
+		return new ImmutableList.Builder<PossibleValue>()
+				.add(new PossibleValue(PROPOSED.name(), PROPOSED.name(), ppcTranslations))
+				.add(new PossibleValue(REVISED.name(), REVISED.name(), rpcTranslations))
+				.build();
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import java.util.function.Predicate;
 import javax.ws.rs.core.Response;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
@@ -335,7 +336,11 @@ public class PossibleValuesEnumerator {
 		try {
 			Long id = (Long) PropertyUtils.getProperty(object, idProperty);
 			String value = valueProvider.getValue(object);
-			return new PossibleValue(id, value);
+			Map<String, String> translatedValue = ImmutableMap.of();
+			if (valueProvider.isTranslatable()) {
+				translatedValue = TranslationUtil.translateLabel(value);
+			}
+			return new PossibleValue(id, value, translatedValue);
 		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException("Failed to extract possible value object from " + object, e);
 		}

@@ -327,7 +327,7 @@ public class TranslationUtil {
      * @param label label to be translated
      * @return translated labels grouped by locale
      */
-    private static Map<String, String> translateLabel(String label) {
+    public static Map<String, String> translateLabel(String label) {
         Set<String> trnLocaleCodes = TranslationSettings.getCurrent().getTrnLocaleCodes();
         Site site = SiteUtils.getDefaultSite();
         return trnLocaleCodes.stream()

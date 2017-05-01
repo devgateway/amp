@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
@@ -14,7 +15,7 @@ public class ApprovalStatusPossibleValuesProvider extends PossibleValuesProvider
 	public List<PossibleValue> getPossibleValues() {
 		List<PossibleValue> values = new ArrayList<>();
 		for (Map.Entry<String, Integer> entry : AmpARFilter.activityStatusToNr.entrySet())
-			values.add(new PossibleValue(entry.getValue().toString(), entry.getKey()));
+			values.add(new PossibleValue(entry.getValue().toString(), entry.getKey(), ImmutableMap.of()));
 		return values;
 	}
 

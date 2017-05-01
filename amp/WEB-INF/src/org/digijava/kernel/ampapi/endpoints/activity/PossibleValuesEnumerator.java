@@ -23,11 +23,11 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterchangeableValueProvider;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.services.sync.model.SyncConstants.Entities;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvider;
@@ -36,7 +36,6 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -276,11 +275,10 @@ public class PossibleValuesEnumerator {
 	 * @return
 	 */
 	
-	@SuppressWarnings("unchecked")
 	private List<PossibleValue> getPossibleValuesForField(Field field) {
 		if (!InterchangeUtils.isFieldEnumerable(field))
 			return new ArrayList<>();
-		Class clazz = InterchangeUtils.getClassOfField(field);
+		Class<?> clazz = InterchangeUtils.getClassOfField(field);
 
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))
 			return getPossibleCategoryValues(field, null);
@@ -289,7 +287,7 @@ public class PossibleValuesEnumerator {
 		return getPossibleValuesGenericCase(clazz);
 	}
 
-	private <T> List<JsonBean> getPossibleValuesGenericCase(Class<T> clazz) {
+	private <T> List<PossibleValue> getPossibleValuesGenericCase(Class<T> clazz) {
 		Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
 		String idFieldName = null;
 		String valueFieldName = null;
@@ -304,7 +302,7 @@ public class PossibleValuesEnumerator {
 		}
 		InterchangeableValueProvider<T> valueProvider = null;
 		if (valueFieldName != null) {
-			valueProvider = new GenericInterchangeableValueProvider<>(valueFieldName);
+			valueProvider = new GenericInterchangeableValueProvider<>(clazz, valueFieldName);
 		}
 		if (valueProvider == null && clazz.isAnnotationPresent(InterchangeableValue.class)) {
 			valueProvider = getInterchangeableValueProvider(clazz);
@@ -318,7 +316,9 @@ public class PossibleValuesEnumerator {
 		List<T> objectList = possibleValuesDAO.getGenericValues(clazz);
 		String finalIdFieldName = idFieldName;
 		InterchangeableValueProvider<T> finalValueProvider = valueProvider;
-		return objectList.stream().map(o -> getGenericBean(o, finalIdFieldName, finalValueProvider)).collect(toList());
+		return objectList.stream()
+				.map(o -> getGenericPossibleValue(o, finalIdFieldName, finalValueProvider))
+				.collect(toList());
 	}
 
 	private <T> InterchangeableValueProvider<T> getInterchangeableValueProvider(Class<T> clazz) {
@@ -330,13 +330,12 @@ public class PossibleValuesEnumerator {
         }
 	}
 
-	private <T> JsonBean getGenericBean(T object, String idProperty, InterchangeableValueProvider<T> valueProvider) {
+	private <T> PossibleValue getGenericPossibleValue(T object, String idProperty,
+			InterchangeableValueProvider<T> valueProvider) {
 		try {
-			//JsonBean jsonBean = new ActivityExporter().getJsonBean(object);
-			JsonBean jsonBean = new JsonBean();
-			jsonBean.set("id", PropertyUtils.getProperty(object, idProperty));
-			jsonBean.set("value", valueProvider.getValue(object));
-			return jsonBean;
+			Long id = (Long) PropertyUtils.getProperty(object, idProperty);
+			String value = valueProvider.getValue(object);
+			return new PossibleValue(id, value);
 		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException("Failed to extract possible value object from " + object, e);
 		}
@@ -375,7 +374,8 @@ public class PossibleValuesEnumerator {
 			LocationExtraInfo extraInfo = new LocationExtraInfo(parentLocId, parentLocCatName,
 					categoryValueId, categoryValueName);
 
-			groupedValues.put(parentLocId, new PossibleValue(locId, locCatName, extraInfo));
+			Map<String, String> translatedValues = TranslationUtil.translateLabel(locCatName);
+			groupedValues.put(parentLocId, new PossibleValue(locId, locCatName, translatedValues, extraInfo));
 		}
 		return convertToHierarchical(groupedValues);
 	}
@@ -411,7 +411,8 @@ public class PossibleValuesEnumerator {
 			Long parentId = (!checkDeleted && item.length > 2) ? (Long) item[2] : null;
 //			Boolean deleted = ((Boolean)(item[2]));
 			if (itemGood) {
-				PossibleValue possibleValue = new PossibleValue(id, value);
+				Map<String, String> translatedValues = TranslationUtil.translateLabel(value);
+				PossibleValue possibleValue = new PossibleValue(id, value, translatedValues);
 				groupedValues.put(parentId, possibleValue);
 			}
 		}

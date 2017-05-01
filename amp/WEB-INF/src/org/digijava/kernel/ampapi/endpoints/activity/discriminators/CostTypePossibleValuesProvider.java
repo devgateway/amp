@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
 
 /**
@@ -17,8 +18,10 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 public class CostTypePossibleValuesProvider extends PossibleValuesProvider {
 
 	private static final List<PossibleValue> OPTIONS = new ImmutableList.Builder<PossibleValue>()
-			.add(new PossibleValue(PROPOSED.name(), PROPOSED.name()))
-			.add(new PossibleValue(REVISED.name(), REVISED.name()))
+			.add(new PossibleValue(PROPOSED.name(), PROPOSED.name(),
+					TranslationUtil.translateLabel(PROPOSED.title + " Project Cost")))
+			.add(new PossibleValue(REVISED.name(), REVISED.name(),
+					TranslationUtil.translateLabel(REVISED.title + " Project Cost")))
 			.build();
 
 	@Override

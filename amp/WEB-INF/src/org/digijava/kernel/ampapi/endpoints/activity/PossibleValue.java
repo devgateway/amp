@@ -4,9 +4,11 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -19,6 +21,10 @@ public class PossibleValue {
     private final Object id;
     private final String value;
 
+    @JsonProperty("translated-values")
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    private final Map<String, String> translatedValues;
+
     @JsonProperty("extra_info")
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private final Object extraInfo;
@@ -27,28 +33,34 @@ public class PossibleValue {
     private final List<PossibleValue> children;
 
     public PossibleValue(Long id, String value) {
-        this(id, value, null);
+        this(id, value, ImmutableMap.of());
     }
 
-    public PossibleValue(Long id, String value, Object extraInfo) {
-        this(id, value, extraInfo, ImmutableList.of());
+    public PossibleValue(Long id, String value, Map<String, String> translatedValues) {
+        this(id, value, translatedValues, null);
     }
 
-    public PossibleValue(String id, String value) {
-        this(id, value, null, ImmutableList.of());
+    public PossibleValue(Long id, String value, Map<String, String> translatedValues, Object extraInfo) {
+        this(id, value, translatedValues, extraInfo, ImmutableList.of());
+    }
+
+    public PossibleValue(String id, String value, Map<String, String> translatedValues) {
+        this(id, value, translatedValues, null, ImmutableList.of());
     }
 
     public PossibleValue withChildren(List<PossibleValue> children) {
-        return new PossibleValue(id, value, extraInfo, children);
+        return new PossibleValue(id, value, translatedValues, extraInfo, children);
     }
 
     public PossibleValue withoutChildren() {
-        return new PossibleValue(id, value, extraInfo, ImmutableList.of());
+        return new PossibleValue(id, value, translatedValues, extraInfo, ImmutableList.of());
     }
 
-    private PossibleValue(Object id, String value, Object extraInfo, List<PossibleValue> children) {
+    private PossibleValue(Object id, String value, Map<String, String> translatedValues, Object extraInfo,
+            List<PossibleValue> children) {
         this.id = id;
         this.value = value;
+        this.translatedValues = ImmutableMap.copyOf(translatedValues);
         this.children = ImmutableList.copyOf(children);
         this.extraInfo = extraInfo;
     }

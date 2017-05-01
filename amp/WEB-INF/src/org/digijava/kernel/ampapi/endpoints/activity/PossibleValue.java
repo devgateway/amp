@@ -21,7 +21,7 @@ public class PossibleValue {
     private final Object id;
     private final String value;
 
-    @JsonProperty("translated-values")
+    @JsonProperty("translated-value")
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
     private final Map<String, String> translatedValues;
 

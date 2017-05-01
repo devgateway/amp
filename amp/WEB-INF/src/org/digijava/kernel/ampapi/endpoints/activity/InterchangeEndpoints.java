@@ -58,7 +58,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	 *   {
 	 *     "id": 262,
 	 *     "value": "Off Budget",
-	 *     "translated-values": {
+	 *     "translated-value": {
 	 *       "en": "Off Budget",
 	 *       "fr": "Hors Budget"
 	 *     }
@@ -66,7 +66,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	 *   {
 	 *     "id": 263,
 	 *     "value": "On Budget",
-	 *     "translated-values": {
+	 *     "translated-value": {
 	 *       "en": "On Budget",
 	 *       "fr": "Inscrit dans le budget"
 	 *     }
@@ -177,7 +177,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	 *     {
 	 *       "id": 262,
 	 *       "value": "Off Budget",
-	 *       "translated-values": {
+	 *       "translated-value": {
 	 *         "en": "Off Budget",
 	 *         "fr": "Hors Budget"
 	 *       }
@@ -185,7 +185,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	 *     {
 	 *       "id": 263,
 	 *       "value": "On Budget",
-	 *       "translated-values": {
+	 *       "translated-value": {
 	 *         "en": "On Budget",
 	 *         "fr": "Inscrit dans le budget"
 	 *       }

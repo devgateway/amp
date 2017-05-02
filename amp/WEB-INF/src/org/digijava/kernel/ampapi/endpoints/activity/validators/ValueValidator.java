@@ -19,8 +19,9 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
  */
 public class ValueValidator extends InputValidator {
 
-	protected boolean isValidLength = true;
-	protected boolean isValidPercentage = true;
+	private boolean isValidLength = true;
+	private boolean isValidPercentage = true;
+
 	@Override
 	public ApiErrorMessage getErrorMessage() {
 		if (!isValidLength)
@@ -115,7 +116,7 @@ public class ValueValidator extends InputValidator {
 		return true;
 	}
 
-	protected boolean isValidLength(Map<String, Object> newFieldParent, APIField fieldDescription) {
+	private boolean isValidLength(Map<String, Object> newFieldParent, APIField fieldDescription) {
 		isValidLength = true;
 		Integer maxLength = fieldDescription.getFieldLength();
 		if (maxLength != null) {
@@ -136,8 +137,8 @@ public class ValueValidator extends InputValidator {
 		}
 		return isValidLength;
 	}
-	
-	protected boolean isValidLength(Object obj, Integer maxLength) {
+
+	private boolean isValidLength(Object obj, Integer maxLength) {
 		if (obj == null)
 			return true;
 		if (String.class.isAssignableFrom(obj.getClass())){

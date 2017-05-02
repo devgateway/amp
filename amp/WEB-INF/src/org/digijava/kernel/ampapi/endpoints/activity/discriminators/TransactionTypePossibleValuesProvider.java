@@ -7,7 +7,7 @@ import java.util.Map;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
-import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -18,11 +18,11 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 public class TransactionTypePossibleValuesProvider extends PossibleValuesProvider {
 	
 	@Override
-	public List<PossibleValue> getPossibleValues() {
+	public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
 		List<PossibleValue> values = new ArrayList<>();
 		for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet()) {
 			values.add(new PossibleValue(entry.getValue().toString(), entry.getKey(),
-					TranslationUtil.translateLabel(entry.getKey())));
+					translatorService.translateLabel(entry.getKey())));
 		}
 		return values;
 	}

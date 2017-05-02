@@ -24,7 +24,8 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
+import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterchangeableValueProvider;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -56,7 +57,8 @@ public class PossibleValuesEnumerator {
 	
 	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
 
-	public static final PossibleValuesEnumerator INSTANCE = new PossibleValuesEnumerator(new AmpPossibleValuesDAO());
+	public static final PossibleValuesEnumerator INSTANCE = new PossibleValuesEnumerator(new AmpPossibleValuesDAO(),
+            AMPTranslatorService.INSTANCE);
 
 	private static final Multimap<Class<?>, String> ENTITY_CLASS_TO_SYNC_ENTITIES =
 			new ImmutableMultimap.Builder<Class<?>, String>()
@@ -76,9 +78,11 @@ public class PossibleValuesEnumerator {
 				.build();
 
 	private PossibleValuesDAO possibleValuesDAO;
+	private TranslatorService translatorService;
 
-	public PossibleValuesEnumerator(PossibleValuesDAO possibleValuesDAO) {
+	public PossibleValuesEnumerator(PossibleValuesDAO possibleValuesDAO, TranslatorService translatorService) {
 		this.possibleValuesDAO = possibleValuesDAO;
+		this.translatorService = translatorService;
 	}
 
 	/**
@@ -243,7 +247,7 @@ public class PossibleValuesEnumerator {
 			Class<? extends PossibleValuesProvider> possibleValuesProviderClass)
 			throws IllegalAccessException, InstantiationException {
 		PossibleValuesProvider provider = possibleValuesProviderClass.newInstance();
-		return provider.getPossibleValues();
+		return provider.getPossibleValues(translatorService);
 	}
 	
 	/**
@@ -338,7 +342,7 @@ public class PossibleValuesEnumerator {
 			String value = valueProvider.getValue(object);
 			Map<String, String> translatedValue = ImmutableMap.of();
 			if (valueProvider.isTranslatable()) {
-				translatedValue = TranslationUtil.translateLabel(value);
+				translatedValue = translatorService.translateLabel(value);
 			}
 			return new PossibleValue(id, value, translatedValue);
 		} catch (ReflectiveOperationException e) {
@@ -379,7 +383,7 @@ public class PossibleValuesEnumerator {
 			LocationExtraInfo extraInfo = new LocationExtraInfo(parentLocId, parentLocCatName,
 					categoryValueId, categoryValueName);
 
-			Map<String, String> translatedValues = TranslationUtil.translateLabel(locCatName);
+			Map<String, String> translatedValues = translatorService.translateLabel(locCatName);
 			groupedValues.put(parentLocId, new PossibleValue(locId, locCatName, translatedValues, extraInfo));
 		}
 		return convertToHierarchical(groupedValues);
@@ -416,7 +420,7 @@ public class PossibleValuesEnumerator {
 			Long parentId = (!checkDeleted && item.length > 2) ? (Long) item[2] : null;
 //			Boolean deleted = ((Boolean)(item[2]));
 			if (itemGood) {
-				Map<String, String> translatedValues = TranslationUtil.translateLabel(value);
+				Map<String, String> translatedValues = translatorService.translateLabel(value);
 				PossibleValue possibleValue = new PossibleValue(id, value, translatedValues);
 				groupedValues.put(parentId, possibleValue);
 			}

@@ -9,7 +9,7 @@ import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
-import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
 
 /**
@@ -19,9 +19,9 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 public class CostTypePossibleValuesProvider extends PossibleValuesProvider {
 
 	@Override
-	public List<PossibleValue> getPossibleValues() {
-		Map<String, String> ppcTranslations = TranslationUtil.translateLabel(PROPOSED.title + " Project Cost");
-		Map<String, String> rpcTranslations = TranslationUtil.translateLabel(REVISED.title + " Project Cost");
+	public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
+		Map<String, String> ppcTranslations = translatorService.translateLabel(PROPOSED.title + " Project Cost");
+		Map<String, String> rpcTranslations = translatorService.translateLabel(REVISED.title + " Project Cost");
 		return new ImmutableList.Builder<PossibleValue>()
 				.add(new PossibleValue(PROPOSED.name(), PROPOSED.name(), ppcTranslations))
 				.add(new PossibleValue(REVISED.name(), REVISED.name(), rpcTranslations))

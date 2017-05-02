@@ -1,6 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.List;
+
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+
 /**
  * 
  * @author acartaleanu
@@ -11,7 +14,7 @@ import java.util.List;
  */
 public abstract class PossibleValuesProvider {
 
-	public abstract List<PossibleValue> getPossibleValues();
+	public abstract List<PossibleValue> getPossibleValues(TranslatorService translatorService);
 
 	/**
 	 * Generates a JSON-friendly representation of the object provided, 

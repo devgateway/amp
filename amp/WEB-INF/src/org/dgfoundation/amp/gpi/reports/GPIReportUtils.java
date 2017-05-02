@@ -32,15 +32,78 @@ public class GPIReportUtils {
 			boolean isSummary) {
 
 		switch (indicatorCode) {
-			case GPIReportConstants.REPORT_5b:
-				return getGeneratedReportForIndicator5b(formParams, isSummary);
-			case GPIReportConstants.REPORT_6:
-				return getGeneratedReportForIndicator6(formParams, isSummary);
-			case GPIReportConstants.REPORT_9b:
-				return getGeneratedReportForIndicator9b(formParams, isSummary);
-			default:
-				return null;
+		case GPIReportConstants.REPORT_5a:
+			return getGeneratedReportForIndicator5a(formParams, isSummary);
+		case GPIReportConstants.REPORT_5b:
+			return getGeneratedReportForIndicator5b(formParams, isSummary);
+		case GPIReportConstants.REPORT_6:
+			return getGeneratedReportForIndicator6(formParams, isSummary);
+		case GPIReportConstants.REPORT_9b:
+			return getGeneratedReportForIndicator9b(formParams, isSummary);
+		default:
+			return null;
 		}
+	}
+
+	/**
+	 * create the template for the gpi report 5b. It can be refactored to
+	 * another class
+	 * 
+	 * @param formParams
+	 * @return
+	 */
+	public static GeneratedReport getGeneratedReportForIndicator5a(JsonBean formParams, boolean isSummary) {
+
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5a,
+				ArConstants.DONOR_TYPE);
+
+		String hierarchyColumn = getHierarchyColumn(formParams);
+		if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
+		} else {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		}
+
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+
+		if (formParams != null) {
+			Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+
+			if (filterRules == null) {
+				filterRules = new AmpReportFilters();
+			}
+
+			ReportElement elem = new ReportElement(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
+
+			// Validated Activities - 4
+			FilterRule filterRule = new FilterRule(Arrays.asList("4"), true);
+			filterRules.addFilterRule(elem, filterRule);
+
+			spec.setFilters(filterRules);
+		}
+
+		SettingsUtils.applySettings(spec, formParams, true);
+
+		ReportSettingsImpl reportSettings = (ReportSettingsImpl) spec.getSettings();
+		if (reportSettings.getYearRangeFilter() == null) {
+			int year = Calendar.getInstance().get(Calendar.YEAR);
+			try {
+				reportSettings.setYearsRangeFilterRule(year, year);
+			} catch (Exception e) {
+				throw new RuntimeException("Cannot set year filter for settings: " + year);
+			}
+		}
+
+		spec.setSummaryReport(true);
+
+		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
+
+		return generatedReport;
 	}
 
 	/**
@@ -52,7 +115,8 @@ public class GPIReportUtils {
 	 */
 	public static GeneratedReport getGeneratedReportForIndicator5b(JsonBean formParams, boolean isSummary) {
 
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5b, ArConstants.GPI_TYPE);
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5b,
+				ArConstants.DONOR_TYPE);
 
 		String hierarchyColumn = getHierarchyColumn(formParams);
 		if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
@@ -115,7 +179,7 @@ public class GPIReportUtils {
 	 */
 	public static GeneratedReport getGeneratedReportForIndicator6(JsonBean formParams, boolean isSummary) {
 
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_6, ArConstants.GPI_TYPE);
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_6, ArConstants.DONOR_TYPE);
 
 		if (!isSummary) {
 			String hierarchyColumn = getHierarchyColumn(formParams);

@@ -13,7 +13,7 @@ module.exports = Backbone.Model.extend({
   },
 
   initialize: function() {
-    this._joinComplete = this._joinFilters();
+    this._joinComplete = this.joinFilters();
   },
 
   // currently we use: tempDirtyForceJoin instead, but should fix it.
@@ -24,30 +24,36 @@ module.exports = Backbone.Model.extend({
   // created this because the joins were being overriden after the initialize, not sure how/why
   // ideally track down why and this won't be needed, then we can just use: getJoinedVersion
   tempDirtyForceJoin: function() {
-    return this._joinFilters();
+    return this.joinFilters();
   },
 
-  _joinFilters: function() {
+  joinFilters: function() {
     var self = this;
     var deferred = $.Deferred();
     this.collection.appData.filter.getAllFilters().then(function(allFilters) {
-      var matchesFilters = self.attributes.matchesFilters;       
-      if (allFilters.filters && matchesFilters) {
-            _.each(matchesFilters, function(v, k) {
-          //make sure it's a valid filter
-          var filterId  = k.toLowerCase().replace(' ', '-');          
-          if (allFilters.filters[filterId]) {
-            //iterate over ids.        	        			  
-            _.each(matchesFilters[k], function(id, index) {
-              var matched = _(allFilters.filters[filterId]).findWhere({id: id});
-              if (matched) {
-                matchesFilters[k][index] = matched;
-              }
-            });
-          }
-        });
-                  
-        self.set('matchesFilters', matchesFilters);
+    	var matchesFilters = self.attributes.matchesFilters;       
+    	if (allFilters.filters && matchesFilters) {
+    		_.each(matchesFilters, function(v, k) {
+    			if (k == 'Primary Sector') {
+    				_.each(matchesFilters[k], function(sector, index) {
+    					matchesFilters[k][index] = new Backbone.Model(sector);                   
+    				});        	   
+    			} else {
+    				//make sure it's a valid filter
+    				var filterId  = k.toLowerCase().replace(' ', '-');          
+    				if (allFilters.filters[filterId]) {
+    					//iterate over ids.        	        			  
+    					_.each(matchesFilters[k], function(id, index) {
+    						var matched = _(allFilters.filters[filterId]).findWhere({id: id});
+    						if (matched) {
+    							matchesFilters[k][index] = matched;
+    						}
+    					});
+    				}
+    			}          
+    		});
+
+    		self.set('matchesFilters', matchesFilters);
       }
       deferred.resolve();
     });

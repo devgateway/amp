@@ -43,7 +43,6 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
 import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
@@ -3459,37 +3458,28 @@ public class ExportActivityToPDF extends Action {
     /**
      * builds donor,MOFED,Sec.Ministry and Proj.Coord. Contacts info output
      */
-    private void buildContactInfoOutput(PdfPTable mainLayout,String contactType, Collection<AmpActivityContact> contacts,ServletContext ampContext) throws WorkerException{
+    private void buildContactInfoOutput(PdfPTable mainLayout, String contactType, Collection<AmpActivityContact> contacts, ServletContext ampContext) throws WorkerException {
 
         if (!hasContents(contacts))
             return;
 
-        PdfPCell cell1=new PdfPCell();
+        PdfPCell cell1 = new PdfPCell();
         cell1.setBorder(0);
-        cell1.setBackgroundColor(new Color(244,244,242));
-        Paragraph paragraph=new Paragraph(TranslatorWorker.translateText(contactType),titleFont);
+        cell1.setBackgroundColor(new Color(244, 244, 242));
+        Paragraph paragraph = new Paragraph(TranslatorWorker.translateText(contactType), titleFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
         cell1.addElement(paragraph);
         mainLayout.addCell(cell1);
 
-        PdfPCell cell2=new PdfPCell();
+        PdfPCell cell2 = new PdfPCell();
         cell2.setBorder(0);
-        cell2.setBackgroundColor(new Color(255,255,255));
-        if(contacts!=null && contacts.size()>0){
-            String output="";
+        cell2.setBackgroundColor(new Color(255, 255, 255));
+        if (contacts != null && contacts.size() > 0) {
+            String output = "";
             for (AmpActivityContact cont : contacts) {
-                Set<AmpContactProperty> contactProperties=cont.getContact().getProperties();
-                String emails="";
-                if(contactProperties!=null){
-                    for (AmpContactProperty email : contactProperties) {
-                        if(email.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-                            emails+=email.getValue()+"; ";
-                        }
-                    }
-                }
-                output+=cont.getContact().getName()+" "+cont.getContact().getLastname()+"- "+emails+ "\n";
+                output += ExportUtil.getContactInformation(cont.getContact());
             }
-            paragraph=new Paragraph(output,plainFont);
+            paragraph = new Paragraph(output, plainFont);
             paragraph.setAlignment(Element.ALIGN_LEFT);
             cell2.addElement(paragraph);
         }

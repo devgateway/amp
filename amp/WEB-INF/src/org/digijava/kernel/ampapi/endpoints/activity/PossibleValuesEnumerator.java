@@ -275,7 +275,7 @@ public class PossibleValuesEnumerator {
 	 * @param field
 	 * @return
 	 */
-	
+
 	private List<PossibleValue> getPossibleValuesForField(Field field) {
 		if (!InterchangeUtils.isFieldEnumerable(field))
 			return new ArrayList<>();

@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -13,6 +14,7 @@ import org.apache.struts.mock.MockHttpServletRequest;
 import org.apache.struts.mock.MockHttpSession;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
@@ -221,8 +223,16 @@ public class PossibleValuesEnumeratorTest {
         return values;
     }
 
-    private void assertJsonEquals(Object actualObj, String expectedJson) throws IOException {
-        String actualJson = new ObjectMapper().writeValueAsString(actualObj);
+    private void assertJsonEquals(List<PossibleValue> possibleValues, String expectedJson) throws IOException {
+        for (Object obj : possibleValues) {
+            assertTrue("Possible value must extend PossibleValue class.", obj instanceof PossibleValue);
+        }
+        String actualJson = new ObjectMapper().writeValueAsString(possibleValues);
+        assertEquals(expectedJson, actualJson);
+    }
+
+    private void assertJsonEquals(JsonBean jsonBean, String expectedJson) throws IOException {
+        String actualJson = new ObjectMapper().writeValueAsString(jsonBean);
         assertEquals(expectedJson, actualJson);
     }
 

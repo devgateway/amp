@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.gpi;
 
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReport5bOutputBuilder;
+import org.dgfoundation.amp.gpi.reports.GPIReport6OutputBuilder;
 import org.dgfoundation.amp.gpi.reports.GPIReport9bOutputBuilder;
 import org.dgfoundation.amp.gpi.reports.GPIReportBuilder;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
@@ -18,7 +19,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author Viorel Chihai
  *
  */
-public class GPIReportService {
+public final class GPIReportService {
 
 	private static GPIReportService service;
 
@@ -68,8 +69,8 @@ public class GPIReportService {
 				ReportPaginationUtils.getRecordsNumberPerPage());
 		Boolean isSummary = EndpointUtils.getSingleValue(formParams, "summary", false);
 		
-		GeneratedReport generatedReport = GPIReportUtils.getGeneratedReportForIndicator(indicatorCode, formParams, isSummary);
-		GPIReportBuilder gpiReportBuilder = new GPIReportBuilder(generatedReport, getGPIReportOutputBuilder(indicatorCode));
+		GeneratedReport niReport = GPIReportUtils.getGeneratedReportForIndicator(indicatorCode, formParams, isSummary);
+		GPIReportBuilder gpiReportBuilder = new GPIReportBuilder(niReport, getGPIReportOutputBuilder(indicatorCode));
 		GPIReport gpiReport = gpiReportBuilder.build(isSummary, page, recordsPerPage);
 
 		return gpiReport;
@@ -85,6 +86,8 @@ public class GPIReportService {
 		switch (indicatorCode) {
 		case GPIReportConstants.REPORT_5b:
 			return new GPIReport5bOutputBuilder();
+		case GPIReportConstants.REPORT_6:
+			return new GPIReport6OutputBuilder();
 		case GPIReportConstants.REPORT_9b:
 			return new GPIReport9bOutputBuilder();
 		default:

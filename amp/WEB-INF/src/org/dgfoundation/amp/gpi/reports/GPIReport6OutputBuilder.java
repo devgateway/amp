@@ -20,35 +20,26 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.TextCell;
 
 /**
- * A utility class to transform a GeneratedReport to GPI Report 9b
+ * A utility class to transform a GeneratedReport to GPI Report 6
  * 
  * @author Viorel Chihai
  *
  */
-public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
+public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 
-	public GPIReport9bOutputBuilder() {
+	public GPIReport6OutputBuilder() {
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
-		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES));
-		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES));
-		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_AUDITING_PROCEDURES));
-		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES));
+		addColumn(new GPIReportOutputColumn(MeasureConstants.PLANNED_DISBURSEMENTS));
 	}
 
 	public final static Set<String> YEAR_LEVEL_HIERARCHIES = Collections.unmodifiableSet(
 			new HashSet<>(Arrays.asList(
-					MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES,
-					MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES,
-					MeasureConstants.NATIONAL_AUDITING_PROCEDURES,
-					MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES
+					MeasureConstants.PLANNED_DISBURSEMENTS
 			)));
 	
 	public final static Set<String> SUMMARY_NUMBERS = Collections.unmodifiableSet(
 			new HashSet<>(Arrays.asList(
-					MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES,
-					MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES,
-					MeasureConstants.NATIONAL_AUDITING_PROCEDURES,
-					MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES
+					MeasureConstants.PLANNED_DISBURSEMENTS
 			)));
 
 	/**
@@ -68,10 +59,7 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 			}
 		}
 
-		headers.add(getColumns().get(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES));
-		headers.add(getColumns().get(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES));
-		headers.add(getColumns().get(MeasureConstants.NATIONAL_AUDITING_PROCEDURES));
-		headers.add(getColumns().get(MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES));
+		headers.add(getColumns().get(MeasureConstants.PLANNED_DISBURSEMENTS));
 		
 		return headers;
 	}

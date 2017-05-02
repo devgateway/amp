@@ -5,7 +5,8 @@ import org.digijava.kernel.ampapi.endpoints.settings.Settings;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 
 /**
- * A utility class to build a GPI Report from {@link GeneratedReport} generated report
+ * A utility class to build a GPI Report from {@link GeneratedReport} generated
+ * report
  * 
  * @author Viorel Chihai
  *
@@ -16,7 +17,7 @@ public class GPIReportBuilder {
 	 * the source generated report which lead to this report being converted
 	 */
 	protected GeneratedReport generatedReport;
-	
+
 	/**
 	 * the object that will transform the report
 	 */
@@ -35,15 +36,14 @@ public class GPIReportBuilder {
 		} else {
 			gpiReport.setPage(getReportPage(page, recordsPerPage));
 		}
-		
 
 		return gpiReport;
 	}
-	
+
 	protected GPIReportPage getReportPage(int page, int recordsPerPage) {
 		return gpiReportOutputBuilder.buildGPIReportPage(generatedReport, page, recordsPerPage);
 	}
-	
+
 	protected GPIReportPage getSummaryPage() {
 		return gpiReportOutputBuilder.buildGPIReportPageSummary(generatedReport);
 	}

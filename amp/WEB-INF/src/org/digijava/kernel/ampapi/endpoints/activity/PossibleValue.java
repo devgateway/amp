@@ -98,4 +98,14 @@ public class PossibleValue {
         possibleValue.getChildren().forEach(pv -> flatPossibleValues.addAll(flattenPossibleValues(pv)));
         return flatPossibleValues;
     }
+
+    @Override
+    public String toString() {
+        return "PossibleValue{"
+                + "id=" + id
+                + ", value='" + value + '\''
+                + ", hasExtraInfo=" + (extraInfo != null)
+                + ", hasChildren=" + (!children.isEmpty())
+                + '}';
+    }
 }

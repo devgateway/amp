@@ -27,7 +27,6 @@ import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterch
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.services.sync.model.SyncConstants.Entities;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvider;
@@ -36,7 +35,6 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -276,11 +274,10 @@ public class PossibleValuesEnumerator {
 	 * @return
 	 */
 	
-	@SuppressWarnings("unchecked")
 	private List<PossibleValue> getPossibleValuesForField(Field field) {
 		if (!InterchangeUtils.isFieldEnumerable(field))
 			return new ArrayList<>();
-		Class clazz = InterchangeUtils.getClassOfField(field);
+		Class<?> clazz = InterchangeUtils.getClassOfField(field);
 
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))
 			return getPossibleCategoryValues(field, null);
@@ -289,7 +286,7 @@ public class PossibleValuesEnumerator {
 		return getPossibleValuesGenericCase(clazz);
 	}
 
-	private <T> List<JsonBean> getPossibleValuesGenericCase(Class<T> clazz) {
+	private <T> List<PossibleValue> getPossibleValuesGenericCase(Class<T> clazz) {
 		Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
 		String idFieldName = null;
 		String valueFieldName = null;
@@ -318,7 +315,9 @@ public class PossibleValuesEnumerator {
 		List<T> objectList = possibleValuesDAO.getGenericValues(clazz);
 		String finalIdFieldName = idFieldName;
 		InterchangeableValueProvider<T> finalValueProvider = valueProvider;
-		return objectList.stream().map(o -> getGenericBean(o, finalIdFieldName, finalValueProvider)).collect(toList());
+		return objectList.stream()
+				.map(o -> getGenericPossibleValue(o, finalIdFieldName, finalValueProvider))
+				.collect(toList());
 	}
 
 	private <T> InterchangeableValueProvider<T> getInterchangeableValueProvider(Class<T> clazz) {
@@ -330,13 +329,12 @@ public class PossibleValuesEnumerator {
         }
 	}
 
-	private <T> JsonBean getGenericBean(T object, String idProperty, InterchangeableValueProvider<T> valueProvider) {
+	private <T> PossibleValue getGenericPossibleValue(T object, String idProperty,
+			InterchangeableValueProvider<T> valueProvider) {
 		try {
-			//JsonBean jsonBean = new ActivityExporter().getJsonBean(object);
-			JsonBean jsonBean = new JsonBean();
-			jsonBean.set("id", PropertyUtils.getProperty(object, idProperty));
-			jsonBean.set("value", valueProvider.getValue(object));
-			return jsonBean;
+			Long id = (Long) PropertyUtils.getProperty(object, idProperty);
+			String value = valueProvider.getValue(object);
+			return new PossibleValue(id, value);
 		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException("Failed to extract possible value object from " + object, e);
 		}

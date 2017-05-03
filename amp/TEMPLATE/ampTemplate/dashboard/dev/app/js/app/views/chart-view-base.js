@@ -5,6 +5,7 @@ var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
+var ModalView = require('./chart-tops-info-modal');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/chart.html', 'UTF-8'));
 
@@ -217,9 +218,41 @@ module.exports = BackboneDash.View.extend({
         
     this.showChartPromise.resolve();
   },
-  
+
+    getNiceContext: function (e, data) {
+
+        var t = e.target,
+            x = t.getAttribute('xid'),
+            y = t.getAttribute('yid'),
+            labelx = data.x[data.xid.indexOf(parseInt(t.getAttribute('xid'), 10))],
+            labely = data.y[data.yid.indexOf(parseInt(t.getAttribute('yid'), 10))];
+
+        return {
+            data: data,
+            series: {},
+            x: {
+                raw: labelx,
+                fmt: labelx,
+                index: x
+            },
+            y: {
+                raw: labely,
+                fmt: labely,
+                index: y
+            }
+        };
+    },
+
   handleHeatmapClicks: function() {
 	  var self = this;
+	  var cell = this.$(".heatmap-cell");
+      if (cell) {
+          $(cell).on('click', function(e) {
+              var context = self.getNiceContext(e, self.model.values);
+              self.modalView = new ModalView({ app: app, context: context, model: self.model });
+              self.openInfoWindow();
+          });
+      }
 	  var others = this.$(".legend-others");
 	  if (others) {
 		  $(others).on('click', function(evt) {
@@ -440,6 +473,18 @@ module.exports = BackboneDash.View.extend({
 		  }else if(this.app.generalSettings.numberDivider === 1000000000) {
 			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inbillions';
 		  }
-	  }
+	  },
+
+    openInfoWindow: function() {
+        var specialClass = 'dash-settings-modal';
+
+        this.app.modal('Category Detail', {
+            specialClass: specialClass,
+            bodyEl: this.modalView.render().el,
+            i18nTitle: 'amp.dashboard:dashboard-chart-tops-info-modal'
+        });
+        // Translate modal popup.
+        app.translator.translateDOM($("." + specialClass));
+    }
 
 });

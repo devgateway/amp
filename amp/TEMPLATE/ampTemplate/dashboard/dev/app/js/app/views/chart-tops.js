@@ -51,21 +51,10 @@ module.exports = ChartViewBase.extend({
                .values[context.x.index].special === 'others') {
       this.model.set('limit', this.model.get('limit') + 5);      
         this.model.set('big', true);      
-    } else if (this.model.get('showCategoriesInfo') === true) {    	
+    } else {
     	this.modalView = new ModalView({ app: app, context: context, model: this.model });
     	this.openInfoWindow();    	    	
     }
-  },
-  
-  openInfoWindow: function() {
-	  var specialClass = 'dash-settings-modal';
-	  this.app.modal('Category Detail', {
-		  specialClass: specialClass,
-	      bodyEl: this.modalView.render().el,
-	      i18nTitle: 'amp.dashboard:dashboard-chart-tops-info-modal'
-	  });	    
-	  // Translate modal popup.
-	  app.translator.translateDOM($("." + specialClass));
   }
 
 });

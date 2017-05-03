@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.ChartService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
@@ -142,7 +143,17 @@ public class EndPoints implements ErrorReportingEndpoint {
 	public JsonBean getAdminLevelsTotals(JsonBean config,
 			@PathParam("type") String type,
 			@DefaultValue("5") @QueryParam("limit") Integer limit) {
-		return DashboardsService.getTops(type, limit, config);
+		//return DashboardsService.getTops(type, null, limit, config);
+		return new ChartService(config, type, limit).buildChartData();
+	}
+
+
+	@POST
+	@Path("/tops/{type}/{id}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "tops")
+	public JsonBean processChartsData(JsonBean config, @PathParam("type") String type, @PathParam("id") Long id) {
+		return new ChartService(config, type, id).buildChartData();
 	}
 
 	/**
@@ -530,6 +541,14 @@ public class EndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "heatMap")
     public JsonBean getHeatMap(JsonBean config) {
 	    return new HeatMapService(config).buildHeatMap();
+    }
+
+	@POST
+    @Path("/heat-map/{type}/{xId}/{yId}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "heatMap")
+    public JsonBean getHeatMap(JsonBean config, @PathParam("xId") Long xId, @PathParam("yId") Long yId) {
+	    return new HeatMapService(config, xId, yId).buildHeatMapDetail();
     }
 	
 	/**

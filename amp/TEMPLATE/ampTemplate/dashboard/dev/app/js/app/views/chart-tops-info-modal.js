@@ -5,7 +5,8 @@ var template = _.template(fs.readFileSync(__dirname
 		+ '/../templates/chart-tops-info-modal.html', 'UTF-8'));
 
 module.exports = BackboneDash.View.extend({
-
+    _currentPage: 0,
+    PAGE_SIZE: 50,
 	initialize: function(options) {
 		this.app = options.app;
 		this.context = options.context;
@@ -15,6 +16,7 @@ module.exports = BackboneDash.View.extend({
 
 	render: function() {
 		var self = this;
+
 		this.$el.html(template({
 			error: undefined,
 			model: this.model,
@@ -22,15 +24,42 @@ module.exports = BackboneDash.View.extend({
 			values: undefined,
 			numberDivider: this.numberDivider
 		}));
+
 		app.translator.translateDOM($(".dash-settings-modal"));
 		
 		//TODO: move this code to a new model so the API call is made automatically.
     	var config = this.app.filter.serialize();
     	config.settings = this.app.settingsWidget.toAPIFormat();
     	config.settings['funding-type'] = this.model.get('adjtype');
+        config.offset = this._currentPage * this.PAGE_SIZE;
+
+    	var url = self.model.url + '/';
+		if (this.model.get('chartType') != 'fragmentation') {
+            url += this.context.data[0].values[this.context.x.index].id;
+		} else {
+            url += this.context.x.index + '/' + this.context.y.index;
+
+            // Process params from heat-map/configs, in that EP we have defined each heatmap.
+            var configs = self.model.get('heatmap_config').models[0];
+            var thisChart = _.find(configs.get('charts'), function(item) {return item.name === self.model.get('name')});
+            var xColumn = self.model.get('xAxisColumn') !== '' ? self.model.get('xAxisColumn') : configs.get('columns')[thisChart.xColumns[0]].origName; // First column is default.
+            var yColumn = configs.get('columns')[thisChart.yColumns[0]].origName; // First column is default.
+
+            // Check if we need to switch axis.
+            if (self.model.get('swapAxes') === true) {
+                var auxAxis = yColumn;
+                yColumn = xColumn;
+                xColumn = auxAxis;
+            }
+
+            config.xCount = self.model.get('xLimit');
+            config.xColumn = xColumn;
+            config.yColumn = yColumn;
+            config.yCount = self.model.get('yLimit');
+		}
     	$.ajax({
     		method: 'POST',
-    		url: self.model.url + '/' + this.context.data[0].values[this.context.x.index].id,
+    		url: url,
     		dataType: 'json',
     		contentType: 'application/json',
     		processData: false,
@@ -44,6 +73,20 @@ module.exports = BackboneDash.View.extend({
     			values: data.values,
     			numberDivider: self.numberDivider
     		}));
+
+            self.$el.find('.load-more').click(function() {
+                self._currentPage++;
+                self.render();
+            });
+            //hide button if all activities were loaded.
+            var startIndex = self._currentPage * self.PAGE_SIZE;
+			if ((startIndex + self.PAGE_SIZE) >= data.totalRecords) {
+            	self.$el.find('.load-more').hide();
+            } else {
+				self.$el.find('.load-more').html('<span data-i18n="amp.dashboard:chart-tops-table-loadmore">load more</span> ' +
+                    (startIndex + self.PAGE_SIZE) + '/' + data.totalRecords);
+                self.$el.find('.load-more').show();
+            }
     		app.translator.translateDOM($(".dash-settings-modal"));
     	}).fail(function(xhr, err) {
 			var msg = JSON.parse(xhr.responseText).error;

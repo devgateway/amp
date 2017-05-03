@@ -3,7 +3,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'utf8');
-
+var SettingsUtils = require('../../../libs/local/settings-utils.js');
 
 module.exports = Backbone.View.extend({
 

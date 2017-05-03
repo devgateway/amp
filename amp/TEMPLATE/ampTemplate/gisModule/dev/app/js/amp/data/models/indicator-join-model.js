@@ -16,6 +16,7 @@ const readyStateConnectionEstablished = 1;
 const readyStateRequestReceived = 2;
 const readyStateProcessingRequest = 3;
 const readyStateResponseReady = 4;
+const JOIN_BOUNDARIES_PREFIX = 'J';
 
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
@@ -90,7 +91,7 @@ module.exports = Backbone.Model
     return boundaryLoaded;
   },
 
-  loadAll: function(options) {
+loadAll: function(options) {
 	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){		  	  
 		  this.url = '/rest/gis/indicators/' + this.getId(); 
 	  }else if(this.get('type') === 'Indicator Layers'){

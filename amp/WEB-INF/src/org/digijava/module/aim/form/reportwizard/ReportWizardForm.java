@@ -4,6 +4,12 @@
  */
 package org.digijava.module.aim.form.reportwizard;
 
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
+
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;

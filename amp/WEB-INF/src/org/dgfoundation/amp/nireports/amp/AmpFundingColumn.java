@@ -85,8 +85,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	 * {@link #getName()} in case this column is used to fetch "Component Funding"
 	 */
 	public final static String ENTITY_COMPONENT_FUNDING = "Component Funding";
-
-	/**
+	
+	/*
 	 * the cell prototypes cache, plus some auxiliary info
 	 */
 	protected final ExpiringCacher<Boolean, NiReportsEngine, FundingFetcherContext> cacher;

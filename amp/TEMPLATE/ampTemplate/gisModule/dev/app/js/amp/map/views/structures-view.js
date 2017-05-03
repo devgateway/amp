@@ -5,6 +5,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 var StructureClusterMixin = require('./structure-cluster-mixin');
+var SettingsUtils = require('../../../libs/local/settings-utils.js');
 
 var ProjectSiteTemplate = fs.readFileSync(__dirname + '/../templates/structure-template.html', 'utf8');
 
@@ -29,7 +30,7 @@ module.exports = Backbone.View
   ZOOM_BREAKPOINT: 11, //11 is real # for zoom resize
   SMALL_ICON_RADIUS: 4,
   BIG_ICON_RADIUS: 6,
-  MAX_NUM_FOR_ICONS: -1,
+  maxNumberOfIcons: -1,
 
   // Calculate based on: var boundary0 = self.app.data.boundaries.get('adm-0');
   currentRadius: null,
@@ -171,7 +172,7 @@ module.exports = Backbone.View
 
 
   // 1. SVG Icon: works well with agresive clustering: aprox 40 px range
-  // or if < MAX_NUM_FOR_ICONS icons. Best on FF
+  // or if < maxNumberOfIcons icons. Best on FF
   _createSectorMarker: function(latlng, feature) {
     var sectorCode = 0; // temp code for catchall...
     var filterVertical = this.structureMenuModel.get('filterVertical');

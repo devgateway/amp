@@ -30,7 +30,11 @@ public class DependencyValidator extends InputValidator {
 			for (String dep : deps) {
 				switch(InterchangeDependencyResolver.checkDependency(value, importer.getNewJson(), dep, newFieldParent)) {
 				case INVALID_REQUIRED:
-					importer.setSaveAsDraft(true);
+					if (importer.isDraftFMEnabled() && importer.getRequestedSaveMode() == null) {
+						importer.downgradeToDraftSave();
+					} else {
+						errors.add(dep);
+					}
 					break;
 				case INVALID_NOT_CONFIGURABLE:
 					result = false;

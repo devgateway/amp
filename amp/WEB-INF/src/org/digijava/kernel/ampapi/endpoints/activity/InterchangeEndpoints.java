@@ -217,7 +217,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getFields", ui = false)
 	public List<APIField> getAvailableFields() {
-		return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields(AmpActivityFields.class);
+		return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
 	}
 	
 	// TODO remove it as part of AMP-25568

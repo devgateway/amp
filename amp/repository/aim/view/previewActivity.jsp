@@ -2324,9 +2324,9 @@ function collapseAll() {
 <!-- END ISSUES SECTION -->
 	
 <!-- DOCUMENT SECTION -->
-<module:display name="/Activity Form/Related Documents" parentModule="/Activity Form">
-	<fieldset>
-	<legend>
+        <module:display name="/Activity Form/Related Documents" parentModule="/Activity Form">
+            <fieldset>
+                <legend>
 		<span class=legend_label id="documentslink" style="cursor: pointer;">
 			<digi:trn>Related Documents</digi:trn>
 		</span>	
@@ -2380,30 +2380,30 @@ function collapseAll() {
 										<c:set var="translation">
 											<digi:trn>Click here to download document</digi:trn>
 										</c:set> 
-										<a id="<c:out value="${crDoc.uuid}"/>" target="_blank" href="${crDoc.generalLink}" title="${translation}">
-											<img src="/repository/contentrepository/view/images/check_out.gif" border="0">
-										</a>
-										<logic:notEmpty name="crDoc" property="description">
-											<br/>&nbsp;
+                                                        <a id="<c:out value="${crDoc.uuid}"/>" target="_blank" href="${crDoc.generalLink}" title="${translation}">
+                                                            <img src="/repository/contentrepository/view/images/check_out.gif" border="0">
+                                                        </a>
+                                                        <logic:notEmpty name="crDoc" property="description">
+                                                            <br/>&nbsp;
 											<digi:trn>Description</digi:trn>:&nbsp;
 											<b><bean:write name="crDoc" property="description" /></b>
-										</logic:notEmpty> 
-										<logic:notEmpty name="crDoc" property="calendar">
-											<br/>&nbsp;
+                                                        </logic:notEmpty>
+                                                        <logic:notEmpty name="crDoc" property="calendar">
+                                                            <br/>&nbsp;
 											<digi:trn>Date</digi:trn>:
 											<b>&nbsp;<c:out value="${crDoc.calendar}" /></b>
 										</logic:notEmpty>
 									</td>
-								</tr>
-							</table>
+                                                </tr>
+                                            </table>
 							<hr />
 						</logic:iterate>
 					</td>
-				</tr>
-			</logic:notEmpty>
-		</table>
-	</c:if> 
-<%--<c:if test="${!empty aimEditActivityForm.documents.linksList}">
+                                </tr>
+                            </logic:notEmpty>
+                        </table>
+                    </c:if>
+                <%--<c:if test="${!empty aimEditActivityForm.documents.linksList}">
 		<table width="100%" cellSpacing="0" cellPadding="0">
 			<c:forEach var="docList" items="${aimEditActivityForm.documents.linksList}" >
 				<bean:define id="links" name="docList" property="relLink" />

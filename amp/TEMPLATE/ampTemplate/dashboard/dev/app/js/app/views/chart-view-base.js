@@ -219,7 +219,7 @@ module.exports = BackboneDash.View.extend({
     this.showChartPromise.resolve();
   },
 
-    getNiceContext: function (e, data) {
+    getCellContext: function (e, data) {
 
         var t = e.target,
             x = t.getAttribute('xid'),
@@ -227,6 +227,9 @@ module.exports = BackboneDash.View.extend({
             labelx = data.x[data.xid.indexOf(parseInt(t.getAttribute('xid'), 10))],
             labely = data.y[data.yid.indexOf(parseInt(t.getAttribute('yid'), 10))];
 
+        if (x == undefined || y == undefined) {
+            return null;
+        }
         return {
             data: data,
             series: {},
@@ -248,9 +251,11 @@ module.exports = BackboneDash.View.extend({
 	  var cell = this.$(".heatmap-cell");
       if (cell) {
           $(cell).on('click', function(e) {
-              var context = self.getNiceContext(e, self.model.values);
-              self.modalView = new ModalView({ app: app, context: context, model: self.model });
-              self.openInfoWindow();
+              var context = self.getCellContext(e, self.model.values);
+              if (context) {
+                  self.modalView = new ModalView({app: app, context: context, model: self.model});
+                  self.openInfoWindow();
+              }
           });
       }
 	  var others = this.$(".legend-others");

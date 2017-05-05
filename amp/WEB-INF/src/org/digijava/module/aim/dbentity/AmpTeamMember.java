@@ -10,26 +10,19 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
-import org.apache.jackrabbit.core.persistence.PersistenceManager;
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.digijava.kernel.ampapi.endpoints.common.valueproviders.TeamMemberValueProvider;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.action.GlobalSettings;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.Output;
 import org.digijava.module.message.dbentity.AmpMessageState;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.jdbc.Work;
 
+@InterchangeableValue(TeamMemberValueProvider.class)
 public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*/ {
 
 	@Interchangeable(fieldTitle="AmpTeamMember ID", id=true)

@@ -155,7 +155,7 @@ public class DbUtil {
 
 	/**
 	 * Returns group, read from database
-	 * 
+	 *
 	 * @param id
 	 *            group identity
 	 * @return group, read from database
@@ -579,7 +579,9 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 
-			// beginTransaction();
+            user.updateLastModified();
+
+            //beginTransaction();
 
 			session.update(user);
 
@@ -776,7 +778,7 @@ public class DbUtil {
 		qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id ";
 		qry = session.createQuery(qryStr);
 		qry.setLong("id", id.longValue());
-		
+
 		AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
 
 		updateGlobalSetting(ags, value);

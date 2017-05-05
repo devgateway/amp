@@ -28,13 +28,13 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.security.PasswordPolicyValidator;
 
 public class RegisterUser extends Action {
 
@@ -71,6 +71,10 @@ public class RegisterUser extends Action {
 			// set client IP address
 			user.setModifyingIP(RequestUtils.getRemoteAddress(request));
 
+			if (!PasswordPolicyValidator.isValid(userRegisterForm.getPassword(), userRegisterForm.getEmail())) {
+				userRegisterForm.addError("error.strong.validation", "Please enter a password which meets the minimum password requirements");
+				return (mapping.getInputForward());
+			}
 			// set password
 			user.setPassword(userRegisterForm.getPassword().trim());
 			user.setSalt(userRegisterForm.getPassword().trim());

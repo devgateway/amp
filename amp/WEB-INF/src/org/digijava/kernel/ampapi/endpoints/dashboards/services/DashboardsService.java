@@ -413,7 +413,7 @@ public class DashboardsService {
 		ReportOutputColumn titleCol = report.leafHeaders.get(0);
 		ReportOutputColumn amountCol = report.leafHeaders.get(1);
 
-		report.reportContents.getChildren().stream().skip(offset).limit(RECORDS_PER_PAGE).forEach(
+		report.reportContents.getChildren().stream().limit(offset + RECORDS_PER_PAGE).forEach(
 				n -> {
 					JsonBean row = new JsonBean();
 					IdentifiedReportCell title = (IdentifiedReportCell) n.getContents().get(titleCol);

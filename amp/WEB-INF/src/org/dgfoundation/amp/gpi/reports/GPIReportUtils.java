@@ -257,7 +257,7 @@ public class GPIReportUtils {
 
 			if (filterRules == null) {
 				filterRules = new AmpReportFilters();
-			} else if (!isSummary) {
+			} else if (isSummary) {
 				filterRules.getFilterRules().clear();
 			}
 

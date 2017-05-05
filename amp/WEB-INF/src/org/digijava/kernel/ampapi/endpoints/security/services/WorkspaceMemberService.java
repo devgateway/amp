@@ -26,10 +26,16 @@ public class WorkspaceMemberService {
    
     public List<WorkspaceMember> getWorkspaceMembers(List<Long> ids) {
         List<WorkspaceMember> wsMermbers = new ArrayList<>();
+        String restrictions;
+        if (ids.isEmpty()) {
+            restrictions = "";
+        } else {
+            restrictions = " WHERE atm.amp_team_mem_id in (" + Util.toCSStringForIN(ids) + ")";
+        }
         String sqlQuery = "SELECT atm.amp_team_mem_id, atm.user_, atm.amp_team_id, atmr.role "
                 + "FROM amp_team_member atm "
-                + "LEFT JOIN amp_team_member_roles atmr ON atmr.amp_team_mem_role_id = atm.amp_member_role_id "
-                + "WHERE atm.amp_team_mem_id in (" + Util.toCSStringForIN(ids) + ")";
+                + "LEFT JOIN amp_team_member_roles atmr ON atmr.amp_team_mem_role_id = atm.amp_member_role_id"
+                + restrictions;
         Consumer<ResultSet> resultSetConsumer = new Consumer<ResultSet>() {
             @Override
             public void accept(ResultSet rs) {

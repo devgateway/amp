@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import javax.ws.rs.core.Response;
 
@@ -33,6 +34,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvi
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -261,6 +263,9 @@ public class PossibleValuesEnumerator {
 			items = possibleValuesDAO.getThemes(configValue);
 		} else if (clazz.equals(AmpCategoryValue.class)){
 			return getPossibleCategoryValues(field, configValue);
+		} else if (clazz.equals(AmpClassificationConfiguration.class)) {
+			return getPossibleValuesGenericCase(clazz,
+					() -> Collections.singletonList(possibleValuesDAO.getAmpClassificationConfiguration(configValue)));
 		} else {
 			//not a complex field, after all
 			return getPossibleValuesForField(field);
@@ -283,10 +288,11 @@ public class PossibleValuesEnumerator {
 			return getPossibleCategoryValues(field, null);
 		if (clazz.isAssignableFrom(AmpLocation.class))
 			return getPossibleLocations();
-		return getPossibleValuesGenericCase(clazz);
+		return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
 	}
 
-	private <T> List<PossibleValue> getPossibleValuesGenericCase(Class<T> clazz) {
+	private <T> List<PossibleValue> getPossibleValuesGenericCase(Class<T> clazz,
+			Supplier<List> possibleValuesSupplier) {
 		Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
 		String idFieldName = null;
 		String valueFieldName = null;
@@ -300,11 +306,11 @@ public class PossibleValuesEnumerator {
 			}
 		}
 		InterchangeableValueProvider<T> valueProvider = null;
-		if (valueFieldName != null) {
-			valueProvider = new GenericInterchangeableValueProvider<>(valueFieldName);
-		}
-		if (valueProvider == null && clazz.isAnnotationPresent(InterchangeableValue.class)) {
+		if (clazz.isAnnotationPresent(InterchangeableValue.class)) {
 			valueProvider = getInterchangeableValueProvider(clazz);
+		}
+		if (valueProvider == null && valueFieldName != null) {
+			valueProvider = new GenericInterchangeableValueProvider<>(valueFieldName);
 		}
 		if (idFieldName == null || valueProvider == null) {
 			String err = "Cannot provide possible values for " + clazz.getName()
@@ -312,7 +318,7 @@ public class PossibleValuesEnumerator {
 			LOGGER.error(err);
 			return Collections.emptyList();
 		}
-		List<T> objectList = possibleValuesDAO.getGenericValues(clazz);
+		List<T> objectList = possibleValuesSupplier.get();
 		String finalIdFieldName = idFieldName;
 		InterchangeableValueProvider<T> finalValueProvider = valueProvider;
 		return objectList.stream()
@@ -334,7 +340,8 @@ public class PossibleValuesEnumerator {
 		try {
 			Long id = (Long) PropertyUtils.getProperty(object, idProperty);
 			String value = valueProvider.getValue(object);
-			return new PossibleValue(id, value);
+			Object extraInfo = valueProvider.getExtraInfo(object);
+			return new PossibleValue(id, value, extraInfo);
 		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException("Failed to extract possible value object from " + object, e);
 		}

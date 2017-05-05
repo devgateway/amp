@@ -1,9 +1,3 @@
-<script type="text/javascript">
-	function openPreviewActivity(id) {
-		window.open('/aim/viewActivityPreview.do~public=true~pageId=2~activityId=' + id, '_blank');
-	}
-</script>
-
 <div class="panel panel-default">
 	<div class="panel-body custom-panel">
 	<span class="table-category">
@@ -38,7 +32,9 @@
 				<% _(values).each(function(row, i) { %>
 					<tr>
 						<td scope="row">
-							<span class='pointer' onclick='openPreviewActivity(<%=row.id%>)'><%=row.name%></span>
+							<a target="_blank" href="/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<%=row.id%>" title="<%=row.name%>">
+								<%=row.name%>
+							</a>
 						</td>
 						<td class="amount-column"><%=row.formattedAmount%></td>
 					</tr>

@@ -27,5 +27,5 @@ public abstract class PossibleValuesProvider {
 	
 	public abstract Long getIdOf(Object value);
 
-	public abstract Object toAmpFormat(Object obj);	
+	public abstract Object toAmpFormat(Object obj);
 }

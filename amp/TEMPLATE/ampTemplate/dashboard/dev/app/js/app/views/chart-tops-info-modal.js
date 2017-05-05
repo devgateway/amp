@@ -7,6 +7,7 @@ var template = _.template(fs.readFileSync(__dirname
 module.exports = BackboneDash.View.extend({
     _currentPage: 0,
     PAGE_SIZE: 50,
+    FRAGMENTATION: 'fragmentation',
 	initialize: function(options) {
 		this.app = options.app;
 		this.context = options.context;
@@ -34,7 +35,7 @@ module.exports = BackboneDash.View.extend({
         config.offset = this._currentPage * this.PAGE_SIZE;
 
     	var url = self.model.url + '/';
-		if (this.model.get('chartType') != 'fragmentation') {
+		if (this.model.get('chartType') != this.FRAGMENTATION) {
             url += this.context.data[0].values[this.context.x.index].id;
 		} else {
             url += this.context.x.index + '/' + this.context.y.index;

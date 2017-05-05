@@ -111,6 +111,11 @@ public class HeatMapService {
         return result;
     }
 
+    /**
+     * Set filters, settings and columns to the report specification and return a projects list
+     * "Others"
+     * @return a json with a list of projects.
+     */
     public JsonBean buildHeatMapDetail() {
         this.spec = getCustomReportDetailRequest();
         if (spec != null && errors.isEmpty()) {
@@ -422,6 +427,11 @@ public class HeatMapService {
         return spec;
     }
 
+    /**
+     * Set filters, settings and columns to the report specification
+     * "Others"
+     * @return a report specification updated.
+     */
     private ReportSpecification getCustomReportDetailRequest() {
         String rName = "";
         this.xCol = FilterUtils.INSTANCE.idFromColumnName(readXYColumn(DashboardConstants.X_COLUMN));

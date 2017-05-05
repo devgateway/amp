@@ -147,12 +147,68 @@ public class EndPoints implements ErrorReportingEndpoint {
 		return new ChartService(config, type, limit).buildChartData();
 	}
 
-
+	/**
+	 * Retrieve a list of projects by type query for selected id.
+	 * </br>
+	 * <dl>
+	 * where Type (Chart type) :
+	 *    do = Donor
+	 *    re = Region
+	 *    ps = Primary Sector
+	 *    dg = Donor Group
+	 * </br>
+	 * The JSON object holds information regarding:
+	 * <dt><b>totalRecords</b><dd> - number total of projects.
+	 * <dt><b>values</b><dd> - array with a list of projects.
+	 *     name - name of the project.
+	 *     amount - amount of the project.
+	 *     formattedAmount - formatted amount of the project.
+	 *     id - id of the project.
+	 * </dl></br></br>
+	 *
+	 * <h3>Sample Input:</h3><pre>
+	 * {
+	 * 	"filters": {},
+	 * 	"settings": {
+	 * 	    "funding-type": ["Actual Commitments","Actual Disbursements"],
+	 * 	    "currency-code": "USD",
+	 * 	    "calendar-id": "123",
+	 * 	    "year-range": {
+	 * 	        "from": "2014",
+	 * 	        "to": "2015"
+	 * 	    }
+	 * 	}
+	 * }</pre>
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
+	 * {
+	 *     "totalRecords": 10,
+	 *     "values": [{
+	 *         "name": "Alimentation en eau de la ville d'Abidjan à partir de la nappe du Sud Comoé (Bonoua) - Phase I",
+	 *         "amount": 104422920.000000000000,
+	 *         "formattedAmount": "104 422 920",
+	 *         "id": 19003
+	 *     },
+	 * 	.....
+	 * 	{
+	 *         "name": "Construction de l'autoroute Abidjan-Bassam",
+	 *         "amount": 114777280.000000000000,
+	 *         "formattedAmount": "114 777 280",
+	 *         "id": 19111
+	 *     }]
+	 * }</pre>
+	 *
+	 * @param config a JSON object with the config
+	 * @param type chart type
+	 * @param id of the category to query the projects.
+	 *
+	 * @return a JSON objects with a list of projects
+	 */
 	@POST
 	@Path("/tops/{type}/{id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "tops")
-	public JsonBean processChartsData(JsonBean config, @PathParam("type") String type, @PathParam("id") Long id) {
+	@ApiMethod(ui = false, id = "topsDataDetail")
+	public JsonBean getChartsDataDetail(JsonBean config, @PathParam("type") String type, @PathParam("id") Long id) {
 		return new ChartService(config, type, id).buildChartData();
 	}
 
@@ -543,11 +599,59 @@ public class EndPoints implements ErrorReportingEndpoint {
 	    return new HeatMapService(config).buildHeatMap();
     }
 
+
+	/**
+	 * Retrieve a list of projects query by xId and yId of Heat Map.
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>totalRecords</b><dd> - number total of projects.
+	 * <dt><b>values</b><dd> - array with a list of projects.
+	 *     name - name of the project.
+	 *     amount - amount of the project.
+	 *     formattedAmount - formatted amount of the project.
+	 *     id - id of the project.
+	 * </dl></br></br>
+	 *
+	 * <h3>Sample Input:</h3><pre>
+	 * {
+	 *  “xCount” : 25, // default 25, set -1 to no limit. +1 ("Others") will be added if more than that available
+	 *  “yCount” : 10, // default 10, set -1 to no limit. +1 ("Others") will be added if more than that available
+	 *  “xColumn” : “Primary Sector”, // must be OrigName
+	 *  “yColumn” : “Donor Group”, // must be origName
+	 *  “filters”: { ... }, // usual filters input
+	 *  “settings” : { ... } // usual settings input, and Dashboard specific with Measure selection
+	 * }</pre>
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
+	 * {
+	 *     "totalRecords": 10,
+	 *     "values": [{
+	 *         "name": "Alimentation en eau de la ville d'Abidjan à partir de la nappe du Sud Comoé (Bonoua) - Phase I",
+	 *         "amount": 104422920.000000000000,
+	 *         "formattedAmount": "104 422 920",
+	 *         "id": 19003
+	 *     },
+	 * 	.....
+	 * 	{
+	 *         "name": "Construction de l'autoroute Abidjan-Bassam",
+	 *         "amount": 114777280.000000000000,
+	 *         "formattedAmount": "114 777 280",
+	 *         "id": 19111
+	 *     }]
+	 * }</pre>
+	 *
+	 * @param config a JSON with the config
+	 * @param xId id of the x dimention of Heat Map matrix.
+	 * @param yId id of the y dimention of Heat Map matrix.
+	 *
+	 * @return a JSON objects with a list of projects
+	 */
 	@POST
     @Path("/heat-map/{type}/{xId}/{yId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "heatMap")
-    public JsonBean getHeatMap(JsonBean config, @PathParam("xId") Long xId, @PathParam("yId") Long yId) {
+    @ApiMethod(ui = false, id = "heatMapDataDetail")
+    public JsonBean getHeatMapDataDetail(JsonBean config, @PathParam("xId") Long xId, @PathParam("yId") Long yId) {
 	    return new HeatMapService(config, xId, yId).buildHeatMapDetail();
     }
 	

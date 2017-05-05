@@ -11,14 +11,17 @@ import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ApprovalStatusPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -147,7 +150,7 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY, pickIdOnly=true)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY)
-    protected AmpTeamMember lastImportedBy;
+	protected User lastImportedBy;
 
 	@Interchangeable(fieldTitle = "Equal Oportunity", importable = true, fmPath = "/Activity Form/Cross Cutting Issues/Equal Opportunity")
 	@VersionableFieldTextEditor(fieldTitle = "Equal Oportunity")
@@ -275,7 +278,8 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Program Description", importable = true, fmPath = "/Activity Form/Program/Program Description")
 	@VersionableFieldTextEditor(fieldTitle = "Program Description")
 	protected String programDescription;
-	
+
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.TEAM, pickIdOnly = true)
 	@VersionableFieldSimple(fieldTitle = "Team")
 	protected AmpTeam team;
 	//@VersionableCollection(fieldTitle = "Members")
@@ -285,7 +289,7 @@ LoggerIdentifiable, Cloneable {
 	//protected AmpTeamMember updatedBy; !!! Use modifiedBy
 	
 	@Interchangeable(fieldTitle = "Project Costs", importable = true)
-	@InterchangeableDiscriminator(discriminatorField = "type",
+	@InterchangeableDiscriminator(discriminatorField = "funType",
 		settings = {
 			@Interchangeable(fieldTitle = "PPC Amount", importable = true, discriminatorOption = "0", multipleValues = false,
 					fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost"),
@@ -378,7 +382,7 @@ LoggerIdentifiable, Cloneable {
 
 	@Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")
 	@VersionableCollection(fieldTitle = "Activity Contacts")
-	@InterchangeableDiscriminator(discriminatorField = "contactType", discriminatorClass = "", settings = {
+	@InterchangeableDiscriminator(discriminatorField = "contactType", settings = {
 			@Interchangeable(fieldTitle = ActivityFieldsConstants.DONOR_CONTACT, importable = true, discriminatorOption = Constants.DONOR_CONTACT, 
 							fmPath = "/Activity Form/Contacts/Donor Contact Information", 
 							validators = @Validators(unique = "/Activity Form/Contacts/Donor Contact Information")),
@@ -467,8 +471,7 @@ LoggerIdentifiable, Cloneable {
 	protected Set <AmpRegionalFunding> regionalFundings;
 
 	@Interchangeable(fieldTitle = "Approval Status", importable = false)
-	@InterchangeableDiscriminator( 
-		discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.ApprovalStatusDiscriminator")
+	@PossibleValues(ApprovalStatusPossibleValuesProvider.class)
 	@VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
 	protected String approvalStatus;
 
@@ -540,7 +543,7 @@ LoggerIdentifiable, Cloneable {
 				 * also confirmed via AMP-20899
 				 */
 				discriminatorOption = CategoryConstants.MODALITIES_KEY, fmPath="/Activity Form/Funding/Overview Section/Modalities", pickIdOnly=true),
-		@Interchangeable(fieldTitle = "A.C. Chapter", importable=true, multipleValues=false, 
+		@Interchangeable(fieldTitle = "A C Chapter", importable=true, multipleValues=false,
 				discriminatorOption = CategoryConstants.ACCHAPTER_KEY, fmPath="/Activity Form/Identification/A.C. Chapter", pickIdOnly=true), 
 		@Interchangeable(fieldTitle = "Activity Budget", importable=true, multipleValues=false, required = "/Activity Form/Identification/Required Validator for Activity Budget", 
 				discriminatorOption = CategoryConstants.ACTIVITY_BUDGET_KEY, fmPath="/Activity Form/Identification/Activity Budget", pickIdOnly=true), 
@@ -671,7 +674,7 @@ LoggerIdentifiable, Cloneable {
 	
 	protected Date modifiedDate;
 
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly=true)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly=true, importable = true)
 	@VersionableFieldSimple(fieldTitle = "Modified By")
 	protected AmpTeamMember modifiedBy;
 	
@@ -1606,11 +1609,11 @@ LoggerIdentifiable, Cloneable {
             this.lastImportedAt = lastImportedAt;
         }
 
-        public AmpTeamMember getLastImportedBy() {
+        public User getLastImportedBy() {
             return lastImportedBy;
         }
 
-        public void setLastImportedBy(AmpTeamMember lastImportedBy) {
+        public void setLastImportedBy(User lastImportedBy) {
             this.lastImportedBy = lastImportedBy;
         }
 

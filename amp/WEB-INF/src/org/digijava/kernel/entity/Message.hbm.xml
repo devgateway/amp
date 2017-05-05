@@ -14,6 +14,7 @@
 		<property name="keyWords" type="java.lang.String" column="KEY_WORDS" />
 		<property name="originalMessage" type="text" column="ORIG_MESSAGE" />
 		<property name="prefix" type="java.lang.String" column="PREFIX" />
+		<property name="ampOffline" type="java.lang.Boolean" column="AMP_OFFLINE" />
 	</class>
 </hibernate-mapping>
 

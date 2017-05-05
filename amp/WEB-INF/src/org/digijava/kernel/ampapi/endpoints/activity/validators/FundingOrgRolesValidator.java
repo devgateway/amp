@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
@@ -40,7 +41,7 @@ public class FundingOrgRolesValidator extends InputValidator {
 
     @Override
     public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 
         if (fieldPath.equals(FUNDING)) {
             return areOrgRolesValid(importer, newFieldParent, FUNDING, SRC_ORG, SRC_ROLE);

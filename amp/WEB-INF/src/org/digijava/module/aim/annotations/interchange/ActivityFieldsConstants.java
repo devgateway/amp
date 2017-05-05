@@ -13,6 +13,7 @@ public class ActivityFieldsConstants {
 	public static final String UPDATE_DATE = "Update Date";
 	public static final String PROJECT_CODE = "Project Code";
 	public static final String AMP_ID = "AMP Id";
+	public static final String TEAM = "Team";
 	public static final String WORKSPACES_EDIT = "Workspaces Edit";
 	public static final String PROJECT_TITLE = "Project Title";
 	public static final String IS_DRAFT = "Is Draft";

@@ -40,12 +40,16 @@ import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
+import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.util.Identifiable;
 
+@InterchangeableValue(UserValueProvider.class)
 public class User
-    extends Entity implements Serializable, Comparable{
+    extends Entity implements Serializable, Comparable, Identifiable {
 
     private Subject subject;
     private String firstNames;
@@ -84,8 +88,9 @@ public class User
     private String organizationTypeOther;
     private Set contacts;
     private AmpUserExtension userExtension;
-
     private Set<AmpOrganisation> assignedOrgs;
+    private Date passwordChangedAt;
+
 	public User() {}
 
     public User(String email, String firstNames, String lastName) {
@@ -107,6 +112,11 @@ public class User
         this.active = false;
         //this.registeredThrough = Session.site;
 
+    }
+
+    @Override
+    public Object getIdentifier() {
+        return id;
     }
 
     /**
@@ -465,5 +475,22 @@ public class User
 	public void setRegion(AmpCategoryValueLocations region) {
 		this.region = region;
 	}
-	
+
+    /**
+     * @return the passwordChangedAt
+     */
+    public Date getPasswordChangedAt() {
+        return passwordChangedAt;
+    }
+
+    /**
+     * @param passwordChangedAt the passwordChangedAt to set
+     */
+    public void setPasswordChangedAt(Date passwordChangedAt) {
+        this.passwordChangedAt = passwordChangedAt;
+    }
+
+    public void updateLastModified() {
+        setLastModified(new Date());
+    }
 }

@@ -187,7 +187,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
      * in the cache
      * @throws WorkerException
      */
-    public void update(Message message) throws WorkerException {
+    public void update(Message message) {
 
         updateDb(message);//message key and body will be processed there
 

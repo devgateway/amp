@@ -960,7 +960,7 @@ public class DataExchangeUtils {
 		try {
 			ampActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(
 					ampActivity, translations, team.getTeamLead(),
-					false, PersistenceManager.getRequestDBSession(), false, false);
+					false, PersistenceManager.getRequestDBSession(), false, false, false);
 		} catch (Exception e) {
             e.printStackTrace();
 			logger.error(e.getMessage());

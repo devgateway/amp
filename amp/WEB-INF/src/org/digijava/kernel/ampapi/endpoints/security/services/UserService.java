@@ -41,7 +41,6 @@ public class UserService {
     public List<User> getUserInfo(List<Long> userIds) {
         List<User> users = new ArrayList<>();
         List<org.digijava.kernel.user.User> ampUsers;
-        long time = System.currentTimeMillis();
         if (userIds.isEmpty()) {
             ampUsers = UserUtils.getAllUsers();
         } else {
@@ -53,8 +52,6 @@ public class UserService {
 
         Map<Long, AmpUserExtension> ampUserExtensions = AmpUserUtil.getAmpUserExtensions(ampUsers);
 
-        time = System.currentTimeMillis() - time;
-        logger.warn("Time: " + time);
         ampUsers.forEach(new Consumer<org.digijava.kernel.user.User>() {
             @Override
             public void accept(org.digijava.kernel.user.User ampUser) {

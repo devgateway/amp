@@ -286,12 +286,12 @@ public class SyncService implements InitializingBean {
         args.put("entity", WORKSPACE_MEMBER);
         args.put("deleted", DELETED);
 
-        return jdbcTemplate.query("select " + COLUMNS + " " +
-                "from amp_offline_changelog " +
-                "where operation_time > :lastSyncTime " +
-                "and entity_name = :entity " +
-                "and (entity_id in (select amp_team_mem_id::varchar from amp_team_member) " +
-                "or operation_name = :deleted)", args, ROW_MAPPER);
+        return jdbcTemplate.query("select " + COLUMNS + " "
+                + "from amp_offline_changelog "
+                + "where operation_time > :lastSyncTime "
+                + "and entity_name = :entity "
+                + "and (entity_id in (select amp_team_mem_id::varchar from amp_team_member) "
+                + "or operation_name = :deleted)", args, ROW_MAPPER);
     }
 
     /**

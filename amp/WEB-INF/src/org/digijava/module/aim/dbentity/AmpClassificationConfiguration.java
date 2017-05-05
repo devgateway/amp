@@ -29,7 +29,7 @@ public class AmpClassificationConfiguration implements Serializable, Identifiabl
 	
 	@Interchangeable(fieldTitle="ID", id = true)
 	private Long id;
-	@Interchangeable(fieldTitle="Name", value = true)
+	@Interchangeable(fieldTitle = "Name", value = true)
 	private String name;
 	@Interchangeable(fieldTitle="Description")
 	private String description;

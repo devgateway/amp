@@ -208,7 +208,7 @@
     var added='${param.added}';
     var activityCurrentPage=1;
     var actRecordNumbers=0;
-
+    var pagesToShow = 18;
 
     
 
@@ -803,31 +803,58 @@
         html[j] = "</table>";
         tmp.innerHTML = html.join('');
         demo.replaceChild(tmp.getElementsByTagName('table')[0], tbl);
+        showInitialPages();
     }
-    
-    function showPageContent(k){
-    	if(k!=activityCurrentPage){
-    		$("tbody[class='act_pages_"+activityCurrentPage+"']").hide('fast');
-        	$("tbody[class='act_pages_"+k+"']").show('fast');
-        	$("#act_page_link_navi_"+activityCurrentPage).toggle();
-        	$("#act_page_link_curr_"+activityCurrentPage).toggle();
-        	$("#act_page_link_navi_"+k).toggle();
-        	$("#act_page_link_curr_"+k).toggle();
-        	activityCurrentPage=k;
-    	}
-    	if(activityCurrentPage>1){
-    		$("#act_page_link_first").show();
-    	}
-    	else{
-    		$("#act_page_link_first").hide();
-    	}
-    	if(k< actRecordNumbers){
-    		$("#act_page_link_last").show();
-    	}
-    	else{
-    		$("#act_page_link_last").hide();
-    	}
-    	return false;
+
+    function showInitialPages() {
+        for (i = pagesToShow + 1, l = actRecordNumbers; i <= l; ++i) {
+            $("#act_page_link_navi_" + i).hide();
+        }
+    }
+
+    function showPageContent(k) {
+
+        var start = k - (pagesToShow / 2);
+        if (start <= 0) {
+            start = 1;
+        }
+        var end = start + pagesToShow;
+        if (end > actRecordNumbers) {
+            start = actRecordNumbers - (pagesToShow - 1);
+        }
+        for (i = 1, l = actRecordNumbers; i <= l; ++i) {
+            if (i != activityCurrentPage) {
+                if (start <= i && i < end) {
+                    $("#act_page_link_navi_" + i).show();
+                } else {
+                    $("#act_page_link_navi_" + i).hide();
+                }
+            }
+        }
+
+        if (k != activityCurrentPage) {
+            $("tbody[class='act_pages_" + activityCurrentPage + "']").hide('fast');
+            $("tbody[class='act_pages_" + k + "']").show('fast');
+            $("#act_page_link_navi_" + activityCurrentPage).toggle();
+            $("#act_page_link_curr_" + activityCurrentPage).toggle();
+            $("#act_page_link_navi_" + k).toggle();
+            $("#act_page_link_curr_" + k).toggle();
+            activityCurrentPage = k;
+        }
+
+        if (activityCurrentPage > 1) {
+            $("#act_page_link_first").show();
+        }
+        else {
+            $("#act_page_link_first").hide();
+        }
+        if (k < actRecordNumbers) {
+            $("#act_page_link_last").show();
+        }
+        else {
+            $("#act_page_link_last").hide();
+        }
+        return false;
     }
     
     function removeActivity(id){

@@ -30,7 +30,7 @@ export default class Report9b extends Component {
             draggable: true,
             caller: 'REPORTS',
             isPopup: true,
-            definitionUrl: '/rest/settings-definitions/reports'
+            definitionUrl: '/rest/settings-definitions/gpi-reports'
         });
         
         this.props.actions.getOrgList(false);

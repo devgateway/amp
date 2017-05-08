@@ -410,10 +410,54 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	 * @return a list of setting definitions
 	 */
 	@GET
-	@Path("/gpi")
+	@Path("/gpi-data")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public final List<SettingField> getSettingDefinitionsForGPI() {
+    public final List<SettingField> getSettingDefinitionsForGPIData() {
         return Arrays.asList(getCurrencyField(false));
+    }
+	
+	/**
+	 * Returns setting definitions for GPI Reports.
+	 * <p>
+	 * Returns definitions for the following settings: currency, calendar.
+	 * </p>
+	 * <h3>Sample Output:</h3>
+	 * 
+	 * <pre>
+	 * [
+	 *   {
+	 *     "type": "OPTIONS",
+	 *     "id": "currency-code",
+	 *     "name": "currency",
+	 *     "value": {
+	 *       "multi": false,
+	 *       "defaultId": "USD",
+	 *       "options": [
+	 *         {
+	 *           "id": "AUD",
+	 *           "name": "Australian Dollar",
+	 *           "value": "AUD"
+	 *         },
+	 *         {
+	 *           "id": "CAD",
+	 *           "name": "Canadian Dollar",
+	 *           "value": "CAD"
+	 *         },
+	 *         ... other options
+	 *       ]
+	 *     }
+	 *   },
+	 *   ... other fields
+	 * ]
+	 * </pre>
+	 * 
+	 * @return a list of setting definitions
+	 */
+	@GET
+	@Path("/gpi-reports")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public final List<SettingField> getSettingDefinitionsForGPIReports() {
+        return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField());
     }
 	
 	@Override

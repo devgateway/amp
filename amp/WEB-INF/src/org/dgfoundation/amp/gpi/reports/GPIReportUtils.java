@@ -28,18 +28,23 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 public class GPIReportUtils {
 
-	public static GeneratedReport getGeneratedReportForIndicator(String indicatorCode, JsonBean formParams,
-			boolean isSummary) {
+	/**
+	 * 
+	 * @param indicatorCode
+	 * @param formParams
+	 * @return generatedRerport {@link GeneratedReport}
+	 */
+	public static GeneratedReport getGeneratedReportForIndicator(String indicatorCode, JsonBean formParams) {
 
 		switch (indicatorCode) {
 		case GPIReportConstants.REPORT_5a:
-			return getGeneratedReportForIndicator5a(formParams, isSummary);
+			return getGeneratedReportForIndicator5a(formParams);
 		case GPIReportConstants.REPORT_5b:
-			return getGeneratedReportForIndicator5b(formParams, isSummary);
+			return getGeneratedReportForIndicator5b(formParams);
 		case GPIReportConstants.REPORT_6:
-			return getGeneratedReportForIndicator6(formParams, isSummary);
+			return getGeneratedReportForIndicator6(formParams);
 		case GPIReportConstants.REPORT_9b:
-			return getGeneratedReportForIndicator9b(formParams, isSummary);
+			return getGeneratedReportForIndicator9b(formParams);
 		default:
 			return null;
 		}
@@ -50,9 +55,9 @@ public class GPIReportUtils {
 	 * another class
 	 * 
 	 * @param formParams
-	 * @return
+	 * @return generatedReport 
 	 */
-	public static GeneratedReport getGeneratedReportForIndicator5a(JsonBean formParams, boolean isSummary) {
+	public static GeneratedReport getGeneratedReportForIndicator5a(JsonBean formParams) {
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5a,
 				ArConstants.DONOR_TYPE);
@@ -111,9 +116,9 @@ public class GPIReportUtils {
 	 * another class
 	 * 
 	 * @param formParams
-	 * @return
+	 * @return generatedReport 
 	 */
-	public static GeneratedReport getGeneratedReportForIndicator5b(JsonBean formParams, boolean isSummary) {
+	public static GeneratedReport getGeneratedReportForIndicator5b(JsonBean formParams) {
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5b,
 				ArConstants.DONOR_TYPE);
@@ -175,24 +180,22 @@ public class GPIReportUtils {
 	 * class
 	 * 
 	 * @param formParams
-	 * @return
+	 * @return generatedReport 
 	 */
-	public static GeneratedReport getGeneratedReportForIndicator6(JsonBean formParams, boolean isSummary) {
+	public static GeneratedReport getGeneratedReportForIndicator6(JsonBean formParams) {
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_6, ArConstants.DONOR_TYPE);
 
-		if (!isSummary) {
-			String hierarchyColumn = getHierarchyColumn(formParams);
-			if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
-				spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
-				spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
-			} else {
-				spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-				spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-			}
-			spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+		String hierarchyColumn = getHierarchyColumn(formParams);
+		if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
+		} else {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		}
-
+		
+		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
 		spec.setSummaryReport(true);
 
@@ -202,9 +205,7 @@ public class GPIReportUtils {
 
 			if (filterRules == null) {
 				filterRules = new AmpReportFilters();
-			} else if (!isSummary) {
-				filterRules.getFilterRules().clear();
-			}
+			} 
 
 			ReportElement elem = new ReportElement(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
 
@@ -227,24 +228,22 @@ public class GPIReportUtils {
 	 * another class
 	 * 
 	 * @param formParams
-	 * @return
+	 * @return generatedReport 
 	 */
-	public static GeneratedReport getGeneratedReportForIndicator9b(JsonBean formParams, boolean isSummary) {
+	public static GeneratedReport getGeneratedReportForIndicator9b(JsonBean formParams) {
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_9b, ArConstants.GPI_TYPE);
 
-		if (!isSummary) {
-			String hierarchyColumn = getHierarchyColumn(formParams);
-			if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
-				spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
-				spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
-			} else {
-				spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-				spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-			}
-			spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+		String hierarchyColumn = getHierarchyColumn(formParams);
+		if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
+		} else {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		}
-
+		
+		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		spec.addMeasure(new ReportMeasure(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.NATIONAL_AUDITING_PROCEDURES));
@@ -257,8 +256,6 @@ public class GPIReportUtils {
 
 			if (filterRules == null) {
 				filterRules = new AmpReportFilters();
-			} else if (isSummary) {
-				filterRules.getFilterRules().clear();
 			}
 
 			ReportElement elem = new ReportElement(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
@@ -283,14 +280,6 @@ public class GPIReportUtils {
 		}
 
 		return "";
-	}
-
-	public static Boolean getSummaryInfo(JsonBean formParams) {
-		if (formParams.get(GPIReportConstants.SUMMARY_PARAMETER) != null) {
-			return (Boolean) formParams.get(GPIReportConstants.SUMMARY_PARAMETER);
-		}
-
-		return false;
 	}
 
 	public static List<String> getMTEFColumnsForIndicator5b(ReportSpecification spec) {

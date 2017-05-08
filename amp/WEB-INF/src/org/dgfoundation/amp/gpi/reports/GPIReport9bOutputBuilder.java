@@ -136,20 +136,17 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	@Override
-	protected List<Map<GPIReportOutputColumn, String>> getReportSummary(GeneratedReport generatedReport) {
-		List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
+	protected Map<GPIReportOutputColumn, String> getReportSummary(GeneratedReport generatedReport) {
 
-		Map<GPIReportOutputColumn, String> columns = new HashMap<>();
+		Map<GPIReportOutputColumn, String> summaryColumns = new HashMap<>();
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 			ReportCell rc = generatedReport.reportContents.getContents().get(roc);
 			rc = rc != null ? rc : TextCell.EMPTY;
 			if (SUMMARY_NUMBERS.contains(roc.originalColumnName)) {
-				columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
+				summaryColumns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
 			}
 		}
 		
-		contents.add(columns);
-		
-		return contents;
+		return summaryColumns;
 	}
 }

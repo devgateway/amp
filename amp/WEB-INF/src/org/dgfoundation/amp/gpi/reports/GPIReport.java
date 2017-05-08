@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.gpi.reports;
 
+import java.util.List;
+import java.util.Map;
+
 import org.digijava.kernel.ampapi.endpoints.settings.Settings;
 
 /**
@@ -14,6 +17,11 @@ public class GPIReport {
 	 * Report Page 
 	 */
 	protected GPIReportPage page;
+	
+	/**
+	 * A map containing the information regarding summary numbers (totals)
+	 */
+	protected Map<GPIReportOutputColumn, String> summary;
 
 	protected Settings settings;
 	
@@ -33,6 +41,14 @@ public class GPIReport {
 
 	public void setSettings(Settings settings) {
 		this.settings = settings;
+	}
+
+	public Map<GPIReportOutputColumn, String> getSummary() {
+		return summary;
+	}
+
+	public void setSummary(Map<GPIReportOutputColumn, String> summary) {
+		this.summary = summary;
 	}
 
 	public boolean isEmpty() {

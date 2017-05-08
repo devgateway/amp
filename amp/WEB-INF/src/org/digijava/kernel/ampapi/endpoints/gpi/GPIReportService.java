@@ -68,11 +68,10 @@ public final class GPIReportService {
 		int page = (Integer) EndpointUtils.getSingleValue(formParams, "page", 0);
 		int recordsPerPage = EndpointUtils.getSingleValue(formParams, "recordsPerPage", 
 				ReportPaginationUtils.getRecordsNumberPerPage());
-		Boolean isSummary = EndpointUtils.getSingleValue(formParams, "summary", false);
 		
-		GeneratedReport niReport = GPIReportUtils.getGeneratedReportForIndicator(indicatorCode, formParams, isSummary);
+		GeneratedReport niReport = GPIReportUtils.getGeneratedReportForIndicator(indicatorCode, formParams);
 		GPIReportBuilder gpiReportBuilder = new GPIReportBuilder(niReport, getGPIReportOutputBuilder(indicatorCode));
-		GPIReport gpiReport = gpiReportBuilder.build(isSummary, page, recordsPerPage);
+		GPIReport gpiReport = gpiReportBuilder.build(page, recordsPerPage);
 
 		return gpiReport;
 	}
@@ -81,7 +80,7 @@ public final class GPIReportService {
 	 * Get the GPI report builder for specific indicator code
 	 * 
 	 * @param indicatorCode
-	 * @return GPIReportOutputBuilder
+	 * @return gpiReportBuilder {@link @GPIReportOutputBuilder}
 	 */
 	private GPIReportOutputBuilder getGPIReportOutputBuilder(String indicatorCode) {
 		switch (indicatorCode) {

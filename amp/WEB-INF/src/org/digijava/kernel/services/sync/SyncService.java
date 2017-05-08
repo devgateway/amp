@@ -168,18 +168,21 @@ public class SyncService implements InitializingBean {
 
         Map<String, Object> args = new HashMap<>();
 
-        String restriction;
-        if (lastSyncTime == null) {
-            restriction = "and deleted <> true";
-        } else {
-            restriction = "and modified_date > :lastSyncTime";
+        String restriction = "";
+        if (lastSyncTime != null) {
+            restriction = "AND a.modified_date > :lastSyncTime ";
             args.put("lastSyncTime", lastSyncTime);
         }
 
         String sql = String.format(
-                "select amp_id ampId, modified_date modifiedDate, deleted " +
-                "from amp_activity " +
-                "where amp_activity_id in (%s) %s", workspaceActivitiesQuery, restriction);
+                "SELECT a.amp_id ampId, a.modified_date modifiedDate, a.deleted "
+                + "FROM amp_activity a "
+                + "WHERE a.amp_activity_id in (%s) %s"
+                + "UNION "
+                + "SELECT a.amp_id ampId, a.modified_date modifiedDate, a.deleted "
+                + "FROM amp_activity_version a "
+                + "JOIN amp_activity_group g ON a.amp_activity_id = g.amp_activity_last_version_id "
+                + "WHERE a.deleted = true", workspaceActivitiesQuery, restriction);
 
         return jdbcTemplate.query(sql, args, ACTIVITY_CHANGE_ROW_MAPPER);
     }

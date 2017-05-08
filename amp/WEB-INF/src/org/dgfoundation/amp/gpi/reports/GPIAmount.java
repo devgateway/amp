@@ -28,13 +28,17 @@ public final class GPIAmount {
 	public final TranslatedDate translatedDate;
 
 	public final LocalDate transactionMoment;
+	
+	public final Long donorId;
 
 	public final String donorName;
+	
 	public final String donorGroup;
 
-	public GPIAmount(String donorName, String donorGroup, MonetaryAmount amount, Date transactionMoment,
+	public GPIAmount(Long donorId, String donorName, String donorGroup, MonetaryAmount amount, Date transactionMoment,
 			TranslatedDate translatedDate) {
 
+		this.donorId = donorId;
 		this.donorName = donorName;
 		this.donorGroup = donorGroup;
 		this.amount = amount;
@@ -57,6 +61,10 @@ public final class GPIAmount {
 
 	public BigDecimal getAmount() {
 		return amount.amount;
+	}
+
+	public Long getDonorId() {
+		return donorId;
 	}
 
 	public String getDonorName() {

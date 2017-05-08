@@ -75,7 +75,7 @@ public class PersistenceManager {
      */
     public static final long MAX_HIBERNATE_SESSION_LIFE_MILLIS=60*60*1000;
 
-    public static HashMap<Session,Object[]> sessionStackTraceMap= new HashMap<Session,Object[]>();
+    private static final HashMap<Session,Object[]> sessionStackTraceMap = new HashMap<>();
 
     /**
      * Invoked at the end of each request. Iterates and removes Hibernate closed sessions from the trace map.
@@ -137,7 +137,7 @@ public class PersistenceManager {
      * Removes only the closed sessions from the map that tracks opened sessions.
      * No other check is being done.
      */
-    public static void removeClosedSessionsFromMap() {
+    private static void removeClosedSessionsFromMap() {
         int count	= 0;
         synchronized (sessionStackTraceMap) {
             Iterator<Entry<Session, Object[]>> iterator = PersistenceManager.sessionStackTraceMap.entrySet().iterator();
@@ -516,17 +516,11 @@ public class PersistenceManager {
      *
      */
     public static void rollbackCurrentSessionTx() {
-        try {
-            if (sf.getCurrentSession().getTransaction().isActive()
-                    && sf.getCurrentSession().isOpen()
-                    && sf.getCurrentSession().isConnected()) {
-                logger.info("Trying to rollback database transaction after exception");
-                sf.getCurrentSession().getTransaction().rollback();
-            }
-
-        } catch (Throwable rbEx) {
-            logger.error("Could not rollback transaction after exception!",
-                    rbEx);
+        if (sf.getCurrentSession().getTransaction().isActive()
+                && sf.getCurrentSession().isOpen()
+                && sf.getCurrentSession().isConnected()) {
+            logger.info("Trying to rollback database transaction after exception");
+            sf.getCurrentSession().getTransaction().rollback();
         }
     }
 
@@ -700,26 +694,18 @@ public class PersistenceManager {
      * ONLY USE IT FOR CONNECTIONS CREATED WITH {@link #openNewSession()}
      * @param session
      */
-    public final static void closeSession(Session session) {
+    public static void closeSession(Session session) {
         if (session == null) return;
         Transaction transaction = session.getTransaction();
         if (transaction != null) {
-            try{if (transaction.isActive()) session.flush();}catch(Exception e){logger.error("error while flushing HSession", e);};
-			try {
-				if (transaction.isActive())
-					transaction.commit();
-			} catch(Exception e) {
-				//System.out.println("error committing transaction");
-				//e.printStackTrace();
-			}
+            if (transaction.isActive()) {
+                session.flush();
+                transaction.commit();
+            }
 		}
-		try {
-			if (session.isOpen())
-				session.close();
-		} catch(Exception e) {
-//			System.out.println("error closing the session");
-//			e.printStackTrace();
-		}
+        if (session.isOpen()) {
+            session.close();
+        }
 	}
 
     /**
@@ -728,7 +714,7 @@ public class PersistenceManager {
      * UNDER NO CIRCUMSTANCES CALL IT IN A "USER" (non-framework, non-job) ENVIRONMENT
      * @see #cleanupSession(Session)
      */
-    public final static void endSessionLifecycle() {
+    public static void endSessionLifecycle() {
         cleanupSession(getSession());
     }
 
@@ -740,22 +726,32 @@ public class PersistenceManager {
      * @see PersistenceManager#endSessionLifecycle()
      * @param session
      */
-    public final static void cleanupSession(Session session)
-    {
-        closeSession(session);
-        try{PersistenceManager.removeClosedSessionsFromMap();}catch(Exception e){};
-        try{
-            synchronized(PersistenceManager.sessionStackTraceMap)
-            {
-                if (PersistenceManager.sessionStackTraceMap.containsKey(session)) {
-                    //logger.error(String.format("Thread #%d: removing Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
-                    PersistenceManager.sessionStackTraceMap.remove(session);
-                } else {
-                    //logger.error(String.format("Thread #%d: trying to cleanup nonexisting Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
-                }
+    public static void cleanupSession(Session session) {
+        try {
+            closeSession(session);
+        } finally {
+            try {
+                removeClosedSessionsFromMap();
+            } catch (Exception e) {
+                // ignore exceptions
+            }
+            try {
+                removeSessionFromMap(session);
+            } catch (Exception e) {
+                // ignore exceptions
             }
         }
-        catch(Exception e){};
+    }
+
+    private static void removeSessionFromMap(Session session) {
+        synchronized (sessionStackTraceMap) {
+            if (sessionStackTraceMap.containsKey(session)) {
+                //logger.error(String.format("Thread #%d: removing Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
+                sessionStackTraceMap.remove(session);
+            } else {
+                //logger.error(String.format("Thread #%d: trying to cleanup nonexisting Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
+            }
+        }
     }
 
     /**

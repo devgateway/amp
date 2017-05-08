@@ -16,7 +16,6 @@ import org.h2.util.StringUtils;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by anpicca on 24/11/2016.
@@ -71,7 +70,6 @@ public class ExportUtil {
         }
         return result;
     }
-
 
     public static String getContactInformation(AmpContact contact) {
         String output = "";

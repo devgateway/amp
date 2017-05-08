@@ -18,6 +18,7 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report 9b
@@ -43,14 +44,6 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 					MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES
 			)));
 	
-	public final static Set<String> SUMMARY_NUMBERS = Collections.unmodifiableSet(
-			new HashSet<>(Arrays.asList(
-					MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES,
-					MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES,
-					MeasureConstants.NATIONAL_AUDITING_PROCEDURES,
-					MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES
-			)));
-
 	/**
 	 * build the headers of the report
 	 * 
@@ -142,7 +135,8 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 			ReportCell rc = generatedReport.reportContents.getContents().get(roc);
 			rc = rc != null ? rc : TextCell.EMPTY;
-			if (SUMMARY_NUMBERS.contains(roc.originalColumnName)) {
+			if (YEAR_LEVEL_HIERARCHIES.contains(roc.originalColumnName) 
+					&& NiReportsEngine.TOTALS_COLUMN_NAME.equals(roc.parentColumn.originalColumnName)) {
 				summaryColumns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
 			}
 		}

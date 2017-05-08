@@ -8,5 +8,10 @@ export const initialTranslations = {
         'amp.gpi-reports:filter-button': 'Filters',
         'amp.gpi-reports:settings-button': 'Settings',
         'amp.gpi-reports:other-years': 'Other Years',
-        'amp.gpi-reports:all-donors': 'All Donors'
+        'amp.gpi-reports:all-years': 'All Years',
+        'amp.gpi-reports:all-donors': 'All Donors',
+        'amp.gpi-reports:donor-agency': 'Donor Agency',
+        'amp.gpi-reports:donor-group': 'Donor Group',
+        'amp.gpi-reports:currency': 'Currency:'
+        
 };

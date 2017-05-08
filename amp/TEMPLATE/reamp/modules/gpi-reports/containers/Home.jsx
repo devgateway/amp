@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as startUp from '../actions/StartUpAction.jsx';
 require('../styles/main.less');
+require('bootstrap');
 import Report9b from "../components/Report9b";
 
 export default class App extends Component {
@@ -12,21 +13,21 @@ export default class App extends Component {
        
     }
     
-    componentWillMount() { 
-      
-       
+    componentWillMount() {       
     }
-   
-   
+    
     render() {       
         
       return (
-            <div >
-             
-             <label className="page-title">{this.props.translations['amp.gpi-reports:title']}</label> 
+            <div >             
+             <div className="title-bar">
+             <div className="container">
+               <h2>{this.props.translations['amp.gpi-reports:title']}</h2>
+             </div>
+           </div>
              <div >
              <div>
-              <ul className="nav nav-tabs" role="tablist">                  
+              <ul className="nav nav-tabs indicator-tabs" role="tablist">                  
              <li role="presentation" className="active"><a href="#indicator1" aria-controls="indicator1" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-reports:indicator1-title']}</a></li>                
              <li role="presentation" ><a href="#indicator5a" aria-controls="indicator5a" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-reports:indicator5a-title']}</a></li>
              <li role="presentation" ><a href="#indicator5b" aria-controls="indicator5b" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-reports:indicator5b-title']}</a></li>

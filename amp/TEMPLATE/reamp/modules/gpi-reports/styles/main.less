@@ -1,38 +1,3 @@
-body {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 13px;
-}
-
-.tab-content {
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    padding: 10px;
-}
-
-.nav-tabs {
-    margin-bottom: 0;
-}
-
-.nav-tabs>li>a {
-    border: 1px solid #ddd;
-    background: #f9f9f9;
-    color: #999999;
-    font-size: 13px;
-}
-
-.nav-tabs>li.active>a {
-    font-weight: bold;
-    color: #354052;
-    font-size: 14px;
-}
-
-.page-title {
- font-size: 18px;
- color: #354052;
-}
-
-
 /* report styles */
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
@@ -466,6 +431,12 @@ a:hover {
   height: 100%;
   width: 100%;
 }
+.btn-years-active{
+  background: #2b9ff6 !important;
+  border: 1px solid #2b9ff6 !important;
+  color: #ffffff !important;
+}
+
 .dropdown-years {
   background: #ffffff;
   border: 1px solid #dfe3e9;
@@ -586,4 +557,41 @@ a:hover {
 }
 .text-centered{
   text-align: center;
+}
+
+
+
+.donor-menu {
+    background: #ffffff;
+    border: 1px solid #dfe3e9;
+    color: #7f8fa4;
+    min-width: 220px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.donor-toggle {
+ width: 15px;
+ height: 15px;
+ float: left;
+ margin-top: 5px;
+ clear: both;
+ 
+}
+.donor-toggle-unselected {
+opacity: 0.4;
+    filter: alpha(opacity=40);
+}
+.donor-header-text{
+ float: left;
+ margin-top: 5px;
+ 
+}
+
+.donor-dropdown {
+  width: 25%;
+}
+
+.number-column {
+  text-align: right;
 }

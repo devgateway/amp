@@ -80,38 +80,40 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 		List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
 		GPIReportOutputColumn yearColumn = getColumns().get(GPIReportConstants.COLUMN_YEAR);
 
-		for (ReportArea reportArea : generatedReport.reportContents.getChildren()) {
-			Map<GPIReportOutputColumn, String> columns = new HashMap<>();
-			Map<String, Map<String, ReportCell>> years = new HashMap<>();
-			for (ReportOutputColumn roc : generatedReport.leafHeaders) {
-				ReportCell rc = reportArea.getContents().get(roc);
-				rc = rc != null ? rc : TextCell.EMPTY;
-				if (YEAR_LEVEL_HIERARCHIES.contains(roc.columnName) && !roc.parentColumn.columnName.equals("Totals")) {
-					if (years.get(roc.parentColumn.columnName) == null) {
-						years.put(roc.parentColumn.columnName, new HashMap<>());
+		if (generatedReport.reportContents.getChildren() != null) {
+			for (ReportArea reportArea : generatedReport.reportContents.getChildren()) {
+				Map<GPIReportOutputColumn, String> columns = new HashMap<>();
+				Map<String, Map<String, ReportCell>> years = new HashMap<>();
+				for (ReportOutputColumn roc : generatedReport.leafHeaders) {
+					ReportCell rc = reportArea.getContents().get(roc);
+					rc = rc != null ? rc : TextCell.EMPTY;
+					if (isMeasureColumn(roc)) {
+						if (years.get(roc.parentColumn.columnName) == null) {
+							years.put(roc.parentColumn.columnName, new HashMap<>());
+						}
+						years.get(roc.parentColumn.columnName).put(roc.columnName, rc);
+					} else if (roc.parentColumn == null) {
+						columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
 					}
-					years.get(roc.parentColumn.columnName).put(roc.columnName, rc);
-				} else if (roc.parentColumn == null) {
-					columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
 				}
-			}
-
-			years.forEach((k, v) -> {
-				Map<GPIReportOutputColumn, String> row = new HashMap<>();
-				row.put(yearColumn, k);
-				final BooleanWrapper isRowEmpty = new BooleanWrapper(true);
-				v.forEach((x, y) -> {
-					row.put(getColumns().get(x), y.displayedValue);
-					if (YEAR_LEVEL_HIERARCHIES.contains(x) && (((AmountCell) y).extractValue() != 0)) {
-						isRowEmpty.set(false);
+	
+				years.forEach((k, v) -> {
+					Map<GPIReportOutputColumn, String> row = new HashMap<>();
+					row.put(yearColumn, k);
+					final BooleanWrapper isRowEmpty = new BooleanWrapper(true);
+					v.forEach((x, y) -> {
+						row.put(getColumns().get(x), y.displayedValue);
+						if (YEAR_LEVEL_HIERARCHIES.contains(x) && (((AmountCell) y).extractValue() != 0)) {
+							isRowEmpty.set(false);
+						}
+					});
+					
+					if (!isRowEmpty.value) {
+						row.putAll(columns);
+						contents.add(row);
 					}
 				});
-				
-				if (!isRowEmpty.value) {
-					row.putAll(columns);
-					contents.add(row);
-				}
-			});
+			}
 		}
 
 		Comparator<Map<GPIReportOutputColumn, String>> byYear = (Map<GPIReportOutputColumn, String> o1,
@@ -121,7 +123,7 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 		
 		return contents;
 	}
-	
+
 	/**
 	 * build the contents of the report
 	 * 
@@ -135,12 +137,29 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 			ReportCell rc = generatedReport.reportContents.getContents().get(roc);
 			rc = rc != null ? rc : TextCell.EMPTY;
-			if (YEAR_LEVEL_HIERARCHIES.contains(roc.originalColumnName) 
-					&& NiReportsEngine.TOTALS_COLUMN_NAME.equals(roc.parentColumn.originalColumnName)) {
+			if (isTotalMeasureColumn(roc)) {
 				summaryColumns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
 			}
 		}
 		
 		return summaryColumns;
+	}
+
+	/**
+	 * @param roc
+	 * @return
+	 */
+	private boolean isMeasureColumn(ReportOutputColumn roc) {
+		return YEAR_LEVEL_HIERARCHIES.contains(roc.columnName) && 
+				!NiReportsEngine.TOTALS_COLUMN_NAME.equals(roc.parentColumn.columnName);
+	}
+	
+	/**
+	 * @param roc
+	 * @return
+	 */
+	private boolean isTotalMeasureColumn(ReportOutputColumn roc) {
+		return YEAR_LEVEL_HIERARCHIES.contains(roc.originalColumnName) 
+				&& NiReportsEngine.TOTALS_COLUMN_NAME.equals(roc.parentColumn.originalColumnName);
 	}
 }

@@ -51,9 +51,7 @@ public abstract class GPIReportOutputBuilder  {
 		output.setHeaders(headers);
 		
 		List<Map<GPIReportOutputColumn, String>> allContents = new ArrayList<>();
-		if(generatedReport.reportContents.getChildren() != null) {
-			allContents = getReportContents(generatedReport);
-		}
+		allContents = getReportContents(generatedReport);
 		output.setTotalRecords(allContents.size());
 		
 		int start = page > 0 ? (page - 1) * recordsPerPage : page;

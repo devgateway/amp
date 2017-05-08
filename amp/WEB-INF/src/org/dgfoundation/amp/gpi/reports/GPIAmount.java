@@ -1,6 +1,8 @@
 package org.dgfoundation.amp.gpi.reports;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
 
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
@@ -12,25 +14,31 @@ import org.dgfoundation.amp.nireports.TranslatedDate;
  * @author Viorel Chihai
  *
  */
-public final class GPIAmount  {
-		
+public final class GPIAmount {
+
 	/**
-	 * the amount stored in this cell, plus some accessory information like the date of the transaction.
+	 * the amount stored in this cell, plus some accessory information like the
+	 * date of the transaction.
 	 */
 	public final MonetaryAmount amount;
-	
+
 	/**
-	 * the effective date 
+	 * the effective date
 	 */
 	public final TranslatedDate translatedDate;
-	
+
+	public final LocalDate transactionMoment;
+
 	public final String donorName;
 	public final String donorGroup;
-	
-	public GPIAmount(String donorName, String donorGroup, MonetaryAmount amount, TranslatedDate translatedDate) {
+
+	public GPIAmount(String donorName, String donorGroup, MonetaryAmount amount, Date transactionMoment,
+			TranslatedDate translatedDate) {
+
 		this.donorName = donorName;
 		this.donorGroup = donorGroup;
 		this.amount = amount;
+		this.transactionMoment = transactionMoment.toLocalDate();
 		this.translatedDate = translatedDate;
 	}
 
@@ -50,15 +58,19 @@ public final class GPIAmount  {
 	public BigDecimal getAmount() {
 		return amount.amount;
 	}
-	
+
 	public String getDonorName() {
 		return donorName;
 	}
-	
+
 	public String getDonorGroup() {
 		return donorGroup;
 	}
-	
+
+	public LocalDate getTransactionMoment() {
+		return transactionMoment;
+	}
+
 	public NiPrecisionSetting getPrecision() {
 		return amount.precisionSetting;
 	}
@@ -66,8 +78,12 @@ public final class GPIAmount  {
 	public boolean isScalableByUnits() {
 		return true;
 	}
-	
-	public String getYear() {
+
+	public String getTranslatedYear() {
 		return translatedDate.year.getValue();
+	}
+
+	public int getYear() {
+		return transactionMoment.getYear();
 	}
 }

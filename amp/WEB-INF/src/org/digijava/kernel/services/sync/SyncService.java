@@ -182,7 +182,7 @@ public class SyncService implements InitializingBean {
                 + "SELECT a.amp_id ampId, a.modified_date modifiedDate, a.deleted "
                 + "FROM amp_activity_version a "
                 + "JOIN amp_activity_group g ON a.amp_activity_id = g.amp_activity_last_version_id "
-                + "WHERE a.deleted = true", workspaceActivitiesQuery, restriction);
+                + "WHERE a.deleted = true %s", workspaceActivitiesQuery, restriction, restriction);
 
         return jdbcTemplate.query(sql, args, ACTIVITY_CHANGE_ROW_MAPPER);
     }

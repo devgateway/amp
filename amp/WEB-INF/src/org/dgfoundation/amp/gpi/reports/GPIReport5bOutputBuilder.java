@@ -18,6 +18,7 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report 5b
@@ -161,7 +162,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 	private double getTotalDisbursements(GeneratedReport generatedReport) {
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 			if (roc.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)
-					&& !roc.parentColumn.columnName.equals("Totals")) {
+					&& NiReportsEngine.TOTALS_COLUMN_NAME.equals(roc.parentColumn.originalColumnName)) {
 				
 				ReportCell rc = generatedReport.reportContents.getContents().get(roc);
 				return ((AmountCell) rc).extractValue();

@@ -3,9 +3,13 @@ package org.dgfoundation.amp.gpi.reports;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -16,6 +20,7 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -25,6 +30,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.common.util.DateTimeUtil;
 
 public class GPIReportUtils {
 
@@ -283,14 +289,34 @@ public class GPIReportUtils {
 	}
 
 	public static List<String> getMTEFColumnsForIndicator5b(ReportSpecification spec) {
+		
+		FilterRule dateFilterRule = getDateFilterRule(spec);
+		if (dateFilterRule == null || StringUtils.isBlank(dateFilterRule.min)) {
+			throw new RuntimeException("No year selected. Please specify the date filter");
+		}
+		
+		Date fromJulianNumberToDate = DateTimeUtil.fromJulianNumberToDate(dateFilterRule.min);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fromJulianNumberToDate);
+		int year = cal.get(Calendar.YEAR);
+
 		List<String> mtefColumns = new ArrayList<>();
-
-		int year = Integer.parseInt(spec.getSettings().getYearRangeFilter().min);
-
 		for (int i = 1; i <= 3; i++) {
 			mtefColumns.add("MTEF " + (year + i));
 		}
 
 		return mtefColumns;
+	}
+
+	public static FilterRule getDateFilterRule(ReportSpecification spec) {
+		Optional<Entry<ReportElement, FilterRule>> dateRuleEntry = spec.getFilters()
+				.getFilterRules().entrySet().stream()
+				.filter(entry -> entry.getKey().type.equals(ElementType.DATE))
+				.filter(entry -> entry.getKey().entity == null)
+				.findAny();
+		
+		FilterRule dateRule = dateRuleEntry.isPresent() ? dateRuleEntry.get().getValue() : null;
+		
+		return dateRule;
 	}
 }

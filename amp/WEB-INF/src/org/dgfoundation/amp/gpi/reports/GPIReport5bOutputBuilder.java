@@ -115,9 +115,8 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	@Override
-	protected List<Map<GPIReportOutputColumn, String>> getReportSummary(GeneratedReport generatedReport) {
-		List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
-		Map<GPIReportOutputColumn, String> indicator = new HashMap<>();
+	protected Map<GPIReportOutputColumn, String> getReportSummary(GeneratedReport generatedReport) {
+		Map<GPIReportOutputColumn, String> summaryColumns = new HashMap<>();
 		
 		if (generatedReport.reportContents.getChildren() != null) {
 			double totalDisbursements = getTotalDisbursements(generatedReport);
@@ -129,7 +128,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 				for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 					ReportCell rc = reportArea.getContents().get(roc);
 					rc = rc != null ? rc : TextCell.EMPTY;
-					if (GPIReportUtils.getMTEFColumnsForIndicator5b(generatedReport.spec).contains(roc.columnName)) {
+					if (GPIReportUtils.getMTEFColumnsForIndicator5b(generatedReport.spec).contains(roc.originalColumnName)) {
 						if (((AmountCell) rc).extractValue() > 0) {
 							mtefYearsWithYes++;
 						} 
@@ -147,11 +146,10 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 			
 			double indicator5bResult = (indicator5bSum * 100) / (totalDisbursements * 3);
 			BigDecimal percentageIndicator5b =  new BigDecimal(indicator5bResult).setScale(0, RoundingMode.UP);
-			indicator.put(new GPIReportOutputColumn(COLUMN_INDICATOR_5B), percentageIndicator5b + "%");
-			contents.add(indicator);
+			summaryColumns.put(new GPIReportOutputColumn(COLUMN_INDICATOR_5B), percentageIndicator5b + "%");
 		}
 		
-		return contents;
+		return summaryColumns;
 	}
 	
 	/**

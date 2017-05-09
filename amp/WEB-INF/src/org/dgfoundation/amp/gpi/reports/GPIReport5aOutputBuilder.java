@@ -124,8 +124,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	@Override
-	protected List<Map<GPIReportOutputColumn, String>> getReportSummary(GeneratedReport generatedReport) {
-		List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
+	protected Map<GPIReportOutputColumn, String> getReportSummary(GeneratedReport generatedReport) {
 
 		Map<GPIReportOutputColumn, String> columns = new HashMap<>();
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
@@ -136,8 +135,6 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 			}
 		}
 		
-		contents.add(columns);
-		
-		return contents;
+		return columns;
 	}
 }

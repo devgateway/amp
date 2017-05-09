@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.reducing;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -17,6 +18,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -29,19 +32,24 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.CalendarConverter;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.AmpPrecisionSetting;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.jdbc.Work;
 
 /**
@@ -113,24 +121,26 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 		List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
 		Map<String, Map<String, GPIIndicator6Item>> reportCells = new HashMap<>();
 
-		for (ReportArea reportArea : generatedReport.reportContents.getChildren()) {
-			Map<String, GPIIndicator6Item> years = new HashMap<>();
-			String donor = "";
-			for (ReportOutputColumn roc : generatedReport.leafHeaders) {
-				ReportCell rc = reportArea.getContents().get(roc);
-				rc = rc != null ? rc : TextCell.EMPTY;
-				if (MeasureConstants.PLANNED_DISBURSEMENTS.equals(roc.columnName)
-						&& !roc.parentColumn.columnName.equals("Totals")) {
-					if (years.get(roc.parentColumn.columnName) == null) {
-						years.put(roc.parentColumn.columnName, new GPIIndicator6Item(
-								new BigDecimal(((AmountCell) rc).extractValue()), BigDecimal.ZERO));
+		if (generatedReport.reportContents.getChildren() != null) {
+			for (ReportArea reportArea : generatedReport.reportContents.getChildren()) {
+				Map<String, GPIIndicator6Item> years = new HashMap<>();
+				String donor = "";
+				for (ReportOutputColumn roc : generatedReport.leafHeaders) {
+					ReportCell rc = reportArea.getContents().get(roc);
+					rc = rc != null ? rc : TextCell.EMPTY;
+					if (MeasureConstants.PLANNED_DISBURSEMENTS.equals(roc.columnName)
+							&& !roc.parentColumn.columnName.equals("Totals")) {
+						if (years.get(roc.parentColumn.columnName) == null) {
+							years.put(roc.parentColumn.columnName, new GPIIndicator6Item(
+									new BigDecimal(((AmountCell) rc).extractValue()), BigDecimal.ZERO));
+						}
+					} else if (roc.parentColumn == null) {
+						donor = rc.displayedValue;
 					}
-				} else if (roc.parentColumn == null) {
-					donor = rc.displayedValue;
 				}
+	
+				reportCells.putIfAbsent(donor, years);
 			}
-
-			reportCells.putIfAbsent(donor, years);
 		}
 
 		List<GPIAmount> gpiBudgetAmounts = fetchGpiBudgetAmounts(generatedReport);
@@ -139,7 +149,8 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 				: GPIAmount::getDonorGroup;
 
 		Map<String, List<GPIAmount>> donorAmounts = gpiBudgetAmounts.stream()
-				.filter(amount -> isAcceptableYear(generatedReport, amount.getYear()))
+				.filter(c -> isAcceptableDonor(generatedReport, c.getDonorId()))
+				.filter(c -> isAcceptableDate(generatedReport, c.getTransactionMoment()))
 				.collect(groupingBy(donorNamePredicate));
 
 		donorAmounts.entrySet().forEach(donor -> {
@@ -160,7 +171,6 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 
 				});
 			}
-			;
 		});
 
 		List<Map<GPIReportOutputColumn, String>> rows = buildReportRows(generatedReport, getDonorColumn(), reportCells);
@@ -220,8 +230,10 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 					row.put(donorColumn, donor);
 					row.put(getColumns().get(MeasureConstants.PLANNED_DISBURSEMENTS),
 							formatAmount(generatedReport, value.getDisbAmount()));
-					row.put(getColumns().get(ANNUAL_GOV_BUDGET), formatAmount(generatedReport, value.getAnnualGov()));
-					row.put(getColumns().get(PLANNED_ON_BUDGET), formatAmount(generatedReport, value.getPercentage()));
+					row.put(getColumns().get(ANNUAL_GOV_BUDGET), 
+							formatAmount(generatedReport, value.getAnnualGov()));
+					row.put(getColumns().get(PLANNED_ON_BUDGET), 
+							formatAmount(generatedReport, value.getPercentage()) + "%");
 					rows.add(row);
 				}
 			});
@@ -254,36 +266,39 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	@Override
-	protected List<Map<GPIReportOutputColumn, String>> getReportSummary(GeneratedReport generatedReport) {
-		List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
+	protected Map<GPIReportOutputColumn, String> getReportSummary(GeneratedReport generatedReport) {
 
 		BigDecimal totalDisbursements = BigDecimal.ZERO;
 
-		Map<GPIReportOutputColumn, String> columns = new HashMap<>();
+		Map<GPIReportOutputColumn, String> summaryColumns = new HashMap<>();
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 			ReportCell rc = generatedReport.reportContents.getContents().get(roc);
 			rc = rc != null ? rc : TextCell.EMPTY;
-			if (MeasureConstants.PLANNED_DISBURSEMENTS.equals(roc.originalColumnName)) {
-				columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
+			if (MeasureConstants.PLANNED_DISBURSEMENTS.equals(roc.originalColumnName)
+					&& NiReportsEngine.TOTALS_COLUMN_NAME.equals(roc.parentColumn.originalColumnName)) {
+				summaryColumns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
 				totalDisbursements = new BigDecimal(((AmountCell) rc).extractValue());
 				break;
 			}
 		}
-		try {
-			BigDecimal sum = fetchGPIGovData(generatedReport).stream().map(c -> c.getAmount()).reduce(BigDecimal.ZERO,
-					BigDecimal::add);
 
-			columns.put(new GPIReportOutputColumn(ANNUAL_GOV_BUDGET), formatAmount(generatedReport, sum));
-			columns.put(new GPIReportOutputColumn(PLANNED_ON_BUDGET),
-					formatAmount(generatedReport, calculateIndicator6Percentage(totalDisbursements, sum)));
+		try {
+			BigDecimal sum = fetchGPIGovData(generatedReport).stream()
+					.filter(c -> isAcceptableDate(generatedReport, c.getTransactionMoment()))
+					.filter(c -> isAcceptableDonor(generatedReport, c.getDonorId()))
+					.map(c -> c.getAmount())
+					.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+			summaryColumns.put(new GPIReportOutputColumn(ANNUAL_GOV_BUDGET), 
+					formatAmount(generatedReport, sum));
+			summaryColumns.put(new GPIReportOutputColumn(PLANNED_ON_BUDGET),
+					formatAmount(generatedReport, calculateIndicator6Percentage(totalDisbursements, sum)) + "%");
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 
-		contents.add(columns);
-
-		return contents;
+		return summaryColumns;
 	}
 
 	public List<GPIAmount> fetchGPIGovData(GeneratedReport generatedReport) throws SQLException {
@@ -293,12 +308,14 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 		CalendarConverter calendarConverter = generatedReport.spec.getSettings() != null
 				&& generatedReport.spec.getSettings().getCalendar() != null
 						? generatedReport.spec.getSettings().getCalendar() : AmpARFilter.getDefaultCalendar();
+		
 		CachingCalendarConverter calendar = new CachingCalendarConverter(calendarConverter,
 				calendarConverter.getDefaultFiscalYearPrefix(), Function.identity());
 		
 		String query = "SELECT aob.amp_gpi_ni_aid_on_budget_id AS budget_id,"
 				+ "aob.amount AS amount, aob.currency_id AS currency_id, aob.indicator_date AS indicator_date,"
-				+ "o.name AS donor_name, grp.org_grp_name AS donor_group " + "FROM amp_gpi_ni_aid_on_budget aob "
+				+ "o.amp_org_id AS donor_id, o.name AS donor_name, grp.org_grp_name AS donor_group " 
+				+ "FROM amp_gpi_ni_aid_on_budget aob "
 				+ "JOIN amp_organisation o ON aob.donor_id = o.amp_org_id "
 				+ "JOIN amp_org_group grp ON o.org_grp_id = grp.amp_org_grp_id";
 
@@ -315,6 +332,7 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 						Long currencyId = rs.rs.getLong("currency_id");
 						AmpCurrency srcCurrency = CurrencyUtil.getAmpcurrency(currencyId);
 
+						Long donorId = rs.rs.getLong("donor_id");
 						String donorName = rs.rs.getString("donor_name");
 						String donorGroup = rs.rs.getString("donor_group");
 
@@ -323,7 +341,7 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 										usedCurrency.getCurrencyCode(), null, transactionDate));
 						MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate),
 								transactionAmount, srcCurrency, transactionDate, precisionSetting);
-						GPIAmount cell = new GPIAmount(donorName, donorGroup, amount, transactionMoment, 
+						GPIAmount cell = new GPIAmount(donorId, donorName, donorGroup, amount, transactionMoment, 
 								calendar.translate(transactionMoment));
 						gpiAmountCells.add(cell);
 					}
@@ -341,18 +359,43 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 	}
 
 	public static BigDecimal calculateIndicator6Percentage(BigDecimal a, BigDecimal b) {
+		if (a == null || b == null || a.equals(BigDecimal.ZERO) || b.equals(BigDecimal.ZERO)) {
+			return BigDecimal.ZERO;
+		}
+		
 		if (a.compareTo(b) <= 0) {
-			return a.divide(b, NiFormula.DIVISION_MC).multiply(new BigDecimal(100));
+			return a.divide(b, NiFormula.DIVISION_MC)
+					.multiply(new BigDecimal(100))
+					.setScale(0, RoundingMode.UP);
 		}
 
-		return a.subtract(b).divide(a, NiFormula.DIVISION_MC).multiply(new BigDecimal(100));
+		return a.subtract(b).divide(a, NiFormula.DIVISION_MC)
+				.multiply(new BigDecimal(100))
+				.setScale(0, RoundingMode.UP);
+	}
+	
+	protected boolean isAcceptableDate(GeneratedReport generatedReport, LocalDate date) {
+		FilterRule dateRule = generatedReport.spec.getFilters().getFilterRules().entrySet().stream()
+				.filter(entry -> entry.getKey().type.equals(ElementType.DATE))
+				.filter(entry -> entry.getKey().entity == null)
+				.findAny().get().getValue();
+		
+		Predicate<Long> dateRangePredicate = dateRule == null ? (z -> true) : dateRule.buildPredicate();
+		
+		return dateRangePredicate.test((long) DateTimeUtil.toJulianDayNumber(date));
 	}
 
-	protected boolean isAcceptableYear(GeneratedReport generatedReport, int yr) {
-		Predicate<Long> yearRangeSettingsPredicate = generatedReport.spec.getSettings() == null ? (z -> true) 
-				: generatedReport.spec.getSettings().buildYearSettingsPredicate();
+	protected boolean isAcceptableDonor(GeneratedReport generatedReport, Long donorId) {
+		Optional<Entry<ReportElement, FilterRule>> donorEntry = generatedReport.spec.getFilters().getFilterRules()
+				.entrySet().stream()
+				.filter(entry -> entry.getKey().type.equals(ElementType.ENTITY))
+				.filter(entry -> entry.getKey().entity.getEntityName().equals(ColumnConstants.DONOR_AGENCY))
+				.findAny();
 		
-		return yearRangeSettingsPredicate.test((long) yr);
+		FilterRule donorRule = donorEntry.isPresent() ? donorEntry.get().getValue() : null;
+		Predicate<Long> donorRulePredicate = donorRule == null ? (z -> true) : donorRule.buildPredicate();
+		
+		return donorRulePredicate.test(donorId);
 	}
 }
 

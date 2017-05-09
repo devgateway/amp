@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.gpi.reports;
 
+import java.util.Map;
+
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.digijava.kernel.ampapi.endpoints.settings.Settings;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -28,14 +30,18 @@ public class GPIReportBuilder {
 		this.gpiReportOutputBuilder = outputBuilder;
 	}
 
-	public GPIReport build(boolean isSummary, int page, int recordsPerPage) {
+	/**
+	 * Builds the GPI report
+	 * 
+	 * @param page - the number of the page
+	 * @param recordsPerPage - records per page
+	 * @return GPI Report {@link GPIReport}
+	 */
+	public GPIReport build(int page, int recordsPerPage) {
 		GPIReport gpiReport = new GPIReport();
 		gpiReport.setSettings(getReportSettings());
-		if (isSummary) {
-			gpiReport.setPage(getSummaryPage());
-		} else {
-			gpiReport.setPage(getReportPage(page, recordsPerPage));
-		}
+		gpiReport.setPage(getReportPage(page, recordsPerPage));
+		gpiReport.setSummary(getSummary());
 
 		return gpiReport;
 	}
@@ -44,8 +50,8 @@ public class GPIReportBuilder {
 		return gpiReportOutputBuilder.buildGPIReportPage(generatedReport, page, recordsPerPage);
 	}
 
-	protected GPIReportPage getSummaryPage() {
-		return gpiReportOutputBuilder.buildGPIReportPageSummary(generatedReport);
+	protected Map<GPIReportOutputColumn, String> getSummary() {
+		return gpiReportOutputBuilder.buildGPIReportSummary(generatedReport);
 	}
 
 	private Settings getReportSettings() {

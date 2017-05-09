@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.gpi.reports;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.stream.Collectors;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 
 /**
- * A utility class to transform a GeneratedReport to GPI Report Output (headers, report data)
+ * A utility class to transform a GeneratedReport to GPI Report Output (headers, report data, summary)
  * 
  * @author Viorel Chihai
  *
@@ -33,7 +34,7 @@ public abstract class GPIReportOutputBuilder  {
 	
 	protected abstract List<Map<GPIReportOutputColumn, String>> getReportContents(GeneratedReport generatedReport);
 	
-	protected abstract List<Map<GPIReportOutputColumn, String>> getReportSummary(GeneratedReport generatedReport);
+	protected abstract Map<GPIReportOutputColumn, String> getReportSummary(GeneratedReport generatedReport);
 
 	/**
 	 * Build the report page data based on generatedReport
@@ -49,7 +50,8 @@ public abstract class GPIReportOutputBuilder  {
 		List<GPIReportOutputColumn> headers = buildHeaders(generatedReport);
 		output.setHeaders(headers);
 		
-		List<Map<GPIReportOutputColumn, String>> allContents = getReportContents(generatedReport);
+		List<Map<GPIReportOutputColumn, String>> allContents = new ArrayList<>();
+		allContents = getReportContents(generatedReport);
 		output.setTotalRecords(allContents.size());
 		
 		int start = page > 0 ? (page - 1) * recordsPerPage : page;
@@ -75,15 +77,10 @@ public abstract class GPIReportOutputBuilder  {
 	 * Build the report summary data based on generatedReport
 	 * 
 	 * @param generatedReport
-	 * @return
+	 * @return summary info as a map of {@link GPIReportOutputColumn, @link String} values
 	 */
-	public GPIReportPage buildGPIReportPageSummary(GeneratedReport generatedReport) {
-		GPIReportPage output = new GPIReportPage();
-		
-		List<Map<GPIReportOutputColumn, String>> allContents = getReportSummary(generatedReport);
-		output.setContents(allContents);
-
-		return output;
+	public Map<GPIReportOutputColumn, String> buildGPIReportSummary(GeneratedReport generatedReport) {
+		return getReportSummary(generatedReport);
 	}
 	
 	/**
@@ -92,7 +89,7 @@ public abstract class GPIReportOutputBuilder  {
 	 * @param collection
 	 * @param index
 	 * @param pageSize
-	 * @return
+	 * @return {@link List<T>}
 	 */
 	public static <T> List<T> paginate(List<T> collection, int index, int pageSize) {
 		return collection.stream().skip(index).limit(pageSize).collect(Collectors.toList());

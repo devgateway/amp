@@ -1,6 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
+var util = require('../../ugly/util');
 var template = _.template(fs.readFileSync(__dirname
 		+ '/../templates/chart-tops-info-modal.html', 'UTF-8'));
 
@@ -28,7 +29,7 @@ module.exports = BackboneDash.View.extend({
 			numberDivider: this.numberDivider
 		}));
 
-		app.translator.translateDOM($(".dash-settings-modal"));
+		app.translator.translateDOM($(".chart-tops-info-container"));
 		
 		//TODO: move this code to a new model so the API call is made automatically.
     	var config = this.app.filter.serialize();
@@ -81,6 +82,8 @@ module.exports = BackboneDash.View.extend({
     			numberDivider: self.numberDivider
     		}));
 
+            self.$el.find('.chart-detail-adjtype').html(util.translateLanguage(self.model.get('adjtype')));
+
             self.$el.find('.load-more').click(function() {
                 self._currentPage++;
                 self.render();
@@ -93,7 +96,7 @@ module.exports = BackboneDash.View.extend({
 				self.$el.find('.load-more').html('<span data-i18n="amp.dashboard:chart-tops-table-loadmore">load more</span>');
                 self.$el.find('.load-more').show();
             }
-    		app.translator.translateDOM($(".load-more"));
+    		app.translator.translateDOM($(".chart-tops-info-container"));
     	}).fail(function(xhr, err) {
 			var msg = JSON.parse(xhr.responseText).error;
 			console.error("Error Getting chart-tops-info-modal from EP", msg);

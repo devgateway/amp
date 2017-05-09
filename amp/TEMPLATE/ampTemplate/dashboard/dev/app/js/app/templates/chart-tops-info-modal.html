@@ -2,7 +2,8 @@
 	<div class="panel-body custom-panel">
 	<span class="table-category">
 		<b><%= (context.x.fmt || context.x.raw) %> <% if(context.y) { %> | <%= (context.y.fmt || context.y.raw) %><% }
-			%></b></span> <span class="table-category-detail">- <%= model.get('adjtype') %> -
+			%></b></span> <span class="table-category-detail">- <span class="chart-detail-adjtype"><%= model.get('adjtype')
+		%></span> -
 		<span data-i18n="<%= app.generalSettings.numberDividerDescription %>"></span>
 		<%= model.get('currency') %>
 	</span>

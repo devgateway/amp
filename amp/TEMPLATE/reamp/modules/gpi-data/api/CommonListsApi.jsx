@@ -2,7 +2,7 @@ import { postJson, delay, fetchJson } from 'amp/tools';
 class CommonListsApi {    
     static getCurrencyList() {              
         return new Promise((resolve, reject) => {
-            fetchJson('/rest/settings-definitions/gpi').then((response) => {
+            fetchJson('/rest/settings-definitions/gpi-data').then((response) => {
                 resolve(response);
             }).catch((error) => {
                 reject(error);

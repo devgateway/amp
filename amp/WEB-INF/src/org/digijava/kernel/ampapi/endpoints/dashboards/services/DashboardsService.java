@@ -3,12 +3,14 @@ package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import clover.com.google.common.base.Strings;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -16,6 +18,7 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
+import org.dgfoundation.amp.newreports.DateCell;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.IdentifiedReportCell;
@@ -99,13 +102,22 @@ public class DashboardsService {
 		return (Integer) EndpointUtils.getSingleValue(config, "offset", 0);
 	}
 
-	public static LinkedHashMap<String, Object> setFilterId(Long id, String filter) {
+	public static LinkedHashMap<String, Object> setFilterId(Long id, String column) {
 		LinkedHashMap<String, Object> filterObject = new LinkedHashMap<String, Object>();
 		List<Long> filterIds = new ArrayList<Long>();
 		if (id >0) {
 			filterIds.add(id);
-			filterObject.put(filter, filterIds);
+			filterObject.put(column, filterIds);
 		}
+		return filterObject;
+	}
+
+	public static LinkedHashMap<String, Object> setFilterYear(Integer year) {
+		LinkedHashMap<String, Object> filterObject = new LinkedHashMap<String, Object>();
+		LinkedHashMap<String, Object> filterYear = new LinkedHashMap<String, Object>();
+		filterYear.put("start", year.intValue() + "-01-01");
+		filterYear.put("end", year.intValue() + "-12-31");
+		filterObject.put(FiltersConstants.DATE, filterYear);
 		return filterObject;
 	}
 
@@ -200,31 +212,58 @@ public class DashboardsService {
 			obj.put(key, 0d);
 		return obj;
 	}
-	
+
+
+	public static JsonBean getAidPredictability(JsonBean filter) throws Exception {
+		return getAidPredictability(filter, null, null);
+	}
+
+
 	/**
 	 * 
 	 * @param filter
 	 * @return
 	 */
-	
-	public static JSONObject getAidPredictability(JsonBean filter) throws Exception {
-		JSONObject retlist = new JSONObject();
+	public static JsonBean getAidPredictability(JsonBean filter, Integer year, String measure) throws Exception {
+		JsonBean retlist = new JsonBean();
 		String err = null;
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability", ArConstants.DONOR_TYPE);
-		spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY));
-		spec.getHierarchies().add(new ReportColumn(ColumnConstants.COUNTRY));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-		
-		AmpReportFilters filterRules;
- 		if(filter!=null){
- 			Map<String, Object> filters=(Map<String, Object>)filter.get(EPConstants.FILTERS);
-			filterRules = FilterUtils.getFilterRules(filters, null);
- 			if(filterRules!=null){
- 				spec.setFilters(filterRules);
- 			} 		
- 		}
+		LinkedHashMap<String, Object> filters = null;
+		if (filter != null) {
+			filters = (LinkedHashMap<String, Object>) filter.get(EPConstants.FILTERS);
+		}
+		if (filters == null) {
+			filters = new LinkedHashMap<>();
+		}
+		if (year != null && year.intValue() > 0 && !Strings.isNullOrEmpty(measure)) {
+			spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+			spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+			if (measure.equalsIgnoreCase(MeasureConstants.PLANNED_DISBURSEMENTS)) {
+				spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+			}else {
+				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+			}
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+			filters.putAll(setFilterYear(year));
+			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+			if (filterRules != null) {
+				spec.setFilters(filterRules);
+			}
+		} else {
+			spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.COUNTRY));
+			spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+			spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+		}
+
+		if (filters != null) {
+			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+			if (filterRules != null) {
+				spec.setFilters(filterRules);
+			}
+		}
  		SettingsUtils.applySettings(spec, filter, true);
 		
 		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
@@ -232,7 +271,11 @@ public class DashboardsService {
 		setCustomSettings(filter, spec);
 		
 		GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
-				
+
+		if (year != null && year.intValue() > 0 && !Strings.isNullOrEmpty(measure)) {
+			return buildPaginateJsonBean(report, getOffset(filter));
+		}
+
 		//Not only years, we can have values like 'Fiscal calendar 2010-2011', so the Map should be <String,JSONObject>
 		Map<String, JSONObject> results = new TreeMap<>(); // accumulator of per-year results
 				
@@ -264,17 +307,22 @@ public class DashboardsService {
 				results.get(yearValue).put("year", yearValue);
 				yearsArray.add(results.get(yearValue));
 			}
-		retlist.put("years", yearsArray);
-		retlist.put("totals", results.get("totals"));		
+		retlist.set("years", yearsArray);
+		retlist.set("totals", results.get("totals"));
 	
 		String currcode = null;
 		currcode = spec.getSettings().getCurrencyCode();
-		retlist.put("currency", currcode);
+		retlist.set("currency", currcode);
 		
-		retlist.put("name", DashboardConstants.AID_PREDICTABILITY);
-		retlist.put("title", TranslatorWorker.translateText(DashboardConstants.AID_PREDICTABILITY));
-		retlist.put("measure", "disbursements");
+		retlist.set("name", DashboardConstants.AID_PREDICTABILITY);
+		retlist.set("title", TranslatorWorker.translateText(DashboardConstants.AID_PREDICTABILITY));
+		retlist.set("measure", "disbursements");
 		return retlist;
+	}
+
+
+	public static JsonBean fundingtype(String adjtype, JsonBean filter) {
+		return fundingtype(adjtype, filter, null, null);
 	}
 
 	/**
@@ -283,25 +331,45 @@ public class DashboardsService {
 	 * @param filter
 	 * @return
 	 */
-	
-	public static JsonBean fundingtype(String adjtype, JsonBean filter) {
+	public static JsonBean fundingtype(String adjtype, JsonBean filter, Integer year, Integer id) {
 		String err = null;
 		JsonBean retlist = new JsonBean();
 		
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype", ArConstants.DONOR_TYPE);
-		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-		spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE));
-		spec.getHierarchies().addAll(spec.getColumns());
-		spec.setSummaryReport(true);
-		
+		LinkedHashMap<String, Object> filters = null;
+		if (filter != null) {
+			filters = (LinkedHashMap<String, Object>) filter.get(EPConstants.FILTERS);
+		}
+		if (filters == null) {
+			filters = new LinkedHashMap<>();
+		}
+		List<Integer> filterIds = new ArrayList<Integer>();
+		if (year != null && year.intValue() > 0 && id != null && id.intValue() > 0) {
+			spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+			spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+			filters.putAll(DashboardsService.setFilterId(id.longValue(), FilterUtils.INSTANCE.idFromColumnName(MoConstants
+					.TYPE_OF_ASSISTANCE)));
+			filters.putAll(setFilterYear(year));
+			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+			if (filterRules != null) {
+				spec.setFilters(filterRules);
+			}
+			spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
+		} else {
+
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+			spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE));
+			spec.getHierarchies().addAll(spec.getColumns());
+			spec.setSummaryReport(true);
+
+		}
 		// also configures funding type
 		SettingsUtils.applyExtendedSettings(spec, filter);
 		
-		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
-				
- 		if (filter != null) {
- 			LinkedHashMap<String, Object> filters = (LinkedHashMap<String, Object>) filter.get(EPConstants.FILTERS);
-			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+ 		if (filters != null) {
+ 			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
  			if (filterRules != null) {
  				spec.setFilters(filterRules);
  			}
@@ -312,50 +380,58 @@ public class DashboardsService {
  		setCustomSettings(filter, spec);
 		
  		GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
-		
-		//Get total
-		AmountCell totals = (AmountCell) report.reportContents.getContents().get(report.leafHeaders.get(report.leafHeaders.size() - 1));
-		retlist.set("total", totals.value);
-		retlist.set("sumarizedTotal", calculateSumarizedTotals(totals.extractValue(), spec));
-		
-		String currcode = null;
-		currcode = spec.getSettings().getCurrencyCode();
-		retlist.set("currency", currcode);
-		
-		Map<String, List<JsonBean>> values = new TreeMap<>(); // Map<year, List<type, amount, formattedAmount>>
-		ReportOutputColumn toaCol = report.leafHeaders.get(0);
-		for(ReportArea toaArea:report.reportContents.getChildren()) {
-			String toa = toaArea.getContents().get(toaCol).displayedValue;
-			for(int i = 1; i < report.leafHeaders.size() - 1; i++) {
-				JsonBean toaBean = new JsonBean();
-				toaBean.set("type", toa);
-				ReportOutputColumn hdr = report.leafHeaders.get(i);
-				//long year = Integer.valueOf(hdr.parentColumn.originalColumnName);
-				String year = hdr.parentColumn.columnName;
-				AmountCell cell = (AmountCell) toaArea.getContents().get(hdr);
-				toaBean.set("amount", cell.extractValue());
-				toaBean.set("formattedAmount", cell.displayedValue);
-				if (!values.containsKey(year))
-					values.put(year, new ArrayList<>());
-				values.get(year).add(toaBean);
-				//values.computeIfAbsent(year, yr -> new ArrayList<>()).add(toaBean);
+
+		if (year != null && year.intValue() > 0 && id != null && id.intValue() > 0) {
+			return buildPaginateJsonBean(report, getOffset(filter));
+		} else {
+			spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
+			//Get total
+			AmountCell totals = (AmountCell) report.reportContents.getContents().get(report.leafHeaders.get(report.leafHeaders.size() - 1));
+
+			retlist.set("total", totals.value);
+			retlist.set("sumarizedTotal", calculateSumarizedTotals(totals.extractValue(), spec));
+
+			String currcode = null;
+			currcode = spec.getSettings().getCurrencyCode();
+			retlist.set("currency", currcode);
+
+			Map<String, List<JsonBean>> values = new TreeMap<>(); // Map<year, List<type, amount, formattedAmount>>
+			ReportOutputColumn toaCol = report.leafHeaders.get(0);
+			for (ReportArea toaArea : report.reportContents.getChildren()) {
+				String toa = toaArea.getContents().get(toaCol).displayedValue;
+				long toaId = toaArea.getOwner().id;
+				for (int i = 1; i < report.leafHeaders.size() - 1; i++) {
+					JsonBean toaBean = new JsonBean();
+					toaBean.set("type", toa);
+					toaBean.set("id", toaId);
+					ReportOutputColumn hdr = report.leafHeaders.get(i);
+					//long year = Integer.valueOf(hdr.parentColumn.originalColumnName);
+					String toaYear = hdr.parentColumn.columnName;
+					AmountCell cell = (AmountCell) toaArea.getContents().get(hdr);
+					toaBean.set("amount", cell.extractValue());
+					toaBean.set("formattedAmount", cell.displayedValue);
+					if (!values.containsKey(toaYear))
+						values.put(toaYear, new ArrayList<>());
+					values.get(toaYear).add(toaBean);
+					//values.computeIfAbsent(year, yr -> new ArrayList<>()).add(toaBean);
+				}
 			}
+			List<JsonBean> outValues = new ArrayList<>();
+			for (String yearValue : values.keySet()) {
+				JsonBean yearBean = new JsonBean();
+				yearBean.set("Year", yearValue);
+				yearBean.set("values", values.get(yearValue));
+				outValues.add(yearBean);
+			}
+			retlist.set("values", outValues);
+
+			retlist.set("name", DashboardConstants.FUNDING_TYPE);
+			retlist.set("title", TranslatorWorker.translateText(DashboardConstants.FUNDING_TYPE));
+
+			return retlist;
 		}
-		List<JsonBean> outValues = new ArrayList<>();
-		for(String year:values.keySet()) {
-			JsonBean yearBean = new JsonBean();
-			yearBean.set("Year", year);
-			yearBean.set("values", values.get(year));
-			outValues.add(yearBean);
-		}
-		retlist.set("values", outValues);
-		
-		retlist.set("name", DashboardConstants.FUNDING_TYPE);
-		retlist.set("title", TranslatorWorker.translateText(DashboardConstants.FUNDING_TYPE));
-		
-		return retlist;
 	}
-	
+
 	public static JsonBean getPeaceMarkerProjectsByCategory(JsonBean config, Integer id) {
 		String err = null;
 		JsonBean retlist = new JsonBean();
@@ -363,7 +439,9 @@ public class DashboardsService {
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetNDD", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
-		spec.getHierarchies().addAll(spec.getColumns());
+		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
+		spec.getHierarchies().add(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+
 		OutputSettings outSettings = new OutputSettings(new HashSet<String>(){{add(ColumnConstants.PROJECT_TITLE);}});
 		// applies settings, including funding type as a measure
 		SettingsUtils.applyExtendedSettings(spec, config);
@@ -411,17 +489,20 @@ public class DashboardsService {
 		JsonBean retlist = new JsonBean();
 		List<JsonBean> values = new ArrayList<JsonBean>();
 		ReportOutputColumn titleCol = report.leafHeaders.get(0);
-		ReportOutputColumn amountCol = report.leafHeaders.get(1);
+		ReportOutputColumn dateCol = report.leafHeaders.get(1);
+		ReportOutputColumn amountCol = report.leafHeaders.get(2);
 
 		report.reportContents.getChildren().stream().limit(offset + RECORDS_PER_PAGE).forEach(
 				n -> {
 					JsonBean row = new JsonBean();
 					IdentifiedReportCell title = (IdentifiedReportCell) n.getContents().get(titleCol);
 					AmountCell amount = (AmountCell) n.getContents().get(amountCol);
+					DateCell date = (DateCell) n.getContents().get(dateCol);
 					row.set("name", title.displayedValue);
 					row.set("amount", amount.value);
 					row.set("formattedAmount", amount.displayedValue);
 					row.set("id", title.entityId);
+					logger.error(date.displayedValue);
 					values.add(row);
 				}
 		);

@@ -8,6 +8,8 @@ module.exports = BackboneDash.View.extend({
     _currentPage: 0,
     PAGE_SIZE: 50,
     FRAGMENTATION: 'fragmentation',
+    AID_PREDICTABILITY: 'aidPredictability',
+    FUNDING_TYPE: 'fundingType',
 	initialize: function(options) {
 		this.app = options.app;
 		this.context = options.context;
@@ -35,9 +37,11 @@ module.exports = BackboneDash.View.extend({
         config.offset = this._currentPage * this.PAGE_SIZE;
 
     	var url = self.model.url + '/';
-		if (this.model.get('chartType') != this.FRAGMENTATION) {
-            url += this.context.data[0].values[this.context.x.index].id;
-		} else {
+    	if (this.model.get('chartType') == this.AID_PREDICTABILITY) {
+            url += this.context.x.index + '/' + this.context.y.index;
+        } else  if (this.model.get('chartType') == this.FUNDING_TYPE) {
+            url += this.context.x.raw + '/' + this.context.data[this.context.series.index].keyId;
+        } else  if (this.model.get('chartType') == this.FRAGMENTATION) {
             url += this.context.x.index + '/' + this.context.y.index;
 
             // Process params from heat-map/configs, in that EP we have defined each heatmap.
@@ -57,8 +61,10 @@ module.exports = BackboneDash.View.extend({
             config.xColumn = xColumn;
             config.yColumn = yColumn;
             config.yCount = self.model.get('yLimit');
-		}
-    	$.ajax({
+		} else {
+            url += this.context.data[0].values[this.context.x.index].id;
+        }
+        $.ajax({
     		method: 'POST',
     		url: url,
     		dataType: 'json',
@@ -84,11 +90,10 @@ module.exports = BackboneDash.View.extend({
 			if ((startIndex + self.PAGE_SIZE) >= data.totalRecords) {
             	self.$el.find('.load-more').hide();
             } else {
-				self.$el.find('.load-more').html('<span data-i18n="amp.dashboard:chart-tops-table-loadmore">load more</span> ' +
-                    (startIndex + self.PAGE_SIZE) + '/' + data.totalRecords);
+				self.$el.find('.load-more').html('<span data-i18n="amp.dashboard:chart-tops-table-loadmore">load more</span>');
                 self.$el.find('.load-more').show();
             }
-    		app.translator.translateDOM($(".dash-settings-modal"));
+    		app.translator.translateDOM($(".load-more"));
     	}).fail(function(xhr, err) {
 			var msg = JSON.parse(xhr.responseText).error;
 			console.error("Error Getting chart-tops-info-modal from EP", msg);
@@ -99,7 +104,7 @@ module.exports = BackboneDash.View.extend({
 				numberDivider: self.numberDivider
 			}));
 		});
-    	
+
 		return this;
 	},
 

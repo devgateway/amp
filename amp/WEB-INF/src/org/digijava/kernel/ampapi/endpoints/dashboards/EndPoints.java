@@ -290,8 +290,68 @@ public class EndPoints implements ErrorReportingEndpoint {
 	@Path("/aid-predictability")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "aidPredictability")
-	public JSONObject getAidPredictability(JsonBean filter) throws Exception {
+	public JsonBean getAidPredictability(JsonBean filter) throws Exception {
 		return DashboardsService.getAidPredictability(filter);
+	}
+
+	/**
+	 * Retrieve a list of projects by aid predictability year.
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>totalRecords</b><dd> - number total of projects.
+	 * <dt><b>values</b><dd> - array with a list of projects.
+	 *     name - name of the project.
+	 *     amount - amount of the project.
+	 *     formattedAmount - formatted amount of the project.
+	 *     id - id of the project.
+	 * </dl></br></br>
+	 *
+	 * <h3>Sample Input:</h3><pre>
+	 * {
+	 * 	"filters": {},
+	 * 	"settings": {
+	 * 	    "funding-type": ["Actual Commitments","Actual Disbursements"],
+	 * 	    "currency-code": "USD",
+	 * 	    "calendar-id": "123",
+	 * 	    "year-range": {
+	 * 	        "from": "2014",
+	 * 	        "to": "2015"
+	 * 	    }
+	 * 	}
+	 * }</pre>
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
+	 * {
+	 *     "totalRecords": 10,
+	 *     "values": [{
+	 *         "name": "Alimentation en eau de la ville d'Abidjan à partir de la nappe du Sud Comoé (Bonoua) - Phase I",
+	 *         "amount": 104422920.000000000000,
+	 *         "formattedAmount": "104 422 920",
+	 *         "id": 19003
+	 *     },
+	 * 	.....
+	 * 	{
+	 *         "name": "Construction de l'autoroute Abidjan-Bassam",
+	 *         "amount": 114777280.000000000000,
+	 *         "formattedAmount": "114 777 280",
+	 *         "id": 19111
+	 *     }]
+	 * }</pre>
+	 *
+	 * @param filter a JSON with a filter and the settings
+	 * @param year a year to query the projects
+	 * @param measure
+	 *
+	 * @return a JSON objects with the projects list.
+	 */
+	@POST
+	@Path("/aid-predictability/{year}/{measure}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "aidPredictabilityDataDetail")
+	public JsonBean getAidPredictabilityDataDetail(JsonBean filter, @PathParam("year") Integer year, @PathParam("measure")
+			String measure) throws Exception {
+		return DashboardsService.getAidPredictability(filter, year, measure);
 	}
 
 	/**
@@ -385,6 +445,71 @@ public class EndPoints implements ErrorReportingEndpoint {
 	public JsonBean getfundingtype(JsonBean config,
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype) {
 		return DashboardsService.fundingtype(adjtype,config);
+	}
+
+	/**
+	 * Retrieve a list of projects by funding types year.
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>totalRecords</b><dd> - number total of projects.
+	 * <dt><b>values</b><dd> - array with a list of projects.
+	 *     name - name of the project.
+	 *     amount - amount of the project.
+	 *     formattedAmount - formatted amount of the project.
+	 *     id - id of the project.
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Input:</h3><pre>
+	 * {
+	 * 	"filters": {},
+	 * 	"settings": {
+	 * 	    "funding-type": ["Actual Commitments","Actual Disbursements"],
+	 * 	    "currency-code": "USD",
+	 * 	    "calendar-id": "123",
+	 * 	    "year-range": {
+	 * 	        "from": "2014",
+	 * 	        "to": "2015"
+	 * 	    }
+	 * 	}
+	 * }</pre>
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
+	 * {
+	 *     "totalRecords": 10,
+	 *     "values": [{
+	 *         "name": "Alimentation en eau de la ville d'Abidjan à partir de la nappe du Sud Comoé (Bonoua) - Phase I",
+	 *         "amount": 104422920.000000000000,
+	 *         "formattedAmount": "104 422 920",
+	 *         "id": 19003
+	 *     },
+	 * 	.....
+	 * 	{
+	 *         "name": "Construction de l'autoroute Abidjan-Bassam",
+	 *         "amount": 114777280.000000000000,
+	 *         "formattedAmount": "114 777 280",
+	 *         "id": 19111
+	 *     }]
+	 * }</pre>
+	 *
+	 * @param config a JSON object with the configuration that is going to be used by the report to get the funding-type
+	 * @param adjtype a funding type
+	 * @param year a year to query the projects
+	 * @param id of the funding type
+	 *
+	 * @return a JSON objects with the projects list.
+	 */
+	@POST
+	@Path("/ftype/{year}/{id}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "ftypeDataDetail")
+	//TODO: Implement Filters
+	public JsonBean getfundingtypeDataDetail(JsonBean config,
+								   @DefaultValue("ac") @QueryParam("adjtype") String adjtype, @PathParam("year")
+														 Integer year, @PathParam("id")
+														 Integer id) {
+		return DashboardsService.fundingtype(adjtype,config, year, id);
 	}
 
 	/**

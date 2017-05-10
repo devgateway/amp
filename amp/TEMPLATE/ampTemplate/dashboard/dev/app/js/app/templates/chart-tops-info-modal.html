@@ -1,13 +1,5 @@
-<div class="panel panel-default">
-	<div class="panel-body custom-panel">
-	<span class="table-category">
-		<b><%= (context.x.fmt || context.x.raw) %> <% if(context.y) { %> | <%= (context.y.fmt || context.y.raw) %><% }
-			%></b></span> <span class="table-category-detail">- <span class="chart-detail-adjtype"><%= model.get('adjtype')
-		%></span> -
-		<span data-i18n="<%= app.generalSettings.numberDividerDescription %>"></span>
-		<%= model.get('currency') %>
-	</span>
-	</div>
+<div>
+	<span class="number-divider-detail"></span>
 </div>
 <div class="panel-default">
 	<div class="chart-tops-info-container">
@@ -26,7 +18,8 @@
 					<thead>
 					<tr>
 						<th><span data-i18n="amp.dashboard:chart-tops-table-projecttitle">Project Title</span></th>
-						<th><span data-i18n="amp.dashboard:chart-tops-table-amount">Amount</span></th>
+						<th><span class="funding-type-title-column"></span> (<%=
+							model.get('currency') %>)</th>
 					</tr>
 					</thead>
 					<tbody>

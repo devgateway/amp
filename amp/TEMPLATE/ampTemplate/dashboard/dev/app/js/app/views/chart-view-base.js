@@ -254,7 +254,7 @@ module.exports = BackboneDash.View.extend({
               var context = self.getCellContext(e, self.model.values);
               if (context) {
                   self.modalView = new ModalView({app: app, context: context, model: self.model});
-                  self.openInfoWindow();
+                  self.openInfoWindow((context.x.fmt || context.x.raw) + ' - ' + (context.y.fmt || context.y.raw));
               }
           });
       }
@@ -480,13 +480,11 @@ module.exports = BackboneDash.View.extend({
 		  }
 	  },
 
-    openInfoWindow: function() {
+    openInfoWindow: function(title) {
         var specialClass = 'dash-settings-modal';
-
-        this.app.modal('Category Detail', {
+        this.app.modal(title, {
             specialClass: specialClass,
-            bodyEl: this.modalView.render().el,
-            i18nTitle: 'amp.dashboard:dashboard-chart-tops-info-modal'
+            bodyEl: this.modalView.render().el
         });
         // Translate modal popup.
         app.translator.translateDOM($("." + specialClass));

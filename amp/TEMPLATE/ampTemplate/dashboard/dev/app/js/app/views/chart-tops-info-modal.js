@@ -82,8 +82,6 @@ module.exports = BackboneDash.View.extend({
     			numberDivider: self.numberDivider
     		}));
 
-            self.$el.find('.chart-detail-adjtype').html(util.translateLanguage(self.model.get('adjtype')));
-
             self.$el.find('.load-more').click(function() {
                 self._currentPage++;
                 self.render();
@@ -96,7 +94,29 @@ module.exports = BackboneDash.View.extend({
 				self.$el.find('.load-more').html('<span data-i18n="amp.dashboard:chart-tops-table-loadmore">load more</span>');
                 self.$el.find('.load-more').show();
             }
-    		app.translator.translateDOM($(".chart-tops-info-container"));
+
+            if (self.app.generalSettings.numberDivider != 1) {
+				var units;
+                if(self.app.generalSettings.numberDivider === 1000) {
+                    units = '<span data-i18n="amp.dashboard:chart-tops-detail-inthousands">Amounts in Thousands (000)</span>';
+                } else if(self.app.generalSettings.numberDivider === 1000000) {
+                    units = '<span data-i18n="amp.dashboard:chart-tops-detail-inmillions">Amounts in Millions (000 000)</span>';
+                }else if(self.app.generalSettings.numberDivider === 1000000000) {
+                    units = '<span data-i18n="amp.dashboard:chart-tops-detail-inbillions">Amounts in Billions (000 000 000)</span>';
+                }
+                self.$el.find('.number-divider-detail').html(units)
+            }
+
+            var fundingType;
+            if (self.model.get('chartType') == self.AID_PREDICTABILITY) {
+                fundingType = self.context.series.key;
+            } else {
+                var adjSettings = self.app.settingsWidget.definitions.getFundingTypeSetting();
+                fundingType = adjSettings.get('value').options.find(x => x.id === self.model.get('adjtype')).name;
+            }
+            self.$el.find('.funding-type-title-column').html(fundingType);
+
+    		app.translator.translateDOM($(".modal-body"));
     	}).fail(function(xhr, err) {
 			var msg = JSON.parse(xhr.responseText).error;
 			console.error("Error Getting chart-tops-info-modal from EP", msg);

@@ -110,7 +110,7 @@ module.exports = ChartViewBase.extend({
         var context = self.getNiceContext(e);
         if (context){
             this.modalView = new ModalView({app: app, context: context, model: this.model});
-            this.openInfoWindow();
+            this.openInfoWindow((context.x.fmt || context.x.raw) + ' ' + context.series.key);
         }
     }
 

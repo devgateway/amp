@@ -6,8 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -76,9 +76,18 @@ public class GPIReportUtils {
 			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		}
+		
+		spec.addColumn(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET));
+		spec.addColumn(new ReportColumn(ColumnConstants.EXECUTING_AGENCY));
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+		
+		spec.getHierarchies().add(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET));
+		spec.getHierarchies().add(new ReportColumn(ColumnConstants.EXECUTING_AGENCY));
 
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.DISBURSED_AS_SCHEDULED));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.OVER_DISBURSED));
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 
 		if (formParams != null) {

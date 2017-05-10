@@ -192,6 +192,7 @@ function validateUserInfo(){
 			          </digi:trn>
 			        </span>
                     <digi:errors/>
+					<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
 					        &nbsp;
 					        <br/>
 					        <logic:equal name="umViewEditUserForm" property="displaySuccessMessage" value="true" >

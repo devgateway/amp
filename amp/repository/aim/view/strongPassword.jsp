@@ -82,6 +82,10 @@
 		width: 144px !important;
 		margin-bottom: 3px; !important;
 	}
+	.psw_error_msg{
+		margin-left: 10px;
+		color: #FF0000;
+	}
 	-->
 </style>
 

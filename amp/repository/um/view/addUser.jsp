@@ -300,6 +300,7 @@
 													</ul>
 													</font>
 												</logic:notEmpty>
+													<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
 												</td>
 											</tr>
                                             <tr>

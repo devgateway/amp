@@ -210,7 +210,9 @@
                       </li>
                     </logic:iterate>
                   </ul>
-                  </font> </td>
+                  </font>
+                  <jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
+                </td>
               </tr>
             </logic:notEmpty>
 

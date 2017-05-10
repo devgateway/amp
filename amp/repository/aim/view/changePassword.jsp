@@ -65,6 +65,7 @@ function validate(){
 		</td>
 		<td align=left valign="top" width="60%">
 			<digi:errors/>
+			<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
 		</td>
 	</tr>
 	<tr>

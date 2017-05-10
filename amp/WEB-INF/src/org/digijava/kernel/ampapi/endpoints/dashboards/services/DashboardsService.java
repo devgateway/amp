@@ -238,7 +238,6 @@ public class DashboardsService {
 		if (year != null && year.intValue() > 0 && !Strings.isNullOrEmpty(measure)) {
 			spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 			spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
-			spec.getHierarchies().add(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 			if (measure.equalsIgnoreCase(MeasureConstants.PLANNED_DISBURSEMENTS)) {
 				spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
 			}else {
@@ -347,7 +346,6 @@ public class DashboardsService {
 		if (year != null && year.intValue() > 0 && id != null && id.intValue() > 0) {
 			spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 			spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
-			spec.getHierarchies().add(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 			spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 			filters.putAll(DashboardsService.setFilterId(id.longValue(), FilterUtils.INSTANCE.idFromColumnName(MoConstants
 					.TYPE_OF_ASSISTANCE)));
@@ -440,12 +438,11 @@ public class DashboardsService {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetNDD", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
-		spec.getHierarchies().add(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 
 		OutputSettings outSettings = new OutputSettings(new HashSet<String>(){{add(ColumnConstants.PROJECT_TITLE);}});
 		// applies settings, including funding type as a measure
 		SettingsUtils.applyExtendedSettings(spec, config);
-		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
+		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
 		
 		LinkedHashMap<String, Object> filters = null;
 		if (config != null) {
@@ -500,9 +497,9 @@ public class DashboardsService {
 					DateCell date = (DateCell) n.getContents().get(dateCol);
 					row.set("name", title.displayedValue);
 					row.set("amount", amount.value);
+					row.set("date", date.displayedValue);
 					row.set("formattedAmount", amount.displayedValue);
 					row.set("id", title.entityId);
-					logger.error(date.displayedValue);
 					values.add(row);
 				}
 		);

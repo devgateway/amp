@@ -439,6 +439,7 @@ public class HeatMapService {
         ReportSpecificationImpl spec = new ReportSpecificationImpl(rName, ArConstants.DONOR_TYPE);
 
         spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+        spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
 
         Map<String, Object> filters = null;
         if (this.config != null) {
@@ -454,7 +455,6 @@ public class HeatMapService {
             spec.setFilters(filterRules);
         }
         spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
-        spec.getHierarchies().addAll(spec.getColumns());
 
         // also configures Measures - consistent with other Dashboards
         SettingsUtils.applyExtendedSettings(spec, config);

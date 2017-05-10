@@ -180,7 +180,6 @@ public class ChartService {
                     add(spec.getColumnNames().iterator().next());
                 }});
 
-        spec.getHierarchies().addAll(spec.getColumns());
         // applies settings, including funding type as a measure
         SettingsUtils.applyExtendedSettings(spec, config);
         ReportsUtil.configureFilters(spec, config);
@@ -232,8 +231,10 @@ public class ChartService {
     public void setColumn(String column) {
         if (this.isDisaggregate) {
             spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+            spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
         } else {
             spec.addColumn(new ReportColumn(column));
+            spec.getHierarchies().addAll(spec.getColumns());
         }
     }
 

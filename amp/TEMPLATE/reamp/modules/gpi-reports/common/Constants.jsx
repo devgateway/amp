@@ -5,3 +5,6 @@ export const NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES = 'National Procurement E
 export const YEAR = 'Year';
 export const DONOR_GROUP = 'Donor Group';
 export const DONOR_AGENCY = 'Donor Agency';
+export const PLANNED_DISBURSEMENTS = 'Planned Disbursements';
+export const ANNUAL_GOVERNMENT_BUDGET = 'Annual Government Budget';
+export const PERCENTAGE_OF_PLANNED_ON_BUDGET = '% of planned on budget';

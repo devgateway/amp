@@ -5,6 +5,7 @@ import * as startUp from '../actions/StartUpAction.jsx';
 require('../styles/main.less');
 require('bootstrap');
 import Report9b from "../components/Report9b";
+import Report6 from "../components/Report6";
 
 export default class App extends Component {
 
@@ -58,7 +59,7 @@ export default class App extends Component {
                Duo soluta interpretaris ut, sea iisque constituto an, albucius sententiae ea vel. Cu vel magna zril suscipit, ad quot eripuit tibique sed. Vix option interpretaris ut, ferri vocent indoctum ex mei. An dolorum perfecto abhorreant eum, per an dicat mundi.
                </div>              
                <div role="tabpanel" className = 'tab-pane' id="indicator5b"> Indicator 5b </div>
-               <div role="tabpanel" className = 'tab-pane' id="indicator6"> Indicator 6 </div>
+               <div role="tabpanel" className = 'tab-pane' id="indicator6"> <Report6/> </div>
                <div role="tabpanel" className = 'tab-pane fade in' id="indicator9b"> <Report9b/> </div>
              </div>
 

@@ -260,7 +260,7 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 	}
 
 	/**
-	 * build the contents of the report
+	 * build the totals of the report
 	 * 
 	 * @param generatedReport
 	 * @return
@@ -375,11 +375,7 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 	}
 	
 	protected boolean isAcceptableDate(GeneratedReport generatedReport, LocalDate date) {
-		FilterRule dateRule = generatedReport.spec.getFilters().getFilterRules().entrySet().stream()
-				.filter(entry -> entry.getKey().type.equals(ElementType.DATE))
-				.filter(entry -> entry.getKey().entity == null)
-				.findAny().get().getValue();
-		
+		FilterRule dateRule = GPIReportUtils.getDateFilterRule(generatedReport.spec);
 		Predicate<Long> dateRangePredicate = dateRule == null ? (z -> true) : dateRule.buildPredicate();
 		
 		return dateRangePredicate.test((long) DateTimeUtil.toJulianDayNumber(date));

@@ -132,7 +132,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				MeasureConstants.PLEDGES_COMMITMENT_GAP, MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, MeasureConstants.PLEDGES_PLANNED_COMMITMENTS,
 				MeasureConstants.PLEDGES_PLANNED_DISBURSEMENTS, MeasureConstants.MTEF_PROJECTIONS, MeasureConstants.EXECUTION_RATE,
 				MeasureConstants.PREDICTABILITY_OF_FUNDING, MeasureConstants.CUMULATIVE_EXECUTION_RATE, MeasureConstants.AVERAGE_DISBURSEMENT_RATE,
-				MeasureConstants.FORECAST_EXECUTION_RATE, MeasureConstants.ALWAYS_PRESENT);
+				MeasureConstants.FORECAST_EXECUTION_RATE, MeasureConstants.ALWAYS_PRESENT, MeasureConstants.DISBURSED_AS_SCHEDULED, MeasureConstants.OVER_DISBURSED);
 
 		buildDigest(
 				buildSpecification("testcase with all unusual measures",

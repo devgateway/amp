@@ -3485,7 +3485,8 @@ module.exports = BackboneDash.View.extend({
 			if ((startIndex + self.PAGE_SIZE) >= data.totalRecords) {
             	self.$el.find('.load-more').hide();
             } else {
-				self.$el.find('.load-more').html('<span data-i18n="amp.dashboard:chart-tops-table-loadmore">load more</span>');
+				self.$el.find('.load-more').html('<span data-i18n="amp.dashboard:chart-tops-table-loadmore">load more</span> ' +
+                (startIndex + self.PAGE_SIZE) + '/' + data.totalRecords);
                 self.$el.find('.load-more').show();
             }
 
@@ -4722,7 +4723,7 @@ var PredictabilityChart = require('../models/chart-aid-predictability');
 var FundingTypeChart = require('../models/chart-funding-type');
 
 var template = _.template("<div class=\"container\">\n</div>\n");
-var modalTemplate = _.template("<div class=\"modal fade\" data-keyboard=\"false\" data-backdrop=\"static\" id=\"<%= m.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n  <div class=\"modal-dialog <%= m.specialClass %>\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\n        <h4 class=\"modal-title text-<%= m.tone %>\" data-i18n=\"<%= m.i18nTitle %>\"><%= m.title %></h4>\n      </div>\n      <div class=\"modal-body\">\n        <% if (m.content) { %>\n          <%= m.content %>\n        <% } %>\n        <% if (m.messages) { %>\n          <% _(m.messages).each(function(message) { %>\n            <p><%= message %></p>\n          <% }) %>\n        <% } %>\n      </div>      \n    </div>\n  </div>\n</div>\n");
+var modalTemplate = _.template("<div class=\"modal fade\" data-keyboard=\"false\" data-backdrop=\"static\" id=\"<%= m.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog <%= m.specialClass %>\">\r\n    <div class=\"modal-content\">\r\n      <div class=\"modal-header\">\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\r\n        <h4 class=\"modal-title text-<%= m.tone %>\" data-i18n=\"<%= m.i18nTitle %>\"><%= m.title %></h4>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        <% if (m.content) { %>\r\n          <%= m.content %>\r\n        <% } %>\r\n        <% if (m.messages) { %>\r\n          <% _(m.messages).each(function(message) { %>\r\n            <p><%= message %></p>\r\n          <% }) %>\r\n        <% } %>\r\n      </div>      \r\n    </div>\r\n  </div>\r\n</div>\r\n");
 
 var EnabledChartsCollection = require('../models/enabled-charts-collection');
 var HeatmapsConfigCollection = require('../models/heatmaps-config-collection');

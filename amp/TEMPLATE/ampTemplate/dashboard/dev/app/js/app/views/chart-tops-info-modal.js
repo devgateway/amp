@@ -91,7 +91,8 @@ module.exports = BackboneDash.View.extend({
 			if ((startIndex + self.PAGE_SIZE) >= data.totalRecords) {
             	self.$el.find('.load-more').hide();
             } else {
-				self.$el.find('.load-more').html('<span data-i18n="amp.dashboard:chart-tops-table-loadmore">load more</span>');
+				self.$el.find('.load-more').html('<span data-i18n="amp.dashboard:chart-tops-table-loadmore">load more</span> ' +
+                (startIndex + self.PAGE_SIZE) + '/' + data.totalRecords);
                 self.$el.find('.load-more').show();
             }
 

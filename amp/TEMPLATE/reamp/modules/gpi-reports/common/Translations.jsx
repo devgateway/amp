@@ -12,6 +12,11 @@ export const initialTranslations = {
         'amp.gpi-reports:all-donors': 'All Donors',
         'amp.gpi-reports:donor-agency': 'Donor Agency',
         'amp.gpi-reports:donor-group': 'Donor Group',
-        'amp.gpi-reports:currency': 'Currency:'
-        
+        'amp.gpi-reports:currency': 'Currency:',
+        'amp.gpi-reports:from': 'From:',
+        'amp.gpi-reports:until': 'Until:',
+        'amp.gpi-reports:of': 'of',
+        'amp.gpi-reports:records': 'records',
+        'amp.gpi-reports:records-displayed': '__fromRecord__ - __toRecord__ of __totalRecords__ records',      
+        'amp.gpi-reports:page-info': '(p __currentPageNumber__/__totalPageCount__)'
 };

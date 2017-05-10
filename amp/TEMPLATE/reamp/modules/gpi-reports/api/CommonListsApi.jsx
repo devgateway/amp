@@ -10,7 +10,26 @@ class CommonListsApi {
             });
         });
         
-    }   
+    }  
+   
+   static getYears(){
+       return new Promise((resolve, reject) => {
+           fetchJson('/rest/settings-definitions/reports').then((response) => {
+               let yearRange = response.filter(setting => setting.id === 'year-range')[0];               
+               let years = [];              
+               if (yearRange && yearRange.value) {            
+                   var rangeFrom = yearRange.value.rangeFrom;
+                   var rangeTo = yearRange.value.rangeTo;
+                   for (var i = rangeFrom; i <= rangeTo; i++) {
+                      years.push(i);
+                   }           
+               }               
+               resolve(years);
+           }).catch((error) => {
+               reject(error);
+           });
+       });
+   }
 }
 
 export default CommonListsApi;

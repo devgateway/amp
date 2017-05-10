@@ -8,7 +8,7 @@ import * as Constants from '../common/Constants';
 export default class Report9b extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = {recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: null};
+        this.state = {recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: ""};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind(this);
@@ -21,6 +21,10 @@ export default class Report9b extends Component {
     }
 
     componentWillMount() {
+        this.initializeFiltersAndSettings();
+    }
+
+    initializeFiltersAndSettings() {
         this.filter = new ampFilter( {
             draggable: true,
             caller: 'REPORTS'
@@ -34,13 +38,10 @@ export default class Report9b extends Component {
         });
         
         this.props.actions.getOrgList(false);
+        this.props.actions.getYears();
         this.fetchReportData();
     }
-
-    componentWillReceiveProps( nextProps ) {
-
-    }
-
+    
     showFilters() {
         this.filter.setElement( this.refs.filterPopup );
         this.filter.showFilters();
@@ -51,8 +52,26 @@ export default class Report9b extends Component {
         }.bind(this));
 
         this.filter.on( 'apply', function() {
+            this.resetQuickFilters();
             this.fetchReportData();
             $( this.refs.filterPopup ).hide();
+        }.bind( this ) );
+    }
+    
+    showSettings() {
+        this.settingsWidget.setElement( this.refs.settingsPopup );
+        this.settingsWidget.definitions.loaded.done( function() {
+            this.settingsWidget.show();
+        }.bind( this ) );
+
+        $( this.refs.settingsPopup ).show();
+        this.settingsWidget.on( 'close', function() {           
+            $( this.refs.settingsPopup ).hide();
+        }.bind( this ) );
+
+        this.settingsWidget.on( 'applySettings', function() {
+            this.fetchReportData();
+            $( this.refs.settingsPopup ).hide();
         }.bind( this ) );
     }
     
@@ -63,8 +82,7 @@ export default class Report9b extends Component {
                 "recordsPerPage" : this.state.recordsPerPage                  
             };
          
-        requestData.filters = this.filter.serialize().filters;     
-        
+        requestData.filters = this.filter.serialize().filters;        
         if (this.state.selectedDonor) {
             requestData.filters['donor-group'] = [];
             requestData.filters['donor-agency'] = [];
@@ -72,7 +90,10 @@ export default class Report9b extends Component {
         }
         
         if (this.state.selectedYear) {
-            
+            requestData.filters.date = {
+                    "start": this.state.selectedYear + "-01-01",
+                    "end": this.state.selectedYear + "-12-31"
+            }
         }
         
         requestData.settings = this.settingsWidget.toAPIFormat();
@@ -90,48 +111,42 @@ export default class Report9b extends Component {
     
     fetchReportData(requestData) {
         var requestData = requestData || this.getRequestData();
-        this.props.actions.fetchReport9bMainReport(requestData, '9b');
-        var summaryRequestData = Object.assign({}, requestData);
-        summaryRequestData.summary = true;
-        this.props.actions.fetchReport9bSummary(summaryRequestData, '9b');
+        this.props.actions.fetchReport9bMainReport(requestData, '9b');        
     }
     
-    showSettings() {
-        this.settingsWidget.setElement( this.refs.settingsPopup );
-        this.settingsWidget.definitions.loaded.done( function() {
-            this.settingsWidget.show();
-        }.bind( this ) );
+   
 
-        $( this.refs.settingsPopup ).show();
-
-        this.settingsWidget.on( 'close', function() {           
-            $( this.refs.settingsPopup ).hide();
-        }.bind( this ) );
-
-        this.settingsWidget.on( 'applySettings', function() {
-            this.fetchReportData();
-            $( this.refs.settingsPopup ).hide();
-        }.bind( this ) );
+    onDonorFilterChange(e) {       
+        this.setState({selectedDonor:  parseInt(e.target.value)}, function(){                         
+            this.fetchReportData();    
+        }.bind(this));            
     }
-
-    getLocalizedColumnName(originalColumnName) {   
-        var name = originalColumnName;
-        if(this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.headers){            
-            var header = this.props.mainReport.page.headers.filter(header => header.originalColumnName === originalColumnName)[0]
-             if (header){
-                 name = header.columnName;
-             }
+    
+    onYearClick(event) {
+        this.setState({selectedYear:  $(event.target).data("year")}, function(){
+            this.fetchReportData();    
+        }.bind(this));
+        
+    }
+    
+    resetQuickFilters() {
+        var filters = this.filter.serialize().filters; 
+        if(filters.date) {
+            this.setState({selectedYear: null}); 
         }
-        return name;        
+        
+        if((filters['donor-group'] && filters['donor-group'].length > 0) || (filters['donor-agency'] && filters['donor-agency'].length > 0)){
+            this.setState({selectedDonor: ""});
+        }        
     }
-     
-    getYearCell(addedGroups, row) {
-        if(addedGroups.indexOf(row[Constants.YEAR]) === -1){
-            addedGroups.push(row[Constants.YEAR]);
-            var matches = this.props.mainReport.page.contents.filter(content => content[Constants.YEAR] === row[Constants.YEAR]);
-            return (<td className="year-col" rowSpan={matches.length}>{row[Constants.YEAR]}</td>)  
-        }               
+    
+    toggleHierarchy(event) {       
+        this.setState({hierarchy: $(event.target).data("hierarchy")}, function () {
+            this.props.actions.getOrgList((this.state.hierarchy === 'donor-group'));
+            this.fetchReportData();
+        }.bind(this));
     }
+    
     
     goToClickedPage(event){
         const pageNumber = parseInt(event.target.getAttribute('data-page'));
@@ -155,31 +170,6 @@ export default class Report9b extends Component {
         this.props.actions.fetchReport9bMainReport(requestData, '9b');
     }
     
-    onDonorFilterChange(e) {       
-        this.setState({selectedDonor:  parseInt(e.target.value)}, function(){                         
-            this.fetchReportData();    
-        }.bind(this));            
-    }
-    
-    toggleHierarchy(event) {       
-        this.setState({hierarchy: $(event.target).data("hierarchy")}, function () {
-            this.props.actions.getOrgList((this.state.hierarchy === 'donor-group'));
-            this.fetchReportData();
-        }.bind(this));
-    }
-    
-    getYears() {
-        var yearRange = this.settingsWidget.definitions.findWhere({id: 'year-range'});
-        var years = [];        
-        if (yearRange) {            
-            var rangeFrom = yearRange.get('value').from;
-            var rangeTo = yearRange.get('value').to;
-            for (var i = rangeFrom; i <= rangeTo; i++){
-                years.push(i);
-            }           
-        }   
-        return years;
-    }
     
     generatePaginationLinks() {
         var paginationLinks  = [];
@@ -190,17 +180,65 @@ export default class Report9b extends Component {
         return paginationLinks;
     }
     
-    onYearClick(event) {
-        this.setState({selectedYear:  $(event.target).data("year")}, function(){
-            this.fetchReportData();    
-        }.bind(this));
+    getLocalizedColumnName(originalColumnName) {   
+        var name = originalColumnName;
+        if(this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.headers){            
+            var header = this.props.mainReport.page.headers.filter(header => header.originalColumnName === originalColumnName)[0]
+             if (header){
+                 name = header.columnName;
+             }
+        }
+        return name;        
+    }
+     
+    getYearCell(addedGroups, row) {
+        if(addedGroups.indexOf(row[Constants.YEAR]) === -1){
+            addedGroups.push(row[Constants.YEAR]);
+            var matches = this.props.mainReport.page.contents.filter(content => content[Constants.YEAR] === row[Constants.YEAR]);
+            return (<td className="year-col" rowSpan={matches.length}>{row[Constants.YEAR]}</td>)  
+        }               
+    }
+    
+    showSelectedDates() {
+        var filters = this.filter.serialize().filters; 
+        var displayDates = '';
+        if(filters.date) {
+            filters.date.start = filters.date.start || '';
+            filters.date.end = filters.date.end || '';
+            var startDatePrefix = (filters.date.start.length > 0 && filters.date.end.length === 0) ? this.props.translations['amp.gpi-reports:from'] : '';
+            var endDatePrefix = (filters.date.start.length === 0 && filters.date.end.length > 0) ? this.props.translations['amp.gpi-reports:until'] : '';                   
+            if(filters.date.start.length > 0 ){
+                displayDates = startDatePrefix + " " + this.filter.formatDate(filters.date.start);               
+            }           
+                        
+            if(filters.date.end.length > 0){
+                if(filters.date.start.length > 0){
+                    displayDates += " - ";
+                }
+                displayDates += endDatePrefix + " " + this.filter.formatDate(filters.date.end);                  
+            }    
+        }
         
+        return displayDates;
+    }
+    
+    displayPagingInfo() {        
+        var transParams = {};
+        transParams.fromRecord = ((this.props.mainReport.page.currentPageNumber - 1) * this.props.mainReport.page.recordsPerPage) + 1;
+        transParams.toRecord = Math.min((this.props.mainReport.page.currentPageNumber * this.props.mainReport.page.recordsPerPage), this.props.mainReport.page.totalRecords);
+        transParams.totalRecords = this.props.mainReport.page.totalRecords;
+        transParams.currentPageNumber = this.props.mainReport.page.currentPageNumber;
+        transParams.totalPageCount = this.props.mainReport.page.totalPageCount;
+        return (<div className="col-md-3 pull-right record-number">
+        <div>{this.props.translate('amp.gpi-reports:records-displayed', transParams)}</div>
+        <div>{this.props.translate('amp.gpi-reports:page-info', transParams)}</div>
+        </div>)
     }
     
     render() {              
         if (this.props.mainReport && this.props.mainReport.page) {
-            var addedGroups = [];            
-            var years = this.getYears();
+            var addedGroups = [];     
+            var years = this.props.years.slice();
             return (
                 <div>
                     <div id="filter-popup" ref="filterPopup"> </div>
@@ -228,29 +266,29 @@ export default class Report9b extends Component {
                     </div>
 
                     <div className="section-divider"></div>
-                   {this.props.summary && this.props.summary.page && this.props.summary.page.contents && this.props.summary.page.contents.length > 0 &&
-                    <div className="container-fluid indicator-stats no-padding">
+                   {this.props.mainReport && this.props.mainReport.summary && 
+                       <div className="container-fluid indicator-stats no-padding">                   
                         <div className="col-md-3">
                             <div className="indicator-stat-wrapper">
-                                <div className="stat-value">{this.props.summary.page.contents[0][Constants.NATIONAL_BUDGET_EXECUTION_PROCEDURES]}</div>
+                                <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_BUDGET_EXECUTION_PROCEDURES]}</div>
                                 <div className="stat-label">{this.getLocalizedColumnName(Constants.NATIONAL_BUDGET_EXECUTION_PROCEDURES)}</div>
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="indicator-stat-wrapper">
-                                <div className="stat-value">{this.props.summary.page.contents[0][Constants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES]}</div>
+                                <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES]}</div>
                                 <div className="stat-label">{this.getLocalizedColumnName(Constants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES)}</div>
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="indicator-stat-wrapper">
-                                <div className="stat-value">{this.props.summary.page.contents[0][Constants.NATIONAL_AUDITING_PROCEDURES]}</div>
+                                <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_AUDITING_PROCEDURES]}</div>
                                 <div className="stat-label">{this.getLocalizedColumnName(Constants.NATIONAL_AUDITING_PROCEDURES)}</div>
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="indicator-stat-wrapper">
-                                <div className="stat-value">{this.props.summary.page.contents[0][Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES]}</div>
+                                <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES]}</div>
                                 <div className="stat-label">{this.getLocalizedColumnName(Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES)}</div>
                             </div>
                         </div>
@@ -262,7 +300,7 @@ export default class Report9b extends Component {
                                 <a onClick={this.onYearClick}>{this.props.translations['amp.gpi-reports:all-years']}</a>
                             </li>
                              { ((years.length > 3) ? years.splice(years.length - 3, 3).reverse() : years.reverse()).map(year => 
-                                  <li className={this.state.selectedYear == year ? 'active' : ''}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
+                                  <li className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
                              )}
                             <li >
                                 <div className="dropdown">
@@ -270,8 +308,8 @@ export default class Report9b extends Component {
                                  {this.props.translations['amp.gpi-reports:other-years']}
                                 <span className="caret"></span></a>
                                     <ul className="dropdown-menu dropdown-years" role="menu">
-                                        { years.length > 3 && years.map(year => 
-                                        <li role="presentation" className={this.state.selectedYear == year ? 'active' : ''}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
+                                        {years.length > 3 && years.reverse().map(year => 
+                                        <li role="presentation" className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
                                         )}
                                         
                                     </ul>
@@ -280,11 +318,11 @@ export default class Report9b extends Component {
                         </ul>
                     </div>
                     <div className="selection-legend">
-                        <div className="pull-right">Selected - 2017 / 2016 / 2015 / 2014 / 2013 / 2012 / 2011 / 2010</div>
+                        <div className="pull-right">{this.showSelectedDates()}</div>
                     </div>
                     <div className="container-fluid no-padding">                        
                              <div className="dropdown">
-                             <select name="donorAgency" className="form-control donor-dropdown" onChange={this.onDonorFilterChange}>
+                             <select name="donorAgency" className="form-control donor-dropdown"  value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
                              <option value="">{this.props.translations['amp.gpi-reports:all-donors']}</option>
                              {this.props.orgList.map(org => 
                              <option value={org.id} key={org.id} >{org.name}</option>
@@ -294,11 +332,7 @@ export default class Report9b extends Component {
                              <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}</h4></div>
 
                     </div>
-                    <div className="container-fluid">
-                        <div className="row">
-                            <h4>Indicator 9b - Chart title will go here</h4>
-                        </div>
-                    </div>
+                    
                     <div className="section-divider"></div>
                     <table className="table table-bordered table-striped indicator-table">
                         <thead>
@@ -324,14 +358,11 @@ export default class Report9b extends Component {
                             <td className="number-column">{row[Constants.NATIONAL_AUDITING_PROCEDURES]}</td>
                             <td className="number-column">{row[Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES]}</td>
                              </tr>  
-                            )}
-                         
+                            )}                         
                         </tbody>
-                    </table>
-                            
+                    </table>                            
                             <div >
-                            <div className="row">
-                           
+                            <div className="row">                           
                               <div className="col-md-8 pull-right pagination-wrapper">
                             {this.props.mainReport &&
                                 <div className="col-md-4">
@@ -343,10 +374,7 @@ export default class Report9b extends Component {
                                 </div>
                             }
                                 <div className="col-md-3">
-
                                 </div>
-
-
                                 <div className="col-md-2">
                                   <div className="input-group pull-right">
                                     <span className="input-group-addon" id="basic-addon1">
@@ -355,13 +383,7 @@ export default class Report9b extends Component {
                                     <input type="text" className="form-control" ref="recordsPerPage" placeholder="" defaultValue={this.state.recordsPerPage} />
                                   </div>
                                 </div>
-
-
-                                <div className="col-md-3 pull-right record-number">
-                                  <div>{((this.props.mainReport.page.currentPageNumber - 1) * this.props.mainReport.page.recordsPerPage) + 1} - {Math.min((this.props.mainReport.page.currentPageNumber * this.props.mainReport.page.recordsPerPage), this.props.mainReport.page.totalRecords)} of {this.props.mainReport.page.totalRecords} records</div>
-                                  <div>(p {this.props.mainReport.page.currentPageNumber}/{this.props.mainReport.page.totalPageCount})</div>
-                                </div>
-
+                                 {this.displayPagingInfo()}
                               </div>
                             </div>
                           </div>
@@ -379,8 +401,8 @@ export default class Report9b extends Component {
 function mapStateToProps( state, ownProps ) {
     return {
         mainReport: state.reports['9b'].mainReport,
-        summary: state.reports['9b'].summary,
         orgList: state.commonLists.orgList,
+        years: state.commonLists.years,
         translations: state.startUp.translations,
         translate: state.startUp.translate
     }

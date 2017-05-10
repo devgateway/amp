@@ -1,18 +1,21 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.*;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_COUNTRY;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_DISTRICT;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_RAW;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_REGION;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_ZONE;
-import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_RAW;
 import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION;
 import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION_GROUP;
 import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION_TYPE;
 import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_ROOT;
 import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSECTOR;
 import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSUBSECTOR;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_ALL_IDS;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.PERCENTAGE;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.PERCENTAGEIFLOWER;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACT;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACTIFGREATER;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.VARIABLE;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_1;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_2;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_3;
@@ -21,6 +24,7 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_5;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_6;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_7;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_ALL_IDS;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -40,9 +44,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
-import com.google.common.collect.ImmutableMap;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -98,6 +100,7 @@ import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
@@ -105,6 +108,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * the big, glorious, immaculate, AMP NiReports schema.
@@ -208,6 +213,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.VARIANCE_OF_DISBURSEMENTS, "Max Actual Disbursements - Min Actual Disbursements");
 		put(MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, "Sum Actual Disbursements / Number of Actual Disbursements");
 		put(MeasureConstants.PREDICTABILITY_OF_FUNDING ,  "((Planned Disbursements - Actual Disbursements) / Planned Disbursements) X 100");
+		put(MeasureConstants.DISBURSED_AS_SCHEDULED ,  "((Actual Disbursements) / Planned Disbursements) X 100");
+		put(MeasureConstants.OVER_DISBURSED ,  "((Actual Disbursements - Planned Disbursements) / Actual Disbursements) X 100");
 		put(MeasureConstants.AVERAGE_DISBURSEMENT_RATE,  "Sum of Execution Rate / Number of Activities");
 		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Sum of Actual Disbursements / Sum (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). ");
 		put(null, null);
@@ -665,15 +672,25 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addFormulaComputedMeasure(MeasureConstants.EXECUTION_RATE, PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
 		addFormulaAverageComputedMeasure(MeasureConstants.AVERAGE_DISBURSEMENT_RATE, PERCENTAGE(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
 		addFormulaComputedMeasure(MeasureConstants.PREDICTABILITY_OF_FUNDING, PERCENTAGE(SUBTRACT(VARIABLE(MeasureConstants.PLANNED_DISBURSEMENTS), VARIABLE(MeasureConstants.ACTUAL_DISBURSEMENTS)), VARIABLE(MeasureConstants.PLANNED_DISBURSEMENTS)));
+		addFormulaComputedMeasure(MeasureConstants.DISBURSED_AS_SCHEDULED, PERCENTAGEIFLOWER(VARIABLE(MeasureConstants.ACTUAL_DISBURSEMENTS), VARIABLE(MeasureConstants.PLANNED_DISBURSEMENTS)), TimeRange.YEAR);
+		addFormulaComputedMeasure(MeasureConstants.OVER_DISBURSED, PERCENTAGE(SUBTRACTIFGREATER(VARIABLE(MeasureConstants.ACTUAL_DISBURSEMENTS), VARIABLE(MeasureConstants.PLANNED_DISBURSEMENTS)), VARIABLE(MeasureConstants.ACTUAL_DISBURSEMENTS)), TimeRange.YEAR);
 		addFormulaComputedMeasure(MeasureConstants.CUMULATIVE_EXECUTION_RATE, PERCENTAGE(MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_COMMITMENT));
 	}
 
 	protected void addFormulaAverageComputedMeasure(String measureName, NiFormula formula) {
-		addFormulaComputedMeasure(measureName, measureDescriptions.get(measureName), formula, true);
+		addFormulaAverageComputedMeasure(measureName, formula, TimeRange.NONE);
+	}
+	
+	protected void addFormulaAverageComputedMeasure(String measureName, NiFormula formula, TimeRange timeRange) {
+		addFormulaComputedMeasure(measureName, measureDescriptions.get(measureName), formula, true, timeRange);
 	}
 
 	protected void addFormulaComputedMeasure(String measureName, NiFormula formula) {
-		addFormulaComputedMeasure(measureName, measureDescriptions.get(measureName), formula, false);
+		addFormulaComputedMeasure(measureName, formula, TimeRange.NONE);
+	}
+	
+	protected void addFormulaComputedMeasure(String measureName, NiFormula formula, TimeRange timeRange) {
+		addFormulaComputedMeasure(measureName, measureDescriptions.get(measureName), formula, false, timeRange);
 	}
 	
 	protected void addPledgeColumns() {

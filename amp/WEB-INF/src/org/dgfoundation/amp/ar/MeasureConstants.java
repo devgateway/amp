@@ -86,6 +86,8 @@ public class MeasureConstants {
 	//type unset
 	public static final String EXECUTION_RATE = "Execution Rate";
 	public static final String PREDICTABILITY_OF_FUNDING = "Predictability of Funding";
+	public static final String DISBURSED_AS_SCHEDULED = "Disbursed as Scheduled";
+	public static final String OVER_DISBURSED = "Over Disbursed";
 	public static final String CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
 	public static final String AVERAGE_DISBURSEMENT_RATE = "Average Disbursement Rate";
 	

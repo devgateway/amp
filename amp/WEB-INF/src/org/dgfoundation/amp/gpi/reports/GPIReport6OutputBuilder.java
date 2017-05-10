@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,8 +59,8 @@ import org.hibernate.jdbc.Work;
  */
 public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 
-	private static final String ANNUAL_GOV_BUDGET = "Annual Government Budget";
-	private static final String PLANNED_ON_BUDGET = "% of planned on budget";
+	public static final String ANNUAL_GOV_BUDGET = "Annual Government Budget";
+	public static final String PLANNED_ON_BUDGET = "% of planned on budget";
 
 	private boolean isDonorAgency = true;
 
@@ -350,12 +349,6 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 		});
 
 		return gpiAmountCells;
-	}
-
-	private String formatAmount(GeneratedReport generatedReport, BigDecimal value) {
-		DecimalFormat decimalFormat = generatedReport.spec.getSettings().getCurrencyFormat();
-
-		return decimalFormat.format(value);
 	}
 
 	public static BigDecimal calculateIndicator6Percentage(BigDecimal a, BigDecimal b) {

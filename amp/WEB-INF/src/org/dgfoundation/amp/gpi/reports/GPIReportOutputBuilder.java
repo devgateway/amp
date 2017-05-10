@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.gpi.reports;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -93,5 +95,18 @@ public abstract class GPIReportOutputBuilder  {
 	 */
 	public static <T> List<T> paginate(List<T> collection, int index, int pageSize) {
 		return collection.stream().skip(index).limit(pageSize).collect(Collectors.toList());
+	}
+	
+	/**
+	 * Format bigDecimal value using the generatedReprot spec settings
+	 * 
+	 * @param generatedReport
+	 * @param value
+	 * @return
+	 */
+	protected String formatAmount(GeneratedReport generatedReport, BigDecimal value) {
+		DecimalFormat decimalFormat = generatedReport.spec.getSettings().getCurrencyFormat();
+
+		return decimalFormat.format(value);
 	}
 }

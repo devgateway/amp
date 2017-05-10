@@ -696,15 +696,31 @@ public class PersistenceManager {
      */
     public static void closeSession(Session session) {
         if (session == null) return;
-        Transaction transaction = session.getTransaction();
-        if (transaction != null) {
-            if (transaction.isActive()) {
-                session.flush();
-                transaction.commit();
+        try {
+            Transaction transaction = session.getTransaction();
+            if (transaction != null) {
+                if (transaction.isActive()) {
+                    try {
+                        // note: flushing is needed only if session uses FlushMode.MANUAL
+                        session.flush();
+                    } catch (HibernateException e) {
+                        // logging the error since finally may throw another exception and this one will be lost
+                        logger.error("Failed to flush the session.", e);
+                        throw e;
+                    } finally {
+                        // do we really want to attempt commit if flushing fails?
+                        transaction.commit();
+                    }
+                }
             }
-		}
-        if (session.isOpen()) {
-            session.close();
+        } catch (HibernateException e) {
+            // logging the error since finally may throw another exception and this one will be lost
+            logger.error("Failed to commit.", e);
+            throw e;
+        } finally {
+            if (session.isOpen()) {
+                session.close();
+            }
         }
 	}
 

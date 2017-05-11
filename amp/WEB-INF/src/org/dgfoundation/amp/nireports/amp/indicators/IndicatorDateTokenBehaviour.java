@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.DateCell;
 import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
 import org.dgfoundation.amp.nireports.output.nicells.NiDateCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
  * This behaviour matches {@link DateTokenBehaviour} with the exception of how horizontal reduce is done.
@@ -22,20 +25,27 @@ import org.dgfoundation.amp.nireports.runtime.NiCell;
  */
 public class IndicatorDateTokenBehaviour extends DateTokenBehaviour {
 
-    public static final IndicatorDateTokenBehaviour instance = new IndicatorDateTokenBehaviour();
+    private final NiDimensionUsage indicatorDimensionUsage;
+    private final IndicatorCellComparator indicatorCellComparator;
 
-    private IndicatorDateTokenBehaviour() {
+    public IndicatorDateTokenBehaviour(NiDimensionUsage indicatorDimensionUsage) {
+        this.indicatorDimensionUsage = indicatorDimensionUsage;
+        indicatorCellComparator = new IndicatorCellComparator(indicatorDimensionUsage);
     }
 
     @Override
     public NiDateCell doHorizontalReduce(List<NiCell> cells) {
         Map<Long, LocalDate> entityIdsValues = new HashMap<>();
         List<LocalDate> values = new ArrayList<>();
-        cells.stream().sorted(IndicatorCellComparator.instance).forEach(niCell -> {
+        cells.stream().filter(distinctByIndicator()).sorted(indicatorCellComparator).forEach(niCell -> {
             DateCell cell = (DateCell) niCell.getCell();
             entityIdsValues.put(cell.entityId, cell.date);
             values.add(cell.date);
         });
         return new NiDateCell(values, any(entityIdsValues.keySet(), -1L), entityIdsValues);
+    }
+
+    private Predicate<NiCell> distinctByIndicator() {
+        return AmpCollections.distinctByKey(c -> c.getCell().coordinates.get(indicatorDimensionUsage));
     }
 }

@@ -21,7 +21,7 @@ public class TransactionTypePossibleValuesProvider extends PossibleValuesProvide
 	public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
 		List<PossibleValue> values = new ArrayList<>();
 		for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet()) {
-			values.add(new PossibleValue(entry.getValue().toString(), entry.getKey(),
+			values.add(new PossibleValue(entry.getValue().longValue(), entry.getKey(),
 					translatorService.translateLabel(entry.getKey())));
 		}
 		return values;

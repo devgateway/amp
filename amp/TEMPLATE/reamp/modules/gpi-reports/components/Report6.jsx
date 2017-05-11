@@ -20,7 +20,7 @@ export default class Report6 extends Component {
         this.onYearClick = this.onYearClick.bind( this );
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.initializeFiltersAndSettings();
     }
 
@@ -35,11 +35,15 @@ export default class Report6 extends Component {
             caller: 'REPORTS',
             isPopup: true,
             definitionUrl: '/rest/settings-definitions/gpi-reports'
-        });
-
-        this.props.actions.getOrgList( false );
-        this.props.actions.getYears();
-        this.fetchReportData();
+        });        
+              
+        this.props.actions.getYears().then(function(){
+            this.props.actions.getOrgList(false);
+            this.fetchReportData();
+        }.bind(this), function(){
+            
+        }.bind(this));
+        
     }
 
     showFilters() {
@@ -103,13 +107,7 @@ export default class Report6 extends Component {
                     'rangeFrom': this.props.years[0],
                     'rangeTo': this.props.years[this.props.years.length - 1]
                 }; 
-        } else {
-            requestData.settings['year-range'] = {
-                    'type': 'INT_VALUE',
-                    'rangeFrom': 1980,
-                    'rangeTo': 2030
-                };   
-        }
+        }         
         
         return requestData
     }
@@ -214,25 +212,26 @@ export default class Report6 extends Component {
     }
 
     showSelectedDates() {
-        var filters = this.filter.serialize().filters;
         var displayDates = '';
-        if ( filters.date ) {
-            filters.date.start = filters.date.start || '';
-            filters.date.end = filters.date.end || '';
-            var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
-            var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
-            if ( filters.date.start.length > 0 ) {
-                displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
-            }
-
-            if ( filters.date.end.length > 0 ) {
+        if(this.filter){
+            var filters = this.filter.serialize().filters;            
+            if ( filters.date ) {
+                filters.date.start = filters.date.start || '';
+                filters.date.end = filters.date.end || '';
+                var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
+                var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
                 if ( filters.date.start.length > 0 ) {
-                    displayDates += " - ";
+                    displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
                 }
-                displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
-            }
-        }
 
+                if ( filters.date.end.length > 0 ) {
+                    if ( filters.date.start.length > 0 ) {
+                        displayDates += " - ";
+                    }
+                    displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
+                }
+            } 
+        }
         return displayDates;
     }
 

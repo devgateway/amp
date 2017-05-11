@@ -11,10 +11,16 @@ export default class App extends Component {
 
     constructor(props, context) {      
         super(props, context);
-       
+        this.state = { currentReport: "9b" };
+        this.tabChanged = this.tabChanged.bind(this);
     }
     
     componentWillMount() {       
+    }
+    
+    tabChanged(event) {
+        console.log($( event.target ).data("indicator"));
+        this.setState({currentReport:  $( event.target ).data( "indicator" )});        
     }
     
     render() {       
@@ -29,11 +35,11 @@ export default class App extends Component {
              <div >
              <div>
               <ul className="nav nav-tabs indicator-tabs" role="tablist">                  
-             <li role="presentation" className="active"><a href="#indicator1" aria-controls="indicator1" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-reports:indicator1-title']}</a></li>                
-             <li role="presentation" ><a href="#indicator5a" aria-controls="indicator5a" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-reports:indicator5a-title']}</a></li>
-             <li role="presentation" ><a href="#indicator5b" aria-controls="indicator5b" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-reports:indicator5b-title']}</a></li>
-             <li role="presentation"  ><a href="#indicator6" aria-controls="indicator6" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-reports:indicator6-title']}</a></li>
-             <li role="presentation" ><a href="#indicator9b" aria-controls="indicator9b" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-reports:indicator9b-title']}</a></li>
+             <li role="presentation" className="active" data-indicator="1" onClick={this.tabChanged}><a href="#indicator1" aria-controls="indicator1" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-reports:indicator1-title']}</a></li>                
+             <li role="presentation"  data-indicator="5a" onClick={this.tabChanged}><a href="#indicator5a" aria-controls="indicator5a" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-reports:indicator5a-title']}</a></li>
+             <li role="presentation"  data-indicator="5b" onClick={this.tabChanged}><a href="#indicator5b" aria-controls="indicator5b" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-reports:indicator5b-title']}</a></li>
+             <li role="presentation"  ><a href="#indicator6" aria-controls="indicator6" role="tab" data-toggle="tab" data-indicator="6" onClick={this.tabChanged} >{this.props.translations['amp.gpi-reports:indicator6-title']}</a></li>
+             <li role="presentation"  ><a href="#indicator9b" aria-controls="indicator9b" role="tab" data-toggle="tab" data-indicator="9b" onClick={this.tabChanged}>{this.props.translations['amp.gpi-reports:indicator9b-title']}</a></li>
              </ul>
              <div className="tab-content panel">
                <div role="tabpanel" className="tab-pane active" id="indicator1">indicator 1
@@ -59,8 +65,17 @@ export default class App extends Component {
                Duo soluta interpretaris ut, sea iisque constituto an, albucius sententiae ea vel. Cu vel magna zril suscipit, ad quot eripuit tibique sed. Vix option interpretaris ut, ferri vocent indoctum ex mei. An dolorum perfecto abhorreant eum, per an dicat mundi.
                </div>              
                <div role="tabpanel" className = 'tab-pane' id="indicator5b"> Indicator 5b </div>
-               <div role="tabpanel" className = 'tab-pane' id="indicator6"> <Report6/> </div>
-               <div role="tabpanel" className = 'tab-pane fade in' id="indicator9b"> <Report9b/> </div>
+               <div role="tabpanel" className = 'tab-pane' id="indicator6"> 
+                {this.state.currentReport == '6' &&
+                   <Report6/> 
+                }
+               
+               </div>
+               <div role="tabpanel" className = 'tab-pane fade in' id="indicator9b"> 
+               {this.state.currentReport == '9b' &&
+                   <Report9b/>
+               }               
+                </div>
              </div>
 
            </div>

@@ -37,9 +37,11 @@ export default class Report9b extends Component {
             definitionUrl: '/rest/settings-definitions/gpi-reports'
         });
 
-        this.props.actions.getOrgList( false );
-        this.props.actions.getYears();
-        this.fetchReportData();
+        this.props.actions.getYears().then(function(){
+            this.props.actions.getOrgList(false);
+            this.fetchReportData();
+        }.bind(this), function(){            
+        }.bind(this));
     }
 
     showFilters() {
@@ -103,12 +105,6 @@ export default class Report9b extends Component {
                     'rangeFrom': this.props.years[0],
                     'rangeTo': this.props.years[this.props.years.length - 1]
                 }; 
-        } else {
-            requestData.settings['year-range'] = {
-                    'type': 'INT_VALUE',
-                    'rangeFrom': 1980,
-                    'rangeTo': 2030
-                };   
         }
         
         return requestData

@@ -89,37 +89,12 @@ public class GPIReportUtils {
 		spec.addMeasure(new ReportMeasure(MeasureConstants.DISBURSED_AS_SCHEDULED));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.OVER_DISBURSED));
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+		spec.setSummaryReport(true);
 
-		if (formParams != null) {
-			Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
-			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
-
-			if (filterRules == null) {
-				filterRules = new AmpReportFilters();
-			}
-
-			ReportElement elem = new ReportElement(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
-
-			// Validated Activities - 4
-			FilterRule filterRule = new FilterRule(Arrays.asList("4"), true);
-			filterRules.addFilterRule(elem, filterRule);
-
-			spec.setFilters(filterRules);
-		}
+		applyAppovalStatusFilter(formParams, spec);
 
 		SettingsUtils.applySettings(spec, formParams, true);
-
-		ReportSettingsImpl reportSettings = (ReportSettingsImpl) spec.getSettings();
-		if (reportSettings.getYearRangeFilter() == null) {
-			int year = Calendar.getInstance().get(Calendar.YEAR);
-			try {
-				reportSettings.setYearsRangeFilterRule(year, year);
-			} catch (Exception e) {
-				throw new RuntimeException("Cannot set year filter for settings: " + year);
-			}
-		}
-
-		spec.setSummaryReport(true);
+		clearYearRangeSettings(spec);
 
 		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 
@@ -149,41 +124,17 @@ public class GPIReportUtils {
 
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+		spec.setSummaryReport(true);
 
-		if (formParams != null) {
-			Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
-			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
-
-			if (filterRules == null) {
-				filterRules = new AmpReportFilters();
-			}
-
-			ReportElement elem = new ReportElement(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
-
-			// Validated Activities - 4
-			FilterRule filterRule = new FilterRule(Arrays.asList("4"), true);
-			filterRules.addFilterRule(elem, filterRule);
-
-			spec.setFilters(filterRules);
-		}
+		applyAppovalStatusFilter(formParams, spec);
 
 		SettingsUtils.applySettings(spec, formParams, true);
-
-		ReportSettingsImpl reportSettings = (ReportSettingsImpl) spec.getSettings();
-		if (reportSettings.getYearRangeFilter() == null) {
-			int year = Calendar.getInstance().get(Calendar.YEAR);
-			try {
-				reportSettings.setYearsRangeFilterRule(year, year);
-			} catch (Exception e) {
-				throw new RuntimeException("Cannot set year filter for settings: " + year);
-			}
-		}
+		clearYearRangeSettings(spec);
 
 		for (String mtefColumn : getMTEFColumnsForIndicator5b(spec)) {
 			spec.addColumn(new ReportColumn(mtefColumn));
 		}
 
-		spec.setSummaryReport(true);
 
 		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 
@@ -214,25 +165,11 @@ public class GPIReportUtils {
 		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
 		spec.setSummaryReport(true);
 
-		if (formParams != null) {
-			Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
-			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
-
-			if (filterRules == null) {
-				filterRules = new AmpReportFilters();
-			} 
-
-			ReportElement elem = new ReportElement(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
-
-			// Validated Activities - 4
-			FilterRule filterRule = new FilterRule(Arrays.asList("4"), true);
-			filterRules.addFilterRule(elem, filterRule);
-
-			spec.setFilters(filterRules);
-		}
+		applyAppovalStatusFilter(formParams, spec);
 
 		SettingsUtils.applySettings(spec, formParams, true);
-
+		clearYearRangeSettings(spec);
+		
 		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 
 		return generatedReport;
@@ -265,6 +202,29 @@ public class GPIReportUtils {
 		spec.addMeasure(new ReportMeasure(MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES));
 		spec.setSummaryReport(true);
 
+		applyAppovalStatusFilter(formParams, spec);
+
+		SettingsUtils.applySettings(spec, formParams, true);
+		clearYearRangeSettings(spec);
+
+		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
+
+		return generatedReport;
+	}
+
+	private static String getHierarchyColumn(JsonBean formParams) {
+		if (formParams.get(GPIReportConstants.HIERARCHY_PARAMETER) != null) {
+			return (String) formParams.get(GPIReportConstants.HIERARCHY_PARAMETER);
+		}
+
+		return "";
+	}
+	
+	/**
+	 * @param formParams
+	 * @param spec
+	 */
+	public static void applyAppovalStatusFilter(JsonBean formParams, ReportSpecificationImpl spec) {
 		if (formParams != null) {
 			Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
 			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
@@ -281,20 +241,14 @@ public class GPIReportUtils {
 
 			spec.setFilters(filterRules);
 		}
-
-		SettingsUtils.applySettings(spec, formParams, true);
-
-		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
-
-		return generatedReport;
 	}
 
-	private static String getHierarchyColumn(JsonBean formParams) {
-		if (formParams.get(GPIReportConstants.HIERARCHY_PARAMETER) != null) {
-			return (String) formParams.get(GPIReportConstants.HIERARCHY_PARAMETER);
-		}
-
-		return "";
+	/**
+	 * @param spec
+	 */
+	public static void clearYearRangeSettings(ReportSpecificationImpl spec) {
+		ReportSettingsImpl reportSettings = (ReportSettingsImpl) spec.getSettings();
+		reportSettings.setYearRangeFilter(null);
 	}
 
 	public static List<String> getMTEFColumnsForIndicator5b(ReportSpecification spec) {

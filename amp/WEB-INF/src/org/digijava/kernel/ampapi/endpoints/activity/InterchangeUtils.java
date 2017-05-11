@@ -642,7 +642,7 @@ public class InterchangeUtils {
 	
 	protected static SimpleDateFormat getDateFormatter() {
 		if (DATE_FORMATTER.get() == null) {
-			DATE_FORMATTER.set(new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT));
+			DATE_FORMATTER.set(new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT));
 		}
 		return DATE_FORMATTER.get();
 	}

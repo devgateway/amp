@@ -59,7 +59,7 @@ public class UserService {
         user.setLastName(ampUser.getLastName());
         user.setEmail(ampUser.getEmail());
         if (ampUser.getPasswordChangedAt() != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT);
+            SimpleDateFormat sdf = new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT);
             user.setPasswordChangedAt(sdf.format(ampUser.getPasswordChangedAt()));
         }
         user.setBanned(ampUser.isBanned());

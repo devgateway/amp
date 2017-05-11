@@ -39,6 +39,9 @@ public class SystemDiff {
     @JsonProperty
     private boolean translations;
 
+    @JsonProperty("exchange-rates")
+    private boolean exchangeRates;
+
     public void updateTimestamp(Date timestamp) {
         if (this.timestamp == null || (timestamp != null && this.timestamp.before(timestamp))) {
             this.timestamp = timestamp;
@@ -81,9 +84,13 @@ public class SystemDiff {
         this.possibleValuesFields = possibleValuesFields;
     }
 
+    public void setExchangeRates(boolean exchangeRates) {
+        this.exchangeRates = exchangeRates;
+    }
+
     public String getTimestamp() {
         if (timestamp != null) {
-            return new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT).format(timestamp);
+            return new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT).format(timestamp);
         } else {
             return null;
         }

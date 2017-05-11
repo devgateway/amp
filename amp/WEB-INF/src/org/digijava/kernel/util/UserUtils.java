@@ -22,11 +22,15 @@
 
 package org.digijava.kernel.util;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.security.auth.Subject;
@@ -50,6 +54,7 @@ import org.digijava.kernel.user.User;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * This class containts user-related utillity functions. User must be
@@ -139,6 +144,23 @@ public class UserUtils {
 			throw new DgException(ex);
 		}
 
+		return result;
+	}
+
+	/**
+	 * Bulk version of user lang preferences retrieval.
+	 */
+	public static Map<Long, UserLangPreferences> getUserLangPreferences(List<User> users, Site site) {
+		List<UserPreferencesPK> keys = users.stream().map(u -> new UserPreferencesPK(u, site)).collect(toList());
+
+		org.hibernate.Session session = PersistenceManager.getSession();
+		List<UserLangPreferences> preferences = session
+				.createCriteria(UserLangPreferences.class)
+				.add(Restrictions.in("id", keys))
+				.list();
+
+		Map<Long, UserLangPreferences> result = new HashMap<>();
+		preferences.forEach(p -> result.put(p.getId().getUser().getId(), p));
 		return result;
 	}
 
@@ -307,6 +329,17 @@ public class UserUtils {
 		}
 		return result;
 
+	}
+
+	/**
+	 * Retrieves all users.
+	 * @return list of users
+	 */
+	public static List<User> getAllUsers() {
+		List<User> users = PersistenceManager.getSession()
+				.createCriteria(User.class)
+				.list();
+		return users;
 	}
 	
 	/**

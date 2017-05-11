@@ -6,4 +6,8 @@ package org.digijava.module.aim.annotations.interchange;
 public interface InterchangeableValueProvider<T> {
 
     String getValue(T object);
+
+    default Object getExtraInfo(T object) {
+        return null;
+    }
 }

@@ -6,6 +6,13 @@
 package org.digijava.module.aim.dbentity;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_ADJUSTMENT_TYPE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_AMOUNT;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_CURRENCY;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_DESCRIPTION;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_DATE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_TYPE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_ORGANIZATION;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -25,31 +32,31 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 	// @Interchangeable(fieldTitle="Activity")
 	// private AmpActivityVersion activity;
 
-	@Interchangeable(fieldTitle="Transaction Type", importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
+	@Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_TYPE, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
 	@PossibleValues(ComponentTransactionTypePossibleValuesProvider.class)
 	private Integer transactionType;
 
-	@Interchangeable(fieldTitle="Adjustment Type", importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS,
+	@Interchangeable(fieldTitle = COMPONENT_FUNDING_ADJUSTMENT_TYPE, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS,
 			discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
 	private AmpCategoryValue adjustmentType;
 
-	@Interchangeable(fieldTitle="Transaction Date", importable = true, required = REQUIRED_ALWAYS)
+	@Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true, required = REQUIRED_ALWAYS)
 	private Date transactionDate;
 
 	// @Interchangeable(fieldTitle="Reporting Date")
 	private Date reportingDate;
 
-	@Interchangeable(fieldTitle="Transaction Amount", importable = true, required = REQUIRED_ALWAYS)
+	@Interchangeable(fieldTitle = COMPONENT_FUNDING_AMOUNT, importable = true, required = REQUIRED_ALWAYS)
 	private Double transactionAmount;
 
 	// reusing field to store the organisation related to the current component
-	@Interchangeable(fieldTitle="Organization", importable = true, pickIdOnly = true)
+	@Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true)
 	private AmpOrganisation reportingOrganization;
 
-	@Interchangeable(fieldTitle="Currency", importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
+	@Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
 	private AmpCurrency currency;
 
-	@Interchangeable(fieldTitle="Description")
+	@Interchangeable(fieldTitle = COMPONENT_FUNDING_DESCRIPTION)
 	private String description;
 
 	// @Interchangeable(fieldTitle="Component")

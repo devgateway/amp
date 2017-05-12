@@ -20,7 +20,7 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 public class ComponentFundingOrgsValidator extends InputValidator {
 
     public static final String ORGANIZATION = "organization";
-    public static final String COMP_FUND_ORGANIZATION = "components~funding~organization";
+    public static final String COMP_FUND_ORGANIZATION = "components~funding~component_organization";
 
     private Set<Long> orgIds;
 

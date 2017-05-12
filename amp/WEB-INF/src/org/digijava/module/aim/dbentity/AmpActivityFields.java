@@ -406,7 +406,7 @@ LoggerIdentifiable, Cloneable {
 	protected String statusReason;
 	
 	@Interchangeable(fieldTitle = "Components", importable = true, fmPath = "/Activity Form/Components")
-	@VersionableCollection(fieldTitle = "Components")
+	@VersionableCollection(fieldTitle = ActivityFieldsConstants.COMPONENTS)
 	protected Set<AmpComponent> components;
 
 	//TTIL

@@ -6,6 +6,10 @@
 package org.digijava.module.aim.dbentity;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_DESCRIPTION;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TITLE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TYPE;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,12 +38,12 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 
 	private Long ampComponentId;
 
-	@Interchangeable(fieldTitle="Title", required = REQUIRED_ALWAYS, importable = true,
+	@Interchangeable(fieldTitle = COMPONENT_TITLE, required = REQUIRED_ALWAYS, importable = true,
 			fmPath="/Activity Form/Components/Component/Component Information/Component Title")
 	@TranslatableField
 	private String title;
 
-	@Interchangeable(fieldTitle="Description", importable = true,
+	@Interchangeable(fieldTitle = COMPONENT_DESCRIPTION, importable = true,
 			fmPath="/Activity Form/Components/Component/Component Information/Description")
 	@TranslatableField
 	private String description;
@@ -48,7 +52,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 
 	private String code;
 
-	@Interchangeable(fieldTitle="Funding", importable = true)
+	@Interchangeable(fieldTitle = COMPONENT_FUNDING, importable = true)
 	private Set<AmpComponentFunding> fundings;
 	
 	public static class AmpComponentComparator implements Comparator<AmpComponent>{
@@ -71,7 +75,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 		}
 	}
 
-	@Interchangeable(fieldTitle="Type", importable = true, pickIdOnly = true,
+	@Interchangeable(fieldTitle = COMPONENT_TYPE, importable = true, pickIdOnly = true,
 			fmPath = "/Activity Form/Components/Component/Component Information/Component Type")
 	private AmpComponentType type;
 	

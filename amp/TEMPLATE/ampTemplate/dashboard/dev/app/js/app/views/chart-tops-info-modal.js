@@ -113,7 +113,11 @@ module.exports = BackboneDash.View.extend({
                 fundingType = self.context.series.key;
             } else {
                 var adjSettings = self.app.settingsWidget.definitions.getFundingTypeSetting();
-                fundingType = adjSettings.get('value').options.find(x => x.id === self.model.get('adjtype')).name;
+                fundingType = $.map(adjSettings.get('value').options, function (option) {
+                    if (option.id === self.model.get('adjtype')) {
+                        return option.name;
+                    }
+                });
             }
             self.$el.find('.funding-type-title-column').html(fundingType);
 

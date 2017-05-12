@@ -20,4 +20,6 @@ public interface PossibleValuesDAO {
     List<Object[]> getSectors(String configType);
 
     List<Object[]> getPossibleLocations();
+
+    List<PossibleValue> getComponentTypes();
 }

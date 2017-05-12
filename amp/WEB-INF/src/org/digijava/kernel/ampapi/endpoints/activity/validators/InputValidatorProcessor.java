@@ -40,6 +40,7 @@ public class InputValidatorProcessor {
 			add(new AgreementCodeValidator());
 			add(new AgreementTitleValidator());
 			add(new FundingOrgRolesValidator());
+			add(new ComponentFundingOrgsValidator());
 			}};
 	
 	/**

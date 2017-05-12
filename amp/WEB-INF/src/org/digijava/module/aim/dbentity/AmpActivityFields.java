@@ -405,7 +405,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Status Reason")
 	protected String statusReason;
 	
-//	@Interchangeable(fieldTitle = "Components", importable = true, fmPath = "/Activity Form/Components")
+	@Interchangeable(fieldTitle = "Components", importable = true, fmPath = "/Activity Form/Components")
 	@VersionableCollection(fieldTitle = "Components")
 	protected Set<AmpComponent> components;
 

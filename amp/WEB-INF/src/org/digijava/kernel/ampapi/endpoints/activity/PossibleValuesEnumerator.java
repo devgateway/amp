@@ -35,6 +35,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -73,6 +74,7 @@ public class PossibleValuesEnumerator {
 				.putAll(AmpTeamMember.class, Entities.WORKSPACE_MEMBER, Entities.USER)
 				.putAll(AmpTeam.class, Entities.WORKSPACES)
 				.putAll(User.class, Entities.USER)
+				.putAll(AmpComponentType.class, Entities.COMPONENT_TYPE)
 				.build();
 
 	private PossibleValuesDAO possibleValuesDAO;
@@ -288,6 +290,8 @@ public class PossibleValuesEnumerator {
 			return getPossibleCategoryValues(field, null);
 		if (clazz.isAssignableFrom(AmpLocation.class))
 			return getPossibleLocations();
+		if (clazz.isAssignableFrom(AmpComponentType.class))
+			return possibleValuesDAO.getComponentTypes();
 		return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
 	}
 

@@ -5,36 +5,53 @@
 
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
+
 import java.io.Serializable;
 import java.util.Date;
 
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ComponentTransactionTypePossibleValuesProvider;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class AmpComponentFunding implements Cloneable, Serializable {
 	// IATI-check: to be ignored
 
-	// @Interchangeable(fieldTitle="ID")
 	private Long ampComponentFundingId;
+
 	// @Interchangeable(fieldTitle="Activity")
 	// private AmpActivityVersion activity;
-	// @Interchangeable(fieldTitle="Transaction Type")
+
+	@Interchangeable(fieldTitle="Transaction Type", importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
+	@PossibleValues(ComponentTransactionTypePossibleValuesProvider.class)
 	private Integer transactionType;
-	// @Interchangeable(fieldTitle="Adjustment Type")
+
+	@Interchangeable(fieldTitle="Adjustment Type", importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS,
+			discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
 	private AmpCategoryValue adjustmentType;
-	// @Interchangeable(fieldTitle="Transaction Date")
+
+	@Interchangeable(fieldTitle="Transaction Date", importable = true, required = REQUIRED_ALWAYS)
 	private Date transactionDate;
+
 	// @Interchangeable(fieldTitle="Reporting Date")
 	private Date reportingDate;
-	// @Interchangeable(fieldTitle="Transaction Amount")
+
+	@Interchangeable(fieldTitle="Transaction Amount", importable = true, required = REQUIRED_ALWAYS)
 	private Double transactionAmount;
+
 	// reusing field to store the organisation related to the current component
-	// @Interchangeable(fieldTitle="Reporting Organization")
+	@Interchangeable(fieldTitle="Organization", importable = true, pickIdOnly = true)
 	private AmpOrganisation reportingOrganization;
-	// @Interchangeable(fieldTitle="Currency")
+
+	@Interchangeable(fieldTitle="Currency", importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
 	private AmpCurrency currency;
-	// @Interchangeable(fieldTitle="Description")
+
+	@Interchangeable(fieldTitle="Description")
 	private String description;
+
 	// @Interchangeable(fieldTitle="Component")
 	private AmpComponent component;
 	// @Interchangeable(fieldTitle="Exchange Rate")

@@ -43,16 +43,16 @@ public class GPIReportUtils {
 	public static GeneratedReport getGeneratedReportForIndicator(String indicatorCode, JsonBean formParams) {
 
 		switch (indicatorCode) {
-		case GPIReportConstants.REPORT_5a:
-			return getGeneratedReportForIndicator5a(formParams);
-		case GPIReportConstants.REPORT_5b:
-			return getGeneratedReportForIndicator5b(formParams);
-		case GPIReportConstants.REPORT_6:
-			return getGeneratedReportForIndicator6(formParams);
-		case GPIReportConstants.REPORT_9b:
-			return getGeneratedReportForIndicator9b(formParams);
-		default:
-			return null;
+			case GPIReportConstants.REPORT_5a:
+				return getGeneratedReportForIndicator5a(formParams);
+			case GPIReportConstants.REPORT_5b:
+				return getGeneratedReportForIndicator5b(formParams);
+			case GPIReportConstants.REPORT_6:
+				return getGeneratedReportForIndicator6(formParams);
+			case GPIReportConstants.REPORT_9b:
+				return getGeneratedReportForIndicator9b(formParams);
+			default:
+				throw new RuntimeException("Wrong indicator code:" + indicatorCode);
 		}
 	}
 
@@ -78,11 +78,10 @@ public class GPIReportUtils {
 		}
 		
 		spec.addColumn(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET));
-		spec.addColumn(new ReportColumn(ColumnConstants.EXECUTING_AGENCY));
-		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+		spec.addColumn(new ReportColumn(ColumnConstants.HAS_EXECUTING_AGENCY));
 		
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET));
-		spec.getHierarchies().add(new ReportColumn(ColumnConstants.EXECUTING_AGENCY));
+		spec.getHierarchies().add(new ReportColumn(ColumnConstants.HAS_EXECUTING_AGENCY));
 
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
@@ -134,7 +133,6 @@ public class GPIReportUtils {
 		for (String mtefColumn : getMTEFColumnsForIndicator5b(spec)) {
 			spec.addColumn(new ReportColumn(mtefColumn));
 		}
-
 
 		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 

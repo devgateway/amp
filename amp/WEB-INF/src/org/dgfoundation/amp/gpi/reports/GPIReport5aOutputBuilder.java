@@ -163,11 +163,16 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 
 		Map<GPIReportOutputColumn, String> columns = new HashMap<>();
 		
-        List<ReportArea> onBudgetAreas = generatedReport.reportContents.getChildren()
-		.stream().flatMap(r -> r.getChildren().stream())
-		.collect(Collectors.toList()).stream()
-		.filter(budgetArea -> isOnBudget(budgetArea))
-		.collect(Collectors.toList());
+		List<ReportArea> onBudgetAreas = new ArrayList<>();
+		
+        if (generatedReport.reportContents.getChildren() != null) {
+        	onBudgetAreas = generatedReport.reportContents.getChildren().stream()
+				.filter(r -> r.getChildren() != null)
+				.flatMap(r -> r.getChildren().stream())
+				.collect(Collectors.toList()).stream()
+				.filter(budgetArea -> isOnBudget(budgetArea))
+				.collect(Collectors.toList());
+        }
         
         // get the sum of actual disbursements for on-budget projects
         BigDecimal actDisbSum = onBudgetAreas.stream()
@@ -197,8 +202,11 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	}
 
 	private boolean isOnBudget(ReportArea budgetArea) {
-		// TODO Auto-generated method stub
-		return true;
+		boolean match = budgetArea.getContents().entrySet().stream()
+		.anyMatch(e -> e.getKey().originalColumnName.equals(ColumnConstants.ON_OFF_TREASURY_BUDGET) 
+				&& (String.valueOf(e.getValue().value)).equals("On Budget"));
+		
+		return match;
 	}
 	
 	private boolean isTotalMeasureColumn(String columnName, ReportOutputColumn roc) {

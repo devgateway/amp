@@ -318,7 +318,7 @@ public class GlobalSettings extends Action {
 
 	private List<KeyValue> getPossibleValues(String tableName) {
 		List<KeyValue> ret = new ArrayList<>();
-		
+
 		if (tableName == null || tableName.length() == 0)
 			return ret;
 

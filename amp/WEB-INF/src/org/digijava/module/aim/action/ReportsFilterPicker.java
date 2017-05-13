@@ -126,6 +126,10 @@ public class ReportsFilterPicker extends Action {
 	        if (teamMember != null) {
 	            ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
 	        }
+        
+		if(request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")){
+    		return mapping.findForward("mydesktop");
+    	}
 	        
 			if (request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")) {
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

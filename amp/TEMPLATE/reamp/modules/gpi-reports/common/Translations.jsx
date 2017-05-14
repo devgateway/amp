@@ -1,5 +1,5 @@
 export const initialTranslations = {       
-        'amp.gpi-reports:title': 'Global Partnerships Indicators',
+        'amp.gpi-reports:title': 'Global Partnership Reports',
         'amp.gpi-reports:indicator1-title': 'Indicator 1',
         'amp.gpi-reports:indicator5a-title': 'Indicator 5a',
         'amp.gpi-reports:indicator5b-title': 'Indicator 5b',

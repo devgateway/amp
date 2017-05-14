@@ -10,9 +10,13 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				INSERT INTO amp_menu_entry (id, parent_id, name, title, url, position, flags) VALUES
-				(nextval('amp_menu_entry_seq'), (SELECT id FROM amp_menu_entry WHERE name = 'Reports Menu'), 'Global Partnerships Indicators - 2017', 'Global Partnerships Indicators - 2017', '/TEMPLATE/reamp/modules/gpi-reports/index.html', 6, null);
+				(nextval('amp_menu_entry_seq'), (SELECT id FROM amp_menu_entry WHERE name = 'Reports Menu'), 'Global Partnership Reports - 2017', 'Global Partnership Reports - 2017', '/TEMPLATE/reamp/modules/gpi-reports/index.html', 6, null);
 				INSERT INTO amp_menu_entry_view(menu_id, view_type) 
-				VALUES ((SELECT id FROM amp_menu_entry WHERE name = 'Global Partnerships Indicators - 2017'), 2);			
+				VALUES ((SELECT id FROM amp_menu_entry WHERE name = 'Global Partnership Reports - 2017'), 2);	
+				
+				UPDATE amp_menu_entry SET position = 7 WHERE name = 'Global Partnership Indicators' and parent_id = (SELECT id FROM amp_menu_entry WHERE name = 'Reports Menu');
+                UPDATE amp_menu_entry SET position = 8 WHERE name = 'Saiku' and parent_id = (SELECT id FROM amp_menu_entry WHERE name = 'Reports Menu');
+						
 			</lang>
 		</script>
 	</apply>

@@ -53,12 +53,15 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -1045,6 +1048,7 @@ public class ActivityImporter {
 		initFundings();
         initContacts();
         postprocessActivityReferences();
+        updateIssues();
         updatePPCAmount();
         updateRoleFundings();
         updateOrgRoles();
@@ -1067,6 +1071,30 @@ public class ActivityImporter {
 				throw new RuntimeException(e);
 			}
 		}
+	}
+
+	private void updateIssues() {
+		if (newActivity.getIssues() != null) {
+			newActivity.getIssues().forEach(issue -> initIssue(newActivity, issue));
+		}
+	}
+
+	private void initIssue(AmpActivityVersion activity, AmpIssues issue) {
+		issue.setActivity(activity);
+		if (issue.getMeasures() != null) {
+			issue.getMeasures().forEach(m -> initMeasure(issue, m));
+		}
+	}
+
+	private void initMeasure(AmpIssues issue, AmpMeasure measure) {
+		measure.setIssue(issue);
+		if (measure.getActors() != null) {
+			measure.getActors().forEach(actor -> initActor(measure, actor));
+		}
+	}
+
+	private void initActor(AmpMeasure measure, AmpActor actor) {
+		actor.setMeasure(measure);
 	}
 	
 	/*

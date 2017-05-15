@@ -1053,7 +1053,10 @@ public class ActivityImporter {
 	}
 
 	private void initComponents() {
-		newActivity.getComponents().forEach(c -> c.setActivities(new HashSet<>(Arrays.asList(newActivity))));
+		newActivity.getComponents().forEach(c -> {
+			c.setActivities(new HashSet<>(Arrays.asList(newActivity)));
+			c.getFundings().forEach(f -> f.setComponent(c));
+		});
 	}
 
 

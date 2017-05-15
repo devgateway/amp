@@ -248,7 +248,7 @@ public class ActivityImporter {
 				prepareToSave();
 				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
 						translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
-						PersistenceManager.getRequestDBSession(), false, false, true);
+						PersistenceManager.getSession(), false, false, true);
 				postProcess();
 			} else {
 				// undo any pending changes

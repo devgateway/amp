@@ -16,9 +16,11 @@ import java.util.function.Predicate;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
@@ -162,9 +164,25 @@ public class FieldsEnumerator {
 		}
 		return apiField;
 	}
+
+	public List<APIField> getAllAvailableFields() {
+		List<APIField> allAvailableFields = getAllAvailableFields(AmpActivityFields.class);
+
+		if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+			String draftFieldName = InterchangeUtils.underscorify(ActivityFieldsConstants.IS_DRAFT);
+			APIField draftField = allAvailableFields
+					.stream()
+					.filter(f -> f.getFieldName().equals(draftFieldName))
+					.findFirst()
+					.orElseThrow(() -> new RuntimeException("Could not find draft field."));
+			draftField.setImportable(true);
+		}
+
+		return allAvailableFields;
+	}
 	
-	public List<APIField> getAllAvailableFields(Class<?> clazz) {
-		return getAllAvailableFields(clazz, new ArrayDeque<>()); // TODO fixme
+	List<APIField> getAllAvailableFields(Class<?> clazz) {
+		return getAllAvailableFields(clazz, new ArrayDeque<>());
 	}
 
 	/**

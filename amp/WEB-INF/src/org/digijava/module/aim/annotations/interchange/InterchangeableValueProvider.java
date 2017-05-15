@@ -11,4 +11,8 @@ public interface InterchangeableValueProvider<T> {
     default boolean isTranslatable() {
         return false;
     }
+
+    default Object getExtraInfo(T object) {
+        return null;
+    }
 }

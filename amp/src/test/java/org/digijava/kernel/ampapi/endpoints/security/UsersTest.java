@@ -46,6 +46,6 @@ public class UsersTest extends AbstractIntegrationTest {
     
     @Test
     public void testEmptyUserIdEmptyListNoException() {
-        assertTrue(userService.getUserInfo(Collections.emptyList()).isEmpty());
+        assertTrue(!userService.getUserInfo(Collections.emptyList()).isEmpty());
     }
 }

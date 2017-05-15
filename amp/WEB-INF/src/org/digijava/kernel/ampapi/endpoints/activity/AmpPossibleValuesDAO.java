@@ -10,10 +10,12 @@ import clover.org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 
 /**
@@ -106,6 +108,16 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 + " LEFT JOIN acvl.parentCategoryValue AS parentCat"
                 + " ORDER BY loc.id";
         return query(queryString);
+    }
+
+    @Override
+    public AmpClassificationConfiguration getAmpClassificationConfiguration(String name) {
+        return (AmpClassificationConfiguration) InterchangeUtils.getSessionWithPendingChanges()
+                .createCriteria(AmpClassificationConfiguration.class)
+                .add(Restrictions.eq("name", name))
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .uniqueResult();
     }
 
     @SuppressWarnings("unchecked")

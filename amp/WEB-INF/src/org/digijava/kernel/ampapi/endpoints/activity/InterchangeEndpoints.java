@@ -253,7 +253,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getFields", ui = false)
 	public List<APIField> getAvailableFields() {
-		return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields(AmpActivityFields.class);
+		return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
 	}
 	
 	// TODO remove it as part of AMP-25568
@@ -352,7 +352,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	}
 
 	/**
-	 * Imports an activity
+	 * Imports an activity.
+	 * <p>Original behaviour: is_draft field cannot be specified. If saving as draft is allowed then activity will
+	 * be saved as draft. Otherwise activity will be saved as submitted.</p>
+	 * <p>AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's value always
+	 * honored.</p>
 	 * 
 	 * @param newJson activity configuration
 	 * @return latest project overview or an error if invalid configuration is received
@@ -367,7 +371,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	
 	/**
 	 * Updates an activity
-	 * 
+	 * <p>Original behaviour: is_draft field cannot be specified. If existing activity was submitted then at import
+	 * this status will be kept if possible. Otherwise activity will be saved as draft.</p>
+	 * <p>AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's value always
+	 * honored.</p>
+	 *
 	 * @param projectId the id of the activity which should be updated
 	 * @param newJson activity configuration
 	 * @return latest project overview or an error if invalid configuration is received

@@ -57,6 +57,8 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
@@ -1053,10 +1055,20 @@ public class ActivityImporter {
 	}
 
 	private void initComponents() {
-		newActivity.getComponents().forEach(c -> {
-			c.setActivities(new HashSet<>(Arrays.asList(newActivity)));
-			c.getFundings().forEach(f -> f.setComponent(c));
-		});
+		if (newActivity.getComponents() != null) {
+			newActivity.getComponents().forEach(component -> initComponent(newActivity, component));
+		}
+	}
+
+	private void initComponent(AmpActivityVersion activity, AmpComponent component) {
+		component.setActivities(new HashSet<>(Arrays.asList(activity)));
+		if (component.getFundings() != null) {
+			component.getFundings().forEach(f -> initComponentFunding(component, f));
+		}
+	}
+
+	private void initComponentFunding(AmpComponent component, AmpComponentFunding f) {
+		f.setComponent(component);
 	}
 
 

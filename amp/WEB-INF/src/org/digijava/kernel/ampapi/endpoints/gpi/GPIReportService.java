@@ -70,7 +70,9 @@ public final class GPIReportService {
 				ReportPaginationUtils.getRecordsNumberPerPage());
 		
 		GeneratedReport niReport = GPIReportUtils.getGeneratedReportForIndicator(indicatorCode, formParams);
-		GPIReportBuilder gpiReportBuilder = new GPIReportBuilder(niReport, getGPIReportOutputBuilder(indicatorCode));
+		GPIReportOutputBuilder gpiReportOutputBuilder = getGPIReportOutputBuilder(indicatorCode);
+		gpiReportOutputBuilder.setDonorAgency(GPIReportUtils.isDonorAgency(formParams));
+		GPIReportBuilder gpiReportBuilder = new GPIReportBuilder(niReport, gpiReportOutputBuilder);
 		GPIReport gpiReport = gpiReportBuilder.build(page, recordsPerPage);
 
 		return gpiReport;

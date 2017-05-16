@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.gpi.reports;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -21,6 +22,7 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -31,7 +33,6 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.module.gpi.util.GPIConstants;
 
 public class GPIReportUtils {
 
@@ -58,8 +59,7 @@ public class GPIReportUtils {
 	}
 
 	/**
-	 * create the template for the gpi report 5b. It can be refactored to
-	 * another class
+	 * Create the template for the GPI report 5a
 	 * 
 	 * @param formParams
 	 * @return generatedReport 
@@ -69,13 +69,12 @@ public class GPIReportUtils {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5a,
 				ArConstants.DONOR_TYPE);
 
-		String hierarchyColumn = getHierarchyColumn(formParams);
-		if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
-			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
-			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
-		} else {
+		if (isDonorAgency(formParams)) {
 			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		} else {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
 		}
 		
 		spec.addColumn(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET));
@@ -92,8 +91,7 @@ public class GPIReportUtils {
 		spec.setSummaryReport(true);
 
 		applyAppovalStatusFilter(formParams, spec);
-
-		SettingsUtils.applySettings(spec, formParams, true);
+		applySettings(formParams, spec);
 		clearYearRangeSettings(spec);
 
 		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -102,8 +100,7 @@ public class GPIReportUtils {
 	}
 
 	/**
-	 * create the template for the gpi report 5b. It can be refactored to
-	 * another class
+	 * Create the template for the GPI report 5b
 	 * 
 	 * @param formParams
 	 * @return generatedReport 
@@ -124,8 +121,7 @@ public class GPIReportUtils {
 		spec.setSummaryReport(true);
 
 		applyAppovalStatusFilter(formParams, spec);
-
-		SettingsUtils.applySettings(spec, formParams, true);
+		applySettings(formParams, spec);
 		clearYearRangeSettings(spec);
 
 		for (String mtefColumn : getMTEFColumnsForIndicator5b(spec)) {
@@ -138,8 +134,7 @@ public class GPIReportUtils {
 	}
 
 	/**
-	 * create the template for the gpi report 6. It can be refactored to another
-	 * class
+	 * Create the template for the GPI report 6
 	 * 
 	 * @param formParams
 	 * @return generatedReport 
@@ -148,13 +143,12 @@ public class GPIReportUtils {
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_6, ArConstants.DONOR_TYPE);
 
-		String hierarchyColumn = getHierarchyColumn(formParams);
-		if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
-			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
-			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
-		} else {
+		if (isDonorAgency(formParams)) {
 			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		} else {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
 		}
 		
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
@@ -162,8 +156,7 @@ public class GPIReportUtils {
 		spec.setSummaryReport(true);
 
 		applyAppovalStatusFilter(formParams, spec);
-
-		SettingsUtils.applySettings(spec, formParams, true);
+		applySettings(formParams, spec);
 		clearYearRangeSettings(spec);
 		
 		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -172,8 +165,7 @@ public class GPIReportUtils {
 	}
 
 	/**
-	 * create the template for the gpi report 9b. It can be refactored to
-	 * another class
+	 * Create the template for the GPI report 9b.
 	 * 
 	 * @param formParams
 	 * @return generatedReport 
@@ -182,13 +174,12 @@ public class GPIReportUtils {
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_9b, ArConstants.GPI_TYPE);
 
-		String hierarchyColumn = getHierarchyColumn(formParams);
-		if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
-			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
-			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
-		} else {
+		if (isDonorAgency(formParams)) {
 			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		} else {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
 		}
 		
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
@@ -199,8 +190,7 @@ public class GPIReportUtils {
 		spec.setSummaryReport(true);
 
 		applyAppovalStatusFilter(formParams, spec);
-
-		SettingsUtils.applySettings(spec, formParams, true);
+		applySettings(formParams, spec);
 		clearYearRangeSettings(spec);
 
 		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -213,7 +203,7 @@ public class GPIReportUtils {
 			return (String) formParams.get(GPIReportConstants.HIERARCHY_PARAMETER);
 		}
 
-		return "";
+		return GPIReportConstants.HIERARCHY_DONOR_AGENCY;
 	}
 	
 	public static boolean isDonorAgency(JsonBean formParams) {
@@ -243,6 +233,18 @@ public class GPIReportUtils {
 
 			spec.setFilters(filterRules);
 		}
+	}
+	
+	/**
+	 * Apply settings on report specifications
+	 * 
+	 * @param formParams
+	 * @param spec
+	 */
+	public static void applySettings(JsonBean formParams, ReportSpecificationImpl spec) {
+		spec.setSettings(MondrianReportUtils.getCurrentUserDefaultSettings());
+		spec.getSettings().getCurrencyFormat().setMinimumFractionDigits(0);
+		SettingsUtils.applySettings(spec, formParams, true);
 	}
 
 	/**

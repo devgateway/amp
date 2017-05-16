@@ -95,7 +95,7 @@ public class ActivityImporter {
 	private JsonBean oldJson = null;
 	private JsonBean newJson = null;
 	private Map<Integer, ApiErrorMessage> errors = new HashMap<Integer, ApiErrorMessage>();
-	protected Map<String, List<JsonBean>> possibleValuesCached = new HashMap<String, List<JsonBean>>();
+	protected Map<String, List<PossibleValue>> possibleValuesCached = new HashMap<>();
 	protected Map<String, String> possibleValuesQuery = new HashMap<String, String>();
 	protected Map<Object, Field> activityFieldsForPostprocess = new HashMap<Object, Field>();
 	private boolean update  = false;
@@ -732,7 +732,8 @@ public class ActivityImporter {
 		
 		Object value = null;
 		String fieldType = fieldDef.getFieldType();
-		List<JsonBean> allowedValues = getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
+		List<PossibleValue> allowedValues = getPossibleValuesForFieldCached(fieldPath,
+				AmpActivityFields.class);
 		boolean idOnly = Boolean.TRUE.equals(fieldDef.isIdOnly());
 		
 		// this is an object reference
@@ -1300,8 +1301,8 @@ public class ActivityImporter {
 	}
 	
 	// what is object for?
-	public List<JsonBean> getPossibleValuesForFieldCached(String fieldPath, 
-			Class<AmpActivityFields> clazz, Object object) {
+	public List<PossibleValue> getPossibleValuesForFieldCached(String fieldPath,
+			Class<AmpActivityFields> clazz) {
 		if (!possibleValuesCached.containsKey(fieldPath)) {
 			possibleValuesCached.put(fieldPath, PossibleValuesEnumerator.INSTANCE
 					.getPossibleValuesForField(fieldPath, clazz, null));

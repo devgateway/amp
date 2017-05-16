@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.List;
@@ -11,8 +8,8 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 
 /**
@@ -22,8 +19,9 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
  */
 public class ValueValidator extends InputValidator {
 
-	protected boolean isValidLength = true;
-	protected boolean isValidPercentage = true;
+	private boolean isValidLength = true;
+	private boolean isValidPercentage = true;
+
 	@Override
 	public ApiErrorMessage getErrorMessage() {
 		if (!isValidLength)
@@ -48,7 +46,8 @@ public class ValueValidator extends InputValidator {
 		if (!isValidPercentage(newFieldParent, fieldDescription)) 
 			return false;
 		
-		List<JsonBean> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
+		List<PossibleValue> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath,
+				AmpActivityFields.class);
 		
 		if (possibleValues.size() != 0) {
 			Object value = newFieldParent.get(fieldDescription.getFieldName());
@@ -56,27 +55,49 @@ public class ValueValidator extends InputValidator {
 			if (value != null) {
 				boolean idOnly = Boolean.TRUE.equals(fieldDescription.isIdOnly());
 				// convert to string the ids to avoid long-integer comparison
-				value = idOnly ? value.toString() : value;
-				
-				for (JsonBean option: possibleValues) {
-					if (idOnly) {
-						if (value.equals(option.getString(ActivityEPConstants.ID)))
-							return true;
-					} else {
-						if (value.equals(option.get(ActivityEPConstants.VALUE)))
-							return true;						
+				String valueStr = value.toString();
+				if (idOnly) {
+					if (findById(possibleValues, valueStr) != null) {
+						return true;
+					}
+				} else {
+					if (findByValue(possibleValues, valueStr) != null) {
+						return true;
 					}
 				}
-				// wrong value configured if it is not found in allowed options 
+				// wrong value configured if it is not found in allowed options
 				return false;
 			}
 		}
 		// nothing failed so far? then we are good to go
 		return true;
 	}
-	
 
+	private PossibleValue findById(List<PossibleValue> possibleValues, String id) {
+		for (PossibleValue possibleValue : possibleValues) {
+			if (id.equals(possibleValue.getId().toString())) {
+				return possibleValue;
+			}
+			PossibleValue childPossibleValue = findById(possibleValue.getChildren(), id);
+			if (childPossibleValue != null) {
+				return childPossibleValue;
+			}
+		}
+		return null;
+	}
 
+	private PossibleValue findByValue(List<PossibleValue> possibleValues, String value) {
+		for (PossibleValue possibleValue : possibleValues) {
+			if (value.equals(possibleValue.getValue())) {
+				return possibleValue;
+			}
+			PossibleValue childPossibleValue = findByValue(possibleValue.getChildren(), value);
+			if (childPossibleValue != null) {
+				return childPossibleValue;
+			}
+		}
+		return null;
+	}
 
 	private boolean isValidPercentage(Map<String, Object> newFieldParent,
 			APIField fieldDescription) {
@@ -95,7 +116,7 @@ public class ValueValidator extends InputValidator {
 		return true;
 	}
 
-	protected boolean isValidLength(Map<String, Object> newFieldParent, APIField fieldDescription) {
+	private boolean isValidLength(Map<String, Object> newFieldParent, APIField fieldDescription) {
 		isValidLength = true;
 		Integer maxLength = fieldDescription.getFieldLength();
 		if (maxLength != null) {
@@ -116,8 +137,8 @@ public class ValueValidator extends InputValidator {
 		}
 		return isValidLength;
 	}
-	
-	protected boolean isValidLength(Object obj, Integer maxLength) {
+
+	private boolean isValidLength(Object obj, Integer maxLength) {
 		if (obj == null)
 			return true;
 		if (String.class.isAssignableFrom(obj.getClass())){

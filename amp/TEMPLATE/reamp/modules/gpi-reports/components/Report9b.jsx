@@ -83,7 +83,15 @@ export default class Report9b extends Component {
         };
 
         requestData.filters = this.filter.serialize().filters;        
-        requestData.settings = this.settingsWidget.toAPIFormat();             
+        requestData.settings = this.settingsWidget.toAPIFormat();    
+        
+        if(this.state.hierarchy === 'donor-agency'){
+            requestData.filters[this.state.hierarchy] = requestData.filters[this.state.hierarchy] || [];
+            if (this.state.selectedDonor && requestData.filters[this.state.hierarchy].indexOf(this.state.selectedDonor) == -1) {
+                requestData.filters[this.state.hierarchy].push(this.state.selectedDonor); 
+            }
+        }
+        
         return requestData
     }
 
@@ -101,8 +109,6 @@ export default class Report9b extends Component {
         this.props.actions.fetchReport9bMainReport( requestData, '9b' );
     }
 
-
-
     onDonorFilterChange( e ) {
         this.setState( { selectedDonor: parseInt( e.target.value ) }, function() {
             var filters = this.filter.serialize().filters;
@@ -117,10 +123,13 @@ export default class Report9b extends Component {
     onYearClick( event ) {
         this.setState( { selectedYear: $( event.target ).data( "year" ) }, function() {                      
             var filters = this.filter.serialize().filters;
-            filters.date = {
-                    'start': this.state.selectedYear + '-01-01',
-                    'end': this.state.selectedYear + '-12-31'
-                };           
+            filters.date = {};
+            if (this.state.selectedYear) {
+                filters.date = {
+                        'start': this.state.selectedYear + '-01-01',
+                        'end': this.state.selectedYear + '-12-31'
+                    };  
+            }                      
             this.filter.deserialize({filters: filters});            
             this.fetchReportData();
         }.bind( this ) );
@@ -139,9 +148,14 @@ export default class Report9b extends Component {
     }
 
     toggleHierarchy( event ) {
-        this.setState( { hierarchy: $( event.target ).data( "hierarchy" ) }, function() {
+        this.setState( { hierarchy: $( event.target ).data( "hierarchy" ), selectedDonor: ''}, function() {
             this.props.actions.getOrgList(( this.state.hierarchy === 'donor-group' ) );
-            this.fetchReportData();
+            var filters = this.filter.serialize().filters;
+            filters['donor-group'] = [];
+            filters['donor-agency'] = [];
+            filters[this.state.hierarchy].push( this.state.selectedDonor);
+            this.filter.deserialize({filters: filters});            
+            this.fetchReportData();                     
         }.bind( this ) );
     }
 

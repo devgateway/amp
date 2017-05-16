@@ -1,8 +1,4 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
-
 
 import java.util.Map;
 
@@ -10,6 +6,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.SaveMode;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -44,17 +41,18 @@ public class RequiredValidator extends InputValidator {
 			} else if (ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED.equals(requiredStatus)) {
 				// field required for submitted activities, but we can save it as a draft
 				// unless it's disabled in FM
-				if (!importer.isDraftFMEnabled()) {
+				if (!importer.isDraftFMEnabled() && importer.getRequestedSaveMode() != SaveMode.SUBMIT) {
 					this.draftDisabled = true;
 					return false;
 				}
-				// ok, it's enabled, save as draft
-				importer.setSaveAsDraft(true);
-				return true;
+				// ok, it's enabled, downgrade to draft if save mode is not specified
+				if (importer.getRequestedSaveMode() == null) {
+					importer.downgradeToDraftSave();
+				}
+				return importer.getRequestedSaveMode() != SaveMode.SUBMIT;
 			}
 		} 
 		// field value != null, it's fine from this validator's POV
 		return true;	
 	}
-
 }

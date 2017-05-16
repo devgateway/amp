@@ -49,8 +49,30 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 
 	/**
 	 * Returns a list of JSON objects, each describing a possible value that might be specified in an activity field
-	 * If Accept: application/vnd.possible-values-v2+json is used then possible values will be represented in a tree
-	 * structure.
+	 * <p>If Accept: application/vnd.possible-values-v2+json is used then possible values will be represented in a tree
+	 * structure.</p>
+	 * <p>If value can be translated then each possible value will contain value-translations element, a map where key
+	 * is language code and value is translated value.</p>
+	 * <h3>Sample response (with translations):</h3><pre>
+	 * [
+	 *   {
+	 *     "id": 262,
+	 *     "value": "Off Budget",
+	 *     "translated-value": {
+	 *       "en": "Off Budget",
+	 *       "fr": "Hors Budget"
+	 *     }
+	 *   },
+	 *   {
+	 *     "id": 263,
+	 *     "value": "On Budget",
+	 *     "translated-value": {
+	 *       "en": "On Budget",
+	 *       "fr": "Inscrit dans le budget"
+	 *     }
+	 *   }
+	 * ]
+	 * </pre>
 	 *
 	 * <h3>Sample response (flat):</h3><pre>
 	 * [
@@ -101,8 +123,9 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	 * </pre>
 	 *
 	 * @implicitParam Accept|string|header
-	 * @param fieldName, the Activity field title, underscorified (see <InterchangeUtils.underscorify for details>
-	 * @return list of JsonBean objects, each representing a possible value
+	 * @implicitParam translations|string|query|false|||||false|pipe separated list of language codes
+	 * @param fieldName fully qualified activity field
+	 * @return list of possible values
 	 */
 	@GET
 	@Path("fields/{fieldName}")
@@ -121,10 +144,12 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 
 	/**
 	 * Returns a list of possible values for each requested field.
-	 * If Accept: application/vnd.possible-values-v2+json is used then possible values will be represented in a tree
-	 * structure.
+	 * <p>If Accept: application/vnd.possible-values-v2+json is used then possible values will be represented in a tree
+	 * structure.</p>
+	 * <p>If value can be translated then each possible value will contain value-translations element, a map where key
+	 * is language code and value is translated value.</p>
 	 * <h3>Sample request:</h3><pre>
-	 * ["fundings~donor_organization_id", "approval_status"]
+	 * ["fundings~donor_organization_id", "approval_status", "activity_budget"]
 	 * </pre>
 	 * <h3>Sample response (flat):</h3><pre>
 	 * {
@@ -147,21 +172,30 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	 *       "id": "2",
 	 *       "value": "edited"
 	 *     }
+	 *   ],
+	 *   "activity_budget": [
+	 *     {
+	 *       "id": 262,
+	 *       "value": "Off Budget",
+	 *       "translated-value": {
+	 *         "en": "Off Budget",
+	 *         "fr": "Hors Budget"
+	 *       }
+	 *     },
+	 *     {
+	 *       "id": 263,
+	 *       "value": "On Budget",
+	 *       "translated-value": {
+	 *         "en": "On Budget",
+	 *         "fr": "Inscrit dans le budget"
+	 *       }
+	 *     }
 	 *   ]
 	 * }
 	 * </pre>
 	 * <h3>Sample response (tree):</h3><pre>
 	 * {
-	 *   "fundings~donor_organization_id": [
-	 *     {
-	 *       "id": 1,
-	 *       "value": "Donor 1"
-	 *     },
-	 *     {
-	 *       "id": 2,
-	 *       "value": "Donor 2"
-	 *     }
-	 *   ],
+	 *   ...
 	 *   "locations~locations": [
 	 *     {
 	 *       "id": "1",
@@ -173,11 +207,13 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	 *         }
 	 *       ]
 	 *     }
-	 *   ]
+	 *   ],
+	 *   ...
 	 * }
 	 * </pre>
 	 * @implicitParam Accept|string|header
-	 * @param fields list of activity fields
+	 * @implicitParam translations|string|query|false|||||false|pipe separated list of language codes
+	 * @param fields list of fully qualified activity fields
 	 * @return list of possible values grouped by field
 	 */
 	@POST
@@ -217,7 +253,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getFields", ui = false)
 	public List<APIField> getAvailableFields() {
-		return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields(AmpActivityFields.class);
+		return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
 	}
 	
 	// TODO remove it as part of AMP-25568
@@ -316,7 +352,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	}
 
 	/**
-	 * Imports an activity
+	 * Imports an activity.
+	 * <p>Original behaviour: is_draft field cannot be specified. If saving as draft is allowed then activity will
+	 * be saved as draft. Otherwise activity will be saved as submitted.</p>
+	 * <p>AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's value always
+	 * honored.</p>
 	 * 
 	 * @param newJson activity configuration
 	 * @return latest project overview or an error if invalid configuration is received
@@ -331,7 +371,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	
 	/**
 	 * Updates an activity
-	 * 
+	 * <p>Original behaviour: is_draft field cannot be specified. If existing activity was submitted then at import
+	 * this status will be kept if possible. Otherwise activity will be saved as draft.</p>
+	 * <p>AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's value always
+	 * honored.</p>
+	 *
 	 * @param projectId the id of the activity which should be updated
 	 * @param newJson activity configuration
 	 * @return latest project overview or an error if invalid configuration is received

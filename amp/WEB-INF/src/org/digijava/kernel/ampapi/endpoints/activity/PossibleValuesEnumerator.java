@@ -12,10 +12,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import javax.ws.rs.core.Response;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
@@ -23,6 +25,8 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterchangeableValueProvider;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -33,6 +37,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvi
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -54,7 +59,8 @@ public class PossibleValuesEnumerator {
 	
 	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
 
-	public static final PossibleValuesEnumerator INSTANCE = new PossibleValuesEnumerator(new AmpPossibleValuesDAO());
+	public static final PossibleValuesEnumerator INSTANCE = new PossibleValuesEnumerator(new AmpPossibleValuesDAO(),
+            AMPTranslatorService.INSTANCE);
 
 	private static final Multimap<Class<?>, String> ENTITY_CLASS_TO_SYNC_ENTITIES =
 			new ImmutableMultimap.Builder<Class<?>, String>()
@@ -74,9 +80,11 @@ public class PossibleValuesEnumerator {
 				.build();
 
 	private PossibleValuesDAO possibleValuesDAO;
+	private TranslatorService translatorService;
 
-	public PossibleValuesEnumerator(PossibleValuesDAO possibleValuesDAO) {
+	public PossibleValuesEnumerator(PossibleValuesDAO possibleValuesDAO, TranslatorService translatorService) {
 		this.possibleValuesDAO = possibleValuesDAO;
+		this.translatorService = translatorService;
 	}
 
 	/**
@@ -241,7 +249,7 @@ public class PossibleValuesEnumerator {
 			Class<? extends PossibleValuesProvider> possibleValuesProviderClass)
 			throws IllegalAccessException, InstantiationException {
 		PossibleValuesProvider provider = possibleValuesProviderClass.newInstance();
-		return provider.getPossibleValues();
+		return provider.getPossibleValues(translatorService);
 	}
 	
 	/**
@@ -261,6 +269,9 @@ public class PossibleValuesEnumerator {
 			items = possibleValuesDAO.getThemes(configValue);
 		} else if (clazz.equals(AmpCategoryValue.class)){
 			return getPossibleCategoryValues(field, configValue);
+		} else if (clazz.equals(AmpClassificationConfiguration.class)) {
+			return getPossibleValuesGenericCase(clazz,
+					() -> Collections.singletonList(possibleValuesDAO.getAmpClassificationConfiguration(configValue)));
 		} else {
 			//not a complex field, after all
 			return getPossibleValuesForField(field);
@@ -273,7 +284,7 @@ public class PossibleValuesEnumerator {
 	 * @param field
 	 * @return
 	 */
-	
+
 	private List<PossibleValue> getPossibleValuesForField(Field field) {
 		if (!InterchangeUtils.isFieldEnumerable(field))
 			return new ArrayList<>();
@@ -283,10 +294,11 @@ public class PossibleValuesEnumerator {
 			return getPossibleCategoryValues(field, null);
 		if (clazz.isAssignableFrom(AmpLocation.class))
 			return getPossibleLocations();
-		return getPossibleValuesGenericCase(clazz);
+		return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
 	}
 
-	private <T> List<PossibleValue> getPossibleValuesGenericCase(Class<T> clazz) {
+	private <T> List<PossibleValue> getPossibleValuesGenericCase(Class<T> clazz,
+			Supplier<List> possibleValuesSupplier) {
 		Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
 		String idFieldName = null;
 		String valueFieldName = null;
@@ -300,11 +312,11 @@ public class PossibleValuesEnumerator {
 			}
 		}
 		InterchangeableValueProvider<T> valueProvider = null;
-		if (valueFieldName != null) {
-			valueProvider = new GenericInterchangeableValueProvider<>(valueFieldName);
-		}
-		if (valueProvider == null && clazz.isAnnotationPresent(InterchangeableValue.class)) {
+		if (clazz.isAnnotationPresent(InterchangeableValue.class)) {
 			valueProvider = getInterchangeableValueProvider(clazz);
+		}
+		if (valueProvider == null && valueFieldName != null) {
+			valueProvider = new GenericInterchangeableValueProvider<>(clazz, valueFieldName);
 		}
 		if (idFieldName == null || valueProvider == null) {
 			String err = "Cannot provide possible values for " + clazz.getName()
@@ -312,7 +324,7 @@ public class PossibleValuesEnumerator {
 			LOGGER.error(err);
 			return Collections.emptyList();
 		}
-		List<T> objectList = possibleValuesDAO.getGenericValues(clazz);
+		List<T> objectList = possibleValuesSupplier.get();
 		String finalIdFieldName = idFieldName;
 		InterchangeableValueProvider<T> finalValueProvider = valueProvider;
 		return objectList.stream()
@@ -334,7 +346,12 @@ public class PossibleValuesEnumerator {
 		try {
 			Long id = (Long) PropertyUtils.getProperty(object, idProperty);
 			String value = valueProvider.getValue(object);
-			return new PossibleValue(id, value);
+			Map<String, String> translatedValue = ImmutableMap.of();
+			if (valueProvider.isTranslatable()) {
+				translatedValue = translatorService.translateLabel(value);
+			}
+            Object extraInfo = valueProvider.getExtraInfo(object);
+			return new PossibleValue(id, value, translatedValue, extraInfo);
 		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException("Failed to extract possible value object from " + object, e);
 		}
@@ -373,7 +390,8 @@ public class PossibleValuesEnumerator {
 			LocationExtraInfo extraInfo = new LocationExtraInfo(parentLocId, parentLocCatName,
 					categoryValueId, categoryValueName);
 
-			groupedValues.put(parentLocId, new PossibleValue(locId, locCatName, extraInfo));
+			Map<String, String> translatedValues = translatorService.translateLabel(locCatName);
+			groupedValues.put(parentLocId, new PossibleValue(locId, locCatName, translatedValues, extraInfo));
 		}
 		return convertToHierarchical(groupedValues);
 	}
@@ -409,7 +427,8 @@ public class PossibleValuesEnumerator {
 			Long parentId = (!checkDeleted && item.length > 2) ? (Long) item[2] : null;
 //			Boolean deleted = ((Boolean)(item[2]));
 			if (itemGood) {
-				PossibleValue possibleValue = new PossibleValue(id, value);
+				Map<String, String> translatedValues = translatorService.translateLabel(value);
+				PossibleValue possibleValue = new PossibleValue(id, value, translatedValues);
 				groupedValues.put(parentId, possibleValue);
 			}
 		}

@@ -19,16 +19,23 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
+				DROP VIEW IF EXISTS v_indicator_risk;
 				CREATE OR REPLACE VIEW v_indicator_risk AS
-				  SELECT v.activity_id amp_activity_id, rr.rating_name::text risk, v.indicator_connection_id, v.rr_id id, v.indicator_id FROM
-					(
-					  SELECT con.activity_id, max(rr.amp_ind_risk_ratings_id) rr_id, con.id AS indicator_connection_id, con.indicator_id
-					  FROM amp_indicator_connection con, amp_indicator_values val
-						LEFT JOIN amp_indicator_risk_ratings rr ON val.risk=rr.amp_ind_risk_ratings_id
-					  WHERE val.ind_connect_id = con.id AND con.sub_clazz::text = 'a'::text
-					  GROUP BY con.activity_id, con.id
-					) v
-					LEFT JOIN amp_indicator_risk_ratings rr ON v.rr_id = rr.amp_ind_risk_ratings_id;
+				  SELECT
+					con.activity_id AS amp_activity_id,
+					rr.rating_name::text AS risk,
+					rr.amp_ind_risk_ratings_id AS id,
+					ind.indicator_id AS me_indicator_id,
+					si.amp_sector_id AS me_indicator_sector_id,
+					CASE ind.type WHEN 'A' THEN 1 :: BIGINT WHEN 'D' THEN 2 :: BIGINT ELSE 3 :: BIGINT END AS me_indicator_type_id,
+					aux.log_frame_id AS me_indicator_logframe_id,
+					aux.risk_rating_id AS me_indicator_risk_id
+				  FROM amp_indicator_connection con
+					JOIN amp_indicator ind ON ind.indicator_id = con.indicator_id
+					LEFT JOIN amp_sector_indicator si ON si.indicator_id=ind.indicator_id
+					JOIN amp_indicator_connection_aux aux ON con.id=aux.indicator_connection_id
+					LEFT JOIN amp_indicator_risk_ratings rr ON rr.amp_ind_risk_ratings_id=aux.risk_rating_id
+				  WHERE con.sub_clazz::text = 'a'::text;
 			]]></lang>
 		</script>
 	</apply>

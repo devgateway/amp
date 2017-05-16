@@ -301,7 +301,8 @@ public class Security implements ErrorReportingEndpoint {
 	 *     ]
 	 * }
 	 * </pre>
-	 * @param ids a comma separated list of users ids for which to provide the information, invalid ids are ignored
+	 * @param ids a comma separated list of users ids for which to provide the information, invalid ids are ignored,
+	 *            if list is empty then all users will be returned
 	 * @return a list of User information
 	 */
 	@GET
@@ -422,7 +423,7 @@ public class Security implements ErrorReportingEndpoint {
      *   ...
      * ]
      * </pre>
-	 * @param ids a comma separate list of workspace member ids
+	 * @param ids comma separated list of workspace member ids, if empty all members will be returned
 	 * @return list of workspace member definitions
 	 */
 	@GET

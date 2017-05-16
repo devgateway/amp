@@ -66,17 +66,6 @@ public @interface Interchangeable {
 	boolean value() default false;
 	
 	/**
-	 * Used in PossibleValues EP. (Designed for the AmpActivityLocation->AmpLocation->AmpCategoryValueLocations)
-	 * 
-	 * Marks a field that contains information useful for describing a possible value, 
-	 * yet not contained within the class itself. 
-	 * Said info is to be specified under the tag "Extra info" and grouped in a JSON. 
-	 * Said JSON will have the structure expected from a 'Possible Value' item.  
-	 *  
-	 */
-	boolean extraInfo() default false;
-	
-	/**
 	 * Specifies the dependencies used for later checking in DependencyValidator. 
 	 * Dependencies (path and value) are encoded via {@link InterchangeDependencyMapper} public static strings,
 	 * like {@link InterchangeDependencyMapper#ON_BUDGET_CODE}. 

@@ -10,9 +10,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.struts.mock.MockHttpServletRequest;
 import org.apache.struts.mock.MockHttpSession;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
@@ -35,7 +37,11 @@ public class PossibleValuesEnumeratorTest {
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
 
+    @Rule
+    public AMPRequestRule ampRequestRule = new AMPRequestRule();
+
     @Mock private PossibleValuesDAO possibleValuesDAO;
+    @Mock private TranslatorService translatorService;
 
     @Before
     public void setup() {
@@ -136,7 +142,7 @@ public class PossibleValuesEnumeratorTest {
 
     static class ThrowingPossibleValuesProvider extends PossibleValuesProvider {
         @Override
-        public List<PossibleValue> getPossibleValues() {
+        public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
             throw new RuntimeException("some reason");
         }
 
@@ -169,13 +175,15 @@ public class PossibleValuesEnumeratorTest {
 
     @Test
     public void testSpecialCaseAmpCategoryValue() throws IOException {
+        when(translatorService.translateLabel(any())).thenReturn(ImmutableMap.of("en", "en value", "fr", "fr value"));
+
         when(possibleValuesDAO.getCategoryValues(any())).thenReturn(Arrays.asList(
                 values(1, "Planned", false),
                 values(2, "Canceled", true)
         ));
 
         assertJsonEquals(possibleValuesFor("activity_status"),
-                "[{\"id\":1,\"value\":\"Planned\"}]");
+                "[{\"id\":1,\"value\":\"Planned\",\"translated-value\":{\"en\":\"en value\",\"fr\":\"fr value\"}}]");
     }
 
     @Test
@@ -241,7 +249,7 @@ public class PossibleValuesEnumeratorTest {
     }
 
     private List<PossibleValue> possibleValuesFor(Class<?> theClass, String field) {
-        return new PossibleValuesEnumerator(possibleValuesDAO)
+        return new PossibleValuesEnumerator(possibleValuesDAO, translatorService)
                 .getPossibleValuesForField(field, theClass, null);
     }
 }

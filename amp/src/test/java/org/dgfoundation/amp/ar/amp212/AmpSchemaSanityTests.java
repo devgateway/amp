@@ -2365,4 +2365,126 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
 		runNiTestCase(spec, "en", indicatorActs, cor);
 	}
+
+	@Test
+	public void testIndicatorsHierarchyBySector() {
+		NiReportModel cor = new NiReportModel("testIndicatorsHierarchyBySector")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 3))",
+						"(Indicator Sector: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Indicator Name: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Indicator Base Value: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Indicator Sector", "", "Indicator Name", "", "Indicator Base Value", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Indicator Sector", "110 - EDUCATION", 6236))
+										.withContents("Indicator Name", "", "Indicator Base Value", "", "Indicator Sector", "110 - EDUCATION")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(95), "Indicator Name", "indicator 1", "Indicator Base Value", "10"),
+												new ReportAreaForTests(new AreaOwner(96), "Indicator Name", "indicator 1", "Indicator Base Value", "5")        ),
+								new ReportAreaForTests(new AreaOwner("Indicator Sector", "120 - HEALTH", 6252)).withContents("Indicator Name", "", "Indicator Base Value", "", "Indicator Sector", "120 - HEALTH")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(95), "Indicator Name", "indicator 2", "Indicator Base Value", "0")        ),
+								new ReportAreaForTests(new AreaOwner("Indicator Sector", "140 - WATER AND SANITATION", 6273)).withContents("Indicator Name", "", "Indicator Base Value", "", "Indicator Sector", "140 - WATER AND SANITATION")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(96), "Indicator Name", "indicator 3", "Indicator Base Value", "1")        ),
+								new ReportAreaForTests(new AreaOwner("Indicator Sector", "160 - OTHER SOCIAL INFRASTRUCTURE AND SERVICES", 6305)).withContents("Indicator Name", "", "Indicator Base Value", "", "Indicator Sector", "160 - OTHER SOCIAL INFRASTRUCTURE AND SERVICES")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(96), "Indicator Name", "indicator 3", "Indicator Base Value", "1")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testIndicatorsHierarchyBySector",
+				Arrays.asList(ColumnConstants.INDICATOR_SECTOR, ColumnConstants.INDICATOR_NAME, ColumnConstants.INDICATOR_BASE_VALUE),
+				null,
+				Arrays.asList(ColumnConstants.INDICATOR_SECTOR),
+				GroupingCriteria.GROUPING_TOTALS_ONLY);
+
+		runNiTestCase(spec, "en", indicatorActs, cor);
+	}
+
+	@Test
+	public void testIndicatorsHierarchyByLogframe() {
+		NiReportModel cor = new NiReportModel("testIndicatorsHierarchyByLogframe")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 3))",
+						"(Logframe Category: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Indicator Name: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Indicator Base Value: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Logframe Category", "", "Indicator Name", "", "Indicator Base Value", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Logframe Category", "Activity", 45)).withContents("Indicator Name", "", "Indicator Base Value", "", "Logframe Category", "Activity")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(96), "Indicator Name", "indicator 1", "Indicator Base Value", "5")        ),
+								new ReportAreaForTests(new AreaOwner("Logframe Category", "None", 7)).withContents("Indicator Name", "", "Indicator Base Value", "", "Logframe Category", "None")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(96), "Indicator Name", "indicator 3", "Indicator Base Value", "1")        ),
+								new ReportAreaForTests(new AreaOwner("Logframe Category", "Outcome", 8)).withContents("Indicator Name", "", "Indicator Base Value", "", "Logframe Category", "Outcome")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(95), "Indicator Name", "indicator 1", "Indicator Base Value", "10")        ),
+								new ReportAreaForTests(new AreaOwner("Logframe Category", "Output", 9)).withContents("Indicator Name", "", "Indicator Base Value", "", "Logframe Category", "Output")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(95), "Indicator Name", "indicator 2", "Indicator Base Value", "0")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testIndicatorsHierarchyByLogframe",
+				Arrays.asList(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, ColumnConstants.INDICATOR_NAME, ColumnConstants.INDICATOR_BASE_VALUE),
+				null,
+				Arrays.asList(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY),
+				GroupingCriteria.GROUPING_TOTALS_ONLY);
+
+		runNiTestCase(spec, "en", indicatorActs, cor);
+	}
+
+	@Test
+	public void testIndicatorsHierarchyByRisk() {
+		NiReportModel cor = new NiReportModel("testIndicatorsHierarchyByRisk")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 3))",
+						"(Risk: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Indicator Name: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Indicator Base Value: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+						.withContents("Risk", "", "Indicator Name", "", "Indicator Base Value", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Risk", "Critical", 6)).withContents("Indicator Name", "", "Indicator Base Value", "", "Risk", "Critical")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(96), "Indicator Name", "indicator 1", "Indicator Base Value", "5")        ),
+								new ReportAreaForTests(new AreaOwner("Risk", "High", 4)).withContents("Indicator Name", "", "Indicator Base Value", "", "Risk", "High")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(95), "Indicator Name", "indicator 1", "Indicator Base Value", "10")        ),
+								new ReportAreaForTests(new AreaOwner("Risk", "Very High", 5)).withContents("Indicator Name", "", "Indicator Base Value", "", "Risk", "Very High")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(96), "Indicator Name", "indicator 3", "Indicator Base Value", "1")        ),
+								new ReportAreaForTests(new AreaOwner("Risk", "Very Low", 1)).withContents("Indicator Name", "", "Indicator Base Value", "", "Risk", "Very Low")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(95), "Indicator Name", "indicator 2", "Indicator Base Value", "0")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testIndicatorsHierarchyByRisk",
+				Arrays.asList(ColumnConstants.INDICATOR_RISK, ColumnConstants.INDICATOR_NAME, ColumnConstants.INDICATOR_BASE_VALUE),
+				null,
+				Arrays.asList(ColumnConstants.INDICATOR_RISK),
+				GroupingCriteria.GROUPING_TOTALS_ONLY);
+
+		runNiTestCase(spec, "en", indicatorActs, cor);
+	}
+
+	@Test
+	public void testIndicatorsHierarchyByType() {
+		NiReportModel cor = new NiReportModel("testIndicatorsHierarchyByType")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 3))",
+						"(Indicator Type: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Indicator Name: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Indicator Base Value: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Indicator Type", "", "Indicator Name", "", "Indicator Base Value", "")
+						.withChildren(
+								new ReportAreaForTests(new AreaOwner("Indicator Type", "", 3))
+										.withContents("Indicator Name", "", "Indicator Base Value", "", "Indicator Type", "")
+										.withChildren(
+												new ReportAreaForTests(new AreaOwner(95), "Indicator Name", "indicator 1, indicator 2", "Indicator Base Value", "10, 0"),
+												new ReportAreaForTests(new AreaOwner(96), "Indicator Name", "indicator 1, indicator 3", "Indicator Base Value", "5, 1")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecification("testIndicatorsHierarchyByType",
+				Arrays.asList(ColumnConstants.INDICATOR_TYPE, ColumnConstants.INDICATOR_NAME, ColumnConstants.INDICATOR_BASE_VALUE),
+				null,
+				Arrays.asList(ColumnConstants.INDICATOR_TYPE),
+				GroupingCriteria.GROUPING_TOTALS_ONLY);
+
+		runNiTestCase(spec, "en", indicatorActs, cor);
+	}
 }

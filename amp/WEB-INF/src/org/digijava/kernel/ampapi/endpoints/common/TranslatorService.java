@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
@@ -17,6 +18,13 @@ public interface TranslatorService {
     Collection<Message> getAllTranslationOfBody(String text, Long siteId) throws WorkerException;
 
     String translateText(String text);
+
+    /**
+     * Translate one label in multiple languages and return translations grouped by locale.
+     * @param label label to be translated
+     * @return translated labels grouped by locale
+     */
+    Map<String, String> translateLabel(String label);
 
     List<AmpContentTranslation> loadFieldTranslations(String objClass, Long objId, String fieldName);
 

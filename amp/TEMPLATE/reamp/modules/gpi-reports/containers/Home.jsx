@@ -19,8 +19,7 @@ export default class App extends Component {
     componentWillMount() {       
     }
     
-    tabChanged(event) {
-        console.log($( event.target ).data("indicator"));
+    tabChanged(event) {        
         this.setState({currentReport:  $( event.target ).data( "indicator" )});        
     }
     

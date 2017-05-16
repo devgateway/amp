@@ -37,12 +37,10 @@ export default class Report6 extends Component {
             definitionUrl: '/rest/settings-definitions/gpi-reports'
         });        
               
-        this.props.actions.getYears().then(function(){
-            this.props.actions.getOrgList(false);
-            this.fetchReportData();
-        }.bind(this), function(){
-            
-        }.bind(this));
+
+        this.props.actions.getYears()
+        this.props.actions.getOrgList(false);
+        this.fetchReportData();
         
     }
 
@@ -86,32 +84,19 @@ export default class Report6 extends Component {
             "recordsPerPage": this.state.recordsPerPage
         };
 
-        requestData.filters = this.filter.serialize().filters;
-        if ( this.state.selectedDonor ) {
-            requestData.filters['donor-group'] = [];
-            requestData.filters['donor-agency'] = [];
-            requestData.filters[this.state.hierarchy].push( this.state.selectedDonor );
-        }
-
-        if ( this.state.selectedYear ) {
-            requestData.filters.date = {
-                'start': this.state.selectedYear + '-01-01',
-                'end': this.state.selectedYear + '-12-31'
+        requestData.filters = this.filter.serialize().filters;        
+        requestData.settings = this.settingsWidget.toAPIFormat(); 
+        
+        if(this.state.hierarchy === 'donor-agency'){
+            requestData.filters[this.state.hierarchy] = requestData.filters[this.state.hierarchy] || [];
+            if (this.state.selectedDonor && requestData.filters[this.state.hierarchy].indexOf(this.state.selectedDonor) == -1) {
+                requestData.filters[this.state.hierarchy].push(this.state.selectedDonor); 
             }
         }
         
-        requestData.settings = this.settingsWidget.toAPIFormat();
-        if(this.props.years.length > 0){
-            requestData.settings['year-range'] = {
-                    'type': 'INT_VALUE',
-                    'rangeFrom': this.props.years[0],
-                    'rangeTo': this.props.years[this.props.years.length - 1]
-                }; 
-        }         
-        
         return requestData
     }
-
+    
     updateRecordsPerPage() {
         if ( this.refs.recordsPerPage && this.refs.recordsPerPage.value ) {
             this.setState( { recordsPerPage: parseInt( this.refs.recordsPerPage.value ) }, function() {
@@ -126,16 +111,28 @@ export default class Report6 extends Component {
         this.props.actions.fetchReport6MainReport( requestData, '6' );
     }
 
-
-
     onDonorFilterChange( e ) {
         this.setState( { selectedDonor: parseInt( e.target.value ) }, function() {
+            var filters = this.filter.serialize().filters;
+            filters['donor-group'] = [];
+            filters['donor-agency'] = [];
+            filters[this.state.hierarchy].push( this.state.selectedDonor);
+            this.filter.deserialize({filters: filters});
             this.fetchReportData();
         }.bind( this ) );
     }
 
     onYearClick( event ) {
-        this.setState( { selectedYear: $( event.target ).data( "year" ) }, function() {
+        this.setState( { selectedYear: $( event.target ).data( "year" ) }, function() {                      
+            var filters = this.filter.serialize().filters;
+            filters.date = {};
+            if (this.state.selectedYear) {
+                filters.date = {
+                        'start': this.state.selectedYear + '-01-01',
+                        'end': this.state.selectedYear + '-12-31'
+                    };  
+            }           
+            this.filter.deserialize({filters: filters});            
             this.fetchReportData();
         }.bind( this ) );
 
@@ -153,9 +150,14 @@ export default class Report6 extends Component {
     }
 
     toggleHierarchy( event ) {
-        this.setState( { hierarchy: $( event.target ).data( "hierarchy" ) }, function() {
+        this.setState( { hierarchy: $( event.target ).data( "hierarchy" ), selectedDonor: ''}, function() {
             this.props.actions.getOrgList(( this.state.hierarchy === 'donor-group' ) );
-            this.fetchReportData();
+            var filters = this.filter.serialize().filters;
+            filters['donor-group'] = [];
+            filters['donor-agency'] = [];
+            filters[this.state.hierarchy].push( this.state.selectedDonor);
+            this.filter.deserialize({filters: filters});            
+            this.fetchReportData();                     
         }.bind( this ) );
     }
 

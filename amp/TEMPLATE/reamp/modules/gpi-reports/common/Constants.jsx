@@ -8,3 +8,4 @@ export const DONOR_AGENCY = 'Donor Agency';
 export const PLANNED_DISBURSEMENTS = 'Planned Disbursements';
 export const ANNUAL_GOVERNMENT_BUDGET = 'Annual Government Budget';
 export const PERCENTAGE_OF_PLANNED_ON_BUDGET = '% of planned on budget';
+export const INDICATOR_5B = 'Indicator 5b';

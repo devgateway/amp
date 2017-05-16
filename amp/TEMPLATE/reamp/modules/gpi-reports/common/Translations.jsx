@@ -18,5 +18,7 @@ export const initialTranslations = {
         'amp.gpi-reports:of': 'of',
         'amp.gpi-reports:records': 'records',
         'amp.gpi-reports:records-displayed': '__fromRecord__ - __toRecord__ of __totalRecords__ records',      
-        'amp.gpi-reports:page-info': '(p __currentPageNumber__/__totalPageCount__)'
+        'amp.gpi-reports:page-info': '(p __currentPageNumber__/__totalPageCount__)',
+        'amp-gpi-reports:indicator-5b': 'Indicator 5b',
+        'amp-gpi-reports:no-data': 'No data meets the applied filter criteria'
 };

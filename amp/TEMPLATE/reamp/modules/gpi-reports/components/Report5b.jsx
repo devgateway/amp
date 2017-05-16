@@ -8,7 +8,7 @@ import * as Constants from '../common/Constants';
 export default class Report5b extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "" };
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: new Date().getFullYear(), selectedDonor: "" };
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );
@@ -37,12 +37,9 @@ export default class Report5b extends Component {
             definitionUrl: '/rest/settings-definitions/gpi-reports'
         });        
               
-        this.props.actions.getYears().then(function(){
-            this.props.actions.getOrgList(false);
-            this.fetchReportData();
-        }.bind(this), function(){
-            
-        }.bind(this));
+        this.props.actions.getYears();
+        this.props.actions.getOrgList(false);
+        this.fetchReportData();        
         
     }
 
@@ -86,38 +83,26 @@ export default class Report5b extends Component {
             "recordsPerPage": this.state.recordsPerPage
         };
 
-        requestData.filters = this.filter.serialize().filters;
-        if ( this.state.selectedDonor ) {
-            requestData.filters['donor-group'] = [];
-            requestData.filters['donor-agency'] = [];
-            requestData.filters[this.state.hierarchy].push( this.state.selectedDonor );
-        }
-
+        requestData.filters = this.filter.serialize().filters;        
+        requestData.settings = this.settingsWidget.toAPIFormat();      
         if ( this.state.selectedYear ) {
             requestData.filters.date = {
                 'start': this.state.selectedYear + '-01-01',
                 'end': this.state.selectedYear + '-12-31'
             }
-        } else {
-            requestData.filters.date = {
-                    'start': 1980 + '-01-01',
-                    'end': 2030 + '-12-31'
-                } 
         }
         
-        requestData.settings = this.settingsWidget.toAPIFormat();
-        if(this.props.years.length > 0){
-            requestData.settings['year-range'] = {
-                    'type': 'INT_VALUE',
-                    'rangeFrom': this.props.years[0],
-                    'rangeTo': this.props.years[this.props.years.length - 1]
-                }; 
-        }         
+        if(this.state.hierarchy === 'donor-agency'){
+            requestData.filters[this.state.hierarchy] = requestData.filters[this.state.hierarchy] || [];
+            if (this.state.selectedDonor && requestData.filters[this.state.hierarchy].indexOf(this.state.selectedDonor) == -1) {
+                requestData.filters[this.state.hierarchy].push(this.state.selectedDonor); 
+            }
+        }
         
         return requestData
     }
-
-    updateRecordsPerPage() {
+    
+   updateRecordsPerPage() {
         if ( this.refs.recordsPerPage && this.refs.recordsPerPage.value ) {
             this.setState( { recordsPerPage: parseInt( this.refs.recordsPerPage.value ) }, function() {
                 this.fetchReportData();
@@ -135,12 +120,26 @@ export default class Report5b extends Component {
 
     onDonorFilterChange( e ) {
         this.setState( { selectedDonor: parseInt( e.target.value ) }, function() {
+            var filters = this.filter.serialize().filters;
+            filters['donor-group'] = [];
+            filters['donor-agency'] = [];
+            filters[this.state.hierarchy].push( this.state.selectedDonor);
+            this.filter.deserialize({filters: filters});
             this.fetchReportData();
         }.bind( this ) );
     }
 
-    onYearClick( event ) {
-        this.setState( { selectedYear: $( event.target ).data( "year" ) }, function() {
+    onYearClick(event) {
+        this.setState( { selectedYear: $( event.target ).data( "year" ) }, function() {                      
+            var filters = this.filter.serialize().filters;
+            filters.date = {};
+            if (this.state.selectedYear) {
+                filters.date = {
+                        'start': this.state.selectedYear + '-01-01',
+                        'end': this.state.selectedYear + '-12-31'
+                    };  
+            }           
+            this.filter.deserialize({filters: filters});            
             this.fetchReportData();
         }.bind( this ) );
 
@@ -158,9 +157,14 @@ export default class Report5b extends Component {
     }
 
     toggleHierarchy( event ) {
-        this.setState( { hierarchy: $( event.target ).data( "hierarchy" ) }, function() {
+        this.setState( { hierarchy: $( event.target ).data( "hierarchy" ), selectedDonor: ''}, function() {
             this.props.actions.getOrgList(( this.state.hierarchy === 'donor-group' ) );
-            this.fetchReportData();
+            var filters = this.filter.serialize().filters;
+            filters['donor-group'] = [];
+            filters['donor-agency'] = [];
+            filters[this.state.hierarchy].push( this.state.selectedDonor);
+            this.filter.deserialize({filters: filters});            
+            this.fetchReportData();                     
         }.bind( this ) );
     }
 
@@ -208,34 +212,26 @@ export default class Report5b extends Component {
         return name;
     }
 
-    getYearCell( addedGroups, row ) {
-        if ( addedGroups.indexOf( row[Constants.YEAR] ) === -1 ) {
-            addedGroups.push( row[Constants.YEAR] );
-            var matches = this.props.mainReport.page.contents.filter( content => content[Constants.YEAR] === row[Constants.YEAR] );
-            return ( <td className="year-col" rowSpan={matches.length}>{row[Constants.YEAR]}</td> )
-        }
-    }
-
     showSelectedDates() {
         var displayDates = '';
-        if(this.filter){
-            var filters = this.filter.serialize().filters;            
-            if ( filters.date ) {
-                filters.date.start = filters.date.start || '';
-                filters.date.end = filters.date.end || '';
-                var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
-                var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
-                if ( filters.date.start.length > 0 ) {
-                    displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
-                }
+        if ( this.filter ) {
+            var filters = this.filter.serialize().filters;
+            filters.date = filters.date || {};
+            filters.date.start = filters.date.start || this.state.selectedYear + '-01-01'  || '';
+            filters.date.end = filters.date.end ||  this.state.selectedYear + '-12-31' || '';
+            var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
+            var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
+            if ( filters.date.start.length > 0 ) {
+                displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
+            }
 
-                if ( filters.date.end.length > 0 ) {
-                    if ( filters.date.start.length > 0 ) {
-                        displayDates += " - ";
-                    }
-                    displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
+            if ( filters.date.end.length > 0 ) {
+                if ( filters.date.start.length > 0 ) {
+                    displayDates += " - ";
                 }
-            } 
+                displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
+            }
+
         }
         return displayDates;
     }
@@ -253,8 +249,23 @@ export default class Report5b extends Component {
         </div> )
     }
 
-    render() {
-        if ( this.props.mainReport && this.props.mainReport.page ) {
+    getMTEFYears() {
+        var years = [];
+        if (this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.headers) {
+            for (var header of this.props.mainReport.page.headers) {
+                var columnName = parseInt(header.columnName);
+                if(isNaN(columnName) == false) {
+                    years.push(columnName);
+                }              
+              }            
+        } 
+        
+        return years.sort();
+    }
+    
+    render() {         
+        if ( this.props.mainReport && this.props.mainReport.page ) {            
+            var MTEFYears =  this.getMTEFYears();
             var addedGroups = [];
             var years = this.props.years.slice();
             return (
@@ -288,35 +299,14 @@ export default class Report5b extends Component {
                         <div className="container-fluid indicator-stats no-padding">
                             <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
-                                    <div className="stat-value">{this.props.mainReport.summary[Constants.ANNUAL_GOVERNMENT_BUDGET]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.ANNUAL_GOVERNMENT_BUDGET )}</div>
+                                    <div className="stat-value">{this.props.mainReport.summary[Constants.INDICATOR_5B]}</div>
+                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.INDICATOR_5B )}</div>
                                 </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="indicator-stat-wrapper">
-                                    <div className="stat-value">{this.props.mainReport.summary[Constants.PLANNED_DISBURSEMENTS]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</div>
-                                </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="indicator-stat-wrapper">
-                                    <div className="stat-value">{this.props.mainReport.summary[Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET )}</div>
-                                </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="indicator-stat-wrapper">
-                                    <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES )}</div>
-                                </div>
-                            </div>
+                            </div>                           
                         </div>
                     }
                     <div className="container-fluid no-padding">
-                        <ul className="year-nav">
-                            <li className={this.state.selectedYear ? '' : 'active'}>
-                                <a onClick={this.onYearClick}>{this.props.translations['amp.gpi-reports:all-years']}</a>
-                            </li>
+                        <ul className="year-nav">                            
                             {( ( years.length > 3 ) ? years.splice( years.length - 3, 3 ).reverse() : years.reverse() ).map( year =>
                                 <li className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
                             )}
@@ -348,36 +338,38 @@ export default class Report5b extends Component {
                             </select>
                         </div>
                         <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}</h4></div>
-
                     </div>
-
                     <div className="section-divider"></div>
-                    <table className="table table-bordered table-striped indicator-table">
-                        <thead>
+                        { this.props.mainReport.empty == false  &&
+                            <table className="table table-bordered table-striped indicator-table">
+                            <thead>
                             <tr>
-                                <th className="col-md-1">{this.getLocalizedColumnName( Constants.YEAR )}</th>
-                                <th className="col-md-2">
-                                    <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-agency" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />
-                                    <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-group" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
-                                </th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.ANNUAL_GOVERNMENT_BUDGET )}</th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET )}</th>                                
+                              <th className="col-md-4">
+                              <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-agency" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />                                                          <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-group" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
+                              </th>
+                              {MTEFYears.map(( year, i ) =>
+                                <th className="col-md-2" key = {i}><img className="table-icon" src="images/icon-information.svg"/>{year}</th>
+                              )}                          
+                              <th className="col-md-2"><img className="table-icon" src="images/icon-value.svg"/>{this.props.translations['amp-gpi-reports:indicator-5b']}</th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.contents.map(( row, i ) =>
-                                <tr key={i} >
-                                    {this.getYearCell( addedGroups, row )}
-                                    <td>{row[Constants.DONOR_AGENCY] || row[Constants.DONOR_GROUP]}</td>
-                                    <td className="number-column">{row[Constants.ANNUAL_GOVERNMENT_BUDGET]}</td>
-                                    <td className="number-column">{row[Constants.PLANNED_DISBURSEMENTS]}</td>
-                                    <td className="number-column">{row[Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET]}</td>                                    
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                    <div >
+                          </thead>
+                          <tbody>                     
+                              {this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.contents.map(( row, i ) =>
+                              <tr key={i} >
+                                  <td>{row[Constants.DONOR_AGENCY] || row[Constants.DONOR_GROUP]}</td>
+                                  {MTEFYears.map(( year, i ) =>
+                                  <td className="number-column">{row[year]}</td>
+                                  )}
+                                  <td>{row[Constants.INDICATOR_5B]}</td>                                    
+                              </tr>
+                          )}                     
+                          </tbody>
+                          </table>     
+                        }
+                        
+                                         
+                      <div>
+                        { this.props.mainReport.empty == false  &&
                         <div className="row">
                             <div className="col-md-8 pull-right pagination-wrapper">
                                 {this.props.mainReport &&
@@ -402,13 +394,17 @@ export default class Report5b extends Component {
                                 {this.displayPagingInfo()}
                             </div>
                         </div>
+                      }
+                      { this.props.mainReport.empty &&
+                         <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div> 
+                      }
                     </div>
+                        
 
 
                 </div>
             );
         }
-
         return ( <div></div> );
     }
 

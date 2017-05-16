@@ -99,6 +99,14 @@ export default class Report5b extends Component {
             }
         }
         
+        if(requestData.filters['donor-agency'] && requestData.filters['donor-agency'].length == 0){
+            delete requestData.filters['donor-agency'] 
+        }
+        
+        if(requestData.filters['donor-group'] && requestData.filters['donor-group'].length == 0){
+            delete requestData.filters['donor-group'] 
+        }
+        
         return requestData
     }
     

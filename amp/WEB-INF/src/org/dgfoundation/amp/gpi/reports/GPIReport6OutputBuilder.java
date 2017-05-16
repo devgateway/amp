@@ -256,7 +256,7 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 			summaryColumns.put(new GPIReportOutputColumn(ANNUAL_GOV_BUDGET), 
 					formatAmount(generatedReport, sum));
 			summaryColumns.put(new GPIReportOutputColumn(PLANNED_ON_BUDGET),
-					formatAmount(generatedReport, calculateIndicator6Percentage(totalDisbursements, sum)) + "%");
+					formatAmount(generatedReport, calculateIndicator6Percentage(sum, totalDisbursements)) + "%");
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -380,7 +380,7 @@ class GPIIndicator6Item {
 	}
 
 	public BigDecimal getPercentage() {
-		return GPIReport6OutputBuilder.calculateIndicator6Percentage(disbAmount, annualGov);
+		return GPIReport6OutputBuilder.calculateIndicator6Percentage(annualGov, disbAmount);
 	}
 
 	public boolean isEmpty() {

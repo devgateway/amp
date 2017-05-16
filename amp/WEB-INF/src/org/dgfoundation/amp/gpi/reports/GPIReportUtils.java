@@ -31,6 +31,7 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.gpi.util.GPIConstants;
 
 public class GPIReportUtils {
 
@@ -112,14 +113,11 @@ public class GPIReportUtils {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5b,
 				ArConstants.DONOR_TYPE);
 
-		String hierarchyColumn = getHierarchyColumn(formParams);
-		if (hierarchyColumn.equals(GPIReportConstants.HIERARCHY_DONOR_GROUP)) {
-			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
-			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
-		} else {
-			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-		}
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+		spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
+		
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
@@ -210,12 +208,18 @@ public class GPIReportUtils {
 		return generatedReport;
 	}
 
-	private static String getHierarchyColumn(JsonBean formParams) {
+	public static String getHierarchyColumn(JsonBean formParams) {
 		if (formParams.get(GPIReportConstants.HIERARCHY_PARAMETER) != null) {
 			return (String) formParams.get(GPIReportConstants.HIERARCHY_PARAMETER);
 		}
 
 		return "";
+	}
+	
+	public static boolean isDonorAgency(JsonBean formParams) {
+		String donorHierarchy = getHierarchyColumn(formParams);
+		
+		return !GPIReportConstants.HIERARCHY_DONOR_GROUP.equals(donorHierarchy);
 	}
 	
 	/**

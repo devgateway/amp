@@ -194,23 +194,6 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 	}
 
 	/**
-	 * @return donorColumn
-	 */
-	private GPIReportOutputColumn getDonorColumn() {
-		GPIReportOutputColumn donorColumn = getColumns()
-				.get(isDonorAgency ? ColumnConstants.DONOR_AGENCY : ColumnConstants.DONOR_GROUP);
-
-		return donorColumn;
-	}
-
-	/**
-	 * @return yearColumn
-	 */
-	private GPIReportOutputColumn getYearColumn() {
-		return getColumns().get(GPIReportConstants.COLUMN_YEAR);
-	}
-
-	/**
 	 * @param generatedReport
 	 * @param donorColumn
 	 * @param reportValues
@@ -238,24 +221,6 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 			});
 		});
 		return rows;
-	}
-
-	/**
-	 * @param yearColumn
-	 * @param donorColumn
-	 * @return
-	 */
-	private Comparator<Map<GPIReportOutputColumn, String>> getByYearDonorComparator(GPIReportOutputColumn yearColumn,
-			GPIReportOutputColumn donorColumn) {
-		Comparator<Map<GPIReportOutputColumn, String>> byYearDonorComparator = (Map<GPIReportOutputColumn, String> o1,
-				Map<GPIReportOutputColumn, String> o2) -> {
-			if (o2.get(yearColumn).compareTo(o1.get(yearColumn)) == 0) {
-				return o2.get(donorColumn).compareTo(o1.get(donorColumn));
-			} else {
-				return o2.get(yearColumn).compareTo(o1.get(yearColumn));
-			}
-		};
-		return byYearDonorComparator;
 	}
 
 	/**

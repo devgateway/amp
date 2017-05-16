@@ -4,11 +4,13 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 
 /**
@@ -20,6 +22,8 @@ import org.dgfoundation.amp.newreports.GeneratedReport;
 public abstract class GPIReportOutputBuilder  {
 
 	protected Map<String, GPIReportOutputColumn> columns = new HashMap<>();
+	
+	protected boolean isDonorAgency = true;
 	
 	public GPIReportOutputBuilder() {
 	};
@@ -108,5 +112,44 @@ public abstract class GPIReportOutputBuilder  {
 		DecimalFormat decimalFormat = generatedReport.spec.getSettings().getCurrencyFormat();
 
 		return decimalFormat.format(value);
+	}
+	
+	/**
+	 * @return donorColumn
+	 */
+	protected GPIReportOutputColumn getDonorColumn() {
+		GPIReportOutputColumn donorColumn = getColumns()
+				.get(isDonorAgency ? ColumnConstants.DONOR_AGENCY : ColumnConstants.DONOR_GROUP);
+
+		return donorColumn;
+	}
+
+	/**
+	 * @return yearColumn
+	 */
+	protected GPIReportOutputColumn getYearColumn() {
+		return getColumns().get(GPIReportConstants.COLUMN_YEAR);
+	}
+	
+	/**
+	 * @param yearColumn
+	 * @param donorColumn
+	 * @return
+	 */
+	protected Comparator<Map<GPIReportOutputColumn, String>> getByYearDonorComparator(GPIReportOutputColumn yearColumn,
+			GPIReportOutputColumn donorColumn) {
+		Comparator<Map<GPIReportOutputColumn, String>> byYearDonorComparator = (Map<GPIReportOutputColumn, String> o1,
+				Map<GPIReportOutputColumn, String> o2) -> {
+			if (o2.get(yearColumn).compareTo(o1.get(yearColumn)) == 0) {
+				return o2.get(donorColumn).compareTo(o1.get(donorColumn));
+			} else {
+				return o2.get(yearColumn).compareTo(o1.get(yearColumn));
+			}
+		};
+		return byYearDonorComparator;
+	}
+	
+	public void setDonorAgency(boolean isDonorAgency) {
+		this.isDonorAgency = isDonorAgency;
 	}
 }

@@ -130,13 +130,9 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     }
 
     @Override
-    public List<PossibleValue> getComponentTypes() {
-        return ComponentsUtil.getAmpComponentTypes(true).stream()
-                .map(this::toPossibleValue)
-                .collect(toList());
+    public List<AmpComponentType> getComponentTypes() {
+        return ComponentsUtil.getAmpComponentTypes(true);
     }
 
-    private PossibleValue toPossibleValue(AmpComponentType type) {
-        return new PossibleValue(type.getType_id(), type.getName());
-    }
+
 }

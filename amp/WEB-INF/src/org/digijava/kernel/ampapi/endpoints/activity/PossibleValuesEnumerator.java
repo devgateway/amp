@@ -297,8 +297,18 @@ public class PossibleValuesEnumerator {
 		if (clazz.isAssignableFrom(AmpLocation.class))
 			return getPossibleLocations();
 		if (clazz.isAssignableFrom(AmpComponentType.class))
-			return possibleValuesDAO.getComponentTypes();
+			return getComponentTypes();
 		return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
+	}
+
+	private List<PossibleValue> getComponentTypes() {
+		return possibleValuesDAO.getComponentTypes().stream()
+				.map(this::toPossibleValue)
+				.collect(toList());
+	}
+
+	private PossibleValue toPossibleValue(AmpComponentType type) {
+		return new PossibleValue(type.getType_id(), type.getName(), translatorService.translateLabel(type.getName()));
 	}
 
 	private <T> List<PossibleValue> getPossibleValuesGenericCase(Class<T> clazz,

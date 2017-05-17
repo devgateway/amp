@@ -259,7 +259,7 @@ LoggerIdentifiable, Cloneable {
 	protected Set documents ;
 	
 
-//	@Interchangeable(fieldTitle = "Issues", importable = true, fmPath = "/Activity Form/Issues Section")
+	@Interchangeable(fieldTitle = "Issues", importable = true, fmPath = "/Activity Form/Issues Section")
 	@VersionableCollection(fieldTitle = "Issues")
 	protected Set<AmpIssues> issues;
 

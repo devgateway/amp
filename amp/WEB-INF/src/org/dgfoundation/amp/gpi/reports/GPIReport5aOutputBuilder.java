@@ -120,105 +120,108 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	protected List<Map<GPIReportOutputColumn, String>> getReportContents(GeneratedReport generatedReport) {
 		List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
 		GPIReportOutputColumn yearColumn = getColumns().get(GPIReportConstants.COLUMN_YEAR);
-		List<ReportArea> mockList = generatedReport.reportContents.getChildren();
-		for (ReportArea reportArea : mockList) {
-			Map<GPIReportOutputColumn, String> columns = new HashMap<>();
-			Map<String, Map<String, ReportCell>> years = new HashMap<>();
+		if (generatedReport.reportContents.getChildren() != null) {
+			for (ReportArea reportArea : generatedReport.reportContents.getChildren()) {
+				Map<GPIReportOutputColumn, String> columns = new HashMap<>();
+				Map<String, Map<String, ReportCell>> years = new HashMap<>();
 
-			for (ReportOutputColumn roc : generatedReport.leafHeaders) {
-				ReportCell rc = reportArea.getContents().get(roc);
-				rc = rc != null ? rc : TextCell.EMPTY;
-				if ((roc.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS))
-						&& !roc.parentColumn.originalColumnName.equals(NiReportsEngine.TOTALS_COLUMN_NAME)) {
-					if (years.get(roc.parentColumn.columnName) == null) {
-						years.put(roc.parentColumn.columnName, getEmptyGPIRow(generatedReport.spec));
-					}
-					years.get(roc.parentColumn.columnName).put(TOTAL_ACTUAL_DISBURSEMENTS, rc);
-				} else if (roc.originalColumnName.equals(ColumnConstants.DONOR_AGENCY)
-						|| roc.originalColumnName.equals(ColumnConstants.DONOR_GROUP)) {
-					columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
-					columns.put(new GPIReportOutputColumn(REMARK),
-							getRemarkEndpointURL(generatedReport.spec, reportArea.getOwner().id));
-				}
-			}
-
-			Set<Integer> concessional = new HashSet<>();
-			for (ReportArea budgetArea : reportArea.getChildren()) {
-				ReportCell rc = budgetArea.getContents().get(headersMap.get(ColumnConstants.ON_OFF_TREASURY_BUDGET));
-				if (String.valueOf(rc.value).equals(ACTIVITY_BUDGET_ON)) {
-					concessional.add(1);
-				} else if (String.valueOf(rc.value).equals("Off Budget")) {
-					concessional.add(0);
-				}
-			}
-
-			columns.put(new GPIReportOutputColumn(CONCESSIONAL), StringUtils.join(concessional.toArray(), ","));
-
-			Optional<ReportArea> onBudgetAreaElement = reportArea.getChildren().stream()
-					.filter(budgetArea -> isOnBudget(budgetArea)).findAny();
-
-			if (onBudgetAreaElement.isPresent()) {
 				for (ReportOutputColumn roc : generatedReport.leafHeaders) {
-					ReportCell rc = onBudgetAreaElement.get().getContents().get(roc);
+					ReportCell rc = reportArea.getContents().get(roc);
 					rc = rc != null ? rc : TextCell.EMPTY;
-					if ((ON_BUDGET_MEASURES.contains(roc.originalColumnName))
+					if ((roc.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS))
 							&& !roc.parentColumn.originalColumnName.equals(NiReportsEngine.TOTALS_COLUMN_NAME)) {
-						if (years.get(roc.parentColumn.originalColumnName) == null) {
-							years.put(roc.parentColumn.originalColumnName, new HashMap<>());
+						if (years.get(roc.parentColumn.columnName) == null) {
+							years.put(roc.parentColumn.columnName, getEmptyGPIRow(generatedReport.spec));
 						}
-
-						if (rc != TextCell.EMPTY) {
-							years.get(roc.parentColumn.originalColumnName).put(roc.originalColumnName, rc);
-						}
+						years.get(roc.parentColumn.columnName).put(TOTAL_ACTUAL_DISBURSEMENTS, rc);
+					} else if (roc.originalColumnName.equals(ColumnConstants.DONOR_AGENCY)
+							|| roc.originalColumnName.equals(ColumnConstants.DONOR_GROUP)) {
+						columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
+						columns.put(new GPIReportOutputColumn(REMARK),
+								getRemarkEndpointURL(generatedReport.spec, reportArea.getOwner().id));
 					}
 				}
 
-				Optional<ReportArea> hasExecArea = onBudgetAreaElement.get().getChildren().stream()
-						.filter(execArea -> hasExecutingAgency(execArea)).findAny();
+				Set<Integer> concessional = new HashSet<>();
+				for (ReportArea budgetArea : reportArea.getChildren()) {
+					ReportCell rc = budgetArea.getContents()
+							.get(headersMap.get(ColumnConstants.ON_OFF_TREASURY_BUDGET));
+					if (String.valueOf(rc.value).equals(ACTIVITY_BUDGET_ON)) {
+						concessional.add(1);
+					} else if (String.valueOf(rc.value).equals("Off Budget")) {
+						concessional.add(0);
+					}
+				}
 
-				if (hasExecArea.isPresent()) {
+				columns.put(new GPIReportOutputColumn(CONCESSIONAL), StringUtils.join(concessional.toArray(), ","));
+
+				Optional<ReportArea> onBudgetAreaElement = reportArea.getChildren().stream()
+						.filter(budgetArea -> isOnBudget(budgetArea)).findAny();
+
+				if (onBudgetAreaElement.isPresent()) {
 					for (ReportOutputColumn roc : generatedReport.leafHeaders) {
-						ReportCell rc = hasExecArea.get().getContents().get(roc);
+						ReportCell rc = onBudgetAreaElement.get().getContents().get(roc);
 						rc = rc != null ? rc : TextCell.EMPTY;
-						if ((MeasureConstants.ACTUAL_DISBURSEMENTS.equals(roc.originalColumnName))
+						if ((ON_BUDGET_MEASURES.contains(roc.originalColumnName))
 								&& !roc.parentColumn.originalColumnName.equals(NiReportsEngine.TOTALS_COLUMN_NAME)) {
 							if (years.get(roc.parentColumn.originalColumnName) == null) {
 								years.put(roc.parentColumn.originalColumnName, new HashMap<>());
 							}
-							years.get(roc.parentColumn.originalColumnName).put(DISBURSEMENTS_OTHER_PROVIDERS, rc);
+
+							if (rc != TextCell.EMPTY) {
+								years.get(roc.parentColumn.originalColumnName).put(roc.originalColumnName, rc);
+							}
+						}
+					}
+
+					Optional<ReportArea> hasExecArea = onBudgetAreaElement.get().getChildren().stream()
+							.filter(execArea -> hasExecutingAgency(execArea)).findAny();
+
+					if (hasExecArea.isPresent()) {
+						for (ReportOutputColumn roc : generatedReport.leafHeaders) {
+							ReportCell rc = hasExecArea.get().getContents().get(roc);
+							rc = rc != null ? rc : TextCell.EMPTY;
+							if ((MeasureConstants.ACTUAL_DISBURSEMENTS.equals(roc.originalColumnName))
+									&& !roc.parentColumn.originalColumnName
+											.equals(NiReportsEngine.TOTALS_COLUMN_NAME)) {
+								if (years.get(roc.parentColumn.originalColumnName) == null) {
+									years.put(roc.parentColumn.originalColumnName, new HashMap<>());
+								}
+								years.get(roc.parentColumn.originalColumnName).put(DISBURSEMENTS_OTHER_PROVIDERS, rc);
+							}
 						}
 					}
 				}
-			}
 
-			years.forEach((k, v) -> {
-				Map<GPIReportOutputColumn, String> row = new HashMap<>();
-				row.put(yearColumn, k);
-				final BooleanWrapper isRowEmpty = new BooleanWrapper(true);
-				v.forEach((x, y) -> {
-					if (MeasureConstants.DISBURSED_AS_SCHEDULED.equals(x)
-							|| MeasureConstants.OVER_DISBURSED.equals(x)) {
-						BigDecimal percentage = new BigDecimal(((AmountCell) y).extractValue());
-						row.put(getColumns().get(x), percentage.setScale(0, RoundingMode.UP) + "%");
-					} else {
-						row.put(getColumns().get(x), y.displayedValue);
-					}
-					if (YEAR_LEVEL_HIERARCHIES.contains(x)) {
-						if (y instanceof AmountCell && (((AmountCell) y).extractValue() != 0)) {
-							isRowEmpty.set(false);
+				years.forEach((k, v) -> {
+					Map<GPIReportOutputColumn, String> row = new HashMap<>();
+					row.put(yearColumn, k);
+					final BooleanWrapper isRowEmpty = new BooleanWrapper(true);
+					v.forEach((x, y) -> {
+						if (MeasureConstants.DISBURSED_AS_SCHEDULED.equals(x)
+								|| MeasureConstants.OVER_DISBURSED.equals(x)) {
+							BigDecimal percentage = new BigDecimal(((AmountCell) y).extractValue());
+							row.put(getColumns().get(x), percentage.setScale(0, RoundingMode.UP) + "%");
+						} else {
+							row.put(getColumns().get(x), y.displayedValue);
 						}
+						if (YEAR_LEVEL_HIERARCHIES.contains(x)) {
+							if (y instanceof AmountCell && (((AmountCell) y).extractValue() != 0)) {
+								isRowEmpty.set(false);
+							}
 
-						if (y instanceof TextCell && StringUtils.isNotBlank(y.value.toString())) {
-							isRowEmpty.set(false);
+							if (y instanceof TextCell && StringUtils.isNotBlank(y.value.toString())) {
+								isRowEmpty.set(false);
+							}
 						}
+					});
+
+					if (!isRowEmpty.value) {
+						row.putAll(columns);
+						contents.add(row);
 					}
 				});
-
-				if (!isRowEmpty.value) {
-					row.putAll(columns);
-					contents.add(row);
-				}
-			});
+			}
 		}
 
 		contents.sort(getByYearDonorComparator(getYearColumn(), getDonorColumn()));

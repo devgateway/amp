@@ -240,8 +240,11 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 				: GPIReportConstants.HIERARCHY_DONOR_GROUP;
 
 		FilterRule dateRule = GPIReportUtils.getDateFilterRule(spec);
+		
+		String min = dateRule.min != null ? dateRule.min : "0";
+		String max = dateRule.max != null ? dateRule.max : "0";
 
-		return String.format(remarkEndpoint, id, donorType, dateRule.min, dateRule.max);
+		return String.format(remarkEndpoint, id, donorType, min, max);
 	}
 
 	private Map<String, ReportCell> getEmptyGPIRow(ReportSpecification spec) {

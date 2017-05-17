@@ -44,8 +44,13 @@ import java.util.Map;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
-public class ChartService {
-    private static final Logger LOGGER = Logger.getLogger(ChartService.class);
+/**
+ * Tops Chart Dashboard Service
+ *
+ * @author Aldo Picca
+ */
+public class TopsChartService {
+    private static final Logger LOGGER = Logger.getLogger(TopsChartService.class);
 
     private JsonBean config;
     private ReportSpecificationImpl spec;
@@ -58,14 +63,14 @@ public class ChartService {
     private OutputSettings outSettings;
     private Integer limit;
 
-    public ChartService(JsonBean config, String type, Integer limit) {
+    public TopsChartService(JsonBean config, String type, Integer limit) {
         this.config = config;
         this.type = type;
         this.limit = limit;
         this.isDisaggregate = false;
     }
 
-    public ChartService(JsonBean config, String type, Long id) {
+    public TopsChartService(JsonBean config, String type, Long id) {
         this.config = config;
         this.type = type;
         this.id = id;
@@ -73,9 +78,9 @@ public class ChartService {
     }
 
     /**
-     * Return (n) Donors sorted by amount
+     * Return (n) Donors sorted by amount or a project list if the chart detail was requested
      *
-     * @return
+     * @return a JSON object with a list of objects.
      */
     public JsonBean buildChartData() {
         this.spec = new ReportSpecificationImpl("GetTops", ArConstants.DONOR_TYPE);
@@ -202,6 +207,9 @@ public class ChartService {
         }
     }
 
+    /**
+     * Set filter id to the report specification
+     */
     public void applyFilter(String column) {
         Map<String, Object> filters = null;
         if (config != null) {

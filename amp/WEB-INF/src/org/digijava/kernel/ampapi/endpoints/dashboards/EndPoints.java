@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.ChartService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
@@ -19,8 +19,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-
-import net.sf.json.JSONObject;
 
 
 /**
@@ -144,7 +142,7 @@ public class EndPoints implements ErrorReportingEndpoint {
 			@PathParam("type") String type,
 			@DefaultValue("5") @QueryParam("limit") Integer limit) {
 		//return DashboardsService.getTops(type, null, limit, config);
-		return new ChartService(config, type, limit).buildChartData();
+		return new TopsChartService(config, type, limit).buildChartData();
 	}
 
 	/**
@@ -209,7 +207,7 @@ public class EndPoints implements ErrorReportingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "topsDataDetail")
 	public JsonBean getChartsDataDetail(JsonBean config, @PathParam("type") String type, @PathParam("id") Long id) {
-		return new ChartService(config, type, id).buildChartData();
+		return new TopsChartService(config, type, id).buildChartData();
 	}
 
 	/**

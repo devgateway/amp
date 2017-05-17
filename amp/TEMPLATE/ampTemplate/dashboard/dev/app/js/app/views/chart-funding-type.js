@@ -1,7 +1,7 @@
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
-var ModalView = require('./chart-tops-info-modal');
+var ProjectsListModalView = require('./chart-detail-info-modal');
 
 module.exports = ChartViewBase.extend({
 
@@ -79,7 +79,7 @@ module.exports = ChartViewBase.extend({
     if (context.data[context.series.index].special === 'others') {
       this.model.set('limit', this.model.get('limit') + 1);
     } else {
-        this.modalView = new ModalView({app: app, context: context, model: this.model});
+        this.modalView = new ProjectsListModalView({app: app, context: context, model: this.model});
         this.openInfoWindow((context.x.fmt || context.x.raw) + ' ' + context.data[context.series.index].key);
     }
   }

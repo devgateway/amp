@@ -1,6 +1,5 @@
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
-var ModalView = require('./chart-tops-info-modal');
 var _ = require('underscore');
 
 module.exports = ChartViewBase.extend({

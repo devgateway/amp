@@ -5,7 +5,7 @@ var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
-var ModalView = require('./chart-tops-info-modal');
+var ProjectsListModalView = require('./chart-detail-info-modal');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/chart.html', 'UTF-8'));
 
@@ -253,7 +253,7 @@ module.exports = BackboneDash.View.extend({
           $(cell).on('click', function(e) {
               var context = self.getCellContext(e, self.model.values);
               if (context) {
-                  self.modalView = new ModalView({app: app, context: context, model: self.model});
+                  self.modalView = new ProjectsListModalView({app: app, context: context, model: self.model});
                   self.openInfoWindow((context.x.fmt || context.x.raw) + ' - ' + (context.y.fmt || context.y.raw));
               }
           });

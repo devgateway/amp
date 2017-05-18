@@ -17,12 +17,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.Predicate;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.AmpARFilterParams;
 import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
@@ -35,6 +38,7 @@ import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -164,7 +168,7 @@ public class SyncService implements InitializingBean {
         if (teamMembers.isEmpty()) {
             workspaceActivitiesQuery = "-1";
         } else {
-            workspaceActivitiesQuery = WorkspaceFilter.getViewableActivitiesIdByTeams(teamMembers);
+            workspaceActivitiesQuery = getCompleteWorkspaceFilter(teamMembers);
         }
 
         Map<String, Object> args = new HashMap<>();
@@ -183,6 +187,27 @@ public class SyncService implements InitializingBean {
                 "where amp_activity_id in (%s) %s", workspaceActivitiesQuery, restriction);
 
         return jdbcTemplate.query(sql, args, ACTIVITY_CHANGE_ROW_MAPPER);
+    }
+
+    private String getCompleteWorkspaceFilter(List<AmpTeamMember> teamMembers) {
+        StringJoiner completeSql = new StringJoiner(" UNION ");
+        completeSql.add(getArFilterActivityIds(teamMembers));
+        completeSql.add(WorkspaceFilter.getViewableActivitiesIdByTeams(teamMembers));
+        return completeSql.toString();
+    }
+
+    private String getArFilterActivityIds(List<AmpTeamMember> teamMembers) {
+        StringJoiner sql = new StringJoiner(" UNION ");
+        for (AmpTeamMember teamMember : teamMembers) {
+
+            AmpARFilter computedWsFilter = FilterUtil.buildFilterFromSource(teamMember.getAmpTeam());
+
+            AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(teamMember.toTeamMember(), null);
+            computedWsFilter.generateFilterQuery(params);
+
+            sql.add(computedWsFilter.getGeneratedFilterQuery());
+        }
+        return sql.toString();
     }
 
     private void updateDiffForUsers(SystemDiff systemDiff, Date lastSyncTime) {

@@ -189,11 +189,8 @@ public abstract class BasicFiltersConverter {
 	protected void addRulesIfPresent(LevelColumn lc, boolean positive, Set<Long> ids) {
 		if (ids == null)
 			return;
-				
-		boolean collapseDimension = shouldCollapseDimension(lc.dimensionUsage.dimension);
-		int level = collapseDimension ? NiDimension.LEVEL_ALL_IDS : lc.level;
-		
-		Predicate<Coordinate> predicate = FilterRule.maybeNegated(engine.buildAcceptor(lc.dimensionUsage, ids.stream().map(z -> new Coordinate(level, z)).collect(toList())), positive);
+
+		Predicate<Coordinate> predicate = FilterRule.maybeNegated(engine.buildAcceptor(lc.dimensionUsage, ids.stream().map(z -> new Coordinate(lc.level, z)).collect(toList())), positive);
 		coosPredicates.computeIfAbsent(lc.dimensionUsage, ignored -> new ArrayList<>()).add(predicate);
 	}
 	

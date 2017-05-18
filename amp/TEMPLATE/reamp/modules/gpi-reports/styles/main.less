@@ -1,10 +1,12 @@
 /* report styles */
 
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+
 
 body {
   font-family: 'Open Sans', sans-serif;
 }
+
 a:hover {
   text-decoration: none;
 }
@@ -444,7 +446,7 @@ a:hover {
   color: #7f8fa4;
   margin-top: 0;
   padding-top: 0;
-  min-width: 220px;
+  min-width: 100%;
   max-height: 300px;
   overflow-y: auto;
 }
@@ -494,16 +496,33 @@ a:hover {
   color: #7f8fa4;
   min-width: 220px;
 }
+
 .indicator-table{
   border: none;
   font-size: 13px;
   line-height: 110%;
 }
+
+.indicator-table > thead > tr > th{
+  border: none;
+  color: #1d2531; 
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 120%;
+  padding-bottom: 15px;
+  padding-right: 20px;
+}
+
+.indicator-table > thead > tr > th > a{
+  color: #1d2531;
+}
+
 .indicator-table td,
 .indicator-table th{
   padding-left: 5px;
   padding-top: 5px;
 }
+
 .indicator-table > thead > tr > th{
   border: none;
   font-size: 13px;
@@ -512,6 +531,7 @@ a:hover {
   padding-bottom: 15px;
   padding-right: 20px;
 }
+
 .indicator-table > tbody > tr > td {
   border:1px solid #e7e9ed;
   color: #000000;
@@ -550,7 +570,12 @@ a:hover {
   height: 12px;
   margin-right: 1px;
   margin-top: 1px;
+  opacity: 1;
 }
+.table-icon:hover {
+  opacity: 0.7;
+}
+
 .remarks{
   margin-left: 12px;
 }
@@ -596,4 +621,71 @@ opacity: 0.4;
 
 .number-column {
   text-align: right;
+}
+
+.table-icon {
+  float: left;
+  height: 12px;
+  margin-right: 1px;
+  margin-top: 1px;
+  opacity: 1;/*new*/
+}
+
+.popup-icon{
+  margin-right: 5px;
+  margin-top: 4px;
+}
+
+.reduced-padding {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.light-weight{
+  font-weight: 100;
+}
+
+.popup{
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.popup a{
+  position: absolute;
+}
+
+.popover-content, .popover {
+  background-color: #778293;
+  border: 1px solid #778293;
+  color: #ffffff;
+}
+
+.popover.top > .arrow::after {
+  border-top-color: #778293;
+}
+
+.modal-container {
+  position: absolute;
+}
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
+}
+
+.modal {
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) { 
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
 }

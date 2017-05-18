@@ -8,5 +8,8 @@ export const REPORTS_CONFIGURATION = {
         '5b' : {
             url : '/rest/gpi/report/5b'
         },
+        '5a' : {
+            url : '/rest/gpi/report/5a'
+        },
         defaultRequestData : {}
     };

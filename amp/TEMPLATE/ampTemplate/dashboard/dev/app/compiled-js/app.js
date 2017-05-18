@@ -3907,7 +3907,7 @@ module.exports = BackboneDash.View.extend({
 		  			  
 		  numberFormat.decimalSeparator = this.app.generalSettings.get('number-decimal-separator') || '.';
 		  this.app.generalSettings.numberFormatSettings = numberFormat;		
-		  
+		  debugger;
 		  this.app.generalSettings.numberDivider = this.app.generalSettings.get('number-divider');		  
 		  if (this.app.generalSettings.numberDivider === 1) {
 			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inunits';

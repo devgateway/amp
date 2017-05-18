@@ -308,13 +308,7 @@ export default class Report6 extends Component {
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET]}</div>
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET )}</div>
                                 </div>
-                            </div>
-                            <div className="col-md-3">
-                                <div className="indicator-stat-wrapper">
-                                    <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES )}</div>
-                                </div>
-                            </div>
+                            </div>                            
                         </div>
                     }
                     <div className="container-fluid no-padding">

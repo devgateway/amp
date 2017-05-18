@@ -516,7 +516,7 @@ public class DashboardsService {
 	 * @param config Is the JsonBean object from UI.
 	 * @param spec Is the current Mondrian Report specification.
 	 */
-    private static void setCustomSettings(JsonBean config, ReportSpecificationImpl spec) {
+    public static void setCustomSettings(JsonBean config, ReportSpecificationImpl spec) {
         LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.get("settings");
         ReportSettingsImpl defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
         defaultSettings.setUnitsOption(AmountsUnits.getDefaultValue());

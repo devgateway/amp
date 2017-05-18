@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -330,6 +331,18 @@ public class GPIDataService {
 		}
 		
 		return orgs;
+	}
+
+	public static List<GPIRemark> getGPIRemarks(Long donorId, String donorType, Long from, Long to) {
+		List<GPIRemark> remarks = new ArrayList<>();
+		
+		//TODO fectch data from DB
+		remarks.add(new GPIRemark("Donor Agency 1", "2017-07-01", "Remark 1 Lorem ipsum dolor sit amet"));
+		remarks.add(new GPIRemark("Donor Agency 2", "2015-12-02", "Remark 2 Lorem ipsum dolor sit amet"));
+		remarks.add(new GPIRemark("Donor Agency 3", "2014-08-04", "Remark 3 Lorem ipsum dolor sit amet"));
+		remarks.add(new GPIRemark("Donor Agency 1", "2015-03-20", "Remark 4 Lorem ipsum dolor sit amet"));
+		
+		return remarks;
 	}
 
 }

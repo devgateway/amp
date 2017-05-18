@@ -46,6 +46,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	public static final String ACTIVITY_BUDGET_ON = "On Budget";
 	public static final String YES_VALUE = "yes";
 
+	public static final String GPI_REMARK_ENDPOINT = "/rest/gpi/report/remarks";
+
 	public GPIReport5aOutputBuilder() {
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
 		addColumn(new GPIReportOutputColumn(TOTAL_ACTUAL_DISBURSEMENTS));
@@ -237,7 +239,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	private String getRemarkEndpointURL(ReportSpecification spec, long id) {
-		String remarkEndpoint = "/gpi/report/remarks?donorId=%s&donorType=%s&from=%s&to=%s";
+		String remarkEndpoint = GPI_REMARK_ENDPOINT + "?donorId=%s&donorType=%s&from=%s&to=%s";
 
 		String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
 				: GPIReportConstants.HIERARCHY_DONOR_GROUP;

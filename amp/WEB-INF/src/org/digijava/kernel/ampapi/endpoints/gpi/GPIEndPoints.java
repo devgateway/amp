@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
@@ -461,6 +462,23 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	@ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getGpiReport", ui = false)
 	public GPIReport getGPIReport(@PathParam("indicatorCode") String indicatorCode, JsonBean formParams) {
 		return GPIReportService.getInstance().getGPIReport(indicatorCode, formParams);
+	}
+	
+	/**
+	 * Retrieves the remarks for the specified donor agency/group and between the specified dates
+	 * 
+	 * @param donorId
+	 * @param donorType (donor-agency|donor-group)
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/report/remarks/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getGpiReport", ui = false)
+	public List<GPIRemark> getGPIRemarks(@PathParam("donorId") Long donorId, @PathParam("donorType") String donorType,
+			@PathParam("from") Long from, @PathParam("to") Long to) {
+		return GPIDataService.getGPIRemarks(donorId, donorType, from, to);
 	}
 
 	/**

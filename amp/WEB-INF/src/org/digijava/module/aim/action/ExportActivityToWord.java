@@ -3637,7 +3637,7 @@ public class ExportActivityToWord extends Action {
         /**
          * Activity Last Updated by
          */
-        if (FeaturesUtil.isVisibleField("Activity Last Updated by")) {
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Last Updated by")) {
             generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Activity last updated by")
                     + ": ", identification.getModifiedBy().getUser().getFirstNames() + " "
                     + identification.getModifiedBy().getUser().getLastName(), CELLCOLORGRAY);
@@ -3646,7 +3646,7 @@ public class ExportActivityToWord extends Action {
         /**
          * Activity updated on
          */
-        if (FeaturesUtil.isVisibleField("Activity Updated On")) {
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Updated On")) {
             generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Activity updated on")
                     + ": ", identification.getUpdatedDate(), CELLCOLORGRAY);
         }

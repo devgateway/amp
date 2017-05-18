@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -18,7 +19,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.types.ISO8601TimeStamp;
-import org.digijava.kernel.ampapi.endpoints.util.types.ListOfLongs;
 import org.digijava.kernel.services.sync.SyncService;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
@@ -37,7 +37,21 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Returns list of objects that were changed in specific period of time.
-     * <h3>Example request:</h3>?user-ids=1,2,3&last-sync-time=2016-12-27T18:05:30.320+0200
+     * <p>For initial sync caller must send only user ids. For subsequent syncs caller must send all fields.</p>
+     * Input:<ul>
+     * <li><b>user-ids</b> - will sync activities visible to the users from this list, mandatory
+     * <li><b>last-sync-time</b> - time since last sync in ISO8601 format, optional
+     * <li><b>amp-ids</b> - list of amp ids of activities currently known to the client, optional
+     * </ul>
+     *
+     * <h3>Example request:</h3>
+     * <pre>
+     * {
+     *   "user-ids": [ 7 ],
+     *   "last-sync-time": "2016-06-01T01:00:00.999+0000",
+     *   "amp-ids": [ "8723268703", "8723268706", "8723228497", "8723210713" ]
+     * }
+     * </pre>
      * <h3>Example response:</h3><pre>
      * {
      *   "timestamp": "2016-12-29T00:00:00.000+0200",
@@ -63,20 +77,16 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
      *   }
      * }
      * </pre>
-     * @param userIds comma separated list of user ids for which to display changes
-     * @param lastSyncTime optional timestamp of last synchronization time in ISO8601 format
      */
-    @GET
+    @POST
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "computeSync", ui = false)
-    public SystemDiff computeSync(
-            @DefaultValue("") @QueryParam("user-ids") ListOfLongs userIds,
-            @QueryParam("last-sync-time") ISO8601TimeStamp lastSyncTime) {
+    public SystemDiff computeSync(SyncRequest syncRequest) {
 
-        if (userIds.isEmpty()) {
+        if (syncRequest.getUserIds() == null || syncRequest.getUserIds().isEmpty()) {
             ApiErrorResponse.reportError(BAD_REQUEST, SynchronizerErrors.NO_USERS_ARE_SPECIFIED);
         }
 
-        return syncService.diff(userIds, lastSyncTime);
+        return syncService.diff(syncRequest);
     }
     
     /**

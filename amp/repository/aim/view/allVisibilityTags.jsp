@@ -36,12 +36,12 @@
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Custom Fields" parentModule="PROJECT MANAGEMENT"></module:display>
+
 <module:display name="Content Repository" parentModule="Resources"></module:display>
 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/> 
-<module:display name="GIS DASHBOARD"></module:display> 
+<module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="/GIS"></module:display>
 
 <module:display  name="/Dashboards"></module:display>
@@ -83,6 +83,7 @@
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Public View Content" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Resource Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Public Filter Manager" parentModule="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -103,8 +104,7 @@
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display>
 <feature:display name="Enable Saiku icon in Tab Manager" module="Tab Generator"></feature:display>
 <module:display name="Tools" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display> 
-<module:display name="WIDGETS"></module:display>
+<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <module:display name="Resources"></module:display>
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Data Freeze Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
@@ -114,13 +114,11 @@
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Map Module"></module:display>
 
 <module:display name="Aid Effectiveness" parentModule="PROJECT MANAGEMENT"></module:display>
 
 <feature:display name="Aid Effectiveness" module="Aid Effectiveness"></feature:display>
 
-<field:display  name="Show image" feature="Map Options"></field:display>
 <module:display name="Organization Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <feature:display name="Organization Manager Type" module="Organization Manager" ></feature:display>
 
@@ -133,31 +131,6 @@
 <module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>
 
-<feature:display name="Select Base Map" module="Map Module"></feature:display>
-<field:display name="Use Esri Online Maps" feature="Select Base Map"></field:display>
-<field:display name="Use Local Base Maps" feature="Select Base Map"></field:display>
-
-<feature:display name="Map Options" module="Map Module"></feature:display>
-<field:display   name="Show Map In Activity Preview" feature="Map Options"></field:display>
-
-<feature:display name="Printing" module="Map Module"></feature:display>
-<field:display   name="Html Printing" feature="Printing"></field:display>
-<field:display   name="Esri Printing" feature="Printing"></field:display>
-
-<feature:display name="Use Indicators Maps" module="Map Module"></feature:display>
-<feature:display name="Add activity" module="Map Module"></feature:display>
-<feature:display name="Search  Structures" module="Map Module"></feature:display>
-<feature:display name="Structures Column" module="Map Module"></feature:display>
-<field:display feature="Structures" name="Show Image"></field:display>
-<feature:display name="Structures" module="Map Module"></feature:display>
-<feature:display name="Structures On Load" module="Map Module"></feature:display>
-<field:display feature="Structures On Load" name="Structures Show Expanded"></field:display>
-<feature:display name="Show National" module="Map Module"></feature:display>
-<feature:display name="Highlight regions" module="Map Module"></feature:display>
-<feature:display name="Highlight Zones" module="Map Module"></feature:display>
-<feature:display name="Show map in public view" module="Map Module"></feature:display>
-<feature:display name="USAID logo" module="Map Module"></feature:display>
-<field:display feature="Structures" name="Structures Column"></field:display>
 <module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
@@ -215,7 +188,8 @@
 <field:display name="Non-archived Activities" feature="Workspace Info"></field:display>
 <field:display name="Archived Activities" feature="Workspace Info"></field:display>
 <feature:display name="Language Option" module="Tools"></feature:display>
-<feature:display name="Activity" module="M & E"></feature:display> 
+<feature:display name="Activity" module="M & E"></feature:display>
+<feature:display name="Reports" module="M & E"></feature:display>
 <feature:display name="AddMessageButton" module="Messages"></feature:display> 
 <feature:display name="Admin - Component Type" module="Components"></feature:display> 
 <feature:display name="Admin - Component" module="Components"></feature:display> 
@@ -248,9 +222,7 @@
 <feature:display name="Page Size" module="Report and Tab Options"></feature:display>
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
 <feature:display name="Funding Information" module="Funding"></feature:display> 
-<feature:display name="Government Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Results Dashboard Data" module="WIDGETS"></feature:display> 
-<feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display> 
+<feature:display name="Government Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Regional Observations" module="Regional Observations"></feature:display>
 <feature:display name="Line Ministries" module="Line Ministries"></feature:display>
@@ -301,13 +273,11 @@
 <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options"></feature:display> 
 <feature:display name="Show Options on Export" module="Report and Tab Options"></feature:display> 
 <feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Search Feature" module="Tools"></feature:display> 
-<feature:display name="Table Widgets" module="WIDGETS"></feature:display> 
+<feature:display name="Search Feature" module="Tools"></feature:display>
 <feature:display name="Target Value" module="PI Reports"></feature:display> 
 
 <feature:display name="User Help" module="HELP"></feature:display> 
-<feature:display name="Web Resources" module="Document"></feature:display> 
-<feature:display name="Widget Places" module="WIDGETS"></feature:display>
+<feature:display name="Web Resources" module="Document"></feature:display>
 
 <feature:display name="Yearly View" module="Calendar"></feature:display>
 <feature:display name="Monthly View" module="Calendar"></feature:display>
@@ -482,18 +452,13 @@
 <field:display name="Amount Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Amount of Disbursement Order" feature="Disbursement Orders"></field:display> 
 <field:display name="Assumptions" feature="Identification"></field:display> 
-<field:display name="Base Value" feature="Activity"></field:display> 
-<field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
+<field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display>
 <field:display name="Cancel button" feature="Create Message Form"></field:display> 
 <field:display name="Channel Overview Tab" feature="Channel Overview"></field:display> 
 <field:display name="Classification Expenditure" feature="Funding Information"></field:display> 
 <field:display name="Close Button" feature="Admin - Component Type"></field:display> 
 <field:display name="Code" feature="Admin - Component Type"></field:display> 
 <field:display name="Code" feature="Admin - Component"></field:display> 
-<field:display name="Comments Base Value" feature="Activity"></field:display> 
-<field:display name="Comments Current Value" feature="Activity"></field:display> 
-<field:display name="Comments Revised Target Value" feature="Activity"></field:display> 
-<field:display name="Comments Target Value" feature="Activity"></field:display> 
 <field:display name="Component Name" feature="Activity - Component Step"></field:display>
 <field:display name="Component Type" feature="Activity - Component Step"></field:display>  
 <field:display name="Component description" feature="Activity - Component Step"></field:display>
@@ -626,14 +591,11 @@ deleted 6 fields, do not reinsert
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Currency of Disbursement Order" feature="Disbursement Orders"></field:display> 
 <field:display name="Current Completion Date" feature="Planning"></field:display> 
-<field:display name="Current Value" feature="Activity"></field:display> 
-<field:display name="Data Source" feature="Identification"></field:display> 
+<field:display name="Data Source" feature="Identification"></field:display>
 <field:display name="Data Team Leader" feature="Identification"></field:display> 
-<field:display name="Date Base Value" feature="Activity"></field:display> 
-<field:display name="Date Commitment" feature="Commitments"></field:display> 
+<field:display name="Date Commitment" feature="Commitments"></field:display>
 <field:display name="Related Pledge" feature="Commitments"></field:display>
 <field:display name="Date Commitments" feature="Regional Funding"></field:display> 
-<field:display name="Date Current Value" feature="Activity"></field:display> 
 <field:display name="Date Disbursement" feature="Disbursement"></field:display>
 <field:display name="Related Pledge" feature="Disbursement"></field:display> 
 <field:display name="Date Disbursement" feature="Funding Information"></field:display> 
@@ -641,9 +603,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Date Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Date Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Date Of Last Activity Change" feature="Identification"></field:display> 
-<field:display name="Date Revised Target Value" feature="Activity"></field:display> 
-<field:display name="Date Target Value" feature="Activity"></field:display> 
-<field:display name="Date of Disbursement Order" feature="Disbursement Orders"></field:display> 
+<field:display name="Date of Disbursement Order" feature="Disbursement Orders"></field:display>
 <field:display name="Delegated Cooperation" feature="Funding Information"></field:display> 
 <field:display name="Delegated Partner" feature="Funding Information"></field:display> 
 <field:display name="Delete Contract" feature="Contracting"></field:display> 
@@ -721,15 +681,28 @@ deleted 6 fields, do not reinsert
 <field:display name="Implementing Agency" feature="Implementing Agency"></field:display>
 <field:display name="Inbox Alert" feature="Alert tab"></field:display> 
 <field:display name="Inbox Message" feature="Message tab"></field:display> 
-<field:display name="Indicator Base Value" feature="Activity"></field:display> 
-<field:display name="Indicator Current Value" feature="Activity"></field:display> 
-<field:display name="Indicator Description" feature="Activity"></field:display> 
+<field:display name="Indicator Base Value" feature="Reports"></field:display>
+<field:display name="Indicator Base Date" feature="Reports"></field:display>
+<field:display name="Indicator Base Comment" feature="Reports"></field:display>
+<field:display name="Indicator Current Value" feature="Reports"></field:display>
+<field:display name="Indicator Current Date" feature="Reports"></field:display>
+<field:display name="Indicator Current Comment" feature="Reports"></field:display>
+<field:display name="Indicator Description" feature="Reports"></field:display>
 <field:display name="Indicator ID" feature="Activity"></field:display> 
-<field:display name="Indicator Name" feature="Activity"></field:display> 
-<field:display name="Indicator Target Value" feature="Activity"></field:display> 
-<field:display name="Indicator Type" feature="Admin"></field:display> 
-<field:display name="Indicator code" feature="Admin"></field:display> 
-<field:display name="Admin Indicator name" feature="Admin"></field:display> 
+<field:display name="Indicator Name" feature="Reports"></field:display>
+<field:display name="Indicator Creation Date" feature="Reports"></field:display>
+<field:display name="Indicator Sector" feature="Reports"></field:display>
+<field:display name="Indicator Revised Target Value" feature="Reports"></field:display>
+<field:display name="Indicator Revised Target Date" feature="Reports"></field:display>
+<field:display name="Indicator Revised Target Comment" feature="Reports"></field:display>
+<field:display name="Indicator Target Value" feature="Reports"></field:display>
+<field:display name="Indicator Target Date" feature="Reports"></field:display>
+<field:display name="Indicator Target Comment" feature="Reports"></field:display>
+<field:display name="Admin Indicator Type" feature="Admin"></field:display>
+<field:display name="Indicator Type" feature="Reports"></field:display>
+<field:display name="Admin Indicator code" feature="Admin"></field:display>
+<field:display name="Indicator Code" feature="Reports"></field:display>
+<field:display name="Admin Indicator name" feature="Admin"></field:display>
 <field:display name="Internal Financing" feature="Admin NPD"></field:display> 
 <field:display name="Issue Date" feature="Issues"></field:display> 
 <field:display name="Issues" feature="Issues"></field:display> 
@@ -741,7 +714,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Level 3 Sectors List" feature="Sectors"></field:display> 
 <field:display name="Line Ministry Rank" feature="Planning"></field:display> 
 <field:display name="Link to Disbursement Order ID" feature="Disbursement"></field:display> 
-<field:display name="Logframe Category" feature="Activity"></field:display> 
+<field:display name="Logframe Category" feature="Reports"></field:display>
 <field:display name="Logframe Preview Button" feature="Logframe" ></field:display> 
 <field:display name="Logframe Preview Button" feature="Logframe"></field:display> 
 <field:display name="Measures Taken" feature="Issues"></field:display> 
@@ -884,8 +857,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display> 
 <field:display name="Responsible Organization" feature="Responsible Organization"></field:display> 
 <field:display name="Results" feature="Identification"></field:display> 
-<field:display name="Revised Target Value" feature="Activity"></field:display> 
-<field:display name="Risk" feature="Activity"></field:display> 
+<field:display name="Risk" feature="Reports"></field:display>
 <field:display name="Same as Proposed Approval Date" feature="Planning"></field:display> 
 <field:display name="Same as Proposed Start Date" feature="Planning"></field:display> 
 <field:display name="Save button" feature="Create Message Form"></field:display> 
@@ -936,19 +908,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Budget Sector" feature="Budget"></field:display>
 <field:display name="Budget Organization" feature="Budget"></field:display>
 <field:display name="Budget Program" feature="Budget"></field:display>
-<field:display name="Table CSS class" feature="Table Widgets"></field:display> 
-<field:display name="Table Code" feature="Table Widgets"></field:display> 
-<field:display name="Table Column CSS class" feature="Table Widgets"></field:display> 
-<field:display name="Table Column Code" feature="Table Widgets"></field:display> 
-<field:display name="Table Column HTML Style" feature="Table Widgets"></field:display> 
-<field:display name="Table Column Pattern" feature="Table Widgets"></field:display> 
-<field:display name="Table Column Widgth" feature="Table Widgets"></field:display> 
-<field:display name="Table Place" feature="Table Widgets"></field:display> 
-<field:display name="Table Show name as widget title" feature="Table Widgets"></field:display> 
-<field:display name="Table Style" feature="Table Widgets"></field:display> 
-<field:display name="Table Width" feature="Table Widgets"></field:display> 
-<field:display name="Target Value" feature="Activity"></field:display> 
-<field:display name="Template Manager" feature="Message Manager"></field:display> 
+<field:display name="Template Manager" feature="Message Manager"></field:display>
 <field:display name="Title Text Box" feature="Create Message Form"></field:display> 
 <field:display name="Total Amount Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount Disbursements" feature="Regional Funding"></field:display> 
@@ -975,7 +935,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Undisbursed Funds" feature="Funding Information"></field:display> 
 <field:display name="Unexpended Funds" feature="Funding Information"></field:display> 
 <field:display name="Delivery rate" feature="Funding Information"></field:display> 
-<field:display name="Consumption rate" feature="Funding Information"></field:display> 
 <field:display name="Validate Mandatory Regional Percentage" feature="Location"></field:display> 
 <field:display name="Verifications" feature="Identification"></field:display> 
 <field:display name="View Schemes Link" feature="Sectors"></field:display> 
@@ -1098,17 +1057,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Pledge Contact 2 - Fax" feature="Pledge Contact 2"></field:display>
 <field:display name="Pledge Contact 2 - Alternate Contact" feature="Pledge Contact 2"></field:display>
 
-<feature:display name="Widgets" module="GIS DASHBOARD"></feature:display>
-<field:display name="Resources at a glance" feature="Widgets"></field:display>
-<field:display name="Widget7" feature="Widgets"></field:display>
-<field:display name="Widget8" feature="Widgets"></field:display>
-<field:display name="Widget8" feature="Widgets"></field:display>
-<field:display name="Millennium Development Goals" feature="Widgets"></field:display>
-<field:display name="Aid Effectiveness Process Indicators" feature="Widgets"></field:display>
-<field:display name="Output Indicators" feature="Widgets"></field:display>
-<field:display name="Total resources" feature="Widgets"></field:display>
-<field:display name="External Aid Resources" feature="Widgets"></field:display>
-
 <feature:display name="Use icons for Sectors in Project List" module="/GIS"></feature:display>
 <feature:display name="Project sites" module="/GIS"></feature:display>
 <feature:display name="Download Map selector" module="/GIS"></feature:display>
@@ -1149,9 +1097,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Contracting Add Amendments" feature="Contracting"></field:display>
 <field:display name="Contracting Remove Amendments" feature="Contracting"></field:display>
 
-<field:display name="Measure Commitment" feature="Widgets"></field:display>
-<field:display name="Measure Disbursement" feature="Widgets"></field:display>
-<field:display name="Measure Expenditure" feature="Widgets"></field:display>
 <field:display name="Mandatory Indicator For Organization Primary Purpose" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Sector Preferences" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Organization Headquarters Address" feature="NGO Form"></field:display>
@@ -1161,15 +1106,3 @@ deleted 6 fields, do not reinsert
 <field:display name="Mandatory Budget Organization Code" feature="Organization Form"></field:display>
 <field:display name="Mandatory Organization Code" feature="Organization Form"></field:display>
 
-<!--  -->
-<module:display name="Visualization Dashboards"></module:display>
-
-<module:display name="Dashboard Generator" parentModule="Visualization Dashboards"></module:display>
-<module:display name="Dashboard Generator in public view" parentModule="Visualization Dashboards"></module:display>
-<module:display name="Dashboard Manager" parentModule="Visualization Dashboards"></module:display>
-
-<module:display name="Dashboard Org. Info" parentModule="Visualization Dashboards"></module:display>
-<feature:display name="Background of organization" module="Dashboard Org. Info"></feature:display> 
-<feature:display name="Org. Description" module="Dashboard Org. Info"></feature:display> 
-<feature:display name="Key Areas of Focus" module="Dashboard Org. Info"></feature:display> 
-<feature:display name="Show Names As Acronyms" module="Dashboard Org. Info"></feature:display>

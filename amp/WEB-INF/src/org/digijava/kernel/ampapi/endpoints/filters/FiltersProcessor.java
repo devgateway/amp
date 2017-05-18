@@ -5,10 +5,10 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Map;
 import java.util.Optional;
 
 import org.dgfoundation.amp.newreports.AmpReportFilters;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Processes and stores filters
@@ -19,10 +19,10 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 public class FiltersProcessor {
     
     private Optional<AmpReportFilters> filters;
-    private JsonBean filtersConfig;
+    private Map<String, Object> filterMap;
     
-    public FiltersProcessor(JsonBean filtersConfig, AmpReportFilters filters) {
-        this.filtersConfig = filtersConfig;
+    public FiltersProcessor(Map<String, Object> filterMap, AmpReportFilters filters) {
+        this.filterMap = filterMap;
         this.filters = Optional.ofNullable(filters);
     }
     
@@ -33,8 +33,8 @@ public class FiltersProcessor {
     }
     
     private void readComputedYear() {
-        if (filtersConfig.any().containsKey(FiltersConstants.COMPUTED_YEAR)) {
-            String computedYearId = filtersConfig.getString(FiltersConstants.COMPUTED_YEAR);
+        if (filterMap != null && filterMap.containsKey(FiltersConstants.COMPUTED_YEAR)) {
+            String computedYearId = filterMap.get(FiltersConstants.COMPUTED_YEAR).toString();
             Integer computedYear = null;
             if (FiltersConstants.CURRENT.equals(computedYearId)) {
                 computedYear = new GregorianCalendar().get(Calendar.YEAR);

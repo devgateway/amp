@@ -3,6 +3,14 @@
  */
 package org.dgfoundation.amp.visibility.data;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+import org.dgfoundation.amp.utils.ConstantsUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,14 +21,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
-import org.dgfoundation.amp.utils.ConstantsUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 /**
  * Detects which columns are visible in Activity Form and can be further used, 
@@ -217,7 +217,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	public static final Map<String, String> dependencyMap= new HashMap<String, String>() {{
 		put(ColumnConstants.ACTIVITY_ID, ColumnConstants.PROJECT_TITLE);
 		put(ColumnConstants.INTERNAL_USE_ID, ColumnConstants.PROJECT_TITLE);
-		put(ColumnConstants.SECONDARY_SECTOR_ID, ColumnConstants.SECONDARY_SECTOR);
 		put(ColumnConstants.AGREEMENT_CLOSE_DATE, ColumnConstants.AGREEMENT_CODE);
 		put(ColumnConstants.AGREEMENT_EFFECTIVE_DATE, ColumnConstants.AGREEMENT_CODE);
 		put(ColumnConstants.AGREEMENT_SIGNATURE_DATE, ColumnConstants.AGREEMENT_CODE);
@@ -272,7 +271,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	
 	@SuppressWarnings("serial")
 	protected static final Map<String, String> featuresToColumnsMap = new HashMap<String, String>() {{
-		put("Physical Progress", ColumnConstants.PHYSICAL_PROGRESS);
 		put("Computed Columns Filters", ColumnConstants.COMPUTED_YEAR);
 	}};
 	
@@ -321,8 +319,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Organizations and Project ID", ColumnConstants.ORGANIZATIONS_AND_PROJECT_ID);
 		put("Overage Project", ColumnConstants.OVERAGE_PROJECT);
 		put("Payment Capital - Recurrent", ColumnConstants.PAYMENT_CAPITAL___RECURRENT);
-		put("Physical progress description", ColumnConstants.PHYSICAL_PROGRESS_DESCRIPTION);
-		put("Physical progress title", ColumnConstants.PHYSICAL_PROGRESS_TITLE);
 		put("Pledges sectors", ColumnConstants.PLEDGES_SECTORS);
 		put("Pledges Aid Modality", ColumnConstants.PLEDGES_AID_MODALITY);
 		put("Pledge Contact 1 - Organization", ColumnConstants.PLEDGE_CONTACT_1___MINISTRY);

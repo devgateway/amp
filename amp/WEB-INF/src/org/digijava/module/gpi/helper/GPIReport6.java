@@ -80,7 +80,7 @@ public class GPIReport6 extends GPIAbstractReport {
 		double fromExchangeRate;
 		double toExchangeRate;
 		
-		BigDecimal multiplier = BigDecimal.valueOf(AmountsUnits.getDefaultValue().multiplier);
+		BigDecimal divider = BigDecimal.valueOf(AmountsUnits.getDefaultValue().divider);
 
 		if (setup != null) {
 			try {
@@ -118,7 +118,7 @@ public class GPIReport6 extends GPIAbstractReport {
 								new java.sql.Date(transactionDate.getTime()));
 					}
 					BigDecimal amount = new BigDecimal(CurrencyWorker.convert1((Double) data[7], fromExchangeRate, toExchangeRate));
-					amount = amount.multiply(multiplier);
+					amount = amount.divide(divider);
 
 					// This is Actual or Planned for funding.
 					String auxCategoryValue = data[10].toString();

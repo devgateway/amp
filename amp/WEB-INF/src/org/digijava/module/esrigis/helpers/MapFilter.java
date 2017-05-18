@@ -31,11 +31,9 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.OrgGroupSkeleton;
 import org.digijava.module.aim.util.OrganizationSkeleton;
-import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 
 public class MapFilter {
 	private static final long serialVersionUID = 1L;
@@ -1042,7 +1040,7 @@ public class MapFilter {
 		if (selectedIds.contains(-1L))
 			return null;
 		
-		return new ArrayList<Long>(DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(selectedIds));
+		return new ArrayList<Long>(DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(selectedIds, false));
 	}
 	
     public List<AmpCategoryValue> getPeacebuildingMarkers() {

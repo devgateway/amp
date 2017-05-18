@@ -31,6 +31,8 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 
 	protected Function<String, String> postprocessor = Function.identity();
 
+	private boolean allowNulls;
+
 	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
 		this(columnName, levelColumn, viewName, TextualTokenBehaviour.instance);
 	}
@@ -39,13 +41,12 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 			Behaviour<NiTextCell> behaviour) {
 		super(columnName, levelColumn, viewName, TextColumnKeyBuilder.instance, behaviour);
 	}
-
-
+	
 	@Override
 	protected TextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
 		String text = postprocessor.apply(rs.getString(2));
 		
-		if (text == null)
+		if (!allowNulls && text == null)
 			return null;
 
         Long entityId = rs.getLong(withoutEntity ? 1 : 3);
@@ -80,7 +81,12 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 	 		this.postprocessor = postprocessor;
 	 		return this;
 	}
-	
+
+	public SimpleTextColumn allowNulls(boolean allowNulls) {
+		this.allowNulls = allowNulls;
+		return this;
+	}
+
 	@Override
 	public boolean getKeptInSummaryReports() {
 		return false;

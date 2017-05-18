@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,12 +16,13 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -68,6 +68,8 @@ public class AmpReportFiltersConverter {
 
 		// Donors section.
 		addFilter(ColumnConstants.DONOR_AGENCY, AmpOrganisation.class, "donnorgAgency", true);
+		addFilter(ColumnConstants.DONOR_TYPE, AmpOrgType.class, "donorTypes", true);
+		addFilter(ColumnConstants.DONOR_GROUP, AmpOrgGroup.class, "donorGroups", true);
 
 		// Related organizations section.
 		addFilter(ColumnConstants.BENEFICIARY_AGENCY, AmpOrganisation.class, "beneficiaryAgency", true);
@@ -82,7 +84,7 @@ public class AmpReportFiltersConverter {
 		addFilter(ColumnConstants.PRIMARY_SECTOR, AmpSector.class, "selectedSectors", true);
 		addFilter(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, AmpSector.class, "selectedSectors", false);
 		addFilter(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, AmpSector.class, "selectedSectors", false);
-		addFilter(ColumnConstants.SECONDARY_SECTOR_ID, AmpSector.class, "selectedSecondarySectors", true);
+		addFilter(ColumnConstants.SECONDARY_SECTOR, AmpSector.class, "selectedSecondarySectors", true);
 		addFilter(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, AmpSector.class, "selectedSecondarySectors", false);
 		addFilter(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, AmpSector.class, "selectedSecondarySectors", false);
 		addFilter(ColumnConstants.TERTIARY_SECTOR, AmpSector.class, "selectedTertiarySectors", true);
@@ -137,12 +139,14 @@ public class AmpReportFiltersConverter {
 		addFilter(ColumnConstants.WORKSPACES, AmpTeam.class, "workspaces", true);
 		addFilter(ColumnConstants.FUNDING_STATUS, AmpCategoryValue.class, "fundingStatus", true);
 		addFilter(ColumnConstants.MODE_OF_PAYMENT, AmpCategoryValue.class, "modeOfPayment", true);
+		addFilter(ColumnConstants.EXPENDITURE_CLASS, AmpCategoryValue.class, "expenditureClass", true);
 		
 		// Other section.
 		addFilter(ColumnConstants.HUMANITARIAN_AID, Integer.class, "humanitarianAid", true);
 		addFilter(ColumnConstants.DISASTER_RESPONSE_MARKER, Integer.class, "disasterResponse", true);
 		addDateRangeFilter(ColumnConstants.ACTUAL_START_DATE, "fromActivityStartDate", "toActivityStartDate");
 		addDateRangeFilter(ColumnConstants.PROPOSED_APPROVAL_DATE, "fromProposedApprovalDate", "toProposedApprovalDate");
+		addDateRangeFilter(ColumnConstants.PROPOSED_START_DATE, "fromProposedStartDate", "toProposedStartDate");
 		addDateRangeFilter(ColumnConstants.ACTUAL_COMPLETION_DATE, "fromActivityActualCompletionDate", "toActivityActualCompletionDate");
 		addDateRangeFilter(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "fromActivityFinalContractingDate", "toActivityFinalContractingDate");
 		addDateRangeFilter(ColumnConstants.EFFECTIVE_FUNDING_DATE, "fromEffectiveFundingDate", "toEffectiveFundingDate");
@@ -177,29 +181,24 @@ public class AmpReportFiltersConverter {
 			Method setterMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(ampARFilterFieldName), param);
 
 			// Get values from Reports API filters.
-			List<FilterRule> filterRules = this.filters.getAllFilterRules().get(new ReportElement(new ReportColumn(mondrianFilterColumnName)));
+			FilterRule filterRule = this.filters.getAllFilterRules().get(new ReportElement(new ReportColumn(mondrianFilterColumnName)));
 
-			if (filterRules != null) {
+			if (filterRule != null) {
 				if (paramClass.getName().equals("java.util.Set") || paramClass.getName().equals("java.util.Collection")) {
-					Set<Object> values = null;
-					values = new HashSet();
-					Iterator<FilterRule> iFilterRules = filterRules.iterator();
-					while (iFilterRules.hasNext()) {
-						FilterRule auxFilterRule = iFilterRules.next();
-						if (auxFilterRule.values != null) {
-							Iterator<String> iValues = auxFilterRule.values.iterator();
-							while (iValues.hasNext()) {
-								String auxValue = iValues.next();
-								if (ampARFilterFieldClass.toString().equals("class java.lang.String")) {
-									values.add(auxValue);
-								} else if (ampARFilterFieldClass.toString().equals("class java.lang.Integer")) {
-									values.add(Integer.valueOf(auxValue));
-								} else if (ampARFilterFieldClass.toString().equals("class java.lang.Double")) {
-									values.add(Double.valueOf(auxValue));
-								} else {
-									Object auxEntity = session.load(ampARFilterFieldClass, new Long(auxValue));
-									values.add(auxEntity);	
-								}
+					Set<Object> values = new HashSet();
+					if (filterRule.values != null) {
+						Iterator<String> iValues = filterRule.values.iterator();
+						while (iValues.hasNext()) {
+							String auxValue = iValues.next();
+							if (ampARFilterFieldClass.toString().equals("class java.lang.String")) {
+								values.add(auxValue);
+							} else if (ampARFilterFieldClass.toString().equals("class java.lang.Integer")) {
+								values.add(Integer.valueOf(auxValue));
+							} else if (ampARFilterFieldClass.toString().equals("class java.lang.Double")) {
+								values.add(Double.valueOf(auxValue));
+							} else {
+								Object auxEntity = session.load(ampARFilterFieldClass, new Long(auxValue));
+								values.add(auxEntity);
 							}
 						}
 					}
@@ -215,14 +214,14 @@ public class AmpReportFiltersConverter {
 					setterMethod.invoke(this.ampARFilter, values);
 					logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + values.toString());
 				} else if (paramClass.getName().equals("java.lang.String")) {
-					setterMethod.invoke(this.ampARFilter, filterRules.toString());
-					logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRules.toString());
+					setterMethod.invoke(this.ampARFilter, filterRule.toString());
+					logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRule.toString());
 				} else if (paramClass.getName().equals("java.lang.Integer")) {
-					setterMethod.invoke(this.ampARFilter, Integer.valueOf(filterRules.toString()));
-					logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRules.toString());
+					setterMethod.invoke(this.ampARFilter, Integer.valueOf(filterRule.toString()));
+					logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRule.toString());
 				} else if (paramClass.getName().equals("java.lang.Double")) {
-					setterMethod.invoke(this.ampARFilter, Double.valueOf(filterRules.toString()));
-					logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRules.toString());
+					setterMethod.invoke(this.ampARFilter, Double.valueOf(filterRule.toString()));
+					logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRule.toString());
 				} else {
 					throw new RuntimeException(paramClass.getName());
 				}
@@ -239,18 +238,16 @@ public class AmpReportFiltersConverter {
 		try {
 			Method setterFromMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(fromMethod), java.lang.String.class);
 			Method setterToMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(toMethod), java.lang.String.class);			
-			SimpleDateFormat originalFormat = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
 			ReportElement filterElement = null;
 			if (mondrianFilterColumnName.equalsIgnoreCase(TRANSACTION_DATE)) {
 				filterElement = new ReportElement(ElementType.DATE);
 			} else {
 				filterElement = new ReportElement(new ReportColumn(mondrianFilterColumnName));
 			}
-			List<FilterRule> filterRules = this.filters.getAllFilterRules().get(filterElement);
-			if (filterRules != null) {
-				FilterRule auxFilterRule = (FilterRule) filterRules.toArray()[0];
-				String fromDate = originalFormat.format(DateTimeUtil.fromJulianNumberToDate(auxFilterRule.min));
-				String toDate = originalFormat.format(DateTimeUtil.fromJulianNumberToDate(auxFilterRule.max));
+			FilterRule filterRule = this.filters.getAllFilterRules().get(filterElement);
+			if (filterRule != null) {
+				String fromDate = DateTimeUtil.convertJulianNrToDefaultDateFormat(filterRule.min);
+				String toDate = DateTimeUtil.convertJulianNrToDefaultDateFormat(filterRule.max);
 
 				// Use reflection to call the setter.
 				setterFromMethod.invoke(this.ampARFilter, fromDate);
@@ -258,10 +255,10 @@ public class AmpReportFiltersConverter {
 				logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + fromDate + " / " + toDate);
 			}
 		} catch (Exception e) {
-			logger.error(e, e);
+			logger.error("Failed to add date range filter.", e);
 		}
 	}
-	
+
 	/**
 	 * Merge all fields that have not been populated in the build process.
 	 * 

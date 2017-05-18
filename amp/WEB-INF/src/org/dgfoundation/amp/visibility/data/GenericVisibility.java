@@ -31,11 +31,11 @@ public class GenericVisibility extends DataVisibility implements FMSettings {
     
     protected GenericVisibility(String groupName) {
         this.groupName = groupName;
+        this.template = FeaturesUtil.getCurrentTemplate();
         this.init();
     }
     
     private void init() {
-        this.template = FeaturesUtil.getCurrentTemplate();
         // initialize as a tree, so that it can be reused if later requested as tree
         // TODO: will it happen to request both as tree and flattened for the same module?
         this.tree = getTree();
@@ -108,15 +108,15 @@ public class GenericVisibility extends DataVisibility implements FMSettings {
         for (AmpObjectVisibility feature : modulesVisibility.getItems()) {
             items.put(feature.getName(), buildFieldsTree(feature));
         }
-        return new FMTree(items, modulesVisibility.isVisibleId(template.getId()));
+        return new FMTree(items, FeaturesUtil.isVisible(modulesVisibility));
     }
     
     private FMTree buildFieldsTree(AmpObjectVisibility feature) {
         Map<String, FMTree> items = new LinkedHashMap<>();
         for (AmpObjectVisibility field : feature.getItems()) {
-            items.put(feature.getName(), new FMTree(null, field.isVisibleTemplateObj(template)));
+            items.put(feature.getName(), new FMTree(null, FeaturesUtil.isVisible(field)));
         }
-        return new FMTree(items, feature.isVisibleTemplateObj(template));
+        return new FMTree(items, FeaturesUtil.isVisible(feature));
     }
     
     

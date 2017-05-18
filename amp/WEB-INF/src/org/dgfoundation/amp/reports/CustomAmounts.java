@@ -17,8 +17,6 @@ public class CustomAmounts {
 	/** columns that must be summed up by activity level (not automatically done by Mondrian / Saiku)*/
 	@SuppressWarnings("serial")
 	public final static Set<String> ACTIVITY_SUM_AMOUNTS = new HashSet<String>() {{
-		add(MeasureConstants.TOTAL_COMMITMENTS);
-		add(MeasureConstants.TOTAL_DISBURSEMENTS);
 	}};
 	
 	/** columns that provide amounts and not text data */
@@ -40,8 +38,6 @@ public class CustomAmounts {
 	@SuppressWarnings("serial")
 	public final static Set<String> PERCENTAGE_AMOUNTS = new HashSet<String>() {{
 		add(MeasureConstants.EXECUTION_RATE);
-		add(MeasureConstants.CONSUMPTION_RATE);
-		add(MeasureConstants.DISBURSMENT_RATIO);
 		add(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);
 		add(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS);
 		add(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT);

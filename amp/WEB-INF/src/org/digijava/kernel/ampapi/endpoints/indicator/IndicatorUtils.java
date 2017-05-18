@@ -273,7 +273,7 @@ public class IndicatorUtils {
     public static JsonBean getIndicatorsAndLocationValues(Long indicatorId, JsonBean input, boolean isGapAnalysis) {
         AmpIndicatorLayer indicator = (AmpIndicatorLayer) DbUtil.getObjectOrNull(AmpIndicatorLayer.class, indicatorId);
         if (indicator == null) {
-            return ApiError.toError(new ApiErrorMessage(IndicatorErrors.INVALID_ID, String.valueOf(indicatorId)));
+            return ApiError.toError(IndicatorErrors.INVALID_ID.withDetails(String.valueOf(indicatorId)));
         }
         return getIndicatorsAndLocationValues(indicator, input, isGapAnalysis);
     }

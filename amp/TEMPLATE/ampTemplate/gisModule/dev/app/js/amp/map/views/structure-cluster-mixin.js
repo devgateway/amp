@@ -86,8 +86,8 @@ module.exports = {
         console.warn('markers not done loading :(, missing feature markers[0]', markers[0]);
       }
 
-      //icons need to be abit bigger than plain circles, so bump up by 2
-      var icon = self.structureMenuModel.iconMappings[sectorCode] || self.structureMenuModel.iconMappings[self.structureMenuModel.DEFAULT_ICON_CODE];
+      //icons need to be abit bigger than plain circles, so bump up by 2      
+      var icon = self.structureMenuModel.iconMappings[sectorCode] || self.structureMenuModel.iconMappings[self.structureMenuModel.DEFAULT_ICON_CODE];      
       marker = new L.circleDivIcon(Math.max(18, size + 2), {
         className: 'marker-cluster ',
         html: '<img src="img/map-icons/' + icon +

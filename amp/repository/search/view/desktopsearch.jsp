@@ -2,24 +2,24 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 <script type="text/javascript">
+
 function search() {
 	var trn= '<digi:trn jsFriendly="true">Both fields in the search form must be completed</digi:trn>'
-	if ($("#querytype").val() == '' || $("#keyword").val()==''){
+	
+	if (!$("#querytype").val().trim || !$("#keyword").val().trim()){
 		alert(trn);
-	}else{
-		$('<form action="/search/search.do" method="POST" />')
-		.append($('<input type="hidden" name="desksearch" value="' + "true" + '">'))
-		.append($('<input type="hidden" name="type" value="' + $("#querytype").val() + '">'))
-		.append($('<input type="hidden" name="searchMode" value="' + $("#searchMode").val() + '">'))
-		.append($('<input type="hidden" name="keyword" value="' + $("#keyword").val() + '">'))
-        .appendTo($(document.body)) //it has to be added somewhere into the <body>
-        .submit();		
+	} else {
+		$("<form/>", { action: '/search/search.do', method: 'POST' })
+		.append($("<input>", {type:'hidden', name:'desksearch', value:'true'}))
+		.append($("<input>", {type:'hidden', name:'type', value: $("#querytype").val()}))
+		.append($("<input>", {type:'hidden', name:'searchMode', value: $("#searchMode").val()}))
+		.append($("<input>", {type:'hidden', name:'keyword', value: $("#keyword").val()}))
+		.appendTo($(document.body))
+		.submit();
 	}
-	//return true;
 }
 
-function searchEnter(e)
-{
+function searchEnter(e) {
     if (typeof e == 'undefined' && window.event) 
         e = window.event; 
     if (e.keyCode == 13)

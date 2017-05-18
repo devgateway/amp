@@ -430,10 +430,8 @@ public class ReportsUtil {
 	
 	public static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams, 
 			AmpFiscalCalendar oldCalendar) {
-		JsonBean filters = new JsonBean();
-		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get(EPConstants.FILTERS);
-		if (requestFilters != null) {
-			filters.any().putAll(requestFilters);
+		Map<String, Object> filterMap = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+		if (filterMap != null) {
 			AmpReportFilters newFilters = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 			if (spec.getFilters() != null) {
 				// TODO: we need calendar + date to be linked in UI as well OR make same form for filters and settings
@@ -444,8 +442,8 @@ public class ReportsUtil {
 					//newFilters.setOldCalendar(oldCalendar);
 				}
 			}
-			
-			AmpReportFilters formFilters = FilterUtils.getFilters(filters, newFilters);
+
+			AmpReportFilters formFilters = FilterUtils.getFilters(filterMap, newFilters);
 			AmpReportFilters stickyFilters = copyStickyMtefEntries((AmpReportFilters) spec.getFilters(), formFilters);
 			spec.setFilters(stickyFilters);
 		}
@@ -469,7 +467,7 @@ public class ReportsUtil {
 		
 		// set filters even if they are empty, that means filters are cleared up
 		// copy MTEF-hacky entries from old widget to new widget, since these are supposed to be sticky (not present in the filter form)
-		for(Entry<ReportElement, List<FilterRule>> elem: oldFilters.getFilterRules().entrySet()) {
+		for(Entry<ReportElement, FilterRule> elem: oldFilters.getFilterRules().entrySet()) {
 			if (MtefConverter.MTEF_DATE_ELEMENT_TYPES.contains(elem.getKey().type)) {
 				result.getFilterRules().put(elem.getKey(), elem.getValue());
 				somethingAdded = true;
@@ -660,7 +658,7 @@ public class ReportsUtil {
 				EPConstants.REPORT_TYPE, EPConstants.DEFAULT_REPORT_TYPE);
 		Integer reportTypeId = EPConstants.REPORT_TYPE_ID_MAP.get(reportType);
 		if (reportTypeId == null) {
-			return new ApiErrorMessage(ReportErrors.REPORT_TYPE_INVALID, config.getString(EPConstants.REPORT_TYPE));
+			return ReportErrors.REPORT_TYPE_INVALID.withDetails(config.getString(EPConstants.REPORT_TYPE));
 		}
 		List<String> activityTypes = (List<String>) config.get(EPConstants.PROJECT_TYPE);
 		if (activityTypes != null) {
@@ -668,7 +666,7 @@ public class ReportsUtil {
 				return ReportErrors.REPORT_TYPE_REQUIRED;
 			}
 			if (!EPConstants.REPORT_TYPE_ACTIVITY_MAP.get(reportType).containsAll(activityTypes)) {
-				return new ApiErrorMessage(ReportErrors.ACTIVITY_TYPE_LIST_INVALID, activityTypes.toString());
+				return ReportErrors.ACTIVITY_TYPE_LIST_INVALID.withDetails(activityTypes.toString());
 			}
 		}
 		return null;
@@ -845,6 +843,7 @@ public class ReportsUtil {
             return spec.getSettings().getUnitsOption();
         return AmountsUnits.getDefaultValue();
 	}
+	
 
 	public static String getUrl(AmpReports report) {
 		String prefix;

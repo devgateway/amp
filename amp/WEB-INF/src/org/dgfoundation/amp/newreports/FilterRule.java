@@ -16,12 +16,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.dgfoundation.amp.algo.AmpCollections;
 
 /**
  * Filter rule that can be of one of {@link FilterType} type
  * @author Nadejda Mandrescu
  */
+@JsonSerialize(using = FilterRuleSerializer.class)
 public class FilterRule {
 	
 	/** the value to use as a filter value when filtering for NULLs */
@@ -270,17 +272,6 @@ public class FilterRule {
 		}
 		if (!mergedValues.isEmpty())
 			res.add(new FilterRule(new ArrayList<String>(mergedValues), true));
-		return res;
-	}
-	
-	public static Set<Long> mergeIdRules(List<FilterRule> initRules) {
-		if (initRules == null || initRules.isEmpty())
-			return null;
-		
-		Set<Long> res = new HashSet<>();
-		for(FilterRule rule:initRules) {
-			rule.addIds(res);
-		}
 		return res;
 	}
 	

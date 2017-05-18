@@ -23,7 +23,7 @@ module.exports = Backbone.Collection
   initialize: function(models, options) {
     if (options) {
       this.filter = options.filter;
-      this.settings = options.settings;
+      this.settingsWidget = options.settingsWidget;
       this.appData = options.appData;
       this.activities = new Activities([], options);
       this._joinedActivities = null;
@@ -41,7 +41,7 @@ module.exports = Backbone.Collection
   fetch: function(options) {
     // TODO: this is running twice on structures load... is that ok??
     var self = this;
-    var payload = {otherFilters: {}};
+    var payload = {};
 
     // cancel last request if not complete.
     if (this._lastFetch && this._lastFetch.readyState > 0 && this._lastFetch.readyState < 4) {
@@ -103,12 +103,18 @@ module.exports = Backbone.Collection
 
         // activity.attributes is a dirty way of checking if already a model...
         // if not joined yet, then join structure to parent activity.
+        
         if (!(activity && activity.attributes)) {
           var match = self.activities.find(function(model) {
             return model.id === structure.get('activityZero');
           });
+          match.joinFilters();
           structure.set('activity', match);
+        } else if (activity.attributes) {
+        	activity.joinFilters();
         }
+        
+        
       });
 
       // all activites joined filters

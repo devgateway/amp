@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.Objects;
 import java.util.Map;
 import java.util.Optional;
 
@@ -10,7 +9,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
- * a {@link Cell} which holds a text. The MetaInfo is always empty, while the coordinates are either empty or with a single entry, depending on the #mainLevel)
+ * a {@link Cell} which holds a text. Coordinates are either empty or with a single entry, depending on the #mainLevel)
  * @author Dolghier Constantin
  *
  */
@@ -22,10 +21,10 @@ public final class TextCell extends Cell {
         this(text, activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
     }
 
-	public TextCell(String text, long activityId, long entityId, Map<NiDimensionUsage, Coordinate> coordinates, Optional<LevelColumn> levelColumn) {
+	public TextCell(String text, long activityId, long entityId, Map<NiDimensionUsage, Coordinate> coordinates,
+			Optional<LevelColumn> levelColumn) {
 		super(activityId, entityId, coordinates, levelColumn);
-		Objects.requireNonNull(text);
-		this.text = text == null ? "" : text;
+		this.text = (text == null) ? "" : text;
 	}
 	
 	@Override

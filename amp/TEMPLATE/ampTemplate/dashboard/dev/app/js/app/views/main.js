@@ -26,8 +26,7 @@ module.exports = BackboneDash.View.extend({
   initialize: function(options) {
     this.app = options.app;
         
-    this.app.settings.load();  // maybe should go in render or something
-                               // but we already do other fetches on init so...
+                                   // but we already do other fetches on init so...
     this.app.user.fetch();
     this.controls = new Controls({ app: this.app });
 

@@ -1456,5 +1456,11 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	<tag>
+		<name>colNameTrn</name>
+		<tagclass>org.digijava.module.translation.taglib.ColNameTrnTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>Special tag that treats report columns in a special way to allow parameterized columns like MTEFs.</info>
+	</tag>
 	
 </taglib>

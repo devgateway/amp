@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports.amp;
 import java.util.Optional;
 import java.util.Set;
 
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
@@ -18,9 +19,9 @@ public class MtefColumn extends AmpFundingColumn {
 	public final Optional<Long> adjustmentTypeCode;
 	public final boolean directed;
 
-	public MtefColumn(String columnName, int mtefYear, String totalColumnName,
+	public MtefColumn(String columnName, LocalizableLabel label, int mtefYear, String totalColumnName,
 			boolean directed, Optional<HardCodedCategoryValue> adjustmentType, SubDimensions subDimensions) {
-		super(columnName, "v_ni_mtef_funding",
+		super(columnName, label, "v_ni_mtef_funding",
 			directed ? new DirectedMeasureBehaviour(totalColumnName) : new MtefBehaviour(totalColumnName),
 			subDimensions);
 		this.mtefYear = mtefYear;

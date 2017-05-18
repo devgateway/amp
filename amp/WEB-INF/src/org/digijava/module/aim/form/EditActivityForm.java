@@ -5,6 +5,48 @@
  */
 package org.digijava.module.aim.form;
 
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
+import org.apache.struts.util.LabelValueBean;
+import org.dgfoundation.amp.exprlogic.MathExpression;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
+import org.digijava.module.aim.dbentity.AmpChapter;
+import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
+import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.BudgetStructure;
+import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.ReferenceDoc;
+import org.digijava.module.aim.helper.SurveyFunding;
+import org.digijava.module.budget.dbentity.AmpBudgetSector;
+import org.digijava.module.budget.dbentity.AmpDepartments;
+import org.digijava.module.contentrepository.helper.DocumentData;
+import org.springframework.beans.BeanWrapperImpl;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,22 +56,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
-import org.apache.struts.util.LabelValueBean;
-import org.dgfoundation.amp.exprlogic.MathExpression;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
-import org.digijava.module.aim.helper.*;
-import org.digijava.module.budget.dbentity.AmpBudgetSector;
-import org.digijava.module.budget.dbentity.AmpDepartments;
-import org.digijava.module.contentrepository.helper.DocumentData;
-import org.springframework.beans.BeanWrapperImpl;
 
 public class EditActivityForm extends ActionForm implements Serializable {
 	private static final long serialVersionUID = -2405474513633165920L;
@@ -88,7 +114,16 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Collection<SurveyFunding> surveyFundings = null;
 	private int draftRedirectedPage;
 	private List<String> warningMessges;
-	
+	private Set <AmpGPISurvey> gpiSurvey;
+
+	public Set<AmpGPISurvey> getGpiSurvey() {
+		return gpiSurvey;
+	}
+
+	public void setGpiSurvey(Set<AmpGPISurvey> gpiSurvey) {
+		this.gpiSurvey = gpiSurvey;
+	}
+
 	public class ActivityContactInfo {
 		private List<AmpActivityContact> activityContacts; //holds all activity contacts
 		private List<AmpActivityContact> mofedContacts;
@@ -6114,441 +6149,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 	}
 	
-	public class IndicatorME implements Serializable {
-		private Long logframeCategory;
-		private Collection indicatorsME;
-		private ActivityIndicator indicatorValues;
-		private Long indicatorId;
-		private Long indicatorValId;
-		private Long expIndicatorId;
-		private Float baseVal;
-		private String baseValDate;
-		private String baseValComments;
-		private Float targetVal;
-		private String targetValDate;
-		private String targetValComments;
-		private Float revTargetVal;
-		private String revTargetValDate;
-		private String revTargetValComments;
-		private Float currentVal;
-		private String currValDate;
-		private String currValComments;
-		private String comments;
-		private Float revisedTargetVal;
-		private Collection riskCollection;
-		private Long indicatorRisk;
-		private String currentValDate;
-		private String currentValComments;
-		private String indicatorPriorValues;
-		
-		@java.lang.SuppressWarnings("all")
-		public IndicatorME() {
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Long getLogframeCategory() {
-			return this.logframeCategory;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Collection getIndicatorsME() {
-			return this.indicatorsME;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public ActivityIndicator getIndicatorValues() {
-			return this.indicatorValues;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Long getIndicatorId() {
-			return this.indicatorId;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Long getIndicatorValId() {
-			return this.indicatorValId;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Long getExpIndicatorId() {
-			return this.expIndicatorId;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Float getBaseVal() {
-			return this.baseVal;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getBaseValDate() {
-			return this.baseValDate;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getBaseValComments() {
-			return this.baseValComments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Float getTargetVal() {
-			return this.targetVal;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getTargetValDate() {
-			return this.targetValDate;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getTargetValComments() {
-			return this.targetValComments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Float getRevTargetVal() {
-			return this.revTargetVal;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getRevTargetValDate() {
-			return this.revTargetValDate;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getRevTargetValComments() {
-			return this.revTargetValComments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Float getCurrentVal() {
-			return this.currentVal;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getCurrValDate() {
-			return this.currValDate;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getCurrValComments() {
-			return this.currValComments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getComments() {
-			return this.comments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Float getRevisedTargetVal() {
-			return this.revisedTargetVal;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Collection getRiskCollection() {
-			return this.riskCollection;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Long getIndicatorRisk() {
-			return this.indicatorRisk;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getCurrentValDate() {
-			return this.currentValDate;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getCurrentValComments() {
-			return this.currentValComments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public String getIndicatorPriorValues() {
-			return this.indicatorPriorValues;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setLogframeCategory(final Long logframeCategory) {
-			this.logframeCategory = logframeCategory;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setIndicatorsME(final Collection indicatorsME) {
-			this.indicatorsME = indicatorsME;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setIndicatorValues(final ActivityIndicator indicatorValues) {
-			this.indicatorValues = indicatorValues;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setIndicatorId(final Long indicatorId) {
-			this.indicatorId = indicatorId;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setIndicatorValId(final Long indicatorValId) {
-			this.indicatorValId = indicatorValId;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setExpIndicatorId(final Long expIndicatorId) {
-			this.expIndicatorId = expIndicatorId;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setBaseVal(final Float baseVal) {
-			this.baseVal = baseVal;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setBaseValDate(final String baseValDate) {
-			this.baseValDate = baseValDate;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setBaseValComments(final String baseValComments) {
-			this.baseValComments = baseValComments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setTargetVal(final Float targetVal) {
-			this.targetVal = targetVal;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setTargetValDate(final String targetValDate) {
-			this.targetValDate = targetValDate;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setTargetValComments(final String targetValComments) {
-			this.targetValComments = targetValComments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setRevTargetVal(final Float revTargetVal) {
-			this.revTargetVal = revTargetVal;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setRevTargetValDate(final String revTargetValDate) {
-			this.revTargetValDate = revTargetValDate;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setRevTargetValComments(final String revTargetValComments) {
-			this.revTargetValComments = revTargetValComments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setCurrentVal(final Float currentVal) {
-			this.currentVal = currentVal;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setCurrValDate(final String currValDate) {
-			this.currValDate = currValDate;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setCurrValComments(final String currValComments) {
-			this.currValComments = currValComments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setComments(final String comments) {
-			this.comments = comments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setRevisedTargetVal(final Float revisedTargetVal) {
-			this.revisedTargetVal = revisedTargetVal;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setRiskCollection(final Collection riskCollection) {
-			this.riskCollection = riskCollection;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setIndicatorRisk(final Long indicatorRisk) {
-			this.indicatorRisk = indicatorRisk;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setCurrentValDate(final String currentValDate) {
-			this.currentValDate = currentValDate;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setCurrentValComments(final String currentValComments) {
-			this.currentValComments = currentValComments;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setIndicatorPriorValues(final String indicatorPriorValues) {
-			this.indicatorPriorValues = indicatorPriorValues;
-		}
-		
-		@java.lang.Override
-		@java.lang.SuppressWarnings("all")
-		public boolean equals(final java.lang.Object o) {
-			if (o == this) return true;
-			if (!(o instanceof EditActivityForm.IndicatorME)) return false;
-			final IndicatorME other = (IndicatorME)o;
-			if (!other.canEqual((java.lang.Object)this)) return false;
-			final java.lang.Object this$logframeCategory = this.getLogframeCategory();
-			final java.lang.Object other$logframeCategory = other.getLogframeCategory();
-			if (this$logframeCategory == null ? other$logframeCategory != null : !this$logframeCategory.equals(other$logframeCategory)) return false;
-			final java.lang.Object this$indicatorsME = this.getIndicatorsME();
-			final java.lang.Object other$indicatorsME = other.getIndicatorsME();
-			if (this$indicatorsME == null ? other$indicatorsME != null : !this$indicatorsME.equals(other$indicatorsME)) return false;
-			final java.lang.Object this$indicatorValues = this.getIndicatorValues();
-			final java.lang.Object other$indicatorValues = other.getIndicatorValues();
-			if (this$indicatorValues == null ? other$indicatorValues != null : !this$indicatorValues.equals(other$indicatorValues)) return false;
-			final java.lang.Object this$indicatorId = this.getIndicatorId();
-			final java.lang.Object other$indicatorId = other.getIndicatorId();
-			if (this$indicatorId == null ? other$indicatorId != null : !this$indicatorId.equals(other$indicatorId)) return false;
-			final java.lang.Object this$indicatorValId = this.getIndicatorValId();
-			final java.lang.Object other$indicatorValId = other.getIndicatorValId();
-			if (this$indicatorValId == null ? other$indicatorValId != null : !this$indicatorValId.equals(other$indicatorValId)) return false;
-			final java.lang.Object this$expIndicatorId = this.getExpIndicatorId();
-			final java.lang.Object other$expIndicatorId = other.getExpIndicatorId();
-			if (this$expIndicatorId == null ? other$expIndicatorId != null : !this$expIndicatorId.equals(other$expIndicatorId)) return false;
-			final java.lang.Object this$baseVal = this.getBaseVal();
-			final java.lang.Object other$baseVal = other.getBaseVal();
-			if (this$baseVal == null ? other$baseVal != null : !this$baseVal.equals(other$baseVal)) return false;
-			final java.lang.Object this$baseValDate = this.getBaseValDate();
-			final java.lang.Object other$baseValDate = other.getBaseValDate();
-			if (this$baseValDate == null ? other$baseValDate != null : !this$baseValDate.equals(other$baseValDate)) return false;
-			final java.lang.Object this$baseValComments = this.getBaseValComments();
-			final java.lang.Object other$baseValComments = other.getBaseValComments();
-			if (this$baseValComments == null ? other$baseValComments != null : !this$baseValComments.equals(other$baseValComments)) return false;
-			final java.lang.Object this$targetVal = this.getTargetVal();
-			final java.lang.Object other$targetVal = other.getTargetVal();
-			if (this$targetVal == null ? other$targetVal != null : !this$targetVal.equals(other$targetVal)) return false;
-			final java.lang.Object this$targetValDate = this.getTargetValDate();
-			final java.lang.Object other$targetValDate = other.getTargetValDate();
-			if (this$targetValDate == null ? other$targetValDate != null : !this$targetValDate.equals(other$targetValDate)) return false;
-			final java.lang.Object this$targetValComments = this.getTargetValComments();
-			final java.lang.Object other$targetValComments = other.getTargetValComments();
-			if (this$targetValComments == null ? other$targetValComments != null : !this$targetValComments.equals(other$targetValComments)) return false;
-			final java.lang.Object this$revTargetVal = this.getRevTargetVal();
-			final java.lang.Object other$revTargetVal = other.getRevTargetVal();
-			if (this$revTargetVal == null ? other$revTargetVal != null : !this$revTargetVal.equals(other$revTargetVal)) return false;
-			final java.lang.Object this$revTargetValDate = this.getRevTargetValDate();
-			final java.lang.Object other$revTargetValDate = other.getRevTargetValDate();
-			if (this$revTargetValDate == null ? other$revTargetValDate != null : !this$revTargetValDate.equals(other$revTargetValDate)) return false;
-			final java.lang.Object this$revTargetValComments = this.getRevTargetValComments();
-			final java.lang.Object other$revTargetValComments = other.getRevTargetValComments();
-			if (this$revTargetValComments == null ? other$revTargetValComments != null : !this$revTargetValComments.equals(other$revTargetValComments)) return false;
-			final java.lang.Object this$currentVal = this.getCurrentVal();
-			final java.lang.Object other$currentVal = other.getCurrentVal();
-			if (this$currentVal == null ? other$currentVal != null : !this$currentVal.equals(other$currentVal)) return false;
-			final java.lang.Object this$currValDate = this.getCurrValDate();
-			final java.lang.Object other$currValDate = other.getCurrValDate();
-			if (this$currValDate == null ? other$currValDate != null : !this$currValDate.equals(other$currValDate)) return false;
-			final java.lang.Object this$currValComments = this.getCurrValComments();
-			final java.lang.Object other$currValComments = other.getCurrValComments();
-			if (this$currValComments == null ? other$currValComments != null : !this$currValComments.equals(other$currValComments)) return false;
-			final java.lang.Object this$comments = this.getComments();
-			final java.lang.Object other$comments = other.getComments();
-			if (this$comments == null ? other$comments != null : !this$comments.equals(other$comments)) return false;
-			final java.lang.Object this$revisedTargetVal = this.getRevisedTargetVal();
-			final java.lang.Object other$revisedTargetVal = other.getRevisedTargetVal();
-			if (this$revisedTargetVal == null ? other$revisedTargetVal != null : !this$revisedTargetVal.equals(other$revisedTargetVal)) return false;
-			final java.lang.Object this$riskCollection = this.getRiskCollection();
-			final java.lang.Object other$riskCollection = other.getRiskCollection();
-			if (this$riskCollection == null ? other$riskCollection != null : !this$riskCollection.equals(other$riskCollection)) return false;
-			final java.lang.Object this$indicatorRisk = this.getIndicatorRisk();
-			final java.lang.Object other$indicatorRisk = other.getIndicatorRisk();
-			if (this$indicatorRisk == null ? other$indicatorRisk != null : !this$indicatorRisk.equals(other$indicatorRisk)) return false;
-			final java.lang.Object this$currentValDate = this.getCurrentValDate();
-			final java.lang.Object other$currentValDate = other.getCurrentValDate();
-			if (this$currentValDate == null ? other$currentValDate != null : !this$currentValDate.equals(other$currentValDate)) return false;
-			final java.lang.Object this$currentValComments = this.getCurrentValComments();
-			final java.lang.Object other$currentValComments = other.getCurrentValComments();
-			if (this$currentValComments == null ? other$currentValComments != null : !this$currentValComments.equals(other$currentValComments)) return false;
-			final java.lang.Object this$indicatorPriorValues = this.getIndicatorPriorValues();
-			final java.lang.Object other$indicatorPriorValues = other.getIndicatorPriorValues();
-			if (this$indicatorPriorValues == null ? other$indicatorPriorValues != null : !this$indicatorPriorValues.equals(other$indicatorPriorValues)) return false;
-			return true;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public boolean canEqual(final java.lang.Object other) {
-			return other instanceof EditActivityForm.IndicatorME;
-		}
-		
-		@java.lang.Override
-		@java.lang.SuppressWarnings("all")
-		public int hashCode() {
-			final int PRIME = 59;
-			int result = 1;
-			final java.lang.Object $logframeCategory = this.getLogframeCategory();
-			result = result * PRIME + ($logframeCategory == null ? 0 : $logframeCategory.hashCode());
-			final java.lang.Object $indicatorsME = this.getIndicatorsME();
-			result = result * PRIME + ($indicatorsME == null ? 0 : $indicatorsME.hashCode());
-			final java.lang.Object $indicatorValues = this.getIndicatorValues();
-			result = result * PRIME + ($indicatorValues == null ? 0 : $indicatorValues.hashCode());
-			final java.lang.Object $indicatorId = this.getIndicatorId();
-			result = result * PRIME + ($indicatorId == null ? 0 : $indicatorId.hashCode());
-			final java.lang.Object $indicatorValId = this.getIndicatorValId();
-			result = result * PRIME + ($indicatorValId == null ? 0 : $indicatorValId.hashCode());
-			final java.lang.Object $expIndicatorId = this.getExpIndicatorId();
-			result = result * PRIME + ($expIndicatorId == null ? 0 : $expIndicatorId.hashCode());
-			final java.lang.Object $baseVal = this.getBaseVal();
-			result = result * PRIME + ($baseVal == null ? 0 : $baseVal.hashCode());
-			final java.lang.Object $baseValDate = this.getBaseValDate();
-			result = result * PRIME + ($baseValDate == null ? 0 : $baseValDate.hashCode());
-			final java.lang.Object $baseValComments = this.getBaseValComments();
-			result = result * PRIME + ($baseValComments == null ? 0 : $baseValComments.hashCode());
-			final java.lang.Object $targetVal = this.getTargetVal();
-			result = result * PRIME + ($targetVal == null ? 0 : $targetVal.hashCode());
-			final java.lang.Object $targetValDate = this.getTargetValDate();
-			result = result * PRIME + ($targetValDate == null ? 0 : $targetValDate.hashCode());
-			final java.lang.Object $targetValComments = this.getTargetValComments();
-			result = result * PRIME + ($targetValComments == null ? 0 : $targetValComments.hashCode());
-			final java.lang.Object $revTargetVal = this.getRevTargetVal();
-			result = result * PRIME + ($revTargetVal == null ? 0 : $revTargetVal.hashCode());
-			final java.lang.Object $revTargetValDate = this.getRevTargetValDate();
-			result = result * PRIME + ($revTargetValDate == null ? 0 : $revTargetValDate.hashCode());
-			final java.lang.Object $revTargetValComments = this.getRevTargetValComments();
-			result = result * PRIME + ($revTargetValComments == null ? 0 : $revTargetValComments.hashCode());
-			final java.lang.Object $currentVal = this.getCurrentVal();
-			result = result * PRIME + ($currentVal == null ? 0 : $currentVal.hashCode());
-			final java.lang.Object $currValDate = this.getCurrValDate();
-			result = result * PRIME + ($currValDate == null ? 0 : $currValDate.hashCode());
-			final java.lang.Object $currValComments = this.getCurrValComments();
-			result = result * PRIME + ($currValComments == null ? 0 : $currValComments.hashCode());
-			final java.lang.Object $comments = this.getComments();
-			result = result * PRIME + ($comments == null ? 0 : $comments.hashCode());
-			final java.lang.Object $revisedTargetVal = this.getRevisedTargetVal();
-			result = result * PRIME + ($revisedTargetVal == null ? 0 : $revisedTargetVal.hashCode());
-			final java.lang.Object $riskCollection = this.getRiskCollection();
-			result = result * PRIME + ($riskCollection == null ? 0 : $riskCollection.hashCode());
-			final java.lang.Object $indicatorRisk = this.getIndicatorRisk();
-			result = result * PRIME + ($indicatorRisk == null ? 0 : $indicatorRisk.hashCode());
-			final java.lang.Object $currentValDate = this.getCurrentValDate();
-			result = result * PRIME + ($currentValDate == null ? 0 : $currentValDate.hashCode());
-			final java.lang.Object $currentValComments = this.getCurrentValComments();
-			result = result * PRIME + ($currentValComments == null ? 0 : $currentValComments.hashCode());
-			final java.lang.Object $indicatorPriorValues = this.getIndicatorPriorValues();
-			result = result * PRIME + ($indicatorPriorValues == null ? 0 : $indicatorPriorValues.hashCode());
-			return result;
-		}
-		
-		@java.lang.Override
-		@java.lang.SuppressWarnings("all")
-		public java.lang.String toString() {
-			return "EditActivityForm.IndicatorME(logframeCategory=" + this.getLogframeCategory() + ", indicatorsME=" + this.getIndicatorsME() + ", indicatorValues=" + this.getIndicatorValues() + ", indicatorId=" + this.getIndicatorId() + ", indicatorValId=" + this.getIndicatorValId() + ", expIndicatorId=" + this.getExpIndicatorId() + ", baseVal=" + this.getBaseVal() + ", baseValDate=" + this.getBaseValDate() + ", baseValComments=" + this.getBaseValComments() + ", targetVal=" + this.getTargetVal() + ", targetValDate=" + this.getTargetValDate() + ", targetValComments=" + this.getTargetValComments() + ", revTargetVal=" + this.getRevTargetVal() + ", revTargetValDate=" + this.getRevTargetValDate() + ", revTargetValComments=" + this.getRevTargetValComments() + ", currentVal=" + this.getCurrentVal() + ", currValDate=" + this.getCurrValDate() + ", currValComments=" + this.getCurrValComments() + ", comments=" + this.getComments() + ", revisedTargetVal=" + this.getRevisedTargetVal() + ", riskCollection=" + this.getRiskCollection() + ", indicatorRisk=" + this.getIndicatorRisk() + ", currentValDate=" + this.getCurrentValDate() + ", currentValComments=" + this.getCurrentValComments() + ", indicatorPriorValues=" + this.getIndicatorPriorValues() + ")";
-		}
-	}
 	private Identification identification;
 
     private Set<AmpAidEffectivenessIndicatorOption> selectedEffectivenessIndicatorOptions;
@@ -6582,7 +6182,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private ContactInformation contactInfo;
 	private Comments comments = null;
 	private PhisycalProgress phisycalProgress;
-	private IndicatorME indicatorME = null;
 	private Contracts contracts = null;
 	private Costing costing = null;
 	private Issues issues = null;
@@ -6590,6 +6189,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private boolean totDisbIsBiggerThanTotCom;
 	private List<BudgetStructure> budgetStructure;
 	private Set<AmpActivityInternalId> internalIds;
+	private Set<IndicatorActivity> indicators;
 
 	public EditActivityForm() {
 		reset = false;
@@ -6620,7 +6220,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.contracts = null;
 			this.contactInformation = null;
 			this.agencies = null;
-			this.indicatorME = null;
+			this.indicators = null;
 			this.fundingCurrCode = null;
 			this.regFundingPageCurrCode = null;
 			//this.funding=null;
@@ -6816,13 +6416,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			}
 		}
 		return funding.getFundingDetails().get(index);
-	}
-	
-	public IndicatorME getIndicator() {
-		if (this.indicatorME == null) {
-			this.indicatorME = new IndicatorME();
-		}
-		return this.indicatorME;
 	}
 	
 	public org.digijava.module.aim.helper.Location getSelectedLocs(int index) {
@@ -7047,11 +6640,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	@java.lang.SuppressWarnings("all")
 	public Set<AmpAhsurvey> getAmpAhsurveys() {
 		return this.ampAhsurveys;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public IndicatorME getIndicatorME() {
-		return this.indicatorME;
 	}
 	
 	@java.lang.SuppressWarnings("all")
@@ -7355,11 +6943,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
-	public void setIndicatorME(final IndicatorME indicatorME) {
-		this.indicatorME = indicatorME;
-	}
-	
-	@java.lang.SuppressWarnings("all")
 	public void setContracts(final Contracts contracts) {
 		this.contracts = contracts;
 	}
@@ -7407,6 +6990,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public Set<AmpActivityInternalId> getInternalIds() {
 		return internalIds;
 	}
+
+	public Set<IndicatorActivity> getIndicators() {
+		return indicators;
+	}
+
+	public void setIndicators(Set<IndicatorActivity> indicators) {
+		this.indicators = indicators;
+	}
+
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
 	public boolean equals(final java.lang.Object o) {
@@ -7557,9 +7149,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		final java.lang.Object this$phisycalProgress = this.getPhisycalProgress();
 		final java.lang.Object other$phisycalProgress = other.getPhisycalProgress();
 		if (this$phisycalProgress == null ? other$phisycalProgress != null : !this$phisycalProgress.equals(other$phisycalProgress)) return false;
-		final java.lang.Object this$indicatorME = this.getIndicatorME();
-		final java.lang.Object other$indicatorME = other.getIndicatorME();
-		if (this$indicatorME == null ? other$indicatorME != null : !this$indicatorME.equals(other$indicatorME)) return false;
 		final java.lang.Object this$contracts = this.getContracts();
 		final java.lang.Object other$contracts = other.getContracts();
 		if (this$contracts == null ? other$contracts != null : !this$contracts.equals(other$contracts)) return false;
@@ -7684,8 +7273,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		result = result * PRIME + ($budgetStructure == null ? 0 : $budgetStructure.hashCode());
 		final java.lang.Object $phisycalProgress = this.getPhisycalProgress();
 		result = result * PRIME + ($phisycalProgress == null ? 0 : $phisycalProgress.hashCode());
-		final java.lang.Object $indicatorME = this.getIndicatorME();
-		result = result * PRIME + ($indicatorME == null ? 0 : $indicatorME.hashCode());
 		final java.lang.Object $contracts = this.getContracts();
 		result = result * PRIME + ($contracts == null ? 0 : $contracts.hashCode());
 		final java.lang.Object $costing = this.getCosting();
@@ -7701,7 +7288,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
     public java.lang.String toString() {
-        return "EditActivityForm(errors=" + this.getErrors() + ", messages=" + this.getMessages() + ", activityId=" + this.getActivityId() + ", context=" + this.getContext() + ", editAct=" + this.isEditAct() + ", editKey=" + this.getEditKey() + ", reset=" + this.isReset() + ", svAction=" + this.getSvAction() + ", isPreview=" + this.getIsPreview() + ", buttonText=" + this.getButtonText() + ", activityExists=" + this.getActivityExists() + ", workingTeamLeadFlag=" + this.getWorkingTeamLeadFlag() + ", teamLead=" + this.isTeamLead() + ", pageId=" + this.getPageId() + ", fileImport=" + this.getFileImport() + ", popupView=" + this.isPopupView() + ", currCode=" + this.getCurrCode() + ", currencies=" + this.getCurrencies() + ", serializeFlag=" + this.isSerializeFlag() + ", fundingCurrCode=" + this.getFundingCurrCode() + ", regFundingPageCurrCode=" + this.getRegFundingPageCurrCode() + ", contactInformation=" + this.getContactInformation() + ", activityContacts=" + this.getActivityContacts() + ", mofedContacts=" + this.getMofedContacts() + ", donorContacts=" + this.getDonorContacts() + ", sectorMinistryContacts=" + this.getSectorMinistryContacts() + ", projCoordinatorContacts=" + this.getProjCoordinatorContacts() + ", implExecutingAgencyContacts=" + this.getImplExecutingAgencyContacts() + ", structures=" + this.getStructures() + ", lineMinistryObservations=" + this.getLineMinistryObservations() + ", esriapiurl=" + this.getEsriapiurl() + ", displayProgram=" + this.getDisplayProgram() + ", surveyFundings=" + this.getSurveyFundings() + ", draftRedirectedPage=" + this.getDraftRedirectedPage() + ", warningMessges=" + this.getWarningMessges() + ", identification=" + this.getIdentification() + ", aidEffectivenes=" + this.getSelectedEffectivenessIndicatorOptions() + ", planning=" + this.getPlanning() + ", location=" + this.getLocation() + ", sectors=" + this.getSectors() + ", components=" + this.getComponents() + ", programs=" + this.getPrograms() + ", crossIssues=" + this.getCrossIssues() + ", funding=" + this.getFunding() + ", documents=" + this.getDocuments() + ", agencies=" + this.getAgencies() + ", survey=" + this.getSurvey() + ", surveys=" + this.getSurveys() + ", ampAhsurveys=" + this.getAmpAhsurveys() + ", contactInfo=" + this.getContactInfo() + ", comments=" + this.getComments() + ", phisycalProgress=" + this.getPhisycalProgress() + ", indicatorME=" + this.getIndicatorME() + ", contracts=" + this.getContracts() + ", costing=" + this.getCosting() + ", issues=" + this.getIssues() + ", observations=" + this.getObservations() + ", totDisbIsBiggerThanTotCom=" + this.isTotDisbIsBiggerThanTotCom() + ")";
+        return "EditActivityForm(errors=" + this.getErrors() + ", messages=" + this.getMessages() + ", activityId=" + this.getActivityId() + ", context=" + this.getContext() + ", editAct=" + this.isEditAct() + ", editKey=" + this.getEditKey() + ", reset=" + this.isReset() + ", svAction=" + this.getSvAction() + ", isPreview=" + this.getIsPreview() + ", buttonText=" + this.getButtonText() + ", activityExists=" + this.getActivityExists() + ", workingTeamLeadFlag=" + this.getWorkingTeamLeadFlag() + ", teamLead=" + this.isTeamLead() + ", pageId=" + this.getPageId() + ", fileImport=" + this.getFileImport() + ", popupView=" + this.isPopupView() + ", currCode=" + this.getCurrCode() + ", currencies=" + this.getCurrencies() + ", serializeFlag=" + this.isSerializeFlag() + ", fundingCurrCode=" + this.getFundingCurrCode() + ", regFundingPageCurrCode=" + this.getRegFundingPageCurrCode() + ", contactInformation=" + this.getContactInformation() + ", activityContacts=" + this.getActivityContacts() + ", mofedContacts=" + this.getMofedContacts() + ", donorContacts=" + this.getDonorContacts() + ", sectorMinistryContacts=" + this.getSectorMinistryContacts() + ", projCoordinatorContacts=" + this.getProjCoordinatorContacts() + ", implExecutingAgencyContacts=" + this.getImplExecutingAgencyContacts() + ", structures=" + this.getStructures() + ", lineMinistryObservations=" + this.getLineMinistryObservations() + ", esriapiurl=" + this.getEsriapiurl() + ", displayProgram=" + this.getDisplayProgram() + ", surveyFundings=" + this.getSurveyFundings() + ", draftRedirectedPage=" + this.getDraftRedirectedPage() + ", warningMessges=" + this.getWarningMessges() + ", identification=" + this.getIdentification() + ", aidEffectivenes=" + this.getSelectedEffectivenessIndicatorOptions() + ", planning=" + this.getPlanning() + ", location=" + this.getLocation() + ", sectors=" + this.getSectors() + ", components=" + this.getComponents() + ", programs=" + this.getPrograms() + ", crossIssues=" + this.getCrossIssues() + ", funding=" + this.getFunding() + ", documents=" + this.getDocuments() + ", agencies=" + this.getAgencies() + ", survey=" + this.getSurvey() + ", surveys=" + this.getSurveys() + ", ampAhsurveys=" + this.getAmpAhsurveys() + ", contactInfo=" + this.getContactInfo() + ", comments=" + this.getComments() + ", phisycalProgress=" + this.getPhisycalProgress() + ", contracts=" + this.getContracts() + ", costing=" + this.getCosting() + ", issues=" + this.getIssues() + ", observations=" + this.getObservations() + ", totDisbIsBiggerThanTotCom=" + this.isTotDisbIsBiggerThanTotCom() + ")";
     }
 
 	

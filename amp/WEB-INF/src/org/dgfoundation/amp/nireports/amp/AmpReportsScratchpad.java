@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import static org.apache.commons.collections.CollectionUtils.containsAny;
+import static org.apache.commons.collections.CollectionUtils.intersection;
+
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -56,7 +59,12 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	 * FOR TESTCASES ONLY. In case it is non-null, for computed measures this value will be used in lieu of LocalDate.now()
 	 */
 	public static LocalDate forcedNowDate;
-	
+
+	/**
+	 * FOR TESTCASES ONLY. When non-null will override the corresponding global setting.
+	 */
+	public static Boolean displayUnlinkedFundingInPledgesReports;
+
 	/**
 	 * caching area for i18n fetchers
 	 */
@@ -123,7 +131,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	public AmpReportsScratchpad(NiReportsEngine engine) {
 		this.engine = engine;
 		this.computedMeasuresBlock =  new Memoizer<>(() -> SelectedYearBlock.buildFor(this.engine.spec, forcedNowDate == null ? LocalDate.now() : forcedNowDate));
-		this.computedPledgeIds = new Memoizer<>(() -> new HashSet<>(SQLUtils.fetchLongs(AmpReportsScratchpad.get(engine).connection, "SELECT id FROM amp_funding_pledges")));
+		this.computedPledgeIds = new Memoizer<>(() -> new HashSet<>(SQLUtils.fetchLongs(AmpReportsScratchpad.get(engine).connection, getPledgesIdsQuery())));
 		
 		try {this.connection = PersistenceManager.getJdbcConnection();}
 		catch(Exception e) {throw AlgoUtils.translateException(e);}
@@ -137,8 +145,39 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		this.verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
 			engine.spec.getColumnNames().contains(ColumnConstants.MODE_OF_PAYMENT) &&
 			!engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);
+
+		checkMeasurelessHierarchies(engine.spec);
 	}
-	
+
+	private void checkMeasurelessHierarchies(ReportSpecification spec) {
+		List<String> amountColumns = AmpReportsSchema.getInstance().getAmountColumns();
+		List<String> onlyMeasurelessHierarchies = AmpReportsSchema.ONLY_MEASURELESS_HIERARCHIES;
+
+		if ((!spec.getMeasures().isEmpty() || containsAny(spec.getColumnNames(), amountColumns))
+				&& containsAny(spec.getHierarchyNames(), onlyMeasurelessHierarchies)) {
+
+			throw new RuntimeException(
+					String.format("Found hierarchies %s that can be used only in measureless reports!",
+					intersection(spec.getHierarchyNames(), onlyMeasurelessHierarchies)));
+		}
+	}
+
+	private String getPledgesIdsQuery() {
+		String query = "SELECT id FROM amp_funding_pledges";
+		if (isDisplayUnlinkedFundingInPledgesReports()) {
+			query += " UNION SELECT 999999999";
+		}
+		return query;
+	}
+
+	private boolean isDisplayUnlinkedFundingInPledgesReports() {
+		if (displayUnlinkedFundingInPledgesReports != null) {
+			return displayUnlinkedFundingInPledgesReports;
+		} else {
+			return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.UNLINKED_FUNDING_IN_PLEDGES_REPORTS);
+		}
+	}
+
 	public AmpCurrency getUsedCurrency() {
 		return usedCurrency;
 	}

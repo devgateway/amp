@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
@@ -173,6 +174,10 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 						MeasureConstants.CURRENT_MONTH_DISBURSEMENTS, MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS),
 				null,
 				GroupingCriteria.GROUPING_TOTALS_ONLY);
+		
+		AmpReportFilters filters = new AmpReportFilters(new HashMap<>());
+		filters.setComputedYear(2016);
+		spec.setFilters(filters);
 
 		runNiTestCase(spec, "en", Arrays.asList("activity-weird-funding", "expenditure class", 
 				"Activity with planned disbursements", "execution rate activity"), cor);
@@ -272,58 +277,7 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 		spec.setFilters(buildSimpleFilter(ColumnConstants.DISASTER_RESPONSE_MARKER, FilterRule.TRUE_VALUE, true));
 		runNiTestCase(spec, "en", Arrays.asList("activity_with_disaster_response"), cor);
 	}
-	
-	@Test
-	public void testUncommittedBalance(){
-		NiReportModel cor = new NiReportModel("Uncommitted balance")
-				.withHeaders(Arrays.asList(
-						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 9))",
-						"(Type Of Assistance: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Proposed Project Amount: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 4))",
-						"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1));(2016: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1))",
-						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Uncommitted Balance: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Uncommitted Cumulative Balance: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Cumulated Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))"))
-					.withWarnings(Arrays.asList())
-					.withBody(      new ReportAreaForTests(null)
-				      .withContents("Type Of Assistance", "", "Project Title", "", "Proposed Project Amount", "120,000", "Funding-2013-Actual Commitments", "15,000", "Funding-2016-Actual Commitments", "15,000", "Totals-Uncommitted Balance", "90,000", "Totals-Uncommitted Cumulative Balance", "90,000", "Totals-Actual Commitments", "30,000", "Totals-Cumulated Disbursements", "0")
-				      .withChildren(
-				        new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119)).withContents("Project Title", "", "Proposed Project Amount", "0", "Funding-2013-Actual Commitments", "15,000", "Funding-2016-Actual Commitments", "15,000", "Totals-Uncommitted Balance", "0", "Totals-Uncommitted Cumulative Balance", "0", "Totals-Actual Commitments", "30,000", "Totals-Cumulated Disbursements", "0", "Type Of Assistance", "default type of assistance")
-				        .withChildren(
-				          new ReportAreaForTests(new AreaOwner(94), "Project Title", "with annual ppc and actual comm", "Funding-2013-Actual Commitments", "15,000", "Funding-2016-Actual Commitments", "15,000", "Totals-Actual Commitments", "30,000")        ),
-				        new ReportAreaForTests(new AreaOwner("Type Of Assistance", "Type Of Assistance: Undefined", -999999999)).withContents("Project Title", "", "Proposed Project Amount", "120,000", "Funding-2013-Actual Commitments", "0", "Funding-2016-Actual Commitments", "0", "Totals-Uncommitted Balance", "90,000", "Totals-Uncommitted Cumulative Balance", "90,000", "Totals-Actual Commitments", "0", "Totals-Cumulated Disbursements", "0", "Type Of Assistance", "Type Of Assistance: Undefined")
-				        .withChildren(
-				          new ReportAreaForTests(new AreaOwner(94), "Project Title", "with annual ppc and actual comm", "Proposed Project Amount", "120,000", "Totals-Uncommitted Balance", "90,000", "Totals-Uncommitted Cumulative Balance", "90,000")        )      ));
 
-		
-		ReportSpecificationImpl spec = buildSpecification("Uncommitted balance",
-				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT),
-				Arrays.asList(MeasureConstants.UNCOMMITTED_BALANCE, MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,
-						MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.CUMULATED_DISBURSEMENTS),
-				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE),
-				GroupingCriteria.GROUPING_YEARLY);
-		runNiTestCase(spec, "en", Arrays.asList("with annual ppc and actual comm"), cor);
-		
-		
-		cor = new NiReportModel("Uncommitted balance")
-				.withHeaders(Arrays.asList(
-						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 9))",
-						"(Type Of Assistance: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Proposed Project Amount: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 4))",
-						"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1));(2016: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1))",
-						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Uncommitted Balance: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Uncommitted Cumulative Balance: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Cumulated Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))"))
-					.withWarnings(Arrays.asList())
-					.withBody(      new ReportAreaForTests(null).withContents("Type Of Assistance", "", "Project Title", "", "Proposed Project Amount", "120,000", "Funding-2013-Actual Commitments", "15,000", "Funding-2016-Actual Commitments", "15,000", "Totals-Uncommitted Balance", "90,000", "Totals-Uncommitted Cumulative Balance", "90,000", "Totals-Actual Commitments", "30,000", "Totals-Cumulated Disbursements", "0")
-				      .withChildren(
-				        new ReportAreaForTests(new AreaOwner(94), "Type Of Assistance", "default type of assistance", "Project Title", "with annual ppc and actual comm", "Proposed Project Amount", "120,000", "Funding-2013-Actual Commitments", "15,000", "Funding-2016-Actual Commitments", "15,000", "Totals-Uncommitted Balance", "90,000", "Totals-Uncommitted Cumulative Balance", "90,000", "Totals-Actual Commitments", "30,000")      ));
-
-		
-		spec = buildSpecification("Uncommitted balance",
-				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT),
-				Arrays.asList(MeasureConstants.UNCOMMITTED_BALANCE, MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,
-						MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.CUMULATED_DISBURSEMENTS),
-				null,
-				GroupingCriteria.GROUPING_YEARLY);
-		runNiTestCase(spec, "en", Arrays.asList("with annual ppc and actual comm"), cor);		
-		
-		
-	}
 	@Test
 	public void testCumulatedDisbursements(){
 		NiReportModel cor = new NiReportModel("Cumulated Disbursements")
@@ -350,5 +304,10 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 	@Override
 	public void tearDown() {
 		AmpReportsScratchpad.forcedNowDate = null;
+	}
+	
+	@Override
+	public void setUp() {
+		AllTests_amp212.setUp();
 	}
 }

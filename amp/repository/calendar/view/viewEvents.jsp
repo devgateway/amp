@@ -9,10 +9,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
-<!-- CSS -->
-<link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
-<link href='TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'>
-
 <digi:instance  property="calendarViewForm"/>
 <c:if test="${!calendarViewForm.print}">			
 	<table border="0" width="1000" height="800px" align="center"> 

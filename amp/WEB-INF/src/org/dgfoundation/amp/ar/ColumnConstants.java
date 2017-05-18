@@ -162,9 +162,6 @@ public class ColumnConstants {
 	public static final String MODALITIES = "Modalities";
 	public static final String OVERAGE_PROJECT = "Overage Project";
 	public static final String PAYMENT_CAPITAL___RECURRENT = "Payment Capital - Recurrent";
-	public static final String PHYSICAL_PROGRESS = "Physical Progress";
-	public static final String PHYSICAL_PROGRESS_DESCRIPTION = "Physical progress description";
-	public static final String PHYSICAL_PROGRESS_TITLE = "Physical progress title";
 	public static final String PLEDGE_CONTACT_1___ADDRESS = "Pledge Contact 1 - Address";
 	public static final String PLEDGE_CONTACT_1___ALTERNATE_CONTACT = "Pledge Contact 1 - Alternate Contact";
 	public static final String PLEDGE_CONTACT_1___ALTERNATE_EMAIL = "Pledge Contact 1 - Alternate Email";
@@ -288,7 +285,6 @@ public class ColumnConstants {
 	public static final String SECONDARY_PROGRAM_LEVEL_7 = "Secondary Program Level 7";
 	public static final String SECONDARY_PROGRAM_LEVEL_8 = "Secondary Program Level 8";
 	public static final String SECONDARY_SECTOR = "Secondary Sector";
-	public static final String SECONDARY_SECTOR_ID = "Secondary Sector Id";
 	public static final String SECONDARY_SECTOR_SUB_SECTOR = "Secondary Sector Sub-Sector";
 	public static final String SECONDARY_SECTOR_SUB_SUB_SECTOR = "Secondary Sector Sub-Sub-Sector";
 	public static final String SECTOR_GROUP = "Sector Group";
@@ -334,4 +330,30 @@ public class ColumnConstants {
 	public static final String WORKSPACES = "Workspaces";
 	public static final String EFFECTIVE_FUNDING_DATE = "Effective Funding Date";
 	public static final String FUNDING_CLOSING_DATE = "Funding Closing Date";
+
+	public static final String INDICATOR_NAME = "Indicator Name";
+	public static final String INDICATOR_TYPE = "Indicator Type";
+	public static final String INDICATOR_DESCRIPTION = "Indicator Description";
+	public static final String INDICATOR_CODE = "Indicator Code";
+	public static final String INDICATOR_CREATION_DATE = "Indicator Creation Date";
+	public static final String INDICATOR_SECTOR = "Indicator Sector";
+	public static final String INDICATOR_RISK = "Risk";
+	public static final String INDICATOR_LOGFRAME_CATEGORY = "Logframe Category";
+
+	public static final String INDICATOR_ACTUAL_VALUE = "Indicator Current Value";
+	public static final String INDICATOR_ACTUAL_DATE = "Indicator Current Date";
+	public static final String INDICATOR_ACTUAL_COMMENT = "Indicator Current Comment";
+
+	public static final String INDICATOR_BASE_VALUE = "Indicator Base Value";
+	public static final String INDICATOR_BASE_DATE = "Indicator Base Date";
+	public static final String INDICATOR_BASE_COMMENT = "Indicator Base Comment";
+
+	public static final String INDICATOR_TARGET_VALUE = "Indicator Target Value";
+	public static final String INDICATOR_TARGET_DATE = "Indicator Target Date";
+	public static final String INDICATOR_TARGET_COMMENT = "Indicator Target Comment";
+
+	public static final String INDICATOR_REVISED_TARGET_VALUE = "Indicator Revised Target Value";
+	public static final String INDICATOR_REVISED_TARGET_DATE = "Indicator Revised Target Date";
+	public static final String INDICATOR_REVISED_TARGET_COMMENT = "Indicator Revised Target Comment";
+
 }

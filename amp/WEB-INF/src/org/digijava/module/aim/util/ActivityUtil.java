@@ -8,8 +8,6 @@ package org.digijava.module.aim.util;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -39,7 +37,37 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
+import org.digijava.module.aim.dbentity.AmpAuditLogger;
+import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureImg;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.dbentity.IPAContractDisbursement;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ActivityHistory;
 import org.digijava.module.aim.helper.ActivityItem;
@@ -55,7 +83,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
-import org.digijava.module.visualization.util.DashboardUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
@@ -281,7 +308,7 @@ public class ActivityUtil {
           //oql += " and " +getTeamMemberWhereClause(teamMember);
     	  AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
           if (teamMember.getComputation()!=null&&teamMember.getComputation()) {
-              String ids = DashboardUtil.getComputationOrgsQry(team);
+              String ids = OrganisationUtil.getComputationOrgsQry(team);
               if(ids.length()>1){
               ids = ids.substring(0, ids.length() - 1);
               	whereTeamStatement.append("  and ( latestAct.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(" + ids+"))");
@@ -292,13 +319,12 @@ public class ActivityUtil {
 				if (team.getAccessType().equals("Management")) {
 					whereTeamStatement.append(String.format(" and (latestAct.draft=false or latestAct.draft is null) and latestAct.approvalStatus IN ('%s', '%s') ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
 					List<AmpTeam> teams = new ArrayList<AmpTeam>();
-					DashboardUtil.getTeams(team, teams);
+					TeamUtil.getTeams(team, teams);
 					String relatedOrgs = "", teamIds = "";
 					for (AmpTeam tm : teams) {
 						if (tm.getComputation() != null && tm.getComputation()) {
-							relatedOrgs += DashboardUtil
-									.getComputationOrgsQry(tm);
-							 relatedOrgsCriteria=true;
+							relatedOrgs += OrganisationUtil.getComputationOrgsQry(tm);
+							relatedOrgsCriteria=true;
 						}
 						teamIds += tm.getAmpTeamId() + ",";
 					}
@@ -1013,78 +1039,37 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
   			session.delete(actSector);
   		}	  
     }
-	    
+
     public static void deleteActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
 
-        /* delete AMP activity Survey */
-        Set<AmpAhsurvey> ampSurvey = ampAct.getSurvey();
-        if (ampSurvey != null) {
-          for(AmpAhsurvey ahSurvey:ampSurvey){
-            Set<AmpAhsurveyResponse> ahAmpSurvey = ahSurvey.getResponses();
-            if (ahSurvey != null) {
-              for(AmpAhsurveyResponse surveyResp: ahAmpSurvey){
-                ahSurvey.getResponses().remove(surveyResp);
-                session.delete(surveyResp);
-                session.flush();
-              }
-            }
-            ampAct.getSurvey().remove(ahSurvey);
-            session.delete(ahSurvey);
-            session.flush();
-          }
-        }
+        logger.info("deleting ... Activity # " + ampAct.getAmpActivityId());
+        Connection con = ((SessionImplementor)session).connection();
+        //	 delete surveys
+        String deleteActivitySurveyResponse = "DELETE FROM amp_ahsurvey_response WHERE amp_ahsurvey_id in ( SELECT amp_ahsurvey_id FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId() + " ) ";
+        SQLUtils.executeQuery(con, deleteActivitySurveyResponse );
+
+        String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        SQLUtils.executeQuery(con, deleteActivitySurvey );
+
+        //	 delete surveys
+        String deleteActivityGPISurveyReponse = "DELETE FROM amp_gpi_survey_response WHERE amp_gpisurvey_id in ( SELECT amp_gpisurvey_id FROM amp_gpi_survey WHERE amp_activity_id = " + ampAct.getAmpActivityId() + " ) " ;
+        SQLUtils.executeQuery(con, deleteActivityGPISurveyReponse );
+
+        String deleteActivityGPISurvey = "DELETE FROM amp_gpi_survey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        SQLUtils.executeQuery(con, deleteActivityGPISurvey );
 
         //	 delete all previous comments
-        List<AmpComments> col = org.digijava.module.aim.util.DbUtil.getAllCommentsByActivityId(ampAct.getAmpActivityId(), session);
-        logger.info("col.size() [Inside deleting]: " + col.size());
-        if (col != null) {
-          Iterator itr = col.iterator();
-          while (itr.hasNext()) {
-            AmpComments comObj = (AmpComments) itr.next();
-            comObj.setAmpActivityId(null);
-            session.delete(comObj);
-          }
-        }
         String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        Connection con = ((SessionImplementor)session).connection();
-        Statement stmt = con.createStatement();
-        stmt.executeUpdate(deleteActivityComments);
-        logger.info("comments deleted");
-        
+        SQLUtils.executeQuery(con, deleteActivityComments );
+
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-         con = ((SessionImplementor)session).connection();
-         stmt = con.createStatement();
-        int deletedRows = stmt.executeUpdate(deleteActivityTeam);
-        
-        //Delete the connection with amp_physical_performance.
-        String deletePhysicalPerformance = "DELETE FROM amp_physical_performance WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        con = ((SessionImplementor)session).connection();
-        stmt = con.createStatement();
-        deletedRows = stmt.executeUpdate(deletePhysicalPerformance);
-        
-        //Delete the connection with Indicator Project. 
-        //String deleteIndicatorProject = "DELETE FROM amp_indicator_project WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        //con = session.connection();
-        //stmt = con.createStatement();
-        //deletedRows = stmt.executeUpdate(deleteIndicatorProject);
-        
-//        ArrayList ipacontracts = org.digijava.module.aim.util.DbUtil.getAllIPAContractsByActivityId(ampAct.getAmpActivityId());
-//	    logger.debug("contracts number [Inside deleting]: " + ipacontracts.size());
-//	    if (ipacontracts != null) {
-//	      Iterator itr = ipacontracts.iterator();
-//	      while (itr.hasNext()) {
-//	        IPAContract contract = (IPAContract) itr.next();
-//	        session.delete(contract);
-//	      }
-//	    }
-//	    logger.debug("contracts deleted");
+        SQLUtils.executeQuery(con, deleteActivityTeam );
 
-      
-      
-    //Section moved here from ActivityManager.java because it didn't worked there.
-	//ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
-    
+        //Delete the connection with components.
+        String deleteActivityComponent = "DELETE FROM amp_activity_components WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        SQLUtils.executeQuery(con, deleteActivityComponent );
+
     }
     
 	public static void removeMergeSources(Long ampActivityId,Session session){
@@ -1895,6 +1880,20 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		return null;
 	}
 	
+	public static Collection<Long> getNationalActivityList() {
+		Collection<Long> ret = new HashSet<Long>();
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			Long id = CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.getIdInDatabase();
+			Query query = session.createSQLQuery("SELECT amp_activity_id FROM amp_activities_categoryvalues WHERE amp_categoryvalue_id = ?");
+			query.setLong(0, id);
+			ret = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
 	/** Get the user first name and last name  who modified (created) the activity.
 	 * @param actitivity
 	 * @param modifiedByInfo
@@ -1970,5 +1969,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		
 		return null;
 	}
-	
+
+	public static Set<String> findExistingAmpIds(Collection<String> candidates) {
+
+		String queryStr = "select activity.ampId from " + AmpActivity.class.getName() + " activity " +
+				" where activity.ampId in ( " + Util.toCSString(candidates) + " ) ";
+
+		Session session = PersistenceManager.getRequestDBSession();
+		Query qry = session.createQuery(queryStr);
+
+		return new HashSet<String>(((List<String>) qry.list()));
+	}
+
 } // End

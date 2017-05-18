@@ -230,7 +230,7 @@ function saveAllSettings(){
             if (typeof gsElement.gsfValue != "undefined") {
             	var opt = gsElement.gsfValue;
                 var val = gsElement.gsfValue.value;
-                allvalues = allvalues + id + "=" + val + "&";
+                allvalues = allvalues + id + "=" + encodeURIComponent(val) + "&";
                 console.log('allvalues = ' + allvalues);
 			} else {
             	// Code for multiselect.
@@ -247,7 +247,7 @@ function saveAllSettings(){
                         val = val + selected[index].value + ';';
 					}
 				}
-                val = val + "&";
+                val = encodeURIComponent(val) + "&";
                 allvalues = allvalues + val;
         	}
     	}
@@ -279,7 +279,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
 <h1 style="text-align:left;" class="admintitle">General Settings</h1>
-
+<digi:errors/>
 <logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
 	<logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett" type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
 		<script type="text/javascript">

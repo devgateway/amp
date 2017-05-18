@@ -20,6 +20,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Graph;
@@ -84,18 +85,21 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * the name of the artificial headers root (see {@link NiHeaderInfo})
 	 */
 	public static final String ROOT_COLUMN_NAME = "RAW";
-	
+	public static final LocalizableLabel ROOT_COLUMN_LABEL = new LocalizableLabel(ROOT_COLUMN_NAME);
+
 	/**
 	 * the name of the premeasure-split measures subtree root (see {@link NiHeaderInfo})
 	 */
 	public static final String FUNDING_COLUMN_NAME = "Funding";
-	
+	public static final LocalizableLabel FUNDING_COLUMN_LABEL = new LocalizableLabel(FUNDING_COLUMN_NAME);
+
 	/**
 	 * the name of the measures- and columns- totals subtree root (see {@link NiHeaderInfo}, {@link VSplitStrategy#getTotalSubcolumnName()}). 
 	 * see {@link NiColSplitCell#entityType}
 	 */
 	public static final String TOTALS_COLUMN_NAME = "Totals";
-	
+	public static final LocalizableLabel TOTALS_COLUMN_LABEL = new LocalizableLabel(TOTALS_COLUMN_NAME);
+
 	/**
 	 * the type of the {@link #ROOT_COLUMN_NAME} / {@link #FUNDING_COLUMN_NAME} / year group column in the headers output
 	 * see {@link NiColSplitCell#entityType}  
@@ -215,6 +219,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	 
 	public NiReportRunResult execute() {
+		if (spec.getMeasures().isEmpty() && spec.getHierarchies().isEmpty() && spec.isSummaryReport()) {
+			throw new RuntimeException("Summary reports without hierarchies and measures are not supported.");
+		}
 		try(SchemaSpecificScratchpad pad = schema.generateScratchpad(this)) {
 			this.schemaSpecificScratchpad = pad;
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
@@ -309,7 +316,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	/**
-	 * generates a new instance with new {@link #rasterizedHeaders} and {@link #leafColumns}, but sharing the same {@link #rootColumn}
+	 * generates a new instance with new {@link NiHeaderInfo#rasterizedHeaders} and {@link NiHeaderInfo#leafColumns}, but sharing the same {@link NiHeaderInfo#rootColumn}
 	 * @param filter
 	 * @return
 	 */
@@ -397,10 +404,10 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * @return
 	 */
 	protected boolean fundingFiltersIds() {
-		//spec.isDisplayEmptyFundingRowsInNonHierarchicalReports() &&
-		return filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME) // there is any predicate operating on Funding 
+		return !spec.getMeasures().isEmpty() && // not measureless
+                (filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME) // there is any predicate operating on Funding
 				|| // or we are filtering on a transaction-level hierarchy and should hide empty rows
-				(isHideEmptyFundingRowsWhenFilteringByTransactionHier() && isFilteringOnTransactionLevelHierarchy());
+				(isHideEmptyFundingRowsWhenFilteringByTransactionHier() && isFilteringOnTransactionLevelHierarchy()));
 	}
 
 	private boolean isHideEmptyFundingRowsWhenFilteringByTransactionHier() {
@@ -421,7 +428,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		//Set<Long> idsToKeep = funding.stream().map(cell -> cell.activityId).collect(Collectors.toSet());
 		Set<Long> idsToKeep = new HashSet<>();
 		reportRunMeasures.stream().map(z -> fetchedMeasures.get(z).data.keySet()).forEach(ids -> idsToKeep.addAll(ids));
-		
+
 		fetchedColumns.forEach((colName, colContents) -> {
 			if (!colName.equals(FUNDING_COLUMN_NAME))
 				colContents.retainIds(idsToKeep);
@@ -501,17 +508,18 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	protected void createInitialReport() {
 		//ColumnReportData fetchedData = new ColumnReportData(this);
-		GroupColumn rawData = new GroupColumn(ROOT_COLUMN_NAME, null, null, null);
+		GroupColumn rawData = new GroupColumn(ROOT_COLUMN_NAME, ROOT_COLUMN_LABEL, null, null, null);
 		
 		for(String name:orderedColumns) {
 			ColumnContents contents = fetchedColumns.get(name);
-			rawData.addColumn(new CellColumn(name, contents, rawData, schema.getColumns().get(name), new NiColSplitCell(PSEUDOCOLUMN_COLUMN, new ComparableValue<String>(name, name)))); // regular columns
+			NiReportColumn<? extends Cell> column = schema.getColumns().get(name);
+			rawData.addColumn(new CellColumn(name, column.label, contents, rawData, column, new NiColSplitCell(PSEUDOCOLUMN_COLUMN, new ComparableValue<String>(name, name)))); // regular columns
 		}
 		
 		TimeRange userRequestedRange = TimeRange.forCriteria(spec.getGroupingCriteria());
 		if (userRequestedRange != TimeRange.NONE)
-			rawData.maybeAddColumn(buildFundingColumn(FUNDING_COLUMN_NAME, rawData, this::separateYears));
-		rawData.maybeAddColumn(buildTotalsColumn(TOTALS_COLUMN_NAME, rawData));
+			rawData.maybeAddColumn(buildFundingColumn(FUNDING_COLUMN_NAME, FUNDING_COLUMN_LABEL, rawData, this::separateYears));
+		rawData.maybeAddColumn(buildTotalsColumn(TOTALS_COLUMN_NAME, TOTALS_COLUMN_LABEL, rawData));
 		
 		GroupColumn catData = applyPostMeasureVerticalHierarchies(rawData);
 		this.headers = new NiHeaderInfo(this, catData, this.actualHierarchies.size());
@@ -550,7 +558,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		List<NiCell> allCells = new ArrayList<>();
 		fundingColumn.forEachCell(cell -> allCells.add(cell));
 		
-		Column res = new CellColumn(fundingColumn.name, new ColumnContents(allCells), fundingColumn.getParent(), null, null, fundingColumn.splitCell);
+		Column res = new CellColumn(fundingColumn.name, fundingColumn.label, new ColumnContents(allCells), fundingColumn.getParent(), null, null, fundingColumn.splitCell);
 		List<VSplitStrategy> splitCriterias = new ArrayList<>();
 		splitCriterias.add(TimeRange.YEAR.asVSplitStrategy(this));
 		if (userRequestedRange != TimeRange.YEAR)
@@ -592,12 +600,12 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		return res;
 	}
 	
-	protected Column buildFundingColumn(String columnName, GroupColumn parentColumn, Function<GroupColumn, GroupColumn> postprocessor) {
-		GroupColumn fundingColumn = new GroupColumn(columnName, null, parentColumn, null);
+	protected Column buildFundingColumn(String columnName, LocalizableLabel columnLabel, GroupColumn parentColumn, Function<GroupColumn, GroupColumn> postprocessor) {
+		GroupColumn fundingColumn = new GroupColumn(columnName, columnLabel, null, parentColumn, null);
 		reportRunMeasures.forEach(name -> {
 			NiReportMeasure<?> meas = schema.getMeasures().get(name);
 			if (meas.getBehaviour().getTimeRange() != TimeRange.NONE)
-				fundingColumn.addColumn(new CellColumn(name, fetchedMeasures.get(name), fundingColumn, meas, meas.getBehaviour(), new NiColSplitCell(PSEUDOCOLUMN_MEASURE, new ComparableValue<String>(name, name))));
+				fundingColumn.addColumn(new CellColumn(name, meas.label, fetchedMeasures.get(name), fundingColumn, meas, meas.getBehaviour(), new NiColSplitCell(PSEUDOCOLUMN_MEASURE, new ComparableValue<String>(name, name))));
 		});
 		GroupColumn res = postprocessor.apply(fundingColumn);
 		return res;
@@ -609,7 +617,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * @param parentColumn
 	 * @return
 	 */
-	protected Column buildTotalsColumn(String columnName, GroupColumn parentColumn) {
+	protected Column buildTotalsColumn(String columnName, LocalizableLabel columnLabel, GroupColumn parentColumn) {
 		LinkedHashMap<NiReportedEntity<?>, ColumnContents> fetchedEntities = new LinkedHashMap<>();
 		
 		// step1: collect fetched entities in a unified map, measures after columns
@@ -625,9 +633,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		});
 
 		//step3: create the Ni columns based on the collected cells
-		GroupColumn totalsColumn = new GroupColumn(columnName, null, parentColumn, null);
+		GroupColumn totalsColumn = new GroupColumn(columnName, columnLabel, null, parentColumn, null);
 		totalsColumnsContents.forEach((name, cont) -> {
-			totalsColumn.addColumn(new CellColumn(name, cont.v, totalsColumn, cont.k, cont.k.getBehaviour(), new NiColSplitCell(PSEUDOCOLUMN_MEASURE, new ComparableValue<String>(name, name))));
+			totalsColumn.addColumn(new CellColumn(name, new LocalizableLabel(name), cont.v, totalsColumn, cont.k, cont.k.getBehaviour(), new NiColSplitCell(PSEUDOCOLUMN_MEASURE, new ComparableValue<String>(name, name))));
 		});
 		
 		return totalsColumn;
@@ -682,7 +690,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 
 	/**
-	 * <strong>HAS A SIDE EFFECT</strong>: fills {@link #actualMeasures} and {@link #requestedMeasures} <br />
+	 * <strong>HAS A SIDE EFFECT</strong>: fills {@link #actualMeasures} and {@link #reportRunMeasures} <br />
 	 * returns a list of the support measures of the ones mandated by the report. This function will become an one-liner when NiReports will become the reference reporting engine
 	 * @return
 	 */

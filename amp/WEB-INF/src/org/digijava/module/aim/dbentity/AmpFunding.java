@@ -259,7 +259,11 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			switch (auxDetail.getTransactionType().intValue()) {
 			case Constants.COMMITMENT: 
 				transactionType = "Commitments";
-				if (auxDetail.getPledgeid() != null) extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
+				if (auxDetail.getPledgeid() != null) {
+					if (auxDetail.getPledgeid().getTitle() != null) {
+						extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
+					}
+				}
 				if (!trnComm) {
 					out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
 					trnComm = true;
@@ -270,8 +274,12 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 				transactionType = " Disbursements";
 				if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0) extraValues += " - " + auxDetail.getDisbOrderId();
 				if (auxDetail.getContract() != null) extraValues += " - " + auxDetail.getContract().getContractName();
-				if (auxDetail.getPledgeid() != null) extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
-				if (!trnDisb) {
+                if (auxDetail.getPledgeid() != null) {
+                    if (auxDetail.getPledgeid().getTitle() != null) {
+                        extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
+                    }
+                }
+                if (!trnDisb) {
 					out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
 					trnDisb = true;
 				}

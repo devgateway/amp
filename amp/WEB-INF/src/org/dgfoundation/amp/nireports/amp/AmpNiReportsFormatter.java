@@ -84,6 +84,6 @@ public class AmpNiReportsFormatter extends NiReportsFormatter {
 		if (niCol.splitCell != null && NiReportsEngine.PSEUDOCOLUMN_YEAR.equals(niCol.splitCell.entityType)) {
 			return niCol.name;
 		}
-		return TranslatorWorker.translateText(niCol.name);
+		return niCol.label.toString();
 	}
 }

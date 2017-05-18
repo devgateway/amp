@@ -6,10 +6,10 @@ var app = app || {};
 define(
 		[ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView',
 				'views/tabBodyView', 'views/tabBodysView', 'business/tabEvents', 'util/tabUtils',
-				'business/filter/filterManager', 'translationManager',
+				'business/filter/filterManager','business/settings/settingsManager', 'translationManager',
 				'business/widgets/documentsWidgetManager', 'jquery', 'jqueryui' ],
 		function(Marionette, Tabs, Tab, TabItemView, TabItemsView, TabBodyView, TabBodysView, TabEvents, TabUtils,
-				FilterManager, TranslationManager, DocumentsWidgetManager, jQuery) {
+				FilterManager, SettingsManager, TranslationManager, DocumentsWidgetManager, jQuery, jqueryui) {
 
 			// AMP-21281 for IE there is a problem when the cache is enable, the tabs are n
 			if(/MSIE \d\d*/i.test(navigator.userAgent) || /rv:11.0/i.test(navigator.userAgent)) {
@@ -123,33 +123,37 @@ define(
 				app.TabsApp.tabsCollection = tabsCollection;
 				app.TabsApp.tabUtils = TabUtils;
 
-				// This class manages how to retrieve content and render each tab.
-				var tabEvents = new TabEvents();
-
-				// JQuery create the tabs and assign some events to our event
-				// manager class.
-				TabUtils.createTabs(tabContainer, {
-					activate : function(event, ui) {
-						tabEvents.onActivateTab(event, ui);
-					},
-					create : function(event, ui) {
-						tabEvents.onCreateTab(event, ui);
-					}
-				});
-
-				// If we are grouping tabs under the last "more tabs..." tab then we
-				// need to hide the "invisible" tabs.
-				if (hasMoreTabs) {
-					TabUtils.hideInvisibleTabs(tabsCollection.models);
-				}
-
-				// Define public function to resize the tab panel.
-				app.TabsApp.resizePanel = function(originalWidth, grow) {
-					TabUtils.resizePanel(app.TabsApp.currentTab.get('id'), app.TabsApp.maxAppWidth);
-				};
-
 				// Use only one instance of filters for all tabs.
 				FilterManager.initializeFilterWidget();
+				
+				SettingsManager.initialize();
+				app.TabsApp.settingsWidget.definitions.loaded.done(function() {
+					// This class manages how to retrieve content and render each tab.
+					var tabEvents = new TabEvents();
+
+					// JQuery create the tabs and assign some events to our event
+					// manager class.
+					TabUtils.createTabs(tabContainer, {
+						activate : function(event, ui) {
+							tabEvents.onActivateTab(event, ui);
+						},
+						create : function(event, ui) {
+							tabEvents.onCreateTab(event, ui);
+						}
+					});
+
+					// If we are grouping tabs under the last "more tabs..." tab then we
+					// need to hide the "invisible" tabs.
+					if (hasMoreTabs) {
+						TabUtils.hideInvisibleTabs(tabsCollection.models);
+					}
+
+					// Define public function to resize the tab panel.
+					app.TabsApp.resizePanel = function(originalWidth, grow) {
+						TabUtils.resizePanel(app.TabsApp.currentTab.get('id'), app.TabsApp.maxAppWidth);
+					};
+				});
+				
 			} else {
 				var message = TranslationManager
 						.getTranslated('Click on one of the tabs to display activities. You can add more tabs by using the Tab Manager.');

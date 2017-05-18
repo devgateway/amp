@@ -163,7 +163,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 			// invalidating
 			String details = "url project_id = " + projectId + ", json " + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME +
 					" = " + internalId;
-			EndpointUtils.addGeneralError(newJson, new ApiErrorMessage(ActivityErrors.UPDATE_ID_MISMATCH, details));
+			EndpointUtils.addGeneralError(newJson, ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details));
 		}
 
 		return InterchangeUtils.importActivity(newJson, true, uri.getBaseUri() + "activity");

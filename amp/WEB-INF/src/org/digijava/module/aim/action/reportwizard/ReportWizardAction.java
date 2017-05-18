@@ -58,7 +58,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.AmpMath;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -79,7 +78,35 @@ import com.google.common.collect.HashBiMap;
 public class ReportWizardAction extends MultiAction {
 
     public static final String MULTILINGUAL_REPORT_PREFIX = "multilingual_report";
-	private static Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
+
+    private static final Map<String, Integer> ME_COLUMNS_ORDER = new HashMap<>();
+    static {
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_NAME, 1);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_CODE, 2);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_SECTOR, 3);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_DESCRIPTION, 4);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TYPE, 5);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_CREATION_DATE, 6);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, 7);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_BASE_VALUE, 8);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_BASE_DATE, 9);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_BASE_COMMENT, 10);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TARGET_VALUE, 11);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TARGET_DATE, 12);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TARGET_COMMENT, 13);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, 14);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, 15);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, 16);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_ACTUAL_VALUE, 17);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_ACTUAL_DATE, 18);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_ACTUAL_COMMENT, 19);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_RISK, 20);
+    }
+
+    private static final Comparator<AmpColumns> ME_COLS_COMPARATOR =
+            Comparator.comparing(c -> ME_COLUMNS_ORDER.getOrDefault(c.getColumnName(), 999));
+
+    private static Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
     
     private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
 
@@ -101,9 +128,10 @@ public class ReportWizardAction extends MultiAction {
     {
     	//if not logged in we have to check if Reporting/Public Report Generator is enabled if not 
     	//we redirect to login page
-    	if(request.getSession().getAttribute( Constants.CURRENT_MEMBER )==null && !FeaturesUtil.isVisibleModule("Public Report Generator")){
-    		response.sendRedirect("/showLayout.do?layout=login");
+    	if(request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")) {
+    		return mapping.findForward("index");
     	}
+    	
         if (request.getParameter("repType")!=null && request.getParameter("repType").length()>0)
             return this.getJSONrepType(mapping, form, request, response);
 
@@ -821,7 +849,6 @@ public class ReportWizardAction extends MultiAction {
         Collection<AmpFieldsVisibility> ampAllFields = FeaturesUtil.getAMPFieldsVisibility();
         Collection<AmpColumns> allAmpColumns = formColumns;
 
-        TreeSet<String> ampThemes = new TreeSet<String>();
         TreeSet<AmpColumnsOrder> ampThemesOrdered = new TreeSet<AmpColumnsOrder>();
 
         ArrayList<AmpColumnsOrder> ampColumnsOrder = (ArrayList<AmpColumnsOrder>) ampContext.getAttribute("ampColumnsOrder");
@@ -856,7 +883,6 @@ public class ReportWizardAction extends MultiAction {
             ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);
             ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
             ampColumnsVisibles.add(ampColumnVisibilityObj);
-            ampThemes.add(ampFieldVisibility.getParent().getName());
 
             if (type == ArConstants.PLEDGES_TYPE)
             {
@@ -870,13 +896,13 @@ public class ReportWizardAction extends MultiAction {
             }
             else
             {
-                AmpColumnsOrder aco = ampColumnsOrderByName.get(ampFieldVisibility.getParent().getName());
+                AmpColumnsOrder aco = ampColumnsOrderByName.get(getThemeName(ampFieldVisibility.getParent().getName()));
                 if (aco == null)
                     continue;
 
                 if (!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)
                         && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){
-                    ampThemesOrdered.add(aco);
+                     ampThemesOrdered.add(aco);
                 }
             }
         }
@@ -891,7 +917,7 @@ public class ReportWizardAction extends MultiAction {
             for (AmpColumnsVisibility acv:ampColumnsVisibles)
             {
                 //iterations2 ++;
-                if(themeName.compareTo(acv.getParent().getName()) == 0)
+                if(themeName.equals(getThemeName(acv.getParent().getName())))
                 {
                     aux.add( acv.getAmpColumn() );
                     added	= true;
@@ -900,11 +926,26 @@ public class ReportWizardAction extends MultiAction {
             }
             if(added)
             {
+                if (themeName.equals("M & E")) {
+                    aux.sort(ME_COLS_COMPARATOR);
+                }
                 ampTreeColumn.put(themeName, aux);
             }
         }
         //System.err.println("iterations1 = " + iterations1 + ", iterations 2 = " + iterations2);
         return ampTreeColumn;
+    }
+
+    /**
+     * Get theme name from feature name. Usually theme name matches feature name, but in some cases it was not
+     * possible to do so. Indicator columns are grouped under /Monitoring & Evaluation/M & E/Reports, in this case
+     * this mechanism allows to swap Reports with M & E.
+     *
+     * @param featureName feature name
+     * @return theme name
+     */
+    private String getThemeName(String featureName) {
+        return "Reports".equals(featureName) ? "M & E" : featureName;
     }
 
     public static void invokeSetterForBeanPropertyWithAnnotation (Object beanObj, Class annotationClass, Object [] params ) throws Exception {

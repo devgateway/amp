@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.nireports.Cell;
@@ -33,7 +34,11 @@ public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn
 	protected String group = null;
 
 	public PsqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, viewName, keyColumnName(viewName, "amp_activity_id"), behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
+		this(columnName, new LocalizableLabel(columnName), levelColumn, viewName, behaviour);
+	}
+
+	public PsqlSourcedColumn(String columnName, LocalizableLabel label, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
+		super(columnName, label, levelColumn, viewName, keyColumnName(viewName, "amp_activity_id"), behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
 		this.viewColumns = SQLUtils.getTableColumns(viewName);
 		check();
 	}

@@ -303,7 +303,7 @@ public class Funding implements Serializable {
 		}
 		//Collection<AmpFundingDetail> fundDetails = ampFunding.getFundingDetails();
 		String currencyCode;
-		if (tm != null) {
+		if (tm != null && tm.getAppSettings() != null) {
 			currencyCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 		} else {
 			currencyCode = Constants.DEFAULT_CURRENCY;

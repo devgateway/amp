@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import static org.dgfoundation.amp.nireports.NiUtils.failIf;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,11 @@ public class SubDimensions {
 
     public void initialize(Map<String, NiReportColumn<? extends Cell>> cols) {
         Map<String, NiDimension.LevelColumn> res = new HashMap<>();
-        columnIdNames.forEach((colName, viewColName) -> res.put(viewColName, cols.get(colName).levelColumn.get()));
+        columnIdNames.forEach((colName, viewColName) -> {
+            failIf(!cols.get(colName).levelColumn.isPresent(),
+                    String.format("%s does not have a level column.", colName));
+            res.put(viewColName, cols.get(colName).levelColumn.get());
+        });
         levelColumns = Collections.unmodifiableMap(res);
     }
 

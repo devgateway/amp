@@ -2,7 +2,7 @@ package org.dgfoundation.amp.nireports;
 
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Comparator;
 import java.util.Optional;
 
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
@@ -20,14 +20,15 @@ public final class DateCell extends Cell {
 	/** the payload - the held date */
 	public final LocalDate date;
 
+    private static final Comparator<LocalDate> dateComparator = Comparator.nullsFirst(Comparator.naturalOrder());
+
     public DateCell(LocalDate date, long activityId, long entityId, Optional<LevelColumn> levelColumn) {
         this(date, activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
     }
 
-	public DateCell(LocalDate date, long activityId, long entityId,
-            Map<NiDimensionUsage, Coordinate> coos, Optional<LevelColumn> levelColumn) {
+    public DateCell(LocalDate date, long activityId, long entityId, Map<NiDimensionUsage, Coordinate> coos,
+			Optional<LevelColumn> levelColumn) {
 		super(activityId, entityId, coos, levelColumn);
-		Objects.requireNonNull(date);
 		this.date = date;
 	}
 
@@ -37,7 +38,6 @@ public final class DateCell extends Cell {
 	}
 
 	@Override
-	/** always empty */
 	public MetaInfoSet getMetaInfo() {
 		return MetaInfoSet.empty();
 	}
@@ -45,7 +45,7 @@ public final class DateCell extends Cell {
 	@Override
 	public int compareTo(Object o) {
 		DateCell dc = (DateCell) o;
-		return date.compareTo(dc.date);
+		return dateComparator.compare(date, dc.date);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public final class DateCell extends Cell {
 
 	@Override
 	public String getDisplayedValue() {
-		return date.toString();
+		return String.valueOf(date);
 	}
 
 }

@@ -1678,10 +1678,12 @@ body {background:none;}
 	                         		</td>
                         		</tr>
                         	</logic:notEmpty>
-                        <field:display name="Pipeline" feature="Commitments">
+						<c:if test="${aimEditActivityForm.funding.showPipeline}">
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.totalPipelineCommitments">
 								<tr>
-	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn> TOTAL PIPELINE COMMITMENTS: </digi:trn></td>
+	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+										<digi:trn key='aim:totalpipelinecommittment'> TOTAL PIPELINE COMMITMENTS </digi:trn>:
+									</td>
 	                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
 										<bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" />
 										<bean:write name="aimEditActivityForm" property="currCode" />
@@ -1689,7 +1691,7 @@ body {background:none;}
 									</td>
 	                        	</tr>
 	                        </logic:notEmpty>
-                        </field:display>
+						</c:if>
                         <feature:display module="Funding" name="Disbursement">
 							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedDisbursements">
                        			<tr>
@@ -1796,15 +1798,6 @@ body {background:none;}
                         	</logic:notEmpty>
                         </feature:display>
 
-                        <logic:notEmpty name="aimEditActivityForm" property="funding.consumptionRate">
-                        	<tr>
-                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:undisbursedBalance"> Consumption Rate</digi:trn>: </td>
-                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-									<b>${aimEditActivityForm.funding.consumptionRate}</b>
-                                	&nbsp;
-                            	</td>
-                        	</tr>
-                        </logic:notEmpty>
                         <logic:notEmpty name="aimEditActivityForm" property="funding.deliveryRate">
 							<tr>
                             	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn>Delivery Rate</digi:trn>: </td>
@@ -2816,7 +2809,19 @@ body {background:none;}
 											</tr>
 										</module:display>
 									</module:display>
-
+									<!-- M & E  SECTION -->
+									<module:display name="M & E" parentModule="MONITORING AND EVALUATING">
+										<tr>
+											<td class="field_name" >
+												<b><digi:trn>M &amp; E</digi:trn></b>
+											</td>
+											<td>
+                                                <bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"/>
+                                                <jsp:include page="previewIndicatosList.jsp"/>
+											</td>
+										</tr>
+									</module:display>
+									<!-- END M & E  SECTION -->
 							 		<field:display name="Activity Performance"  feature="Activity Dashboard">
 									<tr>
 										<td class="field_name">
@@ -3021,7 +3026,57 @@ body {background:none;}
 									</feature:display>
 								  </logic:present>
 
-
+									<!-- GPI -->
+									<module:display name="/Activity Form/GPI" parentModule="/Activity Form">
+										<bean:define id="gpiSurvey" name="gpiSurveys" scope="request" toScope="page"
+													 type="java.util.Collection"/>
+										<c:if test="${not empty gpiSurvey}">
+											<tr>
+												<td vAlign="top" class="field_name">
+													<b><digi:trn>GPI</digi:trn></b>
+												</td>
+												<td vAlign="top">
+													<c:set var="currentIndicatorName" value=""/>
+													<logic:iterate name="gpiSurveys" id="gpiSurvey"
+																   type="java.util.Collection" indexId="gpiId">
+														<logic:iterate name="gpiSurvey" id="gpiresponse"
+																	   type="org.digijava.module.aim.dbentity.AmpGPISurveyResponse">
+															<table width="100%" cellSpacing="2" cellPadding="1"
+																   style="font-size:11px;" border="0">
+																<c:if test="${!currentIndicatorName.equals(gpiresponse.ampQuestionId.ampIndicatorId.name)}">
+																	<c:set var="currentIndicatorName"
+																		   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
+																	<tr>
+																		<td bgcolor="#eeeeee"
+																			style="text-transform: uppercase;">
+																			<c:set var="indicatorName"
+																				   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
+																			<span class="word_break bold">${indicatorName}</span>
+																		</td>
+																	</tr>
+																</c:if>
+																<tr>
+																	<td width=85%>
+																		<c:set var="questionText"
+																			   value="${gpiresponse.ampQuestionId.questionText}"/>
+																		<span class="word_break bold">${questionText}</span>
+																		<c:set var="responseText"
+																			   value="${gpiresponse.response}"/>
+																		<lu>
+																			<li>
+																				<span class="word_break bold">${responseText}</span>
+																			</li>
+																		</lu>
+																	</td>
+																</tr>
+															</table>
+														</logic:iterate>
+													</logic:iterate>
+												</td>
+											</tr>
+										</c:if>
+									</module:display>
+									<!-- END GPI -->
 
 
 <field:display name="Activity Created By" feature="Identification">

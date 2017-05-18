@@ -51,8 +51,6 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.action.MainMap;
-import org.digijava.module.visualization.helper.EntityRelatedListHelper;
-import org.digijava.module.visualization.util.Constants;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.joda.time.chrono.GregorianChronology;
@@ -321,19 +319,16 @@ public class QueryUtil {
 		List<AmpOrgType> orgtypes = new ArrayList<AmpOrgType>(DbUtil.getAllOrgTypes());
 		filter.setOrganizationsType(orgtypes);
 		
-		//List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getAllSectors());
-		//filter.setSectors(sectors);
-		
 		try {
 			if(filter.getSelSectorConfigId()==null){
 					filter.setSelSectorConfigId(SectorUtil.getPrimaryConfigClassification().getId());
 			}
 			filter.setSectorConfigs(SectorUtil.getAllClassificationConfigs());
 			filter.setConfigWithSectorAndSubSectors(new ArrayList<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>>());
-			List<AmpSector> sectors = org.digijava.module.visualization.util.DbUtil.getParentSectorsFromConfig(filter.getSelSectorConfigId());
+			List<AmpSector> sectors = org.digijava.module.esrigis.helpers.DbUtil.getParentSectorsFromConfig(filter.getSelSectorConfigId());
 			filter.setSectors(sectors);
 			for(AmpClassificationConfiguration config: filter.getSectorConfigs()){
-				List<AmpSector> currentConfigSectors = org.digijava.module.visualization.util.DbUtil.getParentSectorsFromConfig(config.getId());
+				List<AmpSector> currentConfigSectors = org.digijava.module.esrigis.helpers.DbUtil.getParentSectorsFromConfig(config.getId());
 				List<EntityRelatedListHelper<AmpSector,AmpSector>> sectorsWithSubSectors = new ArrayList<EntityRelatedListHelper<AmpSector,AmpSector>>();
 				for(AmpSector sector:currentConfigSectors){;
 					List<AmpSector> sectorList=new ArrayList<AmpSector>(sector.getSectors());

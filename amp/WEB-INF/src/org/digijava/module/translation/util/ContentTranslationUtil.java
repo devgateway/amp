@@ -494,7 +494,7 @@ public class ContentTranslationUtil {
     private static HashMap<String, AmpContentTranslation> loadCachedFieldTranslations(final String objClass, final Long objId, String fieldName){
          HashMap<String, HashMap<String, AmpContentTranslation>> outerfieldMap = (HashMap<String, HashMap<String, AmpContentTranslation>>) cache.get(getCacheKey(objClass, objId));
         if (outerfieldMap== null){
-            PersistenceManager.getCurrentSession().doWork(
+            PersistenceManager.getSession().doWork(
                     new org.hibernate.jdbc.Work() {
                         public void execute(Connection conn) throws SQLException {
                             Session newSession = null;

@@ -5,17 +5,6 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -37,6 +26,8 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -57,7 +48,6 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
-//import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.ManagedDocument;
 import org.digijava.module.aim.helper.OrgProjectId;
@@ -79,8 +69,19 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.editor.dbentity.Editor;
 import org.hibernate.Hibernate;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+//import org.digijava.module.aim.helper.Issues;
 
 public class ShowActivityPrintPreview
     extends Action {
@@ -107,8 +108,18 @@ public class ShowActivityPrintPreview
 				e.printStackTrace();
 			}
             if(activity != null){
-            	
-            	
+
+                List gpiSurveys = new ArrayList();
+                if (activity.getGpiSurvey() != null) {
+                    for (AmpGPISurvey survey : activity.getGpiSurvey()) {
+                        List<AmpGPISurveyResponse> list = new ArrayList<>(survey.getResponses());
+                        Collections.sort(list, new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
+                        gpiSurveys.add(list);
+                    }
+                    request.setAttribute("gpiSurveys", gpiSurveys);
+                }
+
+
                 //costing
                 Collection euActs = EUActivityUtil.getEUActivities(activity.getAmpActivityId());
       	      	request.setAttribute("costs", euActs);
@@ -181,8 +192,9 @@ public class ShowActivityPrintPreview
                 eaForm.getIdentification().setAmpId(activity.getAmpId());
 
                 eaForm.getIdentification().setStatus(DbUtil.getActivityApprovalStatus(new Long(actId)));
-                
+
                 String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+
                 if(activity.getStatusReason()!=null){
                     eaForm.getIdentification().setStatusReason(activity.getStatusReason());
                 }

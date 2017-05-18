@@ -5,7 +5,6 @@ import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
@@ -14,6 +13,7 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
@@ -359,7 +359,7 @@ public class QueryUtil {
 							String displayName = TranslatorWorker.translateText(rs.getString("name"));
 							
 							SimpleJsonBean orgRole = new SimpleJsonBean(orgRoleId, orgRoleName,	null, displayName);
-							orgRole.setFilterId(orgRoleName);
+							orgRole.setFilterId(FiltersConstants.ORG_ROLE_CODE_TO_FILTER_ID.get(orgRoleCode));
 							
 							orgRoles.add(orgRole);
 						}
@@ -448,9 +448,9 @@ public class QueryUtil {
 		return location;
 	}
 	
-	public final static String[] LEVEL_TO_NAME = {"na", ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, "na2", "na3", "na4"};
+	private final static String[] LEVEL_TO_NAME = {"na", FiltersConstants.COUNTRY, FiltersConstants.REGION, FiltersConstants.ZONE, FiltersConstants.DISTRICT, "na2", "na3", "na4"};
 	
-	public static JsonBean buildLocationsJsonBean(LocationSkeleton loc, int level) {
+	private static JsonBean buildLocationsJsonBean(LocationSkeleton loc, int level) {
 		JsonBean res = new JsonBean();
 		res.set("id", loc.getId());
 		res.set("name", loc.getName());
@@ -472,11 +472,13 @@ public class QueryUtil {
 				String query =  "SELECT (o.amp_org_id) orgId, o.name, o.acronym FROM  amp_organisation o WHERE o.amp_org_id IN (" +
 								"SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_org_role aor, amp_role r " +
 								"WHERE (o.amp_org_id = aor.organisation AND aor.role = r.amp_role_id AND r.role_code = 'DN') " +
+								"AND activity NOT IN (select amp_activity_id from amp_activity_version where amp_team_id IN (SELECT amp_team_id from amp_team where isolated = true))" +
 								"UNION " +
 								"SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_funding af, amp_activity_version v, amp_role r   " +                
 								"WHERE  o.amp_org_id = af.amp_donor_org_id  AND v.amp_activity_id = af.amp_activity_id  AND (v.deleted is false) " +
-								"AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN')) " +
-								"AND (o.deleted IS NULL OR o.deleted = false ) ";
+								"AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN') "	+ 
+								"AND v.amp_team_id NOT IN (SELECT amp_team_id from amp_team where isolated = true)) " +
+								"AND (o.deleted IS NULL OR o.deleted = false) ";
 						 
 						if (toExcludeFilter) {
 							query += "AND o.amp_org_id NOT IN (SELECT amp_donor_id FROM amp_scorecard_organisation WHERE to_exclude = true) ";

@@ -1,12 +1,8 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import static java.util.stream.Collectors.toList;
-import static org.dgfoundation.amp.algo.AmpCollections.mergePredicates;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -35,7 +31,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 	/**
 	 * Map<DONOR_REPORT_COLUMN, corresponding PLEDGE_REPORT_COLUMN>
 	 */
-    final static Map<String, String> DONOR_COLUMNS_TO_PLEDGE_COLUMNS = new HashMap<String, String>() {{
+    public static final Map<String, String> DONOR_COLUMNS_TO_PLEDGE_COLUMNS = new HashMap<String, String>() {{
     	put(ColumnConstants.PROJECT_TITLE, ColumnConstants.PLEDGES_TITLES);
         put(ColumnConstants.STATUS, ColumnConstants.PLEDGE_STATUS);
         put(ColumnConstants.MODALITIES, ColumnConstants.PLEDGES_AID_MODALITY);
@@ -87,7 +83,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 	/**
 	 * the dimensions whose {@link NiDimensionUsage} instances are ORed between themselves while filtering (please see the contract for {@link #shouldCollapseDimension(NiDimension)}
 	 */
-	Set<String> ORED_DIMENSIONS = new HashSet<>(Arrays.asList("locs", "sectors", "progs"));
+	Set<String> ORED_DIMENSIONS = new HashSet<>(Arrays.asList("locs", "sectors", "progs", "orgs"));
 	
 	Set<String> locationColumns = new HashSet<>(Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
 
@@ -96,19 +92,19 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 	}
 
 	@Override
-	protected void processColumnElement(String columnName, List<FilterRule> rules) {
+	protected void processColumnElement(String columnName, FilterRule rule) {
 		if (columnName.equals(ColumnConstants.ARCHIVED))
 			return; //TODO: hack so that preexisting testcases are not broken while developing the feature
 		
 		if (columnName.equals(ColumnConstants.DONOR_ID))
 			columnName = ColumnConstants.DONOR_AGENCY; // Hello, filter widget with your weird peculiarities
 		
-		if (columnName.equals(ColumnConstants.DONOR_AGENCY) && (rules == null || (rules.size() == 1 && rules.get(0).filterType == FilterType.VALUES && rules.get(0).values.isEmpty())))
+		if (columnName.equals(ColumnConstants.DONOR_AGENCY) && (rule.filterType == FilterType.VALUES && rule.values.isEmpty()))
 			return; // temporary hack for https://jira.dgfoundation.org/browse/AMP-22602
 				
 		if (columnName.equals(ColumnConstants.ACTIVITY_ID)) {
 			// fast track for ACTIVITY_ID filtering: construct a predicate to run on top of the workspace filter
-			this.activityIdsPredicate = Optional.of(mergePredicates(rules.stream().map(FilterRule::buildPredicate).collect(toList())));
+			this.activityIdsPredicate = Optional.of(rule.buildPredicate());
 			return;
 		}
 		
@@ -132,12 +128,12 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 		}
 
 		if (schema.getColumns().containsKey(columnName)) {
-			super.processColumnElement(columnName, rules);
+			super.processColumnElement(columnName, rule);
 			return;
 		}
 				
 		// gone till here -> we're going to fail anyway, but using the superclass
-		super.processColumnElement(columnName, rules);
+		super.processColumnElement(columnName, rule);
 	}
 
 	/**
@@ -159,9 +155,9 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 	
 	
 	@Override
-	protected void processMiscElement(ReportElement repElem, List<FilterRule> rules) {
+	protected void processMiscElement(ReportElement repElem, FilterRule rule) {
 		if (repElem.type == ElementType.DATE) {
-			addCellPredicate(NiReportsEngine.FUNDING_COLUMN_NAME, cell -> ((CategAmountCell) cell).amount.getJulianDayCode(), rules);
+			addCellPredicate(NiReportsEngine.FUNDING_COLUMN_NAME, cell -> ((CategAmountCell) cell).amount.getJulianDayCode(), rule);
 		}
 	}
 

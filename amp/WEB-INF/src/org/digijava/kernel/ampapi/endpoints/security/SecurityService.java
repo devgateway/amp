@@ -3,6 +3,13 @@
  */
 package org.digijava.kernel.ampapi.endpoints.security;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.menu.MenuConstants;
@@ -19,12 +26,6 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.w3c.dom.Document;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Security Endpoint related services like menu, footer, user
@@ -116,11 +117,7 @@ public class SecurityService {
 			adminLink.set(EPConstants.LINK_NAME, EPConstants.ADMIN_LINK_NAME);
 			adminLink.set(EPConstants.LINK_URL, siteUrl + "/admin");
 
-			JsonBean userDevLink = new JsonBean();
-			userDevLink.set(EPConstants.LINK_NAME, EPConstants.USERDEV_LINK_NAME);
-			userDevLink.set(EPConstants.LINK_URL, siteUrl + "/admin/switchDevelopmentMode.do");
 			links.add(adminLink);
-			links.add(userDevLink);
 			jsonItem.set(EPConstants.ADMIN_LINKS, links);
 		}
 		return jsonItem;
@@ -150,7 +147,7 @@ public class SecurityService {
 				// if buildDate is empty it shouldn't replace the release date.
 				// In PROD and STG this props should be empty
 				if (StringUtils.isNotEmpty(buildSource)) {
-					ampVersion += " (" + buildSource + ")";
+					ampVersion += buildSource;
 				}
 				
 				if (StringUtils.isNotEmpty(buildDate)) {

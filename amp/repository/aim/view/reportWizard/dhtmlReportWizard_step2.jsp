@@ -73,7 +73,7 @@
 		</tr>
 		<tr>
 			<td align="center" valign="top">
-				<span id="columnsMust" style="visibility: hidden">
+				<span id="columnsMust" style="display: none">
 					<font color="red">*
 						<digi:trn key="rep:wizard:hint:mustselectcolumn">
 							Must select at least one column
@@ -83,12 +83,19 @@
 			</td>
 			<td>&nbsp;</td>
 			<td align="center" valign="top">
-				<span id="columnsLimit" style="visibility: hidden">
+				<span id="columnsLimit" style="display: none">
 					<font color="red">*
 						<digi:trn key="rep:wizard:hint:limit3columns">
 							You cannot select more than 3 columns in a desktop tab
 						</digi:trn>
 					</font>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<td align="center" valign="top">
+				<span id="measureOrHierarchyMust2" class="color: red" style="display: none;">
+					* <digi:trn>Must select at least one measure or hierarchy</digi:trn>
 				</span>
 			</td>
 		</tr>

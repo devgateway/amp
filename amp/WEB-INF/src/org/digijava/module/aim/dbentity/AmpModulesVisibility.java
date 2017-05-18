@@ -43,6 +43,7 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	/**
 	 * @param id
 	 * @return
+	 * @deprecated does not provide the latest state when outside Admin session, use FeaturesUtil
 	 */
 	public boolean isVisibleId(Long id) {
 		for (Iterator it = this.getTemplates().iterator(); it.hasNext();) {
@@ -57,6 +58,7 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	/**
 	 * @param aObjVis
 	 * @return
+	 * @deprecated does not provide the latest state when outside Admin session, use FeaturesUtil
 	 */
 	public boolean isVisibleTemplateObj(AmpTemplatesVisibility aObjVis) {
 		for (Iterator it = aObjVis.getItems().iterator(); it.hasNext();) {

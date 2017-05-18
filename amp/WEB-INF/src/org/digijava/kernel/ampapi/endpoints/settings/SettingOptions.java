@@ -1,23 +1,16 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.digijava.kernel.translator.TranslatorWorker;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 /**
  * Stores a generic setting configuration  
  * @author Nadejda Mandrescu
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class SettingOptions {
-	
-	protected static final Logger logger = Logger.getLogger(SettingOptions.class);
 	
 	/**
 	 * A setting option
@@ -64,59 +57,37 @@ public class SettingOptions {
 		}
 	}
 	
-	
-	
-	/** Setting id */
-	@Deprecated
-	public final String id;
 	/** Specifies if multiple options can be selected */
 	public final Boolean multi;
-	/** Setting name */
-	@Deprecated
-	public final String name;
 	/** Default setting option id */
 	public final String defaultId;
 	/** List of available setting options */
 	public final List<Option> options;
 	
 	/**
-	 * Configures a GIS Setting
-	 * @param id - (deprecated) setting id
-	 * @param name - (deprecated) setting name
-	 * @param defaultId - default setting option id
-	 * @param options - list of available setting options
+	 * Simple list of options
+	 * 
+	 * @param defaultId default setting option id
+	 * @param options list of available setting options
 	 */
-	@Deprecated
-	public SettingOptions(String id, boolean multi, String name, String defaultId, List<Option> options, boolean translate) {
-		this.id = id;
+	public SettingOptions(String defaultId, List<Option> options) {
+		this(false, defaultId, options);
+	}
+
+	/**
+	 * Simple list of options
+	 *
+	 * @param multi allow multiple selections
+	 * @param defaultId default setting option id
+	 * @param options list of available setting options
+	 */
+	public SettingOptions(boolean multi, String defaultId, List<Option> options) {
 		this.multi = multi;
-		this.name = (name != null && translate) ? TranslatorWorker.translateText(name) : name;
 		this.defaultId = defaultId;
 		this.options = options;
 	}
-	
-	/**
-	 * Simple list of options
-	 * 
-	 * @param defaultId
-	 * @param options
-	 */
-	public SettingOptions(String defaultId, List<Option> options) {
-		this(null, false, null, defaultId, options, false);
-	}
-		
-	/**
-	 * Use this constructor to create a SettingOptions with only one Option.
-	 * @param id
-	 * @param name
-	 * @param option
-	 */
-	@Deprecated
-	public SettingOptions(String id, String name, Option option) {
-		this(id, false, name, option.id, Arrays.asList(option), true);
-	}
-	
+
 	@Override public String toString() {
-		return String.format("(id: %s, name: %s, multi: %s, defaultId: %s, options: %s)", id, name, multi, defaultId, options);
+		return String.format("(multi: %s, defaultId: %s, options: %s)", multi, defaultId, options);
 	}
 }

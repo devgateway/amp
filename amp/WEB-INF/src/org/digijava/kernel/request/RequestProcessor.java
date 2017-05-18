@@ -110,9 +110,6 @@ public class RequestProcessor
     static {
         bypassRefererCheckActions = new HashSet<String>();
         bypassRefererCheckActions.add("/aim/confirmRegisteration.do");
-        bypassRefererCheckActions.add("/visualization/dataDispatcher.do");
-        bypassRefererCheckActions.add("/visualization/launchDashboard.do");
-        bypassRefererCheckActions.add("/visualization/launchGraph.do");
         bypassRefererCheckActions.add("/aim/csvExport.do");
         bypassRefererCheckActions.add("/aim/xlsExport.do");
         bypassRefererCheckActions.add("/aim/viewNewAdvancedReport.do");

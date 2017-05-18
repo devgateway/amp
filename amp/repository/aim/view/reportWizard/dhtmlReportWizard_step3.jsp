@@ -46,10 +46,9 @@
 								</td>					
 								</tr>
 								<tr>
-								<td colspan="3">
-									<span id="hierarchiesMust" style="visibility: hidden;">
-									<font color="red">*
-										<c:choose> 
+								<td colspan="3" align="center" valign="top">
+									<div id="hierarchiesMust" style="color: red; display: none;">
+										* <c:choose>
 											<c:when test="${myForm.budgetExporter }">
 												<digi:trn>You cannot select more than 5 hierarchies</digi:trn>
 											</c:when>
@@ -57,21 +56,24 @@
 												<digi:trn>You cannot select more than 3 hierarchies</digi:trn>
 											</c:otherwise>
 										</c:choose>
-									</font>
-									</span>
-									<span id="hierarchiesSummaryMust" style="visibility: hidden;">
-									<font color="red">*
-											<digi:trn>Only in summary reports can all columns be hierarchies</digi:trn>
-									</font>
-									</span>
-									<br>
-									<span id="incompatiblehierarchies" style="visibility: hidden;">
-									<font color="red">* 
-										<digi:trn key="rep:wizard:hint:notmorehierarchies">
-											You cannot Select Primary and Secondary Sectors as hierarchies
-										</digi:trn>
-									</font>
-									</span>
+									</div>
+									<div id="hierarchiesSummaryMust" style="color: red; display: none;">
+										* <digi:trn>Only in summary reports can all columns be hierarchies</digi:trn>
+									</div>
+									<div id="incompatiblehierarchies" style="color: red; display: none;">
+										* <digi:trn key="rep:wizard:hint:notmorehierarchies">You cannot Select Primary and Secondary Sectors as hierarchies</digi:trn>
+									</div>
+									<div id="measureOrHierarchyMust3" style="color: red; display: none;">
+										* <digi:trn>Must select at least one measure or hierarchy</digi:trn>
+									</div>
+									<div id="hierNotCompatibleWithAmountCols" style="color: red; display: none;">
+										* <digi:trn>The following hierarchies are not compatible with amount &amp; MTEF columns:</digi:trn>
+										<span id="hierNotCompatibleWithAmountColsList"></span>
+									</div>
+									<div id="measurelessOnlyHiersNotAllowed3" style="color: red; display: none;">
+										* <digi:trn>The following hierarchies can be used only in reports without measures:</digi:trn>
+										<span id="measurelessOnlyHiersNotAllowed3List"></span>
+									</div>
 								</td>
 							</tr>
 						

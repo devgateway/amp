@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.log4j.Level;
@@ -788,7 +789,19 @@ public class PersistenceManager {
      * @param returningWork returning work to be executed
      */
     public static <T> T doReturningWorkInTransaction(ReturningWork<T> returningWork) {
-        return doInTransaction(session -> session.doReturningWork(returningWork));
+        return doInTransaction(session -> {
+            return session.doReturningWork(returningWork);
+        });
+    }
+
+    /**
+     * Execute a block of code in new session.
+     */
+    public static void doInTransaction(Consumer<Session> consumer) {
+        doInTransaction(s -> {
+            consumer.accept(s);
+            return Void.class;
+        });
     }
 
     /**
@@ -797,7 +810,7 @@ public class PersistenceManager {
      * @param <R> return type
      * @return result of the function
      */
-    private static <R> R doInTransaction(Function<Session, R> fn) {
+    public static <R> R doInTransaction(Function<Session, R> fn) {
         Session session = PersistenceManager.openNewSession();
         Transaction tx = session.beginTransaction();
         try {

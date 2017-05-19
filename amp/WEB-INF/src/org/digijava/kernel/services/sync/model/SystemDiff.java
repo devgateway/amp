@@ -1,18 +1,17 @@
 package org.digijava.kernel.services.sync.model;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class SystemDiff {
 
-    @JsonProperty
+    @JsonProperty @JsonSerialize(using = ISO8601TimeStampSerializer.class)
     private Date timestamp;
 
     @JsonProperty("global-settings")
@@ -52,6 +51,10 @@ public class SystemDiff {
         this.timestamp = timestamp;
     }
 
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
     public void setGlobalSettings(boolean globalSettings) {
         this.globalSettings = globalSettings;
     }
@@ -86,13 +89,5 @@ public class SystemDiff {
 
     public void setExchangeRates(boolean exchangeRates) {
         this.exchangeRates = exchangeRates;
-    }
-
-    public String getTimestamp() {
-        if (timestamp != null) {
-            return new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT).format(timestamp);
-        } else {
-            return null;
-        }
     }
 }

@@ -1107,3 +1107,16 @@ deleted 6 fields, do not reinsert
 <field:display name="Mandatory Budget Organization Code" feature="Organization Form"></field:display>
 <field:display name="Mandatory Organization Code" feature="Organization Form"></field:display>
 
+  <!-- GPI  -->
+<module:display name="GPI Reports" parentModule="REPORTING"></module:display>
+<module:display name="GPI" parentModule="GPI Reports"></module:display>
+<module:display name="GPI 2014" parentModule="GPI Reports"></module:display>
+<feature:display name="GPI 2014 - Indicator 1" module="GPI 2014"></feature:display>
+<feature:display name="GPI 2014 - Indicator 5a" module="GPI 2014"></feature:display>
+<feature:display name="GPI 2014 - Indicator 6" module="GPI 2014"></feature:display>
+<feature:display name="GPI 2014 - Indicator 9b" module="GPI 2014"></feature:display>
+<feature:display name="Indicator 1" module="GPI"></feature:display>
+<feature:display name="Indicator 5a" module="GPI"></feature:display>
+<feature:display name="Indicator 5b" module="GPI"></feature:display>
+<feature:display name="Indicator 6" module="GPI"></feature:display>
+<feature:display name="Indicator 9b" module="GPI"></feature:display>

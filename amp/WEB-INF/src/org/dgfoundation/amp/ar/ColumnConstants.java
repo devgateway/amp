@@ -110,6 +110,13 @@ public class ColumnConstants {
 	public static final String FY = "FY";
 	public static final String GOVERNMENT_AGREEMENT_NUMBER = "Government Agreement Number";
 	public static final String GOVERNMENT_APPROVAL_PROCEDURES = "Government Approval Procedures";
+	public static final String GPI_1_Q6 = "Q6";
+	public static final String GPI_1_Q6_DESCRIPTION = "Q6 Description";
+	public static final String GPI_1_Q7 = "Q7";
+	public static final String GPI_1_Q8 = "Q8";
+	public static final String GPI_1_Q9 = "Q9";
+	public static final String GPI_1_Q10 = "Q10";
+	public static final String GPI_1_Q10_DESCRIPTION = "Q10 Description";
 
 	public static final String GRAND_TOTAL_COST = "Grand Total Cost";
 	public static final String GRACE_PERIOD = "Loan Grace Period";

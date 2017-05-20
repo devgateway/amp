@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
 import org.dgfoundation.amp.gpi.reports.GPIReport;
+import org.dgfoundation.amp.gpi.reports.GPIReport1Output1Builder;
+import org.dgfoundation.amp.gpi.reports.GPIReport1Output2Builder;
 import org.dgfoundation.amp.gpi.reports.GPIReport5aOutputBuilder;
 import org.dgfoundation.amp.gpi.reports.GPIReport5bOutputBuilder;
 import org.dgfoundation.amp.gpi.reports.GPIReport6OutputBuilder;
@@ -65,12 +67,14 @@ public final class GPIReportService {
 	 * @return GPIReport result for the requested page and pagination information
 	 */
 	public GPIReport getGPIReport(String indicatorCode, JsonBean formParams) {
-		int page = (Integer) EndpointUtils.getSingleValue(formParams, "page", 0);
-		int recordsPerPage = EndpointUtils.getSingleValue(formParams, "recordsPerPage", 
+		int page = EndpointUtils.getSingleValue(formParams, "page", 0);
+		int recordsPerPage = EndpointUtils.getSingleValue(formParams, "recordsPerPage",
 				ReportPaginationUtils.getRecordsNumberPerPage());
-		
+
+		int output = EndpointUtils.getSingleValue(formParams, "output", 1);
+
 		GeneratedReport niReport = GPIReportUtils.getGeneratedReportForIndicator(indicatorCode, formParams);
-		GPIReportOutputBuilder gpiReportOutputBuilder = getGPIReportOutputBuilder(indicatorCode);
+		GPIReportOutputBuilder gpiReportOutputBuilder = getGPIReportOutputBuilder(indicatorCode, output);
 		gpiReportOutputBuilder.setDonorAgency(GPIReportUtils.isDonorAgency(formParams));
 		GPIReportBuilder gpiReportBuilder = new GPIReportBuilder(niReport, gpiReportOutputBuilder);
 		GPIReport gpiReport = gpiReportBuilder.build(page, recordsPerPage);
@@ -84,8 +88,13 @@ public final class GPIReportService {
 	 * @param indicatorCode
 	 * @return gpiReportBuilder {@link @GPIReportOutputBuilder}
 	 */
-	private GPIReportOutputBuilder getGPIReportOutputBuilder(String indicatorCode) {
+	private GPIReportOutputBuilder getGPIReportOutputBuilder(String indicatorCode, int output) {
 		switch (indicatorCode) {
+			case GPIReportConstants.REPORT_1:
+				if (output == 2) {
+					return new GPIReport1Output2Builder();
+				}
+				return new GPIReport1Output1Builder();
 			case GPIReportConstants.REPORT_5a:
 				return new GPIReport5aOutputBuilder();
 			case GPIReportConstants.REPORT_5b:

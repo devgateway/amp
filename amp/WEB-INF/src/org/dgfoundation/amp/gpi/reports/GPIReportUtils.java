@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -22,11 +21,11 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -45,6 +44,8 @@ public class GPIReportUtils {
 	public static GeneratedReport getGeneratedReportForIndicator(String indicatorCode, JsonBean formParams) {
 
 		switch (indicatorCode) {
+			case GPIReportConstants.REPORT_1:
+				return getGeneratedReportForIndicator1(formParams);
 			case GPIReportConstants.REPORT_5a:
 				return getGeneratedReportForIndicator5a(formParams);
 			case GPIReportConstants.REPORT_5b:
@@ -56,6 +57,86 @@ public class GPIReportUtils {
 			default:
 				throw new RuntimeException("Wrong indicator code:" + indicatorCode);
 		}
+	}
+	
+	/**
+	 * Create the template for the GPI report 1
+	 * 
+	 * @param formParams
+	 * @return generatedReport 
+	 */
+	public static GeneratedReport getGeneratedReportForIndicator1(JsonBean formParams) {
+		if (EndpointUtils.getSingleValue(formParams, "output", 1) == 2) {
+			return getGeneratedReportForIndicator1Output2(formParams);
+		}
+		
+		return getGeneratedReportForIndicator1Output1(formParams);
+	}
+	
+	/**
+	 * Create the template for the GPI report 1 Output 1
+	 * 
+	 * @param formParams
+	 * @return generatedReport 
+	 */
+	public static GeneratedReport getGeneratedReportForIndicator1Output1(JsonBean formParams) {
+
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_1, ArConstants.DONOR_TYPE);
+
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		spec.addColumn(new ReportColumn(ColumnConstants.ACTUAL_APPROVAL_DATE));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6_DESCRIPTION));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q7));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q8));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q9));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q10));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q10_DESCRIPTION));
+		
+		spec.getHierarchies().add(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+		spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		
+		applyAppovalStatusFilter(formParams, spec);
+		applySettings(formParams, spec);
+		clearYearRangeSettings(spec);
+
+		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
+
+		return generatedReport;
+	}
+	
+	/**
+	 * Create the template for the GPI report 1 Output 2
+	 * 
+	 * @param formParams
+	 * @return generatedReport 
+	 */
+	public static GeneratedReport getGeneratedReportForIndicator1Output2(JsonBean formParams) {
+
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_1, ArConstants.DONOR_TYPE);
+
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		spec.addColumn(new ReportColumn(ColumnConstants.ACTUAL_APPROVAL_DATE));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6_DESCRIPTION));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q7));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q8));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q9));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q10));
+		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q10_DESCRIPTION));
+		
+		spec.getHierarchies().add(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+		spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		
+		applyAppovalStatusFilter(formParams, spec);
+		applySettings(formParams, spec);
+		clearYearRangeSettings(spec);
+
+		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
+
+		return generatedReport;
 	}
 
 	/**

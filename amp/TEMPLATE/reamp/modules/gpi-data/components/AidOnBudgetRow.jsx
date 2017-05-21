@@ -199,7 +199,7 @@ export default class AidOnBudgetRow extends Component {
                     <select name="currencyCode" value={this.props.aidOnBudget.currencyCode} className="form-control" onChange={this.onChange}>
                     <option value="">{this.props.translations['amp.gpi-data:select-currency']}</option>
                     {this.props.currencyList.map(currency => 
-                    <option value={currency.id} key={currency.id} >{currency.name}</option>
+                    <option value={currency.id} key={currency.id} >{currency.id}</option>
                     )}
                     </select>
                     </div>                    
@@ -217,7 +217,7 @@ export default class AidOnBudgetRow extends Component {
                     <td scope="row">{this.toDisplayDateFormat(this.props.aidOnBudget.indicatorDate)}</td>
                     <td>{this.getOrgName(this.props.aidOnBudget.donorId)}</td>
                     <td className="amount-column">{this.formatAmount(this.props.aidOnBudget.amount)}</td>
-                    <td>{this.getCurrencyName(this.props.aidOnBudget.currencyCode)} </td>
+                    <td>{this.props.aidOnBudget.currencyCode} </td>
                     <td><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteAidOnBudget}></span></td>                
                     </tr>
                     

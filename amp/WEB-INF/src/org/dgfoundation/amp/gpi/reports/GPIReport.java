@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.settings.Settings;

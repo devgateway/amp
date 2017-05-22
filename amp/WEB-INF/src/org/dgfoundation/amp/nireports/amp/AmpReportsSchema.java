@@ -452,6 +452,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.FY, "v_budget_extras_fy");
 
 		no_entity(ColumnConstants.GOVERNMENT_AGREEMENT_NUMBER, "v_gov_agreement_number");
+		no_entity(ColumnConstants.GPI_1_Q6, "v_ni_gpi_indicator_1_q6");
+		no_entity(ColumnConstants.GPI_1_Q6_DESCRIPTION, "v_ni_gpi_indicator_1_q6_description");
+		no_entity(ColumnConstants.GPI_1_Q7, "v_ni_gpi_indicator_1_q7");
+		no_entity(ColumnConstants.GPI_1_Q8, "v_ni_gpi_indicator_1_q8");
+		no_entity(ColumnConstants.GPI_1_Q9, "v_ni_gpi_indicator_1_q9");
+		no_entity(ColumnConstants.GPI_1_Q10, "v_ni_gpi_indicator_1_q10");
+		no_entity(ColumnConstants.GPI_1_Q10_DESCRIPTION, "v_ni_gpi_indicator_1_q10_description");
 		degenerate_dimension(ColumnConstants.HAS_EXECUTING_AGENCY, "v_has_executing_agency", boolDimension);
 		no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_EMAIL, "v_impl_ex_cont_email");
 		no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_FAX, "v_impl_ex_cont_fax");

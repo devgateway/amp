@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
@@ -30,10 +31,13 @@ import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.currency.CurrencyService;
+import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
 import org.digijava.kernel.request.Site;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.services.sync.model.ActivityChange;
 import org.digijava.kernel.services.sync.model.AmpOfflineChangelog;
+import org.digijava.kernel.services.sync.model.ExchangeRatesDiff;
 import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
@@ -70,6 +74,7 @@ public class SyncService implements InitializingBean {
 
     private PossibleValuesEnumerator possibleValuesEnumerator = PossibleValuesEnumerator.INSTANCE;
     private FieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.PRIVATE_ENUMERATOR;
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
 
     private static class AmpOfflineChangelogMapper implements RowMapper<AmpOfflineChangelog> {
 
@@ -103,6 +108,8 @@ public class SyncService implements InitializingBean {
 
         systemDiff.setPossibleValuesFields(findChangedPossibleValuesFields(lastSyncTime));
 
+        systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
+
         return systemDiff;
     }
 
@@ -121,6 +128,14 @@ public class SyncService implements InitializingBean {
                 "and operation_time > :lastSyncTime", args);
 
         return count > 0;
+    }
+
+    private boolean shouldSyncExchangeRates(Date lastSyncTime) {
+        return lastSyncTime == null || ratesChanged(lastSyncTime);
+    }
+
+    private boolean ratesChanged(Date lastSyncTime) {
+        return !findDaysWithModifiedRates(lastSyncTime).isEmpty();
     }
 
     private List<String> findChangedPossibleValuesFields(Date lastSyncTime) {
@@ -372,5 +387,32 @@ public class SyncService implements InitializingBean {
                 messageKeyFilter,
                 args,
                 TRANSLATION_ROW_MAPPER);
+    }
+
+    public ExchangeRatesDiff getChangedExchangeRates(Date lastSyncTime) {
+        Objects.requireNonNull(lastSyncTime);
+
+        List<Date> dates = findDaysWithModifiedRates(lastSyncTime);
+
+        List<ExchangeRatesForPair> exchangeRatesForPairs;
+        if (dates.isEmpty()) {
+            exchangeRatesForPairs = Collections.emptyList();
+        } else {
+            exchangeRatesForPairs = currencyService.getExchangeRatesForPairs(dates);
+        }
+
+        return new ExchangeRatesDiff(dates, exchangeRatesForPairs);
+    }
+
+    private List<Date> findDaysWithModifiedRates(Date lastSyncTime) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("lastSyncTime", lastSyncTime);
+        args.put("entity", EXCHANGE_RATES);
+
+        return jdbcTemplate.query(
+                "select entity_id from amp_offline_changelog "
+                        + "where entity_name=:entity and operation_time > :lastSyncTime",
+                args,
+                JulianDayRowMapper.INSTANCE);
     }
 }

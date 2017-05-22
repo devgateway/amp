@@ -34,7 +34,7 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
             sdfIn.set(new SimpleDateFormat(AmpARFilter.SDF_IN_FORMAT_STRING));
         }
         if (sdfApiOut.get() == null) {
-            sdfApiOut.set(new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT));
+            sdfApiOut.set(new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT));
         }
     }
     

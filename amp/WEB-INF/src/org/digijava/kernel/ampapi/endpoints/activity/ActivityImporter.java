@@ -10,6 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -57,6 +58,8 @@ import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
@@ -1052,8 +1055,26 @@ public class ActivityImporter {
         updatePPCAmount();
         updateRoleFundings();
         updateOrgRoles();
+        initComponents();
 	}
-	
+
+	private void initComponents() {
+		if (newActivity.getComponents() != null) {
+			newActivity.getComponents().forEach(component -> initComponent(newActivity, component));
+		}
+	}
+
+	private void initComponent(AmpActivityVersion activity, AmpComponent component) {
+		component.setActivities(new HashSet<>(Arrays.asList(activity)));
+		if (component.getFundings() != null) {
+			component.getFundings().forEach(f -> initComponentFunding(component, f));
+		}
+	}
+
+	private void initComponentFunding(AmpComponent component, AmpComponentFunding f) {
+		f.setComponent(component);
+	}
+
 
 	/*
 	 * First, every reference to AmpActivityVersion in all the m2ms has been added to a map; 

@@ -12,14 +12,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
 
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.types.ISO8601TimeStamp;
 import org.digijava.kernel.services.sync.SyncService;
+import org.digijava.kernel.services.sync.model.ExchangeRatesDiff;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SpringUtil;
@@ -181,6 +184,55 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
             @QueryParam("last-sync-time") ISO8601TimeStamp lastSyncTime) {
         List<Translation> translations = syncService.getTranslationsToSync(lastSyncTime);
         return TranslationUtil.groupByLabelAndLocale(translations);
+    }
+
+    /**
+     * Returns exchange rates that changed since last sync.
+     * <p>Parameter last-sync-time is mandatory. For first time synchronization please use
+     * GET /rest/currency/exchange-rates.</p>
+     * <p>Result will contain the dates for which exchange rates were changed. Changed includes: deletions, additions,
+     * modifications. For correct sync, all locally stored exchange rates for specified days must be deleted and then
+     * replaced with new rates. Rates for a day will include all currency pairs, even if only one of them has changed.
+     * </p>
+     * <h3>Sample Response:</h3>
+     * <pre>
+     * {
+     *   "changed-dates": [
+     *     "2015-02-09",
+     *     "2015-04-21"
+     *   ],
+     *   "exchange-rates-for-pairs": [
+     *     {
+     *       "rates": [
+     *         {
+     *           "date": "2015-04-21",
+     *           "rate": 0.693122059096484
+     *         },
+     *         {
+     *           "date": "2015-02-09",
+     *           "rate": 0.69306501515102
+     *         }
+     *       ],
+     *       "currency-pair": {
+     *         "from": "USD",
+     *         "to": "USD1995-4"
+     *       }
+     *     }
+     *   ]
+     * }
+     * </pre>
+     * @param lastSyncTime required timestamp of last synchronization time in ISO8601 format
+     * @return exchange rates that changed
+     */
+    @GET
+    @Path("/exchange-rates")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "exchange-rates", ui = false, authTypes = {AuthRule.AUTHENTICATED})
+    public ExchangeRatesDiff getExchangeRatesToSync(@QueryParam("last-sync-time") ISO8601TimeStamp lastSyncTime) {
+        if (lastSyncTime == null) {
+            throw new AmpWebApplicationException(Status.BAD_REQUEST, SynchronizerErrors.LAST_SYNC_TIME_REQUIRED);
+        }
+        return syncService.getChangedExchangeRates(lastSyncTime);
     }
 
     @Override

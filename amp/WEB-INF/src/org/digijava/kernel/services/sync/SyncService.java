@@ -1,5 +1,6 @@
 package org.digijava.kernel.services.sync;
 
+import static java.util.Collections.emptyMap;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.*;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.UPDATED;
@@ -17,12 +18,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.Predicate;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.AmpARFilterParams;
 import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
@@ -38,6 +42,7 @@ import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -95,8 +100,8 @@ public class SyncService implements InitializingBean {
         SystemDiff systemDiff = new SystemDiff();
 
         updateDiffsForWsAndGs(systemDiff, lastSyncTime);
-        updateDiffForWorkspaceMembers(systemDiff, userIds, lastSyncTime);
-        updateDiffForUsers(systemDiff, userIds, lastSyncTime);
+        updateDiffForWorkspaceMembers(systemDiff, lastSyncTime);
+        updateDiffForUsers(systemDiff, lastSyncTime);
         updateDiffsForActivities(systemDiff, userIds, lastSyncTime);
 
         systemDiff.setTranslations(shouldSyncTranslations(lastSyncTime));
@@ -178,7 +183,7 @@ public class SyncService implements InitializingBean {
         if (teamMembers.isEmpty()) {
             workspaceActivitiesQuery = "-1";
         } else {
-            workspaceActivitiesQuery = WorkspaceFilter.getViewableActivitiesIdByTeams(teamMembers);
+            workspaceActivitiesQuery = getCompleteWorkspaceFilter(teamMembers);
         }
 
         Map<String, Object> args = new HashMap<>();
@@ -199,11 +204,32 @@ public class SyncService implements InitializingBean {
         return jdbcTemplate.query(sql, args, ACTIVITY_CHANGE_ROW_MAPPER);
     }
 
-    private void updateDiffForUsers(SystemDiff systemDiff, List<Long> userIds, Date lastSyncTime) {
+    private String getCompleteWorkspaceFilter(List<AmpTeamMember> teamMembers) {
+        StringJoiner completeSql = new StringJoiner(" UNION ");
+        completeSql.add(getArFilterActivityIds(teamMembers));
+        completeSql.add(WorkspaceFilter.getViewableActivitiesIdByTeams(teamMembers));
+        return completeSql.toString();
+    }
+
+    private String getArFilterActivityIds(List<AmpTeamMember> teamMembers) {
+        StringJoiner sql = new StringJoiner(" UNION ");
+        for (AmpTeamMember teamMember : teamMembers) {
+
+            AmpARFilter computedWsFilter = FilterUtil.buildFilterFromSource(teamMember.getAmpTeam());
+
+            AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(teamMember.toTeamMember(), null);
+            computedWsFilter.generateFilterQuery(params);
+
+            sql.add(computedWsFilter.getGeneratedFilterQuery());
+        }
+        return sql.toString();
+    }
+
+    private void updateDiffForUsers(SystemDiff systemDiff, Date lastSyncTime) {
         if (lastSyncTime == null) {
-            systemDiff.setUsers(new ListDiff<>(Collections.emptyList(), userIds));
+            systemDiff.setUsers(new ListDiff<>(Collections.emptyList(), findAllUserIds()));
         } else {
-            List<AmpOfflineChangelog> changelogs = findChangedUsers(userIds, lastSyncTime);
+            List<AmpOfflineChangelog> changelogs = findChangedUsers(lastSyncTime);
 
             List<Long> saved = new ArrayList<>();
             for (AmpOfflineChangelog changelog : changelogs) {
@@ -215,16 +241,19 @@ public class SyncService implements InitializingBean {
         }
     }
 
-    private List<AmpOfflineChangelog> findChangedUsers(List<Long> userIds, Date lastSyncTime) {
+    private List<Long> findAllUserIds() {
+        return jdbcTemplate.query("select id from dg_user", emptyMap(), ID_MAPPER);
+    }
+
+    private List<AmpOfflineChangelog> findChangedUsers(Date lastSyncTime) {
         Map<String, Object> args = new HashMap<>();
         args.put("lastSyncTime", lastSyncTime);
-        args.put("userIds", userIds);
 
         return jdbcTemplate.query(
                 "select null::varchar, id::varchar, null::varchar, last_modified " +
                         "from dg_user " +
-                        "where last_modified > :lastSyncTime " +
-                        "and id in (:userIds)", args, ROW_MAPPER);
+                        "where last_modified > :lastSyncTime",
+                args, ROW_MAPPER);
     }
 
     private void updateDiffsForWsAndGs(SystemDiff systemDiff, Date lastSyncTime) {
@@ -262,13 +291,13 @@ public class SyncService implements InitializingBean {
                 "and entity_name in (:entities)", args, ROW_MAPPER);
     }
 
-    private void updateDiffForWorkspaceMembers(SystemDiff systemDiff, List<Long> userIds, Date lastSyncTime) {
+    private void updateDiffForWorkspaceMembers(SystemDiff systemDiff, Date lastSyncTime) {
         if (lastSyncTime == null) {
-            List<Long> workspaceMemberIds = findWorkspaceMembers(userIds);
+            List<Long> workspaceMemberIds = findWorkspaceMembers();
 
             systemDiff.setWorkspaceMembers(new ListDiff<>(Collections.emptyList(), workspaceMemberIds));
         } else {
-            List<AmpOfflineChangelog> changelogs = findChangedWorkspaceMembers(userIds, lastSyncTime);
+            List<AmpOfflineChangelog> changelogs = findChangedWorkspaceMembers(lastSyncTime);
 
             List<Long> removed = new ArrayList<>();
             List<Long> saved = new ArrayList<>();
@@ -287,28 +316,22 @@ public class SyncService implements InitializingBean {
         }
     }
 
-    private List<Long> findWorkspaceMembers(List<Long> userIds) {
-        Map<String, Object> args = new HashMap<>();
-        args.put("userIds", userIds);
-
-        return jdbcTemplate.query(
-                "select amp_team_mem_id from amp_team_member where user_ in (:userIds)",
-                args, ID_MAPPER);
+    private List<Long> findWorkspaceMembers() {
+        return jdbcTemplate.query("select amp_team_mem_id from amp_team_member", emptyMap(), ID_MAPPER);
     }
 
-    private List<AmpOfflineChangelog> findChangedWorkspaceMembers(List<Long> userIds, Date lastSyncTime) {
+    private List<AmpOfflineChangelog> findChangedWorkspaceMembers(Date lastSyncTime) {
         Map<String, Object> args = new HashMap<>();
         args.put("lastSyncTime", lastSyncTime);
         args.put("entity", WORKSPACE_MEMBER);
-        args.put("userIds", userIds);
         args.put("deleted", DELETED);
 
-        return jdbcTemplate.query("select " + COLUMNS + " " +
-                "from amp_offline_changelog " +
-                "where operation_time > :lastSyncTime " +
-                "and entity_name = :entity " +
-                "and (entity_id in (select amp_team_mem_id::varchar from amp_team_member where user_ in (:userIds)) " +
-                "or operation_name = :deleted)", args, ROW_MAPPER);
+        return jdbcTemplate.query("select " + COLUMNS + " "
+                + "from amp_offline_changelog "
+                + "where operation_time > :lastSyncTime "
+                + "and entity_name = :entity "
+                + "and (entity_id in (select amp_team_mem_id::varchar from amp_team_member) "
+                + "or operation_name = :deleted)", args, ROW_MAPPER);
     }
 
     /**

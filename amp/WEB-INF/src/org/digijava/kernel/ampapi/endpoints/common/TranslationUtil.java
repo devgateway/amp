@@ -319,19 +319,7 @@ public class TranslationUtil {
      * @return translated labels grouped by label and locale
      */
     public static Map<String, Map<String, String>> translateLabels(List<String> labels) {
-        return labels.stream().collect(toMap(Function.identity(), TranslationUtil::translateLabel));
-    }
-
-    /**
-     * Translate one label in multiple languages and return translaitons grouped by locale.
-     * @param label label to be translated
-     * @return translated labels grouped by locale
-     */
-    private static Map<String, String> translateLabel(String label) {
-        Set<String> trnLocaleCodes = TranslationSettings.getCurrent().getTrnLocaleCodes();
-        Site site = SiteUtils.getDefaultSite();
-        return trnLocaleCodes.stream()
-                .collect(toMap(Function.identity(), locale -> TranslatorWorker.translateText(label, locale, site)));
+        return labels.stream().collect(toMap(Function.identity(), AMPTranslatorService.INSTANCE::translateLabel));
     }
 
     /**

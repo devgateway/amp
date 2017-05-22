@@ -3,10 +3,14 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
+import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -45,22 +49,25 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -88,8 +95,7 @@ public class ActivityImporter {
 	 * FM path for the "Save as Draft" feature being enabled 
 	 */
 	private static final String SAVE_AS_DRAFT_PATH = "/Activity Form/Save as Draft";
-	private static final boolean ALLOW_SAVE_AS_DRAFT_SHIFT = true;
-	
+
 	private AmpActivityVersion newActivity = null;
 	private AmpActivityVersion oldActivity = null;
 	private JsonBean oldJson = null;
@@ -99,7 +105,8 @@ public class ActivityImporter {
 	protected Map<String, String> possibleValuesQuery = new HashMap<String, String>();
 	protected Map<Object, Field> activityFieldsForPostprocess = new HashMap<Object, Field>();
 	private boolean update  = false;
-	private boolean saveAsDraft = false;
+	private SaveMode requestedSaveMode;
+	private boolean downgradedToDraftSave = false;
 	private InputValidatorProcessor validator = new InputValidatorProcessor();
 	private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
 	private boolean isDraftFMEnabled;
@@ -171,10 +178,14 @@ public class ActivityImporter {
 	 */
 	public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
 		init(newJson, update, endpointContextPath);
-		
+
+		List<ApiErrorMessage> saveModeErrors = determineRequestedSaveMode();
+		if (!saveModeErrors.isEmpty()) {
+			return saveModeErrors;
+		}
+
 		// retrieve fields definition for internal use
-		List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR
-				.getAllAvailableFields(AmpActivityFields.class);
+		List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getAllAvailableFields();
 		// get existing activity if this is an update request
 		Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
 
@@ -243,7 +254,7 @@ public class ActivityImporter {
 				prepareToSave();
 				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
 						translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
-						PersistenceManager.getRequestDBSession(), false, false, true);
+						PersistenceManager.getSession(), false, false, true);
 				postProcess();
 			} else {
 				// undo any pending changes
@@ -267,6 +278,26 @@ public class ActivityImporter {
 		}
 		
 		return new ArrayList<ApiErrorMessage>(errors.values());
+	}
+
+	private List<ApiErrorMessage> determineRequestedSaveMode() {
+		if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+			String draftFieldName = InterchangeUtils.underscorify(ActivityFieldsConstants.IS_DRAFT);
+			Object draftAsObj = newJson.get(draftFieldName);
+			if (draftAsObj == null) {
+				return Collections.singletonList(ActivityErrors.FIELD_REQUIRED.withDetails(draftFieldName));
+			}
+			if (!(draftAsObj instanceof Boolean)) {
+				return Collections.singletonList(ActivityErrors.FIELD_INVALID_TYPE.withDetails(draftFieldName));
+			}
+			boolean draft = (boolean) draftAsObj;
+			requestedSaveMode = draft ? DRAFT : SUBMIT;
+			if (requestedSaveMode == DRAFT && !isDraftFMEnabled) {
+				return Collections.singletonList(ActivityErrors.SAVE_AS_DRAFT_FM_DISABLED.withDetails(draftFieldName));
+			}
+		}
+
+		return Collections.emptyList();
 	}
 
 	public AmpTeamMember getAmpTeamMember(Long modifiedBy) {
@@ -979,12 +1010,19 @@ public class ActivityImporter {
         newActivity.setLastImportedBy(currentUser);
 
 		newActivity.setChangeType(determineChangeType().toString());
-		if (update) {
-			if (isDraftFMEnabled && saveAsDraft) {
-				newActivity.setDraft(true);
-			}
+		if (requestedSaveMode != null) {
+			newActivity.setDraft(requestedSaveMode == DRAFT);
 		} else {
-			newActivity.setDraft(isDraftFMEnabled);
+			// IATI draft semantics
+			if (update) {
+				// on update try to keep previous status
+				// if validation for non-draft activity failed but it succeeded for draft activity then change to draft true
+				if (isDraftFMEnabled && downgradedToDraftSave) {
+					newActivity.setDraft(true);
+				}
+			} else {
+				newActivity.setDraft(isDraftFMEnabled);
+			}
 		}
 		initDefaults();
 	}
@@ -1013,11 +1051,30 @@ public class ActivityImporter {
 		initFundings();
         initContacts();
         postprocessActivityReferences();
+        updateIssues();
         updatePPCAmount();
         updateRoleFundings();
         updateOrgRoles();
+        initComponents();
 	}
-	
+
+	private void initComponents() {
+		if (newActivity.getComponents() != null) {
+			newActivity.getComponents().forEach(component -> initComponent(newActivity, component));
+		}
+	}
+
+	private void initComponent(AmpActivityVersion activity, AmpComponent component) {
+		component.setActivities(new HashSet<>(Arrays.asList(activity)));
+		if (component.getFundings() != null) {
+			component.getFundings().forEach(f -> initComponentFunding(component, f));
+		}
+	}
+
+	private void initComponentFunding(AmpComponent component, AmpComponentFunding f) {
+		f.setComponent(component);
+	}
+
 
 	/*
 	 * First, every reference to AmpActivityVersion in all the m2ms has been added to a map; 
@@ -1035,6 +1092,30 @@ public class ActivityImporter {
 				throw new RuntimeException(e);
 			}
 		}
+	}
+
+	private void updateIssues() {
+		if (newActivity.getIssues() != null) {
+			newActivity.getIssues().forEach(issue -> initIssue(newActivity, issue));
+		}
+	}
+
+	private void initIssue(AmpActivityVersion activity, AmpIssues issue) {
+		issue.setActivity(activity);
+		if (issue.getMeasures() != null) {
+			issue.getMeasures().forEach(m -> initMeasure(issue, m));
+		}
+	}
+
+	private void initMeasure(AmpIssues issue, AmpMeasure measure) {
+		measure.setIssue(issue);
+		if (measure.getActors() != null) {
+			measure.getActors().forEach(actor -> initActor(measure, actor));
+		}
+	}
+
+	private void initActor(AmpMeasure measure, AmpActor actor) {
+		actor.setMeasure(measure);
 	}
 	
 	/*
@@ -1279,6 +1360,16 @@ public class ActivityImporter {
 	}
 
 	/**
+	 * Return save mode for validation purposes. If this value is null then validators can assume that they validate
+	 * activity for submission (non-draft) with possibility to downgrade with draft save. However if returned value
+	 * is specified then validators must honor this setting and return appropriate errors.
+	 * @return requested SaveMode or null
+	 */
+	public SaveMode getRequestedSaveMode() {
+		return requestedSaveMode;
+	}
+
+	/**
 	 * @return the update
 	 */
 	public boolean isUpdate() {
@@ -1290,14 +1381,6 @@ public class ActivityImporter {
 	 */
 	public List<AmpContentTranslation> getTranslations() {
 		return translations;
-	}
-	
-	/**
-	 * Defines if changing the Saving process from "Save" to "Save as draft" is allowed or not.
-	 * @return true if it is allowed, false otherwise
-	 */
-	public boolean getAllowSaveAsDraftShift () {
-		return ALLOW_SAVE_AS_DRAFT_SHIFT;
 	}
 	
 	// what is object for?
@@ -1331,20 +1414,8 @@ public class ActivityImporter {
 		return sourceURL;
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isSaveAsDraft() {
-		return saveAsDraft;
-	}
-	
-	/**
-	 * 
-	 * @param saveAsDraft
-	 */
-	public void setSaveAsDraft(boolean saveAsDraft) {
-		this.saveAsDraft = saveAsDraft;
+	public void downgradeToDraftSave() {
+		this.downgradedToDraftSave = true;
 	}
 
 	/**

@@ -193,6 +193,7 @@ public class ConfigLoaderListener
         try {
             runnable.run();
         } catch (RuntimeException e) {
+            logger.error("Exception while emulating open session in view.", e);
             PersistenceManager.rollbackCurrentSessionTx();
             throw e;
         } finally {

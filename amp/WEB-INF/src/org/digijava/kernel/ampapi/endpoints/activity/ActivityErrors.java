@@ -26,7 +26,7 @@ public class ActivityErrors {
 	public static final ApiErrorMessage CANNOT_GET_PROPERTIES = new ApiErrorMessage(10, "Cannot get properties for type");
 	public static final ApiErrorMessage DISCRIMINATOR_METHOD_ERROR = new ApiErrorMessage(12, "Error when accessing discriminator method");
 	public static final ApiErrorMessage DISCRIMINATOR_CLASS_METHOD_ERROR = new ApiErrorMessage(13, "Error when accessing a method from the discriminator class");
-	public static final ApiErrorMessage SAVE_AS_DRAFT_FM_DISABLED = new ApiErrorMessage(14, "Activity can only be saved as draft, but \"save as draft\" is disabled in FM!");	
+	public static final ApiErrorMessage SAVE_AS_DRAFT_FM_DISABLED = new ApiErrorMessage(14, "Activity cannot be saved as draft, \"save as draft\" is disabled in FM!");
 	public static final ApiErrorMessage TITLE_IN_DEFAULT_LANUGAGE_REQUIRED = new ApiErrorMessage(15, "Title in default language is required");
 	public static final ApiErrorMessage UPDATE_ID_MISMATCH = new ApiErrorMessage(16, "Request project ids mismatch");
 	public static final ApiErrorMessage FIELD_INVALID_LENGTH = new ApiErrorMessage(17, "Invalid field length");
@@ -42,5 +42,6 @@ public class ActivityErrors {
 	public static final ApiErrorMessage AGREEMENT_CODE_UNIQUE = new ApiErrorMessage(27, "Agreement code should be unique");
 	public static final ApiErrorMessage AGREEMENT_TITLE_REQUIRED = new ApiErrorMessage(26, "Agreement title is required");
 	public static final ApiErrorMessage ORGANIZATION_ROLE_PAIR_NOT_DECLARED = new ApiErrorMessage(27, "The organization and role pair is not declared");
+	public static final ApiErrorMessage ORGANIZATION_NOT_DECLARED = new ApiErrorMessage(28, "The organization is not declared");
 
 }

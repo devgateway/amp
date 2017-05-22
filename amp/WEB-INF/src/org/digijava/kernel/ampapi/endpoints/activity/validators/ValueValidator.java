@@ -45,7 +45,8 @@ public class ValueValidator extends InputValidator {
 			return false;
 		if (!isValidPercentage(newFieldParent, fieldDescription)) 
 			return false;
-		
+
+		// FIXME possible values are not always available for all fields, must check only for select fields (not all)
 		List<PossibleValue> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath,
 				AmpActivityFields.class);
 		

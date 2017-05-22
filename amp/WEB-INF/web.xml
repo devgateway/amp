@@ -11,6 +11,15 @@
 	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
 	<!-- ******************************************* -->
 
+	<filter>
+		<filter-name>gzipRequestFilter</filter-name>
+		<filter-class>org.digijava.kernel.web.gzip.GzipRequestFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>gzipRequestFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+
 <!-- Saiku parts -->
 	<filter>
 		<filter-name>org.springframework.security.filterChainProxy</filter-name>

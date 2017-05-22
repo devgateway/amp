@@ -30,6 +30,16 @@ class CommonListsApi {
            });
        });
    }
+   
+   static fetchReportVisibilityConfiguration(  ) {
+       return new Promise(( resolve, reject ) => {
+           fetchJson('/rest/gpi/report/visibility').then(( conf ) => {
+               resolve(conf )
+           }).catch(( error ) => {
+               reject( error );
+           });
+       });
+   }
 }
 
 export default CommonListsApi;

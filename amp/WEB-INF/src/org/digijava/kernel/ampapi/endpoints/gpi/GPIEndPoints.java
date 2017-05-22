@@ -13,10 +13,12 @@ import javax.ws.rs.core.MediaType;
 
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
+import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 @Path("gpi")
 public class GPIEndPoints implements ErrorReportingEndpoint {
@@ -481,6 +483,20 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 		return GPIDataService.getGPIRemarks(donorId, donorType, from, to);
 	}
 
+	@GET
+	@Path("/report/visibility/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getGPIReportVisibility", ui = false)
+	public JsonBean getGPIReportVisibilityConfiguration() {
+		JsonBean visibilityConfiguration = new JsonBean();
+		visibilityConfiguration.set(GPIReportConstants.REPORT_1, FeaturesUtil.isVisibleFeature(GPIReportConstants.REPORT_1_GFM_NAME) );
+		visibilityConfiguration.set(GPIReportConstants.REPORT_5a, FeaturesUtil.isVisibleFeature(GPIReportConstants.REPORT_5a_GFM_NAME) );
+		visibilityConfiguration.set(GPIReportConstants.REPORT_5b, FeaturesUtil.isVisibleFeature(GPIReportConstants.REPORT_5b_GFM_NAME) );
+		visibilityConfiguration.set(GPIReportConstants.REPORT_6, FeaturesUtil.isVisibleFeature(GPIReportConstants.REPORT_6_GFM_NAME) );
+		visibilityConfiguration.set(GPIReportConstants.REPORT_9b, FeaturesUtil.isVisibleFeature(GPIReportConstants.REPORT_9b_GFM_NAME) );
+		return visibilityConfiguration;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

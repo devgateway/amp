@@ -10,6 +10,10 @@ export function fetchYearsSuccess(years){
     return {type: 'FETCH_YEARS_SUCCESS', years: years}
 }
 
+export function fetchReportVisibilityConfigurationSuccess(reportVisibility) {
+    return {type: 'FETCH_REPORT_VISIBILITY_CONF_SUCCESS', reportVisibility: reportVisibility};
+}
+
 
 export function getOrgList(group){
     return function(dispatch) {
@@ -26,6 +30,17 @@ export function getYears() {
     return function(dispatch) {
         return commonListsApi.getYears().then(response => {            
              dispatch(fetchYearsSuccess(response));                                   
+        }).catch(error => {
+            throw(error);
+        });
+    }; 
+}
+
+
+export function fetchReportVisibilityConfiguration() {
+    return function(dispatch) {
+        return commonListsApi.fetchReportVisibilityConfiguration().then(response => {            
+             dispatch(fetchReportVisibilityConfigurationSuccess(response));                                   
         }).catch(error => {
             throw(error);
         });

@@ -141,7 +141,9 @@
 				<digi:trn>Currency</digi:trn>&nbsp;</td>
 			<td>
 				<html:select property="currency" style="width: 200px" styleClass="dropdwn_sm">
-					<html:optionsCollection property="currencies" value="ampCurrencyId" label="currencyName" />
+					<c:if test="${!empty aimReportsFilterPickerForm.currencies}">
+						<html:optionsCollection property="currencies" value="ampCurrencyId" label="currencyName" />
+					</c:if>
 				</html:select>
 			</td>
 		</tr>
@@ -151,7 +153,9 @@
 			</td>
 			<td>
 				<html:select property="calendar" style="width: 200px" styleClass="dropdwn_sm">
-					<html:optionsCollection property="calendars" value="ampFiscalCalId" label="name" />
+					<c:if test="${!empty aimReportsFilterPickerForm.calendars}">
+						<html:optionsCollection property="calendars" value="ampFiscalCalId" label="name" />
+					</c:if>
 				</html:select>
 			</td>
 		</tr>
@@ -167,14 +171,18 @@
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>
-						<html:optionsCollection property="fromYears" label="wrappedInstance" value="wrappedInstance" />
+						<c:if test="${!empty aimReportsFilterPickerForm.fromYears}">
+							<html:optionsCollection property="fromYears" label="wrappedInstance" value="wrappedInstance" />
+						</c:if>
 					</html:select> &nbsp;
 					<digi:trn>To</digi:trn>: &nbsp; 
 					<html:select property="renderEndYear" styleClass="dropdwn_sm" styleId="renderEndYear">
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>
-						<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
+						<c:if test="${!empty aimReportsFilterPickerForm.toYears}">
+							<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
+						</c:if>
 					</html:select>
 			</td>
 		</tr>

@@ -32,5 +32,6 @@ public class SyncConstants {
         public static final String ACTIVITY_PROGRAM_SETTINGS = "activity program settings";
         public static final String COMPONENT_TYPE = "component type";
         public static final String EXCHANGE_RATES = "exchange rates";
+        public static final String FEATURE_MANAGER = "feature manager";
     }
 }

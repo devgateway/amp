@@ -41,6 +41,9 @@ public class SystemDiff {
     @JsonProperty("exchange-rates")
     private boolean exchangeRates;
 
+    @JsonProperty("feature-manager")
+    private boolean featureManager;
+
     public void updateTimestamp(Date timestamp) {
         if (this.timestamp == null || (timestamp != null && this.timestamp.before(timestamp))) {
             this.timestamp = timestamp;
@@ -89,5 +92,9 @@ public class SystemDiff {
 
     public void setExchangeRates(boolean exchangeRates) {
         this.exchangeRates = exchangeRates;
+    }
+
+    public void setFeatureManager(boolean featureManager) {
+        this.featureManager = featureManager;
     }
 }

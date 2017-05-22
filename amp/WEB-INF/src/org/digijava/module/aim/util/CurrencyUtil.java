@@ -79,6 +79,9 @@ public class CurrencyUtil {
 	}
 
 	private static Collection<CurrencyRates> getActiveRates(Date fromDate, Date toDate, List<Date> days) {
+		if ((fromDate == null && toDate != null) || (fromDate != null && toDate == null)) {
+			throw new IllegalArgumentException("fromDate and toDate must be both either null or non null");
+		}
 		Collection<CurrencyRates> col = new ArrayList<>();
 		Session session = null;
 		String qryStr = null;

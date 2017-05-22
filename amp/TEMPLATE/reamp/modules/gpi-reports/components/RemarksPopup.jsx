@@ -12,18 +12,26 @@ export default class RemarksPopup extends Component {
         this.props.actions.clearRemarks(this.props.code);
         this.props.actions.fetchRemarks(this.props.code, this.props.remarksUrl);        
     }
-    render() {
-        console.log(this.props.remarks);    
+    render() {          
         return (<Modal show={this.props.showRemarks} onHide={this.props.closeRemarksModal} container={this}>
                 <Modal.Header closeButton>
                   <Modal.Title>{this.props.translations['amp-gpi-reports:remarks']}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <h1> Hello World!</h1>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button onClick={this.props.closeRemarksModal}>{this.props.translations['amp-gpi-reports:close']}</Button>
-                </Modal.Footer>
+                  <div>
+                    {this.props.remarks.map((remark, i ) =>
+                    <div className="row remark-row" key={i}> 
+                       <div >
+                        <span className="glyphicon glyphicon-comment comment-icon"> </span>
+                        <span className="remark-date"> {remark.date}</span>
+                        </div>
+                       <div className="remark"> {remark.remark}</div>
+                        <div className="row-divider"></div>
+                     </div>
+                     
+                    )}
+                  </div>
+                </Modal.Body>                
               </Modal>)
     }
 }

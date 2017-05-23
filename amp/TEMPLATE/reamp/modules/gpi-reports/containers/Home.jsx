@@ -15,8 +15,9 @@ import Report1Output2 from '../components/Report1Output2';
 export default class App extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { currentReport: null };
-        this.tabChanged = this.tabChanged.bind( this );
+        this.state = { currentReport: null, currentOutput: Constants.OUTPUT_1};
+        this.tabChanged = this.tabChanged.bind(this);
+        this.outputChanged = this.outputChanged.bind(this);
     }
 
     componentDidMount() {
@@ -24,9 +25,13 @@ export default class App extends Component {
     }
 
     tabChanged( event ) {
-        this.setState( { currentReport: $( event.target ).data("indicator") });
+        this.setState({currentReport: $( event.target ).data("indicator")});
     }
 
+    outputChanged(event) {
+        this.setState({currentOutput: $( event.target ).data("output")});
+    }
+    
     isVisible( code ) {
         return this.props.reportVisibility[code] === true;
     }
@@ -34,7 +39,11 @@ export default class App extends Component {
    getReport(code){       
         switch (code) {               
         case Constants.INDICATOR_1_CODE: 
-            return <Report1Output2/>;
+            if (this.state.currentOutput == Constants.OUTPUT_1){
+                return <div></div>;
+            } else {
+               return <Report1Output2/>;  
+            }            
         case Constants.INDICATOR_5A_CODE:
             return <Report5a/>;
         case Constants.INDICATOR_5B_CODE:
@@ -67,11 +76,16 @@ export default class App extends Component {
              </ul>
              <div className="tab-content panel">               
                {visibleReports.map((indicatorCode, i) => 
-                 <div key={i} role="tabpanel" className={currentReport == indicatorCode ? "tab-pane active" : 'tab-pane'} id={'indicator'+ indicatorCode}>
-                   {this.getReport(indicatorCode)}
-                 </div>
-               )}
-
+                <div key={i} role="tabpanel" className={currentReport == indicatorCode ? "tab-pane active" : 'tab-pane'} id={'indicator'+ indicatorCode}>               
+                {indicatorCode == Constants.INDICATOR_1_CODE &&
+                   <ul className="output-nav">               
+                    <li className={this.state.currentOutput == '1' ? 'active': ''}><a data-output="1" onClick={this.outputChanged}>{this.props.translations['amp.gpi-reports:indicator1-output1']}</a></li>
+                    <li className={this.state.currentOutput == '2' ? 'active': ''}><a data-output="2" onClick={this.outputChanged}>{this.props.translations['amp.gpi-reports:indicator1-output2']}</a></li>
+                   </ul>
+                }               
+                {this.getReport(indicatorCode)}
+                </div>
+                )}
              </div>
 
            </div>

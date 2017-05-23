@@ -30,7 +30,8 @@ export const initialTranslations = {
         'amp.gpi-reports:indicator1-q3': 'Q3. What is the share of results indicators that will rely on sources of data provided by existing country-led monitoring system or national statistical services?',
         'amp.gpi-reports:indicator1-q4': 'Q4. What is the share of new interventions that plan a final (ex post) evaluation supported by the government? (i.e percentage of all new intervention with a final ex post evaluation with government support)',
         'amp.gpi-reports:indicator1-output1': 'Output 1',
-        'amp.gpi-reports:indicator1-output2': 'Output 2'
+        'amp.gpi-reports:indicator1-output2': 'Output 2',
+        'amp.gpi-reports:indicator1-output2-description' : "Development co-operation is focused on results that meet developing countries' priorities"
         
         
 };

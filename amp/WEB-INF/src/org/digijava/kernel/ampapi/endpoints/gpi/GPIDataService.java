@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -19,6 +22,10 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.translation.exotic.AmpDateFormatter;
+import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 /**
  * 
@@ -333,16 +340,70 @@ public class GPIDataService {
 		return orgs;
 	}
 
-	public static List<GPIRemark> getGPIRemarks(Long donorId, String donorType, Long from, Long to) {
+	/**
+	 * get the list of remarks used in indicator 1 and 5a
+	 * 
+	 * @param indicatorCode
+	 * @param donorIds
+	 * @param donorType
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public static List<GPIRemark> getGPIRemarks(String indicatorCode, List<Long> donorIds, String donorType, Long from, Long to) {
 		List<GPIRemark> remarks = new ArrayList<>();
+
+		AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
 		
-		//TODO fectch data from DB
-		remarks.add(new GPIRemark("Donor Agency 1", "2017-07-01", "Remark 1 Lorem ipsum dolor sit amet"));
-		remarks.add(new GPIRemark("Donor Agency 2", "2015-12-02", "Remark 2 Lorem ipsum dolor sit amet"));
-		remarks.add(new GPIRemark("Donor Agency 3", "2014-08-04", "Remark 3 Lorem ipsum dolor sit amet"));
-		remarks.add(new GPIRemark("Donor Agency 1", "2015-03-20", "Remark 4 Lorem ipsum dolor sit amet"));
+		Session dbSession = PersistenceManager.getSession();
+		String queryString = "SELECT donorNotes FROM " + AmpGPINiDonorNotes.class.getName() + " donorNotes "
+				+ "WHERE indicatorCode = :indicatorCode ";
+		Query query = dbSession.createQuery(queryString);
+		query.setString("indicatorCode", indicatorCode);
+		List<AmpGPINiDonorNotes> donorNotes = query.list();
 		
+		List<AmpGPINiDonorNotes> filteredNotes = filterNotes(donorNotes, donorIds, donorType, from, to);
+		
+		filteredNotes.forEach(n -> {
+			remarks.add(new GPIRemark(n.getDonor().getName(), dateFormatter.format(n.getNotesDate()), n.getNotes()));
+		});
+
 		return remarks;
+	}
+
+	/**
+	 * Filter a donorNotes by donor-type, donorId, from and to dates
+	 * 
+	 * @param donorNotes
+	 * @param donorIds
+	 * @param donorType
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	private static List<AmpGPINiDonorNotes> filterNotes(List<AmpGPINiDonorNotes> donorNotes, List<Long> donorIds,
+			String donorType, Long from, Long to) {
+		
+		List<AmpGPINiDonorNotes> filteredNotes = new ArrayList<>();
+		
+		Predicate<AmpGPINiDonorNotes> fromDatePredicate = note -> from == null || from == 0 ? true : 
+			DateTimeUtil.toJulianDayNumber(note.getNotesDate()) >= from;
+			
+		Predicate<AmpGPINiDonorNotes> toDatePredicate = note -> to == null || to == 0 ? true : 
+			DateTimeUtil.toJulianDayNumber(note.getNotesDate()) <= to;
+		
+		Predicate<AmpGPINiDonorNotes> donorPredicate = note -> donorIds == null || donorIds.isEmpty() ? true :
+			donorType == null || "donor-agency".equals(donorType) ? donorIds.contains(note.getDonor().getAmpOrgId()) : 
+			"donor-group".equals(donorType) ? donorIds.contains(note.getDonor().getOrgGrpId().getAmpOrgGrpId()) : false;
+		
+		filteredNotes = donorNotes.stream()
+				.filter(fromDatePredicate)
+				.filter(toDatePredicate)
+				.filter(donorPredicate)
+				.sorted((n1, n2) -> n2.getNotesDate().compareTo(n1.getNotesDate()))
+				.collect(Collectors.toList());
+		
+		return filteredNotes;
 	}
 
 }

@@ -273,7 +273,8 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	private String getRemarkEndpointURL() {
-		String remarkEndpoint = GPIReportConstants.GPI_REMARK_ENDPOINT + "?donorId=%s&donorType=%s&from=%s&to=%s";
+		String remarkEndpoint = GPIReportConstants.GPI_REMARK_ENDPOINT 
+				+ "?indicatorCode=%s&donorId=%s&donorType=%s&from=%s&to=%s";
 
 		String donorType = GPIReportConstants.HIERARCHY_DONOR_AGENCY;
 
@@ -289,6 +290,6 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 		String min = approvalDateRule == null ? "0" : approvalDateRule.min != null ? approvalDateRule.min : "0";
 		String max = approvalDateRule == null ? "0" : approvalDateRule.max != null ? approvalDateRule.max : "0";
 
-		return String.format(remarkEndpoint, ids, donorType, min, max);
+		return String.format(remarkEndpoint, GPIReportConstants.REPORT_1, ids, donorType, min, max);
 	}
 }

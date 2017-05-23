@@ -452,7 +452,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	}
 	
 	/**
-	 * Retrieves the gpi report for specified indicator
+	 * Retrieves the gpi report for specified indicator.
 	 * 
 	 * @param indicatorCode
 	 * @param formParams
@@ -467,10 +467,13 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	}
 	
 	/**
-	 * Retrieves the remarks for the specified donor agency/group and between the specified dates
+	 * Retrieves the remarks for the specified indicator code, donor agency/group and between the specified dates.
 	 * 
-	 * @param donorId
+	 * @param indicatorCode
+	 * @param donorIds - list of donors
 	 * @param donorType (donor-agency|donor-group)
+	 * @param from
+	 * @param to
 	 * 
 	 * @return
 	 */
@@ -478,9 +481,11 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	@Path("/report/remarks/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getGpiReport", ui = false)
-	public List<GPIRemark> getGPIRemarks(@PathParam("donorId") Long donorId, @PathParam("donorType") String donorType,
-			@PathParam("from") Long from, @PathParam("to") Long to) {
-		return GPIDataService.getGPIRemarks(donorId, donorType, from, to);
+	public List<GPIRemark> getGPIRemarks(@QueryParam("indicatorCode") String indicatorCode,
+			@QueryParam("donorId") List<Long> donorIds, @QueryParam("donorType") String donorType, @QueryParam("from") Long from,
+			@QueryParam("to") Long to) {
+		
+		return GPIDataService.getGPIRemarks(indicatorCode, donorIds, donorType, from, to);
 	}
 
 	@GET

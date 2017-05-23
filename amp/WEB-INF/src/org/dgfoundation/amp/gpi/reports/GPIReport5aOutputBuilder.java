@@ -236,7 +236,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	private String getRemarkEndpointURL(ReportSpecification spec, long id) {
-		String remarkEndpoint = GPIReportConstants.GPI_REMARK_ENDPOINT + "?donorId=%s&donorType=%s&from=%s&to=%s";
+		String remarkEndpoint = GPIReportConstants.GPI_REMARK_ENDPOINT 
+				+ "?indicatorCode=%s&donorId=%s&donorType=%s&from=%s&to=%s";
 
 		String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
 				: GPIReportConstants.HIERARCHY_DONOR_GROUP;
@@ -246,7 +247,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		String min = dateRule == null ? "0" : dateRule.min != null ? dateRule.min : "0";
 		String max = dateRule == null ? "0" : dateRule.max != null ? dateRule.max : "0";
 
-		return String.format(remarkEndpoint, id, donorType, min, max);
+		return String.format(remarkEndpoint, GPIReportConstants.REPORT_5a, id, donorType, min, max);
 	}
 
 	private Map<String, ReportCell> getEmptyGPIRow(ReportSpecification spec) {

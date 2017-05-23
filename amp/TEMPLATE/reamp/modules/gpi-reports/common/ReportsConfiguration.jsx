@@ -11,5 +11,8 @@ export const REPORTS_CONFIGURATION = {
         '5a' : {
             url : '/rest/gpi/report/5a'
         },
+        '1' : {
+            url : '/rest/gpi/report/1'
+        },
         defaultRequestData : {}
     };

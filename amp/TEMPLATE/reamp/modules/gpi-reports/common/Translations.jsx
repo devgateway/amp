@@ -22,7 +22,13 @@ export const initialTranslations = {
         'amp-gpi-reports:indicator-5b': 'Indicator 5b',
         'amp-gpi-reports:no-data': 'No data meets the applied filter criteria',
         'amp-gpi-reports:remarks': 'Remarks',
-        'amp-gpi-reports:close': 'Close'
+        'amp-gpi-reports:close': 'Close',
+        'amp-gpi-reports:question': 'Question',
+        'amp-gpi-reports:value': 'Value',
+        'amp.gpi-reports:indicator1-q1': 'Q1',
+        'amp.gpi-reports:indicator1-q2': 'Q2',
+        'amp.gpi-reports:indicator1-q3': 'Q3',
+        'amp.gpi-reports:indicator1-q4': 'Q4',
         
         
 };

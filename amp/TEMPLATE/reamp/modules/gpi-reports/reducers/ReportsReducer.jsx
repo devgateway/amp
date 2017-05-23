@@ -11,6 +11,10 @@ const defaultState = {
     '5a': {
         mainReport: {},
         remarks:[]
+    },
+    '1': {
+        output1: {},
+        output2: {}
     }
 };
 export default function reports( state: Object = defaultState, action: Object ) {
@@ -27,9 +31,18 @@ export default function reports( state: Object = defaultState, action: Object ) 
             var newState = Object.assign( {}, state );
             newState['5b'].mainReport = action.data;
             return newState;
-        case 'FETCH_REPORT_5A_MAIN_REPORT_SUCCESS':
-            var newState = Object.assign( {}, state);
-            newState['5a'].mainReport = action.data;
+        case 'FETCH_REPORT_SUCCESS':
+            var newState = Object.assign({}, state);
+            if(action.data.code == 1){
+                if(action.data.requestData.output == 1){
+                    newState[action.data.code].output1 = action.data.reportData;
+                } else {
+                    newState[action.data.code].output2 = action.data.reportData;
+                }                
+            } else {
+                newState[action.data.code].mainReport = action.data.reportData;
+            }
+            
             return newState;
         case 'FETCH_REMARKS_SUCCESS':
             var newState = Object.assign( {}, state);

@@ -6,10 +6,11 @@ import * as commonListsActions from '../actions/CommonListsActions';
 require('../styles/main.less');
 require('bootstrap');
 import * as Constants from '../common/Constants';
-import Report9b from "../components/Report9b";
-import Report6 from "../components/Report6";
-import Report5b from "../components/Report5b";
-import Report5a from "../components/Report5a";
+import Report9b from '../components/Report9b';
+import Report6 from '../components/Report6';
+import Report5b from '../components/Report5b';
+import Report5a from '../components/Report5a';
+import Report1Output2 from '../components/Report1Output2';
 
 export default class App extends Component {
     constructor( props, context ) {
@@ -33,7 +34,7 @@ export default class App extends Component {
    getReport(code){       
         switch (code) {               
         case Constants.INDICATOR_1_CODE: 
-            return <div></div>;
+            return <Report1Output2/>;
         case Constants.INDICATOR_5A_CODE:
             return <Report5a/>;
         case Constants.INDICATOR_5B_CODE:

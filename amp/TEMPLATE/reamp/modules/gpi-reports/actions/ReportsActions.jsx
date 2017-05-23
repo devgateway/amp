@@ -20,6 +20,10 @@ export function fetchReport5aMainReportSuccess(reportData){
     return {type: 'FETCH_REPORT_5A_MAIN_REPORT_SUCCESS', data: reportData}
 }
 
+export function fetchReportSuccess(data){
+    return {type: 'FETCH_REPORT_SUCCESS', data: data}
+}
+
 export function fetchRemarksSuccess(code, remarks){
     return {type: 'FETCH_REMARKS_SUCCESS', data:{code: code, remarks: remarks}}
 }
@@ -59,16 +63,6 @@ export function fetchReport5bMainReport(requestData, reportCode) {
     }; 
 }
 
-export function fetchReport5aMainReport(requestData, reportCode) {
-    return function(dispatch) {
-        return reportsApi.fetchReportData(requestData, reportCode).then(response => {            
-            dispatch(fetchReport5aMainReportSuccess(response));                                
-        }).catch(error => {
-            throw(error);
-        });
-    }; 
-}
-
 export function fetchRemarks(code, url) {
     return function(dispatch) {
         return reportsApi.fetchRemarks(url).then(response => {            
@@ -78,3 +72,15 @@ export function fetchRemarks(code, url) {
         });
     }; 
 }
+
+
+export function fetchReportData(requestData, reportCode) {
+    return function(dispatch) {
+        return reportsApi.fetchReportData(requestData, reportCode).then(response => {            
+            dispatch(fetchReportSuccess({reportData: response, code: reportCode, requestData: requestData }));                                
+        }).catch(error => {
+            throw(error);
+        });
+    };  
+}
+

@@ -1,3 +1,7 @@
+export const DEFAULT_UI_DATE_FORMAT = 'DD/MMM/YYYY';
+export const DATE_FORMAT_SETTING = 'default-date-format';
+export const EP_DATE_FORMAT =  'YYYY-MM-DD';
+
 export const NATIONAL_BUDGET_EXECUTION_PROCEDURES = 'National Budget Execution Procedures';
 export const NATIONAL_FINANCIAL_REPORTING_PROCEDURES = 'National Financial Reporting Procedures';
 export const NATIONAL_AUDITING_PROCEDURES = 'National Auditing Procedures';
@@ -17,8 +21,13 @@ export const DISBURSEMENTS_AS_SCHEDULED = 'Disbursed as Scheduled';
 export const OVER_DISBURSED = 'Over Disbursed';
 export const REMARK = 'Remark';
 export const INDICATOR_1_CODE = '1';
+export const INDICATOR_1_1_CODE = '1_1';
 export const INDICATOR_5A_CODE = '5a';
 export const INDICATOR_5B_CODE = '5b';
 export const INDICATOR_6_CODE = '6';
 export const INDICATOR_9B_CODE = '9b';
 export const INDICATOR_CODE_LIST = [INDICATOR_1_CODE, INDICATOR_5A_CODE, INDICATOR_5B_CODE,INDICATOR_6_CODE, INDICATOR_9B_CODE];
+export const Q1 = 'Q1';
+export const Q2 = 'Q2';
+export const Q3 = 'Q3';
+export const Q4 = 'Q4';

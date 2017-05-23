@@ -1,4 +1,4 @@
-const defaultState = {orgList: [], years: [], reportVisibility: {}};
+const defaultState = {orgList: [], years: [], reportVisibility: {}, settings:{}};
 
 export default function commonListsReducer(state: Object = defaultState, action: Object) { 
     switch (action.type) {               
@@ -14,6 +14,10 @@ export default function commonListsReducer(state: Object = defaultState, action:
         var newState = Object.assign({}, state); 
         newState.reportVisibility = action.reportVisibility;        
         return  newState; 
+    case 'LOAD_SETTINGS_SUCCESS': 
+        var newState = Object.assign({}, state); 
+        newState.settings = action.settings
+        return  newState;
     default:            
         return state;
     }

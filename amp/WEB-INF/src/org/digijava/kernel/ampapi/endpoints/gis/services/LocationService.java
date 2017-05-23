@@ -129,7 +129,7 @@ public class LocationService {
 			//if country level we only return the current country with 0 has GeoCode
 			admLevelToGeoCode = Collections.unmodifiableMap(new HashMap<String, String>() {
 				{
-					this.put(countryName.value, "0");
+					this.put(countryName.value, getGeoCodeForCountry().value);
 				}
 			});
 		} else {
@@ -163,7 +163,20 @@ public class LocationService {
 		retlist.set("values", values);
 		return retlist;
 	}
-	
+	private ValueWrapper<String>getGeoCodeForCountry(){
+		final ValueWrapper<String> geoCode = new ValueWrapper<String>("");
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String countryIdQuery = "select geo_code from amp_category_value_location where location_name ='Haiti'";
+				RsInfo rsi = SQLUtils.rawRunQuery(conn, countryIdQuery, null);
+				if (rsi.rs.next()) {
+					geoCode.value = rsi.rs.getString(1);
+				}
+				rsi.close();
+			}
+		});
+		return geoCode;
+	}
 	/**
 	 * Provides admLevel name to geo code map
 	 * @param admLevel

@@ -13,8 +13,11 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.dgfoundation.amp.gpi.reports.GpiReport1Output2Visitor;
+
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.nireports.formulas.NiFormula;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report 1 Output 2
@@ -24,18 +27,13 @@ import org.dgfoundation.amp.newreports.GeneratedReport;
  */
 public class GPIReport1Output2Builder extends GPIReportOutputBuilder {
 
-	public static final String GPI_1_Q1 = "Q1";
-	public static final String GPI_1_Q2 = "Q2";
-	public static final String GPI_1_Q3 = "Q3";
-	public static final String GPI_1_Q4 = "Q4";
-
 	public GPIReport1Output2Builder() {
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.ACTUAL_APPROVAL_DATE));
-		addColumn(new GPIReportOutputColumn(GPI_1_Q1));
-		addColumn(new GPIReportOutputColumn(GPI_1_Q2));
-		addColumn(new GPIReportOutputColumn(GPI_1_Q3));
-		addColumn(new GPIReportOutputColumn(GPI_1_Q4));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q1));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q2));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q3));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q4));
 	}
 
 	/**
@@ -49,10 +47,10 @@ public class GPIReport1Output2Builder extends GPIReportOutputBuilder {
 		List<GPIReportOutputColumn> headers = new ArrayList<>();
 
 		headers.add(getColumns().get(GPIReportConstants.COLUMN_YEAR));
-		headers.add(getColumns().get(GPI_1_Q1));
-		headers.add(getColumns().get(GPI_1_Q2));
-		headers.add(getColumns().get(GPI_1_Q3));
-		headers.add(getColumns().get(GPI_1_Q4));
+		headers.add(getColumns().get(GPIReportConstants.GPI_1_Q1));
+		headers.add(getColumns().get(GPIReportConstants.GPI_1_Q2));
+		headers.add(getColumns().get(GPIReportConstants.GPI_1_Q3));
+		headers.add(getColumns().get(GPIReportConstants.GPI_1_Q4));
 
 		return headers;
 	}
@@ -101,10 +99,10 @@ public class GPIReport1Output2Builder extends GPIReportOutputBuilder {
 		BigDecimal q9Sum = getSumOfFields(items, GPIOutput2Item::getQ9);
 		BigDecimal q10Cnt = getCountOfFilteredElements(items, GPIOutput2Item::getQ10);
 
-		row.put(getColumns().get(GPI_1_Q1), getPercentage(q6Cnt, cnt) + "%");
-		row.put(getColumns().get(GPI_1_Q2), getPercentage(q8Sum, q7Sum) + "%");
-		row.put(getColumns().get(GPI_1_Q3), getPercentage(q9Sum, q7Sum) + "%");
-		row.put(getColumns().get(GPI_1_Q4), getPercentage(q10Cnt, cnt) + "%");
+		row.put(getColumns().get(GPIReportConstants.GPI_1_Q1), getPercentage(q6Cnt, cnt) + "%");
+		row.put(getColumns().get(GPIReportConstants.GPI_1_Q2), getPercentage(q8Sum, q7Sum) + "%");
+		row.put(getColumns().get(GPIReportConstants.GPI_1_Q3), getPercentage(q9Sum, q7Sum) + "%");
+		row.put(getColumns().get(GPIReportConstants.GPI_1_Q4), getPercentage(q10Cnt, cnt) + "%");
 
 		return row;
 	}
@@ -115,7 +113,7 @@ public class GPIReport1Output2Builder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	private BigDecimal getPercentage(BigDecimal a, BigDecimal b) {
-		return a.divide(b).scaleByPowerOfTen(2).setScale(0, RoundingMode.UP);
+		return a.divide(b, NiFormula.DIVISION_MC).scaleByPowerOfTen(2).setScale(0, RoundingMode.HALF_UP);
 	}
 
 	/**

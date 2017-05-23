@@ -133,7 +133,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 			}
 		}
 		
-		BigDecimal percentageDisb =  new BigDecimal((sum / 3) * 100).setScale(0, RoundingMode.UP);
+		BigDecimal percentageDisb =  new BigDecimal((sum / 3) * 100).setScale(0, RoundingMode.HALF_UP);
 		columns.put(new GPIReportOutputColumn(COLUMN_INDICATOR_5B), percentageDisb + "%");
 		return columns;
 	}
@@ -182,7 +182,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 				}
 			}
 			double indicator5bResult = (indicator5bSum * 100) / (totalDisbursements * 3);
-			percentageIndicator5b =  new BigDecimal(indicator5bResult).setScale(0, RoundingMode.UP);
+			percentageIndicator5b =  new BigDecimal(indicator5bResult).setScale(0, RoundingMode.HALF_UP);
 		}
 		summaryColumns.put(new GPIReportOutputColumn(COLUMN_INDICATOR_5B), percentageIndicator5b + "%");
 		

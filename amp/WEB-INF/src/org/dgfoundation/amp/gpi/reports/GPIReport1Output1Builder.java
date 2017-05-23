@@ -207,22 +207,25 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	private Map<GPIReportOutputColumn, String> generateSummary(List<GPIOutput1Item> gpiElements) {
-
-		BigDecimal cnt = BigDecimal.valueOf(gpiElements.size());
 		Map<GPIReportOutputColumn, String> row = new HashMap<>();
+		row.put(getColumns().get(GPIReportConstants.COLUMN_REMARK), getRemarkEndpointURL());
 
-		BigDecimal q6Cnt = getCountOfFilteredElements(gpiElements, GPIOutput1Item::getQ6);
-		BigDecimal q7Sum = getSumOfFields(gpiElements, GPIOutput1Item::getQ7);
-		BigDecimal q8Sum = getSumOfFields(gpiElements, GPIOutput1Item::getQ8);
-		BigDecimal q9Sum = getSumOfFields(gpiElements, GPIOutput1Item::getQ9);
-		BigDecimal q10Cnt = getCountOfFilteredElements(gpiElements, GPIOutput1Item::getQ10);
+		if (!gpiElements.isEmpty()) {
 
-		row.put(getColumns().get(GPIReportConstants.GPI_1_Q1), getPercentage(q6Cnt, cnt) + "%");
-		row.put(getColumns().get(GPIReportConstants.GPI_1_Q2), getPercentage(q8Sum, q7Sum) + "%");
-		row.put(getColumns().get(GPIReportConstants.GPI_1_Q3), getPercentage(q9Sum, q7Sum) + "%");
-		row.put(getColumns().get(GPIReportConstants.GPI_1_Q4), getPercentage(q10Cnt, cnt) + "%");
-		
-		row.put(getColumns().get(GPIReportConstants.COLUMN_REMARK), getRemarkEndpointURL(gpiElements));
+			BigDecimal cnt = BigDecimal.valueOf(gpiElements.size());
+
+			BigDecimal q6Cnt = getCountOfFilteredElements(gpiElements, GPIOutput1Item::getQ6);
+			BigDecimal q7Sum = getSumOfFields(gpiElements, GPIOutput1Item::getQ7);
+			BigDecimal q8Sum = getSumOfFields(gpiElements, GPIOutput1Item::getQ8);
+			BigDecimal q9Sum = getSumOfFields(gpiElements, GPIOutput1Item::getQ9);
+			BigDecimal q10Cnt = getCountOfFilteredElements(gpiElements, GPIOutput1Item::getQ10);
+
+			row.put(getColumns().get(GPIReportConstants.GPI_1_Q1), getPercentage(q6Cnt, cnt) + "%");
+			row.put(getColumns().get(GPIReportConstants.GPI_1_Q2), getPercentage(q8Sum, q7Sum) + "%");
+			row.put(getColumns().get(GPIReportConstants.GPI_1_Q3), getPercentage(q9Sum, q7Sum) + "%");
+			row.put(getColumns().get(GPIReportConstants.GPI_1_Q4), getPercentage(q10Cnt, cnt) + "%");
+
+		}
 
 		return row;
 	}
@@ -269,14 +272,16 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 	 * @param id
 	 * @return
 	 */
-	private String getRemarkEndpointURL(List<GPIOutput1Item> gpiElements) {
+	private String getRemarkEndpointURL() {
 		String remarkEndpoint = GPIReportConstants.GPI_REMARK_ENDPOINT + "?donorId=%s&donorType=%s&from=%s&to=%s";
 
 		String donorType = GPIReportConstants.HIERARCHY_DONOR_AGENCY;
 
-		List<String> donorIds = gpiElements.stream().map(gpiItem -> Long.toString(gpiItem.getDonorId()))
-				.collect(Collectors.toList());
-		String ids = String.join(",", donorIds);
+		FilterRule donorAgencyRule = GPIReportUtils.getFilterRule(originalFormParams, ColumnConstants.DONOR_AGENCY);
+		List<String> filteredDonors = donorAgencyRule == null ? new ArrayList<>()
+				: donorAgencyRule.values.stream().collect(Collectors.toList());
+		
+		String ids = String.join(",", filteredDonors);
 
 		FilterRule approvalDateRule = GPIReportUtils.getFilterRule(originalFormParams, 
 				ColumnConstants.ACTUAL_APPROVAL_DATE);

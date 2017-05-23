@@ -38,7 +38,6 @@ public class GpiReport1Output1Visitor implements ReportVisitor {
 	public void visit(ReportArea area) {
 		if (area.getChildren() == null) {
 			if (!gpiItem.isEmpty()) {
-				System.out.println(gpiItem);
 				donorItems.add(gpiItem);
 			}
 		} else {

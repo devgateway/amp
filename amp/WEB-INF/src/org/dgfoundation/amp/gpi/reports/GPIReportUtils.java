@@ -86,6 +86,10 @@ public class GPIReportUtils {
 		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTUAL_APPROVAL_DATE));
+		spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY));
+		spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+		spec.addColumn(new ReportColumn(ColumnConstants.FINANCING_INSTRUMENT));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6_DESCRIPTION));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q7));
@@ -94,10 +98,24 @@ public class GPIReportUtils {
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q10));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q10_DESCRIPTION));
 		
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PIPELINE_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_EXPENDITURES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_EXPENDITURES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENT_ORDERS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_ESTIMATED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_ESTIMATED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST));
+		
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		
 		applyAppovalStatusFilter(formParams, spec);
+		removeDonorAgencyFilterRule(spec);
 		applySettings(formParams, spec);
 		clearYearRangeSettings(spec);
 
@@ -105,7 +123,7 @@ public class GPIReportUtils {
 
 		return generatedReport;
 	}
-	
+
 	/**
 	 * Create the template for the GPI report 1 Output 2
 	 * 
@@ -300,6 +318,7 @@ public class GPIReportUtils {
 	public static void applyAppovalStatusFilter(JsonBean formParams, ReportSpecificationImpl spec) {
 		if (formParams != null) {
 			Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+			
 			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
 
 			if (filterRules == null) {
@@ -366,5 +385,38 @@ public class GPIReportUtils {
 		FilterRule dateRule = dateRuleEntry.isPresent() ? dateRuleEntry.get().getValue() : null;
 		
 		return dateRule;
+	}
+	
+	/**
+	 * @param spec
+	 */
+	private static void removeDonorAgencyFilterRule(ReportSpecificationImpl spec) {
+		ReportElement donorAgencyRuleElement = getFilterRuleElement(spec.getFilters().getAllFilterRules(), 
+				ColumnConstants.DONOR_AGENCY);
+		spec.getFilters().getAllFilterRules().remove(donorAgencyRuleElement);
+	}
+	
+	public static FilterRule getFilterRule(JsonBean formParams, String columnName) {
+		FilterRule donorAgencyRule = null;
+		if (formParams != null) {
+			Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+
+			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+			ReportElement donorAgencyRuleElement = getFilterRuleElement(filterRules.getAllFilterRules(), columnName);
+			donorAgencyRule = filterRules.getAllFilterRules().get(donorAgencyRuleElement);
+		}
+
+		return donorAgencyRule;
+	}
+	
+	public static ReportElement getFilterRuleElement(Map<ReportElement, FilterRule> filterRules, String column) {
+
+		Optional<Entry<ReportElement, FilterRule>> dateRuleEntry = filterRules.entrySet().stream()
+				.filter(entry -> entry.getKey().entity.getEntityName().equals(column))
+				.findAny();
+
+		ReportElement reportElement = dateRuleEntry.isPresent() ? dateRuleEntry.get().getKey() : null;
+
+		return reportElement;
 	}
 }

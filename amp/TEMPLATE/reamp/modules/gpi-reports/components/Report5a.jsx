@@ -31,6 +31,7 @@ export default class Report5a extends Component {
         this.settingsWidget = Utils.initializeSettingsWidget()
         this.props.actions.getYears()
         this.props.actions.getOrgList(false);
+        this.props.actions.getSettings();
         this.fetchReportData();
         
     }
@@ -95,7 +96,7 @@ export default class Report5a extends Component {
 
     fetchReportData( data ) {
         let requestData = data || this.getRequestData();
-        this.props.actions.fetchReport5aMainReport( requestData, '5a' );
+        this.props.actions.fetchReportData( requestData, '5a' );
     }
     
     onDonorFilterChange( e ) {
@@ -172,13 +173,13 @@ export default class Report5a extends Component {
     goToPage( pageNumber ) {
         let requestData = this.getRequestData();
         requestData.page = pageNumber;
-        this.props.actions.fetchReport5aMainReport( requestData, '5a' );
+        this.props.actions.fetchReportData( requestData, '5a' );
     }
     
     updateRecordsPerPage(recordsPerPage) {
         let requestData = this.getRequestData();
         requestData.recordsPerPage = recordsPerPage;
-        this.props.actions.fetchReport5aMainReport( requestData, '5a' );
+        this.props.actions.fetchReportData(requestData, '5a' );
     }
     
     closeRemarksModal() {
@@ -233,7 +234,7 @@ export default class Report5a extends Component {
                     </div>                                       
                     <div className="section-divider"></div>     
                         {this.state.showRemarks &&
-                             <RemarksPopup showRemarks={this.state.showRemarks} closeRemarksModal={this.closeRemarksModal.bind(this)} remarksUrl={this.state.remarksUrl} code="5a" />                                                  
+                             <RemarksPopup showRemarks={this.state.showRemarks} closeRemarksModal={this.closeRemarksModal.bind(this)} remarksUrl={this.state.remarksUrl} code="5a" settings={this.props.settings} />                                                  
                         }                        
                         <table className="table table-bordered table-striped indicator-table">
                         <thead>
@@ -293,6 +294,7 @@ function mapStateToProps( state, ownProps ) {
         mainReport: state.reports['5a'].mainReport,
         orgList: state.commonLists.orgList,
         years: state.commonLists.years,
+        settings: state.commonLists.settings,
         translations: state.startUp.translations,
         translate: state.startUp.translate
     }

@@ -12,11 +12,23 @@ import org.passay.UsernameRule;
 
 import java.util.Arrays;
 
+/**
+ * Validates the supplied password per the requirements of these rules.
+ *
+ * @author Aldo Picca
+ */
 public class PasswordPolicyValidator {
+
+    public static final String SHOW_PASSWORD_POLICY_RULES = "showPasswordPolicyRules";
+    public static final int MIN_LENGTH = 8;
+    public static final int MAX_LENGTH = 9999; //currently no max length is requested.
+    public static final boolean USERNAME_MATCH_BACKWARDS = false; //whether to match backwards.
+    public static final boolean USERNAME_IGNORE_CASE = true; //whether to ignore case.
+
     private static PasswordValidator validator = new PasswordValidator(Arrays.asList(
-            new UsernameRule(true, true),
-            // length between 8 and 16 characters
-            new LengthRule(8, 9999),
+            new UsernameRule(USERNAME_MATCH_BACKWARDS, USERNAME_IGNORE_CASE),
+            // length between MIN_LENGTH and MAX_LENGTH characters
+            new LengthRule(MIN_LENGTH, MAX_LENGTH),
             // at least one upper-case character
             new CharacterRule(EnglishCharacterData.UpperCase, 1),
             // at least one lower-case character
@@ -24,6 +36,11 @@ public class PasswordPolicyValidator {
             // at least one digit character
             new CharacterRule(EnglishCharacterData.Digit, 1)));
 
+    /**
+     * Returns whether the result of the rule verification is a valid password.
+     *
+     * @return valid password for these rules
+     */
     public static boolean isValid(String password, String username) {
 
         if (FeaturesUtil.getGlobalSettingValueBoolean(Constants.STRONG_PASSWORD)) {

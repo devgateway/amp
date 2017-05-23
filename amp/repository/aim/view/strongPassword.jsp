@@ -1,3 +1,4 @@
+<%@ page import="org.digijava.kernel.security.PasswordPolicyValidator" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="globalsettings"%>
@@ -33,7 +34,7 @@
                 progressBarExtraCssClasses: "amp_progress_bar"
             };
             options.common = {
-                minChar: 8
+                minChar: <%=PasswordPolicyValidator.MIN_LENGTH%>
             };
             options.i18n = {
                 t: function (key) {

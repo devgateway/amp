@@ -60,7 +60,7 @@ public class RegisterUser extends Action {
 			ActionMessages errors = new ActionMessages();
 			if (!PasswordPolicyValidator.isValid(userRegisterForm.getPassword(), userRegisterForm.getEmail())) {
 				userRegisterForm.addError("error.strong.validation", "Please enter a password which meets the minimum password requirements");
-				request.setAttribute("showPasswordPolicyRules", true);
+				request.setAttribute(PasswordPolicyValidator.SHOW_PASSWORD_POLICY_RULES, true);
 				return (mapping.getInputForward());
 			}
 			// set password

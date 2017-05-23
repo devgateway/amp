@@ -396,7 +396,7 @@ public class ViewEditUser extends Action {
                         errors.add(ActionMessages.GLOBAL_MESSAGE,
                                 new ActionMessage("error.strong.validation"));
                         saveErrors(request, errors);
-                        request.setAttribute("showPasswordPolicyRules", true);
+                        request.setAttribute(PasswordPolicyValidator.SHOW_PASSWORD_POLICY_RULES, true);
                         return mapping.findForward("forward");
                     }
 

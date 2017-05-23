@@ -61,13 +61,13 @@ export default class App extends Component {
              <div >
              <div>
               <ul className="nav nav-tabs indicator-tabs" role="tablist">    
-               {visibleReports.map( indicatorCode =>               
-                  <li role="presentation" className={currentReport == indicatorCode  ? "active" : ''} ><a href={'#indicator' + indicatorCode} aria-controls={'indicator' + indicatorCode} role="tab" data-toggle="tab" data-indicator={indicatorCode} onClick={this.tabChanged}>{this.props.translations['amp.gpi-reports:indicator'+ indicatorCode +'-title']}</a></li>
+               {visibleReports.map((indicatorCode, i) =>               
+                  <li key={i} role="presentation" className={currentReport == indicatorCode  ? "active" : ''} ><a href={'#indicator' + indicatorCode} aria-controls={'indicator' + indicatorCode} role="tab" data-toggle="tab" data-indicator={indicatorCode} onClick={this.tabChanged}>{this.props.translations['amp.gpi-reports:indicator'+ indicatorCode +'-title']}</a></li>
                 )}             
              </ul>
              <div className="tab-content panel">               
-               {visibleReports.map( indicatorCode => 
-                 <div role="tabpanel" className={currentReport == indicatorCode ? "tab-pane active" : 'tab-pane'} id={'indicator'+ indicatorCode}>
+               {visibleReports.map((indicatorCode, i) => 
+                 <div key={i} role="tabpanel" className={currentReport == indicatorCode ? "tab-pane active" : 'tab-pane'} id={'indicator'+ indicatorCode}>
                    {this.getReport(indicatorCode)}
                  </div>
                )}

@@ -25,10 +25,10 @@ export const initialTranslations = {
         'amp-gpi-reports:close': 'Close',
         'amp-gpi-reports:question': 'Question',
         'amp-gpi-reports:value': 'Value',
-        'amp.gpi-reports:indicator1-q1': 'Q1',
-        'amp.gpi-reports:indicator1-q2': 'Q2',
-        'amp.gpi-reports:indicator1-q3': 'Q3',
-        'amp.gpi-reports:indicator1-q4': 'Q4',
+        'amp.gpi-reports:indicator1-q1': 'Q1. What is the share of new interventions that draw their objectives/development focus from government-led results frameworks, plans and strategy? ',
+        'amp.gpi-reports:indicator1-q2': 'Q2. What is the share of results indicators included in the interventions results framework that drawn results indicators from existing government –led frameworks, planning and strategy?',
+        'amp.gpi-reports:indicator1-q3': 'Q3. What is the share of results indicators that will rely on sources of data provided by existing country-led monitoring system or national statistical services?',
+        'amp.gpi-reports:indicator1-q4': 'Q4. What is the share of new interventions that plan a final (ex post) evaluation supported by the government? (i.e percentage of all new intervention with a final ex post evaluation with government support)',
         
         
 };

@@ -75,10 +75,16 @@ export default class Report1Output2 extends Component {
         requestData.filters = this.filter.serialize().filters;        
         requestData.settings = this.settingsWidget.toAPIFormat(); 
         
-        if (!requestData.filters .date && this.state.selectedYear) {
-            requestData.filters.date = {
-                    'actual-approval-date': this.state.selectedYear + '-01-01',
-                    'actual-approval-date': this.state.selectedYear + '-12-31'
+        
+        requestData.filters['donor-agency'] = requestData.filters['donor-agency'] || [];
+        if (this.state.selectedDonor && requestData.filters['donor-agency'].indexOf(this.state.selectedDonor) == -1) {
+           requestData.filters['donor-agency'].push(this.state.selectedDonor); 
+        }        
+        
+        if (!requestData.filters['actual-approval-date'] && this.state.selectedYear) {
+            requestData.filters['actual-approval-date'] = {
+                    'start': this.state.selectedYear + '-01-01',
+                    'end': this.state.selectedYear + '-12-31'
                 };  
         }     
         
@@ -92,9 +98,9 @@ export default class Report1Output2 extends Component {
     
     onDonorFilterChange( e ) {
         this.setState( { selectedDonor: parseInt( e.target.value ) }, function() {
-            let filters = this.filter.serialize().filters;
-            delete filters['donor-group'];
-            delete filters['donor-agency'];
+            let filters = this.filter.serialize().filters;            
+            filters['donor-agency'] = []
+            filters['donor-agency'].push( this.state.selectedDonor);
             this.filter.deserialize({filters: filters});
             this.fetchReportData();
         }.bind( this ) );
@@ -103,11 +109,11 @@ export default class Report1Output2 extends Component {
     onYearClick( selectedYear ) {
         this.setState( { selectedYear: selectedYear }, function() {                      
             let filters = this.filter.serialize().filters;
-            filters.date = {};
+            filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                filters.date = {
-                        'actual-approval-date': this.state.selectedYear + '-01-01',
-                        'actual-approval-date': this.state.selectedYear + '-12-31'
+                filters['actual-approval-date'] = {
+                        'start': this.state.selectedYear + '-01-01',
+                        'end': this.state.selectedYear + '-12-31'
                     };  
             }           
             this.filter.deserialize({filters: filters});            
@@ -118,7 +124,7 @@ export default class Report1Output2 extends Component {
 
     resetQuickFilters() {
         let filters = this.filter.serialize().filters;
-        if (filters.date) {
+        if (filters['actual-approval-date']) {
             this.setState( { selectedYear: null });
         }
 
@@ -161,7 +167,7 @@ export default class Report1Output2 extends Component {
    createRows() {
        var rows = [];
        this.props.output2 && this.props.output2.page && this.props.output2.page.contents.forEach(( dataRow, i ) => {
-          rows.push(<tr ><td rowSpan="4">{dataRow[Constants.YEAR]}</td><td>{this.props.translations['amp.gpi-reports:indicator1-q1']}</td><td>{dataRow[Constants.Q1]}</td></tr>);
+          rows.push(<tr><td rowSpan="4">{dataRow[Constants.YEAR]}</td><td>{this.props.translations['amp.gpi-reports:indicator1-q1']}</td><td>{dataRow[Constants.Q1]}</td></tr>);
           rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q2']}</td><td>{dataRow[Constants.Q2]}</td></tr>);
           rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q3']}</td><td>{dataRow[Constants.Q3]}</td></tr>);
           rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q4']}</td><td>{dataRow[Constants.Q4]}</td></tr>);
@@ -180,14 +186,14 @@ export default class Report1Output2 extends Component {
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}/>
                     <div className="section-divider"></div>
                    
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={this.props.years} selectedYear={this.state.selectedYear} mainReport={this.props.output2}/>
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={this.props.years} selectedYear={this.state.selectedYear} mainReport={this.props.output2} filter={this.filter} dateField="actual-approval-date"/>
                     
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
                                 <option value="">{this.props.translations['amp.gpi-reports:all-donors']}</option>
-                                {this.props.orgList.map( org =>
-                                    <option value={org.id} key={org.id} >{org.name}</option>
+                                {this.props.orgList.map((org, i) =>
+                                    <option key={i} value={org.id} key={org.id} >{org.name}</option>
                                 )}
                             </select>
                         </div>

@@ -20,20 +20,20 @@ export default class YearsFilterSection extends Component {
         var displayDates = '';
         if(this.props.filter){
             var filters = this.props.filter.serialize().filters;            
-            if ( filters.date ) {
-                filters.date.start = filters.date.start || '';
-                filters.date.end = filters.date.end || '';
-                var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
-                var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
-                if ( filters.date.start.length > 0 ) {
-                    displayDates = startDatePrefix + " " + this.props.filter.formatDate( filters.date.start );
+            if (filters[this.props.dateField]) {
+                filters[this.props.dateField].start = filters[this.props.dateField].start || '';
+                filters[this.props.dateField].end = filters[this.props.dateField].end || '';
+                var startDatePrefix = ( filters[this.props.dateField].start.length > 0 && filters[this.props.dateField].end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
+                var endDatePrefix = ( filters[this.props.dateField].start.length === 0 && filters[this.props.dateField].end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
+                if ( filters[this.props.dateField].start.length > 0 ) {
+                    displayDates = startDatePrefix + " " + this.props.filter.formatDate( filters[this.props.dateField].start );
                 }
 
-                if ( filters.date.end.length > 0 ) {
-                    if ( filters.date.start.length > 0 ) {
+                if ( filters[this.props.dateField].end.length > 0 ) {
+                    if ( filters[this.props.dateField].start.length > 0 ) {
                         displayDates += " - ";
                     }
-                    displayDates += endDatePrefix + " " + this.props.filter.formatDate( filters.date.end );
+                    displayDates += endDatePrefix + " " + this.props.filter.formatDate( filters[this.props.dateField].end );
                 }
             } 
         }

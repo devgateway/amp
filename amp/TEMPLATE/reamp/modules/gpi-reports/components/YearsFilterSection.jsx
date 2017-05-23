@@ -18,22 +18,22 @@ export default class YearsFilterSection extends Component {
     
     showSelectedDates() {
         var displayDates = '';
-        if(this.filter){
-            var filters = this.filter.serialize().filters;            
+        if(this.props.filter){
+            var filters = this.props.filter.serialize().filters;            
             if ( filters.date ) {
                 filters.date.start = filters.date.start || '';
                 filters.date.end = filters.date.end || '';
                 var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
                 var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
                 if ( filters.date.start.length > 0 ) {
-                    displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
+                    displayDates = startDatePrefix + " " + this.props.filter.formatDate( filters.date.start );
                 }
 
                 if ( filters.date.end.length > 0 ) {
                     if ( filters.date.start.length > 0 ) {
                         displayDates += " - ";
                     }
-                    displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
+                    displayDates += endDatePrefix + " " + this.props.filter.formatDate( filters.date.end );
                 }
             } 
         }

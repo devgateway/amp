@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report Output (headers, report data, summary)
@@ -25,6 +26,8 @@ public abstract class GPIReportOutputBuilder  {
 	
 	protected boolean isDonorAgency = true;
 	
+	protected JsonBean originalFormParams;
+	
 	public GPIReportOutputBuilder() {
 	};
 	
@@ -34,6 +37,11 @@ public abstract class GPIReportOutputBuilder  {
 	
 	protected void addColumn(GPIReportOutputColumn col) {
 		columns.put(col.columnName, col);
+	}
+	
+	public void setOriginalFormParams(JsonBean originalFormParams) {
+		this.originalFormParams = originalFormParams;
+		this.isDonorAgency = GPIReportUtils.isDonorAgency(originalFormParams);
 	}
 	
 	protected abstract List<GPIReportOutputColumn> buildHeaders(GeneratedReport generatedReport);

@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -324,12 +323,12 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 		if (a.compareTo(b) <= 0) {
 			return a.divide(b, NiFormula.DIVISION_MC)
 					.multiply(new BigDecimal(100))
-					.setScale(0, RoundingMode.UP);
+					.setScale(0, RoundingMode.HALF_UP);
 		}
 
 		return a.subtract(b).divide(a, NiFormula.DIVISION_MC)
 				.multiply(new BigDecimal(100))
-				.setScale(0, RoundingMode.UP);
+				.setScale(0, RoundingMode.HALF_UP);
 	}
 	
 	protected boolean isAcceptableDate(GeneratedReport generatedReport, LocalDate date) {

@@ -41,12 +41,9 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	public static final String TOTAL_ACTUAL_DISBURSEMENTS = "Total Actual Disbursements";
 	public static final String CONCESSIONAL = "Concessional";
 	public static final String DISBURSEMENTS_OTHER_PROVIDERS = "Disbursements through other providers";
-	public static final String REMARK = "Remark";
 
 	public static final String ACTIVITY_BUDGET_ON = "On Budget";
 	public static final String YES_VALUE = "yes";
-
-	public static final String GPI_REMARK_ENDPOINT = "/rest/gpi/report/remarks";
 
 	public GPIReport5aOutputBuilder() {
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
@@ -57,7 +54,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		addColumn(new GPIReportOutputColumn(MeasureConstants.PLANNED_DISBURSEMENTS));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.DISBURSED_AS_SCHEDULED));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.OVER_DISBURSED));
-		addColumn(new GPIReportOutputColumn(REMARK));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK));
 	}
 
 	public final static Set<String> YEAR_LEVEL_HIERARCHIES = Collections
@@ -107,7 +104,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		headers.add(new GPIReportOutputColumn(DISBURSEMENTS_OTHER_PROVIDERS));
 		headers.add(getColumns().get(MeasureConstants.DISBURSED_AS_SCHEDULED));
 		headers.add(getColumns().get(MeasureConstants.OVER_DISBURSED));
-		headers.add(new GPIReportOutputColumn(REMARK));
+		headers.add(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK));
 
 		return headers;
 	}
@@ -139,7 +136,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 					} else if (roc.originalColumnName.equals(ColumnConstants.DONOR_AGENCY)
 							|| roc.originalColumnName.equals(ColumnConstants.DONOR_GROUP)) {
 						columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
-						columns.put(new GPIReportOutputColumn(REMARK),
+						columns.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK),
 								getRemarkEndpointURL(generatedReport.spec, reportArea.getOwner().id));
 					}
 				}
@@ -203,7 +200,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 						if (MeasureConstants.DISBURSED_AS_SCHEDULED.equals(x)
 								|| MeasureConstants.OVER_DISBURSED.equals(x)) {
 							BigDecimal percentage = new BigDecimal(((AmountCell) y).extractValue());
-							row.put(getColumns().get(x), percentage.setScale(0, RoundingMode.UP) + "%");
+							row.put(getColumns().get(x), percentage.setScale(0, RoundingMode.HALF_UP) + "%");
 						} else {
 							row.put(getColumns().get(x), y.displayedValue);
 						}
@@ -239,15 +236,15 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	private String getRemarkEndpointURL(ReportSpecification spec, long id) {
-		String remarkEndpoint = GPI_REMARK_ENDPOINT + "?donorId=%s&donorType=%s&from=%s&to=%s";
+		String remarkEndpoint = GPIReportConstants.GPI_REMARK_ENDPOINT + "?donorId=%s&donorType=%s&from=%s&to=%s";
 
 		String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
 				: GPIReportConstants.HIERARCHY_DONOR_GROUP;
 
 		FilterRule dateRule = GPIReportUtils.getDateFilterRule(spec);
 		
-		String min = dateRule.min != null ? dateRule.min : "0";
-		String max = dateRule.max != null ? dateRule.max : "0";
+		String min = dateRule == null ? "0" : dateRule.min != null ? dateRule.min : "0";
+		String max = dateRule == null ? "0" : dateRule.max != null ? dateRule.max : "0";
 
 		return String.format(remarkEndpoint, id, donorType, min, max);
 	}
@@ -348,7 +345,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 			result = actual.divide(planned, NiFormula.DIVISION_MC);
 		}
 
-		return result.multiply(new BigDecimal(100)).setScale(0, RoundingMode.UP);
+		return result.multiply(new BigDecimal(100)).setScale(0, RoundingMode.HALF_UP);
 	}
 
 	/**
@@ -366,7 +363,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		}
 
 		return actual.subtract(planned).divide(actual, NiFormula.DIVISION_MC).multiply(new BigDecimal(100)).setScale(0,
-				RoundingMode.UP);
+				RoundingMode.HALF_UP);
 	}
 
 }

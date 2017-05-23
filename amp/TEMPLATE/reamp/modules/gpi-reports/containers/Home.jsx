@@ -78,10 +78,12 @@ export default class App extends Component {
                {visibleReports.map((indicatorCode, i) => 
                 <div key={i} role="tabpanel" className={currentReport == indicatorCode ? "tab-pane active" : 'tab-pane'} id={'indicator'+ indicatorCode}>               
                 {indicatorCode == Constants.INDICATOR_1_CODE &&
+                  <div className="col-md-6 no-padding">                
                    <ul className="output-nav">               
                     <li className={this.state.currentOutput == '1' ? 'active': ''}><a data-output="1" onClick={this.outputChanged}>{this.props.translations['amp.gpi-reports:indicator1-output1']}</a></li>
                     <li className={this.state.currentOutput == '2' ? 'active': ''}><a data-output="2" onClick={this.outputChanged}>{this.props.translations['amp.gpi-reports:indicator1-output2']}</a></li>
                    </ul>
+                   </div>
                 }               
                 {this.getReport(indicatorCode)}
                 </div>

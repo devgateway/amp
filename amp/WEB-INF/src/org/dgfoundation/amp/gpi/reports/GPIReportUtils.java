@@ -324,12 +324,12 @@ public class GPIReportUtils {
 			if (filterRules == null) {
 				filterRules = new AmpReportFilters();
 			}
-//
-//			ReportElement elem = new ReportElement(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
-//
-//			// Validated Activities - 4
-//			FilterRule filterRule = new FilterRule(Arrays.asList("4"), true);
-//			filterRules.addFilterRule(elem, filterRule);
+
+			ReportElement elem = new ReportElement(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
+
+			// Validated Activities - 4
+			FilterRule filterRule = new FilterRule(Arrays.asList("4"), true);
+			filterRules.addFilterRule(elem, filterRule);
 
 			spec.setFilters(filterRules);
 		}

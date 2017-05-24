@@ -125,7 +125,7 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 		List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
 		
 		List<GPIOutput1Item> gpiItems = getFilteredGPIItems(generatedReport);
-		gpiItems.forEach(gpiItem -> contents.add(generateRow(gpiItem)));
+		gpiItems.forEach(gpiItem -> contents.add(generateRow(generatedReport, gpiItem)));
 
 		GPIReportOutputColumn approvalColumn = getColumns().get(ColumnConstants.ACTUAL_APPROVAL_DATE);
 		Comparator<Map<GPIReportOutputColumn, String>> byApprovalDate = (Map<GPIReportOutputColumn, String> o1,
@@ -169,16 +169,18 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 	}
 	
 	/**
+	 * @param generatedReport 
 	 * @param gpiElement
 	 * @return
 	 */
-	private Map<GPIReportOutputColumn, String> generateRow(GPIOutput1Item gpiElement) {
+	private Map<GPIReportOutputColumn, String> generateRow(GeneratedReport generatedReport, GPIOutput1Item gpiElement) {
 		
 		Map<GPIReportOutputColumn, String> row = new HashMap<>();
 		
 		row.put(getColumns().get(ColumnConstants.PROJECT_TITLE), gpiElement.getProjectTitle());
-		row.put(getColumns().get(GPIReportConstants.GPI_1_Q1), gpiElement.getApprovalDateAsString());
-		row.put(getColumns().get(GPIReportConstants.GPI_1_Q2), gpiElement.getActCommitments().toString());
+		row.put(getColumns().get(GPIReportConstants.GPI_1_Q1), 
+				formatAmount(generatedReport, gpiElement.getActCommitments()));
+		row.put(getColumns().get(GPIReportConstants.GPI_1_Q2), gpiElement.getApprovalDateAsString());
 		row.put(getColumns().get(GPIReportConstants.GPI_1_Q3), 
 				String.join("###", gpiElement.getFinancingInstruments().values()));
 		row.put(getColumns().get(GPIReportConstants.GPI_1_Q4), 

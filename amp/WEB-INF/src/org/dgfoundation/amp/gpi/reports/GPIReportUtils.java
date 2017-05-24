@@ -393,7 +393,10 @@ public class GPIReportUtils {
 	private static void removeDonorAgencyFilterRule(ReportSpecificationImpl spec) {
 		ReportElement donorAgencyRuleElement = getFilterRuleElement(spec.getFilters().getAllFilterRules(), 
 				ColumnConstants.DONOR_AGENCY);
-		spec.getFilters().getAllFilterRules().remove(donorAgencyRuleElement);
+		
+		if (donorAgencyRuleElement != null) {
+			spec.getFilters().getAllFilterRules().remove(donorAgencyRuleElement);
+		}
 	}
 	
 	public static FilterRule getFilterRule(JsonBean formParams, String columnName) {
@@ -412,7 +415,8 @@ public class GPIReportUtils {
 	public static ReportElement getFilterRuleElement(Map<ReportElement, FilterRule> filterRules, String column) {
 
 		Optional<Entry<ReportElement, FilterRule>> dateRuleEntry = filterRules.entrySet().stream()
-				.filter(entry -> entry.getKey().entity.getEntityName().equals(column))
+				.filter(entry -> entry.getKey() != null && entry.getKey().entity != null)
+				.filter(entry -> column.equals(entry.getKey().entity.getEntityName()))
 				.findAny();
 
 		ReportElement reportElement = dateRuleEntry.isPresent() ? dateRuleEntry.get().getKey() : null;

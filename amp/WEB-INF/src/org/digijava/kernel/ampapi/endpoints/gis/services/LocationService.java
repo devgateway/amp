@@ -169,7 +169,7 @@ public class LocationService {
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 				String countryIdQuery = " select geo_code from amp_category_value_location acvl,amp_global_settings gs "
-						+ " where acvl.iso=gs.settingsvalue and gs.settingsname ='Default Country'";
+						+ " where acvl.iso=gs.settingsvalue and gs.settingsname ='"+ GlobalSettingsConstants.DEFAULT_COUNTRY +"'";
 				RsInfo rsi = SQLUtils.rawRunQuery(conn, countryIdQuery, null);
 				if (rsi.rs.next()) {
 					geoCode.value = rsi.rs.getString(1);

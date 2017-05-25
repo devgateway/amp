@@ -217,14 +217,17 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 			BigDecimal cnt = BigDecimal.valueOf(gpiElements.size());
 
 			BigDecimal q6Cnt = getCountOfFilteredElements(gpiElements, GPIOutput1Item::getQ6);
-			BigDecimal q7Sum = getSumOfFields(gpiElements, GPIOutput1Item::getQ7);
-			BigDecimal q8Sum = getSumOfFields(gpiElements, GPIOutput1Item::getQ8);
-			BigDecimal q9Sum = getSumOfFields(gpiElements, GPIOutput1Item::getQ9);
+			
+			BigDecimal q8Sum = getSumOfFields(gpiElements, 
+					gpiItem -> gpiItem.getQ8().divide(gpiItem.getQ7(), NiFormula.DIVISION_MC));
+			BigDecimal q9Sum = getSumOfFields(gpiElements, 
+					gpiItem -> gpiItem.getQ9().divide(gpiItem.getQ7(), NiFormula.DIVISION_MC));
+			
 			BigDecimal q10Cnt = getCountOfFilteredElements(gpiElements, GPIOutput1Item::getQ10);
 
 			row.put(getColumns().get(GPIReportConstants.GPI_1_Q1), getPercentage(q6Cnt, cnt) + "%");
-			row.put(getColumns().get(GPIReportConstants.GPI_1_Q2), getPercentage(q8Sum, q7Sum) + "%");
-			row.put(getColumns().get(GPIReportConstants.GPI_1_Q3), getPercentage(q9Sum, q7Sum) + "%");
+			row.put(getColumns().get(GPIReportConstants.GPI_1_Q2), getPercentage(q8Sum, cnt) + "%");
+			row.put(getColumns().get(GPIReportConstants.GPI_1_Q3), getPercentage(q9Sum, cnt) + "%");
 			row.put(getColumns().get(GPIReportConstants.GPI_1_Q4), getPercentage(q10Cnt, cnt) + "%");
 
 		}
@@ -238,7 +241,10 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	private BigDecimal getPercentage(BigDecimal a, BigDecimal b) {
-		return a.divide(b, NiFormula.DIVISION_MC).scaleByPowerOfTen(2).setScale(0, RoundingMode.HALF_UP);
+		return BigDecimal.ZERO.equals(b) ? BigDecimal.ZERO : 
+			a.divide(b, NiFormula.DIVISION_MC)
+			.scaleByPowerOfTen(2)
+			.setScale(0, RoundingMode.HALF_UP);
 	}
 
 	/**

@@ -209,14 +209,14 @@ public class GPIReportUtils {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5b,
 				ArConstants.DONOR_TYPE);
 
-		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
-		spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
-		
-		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-		spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		if (isDonorAgency(formParams)) {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		} else {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
+		}
 
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		spec.setSummaryReport(true);
 
 		applyAppovalStatusFilter(formParams, spec);
@@ -226,6 +226,49 @@ public class GPIReportUtils {
 		for (String mtefColumn : getMTEFColumnsForIndicator5b(spec)) {
 			spec.addColumn(new ReportColumn(mtefColumn));
 		}
+
+		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
+
+		return generatedReport;
+	}
+	
+	/**
+	 * Create the template for the GPI report 5b
+	 * 
+	 * @param formParams
+	 * @return generatedReport 
+	 */
+	public static GeneratedReport getGeneratedReportForIndicator5bActDisb(JsonBean formParams) {
+
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5b + " measures",
+				ArConstants.DONOR_TYPE);
+
+		if (isDonorAgency(formParams)) {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		} else {
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+			spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
+		}
+		
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PIPELINE_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_EXPENDITURES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_EXPENDITURES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENT_ORDERS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_ESTIMATED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_ESTIMATED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST));
+
+		spec.setSummaryReport(true);
+
+		applyAppovalStatusFilter(formParams, spec);
+		applySettings(formParams, spec);
+		clearYearRangeSettings(spec);
 
 		GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 
@@ -373,6 +416,21 @@ public class GPIReportUtils {
 		}
 
 		return mtefColumns;
+	}
+	
+	public static int getPivoteYear(ReportSpecification spec) {
+		
+		FilterRule dateFilterRule = getDateFilterRule(spec);
+		if (dateFilterRule == null || StringUtils.isBlank(dateFilterRule.min)) {
+			throw new RuntimeException("No year selected. Please specify the date filter");
+		}
+		
+		Date fromJulianNumberToDate = DateTimeUtil.fromJulianNumberToDate(dateFilterRule.min);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fromJulianNumberToDate);
+		int year = cal.get(Calendar.YEAR);
+
+		return year;
 	}
 
 	public static FilterRule getDateFilterRule(ReportSpecification spec) {

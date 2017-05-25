@@ -58,11 +58,11 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 	protected List<GPIReportOutputColumn> buildHeaders(GeneratedReport generatedReport) {
 		List<GPIReportOutputColumn> headers = new ArrayList<>();
 
-		GPIReportOutputColumn donorColumn = null;
+		String donorColumnName = isDonorAgency ? ColumnConstants.DONOR_AGENCY : ColumnConstants.DONOR_GROUP;
 
 		int year = GPIReportUtils.getPivoteYear(generatedReport.spec);
 
-		headers.add(donorColumn);
+		headers.add(getColumns().get(donorColumnName));
 		headers.add(new GPIReportOutputColumn(String.valueOf(year + 1), String.format("%s %s", MTEF_NAME, (year + 1))));
 		headers.add(new GPIReportOutputColumn(String.valueOf(year + 2), String.format("%s %s", MTEF_NAME, (year + 2))));
 		headers.add(new GPIReportOutputColumn(String.valueOf(year + 3), String.format("%s %s", MTEF_NAME, (year + 3))));

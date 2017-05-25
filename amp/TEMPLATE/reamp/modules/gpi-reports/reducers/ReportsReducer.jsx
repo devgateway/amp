@@ -14,9 +14,12 @@ const defaultState = {
     },
     '1': {
         output1: {},
-        output2: {}
+        output2: {},
+        remarks:[],
+        supportingEvidence: {}
     }
 };
+
 export default function reports( state: Object = defaultState, action: Object ) {
     switch ( action.type ) {
         case 'FETCH_REPORT_9B_MAIN_REPORT_SUCCESS':
@@ -51,7 +54,15 @@ export default function reports( state: Object = defaultState, action: Object ) 
         case 'CLEAR_REMARKS':
             var newState = Object.assign( {}, state);
             newState[action.data.code].remarks = [];
-            return newState;         
+            return newState;   
+        case 'FETCH_SUPPORTING_EVIDENCE_SUCCESS':
+            var newState = Object.assign( {}, state);
+            newState[action.data.code].supportingEvidence = action.data.supportingEvidence;
+            return newState;
+        case 'CLEAR_SUPPORTING_EVIDENCE':
+            var newState = Object.assign( {}, state);
+            newState[action.data.code].supportingEvidence = {};
+            return newState;
         default:
             return state;
     }

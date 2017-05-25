@@ -14,30 +14,19 @@ export default class RemarksPopup extends Component {
         this.props.actions.clearRemarks(this.props.code);
         this.props.actions.fetchRemarks(this.props.code, this.props.remarksUrl);        
     }
-    getDateFormat() {
-        return (this.props.settings && this.props.settings[Constants.DATE_FORMAT_SETTING]) ? this.props.settings[Constants.DATE_FORMAT_SETTING].toUpperCase() : Constants.DEFAULT_UI_DATE_FORMAT;  
-    }
-    
-    formatDate(date) {
-        var result;
-        if(date) {
-            result = moment(date, Constants.EP_DATE_FORMAT).format(this.getDateFormat());           
-        }        
-        return result        
-    }
-    
+       
     render() {          
         return (<Modal show={this.props.showRemarks} onHide={this.props.closeRemarksModal} container={this}>
                 <Modal.Header closeButton>
                   <Modal.Title>{this.props.translations['amp-gpi-reports:remarks']}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <div>
+                  <div className="remarks-container">
                     {this.props.remarks.map((remark, i ) =>
                     <div className="row remark-row" key={i}> 
                        <div >
                         <span className="glyphicon glyphicon-comment comment-icon"> </span>
-                        <span className="remark-date"> {this.formatDate(remark.date)}</span>
+                        <span className="remark-date"> {remark.date}</span>
                         </div>
                        <div className="remark"> {remark.remark}</div>
                         <div className="row-divider"></div>
@@ -50,11 +39,11 @@ export default class RemarksPopup extends Component {
     }
 }
 
-function mapStateToProps( state, ownProps ) {
+function mapStateToProps( state, ownProps ) {   
     return {
         translations: state.startUp.translations,
         translate: state.startUp.translate,
-        remarks: state.reports['5a'].remarks
+        remarks: state.reports[ownProps.code].remarks
     }
 }
 

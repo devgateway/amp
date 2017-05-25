@@ -11,6 +11,7 @@ import Report6 from '../components/Report6';
 import Report5b from '../components/Report5b';
 import Report5a from '../components/Report5a';
 import Report1Output2 from '../components/Report1Output2';
+import Report1Output1 from '../components/Report1Output1';
 
 export default class App extends Component {
     constructor( props, context ) {
@@ -40,7 +41,7 @@ export default class App extends Component {
         switch (code) {               
         case Constants.INDICATOR_1_CODE: 
             if (this.state.currentOutput == Constants.OUTPUT_1){
-                return <div></div>;
+                return <Report1Output1/>;
             } else {
                return <Report1Output2/>;  
             }            

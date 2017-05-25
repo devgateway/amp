@@ -26,10 +26,31 @@ export const INDICATOR_5A_CODE = '5a';
 export const INDICATOR_5B_CODE = '5b';
 export const INDICATOR_6_CODE = '6';
 export const INDICATOR_9B_CODE = '9b';
-export const OUTPUT_1 = '1';
-export const OUTPUT_2 = '2';
 export const INDICATOR_CODE_LIST = [INDICATOR_1_CODE, INDICATOR_5A_CODE, INDICATOR_5B_CODE,INDICATOR_6_CODE, INDICATOR_9B_CODE];
+
+//Indicator 1 constants
 export const Q1 = 'Q1';
 export const Q2 = 'Q2';
 export const Q3 = 'Q3';
 export const Q4 = 'Q4';
+export const Q5 = 'Q5';
+export const Q6 = 'Q6';
+export const Q7 = 'Q7';
+export const Q8 = 'Q8';
+export const Q9 = 'Q9';
+export const Q10 = 'Q10';
+export const Q11 = 'Q11';
+export const PROJECT_TITLE = 'Project Title';
+export const RESULT = 'Result';
+export const M_E = 'M&E';
+export const ACTUAL_COMMITMENTS = 'Actual Commitments';//
+export const ACTUAL_APPROVAL_DATE = 'Actual Approval Date';
+export const FINANCING_INSTRUMENT = 'Financing Instrument';
+export const IMPLEMENTING_AGENCY = 'Implementing Agency';
+export const PRIMARY_SECTOR = 'Primary Sector';
+export const Q6_DESCRIPTION = 'Q6 Description';
+export const Q10_DESCRIPTION = 'Q10 Description';
+export const OUTPUT_1 = '1';
+export const OUTPUT_2 = '2';
+export const DELIMETER = '###';
+

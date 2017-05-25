@@ -31,7 +31,10 @@ export const initialTranslations = {
         'amp.gpi-reports:indicator1-q4': 'Q4. What is the share of new interventions that plan a final (ex post) evaluation supported by the government? (i.e percentage of all new intervention with a final ex post evaluation with government support)',
         'amp.gpi-reports:indicator1-output1': 'Output 1',
         'amp.gpi-reports:indicator1-output2': 'Output 2',
-        'amp.gpi-reports:indicator1-output2-description' : "Development co-operation is focused on results that meet developing countries' priorities"
-        
-        
+        'amp.gpi-reports:indicator1-description' : "Development co-operation is focused on results that meet developing countries' priorities",
+        'amp.gpi-reports:indicator1-output1-summary-q1': 'Overall extent of use existing crfs',
+        'amp.gpi-reports:indicator1-output1-summary-q2': 'Overall use of country owned results framework',
+        'amp.gpi-reports:indicator1-output1-summary-q3': 'Overall use of country lead results monitoring frameworks',
+        'amp.gpi-reports:indicator1-output1-summary-q4': 'Overall existence of ex post',
+        'amp-gpi-reports:supporting-evidence': 'Supporting Evidence'       
 };

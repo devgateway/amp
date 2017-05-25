@@ -201,7 +201,7 @@ export default class Report1Output2 extends Component {
                     </div>   
                     <div className="container-fluid">
                        <div className="row">
-                         <h4>{this.props.translations['amp.gpi-reports:indicator1-output2-description']}</h4>
+                         <h4>{this.props.translations['amp.gpi-reports:indicator1-description']}</h4>
                         </div>
                     </div>
                     <div className="section-divider"></div>                                                

@@ -690,7 +690,7 @@ opacity: 0.4;
   vertical-align: middle;
 }
 
-.remark-row {
+.remark-row , .document-row{
   width: 95%;
   margin: auto;
   font-size: 13px;
@@ -703,7 +703,7 @@ opacity: 0.4;
 .remark {
   padding-left: 20px; 
 }
-.comment-icon {
+.comment-icon, .document-icon {
  vertical-align: middle;
  font-weight: 600;
 }
@@ -712,4 +712,23 @@ opacity: 0.4;
     background: #e6eaee;
     height: 1px;
     margin: 10px auto 5px auto;
+}
+
+.remarks-container{
+ max-height: 400px;
+ overflow-y: auto;
+}
+
+.popover {
+    position: relative;
+
+}
+
+.document a {
+ color: #2b9ff6;
+ font-weight:bold; 
+}
+
+.document a:hover{
+ color: #90c845;
 }

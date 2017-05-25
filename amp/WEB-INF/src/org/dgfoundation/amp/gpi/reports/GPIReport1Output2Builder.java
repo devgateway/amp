@@ -94,14 +94,17 @@ public class GPIReport1Output2Builder extends GPIReportOutputBuilder {
 		row.put(getYearColumn(), year);
 
 		BigDecimal q6Cnt = getCountOfFilteredElements(items, GPIOutput2Item::getQ6);
-		BigDecimal q7Sum = getSumOfFields(items, GPIOutput2Item::getQ7);
-		BigDecimal q8Sum = getSumOfFields(items, GPIOutput2Item::getQ8);
-		BigDecimal q9Sum = getSumOfFields(items, GPIOutput2Item::getQ9);
+		
+		BigDecimal q8Sum = getSumOfFields(items, 
+				gpiItem -> gpiItem.getQ8().divide(gpiItem.getQ7(), NiFormula.DIVISION_MC));
+		BigDecimal q9Sum = getSumOfFields(items, 
+				gpiItem -> gpiItem.getQ9().divide(gpiItem.getQ7(), NiFormula.DIVISION_MC));
+		
 		BigDecimal q10Cnt = getCountOfFilteredElements(items, GPIOutput2Item::getQ10);
 
 		row.put(getColumns().get(GPIReportConstants.GPI_1_Q1), getPercentage(q6Cnt, cnt) + "%");
-		row.put(getColumns().get(GPIReportConstants.GPI_1_Q2), getPercentage(q8Sum, q7Sum) + "%");
-		row.put(getColumns().get(GPIReportConstants.GPI_1_Q3), getPercentage(q9Sum, q7Sum) + "%");
+		row.put(getColumns().get(GPIReportConstants.GPI_1_Q2), getPercentage(q8Sum, cnt) + "%");
+		row.put(getColumns().get(GPIReportConstants.GPI_1_Q3), getPercentage(q9Sum, cnt) + "%");
 		row.put(getColumns().get(GPIReportConstants.GPI_1_Q4), getPercentage(q10Cnt, cnt) + "%");
 
 		return row;

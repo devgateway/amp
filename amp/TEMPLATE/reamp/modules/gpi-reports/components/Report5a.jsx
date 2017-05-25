@@ -84,14 +84,6 @@ export default class Report5a extends Component {
             }
         }
         
-        //TODO: to be removed - hack for BE bug 
-        if(!requestData.filters.date){
-            requestData.filters.date = {
-                    'start': 1970 + '-01-01',
-                    'end': 2030 + '-12-31'
-                };  
-        }        
-          
         return requestData
     } 
 
@@ -101,7 +93,7 @@ export default class Report5a extends Component {
     }
     
     onDonorFilterChange( e ) {
-        this.setState( { selectedDonor: parseInt( e.target.value ) }, function() {
+        this.setState( { selectedDonor: parseInt( e.target.value ), showRemarks: false, remarksUrl: null }, function() {
             let filters = this.filter.serialize().filters;
             delete filters['donor-group'];
             delete filters['donor-agency'];

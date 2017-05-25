@@ -149,7 +149,7 @@ public abstract class GPIReportOutputBuilder  {
 		Comparator<Map<GPIReportOutputColumn, String>> byYearDonorComparator = (Map<GPIReportOutputColumn, String> o1,
 				Map<GPIReportOutputColumn, String> o2) -> {
 			if (o2.get(yearColumn).compareTo(o1.get(yearColumn)) == 0) {
-				return o2.get(donorColumn).compareTo(o1.get(donorColumn));
+				return o1.get(donorColumn).compareTo(o2.get(donorColumn));
 			} else {
 				return o2.get(yearColumn).compareTo(o1.get(yearColumn));
 			}

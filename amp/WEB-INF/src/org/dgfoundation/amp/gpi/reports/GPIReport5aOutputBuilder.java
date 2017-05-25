@@ -298,9 +298,9 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 
 		columns.put(new GPIReportOutputColumn(MeasureConstants.DISBURSED_AS_SCHEDULED),
-				formatAmount(generatedReport, calculateDisbursedAsScheduled(actDisbSum, planDisbSum)) + "%");
+				formatAmount(generatedReport, calculateDisbursedAsScheduled(actDisbSum, planDisbSum), false) + "%");
 		columns.put(new GPIReportOutputColumn(MeasureConstants.OVER_DISBURSED),
-				formatAmount(generatedReport, calculateOverDisbursed(actDisbSum, planDisbSum)) + "%");
+				formatAmount(generatedReport, calculateOverDisbursed(actDisbSum, planDisbSum), false) + "%");
 
 		return columns;
 	}

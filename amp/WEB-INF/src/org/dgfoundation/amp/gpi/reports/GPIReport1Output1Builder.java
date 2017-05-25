@@ -179,7 +179,7 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 		
 		row.put(getColumns().get(ColumnConstants.PROJECT_TITLE), gpiElement.getProjectTitle());
 		row.put(getColumns().get(GPIReportConstants.GPI_1_Q1), 
-				formatAmount(generatedReport, gpiElement.getActCommitments()));
+				formatAmount(generatedReport, gpiElement.getActCommitments(), true));
 		row.put(getColumns().get(GPIReportConstants.GPI_1_Q2), gpiElement.getApprovalDateAsString());
 		row.put(getColumns().get(GPIReportConstants.GPI_1_Q3), 
 				String.join("###", gpiElement.getFinancingInstruments().values()));

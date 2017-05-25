@@ -11,8 +11,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.aim.helper.FormatHelper;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report Output (headers, report data, summary)
@@ -116,9 +119,14 @@ public abstract class GPIReportOutputBuilder  {
 	 * @param value
 	 * @return
 	 */
-	protected String formatAmount(GeneratedReport generatedReport, BigDecimal value) {
-		DecimalFormat decimalFormat = generatedReport.spec.getSettings().getCurrencyFormat();
-
+	protected String formatAmount(GeneratedReport generatedReport, BigDecimal value, boolean toDivide) {
+		ReportSettings settings = generatedReport.spec.getSettings();
+		DecimalFormat decimalFormat = settings.getCurrencyFormat();
+		AmountsUnits amountsUnits = (settings != null && settings.getUnitsOption() != null) ? 
+				settings.getUnitsOption() : AmountsUnits.AMOUNTS_OPTION_UNITS;
+		BigDecimal unitsDivider = BigDecimal.valueOf(amountsUnits.divider);
+		value = toDivide ? value.divide(unitsDivider) : value;
+		
 		return decimalFormat.format(value);
 	}
 	

@@ -210,11 +210,11 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 					row.put(getColumns().get(GPIReportConstants.COLUMN_YEAR), yearEntry.getKey());
 					row.put(donorColumn, donor);
 					row.put(getColumns().get(MeasureConstants.PLANNED_DISBURSEMENTS),
-							formatAmount(generatedReport, value.getDisbAmount()));
+							formatAmount(generatedReport, value.getDisbAmount(), true));
 					row.put(getColumns().get(ANNUAL_GOV_BUDGET), 
-							formatAmount(generatedReport, value.getAnnualGov()));
+							formatAmount(generatedReport, value.getAnnualGov(), true));
 					row.put(getColumns().get(PLANNED_ON_BUDGET), 
-							formatAmount(generatedReport, value.getPercentage()) + "%");
+							formatAmount(generatedReport, value.getPercentage(), false) + "%");
 					rows.add(row);
 				}
 			});
@@ -253,9 +253,9 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 					.reduce(BigDecimal.ZERO, BigDecimal::add);
 
 			summaryColumns.put(new GPIReportOutputColumn(ANNUAL_GOV_BUDGET), 
-					formatAmount(generatedReport, sum));
+					formatAmount(generatedReport, sum, true));
 			summaryColumns.put(new GPIReportOutputColumn(PLANNED_ON_BUDGET),
-					formatAmount(generatedReport, calculateIndicator6Percentage(sum, totalDisbursements)) + "%");
+					formatAmount(generatedReport, calculateIndicator6Percentage(sum, totalDisbursements), false) + "%");
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

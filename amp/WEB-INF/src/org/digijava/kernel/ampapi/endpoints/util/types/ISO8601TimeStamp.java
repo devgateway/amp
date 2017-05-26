@@ -26,7 +26,7 @@ public class ISO8601TimeStamp extends Date {
             throw new RuntimeException("No timestamp value for empty string.");
         }
         try {
-            SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT);
+            SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT);
             return format.parse(value).getTime();
         } catch (ParseException e) {
             throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, CommonErrors.INVALID_TIMESTAMP);

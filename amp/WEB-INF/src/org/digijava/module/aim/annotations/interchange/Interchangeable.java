@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Interchangeable {
 	/**
-	 * field title -- a capitalized, preferrably unabbreviated name for the field
+	 * field title -- a capitalized, preferrably unabbreviated name for the field.
+	 * <p>fieldTitle must match the label name used in activity form. Usually it coincides with fmName.</p>
 	 * example: "Sectors"; "AMP Internal ID"
 	 */
 	String fieldTitle();

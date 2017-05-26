@@ -1,6 +1,8 @@
 package org.digijava.kernel.services.sync;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonMap;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.*;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.UPDATED;
@@ -10,12 +12,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
@@ -30,10 +33,14 @@ import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.currency.CurrencyService;
+import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
+import org.digijava.kernel.ampapi.endpoints.sync.SyncRequest;
 import org.digijava.kernel.request.Site;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.services.sync.model.ActivityChange;
 import org.digijava.kernel.services.sync.model.AmpOfflineChangelog;
+import org.digijava.kernel.services.sync.model.ExchangeRatesDiff;
 import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
@@ -70,6 +77,7 @@ public class SyncService implements InitializingBean {
 
     private PossibleValuesEnumerator possibleValuesEnumerator = PossibleValuesEnumerator.INSTANCE;
     private FieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.PRIVATE_ENUMERATOR;
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
 
     private static class AmpOfflineChangelogMapper implements RowMapper<AmpOfflineChangelog> {
 
@@ -91,17 +99,21 @@ public class SyncService implements InitializingBean {
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public SystemDiff diff(List<Long> userIds, Date lastSyncTime) {
+    public SystemDiff diff(SyncRequest syncRequest) {
+        Date lastSyncTime = syncRequest.getLastSyncTime();
+
         SystemDiff systemDiff = new SystemDiff();
 
         updateDiffsForWsAndGs(systemDiff, lastSyncTime);
         updateDiffForWorkspaceMembers(systemDiff, lastSyncTime);
         updateDiffForUsers(systemDiff, lastSyncTime);
-        updateDiffsForActivities(systemDiff, userIds, lastSyncTime);
+        updateDiffsForActivities(systemDiff, syncRequest);
 
         systemDiff.setTranslations(shouldSyncTranslations(lastSyncTime));
 
         systemDiff.setPossibleValuesFields(findChangedPossibleValuesFields(lastSyncTime));
+
+        systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
 
         return systemDiff;
     }
@@ -121,6 +133,14 @@ public class SyncService implements InitializingBean {
                 "and operation_time > :lastSyncTime", args);
 
         return count > 0;
+    }
+
+    private boolean shouldSyncExchangeRates(Date lastSyncTime) {
+        return lastSyncTime == null || ratesChanged(lastSyncTime);
+    }
+
+    private boolean ratesChanged(Date lastSyncTime) {
+        return !findDaysWithModifiedRates(lastSyncTime).isEmpty();
     }
 
     private List<String> findChangedPossibleValuesFields(Date lastSyncTime) {
@@ -144,49 +164,67 @@ public class SyncService implements InitializingBean {
         return fieldsEnumerator.findFieldPaths(fieldFilter);
     }
 
-    private void updateDiffsForActivities(SystemDiff systemDiff, List<Long> userIds, Date lastSyncTime) {
-        List<ActivityChange> changes = getActivityChanges(userIds, lastSyncTime);
+    private void updateDiffsForActivities(SystemDiff systemDiff, SyncRequest syncRequest) {
+        List<Long> userIds = syncRequest.getUserIds();
+        Date lastSyncTime = syncRequest.getLastSyncTime();
 
-        List<String> deleted = new ArrayList<>();
-        List<String> modified = new ArrayList<>();
+        List<ActivityChange> changes = getActivityChanges(lastSyncTime);
+        Set<String> visibleActivities = new HashSet<>(getVisibleAmpIds(userIds));
+        Set<String> offlineActivities = new HashSet<>();
+        if (syncRequest.getAmpIds() != null) {
+            offlineActivities.addAll(syncRequest.getAmpIds());
+        }
+
+        Set<String> deleted = new HashSet<>();
+        Set<String> modified = new HashSet<>();
 
         for (ActivityChange change : changes) {
-            if (change.getDeleted()) {
-                deleted.add(change.getAmpId());
-            } else {
-                modified.add(change.getAmpId());
+            if (visibleActivities.contains(change.getAmpId())) {
+                if (change.getDeleted()) {
+                    deleted.add(change.getAmpId());
+                } else {
+                    modified.add(change.getAmpId());
+                }
+                systemDiff.updateTimestamp(change.getModifiedDate());
             }
-            systemDiff.updateTimestamp(change.getModifiedDate());
         }
 
-        systemDiff.setActivities(new ListDiff<>(deleted, modified));
+        deleted.addAll(subtract(offlineActivities, visibleActivities));
+        modified.addAll(subtract(visibleActivities, offlineActivities));
+
+        systemDiff.setActivities(new ListDiff<>(new ArrayList<>(deleted), new ArrayList<>(modified)));
     }
 
-    private List<ActivityChange> getActivityChanges(List<Long> userIds, Date lastSyncTime) {
+    /**
+     * Returns a new {@link Set} containing <tt><i>a</i> - <i>b</i></tt>.
+     */
+    private <T> Set<T> subtract(Set<T> a, Collection<T> b) {
+        Set<T> result = new HashSet<>(a);
+        result.removeAll(b);
+        return result;
+    }
+
+    private List<String> getVisibleAmpIds(List<Long> userIds) {
         List<AmpTeamMember> teamMembers = TeamMemberUtil.getTeamMembers(userIds);
-        String workspaceActivitiesQuery;
         if (teamMembers.isEmpty()) {
-            workspaceActivitiesQuery = "-1";
-        } else {
-            workspaceActivitiesQuery = getCompleteWorkspaceFilter(teamMembers);
+            return emptyList();
         }
 
-        Map<String, Object> args = new HashMap<>();
+        String wsFilter = getCompleteWorkspaceFilter(teamMembers);
+        String sql = String.format("select amp_id from amp_activity where amp_activity_id in (%s)", wsFilter);
+        return jdbcTemplate.query(sql, emptyMap(), STR_MAPPER);
+    }
 
-        String restriction;
+    private List<ActivityChange> getActivityChanges(Date lastSyncTime) {
         if (lastSyncTime == null) {
-            restriction = "and deleted <> true";
-        } else {
-            restriction = "and modified_date > :lastSyncTime";
-            args.put("lastSyncTime", lastSyncTime);
+            return emptyList();
         }
 
-        String sql = String.format(
-                "select amp_id ampId, modified_date modifiedDate, deleted " +
-                "from amp_activity " +
-                "where amp_activity_id in (%s) %s", workspaceActivitiesQuery, restriction);
+        String sql = "select amp_id ampId, modified_date modifiedDate, deleted "
+                + "from amp_activity "
+                + "where modified_date > :lastSyncTime";
 
-        return jdbcTemplate.query(sql, args, ACTIVITY_CHANGE_ROW_MAPPER);
+        return jdbcTemplate.query(sql, singletonMap("lastSyncTime", lastSyncTime), ACTIVITY_CHANGE_ROW_MAPPER);
     }
 
     private String getCompleteWorkspaceFilter(List<AmpTeamMember> teamMembers) {
@@ -212,7 +250,7 @@ public class SyncService implements InitializingBean {
 
     private void updateDiffForUsers(SystemDiff systemDiff, Date lastSyncTime) {
         if (lastSyncTime == null) {
-            systemDiff.setUsers(new ListDiff<>(Collections.emptyList(), findAllUserIds()));
+            systemDiff.setUsers(new ListDiff<>(emptyList(), findAllUserIds()));
         } else {
             List<AmpOfflineChangelog> changelogs = findChangedUsers(lastSyncTime);
 
@@ -222,7 +260,7 @@ public class SyncService implements InitializingBean {
                 saved.add(changelog.getEntityIdAsLong());
             }
 
-            systemDiff.setUsers(new ListDiff<>(Collections.emptyList(), saved));
+            systemDiff.setUsers(new ListDiff<>(emptyList(), saved));
         }
     }
 
@@ -280,7 +318,7 @@ public class SyncService implements InitializingBean {
         if (lastSyncTime == null) {
             List<Long> workspaceMemberIds = findWorkspaceMembers();
 
-            systemDiff.setWorkspaceMembers(new ListDiff<>(Collections.emptyList(), workspaceMemberIds));
+            systemDiff.setWorkspaceMembers(new ListDiff<>(emptyList(), workspaceMemberIds));
         } else {
             List<AmpOfflineChangelog> changelogs = findChangedWorkspaceMembers(lastSyncTime);
 
@@ -372,5 +410,32 @@ public class SyncService implements InitializingBean {
                 messageKeyFilter,
                 args,
                 TRANSLATION_ROW_MAPPER);
+    }
+
+    public ExchangeRatesDiff getChangedExchangeRates(Date lastSyncTime) {
+        Objects.requireNonNull(lastSyncTime);
+
+        List<Date> dates = findDaysWithModifiedRates(lastSyncTime);
+
+        List<ExchangeRatesForPair> exchangeRatesForPairs;
+        if (dates.isEmpty()) {
+            exchangeRatesForPairs = emptyList();
+        } else {
+            exchangeRatesForPairs = currencyService.getExchangeRatesForPairs(dates);
+        }
+
+        return new ExchangeRatesDiff(dates, exchangeRatesForPairs);
+    }
+
+    private List<Date> findDaysWithModifiedRates(Date lastSyncTime) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("lastSyncTime", lastSyncTime);
+        args.put("entity", EXCHANGE_RATES);
+
+        return jdbcTemplate.query(
+                "select entity_id from amp_offline_changelog "
+                        + "where entity_name=:entity and operation_time > :lastSyncTime",
+                args,
+                JulianDayRowMapper.INSTANCE);
     }
 }

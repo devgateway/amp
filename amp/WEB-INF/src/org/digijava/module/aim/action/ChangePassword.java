@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.ChangePasswordForm;
 import org.digijava.module.um.util.DbUtil;
+import org.digijava.kernel.security.PasswordPolicyValidator;
 
 public class ChangePassword extends Action {
 
@@ -25,7 +26,14 @@ public class ChangePassword extends Action {
 
         ChangePasswordForm cpForm = (ChangePasswordForm) form;
         ActionMessages errors = new ActionMessages();
+        if (!PasswordPolicyValidator.isValid(cpForm.getNewPassword(), cpForm.getUserId())) {
 
+            errors.add(ActionMessages.GLOBAL_MESSAGE,
+                    new ActionMessage("error.strong.validation"));
+            saveErrors(request, errors);
+            request.setAttribute(PasswordPolicyValidator.SHOW_PASSWORD_POLICY_RULES, true);
+            return mapping.getInputForward();
+        }
 
         if (cpForm.getUserId() != null && cpForm.getOldPassword() != null && cpForm.getNewPassword() != null) {
             try {

@@ -101,7 +101,7 @@ export default class Report1Output2 extends Component {
             let filters = this.filter.serialize().filters;            
             filters['donor-agency'] = []
             filters['donor-agency'].push( this.state.selectedDonor);
-            this.filter.deserialize({filters: filters});
+            this.filter.deserialize({filters: filters}, {silent : true});
             this.fetchReportData();
         }.bind( this ) );
     }
@@ -116,7 +116,7 @@ export default class Report1Output2 extends Component {
                         'end': this.state.selectedYear + '-12-31'
                     };  
             }           
-            this.filter.deserialize({filters: filters});            
+            this.filter.deserialize({filters: filters}, {silent : true});            
             this.fetchReportData();
         }.bind( this ) );
 

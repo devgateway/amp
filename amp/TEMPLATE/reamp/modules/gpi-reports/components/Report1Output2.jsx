@@ -193,7 +193,7 @@ export default class Report1Output2 extends Component {
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
                                 <option value="">{this.props.translations['amp.gpi-reports:all-donors']}</option>
                                 {this.props.orgList.map((org, i) =>
-                                    <option key={i} value={org.id} key={org.id} >{org.name}</option>
+                                    <option value={org.id} key={org.id} >{org.name}</option>
                                 )}
                             </select>
                         </div>

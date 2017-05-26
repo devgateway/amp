@@ -16,11 +16,10 @@ import { Button } from 'react-bootstrap';
 export default class Report1Output1 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false};
+        this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );        
-        this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
-        this.toggleHierarchy = this.toggleHierarchy.bind( this );  
+        this.onDonorFilterChange = this.onDonorFilterChange.bind( this );        
         this.showRemarksModal = this.showRemarksModal.bind(this);
         this.closeRemarksModal = this.closeRemarksModal.bind(this);
     }
@@ -72,7 +71,6 @@ export default class Report1Output1 extends Component {
     
     getRequestData() {
         let requestData = {
-            "hierarchy": this.state.hierarchy,
             "page": 1,
             "recordsPerPage": this.getRecordsPerPage(),
             "output": 1
@@ -81,11 +79,9 @@ export default class Report1Output1 extends Component {
         requestData.filters = this.filter.serialize().filters;        
         requestData.settings = this.settingsWidget.toAPIFormat(); 
        
-        if(this.state.hierarchy === 'donor-agency'){
-            requestData.filters[this.state.hierarchy] = requestData.filters[this.state.hierarchy] || [];
-            if (this.state.selectedDonor && requestData.filters[this.state.hierarchy].indexOf(this.state.selectedDonor) == -1) {
-                requestData.filters[this.state.hierarchy].push(this.state.selectedDonor); 
-            }
+        requestData.filters['donor-agency'] = requestData.filters['donor-agency'] || [];
+        if (this.state.selectedDonor && requestData.filters['donor-agency'].indexOf(this.state.selectedDonor) == -1) {
+            requestData.filters['donor-agency'].push(this.state.selectedDonor); 
         }
         
        return requestData
@@ -99,11 +95,9 @@ export default class Report1Output1 extends Component {
     onDonorFilterChange( e ) {
         this.setState( { selectedDonor: parseInt( e.target.value ) }, function() {
             let filters = this.filter.serialize().filters;
-            delete filters['donor-group'];
-            delete filters['donor-agency'];
-            filters[this.state.hierarchy] = [];
-            filters[this.state.hierarchy].push( this.state.selectedDonor);
-            this.filter.deserialize({filters: filters});
+            filters['donor-agency'] = [];
+            filters['donor-agency'].push( this.state.selectedDonor);
+            this.filter.deserialize({filters: filters}, {silent : true});
             this.fetchReportData();
         }.bind( this ) );
     }
@@ -118,7 +112,7 @@ export default class Report1Output1 extends Component {
                         'end': this.state.selectedYear + '-12-31'
                     };  
             }           
-            this.filter.deserialize({filters: filters});            
+            this.filter.deserialize({filters: filters}, {silent : true});            
             this.fetchReportData();
         }.bind( this ) );
 
@@ -130,22 +124,9 @@ export default class Report1Output1 extends Component {
             this.setState( { selectedYear: null });
         }
 
-        if (( filters['donor-group'] && filters['donor-group'].length > 0 ) || ( filters['donor-agency'] && filters['donor-agency'].length > 0 ) ) {
+        if ( filters['donor-agency'] && filters['donor-agency'].length > 0  ) {
             this.setState( { selectedDonor: "" });
         }
-    }
-
-    toggleHierarchy( event ) {
-        this.setState( { hierarchy: $( event.target ).data( "hierarchy" ), selectedDonor: ''}, function() {
-            this.props.actions.getOrgList(( this.state.hierarchy === 'donor-group' ) );
-            let filters = this.filter.serialize().filters;
-            delete filters['donor-group'];
-            delete filters['donor-agency'];
-            filters[this.state.hierarchy] = [];
-            filters[this.state.hierarchy].push( this.state.selectedDonor);
-            this.filter.deserialize({filters: filters});            
-            this.fetchReportData();                     
-        }.bind( this ) );
     }
 
     getLocalizedColumnName( originalColumnName ) {

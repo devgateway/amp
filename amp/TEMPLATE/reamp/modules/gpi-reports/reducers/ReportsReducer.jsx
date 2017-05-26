@@ -21,19 +21,7 @@ const defaultState = {
 };
 
 export default function reports( state: Object = defaultState, action: Object ) {
-    switch ( action.type ) {
-        case 'FETCH_REPORT_9B_MAIN_REPORT_SUCCESS':
-            var newState = Object.assign( {}, state );
-            newState['9b'].mainReport = action.data;
-            return newState;
-        case 'FETCH_REPORT_6_MAIN_REPORT_SUCCESS':
-            var newState = Object.assign( {}, state );
-            newState['6'].mainReport = action.data;
-            return newState;
-        case 'FETCH_REPORT_5B_MAIN_REPORT_SUCCESS':
-            var newState = Object.assign( {}, state );
-            newState['5b'].mainReport = action.data;
-            return newState;
+    switch ( action.type ) {        
         case 'FETCH_REPORT_SUCCESS':
             var newState = Object.assign({}, state);
             if(action.data.code == 1){

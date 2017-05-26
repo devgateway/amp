@@ -99,7 +99,7 @@ export default class Report5a extends Component {
             delete filters['donor-agency'];
             filters[this.state.hierarchy] = [];
             filters[this.state.hierarchy].push( this.state.selectedDonor);
-            this.filter.deserialize({filters: filters});
+            this.filter.deserialize({filters: filters}, {silent : true});
             this.fetchReportData();
         }.bind( this ) );
     }
@@ -114,7 +114,7 @@ export default class Report5a extends Component {
                         'end': this.state.selectedYear + '-12-31'
                     };  
             }           
-            this.filter.deserialize({filters: filters});            
+            this.filter.deserialize({filters: filters}, {silent : true});          
             this.fetchReportData();
         }.bind( this ) );
 
@@ -139,7 +139,7 @@ export default class Report5a extends Component {
             delete filters['donor-agency'];
             filters[this.state.hierarchy] = [];
             filters[this.state.hierarchy].push( this.state.selectedDonor);
-            this.filter.deserialize({filters: filters});            
+            this.filter.deserialize({filters: filters}, {silent : true});          
             this.fetchReportData();                     
         }.bind( this ) );
     }

@@ -8,6 +8,7 @@ var template = _.template(fs.readFileSync(__dirname
 module.exports = BackboneDash.View.extend({
     _currentPage: 0,
     PAGE_SIZE: 50,
+    TOP: 'top',
     FRAGMENTATION: 'fragmentation',
     AID_PREDICTABILITY: 'aidPredictability',
     FUNDING_TYPE: 'fundingType',
@@ -27,8 +28,10 @@ module.exports = BackboneDash.View.extend({
             url += this.context.x.raw + '/' + this.context.data[this.context.series.index].keyId;
         } else  if (this.model.get('chartType') == this.FRAGMENTATION) {
             url += this.context.x.index + '/' + this.context.y.index;
-        } else {
+        } else  if (this.model.get('chartType') == this.TOP) {
             url += this.context.data[0].values[this.context.x.index].id;
+        } else {
+            console.error('error building url, wrong chartType.');
         }
         return url;
     },

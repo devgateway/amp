@@ -121,7 +121,7 @@ export default class Report5b extends Component {
 
     fetchReportData( requestData ) {
         var requestData = requestData || this.getRequestData();
-        this.props.actions.fetchReport5bMainReport( requestData, '5b' );
+        this.props.actions.fetchReportData( requestData, '5b' );
     }
 
 
@@ -147,7 +147,7 @@ export default class Report5b extends Component {
                         'end': this.state.selectedYear + '-12-31'
                     };  
             }           
-            this.filter.deserialize({filters: filters});            
+            this.filter.deserialize({filters: filters}, {silent : true});           
             this.fetchReportData();
         }.bind( this ) );
 
@@ -171,7 +171,7 @@ export default class Report5b extends Component {
             filters['donor-group'] = [];
             filters['donor-agency'] = [];
             filters[this.state.hierarchy].push( this.state.selectedDonor);
-            this.filter.deserialize({filters: filters});            
+            this.filter.deserialize({filters: filters}, {silent : true});           
             this.fetchReportData();                     
         }.bind( this ) );
     }
@@ -196,7 +196,7 @@ export default class Report5b extends Component {
     goToPage( pageNumber ) {
         var requestData = this.getRequestData();
         requestData.page = pageNumber;
-        this.props.actions.fetchReport5bMainReport( requestData, '5b' );
+        this.props.actions.fetchReportData( requestData, '5b' );
     }
 
 

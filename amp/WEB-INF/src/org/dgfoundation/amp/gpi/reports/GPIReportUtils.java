@@ -387,6 +387,8 @@ public class GPIReportUtils {
 	public static void applySettings(JsonBean formParams, ReportSpecificationImpl spec) {
 		spec.setSettings(MondrianReportUtils.getCurrentUserDefaultSettings());
 		spec.getSettings().getCurrencyFormat().setMinimumFractionDigits(0);
+		spec.getSettings().getCurrencyFormat().setMinimumIntegerDigits(1);
+		
 		SettingsUtils.applySettings(spec, formParams, true);
 	}
 

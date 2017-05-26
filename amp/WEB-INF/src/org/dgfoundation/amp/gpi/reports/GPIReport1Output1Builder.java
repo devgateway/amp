@@ -40,11 +40,16 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 
 	public GPIReport1Output1Builder() {
 		addColumn(new GPIReportOutputColumn(ColumnConstants.PROJECT_TITLE));
-		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q1, MeasureConstants.ACTUAL_COMMITMENTS));
-		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q2, ColumnConstants.ACTUAL_APPROVAL_DATE));
-		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q3, ColumnConstants.FINANCING_INSTRUMENT));
-		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q4, ColumnConstants.IMPLEMENTING_AGENCY));
-		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q5, ColumnConstants.PRIMARY_SECTOR));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q1, 
+				GPIReportConstants.GPI_1_Q1, MeasureConstants.ACTUAL_COMMITMENTS));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q2, GPIReportConstants.GPI_1_Q2, 
+				ColumnConstants.ACTUAL_APPROVAL_DATE));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q3, GPIReportConstants.GPI_1_Q3, 
+				ColumnConstants.FINANCING_INSTRUMENT));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q4, GPIReportConstants.GPI_1_Q4, 
+				ColumnConstants.IMPLEMENTING_AGENCY));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.GPI_1_Q5, GPIReportConstants.GPI_1_Q5, 
+				ColumnConstants.PRIMARY_SECTOR));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.GPI_1_Q6));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.GPI_1_Q6_DESCRIPTION));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.GPI_1_Q7));

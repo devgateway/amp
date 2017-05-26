@@ -46,6 +46,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	public static final String YES_VALUE = "yes";
 
 	public GPIReport5aOutputBuilder() {
+		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
+		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
 		addColumn(new GPIReportOutputColumn(TOTAL_ACTUAL_DISBURSEMENTS));
 		addColumn(new GPIReportOutputColumn(CONCESSIONAL));
@@ -81,8 +83,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		headers.add(getColumns().get(GPIReportConstants.COLUMN_YEAR));
 
 		GPIReportOutputColumn donorColumn = null;
-		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
-		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
+		
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 			if (ColumnConstants.DONOR_AGENCY.equals(roc.originalColumnName)) {
 				donorColumn = new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY);

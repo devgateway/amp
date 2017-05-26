@@ -45,7 +45,7 @@ public class GPIReportOutputColumn implements Comparable<GPIReportOutputColumn> 
 	}
 	
 	public String getColumnName() {
-		return this.columnName;
+		return this.originalColumnName;
 	}
 	
 	@Override

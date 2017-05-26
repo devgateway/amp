@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dgfoundation.amp.algo.BooleanWrapper;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -30,6 +31,8 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 
 	public GPIReport9bOutputBuilder() {
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
+		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
+		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_AUDITING_PROCEDURES));
@@ -55,12 +58,9 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 		List<GPIReportOutputColumn> headers = new ArrayList<>();
 		headers.add(getColumns().get(GPIReportConstants.COLUMN_YEAR));
 
-		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
-			if (!getColumns().keySet().contains(roc.originalColumnName)) {
-				headers.add(new GPIReportOutputColumn(roc));
-			}
-		}
-
+		String donorColumnName = isDonorAgency ? ColumnConstants.DONOR_AGENCY : ColumnConstants.DONOR_GROUP;
+		headers.add(getColumns().get(donorColumnName));
+		
 		headers.add(getColumns().get(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES));
 		headers.add(getColumns().get(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES));
 		headers.add(getColumns().get(MeasureConstants.NATIONAL_AUDITING_PROCEDURES));

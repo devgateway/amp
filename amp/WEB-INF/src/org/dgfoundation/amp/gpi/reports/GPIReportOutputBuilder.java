@@ -39,7 +39,7 @@ public abstract class GPIReportOutputBuilder  {
 	}
 	
 	protected void addColumn(GPIReportOutputColumn col) {
-		columns.put(col.columnName, col);
+		columns.put(col.originalColumnName, col);
 	}
 	
 	public void setOriginalFormParams(JsonBean originalFormParams) {

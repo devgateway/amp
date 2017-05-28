@@ -77,12 +77,13 @@ export default class Report1Output1 extends Component {
         };
 
         requestData.filters = this.filter.serialize().filters;        
-        requestData.settings = this.settingsWidget.toAPIFormat(); 
-       
-        requestData.filters['donor-agency'] = requestData.filters['donor-agency'] || [];
-        if (this.state.selectedDonor && requestData.filters['donor-agency'].indexOf(this.state.selectedDonor) == -1) {
-            requestData.filters['donor-agency'].push(this.state.selectedDonor); 
-        }
+        requestData.settings = this.settingsWidget.toAPIFormat();       
+        if(this.state.selectedDonor){
+            requestData.filters['donor-agency'] = requestData.filters['donor-agency'] || [];
+            if (requestData.filters['donor-agency'].indexOf(this.state.selectedDonor) == -1) {
+                requestData.filters['donor-agency'].push(this.state.selectedDonor); 
+            }
+       }   
         
        return requestData
     } 
@@ -103,17 +104,16 @@ export default class Report1Output1 extends Component {
     }
 
     onYearClick( selectedYear ) {
-        this.setState( { selectedYear: selectedYear }, function() {                      
-            let filters = this.filter.serialize().filters;
-            filters['actual-approval-date']= {};
+        this.setState( { selectedYear: selectedYear }, function() {  
+            let requestData = this.getRequestData();
+            requestData.filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                filters['actual-approval-date']= {
+                requestData.filters['actual-approval-date']= {
                         'start': this.state.selectedYear + '-01-01',
                         'end': this.state.selectedYear + '-12-31'
                     };  
-            }           
-            this.filter.deserialize({filters: filters}, {silent : true});            
-            this.fetchReportData();
+            } 
+            this.fetchReportData(requestData);
         }.bind( this ) );
 
     }

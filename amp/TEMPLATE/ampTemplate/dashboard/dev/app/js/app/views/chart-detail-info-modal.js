@@ -31,7 +31,7 @@ module.exports = BackboneDash.View.extend({
         } else  if (this.model.get('chartType') == this.TOP) {
             url += this.context.data[0].values[this.context.x.index].id;
         } else {
-            console.error('error building url, wrong chartType.');
+            throw new Error('error building url, wrong chartType.');
         }
         return url;
     },

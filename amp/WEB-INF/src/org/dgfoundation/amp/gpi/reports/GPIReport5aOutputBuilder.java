@@ -3,6 +3,7 @@ package org.dgfoundation.amp.gpi.reports;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,6 +30,7 @@ import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report 6
@@ -137,8 +139,6 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 					} else if (roc.originalColumnName.equals(ColumnConstants.DONOR_AGENCY)
 							|| roc.originalColumnName.equals(ColumnConstants.DONOR_GROUP)) {
 						columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
-						columns.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK),
-								getRemarkEndpointURL(generatedReport.spec, reportArea.getOwner().id));
 					}
 				}
 
@@ -215,6 +215,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 							}
 						}
 					});
+					row.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK),
+							getRemarkEndpointURL(k, reportArea.getOwner().id));
 
 					if (!isRowEmpty.value) {
 						row.putAll(columns);
@@ -232,22 +234,21 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	/**
 	 * Generate the remark endpoint url
 	 * 
-	 * @param spec
+	 * @param year
 	 * @param id
 	 * @return
 	 */
-	private String getRemarkEndpointURL(ReportSpecification spec, long id) {
+	private String getRemarkEndpointURL(String year, long id) {
 		String remarkEndpoint = GPIReportConstants.GPI_REMARK_ENDPOINT 
 				+ "?indicatorCode=%s&donorId=%s&donorType=%s&from=%s&to=%s";
 
 		String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
 				: GPIReportConstants.HIERARCHY_DONOR_GROUP;
 
-		FilterRule dateRule = GPIReportUtils.getDateFilterRule(spec);
+		int y = Integer.parseInt(year);
+		String min = Integer.toString(DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y, 1)));
+		String max = Integer.toString(DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y + 1, 1)));
 		
-		String min = dateRule == null ? "0" : dateRule.min != null ? dateRule.min : "0";
-		String max = dateRule == null ? "0" : dateRule.max != null ? dateRule.max : "0";
-
 		return String.format(remarkEndpoint, GPIReportConstants.REPORT_5a, id, donorType, min, max);
 	}
 

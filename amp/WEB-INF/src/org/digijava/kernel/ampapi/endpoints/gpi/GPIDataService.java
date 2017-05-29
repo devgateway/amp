@@ -392,10 +392,12 @@ public class GPIDataService {
 		Predicate<AmpGPINiDonorNotes> toDatePredicate = note -> to == null || to == 0 ? true : 
 			DateTimeUtil.toJulianDayNumber(note.getNotesDate()) <= to;
 		
-		Predicate<AmpGPINiDonorNotes> donorPredicate = note -> donorIds == null || donorIds.isEmpty() ? true :
-			donorType == null || "donor-agency".equals(donorType) ? donorIds.contains(note.getDonor().getAmpOrgId()) : 
-			"donor-group".equals(donorType) ? donorIds.contains(note.getDonor().getOrgGrpId().getAmpOrgGrpId()) : false;
-		
+		Predicate<AmpGPINiDonorNotes> donorPredicate = note -> donorIds == null || donorIds.isEmpty()
+				|| (donorIds.size() == 1 && donorIds.get(0) == null) 
+				? true : donorType == null || "donor-agency".equals(donorType)	
+				? donorIds.contains(note.getDonor().getAmpOrgId()) : "donor-group".equals(donorType) 
+				? donorIds.contains(note.getDonor().getOrgGrpId().getAmpOrgGrpId()) : false;
+
 		filteredNotes = donorNotes.stream()
 				.filter(fromDatePredicate)
 				.filter(toDatePredicate)

@@ -37,25 +37,25 @@ export default class App extends Component {
         return this.props.reportVisibility[code] === true;
     }
     
-   getReport(code){       
-        switch (code) {               
-        case Constants.INDICATOR_1_CODE: 
+   getReport(code, currentReport){       
+        var component = <div></div>;  
+        if (Constants.INDICATOR_1_CODE == code && currentReport == code) {            
             if (this.state.currentOutput == Constants.OUTPUT_1){
-                return <Report1Output1/>;
+                component = <Report1Output1/>;
             } else {
-               return <Report1Output2/>;  
-            }            
-        case Constants.INDICATOR_5A_CODE:
-            return <Report5a/>;
-        case Constants.INDICATOR_5B_CODE:
-            return <Report5b/>;
-        case Constants.INDICATOR_6_CODE:
-            return <Report6/>;
-        case Constants.INDICATOR_9B_CODE:
-            return <Report9b/>;
-        default:            
-            return <div></div>;
-        }
+                component = <Report1Output2/>;  
+            }  
+        } else if (Constants.INDICATOR_5A_CODE == code && currentReport == code) {
+            component = <Report5a/>;         
+        } else if (Constants.INDICATOR_5B_CODE == code && currentReport == code){
+            component =  <Report5b/>;           
+        } else if (Constants.INDICATOR_6_CODE == code && currentReport == code){
+            component =  <Report6/>;            
+        } else if (Constants.INDICATOR_9B_CODE == code && currentReport == code){       
+            component = <Report9b/>;           
+        } 
+        
+        return component;
     }
    
     render() { 
@@ -86,7 +86,7 @@ export default class App extends Component {
                    </ul>
                    </div>
                 }               
-                {this.getReport(indicatorCode)}
+                {this.getReport(indicatorCode, currentReport)}
                 </div>
                 )}
              </div>

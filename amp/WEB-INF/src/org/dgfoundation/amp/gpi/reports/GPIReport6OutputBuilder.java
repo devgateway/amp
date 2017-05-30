@@ -58,16 +58,13 @@ import org.hibernate.jdbc.Work;
  */
 public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 
-	public static final String ANNUAL_GOV_BUDGET = "Annual Government Budget";
-	public static final String PLANNED_ON_BUDGET = "% of planned on budget";
-
 	private boolean isDonorAgency = true;
 
 	public GPIReport6OutputBuilder() {
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.PLANNED_DISBURSEMENTS));
-		addColumn(new GPIReportOutputColumn(ANNUAL_GOV_BUDGET));
-		addColumn(new GPIReportOutputColumn(PLANNED_ON_BUDGET));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_ANNUAL_GOV_BUDGET));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_PLANNED_ON_BUDGET));
 	}
 
 	public final static Set<String> YEAR_LEVEL_HIERARCHIES = Collections
@@ -102,8 +99,8 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 		}
 
 		headers.add(getColumns().get(MeasureConstants.PLANNED_DISBURSEMENTS));
-		headers.add(getColumns().get(ANNUAL_GOV_BUDGET));
-		headers.add(getColumns().get(PLANNED_ON_BUDGET));
+		headers.add(getColumns().get(GPIReportConstants.COLUMN_ANNUAL_GOV_BUDGET));
+		headers.add(getColumns().get(GPIReportConstants.COLUMN_PLANNED_ON_BUDGET));
 
 		return headers;
 	}
@@ -211,9 +208,9 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 					row.put(donorColumn, donor);
 					row.put(getColumns().get(MeasureConstants.PLANNED_DISBURSEMENTS),
 							formatAmount(generatedReport, value.getDisbAmount(), true));
-					row.put(getColumns().get(ANNUAL_GOV_BUDGET), 
+					row.put(getColumns().get(GPIReportConstants.COLUMN_ANNUAL_GOV_BUDGET), 
 							formatAmount(generatedReport, value.getAnnualGov(), true));
-					row.put(getColumns().get(PLANNED_ON_BUDGET), 
+					row.put(getColumns().get(GPIReportConstants.COLUMN_PLANNED_ON_BUDGET), 
 							formatAmount(generatedReport, value.getPercentage(), false) + "%");
 					rows.add(row);
 				}
@@ -252,9 +249,9 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 					.map(c -> c.getAmount())
 					.reduce(BigDecimal.ZERO, BigDecimal::add);
 
-			summaryColumns.put(new GPIReportOutputColumn(ANNUAL_GOV_BUDGET), 
+			summaryColumns.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_ANNUAL_GOV_BUDGET), 
 					formatAmount(generatedReport, sum, true));
-			summaryColumns.put(new GPIReportOutputColumn(PLANNED_ON_BUDGET),
+			summaryColumns.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_PLANNED_ON_BUDGET),
 					formatAmount(generatedReport, calculateIndicator6Percentage(sum, totalDisbursements), false) + "%");
 
 		} catch (SQLException e) {

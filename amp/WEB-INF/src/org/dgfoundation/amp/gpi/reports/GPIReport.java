@@ -2,6 +2,8 @@ package org.dgfoundation.amp.gpi.reports;
 
 import java.util.Map;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.settings.Settings;
 
 /**
@@ -25,6 +27,9 @@ public class GPIReport {
 	protected Settings settings;
 	
 	protected boolean isEmpty;
+	
+	@JsonIgnore
+	private ReportSpecification spec;
 
 	public GPIReportPage getPage() {
 		return page;
@@ -56,5 +61,13 @@ public class GPIReport {
 		}
 		
 		return true;
+	}
+
+	public ReportSpecification getSpec() {
+		return spec;
+	}
+
+	public void setSpec(ReportSpecification spec) {
+		this.spec = spec;
 	}
 }

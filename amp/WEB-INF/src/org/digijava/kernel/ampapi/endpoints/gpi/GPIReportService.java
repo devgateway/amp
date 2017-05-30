@@ -1,5 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReport1Output1Builder;
 import org.dgfoundation.amp.gpi.reports.GPIReport1Output2Builder;
@@ -11,6 +15,7 @@ import org.dgfoundation.amp.gpi.reports.GPIReportBuilder;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputBuilder;
 import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
+import org.dgfoundation.amp.gpi.reports.export.GPIReportExportType;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -25,6 +30,8 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 public final class GPIReportService {
 
 	private static GPIReportService service;
+	
+	protected static final Logger logger = Logger.getLogger(GPIReportService.class);
 
 	private GPIReportService() {
 	}
@@ -106,6 +113,68 @@ public final class GPIReportService {
 			default:
 				return null;
 		}
+	}
+
+	public Response exportGPIReport(String indicatorCode, JsonBean formParams, String type) {
+		GPIReport gpiReport = getGPIReport(indicatorCode, formParams);
+		
+		return getExportAsResponse(indicatorCode, type, gpiReport, formParams);
+	}
+	
+	public Response getExportAsResponse(String indicatorCode, String type, GPIReport report, JsonBean formParams) {
+		String fileName = String.format("Indicator_%s.%s", indicatorCode, type);
+		try {
+			byte[] doc = exportGPIReport(indicatorCode, report, formParams, type);
+			
+			if (doc != null) {
+				logger.info("Send GPI export data to browser...");
+
+				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
+						.header("content-disposition", "attachment; filename = " + fileName)
+						.header("content-length", doc.length).build();
+			} else {
+				logger.error(type + " GPI report export is null");
+				return Response.serverError().build();
+			}
+		} catch (Exception e) {
+			logger.error("error while generating GPI report", e);
+			return Response.serverError().build();
+		}
+	}
+	
+	/** Method used for exporting a NiReport. 
+	 * @param indicatorCode 
+	 * @param report
+	 * @param reportId
+	 * @param queryObject
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */
+	private byte[] exportGPIReport(String indicatorCode, GPIReport report, JsonBean formParams, String type) throws Exception {
+		
+		GPIReportExportType exporter = null;
+		
+		switch (type) {
+			case GPIReportConstants.XLSX: {
+				switch (indicatorCode) {
+					case GPIReportConstants.REPORT_6 :
+						exporter = GPIReportExportType.XLSX_6;
+						break;
+					case GPIReportConstants.REPORT_9b :
+						exporter = GPIReportExportType.XLSX_9b;
+						break;
+					default :
+						exporter = GPIReportExportType.XLSX;
+					} 
+				break;
+			}
+			case GPIReportConstants.PDF:
+				exporter = GPIReportExportType.PDF;
+				break;
+		}
+		
+		return exporter.executor.newInstance().exportReport(report);
 	}
 
 }

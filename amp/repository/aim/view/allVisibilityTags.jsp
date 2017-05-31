@@ -379,6 +379,7 @@
 <field:display name="Activity Printer Friendly Button Risk" feature="Activity Dashboard"></field:display>
 
 <field:display name="Activity Updated By" feature="Identification"></field:display>
+<field:display name="Activity Updated On" feature="Identification"></field:display> 
 <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display>
 <field:display name="Actors" feature="Issues"></field:display>
 <field:display name="Actual Approval Date" feature="Planning" ></field:display>

@@ -34,32 +34,6 @@
 					  AND mv.name = 'Project ID and Planning'
 					  AND mv2.name = 'PROJECT MANAGEMENT';
 
-				-- drop old template settings
-				DELETE FROM amp_fields_templates WHERE field IN (
-				  SELECT fv.id
-				  FROM amp_fields_visibility fv
-					JOIN amp_features_visibility ftv ON fv.parent = ftv.id
-					JOIN amp_modules_visibility mv ON ftv.parent = mv.id
-					JOIN amp_modules_visibility mv2 ON mv.parent = mv2.id
-				  WHERE fv.name = 'Activity Updated On'
-						AND ftv.name = 'Identification'
-						AND mv.name = 'Project ID and Planning'
-						AND mv2.name = 'PROJECT MANAGEMENT'
-				);
-
-				-- drop FM field
-				DELETE FROM amp_fields_visibility where id IN (
-				  SELECT fv.id
-				  FROM amp_fields_visibility fv
-					JOIN amp_features_visibility ftv ON fv.parent = ftv.id
-					JOIN amp_modules_visibility mv ON ftv.parent = mv.id
-					JOIN amp_modules_visibility mv2 ON mv.parent = mv2.id
-				  WHERE fv.name = 'Activity Updated On'
-						AND ftv.name = 'Identification'
-						AND mv.name = 'Project ID and Planning'
-						AND mv2.name = 'PROJECT MANAGEMENT'
-				);
-
 				-------------------------------------------------------------------------------------
 				-- '/PROJECT MANAGEMENT/Project ID and Planning/Identification/Activity Last Updated by' -> '/Activity Form/Identification/Activity Last Updated by'
 				-------------------------------------------------------------------------------------

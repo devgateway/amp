@@ -957,10 +957,11 @@ public class TeamMemberUtil {
 		return role;
 	}
 
-	public static List<AmpTeamMember> getTeamMembers(Collection<Long> userIds) {
+	public static List<AmpTeamMember> getNonManagementTeamMembers(Collection<Long> userIds) {
 		return getTeamMembersByUserId(userIds).values()
 				.stream()
 				.flatMap(Collection::stream)
+				.filter(tm -> !tm.getAmpTeam().getAccessType().equals(Constants.ACCESS_TYPE_MNGMT))
 				.collect(Collectors.toList());
 	}
 	

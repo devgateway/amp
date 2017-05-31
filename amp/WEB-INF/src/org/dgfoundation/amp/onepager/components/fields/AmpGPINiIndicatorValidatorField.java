@@ -2,10 +2,15 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.dgfoundation.amp.onepager.validators.AmpGPINiIndicatorValidator;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
@@ -38,34 +43,34 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
 	 * AmpCollectionValidatorField#getHiddenContainerModel(org.apache.wicket.
 	 * model.IModel)
 	 */
-	public IModel<String> getHiddenContainerModel(
-			IModel<? extends Collection<AmpGPINiSurveyResponse>> collectionModel) {
+    public IModel<String> getHiddenContainerModel(
+            IModel<? extends Collection<AmpGPINiSurveyResponse>> collectionModel) {
 
-		Model<String> model = new Model<String>() {
-			private static final long serialVersionUID = 1L;
+        Model<String> model = new Model<String>() {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public String getObject() {
-				List<String> ret = new ArrayList<String>();
-				boolean hasResponse = false;
-				for (AmpGPINiSurveyResponse response : collectionModel.getObject()) {
-					if (isResponseEmpty(response)) {
-						ret.add("Q" + response.getAmpGPINiQuestion().getCode());
-					} else {
-						hasResponse = true;
-					}
-				}
+            @Override
+            public String getObject() {
+                List<String> ret = new ArrayList<String>();
+                boolean hasResponse = false;
+                for (AmpGPINiSurveyResponse response : collectionModel.getObject()) {
+                    if (isResponseEmpty(response)) {
+                        ret.add("Q" + response.getAmpGPINiQuestion().getCode());
+                    } else {
+                        hasResponse = true;
+                    }
+                }
 
-				if (hasResponse) {
-					return ret.size() > 0 ? ret.toString() : "";
-				} else {
-					return "";
-				}
-			}
-		};
+                if (hasResponse) {
+                    return ret.size() > 0 ? ret.toString() : "";
+                } else {
+                    return "";
+                }
+            }
+        };
 
-		return model;
-	}
+        return model;
+    }
 
 	/**
 	 * Check if the response has a value or not
@@ -73,26 +78,35 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
 	 * @param response
 	 * @return true if is empty
 	 */
-	protected boolean isResponseEmpty(AmpGPINiSurveyResponse response) {
-		if (response.getAmpGPINiQuestion().getType() != GPINiQuestionType.LINK) {
-			// the 10b response can be null when the question 10a has the respons 'No'
-			if (response.getAmpGPINiQuestion().getCode().equals("10b")) {
-				boolean isDependentResponsePresent = response.getAmpGPINiSurvey().getResponses()
-						.stream()
-						.filter(r -> r.getAmpGPINiQuestion().getCode().equals("10a"))
-						.findAny()
-						.map(r -> r.getQuestionOption())
-						.map(o -> o.getDescription())
-						.filter(d -> d.equals("Yes"))
-						.isPresent();
+    protected boolean isResponseEmpty(AmpGPINiSurveyResponse response) {
+        if (response.getAmpGPINiQuestion().getType() != GPINiQuestionType.LINK) {
+            // the 10b response can be null when the question 10a has the respons 'No'
+            if (response.getAmpGPINiQuestion().getCode().equals("10b")) {
+                boolean isDependentResponsePresent = response.getAmpGPINiSurvey().getResponses()
+                        .stream()
+                        .filter(r -> r.getAmpGPINiQuestion().getCode().equals("10a"))
+                        .findAny()
+                        .map(r -> r.getQuestionOption())
+                        .map(o -> o.getDescription())
+                        .filter(d -> d.equals("Yes"))
+                        .isPresent();
 
-				return isDependentResponsePresent && response.isEmpty();
-			}
+                return isDependentResponsePresent && response.isEmpty();
+            }
 
-			return response.isEmpty();
-		}
+            return response.isEmpty();
+        } else {
+            Set<TemporaryGPINiDocument> allResourcesNewItems =
+                    getSession().getMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS);
+            Set<TemporaryGPINiDocument> newResponseResourceItems = new HashSet<>();
 
-		return false;
+            newResponseResourceItems = allResourcesNewItems.stream()
+                    .filter(item -> item.getSurveyResponse().getAmpGPINiSurveyResponseId().equals(response
+                            .getAmpGPINiSurveyResponseId()))
+                    .collect(Collectors.toSet());
+            return newResponseResourceItems.size() == 0;
 
-	}
+        }
+
+    }
 }

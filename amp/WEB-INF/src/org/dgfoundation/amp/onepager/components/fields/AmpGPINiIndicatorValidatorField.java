@@ -47,14 +47,20 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
 			@Override
 			public String getObject() {
 				List<String> ret = new ArrayList<String>();
-				
+				boolean hasResponse = false;
 				for (AmpGPINiSurveyResponse response : collectionModel.getObject()) {
 					if (isResponseEmpty(response)) {
 						ret.add("Q" + response.getAmpGPINiQuestion().getCode());
+					} else {
+						hasResponse = true;
 					}
 				}
 
-				return ret.size() > 0 ? ret.toString() : "";
+				if (hasResponse) {
+					return ret.size() > 0 ? ret.toString() : "";
+				} else {
+					return "";
+				}
 			}
 		};
 
@@ -72,20 +78,21 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
 			// the 10b response can be null when the question 10a has the respons 'No'
 			if (response.getAmpGPINiQuestion().getCode().equals("10b")) {
 				boolean isDependentResponsePresent = response.getAmpGPINiSurvey().getResponses()
-				.stream()
-				.filter(r -> r.getAmpGPINiQuestion().getCode().equals("10a"))
-				.findAny()
-				.map(r -> r.getQuestionOption())
-				.map(o -> o.getDescription())
-				.filter(d -> d.equals("Yes"))
-				.isPresent();
-				
+						.stream()
+						.filter(r -> r.getAmpGPINiQuestion().getCode().equals("10a"))
+						.findAny()
+						.map(r -> r.getQuestionOption())
+						.map(o -> o.getDescription())
+						.filter(d -> d.equals("Yes"))
+						.isPresent();
+
 				return isDependentResponsePresent && response.isEmpty();
 			}
-			
+
 			return response.isEmpty();
 		}
-		
+
 		return false;
+
 	}
 }

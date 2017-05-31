@@ -10,6 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
@@ -464,6 +465,32 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	@ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getGpiReport", ui = false)
 	public GPIReport getGPIReport(@PathParam("indicatorCode") String indicatorCode, JsonBean formParams) {
 		return GPIReportService.getInstance().getGPIReport(indicatorCode, formParams);
+	}
+	
+	/**
+	 * 
+	 * @param indicatorCode
+	 * @param formParams
+	 * @return response containing the XLSX file of the GPI Report
+	 */
+	@POST
+	@Path("/report/export/xls/{indicatorCode}")
+	@Produces({"application/vnd.ms-excel" })
+	public final Response exportXlsGPIReport(@PathParam("indicatorCode") String indicatorCode, JsonBean formParams) {
+		return GPIReportService.getInstance().exportGPIReport(indicatorCode, formParams, GPIReportConstants.XLSX);
+	}
+	
+	/**
+	 * 
+	 * @param indicatorCode
+	 * @param formParams
+	 * @return response containing the PDF file of the GPI Report
+	 */
+	@POST
+	@Path("/report/export/pdf/{indicatorCode}")
+	@Produces({"application/pdf" })
+	public final Response exportPdfGPIReport(@PathParam("indicatorCode") String indicatorCode, JsonBean formParams) {
+		return GPIReportService.getInstance().exportGPIReport(indicatorCode, formParams, GPIReportConstants.PDF);
 	}
 	
 	/**

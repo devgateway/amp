@@ -16,6 +16,8 @@ public class GPIReportConstants {
 	
 	public static final String COLUMN_YEAR = "Year";
 	public static final String COLUMN_REMARK = "Remark";
+	public static final String COLUMN_ANNUAL_GOV_BUDGET = "Annual Government Budget";
+	public static final String COLUMN_PLANNED_ON_BUDGET = "% of planned on budget";
 	
 	public static final String HIERARCHY_PARAMETER = "hierarchy";
 	public static final String SUMMARY_PARAMETER = "summary";
@@ -29,5 +31,8 @@ public class GPIReportConstants {
 	public static final String GPI_1_Q5 = "Q5";
 	
 	public static final String GPI_REMARK_ENDPOINT = "/rest/gpi/report/remarks";
+	
+	public static final String PDF = "pdf";
+	public static final String XLSX = "xlsx";
 
 }

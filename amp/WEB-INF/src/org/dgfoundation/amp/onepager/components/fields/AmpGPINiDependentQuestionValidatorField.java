@@ -69,7 +69,7 @@ public class AmpGPINiDependentQuestionValidatorField extends AmpCollectionValida
 				if (dependentResponse.isPresent() && dependentResponse.get().getIntegerResponse() != null) {
 					for (AmpGPINiSurveyResponse response : collectionModel.getObject()) {
 						if (hasQuestionDependentValue(response.getAmpGPINiQuestion()) 
-								&& RESPONSE_INTEGER_COMPARATOR.compare(dependentResponse.get(), response) <= 0) {
+								&& RESPONSE_INTEGER_COMPARATOR.compare(dependentResponse.get(), response) < 0) {
 							
 							ret.add("Q" + response.getAmpGPINiQuestion().getCode());
 						}

@@ -98,7 +98,8 @@ public class EPConstants {
 	public static final String DETAILS_FLAT = "detail-flat";
 	public static final String FULL_ENABLED_PATHS = "full-enabled-paths";
 	public static final String FM_ENABLED = "__enabled";
-	
+	public static final String FM_FILTER = "filter";
+
 	// menu constants
 	public static final String MENU_NAME = "name"; 
 	public static final String MENU_TOOLTIP = "tooltip";

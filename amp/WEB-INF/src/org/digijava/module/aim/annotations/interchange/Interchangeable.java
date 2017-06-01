@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Interchangeable {
 	/**
-	 * field title -- a capitalized, preferrably unabbreviated name for the field
+	 * field title -- a capitalized, preferrably unabbreviated name for the field.
+	 * <p>fieldTitle must match the label name used in activity form. Usually it coincides with fmName.</p>
 	 * example: "Sectors"; "AMP Internal ID"
 	 */
 	String fieldTitle();
@@ -64,17 +65,6 @@ public @interface Interchangeable {
 	 * Whether this field is the value shown in Activity Form -- for instance, AmpSector.name for sectors.
 	 */
 	boolean value() default false;
-	
-	/**
-	 * Used in PossibleValues EP. (Designed for the AmpActivityLocation->AmpLocation->AmpCategoryValueLocations)
-	 * 
-	 * Marks a field that contains information useful for describing a possible value, 
-	 * yet not contained within the class itself. 
-	 * Said info is to be specified under the tag "Extra info" and grouped in a JSON. 
-	 * Said JSON will have the structure expected from a 'Possible Value' item.  
-	 *  
-	 */
-	boolean extraInfo() default false;
 	
 	/**
 	 * Specifies the dependencies used for later checking in DependencyValidator. 

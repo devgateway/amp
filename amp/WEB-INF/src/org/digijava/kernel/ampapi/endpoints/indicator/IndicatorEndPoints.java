@@ -541,8 +541,8 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
      *   “layersIds” : [5,10,11 23, ...]
      * }</pre>
      *
+     * @implicitParam X-Auth-Token|string|header
      * @param input a JSON object with a list of layers Ids
-     *
      * @return no content or errors
      */
     @POST

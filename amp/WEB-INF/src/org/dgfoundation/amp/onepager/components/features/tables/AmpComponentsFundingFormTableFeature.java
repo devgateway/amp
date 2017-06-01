@@ -30,6 +30,13 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.util.*;
 
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_ADJUSTMENT_TYPE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_AMOUNT;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_CURRENCY;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_DESCRIPTION;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_DATE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_ORGANIZATION;
+
 /**
  * @author aartimon@dginternational.org 
  * @since Nov 25, 2010
@@ -64,7 +71,7 @@ public class AmpComponentsFundingFormTableFeature extends
                     AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
                             "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
                             new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
-                            CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
+                            COMPONENT_FUNDING_ADJUSTMENT_TYPE, //fmname
                             false, false, false, null, false);
                     adjustmentTypes.getChoiceContainer().setRequired(true);
                     adjustmentTypes.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
@@ -81,18 +88,18 @@ public class AmpComponentsFundingFormTableFeature extends
 
                 // selector for related orgs
                 AmpSelectFieldPanel<AmpOrganisation> orgSelect = new AmpSelectFieldPanel<AmpOrganisation>("orgSelect",
-                        new PropertyModel<AmpOrganisation>(model, "reportingOrganization"), orgsList, "Component Organization", false, true, null, false);
+                        new PropertyModel<AmpOrganisation>(model, "reportingOrganization"), orgsList, COMPONENT_ORGANIZATION, false, true, null, false);
                 orgSelect.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
                 orgSelect.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
                 item.add(orgSelect);
 
                 AmpFundingAmountComponent amountComponent = new AmpFundingAmountComponent<AmpComponentFunding>("fundingAmount",
-                        model, "Amount", "transactionAmount", "Currency",
-                        "currency", "Transaction Date", "transactionDate", false,"6");
+                        model, COMPONENT_FUNDING_AMOUNT, "transactionAmount", COMPONENT_FUNDING_CURRENCY,
+                        "currency", COMPONENT_FUNDING_TRANSACTION_DATE, "transactionDate", false,"6");
                 amountComponent.getAmount().getTextContainer().setRequired(false);
                 item.add(amountComponent);
 
-                AmpTextFieldPanel<String> description = new AmpTextFieldPanel<String>("description", new PropertyModel<String>(model, "description"), "Description", false);
+                AmpTextFieldPanel<String> description = new AmpTextFieldPanel<String>("description", new PropertyModel<String>(model, "description"), COMPONENT_FUNDING_DESCRIPTION, false);
                 item.add(description);
 
                 item.add(new ListEditorRemoveButton("delete", "Delete"));

@@ -32,10 +32,13 @@ package org.digijava.kernel.entity;
 import java.security.Principal;
 import java.util.Date;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+
 public abstract class Entity
     implements Principal {
 
-    private Long id;
+    @Interchangeable(fieldTitle = "Id", id = true)
+    protected Long id;
     protected String name;
     private Entity creationEntity;
     private Date creationDate;

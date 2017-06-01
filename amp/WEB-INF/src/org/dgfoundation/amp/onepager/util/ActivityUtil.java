@@ -64,7 +64,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
-import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -72,7 +71,6 @@ import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -154,7 +152,7 @@ public class ActivityUtil {
 		try
 		{
 			a = saveActivityNewVersion(oldA, values,
-					ampCurrentMember, draft, session, rejected, isActivityForm);
+					ampCurrentMember, draft, session, rejected, isActivityForm, false);
 
 		} catch (Exception exception) {
 			logger.error("Error saving activity:", exception); // Log the exception
@@ -179,14 +177,14 @@ public class ActivityUtil {
 	 * saves a new version of an activity
 	 * returns newActivity
 	 */
-	public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a, Collection<AmpContentTranslation> translations, 
-			AmpTeamMember ampCurrentMember, boolean draft, Session session, boolean rejected, boolean isActivityForm) throws Exception
+	public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
+			Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
+			Session session, boolean rejected, boolean isActivityForm, boolean isImporter) throws Exception
 	{
 		//saveFundingOrganizationRole(a);
 		AmpActivityVersion oldA = a;
 		boolean newActivity = false;
-		boolean isImporter = ChangeType.IMPORT.name().equals(a.getChangeType());
-		
+
 		if (a.getAmpActivityId() == null){
 			a.setActivityCreator(ampCurrentMember);
 			a.setActivityCreator(ampCurrentMember);
@@ -354,12 +352,7 @@ public class ActivityUtil {
 
 	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity,boolean rejected) {
 		Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
-		ApplicationSettings appSettings = null;
-		if (TeamUtil.getCurrentMember() != null) {
-			appSettings = TeamUtil.getCurrentMember().getAppSettings();
-		}
-		String validation = appSettings != null ? appSettings.getValidation() : 
-			org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
+		String validation = org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
 		
 		//setting activity status....
 		AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
@@ -505,11 +498,11 @@ public class ActivityUtil {
 
 	private static void updateComponentFunding(AmpActivityVersion a, Session session) {
 		Set<AmpComponent> components = a.getComponents();
-		
+
 		if (components == null) {
 			return;
 		}
-		
+
 		Iterator<AmpComponent> componentIterator = components.iterator();
 		while (componentIterator.hasNext()) {
 			AmpComponent ampComponent = componentIterator.next();

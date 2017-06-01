@@ -6,12 +6,12 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 import java.util.Map;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 
@@ -32,11 +32,11 @@ public class AmpActivityIdValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
+						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 		// REFACTOR: let's define a flag (count = 2) once both amp_activity_id and amp_id are verified to immediately skip this validator
 		boolean isValid = true;
-		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
+		String fieldName = fieldDescription.getFieldName();
 		
 		// verify amp_activity_id, that is our main reference 
 		if (ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME.equals(fieldPath)) {

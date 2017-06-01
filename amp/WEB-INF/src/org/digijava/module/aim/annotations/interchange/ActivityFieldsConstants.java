@@ -3,6 +3,9 @@
  */
 package org.digijava.module.aim.annotations.interchange;
 
+
+import org.digijava.module.categorymanager.util.CategoryConstants;
+
 /**
  * Stores activity fields related constants used in annotations for reuse
  * @author Nadejda Mandrescu
@@ -13,6 +16,7 @@ public class ActivityFieldsConstants {
 	public static final String UPDATE_DATE = "Update Date";
 	public static final String PROJECT_CODE = "Project Code";
 	public static final String AMP_ID = "AMP Id";
+	public static final String TEAM = "Team";
 	public static final String WORKSPACES_EDIT = "Workspaces Edit";
 	public static final String PROJECT_TITLE = "Project Title";
 	public static final String IS_DRAFT = "Is Draft";
@@ -30,4 +34,16 @@ public class ActivityFieldsConstants {
     public static final String PRIMARY_CONTACT = "Primary Contact";
     public static final String TRANSACTION_TYPE = "Transaction Type";
     public static final String ORG_ROLE = "Org. Role";
+    public static final String COMPONENTS = "Components";
+    public static final String COMPONENT_TITLE = "Component Title";
+    public static final String COMPONENT_DESCRIPTION = "Description";
+    public static final String COMPONENT_TYPE = "Component Type";
+    public static final String COMPONENT_ORGANIZATION = "Component Organization";
+    public static final String COMPONENT_FUNDING = "Funding";
+    public static final String COMPONENT_FUNDING_CURRENCY = "Currency";
+    public static final String COMPONENT_FUNDING_DESCRIPTION = "Description";
+    public static final String COMPONENT_FUNDING_AMOUNT = "Amount";
+    public static final String COMPONENT_FUNDING_TRANSACTION_DATE = "Transaction Date";
+    public static final String COMPONENT_FUNDING_ADJUSTMENT_TYPE = CategoryConstants.ADJUSTMENT_TYPE_NAME;
+    public static final String COMPONENT_FUNDING_TRANSACTION_TYPE = "Transaction Type";
 }

@@ -3,6 +3,9 @@
  */
 package org.digijava.kernel.ampapi.endpoints.errors;
 
+import java.util.Optional;
+
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -38,13 +41,15 @@ public class ApiErrorResponse {
      * @param mediaType the MediaType
      */
     public static Response buildGenericError(Status status, JsonBean errorBean, String mediaType) {
-        
-    	Object formattedMessage = mediaType.equals(MediaType.APPLICATION_XML) ? 
-        						ApiError.toXmlErrorString(errorBean) : errorBean;
-        
+
+    	String responseMediaType = Optional.ofNullable(mediaType).orElse(MediaType.APPLICATION_JSON);
+
+		Object formattedMessage = responseMediaType.equals(MediaType.APPLICATION_XML)
+				? ApiError.toXmlErrorString(errorBean) : errorBean;
+
         ResponseBuilder builder = Response.status(status)
         		.entity(formattedMessage)
-        		.type(mediaType);
+        		.type(responseMediaType);
         
         return builder.build();
     }
@@ -105,8 +110,15 @@ public class ApiErrorResponse {
 	 * @param error	 JSON with the error details
 	 */
 	public static void reportError(Response.Status status, JsonBean error) {
-		logger.error(String.format("[HTTP %d] Error response = %s", status.getStatusCode(), error.toString()));
-
-		throw new ApiRuntimeException(status, error);
+		throw new WebApplicationException(buildResponse(status, error));
 	}
+	
+	public static Response buildResponse(Response.Status status, JsonBean error) {
+	    logger.error(String.format("[HTTP %d] Error response = %s", status.getStatusCode(), error.toString()));
+        ResponseBuilder builder = Response.status(status).
+                entity(error).
+                type(MediaType.APPLICATION_JSON);
+        
+        return builder.build();
+    }
 }

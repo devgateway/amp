@@ -7,10 +7,11 @@ import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -58,8 +59,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	 */
 	
 	@Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true, pickIdOnly = true)
-	@InterchangeableDiscriminator(discriminatorField="transactionType",
-			discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator")
+	@PossibleValues(TransactionTypePossibleValuesProvider.class)
 	private Integer transactionType;
 	
 	@Interchangeable(fieldTitle="Adjustment Type", importable = true, pickIdOnly = true, 
@@ -111,7 +111,11 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	private AmpCurrency fixedRateBaseCurrency;
 	@Interchangeable(fieldTitle="Disbursement Order Rejected", importable=true)
 	private Boolean disbursementOrderRejected;
-	@Interchangeable(fieldTitle="Pledge", importable=true)
+	@Interchangeable(fieldTitle="Pledge", importable=true, fmPath =
+			FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_PLEDGES_FM_PATH
+					+ "|" + ActivityEPConstants.DISBURSEMENTS_PLEDGES_FM_PATH
+					+ "|" + ActivityEPConstants.ESTIMATED_DISBURSEMENTS_PLEDGES_FM_PATH
+					+ "|" + ActivityEPConstants.RELEASE_OF_FUNDS_PLEDGES_FM_PATH)
 	private FundingPledges pledgeid;
 	@Interchangeable(fieldTitle="Capital Spending Percentage", importable=true)
 	private Float capitalSpendingPercentage;

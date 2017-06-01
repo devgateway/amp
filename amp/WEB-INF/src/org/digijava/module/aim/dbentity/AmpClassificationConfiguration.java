@@ -5,12 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.digijava.kernel.ampapi.endpoints.common.valueproviders.ClassificationConfigurationValueProvider;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.SectorUtil;
 
-
+@InterchangeableValue(ClassificationConfigurationValueProvider.class)
 public class AmpClassificationConfiguration implements Serializable, Identifiable {
 	
 	public static final String PRIMARY_CLASSIFICATION_CONFIGURATION_NAME	= "Primary";
@@ -27,7 +29,7 @@ public class AmpClassificationConfiguration implements Serializable, Identifiabl
 	
 	@Interchangeable(fieldTitle="ID", id = true)
 	private Long id;
-	@Interchangeable(fieldTitle="ID", value = true)
+	@Interchangeable(fieldTitle = "Name", value = true)
 	private String name;
 	@Interchangeable(fieldTitle="Description")
 	private String description;

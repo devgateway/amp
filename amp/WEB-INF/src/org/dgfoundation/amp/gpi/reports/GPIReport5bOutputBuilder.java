@@ -30,8 +30,6 @@ import org.dgfoundation.amp.nireports.formulas.NiFormula;
  */
 public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 
-	private static final String COLUMN_INDICATOR_5B = "Indicator 5b";
-
 	private static final String MTEF_FUNDINGS_YES = "1";
 	private static final String MTEF_FUNDINGS_NO = "0";
 
@@ -40,13 +38,13 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 	private List<GPIIndicator5bItem> gpiItems = new ArrayList<>();
 
 	public GPIReport5bOutputBuilder() {
-		addColumn(new GPIReportOutputColumn(COLUMN_INDICATOR_5B));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_INDICATOR_5B));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
 	}
 
 	public final static Set<String> SUMMARY_NUMBERS = Collections
-			.unmodifiableSet(new HashSet<>(Arrays.asList(COLUMN_INDICATOR_5B)));
+			.unmodifiableSet(new HashSet<>(Arrays.asList(GPIReportConstants.COLUMN_INDICATOR_5B)));
 
 	/**
 	 * build the headers of the report
@@ -69,7 +67,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 				String.format("%s %s", MTEF_NAME, (year + 2))));
 		headers.add(new GPIReportOutputColumn(String.valueOf(year + 3), String.valueOf(year + 3),
 				String.format("%s %s", MTEF_NAME, (year + 3))));
-		headers.add(getColumns().get(COLUMN_INDICATOR_5B));
+		headers.add(getColumns().get(GPIReportConstants.COLUMN_INDICATOR_5B));
 
 		return headers;
 	}
@@ -96,7 +94,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 					gpiItem.hasYear2() ? MTEF_FUNDINGS_YES : MTEF_FUNDINGS_NO);
 			columns.put(new GPIReportOutputColumn(String.valueOf(gpiItem.getYear() + 3)),
 					gpiItem.hasYear3() ? MTEF_FUNDINGS_YES : MTEF_FUNDINGS_NO);
-			columns.put(getColumns().get(COLUMN_INDICATOR_5B), gpiItem.getPercentage() + "%");
+			columns.put(getColumns().get(GPIReportConstants.COLUMN_INDICATOR_5B), gpiItem.getPercentage() + "%");
 
 			contents.add(columns);
 		});
@@ -218,7 +216,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 							.setScale(0, RoundingMode.HALF_UP);
 		}
 
-		summaryColumns.put(new GPIReportOutputColumn(COLUMN_INDICATOR_5B), percentageIndicator5b + "%");
+		summaryColumns.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_INDICATOR_5B), percentageIndicator5b + "%");
 
 		return summaryColumns;
 	}

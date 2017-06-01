@@ -1,6 +1,8 @@
 package org.dgfoundation.amp.gpi.reports;
 
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * class holding metadata about a gpi-report-output-column. 
@@ -25,7 +27,7 @@ public class GPIReportOutputColumn implements Comparable<GPIReportOutputColumn> 
 	}
 	
 	public GPIReportOutputColumn(String originalColumnName) {
-		this(originalColumnName, originalColumnName, null);
+		this(TranslatorWorker.translateText(originalColumnName), originalColumnName, null);
 	}
 			
 	public GPIReportOutputColumn(String columnName, String originalColumnName) {
@@ -45,12 +47,12 @@ public class GPIReportOutputColumn implements Comparable<GPIReportOutputColumn> 
 	}
 	
 	public String getColumnName() {
-		return this.originalColumnName;
+		return columnName;
 	}
 	
 	@Override
 	public String toString() {
-		return this.getColumnName();
+		return originalColumnName;
 	}
 	
 	@Override

@@ -7,6 +7,8 @@ public class GPIReportConstants {
 	public static final String REPORT_5b = "5b";
 	public static final String REPORT_6 = "6";
 	public static final String REPORT_9b = "9b";
+	public static final String REPORT_1_1 = "1";
+	public static final String REPORT_1_2 = "1";
 	
 	public static final String REPORT_1_GFM_NAME = "Indicator 1";
 	public static final String REPORT_5a_GFM_NAME = "Indicator 5a";
@@ -18,6 +20,11 @@ public class GPIReportConstants {
 	public static final String COLUMN_REMARK = "Remark";
 	public static final String COLUMN_ANNUAL_GOV_BUDGET = "Annual Government Budget";
 	public static final String COLUMN_PLANNED_ON_BUDGET = "% of planned on budget";
+	public static final String COLUMN_INDICATOR_5B = "Indicator 5b";
+	public static final String COLUMN_TOTAL_ACTUAL_DISBURSEMENTS = "Total Actual Disbursements";
+	public static final String COLUMN_CONCESSIONAL = "Concessional";
+	public static final String COLUMN_DISBURSEMENTS_OTHER_PROVIDERS = "Disbursements through other providers";
+
 	
 	public static final String HIERARCHY_PARAMETER = "hierarchy";
 	public static final String SUMMARY_PARAMETER = "summary";

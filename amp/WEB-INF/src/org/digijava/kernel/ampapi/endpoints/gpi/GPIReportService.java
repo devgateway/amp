@@ -154,10 +154,24 @@ public final class GPIReportService {
 	private byte[] exportGPIReport(String indicatorCode, GPIReport report, JsonBean formParams, String type) throws Exception {
 		
 		GPIReportExportType exporter = null;
+		int output = EndpointUtils.getSingleValue(formParams, "output", 1);
 		
 		switch (type) {
 			case GPIReportConstants.XLSX: {
 				switch (indicatorCode) {
+					case GPIReportConstants.REPORT_1 :
+						if (output == 2) {
+							exporter = GPIReportExportType.XLSX_1_2;
+						} else {
+							exporter = GPIReportExportType.XLSX_1_1;
+						}
+						break;
+					case GPIReportConstants.REPORT_5a :
+						exporter = GPIReportExportType.XLSX_5a;
+						break;
+					case GPIReportConstants.REPORT_5b :
+						exporter = GPIReportExportType.XLSX_5b;
+						break;
 					case GPIReportConstants.REPORT_6 :
 						exporter = GPIReportExportType.XLSX_6;
 						break;

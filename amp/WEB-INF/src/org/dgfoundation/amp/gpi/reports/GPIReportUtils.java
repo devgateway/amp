@@ -465,8 +465,10 @@ public class GPIReportUtils {
 			Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
 
 			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
-			ReportElement donorAgencyRuleElement = getFilterRuleElement(filterRules.getAllFilterRules(), columnName);
-			donorAgencyRule = filterRules.getAllFilterRules().get(donorAgencyRuleElement);
+			if (filterRules != null) {
+				ReportElement donorAgencyRuleElement = getFilterRuleElement(filterRules.getAllFilterRules(), columnName);
+				donorAgencyRule = filterRules.getAllFilterRules().get(donorAgencyRuleElement);
+			}
 		}
 
 		return donorAgencyRule;

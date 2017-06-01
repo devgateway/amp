@@ -31,10 +31,9 @@ public class GPIReportIndicator9bXlsxExporter extends GPIReportXlsxExporter {
 	 */
 	protected void renderReportTableHeader(Workbook wb, Sheet sheet, GPIReport report) {
 		Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
-
+		
 		Row row = sheet.createRow(initHeaderRowOffset);
 		for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
-
 			Cell cell = row.createCell(i);
 			cell.setCellValue(report.getPage().getHeaders().get(i).columnName);
 			setMaxColWidth(sheet, cell, i);
@@ -51,6 +50,37 @@ public class GPIReportIndicator9bXlsxExporter extends GPIReportXlsxExporter {
 			GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
 		}
 	}
+	
+	/**
+	 * @param wb
+	 * @param sheet
+	 * @param report
+	 */
+	protected void renderReportTableSummary(Workbook wb, Sheet sheet, GPIReport report) {
+		Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
+		
+		Row summaryRow = sheet.createRow(initSummaryRowOffset);
+		for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
+			GPIReportOutputColumn gpiReportOutputColumn = report.getPage().getHeaders().get(i);
+			if (report.getSummary().containsKey(gpiReportOutputColumn)) {
+				Cell cell = summaryRow.createCell(i);
+				cell.setCellValue(String.format("%s\n%s", 
+						report.getSummary().get(gpiReportOutputColumn), gpiReportOutputColumn.columnName));
+				setMaxColWidth(sheet, cell, i);
+
+				CellRangeAddress mergedHeaderCell = new CellRangeAddress(initHeaderRowOffset, initHeaderRowOffset, i, i);
+				if (mergedHeaderCell.getNumberOfCells() > 1)
+					sheet.addMergedRegion(mergedHeaderCell);
+
+				mergedCells.add(mergedHeaderCell);
+				cell.setCellStyle(template.getSummaryCellStyle());
+			}
+		}
+		
+		for (CellRangeAddress ca : mergedCells) {
+			GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+		}
+	}
 
 	/**
 	 * @param sheet
@@ -63,21 +93,21 @@ public class GPIReportIndicator9bXlsxExporter extends GPIReportXlsxExporter {
 			
 			for (int j = 0; j < report.getPage().getHeaders().size(); j++) {
 				GPIReportOutputColumn column = report.getPage().getHeaders().get(j);
-				createCell(report, sheet, row, j, column, rowData.get(column));
+				createCell(report, sheet, row, j, column.originalColumnName, rowData.get(column));
 			}
 		}
 	}
 
 	@Override
-	public int getCellType(GPIReportOutputColumn column) {
-		switch (column.originalColumnName) {
-		case MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES:
-		case MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES:
-		case MeasureConstants.NATIONAL_AUDITING_PROCEDURES:
-		case MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES:
-			return Cell.CELL_TYPE_NUMERIC;
+	public int getCellType(String columnName) {
+		switch (columnName) {
+			case MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES:
+			case MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES:
+			case MeasureConstants.NATIONAL_AUDITING_PROCEDURES:
+			case MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES:
+				return Cell.CELL_TYPE_NUMERIC;
 		default:
-			return super.getCellType(column);
+			return super.getCellType(columnName);
 		}
 	}
 }

@@ -22,6 +22,8 @@ export default class Report1Output1 extends Component {
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );        
         this.showRemarksModal = this.showRemarksModal.bind(this);
         this.closeRemarksModal = this.closeRemarksModal.bind(this);
+        this.downloadExcelFile = this.downloadExcelFile.bind(this);
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);
     }
 
     componentDidMount() {
@@ -172,6 +174,14 @@ export default class Report1Output1 extends Component {
         var org = this.props.orgList.filter(org => org.id === id)[0];
         return org ? org.name : '';
     }
+    
+    downloadExcelFile() {
+        this.props.actions.downloadExcelFile(this.getRequestData(), '1');
+    }
+    
+    downloadPdfFile(){
+        this.props.actions.downloadPdfFile(this.getRequestData(), '1');
+    }
        
     render() {
         if ( this.props.mainReport && this.props.mainReport.page ) {
@@ -181,7 +191,7 @@ export default class Report1Output1 extends Component {
                 <div>
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
-                    <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}/>
+                    <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}  downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile}/>
                     <div className="section-divider"></div>
                     {this.props.mainReport && this.props.mainReport.summary &&                              
                             <div className="container-fluid indicator-stats no-padding">

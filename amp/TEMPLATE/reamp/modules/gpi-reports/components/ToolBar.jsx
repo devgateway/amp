@@ -16,10 +16,10 @@ export default class ToolBar extends Component {
             <div className="col-md-6 no-padding">
                 <ul className="export-nav">
                     <li>
-                        <a href="#"><img src="images/export-pdf.svg" /></a>
+                        <a onClick={this.props.downloadPdfFile} ><img src="images/export-pdf.svg" /></a>
                     </li>
                     <li>
-                        <a href="#"><img src="images/export-excel.svg" /></a>
+                        <a onClick={this.props.downloadExcelFile} ><img src="images/export-excel.svg" /></a>
                     </li>
                     <li>
                         <a href="#"><img src="images/export-print.svg" /></a>

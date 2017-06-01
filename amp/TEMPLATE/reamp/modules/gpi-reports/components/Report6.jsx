@@ -18,6 +18,8 @@ export default class Report6 extends Component {
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
         this.toggleHierarchy = this.toggleHierarchy.bind( this );
         this.onYearClick = this.onYearClick.bind( this );
+        this.downloadExcelFile = this.downloadExcelFile.bind(this);
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);
     }
 
     componentDidMount() {
@@ -257,6 +259,14 @@ export default class Report6 extends Component {
         </div> )
     }
 
+    downloadExcelFile() {
+        this.props.actions.downloadExcelFile(this.getRequestData(), '6');
+    }
+    
+    downloadPdfFile(){
+        this.props.actions.downloadPdfFile(this.getRequestData(), '6');
+    } 
+    
     render() {
         if ( this.props.mainReport && this.props.mainReport.page ) {
             var addedGroups = [];
@@ -269,17 +279,17 @@ export default class Report6 extends Component {
                         <div className="col-md-6 no-padding">
                         </div>
                         <div className="col-md-6 no-padding">
-                            <ul className="export-nav">
-                                <li>
-                                    <a href="#"><img src="images/export-pdf.svg" /></a>
-                                </li>
-                                <li>
-                                    <a href="#"><img src="images/export-excel.svg" /></a>
-                                </li>
-                                <li>
-                                    <a href="#"><img src="images/export-print.svg" /></a>
-                                </li>
-                            </ul>
+                           <ul className="export-nav">
+                             <li>
+                                <a onClick={this.downloadPdfFile}><img src="images/export-pdf.svg" /></a>
+                             </li>
+                             <li>
+                                <a onClick={this.downloadExcelFile}><img src="images/export-excel.svg" /></a>
+                             </li>
+                            <li>
+                                <a href="#"><img src="images/export-print.svg" /></a>
+                            </li>
+                           </ul>
                             <div className="btn-action-nav">
                                 <button type="button" className="btn btn-action" onClick={this.showFilters}>{this.props.translations['amp.gpi-reports:filter-button']}</button>
                                 <button type="button" className="btn btn-action" onClick={this.showSettings}>{this.props.translations['amp.gpi-reports:settings-button']}</button>

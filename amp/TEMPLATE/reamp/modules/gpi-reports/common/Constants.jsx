@@ -54,3 +54,6 @@ export const OUTPUT_1 = '1';
 export const OUTPUT_2 = '2';
 export const DELIMETER = '###';
 
+export const XLS = 'xls';
+export const PDF = 'pdf';
+

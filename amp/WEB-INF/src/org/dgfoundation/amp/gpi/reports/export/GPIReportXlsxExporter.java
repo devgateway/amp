@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -38,7 +39,8 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 	public String summarySheetName = "Summary Information";
 
 	public final int currencyUnitsRowPosition = 1;
-	public final int initHeaderRowOffset = 3;
+	public int initSummaryRowOffset = 3;
+	public int initHeaderRowOffset = 6;
 
 	protected static final int IN_MEMORY_ROWS = 10;
 
@@ -102,6 +104,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 
 	protected void generateReportSheet(SXSSFWorkbook wb, SXSSFSheet sheet, GPIReport report) {
 		renderReportTableUnits(wb, sheet, report);
+		renderReportTableSummary(wb, sheet, report);
 		renderReportTableHeader(wb, sheet, report);
 		renderReportData(sheet, report);
 	}
@@ -139,6 +142,14 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 	 */
 	protected void renderReportTableHeader(Workbook wb, Sheet sheet, GPIReport report) {
 	}
+	
+	/**
+	 * @param wb
+	 * @param sheet
+	 * @param report
+	 */
+	protected void renderReportTableSummary(Workbook wb, Sheet sheet, GPIReport report) {
+	}
 
 	/**
 	 * @param sheet
@@ -157,8 +168,8 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 	 * @param value
 	 * @return
 	 */
-	public Cell createCell(GPIReport report, Sheet sheet, Row row, int i, GPIReportOutputColumn column, String value) {
-		int cellType = getCellType(column);
+	public Cell createCell(GPIReport report, Sheet sheet, Row row, int i, String columnName, String value) {
+		int cellType = getCellType(columnName);
 		Cell cell = row.createCell(i, cellType);
 		if (cellType == Cell.CELL_TYPE_NUMERIC) {
 			DecimalFormat df = report.getSpec().getSettings().getCurrencyFormat();
@@ -168,12 +179,15 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 			} catch (ParseException e) {
 				logger.error(e);
 			}
-
 			cell.setCellValue(val);
 		} else if (cellType == Cell.CELL_TYPE_STRING) {
 			cell.setCellValue(value);
 		}
-
+		
+		if (hasSpecificStyle(columnName)) {
+			cell.setCellStyle(getSpecificStyle(columnName));
+		}
+		
 		setMaxColWidth(sheet, cell, i);
 
 		return cell;
@@ -184,7 +198,8 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		IntWrapper width = new IntWrapper().inc(10);
 		switch (cell.getCellType()) {
 		case Cell.CELL_TYPE_STRING:
-			width.set(cell.getStringCellValue().length());
+			int length = cell.getStringCellValue().length();
+			width.set(length < width.value ? width.value : length);
 			break;
 		case Cell.CELL_TYPE_NUMERIC:
 			width.set(Double.toString(cell.getNumericCellValue()).length());
@@ -194,8 +209,20 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		widths.compute(i, (k, v) -> v == null ? width.value : v < width.value ? width.value : v);
 	}
 
-	public int getCellType(GPIReportOutputColumn column) {
+	public int getCellType(String columnName) {
 		return Cell.CELL_TYPE_STRING;
+	}
+	
+	protected boolean hasSpecificStyle(String columnName) {
+		return false;
+	}
+	
+	protected CellStyle getSpecificStyle(String columnName) {
+		return template.getNumberStyle();
+	}
+	
+	protected boolean isHiddenColumn(String columnName) {
+		return false;
 	}
 
 	/**
@@ -327,7 +354,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 			}
 		}
 	}
-
+	
 	protected String getReportSheetName() {
 		return reportSheetName;
 	}

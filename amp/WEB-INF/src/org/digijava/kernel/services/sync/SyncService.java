@@ -247,7 +247,7 @@ public class SyncService implements InitializingBean {
     }
 
     private List<ActivityChange> getVisibleActivities(List<Long> userIds) {
-        List<AmpTeamMember> teamMembers = TeamMemberUtil.getTeamMembers(userIds);
+        List<AmpTeamMember> teamMembers = TeamMemberUtil.getNonManagementTeamMembers(userIds);
         if (teamMembers.isEmpty()) {
             return emptyList();
         }

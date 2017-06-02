@@ -41,7 +41,7 @@ public class FMEndpoint {
      * {
      *    "reporting-fields" : true,
      *    "enabled-modules" : true,
-     *    "detail-modules" : ["GIS","Dashboards", ...]
+     *    "detail-modules" : ["GIS","Dashboards", ...],
      *    "detail-flat" : true,
      *    "full-enabled-paths" : true,
      *    "filter": ["/PROJECT MANAGEMENT/Funding/Funding Information/Delivery rate"]

@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +18,13 @@ public class AmpDataFreezeSettings implements Serializable {
 	 */
 	private Boolean enabled = Boolean.FALSE;
 	private Integer gracePeriod;
-
+	private Date freezingDate;
+	private Date openPeriodStart;
+	private Date openPeriodEnd;
+	private Boolean sendNotification = Boolean.FALSE;
+	private FreezeOptions freezeOption;	
+	public enum FreezeOptions {ENTIRE_ACTIVITY, FUNDING};
+	
 	public Long getAmpDataFreezeSettingsId() {
 		return ampDataFreezeSettingsId;
 	}
@@ -35,6 +42,36 @@ public class AmpDataFreezeSettings implements Serializable {
 	}
 	public void setGracePeriod(Integer gracePeriod) {
 		this.gracePeriod = gracePeriod;
+	}
+	public Date getFreezingDate() {
+		return freezingDate;
+	}
+	public void setFreezingDate(Date freezingDate) {
+		this.freezingDate = freezingDate;
+	}
+	public Date getOpenPeriodStart() {
+		return openPeriodStart;
+	}
+	public void setOpenPeriodStart(Date openPeriodStart) {
+		this.openPeriodStart = openPeriodStart;
+	}
+	public Date getOpenPeriodEnd() {
+		return openPeriodEnd;
+	}
+	public void setOpenPeriodEnd(Date openPeriodEnd) {
+		this.openPeriodEnd = openPeriodEnd;
+	}	
+	public Boolean getSendNotification() {
+		return sendNotification;
+	}
+	public void setSendNotification(Boolean sendNotification) {
+		this.sendNotification = sendNotification;
+	}
+	public FreezeOptions getFreezeOption() {
+		return freezeOption;
+	}
+	public void setFreezeOption(FreezeOptions freezeOption) {
+		this.freezeOption = freezeOption;
 	}
 	
 }

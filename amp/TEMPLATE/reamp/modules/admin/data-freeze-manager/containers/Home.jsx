@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
-import DataFreezingEventForm from '../components/DataFreezingEventForm';
-import DataFreezingEventsList from '../components/DataFreezingEventsList';
+import DataFreezeEventForm from '../components/DataFreezeEventForm';
+import DataFreezeEventsList from '../components/DataFreezeEventsList';
 import UnfreezeAll from '../components/UnfreezeAll';
 export default class App extends Component {
     constructor(props, context) {      
@@ -36,8 +36,8 @@ export default class App extends Component {
                     
                   <div className="tab-content">
                      <div id="data-freezing" className="tab-pane fade in active">                    
-                       <DataFreezingEventForm /> 
-                       <DataFreezingEventsList/>   
+                       <DataFreezeEventForm /> 
+                       <DataFreezeEventsList/>   
                      </div>
                     <div id="unfreeze-all" className="tab-pane fade in">
                         <UnfreezeAll/>

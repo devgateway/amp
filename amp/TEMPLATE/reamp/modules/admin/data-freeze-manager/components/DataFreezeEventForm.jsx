@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as startUp from '../actions/StartUpAction.jsx';
-export default class DataFreezingEventForm extends Component {    
+export default class DataFreezeEventForm extends Component {    
     constructor(props, context) {      
         super(props, context);
         this.state = {};        
@@ -132,4 +132,4 @@ function mapDispatchToProps(dispatch) {
     return {actions: bindActionCreators({}, dispatch)}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataFreezingEventForm);
+export default connect(mapStateToProps, mapDispatchToProps)(DataFreezeEventForm);

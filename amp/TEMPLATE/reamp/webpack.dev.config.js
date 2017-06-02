@@ -17,10 +17,10 @@ module.exports = {
           'webpack/hot/only-dev-server',
           './modules/admin/resource-manager-admin/script.es6'
       ],
-      "admin/data-freezing/script": [
+      "admin/data-freeze-manager/script": [
           'webpack-dev-server/client?http://localhost:3000',
           'webpack/hot/only-dev-server',
-          './modules/admin/data-freezing/script.es6'
+          './modules/admin/data-freeze-manager/script.es6'
       ]
     //"filters/script": [
     //  'webpack-dev-server/client?http://localhost:3000',

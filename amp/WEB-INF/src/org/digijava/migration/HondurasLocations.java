@@ -18,27 +18,36 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import javax.servlet.ServletContext;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.startup.AmpBackgroundActivitiesUtil;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -59,12 +68,16 @@ public class HondurasLocations {
 
     private Pattern oldLocPattern = Pattern.compile("R\\d\\d - .*");
 
-    public static void run() {
-        new HondurasLocations().migrate();
+    private String rootRealPath;
+
+    public static void run(ServletContext servletContext) {
+        new HondurasLocations().migrate(servletContext);
     }
 
-    private void migrate() {
+    private void migrate(ServletContext servletContext) {
         logger.info("MIGRATION STARTED!");
+
+        rootRealPath = servletContext.getRealPath("/");
 
         Multimap<String, Loc> locs = LinkedHashMultimap.create();
         Set<String> actsWithoutLocs = new HashSet<>();
@@ -152,7 +165,12 @@ public class HondurasLocations {
             float perc = 100f / a.getLocations().size();
             a.getLocations().forEach(l -> l.setLocationPercentage(perc));
 
-            saveActivityNewVersion(a, translations, teamMember, a.getDraft(), session, false, false);
+            AmpActivityVersion newActivity = saveActivityNewVersion(a, translations, teamMember, a.getDraft(), session, false, false);
+
+            session.flush();
+
+            Locale locale = new Locale("en");
+            LuceneUtil.addUpdateActivity(rootRealPath, true, SiteUtils.getDefaultSite(), locale, newActivity, a);
 
             PersistenceManager.cleanupSession(session);
         } catch (Exception e) {

@@ -193,7 +193,7 @@ public class ConfigLoaderListener
 			e.printStackTrace();
 		}
 
-        HondurasLocations.run();
+        HondurasLocations.run(sce.getServletContext());
     }
 
 	/**

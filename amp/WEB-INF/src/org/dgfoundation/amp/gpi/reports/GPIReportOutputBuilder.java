@@ -162,6 +162,7 @@ public abstract class GPIReportOutputBuilder  {
 				return o2.get(yearColumn).compareTo(o1.get(yearColumn));
 			}
 		};
+		
 		return byYearDonorComparator;
 	}
 	

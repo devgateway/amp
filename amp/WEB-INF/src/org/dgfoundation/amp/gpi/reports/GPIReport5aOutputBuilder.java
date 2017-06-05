@@ -41,6 +41,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 
 	public static final String ACTIVITY_BUDGET_ON = "On Budget";
 	public static final String YES_VALUE = "yes";
+	public static final String CONCESSIONAL_YES_VALUE = "1";
 
 	public GPIReport5aOutputBuilder() {
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
@@ -149,8 +150,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 					}
 				}
 
-				columns.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_CONCESSIONAL), 
-						StringUtils.join(concessional.toArray(), ","));
+				columns.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_CONCESSIONAL), CONCESSIONAL_YES_VALUE);
 
 				Optional<ReportArea> onBudgetAreaElement = reportArea.getChildren().stream()
 						.filter(budgetArea -> isOnBudget(budgetArea)).findAny();

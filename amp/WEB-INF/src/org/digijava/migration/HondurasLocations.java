@@ -2,6 +2,7 @@ package org.digijava.migration;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion;
 import static org.digijava.module.message.jobs.CloseExpiredActivitiesJob.AMP_MODIFIER_FIRST_NAME;
@@ -115,9 +116,15 @@ public class HondurasLocations {
     }
 
     private boolean allTargetLocationsExist(Multimap<String, Loc> locs) {
-        return locs.asMap().values().stream()
+        Set<String> missingLocations = locs.asMap().values().stream()
                 .flatMap(Collection::stream)
-                .allMatch(loc -> findCVLocation(loc) != null);
+                .filter(loc -> findCVLocation(loc) == null)
+                .map(loc -> loc.department + " - " + loc.municipality)
+                .collect(toSet());
+        if (!missingLocations.isEmpty()) {
+            logger.info("The following target locations are missing: " + missingLocations);
+        }
+        return missingLocations.isEmpty();
     }
 
     private void warnIfNotAllActivitiesAreCovered(Multimap<String, Loc> locs, Set<String> actsWithoutLocs) {

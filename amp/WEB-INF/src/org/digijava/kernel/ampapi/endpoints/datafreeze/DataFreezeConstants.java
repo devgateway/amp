@@ -18,4 +18,12 @@ public class DataFreezeConstants {
 	public static final String SAVE_SUCCESSFUL = "SAVE_SUCCESSFUL";
 	public static final String SAVE_FAILED= "SAVE_FAILED";
 	
+	public static final Integer DEFAULT_RECORDS_PER_PAGE = 10;
+	public static final Integer DEFAULT_OFFSET = 0;
+	public static final String DEFAULT_SORT_COLUMN = "id";
+	public static final String DEFAULT_SORT_ORDER = "desc";
+	public static final String TOTAL_RECORDS = "totalRecords";
+	public static final String ORDER_ASC = "asc";
+	public static final String ORDER_DESC = "desc";	
+	
 }

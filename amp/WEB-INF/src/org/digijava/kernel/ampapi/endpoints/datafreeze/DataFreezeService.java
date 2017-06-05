@@ -103,8 +103,12 @@ public class DataFreezeService {
 		DataFreezeUtil.deleteDataFreezeEvent(id);
 	}
 	
-	public static Page<AmpDataFreezeSettings> fetchDataFreezeEventList(){
-		return new Page<>();
+	public static Page<AmpDataFreezeSettings> fetchDataFreezeEventList(Integer offset, Integer count, String orderBy, String sort){
+		Page<AmpDataFreezeSettings> page = new Page<>();
+		Integer total = DataFreezeUtil.getFreezeEventsTotalCount();
+		page.setData(DataFreezeUtil.getDataFreeEventsList(offset, count, orderBy, sort, total));
+		page.setTotalRecords(total);
+		return page;
 	}
 	
 	public static AmpDataFreezeSettings fetchOneDataFreezeEvent(long id){

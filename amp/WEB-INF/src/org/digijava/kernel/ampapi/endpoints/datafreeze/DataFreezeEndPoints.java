@@ -9,6 +9,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
@@ -23,7 +24,7 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
 	@POST
 	@Path("event")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-   // @ApiMethod(ui = false, id = "saveDataFreezeEvent", authTypes = {AuthRule.IN_ADMIN})
+    @ApiMethod(ui = false, id = "saveDataFreezeEvent", authTypes = {AuthRule.IN_ADMIN})
 	public JsonBean saveDataFreezeEvent(JsonBean dataFreezeEvent){
 		return DataFreezeService.saveDataFreezeEvent(dataFreezeEvent);
 	}
@@ -41,15 +42,16 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "fetchDataFreezeEvent", authTypes = {AuthRule.IN_ADMIN})
 	public AmpDataFreezeSettings fetchDataFreezeEvent(@PathParam("id") long id){
-		return new AmpDataFreezeSettings();
+		return DataFreezeService.fetchOneDataFreezeEvent(id);
 	}
 	
 	@GET
-    @Path("event/")
+    @Path("event/list")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "fetchDataFreezeEventList", authTypes = {AuthRule.IN_ADMIN})
-	public Page<AmpDataFreezeSettings> fetchDataFreezeEventList(){
-		return new Page<AmpDataFreezeSettings>();
+	public Page<AmpDataFreezeSettings> fetchDataFreezeEventList(@QueryParam("offset") Integer offset, @QueryParam("count") Integer count,
+			@QueryParam("orderby") String orderBy, @QueryParam("sort") String sort){
+		return DataFreezeService.fetchDataFreezeEventList(offset, count, orderBy, sort);
 	}
 	
 	/**

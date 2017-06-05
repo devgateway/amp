@@ -91,7 +91,12 @@ public class HondurasLocations {
 
         findActivitiesLinkedWithOldRegions();
 
-        crashIfNotAllActivitiesAreCovered(locs, actsWithoutLocs);
+        warnIfNotAllActivitiesAreCovered(locs, actsWithoutLocs);
+
+        if (!allTargetLocationsExist(locs)) {
+            logger.warn("Skipping Honduras migration! Target locations aren't created yet.");
+            return;
+        }
 
         try {
             AmpBackgroundActivitiesUtil.createActivityUserIfNeeded(user);
@@ -109,7 +114,13 @@ public class HondurasLocations {
         logger.info("MIGRATION FINISHED!");
     }
 
-    private void crashIfNotAllActivitiesAreCovered(Multimap<String, Loc> locs, Set<String> actsWithoutLocs) {
+    private boolean allTargetLocationsExist(Multimap<String, Loc> locs) {
+        return locs.asMap().values().stream()
+                .flatMap(Collection::stream)
+                .allMatch(loc -> findCVLocation(loc) != null);
+    }
+
+    private void warnIfNotAllActivitiesAreCovered(Multimap<String, Loc> locs, Set<String> actsWithoutLocs) {
         HashSet<String> invalidActs = new HashSet<>(activitiesWithOldRegions);
         invalidActs.removeAll(actsWithoutLocs);
         invalidActs.removeAll(locs.keySet());

@@ -215,6 +215,9 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 					});
 					row.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK),
 							getRemarkEndpointURL(k, reportArea.getOwner().id));
+					
+					row.put(new GPIReportOutputColumn(ColumnConstants.DONOR_ID), 
+							String.valueOf(reportArea.getOwner().id));
 
 					if (!isRowEmpty.value) {
 						row.putAll(columns);

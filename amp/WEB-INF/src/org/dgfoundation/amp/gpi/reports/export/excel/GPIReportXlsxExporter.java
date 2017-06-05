@@ -127,6 +127,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		String translatedCurrencyCode = TranslatorWorker.translateText(currencyCode);
 
 		cell.setCellValue(translatedNotes + " - " + translatedCurrencyCode);
+		cell.setCellStyle(template.getDefaultStyle());
 
 		CellRangeAddress mergedUnitsCell = new CellRangeAddress(currencyUnitsRowPosition, currencyUnitsRowPosition, 0,
 				report.getPage().getHeaders().size() + 1);
@@ -186,6 +187,8 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		
 		if (hasSpecificStyle(columnName)) {
 			cell.setCellStyle(getSpecificStyle(columnName));
+		} else {
+			cell.setCellStyle(template.getDefaultStyle());
 		}
 		
 		setMaxColWidth(sheet, cell, i);
@@ -276,11 +279,14 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 			for (String filterValue : filter.getValue()) {
 				// Check if the row 'i' exists so we don't add an extra row for
 				// the first filter result.
-				if (summarySheet.getRow(currLine.intValue()) != null) {
-					summarySheet.getRow(currLine.intValue()).createCell(1).setCellValue(filterValue);
-				} else {
-					summarySheet.createRow(currLine.intValue()).createCell(1).setCellValue(filterValue);
+				Row row = summarySheet.getRow(currLine.intValue());
+				
+				if (summarySheet.getRow(currLine.intValue()) == null) {
+					summarySheet.createRow(currLine.intValue());
 				}
+				Cell filterCell = row.createCell(1);
+				filterCell.setCellValue(filterValue);
+				filterCell.setCellStyle(template.getDefaultStyle());
 				currLine.inc();
 				group++;
 			}
@@ -324,7 +330,10 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		Cell calendarTitleCell = calendarRow.createCell(0);
 		calendarTitleCell.setCellValue(TranslatorWorker.translateText(title));
 		calendarTitleCell.setCellStyle(template.getOptionSettingsStyle());
-		calendarRow.createCell(1).setCellValue(value);
+		
+		Cell calendarCell = calendarRow.createCell(1);
+		calendarCell.setCellValue(value);
+		calendarCell.setCellStyle(template.getDefaultStyle());
 	}
 
 	/**

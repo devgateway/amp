@@ -27,15 +27,16 @@ public class GPIReportExcelTemplate {
 	private CellStyle numberStyle = null;
 	private CellStyle centerStyle = null;
 	private CellStyle wrappedStyle = null;
+	private CellStyle defaultStyle = null;
 	private CellStyle settingsOptionStyle = null;
 	private CellStyle settingsFilterStyle = null;
 	
 	private Map<Integer, CellStyle> subTotals = new HashMap<Integer, CellStyle>();
 	
-	private final short cellHeight = 300;
-	private final float charWidth = 300;
+	private final short cellHeight = 250;
+	private final float charWidth = 250;
 	private final int maxColumnWidth = 20480; // 80 * 256
-	private final int defaultColWidth = 25;
+	private final int defaultColWidth = 20;
 	
 	private Workbook wb;
 	
@@ -50,14 +51,20 @@ public class GPIReportExcelTemplate {
 	 */
 	private void initWorkbookStyles() {
 		
+		Font fontDefault = wb.createFont();
+		fontDefault.setFontHeightInPoints((short)10);
+		
 		Font fontHeaderAndTotal = wb.createFont();
 		fontHeaderAndTotal.setColor(IndexedColors.BLACK.getIndex());
+		fontHeaderAndTotal.setFontHeightInPoints((short)10);
+		
 		Font fontBold = wb.createFont();
 		fontBold.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		fontBold.setFontHeightInPoints((short)10);
 		
 		Font fontSummary = wb.createFont();
 		fontSummary.setBold(true);
-		fontSummary.setFontHeightInPoints((short)12);
+		fontSummary.setFontHeightInPoints((short)10);
 
 		headerCellStyle = wb.createCellStyle();
 		headerCellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
@@ -91,16 +98,26 @@ public class GPIReportExcelTemplate {
 		hierarchyStyle = wb.createCellStyle();
 		hierarchyStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 		hierarchyStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		hierarchyStyle.setFont(fontDefault);
 
 		numberStyle = wb.createCellStyle();
 		numberStyle.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
 		numberStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		numberStyle.setFont(fontDefault);
 		
 		centerStyle = wb.createCellStyle();
 		centerStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		centerStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		centerStyle.setFont(fontDefault);
 		
 		wrappedStyle = wb.createCellStyle();
+		wrappedStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
 		wrappedStyle.setWrapText(true);
+		wrappedStyle.setFont(fontDefault);
+		
+		defaultStyle = wb.createCellStyle();
+		defaultStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		defaultStyle.setFont(fontDefault);
 
 		settingsOptionStyle = wb.createCellStyle();
 		settingsOptionStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
@@ -108,6 +125,7 @@ public class GPIReportExcelTemplate {
 		settingsOptionStyle.setFont(fontBold);
 
 		settingsFilterStyle = wb.createCellStyle();
+		settingsFilterStyle.setFont(fontDefault);
 	}
 	
 	public CellStyle getHeaderCellStyle() {
@@ -144,6 +162,10 @@ public class GPIReportExcelTemplate {
 	
 	public CellStyle getWrappedStyle() {
 		return wrappedStyle;
+	}
+	
+	public CellStyle getDefaultStyle() {
+		return defaultStyle;
 	}
 	
 	public int getCellHeight() {

@@ -24,6 +24,7 @@ public class AmpDataFreezeSettings implements Serializable {
 	private Boolean sendNotification = Boolean.FALSE;
 	private FreezeOptions freezeOption;	
 	public enum FreezeOptions {ENTIRE_ACTIVITY, FUNDING};
+	private String filters;
 	
 	public Long getAmpDataFreezeSettingsId() {
 		return ampDataFreezeSettingsId;
@@ -72,6 +73,12 @@ public class AmpDataFreezeSettings implements Serializable {
 	}
 	public void setFreezeOption(FreezeOptions freezeOption) {
 		this.freezeOption = freezeOption;
+	}
+	public String getFilters() {
+		return filters;
+	}
+	public void setFilters(String filters) {
+		this.filters = filters;
 	}
 	
 }

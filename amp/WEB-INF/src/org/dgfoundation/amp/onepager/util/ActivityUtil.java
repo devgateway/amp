@@ -3,12 +3,9 @@
  */
 package org.dgfoundation.amp.onepager.util;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -32,14 +29,12 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.upload.FileItemEx;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
 import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
-import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -62,6 +57,7 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -950,7 +946,7 @@ public class ActivityUtil {
 	}
 	
 	/**
-	 * @param a
+	 *
 	 * @param deletedResources
 	 */
 	private static void deleteGPINiResources(HashSet<AmpGPINiSurveyResponseDocument> deletedResources) {
@@ -972,15 +968,17 @@ public class ActivityUtil {
 	 */
 	private static void insertGPINiResources(AmpActivityVersion a, HashSet<TemporaryGPINiDocument> newResources) {
 		if (newResources != null) {
+
 			for (TemporaryGPINiDocument temp : newResources) {
 				AmpGPINiSurveyResponse surveyResponse = temp.getSurveyResponse();
-				
+
 				TemporaryDocumentData tdd = new TemporaryDocumentData();
 				tdd.setTitle(temp.getTitle());
 				tdd.setName(temp.getFileName());
 
-				if (temp.getDate() != null)
+				if (temp.getDate() != null) {
 					tdd.setDate(temp.getDate().getTime());
+				}
 				if (temp.getWebLink() == null || temp.getWebLink().length() == 0) {
 					if (temp.getFile() != null) {
 						tdd.setFileSize(temp.getFile().getSize());
@@ -995,20 +993,40 @@ public class ActivityUtil {
 					NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
 
 					AmpGPINiSurveyResponseDocument responseDocument = new AmpGPINiSurveyResponseDocument();
-					responseDocument.setSurveyResponse(surveyResponse);
-					
+
 					if (node != null) {
 						responseDocument.setUuid(node.getUuid());
 					} else {
 						responseDocument.setUuid(temp.getExistingDocument().getUuid());
 					}
-					
-					surveyResponse.getSupportingDocuments().add(responseDocument);
+
+					for (AmpOrgRole tempOrgRole : a.getOrgrole()) {
+						if (tempOrgRole.getGpiNiSurvey() != null) {
+							for (AmpGPINiSurveyResponse tempGPINiSurveyResponse : tempOrgRole.getGpiNiSurvey()
+									.getResponses()) {
+								if (tempGPINiSurveyResponse.getOldKey() == surveyResponse
+										.getAmpGPINiSurveyResponseId()) {
+									responseDocument.setSurveyResponse(tempGPINiSurveyResponse);
+
+									if (tempGPINiSurveyResponse.getSupportingDocuments() == null) {
+										tempGPINiSurveyResponse.setSupportingDocuments(new
+												HashSet<AmpGPINiSurveyResponseDocument>());
+									}
+
+									tempGPINiSurveyResponse.getSupportingDocuments().add(responseDocument);
+								}
+
+							}
+
+						}
+					}
+
 				} catch (JCRSessionException ex) {
 					// we catch the exception and show a warning, but allow the activity to be saved
 					logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
 							+ " will not be saved.", ex);
 				}
+
 			}
 		}
 	}

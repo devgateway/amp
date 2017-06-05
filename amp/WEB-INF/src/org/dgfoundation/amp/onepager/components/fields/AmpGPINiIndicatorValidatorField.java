@@ -104,7 +104,7 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
                     .filter(item -> item.getSurveyResponse().getAmpGPINiSurveyResponseId().equals(response
                             .getAmpGPINiSurveyResponseId()))
                     .collect(Collectors.toSet());
-            return newResponseResourceItems.size() == 0;
+            return newResponseResourceItems.size() == 0 && response.isEmpty();
 
         }
 

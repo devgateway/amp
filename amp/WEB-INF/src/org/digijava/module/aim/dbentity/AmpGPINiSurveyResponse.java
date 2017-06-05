@@ -11,6 +11,7 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 	private static final long serialVersionUID = -6656563271238273140L;
 	
 	private Long ampGPINiSurveyResponseId;
+	private transient Long oldKey;
 	private AmpGPINiSurvey ampGPINiSurvey;
 	private AmpGPINiQuestion ampGPINiQuestion;
 	private Long integerResponse;
@@ -66,24 +67,37 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 		this.questionOption = questionOption;
 	}
 
+	public Long getOldKey() {
+		return oldKey;
+	}
+
+	public void setOldKey(Long oldKey) {
+		this.oldKey = oldKey;
+	}
+
 	public Object clone() throws CloneNotSupportedException {
 		AmpGPINiSurveyResponse clonedResponse = new AmpGPINiSurveyResponse();
 		clonedResponse.setAmpGPINiSurveyResponseId(null);
+		clonedResponse.setOldKey(this.ampGPINiSurveyResponseId);
 		clonedResponse.setAmpGPINiQuestion(this.ampGPINiQuestion);
 		clonedResponse.setTextResponse(this.textResponse);
 		clonedResponse.setIntegerResponse(this.integerResponse);
 		clonedResponse.setQuestionOption(this.questionOption);
-		if (clonedResponse.getSupportingDocuments() != null && clonedResponse.getSupportingDocuments().size() > 0) {
+		if (this.supportingDocuments != null && this.supportingDocuments.size() > 0) {
 			final Set<AmpGPINiSurveyResponseDocument> clDocuments = new HashSet<AmpGPINiSurveyResponseDocument>();
-			clonedResponse.getSupportingDocuments().forEach(d -> {
+			this.supportingDocuments.forEach(d -> {
 				try {
 					AmpGPINiSurveyResponseDocument clDoc = (AmpGPINiSurveyResponseDocument) d.clone();
-					clDoc.setSurveyResponse(null);
+					clDoc.setId(null);
+					clDoc.setSurveyResponse(clonedResponse);
 					clDocuments.add(clDoc);
 				} catch (CloneNotSupportedException e) {
 					throw new RuntimeException(e);
 				}
 			});
+			if (clonedResponse.getSupportingDocuments() == null) {
+				clonedResponse.setSupportingDocuments(new HashSet<AmpGPINiSurveyResponseDocument>());
+			}
 			clonedResponse.getSupportingDocuments().clear();
 			clonedResponse.getSupportingDocuments().addAll(clDocuments);
 		}

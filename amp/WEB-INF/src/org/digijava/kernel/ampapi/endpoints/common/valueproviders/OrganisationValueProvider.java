@@ -1,17 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.common.valueproviders;
 
 import com.google.common.collect.ImmutableMap;
-import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvider;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class OrganisationValueProvider implements InterchangeableValueProvider<AmpOrganisation> {
+public class OrganisationValueProvider extends GenericInterchangeableValueProvider<AmpOrganisation> {
 
-    @Override
-    public String getValue(AmpOrganisation organisation) {
-        return organisation.getName();
+    public OrganisationValueProvider() {
+        super(AmpOrganisation.class, "name");
     }
 
     @Override

@@ -47,7 +47,7 @@ public class FMService {
 				
 				Boolean detailFlat = EndpointUtils.getSingleValue(config, EPConstants.DETAILS_FLAT, Boolean.TRUE);
 				Boolean fullEnabledPaths = EndpointUtils.getSingleValue(config, EPConstants.FULL_ENABLED_PATHS, Boolean.TRUE);
-				List<String> requiredPaths = (List) config.get(EPConstants.FM_FILTER);
+				List<String> requiredPaths = (List) config.get(EPConstants.FM_PATHS_FILTER);
 				provideModulesDetails(result, EndpointUtils.getSingleValue(config, EPConstants.DETAIL_MODULES, 
 						new ArrayList<String>()), detailFlat, fullEnabledPaths, requiredPaths);
 			}

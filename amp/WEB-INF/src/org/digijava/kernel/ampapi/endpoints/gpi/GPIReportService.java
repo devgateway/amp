@@ -157,7 +157,7 @@ public final class GPIReportService {
 		int output = EndpointUtils.getSingleValue(formParams, "output", 1);
 		
 		switch (type) {
-			case GPIReportConstants.XLSX: {
+			case GPIReportConstants.XLSX: 
 				switch (indicatorCode) {
 					case GPIReportConstants.REPORT_1 :
 						if (output == 2) {
@@ -182,10 +182,31 @@ public final class GPIReportService {
 						exporter = GPIReportExportType.XLSX;
 					} 
 				break;
-			}
-			case GPIReportConstants.PDF:
-				exporter = GPIReportExportType.PDF;
-				break;
+			case GPIReportConstants.PDF: 
+				switch (indicatorCode) {
+					case GPIReportConstants.REPORT_1 :
+						if (output == 2) {
+							exporter = GPIReportExportType.PDF_1_2;
+						} else {
+							exporter = GPIReportExportType.PDF_1_1;
+						}
+						break;
+					case GPIReportConstants.REPORT_5a :
+						exporter = GPIReportExportType.PDF_5a;
+						break;
+					case GPIReportConstants.REPORT_5b :
+						exporter = GPIReportExportType.PDF_5b;
+						break;
+					case GPIReportConstants.REPORT_6 :
+						exporter = GPIReportExportType.PDF_6;
+						break;
+					case GPIReportConstants.REPORT_9b :
+						exporter = GPIReportExportType.PDF_9b;
+						break;
+					default :
+					exporter = GPIReportExportType.PDF;
+				} 
+			break;
 		}
 		
 		return exporter.executor.newInstance().exportReport(report);

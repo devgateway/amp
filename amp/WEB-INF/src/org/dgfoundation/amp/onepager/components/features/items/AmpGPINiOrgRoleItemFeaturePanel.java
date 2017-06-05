@@ -83,7 +83,7 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 
 			@Override
 			public boolean isVisible() {
-				return donor.getObject().getGpiNiSurvey() == null;
+				return super.isVisible() && donor.getObject().getGpiNiSurvey() == null;
 			}
 		};
 		add(newItem);
@@ -99,7 +99,7 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 
 			@Override
 			public boolean isVisible() {
-				return donor.getObject().getGpiNiSurvey() != null;
+				return super.isVisible() && donor.getObject().getGpiNiSurvey() != null;
 			}
 		};
 		add(deleteItem);

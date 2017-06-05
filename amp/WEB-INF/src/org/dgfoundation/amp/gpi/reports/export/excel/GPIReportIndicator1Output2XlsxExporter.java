@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.gpi.reports.export;
+package org.dgfoundation.amp.gpi.reports.export.excel;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -15,6 +15,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
+import org.dgfoundation.amp.gpi.reports.export.GPIReportMessages;
 
 /**
  * @author Viorel Chihai
@@ -24,9 +25,6 @@ public class GPIReportIndicator1Output2XlsxExporter extends GPIReportXlsxExporte
 	
 	public int initHeaderRowOffset = 3;
 
-	public static final String COLUMN_QUESTION = "Question";
-	public static final String COLUMN_VALUE = "Value";
-	
 	public GPIReportIndicator1Output2XlsxExporter() {
 		reportSheetName = "Indicator 1 Output 2";
 	}

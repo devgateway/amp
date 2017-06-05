@@ -1,7 +1,5 @@
-package org.dgfoundation.amp.gpi.reports.export;
+package org.dgfoundation.amp.gpi.reports.export.excel;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -23,21 +21,7 @@ import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
  *
  */
 public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
-	
-	public static final Map<String, String> COLUMN_LABELS = Collections.unmodifiableMap(new HashMap<String, String>() {
-		private static final long serialVersionUID = 1L;
-		{
-			put(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS,
-					String.format("%s %s", GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS, "(Q1)"));
-			put(GPIReportConstants.COLUMN_CONCESSIONAL,
-					String.format("%s?\n%s", GPIReportConstants.COLUMN_CONCESSIONAL, "(Yes=1 / No=0)"));
-			put(MeasureConstants.ACTUAL_DISBURSEMENTS,
-					String.format("%s %s", MeasureConstants.ACTUAL_DISBURSEMENTS, "(Q2)"));
-			put(MeasureConstants.PLANNED_DISBURSEMENTS,
-					String.format("%s %s", MeasureConstants.PLANNED_DISBURSEMENTS, "(Q3)"));
-		}
-	});
-    
+
 	public GPIReportIndicator5aXlsxExporter() {
 		reportSheetName = "Indicator 5a";
 	}
@@ -57,11 +41,12 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
 				Cell cell = row.createCell(i);
 				cell.setCellValue(getColumnHeaderLabel(gpiReportOutputColumn.columnName));
 				setMaxColWidth(sheet, cell, i);
-	
-				CellRangeAddress mergedHeaderCell = new CellRangeAddress(initHeaderRowOffset, initHeaderRowOffset, i, i);
+
+				CellRangeAddress mergedHeaderCell = new CellRangeAddress(initHeaderRowOffset, initHeaderRowOffset, i,
+						i);
 				if (mergedHeaderCell.getNumberOfCells() > 1)
 					sheet.addMergedRegion(mergedHeaderCell);
-	
+
 				mergedCells.add(mergedHeaderCell);
 				cell.setCellStyle(template.getHeaderCellStyle());
 			}
@@ -71,7 +56,7 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
 			GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
 		}
 	}
-	
+
 	/**
 	 * @param wb
 	 * @param sheet
@@ -79,18 +64,18 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
 	 */
 	protected void renderReportTableSummary(Workbook wb, Sheet sheet, GPIReport report) {
 		Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
-		
+
 		Row summaryRow = sheet.createRow(initSummaryRowOffset);
 		for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
 			GPIReportOutputColumn gpiReportOutputColumn = report.getPage().getHeaders().get(i);
 			if (report.getSummary().containsKey(gpiReportOutputColumn)) {
 				Cell cell = summaryRow.createCell(i);
-				cell.setCellValue(String.format("%s\n%s", 
-						report.getSummary().get(gpiReportOutputColumn), gpiReportOutputColumn.columnName));
+				cell.setCellValue(String.format("%s\n%s", report.getSummary().get(gpiReportOutputColumn),
+						gpiReportOutputColumn.columnName));
 				setMaxColWidth(sheet, cell, i);
 
-				CellRangeAddress mergedHeaderCell = new CellRangeAddress(initHeaderRowOffset, 
-						initHeaderRowOffset, i, i);
+				CellRangeAddress mergedHeaderCell = new CellRangeAddress(initHeaderRowOffset, initHeaderRowOffset, i,
+						i);
 				if (mergedHeaderCell.getNumberOfCells() > 1)
 					sheet.addMergedRegion(mergedHeaderCell);
 
@@ -98,7 +83,7 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
 				cell.setCellStyle(template.getSummaryCellStyle());
 			}
 		}
-		
+
 		for (CellRangeAddress ca : mergedCells) {
 			GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
 		}
@@ -110,7 +95,7 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
 	 */
 	public void renderReportData(SXSSFSheet sheet, GPIReport report) {
 		for (int i = 0; i < report.getPage().getContents().size(); i++) {
-			Row row = sheet.createRow(initHeaderRowOffset + (i+1));
+			Row row = sheet.createRow(initHeaderRowOffset + (i + 1));
 			Map<GPIReportOutputColumn, String> rowData = report.getPage().getContents().get(i);
 			for (int j = 0; j < report.getPage().getHeaders().size(); j++) {
 				GPIReportOutputColumn column = report.getPage().getHeaders().get(j);
@@ -120,51 +105,52 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
 			}
 		}
 	}
-	
+
 	@Override
 	public int getCellType(String columnName) {
-		switch(columnName) {
-			case MeasureConstants.ACTUAL_DISBURSEMENTS:
-			case MeasureConstants.PLANNED_DISBURSEMENTS:
-			case GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS:
-			case GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS:
-				return Cell.CELL_TYPE_NUMERIC;
-			default:
-				return super.getCellType(columnName);
+		switch (columnName) {
+		case MeasureConstants.ACTUAL_DISBURSEMENTS:
+		case MeasureConstants.PLANNED_DISBURSEMENTS:
+		case GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS:
+		case GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS:
+			return Cell.CELL_TYPE_NUMERIC;
+		default:
+			return super.getCellType(columnName);
 		}
 	}
-	
+
 	@Override
 	protected boolean hasSpecificStyle(String columnName) {
-		switch(columnName) {
-			case MeasureConstants.DISBURSED_AS_SCHEDULED:
-			case MeasureConstants.OVER_DISBURSED:
-			case GPIReportConstants.COLUMN_CONCESSIONAL:
-				return true;
-			default:
-				return false;
+		switch (columnName) {
+		case MeasureConstants.DISBURSED_AS_SCHEDULED:
+		case MeasureConstants.OVER_DISBURSED:
+		case GPIReportConstants.COLUMN_CONCESSIONAL:
+			return true;
+		default:
+			return false;
 		}
 	}
-	
+
 	@Override
 	protected CellStyle getSpecificStyle(String columnName) {
-		switch(columnName) {
-			case MeasureConstants.DISBURSED_AS_SCHEDULED:
-			case MeasureConstants.OVER_DISBURSED:
-				return template.getNumberStyle();
-			case GPIReportConstants.COLUMN_CONCESSIONAL:
-				return template.getCenterStyle();
-			default:
-				return template.getNumberStyle();
+		switch (columnName) {
+		case MeasureConstants.DISBURSED_AS_SCHEDULED:
+		case MeasureConstants.OVER_DISBURSED:
+			return template.getNumberStyle();
+		case GPIReportConstants.COLUMN_CONCESSIONAL:
+			return template.getCenterStyle();
+		default:
+			return template.getNumberStyle();
 		}
 	}
-	
+
 	@Override
 	protected boolean isHiddenColumn(String columnName) {
 		return columnName.equals(GPIReportConstants.COLUMN_REMARK);
 	}
-	
+
 	private String getColumnHeaderLabel(String columnName) {
-		return COLUMN_LABELS.containsKey(columnName) ? COLUMN_LABELS.get(columnName) : columnName;
+		return INDICATOR_5A_COLUMN_LABELS.containsKey(columnName) ? INDICATOR_5A_COLUMN_LABELS.get(columnName)
+				: columnName;
 	}
 }

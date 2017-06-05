@@ -1,5 +1,7 @@
-package org.dgfoundation.amp.gpi.reports.export;
+package org.dgfoundation.amp.gpi.reports.export.excel;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -21,6 +23,20 @@ import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
  *
  */
 public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporter {
+	
+	public static final Map<String, String> COLUMN_LABELS = Collections.unmodifiableMap(new HashMap<String, String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			put(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS,
+					String.format("%s %s", GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS, "(Q1)"));
+			put(GPIReportConstants.COLUMN_CONCESSIONAL,
+					String.format("%s?\n%s", GPIReportConstants.COLUMN_CONCESSIONAL, "(Yes=1 / No=0)"));
+			put(MeasureConstants.ACTUAL_DISBURSEMENTS,
+					String.format("%s %s", MeasureConstants.ACTUAL_DISBURSEMENTS, "(Q2)"));
+			put(MeasureConstants.PLANNED_DISBURSEMENTS,
+					String.format("%s %s", MeasureConstants.PLANNED_DISBURSEMENTS, "(Q3)"));
+		}
+	});
 	
 	public GPIReportIndicator1Output1XlsxExporter() {
 		reportSheetName = "Indicator 1 Output 1";

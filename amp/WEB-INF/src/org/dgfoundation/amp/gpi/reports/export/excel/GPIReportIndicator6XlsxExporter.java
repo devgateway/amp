@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.gpi.reports.export;
+package org.dgfoundation.amp.gpi.reports.export.excel;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -19,12 +19,10 @@ import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
  * @author Viorel Chihai
  *
  */
-public class GPIReportIndicator5bXlsxExporter extends GPIReportXlsxExporter {
-
-	private static final String SUMMARY_LABEL = "Indicator 5b % at country level";
-
-	public GPIReportIndicator5bXlsxExporter() {
-		reportSheetName = "Indicator 5b";
+public class GPIReportIndicator6XlsxExporter extends GPIReportXlsxExporter {
+	
+	public GPIReportIndicator6XlsxExporter() {
+		reportSheetName = "Indicator 6";
 	}
 
 	/**
@@ -68,12 +66,11 @@ public class GPIReportIndicator5bXlsxExporter extends GPIReportXlsxExporter {
 			GPIReportOutputColumn gpiReportOutputColumn = report.getPage().getHeaders().get(i);
 			if (report.getSummary().containsKey(gpiReportOutputColumn)) {
 				Cell cell = summaryRow.createCell(i);
-				cell.setCellValue(String.format("%s %s", 
-						SUMMARY_LABEL, report.getSummary().get(gpiReportOutputColumn)));
+				cell.setCellValue(String.format("%s\n%s", 
+						report.getSummary().get(gpiReportOutputColumn), gpiReportOutputColumn.columnName));
 				setMaxColWidth(sheet, cell, i);
 
-				CellRangeAddress mergedHeaderCell = new CellRangeAddress(initHeaderRowOffset, 
-						initHeaderRowOffset, i, i);
+				CellRangeAddress mergedHeaderCell = new CellRangeAddress(initHeaderRowOffset, initHeaderRowOffset, i, i);
 				if (mergedHeaderCell.getNumberOfCells() > 1)
 					sheet.addMergedRegion(mergedHeaderCell);
 
@@ -115,6 +112,6 @@ public class GPIReportIndicator5bXlsxExporter extends GPIReportXlsxExporter {
 	
 	@Override
 	protected boolean hasSpecificStyle(String columnName) {
-		return columnName.equals(GPIReportConstants.COLUMN_INDICATOR_5B);
+		return columnName.equals(GPIReportConstants.COLUMN_PLANNED_ON_BUDGET);
 	}
 }

@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.gpi.reports.export;
+package org.dgfoundation.amp.gpi.reports.export.excel;
 
 import java.util.HashMap;
 import java.util.Map;

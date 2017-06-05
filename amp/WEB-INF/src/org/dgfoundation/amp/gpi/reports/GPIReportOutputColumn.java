@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.gpi.reports;
 
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 /**

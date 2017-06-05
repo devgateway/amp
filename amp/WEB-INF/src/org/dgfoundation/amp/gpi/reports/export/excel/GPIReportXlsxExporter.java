@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.gpi.reports.export;
+package org.dgfoundation.amp.gpi.reports.export.excel;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
@@ -19,7 +19,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
-import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
+import org.dgfoundation.amp.gpi.reports.export.GPIReportExporter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.reports.saiku.export.ExportFilterUtils;

@@ -24,8 +24,9 @@ public class GPIReportConstants {
 	public static final String COLUMN_TOTAL_ACTUAL_DISBURSEMENTS = "Total Actual Disbursements";
 	public static final String COLUMN_CONCESSIONAL = "Concessional";
 	public static final String COLUMN_DISBURSEMENTS_OTHER_PROVIDERS = "Disbursements through other providers";
+	public static final String COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT = "Result";
+	public static final String COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES = "M&E";
 
-	
 	public static final String HIERARCHY_PARAMETER = "hierarchy";
 	public static final String SUMMARY_PARAMETER = "summary";
 	public static final String HIERARCHY_DONOR_GROUP = "donor-group";
@@ -36,6 +37,10 @@ public class GPIReportConstants {
 	public static final String GPI_1_Q3 = "Q3";
 	public static final String GPI_1_Q4 = "Q4";
 	public static final String GPI_1_Q5 = "Q5";
+	public static final String GPI_1_Q11 = "Q11";
+	public static final String GPI_1_Q11a = "Q11a";
+	public static final String GPI_1_Q11b = "Q11b";
+	public static final String GPI_1_Q11c = "Q11c";
 	
 	public static final String GPI_REMARK_ENDPOINT = "/rest/gpi/report/remarks";
 	

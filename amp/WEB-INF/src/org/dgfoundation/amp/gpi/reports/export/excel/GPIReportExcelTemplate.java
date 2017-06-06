@@ -71,7 +71,9 @@ public class GPIReportExcelTemplate {
 		//headerCellStyle.setFillForegroundColor(new XSSFColor(Color.decode("#4F81BD")).getIndexed());
 		headerCellStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
 		headerCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		headerCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 		headerCellStyle.setWrapText(true);
+		
 		headerCellStyle.setBorderTop(CellStyle.BORDER_THIN);
 		headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
 		headerCellStyle.setBorderRight(CellStyle.BORDER_THIN);

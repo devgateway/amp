@@ -200,13 +200,12 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		Map<Integer, Integer> widths = cachedWidths.get(sheet.getSheetName());
 		IntWrapper width = new IntWrapper().inc(10);
 		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_STRING:
-			int length = cell.getStringCellValue().length();
-			width.set(length < width.value ? width.value : length);
-			break;
-		case Cell.CELL_TYPE_NUMERIC:
-			width.set(Double.toString(cell.getNumericCellValue()).length());
-			break;
+			case Cell.CELL_TYPE_NUMERIC:
+				width.set(Double.toString(cell.getNumericCellValue()).length());
+				break;
+			default:
+				int length = cell.getStringCellValue().length();
+				width.set(length < width.value ? width.value : length);
 		}
 
 		widths.compute(i, (k, v) -> v == null ? width.value : v < width.value ? width.value : v);

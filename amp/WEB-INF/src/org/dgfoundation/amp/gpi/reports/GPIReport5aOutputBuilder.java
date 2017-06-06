@@ -20,7 +20,6 @@ import org.dgfoundation.amp.algo.BooleanWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmountCell;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
@@ -40,20 +39,17 @@ import org.digijava.module.common.util.DateTimeUtil;
  */
 public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 
-	public static final String TOTAL_ACTUAL_DISBURSEMENTS = "Total Actual Disbursements";
-	public static final String CONCESSIONAL = "Concessional";
-	public static final String DISBURSEMENTS_OTHER_PROVIDERS = "Disbursements through other providers";
-
 	public static final String ACTIVITY_BUDGET_ON = "On Budget";
 	public static final String YES_VALUE = "yes";
+	public static final String CONCESSIONAL_YES_VALUE = "1";
 
 	public GPIReport5aOutputBuilder() {
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
-		addColumn(new GPIReportOutputColumn(TOTAL_ACTUAL_DISBURSEMENTS));
-		addColumn(new GPIReportOutputColumn(CONCESSIONAL));
-		addColumn(new GPIReportOutputColumn(DISBURSEMENTS_OTHER_PROVIDERS));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_CONCESSIONAL));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.PLANNED_DISBURSEMENTS));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.DISBURSED_AS_SCHEDULED));
@@ -64,12 +60,12 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	public final static Set<String> YEAR_LEVEL_HIERARCHIES = Collections
 			.unmodifiableSet(new HashSet<>(Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS,
 					MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.DISBURSED_AS_SCHEDULED,
-					MeasureConstants.OVER_DISBURSED, TOTAL_ACTUAL_DISBURSEMENTS)));
+					MeasureConstants.OVER_DISBURSED, GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS)));
 
 	public final static Set<String> ON_BUDGET_MEASURES = Collections
 			.unmodifiableSet(new HashSet<>(Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS,
 					MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.DISBURSED_AS_SCHEDULED,
-					MeasureConstants.OVER_DISBURSED, DISBURSEMENTS_OTHER_PROVIDERS)));
+					MeasureConstants.OVER_DISBURSED, GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS)));
 
 	public final static Map<String, ReportOutputColumn> headersMap = new HashMap<>();
 
@@ -100,11 +96,11 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 			headers.add(donorColumn);
 		}
 
-		headers.add(getColumns().get(TOTAL_ACTUAL_DISBURSEMENTS));
-		headers.add(getColumns().get(CONCESSIONAL));
+		headers.add(getColumns().get(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS));
+		headers.add(getColumns().get(GPIReportConstants.COLUMN_CONCESSIONAL));
 		headers.add(getColumns().get(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		headers.add(getColumns().get(MeasureConstants.PLANNED_DISBURSEMENTS));
-		headers.add(new GPIReportOutputColumn(DISBURSEMENTS_OTHER_PROVIDERS));
+		headers.add(getColumns().get(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS));
 		headers.add(getColumns().get(MeasureConstants.DISBURSED_AS_SCHEDULED));
 		headers.add(getColumns().get(MeasureConstants.OVER_DISBURSED));
 		headers.add(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK));
@@ -135,7 +131,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 						if (years.get(roc.parentColumn.columnName) == null) {
 							years.put(roc.parentColumn.columnName, getEmptyGPIRow(generatedReport.spec));
 						}
-						years.get(roc.parentColumn.columnName).put(TOTAL_ACTUAL_DISBURSEMENTS, rc);
+						years.get(roc.parentColumn.columnName)
+							.put(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS, rc);
 					} else if (roc.originalColumnName.equals(ColumnConstants.DONOR_AGENCY)
 							|| roc.originalColumnName.equals(ColumnConstants.DONOR_GROUP)) {
 						columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
@@ -153,7 +150,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 					}
 				}
 
-				columns.put(new GPIReportOutputColumn(CONCESSIONAL), StringUtils.join(concessional.toArray(), ","));
+				columns.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_CONCESSIONAL), CONCESSIONAL_YES_VALUE);
 
 				Optional<ReportArea> onBudgetAreaElement = reportArea.getChildren().stream()
 						.filter(budgetArea -> isOnBudget(budgetArea)).findAny();
@@ -187,7 +184,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 								if (years.get(roc.parentColumn.originalColumnName) == null) {
 									years.put(roc.parentColumn.originalColumnName, new HashMap<>());
 								}
-								years.get(roc.parentColumn.originalColumnName).put(DISBURSEMENTS_OTHER_PROVIDERS, rc);
+								years.get(roc.parentColumn.originalColumnName)
+									.put(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS, rc);
 							}
 						}
 					}
@@ -217,6 +215,9 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 					});
 					row.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK),
 							getRemarkEndpointURL(k, reportArea.getOwner().id));
+					
+					row.put(new GPIReportOutputColumn(ColumnConstants.DONOR_ID), 
+							String.valueOf(reportArea.getOwner().id));
 
 					if (!isRowEmpty.value) {
 						row.putAll(columns);

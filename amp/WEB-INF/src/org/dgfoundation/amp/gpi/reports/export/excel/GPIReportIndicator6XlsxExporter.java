@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.gpi.reports.export;
+package org.dgfoundation.amp.gpi.reports.export.excel;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -52,6 +52,37 @@ public class GPIReportIndicator6XlsxExporter extends GPIReportXlsxExporter {
 			GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
 		}
 	}
+	
+	/**
+	 * @param wb
+	 * @param sheet
+	 * @param report
+	 */
+	protected void renderReportTableSummary(Workbook wb, Sheet sheet, GPIReport report) {
+		Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
+		
+		Row summaryRow = sheet.createRow(initSummaryRowOffset);
+		for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
+			GPIReportOutputColumn gpiReportOutputColumn = report.getPage().getHeaders().get(i);
+			if (report.getSummary().containsKey(gpiReportOutputColumn)) {
+				Cell cell = summaryRow.createCell(i);
+				cell.setCellValue(String.format("%s\n%s", 
+						report.getSummary().get(gpiReportOutputColumn), gpiReportOutputColumn.columnName));
+				setMaxColWidth(sheet, cell, i);
+
+				CellRangeAddress mergedHeaderCell = new CellRangeAddress(initHeaderRowOffset, initHeaderRowOffset, i, i);
+				if (mergedHeaderCell.getNumberOfCells() > 1)
+					sheet.addMergedRegion(mergedHeaderCell);
+
+				mergedCells.add(mergedHeaderCell);
+				cell.setCellStyle(template.getSummaryCellStyle());
+			}
+		}
+		
+		for (CellRangeAddress ca : mergedCells) {
+			GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+		}
+	}
 
 	/**
 	 * @param sheet
@@ -63,19 +94,24 @@ public class GPIReportIndicator6XlsxExporter extends GPIReportXlsxExporter {
 			Map<GPIReportOutputColumn, String> rowData = report.getPage().getContents().get(i);
 			for (int j = 0; j < report.getPage().getHeaders().size(); j++) {
 				GPIReportOutputColumn column = report.getPage().getHeaders().get(j);
-				createCell(report, sheet, row, j, column, rowData.get(column));
+				createCell(report, sheet, row, j, column.originalColumnName, rowData.get(column));
 			}
 		}
 	}
 	
 	@Override
-	public int getCellType(GPIReportOutputColumn column) {
-		switch(column.originalColumnName) {
+	public int getCellType(String columnName) {
+		switch(columnName) {
 			case MeasureConstants.PLANNED_DISBURSEMENTS:
 			case GPIReportConstants.COLUMN_ANNUAL_GOV_BUDGET:
 				return Cell.CELL_TYPE_NUMERIC;
 			default:
-				return super.getCellType(column);
+				return super.getCellType(columnName);
 		}
+	}
+	
+	@Override
+	protected boolean hasSpecificStyle(String columnName) {
+		return columnName.equals(GPIReportConstants.COLUMN_PLANNED_ON_BUDGET);
 	}
 }

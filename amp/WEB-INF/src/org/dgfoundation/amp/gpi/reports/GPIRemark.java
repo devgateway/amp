@@ -8,9 +8,9 @@ package org.dgfoundation.amp.gpi.reports;
  */
 public class GPIRemark {
 
-	String donorAgency;
-	String date;
-	String remark;
+	private String donorAgency;
+	private String date;
+	private String remark;
 	
 	public GPIRemark() {}
 	

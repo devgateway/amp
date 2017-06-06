@@ -20,6 +20,8 @@ export default class Report5a extends Component {
         this.showSettings = this.showSettings.bind( this );        
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
         this.toggleHierarchy = this.toggleHierarchy.bind( this );  
+        this.downloadExcelFile = this.downloadExcelFile.bind(this);
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);
       }
 
     componentDidMount() {
@@ -75,8 +77,7 @@ export default class Report5a extends Component {
         };
 
         requestData.filters = this.filter.serialize().filters;        
-        requestData.settings = this.settingsWidget.toAPIFormat(); 
-       
+        requestData.settings = this.settingsWidget.toAPIFormat();        
         if(this.state.hierarchy === 'donor-agency'){
             requestData.filters[this.state.hierarchy] = requestData.filters[this.state.hierarchy] || [];
             if (this.state.selectedDonor && requestData.filters[this.state.hierarchy].indexOf(this.state.selectedDonor) == -1) {
@@ -180,7 +181,15 @@ export default class Report5a extends Component {
     }
     
     showRemarksModal(event) {       
-        this.setState({showRemarks: true, remarksUrl: $( event.target ).data("url")});
+        this.setState({showRemarks: true, remarksUrl: $(event.target).data("url")});
+    }
+    
+    downloadExcelFile() {
+        this.props.actions.downloadExcelFile(this.getRequestData(), '5a');
+    }
+    
+    downloadPdfFile(){
+        this.props.actions.downloadPdfFile(this.getRequestData(), '5a');
     }
     
     render() {
@@ -191,7 +200,7 @@ export default class Report5a extends Component {
                 <div>
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
-                    <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}/>
+                    <ToolBar showFilters={this.showFilters} showSettings={this.showSettings} downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile} />
                     <div className="section-divider"></div>
                     {this.props.mainReport && this.props.mainReport.summary &&
                         <div className="container-fluid indicator-stats no-padding">

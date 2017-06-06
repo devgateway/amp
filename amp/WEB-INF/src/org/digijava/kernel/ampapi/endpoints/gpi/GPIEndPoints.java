@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.gpi;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -12,6 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
@@ -476,8 +478,8 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	@POST
 	@Path("/report/export/xls/{indicatorCode}")
 	@Produces({"application/vnd.ms-excel" })
-	public final Response exportXlsGPIReport(@PathParam("indicatorCode") String indicatorCode, JsonBean formParams) {
-		return GPIReportService.getInstance().exportGPIReport(indicatorCode, formParams, GPIReportConstants.XLSX);
+	public final Response exportXlsGPIReport(@PathParam("indicatorCode") String indicatorCode, @FormParam("formParams") String formParams) {		
+		return GPIReportService.getInstance().exportGPIReport(indicatorCode, JsonBean.getJsonBeanFromString(formParams), GPIReportConstants.XLSX);
 	}
 	
 	/**
@@ -489,8 +491,8 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	@POST
 	@Path("/report/export/pdf/{indicatorCode}")
 	@Produces({"application/pdf" })
-	public final Response exportPdfGPIReport(@PathParam("indicatorCode") String indicatorCode, JsonBean formParams) {
-		return GPIReportService.getInstance().exportGPIReport(indicatorCode, formParams, GPIReportConstants.PDF);
+	public final Response exportPdfGPIReport(@PathParam("indicatorCode") String indicatorCode, @FormParam("formParams") String formParams) {
+		return GPIReportService.getInstance().exportGPIReport(indicatorCode, JsonBean.getJsonBeanFromString(formParams), GPIReportConstants.PDF);
 	}
 	
 	/**
@@ -513,6 +515,22 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 			@QueryParam("to") Long to) {
 		
 		return GPIDataService.getGPIRemarks(indicatorCode, donorIds, donorType, from, to);
+	}
+	
+	/**
+	 * Retrieves the documents for the specified donor agency/group and activity.
+	 * 
+	 * @param activitydonors - list of donors with activities
+	 * 
+	 * @return list of activity donors with documents
+	 */
+	@POST
+	@Path("/report/documents/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getSupportiveDocuments", ui = false)
+	public List<GPIDonorActivityDocument> getSupportiveDocuments(List<GPIDonorActivityDocument> activityDonors) {
+
+		return GPIDataService.getGPIDocuments(activityDonors);
 	}
 
 	@GET

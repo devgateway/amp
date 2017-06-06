@@ -33,9 +33,6 @@ import org.hibernate.jdbc.Work;
  */
 public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 
-	public static final String EXTENT_OF_USE_OF_COUNTY_RESULT = "Result";
-	public static final String EXTENT_OF_USE_OF_GOV_SOURCES = "M&E";
-	
 	public Map<Long, String> orgToGroupName = new HashMap<>();
 
 	public GPIReport1Output1Builder() {
@@ -57,11 +54,13 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 		addColumn(new GPIReportOutputColumn(ColumnConstants.GPI_1_Q9));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.GPI_1_Q10));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.GPI_1_Q10_DESCRIPTION));
-		addColumn(new GPIReportOutputColumn(EXTENT_OF_USE_OF_COUNTY_RESULT));
-		addColumn(new GPIReportOutputColumn(EXTENT_OF_USE_OF_GOV_SOURCES));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.ACTIVITY_ID));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_ID));
+		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
 		
 		orgToGroupName = fetchOrgToGroupName();
 	}
@@ -89,8 +88,8 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 		headers.add(getColumns().get(ColumnConstants.GPI_1_Q9));
 		headers.add(getColumns().get(ColumnConstants.GPI_1_Q10));
 		headers.add(getColumns().get(ColumnConstants.GPI_1_Q10_DESCRIPTION));
-		headers.add(getColumns().get(EXTENT_OF_USE_OF_COUNTY_RESULT));
-		headers.add(getColumns().get(EXTENT_OF_USE_OF_GOV_SOURCES));
+		headers.add(getColumns().get(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT));
+		headers.add(getColumns().get(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES));
 
 		return headers;
 	}
@@ -182,6 +181,8 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 		
 		Map<GPIReportOutputColumn, String> row = new HashMap<>();
 		
+		row.put(getColumns().get(GPIReportConstants.COLUMN_YEAR), gpiElement.getApprovalYear());
+		row.put(getColumns().get(ColumnConstants.DONOR_AGENCY), gpiElement.getDonorAgency());
 		row.put(getColumns().get(ColumnConstants.PROJECT_TITLE), gpiElement.getProjectTitle());
 		row.put(getColumns().get(GPIReportConstants.GPI_1_Q1), 
 				formatAmount(generatedReport, gpiElement.getActCommitments(), true));
@@ -199,9 +200,9 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 		row.put(getColumns().get(ColumnConstants.GPI_1_Q9), gpiElement.getQ9().toString());
 		row.put(getColumns().get(ColumnConstants.GPI_1_Q10), gpiElement.getQ10() ? "Yes" : "No");
 		row.put(getColumns().get(ColumnConstants.GPI_1_Q10_DESCRIPTION), gpiElement.getQ10Description());
-		row.put(getColumns().get(EXTENT_OF_USE_OF_COUNTY_RESULT), 
+		row.put(getColumns().get(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT), 
 				getPercentage(gpiElement.getQ8(), gpiElement.getQ7()) + "%");
-		row.put(getColumns().get(EXTENT_OF_USE_OF_GOV_SOURCES), 
+		row.put(getColumns().get(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES), 
 				getPercentage(gpiElement.getQ9(), gpiElement.getQ7()) + "%");
 		row.put(getColumns().get(ColumnConstants.ACTIVITY_ID), String.valueOf(gpiElement.getActivityId()));
 		row.put(getColumns().get(ColumnConstants.DONOR_ID), String.valueOf(gpiElement.getDonorId()));

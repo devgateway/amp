@@ -1,20 +1,32 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.jcr.Node;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.math.NumberUtils;
+import org.dgfoundation.amp.gpi.reports.GPIDocument;
+import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
+import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
+import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
@@ -22,6 +34,8 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 import org.hibernate.Query;
@@ -350,11 +364,13 @@ public class GPIDataService {
 	 * @param to
 	 * @return
 	 */
-	public static List<GPIRemark> getGPIRemarks(String indicatorCode, List<Long> donorIds, String donorType, Long from, Long to) {
+	public static List<GPIRemark> getGPIRemarks(String indicatorCode, List<Long> donorIds, String donorType, 
+			Long from, Long to) {
+		
 		List<GPIRemark> remarks = new ArrayList<>();
 
 		AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
-		
+
 		Session dbSession = PersistenceManager.getSession();
 		String queryString = "SELECT donorNotes FROM " + AmpGPINiDonorNotes.class.getName() + " donorNotes "
 				+ "WHERE indicatorCode = :indicatorCode ";
@@ -369,6 +385,28 @@ public class GPIDataService {
 		});
 
 		return remarks;
+	}
+	
+	/**
+	 * 
+	 * @param activityDonors
+	 * @return
+	 */
+	public static List<GPIDonorActivityDocument> getGPIDocuments(List<GPIDonorActivityDocument> activityDonors) {
+		List<GPIDonorActivityDocument> gpiDocuments = new ArrayList<>();
+		List<AmpGPINiSurveyResponseDocument> surveyDocuments = new ArrayList<>();
+		
+		if (activityDonors != null) {
+			Session dbSession = PersistenceManager.getSession();
+			String queryString = "SELECT surveyDocuments FROM " + AmpGPINiSurveyResponseDocument.class.getName() 
+					+ " surveyDocuments";
+			Query query = dbSession.createQuery(queryString);
+			surveyDocuments = query.list();
+		}
+		
+		gpiDocuments = filterDocuments(surveyDocuments, activityDonors);
+		
+		return gpiDocuments;
 	}
 
 	/**
@@ -407,5 +445,128 @@ public class GPIDataService {
 		
 		return filteredNotes;
 	}
+	
+	/**
+	 * Get filtered documents for specific donors and activities
+	 * 
+	 * @param documents
+	 * @param activityDonors
+	 * @return
+	 */
+	private static List<GPIDonorActivityDocument> filterDocuments(List<AmpGPINiSurveyResponseDocument> documents, 
+			List<GPIDonorActivityDocument> activityDonors) {
+		
+		Set<Long> donorIds = activityDonors.stream().map(ad -> Long.valueOf(ad.getDonorId()))
+				.collect(Collectors.toSet());
+		
+		Set<Long> activityIds = activityDonors.stream().map(ad -> Long.valueOf(ad.getActivityId()))
+				.collect(Collectors.toSet());
+		
+		List<AmpGPINiSurveyResponseDocument> filteredDocuments = documents.stream()
+				.filter(doc -> donorIds.contains(
+						doc.getSurveyResponse().getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()))
+				.filter(doc -> activityIds.contains(
+						doc.getSurveyResponse().getAmpGPINiSurvey().getAmpOrgRole().getActivity().getAmpActivityId()))
+				.collect(Collectors.toList());
+		
+		List<GPIDonorActivityDocument> donorActivityDocuments = getGrouppedDocuments(filteredDocuments);
+		donorActivityDocuments.sort(getGPIDocumentComparator());
+		
+		return donorActivityDocuments;
+	}
 
+	/**
+	 * Transform the list of AmpGPINiSurveyResponseDocument in a list of GPIDonorActivityDocument
+	 * 
+	 * @param filteredDocuments
+	 */
+	private static List<GPIDonorActivityDocument> getGrouppedDocuments(
+			List<AmpGPINiSurveyResponseDocument> filteredDocuments) {
+		
+		List<GPIDonorActivityDocument> donorActivityDocuments = new ArrayList<>();
+		Map<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>> grouppedDocuments = 
+				new HashMap<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>>();
+
+		filteredDocuments.forEach(doc -> {
+			AmpOrgRole orgRole = doc.getSurveyResponse().getAmpGPINiSurvey().getAmpOrgRole();
+			Long donorId = orgRole.getOrganisation().getAmpOrgId();
+			Long actId = orgRole.getActivity().getAmpActivityId();
+
+			Map<Long, List<AmpGPINiSurveyResponseDocument>> actDocMap = grouppedDocuments.containsKey(donorId)
+					? grouppedDocuments.get(donorId) : new HashMap<Long, List<AmpGPINiSurveyResponseDocument>>();
+
+			List<AmpGPINiSurveyResponseDocument> actDocs = actDocMap.containsKey(actId) ? actDocMap.get(actId)
+					: new ArrayList<>();
+
+			actDocs.add(doc);
+			actDocMap.put(actId, actDocs);
+			grouppedDocuments.put(donorId, actDocMap);
+		});
+
+		grouppedDocuments.entrySet().forEach(donor -> {
+			donor.getValue().entrySet().forEach(act -> {
+				List<GPIDocument> supportiveDocs = new ArrayList<>();
+				act.getValue().forEach(doc -> {
+					HttpServletRequest req = TLSUtils.getRequest();
+					Node node = DocumentManagerUtil.getWriteNode(doc.getUuid(), req);
+					if (node != null) {
+						NodeWrapper nw = new NodeWrapper(node);
+						GPIDocument gpiDoc = new GPIDocument();
+						gpiDoc.setTitle(nw.getTitle());
+						gpiDoc.setDescription(doc.getSurveyResponse().getAmpGPINiQuestion().getDescription());
+						gpiDoc.setQuestion(doc.getSurveyResponse().getAmpGPINiQuestion().getCode());
+
+						if (nw.getWebLink() == null) {
+							gpiDoc.setUrl(getURLForDownload(req, doc.getUuid()));
+							gpiDoc.setType(GPINiQuestionType.DOCUMENT.toString());
+						} else {
+							gpiDoc.setUrl(nw.getWebLink());
+							gpiDoc.setType(GPINiQuestionType.LINK.toString());
+						}
+
+						supportiveDocs.add(gpiDoc);
+					}
+				});
+				donorActivityDocuments.add(new GPIDonorActivityDocument(String.valueOf(donor.getKey()),
+						String.valueOf(act.getKey()), supportiveDocs));
+			});
+		});
+
+		return donorActivityDocuments;
+	}
+
+	/**
+	 * Get the URL for downloading the document
+	 * @param req
+	 * @param uuid
+	 * @return
+	 */
+	public static String getURLForDownload(HttpServletRequest req, String uuid) {
+		String scheme = req.getScheme();
+		String serverName = req.getServerName();
+		int serverPort = req.getServerPort();
+		String contextPath = req.getContextPath(); //
+
+		StringBuilder downloadUrl = new StringBuilder();
+		downloadUrl.append(scheme).append("://").append(serverName);
+
+		if (serverPort != 80 && serverPort != 443) {
+			downloadUrl.append(":").append(serverPort);
+		}
+
+		downloadUrl.append(contextPath);
+		downloadUrl.append("/contentrepository/downloadFile.do?uuid=").append(uuid);
+
+		return downloadUrl.toString();
+	}
+	
+	private static Comparator<GPIDonorActivityDocument> getGPIDocumentComparator() {
+		return (GPIDonorActivityDocument ad1, GPIDonorActivityDocument ad2) -> {
+			if (ad1.getDonorId().compareTo(ad2.getDonorId()) == 0) {
+				return ad1.getActivityId().compareTo(ad2.getActivityId());
+			} else {
+				return ad1.getDonorId().compareTo(ad2.getDonorId());
+			}
+		};
+	}
 }

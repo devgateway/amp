@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.gpi.reports;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -7,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +30,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -465,8 +468,10 @@ public class GPIReportUtils {
 			Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
 
 			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
-			ReportElement donorAgencyRuleElement = getFilterRuleElement(filterRules.getAllFilterRules(), columnName);
-			donorAgencyRule = filterRules.getAllFilterRules().get(donorAgencyRuleElement);
+			if (filterRules != null) {
+				ReportElement donorAgencyRuleElement = getFilterRuleElement(filterRules.getAllFilterRules(), columnName);
+				donorAgencyRule = filterRules.getAllFilterRules().get(donorAgencyRuleElement);
+			}
 		}
 
 		return donorAgencyRule;
@@ -482,5 +487,41 @@ public class GPIReportUtils {
 		ReportElement reportElement = dateRuleEntry.isPresent() ? dateRuleEntry.get().getKey() : null;
 
 		return reportElement;
+	}
+	
+	public static String getRemarksForExport(Map<GPIReportOutputColumn, String> rowData) {
+		String year = "";
+		boolean isDonorAgency = true;
+		List<Long> donorIds = new ArrayList<Long>();
+		
+		for (Map.Entry<GPIReportOutputColumn, String> e : rowData.entrySet()) {
+			GPIReportOutputColumn column = e.getKey();
+			if (column.originalColumnName.equals(ColumnConstants.DONOR_GROUP)) {
+				isDonorAgency = false;
+			}
+			if (column.originalColumnName.equals(GPIReportConstants.COLUMN_YEAR)) {
+				year = rowData.get(column);
+			}
+			if (column.originalColumnName.equals(ColumnConstants.DONOR_ID)) {
+				donorIds.add(Long.valueOf(rowData.get(column)));
+			}
+		};
+		
+		String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
+				: GPIReportConstants.HIERARCHY_DONOR_GROUP;
+
+		int y = Integer.parseInt(year);
+		Long from = Long.valueOf(DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y, 1)));
+		Long to = Long.valueOf(DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y + 1, 1)));
+
+		List<GPIRemark> remarks = GPIDataService.getGPIRemarks(GPIReportConstants.REPORT_5a, 
+							donorIds, donorType, from, to);
+		
+		List<String> remarksAsStringList = remarks.stream()
+				.map(remark -> String.format("%s : %s", remark.getDate(), remark.getRemark()))
+				.collect(Collectors.toList());
+		
+		
+		return String.join("\n", remarksAsStringList);
 	}
 }

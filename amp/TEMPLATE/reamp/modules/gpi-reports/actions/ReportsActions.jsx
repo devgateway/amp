@@ -1,4 +1,5 @@
 import reportsApi from '../api/ReportsApi';
+import * as Constants from '../common/Constants';
 
 export function fetchReportSuccess(data){
     return {type: 'FETCH_REPORT_SUCCESS', data: data}
@@ -50,5 +51,13 @@ export function fetchSupportingEvidence(code, requestData) {
         }).catch(error => {
             throw(error);
         });
-    }; 
+    };   
+}
+
+export function downloadExcelFile(requestData, code) {   
+    reportsApi.downloadFile(requestData, Constants.XLS, code);
+}
+
+export function downloadPdfFile(requestData, code) {    
+    reportsApi.downloadFile(requestData, Constants.PDF, code);
 }

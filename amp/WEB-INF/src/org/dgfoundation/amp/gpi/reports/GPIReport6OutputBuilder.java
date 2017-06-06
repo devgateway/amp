@@ -62,6 +62,8 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 
 	public GPIReport6OutputBuilder() {
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
+		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
+		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.PLANNED_DISBURSEMENTS));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_ANNUAL_GOV_BUDGET));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_PLANNED_ON_BUDGET));
@@ -81,25 +83,17 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 		List<GPIReportOutputColumn> headers = new ArrayList<>();
 		headers.add(getColumns().get(GPIReportConstants.COLUMN_YEAR));
 
-		GPIReportOutputColumn donorColumn = null;
-		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
-		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
-
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 			if (ColumnConstants.DONOR_AGENCY.equals(roc.originalColumnName)) {
-				donorColumn = new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY);
+				headers.add(getColumns().get(ColumnConstants.DONOR_AGENCY));
 			} else if (ColumnConstants.DONOR_GROUP.equals(roc.originalColumnName)) {
-				donorColumn = new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP);
+				headers.add(getColumns().get(ColumnConstants.DONOR_GROUP));
 				isDonorAgency = false;
 			}
 		}
 
-		if (donorColumn != null) {
-			headers.add(donorColumn);
-		}
-
-		headers.add(getColumns().get(MeasureConstants.PLANNED_DISBURSEMENTS));
 		headers.add(getColumns().get(GPIReportConstants.COLUMN_ANNUAL_GOV_BUDGET));
+		headers.add(getColumns().get(MeasureConstants.PLANNED_DISBURSEMENTS));
 		headers.add(getColumns().get(GPIReportConstants.COLUMN_PLANNED_ON_BUDGET));
 
 		return headers;

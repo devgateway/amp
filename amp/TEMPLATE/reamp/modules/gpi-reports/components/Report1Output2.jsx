@@ -18,7 +18,9 @@ export default class Report1Output2 extends Component {
         this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: ""};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );        
-        this.onDonorFilterChange = this.onDonorFilterChange.bind( this );        
+        this.onDonorFilterChange = this.onDonorFilterChange.bind( this );     
+        this.downloadExcelFile = this.downloadExcelFile.bind(this);
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);
       }
 
     componentDidMount() {
@@ -167,6 +169,14 @@ export default class Report1Output2 extends Component {
        return rows;
    }
    
+   downloadExcelFile() {
+       this.props.actions.downloadExcelFile(this.getRequestData(), '1');
+   }
+   
+   downloadPdfFile(){
+       this.props.actions.downloadPdfFile(this.getRequestData(), '1');
+   }
+   
    render() {
         if ( this.props.output2 && this.props.output2.page ) {           
             let addedGroups = [];
@@ -175,7 +185,7 @@ export default class Report1Output2 extends Component {
                 <div>
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
-                    <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}/>
+                    <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}  downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile}/>
                     <div className="section-divider"></div>
                    
                     <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={this.props.years} selectedYear={this.state.selectedYear} mainReport={this.props.output2} filter={this.filter} dateField="actual-approval-date"/>

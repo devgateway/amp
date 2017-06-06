@@ -15,7 +15,6 @@ import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.helper.FormatHelper;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report Output (headers, report data, summary)
@@ -162,6 +161,7 @@ public abstract class GPIReportOutputBuilder  {
 				return o2.get(yearColumn).compareTo(o1.get(yearColumn));
 			}
 		};
+		
 		return byYearDonorComparator;
 	}
 	

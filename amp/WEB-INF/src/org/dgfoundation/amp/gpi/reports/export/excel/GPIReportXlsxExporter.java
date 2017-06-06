@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.gpi.reports.export;
+package org.dgfoundation.amp.gpi.reports.export.excel;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -18,7 +19,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
-import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
+import org.dgfoundation.amp.gpi.reports.export.GPIReportExporter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.reports.saiku.export.ExportFilterUtils;
@@ -38,7 +39,8 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 	public String summarySheetName = "Summary Information";
 
 	public final int currencyUnitsRowPosition = 1;
-	public final int initHeaderRowOffset = 3;
+	public int initSummaryRowOffset = 3;
+	public int initHeaderRowOffset = 6;
 
 	protected static final int IN_MEMORY_ROWS = 10;
 
@@ -102,6 +104,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 
 	protected void generateReportSheet(SXSSFWorkbook wb, SXSSFSheet sheet, GPIReport report) {
 		renderReportTableUnits(wb, sheet, report);
+		renderReportTableSummary(wb, sheet, report);
 		renderReportTableHeader(wb, sheet, report);
 		renderReportData(sheet, report);
 	}
@@ -124,6 +127,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		String translatedCurrencyCode = TranslatorWorker.translateText(currencyCode);
 
 		cell.setCellValue(translatedNotes + " - " + translatedCurrencyCode);
+		cell.setCellStyle(template.getDefaultStyle());
 
 		CellRangeAddress mergedUnitsCell = new CellRangeAddress(currencyUnitsRowPosition, currencyUnitsRowPosition, 0,
 				report.getPage().getHeaders().size() + 1);
@@ -138,6 +142,14 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 	 * @param report
 	 */
 	protected void renderReportTableHeader(Workbook wb, Sheet sheet, GPIReport report) {
+	}
+	
+	/**
+	 * @param wb
+	 * @param sheet
+	 * @param report
+	 */
+	protected void renderReportTableSummary(Workbook wb, Sheet sheet, GPIReport report) {
 	}
 
 	/**
@@ -157,8 +169,8 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 	 * @param value
 	 * @return
 	 */
-	public Cell createCell(GPIReport report, Sheet sheet, Row row, int i, GPIReportOutputColumn column, String value) {
-		int cellType = getCellType(column);
+	public Cell createCell(GPIReport report, Sheet sheet, Row row, int i, String columnName, String value) {
+		int cellType = getCellType(columnName);
 		Cell cell = row.createCell(i, cellType);
 		if (cellType == Cell.CELL_TYPE_NUMERIC) {
 			DecimalFormat df = report.getSpec().getSettings().getCurrencyFormat();
@@ -168,12 +180,17 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 			} catch (ParseException e) {
 				logger.error(e);
 			}
-
 			cell.setCellValue(val);
 		} else if (cellType == Cell.CELL_TYPE_STRING) {
 			cell.setCellValue(value);
 		}
-
+		
+		if (hasSpecificStyle(columnName)) {
+			cell.setCellStyle(getSpecificStyle(columnName));
+		} else {
+			cell.setCellStyle(template.getDefaultStyle());
+		}
+		
 		setMaxColWidth(sheet, cell, i);
 
 		return cell;
@@ -183,19 +200,31 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		Map<Integer, Integer> widths = cachedWidths.get(sheet.getSheetName());
 		IntWrapper width = new IntWrapper().inc(10);
 		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_STRING:
-			width.set(cell.getStringCellValue().length());
-			break;
-		case Cell.CELL_TYPE_NUMERIC:
-			width.set(Double.toString(cell.getNumericCellValue()).length());
-			break;
+			case Cell.CELL_TYPE_NUMERIC:
+				width.set(Double.toString(cell.getNumericCellValue()).length());
+				break;
+			default:
+				int length = cell.getStringCellValue().length();
+				width.set(length < width.value ? width.value : length);
 		}
 
 		widths.compute(i, (k, v) -> v == null ? width.value : v < width.value ? width.value : v);
 	}
 
-	public int getCellType(GPIReportOutputColumn column) {
+	public int getCellType(String columnName) {
 		return Cell.CELL_TYPE_STRING;
+	}
+	
+	protected boolean hasSpecificStyle(String columnName) {
+		return false;
+	}
+	
+	protected CellStyle getSpecificStyle(String columnName) {
+		return template.getNumberStyle();
+	}
+	
+	protected boolean isHiddenColumn(String columnName) {
+		return false;
 	}
 
 	/**
@@ -249,11 +278,14 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 			for (String filterValue : filter.getValue()) {
 				// Check if the row 'i' exists so we don't add an extra row for
 				// the first filter result.
-				if (summarySheet.getRow(currLine.intValue()) != null) {
-					summarySheet.getRow(currLine.intValue()).createCell(1).setCellValue(filterValue);
-				} else {
-					summarySheet.createRow(currLine.intValue()).createCell(1).setCellValue(filterValue);
+				Row row = summarySheet.getRow(currLine.intValue());
+				
+				if (summarySheet.getRow(currLine.intValue()) == null) {
+					summarySheet.createRow(currLine.intValue());
 				}
+				Cell filterCell = row.createCell(1);
+				filterCell.setCellValue(filterValue);
+				filterCell.setCellStyle(template.getDefaultStyle());
 				currLine.inc();
 				group++;
 			}
@@ -297,7 +329,10 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		Cell calendarTitleCell = calendarRow.createCell(0);
 		calendarTitleCell.setCellValue(TranslatorWorker.translateText(title));
 		calendarTitleCell.setCellStyle(template.getOptionSettingsStyle());
-		calendarRow.createCell(1).setCellValue(value);
+		
+		Cell calendarCell = calendarRow.createCell(1);
+		calendarCell.setCellValue(value);
+		calendarCell.setCellStyle(template.getDefaultStyle());
 	}
 
 	/**
@@ -327,7 +362,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 			}
 		}
 	}
-
+	
 	protected String getReportSheetName() {
 		return reportSheetName;
 	}

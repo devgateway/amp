@@ -18,6 +18,8 @@ export default class Report5b extends Component {
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
         this.toggleHierarchy = this.toggleHierarchy.bind( this );
         this.onYearClick = this.onYearClick.bind( this );
+        this.downloadExcelFile = this.downloadExcelFile.bind(this);
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);
     }
 
     componentDidMount() {
@@ -271,6 +273,14 @@ export default class Report5b extends Component {
         return years.sort();
     }
     
+    downloadExcelFile() {
+        this.props.actions.downloadExcelFile(this.getRequestData(), '5b');
+    }
+    
+    downloadPdfFile(){
+        this.props.actions.downloadPdfFile(this.getRequestData(), '5b');
+    } 
+    
     render() {         
         if ( this.props.mainReport && this.props.mainReport.page ) {            
             var MTEFYears =  this.getMTEFYears();
@@ -286,10 +296,10 @@ export default class Report5b extends Component {
                         <div className="col-md-5b no-padding">
                             <ul className="export-nav">
                                 <li>
-                                    <a href="#"><img src="images/export-pdf.svg" /></a>
+                                     <a onClick={this.downloadPdfFile}><img src="images/export-pdf.svg" /></a>
                                 </li>
                                 <li>
-                                    <a href="#"><img src="images/export-excel.svg" /></a>
+                                     <a onClick={this.downloadExcelFile}><img src="images/export-excel.svg" /></a>
                                 </li>
                                 <li>
                                     <a href="#"><img src="images/export-print.svg" /></a>

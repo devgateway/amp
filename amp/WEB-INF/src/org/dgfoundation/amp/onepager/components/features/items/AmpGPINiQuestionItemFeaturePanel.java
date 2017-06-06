@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -17,16 +18,18 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpGPINiResourcesFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.events.GPINiQuestionUpdateEvent;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
@@ -45,7 +48,13 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 	private static final String RESPONSE_TEXT_ID = "textInput";
 	private static final String RESPONSE_OPTIONS_ID = "optionsInput";
 	private static final String RESPONSE_SELECT_ID = "optionsSelect";
-	
+	final protected String INVALID_INTEGER_MESSAGE = TranslatorUtil.getTranslatedText("Answers may only be positive "
+			+ "whole "
+			+ "numbers");
+
+	protected WebMarkupContainer webLinkFeedbackContainer;
+	protected Label webLinkFeedbackLabel;
+
 	private static final long serialVersionUID = 2026765260335404697L;
 	protected Set<AmpGPINiSurveyResponse> responses = new HashSet<>();
 	
@@ -70,7 +79,7 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 		
 		GPINiQuestionType type = surveyQuestionModel.getObject().getType();
 		if (type.equals(GPINiQuestionType.INTEGER)) {
-			NumberTextField<Long> input = getNumberResponseInput(responseValidationFields, responseModel);
+			TextField<Integer> input = getNumberResponseInput(responseValidationFields, responseModel);
 			add(input);
 			add(hiddenMarkup(RESPONSE_TEXT_ID), hiddenMarkup(RESPONSE_OPTIONS_ID), hiddenMarkup(RESPONSE_SELECT_ID));
 		} if (type.equals(GPINiQuestionType.FREE_TEXT)) {
@@ -92,6 +101,18 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 			add(resourceContainer);
 			add(hiddenMarkup(RESPONSE_NUMBER_ID), hiddenMarkup(RESPONSE_TEXT_ID), hiddenMarkup(RESPONSE_SELECT_ID));
 		}
+
+		webLinkFeedbackContainer = new WebMarkupContainer("webLinkFeedbackContainer");
+		webLinkFeedbackContainer.setOutputMarkupId(true);
+		webLinkFeedbackContainer.setOutputMarkupPlaceholderTag(true);
+		webLinkFeedbackContainer.setVisible(false);
+
+		webLinkFeedbackLabel = new Label("webLinkFeedbackLabel", new Model<String>(INVALID_INTEGER_MESSAGE));
+		webLinkFeedbackContainer.add(webLinkFeedbackLabel);
+
+		webLinkFeedbackContainer.setVisible(false);
+
+		add(webLinkFeedbackContainer);
 	}
 
 	/**
@@ -125,16 +146,41 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 	 * @param responseModel
 	 * @return
 	 */
-	private NumberTextField<Long> getNumberResponseInput(
+	private TextField<Integer> getNumberResponseInput(
 			List<AmpCollectionValidatorField<AmpGPINiSurveyResponse, String>> responseValidationFields,
 			IModel<AmpGPINiSurveyResponse> responseModel) {
-		NumberTextField<Long> input = new NumberTextField<Long>(RESPONSE_NUMBER_ID, 
-				new PropertyModel<Long>(responseModel, "integerResponse"));
-		
+		TextField<Integer> input = new TextField<Integer>(RESPONSE_NUMBER_ID,
+				new PropertyModel<Integer>(responseModel, "integerResponse"), Integer.class);
+		input.setRequired(true);
+		input.add(new IValidator<Integer>(){
+			@Override
+			public void validate(IValidatable<Integer> validatable) {
+				String value = String.valueOf(validatable.getValue());
+				int intValue = -1;
+				try {
+					webLinkFeedbackContainer.setVisible(false);
+					intValue = Integer.parseInt(value);
+				}
+				catch (NumberFormatException e) {
+
+				}
+				if (intValue < 0) {
+					webLinkFeedbackContainer.setVisible(true);
+					webLinkFeedbackLabel.setDefaultModelObject(INVALID_INTEGER_MESSAGE);
+				}
+			}
+		});
+
 		input.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				target.add(input);
+				if (webLinkFeedbackContainer.isVisible()) {
+					input.add(new AttributeModifier( "class", "formcomponent invalid inputx"));
+				} else {
+					input.add(new AttributeModifier( "class", ""));
+				}
+				target.add(webLinkFeedbackContainer);
 				responseValidationFields.stream().forEach(r -> r.reloadValidationField(target, false));
 			}
 		});

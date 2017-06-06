@@ -29,10 +29,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -41,7 +38,6 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.startup.AmpBackgroundActivitiesUtil;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -49,6 +45,7 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.LongType;
@@ -71,6 +68,7 @@ public class HondurasLocations {
     private String rootRealPath;
 
     public static void run(ServletContext servletContext) {
+        LuceneUtil.checkActivityIndex(servletContext);
         new HondurasLocations().migrate(servletContext);
     }
 
@@ -119,13 +117,37 @@ public class HondurasLocations {
             throw new RuntimeException("Failed to create user.", e);
         }
 
+        assignTeamsForAllActivities();
+
         // update activities with locations
-        locs.asMap().forEach(this::updateLocation);
+        locs.asMap().forEach(this::updateActivity);
 
         // update activities without locations
-        actsWithoutLocs.forEach(id -> updateLocation(id, emptyList()));
+        actsWithoutLocs.forEach(id -> updateActivity(id, emptyList()));
+
+        hideOldHondurasRegions();
 
         logger.info("MIGRATION FINISHED!");
+    }
+
+    private void assignTeamsForAllActivities() {
+        String sql = "UPDATE amp_activity_version"
+                + " SET amp_team_id = 1"
+                + " WHERE amp_activity_id IN ("
+                + "   SELECT amp_activity_id"
+                + "   FROM amp_activity"
+                + "   WHERE amp_id IN ('871711818238', '871711818082', '871711817046', '871711817090', '8717172319216', '87171319871')"
+                + "   AND amp_team_id IS NULL)";
+        Session session = PersistenceManager.getSession();
+        session.createSQLQuery(sql).executeUpdate();
+        PersistenceManager.cleanupSession(session);
+    }
+
+    private void hideOldHondurasRegions() {
+        String sql = "update amp_category_value_location set deleted=true where location_name ~ 'R\\d\\d - .*'";
+        Session session = PersistenceManager.getSession();
+        session.createSQLQuery(sql).executeUpdate();
+        PersistenceManager.cleanupSession(session);
     }
 
     private boolean allTargetLocationsExist(Multimap<String, Loc> locs) {
@@ -149,28 +171,24 @@ public class HondurasLocations {
         }
     }
 
-    private void updateLocation(String ampId, Collection<Loc> locs) {
+    private void updateActivity(String ampId, Collection<Loc> locs) {
         logger.info("UPDATING: " + ampId);
         try {
             Session session = PersistenceManager.getSession();
-            List<AmpContentTranslation> translations = new ArrayList<>();
 
-            AmpActivityVersion a = ActivityUtil.loadActivity(findActivityId(ampId));
+            AmpActivityVersion activity = ActivityUtil.loadActivity(findActivityId(ampId));
 
-            AmpTeamMember teamMember = AmpBackgroundActivitiesUtil.createActivityTeamMemberIfNeeded(a.getTeam(), user);
+            initializeActivity(activity);
+            session.evict(activity); // prevents this activity if it was submitted
 
-            a.getLocations().removeIf(this::isOldLocation);
-            a.getLocations().addAll(createActivityLocations(a, locs, a.getLocations()));
+            boolean updated = updateActivityLocations(activity, locs);
+            if (!updated) {
+                return;
+            }
 
-            float perc = 100f / a.getLocations().size();
-            a.getLocations().forEach(l -> l.setLocationPercentage(perc));
+            AmpActivityVersion newActivity = saveActivity(session, activity);
 
-            AmpActivityVersion newActivity = saveActivityNewVersion(a, translations, teamMember, a.getDraft(), session, false, false);
-
-            session.flush();
-
-            Locale locale = new Locale("en");
-            LuceneUtil.addUpdateActivity(rootRealPath, true, SiteUtils.getDefaultSite(), locale, newActivity, a);
+            updateLucene(activity, newActivity);
 
             PersistenceManager.cleanupSession(session);
         } catch (Exception e) {
@@ -178,10 +196,48 @@ public class HondurasLocations {
         }
     }
 
-    private Collection<AmpActivityLocation> createActivityLocations(AmpActivityVersion a, Collection<Loc> locs,
-            Set<AmpActivityLocation> locations) {
+    private AmpActivityVersion saveActivity(Session session, AmpActivityVersion activity) throws Exception {
+        List<AmpContentTranslation> translations = new ArrayList<>();
+        AmpTeamMember teamMember = AmpBackgroundActivitiesUtil.createActivityTeamMemberIfNeeded(activity.getTeam(), user);
+        return saveActivityNewVersion(activity, translations, teamMember, activity.getDraft(), session, false, false);
+    }
+
+    private void initializeActivity(AmpActivityVersion activity) {
+        Hibernate.initialize(activity.getLineMinistryObservations());
+        Hibernate.initialize(activity.getAnnualProjectBudgets());
+        Hibernate.initialize(activity.getActBudgetStructure());
+        Hibernate.initialize(activity.getActPrograms());
+        Hibernate.initialize(activity.getSurvey());
+        Hibernate.initialize(activity.getGpiSurvey());
+        Hibernate.initialize(activity.getContracts());
+        Hibernate.initialize(activity.getIndicators());
+        Hibernate.initialize(activity.getMember());
+        Hibernate.initialize(activity.getComponents());
+        if (activity.getComponents() != null) {
+            activity.getComponents().forEach(c -> Hibernate.initialize(c.getFundings()));
+        }
+        Hibernate.initialize(activity.getFunding());
+
+    }
+
+    private void updateLucene(AmpActivityVersion oldActivity, AmpActivityVersion newActivity) {
+        Locale locale = new Locale("en");
+        LuceneUtil.addUpdateActivity(rootRealPath, true, SiteUtils.getDefaultSite(), locale, newActivity, oldActivity);
+    }
+
+    private boolean updateActivityLocations(AmpActivityVersion activity, Collection<Loc> locs) {
+        boolean updated = activity.getLocations().removeIf(this::isOldLocation);
+        updated |= activity.getLocations().addAll(createActivityLocations(activity, locs));
+
+        float perc = 100f / activity.getLocations().size();
+        activity.getLocations().forEach(l -> l.setLocationPercentage(perc));
+
+        return updated;
+    }
+
+    private Collection<AmpActivityLocation> createActivityLocations(AmpActivityVersion a, Collection<Loc> locs) {
         return locs.stream()
-                .filter(l -> !alreadyPresent(l, locations))
+                .filter(l -> !alreadyPresent(l, a.getLocations()))
                 .map(l -> createActivityLocation(a, l))
                 .collect(toList());
     }

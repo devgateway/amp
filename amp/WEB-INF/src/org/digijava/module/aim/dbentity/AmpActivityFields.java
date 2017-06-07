@@ -670,6 +670,7 @@ LoggerIdentifiable, Cloneable {
 	/**
 	 * Fields for activity versioning.
 	 */
+	@Interchangeable(fieldTitle = "Activity Group")
 	protected AmpActivityGroup ampActivityGroup;
 	
 	protected Date modifiedDate;

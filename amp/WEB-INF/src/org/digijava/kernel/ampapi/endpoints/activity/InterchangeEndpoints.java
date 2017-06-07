@@ -375,6 +375,9 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
 	 * this status will be kept if possible. Otherwise activity will be saved as draft.</p>
 	 * <p>AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's value always
 	 * honored.</p>
+	 * <p>AMP Offline must use optimistic lock in order to update activity. For other clients locking is optional.
+	 * Locking is achieved by sending last known value of activity_group.version. If activity was updated in meantime
+	 * then version will be different and subsequent updates will fail with appropriate message.</p>
 	 *
 	 * @param projectId the id of the activity which should be updated
 	 * @param newJson activity configuration

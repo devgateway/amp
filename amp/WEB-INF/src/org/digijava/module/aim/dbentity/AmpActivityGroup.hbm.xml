@@ -9,6 +9,8 @@
 				</param>
 			</generator>
 		</id>
+
+		<version name="version" type="java.lang.Long" />
 		
 		<property column="autoClosedOnExpiration" name="autoClosedOnExpiration" type="java.lang.Boolean" />
 		

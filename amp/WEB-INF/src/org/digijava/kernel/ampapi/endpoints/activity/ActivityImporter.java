@@ -83,6 +83,7 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.StaleStateException;
 
 /**
  * Imports a new activity or updates an existing one
@@ -195,6 +196,11 @@ public class ActivityImporter {
 					SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
 		}
 
+		if (org.dgfoundation.amp.onepager.util.ActivityUtil.isActivityStale(ampActivityId)) {
+			return Collections.singletonList(
+					ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
+		}
+
 		List<ApiErrorMessage> messages = checkPermissions(update, ampActivityId, teamMember);
 		if (!messages.isEmpty()) {
 			return messages;
@@ -220,11 +226,15 @@ public class ActivityImporter {
 		String activityId = ampActivityId == null ? null : ampActivityId.toString();
 		String key = null;
 
+		Long currentVersion = null;
+
 		try {
 			// initialize new activity
 			InterchangeUtils.getSessionWithPendingChanges();
 			
 			if (oldActivity != null) {
+				currentVersion = oldActivity.getAmpActivityGroup().getVersion();
+
 				key = ActivityGatekeeper.lockActivity(activityId, teamMember.getAmpTeamMemId());
 				
 				if (key == null){ //lock not acquired
@@ -236,9 +246,14 @@ public class ActivityImporter {
 				// REFACTOR: we may no longer need to use old activity
 				oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, teamMember);
 				oldActivity.setAmpId(newActivity.getAmpId());
-				oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup());
+				oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
 				
 				cleanupNewActivity();
+
+				if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+					PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
+					newActivity.getAmpActivityGroup().setVersion(-1L);
+				}
 			} else if (!update) {
 				newActivity = new AmpActivityVersion();
 			}
@@ -262,11 +277,16 @@ public class ActivityImporter {
 			}
 			
 			updateResponse(update);
+
+			PersistenceManager.flushAndCommit(PersistenceManager.getSession());
 		} catch (Throwable e) {
-			// if any unhandled issue, then cleanup pending changes 
-			PersistenceManager.getSession().clear();
-			
-			if (errors.isEmpty()) {
+			PersistenceManager.rollbackCurrentSessionTx();
+
+			if (e instanceof StaleStateException) {
+				String details = "Latest version is " + currentVersion;
+				ApiErrorMessage error = ActivityErrors.ACTIVITY_IS_STALE.withDetails(details);
+				errors.put(error.id, error);
+			} else if (errors.isEmpty()) {
 				throw new RuntimeException(e);
 			} else {
 				ApiExceptionMapper aem = new ApiExceptionMapper();

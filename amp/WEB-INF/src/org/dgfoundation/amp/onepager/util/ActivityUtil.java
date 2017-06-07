@@ -325,15 +325,17 @@ public class ActivityUtil {
 	}
 
 	/**
-	 * Since all properties of AmpActivityGroup are not changed hibernate does not automatically increment the version.
-	 * Yet activity can change and AmpActivityGroup remains the same, thus forcing version increment explicitly.
+	 * Since none of the AmpActivityGroup properties are changed hibernate does not automatically increment the
+	 * version. Yet activity can change and AmpActivityGroup would remains the same, thus forcing version
+	 * increment explicitly.
 	 */
 	private static void forceVersionIncrement(Session session, AmpActivityGroup group) {
 		session.buildLockRequest(new LockOptions(LockMode.OPTIMISTIC_FORCE_INCREMENT)).lock(group);
 	}
 
 	/**
-	 * Checks if the activity is stale just by looking at ampActivityId.
+	 * Checks if the activity is stale just by looking at ampActivityId. Used only for the case when new activity
+	 * versions are created.
 	 */
 	public static boolean isActivityStale(Long ampActivityId) {
 		Number activityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityVersion.class)

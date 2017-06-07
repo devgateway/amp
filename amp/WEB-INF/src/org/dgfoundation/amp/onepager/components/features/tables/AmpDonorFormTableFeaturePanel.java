@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 
 
 import java.text.NumberFormat;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +33,8 @@ import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -43,7 +46,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 public abstract class AmpDonorFormTableFeaturePanel extends
 	AmpFundingFormTableFeaturePanel<AmpFunding, AmpFundingDetail> {
 
-	 private static Logger logger = Logger.getLogger(AmpDonorFormTableFeaturePanel.class);
+	private static Logger logger = Logger.getLogger(AmpDonorFormTableFeaturePanel.class);
 	
 	protected IModel<Set<AmpFundingDetail>> parentModel;
 	protected IModel<Set<AmpFundingDetail>> setModel;
@@ -72,6 +75,27 @@ public abstract class AmpDonorFormTableFeaturePanel extends
         };
 	}
 
+
+	protected Comparator<AmpFundingDetail> getFundingDetailComparator() {
+		Comparator<AmpFundingDetail> comparator = null;
+		String globalSettingComparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants
+				.REORDER_FUNDING_ITEMS);
+		switch (globalSettingComparator) {
+			case Constants.COMPARATOR_TRANSACTION_DATE_DESC:
+				comparator = new AmpFundingDetail.FundingDetailComparatorByTransactionDateDesc();
+				break;
+			case Constants.COMPARATOR_FUNDING_ITEM_ID_ASC:
+				comparator = new AmpFundingDetail.FundingDetailComparatorByFundingItemIdAsc();
+				break;
+			case Constants.COMPARATOR_FUNDING_ITEM_ID_DESC:
+				comparator = new AmpFundingDetail.FundingDetailComparatorByFundingItemIdDesc();
+				break;
+			default:
+				comparator = new AmpFundingDetail.FundingDetailComparatorByTransactionDateAsc();
+		}
+
+		return comparator;
+	}
 
 	protected AmpCategorySelectFieldPanel getAdjustmentTypeComponent(
 			IModel<AmpFundingDetail> model, int transactionType) {

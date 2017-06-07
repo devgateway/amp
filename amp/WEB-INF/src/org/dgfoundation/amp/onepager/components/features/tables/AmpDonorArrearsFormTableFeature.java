@@ -49,7 +49,7 @@ public class AmpDonorArrearsFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.ARREARS, 7);
 
-		list = new ListEditor<AmpFundingDetail>("listArrears", setModel, new AmpFundingDetail.FundingDetailComparator()) {
+		list = new ListEditor<AmpFundingDetail>("listArrears", setModel, getFundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
 					ListItem<AmpFundingDetail> item) {

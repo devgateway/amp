@@ -436,4 +436,11 @@ public class Constants
      public static final String LOGIN_ACTION="login";
      public static final String SENT_REMINDER="sentReminder";
      public static final String UNASSIGNED_ACTIVITY_LIST="unassignedActivityList";
+
+
+	public static final String COMPARATOR_TRANSACTION_DATE_DESC = "1";
+	public static final String COMPARATOR_TRANSACTION_DATE_ASC = "2";
+	public static final String COMPARATOR_FUNDING_ITEM_ID_DESC = "3";
+	public static final String COMPARATOR_FUNDING_ITEM_ID_ASC = "4";
+
 }

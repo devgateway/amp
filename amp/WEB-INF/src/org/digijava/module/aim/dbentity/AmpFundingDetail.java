@@ -17,7 +17,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem {
-	
+
 	public static class FundingDetailComparatorByTransactionDateAsc implements Comparator<AmpFundingDetail>, Serializable {
 
 		@Override
@@ -33,11 +33,12 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 			}
 		}
 	}
+
 	public static class FundingDetailComparatorByTransactionDateDesc implements Comparator<AmpFundingDetail>, Serializable {
 
 		@Override
 		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
-			if (arg0.getTransactionDate() != null && arg1.getTransactionDate() != null){ 
+			if (arg0.getTransactionDate() != null && arg1.getTransactionDate() != null){
 				return arg1.getTransactionDate().compareTo(arg0.getTransactionDate());
 			}else{
 				if(arg0.getTransactionDate()==null){
@@ -47,7 +48,40 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 				}
 			}
 		}
-	}	
+	}
+
+	public static class FundingDetailComparatorByFundingItemIdAsc implements Comparator<AmpFundingDetail>, Serializable {
+
+		@Override
+		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() != null){
+				return arg0.getAmpFundDetailId().compareTo(arg1.getAmpFundDetailId());
+			}else{
+				if(arg0.getAmpFundDetailId()==null){
+					return 1;
+				}else{
+					return -1;
+				}
+			}
+		}
+	}
+
+	public static class FundingDetailComparatorByFundingItemIdDesc implements Comparator<AmpFundingDetail>, Serializable {
+
+		@Override
+		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() != null){
+				return arg1.getAmpFundDetailId().compareTo(arg0.getAmpFundDetailId());
+			}else{
+				if(arg0.getAmpFundDetailId()==null){
+					return -1;
+				}else{
+					return 1;
+				}
+			}
+		}
+	}
+
 	//IATI-check: not to be ignored!
 	public static class FundingDetailComparator implements Comparator<AmpFundingDetail>, Serializable {
 

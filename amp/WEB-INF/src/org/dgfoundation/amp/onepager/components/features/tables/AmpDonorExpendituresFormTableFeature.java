@@ -91,7 +91,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.EXPENDITURE, 6);
 		
-		list = new FundingListEditor<AmpFundingDetail>("listExp", setModel, new AmpFundingDetail.FundingDetailComparator()) {
+		list = new FundingListEditor<AmpFundingDetail>("listExp", setModel, getFundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {

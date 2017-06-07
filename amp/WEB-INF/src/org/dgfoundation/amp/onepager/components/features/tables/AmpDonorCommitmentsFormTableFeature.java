@@ -39,6 +39,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 		AmpDonorFormTableFeaturePanel {
 
 	private boolean alertIfDisbursmentBiggerCommitments = false;
+
 	/**
 	 * @param id
 	 * @param model
@@ -50,7 +51,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.COMMITMENT, 7);
 
-		list = new ListEditor<AmpFundingDetail>("listCommitments", setModel, new AmpFundingDetail.FundingDetailComparatorByTransactionDateAsc()) {
+		list = new ListEditor<AmpFundingDetail>("listCommitments", setModel, getFundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
 					ListItem<AmpFundingDetail> item) {

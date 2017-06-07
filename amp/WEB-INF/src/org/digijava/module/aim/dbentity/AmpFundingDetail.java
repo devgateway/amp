@@ -17,7 +17,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem {
-	
+
 	public static class FundingDetailComparatorByTransactionDateAsc implements Comparator<AmpFundingDetail>, Serializable {
 
 		@Override
@@ -33,11 +33,12 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 			}
 		}
 	}
+
 	public static class FundingDetailComparatorByTransactionDateDesc implements Comparator<AmpFundingDetail>, Serializable {
 
 		@Override
 		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
-			if (arg0.getTransactionDate() != null && arg1.getTransactionDate() != null){ 
+			if (arg0.getTransactionDate() != null && arg1.getTransactionDate() != null){
 				return arg1.getTransactionDate().compareTo(arg0.getTransactionDate());
 			}else{
 				if(arg0.getTransactionDate()==null){
@@ -47,7 +48,40 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 				}
 			}
 		}
-	}	
+	}
+
+	public static class FundingDetailComparatorByFundingItemIdAsc implements Comparator<AmpFundingDetail>, Serializable {
+
+		@Override
+		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() != null){
+				return arg0.getAmpFundDetailId().compareTo(arg1.getAmpFundDetailId());
+			}else{
+				if(arg0.getAmpFundDetailId()==null){
+					return 1;
+				}else{
+					return -1;
+				}
+			}
+		}
+	}
+
+	public static class FundingDetailComparatorByFundingItemIdDesc implements Comparator<AmpFundingDetail>, Serializable {
+
+		@Override
+		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() != null){
+				return arg1.getAmpFundDetailId().compareTo(arg0.getAmpFundDetailId());
+			}else{
+				if(arg0.getAmpFundDetailId()==null){
+					return -1;
+				}else{
+					return 1;
+				}
+			}
+		}
+	}
+
 	//IATI-check: not to be ignored!
 	public static class FundingDetailComparator implements Comparator<AmpFundingDetail>, Serializable {
 
@@ -56,34 +90,42 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+		public int compare(final AmpFundingDetail arg0, final AmpFundingDetail arg1) {
 
 			if (arg0.getTransactionDate() != null && arg0.getTransactionAmount() != null
 					&& arg0.getAdjustmentType() != null) {
 				if (arg0.getTransactionDate() != null && arg1.getTransactionDate() != null
-						&& arg0.getTransactionDate().compareTo(arg1.getTransactionDate()) != 0)
+						&& arg0.getTransactionDate().compareTo(arg1.getTransactionDate()) != 0) {
 					return arg0.getTransactionDate().compareTo(arg1.getTransactionDate());
-				if (arg0.getTransactionDate() != null && arg1.getTransactionDate() == null)
+				}
+				if (arg0.getTransactionDate() != null && arg1.getTransactionDate() == null) {
 					return -1;
-				if (arg0.getTransactionDate() == null && arg1.getTransactionDate() != null)
+				}
+				if (arg0.getTransactionDate() == null && arg1.getTransactionDate() != null) {
 					return 1;
+				}
 			}
-			if (arg0.getReportingDate() != null && arg1.getReportingDate() != null)
+			if (arg0.getReportingDate() != null && arg1.getReportingDate() != null) {
 				return arg0.getReportingDate().compareTo(arg1.getReportingDate());
-			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() != null)
+			}
+			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() != null) {
 				return arg0.getAmpFundDetailId().compareTo(arg1.getAmpFundDetailId());
-			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() == null)
+			}
+			if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() == null) {
 				return -1;
-			if (arg0.getAmpFundDetailId() == null && arg1.getAmpFundDetailId() != null)
+			}
+			if (arg0.getAmpFundDetailId() == null && arg1.getAmpFundDetailId() != null) {
 				return 1;
+			}
 			return arg0.hashCode() - arg1.hashCode();
 		}
 	}
-	@Interchangeable(fieldTitle="ID")
+
+	@Interchangeable(fieldTitle = "ID")
 	private Long ampFundDetailId;
-	@Interchangeable(fieldTitle="Fiscal Year", importable=true)
+	@Interchangeable(fieldTitle = "Fiscal Year", importable = true)
 	private Integer fiscalYear;
-	@Interchangeable(fieldTitle="Fiscal Quarter", importable=true)
+	@Interchangeable(fieldTitle = "Fiscal Quarter", importable = true)
 	private Integer fiscalQuarter;
 	
 	/**
@@ -95,18 +137,19 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	 * public static final int MTEFPROJECTION = 3 ;
 	 * public static final int ARREAR = 10;
 	 */
-	
+
 	@Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true, pickIdOnly = true)
-	@InterchangeableDiscriminator(discriminatorField="transactionType",
-			discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator")
+	@InterchangeableDiscriminator(discriminatorField = "transactionType",
+			discriminatorClass = "org.digijava.kernel.ampapi.endpoints.activity.discriminators"
+					+ ".TransactionTypeDiscriminator")
 	private Integer transactionType;
-	
-	@Interchangeable(fieldTitle="Adjustment Type", importable = true, pickIdOnly = true, 
-					 discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
+
+	@Interchangeable(fieldTitle = "Adjustment Type", importable = true, pickIdOnly = true,
+			discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
 	private AmpCategoryValue adjustmentType;
-	
-	@Interchangeable(fieldTitle="Expenditure Class", importable = true, pickIdOnly = true, 
-			 		discriminatorOption = CategoryConstants.EXPENDITURE_CLASS_KEY)
+
+	@Interchangeable(fieldTitle = "Expenditure Class", importable = true, pickIdOnly = true,
+			discriminatorOption = CategoryConstants.EXPENDITURE_CLASS_KEY)
 	private AmpCategoryValue expenditureClass;
 	
 	
@@ -114,53 +157,53 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 		return expenditureClass;
 	}
 
-	public void setExpenditureClass(AmpCategoryValue expenditureClass) {
+	public void setExpenditureClass(final AmpCategoryValue expenditureClass) {
 		this.expenditureClass = expenditureClass;
 	}
 
-	@Interchangeable(fieldTitle="Transaction Date", importable=true)
+	@Interchangeable(fieldTitle = "Transaction Date", importable = true)
 	private Date transactionDate;
-	@Interchangeable(fieldTitle="Transaction Date 2", importable=true)
+	@Interchangeable(fieldTitle = "Transaction Date 2", importable = true)
 	private Date transactionDate2;
-	@Interchangeable(fieldTitle="Reporting Date", importable=true)
+	@Interchangeable(fieldTitle = "Reporting Date", importable = true)
 	private Date reportingDate;
-	@Interchangeable(fieldTitle="Updated Date", importable=false)
+	@Interchangeable(fieldTitle = "Updated Date", importable = false)
 	private Date updatedDate;
-		
-	@Interchangeable(fieldTitle="Transaction Amount", importable=true)
+
+	@Interchangeable(fieldTitle = "Transaction Amount", importable = true)
 	private Double transactionAmount;
-	@Interchangeable(fieldTitle="Thousands Transaction Amount", importable=true)
+	@Interchangeable(fieldTitle = "Thousands Transaction Amount", importable = true)
 	private Double thousandsTransactionAmount;
-	@Interchangeable(fieldTitle="Language", importable=true)
+	@Interchangeable(fieldTitle = "Language", importable = true)
 	private String language;
-	@Interchangeable(fieldTitle="Version", importable=true)
+	@Interchangeable(fieldTitle = "Version", importable = true)
 	private String version;
-	@Interchangeable(fieldTitle="Calendar Type", importable=true) //why isn't this an ACV?
+	@Interchangeable(fieldTitle = "Calendar Type", importable = true) //why isn't this an ACV?
 	private String calType;
 	private String orgRoleCode; // defunct
-	@Interchangeable(fieldTitle="Currency", importable=true, pickIdOnly = true)
+	@Interchangeable(fieldTitle = "Currency", importable = true, pickIdOnly = true)
 	private AmpCurrency ampCurrencyId;
-	@Interchangeable(fieldTitle="Reporting Organization", importable=true, pickIdOnly = true)
+	@Interchangeable(fieldTitle = "Reporting Organization", importable = true, pickIdOnly = true)
 	private AmpOrganisation reportingOrgId;
-//	@Interchangeable(fieldTitle="Funding", pickIdOnly=true, importable=true)
+	//	@Interchangeable(fieldTitle="Funding", pickIdOnly=true, importable=true)
 	private AmpFunding ampFundingId;
-	@Interchangeable(fieldTitle="Fixed Exchange Rate", importable=true)
+	@Interchangeable(fieldTitle = "Fixed Exchange Rate", importable = true)
 	private Double fixedExchangeRate;
-	@Interchangeable(fieldTitle="Fixed Base Currency", importable=true, pickIdOnly = true)
+	@Interchangeable(fieldTitle = "Fixed Base Currency", importable = true, pickIdOnly = true)
 	private AmpCurrency fixedRateBaseCurrency;
-	@Interchangeable(fieldTitle="Disbursement Order Rejected", importable=true)
+	@Interchangeable(fieldTitle = "Disbursement Order Rejected", importable = true)
 	private Boolean disbursementOrderRejected;
-	@Interchangeable(fieldTitle="Pledge", importable=true)
+	@Interchangeable(fieldTitle = "Pledge", importable = true)
 	private FundingPledges pledgeid;
-	@Interchangeable(fieldTitle="Capital Spending Percentage", importable=true)
+	@Interchangeable(fieldTitle = "Capital Spending Percentage", importable = true)
 	private Float capitalSpendingPercentage;
-	@Interchangeable(fieldTitle="Recipient Organization", importable=true, pickIdOnly=true)
+	@Interchangeable(fieldTitle = "Recipient Organization", importable = true, pickIdOnly = true)
 	private AmpOrganisation recipientOrg;
-	@Interchangeable(fieldTitle="Recipient Role", importable=true, pickIdOnly = true)
+	@Interchangeable(fieldTitle = "Recipient Role", importable = true, pickIdOnly = true)
 	private AmpRole recipientRole;
-	@Interchangeable(fieldTitle="Expenditure Category", importable=true)
+	@Interchangeable(fieldTitle = "Expenditure Category", importable = true)
 	private String expCategory;
-	@Interchangeable(fieldTitle="Disbursement Order ID", importable=true)
+	@Interchangeable(fieldTitle = "Disbursement Order ID", importable = true)
 	private String disbOrderId;
 	private IPAContract contract;
 	private boolean iatiAdded = false; //nonpersistant

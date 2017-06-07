@@ -549,7 +549,7 @@ function collapseAll() {
 		<digi:trn>Activity created on</digi:trn>:<br/>
 		<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
 		<hr/>
-		<module:display name="/Activity Form/Identification/Activity Last Updated by">
+		<module:display name="/Activity Form/Identification/Activity Last Updated by" parentModule="/Activity Form/Identification">
 			<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
 				<digi:trn>Activity last updated by</digi:trn>: <br/>
 				<b>
@@ -559,7 +559,7 @@ function collapseAll() {
 			</logic:notEmpty>
 		</module:display>
 		<hr/>
-		<module:display name="/Activity Form/Identification/Activity Updated On">
+		<module:display name="/Activity Form/Identification/Activity Updated On" parentModule="/Activity Form/Identification">
 			<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
 				<digi:trn>Activity updated on</digi:trn>: <br/>
 				<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>

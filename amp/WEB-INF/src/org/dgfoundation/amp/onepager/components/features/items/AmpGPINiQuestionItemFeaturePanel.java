@@ -151,7 +151,6 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 			IModel<AmpGPINiSurveyResponse> responseModel) {
 		TextField<Integer> input = new TextField<Integer>(RESPONSE_NUMBER_ID,
 				new PropertyModel<Integer>(responseModel, "integerResponse"), Integer.class);
-		input.setRequired(true);
 		input.add(new IValidator<Integer>(){
 			@Override
 			public void validate(IValidatable<Integer> validatable) {

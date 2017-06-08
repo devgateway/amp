@@ -13,6 +13,7 @@ import org.apache.axis.utils.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -106,20 +107,19 @@ public class GenericVisibility extends DataVisibility implements FMSettings {
         }
         // build features tree
         for (AmpObjectVisibility feature : modulesVisibility.getItems()) {
-            items.put(feature.getName(), buildFieldsTree(feature));
+            items.put(feature.getName(), buildFeaturesTree((AmpFeaturesVisibility) feature));
         }
         return new FMTree(items, FeaturesUtil.isVisible(modulesVisibility));
     }
-    
-    private FMTree buildFieldsTree(AmpObjectVisibility feature) {
+
+    private FMTree buildFeaturesTree(AmpFeaturesVisibility feature) {
         Map<String, FMTree> items = new LinkedHashMap<>();
         for (AmpObjectVisibility field : feature.getItems()) {
-            items.put(feature.getName(), new FMTree(null, FeaturesUtil.isVisible(field)));
+            items.put(field.getName(), new FMTree(null, FeaturesUtil.isVisible(field)));
         }
         return new FMTree(items, FeaturesUtil.isVisible(feature));
     }
-    
-    
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public boolean supportsFMTree() {

@@ -28,7 +28,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.AmpARFilterParams;
 import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
@@ -118,13 +117,28 @@ public class SyncService implements InitializingBean {
 
         systemDiff.setPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, lastSyncTime));
 
+        systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
+
+        updateDiffForFeatureManager(systemDiff, syncRequest);
+
         if (systemDiff.getTimestamp() == null) {
             systemDiff.setTimestamp(syncRequest.getLastSyncTime());
         }
 
-        systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
-
         return systemDiff;
+    }
+
+    private void updateDiffForFeatureManager(SystemDiff systemDiff, SyncRequest syncRequest) {
+        if (syncRequest.getLastSyncTime() == null) {
+            systemDiff.setFeatureManager(true);
+        } else {
+            List<String> entities = Arrays.asList(GLOBAL_SETTINGS, WORKSPACES, FEATURE_MANAGER);
+            List<AmpOfflineChangelog> changelogs = loadChangeLog(syncRequest.getLastSyncTime(), entities);
+            systemDiff.setFeatureManager(!changelogs.isEmpty());
+            for (AmpOfflineChangelog changelog : changelogs) {
+                systemDiff.updateTimestamp(changelog.getOperationTime());
+            }
+        }
     }
 
     private boolean shouldSyncTranslations(SystemDiff systemDiff, Date lastSyncTime) {
@@ -159,15 +173,8 @@ public class SyncService implements InitializingBean {
         if (lastSyncTime == null) {
             fieldFilter = possibleValuesEnumerator.fieldsWithPossibleValues();
         } else {
-            Map<String, Object> args = ImmutableMap.of(
-                    "entities", possibleValuesEnumerator.getAllSyncEntities(),
-                    "lastSyncTime", lastSyncTime);
-
-            List<AmpOfflineChangelog> entityList = jdbcTemplate.query(
-                    "select distinct " + COLUMNS + " "
-                            + "from amp_offline_changelog cl "
-                            + "where cl.entity_name in (:entities) "
-                            + "and cl.operation_time > :lastSyncTime", args, ROW_MAPPER);
+            Set<String> allSyncEntities = possibleValuesEnumerator.getAllSyncEntities();
+            List<AmpOfflineChangelog> entityList = loadChangeLog(lastSyncTime, allSyncEntities);
 
             Set<String> changedEntities = new HashSet<>();
             for (AmpOfflineChangelog changelog : entityList) {
@@ -347,15 +354,7 @@ public class SyncService implements InitializingBean {
     }
 
     private List<AmpOfflineChangelog> findChangedWsAndGs(Date lastSyncTime) {
-        Map<String, Object> args = new HashMap<>();
-        args.put("lastSyncTime", lastSyncTime);
-        args.put("entities", Arrays.asList(GLOBAL_SETTINGS, WORKSPACES, WORKSPACE_SETTINGS));
-
-        return jdbcTemplate.query(
-                "select " + COLUMNS + " " +
-                "from amp_offline_changelog " +
-                "where operation_time > :lastSyncTime " +
-                "and entity_name in (:entities)", args, ROW_MAPPER);
+        return loadChangeLog(lastSyncTime, Arrays.asList(GLOBAL_SETTINGS, WORKSPACES, WORKSPACE_SETTINGS));
     }
 
     private void updateDiffForWorkspaceMembers(SystemDiff systemDiff, Date lastSyncTime) {
@@ -481,5 +480,16 @@ public class SyncService implements InitializingBean {
                         + "where entity_name=:entity and operation_time > :lastSyncTime",
                 args,
                 JulianDayRowMapper.INSTANCE);
+    }
+
+    private List<AmpOfflineChangelog> loadChangeLog(Date lastSyncTime, Collection<String> entities) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("lastSyncTime", lastSyncTime);
+        args.put("entities", entities);
+
+        return jdbcTemplate.query("select " + COLUMNS + " "
+                + "from amp_offline_changelog "
+                + "where operation_time > :lastSyncTime "
+                + "and entity_name in (:entities) ", args, ROW_MAPPER);
     }
 }

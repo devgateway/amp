@@ -169,18 +169,31 @@ public class FieldsEnumerator {
 		List<APIField> allAvailableFields = getAllAvailableFields(AmpActivityFields.class);
 
 		if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-			String draftFieldName = InterchangeUtils.underscorify(ActivityFieldsConstants.IS_DRAFT);
-			APIField draftField = allAvailableFields
-					.stream()
-					.filter(f -> f.getFieldName().equals(draftFieldName))
-					.findFirst()
-					.orElseThrow(() -> new RuntimeException("Could not find draft field."));
-			draftField.setImportable(true);
+			findField(allAvailableFields, ActivityFieldsConstants.IS_DRAFT).setImportable(true);
+
+			setRequiredAndImportable(allAvailableFields, ActivityFieldsConstants.APPROVED_BY);
+			setRequiredAndImportable(allAvailableFields, ActivityFieldsConstants.APPROVAL_STATUS);
+			setRequiredAndImportable(allAvailableFields, ActivityFieldsConstants.APPROVAL_DATE);
 		}
 
 		return allAvailableFields;
 	}
-	
+
+	private void setRequiredAndImportable(List<APIField> allAvailableFields, String fieldTitle) {
+		APIField field = findField(allAvailableFields, fieldTitle);
+		field.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
+		field.setImportable(true);
+	}
+
+	private APIField findField(List<APIField> allAvailableFields, String fieldTitle) {
+		String fieldName = InterchangeUtils.underscorify(fieldTitle);
+		return allAvailableFields
+				.stream()
+				.filter(f -> f.getFieldName().equals(fieldName))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("Could not find " + fieldName + " field."));
+	}
+
 	List<APIField> getAllAvailableFields(Class<?> clazz) {
 		return getAllAvailableFields(clazz, new ArrayDeque<>());
 	}

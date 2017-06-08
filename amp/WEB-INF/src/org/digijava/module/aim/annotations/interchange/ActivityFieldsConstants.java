@@ -25,6 +25,8 @@ public class ActivityFieldsConstants {
     public static final String LAST_IMPORTED_BY = "Last Imported By";
     public static final String CREATED_BY = "Created By";
     public static final String APPROVED_BY = "Approved By";
+    public static final String APPROVAL_DATE = "Approval Date";
+    public static final String APPROVAL_STATUS = "Approval Status";
     public static final String MODIFIED_BY = "Modified By";
     public static final String DONOR_CONTACT = "Donor Contact";
     public static final String PROJECT_COORDINATOR_CONTACT = "Project Coordinator Contact";

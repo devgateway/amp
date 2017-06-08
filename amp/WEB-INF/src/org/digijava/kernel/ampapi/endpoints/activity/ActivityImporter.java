@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ChangeType;
+import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
@@ -130,12 +131,11 @@ public class ActivityImporter {
 	}
 
     /**
-     * Cleans all the fields of the new activity (except for AMP ID and internal ID),
-     * in the case it's an update process.
-     * It has to be this way because otherwise it would contain leftover data from the old activity 
+     * Cleans all the fields of the new activity in the case it's an update process.
+     * It has to be this way because otherwise it would contain leftover data from the old activity
      * (in m2ms, like sectors)
      */
-    private void cleanupNewActivity() {
+    private void cleanupNewActivity(List<APIField> fieldDefs) {
     	if (newActivity == null)
     		return;
     	
@@ -143,23 +143,19 @@ public class ActivityImporter {
 		for (Method method : AmpActivityFields.class.getMethods()) {
 			aafMethods.put(method.getName(), method);
 		}
-		
-		for (Field field : AmpActivityFields.class.getDeclaredFields()) {
-			Interchangeable ant = field.getAnnotation(Interchangeable.class);
-			if (ant != null && ant.importable()) {
+
+		for (APIField fieldDef : fieldDefs) {
+			if (fieldDef.isImportable()) {
 				try {
-					if (ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ACTIVITY_ID) ||
-							ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ID))
-						continue;
 					// clean up everything importable in the new activity
-					Method setterMeth = aafMethods.get(InterchangeUtils.getSetterMethodName(field.getName()));
-					Method getterMeth = aafMethods.get(InterchangeUtils.getGetterMethodName(field.getName()));
-					if (Collection.class.isAssignableFrom(field.getType())) {
-						@SuppressWarnings("unchecked")
-						Collection<Object> col = (Collection<Object>) getterMeth.invoke(newActivity);
+					String fieldName = fieldDef.getFieldNameInternal();
+					if (fieldDef.getFieldType().equals(ActivityEPConstants.FIELD_TYPE_LIST)) {
+						Method getterMeth = aafMethods.get(InterchangeUtils.getGetterMethodName(fieldName));
+						Collection col = (Collection) getterMeth.invoke(newActivity);
 						if (col != null)
 							col.clear();
 					} else {
+						Method setterMeth = aafMethods.get(InterchangeUtils.getSetterMethodName(fieldName));
 						setterMeth.invoke(newActivity, new Object[]{null});
 					}
 				} catch (Exception e) {
@@ -238,7 +234,7 @@ public class ActivityImporter {
 				oldActivity.setAmpId(newActivity.getAmpId());
 				oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup());
 				
-				cleanupNewActivity();
+				cleanupNewActivity(fieldsDef);
 			} else if (!update) {
 				newActivity = new AmpActivityVersion();
 			}
@@ -252,9 +248,10 @@ public class ActivityImporter {
 			if (newActivity != null && errors.isEmpty()) {
 				// save new activity
 				prepareToSave();
-				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
+				boolean updateApprovalStatus = !AmpOfflineModeHolder.isAmpOfflineMode();
+				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
 						translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
-						PersistenceManager.getSession(), false, false, true);
+						PersistenceManager.getSession(), SaveContext.api(updateApprovalStatus));
 				postProcess();
 			} else {
 				// undo any pending changes

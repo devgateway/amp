@@ -229,10 +229,26 @@ public class HondurasLocations {
         boolean updated = activity.getLocations().removeIf(this::isOldLocation);
         updated |= activity.getLocations().addAll(createActivityLocations(activity, locs));
 
-        float perc = 100f / activity.getLocations().size();
-        activity.getLocations().forEach(l -> l.setLocationPercentage(perc));
+        int[] perc = dividePercentages(activity.getLocations().size());
+        int i = 0;
+        for (AmpActivityLocation activityLocation : activity.getLocations()) {
+            activityLocation.setLocationPercentage((float) perc[i++]);
+        }
 
         return updated;
+    }
+
+    private static int[] dividePercentages(int n) {
+        int[] perc = new int[n];
+        int sum = 0;
+        for (int i = 0; i < n; i++) {
+            perc[i] = 100/n;
+            sum += perc[i];
+        }
+        for (int i = 0; sum < 100; sum++, i++) {
+            perc[i]++;
+        }
+        return perc;
     }
 
     private Collection<AmpActivityLocation> createActivityLocations(AmpActivityVersion a, Collection<Loc> locs) {

@@ -408,6 +408,20 @@ public class GPIDataService {
 		
 		return gpiDocuments;
 	}
+	
+	/**
+	 * 
+	 * @param donorId
+	 * @param activityId
+	 * @return
+	 */
+	public static List<GPIDonorActivityDocument> getGPIDocuments(String donorId, String activityId) {
+		List<GPIDonorActivityDocument> donorActList = new ArrayList<>();
+		GPIDonorActivityDocument actDonorDocument = new GPIDonorActivityDocument(donorId, activityId);
+		donorActList.add(actDonorDocument);
+		
+		return getGPIDocuments(donorActList);
+	}
 
 	/**
 	 * Filter a donorNotes by donor-type, donorId, from and to dates

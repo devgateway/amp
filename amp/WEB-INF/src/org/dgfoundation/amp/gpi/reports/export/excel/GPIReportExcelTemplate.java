@@ -33,8 +33,8 @@ public class GPIReportExcelTemplate {
 	
 	private Map<Integer, CellStyle> subTotals = new HashMap<Integer, CellStyle>();
 	
-	private final short cellHeight = 250;
-	private final float charWidth = 250;
+	private final short cellHeight = 230;
+	private final float charWidth = 200;
 	private final int maxColumnWidth = 20480; // 80 * 256
 	private final int defaultColWidth = 20;
 	

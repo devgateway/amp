@@ -23,26 +23,27 @@ import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
  *
  */
 public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField<AmpGPINiSurveyResponse, String> {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param id
-	 * @param responseComponentInput
-	 * @param fmName
-	 */
-	public AmpGPINiIndicatorValidatorField(String id,
-			IModel<? extends Collection<AmpGPINiSurveyResponse>> responseComponentInput, String fmName) {
-		super(id, responseComponentInput, fmName, new AmpGPINiIndicatorValidator());
-		hiddenContainer.setType(String.class);
-	}
+    /**
+     * @param id
+     * @param responseComponentInput
+     * @param fmName
+     */
+    public AmpGPINiIndicatorValidatorField(String id,
+                                           IModel<? extends Collection<AmpGPINiSurveyResponse>>
+                                                   responseComponentInput, String fmName) {
+        super(id, responseComponentInput, fmName, new AmpGPINiIndicatorValidator());
+        hiddenContainer.setType(String.class);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dgfoundation.amp.onepager.components.fields.
-	 * AmpCollectionValidatorField#getHiddenContainerModel(org.apache.wicket.
-	 * model.IModel)
-	 */
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.dgfoundation.amp.onepager.components.fields.
+     * AmpCollectionValidatorField#getHiddenContainerModel(org.apache.wicket.
+     * model.IModel)
+     */
     public IModel<String> getHiddenContainerModel(
             IModel<? extends Collection<AmpGPINiSurveyResponse>> collectionModel) {
 
@@ -72,12 +73,12 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
         return model;
     }
 
-	/**
-	 * Check if the response has a value or not
-	 * 
-	 * @param response
-	 * @return true if is empty
-	 */
+    /**
+     * Check if the response has a value or not
+     *
+     * @param response
+     * @return true if is empty
+     */
     protected boolean isResponseEmpty(AmpGPINiSurveyResponse response) {
         if (response.getAmpGPINiQuestion().getType() != GPINiQuestionType.LINK) {
             // the 10b response can be null when the question 10a has the respons 'No'
@@ -101,8 +102,11 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
             Set<TemporaryGPINiDocument> newResponseResourceItems = new HashSet<>();
 
             newResponseResourceItems = allResourcesNewItems.stream()
-                    .filter(item -> item.getSurveyResponse().getAmpGPINiSurveyResponseId().equals(response
-                            .getAmpGPINiSurveyResponseId()))
+                    .filter(item -> response.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
+                            == item.getSurveyResponse().getAmpGPINiSurvey().getAmpOrgRole().getOrganisation()
+                            .getAmpOrgId() && response.getAmpGPINiQuestion().getCode().equals(item
+                            .getSurveyResponse().getAmpGPINiQuestion().getCode())
+                    )
                     .collect(Collectors.toSet());
             return newResponseResourceItems.size() == 0 && response.isEmpty();
 

@@ -1,13 +1,20 @@
 package org.dgfoundation.amp.gpi.reports.export.excel;
 
+import static java.util.stream.Collectors.groupingBy;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,10 +23,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.gpi.reports.GPIDocument;
+import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
+import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 
 /**
  * @author Viorel Chihai
@@ -71,6 +80,17 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 			put(GPIReportConstants.GPI_1_Q11c, "Electronic link to gov. existing data source, statistical database "
 					+ "or M&E system that will be used to track project progress");
 			
+		}
+	});
+	
+	public final Map<String, String> SUMMARY_LABELS = Collections.unmodifiableMap(new HashMap<String, String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			put(GPIReportConstants.GPI_1_Q1, "Overall extent of use existing CRFs");
+			put(GPIReportConstants.GPI_1_Q2, "Overall use of country owned Results Frameworks");
+			put(GPIReportConstants.GPI_1_Q3, "Overall use of country lead Results Monitoring Frameworks");
+			put(GPIReportConstants.GPI_1_Q4, "Overall existence of ex post (final Evaluations)");
+
 		}
 	});
 	
@@ -150,6 +170,7 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 	 */
 	private CellRangeAddress createHeaderCell(Sheet sheet, Row row, String headerLabel, int firstRow, int lastRow,
 			int firstCol, int lastCol) {
+		
 		Cell cell = row.createCell(firstCol);
 		cell.setCellValue(headerLabel);
 		cell.setCellStyle(template.getHeaderCellStyle());
@@ -184,9 +205,7 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 			createDataCell(sheet, row, report, 4, columns.get(GPIReportConstants.GPI_1_Q2), rowData);
 			createDataCell(sheet, row, report, 5, columns.get(GPIReportConstants.GPI_1_Q3), rowData);
 			createDataCell(sheet, row, report, 6, columns.get(GPIReportConstants.GPI_1_Q4), rowData);
-			createDataCell(sheet, row, report, 7, columns.get(GPIReportConstants.GPI_1_Q5), rowData);
-			createDataCell(sheet, row, report, 8, columns.get(GPIReportConstants.GPI_1_Q5), rowData);
-			createDataCell(sheet, row, report, 9, columns.get(GPIReportConstants.GPI_1_Q5), rowData);
+			createPrimarySectorsCells(sheet, row, report, 7, columns.get(GPIReportConstants.GPI_1_Q5), rowData);
 			createDataCell(sheet, row, report, 10, columns.get(ColumnConstants.GPI_1_Q6), rowData);
 			createDataCell(sheet, row, report, 11, columns.get(ColumnConstants.GPI_1_Q6_DESCRIPTION), rowData);
 			createDataCell(sheet, row, report, 12, columns.get(ColumnConstants.GPI_1_Q7), rowData);
@@ -199,10 +218,113 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 			createDataCell(sheet, row, report, 18, 
 					columns.get(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES), rowData);
 			
+			createSupportiveDocumentCells(sheet, row, report, 19, columns, rowData);
+		}
+	}
+	
+	@Override
+	protected void renderReportTableSummary(Workbook wb, Sheet sheet, GPIReport report) {
+		Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
+		Row summaryRow = sheet.createRow(initSummaryRowOffset);
+		
+		Map<String, GPIReportOutputColumn> columns = report.getSummary().keySet().stream()
+				.collect(Collectors.toMap(GPIReportOutputColumn::getOriginalColumnName, Function.identity()));
+	    
+		
+		mergedCells.add(createSummaryCell(sheet, summaryRow, report, initSummaryRowOffset, initSummaryRowOffset, 1, 1,
+				GPIReportConstants.GPI_1_Q1, columns));
+		mergedCells.add(createSummaryCell(sheet, summaryRow, report, initSummaryRowOffset, initSummaryRowOffset, 2, 2, 
+				GPIReportConstants.GPI_1_Q2, columns));
+		mergedCells.add(createSummaryCell(sheet, summaryRow, report, initSummaryRowOffset, initSummaryRowOffset, 3, 4,
+				GPIReportConstants.GPI_1_Q3, columns));
+		mergedCells.add(createSummaryCell(sheet, summaryRow, report, initSummaryRowOffset, initSummaryRowOffset, 5, 6,
+				GPIReportConstants.GPI_1_Q4, columns));
+
+		for (CellRangeAddress ca : mergedCells) {
+			GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+		}
+	}
+	
+	/**
+	 * @param sheet
+	 * @param headerLabel
+	 * @param initColPos
+	 * @param initRowPos
+	 * @return
+	 */
+	private CellRangeAddress createSummaryCell(Sheet sheet, Row row, GPIReport report, int firstRow, int lastRow, 
+			int firstCol, int lastCol, String columnName, Map<String, GPIReportOutputColumn> columns) {
+		
+		
+		String summaryLabel = String.format("%s\n%s", report.getSummary().get(columns.get(columnName)),
+				SUMMARY_LABELS.get(columnName));
+		
+		Cell cell = row.createCell(firstCol);
+		cell.setCellValue(summaryLabel);
+		cell.setCellStyle(template.getSummaryCellStyle());
+		setMaxColWidth(sheet, cell, firstCol);
+
+		CellRangeAddress mergedHeaderCell = new CellRangeAddress(firstRow, lastRow, firstCol, lastCol);
+		
+		if (mergedHeaderCell.getNumberOfCells() > 1)
+			sheet.addMergedRegion(mergedHeaderCell);
+		
+		return mergedHeaderCell;
+	}
+
+	private void createSupportiveDocumentCells(SXSSFSheet sheet, Row row, GPIReport report, int startPos,
+			Map<String, GPIReportOutputColumn> columns, Map<GPIReportOutputColumn, String> rowData) {
+		
+		String donorId = rowData.get(columns.get(ColumnConstants.DONOR_ID));
+		String activityId = rowData.get(columns.get(ColumnConstants.ACTIVITY_ID));
+		List<GPIDonorActivityDocument> gpiDocuments = GPIDataService.getGPIDocuments(donorId, activityId);
+		
+		List<GPIDocument> documents = gpiDocuments.stream()
+				.map(GPIDonorActivityDocument::getDocuments)
+				.flatMap(docs -> docs.stream())
+				.collect(Collectors.toList());
+		
+		Map<String, List<GPIDocument>> documentsMap = documents.stream()
+				.collect(groupingBy(gpiDoc -> "Q" + gpiDoc.getQuestion()));
+		
+		createDocumentCell(sheet, row, report, startPos, columns, documentsMap, GPIReportConstants.GPI_1_Q11a);
+		createDocumentCell(sheet, row, report, startPos + 1, columns, documentsMap, GPIReportConstants.GPI_1_Q11b);
+		createDocumentCell(sheet, row, report, startPos + 2, columns, documentsMap, GPIReportConstants.GPI_1_Q11c);
+		
+	}
+
+	/**
+	 * @param sheet
+	 * @param row
+	 * @param report
+	 * @param colPos
+	 * @param columns
+	 * @param documentsMap
+	 * @param columnName
+	 */
+	private void createDocumentCell(SXSSFSheet sheet, Row row, GPIReport report, int colPos,
+			Map<String, GPIReportOutputColumn> columns, Map<String, List<GPIDocument>> documentsMap,
+			String columnName) {
+		
+		if (documentsMap.containsKey(columnName)) {
+			String supportiveUrls = String.join("\n", documentsMap.get(columnName)
+					.stream().map(GPIDocument::getUrl)
+					.collect(Collectors.toList()));
 			
-//			createDataCell(sheet, report, i, 19, "http://11a.doc", rowData);
-//			createDataCell(sheet, report, i, 20, "http://11b.doc", rowData);
-//			createDataCell(sheet, report, i, 21, "http://11c.doc", rowData);
+			createCell(report, sheet, row, colPos, columnName, supportiveUrls);
+		}
+	}
+
+	private void createPrimarySectorsCells(SXSSFSheet sheet, Row row, GPIReport report, int startPos,
+			GPIReportOutputColumn column, Map<GPIReportOutputColumn, String> rowData) {
+
+		String sectors = rowData.get(column);
+		if (StringUtils.isNotBlank(sectors)) {
+			List<String> sectorList = Arrays.asList(sectors.split("###"));
+			int max = sectorList.isEmpty() ? 0 : sectorList.size() < 3 ? sectorList.size() : 3;
+			for (int i = 0; i < max; i++) {
+				createCell(report, sheet, row, startPos + i, column.originalColumnName, sectorList.get(i));
+			}
 		}
 	}
 
@@ -216,7 +338,24 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 	private void createDataCell(SXSSFSheet sheet, Row row, GPIReport report, int colPos, 
 			GPIReportOutputColumn column, Map<GPIReportOutputColumn, String> rowData) {
 		
-		createCell(report, sheet, row, colPos, column.originalColumnName, rowData.get(column));
+		String value = rowData.get(column);
+		
+		if (column.originalColumnName.equals(ColumnConstants.GPI_1_Q6) ||
+				column.originalColumnName.equals(ColumnConstants.GPI_1_Q10)) {
+			value = "Yes".equals(value) ? "1" : "0";
+		}
+		
+		if (column.originalColumnName.equals(GPIReportConstants.GPI_1_Q2)) {
+			if (!StringUtils.isBlank(value)) {
+				try {
+					value = new SimpleDateFormat("MM/yyyy").format(new SimpleDateFormat("dd/MM/yyyy").parse(value));
+				} catch (ParseException e) {
+					throw new RuntimeException("Error in parsing the approval date", e);
+				}
+			}
+		}
+		
+		createCell(report, sheet, row, colPos, column.originalColumnName, value);
 	}
 	
 	@Override
@@ -243,9 +382,11 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 	public int getCellType(String columnName) {
 		switch(columnName) {
 			case GPIReportConstants.GPI_1_Q1:
+			case ColumnConstants.GPI_1_Q6:
 			case ColumnConstants.GPI_1_Q7:
 			case ColumnConstants.GPI_1_Q8:
 			case ColumnConstants.GPI_1_Q9:
+			case ColumnConstants.GPI_1_Q10:
 				return Cell.CELL_TYPE_NUMERIC;
 			default:
 				return super.getCellType(columnName);
@@ -257,6 +398,7 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 		switch(columnName) {
 			case GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT:
 			case GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES:
+			case GPIReportConstants.GPI_1_Q2:
 			case ColumnConstants.GPI_1_Q6:
 			case ColumnConstants.GPI_1_Q6_DESCRIPTION:
 			case ColumnConstants.GPI_1_Q7:
@@ -264,6 +406,9 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 			case ColumnConstants.GPI_1_Q9:
 			case ColumnConstants.GPI_1_Q10:
 			case ColumnConstants.GPI_1_Q10_DESCRIPTION:
+			case GPIReportConstants.GPI_1_Q11a:
+			case GPIReportConstants.GPI_1_Q11b:
+			case GPIReportConstants.GPI_1_Q11c:
 				return true;
 			default:
 				return false;
@@ -276,6 +421,11 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 			case GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT:
 			case GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES:
 				return template.getNumberStyle();
+			case GPIReportConstants.GPI_1_Q11a:
+			case GPIReportConstants.GPI_1_Q11b:
+			case GPIReportConstants.GPI_1_Q11c:
+				return template.getWrappedStyle();
+			case GPIReportConstants.GPI_1_Q2:
 			case ColumnConstants.GPI_1_Q6:
 			case ColumnConstants.GPI_1_Q6_DESCRIPTION:
 			case ColumnConstants.GPI_1_Q7:

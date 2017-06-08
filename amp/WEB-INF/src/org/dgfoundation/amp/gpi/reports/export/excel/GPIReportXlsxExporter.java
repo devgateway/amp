@@ -281,7 +281,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 				Row row = summarySheet.getRow(currLine.intValue());
 				
 				if (summarySheet.getRow(currLine.intValue()) == null) {
-					summarySheet.createRow(currLine.intValue());
+					row = summarySheet.createRow(currLine.intValue());
 				}
 				Cell filterCell = row.createCell(1);
 				filterCell.setCellValue(filterValue);

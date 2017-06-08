@@ -22,6 +22,12 @@ public class GPIDonorActivityDocument {
 		this.activityId = activityId;
 		this.documents = documents;
 	}
+	
+	public GPIDonorActivityDocument(String donorId, String activityId) {
+		super();
+		this.donorId = donorId;
+		this.activityId = activityId;
+	}
 
 	public String getDonorId() {
 		return donorId;

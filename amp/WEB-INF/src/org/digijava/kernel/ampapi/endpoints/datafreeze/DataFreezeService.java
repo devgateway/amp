@@ -3,6 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.datafreeze;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.translation.exotic.AmpDateFormatter;
+import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,9 +43,9 @@ public class DataFreezeService {
 		json.set(DataFreezeConstants.FIELD_ID, dataFreezeEvent.getAmpDataFreezeSettingsId());
 		json.set(DataFreezeConstants.FIELD_ENABLED, dataFreezeEvent.getEnabled());
 		json.set(DataFreezeConstants.FIELD_GRACE_PERIOD, dataFreezeEvent.getGracePeriod());
-		json.set(DataFreezeConstants.FIELD_FREEZING_DATE, dataFreezeEvent.getFreezingDate());
-		json.set(DataFreezeConstants.FIELD_OPEN_PERIOD_START, dataFreezeEvent.getOpenPeriodStart());
-		json.set(DataFreezeConstants.FIELD_OPEN_PERIOD_END, dataFreezeEvent.getOpenPeriodEnd());
+		json.set(DataFreezeConstants.FIELD_FREEZING_DATE, DateTimeUtil.formatDate(dataFreezeEvent.getFreezingDate(), DataFreezeConstants.DATE_FORMAT));
+		json.set(DataFreezeConstants.FIELD_OPEN_PERIOD_START, DateTimeUtil.formatDate(dataFreezeEvent.getOpenPeriodStart(), DataFreezeConstants.DATE_FORMAT));
+		json.set(DataFreezeConstants.FIELD_OPEN_PERIOD_END, DateTimeUtil.formatDate(dataFreezeEvent.getOpenPeriodEnd(), DataFreezeConstants.DATE_FORMAT));
 		json.set(DataFreezeConstants.FIELD_FREEZE_OPTION, dataFreezeEvent.getFreezeOption());
 		json.set(DataFreezeConstants.FIELD_FILTERS, dataFreezeEvent.getFilters());
 		json.set(DataFreezeConstants.FIELD_SEND_NOTIFICATION, dataFreezeEvent.getSendNotification());
@@ -103,11 +105,20 @@ public class DataFreezeService {
 		DataFreezeUtil.deleteDataFreezeEvent(id);
 	}
 	
-	public static Page<AmpDataFreezeSettings> fetchDataFreezeEventList(Integer offset, Integer count, String orderBy, String sort){
-		Page<AmpDataFreezeSettings> page = new Page<>();
+	public static Page<DataFreezeEvent> fetchDataFreezeEventList(Integer offset, Integer count, String orderBy, String sort){
+		Page<DataFreezeEvent> page = new Page<>();
+		AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getDefaultFormatter(DataFreezeConstants.DATE_FORMAT);		
 		Integer total = DataFreezeUtil.getFreezeEventsTotalCount();
-		page.setData(DataFreezeUtil.getDataFreeEventsList(offset, count, orderBy, sort, total));
+		List <AmpDataFreezeSettings> fetchedData = DataFreezeUtil.getDataFreeEventsList(offset, count, orderBy, sort, total);
+		List <DataFreezeEvent> freezeEvents = new ArrayList<>();
+		
+		fetchedData.forEach(event -> {
+			freezeEvents.add(new DataFreezeEvent(event.getAmpDataFreezeSettingsId(), event.getEnabled(), event.getGracePeriod(), dateFormatter.format(event.getFreezingDate()), dateFormatter.format(event.getOpenPeriodStart()), dateFormatter.format(event.getOpenPeriodEnd()), event.getSendNotification(), event.getFreezeOption(), event.getFilters()));
+		});
+		
+		page.setData(freezeEvents);
 		page.setTotalRecords(total);
+		
 		return page;
 	}
 	

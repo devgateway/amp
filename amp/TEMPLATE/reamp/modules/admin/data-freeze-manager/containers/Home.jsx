@@ -37,16 +37,17 @@ export default class App extends Component {
                   <div className="tab-content">
                      <div id="data-freezing" className="tab-pane fade in active">                    
                        <DataFreezeEventForm /> 
-                       <DataFreezeEventsList/>   
+                         
                      </div>
                     <div id="unfreeze-all" className="tab-pane fade in">
                         <UnfreezeAll/>
                     </div>
                     
                     </div>
+                    
                     </div>
                             
-                    
+                    <DataFreezeEventsList/> 
                     
             </div>
             

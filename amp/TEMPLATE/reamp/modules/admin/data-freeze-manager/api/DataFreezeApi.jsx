@@ -1,0 +1,36 @@
+import { postJson, delay, fetchJson, deleteJson } from 'amp/tools';
+class DataFreezeApi {
+    static getDataFreezeEventsList( data ) {
+        const url = '/rest/data-freeze/event/list?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;
+        return new Promise(( resolve, reject ) => {
+            fetchJson( url ).then(( response ) => {
+                resolve( response )
+            }).catch(( error ) => {
+                reject( error );
+            });
+        });
+    }
+
+    static save( data ) {
+        return new Promise(( resolve, reject ) => {
+            postJson( '/rest/data-freeze/event', data ).then( response => {
+                resolve( response.json() );
+            }).catch( error => {
+                reject( error );
+            });
+        });
+    }
+
+    static deleteDataFreezeEvent( data ) {
+        var url = '/rest/data-freeze/event/' + data.id;
+        return new Promise(( resolve, reject ) => {
+            deleteJson( url, {}).then( response => {
+                resolve( response.json() );
+            }).catch( error => {
+                reject( error );
+            });
+        });
+    }
+}
+
+export default DataFreezeApi;

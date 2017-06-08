@@ -1,17 +1,34 @@
 import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as startUp from '../actions/StartUpAction.jsx';
+import * as startUp from '../actions/StartUpAction';
+import * as dataFreezeActions from '../actions/DataFreezeActions';
+import * as Constants from '../common/Constants';
+require('../styles/less/main.less');
 export default class DataFreezeEventsList extends Component {    
     constructor(props, context) {      
         super(props, context);
-        this.state = {};        
+        this.state = {};  
+        this.showFreezeOption = this.showFreezeOption.bind(this);
     }
     
-    componentWillMount() {        
-    }  
+    componentWillMount() {  
+        this.props.actions.loadDataFreezeEventsList({paging: this.props.paging, sorting: this.props.sorting});
+    } 
+    
+    showFreezeOption(freezeOption) {
+        let result = '';
+        if (freezeOption === Constants.FREEZE_OPTION_ENTIRE_ACTIVITY) {             
+            result = this.props.translations['amp.data-freezing:freeze-option-activity'];
+        } else if (freezeOption === Constants.FREEZE_OPTION_FUNDING) {
+            result = this.props.translations['amp.data-freezing:freeze-option-funding'];
+        }
+        
+        return result;      
+    }
     
     render() {       
+        
         return (
                 <div>
                 <div className="container padded30">
@@ -20,97 +37,39 @@ export default class DataFreezeEventsList extends Component {
                     <table className="table table-bordered table-striped data-table">
                       <thead>
                         <tr>
-                          <th className="col-md-2">Data Freeze Date</th>
-                          <th>Grace Period</th>
-                          <th>Open Period Start</th>
-                          <th>Open Period End</th>
-                          <th># of Activities</th>
-                          <th>Freeze Options</th>
-                          <th>Filters</th>
+                          <th className="col-md-2">{this.props.translations['amp.data-freezing:data-freeze-date']}</th>
+                          <th>{this.props.translations['amp.data-freezing:grace-period']}</th>
+                          <th>{this.props.translations['amp.data-freezing:open-period-start']}</th>
+                          <th>{this.props.translations['amp.data-freezing:open-period-end']}</th>
+                          <th>{this.props.translations['amp.data-freezing:number-of-activities']}</th>
+                          <th>{this.props.translations['amp.data-freezing:freeze-options']}</th>
+                          <th>{this.props.translations['amp.data-freezing:filters']}</th>
                           <th></th>
                           <th></th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>2017-3-28</td>
-                          <td>15</td>
-                          <td>2017-3-25</td>
-                          <td>45</td>
-                          <td>2017-4-5</td>
-                          <td>Entire Activity</td>
-                          <td>
-                            <span className="filter">Filter name 1, Filter name 2</span>
-                          </td>
-                          <td className="action">
-                              <img className="tab-content-icon" src="styles/images/edit.svg"/>
-                          </td>
-                          <td className="action">
-                            <img className="tab-content-icon" src="styles/images/delete.svg"/>
-                          </td>
+                        {this.props.dataFreezeEventsList.map(event => 
+                              <tr >
+                              <td>{event.freezingDate}</td>
+                              <td>{event.gracePeriod}</td>
+                              <td>{event.openPeriodStart}</td>
+                              <td>{event.openPeriodEnd}</td>
+                              <td></td>
+                              <td>{this.showFreezeOption(event.freezeOption)}</td>
+                              <td>
+                                <span className="filter">Filter name 1, Filter name 2</span>
+                              </td>
+                              <td className="action">
+                                  <img className="tab-content-icon" src="styles/images/edit.svg"/>
+                              </td>
+                              <td className="action">
+                                <img className="tab-content-icon" src="styles/images/delete.svg"/>
+                              </td>
 
-                        </tr>
-                        <tr>
-                          <td>2017-2-28</td>
-                          <td>6</td>
-                          <td>2017-2-25</td>
-                          <td>5</td>
-                          <td>2017-2-4</td>
-                          <td>Funding</td>
-                          <td><span className="filter">First Name, other, Last Name</span></td>
-                          <td className="action">
-                              <img className="tab-content-icon" src="styles/images/edit.svg"/>
-                          </td>
-                          <td className="action">
-                            <img className="tab-content-icon" src="styles/images/delete.svg"/>
-                          </td>
-
-                        </tr>
-                        <tr>
-                          <td>2017-3-25</td>
-                          <td>7</td>
-                          <td>2017-3-13</td>
-                          <td>16</td>
-                          <td>2017-1-1</td>
-                          <td>Funding</td>
-                          <td><span className="filter">Filter name 1, Filter name 2</span></td>
-                          <td>
-                              <img className="tab-content-icon" src="styles/images/edit.svg"/>
-                          </td>
-                          <td>
-                            <img className="tab-content-icon" src="styles/images/delete.svg"/>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>2017-2-05</td>
-                          <td>21</td>
-                          <td>2017-3-15</td>
-                          <td>23</td>
-                          <td>2017-2-13</td>
-                          <td>Entire Activity</td>
-                          <td><span className="filter">Filter name, Name 1, Name 2</span></td>
-                          <td>
-                              <img className="tab-content-icon" src="styles/images/edit.svg"/>
-                          </td>
-                          <td>
-                            <img className="tab-content-icon" src="styles/images/delete.svg"/>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>2017-2-02</td>
-                          <td>9</td>
-                          <td>2017-3-13</td>
-                          <td>88</td>
-                          <td>2017-3-13</td>
-                          <td>Entire Activity</td>
-                          <td><span className="filter">First Name, Last Name, other filter</span></td>
-                          <td>
-                              <img className="tab-content-icon" src="styles/images/edit.svg"/>
-                          </td>
-                          <td>
-                              <img className="tab-content-icon" src="styles/images/delete.svg"/>
-                          </td>
-                        </tr>
+                            </tr>    
+                        )}                   
+                      
                       </tbody>
                     </table>
 
@@ -177,12 +136,15 @@ export default class DataFreezeEventsList extends Component {
 function mapStateToProps(state, ownProps) { 
     return {        
         translations: state.startUp.translations,
-        translate: state.startUp.translate
+        translate: state.startUp.translate,
+        paging: state.dataFreeze.paging,
+        sorting: state.dataFreeze.sorting,
+        dataFreezeEventsList: state.dataFreeze.dataFreezeEventsList
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return {actions: bindActionCreators({}, dispatch)}
+    return {actions: bindActionCreators(Object.assign({}, dataFreezeActions), dispatch)}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DataFreezeEventsList);

@@ -10,9 +10,11 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
@@ -36,7 +38,17 @@ import org.digijava.module.aim.util.ProgramUtil;
  */
 public class FieldsEnumerator {
 	
-	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
+	private static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
+
+	/**
+	 * Fields that are importable & required by AMP Offline clients.
+	 */
+	public static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
+			.add(ActivityFieldsConstants.IS_DRAFT)
+			.add(ActivityFieldsConstants.APPROVED_BY)
+			.add(ActivityFieldsConstants.APPROVAL_STATUS)
+			.add(ActivityFieldsConstants.APPROVAL_DATE)
+			.build();
 
 	private boolean internalUse = false;
 
@@ -104,6 +116,10 @@ public class FieldsEnumerator {
 		apiField.setFieldLabel(InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
 		apiField.setRequired(getRequiredValue(intchStack, fmService));
 		apiField.setImportable(interchangeable.importable());
+		if (AmpOfflineModeHolder.isAmpOfflineMode() && OFFLINE_REQUIRED_FIELDS.contains(interchangeable.fieldTitle())) {
+			apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
+			apiField.setImportable(true);
+		}
 		if (interchangeable.percentageConstraint()){
 			apiField.setPercentage(true);
 		}
@@ -166,32 +182,7 @@ public class FieldsEnumerator {
 	}
 
 	public List<APIField> getAllAvailableFields() {
-		List<APIField> allAvailableFields = getAllAvailableFields(AmpActivityFields.class);
-
-		if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-			findField(allAvailableFields, ActivityFieldsConstants.IS_DRAFT).setImportable(true);
-
-			setRequiredAndImportable(allAvailableFields, ActivityFieldsConstants.APPROVED_BY);
-			setRequiredAndImportable(allAvailableFields, ActivityFieldsConstants.APPROVAL_STATUS);
-			setRequiredAndImportable(allAvailableFields, ActivityFieldsConstants.APPROVAL_DATE);
-		}
-
-		return allAvailableFields;
-	}
-
-	private void setRequiredAndImportable(List<APIField> allAvailableFields, String fieldTitle) {
-		APIField field = findField(allAvailableFields, fieldTitle);
-		field.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
-		field.setImportable(true);
-	}
-
-	private APIField findField(List<APIField> allAvailableFields, String fieldTitle) {
-		String fieldName = InterchangeUtils.underscorify(fieldTitle);
-		return allAvailableFields
-				.stream()
-				.filter(f -> f.getFieldName().equals(fieldName))
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("Could not find " + fieldName + " field."));
+		return getAllAvailableFields(AmpActivityFields.class);
 	}
 
 	List<APIField> getAllAvailableFields(Class<?> clazz) {

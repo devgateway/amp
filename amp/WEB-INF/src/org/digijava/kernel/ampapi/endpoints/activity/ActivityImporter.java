@@ -131,11 +131,12 @@ public class ActivityImporter {
 	}
 
     /**
-     * Cleans all the fields of the new activity in the case it's an update process.
-     * It has to be this way because otherwise it would contain leftover data from the old activity
+     * Cleans all the fields of the new activity (except for AMP ID and internal ID),
+     * in the case it's an update process.
+     * It has to be this way because otherwise it would contain leftover data from the old activity 
      * (in m2ms, like sectors)
      */
-    private void cleanupNewActivity(List<APIField> fieldDefs) {
+    private void cleanupNewActivity() {
     	if (newActivity == null)
     		return;
     	
@@ -143,19 +144,23 @@ public class ActivityImporter {
 		for (Method method : AmpActivityFields.class.getMethods()) {
 			aafMethods.put(method.getName(), method);
 		}
-
-		for (APIField fieldDef : fieldDefs) {
-			if (fieldDef.isImportable()) {
+		
+		for (Field field : AmpActivityFields.class.getDeclaredFields()) {
+			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+			if (isImportable(ant)) {
 				try {
+					if (ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ACTIVITY_ID) ||
+							ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ID))
+						continue;
 					// clean up everything importable in the new activity
-					String fieldName = fieldDef.getFieldNameInternal();
-					if (fieldDef.getFieldType().equals(ActivityEPConstants.FIELD_TYPE_LIST)) {
-						Method getterMeth = aafMethods.get(InterchangeUtils.getGetterMethodName(fieldName));
-						Collection col = (Collection) getterMeth.invoke(newActivity);
+					Method setterMeth = aafMethods.get(InterchangeUtils.getSetterMethodName(field.getName()));
+					Method getterMeth = aafMethods.get(InterchangeUtils.getGetterMethodName(field.getName()));
+					if (Collection.class.isAssignableFrom(field.getType())) {
+						@SuppressWarnings("unchecked")
+						Collection<Object> col = (Collection<Object>) getterMeth.invoke(newActivity);
 						if (col != null)
 							col.clear();
 					} else {
-						Method setterMeth = aafMethods.get(InterchangeUtils.getSetterMethodName(fieldName));
 						setterMeth.invoke(newActivity, new Object[]{null});
 					}
 				} catch (Exception e) {
@@ -165,6 +170,12 @@ public class ActivityImporter {
 		}
     }
     
+	private boolean isImportable(Interchangeable ant) {
+		return ant != null && (ant.importable()
+				|| (AmpOfflineModeHolder.isAmpOfflineMode()
+				&& FieldsEnumerator.OFFLINE_REQUIRED_FIELDS.contains(ant.fieldTitle())));
+	}
+
 	/**
 	 * Imports or Updates
 	 * 
@@ -234,7 +245,7 @@ public class ActivityImporter {
 				oldActivity.setAmpId(newActivity.getAmpId());
 				oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup());
 				
-				cleanupNewActivity(fieldsDef);
+				cleanupNewActivity();
 			} else if (!update) {
 				newActivity = new AmpActivityVersion();
 			}

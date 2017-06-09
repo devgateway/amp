@@ -245,7 +245,7 @@ public class HondurasLocations {
             perc[i] = 100/n;
             sum += perc[i];
         }
-        for (int i = 0; sum < 100; sum++, i++) {
+        for (int i = 0; sum < 100 && i < n; sum++, i++) {
             perc[i]++;
         }
         return perc;

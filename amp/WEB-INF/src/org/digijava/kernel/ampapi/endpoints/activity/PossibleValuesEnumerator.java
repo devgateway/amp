@@ -49,6 +49,8 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * AMP Activity Endpoint for Possible Values -- /activity/fields/:fieldName
@@ -423,15 +425,41 @@ public class PossibleValuesEnumerator {
 			discriminatorOption = ant.discriminatorOption();
 		}
 		if (StringUtils.isNotBlank(discriminatorOption)) {
-			List<Object[]> objColList = possibleValuesDAO.getCategoryValues(discriminatorOption);
-			return setProperties(objColList, true);
+			if (discriminatorOption.equals(CategoryConstants.IMPLEMENTATION_LOCATION_KEY)) {
+				return getImplementationLocationValues();
+			} else {
+				List<Object[]> objColList = possibleValuesDAO.getCategoryValues(discriminatorOption);
+				return setProperties(objColList, true);
+			}
 		} else {
 			LOGGER.error("discriminatorOption is not configured for CategoryValue [" + field.getName() + "]");
 		}
 		
 		return Collections.emptyList();
 	}
-	
+
+	private List<PossibleValue> getImplementationLocationValues() {
+		String key = CategoryConstants.IMPLEMENTATION_LOCATION_KEY;
+		List<AmpCategoryValue> collectionByKey = CategoryManagerUtil.getAllAcceptableValuesForACVClass(key, null);
+		return collectionByKey.stream()
+				.filter(AmpCategoryValue::isVisible)
+				.map(this::getImplementationLevelValue)
+				.collect(toList());
+	}
+
+	private PossibleValue getImplementationLevelValue(AmpCategoryValue locCategory) {
+		Long id = locCategory.getId();
+		String value = locCategory.getValue();
+		Map<String, String> translatedValues = translatorService.translateLabel(value);
+
+		List<Long> implementationLevels = locCategory.getUsedValues().stream()
+                .map(AmpCategoryValue::getId)
+                .collect(toList());
+		ImplementationLocationExtraInfo extraInfo = new ImplementationLocationExtraInfo(implementationLevels);
+
+		return new PossibleValue(id, value, translatedValues, extraInfo);
+	}
+
 	private List<PossibleValue> setProperties(List<Object[]> objColList, boolean checkDeleted) {
 		ListMultimap<Long, PossibleValue> groupedValues = ArrayListMultimap.create();
 		for (Object[] item : objColList){

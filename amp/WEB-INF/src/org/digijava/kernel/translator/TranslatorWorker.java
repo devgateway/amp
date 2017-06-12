@@ -1411,7 +1411,7 @@ public class TranslatorWorker {
 
         return message;
     }
-    
+
     /**
      * Same as {@link #getAllTranslationsOfKey(String, String)} but uses some text, 
      * usually body of trn tag or default text to generate key.
@@ -1428,13 +1428,17 @@ public class TranslatorWorker {
     /**
      * Returns all translations for specified key on specified site.
      * If any some translation has been translated in 3 languages, then this will find all 3 records for the key.
-     * @param key   
+     * @param key
      * @param siteId
      * @return
      * @throws WorkerException
      */
+    public static Collection<Message> getAllTranslationsOfKey(String key, Long siteId) throws WorkerException {
+        return getInstance("").getAllTranslationsOfKeyInternal(key, siteId);
+    }
+
     @SuppressWarnings("unchecked")
-	public static Collection<Message> getAllTranslationsOfKey(String key, Long siteId) throws WorkerException{
+	public Collection<Message> getAllTranslationsOfKeyInternal(String key, Long siteId) throws WorkerException {
     	Session session = null;
     	List<Message> result = null;
 		try {

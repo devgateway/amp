@@ -24,6 +24,7 @@ package org.digijava.kernel.translator;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -250,4 +251,11 @@ public class CachedTranslatorWorker extends TranslatorWorker {
 	{
 		this.messageCache.clear();
 	}
+
+	@Override
+    public Collection<Message> getAllTranslationsOfKeyInternal(String key, Long siteId) throws WorkerException {
+        Collection<Message> messages = super.getAllTranslationsOfKeyInternal(key, siteId);
+        messages.forEach(m -> messageCache.put(m, m));
+        return messages;
+    }
 }

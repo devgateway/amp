@@ -82,8 +82,12 @@ import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Hibernate;
+import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * Util class used to manipulate an activity
@@ -229,7 +233,7 @@ public class ActivityUtil {
 		if (createNewVersion){
 			try {
 				AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
-				
+
 				a = ActivityVersionUtil.cloneActivity(a, ampCurrentMember);
 				//keeping session.clear() only for acitivity form as it was before
 				if (isActivityForm)
@@ -270,6 +274,9 @@ public class ActivityUtil {
 		if (!newActivity){
 			//existing activity
 			//previousVersion for current activity
+			if (group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId())) {
+				forceVersionIncrement(session, group);
+			}
 			group.setAmpActivityLastVersion(a);
 			session.update(group);
 		}
@@ -315,6 +322,34 @@ public class ActivityUtil {
             session.update(a);
         }
         return a;
+	}
+
+	/**
+	 * Since none of the AmpActivityGroup properties are changed hibernate does not automatically increment the
+	 * version. Yet activity can change and AmpActivityGroup would remains the same, thus forcing version
+	 * increment explicitly.
+	 */
+	private static void forceVersionIncrement(Session session, AmpActivityGroup group) {
+		session.buildLockRequest(new LockOptions(LockMode.OPTIMISTIC_FORCE_INCREMENT)).lock(group);
+	}
+
+	/**
+	 * Checks if the activity is stale just by looking at ampActivityId. Used only for the case when new activity
+	 * versions are created.
+	 */
+	public static boolean isActivityStale(Long ampActivityId) {
+		Number activityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityVersion.class)
+				.add(Restrictions.eq("ampActivityId", ampActivityId))
+				.setProjection(Projections.count("ampActivityId"))
+				.uniqueResult();
+
+		Number latestActivityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityGroup.class)
+				.createAlias("ampActivityLastVersion", "a")
+				.add(Restrictions.eq("a.ampActivityId", ampActivityId))
+				.setProjection(Projections.count("a.ampActivityId"))
+				.uniqueResult();
+
+		return activityCount.longValue() == 1 && latestActivityCount.longValue() == 0;
 	}
 
 	/**

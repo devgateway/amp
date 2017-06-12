@@ -698,22 +698,7 @@ public class PersistenceManager {
     public static void closeSession(Session session) {
         if (session == null) return;
         try {
-            Transaction transaction = session.getTransaction();
-            if (transaction != null) {
-                if (transaction.isActive()) {
-                    try {
-                        // note: flushing is needed only if session uses FlushMode.MANUAL
-                        session.flush();
-                    } catch (HibernateException e) {
-                        // logging the error since finally may throw another exception and this one will be lost
-                        logger.error("Failed to flush the session.", e);
-                        throw e;
-                    } finally {
-                        // do we really want to attempt commit if flushing fails?
-                        transaction.commit();
-                    }
-                }
-            }
+            flushAndCommit(session);
         } catch (HibernateException e) {
             // logging the error since finally may throw another exception and this one will be lost
             logger.error("Failed to commit.", e);
@@ -724,6 +709,29 @@ public class PersistenceManager {
             }
         }
 	}
+
+    /**
+     * Flushes the session and commits the transaction. It will not close the session and allows to rollback if an
+     * exception is raised here (as opposed to {@link #closeSession(Session)} which does not allow rollback).
+     */
+    public static void flushAndCommit(Session session) {
+        Transaction transaction = session.getTransaction();
+        if (transaction != null) {
+            if (transaction.isActive()) {
+                try {
+                    // note: flushing is needed only if session uses FlushMode.MANUAL
+                    session.flush();
+                } catch (HibernateException e) {
+                    // logging the error since finally may throw another exception and this one will be lost
+                    logger.error("Failed to flush the session.", e);
+                    throw e;
+                } finally {
+                    // do we really want to attempt commit if flushing fails?
+                    transaction.commit();
+                }
+            }
+        }
+    }
 
     /**
      * <strong>This is a lifecycle management function</strong><br />

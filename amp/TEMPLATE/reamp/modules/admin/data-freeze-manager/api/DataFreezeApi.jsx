@@ -1,6 +1,6 @@
 import { postJson, delay, fetchJson, deleteJson } from 'amp/tools';
 class DataFreezeApi {
-    static getDataFreezeEventsList( data ) {
+    static getDataFreezeEventList( data ) {
         const url = '/rest/data-freeze/event/list?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;
         return new Promise(( resolve, reject ) => {
             fetchJson( url ).then(( response ) => {
@@ -12,6 +12,7 @@ class DataFreezeApi {
     }
 
     static save( data ) {
+        delete data.isEditing
         return new Promise(( resolve, reject ) => {
             postJson( '/rest/data-freeze/event', data ).then( response => {
                 resolve( response.json() );

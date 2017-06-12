@@ -1,5 +1,8 @@
 export const initialTranslations = {       
         'amp.data-freezing:title': 'Aid Management Platform - Data Freezing',
+        'amp.data-freezing:data-freeze-manager': 'Data Freezing Manager',
+        'amp.data-freezing:add-freezing-event': '+ Add New Freezing Event',
+        'amp.data-freezing:unfreeze-all': 'Unfreeze All',
         'amp.data-freezing:data-freeze-date': 'Data Freeze Date',
         'amp.data-freezing:grace-period': 'Grace Period',
         'amp.data-freezing:open-period-start': 'Data Open Period Start',
@@ -9,9 +12,19 @@ export const initialTranslations = {
         'amp.data-freezing:filters': 'Filters',
         'amp.data-freezing:notification-email': 'Notification Email', 
         'amp.data-freezing:save-event':'Save Event',
-        'amp.data-freezing:days':'Days',
+        'amp.data-freezing:days':'(Days)',
         'amp.data-freezing:freeze-option-activity': 'Entire Activity',
         'amp.data-freezing:freeze-option-funding': 'Funding',
         'amp.data-freeze-event:save-successful':'Record was saved successfully',
-        'amp.data-freeze-event:delete-successful': 'Record deleted successfully'
+        'amp.data-freeze-event:delete-successful': 'Record deleted successfully',
+        'amp.data-freeze:button-next': 'Next',
+        'amp.data-freezing:notify': 'Notify',
+        'amp.data-freezing:add-new':'Add new',
+        'amp.data-freezing:insert-data': '(insert data to the new field)',
+        'amp.data-freezing:click-save': 'Click the Save icon to save the added data row',
+        'amp.data-freezing:button-save-all-edits': 'Save all edits',
+        'amp.data-freezing:required-fields': '* Required Fields',
+        'amp.data-freezing:notify-option-yes':'Yes',
+        'amp.data-freezing:notify-option-no':'No',
+        'amp.data-freezing:required-fields-message': 'Data Freezing Date, Freeze Option and Notification email are required fields.'
 };

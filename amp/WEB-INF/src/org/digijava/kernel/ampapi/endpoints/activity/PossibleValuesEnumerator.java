@@ -443,11 +443,11 @@ public class PossibleValuesEnumerator {
 		List<AmpCategoryValue> collectionByKey = CategoryManagerUtil.getAllAcceptableValuesForACVClass(key, null);
 		return collectionByKey.stream()
 				.filter(AmpCategoryValue::isVisible)
-				.map(this::getImplementationLevelValue)
+				.map(this::getImplementationLocationValue)
 				.collect(toList());
 	}
 
-	private PossibleValue getImplementationLevelValue(AmpCategoryValue locCategory) {
+	private PossibleValue getImplementationLocationValue(AmpCategoryValue locCategory) {
 		Long id = locCategory.getId();
 		String value = locCategory.getValue();
 		Map<String, String> translatedValues = translatorService.translateLabel(value);

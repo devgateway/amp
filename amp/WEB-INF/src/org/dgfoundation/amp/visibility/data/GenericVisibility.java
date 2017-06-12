@@ -100,7 +100,7 @@ public class GenericVisibility extends DataVisibility implements FMSettings {
             for (AmpModulesVisibility mv : submodules) {
                 String treePath = mv.getName();
                 if (treePath.startsWith(parentPath)) {
-                    treePath = treePath.substring(parentPath.length(), treePath.length() - 1);
+                    treePath = treePath.substring(parentPath.length());
                 }
                 items.put(StringUtils.strip(treePath, "/"), buildTreeByModules(mv));
             }

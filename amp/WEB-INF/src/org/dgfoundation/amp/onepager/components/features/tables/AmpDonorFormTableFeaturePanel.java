@@ -5,7 +5,6 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 
-import java.text.NumberFormat;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -33,6 +32,8 @@ import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingDetailItemIdComparator;
+import org.digijava.module.aim.helper.FundingDetailTransactionDateComparator;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
@@ -82,16 +83,16 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 				.REORDER_FUNDING_ITEMS);
 		switch (globalSettingComparator) {
 			case Constants.COMPARATOR_TRANSACTION_DATE_DESC:
-				comparator = new AmpFundingDetail.FundingDetailComparatorByTransactionDateDesc();
+				comparator = FundingDetailTransactionDateComparator.getDescending();
 				break;
 			case Constants.COMPARATOR_FUNDING_ITEM_ID_ASC:
-				comparator = new AmpFundingDetail.FundingDetailComparatorByFundingItemIdAsc();
+				comparator = FundingDetailItemIdComparator.getAscending();
 				break;
 			case Constants.COMPARATOR_FUNDING_ITEM_ID_DESC:
-				comparator = new AmpFundingDetail.FundingDetailComparatorByFundingItemIdDesc();
+				comparator = FundingDetailItemIdComparator.getDescending();
 				break;
 			default:
-				comparator = new AmpFundingDetail.FundingDetailComparatorByTransactionDateAsc();
+				comparator = FundingDetailTransactionDateComparator.getAscending();
 		}
 
 		return comparator;

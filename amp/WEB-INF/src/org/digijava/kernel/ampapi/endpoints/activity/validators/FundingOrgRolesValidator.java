@@ -1,12 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
@@ -14,6 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+import org.digijava.module.aim.dbentity.AmpRole;
 
 /**
  * Check if organization roles used in activity.funding and activity.funding.fundingDetails match organization roles
@@ -24,7 +27,6 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 public class FundingOrgRolesValidator extends InputValidator {
 
     private final static String ORG_ROLE_ORG = "organization";
-    private final static String ORG_ROLE_ROLE = "role";
 
     private final static String FUNDING = "fundings";
     private static final String SRC_ORG = "donor_organization_id";
@@ -86,7 +88,9 @@ public class FundingOrgRolesValidator extends InputValidator {
      * Get defined organization roles for activity.
      */
     private Set<Pair<Long, Long>> getOrgRoleDefinitions(JsonBean activity) {
-        Set<Pair<Long, Long>> orgRolesNormale = new HashSet<>();
+        Set<Pair<Long, Long>> orgRoles = new HashSet<>();
+
+        Map<String, Long> roleIdsByCode = getOrgRoleIdsByCode();
 
         List<String> orgRoleFields = InterchangeUtils.discriminatedFieldsByFieldTitle.get(ActivityFieldsConstants.ORG_ROLE);
 
@@ -97,16 +101,28 @@ public class FundingOrgRolesValidator extends InputValidator {
                 for (Object orgRoleObj : orgRolesColl) {
                     if (orgRoleObj != null && orgRoleObj instanceof Map) {
                         Map orgRoleMap = (Map) orgRoleObj;
-                        Pair<Long, Long> orgRole = getOrgRole(orgRoleMap, ORG_ROLE_ORG, ORG_ROLE_ROLE);
-                        if (orgRole != null) {
-                            orgRolesNormale.add(orgRole);
+
+                        Long orgId = getLong(orgRoleMap.get(ORG_ROLE_ORG));
+                        String roleCode = ActivityFieldsConstants.ORG_ROLE_CODES.get(field);
+                        Long roleId = roleIdsByCode.get(roleCode);
+
+                        if (orgId != null) {
+                            orgRoles.add(Pair.of(orgId, roleId));
                         }
                     }
                 }
             }
         }
 
-        return orgRolesNormale;
+        return orgRoles;
+    }
+
+    private Map<String, Long> getOrgRoleIdsByCode() {
+        Map<String, Long> roles = new HashMap<>();
+        for (AmpRole role : OnePagerUtil.getOrgRoles()) {
+            roles.put(role.getRoleCode(), role.getAmpRoleId());
+        }
+        return roles;
     }
 
     /**

@@ -15,13 +15,11 @@ import org.digijava.module.aim.util.Output;
 public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable
 {
 	//IATI-check: not to be ignored
-	@Interchangeable(fieldTitle="AMP Organization Role ID")
     private Long ampOrgRoleId;
 	@Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
     private AmpActivityVersion activity;
 	@Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private AmpOrganisation organisation;
-	@Interchangeable(fieldTitle="Role"/*, descend=true*/, importable=true, pickIdOnly=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private AmpRole role;
 	@Interchangeable(fieldTitle="Percentage", importable=true, percentageConstraint = true, fmPath = FMVisibility.PARENT_FM + "/percentage")
 	private Float 	percentage;

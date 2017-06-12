@@ -28,7 +28,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
@@ -52,6 +54,8 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
@@ -75,6 +79,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -117,6 +122,11 @@ public class ActivityImporter {
     private String endpointContextPath;
     // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
+
+	private Memoizer<Map<String, AmpRole>> rolesByCode = new Memoizer<>(this::loadOrgRoles);
+
+	private Memoizer<Map<String, AmpActivityProgramSettings>> programSettingsByName =
+			new Memoizer<>(this::loadProgramSettings);
 
     protected void init(JsonBean newJson, boolean update, String endpointContextPath) {
 		this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
@@ -554,7 +564,7 @@ public class ActivityImporter {
 				} else if (newParent != null && isCollection) {
 					// actual links will be updated
 					((Collection) newFieldValue).add(res);
-					configureCustom(newParent, res, fieldPath);
+					configureCustom(res, fieldDef);
 				}
 			}
 			// TODO: we also need to validate other children, some can be mandatory
@@ -1148,6 +1158,12 @@ public class ActivityImporter {
 		if (newActivity.getFunding() == null) {
 			newActivity.setFunding(new HashSet<AmpFunding>());
         }
+		Iterator<AmpFunding> iterator = newActivity.getFunding().iterator();
+		int i = 0;
+		while (iterator.hasNext()) {
+			AmpFunding funding = iterator.next();
+			funding.setIndex(i++);
+		}
 	}
 	
 	protected void initOrgRoles() {
@@ -1287,31 +1303,43 @@ public class ActivityImporter {
 	
 	/**
 	 * Execute custom configurations that is not worth to define generic for single use cases
-	 * @param parent
-	 * @param child
-	 * @param fieldPath
 	 */
-	protected void configureCustom(Object parent, Object child, String fieldPath) {
-		if (child instanceof AmpActivityContact) {
-			configureContactType((AmpActivityContact) child, fieldPath);
+	private void configureCustom(Object obj, APIField fieldDef) {
+		if (obj instanceof AmpActivityContact) {
+			AmpActivityContact contact = (AmpActivityContact) obj;
+			contact.setContactType(fieldDef.getDiscriminator());
+		}
+		if (obj instanceof AmpOrgRole) {
+			AmpOrgRole role = (AmpOrgRole) obj;
+			role.setRole(rolesByCode.get().get(fieldDef.getDiscriminator()));
+		}
+		if (obj instanceof AmpActivityProgram) {
+			AmpActivityProgram program = (AmpActivityProgram) obj;
+			program.setProgramSetting(programSettingsByName.get().get(fieldDef.getDiscriminator()));
+		}
+		if (obj instanceof AmpFundingAmount) {
+			Integer index = Integer.valueOf(fieldDef.getDiscriminator());
+			AmpFundingAmount fundingAmount = (AmpFundingAmount) obj;
+			fundingAmount.setFunType(AmpFundingAmount.FundingType.values()[index]);
 		}
 	}
-	
-	/**
-	 * Custom configuration for the contact type 
-	 * @param contact activity contact to configure
-	 * @param contactGroup the contact group to configure
-	 */
-	protected void configureContactType(AmpActivityContact contact, String contactGroup) {
-		// custom, but very special case no need to make generic
-		String contactType = InterchangeableClassMapper.CONTACT_SET_NAME_TO_CONTACT_TYPE.get(
-				InterchangeUtils.deunderscorify(contactGroup));
-		if (contactType == null) {
-			throw new RuntimeException("No contact type match found for contactGroup = " + contactGroup);
+
+	private Map<String, AmpActivityProgramSettings> loadProgramSettings() {
+		Map<String, AmpActivityProgramSettings> programSettings = new HashMap<>();
+		for (AmpActivityProgramSettings setting : ProgramUtil.getAmpActivityProgramSettingsList()) {
+			programSettings.put(setting.getName(), setting);
 		}
-		contact.setContactType(contactType);
+		return programSettings;
 	}
-	
+
+	private Map<String, AmpRole> loadOrgRoles() {
+		Map<String, AmpRole> roles = new HashMap<>();
+		for (AmpRole role : OnePagerUtil.getOrgRoles()) {
+			roles.put(role.getRoleCode(), role);
+		}
+		return roles;
+	}
+
 	protected void postProcess() {
 		LuceneUtil.addUpdateActivity(TLSUtils.getRequest().getServletContext().getRealPath("/"), update,
         		TLSUtils.getSite(), Locale.forLanguageTag(trnSettings.getDefaultLangCode()), newActivity, oldActivity);

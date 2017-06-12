@@ -38,7 +38,6 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
 		}
 	};
 	
-	@Interchangeable(fieldTitle="AMP Funding Amount ID", id = true)
 	private Long ampFundingAmountId;
 	
 	@Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
@@ -59,8 +58,6 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
 	@VersionableFieldSimple(fieldTitle = "Fun Date")
 	protected Date funDate;
 	
-	@Interchangeable(fieldTitle = "Funding Type", importable = true)
-	@PossibleValues(CostTypePossibleValuesProvider.class)
 	protected FundingType funType;
 
 	/**

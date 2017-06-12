@@ -25,7 +25,7 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
 	@Path("event")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
    // @ApiMethod(ui = false, id = "saveDataFreezeEvent", authTypes = {AuthRule.IN_ADMIN})
-	public JsonBean saveDataFreezeEvent(JsonBean dataFreezeEvent){
+	public JsonBean saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent){
 		return DataFreezeService.saveDataFreezeEvent(dataFreezeEvent);
 	}
 	

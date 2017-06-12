@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
-import java.util.Date;
 
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings.FreezeOptions;
 
 public class DataFreezeEvent {
-	private Long ampDataFreezeSettingsId;
+	private Long id;
+	private Long cid;	
 	private Boolean enabled = Boolean.FALSE;
 	private Integer gracePeriod;
 	private String freezingDate;
@@ -15,11 +15,14 @@ public class DataFreezeEvent {
 	private FreezeOptions freezeOption;	
 	private String filters;
 	
-	public DataFreezeEvent(Long ampDataFreezeSettingsId, Boolean enabled, Integer gracePeriod, String freezingDate,
+	public DataFreezeEvent() {		
+	}
+			
+	public DataFreezeEvent(Long id, Boolean enabled, Integer gracePeriod, String freezingDate,
 			String openPeriodStart, String openPeriodEnd, Boolean sendNotification, FreezeOptions freezeOption,
-			String filters) {
+			String filters, Long cid) {
 		super();
-		this.ampDataFreezeSettingsId = ampDataFreezeSettingsId;
+		this.id = id;
 		this.enabled = enabled;
 		this.gracePeriod = gracePeriod;
 		this.freezingDate = freezingDate;
@@ -28,12 +31,13 @@ public class DataFreezeEvent {
 		this.sendNotification = sendNotification;
 		this.freezeOption = freezeOption;
 		this.filters = filters;
+		this.cid = cid;
 	}
-	public Long getAmpDataFreezeSettingsId() {
-		return ampDataFreezeSettingsId;
+	public Long getId() {
+		return id;
 	}
-	public void setAmpDataFreezeSettingsId(Long ampDataFreezeSettingsId) {
-		this.ampDataFreezeSettingsId = ampDataFreezeSettingsId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public Boolean getEnabled() {
 		return enabled;
@@ -82,5 +86,11 @@ public class DataFreezeEvent {
 	}
 	public void setFilters(String filters) {
 		this.filters = filters;
+	}
+	public Long getCid() {
+		return cid;
+	}
+	public void setCid(Long cid) {
+		this.cid = cid;
 	}
 }

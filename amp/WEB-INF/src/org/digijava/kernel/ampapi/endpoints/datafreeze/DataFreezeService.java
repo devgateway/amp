@@ -13,120 +13,109 @@ import java.util.List;
 import org.apache.commons.lang.math.NumberUtils;
 
 public class DataFreezeService {
-	
-	public static JsonBean saveDataFreezeEvent(JsonBean data){
+
+	public static JsonBean saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
 		JsonBean result = new JsonBean();
-		List<JsonBean> validationErrors =  validate(data);
+		List<JsonBean> validationErrors = validate(dataFreezeEvent);
 		if (validationErrors.size() == 0) {
-			AmpDataFreezeSettings dataFreezeEvent = getOrCreate(data);
-			updateModel(dataFreezeEvent, data);
-			DataFreezeUtil.saveDataFreezeEvent(dataFreezeEvent);
-			JsonBean saved = modelToJsonBean(dataFreezeEvent);
+			AmpDataFreezeSettings dataFreezeSettings = getOrCreate(dataFreezeEvent);
+			updateModel(dataFreezeSettings, dataFreezeEvent);
+			DataFreezeUtil.saveDataFreezeEvent(dataFreezeSettings);
+			JsonBean saved = modelToJsonBean(dataFreezeSettings);
+			if (dataFreezeEvent.getCid() != null) {
+				saved.set(DataFreezeConstants.FIELD_CID, dataFreezeEvent.getCid());
+			}
 			result.set(DataFreezeConstants.DATA, saved);
-			result.set(DataFreezeConstants.RESULT, DataFreezeConstants.SAVE_SUCCESSFUL);			
+			result.set(DataFreezeConstants.RESULT, DataFreezeConstants.SAVE_SUCCESSFUL);
 		} else {
-			result.set(DataFreezeConstants.DATA, data);
+			result.set(DataFreezeConstants.DATA, dataFreezeEvent);
 			result.set(DataFreezeConstants.RESULT, DataFreezeConstants.SAVE_FAILED);
 			result.set(DataFreezeConstants.ERRORS, validationErrors);
 		}
-		
+
 		return result;
 	}
-	
-	private static List<JsonBean> validate(JsonBean data){
+
+	private static List<JsonBean> validate(DataFreezeEvent dataFreezeEvent) {
 		List<JsonBean> errors = new ArrayList<>();
 		return errors;
 	}
-	
+
 	private static JsonBean modelToJsonBean(AmpDataFreezeSettings dataFreezeEvent) {
-		JsonBean json  = new JsonBean();
+		JsonBean json = new JsonBean();
 		json.set(DataFreezeConstants.FIELD_ID, dataFreezeEvent.getAmpDataFreezeSettingsId());
 		json.set(DataFreezeConstants.FIELD_ENABLED, dataFreezeEvent.getEnabled());
 		json.set(DataFreezeConstants.FIELD_GRACE_PERIOD, dataFreezeEvent.getGracePeriod());
-		json.set(DataFreezeConstants.FIELD_FREEZING_DATE, DateTimeUtil.formatDate(dataFreezeEvent.getFreezingDate(), DataFreezeConstants.DATE_FORMAT));
-		json.set(DataFreezeConstants.FIELD_OPEN_PERIOD_START, DateTimeUtil.formatDate(dataFreezeEvent.getOpenPeriodStart(), DataFreezeConstants.DATE_FORMAT));
-		json.set(DataFreezeConstants.FIELD_OPEN_PERIOD_END, DateTimeUtil.formatDate(dataFreezeEvent.getOpenPeriodEnd(), DataFreezeConstants.DATE_FORMAT));
+		json.set(DataFreezeConstants.FIELD_FREEZING_DATE,
+				DateTimeUtil.formatDate(dataFreezeEvent.getFreezingDate(), DataFreezeConstants.DATE_FORMAT));
+		json.set(DataFreezeConstants.FIELD_OPEN_PERIOD_START,
+				DateTimeUtil.formatDate(dataFreezeEvent.getOpenPeriodStart(), DataFreezeConstants.DATE_FORMAT));
+		json.set(DataFreezeConstants.FIELD_OPEN_PERIOD_END,
+				DateTimeUtil.formatDate(dataFreezeEvent.getOpenPeriodEnd(), DataFreezeConstants.DATE_FORMAT));
 		json.set(DataFreezeConstants.FIELD_FREEZE_OPTION, dataFreezeEvent.getFreezeOption());
 		json.set(DataFreezeConstants.FIELD_FILTERS, dataFreezeEvent.getFilters());
 		json.set(DataFreezeConstants.FIELD_SEND_NOTIFICATION, dataFreezeEvent.getSendNotification());
 		return json;
 	}
-	
-	private static AmpDataFreezeSettings updateModel(AmpDataFreezeSettings dataFreezeSettings, JsonBean data){
-		if (data.get(DataFreezeConstants.FIELD_ENABLED) != null) {
-			dataFreezeSettings.setEnabled((Boolean)data.get(DataFreezeConstants.FIELD_ENABLED));
-		}
-		
-		if (data.get(DataFreezeConstants.FIELD_GRACE_PERIOD) != null) {					
-			dataFreezeSettings.setGracePeriod((Integer)(data.get(DataFreezeConstants.FIELD_GRACE_PERIOD)));
-		}
-		
-		if (data.get(DataFreezeConstants.FIELD_FREEZING_DATE) != null) {
-			Date freezingDate = DateTimeUtil.parseDate(data.getString(DataFreezeConstants.FIELD_FREEZING_DATE), DataFreezeConstants.DATE_FORMAT);		
-			dataFreezeSettings.setFreezingDate(freezingDate);
-		}
-		
-		if (data.get(DataFreezeConstants.FIELD_OPEN_PERIOD_START) != null) {
-			dataFreezeSettings.setOpenPeriodStart(DateTimeUtil.parseDate(data.getString(DataFreezeConstants.FIELD_OPEN_PERIOD_START), DataFreezeConstants.DATE_FORMAT));
-		}
-		
-		if (data.get(DataFreezeConstants.FIELD_OPEN_PERIOD_END) != null) {
-			dataFreezeSettings.setOpenPeriodEnd(DateTimeUtil.parseDate(data.getString(DataFreezeConstants.FIELD_OPEN_PERIOD_END), DataFreezeConstants.DATE_FORMAT));
-		}
-		
-		if (data.get(DataFreezeConstants.FIELD_FREEZE_OPTION) != null) {
-			dataFreezeSettings.setFreezeOption(AmpDataFreezeSettings.FreezeOptions.valueOf(data.getString(DataFreezeConstants.FIELD_FREEZE_OPTION)));
-		}
-		
-		if (data.get(DataFreezeConstants.FIELD_FILTERS) != null) {
-			dataFreezeSettings.setFilters(data.getString(DataFreezeConstants.FIELD_FILTERS));
-		}
-		
-		if (data.get(DataFreezeConstants.FIELD_SEND_NOTIFICATION) != null) {
-			dataFreezeSettings.setSendNotification((Boolean)data.get(DataFreezeConstants.FIELD_SEND_NOTIFICATION));
-		}
-		
-		return dataFreezeSettings;
-	}
-	
-	public static AmpDataFreezeSettings getOrCreate(JsonBean data){
-		AmpDataFreezeSettings dataFreezeSettings;
-		if (data.getString(DataFreezeConstants.FIELD_ID) != null && NumberUtils.isNumber(data.getString(DataFreezeConstants.FIELD_ID))) {
-			Long id = Long.parseLong(String.valueOf(data.get(DataFreezeConstants.FIELD_ID)));
-			dataFreezeSettings = DataFreezeUtil.getDataFreezeEventById(id);
-		} else {
-			dataFreezeSettings = new AmpDataFreezeSettings();
-		}
-		
+
+	private static AmpDataFreezeSettings updateModel(AmpDataFreezeSettings dataFreezeSettings,
+			DataFreezeEvent dataFreezeEvent) {
+		dataFreezeSettings.setEnabled(dataFreezeEvent.getEnabled());
+		dataFreezeSettings.setGracePeriod(dataFreezeEvent.getGracePeriod());
+		dataFreezeSettings.setFreezingDate(
+				DateTimeUtil.parseDate(dataFreezeEvent.getFreezingDate(), DataFreezeConstants.DATE_FORMAT));
+		dataFreezeSettings.setOpenPeriodStart(
+				DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodStart(), DataFreezeConstants.DATE_FORMAT));
+		dataFreezeSettings.setOpenPeriodEnd(
+				DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodEnd(), DataFreezeConstants.DATE_FORMAT));
+		dataFreezeSettings.setFreezeOption(dataFreezeEvent.getFreezeOption());
+		dataFreezeSettings.setFilters(dataFreezeEvent.getFilters());
+		dataFreezeSettings.setSendNotification(dataFreezeEvent.getSendNotification());
 		return dataFreezeSettings;
 	}
 
-	public static void deleteDataFreezeEvent(long id){	
+	public static AmpDataFreezeSettings getOrCreate(DataFreezeEvent dataFreezeEvent) {
+		AmpDataFreezeSettings dataFreezeSettings;
+		if (dataFreezeEvent.getId() != null) {
+			dataFreezeSettings = DataFreezeUtil.getDataFreezeEventById(dataFreezeEvent.getId());
+		} else {
+			dataFreezeSettings = new AmpDataFreezeSettings();
+		}
+
+		return dataFreezeSettings;
+	}
+
+	public static void deleteDataFreezeEvent(long id) {
 		DataFreezeUtil.deleteDataFreezeEvent(id);
 	}
-	
-	public static Page<DataFreezeEvent> fetchDataFreezeEventList(Integer offset, Integer count, String orderBy, String sort){
+
+	public static Page<DataFreezeEvent> fetchDataFreezeEventList(Integer offset, Integer count, String orderBy,
+			String sort) {
 		Page<DataFreezeEvent> page = new Page<>();
-		AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getDefaultFormatter(DataFreezeConstants.DATE_FORMAT);		
+		AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getDefaultFormatter(DataFreezeConstants.DATE_FORMAT);
 		Integer total = DataFreezeUtil.getFreezeEventsTotalCount();
-		List <AmpDataFreezeSettings> fetchedData = DataFreezeUtil.getDataFreeEventsList(offset, count, orderBy, sort, total);
-		List <DataFreezeEvent> freezeEvents = new ArrayList<>();
-		
+		List<AmpDataFreezeSettings> fetchedData = DataFreezeUtil.getDataFreeEventsList(offset, count, orderBy, sort,
+				total);
+		List<DataFreezeEvent> freezeEvents = new ArrayList<>();
+
 		fetchedData.forEach(event -> {
-			freezeEvents.add(new DataFreezeEvent(event.getAmpDataFreezeSettingsId(), event.getEnabled(), event.getGracePeriod(), dateFormatter.format(event.getFreezingDate()), dateFormatter.format(event.getOpenPeriodStart()), dateFormatter.format(event.getOpenPeriodEnd()), event.getSendNotification(), event.getFreezeOption(), event.getFilters()));
+			freezeEvents.add(new DataFreezeEvent(event.getAmpDataFreezeSettingsId(), event.getEnabled(),
+					event.getGracePeriod(), dateFormatter.format(event.getFreezingDate()),
+					dateFormatter.format(event.getOpenPeriodStart()), dateFormatter.format(event.getOpenPeriodEnd()),
+					event.getSendNotification(), event.getFreezeOption(), event.getFilters(), null));
 		});
-		
+
 		page.setData(freezeEvents);
 		page.setTotalRecords(total);
-		
+
 		return page;
 	}
-	
-	public static AmpDataFreezeSettings fetchOneDataFreezeEvent(long id){
+
+	public static AmpDataFreezeSettings fetchOneDataFreezeEvent(long id) {
 		return DataFreezeUtil.getDataFreezeEventById(id);
 	}
-	
-	public static Page<AmpDataFreezeSettings> unfreezeAll(){
+
+	public static Page<AmpDataFreezeSettings> unfreezeAll() {
 		return new Page<>();
 	}
 }

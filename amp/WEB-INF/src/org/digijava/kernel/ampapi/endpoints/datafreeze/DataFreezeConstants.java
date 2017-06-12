@@ -9,15 +9,13 @@ public class DataFreezeConstants {
 	public static final String FIELD_SEND_NOTIFICATION = "sendNotification";
 	public static final String FIELD_FREEZE_OPTION = "freezeOption";
 	public static final String FIELD_FILTERS = "filters";
-	
-	public static final String DATE_FORMAT = "yyyy-MM-dd";
-	
+	public static final String FIELD_CID = "cid";// client side id	
+	public static final String DATE_FORMAT = "yyyy-MM-dd";	
 	public static final String DATA = "data";
-	public static final String RESULT = "result";
+	public static final String RESULT = "result";	
 	public static final String ERRORS = "errors";
 	public static final String SAVE_SUCCESSFUL = "SAVE_SUCCESSFUL";
-	public static final String SAVE_FAILED= "SAVE_FAILED";
-	
+	public static final String SAVE_FAILED= "SAVE_FAILED";	
 	public static final Integer DEFAULT_RECORDS_PER_PAGE = 10;
 	public static final Integer DEFAULT_OFFSET = 0;
 	public static final String DEFAULT_SORT_COLUMN = "id";

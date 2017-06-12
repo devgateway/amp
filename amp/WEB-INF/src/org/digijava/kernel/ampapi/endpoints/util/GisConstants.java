@@ -28,10 +28,10 @@ public class GisConstants {
 	public static final String PROJECT_SITES = "Project sites";
 	public static final String DOWNLOAD_MAP_SELECTOR = "Download Map selector";
 	
-	public static final String ADM0 = "adm0";
-	public static final String ADM1 = "adm1";
-	public static final String ADM2 = "adm2";
-	public static final String ADM3 = "adm3";
+	public static final String ADM0 = "adm-0";
+	public static final String ADM1 = "adm-1";
+	public static final String ADM2 = "adm-2";
+	public static final String ADM3 = "adm-3";
 	
 	/**
 	 * The order is important - this is the priority order between measures, 

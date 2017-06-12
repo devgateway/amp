@@ -305,40 +305,6 @@ function unload() {
        							                     </digi:form>  
                                                 </td>
                                             </tr>
-	                                            <tr>
-		                                            <td bgColor=#ffffff class="box-border" >
-		                                                     <span class="subtitle-blue" style="margin-left:180px; ">
-																<digi:trn>Indicator Layers</digi:trn>
-															</span>
-															<digi:form action="/addNewLocation.do" method="post" name="aimLocationIndicatorValueForm">
-																<html:hidden property="editedId"/>
-																<html:hidden property="event" value="saveLocationValues"/>
-																<c:choose>
-																	<c:when test="${empty aimNewAddLocationForm.locationIndicatorValues}">
-																		<span><digi:trn key="aim:noIndicatorsAttached">No indicators attached.</digi:trn></span>
-																	</c:when>
-																	<c:otherwise>
-																		<table style="margin-top:25px;">
-																		<c:forEach var="value" items="${aimNewAddLocationForm.locationIndicatorValues}">
-																			<tr>
-																				<td align="right" width="50%">${value.indicator.name}</td>
-																				<td  width="50%"><input type="text" name="indicator_${value.indicator.id}" value="${value.value}"/></td>
-																			</tr>
-																		</c:forEach>
-																			<tr><td></td>
-																			<td align="left">
-																			    <c:set var="translation">
-																			        <digi:trn key="btn:regionManagerSave">Save layer indicator value</digi:trn>
-																			    </c:set>
-																			    <input type="button" value="${translation}" class="dr-menu" onclick="validateLocale(); return false();">
-																			</td>
-																			</tr>
-																		</table>
-																	</c:otherwise>
-																</c:choose>
-															</digi:form>
-		                                            </td>
-	                                            </tr>
 	                                        </table>
 	                                    </td>
 	                                </tr>
@@ -388,17 +354,6 @@ function unload() {
 												</c:set>
 												<digi:link href="/dynLocationManager.do" title="${translation}" >
 												<digi:trn key="aim:regionManager">Region Manager</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
-										<tr>
-											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="translation">
-													<digi:trn key="aim:clickToViewIndicatorLayerManager">Click here to go to Indicator Layer Manager</digi:trn>
-												</c:set>
-												<digi:link href="/indicatorLayerManager.do?event=manager" title="${translation}" >
-												<digi:trn key="aim:indicatorLayerManager">Indicator Layer Manager</digi:trn>
 												</digi:link>
 											</td>
 										</tr>

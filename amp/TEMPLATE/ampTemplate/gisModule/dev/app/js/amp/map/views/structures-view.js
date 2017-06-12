@@ -114,43 +114,60 @@ module.exports = Backbone.View
 
 
   _featureToMarker: function(feature) {  // 152ms on Phil's computer
-    var self = this,
-        marker,
-        latlng = L.latLng(feature.geometry.coordinates[1],
-                          feature.geometry.coordinates[0]);
+	  var self = this,
+	  marker,
+	  latlng = L.latLng(feature.geometry.coordinates[1],
+			  feature.geometry.coordinates[0]);
 
-    // Calculate only one time and not for all points (we can have thousands).
-    if (self.maxNumberOfIcons === -1) {
-      self.maxNumberOfIcons = SettingsUtils.getMaxNumberOfIcons(app.data.settings);     
-    }
-    
-    if (self.rawData.features.length < self.maxNumberOfIcons &&
-      self.structureMenuModel.get('filterVertical') === 'Primary Sector') {
-      // create icon
-      marker = self._createSectorMarker(latlng, feature);
-    } else {
-      // coloured circle marker, no icon
-      marker = self._createPlainMarker(latlng, feature);
-    }
+	  // Calculate only one time and not for all points (we can have thousands).
+	  if (self.MAX_NUM_FOR_ICONS === -1) {
+		  //TODO: Move this code to a config class.        
+		  var useIconsForSectors = app.data.generalSettings.get('use-icons-for-sectors-in-project-list');
+		  var maxIcons = app.data.generalSettings.get('max-locations-icons');
 
-    marker.feature = feature;  /* L.geoJSON would do this implicitely
+		  /* maxIcons is maxLocationIcons */
+		  if (useIconsForSectors === true) {
+			  if (maxIcons !== '') {
+				  if (maxIcons === 0) {
+					  self.MAX_NUM_FOR_ICONS = 99999; //always show
+				  } else {
+					  self.MAX_NUM_FOR_ICONS = maxIcons;
+				  }
+			  } else {
+				  self.MAX_NUM_FOR_ICONS = 0;
+			  }
+		  } else {
+			  self.MAX_NUM_FOR_ICONS = 0;
+		  }
+		  console.log('MAX_NUM_FOR_ICONS: ' + self.MAX_NUM_FOR_ICONS);
+	  }
+	  if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
+			  self.structureMenuModel.get('filterVertical') === 'Primary Sector') {
+		  // create icon
+		  marker = self._createSectorMarker(latlng, feature);
+	  } else {
+		  // coloured circle marker, no icon
+		  marker = self._createPlainMarker(latlng, feature);
+	  }
+
+	  marker.feature = feature;  /* L.geoJSON would do this implicitely
                                 so add it manually to keep the same API */
 
-    // self.markerCluster.addLayer(marker);
+	  // self.markerCluster.addLayer(marker);
 
-    // DRS in progress custom own clustering. big efficiency gains.
-    var latLngString = Math.round(latlng.lat * Math.pow(10, self.CLUSTER_PRECISION)) +
-      ',' + Math.round(latlng.lng * Math.pow(10, self.CLUSTER_PRECISION));
-    if (self.customClusterMap[latLngString]) {
-      self.customClusterMap[latLngString].push(marker); //TODO: should push marker or feature?
-      self.maxClusterCount = Math.max(self.maxClusterCount, self.customClusterMap[latLngString].length);
-    } else {
-      self.customClusterMap[latLngString] = [marker];
-    }
+	  // DRS in progress custom own clustering. big efficiency gains.
+	  var latLngString = Math.round(latlng.lat * Math.pow(10, self.CLUSTER_PRECISION)) +
+	  ',' + Math.round(latlng.lng * Math.pow(10, self.CLUSTER_PRECISION));
+	  if (self.customClusterMap[latLngString]) {
+		  self.customClusterMap[latLngString].push(marker); //TODO: should push marker or feature?
+		  self.maxClusterCount = Math.max(self.maxClusterCount, self.customClusterMap[latLngString].length);
+	  } else {
+		  self.customClusterMap[latLngString] = [marker];
+	  }
 
-    self._bindPopup(marker);
+	  self._bindPopup(marker);
 
-    return marker;
+	  return marker;
   },
 
 
@@ -176,8 +193,10 @@ module.exports = Backbone.View
         }
       }
     }
+    
+    var icon = this.structureMenuModel.iconMappings[sectorCode] || this.structureMenuModel.iconMappings[this.structureMenuModel.DEFAULT_ICON_CODE];    
     var pointIcon = L.icon({
-      iconUrl: 'img/map-icons/' + this.structureMenuModel.iconMappings[sectorCode],
+      iconUrl: 'img/map-icons/' + icon,
       iconSize:     [25, 25], // size of the icon
       iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
       popupAnchor:  [-3, -6]  // point from which the popup should open relative to the iconAnchor

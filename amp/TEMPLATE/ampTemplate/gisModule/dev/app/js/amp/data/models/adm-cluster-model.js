@@ -20,7 +20,7 @@ module.exports = Backbone.Model
 
     this.listenTo(this.collection.filter, 'apply', this.refreshModel);
     //this.listenTo(this.collection.settings, 'change:selected', this.refreshModel);
-    this.listenTo(this.collection.settings, 'applySettings', this.refreshModel);
+    this.listenTo(this.collection.settingsWidget, 'applySettings', this.refreshModel);
   },
 
   // if filters change and layer is selected update it.
@@ -34,7 +34,7 @@ module.exports = Backbone.Model
   },
 
   fetch: function(options) {
-    var filter = {otherFilters: {}};
+    var filter = {};
 
     // TODO: move lastFetchXhr code into a mixin or something...
     //Stop last fetch before doing new one.
@@ -49,9 +49,10 @@ module.exports = Backbone.Model
     }
 
     // TODO: verify settings works..
-    filter.settings = this.collection.settings.serialize();
+    filter.settings = this.collection.settingsWidget.toAPIFormat();
 
-    filter.otherFilters.adminLevel = this._translateADMToMagicWord(this.get('value'));
+    filter.filters = filter.filters || {};
+    filter.filters.adminLevel = this._translateADMToMagicWord(this.get('value'));
 
     options = _.defaults((options || {}), {
       type: 'POST',

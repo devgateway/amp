@@ -47,7 +47,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td align="center" valign="top">
+									<td colspan="3" align="center" valign="top">
 										<div id="measuresMust" style="color: red">
 											* <digi:trn key="rep:wizard:hint:mustselectmeasure">
 													Must select at least one measure
@@ -56,16 +56,16 @@
 										<div id="actualCommitmentsMust" style="color: red; display: none">
 											* "<digi:trn>Actual Commitments</digi:trn>" <digi:trn>should be selected when a report is configured to also show pledges</digi:trn>
 										</div>
-									</td>
-									<td>&nbsp;</td>
-									<td align="center" valign="top">
-										<span id="measuresLimit" style="visibility: hidden">
-											<font color="red">* 
-												<digi:trn key="rep:wizard:hint:limit2measures">
-													You cannot select more than 2 measures in a desktop tab
-												</digi:trn>
-											</font>
-										</span>
+										<div id="measurelessOnlyHiersNotAllowed4" style="color: red; display: none;">
+											* <digi:trn>The following hierarchies can be used only in reports without measures:</digi:trn>
+											  <span id="measurelessOnlyHiersNotAllowed4List"></span>
+										</div>
+										<div id="measureOrHierarchyMust4" class="color: red" style="display: none;">
+											* <digi:trn>Must select at least one measure or hierarchy</digi:trn>
+										</div>
+										<div id="measuresLimit" style="color: red; display: none">
+											* <digi:trn key="rep:wizard:hint:limit2measures">You cannot select more than 2 measures in a desktop tab</digi:trn>
+										</div>
 									</td>
 								</tr>
 							</table>

@@ -3,12 +3,12 @@ package org.dgfoundation.amp.nireports.testcases.generic;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import org.dgfoundation.amp.nireports.PercentageTextCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
+import org.dgfoundation.amp.nireports.PercentageTextCell;
 
-public class PrimaryProgramLevel1Cells extends HardcodedCells<PercentageTextCell> {
+
+public class PrimaryProgramLevel1Cells extends HardcodedCells<PercentageTextCell>{
 
 	public PrimaryProgramLevel1Cells(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {
 		super(activityNames, entityNames, lc);
@@ -27,6 +27,7 @@ public class PrimaryProgramLevel1Cells extends HardcodedCells<PercentageTextCell
 			cell("Activity with primary_tertiary_program", "Subprogram p1.b", 3, 0.500000),
 			cell("activity_with_disaster_response", "Subprogram p1.b", 3, 1.000000),
 			cell("execution rate activity", "Subprogram p1", 2, 1.000000),
+			cell("second with disaster response", "Subprogram p1", 2, 1.000000),
 			cell("with weird currencies", "Subprogram p1", 2, 0.670000),
 			cell("with weird currencies", "Subprogram p1.b", 3, 0.330000));
 	}

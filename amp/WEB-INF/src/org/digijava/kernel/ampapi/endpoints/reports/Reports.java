@@ -1,6 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -15,6 +18,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -25,6 +29,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -45,10 +50,14 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
+import org.dgfoundation.amp.reports.xml.ObjectFactory;
+import org.dgfoundation.amp.reports.xml.Report;
+import org.dgfoundation.amp.reports.xml.ReportParameter;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -59,14 +68,11 @@ import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.action.ReportsFilterPicker;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -106,7 +112,11 @@ public class Reports implements ErrorReportingEndpoint {
 	@Path("/report/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JSONResult getReport(@PathParam("report_id") Long reportId) {
-		JSONResult report = getReport(DbUtil.getAmpReport(reportId));
+		AmpReports ampReport = DbUtil.getAmpReport(reportId);
+		if (ampReport == null) {
+			ApiErrorResponse.reportError(BAD_REQUEST, ReportErrors.REPORT_NOT_FOUND);
+		}
+		JSONResult report = getReport(ampReport);
 		report.getReportMetadata().setReportType(SAVED);
 		report.getReportMetadata().setReportIdentifier(reportId.toString());
 		return report;
@@ -129,6 +139,7 @@ public class Reports implements ErrorReportingEndpoint {
 		try {
 			spec = AmpReportsToReportSpecification.convert(ampReport);
 		} catch (Exception e1) {
+			logger.error("Failed to convert report.", e1);
 			JSONResult result = new JSONResult();
 			result.setErrorMessage(e1.getMessage());
 			return result;
@@ -197,7 +208,7 @@ public class Reports implements ErrorReportingEndpoint {
 	 * Generates a custom report.  
 	 * 
 	 * @param formParams {@link ReportsUtil#getReportResultByPage form parameters}
-	 * @return JsonBean result for the requested page and pagination information
+	 * @return Response JsonBean result for the requested page and pagination information
 	 * @see ReportsUtil#getReportResultByPage
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
@@ -212,6 +223,20 @@ public class Reports implements ErrorReportingEndpoint {
 	}
 	
 	/**
+	 * Generates a custom xml report.
+	 *
+	 * @param reportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
+	 * @return Response in xml format result for the report
+	 */
+	@POST
+	@Path("/report/custom")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
+	public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter) {
+		return getXmlReportResult(reportParameter, null);
+	}
+
+	/**
 	 * Retrieves report data for the specified reportId and a given page number
 	 *  
 	 * @param reportId    report Id
@@ -221,12 +246,32 @@ public class Reports implements ErrorReportingEndpoint {
 	 */
 	@POST
 	@Path("/report/{report_id}/paginate")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JsonBean getReportResultByPage(JsonBean formParams,
 			@PathParam("report_id") Long reportId) {
 		return ReportsUtil.getReportResultByPage(reportId, formParams);
 	}
 	
+	/**
+	 * Retrieves report data in XML format for the specified reportId
+	 *
+	 * @param reportId report Id
+	 * @param ReportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
+	 * @return XML result for the specified reportId
+	 * @see ApiXMLService#getXmlReport
+	 */
+	@POST
+	@Path("/report/{report_id}")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
+	public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter, @PathParam("report_id") Long reportId) {
+		Report xmlReport = ApiXMLService.getXmlReport(reportParameter, reportId);
+		ObjectFactory xmlReportObjFactory = new ObjectFactory();
+
+		return xmlReportObjFactory.createReport(xmlReport);
+	}
+
 	@POST
 	@Path("/report/{report_id}/result/jqGrid")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -236,7 +281,7 @@ public class Reports implements ErrorReportingEndpoint {
 	 */
 	public final JsonBean getReportResultForTabGrid(JsonBean formParams, 
 			@PathParam("report_id") Long reportId) {
-		
+
 		// TODO: normally all extra columns should come from formParams
 		List<String> extraColumns = new ArrayList<String>();
 		extraColumns.add(ColumnConstants.ACTIVITY_ID);
@@ -244,7 +289,7 @@ public class Reports implements ErrorReportingEndpoint {
 		extraColumns.add(ColumnConstants.DRAFT);
 		//extraColumns.add(ColumnConstants.TEAM_ID);  // TODO: this column never worked in NiReports - is it needed by Tabs now?
 		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
-		
+
 		// Convert jqgrid sorting params into ReportUtils sorting params.
 		if (formParams.getString("sidx") != null) {			
 			formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));
@@ -338,15 +383,15 @@ public class Reports implements ErrorReportingEndpoint {
 				throw new RuntimeException("Cannot restore report from session: " + reportId);
 			}
 		}
-		
+
 		// AMP-19189 - add columns used for coloring the project title and amp id (but not for summary reports).
 		List<String> extraColumns = new ArrayList<String>();
-		if (spec.getColumns().size() != spec.getHierarchies().size()) {
+		if (spec.getColumns().size() != spec.getHierarchies().size() && !spec.getMeasures().isEmpty()) {
 			extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 			extraColumns.add(ColumnConstants.DRAFT);
 			queryObject.set(EPConstants.ADD_COLUMNS, extraColumns);
 		}
-		
+
 		JsonBean report = ReportsUtil.getReportResultByPage(reportId,
 				ReportsUtil.convertSaikuParamsToReports(queryObject));
 		
@@ -390,12 +435,14 @@ public class Reports implements ErrorReportingEndpoint {
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX, false);
 	}
+
 	@POST
 	@Path("/saikureport/export/xls/run/{report_token}")
 	@Produces({"application/vnd.ms-excel" })
 	public final Response exportXlsSaikuReport(String query, @PathParam("report_token") Integer reportToken) {
 		return exportInMemorySaikuReport(query,reportToken,AMPReportExportConstants.XLSX);
 	}	
+
 	@POST
 	@Path("/saikureport/export/csv/{report_id}")
 	@Produces({"text/csv"})
@@ -404,15 +451,34 @@ public class Reports implements ErrorReportingEndpoint {
 		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.CSV, false);
 
 	}
+
 	@POST
 	@Path("/saikureport/export/csv/run/{report_token}")
 	@Produces({"text/csv"})
 	public final Response exportCsvSaikuReport(String query, @PathParam("report_token") Integer reportToken,
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 
-		return exportInMemorySaikuReport(query, reportToken,AMPReportExportConstants.CSV);
+		return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.CSV);
 	}
 	
+	@POST
+	@Path("/saikureport/export/xml/{report_id}")
+	@Produces({"application/xml"})
+	public final Response exportXmlSaikuReport(String query, @PathParam("report_id") Long reportId,
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XML, false);
+
+	}
+
+	@POST
+	@Path("/saikureport/export/xml/run/{report_token}")
+	@Produces({"application/xml"})
+	public final Response exportXmlSaikuReport(String query, @PathParam("report_token") Integer reportToken,
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+
+		return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.XML);
+	}
+
 	@POST
 	@Path("/saikureport/export/pdf/{report_id}")
 	@Produces({"application/pdf"})
@@ -426,7 +492,7 @@ public class Reports implements ErrorReportingEndpoint {
 	@Path("/saikureport/export/pdf/run/{report_token}")
 	@Produces({"application/pdf"})
 	public final Response exportPdfSaikuReport(String query, @PathParam("report_token") Integer reportToken) {
-		return exportInMemorySaikuReport(query, reportToken,AMPReportExportConstants.PDF);
+		return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.PDF);
 	}
 	
 	@POST
@@ -572,6 +638,7 @@ public class Reports implements ErrorReportingEndpoint {
 			
 			if (doc != null) {
 				logger.info("Send export data to browser...");
+
 				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
 						.header("content-disposition", "attachment; filename = " + fileName)
 						.header("content-length", doc.length).build();
@@ -587,9 +654,16 @@ public class Reports implements ErrorReportingEndpoint {
 
 	public String getExportFileName(AmpReports ampReport, String type) {
 		
-		String filename = ampReport != null ? ampReport.getName() : "export";
+		String filename = ampReport != null ? StringUtils.trim(ampReport.getName()) : "export";
+		filename = String.format("%s", filename.replaceAll(" ", "_"));
+
+		try {
+			filename = URLEncoder.encode(filename, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e);
+		}
+
 		filename += "." + type;
-		filename = String.format("\"%s\"", filename.replaceAll(" ", "_"));
 		
 		return filename;
 	}
@@ -631,33 +705,14 @@ public class Reports implements ErrorReportingEndpoint {
 			case AMPReportExportConstants.PDF:
 				exporter = SaikuReportExportType.PDF;
 				break;
+			case AMPReportExportConstants.XML:
+				exporter = SaikuReportExportType.XML;
+				break;
 		}
 		
 		return exporter.executor.newInstance().exportReport(report, dualReport);
 	}
 
-	@GET
-	@Path("/report/{report_id}/settings/")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public final Object getSettings(@PathParam("report_id") Long reportId) {
-		AmpARFilter arFilter = FilterUtil.buildFilter(null, reportId);
-		ReportsFilterPickerForm oldFilterForm = new ReportsFilterPickerForm();
-		FilterUtil.populateForm(oldFilterForm, arFilter, reportId);
-		ReportsFilterPicker.fillSettingsFormDropdowns(oldFilterForm, arFilter);
-		Map<String, Object> settings = new HashMap<String, Object>();
-		settings.put("decimalSeparators", oldFilterForm.getAlldecimalSymbols());
-		settings.put("decimalSymbols", oldFilterForm.getAlldecimalSymbols());
-		settings.put("groupSeparators", oldFilterForm.getAllgroupingseparators());
-		settings.put("amountInThousands", oldFilterForm.getAmountinthousands());
-		settings.put("selectedDecimalPlaces", oldFilterForm.getCustomDecimalPlaces());
-		settings.put("selectedDecimalSeparator", oldFilterForm.getCustomDecimalSymbol());
-		settings.put("selectedGroupSeparator", oldFilterForm.getCustomGroupCharacter());
-		settings.put("selectedUseGroupingSeparator", oldFilterForm.getCustomUseGrouping());
-		// settings.put("calendars", oldFilterForm.getCalendars());
-		// settings.put("currencies", oldFilterForm.getCurrencies());
-		return settings;
-	}
-	
 	@GET
 	@Path("/report/columns")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -697,50 +752,44 @@ public class Reports implements ErrorReportingEndpoint {
 			AmpARFilter newFilters = null;
 
 			// Convert json object back to AmpReportFilters
-			if (formParams.get("filters") != null) {
-				JsonBean filters = new JsonBean();
-				LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get("filters");
-				AmpReportFilters reportFilters = null;
-				if (requestFilters != null) {
-					filters.any().putAll(requestFilters);
-					reportFilters = FilterUtils.getFilters(filters,
-							new AmpReportFilters());
+			Map<String, Object> filterMap = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+			if (filterMap != null) {
+				AmpReportFilters reportFilters = FilterUtils.getFilters(filterMap, new AmpReportFilters());
 
-					// Transform back to legacy AmpARFilters.
-					AmpReportFiltersConverter converter = new AmpReportFiltersConverter(reportFilters);
-					newFilters = converter.buildFilters();
-					// converter.mergeWithOldFilters(oldFilters);
-					
-					if (formParams.getString("sidx") != null && !formParams.getString("sidx").equals("")) {			
-						formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));									
-						logger.info(formParams.get(EPConstants.SORTING));
-						newFilters.setSortByAsc(formParams.getString("sord").equals("asc") ? true : false);
-						
-						String columns = "";
-						for (Map map : ((List<Map>) formParams.get(EPConstants.SORTING))) {
-							String column = map.get("columns").toString();
-							column = column.substring(column.indexOf("[") + 1, column.indexOf("]"));
-							columns += ("/" + column);
-						}
-						newFilters.setSortBy(columns);
-					}
-					
-					if (formParams.get(EPConstants.SETTINGS) != null) {
-						String currency = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("1").toString();
-						String calendar = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("2").toString();
-						newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
-						newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
-					}
-					
-					logger.info(newFilters);
+				// Transform back to legacy AmpARFilters.
+				AmpReportFiltersConverter converter = new AmpReportFiltersConverter(reportFilters);
+				newFilters = converter.buildFilters();
+				// converter.mergeWithOldFilters(oldFilters);
 
-					Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, newFilters);
-					if (report.getFilterDataSet() == null)
-						report.setFilterDataSet(fdSet);
-					else {
-						report.getFilterDataSet().clear();
-						report.getFilterDataSet().addAll(fdSet);
+				if (formParams.getString("sidx") != null && !formParams.getString("sidx").equals("")) {
+					formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));
+					logger.info(formParams.get(EPConstants.SORTING));
+					newFilters.setSortByAsc(formParams.getString("sord").equals("asc") ? true : false);
+
+					String columns = "";
+					for (Map map : ((List<Map>) formParams.get(EPConstants.SORTING))) {
+						String column = map.get("columns").toString();
+						column = column.substring(column.indexOf("[") + 1, column.indexOf("]"));
+						columns += ("/" + column);
 					}
+					newFilters.setSortBy(columns);
+				}
+
+				if (formParams.get(EPConstants.SETTINGS) != null) {
+					String currency = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get(SettingsConstants.CURRENCY_ID).toString();
+					String calendar = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get(SettingsConstants.CALENDAR_TYPE_ID).toString();
+					newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
+					newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
+				}
+
+				logger.info(newFilters);
+
+				Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, newFilters);
+				if (report.getFilterDataSet() == null)
+					report.setFilterDataSet(fdSet);
+				else {
+					report.getFilterDataSet().clear();
+					report.getFilterDataSet().addAll(fdSet);
 				}
 			}
 			

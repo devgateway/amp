@@ -8,8 +8,7 @@ module.exports = IndicatorJoinModel.extend({
   type: 'POST',
 
   url: function() {
-    // var settings = this.collection.settings.serialize();
-    return '/rest/gis/locationstotals/' + this.id.replace('-', '');
+    return '/rest/gis/locationstotals/' + this.id;
   },
 
   initialize: function() {
@@ -18,8 +17,7 @@ module.exports = IndicatorJoinModel.extend({
 
     // if filters or settings change then get data from API and update model
     this.listenTo(this.collection.filter, 'apply', this.refreshModel);
-    //this.listenTo(this.collection.settings, 'change:selected', this.refreshModel);
-    this.listenTo(this.collection.settings, 'applySettings', this.refreshModel);
+    this.listenTo(this.collection.settingsWidget, 'applySettings', this.refreshModel);
 
     // If the model updates, then refresh dependencies.
     this.listenTo(this, 'sync', this.refreshDependencies);
@@ -67,7 +65,7 @@ module.exports = IndicatorJoinModel.extend({
 
   fetch: function(options) {
     var self = this;
-    var payload = {otherFilters: {}};
+    var payload = {};
     var deferred = $.Deferred();
 
     // get filters
@@ -76,10 +74,9 @@ module.exports = IndicatorJoinModel.extend({
     }
 
     //get settings
-    if (this.collection.settings) {
-      this.collection.settings.serializeDeferred().then(function(serializedJSON) {
-        //add settings to payload
-        payload.settings = serializedJSON;
+    if (this.collection.settingsWidget) {
+           //add settings to payload
+        payload.settings = this.collection.settingsWidget.toAPIFormat();
         options = _.defaults((options || {}), {
           type: 'POST',
           data: JSON.stringify(payload)
@@ -89,7 +86,6 @@ module.exports = IndicatorJoinModel.extend({
         Backbone.Model.prototype.fetch.call(self, options).then(function() {
           deferred.resolve();
         });
-      });
     } else {
       console.warn('no settings fail hilight funding!');
       deferred.resolve(null);

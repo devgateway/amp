@@ -42,7 +42,6 @@ public class RecreateFMEntries {
 		add(MeasureConstants.PLANNED_COMMITMENTS);
 		add(MeasureConstants.PLANNED_DISBURSEMENTS);
 		add(MeasureConstants.PLANNED_EXPENDITURES);
-		add(MeasureConstants.TOTAL_COMMITMENTS);
 		add(MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS);
 		add(MeasureConstants.PLANNED_DISBURSEMENT_ORDERS);
 		add(MeasureConstants.PLEDGES_ACTUAL_PLEDGE);

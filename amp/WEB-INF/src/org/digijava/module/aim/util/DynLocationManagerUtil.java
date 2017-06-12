@@ -116,22 +116,15 @@ public class DynLocationManagerUtil {
 		Session dbSession = PersistenceManager.getSession();
 		try {
 			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) dbSession.load(AmpCategoryValueLocations.class, id);
+			loc.setDeleted(true);
+			dbSession.save(loc);
 			
-			AmpLocation ampLoc = DynLocationManagerUtil.getAmpLocation(loc);
-			if (ampLoc != null && ampLoc.getActivities() != null && ampLoc.getActivities().size() > 0) {
-				errors.add("title", new ActionMessage("error.aim.dynRegionManager.locationIsInUse"));
-			} else {
-				if (loc.getParentLocation() != null)
-					loc.getParentLocation().getChildLocations().remove(loc);
-				
-				if (ampLoc != null) {
-					dbSession.delete(ampLoc);
-				}
-				
-				dbSession.delete(loc);
+			for (AmpCategoryValueLocations l : loc.getChildLocations()) {
+				deleteLocation(l.getId(), errors);
 			}
+			
 		} catch (Exception e) {
-			errors.add("title", new ActionMessage("error.aim.dynRegionManager.locationIsInUse"));
+			errors.add("title", new ActionMessage("error.aim.dynRegionManager.cannotSaveOrUpdate"));
 			logger.error(e);
 		}
 	}
@@ -217,7 +210,7 @@ public class DynLocationManagerUtil {
 		TreeSet<AmpCategoryValueLocations> returnLocations = new TreeSet<AmpCategoryValueLocations>(alphabeticalLocComp);
 		
 		for(AmpCategoryValueLocations loc : allLocations) {
-			if (loc.getParentLocation() == null) {
+			if (loc.getParentLocation() == null && !loc.isSoftDeleted()) {
 				returnLocations.add(loc);
 			}
 		}
@@ -677,9 +670,9 @@ public class DynLocationManagerUtil {
 	 * @param locations
 	 * @return
 	 */
-	public static Set<Long> populateWithDescendantsIds(Collection<AmpCategoryValueLocations> locations)
-	{
-		Set<Long> allOutputLocations = getRecursiveChildrenOfCategoryValueLocations(AlgoUtils.collectIds(new HashSet<Long>(), locations));
+	public static Set<Long> populateWithDescendantsIds(Collection<AmpCategoryValueLocations> locations, boolean includeDeleted)	{
+		Set<Long> allOutputLocations = getRecursiveChildrenOfCategoryValueLocations(AlgoUtils.collectIds(new HashSet<Long>(), locations), includeDeleted);
+		
 		return allOutputLocations;
 	}
 	
@@ -688,12 +681,14 @@ public class DynLocationManagerUtil {
 	 * @param destCollection
 	 * @param locations
 	 */
-	public static void populateWithDescendants(Set <AmpCategoryValueLocations> destCollection, 
-			Collection<AmpCategoryValueLocations> locations ) {
+	public static void populateWithDescendants(Set<AmpCategoryValueLocations> destCollection, 
+			Collection<AmpCategoryValueLocations> locations, boolean includeDeleted) {
 		
-		Set<Long> allOutputLocations = populateWithDescendantsIds(locations);
-		for(Long outputId:allOutputLocations)
+		Set<Long> allOutputLocations = populateWithDescendantsIds(locations, includeDeleted);
+		
+		for(Long outputId:allOutputLocations) {
 			destCollection.add(getLocation(outputId, false));
+		}
 	}
 	
 	/**
@@ -701,21 +696,34 @@ public class DynLocationManagerUtil {
 	 * @param inIds
 	 * @return
 	 */
-	public static Set<Long> getRecursiveAscendantsOfCategoryValueLocations(Collection<Long> inIds)
-	{
+	public static Set<Long> getRecursiveAscendantsOfCategoryValueLocations(Collection<Long> inIds, boolean includeDeleted) {
+		String exludeDeletedCriteria = " deleted IS NOT TRUE AND";
+		
+		if (includeDeleted) {
+			exludeDeletedCriteria = "";
+		}
+		
 		return AlgoUtils.runWave(inIds, 
-				new DatabaseWaver("SELECT DISTINCT(parent_location) FROM amp_category_value_location WHERE (parent_location IS NOT NULL) AND (id IN ($))"));
+				new DatabaseWaver("SELECT DISTINCT(parent_location) FROM amp_category_value_location WHERE "
+						+ exludeDeletedCriteria + " (parent_location IS NOT NULL) AND (id IN ($))"));
 	}
 		
 	/**
 	 * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm
 	 * @param inIds
+	 * @param includedDeleted
 	 * @return
 	 */
-	public static Set<Long> getRecursiveChildrenOfCategoryValueLocations(Collection<Long> inIds)
-	{
+	public static Set<Long> getRecursiveChildrenOfCategoryValueLocations(Collection<Long> inIds, boolean includeDeleted) {
+		String exludeDeletedCriteria = " deleted IS NOT TRUE AND";
+		
+		if (includeDeleted) {
+			exludeDeletedCriteria = "";
+		}
+		
 		return AlgoUtils.runWave(inIds, 
-				new DatabaseWaver("SELECT DISTINCT id FROM amp_category_value_location WHERE parent_location IN ($)"));
+				new DatabaseWaver("SELECT DISTINCT id FROM amp_category_value_location WHERE "
+						+ exludeDeletedCriteria + " parent_location IN ($)"));
 	}
 	
 	public static void populateWithAscendants(Collection <AmpCategoryValueLocations> destCollection, 
@@ -833,7 +841,8 @@ public class DynLocationManagerUtil {
 			Session dbSession = PersistenceManager.getSession();
 			String queryString = "select loc from "
 					+ AmpCategoryValueLocations.class.getName()
-					+ " loc where (loc.parentCategoryValue=:cvId) ";
+					+ " loc where (loc.parentCategoryValue=:cvId) "
+					+ " and (loc.deleted != true)";
 			Query qry = dbSession.createQuery(queryString);
 			qry.setLong("cvId", cvLayer.getId());
             qry.setCacheable(true);
@@ -1069,6 +1078,7 @@ public class DynLocationManagerUtil {
                                 location.setIso3(iso3);
                                 location.setParentCategoryValue(implLoc);
                                 location.setParentLocation(parentLoc);
+                                location.setDeleted(false);
                                 boolean edit = location.getId() != null;
                                 LocationUtil.saveLocation(location, edit);
                             }
@@ -1325,161 +1335,7 @@ public class DynLocationManagerUtil {
 		return (AmpLocationIndicatorValue)qry.uniqueResult(); 
  }
 
-    /**
-     * Return the errorc
-     * @param inputStream
-     * @param option
-     * @return returns
-     * @throws AimException
-     */
-    public static ErrorWrapper importIndicatorTableExcelFile(InputStream inputStream, Option option) throws AimException {
-       return importIndicatorTableExcelFile(inputStream, option, 0);
-    }
 
-    /**
-     * Return the errorc
-     * @param inputStream
-     * @param option
-     * @return returns
-     * @throws AimException
-     */
-    public static ErrorWrapper importIndicatorTableExcelFile(InputStream inputStream, Option option, long indicatorId) throws AimException {
-        POIFSFileSystem fsFileSystem = null;
-
-        Set<String> geoIdsWithProblems=new HashSet<String>();
-        try {
-            fsFileSystem = new POIFSFileSystem(inputStream);
-            HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
-
-            HSSFSheet hssfSheet = workBook.getSheetAt(0);
-            Row hssfRow = hssfSheet.getRow(0);
-            Cell admLevelCell = hssfRow.getCell(0);
-            String admLevel = "";
-            AmpCategoryValue selectedAdmLevel = null;
-            if (admLevelCell!= null) {
-                admLevel = admLevelCell.getStringCellValue();
-            }
-            List<AmpCategoryValue> implLocs = new ArrayList<AmpCategoryValue>(
-                    CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
-
-            boolean isCountryLevel = false;
-            for (AmpCategoryValue admLevelValue:implLocs) {
-                if (admLevel.equalsIgnoreCase(admLevelValue.getValue()) && admLevelValue.isVisible()) {
-                    selectedAdmLevel = admLevelValue;
-                    if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(admLevelValue)) {
-                        isCountryLevel = true;
-                    }
-                    break;
-                }
-            }
-
-            if (selectedAdmLevel == null) {
-                return new ErrorWrapper(ErrorCode.INEXISTANT_ADM_LEVEL);
-            }
-
-            int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();
-            List<AmpIndicatorLayer> indicatorLayers;
-            if (indicatorId > 0) {
-                indicatorLayers = DynLocationManagerUtil.getIndicatorByCategoryValueIdAndIndicatorId(selectedAdmLevel.getId(), indicatorId);
-            } else {
-                indicatorLayers = DynLocationManagerUtil.getIndicatorByCategoryValueId(selectedAdmLevel.getId());
-            }
-            int indicatorNumberOfCells=indicatorLayers.size();
-            if (indicatorNumberOfCells+2 < physicalNumberOfCells) {
-                return new ErrorWrapper(ErrorCode.NUMBER_NOT_MATCH);
-            }
-            List<AmpIndicatorLayer>  orderedIndicators = new ArrayList<AmpIndicatorLayer>();
-            for (int i=2;i<physicalNumberOfCells;i++) {
-                String cellValue = hssfRow.getCell(i).getStringCellValue();
-                boolean found = false;
-                for (AmpIndicatorLayer indicator:indicatorLayers) {
-                    if (indicator.getName().equalsIgnoreCase(cellValue)) {
-                        found = true;
-                        orderedIndicators.add(indicator);
-                        break;
-                    }
-                }
-                if (!found) {
-                    return new ErrorWrapper(ErrorCode.NAME_NOT_MATCH);
-                }
-            }
-            for (int j = 1; j < hssfSheet.getPhysicalNumberOfRows(); j++) {
-                hssfRow = hssfSheet.getRow(j);
-                if (hssfRow != null) {
-                    AmpCategoryValueLocations locationObject = null;
-                    String id = null;
-
-                    if (!isCountryLevel) {
-                        Cell idCell = hssfRow.getCell(1);
-                        if (idCell != null) {
-                            id = getValue(idCell);
-                            //some versions of excel converts to numeric and adds a .0 at the end
-                            if (StringUtils.isNotEmpty(id) && !".0".equals(id)) {
-                                id = id.replace(".0", "");
-                                locationObject = DynLocationManagerUtil.getLocationById(Long.parseLong(id), selectedAdmLevel);
-                                if(locationObject == null) {
-                                    geoIdsWithProblems.add(id);
-                                    continue;
-                                }
-                            } else {
-                                continue;
-                            }
-                        }
-                    }
-
-                    int index = 2;
-                    for (AmpIndicatorLayer indicator : orderedIndicators) {
-                        Cell cell = hssfRow.getCell(index++);
-                        String value = getValue(cell);
-
-                        if (isCountryLevel){
-                            locationObject = getDefaultCountry();
-                        }
-                        AmpLocationIndicatorValue locationIndicatorValue = DynLocationManagerUtil.getLocationIndicatorValue (indicator.getId(), locationObject.getId());
-
-                        if (locationIndicatorValue!=null && option.equals(Option.NEW)) {
-                            continue;
-                        }
-                        else {
-                            if (locationIndicatorValue!= null) {
-                                locationIndicatorValue.setValue(Double.valueOf(value));
-                            }
-                            else {
-                                locationIndicatorValue = new AmpLocationIndicatorValue();
-                                locationIndicatorValue.setValue(Double.valueOf(value));
-                                locationIndicatorValue.setIndicator(indicator);
-                                locationIndicatorValue.setLocation(locationObject);
-                            }
-                        }
-                        DbUtil.saveOrUpdateObject(locationIndicatorValue);
-                    }
-                }
-            }
-
-        }
-        catch (NullPointerException e) {
-            logger.error("file is not ok");
-            throw new AimException("Cannot import indicator values", e);
-        }
-        catch (IllegalStateException e) {
-            logger.error("file is not ok", e);
-            return new ErrorWrapper(ErrorCode.INCORRECT_CONTENT);
-        }
-        catch(IOException e){
-            logger.error("file is not ok", e);
-            return new ErrorWrapper(ErrorCode.INCORRECT_CONTENT);
-        }
-        catch (Exception e) {
-            logger.error(e);
-            throw new AimException("Cannot import indicator values", e);
-        }
-        if(geoIdsWithProblems.size()>0){
-            //we have geoids with errors
-            return new ErrorWrapper(ErrorCode.LOCATION_NOT_FOUND,geoIdsWithProblems);
-        }else{
-            return new ErrorWrapper(ErrorCode.CORRECT_CONTENT);}
-    }
- 
 	/**
 	 * 
 	 * @param id

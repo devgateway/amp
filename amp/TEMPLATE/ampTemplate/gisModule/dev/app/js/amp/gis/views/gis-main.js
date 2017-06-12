@@ -1,11 +1,11 @@
 var fs = require('fs');
 var $ = require('jquery');
 var Backbone = require('backbone');
-var boilerplate = require('amp-boilerplate');
 var MapView = require('../../map/views/main-view');
 //var DataQualityView = require('../../dataquality/views/dataquality-view');
 var SidebarView = require('../../sidebar/sidebar-view');
 var ModuleTemplate = fs.readFileSync(__dirname + '/../templates/module-template.html', 'utf8');
+var boilerplate = require('amp-boilerplate');
 
 module.exports = Backbone.View.extend({
 
@@ -44,7 +44,7 @@ module.exports = Backbone.View.extend({
         showDGFooter: false,
         useSingleRowHeader: true
       });
-    $.when(headerWidget.menu.menuRendered).then(function() {
+    $.when(headerWidget.layoutFetched).then(function() {
       $('.dropdown-toggle').dropdown();
     });
 

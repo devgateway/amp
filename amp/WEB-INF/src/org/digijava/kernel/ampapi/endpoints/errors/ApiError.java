@@ -1,10 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
@@ -15,10 +21,13 @@ import org.digijava.kernel.ampapi.endpoints.gis.GisEndPoints;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEndPoints;
 import org.digijava.kernel.ampapi.endpoints.reports.Reports;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsDefinitionsEndpoint;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.json.JSONObject;
+import org.json.XML;
 
-import javax.servlet.http.HttpServletResponse;
+import com.google.common.base.Joiner;
 
 /**
  * Defines API Error Utility class for manipulating ApiErrorMessage objects
@@ -37,7 +46,7 @@ public class ApiError {
 	public final static String UNKOWN_ERROR = "Unknown Error";
 	
 	/**  Will store the mapping between the component and it's Id (C). */
-	public final static Map<String, Integer> COMPONENT_ID_CLASS_MAP = new HashMap<String, Integer>() {{
+	private final static Map<String, Integer> COMPONENT_ID_CLASS_MAP = new HashMap<String, Integer>() {{
 		put(InterchangeEndpoints.class.getName(), 1);
 		put(Security.class.getName(), 2);
         put(Reports.class.getName(), 3);
@@ -45,7 +54,11 @@ public class ApiError {
         put(EndPoints.class.getName(), 5);
         put(IndicatorEndPoints.class.getName(), 6);
         put(GisEndPoints.class.getName(), 7);
+        put(SettingsDefinitionsEndpoint.class.getName(), 8);
 	}};
+
+	private final static Set<String> COMPONENTS_WITH_NEW_ERROR_FORMAT = new HashSet<>(
+			Collections.singletonList(InterchangeEndpoints.class.getName()));
 	
 	/**
 	 * Returns a JSON object with a single error message  => generic 0 error code with one error in the list.
@@ -53,10 +66,10 @@ public class ApiError {
 	 * @return the json of the error. E.g.: {0: [“Generic error 1”]}
 	 */
 	public static JsonBean toError(String errorMessage) {
-		JsonBean errorBean = new JsonBean();
-		errorBean.set(String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE), new String[] {errorMessage});
+		Map<String, Collection<Object>> error = new HashMap<>();
+		error.put(String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE), Arrays.asList(errorMessage));
 		
-		return getResultErrorBean(errorBean);
+		return getResultErrorBean(error);
 	};
 	
 	/**
@@ -77,22 +90,22 @@ public class ApiError {
 	 * @return the JSON object of the error. E.g.: {0: [“Generic error 1”, “Generic error 2”], 135: [“Forbidden fields have been configured: sector_id”], 123: [“Generic error 1”]}
 	 */
 	public static JsonBean toError(Collection<?> errorMessages) {
-		Map<String, Collection<String>> errors = new HashMap<String, Collection<String>>();
+		Map<String, Collection<Object>> errors = new HashMap<>();
 		
 		if (errorMessages != null && errorMessages.size() > 0) {
 			if (errorMessages.iterator().next() instanceof String) {
 				String generalErrorCode = String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE);
-				errors.put(generalErrorCode, (Collection<String>) errorMessages);
+				errors.put(generalErrorCode, (Collection<Object>) errorMessages);
 			} else if (errorMessages.iterator().next() instanceof ApiErrorMessage) {
 				int componentId = getErrorComponentId();
 				for(Object errorMessage : errorMessages) {
 					ApiErrorMessage apiError = (ApiErrorMessage) errorMessage;
 					String errorId = getErrorId(componentId, apiError.id);
-					
+
 					if (errors.get(errorId) == null) {
-						errors.put(errorId, new ArrayList<String>());
+						errors.put(errorId, new ArrayList<>());
 					}
-					
+
 					errors.get(errorId).add(getErrorText(apiError));
 				}
 			}
@@ -107,10 +120,10 @@ public class ApiError {
 	 * @return the json of the error. E.g.: {"0102": ["Generic error 1"]}
 	 */
 	public static JsonBean toError(ApiErrorMessage apiErrorMessage) {
-		JsonBean errorBean = new JsonBean();
-		errorBean.set(getErrorId(getErrorComponentId(), apiErrorMessage.id), new String[] {getErrorText(apiErrorMessage)});
+		Map<String, Collection<Object>> error = new HashMap<>();
+		error.put(getErrorId(getErrorComponentId(), apiErrorMessage.id), Arrays.asList(getErrorText(apiErrorMessage)));
 		
-		return getResultErrorBean(errorBean);
+		return getResultErrorBean(error);
 	};
 
     /**
@@ -125,11 +138,11 @@ public class ApiError {
         }
     }
 	
-	private static JsonBean getResultErrorBean(Object errorBean) {
+	private static JsonBean getResultErrorBean(Map<String, Collection<Object>> errors) {
         processErrorResponseStatus();
 
 		JsonBean resultErrorBean = new JsonBean();
-		resultErrorBean.set(JSON_ERROR_CODE, errorBean);
+		resultErrorBean.set(JSON_ERROR_CODE, errors);
 		
 		return resultErrorBean;
 	}
@@ -170,24 +183,102 @@ public class ApiError {
 		
 		return GENERAL_ERROR_CODE;
 	}
+
+	/**
+	 * Determine if this call is being executed from a REST Endpoint / component that supports new error format.
+	 *
+	 * @return true if this component supports new error format
+	 */
+	private static boolean isNewErrorFormat() {
+		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+
+		for (StackTraceElement st : stackTrace) {
+			if (COMPONENTS_WITH_NEW_ERROR_FORMAT.contains(st.getClassName())) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 	
 	/**
-	 * Returns the message of the ApiErrorMessage object.
+	 * Convert ApiErrorMessage to an error object. Some components use expanded errors while others use flattened.
+	 * See {@link #isNewErrorFormat()}.
+	 *
 	 * @param apiErrorMessage object
 	 * @see ApiErrorMessage
-	 * @return the message of the error
+	 * @return an object describing the error
 	 */
-	private static String getErrorText(ApiErrorMessage apiErrorMessage) {
+	private static Object getErrorText(ApiErrorMessage apiErrorMessage) {
+		if (isNewErrorFormat()) {
+			return getExpandedError(apiErrorMessage);
+		} else {
+			return getFlattenedError(apiErrorMessage);
+		}
+	}
+
+	/**
+	 * Extract the expanded error message from ApiErrorMessage. This format is handy for post processing in UI layers.
+	 *
+	 * @param apiErrorMessage the error
+	 * @return expanded error message
+	 */
+	private static JsonBean getExpandedError(ApiErrorMessage apiErrorMessage) {
+		String errorText = TranslatorWorker.translateText(apiErrorMessage.description);
+		if (!StringUtils.isBlank(apiErrorMessage.prefix)) {
+            errorText += " " + TranslatorWorker.translateText(apiErrorMessage.prefix);
+        }
+
+		JsonBean error = new JsonBean();
+		error.set(errorText, apiErrorMessage.values);
+		return error;
+	}
+
+	/**
+	 * Extract flattened error message from ApiErrorMessage.
+	 *
+	 * @param apiErrorMessage the error
+	 * @return the message represented by this error object
+	 */
+	private static String getFlattenedError(ApiErrorMessage apiErrorMessage) {
 		String errorText = "(" + TranslatorWorker.translateText(apiErrorMessage.description) + ")";
 		if (!StringUtils.isBlank(apiErrorMessage.prefix)) {
-			errorText += " " + TranslatorWorker.translateText(apiErrorMessage.prefix);
-		}
-		
-		if (!StringUtils.isBlank(apiErrorMessage.value)) {
-			// no translation of the value, it must come translated if translation is needed for it
-			errorText += " " + apiErrorMessage.value;
-		}
-		
+            errorText += " " + TranslatorWorker.translateText(apiErrorMessage.prefix);
+        }
+
+		if (apiErrorMessage.values != null) {
+            // no translation of the value, it must come translated if translation is needed for it
+            errorText += " " + Joiner.on(", ").join(apiErrorMessage.values);
+        }
+
 		return errorText;
+	}
+	
+	/**
+	 * 
+	 * @param errorBean
+	 * @return convert a error JsonBean into a well-formed, element-normal XML string
+	 */
+	public static String toXmlErrorString(JsonBean errorBean) {
+		JsonBean responseErrorBean = new JsonBean();
+		Map<String, Collection<Object>> errorBeans = (Map<String, Collection<Object>>) errorBean.get(JSON_ERROR_CODE);
+		List<Map<String, Object>> errors = new ArrayList<>();
+		
+		for(String key : errorBeans.keySet()) {
+			Map<String, Object> err = new HashMap<>();
+			Collection<Object> error = errorBeans.get(key);
+			err.put("code", key);
+			err.put("value", error);
+			errors.add(err);
+		}
+		
+		Map<String, Object> errorsMap = new HashMap<>();
+		errorsMap.put(JSON_ERROR_CODE, errors);
+		responseErrorBean.set("errors", errorsMap);
+		
+		JSONObject o = new JSONObject(responseErrorBean.asJsonString());
+		String xmlString = XML.toString(o);
+		
+		return xmlString;
 	}
 }

@@ -254,6 +254,15 @@ public class AmpTreeVisibility implements Serializable{
 		return null;
 	}
 
+    public AmpFeaturesVisibility getFeatureByNameFromModule(String moduleName, String featureName) {
+        AmpTreeVisibility module = this.getModuleTreeByNameFromRoot(moduleName);
+        if (module != null && module.getItems().containsKey(featureName)) {
+            return (AmpFeaturesVisibility) ((AmpTreeVisibility) module
+                    .getItems().get(featureName)).getRoot();
+        }
+        return null;
+    }
+
 	public AmpTreeVisibility getFeatureTreeByNameFromRoot(String featureName) {
 		for (Iterator it = this.getItems().values().iterator(); it.hasNext();) {
 			AmpTreeVisibility module = (AmpTreeVisibility) it.next();

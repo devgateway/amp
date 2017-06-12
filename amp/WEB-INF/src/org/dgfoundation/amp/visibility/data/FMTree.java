@@ -53,7 +53,7 @@ public class FMTree {
             for (Entry<String, FMTree> entry : entries.entrySet()) {
                 FMTree value = entry.getValue();
                 if (!fullEnabledPaths || value.enabled) {
-                    String suffix = fullEnabledPaths ? "" : "[" + enabled + "]"; 
+                    String suffix = fullEnabledPaths ? "" : "[" + value.enabled + "]"; 
                     String currentPath = "/" + entry.getKey() + suffix;   
                     Set<String> children = value == null ? null : value.toFlattenedTree(fullEnabledPaths);
                     if (children == null || children.isEmpty()) {

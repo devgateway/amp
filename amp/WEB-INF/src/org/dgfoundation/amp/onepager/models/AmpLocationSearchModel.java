@@ -106,6 +106,8 @@ public class AmpLocationSearchModel extends
 		if (!CategoryConstants.IMPLEMENTATION_LOCATION_ALL.equalsCategoryValue(cvLayer)) {
 			criteria.add(Restrictions.eq("parentCategoryValue", cvLayer));
 		}
+		
+		criteria.add(Restrictions.eqOrIsNull("deleted", false));
 
 		criteria.addOrder(Order.asc("name"));
 		if (maxResults != null && maxResults != 0)

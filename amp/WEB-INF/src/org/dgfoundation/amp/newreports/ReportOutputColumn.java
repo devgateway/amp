@@ -103,5 +103,12 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	@Override public int compareTo(ReportOutputColumn oth) {
 		return this.getHierarchicalName().compareTo(oth.getHierarchicalName());
 	}
-
+	
+	/** get the format type of the column. The information is used for displayng data in reports. 
+	 * 
+	 * @return format type of the column
+	 */
+	public String getFormatType() {
+		return this.emptyCell.extractFormatType();
+	}
 }

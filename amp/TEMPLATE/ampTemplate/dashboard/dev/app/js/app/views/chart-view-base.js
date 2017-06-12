@@ -55,7 +55,7 @@ module.exports = BackboneDash.View.extend({
     }
 
     this.listenTo(this.app.filter, 'apply', this.updateData);
-    this.listenTo(this.app.settings, 'change', this.updateData);
+    this.listenTo(this.app.settingsWidget, 'applySettings', this.updateData);
     this.listenTo(this.model, 'change:adjtype', this.render);
     this.listenTo(this.model, 'change:xAxisColumn', this.render);
     this.listenTo(this.model, 'change:limit', this.updateData);
@@ -67,7 +67,7 @@ module.exports = BackboneDash.View.extend({
       empty: null
     });
 
-    _.bindAll(this, 'showChart', 'failLoading','hideExportInPublicView');
+    _.bindAll(this, 'showChart', 'failLoading','hideExportInPublicView','extractNumberFormatSettings');
     if (this.getTTContent) { _.bindAll(this, 'getTTContent'); }
     if (this.chartClickHandler) { _.bindAll(this, 'chartClickHandler'); }
   },
@@ -82,32 +82,33 @@ module.exports = BackboneDash.View.extend({
       util: util
     };
     // We need to be sure all dependencies have been loaded before processing each chart (specially the templates).
-    $.when(this._stateWait, this.app.filter.loaded, this.app.translator.promise).done(function() {
+    $.when(this._stateWait, this.app.filter.loaded, this.app.translator.promise, this.app.settingsWidget.definitions.loaded, this.app.generalSettings.loaded).done(function() {
+    	
+    	self.extractNumberFormatSettings();
     	self.$el.html(template(renderOptions));
     	self.hideExportInPublicView();
     	self.message = self.$('.dash-chart-diagnostic');
     	self.chartContainer = self.$('.dash-chart-wrap');
 	
 	    if (self.model.get('adjtype') !== void 0) {  // this chart has adj settings
-	    	self.app.settings.load().done(_(function() {
-	    		self.rendered = true;
-	        var adjSettings = self.app.settings.get('0');  // id for Funding Type
+	    	self.rendered = true;
+	        var adjSettings = self.app.settingsWidget.definitions.getFundingTypeSetting(); 	        	
 	        if (!adjSettings) { 
 	        	self.app.report('Could not find Funding Type settings'); 
 	        } else {
 	        	if (self.model.get('adjtype') === 'FAKE') {
-	        		self.model.set('adjtype', adjSettings.get('defaultId'));
+	        		self.model.set('adjtype', adjSettings.get('value').defaultId);
 	        	}
 	        }
 	        self.$('.ftype-options').html(
-	          _(adjSettings.get('options')).map(function(opt) {
+	          _(adjSettings.get('value').options).map(function(opt) {
 	            return adjOptTemplate({
 	              opt: opt,
 	              current: (opt.id === self.model.get('adjtype'))
 	            });
 	          }, self)
 	        );
-	      }).bind(self));
+	      
 	    } else {
 	    	self.rendered = true;
 	    }
@@ -263,7 +264,7 @@ module.exports = BackboneDash.View.extend({
     	this.$('.chart-total').html(util.translateLanguage(this.model.get('sumarizedTotal'))); // this shall use the format from the server and translate it in the front end
     }
     var self = this;
-    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+   var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;    	
     this.$('.chart-currency').html(currencyName);
   },
 
@@ -321,8 +322,8 @@ module.exports = BackboneDash.View.extend({
     this.hideExportInPublicView();
   },
   hideExportInPublicView: function(){
-	  var editableDataExportSetting = this.app.settings.get('hide-editable-export-formats-public-view');
-	  if(this.model.get('view') === 'table' && editableDataExportSetting && editableDataExportSetting.get('defaultId') == "true" && this.app.user.get('logged') == false ){
+	  var editableDataExportSetting = this.app.generalSettings.get('hide-editable-export-formats-public-view');
+	  if(this.model.get('view') === 'table' && editableDataExportSetting == true && this.app.user.get('logged') == false ){
 		  this.$el.find('.download').hide();
 	  }else{
 		  this.$el.find('.download').show();
@@ -412,6 +413,32 @@ module.exports = BackboneDash.View.extend({
 			  nv.tooltip.cleanup();
 		  });
 	  }
-  }
+  },
+  extractNumberFormatSettings: function(settings) {
+		  var numberFormat = {}; 
+	      numberFormat.numberFormat = this.app.generalSettings.get('number-format') || '#,#.#';
+
+		  // If the format pattern doesnt have thousands grouping then ignore 'number-group-separator' param or it will 
+		  // be used by JS to group by thousands (ie: in the 'Others' columns).
+		  if(numberFormat.numberFormat.indexOf(',') !== -1) {			  		  
+			  numberFormat.groupSeparator = this.app.generalSettings.get('number-group-separator') || ',';
+		  } else {
+			  numberFormat.groupSeparator = '';
+		  }
+		  			  
+		  numberFormat.decimalSeparator = this.app.generalSettings.get('number-decimal-separator') || '.';
+		  this.app.generalSettings.numberFormatSettings = numberFormat;		
+		  
+		  this.app.generalSettings.numberDivider = this.app.generalSettings.get('number-divider');		  
+		  if (this.app.generalSettings.numberDivider === 1) {
+			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inunits';
+		  } else if(this.app.generalSettings.numberDivider === 1000) {
+			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inthousands';
+		  } else if(this.app.generalSettings.numberDivider === 1000000) {
+			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inmillions';
+		  }else if(this.app.generalSettings.numberDivider === 1000000000) {
+			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inbillions';
+		  }
+	  }
 
 });

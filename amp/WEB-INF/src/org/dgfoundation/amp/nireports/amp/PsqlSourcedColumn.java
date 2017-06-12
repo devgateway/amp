@@ -1,8 +1,14 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
+import org.digijava.kernel.translator.LocalizableLabel;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -26,9 +32,13 @@ public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn
 	 * and added to amp_columns
 	 */
 	protected String group = null;
-		
+
 	public PsqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, viewName, keyColumnName(viewName, "amp_activity_id"), behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
+		this(columnName, new LocalizableLabel(columnName), levelColumn, viewName, behaviour);
+	}
+
+	public PsqlSourcedColumn(String columnName, LocalizableLabel label, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
+		super(columnName, label, levelColumn, viewName, keyColumnName(viewName, "amp_activity_id"), behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
 		this.viewColumns = SQLUtils.getTableColumns(viewName);
 		check();
 	}
@@ -56,4 +66,24 @@ public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn
 		NiUtils.failIf(!viewColumns.contains(mainColumn), String.format("column %s: view %s does not have mainColumn %s", name, viewName, mainColumn));
 	}
 
+	protected Map<NiDimension.NiDimensionUsage, NiDimension.Coordinate> buildCoordinates(long entityId,
+			NiReportsEngine engine, ResultSet rs) throws SQLException {
+		HashMap<NiDimension.NiDimensionUsage, NiDimension.Coordinate> coos = new HashMap<>();
+
+		levelColumn.ifPresent(column -> coos.put(column.dimensionUsage, column.getCoordinate(entityId)));
+
+		addSubActivityCoordinates(coos, engine, rs);
+
+		return coos;
+	}
+
+	protected void addSubActivityCoordinates(Map<NiDimension.NiDimensionUsage, NiDimension.Coordinate> coos,
+			NiReportsEngine engine, ResultSet rs) throws SQLException {
+		Map<String, NiDimension.LevelColumn> levelColumns = engine.schema.getSubDimensions().getLevelColumns();
+		for (Map.Entry<String, NiDimension.LevelColumn> optDim : levelColumns.entrySet()) {
+			if (viewColumns.contains(optDim.getKey())) {
+				addCoordinateIfLongExists(coos, rs, optDim.getKey(), optDim.getValue());
+			}
+		}
+	}
 }

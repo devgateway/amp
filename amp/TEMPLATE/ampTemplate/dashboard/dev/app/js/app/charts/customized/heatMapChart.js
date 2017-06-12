@@ -132,9 +132,9 @@ nv.models.heatMapChart = function() {
         renderWatch.models(heatmap);
 
         selection.each(function(data) {
-        	// Get currency for later.
-        	var currencySettings = _.find(app.settings.models, function(item) {return item.get('id') === '1'});
-        	var selectedCurrency = _.find(currencySettings.get('options'), function(item) {return item.selected === true}).value;
+        	// Get currency for later.        	       	
+        	var currencyId = app.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
+        	var selectedCurrency = app.settingsWidget.definitions.findCurrencyById(currencyId).value;        	
         	var newShortTextLength = !data[0].values.model.get('showFullLegends') ? shortTextLength : 100;
         	
         	var container = d3.select(this);

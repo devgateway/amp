@@ -518,10 +518,10 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
 			documentData.setUuid(uuid);
 		if (nodeVersionUUID != null)
 			documentData.setNodeVersionUUID(nodeVersionUUID);
-		documentData.setTitle( nodeWrapper.getTitle() );
-		if (documentData.getTitle() == null) {
-			documentData.setTitle(nodeWrapper.getTranslatedTitleByLang(TLSUtils.getSite().getDefaultLanguage().getCode()));
-		}
+		documentData.setTitle(nodeWrapper.getTitle());
+        if (documentData.getTitle() == null) {
+            documentData.setTitle(nodeWrapper.getTranslatedTitleByLang(TLSUtils.getSite().getDefaultLanguage().getCode()));
+        }
 		documentData.setDescription( nodeWrapper.getDescription() );
 		documentData.setNotes( nodeWrapper.getNotes() );
 		documentData.setFileSize( nodeWrapper.getFileSizeInMegabytes() );

@@ -21,6 +21,7 @@ module.exports = Backbone.Model
     this.appData = options.appData;
     this.filter = options.filter;
     this.structuresCollection = this.appData.structures;
+    this.attachListeners();
   },
 
   addedState: function() {
@@ -89,6 +90,7 @@ module.exports = Backbone.Model
 	1: 'None.svg',
     100: 'Social.svg',
     110: 'Education.svg',
+    113: 'Education.svg',
     120: 'Health.svg',
     130: 'Population.svg',
     140: 'Water.svg',
@@ -115,6 +117,8 @@ module.exports = Backbone.Model
     920: 'NGO_Support.svg',
     930: 'Refugees.svg',
     998: 'Unspecified.svg'
-  }
+  },
+  
+  DEFAULT_ICON_CODE: '998' //if no icon can be found using the sector code in the activity, default to unspecified
 
 });

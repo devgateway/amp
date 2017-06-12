@@ -55,8 +55,8 @@ import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 import org.digijava.module.esrigis.helpers.MapFilter;
 import org.digijava.module.esrigis.helpers.QueryUtil;
-import org.digijava.module.visualization.helper.EntityRelatedListHelper;
-import org.digijava.module.visualization.util.Constants;
+import org.digijava.module.esrigis.helpers.EntityRelatedListHelper;
+import org.digijava.module.esrigis.helpers.Constants;
 
 public class MainMap extends Action {
 	private static Logger logger = Logger.getLogger(MainMap.class);
@@ -264,12 +264,12 @@ public class MainMap extends Action {
 			}
 			filter.setSectorConfigs(SectorUtil.getAllClassificationConfigs());
 			filter.setConfigWithSectorAndSubSectors(new ArrayList<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>>());
-			List<AmpSector> sectors = org.digijava.module.visualization.util.DbUtil
+			List<AmpSector> sectors = org.digijava.module.esrigis.helpers.DbUtil
 						.getParentSectorsFromConfig(filter.getSelSectorConfigId());
 			
 			filter.setSectors(sectors);
 			for(AmpClassificationConfiguration config: filter.getSectorConfigs()){
-				List<AmpSector> currentConfigSectors = org.digijava.module.visualization.util.DbUtil.getParentSectorsFromConfig(config.getId());
+				List<AmpSector> currentConfigSectors = org.digijava.module.esrigis.helpers.DbUtil.getParentSectorsFromConfig(config.getId());
 				List<EntityRelatedListHelper<AmpSector,AmpSector>> sectorsWithSubSectors = new ArrayList<EntityRelatedListHelper<AmpSector,AmpSector>>();
 				Collections.sort((List)currentConfigSectors, new DbUtil.HelperAmpSectorNameComparator());
 				for(AmpSector sector:currentConfigSectors){;

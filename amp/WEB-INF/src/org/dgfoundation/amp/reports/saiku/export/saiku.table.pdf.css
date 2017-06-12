@@ -53,16 +53,19 @@ th.row {
 	background: #F9F9F9 none repeat scroll 0% 0%;
 }
 
+td.text, td.date {
+	text-align: left;
+}
+
+td.number {
+	text-align: right;
+}
+
 th.row_total {
 	border-left: 1px none #D5D5D5;
 	border-top: 1px solid #D5D5D5;
 	background: #C7C7C7 none repeat scroll 0% 0%;
 }
-
-td.data {
-	text-align: left;
-}
-
 
 td.measure {
 	border-left: 1px solid #D5D5D5;

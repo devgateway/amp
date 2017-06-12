@@ -80,21 +80,23 @@
 
 </script>
 
-
- 
- 
 <link rel="stylesheet"  href="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/dhtmlxscheduler.css"/>" type="text/css"/> 
-
 
 <script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/dhtmlxscheduler.js"/>" type="text/javascript"></script>
  
 <script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_year_view.js"/>" type="text/javascript"></script>
- 
- 
- 
- 
- <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
+<!-- Recurring Events -->
+<!--
+By default, the scheduler doesn't support recurring events. To enable such support, you need to include a special extension file on the page - dhtmlxscheduler_recurring.js.
+
+read more in http://docs.dhtmlx.com/scheduler/recurring_events.html
+-->
+<script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_recurring.js"/>" type="text/javascript"></script>
+
+<script src="<digi:file src="module/calendar/dhtmlxScheduler/property.js"/>" type="text/javascript"></script>
+
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
 <c:set var="printButon"><%=request.getSession().getAttribute("print")%></c:set>
  <c:if test="${printButon}">

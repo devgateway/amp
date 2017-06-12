@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.dgfoundation.amp.newreports;
 
 import java.util.ArrayList;
@@ -20,6 +17,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	protected String reportName = null;
 	protected Set<ReportColumn> columns = new LinkedHashSet<ReportColumn>();
 	protected Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
+	protected Set<ReportColumn> invisibleHierarchies = new LinkedHashSet<>();
 	protected Set<ReportMeasure> measures = new LinkedHashSet<ReportMeasure>();
 	protected ReportFilters filters = null;
 	protected ReportSettings settings = null;
@@ -106,7 +104,16 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		this.hierarchies.clear();
 		this.hierarchies.addAll(hierarchies);
 	}
-	
+
+	@Override
+	public Set<ReportColumn> getInvisibleHierarchies() {
+		return invisibleHierarchies;
+	}
+
+	public void addInvisibleHierarchy(ReportColumn hierarchy) {
+		invisibleHierarchies.add(hierarchy);
+	}
+
 	@Override
 	public ReportFilters getFilters() {
 		return filters;
@@ -271,9 +278,11 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		
 		for(String columnName:columns)
 			spec.addColumn(new ReportColumn(columnName));
-		
-		for(String measureName:measures)
-			spec.addMeasure(new ReportMeasure(measureName));
+
+		if (measures != null) {
+			for (String measureName : measures)
+				spec.addMeasure(new ReportMeasure(measureName));
+		}
 		
 		if (hierarchies != null) {
 			for(String hierarchyName:hierarchies) {

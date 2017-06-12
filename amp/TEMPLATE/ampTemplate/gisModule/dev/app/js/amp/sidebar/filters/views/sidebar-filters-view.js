@@ -25,19 +25,17 @@ module.exports = BaseControlView.extend({
     this.app = options.app;
     BaseControlView.prototype.initialize.apply(this, arguments);
 
-    this.app.data.filter.loaded.then(function() {
-    	console.info('filters loaded');
+    this.app.data.filter.loaded.then(function() {    	
       self.app.state.register(self, 'filters', {
         get: function() { return self.app.data.filter.serialize();},
         set: function(state) {
           state = state || {};
           self.app.data.filter.reset({silent: true});
-          // AMP-21118, AMP-19254, AMP-20537: override the "date" range with the GIS-specific one from the settings blob (a hack...)
+          //override the "date" range with the GIS-specific one from the settings blob
           if (_.isEmpty(state)){ 
-        	  self.app.data.filter.extractDates(self.app.data.settings.models, state, 'gis-default-min-date', 'gis-default-max-date'); 
+        	  self.app.data.filter.extractDates(self.app.data.generalSettings, state.filters, 'gis-default-min-date', 'gis-default-max-date'); 
           }          
-      	  var res = self.app.data.filter.deserialize(state);
-          self.app.data.filter.finishedFirstLoad = true; //copy-pasted off AMP-20206, most probably bad code
+      	  var res = self.app.data.filter.deserialize(state);          
         },
         empty: null
       });
@@ -47,25 +45,20 @@ module.exports = BaseControlView.extend({
 
 
   render:function() {
-    BaseControlView.prototype.render.apply(this);
-
-    // add content
+    BaseControlView.prototype.render.apply(this);   
     this.$('.content').html(this.template({title: this.title}));
-    this.app.data.filter.setElement(this.el.querySelector('#filter-popup')); //self.$('#filter-popup'));
-
-    this._attachListeners();
-
+    this.app.data.filter.setElement(this.el.querySelector('#filter-popup'));
+    this.attachListeners();
     return this;
   },
 
   newlaunchFilter:function() {
-    this.app.data.filter.showFilters(); // triggers stash of vars etc...
+    this.app.data.filter.showFilters();
     this.$('#filter-popup').show();
   },
 
-  _attachListeners: function() {
+  attachListeners: function() {
     var self = this;
-
     // could do better, but must close accordion or get weird states from bootstrap and manual filter showing....
     this.app.data.filter.on('cancel', function() {
       self.$('.accordion-body').collapse('hide');
@@ -73,7 +66,6 @@ module.exports = BaseControlView.extend({
 
     // serialized obj is returned in event if needed.
     this.app.data.filter.on('apply', function() {
-      //console.log('serialized', serialized.columnFilters);
       //only collapse ui if it's expanded...otherwise strange bootstrap behaviour.
       if (self.$('.accordion-body.collapse.in').length > 0) {
         self.$('.accordion-body').collapse('hide');

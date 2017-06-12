@@ -140,7 +140,7 @@ public class ActionAuthorizer {
 			error = errors.get(error.id); 
 		}
 		if (StringUtils.isNotBlank(details)) {
-			error = new ApiErrorMessage(error, TranslatorWorker.translateText(details));
+			error = error.withDetails(TranslatorWorker.translateText(details));
 		}
 		errors.put(error.id, error);
 	}

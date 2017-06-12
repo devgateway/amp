@@ -63,6 +63,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
@@ -252,7 +253,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     *     11,22,32,43 									<br/>
     *   ] 												<br/>
     * }, 												<br/>
-    * "otherFilters":{  								<br/>
+    * "filters":{  										<br/>
     *   "date":{  										<br/>
     *      "start":"1967-01-01",						<br/>
     *      "end":"2015-12-31"							<br/>
@@ -395,6 +396,10 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 				colorJson.set("color", color.getColor());
 				colorJson.set("order", color.getPayload());
 				colors.add(colorJson);
+				 if (color.getPayload() == IndicatorEPConstants.PAYLOAD_INDEX) {
+	                	long colorId = ColorRampUtil.getColorId(color.getColor());
+	                	json.set(IndicatorEPConstants.IS_MULTI_COLOR, IndicatorEPConstants.MULTI_COLOR_PALETTES.contains(colorId));
+	             }
 			}
 			json.set("colorRamp", colors);
 			indicatorsJson.add(json);

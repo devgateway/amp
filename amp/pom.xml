@@ -12,10 +12,10 @@
         <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <buildVersion>2.12-SNAPSHOT</buildVersion>
+        <buildVersion>2.13-SNAPSHOT</buildVersion>
         <buildSource></buildSource>
         <buildDate></buildDate>
-        <jersey.version>1.18</jersey.version>
+        <jersey.version>1.19</jersey.version>
         <saiku.version>3.0-RC2</saiku.version>
         <saiku3.version>3.0-RC2-DG</saiku3.version>
         <apidocs>false</apidocs>
@@ -974,6 +974,12 @@
             <artifactId>embedphantomjs</artifactId>
             <version>2.9</version>
         </dependency>
+        
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.14</version>
+		</dependency>
 
     </dependencies>
 
@@ -981,7 +987,25 @@
         <sourceDirectory>${project.basedir}/WEB-INF/src</sourceDirectory>
 
         <outputDirectory>${project.basedir}/WEB-INF/classes</outputDirectory>
+
+        <resources>
+            <resource>
+                <directory>WEB-INF/src</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
         <plugins>
+            <plugin>
+                <groupId>org.developmentgateway</groupId>
+                <artifactId>inccheckstyle-maven-plugin</artifactId>
+                <version>0.1</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -990,9 +1014,6 @@
                     <warName>${project.version}</warName>
 
                     <recompressZippedFiles>false</recompressZippedFiles>
-                    <manifest>
-                        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                    </manifest>
                     <archive>
                         <manifestEntries>
                             <Specification-Title>${project.name}</Specification-Title>
@@ -1048,6 +1069,7 @@
                         <configuration>
                             <outputDirectory>WEB-INF/lib</outputDirectory>
                             <excludeScope>provided</excludeScope>
+                            <silent>true</silent>
                         </configuration>
                     </execution>
                 </executions>
@@ -1088,14 +1110,9 @@
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
                                 <property name="jdbc.db" value="amp_drc" />
 
-                                <echo message="compile classpath: ${compile_classpath}" />
-                                <echo message="runtime classpath: ${runtime_classpath}" />
-                                <echo message="test classpath:    ${test_classpath}" />
-                                <echo message="plugin classpath:  ${plugin_classpath}" />
-
                                 <ant antfile="${basedir}/build.xml">
                                     <target name="deployForServer" />
-                                    <target name="compile" />
+                                    <target name="jaxb" />
                                 </ant>
                             </target>
                         </configuration>
@@ -1113,11 +1130,6 @@
                                 <property name="runtime_classpath" refid="maven.runtime.classpath" />
                                 <property name="test_classpath" refid="maven.test.classpath" />
                                 <property name="plugin_classpath" refid="maven.plugin.classpath" />
-
-                                <echo message="compile classpath: ${compile_classpath}" />
-                                <echo message="runtime classpath: ${runtime_classpath}" />
-                                <echo message="test classpath:    ${test_classpath}" />
-                                <echo message="plugin classpath:  ${plugin_classpath}" />
 
                                 <ant antfile="${basedir}/build.xml">
                                     <target name="clean" />
@@ -1229,7 +1241,44 @@
                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
-                             
+                                       <!-- Installing node and npm  for amp-settings-->
+                    <execution>
+                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
+                        <id>install node and npm for amp-settings</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
+                        </configuration>
+                    </execution>
+                      <!-- Running npm for amp-settings-->
+                    <execution>
+                        <id>npm install for amp-settings</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Running gulp for amp-settings-->
+                    <execution>
+                        <id>gulp build for amp-settings</id>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <arguments>build</arguments>
+               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
+                        </configuration>
+                    </execution>
                     <!-- Running npm for GIS-->
                     <execution>
                         <id>npm install for GIS</id>

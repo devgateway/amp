@@ -1102,7 +1102,7 @@ public class ActivityImporter {
         		funAmount += InterchangeUtils.doPPCCalculations(apb, ppc.getCurrencyCode());
         	}
 			if (ppc != null) {
-				ppc.setFunAmount(funAmount * AmountsUnits.getDefaultValue().multiplier);
+				ppc.setFunAmount(funAmount / AmountsUnits.getDefaultValue().divider);
 			}
         }
 	}

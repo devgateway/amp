@@ -43,7 +43,6 @@ var Query = Backbone.Model.extend({
         this.model = _.extend({ name: this.uuid }, SaikuQueryTemplate);
         this.helper = new SaikuQueryHelper(this);
         this.result = new Result({ limit: Settings.RESULT_LIMIT }, { query: this });
-        this.timestamp = new Date().getTime();
 
         //Start Custom Code for Pagination
        	this.set({page:1});
@@ -54,22 +53,23 @@ var Query = Backbone.Model.extend({
         //End Custom Code for Pagination
         
         this.transformSavedFilters();
-    },    
+    },
     
     transformSavedFilters: function() {
     	Saiku.logger.log("Query.transformSavedFilters");
     	var self = this;
-        if (this.firstLoad === true) {
-        	// Get original filters from reports specs.
-        	var auxFilters = self.get('filters');
-	        // Cleanup filters property on this Query.
-        	self.set('filters', undefined);
-	        // TODO: Review this 2-steps process completely.
-	        var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
-	        var blob = CommonFilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
-	        Saiku.logger.log(blob);
-	        // Set these filters reformatted. 
-	        self.set('filters', blob);	       
+        if (this.firstLoad === true) {        	
+        	var  auxFilters = self.get('filters');
+        	
+        	//remove null filters
+        	$.each(auxFilters, function(key, value){
+        	    if (value === "" || value === null){
+        	        delete auxFilters[key];
+        	    }
+        	});
+	       
+        	self.set('filters', undefined);	         
+	        self.set('filters', auxFilters);	       
         }
     },
     
@@ -157,7 +157,7 @@ var Query = Backbone.Model.extend({
     	 * See AMP-19159, AMP-19135 and AMP-18826
     	 */
     	//if (this.firstLoad === false) {
-        	if (filters === undefined) {
+    	    if (filters === undefined) {
         		filters = this.get('filters');
         	}
         	if (settings === undefined) {
@@ -168,9 +168,9 @@ var Query = Backbone.Model.extend({
         	if(filters) {
         		this.set('filters', filters);
         		filtersApplied = true;
-        		//this.set('filtersWithModels', window.currentFilter.serializeToModels());
+        		
         	}	        	
-    	//}
+    	
 
     	var settingsApplied = false;
     	if(settings) {
@@ -184,11 +184,10 @@ var Query = Backbone.Model.extend({
 
     	exModel = this.workspace.currentQueryModel;
     	exModel.querySettings = {};
-    	//if (this.firstLoad === false) {
-    		exModel.queryModel.filters = this.get('filters');
-    		exModel.queryModel.filtersWithModels = this.get('filtersWithModels');
-    		exModel.queryModel.filtersApplied = filtersApplied;
-    	//}
+    	exModel.queryModel.filters = this.get('filters'); 
+    	exModel.queryModel.filtersWithModels = this.get('filtersWithModels');
+    	exModel.queryModel.filtersApplied = filtersApplied;
+    	
     	exModel.queryModel.settings = this.get('settings');        	
     	exModel.queryModel.settingsApplied = settingsApplied;
     	if(Settings.PAGINATION) {
@@ -204,7 +203,8 @@ var Query = Backbone.Model.extend({
         }
         this.firstLoad = false;
         
-        exModel.MD5 = this.calculateMD5FromParameters(exModel, this.get('report_id'));
+        Saiku.logger.log("QueryRouter.calculateMD5FromParameters");
+        exModel.MD5 = CommonFilterUtils.calculateMD5FromParameters(exModel, this.get('report_id'), Saiku.i18n.locale, this.get('page_timestamp'));
         exModel.querySettings.info = this.get('info');
 
         // Run it
@@ -231,83 +231,5 @@ var Query = Backbone.Model.extend({
     url: function() {
     	Saiku.logger.log("Query.url");
    		return "/TEMPLATE/ampTemplate/saikuui_nireports/mockData/query.json";
-    },
-    
-    /**
-     * This function will calculate the MD5 string of the parameters that define a report's result: id, filters, etc.
-     * Also will make some cleanup and reordering to get the same MD5 for the "same" parameters.
-     */
-    calculateMD5FromParameters: function (model, id) {
-    	Saiku.logger.log("QueryRouter.calculateMD5FromParameters");
-    	var parameters = {filters: {}, settings: {}, id: null, lang : null, timestamp : null};
-    	
-    	parameters.id = id;
-    	parameters.lang = Saiku.i18n.locale;
-    	parameters.timestamp = this.timestamp;
-    	
-    	if (model.queryModel.filters) {
-    		// Everything non-date filters.
-    		if (model.queryModel.filters.columnFilters) {
-    			var columnFilters = {};
-    			for (var property in model.queryModel.filters.columnFilters) {
-    				// To avoid problems with prototype´s properties.
-    				if (model.queryModel.filters.columnFilters.hasOwnProperty(property)) {
-    					// Sort ID's.
-    					columnFilters[property] = _.sortBy(model.queryModel.filters.columnFilters[property], function(item) {return item;});
-    				}
-    			}
-    			// Now sort the properties of the object so stringify will return the same string.
-    			var auxPropertiesArray = [];
-    			for (var property in columnFilters) {
-    				auxPropertiesArray.push(property);
-    			}
-    			var sortedFilters = {};
-    			auxPropertiesArray = auxPropertiesArray.sort();
-    			_.each(auxPropertiesArray, function(item) {
-    				sortedFilters[item] = columnFilters[item];
-    			})
-    			parameters.filters.columnFilters = sortedFilters;
-    		}
-    		
-    		// Date filters.
-    		if (model.queryModel.filters.otherFilters) {
-    			// Sort the properties by name so stringify will return the same string.
-    			var auxPropertiesArray = [];
-    			for (var property in model.queryModel.filters.otherFilters) {
-    				auxPropertiesArray.push(property);
-    			}
-    			var sortedFilters = {};
-    			auxPropertiesArray = auxPropertiesArray.sort();
-    			_.each(auxPropertiesArray, function(item) {
-    				sortedFilters[item] = model.queryModel.filters.otherFilters[item];
-    			})
-    			parameters.filters.otherFilters = sortedFilters;
-    		}
-    	}    	
-    	
-    	if (model.queryModel.settings) {
-    		var auxSettings = model.queryModel.settings;
-			// Now sort the properties of the object so stringify will return the same string.
-			var auxPropertiesArray = [];
-			for (var property in auxSettings) {
-				auxPropertiesArray.push(property);
-			}
-			var sortingSettings = {};
-			auxPropertiesArray = auxPropertiesArray.sort();
-			_.each(auxPropertiesArray, function(item) {
-				sortingSettings[item] = auxSettings[item];
-			})
-			parameters.settings = sortingSettings;    		
-    	}
-    	
-    	if (model.queryModel.sorting) {
-    		// No need to rearrange sorting parameters.
-    		parameters.sorting = model.queryModel.sorting; 
-    	}
-  	
-    	Saiku.logger.log(JSON.stringify(parameters));
-    	var md5 = hex_md5(JSON.stringify(parameters));
-    	Saiku.logger.log(md5);
-		return md5;
     }
 });

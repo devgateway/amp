@@ -31,12 +31,15 @@ import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.util.SectorUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -67,13 +70,13 @@ public class ActivityService {
 		List<JsonBean> activities=new ArrayList<JsonBean>();
 		
 		//we check if we have filter by keyword
-		LinkedHashMap<String, Object> otherFilter=null;
+		LinkedHashMap<String, Object> filters = null;
 		if (config != null) {
-			otherFilter=(LinkedHashMap<String, Object>)config.get("otherFilters");
-			if(activitIds==null){
-				activitIds=new ArrayList<String>();
+			filters = (LinkedHashMap<String, Object>) config.get(EPConstants.FILTERS);
+			if (activitIds == null) {
+				activitIds = new ArrayList<>();
 			}
-			activitIds.addAll(FilterUtils.applyKeywordSearch( otherFilter));
+			activitIds.addAll(FilterUtils.applyKeywordSearch(filters));
 		}
 		
 		
@@ -108,9 +111,7 @@ public class ActivityService {
  		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
  		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 
-		AmpReportFilters filterRules = FilterUtils.getFilterRules(
-				(LinkedHashMap<String, Object>) config.get("columnFilters"),
-				otherFilter, activitIds);
+		AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, activitIds);
 		if(filterRules!=null){
 			spec.setFilters(filterRules);
 		}
@@ -127,7 +128,7 @@ public class ActivityService {
 
  		for (ReportArea reportArea : ll) {
 			JsonBean activity = new JsonBean();
-			JsonBean filters = new JsonBean();
+			JsonBean matchesFilters = new JsonBean();
 			Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
 			Set<ReportOutputColumn> col = row.keySet();
 			for (ReportOutputColumn reportOutputColumn : col) {
@@ -143,10 +144,23 @@ public class ActivityService {
 				} else {
 				    IdentifiedReportCell idReportCell = (IdentifiedReportCell) row.get(reportOutputColumn);
 				    Set<Long> ids = idReportCell.entitiesIdsValues == null ? null : idReportCell.entitiesIdsValues.keySet();
-					filters.set(reportOutputColumn.originalColumnName, ids);
+				    if (reportOutputColumn.originalColumnName.equals(ColumnConstants.PRIMARY_SECTOR)) {
+						List<SimpleJsonBean> sectors = new ArrayList<>();
+						for (Long id : ids) {
+							AmpSector ampSector = SectorUtil.getAmpSector(id);
+							SimpleJsonBean sector = new SimpleJsonBean();
+							sector.setId(ampSector.getAmpSectorId());
+							sector.setCode(ampSector.getSectorCodeOfficial());
+							sector.setName(ampSector.getName());						
+							sectors.add(sector);
+						}						
+						matchesFilters.set(reportOutputColumn.originalColumnName, sectors);
+					} else {
+						matchesFilters.set(reportOutputColumn.originalColumnName, ids);
+					}
 				}
 			}
-			activity.set("matchesFilters", filters);
+			activity.set("matchesFilters", matchesFilters);
 			activities.add(activity);
 		}
 		JsonBean list = new JsonBean();
@@ -211,8 +225,8 @@ public class ActivityService {
 	
 	if (config != null) {
 	    SettingsUtils.applySettings(spec, config, true);
+		FilterUtils.applyFilterRules((Map<String, Object>) config.get(EPConstants.FILTERS), spec,null);
 	}
-	FilterUtils.applyFilterRules(config, spec,null);	
 	GeneratedReport report = EndpointUtils.runReport(spec);
 	
 	//ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);

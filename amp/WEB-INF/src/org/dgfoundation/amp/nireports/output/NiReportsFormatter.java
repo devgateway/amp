@@ -71,7 +71,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	
 	/** build generated headers and compute ReportOutputColumn's */
 	protected void buildHeaders() {
-		boolean needToGenerateDummyColumn = spec.isSummaryReport() && (spec.getHierarchies() == null || spec.getHierarchies().isEmpty());
+		boolean needToGenerateDummyColumn = spec.isSummaryReport() && spec.getHierarchies().isEmpty();
 		for (int i = 1; i < runResult.headers.rasterizedHeaders.size(); i++) {
 			SortedMap<Integer, Column> niHeaderRow = runResult.headers.rasterizedHeaders.get(i);
 			List<HeaderCell> ampHeaderRow = new ArrayList<HeaderCell>();
@@ -164,9 +164,9 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	 * @param id the id of the entity to convert
 	 * @return
 	 */
-	protected ReportAreaImpl renderCrdRow(NiColumnReportData crd, long id) {
+	protected ReportAreaImpl renderCrdRow(NiColumnReportData crd, NiRowId id) {
 		ReportAreaImpl row = reportAreaSupplier.get();
-		row.setOwner(new AreaOwner(id));
+		row.setOwner(new AreaOwner(id.id));
 		Map<ReportOutputColumn, ReportCell> rowData = new LinkedHashMap<>();
 		for(int i = hiersStack.size(); i < runResult.headers.leafColumns.size(); i++) {
 			CellColumn niCellColumn = runResult.headers.leafColumns.get(i);

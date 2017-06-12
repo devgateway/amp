@@ -110,15 +110,17 @@ var Palette = Backbone.Model.extend({
 
     function makeTest(bucket) {
       return function(value) {
-        return value >= bucket[0] && value <= bucket[1];
+        return bucket && value >= bucket[0] && value <= bucket[1];
+        
       };
     }
 
     for (var stop = 0; stop < stops; stop++) {
+      var color = this.getColour(stop, stops, sStopSize, lStopSize, hStopSize)
       newColours.push({
-        h: (this.get('rootHue') + (hStopSize * stop) + 360) % 360,
-        s: DEFAULT.S_MIN + (sStopSize * stop),
-        l: DEFAULT.L_MAX - (lStopSize * stop),  // dark to bright
+        h: color.h,
+        s: color.s,
+        l: color.l,  // dark to bright
         value: buckets[stop],
         test: makeTest(buckets[stop]),
         userSpecified: (stop === 0) ? true : false
@@ -127,7 +129,19 @@ var Palette = Backbone.Model.extend({
 
     this.colours.reset(newColours);
   },
-
+  getColour: function(stop, stops, sStopSize, lStopSize, hStopSize) {
+	  if (this.get('multiColorSet') && stops <= this.get('multiColorSet').length) {
+		  return {
+			  h: this.get('multiColorSet')[stop][0],
+			  s: this.get('multiColorSet')[stop][1],
+			  l: this.get('multiColorSet')[stop][2]
+		  };
+	  } else {
+		  return {h: (this.get('rootHue') + (hStopSize * stop) + 360) % 360,
+		      s: DEFAULT.S_MIN + (sStopSize * stop),
+		      l: DEFAULT.L_MAX - (lStopSize * stop)};  // dark to bright 
+	  }	  
+  },  
   generateSet: function() {
 
     var elements = this.get('elements'),
@@ -135,7 +149,7 @@ var Palette = Backbone.Model.extend({
 
     var localizedMultipleItem = [
                                  '<span data-i18n="amp.gis:legend-multiple">',
-                                 'Multiple ',
+                                 'Multiple Projects ',
                                  '</span>'
                                ].join('');
     var localizedOthersItem = [

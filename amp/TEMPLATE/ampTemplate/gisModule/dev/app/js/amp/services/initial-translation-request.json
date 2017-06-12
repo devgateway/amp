@@ -76,7 +76,7 @@
 "amp.gis:legend-others":"Others",
 "amp.gis:legend-none":"None",
 "amp.gis:legend-na":"n/a",
-"amp.gis:legend-multiple":"Multiple",
+"amp.gis:legend-multiple":"Multiple Projects",
 "amp.gis:title-settings": "Settings",
 "amp.gis:popup-project-site": "Project Site",
 "amp.gis:popup-project-site-activity": "Project",
@@ -105,5 +105,9 @@
 "amp.gis:page-title":"Aid Management Platform - GIS",
 "amp.gis:title-gap-analysis-selector":"Gap Analysis View Available",
 "amp.gis:title-gap-analysis-tooltip[title]":"Gap analysis calculates the amount of funding by location spent per the selected indicator. Example: Amount spent for each person with no access to safe water in each district. Filters should be used to specify funding for the appropriate sector (e.g. water and sanitation), etc. Gap analysis is not available for layers that are the 'Ratio: other' type.",
-"amp.gis:statistical-layers-btn": "Statistical Layers Manager"
+"amp.gis:statistical-layers-btn": "Statistical Layers Manager",
+"amp.gis-layers-manager:tooltip-created-on": "Created on",
+"amp.gis-layers-manager:tooltip-created-by": "by",
+"amp.gis:date-from": "From",
+"amp.gis:date-until": "Until"
 }

@@ -1,5 +1,5 @@
-define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ], function(columnsMapping,
-		TranslationManager, TabUtils) {
+define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','underscore' ], function(columnsMapping,
+		TranslationManager, TabUtils, _) {
 
 	"use strict";
 
@@ -28,10 +28,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 	/**
 	 * Apply filters and refresh the grid.
 	 */
-	GridManager.filter = function(id, jsonFilters, settings) {
+	GridManager.filter = function(id, jsonFilters, settings) {		
 		// Until we refactor the Filter Widget we will transform some filters here before sending the params to the backend.
-		CommonFilterUtils.transformParametersForBackend(jsonFilters);
-		
+						
 		var grid = jQuery("#" + gridBaseName + id);
 		jQuery(grid).jqGrid('clearGridData');
 		jQuery(grid).jqGrid('setGridParam', {
@@ -65,6 +64,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 	};
 
 	GridManager.populateGrid = function(id, dynamicLayoutView, firstContent) {
+		app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize() || {};		
 		var TableSectionView = Marionette.ItemView.extend({
 			template : '#grid-template'
 		});
@@ -107,13 +107,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 							page : 1,
 							regenerate : true,
 							columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
-							filters : null
-						},
-						serializeGridData : function(postData) {
-							if (postData.sidx && postData.sord) {
-								postData.sidx = postData.sidx.replace(/ asc/g, ' ' + postData.sord);
-							}
-							return JSON.stringify(postData);
+							filters : app.TabsApp.serializedFilters.filters
 						},
 						jsonReader : {
 							repeatitems : false,
@@ -159,6 +153,17 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 						footerrow : true,
 						loadBeforeSend : function(xhr, settings) {
 							TranslationManager.searchAndTranslate();
+						},
+						serializeGridData: function (data) {
+							// This function is called automatically BEFORE sending the request, so here we can make changes on the POST data.
+							if (data.sidx && data.sord) {
+								data.sidx = data.sidx.replace(/ asc/g, ' ' + data.sord);
+							}
+							data.MD5 = generateMD5(data.filters, data.settings,  
+									{sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, 
+									id, app.TabsApp.generalSettings.get('language'));
+							
+							return JSON.stringify(data);
 						},
 						gridComplete : function() {
 							// Save current sorting settings in case we save the tab later.
@@ -613,4 +618,19 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils' ]
 	}
 
 	return GridManager;
+	
+	function generateMD5(filters, settings, sorting, id, lang) {
+		var model = {queryModel: {}};
+		if (filters !== null) {
+			model.queryModel.filters = filters;
+		}
+		if (settings !== null) {
+			model.queryModel.settings = settings;
+		}
+		if (sorting !== null) {
+			model.queryModel.sorting = sorting;
+		}
+		var md5 = CommonFilterUtils.calculateMD5FromParameters(model, id, lang, null);
+		return md5;
+	}
 });

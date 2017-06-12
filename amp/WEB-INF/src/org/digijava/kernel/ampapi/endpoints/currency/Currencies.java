@@ -1,6 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.currency;
 
-import java.util.List;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,13 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
-import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.util.CurrencyUtil;
+import java.util.List;
 
 @Path("currency")
 public class Currencies implements ErrorReportingEndpoint {
@@ -26,10 +25,40 @@ public class Currencies implements ErrorReportingEndpoint {
 	private HttpServletRequest httpRequest;
 	@Context
 	private HttpServletResponse httpResponse;
-	
+
 	/**
-	 * Provides standard currency (doesn't include constant currencies)
-	 * @return { "currency-code1": "currency-name1", "currency-code2": "currency-name2", ...}
+	 * Provides standard currency.
+	 * </br>
+	 * <dl>
+	 * The list doesn't include constant currencies
+	 * The JSON object holds information regarding:
+	 * <dt><b>name</b><dd> - is the currency code
+	 * <dt><b>value</b><dd> - is the currency name
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
+	 * {
+	 *   "AUD": "Australian Dollar 2000",
+	 *   "CAD": "Canadian Dollar",
+	 *   "CHF": "Swiss Franc",
+	 *   "CNY": "Chinese Yuan",
+	 *   "DKK": "Danish Kroner",
+	 *   "EUR": "Euro",
+	 *   "GBP": "Pound Sterling",
+	 *   "IDR": "Indonesian Rupiah",
+	 *   "JPY": "Japanese Yen",
+	 *   "KRW": "Korean Won",
+	 *   "NOK": "Norwegian Krone",
+	 *   "NZD": "New Zealand Dollar",
+	 *   "SDR": "Constant US Dollar 2012 (Ethiopian Fiscal Calendar)",
+	 *   "SEK": "Swedish Krona",
+	 *   "SGD": "Singapore ",
+	 *   "THB": "Thailand Baht",
+	 *   "USD": "US Dollar"
+	 * }</pre>
+	 *
+	 * @return a JSON object with all available currencies or error
 	 */
 	@GET
 	@Path("/currencies")
@@ -43,10 +72,18 @@ public class Currencies implements ErrorReportingEndpoint {
 		return standardCurrencies;
 	}
 	
-	
 	/**
-	 * Provides inflation rates data sources
-	 * @return <pre>
+	 * Provides inflation rates data sources.
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>name</b><dd> - the name of the source
+	 * <dt><b>description</b><dd> - the description of the source
+	 * <dt><b>settings</b><dd> - settings info with the currency and frequency
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
 	 * [{
 	 *    id: 123,
 	 *    name: “FRED-GNPDEF”,
@@ -58,8 +95,9 @@ public class Currencies implements ErrorReportingEndpoint {
 	 *    },
 	 *  },
 	 *  ... // another source, e.g. CSV import
-	 * ]
-	 * </pre>
+	 * ]</pre>
+	 *
+	 * @return a list of JSON objects
 	 */
 	@GET
 	@Path("/inflation-sources")
@@ -68,16 +106,25 @@ public class Currencies implements ErrorReportingEndpoint {
 	public List<JsonBean> getCurrencyInflationDataSources() {
 		return CurrencyService.getInflationDataSources();
 	}
-	
+
 	/**
-	 * Provides inflation rates already stored in AMP, sorted by date 
-	 * @return <pre>
+	 * Provides inflation rates already stored in AMP, sorted by date.
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>name</b><dd> - the currency code
+	 * <dt><b>value</b><dd> - a list of currency rates
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
 	 * {
 	 *     "USD": {"2008-01-01" : 1.2, ...},		//sorted by date
 	 *     "ETB": {"2008-01-01" : 12.7, ...},
 	 *     ...
-	 * }
-	 * </pre>
+	 * }</pre>
+	 *
+	 * @return a JSON objects with the inflation rates
 	 */
 	@GET
 	@Path("/inflation-rates")
@@ -86,18 +133,27 @@ public class Currencies implements ErrorReportingEndpoint {
 	public JsonBean getAmpInflationRates() {
 		return CurrencyService.getAmpInflationRates();
 	}
-	
+
 	/**
-	 * Save new inflation rates AMP. Input example:
-	 * <pre>
+	 * Save new inflation rates AMP.
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>name</b><dd> - the currency code
+	 * <dt><b>value</b><dd> - a list of date and currency rates
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Input:</h3><pre>
 	 * {
-	 *     "USD": {"2008-01-01" : 1.2, ...},
-	 *     "ETB": {"2008-01-01" : 12.7, ...},
+	 *      "USD": {"2008-01-01" : 1.2},
+	 *      "ETB": {"2008-01-01" : 12.7),
 	 *     ...
-	 * }
-	 * </pre>
-	 * @param inflationRates data input
-	 * @return no output with 200 HTTP status or validation error with 400 HTTP status (bad request) 
+	 * }</pre>
+	 *
+	 * @param inflationRates a JSON object with the currency codes and a list of date and currency rates
+	 *
+	 * @return no output with 200 HTTP status or validation error with 400 HTTP status (bad request)
 	 */
 	@POST
 	@Path("/inflation-rates")
@@ -106,17 +162,27 @@ public class Currencies implements ErrorReportingEndpoint {
 	public JsonBean saveInflationRates(JsonBean inflationRates) {
 		return CurrencyService.saveInflationRates(inflationRates);
 	}
-	
+
 	/**
-	 * Retrieve and provide inflation rates from the selected datasource
-	 * @param sourceId source ID to query for inflation rates 
-	 * @return <pre>
+	 * Retrieve and provide inflation rates from the selected datasource.
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>name</b><dd> - the currency code
+	 * <dt><b>value</b><dd> - a list of currency rates
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
 	 * {
 	 *     "USD": {"2008-01-01" : 1.2, ...},		//sorted by date
 	 *     "ETB": {"2008-01-01" : 12.7, ...},
 	 *     ...
-	 * }
-	 * </pre>
+	 * }</pre>
+	 *
+	 * @param sourceId source ID to query for inflation rates
+	 *
+	 * @return a JSON object with the inflation rates from the selected datasource
 	 */
 	@GET
 	@Path("/inflation-rates/{source_id}")
@@ -125,10 +191,18 @@ public class Currencies implements ErrorReportingEndpoint {
 	public JsonBean getInflationRatesFromSource(@PathParam("source_id") Long sourceId) {
 		return CurrencyService.getInflationRatesFromSource(sourceId);
 	}
-	
+
 	/**
-	 * Provides configured constant currencies per calendar
-	 * @return <pre>
+	 * Provides configured constant currencies per calendar.
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>name</b><dd> - the calendar_id for Gregorian Calendar in the currency AMP instance
+	 * <dt><b>value</b><dd> - a list of constant currencies
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
 	 * {
 	 *    "4": { // calendar_id for Gregorian Calendar in AMP Ethiopia
 	 *      "USD": "2008, 2010-2015",
@@ -136,8 +210,9 @@ public class Currencies implements ErrorReportingEndpoint {
 	 *    },
 	 *    "1": {...},
 	 *    ...
-	 * }
-	 * </pre>
+	 * }</pre>
+	 *
+	 * @return a JSON object with the constant currencies per calendar
 	 */
 	@GET
 	@Path("/constant-currencies")
@@ -146,10 +221,18 @@ public class Currencies implements ErrorReportingEndpoint {
 	public JsonBean getConstantCurrencies() {
 		return CurrencyService.getConstantCurrencies();
 	}
-	
+
 	/**
-	 * Stores constant currencies per calendar
-	 * @param input <pre>
+	 * Stores constant currencies per calendar.
+	 * </br>
+	 * <dl>
+	 * The JSON object holds information regarding:
+	 * <dt><b>name</b><dd> - the calendar_id for Gregorian Calendar in the currency AMP instance
+	 * <dt><b>value</b><dd> - a list of constant currencies
+	 * </dl></br></br>
+	 *
+	 * </br>
+	 * <h3>Sample Output:</h3><pre>
 	 * {
 	 *    "4": { // calendar_id for Gregorian Calendar in AMP Ethiopia
 	 *      "USD": "2008, 2010-2015",
@@ -157,8 +240,10 @@ public class Currencies implements ErrorReportingEndpoint {
 	 *    },
 	 *    "1": {...},
 	 *    ...
-	 * }
-	 * </pre>
+	 * }</pre>
+	 *
+	 * @param input a JSON object with the constant currencies information
+	 *
 	 * @return nothing or error
 	 */
 	@POST

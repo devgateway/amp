@@ -91,16 +91,10 @@ public class FactTableFiltering {
 	protected String buildAcvStatement(String ampColumnName, String factTableColumnName) {
 		if (mrf == null || mrf.getFilterRules() == null)
 			return "";
-		List<FilterRule> rules = mrf.getFilterRules().get(new ReportElement(new ReportColumn(ampColumnName)));
-		if (rules == null)
+		FilterRule rule = mrf.getFilterRules().get(new ReportElement(new ReportColumn(ampColumnName)));
+		if (rule == null)
 			return "";
-		List<String> ruleStatements = new ArrayList<>();
-		for(FilterRule rule:rules) {
-			String statement = buildRuleStatement(rule, new IdentityExpander(factTableColumnName));
-			if (statement.length() > 0)
-				ruleStatements.add(statement);
-		}
-		return AmpARFilter.mergeStatements(ruleStatements);
+		return buildRuleStatement(rule, new IdentityExpander(factTableColumnName));
 	}
 	
 	
@@ -113,7 +107,7 @@ public class FactTableFiltering {
 		ActivityFilter flt = new ActivityFilter("date_code");
 		if (mrf != null && mrf.getFilterRules() != null) {
 			// tag date filters section to reuse "all filters without date filters" criteria in other queries 
-			for(Entry<ReportElement, List<FilterRule>> filterElement:mrf.getFilterRules().entrySet())
+			for(Entry<ReportElement, FilterRule> filterElement:mrf.getFilterRules().entrySet())
 				if (filterElement.getKey().type.equals(elementType)) {
 					String dateQuery = flt.buildQuery(filterElement.getValue());
 					if (dateQuery != null && !dateQuery.isEmpty())

@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
@@ -125,7 +126,7 @@ public class DateTimeUtil {
     	return result;
 	}
 
-	public static String parseDateForPicker2(Date date, String format) throws Exception{
+	public static String formatDateForPicker2(Date date, String format) {
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
 		String pattern = null;
 		if (format == null) {
@@ -153,6 +154,22 @@ public class DateTimeUtil {
                     result = formaterCont.format(date);
                 }
 		return result;
+	}
+
+	/**
+	 * Converts Julian day number to default date format. Julian number can be null.
+	 *
+	 * @param julianNumber julian day number as string
+	 * @return date using default date format
+	 */
+	public static String convertJulianNrToDefaultDateFormat(String julianNumber) {
+		Date fromDateTrue = DateTimeUtil.fromJulianNumberToDate(julianNumber);
+		if (fromDateTrue == null) {
+			return null;
+		}
+		String defaultFormatPattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+		SimpleDateFormat format = new SimpleDateFormat(defaultFormatPattern);
+		return format.format(fromDateTrue);
 	}
 		
 	public static int toJulianDayNumber(LocalDate date) {

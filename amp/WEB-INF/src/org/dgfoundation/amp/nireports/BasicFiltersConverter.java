@@ -40,7 +40,7 @@ public abstract class BasicFiltersConverter {
 	/**
 	 * the rules, as enumerated in {@link ReportSpecification#getFilters()}
 	 */
-	protected final Map<ReportElement, List<FilterRule>> rawRules;
+	protected final Map<ReportElement, FilterRule> rawRules;
 	protected final ReportSpecification spec;
 	
 	/**
@@ -88,9 +88,9 @@ public abstract class BasicFiltersConverter {
 	 * @return
 	 */
 	public PassiveNiFilters buildNiFilters(Function<NiReportsEngine, Set<Long>> activityIdsSrc) {
-		rawRules.forEach((repElem, rules) -> {
-			if (rules != null && !rules.isEmpty())
-				processElement(repElem, rules);
+		rawRules.forEach((repElem, rule) -> {
+			if (rule != null)
+				processElement(repElem, rule);
 		});
 		Set<String> mandatoryHiers = this.filteringColumns.stream().filter(this::shouldCreateVirtualHierarchy).collect(Collectors.toSet());
 		return new PassiveNiFilters(engine, 
@@ -114,24 +114,24 @@ public abstract class BasicFiltersConverter {
 	/**
 	 * called for each of the filtering sets defined in the spec with a non-null and/or non-empty list of rules
 	 * @param repElem
-	 * @param rules
+	 * @param rule
 	 */
-	protected void processElement(ReportElement repElem, List<FilterRule> rules) {
+	protected void processElement(ReportElement repElem, FilterRule rule) {
 		if (repElem.type == ElementType.ENTITY) {
 			NiUtils.failIf(!(repElem.entity instanceof ReportColumn),
 				() -> String.format("entity type %s not supported: %s", repElem.entity.getClass().getName(), repElem.entity.toString()));
 			if (repElem.entity instanceof ReportColumn)
-				processColumnElement(repElem.entity.getEntityName(), rules);
+				processColumnElement(repElem.entity.getEntityName(), rule);
 		} else
-			processMiscElement(repElem, rules);
+			processMiscElement(repElem, rule);
 	}
 		
 	/**
 	 * callback called for each filter-by-column filtering set defined in the spec
 	 * @param columnName
-	 * @param rules
+	 * @param rule
 	 */
-	protected void processColumnElement(String columnName, List<FilterRule> rules) {
+	protected void processColumnElement(String columnName, FilterRule rule) {
 		// filtering by column
 		NiReportColumn<?> col = schema.getColumns().get(columnName);
 		if (col == null) {
@@ -149,13 +149,14 @@ public abstract class BasicFiltersConverter {
 		if (col.levelColumn != null && col.levelColumn.isPresent()) {
 			// filtering by a column which defines a LevelColumn: filter the whole report's cellset by the given LC 
 			LevelColumn lc = col.levelColumn.get();
-			Set<Long> positiveIds = FilterRule.mergeIdRules(rules.stream().filter(rule -> rule.valuesInclusive).collect(toList()));
-			Set<Long> negativeIds = FilterRule.mergeIdRules(rules.stream().filter(rule -> !rule.valuesInclusive).collect(toList()));
+			Set<Long> ids = rule.addIds(null);
+			Set<Long> positiveIds = rule.valuesInclusive ? ids : null;
+			Set<Long> negativeIds = rule.valuesInclusive ? null : ids;
 			addRulesIfPresent(lc, true, positiveIds);
 			addRulesIfPresent(lc, false, negativeIds);
 		} else {
 			// only filter the given column by entity ids
-			addCellPredicate(columnName, cell -> cell.entityId, rules);
+			addCellPredicate(columnName, cell -> cell.entityId, rule);
 		}
 	}
 
@@ -163,13 +164,11 @@ public abstract class BasicFiltersConverter {
 	 * called when filtering cells by a predicate 
 	 * @param columnName the column whose fetched cells are filtered by the predicate
 	 * @param cellIdExtractor the callback used to extract the relevant "id" from the cell (usually an entityId or maybe the Julian code of a date)
-	 * @param rules the spec-rules
+	 * @param rule the spec-rule
 	 */
-	protected void addCellPredicate(String columnName, Function<Cell, Long> cellIdExtractor, List<FilterRule> rules) {
+	protected void addCellPredicate(String columnName, Function<Cell, Long> cellIdExtractor, FilterRule rule) {
 		List<Predicate<Cell>> cellPreds = new ArrayList<>();
-		rules.stream().map(FilterRule::buildPredicate).forEach(lp -> {
-			cellPreds.add(cell -> lp.test(cellIdExtractor.apply(cell)));
-		});
+		cellPreds.add(cell -> rule.buildPredicate().test(cellIdExtractor.apply(cell)));
 		cellPredicates.computeIfAbsent(columnName, ignored -> new ArrayList<>()).addAll(cellPreds);
 	}
 	
@@ -190,20 +189,17 @@ public abstract class BasicFiltersConverter {
 	protected void addRulesIfPresent(LevelColumn lc, boolean positive, Set<Long> ids) {
 		if (ids == null)
 			return;
-				
-		boolean collapseDimension = shouldCollapseDimension(lc.dimensionUsage.dimension);
-		int level = collapseDimension ? NiDimension.LEVEL_ALL_IDS : lc.level;
-		
-		Predicate<Coordinate> predicate = FilterRule.maybeNegated(engine.buildAcceptor(lc.dimensionUsage, ids.stream().map(z -> new Coordinate(level, z)).collect(toList())), positive);
+
+		Predicate<Coordinate> predicate = FilterRule.maybeNegated(engine.buildAcceptor(lc.dimensionUsage, ids.stream().map(z -> new Coordinate(lc.level, z)).collect(toList())), positive);
 		coosPredicates.computeIfAbsent(lc.dimensionUsage, ignored -> new ArrayList<>()).add(predicate);
 	}
 	
 	/**
 	 * callback for filtering on non-column items
 	 * @param repElem
-	 * @param rules
+	 * @param rule
 	 */
-	protected abstract void processMiscElement(ReportElement repElem, List<FilterRule> rules);
+	protected abstract void processMiscElement(ReportElement repElem, FilterRule rule);
 	
 	/**
 	 * callback to instruct the filter converter to ignore some filter-by-column elements altogether, even though they are present in the schema

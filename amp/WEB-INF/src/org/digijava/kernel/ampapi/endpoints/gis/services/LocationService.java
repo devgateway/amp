@@ -199,7 +199,8 @@ public class LocationService {
 					" join amp_location loc on al.amp_location_id = loc.amp_location_id  "+
 					" join amp_category_value_location acvl on loc.location_id = acvl.id  "+
 					" join amp_category_value amcv on acvl.parent_category_value =amcv.id "+  
-					" where amcv.category_value ='Country' "+
+					" where amcv.category_value ='Country'"
+					+ " and (acvl.deleted is null or acvl.deleted = false) "+
 					" and al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) " +
 					" and location_name=(select country_name "
 					+ " from DG_COUNTRIES where iso='"+ FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) +"')";
@@ -214,6 +215,7 @@ public class LocationService {
 				+ adminLevel
 				+ "'  "
 				+ " and acvl.gs_lat is not null and acvl.gs_long is not null  "
+				+ " and (acvl.deleted is null or acvl.deleted = false) "
 				+ " UNION ALL  "
 				+ " SELECT acvl.id, acvl.parent_location, rt.gs_lat, rt.gs_long, acvl.parent_category_value, rt.LEVEL + 1, rt.root_location_id, rt.root_location_description  "
 				+ " FROM rt_amp_category_value_location rt, amp_category_value_location acvl  "

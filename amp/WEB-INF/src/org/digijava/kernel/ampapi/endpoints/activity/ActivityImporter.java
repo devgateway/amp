@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ChangeType;
+import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
@@ -147,7 +148,7 @@ public class ActivityImporter {
 		
 		for (Field field : AmpActivityFields.class.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
-			if (ant != null && ant.importable()) {
+			if (isImportable(ant)) {
 				try {
 					if (ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ACTIVITY_ID) ||
 							ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ID))
@@ -170,6 +171,12 @@ public class ActivityImporter {
 		}
     }
     
+	private boolean isImportable(Interchangeable ant) {
+		return ant != null && (ant.importable()
+				|| (AmpOfflineModeHolder.isAmpOfflineMode()
+				&& FieldsEnumerator.OFFLINE_REQUIRED_FIELDS.contains(ant.fieldTitle())));
+	}
+
 	/**
 	 * Imports or Updates
 	 * 
@@ -267,9 +274,10 @@ public class ActivityImporter {
 			if (newActivity != null && errors.isEmpty()) {
 				// save new activity
 				prepareToSave();
-				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
+				boolean updateApprovalStatus = !AmpOfflineModeHolder.isAmpOfflineMode();
+				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
 						translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
-						PersistenceManager.getSession(), false, false, true);
+						PersistenceManager.getSession(), SaveContext.api(updateApprovalStatus));
 				postProcess();
 			} else {
 				// undo any pending changes

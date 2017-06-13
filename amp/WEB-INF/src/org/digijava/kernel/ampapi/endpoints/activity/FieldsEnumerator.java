@@ -10,9 +10,11 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
@@ -36,7 +38,17 @@ import org.digijava.module.aim.util.ProgramUtil;
  */
 public class FieldsEnumerator {
 	
-	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
+	private static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
+
+	/**
+	 * Fields that are importable & required by AMP Offline clients.
+	 */
+	public static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
+			.add(ActivityFieldsConstants.IS_DRAFT)
+			.add(ActivityFieldsConstants.APPROVED_BY)
+			.add(ActivityFieldsConstants.APPROVAL_STATUS)
+			.add(ActivityFieldsConstants.APPROVAL_DATE)
+			.build();
 
 	private boolean internalUse = false;
 
@@ -104,6 +116,10 @@ public class FieldsEnumerator {
 		apiField.setFieldLabel(InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
 		apiField.setRequired(getRequiredValue(intchStack, fmService));
 		apiField.setImportable(interchangeable.importable());
+		if (AmpOfflineModeHolder.isAmpOfflineMode() && OFFLINE_REQUIRED_FIELDS.contains(interchangeable.fieldTitle())) {
+			apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
+			apiField.setImportable(true);
+		}
 		if (interchangeable.percentageConstraint()){
 			apiField.setPercentage(true);
 		}
@@ -166,21 +182,9 @@ public class FieldsEnumerator {
 	}
 
 	public List<APIField> getAllAvailableFields() {
-		List<APIField> allAvailableFields = getAllAvailableFields(AmpActivityFields.class);
-
-		if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-			String draftFieldName = InterchangeUtils.underscorify(ActivityFieldsConstants.IS_DRAFT);
-			APIField draftField = allAvailableFields
-					.stream()
-					.filter(f -> f.getFieldName().equals(draftFieldName))
-					.findFirst()
-					.orElseThrow(() -> new RuntimeException("Could not find draft field."));
-			draftField.setImportable(true);
-		}
-
-		return allAvailableFields;
+		return getAllAvailableFields(AmpActivityFields.class);
 	}
-	
+
 	List<APIField> getAllAvailableFields(Class<?> clazz) {
 		return getAllAvailableFields(clazz, new ArrayDeque<>());
 	}

@@ -463,14 +463,14 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVED_BY, pickIdOnly=true)
 	protected AmpTeamMember approvedBy;
 	
-	@Interchangeable(fieldTitle = "Approval Date", importable = false)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_DATE)
 	protected Date approvalDate;
 
 //	@Interchangeable(fieldTitle = "Regional Fundings", importable = true, fmPath = "/Activity Form/Regional Funding")
 	@VersionableCollection(fieldTitle = "Regional Fundings")
 	protected Set <AmpRegionalFunding> regionalFundings;
 
-	@Interchangeable(fieldTitle = "Approval Status", importable = false)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS)
 	@PossibleValues(ApprovalStatusPossibleValuesProvider.class)
 	@VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
 	protected String approvalStatus;

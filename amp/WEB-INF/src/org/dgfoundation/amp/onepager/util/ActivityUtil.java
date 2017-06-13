@@ -122,7 +122,7 @@ public class ActivityUtil {
 
 		AmpActivityVersion oldA = am.getObject();
 
-		AmpActivityVersion newA = saveActivity(oldA, am.getTranslationHashMap().values(), ampCurrentMember, wicketSession.getSite(), wicketSession.getLocale(), sc.getRealPath("/"), draft, rejected, true);
+		AmpActivityVersion newA = saveActivity(oldA, am.getTranslationHashMap().values(), ampCurrentMember, wicketSession.getSite(), wicketSession.getLocale(), sc.getRealPath("/"), draft, SaveContext.activityForm(rejected));
 
 		am.setObject(newA);
 
@@ -143,9 +143,9 @@ public class ActivityUtil {
 	 * @param draft
 	 * @param rejected
 	 */
-	public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, boolean rejected, boolean isActivityForm){
+	public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, SaveContext saveContext) {
 		Session session;
-		if (isActivityForm) {
+		if (saveContext.getSource() == ActivitySource.ACTIVITY_FORM) {
 			session = AmpActivityModel.getHibernateSession();
 		} else {
 			session = PersistenceManager.getSession();
@@ -153,11 +153,8 @@ public class ActivityUtil {
 
 		boolean newActivity = oldA.getAmpActivityId() == null;
 		AmpActivityVersion a=null;
-		try
-		{
-			a = saveActivityNewVersion(oldA, values,
-					ampCurrentMember, draft, session, rejected, isActivityForm, false);
-
+		try {
+			a = saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext);
 		} catch (Exception exception) {
 			logger.error("Error saving activity:", exception); // Log the exception
 			throw new RuntimeException("Can't save activity:", exception);
@@ -183,7 +180,7 @@ public class ActivityUtil {
 	 */
 	public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
 			Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
-			Session session, boolean rejected, boolean isActivityForm, boolean isImporter) throws Exception
+			Session session, SaveContext context) throws Exception
 	{
 		//saveFundingOrganizationRole(a);
 		AmpActivityVersion oldA = a;
@@ -230,6 +227,7 @@ public class ActivityUtil {
 
 		//is versioning activated?
         boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
+		boolean isActivityForm = context.getSource() == ActivitySource.ACTIVITY_FORM;
 		if (createNewVersion){
 			try {
 				AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
@@ -288,8 +286,8 @@ public class ActivityUtil {
 		a.setModifiedDate(updatedDate);
 		a.setModifiedBy(ampCurrentMember);
 		
-		if (isActivityForm || isImporter) {
-			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity,rejected);
+		if (context.isUpdateActivityStatus()) {
+			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
 		}
 		
 		if (isActivityForm) {

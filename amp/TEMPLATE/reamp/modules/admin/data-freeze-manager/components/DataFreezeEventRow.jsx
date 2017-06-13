@@ -23,10 +23,15 @@ export default class DataFreezeEventRow extends Component {
       }
        
     edit() {
-        const dataFreezeEvent = this.props.dataFreezeEvent;
-        var origDataFreezeEvent  = Object.assign({}, dataFreezeEvent);
-        dataFreezeEvent.isEditing = true;           
-        this.props.actions.updateDataFreezeEvent(dataFreezeEvent);        
+        var inEdit = this.props.dataFreezeEventList.filter(dataFreezeEvent => {
+            return dataFreezeEvent.isEditing
+        });
+        if(inEdit.length == 0){
+            const dataFreezeEvent = this.props.dataFreezeEvent;
+            var origDataFreezeEvent  = Object.assign({}, dataFreezeEvent);
+            dataFreezeEvent.isEditing = true;           
+            this.props.actions.updateDataFreezeEvent(dataFreezeEvent);  
+        }               
     }
     
     cancel() {
@@ -40,9 +45,9 @@ export default class DataFreezeEventRow extends Component {
     
     render() {          
         if(this.props.dataFreezeEvent.isEditing){
-               return (<DataFreezeEventEdit dataFreezeEvent={this.props.dataFreezeEvent}  cancel={this.cancel}/>); 
+               return (<DataFreezeEventEdit cancel={this.cancel} {...this.props}/>); 
             } else{
-               return (<DataFreezeEventView dataFreezeEvent={this.props.dataFreezeEvent} edit={this.edit}/>); 
+               return (<DataFreezeEventView edit={this.edit} {...this.props}/>); 
             } 
     }
 }
@@ -51,7 +56,8 @@ function mapStateToProps(state, ownProps) {
     return {        
         translations: state.startUp.translations,
         translate: state.startUp.translate,
-        settings: state.commonLists.settings
+        settings: state.commonLists.settings,
+        dataFreezeEventList: state.dataFreeze.dataFreezeEventList
     }
 }
 

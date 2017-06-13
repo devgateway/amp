@@ -55,15 +55,24 @@ export default function dataFreezeEventReducer(state: Object = defaultState.data
         return newState;
     case 'ADD_DATA_FREEZE_EVENT':
         var newState = Object.assign({}, state);
-        var actionData = Object.assign({}, action.data);
-        actionData.dataFreezeEvent.cid = state.cid;
-        newState.dataFreezeEventList = [Object.assign({}, actionData.dataFreezeEvent), ...newState.dataFreezeEventList];
-        newState.errors = [];
-        newState.infoMessages = [];
-        newState.cid = ++newState.cid;        
+        var inEdit = newState.dataFreezeEventList.filter(dataFreezeEvent => {
+            return dataFreezeEvent.isEditing
+        })
+        if(inEdit.length == 0) {
+            var actionData = Object.assign({}, action.data);
+            actionData.dataFreezeEvent.cid = state.cid;
+            newState.dataFreezeEventList = [Object.assign({}, actionData.dataFreezeEvent), ...newState.dataFreezeEventList];
+            newState.errors = [];
+            newState.infoMessages = [];
+            newState.cid = ++newState.cid; 
+        }                
         return newState; 
     case 'UPDATE_DATA_FREEZE_EVENT':
         var newState = Object.assign({}, state);
+        var inEdit = newState.dataFreezeEventList.filter(dataFreezeEvent => {
+            return dataFreezeEvent.isEditing
+        });
+               
         var actionData = Object.assign({}, action.data);        
         newState.dataFreezeEventList =  newState.dataFreezeEventList.map(function(dataFreezeEvent) { 
             return ((dataFreezeEvent.id && dataFreezeEvent.id === actionData.dataFreezeEvent.id) || (dataFreezeEvent.cid && dataFreezeEvent.cid === actionData.dataFreezeEvent.cid)) ? Object.assign({}, actionData.dataFreezeEvent) : dataFreezeEvent;

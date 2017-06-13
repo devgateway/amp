@@ -26,6 +26,8 @@ export default class DataFreezeEventForm extends Component {
         this.onSendNotificationChange = this.onSendNotificationChange.bind(this);
         this.onFreezeOptionChange = this.onFreezeOptionChange.bind(this);
         this.save = this.save.bind(this);
+        this.showFilters = this.showFilters.bind(this);
+        this.restoreSavedFilters = this.restoreSavedFilters.bind(this);
     }
         
     toggleDatePicker(event) {
@@ -91,6 +93,33 @@ export default class DataFreezeEventForm extends Component {
         this.props.actions.save(this.props.dataFreezeEvent);
     }
     
+    showFilters() {
+        this.props.setFilterElement();       
+        this.restoreSavedFilters();
+        this.props.filter.showFilters();
+        this.props.showFilterElement();
+        this.props.filter.on( 'cancel', function() {            
+            this.props.hideFilterElement();
+        }.bind( this ) );
+
+        this.props.filter.on( 'apply', function() {   
+            let currentRecord = this.props.dataFreezeEvent;
+            let filters = this.props.filter.serialize();
+            if (filters) {
+                currentRecord.filters = JSON.stringify(filters);
+                this.setState({currentRecord: currentRecord});  
+            }                        
+            this.props.hideFilterElement();
+        }.bind( this ) );
+    }
+    
+    restoreSavedFilters() {        
+        this.props.filter.reset({silent : true })
+        let currentRecord = this.props.dataFreezeEvent;        
+        let filters = JSON.parse(currentRecord.filters || '{}')
+        this.props.filter.deserialize(filters, {silent : true });            
+    }
+    
     render() {          
         return (  
                 <tr >
@@ -151,11 +180,11 @@ export default class DataFreezeEventForm extends Component {
               <div className="input-group">
               <div className="radio">
                 <label>
-                  <input type="radio" name="freezeOption" value={Constants.FREEZE_OPTION_ENTIRE_ACTIVITY} onChange={this.onFreezeOptionChange} checked={this.props.dataFreezeEvent.freezeOption === Constants.FREEZE_OPTION_ENTIRE_ACTIVITY} />{this.props.translations['amp.data-freezing:freeze-option-activity']}</label>
+                  <input type="radio" name={'freezeOption' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.FREEZE_OPTION_ENTIRE_ACTIVITY} onChange={this.onFreezeOptionChange} checked={this.props.dataFreezeEvent.freezeOption === Constants.FREEZE_OPTION_ENTIRE_ACTIVITY} />{this.props.translations['amp.data-freezing:freeze-option-activity']}</label>
               </div>
               <div className="radio">
                 <label>
-                  <input type="radio" name="freezeOption" value={Constants.FREEZE_OPTION_FUNDING} onChange={this.onFreezeOptionChange} checked={this.props.dataFreezeEvent.freezeOption === Constants.FREEZE_OPTION_FUNDING} />{this.props.translations['amp.data-freezing:freeze-option-funding']}</label>
+                  <input type="radio" name={'freezeOption' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.FREEZE_OPTION_FUNDING} onChange={this.onFreezeOptionChange} checked={this.props.dataFreezeEvent.freezeOption === Constants.FREEZE_OPTION_FUNDING} />{this.props.translations['amp.data-freezing:freeze-option-funding']}</label>
               </div>
             </div>
             <div>
@@ -166,16 +195,16 @@ export default class DataFreezeEventForm extends Component {
                   <div className="input-group ">
                   <div className="radio">
                     <label>
-                      <input type="radio" name="sendNotification" value={Constants.OPTION_YES} onChange={this.onSendNotificationChange} checked={this.props.dataFreezeEvent.sendNotification}/>{this.props.translations['amp.data-freezing:notify-option-yes']}</label>
+                      <input type="radio" name={'sendNotification' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_YES} onChange={this.onSendNotificationChange} checked={this.props.dataFreezeEvent.sendNotification}/>{this.props.translations['amp.data-freezing:notify-option-yes']}</label>
                   </div>
                   <div className="radio">
                     <label>
-                      <input type="radio" name="sendNotification" value={Constants.OPTION_NO} onChange={this.onSendNotificationChange} checked={this.props.dataFreezeEvent.sendNotification === false}/>{this.props.translations['amp.data-freezing:notify-option-no']}</label>
+                      <input type="radio" name={'sendNotification' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_NO} onChange={this.onSendNotificationChange} checked={this.props.dataFreezeEvent.sendNotification === false}/>{this.props.translations['amp.data-freezing:notify-option-no']}</label>
                   </div>
                 </div>
                   </td>
-                <td>
-                  <button className="btn btn-default filter-add">
+                <td>                  
+                  <button className="btn btn-default filter-add" onClick={this.showFilters}>
                   <span className="glyphicon glyphicon-plus-sign"></span>
                  </button>
                </td>

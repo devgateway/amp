@@ -29,6 +29,9 @@ export default class DataFreezeEventList extends Component {
         this.sort = this.sort.bind(this);
         this.showSortCaret = this.showSortCaret.bind(this);
         this.isEditing = this.isEditing.bind(this);
+        this.setFilterElement = this.setFilterElement.bind(this);
+        this.showFilterElement = this.showFilterElement.bind(this);
+        this.hideFilterElement = this.hideFilterElement.bind(this);
     }
 
     componentWillMount() {
@@ -37,6 +40,7 @@ export default class DataFreezeEventList extends Component {
             sorting: this.props.sorting
         });
         this.props.actions.getSettings();
+        this.initializeFilter();
     }
 
 
@@ -140,13 +144,32 @@ export default class DataFreezeEventList extends Component {
         return result;
     }
     
+    initializeFilter() {
+        this.filter = new ampFilter({
+            draggable: true,
+            caller: 'DATA-FREEZE-MANAGER'
+        }); 
+    }  
+    
+    setFilterElement() {
+       this.filter.setElement( this.refs.filterPopup ); 
+    }
+    
+    showFilterElement() {
+        $( this.refs.filterPopup ).show();
+    }
+    
+    hideFilterElement() {
+        $( this.refs.filterPopup ).hide();
+    }
+    
     render() {
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);
         return (
-            <div>
+            <div>   
+                <div id="filter-popup" ref="filterPopup"> </div>
                 <div >
-                <div className="row">
-                
+                <div className="row">                
                 <br/>                
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">
@@ -162,7 +185,7 @@ export default class DataFreezeEventList extends Component {
                     <table className="table table-bordered table-striped data-table">
                       <thead>
                         <tr>
-                          <th className="col-md-2">{this.props.translations['amp.data-freezing:data-freeze-date']}</th>
+                          <th className="col-md-2"><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.data-freezing:data-freeze-date']}</th>
                           <th>
                           {this.props.translations['amp.data-freezing:grace-period']}<br/>
                           {this.props.translations['amp.data-freezing:days']} 
@@ -170,8 +193,8 @@ export default class DataFreezeEventList extends Component {
                           <th>{this.props.translations['amp.data-freezing:open-period-start']}</th>
                           <th>{this.props.translations['amp.data-freezing:open-period-end']}</th>
                           <th>{this.props.translations['amp.data-freezing:number-of-activities']}</th>
-                          <th>{this.props.translations['amp.data-freezing:freeze-options']}</th>
-                          <th>{this.props.translations['amp.data-freezing:notify']}</th>
+                          <th><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.data-freezing:freeze-options']}</th>
+                          <th><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.data-freezing:notify']}</th>
                           <th>{this.props.translations['amp.data-freezing:filters']}</th>
                           <th></th>
                           <th></th>
@@ -179,7 +202,7 @@ export default class DataFreezeEventList extends Component {
                       </thead>
                       <tbody>
                         {this.props.dataFreezeEventList.map((dataFreezeEvent, i) => 
-                          <DataFreezeEventRow dataFreezeEvent={dataFreezeEvent} key={i}/>                      
+                          <DataFreezeEventRow dataFreezeEvent={dataFreezeEvent} key={i} filter={this.filter} setFilterElement={this.setFilterElement} showFilterElement={this.showFilterElement} hideFilterElement={this.hideFilterElement}/>                      
                         )}                  
                       
                       </tbody>

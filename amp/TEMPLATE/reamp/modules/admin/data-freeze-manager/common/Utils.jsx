@@ -1,3 +1,5 @@
+import moment from 'moment';
+import * as Constants from '../common/Constants';
 class Utils {
     static extractErrors( errors, obj ) {
         var errorMessages = [];
@@ -42,10 +44,19 @@ class Utils {
         if ( message ) {
             errors.push( message );
         }
-
+        errors.push(...this.validateFreezingDate(dataFreezeEvent));
         return errors
     }
 
+    static validateFreezingDate(dataFreezeEvent){
+        let errors = [];
+        let freezingDate = moment(dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT);
+        let today = moment();
+        if(today.isAfter(freezingDate)){
+            errors.push({ messageKey: 'amp.data-freezing:invalid-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['freezingDate'] });
+        }  
+        return errors;
+    }
     
     static checkRequiredField( obj, field, message ) {
         if ( this.isUndefinedOrBlank( obj, field ) ) {

@@ -28,6 +28,7 @@ export default class DataFreezeEventForm extends Component {
         this.save = this.save.bind(this);
         this.showFilters = this.showFilters.bind(this);
         this.restoreSavedFilters = this.restoreSavedFilters.bind(this);
+        this.onEnabledChange = this.onEnabledChange.bind(this);
     }
         
     toggleDatePicker(event) {
@@ -68,6 +69,12 @@ export default class DataFreezeEventForm extends Component {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.sendNotification = $(event.target).val() === Constants.OPTION_YES;
         this.setState({currentRecord: currentRecord}); 
+    }
+    
+    onEnabledChange(event){
+        let currentRecord = this.props.dataFreezeEvent;
+        currentRecord.enabled = $(event.target).val() === Constants.OPTION_YES;
+        this.setState({currentRecord: currentRecord});
     }
     
     onFreezeOptionChange(event) {
@@ -174,7 +181,7 @@ export default class DataFreezeEventForm extends Component {
                 
                 </td>
                 <td>
-              
+                  {this.props.dataFreezeEvent.count}
                 </td>
                 <td>
               <div className="input-group">
@@ -195,11 +202,11 @@ export default class DataFreezeEventForm extends Component {
                   <div className="input-group ">
                   <div className="radio">
                     <label>
-                      <input type="radio" name={'sendNotification' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_YES} onChange={this.onSendNotificationChange} checked={this.props.dataFreezeEvent.sendNotification}/>{this.props.translations['amp.data-freezing:notify-option-yes']}</label>
+                      <input type="radio" name={'sendNotification' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_YES} onChange={this.onSendNotificationChange} checked={this.props.dataFreezeEvent.sendNotification}/>{this.props.translations['amp.data-freezing:boolean-option-yes']}</label>
                   </div>
                   <div className="radio">
                     <label>
-                      <input type="radio" name={'sendNotification' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_NO} onChange={this.onSendNotificationChange} checked={this.props.dataFreezeEvent.sendNotification === false}/>{this.props.translations['amp.data-freezing:notify-option-no']}</label>
+                      <input type="radio" name={'sendNotification' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_NO} onChange={this.onSendNotificationChange} checked={this.props.dataFreezeEvent.sendNotification === false}/>{this.props.translations['amp.data-freezing:boolean-option-no']}</label>
                   </div>
                 </div>
                   </td>
@@ -208,6 +215,18 @@ export default class DataFreezeEventForm extends Component {
                   <span className="glyphicon glyphicon-plus-sign"></span>
                  </button>
                </td>
+                <td>
+                      <div className="input-group ">
+                      <div className="radio">
+                        <label>
+                          <input type="radio" name={'enabled' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_YES} onChange={this.onEnabledChange} checked={this.props.dataFreezeEvent.enabled}/>{this.props.translations['amp.data-freezing:boolean-option-yes']}</label>
+                      </div>
+                      <div className="radio">
+                        <label>
+                          <input type="radio" name={'enabled' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_NO} onChange={this.onEnabledChange} checked={this.props.dataFreezeEvent.enabled === false}/>{this.props.translations['amp.data-freezing:boolean-option-no']}</label>
+                      </div> 
+                     </div>
+                 </td>
                 <td className="action-column">                  
                       <span className="glyphicon glyphicon-custom glyphicon-ok-circle success-color" onClick={this.save}> </span>
                       <span className="glyphicon glyphicon-custom glyphicon-remove-sign" onClick={this.props.cancel}></span>

@@ -196,6 +196,7 @@ export default class DataFreezeEventList extends Component {
                           <th><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.data-freezing:freeze-options']}</th>
                           <th><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.data-freezing:notify']}</th>
                           <th>{this.props.translations['amp.data-freezing:filters']}</th>
+                          <th>{this.props.translations['amp.data-freezing:enabled']}</th>
                           <th></th>
                           <th></th>
                         </tr>

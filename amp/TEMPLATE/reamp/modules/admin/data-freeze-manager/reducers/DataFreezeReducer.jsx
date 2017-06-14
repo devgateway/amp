@@ -80,6 +80,13 @@ export default function dataFreezeEventReducer(state: Object = defaultState.data
         newState.errors = actionData.errors || [];
         newState.infoMessages = actionData.infoMessages || [];         
         return newState;   
+    case 'UNFREEZE_ALL':
+        var actionData = Object.assign({}, action.data);
+        var newState = Object.assign({}, state);            
+        newState.errors = actionData.errors || [];
+        newState.infoMessages = actionData.infoMessages || [];         
+        return newState;  
+        
     default:            
         return state;
     }

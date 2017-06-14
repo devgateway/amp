@@ -18,7 +18,7 @@ export function deleteSuccess(data){
 }
 
 export function addNewDataFreezeEvent() {
-    return {type: 'ADD_DATA_FREEZE_EVENT', data: {dataFreezeEvent: {isEditing: true}} } 
+    return {type: 'ADD_DATA_FREEZE_EVENT', data: {dataFreezeEvent: {isEditing: true, enabled: true}} } 
 }
 
 export function updateDataFreezeEvent(dataFreezeEvent) {
@@ -124,4 +124,20 @@ export function removeFromState(data) {
         };
         dispatch(deleteSuccess(result));  
     }    
+}
+
+export function unfreezeAll() {
+    return function(dispatch) {
+         return dataFreezeApi.unfreezeAll().then(response => {
+             let result = {infoMessages: [], errors: []};
+             if (response.result === 'SUCCESSFUL') {
+                 result.infoMessages.push({messageKey: 'amp.data-freeze-event:unfreeze-all-successful'});
+             } else {
+                 result.errors.push({messageKey: 'amp.data-freeze-event:unfreeze-all-failed'});
+             }
+             
+             dispatch({type:'UNFREEZE_ALL', data: result});  
+        });
+         
+   }
 }

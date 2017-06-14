@@ -17,6 +17,7 @@ export default class DataFreezeEventView extends Component {
         };    
         this.toDisplayDateFormat = this.toDisplayDateFormat.bind(this);
         this.getDisplayDateFormat = this.getDisplayDateFormat.bind(this);
+        this.deleteDataFreezeEvent = this.deleteDataFreezeEvent.bind(this);
     }
     
     showFreezeOption(freezeOption) {
@@ -43,6 +44,12 @@ export default class DataFreezeEventView extends Component {
         return result        
     }
     
+    deleteDataFreezeEvent() {
+        if(confirm(this.props.translations['amp.data-freezing:delete-prompt'])){
+            this.props.actions.deleteDataFreezeEvent(this.props.dataFreezeEvent); 
+        }        
+    }
+    
     render() {          
          return (                  
                 <tr >
@@ -50,16 +57,19 @@ export default class DataFreezeEventView extends Component {
                 <td>{this.props.dataFreezeEvent.gracePeriod}</td>
                 <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)}</td>
                 <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodEnd)}</td>
-                <td></td>
+                <td>
+                 {this.props.dataFreezeEvent.count}
+                </td>
                 <td>{this.showFreezeOption(this.props.dataFreezeEvent.freezeOption)}</td>
                 <td>
-                {this.props.dataFreezeEvent.sendNotification ? this.props.translations['amp.data-freezing:notify-option-yes'] : this.props.translations['amp.data-freezing:notify-option-no']}
+                {this.props.dataFreezeEvent.sendNotification ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}
                 </td>
                 <td>
                   <span className="filter">Filter name 1, Filter name 2</span>
-                </td>                          
+                </td>  
+                <td> {this.props.dataFreezeEvent.enabled ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}</td>
                 <td className="action-column">
-                  <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.props.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.disableDataFreezeEvent}></span>
+                  <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.props.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDataFreezeEvent}></span>
                 </td>               
               </tr>    
         );

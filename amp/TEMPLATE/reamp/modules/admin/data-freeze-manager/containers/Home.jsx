@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+require('bootstrap');
 require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
 import DataFreezeEventList from '../components/DataFreezeEventList';
@@ -8,15 +9,22 @@ import UnfreezeAll from '../components/UnfreezeAll';
 export default class App extends Component {
     constructor(props, context) {      
         super(props, context);
+        this.state = {
+               currentTab: 'data-freezing'   
+        }
+        this.tabChanged = this.tabChanged.bind(this);
     }
     
     componentWillMount() {     
     }
    
-    render() {             
+    tabChanged( event ) {
+        this.setState({currentTab: $( event.target ).data("tab")});
+    }
+    render() {         
         return (
             <div>
-                <div className="container">
+                <div className="data-freeze-container container">
                 <div className="col-md-6">
                   <h2 className="pull-left">
                  {this.props.translations['amp.data-freezing:data-freeze-manager']}</h2>
@@ -27,19 +35,19 @@ export default class App extends Component {
                 </div>
                   
                   <div className="container">
-                  <ul className="nav nav-tabs indicator-tabs">
-                    <li role="presentation" className="active"><a href="#data-freezing"  aria-controls="data-freezing" role="tab" data-toggle="tab">{this.props.translations['amp.data-freezing:add-freezing-event']}</a>
+                  <ul className="nav nav-tabs indicator-tabs" data-tabs="tabs">
+                    <li role="presentation" className={this.state.currentTab == 'data-freezing' ? 'active' : ''}><a data-tab="data-freezing" role="tab" data-toggle="tab" onClick={this.tabChanged}>{this.props.translations['amp.data-freezing:add-freezing-event']}</a>
                     </li>
-                    <li role="presentation"><a href="#unfreeze-all" aria-controls="unfreeze-all" role="tab" data-toggle="tab">
+                    <li role="presentation" className={this.state.currentTab == 'unfreeze-all' ? 'active' : ''}><a  data-tab="unfreeze-all" role="tab" data-toggle="tab" onClick={this.tabChanged}>
                     {this.props.translations['amp.data-freezing:unfreeze-all']}</a>
                     </li>
                   </ul>
                     
                   <div className="tab-content">
-                     <div id="data-freezing" className="tab-pane fade in active">                    
-                        <DataFreezeEventList/>                          
+                     <div id="data-freezing" className={this.state.currentTab === 'data-freezing' ? 'tab-pane fade in active' : 'tab-pane fade in' }>                    
+                        <DataFreezeEventList context={Constants.DATA_FREEZE_EVENTS}/>                          
                      </div>
-                    <div id="unfreeze-all" className="tab-pane fade in">
+                    <div id="unfreeze-all" className={this.state.currentTab === 'unfreeze-all' ? 'tab-pane fade in active' : 'tab-pane fade in' }>
                         <UnfreezeAll/>
                     </div>
                     

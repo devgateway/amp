@@ -6,6 +6,7 @@ import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCal
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCurrencyField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getFundingTypeField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportAmountFormatField;
+import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportAmountUnits;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportYearRangeField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getResourceManagerSettings;
 
@@ -215,7 +216,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final List<SettingField> getSettingDefinitionsForReports() {
 		return Arrays.asList(getCurrencyField(), getCalendarField(), getCalendarCurrenciesField(),
-				getReportYearRangeField());
+				getReportYearRangeField(), getReportAmountUnits());
 	}
 
 	/**

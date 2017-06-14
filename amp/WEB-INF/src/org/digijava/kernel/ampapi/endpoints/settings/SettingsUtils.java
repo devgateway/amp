@@ -312,6 +312,17 @@ public class SettingsUtils {
 	}
 
 	/**
+	 * Return amount units field using defaults.
+	 *
+	 * @return field that defines the amount units in reports
+	 */
+	static SettingField getReportAmountUnits() {
+		final String defaultAmountUnit = String.valueOf(AmountsUnits.getDefaultValue().divider);
+		return getOptionValueSetting(SettingsConstants.AMOUNT_UNITS, SettingsConstants.USE_GROUPING,
+				defaultAmountUnit, SettingsConstants.AMOUNT_UNITS_MAP);
+	}
+
+	/**
 	 * Return year range field taking in consideration report settings. If
 	 * report settings are not specified then defaults are used.
 	 *
@@ -655,7 +666,7 @@ public class SettingsUtils {
 	}
 
 	/**
-	 * @param currentSettings
+	 * @param sortColumn
 	 * @return general currency settings
 	 */
 	private static SettingOptions getSortSetting(String sortColumn) {

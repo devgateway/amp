@@ -1,5 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -7,10 +11,15 @@ import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.lang.math.NumberUtils;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 
 public class DataFreezeService {
 
@@ -55,6 +64,8 @@ public class DataFreezeService {
 		json.set(DataFreezeConstants.FIELD_FREEZE_OPTION, dataFreezeEvent.getFreezeOption());
 		json.set(DataFreezeConstants.FIELD_FILTERS, dataFreezeEvent.getFilters());
 		json.set(DataFreezeConstants.FIELD_SEND_NOTIFICATION, dataFreezeEvent.getSendNotification());
+		json.set(DataFreezeConstants.FIELD_ENABLED, dataFreezeEvent.getEnabled());
+		json.set(DataFreezeConstants.FIELD_COUNT, getCountOfFrozenActivities(dataFreezeEvent));
 		return json;
 	}
 
@@ -71,6 +82,7 @@ public class DataFreezeService {
 		dataFreezeSettings.setFreezeOption(dataFreezeEvent.getFreezeOption());
 		dataFreezeSettings.setFilters(dataFreezeEvent.getFilters());
 		dataFreezeSettings.setSendNotification(dataFreezeEvent.getSendNotification());
+		dataFreezeSettings.setEnabled(dataFreezeEvent.getEnabled());
 		return dataFreezeSettings;
 	}
 
@@ -102,7 +114,7 @@ public class DataFreezeService {
 			freezeEvents.add(new DataFreezeEvent(event.getAmpDataFreezeSettingsId(), event.getEnabled(),
 					event.getGracePeriod(), dateFormatter.format(event.getFreezingDate()),
 					dateFormatter.format(event.getOpenPeriodStart()), dateFormatter.format(event.getOpenPeriodEnd()),
-					event.getSendNotification(), event.getFreezeOption(), event.getFilters(), null));
+					event.getSendNotification(), event.getFreezeOption(), event.getFilters(), null, getCountOfFrozenActivities(event)));
 		});
 
 		page.setData(freezeEvents);
@@ -110,12 +122,43 @@ public class DataFreezeService {
 
 		return page;
 	}
+	
+	private static Integer getCountOfFrozenActivities(AmpDataFreezeSettings event) {
+		Integer count = 0;
+		if (event.getEnabled()) {
+			String name = "ActivityList";
+			ReportSpecificationImpl spec = new ReportSpecificationImpl(name, ArConstants.DONOR_TYPE);
+			spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
+			FilterUtils.applyFilterRules(getFilters(event), spec, null);
+			GeneratedReport report = EndpointUtils.runReport(spec);
+			count = report.reportContents.getChildren().size();
+		}
+		
+		return count;
+	}
+
+	private static LinkedHashMap<String, Object> getFilters(AmpDataFreezeSettings event) {
+		LinkedHashMap<String, Object> filters;
+		if (event.getFilters() != null) {
+			JsonBean config = JsonBean.getJsonBeanFromString(event.getFilters());
+			filters = (LinkedHashMap<String, Object>) config.get(EPConstants.FILTERS);
+		} else {
+			filters = new LinkedHashMap<>();
+		}
+		
+		Map<String, Object> dateFilter = new LinkedHashMap<>();
+		dateFilter.put("end", DateTimeUtil.formatDate(event.getFreezingDate(), DataFreezeConstants.DATE_FORMAT));
+		filters.put(FiltersConstants.DATE, dateFilter);
+		
+		return filters;
+
+	}
 
 	public static AmpDataFreezeSettings fetchOneDataFreezeEvent(long id) {
 		return DataFreezeUtil.getDataFreezeEventById(id);
 	}
 
-	public static Page<AmpDataFreezeSettings> unfreezeAll() {
-		return new Page<>();
+	public static void unfreezeAll() {
+		DataFreezeUtil.unfreezeAll();
 	}
 }

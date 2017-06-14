@@ -6,7 +6,7 @@ import org.digijava.module.aim.dbentity.AmpDataFreezeSettings.FreezeOptions;
 public class DataFreezeEvent {
 	private Long id;
 	private Long cid;	
-	private Boolean enabled = Boolean.FALSE;
+	private Boolean enabled = Boolean.TRUE;
 	private Integer gracePeriod;
 	private String freezingDate;
 	private String openPeriodStart;
@@ -14,13 +14,22 @@ public class DataFreezeEvent {
 	private Boolean sendNotification = Boolean.FALSE;
 	private FreezeOptions freezeOption;	
 	private String filters;
+	private Integer count;// number of affected activities
 	
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
 	public DataFreezeEvent() {		
 	}
 			
 	public DataFreezeEvent(Long id, Boolean enabled, Integer gracePeriod, String freezingDate,
 			String openPeriodStart, String openPeriodEnd, Boolean sendNotification, FreezeOptions freezeOption,
-			String filters, Long cid) {
+			String filters, Long cid, Integer count) {
 		super();
 		this.id = id;
 		this.enabled = enabled;
@@ -32,6 +41,7 @@ public class DataFreezeEvent {
 		this.freezeOption = freezeOption;
 		this.filters = filters;
 		this.cid = cid;
+		this.count = count;
 	}
 	public Long getId() {
 		return id;

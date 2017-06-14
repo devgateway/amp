@@ -61,6 +61,14 @@ public class DataFreezeUtil {
 		
 		return query.list();
 	}	
-
-
+	
+	public static void unfreezeAll() {	
+		try {
+			Session dbSession = PersistenceManager.getSession();
+			String queryString = "update " + AmpDataFreezeSettings.class.getName() + " d set d.enabled = false";
+			dbSession.createQuery(queryString).executeUpdate();
+		} catch (Exception e) {
+			logger.error("Exception from unfreezeAll: " + e.getMessage());
+		}
+	 }
 }

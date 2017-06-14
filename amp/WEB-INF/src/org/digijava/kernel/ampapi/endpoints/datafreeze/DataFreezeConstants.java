@@ -10,6 +10,7 @@ public class DataFreezeConstants {
 	public static final String FIELD_FREEZE_OPTION = "freezeOption";
 	public static final String FIELD_FILTERS = "filters";
 	public static final String FIELD_CID = "cid";// client side id	
+	public static final String FIELD_COUNT = "count";// client side id	
 	public static final String DATE_FORMAT = "yyyy-MM-dd";	
 	public static final String DATA = "data";
 	public static final String RESULT = "result";	

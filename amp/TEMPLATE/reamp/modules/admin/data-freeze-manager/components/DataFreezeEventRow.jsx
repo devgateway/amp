@@ -44,7 +44,7 @@ export default class DataFreezeEventRow extends Component {
     }
     
     render() {          
-        if(this.props.dataFreezeEvent.isEditing){
+        if(this.props.dataFreezeEvent.isEditing && this.props.context === Constants.DATA_FREEZE_EVENTS ){
                return (<DataFreezeEventEdit cancel={this.cancel} {...this.props}/>); 
             } else{
                return (<DataFreezeEventView edit={this.edit} {...this.props}/>); 

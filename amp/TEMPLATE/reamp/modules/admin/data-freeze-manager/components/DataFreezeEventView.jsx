@@ -50,29 +50,41 @@ export default class DataFreezeEventView extends Component {
         }        
     }
     
-    render() {          
-         return (                  
-                <tr >
-                <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)}</td>
-                <td>{this.props.dataFreezeEvent.gracePeriod}</td>
-                <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)}</td>
-                <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodEnd)}</td>
-                <td>
-                 {this.props.dataFreezeEvent.count}
-                </td>
-                <td>{this.showFreezeOption(this.props.dataFreezeEvent.freezeOption)}</td>
-                <td>
-                {this.props.dataFreezeEvent.sendNotification ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}
-                </td>
-                <td>
-                  <span className="filter">Filter name 1, Filter name 2</span>
-                </td>  
-                <td> {this.props.dataFreezeEvent.enabled ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}</td>
-                <td className="action-column">
-                  <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.props.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDataFreezeEvent}></span>
-                </td>               
-              </tr>    
-        );
+    render() { 
+        if(this.props.context === Constants.UNFREEZE_ALL) {
+            return (                   
+                    <tr >
+                    <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)}</td>                    
+                    <td className="text-left">
+                     {this.props.dataFreezeEvent.count}
+                    </td>                            
+                  </tr>                
+         ); 
+        } else {
+            return (                   
+                    <tr >
+                    <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)}</td>
+                    <td>{this.props.dataFreezeEvent.gracePeriod}</td>
+                    <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)}</td>
+                    <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodEnd)}</td>
+                    <td>
+                     {this.props.dataFreezeEvent.count}
+                    </td>
+                    <td>{this.showFreezeOption(this.props.dataFreezeEvent.freezeOption)}</td>
+                    <td>
+                    {this.props.dataFreezeEvent.sendNotification ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}
+                    </td>
+                    <td>
+                      <span className="filter">Filter name 1, Filter name 2</span>
+                    </td>  
+                    <td> {this.props.dataFreezeEvent.enabled ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}</td>
+                    <td className="action-column">
+                      <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.props.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDataFreezeEvent}></span>
+                    </td>               
+                  </tr>                
+         ); 
+        }    
+       
     }
 }
 

@@ -6,6 +6,7 @@ require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
 import DataFreezeEventList from '../components/DataFreezeEventList';
 import UnfreezeAll from '../components/UnfreezeAll';
+import * as Constants from '../common/Constants';
 export default class App extends Component {
     constructor(props, context) {      
         super(props, context);

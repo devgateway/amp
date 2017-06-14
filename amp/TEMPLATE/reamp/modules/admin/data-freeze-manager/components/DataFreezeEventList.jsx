@@ -40,7 +40,11 @@ export default class DataFreezeEventList extends Component {
             sorting: this.props.sorting
         });
         this.props.actions.getSettings();
-        this.initializeFilter();
+        if (this.props.context === Constants.DATA_FREEZE_EVENTS) {
+            this.initializeFilter();  
+        }
+            
+        
     }
 
 
@@ -166,11 +170,12 @@ export default class DataFreezeEventList extends Component {
     render() {
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);
         return (
-            <div>   
-                <div id="filter-popup" ref="filterPopup"> </div>
-                <div >
+            <div>
+                <div id="filter-popup" ref="filterPopup"> </div>                              
+                <div >                
                 <div className="row">                
-                <br/>                
+                <br/>  
+                {this.props.context === Constants.DATA_FREEZE_EVENTS &&  
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-plus" onClick={this.addNew}></span>
@@ -180,12 +185,23 @@ export default class DataFreezeEventList extends Component {
                 <span> / </span><span className="required-fields">{this.props.translations['amp.data-freezing:required-fields']}</span>                        
                 </div>                 
                 </div>  
+                }
                 {this.showErrors()}
                 {this.showInfoMessages()} 
                     <table className="table table-bordered table-striped data-table">
                       <thead>
-                        <tr>
-                          <th className="col-md-2"><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.data-freezing:data-freeze-date']}</th>
+                        {this.props.context === Constants.UNFREEZE_ALL &&
+                            <tr>
+                             <th className="col-md-2">{this.props.translations['amp.data-freezing:data-freeze-date']}</th>
+                             
+                              <th>{this.props.translations['amp.data-freezing:number-of-activities']}</th>
+                            </tr>
+                        }
+                        {this.props.context === Constants.DATA_FREEZE_EVENTS &&
+                          <tr>
+                          <th className="col-md-2">                         
+                          <span className="error-color" >*&nbsp;</span>
+                            {this.props.translations['amp.data-freezing:data-freeze-date']}</th>
                           <th>
                           {this.props.translations['amp.data-freezing:grace-period']}<br/>
                           {this.props.translations['amp.data-freezing:days']} 
@@ -199,11 +215,12 @@ export default class DataFreezeEventList extends Component {
                           <th>{this.props.translations['amp.data-freezing:enabled']}</th>
                           <th></th>
                           <th></th>
-                        </tr>
+                          </tr>
+                        }
                       </thead>
                       <tbody>
                         {this.props.dataFreezeEventList.map((dataFreezeEvent, i) => 
-                          <DataFreezeEventRow dataFreezeEvent={dataFreezeEvent} key={i} filter={this.filter} setFilterElement={this.setFilterElement} showFilterElement={this.showFilterElement} hideFilterElement={this.hideFilterElement}/>                      
+                          <DataFreezeEventRow dataFreezeEvent={dataFreezeEvent} key={i} filter={this.filter} setFilterElement={this.setFilterElement} showFilterElement={this.showFilterElement} hideFilterElement={this.hideFilterElement} {...this.props}/>                      
                         )}                  
                       
                       </tbody>

@@ -72,6 +72,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
@@ -2737,6 +2738,8 @@ public class ExportActivityToPDF extends Action {
         Collection<FundingDetail> details = funding.filterFundings(transactionType, adjustmentType);
         if (details.isEmpty())
             return;
+        List<FundingDetail> list = new ArrayList<>(details);
+        Collections.sort(list, FundingValidator.getFundingDetailComparator());
         ServletContext ampContext = getServlet().getServletContext();
 
         String output = TranslatorWorker.translateText(fundingRegionName);
@@ -2749,7 +2752,7 @@ public class ExportActivityToPDF extends Action {
         plCommCell1.setColspan(4);
         fundingTable.addCell(plCommCell1);
 
-        for (FundingDetail fd : details)
+        for (FundingDetail fd : list)
         {
             buildFundingInfoInnerTable(fundingTable, fd, fmTemplate, fundingTable, ampContext,session);
         }

@@ -32,7 +32,7 @@ import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FundingDetailItemIdComparator;
+import org.digijava.module.aim.helper.FundingDetailReportingDateComparator;
 import org.digijava.module.aim.helper.FundingDetailTransactionDateComparator;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -85,11 +85,11 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 			case Constants.COMPARATOR_TRANSACTION_DATE_DESC:
 				comparator = FundingDetailTransactionDateComparator.getDescending();
 				break;
-			case Constants.COMPARATOR_FUNDING_ITEM_ID_ASC:
-				comparator = FundingDetailItemIdComparator.getAscending();
+			case Constants.COMPARATOR_REPORTING_DATE_ASC:
+				comparator = FundingDetailReportingDateComparator.getAscending();
 				break;
-			case Constants.COMPARATOR_FUNDING_ITEM_ID_DESC:
-				comparator = FundingDetailItemIdComparator.getDescending();
+			case Constants.COMPARATOR_REPORTING_DATE_DESC:
+				comparator = FundingDetailReportingDateComparator.getDescending();
 				break;
 			default:
 				comparator = FundingDetailTransactionDateComparator.getAscending();

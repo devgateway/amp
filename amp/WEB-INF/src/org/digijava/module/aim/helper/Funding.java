@@ -331,7 +331,7 @@ public class Funding implements Serializable {
 					currentFundingDetail.setCurrencyCode(currencyCode);
 				}
 			}
-			if (fundDetail != null) Collections.sort(fundDetail, FundingValidator.dateComp);
+			if (fundDetail != null) Collections.sort(fundDetail, FundingValidator.getFundingDetailComparator());
 			this.setFundingDetails(fundDetail);
 			this.populateAmpRawFunding(ampFunding);
 			// funding.add(fund);

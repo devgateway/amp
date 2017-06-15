@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
@@ -17,6 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.util.OrganisationUtil;
 
 /**
  * Check if organization roles used in activity.funding and activity.funding.fundingDetails match organization roles
@@ -119,7 +119,7 @@ public class FundingOrgRolesValidator extends InputValidator {
 
     private Map<String, Long> getOrgRoleIdsByCode() {
         Map<String, Long> roles = new HashMap<>();
-        for (AmpRole role : OnePagerUtil.getOrgRoles()) {
+        for (AmpRole role : OrganisationUtil.getOrgRoles()) {
             roles.put(role.getRoleCode(), role.getAmpRoleId());
         }
         return roles;

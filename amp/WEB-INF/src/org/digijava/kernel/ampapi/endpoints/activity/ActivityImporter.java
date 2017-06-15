@@ -30,7 +30,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
@@ -79,6 +78,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -1334,7 +1334,7 @@ public class ActivityImporter {
 
 	private Map<String, AmpRole> loadOrgRoles() {
 		Map<String, AmpRole> roles = new HashMap<>();
-		for (AmpRole role : OnePagerUtil.getOrgRoles()) {
+		for (AmpRole role : OrganisationUtil.getOrgRoles()) {
 			roles.put(role.getRoleCode(), role);
 		}
 		return roles;

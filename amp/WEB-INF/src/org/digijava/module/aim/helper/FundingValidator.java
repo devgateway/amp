@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class FundingValidator {
@@ -36,7 +37,32 @@ public class FundingValidator {
 			throw new ClassCastException();
 		}
 	};
-	
+
+	public static Comparator<FundingDetail> getFundingDetailComparator() {
+		Comparator<FundingDetail> comparator = null;
+		String globalSettingComparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants
+				.REORDER_FUNDING_ITEMS);
+		switch (globalSettingComparator) {
+			case Constants.COMPARATOR_TRANSACTION_DATE_DESC:
+				comparator = Comparator.comparing
+						(FundingDetail::getTransactionDate, Comparator.nullsFirst(Comparator.naturalOrder())).reversed();
+				break;
+			case Constants.COMPARATOR_REPORTING_DATE_ASC:
+				comparator = Comparator.comparing
+						(FundingDetail::getReportingDate, Comparator.nullsFirst(Comparator.naturalOrder()));
+				break;
+			case Constants.COMPARATOR_REPORTING_DATE_DESC:
+				comparator = Comparator.comparing
+						(FundingDetail::getReportingDate, Comparator.nullsFirst(Comparator.naturalOrder())).reversed();
+				break;
+			default:
+				comparator = Comparator.comparing
+						(FundingDetail::getTransactionDate, Comparator.nullsFirst(Comparator.naturalOrder()));
+		}
+
+		return comparator;
+	}
+
 	private static void makeCumulativeAmounts() {
 		double value = 0;
 		for (int i = 0;i < list1.size();i ++) {

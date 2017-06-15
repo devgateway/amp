@@ -61,7 +61,7 @@ public class SettingsConstants {
 		put(USE_GROUPING, "Use Grouping Separator");
 		put(GROUP_SEPARATOR, "Grouping Separator");
 		put(GROUP_SIZE, "Group Size");
-		put(AMOUNT_UNITS, "Amount units");
+		put(AMOUNT_UNITS, "Amounts units");
 		put(AMOUNT_UNITS_1, "Amounts in Units");
 		put(AMOUNT_UNITS_1000, "Amounts in Thousands (000)");
 		put(AMOUNT_UNITS_1000000, "Amounts in Millions (000 000)");

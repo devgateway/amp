@@ -65,7 +65,7 @@ var AMPInfo = Backbone.View.extend({
     },
 
     build_notificationFromSettings: function(settings) {
-    	Saiku.logger.log("AMPInfo.build_notification");
+    	Saiku.logger.log("AMPInfo.build_notificationFromSettings");
     	var amountFormat = settings[window.settingsWidget.Constants.AMOUNT_FORMAT_ID];
         	if (amountFormat) {
                 switch (amountFormat[window.settingsWidget.Constants.AMOUNT_UNIT_ID]) {

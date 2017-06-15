@@ -27,12 +27,13 @@ export const initialTranslations = {
         'amp.data-freezing:boolean-option-yes':'Yes',
         'amp.data-freezing:boolean-option-no':'No',
         'amp.data-freezing:required-fields-message': 'Data Freeze Date, Freeze Option and Notification email are required fields.',
-        'amp.data-freezing:invalid-freeze-date': 'Invalid Data Freeze Date - the Data Freeze Date should not be in the past',
+        'amp.data-freezing:invalid-freeze-date': 'Invalid Data Freeze Date. The Data Freeze Date should not be in the past',
         'amp.data-freezing:delete-prompt': 'Are you sure you want to delete?',
         'amp.data-freezing:enabled': 'Enabled',
         'amp.data-freezing:unfreeze-all' : 'Unfreeze All',
         'amp.data-freeze-event:unfreeze-all-successful': 'Unfreeze all completed successfully',
         'amp.data-freeze-event:unfreeze-all-failed': 'Unfreeze all failed with an error',
         'amp.data-freezing:unfreeze-all-desc': 'This option will allow you to unfreeze all events and activities.',
-        'amp.data-freeze-event:unfreeze-all-confirm' : 'Are you sure you want to unfreeze all activities?'
+        'amp.data-freeze-event:unfreeze-all-confirm' : 'Are you sure you want to unfreeze all activities?',
+        'amp.data-freezing:start-date-should-not-be-greater-than-end-date': 'Data Open Period Start not be greater than Data Open Period End'
 };

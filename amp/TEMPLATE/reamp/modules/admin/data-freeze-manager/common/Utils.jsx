@@ -45,17 +45,29 @@ class Utils {
             errors.push( message );
         }
         errors.push(...this.validateFreezingDate(dataFreezeEvent));
+        errors.push(...this.validateStartAndEndDate(dataFreezeEvent))
         return errors
     }
 
-    static validateFreezingDate(dataFreezeEvent){
+    static validateFreezingDate(dataFreezeEvent) {
         let errors = [];
         let freezingDate = moment(dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT);
         let today = moment();
-        if(today.isAfter(freezingDate)){
+        if(today.startOf('day').isAfter(freezingDate)){
             errors.push({ messageKey: 'amp.data-freezing:invalid-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['freezingDate'] });
         }  
         return errors;
+    }
+    
+    static validateStartAndEndDate(dataFreezeEvent) {
+        let errors = [];
+        let openPeriodStart = moment(dataFreezeEvent.openPeriodStart, Constants.EP_DATE_FORMAT);
+        let openPeriodEnd = moment(dataFreezeEvent.openPeriodEnd, Constants.EP_DATE_FORMAT);
+        if (openPeriodStart.isAfter(openPeriodEnd)) {
+            errors.push({ messageKey: 'amp.data-freezing:start-date-should-not-be-greater-than-end-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['freezingDate'] });
+        }
+        return errors;
+        
     }
     
     static checkRequiredField( obj, field, message ) {

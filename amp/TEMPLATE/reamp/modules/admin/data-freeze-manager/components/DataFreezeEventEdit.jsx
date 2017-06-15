@@ -121,7 +121,7 @@ export default class DataFreezeEventForm extends Component {
     }
     
     restoreSavedFilters() {        
-        this.props.filter.reset({silent : true })
+        this.props.filter.reset({silent : true });
         let currentRecord = this.props.dataFreezeEvent;        
         let filters = JSON.parse(currentRecord.filters || '{}')
         this.props.filter.deserialize(filters, {silent : true });            
@@ -145,7 +145,7 @@ export default class DataFreezeEventForm extends Component {
               }  </td>
                 <td>
                 <div className="input-group pull-right ">
-                  <input type="text" className="form-control" onChange={this.onGracePeriodChange}/>        
+                  <input type="text" className="form-control" onChange={this.onGracePeriodChange} value={this.props.dataFreezeEvent.gracePeriod}/>        
                 
                  </div>
                 </td>

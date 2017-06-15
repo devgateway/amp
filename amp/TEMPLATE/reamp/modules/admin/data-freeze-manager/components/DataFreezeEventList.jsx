@@ -32,6 +32,7 @@ export default class DataFreezeEventList extends Component {
         this.setFilterElement = this.setFilterElement.bind(this);
         this.showFilterElement = this.showFilterElement.bind(this);
         this.hideFilterElement = this.hideFilterElement.bind(this);
+        this.updateRecordsPerPage = this.updateRecordsPerPage.bind(this);
     }
 
     componentWillMount() {
@@ -101,6 +102,18 @@ export default class DataFreezeEventList extends Component {
         }
     }
 
+    updateRecordsPerPage() {
+        if ( this.refs.recordsPerPage && this.refs.recordsPerPage.value ) {
+            const loadParams = {};
+            loadParams.paging = this.props.paging;
+            loadParams.sorting = this.props.sorting;
+            loadParams.paging.recordsPerPage = parseInt( this.refs.recordsPerPage.value );
+            loadParams.paging.currentPageNumber = 1
+            this.props.actions.loadDataFreezeEventList(loadParams);
+        }
+    }
+
+    
     showErrors() {
         const messages = [];
         this.props.errors.forEach((error, index) => {
@@ -199,19 +212,18 @@ export default class DataFreezeEventList extends Component {
                         }
                         {this.props.context === Constants.DATA_FREEZE_EVENTS &&
                           <tr>
-                          <th className="col-md-2">                         
-                          <span className="error-color" >*&nbsp;</span>
-                            {this.props.translations['amp.data-freezing:data-freeze-date']}</th>
+                          <th className="col-md-2">       
+                            <img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:data-freeze-date']}<span className="error-color" >*&nbsp;</span></th>
                           <th>
-                          {this.props.translations['amp.data-freezing:grace-period']}<br/>
+                          <img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:grace-period']}<br/>
                           {this.props.translations['amp.data-freezing:days']} 
                           </th>
-                          <th>{this.props.translations['amp.data-freezing:open-period-start']}</th>
-                          <th>{this.props.translations['amp.data-freezing:open-period-end']}</th>
-                          <th>{this.props.translations['amp.data-freezing:number-of-activities']}</th>
-                          <th><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.data-freezing:freeze-options']}</th>
-                          <th><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.data-freezing:notify']}</th>
-                          <th>{this.props.translations['amp.data-freezing:filters']}</th>
+                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:open-period-start']}</th>
+                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:open-period-end']}</th>
+                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:number-of-activities']}</th>
+                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:freeze-options']}<span className="error-color" >*&nbsp;</span></th>
+                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:notify']}<span className="error-color" >*&nbsp;</span></th>
+                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:filters']}</th>
                           <th>{this.props.translations['amp.data-freezing:enabled']}</th>
                           <th></th>
                           <th></th>
@@ -253,14 +265,14 @@ export default class DataFreezeEventList extends Component {
                         </li>
                         </ul>
                         </nav>}
-                              </div>
+                         </div>
 
                               <div className="col-md-2">
                                 <div className="input-group pull-right">
                                   <span className="input-group-addon" id="basic-addon1">
-                                    <span className="glyphicon glyphicon-arrow-right"></span>
+                                    <span className="glyphicon glyphicon-arrow-right" onClick={this.updateRecordsPerPage}></span>
                                   </span>
-                                  <input type="text" className="form-control" placeholder=""/>
+                                  <input type="text" ref="recordsPerPage" className="form-control" placeholder="" defaultValue={this.props.paging.recordsPerPage}/>
                                 </div>
                               </div>
 

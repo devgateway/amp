@@ -81,7 +81,7 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 
         GPINiQuestionType type = surveyQuestionModel.getObject().getType();
         if (type.equals(GPINiQuestionType.INTEGER)) {
-            TextField<String> input = getNumberResponseInput(responseValidationFields, responseModel);
+            TextField<Integer> input = getNumberResponseInput(responseValidationFields, responseModel);
             add(input);
             add(hiddenMarkup(RESPONSE_TEXT_ID), hiddenMarkup(RESPONSE_OPTIONS_ID), hiddenMarkup(RESPONSE_SELECT_ID));
         }
@@ -149,28 +149,20 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
      * @param responseModel
      * @return
      */
-    private TextField<String> getNumberResponseInput(
+    private TextField<Integer> getNumberResponseInput(
             List<AmpCollectionValidatorField<AmpGPINiSurveyResponse, String>> responseValidationFields,
             IModel<AmpGPINiSurveyResponse> responseModel) {
-        TextField<String> input = new TextField<String>(RESPONSE_NUMBER_ID,
-                new PropertyModel<String>(responseModel, "integerResponse"), String.class);
-        input.add(new IValidator<String>() {
+        TextField<Integer> input = new TextField<Integer>(RESPONSE_NUMBER_ID,
+                new PropertyModel<Integer>(responseModel, "integerResponse"), Integer.class);
+        input.add(new IValidator<Integer>() {
             @Override
-            public void validate(IValidatable<String> validatable) {
+            public void validate(IValidatable<Integer> validatable) {
                 String value = String.valueOf(validatable.getValue());
-                int intValue = -1;
-                try {
-                    webLinkFeedbackContainer.setVisible(false);
-                    intValue = Integer.parseInt(value);
-                } catch (NumberFormatException e) {
-
-                }
-                if (intValue < 0) {
+                webLinkFeedbackContainer.setVisible(false);
+                if (!isPositiveInteger(value)) {
                     ValidationError error = new ValidationError();
                     error.addKey("AmpGPINiQuestionNumericValidator");
                     validatable.error(error);
-                    webLinkFeedbackContainer.setVisible(true);
-                    webLinkFeedbackLabel.setDefaultModelObject(INVALID_INTEGER_MESSAGE);
                 }
             }
 
@@ -188,16 +180,24 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
 
             @Override
             protected void onError(AjaxRequestTarget target, RuntimeException e) {
-                if (webLinkFeedbackContainer.isVisible()) {
-                    input.add(new AttributeModifier("class", "formcomponent invalid inputx"));
-                } else {
-                    input.add(new AttributeModifier("class", ""));
-                }
+                input.add(new AttributeModifier("class", "formcomponent invalid inputx"));
                 target.add(input);
+                webLinkFeedbackContainer.setVisible(true);
+                webLinkFeedbackLabel.setDefaultModelObject(INVALID_INTEGER_MESSAGE);
                 target.add(webLinkFeedbackContainer);
             }
         });
         return input;
+    }
+
+    private boolean isPositiveInteger(String value) {
+        int intValue;
+        try {
+            intValue = Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return intValue >= 0;
     }
 
     /**

@@ -25,7 +25,8 @@ export default class App extends Component {
     render() {         
         return (
             <div>
-                <div className="data-freeze-container container">
+                <div className="data-freeze-container">
+                <div className="container">
                 <div className="col-md-6">
                   <h2 className="pull-left">
                  {this.props.translations['amp.data-freezing:data-freeze-manager']}</h2>
@@ -33,9 +34,8 @@ export default class App extends Component {
                 <div className="col-md-6">
                   <span className="required pull-right">{this.props.translations['amp.data-freezing:required-fields']}</span>
                 </div>
-                </div>
-                  
-                  <div className="container">
+                </div>                  
+                  <div className="container" style={{width:'90%'}}>
                   <ul className="nav nav-tabs indicator-tabs" data-tabs="tabs">
                     <li role="presentation" className={this.state.currentTab == 'data-freezing' ? 'active' : ''}><a data-tab="data-freezing" role="tab" data-toggle="tab" onClick={this.tabChanged}>{this.props.translations['amp.data-freezing:add-freezing-event']}</a>
                     </li>
@@ -57,7 +57,7 @@ export default class App extends Component {
                     </div>
                             
                     
-                    
+              </div>    
             </div>
             
         );

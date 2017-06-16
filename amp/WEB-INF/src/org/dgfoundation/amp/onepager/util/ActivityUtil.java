@@ -744,12 +744,15 @@ public class ActivityUtil {
 					tdd.setTranslatedNotes(translatedNoteMap);
 				}
 
-				if (temp.getType() != null)
+				if (temp.getType() != null) {
 					tdd.setCmDocTypeId(temp.getType().getId());
-				if (temp.getDate() != null)
+				}
+				if (temp.getDate() != null) {
 					tdd.setDate(temp.getDate().getTime());
-				if (temp.getYear() != null)
+				}
+				if (temp.getYear() != null) {
 					tdd.setYearofPublication(temp.getYear());
+				}
 				if (temp.getWebLink() == null || temp.getWebLink().length() == 0) {
 					if (temp.getFile() != null) {
 						tdd.setFileSize(temp.getFile().getSize());
@@ -838,12 +841,12 @@ public class ActivityUtil {
 	 * @param deletedResources
 	 */
 	private static void deleteResources(AmpActivityVersion a, HashSet<AmpActivityDocument> deletedResources) {
-		if (deletedResources != null){
+		if (deletedResources != null) {
 			for (AmpActivityDocument tmpDoc : deletedResources) {
 				Iterator<AmpActivityDocument> it2 = a.getActivityDocuments().iterator();
 				while (it2.hasNext()) {
 					AmpActivityDocument existDoc = (AmpActivityDocument) it2.next();
-					if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0){
+					if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0) {
 						it2.remove();
 						break;
 					}
@@ -936,7 +939,8 @@ public class ActivityUtil {
 		AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
 
 		HashSet<TemporaryGPINiDocument> newResources = s.getMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS);
-		HashSet<AmpGPINiSurveyResponseDocument> deletedResources = s.getMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS);
+		HashSet<AmpGPINiSurveyResponseDocument> deletedResources = s.getMetaData(OnePagerConst
+				.GPI_RESOURCES_DELETED_ITEMS);
 
 		// remove old resources
 		deleteGPINiResources(a, deletedResources);
@@ -949,7 +953,8 @@ public class ActivityUtil {
 	 *
 	 * @param deletedResources
 	 */
-	private static void deleteGPINiResources(AmpActivityVersion a, HashSet<AmpGPINiSurveyResponseDocument> deletedResources) {
+	private static void deleteGPINiResources(AmpActivityVersion a, HashSet<AmpGPINiSurveyResponseDocument>
+			deletedResources) {
 		if (deletedResources != null) {
 			for (AmpGPINiSurveyResponseDocument tmpDoc : deletedResources) {
 				AmpGPINiSurveyResponse surveyResponse = tmpDoc.getSurveyResponse();
@@ -961,7 +966,8 @@ public class ActivityUtil {
 							if (tempGPINiSurveyResponse.getOldKey() == surveyResponse
 									.getAmpGPINiSurveyResponseId()) {
 
-								Set<AmpGPINiSurveyResponseDocument> docsToBeRemoved = tempGPINiSurveyResponse.getSupportingDocuments().stream()
+								Set<AmpGPINiSurveyResponseDocument> docsToBeRemoved = tempGPINiSurveyResponse
+										.getSupportingDocuments().stream()
 										.filter(d -> d.getUuid().equals(tmpDoc.getUuid()))
 										.collect(Collectors.toSet());
 

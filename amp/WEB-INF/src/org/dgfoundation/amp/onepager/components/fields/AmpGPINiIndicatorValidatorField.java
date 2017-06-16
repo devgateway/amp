@@ -14,6 +14,7 @@ import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.dgfoundation.amp.onepager.validators.AmpGPINiIndicatorValidator;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
+import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 
 /**
  * This field can be used to validate the GPI Ni responses and show an error
@@ -108,9 +109,23 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
                             .getSurveyResponse().getAmpGPINiQuestion().getCode())
                     )
                     .collect(Collectors.toSet());
-            return newResponseResourceItems.size() == 0 && response.isEmpty();
+            return newResponseResourceItems.size() == 0 && (response.isEmpty() || isEmptyAfterDelete(response));
 
         }
 
+    }
+
+    private boolean isEmptyAfterDelete(AmpGPINiSurveyResponse response) {
+        Set<AmpGPINiSurveyResponseDocument> delItems =
+                getSession().getMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS);
+
+        boolean isEmptyAfterDelete = false;
+        if (delItems.size() > 0 && response.getSupportingDocuments().size() > 0) {
+            Set<AmpGPINiSurveyResponseDocument> currentDocs = new HashSet<AmpGPINiSurveyResponseDocument>();
+            currentDocs.addAll(response.getSupportingDocuments());
+            currentDocs.removeAll(delItems);
+            isEmptyAfterDelete = (currentDocs.size() <= 0);
+        }
+        return isEmptyAfterDelete;
     }
 }

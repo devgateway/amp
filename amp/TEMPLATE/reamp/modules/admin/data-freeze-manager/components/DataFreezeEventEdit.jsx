@@ -29,6 +29,7 @@ export default class DataFreezeEventForm extends Component {
         this.showFilters = this.showFilters.bind(this);
         this.restoreSavedFilters = this.restoreSavedFilters.bind(this);
         this.onEnabledChange = this.onEnabledChange.bind(this);
+        this.getErrorsForField = this.getErrorsForField.bind(this);
     }
         
     toggleDatePicker(event) {
@@ -58,11 +59,9 @@ export default class DataFreezeEventForm extends Component {
 
     onGracePeriodChange(event) {
         let gracePeriod = $(event.target).val();    
-        if(gracePeriod) {
-            let currentRecord = this.props.dataFreezeEvent;
-            currentRecord.gracePeriod = parseInt(gracePeriod);
-            this.setState({currentRecord: currentRecord});  
-        }          
+        let currentRecord = this.props.dataFreezeEvent;
+        currentRecord.gracePeriod = (gracePeriod  && !isNaN(gracePeriod)) ? parseInt(gracePeriod) : '';
+        this.setState({currentRecord: currentRecord});             
     }
     
     onSendNotificationChange(event) {
@@ -127,10 +126,17 @@ export default class DataFreezeEventForm extends Component {
         this.props.filter.deserialize(filters, {silent : true });            
     }
     
+    getErrorsForField(field){
+        var errors = this.props.errors.filter(error => {return (((error.id && error.id === this.props.dataFreezeEvent.id) || (error.cid && error.cid === this.props.dataFreezeEvent.cid)) && error.affectedFields && error.affectedFields.includes(field) )})
+        return  errors; 
+    }
+    
     render() {          
         return (  
                 <tr >
-                <td><div className="input-group date pull-right " data-provide="datepicker">
+                <td>
+                <div className={this.getErrorsForField('freezingDate').length > 0 ? 'has-error': ''}>
+                <div className="input-group date pull-right " data-provide="datepicker">
                 <input type="text" className="form-control" value={this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)} readOnly/>
                 <div className="input-group-addon">
                   <span className="glyphicon glyphicon-calendar" data-field="freezingDate" onClick={this.toggleDatePicker}></span>
@@ -142,14 +148,17 @@ export default class DataFreezeEventForm extends Component {
                     <DatePicker data-field="freezingDate"  onChange={this.onFreezingDateChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)} dateFormat={this.getDisplayDateFormat()}/>
                   </div>
               </div>
-              }  </td>
-                <td>
-                <div className="input-group pull-right ">
-                  <input type="text" className="form-control" onChange={this.onGracePeriodChange} value={this.props.dataFreezeEvent.gracePeriod}/>        
+              }
+              </div>
+              </td>
+                <td >
+                <div className={this.getErrorsForField('gracePeriod').length > 0 ? 'has-error input-group pull-right': 'input-group pull-right'}>
+                  <input type="text" className="form-control grace-period-input" onChange={this.onGracePeriodChange} value={this.props.dataFreezeEvent.gracePeriod} />        
                 
                  </div>
                 </td>
                 <td>
+              <div className={this.getErrorsForField('openPeriodStart').length > 0 ? 'has-error': ''}>
                   <div className="input-group date pull-right " data-provide="datepicker">
                   <input type="text" className="form-control" value={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)} readOnly/>
                   <div className="input-group-addon">
@@ -162,9 +171,11 @@ export default class DataFreezeEventForm extends Component {
                       <DatePicker onChange={this.onOpenPeriodStartChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)} dateFormat={this.getDisplayDateFormat()}/>
                      </div>
                     </div>
-                }                
+                }  
+                </div>
                 </td>
                 <td>
+                <div className={this.getErrorsForField('openPeriodEnd').length > 0 ? 'has-error': ''}>
                 <div className="input-group date pull-right " data-provide="datepicker">
                 <input type="text" className="form-control" value={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodEnd)} readOnly/>
                 <div className="input-group-addon">
@@ -178,13 +189,13 @@ export default class DataFreezeEventForm extends Component {
                    </div>
                   </div>
               }
-                
+                </div>
                 </td>
                 <td>
                   {this.props.dataFreezeEvent.count}
                 </td>
                 <td>
-              <div className="input-group">
+              <div className={this.getErrorsForField('freezeOption').length > 0 ? 'input-group has-error': 'input-group'}>
               <div className="radio">
                 <label>
                   <input type="radio" name={'freezeOption' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.FREEZE_OPTION_ENTIRE_ACTIVITY} onChange={this.onFreezeOptionChange} checked={this.props.dataFreezeEvent.freezeOption === Constants.FREEZE_OPTION_ENTIRE_ACTIVITY} />{this.props.translations['amp.data-freezing:freeze-option-activity']}</label>
@@ -199,7 +210,7 @@ export default class DataFreezeEventForm extends Component {
                 
                 </td>
                 <td>
-                  <div className="input-group ">
+                  <div className={this.getErrorsForField('sendNotification').length > 0 ? 'input-group has-error': 'input-group'}>
                   <div className="radio">
                     <label>
                       <input type="radio" name={'sendNotification' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_YES} onChange={this.onSendNotificationChange} checked={this.props.dataFreezeEvent.sendNotification}/>{this.props.translations['amp.data-freezing:boolean-option-yes']}</label>

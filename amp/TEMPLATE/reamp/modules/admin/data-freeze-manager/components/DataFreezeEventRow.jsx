@@ -35,8 +35,7 @@ export default class DataFreezeEventRow extends Component {
         }               
     }
     
-    cancel() {
-        debugger
+    cancel() {        
         const origDataFreezeEvent = this.state.origDataFreezeEvent;
         if(origDataFreezeEvent && origDataFreezeEvent.id) {
            this.props.actions.updateDataFreezeEvent(origDataFreezeEvent);  

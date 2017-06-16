@@ -18,7 +18,6 @@ export const initialTranslations = {
         'amp.data-freeze-event:save-successful':'Record was saved successfully',
         'amp.data-freeze-event:delete-successful': 'Record deleted successfully',
         'amp.data-freeze:button-next': 'Next',
-        'amp.data-freezing:notify': 'Notify',
         'amp.data-freezing:add-new':'Add new',
         'amp.data-freezing:insert-data': '(insert data to the new field)',
         'amp.data-freezing:click-save': 'Click the Save icon to save the added data row',
@@ -26,7 +25,7 @@ export const initialTranslations = {
         'amp.data-freezing:required-fields': '* Required Fields',
         'amp.data-freezing:boolean-option-yes':'Yes',
         'amp.data-freezing:boolean-option-no':'No',
-        'amp.data-freezing:required-fields-message': 'Data Freeze Date, Freeze Option and Notification email are required fields.',
+        'amp.data-freezing:required-fields-message': 'Data Freeze Date, Freeze Option and Notification Email are required fields',
         'amp.data-freezing:invalid-freeze-date': 'Invalid Data Freeze Date. The Data Freeze Date should not be in the past',
         'amp.data-freezing:delete-prompt': 'Are you sure you want to delete?',
         'amp.data-freezing:enabled': 'Enabled',
@@ -35,5 +34,15 @@ export const initialTranslations = {
         'amp.data-freeze-event:unfreeze-all-failed': 'Unfreeze all failed with an error',
         'amp.data-freezing:unfreeze-all-desc': 'This option will allow you to unfreeze all events and activities.',
         'amp.data-freeze-event:unfreeze-all-confirm' : 'Are you sure you want to unfreeze all activities?',
-        'amp.data-freezing:start-date-should-not-be-greater-than-end-date': 'Data Open Period Start not be greater than Data Open Period End'
+        'amp.data-freezing:start-date-should-not-be-greater-than-end-date': 'Data Open Period Start should not be greater than Data Open Period End',
+        'amp.data-freezing:start-date-should-be-after-freeze-date': 'Data Open Period Start should be greater than the Data Freeze Date',
+        'amp.data-freezing:tooltip-data-freeze-date': 'Data Freeze Date',
+         'amp.data-freezing:tooltip-grace-period': 'Grace Period (Days)',
+         'amp.data-freezing:tooltip-open-period-start': 'Data Open Period Start',
+         'amp.data-freezing:tooltip-open-period-end': 'Data Open Period End',
+         'amp.data-freezing:tooltip-number-of-activities': 'Number of activities affected by the data freeze event',
+         'amp.data-freezing:tooltip-freeze-options': 'Freeze Options',
+         'amp.data-freezing:tooltip-filters': 'Filters',
+         'amp.data-freezing:tooltip-notification-email': 'Notification Email',
+         'amp.data-freezing:invalid-grace-period': 'Invalid Grace Period. Grace period can be 0 or a positive whole number'
 };

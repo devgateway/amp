@@ -8,6 +8,8 @@ import {
 import {
     bindActionCreators
 } from 'redux';
+import { OverlayTrigger } from 'react-bootstrap';
+import {Tooltip } from 'react-bootstrap';
 import * as startUp from '../actions/StartUpAction';
 import * as dataFreezeActions from '../actions/DataFreezeActions';
 import * as commonListsActions from '../actions/CommonListsActions';
@@ -47,7 +49,6 @@ export default class DataFreezeEventList extends Component {
             
         
     }
-
 
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -122,7 +123,7 @@ export default class DataFreezeEventList extends Component {
 
         return (this.props.errors.length > 0 && <div className="alert alert-danger" role="alert">
             {messages}
-    </div>)
+     </div>)
     }
 
     showInfoMessages() {
@@ -180,6 +181,14 @@ export default class DataFreezeEventList extends Component {
         $( this.refs.filterPopup ).hide();
     }
     
+    showInfoIcon(column) {
+        let tooltip = <Tooltip id={column + '-icon-tooltip'}>{this.props.translations['amp.data-freezing:tooltip-' + column]}</Tooltip> ;                   
+        return ( 
+                <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={tooltip}>
+                  <img className="tab-content-icon" src="styles/images/icon-information.svg"/>
+                </OverlayTrigger>
+        )
+    }
     render() {
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);
         return (
@@ -213,17 +222,17 @@ export default class DataFreezeEventList extends Component {
                         {this.props.context === Constants.DATA_FREEZE_EVENTS &&
                           <tr>
                           <th className="col-md-2">       
-                            <img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:data-freeze-date']}<span className="error-color" >*&nbsp;</span></th>
+                            {this.showInfoIcon('data-freeze-date')}{this.props.translations['amp.data-freezing:data-freeze-date']}<span className="error-color" >*&nbsp;</span></th>
                           <th>
-                          <img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:grace-period']}<br/>
+                           {this.showInfoIcon('grace-period')}{this.props.translations['amp.data-freezing:grace-period']}<br/>
                           {this.props.translations['amp.data-freezing:days']} 
                           </th>
-                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:open-period-start']}</th>
-                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:open-period-end']}</th>
-                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:number-of-activities']}</th>
-                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:freeze-options']}<span className="error-color" >*&nbsp;</span></th>
-                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:notify']}<span className="error-color" >*&nbsp;</span></th>
-                          <th><img className="tab-content-icon" src="styles/images/icon-information.svg"/>{this.props.translations['amp.data-freezing:filters']}</th>
+                          <th>{this.showInfoIcon('open-period-start')}{this.props.translations['amp.data-freezing:open-period-start']}</th>
+                          <th>{this.showInfoIcon('open-period-end')}{this.props.translations['amp.data-freezing:open-period-end']}</th>
+                          <th>{this.showInfoIcon('number-of-activities')}{this.props.translations['amp.data-freezing:number-of-activities']}</th>
+                          <th>{this.showInfoIcon('freeze-options')}{this.props.translations['amp.data-freezing:freeze-options']}<span className="error-color" >*&nbsp;</span></th>
+                          <th>{this.showInfoIcon('notification-email')}{this.props.translations['amp.data-freezing:notification-email']}<span className="error-color" >*&nbsp;</span></th>
+                          <th>{this.showInfoIcon('filters')}{this.props.translations['amp.data-freezing:filters']}</th>
                           <th>{this.props.translations['amp.data-freezing:enabled']}</th>
                           <th></th>
                           <th></th>

@@ -1,8 +1,15 @@
-import React, { Component, PropTypes } from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
+import {
+    connect
+} from 'react-redux';
+import {
+    bindActionCreators
+} from 'redux';
 import * as startUp from '../actions/StartUpAction';
-import * as commonListsActions from  '../actions/CommonListsActions';
+import * as commonListsActions from '../actions/CommonListsActions';
 import * as dataFreezeActions from '../actions/DataFreezeActions';
 import DatePicker from 'react-date-picker';
 import moment from 'moment';
@@ -10,14 +17,18 @@ require('react-date-picker/base.css');
 require('react-date-picker/theme/hackerone.css');
 import * as Constants from '../common/Constants';
 require('../styles/less/main.less');
-export default class DataFreezeEventForm extends Component {    
-    constructor(props, context) {      
+export default class DataFreezeEventEdit extends Component {
+    constructor(props, context) {
         super(props, context);
         this.state = {
-           showDatePicker: {freezingDate: false, openPeriodStart: false, openPeriodEnd: false},
-           currentRecord: {}
+            showDatePicker: {
+                freezingDate: false,
+                openPeriodStart: false,
+                openPeriodEnd: false
+            },
+            currentRecord: {}
         };
-        
+
         this.toggleDatePicker = this.toggleDatePicker.bind(this);
         this.onFreezingDateChange = this.onFreezingDateChange.bind(this);
         this.onOpenPeriodStartChange = this.onOpenPeriodStartChange.bind(this);
@@ -31,109 +42,133 @@ export default class DataFreezeEventForm extends Component {
         this.onEnabledChange = this.onEnabledChange.bind(this);
         this.getErrorsForField = this.getErrorsForField.bind(this);
     }
-        
+
     toggleDatePicker(event) {
         let field = event.target.getAttribute('data-field');
         let toggleState = this.state.showDatePicker;
         toggleState[field] = !toggleState[field];
-        this.setState({showDatePicker: toggleState});
+        this.setState({
+            showDatePicker: toggleState
+        });
     }
-    
+
     onFreezingDateChange(date) {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.freezingDate = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
-        this.setState({currentRecord: currentRecord}); 
+        this.setState({
+            currentRecord: currentRecord
+        });
     }
-    
-    onOpenPeriodStartChange(date){
-       let currentRecord = this.props.dataFreezeEvent;
-       currentRecord.openPeriodStart = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
-       this.setState({currentRecord: currentRecord});        
+
+    onOpenPeriodStartChange(date) {
+        let currentRecord = this.props.dataFreezeEvent;
+        currentRecord.openPeriodStart = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
+        this.setState({
+            currentRecord: currentRecord
+        });
     }
-    
-    onOpenPeriodEndChange(date){
+
+    onOpenPeriodEndChange(date) {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.openPeriodEnd = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
-        this.setState({currentRecord: currentRecord});    
+        this.setState({
+            currentRecord: currentRecord
+        });
     }
 
     onGracePeriodChange(event) {
-        let gracePeriod = $(event.target).val();    
+        let gracePeriod = $(event.target).val();
         let currentRecord = this.props.dataFreezeEvent;
-        currentRecord.gracePeriod = (gracePeriod  && !isNaN(gracePeriod)) ? parseInt(gracePeriod) : '';
-        this.setState({currentRecord: currentRecord});             
+        currentRecord.gracePeriod = (gracePeriod && !isNaN(gracePeriod)) ? parseInt(gracePeriod) : '';
+        this.setState({
+            currentRecord: currentRecord
+        });
     }
-    
+
     onSendNotificationChange(event) {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.sendNotification = $(event.target).val() === Constants.OPTION_YES;
-        this.setState({currentRecord: currentRecord}); 
+        this.setState({
+            currentRecord: currentRecord
+        });
     }
-    
-    onEnabledChange(event){
+
+    onEnabledChange(event) {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.enabled = $(event.target).val() === Constants.OPTION_YES;
-        this.setState({currentRecord: currentRecord});
+        this.setState({
+            currentRecord: currentRecord
+        });
     }
-    
+
     onFreezeOptionChange(event) {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.freezeOption = $(event.target).val();
-        this.setState({currentRecord: currentRecord}); 
+        this.setState({
+            currentRecord: currentRecord
+        });
     }
-    
+
     getDisplayDateFormat() {
-        return (this.props.settings && this.props.settings[Constants.DATE_FORMAT_SETTING]) ? this.props.settings[Constants.DATE_FORMAT_SETTING].toUpperCase() : Constants.DEFAULT_UI_DATE_FORMAT;  
+        return (this.props.settings && this.props.settings[Constants.DATE_FORMAT_SETTING]) ? this.props.settings[Constants.DATE_FORMAT_SETTING].toUpperCase() : Constants.DEFAULT_UI_DATE_FORMAT;
     }
-    
+
     toDisplayDateFormat(date) {
         var result;
-        if(date) {           
-            result = moment(date, Constants.EP_DATE_FORMAT).format(this.getDisplayDateFormat());            
-        }    
-        
-        return result        
+        if (date) {
+            result = moment(date, Constants.EP_DATE_FORMAT).format(this.getDisplayDateFormat());
+        }
+
+        return result
     }
-    
-    save(){
+
+    save() {
         this.props.actions.save(this.props.dataFreezeEvent);
     }
-    
+
     showFilters() {
-        this.props.setFilterElement();       
+        this.props.setFilterElement();
         this.restoreSavedFilters();
         this.props.filter.showFilters();
         this.props.showFilterElement();
-        this.props.filter.on( 'cancel', function() {            
+        this.props.filter.on('cancel', function () {
             this.props.hideFilterElement();
-        }.bind( this ) );
+        }.bind(this));
 
-        this.props.filter.on( 'apply', function() {   
+        this.props.filter.on('apply', function () {
             let currentRecord = this.props.dataFreezeEvent;
             let filters = this.props.filter.serialize();
             if (filters) {
                 currentRecord.filters = JSON.stringify(filters);
-                this.setState({currentRecord: currentRecord});  
-            }                        
+                this.setState({
+                    currentRecord: currentRecord
+                });
+            }
             this.props.hideFilterElement();
-        }.bind( this ) );
+        }.bind(this));
     }
-    
-    restoreSavedFilters() {        
-        this.props.filter.reset({silent : true });
-        let currentRecord = this.props.dataFreezeEvent;        
+
+    restoreSavedFilters() {
+        this.props.filter.reset({
+            silent: true
+        });
+        let currentRecord = this.props.dataFreezeEvent;
         let filters = JSON.parse(currentRecord.filters || '{}')
-        this.props.filter.deserialize(filters, {silent : true });            
+        this.props.filter.deserialize(filters, {
+            silent: true
+        });
     }
-    
-    getErrorsForField(field){
-        var errors = this.props.errors.filter(error => {return (((error.id && error.id === this.props.dataFreezeEvent.id) || (error.cid && error.cid === this.props.dataFreezeEvent.cid)) && error.affectedFields && error.affectedFields.includes(field) )})
-        return  errors; 
+
+    getErrorsForField(field) {
+        var errors = this.props.errors.filter(error => {
+            return (((error.id && error.id === this.props.dataFreezeEvent.id) || (error.cid && error.cid === this.props.dataFreezeEvent.cid)) && error.affectedFields && error.affectedFields.includes(field))
+        })
+        return errors;
     }
-    
-    render() {          
-        return (  
-                <tr >
+
+    render() {
+        return (
+            <tr >
                 <td>
                 <div className={this.getErrorsForField('freezingDate').length > 0 ? 'has-error': ''}>
                 <div className="input-group date pull-right " data-provide="datepicker">
@@ -242,14 +277,14 @@ export default class DataFreezeEventForm extends Component {
                       <span className="glyphicon glyphicon-custom glyphicon-ok-circle success-color" onClick={this.save}> </span>
                       <span className="glyphicon glyphicon-custom glyphicon-remove-sign" onClick={this.props.cancel}></span>
                    </td>
-              </tr> 
-               
+              </tr>
+
         );
     }
 }
 
-function mapStateToProps(state, ownProps) { 
-    return {        
+function mapStateToProps(state, ownProps) {
+    return {
         translations: state.startUp.translations,
         translate: state.startUp.translate,
         settings: state.commonLists.settings
@@ -257,7 +292,9 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return {actions: bindActionCreators(Object.assign({}, commonListsActions, dataFreezeActions), dispatch)}   
+    return {
+        actions: bindActionCreators(Object.assign({}, commonListsActions, dataFreezeActions), dispatch)
+    }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataFreezeEventForm);
+export default connect(mapStateToProps, mapDispatchToProps)(DataFreezeEventEdit);

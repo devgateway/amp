@@ -26,19 +26,19 @@ class DataFreezeApi {
         var url = '/rest/data-freeze/event/' + data.id;
         return new Promise(( resolve, reject ) => {
             deleteObject( url, {}).then( response => {
-                resolve({});
+                resolve( {});
             }).catch( error => {
                 reject( error );
             });
         });
     }
-    
-    static unfreezeAll(){
+
+    static unfreezeAll() {
         return new Promise(( resolve, reject ) => {
-            postJson( '/rest/data-freeze/event/unfreeze-all', {} ).then( response => {
-                resolve({result:'SUCCESSFUL'});
+            postJson( '/rest/data-freeze/event/unfreeze-all', {}).then( response => {
+                resolve( { result: 'SUCCESSFUL' });
             }).catch( error => {
-                reject( {result:'FAILED', error: error} );
+                reject( { result: 'FAILED', error: error });
             });
         });
     }

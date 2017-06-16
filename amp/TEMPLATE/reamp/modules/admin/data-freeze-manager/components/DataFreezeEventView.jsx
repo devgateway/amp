@@ -1,75 +1,81 @@
-import React, { Component, PropTypes } from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
+import {
+    connect
+} from 'react-redux';
+import {
+    bindActionCreators
+} from 'redux';
 import * as startUp from '../actions/StartUpAction';
-import * as commonListsActions from  '../actions/CommonListsActions';
+import * as commonListsActions from '../actions/CommonListsActions';
 import * as dataFreezeActions from '../actions/DataFreezeActions';
 import AppliedFilters from './AppliedFilters';
-import DatePicker from 'react-date-picker';
 import moment from 'moment';
-require('react-date-picker/base.css');
-require('react-date-picker/theme/hackerone.css');
 import * as Constants from '../common/Constants';
 require('../styles/less/main.less');
-export default class DataFreezeEventView extends Component {    
-    constructor(props, context) {      
+export default class DataFreezeEventView extends Component {
+    constructor(props, context) {
         super(props, context);
-        this.state = {    
-                showAppliedFilters: false
-        };    
+        this.state = {
+            showAppliedFilters: false
+        };
         this.toDisplayDateFormat = this.toDisplayDateFormat.bind(this);
         this.getDisplayDateFormat = this.getDisplayDateFormat.bind(this);
         this.deleteDataFreezeEvent = this.deleteDataFreezeEvent.bind(this);
-        this.toggleAppliedFilters = this.toggleAppliedFilters.bind(this);       
+        this.toggleAppliedFilters = this.toggleAppliedFilters.bind(this);
     }
-    
+
     showFreezeOption(freezeOption) {
         let result = '';
-        if (freezeOption === Constants.FREEZE_OPTION_ENTIRE_ACTIVITY) {             
+        if (freezeOption === Constants.FREEZE_OPTION_ENTIRE_ACTIVITY) {
             result = this.props.translations['amp.data-freezing:freeze-option-activity'];
         } else if (freezeOption === Constants.FREEZE_OPTION_FUNDING) {
             result = this.props.translations['amp.data-freezing:freeze-option-funding'];
         }
-        
-        return result;      
+
+        return result;
     }
-    
+
     getDisplayDateFormat() {
-        return (this.props.settings && this.props.settings[Constants.DATE_FORMAT_SETTING]) ? this.props.settings[Constants.DATE_FORMAT_SETTING].toUpperCase() : Constants.DEFAULT_UI_DATE_FORMAT;  
+        return (this.props.settings && this.props.settings[Constants.DATE_FORMAT_SETTING]) ? this.props.settings[Constants.DATE_FORMAT_SETTING].toUpperCase() : Constants.DEFAULT_UI_DATE_FORMAT;
     }
-    
+
     toDisplayDateFormat(date) {
         var result;
-        if(date) {           
-            result = moment(date, Constants.EP_DATE_FORMAT).format(this.getDisplayDateFormat());            
+        if (date) {
+            result = moment(date, Constants.EP_DATE_FORMAT).format(this.getDisplayDateFormat());
         }
-        
-        return result        
+
+        return result
     }
-    
+
     deleteDataFreezeEvent() {
-        if(confirm(this.props.translations['amp.data-freezing:delete-prompt'])){
-            this.props.actions.deleteDataFreezeEvent(this.props.dataFreezeEvent); 
-        }        
+        if (confirm(this.props.translations['amp.data-freezing:delete-prompt'])) {
+            this.props.actions.deleteDataFreezeEvent(this.props.dataFreezeEvent);
+        }
     }
-    
+
     toggleAppliedFilters(event) {
-       this.setState({showAppliedFilters: !this.state.showAppliedFilters});
+        this.setState({
+            showAppliedFilters: !this.state.showAppliedFilters
+        });
     }
-   
-    render() { 
+
+    render() {
         if (this.props.context === Constants.UNFREEZE_ALL) {
-            return (                   
-                    <tr >
+            return (
+                <tr >
                     <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)}</td>                    
                     <td className="text-left">
                      {this.props.dataFreezeEvent.count}
                     </td>                            
-                  </tr>                
-         ); 
+                  </tr>
+            );
         } else {
-            return (                   
-                    <tr >
+            return (
+                <tr >
                     <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)}</td>
                     <td>{this.props.dataFreezeEvent.gracePeriod}</td>
                     <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)}</td>
@@ -93,15 +99,15 @@ export default class DataFreezeEventView extends Component {
                     <td className="action-column">
                       <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.props.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDataFreezeEvent}></span>
                     </td>               
-                  </tr>                
-         ); 
-        }    
-       
+                  </tr>
+            );
+        }
+
     }
 }
 
-function mapStateToProps(state, ownProps) { 
-    return {        
+function mapStateToProps(state, ownProps) {
+    return {
         translations: state.startUp.translations,
         translate: state.startUp.translate,
         settings: state.commonLists.settings
@@ -109,7 +115,9 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return {actions: bindActionCreators(Object.assign({}, commonListsActions, dataFreezeActions), dispatch)}   
+    return {
+        actions: bindActionCreators(Object.assign({}, commonListsActions, dataFreezeActions), dispatch)
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DataFreezeEventView);

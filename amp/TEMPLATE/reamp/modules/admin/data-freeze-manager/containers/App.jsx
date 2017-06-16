@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Home from "./Home.jsx";
+import Home from "./Home";
 
 export default class App extends Component {
     constructor(props, context) {      

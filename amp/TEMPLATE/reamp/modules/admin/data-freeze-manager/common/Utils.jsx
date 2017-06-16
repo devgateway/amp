@@ -28,7 +28,7 @@ class Utils {
 
     static isUndefinedOrBlank( obj, field ) {
         var result = false;
-        if ( obj[field] === '' || obj[field] === undefined || obj[field] === null) {
+        if ( obj[field] === '' || obj[field] === undefined || obj[field] === null ) {
             result = true;
         }
         return result;
@@ -44,46 +44,46 @@ class Utils {
         if ( message ) {
             errors.push( message );
         }
-        errors.push(...this.validateFreezingDate(dataFreezeEvent));
-        errors.push(...this.validateStartAndEndDate(dataFreezeEvent));
-        errors.push(...this.validateGracePeriod(dataFreezeEvent));
+        errors.push( ...this.validateFreezingDate( dataFreezeEvent ) );
+        errors.push( ...this.validateStartAndEndDate( dataFreezeEvent ) );
+        errors.push( ...this.validateGracePeriod( dataFreezeEvent ) );
         return errors
     }
 
-    static validateFreezingDate(dataFreezeEvent) {
+    static validateFreezingDate( dataFreezeEvent ) {
         let errors = [];
-        let freezingDate = moment(dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT);
+        let freezingDate = moment( dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT );
         let today = moment();
-        if(today.startOf('day').isAfter(freezingDate)){
-            errors.push({ messageKey: 'amp.data-freezing:invalid-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['freezingDate'] });
-        }  
+        if ( today.startOf( 'day' ).isAfter( freezingDate ) ) {
+            errors.push( { messageKey: 'amp.data-freezing:invalid-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['freezingDate'] });
+        }
         return errors;
     }
-    
-    static validateStartAndEndDate(dataFreezeEvent) {
+
+    static validateStartAndEndDate( dataFreezeEvent ) {
         let errors = [];
-        let openPeriodStart = moment(dataFreezeEvent.openPeriodStart, Constants.EP_DATE_FORMAT);
-        let openPeriodEnd = moment(dataFreezeEvent.openPeriodEnd, Constants.EP_DATE_FORMAT);
-        let freezingDate = moment(dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT);
-        if(openPeriodStart.isAfter(freezingDate) === false){
-            errors.push({ messageKey: 'amp.data-freezing:start-date-should-be-after-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart','freezingDate'] }); 
+        let openPeriodStart = moment( dataFreezeEvent.openPeriodStart, Constants.EP_DATE_FORMAT );
+        let openPeriodEnd = moment( dataFreezeEvent.openPeriodEnd, Constants.EP_DATE_FORMAT );
+        let freezingDate = moment( dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT );
+        if ( openPeriodStart.isAfter( freezingDate ) === false ) {
+            errors.push( { messageKey: 'amp.data-freezing:start-date-should-be-after-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'freezingDate'] });
         }
-        
-        if (openPeriodStart.isAfter(openPeriodEnd)) {
-            errors.push({ messageKey: 'amp.data-freezing:start-date-should-not-be-greater-than-end-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart','openPeriodEnd'] });
+
+        if ( openPeriodStart.isAfter( openPeriodEnd ) ) {
+            errors.push( { messageKey: 'amp.data-freezing:start-date-should-not-be-greater-than-end-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'openPeriodEnd'] });
         }
         return errors;
-        
+
     }
-    
-    static validateGracePeriod(dataFreezeEvent) {
+
+    static validateGracePeriod( dataFreezeEvent ) {
         let errors = [];
-        if(dataFreezeEvent.gracePeriod < 0){
-            errors.push({ messageKey: 'amp.data-freezing:invalid-grace-period', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['gracePeriod'] });
+        if ( dataFreezeEvent.gracePeriod < 0 ) {
+            errors.push( { messageKey: 'amp.data-freezing:invalid-grace-period', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['gracePeriod'] });
         }
         return errors;
     }
-    
+
     static checkRequiredField( obj, field, message ) {
         if ( this.isUndefinedOrBlank( obj, field ) ) {
             if ( message ) {

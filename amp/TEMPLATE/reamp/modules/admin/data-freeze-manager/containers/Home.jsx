@@ -1,6 +1,13 @@
-import React, { Component, PropTypes } from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
+import {
+    connect
+} from 'react-redux';
+import {
+    bindActionCreators
+} from 'redux';
 require('bootstrap');
 require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
@@ -8,21 +15,22 @@ import DataFreezeEventList from '../components/DataFreezeEventList';
 import UnfreezeAll from '../components/UnfreezeAll';
 import * as Constants from '../common/Constants';
 export default class App extends Component {
-    constructor(props, context) {      
+    constructor(props, context) {
         super(props, context);
         this.state = {
-               currentTab: 'data-freezing'   
+            currentTab: 'data-freezing'
         }
         this.tabChanged = this.tabChanged.bind(this);
     }
-    
-    componentWillMount() {     
+
+    componentWillMount() {}
+
+    tabChanged(event) {
+        this.setState({
+            currentTab: $(event.target).data("tab")
+        });
     }
-   
-    tabChanged( event ) {
-        this.setState({currentTab: $( event.target ).data("tab")});
-    }
-    render() {         
+    render() {
         return (
             <div>
                 <div className="data-freeze-container">
@@ -59,21 +67,22 @@ export default class App extends Component {
                     
               </div>    
             </div>
-            
+
         );
     }
 }
 
-function mapStateToProps(state, ownProps) { 
-    return {       
+function mapStateToProps(state, ownProps) {
+    return {
         translations: state.startUp.translations,
         translate: state.startUp.translate
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return {actions: bindActionCreators({}, dispatch)}
+    return {
+        actions: bindActionCreators({}, dispatch)
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-

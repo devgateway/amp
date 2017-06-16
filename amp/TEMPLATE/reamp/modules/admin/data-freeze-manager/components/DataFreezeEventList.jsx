@@ -8,8 +8,12 @@ import {
 import {
     bindActionCreators
 } from 'redux';
-import { OverlayTrigger } from 'react-bootstrap';
-import {Tooltip } from 'react-bootstrap';
+import {
+    OverlayTrigger
+} from 'react-bootstrap';
+import {
+    Tooltip
+} from 'react-bootstrap';
 import * as startUp from '../actions/StartUpAction';
 import * as dataFreezeActions from '../actions/DataFreezeActions';
 import * as commonListsActions from '../actions/CommonListsActions';
@@ -44,10 +48,10 @@ export default class DataFreezeEventList extends Component {
         });
         this.props.actions.getSettings();
         if (this.props.context === Constants.DATA_FREEZE_EVENTS) {
-            this.initializeFilter();  
+            this.initializeFilter();
         }
-            
-        
+
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -104,17 +108,17 @@ export default class DataFreezeEventList extends Component {
     }
 
     updateRecordsPerPage() {
-        if ( this.refs.recordsPerPage && this.refs.recordsPerPage.value ) {
+        if (this.refs.recordsPerPage && this.refs.recordsPerPage.value) {
             const loadParams = {};
             loadParams.paging = this.props.paging;
             loadParams.sorting = this.props.sorting;
-            loadParams.paging.recordsPerPage = parseInt( this.refs.recordsPerPage.value );
+            loadParams.paging.recordsPerPage = parseInt(this.refs.recordsPerPage.value);
             loadParams.paging.currentPageNumber = 1
             this.props.actions.loadDataFreezeEventList(loadParams);
         }
     }
 
-    
+
     showErrors() {
         const messages = [];
         this.props.errors.forEach((error, index) => {
@@ -161,30 +165,30 @@ export default class DataFreezeEventList extends Component {
         }
         return result;
     }
-    
+
     initializeFilter() {
         this.filter = new ampFilter({
             draggable: true,
             caller: 'DATA-FREEZE-MANAGER'
-        }); 
-    }  
-    
+        });
+    }
+
     setFilterElement() {
-       this.filter.setElement( this.refs.filterPopup ); 
+        this.filter.setElement(this.refs.filterPopup);
     }
-    
+
     showFilterElement() {
-        $( this.refs.filterPopup ).show();
+        $(this.refs.filterPopup).show();
     }
-    
+
     hideFilterElement() {
-        $( this.refs.filterPopup ).hide();
+        $(this.refs.filterPopup).hide();
     }
-    
+
     showInfoIcon(column) {
-        let tooltip = <Tooltip id={column + '-icon-tooltip'}>{this.props.translations['amp.data-freezing:tooltip-' + column]}</Tooltip> ;                   
-        return ( 
-                <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={tooltip}>
+        let tooltip = <Tooltip id={column + '-icon-tooltip'}>{this.props.translations['amp.data-freezing:tooltip-' + column]}</Tooltip>;
+        return (
+            <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={tooltip}>
                   <img className="tab-content-icon" src="styles/images/icon-information.svg"/>
                 </OverlayTrigger>
         )

@@ -10,8 +10,8 @@ import java.util.Comparator;
  */
 public class FundingDetailReportingDateComparator implements Serializable {
 
-    private static final Comparator<AmpFundingDetail> comparator = Comparator.comparing
-            (AmpFundingDetail::getReportingDate, Comparator.nullsFirst(Comparator.naturalOrder()));
+    private static final Comparator<AmpFundingDetail> comparator = Comparator.comparing(
+            AmpFundingDetail::getReportingDate, Comparator.nullsFirst(Comparator.naturalOrder()));
 
     public static Comparator<AmpFundingDetail> getAscending() {
         return comparator;

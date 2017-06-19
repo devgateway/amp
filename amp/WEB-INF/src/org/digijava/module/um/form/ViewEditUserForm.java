@@ -68,6 +68,7 @@ public class ViewEditUserForm extends ActionForm {
 	private Long role;
 	private boolean emailerror;
 	private boolean banReadOnly;
+	private Boolean exemptFromDataFreezing;
 	
 	public boolean isEmailerror() {
 		return emailerror;
@@ -384,4 +385,12 @@ public class ViewEditUserForm extends ActionForm {
 	public void setBanReadOnly(boolean banReadOnly) {
 		this.banReadOnly = banReadOnly;
 	}
+
+    public Boolean getExemptFromDataFreezing() {
+        return exemptFromDataFreezing;
+    }
+
+    public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
+        this.exemptFromDataFreezing = exemptFromDataFreezing;
+    }
 }

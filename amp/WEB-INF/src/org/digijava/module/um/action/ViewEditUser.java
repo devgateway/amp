@@ -184,6 +184,7 @@ public class ViewEditUser extends Action {
             uForm.setDisplaySuccessMessage(null);
             uForm.setAddWorkspace(false);
             uForm.setEmailerror(false);
+            uForm.setExemptFromDataFreezing(false);
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
                 AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
@@ -205,7 +206,7 @@ public class ViewEditUser extends Action {
                 uForm.getAssignedOrgs().addAll(user.getAssignedOrgs());
                 uForm.setPledger(user.getPledger());
                 uForm.setBanReadOnly(user.isBanned());
-
+                uForm.setExemptFromDataFreezing(user.getExemptFromDataFreezing());
 
                 Locale language = null;
                 if (langPref == null) {
@@ -328,6 +329,7 @@ public class ViewEditUser extends Action {
 
                     user.setUserLangPreferences(userLangPreferences);
                     user.setPledger(uForm.getPledger());
+                    user.setExemptFromDataFreezing(uForm.getExemptFromDataFreezing());
                     DbUtil.updateUser(user);
                     //assign workspace place
                     if(uForm.isAddWorkspace()){

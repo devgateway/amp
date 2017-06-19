@@ -44,20 +44,21 @@ public class FundingValidator {
 				.REORDER_FUNDING_ITEMS);
 		switch (globalSettingComparator) {
 			case Constants.COMPARATOR_TRANSACTION_DATE_DESC:
-				comparator = Comparator.comparing
-						(FundingDetail::getTransactionDate, Comparator.nullsFirst(Comparator.naturalOrder())).reversed();
+				comparator = Comparator.comparing(
+						FundingDetail::getTransactionDate, Comparator.nullsFirst(Comparator.naturalOrder()))
+						.reversed();
 				break;
 			case Constants.COMPARATOR_REPORTING_DATE_ASC:
-				comparator = Comparator.comparing
-						(FundingDetail::getReportingDate, Comparator.nullsFirst(Comparator.naturalOrder()));
+				comparator = Comparator.comparing(
+						FundingDetail::getReportingDate, Comparator.nullsFirst(Comparator.naturalOrder()));
 				break;
 			case Constants.COMPARATOR_REPORTING_DATE_DESC:
-				comparator = Comparator.comparing
-						(FundingDetail::getReportingDate, Comparator.nullsFirst(Comparator.naturalOrder())).reversed();
+				comparator = Comparator.comparing(
+						FundingDetail::getReportingDate, Comparator.nullsFirst(Comparator.naturalOrder())).reversed();
 				break;
 			default:
-				comparator = Comparator.comparing
-						(FundingDetail::getTransactionDate, Comparator.nullsFirst(Comparator.naturalOrder()));
+				comparator = Comparator.comparing(
+						FundingDetail::getTransactionDate, Comparator.nullsFirst(Comparator.naturalOrder()));
 		}
 
 		return comparator;

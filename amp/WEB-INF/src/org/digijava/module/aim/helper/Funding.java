@@ -256,12 +256,13 @@ public class Funding implements Serializable {
 
 	public Collection<FundingDetail> getArrearsDetails() {
 		return filterFundings(Constants.ARREARS);
-	}	
-	
+	}
+
 	/**
 	 * returns a funding item built and with all its' currency Codes overwritten to a single one
 	 * WARNING, BUG! CurrencyName is not overwritten
 	 * WARNING 2, BUG 2 - MTEF projections do not have their currency updated anyway - only the totals are
+	 *
 	 * @param ampFunding
 	 * @param activityTotalCalculations
 	 * @param toCurrCode
@@ -269,7 +270,8 @@ public class Funding implements Serializable {
 	 * @param tm
 	 * @return
 	 */
-	public Funding(AmpFunding ampFunding, FundingCalculationsHelper activityTotalCalculations, String toCurrCode, boolean changeToWorkspaceCurrency, TeamMember tm) {
+	public Funding(AmpFunding ampFunding, FundingCalculationsHelper activityTotalCalculations, String toCurrCode,
+				   boolean changeToWorkspaceCurrency, TeamMember tm) {
 		//Funding funding = new Funding();
 		//fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
 		this.setTypeOfAssistance(ampFunding.getTypeOfAssistance());
@@ -281,19 +283,22 @@ public class Funding implements Serializable {
 		this.setFundingId(ampFunding.getAmpFundingId().longValue());
 		this.setGroupVersionedFunding(ampFunding.getGroupVersionedFunding());
 		this.setOrgFundingId(ampFunding.getFinancingId());
-		if (ampFunding.getSourceRole() != null) this.setSourceRole(ampFunding.getSourceRole().getName());
+		if (ampFunding.getSourceRole() != null) {
+			this.setSourceRole(ampFunding.getSourceRole().getName());
+		}
 		this.setConditions(ampFunding.getConditions());
 		this.setDonorObjective(ampFunding.getDonorObjective());
 		this.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
-		this.setFundingClassificationDate(DateConversion.convertDateToString(ampFunding.getFundingClassificationDate()));
+		this.setFundingClassificationDate(DateConversion.convertDateToString(ampFunding.getFundingClassificationDate
+				()));
 		this.setEffectiveFundingDate(DateConversion.convertDateToString(ampFunding.getEffectiveFundingDate()));
 		this.setFundingClosingDate(DateConversion.convertDateToString(ampFunding.getFundingClosingDate()));
 		this.setRatificationDate(DateConversion.convertDateToLocalizedString(ampFunding.getRatificationDate()));
 		this.setGracePeriod(ampFunding.getGracePeriod());
 		this.setInterestRate(ampFunding.getInterestRate());
 		this.setMaturity(DateConversion.convertDateToLocalizedString(ampFunding.getMaturity()));
-		
-		
+
+
 		if (ampFunding.getAgreement() != null) {
 			this.setTitle(ampFunding.getAgreement().getTitle());
 			this.setCode(ampFunding.getAgreement().getCode());
@@ -308,8 +313,9 @@ public class Funding implements Serializable {
 		} else {
 			currencyCode = Constants.DEFAULT_CURRENCY;
 		}
-		if (true) // we might also have MTEFs, so no reason to do the "if". Plus, anyway, this will be a NOP if there are no fundings inside
-		 {
+		if (true) // we might also have MTEFs, so no reason to do the "if". Plus, anyway, this will be a NOP if there
+			// are no fundings inside
+		{
 			//  Iterator fundDetItr = fundDetails.iterator();
 			// long indexId = System.currentTimeMillis();
 			activityTotalCalculations.doCalculations(ampFunding, toCurrCode);
@@ -323,15 +329,19 @@ public class Funding implements Serializable {
 					if (currentFundingDetail.getFixedExchangeRate() == null) {
 						currencyAppliedAmount = getAmountInCurrency(currentFundingDetail, currencyCode);
 					} else {
-						Double fixedExchangeRate = FormatHelper.parseDouble(currentFundingDetail.getFixedExchangeRate());
-						currencyAppliedAmount = CurrencyWorker.convert1(FormatHelper.parseDouble(currentFundingDetail.getTransactionAmount()), fixedExchangeRate, 1);
+						Double fixedExchangeRate = FormatHelper.parseDouble(currentFundingDetail.getFixedExchangeRate
+								());
+						currencyAppliedAmount = CurrencyWorker.convert1(FormatHelper.parseDouble(currentFundingDetail
+								.getTransactionAmount()), fixedExchangeRate, 1);
 					}
 					String currentAmount = FormatHelper.formatNumber(currencyAppliedAmount);
 					currentFundingDetail.setTransactionAmount(currentAmount);
 					currentFundingDetail.setCurrencyCode(currencyCode);
 				}
 			}
-			if (fundDetail != null) Collections.sort(fundDetail, FundingValidator.getFundingDetailComparator());
+			if (fundDetail != null) {
+				Collections.sort(fundDetail, FundingValidator.getFundingDetailComparator());
+			}
 			this.setFundingDetails(fundDetail);
 			this.populateAmpRawFunding(ampFunding);
 			// funding.add(fund);

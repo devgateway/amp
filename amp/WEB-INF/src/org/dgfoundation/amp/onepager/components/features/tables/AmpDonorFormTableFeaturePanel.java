@@ -76,28 +76,6 @@ public abstract class AmpDonorFormTableFeaturePanel extends
         };
 	}
 
-
-	protected Comparator<AmpFundingDetail> getFundingDetailComparator() {
-		Comparator<AmpFundingDetail> comparator = null;
-		String globalSettingComparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants
-				.REORDER_FUNDING_ITEMS);
-		switch (globalSettingComparator) {
-			case Constants.COMPARATOR_TRANSACTION_DATE_DESC:
-				comparator = FundingDetailTransactionDateComparator.getDescending();
-				break;
-			case Constants.COMPARATOR_REPORTING_DATE_ASC:
-				comparator = FundingDetailReportingDateComparator.getAscending();
-				break;
-			case Constants.COMPARATOR_REPORTING_DATE_DESC:
-				comparator = FundingDetailReportingDateComparator.getDescending();
-				break;
-			default:
-				comparator = FundingDetailTransactionDateComparator.getAscending();
-		}
-
-		return comparator;
-	}
-
 	protected AmpCategorySelectFieldPanel getAdjustmentTypeComponent(
 			IModel<AmpFundingDetail> model, int transactionType) {
 		

@@ -80,6 +80,7 @@ import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingDetailComparator;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.GlobalSettings;
@@ -2745,10 +2746,13 @@ public class ExportActivityToWord extends Action {
                             (adjTypeKey).
                                     append(" ").append(transTypeKey).toString(), null, null, true));
                             Set<AmpFundingDetail> structuredFndDets = transTypeGroup.get(adjTypeKey);
+
+                            ArrayList<AmpFundingDetail> fundingDetails = new ArrayList<AmpFundingDetail>();
+                            fundingDetails.addAll(structuredFndDets);
+                            Collections.sort(fundingDetails, FundingDetailComparator.getFundingDetailComparator() );
+
                             FundingCalculationsHelper fundingCalculations = new FundingCalculationsHelper();
-                            fundingCalculations.doCalculations(structuredFndDets, toCurrCode, true);
-                            Collections.sort(fundingCalculations.getFundDetailList(), FundingValidator
-                            .getFundingDetailComparator());
+                            fundingCalculations.doCalculations(fundingDetails, toCurrCode, true);
                             for (FundingDetail fndDet : fundingCalculations.getFundDetailList()) {
                                 // validating module visibility
                                 // Commitments

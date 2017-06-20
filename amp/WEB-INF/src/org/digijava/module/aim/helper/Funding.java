@@ -110,8 +110,11 @@ public class Funding implements Serializable {
 	}
 	
 	public void populateAmpRawFunding(AmpFunding fundingSource) {
-		ArrayList<FundingInformationItem> funding = new ArrayList<FundingInformationItem>();
-		if (fundingSource.getFundingDetails() != null) funding.addAll(fundingSource.getFundingDetails());
+        ArrayList<FundingInformationItem> funding = new ArrayList<FundingInformationItem>();
+        ArrayList<AmpFundingDetail> fundingDetails = new ArrayList<AmpFundingDetail>();
+        fundingDetails.addAll(fundingSource.getFundingDetails());
+        Collections.sort(fundingDetails, FundingDetailComparator.getFundingDetailComparator());
+        if (fundingSource.getFundingDetails() != null) funding.addAll(fundingDetails);
 		if (fundingSource.getMtefProjections() != null) funding.addAll(fundingSource.getMtefProjections());
 		this.ampRawFunding = funding;
 	}
@@ -266,7 +269,7 @@ public class Funding implements Serializable {
 	 * @param ampFunding
 	 * @param activityTotalCalculations
 	 * @param toCurrCode
-	 * @param isPreview
+	 * @param changeToWorkspaceCurrency
 	 * @param tm
 	 * @return
 	 */
@@ -339,12 +342,8 @@ public class Funding implements Serializable {
 					currentFundingDetail.setCurrencyCode(currencyCode);
 				}
 			}
-			if (fundDetail != null) {
-				Collections.sort(fundDetail, FundingValidator.getFundingDetailComparator());
-			}
 			this.setFundingDetails(fundDetail);
 			this.populateAmpRawFunding(ampFunding);
-			// funding.add(fund);
 		}
 	}
 	

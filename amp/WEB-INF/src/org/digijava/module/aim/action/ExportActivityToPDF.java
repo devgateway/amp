@@ -2738,8 +2738,6 @@ public class ExportActivityToPDF extends Action {
         Collection<FundingDetail> details = funding.filterFundings(transactionType, adjustmentType);
         if (details.isEmpty())
             return;
-        List<FundingDetail> list = new ArrayList<>(details);
-        Collections.sort(list, FundingValidator.getFundingDetailComparator());
         ServletContext ampContext = getServlet().getServletContext();
 
         String output = TranslatorWorker.translateText(fundingRegionName);
@@ -2752,7 +2750,7 @@ public class ExportActivityToPDF extends Action {
         plCommCell1.setColspan(4);
         fundingTable.addCell(plCommCell1);
 
-        for (FundingDetail fd : list)
+        for (FundingDetail fd : details)
         {
             buildFundingInfoInnerTable(fundingTable, fd, fmTemplate, fundingTable, ampContext,session);
         }

@@ -73,4 +73,12 @@ public final class DataFreezeUtil {
             logger.error("Exception from unfreezeAll: " + e.getMessage());
         }
     }
+    
+    public static List<AmpDataFreezeSettings> getEnabledDataFreezeEvents(AmpDataFreezeSettings.FreezeOptions freezeOption){
+         Session dbSession = PersistenceManager.getSession();
+        String queryString = "select dataFreezeEvent from " + AmpDataFreezeSettings.class.getName() + " dataFreezeEvent where dataFreezeEvent.enabled = true and dataFreezeEvent.freezeOption = :freezeOption";
+        Query query = dbSession.createQuery(queryString);
+        query.setParameter("freezeOption", freezeOption);
+        return query.list();
+    }
 }

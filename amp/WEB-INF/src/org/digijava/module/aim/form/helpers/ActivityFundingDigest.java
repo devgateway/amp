@@ -155,7 +155,6 @@ public class ActivityFundingDigest {
 				if (org == null || org.getAmpOrgId() == null) continue;
 				FundingOrganization fundOrg = new FundingOrganization(ampFunding);
 				Funding fund = new Funding(ampFunding, activityTotalCalculations, toCurrCode, false /*isPreview*/, tm);
-				Collections.sort(fund.getFundingDetails(), FundingValidator.getFundingDetailComparator());
 				if (fund.getFundingDetails() != null && fund.getFundingDetails().size() > 0) {
 					if (this.getFundingDetails() == null) this.setFundingDetails(new ArrayList<FundingDetail>());
 					this.getFundingDetails().addAll(new ArrayList<FundingDetail>(fund.getFundingDetails()));

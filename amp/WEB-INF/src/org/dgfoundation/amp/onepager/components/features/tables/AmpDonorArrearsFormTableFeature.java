@@ -27,6 +27,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingDetailComparator;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
@@ -49,7 +50,8 @@ public class AmpDonorArrearsFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.ARREARS, 7);
 
-		list = new ListEditor<AmpFundingDetail>("listArrears", setModel, getFundingDetailComparator()) {
+		list = new ListEditor<AmpFundingDetail>("listArrears", setModel, FundingDetailComparator
+				.getFundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
 					ListItem<AmpFundingDetail> item) {

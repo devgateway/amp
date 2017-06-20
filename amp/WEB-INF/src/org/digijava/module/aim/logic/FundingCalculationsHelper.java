@@ -4,6 +4,7 @@ package org.digijava.module.aim.logic;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,12 +14,14 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingDetailComparator;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
@@ -163,8 +166,12 @@ public class FundingCalculationsHelper {
 	 * @param userCurrencyCode
 	 */
 	public void doCalculations(AmpFunding fundingSource, String userCurrencyCode) {
+
+		ArrayList<AmpFundingDetail> fundingDetails = new ArrayList<AmpFundingDetail>();
+		fundingDetails.addAll(fundingSource.getFundingDetails());
+		Collections.sort(fundingDetails, FundingDetailComparator.getFundingDetailComparator() );
 		ArrayList<FundingInformationItem> funding = new ArrayList<FundingInformationItem>();
-		if (fundingSource.getFundingDetails() != null) funding.addAll(fundingSource.getFundingDetails());
+		if (fundingSource.getFundingDetails() != null) funding.addAll(fundingDetails);
 		if (fundingSource.getMtefProjections() != null) funding.addAll(fundingSource.getMtefProjections());
 		boolean updateTotals = fundingSource.isCountedInTotals();
 		doCalculations(funding, userCurrencyCode, updateTotals);
@@ -177,7 +184,6 @@ public class FundingCalculationsHelper {
 	 * @param updateTotals - if false, then only fundDetailList will be built, without updating the totals
 	 */
 	public void doCalculations(Collection<? extends FundingInformationItem> details, String userCurrencyCode, boolean updateTotals) {
-		//Iterator<? extends FundingInformationItem> fundDetItr = details.iterator();
 		fundDetailList = new ArrayList<FundingDetail>();
 		int indexId = 0;
 		AmpCategoryValue actualAdjustmentType = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB();
@@ -195,7 +201,6 @@ public class FundingCalculationsHelper {
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
 			fundingDetail.setFundDetId(fundDet.getDbId());
 			
-//			String baseCurrCode		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
 			if (fundDet.getFixedExchangeRate() != null && fundDet.getFixedExchangeRate().doubleValue() != 1) {
 				// We cannot use FormatHelper.formatNumber as this might roundup our number (and this would be very wrong)
 				fundingDetail.setFixedExchangeRate((fundDet.getFixedExchangeRate().toString()).replace('.', decimalSeparatorChar));
@@ -212,26 +217,8 @@ public class FundingCalculationsHelper {
 			java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
 			
 			Double fixedExchangeRate = fundDet.getFixedExchangeRate();
-//			if (fixedExchangeRate != null && (Math.abs(fixedExchangeRate.doubleValue()) < 1.0E-15))
-//				fixedExchangeRate = null;
-//			double frmExRt;
-//			if (fixedExchangeRate == null) {
-//				frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
-//			} else {
-//				frmExRt = fixedExchangeRate;
-//			}
-//			double toExRt;
-//			if (userCurrencyCode != null)
-//				toCurrCode = userCurrencyCode;
-//			if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(toCurrCode)) {
-//				toExRt = frmExRt;
-//			} else {
-//				toExRt = Util.getExchange(toCurrCode, dt);
-//			}
-			//DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
 			DecimalWraper amt = new DecimalWraper();
-			//fundDet.getTransactionDate();
-			amt.setValue(BigDecimal.valueOf(fundDet.getTransactionAmount()).multiply(BigDecimal.valueOf(AmpCurrencyConvertor.getInstance().getExchangeRate(fundDet.getAmpCurrencyId().getCurrencyCode(), userCurrencyCode, fixedExchangeRate, dt.toLocalDate()))));
+            amt.setValue(BigDecimal.valueOf(fundDet.getTransactionAmount()).multiply(BigDecimal.valueOf(AmpCurrencyConvertor.getInstance().getExchangeRate(fundDet.getAmpCurrencyId().getCurrencyCode(), userCurrencyCode, fixedExchangeRate, dt.toLocalDate()))));
 			if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
 				fundingDetail.setClassification(fundDet.getExpCategory());
 			}

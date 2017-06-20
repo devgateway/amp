@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CostTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -38,7 +37,6 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
 		}
 	};
 	
-	@Interchangeable(fieldTitle="AMP Funding Amount ID", id = true)
 	private Long ampFundingAmountId;
 	
 	@Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
@@ -59,8 +57,6 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
 	@VersionableFieldSimple(fieldTitle = "Fun Date")
 	protected Date funDate;
 	
-	@Interchangeable(fieldTitle = "Funding Type", importable = true)
-	@PossibleValues(CostTypePossibleValuesProvider.class)
 	protected FundingType funType;
 
 	/**

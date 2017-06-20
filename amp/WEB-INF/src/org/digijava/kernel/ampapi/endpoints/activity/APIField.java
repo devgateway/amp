@@ -72,6 +72,9 @@ public class APIField {
     @JsonProperty(ActivityEPConstants.PERCENTAGE)
     private Boolean percentage;
 
+    @JsonIgnore
+    private String discriminator;
+
     public String getFieldName() {
         return fieldName;
     }
@@ -214,6 +217,14 @@ public class APIField {
 
     public void setPercentage(Boolean percentage) {
         this.percentage = percentage;
+    }
+
+    public String getDiscriminator() {
+        return discriminator;
+    }
+
+    public void setDiscriminator(String discriminator) {
+        this.discriminator = discriminator;
     }
 
     @Override

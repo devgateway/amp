@@ -178,6 +178,9 @@ public class FieldsEnumerator {
 		if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
 			apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
 		}
+
+		apiField.setDiscriminator(interchangeable.discriminatorOption());
+
 		return apiField;
 	}
 

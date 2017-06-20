@@ -18,7 +18,6 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
         private AmpTheme program;
         @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
         private AmpActivityVersion activity;
-        @Interchangeable(fieldTitle="Program Settings", pickIdOnly = true, importable=true)
         private AmpActivityProgramSettings programSetting;
         public Long getAmpActivityProgramId() {
                 return ampActivityProgramId;

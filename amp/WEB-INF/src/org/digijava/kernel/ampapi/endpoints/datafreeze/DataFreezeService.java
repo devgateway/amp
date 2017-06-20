@@ -16,6 +16,7 @@ import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -169,6 +170,13 @@ public final class DataFreezeService {
         return report;
     }
 
+    /**
+     * Get Map of filters to apply to report - combines any filters applied in
+     * the Data Freeze Event with a date filter created from Freezing Date
+     * 
+     * @param event
+     * @return
+     */
     private static LinkedHashMap<String, Object> getFilters(AmpDataFreezeSettings event) {
         LinkedHashMap<String, Object> filters;
 
@@ -221,45 +229,67 @@ public final class DataFreezeService {
         for (AmpDataFreezeSettings event : dataFreezeEvents) {
             GeneratedReport report = getFrozenActivitiesReport(event);
             List<Long> activityIds = getActivityIds(report);
-            boolean isGracePeriod = isGracePeriod(event);
-            boolean isOpenPeriod = isOpenPeriod(event);
+            Date todaysDate = getTodaysDate();
+            boolean isGracePeriod = isGracePeriod(event, todaysDate);
+            boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
+
+            // if activity is in list of frozen activities and current date does
+            // not fall in open period
+            // and current date is not in grace period, then disable edit i.e
+            // return false
             if (activityIds.contains(activityId) && Boolean.FALSE.equals(isOpenPeriod)
                     && Boolean.FALSE.equals(isGracePeriod)) {
                 return false;
             }
         }
 
-        // check if activity is excluded from data freezing
-        // check if activity has been frozen by any of the active data freezing
-        // events
         return true;
 
     }
 
-    public static boolean isEditable(Long activityId, Date transactionDate, Long ampTeamMemberId) {
+    /**
+     * Check if funding items are editable - uses the transaction dates of the
+     * funding items
+     * 
+     * @param activityId
+     * @param ampTeamMemberId
+     * @return
+     */
+    public static Map<Date, Boolean> isEditable(Long activityId, List<Date> transactionDates, Long ampTeamMemberId) {
+        Map<Date, Boolean> editable = new HashMap<>();
+        for (Date transactionDate : transactionDates) {
+            editable.put(transactionDate, true);
+        }
+
         // check if user is exempt for data freezing
         AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(ampTeamMemberId);
         if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing())) {
-            return true;
+            return editable;
         }
 
         List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil
                 .getEnabledDataFreezeEvents(AmpDataFreezeSettings.FreezeOptions.FUNDING);
         for (AmpDataFreezeSettings event : dataFreezeEvents) {
             GeneratedReport report = getFrozenActivitiesReport(event);
-            List<Long> activityIds = getActivityIds(report);
-            boolean isGracePeriod = isGracePeriod(event);
-            boolean isOpenPeriod = isOpenPeriod(event);
-            if (activityIds.contains(activityId) && Boolean.FALSE.equals(isOpenPeriod)
-                    && transactionDate.before(event.getFreezingDate()) && Boolean.FALSE.equals(isGracePeriod)) {
-                return false;
+            List<Long> activityIds = getActivityIds(report); // ids of frozen
+                                                             // activities
+            Date todaysDate = getTodaysDate();
+            boolean isGracePeriod = isGracePeriod(event, todaysDate);
+            boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
+            for (Date transactionDate : transactionDates) {
+                // if activity is in list of frozen activities and current date
+                // does not fall in open period
+                // and current date is not in grace period, then disable edit
+                // i.e return false
+                if (activityIds.contains(activityId) && Boolean.FALSE.equals(isOpenPeriod)
+                        && transactionDate.before(event.getFreezingDate()) && Boolean.FALSE.equals(isGracePeriod)) {
+                    editable.put(transactionDate, false);
+                }
             }
+
         }
 
-        // check if activity is excluded from data freezing
-        // check if activity has been frozen by any of the active data freezing
-        // events
-        return true;
+        return editable;
     }
 
     public static List<Long> getActivityIds(GeneratedReport report) {
@@ -274,19 +304,19 @@ public final class DataFreezeService {
         return ids;
     }
 
-    public static boolean isOpenPeriod(AmpDataFreezeSettings event) {
+    public static boolean isOpenPeriod(AmpDataFreezeSettings event, Date todaysDate) {
         if (event.getOpenPeriodStart() == null || event.getOpenPeriodEnd() == null) {
             return false;
         }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date todaysDate = calendar.getTime();
-
         return (!todaysDate.before(event.getOpenPeriodStart()) && !todaysDate.after(event.getOpenPeriodEnd()));
+    }
+    
+    public static boolean isGracePeriod(AmpDataFreezeSettings event, Date todaysDate) {
+        Integer gracePeriod = event.getGracePeriod() != null ? event.getGracePeriod() : 0;
+        Date today = getTodaysDate();
+        Date gracePeriodEnd = AmpDateUtils.getDateAfterDays(event.getFreezingDate(), gracePeriod);
+        return (!today.after(gracePeriodEnd));
     }
 
     public static Date getTodaysDate() {
@@ -297,12 +327,4 @@ public final class DataFreezeService {
         today.set(Calendar.MILLISECOND, 0);
         return today.getTime();
     }
-
-    public static boolean isGracePeriod(AmpDataFreezeSettings event) {
-        Integer gracePeriod = event.getGracePeriod() != null ? event.getGracePeriod() : 0;
-        Date today = getTodaysDate();
-        Date gracePeriodEnd = AmpDateUtils.getDateAfterDays(event.getFreezingDate(), gracePeriod);
-        return (!today.after(gracePeriodEnd));
-    }
-
 }

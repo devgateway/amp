@@ -108,14 +108,18 @@ public class Funding implements Serializable {
 		}
 		throw new ClassCastException("cannot compare a " + this.getClass().getName() + " instance with a " + e.getClass().getName() + " instance");
 	}
-	
+
 	public void populateAmpRawFunding(AmpFunding fundingSource) {
-        ArrayList<FundingInformationItem> funding = new ArrayList<FundingInformationItem>();
-        ArrayList<AmpFundingDetail> fundingDetails = new ArrayList<AmpFundingDetail>();
-        fundingDetails.addAll(fundingSource.getFundingDetails());
-        Collections.sort(fundingDetails, FundingDetailComparator.getFundingDetailComparator());
-        if (fundingSource.getFundingDetails() != null) funding.addAll(fundingDetails);
-		if (fundingSource.getMtefProjections() != null) funding.addAll(fundingSource.getMtefProjections());
+		ArrayList<FundingInformationItem> funding = new ArrayList<FundingInformationItem>();
+		ArrayList<AmpFundingDetail> fundingDetails = new ArrayList<AmpFundingDetail>();
+		fundingDetails.addAll(fundingSource.getFundingDetails());
+		Collections.sort(fundingDetails, FundingDetailComparator.getFundingDetailComparator());
+		if (fundingSource.getFundingDetails() != null) {
+			funding.addAll(fundingDetails);
+		}
+		if (fundingSource.getMtefProjections() != null) {
+			funding.addAll(fundingSource.getMtefProjections());
+		}
 		this.ampRawFunding = funding;
 	}
 	

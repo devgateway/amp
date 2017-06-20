@@ -166,13 +166,16 @@ public class FundingCalculationsHelper {
 	 * @param userCurrencyCode
 	 */
 	public void doCalculations(AmpFunding fundingSource, String userCurrencyCode) {
-
 		ArrayList<AmpFundingDetail> fundingDetails = new ArrayList<AmpFundingDetail>();
 		fundingDetails.addAll(fundingSource.getFundingDetails());
-		Collections.sort(fundingDetails, FundingDetailComparator.getFundingDetailComparator() );
+		Collections.sort(fundingDetails, FundingDetailComparator.getFundingDetailComparator());
 		ArrayList<FundingInformationItem> funding = new ArrayList<FundingInformationItem>();
-		if (fundingSource.getFundingDetails() != null) funding.addAll(fundingDetails);
-		if (fundingSource.getMtefProjections() != null) funding.addAll(fundingSource.getMtefProjections());
+		if (fundingSource.getFundingDetails() != null) {
+			funding.addAll(fundingDetails);
+		}
+		if (fundingSource.getMtefProjections() != null) {
+			funding.addAll(fundingSource.getMtefProjections());
+		}
 		boolean updateTotals = fundingSource.isCountedInTotals();
 		doCalculations(funding, userCurrencyCode, updateTotals);
 	}
@@ -218,7 +221,9 @@ public class FundingCalculationsHelper {
 			
 			Double fixedExchangeRate = fundDet.getFixedExchangeRate();
 			DecimalWraper amt = new DecimalWraper();
-            amt.setValue(BigDecimal.valueOf(fundDet.getTransactionAmount()).multiply(BigDecimal.valueOf(AmpCurrencyConvertor.getInstance().getExchangeRate(fundDet.getAmpCurrencyId().getCurrencyCode(), userCurrencyCode, fixedExchangeRate, dt.toLocalDate()))));
+			amt.setValue(BigDecimal.valueOf(fundDet.getTransactionAmount()).multiply(BigDecimal.valueOf
+					(AmpCurrencyConvertor.getInstance().getExchangeRate(fundDet.getAmpCurrencyId().getCurrencyCode(),
+							userCurrencyCode, fixedExchangeRate, dt.toLocalDate()))));
 			if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
 				fundingDetail.setClassification(fundDet.getExpCategory());
 			}
@@ -227,7 +232,8 @@ public class FundingCalculationsHelper {
 		    if(curr != null) {
 		    	fundingDetail.setCurrencyName(curr.getCountryName());
 		    }
-			fundingDetail.setTransactionAmount(CurrencyWorker.convert(FeaturesUtil.applyThousandsForVisibility(amt.doubleValue()).doubleValue(), 1, 1));
+			fundingDetail.setTransactionAmount(CurrencyWorker.convert(FeaturesUtil.applyThousandsForVisibility(amt
+					.doubleValue()).doubleValue(), 1, 1));
 			fundingDetail.setTransactionDate(DateConversion.convertDateToLocalizedString(fundDet.getTransactionDate()));
 			fundingDetail.setFiscalYear(DateConversion.convertDateToFiscalYearString(fundDet.getTransactionDate()));
 			fundingDetail.setCapitalPercent(fundDet.getCapitalSpendingPercentage());

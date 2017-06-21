@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -78,10 +79,21 @@ public final class DataFreezeUtil {
             AmpDataFreezeSettings.FreezeOptions freezeOption) {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select dataFreezeEvent from " + AmpDataFreezeSettings.class.getName()
-                + " dataFreezeEvent where dataFreezeEvent.enabled = true"
-                + " and dataFreezeEvent.freezeOption = :freezeOption";
+                + " dataFreezeEvent where dataFreezeEvent.enabled = true";
+        if(freezeOption != null) {
+            queryString += " and dataFreezeEvent.freezeOption = :freezeOption";
+        }
+        
+                
         Query query = dbSession.createQuery(queryString);
         query.setParameter("freezeOption", freezeOption);
         return query.list();
+    }
+    
+    public static List<User> getUsers(){       
+          Session session = PersistenceManager.getRequestDBSession();
+          String queryString = "from " + User.class.getName();
+          Query query = session.createQuery(queryString);
+          return query.list();        
     }
 }

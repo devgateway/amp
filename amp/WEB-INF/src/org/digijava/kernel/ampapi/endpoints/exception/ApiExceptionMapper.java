@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.exception;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -29,6 +30,10 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     
     @Override
     public Response toResponse(Exception e) {
+        if (e instanceof WebApplicationException) {
+            return ((WebApplicationException) e).getResponse();
+        }
+
         logger.error("ApiExceptionMapper: ", e);
         
         if (e instanceof ApiRuntimeException) {
@@ -54,7 +59,7 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     private String extractMessageFromException(Throwable e) {
         StringBuilder accumulatedMessage = new StringBuilder(e.getMessage() == null ? "" : e.getMessage());
         String message = extractMessageFromException(e, 0, accumulatedMessage);
-        message = StringUtils.isBlank(message) ? ApiErrorResponse.UNKOWN_ERROR : message;
+        message = StringUtils.isBlank(message) ? ApiErrorResponse.UNKNOWN_ERROR : message;
         
         return message;
     }

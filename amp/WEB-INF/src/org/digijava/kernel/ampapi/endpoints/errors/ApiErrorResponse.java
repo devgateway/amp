@@ -23,7 +23,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 public class ApiErrorResponse {
 	protected static final Logger logger = Logger.getLogger(ApiErrorResponse.class);
 	
-	public static final String UNKOWN_ERROR = "Unkown Error";
+	public static final String UNKNOWN_ERROR = "Unknown Error";
 	public static final String INTERNAL_ERROR = "Internal Error";
 	
 	/**
@@ -76,7 +76,7 @@ public class ApiErrorResponse {
 	 * Reports forbidden access with unknown reason
 	 */
 	public static void reportForbiddenAccess() {
-		reportError(Response.Status.FORBIDDEN, ApiError.toError(TranslatorWorker.translateText(UNKOWN_ERROR)));
+		reportError(Response.Status.FORBIDDEN, ApiError.toError(TranslatorWorker.translateText(UNKNOWN_ERROR)));
 	}
 	
 	/**

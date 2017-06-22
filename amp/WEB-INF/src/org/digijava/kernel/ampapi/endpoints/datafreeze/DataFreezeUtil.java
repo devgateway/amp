@@ -82,11 +82,12 @@ public final class DataFreezeUtil {
                 + " dataFreezeEvent where dataFreezeEvent.enabled = true";
         if(freezeOption != null) {
             queryString += " and dataFreezeEvent.freezeOption = :freezeOption";
-        }
-        
+        }        
                 
         Query query = dbSession.createQuery(queryString);
-        query.setParameter("freezeOption", freezeOption);
+        if(freezeOption != null) {
+           query.setParameter("freezeOption", freezeOption);
+        }
         return query.list();
     }
     

@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -34,6 +33,8 @@ public class AmpComponentFunding implements Versionable, Cloneable, Serializable
     //reusing field to store the organisation related to the current component
 //	@Interchangeable(fieldTitle="Reporting Organization")
 	private AmpOrganisation reportingOrganization;
+//	@Interchangeable(fieldTitle="Second Reporting Organisation")
+	private AmpOrganisation secondReportingOrganisation;
 //	@Interchangeable(fieldTitle="Currency")
 	private AmpCurrency currency;
 //	@Interchangeable(fieldTitle="Description")
@@ -140,6 +141,18 @@ public class AmpComponentFunding implements Versionable, Cloneable, Serializable
 		this.reportingOrganization = reportingOrganization;
 	}
 	/**
+	 * @return Returns the secondReportingOrganisation.
+	 */
+	public AmpOrganisation getSecondReportingOrganisation() {
+		return secondReportingOrganisation;
+	}
+	/**
+	 * @param secondReportingOrganisation The secondReportingOrganisation to set.
+	 */
+	public void setSecondReportingOrganisation(AmpOrganisation secondReportingOrganisation) {
+		this.secondReportingOrganisation = secondReportingOrganisation;
+	}
+	/**
 	 * @return Returns the transactionAmount.
 	 */
 	public Double getTransactionAmount() {
@@ -208,10 +221,12 @@ public class AmpComponentFunding implements Versionable, Cloneable, Serializable
 	public boolean equalsForVersioning(Object obj) {
 		AmpComponentFunding aux = (AmpComponentFunding) obj;
 		String original = " " + this.currency + this.transactionType + this.transactionAmount + this.transactionDate
-				+ this.adjustmentType.getValue() + this.reportingDate + this.reportingOrganization + this.description
+				+ this.adjustmentType.getValue() + this.reportingDate + this.reportingOrganization
+				+ this.secondReportingOrganisation + this.description
 				+ this.component.getTitle() + this.exchangeRate;
 		String copy = " " + aux.currency + aux.transactionType + aux.transactionAmount + aux.transactionDate
-				+ aux.adjustmentType.getValue() + aux.reportingDate + aux.reportingOrganization + aux.description
+				+ aux.adjustmentType.getValue() + aux.reportingDate + aux.reportingOrganization
+				+ this.secondReportingOrganisation + aux.description
 				+ aux.component.getTitle() + aux.exchangeRate;
 		if (original.equals(copy)) {
 			return true;

@@ -3634,6 +3634,8 @@ public class ExportActivityToPDF extends Action {
                 {
                     String descriptionFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Description";
                     String orgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization";
+                    String secondOrgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment "
+                            + "Table/Second Reporting Organisation";
 
                     if (FeaturesUtil.isVisibleModule(orgNameFm) && (fd.getComponentOrganisation() != null))
                     {
@@ -3641,6 +3643,16 @@ public class ExportActivityToPDF extends Action {
                         fdTable.addCell(buildPdfCell("", null, 1));
                         fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Organization"), titleFont, 1));
                         String orgNameTxt = fd.getComponentOrganisation() == null ? "" : fd.getComponentOrganisation().getName();
+                        fdTable.addCell(buildPdfCell(orgNameTxt, null, fdTable.getNumberOfColumns() - 2));
+                        fdTable.completeRow();
+                    }
+
+                    if (FeaturesUtil.isVisibleModule(secondOrgNameFm) && (fd.getSecondReportingOrganisation() != null))
+                    {
+                        fdTable.completeRow();
+                        fdTable.addCell(buildPdfCell("", null, 1));
+                        fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Second Reporting Organisation"), titleFont, 1));
+                        String orgNameTxt = fd.getSecondReportingOrganisation() == null ? "" : fd.getSecondReportingOrganisation().getName();
                         fdTable.addCell(buildPdfCell(orgNameTxt, null, fdTable.getNumberOfColumns() - 2));
                         fdTable.completeRow();
                     }

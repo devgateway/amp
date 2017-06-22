@@ -2259,27 +2259,51 @@ public class ExportActivityToWord extends Action {
                     .addRowData(compFnd.getFormattedRate() != null ? compFnd
                             .getFormattedRate() : "");
 
+            eshCompFundingDetails.addRowData(sectionHelper);
             if (componentFMfields[0].equals("/Activity Form/Components/Component/Components Commitments")) // hacky way of detecting "we are rendering a component funding item"
             {
                 String descriptionFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Description";
                 String orgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization";
+                String secondOrgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment "
+                        + "Table/Second Reporting Organisation";
 
                 if (FeaturesUtil.isVisibleModule(orgNameFm))
                 {
+                    ExportSectionHelperRowData organisationHelper = new ExportSectionHelperRowData("",
+                            null, null, false);
                     String orgString = compFnd.getComponentOrganisation() != null ? compFnd.getComponentOrganisation().getName() : "";
-                    sectionHelper.addRowData(TranslatorWorker.translateText("Organization") + ":" + orgString);
+                    eshCompFundingDetails.addRowData(getExportSectionHelperRowData("Organization",
+                            orgString, compFnd));
+                }
+
+                if (FeaturesUtil.isVisibleModule(secondOrgNameFm))
+                {
+                    String orgString = compFnd.getSecondReportingOrganisation() != null ? compFnd.getSecondReportingOrganisation().getName() : "";
+                    eshCompFundingDetails.addRowData(getExportSectionHelperRowData("Second Reporting Organisation",
+                            orgString, compFnd));
                 }
 
                 if (FeaturesUtil.isVisibleModule(descriptionFm))
                 {
+                    ExportSectionHelperRowData organisationHelper = new ExportSectionHelperRowData(null,
+                            null, null, true);
                     String compTransStr = compFnd.getComponentTransactionDescription() == null ? "" : compFnd.getComponentTransactionDescription();
-                    sectionHelper.addRowData(TranslatorWorker.translateText("Transaction Description") + ": " + compTransStr);
+                    eshCompFundingDetails.addRowData(getExportSectionHelperRowData("Transaction Description",
+                            compTransStr, compFnd));
                 }
             }
 
-            eshCompFundingDetails.addRowData(sectionHelper);
+
         }
 
+    }
+
+    private ExportSectionHelperRowData getExportSectionHelperRowData(String title, String orgString, FundingDetail
+            compFnd) {
+        ExportSectionHelperRowData organisationHelper = new ExportSectionHelperRowData(null,
+                null, null, false);
+        organisationHelper.addRowData(TranslatorWorker.translateText(title) + ": " + orgString);
+        return organisationHelper;
     }
 
 

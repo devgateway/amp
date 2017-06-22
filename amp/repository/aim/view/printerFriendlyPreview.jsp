@@ -1961,7 +1961,7 @@ body {background:none;}
 									</module:display>
 
 									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="false">
-                                    <module:display name="Components" parentModule="PROJECT MANAGEMENT">
+                                    <module:display name="/Activity Form/Components" parentModule="/Activity Form">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -1992,151 +1992,253 @@ body {background:none;}
 															<tr><td bgcolor="#f4f4f2">
 																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
 															</td></tr>
-															<c:if test="${!empty comp.commitments}">
-																<tr><td bgcolor="#ffffff">
-																	<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
-																		<tr>
-																			<td valign="top" width="100" bgcolor="#ffffff">
-																				<digi:trn key="aim:commitments">
-																				Commitments</digi:trn>
-																			</td>
-																			<td bgcolor="#ffffff">
-																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
-																					<c:forEach var="fd" items="${comp.commitments}">
-																						<tr>
-																							<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step">
-																							<td width="50" bgcolor="#ffffff">
-																								<digi:trn key="aim:commitments:${fd.adjustmentTypeNameTrimmed}">
-																									<c:out value="${fd.adjustmentTypeName.value}"/>
-																								</digi:trn>
-																							</td>
-																							</field:display>
-																							<field:display name="Components Amount Commitments" feature="Activity - Component Step">
-																								<td align="right" width="100" bgcolor="#ffffff">
-																									<c:out value="${fd.transactionAmount}"/>
-																								</td>
-																							</field:display>
-																							<field:display name="Components Currency Commitments" feature="Activity - Component Step">
-																								<td bgcolor="#ffffff">
-																									<c:out value="${fd.currencyCode}"/>
-																								</td>
-																							</field:display>
-																							<field:display name="Components Date Commitments" feature="Activity - Component Step">
-																								<td bgcolor="#ffffff" width="70">
-																									<c:out value="${fd.transactionDate}"/>
-																								</td>
-																							</field:display>
-																						</tr>
-																						<field:display name="Component Funding Organization" feature="Activity - Component Step">
-																							<tr>
-																								<td bgcolor="#ffffff">
-																									<b><digi:trn>Organisation</digi:trn></b>
-																								</td>
-																								<td colspan="3">
-																									<logic:notEmpty property="componentOrganisation" name="fd">
+															<module:display
+																	name="/Activity Form/Components/Component/Components Commitments"
+																	parentModule="/Activity Form/Components/Component">
+																<c:if test="${!empty comp.commitments}">
+																	<tr>
+																		<td bgcolor="#ffffff">
+																			<table width="100%" cellSpacing="1"
+																				   cellPadding="0"
+																				   class="box-border-nopadding">
+																				<tr>
+																					<td valign="top" width="100"
+																						bgcolor="#ffffff">
+																						<digi:trn key="aim:commitments">
+																							Commitments</digi:trn>
+																					</td>
+																					<td bgcolor="#ffffff">
+																						<table width="100%"
+																							   cellSpacing="1"
+																							   cellPadding="1"
+																							   bgcolor="#eeeeee">
+																							<c:forEach var="fd"
+																									   items="${comp.commitments}">
+																								<tr>
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Commitments"
+																											parentModule="/Activity Form/Components/Component">
+																										<td width="50"
+																											bgcolor="#ffffff">
+																											<digi:trn
+																													key="aim:commitments:${fd.adjustmentTypeNameTrimmed}">
+																												<c:out value="${fd.adjustmentTypeName.value}"/>
+																											</digi:trn>
+																										</td>
+																									</module:display>
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount"
+																											parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																										<td align="right"
+																											width="100"
+																											bgcolor="#ffffff">
+																											<c:out value="${fd.transactionAmount}"/>
+																										</td>
+																									</module:display>
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency"
+																											parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																										<td bgcolor="#ffffff">
+																											<c:out value="${fd.currencyCode}"/>
+																										</td>
+																									</module:display>
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"
+																											parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																										<td bgcolor="#ffffff"
+																											width="70">
+																											<c:out value="${fd.transactionDate}"/>
+																										</td>
+																									</module:display>
+																								</tr>
+																								<module:display
+																										name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"
+																										parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																									<tr bgcolor="#ffffff">
+																										<td>
+																											<b><digi:trn>Organisation</digi:trn></b>
+																										</td>
+																										<td colspan="3">
+																											<logic:notEmpty
+																													property="componentOrganisation"
+																													name="fd">
 																									<span class="word_break">
-																										<c:out value="${fd.componentOrganisation.name}" />
+																										<c:out value="${fd.componentOrganisation.name}"/>
 																									</span>
-																									</logic:notEmpty>
-																								</td>
-																							</tr>
-																						</field:display>
-
-																						<field:display name="Description of Component Funding" feature="Activity - Component Step">
-																							<tr>
-																								<td width="50" bgcolor="#ffffff">
-																									<b><digi:trn>Description</digi:trn></b>
-																								</td>
-																								<td colspan="3" bgcolor="white">
+																											</logic:notEmpty>
+																										</td>
+																									</tr>
+																								</module:display>
+																								<module:display
+																										name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Second Reporting Organisation"
+																										parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																									<tr bgcolor="#ffffff">
+																										<td>
+																											<b><digi:trn>Second Reporting Organisation</digi:trn></b>
+																										</td>
+																										<td colspan="3">
+																											<logic:notEmpty
+																													property="secondReportingOrganisation"
+																													name="fd">
+																									<span class="word_break">
+																										<c:out value="${fd.secondReportingOrganisation.name}"/>
+																									</span>
+																											</logic:notEmpty>
+																										</td>
+																									</tr>
+																								</module:display>
+																								<module:display
+																										name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Description"
+																										parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																									<tr>
+																										<td width="50"
+																											bgcolor="#ffffff">
+																											<b><digi:trn>Description</digi:trn></b>
+																										</td>
+																										<td colspan="3"
+																											bgcolor="white">
 																								<span class="word_break">
-																									<c:out value="${fd.componentTransactionDescription}" />
+																									<c:out value="${fd.componentTransactionDescription}"/>
 																								</span>
-																								</td>
-																							</tr>
-																						</field:display>
-																					</c:forEach>
-																				</table>
-																			</td>
-																		</tr>
-																	</table>
-																</td></tr>
-															</c:if>
-															<c:if test="${!empty comp.disbursements}">
-																<tr><td bgcolor="#ffffff">
-																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
-																		<tr>
-																			<td valign="top" width="100" bgcolor="#ffffff">
-																				<digi:trn key="aim:disbursements">
-																				Disbursements</digi:trn>																			</td>
-																			<td bgcolor="#ffffff">
-																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
-																					<c:forEach var="fd" items="${comp.disbursements}">
-																						<tr>
-																							<field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step">
-																							<td width="50" bgcolor="#ffffff">
-																							<digi:trn key="aim:disbursements:${fd.adjustmentTypeNameTrimmed}">
-																								<c:out value="${fd.adjustmentTypeName.value}"/>
-																							</digi:trn>
-																							</td>
-																							</field:display>
-																							<field:display name="Components Amount Disbursements" feature="Activity - Component Step">
-																							<td align="right" width="100" bgcolor="#ffffff">
+																										</td>
+																									</tr>
+																								</module:display>
+																							</c:forEach>
+																						</table>
+																					</td>
+																				</tr>
+																			</table>
+																		</td>
+																	</tr>
+																</c:if>
+															</module:display>
+															<module:display
+																	name="/Activity Form/Components/Component/Components Disbursements"
+																	parentModule="/Activity Form/Components/Component">
+																<c:if test="${!empty comp.disbursements}">
+																	<tr>
+																		<td bgcolor="#ffffff">
+																			<table width="100%" cellSpacing="1"
+																				   cellPadding="1"
+																				   class="box-border-nopadding">
+																				<tr>
+																					<td valign="top" width="100"
+																						bgcolor="#ffffff">
+																						<digi:trn
+																								key="aim:disbursements">
+																							Disbursements</digi:trn></td>
+																					<td bgcolor="#ffffff">
+																						<table width="100%"
+																							   cellSpacing="1"
+																							   cellPadding="1"
+																							   bgcolor="#eeeeee">
+																							<c:forEach var="fd"
+																									   items="${comp.disbursements}">
+																								<tr>
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Disbursements"
+																											parentModule="/Activity Form/Components/Component">
+																										<td width="50"
+																											bgcolor="#ffffff">
+																											<digi:trn
+																													key="aim:disbursements:${fd.adjustmentTypeNameTrimmed}">
+																												<c:out value="${fd.adjustmentTypeName.value}"/>
+																											</digi:trn>
+																										</td>
+																									</module:display>
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount"
+																											parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+																										<td align="right"
+																											width="100"
+																											bgcolor="#ffffff">
+																											<c:out value="${fd.transactionAmount}"/></td>
+																									</module:display>
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency"
+																											parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+																										<td bgcolor="#ffffff">
+																											<c:out value="${fd.currencyCode}"/></td>
+																									</module:display>
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"
+																											parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+																										<td bgcolor="#ffffff"
+																											width="70">
+																											<c:out value="${fd.transactionDate}"/></td>
+																									</module:display>
+																								</tr>
+																							</c:forEach>
+																						</table>
+																					</td>
+																				</tr>
+																			</table>
+																		</td>
+																	</tr>
+																</c:if>
+															</module:display>
+															<module:display
+																	name="/Activity Form/Components/Component/Components Expenditures"
+																	parentModule="/Activity Form/Components/Component">
+																<c:if test="${!empty comp.expenditures}">
+																	<tr>
+																		<td bgcolor="#ffffff">
+																			<table width="100%" cellSpacing="1"
+																				   cellPadding="1"
+																				   class="box-border-nopadding">
+																				<tr>
+																					<td valign="top" width="100"
+																						bgcolor="#ffffff">
+																						<digi:trn
+																								key="aim:expenditures">
+																							Expenditures</digi:trn>
+																					</td>
+																					<td bgcolor="#ffffff">
+																						<table width="100%"
+																							   cellSpacing="1"
+																							   cellPadding="1"
+																							   bgcolor="#eeeeee">
+																							<c:forEach var="fd"
+																									   items="${comp.expenditures}">
+																								<tr bgcolor="#ffffff">
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Expeditures"
+																											parentModule="/Activity Form/Components/Component">
+																										<td width="50">
+																											<digi:trn
+																													key="aim:expenditures:${fd.adjustmentTypeNameTrimmed}">
+																												<c:out value="${fd.adjustmentTypeName.value}"/>
+																											</digi:trn></td>
+																									</module:display>
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount"
+																											parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+																										<td align="right">
 
-																								<c:out value="${fd.transactionAmount}"/>																							</td>
-																							</field:display>
-																							<field:display name="Components Currency Disbursements" feature="Activity - Component Step">
-																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.currencyCode}"/>																							</td>
-																							</field:display>
-																							<field:display name="Components Date Disbursements" feature="Activity - Component Step">
-																							<td bgcolor="#ffffff" width="70">
-																								<c:out value="${fd.transactionDate}"/>																							</td>
-																							</field:display>
-																						</tr>
-																					</c:forEach>
-																				</table>																			</td>
-																		</tr>
-																	</table>
-																</td></tr>
-															</c:if>
-															<c:if test="${!empty comp.expenditures}">
-																<tr><td bgcolor="#ffffff">
-																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
-																		<tr>
-																			<td valign="top" width="100" bgcolor="#ffffff">
-																				<digi:trn key="aim:expenditures">
-																				Expenditures</digi:trn>																			</td>
-																			<td bgcolor="#ffffff">
-																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
-																					<c:forEach var="fd" items="${comp.expenditures}">
-																						<tr bgcolor="#ffffff">
-																							<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step">
-																							<td width="50">
-																								<digi:trn key="aim:expenditures:${fd.adjustmentTypeNameTrimmed}">
-																									<c:out value="${fd.adjustmentTypeName.value}"/>
-																								</digi:trn>																							</td>
-																							</field:display>
-																							<field:display name="Components Amount Expenditures" feature="Activity - Component Step">
-																							<td align="right">
-
-																								<c:out value="${fd.transactionAmount}"/>																							</td>
-																							</field:display>
-																							<field:display name="Components Currency Expenditures" feature="Activity - Component Step">
-																							<td>
-																								<c:out value="${fd.currencyCode}"/>																							</td>
-																							</field:display>
-																							<field:display name="Components Date Expenditures" feature="Activity - Component Step">
-																							<td width="70">
-																								<c:out value="${fd.transactionDate}"/>																							</td>
-																							</field:display>
-																						</tr>
-																					</c:forEach>
-																				</table>
-																			</td>
-																		</tr>
-																	</table>
-																</td></tr>
-															</c:if>
+																											<c:out value="${fd.transactionAmount}"/></td>
+																									</module:display>
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency"
+																											parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+																										<td>
+																											<c:out value="${fd.currencyCode}"/></td>
+																									</module:display>
+																									<module:display
+																											name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date"
+																											parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+																										<td width="70">
+																											<c:out value="${fd.transactionDate}"/></td>
+																									</module:display>
+																								</tr>
+																							</c:forEach>
+																						</table>
+																					</td>
+																				</tr>
+																			</table>
+																		</td>
+																	</tr>
+																</c:if>
+															</module:display>
 															<tr><td bgcolor="#ffffff">&nbsp;</td>
 															</tr>
 														</table>

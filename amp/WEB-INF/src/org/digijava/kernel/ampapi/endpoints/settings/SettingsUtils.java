@@ -321,19 +321,8 @@ public class SettingsUtils {
 	static SettingField getReportAmountUnits() {
 		final String defaultAmountUnit = String.valueOf(AmountsUnits.getDefaultValue().divider);
 
-		Map<String, String> amountUnits = new LinkedHashMap<String, String>();
-
-		SettingsConstants.AMOUNT_UNITS_MAP
-				.entrySet()
-				.stream().sorted(Map.Entry.comparingByValue())
-				.forEach(e -> {
-					if (!SettingsConstants.AMOUNT_UNITS_MAP_EXCLUDED.contains(e.getKey())) {
-						amountUnits.put(e.getKey(), e.getValue());
-					}
-				});
-
 		return getOptionValueSetting(SettingsConstants.AMOUNT_UNITS, SettingsConstants.USE_GROUPING,
-				defaultAmountUnit, amountUnits);
+				defaultAmountUnit, SettingsConstants.AMOUNT_UNITS_MAP_REPORTS);
 	}
 
 	/**

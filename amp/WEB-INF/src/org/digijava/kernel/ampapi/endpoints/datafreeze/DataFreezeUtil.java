@@ -3,9 +3,11 @@ package org.digijava.kernel.ampapi.endpoints.datafreeze;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
+import org.digijava.module.aim.util.AmpDateUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -96,5 +98,15 @@ public final class DataFreezeUtil {
           String queryString = "from " + User.class.getName();
           Query query = session.createQuery(queryString);
           return query.list();        
+    }
+    
+    public static Date getFreezingDate(AmpDataFreezeSettings event) {
+        Date freezingDate;
+        if (event.getGracePeriod() != null) {
+            freezingDate = AmpDateUtils.getDateAfterDays(event.getFreezingDate(), event.getGracePeriod());
+        } else {
+            freezingDate = event.getFreezingDate();
+        }
+        return freezingDate;
     }
 }

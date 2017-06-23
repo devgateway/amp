@@ -80,12 +80,12 @@ export default class DataFreezeEventView extends Component {
                     <td>{this.props.dataFreezeEvent.gracePeriod}</td>
                     <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)}</td>
                     <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodEnd)}</td>
-                    <td>
-                     {this.props.dataFreezeEvent.count}
-                    </td>
                     <td>{this.showFreezeOption(this.props.dataFreezeEvent.freezeOption)}</td>
                     <td>
                     {this.props.dataFreezeEvent.sendNotification ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}
+                    </td>
+                    <td>
+                    {this.props.dataFreezeEvent.notificationDays}
                     </td>
                     <td>                    
                       <button className="btn btn-default filter-add" onClick={this.toggleAppliedFilters}>

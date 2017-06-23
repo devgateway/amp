@@ -14,6 +14,10 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 @Path("data-freeze")
 public class DataFreezeEndPoints implements ErrorReportingEndpoint {
@@ -58,6 +62,16 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "unfreezeAll", authTypes = { AuthRule.IN_ADMIN })
     public void unfreezeAll(JsonBean data) {
         DataFreezeService.unfreezeAll();
+    }
+    
+    @GET
+    @Path("event/activity-test")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "activityTest")
+    public boolean activityTest(@QueryParam("id")Long id) {
+        TeamMember tm = TeamUtil.getCurrentMember();
+        AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+        return DataFreezeService.isEditable(id, atm.getAmpTeamMemId());
     }
 
     /**

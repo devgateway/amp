@@ -18,22 +18,17 @@ public class DataFreezeEmailNotificationJob extends ConnectionCleaningJob implem
 
     @Override
     public void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
-
         List<AmpDataFreezeSettings> events = DataFreezeUtil.getEnabledDataFreezeEvents(null);
         try {
             for (AmpDataFreezeSettings event : events) {
-                Date freezingDate = (event.getGracePeriod() != null)
-                        ? AmpDateUtils.getDateAfterDays(event.getFreezingDate(), event.getGracePeriod())
-                        : event.getFreezingDate();
-                Integer numberOfDaysToFreezing = AmpDateUtils.daysBetween(new Date(), freezingDate);
-                logger.info("--------------------------------------------------------------");
-                logger.info("Event Freeze Date: " + DateTimeUtil.formatDate(event.getFreezingDate()));
-                logger.info("Grace Period: " + event.getGracePeriod());
-                logger.info("Effective Freeze Date: " + DateTimeUtil.formatDate(freezingDate));
-                logger.info("Number of days to freezing date: " + numberOfDaysToFreezing);
-                if (numberOfDaysToFreezing == DATA_FREEZE_NOTIFICATION_DAYS) {
-                    new DataFreezeEmailNotificationTrigger(event);
-                }
+                if (Boolean.TRUE.equals(event.getSendNotification())) {
+                    Integer notificationDays = event.getNotificationDays() != null ? event.getNotificationDays() : DATA_FREEZE_NOTIFICATION_DAYS; 
+                    Date freezingDate = DataFreezeUtil.getFreezingDate(event);                            
+                    Integer numberOfDaysToFreezingDate = AmpDateUtils.daysBetween(new Date(), freezingDate);
+                    if (numberOfDaysToFreezingDate == notificationDays) {
+                        new DataFreezeEmailNotificationTrigger(event);
+                    }
+                }                
             }
 
         } catch (Exception ex) {

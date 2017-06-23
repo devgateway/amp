@@ -14,6 +14,8 @@ public class DataFreezeEvent {
     private FreezeOptions freezeOption;
     private String filters;
     private Integer count; // number of affected activities
+    private Integer notificationDays;
+  
 
     public Integer getCount() {
         return count;
@@ -104,5 +106,13 @@ public class DataFreezeEvent {
 
     public void setCid(Long cid) {
         this.cid = cid;
+    }
+    
+    public Integer getNotificationDays() {
+        return notificationDays;
+    }
+
+    public void setNotificationDays(Integer notificationDays) {
+        this.notificationDays = notificationDays;
     }
 }

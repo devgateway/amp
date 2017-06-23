@@ -41,6 +41,7 @@ export default class DataFreezeEventEdit extends Component {
         this.restoreSavedFilters = this.restoreSavedFilters.bind(this);
         this.onEnabledChange = this.onEnabledChange.bind(this);
         this.getErrorsForField = this.getErrorsForField.bind(this);
+        this.onNotificationDaysChange = this.onNotificationDaysChange.bind(this);
     }
 
     toggleDatePicker(event) {
@@ -88,6 +89,9 @@ export default class DataFreezeEventEdit extends Component {
     onSendNotificationChange(event) {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.sendNotification = $(event.target).val() === Constants.OPTION_YES;
+        if ($(event.target).val() === Constants.OPTION_NO) {
+            currentRecord.notificationDays = '';
+        }
         this.setState({
             currentRecord: currentRecord
         });
@@ -109,6 +113,15 @@ export default class DataFreezeEventEdit extends Component {
         });
     }
 
+    onNotificationDaysChange(event) {
+        let currentRecord = this.props.dataFreezeEvent;
+        let notificationDays = $(event.target).val();
+        currentRecord.notificationDays = (notificationDays && !isNaN(notificationDays)) ? parseInt(notificationDays) : '';
+        this.setState({
+            currentRecord: currentRecord
+        }); 
+    }
+    
     getDisplayDateFormat() {
         return (this.props.settings && this.props.settings[Constants.DATE_FORMAT_SETTING]) ? this.props.settings[Constants.DATE_FORMAT_SETTING].toUpperCase() : Constants.DEFAULT_UI_DATE_FORMAT;
     }
@@ -226,9 +239,7 @@ export default class DataFreezeEventEdit extends Component {
               }
                 </div>
                 </td>
-                <td>
-                  {this.props.dataFreezeEvent.count}
-                </td>
+                
                 <td>
               <div className={this.getErrorsForField('freezeOption').length > 0 ? 'input-group has-error': 'input-group'}>
               <div className="radio">
@@ -255,6 +266,9 @@ export default class DataFreezeEventEdit extends Component {
                       <input type="radio" name={'sendNotification' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_NO} onChange={this.onSendNotificationChange} checked={this.props.dataFreezeEvent.sendNotification === false}/>{this.props.translations['amp.data-freezing:boolean-option-no']}</label>
                   </div>
                 </div>
+                  </td>
+                  <td>
+                     <input type="text" className="form-control notification-days-input" value={this.props.dataFreezeEvent.notificationDays} readOnly={this.props.dataFreezeEvent.sendNotification === false} onChange={this.onNotificationDaysChange}/>
                   </td>
                 <td>                  
                   <button className="btn btn-default filter-add" onClick={this.showFilters}>

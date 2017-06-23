@@ -22,6 +22,7 @@ public class AmpDataFreezeSettings implements Serializable {
     private Date openPeriodEnd;
     private Boolean sendNotification = Boolean.FALSE;
     private FreezeOptions freezeOption;
+    private Integer notificationDays;
 
     public enum FreezeOptions {
         ENTIRE_ACTIVITY, FUNDING
@@ -99,6 +100,14 @@ public class AmpDataFreezeSettings implements Serializable {
 
     public void setFilters(String filters) {
         this.filters = filters;
+    }
+
+    public Integer getNotificationDays() {
+        return notificationDays;
+    }
+
+    public void setNotificationDays(Integer notificationDays) {
+        this.notificationDays = notificationDays;
     }
 
 }

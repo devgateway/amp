@@ -44,5 +44,7 @@ export const initialTranslations = {
          'amp.data-freezing:tooltip-freeze-options': 'Freeze Options',
          'amp.data-freezing:tooltip-filters': 'Filters',
          'amp.data-freezing:tooltip-notification-email': 'Notification Email',
-         'amp.data-freezing:invalid-grace-period': 'Invalid Grace Period. Grace period can be 0 or a positive whole number'
+         'amp.data-freezing:tooltip-notification-days': 'The number of days before the freezing date when the email notification will be sent out. Default is 7 days.',
+         'amp.data-freezing:invalid-grace-period': 'Invalid Grace Period. Grace period can be 0 or a positive whole number',
+         'amp.data-freezing:notification-days': 'Notify (Days)'
 };

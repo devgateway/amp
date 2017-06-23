@@ -80,6 +80,7 @@ public final class DataFreezeService {
         json.set(DataFreezeConstants.FIELD_SEND_NOTIFICATION, dataFreezeEvent.getSendNotification());
         json.set(DataFreezeConstants.FIELD_ENABLED, dataFreezeEvent.getEnabled());
         json.set(DataFreezeConstants.FIELD_COUNT, getCountOfFrozenActivities(dataFreezeEvent));
+        json.set(DataFreezeConstants.FIELD_NOTIFICATION_DAYS, dataFreezeEvent.getNotificationDays());
         return json;
     }
 
@@ -97,6 +98,7 @@ public final class DataFreezeService {
         dataFreezeSettings.setFilters(dataFreezeEvent.getFilters());
         dataFreezeSettings.setSendNotification(dataFreezeEvent.getSendNotification());
         dataFreezeSettings.setEnabled(dataFreezeEvent.getEnabled());
+        dataFreezeSettings.setNotificationDays(dataFreezeEvent.getNotificationDays());
         return dataFreezeSettings;
     }
 
@@ -135,6 +137,7 @@ public final class DataFreezeService {
             dataFreezeEvent.setSendNotification(event.getSendNotification());
             dataFreezeEvent.setFreezeOption(event.getFreezeOption());
             dataFreezeEvent.setFilters(event.getFilters());
+            dataFreezeEvent.setNotificationDays(event.getNotificationDays());
             dataFreezeEvent.setCount(getCountOfFrozenActivities(event));
             freezeEvents.add(dataFreezeEvent);
         });

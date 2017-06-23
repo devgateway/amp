@@ -2,6 +2,7 @@ package org.digijava.module.message.triggers;
 
 import java.util.Date;
 
+import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeUtil;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -30,21 +31,15 @@ public class DataFreezeEmailNotificationTrigger extends Trigger {
     @Override
     protected Event generateEvent() {
         Event e = new Event(DataFreezeEmailNotificationTrigger.class);
+        AmpDataFreezeSettings event = (AmpDataFreezeSettings)this.source;
         e.getParameters().put(PARAM_TRIGGER_SENDER, MessageConstants.SENDER_TYPE_SYSTEM);
         e.getParameters().put(PARAM_DATA_FREEZE_NOTIFICATION_DAYS, DAYS_TO_FREEZE);
-        e.getParameters().put(PARAM_DATA_FREEZING_DATE, this.getFreezingDate());
+        e.getParameters().put(PARAM_DATA_FREEZING_DATE, DateTimeUtil.formatDate(DataFreezeUtil.getFreezingDate(event)));
         return e;
     }
 
     @Override
     public String[] getParameterNames() {
         return parameterNames;
-    }
-    
-    private String getFreezingDate(){
-        AmpDataFreezeSettings event = (AmpDataFreezeSettings)this.source;
-        Date freezingDate = (event.getGracePeriod() != null) ? AmpDateUtils.getDateAfterDays(event.getFreezingDate(), event.getGracePeriod()) : event.getFreezingDate();
-        return DateTimeUtil.formatDate(freezingDate);
-    }
-
+    }    
 }

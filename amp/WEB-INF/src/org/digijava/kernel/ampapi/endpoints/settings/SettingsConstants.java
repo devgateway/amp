@@ -113,10 +113,13 @@ public class SettingsConstants {
 		put(AMOUNT_UNITS_1000000000, "1000000000");
 	}});
 
-	/** list of amount units to be excluded in reports settings */
-	public static final List<String> AMOUNT_UNITS_MAP_EXCLUDED = new ArrayList<String>() {{
-		add(AMOUNT_UNITS_1000000000);
-	}};
+	/** {id, value} map for default amount units used in reports */
+	public static final Map<String, String> AMOUNT_UNITS_MAP_REPORTS = Collections.unmodifiableMap(new
+																										   LinkedHashMap<String, String>() {{
+		put(AMOUNT_UNITS_1, "1");
+		put(AMOUNT_UNITS_1000, "1000");
+		put(AMOUNT_UNITS_1000000, "1000000");
+	}});
 	
 	public static final Map<String, String> YEAR_MAP = Collections.unmodifiableMap(new LinkedHashMap<String, String>() {{
 		put(YEAR_ALL, "-1");

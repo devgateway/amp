@@ -93,11 +93,15 @@ public final class DataFreezeUtil {
         return query.list();
     }
     
-    public static List<User> getUsers(){       
-          Session session = PersistenceManager.getRequestDBSession();
-          String queryString = "from " + User.class.getName();
-          Query query = session.createQuery(queryString);
-          return query.list();        
+    /**
+     * Get list of active users
+     * @return
+     */
+    public static List<User> getUsers() {
+        Session session = PersistenceManager.getRequestDBSession();
+        String queryString = "from " + User.class.getName() + " user where user.banned = false and user.active = true";
+        Query query = session.createQuery(queryString);
+        return query.list();
     }
     
     public static Date getFreezingDate(AmpDataFreezeSettings event) {

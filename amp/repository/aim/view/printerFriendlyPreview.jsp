@@ -2168,6 +2168,58 @@ body {background:none;}
 																											<c:out value="${fd.transactionDate}"/></td>
 																									</module:display>
 																								</tr>
+																								<module:display
+																										name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Organization"
+																										parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+																									<tr bgcolor="#ffffff">
+																										<td>
+																											<b><digi:trn>Organisation</digi:trn></b>
+																										</td>
+																										<td colspan="3">
+																											<logic:notEmpty
+																													property="componentOrganisation"
+																													name="fd">
+																									<span class="word_break">
+																										<c:out value="${fd.componentOrganisation.name}"/>
+																									</span>
+																											</logic:notEmpty>
+																										</td>
+																									</tr>
+																								</module:display>
+																								<module:display
+																										name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Second Reporting Organisation"
+																										parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+																									<tr bgcolor="#ffffff">
+																										<td>
+																											<b><digi:trn>Second Reporting Organisation</digi:trn></b>
+																										</td>
+																										<td colspan="3">
+																											<logic:notEmpty
+																													property="secondReportingOrganisation"
+																													name="fd">
+																									<span class="word_break">
+																										<c:out value="${fd.secondReportingOrganisation.name}"/>
+																									</span>
+																											</logic:notEmpty>
+																										</td>
+																									</tr>
+																								</module:display>
+																								<module:display
+																										name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Description"
+																										parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+																									<tr>
+																										<td width="50"
+																											bgcolor="#ffffff">
+																											<b><digi:trn>Description</digi:trn></b>
+																										</td>
+																										<td colspan="3"
+																											bgcolor="white">
+																								<span class="word_break">
+																									<c:out value="${fd.componentTransactionDescription}"/>
+																								</span>
+																										</td>
+																									</tr>
+																								</module:display>
 																							</c:forEach>
 																						</table>
 																					</td>
@@ -2230,6 +2282,58 @@ body {background:none;}
 																											<c:out value="${fd.transactionDate}"/></td>
 																									</module:display>
 																								</tr>
+																								<module:display
+																										name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Organization"
+																										parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+																									<tr bgcolor="#ffffff">
+																										<td>
+																											<b><digi:trn>Organisation</digi:trn></b>
+																										</td>
+																										<td colspan="3">
+																											<logic:notEmpty
+																													property="componentOrganisation"
+																													name="fd">
+																									<span class="word_break">
+																										<c:out value="${fd.componentOrganisation.name}"/>
+																									</span>
+																											</logic:notEmpty>
+																										</td>
+																									</tr>
+																								</module:display>
+																								<module:display
+																										name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Second Reporting Organisation"
+																										parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+																									<tr bgcolor="#ffffff">
+																										<td>
+																											<b><digi:trn>Second Reporting Organisation</digi:trn></b>
+																										</td>
+																										<td colspan="3">
+																											<logic:notEmpty
+																													property="secondReportingOrganisation"
+																													name="fd">
+																									<span class="word_break">
+																										<c:out value="${fd.secondReportingOrganisation.name}"/>
+																									</span>
+																											</logic:notEmpty>
+																										</td>
+																									</tr>
+																								</module:display>
+																								<module:display
+																										name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Description"
+																										parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+																									<tr>
+																										<td width="50"
+																											bgcolor="#ffffff">
+																											<b><digi:trn>Description</digi:trn></b>
+																										</td>
+																										<td colspan="3"
+																											bgcolor="white">
+																								<span class="word_break">
+																									<c:out value="${fd.componentTransactionDescription}"/>
+																								</span>
+																										</td>
+																									</tr>
+																								</module:display>
 																							</c:forEach>
 																						</table>
 																					</td>

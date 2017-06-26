@@ -1004,17 +1004,23 @@ public class ActivityUtil {
 						if (tempOrgRole.getGpiNiSurvey() != null) {
 							for (AmpGPINiSurveyResponse tempGPINiSurveyResponse : tempOrgRole.getGpiNiSurvey()
 									.getResponses()) {
-								if (tempGPINiSurveyResponse.getOldKey() == surveyResponse
-										.getAmpGPINiSurveyResponseId()) {
-									responseDocument.setSurveyResponse(tempGPINiSurveyResponse);
+                                if (tempGPINiSurveyResponse.getOldKey() == surveyResponse
+                                        .getAmpGPINiSurveyResponseId() &&
+                                        (tempGPINiSurveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation()
+                                                .getAmpOrgId()
+                                                == surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation()
+                                                .getAmpOrgId() && tempGPINiSurveyResponse.getAmpGPINiQuestion()
+                                                .getCode().equals(surveyResponse.getAmpGPINiQuestion().getCode()))
+                                        ) {
+                                    responseDocument.setSurveyResponse(tempGPINiSurveyResponse);
 
-									if (tempGPINiSurveyResponse.getSupportingDocuments() == null) {
-										tempGPINiSurveyResponse.setSupportingDocuments(new
-												HashSet<AmpGPINiSurveyResponseDocument>());
-									}
+                                    if (tempGPINiSurveyResponse.getSupportingDocuments() == null) {
+                                        tempGPINiSurveyResponse.setSupportingDocuments(new
+                                                HashSet<AmpGPINiSurveyResponseDocument>());
+                                    }
 
-									tempGPINiSurveyResponse.getSupportingDocuments().add(responseDocument);
-								}
+                                    tempGPINiSurveyResponse.getSupportingDocuments().add(responseDocument);
+                                }
 
 							}
 

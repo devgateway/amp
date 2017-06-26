@@ -75,11 +75,11 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 				as.setAmpOrgRole(donor.getObject());
 				as.setSurveyDate(new Date());
 				as.setResponses(new HashSet<>());
-				if (donor.getObject().getGpiNiSurveySet() == null) {
-					donor.getObject().setGpiNiSurveySet(new HashSet<>());
+				if (donor.getObject().getGpiNiSurveys() == null) {
+					donor.getObject().setGpiNiSurveys(new HashSet<>());
 				}
-				donor.getObject().getGpiNiSurveySet().clear();
-				donor.getObject().getGpiNiSurveySet().add(as);
+				donor.getObject().getGpiNiSurveys().clear();
+				donor.getObject().getGpiNiSurveys().add(as);
 				target.add(parent);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
 				target.appendJavaScript("$('#" + getDonorToggleId(donor.getObject().getAmpOrgRoleId()) + "').show();");
@@ -96,7 +96,7 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 
-				donor.getObject().getGpiNiSurveySet().clear();
+				donor.getObject().getGpiNiSurveys().clear();
 				// after we clear the set we flush the session if not
 				// if we add another survey in the same session the delete is not triggered
 				// first and we get a constrain exception

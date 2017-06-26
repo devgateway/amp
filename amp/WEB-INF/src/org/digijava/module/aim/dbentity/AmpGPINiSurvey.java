@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.Set;
 
 import org.apache.commons.collections.ComparatorUtils;
-import org.apache.struts.tiles.taglib.GetAttributeTag;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 public class AmpGPINiSurvey implements Serializable, Cloneable, Comparable<AmpGPINiSurvey> {
 	

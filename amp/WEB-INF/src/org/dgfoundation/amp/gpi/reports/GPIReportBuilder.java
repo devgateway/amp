@@ -43,6 +43,7 @@ public class GPIReportBuilder {
 		gpiReport.setPage(getReportPage(page, recordsPerPage));
 		gpiReport.setSummary(getSummary());
 		gpiReport.setSpec(generatedReport.spec);
+		gpiReport.setOriginalFormParams(gpiReportOutputBuilder.getOriginalFormParams());
 
 		return gpiReport;
 	}

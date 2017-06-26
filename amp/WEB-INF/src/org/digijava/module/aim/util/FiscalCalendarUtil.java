@@ -263,6 +263,21 @@ public class FiscalCalendarUtil {
 	}
 	
 	/**
+	 * A method to convert a Gregorian date into toCalendar date
+	 * 
+	 * @param gregorianDate
+	 * @param toCalendar
+	 * @return
+	 */
+	public static DateTime convertFromGregorianDate(Date gregorianDate, AmpFiscalCalendar toCalendar) {
+		
+		ICalendarWorker toCalWorker = toCalendar.getworker();
+		toCalWorker.setTime(gregorianDate);
+		
+		return toCalWorker.getCalendarDate();
+	}
+	
+	/**
 	 * 
 	 * Note: Since no general solution existed so far for so many years, agreed on this quick solution to reduce 
 	 * conversion bugs and it will be redesign as part of migration to Java8 and new Reports Engine (after Mondrian era)  

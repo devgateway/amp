@@ -23,6 +23,7 @@ import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TrailCellsDigest;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
+import org.digijava.module.aim.util.DbUtil;
 import org.junit.Test;
 
 /**
@@ -1054,7 +1055,34 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			GroupingCriteria.GROUPING_TOTALS_ONLY);
 		
 		runNiTestCase(spec, "en", Arrays.asList("ptc activity 1", "mtef activity 1", "mtef activity 2", "ptc activity 2"), cor);
-	}	
+	}
+	
+	@Test
+	public void testEthCalendarDateColumns() {
+		NiReportModel cor = new NiReportModel("test_eth_calendar_date_columns")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 5))",
+						"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Activity Created On: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Activity Updated On: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2))",
+						"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
+					.withBody(      new ReportAreaForTests(null)
+				      .withContents("Project Title", "", "Activity Created On", "", "Activity Updated On", "", "Totals-Actual Commitments", "999,999", "Totals-Actual Disbursements", "0")
+				      .withChildren(
+				        new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Activity Created On", "29/11/2005", "Activity Updated On", "11/04/2006"),
+				        new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Activity Created On", "29/11/2005", "Activity Updated On", "11/04/2006"),
+				        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Activity Created On", "13/12/2005", "Activity Updated On", "11/04/2006", "Totals-Actual Commitments", "666,777"),
+				        new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Activity Created On", "13/12/2005", "Activity Updated On", "11/04/2006", "Totals-Actual Commitments", "333,222")      ));
+		
+		ReportSpecificationImpl spec = buildSpecification("test_eth_calendar_date_columns",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ACTIVITY_CREATED_ON, ColumnConstants.ACTIVITY_UPDATED_ON),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+			null,
+			GroupingCriteria.GROUPING_TOTALS_ONLY);
+		
+		spec.getOrCreateSettings().setCalendar(DbUtil.getAmpFiscalCalendar(172L));
+		
+		runNiTestCase(spec, "en", Arrays.asList("ptc activity 1", "mtef activity 1", "mtef activity 2", "ptc activity 2"), cor);
+	}
 	
 	@Test
 	public void testHierByModeOfPayment() {

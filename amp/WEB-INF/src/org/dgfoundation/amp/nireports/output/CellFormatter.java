@@ -5,18 +5,23 @@ import static org.dgfoundation.amp.algo.AmpCollections.any;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.DateCell;
 import org.dgfoundation.amp.newreports.IntCell;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NumberedCell;
+import org.dgfoundation.amp.nireports.TranslatedDate;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.nireports.output.nicells.CellVisitor;
 import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
@@ -27,8 +32,12 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
+import org.joda.time.DateTime;
 
 /**
  * a {@link CellVisitor} used to transform instances of {@link NiOutCell} into instances of {@link ReportCell}
@@ -45,6 +54,7 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	final protected Function<String, String> translator;
 	final protected AmountsUnits amountsUnits;
 	final protected BigDecimal unitsDivider;
+	final protected CalendarConverter calendarConverter;
 	
 	public CellFormatter(ReportSettings settings, DecimalFormat defaultDecimalFormatter, String dateDisplayFormat, Function<String, String> translator, OutputSettings outputSettings) {
 		this.decimalFormatter = (settings != null && settings.getCurrencyFormat() != null) ? settings.getCurrencyFormat() : defaultDecimalFormatter;
@@ -53,6 +63,8 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 		this.outputSettings = outputSettings;
 		this.dateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(dateDisplayFormat);
 		this.translator = translator;
+		this.calendarConverter = (settings != null && settings.getCalendar() != null) ? settings.getCalendar() : 
+			AmpARFilter.getDefaultCalendar();
 	}
 
 	private String scaleAndFormatAmount(BigDecimal value) {
@@ -104,7 +116,18 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 
 	private String formatDate(LocalDate date) {
 		if (date != null) {
-			return dateFormatter.format(date);
+			LocalDate convertedDate = date;
+			if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
+				AmpFiscalCalendar ampFiscalCalendar = (AmpFiscalCalendar) calendarConverter;
+						
+				DateTime convDate = FiscalCalendarUtil.convertFromGregorianDate( 
+						Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), 
+						ampFiscalCalendar);
+				
+				convertedDate = LocalDate.of(convDate.getYear(), convDate.getMonthOfYear(), convDate.getDayOfMonth());
+			}
+			
+			return dateFormatter.format(convertedDate);
 		} else {
 			return "";
 		}

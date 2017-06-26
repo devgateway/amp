@@ -31,24 +31,23 @@ public class DateFilterUtils {
     public static FilterRule getDateRangeFilterRule(Date start, Date end, AmpFiscalCalendar toCalendar, 
             AmpFiscalCalendar fromCalendar) 
             throws AmpApiException {
-        /*
-         * once UI will be fully in sync with current Calendar (filter picker + keeping track for calendar of the dates)
-         * you can uncomment this part
-        Date gregStart = start == null ? null : FiscalCalendarUtil.toGregorianDate(start, 
-                fromCalendar != null ? fromCalendar : toCalendar);
-        Date gregEnd = end == null ? null : FiscalCalendarUtil.toGregorianDate(end, 
-                fromCalendar != null ? fromCalendar : toCalendar);
-        start = FiscalCalendarUtil.convertDate(fromCalendar, start, toCalendar);
-        end = FiscalCalendarUtil.convertDate(fromCalendar, end, toCalendar);
+
+        Date gregStart = start == null ? null : fromCalendar == null && toCalendar == null ? 
+        		start : FiscalCalendarUtil.toGregorianDate(start, fromCalendar != null ? fromCalendar : toCalendar);
+        Date gregEnd = end == null ? null : fromCalendar == null && toCalendar == null ?
+        		end : FiscalCalendarUtil.toGregorianDate(end, fromCalendar != null ? fromCalendar : toCalendar);
+        start = start == null ? null : FiscalCalendarUtil.convertDate(fromCalendar, start, toCalendar).toDate();
+        end = end == null ? null : FiscalCalendarUtil.convertDate(fromCalendar, end, toCalendar).toDate();
+        
         return getDatesRangeFilterRule(ElementType.DATE,
                 DateTimeUtil.toJulianDayNumber(gregStart), DateTimeUtil.toJulianDayNumber(gregEnd), 
                 DateTimeUtil.formatDateOrNull(start), DateTimeUtil.formatDateOrNull(end), false);
-        */
+        /**
         return getDatesRangeFilterRule(ElementType.DATE,
                 DateTimeUtil.toJulianDayNumber(start), DateTimeUtil.toJulianDayNumber(end),
                 DateTimeUtil.formatDateOrNull(start, ArConstants.DATE_FORMAT), 
                 DateTimeUtil.formatDateOrNull(end, ArConstants.DATE_FORMAT), false);
-
+        */
     }
     
     private static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, boolean bothLimits) 

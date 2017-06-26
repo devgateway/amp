@@ -2079,7 +2079,8 @@ public class ExportActivityToWord extends Action {
     /*
      * Component funding section
      */
-    private List<Table> getComponentTables (HttpServletRequest request,	ServletContext ampContext, EditActivityForm myForm)	throws BadElementException, WorkerException {
+    private List<Table> getComponentTables (final HttpServletRequest request, final ServletContext ampContext,
+                                            final EditActivityForm myForm)	throws BadElementException, WorkerException {
         final String[] componentCommitmentsFMfields = {
                 "/Activity Form/Components/Component/Components Commitments",
                 "/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount",
@@ -2095,7 +2096,8 @@ public class ExportActivityToWord extends Action {
                 "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount",
                 "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency",
                 "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date",
-                "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Organization",
+                "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component "
+                        + "Organization",
                 "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Second Reporting "
                         + "Organisation",
                 "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Description"
@@ -2250,26 +2252,26 @@ public class ExportActivityToWord extends Action {
     }
 
     private void createComponentDetails(
-            ExportSectionHelper eshCompFundingDetails,
+            final ExportSectionHelper eshCompFundingDetails,
             Collection<FundingDetail> listToIterate,
-            final String[] componentFMfields, ServletContext ampContext, HttpSession session) {
+            final String[] componentFMfields, final ServletContext ampContext, final HttpSession session) {
 
         for (FundingDetail compFnd : listToIterate) {
             ExportSectionHelperRowData sectionHelper = new ExportSectionHelperRowData(
                     FundingCalculationsHelper.getTransactionTypeLabel(compFnd.getTransactionType()),
                     null, null, true);
-            if (FeaturesUtil.isVisibleModule(componentFMfields[0])) {
+            if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_TYPE])) {
                 sectionHelper.addRowData(
                         compFnd.getAdjustmentTypeNameTrimmed(), true);
             }
-            if (FeaturesUtil.isVisibleModule(componentFMfields[1])) {
+            if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_AMOUNT])) {
                 String output = compFnd.getTransactionAmount().toString();
-                if (FeaturesUtil.isVisibleModule(componentFMfields[2])) {
+                if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_CURRENCY])) {
                     output += compFnd.getCurrencyCode();
                 }
                 sectionHelper.addRowData(output);
             }
-            if (FeaturesUtil.isVisibleModule(componentFMfields[3])) {
+            if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_TRANSCTION_DATE])) {
                 sectionHelper.addRowData(compFnd.getTransactionDate());
             }
 
@@ -2279,7 +2281,7 @@ public class ExportActivityToWord extends Action {
 
             eshCompFundingDetails.addRowData(sectionHelper);
 
-            if (FeaturesUtil.isVisibleModule(componentFMfields[4])) {
+            if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_ORGANISATION])) {
                 ExportSectionHelperRowData organisationHelper = new ExportSectionHelperRowData("",
                         null, null, false);
                 String orgString = compFnd.getComponentOrganisation() != null ? compFnd.getComponentOrganisation()
@@ -2288,14 +2290,14 @@ public class ExportActivityToWord extends Action {
                         orgString, compFnd));
             }
 
-            if (FeaturesUtil.isVisibleModule(componentFMfields[5])) {
+            if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_SECOND_REPORTING])) {
                 String orgString = compFnd.getSecondReportingOrganisation() != null ? compFnd
                         .getSecondReportingOrganisation().getName() : "";
                 eshCompFundingDetails.addRowData(getExportSectionHelperRowData("Second Reporting Organisation",
                         orgString, compFnd));
             }
 
-            if (FeaturesUtil.isVisibleModule(componentFMfields[6])) {
+            if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_DESCRIPTION])) {
                 ExportSectionHelperRowData organisationHelper = new ExportSectionHelperRowData(null,
                         null, null, true);
                 String compTransStr = compFnd.getComponentTransactionDescription() == null ? "" : compFnd
@@ -2309,8 +2311,8 @@ public class ExportActivityToWord extends Action {
 
     }
 
-    private ExportSectionHelperRowData getExportSectionHelperRowData(String title, String orgString, FundingDetail
-            compFnd) {
+    private ExportSectionHelperRowData getExportSectionHelperRowData(final String title, final String orgString,
+                                                                     final FundingDetail compFnd) {
         ExportSectionHelperRowData organisationHelper = new ExportSectionHelperRowData(null,
                 null, null, false);
         organisationHelper.addRowData(TranslatorWorker.translateText(title) + ": " + orgString);

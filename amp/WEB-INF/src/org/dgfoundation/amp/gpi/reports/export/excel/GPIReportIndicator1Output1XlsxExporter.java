@@ -34,7 +34,6 @@ import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
 import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
 import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.ReportElement;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -43,9 +42,11 @@ import org.digijava.kernel.translator.TranslatorWorker;
  *
  */
 public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporter {
-	
+
 	protected String remarkSheetName = "Donor Remarks";
-	
+
+	public static final int NUM_OF_REMARK_HEADERS = 3;
+
 	public final Map<String, String> HEADER_LABELS = Collections.unmodifiableMap(new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
@@ -177,8 +178,8 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 
 		remarkSheet.trackAllColumnsForAutoSizing();
 
-		for (int l = 0; l < 3; l++) {
-			remarkSheet.autoSizeColumn(l, true);
+		for (int i = 0; i < NUM_OF_REMARK_HEADERS; i++) {
+			remarkSheet.autoSizeColumn(i, true);
 		}
 	}
 

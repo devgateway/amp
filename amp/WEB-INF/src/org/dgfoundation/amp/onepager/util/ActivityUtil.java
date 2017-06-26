@@ -744,21 +744,21 @@ public class ActivityUtil {
 					tdd.setTranslatedNotes(translatedNoteMap);
 				}
 
-                if (temp.getType() != null) {
-                    tdd.setCmDocTypeId(temp.getType().getId());
-                }
-                if (temp.getDate() != null) {
-                    tdd.setDate(temp.getDate().getTime());
-                }
-                if (temp.getYear() != null) {
-                    tdd.setYearofPublication(temp.getYear());
-                }
-                if (temp.getWebLink() == null || temp.getWebLink().length() == 0) {
-                    if (temp.getFile() != null) {
-                        tdd.setFileSize(temp.getFile().getSize());
-                        tdd.setFormFile(generateFormFile(temp.getFile()));
-                    }
-                }
+				if (temp.getType() != null) {
+					tdd.setCmDocTypeId(temp.getType().getId());
+				}
+				if (temp.getDate() != null) {
+					tdd.setDate(temp.getDate().getTime());
+				}
+				if (temp.getYear() != null) {
+					tdd.setYearofPublication(temp.getYear());
+				}
+				if (temp.getWebLink() == null || temp.getWebLink().length() == 0) {
+					if (temp.getFile() != null) {
+						tdd.setFileSize(temp.getFile().getSize());
+						tdd.setFormFile(generateFormFile(temp.getFile()));
+					}
+				}
 
 				tdd.setWebLink(temp.getWebLink());
 
@@ -943,7 +943,7 @@ public class ActivityUtil {
                 .GPI_RESOURCES_DELETED_ITEMS);
 
 		// remove old resources
-		deleteGPINiResources(deletedResources);
+		deleteGPINiResources(a, deletedResources);
 
 		// insert new resources in the system
 		insertGPINiResources(a, newResources);
@@ -953,15 +953,32 @@ public class ActivityUtil {
 	 *
 	 * @param deletedResources
 	 */
-	private static void deleteGPINiResources(HashSet<AmpGPINiSurveyResponseDocument> deletedResources) {
+	private static void deleteGPINiResources(AmpActivityVersion a, HashSet<AmpGPINiSurveyResponseDocument>
+			deletedResources) {
 		if (deletedResources != null) {
 			for (AmpGPINiSurveyResponseDocument tmpDoc : deletedResources) {
 				AmpGPINiSurveyResponse surveyResponse = tmpDoc.getSurveyResponse();
-				Set<AmpGPINiSurveyResponseDocument> docsToBeRemoved = surveyResponse.getSupportingDocuments().stream()
-						.filter(d -> d.getUuid().equals(tmpDoc.getUuid()))
-						.collect(Collectors.toSet());
 
-				surveyResponse.getSupportingDocuments().removeAll(docsToBeRemoved);
+				for (AmpOrgRole tempOrgRole : a.getOrgrole()) {
+					if (tempOrgRole.getGpiNiSurvey() != null) {
+						for (AmpGPINiSurveyResponse tempGPINiSurveyResponse : tempOrgRole.getGpiNiSurvey()
+								.getResponses()) {
+							if (tempGPINiSurveyResponse.getOldKey() == surveyResponse
+									.getAmpGPINiSurveyResponseId()) {
+
+								Set<AmpGPINiSurveyResponseDocument> docsToBeRemoved = tempGPINiSurveyResponse
+										.getSupportingDocuments().stream()
+										.filter(d -> d.getUuid().equals(tmpDoc.getUuid()))
+										.collect(Collectors.toSet());
+
+								tempGPINiSurveyResponse.getSupportingDocuments().removeAll(docsToBeRemoved);
+
+							}
+
+						}
+
+					}
+				}
 			}
 		}
 	}

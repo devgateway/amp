@@ -149,9 +149,36 @@ public class ExportActivityToPDF extends Action {
     private static final String [] fundingEDDFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Currency"};
     private static final String [] fundingDisbOrdersFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Currency"};
 
-    private static final String [] componentCommitmentsFMfields={"/Activity Form/Components/Component/Components Commitments","/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount","/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency","/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"};
-    private static final String [] componentDisbursementsFMfields={"/Activity Form/Components/Component/Components Disbursements","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"};
-    private static final String [] componentExpendituresFMfields={"/Activity Form/Components/Component/Components Expenditures","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date"};
+    private static final String[] componentCommitmentsFMfields = {
+            "/Activity Form/Components/Component/Components Commitments",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Second Reporting "
+                    + "Organisation",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Description"
+    };
+    private static final String[] componentDisbursementsFMfields = {
+            "/Activity Form/Components/Component/Components Disbursements",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Organization",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Second Reporting "
+                    + "Organisation",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Description"
+    };
+    private static final String[] componentExpendituresFMfields = {
+            "/Activity Form/Components/Component/Components Expenditures",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Organization",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Second Reporting "
+                    + "Organisation",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Description"
+    };
     private static final Chunk BULLET_SYMBOL = new Chunk("\u2022");
 
     private static final String [] mtefProjectionFields = {
@@ -2574,7 +2601,6 @@ public class ExportActivityToPDF extends Action {
                             financeCell.setColspan(2);
                             PdfPTable financeTable=new PdfPTable(2);
                             financeTable.setWidths(new float[]{1f,4f});
-                            //String[] fmFields=new String[] {"Components Actual/Planned Commitments","Components Amount Commitments","Components Currency Commitments","Components Date Commitments"};
                             buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Commitment"),(List) comp.getCommitments(),componentCommitmentsFMfields,ampContext,session);
                             financeCell.addElement(financeTable);
                             componentsNestedTable.addCell(financeCell);
@@ -2586,7 +2612,6 @@ public class ExportActivityToPDF extends Action {
                             financeCell.setColspan(2);
                             PdfPTable financeTable=new PdfPTable(2);
                             financeTable.setWidths(new float[]{1f,4f});
-                            //String[] fmFields=new String[] {"Components Actual/Planned Disbursements","Components Amount Disbursements","Components Currency Disbursements","Components Date Disbursements"};
                             buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Disbursment"),(List) comp.getDisbursements(),componentDisbursementsFMfields,ampContext,session);
                             financeCell.addElement(financeTable);
                             componentsNestedTable.addCell(financeCell);
@@ -2598,7 +2623,6 @@ public class ExportActivityToPDF extends Action {
                             financeCell.setColspan(2);
                             PdfPTable financeTable=new PdfPTable(2);
                             financeTable.setWidths(new float[]{1f,4f});
-                            //final String[] fmFields=new String[] {"Components Actual/Planned Expenditures","Components Amount Expenditures","Components Currency Expenditures","Components Date Expenditures"};
                             buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Expenditures"),(List) comp.getExpenditures(),componentExpendituresFMfields,ampContext,session);
                             financeCell.addElement(financeTable);
                             componentsNestedTable.addCell(financeCell);
@@ -3601,7 +3625,7 @@ public class ExportActivityToPDF extends Action {
         nestedTable.addCell(cell);
 
         int visibleFmFieldsAmount=0;
-        for(int i=0;i<fmFields.length;i++){
+        for(int i=0;i<fmFields.length -3;i++){
             if(FeaturesUtil.isVisibleModule(fmFields[i])){
                 visibleFmFieldsAmount++;
             }
@@ -3609,7 +3633,7 @@ public class ExportActivityToPDF extends Action {
 
         if (visibleFmFieldsAmount > 0)
         {
-            PdfPTable fdTable=new PdfPTable(visibleFmFieldsAmount);
+            PdfPTable fdTable = new PdfPTable(visibleFmFieldsAmount);
             for (FundingDetail fd : listToIterate)
             {
                 if(FeaturesUtil.isVisibleModule(fmFields[0])){
@@ -3628,45 +3652,44 @@ public class ExportActivityToPDF extends Action {
                     fdTable.addCell(buildPdfCell(fd.getTransactionDate(), plainFont, 1));
                 }
 
-                fdTable.addCell(buildPdfCell(fd.getFormattedRate()!=null?fd.getFormattedRate():" ", plainFont, 1));
+                fdTable.addCell(buildPdfCell(fd.getFormattedRate() != null ? fd.getFormattedRate() : " ", plainFont,
+                        1));
 
-                if (fmFields[0].equals("/Activity Form/Components/Component/Components Commitments")) // dirty hack to detect "we are rendering Components Commitments, so we need to render comp-funding organisation and description
-                {
-                    String descriptionFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Description";
-                    String orgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization";
-                    String secondOrgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment "
-                            + "Table/Second Reporting Organisation";
-
-                    if (FeaturesUtil.isVisibleModule(orgNameFm) && (fd.getComponentOrganisation() != null))
-                    {
-                        fdTable.completeRow();
-                        fdTable.addCell(buildPdfCell("", null, 1));
-                        fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Organization"), titleFont, 1));
-                        String orgNameTxt = fd.getComponentOrganisation() == null ? "" : fd.getComponentOrganisation().getName();
-                        fdTable.addCell(buildPdfCell(orgNameTxt, null, fdTable.getNumberOfColumns() - 2));
-                        fdTable.completeRow();
-                    }
-
-                    if (FeaturesUtil.isVisibleModule(secondOrgNameFm) && (fd.getSecondReportingOrganisation() != null))
-                    {
-                        fdTable.completeRow();
-                        fdTable.addCell(buildPdfCell("", null, 1));
-                        fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Second Reporting Organisation"), titleFont, 1));
-                        String orgNameTxt = fd.getSecondReportingOrganisation() == null ? "" : fd.getSecondReportingOrganisation().getName();
-                        fdTable.addCell(buildPdfCell(orgNameTxt, null, fdTable.getNumberOfColumns() - 2));
-                        fdTable.completeRow();
-                    }
-
-                    if (FeaturesUtil.isVisibleModule(descriptionFm) && (fd.getComponentTransactionDescription() != null) && (!fd.getComponentTransactionDescription().isEmpty()))
-                    {
-                        fdTable.completeRow();
-                        fdTable.addCell(buildPdfCell("", null, 1));
-                        fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Transaction Description"), titleFont, 1));
-                        fdTable.addCell(buildPdfCell(fd.getComponentTransactionDescription(), null, fdTable.getNumberOfColumns() - 2));
-                        fdTable.completeRow();
-                    }
-
+                if (FeaturesUtil.isVisibleModule(fmFields[4]) && (fd.getComponentOrganisation() != null)) {
+                    fdTable.completeRow();
+                    fdTable.addCell(buildPdfCell("", null, 1));
+                    //fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Organization"), titleFont, 1));
+                    String orgNameTxt = fd.getComponentOrganisation() == null ? "" : fd.getComponentOrganisation()
+                            .getName();
+                    fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Organization") + ":" + orgNameTxt,
+                            null,
+                            fdTable.getNumberOfColumns() - 1));
+                    fdTable.completeRow();
                 }
+
+                if (FeaturesUtil.isVisibleModule(fmFields[5]) && (fd.getSecondReportingOrganisation() != null)) {
+                    fdTable.completeRow();
+                    fdTable.addCell(buildPdfCell("", null, 1));
+                    //fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Second Reporting Organisation"),
+                    //        titleFont, 1));
+                    String orgNameTxt = fd.getSecondReportingOrganisation() == null ? "" : fd
+                            .getSecondReportingOrganisation().getName();
+                    fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Second Reporting Organisation") +
+                            ":" + orgNameTxt, null, fdTable.getNumberOfColumns() - 1));
+                    fdTable.completeRow();
+                }
+
+                if (FeaturesUtil.isVisibleModule(fmFields[6]) && (fd.getComponentTransactionDescription() != null)
+                        && (!fd.getComponentTransactionDescription().isEmpty())) {
+                    fdTable.completeRow();
+                    fdTable.addCell(buildPdfCell("", null, 1));
+                    //fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Transaction Description"),
+                    //        titleFont, 1));
+                    fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Transaction Description") + ":" + fd.getComponentTransactionDescription(), null, fdTable
+                            .getNumberOfColumns() - 1));
+                    fdTable.completeRow();
+                }
+
             }
             nestedTable.addCell(fdTable);
         }

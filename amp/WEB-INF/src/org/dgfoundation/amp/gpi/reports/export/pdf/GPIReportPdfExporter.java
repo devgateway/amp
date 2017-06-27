@@ -13,6 +13,7 @@ import org.dgfoundation.amp.gpi.reports.export.GPIReportExporter;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
+import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -154,12 +155,12 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 	}
 
 	protected void renderReportTableData(GPIReport report, PdfPTable table) {
-		Font bf11 = new Font(Font.HELVETICA, 10);
+		Font bf10 = new Font(Font.HELVETICA, 10);
 		Color bkgColor = Color.WHITE;
 
 		report.getPage().getContents().forEach(row -> {
 			report.getPage().getHeaders().forEach(col -> {
-				insertCell(table, row.get(col), getCellAlignment(col.originalColumnName), 1, bf11, bkgColor);
+				insertCell(table, row.get(col), getCellAlignment(col.originalColumnName), 1, bf10, bkgColor);
 			});
 		});
 	}
@@ -188,6 +189,10 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 	}
 
 	protected int calculateWidth() {
+		if (relativeWidths != null) {
+			return relativeWidths.length;
+		}
+		
 		return report.getPage().getHeaders().size();
 	}
 
@@ -198,9 +203,9 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 		}
 		
 		if (resultWidth >= 15) {
-			size = PageSize.A3;
+			size = PageSize.A3.rotate();
 		}
-
+		
 		return size;
 	}
 	
@@ -208,25 +213,45 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 		insertCell(table, text, align, colspan, 1, font, bkgColor, 0);
 	}
 	
-	protected void insertCell(PdfPTable table, String text, int align, int colspan, int rowsPan, Font font,
+	protected void insertCell(PdfPTable table, String text, int align, int colspan, int rowspan, Font font,
 			Color bkgColor) {
-		insertCell(table, text, align, colspan, rowsPan, font, bkgColor, 0);
+		insertCell(table, text, align, colspan, rowspan, font, bkgColor, 0);
 	}
-	
 	
 	protected void insertCell(PdfPTable table, String text, int align, int colspan, int rowspan, Font font,
 			Color bkgColor, float height) {
+		insertCell(table, text, align, Element.ALIGN_MIDDLE, colspan, rowspan, font, bkgColor, 0);
+	}
+	
+	protected void insertCell(PdfPTable table, String text, int align, int valign, int colspan, int rowspan, Font font,
+			Color bkgColor, float height) {
 		
-		PdfPCell cell = new PdfPCell(new Phrase(text.trim(), font));
+		height = text.trim().equalsIgnoreCase("") ? 10f : height;
+		Phrase phrase = new Phrase(text.trim(), font);
+		
+		insertCell(table, phrase, align, Element.ALIGN_MIDDLE, colspan, rowspan, bkgColor, height);
+	}
+	
+	protected void insertUrlCell(PdfPTable table, String text, String url, 
+			int align, int valign, int colspan, int rowspan, Font font, Color bkgColor) {
+		
+		Phrase phrase = new Phrase("", font);
+		Chunk chunk = new Chunk(text.trim());
+		chunk.setAnchor(url);
+		phrase.add(chunk);
+		
+		insertCell(table, phrase, align, Element.ALIGN_MIDDLE, colspan, rowspan, bkgColor, 0);
+	}
+	
+	protected void insertCell(PdfPTable table, Phrase phrase, int align, int valign, int colspan, int rowspan,
+			Color bkgColor, float height) {
+		
+		PdfPCell cell = new PdfPCell(phrase);
 		cell.setHorizontalAlignment(align);
-		cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+		cell.setVerticalAlignment(valign);
 		cell.setColspan(colspan);
 		cell.setRowspan(rowspan);
 		cell.setBackgroundColor(bkgColor);
-		
-		if (text.trim().equalsIgnoreCase("")) {
-			cell.setMinimumHeight(10f);
-		}
 		
 		if (height > 0) {
 			cell.setMinimumHeight(height);

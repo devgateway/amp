@@ -41,7 +41,7 @@ public class GPIReportIndicator5bPdfExporter extends GPIReportPdfExporter {
 				Phrase summaryPhrase = new Phrase(cellValue, bfBold14);
 				PdfPCell summaryCell = generatePdfCell(summaryPhrase, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE, 1, 1,
 						bkgColor);
-				insertCell(table, summaryCell, 30f);
+				insertCell(table, summaryCell, SUMMARY_ROW_HEIGHT);
 			}
 		}
 

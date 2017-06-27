@@ -31,11 +31,12 @@ import com.lowagie.text.pdf.PdfWriter;
  */
 public class GPIReportPdfExporter implements GPIReportExporter {
 	
-	final static float FONT_SIZE_TITLE = 20f;
-	final static float FONT_SIZE_SETTINGS = 10f;
-	final static float FONT_SIZE_SUMMARY = 13f;
-	
-	final static float MINIMUM_ROW_HEIGHT = 10f;
+	static final float FONT_SIZE_TITLE = 20f;
+	static final float FONT_SIZE_SETTINGS = 10f;
+	static final float FONT_SIZE_SUMMARY = 13f;
+
+	static final float MINIMUM_ROW_HEIGHT = 10f;
+	static final float SUMMARY_ROW_HEIGHT = 30f;
 
 	protected GPIReport report;
 	

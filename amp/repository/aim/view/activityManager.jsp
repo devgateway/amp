@@ -50,7 +50,7 @@
       			<digi:context name="unfreezeAction" property="context/module/moduleinstance/activityManager.do?action=unfreeze"/>
   				document.aimActivityForm.action = "<%=unfreezeAction %>&activityIds="+activityIds+"";
 				document.aimActivityForm.target = "_self";
-				document.aimActivityForm.submit();	
+				document.aimActivityForm.submit();				
  			}
  		}else{
  			var translation = "<digi:trn key="aim:activityselectonetounfreeze">Please select at least one activity to unfreeze</digi:trn>";
@@ -261,13 +261,13 @@
 															<digi:trn key="aim:resultsAll">All</digi:trn>
 														</html:option>
 													</html:select></td>
-													<td width="120"><digi:trn key="aim:dataFreezeFilter">Data Freeze Filter</digi:trn>&nbsp;
-													<td>
+													<td width="200"><digi:trn key="aim:dataFreezeFilter">Data Freeze Filter</digi:trn>&nbsp;													
 													<html:select property="dataFreezeFilter" styleClass="inp-text" onchange="return searchActivity()">
 	                                                    <html:option value="ALL"><digi:trn key="aim:all">All</digi:trn></html:option>
 	                                                    <html:option value="FROZEN"><digi:trn key="aim:frozen">Frozen</digi:trn></html:option>
 	                                                    <html:option value="UNFROZEN"><digi:trn key="aim:unfrozen">Unfrozen</digi:trn></html:option>	
                                                     </html:select>
+                                                    &nbsp;
 													</td>
 													<td width="50"><c:set var="trnResetBtn">
 														<digi:trn key="aim:btnReset"> Reset </digi:trn>
@@ -308,7 +308,13 @@
 																<c:set target="${urlParamsSort}" property="action"
 																	value="sort" />
 																<td width="9" height="15" class="inside ignore">&nbsp;</td>
-																<td></td>
+																<td style="color:#376091;">
+																<b>
+																<digi:trn key="aim:FreezingColorCol">
+	                                                                            	Frozen/Unfrozen
+	                                                                            </digi:trn>
+	                                                                            </b>
+																</td>
 																<td class="inside" >
 																<a href="javascript:sortSubmit('activityName')">
 																<b> <digi:trn key="aim:ActivityNameCol">
@@ -401,7 +407,7 @@
 																		</td>
 																	</logic:empty>
 																	<td width="100" class="inside">
-																	 <div class="<%= activities.getFrozen() ? "frozen" : "unfrozen" %>" title="<digi:trn key="aim:Frozen">Frozen</digi:trn>"> </div>
+																	 <div class="<%= activities.getFrozen() ? "frozen" : "unfrozen" %>" > </div>
 																	</td>
 																	<td class="inside"><bean:write name="activities" property="name" />
 																	</td>
@@ -443,6 +449,26 @@
 											
 											</td>
 											
+										</tr>
+										<tr>
+										<td>						
+										
+										<div class="legend-item">
+										  <div class="frozen"> </div>
+										  <div style= "float:left;"><digi:trn key="aim:frozen">Frozen</digi:trn></div>
+										</div>
+										
+										<div class="legend-item">
+										  <div class="unfrozen"> </div>
+										  <div style= "float:left;"><digi:trn key="aim:unfrozen">Unfrozen</digi:trn></div>
+										</div>
+										
+										</td>
+										</tr>
+										<tr>
+										<td> 
+									    
+										</td>
 										</tr>
 										
 										<tr bgcolor="#ffffff">

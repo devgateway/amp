@@ -1186,10 +1186,20 @@ div.footer {
 	width:15px;
 	height:15px;
 	background-color:red;
+	float: left;
+	margin-right:5px;
 }
 
 .unfrozen{
 	width:15px;
 	height:15px;
 	background-color:green;
+	float: left;
+	margin-right:5px;
+}
+
+.legend-item {
+	float:left;width:20%; 
+	margin-top:10px;
+	clear:both;
 }

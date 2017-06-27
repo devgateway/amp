@@ -216,39 +216,47 @@ public final class DataFreezeService {
 
     /**
      * Check if activity is editable
+     *  - Checks if is frozen by any of the data freeze events
+     *  - Checks if is excluded from freezing
      * 
      * @param activityId
      * @param ampTeamMemberId
      * @return
      */
     public static boolean isEditable(Long activityId, Long ampTeamMemberId) {
-
+        boolean result = true;
         // check if user is exempt for data freezing
         AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(ampTeamMemberId);
         if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing())) {
-            return true;
+            return result;
         }
 
         // check if activity is frozen by any of the enabled data freeze events
         List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil
                 .getEnabledDataFreezeEvents(AmpDataFreezeSettings.FreezeOptions.ENTIRE_ACTIVITY);
-        for (AmpDataFreezeSettings event : dataFreezeEvents) {            
-            GeneratedReport report = getFrozenActivitiesReport(event);
-            Set<Long> activityIds = getActivityIds(report);
-            Date todaysDate = getTodaysDate();
-            boolean isGracePeriod = isGracePeriod(event, todaysDate);
-            boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
+        for (AmpDataFreezeSettings event : dataFreezeEvents) {   
+            AmpDataFreezeExclusion ampDataFreezeExclusion = DataFreezeUtil.findDataFreezeExclusion(activityId, event.getAmpDataFreezeSettingsId());
+            if (ampDataFreezeExclusion == null){
+                GeneratedReport report = getFrozenActivitiesReport(event);
+                Set<Long> activityIds = getActivityIds(report);
+                Date todaysDate = getTodaysDate();
+                boolean isGracePeriod = isGracePeriod(event, todaysDate);
+                boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
 
-            // if activity is in list of frozen activities and current date does
-            // not fall in open period and current date is not in grace period,
-            // then disable edit i.e return false
-            if (activityIds.contains(activityId) && Boolean.FALSE.equals(isOpenPeriod)
-                    && Boolean.FALSE.equals(isGracePeriod)) {
-                return false;
+                // if activity is in list of frozen activities and current date does
+                // not fall in open period and current date is not in grace period,
+                // then disable edit i.e return false
+                if (activityIds.contains(activityId) && Boolean.FALSE.equals(isOpenPeriod)
+                        && Boolean.FALSE.equals(isGracePeriod)) {
+                    result = false;
+                }
+            } else {
+                result = true;
             }
+            
         }
 
-        return true;
+        return result;
     }
 
     /**
@@ -274,22 +282,28 @@ public final class DataFreezeService {
         List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil
                 .getEnabledDataFreezeEvents(AmpDataFreezeSettings.FreezeOptions.FUNDING);
         for (AmpDataFreezeSettings event : dataFreezeEvents) {
-            GeneratedReport report = getFrozenActivitiesReport(event);
-            Set<Long> activityIds = getActivityIds(report);                                                              
-            Date todaysDate = getTodaysDate();
-            boolean isGracePeriod = isGracePeriod(event, todaysDate);
-            boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
-            
-            for (Date transactionDate : transactionDates) {                
-                // if activity is in list of frozen activities and current date does
-                // not fall in open period and current date is not in grace period,
-                // then disable edit i.e return false
-                if (activityIds.contains(activityId) && Boolean.FALSE.equals(isOpenPeriod)
-                        && transactionDate.before(event.getFreezingDate()) && Boolean.FALSE.equals(isGracePeriod)) {
-                    editable.put(transactionDate, false);
+            AmpDataFreezeExclusion ampDataFreezeExclusion = DataFreezeUtil.findDataFreezeExclusion(activityId, event.getAmpDataFreezeSettingsId());
+            if (ampDataFreezeExclusion == null){
+                GeneratedReport report = getFrozenActivitiesReport(event);
+                Set<Long> activityIds = getActivityIds(report);                                                              
+                Date todaysDate = getTodaysDate();
+                boolean isGracePeriod = isGracePeriod(event, todaysDate);
+                boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
+                
+                for (Date transactionDate : transactionDates) {                
+                    // if activity is in list of frozen activities and current date does
+                    // not fall in open period and current date is not in grace period,
+                    // then disable edit i.e return false
+                    if (activityIds.contains(activityId) && Boolean.FALSE.equals(isOpenPeriod)
+                            && transactionDate.before(event.getFreezingDate()) && Boolean.FALSE.equals(isGracePeriod)) {
+                        editable.put(transactionDate, false);
+                    }
+                }
+            } else {
+                for (Date transactionDate : transactionDates) {
+                    editable.put(transactionDate, true);
                 }
             }
-
         }
 
         return editable;

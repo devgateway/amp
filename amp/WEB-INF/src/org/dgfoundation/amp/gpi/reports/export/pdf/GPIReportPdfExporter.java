@@ -13,7 +13,6 @@ import org.dgfoundation.amp.gpi.reports.export.GPIReportExporter;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
-import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -31,6 +30,12 @@ import com.lowagie.text.pdf.PdfWriter;
  *
  */
 public class GPIReportPdfExporter implements GPIReportExporter {
+	
+	final static float FONT_SIZE_TITLE = 20f;
+	final static float FONT_SIZE_SETTINGS = 10f;
+	final static float FONT_SIZE_SUMMARY = 13f;
+	
+	final static float MINIMUM_ROW_HEIGHT = 10f;
 
 	protected GPIReport report;
 	
@@ -86,14 +91,14 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 	}
 	
 	public void renderReportTitle(GPIReport report, Paragraph body) {
-		float fntSize = 20f;
+		float fntSize = FONT_SIZE_TITLE;
 		
 		Paragraph titleParagraph = new Paragraph(reportTitle, FontFactory.getFont(FontFactory.HELVETICA_BOLD, fntSize));
 		body.add(titleParagraph);
 	}
 	
 	public void renderReportSettings(GPIReport report, Paragraph body) {
-		Font bf10 = new Font(Font.HELVETICA, 10);
+		Font bf10 = new Font(Font.HELVETICA, FONT_SIZE_SETTINGS);
 		
 		String units = report.getSpec().getSettings().getUnitsOption().userMessage;
 		String currency = report.getSettings().getCurrencyCode();
@@ -112,7 +117,7 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 		// set table width a percentage of the page width
 		table.setWidthPercentage(100f);
 		
-		Font bfBold14 = new Font(Font.HELVETICA, 13, Font.BOLD, new Color(0, 0, 0));
+		Font bfBold14 = new Font(Font.HELVETICA, FONT_SIZE_SUMMARY, Font.BOLD, new Color(0, 0, 0));
 		Color bkgColor = Color.ORANGE;
 
 		for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
@@ -210,54 +215,37 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 	}
 	
 	protected void insertCell(PdfPTable table, String text, int align, int colspan, Font font, Color bkgColor) {
-		insertCell(table, text, align, colspan, 1, font, bkgColor, 0);
+		insertCell(table, text, align, colspan, 1, font, bkgColor);
 	}
 	
 	protected void insertCell(PdfPTable table, String text, int align, int colspan, int rowspan, Font font,
 			Color bkgColor) {
-		insertCell(table, text, align, colspan, rowspan, font, bkgColor, 0);
-	}
-	
-	protected void insertCell(PdfPTable table, String text, int align, int colspan, int rowspan, Font font,
-			Color bkgColor, float height) {
-		insertCell(table, text, align, Element.ALIGN_MIDDLE, colspan, rowspan, font, bkgColor, 0);
-	}
-	
-	protected void insertCell(PdfPTable table, String text, int align, int valign, int colspan, int rowspan, Font font,
-			Color bkgColor, float height) {
 		
-		height = text.trim().equalsIgnoreCase("") ? 10f : height;
 		Phrase phrase = new Phrase(text.trim(), font);
+		PdfPCell cell = generatePdfCell(phrase, align, Element.ALIGN_MIDDLE, colspan, rowspan, bkgColor);
 		
-		insertCell(table, phrase, align, Element.ALIGN_MIDDLE, colspan, rowspan, bkgColor, height);
+		insertCell(table, cell, MINIMUM_ROW_HEIGHT);
 	}
 	
-	protected void insertUrlCell(PdfPTable table, String text, String url, 
-			int align, int valign, int colspan, int rowspan, Font font, Color bkgColor) {
-		
-		Phrase phrase = new Phrase("", font);
-		Chunk chunk = new Chunk(text.trim());
-		chunk.setAnchor(url);
-		phrase.add(chunk);
-		
-		insertCell(table, phrase, align, Element.ALIGN_MIDDLE, colspan, rowspan, bkgColor, 0);
-	}
-	
-	protected void insertCell(PdfPTable table, Phrase phrase, int align, int valign, int colspan, int rowspan,
-			Color bkgColor, float height) {
-		
-		PdfPCell cell = new PdfPCell(phrase);
-		cell.setHorizontalAlignment(align);
-		cell.setVerticalAlignment(valign);
-		cell.setColspan(colspan);
-		cell.setRowspan(rowspan);
-		cell.setBackgroundColor(bkgColor);
+	protected void insertCell(PdfPTable table, PdfPCell cell, float height) {
 		
 		if (height > 0) {
 			cell.setMinimumHeight(height);
 		}
 
 		table.addCell(cell);
+	}
+	
+	protected PdfPCell generatePdfCell(Phrase phrase, int align, int valign, int colspan, int rowspan, Color bkgColor) {
+
+		PdfPCell cell = new PdfPCell(phrase);
+		cell.setHorizontalAlignment(align);
+		cell.setVerticalAlignment(valign);
+		cell.setColspan(colspan);
+		cell.setRowspan(rowspan);
+		cell.setBackgroundColor(bkgColor);
+
+		return cell;
 	}
 	
 	public int getCellAlignment(String columnName) {

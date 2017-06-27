@@ -22,8 +22,7 @@ public interface GPIReportExporter {
 	public static final String COLUMN_QUESTION = "Question";
 	public static final String COLUMN_VALUE = "Value";
 	
-	public static final Map<String, String> INDICATOR_5A_COLUMN_LABELS = 
-			Collections.unmodifiableMap(new HashMap<String, String>() {
+	Map<String, String> INDICATOR_5A_COLUMN_LABELS = Collections.unmodifiableMap(new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
 			put(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS,
@@ -37,7 +36,7 @@ public interface GPIReportExporter {
 		}
 	});
 	
-	public final Map<String, String> INDICATOR_1_1_COLUMN_LABELS = Collections.unmodifiableMap(new HashMap<String, String>() {
+	Map<String, String> INDICATOR_1_1_COLUMN_LABELS = Collections.unmodifiableMap(new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
 			put(GPIReportConstants.COLUMN_YEAR, "Year");
@@ -72,8 +71,9 @@ public interface GPIReportExporter {
 					+ "\n(if there is one planned)"));
 			put(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT, "Extent of use of country owned result "
 					+ "framework or similar planning document\nCalculation = Q8/Q7");
-			put(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES, "Extent of use of Gov’t sources and M&E systems"
-					+ " to track project progress\nCalculation = Q9/Q7");
+					put(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES,
+							"Extent of use of Gov’t sources and M&E systems"
+							+ " to track project progress\nCalculation = Q9/Q7");
 			put(GPIReportConstants.GPI_1_Q11, "Supportive Documents");
 			put(GPIReportConstants.GPI_1_Q11a, "Electronic link to project document");
 			put(GPIReportConstants.GPI_1_Q11b, "Electronic link to gov. planning doc. or results framework "
@@ -84,7 +84,7 @@ public interface GPIReportExporter {
 		}
 	});
 	
-	public final Map<String, String> INDICATOR_1_1_SUMMARY_LABELS = Collections.unmodifiableMap(new HashMap<String, String>() {
+	Map<String, String> INDICATOR_1_1_SUMMARY_LABELS = Collections.unmodifiableMap(new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
 			put(GPIReportConstants.GPI_1_Q1, "Overall extent of use existing CRFs");

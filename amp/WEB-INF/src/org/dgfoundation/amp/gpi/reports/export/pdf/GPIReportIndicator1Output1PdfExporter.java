@@ -25,6 +25,7 @@ import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 
 /**
@@ -33,8 +34,8 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter {
 
-	public final static int SUMMARY_TABLE_SIZE = 4;
-	public final static int PRIMARY_SECTORS_SIZE = 3;
+	public static final int SUMMARY_TABLE_SIZE = 4;
+	public static final int PRIMARY_SECTORS_SIZE = 3;
 
 	public GPIReportIndicator1Output1PdfExporter() {
 		relativeWidths = new float[] { 2f, 5f, 5f, 3f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 3f,
@@ -77,7 +78,9 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 
 		String cellValue = String.format("%s\n%s", report.getSummary().get(columns.get(columnName)),
 				INDICATOR_1_1_SUMMARY_LABELS.get(columnName));
-		insertCell(table, cellValue, Element.ALIGN_LEFT, Element.ALIGN_TOP, 1, 1, bfBold14, bkgColor, 30f);
+		PdfPCell summaryCell = generatePdfCell(new Phrase(cellValue, bfBold14), Element.ALIGN_LEFT, Element.ALIGN_TOP,
+				1, 1, bkgColor);
+		insertCell(table, summaryCell, 30f);
 	}
 
 	@Override
@@ -121,7 +124,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 				Element.ALIGN_CENTER, 1, 1, bfBold11, bkgColor);
 		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q11), Element.ALIGN_CENTER, 3, 1,
 				bfBold11, bkgColor);
-		
+
 		// insertCell(table,
 		// INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q11a),
 		// Element.ALIGN_CENTER, 1, 1, bfBold11, bkgColor);
@@ -206,7 +209,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 
 	private void insertSupportiveDocumentsCells(PdfPTable table, Color bkgColor,
 			Map<String, GPIReportOutputColumn> columns, Map<GPIReportOutputColumn, String> rowData) {
-		
+
 		Font urlFont = new Font(Font.HELVETICA, 7);
 		urlFont.setColor(Color.BLUE);
 		urlFont.setStyle(Font.UNDERLINE);
@@ -238,21 +241,24 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 				cellPhrase.add(chunk);
 			}
 		}
+		
+		PdfPCell urlCell = generatePdfCell(cellPhrase, getCellAlignment(columnName), Element.ALIGN_MIDDLE, 1, 1,
+				bkgColor);
 
-		insertCell(table, cellPhrase, getCellAlignment(columnName), Element.ALIGN_MIDDLE, 1, 1, bkgColor, 0);
+		insertCell(table, urlCell, 0);
 	}
 
 	@Override
 	public int getCellAlignment(String columnName) {
 		switch (columnName) {
-			case GPIReportConstants.GPI_1_Q1:
-				return Element.ALIGN_RIGHT;
-			case GPIReportConstants.GPI_1_Q11a:
-			case GPIReportConstants.GPI_1_Q11b:
-			case GPIReportConstants.GPI_1_Q11c:
-				return Element.ALIGN_LEFT;
-			default:
-				return Element.ALIGN_CENTER;
+		case GPIReportConstants.GPI_1_Q1:
+			return Element.ALIGN_RIGHT;
+		case GPIReportConstants.GPI_1_Q11a:
+		case GPIReportConstants.GPI_1_Q11b:
+		case GPIReportConstants.GPI_1_Q11c:
+			return Element.ALIGN_LEFT;
+		default:
+			return Element.ALIGN_CENTER;
 		}
 	}
 }

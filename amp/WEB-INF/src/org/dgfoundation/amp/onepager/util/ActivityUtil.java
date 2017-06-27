@@ -1025,14 +1025,7 @@ public class ActivityUtil {
 						if (tempOrgRole.getGpiNiSurvey() != null) {
 							for (AmpGPINiSurveyResponse tempGPINiSurveyResponse : tempOrgRole.getGpiNiSurvey()
 									.getResponses()) {
-                                if (tempGPINiSurveyResponse.getOldKey() == surveyResponse
-                                        .getAmpGPINiSurveyResponseId()
-                                        && (tempGPINiSurveyResponse.getAmpGPINiSurvey().getAmpOrgRole()
-                                        .getOrganisation()
-                                        .getAmpOrgId()
-                                        == surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation()
-                                        .getAmpOrgId() && tempGPINiSurveyResponse.getAmpGPINiQuestion()
-                                        .getCode().equals(surveyResponse.getAmpGPINiQuestion().getCode()))
+                                if (shouldResponseToBeUpdated(surveyResponse, tempGPINiSurveyResponse)
                                         ) {
                                     responseDocument.setSurveyResponse(tempGPINiSurveyResponse);
 
@@ -1058,6 +1051,15 @@ public class ActivityUtil {
 			}
 		}
 	}
+
+    private static boolean shouldResponseToBeUpdated(AmpGPINiSurveyResponse surveyResponse, AmpGPINiSurveyResponse
+            tempGPINiSurveyResponse) {
+        return tempGPINiSurveyResponse.getOldKey() == surveyResponse.getAmpGPINiSurveyResponseId()
+                && (tempGPINiSurveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
+                == surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
+                && tempGPINiSurveyResponse.getAmpGPINiQuestion().getCode()
+                .equals(surveyResponse.getAmpGPINiQuestion().getCode()));
+    }
 
 	private static void saveIndicators(AmpActivityVersion a, Session session) throws Exception {
 		if (a.getAmpActivityId() != null){

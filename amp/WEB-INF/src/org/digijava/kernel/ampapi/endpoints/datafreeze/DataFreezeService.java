@@ -5,6 +5,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.AmpDateUtils;
@@ -17,10 +18,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -229,9 +232,9 @@ public final class DataFreezeService {
         // check if activity is frozen by any of the enabled data freeze events
         List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil
                 .getEnabledDataFreezeEvents(AmpDataFreezeSettings.FreezeOptions.ENTIRE_ACTIVITY);
-        for (AmpDataFreezeSettings event : dataFreezeEvents) {
+        for (AmpDataFreezeSettings event : dataFreezeEvents) {            
             GeneratedReport report = getFrozenActivitiesReport(event);
-            List<Long> activityIds = getActivityIds(report);
+            Set<Long> activityIds = getActivityIds(report);
             Date todaysDate = getTodaysDate();
             boolean isGracePeriod = isGracePeriod(event, todaysDate);
             boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
@@ -272,7 +275,7 @@ public final class DataFreezeService {
                 .getEnabledDataFreezeEvents(AmpDataFreezeSettings.FreezeOptions.FUNDING);
         for (AmpDataFreezeSettings event : dataFreezeEvents) {
             GeneratedReport report = getFrozenActivitiesReport(event);
-            List<Long> activityIds = getActivityIds(report);                                                              
+            Set<Long> activityIds = getActivityIds(report);                                                              
             Date todaysDate = getTodaysDate();
             boolean isGracePeriod = isGracePeriod(event, todaysDate);
             boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
@@ -292,8 +295,8 @@ public final class DataFreezeService {
         return editable;
     }
 
-    public static List<Long> getActivityIds(GeneratedReport report) {
-        List<Long> ids = new ArrayList<>();
+    public static Set<Long> getActivityIds(GeneratedReport report) {
+        Set<Long> ids = new HashSet<>();
         ReportOutputColumn ampIdCol = report.leafHeaders.get(0);
         for (Iterator<ReportArea> iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
             Map<ReportOutputColumn, ReportCell> contents = iterator.next().getContents();
@@ -326,5 +329,40 @@ public final class DataFreezeService {
         today.set(Calendar.SECOND, 0);
         today.set(Calendar.MILLISECOND, 0);
         return today.getTime();
+    }
+    
+    public static Map<Long,Set<Long>>getFreezeActivityIdEventIdsMap(){        
+        Map<Long, Set<Long>> activityIdEventsIdsMap = new HashMap<>();
+        List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil.getEnabledDataFreezeEvents(null);
+        List<AmpDataFreezeExclusion> exclusions = DataFreezeUtil.findAllDataFreezeExclusion();
+        for (AmpDataFreezeSettings event : dataFreezeEvents) {
+            GeneratedReport report = getFrozenActivitiesReport(event);
+            Set<Long> activityIds = getActivityIds(report);
+
+            for (Long activityId : activityIds) {
+                AmpDataFreezeExclusion ampDataFreezeExclusion = exclusions.stream()
+                        .filter(exclusion -> exclusion.getDataFreezeEvent().getAmpDataFreezeSettingsId().equals(event
+                                .getAmpDataFreezeSettingsId())
+                                && exclusion.getActivity().getAmpActivityId().equals(activityId))
+                        .findAny().orElse(null);            
+                
+                if (ampDataFreezeExclusion == null) {
+                    Set<Long> events = activityIdEventsIdsMap.get(activityId);
+                    if (events == null) {
+                        events = new HashSet<>();
+                    }
+
+                    events.add(event.getAmpDataFreezeSettingsId());
+                    activityIdEventsIdsMap.put(activityId, events);
+                }
+
+            }
+        }
+        
+        return activityIdEventsIdsMap;
+    }
+    
+    public static void unfreezeActivities(Map<Long,Set<Long>> activityIdEventsIdsMap){
+        DataFreezeUtil.unfreezeActivities(activityIdEventsIdsMap);
     }
 }

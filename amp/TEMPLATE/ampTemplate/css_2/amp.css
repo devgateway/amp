@@ -1181,3 +1181,15 @@ div.footer {
 .img-padding {
     padding-right: 5px;
 }
+
+.frozen{
+	width:15px;
+	height:15px;
+	background-color:red;
+}
+
+.unfrozen{
+	width:15px;
+	height:15px;
+	background-color:green;
+}

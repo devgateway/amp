@@ -18,7 +18,6 @@ import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.digijava.module.aim.util.DbUtil;
 import org.junit.Test;
 
 /**
@@ -680,35 +679,6 @@ public abstract class FilteringSanityChecks extends ReportingTestCase {
 		ReportSpecificationImpl spec = buildSpecForFiltering("flat filter by created_on range negated", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ACTIVITY_CREATED_ON), null, 
 			new ReportElement(new ReportColumn(ColumnConstants.ACTIVITY_CREATED_ON)), new FilterRule("2456658", "2456809", true, true, false)); // 2014/jan/1 - 2014/jun/1
-		
-		runNiTestCase(spec, "en", acts, cor);
-	}
-	
-	@Test
-	public void testFilterByActivityCreatedOnRangeEthCalendar() {
-		NiReportModel cor = new NiReportModel("flat filter by created_on range in eth calendar")
-				.withHeaders(Arrays.asList(
-						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 6))",
-						"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Activity Created On: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 2))",
-						"(2006: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
-						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))"))
-					.withWarnings(Arrays.asList())
-					.withBody(      new ReportAreaForTests(null)
-				      .withContents("Project Title", "", "Activity Created On", "", "Funding-2006-Actual Commitments", "12,292,000", "Funding-2006-Actual Disbursements", "450,000", "Totals-Actual Commitments", "12,292,000", "Totals-Actual Disbursements", "450,000")
-				      .withChildren(
-				        new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Activity Created On", "14/06/2006", "Funding-2006-Actual Commitments", "75,000", "Totals-Actual Commitments", "75,000"),
-				        new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Activity Created On", "18/07/2006", "Funding-2006-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000"),
-				        new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Activity Created On", "19/07/2006", "Funding-2006-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000"),
-				        new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Activity Created On", "19/07/2006", "Funding-2006-Actual Commitments", "32,000", "Totals-Actual Commitments", "32,000"),
-				        new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Activity Created On", "19/07/2006", "Funding-2006-Actual Commitments", "15,000", "Totals-Actual Commitments", "15,000"),
-				        new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Activity Created On", "21/08/2006", "Funding-2006-Actual Commitments", "5,000,000", "Totals-Actual Commitments", "5,000,000"),
-				        new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Activity Created On", "21/08/2006", "Funding-2006-Actual Commitments", "7,070,000", "Funding-2006-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")));
-		
-		ReportSpecificationImpl spec = buildSpecForFiltering("flat filter by created_on range in eth calendar", 
-			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ACTIVITY_CREATED_ON), null, 
-			new ReportElement(new ReportColumn(ColumnConstants.ACTIVITY_CREATED_ON)), new FilterRule("2456658", "2456809", true, true, true)); // 2014/jan/1 - 2014/jun/1 in Greg or 2006/04/23 - 2006/09/24 in Eth
-		
-		spec.getOrCreateSettings().setCalendar(DbUtil.getAmpFiscalCalendar(172L));
 		
 		runNiTestCase(spec, "en", acts, cor);
 	}

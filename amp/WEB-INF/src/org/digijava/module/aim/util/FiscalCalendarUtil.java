@@ -1,22 +1,23 @@
 package org.digijava.module.aim.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.hibernate.Session;
 import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.GregorianChronology;
-
-import java.text.SimpleDateFormat;
 
 public class FiscalCalendarUtil {
 	
@@ -361,6 +362,15 @@ public class FiscalCalendarUtil {
 			startYearDate.plusDays(daysOffset);
 			return startYearDate;
 		}
+	}
+	
+	public static boolean isEthiopianCalendar(CalendarConverter calendarConverter) {
+		if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
+			AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
+			return calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue());
+		}
+		
+		return false;
 	}
 	
 	public static AmpFiscalCalendar getGSCalendar() {

@@ -34,6 +34,7 @@ import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
@@ -116,21 +117,22 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 
 	private String formatDate(LocalDate date) {
 		if (date != null) {
-			LocalDate convertedDate = date;
-			if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
-				AmpFiscalCalendar ampFiscalCalendar = (AmpFiscalCalendar) calendarConverter;
-						
-				DateTime convDate = FiscalCalendarUtil.convertFromGregorianDate( 
-						Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), 
-						ampFiscalCalendar);
-				
-				convertedDate = LocalDate.of(convDate.getYear(), convDate.getMonthOfYear(), convDate.getDayOfMonth());
-			}
-			
-			return dateFormatter.format(convertedDate);
-		} else {
-			return "";
+			return FiscalCalendarUtil.isEthiopianCalendar(calendarConverter) ? getEthiopianFormattedDate(date)
+					: dateFormatter.format(date);
 		}
+		
+		return "";
+	}
+
+	private String getEthiopianFormattedDate(LocalDate date) {
+		AmpFiscalCalendar ampFiscalCalendar = (AmpFiscalCalendar) calendarConverter;
+		
+		DateTime convDate = FiscalCalendarUtil.convertFromGregorianDate( 
+				Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), 
+				ampFiscalCalendar);
+		
+		return String.format("%02d/%02d/%d", 
+				convDate.getDayOfMonth(), convDate.getMonthOfYear(), convDate.getYear());
 	}
 
 	protected String translate(String str) {

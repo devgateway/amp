@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -76,7 +77,8 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 	private void insertSummaryCell(GPIReport report, PdfPTable table, Font bfBold14, Color bkgColor,
 			Map<String, GPIReportOutputColumn> columns, String columnName) {
 
-		String cellValue = String.format("%s\n%s", report.getSummary().get(columns.get(columnName)),
+		String summaryValue = report.getSummary().get(columns.get(columnName));
+		String cellValue = String.format("%s\n%s", summaryValue == null ? "" : summaryValue,
 				INDICATOR_1_1_SUMMARY_LABELS.get(columnName));
 		PdfPCell summaryCell = generatePdfCell(new Phrase(cellValue, bfBold14), Element.ALIGN_LEFT, Element.ALIGN_TOP,
 				1, 1, bkgColor);
@@ -143,8 +145,13 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 		Font bf7 = new Font(Font.HELVETICA, 7);
 		Color bkgColor = Color.WHITE;
 
-		Map<String, GPIReportOutputColumn> columns = report.getPage().getContents().stream().findAny().get().keySet()
-				.stream().collect(Collectors.toMap(GPIReportOutputColumn::getOriginalColumnName, Function.identity()));
+		Map<String, GPIReportOutputColumn> columns = new HashMap<>();
+		
+		if (!report.getPage().getContents().isEmpty()) {
+			columns = report.getPage().getContents().stream()
+					.findAny().get().keySet().stream()
+					.collect(Collectors.toMap(GPIReportOutputColumn::getOriginalColumnName, Function.identity()));
+		}
 
 		for (int i = 0; i < report.getPage().getContents().size(); i++) {
 			Map<GPIReportOutputColumn, String> rowData = report.getPage().getContents().get(i);

@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.groupingBy;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -132,10 +133,12 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 	 */
 	public void renderReportData(SXSSFSheet sheet, GPIReport report) {
 		
-		Map<String, GPIReportOutputColumn> columns = report.getPage().getContents().stream()
-				.findAny().get()
-				.keySet().stream()
-				.collect(Collectors.toMap(GPIReportOutputColumn::getOriginalColumnName, Function.identity()));
+		Map<String, GPIReportOutputColumn> columns = new HashMap<>();
+		if (!report.getPage().getContents().isEmpty()) {
+			columns = report.getPage().getContents().stream()
+					.findAny().get().keySet().stream()
+					.collect(Collectors.toMap(GPIReportOutputColumn::getOriginalColumnName, Function.identity()));
+		}
 		
 		for (int i = 0; i < report.getPage().getContents().size(); i++) {
 			Map<GPIReportOutputColumn, String> rowData = report.getPage().getContents().get(i);
@@ -197,7 +200,8 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 	private CellRangeAddress createSummaryCell(Sheet sheet, Row row, GPIReport report, int firstRow, int lastRow, 
 			int firstCol, int lastCol, String columnName, Map<String, GPIReportOutputColumn> columns) {
 		
-		String summaryLabel = String.format("%s\n%s", report.getSummary().get(columns.get(columnName)),
+		String summaryValue = report.getSummary().get(columns.get(columnName));
+		String summaryLabel = String.format("%s\n%s", summaryValue == null ? "" : summaryValue,
 				INDICATOR_1_1_SUMMARY_LABELS.get(columnName));
 		
 		Cell cell = row.createCell(firstCol);

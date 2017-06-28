@@ -14,6 +14,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
@@ -54,31 +55,9 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 		Document doc = createDocument();
 		PdfWriter writer = PdfWriter.getInstance(doc, os);
 		doc.open();
-
-		generateReportTable(doc, writer, report);
-
-		doc.close();
-
-		return os.toByteArray();
-	}
-
-	private Document createDocument() {
-		Document doc = new Document(calculateDocumentSize(calculateWidth()));
-
-		return doc;
-	}
-
-	public void generateReportTable(Document doc, PdfWriter writer, GPIReport report) {
+		
 		try {
-			Paragraph body = new Paragraph();
-			
-			renderReportTitle(report, body);
-			renderReportSettings(report, body);
-			renderReportTableSummary(report, body);
-			renderReportTable(report, body);
-			renderReportStatistics(report, body);
-			
-			doc.add(body);
+			generateReportTable(doc, writer, report);
 		} catch (Exception e) {
 			throw new RuntimeException("Error during creating the GPI Report in PDF", e);
 		} finally {
@@ -89,6 +68,26 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 				writer.close();
 			}
 		}
+
+		return os.toByteArray();
+	}
+
+	private Document createDocument() {
+		Document doc = new Document(calculateDocumentSize(calculateWidth()));
+
+		return doc;
+	}
+
+	public void generateReportTable(Document doc, PdfWriter writer, GPIReport report) throws DocumentException {
+		Paragraph body = new Paragraph();
+		
+		renderReportTitle(report, body);
+		renderReportSettings(report, body);
+		renderReportTableSummary(report, body);
+		renderReportTable(report, body);
+		renderReportStatistics(report, body);
+		
+		doc.add(body);
 	}
 	
 	public void renderReportTitle(GPIReport report, Paragraph body) {

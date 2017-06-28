@@ -276,16 +276,7 @@ export default class DataFreezeEventEdit extends Component {
                  </button>
                </td>
                 <td>
-                      <div className="input-group ">
-                      <div className="radio">
-                        <label>
-                          <input type="radio" name={'enabled' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_YES} onChange={this.onEnabledChange} checked={this.props.dataFreezeEvent.enabled}/>{this.props.translations['amp.data-freezing:boolean-option-yes']}</label>
-                      </div>
-                      <div className="radio">
-                        <label>
-                          <input type="radio" name={'enabled' + (this.props.dataFreezeEvent.id || this.props.dataFreezeEvent.cid)} value={Constants.OPTION_NO} onChange={this.onEnabledChange} checked={this.props.dataFreezeEvent.enabled === false}/>{this.props.translations['amp.data-freezing:boolean-option-no']}</label>
-                      </div> 
-                     </div>
+                      {this.props.dataFreezeEvent.enabled ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}
                  </td>
                 <td className="action-column">                  
                       <span className="glyphicon glyphicon-custom glyphicon-ok-circle success-color" onClick={this.save}> </span>

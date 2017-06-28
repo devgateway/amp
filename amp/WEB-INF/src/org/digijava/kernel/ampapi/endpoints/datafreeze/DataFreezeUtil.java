@@ -87,21 +87,22 @@ public final class DataFreezeUtil {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select dataFreezeEvent from " + AmpDataFreezeSettings.class.getName()
                 + " dataFreezeEvent where dataFreezeEvent.enabled = true";
-        if(freezeOption != null) {
+        if (freezeOption != null) {
             queryString += " and dataFreezeEvent.freezeOption = :freezeOption";
-        }        
-         
+        }
+
         queryString += " order by ampDataFreezeSettingsId asc";
-        
+
         Query query = dbSession.createQuery(queryString);
-        if(freezeOption != null) {
-           query.setParameter("freezeOption", freezeOption);
+        if (freezeOption != null) {
+            query.setParameter("freezeOption", freezeOption);
         }
         return query.list();
     }
-    
+
     /**
      * Get list of active users
+     * 
      * @return
      */
     public static List<User> getUsers() {
@@ -110,46 +111,46 @@ public final class DataFreezeUtil {
         Query query = session.createQuery(queryString);
         return query.list();
     }
-    
+
     public static AmpDataFreezeExclusion findDataFreezeExclusion(Long activityId, Long dataFreezeEventId) {
-          Session dbSession = PersistenceManager.getSession();
+        Session dbSession = PersistenceManager.getSession();
         String queryString = "select exclusion from " + AmpDataFreezeExclusion.class.getName()
-                + " exclusion where exclusion.activity.ampActivityId = :ampActivityId and exclusion.dataFreezeEvent.ampDataFreezeSettingsId = :ampDataFreezeSettingsId";               
-        Query query = dbSession.createQuery(queryString);        
+                + " exclusion where exclusion.activity.ampActivityId = :ampActivityId and exclusion.dataFreezeEvent.ampDataFreezeSettingsId = :ampDataFreezeSettingsId";
+        Query query = dbSession.createQuery(queryString);
         query.setParameter("ampActivityId", activityId);
-        query.setParameter("ampDataFreezeSettingsId", dataFreezeEventId);         
-        
+        query.setParameter("ampDataFreezeSettingsId", dataFreezeEventId);
+
         List<AmpDataFreezeExclusion> lst = query.list();
         return (lst.size() > 0) ? lst.get(0) : null;
     }
-    
-    
+
     public static List<AmpDataFreezeExclusion> findAllDataFreezeExclusion() {
         Session dbSession = PersistenceManager.getSession();
-      String queryString = "select exclusion from " + AmpDataFreezeExclusion.class.getName()+ " exclusion";              
-      Query query = dbSession.createQuery(queryString);        
-      return query.list();
-  }
-    public static void unfreezeActivities(Map<Long,Set<Long>> activityIdEventsIdsMap) {
+        String queryString = "select exclusion from " + AmpDataFreezeExclusion.class.getName() + " exclusion";
+        Query query = dbSession.createQuery(queryString);
+        return query.list();
+    }
+
+    public static void unfreezeActivities(Map<Long, Set<Long>> activityIdEventsIdsMap) {
         try {
             Session dbSession = PersistenceManager.getSession();
             for (Map.Entry<Long, Set<Long>> event : activityIdEventsIdsMap.entrySet()) {
-                for(Long eventId : event.getValue()) {
+                for (Long eventId : event.getValue()) {
                     AmpDataFreezeExclusion ampDataFreezeExclusion = findDataFreezeExclusion(event.getKey(), eventId);
-                    if (ampDataFreezeExclusion == null){
+                    if (ampDataFreezeExclusion == null) {
                         ampDataFreezeExclusion = new AmpDataFreezeExclusion();
                         ampDataFreezeExclusion.setActivity(ActivityUtil.loadAmpActivity(event.getKey()));
-                        ampDataFreezeExclusion.setDataFreezeEvent(getDataFreezeEventById(eventId)); 
+                        ampDataFreezeExclusion.setDataFreezeEvent(getDataFreezeEventById(eventId));
                         dbSession.saveOrUpdate(ampDataFreezeExclusion);
-                    }                   
-                }               
-            }            
+                    }
+                }
+            }
         } catch (Exception e) {
             logger.error("Exception from unfreezeActivities: " + e.getMessage());
         }
-        
+
     }
-    
+
     public static Date getFreezingDate(AmpDataFreezeSettings event) {
         Date freezingDate;
         if (event.getGracePeriod() != null) {

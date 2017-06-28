@@ -96,8 +96,6 @@ public class AddUserForm  extends ValidatorForm {
     private Long siteId;    
     private Boolean exemptFromDataFreezing;
     
-    private Long siteId;
-    
     private boolean nationalCoordinator = false;
     
     public String[] getSelectedItems() {

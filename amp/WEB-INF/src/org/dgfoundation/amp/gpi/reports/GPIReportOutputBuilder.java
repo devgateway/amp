@@ -46,6 +46,10 @@ public abstract class GPIReportOutputBuilder  {
 		this.isDonorAgency = GPIReportUtils.isDonorAgency(originalFormParams);
 	}
 	
+	public JsonBean getOriginalFormParams() {
+		return originalFormParams;
+	}
+	
 	protected abstract List<GPIReportOutputColumn> buildHeaders(GeneratedReport generatedReport);
 	
 	protected abstract List<Map<GPIReportOutputColumn, String>> getReportContents(GeneratedReport generatedReport);

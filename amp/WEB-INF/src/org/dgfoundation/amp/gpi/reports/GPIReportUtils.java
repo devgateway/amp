@@ -463,18 +463,18 @@ public class GPIReportUtils {
 	}
 	
 	public static FilterRule getFilterRule(JsonBean formParams, String columnName) {
-		FilterRule donorAgencyRule = null;
+		FilterRule filterRule = null;
 		if (formParams != null) {
 			Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
 
 			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
 			if (filterRules != null) {
-				ReportElement donorAgencyRuleElement = getFilterRuleElement(filterRules.getAllFilterRules(), columnName);
-				donorAgencyRule = filterRules.getAllFilterRules().get(donorAgencyRuleElement);
+				ReportElement ruleElement = getFilterRuleElement(filterRules.getAllFilterRules(), columnName);
+				filterRule = filterRules.getAllFilterRules().get(ruleElement);
 			}
 		}
 
-		return donorAgencyRule;
+		return filterRule;
 	}
 	
 	public static ReportElement getFilterRuleElement(Map<ReportElement, FilterRule> filterRules, String column) {

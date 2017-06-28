@@ -31,10 +31,10 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	private Set <AmpOrgRoleBudget> budgets;
 	@Interchangeable(fieldTitle="Additional Info", importable=true)
 	private String additionalInfo;
-	
+
 	@Interchangeable(fieldTitle = "GPI Ni Survey")
-	private AmpGPINiSurvey gpiNiSurvey;
-		
+	private Set<AmpGPINiSurvey> gpiNiSurveys;		
+	
     public Float getPercentage() {
 		return percentage;
 	}
@@ -154,10 +154,11 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 		clonedAmpOrgRole.activity = newActivity;
 		clonedAmpOrgRole.ampOrgRoleId = null;
 		
-		if (gpiNiSurvey != null) {
-			AmpGPINiSurvey clonedSurvey = (AmpGPINiSurvey) gpiNiSurvey.clone();
+		if (getGpiNiSurveys() != null && !getGpiNiSurveys().isEmpty()) {
+			AmpGPINiSurvey clonedSurvey = (AmpGPINiSurvey) getGpiNiSurveys().iterator().next().clone();
 			clonedSurvey.setAmpGPINiSurveyId(null);
 			clonedSurvey.setAmpOrgRole(clonedAmpOrgRole);
+			
 	
 			if (clonedSurvey.getResponses() != null) {
 				final Set<AmpGPINiSurveyResponse> clonedSurveyResponses = new HashSet<AmpGPINiSurveyResponse>();
@@ -173,8 +174,8 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 				clonedSurvey.getResponses().clear();
 				clonedSurvey.getResponses().addAll(clonedSurveyResponses);
 			}
-			
-			clonedAmpOrgRole.setGpiNiSurvey(clonedSurvey);
+			clonedAmpOrgRole.getGpiNiSurveys().clear();
+			clonedAmpOrgRole.getGpiNiSurveys().add(clonedSurvey);
 		}
 		
 		return clonedAmpOrgRole;
@@ -240,11 +241,28 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	}
 	
 	public AmpGPINiSurvey getGpiNiSurvey() {
-		return gpiNiSurvey;
+		if (getGpiNiSurveys() != null && !getGpiNiSurveys().isEmpty()) {
+			return getGpiNiSurveys().iterator().next();
+		} else {
+			return null;
+		}
 	}
-	
+
 	public void setGpiNiSurvey(AmpGPINiSurvey gpiNiSurvey) {
-		this.gpiNiSurvey = gpiNiSurvey;
+		if (getGpiNiSurveys() == null) {
+			setGpiNiSurveys(new HashSet<>());
+		}
+		getGpiNiSurveys().add(gpiNiSurvey);
+	}
+
+	public boolean hasGpiNiSurvey(){
+		return (getGpiNiSurveys()!=null && !getGpiNiSurveys().isEmpty());
+	}
+	public Set<AmpGPINiSurvey> getGpiNiSurveys() {
+		return gpiNiSurveys;
+	}
+	public void setGpiNiSurveys(Set<AmpGPINiSurvey> gpiNiSurveys) {
+		this.gpiNiSurveys = gpiNiSurveys;
 	}
 	
 }	

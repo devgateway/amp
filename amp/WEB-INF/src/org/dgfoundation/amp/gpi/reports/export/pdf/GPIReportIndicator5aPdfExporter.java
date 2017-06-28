@@ -11,6 +11,8 @@ import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 
 /**
@@ -38,7 +40,11 @@ public class GPIReportIndicator5aPdfExporter extends GPIReportPdfExporter {
 			GPIReportOutputColumn column = report.getPage().getHeaders().get(i);
 			if (report.getSummary().containsKey(column)) {
 				String cellValue = String.format("%s\n%s", report.getSummary().get(column), column.columnName);
-				insertCell(table, cellValue, Element.ALIGN_LEFT, 1, 1, bfBold14, bkgColor, 30f);
+
+				Phrase summaryPhrase = new Phrase(cellValue, bfBold14);
+				PdfPCell summaryCell = generatePdfCell(summaryPhrase, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE, 1, 1,
+						bkgColor);
+				insertCell(table, summaryCell, SUMMARY_ROW_HEIGHT);
 			}
 		}
 

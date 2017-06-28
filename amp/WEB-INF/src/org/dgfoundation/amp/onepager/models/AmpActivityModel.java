@@ -4,7 +4,12 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
@@ -12,10 +17,14 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
+import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.startup.AmpSessionListener;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -61,6 +70,8 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 			s.setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, null);
 			s.setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, null);
 			s.setMetaData(OnePagerConst.EDITOR_ITEMS, null);
+			s.setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, null);
+			s.setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, null);
 			s.setMetaData(OnePagerConst.AGREEMENT_ITEMS, null);
 			s.setMetaData(OnePagerConst.COMMENTS_ITEMS, null);
 			s.setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, null);
@@ -113,10 +124,41 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		AmpActivityVersion ret = ActivityUtil.load(this, id);
         if (ret.getActivityType() == null) //set default type for previously saved activities
             ret.setActivityType(ActivityUtil.ACTIVITY_TYPE_PROJECT);
-
+        loadFreezingConfiguration(ret);
 		return ret;
 	}
 
+	private void loadFreezingConfiguration(AmpActivityVersion a) {
+
+		AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		s.setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, null);
+		s.setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, null);
+		// we get activity freezing configuration
+		Boolean isActivityEditable = DataFreezeService.isEditable(a.getAmpActivityId(),
+				s.getAmpCurrentMember());
+		org.apache.wicket.Session.get().setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, isActivityEditable);
+
+		// we get funding freezing configuration
+
+		List<Date> dates = new ArrayList<Date>();
+		java.util.Date inicio = new java.util.Date();
+		
+		for (AmpFunding f : a.getFunding()) {
+			for (AmpFundingMTEFProjection mfp : f.getMtefProjections()) {
+				dates.add(mfp.getTransactionDate());
+			}
+			for (AmpFundingDetail fd : f.getFundingDetails()) {
+				dates.add(fd.getTransactionDate());
+			}
+		}
+		
+		java.util.Date fin = new java.util.Date();
+		HashMap<Date, Boolean> transactionEditable = DataFreezeService.isEditable(a.getAmpActivityId(),
+				dates, s.getAmpCurrentMember());
+		org.apache.wicket.Session.get().setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, transactionEditable);
+		System.out.println("demoro " + (fin.getTime() - inicio.getTime()));
+	}
+    
 	@Override   
 	public void setObject(AmpActivityVersion arg0) {
 		a = arg0;

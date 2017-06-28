@@ -4,8 +4,10 @@
 */
 package org.dgfoundation.amp.onepager;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 import org.apache.wicket.MetaDataKey;
@@ -44,7 +46,9 @@ public final class OnePagerConst {
 
 	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};
 	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_DELETED_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};
-
+	
+	public static final MetaDataKey<HashMap<Date, Boolean>> FUNDING_FREEZING_CONFIGURATION = new MetaDataKey<HashMap<Date, Boolean>>(){};
+	public static final MetaDataKey<Boolean> ACTIVITY_FREEZING_CONFIGURATION = new MetaDataKey<Boolean>(){};
 
     /**
 	 * {@linkplain http://community.jboss.org/wiki/OpenSessionInView}

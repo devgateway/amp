@@ -141,12 +141,23 @@ public class GPIReportUtils {
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTUAL_APPROVAL_DATE));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6));
-		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6_DESCRIPTION));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q7));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q8));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q9));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q10));
-		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q10_DESCRIPTION));
+		
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PIPELINE_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_EXPENDITURES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_EXPENDITURES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENT_ORDERS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_ESTIMATED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_ESTIMATED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST));
 		
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));

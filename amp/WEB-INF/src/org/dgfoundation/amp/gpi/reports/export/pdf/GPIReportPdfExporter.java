@@ -226,7 +226,8 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 	protected void insertCell(PdfPTable table, String text, int align, int colspan, int rowspan, Font font,
 			Color bkgColor) {
 		
-		Phrase phrase = new Phrase(text.trim(), font);
+		text = text == null ? "" : text.trim();
+		Phrase phrase = new Phrase(text, font);
 		PdfPCell cell = generatePdfCell(phrase, align, Element.ALIGN_MIDDLE, colspan, rowspan, bkgColor);
 		
 		insertCell(table, cell, MINIMUM_ROW_HEIGHT);

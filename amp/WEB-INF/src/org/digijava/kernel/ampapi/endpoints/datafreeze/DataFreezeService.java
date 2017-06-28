@@ -227,10 +227,10 @@ public final class DataFreezeService {
      * @return
      */
     public static boolean isEditable(Long activityId, AmpTeamMember atm) {
-
+        boolean result = true;
         // check if user is exempt for data freezing
         if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing())) {
-            return true;
+            return result;
         }
 
         // check if activity is frozen by any of the enabled data freeze events
@@ -330,12 +330,11 @@ public final class DataFreezeService {
         return (!todaysDate.before(event.getOpenPeriodStart()) && !todaysDate.after(event.getOpenPeriodEnd()));
     }
     
-    public static boolean isGracePeriod(AmpDataFreezeSettings event, Date todaysDate) {
+    public static boolean isGracePeriod(AmpDataFreezeSettings event, Date today) {
         Integer gracePeriod = event.getGracePeriod() != null ? event.getGracePeriod() : 0;
 		if (gracePeriod.equals(0)) {
 			return false;
-		}
-        Date today = getTodaysDate();
+		}        
         Date gracePeriodEnd = AmpDateUtils.getDateAfterDays(event.getFreezingDate(), gracePeriod);
         return (!today.after(gracePeriodEnd));
     }

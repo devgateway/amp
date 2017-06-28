@@ -25,6 +25,7 @@ export default class DataFreezeEventView extends Component {
         this.getDisplayDateFormat = this.getDisplayDateFormat.bind(this);
         this.deleteDataFreezeEvent = this.deleteDataFreezeEvent.bind(this);
         this.toggleAppliedFilters = this.toggleAppliedFilters.bind(this);
+        this.getFilterObject = this.getFilterObject.bind(this);
     }
 
     showFreezeOption(freezeOption) {
@@ -62,8 +63,16 @@ export default class DataFreezeEventView extends Component {
             showAppliedFilters: !this.state.showAppliedFilters
         });
     }
-
-    render() {
+    
+    getFilterObject(){
+        var filters;
+        if(this.props.dataFreezeEvent.filters){
+            filters = JSON.parse(this.props.dataFreezeEvent.filters);
+        }
+        return filters;
+    }
+    
+    render() {                
         if (this.props.context === Constants.UNFREEZE_ALL) {
             return (
                 <tr >
@@ -74,6 +83,7 @@ export default class DataFreezeEventView extends Component {
                   </tr>
             );
         } else {
+            let filterObject = this.getFilterObject();
             return (
                 <tr >
                     <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)}</td>
@@ -87,11 +97,13 @@ export default class DataFreezeEventView extends Component {
                     <td>
                     {this.props.dataFreezeEvent.notificationDays}
                     </td>
-                    <td>                    
+                    <td>   
+                     {filterObject && Object.keys(filterObject.filters).length > 0 &&
                       <button className="btn btn-default filter-add" onClick={this.toggleAppliedFilters}>
                       <span className={this.state.showAppliedFilters ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'}></span>
                      </button>
-                      {this.props.dataFreezeEvent.filters && this.state.showAppliedFilters &&
+                      }
+                      {filterObject && Object.keys(filterObject.filters).length > 0 &&  this.state.showAppliedFilters &&
                           <AppliedFilters {...this.props}/>
                       }
                     </td>  

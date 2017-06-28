@@ -214,21 +214,23 @@ public final class DataFreezeService {
         DataFreezeUtil.unfreezeAll();
     }
 
+    
+	public static boolean isEditable(Long activityId, Long ampTeamMemberId) {
+		return isEditable(activityId, TeamMemberUtil.getAmpTeamMember(ampTeamMemberId));
+	}
+
     /**
      * Check if activity is editable
-     *  - Checks if is frozen by any of the data freeze events
-     *  - Checks if is excluded from freezing
      * 
      * @param activityId
      * @param ampTeamMemberId
      * @return
      */
-    public static boolean isEditable(Long activityId, Long ampTeamMemberId) {
-        boolean result = true;
+    public static boolean isEditable(Long activityId, AmpTeamMember atm) {
+
         // check if user is exempt for data freezing
-        AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(ampTeamMemberId);
         if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing())) {
-            return result;
+            return true;
         }
 
         // check if activity is frozen by any of the enabled data freeze events
@@ -267,18 +269,17 @@ public final class DataFreezeService {
      * @param ampTeamMemberId
      * @return
      */
-    public static Map<Date, Boolean> isEditable(Long activityId, List<Date> transactionDates, Long ampTeamMemberId) {
-        Map<Date, Boolean> editable = new HashMap<>();
+    public static HashMap<Date, Boolean> isEditable(Long activityId, List<Date> transactionDates, AmpTeamMember atm) {
+    	HashMap<Date, Boolean> editable = new HashMap<>();
         for (Date transactionDate : transactionDates) {
             editable.put(transactionDate, true);
         }
 
         // check if user is exempt for data freezing
-        AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(ampTeamMemberId);
         if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing())) {
             return editable;
         }
-
+        
         List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil
                 .getEnabledDataFreezeEvents(AmpDataFreezeSettings.FreezeOptions.FUNDING);
         for (AmpDataFreezeSettings event : dataFreezeEvents) {
@@ -331,6 +332,9 @@ public final class DataFreezeService {
     
     public static boolean isGracePeriod(AmpDataFreezeSettings event, Date todaysDate) {
         Integer gracePeriod = event.getGracePeriod() != null ? event.getGracePeriod() : 0;
+		if (gracePeriod.equals(0)) {
+			return false;
+		}
         Date today = getTodaysDate();
         Date gracePeriodEnd = AmpDateUtils.getDateAfterDays(event.getFreezingDate(), gracePeriod);
         return (!today.after(gracePeriodEnd));

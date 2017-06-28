@@ -536,7 +536,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		saveAndSubmit.getButton().add(closeEditors);
 		saveAndSubmit.getButton().add(clickMonEval);
 		saveAndSubmit.getButton().setDefaultFormProcessing(false);
-		
+		saveAndSubmit.setAffectedByFreezing(false);
 		activityForm.add(saveAndSubmit);
 		
 		AmpAjaxLinkField saveReject=new AmpAjaxLinkField("saveReject", "Reject Activity", "Reject activity") {
@@ -585,7 +585,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 		saveAsDraft.setVisible(false);
 		saveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
-        activityForm.add(saveAsDraft);
+		saveAsDraft.setAffectedByFreezing(false);
+		activityForm.add(saveAsDraft);
 		activityForm.add(new Behavior(){
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
@@ -636,6 +637,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         cancelSaveAsDraft.setVisible(true);
         cancelSaveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         cancelSaveAsDraft.setOutputMarkupId(true);
+        cancelSaveAsDraft.setAffectedByFreezing(false);
         activityForm.add(cancelSaveAsDraft);
 
         AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
@@ -666,6 +668,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		saveAsDraftAction.getButton().add(new AttributePrepender("onclick", new Model<String>(onClickSaveAsDraft+" disableButton();"), ""));
 		saveAsDraftAction.getButton().add(updateEditors);
 		saveAsDraftAction.add(isSubmit);
+		saveAsDraftAction.setAffectedByFreezing(false);
 		activityForm.add(saveAsDraftAction);
 		
 		//text area for the message

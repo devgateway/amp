@@ -18,6 +18,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
@@ -54,6 +55,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	
 	protected boolean ignoreFmVisibility = false;
 	protected boolean ignorePermissions = false; 
+	protected boolean isAffectedByFreezing = true;
 	
 	public boolean isIgnorePermissions() {
 		return ignorePermissions;
@@ -296,7 +298,15 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	}
 
 
-    @Override
+    public boolean isAffectedByFreezing() {
+		return isAffectedByFreezing;
+	}
+
+	public void setAffectedByFreezing(boolean isAffectedByFreezing) {
+		this.isAffectedByFreezing = isAffectedByFreezing;
+	}
+
+	@Override
     protected void onBeforeRender() {
         super.onBeforeRender();    //To change body of overridden methods use File | Settings | File Templates.
 
@@ -318,8 +328,15 @@ public abstract class AmpComponentPanel<T> extends Panel implements
          */
         boolean isEnabledInFm = FMUtil.isFmEnabled(this); //be sure to run this assures that module inserted in FM
         boolean fmEnabled = (foundEnabledChild.getObject() || isEnabledInFm);
+        //we should check here
         boolean fmVisible = FMUtil.isFmVisible(this);
-
+		if (isAffectedByFreezing) { // if visibility needs to be checked , this is to avoid
+					// freezing "add funding item or save buttons"
+			Boolean isEditableByFreezingConfiguration = org.apache.wicket.Session.get()
+					.getMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION);
+			fmEnabled = fmEnabled && (isEditableByFreezingConfiguration == null || isEditableByFreezingConfiguration);
+		}
+        
         if (fmMode){
             setEnabled(true);
             setVisible(true);

@@ -1,3 +1,5 @@
+window.currentFilter = new ampFilter({el:$('#filter-popup'), draggable:true, caller: 'REPORTS'});
+
 var AMPFilters = Backbone.View.extend({
 			events : {
 				'click .edit_amp_filter' : 'add_amp_filter'
@@ -19,9 +21,7 @@ var AMPFilters = Backbone.View.extend({
 				this.add_button();
 				this.workspace.toolbar.amp_filters = this.show;
 
-				$(this.workspace.el).find('.workspace_results').prepend($(this.el).hide());
-
-				window.currentFilter = new ampFilter({el:$('#filter-popup'), draggable:true, caller: 'REPORTS'});
+				$(this.workspace.el).find('.workspace_results').prepend($(this.el).hide());				
 				window.currentFilter.showFilters();
 				window.currentFilter.converted = false;
 				$('#filter-popup').hide();

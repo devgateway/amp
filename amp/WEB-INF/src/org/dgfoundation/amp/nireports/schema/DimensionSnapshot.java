@@ -22,7 +22,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 public final class DimensionSnapshot {
 	public final List<DimensionLevel> data;
 	public final int depth;
-	public final Map<Long, Integer> idToLevel;
+	private final Map<Long, Integer> idToLevel;
 	
 	public DimensionSnapshot(List<DimensionLevel> data) {
 		this.data = data;
@@ -121,7 +121,7 @@ public final class DimensionSnapshot {
 		return getAcceptableDescendants(level, ids, targetLevel);
 	}
 	
-	public int getLevelOf(Coordinate coo) {
+	private int getLevelOf(Coordinate coo) {
 		int level = coo.level == NiDimension.LEVEL_ALL_IDS ?
 				idToLevel.getOrDefault(coo.id, 0) : coo.level;
 		return level;

@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.groupingBy;
 import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -205,12 +206,14 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 			Map<GPIReportOutputColumn, String> rowData) {
 
 		String sectors = rowData.get(column);
+		List<String> sectorList = new ArrayList<>();
 		if (StringUtils.isNotBlank(sectors)) {
-			List<String> sectorList = Arrays.asList(sectors.split("###"));
-			for (int i = 0; i < PRIMARY_SECTORS_SIZE; i++) {
-				String value = i < sectorList.size() ? sectorList.get(i) : "";
-				insertCell(table, value, getCellAlignment(column.originalColumnName), 1, 1, font, bkgColor);
-			}
+			sectorList = Arrays.asList(sectors.split("###"));
+		}
+		
+		for (int i = 0; i < PRIMARY_SECTORS_SIZE; i++) {
+			String value = i < sectorList.size() ? sectorList.get(i) : "";
+			insertCell(table, value, getCellAlignment(column.originalColumnName), 1, 1, font, bkgColor);
 		}
 	}
 

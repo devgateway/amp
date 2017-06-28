@@ -6,10 +6,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
 import org.dgfoundation.amp.gpi.reports.export.GPIReportExporter;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -31,6 +33,8 @@ import com.lowagie.text.pdf.PdfWriter;
  *
  */
 public class GPIReportPdfExporter implements GPIReportExporter {
+	
+	protected static final Logger logger = Logger.getLogger(GPIReportExporter.class);
 	
 	static final float FONT_SIZE_TITLE = 20f;
 	static final float FONT_SIZE_SETTINGS = 10f;
@@ -59,7 +63,8 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 		try {
 			generateReportTable(doc, writer, report);
 		} catch (Exception e) {
-			throw new RuntimeException("Error during creating the GPI Report in PDF", e);
+			logger.error(e.getMessage(), e);
+			doc.add(new Paragraph("Error occured during creating the GPI Report in PDF."));
 		} finally {
 			if (doc != null) {
 				doc.close();

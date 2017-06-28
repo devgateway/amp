@@ -73,6 +73,7 @@ public class UserRegisterForm
     private String[] contentSelectedLanguages;
     private String organizationTypeOther;
     private Long selectedOrganizationId;
+    private boolean nationalCoordinator = false;
     private HashMap<String,String> errors=null;
 //FocusBoxes
     private String[] selectedItems = {};
@@ -516,5 +517,13 @@ public class UserRegisterForm
 
 	public void clearMessages(){
 	    this.errors.clear();
+	}
+	
+	public boolean getNationalCoordinator() {
+		return nationalCoordinator;
+	}
+
+	public void setNationalCoordinator(boolean nationalCoordinator) {
+		this.nationalCoordinator = nationalCoordinator;
 	}
 }

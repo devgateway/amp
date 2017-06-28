@@ -96,6 +96,10 @@ public class AddUserForm  extends ValidatorForm {
     private Long siteId;    
     private Boolean exemptFromDataFreezing;
     
+    private Long siteId;
+    
+    private boolean nationalCoordinator = false;
+    
     public String[] getSelectedItems() {
         return this.selectedItems;
     }
@@ -423,7 +427,7 @@ public class AddUserForm  extends ValidatorForm {
 
         siteId = null;
         addWorkspace=false;
-       
+        nationalCoordinator = false;
     }
 
     /**
@@ -617,5 +621,12 @@ public class AddUserForm  extends ValidatorForm {
         this.exemptFromDataFreezing = exemptFromDataFreezing;
     }
 
+	public boolean getNationalCoordinator() {
+		return nationalCoordinator;
+	}
+
+	public void setNationalCoordinator(boolean nationalCoordinator) {
+		this.nationalCoordinator = nationalCoordinator;
+	}
 	
 }

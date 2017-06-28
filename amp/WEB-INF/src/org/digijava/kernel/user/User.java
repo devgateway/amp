@@ -422,7 +422,7 @@ public class User
 	public void setPledger(Boolean pledger) {
 		this.pledger = pledger;
 	}
-
+	
 	@Override
 	public int compareTo(Object o) {
 		// TODO Auto-generated method stub
@@ -458,7 +458,35 @@ public class User
    		}
    		return false;
 	}
-
+  
+	/**
+	 * Checks if user has a verified org and the org is role donor
+	 * @return 
+	 */
+	public boolean hasVerifiedDonor(){
+		if (this.assignedOrgs.size() == 0) {
+			return false;
+		}
+        
+		Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
+		while (it.hasNext()) {
+			AmpOrganisation currentOrganization = it.next();
+			if (org.digijava.module.aim.util.DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
+				return true;
+		}
+		return false;	
+	}
+	public boolean hasNationalCoordinatorGroup(){
+		boolean result = false;
+		Set<Group> groups = this.groups;
+		for (Group group : groups) {
+			if (group.isNationalCoordinatorGroup()) {
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
 	public AmpCategoryValueLocations getRegion() {
 		return region;
 	}

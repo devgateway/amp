@@ -69,6 +69,8 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 			AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 			s.setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, null);
 			s.setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, null);
+			s.setMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS, null);
+			s.setMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS, null);
 			s.setMetaData(OnePagerConst.EDITOR_ITEMS, null);
 			s.setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, null);
 			s.setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, null);

@@ -27,7 +27,7 @@
                	</td>
             </tr>
         </wicket:fm>
-        <wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms;Funding Classification Date;Required Validator for Funding Status;Show Funding Status in summary;Show Mode of Payment in summary;Ratification Date;Maturity">
+        <wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms;Funding Classification Date;Required Validator for Funding Status;Show Funding Status in summary;Show Mode of Payment in summary;Ratification Date;Maturity;Concessionality Level">
             <tr align="left">
                 <wicket:fm fmNames="Funding Status;Required Validator for Funding Status;Show Funding Status in summary">
                     <td><span wicket:id="fundingStatus"/><span wicket:id="fundingStatusRequired"/><span wicket:id="showFundingStatus"/></td>
@@ -55,6 +55,16 @@
                     </wicket:fm>
                 </td>
             </tr>
+            <wicket:fm fmNames="Concessionality Level">
+            	<tr>
+            		<td>
+            			<span wicket:id="concessionalityLevel"/>
+            			<span wicket:id="concessionalityLevelRequired"/>
+            		</td>
+            		<td></td>
+            		<td></td>
+           		</tr>
+            </wicket:fm>
         </wicket:fm>
         <wicket:fm fmNames="Interest Rate;Grace Period">
             <tr align="left">

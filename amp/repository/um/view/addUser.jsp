@@ -464,8 +464,14 @@
 												<c:if test="${!umAddUserForm.registrationByEmail}">
 													<html:checkbox property="sendEmail"	styleClass="inp-text" disabled="true" >
 													</html:checkbox></td>
-												</c:if>
-													
+												</c:if>													
+											</tr>
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align="right"  class="formCheckContainer"><digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn></td>
+												<td class=f-names align="left">
+													<html:checkbox property="nationalCoordinator" styleClass="inp-text">
+													</html:checkbox></td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>

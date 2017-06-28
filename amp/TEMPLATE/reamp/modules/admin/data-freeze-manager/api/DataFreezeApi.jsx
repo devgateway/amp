@@ -1,4 +1,4 @@
-import { postJson, delay, fetchJson, deleteObject } from 'amp/tools';
+import { postJson, delay, fetchJson, deleteJson } from 'amp/tools';
 class DataFreezeApi {
     static getDataFreezeEventList( data ) {
         const url = '/rest/data-freeze/event/list?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;
@@ -25,7 +25,7 @@ class DataFreezeApi {
     static deleteDataFreezeEvent( data ) {
         var url = '/rest/data-freeze/event/' + data.id;
         return new Promise(( resolve, reject ) => {
-            deleteObject( url, {}).then( response => {
+            deleteJson( url, {}).then( response => {
                 resolve( {});
             }).catch( error => {
                 reject( error );

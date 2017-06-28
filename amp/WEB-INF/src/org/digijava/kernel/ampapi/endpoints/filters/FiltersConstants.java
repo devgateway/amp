@@ -32,6 +32,7 @@ public class FiltersConstants {
     public static final String ARCHIVED = "archived";
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
     public static final String COMPUTED_YEAR = "computed-year";
+    public static final String CONCESSIONALITY_LEVEL = "concessionality-level";
     public static final String CONTRACTING_AGENCY = "contracting-agency";
     public static final String CONTRACTING_AGENCY_GROUPS = "contracting-agency-groups";
     public static final String COUNTRY = "country";

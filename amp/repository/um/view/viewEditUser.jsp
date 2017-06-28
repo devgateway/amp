@@ -456,7 +456,15 @@ function validateUserInfo(){
           																	<html:checkbox property="pledger" styleClass="inp-text"/>
 																		</td>
 																	</tr>
-																	</module:display>
+																	</module:display>																	
+																		<tr>
+																		<td width="169" align="right" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
+                                                                     		 <digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn>
+																		</td>
+																	    <td width="380" height="30" colspan="2">
+          																	<html:checkbox property="nationalCoordinator" styleClass="inp-text"/>
+																		</td>
+																	</tr>																	
 																		<tr>
 																			<td align="right"  class="formCheckContainer">
 																				<digi:trn>Assign to Workspace</digi:trn>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +44,7 @@ import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
+import org.digijava.kernel.user.Group;
 
 public class ViewEditUser extends Action {
 
@@ -184,6 +186,7 @@ public class ViewEditUser extends Action {
             uForm.setDisplaySuccessMessage(null);
             uForm.setAddWorkspace(false);
             uForm.setEmailerror(false);
+            uForm.setNationalCoordinator(false);
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
                 AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
@@ -272,7 +275,10 @@ public class ViewEditUser extends Action {
                     if(uForm.getWorkspaces() == null){
                     	uForm.setWorkspaces(TeamUtil.getAllTeams());
                     }
-                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());      
+                    
+                    uForm.setNationalCoordinator(user.hasNationalCoordinatorGroup());
+                   
 //                }
             }
         } else {        	
@@ -328,6 +334,12 @@ public class ViewEditUser extends Action {
 
                     user.setUserLangPreferences(userLangPreferences);
                     user.setPledger(uForm.getPledger());
+                    
+                    if (uForm.getNationalCoordinator()) {
+                    	user.getGroups().add(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));                    	
+                    } else {
+                    	user.getGroups().remove(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));
+                    }
                     DbUtil.updateUser(user);
                     //assign workspace place
                     if(uForm.isAddWorkspace()){

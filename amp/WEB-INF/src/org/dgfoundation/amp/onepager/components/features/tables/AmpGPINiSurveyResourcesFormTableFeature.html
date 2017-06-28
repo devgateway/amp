@@ -1,0 +1,22 @@
+<wicket:extend>
+	<tr wicket:id="tableHeading">
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width="150"><b class="ins_title"><wicket:trn key="trn:title">Title</wicket:trn></b></td>
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width="400"><b class="ins_title"><wicket:trn key="trn:resourceName">Resource Name</wicket:trn></b></td>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width="50">&nbsp;</td>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width="50"><b class="ins_title">&nbsp;</b></td>	
+	</tr>
+	<tr wicket:id="list">
+		<td class="inside">
+			<span wicket:id="title"/>
+		</td>
+		<td class="inside">
+			<span wicket:id="resourceName"/>
+		</td>
+		<td class="inside" align="center">
+			<a wicket:id="download"><img wicket:id="downloadImage" src="/TEMPLATE/ampTemplate/img_2/ico_attachment.png" /></a>
+		</td>
+		<td class="inside" align="center">
+			<span wicket:id="delete"/>
+		</td>
+	</tr>
+</wicket:extend>

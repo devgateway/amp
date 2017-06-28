@@ -1054,8 +1054,7 @@ public class ActivityUtil {
 
     private static boolean shouldResponseToBeUpdated(AmpGPINiSurveyResponse surveyResponse, AmpGPINiSurveyResponse
             tempGPINiSurveyResponse) {
-        return tempGPINiSurveyResponse.getOldKey() == surveyResponse.getAmpGPINiSurveyResponseId()
-                && (tempGPINiSurveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
+        return (tempGPINiSurveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
                 == surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
                 && tempGPINiSurveyResponse.getAmpGPINiQuestion().getCode()
                 .equals(surveyResponse.getAmpGPINiQuestion().getCode()));

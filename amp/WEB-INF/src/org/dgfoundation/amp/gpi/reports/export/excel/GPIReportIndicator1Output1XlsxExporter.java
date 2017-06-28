@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,22 +22,106 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.gpi.reports.GPIDocument;
 import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
+import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
+import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * @author Viorel Chihai
  *
  */
 public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporter {
+  
+  protected String remarkSheetName = "Donor Remarks";
+
+	public static final int NUM_OF_REMARK_HEADERS = 3;
 	
 	public GPIReportIndicator1Output1XlsxExporter() {
 		reportSheetName = "Indicator 1 Output 1";
+	}
+	
+	@Override
+	protected void addAllSheetsToWorkbook(GPIReport report, SXSSFWorkbook wb) {
+		addReportSheetToWorkbook(wb, report, getReportSheetName());
+		addRemarkSheetToWorkbook(wb, report, getRemarkSheetName());
+		addSummarySheetToWorkbook(wb, report, getSummarySheetName());
+	}
+	
+	protected void addRemarkSheetToWorkbook(SXSSFWorkbook wb, GPIReport report, String sheetName) {
+		SXSSFSheet remarkSheet = wb.createSheet(TranslatorWorker.translateText(sheetName));
+		generateRemarkSheet(wb, remarkSheet, report);
+	}
+	
+	/**
+	 * Add extra info about filters applied, currency and settings.
+	 * 
+	 * @param wb
+	 * @param remarkSheet
+	 * @param reportSpec
+	 * @param queryObject
+	 */
+	protected void generateRemarkSheet(SXSSFWorkbook workbook, SXSSFSheet remarkSheet, GPIReport report) {
+		IntWrapper currLine = new IntWrapper();
+		
+		Row calendarRow = remarkSheet.createRow(currLine.intValue());
+		Cell dateHeaderCell = calendarRow.createCell(0);
+		dateHeaderCell.setCellValue(TranslatorWorker.translateText("Date"));
+		dateHeaderCell.setCellStyle(template.getHeaderCellStyle());
+		
+		Cell donorHeaderCell = calendarRow.createCell(1);
+		donorHeaderCell.setCellValue(TranslatorWorker.translateText("Donor"));
+		donorHeaderCell.setCellStyle(template.getHeaderCellStyle());
+		
+		Cell remarkHeaderCell = calendarRow.createCell(2);
+		remarkHeaderCell.setCellValue(TranslatorWorker.translateText("Remarks"));
+		remarkHeaderCell.setCellStyle(template.getHeaderCellStyle());
+		
+		String donorType = GPIReportConstants.HIERARCHY_DONOR_AGENCY;
+
+		FilterRule donorAgencyRule = GPIReportUtils.getFilterRule(report.getOriginalFormParams(), 
+				ColumnConstants.DONOR_AGENCY);
+		List<Long> ids = donorAgencyRule == null ? new ArrayList<>()
+				: donorAgencyRule.values.stream().map(s -> Long.parseLong(s)).collect(Collectors.toList());
+		
+		FilterRule aprDateRule = GPIReportUtils.getFilterRule(report.getOriginalFormParams(), 
+				ColumnConstants.ACTUAL_APPROVAL_DATE);
+		
+		Long min = aprDateRule == null ? 0L : aprDateRule.min != null ? Long.parseLong(aprDateRule.min) : 0L;
+		Long max = aprDateRule == null ? 0L : aprDateRule.max != null ? Long.parseLong(aprDateRule.max) : 0L;
+		
+		List<GPIRemark> remarks = GPIDataService.getGPIRemarks(GPIReportConstants.REPORT_1, ids, donorType, min, max);
+		
+		for (GPIRemark remark : remarks) {
+			Row remarkRow = remarkSheet.createRow(currLine.inc().intValue());
+			
+			Cell dateCell = remarkRow.createCell(0);
+			dateCell.setCellValue(remark.getDate());
+			dateCell.setCellStyle(template.getDefaultStyle());
+			
+			Cell donorCell = remarkRow.createCell(1);
+			donorCell.setCellValue(remark.getDonorAgency());
+			donorCell.setCellStyle(template.getDefaultStyle());
+			
+			Cell remarkCell = remarkRow.createCell(2);
+			remarkCell.setCellValue(remark.getRemark());
+			remarkCell.setCellStyle(template.getDefaultStyle());
+		}
+
+		remarkSheet.trackAllColumnsForAutoSizing();
+
+		for (int i = 0; i < NUM_OF_REMARK_HEADERS; i++) {
+			remarkSheet.autoSizeColumn(i, true);
+		}
 	}
 
 	/**
@@ -382,5 +467,9 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 			default:
 				return template.getNumberStyle();
 		}
+	}
+	
+	protected String getRemarkSheetName() {
+		return remarkSheetName;
 	}
 }

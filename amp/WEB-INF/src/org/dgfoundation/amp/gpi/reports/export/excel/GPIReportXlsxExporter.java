@@ -68,8 +68,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 
 		template = new GPIReportExcelTemplate(wb);
 
-		addReportSheetToWorkbook(wb, report, getReportSheetName());
-		addSummarySheetToWorkbook(wb, report, getSummarySheetName());
+		addAllSheetsToWorkbook(report, wb);
 
 		wb.write(os);
 		os.flush();
@@ -78,6 +77,15 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		logger.info("Stop generating GPI Excel Report.");
 
 		return os.toByteArray();
+	}
+
+	/**
+	 * @param report
+	 * @param wb
+	 */
+	protected void addAllSheetsToWorkbook(GPIReport report, SXSSFWorkbook wb) {
+		addReportSheetToWorkbook(wb, report, getReportSheetName());
+		addSummarySheetToWorkbook(wb, report, getSummarySheetName());
 	}
 
 	/**
@@ -106,7 +114,10 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		renderReportTableUnits(wb, sheet, report);
 		renderReportTableSummary(wb, sheet, report);
 		renderReportTableHeader(wb, sheet, report);
-		renderReportData(sheet, report);
+	
+		if (report.getPage().getContents() != null && !report.getPage().getContents().isEmpty()) {
+			renderReportData(sheet, report);
+		}
 	}
 
 	/**
@@ -232,8 +243,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 	 * 
 	 * @param wb
 	 * @param summarySheet
-	 * @param reportSpec
-	 * @param queryObject
+	 * @param report
 	 */
 	protected void generateSummarySheet(SXSSFWorkbook workbook, SXSSFSheet summarySheet, GPIReport report) {
 		IntWrapper currLine = new IntWrapper();
@@ -251,7 +261,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 	 * Add information about applied filters in the summary sheet
 	 * 
 	 * @param summarySheet
-	 * @param reportSpec
+	 * @param report
 	 * @param currLine
 	 */
 	private void renderSummaryFilters(Sheet summarySheet, GPIReport report, IntWrapper currLine) {

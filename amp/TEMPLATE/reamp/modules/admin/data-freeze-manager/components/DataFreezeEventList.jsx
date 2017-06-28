@@ -225,14 +225,14 @@ export default class DataFreezeEventList extends Component {
                         }
                         {this.props.context === Constants.DATA_FREEZE_EVENTS &&
                           <tr>
-                          <th className="col-md-2">       
+                          <th className="date-column">       
                           {this.showInfoIcon('data-freeze-date')}{this.props.translations['amp.data-freezing:data-freeze-date']}<span className="error-color" >*&nbsp;</span></th>
                           <th>
                           {this.showInfoIcon('grace-period')}{this.props.translations['amp.data-freezing:grace-period']}<br/>
                           {this.props.translations['amp.data-freezing:days']} 
                           </th>
-                          <th>{this.showInfoIcon('open-period-start')}{this.props.translations['amp.data-freezing:open-period-start']}</th>
-                          <th>{this.showInfoIcon('open-period-end')}{this.props.translations['amp.data-freezing:open-period-end']}</th>
+                          <th className="date-column">{this.showInfoIcon('open-period-start')}{this.props.translations['amp.data-freezing:open-period-start']}</th>
+                          <th className="date-column">{this.showInfoIcon('open-period-end')}{this.props.translations['amp.data-freezing:open-period-end']}</th>
                           <th>{this.showInfoIcon('freeze-options')}{this.props.translations['amp.data-freezing:freeze-options']}<span className="error-color" >*&nbsp;</span></th>
                           <th>{this.showInfoIcon('notification-email')}{this.props.translations['amp.data-freezing:notification-email']}<span className="error-color" >*&nbsp;</span></th>
                           <th>{this.showInfoIcon('notification-days')}{this.props.translations['amp.data-freezing:notification-days']}</th>

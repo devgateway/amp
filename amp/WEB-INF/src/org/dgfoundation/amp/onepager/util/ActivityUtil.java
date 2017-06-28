@@ -841,13 +841,13 @@ public class ActivityUtil {
 	 * @param deletedResources
 	 */
 	private static void deleteResources(AmpActivityVersion a, HashSet<AmpActivityDocument> deletedResources) {
-		if (deletedResources != null) {
-			for (AmpActivityDocument tmpDoc : deletedResources) {
+        if (deletedResources != null) {
+            for (AmpActivityDocument tmpDoc : deletedResources) {
 				Iterator<AmpActivityDocument> it2 = a.getActivityDocuments().iterator();
 				while (it2.hasNext()) {
 					AmpActivityDocument existDoc = (AmpActivityDocument) it2.next();
-					if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0) {
-						it2.remove();
+                    if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0) {
+                        it2.remove();
 						break;
 					}
 				}
@@ -938,9 +938,9 @@ public class ActivityUtil {
 	private static void saveActivityGPINiResources(AmpActivityVersion a, Session session) {
 		AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
 
-		HashSet<TemporaryGPINiDocument> newResources = s.getMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS);
-		HashSet<AmpGPINiSurveyResponseDocument> deletedResources = s.getMetaData(OnePagerConst
-				.GPI_RESOURCES_DELETED_ITEMS);
+        HashSet<TemporaryGPINiDocument> newResources = s.getMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS);
+        HashSet<AmpGPINiSurveyResponseDocument> deletedResources = s.getMetaData(OnePagerConst
+                .GPI_RESOURCES_DELETED_ITEMS);
 
 		// remove old resources
 		deleteGPINiResources(a, deletedResources);
@@ -1025,17 +1025,17 @@ public class ActivityUtil {
 						if (tempOrgRole.getGpiNiSurvey() != null) {
 							for (AmpGPINiSurveyResponse tempGPINiSurveyResponse : tempOrgRole.getGpiNiSurvey()
 									.getResponses()) {
-								if (tempGPINiSurveyResponse.getOldKey() == surveyResponse
-										.getAmpGPINiSurveyResponseId()) {
-									responseDocument.setSurveyResponse(tempGPINiSurveyResponse);
+                                if (shouldResponseToBeUpdated(surveyResponse, tempGPINiSurveyResponse)
+                                        ) {
+                                    responseDocument.setSurveyResponse(tempGPINiSurveyResponse);
 
-									if (tempGPINiSurveyResponse.getSupportingDocuments() == null) {
-										tempGPINiSurveyResponse.setSupportingDocuments(new
-												HashSet<AmpGPINiSurveyResponseDocument>());
-									}
+                                    if (tempGPINiSurveyResponse.getSupportingDocuments() == null) {
+                                        tempGPINiSurveyResponse.setSupportingDocuments(new
+                                                HashSet<AmpGPINiSurveyResponseDocument>());
+                                    }
 
-									tempGPINiSurveyResponse.getSupportingDocuments().add(responseDocument);
-								}
+                                    tempGPINiSurveyResponse.getSupportingDocuments().add(responseDocument);
+                                }
 
 							}
 
@@ -1051,6 +1051,14 @@ public class ActivityUtil {
 			}
 		}
 	}
+
+    private static boolean shouldResponseToBeUpdated(AmpGPINiSurveyResponse surveyResponse, AmpGPINiSurveyResponse
+            tempGPINiSurveyResponse) {
+        return (tempGPINiSurveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
+                == surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
+                && tempGPINiSurveyResponse.getAmpGPINiQuestion().getCode()
+                .equals(surveyResponse.getAmpGPINiQuestion().getCode()));
+    }
 
 	private static void saveIndicators(AmpActivityVersion a, Session session) throws Exception {
 		if (a.getAmpActivityId() != null){

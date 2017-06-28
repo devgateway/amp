@@ -2,13 +2,18 @@ package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -85,7 +90,9 @@ public final class DataFreezeUtil {
         if(freezeOption != null) {
             queryString += " and dataFreezeEvent.freezeOption = :freezeOption";
         }        
-                
+         
+        queryString += " order by ampDataFreezeSettingsId asc";
+        
         Query query = dbSession.createQuery(queryString);
         if(freezeOption != null) {
            query.setParameter("freezeOption", freezeOption);
@@ -102,6 +109,45 @@ public final class DataFreezeUtil {
         String queryString = "from " + User.class.getName() + " user where user.banned = false and user.active = true";
         Query query = session.createQuery(queryString);
         return query.list();
+    }
+    
+    public static AmpDataFreezeExclusion findDataFreezeExclusion(Long activityId, Long dataFreezeEventId) {
+          Session dbSession = PersistenceManager.getSession();
+        String queryString = "select exclusion from " + AmpDataFreezeExclusion.class.getName()
+                + " exclusion where exclusion.activity.ampActivityId = :ampActivityId and exclusion.dataFreezeEvent.ampDataFreezeSettingsId = :ampDataFreezeSettingsId";               
+        Query query = dbSession.createQuery(queryString);        
+        query.setParameter("ampActivityId", activityId);
+        query.setParameter("ampDataFreezeSettingsId", dataFreezeEventId);         
+        
+        List<AmpDataFreezeExclusion> lst = query.list();
+        return (lst.size() > 0) ? lst.get(0) : null;
+    }
+    
+    
+    public static List<AmpDataFreezeExclusion> findAllDataFreezeExclusion() {
+        Session dbSession = PersistenceManager.getSession();
+      String queryString = "select exclusion from " + AmpDataFreezeExclusion.class.getName()+ " exclusion";              
+      Query query = dbSession.createQuery(queryString);        
+      return query.list();
+  }
+    public static void unfreezeActivities(Map<Long,Set<Long>> activityIdEventsIdsMap) {
+        try {
+            Session dbSession = PersistenceManager.getSession();
+            for (Map.Entry<Long, Set<Long>> event : activityIdEventsIdsMap.entrySet()) {
+                for(Long eventId : event.getValue()) {
+                    AmpDataFreezeExclusion ampDataFreezeExclusion = findDataFreezeExclusion(event.getKey(), eventId);
+                    if (ampDataFreezeExclusion == null){
+                        ampDataFreezeExclusion = new AmpDataFreezeExclusion();
+                        ampDataFreezeExclusion.setActivity(ActivityUtil.loadAmpActivity(event.getKey()));
+                        ampDataFreezeExclusion.setDataFreezeEvent(getDataFreezeEventById(eventId)); 
+                        dbSession.saveOrUpdate(ampDataFreezeExclusion);
+                    }                   
+                }               
+            }            
+        } catch (Exception e) {
+            logger.error("Exception from unfreezeActivities: " + e.getMessage());
+        }
+        
     }
     
     public static Date getFreezingDate(AmpDataFreezeSettings event) {

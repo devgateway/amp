@@ -1,7 +1,7 @@
 export const initialTranslations = {       
         'amp.data-freezing:title': 'Aid Management Platform - Data Freezing',
         'amp.data-freezing:data-freeze-manager': 'Data Freezing Manager',
-        'amp.data-freezing:add-freezing-event': '+ Add New Freezing Event',
+        'amp.data-freezing:add-freezing-event': 'Freezing Events',
         'amp.data-freezing:unfreeze-all': 'Unfreeze All',
         'amp.data-freezing:data-freeze-date': 'Data Freeze Date',
         'amp.data-freezing:grace-period': 'Grace Period',

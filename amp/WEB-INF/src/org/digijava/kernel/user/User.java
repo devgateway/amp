@@ -84,6 +84,7 @@ public class User
     private String organizationTypeOther;
     private Set contacts;
     private AmpUserExtension userExtension;
+    private Boolean exemptFromDataFreezing;
 
     private Set<AmpOrganisation> assignedOrgs;
 	public User() {}
@@ -493,5 +494,13 @@ public class User
 	public void setRegion(AmpCategoryValueLocations region) {
 		this.region = region;
 	}
+
+    public Boolean getExemptFromDataFreezing() {
+        return exemptFromDataFreezing;
+    }
+
+    public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
+        this.exemptFromDataFreezing = exemptFromDataFreezing;
+    }
 	
 }

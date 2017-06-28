@@ -85,6 +85,7 @@ public class UserRegisterForm
     private Collection topicitems;
 
     private Long siteId;
+    private boolean exemptFromDataFreezing;
     
     public String[] getSelectedItems() {
         return this.selectedItems;
@@ -495,7 +496,15 @@ public class UserRegisterForm
 		this.selectedOrganizationId = selectedOrganizationId;
 	}
 
-	public HashMap<String, String> getErrors() {
+	public boolean isExemptFromDataFreezing() {
+        return exemptFromDataFreezing;
+    }
+
+    public void setExemptFromDataFreezing(boolean exemptFromDataFreezing) {
+        this.exemptFromDataFreezing = exemptFromDataFreezing;
+    }
+
+    public HashMap<String, String> getErrors() {
 		return errors;
 	}
 

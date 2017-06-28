@@ -186,6 +186,7 @@ public class ViewEditUser extends Action {
             uForm.setDisplaySuccessMessage(null);
             uForm.setAddWorkspace(false);
             uForm.setEmailerror(false);
+            uForm.setExemptFromDataFreezing(false);
             uForm.setNationalCoordinator(false);
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
@@ -208,7 +209,7 @@ public class ViewEditUser extends Action {
                 uForm.getAssignedOrgs().addAll(user.getAssignedOrgs());
                 uForm.setPledger(user.getPledger());
                 uForm.setBanReadOnly(user.isBanned());
-
+                uForm.setExemptFromDataFreezing(user.getExemptFromDataFreezing());
 
                 Locale language = null;
                 if (langPref == null) {
@@ -334,6 +335,7 @@ public class ViewEditUser extends Action {
 
                     user.setUserLangPreferences(userLangPreferences);
                     user.setPledger(uForm.getPledger());
+                    user.setExemptFromDataFreezing(uForm.getExemptFromDataFreezing());
                     
                     if (uForm.getNationalCoordinator()) {
                     	user.getGroups().add(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));                    	

@@ -423,7 +423,9 @@ public class GPIReportUtils {
 
 		if (filters.getDateFilterRules() != null && isEthiopianCalendar(calendarConverter)) {
 			AmpFiscalCalendar ethCalendar = (AmpFiscalCalendar) calendarConverter;
+			Optional<ReportColumn> optApprovalColumn = filters.getDateFilterRules().keySet().stream()
 					.filter(rc -> rc.getColumnName().equals(ColumnConstants.ACTUAL_APPROVAL_DATE)).findAny();
+			ReportColumn approvalColumn = optApprovalColumn.isPresent() ? optApprovalColumn.get()
 					: new ReportColumn(ColumnConstants.ACTUAL_APPROVAL_DATE);
 			FilterRule gregFilterRule = filters.getDateFilterRules().get(approvalColumn);
 

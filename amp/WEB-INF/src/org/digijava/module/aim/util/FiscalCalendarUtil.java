@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.CalendarConverter;
@@ -140,6 +141,18 @@ public class FiscalCalendarUtil {
 			e.printStackTrace(System.out);
 		}
 		return fisCal;
+	}
+	
+	public static List<AmpFiscalCalendar> getAllAmpFiscalCalendars(){
+	    Session session = null;
+	    List<AmpFiscalCalendar> list = null;        
+        try {
+            session = PersistenceManager.getSession();
+            list = session.createQuery("from " + AmpFiscalCalendar.class.getName()).list();            
+        } catch (Exception e) {
+            logger.error("Exception from getAllAmpFiscalCalendars() :" + e.getMessage());            
+        }
+        return list;
 	}
 	
 	public static AmpFiscalCalendar getAmpFiscalCalendar(String calendarName) {

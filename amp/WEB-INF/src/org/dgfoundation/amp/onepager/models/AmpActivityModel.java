@@ -126,7 +126,9 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		AmpActivityVersion ret = ActivityUtil.load(this, id);
         if (ret.getActivityType() == null) //set default type for previously saved activities
             ret.setActivityType(ActivityUtil.ACTIVITY_TYPE_PROJECT);
-        loadFreezingConfiguration(ret);
+		if (id != null) {
+			loadFreezingConfiguration(ret);
+		}
 		return ret;
 	}
 
@@ -143,8 +145,6 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		// we get funding freezing configuration
 
 		List<Date> dates = new ArrayList<Date>();
-		java.util.Date inicio = new java.util.Date();
-		
 		for (AmpFunding f : a.getFunding()) {
 			for (AmpFundingMTEFProjection mfp : f.getMtefProjections()) {
 				dates.add(mfp.getTransactionDate());
@@ -153,12 +153,9 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 				dates.add(fd.getTransactionDate());
 			}
 		}
-		
-		java.util.Date fin = new java.util.Date();
 		HashMap<Date, Boolean> transactionEditable = DataFreezeService.isEditable(a.getAmpActivityId(),
 				dates, s.getAmpCurrentMember());
 		org.apache.wicket.Session.get().setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, transactionEditable);
-		System.out.println("demoro " + (fin.getTime() - inicio.getTime()));
 	}
     
 	@Override   

@@ -1,0 +1,11 @@
+<div class="form-group">
+  <label class="control-label" data-i18n="amp.settings:label-<%= obj.setting.id %>"><%= obj.setting.name %></label>
+  <select class="form-control" id="<%= obj.setting.id %>">
+  <% _.each(obj.setting.value.options, function(option){ %>
+  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings['amount-format'][obj.setting.id];%>
+    <option value="<%= option.value %>"  <% if(selected == option.value){ %> selected <% } %> >
+      <%= option.name %>
+    </option>
+  <%}); %>
+  </select>
+</div>

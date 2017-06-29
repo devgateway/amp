@@ -156,7 +156,7 @@ public class SettingsUtils {
 
 	/**
 	 * Provides current report settings
-	 * 
+	 *
 	 * @param spec
 	 *            report specification
 	 * @return settings in a structure to be used in UI, with all options
@@ -511,8 +511,23 @@ public class SettingsUtils {
 			for (String measure : measureOptions)
 				spec.addMeasure(new ReportMeasure(measure));
 		} else {
-			spec.addMeasure(new ReportMeasure(SettingsConstants.DEFAULT_FUNDING_TYPE_ID));
+			spec.addMeasure(new ReportMeasure(SettingsUtils.getDefaultFundingType()));
 		}
+	}
+
+	/**
+	 * Return the default Funding Type
+	 *
+	 * @return default Funding Type
+	 */
+	public static String getDefaultFundingType() {
+		String fundingType = SettingsConstants.DEFAULT_FUNDING_TYPE_ID;
+		Set<String> measures = new LinkedHashSet<>(GisConstants.FUNDING_TYPES);
+		measures.retainAll(MeasuresVisibility.getConfigurableMeasures());
+		if (measures.size() > 0) {
+			fundingType = measures.iterator().next();
+		}
+		return fundingType;
 	}
 
 	/**

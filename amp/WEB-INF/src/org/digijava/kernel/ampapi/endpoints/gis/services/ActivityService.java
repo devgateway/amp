@@ -182,7 +182,7 @@ public class ActivityService {
 			Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
 			String fundingType = (String) (settings == null ? null : settings.get(SettingsConstants.FUNDING_TYPE_ID));
 			if (fundingType == null)
-				fundingType = SettingsConstants.DEFAULT_FUNDING_TYPE_ID;
+				fundingType = SettingsUtils.getDefaultFundingType();
 			if (fundingType.startsWith("Actual")) {
 				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));

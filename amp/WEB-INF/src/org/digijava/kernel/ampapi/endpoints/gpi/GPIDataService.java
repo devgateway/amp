@@ -609,15 +609,14 @@ public class GPIDataService {
         return result;     
    }
 	
-  private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {
-      Integer result = 0;
-      int currentYear =  FiscalCalendarUtil.getCurrentYear();
+  private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {     
       for(AmpFiscalCalendar calendar : calendars){
           if(calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())){
+              int currentYear =  FiscalCalendarUtil.getCurrentYear();
               int startYear = AmpARFilter.getDefaultYear(AmpARFilter.getEffectiveSettings(), calendar, true);
               return currentYear - startYear;
           } 
       }
-      return result;
+      return 0;
   }
 }

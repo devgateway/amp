@@ -283,9 +283,6 @@ export default class Report9b extends Component {
                          <li>
                             <a onClick={this.downloadExcelFile}><img src="images/export-excel.svg" /></a>
                          </li>
-                         <li>
-                            <a href="#"><img src="images/export-print.svg" /></a>
-                         </li>
                         </ul>
                             <div className="btn-action-nav">
                                 <button type="button" className="btn btn-action" onClick={this.showFilters}>{this.props.translations['amp.gpi-reports:filter-button']}</button>

@@ -1,8 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -61,7 +63,7 @@ public class SettingsConstants {
 		put(USE_GROUPING, "Use Grouping Separator");
 		put(GROUP_SEPARATOR, "Grouping Separator");
 		put(GROUP_SIZE, "Group Size");
-		put(AMOUNT_UNITS, "Amount units");
+		put(AMOUNT_UNITS, "Amounts units");
 		put(AMOUNT_UNITS_1, "Amounts in Units");
 		put(AMOUNT_UNITS_1000, "Amounts in Thousands (000)");
 		put(AMOUNT_UNITS_1000000, "Amounts in Millions (000 000)");
@@ -109,6 +111,14 @@ public class SettingsConstants {
 		put(AMOUNT_UNITS_1000, "1000");
 		put(AMOUNT_UNITS_1000000, "1000000");
 		put(AMOUNT_UNITS_1000000000, "1000000000");
+	}});
+
+	/** {id, value} map for default amount units used in reports */
+	public static final Map<String, String> AMOUNT_UNITS_MAP_REPORTS = Collections.unmodifiableMap(new
+																										   LinkedHashMap<String, String>() {{
+		put(AMOUNT_UNITS_1, "1");
+		put(AMOUNT_UNITS_1000, "1000");
+		put(AMOUNT_UNITS_1000000, "1000000");
 	}});
 	
 	public static final Map<String, String> YEAR_MAP = Collections.unmodifiableMap(new LinkedHashMap<String, String>() {{

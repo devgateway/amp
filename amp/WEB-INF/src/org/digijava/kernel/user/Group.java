@@ -42,12 +42,14 @@ public class Group
     public static final String TRANSLATORS = "TRN";
     public static final String EDITORS = "EDT";
     public static final String PLEDGERS = "PLE";
+    public static final String NATIONAL_COORDINATORS = "NCO";
 
     public static final String ADMINISTRATORS_NAME = "Administrators";
     public static final String MEMBERS_NAME = "Members";
     public static final String TRANSLATORS_NAME = "Translators";
     public static final String EDITORS_NAME = "Editors";
     public static final String PLEDGERS_NAME = "Pledgers";
+    public static final String NATIONAL_COORDINATORS_NAME = "National Coordinators";
 
     public static final HashMap defaultGroups;
 
@@ -58,6 +60,7 @@ public class Group
         defaultGroups.put(TRANSLATORS, TRANSLATORS_NAME);
         defaultGroups.put(EDITORS, EDITORS_NAME);
         defaultGroups.put(PLEDGERS, PLEDGERS_NAME);
+        defaultGroups.put(NATIONAL_COORDINATORS, NATIONAL_COORDINATORS_NAME);
     }
 
     private Site site;
@@ -137,6 +140,11 @@ public class Group
         return key.equals(EDITORS);
     }
 
+    public Boolean isNationalCoordinatorGroup(){
+    	if( key == null ) return false;
+        return key.equals(NATIONAL_COORDINATORS);		
+	}
+    
     /**
      * Returns required action(s) for default group and null for non-default
          * one. For example, ADMIN for administrators group, READ for members group,

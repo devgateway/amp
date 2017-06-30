@@ -62,6 +62,7 @@ function resetFilter(){
  		resetElement(aimReportsFilterPickerForm.selectedImplementingAgency);
  		resetElement(aimReportsFilterPickerForm.selectedDonnorAgency);
  		resetElement(aimReportsFilterPickerForm.selectedresponsibleorg);
+ 		resetElement(aimReportsFilterPickerForm.selectedConcensionalityLevel);
  		
  		resetElement(aimReportsFilterPickerForm.disbursementOrders);
  		resetElement(aimReportsFilterPickerForm.selectedBudgets);

@@ -2886,6 +2886,12 @@ public class ExportActivityToPDF extends Action {
                             {
                                 addNewInfoCell(fundingTable, "Mode of Payment", funding.getModeOfPayment());
                             }
+                            
+                            // Concessionality Level
+                            if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level"))
+                            {
+                                addNewInfoCell(fundingTable, "Concessionality Level", funding.getConcessionalityLevel());
+                            }
 
                             //always display FundingClassification Date, if it has been entered
                             {

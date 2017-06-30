@@ -44,7 +44,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	public static final String CONCESSIONAL_YES_VALUE = "1";
 
 	public GPIReport5aOutputBuilder() {
-		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
+		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY,"TheDonorAgency"));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS));
@@ -84,9 +84,9 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 			if (ColumnConstants.DONOR_AGENCY.equals(roc.originalColumnName)) {
-				donorColumn = new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY);
+				donorColumn = new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY,roc.description);
 			} else if (ColumnConstants.DONOR_GROUP.equals(roc.originalColumnName)) {
-				donorColumn = new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP);
+				donorColumn = new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP,roc.description);
 				isDonorAgency = false;
 			}
 			headersMap.putIfAbsent(roc.originalColumnName, roc);

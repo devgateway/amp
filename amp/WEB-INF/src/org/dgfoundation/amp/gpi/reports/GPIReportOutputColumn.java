@@ -29,8 +29,8 @@ public class GPIReportOutputColumn implements Comparable<GPIReportOutputColumn> 
 		this(TranslatorWorker.translateText(originalColumnName), originalColumnName, null);
 	}
 			
-	public GPIReportOutputColumn(String columnName, String originalColumnName) {
-		this(columnName, originalColumnName, null);
+	public GPIReportOutputColumn(String originalColumnName, String description) {
+		this(TranslatorWorker.translateText(originalColumnName), originalColumnName, TranslatorWorker.translateText(description));
 	}
 	
 	public GPIReportOutputColumn(String columnName, String originalColumnName, String description) {

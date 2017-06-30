@@ -336,7 +336,7 @@ export default class Report9b extends Component {
                                         {this.props.translations['amp.gpi-reports:other-years']}
                                         <span className="caret"></span></a>
                                     <ul className="dropdown-menu dropdown-years" role="menu">
-                                        {years.length > 3 && years.reverse().map( year =>
+                                        {years.reverse().map( year =>
                                             <li role="presentation" className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
                                         )}
 

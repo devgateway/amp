@@ -42,23 +42,39 @@ export default class DataFreezeEventEdit extends Component {
         this.onEnabledChange = this.onEnabledChange.bind(this);
         this.getErrorsForField = this.getErrorsForField.bind(this);
         this.onNotificationDaysChange = this.onNotificationDaysChange.bind(this);
+        this.toggleDatePickerByFieldName = this.toggleDatePickerByFieldName.bind(this);        
     }
 
-    toggleDatePicker(event) {
-        let field = event.target.getAttribute('data-field');
+    toggleDatePicker(event) { 
         let toggleState = this.state.showDatePicker;
+        let field = event.target.getAttribute('data-field'); 
+        for(const fieldName in toggleState){
+            if(field != fieldName){
+                toggleState[fieldName]  = false; 
+            }            
+        }
+        
         toggleState[field] = !toggleState[field];
         this.setState({
             showDatePicker: toggleState
         });
     }
-
-    onFreezingDateChange(date) {
+    
+   toggleDatePickerByFieldName(fieldName){
+        let toggleState = this.state.showDatePicker;        
+        toggleState[fieldName] = !toggleState[fieldName];
+        this.setState({
+            showDatePicker: toggleState
+        });
+    }
+ 
+   onFreezingDateChange(date) {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.freezingDate = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
         this.setState({
             currentRecord: currentRecord
         });
+        this.toggleDatePickerByFieldName('freezingDate');
     }
 
     onOpenPeriodStartChange(date) {
@@ -67,6 +83,8 @@ export default class DataFreezeEventEdit extends Component {
         this.setState({
             currentRecord: currentRecord
         });
+        
+        this.toggleDatePickerByFieldName('openPeriodStart');
     }
 
     onOpenPeriodEndChange(date) {
@@ -75,8 +93,9 @@ export default class DataFreezeEventEdit extends Component {
         this.setState({
             currentRecord: currentRecord
         });
+        this.toggleDatePickerByFieldName('openPeriodEnd');
     }
-
+    
     onGracePeriodChange(event) {
         let gracePeriod = $(event.target).val();
         let currentRecord = this.props.dataFreezeEvent;
@@ -85,7 +104,7 @@ export default class DataFreezeEventEdit extends Component {
             currentRecord: currentRecord
         });
     }
-
+    
     onSendNotificationChange(event) {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.sendNotification = $(event.target).val() === Constants.OPTION_YES;
@@ -193,7 +212,7 @@ export default class DataFreezeEventEdit extends Component {
               {this.state.showDatePicker.freezingDate &&
                <div className="datepicker-outer-wrapper">                      
                   <div className="datepicker-inner-wrapper">                        
-                    <DatePicker data-field="freezingDate"  onChange={this.onFreezingDateChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)} dateFormat={this.getDisplayDateFormat()}/>
+                    <DatePicker data-field="freezingDate"  onChange={this.onFreezingDateChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)} dateFormat={this.getDisplayDateFormat()} />
                   </div>
               </div>
               }
@@ -216,7 +235,7 @@ export default class DataFreezeEventEdit extends Component {
                 {this.state.showDatePicker.openPeriodStart &&
                     <div className="datepicker-outer-wrapper">                      
                     <div className="datepicker-inner-wrapper">                      
-                      <DatePicker onChange={this.onOpenPeriodStartChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)} dateFormat={this.getDisplayDateFormat()}/>
+                      <DatePicker onChange={this.onOpenPeriodStartChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)} dateFormat={this.getDisplayDateFormat()} />
                      </div>
                     </div>
                 }  

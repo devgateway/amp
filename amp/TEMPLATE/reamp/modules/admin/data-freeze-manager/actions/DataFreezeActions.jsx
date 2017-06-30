@@ -78,7 +78,7 @@ export function save(data) {
                result.dataFreezeEvent = response.data || data;
                if (response.result === Constants.SAVE_SUCCESSFUL) {
                     result.dataFreezeEvent.isEditing = false;
-                    result.infoMessages = [{ messageKey: 'amp.data-freeze-event:save-successful' }];
+                    result.infoMessages = [{ messageKey: 'amp.data-freeze-event:save-successful', context: Constants.DATA_FREEZE_EVENTS}];
                }
 
                if (response.errors || response.error) {
@@ -108,7 +108,7 @@ export function deleteDataFreezeEvent(data) {
                     if (response.error) {
                          result.errors = [...Utils.extractErrors(response.error, result.dataFreezeEvent)]
                     } else {
-                         result.infoMessages = [{ messageKey: 'amp.data-freeze-event:delete-successful' }];
+                        result.infoMessages = [{ messageKey: 'amp.data-freeze-event:delete-successful', context: Constants.DATA_FREEZE_EVENTS}];
                     }
 
                     dispatch(deleteSuccess(result));
@@ -118,7 +118,7 @@ export function deleteDataFreezeEvent(data) {
           } else {
                const result = {
                     dataFreezeEvent: data,
-                    infoMessages: [{ messageKey: 'amp.data-freeze-event:delete-successful' }]
+                    infoMessages: [{ messageKey: 'amp.data-freeze-event:delete-successful' ,context: Constants.DATA_FREEZE_EVENTS }]
                };
                dispatch(deleteSuccess(result));
           }
@@ -140,9 +140,9 @@ export function unfreezeAll() {
           return dataFreezeApi.unfreezeAll().then(response => {
                let result = { infoMessages: [], errors: [] };
                if (response.result === 'SUCCESSFUL') {
-                    result.infoMessages.push({ messageKey: 'amp.data-freeze-event:unfreeze-all-successful' });
+                   result.infoMessages.push( { messageKey: 'amp.data-freeze-event:unfreeze-all-successful', context: Constants.UNFREEZE_ALL});
                } else {
-                    result.errors.push({ messageKey: 'amp.data-freeze-event:unfreeze-all-failed' });
+                   result.errors.push( { messageKey: 'amp.data-freeze-event:unfreeze-all-failed', context: Constants.UNFREEZE_ALL });
                }
 
                dispatch({ type: 'UNFREEZE_ALL', data: result });

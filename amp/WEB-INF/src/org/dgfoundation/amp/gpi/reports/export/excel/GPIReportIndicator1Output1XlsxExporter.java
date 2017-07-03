@@ -86,20 +86,7 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 		remarkHeaderCell.setCellValue(TranslatorWorker.translateText("Remarks"));
 		remarkHeaderCell.setCellStyle(template.getHeaderCellStyle());
 		
-		String donorType = GPIReportConstants.HIERARCHY_DONOR_AGENCY;
-
-		FilterRule donorAgencyRule = GPIReportUtils.getFilterRule(report.getOriginalFormParams(), 
-				ColumnConstants.DONOR_AGENCY);
-		List<Long> ids = donorAgencyRule == null ? new ArrayList<>()
-				: donorAgencyRule.values.stream().map(s -> Long.parseLong(s)).collect(Collectors.toList());
-		
-		FilterRule aprDateRule = GPIReportUtils.getFilterRule(report.getOriginalFormParams(), 
-				ColumnConstants.ACTUAL_APPROVAL_DATE);
-		
-		Long min = aprDateRule == null ? 0L : aprDateRule.min != null ? Long.parseLong(aprDateRule.min) : 0L;
-		Long max = aprDateRule == null ? 0L : aprDateRule.max != null ? Long.parseLong(aprDateRule.max) : 0L;
-		
-		List<GPIRemark> remarks = GPIDataService.getGPIRemarks(GPIReportConstants.REPORT_1, ids, donorType, min, max);
+		List<GPIRemark> remarks = GPIReportUtils.getRemarksForIndicator1(report);
 		
 		for (GPIRemark remark : remarks) {
 			Row remarkRow = remarkSheet.createRow(currLine.inc().intValue());

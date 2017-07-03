@@ -17,18 +17,25 @@ import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.gpi.reports.GPIDocument;
 import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
+import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
+import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * @author Viorel Chihai
@@ -43,6 +50,22 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 		relativeWidths = new float[] { 2f, 5f, 5f, 3f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 3f,
 				3f, 3f };
 		reportTitle = "Indicator 1 Output 1";
+	}
+	
+	public void generateReportTable(Document doc, PdfWriter writer, GPIReport report) throws DocumentException {
+		Paragraph body = new Paragraph();
+		
+		renderReportTitle(report, body);
+		renderReportSettings(report, body);
+		renderReportTableSummary(report, body);
+		renderReportTable(report, body);
+		doc.add(body);
+		
+		doc.newPage();
+		body = new Paragraph();
+		renderReportRemarks(report, body);
+		renderReportStatistics(report, body);
+		doc.add(body);
 	}
 
 	@Override
@@ -256,6 +279,45 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 				bkgColor);
 
 		insertCell(table, urlCell, 0);
+	}
+	
+	/*
+	 * Render Report Remarks
+	 */
+	public void renderReportRemarks(GPIReport report, Paragraph body) {
+		float fntSize = FONT_SIZE_TITLE;
+		Font titleRemarkFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, fntSize);
+		Paragraph remarkParagraph = new Paragraph("Donor Remarks", titleRemarkFont);
+		body.add(remarkParagraph);
+		
+		float[] remarksRelativeWidths = new float[] {10f, 30f, 60f};
+		PdfPTable table = new PdfPTable(remarksRelativeWidths);
+
+		// set table width a percentage of the page width
+		table.setWidthPercentage(100f);
+
+		Font bfBold10 = new Font(Font.HELVETICA, 10, Font.BOLD, new Color(0, 0, 0));
+		Color bkgColor = Color.LIGHT_GRAY;
+		
+		insertCell(table, TranslatorWorker.translateText("Date"), Element.ALIGN_CENTER, 1, 1, bfBold10, bkgColor);
+		insertCell(table, TranslatorWorker.translateText("Donor"), Element.ALIGN_CENTER, 1, 1, bfBold10, bkgColor);
+		insertCell(table, TranslatorWorker.translateText("Remarks"), Element.ALIGN_CENTER, 1, 1, bfBold10, bkgColor);
+		
+		table.setHeaderRows(1);
+		
+		Font font = new Font(Font.HELVETICA, 9);
+		bkgColor = Color.WHITE;
+		
+		List<GPIRemark> remarks = GPIReportUtils.getRemarksForIndicator1(report);
+		
+		for (GPIRemark remark : remarks) {
+			insertCell(table, remark.getDate(), Element.ALIGN_CENTER, 1, 1, font, bkgColor);
+			insertCell(table, remark.getDonorAgency(), Element.ALIGN_LEFT, 1, 1, font, bkgColor);
+			insertCell(table, remark.getRemark(), Element.ALIGN_LEFT, 1, 1, font, bkgColor);
+		}
+
+		body.add(table);
+		body.add(new Paragraph(""));
 	}
 
 	@Override

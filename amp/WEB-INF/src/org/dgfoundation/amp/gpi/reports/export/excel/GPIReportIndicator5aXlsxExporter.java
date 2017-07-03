@@ -107,7 +107,7 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
 				GPIReportOutputColumn column = report.getPage().getHeaders().get(j);
 				if (isRemarkColumn(column.originalColumnName)) {
 					createCell(report, sheet, row, j, column.originalColumnName, 
-							GPIReportUtils.getRemarksForExport(rowData));
+							GPIReportUtils.getRemarksForIndicator5a(rowData));
 				} else {
 					createCell(report, sheet, row, j, column.originalColumnName, rowData.get(column));
 				}

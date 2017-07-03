@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Utils from '../common/Utils';
 import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as Constants from '../common/Constants';
@@ -37,14 +38,7 @@ export default class Report5b extends Component {
                draggable: true,
                caller: 'REPORTS'
           });
-
-          this.settingsWidget = new AMPSettings.SettingsWidget({
-               draggable: true,
-               caller: 'REPORTS',
-               isPopup: true,
-               definitionUrl: '/rest/settings-definitions/gpi-reports'
-          });
-
+          this.settingsWidget = Utils.initializeSettingsWidget();
           this.props.actions.getYears();
           this.props.actions.getOrgList(false);
           this.fetchReportData();

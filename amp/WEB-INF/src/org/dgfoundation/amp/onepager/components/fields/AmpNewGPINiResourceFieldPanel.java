@@ -361,15 +361,15 @@ public class AmpNewGPINiResourceFieldPanel extends AmpFeaturePanel {
         }
     }
 
-    protected String getToggleId() {
-    	if (TranslatorUtil.isTranslatorMode(getSession())) {
-    		return getTranlationToggleId();
-    	}
-    	
-    	return responseModel.getObject().getAmpGPINiQuestion().getAmpGPINiQuestionId() + "_" + getId();
-    }
-    
-    protected String getTranlationToggleId() {
-    	return responseModel.getObject().getAmpGPINiQuestion().getAmpGPINiQuestionId() + "_" + getId() + "H";
-    }
+	protected String getToggleId() {
+		if (TranslatorUtil.isTranslatorMode(getSession())) {
+			return getTranlationToggleId();
+		}
+
+		return responseModel.getObject().getAmpGPINiQuestion().getAmpGPINiQuestionId() + "_" + this.getMarkupId() + "_" + getId();
+	}
+
+	protected String getTranlationToggleId() {
+		return responseModel.getObject().getAmpGPINiQuestion().getAmpGPINiQuestionId() + "_" + this.getMarkupId() + "_" + getId() + "H";
+	}
 }

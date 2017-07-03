@@ -69,6 +69,7 @@ public class ViewEditUserForm extends ActionForm {
 	private Long role;
 	private boolean emailerror;
 	private boolean banReadOnly;
+	private Boolean exemptFromDataFreezing;
 	private boolean nationalCoordinator;
 	
 	public boolean isEmailerror() {
@@ -387,6 +388,13 @@ public class ViewEditUserForm extends ActionForm {
 		this.banReadOnly = banReadOnly;
 	}
 
+    public Boolean getExemptFromDataFreezing() {
+        return exemptFromDataFreezing;
+    }
+
+    public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
+        this.exemptFromDataFreezing = exemptFromDataFreezing;
+    }
 	public boolean getNationalCoordinator() {
 		return nationalCoordinator;
 	}

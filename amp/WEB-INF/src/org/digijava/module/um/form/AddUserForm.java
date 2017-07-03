@@ -93,7 +93,8 @@ public class AddUserForm  extends ValidatorForm {
     private String[] topicselectedItems = {};
     private Collection topicitems;
 
-    private Long siteId;
+    private Long siteId;    
+    private Boolean exemptFromDataFreezing;
     
     private boolean nationalCoordinator = false;
     
@@ -609,6 +610,14 @@ public class AddUserForm  extends ValidatorForm {
 	public void setRegistrationByEmail(boolean registrationByEmail) {
 		this.registrationByEmail = registrationByEmail;
 	}
+
+    public Boolean getExemptFromDataFreezing() {
+        return exemptFromDataFreezing;
+    }
+
+    public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
+        this.exemptFromDataFreezing = exemptFromDataFreezing;
+    }
 
 	public boolean getNationalCoordinator() {
 		return nationalCoordinator;

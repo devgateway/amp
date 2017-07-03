@@ -30,7 +30,7 @@ public class GpiReport1Output2Visitor implements ReportVisitor {
 	@Override
 	public void visit(ReportArea area) {
 		if (area.getChildren() == null) {
-			if (!gpiItem.isEmpty()) {
+			if (!gpiItem.isEmpty() && gpiItem.getApprovalDate() != 0) {
 				gpiItems.add(gpiItem);
 			}
 		}

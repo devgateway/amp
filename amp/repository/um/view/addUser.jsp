@@ -479,7 +479,14 @@
 												<td class=f-names align="left">
 													<html:checkbox property="addWorkspace" styleClass="inp-text">
 													</html:checkbox></td>
-											</tr>											
+											</tr>
+											 <tr>
+												<td width="3%">&nbsp;</td>
+												<td align="right"  class="formCheckContainer"><digi:trn key="um:exemptFromDataFreezing">Exempt from activity freezing</digi:trn></td>
+												<td class=f-names align="left">
+													<html:checkbox property="exemptFromDataFreezing" styleClass="inp-text">
+													</html:checkbox></td>
+											</tr>
 											<tr>
 												<td>&nbsp;</td>
 												<td align="right" class="addUserButContainer">

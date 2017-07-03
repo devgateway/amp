@@ -47,7 +47,7 @@ export default class Report1Output1Row extends Component {
         this.setState({descriptionsExpanded: descriptionToggleState})
     }
     
-    toggleSupportingEvidence(event) {        
+    toggleSupportingEvidence(event) {  
         this.setState({showSupportingEvidence: !this.state.showSupportingEvidence}) 
     }
     
@@ -94,7 +94,7 @@ export default class Report1Output1Row extends Component {
                     <td>                   
                     <div style={{ position: 'relative' }}>
                         {this.state.showSupportingEvidence &&
-                           <SupportingEvidencePopup code="1" requestData={{}} toggleSupportingEvidence={this.toggleSupportingEvidence}/> 
+                           <SupportingEvidencePopup code="1" requestData={{}} toggleSupportingEvidence={this.toggleSupportingEvidence} rowData={this.props.rowData}/> 
                         }
                         <img className="table-icon" ref="showSupportingEvidenceToggle" src="images/icon-download-blue.svg" onClick={this.toggleSupportingEvidence}/>
                     </div>                                          

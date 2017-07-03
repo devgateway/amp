@@ -17,6 +17,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.dgfoundation.amp.gpi.reports.GPIDocument;
 import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
+import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -446,8 +447,9 @@ public class GPIDataService {
 		
 		Predicate<AmpGPINiDonorNotes> donorPredicate = note -> donorIds == null || donorIds.isEmpty()
 				|| (donorIds.size() == 1 && donorIds.get(0) == null) 
-				? true : donorType == null || "donor-agency".equals(donorType)	
-				? donorIds.contains(note.getDonor().getAmpOrgId()) : "donor-group".equals(donorType) 
+				? true : donorType == null || GPIReportConstants.HIERARCHY_DONOR_AGENCY.equals(donorType)	
+				? donorIds.contains(note.getDonor().getAmpOrgId()) 
+				: GPIReportConstants.HIERARCHY_DONOR_GROUP.equals(donorType) 
 				? donorIds.contains(note.getDonor().getOrgGrpId().getAmpOrgGrpId()) : false;
 
 		filteredNotes = donorNotes.stream()

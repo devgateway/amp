@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
@@ -14,6 +15,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
@@ -30,6 +32,15 @@ import com.lowagie.text.pdf.PdfWriter;
  *
  */
 public class GPIReportPdfExporter implements GPIReportExporter {
+	
+	protected static final Logger logger = Logger.getLogger(GPIReportExporter.class);
+	
+	static final float FONT_SIZE_TITLE = 20f;
+	static final float FONT_SIZE_SETTINGS = 10f;
+	static final float FONT_SIZE_SUMMARY = 13f;
+
+	static final float MINIMUM_ROW_HEIGHT = 10f;
+	static final float SUMMARY_ROW_HEIGHT = 30f;
 
 	protected GPIReport report;
 	
@@ -47,10 +58,20 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 		Document doc = createDocument();
 		PdfWriter writer = PdfWriter.getInstance(doc, os);
 		doc.open();
-
-		generateReportTable(doc, writer, report);
-
-		doc.close();
+		
+		try {
+			generateReportTable(doc, writer, report);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			doc.add(new Paragraph("Error occured during creating the GPI Report in PDF."));
+		} finally {
+			if (doc != null) {
+				doc.close();
+			}
+			if (writer != null) {
+				writer.close();
+			}
+		}
 
 		return os.toByteArray();
 	}
@@ -61,38 +82,27 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 		return doc;
 	}
 
-	public void generateReportTable(Document doc, PdfWriter writer, GPIReport report) {
-		try {
-			Paragraph body = new Paragraph();
-			
-			renderReportTitle(report, body);
-			renderReportSettings(report, body);
-			renderReportTableSummary(report, body);
-			renderReportTable(report, body);
-			renderReportStatistics(report, body);
-			
-			doc.add(body);
-		} catch (Exception e) {
-			throw new RuntimeException("Error during creating the GPI Report in PDF", e);
-		} finally {
-			if (doc != null) {
-				doc.close();
-			}
-			if (writer != null) {
-				writer.close();
-			}
-		}
+	public void generateReportTable(Document doc, PdfWriter writer, GPIReport report) throws DocumentException {
+		Paragraph body = new Paragraph();
+		
+		renderReportTitle(report, body);
+		renderReportSettings(report, body);
+		renderReportTableSummary(report, body);
+		renderReportTable(report, body);
+		renderReportStatistics(report, body);
+		
+		doc.add(body);
 	}
 	
 	public void renderReportTitle(GPIReport report, Paragraph body) {
-		float fntSize = 20f;
+		float fntSize = FONT_SIZE_TITLE;
 		
 		Paragraph titleParagraph = new Paragraph(reportTitle, FontFactory.getFont(FontFactory.HELVETICA_BOLD, fntSize));
 		body.add(titleParagraph);
 	}
 	
 	public void renderReportSettings(GPIReport report, Paragraph body) {
-		Font bf10 = new Font(Font.HELVETICA, 10);
+		Font bf10 = new Font(Font.HELVETICA, FONT_SIZE_SETTINGS);
 		
 		String units = report.getSpec().getSettings().getUnitsOption().userMessage;
 		String currency = report.getSettings().getCurrencyCode();
@@ -111,7 +121,7 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 		// set table width a percentage of the page width
 		table.setWidthPercentage(100f);
 		
-		Font bfBold14 = new Font(Font.HELVETICA, 13, Font.BOLD, new Color(0, 0, 0));
+		Font bfBold14 = new Font(Font.HELVETICA, FONT_SIZE_SUMMARY, Font.BOLD, new Color(0, 0, 0));
 		Color bkgColor = Color.ORANGE;
 
 		for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
@@ -154,12 +164,12 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 	}
 
 	protected void renderReportTableData(GPIReport report, PdfPTable table) {
-		Font bf11 = new Font(Font.HELVETICA, 10);
+		Font bf10 = new Font(Font.HELVETICA, 10);
 		Color bkgColor = Color.WHITE;
 
 		report.getPage().getContents().forEach(row -> {
 			report.getPage().getHeaders().forEach(col -> {
-				insertCell(table, row.get(col), getCellAlignment(col.originalColumnName), 1, bf11, bkgColor);
+				insertCell(table, row.get(col), getCellAlignment(col.originalColumnName), 1, bf10, bkgColor);
 			});
 		});
 	}
@@ -188,6 +198,10 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 	}
 
 	protected int calculateWidth() {
+		if (relativeWidths != null) {
+			return relativeWidths.length;
+		}
+		
 		return report.getPage().getHeaders().size();
 	}
 
@@ -198,41 +212,45 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 		}
 		
 		if (resultWidth >= 15) {
-			size = PageSize.A3;
+			size = PageSize.A3.rotate();
 		}
-
+		
 		return size;
 	}
 	
 	protected void insertCell(PdfPTable table, String text, int align, int colspan, Font font, Color bkgColor) {
-		insertCell(table, text, align, colspan, 1, font, bkgColor, 0);
+		insertCell(table, text, align, colspan, 1, font, bkgColor);
 	}
-	
-	protected void insertCell(PdfPTable table, String text, int align, int colspan, int rowsPan, Font font,
-			Color bkgColor) {
-		insertCell(table, text, align, colspan, rowsPan, font, bkgColor, 0);
-	}
-	
 	
 	protected void insertCell(PdfPTable table, String text, int align, int colspan, int rowspan, Font font,
-			Color bkgColor, float height) {
+			Color bkgColor) {
 		
-		PdfPCell cell = new PdfPCell(new Phrase(text.trim(), font));
-		cell.setHorizontalAlignment(align);
-		cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-		cell.setColspan(colspan);
-		cell.setRowspan(rowspan);
-		cell.setBackgroundColor(bkgColor);
+		text = text == null ? "" : text.trim();
+		Phrase phrase = new Phrase(text, font);
+		PdfPCell cell = generatePdfCell(phrase, align, Element.ALIGN_MIDDLE, colspan, rowspan, bkgColor);
 		
-		if (text.trim().equalsIgnoreCase("")) {
-			cell.setMinimumHeight(10f);
-		}
+		insertCell(table, cell, MINIMUM_ROW_HEIGHT);
+	}
+	
+	protected void insertCell(PdfPTable table, PdfPCell cell, float height) {
 		
 		if (height > 0) {
 			cell.setMinimumHeight(height);
 		}
 
 		table.addCell(cell);
+	}
+	
+	protected PdfPCell generatePdfCell(Phrase phrase, int align, int valign, int colspan, int rowspan, Color bkgColor) {
+
+		PdfPCell cell = new PdfPCell(phrase);
+		cell.setHorizontalAlignment(align);
+		cell.setVerticalAlignment(valign);
+		cell.setColspan(colspan);
+		cell.setRowspan(rowspan);
+		cell.setBackgroundColor(bkgColor);
+
+		return cell;
 	}
 	
 	public int getCellAlignment(String columnName) {

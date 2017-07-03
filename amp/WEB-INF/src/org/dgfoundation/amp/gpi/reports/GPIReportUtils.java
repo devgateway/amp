@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -141,12 +141,23 @@ public class GPIReportUtils {
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTUAL_APPROVAL_DATE));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6));
-		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q6_DESCRIPTION));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q7));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q8));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q9));
 		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q10));
-		spec.addColumn(new ReportColumn(ColumnConstants.GPI_1_Q10_DESCRIPTION));
+		
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PIPELINE_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_EXPENDITURES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_EXPENDITURES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENT_ORDERS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_ESTIMATED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_ESTIMATED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST));
 		
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_AGENCY));
@@ -463,18 +474,18 @@ public class GPIReportUtils {
 	}
 	
 	public static FilterRule getFilterRule(JsonBean formParams, String columnName) {
-		FilterRule donorAgencyRule = null;
+		FilterRule filterRule = null;
 		if (formParams != null) {
 			Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
 
 			AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
 			if (filterRules != null) {
-				ReportElement donorAgencyRuleElement = getFilterRuleElement(filterRules.getAllFilterRules(), columnName);
-				donorAgencyRule = filterRules.getAllFilterRules().get(donorAgencyRuleElement);
+				ReportElement ruleElement = getFilterRuleElement(filterRules.getAllFilterRules(), columnName);
+				filterRule = filterRules.getAllFilterRules().get(ruleElement);
 			}
 		}
 
-		return donorAgencyRule;
+		return filterRule;
 	}
 	
 	public static ReportElement getFilterRuleElement(Map<ReportElement, FilterRule> filterRules, String column) {
@@ -489,7 +500,13 @@ public class GPIReportUtils {
 		return reportElement;
 	}
 	
-	public static String getRemarksForExport(Map<GPIReportOutputColumn, String> rowData) {
+	/**
+	 * Get GPI Remarks for indicator 5a exports (pdf and xlsx)
+	 * 
+	 * @param report
+	 * @return remarks as string (joined by '\n')
+	 */	
+	public static String getRemarksForIndicator5a(Map<GPIReportOutputColumn, String> rowData) {
 		String year = "";
 		boolean isDonorAgency = true;
 		List<Long> donorIds = new ArrayList<Long>();
@@ -523,5 +540,29 @@ public class GPIReportUtils {
 		
 		
 		return String.join("\n", remarksAsStringList);
+	}
+	
+	/**
+	 * Get GPI Remarks for indicator 1 exports (pdf and xlsx)
+	 * 
+	 * @param report
+	 * @return remarks
+	 */
+	public static List<GPIRemark> getRemarksForIndicator1(GPIReport report) {
+		String donorType = GPIReportConstants.HIERARCHY_DONOR_AGENCY;
+
+		FilterRule donorAgencyRule = GPIReportUtils.getFilterRule(report.getOriginalFormParams(), 
+				ColumnConstants.DONOR_AGENCY);
+		List<Long> ids = donorAgencyRule == null ? new ArrayList<>()
+				: donorAgencyRule.values.stream().map(s -> Long.parseLong(s)).collect(Collectors.toList());
+		
+		FilterRule aprDateRule = GPIReportUtils.getFilterRule(report.getOriginalFormParams(), 
+				ColumnConstants.ACTUAL_APPROVAL_DATE);
+		
+		Long min = aprDateRule == null ? 0L : aprDateRule.min != null ? Long.parseLong(aprDateRule.min) : 0L;
+		Long max = aprDateRule == null ? 0L : aprDateRule.max != null ? Long.parseLong(aprDateRule.max) : 0L;
+		
+		List<GPIRemark> remarks = GPIDataService.getGPIRemarks(GPIReportConstants.REPORT_1, ids, donorType, min, max);
+		return remarks;
 	}
 }

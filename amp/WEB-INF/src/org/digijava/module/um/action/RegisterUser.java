@@ -88,6 +88,7 @@ public class RegisterUser extends Action {
 			user.setOrganizationName(userRegisterForm.getOrganizationName());
 
 			user.setPledger(userRegisterForm.getPledger());
+			user.setExemptFromDataFreezing(userRegisterForm.getExemptFromDataFreezing());
 			
 			user.setOrganizationTypeOther(new String(" "));
 			

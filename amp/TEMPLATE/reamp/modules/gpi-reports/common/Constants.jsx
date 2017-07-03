@@ -9,6 +9,8 @@ export const NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES = 'National Procurement E
 export const YEAR = 'Year';
 export const DONOR_GROUP = 'Donor Group';
 export const DONOR_AGENCY = 'Donor Agency';
+export const ACTIVITY_ID = 'Activity Id';
+export const DONOR_ID = 'Donor Id';
 export const PLANNED_DISBURSEMENTS = 'Planned Disbursements';
 export const ANNUAL_GOVERNMENT_BUDGET = 'Annual Government Budget';
 export const PERCENTAGE_OF_PLANNED_ON_BUDGET = '% of planned on budget';
@@ -56,4 +58,7 @@ export const DELIMETER = '###';
 
 export const XLS = 'xls';
 export const PDF = 'pdf';
+
+export const IMG_INFO = 'IMG_INFO';
+export const IMG_VALUE = 'IMG_INFO';
 

@@ -7,6 +7,7 @@ import org.dgfoundation.amp.gpi.reports.export.excel.GPIReportIndicator5bXlsxExp
 import org.dgfoundation.amp.gpi.reports.export.excel.GPIReportIndicator6XlsxExporter;
 import org.dgfoundation.amp.gpi.reports.export.excel.GPIReportIndicator9bXlsxExporter;
 import org.dgfoundation.amp.gpi.reports.export.excel.GPIReportXlsxExporter;
+import org.dgfoundation.amp.gpi.reports.export.pdf.GPIReportIndicator1Output1PdfExporter;
 import org.dgfoundation.amp.gpi.reports.export.pdf.GPIReportIndicator1Output2PdfExporter;
 import org.dgfoundation.amp.gpi.reports.export.pdf.GPIReportIndicator5aPdfExporter;
 import org.dgfoundation.amp.gpi.reports.export.pdf.GPIReportIndicator5bPdfExporter;
@@ -30,7 +31,7 @@ public enum GPIReportExportType {
 	XLSX_5b(GPIReportIndicator5bXlsxExporter.class),
 	XLSX_6(GPIReportIndicator6XlsxExporter.class),
 	XLSX_9b(GPIReportIndicator9bXlsxExporter.class),
-	PDF_1_1(GPIReportPdfExporter.class),
+	PDF_1_1(GPIReportIndicator1Output1PdfExporter.class),
 	PDF_1_2(GPIReportIndicator1Output2PdfExporter.class),
 	PDF_5a(GPIReportIndicator5aPdfExporter.class),
 	PDF_5b(GPIReportIndicator5bPdfExporter.class),

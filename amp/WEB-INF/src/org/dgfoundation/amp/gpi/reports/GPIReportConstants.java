@@ -80,7 +80,7 @@ public class GPIReportConstants {
 					"Is there an ex-post (final) evaluation planned at project closing to measure the impacts of "
 							+ "the intervention?");
 			put(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT,
-					"Extent of use of county owned result framework or similar planning document");
+					"Extent of use of country owned result framework or similar planning document");
 			put(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES,
 					"Extent of use of Gov’t sources and M&E sytems to track project progress");
 

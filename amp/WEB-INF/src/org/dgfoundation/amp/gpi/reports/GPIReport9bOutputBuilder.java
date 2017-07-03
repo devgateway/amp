@@ -37,7 +37,7 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES,
 				GPIReportConstants.REPORT_9_TOOLTIP.get(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES)));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES,
-				GPIReportConstants.REPORT_9_TOOLTIP.get(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES)));
+				GPIReportConstants.REPORT_9_TOOLTIP.get(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES)));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_AUDITING_PROCEDURES,
 				GPIReportConstants.REPORT_9_TOOLTIP.get(MeasureConstants.NATIONAL_AUDITING_PROCEDURES)));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES,

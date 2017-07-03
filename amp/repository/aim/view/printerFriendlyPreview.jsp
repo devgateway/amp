@@ -1234,9 +1234,8 @@ body {background:none;}
 										</td>
 										<td bgcolor="#ffffff">
 			                            <c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
-			                               <field:display name="${config.name} Sector" feature="Sectors">
+											<module:display name="/Activity Form/Sectors/${config.name} Sectors" parentModule="/Activity Form/Sectors">
 											<c:set var="hasSectors">false</c:set>
-
 											<c:forEach var="actSect" items="${aimEditActivityForm.sectors.activitySectors}">
 												<c:if test="${actSect.configId==config.id}">
 													<c:set var="hasSectors">true</c:set>
@@ -1253,37 +1252,35 @@ body {background:none;}
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="sectors" items="${aimEditActivityForm.sectors.activitySectors}">
                                                  	<c:if test="${sectors.configId==config.id}">
+														<module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
 														<tr><td>
 														<c:if test="${!empty sectors.sectorName}">
 															<span class="word_break">
 																<c:out value="${sectors.sectorName}" />
 															</span>
 														</c:if>&nbsp;&nbsp;
-														<field:display name="${config.name} Sector Sub-Sector" feature="Sectors">
 														<c:if test="${!empty sectors.subsectorLevel1Name}">
 															<span class="word_break">
 																[<c:out value="${sectors.subsectorLevel1Name}"/>]
 															</span>
 														</c:if>
-														</field:display>
-														<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
 															<c:if test="${!empty sectors.subsectorLevel2Name}">
 																<span class="word_break">
 																	[<c:out value="${sectors.subsectorLevel2Name}"/>]
 																</span>
 															</c:if>
-														</field:display>
 														<c:if test="${sectors.sectorPercentage!=''}">
 															<c:if test="${sectors.sectorPercentage!='0'}">
 																(<c:out value="${sectors.sectorPercentage}" />)%
 															</c:if>
 														</c:if>
 														</td></tr>
+														</module:display>
 													</c:if>
 												</c:forEach>
 												</table>
 											</c:if>
-		                                    </field:display>
+											</module:display>
 										</c:forEach>
 										</td>
 									</tr>

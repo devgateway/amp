@@ -46,8 +46,9 @@ export function fetchReportData(requestData, reportCode) {
 
 export function fetchSupportingEvidence(code, requestData) {
     return function(dispatch) {
-        return reportsApi.fetchSupportingEvidence(requestData).then(response => {            
-            dispatch(fetchSupportingEvidenceSuccess(code, response));                                
+        return reportsApi.fetchSupportingEvidence(requestData).then(response => {              
+            let documents = (response && response.length > 0)? response[0] : {}; 
+            dispatch(fetchSupportingEvidenceSuccess(code, documents));                                
         }).catch(error => {
             throw(error);
         });

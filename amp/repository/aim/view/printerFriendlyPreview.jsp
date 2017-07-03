@@ -1227,66 +1227,79 @@ body {background:none;}
 
                                     <!-- SECTORS SECTION -->
                                     <module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
-									<tr>
-										<td class="field_name" class="t-name">
-											<b>
-									  			<digi:trn key="aim:sector">Sector</digi:trn>
-									  		</b>
-										</td>
-										<td bgcolor="#ffffff">
-			                            <c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
-											<module:display name="/Activity Form/Sectors/${config.name} Sectors" parentModule="/Activity Form/Sectors">
-											<c:set var="hasSectors">false</c:set>
-											<c:forEach var="actSect" items="${aimEditActivityForm.sectors.activitySectors}">
-												<c:if test="${actSect.configId==config.id}">
-													<c:set var="hasSectors">true</c:set>
-												</c:if>
-											</c:forEach>
-											<c:if test="${hasSectors}">
-			                                <strong>
-				                               	<digi:trn key="aim:addactivitysectors:${config.name} Sector">
-				                                <c:out value="${config.name} Sector"/>
-				                                </digi:trn>
-				                                </strong><br/>
-			                                </c:if>
-	                                        <c:if test="${!empty aimEditActivityForm.sectors.activitySectors}">
-												<table width="100%" cellSpacing="2" cellPadding="1">
-												<c:forEach var="sectors" items="${aimEditActivityForm.sectors.activitySectors}">
-                                                 	<c:if test="${sectors.configId==config.id}">
-														<module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
-														<tr><td>
-														<c:if test="${!empty sectors.sectorName}">
-															<span class="word_break">
-																<c:out value="${sectors.sectorName}" />
-															</span>
-														</c:if>&nbsp;&nbsp;
-														<c:if test="${!empty sectors.subsectorLevel1Name}">
-															<span class="word_break">
-																[<c:out value="${sectors.subsectorLevel1Name}"/>]
-															</span>
-														</c:if>
-															<c:if test="${!empty sectors.subsectorLevel2Name}">
-																<span class="word_break">
-																	[<c:out value="${sectors.subsectorLevel2Name}"/>]
-																</span>
-															</c:if>
-														<c:if test="${sectors.sectorPercentage!=''}">
-															<c:if test="${sectors.sectorPercentage!='0'}">
-																(<c:out value="${sectors.sectorPercentage}" />)%
-															</c:if>
-														</c:if>
-														</td></tr>
-														</module:display>
-													</c:if>
-												</c:forEach>
-												</table>
-											</c:if>
-											</module:display>
-										</c:forEach>
-										</td>
-									</tr>
+                                        <tr>
+                                            <td class="field_name" class="t-name">
+                                                <b>
+                                                    <digi:trn key="aim:sector">Sector</digi:trn>
+                                                </b>
+                                            </td>
+                                            <td bgcolor="#ffffff">
+                                                <c:forEach var="config"
+                                                           items="${aimEditActivityForm.sectors.classificationConfigs}"
+                                                           varStatus="ind">
+                                                    <module:display name="/Activity Form/Sectors/${config.name} Sectors"
+                                                                    parentModule="/Activity Form/Sectors">
+                                                        <c:set var="hasSectors">false</c:set>
+                                                        <c:forEach var="actSect"
+                                                                   items="${aimEditActivityForm.sectors.activitySectors}">
+                                                            <c:if test="${actSect.configId==config.id}">
+                                                                <c:set var="hasSectors">true</c:set>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                        <c:if test="${hasSectors}">
+                                                            <strong>
+                                                                <digi:trn
+                                                                        key="aim:addactivitysectors:${config.name} Sector">
+                                                                    <c:out value="${config.name} Sector"/>
+                                                                </digi:trn>
+                                                            </strong><br/>
+                                                        </c:if>
+                                                        <c:if test="${!empty aimEditActivityForm.sectors.activitySectors}">
+                                                            <table width="100%" cellSpacing="2" cellPadding="1">
+                                                                <c:forEach var="sectors"
+                                                                           items="${aimEditActivityForm.sectors.activitySectors}">
+                                                                    <c:if test="${sectors.configId==config.id}">
+                                                                        <module:display name="/Activity Form/Sectors"
+                                                                                        parentModule="/Activity Form">
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <c:if test="${!empty sectors.sectorName}">
+                                                                                        <span class="word_break">
+                                                                                            <c:out value="${sectors.sectorName}"/>
+                                                                                        </span>
+                                                                                    </c:if>&nbsp;&nbsp;
+                                                                                    <c:if test="${!empty sectors.subsectorLevel1Name}">
+                                                                                        <span class="word_break">
+                                                                                            [<c:out
+                                                                                                value="${sectors.subsectorLevel1Name}"/>]
+                                                                                        </span>
+                                                                                    </c:if>
+                                                                                    <c:if test="${!empty sectors.subsectorLevel2Name}">
+                                                                                        <span class="word_break">
+                                                                                            [<c:out
+                                                                                                value="${sectors.subsectorLevel2Name}"/>]
+                                                                                        </span>
+                                                                                    </c:if>
+                                                                                    <c:if test="${sectors.sectorPercentage!=''}">
+                                                                                        <c:if test="${sectors.sectorPercentage!='0'}">
+                                                                                            (<c:out
+                                                                                                value="${sectors.sectorPercentage}"/>)%
+                                                                                        </c:if>
+                                                                                    </c:if>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </module:display>
+                                                                    </c:if>
+                                                                </c:forEach>
+                                                            </table>
+                                                        </c:if>
+                                                    </module:display>
+                                                </c:forEach>
+                                            </td>
+                                        </tr>
                                     </module:display>
                                     <!-- END SECTORS SECTION -->
+
                                   <c:if test="${not empty aimEditActivityForm.components.activityComponentes}">
 									<tr>
 										<td class="field_name">

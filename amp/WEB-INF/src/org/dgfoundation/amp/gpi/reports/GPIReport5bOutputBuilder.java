@@ -38,7 +38,8 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 	private List<GPIIndicator5bItem> gpiItems = new ArrayList<>();
 
 	public GPIReport5bOutputBuilder() {
-		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_INDICATOR_5B));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_INDICATOR_5B,
+				GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.COLUMN_INDICATOR_5B)));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
 	}
@@ -61,12 +62,12 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 		int year = GPIReportUtils.getPivoteYear(generatedReport.spec);
 
 		headers.add(getColumns().get(donorColumnName));
-		headers.add(new GPIReportOutputColumn(String.valueOf(year + 1), String.valueOf(year + 1), 
-				String.format("%s %s", MTEF_NAME, (year + 1))));
-		headers.add(new GPIReportOutputColumn(String.valueOf(year + 2), String.valueOf(year + 2), 
-				String.format("%s %s", MTEF_NAME, (year + 2))));
+		headers.add(new GPIReportOutputColumn(String.valueOf(year + 1), String.valueOf(year + 1),
+				GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_1)));
+		headers.add(new GPIReportOutputColumn(String.valueOf(year + 2), String.valueOf(year + 2),
+				GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_2)));
 		headers.add(new GPIReportOutputColumn(String.valueOf(year + 3), String.valueOf(year + 3),
-				String.format("%s %s", MTEF_NAME, (year + 3))));
+				GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_3)));
 		headers.add(getColumns().get(GPIReportConstants.COLUMN_INDICATOR_5B));
 
 		return headers;
@@ -216,7 +217,8 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 							.setScale(0, RoundingMode.HALF_UP);
 		}
 
-		summaryColumns.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_INDICATOR_5B), percentageIndicator5b + "%");
+		summaryColumns.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_INDICATOR_5B),
+				percentageIndicator5b + "%");
 
 		return summaryColumns;
 	}
@@ -324,8 +326,7 @@ class GPIIndicator5bItem {
 
 	public BigDecimal getPercentage() {
 		BigDecimal percentageDisb = new BigDecimal(getMtefYearsWithYes())
-				.divide(new BigDecimal(3), NiFormula.DIVISION_MC)
-				.scaleByPowerOfTen(2)
+				.divide(new BigDecimal(3), NiFormula.DIVISION_MC).scaleByPowerOfTen(2)
 				.setScale(0, RoundingMode.HALF_UP);
 
 		return percentageDisb;

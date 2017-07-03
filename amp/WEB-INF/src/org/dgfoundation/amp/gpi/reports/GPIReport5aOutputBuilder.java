@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -48,12 +49,16 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS));
-		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_CONCESSIONAL));
-		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_CONCESSIONAL,
+				GPIReportConstants.REPORT_5A_TOOLTIP.get(GPIReportConstants.COLUMN_CONCESSIONAL)));
+		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS,
+				GPIReportConstants.REPORT_5A_TOOLTIP.get(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS)));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.PLANNED_DISBURSEMENTS));
-		addColumn(new GPIReportOutputColumn(MeasureConstants.DISBURSED_AS_SCHEDULED));
-		addColumn(new GPIReportOutputColumn(MeasureConstants.OVER_DISBURSED));
+		addColumn(new GPIReportOutputColumn(MeasureConstants.DISBURSED_AS_SCHEDULED,
+				GPIReportConstants.REPORT_5A_TOOLTIP.get(MeasureConstants.DISBURSED_AS_SCHEDULED)));
+		addColumn(new GPIReportOutputColumn(MeasureConstants.OVER_DISBURSED,
+				GPIReportConstants.REPORT_5A_TOOLTIP.get(MeasureConstants.OVER_DISBURSED)));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK));
 	}
 
@@ -81,12 +86,12 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		headers.add(getColumns().get(GPIReportConstants.COLUMN_YEAR));
 
 		GPIReportOutputColumn donorColumn = null;
-		
+
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 			if (ColumnConstants.DONOR_AGENCY.equals(roc.originalColumnName)) {
-				donorColumn = new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY);
+				donorColumn = new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY, roc.description);
 			} else if (ColumnConstants.DONOR_GROUP.equals(roc.originalColumnName)) {
-				donorColumn = new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP);
+				donorColumn = new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP, roc.description);
 				isDonorAgency = false;
 			}
 			headersMap.putIfAbsent(roc.originalColumnName, roc);
@@ -131,8 +136,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 						if (years.get(roc.parentColumn.columnName) == null) {
 							years.put(roc.parentColumn.columnName, getEmptyGPIRow(generatedReport.spec));
 						}
-						years.get(roc.parentColumn.columnName)
-							.put(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS, rc);
+						years.get(roc.parentColumn.columnName).put(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS,
+								rc);
 					} else if (roc.originalColumnName.equals(ColumnConstants.DONOR_AGENCY)
 							|| roc.originalColumnName.equals(ColumnConstants.DONOR_GROUP)) {
 						columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
@@ -185,7 +190,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 									years.put(roc.parentColumn.originalColumnName, new HashMap<>());
 								}
 								years.get(roc.parentColumn.originalColumnName)
-									.put(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS, rc);
+										.put(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS, rc);
 							}
 						}
 					}
@@ -215,8 +220,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 					});
 					row.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK),
 							getRemarkEndpointURL(k, reportArea.getOwner().id));
-					
-					row.put(new GPIReportOutputColumn(ColumnConstants.DONOR_ID), 
+
+					row.put(new GPIReportOutputColumn(ColumnConstants.DONOR_ID),
 							String.valueOf(reportArea.getOwner().id));
 
 					if (!isRowEmpty.value) {
@@ -240,7 +245,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	private String getRemarkEndpointURL(String year, long id) {
-		String remarkEndpoint = GPIReportConstants.GPI_REMARK_ENDPOINT 
+		String remarkEndpoint = GPIReportConstants.GPI_REMARK_ENDPOINT
 				+ "?indicatorCode=%s&donorId=%s&donorType=%s&from=%s&to=%s";
 
 		String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
@@ -249,7 +254,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		int y = Integer.parseInt(year);
 		String min = Integer.toString(DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y, 1)));
 		String max = Integer.toString(DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y + 1, 1)));
-		
+
 		return String.format(remarkEndpoint, GPIReportConstants.REPORT_5a, id, donorType, min, max);
 	}
 
@@ -280,8 +285,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		if (generatedReport.reportContents.getChildren() != null) {
 			onBudgetAreas = generatedReport.reportContents.getChildren().stream().filter(r -> r.getChildren() != null)
 					.flatMap(r -> r.getChildren().stream()).collect(Collectors.toList()).stream()
-					.filter(budgetArea -> isOnBudget(budgetArea))
-					.collect(Collectors.toList());
+					.filter(budgetArea -> isOnBudget(budgetArea)).collect(Collectors.toList());
 		}
 
 		// get the sum of actual disbursements for on-budget projects
@@ -289,16 +293,14 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 				.flatMap(budgetArea -> budgetArea.getContents().entrySet().stream())
 				.filter(entry -> isTotalMeasureColumn(MeasureConstants.ACTUAL_DISBURSEMENTS, entry.getKey()))
 				.map(entry -> entry.getValue()).filter(rc -> rc != null)
-				.map(rc -> new BigDecimal(((AmountCell) rc).extractValue()))
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+				.map(rc -> new BigDecimal(((AmountCell) rc).extractValue())).reduce(BigDecimal.ZERO, BigDecimal::add);
 
 		// get the sum of planned disbursements for on-budget projects
 		BigDecimal planDisbSum = onBudgetAreas.stream()
 				.flatMap(budgetArea -> budgetArea.getContents().entrySet().stream())
 				.filter(entry -> isTotalMeasureColumn(MeasureConstants.PLANNED_DISBURSEMENTS, entry.getKey()))
 				.map(entry -> entry.getValue()).filter(rc -> rc != null)
-				.map(rc -> new BigDecimal(((AmountCell) rc).extractValue()))
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+				.map(rc -> new BigDecimal(((AmountCell) rc).extractValue())).reduce(BigDecimal.ZERO, BigDecimal::add);
 
 		columns.put(new GPIReportOutputColumn(MeasureConstants.DISBURSED_AS_SCHEDULED),
 				formatAmount(generatedReport, calculateDisbursedAsScheduled(actDisbSum, planDisbSum), false) + "%");

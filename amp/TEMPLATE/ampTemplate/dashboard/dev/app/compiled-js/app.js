@@ -106,7 +106,7 @@ _.extend(App.prototype, BackboneDash.Events, {
           }
       }
 
-      var dashboardTranslateKeys = JSON.parse("{\r\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF\",\r\n\r\n\"amp.common:title\": \"AMP\",\r\n\"amp.common:title-desktop\": \"Desktop\",\r\n\"amp.common:subtitle-my-desktop\": \"My Desktop\",\r\n\"amp.common:subtitle-add-tab\": \"Add Tab\",\r\n\"amp.common:subtitle-tab-manager\": \"Tab Manager\",\r\n\"amp.common:title-reports\": \"Reports\",\r\n\"amp.common:subtitle-all-reports\": \"All Reports\",\r\n\"amp.common:subtitle-fav-reports\": \"Favourite Reports\",\r\n\"amp.common:subtitle-report-generator\": \"Report Generator\",\r\n\"amp.common:subtitle-saiku\": \"Saiku\",\r\n\"amp.common:title-documents\": \"Documents\",\r\n\"amp.common:title-dashboards\": \"Dashboards\",\r\n\"amp.common:subtitle-gis\": \"New GIS (BETA)\",\r\n\"amp.common:subtitle-dashboards\": \"New Dashboard (BETA)\",\r\n\"amp.common:subtitle-dashboard-generator\": \"Dashboard Generator\",\r\n\"amp.common:subtitle-donor-profile\": \"Donor Profile\",\r\n\"amp.common:subtitle-region-profile\": \"Region Profile\",\r\n\"amp.common:subtitle-sector-profile\": \"Sector Profile\",\r\n\"amp.common:subtitle-executing-profile\": \"Executing Agency Profile\",\r\n\"amp.common:subtitle-beneficiary-profile\": \"Beneficiary Ministry Profile\",\r\n\"amp.common:title-tools\": \"Tools\",\r\n\"amp.common:subtitle-workspace-setup\": \"Workspace Setup\",\r\n\"amp.common:subtitle-advanced-mode\": \"Advanced Mode\",\r\n\"amp.common:subtitle-search\": \"Search\",\r\n\"amp.common:subtitle-addressbook\": \"Address Book\",\r\n\"amp.common:title-help\": \"Help\",\r\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\r\n\"amp.common:subtitle-glossary\": \"Glossary\",\r\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\r\n\"amp.common:title-logout\": \"Logout\",\r\n\"amp.common:filters-loading\": \"Loading...\",\r\n\"amp.dashboard:page-title\":\"AMP Dashboards\",\r\n\"amp.dashboard:loading\": \"Loading...\",\r\n\"amp.dashboard:title-projectdata\": \"Project Data\",\r\n\"amp.dashboard:sub-title-projectdata\": \"View where projects are being implemented throughout the country.\",\r\n\"amp.dashboard:title-Country\": \"Country\",\r\n\"amp.dashboard:title-Region\": \"Region\",\r\n\"amp.dashboard:title-Zone\": \"Zone\",\r\n\"amp.dashboard:title-District\": \"District\",\r\n\"amp.dashboard:chart-reset\": \"reset others\",\r\n\"amp.dashboard:chart-radioui-commitments\": \"Commitments\",\r\n\"amp.dashboard:chart-radioui-disbursements\": \"Disbursements\",\r\n\"amp.dashboard:filters-none-applied\": \"No filters applied\",\r\n\"amp.dashboard:close\": \"Close\",\r\n\"amp.dashboard:modal-sorry\": \"Sorry for any inconvenience\",\r\n\"amp.dashboard:share-dashboard-top\": \"Share dashboard\",\r\n\"amp.dashboard:share-dashboard\": \"Share this dashboard view\",\r\n\"amp.dashboard:share-link\": \"Link\",\r\n\"amp.dashboard:of\": \"of\",\r\n\"amp.dashboard:tooltip-predict-otherseries\": \"TRANSLATEME\",\r\n\"amp.dashboard:total\": \"total\",\r\n\"amp.common:title\": \"AMP Toolbar\",\r\n\"amp.common:title-filters\": \"Filters\",\r\n\"amp.dashboard:chart-TopDonorAgencies\": \"Top Donor Agencies\",\r\n\"amp.dashboard:chart-TopDonorGroups\": \"Top Donor Groups\",\r\n\"amp.dashboard:chart-TopRegions\": \"Top Regions\",\r\n\"amp.dashboard:chart-TopSectors\": \"Top Sectors\",\r\n\"amp.dashboard:chart-AidPredictability\": \"Aid Predictability\",\r\n\"amp.dashboard:chart-FundingType\": \"Funding Type\",\r\n\"amp.dashboard:chart-ResponsibleOrganizations\": \"Responsible Organizations\",\r\n\"amp.dashboard:chart-BeneficiaryAgencies\": \"Beneficiary Agencies\",\r\n\"amp.dashboard:chart-ExecutingAgencies\": \"Executing Agencies\",\r\n\"amp.dashboard:chart-ImplementingAgencies\": \"Implementing Agencies\",\r\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals\": \"Peace-building and State-building Goals\",\r\n\"amp.dashboard:predictability-planned\": \"Planned\",\r\n\"amp.dashboard:predictability-actual\": \"Actual\",\r\n\"amp.dashboard:chart-FundingType-Grant\": \"Grant\",\r\n\"amp.dashboard:chart-FundingType-Loan\": \"Loan\",\r\n\"amp.dashboard:chart-FundingType-others\": \"Others\",\r\n\"amp.dashboard:chart-TopRegions-DistrictUndefined\": \"District: U\",\r\n\"amp.dashboard:chart-TopRegions-others\": \"Others\",\r\n\"amp.dashboard:chart-TopSectors-others\": \"Others\",\r\n\"amp.dashboard:chart-TopDonorAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-TopDonorGroups-others\": \"Others\",\r\n\"amp.dashboard:chart-ResponsibleOrganizations-others\": \"Others\",\r\n\"amp.dashboard:chart-BeneficiaryAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-ExecutingAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-ImplementingAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals-others\":\"Others\",\r\n\"amp.dashboard:filters-edit\":\"edit filters\",\r\n\"amp.dashboard:dashboard-settings\":\"Settings\",\r\n\"amp.dashboard:settings-edit\":\"edit settings\",\r\n\"amp.dashboard:download-amount\":\"Amount\",\r\n\"amp.dashboard:download-preview\":\"Preview:\",\r\n\"amp.dashboard:download-rendering\":\"Rendering...\",\r\n\"amp.dashboard:download-download-chart\":\"Download chart\",\r\n\"amp.dashboard:download-download-data\":\"Download data\",\r\n\"amp.dashboard:chart-no-data-available\":\"No Data Available\",\r\n\"amp.dashboard:chart-loading-saved-settings\":\"Loading saved settings...\",\r\n\"amp.dashboard:filters-show-settings\":\"Show filter settings\",\r\n\"amp.dashboard:filters-chart-legends-Grouped\":\"Grouped\",\r\n\"amp.dashboard:filters-chart-legends-Stacked\":\"Stacked\",\r\n\"amp.dashboard:of-total\": \"of total\",\r\n\"amp.dashboard:aid-predictability-actual-disbursements\": \"Actual Disbursements\",\r\n\"amp.dashboard:aid-predictability-planned-disbursements\": \"Planned Disbursements\",\r\n\"amp.dashboard:filters-hide-details\": \"Hide filter details\",\r\n\"amp.dashboard:saving-state\": \"Saving dashboard state, please wait...\",\r\n\"amp.dashboard:date-range\": \"Date Range\",\r\n\"amp.dashboard:currency\" : \"Currency\",\r\n\"amp.dashboard:type\" : \"Type\",\r\n\"amp.dashboard:year\" : \"Year\",\r\n\"amp.dashboard:ftype-actual-commitment\": \"Actual Commitments\",\r\n\"amp.dashboard:ftype-actual-disbursement\": \"Actual Disbursements\",\r\n\"amp.dashboard:ftype-actual-expenditure\": \"Actual Expenditures\",\r\n\"amp.dashboard:ftype-planned-commitment\": \"Planned Commitments\" ,\r\n\"amp.dashboard:ftype-planned-disbursement\":\t\"Planned Disbursements\" ,\r\n\"amp.dashboard:ftype-planned-expenditures\":\t\"Planned Expenditures\",  \t\t\t\r\n\"amp.dashboard:dashboard-chart-tops-info-modal\": \"Category Detail\",\r\n\"amp.dashboard:chart-tops-table-projecttitle\": \"Project Title\",\r\n\"amp.dashboard:chart-tops-inunits\": \"In units\",\r\n\"amp.dashboard:chart-tops-inthousands\": \"In thousands\",\r\n\"amp.dashboard:chart-tops-inmillions\": \"In millions\",\r\n\"amp.dashboard:chart-thousand\": \"k\",\r\n\"amp.dashboard:chart-million\": \"M\",\r\n\"amp.dashboard:chart-billion\": \"B\",\r\n\"amp.dashboard:chart-trillion\": \"T\",\r\n\"amp.dashboard:chart-peta\": \"P\",\r\n\"amp.dashboard:chart-exa\": \"E\",\r\n\"amp.dashboard:chart-swap-axes\": \"Swap Axes\",\r\n\"amp.dashboard:chart-HeatMapbySectorandDonorGroup\":\"Sector Fragmentation\",\r\n\"amp.dashboard:chart-HeatMapbyLocationandDonorGroup\":\"Location Fragmentation\",\r\n\"amp.dashboard:chart-HeatMapbyProgramandDonorGroup\":\"Program Fragmentation\",\r\n\"amp.dashboard:chart-heatmap-reset-others\":\"Reset Others\",\r\n\"amp.dashboard:negatives-values\":\"Negative values are not represented in this chart.\",\r\n\"amp.dashboard:negatives-values-parag\":\"Please switch to bar chart or table view to view all values.\",\r\n\"amp.dashboard:chart-heatmap-legends\":\"LEGENDS\",\r\n\"amp.dashboard:chart-heatmap-totals\":\"TOTALS\",\r\n\"amp.dashboard:chart-heatmap-legend-less-than\":\"Less than\",\r\n\"amp.dashboard:chart-heatmap-legend-between\":\"Between\",\r\n\"amp.dashboard:chart-heatmap-legend-and\":\"and\",\r\n\"amp.dashboard:chart-heatmap-legend-more-than\":\"More than\",\r\n\"amp.dashboard:chart-heatmap-others\":\"Others\",\r\n\"amp.dashboard:percentage\": \"Percentage\",\r\n\"amp.dashboard:chart-heatmap-help-text-location\":\"Each cell represents an intersection between a donor group and a location and represents how much that funder contributes to the total funding received by that location.\",\r\n\"amp.dashboard:chart-heatmap-help-text-sector\":\"Each cell represents an intersection between a donor group and a sector and represents how much that funder contributes to the total funding received by that sector.\",\r\n\"amp.dashboard:chart-heatmap-help-text-program\":\"Each cell represents an intersection between a donor group and a program and represents how much that funder contributes to the total funding received by that program.\",\r\n\"amp.dashboard:chart-tooltip-pie-chart[title]\":\"View data in pie chart\",\r\n\"amp.dashboard:chart-tooltip-bar-chart[title]\":\"View data in bar chart\",\r\n\"amp.dashboard:chart-tooltip-table-chart[title]\":\"View data in table format\",\r\n\"amp.dashboard:chart-tooltip-multibar-chart[title]\":\"View data in multibar chart\",\r\n\"amp.dashboard:chart-tooltip-download-chart[title]\":\"Download image or table\",\r\n\"amp.dashboard:chart-tooltip-expand-chart[title]\":\"Expand chart\",\r\n\"amp.dashboard:chart-tooltip-collapse-chart[title]\":\"Collapse chart\",\r\n\"amp.dashboard:chart-tooltip-heatmap-chart[title]\":\"View heat map\"\r\n}");
+      var dashboardTranslateKeys = JSON.parse("{\r\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF\",\r\n\r\n\"amp.common:title\": \"AMP\",\r\n\"amp.common:title-desktop\": \"Desktop\",\r\n\"amp.common:subtitle-my-desktop\": \"My Desktop\",\r\n\"amp.common:subtitle-add-tab\": \"Add Tab\",\r\n\"amp.common:subtitle-tab-manager\": \"Tab Manager\",\r\n\"amp.common:title-reports\": \"Reports\",\r\n\"amp.common:subtitle-all-reports\": \"All Reports\",\r\n\"amp.common:subtitle-fav-reports\": \"Favourite Reports\",\r\n\"amp.common:subtitle-report-generator\": \"Report Generator\",\r\n\"amp.common:subtitle-saiku\": \"Saiku\",\r\n\"amp.common:title-documents\": \"Documents\",\r\n\"amp.common:title-dashboards\": \"Dashboards\",\r\n\"amp.common:subtitle-gis\": \"New GIS (BETA)\",\r\n\"amp.common:subtitle-dashboards\": \"New Dashboard (BETA)\",\r\n\"amp.common:subtitle-dashboard-generator\": \"Dashboard Generator\",\r\n\"amp.common:subtitle-donor-profile\": \"Donor Profile\",\r\n\"amp.common:subtitle-region-profile\": \"Region Profile\",\r\n\"amp.common:subtitle-sector-profile\": \"Sector Profile\",\r\n\"amp.common:subtitle-executing-profile\": \"Executing Agency Profile\",\r\n\"amp.common:subtitle-beneficiary-profile\": \"Beneficiary Ministry Profile\",\r\n\"amp.common:title-tools\": \"Tools\",\r\n\"amp.common:subtitle-workspace-setup\": \"Workspace Setup\",\r\n\"amp.common:subtitle-advanced-mode\": \"Advanced Mode\",\r\n\"amp.common:subtitle-search\": \"Search\",\r\n\"amp.common:subtitle-addressbook\": \"Address Book\",\r\n\"amp.common:title-help\": \"Help\",\r\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\r\n\"amp.common:subtitle-glossary\": \"Glossary\",\r\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\r\n\"amp.common:title-logout\": \"Logout\",\r\n\"amp.common:filters-loading\": \"Loading...\",\r\n\"amp.dashboard:page-title\":\"AMP Dashboards\",\r\n\"amp.dashboard:loading\": \"Loading...\",\r\n\"amp.dashboard:title-projectdata\": \"Project Data\",\r\n\"amp.dashboard:sub-title-projectdata\": \"View where projects are being implemented throughout the country.\",\r\n\"amp.dashboard:title-Country\": \"Country\",\r\n\"amp.dashboard:title-Region\": \"Region\",\r\n\"amp.dashboard:title-Zone\": \"Zone\",\r\n\"amp.dashboard:title-District\": \"District\",\r\n\"amp.dashboard:chart-reset\": \"reset others\",\r\n\"amp.dashboard:chart-radioui-commitments\": \"Commitments\",\r\n\"amp.dashboard:chart-radioui-disbursements\": \"Disbursements\",\r\n\"amp.dashboard:filters-none-applied\": \"No filters applied\",\r\n\"amp.dashboard:close\": \"Close\",\r\n\"amp.dashboard:modal-sorry\": \"Sorry for any inconvenience\",\r\n\"amp.dashboard:share-dashboard-top\": \"Share dashboard\",\r\n\"amp.dashboard:share-dashboard\": \"Share this dashboard view\",\r\n\"amp.dashboard:share-link\": \"Link\",\r\n\"amp.dashboard:of\": \"of\",\r\n\"amp.dashboard:tooltip-predict-otherseries\": \"TRANSLATEME\",\r\n\"amp.dashboard:total\": \"total\",\r\n\"amp.common:title\": \"AMP Toolbar\",\r\n\"amp.common:title-filters\": \"Filters\",\r\n\"amp.dashboard:chart-TopDonorAgencies\": \"Top Donor Agencies\",\r\n\"amp.dashboard:chart-TopDonorGroups\": \"Top Donor Groups\",\r\n\"amp.dashboard:chart-TopRegions\": \"Top Regions\",\r\n\"amp.dashboard:chart-TopSectors\": \"Top Sectors\",\r\n\"amp.dashboard:chart-AidPredictability\": \"Aid Predictability\",\r\n\"amp.dashboard:chart-FundingType\": \"Funding Type\",\r\n\"amp.dashboard:chart-ResponsibleOrganizations\": \"Responsible Organizations\",\r\n\"amp.dashboard:chart-BeneficiaryAgencies\": \"Beneficiary Agencies\",\r\n\"amp.dashboard:chart-ExecutingAgencies\": \"Executing Agencies\",\r\n\"amp.dashboard:chart-ImplementingAgencies\": \"Implementing Agencies\",\r\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals\": \"Peace-building and State-building Goals\",\r\n\"amp.dashboard:predictability-planned\": \"Planned\",\r\n\"amp.dashboard:predictability-actual\": \"Actual\",\r\n\"amp.dashboard:chart-FundingType-Grant\": \"Grant\",\r\n\"amp.dashboard:chart-FundingType-Loan\": \"Loan\",\r\n\"amp.dashboard:chart-FundingType-others\": \"Others\",\r\n\"amp.dashboard:chart-TopRegions-DistrictUndefined\": \"District: U\",\r\n\"amp.dashboard:chart-TopRegions-others\": \"Others\",\r\n\"amp.dashboard:chart-TopSectors-others\": \"Others\",\r\n\"amp.dashboard:chart-TopDonorAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-TopDonorGroups-others\": \"Others\",\r\n\"amp.dashboard:chart-ResponsibleOrganizations-others\": \"Others\",\r\n\"amp.dashboard:chart-BeneficiaryAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-ExecutingAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-ImplementingAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals-others\":\"Others\",\r\n\"amp.dashboard:filters-edit\":\"edit filters\",\r\n\"amp.dashboard:dashboard-settings\":\"Settings\",\r\n\"amp.dashboard:settings-edit\":\"edit settings\",\r\n\"amp.dashboard:download-amount\":\"Amount\",\r\n\"amp.dashboard:download-preview\":\"Preview:\",\r\n\"amp.dashboard:download-rendering\":\"Rendering...\",\r\n\"amp.dashboard:download-download-chart\":\"Download chart\",\r\n\"amp.dashboard:download-download-data\":\"Download data\",\r\n\"amp.dashboard:chart-no-data-available\":\"No Data Available\",\r\n\"amp.dashboard:chart-loading-saved-settings\":\"Loading saved settings...\",\r\n\"amp.dashboard:filters-show-settings\":\"Show filter settings\",\r\n\"amp.dashboard:filters-chart-legends-Grouped\":\"Grouped\",\r\n\"amp.dashboard:filters-chart-legends-Stacked\":\"Stacked\",\r\n\"amp.dashboard:of-total\": \"of total\",\r\n\"amp.dashboard:aid-predictability-actual-disbursements\": \"Actual Disbursements\",\r\n\"amp.dashboard:aid-predictability-planned-disbursements\": \"Planned Disbursements\",\r\n\"amp.dashboard:filters-hide-details\": \"Hide filter details\",\r\n\"amp.dashboard:saving-state\": \"Saving dashboard state, please wait...\",\r\n\"amp.dashboard:date-range\": \"Date Range\",\r\n\"amp.dashboard:currency\" : \"Currency\",\r\n\"amp.dashboard:type\" : \"Type\",\r\n\"amp.dashboard:year\" : \"Year\",\r\n\"amp.dashboard:ftype-actual-commitment\": \"Actual Commitments\",\r\n\"amp.dashboard:ftype-actual-disbursement\": \"Actual Disbursements\",\r\n\"amp.dashboard:ftype-actual-expenditure\": \"Actual Expenditures\",\r\n\"amp.dashboard:ftype-planned-commitment\": \"Planned Commitments\" ,\r\n\"amp.dashboard:ftype-planned-disbursement\":\t\"Planned Disbursements\" ,\r\n\"amp.dashboard:ftype-planned-expenditures\":\t\"Planned Expenditures\",\r\n\"amp.dashboard:chart-tops-table-projecttitle\": \"Project Title\",\r\n\"amp.dashboard:chart-tops-table-amount\": \"Amount\",\r\n\"amp.dashboard:chart-tops-table-loadmore\": \"load more\",\r\n\"amp.dashboard:chart-tops-inunits\": \"In units\",\r\n\"amp.dashboard:chart-tops-inthousands\": \"In thousands\",\r\n\"amp.dashboard:chart-tops-inmillions\": \"In millions\",\r\n\"amp.dashboard:chart-tops-detail-inthousands\": \"Amounts in Thousands (000)\",\r\n\"amp.dashboard:chart-tops-detail-inmillions\": \"Amounts in Millions (000 000)\",\r\n\"amp.dashboard:chart-tops-detail-inbillions\": \"Amounts in Billions (000 000 000)\",\r\n\"amp.dashboard:chart-thousand\": \"k\",\r\n\"amp.dashboard:chart-million\": \"M\",\r\n\"amp.dashboard:chart-billion\": \"B\",\r\n\"amp.dashboard:chart-trillion\": \"T\",\r\n\"amp.dashboard:chart-peta\": \"P\",\r\n\"amp.dashboard:chart-exa\": \"E\",\r\n\"amp.dashboard:chart-swap-axes\": \"Swap Axes\",\r\n\"amp.dashboard:chart-HeatMapbySectorandDonorGroup\":\"Sector Fragmentation\",\r\n\"amp.dashboard:chart-HeatMapbyLocationandDonorGroup\":\"Location Fragmentation\",\r\n\"amp.dashboard:chart-HeatMapbyProgramandDonorGroup\":\"Program Fragmentation\",\r\n\"amp.dashboard:chart-heatmap-reset-others\":\"Reset Others\",\r\n\"amp.dashboard:negatives-values\":\"Negative values are not represented in this chart.\",\r\n\"amp.dashboard:negatives-values-parag\":\"Please switch to bar chart or table view to view all values.\",\r\n\"amp.dashboard:chart-heatmap-legends\":\"LEGENDS\",\r\n\"amp.dashboard:chart-heatmap-totals\":\"TOTALS\",\r\n\"amp.dashboard:chart-heatmap-legend-less-than\":\"Less than\",\r\n\"amp.dashboard:chart-heatmap-legend-between\":\"Between\",\r\n\"amp.dashboard:chart-heatmap-legend-and\":\"and\",\r\n\"amp.dashboard:chart-heatmap-legend-more-than\":\"More than\",\r\n\"amp.dashboard:chart-heatmap-others\":\"Others\",\r\n\"amp.dashboard:percentage\": \"Percentage\",\r\n\"amp.dashboard:chart-heatmap-help-text-location\":\"Each cell represents an intersection between a donor group and a location and represents how much that funder contributes to the total funding received by that location.\",\r\n\"amp.dashboard:chart-heatmap-help-text-sector\":\"Each cell represents an intersection between a donor group and a sector and represents how much that funder contributes to the total funding received by that sector.\",\r\n\"amp.dashboard:chart-heatmap-help-text-program\":\"Each cell represents an intersection between a donor group and a program and represents how much that funder contributes to the total funding received by that program.\",\r\n\"amp.dashboard:chart-tooltip-pie-chart[title]\":\"View data in pie chart\",\r\n\"amp.dashboard:chart-tooltip-bar-chart[title]\":\"View data in bar chart\",\r\n\"amp.dashboard:chart-tooltip-table-chart[title]\":\"View data in table format\",\r\n\"amp.dashboard:chart-tooltip-multibar-chart[title]\":\"View data in multibar chart\",\r\n\"amp.dashboard:chart-tooltip-download-chart[title]\":\"Download image or table\",\r\n\"amp.dashboard:chart-tooltip-expand-chart[title]\":\"Expand chart\",\r\n\"amp.dashboard:chart-tooltip-collapse-chart[title]\":\"Collapse chart\",\r\n\"amp.dashboard:chart-tooltip-heatmap-chart[title]\":\"View heat map\"\r\n}");
       this.translator = new Translator({
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
@@ -1394,6 +1394,8 @@ nv.models.heatMapChart = function() {
 			.attr("height", cubeSize)
 			.style("fill", noColor)
 			.attr("data-x", data.x - 1)
+			.attr("xid", data.xid)
+			.attr("yid", data.yid)
 			.attr("data-y", data.y - 1);
 		
 		cube.transition()
@@ -1404,7 +1406,9 @@ nv.models.heatMapChart = function() {
 		text.attr('font-family', 'Arial')
 			.attr('font-size', '11px')
 			.attr("x", ((data.y - 1) * cubeSize))
+			.attr("xid", data.xid)
 			.attr("y", ((data.y - 1) * cubeSize) + 19)
+			.attr("yid", data.yid)
 			.attr("class", "heatmap-cell")
 			.attr("x", function() {
 				// The "offsets" we add on each return call are tied to the current font family and size, so if we change them we might need to change the offsets too.
@@ -1442,7 +1446,7 @@ nv.models.heatMapChart = function() {
 				// Highlight this cell.
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']" + "[data-x='"+ (selfData.x - 1) + "']")).removeAttr("filter");
 			});
-		
+
 		if (data.tooltip) {
 			text.attr('data-title', data.tooltip)
 				.attr("class", "nv-series heatmap-cell");
@@ -2562,6 +2566,7 @@ module.exports = ChartModel.extend({
       .map(function(s) {
         var cleanName = s.replace(/[ :.]/g, '');
         var localizedName = s;
+        var keyId;
         if (self.localizedLookup[chartName + cleanName]) {
           localizedName = self.localizedLookup[chartName + cleanName];
         }
@@ -2569,13 +2574,15 @@ module.exports = ChartModel.extend({
           key: localizedName,
           values: _(years).map(function(y) {
             var yearValue = _(y.values).findWhere({type: s});
+            keyId = yearValue.id;
             return {
               x: y.Year,
               y: yearValue && yearValue.amount || 0,
               z: yearValue && yearValue.formattedAmount || 0,
             };
           }),
-          disabled: (_.indexOf(self.get('seriesToExclude'),localizedName) != -1)
+          disabled: (_.indexOf(self.get('seriesToExclude'),localizedName) != -1),
+		  keyId: keyId
         };
       })
       .value();
@@ -2707,6 +2714,8 @@ module.exports = ChartModel.extend({
 			// The EP for heatmaps is different than the other charts because it returns an empty object, so we set explicitly some fields to empty value. 
 			data.yDataSet = [];
 			data.xDataSet = [];
+			data.yDataSetIds = [];
+			data.xDataSetIds = [];
 			data.matrix = [];
 			data.xTotals = 0;
 			data.yTotals = 0;
@@ -2716,15 +2725,19 @@ module.exports = ChartModel.extend({
 			data.yTotalCount = 0;
 		}		
 		self.values.x = data.xDataSet;
+		self.values.xid = data.xDataSetIds;
 		self.values.y = data.yDataSet;
+		self.values.yid = data.yDataSetIds;
 		for (var i = 0; i < data.yDataSet.length; i++) {
 			for (var j = 0; j < data.xDataSet.length; j++) {
 				if (data.matrix[i] !== null) {
 					var value = data.matrix[i][j] !== null ? data.matrix[i][j] : {p: -1, amount: '0'};
-					var row = {y: i + 1, x: j + 1, value: value.p, amount: value.dv/*, yname: data.yDataSet[i], xname: data.xDataSet[i]*/}; //name is for tooltip
+					var row = {y: i + 1, x: j + 1, value: value.p, amount: value.dv, yid: data.yDataSetIds[i], xid: data.xDataSetIds[j]/*, yname:
+					 data.yDataSet[i],
+					 xname: data.xDataSet[i]*/}; //name is for tooltip
 					self.values.push(row);
 				} else {
-					self.values.push({y: i + 1, x: j + 1, value: -1, amount: "0"});
+					self.values.push({y: i + 1, x: j + 1, value: -1, amount: "0", yid: data.yDataSetIds[i], xid: data.xDataSetIds[j]});
 				}
 			}
 		}
@@ -3138,7 +3151,7 @@ module.exports = BackboneDash.Collection.extend({
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
-
+var ProjectsListModalView = require('./chart-detail-info-modal');
 
 module.exports = ChartViewBase.extend({
 
@@ -3156,7 +3169,7 @@ module.exports = ChartViewBase.extend({
       });
   },  
   changeChartColumns: function(e){
-	  var key = $(e.currentTarget).find('.nv-legend-text').text();
+      var key = $(e.currentTarget).find('.nv-legend-text').text();
 	  var plannedDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-planned-disbursements","Planned Disbursements");
 	  var actualDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-actual-disbursements","Actual Disbursements");
 	  if(key == plannedDisbursementTrn){
@@ -3169,6 +3182,8 @@ module.exports = ChartViewBase.extend({
     'multibar',
     'table'
   ],
+
+  modalView: undefined,
 
   chartOptions: {
     nvControls: false
@@ -3214,15 +3229,207 @@ module.exports = ChartViewBase.extend({
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
       footerText: line2
     }};
-  }
+  },
+
+    getNiceContext: function (e) {
+
+        var x = e.data[e.series.index].values[e.x.index].x,
+            y = e.data[e.series.index].key;
+
+        if (x == undefined || y == undefined) {
+            return null;
+        }
+        return {
+            data: e.data,
+            series: e.series,
+            x: {
+                raw: x,
+                fmt: x,
+                index: x
+            },
+            y: {
+                raw: y,
+                fmt: y,
+                index: y
+            }
+        };
+    },
+
+    chartClickHandler: function (e) {
+        var self = this;
+        var context = self.getNiceContext(e);
+        if (context){
+            this.modalView = new ProjectsListModalView({app: app, context: context, model: this.model});
+            this.openInfoWindow((context.x.fmt || context.x.raw) + ' ' + context.series.key);
+        }
+    }
 
 });
 
-},{"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],27:[function(require,module,exports){
+},{"./chart-detail-info-modal":27,"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],27:[function(require,module,exports){
+
+var _ = require('underscore');
+var BackboneDash = require('../backbone-dash');
+var util = require('../../ugly/util');
+var template = _.template("<div>\r\n\t<span class=\"number-divider-detail\"></span>\r\n</div>\r\n<div class=\"panel-default\">\r\n\t<div class=\"chart-tops-info-container\">\r\n\t\t<div class=\"chart-tops-info-content\">\r\n\t\t\t<% if(error) { %>\r\n\t\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t\t<strong><span data-i18n=\"amp.dashboard:error\">Error</span></strong>\r\n\t\t\t\t\t<span data-i18n=\"amp.dashboard:error-detail\">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>\r\n\t\t\t\t</div>\r\n\t\t\t<% } else if(values === undefined) { %>\r\n\t\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\r\n\t\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\r\n\t\t\t<% } else { %>\r\n\t\t\t\t<% var rowClass = ''; %>\r\n\t\t\t\t<table class=\"table table-striped\">\r\n\t\t\t\t\t<thead>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<th class=\"header-row\"><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\r\n\t\t\t\t\t\t<th class=\"header-row\"><span class=\"funding-type-title-column\"></span> (<%=\r\n\t\t\t\t\t\t\tmodel.get('currency') %>)</th>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t</thead>\r\n\t\t\t\t\t<tbody>\r\n\t\t\t\t<% _(values).each(function(row, i) { %>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td scope=\"row\">\r\n\t\t\t\t\t\t\t<a class=\"title-column\" target=\"_blank\"\r\n\t\t\t\t\t\t\t   href=\"/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<%=row.id%>\" title=\"<%=row.name%>\">\r\n\t\t\t\t\t\t\t\t<%=row.name%>\r\n\t\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"amount-column\"><%=row.formattedAmount%></td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t<% }) %>\r\n\t\t\t\t\t</tbody>\r\n\t\t\t\t</table>\r\n\t\t\t<% } %>\r\n\t\t\t<div class=\"btn btn-success load-more\" style=\"display: none\"><span\r\n\t\t\t\t\tdata-i18n=\"amp.dashboard:chart-tops-table-loadmore\">load\r\n\t\t\t\tmore</span>...</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n");
+
+module.exports = BackboneDash.View.extend({
+    _currentPage: 0,
+    PAGE_SIZE: 50,
+    TOP: 'top',
+    FRAGMENTATION: 'fragmentation',
+    AID_PREDICTABILITY: 'aidPredictability',
+    FUNDING_TYPE: 'fundingType',
+	initialize: function(options) {
+		this.app = options.app;
+		this.context = options.context;
+		this.model = options.model;
+		this.numberDivider = app.generalSettings.numberDivider;			
+	},
+
+    getUrl : function() {
+        var self = this;
+        var url = self.model.url + '/';
+        if (this.model.get('chartType') == this.AID_PREDICTABILITY) {
+            url += this.context.x.index + '/' + this.context.y.index;
+        } else  if (this.model.get('chartType') == this.FUNDING_TYPE) {
+            url += this.context.x.raw + '/' + this.context.data[this.context.series.index].keyId;
+        } else  if (this.model.get('chartType') == this.FRAGMENTATION) {
+            url += this.context.x.index + '/' + this.context.y.index;
+        } else  if (this.model.get('chartType') == this.TOP) {
+            url += this.context.data[0].values[this.context.x.index].id;
+        } else {
+            throw new Error('error building url, wrong chartType.');
+        }
+        return url;
+    },
+
+    getConfig: function () {
+        var self = this;
+
+        //TODO: move this code to a new model so the API call is made automatically.
+        var config = self.app.filter.serialize();
+        config.settings = self.app.settingsWidget.toAPIFormat();
+        config.settings['funding-type'] = self.model.get('adjtype');
+        config.offset = self._currentPage * self.PAGE_SIZE;
+
+        if (this.model.get('chartType') == this.FRAGMENTATION) {
+            // Process params from heat-map/configs, in that EP we have defined each heatmap.
+            var configs = self.model.get('heatmap_config').models[0];
+            var thisChart = _.find(configs.get('charts'), function (item) {
+                return item.name === self.model.get('name')
+            });
+            var xColumn = self.model.get('xAxisColumn') !== '' ? self.model.get('xAxisColumn') : configs.get('columns')[thisChart.xColumns[0]].origName; // First column is default.
+            var yColumn = configs.get('columns')[thisChart.yColumns[0]].origName; // First column is default.
+
+            // Check if we need to switch axis.
+            if (self.model.get('swapAxes') === true) {
+                var auxAxis = yColumn;
+                yColumn = xColumn;
+                xColumn = auxAxis;
+            }
+
+            config.xCount = self.model.get('xLimit');
+            config.xColumn = xColumn;
+            config.yColumn = yColumn;
+            config.yCount = self.model.get('yLimit');
+        }
+        return config;
+    },
+
+	render: function() {
+		var self = this;
+
+		this.$el.html(template({
+			error: undefined,
+			model: this.model,
+			context: this.context,
+			values: undefined,
+			numberDivider: this.numberDivider
+		}));
+
+		app.translator.translateDOM($(".chart-tops-info-container"));
+		
+        var config = self.getConfig();
+    	var url = self.getUrl();
+
+        $.ajax({
+    		method: 'POST',
+    		url: url,
+    		dataType: 'json',
+    		contentType: 'application/json',
+    		processData: false,
+    		data: JSON.stringify(config)
+    	}).done(function(data) {
+    		//TODO: Can we avoid re-calling the template by binding the changes in the 'values' field? 
+    		self.$el.html(template({
+				error: undefined,
+    			model: self.model,
+    			context: self.context,
+    			values: data.values,
+    			numberDivider: self.numberDivider
+    		}));
+
+            self.$el.find('.load-more').click(function() {
+                self._currentPage++;
+                self.render();
+            });
+            //hide button if all activities were loaded.
+            var startIndex = self._currentPage * self.PAGE_SIZE;
+			if ((startIndex + self.PAGE_SIZE) >= data.totalRecords) {
+            	self.$el.find('.load-more').hide();
+            } else {
+				self.$el.find('.load-more').html('<span data-i18n="amp.dashboard:chart-tops-table-loadmore">load more</span> ' +
+                (startIndex + self.PAGE_SIZE) + '/' + data.totalRecords);
+                self.$el.find('.load-more').show();
+            }
+
+            if (self.app.generalSettings.numberDivider != 1) {
+				var units;
+                if(self.app.generalSettings.numberDivider === 1000) {
+                    units = '<span data-i18n="amp.dashboard:chart-tops-detail-inthousands">Amounts in Thousands (000)</span>';
+                } else if(self.app.generalSettings.numberDivider === 1000000) {
+                    units = '<span data-i18n="amp.dashboard:chart-tops-detail-inmillions">Amounts in Millions (000 000)</span>';
+                }else if(self.app.generalSettings.numberDivider === 1000000000) {
+                    units = '<span data-i18n="amp.dashboard:chart-tops-detail-inbillions">Amounts in Billions (000 000 000)</span>';
+                }
+                self.$el.find('.number-divider-detail').html(units)
+            }
+
+            var fundingType;
+            if (self.model.get('chartType') == self.AID_PREDICTABILITY) {
+                fundingType = self.context.series.key;
+            } else {
+                var adjSettings = self.app.settingsWidget.definitions.getFundingTypeSetting();
+                fundingType = $.map(adjSettings.get('value').options, function (option) {
+                    if (option.id === self.model.get('adjtype')) {
+                        return option.name;
+                    }
+                });
+            }
+            self.$el.find('.funding-type-title-column').html(fundingType);
+
+    		app.translator.translateDOM($(".modal-body"));
+    	}).fail(function(xhr, err) {
+			var msg = JSON.parse(xhr.responseText).error;
+			console.error("Error Getting chart-detail-info-modal from EP", msg);
+			self.$el.html(template({
+				model: self.model,
+				context: self.context,
+				error: err,
+				numberDivider: self.numberDivider
+			}));
+		});
+
+		return this;
+	},
+
+});
+},{"../../ugly/util":44,"../backbone-dash":3,"underscore":"underscore"}],28:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
-
+var ProjectsListModalView = require('./chart-detail-info-modal');
 
 module.exports = ChartViewBase.extend({
 
@@ -3299,15 +3506,17 @@ module.exports = ChartViewBase.extend({
     // clicking on the "others" bar loads five more.
     if (context.data[context.series.index].special === 'others') {
       this.model.set('limit', this.model.get('limit') + 1);
+    } else {
+        this.modalView = new ProjectsListModalView({app: app, context: context, model: this.model});
+        this.openInfoWindow((context.x.fmt || context.x.raw) + ' ' + context.data[context.series.index].key);
     }
   }
 
 });
 
-},{"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],28:[function(require,module,exports){
+},{"./chart-detail-info-modal":27,"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],29:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
-var ModalView = require('./chart-tops-info-modal');
 var _ = require('underscore');
 
 module.exports = ChartViewBase.extend({
@@ -3341,72 +3550,10 @@ module.exports = ChartViewBase.extend({
   }
 
 });
-},{"./chart-tops-info-modal":29,"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],29:[function(require,module,exports){
-
-var _ = require('underscore');
-var BackboneDash = require('../backbone-dash');
-var template = _.template("<script type=\"text/javascript\">\r\n\tfunction openPreviewActivity(id) {\r\n\t\twindow.open('/aim/viewActivityPreview.do~public=true~pageId=2~activityId=' + id, '_blank');\r\n\t}\r\n</script>\r\n\r\n<div class='chart-tops-info-category'>\r\n\t<span>\r\n\t\t<b><%= (context.x.fmt || context.x.raw) %></b> - <%= model.get('adjtype')%> -  \t\t\r\n\t\t<span data-i18n=\"<%= app.generalSettings.numberDividerDescription %>\"></span>\r\n\t\t<%= model.get('currency') %>\r\n\t</span>\r\n</div>\r\n<div class=\"chart-tops-info-container\">\r\n\t<div class=\"chart-tops-info-content\">\r\n\t\t<% if(error) { %>\r\n\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t<strong><span data-i18n=\"amp.dashboard:error\">Error</span></strong>\r\n\t\t\t\t<span data-i18n=\"amp.dashboard:error-detail\">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>\r\n\t\t\t</div>\r\n\t\t<% } else if(values === undefined) { %>\r\n\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\r\n\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\r\n\t\t<% } else { %>\r\n\t\t\t<% var rowClass = ''; %>\r\n\t\t\t<table>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-amount\">Amount</span></th>\r\n\t\t\t\t</tr>\t\t\t\r\n\t\t\t<% _(values).each(function(row, i) { %>\r\n          \t\t<% \tif (i % 2 === 0) rowClass = 'odd_row';\r\n    \t\t\t\telse rowClass = ''; %>\r\n    \t\t\t<tr class=\"<%=rowClass%>\">\r\n    \t\t\t\t<td>\r\n    \t\t\t\t\t<span class='pointer' onclick='openPreviewActivity(<%=row.id%>)'><%=row.name%></span>\r\n    \t\t\t\t</td>\r\n    \t\t\t\t<td><%=row.formattedAmount%></td>\r\n    \t\t\t</tr>\r\n        \t<% }) %>\r\n        \t</table>\r\n\t\t<% } %>\r\n\t</div>\r\n</div>");
-
-module.exports = BackboneDash.View.extend({
-
-	initialize: function(options) {
-		this.app = options.app;
-		this.context = options.context;
-		this.model = options.model;
-		this.numberDivider = app.generalSettings.numberDivider;			
-	},
-
-	render: function() {
-		var self = this;
-		this.$el.html(template({
-			error: undefined,
-			model: this.model,
-			context: this.context,
-			values: undefined,
-			numberDivider: this.numberDivider
-		}));
-		app.translator.translateDOM($(".dash-settings-modal"));
-		
-		//TODO: move this code to a new model so the API call is made automatically.
-    	var config = this.app.filter.serialize();
-    	config.settings = this.app.settingsWidget.toAPIFormat();
-    	config.settings['funding-type'] = this.model.get('adjtype');
-    	$.ajax({
-    		method: 'POST',
-    		url: self.model.url + '/' + this.context.data[0].values[this.context.x.index].id,
-    		dataType: 'json',
-    		contentType: 'application/json',
-    		processData: false,
-    		data: JSON.stringify(config)
-    	}).done(function(data) {
-    		//TODO: Can we avoid re-calling the template by binding the changes in the 'values' field? 
-    		self.$el.html(template({
-				error: undefined,
-    			model: self.model,
-    			context: self.context,
-    			values: data.values,
-    			numberDivider: self.numberDivider
-    		}));
-    		app.translator.translateDOM($(".dash-settings-modal"));
-    	}).fail(function(xhr, err) {
-			var msg = JSON.parse(xhr.responseText).error;
-			console.error("Error Getting chart-tops-info-modal from EP", msg);
-			self.$el.html(template({
-				model: self.model,
-				context: self.context,
-				error: err,
-				numberDivider: self.numberDivider
-			}));
-		});
-    	
-		return this;
-	},
-
-});
-},{"../backbone-dash":3,"underscore":"underscore"}],30:[function(require,module,exports){
+},{"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],30:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
-var ModalView = require('./chart-tops-info-modal');
+var ProjectsListModalView = require('./chart-detail-info-modal');
 var _ = require('underscore');
 
 module.exports = ChartViewBase.extend({
@@ -3455,28 +3602,17 @@ module.exports = ChartViewBase.extend({
     // clicking on the "others" bar loads five more.
     if (context.data[context.series.index]
                .values[context.x.index].special === 'others') {
-      this.model.set('limit', this.model.get('limit') + 5);      
+        this.model.set('limit', this.model.get('limit') + 5);
         this.model.set('big', true);      
-    } else if (this.model.get('showCategoriesInfo') === true) {    	
-    	this.modalView = new ModalView({ app: app, context: context, model: this.model });
-    	this.openInfoWindow();    	    	
+    } else {
+    	this.modalView = new ProjectsListModalView({ app: app, context: context, model: this.model });
+    	this.openInfoWindow((context.x.fmt || context.x.raw));
     }
-  },
-  
-  openInfoWindow: function() {
-	  var specialClass = 'dash-settings-modal';
-	  this.app.modal('Category Detail', {
-		  specialClass: specialClass,
-	      bodyEl: this.modalView.render().el,
-	      i18nTitle: 'amp.dashboard:dashboard-chart-tops-info-modal'
-	  });	    
-	  // Translate modal popup.
-	  app.translator.translateDOM($("." + specialClass));
   }
 
 });
 
-},{"./chart-tops-info-modal":29,"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],31:[function(require,module,exports){
+},{"./chart-detail-info-modal":27,"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],31:[function(require,module,exports){
 
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
@@ -3484,6 +3620,7 @@ var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
+var ProjectsListModalView = require('./chart-detail-info-modal');
 var template = _.template("<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\r\n\r\n  <div class=\"panel panel-chart\">\r\n    <div class=\"panel-heading fix-title-height\">\r\n      <% if (model.get('showTotal') === true) { %>\r\n\t      <div class=\"pull-right big-number\">\r\n\t        <b class=\"chart-total\"></b>\r\n\t        <span class=\"chart-currency\"></span>\r\n\t      </div>\r\n      <% } %>\r\n      <div class=\"chart-title\">\r\n\t      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\r\n\t      <% if (model.get('chartType') === 'fragmentation') { %>\r\n\t      \t<% var help_icon_text = app.translator.translateSync('amp.dashboard:chart-heatmap-help-text-' + model.get('heatmap_type'));%>\r\n\t      \t<img src=\"/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png\" class=\"question_mark nv-series\" data-title=\"<%= help_icon_text %>\">\r\n\t      <% } %>\r\n      </div>\r\n    </div>\r\n\t\r\n    <div class=\"panel-body\">\r\n      <div class=\"chart-container\">\r\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\r\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\r\n        </div>\r\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\r\n      </div>\r\n      <div class=\"alert alert-warning negative-values-message\" role=\"alert\">\r\n          <strong data-i18n=\"amp.dashboard:negatives-values\">Negative values are not represented in this chart.</strong><br>\r\n          <span data-i18n=\"amp.dashboard:negatives-values-parag\">Please switch to bar chart or table view to view all values.</span>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"panel-footer clearfix\">\r\n\r\n      <div class=\"pull-right\">\r\n\r\n        <div class=\"btn-group\">\r\n          <% _(views).each(function(view) { %>\r\n            <button data-i18n=\"amp.dashboard:chart-tooltip-<%= view %>-chart[title]\" data-toggle=\"tooltip\" title=\"View data in <%= view %> chart\" type=\"button\" data-view=\"<%= view %>\"\r\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\r\n              <span class=\"glyphicon glyphicon-<%= {\r\n                bar: 'signal',\r\n                multibar: 'signal',\r\n                heatmap: 'stats',\r\n                pie: 'adjust',\r\n                table: 'th-list'\r\n              }[view] %>\"></span>\r\n            </button>\r\n          <% }) %>\r\n        </div>\r\n\r\n        <div class=\"btn-group\">\r\n          <a data-i18n=\"amp.dashboard:chart-tooltip-download-chart[title]\" data-toggle=\"tooltip\" title=\"Download image or table\"\r\n            class=\"btn btn-sm btn-default download\"\r\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\r\n            target=\"_blank\">\r\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\r\n          </a>\r\n          <button data-i18n=\"<%= model.get('big') ? 'amp.dashboard:chart-tooltip-collapse-chart[title]' : 'amp.dashboard:chart-tooltip-expand-chart[title]' %>\" data-toggle=\"tooltip\" title=\"<%= model.get('big') ? 'Collapse chart' : 'Expand chart' %>\" type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\" <%= model.get('disableResize') ? 'disabled' : ''%>>\r\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\r\n          </button>\r\n        </div>\r\n\r\n      </div><!-- buttons in .pull-right -->\r\n\r\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\r\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\r\n          <select class=\"form-control like-btn-sm ftype-options\">\r\n            <option>...</option>\r\n            <!-- gets populated after settings load -->\r\n          </select>\r\n          <span class=\"cheat-lineheight\"></span>\r\n        </form>\r\n      <% } %>\r\n      \r\n      <% if (model.get('chartType') === 'fragmentation') { %>\r\n\t\t<form class=\"form-inline dash-form dash-xaxis-options\" role=\"form\">\r\n        \t<select class=\"form-control like-btn-sm xaxis-options\">\r\n            \t<option>...</option>\r\n            \t<!-- gets populated after settings load -->\r\n          \t</select>\r\n          \t<span class=\"cheat-lineheight\"></span>\r\n        </form>\r\n        <button type=\"button\" class=\"btn btn-sm btn-default heatmap-switch\">\r\n            <span data-i18n=\"amp.dashboard:chart-swap-axes\">Swap Axes</span>\r\n        </button>\r\n\t <% } %>\r\n\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"export-modal\"></div>\r\n</div>");
 
 
@@ -3695,9 +3832,46 @@ module.exports = BackboneDash.View.extend({
         
     this.showChartPromise.resolve();
   },
-  
+
+    getCellContext: function (e, data) {
+
+        var t = e.target,
+            x = t.getAttribute('xid'),
+            y = t.getAttribute('yid'),
+            labelx = data.x[data.xid.indexOf(parseInt(t.getAttribute('xid'), 10))],
+            labely = data.y[data.yid.indexOf(parseInt(t.getAttribute('yid'), 10))];
+
+        if (x == undefined || y == undefined) {
+            return null;
+        }
+        return {
+            data: data,
+            series: {},
+            x: {
+                raw: labelx,
+                fmt: labelx,
+                index: x
+            },
+            y: {
+                raw: labely,
+                fmt: labely,
+                index: y
+            }
+        };
+    },
+
   handleHeatmapClicks: function() {
 	  var self = this;
+	  var cell = this.$(".heatmap-cell");
+      if (cell) {
+          $(cell).on('click', function(e) {
+              var context = self.getCellContext(e, self.model.values);
+              if (context) {
+                  self.modalView = new ProjectsListModalView({app: app, context: context, model: self.model});
+                  self.openInfoWindow((context.x.fmt || context.x.raw) + ' - ' + (context.y.fmt || context.y.raw));
+              }
+          });
+      }
 	  var others = this.$(".legend-others");
 	  if (others) {
 		  $(others).on('click', function(evt) {
@@ -3918,11 +4092,21 @@ module.exports = BackboneDash.View.extend({
 		  }else if(this.app.generalSettings.numberDivider === 1000000000) {
 			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inbillions';
 		  }
-	  }
+	  },
+
+    openInfoWindow: function(title) {
+        var specialClass = 'dash-settings-modal';
+        this.app.modal(title, {
+            specialClass: specialClass,
+            bodyEl: this.modalView.render().el
+        });
+        // Translate modal popup.
+        app.translator.translateDOM($("." + specialClass));
+    }
 
 });
 
-},{"../../ugly/util":44,"../backbone-dash":3,"../charts/chart":9,"./download":34,"jquery":"jquery","underscore":"underscore"}],32:[function(require,module,exports){
+},{"../../ugly/util":44,"../backbone-dash":3,"../charts/chart":9,"./chart-detail-info-modal":27,"./download":34,"jquery":"jquery","underscore":"underscore"}],32:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -3995,7 +4179,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"./chart-aid-predictability":26,"./chart-funding-type":27,"./chart-heatmaps":28,"./chart-tops":30,"underscore":"underscore"}],33:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"./chart-aid-predictability":26,"./chart-funding-type":28,"./chart-heatmaps":29,"./chart-tops":30,"underscore":"underscore"}],33:[function(require,module,exports){
 var BackboneDash = require('../backbone-dash');
 var Filters = require('./filters');
 var Settings = require('./settings');
@@ -4562,7 +4746,7 @@ var PredictabilityChart = require('../models/chart-aid-predictability');
 var FundingTypeChart = require('../models/chart-funding-type');
 
 var template = _.template("<div class=\"container\">\n</div>\n");
-var modalTemplate = _.template("<div class=\"modal fade\" id=\"<%= m.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog <%= m.specialClass %>\">\r\n    <div class=\"modal-content\">\r\n      <div class=\"modal-header\">\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\r\n        <h4 class=\"modal-title text-<%= m.tone %>\" data-i18n=\"<%= m.i18nTitle %>\"><%= m.title %></h4>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        <% if (m.content) { %>\r\n          <%= m.content %>\r\n        <% } %>\r\n        <% if (m.messages) { %>\r\n          <% _(m.messages).each(function(message) { %>\r\n            <p><%= message %></p>\r\n          <% }) %>\r\n        <% } %>\r\n      </div>      \r\n    </div>\r\n  </div>\r\n</div>\r\n");
+var modalTemplate = _.template("<div class=\"modal fade\" data-keyboard=\"false\" data-backdrop=\"static\" id=\"<%= m.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog <%= m.specialClass %>\">\r\n    <div class=\"modal-content\">\r\n      <div class=\"modal-header\">\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\r\n        <h4 class=\"modal-title text-<%= m.tone %>\" data-i18n=\"<%= m.i18nTitle %>\"><%= m.title %></h4>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        <% if (m.content) { %>\r\n          <%= m.content %>\r\n        <% } %>\r\n        <% if (m.messages) { %>\r\n          <% _(m.messages).each(function(message) { %>\r\n            <p><%= message %></p>\r\n          <% }) %>\r\n        <% } %>\r\n      </div>      \r\n    </div>\r\n  </div>\r\n</div>\r\n");
 
 var EnabledChartsCollection = require('../models/enabled-charts-collection');
 var HeatmapsConfigCollection = require('../models/heatmaps-config-collection');
@@ -4701,7 +4885,7 @@ module.exports = BackboneDash.View.extend({
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var template = _.template("<div class=\"col-xs-12 col-sm-6 col-md-3\">\n  <div class=\"panel\">\n    <div class=\"panel-body\">\n      <h3 data-i18n=\"amp.dashboard:dashboard-settings\" class=\"inline-heading\" style=\"max-width: 50px;overflow-x: visible\">Settings</h3>\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right dash-settings-button\">\n        <span class=\"glyphicon glyphicon-edit\"></span>\n        <span data-i18n=\"amp.dashboard:settings-edit\">edit settings</span>\n      </button>\n    </div>\n  </div>\n</div>\n<div id=\"amp-settings\" style=\"display:none;\"></div>\n");
+var template = _.template("<div class=\"col-xs-12 col-sm-6 col-md-3\">\r\n  <div class=\"panel\">\r\n    <div class=\"panel-body\">\r\n      <h3 data-i18n=\"amp.dashboard:dashboard-settings\" class=\"inline-heading\" style=\"max-width: 50px;overflow-x: visible\">Settings</h3>\r\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right dash-settings-button\">\r\n        <span class=\"glyphicon glyphicon-edit\"></span>\r\n        <span data-i18n=\"amp.dashboard:settings-edit\">edit settings</span>\r\n      </button>\r\n    </div>\r\n  </div>\r\n</div>\r\n<div id=\"amp-settings\" style=\"display:none;\"></div>\r\n");
 module.exports = BackboneDash.View.extend({
   events: {
     'click .dash-settings-button': 'editSettings'
@@ -23546,7 +23730,7 @@ module.exports = Backbone.View.extend({
 var Backbone = require('backbone');
 require('bootstrap/dist/js/bootstrap');
 var _ = require('underscore');
-var Template = "<!-- inline styles used so we can relocate amp-boilerplate module-->\n<style>\n  /* This directory and then Dashboard & GIS need\n   * to be rebuilt with their respective browserify-processes to see\n   * changes from this filter-popup due to brfs, see readme.md\n   */\n  #amp-header {\n    font-family: \"Open Sans\",\"Helvetica Neue\",Helvetica,Arial,sans-serif;\n  }\n  #amp-header .navbar-header>button.navbar-toggle {\n    /* fix contracted menu icon to not block map*/\n    padding: 2px;\n    margin: 4px;\n  }\n\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampPublic,\n  #amp-header .container.ampUserLoggedIn ul.ampPublic {\n    display: none !important;\n  }\n\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampUserLoggedIn,\n  #amp-header .container.ampUserLoggedIn ul.ampUserLoggedIn {\n    display: inherit !important;\n  }\n\n  #amp-header .container-fluid ul.ampPublic,\n  #amp-header .container ul.ampPublic {\n    display: inherit !important;\n  }\n\n  #amp-header .container-fluid ul.ampUserLoggedIn,\n  #amp-header .container ul.ampUserLoggedIn {\n    display: none !important;\n  }\n\n\n  div#amp-header nav div.container,\n  div#amp-header nav div.navbar-collapse a,\n  div#amp-header nav div.container-fluid,\n  div#amp-header nav div.navbar-collapse a {\n    font-size: 12px;\n  }\n\n  div#amp-header .navbar-brand {\n    font-size: 16px !important;\n    color: #E69923;\n    text-shadow: 1px 1px 5px #CCC;\n    white-space: nowrap;\n    padding-bottom: 8px;\n  }\n\n  div#amp-header .double-row .navbar-brand {\n    padding-top: 8px;\n    height: 41px;\n  }\n\n  /* Several places in AMP include things that will set this\n   * back to gigantic margins.\n   * 8px feels like generous padding\n   * 5px is slightly tight.\n   *\n   */\n  div#amp-header .single-row .nav > li > a {\n    padding-right: 6px;\n    padding-left: 6px;\n  }\n  div#amp-header .double-row .nav > li > a{\n    padding-right: 10px;\n    padding-left: 10px;\n    padding-bottom: 8px;\n    padding-top: 9px;\n  }\n\n  div#amp-header .double-row #AmpMenus.nav > li:nth-child(1) > a {\n    /* For first element, eliminate padding to ensure is flush. */\n    padding-left: 0;\n  }\n\n    div#amp-header .workspace-name {\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n    div#amp-header .user-url {\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n\n  /* limit size of top level menu to prevent translations that are too long\n   * Apply to a span so that that caret doesn't get chopped off.\n   */\n  /* max-width:\n   * 141px is generous, fits ÉTUDES ET DOCUMENTS\n   * 124px is minimum to include 3 words (Ministry of ??...)\n   * 117px fits TABLEAUX DE BORD\n   *\n   * div.ampUserLoggedIn in selector makes this effective ONLY when logged in\n   * single-row selector only when using that mode\n   */\n  #amp-header div.ampUserLoggedIn .single-row ul#AmpMenus > .dropdown > a > span.dropdown-text {\n    max-width: 141px;\n  }\n\n  #amp-header ul#AmpMenus > .dropdown > a > span.dropdown-text {\n    display: inline-block;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    color: #3E6C94;\n    text-rendering: optimizeLegibility;\n  }\n\n\n  #amp-header ul#AmpMenus > .dropdown > a > span.caret {\n    /* bump up caret to the height of the truncate-able inline-block next to it */\n    padding-bottom: 11px;\n    color: rgb(11, 12, 26);\n  }\n\n\n  #amp-header .container-fluid.no-gutters,\n  #amp-header .container.no-gutters {\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  /* No gutters creates space for 1 gridsquare logo.\n   * http://julienmelissas.com/no-gutter-column-trick-for-bootstrap/\n   */\n  #amp-header .container-fluid .row.no-gutters,\n  #amp-header .container .row.no-gutters {\n    margin-right: 0;\n    margin-left: 0;\n  }\n  #amp-header .container-fluid .row.no-gutters > [class^=\"col-\"],\n  #amp-header .container-fluid .row.no-gutters > [class*=\" col-\"],\n  #amp-header .container .row.no-gutters > [class^=\"col-\"],\n  #amp-header .container .row.no-gutters > [class*=\"col-\"] {\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  #amp-header nav > .container-fluid > div.row:nth-child(1),\n  #amp-header nav > .container > div.row:nth-child(1) {\n    background-color: #FFF;\n  }\n\n  #amp-header nav > .container > div.row:nth-child(2),\n  #amp-header nav > .container-fluid > div.row:nth-child(2) {\n    border-top: 1px solid #EDEDED;\n    background-color: #F7F7F7;\n  }\n\n  #amp-header .container-fluid,\n  #amp-header .container {\n    background-color: #FFF; /* Fixes gray area in gutter of single-row */\n  }\n\n\n/* There is a second set of gutters on the navbar itself. */\n  div#amp-header .navbar-collapse.no-gutters{\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  /* These four styles avoids setting hard max-widths on these items */\n  #amp-header .ampLoggedInMenus {\n    width: 95%; /* account for scrollbar */\n    text-shadow: 1px 1px 1px #AAA;\n  }\n\n  /* give a bit of extra width to workspace */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(1) {\n      text-align: right;\n  }\n  /* user name */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(2) {\n      text-align: center;\n  }\n  /* Logout */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(3) {\n      white-space: nowrap; /* prevent translations of logout from wrapping */\n  }\n\n  div#amp-header div#logincontainer {\n    padding-left: 140px; /* IE9 fix that works everywhere: make room for green login button */\n  }\n\n  div#amp-header .login_here {\n    margin-top: 3px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\n  }\n\n  html.ie9 div#amp-header .login_here {\n    margin-top: -11px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\n  }\n\n  /******/\n  .scrollable-menu {\n    height: auto;\n    max-height: 400px;\n    overflow-x: hidden;\n  }\n\n  .dropdown-submenu {\n    position: relative;\n  }\n\n  .dropdown-submenu>.dropdown-menu {\n    top: 0;\n    left: 100%;\n    margin-top: -6px;\n    margin-left: -1px;\n    -webkit-border-radius: 0 6px 6px 6px;\n    -moz-border-radius: 0 6px 6px 6px;\n    border-radius: 0 6px 6px 6px;\n  }\n\n  .dropdown-submenu:hover>.dropdown-menu {\n    display: block;\n  }\n\n  .dropdown-submenu>a:after {\n    display: block;\n    content: \" \";\n    float: right;\n    width: 0;\n    height: 0;\n    border-color: transparent;\n    border-style: solid;\n    border-width: 5px 0 5px 5px;\n    border-left-color: #cccccc;\n    margin-top: 5px;\n    margin-right: -10px;\n  }\n\n  .dropdown-submenu:hover>a:after {\n    border-left-color: #ffffff;\n  }\n\n  .dropdown-submenu.pull-left {\n    float: none;\n  }\n\n  .dropdown-submenu.pull-left>.dropdown-menu {\n    left: -100%;\n    margin-left: 10px;\n    -webkit-border-radius: 6px 0 6px 6px;\n    -moz-border-radius: 6px 0 6px 6px;\n    border-radius: 6px 0 6px 6px;\n  }\n\n</style>\n<script type=\"text/javascript\">\n  function switchTranslation (url) {\n    $('#backUrl').val(document.location.href);\n    document.modeSwitchForm.action = url;\n    document.modeSwitchForm.submit();\n  }\n</script>\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\n</form>\n<%\n/***\n * Single Row Header Design (used when optionally requested: on GIS)\n * Useful for fixed height apps.\n *\n * Container-fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *      columns AmpMenus (public or internal menus shown as provided by API)\n *      nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n *        3 columns\n *  login_here (ignores bootstrap container structure; shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/\n\n  if (useSingleRowHeader) {\n %>\n<nav class=\"navbar navbar-default single-row\" role=\"navigation\">\n  <div class=\"container-fluid <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-11\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <div class=\"col-md-8 col-sm-10\">\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n              <!-- File -->\n\n            </ul>\n            <div class=\"clearfix\"></div>\n          </div>\n          <div class=\"col-md-4 col-sm-2\">\n              <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n                <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\n                <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                  <a class=\"user-url\">\n                    <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\n                  </a>\n                </li>\n                <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n              </ul>\n              <% if(showLogin) { %>\n                <% if(loginDropdown){ %>\n                  <div class=\"login_here\" id=\"show_login_pop\">\n                    <div class=\"login_here_cont\">\n                      <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                    </div>\n                  </div>\n                <% } else { %>\n                  <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                    <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                  </ul>\n                <% } %>\n              <% } %>\n              <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n <% } else { %>\n\n<% /***\n * Double Row Header Design (used by default)\n *\n * Container-Fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *        nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n            3 columns\n * row\n *    columns AmpMenus (public or internal menus shown as provided by API)\n *  login_here (ignores bootstrap container structure, shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/ %>\n<nav class=\"navbar navbar-default double-row\" role=\"navigation\">\n  <div class=\"container-fluid no-gutters <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1 col-sm-offset-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-9\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <!-- To change workspace/user truncation length, edit the offset and grid number below:-->\n          <div class=\"col-sm-offset-5 col-sm-7\">\n            <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n              <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\n              <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                <a class=\"user-url\">\n                  <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\n                </a>\n              </li>\n              <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n            </ul>\n            <% if(showLogin) { %>\n              <% if(loginDropdown){ %>\n                <div class=\"login_here\" id=\"show_login_pop\">\n                  <div class=\"login_here_cont\">\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                  </div>\n                </div>\n              <% } else { %>\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                </ul>\n              <% } %>\n            <% } %>\n            <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n\n    <div class=\"row no-gutters\">\n      <div class=\"col-sm-11 col-sm-offset-1\">\n        <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n          <!-- File -->\n\n        </ul>\n        <div class=\"clearfix\"></div>\n      </div>\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n\n<%\n  } %>\n";
+var Template = "<!-- inline styles used so we can relocate amp-boilerplate module-->\r\n<style>\r\n  /* This directory and then Dashboard & GIS need\r\n   * to be rebuilt with their respective browserify-processes to see\r\n   * changes from this filter-popup due to brfs, see readme.md\r\n   */\r\n  #amp-header {\r\n    font-family: \"Open Sans\",\"Helvetica Neue\",Helvetica,Arial,sans-serif;\r\n  }\r\n  #amp-header .navbar-header>button.navbar-toggle {\r\n    /* fix contracted menu icon to not block map*/\r\n    padding: 2px;\r\n    margin: 4px;\r\n  }\r\n\r\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampPublic,\r\n  #amp-header .container.ampUserLoggedIn ul.ampPublic {\r\n    display: none !important;\r\n  }\r\n\r\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampUserLoggedIn,\r\n  #amp-header .container.ampUserLoggedIn ul.ampUserLoggedIn {\r\n    display: inherit !important;\r\n  }\r\n\r\n  #amp-header .container-fluid ul.ampPublic,\r\n  #amp-header .container ul.ampPublic {\r\n    display: inherit !important;\r\n  }\r\n\r\n  #amp-header .container-fluid ul.ampUserLoggedIn,\r\n  #amp-header .container ul.ampUserLoggedIn {\r\n    display: none !important;\r\n  }\r\n\r\n\r\n  div#amp-header nav div.container,\r\n  div#amp-header nav div.navbar-collapse a,\r\n  div#amp-header nav div.container-fluid,\r\n  div#amp-header nav div.navbar-collapse a {\r\n    font-size: 12px;\r\n  }\r\n\r\n  div#amp-header .navbar-brand {\r\n    font-size: 16px !important;\r\n    color: #E69923;\r\n    text-shadow: 1px 1px 5px #CCC;\r\n    white-space: nowrap;\r\n    padding-bottom: 8px;\r\n  }\r\n\r\n  div#amp-header .double-row .navbar-brand {\r\n    padding-top: 8px;\r\n    height: 41px;\r\n  }\r\n\r\n  /* Several places in AMP include things that will set this\r\n   * back to gigantic margins.\r\n   * 8px feels like generous padding\r\n   * 5px is slightly tight.\r\n   *\r\n   */\r\n  div#amp-header .single-row .nav > li > a {\r\n    padding-right: 6px;\r\n    padding-left: 6px;\r\n  }\r\n  div#amp-header .double-row .nav > li > a{\r\n    padding-right: 10px;\r\n    padding-left: 10px;\r\n    padding-bottom: 8px;\r\n    padding-top: 9px;\r\n  }\r\n\r\n  div#amp-header .double-row #AmpMenus.nav > li:nth-child(1) > a {\r\n    /* For first element, eliminate padding to ensure is flush. */\r\n    padding-left: 0;\r\n  }\r\n\r\n    div#amp-header .workspace-name {\r\n    white-space: nowrap;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n  }\r\n    div#amp-header .user-url {\r\n    white-space: nowrap;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n  }\r\n\r\n  /* limit size of top level menu to prevent translations that are too long\r\n   * Apply to a span so that that caret doesn't get chopped off.\r\n   */\r\n  /* max-width:\r\n   * 141px is generous, fits ÉTUDES ET DOCUMENTS\r\n   * 124px is minimum to include 3 words (Ministry of ??...)\r\n   * 117px fits TABLEAUX DE BORD\r\n   *\r\n   * div.ampUserLoggedIn in selector makes this effective ONLY when logged in\r\n   * single-row selector only when using that mode\r\n   */\r\n  #amp-header div.ampUserLoggedIn .single-row ul#AmpMenus > .dropdown > a > span.dropdown-text {\r\n    max-width: 141px;\r\n  }\r\n\r\n  #amp-header ul#AmpMenus > .dropdown > a > span.dropdown-text {\r\n    display: inline-block;\r\n    white-space: nowrap;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n    color: #3E6C94;\r\n    text-rendering: optimizeLegibility;\r\n  }\r\n\r\n\r\n  #amp-header ul#AmpMenus > .dropdown > a > span.caret {\r\n    /* bump up caret to the height of the truncate-able inline-block next to it */\r\n    padding-bottom: 11px;\r\n    color: rgb(11, 12, 26);\r\n  }\r\n\r\n\r\n  #amp-header .container-fluid.no-gutters,\r\n  #amp-header .container.no-gutters {\r\n    padding-right: 0;\r\n    padding-left: 0;\r\n  }\r\n\r\n  /* No gutters creates space for 1 gridsquare logo.\r\n   * http://julienmelissas.com/no-gutter-column-trick-for-bootstrap/\r\n   */\r\n  #amp-header .container-fluid .row.no-gutters,\r\n  #amp-header .container .row.no-gutters {\r\n    margin-right: 0;\r\n    margin-left: 0;\r\n  }\r\n  #amp-header .container-fluid .row.no-gutters > [class^=\"col-\"],\r\n  #amp-header .container-fluid .row.no-gutters > [class*=\" col-\"],\r\n  #amp-header .container .row.no-gutters > [class^=\"col-\"],\r\n  #amp-header .container .row.no-gutters > [class*=\"col-\"] {\r\n    padding-right: 0;\r\n    padding-left: 0;\r\n  }\r\n\r\n  #amp-header nav > .container-fluid > div.row:nth-child(1),\r\n  #amp-header nav > .container > div.row:nth-child(1) {\r\n    background-color: #FFF;\r\n  }\r\n\r\n  #amp-header nav > .container > div.row:nth-child(2),\r\n  #amp-header nav > .container-fluid > div.row:nth-child(2) {\r\n    border-top: 1px solid #EDEDED;\r\n    background-color: #F7F7F7;\r\n  }\r\n\r\n  #amp-header .container-fluid,\r\n  #amp-header .container {\r\n    background-color: #FFF; /* Fixes gray area in gutter of single-row */\r\n  }\r\n\r\n\r\n/* There is a second set of gutters on the navbar itself. */\r\n  div#amp-header .navbar-collapse.no-gutters{\r\n    padding-right: 0;\r\n    padding-left: 0;\r\n  }\r\n\r\n  /* These four styles avoids setting hard max-widths on these items */\r\n  #amp-header .ampLoggedInMenus {\r\n    width: 95%; /* account for scrollbar */\r\n    text-shadow: 1px 1px 1px #AAA;\r\n  }\r\n\r\n  /* give a bit of extra width to workspace */\r\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(1) {\r\n      text-align: right;\r\n  }\r\n  /* user name */\r\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(2) {\r\n      text-align: center;\r\n  }\r\n  /* Logout */\r\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(3) {\r\n      white-space: nowrap; /* prevent translations of logout from wrapping */\r\n  }\r\n\r\n  div#amp-header div#logincontainer {\r\n    padding-left: 140px; /* IE9 fix that works everywhere: make room for green login button */\r\n  }\r\n\r\n  div#amp-header .login_here {\r\n    margin-top: 3px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\r\n  }\r\n\r\n  html.ie9 div#amp-header .login_here {\r\n    margin-top: -11px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\r\n  }\r\n\r\n  /******/\r\n  .scrollable-menu {\r\n    height: auto;\r\n    max-height: 400px;\r\n    overflow-x: hidden;\r\n  }\r\n\r\n  .dropdown-submenu {\r\n    position: relative;\r\n  }\r\n\r\n  .dropdown-submenu>.dropdown-menu {\r\n    top: 0;\r\n    left: 100%;\r\n    margin-top: -6px;\r\n    margin-left: -1px;\r\n    -webkit-border-radius: 0 6px 6px 6px;\r\n    -moz-border-radius: 0 6px 6px 6px;\r\n    border-radius: 0 6px 6px 6px;\r\n  }\r\n\r\n  .dropdown-submenu:hover>.dropdown-menu {\r\n    display: block;\r\n  }\r\n\r\n  .dropdown-submenu>a:after {\r\n    display: block;\r\n    content: \" \";\r\n    float: right;\r\n    width: 0;\r\n    height: 0;\r\n    border-color: transparent;\r\n    border-style: solid;\r\n    border-width: 5px 0 5px 5px;\r\n    border-left-color: #cccccc;\r\n    margin-top: 5px;\r\n    margin-right: -10px;\r\n  }\r\n\r\n  .dropdown-submenu:hover>a:after {\r\n    border-left-color: #ffffff;\r\n  }\r\n\r\n  .dropdown-submenu.pull-left {\r\n    float: none;\r\n  }\r\n\r\n  .dropdown-submenu.pull-left>.dropdown-menu {\r\n    left: -100%;\r\n    margin-left: 10px;\r\n    -webkit-border-radius: 6px 0 6px 6px;\r\n    -moz-border-radius: 6px 0 6px 6px;\r\n    border-radius: 6px 0 6px 6px;\r\n  }\r\n\r\n</style>\r\n<script type=\"text/javascript\">\r\n  function switchTranslation (url) {\r\n    $('#backUrl').val(document.location.href);\r\n    document.modeSwitchForm.action = url;\r\n    document.modeSwitchForm.submit();\r\n  }\r\n</script>\r\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\r\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\r\n</form>\r\n<%\r\n/***\r\n * Single Row Header Design (used when optionally requested: on GIS)\r\n * Useful for fixed height apps.\r\n *\r\n * Container-fluid structure:\r\n * row\r\n *  column navbar-brand (logo)\r\n *  column navbar-collapse\r\n *    nested row:\r\n *      columns AmpMenus (public or internal menus shown as provided by API)\r\n *      nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\r\n *        3 columns\r\n *  login_here (ignores bootstrap container structure; shown when logged out)\r\n *  div#logincontainer: inserted by jQuery + rendered by JSP\r\n ***/\r\n\r\n  if (useSingleRowHeader) {\r\n %>\r\n<nav class=\"navbar navbar-default single-row\" role=\"navigation\">\r\n  <div class=\"container-fluid <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\r\n    <div class=\"row no-gutters\">\r\n      <!-- .ampUserLoggedIn hides public version-->\r\n\r\n      <!-- Brand and toggle get grouped for better mobile display -->\r\n      <div class=\"navbar-header col-sm-1\">\r\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\r\n          <span class=\"sr-only\">Toggle navigation</span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n        </button>\r\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\r\n          <span>\r\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\r\n          </span>\r\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\r\n      </div>\r\n\r\n      <div class=\"col-sm-11\">\r\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\r\n          <div class=\"col-md-8 col-sm-10\">\r\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\r\n\r\n              <!-- File -->\r\n\r\n            </ul>\r\n            <div class=\"clearfix\"></div>\r\n          </div>\r\n          <div class=\"col-md-4 col-sm-2\">\r\n              <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\r\n                <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\r\n                <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\r\n                  <a class=\"user-url\">\r\n                    <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\r\n                  </a>\r\n                </li>\r\n                <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\r\n              </ul>\r\n              <% if(showLogin) { %>\r\n                <% if(loginDropdown){ %>\r\n                  <div class=\"login_here\" id=\"show_login_pop\">\r\n                    <div class=\"login_here_cont\">\r\n                      <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\r\n                    </div>\r\n                  </div>\r\n                <% } else { %>\r\n                  <ul class=\"nav navbar-nav ampPublic navbar-right\">\r\n                    <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\r\n                  </ul>\r\n                <% } %>\r\n              <% } %>\r\n              <!-- div#logincontainer with anchors gets appended here -->\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n    </div>\r\n    <!-- Collect the nav links, forms, and other content for toggling -->\r\n  </div><!-- /.container-fluid -->\r\n</nav>\r\n <% } else { %>\r\n\r\n<% /***\r\n * Double Row Header Design (used by default)\r\n *\r\n * Container-Fluid structure:\r\n * row\r\n *  column navbar-brand (logo)\r\n *  column navbar-collapse\r\n *    nested row:\r\n *        nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\r\n            3 columns\r\n * row\r\n *    columns AmpMenus (public or internal menus shown as provided by API)\r\n *  login_here (ignores bootstrap container structure, shown when logged out)\r\n *  div#logincontainer: inserted by jQuery + rendered by JSP\r\n ***/ %>\r\n<nav class=\"navbar navbar-default double-row\" role=\"navigation\">\r\n  <div class=\"container-fluid no-gutters <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\r\n    <div class=\"row no-gutters\">\r\n      <!-- .ampUserLoggedIn hides public version-->\r\n\r\n      <!-- Brand and toggle get grouped for better mobile display -->\r\n      <div class=\"navbar-header col-sm-1 col-sm-offset-1\">\r\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\r\n          <span class=\"sr-only\">Toggle navigation</span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n        </button>\r\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\r\n          <span>\r\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\r\n          </span>\r\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\r\n      </div>\r\n\r\n      <div class=\"col-sm-9\">\r\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\r\n          <!-- To change workspace/user truncation length, edit the offset and grid number below:-->\r\n          <div class=\"col-sm-offset-5 col-sm-7\">\r\n            <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\r\n              <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\r\n              <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\r\n                <a class=\"user-url\">\r\n                  <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\r\n                </a>\r\n              </li>\r\n              <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\r\n            </ul>\r\n            <% if(showLogin) { %>\r\n              <% if(loginDropdown){ %>\r\n                <div class=\"login_here\" id=\"show_login_pop\">\r\n                  <div class=\"login_here_cont\">\r\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\r\n                  </div>\r\n                </div>\r\n              <% } else { %>\r\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\r\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\r\n                </ul>\r\n              <% } %>\r\n            <% } %>\r\n            <!-- div#logincontainer with anchors gets appended here -->\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n    </div>\r\n\r\n    <div class=\"row no-gutters\">\r\n      <div class=\"col-sm-11 col-sm-offset-1\">\r\n        <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\r\n\r\n          <!-- File -->\r\n\r\n        </ul>\r\n        <div class=\"clearfix\"></div>\r\n      </div>\r\n    </div>\r\n    <!-- Collect the nav links, forms, and other content for toggling -->\r\n  </div><!-- /.container-fluid -->\r\n</nav>\r\n\r\n<%\r\n  } %>\r\n";
 var MenuCollection = require('../collections/amp-menus-collection.js');
 var MenuModel = require('../models/amp-menus-model.js');
 var SubmenuView = require('./submenu-compositeview.js');
@@ -32216,7 +32400,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var Translator = require('amp-translate');
 var Template = "<% if(obj.isPopup) {%>\r\n<div class=\"panel-heading\">\r\n\t\t\t<button type=\"button\" class=\"close cancel\" aria-hidden=\"true\">x</button>\r\n\t\t\t<h3 class=\"panel-title\" data-i18n=\"amp.settings:title\">Settings</h3>\r\n</div>\r\n<%}%>\r\n<div class=\"panel-body\">\t\t\r\n<div class=\"container-fluid\">\r\n  <div class=\"settings\">\r\n    Loading...\r\n  </div>\r\n  <% if(!obj.isPopup) {%>\r\n  <div class=\"form-group\">\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n  </div>\r\n  <%}%>\r\n</div>\r\n</div>\r\n<% if(obj.isPopup) {%>\r\n<div class=\"panel-footer setting-dialog-footer\">\r\n    <button type=\"button\" class=\"btn btn-warning cancel-btn cancel\" data-i18n=\"amp.settings:cancel-button\">Cancel</button>\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n </div>\r\n <%}%>\r\n \r\n \r\n";
-var SelectTemplate = "<div class=\"form-group\">\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\n  <% _.each(obj.setting.value.options, function(option){ %>\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings[obj.setting.id];%>\n    <option value=\"<%= option.id %>\"  <% if(selected == option.id){ %> selected <% } %> >\n      <%= option.name %>\n    </option>\n  <%}); %>\n  </select>\n</div>\n";
+var SelectTemplate = "<div class=\"form-group\">\r\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n  <% _.each(obj.setting.value.options, function(option){ %>\r\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings[obj.setting.id];%>\r\n    <option value=\"<%= option.id %>\"  <% if(selected == option.id){ %> selected <% } %> >\r\n      <%= option.name %>\r\n    </option>\r\n  <%}); %>\r\n  </select>\r\n</div>\r\n";
 var YearRangeTemplate = "<div class=\"form-group\"> \r\n<label data-i18n=\"amp.settings:label-<%= obj.id %>\"><%= obj.name %></label> \r\n <div class=\"row year-range \"> \r\n \r\n </div>  \r\n</div>";
 var YearSelectTemplate = "<div class=\"col-xs-2\">\r\n   <label data-i18n=\"amp.settings:label-<%= obj.setting.id %>\" ><%= obj.setting.name %></label>\r\n </div>\r\n  <div class=\"col-xs-4\">\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n    <%\r\n      var applied = obj.appliedSettings['year-range'] ? obj.appliedSettings['year-range'][obj.setting.id] : null;\r\n      var selected = obj.settingsSelections[obj.setting.id];\r\n    %>\r\n    <option data-i18n=\"amp.settings:all\" value=\"-1\"<% if((selected || applied) == -1){ %> selected <% } %>>All</option>\r\n    <% for (i = obj.setting.rangeFrom; i <= obj.setting.rangeTo; i++) { %>\r\n      <option value=\"<%= i %>\"<% if((selected || applied) == i){ %> selected <% } %>>\r\n      <%= i %>\r\n      </option>\r\n    <% } %>\r\n  </select>\r\n  </div>";
 var Constants = require('../common/constants');

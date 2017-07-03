@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,20 +34,22 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
 		addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
-		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES));
-		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES));
-		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_AUDITING_PROCEDURES));
-		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES));
+		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES,
+				GPIReportConstants.REPORT_9_TOOLTIP.get(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES)));
+		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES,
+				GPIReportConstants.REPORT_9_TOOLTIP.get(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES)));
+		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_AUDITING_PROCEDURES,
+				GPIReportConstants.REPORT_9_TOOLTIP.get(MeasureConstants.NATIONAL_AUDITING_PROCEDURES)));
+		addColumn(new GPIReportOutputColumn(MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES,
+				GPIReportConstants.REPORT_9_TOOLTIP.get(MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES)));
 	}
 
-	public final static Set<String> YEAR_LEVEL_HIERARCHIES = Collections.unmodifiableSet(
-			new HashSet<>(Arrays.asList(
-					MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES,
+	public final static Set<String> YEAR_LEVEL_HIERARCHIES = Collections
+			.unmodifiableSet(new HashSet<>(Arrays.asList(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES,
 					MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES,
 					MeasureConstants.NATIONAL_AUDITING_PROCEDURES,
-					MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES
-			)));
-	
+					MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES)));
+
 	/**
 	 * build the headers of the report
 	 * 
@@ -60,12 +63,12 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 
 		String donorColumnName = isDonorAgency ? ColumnConstants.DONOR_AGENCY : ColumnConstants.DONOR_GROUP;
 		headers.add(getColumns().get(donorColumnName));
-		
+
 		headers.add(getColumns().get(MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES));
 		headers.add(getColumns().get(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES));
 		headers.add(getColumns().get(MeasureConstants.NATIONAL_AUDITING_PROCEDURES));
 		headers.add(getColumns().get(MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES));
-		
+
 		return headers;
 	}
 
@@ -96,7 +99,7 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 						columns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
 					}
 				}
-	
+
 				years.forEach((k, v) -> {
 					Map<GPIReportOutputColumn, String> row = new HashMap<>();
 					row.put(yearColumn, k);
@@ -107,7 +110,7 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 							isRowEmpty.set(false);
 						}
 					});
-					
+
 					if (!isRowEmpty.value) {
 						row.putAll(columns);
 						contents.add(row);
@@ -118,9 +121,9 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 
 		Comparator<Map<GPIReportOutputColumn, String>> byYear = (Map<GPIReportOutputColumn, String> o1,
 				Map<GPIReportOutputColumn, String> o2) -> o2.get(yearColumn).compareTo(o1.get(yearColumn));
-		
+
 		contents.sort(byYear);
-		
+
 		return contents;
 	}
 
@@ -141,7 +144,7 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 				summaryColumns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
 			}
 		}
-		
+
 		return summaryColumns;
 	}
 
@@ -150,16 +153,16 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 	 * @return
 	 */
 	private boolean isMeasureColumn(ReportOutputColumn roc) {
-		return YEAR_LEVEL_HIERARCHIES.contains(roc.columnName) && 
-				!NiReportsEngine.TOTALS_COLUMN_NAME.equals(roc.parentColumn.columnName);
+		return YEAR_LEVEL_HIERARCHIES.contains(roc.columnName)
+				&& !NiReportsEngine.TOTALS_COLUMN_NAME.equals(roc.parentColumn.columnName);
 	}
-	
+
 	/**
 	 * @param roc
 	 * @return
 	 */
 	private boolean isTotalMeasureColumn(ReportOutputColumn roc) {
-		return YEAR_LEVEL_HIERARCHIES.contains(roc.originalColumnName) 
+		return YEAR_LEVEL_HIERARCHIES.contains(roc.originalColumnName)
 				&& NiReportsEngine.TOTALS_COLUMN_NAME.equals(roc.parentColumn.originalColumnName);
 	}
 }

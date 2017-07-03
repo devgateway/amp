@@ -57,3 +57,6 @@ export const DELIMETER = '###';
 export const XLS = 'xls';
 export const PDF = 'pdf';
 
+export const IMG_INFO = 'IMG_INFO';
+export const IMG_VALUE = 'IMG_INFO';
+

@@ -5,6 +5,7 @@ import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as startUp from '../actions/StartUpAction.jsx';
 import * as Constants from '../common/Constants';
+import HeaderToolTip from './HeaderToolTip';
 export default class Report6 extends Component {
     constructor( props, context ) {
         super( props, context );
@@ -365,9 +366,14 @@ export default class Report6 extends Component {
                                     <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-agency" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />
                                     <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-group" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
                                 </th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.ANNUAL_GOVERNMENT_BUDGET )}</th>
+                                <th className="col-md-2"><HeaderToolTip
+                                    column={Constants.ANNUAL_GOVERNMENT_BUDGET}
+                                    headers={this.props.mainReport.page.headers}/>
+                                     {this.getLocalizedColumnName( Constants.ANNUAL_GOVERNMENT_BUDGET )}</th>
                                 <th className="col-md-2">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET )}</th>                                
+                                <th className="col-md-2"><HeaderToolTip
+                                    column={Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET}
+                                    headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName( Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET )}</th>
                             </tr>
                         </thead>
                         <tbody>

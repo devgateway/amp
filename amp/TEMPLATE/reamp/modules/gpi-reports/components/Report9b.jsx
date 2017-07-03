@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
-import * as startUp from '../actions/StartUpAction.jsx';
 import * as Constants from '../common/Constants';
 export default class Report9b extends Component {
     constructor( props, context ) {
@@ -362,17 +361,40 @@ export default class Report9b extends Component {
                     <div className="section-divider"></div>
                     <table className="table table-bordered table-striped indicator-table">
                         <thead>
-                            <tr>
-                                <th className="col-md-1">{this.getLocalizedColumnName( Constants.YEAR )}</th>
-                                <th className="col-md-2">
-                                    <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-agency" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />
-                                    <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-group" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
-                                </th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.NATIONAL_BUDGET_EXECUTION_PROCEDURES )}</th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES )}</th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.NATIONAL_AUDITING_PROCEDURES )}</th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES )}</th>
-                            </tr>
+                        <tr>
+                            <th className="col-md-1">{this.getLocalizedColumnName(Constants.YEAR)}</th>
+                            <th className="col-md-2">
+                                <img src="images/blue_radio_on.png"
+                                     className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'}
+                                     onClick={this.toggleHierarchy} data-hierarchy="donor-agency"/><span
+                                className="donor-header-text" onClick={this.toggleHierarchy}
+                                data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />
+                                <img src="images/blue_radio_on.png"
+                                     className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'}
+                                     onClick={this.toggleHierarchy} data-hierarchy="donor-group"/><span
+                                className="donor-header-text" onClick={this.toggleHierarchy}
+                                data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
+                            </th>
+                            <th className="col-md-2">
+                                <HeaderToolTip
+                                    column={Constants.NATIONAL_BUDGET_EXECUTION_PROCEDURES}
+                                    headers={this.props.mainReport.page.headers}/>
+                                 {this.getLocalizedColumnName(Constants.NATIONAL_BUDGET_EXECUTION_PROCEDURES)}</th>
+                            <th className="col-md-2">
+                                <HeaderToolTip
+                                    column={Constants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES}
+                                    headers={this.props.mainReport.page.headers}/>
+                                 {this.getLocalizedColumnName(Constants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES)}</th>
+                            <th className="col-md-2">
+                                <HeaderToolTip
+                                    column={Constants.NATIONAL_AUDITING_PROCEDURES}
+                                    headers={this.props.mainReport.page.headers}/>
+                                 {this.getLocalizedColumnName(Constants.NATIONAL_AUDITING_PROCEDURES)}</th>
+                            <th className="col-md-2"><HeaderToolTip
+                                column={Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES}
+                                headers={this.props.mainReport.page.headers}/>
+                                 {this.getLocalizedColumnName(Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES)}</th>
+                        </tr>
                         </thead>
                         <tbody>
                             {this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.contents.map(( row, i ) =>

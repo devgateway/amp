@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as Constants from '../common/Constants';
+import HeaderToolTip from './HeaderToolTip';
+
 export default class Report9b extends Component {
     constructor( props, context ) {
         super( props, context );

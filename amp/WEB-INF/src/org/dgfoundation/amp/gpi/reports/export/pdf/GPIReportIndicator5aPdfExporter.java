@@ -73,7 +73,7 @@ public class GPIReportIndicator5aPdfExporter extends GPIReportPdfExporter {
 				if (!isRemarkColumn(col.originalColumnName)) {
 					insertCell(table, row.get(col), getCellAlignment(col.originalColumnName), 1, bf11, bkgColor);
 				} else {
-					insertCell(table, GPIReportUtils.getRemarksForExport(row), getCellAlignment(col.originalColumnName),
+					insertCell(table, GPIReportUtils.getRemarksForIndicator5a(row), getCellAlignment(col.originalColumnName),
 							1, bf11, bkgColor);
 				}
 			});

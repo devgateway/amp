@@ -11,7 +11,6 @@ import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
 import org.dgfoundation.amp.gpi.reports.export.GPIReportExporter;
-import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 

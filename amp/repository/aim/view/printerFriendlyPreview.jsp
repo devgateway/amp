@@ -1225,7 +1225,8 @@ body {background:none;}
 											</c:if>
 										</module:display>
 
-                                    <feature:display name="Sectors" module="Project ID and Planning">
+                                    <!-- SECTORS SECTION -->
+                                    <module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
 									<tr>
 										<td class="field_name" class="t-name">
 											<b>
@@ -1284,7 +1285,8 @@ body {background:none;}
 										</c:forEach>
 										</td>
 									</tr>
-									</feature:display>
+                                    </module:display>
+                                    <!-- END SECTORS SECTION -->
                                   <c:if test="${not empty aimEditActivityForm.components.activityComponentes}">
 									<tr>
 										<td class="field_name">

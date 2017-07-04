@@ -25,7 +25,6 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -40,8 +39,6 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
-import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.joda.time.DateTime;
@@ -421,7 +418,7 @@ public class GPIReportUtils {
 		CalendarConverter calendarConverter = (spec.getSettings() != null && spec.getSettings().getCalendar() != null)
 				? spec.getSettings().getCalendar() : AmpARFilter.getDefaultCalendar();
 
-		if (filters.getDateFilterRules() != null && isEthiopianCalendar(calendarConverter)) {
+		if (filters.getDateFilterRules() != null && FiscalCalendarUtil.isEthiopianCalendar(calendarConverter)) {
 			AmpFiscalCalendar ethCalendar = (AmpFiscalCalendar) calendarConverter;
 			Optional<ReportColumn> optApprovalColumn = filters.getDateFilterRules().keySet().stream()
 					.filter(rc -> rc.getColumnName().equals(ColumnConstants.ACTUAL_APPROVAL_DATE)).findAny();
@@ -450,15 +447,6 @@ public class GPIReportUtils {
 		}
 	}
 
-	public static boolean isEthiopianCalendar(CalendarConverter calendarConverter) {
-		if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
-			AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
-			return calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue());
-		}
-
-		return false;
-	}
-	
 	/**
 	 * Apply settings on report specifications
 	 * 
@@ -568,6 +556,30 @@ public class GPIReportUtils {
 	}
 	
 	/**
+	 * Get the converted year of the julidanDateNumber using the calendar from the report spec
+	 * 
+	 * @param spec
+	 * @param julianDateNumber
+	 * @return
+	 */
+	public static int getYearOfCustomCalendar(ReportSpecification spec, long julianDateNumber) {
+		Date date = DateTimeUtil.fromJulianNumberToDate(Long.toString(julianDateNumber));
+		CalendarConverter calendarConverter = spec.getSettings().getCalendar();
+		if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
+			AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
+			DateTime convDate = FiscalCalendarUtil.convertFromGregorianDate(date, calendar);
+			
+			return convDate.getYear();
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		
+		return calendar.get(Calendar.YEAR);
+		
+	}
+	
+	/**
 	 * Get GPI Remarks for indicator 5a exports (pdf and xlsx)
 	 * 
 	 * @param report
@@ -630,6 +642,7 @@ public class GPIReportUtils {
 		Long max = aprDateRule == null ? 0L : aprDateRule.max != null ? Long.parseLong(aprDateRule.max) : 0L;
 		
 		List<GPIRemark> remarks = GPIDataService.getGPIRemarks(GPIReportConstants.REPORT_1, ids, donorType, min, max);
+		
 		return remarks;
 	}
 }

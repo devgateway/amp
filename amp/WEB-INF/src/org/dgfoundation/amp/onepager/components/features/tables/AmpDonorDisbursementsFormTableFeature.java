@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingDetailComparator;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
@@ -58,7 +59,8 @@ public class AmpDonorDisbursementsFormTableFeature extends
 			}
 		};		
 		
-		list = new FundingListEditor<AmpFundingDetail>("listDisbursements", setModel, new AmpFundingDetail.FundingDetailComparator()) {
+		list = new FundingListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
+				.getFundingDetailComparator()) {
 
 			@Override
 			protected void onPopulateItem(

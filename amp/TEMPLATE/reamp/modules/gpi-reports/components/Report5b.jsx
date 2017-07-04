@@ -33,6 +33,7 @@ export default class Report5b extends Component {
              caller: 'REPORTS'
         });
         this.settingsWidget = Utils.initializeSettingsWidget();
+        this.props.actions.getYears();
         this.props.actions.getOrgList(false);
         this.fetchReportData();
 

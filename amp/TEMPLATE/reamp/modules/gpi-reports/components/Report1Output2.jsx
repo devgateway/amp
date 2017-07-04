@@ -30,8 +30,8 @@ export default class Report1Output2 extends Component {
 
     initializeFiltersAndSettings() {
         this.filter = Utils.initializeFilterWidget();
-        this.settingsWidget = Utils.initializeSettingsWidget()
-        this.props.actions.getYears()
+        this.settingsWidget = Utils.initializeSettingsWidget();
+        this.props.actions.getYears();
         this.props.actions.getOrgList(false);        
         this.fetchReportData();
         

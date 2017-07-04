@@ -165,6 +165,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 				clonedSurvey.getResponses().forEach(r -> {
 					try {
 						AmpGPINiSurveyResponse clonedResponse = (AmpGPINiSurveyResponse) r.clone();
+						clonedResponse.setAmpGPINiSurveyResponseId(null);
 						clonedResponse.setAmpGPINiSurvey(clonedSurvey);
 						clonedSurveyResponses.add(clonedResponse);
 					} catch (CloneNotSupportedException e) {
@@ -176,6 +177,8 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 			}
 			clonedAmpOrgRole.getGpiNiSurveys().clear();
 			clonedAmpOrgRole.getGpiNiSurveys().add(clonedSurvey);
+		}else{
+			clonedAmpOrgRole.setGpiNiSurveys(null);
 		}
 		
 		return clonedAmpOrgRole;

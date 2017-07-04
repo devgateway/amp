@@ -47,7 +47,9 @@ public class FundingListEditor<T> extends ListEditor<T> {
 
 		FundingInformationItem fundingDetailItem = (FundingInformationItem) item.getModel().getObject();
 
-		if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION) != null) {
+		if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION) != null
+				&& org.apache.wicket.Session.get().getMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION)
+						.get(fundingDetailItem.getTransactionDate()) != null) {
 			enabled = org.apache.wicket.Session.get().getMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION)
 					.get(fundingDetailItem.getTransactionDate())  && enabled;
 		}

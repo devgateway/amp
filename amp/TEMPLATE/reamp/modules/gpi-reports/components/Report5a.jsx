@@ -12,6 +12,7 @@ import RemarksPopup from './RemarksPopup';
 import ToolBar from './ToolBar';
 import { Modal } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
+import HeaderToolTip from './HeaderToolTip';
 export default class Report5a extends Component {
     constructor( props, context ) {
         super( props, context );
@@ -246,13 +247,13 @@ export default class Report5a extends Component {
                           <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-agency" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />
                           <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-group" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
                           </th>
-                          <th>{this.getLocalizedColumnName(Constants.TOTAL_ACTUAL_DISBURSEMENTS)}<span className="light-weight">(Q1)</span></th>
-                          <th className="col-md-1">{this.getLocalizedColumnName(Constants.CONCESSIONAL)}? <span className="light-weight">(Yes=1/ No=0)</span></th>
-                          <th>{this.getLocalizedColumnName(Constants.ACTUAL_DISBURSEMENTS)} <span className="light-weight">(Q2)</span></th>
-                          <th>{this.getLocalizedColumnName(Constants.PLANNED_DISBURSEMENTS)}<span className="light-weight">(Q3)</span></th>
-                          <th>{this.getLocalizedColumnName(Constants.DISBURSEMENTS_THROUGH_OTHER_PROVIDERS)}</th>
-                          <th>{this.getLocalizedColumnName(Constants.DISBURSEMENTS_AS_SCHEDULED)}</th>
-                          <th>{this.getLocalizedColumnName(Constants.OVER_DISBURSED)}</th>
+                          <th>{this.getLocalizedColumnName(Constants.TOTAL_ACTUAL_DISBURSEMENTS)}<span className="light-weight"></span></th>
+                          <th className="col-md-2"><HeaderToolTip column={Constants.CONCESSIONAL} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.CONCESSIONAL)}?</th>
+                          <th>{this.getLocalizedColumnName(Constants.ACTUAL_DISBURSEMENTS)} <span className="light-weight"></span></th>
+                          <th>{this.getLocalizedColumnName(Constants.PLANNED_DISBURSEMENTS)}<span className="light-weight"></span></th>
+                          <th className="col-md-2"><HeaderToolTip column={Constants.DISBURSEMENTS_THROUGH_OTHER_PROVIDERS} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.DISBURSEMENTS_THROUGH_OTHER_PROVIDERS)}</th>
+                          <th className="col-md-2"><HeaderToolTip column={Constants.DISBURSEMENTS_AS_SCHEDULED} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.DISBURSEMENTS_AS_SCHEDULED)}</th>
+                          <th className="col-md-2"><HeaderToolTip column={Constants.OVER_DISBURSED} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.OVER_DISBURSED)}</th>
                           <th>
                             <div className="popup">
                               <a data-container="body" data-toggle="popover" data-placement="top" data-content={this.getLocalizedColumnName(Constants.REMARK)} data-original-title="" title="">

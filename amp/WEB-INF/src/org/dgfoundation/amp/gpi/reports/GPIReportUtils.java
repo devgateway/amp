@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -567,7 +567,13 @@ public class GPIReportUtils {
 		return reportElement;
 	}
 	
-	public static String getRemarksForExport(Map<GPIReportOutputColumn, String> rowData) {
+	/**
+	 * Get GPI Remarks for indicator 5a exports (pdf and xlsx)
+	 * 
+	 * @param report
+	 * @return remarks as string (joined by '\n')
+	 */	
+	public static String getRemarksForIndicator5a(Map<GPIReportOutputColumn, String> rowData) {
 		String year = "";
 		boolean isDonorAgency = true;
 		List<Long> donorIds = new ArrayList<Long>();
@@ -601,5 +607,29 @@ public class GPIReportUtils {
 		
 		
 		return String.join("\n", remarksAsStringList);
+	}
+	
+	/**
+	 * Get GPI Remarks for indicator 1 exports (pdf and xlsx)
+	 * 
+	 * @param report
+	 * @return remarks
+	 */
+	public static List<GPIRemark> getRemarksForIndicator1(GPIReport report) {
+		String donorType = GPIReportConstants.HIERARCHY_DONOR_AGENCY;
+
+		FilterRule donorAgencyRule = GPIReportUtils.getFilterRule(report.getOriginalFormParams(), 
+				ColumnConstants.DONOR_AGENCY);
+		List<Long> ids = donorAgencyRule == null ? new ArrayList<>()
+				: donorAgencyRule.values.stream().map(s -> Long.parseLong(s)).collect(Collectors.toList());
+		
+		FilterRule aprDateRule = GPIReportUtils.getFilterRule(report.getOriginalFormParams(), 
+				ColumnConstants.ACTUAL_APPROVAL_DATE);
+		
+		Long min = aprDateRule == null ? 0L : aprDateRule.min != null ? Long.parseLong(aprDateRule.min) : 0L;
+		Long max = aprDateRule == null ? 0L : aprDateRule.max != null ? Long.parseLong(aprDateRule.max) : 0L;
+		
+		List<GPIRemark> remarks = GPIDataService.getGPIRemarks(GPIReportConstants.REPORT_1, ids, donorType, min, max);
+		return remarks;
 	}
 }

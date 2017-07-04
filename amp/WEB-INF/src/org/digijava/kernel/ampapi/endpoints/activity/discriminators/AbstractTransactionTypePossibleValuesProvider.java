@@ -18,7 +18,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 /**
  * @author Octavian Ciubotaru
  */
-public class AbstractTransactionTypePossibleValuesProvider extends PossibleValuesProvider {
+public abstract class AbstractTransactionTypePossibleValuesProvider extends PossibleValuesProvider {
 
     private boolean filterByValues;
     private List<String> values;
@@ -58,6 +58,8 @@ public class AbstractTransactionTypePossibleValuesProvider extends PossibleValue
         return null;
     }
 
+    public abstract boolean isVisibleInFeatureManager(Integer transactionTypeId);
+
     private Map<String, Integer> getTransactionTypeMap() {
         Map<String, Integer> valuesMap = new HashMap<String, Integer>();
 
@@ -67,9 +69,11 @@ public class AbstractTransactionTypePossibleValuesProvider extends PossibleValue
             for (AmpCategoryValue transactionType : possibleValues) {
                 // put only those values that are not disabled/deleted in the category manager and are presented in the
                 // TRANSACTION_TYPE_NAME_TO_ID map
+                Integer transactionTypeId = ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType.getValue());
                 if (transactionType.isVisible()
-                        && ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType.getValue()) != null
-                        && isIncluded(transactionType)) {
+                        && transactionTypeId != null
+                        && isIncluded(transactionType)
+                        && isVisibleInFeatureManager(transactionTypeId)) {
                     valuesMap.put(transactionType.getValue(), ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType.getValue()));
                 }
             }

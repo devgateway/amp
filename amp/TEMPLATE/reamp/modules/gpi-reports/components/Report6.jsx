@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as startUp from '../actions/StartUpAction.jsx';
+import Utils from '../common/Utils';
 import * as Constants from '../common/Constants';
 import HeaderToolTip from './HeaderToolTip';
 export default class Report6 extends Component {
@@ -32,15 +33,7 @@ export default class Report6 extends Component {
             draggable: true,
             caller: 'REPORTS'
         });
-
-        this.settingsWidget = new AMPSettings.SettingsWidget( {
-            draggable: true,
-            caller: 'REPORTS',
-            isPopup: true,
-            definitionUrl: '/rest/settings-definitions/gpi-reports'
-        });        
-              
-
+        this.settingsWidget = Utils.initializeSettingsWidget();
         this.props.actions.getYears()
         this.props.actions.getOrgList(false);
         this.fetchReportData();

@@ -22,6 +22,7 @@ export default class Report1Output1 extends Component {
         this.closeRemarksModal = this.closeRemarksModal.bind(this);
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
         this.downloadPdfFile = this.downloadPdfFile.bind(this);
+        this.getYears = this.getYears.bind(this);
     }
 
     componentDidMount() {
@@ -181,10 +182,17 @@ export default class Report1Output1 extends Component {
         this.props.actions.downloadPdfFile(this.getRequestData(), '1');
     }
 
+    getYears() {
+       let settings  = this.settingsWidget.toAPIFormat()
+       let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+       let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
+       return calendar.years.slice();        
+    }
+
     render() {
-        if ( this.props.mainReport && this.props.mainReport.page ) {
-            let addedGroups = [];
-            let years = this.props.years.slice();
+        if ( this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions) {
+            let addedGroups = [];                       
+            var years = this.getYears();            
             return (
                 <div>
                     <div id="filter-popup" ref="filterPopup"> </div>
@@ -220,7 +228,7 @@ export default class Report1Output1 extends Component {
                             </div>
 
                     }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={this.props.years} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="actual-approval-date" />
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={years} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="actual-approval-date" /> 
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>

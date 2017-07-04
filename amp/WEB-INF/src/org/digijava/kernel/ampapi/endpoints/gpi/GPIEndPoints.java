@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
+
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -22,6 +23,7 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.util.FeaturesUtil;
+
 
 @Path("gpi")
 public class GPIEndPoints implements ErrorReportingEndpoint {
@@ -546,6 +548,14 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 		visibilityConfiguration.set(GPIReportConstants.REPORT_9b, FeaturesUtil.isVisibleFeature(GPIReportConstants.REPORT_9b_GFM_NAME) );
 		return visibilityConfiguration;
 	}
+	
+	@GET
+    @Path("/report/years/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getYears", ui = false)
+    public List<JsonBean> getYears() {	     
+	     return GPIDataService.getYears();
+    }
 	
 	/**
 	 * {@inheritDoc}

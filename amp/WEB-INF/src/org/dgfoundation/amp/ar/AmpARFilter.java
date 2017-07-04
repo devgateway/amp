@@ -948,7 +948,7 @@ public class AmpARFilter extends PropertyListable {
 		return getDefaultYear(getEffectiveSettings(), current, false);
 	}
 	
-	protected static Integer getDefaultYear(AmpApplicationSettings settings, AmpFiscalCalendar current, 
+	public static Integer getDefaultYear(AmpApplicationSettings settings, AmpFiscalCalendar current, 
 			boolean startYear) {
 		
 		// 1st default priority are Workspace Settings

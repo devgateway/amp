@@ -14,6 +14,7 @@ import javax.jcr.Node;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.gpi.reports.GPIDocument;
 import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
@@ -23,6 +24,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
@@ -31,7 +33,9 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -585,4 +589,34 @@ public class GPIDataService {
 			}
 		};
 	}
+	
+	public static List<JsonBean> getYears() {      
+        List<AmpFiscalCalendar> calendars = FiscalCalendarUtil.getAllAmpFiscalCalendars();
+        List<JsonBean> result = new ArrayList<>();  
+        int numberOfYears =  getNumberOfYears(calendars);
+        for(AmpFiscalCalendar calendar : calendars){
+            JsonBean yearRange = new JsonBean();
+            yearRange.set("calendarId", calendar.getAmpFiscalCalId());
+            int startYear = AmpARFilter.getDefaultYear(AmpARFilter.getEffectiveSettings(), calendar, true);
+            int endYear = startYear + numberOfYears;                     
+            List<Integer> years = new ArrayList<>();
+            for(int i = startYear;i <= endYear; i++) {                              
+                years.add(i);               
+            }
+            yearRange.set("years", years);           
+            result.add(yearRange);          
+        }       
+        return result;     
+   }
+	
+  private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {     
+      for(AmpFiscalCalendar calendar : calendars){
+          if(calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())){
+              int currentYear =  FiscalCalendarUtil.getCurrentYear();
+              int startYear = AmpARFilter.getDefaultYear(AmpARFilter.getEffectiveSettings(), calendar, true);
+              return currentYear - startYear;
+          } 
+      }
+      return 0;
+  }
 }

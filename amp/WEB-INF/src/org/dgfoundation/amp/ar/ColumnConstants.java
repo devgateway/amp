@@ -317,6 +317,8 @@ public class ColumnConstants {
 	public static final String TERTIARY_SECTOR = "Tertiary Sector";
 	public static final String TERTIARY_SECTOR_SUB_SECTOR = "Tertiary Sector Sub-Sector";
 	public static final String TERTIARY_SECTOR_SUB_SUB_SECTOR = "Tertiary Sector Sub-Sub-Sector";
+	public static final String QUATERNARY_SECTOR = "Quaternary Sector";
+	public static final String QUINARY_SECTOR = "Quinary Sector";
 	public static final String TOTAL_GRAND_ACTUAL_COMMITMENTS = "Total Grand Actual Commitments";
 	public static final String TOTAL_GRAND_ACTUAL_DISBURSEMENTS = "Total Grand Actual Disbursements";
 	public static final String TYPE_OF_ASSISTANCE = "Type Of Assistance";

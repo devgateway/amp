@@ -113,6 +113,8 @@ public class FiltersConstants {
     public static final String TERTIARY_SECTOR = "tertiary-sector";
     public static final String TERTIARY_SECTOR_SUB_SECTOR = "tertiary-sector-sub-sector";
     public static final String TERTIARY_SECTOR_SUB_SUB_SECTOR = "tertiary-sector-sub-sub-sector";
+    public static final String QUATERNARY_SECTOR = "quaternary-sector";
+    public static final String QUINARY_SECTOR = "quinary-sector";
     public static final String TYPE_OF_ASSISTANCE = "type-of-assistance";
     public static final String WORKSPACES = "workspaces";
     public static final String ZONE = "zone";

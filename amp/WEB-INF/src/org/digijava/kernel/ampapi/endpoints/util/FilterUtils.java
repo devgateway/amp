@@ -134,6 +134,8 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_7, ColumnConstants.TERTIARY_PROGRAM_LEVEL_7);
 		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_8, ColumnConstants.TERTIARY_PROGRAM_LEVEL_8);
 		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR, ColumnConstants.TERTIARY_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUATERNARY_SECTOR, ColumnConstants.QUATERNARY_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUINARY_SECTOR, ColumnConstants.QUINARY_SECTOR);
 		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR);
 		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
 		mapSimpleColumn(FiltersConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_ASSISTANCE);

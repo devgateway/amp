@@ -1983,4 +1983,14 @@ public class TeamUtil {
             }
         }
     }
+    
+    public static AmpTeamMember findAnyTeamMember(Long teamId) {
+        Session dbSession = PersistenceManager.getSession();
+        String queryString = "select atm from " + AmpTeamMember.class.getName() + " atm where atm.ampTeam.ampTeamId = :ampTeamId";
+        Query query = dbSession.createQuery(queryString);
+        query.setParameter("ampTeamId", teamId);
+        List<AmpTeamMember> lst = query.list();
+        return (lst.size() > 0) ? lst.get(0) : null;
+        
+    }
 }

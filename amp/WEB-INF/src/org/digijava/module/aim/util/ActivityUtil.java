@@ -1634,8 +1634,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 qry.setString("searchTerm", "%" + searchTerm + "%");
             }
             
-            if(ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter) || ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) { 
-                qry.setParameterList("frozenActivityIds", frozenActivityIds != null ? frozenActivityIds : new HashSet<>());
+            if(ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter) || ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
+                frozenActivityIds = frozenActivityIds != null ? frozenActivityIds : new HashSet<>();
+                //if activity list is empty, add a fake activity id, so that the query does not break
+                Long fakeActivityId = -1L;
+                if(frozenActivityIds.isEmpty())  {
+                    frozenActivityIds.add(fakeActivityId);
+                }
+                qry.setParameterList("frozenActivityIds", frozenActivityIds);
             }
             
             Iterator iter = qry.list().iterator();

@@ -356,28 +356,29 @@ public final class DataFreezeService {
         today.set(Calendar.MILLISECOND, 0);
         return today.getTime();
     }
-
-    public static Map<Long, Set<Long>> getFreezeActivityIdEventIdsMap() {       
+    
+    /**
+     * Fetches a map of activity Ids and the Freeze Events that have frozen each of the activity. 
+     * This is used in the Activity Manager to color code and also for the unfreeze functionality.
+     * @return - map of activity ids and Freeze Events
+     */
+    public static Map<Long, Set<Long>> getFreezeActivityIdEventIdsMap() {  
+        setUpReportToRunInWorkpace();
+        
         Map<Long, Set<Long>> activityIdEventsIdsMap = new HashMap<>();
         List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil.getEnabledDataFreezeEvents(null);
         List<AmpDataFreezeExclusion> exclusions = DataFreezeUtil.findAllDataFreezeExclusion();
         Date todaysDate = getTodaysDate();
         
-        setUpReportToRunInWorkpace();
         for (AmpDataFreezeSettings event : dataFreezeEvents) {
             GeneratedReport report = getFrozenActivitiesReport(event);
             Set<Long> activityIds = getActivityIds(report);            
             boolean isGracePeriod = isGracePeriod(event, todaysDate);
             boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
             
-            for (Long activityId : activityIds) {
-                AmpDataFreezeExclusion ampDataFreezeExclusion = exclusions.stream()
-                        .filter(exclusion -> exclusion.getDataFreezeEvent().getAmpDataFreezeSettingsId()
-                                .equals(event.getAmpDataFreezeSettingsId())
-                                && exclusion.getActivity().getAmpActivityId().equals(activityId))
-                        .findAny().orElse(null);
-
-                if (ampDataFreezeExclusion == null && Boolean.FALSE.equals(isOpenPeriod)
+            for (Long activityId : activityIds) {               
+                boolean isExcludedFromFreezing = isExcludedFromFreezing(activityId, exclusions, event);
+                if (Boolean.FALSE.equals(isExcludedFromFreezing) && Boolean.FALSE.equals(isOpenPeriod)
                         && Boolean.FALSE.equals(isGracePeriod)) {
                     Set<Long> events = activityIdEventsIdsMap.get(activityId);
                     if (events == null) {
@@ -394,6 +395,23 @@ public final class DataFreezeService {
         return activityIdEventsIdsMap;
     }
 
+    /**
+     * Checks if an activity is excluded from freezing - the check is done per Freeze Event. 
+     * After an activity is excluded from freezing, its possible to refreeze the activity by creating another freeze event that matches the activity.
+     * @param activityId - activity id
+     * @param exclusions - Data Freeze Exclusions
+     * @param event - Freeze Event
+     * @return
+     */
+    private static boolean isExcludedFromFreezing(Long activityId, List<AmpDataFreezeExclusion> exclusions, AmpDataFreezeSettings event) {
+        AmpDataFreezeExclusion ampDataFreezeExclusion = exclusions.stream()
+                .filter(exclusion -> exclusion.getDataFreezeEvent().getAmpDataFreezeSettingsId()
+                        .equals(event.getAmpDataFreezeSettingsId())
+                        && exclusion.getActivity().getAmpActivityId().equals(activityId))
+                .findAny().orElse(null);
+        return (ampDataFreezeExclusion != null);
+    }
+    
     public static void unfreezeActivities(Map<Long, Set<Long>> activityIdEventsIdsMap) {
         DataFreezeUtil.unfreezeActivities(activityIdEventsIdsMap);
     }

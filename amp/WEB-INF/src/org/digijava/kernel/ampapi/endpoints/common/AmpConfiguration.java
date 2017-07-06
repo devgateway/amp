@@ -166,6 +166,7 @@ public class AmpConfiguration {
 	@GET
 	@Path("compatible-version-range")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "getCompatibleVersionRanges", ui = false, authTypes = AuthRule.IN_ADMIN)
 	public List<AmpOfflineCompatibleVersionRange> getCompatibleVersionRanges() {
 		return ampVersionService.getCompatibleVersionRanges();
 	}
@@ -191,6 +192,7 @@ public class AmpConfiguration {
 	@PUT
 	@Path("compatible-version-range")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "addCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
 	public AmpOfflineCompatibleVersionRange addCompatibleVersionRange(AmpOfflineCompatibleVersionRange versionRange) {
 		return ampVersionService.addCompatibleVersionRange(versionRange);
 	}
@@ -216,6 +218,7 @@ public class AmpConfiguration {
 	@POST
 	@Path("compatible-version-range/{id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "updateCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
 	public AmpOfflineCompatibleVersionRange updateCompatibleVersionRange(@PathParam("id") Long id,
 			AmpOfflineCompatibleVersionRange versionRange) {
 		versionRange.setId(id);
@@ -236,6 +239,7 @@ public class AmpConfiguration {
 	@DELETE
 	@Path("compatible-version-range/{id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "deleteCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
 	public AmpOfflineCompatibleVersionRange deleteCompatibleVersionRange(@PathParam("id") Long id) {
 		return ampVersionService.deleteCompatibleVersionRange(id);
 	}

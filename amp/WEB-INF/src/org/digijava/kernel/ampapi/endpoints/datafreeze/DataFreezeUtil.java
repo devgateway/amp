@@ -2,10 +2,8 @@ package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.hibernate.Query;
@@ -160,6 +158,5 @@ public final class DataFreezeUtil {
             freezingDate = event.getFreezingDate();
         }
         return freezingDate;
-    }    
-   
+    }
 }

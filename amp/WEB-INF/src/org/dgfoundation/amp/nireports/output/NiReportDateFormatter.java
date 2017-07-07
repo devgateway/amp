@@ -34,11 +34,10 @@ public class NiReportDateFormatter {
 		if (date != null) {
 			if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
 				AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
-
-				DateTime convDate = FiscalCalendarUtil.convertFromGregorianDate(
-						Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), calendar);
-
 				if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())) {
+					DateTime convDate = FiscalCalendarUtil.convertFromGregorianDate(
+							Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), calendar);
+					
 					return getEthiopianFormattedDate(convDate);
 				}
 			}

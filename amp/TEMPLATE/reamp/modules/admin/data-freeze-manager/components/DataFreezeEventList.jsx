@@ -244,8 +244,7 @@ export default class DataFreezeEventList extends Component {
                           <th>{this.showInfoIcon('freeze-options')}{this.props.translations['amp.data-freezing:freeze-options']}<span className="error-color" >*&nbsp;</span></th>
                           <th>{this.showInfoIcon('notification-email')}{this.props.translations['amp.data-freezing:notification-email']}<span className="error-color" >*&nbsp;</span></th>
                           <th>{this.showInfoIcon('notification-days')}{this.props.translations['amp.data-freezing:notification-days']}</th>
-                          <th>{this.showInfoIcon('filters')}{this.props.translations['amp.data-freezing:filters']}</th>
-                          <th>{this.props.translations['amp.data-freezing:enabled']}</th>
+                          <th>{this.showInfoIcon('filters')}{this.props.translations['amp.data-freezing:filters']}</th>                          
                           <th></th>
                           <th></th>
                           </tr>

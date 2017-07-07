@@ -294,10 +294,7 @@ export default class DataFreezeEventEdit extends Component {
                   <span className="glyphicon glyphicon-plus-sign"></span>
                  </button>
                </td>
-                <td>
-                      {this.props.dataFreezeEvent.enabled ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}
-                 </td>
-                <td className="action-column">                  
+               <td className="action-column">                  
                       <span className="glyphicon glyphicon-custom glyphicon-ok-circle success-color" onClick={this.save}> </span>
                       <span className="glyphicon glyphicon-custom glyphicon-remove-sign" onClick={this.props.cancel}></span>
                    </td>

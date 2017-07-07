@@ -30,7 +30,7 @@ export default class DataFreezeEventRow extends Component {
         });
         if (inEdit.length == 0) {
             const dataFreezeEvent = this.props.dataFreezeEvent;
-            var origDataFreezeEvent = Object.assign({}, dataFreezeEvent);
+            const origDataFreezeEvent = Object.assign({}, dataFreezeEvent);
             dataFreezeEvent.isEditing = true;
             this.setState({
                 origDataFreezeEvent: origDataFreezeEvent

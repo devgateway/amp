@@ -46,8 +46,8 @@ export default class DataFreezeEventEdit extends Component {
     }
 
     toggleDatePicker(event) { 
-        let toggleState = this.state.showDatePicker;
-        let field = event.target.getAttribute('data-field'); 
+        const toggleState = this.state.showDatePicker;
+        const field = event.target.getAttribute('data-field'); 
         for(const fieldName in toggleState){
             if(field != fieldName){
                 toggleState[fieldName]  = false; 
@@ -61,7 +61,7 @@ export default class DataFreezeEventEdit extends Component {
     }
     
    toggleDatePickerByFieldName(fieldName){
-        let toggleState = this.state.showDatePicker;        
+        const toggleState = this.state.showDatePicker;        
         toggleState[fieldName] = !toggleState[fieldName];
         this.setState({
             showDatePicker: toggleState
@@ -69,7 +69,7 @@ export default class DataFreezeEventEdit extends Component {
     }
  
    onFreezingDateChange(date) {
-        let currentRecord = this.props.dataFreezeEvent;
+        const currentRecord = this.props.dataFreezeEvent;
         currentRecord.freezingDate = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
         this.setState({
             currentRecord: currentRecord
@@ -78,7 +78,7 @@ export default class DataFreezeEventEdit extends Component {
     }
 
     onOpenPeriodStartChange(date) {
-        let currentRecord = this.props.dataFreezeEvent;
+        const currentRecord = this.props.dataFreezeEvent;
         currentRecord.openPeriodStart = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
         this.setState({
             currentRecord: currentRecord
@@ -88,7 +88,7 @@ export default class DataFreezeEventEdit extends Component {
     }
 
     onOpenPeriodEndChange(date) {
-        let currentRecord = this.props.dataFreezeEvent;
+        const currentRecord = this.props.dataFreezeEvent;
         currentRecord.openPeriodEnd = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
         this.setState({
             currentRecord: currentRecord
@@ -97,8 +97,8 @@ export default class DataFreezeEventEdit extends Component {
     }
     
     onGracePeriodChange(event) {
-        let gracePeriod = $(event.target).val();
-        let currentRecord = this.props.dataFreezeEvent;
+        const gracePeriod = $(event.target).val();
+        const currentRecord = this.props.dataFreezeEvent;
         currentRecord.gracePeriod = (gracePeriod && !isNaN(gracePeriod)) ? parseInt(gracePeriod) : '';
         this.setState({
             currentRecord: currentRecord
@@ -106,7 +106,7 @@ export default class DataFreezeEventEdit extends Component {
     }
     
     onSendNotificationChange(event) {
-        let currentRecord = this.props.dataFreezeEvent;
+        const currentRecord = this.props.dataFreezeEvent;
         currentRecord.sendNotification = $(event.target).val() === Constants.OPTION_YES;
         if ($(event.target).val() === Constants.OPTION_NO) {
             currentRecord.notificationDays = '';
@@ -117,7 +117,7 @@ export default class DataFreezeEventEdit extends Component {
     }
 
     onEnabledChange(event) {
-        let currentRecord = this.props.dataFreezeEvent;
+        const currentRecord = this.props.dataFreezeEvent;
         currentRecord.enabled = $(event.target).val() === Constants.OPTION_YES;
         this.setState({
             currentRecord: currentRecord
@@ -125,7 +125,7 @@ export default class DataFreezeEventEdit extends Component {
     }
 
     onFreezeOptionChange(event) {
-        let currentRecord = this.props.dataFreezeEvent;
+        const currentRecord = this.props.dataFreezeEvent;
         currentRecord.freezeOption = $(event.target).val();
         this.setState({
             currentRecord: currentRecord
@@ -133,8 +133,8 @@ export default class DataFreezeEventEdit extends Component {
     }
 
     onNotificationDaysChange(event) {
-        let currentRecord = this.props.dataFreezeEvent;
-        let notificationDays = $(event.target).val();
+        const currentRecord = this.props.dataFreezeEvent;
+        const notificationDays = $(event.target).val();
         currentRecord.notificationDays = (notificationDays && !isNaN(notificationDays)) ? parseInt(notificationDays) : '';
         this.setState({
             currentRecord: currentRecord
@@ -168,8 +168,8 @@ export default class DataFreezeEventEdit extends Component {
         }.bind(this));
 
         this.props.filter.on('apply', function () {
-            let currentRecord = this.props.dataFreezeEvent;
-            let filters = this.props.filter.serialize();
+            const currentRecord = this.props.dataFreezeEvent;
+            const filters = this.props.filter.serialize();
             if (filters) {
                 currentRecord.filters = JSON.stringify(filters);
                 this.setState({
@@ -184,8 +184,8 @@ export default class DataFreezeEventEdit extends Component {
         this.props.filter.reset({
             silent: true
         });
-        let currentRecord = this.props.dataFreezeEvent;
-        let filters = JSON.parse(currentRecord.filters || '{}')
+        const currentRecord = this.props.dataFreezeEvent;
+        const filters = JSON.parse(currentRecord.filters || '{}')
         this.props.filter.deserialize(filters, {
             silent: true
         });

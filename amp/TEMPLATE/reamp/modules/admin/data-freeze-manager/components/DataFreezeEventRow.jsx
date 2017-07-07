@@ -25,7 +25,7 @@ export default class DataFreezeEventRow extends Component {
     }
 
     edit() {
-        var inEdit = this.props.dataFreezeEventList.filter(dataFreezeEvent => {
+        const inEdit = this.props.dataFreezeEventList.filter(dataFreezeEvent => {
             return dataFreezeEvent.isEditing
         });
         if (inEdit.length == 0) {

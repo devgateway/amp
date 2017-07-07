@@ -44,7 +44,7 @@ class Utils {
         if ( message ) {
             errors.push( message );
         }
-        //errors.push( ...this.validateFreezingDate( dataFreezeEvent ) );
+        errors.push( ...this.validateFreezingDate( dataFreezeEvent ) );
         errors.push( ...this.validateStartAndEndDate( dataFreezeEvent ) );
         errors.push( ...this.validateGracePeriod( dataFreezeEvent ) );
         return errors
@@ -73,7 +73,7 @@ class Utils {
             const freezingDate = moment( dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT );
             
             if ( openPeriodStart.isAfter( freezingDate ) === false ) {
-                errors.push( { messageKey: 'amp.data-freezing:start-date-should-be-after-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'freezingDate'] });
+                errors.push( { messageKey: 'amp.data-freezing:start-date-should-be-after-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'freezingDate'], context: Constants.DATA_FREEZE_EVENTS  });
             }
 
             if ( openPeriodStart.isAfter( openPeriodEnd ) ) {

@@ -31,7 +31,7 @@ export default class Report6 extends Component {
     initializeFiltersAndSettings() {
         this.filter = new ampFilter( {
             draggable: true,
-            caller: 'REPORTS'
+            caller: 'GPI_REPORTS'
         });
         this.settingsWidget = Utils.initializeSettingsWidget();
         this.props.actions.getYears()

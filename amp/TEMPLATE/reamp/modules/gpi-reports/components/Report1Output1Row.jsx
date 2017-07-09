@@ -55,7 +55,7 @@ export default class Report1Output1Row extends Component {
              return (
                     <tr >
                     <td>{this.props.rowData[Constants.PROJECT_TITLE]}</td>
-                    <td>{this.props.rowData[Constants.Q1]}</td>
+                    <td className="number-column">{this.props.rowData[Constants.Q1]}</td>
                     <td>{this.props.rowData[Constants.Q2]}</td>
                     <td>
                       <ul>
@@ -80,17 +80,17 @@ export default class Report1Output1Row extends Component {
                             <div>{this.props.rowData[Constants.Q6_DESCRIPTION]}</div>
                         }                      
                     </td>
-                    <td>{this.props.rowData[Constants.Q7]}</td>
-                    <td>{this.props.rowData[Constants.Q8]}</td>
-                    <td>{this.props.rowData[Constants.Q9]}</td>
+                    <td className="number-column">{this.props.rowData[Constants.Q7]}</td>
+                    <td className="number-column">{this.props.rowData[Constants.Q8]}</td>
+                    <td className="number-column">{this.props.rowData[Constants.Q9]}</td>
                     <td>{this.props.rowData[Constants.Q10]}
                     <span className="glyphicon glyphicon-chevron-down" onClick={this.toggleDescription} data-question="Q10"></span>
                     {this.state.descriptionsExpanded[Constants.Q10] &&
                        <div>{this.props.rowData[Constants.Q10_DESCRIPTION]}</div>
                     }
                     </td>
-                    <td>{this.props.rowData[Constants.RESULT]}</td>
-                    <td>{this.props.rowData[Constants.M_E]}</td>
+                    <td className="number-column">{this.props.rowData[Constants.RESULT]}</td>
+                    <td className="number-column">{this.props.rowData[Constants.M_E]}</td>
                     <td>                   
                     <div style={{ position: 'relative' }}>
                         {this.state.showSupportingEvidence &&

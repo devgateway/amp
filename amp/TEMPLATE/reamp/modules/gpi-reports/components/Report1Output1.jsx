@@ -257,8 +257,7 @@ export default class Report1Output1 extends Component {
                         }
                         </h4></div>
                     </div>
-                    <div className="section-divider"></div>
-
+                   
                         <div className="container-fluid">
                           <div className="row">
                             <h4>{this.props.translations['amp.gpi-reports:indicator1-description']}</h4>

@@ -248,7 +248,13 @@ export default class Report5a extends Component {
                         }
                         </h4></div>
                     </div>                                       
-                    <div className="section-divider"></div>     
+                        
+                        <div className="container-fluid">
+                        <div className="row">
+                          <h4>{this.props.translations['amp.gpi-reports:indicator5a-description']}</h4>
+                        </div>
+                      </div>
+                        <div className="section-divider"></div>
                         {this.state.showRemarks &&
                              <RemarksPopup showRemarks={this.state.showRemarks} closeRemarksModal={this.closeRemarksModal.bind(this)} remarksUrl={this.state.remarksUrl} code="5a" settings={this.props.settings} />                                                  
                         }                        

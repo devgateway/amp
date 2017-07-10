@@ -47,10 +47,14 @@ public class ActivityEPConstants {
 	public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
 	
 	// fields constants
-	public static final String AMP_ACTIVITY_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
+	public static final String AMP_ACTIVITY_ID_FIELD_NAME = 
+	        InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
 	public static final String AMP_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID);
-	public static final String MODIFIED_BY_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.MODIFIED_BY);
+	public static final String MODIFIED_BY_FIELD_NAME = 
+	        InterchangeUtils.underscorify(ActivityFieldsConstants.MODIFIED_BY);
 
+	public static final String IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME = "project_code";
+	
 	// field types
 	public static final String FIELD_TYPE_LIST = "list";
 	public static final String FIELD_TYPE_STRING = "string";

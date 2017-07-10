@@ -96,9 +96,11 @@ public class FieldsEnumerator {
 	 */
 	private APIField describeField(Field field, Deque<Interchangeable> intchStack) {
 		Interchangeable interchangeable = intchStack.peek();
+        String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
 
 		APIField apiField = new APIField();
-		apiField.setFieldName(InterchangeUtils.underscorify(interchangeable.fieldTitle()));
+		apiField.setFieldName(fieldTitle);
+
 		if (interchangeable.id()) {
 			apiField.setId(interchangeable.id());
 		}
@@ -112,7 +114,6 @@ public class FieldsEnumerator {
 					? InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);
 		}
 		
-
 		apiField.setFieldLabel(InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
 		apiField.setRequired(getRequiredValue(intchStack, fmService));
 		apiField.setImportable(interchangeable.importable());
@@ -120,6 +121,12 @@ public class FieldsEnumerator {
 			apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
 			apiField.setImportable(true);
 		}
+		
+		if (InterchangeUtils.isFieldIatiIdentifier(fieldTitle)) {
+		    apiField.setRequired(ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED);
+		    apiField.setImportable(true);
+        }
+
 		if (interchangeable.percentageConstraint()){
 			apiField.setPercentage(true);
 		}

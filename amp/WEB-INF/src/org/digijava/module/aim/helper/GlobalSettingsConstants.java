@@ -206,6 +206,8 @@ public class GlobalSettingsConstants {
 
     public static final String  IMPORT_PROCESSOR_URL = "Import processor endpoint URL";
     
+    public static final String  IATI_IDENTIFIER_AMP_FIELD = "IATI Identifier AMP field";
+    
     public static final String  LIMIT_FILE_TYPE_FOR_UPLOAD = "Limit upload of file types";
 
     public static final String  NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION = "Number of days before automatic validation";

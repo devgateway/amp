@@ -225,19 +225,24 @@ public class ProjectList {
 			final boolean viewable) {
 		final List<JsonBean> activitiesList = new ArrayList<JsonBean>();
 		
+		String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
+		
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 				String ids = StringUtils.join(activityIds, ",");
-				String negate = "";
-				if (!include) {
-					negate = " NOT ";
-				}
-				String allActivitiesQuery = "SELECT act.amp_activity_id as amp_activity_id, act.amp_id as amp_id, act.name as name, act.date_created as date_created, "
-						+ "act.project_code as project_code, act.date_updated as date_updated, at.name as team_name "
-						+ "FROM amp_activity act JOIN amp_team at ON act.amp_team_id = at.amp_team_id ";
+				String negate = include ? "" : " NOT ";
+				String query = "SELECT act.amp_activity_id as amp_activity_id, act.amp_id as amp_id, act.name as name, "
+						+ "act.date_created as date_created, "
+						+ "act.%s as project_code, act.date_updated as date_updated, at.name as team_name "
+						+ "FROM amp_activity act "
+						+ "JOIN amp_team at ON act.amp_team_id = at.amp_team_id ";
+				
 				if (activityIds.size() > 0) {
-					allActivitiesQuery += " WHERE act.amp_activity_id " + negate + " in (" + ids + ")";
+					query += " WHERE act.amp_activity_id " + negate + " in (" + ids + ")";
 				}
+				
+				String allActivitiesQuery = String.format(query, iatiIdAmpField);
+				
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allActivitiesQuery, null)) {
 					ResultSet rs = rsi.rs;
 					while (rs.next()) {

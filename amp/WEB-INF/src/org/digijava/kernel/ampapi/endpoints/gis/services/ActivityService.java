@@ -53,6 +53,7 @@ public class ActivityService {
 		 columnHeaders = new HashMap<String, String>();
 		 columnHeaders.put(ColumnConstants.PROJECT_TITLE,"Title" );
 		 columnHeaders.put(ColumnConstants.DONOR_AGENCY, "Donor Agency");
+		 columnHeaders.put(ColumnConstants.EXECUTING_AGENCY, "Executing Agency");
 		 columnHeaders.put(ColumnConstants.ACTIVITY_UPDATED_ON, "Date");
 		 
 		 columnsToProvide = new HashSet<String>();
@@ -62,6 +63,8 @@ public class ActivityService {
 		 columnsToProvide.add(MeasureConstants.ACTUAL_DISBURSEMENTS);
 		 columnsToProvide.add(MeasureConstants.PLANNED_COMMITMENTS);
 		 columnsToProvide.add(MeasureConstants.PLANNED_DISBURSEMENTS);
+		 columnsToProvide.add(MeasureConstants.BILATERAL_SSC_COMMITMENTS);
+		 columnsToProvide.add(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS);
 	    }
 	
 	public static JsonBean getActivities(JsonBean config, List<String>activitIds, Integer page, Integer pageSize) 
@@ -87,11 +90,13 @@ public class ActivityService {
 		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
 		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		spec.addColumn(new ReportColumn(ColumnConstants.EXECUTING_AGENCY));
 		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
 		
 		OutputSettings outSettings = new OutputSettings(new HashSet<String>() {{
 		    add(ColumnConstants.AMP_ID);
 		    add(ColumnConstants.DONOR_AGENCY);
+		    add(ColumnConstants.EXECUTING_AGENCY);
 		    add(ColumnConstants.PRIMARY_SECTOR);
 		}});
 		
@@ -103,7 +108,7 @@ public class ActivityService {
 		SettingsUtils.applySettings(spec, config, true);
 		// apply custom settings
 		configureMeasures(spec, config);
-		
+
  		
  		// AMP-19772: Needed to avoid problems on GIS js. 
  		spec.setDisplayEmptyFundingRows(true);
@@ -168,12 +173,12 @@ public class ActivityService {
 		list.set("activities", activities);
 		return list;
 	}
-	
+
 	/**
 	 * Adds measures to the report specification based on AMP-18874:
 	 * a) needs to have 'planned commitments' and  'planned disbursements'  if any planned setting is selected.
 	 * b) needs to have 'actual commitments' and  'actual disbursements'  if any actual setting is selected.
-	 * 
+	 *
 	 * @param spec
 	 * @param config
 	 */
@@ -190,6 +195,10 @@ public class ActivityService {
 			if (fundingType.startsWith("Planned")) {
 				spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_COMMITMENTS));
 				spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+			}
+			if (fundingType.contains("SSC")) {
+				spec.addMeasure(new ReportMeasure(MeasureConstants.BILATERAL_SSC_COMMITMENTS));
+				spec.addMeasure(new ReportMeasure(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS));
 			}
 		}
 	}

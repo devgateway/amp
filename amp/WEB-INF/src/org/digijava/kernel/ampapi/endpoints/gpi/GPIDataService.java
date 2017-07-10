@@ -622,8 +622,7 @@ public class GPIDataService {
     }
 
     public static List<JsonBean> getDonors() {
-        TeamMember tm = TeamUtil.getCurrentMember();
-        return GPIUtils.getDonors(tm.getTeamId());
+        return GPIUtils.getDonors();
 
     }
 

@@ -123,7 +123,7 @@ public class FieldsEnumerator {
 		}
 		
 		if (InterchangeUtils.isFieldIatiIdentifier(fieldTitle)) {
-		    apiField.setRequired(ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED);
+		    apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
 		    apiField.setImportable(true);
         }
 

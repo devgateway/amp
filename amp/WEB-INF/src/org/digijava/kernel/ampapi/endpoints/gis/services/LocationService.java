@@ -280,8 +280,8 @@ public class LocationService {
 		
 		OutputSettings outSettings = new OutputSettings(new HashSet<String>() {{add(ColumnConstants.AMP_ID);}});
 		
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+		SettingsUtils.configureMeasures(spec, config);
+
 		ReportColumn implementationLevelColumn = null;
 		if (adminLevel != null) {
 			switch (adminLevel) {

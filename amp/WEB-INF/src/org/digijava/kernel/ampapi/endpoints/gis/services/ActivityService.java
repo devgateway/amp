@@ -107,8 +107,7 @@ public class ActivityService {
 		// apply default settings
 		SettingsUtils.applySettings(spec, config, true);
 		// apply custom settings
-		configureMeasures(spec, config);
-
+		SettingsUtils.configureMeasures(spec, config);
  		
  		// AMP-19772: Needed to avoid problems on GIS js. 
  		spec.setDisplayEmptyFundingRows(true);
@@ -172,35 +171,6 @@ public class ActivityService {
 		list.set("count", count);
 		list.set("activities", activities);
 		return list;
-	}
-
-	/**
-	 * Adds measures to the report specification based on AMP-18874:
-	 * a) needs to have 'planned commitments' and  'planned disbursements'  if any planned setting is selected.
-	 * b) needs to have 'actual commitments' and  'actual disbursements'  if any actual setting is selected.
-	 *
-	 * @param spec
-	 * @param config
-	 */
-	private static void configureMeasures(ReportSpecificationImpl spec, JsonBean config) {
-		if (spec != null && config != null) {
-			Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
-			String fundingType = (String) (settings == null ? null : settings.get(SettingsConstants.FUNDING_TYPE_ID));
-			if (fundingType == null)
-				fundingType = SettingsUtils.getDefaultFundingType();
-			if (fundingType.startsWith("Actual")) {
-				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
-				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-			}
-			if (fundingType.startsWith("Planned")) {
-				spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_COMMITMENTS));
-				spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
-			}
-			if (fundingType.contains("SSC")) {
-				spec.addMeasure(new ReportMeasure(MeasureConstants.BILATERAL_SSC_COMMITMENTS));
-				spec.addMeasure(new ReportMeasure(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS));
-			}
-		}
 	}
 
 	/**

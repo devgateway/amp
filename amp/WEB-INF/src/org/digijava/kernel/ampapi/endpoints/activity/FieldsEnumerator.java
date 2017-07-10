@@ -11,7 +11,6 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -26,7 +25,6 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
@@ -180,7 +178,7 @@ public class FieldsEnumerator {
 		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field, intchStack));
 		bean.set(ActivityEPConstants.IMPORTABLE, interchangeable.importable());
 		if (InterchangeUtils.isFieldIatiIdentifier(fieldTitle)) {
-			bean.set(ActivityEPConstants.REQUIRED, ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED);
+			bean.set(ActivityEPConstants.REQUIRED, ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
 			bean.set(ActivityEPConstants.IMPORTABLE, true);
 		}
 		

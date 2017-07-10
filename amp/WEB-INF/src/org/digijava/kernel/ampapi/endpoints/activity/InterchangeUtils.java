@@ -121,8 +121,8 @@ public class InterchangeUtils {
 	
 	public static String getAmpIatiIdentifierFieldName() {
 		String iatiIdGsField = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.IATI_IDENTIFIER_AMP_FIELD);
-		String iatiIdAmpField = StringUtils.isEmpty(iatiIdGsField) ? 
-				ActivityEPConstants.IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME : iatiIdGsField;
+		String iatiIdAmpField = StringUtils.isEmpty(iatiIdGsField) 
+				? ActivityEPConstants.IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME : iatiIdGsField;
 		
 		return iatiIdAmpField;
 	}

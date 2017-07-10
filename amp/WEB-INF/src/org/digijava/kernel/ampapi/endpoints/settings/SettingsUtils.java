@@ -478,12 +478,13 @@ public class SettingsUtils {
 	 * @param spec
 	 * @param config
 	 */
-	public static void configureMeasures(ReportSpecificationImpl spec, JsonBean config) {
+	public static void configureMeasures(final ReportSpecificationImpl spec, final  JsonBean config) {
 		if (spec != null && config != null) {
 			Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
 			String fundingType = (String) (settings == null ? null : settings.get(SettingsConstants.FUNDING_TYPE_ID));
-			if (fundingType == null)
+			if (fundingType == null) {
 				fundingType = SettingsUtils.getDefaultFundingType();
+			}
 			if (fundingType.startsWith("Actual")) {
 				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
@@ -701,7 +702,7 @@ public class SettingsUtils {
 	}
 
 	/**
-	 * @param currentSettings
+	 * @param sortColumn
 	 * @return general currency settings
 	 */
 	private static SettingOptions getSortSetting(String sortColumn) {

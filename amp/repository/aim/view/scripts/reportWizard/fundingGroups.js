@@ -99,6 +99,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Budget Structure'
                 , 'Indirect On Budget'
                 , 'Humanitarian Aid'
+                , 'Concessionality Level'
                 , 'Disaster Response Marker'
                 , 'Indicator Name'
                 , 'Logframe Category'

@@ -106,7 +106,7 @@ public class LocationService {
 				filterRules = FilterUtils.getFilterRules(filters, null, filterRules);
 			}
  		}
-		Map<String, String> admLevelToGeoCode;
+		Map<Long, String> admLevelToGeoCode;
 		if (admlevel.equals(ColumnConstants.COUNTRY)) {
 			// If the admin level is country we filter only to show projects at
 			// the country of the current installation
@@ -147,7 +147,9 @@ public class LocationService {
 				Iterator<ReportCell> iter = reportArea.getContents().values().iterator();
 				BigDecimal value=(BigDecimal) iter.next().value;				
 				ReportCell reportcell = (ReportCell) iter.next();
-				String admid = admLevelToGeoCode.get(reportcell.value);
+                //we fetch the entity id so we can Univocally search the GeoId
+                Long entityId=((IdentifiedReportCell)reportcell).entityId;
+                String admid = admLevelToGeoCode.get(entityId);
 				item.set("admID", admid);
 				item.set("amount", value);
 				if (admid!=null){
@@ -165,12 +167,12 @@ public class LocationService {
 	 * @param admLevelCV
 	 * @return
 	 */
-	public Map<String, String> getAdmLevelGeoCodeMap(String admLevel, HardCodedCategoryValue admLevelCV) {
+	public Map<Long, String> getAdmLevelGeoCodeMap(String admLevel, HardCodedCategoryValue admLevelCV) {
 		Set<AmpCategoryValueLocations> acvlData = DynLocationManagerUtil.getLocationsByLayer(admLevelCV);
-		Map<String, String> levelToGeoCodeMap = new HashMap<String, String>();
+		Map<Long, String> levelToGeoCodeMap = new HashMap<Long, String>();
 		if (acvlData != null) {
 			for (AmpCategoryValueLocations acvl : acvlData) {
-				levelToGeoCodeMap.put(acvl.getName(), acvl.getGeoCode());
+				levelToGeoCodeMap.put(acvl.getId(), acvl.getGeoCode());
 			}
 		}
 		return levelToGeoCodeMap;
@@ -199,7 +201,8 @@ public class LocationService {
 					" join amp_location loc on al.amp_location_id = loc.amp_location_id  "+
 					" join amp_category_value_location acvl on loc.location_id = acvl.id  "+
 					" join amp_category_value amcv on acvl.parent_category_value =amcv.id "+  
-					" where amcv.category_value ='Country' "+
+					" where amcv.category_value ='Country'"
+					+ " and (acvl.deleted is null or acvl.deleted = false) "+
 					" and al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) " +
 					" and location_name=(select country_name "
 					+ " from DG_COUNTRIES where iso='"+ FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) +"')";
@@ -214,6 +217,7 @@ public class LocationService {
 				+ adminLevel
 				+ "'  "
 				+ " and acvl.gs_lat is not null and acvl.gs_long is not null  "
+				+ " and (acvl.deleted is null or acvl.deleted = false) "
 				+ " UNION ALL  "
 				+ " SELECT acvl.id, acvl.parent_location, rt.gs_lat, rt.gs_long, acvl.parent_category_value, rt.LEVEL + 1, rt.root_location_id, rt.root_location_description  "
 				+ " FROM rt_amp_category_value_location rt, amp_category_value_location acvl  "

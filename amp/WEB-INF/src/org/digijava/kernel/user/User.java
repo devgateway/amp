@@ -88,6 +88,7 @@ public class User
     private String organizationTypeOther;
     private Set contacts;
     private AmpUserExtension userExtension;
+    private Boolean exemptFromDataFreezing;
     private Set<AmpOrganisation> assignedOrgs;
     private Date passwordChangedAt;
 
@@ -468,6 +469,34 @@ public class User
    		return false;
 	}
 
+	/**
+	 * Checks if user has a verified org and the org is role donor
+	 * @return
+	 */
+	public boolean hasVerifiedDonor(){
+		if (this.assignedOrgs.size() == 0) {
+			return false;
+		}
+
+		Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
+		while (it.hasNext()) {
+			AmpOrganisation currentOrganization = it.next();
+			if (org.digijava.module.aim.util.DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
+				return true;
+		}
+		return false;
+	}
+	public boolean hasNationalCoordinatorGroup(){
+		boolean result = false;
+		Set<Group> groups = this.groups;
+		for (Group group : groups) {
+			if (group.isNationalCoordinatorGroup()) {
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
 	public AmpCategoryValueLocations getRegion() {
 		return region;
 	}
@@ -493,4 +522,13 @@ public class User
     public void updateLastModified() {
         setLastModified(new Date());
     }
+
+    public Boolean getExemptFromDataFreezing() {
+        return exemptFromDataFreezing;
+    }
+
+    public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
+        this.exemptFromDataFreezing = exemptFromDataFreezing;
+    }
+
 }

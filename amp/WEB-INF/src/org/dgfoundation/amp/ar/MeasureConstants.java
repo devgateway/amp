@@ -37,8 +37,8 @@ public class MeasureConstants {
 	public static final String CURRENT_MONTH_DISBURSEMENTS = "Current Month Disbursements";
 	public static final String PRIOR_ACTUAL_DISBURSEMENTS = "Prior Actual Disbursements";
 	public static final String SELECTED_YEAR_PLANNED_DISBURSEMENTS = "Selected Year Planned Disbursements";
-	public static final String TRIANGULAR_SSC_COMMITMENTS = "Triangular SSC Disbursements";
-	public static final String TRIANGULAR_SSC_DISBURSEMENTS = "Triangular SSC Commitments";
+	public static final String TRIANGULAR_SSC_COMMITMENTS = "Triangular SSC Commitments";
+	public static final String TRIANGULAR_SSC_DISBURSEMENTS = "Triangular SSC Disbursements";
 	public static final String UNDISBURSED_BALANCE = "Undisbursed Balance";
 	public static final String REAL_PLANNED_DISBURSEMENTS = "Real Planned Disbursements";
 	public static final String REAL_DISBURSEMENTS = "Real Disbursements";

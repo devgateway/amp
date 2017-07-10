@@ -159,7 +159,8 @@ public class FieldsEnumerator {
 			return null;
 		
 		JsonBean bean = new JsonBean();
-		bean.set(ActivityEPConstants.FIELD_NAME, InterchangeUtils.underscorify(interchangeable.fieldTitle()));
+		String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
+		bean.set(ActivityEPConstants.FIELD_NAME, InterchangeUtils.underscorify(fieldTitle));
 		if (interchangeable.id()) {
 			bean.set(ActivityEPConstants.ID, interchangeable.id());
 		}
@@ -178,6 +179,11 @@ public class FieldsEnumerator {
 		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
 		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field, intchStack));
 		bean.set(ActivityEPConstants.IMPORTABLE, interchangeable.importable());
+		if (InterchangeUtils.isFieldIatiIdentifier(fieldTitle)) {
+			bean.set(ActivityEPConstants.REQUIRED, ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED);
+			bean.set(ActivityEPConstants.IMPORTABLE, true);
+		}
+		
 		if (interchangeable.percentageConstraint()){
 			bean.set(ActivityEPConstants.PERCENTAGE, true);
 		}

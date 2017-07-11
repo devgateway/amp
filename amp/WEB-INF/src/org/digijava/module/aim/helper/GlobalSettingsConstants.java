@@ -215,9 +215,8 @@ public class GlobalSettingsConstants {
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value
      */
-	public final static Set<String> SETTINGS_TO_HIDE = new HashSet<>(Arrays.asList(REPORT_WIZARD_VISIBILITY_SOURCE));
+	public final static Set<String> SETTINGS_TO_HIDE = new HashSet<>(Arrays.asList(REPORT_WIZARD_VISIBILITY_SOURCE));	
 	
-	
-	
+	public static final String WORKSPACE_TO_RUN_REPORT_OF_FROZEN_ACTIVITIES = "Workspace Team to run report of frozen activities";
 
 }

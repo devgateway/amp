@@ -5,11 +5,15 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AmpDateUtils;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
@@ -352,23 +356,30 @@ public final class DataFreezeService {
         today.set(Calendar.MILLISECOND, 0);
         return today.getTime();
     }
-
-    public static Map<Long, Set<Long>> getFreezeActivityIdEventIdsMap() {
+    
+    /**
+     * Fetches a map of activity Ids and the Freeze Events that have frozen each of the activity. 
+     * This is used in the Activity Manager to color code and also for the unfreeze functionality.
+     * @return - map of activity ids and Freeze Events
+     */
+    public static Map<Long, Set<Long>> getFreezeActivityIdEventIdsMap() {  
+        setUpReportToRunInWorkpace();
+        
         Map<Long, Set<Long>> activityIdEventsIdsMap = new HashMap<>();
         List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil.getEnabledDataFreezeEvents(null);
         List<AmpDataFreezeExclusion> exclusions = DataFreezeUtil.findAllDataFreezeExclusion();
+        Date todaysDate = getTodaysDate();
+        
         for (AmpDataFreezeSettings event : dataFreezeEvents) {
             GeneratedReport report = getFrozenActivitiesReport(event);
-            Set<Long> activityIds = getActivityIds(report);
-
-            for (Long activityId : activityIds) {
-                AmpDataFreezeExclusion ampDataFreezeExclusion = exclusions.stream()
-                        .filter(exclusion -> exclusion.getDataFreezeEvent().getAmpDataFreezeSettingsId()
-                                .equals(event.getAmpDataFreezeSettingsId())
-                                && exclusion.getActivity().getAmpActivityId().equals(activityId))
-                        .findAny().orElse(null);
-
-                if (ampDataFreezeExclusion == null) {
+            Set<Long> activityIds = getActivityIds(report);            
+            boolean isGracePeriod = isGracePeriod(event, todaysDate);
+            boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
+            
+            for (Long activityId : activityIds) {               
+                boolean isExcludedFromFreezing = isExcludedFromFreezing(activityId, exclusions, event);
+                if (Boolean.FALSE.equals(isExcludedFromFreezing) && Boolean.FALSE.equals(isOpenPeriod)
+                        && Boolean.FALSE.equals(isGracePeriod)) {
                     Set<Long> events = activityIdEventsIdsMap.get(activityId);
                     if (events == null) {
                         events = new HashSet<>();
@@ -384,7 +395,39 @@ public final class DataFreezeService {
         return activityIdEventsIdsMap;
     }
 
+    /**
+     * Checks if an activity is excluded from freezing - the check is done per Freeze Event. 
+     * After an activity is excluded from freezing, its possible to refreeze the activity by creating another freeze event that matches the activity.
+     * @param activityId - activity id
+     * @param exclusions - Data Freeze Exclusions
+     * @param event - Freeze Event
+     * @return
+     */
+    private static boolean isExcludedFromFreezing(Long activityId, List<AmpDataFreezeExclusion> exclusions, AmpDataFreezeSettings event) {
+        AmpDataFreezeExclusion ampDataFreezeExclusion = exclusions.stream()
+                .filter(exclusion -> exclusion.getDataFreezeEvent().getAmpDataFreezeSettingsId()
+                        .equals(event.getAmpDataFreezeSettingsId())
+                        && exclusion.getActivity().getAmpActivityId().equals(activityId))
+                .findAny().orElse(null);
+        return (ampDataFreezeExclusion != null);
+    }
+    
     public static void unfreezeActivities(Map<Long, Set<Long>> activityIdEventsIdsMap) {
         DataFreezeUtil.unfreezeActivities(activityIdEventsIdsMap);
     }
+
+    /**
+     * Sets up the workspace filter for nireports to run in the workspace configured in
+     * the 'Workspace Team to run report of frozen activities' GS setting
+     * This is important when running a report in admin.
+     */
+    private static void setUpReportToRunInWorkpace() {
+        Long ampTeamId = FeaturesUtil
+                .getGlobalSettingValueLong(GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_OF_FROZEN_ACTIVITIES);
+        AmpTeamMember teamMember = TeamUtil.findAnyTeamMember(ampTeamId);
+        if (teamMember != null) {
+            TeamUtil.setupFiltersForLoggedInUser(TLSUtils.getRequest(), teamMember);
+        }
+    }
+
 }

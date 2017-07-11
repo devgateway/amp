@@ -162,10 +162,10 @@ export default class Report1Output2 extends Component {
    createRows() {
        var rows = [];
        this.props.output2 && this.props.output2.page && this.props.output2.page.contents.forEach(( dataRow, i ) => {
-          rows.push(<tr><td rowSpan="4">{dataRow[Constants.YEAR]}</td><td>{this.props.translations['amp.gpi-reports:indicator1-q1']}</td><td>{dataRow[Constants.Q1]}</td></tr>);
-          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q2']}</td><td>{dataRow[Constants.Q2]}</td></tr>);
-          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q3']}</td><td>{dataRow[Constants.Q3]}</td></tr>);
-          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q4']}</td><td>{dataRow[Constants.Q4]}</td></tr>);
+          rows.push(<tr><td rowSpan="4">{dataRow[Constants.YEAR]}</td><td>{this.props.translations['amp.gpi-reports:indicator1-q1']}</td><td className='number-column'>{dataRow[Constants.Q1]}</td></tr>);
+          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q2']}</td><td className='number-column'>{dataRow[Constants.Q2]}</td></tr>);
+          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q3']}</td><td className='number-column'>{dataRow[Constants.Q3]}</td></tr>);
+          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q4']}</td><td className='number-column'>{dataRow[Constants.Q4]}</td></tr>);
        })       
        return rows;
    }
@@ -220,7 +220,7 @@ export default class Report1Output2 extends Component {
                         <tr>
                           <th className="col-md-1">{this.getLocalizedColumnName(Constants.YEAR)}</th>
                           <th className="col-md-1">{this.props.translations['amp-gpi-reports:question']}</th>
-                          <th className="col-md-1">{this.props.translations['amp-gpi-reports:value']}</th>                         
+                          <th className="col-md-1 number-column" >{this.props.translations['amp-gpi-reports:value']}</th>                         
                         </tr>
                       </thead>
                       <tbody>

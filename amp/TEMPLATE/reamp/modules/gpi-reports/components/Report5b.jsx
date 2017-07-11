@@ -376,7 +376,7 @@ export default class Report5b extends Component {
                                   {MTEFYears.map(( year, i ) =>
                                   <td className="number-column">{row[year]}</td>
                                   )}
-                                  <td>{row[Constants.INDICATOR_5B]}</td>                                    
+                                  <td className="number-column">{row[Constants.INDICATOR_5B]}</td>                                    
                               </tr>
                           )}                     
                           </tbody>

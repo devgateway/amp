@@ -161,7 +161,7 @@ public class FieldsEnumerator {
 		
 		JsonBean bean = new JsonBean();
 		String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
-		bean.set(ActivityEPConstants.FIELD_NAME, InterchangeUtils.underscorify(fieldTitle));
+		bean.set(ActivityEPConstants.FIELD_NAME, fieldTitle);
 		if (interchangeable.id()) {
 			bean.set(ActivityEPConstants.ID, interchangeable.id());
 		}

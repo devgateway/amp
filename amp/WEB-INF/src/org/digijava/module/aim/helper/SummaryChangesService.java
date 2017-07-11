@@ -37,7 +37,7 @@ public class SummaryChangesService {
                         + " and approval_status in ( %s )"
                         + " and exists (select actappr from %s actappr "
                         + "             where approval_status = '%s' "
-                        + " and act.ampId = actappr.ampId ) "
+                        + " and act.ampActivityGroup.ampActivityGroupId = actappr.ampActivityGroup.ampActivityGroupId ) "
                         + " ) "
                         + " and ampAct.team.id IN (select ampTeamId from %s WHERE isolated = false) ",
                 AmpActivityVersion.class.getName(), AmpActivity.class.getName(), Constants

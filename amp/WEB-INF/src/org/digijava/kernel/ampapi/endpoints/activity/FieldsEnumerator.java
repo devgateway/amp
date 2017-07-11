@@ -25,6 +25,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.h2.util.StringUtils;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
@@ -41,6 +42,7 @@ public class FieldsEnumerator {
 	public static Map<Field, Integer> fieldMaxLengths;
 	
 	private boolean internalUse = false;
+	private String iatiIdentifierField;
 	private TranslationSettings trnSettings = TranslationSettings.getCurrent();
 	
 	static {
@@ -54,6 +56,7 @@ public class FieldsEnumerator {
 	 */
 	public FieldsEnumerator(boolean internalUse) {
 		this.internalUse = internalUse;
+		this.iatiIdentifierField = InterchangeUtils.getAmpIatiIdentifierFieldName();
 	}
 	
 	/**
@@ -173,11 +176,11 @@ public class FieldsEnumerator {
 
 		}
 		
-
 		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
 		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field, intchStack));
 		bean.set(ActivityEPConstants.IMPORTABLE, interchangeable.importable());
-		if (InterchangeUtils.isFieldIatiIdentifier(fieldTitle)) {
+		
+		if (isFieldIatiIdentifier(fieldTitle)) {
 			bean.set(ActivityEPConstants.REQUIRED, ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
 			bean.set(ActivityEPConstants.IMPORTABLE, true);
 		}
@@ -377,6 +380,16 @@ public class FieldsEnumerator {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Decides whether a field stores iati-identifier value
+	 *  
+	 * @param fieldName
+	 * @return true if is iati-identifier
+	 */
+	private boolean isFieldIatiIdentifier(String fieldName) {
+		return StringUtils.equals(this.iatiIdentifierField, fieldName);
 	}
 	
 }

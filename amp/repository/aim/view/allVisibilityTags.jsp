@@ -464,7 +464,8 @@
 <field:display name="Component description" feature="Activity - Component Step"></field:display>
 <field:display name="Description of Component Funding" feature="Activity - Component Step"></field:display>
 <field:display name="Component Funding Organization" feature="Activity - Component Step"></field:display> 
-<field:display name="Componente" feature="Planning"></field:display> 
+<field:display name="Component Second Responsible Organization" feature="Activity - Component Step"></field:display>
+<field:display name="Componente" feature="Planning"></field:display>
 <field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step"></field:display> 

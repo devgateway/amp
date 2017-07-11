@@ -292,7 +292,7 @@ public class ProjectList {
 	}
 
 	private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
-		Field field = InterchangeUtils.getFieldByLongName(InterchangeUtils.deunderscorify(iatiIdAmpField), false);
+		Field field = InterchangeUtils.getFieldByLongName(iatiIdAmpField, false);
 		try {
 			return (String) PropertyUtils.getProperty(a, field.getName());
 		} catch (Exception e) {

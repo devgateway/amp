@@ -227,8 +227,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage SG_DIM_USG = orgsDimension.getDimensionUsage(Constants.SECTOR_GROUP);	
 	public final static NiDimensionUsage RAW_ORG_DIM_USG = orgsDimension.getDimensionUsage(Constants.ORGANIZATION);
 	public final static LevelColumn RAW_ORG_LEVEL_COLUMN = RAW_ORG_DIM_USG.getLevelColumn(LEVEL_ORGANISATION);
-	public final static NiDimensionUsage CF_DIM_USG = orgsDimension.getDimensionUsage("ComponentFunding");
-	
+	public static final NiDimensionUsage CFO_DIM_USG = orgsDimension.getDimensionUsage("ComponentFundingOrg");
+	public static final NiDimensionUsage CSRO_DIM_USG = orgsDimension.getDimensionUsage("ComponentSecondReportingOrg");
+
 	// the sectors-based NiDimensionUsage's
 	public final static NiDimensionUsage PS_DIM_USG = secsDimension.getDimensionUsage("Primary");
 	public final static NiDimensionUsage SS_DIM_USG = secsDimension.getDimensionUsage("Secondary");	
@@ -364,7 +365,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		degenerate_dimension(ColumnConstants.BUDGET_STRUCTURE, "v_budget_structure", boolDimension);
 		
 		single_dimension(ColumnConstants.COMPONENT_DESCRIPTION, "v_component_description", COMPONENT_LEVEL_COLUMN);
-		single_dimension(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, "v_component_funding_organization_name", CF_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		single_dimension(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION,
+				"v_component_funding_organization_name", CFO_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		single_dimension(ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
+				"v_component_second_responsible_organization_name", CSRO_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
 		single_dimension(ColumnConstants.COMPONENT_NAME, "v_components", COMPONENT_LEVEL_COLUMN);
 		single_dimension(ColumnConstants.COMPONENT_TYPE, "v_component_type", COMPS_DIM_USG.getLevelColumn(ComponentsDimension.LEVEL_COMPONENT_TYPE));
 		single_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description", COMPONENT_LEVEL_COLUMN);

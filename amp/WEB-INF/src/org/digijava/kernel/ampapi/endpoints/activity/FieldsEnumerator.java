@@ -58,6 +58,8 @@ public class FieldsEnumerator {
 
 	private TranslatorService translatorService;
 
+	private String iatiIdentifierField;
+	
 	/**
 	 * Fields Enumerator
 	 * 
@@ -69,6 +71,7 @@ public class FieldsEnumerator {
 		this.fmService = fmService;
 		this.translatorService = translatorService;
 		this.internalUse = internalUse;
+		this.iatiIdentifierField = InterchangeUtils.getAmpIatiIdentifierFieldName();
 	}
 	
 	/**
@@ -122,7 +125,7 @@ public class FieldsEnumerator {
 			apiField.setImportable(true);
 		}
 		
-		if (InterchangeUtils.isFieldIatiIdentifier(fieldTitle)) {
+		if (isFieldIatiIdentifier(fieldTitle)) {
 		    apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
 		    apiField.setImportable(true);
         }
@@ -485,5 +488,15 @@ public class FieldsEnumerator {
 		}
 
 		return isEnabled;
+	}
+	
+	/**
+	 * Decides whether a field stores iati-identifier value
+	 *  
+	 * @param fieldName
+	 * @return true if is iati-identifier
+	 */
+	private boolean isFieldIatiIdentifier(String fieldName) {
+		return StringUtils.equals(this.iatiIdentifierField, fieldName);
 	}
 }

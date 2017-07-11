@@ -108,16 +108,6 @@ public class InterchangeUtils {
 		return false;
 	}
 	
-	/**
-	 * Decides whether a field stores iati-identifier value
-	 *  
-	 * @param fieldName
-	 * @return true if is iati-identifier
-	 */
-	public static boolean isFieldIatiIdentifier(String fieldName) {
-		return getAmpIatiIdentifierFieldName().equals(fieldName);
-	}
-	
 	public static String getAmpIatiIdentifierFieldName() {
 		String iatiIdGsField = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.IATI_IDENTIFIER_AMP_FIELD);
 		String iatiIdAmpField = StringUtils.isEmpty(iatiIdGsField) 

@@ -15,6 +15,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -222,7 +223,7 @@ public class ProjectList {
 				String negate = include ? "" : " NOT ";
 				String query = "SELECT act.amp_activity_id as amp_activity_id, act.amp_id as amp_id, act.name as name, "
 						+ "act.date_created as date_created, "
-						+ "act.%s as project_code, act.date_updated as date_updated, at.name as team_name "
+						+ "act.%s as %s, act.date_updated as date_updated, at.name as team_name "
 						+ "FROM amp_activity act "
 						+ "JOIN amp_team at ON act.amp_team_id = at.amp_team_id ";
 				
@@ -230,7 +231,7 @@ public class ProjectList {
 					query += " WHERE act.amp_activity_id " + negate + " in (" + ids + ")";
 				}
 				
-				String allActivitiesQuery = String.format(query, iatiIdAmpField);
+				String allActivitiesQuery = String.format(query, iatiIdAmpField, iatiIdAmpField);
 				
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allActivitiesQuery, null)) {
 					ResultSet rs = rsi.rs;
@@ -243,7 +244,7 @@ public class ProjectList {
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), rs.getLong("amp_activity_id"));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), InterchangeUtils.formatISO8601Date(rs.getTimestamp("date_created")));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE), getTranslatableFieldValue("name", rs.getString("name"), rs.getLong("amp_activity_id")));
-						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_CODE), rs.getString("project_code"));
+						bean.set(iatiIdAmpField, rs.getString(iatiIdAmpField));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(rs.getTimestamp("date_updated")));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.WORKSPACES_EDIT), workspaces);
@@ -267,15 +268,26 @@ public class ProjectList {
 	 */
 	public static JsonBean getActivityInProjectListFormat(AmpActivityVersion a, boolean editable, boolean viewable) {
 		JsonBean bean = new JsonBean();
+		String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), a.getIdentifier());
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), InterchangeUtils.formatISO8601Date(a.getCreatedDate()));
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE), getTranslatableFieldValue("name", a.getName(), (Long) a.getIdentifier()));
-		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_CODE), a.getProjectCode());
+		bean.set(iatiIdAmpField, getIatiIdentifierValue(a, iatiIdAmpField));
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(a.getUpdatedDate()));
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
 		bean.set(ActivityEPConstants.EDIT, true);
 		bean.set(ActivityEPConstants.VIEW, true);
 		return bean;
+	}
+
+	private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
+		Field field = InterchangeUtils.getFieldByLongName(InterchangeUtils.deunderscorify(iatiIdAmpField), false);
+		try {
+			return (String) PropertyUtils.getProperty(a, field.getName());
+		} catch (Exception e) {
+			LOGGER.error("Couldn't fetch the field value", e);
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

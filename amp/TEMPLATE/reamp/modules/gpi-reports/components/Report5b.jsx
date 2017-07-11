@@ -6,10 +6,11 @@ import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as startUp from '../actions/StartUpAction.jsx';
 import * as Constants from '../common/Constants';
+import Loading from './Loading';
 export default class Report5b extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: new Date().getFullYear(), selectedDonor: "" };
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: new Date().getFullYear(), selectedDonor: "", waiting: true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );
@@ -118,7 +119,10 @@ export default class Report5b extends Component {
 
     fetchReportData( requestData ) {
         var requestData = requestData || this.getRequestData();
-        this.props.actions.fetchReportData( requestData, '5b' );
+        this.setState({waiting:true});
+        this.props.actions.fetchReportData( requestData, '5b' ).then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));
     }
 
 
@@ -275,21 +279,18 @@ export default class Report5b extends Component {
     downloadPdfFile(){
         this.props.actions.downloadPdfFile(this.getRequestData(), '5b');
     } 
-    
-    getYears() {
-        let settings  = this.settingsWidget.toAPIFormat()
-        let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-        let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
-        return calendar.years.slice();      
-    }
-    
+       
     render() {         
-        if ( this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions) {            
-            var MTEFYears =  this.getMTEFYears();
-            var addedGroups = [];
-            var years = this.getYears();
-            return (
+        var years = Utils.getYears(this.settingsWidget, this.props.years);                   
+        var MTEFYears =  this.getMTEFYears();
+        var addedGroups = [];            
+        return (
                 <div>
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
+                    {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
+                     <div>                    
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <div className="container-fluid indicator-nav no-padding">
@@ -421,12 +422,11 @@ export default class Report5b extends Component {
                       }
                     </div>
                         
-
-
+                 </div>
+                 }
                 </div>
-            );
-        }
-        return ( <div></div> );
+            );           
+        
     }
 
 }

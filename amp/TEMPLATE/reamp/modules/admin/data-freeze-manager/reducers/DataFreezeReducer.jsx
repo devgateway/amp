@@ -26,13 +26,9 @@ export default function dataFreezeEventReducer(state: Object = defaultState.data
     case 'DATA_FREEZE_EVENT_ON_SAVE':
         var newState = Object.assign({}, state);
         var actionData = Object.assign({}, action.data);
-        if (actionData.errors && actionData.errors.length > 0) {
-            newState.dataFreezeEventList = [...newState.dataFreezeEventList]
-        } else {
-            newState.dataFreezeEventList = newState.dataFreezeEventList.map(function(dataFreezeEvent) { return ((dataFreezeEvent.id && dataFreezeEvent.id === actionData.dataFreezeEvent.id) || (dataFreezeEvent.cid && dataFreezeEvent.cid === actionData.dataFreezeEvent.cid)) ? Object.assign({}, actionData.dataFreezeEvent) : dataFreezeEvent; });
-        }   
+        newState.dataFreezeEventList = newState.dataFreezeEventList.map(function(dataFreezeEvent) { return ((dataFreezeEvent.id && dataFreezeEvent.id === actionData.dataFreezeEvent.id) || (dataFreezeEvent.cid && dataFreezeEvent.cid === actionData.dataFreezeEvent.cid)) ? Object.assign({}, actionData.dataFreezeEvent) : dataFreezeEvent; });  
         newState.errors = actionData.errors || [];
-        newState.infoMessages = actionData.infoMessages || [];         
+        newState.infoMessages = actionData.infoMessages || [];          
         return newState;
     case 'DATA_FREEZE_EVENT_ON_SAVE_ALL_EDITS':        
         var newState = Object.assign({}, state);
@@ -44,7 +40,7 @@ export default function dataFreezeEventReducer(state: Object = defaultState.data
             return found ? Object.assign({}, found) : dataFreezeEvent;            
         });        
         newState.errors = actionData.errors || [];
-        newState.infoMessages = actionData.infoMessages || [];        
+        newState.infoMessages = actionData.infoMessages || [];         
         return newState;     
     case 'DATA_FREEZE_EVENT_DELETE_SUCCESS':
         var newState = Object.assign({}, state);

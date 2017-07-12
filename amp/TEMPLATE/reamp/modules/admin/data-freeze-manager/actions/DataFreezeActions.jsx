@@ -81,7 +81,6 @@ export function save( data ) {
                     result.errors = [...Utils.extractErrors( response.error, result.dataFreezeEvent )]
                 }
             }
-
             dispatch( onSave( result ) );
         }).catch( error => {
             throw ( error );

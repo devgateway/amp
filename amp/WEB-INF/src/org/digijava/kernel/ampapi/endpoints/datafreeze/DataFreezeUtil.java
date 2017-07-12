@@ -3,12 +3,10 @@ package org.digijava.kernel.ampapi.endpoints.datafreeze;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityFrozen;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
-import org.eclipse.jdt.internal.core.CreateTypeHierarchyOperation;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
@@ -260,5 +258,22 @@ public final class DataFreezeUtil {
 			freezingDate = event.getFreezingDate();
 		}
 		return freezingDate;
+	}
+	
+	public static boolean freezeDateExists(Long ampDataFreezeSettingsId, Date freezingDate) {	       
+	    Session dbSession = PersistenceManager.getSession();
+        String queryString = "select event from " + AmpDataFreezeSettings.class.getName()
+                + " event where event.freezingDate = :freezingDate ";  
+        if (ampDataFreezeSettingsId != null) {
+            queryString += " and event.ampDataFreezeSettingsId != :ampDataFreezeSettingsId ";
+        }
+
+        Query query = dbSession.createQuery(queryString);       
+        query.setParameter("freezingDate", freezingDate);
+        if (ampDataFreezeSettingsId != null) {
+            query.setParameter("ampDataFreezeSettingsId", ampDataFreezeSettingsId);
+        }
+        return query.list().size() > 0;
+	    
 	}
 }

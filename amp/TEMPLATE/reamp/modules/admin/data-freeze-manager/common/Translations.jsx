@@ -46,5 +46,6 @@ export const initialTranslations = {
          'amp.data-freezing:tooltip-notification-email': 'Choose whether to send a notification email to all users warning them of the freeze period',
          'amp.data-freezing:tooltip-notification-days': 'The number of days before the freezing date when the email notification will be sent out. Default is 7 days.',
          'amp.data-freezing:invalid-grace-period': 'Invalid Grace Period. Grace period can be 0 or a positive whole number',
-         'amp.data-freezing:notification-days': 'Notify (Days)'
+         'amp.data-freezing:notification-days': 'Notify (Days)',
+         'amp.data-freezing:server-errors-0001': 'Freezing events cannot be repeated.'
 };

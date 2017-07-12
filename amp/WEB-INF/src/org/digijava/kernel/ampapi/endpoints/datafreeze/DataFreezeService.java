@@ -147,6 +147,7 @@ public final class DataFreezeService {
 			dataFreezeEvent.setFreezeOption(event.getFreezeOption());
 			dataFreezeEvent.setFilters(event.getFilters());
 			dataFreezeEvent.setNotificationDays(event.getNotificationDays());
+			dataFreezeEvent.setExecuted(event.getExecuted());
 			dataFreezeEvent.setCount(getCountOfFrozenActivities(event));
 			freezeEvents.add(dataFreezeEvent);
 		});

@@ -33,7 +33,10 @@ public class FMService {
 	public static JsonBean getFMSettings(JsonBean config) {
 		JsonBean result = new JsonBean();
 		try {
-			String err = validate(config);
+			Boolean fullEnabledPaths = EndpointUtils.getSingleValue(config, EPConstants.FULL_ENABLED_PATHS,
+					Boolean.TRUE);
+
+			String err = validate(config, fullEnabledPaths);
 			
 			if (err != null) {
 				result.set(EPConstants.ERROR, err);
@@ -46,7 +49,6 @@ public class FMService {
 				}
 				
 				Boolean detailFlat = EndpointUtils.getSingleValue(config, EPConstants.DETAILS_FLAT, Boolean.TRUE);
-				Boolean fullEnabledPaths = EndpointUtils.getSingleValue(config, EPConstants.FULL_ENABLED_PATHS, Boolean.TRUE);
 				List<String> requiredPaths = (List) config.get(EPConstants.FM_PATHS_FILTER);
 				provideModulesDetails(result, EndpointUtils.getSingleValue(config, EPConstants.DETAIL_MODULES, 
 						new ArrayList<String>()), detailFlat, fullEnabledPaths, requiredPaths);
@@ -63,14 +65,19 @@ public class FMService {
 	 * 
 	 * @return
 	 */
-	private static String validate(JsonBean config) {
+	private static String validate(JsonBean config, Boolean fullEnabledPaths) {
 		String err = null;
-		List<String> detailModules = EndpointUtils.getSingleValue(config, EPConstants.DETAIL_MODULES, 
+		List<String> requestedModules = EndpointUtils.getSingleValue(config, EPConstants.DETAIL_MODULES,
 				new ArrayList<String>());
-		Set<String> visibleModules = FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES);
-		if (detailModules != null && !visibleModules.containsAll(detailModules)) {
-			err = "Invalid modules details requested: " + detailModules 
-					+ ". Allowed are: " + visibleModules;
+		Set<String> allowedModules;
+		if (fullEnabledPaths) {
+			allowedModules = FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES);
+		} else {
+			allowedModules = FMSettingsMediator.getSettings(FMSettingsMediator.FMGROUP_MODULES);
+		}
+		if (requestedModules != null && !allowedModules.containsAll(requestedModules)) {
+			err = "Invalid modules details requested: " + requestedModules
+					+ ". Allowed are: " + allowedModules;
 		}
 		return err;
 	}

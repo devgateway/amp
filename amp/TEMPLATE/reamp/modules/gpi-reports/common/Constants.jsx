@@ -62,3 +62,6 @@ export const PDF = 'pdf';
 export const IMG_INFO = 'IMG_INFO';
 export const IMG_VALUE = 'IMG_INFO';
 
+export const OPTION_YES = 'Yes';
+export const OPTION_NO = 'No';;
+

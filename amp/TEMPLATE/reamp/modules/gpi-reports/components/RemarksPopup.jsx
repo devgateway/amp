@@ -22,11 +22,16 @@ export default class RemarksPopup extends Component {
                 </Modal.Header>
                 <Modal.Body>
                   <div className="remarks-container">
+                     
                     {this.props.remarks.map((remark, i ) =>
                     <div className="row remark-row" key={i}> 
                        <div >
                         <span className="glyphicon glyphicon-comment comment-icon"> </span>
                         <span className="remark-date"> {remark.date}</span>
+                        </div>
+                        <div className="remark-donor">                        
+                         <span > {remark.donorAgency}</span>                         
+                         <br/>
                         </div>
                        <div className="remark"> {remark.remark}</div>
                         <div className="row-divider"></div>

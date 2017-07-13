@@ -70,6 +70,15 @@ public final class DataFreezeService {
 		            DataFreezeErrors.FREEZING_DATE_EXISTS.description);
 		    errors.add(error);
 		}
+		
+		Date openPeriodStart = DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodStart(), DataFreezeConstants.DATE_FORMAT);
+		Date openPeriodEnd = DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodEnd(), DataFreezeConstants.DATE_FORMAT);		
+		if(DataFreezeUtil.openPeriodOverlaps(dataFreezeEvent.getId(), openPeriodStart, openPeriodEnd)){
+		    JsonBean error = new JsonBean();
+            error.set(ApiError.getErrorCode(DataFreezeErrors.OPEN_PERIOD_OVERLAPS),
+                    DataFreezeErrors.OPEN_PERIOD_OVERLAPS.description);
+            errors.add(error); 
+		}
 		return errors;
 	}
 

@@ -276,4 +276,21 @@ public final class DataFreezeUtil {
         return query.list().size() > 0;
 	    
 	}
+	
+	public static boolean openPeriodOverlaps(Long ampDataFreezeSettingsId, Date openPeriodStart, Date openPeriodEnd) {
+	    Session dbSession = PersistenceManager.getSession();
+        String queryString = "select event from " + AmpDataFreezeSettings.class.getName()
+                + " event where event.openPeriodStart <= :openPeriodEnd and event.openPeriodEnd >= :openPeriodStart ";  
+        if (ampDataFreezeSettingsId != null) {
+            queryString += " and event.ampDataFreezeSettingsId != :ampDataFreezeSettingsId ";
+        }
+        
+        Query query = dbSession.createQuery(queryString);
+        query.setParameter("openPeriodStart", openPeriodStart);
+        query.setParameter("openPeriodEnd", openPeriodEnd);
+        if (ampDataFreezeSettingsId != null) {
+            query.setParameter("ampDataFreezeSettingsId", ampDataFreezeSettingsId);
+        }
+        return query.list().size() > 0; 
+	}
 }

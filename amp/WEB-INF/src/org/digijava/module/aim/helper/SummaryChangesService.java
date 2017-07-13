@@ -1,54 +1,161 @@
 package org.digijava.module.aim.helper;
 
-import org.apache.commons.lang.time.DateUtils;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.hibernate.Query;
-import org.hibernate.Session;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.util.ActivityUtil;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 /**
  * @author Aldo Picca
- *
  */
 public class SummaryChangesService {
 
+    private static final Logger LOGGER = Logger.getLogger(SummaryChangesService.class);
+    private static final String NEW = "New";
+    private static final String EDITED = "Edited";
+    private static final String DELETED = "Deleted";
+
     /**
      * Return a list of activities that were modified in the 24 hours prior to the date.
+     *
      * @param fromDate filter by date
      * @return list of activities.
      */
     public static List<AmpActivityVersion> getActivitiesChanged(Date fromDate) {
-        List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>();
-        Session session = PersistenceManager.getRequestDBSession();
-
-        String queryString = String.format(
-                "select ampAct from %s ampAct "
-                        + " WHERE ampAct.ampActivityId in ( "
-                        + " select act.ampActivityId from %s act "
-                        + " where draft = false "
-                        + " and not amp_team_id is null "
-                        + " and date_updated >= :fromDate "
-                        + " and approval_status in ( %s )"
-                        + " and exists (select actappr from %s actappr "
-                        + "             where approval_status = '%s' "
-                        + " and act.ampActivityGroup.ampActivityGroupId = actappr.ampActivityGroup.ampActivityGroupId ) "
-                        + " ) "
-                        + " and ampAct.team.id IN (select ampTeamId from %s WHERE isolated = false) ",
-                AmpActivityVersion.class.getName(), AmpActivity.class.getName(), Constants
-                        .ACTIVITY_NEEDS_APPROVAL_STATUS, AmpActivityVersion.class.getName(), Constants
-                        .APPROVED_STATUS, AmpTeam.class.getName());
-
-        Query query = session.createQuery(queryString);
-        query.setDate("fromDate", DateUtils.addDays(fromDate, -1));
-
-        return query.list();
-
+        return ActivityUtil.getActivitiesChanged(fromDate);
     }
 
+
+    /**
+     * Return a list of activities whit every funding change.
+     *
+     * @param activities activities list.
+     * @return list of activities and changes.
+     */
+    public static LinkedHashMap<String, Object> getActivitiesChanged(List<AmpActivityVersion> activities) {
+
+        LinkedHashMap<String, Object> activitiesChanges = new LinkedHashMap<>();
+        for (AmpActivityVersion currentActivity : activities) {
+            AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(currentActivity);
+
+            Map<String, Collection<SummaryChange>> differences = new LinkedHashMap<String, Collection<SummaryChange>>();
+
+            if ((currentActivity.getFunding() == null && previousActivity.getFunding() == null)
+                    || (currentActivity.getFunding() == null && previousActivity.getFunding().size() == 0)
+                    || (currentActivity.getFunding().size() == 0 && previousActivity.getFunding() == null)
+                    || (currentActivity.getFunding().size() == 0 && previousActivity.getFunding().size() == 0)) {
+                // Collections are equal.
+                break;
+            }
+
+            for (AmpFunding currentFunding : currentActivity.getFunding()) {
+                for (AmpFunding previousFunding : previousActivity.getFunding()) {
+                    if (currentFunding.equalsForVersioning(previousFunding)) {
+                        Object auxValue1 = currentFunding.getValue() != null ? currentFunding.getValue() : "";
+                        Object auxValue2 = previousFunding.getValue() != null ? previousFunding.getValue() : "";
+                        if (!auxValue1.equals(auxValue2)) {
+
+                            for (AmpFundingDetail currentFundingDetail : currentFunding.getFundingDetails()) {
+                                boolean fundingDetailFound = checkChanges(differences, previousFunding, currentFundingDetail);
+                                if (!fundingDetailFound) {
+                                    setNewChange(differences, currentFundingDetail);
+                                }
+                            }
+
+                            for (AmpFundingDetail previousFundingDetail : previousFunding.getFundingDetails()) {
+                                boolean fundingDetailFound = checkChanges(differences, currentFunding, previousFundingDetail);
+                                if (!fundingDetailFound) {
+                                    setDeletedChange(differences, previousFundingDetail);
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                activitiesChanges.put(currentActivity.getAmpActivityId().toString(), differences);
+            }
+
+        }
+
+        return activitiesChanges;
+    }
+
+    private static boolean checkChanges(Map<String, Collection<SummaryChange>> differences, AmpFunding funding, AmpFundingDetail ampFundingDetail) {
+        boolean fundingDetailFound = false;
+        for (AmpFundingDetail previousFundingDetail : funding.getFundingDetails()) {
+            if (isSameFundingDetail(ampFundingDetail, previousFundingDetail)) {
+                fundingDetailFound = true;
+                if (isAmountChanged(ampFundingDetail, previousFundingDetail)) {
+                    setEditedChange(differences, ampFundingDetail, previousFundingDetail);
+                }
+                break;
+            }
+        }
+        return fundingDetailFound;
+    }
+
+    private static boolean isSameFundingDetail(AmpFundingDetail currentFundingDetail, AmpFundingDetail
+            previousFundingDetail) {
+        return currentFundingDetail.getReportingDate() != null && currentFundingDetail
+                .getReportingDate().equals(previousFundingDetail.getReportingDate());
+    }
+
+    private static boolean isAmountChanged(AmpFundingDetail current, AmpFundingDetail previous) {
+        return current.getTransactionAmount().compareTo(previous.getTransactionAmount()) != 0
+                || current.getAmpCurrencyId() != previous.getAmpCurrencyId();
+    }
+
+    private static boolean isDateChanged(AmpFundingDetail current, AmpFundingDetail previous) {
+        return current.getTransactionDate() != previous.getTransactionDate()
+                || current.getAdjustmentType() != previous.getAdjustmentType();
+    }
+
+    private static void setNewChange(Map<String, Collection<SummaryChange>> objDiff, AmpFundingDetail fundingDetail) {
+
+        SummaryChange summaryChange = new SummaryChange(fundingDetail.getTransactionType(),
+                fundingDetail.getAdjustmentType(), NEW, null, fundingDetail.getTransactionAmount(), fundingDetail
+                .getTransactionDate());
+
+        addChange(objDiff, summaryChange);
+    }
+
+    private static void addChange(Map<String, Collection<SummaryChange>> objDiff, SummaryChange summaryChange) {
+        String key = summaryChange.getQuarter().getQuarterNumber().toString();
+
+        if (objDiff.get(key) == null) {
+            objDiff.put(key, new ArrayList<SummaryChange>());
+        }
+
+        objDiff.get(key).add(summaryChange);
+    }
+
+    private static void setDeletedChange(Map<String, Collection<SummaryChange>> objDiff, AmpFundingDetail
+            fundingDetail) {
+
+        SummaryChange summaryChange = new SummaryChange(fundingDetail.getTransactionType(),
+                fundingDetail.getAdjustmentType(), DELETED, fundingDetail.getTransactionAmount(), null, fundingDetail
+                .getTransactionDate());
+
+        addChange(objDiff, summaryChange);
+    }
+
+    private static void setEditedChange(Map<String, Collection<SummaryChange>> objDiff, AmpFundingDetail
+            curr, AmpFundingDetail previus) {
+
+        SummaryChange summaryChange = new SummaryChange(curr.getTransactionType(),
+                curr.getAdjustmentType(), EDITED, previus.getTransactionAmount(), curr.getTransactionAmount(), curr
+                .getTransactionDate());
+
+        addChange(objDiff, summaryChange);
+    }
 }

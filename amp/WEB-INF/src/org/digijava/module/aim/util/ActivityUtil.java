@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
@@ -2008,6 +2009,50 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		Query qry = session.createQuery(queryStr);
 
 		return new HashSet<String>(((List<String>) qry.list()));
+	}
+
+	public static AmpActivityVersion getPreviousVersion(AmpActivityVersion activity) {
+		Session session = PersistenceManager.getRequestDBSession();
+		Query qry = session.createQuery(String.format("SELECT act FROM " + AmpActivityVersion.class.getName()
+				+ " act WHERE approval_status = '%s' and act.ampActivityGroup.ampActivityGroupId = ? ORDER BY act"
+				+ ".ampActivityId DESC", Constants.APPROVED_STATUS))
+				.setMaxResults(1);
+		qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
+		return (AmpActivityVersion) qry.list().get(0);
+	}
+
+	/**
+	 * Return a list of activities that were modified in the 24 hours prior to the date.
+	 * @param fromDate filter by date
+	 * @return list of activities.
+	 */
+	public static List<AmpActivityVersion> getActivitiesChanged(Date fromDate) {
+		List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>();
+		Session session = PersistenceManager.getRequestDBSession();
+
+		String queryString = String.format(
+				"select ampAct from %s ampAct "
+						+ " WHERE ampAct.ampActivityId in ( "
+						+ " select act.ampActivityId from %s act "
+						+ " where draft = false "
+						+ " and not amp_team_id is null "
+						+ " and date_updated >= :fromDate "
+						+ " and approval_status in ( %s )"
+						+ " and exists (select actappr from %s actappr "
+						+ "             where approval_status = '%s' "
+						+ " and act.ampActivityGroup.ampActivityGroupId = actappr.ampActivityGroup.ampActivityGroupId ) "
+						+ " ) "
+						+ " and ampAct.team.id IN (select ampTeamId from %s WHERE isolated = false or isolated is "
+						+ " null ) ",
+				AmpActivityVersion.class.getName(), AmpActivity.class.getName(), Constants
+						.ACTIVITY_NEEDS_APPROVAL_STATUS, AmpActivityVersion.class.getName(), Constants
+						.APPROVED_STATUS, AmpTeam.class.getName());
+
+		Query query = session.createQuery(queryString);
+		query.setDate("fromDate", DateUtils.addDays(fromDate, -1));
+
+		return query.list();
+
 	}
 
 } // End

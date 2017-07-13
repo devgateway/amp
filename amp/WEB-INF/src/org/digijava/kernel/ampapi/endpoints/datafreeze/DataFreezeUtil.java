@@ -1,5 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -264,5 +267,39 @@ public final class DataFreezeUtil {
 			freezingDate = event.getFreezingDate();
 		}
 		return freezingDate;
+	}
+	
+	public static boolean freezeDateExists(Long ampDataFreezeSettingsId, Date freezingDate) {	       
+	    Session dbSession = PersistenceManager.getSession();
+        String queryString = "select event from " + AmpDataFreezeSettings.class.getName()
+                + " event where event.freezingDate = :freezingDate ";  
+        if (ampDataFreezeSettingsId != null) {
+            queryString += " and event.ampDataFreezeSettingsId != :ampDataFreezeSettingsId ";
+        }
+
+        Query query = dbSession.createQuery(queryString);       
+        query.setParameter("freezingDate", freezingDate);
+        if (ampDataFreezeSettingsId != null) {
+            query.setParameter("ampDataFreezeSettingsId", ampDataFreezeSettingsId);
+        }
+        return query.list().size() > 0;
+	    
+	}
+	
+	public static boolean openPeriodOverlaps(Long ampDataFreezeSettingsId, Date openPeriodStart, Date openPeriodEnd) {
+	    Session dbSession = PersistenceManager.getSession();
+        String queryString = "select event from " + AmpDataFreezeSettings.class.getName()
+                + " event where event.openPeriodStart <= :openPeriodEnd and event.openPeriodEnd >= :openPeriodStart ";  
+        if (ampDataFreezeSettingsId != null) {
+            queryString += " and event.ampDataFreezeSettingsId != :ampDataFreezeSettingsId ";
+        }
+        
+        Query query = dbSession.createQuery(queryString);
+        query.setParameter("openPeriodStart", openPeriodStart);
+        query.setParameter("openPeriodEnd", openPeriodEnd);
+        if (ampDataFreezeSettingsId != null) {
+            query.setParameter("ampDataFreezeSettingsId", ampDataFreezeSettingsId);
+        }
+        return query.list().size() > 0; 
 	}
 }

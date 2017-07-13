@@ -2,24 +2,18 @@ package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.AmpDateUtils;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
-import org.hibernate.jdbc.Work;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,9 +27,6 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.FilterParam;
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.IdentifiedReportCell;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -73,6 +64,21 @@ public final class DataFreezeService {
 
 	private static List<JsonBean> validate(DataFreezeEvent dataFreezeEvent) {
 		List<JsonBean> errors = new ArrayList<>();
+		if(DataFreezeUtil.freezeDateExists(dataFreezeEvent.getId(), DateTimeUtil.parseDate(dataFreezeEvent.getFreezingDate(), DataFreezeConstants.DATE_FORMAT))){
+		    JsonBean error = new JsonBean();
+		    error.set(ApiError.getErrorCode(DataFreezeErrors.FREEZING_DATE_EXISTS),
+		            DataFreezeErrors.FREEZING_DATE_EXISTS.description);
+		    errors.add(error);
+		}
+		
+		Date openPeriodStart = DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodStart(), DataFreezeConstants.DATE_FORMAT);
+		Date openPeriodEnd = DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodEnd(), DataFreezeConstants.DATE_FORMAT);		
+		if(DataFreezeUtil.openPeriodOverlaps(dataFreezeEvent.getId(), openPeriodStart, openPeriodEnd)){
+		    JsonBean error = new JsonBean();
+            error.set(ApiError.getErrorCode(DataFreezeErrors.OPEN_PERIOD_OVERLAPS),
+                    DataFreezeErrors.OPEN_PERIOD_OVERLAPS.description);
+            errors.add(error); 
+		}
 		return errors;
 	}
 
@@ -150,6 +156,7 @@ public final class DataFreezeService {
 			dataFreezeEvent.setFreezeOption(event.getFreezeOption());
 			dataFreezeEvent.setFilters(event.getFilters());
 			dataFreezeEvent.setNotificationDays(event.getNotificationDays());
+			dataFreezeEvent.setExecuted(event.getExecuted());
 			dataFreezeEvent.setCount(getCountOfFrozenActivities(event));
 			freezeEvents.add(dataFreezeEvent);
 		});

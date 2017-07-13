@@ -10,10 +10,14 @@ import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AmpDateUtils;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -341,5 +345,23 @@ public final class DataFreezeService {
 
 	public static void unfreezeActivities(Set<Long>activitiesIdToFreeze) {
 		DataFreezeUtil.unfreezeActivities(activitiesIdToFreeze);
+	}
+
+	public static JsonBean getFronzeActivitiesInformation() {
+		String freezingDate = null;
+		Integer freezingCount = 0;
+		AmpDataFreezeSettings ampDataFreezeSettings = DataFreezeUtil.getLatestFreezingConfiguration();
+		if (ampDataFreezeSettings != null) {
+			Set<Long> frozenActivities = DataFreezeUtil.getFrozenActivities();
+			String defaultDateFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(defaultDateFormat);
+			freezingDate = dateFormatter.format(ampDataFreezeSettings.getFreezingDate());
+			freezingCount = frozenActivities.size();
+		}
+
+		JsonBean freezingInformation = new JsonBean();
+		freezingInformation.set("freezingDate", freezingDate);
+		freezingInformation.set("freezingCount", freezingCount);
+		return freezingInformation;
 	}
 }

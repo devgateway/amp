@@ -234,7 +234,7 @@ public class TranslatorWorker {
 
         Message message = findMessage(worker, text, keyWords, locale, siteId);
 
-        processAmpOfflineMessage(worker, message);
+        processAmpOfflineMessage(worker, text, message);
 
         return message.getMessage();
     }
@@ -245,11 +245,23 @@ public class TranslatorWorker {
      * @param worker worker used to update message
      * @param message the message to check
      */
-    private static void processAmpOfflineMessage(TranslatorWorker worker, Message message) {
+    private static void processAmpOfflineMessage(TranslatorWorker worker, String text, Message message) {
+        boolean updateRequired = false;
         if (AmpOfflineModeHolder.isAmpOfflineMode() && !isAmpOfflineMessage(message)) {
             message.setAmpOffline(true);
+            updateRequired = true;
+        }
+        if (message.getLocale().equals("en") && isOriginalMsgKeyIncorrect(message)) {
+            message.setOriginalMessage(text);
+            updateRequired = true;
+        }
+        if (updateRequired) {
             worker.update(message);
         }
+    }
+
+    private static boolean isOriginalMsgKeyIncorrect(Message message) {
+        return !TranslatorWorker.generateTrnKey(message.getOriginalMessage()).equals(message.getKey());
     }
 
     private static boolean isAmpOfflineMessage(Message message) {

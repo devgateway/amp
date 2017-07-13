@@ -289,6 +289,10 @@ public final class DataFreezeService {
 		if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing())) {
 			return true;
 		}
+		if (ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart() == null
+				|| ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd() == null) {
+			return false;
+		}
 		return transactionDate.compareTo(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart()) >= 0
 				&& transactionDate.compareTo(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd()) <= 0;
 	}

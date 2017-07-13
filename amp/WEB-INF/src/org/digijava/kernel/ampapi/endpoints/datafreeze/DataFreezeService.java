@@ -328,38 +328,11 @@ public final class DataFreezeService {
 		return today.getTime();
 	}
 
-	public static Map<Long, Set<Long>> getFreezeActivityIdEventIdsMap() {
-		Map<Long, Set<Long>> activityIdEventsIdsMap = new HashMap<>();
-		List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil.getEnabledDataFreezeEvents(null);
-		List<AmpDataFreezeExclusion> exclusions = DataFreezeUtil.findAllDataFreezeExclusion();
-		for (AmpDataFreezeSettings event : dataFreezeEvents) {
-			GeneratedReport report = getFrozenActivitiesReport(event);
-			Set<Long> activityIds = getActivityIds(report);
-
-			for (Long activityId : activityIds) {
-				AmpDataFreezeExclusion ampDataFreezeExclusion = exclusions.stream()
-						.filter(exclusion -> exclusion.getDataFreezeEvent().getAmpDataFreezeSettingsId()
-								.equals(event.getAmpDataFreezeSettingsId())
-								&& exclusion.getActivity().getAmpActivityId().equals(activityId))
-						.findAny().orElse(null);
-
-				if (ampDataFreezeExclusion == null) {
-					Set<Long> events = activityIdEventsIdsMap.get(activityId);
-					if (events == null) {
-						events = new HashSet<>();
-					}
-
-					events.add(event.getAmpDataFreezeSettingsId());
-					activityIdEventsIdsMap.put(activityId, events);
-				}
-
-			}
-		}
-
-		return activityIdEventsIdsMap;
+	public static Set<Long> getFronzeActivities() {
+	return DataFreezeUtil.getFrozenActivities();
 	}
 
-	public static void unfreezeActivities(Map<Long, Set<Long>> activityIdEventsIdsMap) {
-		DataFreezeUtil.unfreezeActivities(activityIdEventsIdsMap);
+	public static void unfreezeActivities(Set<Long>activitiesIdToFreeze) {
+		DataFreezeUtil.unfreezeActivities(activitiesIdToFreeze);
 	}
 }

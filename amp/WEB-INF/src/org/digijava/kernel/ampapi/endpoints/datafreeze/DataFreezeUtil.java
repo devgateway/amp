@@ -1,24 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpActivityFrozen;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
-import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.AmpDateUtils;
-import org.eclipse.jdt.internal.core.CreateTypeHierarchyOperation;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.jdbc.Work;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -26,6 +13,15 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpActivityFrozen;
+import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
+import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
+import org.digijava.module.aim.util.AmpDateUtils;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 
 public final class DataFreezeUtil {
 	private static Logger logger = Logger.getLogger(DataFreezeUtil.class);
@@ -66,7 +62,6 @@ public final class DataFreezeUtil {
 	}
 
 	public static AmpActivityFrozen getAmpActivityFrozenForActivity(Long ampActivityId) {
-		AmpActivityFrozen ampActivityFrozen = null;
 		String queryString = "select ampActivityFrozen from " + AmpActivityFrozen.class.getName()
 				+ " ampActivityFrozen "
 				+ " where ampActivityFrozen.activityGroup.ampActivityLastVersion.ampActivityId=:ampActivityId "
@@ -111,6 +106,19 @@ public final class DataFreezeUtil {
 			}
 		});
 
+	}
+
+	public static Set<Long> getFrozenActivities() {
+		final Set<Long> frozenActivities = new LinkedHashSet<>();
+
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String query = "select ag.amp_activity_last_version_id from amp_activity_frozen af,amp_activity_group ag where "
+						+ " ag.amp_activity_group_id=af.amp_activity_group_id and af.frozen=true and af.deleted=false";
+				frozenActivities.addAll(SQLUtils.fetchLongs(conn, query));
+			}
+		});
+		return frozenActivities;
 	}
 
 	public static void freezeActivitiesForFreezingDate(AmpDataFreezeSettings currentFreezingEvent,
@@ -232,23 +240,19 @@ public final class DataFreezeUtil {
 		return query.list();
 	}
 
-	public static void unfreezeActivities(Map<Long, Set<Long>> activityIdEventsIdsMap) {
-		try {
+	public static void unfreezeActivities(Set<Long>activitiesIdToUnFreeze) {
 			Session dbSession = PersistenceManager.getSession();
-			for (Map.Entry<Long, Set<Long>> event : activityIdEventsIdsMap.entrySet()) {
-				for (Long eventId : event.getValue()) {
-					AmpDataFreezeExclusion ampDataFreezeExclusion = findDataFreezeExclusion(event.getKey(), eventId);
-					if (ampDataFreezeExclusion == null) {
-						ampDataFreezeExclusion = new AmpDataFreezeExclusion();
-						ampDataFreezeExclusion.setActivity(ActivityUtil.loadAmpActivity(event.getKey()));
-						ampDataFreezeExclusion.setDataFreezeEvent(getDataFreezeEventById(eventId));
-						dbSession.saveOrUpdate(ampDataFreezeExclusion);
-					}
+			PersistenceManager.getSession().doWork(new Work() {
+				public void execute(Connection conn) throws SQLException {
+					String query=" update amp_activity_frozen set frozen = false " +
+							" where deleted = false and amp_activity_group_id "
+							+ " in (select amp_activity_group_id from amp_activity_group "
+							+ " where amp_activity_last_version_id in (%s)) ";
+					SQLUtils.executeQuery(conn,
+							String.format(query, Util.toCSStringForIN(activitiesIdToUnFreeze)));
 				}
-			}
-		} catch (Exception e) {
-			logger.error("Exception from unfreezeActivities: " + e.getMessage());
-		}
+			});
+
 
 	}
 

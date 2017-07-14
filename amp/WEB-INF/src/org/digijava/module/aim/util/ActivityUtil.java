@@ -1620,10 +1620,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             }   
             
             String dataFreezeQuery = "";
-            if(ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {               
-                dataFreezeQuery = " and f.ampActivityId in (:frozenActivityIds) ";
-            } else if(ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
-                dataFreezeQuery = " and f.ampActivityId not in (:frozenActivityIds) ";
+            if(frozenActivityIds!=null && frozenActivityIds.size()>0){
+	            if(ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {               
+	                dataFreezeQuery = " and f.ampActivityId in (:frozenActivityIds) ";
+	            } else if(ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
+	                dataFreezeQuery = " and f.ampActivityId not in (:frozenActivityIds) ";
+	            }
             }
                 
             String queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup FROM " + AmpActivity.class.getName() +  
@@ -1634,10 +1636,13 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 qry.setString("searchTerm", "%" + searchTerm + "%");
             }
             
-            if(ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter) || ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) { 
-                qry.setParameterList("frozenActivityIds", frozenActivityIds != null ? frozenActivityIds : new HashSet<>());
-            }
-            
+			if (frozenActivityIds != null && frozenActivityIds.size() > 0
+					&& (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)
+							|| ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter))) {
+				qry.setParameterList("frozenActivityIds",
+						frozenActivityIds != null ? frozenActivityIds : new HashSet<>());
+			}
+
             Iterator iter = qry.list().iterator();
             ArrayList<AmpActivityFake> result = new  ArrayList<AmpActivityFake>();
             while (iter.hasNext()) {

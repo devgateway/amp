@@ -115,6 +115,13 @@
 			document.aimCompareActivityVersionsForm.submit();
 		}
 	}
+
+	function submitChangeSummary() {
+		document.getElementById("action").value = "compare";
+		document.getElementById("method").value = "changesSummary";
+		document.aimCompareActivityVersionsForm.submit();
+	}
+
 	function monitorCheckbox(){
 		var checkboxes = document.getElementsByName("compareCheckboxes");
 		var counter = 0;

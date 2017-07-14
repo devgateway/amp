@@ -3,12 +3,14 @@ package org.digijava.module.aim.action;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,6 +46,8 @@ import org.digijava.module.aim.form.CompareActivityVersionsForm;
 import org.digijava.module.aim.helper.ActivityHistory;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.SummaryChangeHtmlRenderer;
+import org.digijava.module.aim.helper.SummaryChangesService;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -492,6 +496,26 @@ public class CompareActivityVersions extends DispatchAction {
 		vForm.setOutputCollection(filteredList);
 		vForm.setMergedValues(new String[vForm.getOutputCollection().size()]);
 		return mapping.findForward("forward");
+	}
+
+	public ActionForward changesSummary(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		Session session = PersistenceManager.getRequestDBSession();
+		Long activityId = Long.parseLong(request.getParameter("activityId"));
+		AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
+
+		LinkedHashMap<String, Object> activityList = SummaryChangesService.processActivity( activity );
+
+		for (String id : activityList.keySet()) {
+
+			LinkedHashMap<String, Object> changesList = (LinkedHashMap) activityList.get(id);
+			SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activity, changesList);
+
+			request.setAttribute("changesTable", renderer.render());
+		}
+
+		return mapping.findForward("summaryChanges");
 	}
 
 	public ActionForward cancel(ActionMapping mapping, ActionForm form, HttpServletRequest request,

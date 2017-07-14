@@ -71,9 +71,14 @@
 			<input type="hidden" name="showMergeColumn" id="showMergeColumn" />
 			<input type="hidden" name="method" id="method" />
 			<input type="hidden" name="ampActivityId" id="ampActivityId" />
+			<input type="hidden" name="activityId" id="activityId"
+				   value="${aimViewActivityHistoryForm.activityId}" />
 			<logic:notEmpty name="currentMember" scope="session">
 				<input type="button" id="SubmitButton" value="<digi:trn>Compare versions</digi:trn>" onclick="submitCompare()"/>
-			 </logic:notEmpty>
+				<field:display name="Show Change Summary" feature="Planning">
+					<input type="button" id="SubmitButton" value="<digi:trn>Show Change Summary</digi:trn>" onclick="submitChangeSummary()"/>
+				</field:display>
+			</logic:notEmpty>
 		
 		</digi:form>		
 	</div>

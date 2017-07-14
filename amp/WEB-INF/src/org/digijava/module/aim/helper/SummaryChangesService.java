@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper;
 
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 
 /**
  * @author Aldo Picca
@@ -20,9 +22,9 @@ import org.apache.log4j.Logger;
 public class SummaryChangesService {
 
     private static final Logger LOGGER = Logger.getLogger(SummaryChangesService.class);
-    private static final String NEW = "New";
-    private static final String EDITED = "Edited";
-    private static final String DELETED = "Deleted";
+    public static final String NEW = "New";
+    public static final String EDITED = "Edited";
+    public static final String DELETED = "Deleted";
 
     /**
      * Return a list of activities that were modified in the 24 hours prior to the date.
@@ -34,6 +36,26 @@ public class SummaryChangesService {
         return ActivityUtil.getActivitiesChanged(fromDate);
     }
 
+    public static String buildActivitiesChanged(Date fromDate) {
+        StringBuffer results = new StringBuffer();
+
+        LinkedHashMap<String, Object> activityList = SummaryChangesService.getActivitiesChanged(SummaryChangesService
+                .getActivitiesChanged(new Date()));
+
+        for (String activity : activityList.keySet()) {
+            Session session = PersistenceManager.getRequestDBSession();
+            AmpActivityVersion activityVersion = (AmpActivityVersion) session.load(AmpActivityVersion.class,
+                    Long.parseLong(activity));
+
+            LinkedHashMap<String, Object> changesList = (LinkedHashMap) activityList.get(activity);
+            SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activityVersion, changesList);
+            LOGGER.info(renderer.render());
+
+        }
+
+
+        return results.toString();
+    }
 
     /**
      * Return a list of activities whit every funding change.
@@ -45,52 +67,61 @@ public class SummaryChangesService {
 
         LinkedHashMap<String, Object> activitiesChanges = new LinkedHashMap<>();
         for (AmpActivityVersion currentActivity : activities) {
-            AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(currentActivity);
-
-            Map<String, Collection<SummaryChange>> differences = new LinkedHashMap<String, Collection<SummaryChange>>();
-
-            if ((currentActivity.getFunding() == null && previousActivity.getFunding() == null)
-                    || (currentActivity.getFunding() == null && previousActivity.getFunding().size() == 0)
-                    || (currentActivity.getFunding().size() == 0 && previousActivity.getFunding() == null)
-                    || (currentActivity.getFunding().size() == 0 && previousActivity.getFunding().size() == 0)) {
-                // Collections are equal.
-                break;
-            }
-
-            for (AmpFunding currentFunding : currentActivity.getFunding()) {
-                for (AmpFunding previousFunding : previousActivity.getFunding()) {
-                    if (currentFunding.equalsForVersioning(previousFunding)) {
-                        Object auxValue1 = currentFunding.getValue() != null ? currentFunding.getValue() : "";
-                        Object auxValue2 = previousFunding.getValue() != null ? previousFunding.getValue() : "";
-                        if (!auxValue1.equals(auxValue2)) {
-
-                            for (AmpFundingDetail currentFundingDetail : currentFunding.getFundingDetails()) {
-                                boolean fundingDetailFound = checkChanges(differences, previousFunding, currentFundingDetail);
-                                if (!fundingDetailFound) {
-                                    setNewChange(differences, currentFundingDetail);
-                                }
-                            }
-
-                            for (AmpFundingDetail previousFundingDetail : previousFunding.getFundingDetails()) {
-                                boolean fundingDetailFound = checkChanges(differences, currentFunding, previousFundingDetail);
-                                if (!fundingDetailFound) {
-                                    setDeletedChange(differences, previousFundingDetail);
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-                activitiesChanges.put(currentActivity.getAmpActivityId().toString(), differences);
-            }
-
+            activitiesChanges.putAll(processActivity(currentActivity));
         }
-
         return activitiesChanges;
     }
 
-    private static boolean checkChanges(Map<String, Collection<SummaryChange>> differences, AmpFunding funding, AmpFundingDetail ampFundingDetail) {
+    public static LinkedHashMap<String, Object> processActivity(AmpActivityVersion currentActivity) {
+
+        LinkedHashMap<String, Object> activitiesChanges = new LinkedHashMap<>();
+
+        AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(currentActivity);
+
+        Map<String, Collection<SummaryChange>> differences = new LinkedHashMap<String, Collection<SummaryChange>>();
+
+        if ((currentActivity.getFunding() == null && previousActivity.getFunding() == null)
+                || (currentActivity.getFunding() == null && previousActivity.getFunding().size() == 0)
+                || (currentActivity.getFunding().size() == 0 && previousActivity.getFunding() == null)
+                || (currentActivity.getFunding().size() == 0 && previousActivity.getFunding().size() == 0)) {
+            // Collections are equal.
+            return null;
+        }
+
+        for (AmpFunding currentFunding : currentActivity.getFunding()) {
+            for (AmpFunding previousFunding : previousActivity.getFunding()) {
+                if (currentFunding.equalsForVersioning(previousFunding)) {
+                    Object auxValue1 = currentFunding.getValue() != null ? currentFunding.getValue() : "";
+                    Object auxValue2 = previousFunding.getValue() != null ? previousFunding.getValue() : "";
+                    if (!auxValue1.equals(auxValue2)) {
+
+                        for (AmpFundingDetail currentFundingDetail : currentFunding.getFundingDetails()) {
+                            boolean fundingDetailFound = checkChanges(differences, previousFunding,
+                                    currentFundingDetail);
+                            if (!fundingDetailFound) {
+                                setNewChange(differences, currentFundingDetail);
+                            }
+                        }
+
+                        for (AmpFundingDetail previousFundingDetail : previousFunding.getFundingDetails()) {
+                            boolean fundingDetailFound = checkChanges(differences, currentFunding,
+                                    previousFundingDetail);
+                            if (!fundingDetailFound) {
+                                setDeletedChange(differences, previousFundingDetail);
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            activitiesChanges.put(currentActivity.getAmpActivityId().toString(), differences);
+        }
+        return activitiesChanges;
+    }
+
+    private static boolean checkChanges(Map<String, Collection<SummaryChange>> differences, AmpFunding funding,
+                                        AmpFundingDetail ampFundingDetail) {
         boolean fundingDetailFound = false;
         for (AmpFundingDetail previousFundingDetail : funding.getFundingDetails()) {
             if (isSameFundingDetail(ampFundingDetail, previousFundingDetail)) {

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -28,6 +29,54 @@ public class AmpClassificationConfiguration implements Serializable, Identifiabl
     	put(QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.QUATERNARY_SECTOR);
     	put(QUINARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.QUINARY_SECTOR);
     }};
+
+    private static final int LEVEL_1 = 1;
+    private static final int LEVEL_2 = 2;
+    private static final int LEVEL_3 = 3;
+
+    private static final Map<Integer, String> PRIMARY_SECTOR_COLUMNS_BY_LEVEL =
+            new ImmutableMap.Builder<Integer, String>()
+                    .put(LEVEL_1, ColumnConstants.PRIMARY_SECTOR)
+                    .put(LEVEL_2, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR)
+                    .put(LEVEL_3, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR)
+                    .build();
+
+    private static final Map<Integer, String> SECONDARY_SECTOR_COLUMNS_BY_LEVEL =
+            new ImmutableMap.Builder<Integer, String>()
+                    .put(LEVEL_1, ColumnConstants.SECONDARY_SECTOR)
+                    .put(LEVEL_2, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR)
+                    .put(LEVEL_3, ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR)
+                    .build();
+
+    private static final Map<Integer, String> TERTIARY_SECTOR_COLUMNS_BY_LEVEL =
+            new ImmutableMap.Builder<Integer, String>()
+                    .put(LEVEL_1, ColumnConstants.TERTIARY_SECTOR)
+                    .put(LEVEL_2, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR)
+                    .put(LEVEL_3, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR)
+                    .build();
+
+    private static final Map<Integer, String> QUATERNARY_SECTOR_COLUMNS_BY_LEVEL =
+            new ImmutableMap.Builder<Integer, String>()
+                    .put(LEVEL_1, ColumnConstants.QUATERNARY_SECTOR)
+                    .put(LEVEL_2, ColumnConstants.QUATERNARY_SECTOR_SUB_SECTOR)
+                    .put(LEVEL_3, ColumnConstants.QUATERNARY_SECTOR_SUB_SUB_SECTOR)
+                    .build();
+
+    private static final Map<Integer, String> QUINARY_SECTOR_COLUMNS_BY_LEVEL =
+            new ImmutableMap.Builder<Integer, String>()
+                    .put(LEVEL_1, ColumnConstants.QUINARY_SECTOR)
+                    .put(LEVEL_2, ColumnConstants.QUINARY_SECTOR_SUB_SECTOR)
+                    .put(LEVEL_3, ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR)
+                    .build();
+
+    public static final Map<String, Map<Integer, String>> NAME_TO_COLUMN_AND_LEVEL =
+            new ImmutableMap.Builder<String, Map<Integer, String>>()
+                    .put(PRIMARY_CLASSIFICATION_CONFIGURATION_NAME, PRIMARY_SECTOR_COLUMNS_BY_LEVEL)
+                    .put(SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, SECONDARY_SECTOR_COLUMNS_BY_LEVEL)
+                    .put(TERTIARY_CLASSIFICATION_CONFIGURATION_NAME, TERTIARY_SECTOR_COLUMNS_BY_LEVEL)
+                    .put(QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME, QUATERNARY_SECTOR_COLUMNS_BY_LEVEL)
+                    .put(QUINARY_CLASSIFICATION_CONFIGURATION_NAME, QUINARY_SECTOR_COLUMNS_BY_LEVEL)
+                    .build();
 	
 	@Interchangeable(fieldTitle="ID", id = true)
 	private Long id;

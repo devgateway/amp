@@ -233,6 +233,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage PS_DIM_USG = secsDimension.getDimensionUsage("Primary");
 	public final static NiDimensionUsage SS_DIM_USG = secsDimension.getDimensionUsage("Secondary");	
 	public final static NiDimensionUsage TS_DIM_USG = secsDimension.getDimensionUsage("Tertiary");	
+	public static final NiDimensionUsage Q4S_DIM_USG = secsDimension.getDimensionUsage("Quaternary");
+	public static final NiDimensionUsage Q5S_DIM_USG = secsDimension.getDimensionUsage("Quinary");
 	public final static NiDimensionUsage TAG_S_DIM_USG = secsDimension.getDimensionUsage("Tag");
 	public final static NiDimensionUsage RAW_SCT_DIM_USG = secsDimension.getDimensionUsage("Any");
 	public final static LevelColumn RAW_SCT_LEVEL_COLUMN = RAW_SCT_DIM_USG.getLevelColumn(LEVEL_ALL_IDS);
@@ -514,17 +516,32 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, "v_sub_sectors", PS_DIM_USG, LEVEL_SUBSECTOR);
 		with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, "v_sub_sub_sectors", PS_DIM_USG, LEVEL_SUBSUBSECTOR);
 
-		with_percentage(ColumnConstants.SECTOR_TAG, "v_sectors", TAG_S_DIM_USG, LEVEL_ROOT);
-		with_percentage(ColumnConstants.SECTOR_TAG_SUB_SECTOR, "v_tag_sub_sectors", TAG_S_DIM_USG, LEVEL_SUBSECTOR);
-		with_percentage(ColumnConstants.SECTOR_TAG_SUB_SUB_SECTOR, "v_tag_sub_sub_sectors", TAG_S_DIM_USG, LEVEL_SUBSUBSECTOR);
-		
-		with_percentage(ColumnConstants.TERTIARY_SECTOR, "v_tertiary_sectors", TS_DIM_USG, LEVEL_ROOT);
-		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, "v_tertiary_sub_sectors", TS_DIM_USG, LEVEL_SUBSECTOR);
-		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, "v_tertiary_sub_sub_sectors", TS_DIM_USG, LEVEL_SUBSUBSECTOR);
-
 		with_percentage(ColumnConstants.SECONDARY_SECTOR, "v_secondary_sectors", SS_DIM_USG, LEVEL_ROOT);
 		with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, "v_secondary_sub_sectors", SS_DIM_USG, LEVEL_SUBSECTOR);
 		with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, "v_secondary_sub_sub_sectors", SS_DIM_USG, LEVEL_SUBSUBSECTOR);
+
+		with_percentage(ColumnConstants.TERTIARY_SECTOR, "v_tertiary_sectors", TS_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, "v_tertiary_sub_sectors", TS_DIM_USG,
+				LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, "v_tertiary_sub_sub_sectors", TS_DIM_USG,
+				LEVEL_SUBSUBSECTOR);
+
+		with_percentage(ColumnConstants.QUATERNARY_SECTOR, "v_quaternary_sectors", Q4S_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.QUATERNARY_SECTOR_SUB_SECTOR, "v_quaternary_sub_sectors", Q4S_DIM_USG,
+				LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.QUATERNARY_SECTOR_SUB_SUB_SECTOR, "v_quaternary_sub_sub_sectors", Q4S_DIM_USG,
+				LEVEL_SUBSUBSECTOR);
+
+		with_percentage(ColumnConstants.QUINARY_SECTOR, "v_quinary_sectors", Q5S_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.QUINARY_SECTOR_SUB_SECTOR, "v_quinary_sub_sectors", Q5S_DIM_USG,
+				LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, "v_quinary_sub_sub_sectors", Q5S_DIM_USG,
+				LEVEL_SUBSUBSECTOR);
+
+		with_percentage(ColumnConstants.SECTOR_TAG, "v_sectors", TAG_S_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.SECTOR_TAG_SUB_SECTOR, "v_tag_sub_sectors", TAG_S_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.SECTOR_TAG_SUB_SUB_SECTOR, "v_tag_sub_sub_sectors", TAG_S_DIM_USG,
+				LEVEL_SUBSUBSECTOR);
 
 		with_percentage(ColumnConstants.PRIMARY_PROGRAM, "v_primaryprogram_level_1", PP_DIM_USG, LEVEL_1);
 		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, "v_primaryprogram_level_1", PP_DIM_USG, LEVEL_1);
@@ -704,7 +721,21 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		with_percentage(ColumnConstants.PLEDGES_TERTIARY_SECTORS, "v_pledges_tertiary_sectors", TS_DIM_USG, LEVEL_ROOT);
 		with_percentage(ColumnConstants.PLEDGES_TERTIARY_SUBSECTORS, "v_pledges_tertiary_sectors_subsectors", TS_DIM_USG, LEVEL_SUBSECTOR);
 		with_percentage(ColumnConstants.PLEDGES_TERTIARY_SUBSUBSECTORS, "v_pledges_tertiary_sectors_subsubsectors", TS_DIM_USG, LEVEL_SUBSUBSECTOR);
-		
+
+		with_percentage(ColumnConstants.PLEDGES_QUATERNARY_SECTORS, "v_pledges_quaternary_sectors",
+				Q4S_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_QUATERNARY_SUBSECTORS, "v_pledges_quaternary_sectors_subsectors",
+				Q4S_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.PLEDGES_QUATERNARY_SUBSUBSECTORS, "v_pledges_quaternary_sectors_subsubsectors",
+				Q4S_DIM_USG, LEVEL_SUBSUBSECTOR);
+
+		with_percentage(ColumnConstants.PLEDGES_QUINARY_SECTORS, "v_pledges_quinary_sectors",
+				Q5S_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_QUINARY_SUBSECTORS, "v_pledges_quinary_sectors_subsectors",
+				Q5S_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.PLEDGES_QUINARY_SUBSUBSECTORS, "v_pledges_quinary_sectors_subsubsectors",
+				Q5S_DIM_USG, LEVEL_SUBSUBSECTOR);
+
 		with_percentage(ColumnConstants.PLEDGES_COUNTRIES, "v_pledges_countries", LOC_DIM_USG, LEVEL_COUNTRY);
 		with_percentage(ColumnConstants.PLEDGES_REGIONS, "v_pledges_regions", LOC_DIM_USG, LEVEL_REGION);
 		with_percentage(ColumnConstants.PLEDGES_ZONES, "v_pledges_zones", LOC_DIM_USG, LEVEL_ZONE);

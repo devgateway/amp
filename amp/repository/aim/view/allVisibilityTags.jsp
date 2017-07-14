@@ -870,6 +870,12 @@ deleted 6 fields, do not reinsert
 <field:display name="Tertiary Sector Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector" feature="Sectors"></field:display>
+<field:display name="Quaternary Sector" feature="Sectors"></field:display>
+<field:display name="Quaternary Sector Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Quaternary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Quinary Sector" feature="Sectors"></field:display>
+<field:display name="Quinary Sector Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Quinary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Sector Tag Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Sector Tag Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Sector Tag" feature="Sectors"></field:display>
@@ -1010,6 +1016,8 @@ deleted 6 fields, do not reinsert
 <field:display feature="Pledges Columns" name="Pledges Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Secondary Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Tertiary Sectors"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Quaternary Sectors"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Quinary Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
 <field:display feature="Pledges Columns" name="Related Projects"></field:display>
 <field:display feature="Pledges Columns" name="Alternate Contact"></field:display>

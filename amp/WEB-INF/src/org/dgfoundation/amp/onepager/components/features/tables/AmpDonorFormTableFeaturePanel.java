@@ -193,6 +193,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 		exchangeRate.setOutputMarkupId(true);
 		exchangeRate.setIgnorePermissions(true);
 		exchangeRate.setEnabled(fixedRate.getObject());
+		exchangeRate.setAffectedByFreezing(false);
 		item.add(exchangeRate);
 	
 		@SuppressWarnings("serial")

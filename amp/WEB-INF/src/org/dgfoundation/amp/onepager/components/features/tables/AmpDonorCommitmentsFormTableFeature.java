@@ -73,8 +73,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 				};
 
 				appendFixedExchangeRateToItem(item);
-
-				item.add(new AmpSelectFieldPanel<FundingPledges>("pledge",
+				AmpSelectFieldPanel pledgeAmpSelectFieldPanel=new AmpSelectFieldPanel<FundingPledges>("pledge",
 						new PropertyModel<FundingPledges>(item.getModel(),
 								"pledgeid"), pledgesModel,
 								"Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
@@ -82,7 +81,10 @@ public class AmpDonorCommitmentsFormTableFeature extends
 					public Object getDisplayValue(FundingPledges arg0) {
 						return arg0.getEffectiveName();
 					}
-				}, false));
+				}, false);
+				// we need to find a generic way of doing this
+				pledgeAmpSelectFieldPanel.setAffectedByFreezing(false);
+				item.add(pledgeAmpSelectFieldPanel);
 				item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"){
 					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);

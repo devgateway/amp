@@ -78,6 +78,7 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
                                         new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage", false, false);
                 capitalSpendingPercentage.getTextContainer().add(new RangeValidator<Float>(0f, 100f));
                 capitalSpendingPercentage.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
+                capitalSpendingPercentage.setAffectedByFreezing(false);
                 item.add(capitalSpendingPercentage);
 
                 AmpSelectFieldPanel<String> disbOrdIdSelector = new AmpSelectFieldPanel<String>("disbOrderId",
@@ -101,6 +102,7 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
 						"Contract", false, true, null, false);
 				
 				contractSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
+				contractSelector.setAffectedByFreezing(false);
 				item.add(contractSelector);
 				
 				IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
@@ -121,6 +123,7 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
 							}
 						}, false);
 				pledgeSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
+				pledgeSelector.setAffectedByFreezing(false);
 				item.add(pledgeSelector);
 				item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"){
 					protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {

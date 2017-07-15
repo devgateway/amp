@@ -204,7 +204,7 @@ export default class AidOnBudgetRow extends Component {
                     </select>
                     </div>                    
                     </td>
-                    <td><br/>
+                    <td className="actions-column"><br/>
                     <span className="glyphicon glyphicon-custom glyphicon-ok-circle success-color" onClick={this.save}> </span>                    
                     <span className="glyphicon glyphicon-custom glyphicon-remove-sign" onClick={this.cancel}></span>
                     </td>                      
@@ -218,7 +218,7 @@ export default class AidOnBudgetRow extends Component {
                     <td>{this.getOrgName(this.props.aidOnBudget.donorId)}</td>
                     <td className="amount-column">{this.formatAmount(this.props.aidOnBudget.amount)}</td>
                     <td>{this.props.aidOnBudget.currencyCode} </td>
-                    <td><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteAidOnBudget}></span></td>                
+                    <td className="actions-column"><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteAidOnBudget}></span></td>                
                     </tr>
                     
             );

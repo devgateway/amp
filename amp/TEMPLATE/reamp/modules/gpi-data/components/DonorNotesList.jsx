@@ -145,11 +145,11 @@ export default class DonorNotesList extends Component {
                 <table className="table table-striped">
                 <thead>
                 <tr >
-                <th></th>
-                <th className="date-column"><span data-field="notesDate" onClick={this.sort} ><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:date']}&nbsp;</span><span className = {this.showSortCaret('notesDate')} ></span></th>
-                <th><span data-field="donor"  onClick={this.sort}><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:donor-agency']}&nbsp;</span><span className = {this.showSortCaret('donor')} ></span></th>
-                <th><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:notes']}</th>
-                <th className="actions-column">{this.props.translations['amp.gpi-data-donor-notes:action']}</th>
+                <td></td>
+                <td className="date-column"><span data-field="notesDate" onClick={this.sort} ><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:date']}&nbsp;</span><span className = {this.showSortCaret('notesDate')} ></span></td>
+                <td><span data-field="donor"  onClick={this.sort}><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:donor-agency']}&nbsp;</span><span className = {this.showSortCaret('donor')} ></span></td>
+                <td><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:notes']}</td>
+                <td className="actions-column">{this.props.translations['amp.gpi-data-donor-notes:action']}</td>
                 </tr>
                 </thead>
                 <tbody>               

@@ -188,9 +188,9 @@ export default class AidOnBudgetRow extends Component {
                     </div>                    
                     </td>
                     <td>
-                    <div className={this.getErrorsForField('amount').length > 0 ? 'form-group has-error amount-column' : 'form-group amount-column' }>
+                    <div className={this.getErrorsForField('amount').length > 0 ? 'form-group has-error amount-input' : 'form-group amount-input' }>
                     <br/>
-                    <input type="text" name="amount" className="form-control amount-column" placeholder="" value={this.props.aidOnBudget.amount} onChange={this.onChange} />
+                    <input type="text" name="amount" className="form-control amount-input" placeholder="" value={this.props.aidOnBudget.amount} onChange={this.onChange} />
                     </div>
                     </td>
                     <td>

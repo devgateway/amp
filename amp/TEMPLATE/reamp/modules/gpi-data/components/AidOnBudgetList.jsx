@@ -154,8 +154,8 @@ export default class AidOnBudgetList extends Component {
                 <tr>                
                 <td className="date-column"><span className="error-color" >*&nbsp;</span><span data-field="indicatorDate" onClick={this.sort} >{this.props.translations['amp.gpi-data-aid-on-budget:date']}</span>&nbsp;<span className = {this.showSortCaret('indicatorDate')} ></span></td>
                 <td><span className="error-color" >*&nbsp;</span><span data-field="donor"  onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:donor-agency']}</span>&nbsp;<span className = {this.showSortCaret('donor')} ></span></td>
-                <td><span className="error-color" >*&nbsp;</span><span data-field="amount" onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:amount']}</span>&nbsp;<span className = {this.showSortCaret('amount')} ></span></td>
-                <td><span className="error-color" >*&nbsp;</span><span data-field="currency" onClick={this.sort} >{Utils.capitalizeFirst(this.props.translations['amp.gpi-data-aid-on-budget:currency'])}</span>&nbsp;<span className = {this.showSortCaret('currency')} ></span></td>
+                <td className="amount-column"><span className="error-color" >*&nbsp;</span><span data-field="amount" onClick={this.sort}>{this.props.translations['amp.gpi-data-aid-on-budget:amount']}</span>&nbsp;<span className = {this.showSortCaret('amount')} ></span></td>
+                <td className="currency-column"><span className="error-color" >*&nbsp;</span><span data-field="currency" onClick={this.sort} >{Utils.capitalizeFirst(this.props.translations['amp.gpi-data-aid-on-budget:currency'])}</span>&nbsp;<span className = {this.showSortCaret('currency')} ></span></td>
                 <td className="actions-column">{this.props.translations['amp.gpi-data-aid-on-budget:action']}</td>
                 </tr>
                 </thead>

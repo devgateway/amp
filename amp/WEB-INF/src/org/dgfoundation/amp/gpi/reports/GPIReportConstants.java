@@ -56,6 +56,8 @@ public class GPIReportConstants {
 
 	public static final String PDF = "pdf";
 	public static final String XLSX = "xlsx";
+	
+	public static final String INDICATOR1_EXPORT_APPROVAL_DATE_FORMAT = "MM/yyyy";
 
 	public static final Map<String, String> REPORT_1_OUTPUT_1_TOOLTIP = new LinkedHashMap<String, String>() {
 		private static final long serialVersionUID = 1773783564463355721L;

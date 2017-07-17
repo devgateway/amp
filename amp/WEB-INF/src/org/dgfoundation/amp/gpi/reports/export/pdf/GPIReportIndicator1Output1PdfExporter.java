@@ -14,6 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.gpi.reports.GPIDocument;
 import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
@@ -22,8 +23,13 @@ import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
 import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
+import org.dgfoundation.amp.newreports.CalendarConverter;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
+import org.digijava.kernel.ampapi.endpoints.settings.Settings;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.gpi.util.GPIConstants;
 
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
@@ -45,6 +51,8 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 
 	public static final int SUMMARY_TABLE_SIZE = 4;
 	public static final int PRIMARY_SECTORS_SIZE = 3;
+	
+	private CalendarConverter calendarConverter;
 
 	public GPIReportIndicator1Output1PdfExporter() {
 		relativeWidths = new float[] { 2f, 5f, 5f, 3f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 3f,
@@ -53,6 +61,10 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 	}
 	
 	public void generateReportTable(Document doc, PdfWriter writer, GPIReport report) throws DocumentException {
+		ReportSettings reportSettings = report.getSpec().getSettings();
+		calendarConverter = (reportSettings != null && reportSettings.getCalendar() != null) 
+				? reportSettings.getCalendar() : AmpARFilter.getDefaultCalendar();
+		
 		Paragraph body = new Paragraph();
 		
 		renderReportTitle(report, body);
@@ -211,17 +223,11 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 				|| column.originalColumnName.equals(ColumnConstants.GPI_1_Q10)) {
 			value = "Yes".equals(value) ? "1" : "0";
 		}
-
+		
 		if (column.originalColumnName.equals(GPIReportConstants.GPI_1_Q2)) {
-			if (!StringUtils.isBlank(value)) {
-				try {
-					value = new SimpleDateFormat("MM/yyyy").format(new SimpleDateFormat("dd/MM/yyyy").parse(value));
-				} catch (ParseException e) {
-					throw new RuntimeException("Error in parsing the approval date", e);
-				}
-			}
+			value = GPIReportUtils.getApprovalDateForExports(rowData.get(column), calendarConverter);
 		}
-
+		
 		insertCell(table, value, getCellAlignment(column.originalColumnName), 1, 1, font, bkgColor);
 	}
 

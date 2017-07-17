@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.gpi.reports;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +18,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
+import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -34,6 +37,8 @@ import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.common.util.DateTimeUtil;
 
 public class GPIReportUtils {
@@ -564,5 +569,36 @@ public class GPIReportUtils {
 		
 		List<GPIRemark> remarks = GPIDataService.getGPIRemarks(GPIReportConstants.REPORT_1, ids, donorType, min, max);
 		return remarks;
+	}
+	
+	/**
+	 * Get the approval date in format MM/yyyy. If the date is in ethiopian calendar, 
+	 * it is in the format dd/MM/yyyy (see @NiReportDateFormatter.getEthiopianFormattedDate())
+	 * 
+	 * @param dateAsString
+	 * @param calendarConverter
+	 * @return approvalDate in format MM/yyyy
+	 */
+	public static String getApprovalDateForExports(String dateAsString, CalendarConverter calendarConverter) {
+		String approvalDate = dateAsString;
+		
+		if (!StringUtils.isBlank(dateAsString)) {
+			if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
+				AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
+				if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())) {
+					approvalDate = dateAsString.substring(3);
+				} else {
+					try {
+						String dateFormat = DateTimeUtil.getGlobalPattern();
+						approvalDate = new SimpleDateFormat(GPIReportConstants.INDICATOR1_EXPORT_APPROVAL_DATE_FORMAT)
+								.format(new SimpleDateFormat(dateFormat).parse(dateAsString));
+					} catch (ParseException e) {
+						throw new RuntimeException("Error in parsing the approval date", e);
+					}
+				}
+			}
+		}
+		
+		return approvalDate;
 	}
 }

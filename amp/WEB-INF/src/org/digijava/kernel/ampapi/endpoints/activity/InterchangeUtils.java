@@ -49,8 +49,10 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -58,9 +60,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.proxy.HibernateProxyHelper;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
+import org.hibernate.proxy.HibernateProxyHelper;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 
@@ -105,6 +107,14 @@ public class InterchangeUtils {
 				return true;
 		}
 		return false;
+	}
+	
+	public static String getAmpIatiIdentifierFieldName() {
+		String iatiIdGsField = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.IATI_IDENTIFIER_AMP_FIELD);
+		String iatiIdAmpField = StringUtils.isEmpty(iatiIdGsField) 
+				? ActivityEPConstants.IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME : iatiIdGsField;
+		
+		return iatiIdAmpField;
 	}
 
 	public static Double getDoubleFromJsonNumber(Object obj) {

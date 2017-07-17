@@ -131,7 +131,7 @@ export default class AidOnBudgetList extends Component {
         return (
                 <div >   
                 <br/>
-                <p>{this.props.translations['amp.gpi-data-aid-on-budget:header-info']}</p>
+                <p className="indicator-description">{this.props.translations['amp.gpi-data-aid-on-budget:header-info']}</p>
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-plus" onClick={this.addNew}></span>

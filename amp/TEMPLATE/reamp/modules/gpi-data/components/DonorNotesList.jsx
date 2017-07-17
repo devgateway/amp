@@ -127,8 +127,7 @@ export default class DonorNotesList extends Component {
     render() {       
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);        
         return (
-                <div >                
-                <br/>
+                <div>               
                 <p className="indicator-description">{this.props.translations['amp.gpi-data-donor-notes-indicator' + this.props.indicatorCode + ':header-info']}</p>
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">

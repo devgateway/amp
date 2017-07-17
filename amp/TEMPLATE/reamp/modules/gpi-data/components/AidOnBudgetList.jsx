@@ -129,8 +129,7 @@ export default class AidOnBudgetList extends Component {
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);  
         const numberFormatter = new DecimalFormat(this.props.settings['number-format'] || "");
         return (
-                <div >   
-                <br/>
+                <div>               
                 <p className="indicator-description">{this.props.translations['amp.gpi-data-aid-on-budget:header-info']}</p>
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">

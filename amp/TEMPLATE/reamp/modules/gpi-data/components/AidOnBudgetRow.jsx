@@ -197,7 +197,7 @@ export default class AidOnBudgetRow extends Component {
                     <div className={this.getErrorsForField('currencyCode').length > 0 ? 'form-group has-error' : 'form-group' }>
                     <br/>
                     <select name="currencyCode" value={this.props.aidOnBudget.currencyCode} className="form-control" onChange={this.onChange}>
-                    <option value="">{this.props.translations['amp.gpi-data:select-currency']}</option>
+                    <option value="" >{this.props.translations['amp.gpi-data:select-currency'].toLowerCase()}</option>
                     {this.props.currencyList.map(currency => 
                     <option value={currency.id} key={currency.id} >{currency.id}</option>
                     )}

@@ -58,6 +58,8 @@ public class FieldsEnumerator {
 
 	private TranslatorService translatorService;
 
+	private String iatiIdentifierField;
+	
 	/**
 	 * Fields Enumerator
 	 * 
@@ -69,6 +71,7 @@ public class FieldsEnumerator {
 		this.fmService = fmService;
 		this.translatorService = translatorService;
 		this.internalUse = internalUse;
+		this.iatiIdentifierField = InterchangeUtils.getAmpIatiIdentifierFieldName();
 	}
 	
 	/**
@@ -96,9 +99,11 @@ public class FieldsEnumerator {
 	 */
 	private APIField describeField(Field field, Deque<Interchangeable> intchStack) {
 		Interchangeable interchangeable = intchStack.peek();
+        String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
 
 		APIField apiField = new APIField();
-		apiField.setFieldName(InterchangeUtils.underscorify(interchangeable.fieldTitle()));
+		apiField.setFieldName(fieldTitle);
+
 		if (interchangeable.id()) {
 			apiField.setId(interchangeable.id());
 		}
@@ -112,7 +117,6 @@ public class FieldsEnumerator {
 					? InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);
 		}
 		
-
 		apiField.setFieldLabel(InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
 		apiField.setRequired(getRequiredValue(intchStack, fmService));
 		apiField.setImportable(interchangeable.importable());
@@ -120,6 +124,12 @@ public class FieldsEnumerator {
 			apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
 			apiField.setImportable(true);
 		}
+		
+		if (isFieldIatiIdentifier(fieldTitle)) {
+		    apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
+		    apiField.setImportable(true);
+        }
+
 		if (interchangeable.percentageConstraint()){
 			apiField.setPercentage(true);
 		}
@@ -478,5 +488,15 @@ public class FieldsEnumerator {
 		}
 
 		return isEnabled;
+	}
+	
+	/**
+	 * Decides whether a field stores iati-identifier value
+	 *  
+	 * @param fieldName
+	 * @return true if is iati-identifier
+	 */
+	private boolean isFieldIatiIdentifier(String fieldName) {
+		return StringUtils.equals(this.iatiIdentifierField, fieldName);
 	}
 }

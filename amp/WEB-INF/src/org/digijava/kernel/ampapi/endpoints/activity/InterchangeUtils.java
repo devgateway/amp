@@ -43,6 +43,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DecimalWraper;
@@ -105,6 +106,14 @@ public class InterchangeUtils {
 			}
 		}
 		return false;
+	}
+	
+	public static String getAmpIatiIdentifierFieldName() {
+		String iatiIdGsField = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.IATI_IDENTIFIER_AMP_FIELD);
+		String iatiIdAmpField = StringUtils.isEmpty(iatiIdGsField) 
+				? ActivityEPConstants.IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME : iatiIdGsField;
+		
+		return iatiIdAmpField;
 	}
 
 	public static Double getDoubleFromJsonNumber(Object obj) {

@@ -91,6 +91,8 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS, ColumnConstants.PLEDGES_SECONDARY_SECTORS);
 		mapSimpleColumn(FiltersConstants.PLEDGES_SECTORS, ColumnConstants.PLEDGES_SECTORS);
 		mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS, ColumnConstants.PLEDGES_TERTIARY_SECTORS);
+		mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS, ColumnConstants.PLEDGES_QUATERNARY_SECTORS);
+		mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS, ColumnConstants.PLEDGES_QUINARY_SECTORS);
 		mapSimpleColumn(FiltersConstants.PLEDGES_TITLES, ColumnConstants.PLEDGES_TITLES);
 		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM, ColumnConstants.PRIMARY_PROGRAM);
 		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
@@ -133,10 +135,15 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_7, ColumnConstants.TERTIARY_PROGRAM_LEVEL_7);
 		mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_8, ColumnConstants.TERTIARY_PROGRAM_LEVEL_8);
 		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR, ColumnConstants.TERTIARY_SECTOR);
-		mapSimpleColumn(FiltersConstants.QUATERNARY_SECTOR, ColumnConstants.QUATERNARY_SECTOR);
-		mapSimpleColumn(FiltersConstants.QUINARY_SECTOR, ColumnConstants.QUINARY_SECTOR);
 		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR);
 		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUATERNARY_SECTOR, ColumnConstants.QUATERNARY_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUATERNARY_SECTOR_SUB_SECTOR, ColumnConstants.QUATERNARY_SECTOR_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUATERNARY_SECTOR_SUB_SUB_SECTOR,
+				ColumnConstants.QUATERNARY_SECTOR_SUB_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUINARY_SECTOR, ColumnConstants.QUINARY_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUINARY_SECTOR_SUB_SECTOR, ColumnConstants.QUINARY_SECTOR_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR);
 		mapSimpleColumn(FiltersConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_ASSISTANCE);
 		mapSimpleColumn(FiltersConstants.WORKSPACES, ColumnConstants.WORKSPACES);
 		mapSimpleColumn(FiltersConstants.ZONE, ColumnConstants.ZONE);

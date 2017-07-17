@@ -69,6 +69,8 @@ public class FiltersConstants {
     public static final String PLEDGES_SECONDARY_SECTORS = "pledges-secondary-sectors";
     public static final String PLEDGES_SECTORS = "pledges-sectors";
     public static final String PLEDGES_TERTIARY_SECTORS = "pledges-tertiary-sectors";
+    public static final String PLEDGES_QUATERNARY_SECTORS = "pledges-quaternary-sectors";
+    public static final String PLEDGES_QUINARY_SECTORS = "pledges-quinary-sectors";
     public static final String PLEDGES_TITLES = "pledges-titles";
     public static final String PRIMARY_PROGRAM = "primary-program";
     public static final String PRIMARY_PROGRAM_LEVEL_1 = "primary-program-level-1";
@@ -114,7 +116,11 @@ public class FiltersConstants {
     public static final String TERTIARY_SECTOR_SUB_SECTOR = "tertiary-sector-sub-sector";
     public static final String TERTIARY_SECTOR_SUB_SUB_SECTOR = "tertiary-sector-sub-sub-sector";
     public static final String QUATERNARY_SECTOR = "quaternary-sector";
+    public static final String QUATERNARY_SECTOR_SUB_SECTOR = "quaternary-sector-sub-sector";
+    public static final String QUATERNARY_SECTOR_SUB_SUB_SECTOR = "quaternary-sector-sub-sub-sector";
     public static final String QUINARY_SECTOR = "quinary-sector";
+    public static final String QUINARY_SECTOR_SUB_SECTOR = "quinary-sector-sub-sector";
+    public static final String QUINARY_SECTOR_SUB_SUB_SECTOR = "quinary-sector-sub-sub-sector";
     public static final String TYPE_OF_ASSISTANCE = "type-of-assistance";
     public static final String WORKSPACES = "workspaces";
     public static final String ZONE = "zone";

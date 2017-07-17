@@ -586,7 +586,7 @@ public class GPIReportUtils {
 			if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
 				AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
 				if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())) {
-					approvalDate = dateAsString.substring(3);
+					approvalDate = dateAsString.substring(GPIReportConstants.ETHIOPIAN_FORMATTED_DATE_DAYS_OFFSET);
 				} else {
 					try {
 						String dateFormat = DateTimeUtil.getGlobalPattern();

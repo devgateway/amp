@@ -10,6 +10,7 @@ import java.util.Map;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
@@ -94,7 +95,9 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
                 if (interchangeableFields.get(fieldName) != null) {
                     Field field = interchangeableFields.get(fieldName);
                     fieldTypes.put(field, dbTypes.get(colname)); //maxLengths.get(colname)
-                    fieldMaxLengths.put(field, maxLengths.get(colname));
+                    if (!field.isAnnotationPresent(VersionableFieldTextEditor.class)) {
+                        fieldMaxLengths.put(field, maxLengths.get(colname));
+                    }
                 }
             }
         }

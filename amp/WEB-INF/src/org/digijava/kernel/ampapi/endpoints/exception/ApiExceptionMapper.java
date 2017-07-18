@@ -9,9 +9,11 @@ import javax.ws.rs.ext.Provider;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleException;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRulesErrors;
 
 /**
  * Builds the generic response with error code 500 for all unhandled exceptions
@@ -35,6 +37,13 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     		ApiRuntimeException apiException = (ApiRuntimeException) e;
     		return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(), httpRequest.getContentType());
     	}
+        
+        if (e instanceof PerformanceRuleException) {
+        	return ApiErrorResponse.buildGenericError(Response.Status.BAD_REQUEST, 
+        			PerformanceRulesErrors.PERFORMANCE_RULE_INVALID.withDetails(e.getMessage()), e, 
+        			httpRequest.getContentType());
+        }
+        
 
         ApiErrorMessage apiErrorMessage = getApiErrorMessageFromException(e);
        

@@ -53,7 +53,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.COMMITMENT, 7);
 
-		list = new FundingListEditor<AmpFundingDetail>("listCommitments", setModel, FundingDetailComparator
+		list = new ListEditor<AmpFundingDetail>("listCommitments", setModel, new AmpFundingDetail.FundingDetailComparator()) {
 				.getFundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(

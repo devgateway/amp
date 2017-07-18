@@ -63,7 +63,7 @@ public class AmpReleaseOfFundsFormTableFeature extends
 			}
 		};		
 		
-		list = new FundingListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
+		list = new ListEditor<AmpFundingDetail>("listDisbursements", setModel, new AmpFundingDetail.FundingDetailComparator()) {
 				.getFundingDetailComparator()) {
 
 			@Override

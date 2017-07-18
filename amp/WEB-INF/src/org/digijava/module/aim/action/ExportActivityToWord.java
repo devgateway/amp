@@ -2664,6 +2664,11 @@ public class ExportActivityToWord extends Action {
                     eshDonorInfo.addRowData((new ExportSectionHelperRowData("Mode of Payment", null, null, true))
                             .addRowData(modeOfPayment));
                 }
+                    if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level")) {
+                        String concessionalityLevel = fnd.getConcessionalityLevel() != null ? fnd.getConcessionalityLevel().getValue() : " ";
+                        eshDonorInfo.addRowData((new ExportSectionHelperRowData("Concessionality Level", null, null, true))
+                                .addRowData(concessionalityLevel));
+                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective")
                         && (fnd.getDonorObjective() != null)) {

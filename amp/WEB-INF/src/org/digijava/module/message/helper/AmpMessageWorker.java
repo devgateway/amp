@@ -19,10 +19,12 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
+import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeUtil;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -65,6 +67,7 @@ import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
 import org.digijava.module.message.triggers.AwaitingApprovalCalendarTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
+import org.digijava.module.message.triggers.DataFreezeEmailNotificationTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
@@ -145,6 +148,8 @@ public class AmpMessageWorker {
 				} else if (e.getTrigger().equals(ApprovedResourceShareTrigger.class)
 						|| e.getTrigger().equals(RejectResourceSharetrigger.class)) {
 					newMsg = processResourceShareEvent(e, newApproval, template, false);
+				} else if(e.getTrigger().equals(DataFreezeEmailNotificationTrigger.class)){
+				    newMsg = proccessDataFreezeNotificationEvent(e, newAlert, template);
 				} else if (e.getTrigger().equals(ActivityMeassureComparisonTrigger.class)
 						|| e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)) {
 
@@ -224,7 +229,10 @@ public class AmpMessageWorker {
 
 				} else if (e.getTrigger().equals(UserAddedToFirstWorkspaceTrigger.class)) {
 					defineReceiversForUserAddedToWorkspace(newMsg, e);
-				} else { // <-- currently for else is left user registration
+				} 
+				else if (e.getTrigger().equals(DataFreezeEmailNotificationTrigger.class)) {
+                    defineReceiversForDataFreezeNotification(newMsg, e, template);
+                } else { // <-- currently for else is left user registration
 							// or activity disbursement date triggers
 					List<String> emailReceivers = new ArrayList<String>();
 					List<AmpMessageState> statesRelatedToTemplate = null;
@@ -666,6 +674,22 @@ public class AmpMessageWorker {
 		return createAlertFromTemplate(template, myHashMap, alert);
 	}
 
+	/**
+     * Data Freeze Notification Processing
+     */
+    private static AmpAlert proccessDataFreezeNotificationEvent(Event e, AmpAlert alert, TemplateAlert template) {        
+        alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);   
+        alert.setName(template.getName());
+        alert.setDescription(template.getDescription());
+        alert.setReceivers(template.getReceivers());
+        alert.setDraft(false);
+        Calendar cal = Calendar.getInstance();
+        alert.setCreationDate(cal.getTime());
+        return alert;
+            
+        
+    }
+    
 	private static Approval createApprovalFromTemplate(TemplateAlert template, HashMap<String, String> myMap,
 			Approval newApproval, boolean needsApproval, boolean sourceIsResource, boolean activityApproval,
 			AmpTeamMember approver) {
@@ -1261,6 +1285,31 @@ public class AmpMessageWorker {
 		}
 	}
 
+	private static void defineReceiversForDataFreezeNotification(AmpMessage newMsg, Event e, TemplateAlert template) throws Exception {
+	    
+	    List<User> users = DataFreezeUtil.getUsers();
+	    AmpTeamMember msgSender = TeamMemberUtil.getAmpTeamMember(newMsg.getSenderId());
+	    HashMap<String, String> params = new HashMap<String, String>();
+	    HashMap<String, AmpEmail> emails = new HashMap<String, AmpEmail>();
+        params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZE_NOTIFICATION_DAYS, String.valueOf(DataFreezeEmailNotificationTrigger.DAYS_TO_FREEZE));
+        params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE, e.getParameters().get(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE).toString());
+	    for(User user : users) { 	        
+	        String senderEmail = (msgSender == null) ? "system@digijava.org" : msgSender.getUser().getEmail();	        
+	        AmpEmail ampEmail = emails.get(user.getRegisterLanguage().getCode());	        
+	        if (ampEmail == null) {
+	             String translatedName = TranslatorWorker.translateText(newMsg.getName(), user.getRegisterLanguage().getCode(), 3L);
+	             String translatedDescription = TranslatorWorker.translateText(newMsg.getDescription(), user.getRegisterLanguage().getCode(), 3L);
+	             ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params), DgUtil.fillPattern(translatedDescription, params));
+	             DbUtil.saveOrUpdateObject(ampEmail);
+	             emails.put(user.getRegisterLanguage().getCode(), ampEmail);
+	         }        
+	        AmpEmailReceiver emailReceiver = new AmpEmailReceiver(user.getEmail(), ampEmail, MessageConstants.UNSENT_STATUS);
+            DbUtil.saveOrUpdateObject(emailReceiver);	         
+	    }
+              
+    }
+
+	
 	private static void createMsgState(AmpMessageState state, AmpMessage newMsg, boolean calendarSaveActionWasCalled)
 			throws Exception {
 		createMsgState(state.getReceiver(), newMsg, calendarSaveActionWasCalled);

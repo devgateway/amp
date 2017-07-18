@@ -456,7 +456,15 @@ function validateUserInfo(){
           																	<html:checkbox property="pledger" styleClass="inp-text"/>
 																		</td>
 																	</tr>
-																	</module:display>
+																	</module:display>																	
+																		<tr>
+																		<td width="169" align="right" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
+                                                                     		 <digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn>
+																		</td>
+																	    <td width="380" height="30" colspan="2">
+          																	<html:checkbox property="nationalCoordinator" styleClass="inp-text"/>
+																		</td>
+																	</tr>																	
 																		<tr>
 																			<td align="right"  class="formCheckContainer">
 																				<digi:trn>Assign to Workspace</digi:trn>
@@ -470,6 +478,14 @@ function validateUserInfo(){
 																				</c:if>
 																			</td>
 																		</tr>
+																		<tr>
+																		<td width="169" align="right" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
+                                                                     		 <digi:trn key="um:exemptFromDataFreezing">Exempt from activity freezing</digi:trn>
+																		</td>
+																	    <td width="380" height="30" colspan="2">
+          																	<html:checkbox property="exemptFromDataFreezing" styleClass="inp-text"/>
+																		</td>
+																	 </tr>
 																	<tr>
 															            <td>&nbsp;</td>
 															          </tr>
@@ -531,6 +547,7 @@ function validateUserInfo(){
                                                               				<input type="button" value="${translation}" onclick="resetPasswordFields()" style="font-family:verdana;font-size:11px;"/></td>
 																		</td>
 																	</tr>
+																			
 																</table>
                                                                 <br/>
 															</td>

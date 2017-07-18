@@ -181,24 +181,28 @@ var createDateFilterObject= function(filters, propertyName){
 			auxProperty.start = auxProperty.start || "";
 			auxProperty.end = auxProperty.end || "";
 
-			var startDatePrefix = TranslationManager.getTranslated((auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "From" : "") + '&nbsp;';
-			var endDatePrefix = TranslationManager.getTranslated((auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "Until" : "") + '&nbsp';
-
-			if(auxProperty.start.length > 0){
-				filter.values.push({
-					id : auxProperty.start,
-					name : auxProperty.start,
-					trnName : startDatePrefix + " " + window.currentFilter.formatDate(auxProperty.start) 
-				});
-			}
-
+			var startDatePrefix = TranslationManager.getTranslated((auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "From" : "");
+			var endDatePrefix = TranslationManager.getTranslated((auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "Until" : "");
+			var trnName = "";
+			
+			if(auxProperty.start.length > 0 ){
+				trnName = startDatePrefix + " " + window.currentFilter.formatDate(auxProperty.start);				
+			}			
+						
 			if(auxProperty.end.length > 0){
-				filter.values.push({
-					id : auxProperty.end,
-					name : auxProperty.end,
-					trnName : endDatePrefix + " " + window.currentFilter.formatDate(auxProperty.end) 					
-				});		
-			}									
+				if(auxProperty.start.length > 0){
+					trnName += " - ";
+				}
+				trnName += endDatePrefix + " " + window.currentFilter.formatDate(auxProperty.end);					
+			}	
+			
+			filter.values.push({
+				id : auxProperty.end + auxProperty.start ,
+				name : auxProperty.end + auxProperty.start,
+				trnName : trnName 					
+			});	
+			
+			
 		} else if (auxProperty.modelType === 'YEAR-SINGLE-VALUE') {
 			if(auxProperty.year){				
 				filter.values.push({

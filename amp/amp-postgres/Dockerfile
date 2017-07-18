@@ -2,7 +2,7 @@ FROM postgres:9.4
 MAINTAINER Octavian Ciubotaru <ociubotaru@developmentgateway.org>
 
 ENV GIS_MAJOR 2.3
-ENV GIS_VERSION 2.3.0+dfsg-2.pgdg80+1
+ENV GIS_VERSION 2.3.2+dfsg-1~exp2.pgdg80+1
 
 ENV POSTGRES_PASSWORD postgres
 

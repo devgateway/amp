@@ -70,6 +70,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedAidModalities;
 	private Long[] selectedTypeOfAssistance;
 	private Long[] selectedModeOfPayment;
+	private Long[] selectedConcensionalityLevel;
 	private Object[] selectedDonorTypes; // ids of AmpOrgType
 	private Object[] selectedDonorGroups; //
 	private Object[] selectedContractingAgencyGroups; //
@@ -1410,5 +1411,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setToFundingClosingDate(String toFundingClosingDate) {
 		this.toFundingClosingDate = toFundingClosingDate;
+	}
+	
+	public Long[] getSelectedConcensionalityLevel() {
+		return selectedConcensionalityLevel;
+	}
+	
+	public void setSelectedConcensionalityLevel(Long[] selectedConcensionalityLevel) {
+		this.selectedConcensionalityLevel = selectedConcensionalityLevel;
 	}
 }

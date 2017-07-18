@@ -21,6 +21,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
@@ -31,7 +32,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
- * Converter for {@link AmpReport} to {@link ReportSpecification} 
+ * Converter for {@link AmpReports} to {@link ReportSpecification}
  * @author Nadejda Mandrescu
  */
 public class AmpReportsToReportSpecification {
@@ -111,16 +112,8 @@ public class AmpReportsToReportSpecification {
 		}
 				
 		//workaround for AMP-18257, issue #1
-		final String groupingOption = report.getDrilldownTab() ? "" : report.getOptions(); 
-		
-		switch(groupingOption) {
-			case "A": spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
-			case "Q": spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
-			case "M": spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
-			default: 
-				spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
-			break;
-		}
+		final String groupingOption = report.getDrilldownTab() ? "" : report.getOptions();
+		ReportsUtil.setGroupingCriteria(spec, groupingOption);
 	}
 	
 	private Set<AmpColumns> getOrderedColumns() {

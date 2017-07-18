@@ -592,22 +592,22 @@ public class DashboardsService {
 	 * @param config Is the JsonBean object from UI.
 	 * @param spec Is the current Mondrian Report specification.
 	 */
-	private static void setCustomSettings(JsonBean config, ReportSpecificationImpl spec) {
-		LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.get("settings");
-		ReportSettingsImpl defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
-		defaultSettings.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
-		if (userSettings.get(SettingsConstants.CURRENCY_ID) != null) {
-			defaultSettings.setCurrencyCode(userSettings.get(SettingsConstants.CURRENCY_ID).toString());
-		}
+    private static void setCustomSettings(JsonBean config, ReportSpecificationImpl spec) {
+        LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.get("settings");
+        ReportSettingsImpl defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
+        defaultSettings.setUnitsOption(AmountsUnits.getDefaultValue());
+        if (userSettings.get(SettingsConstants.CURRENCY_ID) != null) {
+            defaultSettings.setCurrencyCode(userSettings.get(SettingsConstants.CURRENCY_ID).toString());
+        }
 
-		if (userSettings.get(SettingsConstants.CALENDAR_TYPE_ID) != null) {
-			defaultSettings.setCalendar(FiscalCalendarUtil.getAmpFiscalCalendar(
-					Long.valueOf(userSettings.get(SettingsConstants.CALENDAR_TYPE_ID).toString())));
-		}
-		spec.setSettings(defaultSettings);
-	}
-	
-	/**
+        if (userSettings.get(SettingsConstants.CALENDAR_TYPE_ID) != null) {
+            defaultSettings.setCalendar(FiscalCalendarUtil.getAmpFiscalCalendar(
+                    Long.valueOf(userSettings.get(SettingsConstants.CALENDAR_TYPE_ID).toString())));
+        }
+        spec.setSettings(defaultSettings);
+    }
+
+    /**
 	 * Generate a smaller version of any number (big or small) by adding a suffix kMBT.
 	 * @param total
 	 * @param spec

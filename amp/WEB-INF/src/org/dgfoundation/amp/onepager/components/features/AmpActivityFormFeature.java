@@ -91,10 +91,10 @@ import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.util.ChangeType;
-import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
@@ -103,6 +103,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -535,7 +536,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		saveAndSubmit.getButton().add(closeEditors);
 		saveAndSubmit.getButton().add(clickMonEval);
 		saveAndSubmit.getButton().setDefaultFormProcessing(false);
-		
+		saveAndSubmit.setAffectedByFreezing(false);
 		activityForm.add(saveAndSubmit);
 		
 		AmpAjaxLinkField saveReject=new AmpAjaxLinkField("saveReject", "Reject Activity", "Reject activity") {
@@ -584,7 +585,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 		saveAsDraft.setVisible(false);
 		saveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
-        activityForm.add(saveAsDraft);
+		saveAsDraft.setAffectedByFreezing(false);
+		activityForm.add(saveAsDraft);
 		activityForm.add(new Behavior(){
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
@@ -635,6 +637,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         cancelSaveAsDraft.setVisible(true);
         cancelSaveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         cancelSaveAsDraft.setOutputMarkupId(true);
+        cancelSaveAsDraft.setAffectedByFreezing(false);
         activityForm.add(cancelSaveAsDraft);
 
         AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
@@ -665,6 +668,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		saveAsDraftAction.getButton().add(new AttributePrepender("onclick", new Model<String>(onClickSaveAsDraft+" disableButton();"), ""));
 		saveAsDraftAction.getButton().add(updateEditors);
 		saveAsDraftAction.add(isSubmit);
+		saveAsDraftAction.setAffectedByFreezing(false);
 		activityForm.add(saveAsDraftAction);
 		
 		//text area for the message
@@ -1012,19 +1016,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         }
 
         //Components Funding
-        Set componentSet = activity.getComponentFundings();
-        if (componentSet != null){
-            HashSet<String> verifiedComponents = new HashSet<String>();
-            for (Iterator<AmpComponentFunding> iterator = componentSet.iterator(); iterator.hasNext();){
-                AmpComponentFunding funding = iterator.next();
-                if (funding.getComponent() == null || verifiedComponents.contains(funding.getComponent().getTitle()))
-                    continue;
-                verifiedComponents.add(funding.getComponent().getTitle());
-                verifySet(new PropertyModel<Set>(am, "componentFundings"), alertIfDisbursementBiggerCommitments,
+        Set<AmpComponent> componentSet = activity.getComponents();
+        if (componentSet != null) {
+            for (AmpComponent component : componentSet) {
+            	for (AmpComponentFunding funding : component.getFundings()) {
+            		verifySet(new PropertyModel<Set>(component, "fundings"), alertIfDisbursementBiggerCommitments,
                         alertIfExpenditureBiggerDisbursement, commitmentErrors, expenditureErrors, funding.getComponent(),
                         TranslatorUtil.getTranslatedText(OnePager.COMPONENTS_SECTION_NAME) + ": " +
                         funding.getComponent().getTitle());
-            }
+            	}
+        	}
         }
     }
 
@@ -1119,8 +1120,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						if (!component.isValid()) {
 							target.appendJavaScript("$('#"+ component.getMarkupId() +"').parents().show();");
 							target.appendJavaScript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
-                            logger.error("Component is invalid, adding to target: " + component.getLabel().getObject());
-							target.add(component);
+                            if (component.getLabel() != null) {
+                            	logger.error("Component is invalid, adding to target: " + component.getLabel().getObject());
+                            }
+							
+                            target.add(component);
 							
 							//some of the fields that need to show errors are HiddenFieldS. These are cumulative error fields, that show error for groups of other fields
 							//like for example a list of sectors with percentages

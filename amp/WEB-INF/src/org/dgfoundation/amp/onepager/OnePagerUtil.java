@@ -4,12 +4,15 @@
  */
 package org.dgfoundation.amp.onepager;
 
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
@@ -92,13 +95,19 @@ public final class OnePagerUtil {
 	 * @return the returned model
 	 */
 	public final static <T> AbstractReadOnlyModel<List<T>> getReadOnlyListModelFromSetModel(final IModel<Set<T>> setModel, final Comparator<T> c) {
+		return getReadOnlyListModelFromSetModel(setModel, c, o -> true);
+	}
+	
+	public final static <T> AbstractReadOnlyModel<List<T>> getReadOnlyListModelFromSetModel(final IModel<Set<T>> setModel, final Comparator<T> c, SerializablePredicate<T> filterPredicate) {
 		return new AbstractReadOnlyModel<List<T>>() {
 			private static final long serialVersionUID = 3706184421459839210L;
 
 			@Override
 			public List<T> getObject() {
-				TreeSet<T> ts=new TreeSet<T>(c);
-				ts.addAll(setModel.getObject());
+				TreeSet<T> ts = new TreeSet<T>(c);
+				Set<T> filteredSet = setModel.getObject().stream().filter(filterPredicate).collect(Collectors.toSet());
+				ts.addAll(filteredSet);
+				
 				return new ArrayList<T>(ts);
 			}
 		};
@@ -233,4 +242,9 @@ public final class OnePagerUtil {
 		new AmpFundingFlowsOrgRoleSelector("orgRoleSelector",model, itemModel,"Funding Flows OrgRole Selector");
 		return orgRoleSelector;
 	}
+	
+	public interface SerializablePredicate<T> extends Predicate<T>, Serializable {
+		
+	}
+
 }

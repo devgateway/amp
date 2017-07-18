@@ -16,6 +16,7 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
@@ -52,11 +53,12 @@ public class AmpDonorCommitmentsFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.COMMITMENT, 7);
 
-		list = new ListEditor<AmpFundingDetail>("listCommitments", setModel, FundingDetailComparator
+		list = new ListEditor<AmpFundingDetail>("listCommitments", setModel, new AmpFundingDetail.FundingDetailComparator()) {
 				.getFundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
 					ListItem<AmpFundingDetail> item) {
+				super.onPopulateItem(item);
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());

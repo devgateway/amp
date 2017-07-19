@@ -129,6 +129,7 @@ public class ColumnConstants {
 	public static final String INTERNAL_USE_ID = "Internal Use Id";
 	public static final String INTEREST_RATE = "Loan Interest Rate";
 	public static final String ISSUES = "Issues";
+	public static final String ISSUE_DATE = "Issue Date";
 	public static final String ISSUES___MEASURES___ACTORS = "Issues / Measures / Actors";
 	public static final String JOINT_CRITERIA = "Joint Criteria";
 	public static final String MATURITY = "Loan Maturity Date";

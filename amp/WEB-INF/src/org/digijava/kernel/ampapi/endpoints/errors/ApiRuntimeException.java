@@ -14,8 +14,8 @@ public class ApiRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected Status responseStatus;
-	protected JsonBean error;
+	private Status responseStatus;
+	private JsonBean error;
 	
 	public ApiRuntimeException(Status status, JsonBean error) {
 		this.responseStatus = status;

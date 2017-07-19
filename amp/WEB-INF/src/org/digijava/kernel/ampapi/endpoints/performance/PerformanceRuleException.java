@@ -6,17 +6,15 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 
 public class PerformanceRuleException extends ApiRuntimeException {
 
-	private static final long serialVersionUID = 1L;
-	
-	public PerformanceRuleException(String message) {
-		super(ApiError.toError(message));
-	}
-	
-	public PerformanceRuleException(ApiErrorMessage errorMessage) {
-		super(ApiError.toError(errorMessage));
-	}
-	
-	public PerformanceRuleException(ApiErrorMessage errorMessage, String details) {
-		super(ApiError.toError(errorMessage.withDetails(details)));
-	}
+    public PerformanceRuleException(String message) {
+        super(ApiError.toError(message));
+    }
+
+    public PerformanceRuleException(ApiErrorMessage errorMessage) {
+        super(ApiError.toError(errorMessage));
+    }
+
+    public PerformanceRuleException(ApiErrorMessage errorMessage, String details) {
+        super(ApiError.toError(errorMessage.withDetails(details)));
+    }
 }

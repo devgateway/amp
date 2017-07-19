@@ -10,14 +10,14 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpCategoryValueSerializer extends JsonSerializer<AmpCategoryValue> {
 
-	@Override
-	public void serialize(AmpCategoryValue value, JsonGenerator jgen, SerializerProvider provider)
-	        throws IOException, JsonProcessingException {
-		
-		jgen.writeStartObject();
-		jgen.writeNumberField("id", value.getId());
-		jgen.writeStringField("value", value.getValue());
-		jgen.writeEndObject();
-		
-	}
+    @Override
+    public void serialize(AmpCategoryValue value, JsonGenerator jgen, SerializerProvider provider)
+            throws IOException, JsonProcessingException {
+
+        jgen.writeStartObject();
+        jgen.writeNumberField("id", value.getId());
+        jgen.writeStringField("value", value.getValue());
+        jgen.writeEndObject();
+
+    }
 }

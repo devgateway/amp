@@ -29,7 +29,6 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     
     @Override
     public Response toResponse(Exception e) {
-        logger.error("ApiExceptionMapper: ", e);
         
         if (e instanceof ApiRuntimeException) {
     		ApiRuntimeException apiException = (ApiRuntimeException) e;

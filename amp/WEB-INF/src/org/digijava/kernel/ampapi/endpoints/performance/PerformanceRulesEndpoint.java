@@ -21,62 +21,51 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRule;
  */
 @Path("performance")
 public class PerformanceRulesEndpoint {
-    
+
+    PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+
     @GET
     @Path("rules")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public List<AmpPerformanceRule> getPerformanceRules() {
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
-       
         return performanceRuleManager.getAllPerformanceRules();
     }
-    
+
     @GET
     @Path("rules/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public AmpPerformanceRule getPerformanceRule(@PathParam("id") long id) {
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
-        
         return performanceRuleManager.getPerformanceRuleById(id);
     }
-    
+
     @POST
     @Path("rules")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public void savePerformanceRule(AmpPerformanceRule performanceRule) {
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
-        
         performanceRuleManager.savePerformanceRule(performanceRule);
     }
-    
+
     @PUT
     @Path("rules/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public void updatePerformanceRule(@PathParam("id") long id, AmpPerformanceRule performanceRule) {
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
-        
         performanceRule.setId(id);
         performanceRuleManager.updatePerformanceRule(performanceRule);
     }
-    
+
     @DELETE
     @Path("rules/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public void deletePerformanceRule(@PathParam("id") long id) {
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
-        
         performanceRuleManager.deletePerformanceRule(id);
     }
-    
+
     @GET
     @Path("admin")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public PerformanceRulesAdminPage<AmpPerformanceRule> getPerformanceRulesPage(@QueryParam("page") long page, 
-    		@QueryParam("size") long size) {
-        
-    	PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
-        
-    	return performanceRuleManager.getAdminPage(page, size);
+    public ResultPage<AmpPerformanceRule> getResultsPage(@QueryParam("page") int page, @QueryParam("size") int size) {
+
+        return performanceRuleManager.getAdminPage(page, size);
     }
 
 }

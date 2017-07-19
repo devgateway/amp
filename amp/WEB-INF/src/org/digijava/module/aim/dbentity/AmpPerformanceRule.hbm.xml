@@ -13,10 +13,12 @@
 		<property name="name" column="rule_name" type="java.lang.String" not-null="true"/>
 		<property name="description" column="rule_description" type="java.lang.String" />
 		<property name="typeClassName" column="rule_type_class_name" type="java.lang.String" not-null="true"/>
-		<property name="enabled" column="enabled" type="java.lang.Boolean" />
+		<property name="enabled" type="java.lang.Boolean" >
+		      <column name="enabled" default="false" />
+		</property>
 		
 		<many-to-one name="level" column="level_category" 
-            class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
+		      class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
 		
 	</class>
 </hibernate-mapping>

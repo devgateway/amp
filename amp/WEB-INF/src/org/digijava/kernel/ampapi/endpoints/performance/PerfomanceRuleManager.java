@@ -7,9 +7,8 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 
 /**
  * 
@@ -19,7 +18,7 @@ import org.hibernate.Session;
 public class PerfomanceRuleManager {
 
     private static PerfomanceRuleManager performanceRuleManager;
-    
+
     private static Logger logger = Logger.getLogger(PerfomanceRuleManager.class);
 
     /**
@@ -36,100 +35,84 @@ public class PerfomanceRuleManager {
 
     public List<AmpPerformanceRule> getAllPerformanceRules() {
 
-        Session dbSession = PersistenceManager.getSession();
-        String queryString = "SELECT rule FROM " + AmpPerformanceRule.class.getName() + " rule";
-        Query query = dbSession.createQuery(queryString);
+        Session session = PersistenceManager.getSession();
 
-        return query.list();
+        return session.createCriteria(AmpPerformanceRule.class)
+                .addOrder(Order.asc("id"))
+                .list();
     }
 
     public AmpPerformanceRule getPerformanceRuleById(Long id) {
-    	AmpPerformanceRule performanceRule = 
-    			(AmpPerformanceRule) PersistenceManager.getSession().get(AmpPerformanceRule.class, id);
-    	
-    	if (performanceRule == null) {
-    		throw new PerformanceRuleException(PerformanceRulesErrors.PERFORMANCE_RULE_INVALID, String.valueOf(id));
-    	}
-    	
+        AmpPerformanceRule performanceRule = (AmpPerformanceRule) PersistenceManager.getSession()
+                .get(AmpPerformanceRule.class, id);
+
+        if (performanceRule == null) {
+            throw new PerformanceRuleException(PerformanceRulesErrors.PERFORMANCE_RULE_INVALID, String.valueOf(id));
+        }
+
         return performanceRule;
     }
-    
+
     public AmpCategoryValue requireCategoryValueExists(Long id) {
-    	AmpCategoryValue acv = (AmpCategoryValue) PersistenceManager.getSession().get(AmpCategoryValue.class, id);
-    	
-    	if (acv == null) {
-    		throw new PerformanceRuleException(PerformanceRulesErrors.CATEGORY_VALUE_INVALID, String.valueOf(id));
-    	}
-    	
+        AmpCategoryValue acv = (AmpCategoryValue) PersistenceManager.getSession().get(AmpCategoryValue.class, id);
+
+        if (acv == null) {
+            throw new PerformanceRuleException(PerformanceRulesErrors.CATEGORY_VALUE_INVALID, String.valueOf(id));
+        }
+
         return acv;
     }
-    
+
     public void updatePerformanceRule(AmpPerformanceRule performanceRule) {
-    	getPerformanceRuleById(performanceRule.getId());
-    	
-    	if (performanceRule.getLevel() == null) {
-    		throw new PerformanceRuleException(PerformanceRulesErrors.REQUIRED_ATTRIBUTE, "level");
-    	}
-    	
-    	requireCategoryValueExists(performanceRule.getLevel().getId());
-        
-    	try {
-            Session session = PersistenceManager.getSession();
-            session.merge(performanceRule);
-        } catch (Exception e) {
-            logger.error("Exception from savePerformanceRule: " + e.getMessage());
-            throw new RuntimeException(e);
+        getPerformanceRuleById(performanceRule.getId());
+
+        if (performanceRule.getLevel() == null) {
+            throw new PerformanceRuleException(PerformanceRulesErrors.REQUIRED_ATTRIBUTE, "level");
         }
+
+        requireCategoryValueExists(performanceRule.getLevel().getId());
+
+        Session session = PersistenceManager.getSession();
+        session.merge(performanceRule);
     }
 
     public void savePerformanceRule(AmpPerformanceRule performanceRule) {
-    	
-    	if (performanceRule.getLevel() == null) {
-    		throw new PerformanceRuleException(PerformanceRulesErrors.REQUIRED_ATTRIBUTE, "level");
-    	}
-    	
-    	requireCategoryValueExists(performanceRule.getLevel().getId());
-    	
-        try {
-            Session session = PersistenceManager.getSession();
-            session.saveOrUpdate(performanceRule);
-        } catch (Exception e) {
-            logger.error("Exception from savePerformanceRule: " + e.getMessage());
-            throw new RuntimeException(e);
+
+        if (performanceRule.getLevel() == null) {
+            throw new PerformanceRuleException(PerformanceRulesErrors.REQUIRED_ATTRIBUTE, "level");
         }
+
+        requireCategoryValueExists(performanceRule.getLevel().getId());
+
+        Session session = PersistenceManager.getSession();
+        session.saveOrUpdate(performanceRule);
     }
 
     public void deletePerformanceRule(Long id) {
         AmpPerformanceRule performanceRule = getPerformanceRuleById(id);
 
-        try {
-            Session session = PersistenceManager.getSession();
-            session.delete(performanceRule);
-        } catch (HibernateException e) {
-            logger.error("Exception from deletePerformanceRule: " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        Session session = PersistenceManager.getSession();
+        session.delete(performanceRule);
     }
 
-	public PerformanceRulesAdminPage<AmpPerformanceRule> getAdminPage(long page, long size) {
-		List<AmpPerformanceRule> allPerformanceRules = getAllPerformanceRules();
+    public ResultPage<AmpPerformanceRule> getAdminPage(int page, int size) {
+        List<AmpPerformanceRule> allPerformanceRules = getAllPerformanceRules();
 
-		long recordsPerPage = size > 0 ? size : PerformanceRuleConstants.DEFAULT_RECORDS_PER_PAGE;
-		long start = page > 0 ? (page - 1) * 0 : PerformanceRuleConstants.DEFAULT_START_PAGE;
+        int recordsPerPage = size > 0 ? size : PerformanceRuleConstants.DEFAULT_RECORDS_PER_PAGE;
+        int start = page > 0 ? (page - 1) * recordsPerPage : 0;
+        
+        Session session = PersistenceManager.getSession();
 
-		List<AmpPerformanceRule> pagePerformanceRules = null;
+        List<AmpPerformanceRule> pagePerformanceRules = session.createCriteria(AmpPerformanceRule.class)
+                .addOrder(Order.asc("id"))
+                .setFirstResult(start)
+                .setMaxResults(recordsPerPage)
+                .list();;
 
-		if (allPerformanceRules.size() > 0) {
-			pagePerformanceRules = allPerformanceRules.stream()
-					.skip(start)
-					.limit(recordsPerPage)
-			        .collect(Collectors.toList());
-		}
+        ResultPage<AmpPerformanceRule> adminPage = new ResultPage<>();
+        adminPage.setPerformanceRules(pagePerformanceRules);
+        adminPage.setTotalRecords(allPerformanceRules.size());
 
-		PerformanceRulesAdminPage<AmpPerformanceRule> adminPage = new PerformanceRulesAdminPage<>();
-		adminPage.setPerformanceRules(pagePerformanceRules);
-		adminPage.setTotalRecords(allPerformanceRules.size());
-
-		return adminPage;
-	}
+        return adminPage;
+    }
 }

@@ -41,7 +41,10 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 	private Set<AmpActivityVersion> activities;
 	private Set<AmpStructureImg> images;
 	
-	public Set getActivities() {
+	@Interchangeable(fieldTitle="Coordinates",fmPath="/Activity Form/Structures")
+    private Set<AmpStructureCoordinate> coordinates;
+   
+    public Set getActivities() {
 		return activities;
 	}
 	public void setActivities(Set activities) {
@@ -224,7 +227,13 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 		this.images = images;
 	}
 
-	@Override
+	public Set<AmpStructureCoordinate> getCoordinates() {
+        return coordinates;
+    }
+    public void setCoordinates(Set<AmpStructureCoordinate> coordinates) {
+        this.coordinates = coordinates;
+    }
+    @Override
 	public String toString()
 	{
 		return String.format("AmpStructure[id=%s], title = %s, description = %s", this.ampStructureId, this.title, this.description);

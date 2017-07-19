@@ -48,7 +48,7 @@ public class PerfomanceRuleManager {
     			(AmpPerformanceRule) PersistenceManager.getSession().get(AmpPerformanceRule.class, id);
     	
     	if (performanceRule == null) {
-    		throw new PerformanceRuleException("Performance rule not found with id " + id);
+    		throw new PerformanceRuleException(PerformanceRulesErrors.PERFORMANCE_RULE_INVALID, String.valueOf(id));
     	}
     	
         return performanceRule;
@@ -58,7 +58,7 @@ public class PerfomanceRuleManager {
     	AmpCategoryValue acv = (AmpCategoryValue) PersistenceManager.getSession().get(AmpCategoryValue.class, id);
     	
     	if (acv == null) {
-    		throw new PerformanceRuleException("Level category not found with id " + id);
+    		throw new PerformanceRuleException(PerformanceRulesErrors.CATEGORY_VALUE_INVALID, String.valueOf(id));
     	}
     	
         return acv;
@@ -68,7 +68,7 @@ public class PerfomanceRuleManager {
     	getPerformanceRuleById(performanceRule.getId());
     	
     	if (performanceRule.getLevel() == null) {
-    		throw new PerformanceRuleException("Level category cannot be null");
+    		throw new PerformanceRuleException(PerformanceRulesErrors.REQUIRED_ATTRIBUTE, "level");
     	}
     	
     	requireCategoryValueExists(performanceRule.getLevel().getId());
@@ -85,7 +85,7 @@ public class PerfomanceRuleManager {
     public void savePerformanceRule(AmpPerformanceRule performanceRule) {
     	
     	if (performanceRule.getLevel() == null) {
-    		throw new PerformanceRuleException("Level category cannot be null");
+    		throw new PerformanceRuleException(PerformanceRulesErrors.REQUIRED_ATTRIBUTE, "level");
     	}
     	
     	requireCategoryValueExists(performanceRule.getLevel().getId());

@@ -846,12 +846,6 @@ public class ReportsUtil {
 	
 
 	public static String getUrl(AmpReports report) {
-		String prefix;
-		if (report.getType() != null && report.getType().equals((long) ArConstants.REGIONAL_TYPE)){
-			prefix = "/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=";
-		} else {
-			prefix = "/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/";
-		}
-		return prefix + report.getAmpReportId();
+		return "/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/" + report.getAmpReportId();
 	}
 }

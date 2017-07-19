@@ -87,13 +87,10 @@ function loadBaseMap() {
 	basemaps.on('change', function() {
 		setBasemap(this.value);
 	});
-	map.on('click', onMapClick);
-	map.on( "zoomend", function( e ) {
-		if (circlePoint != null) {
-		circlePoint.setRadius (pointRadious[map.getZoom()+1]);
-	    console.log( "zoom level is " + map.getZoom() );
-		}
-	});
+	
+	var drawnItems = L.featureGroup().addTo(map);
+	addDrawControls(drawnItems);
+	
 	
 }
 
@@ -121,18 +118,59 @@ function onMapClick (e) {
 	
 }
 
-function selectLocationCallerShape(selectedGraphic){
+function selectLocationCallerShape(selectedGraphic){	
 	var callerButton = window.opener.callerGisObject;
+	var shape = 'Point';
 	//Lat
-	callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1].value = "";
+	var latitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];	
+	latitudeInput.value = "";
 	//Long
-	callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2].value = "";
-	callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1].value = selectedGraphic.latlng.lat;
-	callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2].value =  selectedGraphic.latlng.lng;
-	element = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];
-	window.opener.postvaluesy(element);
-    element = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2];
-    window.opener.postvaluesx(element);
+	var longitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2];
+	longitudeInput.value = "";
+	
+	var coordsInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[3];
+	coordsInput.value = "";
+	
+	var shapeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[5];
+	shapeInput.value = "";
+	
+    if(selectedPointEvent.target instanceof L.Marker) {
+    	latitudeInput.value = selectedGraphic.latlng.lat;
+    	longitudeInput.value =  selectedGraphic.latlng.lng; 
+    	shapeInput.value = 'Point';
+    	window.opener.postvaluesy(latitudeInput);
+        window.opener.postvaluesx(longitudeInput);  
+        window.opener.postvaluesx(shapeInput); 
+	} else {
+		var latLngs = selectedGraphic.target.getLatLngs();
+		var data = []
+		for(i = 0; i < latLngs.length; i++){
+			var obj = {}
+			obj.latitude = latLngs[i].lat;
+			obj.longitude = latLngs[i].lng;
+			data.push(obj)
+		}
+		coordsInput.value =  JSON.stringify(data);		
+	    window.opener.postvaluesx(coordsInput);
+	    if ("createEvent" in document) {
+	        var evt = document.createEvent("HTMLEvents");
+	        evt.initEvent("change", false, true);
+	        coordsInput.dispatchEvent(evt);
+	    } else {
+	    	coordsInput.fireEvent("onchange");
+	    } 
+	    
+	    if( selectedPointEvent.target instanceof L.Polyline) {
+	    	if (selectedPointEvent.target instanceof L.Polygon) {
+	    		shapeInput.value = 'Polygon';
+	    	} else {
+	    		shapeInput.value = 'Polyline';
+	    	}	    	
+	    }
+	    
+	    window.opener.postvaluesx(shapeInput);	    
+	}
+ 
 	window.close();
 }
 
@@ -222,6 +260,40 @@ function setBasemap(basemap) {
 	}
 }
 
+
+
+function addDrawControls(drawnItems) {
+	 map.addControl(new L.Control.Draw({
+	        edit: {
+	            featureGroup: drawnItems,
+	            poly: {
+	                allowIntersection: false
+	            }
+	        },
+	        draw: {
+	            polygon: {
+	                allowIntersection: false,
+	                showArea: true
+	            }
+	        }
+	    }));
+	 
+	 
+	 map.on(L.Draw.Event.CREATED, function (event) {
+	        var layer = event.layer;
+	        layer.on('contextmenu', function(e) {
+	        	e.layerz = layer;
+	        	selectedPointEvent = e;
+            	isMenuOpen = true;
+       	        var y = e.originalEvent.clientY;
+       	        var x = e.originalEvent.clientX;
+       		    showMenu (y,x);
+            	
+            });
+	        drawnItems.addLayer(layer);
+	    });
+}
+
 /**
  * Checks if the geometry's type combobox contains the option value received as a parameter
  * @param searchtext, the select options's value to search for
@@ -248,21 +320,6 @@ function filterLocation (value) {
 			searchLocationsLayer.removeLayer (layer);
 		} 
 	});
-
-}
-
-function createPoint () {
-	isDrawActive = true;
-	$('#map').css("cursor","pointer");
-	$('#pointBtn').addClass("button-pressed");
-	$('#deactivateBtn').removeClass("button-pressed");
-}
-
-function deactivate () {
-	isDrawActive = false;
-	$('#map').css("cursor","-webkit-grab");
-	$('#deactivateBtn').addClass("button-pressed");
-	$('#pointBtn').removeClass("button-pressed");
 
 }
 

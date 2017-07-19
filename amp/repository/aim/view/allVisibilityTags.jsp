@@ -837,6 +837,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Recievers" feature="Create Message Form"></field:display>
 <field:display name="Country" feature="Location"></field:display>  
 <field:display name="Region" feature="Location"></field:display>
+<field:display name="Regional Region" feature="Location"></field:display>
 <field:display name="District" feature="Location"></field:display>
 <field:display name="Zone" feature="Location"></field:display>
 <field:display name="Regional Funding Tab" feature="Regional Funding"></field:display> 

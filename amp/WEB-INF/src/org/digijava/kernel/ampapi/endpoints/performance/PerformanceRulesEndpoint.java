@@ -12,6 +12,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 
 /**
@@ -22,33 +24,37 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 @Path("performance")
 public class PerformanceRulesEndpoint {
 
-    PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+    private PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
 
     @GET
     @Path("rules")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public List<AmpPerformanceRule> getPerformanceRules() {
-        return performanceRuleManager.getAllPerformanceRules();
+    @ApiMethod(ui = false, id = "getRules", authTypes = { AuthRule.IN_ADMIN })
+    public List<AmpPerformanceRule> getRules() {
+        return performanceRuleManager.getPerformanceRules();
     }
 
     @GET
     @Path("rules/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public AmpPerformanceRule getPerformanceRule(@PathParam("id") long id) {
+    @ApiMethod(ui = false, id = "getRule", authTypes = { AuthRule.IN_ADMIN })
+    public AmpPerformanceRule getRule(@PathParam("id") long id) {
         return performanceRuleManager.getPerformanceRuleById(id);
     }
 
     @POST
     @Path("rules")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public void savePerformanceRule(AmpPerformanceRule performanceRule) {
+    @ApiMethod(ui = false, id = "saveRule", authTypes = { AuthRule.IN_ADMIN })
+    public void saveRule(AmpPerformanceRule performanceRule) {
         performanceRuleManager.savePerformanceRule(performanceRule);
     }
 
     @PUT
     @Path("rules/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public void updatePerformanceRule(@PathParam("id") long id, AmpPerformanceRule performanceRule) {
+    @ApiMethod(ui = false, id = "updateRule", authTypes = { AuthRule.IN_ADMIN })
+    public void updateRule(@PathParam("id") long id, AmpPerformanceRule performanceRule) {
         performanceRule.setId(id);
         performanceRuleManager.updatePerformanceRule(performanceRule);
     }
@@ -56,16 +62,17 @@ public class PerformanceRulesEndpoint {
     @DELETE
     @Path("rules/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public void deletePerformanceRule(@PathParam("id") long id) {
+    @ApiMethod(ui = false, id = "deleteRule", authTypes = { AuthRule.IN_ADMIN })
+    public void deleteRule(@PathParam("id") long id) {
         performanceRuleManager.deletePerformanceRule(id);
     }
 
     @GET
     @Path("admin")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public ResultPage<AmpPerformanceRule> getResultsPage(@QueryParam("page") int page, @QueryParam("size") int size) {
-
-        return performanceRuleManager.getAdminPage(page, size);
+    @ApiMethod(ui = false, id = "getRulesPage", authTypes = { AuthRule.IN_ADMIN })
+    public ResultPage<AmpPerformanceRule> getRulesPage(@QueryParam("page") int page, @QueryParam("size") int size) {
+        return performanceRuleManager.getPerformanceRules(page, size);
     }
 
 }

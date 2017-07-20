@@ -9,6 +9,7 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 
 /**
  * 
@@ -31,15 +32,6 @@ public class PerfomanceRuleManager {
         }
 
         return performanceRuleManager;
-    }
-
-    public List<AmpPerformanceRule> getAllPerformanceRules() {
-
-        Session session = PersistenceManager.getSession();
-
-        return session.createCriteria(AmpPerformanceRule.class)
-                .addOrder(Order.asc("id"))
-                .list();
     }
 
     public AmpPerformanceRule getPerformanceRuleById(Long id) {
@@ -94,9 +86,17 @@ public class PerfomanceRuleManager {
         Session session = PersistenceManager.getSession();
         session.delete(performanceRule);
     }
+    
+    public List<AmpPerformanceRule> getPerformanceRules() {
 
-    public ResultPage<AmpPerformanceRule> getAdminPage(int page, int size) {
-        List<AmpPerformanceRule> allPerformanceRules = getAllPerformanceRules();
+        Session session = PersistenceManager.getSession();
+
+        return session.createCriteria(AmpPerformanceRule.class)
+                .addOrder(Order.asc("id"))
+                .list();
+    }
+
+    public ResultPage<AmpPerformanceRule> getPerformanceRules(int page, int size) {
 
         int recordsPerPage = size > 0 ? size : PerformanceRuleConstants.DEFAULT_RECORDS_PER_PAGE;
         int start = page > 0 ? (page - 1) * recordsPerPage : 0;
@@ -107,12 +107,16 @@ public class PerfomanceRuleManager {
                 .addOrder(Order.asc("id"))
                 .setFirstResult(start)
                 .setMaxResults(recordsPerPage)
-                .list();;
+                .list();
+        
+        int totalRecords = (int) session.createCriteria(AmpPerformanceRule.class)
+                .setProjection(Projections.rowCount())
+                .uniqueResult();
 
-        ResultPage<AmpPerformanceRule> adminPage = new ResultPage<>();
-        adminPage.setPerformanceRules(pagePerformanceRules);
-        adminPage.setTotalRecords(allPerformanceRules.size());
+        ResultPage<AmpPerformanceRule> resultPage = new ResultPage<>();
+        resultPage.setItems(pagePerformanceRules);
+        resultPage.setTotalRecords(totalRecords);
 
-        return adminPage;
+        return resultPage;
     }
 }

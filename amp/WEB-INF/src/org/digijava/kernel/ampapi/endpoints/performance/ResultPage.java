@@ -16,7 +16,7 @@ import org.codehaus.jackson.annotate.JsonPropertyOrder;
 public class ResultPage<T> {
 
     @JsonProperty(value = "data")
-    private List<T> performanceRules = new ArrayList<>();
+    private List<T> items = new ArrayList<>();
 
     @JsonProperty(value = "totalRecords")
     private int totalRecords = 0;
@@ -25,15 +25,15 @@ public class ResultPage<T> {
         return totalRecords;
     }
 
-    public void setTotalRecords(Integer totalRecords) {
+    public void setTotalRecords(int totalRecords) {
         this.totalRecords = totalRecords;
     }
 
-    public List<T> getPerformanceRules() {
-        return performanceRules;
+    public List<T> getItems() {
+        return items;
     }
 
-    public void setPerformanceRules(List<T> performanceRules) {
-        this.performanceRules = performanceRules;
+    public void setItems(List<T> items) {
+        this.items = items;
     }
 }

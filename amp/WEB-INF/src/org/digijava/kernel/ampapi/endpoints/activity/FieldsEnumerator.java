@@ -11,7 +11,6 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -26,7 +25,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.h2.util.StringUtils;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
@@ -43,6 +42,7 @@ public class FieldsEnumerator {
 	public static Map<Field, Integer> fieldMaxLengths;
 	
 	private boolean internalUse = false;
+	private String iatiIdentifierField;
 	private TranslationSettings trnSettings = TranslationSettings.getCurrent();
 	
 	static {
@@ -56,6 +56,7 @@ public class FieldsEnumerator {
 	 */
 	public FieldsEnumerator(boolean internalUse) {
 		this.internalUse = internalUse;
+		this.iatiIdentifierField = InterchangeUtils.getAmpIatiIdentifierFieldName();
 	}
 	
 	/**
@@ -159,7 +160,8 @@ public class FieldsEnumerator {
 			return null;
 		
 		JsonBean bean = new JsonBean();
-		bean.set(ActivityEPConstants.FIELD_NAME, InterchangeUtils.underscorify(interchangeable.fieldTitle()));
+		String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
+		bean.set(ActivityEPConstants.FIELD_NAME, fieldTitle);
 		if (interchangeable.id()) {
 			bean.set(ActivityEPConstants.ID, interchangeable.id());
 		}
@@ -174,10 +176,15 @@ public class FieldsEnumerator {
 
 		}
 		
-
 		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
 		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field, intchStack));
 		bean.set(ActivityEPConstants.IMPORTABLE, interchangeable.importable());
+		
+		if (isFieldIatiIdentifier(fieldTitle)) {
+			bean.set(ActivityEPConstants.REQUIRED, ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
+			bean.set(ActivityEPConstants.IMPORTABLE, true);
+		}
+		
 		if (interchangeable.percentageConstraint()){
 			bean.set(ActivityEPConstants.PERCENTAGE, true);
 		}
@@ -373,6 +380,16 @@ public class FieldsEnumerator {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Decides whether a field stores iati-identifier value
+	 *  
+	 * @param fieldName
+	 * @return true if is iati-identifier
+	 */
+	private boolean isFieldIatiIdentifier(String fieldName) {
+		return StringUtils.equals(this.iatiIdentifierField, fieldName);
 	}
 	
 }

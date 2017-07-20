@@ -5,7 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 
-
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +32,10 @@ import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingDetailReportingDateComparator;
+import org.digijava.module.aim.helper.FundingDetailTransactionDateComparator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -43,7 +47,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 public abstract class AmpDonorFormTableFeaturePanel extends
 	AmpFundingFormTableFeaturePanel<AmpFunding, AmpFundingDetail> {
 
-	 private static Logger logger = Logger.getLogger(AmpDonorFormTableFeaturePanel.class);
+	private static Logger logger = Logger.getLogger(AmpDonorFormTableFeaturePanel.class);
 	
 	protected IModel<Set<AmpFundingDetail>> parentModel;
 	protected IModel<Set<AmpFundingDetail>> setModel;
@@ -71,7 +75,6 @@ public abstract class AmpDonorFormTableFeaturePanel extends
             }
         };
 	}
-
 
 	protected AmpCategorySelectFieldPanel getAdjustmentTypeComponent(
 			IModel<AmpFundingDetail> model, int transactionType) {
@@ -126,6 +129,8 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 						CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
 						 false, false, false, dependantModel, false);
 			adjustmentTypes.getChoiceContainer().setRequired(true);
+			// adjustment type shouldn't be affected by overall freezing
+			adjustmentTypes.setAffectedByFreezing(false);
 			return adjustmentTypes;
 		}catch(Exception e)
 		{
@@ -188,6 +193,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 		exchangeRate.setOutputMarkupId(true);
 		exchangeRate.setIgnorePermissions(true);
 		exchangeRate.setEnabled(fixedRate.getObject());
+		exchangeRate.setAffectedByFreezing(false);
 		item.add(exchangeRate);
 	
 		@SuppressWarnings("serial")

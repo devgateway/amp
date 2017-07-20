@@ -71,6 +71,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
@@ -2926,6 +2927,12 @@ public class ExportActivityToPDF extends Action {
                             if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment"))
                             {
                                 addNewInfoCell(fundingTable, "Mode of Payment", funding.getModeOfPayment());
+                            }
+                            
+                            // Concessionality Level
+                            if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level"))
+                            {
+                                addNewInfoCell(fundingTable, "Concessionality Level", funding.getConcessionalityLevel());
                             }
 
                             //always display FundingClassification Date, if it has been entered

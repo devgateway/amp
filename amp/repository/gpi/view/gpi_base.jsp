@@ -47,8 +47,9 @@
 			<digi:errors />
 		
 			
-			<%String reportId = request.getParameter("reportId");%>
+			<c:set var="reportId" value="${ gpiForm.gpiReport.indicatorCode}" />
 			<digi:form action="/gpi.do" type="org.digijava.module.gpi.form.GPIForm" name="gpiForm">
+			 
 				<c:choose>
 			    <c:when test="${not empty gpiForm.gpiReport}">  
 				    <jsp:include page="viewGPIPopupScripts.jsp" />
@@ -70,7 +71,7 @@
 				    <html:hidden property="printPreview" value="false"/>
 					<html:hidden property="exportPDF" value="false"/>
 					<html:hidden property="exportXLS" value="false"/>
-				    <html:hidden property="reportId" value="<%=reportId%>"/>
+				    <html:hidden property="reportId" value="${gpiForm.gpiReport.indicatorCode}"/>
 				    
 					<table width="1000" border="0" cellpadding="10" cellspacing="0" bgcolor="#F2F2F2" style="border-color: #D0D0D0; border-width: 1px 1px 1px 1px; border-style: solid;" align="center">
 						<tr>
@@ -199,7 +200,8 @@
 					                            <logic:notEmpty name="gpiForm" property="availableGPIReports">
 				                                	<ul class="yui-nav" id="MyTabs">
 				                                    	<logic:iterate id="element" name="gpiForm" property="availableGPIReports" indexId="index">
-															<%String selected = ""; 
+				                                    	<feature:display name="GPI 2014 - Indicator ${element.indicatorCode}" module="GPI 2014">
+				                                    	<%String selected = ""; 
 															String style = "background: none; background-color: #E0E0E0;";
 															String aStyle = "color: #376091;";%>
 				                                            <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="${element.indicatorCode}">
@@ -213,7 +215,9 @@
 				                                                       	<digi:trn>Indicator</digi:trn>&nbsp;<bean:write name="element" property="indicatorCode"/>
 				                                                    </div>
 				                                                </digi:link>
-				                                            </li>
+				                                            </li> 
+				                                    	</feature:display>
+															
 														</logic:iterate>
 				                                 	</ul>
 				                            	</logic:notEmpty>		                        
@@ -233,19 +237,27 @@
 										                    	</tr>
 										                  	</table>
 										        
-									                       	<div id="reportContent" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">
+									                       	<div id="reportContent" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">                                                            
+                                                             <feature:display name="GPI 2014 - Indicator 1" module="GPI 2014">  
 										                    	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="1">
 																	<jsp:include page="gpi_1.jsp"></jsp:include>
 										                       	</logic:equal>
+										                       	</feature:display>
+										                       	<feature:display name="GPI 2014 - Indicator 5a" module="GPI 2014">  
 									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="5a">
 									                            	<jsp:include page="gpi_5a.jsp"></jsp:include>
 									                           	</logic:equal>
+									                           	</feature:display>
+									                           	<feature:display name="GPI 2014 - Indicator 6" module="GPI 2014">
 									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="6">
 									                            	<jsp:include page="gpi_6.jsp"></jsp:include>
 									                           	</logic:equal>
+									                           	</feature:display>
+									                           	<feature:display name="GPI 2014 - Indicator 9b" module="GPI 2014">
 									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="9b">
 									                               	<jsp:include page="gpi_9b.jsp"></jsp:include>
 									                           	</logic:equal>
+									                           	</feature:display>
 								                           </div>							                           
 								                    	</td>
 								                	</tr>

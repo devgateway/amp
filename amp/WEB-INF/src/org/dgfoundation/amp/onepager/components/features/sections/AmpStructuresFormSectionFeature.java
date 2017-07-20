@@ -6,15 +6,20 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -24,11 +29,14 @@ import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpHiddenFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -88,7 +96,36 @@ public class AmpStructuresFormSectionFeature extends
 //                structureTypes.getChoiceContainer().add(new AttributeModifier("style", "max-width: 100px;margin-bottom:20px;"));
 //				item.add(structureTypes);
 //				
-
+				                
+             final TextField<String> coords = new TextField<String>("coords", new PropertyModel<String>(structureModel, "coords"));            
+             coords.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                      if(coords.getDefaultModelObject() != null) {
+                          JsonBean data = JsonBean.getJsonBeanFromString(coords.getDefaultModelObject().toString());
+                          List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
+                          if(structureModel.getObject() == null) {
+                              structureModel.getObject().setCoordinates(new HashSet<>());
+                          } else {
+                              structureModel.getObject().getCoordinates().clear();
+                          }                                                   
+                          if (coordinates != null) {
+                              for (Map<String, String> pair : coordinates) {
+                                  AmpStructureCoordinate ampStructureCoordinate = new AmpStructureCoordinate();
+                                  ampStructureCoordinate.setStructure(structureModel.getObject());
+                                  ampStructureCoordinate.setLatitude(String.valueOf(pair.get("latitude")));
+                                  ampStructureCoordinate.setLongitude(String.valueOf(pair.get("longitude")));
+                                  structureModel.getObject().getCoordinates().add(ampStructureCoordinate);
+                              }
+                          }
+                          
+                          System.out.println(coords.getDefaultModelObject().toString());  
+                      }                     
+                    }
+                });
+                
+                coords.setOutputMarkupId(true);                                
+                item.add(coords);
 				
 				final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(structureModel, "title"), "Structure Title",true, true);
 				name.setOutputMarkupId(true);
@@ -132,6 +169,7 @@ public class AmpStructuresFormSectionFeature extends
 				
 				shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
 				item.add(shape);
+				
 				
 				//final AmpStructureImgListComponent<AmpStructure> imgList = new AmpStructureImgListComponent<AmpStructure>("structureImgList", "", structureModel, am);
 				//item.add(imgList);

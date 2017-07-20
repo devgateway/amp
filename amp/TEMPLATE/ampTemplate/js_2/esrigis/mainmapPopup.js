@@ -128,7 +128,7 @@ function selectLocationCallerShape(selectedGraphic){
 	var longitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2];
 	longitudeInput.value = "";
 	
-	var coordsInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[3];
+	var coordsInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[4];
 	coordsInput.value = "";
 	
 	var shapeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[5];
@@ -140,7 +140,10 @@ function selectLocationCallerShape(selectedGraphic){
     	shapeInput.value = 'Point';
     	window.opener.postvaluesy(latitudeInput);
         window.opener.postvaluesx(longitudeInput);  
-        window.opener.postvaluesx(shapeInput); 
+        window.opener.postvaluesx(shapeInput);         
+        coordsInput.value =  JSON.stringify({'coordinates': []});		
+	    window.opener.postvaluesx(coordsInput);
+	    
 	} else {
 		var latLngs = selectedGraphic.target.getLatLngs();
 		var data = []
@@ -149,27 +152,26 @@ function selectLocationCallerShape(selectedGraphic){
 			obj.latitude = latLngs[i].lat;
 			obj.longitude = latLngs[i].lng;
 			data.push(obj)
-		}
-		coordsInput.value =  JSON.stringify(data);		
-	    window.opener.postvaluesx(coordsInput);
-	    if ("createEvent" in document) {
-	        var evt = document.createEvent("HTMLEvents");
-	        evt.initEvent("change", false, true);
-	        coordsInput.dispatchEvent(evt);
-	    } else {
-	    	coordsInput.fireEvent("onchange");
-	    } 
-	    
+		}		
+		coordsInput.value =  JSON.stringify({'coordinates': data});		
+	    window.opener.postvaluesx(coordsInput);    
 	    if( selectedPointEvent.target instanceof L.Polyline) {
 	    	if (selectedPointEvent.target instanceof L.Polygon) {
 	    		shapeInput.value = 'Polygon';
 	    	} else {
 	    		shapeInput.value = 'Polyline';
 	    	}	    	
-	    }
-	    
+	    }	    
 	    window.opener.postvaluesx(shapeInput);	    
 	}
+   
+    if ("createEvent" in document) {
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("change", false, true);
+        coordsInput.dispatchEvent(evt);
+    } else {
+    	coordsInput.fireEvent("onchange");
+    } 
  
 	window.close();
 }

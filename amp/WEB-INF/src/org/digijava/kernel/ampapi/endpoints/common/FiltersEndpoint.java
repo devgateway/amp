@@ -306,7 +306,7 @@ public class FiltersEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = ColumnConstants.ACTUAL_APPROVAL_DATE, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
 			id = FiltersConstants.ACTUAL_APPROVAL_DATE, filterType = {
-			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+			FilterType.REPORTS, FilterType.TAB, FilterType.GPI_REPORTS }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getActualApprovalDate() {
 		return new JsonBean();
 	}	

@@ -558,6 +558,20 @@ public class FiltersEndpoint {
 	public JsonBean getExpenditureClass() {
 		return getCategoryValue(CategoryConstants.EXPENDITURE_CLASS_KEY, ColumnConstants.EXPENDITURE_CLASS);
 	}
+	
+	/**
+	 * Funding concessionality level information
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/concessionalityLevel/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, id = FiltersConstants.CONCESSIONALITY_LEVEL, columns = ColumnConstants.CONCESSIONALITY_LEVEL,
+			name="Concessionality Level", tab=EPConstants.TAB_FINANCIALS)
+	public JsonBean getConcessionalityLevel() {
+		return getCategoryValue(CategoryConstants.CONCESSIONALITY_LEVEL_KEY, ColumnConstants.CONCESSIONALITY_LEVEL);
+	}
 
 	/**
 	 * Return financing instruments 

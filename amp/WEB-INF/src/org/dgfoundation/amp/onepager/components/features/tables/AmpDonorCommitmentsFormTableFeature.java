@@ -28,6 +28,7 @@ import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingDetailComparator;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
@@ -39,6 +40,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 		AmpDonorFormTableFeaturePanel {
 
 	private boolean alertIfDisbursmentBiggerCommitments = false;
+
 	/**
 	 * @param id
 	 * @param model
@@ -50,7 +52,8 @@ public class AmpDonorCommitmentsFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.COMMITMENT, 7);
 
-		list = new ListEditor<AmpFundingDetail>("listCommitments", setModel, new AmpFundingDetail.FundingDetailComparator()) {
+		list = new ListEditor<AmpFundingDetail>("listCommitments", setModel, FundingDetailComparator
+				.getFundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
 					ListItem<AmpFundingDetail> item) {

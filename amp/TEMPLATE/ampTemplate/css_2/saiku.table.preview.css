@@ -1,5 +1,4 @@
 body {
-	font-family: arial unicode ms;
 	margin-right: 10px;
 	margin-left: 10px;
 	padding-top: 10px;
@@ -16,18 +15,21 @@ table {
 }
 
 th, td {
-	padding-top: 10px;
+	vertical-align: center;
+	font-size: 9px;
+}
+
+td.text {
+	vertical-align: center;
+	font-size: 9px;
 	padding-bottom: 5px;
 	padding-left: 5px;
 	padding-right: 5px;
 	border: 1px solid #D5D5D5;
 	border: 1px solid #D5D5D5;
-	vertical-align: center;
-	font-size: 9px;
 }
 
 th {
-	/*border: 1px solid #D5D5D5;*/
 	margin-bottom: 0px;
 	text-align: center;
 	font-size: 10px;

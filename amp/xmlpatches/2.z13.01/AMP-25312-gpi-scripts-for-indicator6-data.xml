@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-25312</jira>
+	<keyword>Populate tables with indicator 6 data</keyword>
+	<author>gmutuhu</author>
+	<description>Populate tables with indicator 6 data</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+			
+				INSERT INTO amp_gpi_ni_indicator(amp_gpi_ni_indicator_id, code, name, description)
+			    VALUES (nextval('amp_gpi_ni_indicator_seq'), '6', 'Indicator 6', '% of aid scheduled for disbursement that is recorded in the annual budgets approved by the legislatures of developing countries');
+		    
+		    </lang>
+		</script>
+	</apply>
+</tns:patch>

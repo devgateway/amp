@@ -80,6 +80,7 @@ public class AmpMTEFProjectionSubsectionFeature extends AmpSubsectionFeatureFund
 				target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
 			}
 		};
+		addMTEF.setAffectedByFreezing(false);
 		add(addMTEF);
 		
 	}

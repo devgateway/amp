@@ -104,10 +104,11 @@ public class AmpStructuresFormSectionFeature extends
                       if(coords.getDefaultModelObject() != null) {
                           JsonBean data = JsonBean.getJsonBeanFromString(coords.getDefaultModelObject().toString());
                           List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
-                          if(structureModel.getObject() == null) {
-                              structureModel.getObject().setCoordinates(new HashSet<>());
+                          AmpStructure structure = structureModel.getObject();
+                          if(structure.getCoordinates() == null) {
+                              structure.setCoordinates(new HashSet<AmpStructureCoordinate>());
                           } else {
-                              structureModel.getObject().getCoordinates().clear();
+                              structure.getCoordinates().clear();                              
                           }                                                   
                           if (coordinates != null) {
                               for (Map<String, String> pair : coordinates) {
@@ -115,11 +116,10 @@ public class AmpStructuresFormSectionFeature extends
                                   ampStructureCoordinate.setStructure(structureModel.getObject());
                                   ampStructureCoordinate.setLatitude(String.valueOf(pair.get("latitude")));
                                   ampStructureCoordinate.setLongitude(String.valueOf(pair.get("longitude")));
-                                  structureModel.getObject().getCoordinates().add(ampStructureCoordinate);
+                                  structure.getCoordinates().add(ampStructureCoordinate);
                               }
-                          }
-                          
-                          System.out.println(coords.getDefaultModelObject().toString());  
+                          }  
+                            
                       }                     
                     }
                 });

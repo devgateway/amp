@@ -238,6 +238,7 @@
         
         <!-- Performance Rules -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpPerformanceRule</hibernate-class>
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute</hibernate-class>
         
         <!-- Allowed MimeTypes -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpFileType</hibernate-class>

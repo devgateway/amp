@@ -33,6 +33,10 @@ public class GisConstants {
 	public static final String ADM2 = "adm-2";
 	public static final String ADM3 = "adm-3";
 	
+	public static final String GIS_STRUCTURE_POLYGON = "Polygon";
+	public static final String GIS_STRUCTURE_POINT = "Point";
+	public static final String GIS_STRUCTURE_POLYLINE = "Polyline";
+	
 	/**
 	 * The order is important - this is the priority order between measures, 
 	 * that is used to convert the report config to gis funding type option   

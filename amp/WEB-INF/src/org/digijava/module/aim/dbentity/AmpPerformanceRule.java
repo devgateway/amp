@@ -1,5 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
+import java.util.List;
+import java.util.Set;
+
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.digijava.kernel.ampapi.endpoints.performance.AmpCategoryValueSerializer;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -15,7 +20,7 @@ public class AmpPerformanceRule {
     private Long id;
 
     private String name;
-    
+
     private String description;
 
     private String typeClassName;
@@ -24,6 +29,9 @@ public class AmpPerformanceRule {
 
     @JsonSerialize(using = AmpCategoryValueSerializer.class)
     private AmpCategoryValue level;
+
+    @JsonManagedReference
+    private Set<AmpPerformanceRuleAttribute> attributes;
 
     public Long getId() {
         return id;
@@ -71,6 +79,14 @@ public class AmpPerformanceRule {
 
     public void setLevel(AmpCategoryValue level) {
         this.level = level;
+    }
+
+    public Set<AmpPerformanceRuleAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Set<AmpPerformanceRuleAttribute> attributes) {
+        this.attributes = attributes;
     }
 
     @Override

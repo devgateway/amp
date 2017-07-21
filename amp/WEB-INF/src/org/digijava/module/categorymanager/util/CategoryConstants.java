@@ -145,6 +145,9 @@ public class CategoryConstants {
 	
 	public static final String INDICATOR_LAYER_TYPE_NAME = "Indicator Layer Type"; 
 	public static final String INDICATOR_LAYER_TYPE_KEY = "indicator_layer_type";
+	
+	public static final String PERFORMANCE_LEVEL_NAME = "Performance Level"; 
+	public static final String PERFORMANCE_LEVEL_KEY = "performance_level";
 
 	public static final long NONE_TYPE		= 0;
 	public static final long COUNTRY_TYPE	= 1;

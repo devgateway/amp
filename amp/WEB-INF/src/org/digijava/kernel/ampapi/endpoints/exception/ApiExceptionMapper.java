@@ -1,7 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.exception;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -29,18 +32,18 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     
     @Override
     public Response toResponse(Exception e) {
+        String mediaType = Optional.ofNullable(httpRequest.getContentType()).orElse(MediaType.APPLICATION_JSON);
         
         if (e instanceof ApiRuntimeException) {
     		ApiRuntimeException apiException = (ApiRuntimeException) e;
     		
     		return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(), 
-    				httpRequest.getContentType());
+    		        mediaType);
     	}
         
         ApiErrorMessage apiErrorMessage = getApiErrorMessageFromException(e);
        
-        return ApiErrorResponse.buildGenericError(Response.Status.INTERNAL_SERVER_ERROR, apiErrorMessage,
-        		httpRequest.getContentType());
+        return ApiErrorResponse.buildGenericError(Response.Status.INTERNAL_SERVER_ERROR, apiErrorMessage, mediaType);
     }
     
     /**

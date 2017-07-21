@@ -1,9 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.performance;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatcher;
+import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatcherAttribute;
+import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatchers;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -39,7 +42,7 @@ public class PerfomanceRuleManager {
                 .get(AmpPerformanceRule.class, id);
 
         if (performanceRule == null) {
-            throw new PerformanceRuleException(PerformanceRulesErrors.PERFORMANCE_RULE_INVALID, String.valueOf(id));
+            throw new PerformanceRuleException(PerformanceRulesErrors.RULE_INVALID, String.valueOf(id));
         }
 
         return performanceRule;
@@ -118,5 +121,21 @@ public class PerfomanceRuleManager {
         resultPage.setTotalRecords(totalRecords);
 
         return resultPage;
+    }
+
+    public List<PerformanceRuleMatcherAttribute> getAttributes(String type) {
+        Optional<PerformanceRuleMatcher> optionalMatcher = PerformanceRuleMatchers.RULE_TYPES.stream()
+                .filter(m -> m.getName().equals(type))
+                .findAny();
+        
+        if (!optionalMatcher.isPresent()) {
+            throw new PerformanceRuleException(PerformanceRulesErrors.RULE_TYPE_INVALID, type);
+        }
+
+        return optionalMatcher.get().getAttributes();
+    }
+
+    public List<PerformanceRuleMatcher> getTypes() {
+        return PerformanceRuleMatchers.RULE_TYPES;
     }
 }

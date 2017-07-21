@@ -67,6 +67,7 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
+import org.digijava.migration.HondurasLocations;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.translation.util.HashKeyPatch;
 import org.digijava.module.xmlpatcher.core.SimpleSQLPatcher;
@@ -191,6 +192,8 @@ public class ConfigLoaderListener
 			logger.error("Failed to write error message to startup log: " + e.getMessage());
 			e.printStackTrace();
 		}
+
+        HondurasLocations.run(sce.getServletContext());
     }
 
 	/**

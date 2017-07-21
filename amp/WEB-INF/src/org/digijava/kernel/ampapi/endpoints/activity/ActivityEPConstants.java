@@ -86,4 +86,8 @@ public class ActivityEPConstants {
 	public static final String DISBURSEMENTS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Disbursements/Disbursements Table/Pledges";
 	public static final String ESTIMATED_DISBURSEMENTS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Estimated Disbursements/Estimated Disbursements Table/Pledges";
 	public static final String RELEASE_OF_FUNDS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Release of Funds/Release of Funds Table/Pledges";
+
+	public static final String AF_ID_FM_PATH = "/Activity Form/Identification";
+	public static final String DONOR_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Donor Project Code";
+	public static final String BUDGET_EXTRAS_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Budget Extras/Project Code";
 }

@@ -59,7 +59,7 @@ public class FieldsEnumerator {
 	private TranslatorService translatorService;
 
 	private String iatiIdentifierField;
-	
+
 	/**
 	 * Fields Enumerator
 	 * 
@@ -125,7 +125,7 @@ public class FieldsEnumerator {
 			apiField.setImportable(true);
 		}
 		
-		if (isFieldIatiIdentifier(fieldTitle)) {
+		if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
 		    apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
 		    apiField.setImportable(true);
         }
@@ -219,7 +219,7 @@ public class FieldsEnumerator {
 			}
 			intchStack.push(interchangeable);
 			if (!InterchangeUtils.isCompositeField(field)) {
-				if (fmService.isVisible(interchangeable.fmPath(), intchStack)) {
+				if (isVisible(interchangeable.fmPath(), intchStack)) {
 					APIField descr = describeField(field, intchStack);
 					if (descr != null) {
 						result.add(descr);
@@ -230,7 +230,7 @@ public class FieldsEnumerator {
 				Interchangeable[] settings = discriminator.settings();
 				for (int i = 0; i < settings.length; i++) {
 					String fmPath = settings[i].fmPath();
-					if (fmService.isVisible(fmPath, intchStack)) {
+					if (isVisible(fmPath, intchStack)) {
 						intchStack.push(settings[i]);
 						APIField descr = describeField(field, intchStack);
 						if (descr != null) {
@@ -280,7 +280,7 @@ public class FieldsEnumerator {
 		Field[] fields = genericClass.getDeclaredFields();
 		for (Field f : fields) {
 			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-			if (interchangeable != null && fmService.isVisible(interchangeable.fmPath(), intchStack)
+			if (interchangeable != null && isVisible(interchangeable.fmPath(), intchStack)
 					&& interchangeable.percentageConstraint()) {
 				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			}
@@ -297,7 +297,7 @@ public class FieldsEnumerator {
 		Field[] fields = genericClass.getDeclaredFields();
 		for (Field f : fields) {
 			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-			if (interchangeable != null && fmService.isVisible(interchangeable.fmPath(), intchStack)
+			if (interchangeable != null && isVisible(interchangeable.fmPath(), intchStack)
 					&& interchangeable.uniqueConstraint()) {
 				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			}
@@ -348,14 +348,14 @@ public class FieldsEnumerator {
 			if (ant != null) {
 				context.interchangeableStack.push(ant);
 				if (!InterchangeUtils.isCompositeField(field)) {
-					if (fmService.isVisible(ant.fmPath(), context.interchangeableStack)) {
+					if (isVisible(ant.fmPath(), context.interchangeableStack)) {
 						visit(field, InterchangeUtils.underscorify(ant.fieldTitle()), ant, visitor, context);
 					}
 				} else {
 					InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
 					Interchangeable[] settings = antd.settings();
 					for (Interchangeable ants : settings) {
-						if (fmService.isVisible(ants.fmPath(), context.interchangeableStack)) {
+						if (isVisible(ants.fmPath(), context.interchangeableStack)) {
 							context.interchangeableStack.push(ants);
 							visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ant, visitor, context);
 							context.interchangeableStack.pop();
@@ -396,7 +396,7 @@ public class FieldsEnumerator {
 		if (required.equals(ActivityEPConstants.REQUIRED_ALWAYS)) {
 			requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 		} else if (required.equals(ActivityEPConstants.REQUIRED_ND)
-				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && fmService.isVisible(required, intchStack))
+				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && isVisible(required, intchStack))
 				|| (hasRequiredValidatorEnabled(intchStack))) {
 			requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 		}
@@ -484,7 +484,7 @@ public class FieldsEnumerator {
 		}
 
 		if (StringUtils.isNotBlank(validatorFmPath)) {
-			isEnabled = fmService.isVisible(validatorFmPath, intchStack);
+			isEnabled = isVisible(validatorFmPath, intchStack);
 		}
 
 		return isEnabled;
@@ -498,5 +498,16 @@ public class FieldsEnumerator {
 	 */
 	private boolean isFieldIatiIdentifier(String fieldName) {
 		return StringUtils.equals(this.iatiIdentifierField, fieldName);
+	}
+
+	private boolean isVisible(String fmPath,  Deque<Interchangeable> intchStack) {
+		Interchangeable interchangeable = intchStack.peek();
+		String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
+
+		if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
+			return true;
+		} else {
+			return fmService.isVisible(fmPath, intchStack);
+		}
 	}
 }

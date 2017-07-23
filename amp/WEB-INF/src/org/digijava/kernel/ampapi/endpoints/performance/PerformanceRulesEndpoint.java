@@ -81,15 +81,15 @@ public class PerformanceRulesEndpoint {
     }
     
     /**
-     * Retrieve and provide performance levels. </br>
+     * Retrieve and provide performance alert levels. </br>
      * <dl>
      * The access types JSON object holds information regarding:
      * <dt><b>id</b>
      * <dd>- the id of the performance level
      * <dt><b>orig-name</b>
-     * <dd>- the original name, not translated of the performance level
+     * <dd>- the performance alert level name, not translated
      * <dt><b>name</b>
-     * <dd>- the name, translated of the performance level
+     * <dd>- the performance alert level name, translated
      * </dl>
      * </br>
      * </br>
@@ -107,14 +107,14 @@ public class PerformanceRulesEndpoint {
      *  ]
      * </pre>
      *
-     * @return a list of JSON objects with the available performance levels
+     * @return all available performance alert levels
      */
     @GET
     @Path("/levels")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "getLevels", authTypes = { AuthRule.IN_ADMIN })
-    public List<JsonBean> getLevels() {
-        return CategoryValueService.getCategoryValues(CategoryConstants.PERFORMANCE_LEVEL_KEY, true);
+    public List<JsonBean> getAlertLevels() {
+        return CategoryValueService.getCategoryValues(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, true);
     }
     
     @GET

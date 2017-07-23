@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.performance;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatcher;
@@ -22,8 +21,6 @@ import org.hibernate.criterion.Projections;
 public class PerfomanceRuleManager {
 
     private static PerfomanceRuleManager performanceRuleManager;
-
-    private static Logger logger = Logger.getLogger(PerfomanceRuleManager.class);
 
     /**
      * 
@@ -124,15 +121,12 @@ public class PerfomanceRuleManager {
     }
 
     public List<PerformanceRuleMatcherAttribute> getAttributes(String type) {
-        Optional<PerformanceRuleMatcher> optionalMatcher = PerformanceRuleMatchers.RULE_TYPES.stream()
+        PerformanceRuleMatcher matcher = PerformanceRuleMatchers.RULE_TYPES.stream()
                 .filter(m -> m.getName().equals(type))
-                .findAny();
+                .findAny()
+                .orElseThrow(() -> new PerformanceRuleException(PerformanceRulesErrors.RULE_TYPE_INVALID, type));
         
-        if (!optionalMatcher.isPresent()) {
-            throw new PerformanceRuleException(PerformanceRulesErrors.RULE_TYPE_INVALID, type);
-        }
-
-        return optionalMatcher.get().getAttributes();
+        return matcher.getAttributes();
     }
 
     public List<PerformanceRuleMatcher> getTypes() {

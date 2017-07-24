@@ -203,6 +203,17 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 				aux.images.add(auxImg);
 			}
 		}
+		
+		aux.coordinates = new LinkedHashSet<>();
+		if (this.coordinates != null){
+            for(AmpStructureCoordinate coord : this.coordinates){
+                AmpStructureCoordinate auxCoord = (AmpStructureCoordinate) coord.clone();
+                auxCoord.setAmpStructureCoordinateId(null);
+                auxCoord.setStructure(aux);
+                aux.coordinates.add(auxCoord);
+            }
+        }
+		
 		//aux.activities.add(newActivity);
 		aux.ampStructureId = null;
 		return aux;

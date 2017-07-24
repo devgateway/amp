@@ -280,7 +280,8 @@ function addDrawControls(drawnItems) {
 	            polygon: {
 	                allowIntersection: false,
 	                showArea: true
-	            }
+	            },
+	            circle : false
 	        }
 	    }));
 	 

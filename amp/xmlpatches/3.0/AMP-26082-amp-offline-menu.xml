@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
 	<jira>AMP-26082</jira>
 	<author>ociubotaru</author>
-	<description>Adding version field to enable optimistic locking for activities</description>
+	<description>Adding menu entries for AMP Offline</description>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[

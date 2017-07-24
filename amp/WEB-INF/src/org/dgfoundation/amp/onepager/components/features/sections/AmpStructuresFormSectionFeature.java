@@ -96,9 +96,8 @@ public class AmpStructuresFormSectionFeature extends
 //				structureTypes.setOutputMarkupId(true);
 //                structureTypes.getChoiceContainer().add(new AttributeModifier("style", "max-width: 100px;margin-bottom:20px;"));
 //				item.add(structureTypes);
-//				
-				                
-             final TextField<String> coords = new TextField<String>("coords", new PropertyModel<String>(structureModel, "coords"));            
+//								                
+			 final TextField<String> coords = new TextField<String>("coords", new PropertyModel<String>(structureModel, "coords"));            
              coords.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {

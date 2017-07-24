@@ -18,6 +18,11 @@ var MapConstants = {
 			   "BASE" : 1,
 			   "INDICATOR" : 2,
 			   "OSM" : 3
+		   },
+		   "SHAPE" : {
+			   "POINT": "Point",
+			   "POLYGON": "Polygon",
+			   "POLYLINE": "Polyline"
 		   }
 		};
 var basemapUrl;
@@ -120,7 +125,6 @@ function onMapClick (e) {
 
 function selectLocationCallerShape(selectedGraphic){	
 	var callerButton = window.opener.callerGisObject;
-	var shape = 'Point';
 	//Lat
 	var latitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];	
 	latitudeInput.value = "";
@@ -137,7 +141,7 @@ function selectLocationCallerShape(selectedGraphic){
     if(selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
     	latitudeInput.value = selectedGraphic.latlng.lat;
     	longitudeInput.value =  selectedGraphic.latlng.lng; 
-    	shapeInput.value = 'Point';
+    	shapeInput.value = MapConstants.SHAPE.POINT;
     	window.opener.postvaluesy(latitudeInput);
         window.opener.postvaluesx(longitudeInput);  
         window.opener.postvaluesx(shapeInput);         
@@ -156,9 +160,9 @@ function selectLocationCallerShape(selectedGraphic){
 	    window.opener.postvaluesx(coordsInput);    
 	    if( selectedPointEvent.target instanceof L.Polyline) {
 	    	if (selectedPointEvent.target instanceof L.Polygon) {
-	    		shapeInput.value = 'Polygon';
+	    		shapeInput.value = MapConstants.SHAPE.POLYGON;
 	    	} else {
-	    		shapeInput.value = 'Polyline';
+	    		shapeInput.value = MapConstants.SHAPE.POLYLINE;
 	    	}	    	
 	    }	    
 	    window.opener.postvaluesx(shapeInput);	    

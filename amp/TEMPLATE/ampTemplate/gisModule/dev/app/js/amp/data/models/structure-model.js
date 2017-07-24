@@ -45,10 +45,8 @@ module.exports = Backbone.Model.extend({
 
     var attributesFromGeoJson = {};
     if (response.type === 'Feature') {
-      attributesFromGeoJson.geometryType = response.geometry.type;
-
-      attributesFromGeoJson.lng = response.geometry.coordinates[0];
-      attributesFromGeoJson.lat = response.geometry.coordinates[1];
+      attributesFromGeoJson.geometryType = response.geometry.type;      
+      attributesFromGeoJson.coordinates = response.geometry.coordinates;   
 
       if (response.properties) {
         _.extend(attributesFromGeoJson, response.properties);

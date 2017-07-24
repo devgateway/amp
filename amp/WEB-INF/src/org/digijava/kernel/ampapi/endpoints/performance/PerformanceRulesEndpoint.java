@@ -12,9 +12,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
+import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatcher;
+import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatcherAttribute;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * 
@@ -73,6 +78,59 @@ public class PerformanceRulesEndpoint {
     @ApiMethod(ui = false, id = "getRulesPage", authTypes = { AuthRule.IN_ADMIN })
     public ResultPage<AmpPerformanceRule> getRulesPage(@QueryParam("page") int page, @QueryParam("size") int size) {
         return performanceRuleManager.getPerformanceRules(page, size);
+    }
+    
+    /**
+     * Retrieve and provide performance alert levels. </br>
+     * <dl>
+     * The access types JSON object holds information regarding:
+     * <dt><b>id</b>
+     * <dd>- the id of the performance level
+     * <dt><b>orig-name</b>
+     * <dd>- the performance alert level name, not translated
+     * <dt><b>name</b>
+     * <dd>- the performance alert level name, translated
+     * </dl>
+     * </br>
+     * </br>
+     *
+     * <h3>Sample Output:</h3>
+     * 
+     * <pre>
+     *  [
+     *     {
+     *      "id" : 123,
+     *      "orig-name" : "Minor",
+     *      "name" : "Minor"
+     *     },
+     *     ....
+     *  ]
+     * </pre>
+     *
+     * @return all available performance alert levels
+     */
+    @GET
+    @Path("/levels")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "getLevels", authTypes = { AuthRule.IN_ADMIN })
+    public List<JsonBean> getAlertLevels() {
+        return CategoryValueService.getCategoryValues(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, true);
+    }
+    
+    @GET
+    @Path("/types")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "getTypes", authTypes = { AuthRule.IN_ADMIN })
+    public List<PerformanceRuleMatcher> getTypes() {
+        return performanceRuleManager.getTypes();
+    }
+    
+    @GET
+    @Path("/attributes")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "getAttributes", authTypes = { AuthRule.IN_ADMIN })
+    public List<PerformanceRuleMatcherAttribute> getAttributes(@QueryParam("ruleType") String ruleType) {
+        return performanceRuleManager.getAttributes(ruleType);
     }
 
 }

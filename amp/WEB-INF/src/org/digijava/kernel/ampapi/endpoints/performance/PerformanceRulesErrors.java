@@ -12,9 +12,10 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
  */
 public final class PerformanceRulesErrors {
 
-    public static final ApiErrorMessage PERFORMANCE_RULE_INVALID = new ApiErrorMessage(1, "Invalid Performance Rule");
+    public static final ApiErrorMessage RULE_INVALID = new ApiErrorMessage(1, "Invalid Rule");
     public static final ApiErrorMessage CATEGORY_VALUE_INVALID = new ApiErrorMessage(2, "Invalid Category Value");
     public static final ApiErrorMessage REQUIRED_ATTRIBUTE = new ApiErrorMessage(3, "Required Attribute");
+    public static final ApiErrorMessage RULE_TYPE_INVALID = new ApiErrorMessage(4, "Invalid Rule Type");
 
     private PerformanceRulesErrors() {
     }

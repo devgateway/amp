@@ -100,9 +100,10 @@ module.exports = Backbone.View
     self.featureGroup = L.layerGroup();
 
     return $.Deferred().resolve()  // kick things off, so we can async this sequence with breathAfter
-      .then(breathAfter(function() {  // wait 50ms, then:
+      .then(breathAfter(function() {  // wait 50ms, then: 
+    	var features = []; 
         return _(self.rawData.features)
-          .map(_(self._featureToMarker).bind(self));
+          .map(_(self._featureToShape).bind(self));
       }))
       .then(function(markers) {
         self.markerCluster.addLayers(markers);
@@ -113,11 +114,22 @@ module.exports = Backbone.View
   },
 
 
+  _featureToShape: function(feature){
+	  if (feature.geometry.type == 'LineString') {
+		  return this._featureToLineString(feature);
+	  } else if (feature.geometry.type == 'Polygon') {
+		  return this._featureToPolygon(feature);
+	  } else {
+		  return this._featureToMarker(feature);
+	  }
+	  
+  },
+  
   _featureToMarker: function(feature) {  // 152ms on Phil's computer
 	  var self = this,
 	  marker,
-	  latlng = L.latLng(feature.geometry.coordinates[1],
-			  feature.geometry.coordinates[0]);
+	  latlng = L.latLng(feature.geometry.coordinates[0],
+			  feature.geometry.coordinates[1]);
 
 	  // Calculate only one time and not for all points (we can have thousands).
 	  if (self.maxNumberOfIcons === -1) {
@@ -165,7 +177,7 @@ module.exports = Backbone.View
 		  self.customClusterMap[latLngString] = [marker];
 	  }
 
-	  self._bindPopup(marker);
+	  self._bindPopup(marker, true);
 
 	  return marker;
   },
@@ -206,23 +218,8 @@ module.exports = Backbone.View
   },
 
   // 0. origninaly way circle marker, no icon
-  _createPlainMarker: function(latlng, feature) {  // 122ms on Phil's computer
-
-    var colors = this.structureMenuModel.structuresCollection.palette.colours.filter(function(colour) {
-      return colour.get('test').call(colour, feature.properties.id);
-    });
-    if (colors.length > 2) {  // 2, because "other" is always true...
-      colors = [this.structureMenuModel.structuresCollection.palette.colours.find(function(colour) {
-        return colour.get('multiple') === true;
-      })];
-    }
-
-    // temp hack for if pallette part didn't work.
-    if (colors.length === 0) {
-      colors = [{hex: function() { return 'orange';}}];
-      //console.warn('colour not found for feature ', feature.properties.activity.attributes.matchesFilters);
-    }
-
+  _createPlainMarker: function(latlng, feature) {
+	 var colors = this._getColors(feature);
     // set radius based on zoom.
     if (this.map.getZoom() < this.ZOOM_BREAKPOINT) {
       this.currentRadius = this.SMALL_ICON_RADIUS;
@@ -241,6 +238,39 @@ module.exports = Backbone.View
 
   },
 
+  _getColors: function(feature){
+	  var colors = this.structureMenuModel.structuresCollection.palette.colours.filter(function(colour) {
+	      return colour.get('test').call(colour, feature.properties.id);
+	    });
+	    if (colors.length > 2) {  // 2, because "other" is always true...
+	      colors = [this.structureMenuModel.structuresCollection.palette.colours.find(function(colour) {
+	        return colour.get('multiple') === true;
+	      })];
+	    }
+
+	    if (colors.length === 0) {
+	      colors = [{hex: function() { return 'orange';}}];	      
+	    }
+	    return colors;
+
+  },
+  
+  _featureToLineString: function(feature) {
+	  var colors = this._getColors(feature);
+	  var polyline = L.polyline(feature.geometry.coordinates, {color: colors[0].hex()}); 
+	  polyline.feature = feature;
+	  this._bindPopup(polyline, false);
+	  return polyline;
+  },
+  
+  _featureToPolygon: function(feature) {
+	  var colors = this._getColors(feature);
+	  var polygon = L.polygon(feature.geometry.coordinates, {color: colors[0].hex()}); 
+	  polygon.feature = feature;
+	  this._bindPopup(polygon, false);
+	  return polygon;
+  },
+  
   // circles  shrink if we're zoomed out, get big if zoomed in
   _updateZoom: function() {
     var self = this;
@@ -266,16 +296,16 @@ module.exports = Backbone.View
   },
 
   // Create pop-ups
-  _bindPopup: function(marker) {
+  _bindPopup: function(shape, highlight) {
     var self = this,
-        feature = marker.feature;
+        feature = shape.feature;
 
     /* TODO(thadk) switch individual feature to this standard parsed model input*/
     /*var parsedProjectSitesList = this.app.data.structures.model.prototype.parse(feature);*/
 
     if (feature.properties) {
       var activityJSON = feature.properties.activity.toJSON();
-      marker.bindPopup(self.structureTemplate({
+      shape.bindPopup(self.structureTemplate({
         activityJSON: activityJSON,
         properties: feature.properties
       }),
@@ -285,20 +315,24 @@ module.exports = Backbone.View
       });
     }
 
-    marker.on('click', function(evt) {
+    shape.on('click', function(evt) {
       var feature = evt.target.feature;
       if (feature) {
         var projectId = feature.properties.activity.id;
-        self._hilightProject(projectId);
+        if (highlight) {
+        	self._hilightProject(projectId);
+        }        
       }
       app.translator.translateDOM($('.cluster-popup'));
     });
 
-    marker.on('popupclose', function(evt) {
+    shape.on('popupclose', function(evt) {
       var feature = evt.target.feature;
       if (feature) {
         var projectId = feature.properties.activity.id;
-        self._dehilightProject(projectId);
+        if (highlight) {
+           self._dehilightProject(projectId);
+        }        
       }
     });
   },

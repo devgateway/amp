@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -104,15 +105,16 @@ public class AmpStructuresFormSectionFeature extends
                       if(coords.getDefaultModelObject() != null) {
                           JsonBean data = JsonBean.getJsonBeanFromString(coords.getDefaultModelObject().toString());
                           List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
-                          if(structureModel.getObject() == null) {
-                              structureModel.getObject().setCoordinates(new HashSet<>());
+                          AmpStructure structure = structureModel.getObject();
+                          if(structure.getCoordinates() == null) {
+                              structure.setCoordinates(new LinkedHashSet<>());
                           } else {
                               structureModel.getObject().getCoordinates().clear();
                           }                                                   
                           if (coordinates != null) {
                               for (Map<String, String> pair : coordinates) {
                                   AmpStructureCoordinate ampStructureCoordinate = new AmpStructureCoordinate();
-                                  ampStructureCoordinate.setStructure(structureModel.getObject());
+                                  ampStructureCoordinate.setStructure(structure);
                                   ampStructureCoordinate.setLatitude(String.valueOf(pair.get("latitude")));
                                   ampStructureCoordinate.setLongitude(String.valueOf(pair.get("longitude")));
                                   structureModel.getObject().getCoordinates().add(ampStructureCoordinate);

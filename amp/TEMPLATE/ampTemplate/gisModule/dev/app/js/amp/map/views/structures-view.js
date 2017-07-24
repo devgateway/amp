@@ -140,7 +140,6 @@ module.exports = Backbone.View
 		  }
 		  console.log('MAX_NUM_FOR_ICONS: ' + self.MAX_NUM_FOR_ICONS);
 	  }
-      debugger;
 	  if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
 			  self.structureMenuModel.get('filterVertical') === 'Primary Sector') {
 		  // create icon

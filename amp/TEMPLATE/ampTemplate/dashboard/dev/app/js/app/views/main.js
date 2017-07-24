@@ -42,7 +42,6 @@ module.exports = BackboneDash.View.extend({
         // The same endpoint will send an error if 'DASHBOARDS' is not active in the Feature Manager.
         window.location = '/';
     }
-    debugger;
     var col = [];
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Donors'})) {
     	col.push(new TopsChart(

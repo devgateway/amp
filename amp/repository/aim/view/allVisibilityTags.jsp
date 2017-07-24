@@ -684,6 +684,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Indicator Base Value" feature="Reports"></field:display>
 <field:display name="Indicator Base Date" feature="Reports"></field:display>
 <field:display name="Indicator Base Comment" feature="Reports"></field:display>
+<field:display name="Performance Alert Level" feature="Reports"></field:display>
 <field:display name="Indicator Current Value" feature="Reports"></field:display>
 <field:display name="Indicator Current Date" feature="Reports"></field:display>
 <field:display name="Indicator Current Comment" feature="Reports"></field:display>

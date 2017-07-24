@@ -424,20 +424,20 @@ public class LocationService {
 	}
 	
 	private static PointGeoJSON buildPoint(AmpStructure structure) {
-        PointGeoJSON pg = new PointGeoJSON();
-        pg.coordinates
-                .add(parseDouble(structure.getLongitude()));
+        PointGeoJSON pg = new PointGeoJSON();        
         pg.coordinates.add(parseDouble(structure.getLatitude()));
+        pg.coordinates.add(parseDouble(structure.getLongitude()));
         return pg;
     }
     
     private static LineStringGeoJSON buildPolyLine(AmpStructure structure) {
         LineStringGeoJSON line = new LineStringGeoJSON();
+        line.coordinates = new ArrayList<>();
         if (structure.getCoordinates() != null) {
           for(AmpStructureCoordinate coord : structure.getCoordinates()) {
-              List<Double> lngLat =  new ArrayList<>();
-              lngLat.add(parseDouble(coord.getLongitude()));
+              List<Double> lngLat =  new ArrayList<>();              
               lngLat.add(parseDouble(coord.getLatitude()));
+              lngLat.add(parseDouble(coord.getLongitude()));
               line.coordinates.add(lngLat);
           }    
         }
@@ -447,14 +447,16 @@ public class LocationService {
     
     private static PolygonGeoJSON buildPolygon(AmpStructure structure){
         PolygonGeoJSON polygon = new PolygonGeoJSON();
+        polygon.coordinates = new ArrayList<>();
         if (structure.getCoordinates() != null) {
               List<List<Double>> ring =  new ArrayList<>();
               for(AmpStructureCoordinate coord : structure.getCoordinates()) {
-                  List<Double> lngLat =  new ArrayList<>();
-                  lngLat.add(parseDouble(coord.getLongitude()));
+                  List<Double> lngLat =  new ArrayList<>();                  
                   lngLat.add(parseDouble(coord.getLatitude()));
+                  lngLat.add(parseDouble(coord.getLongitude()));
                   ring.add(lngLat);
-              }  
+              } 
+              
               polygon.coordinates.add(ring);
             }
             

@@ -1,6 +1,8 @@
 package org.digijava.kernel.services;
 
 import java.io.Serializable;
+import java.util.Comparator;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +15,8 @@ import org.codehaus.jackson.annotate.JsonValue;
 public class AmpOfflineVersion implements Comparable<AmpOfflineVersion>, Serializable {
 
     private static final Pattern PATTERN = Pattern.compile("(\\d{1,9}).(\\d{1,9}).(\\d{1,9})(?:-(.*))?");
+
+    private static final Comparator<String> SUFFIX_ORDER = Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER);
 
     private final int major;
     private final int minor;
@@ -70,6 +74,10 @@ public class AmpOfflineVersion implements Comparable<AmpOfflineVersion>, Seriali
         if (c != 0) {
             return c;
         }
-        return Integer.compare(patch, o.patch);
+        c = Integer.compare(patch, o.patch);
+        if (c != 0) {
+            return c;
+        }
+        return Objects.compare(suffix, o.suffix, SUFFIX_ORDER);
     }
 }

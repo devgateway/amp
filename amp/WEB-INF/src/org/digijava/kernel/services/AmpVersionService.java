@@ -78,11 +78,19 @@ public class AmpVersionService {
 
     public AmpOfflineCompatibleVersionRange addCompatibleVersionRange(AmpOfflineCompatibleVersionRange range) {
         range.setId(null);
+        ensureIsValid(range);
         PersistenceManager.getSession().save(range);
         return range;
     }
 
+    public void ensureIsValid(AmpOfflineCompatibleVersionRange range) {
+        if (range.getFromVersion().compareTo(range.getToVersion()) > 0) {
+            throw new IllegalArgumentException("To version must be greater than from.");
+        }
+    }
+
     public AmpOfflineCompatibleVersionRange updateCompatibleVersionRange(AmpOfflineCompatibleVersionRange range) {
+        ensureIsValid(range);
         PersistenceManager.getSession().update(range);
         return range;
     }

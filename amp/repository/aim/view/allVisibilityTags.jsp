@@ -684,7 +684,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Indicator Base Value" feature="Reports"></field:display>
 <field:display name="Indicator Base Date" feature="Reports"></field:display>
 <field:display name="Indicator Base Comment" feature="Reports"></field:display>
-<field:display name="Performance Alert Level" feature="Reports"></field:display>
 <field:display name="Indicator Current Value" feature="Reports"></field:display>
 <field:display name="Indicator Current Date" feature="Reports"></field:display>
 <field:display name="Indicator Current Comment" feature="Reports"></field:display>
@@ -958,6 +957,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Add Donor Button" feature="Donors"></field:display>
 <field:display name="Remove Donor Button" feature="Donors"></field:display>
 <feature:display name="Computed Fields"  module="Report Generator"></feature:display>
+<feature:display name="Performance Monitoring"  module="Report Generator"></feature:display>
 <feature:display name="Save and Open Button"  module="Report Generator"></feature:display>
 <feature:display name="Also show pledges checkbox" module="Report and Tab Options"></feature:display>
 <feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
@@ -977,6 +977,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Percentage of Disbursement" feature="Computed Fields"></field:display>
 <field:display name="Commitment Gap" feature="Computed Fields"></field:display>
 <field:display name="Calculated Project Life" feature="Computed Fields"></field:display>
+<field:display name="Performance Alert Level" feature="Performance Monitoring"></field:display>
 
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>

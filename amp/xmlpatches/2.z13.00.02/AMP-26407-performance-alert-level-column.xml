@@ -4,11 +4,15 @@
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
 	<jira>AMP-26407</jira>
 	<author>ociubotaru</author>
-	<description>recreate views after addition of performance alert level column</description>
+	<description>Added performance alert level column</description>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
 				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
+
+				INSERT INTO amp_columns_order (id, columnName, indexOrder)
+				  SELECT nextval('amp_columns_order_seq'), 'Performance Monitoring', max(indexOrder) + 1
+				  FROM amp_columns_order;
 			]]></lang>
 		</script>
 	</apply>

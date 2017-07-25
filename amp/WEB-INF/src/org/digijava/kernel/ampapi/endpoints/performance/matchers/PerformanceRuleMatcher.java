@@ -3,16 +3,13 @@ package org.digijava.kernel.ampapi.endpoints.performance.matchers;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpPerformanceRule;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * 
  * @author Viorel Chihai
  *
  */
-public abstract class PerformanceRuleMatcher {
+public class PerformanceRuleMatcher {
 
     protected String name;
 
@@ -50,7 +47,4 @@ public abstract class PerformanceRuleMatcher {
     public void setAttributes(List<PerformanceRuleMatcherAttribute> attributes) {
         this.attributes = attributes;
     }
-    
-    public abstract AmpCategoryValue match(AmpPerformanceRule rule, AmpActivityVersion a);
-
 }

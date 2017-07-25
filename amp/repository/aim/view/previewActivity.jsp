@@ -1997,7 +1997,7 @@ function collapseAll() {
 												</td>
 												<td class="prv_right">
 													<c:forEach var="fd" items="${comp.commitments}">
-													<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">												
+													<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
 														<tr>
 															<module:display name="/Activity Form/Components/Component/Components Commitments" 
 																parentModule="/Activity Form/Components/Component">
@@ -2086,8 +2086,10 @@ function collapseAll() {
 												<digi:trn key="aim:disbursements">Disbursements</digi:trn>
 											</td>
 											<td class="prv_right">
-											<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
 												<c:forEach var="fd" items="${comp.disbursements}">
+													<table width="100%" cellSpacing="1" cellPadding="1"
+														   bgcolor="#eeeeee"
+														   class="component-funding-table">
 													<tr>
 														<module:display name="/Activity Form/Components/Component/Components Disbursements"
 																parentModule="/Activity Form/Components/Component">
@@ -2180,8 +2182,8 @@ function collapseAll() {
 										<digi:trn key="aim:expenditures">Expenditures</digi:trn>
 									</td>
 									<td class="prv_right">
-									<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
 										<c:forEach var="fd" items="${comp.expenditures}">
+											<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
 											<tr>
 												<module:display name="/Activity Form/Components/Component/Components Expeditures" 
 													parentModule="/Activity Form/Components/Component">

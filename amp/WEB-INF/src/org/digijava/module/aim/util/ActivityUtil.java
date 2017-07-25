@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -1980,5 +1981,24 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
 		return new HashSet<String>(((List<String>) qry.list()));
 	}
+	
+	/**
+     * @param a
+     * @param activityDisbursements
+     * @return transactions of specified type
+     */
+    public static List<AmpFundingDetail> getTransactionsByType(AmpActivityVersion a, int transactionType) {
+        List<AmpFundingDetail> activityTransactions = new ArrayList<>();
+        
+        if (a.getFunding() != null) {
+            activityTransactions = a.getFunding().stream()
+                    .flatMap(f -> f.getFundingDetails().stream())
+                    .collect(Collectors.toList()).stream()
+                    .filter(fd -> fd.getTransactionType() == transactionType)
+                    .collect(Collectors.toList());
+        }
+        
+        return activityTransactions;
+    }
 
 } // End

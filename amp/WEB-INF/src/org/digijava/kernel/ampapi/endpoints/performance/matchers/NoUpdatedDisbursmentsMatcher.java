@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.performance.matchers;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,16 +19,16 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author Viorel Chihai
  *
  */
-public class NoDisbursmentsAfterSignatureDateMatcher extends PerformanceRuleMatcher {
+public class NoUpdatedDisbursmentsMatcher extends PerformanceRuleMatcher {
     
     public static final String ATTRIBUTE_MONTH = "month";
 
-    public NoDisbursmentsAfterSignatureDateMatcher() {
-        super("noDisbAfterSignatureDate", "No disbursments after signature date");
+    public NoUpdatedDisbursmentsMatcher() {
+        super("NoUpdatedDisbursments", "No updated disbursments in the last months");
 
         this.attributes = new ArrayList<>();
         this.attributes.add(new PerformanceRuleMatcherAttribute(ATTRIBUTE_MONTH, 
-                "No Disbursements after x months from signature date",
+                "No updated disbursements in the last x months",
                 AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.INTEGER));
     }
 
@@ -41,24 +40,22 @@ public class NoDisbursmentsAfterSignatureDateMatcher extends PerformanceRuleMatc
         AmpPerformanceRuleAttribute monthAttribute = performanceRuleManager.getAttributeFromRule(rule, ATTRIBUTE_MONTH);
         
         if (monthAttribute != null && a.getApprovalDate() != null) {
-            Date signatureDate = a.getApprovalDate();
-            
             Calendar c = Calendar.getInstance();
-            c.setTime(signatureDate);
            
             int month = Integer.parseInt(monthAttribute.getValue());
+            // in order to substract months from a specific date
+            month *= -1;
             c.add(Calendar.MONTH, month);
             
-            List<AmpFundingDetail> disbursementsAfterSignatureDate = activityDisbursements.stream()
+            List<AmpFundingDetail> disbursementsInLastMonths = activityDisbursements.stream()
                     .filter(disb -> disb.getTransactionDate().after(c.getTime()))
                     .collect(Collectors.toList());
             
-            if (!disbursementsAfterSignatureDate.isEmpty()) {
+            if (disbursementsInLastMonths.isEmpty()) {
                 return rule.getLevel();
             }
         }
 
         return null;
     }
-
 }

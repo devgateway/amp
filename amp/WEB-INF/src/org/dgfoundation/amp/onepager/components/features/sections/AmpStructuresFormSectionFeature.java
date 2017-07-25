@@ -35,6 +35,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
@@ -202,6 +203,29 @@ public class AmpStructuresFormSectionFeature extends
 			  	}
 				};
 				item.add(openMapPopup);	
+				final AmpAjaxLinkField viewCoords = new AmpAjaxLinkField("viewCoords","Map", "View") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        List<JsonBean> coordinates = new ArrayList<>();
+                        JsonBean data = new JsonBean();
+                        AmpStructure structure = structureModel.getObject();
+                        for(AmpStructureCoordinate coord: structure.getCoordinates()) {
+                            JsonBean coordinate = new JsonBean(); 
+                            coordinate.set("latitude", coord.getLatitude());
+                            coordinate.set("longitude", coord.getLongitude());
+                            coordinates.add(coordinate);
+                        }                      
+                        data.set("coordinates", coordinates);
+                        data.set("title", TranslatorWorker.translateText("Coordinates"));
+                        data.set("shape", structure.getShape() != null ? structure.getShape() : "" );
+                        data.set("latitudeColName", TranslatorWorker.translateText("Latitude"));
+                        data.set("longitudeColName", TranslatorWorker.translateText("Longitude"));
+                        data.set("selectedShape", TranslatorWorker.translateText("Selected Shape"));
+                        data.set("noData", TranslatorWorker.translateText("No Data"));
+                        target.appendJavaScript("viewCoordinates('"+ data.asJsonString() +"');");
+                }
+                };
+                item.add(viewCoords);
 			}
 		};
 		containter.add(list);

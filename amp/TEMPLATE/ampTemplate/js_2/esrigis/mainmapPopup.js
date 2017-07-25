@@ -127,15 +127,15 @@ function selectLocationCallerShape(selectedGraphic){
 	var callerButton = window.opener.callerGisObject;
 	//Lat
 	var latitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];	
-	latitudeInput.value = "";
+	latitudeInput.value = "";	
 	//Long
 	var longitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2];
 	longitudeInput.value = "";
 	
-	var coordsInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[4];
+	var coordsInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[5];
 	coordsInput.value = "";
 	
-	var shapeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[5];
+	var shapeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[6];
 	shapeInput.value = "";
 	
     if(selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {

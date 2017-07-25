@@ -35,6 +35,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureCoordinate;

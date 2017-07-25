@@ -12,7 +12,7 @@ public class AmpOfflineVersionTest {
     @Test(expected = NullPointerException.class)
     public void testCompareNull() {
         AmpOfflineVersion v1 = new AmpOfflineVersion("1.0.0");
-        assertEquals(0, v1.compareTo(null));
+        v1.compareTo(null);
     }
 
     @Test

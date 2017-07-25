@@ -12,7 +12,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -32,7 +36,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 
 @Path("amp")
-public class AmpConfiguration {
+public class AmpConfiguration implements ErrorReportingEndpoint {
 
 	private AmpVersionService ampVersionService = SpringUtil.getBean(AmpVersionService.class);
 	
@@ -194,7 +198,12 @@ public class AmpConfiguration {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(id = "addCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
 	public AmpOfflineCompatibleVersionRange addCompatibleVersionRange(AmpOfflineCompatibleVersionRange versionRange) {
-		return ampVersionService.addCompatibleVersionRange(versionRange);
+		try {
+			return ampVersionService.addCompatibleVersionRange(versionRange);
+		} catch (IllegalArgumentException e) {
+			JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails(e.getMessage()));
+			throw new ApiRuntimeException(Response.Status.BAD_REQUEST, error);
+		}
 	}
 
 	/**
@@ -221,8 +230,13 @@ public class AmpConfiguration {
 	@ApiMethod(id = "updateCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
 	public AmpOfflineCompatibleVersionRange updateCompatibleVersionRange(@PathParam("id") Long id,
 			AmpOfflineCompatibleVersionRange versionRange) {
-		versionRange.setId(id);
-		return ampVersionService.updateCompatibleVersionRange(versionRange);
+		try {
+			versionRange.setId(id);
+			return ampVersionService.updateCompatibleVersionRange(versionRange);
+		} catch (IllegalArgumentException e) {
+			JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails(e.getMessage()));
+			throw new ApiRuntimeException(Response.Status.BAD_REQUEST, error);
+		}
 	}
 
 	/**
@@ -242,5 +256,10 @@ public class AmpConfiguration {
 	@ApiMethod(id = "deleteCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
 	public AmpOfflineCompatibleVersionRange deleteCompatibleVersionRange(@PathParam("id") Long id) {
 		return ampVersionService.deleteCompatibleVersionRange(id);
+	}
+
+	@Override
+	public Class getErrorsClass() {
+		return AmpConfigurationErrors.class;
 	}
 }

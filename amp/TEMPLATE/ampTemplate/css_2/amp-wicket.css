@@ -678,6 +678,6 @@ input[disabled], select[disabled]{
 }
 
 .ui-widget-header {
-	color: #2d5379;
+	color: #2d5379 !important;
     background: #ededed;
 }

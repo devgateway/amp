@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
+import org.digijava.kernel.ampapi.endpoints.common.AmpConfiguration;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.currency.Currencies;
 import org.digijava.kernel.ampapi.endpoints.dashboards.EndPoints;
@@ -58,6 +59,7 @@ public class ApiError {
         put(IndicatorEndPoints.class.getName(), 6);
         put(GisEndPoints.class.getName(), 7);
         put(SettingsDefinitionsEndpoint.class.getName(), 8);
+        put(AmpConfiguration.class.getName(), 9);
 	}};
 
 	private final static Set<String> COMPONENTS_WITH_NEW_ERROR_FORMAT = new HashSet<>(

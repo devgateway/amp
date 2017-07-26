@@ -1,6 +1,7 @@
 package org.digijava.kernel.services;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
@@ -9,6 +10,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
@@ -51,6 +55,51 @@ public class AmpVersionService {
     }
 
     public boolean isAmpOfflineCompatible(String ampOfflineVersion) {
-        return true;
+        AmpOfflineVersion version = new AmpOfflineVersion(ampOfflineVersion);
+
+        List<AmpOfflineCompatibleVersionRange> ranges = getCompatibleVersionRanges();
+
+        for (AmpOfflineCompatibleVersionRange range : ranges) {
+            if (version.compareTo(range.getFromVersion()) >= 0
+                    && version.compareTo(range.getToVersion()) <= 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public List<AmpOfflineCompatibleVersionRange> getCompatibleVersionRanges() {
+        Session session = PersistenceManager.getSession();
+        return (List<AmpOfflineCompatibleVersionRange>) session.createCriteria(AmpOfflineCompatibleVersionRange.class)
+                .setCacheable(true)
+                .list();
+    }
+
+    public AmpOfflineCompatibleVersionRange addCompatibleVersionRange(AmpOfflineCompatibleVersionRange range) {
+        range.setId(null);
+        ensureIsValid(range);
+        PersistenceManager.getSession().save(range);
+        return range;
+    }
+
+    public void ensureIsValid(AmpOfflineCompatibleVersionRange range) {
+        if (range.getFromVersion().compareTo(range.getToVersion()) > 0) {
+            throw new IllegalArgumentException("To version must be greater than from.");
+        }
+    }
+
+    public AmpOfflineCompatibleVersionRange updateCompatibleVersionRange(AmpOfflineCompatibleVersionRange range) {
+        ensureIsValid(range);
+        PersistenceManager.getSession().update(range);
+        return range;
+    }
+
+    public AmpOfflineCompatibleVersionRange deleteCompatibleVersionRange(Long id) {
+        Session session = PersistenceManager.getSession();
+        AmpOfflineCompatibleVersionRange range =
+                (AmpOfflineCompatibleVersionRange) session.load(AmpOfflineCompatibleVersionRange.class, id);
+        session.delete(range);
+        return range;
     }
 }

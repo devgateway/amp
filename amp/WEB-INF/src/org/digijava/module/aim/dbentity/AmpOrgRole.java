@@ -30,7 +30,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	@Interchangeable(fieldTitle="Additional Info", importable=true)
 	private String additionalInfo;
 
-	@Interchangeable(fieldTitle = "GPI Ni Survey")
+	@Interchangeable(fieldTitle = "GPI Ni Survey", fmPath = "/Activity Form/GPI 2017/GPI NI Survey")
 	private Set<AmpGPINiSurvey> gpiNiSurveys;		
 	
     public Float getPercentage() {

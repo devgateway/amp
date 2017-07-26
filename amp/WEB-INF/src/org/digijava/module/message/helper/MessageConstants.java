@@ -90,6 +90,7 @@ public class MessageConstants {
                                                             "New User Registration",
                                                             "Activity validation workflow notification",
                                                             "Activity measure comparison notification",
+                                                            "Data Freeze Email Notification",
                                                             "Notify Summary Change"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";

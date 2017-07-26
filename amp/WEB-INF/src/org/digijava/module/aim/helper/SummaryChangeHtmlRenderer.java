@@ -24,11 +24,11 @@ public class SummaryChangeHtmlRenderer {
     }
 
     public String render() {
-        StringBuilder res = new StringBuilder(String.format("<table "
+        StringBuilder res = new StringBuilder("<table "
                 + "style='font-family:Arial, Helvetica, sans-serif;font-size:12px;border: 1px solid black;"
                 + "border-collapse:collapse' "
                 + "cellspacing='2' cellpadding='2' border='1' "
-                + "%s>", "width='100%'"));
+                + " width='100%'>");
         res.append("\n");
         renderHeaders(res);
         res.append("\n");
@@ -55,10 +55,9 @@ public class SummaryChangeHtmlRenderer {
     private String renderHeaderRow(String title, String value) {
         StringBuilder res = new StringBuilder();
         res.append("<tr>");
-        res.append(String.format("<td width='50%'><span style='font-weight: bold;'>%s</span></td>", TranslatorWorker
-                .translateText
-                        (title)));
-        res.append(String.format("<td width='50%'>%s</td>", (value != null ? value : "")));
+        res.append(String.format("<td width='50%%'><span style='font-weight: bold;'>%s</span></td>", TranslatorWorker
+                .translateText(title)));
+        res.append(String.format("<td width='50%%'>%s</td>", (value != null ? value : "")));
         res.append("</tr>\n");
         return res.toString();
     }
@@ -66,18 +65,15 @@ public class SummaryChangeHtmlRenderer {
     private String renderChangeRow(String quarter, Collection<SummaryChange> changes) {
         StringBuilder res = new StringBuilder();
         res.append("<tr>");
-        res.append(String.format("<td width='50%' valign='top'>%s</td>", quarter));
+        res.append(String.format("<td width='50%%' valign='top'>%s</td>", quarter));
 
-        res.append("<td width='50%' valign='top'>");
+        res.append("<td width='50%%' valign='top'>");
         for (SummaryChange summaryChange : changes) {
 
-            res.append(String.format("<span style='font-weight: bold;'>%s</span>", summaryChange.getFundingDetailType
-                    ()));
-
-            res.append(String.format("<br><font color='" + getFontColor(summaryChange.getChangeType()) +
-                    "'>%s</font>", TranslatorWorker.translateText(
-                    summaryChange.getChangeType())));
-
+            res.append(String.format("<span style='font-weight: bold;'>%s</span>",
+                    summaryChange.getFundingDetailType()));
+            res.append(String.format("<br><font color='" + getFontColor(summaryChange.getChangeType())
+                    + "'>%s</font>", TranslatorWorker.translateText(summaryChange.getChangeType())));
             res.append("<ol>");
 
             if (summaryChange.getChangeType() == SummaryChangesService.EDITED) {
@@ -90,8 +86,8 @@ public class SummaryChangeHtmlRenderer {
                     res.append(String.format("<li>%s</li>", FormatHelper.formatNumber(summaryChange.getCurrentValue()
                     )));
                 } else {
-                    res.append(String.format("<li>%s</li>", FormatHelper.formatNumber(summaryChange.getPreviousValue
-                            ())));
+                    res.append(String.format("<li>%s</li>", FormatHelper.formatNumber(
+                            summaryChange.getPreviousValue())));
                 }
             }
             res.append("</ol>");

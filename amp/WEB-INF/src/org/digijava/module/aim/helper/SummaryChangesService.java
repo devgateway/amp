@@ -4,6 +4,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Session;
 
 /**
@@ -39,8 +41,8 @@ public class SummaryChangesService {
     public static String buildActivitiesChanged(Date fromDate) {
         StringBuffer results = new StringBuffer();
 
-        LinkedHashMap<String, Object> activityList = SummaryChangesService.getActivitiesChanged(SummaryChangesService
-                .getActivitiesChanged(new Date()));
+        LinkedHashMap<String, Object> activityList = SummaryChangesService.getSummaryChanges(SummaryChangesService
+                .getActivitiesChanged(fromDate));
 
         for (String activity : activityList.keySet()) {
             Session session = PersistenceManager.getRequestDBSession();
@@ -52,9 +54,32 @@ public class SummaryChangesService {
             LOGGER.info(renderer.render());
 
         }
-
-
         return results.toString();
+    }
+
+    /**
+     * Return a list of approvers whit the activities that changed.
+     *
+     * @param activities activities list.
+     * @return list of approvers and activities.
+     */
+    public static Map<String, Collection<AmpActivityVersion>> getValidators(List<AmpActivityVersion> activities) {
+
+        Map<String, Collection<AmpActivityVersion>> results = new LinkedHashMap<>();
+
+        for (AmpActivityVersion currentActivity : activities) {
+            List<AmpTeamMember> teamHeadAndAndApprovers = TeamMemberUtil.getTeamHeadAndApprovers(currentActivity
+                    .getTeam().getAmpTeamId());
+
+            for (AmpTeamMember approver : teamHeadAndAndApprovers) {
+                String key = approver.getUser().getEmail();
+                if (results.get(key) == null) {
+                    results.put(key, new ArrayList<AmpActivityVersion>());
+                }
+                results.get(key).add(currentActivity);
+            }
+        }
+        return results;
     }
 
     /**
@@ -63,7 +88,7 @@ public class SummaryChangesService {
      * @param activities activities list.
      * @return list of activities and changes.
      */
-    public static LinkedHashMap<String, Object> getActivitiesChanged(List<AmpActivityVersion> activities) {
+    public static LinkedHashMap<String, Object> getSummaryChanges(List<AmpActivityVersion> activities) {
 
         LinkedHashMap<String, Object> activitiesChanges = new LinkedHashMap<>();
         for (AmpActivityVersion currentActivity : activities) {

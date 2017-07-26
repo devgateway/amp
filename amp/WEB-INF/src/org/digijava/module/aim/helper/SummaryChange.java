@@ -46,8 +46,8 @@ public class SummaryChange {
     }
 
     public String getFundingDetailType() {
-        return this.adjustmentType + " " +
-                ArConstants.TRANSACTION_ID_TO_TYPE_NAME.get(this.transactionType);
+        return this.adjustmentType + " "
+                + ArConstants.TRANSACTION_ID_TO_TYPE_NAME.get(this.transactionType);
     }
 
     public void setTransactionType(Integer transactionType) {

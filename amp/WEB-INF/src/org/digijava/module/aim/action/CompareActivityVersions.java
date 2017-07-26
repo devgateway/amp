@@ -499,13 +499,13 @@ public class CompareActivityVersions extends DispatchAction {
 	}
 
 	public ActionForward changesSummary(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+										HttpServletResponse response) throws Exception {
 
 		Session session = PersistenceManager.getRequestDBSession();
 		Long activityId = Long.parseLong(request.getParameter("activityId"));
 		AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
 
-		LinkedHashMap<String, Object> activityList = SummaryChangesService.processActivity( activity );
+		LinkedHashMap<String, Object> activityList = SummaryChangesService.processActivity(activity);
 
 		for (String id : activityList.keySet()) {
 

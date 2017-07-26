@@ -43,6 +43,7 @@ import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
+import org.digijava.kernel.user.Group;
 import org.digijava.kernel.security.PasswordPolicyValidator;
 
 public class ViewEditUser extends Action {
@@ -185,6 +186,8 @@ public class ViewEditUser extends Action {
             uForm.setDisplaySuccessMessage(null);
             uForm.setAddWorkspace(false);
             uForm.setEmailerror(false);
+            uForm.setExemptFromDataFreezing(false);
+            uForm.setNationalCoordinator(false);
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
                 AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
@@ -206,7 +209,7 @@ public class ViewEditUser extends Action {
                 uForm.getAssignedOrgs().addAll(user.getAssignedOrgs());
                 uForm.setPledger(user.getPledger());
                 uForm.setBanReadOnly(user.isBanned());
-
+                uForm.setExemptFromDataFreezing(user.getExemptFromDataFreezing());
 
                 Locale language = null;
                 if (langPref == null) {
@@ -274,6 +277,9 @@ public class ViewEditUser extends Action {
                     	uForm.setWorkspaces(TeamUtil.getAllTeams());
                     }
                     uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+
+                    uForm.setNationalCoordinator(user.hasNationalCoordinatorGroup());
+
 //                }
             }
         } else {        	
@@ -329,6 +335,13 @@ public class ViewEditUser extends Action {
 
                     user.setUserLangPreferences(userLangPreferences);
                     user.setPledger(uForm.getPledger());
+                    user.setExemptFromDataFreezing(uForm.getExemptFromDataFreezing());
+
+                    if (uForm.getNationalCoordinator()) {
+                    	user.getGroups().add(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));
+                    } else {
+                    	user.getGroups().remove(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));
+                    }
                     DbUtil.updateUser(user);
                     //assign workspace place
                     if(uForm.isAddWorkspace()){

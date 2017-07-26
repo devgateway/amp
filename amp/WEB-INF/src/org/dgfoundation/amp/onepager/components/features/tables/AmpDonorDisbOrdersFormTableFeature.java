@@ -22,6 +22,7 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingDetailComparator;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
@@ -39,7 +40,8 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.DISBURSEMENT_ORDER, 8);
 
-		list = new ListEditor<AmpFundingDetail>("listDisbOrders", setModel, new AmpFundingDetail.FundingDetailComparator()) {
+		list = new ListEditor<AmpFundingDetail>("listDisbOrders", setModel, FundingDetailComparator
+				.getFundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {

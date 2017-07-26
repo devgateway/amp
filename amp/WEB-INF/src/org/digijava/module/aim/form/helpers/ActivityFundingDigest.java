@@ -21,6 +21,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.TeamMember;
@@ -154,8 +155,7 @@ public class ActivityFundingDigest {
 				if (org == null || org.getAmpOrgId() == null) continue;
 				FundingOrganization fundOrg = new FundingOrganization(ampFunding);
 				Funding fund = new Funding(ampFunding, activityTotalCalculations, toCurrCode, false /*isPreview*/, tm);
-				Collection<FundingDetail> fundDetails = fund.getFundingDetails();
-				if (fundDetails != null && fundDetails.size() > 0) {
+				if (fund.getFundingDetails() != null && fund.getFundingDetails().size() > 0) {
 					if (this.getFundingDetails() == null) this.setFundingDetails(new ArrayList<FundingDetail>());
 					this.getFundingDetails().addAll(new ArrayList<FundingDetail>(fund.getFundingDetails()));
 				}

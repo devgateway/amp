@@ -1508,6 +1508,19 @@ body {background:none;}
 																					</tr>
                                                                                   </logic:notEmpty>
 																			</field:display>
+																			<field:display name="Concessionality Level" feature="Funding Information">
+																				<logic:notEmpty name="funding" property="concessionalityLevel">
+                                                                              		<tr>
+                                                                                		<td align="left" width="339">
+                                                                                  			<a><digi:trn>Concessionality Level</digi:trn></a>
+																				 		</td>
+                                                                                		<td width="10">:</td>
+                                                                                		<td align="left">
+                                                                                    		<digi:trn><bean:write name="funding" property="concessionalityLevel.value"/></digi:trn>
+																						</td>
+																					</tr>
+                                                                                  </logic:notEmpty>
+																			</field:display>
 																				<logic:notEmpty name="funding" property="fundingClassificationDate">
                                                                               		<tr>
                                                                                 		<td align="left" width="339">

@@ -60,10 +60,10 @@ public class SettingsUtils {
 	/**
 	 * @return general currency settings
 	 */
-	private static SettingOptions getCurrencySettings() {
+	private static SettingOptions getCurrencySettings(boolean includeVirtual) {
 		// build currency options
 		List<SettingOptions.Option> options = new ArrayList<>();
-		for (AmpCurrency ampCurrency : CurrencyUtil.getActiveAmpCurrencyByName(true)) {
+		for (AmpCurrency ampCurrency : CurrencyUtil.getActiveAmpCurrencyByName(includeVirtual)) {
 			String ccValue = ampCurrency.isVirtual()
 					? ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(ampCurrency.getCurrencyCode())
 					: ampCurrency.getCurrencyCode();
@@ -231,8 +231,8 @@ public class SettingsUtils {
 		return getSettingFieldForOptions(SettingsConstants.CALENDAR_TYPE_ID, getCalendarSettings());
 	}
 
-	static SettingField getCurrencyField() {
-		return getSettingFieldForOptions(SettingsConstants.CURRENCY_ID, getCurrencySettings());
+	static SettingField getCurrencyField(boolean includeVirtual) {
+		return getSettingFieldForOptions(SettingsConstants.CURRENCY_ID, getCurrencySettings(includeVirtual));
 	}
 
 	static SettingField getFundingTypeField() {
@@ -311,6 +311,18 @@ public class SettingsUtils {
 	 */
 	static SettingField getReportYearRangeField() {
 		return getReportYearRangeField(null);
+	}
+
+	/**
+	 * Return amount units field using defaults.
+	 *
+	 * @return field that defines the amount units in reports
+	 */
+	static SettingField getReportAmountUnits() {
+		final String defaultAmountUnit = String.valueOf(AmountsUnits.getDefaultValue().divider);
+
+		return getOptionValueSetting(SettingsConstants.AMOUNT_UNITS, SettingsConstants.USE_GROUPING,
+				defaultAmountUnit, SettingsConstants.AMOUNT_UNITS_MAP_REPORTS);
 	}
 
 	/**

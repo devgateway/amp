@@ -128,6 +128,7 @@ public class Security implements ErrorReportingEndpoint {
 		authenticationResult.set("is-admin", isAdmin);
 		authenticationResult.set("add-activity", team != null && addActivity); //to check if the user can add activity in the selected ws
 		authenticationResult.set("view-activity", !isAdmin); ///at this stage the user can view activities only if you are not admin
+		authenticationResult.set("national-coordinator", user.hasNationalCoordinatorGroup()); //role that allows user to enter gpi indicator 6 data
 		return authenticationResult;
 	}
 
@@ -216,7 +217,6 @@ public class Security implements ErrorReportingEndpoint {
 			storeInSession(username, password, teamMember, user);
 
 			AmpApiToken ampApiToken = SecurityUtil.generateToken();
-
 			String ampTeamName = (teamMember == null) ? null : teamMember.getAmpTeam().getName();
 			return createResponse(user.isGlobalAdmin(), ampApiToken, user, ampTeamName, true);
 		} catch (DgException e) {
@@ -277,7 +277,7 @@ public class Security implements ErrorReportingEndpoint {
 	 * <dt><b>assigned-org-id</b><dd> user assigned organization id
 	 * <dt><b>assigned-org-ids</b><dd> user assigned organizations ids
 	 * <dt><b>group-keys</b><dd> user groups keys
-	 * 
+	 *
 	 * <h3> Sample Output: </h3>
 	 * <pre>
 	 * {

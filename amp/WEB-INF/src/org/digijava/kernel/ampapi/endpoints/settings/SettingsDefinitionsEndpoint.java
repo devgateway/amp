@@ -16,7 +16,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -24,7 +23,6 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.helper.SummaryChangesService;
 import org.digijava.module.aim.util.DbUtil;
 
 /**
@@ -127,9 +125,6 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 	@Path("/gis")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final List<SettingField> getSettingDefinitionsForGisModule() {
-
-		String result = SummaryChangesService.buildActivitiesChanged( new Date());
-
 		return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
 				getFundingTypeField());
 	}

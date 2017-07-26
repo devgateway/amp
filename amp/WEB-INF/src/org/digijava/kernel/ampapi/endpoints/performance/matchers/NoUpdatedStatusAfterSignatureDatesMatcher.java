@@ -31,7 +31,7 @@ public class NoUpdatedStatusAfterSignatureDatesMatcher extends PerformanceRuleMa
     }
 
     @Override
-    public AmpCategoryValue match(AmpPerformanceRule rule, AmpActivityVersion a) {
+    public boolean match(AmpPerformanceRule rule, AmpActivityVersion a) {
         
         PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
         AmpPerformanceRuleAttribute monthAttribute = performanceRuleManager.getAttributeFromRule(rule, ATTRIBUTE_MONTH);
@@ -52,11 +52,9 @@ public class NoUpdatedStatusAfterSignatureDatesMatcher extends PerformanceRuleMa
             boolean statusIsNotUpdatedToOngoing = currentDate.after(c.getTime()) 
                     && activityStatus != null && !Constants.ACTIVITY_STATUS_ONGOING.equals(activityStatus.getLabel());
             
-            if (statusIsNotUpdatedToOngoing) {
-                return rule.getLevel();
-            }
+            return statusIsNotUpdatedToOngoing;
         }
 
-        return null;
+        return false;
     }
 }

@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.performance;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatcher;
@@ -136,8 +136,8 @@ public class PerfomanceRuleManager {
                 .filter(AmpPerformanceRule::getEnabled)
                 .collect(Collectors.toList());
 
-        Map<Long, AmpCategoryValue> performanceAlertMap = new HashMap<>();
-        actIds.stream().forEach(actId -> performanceAlertMap.put(actId, matchActivity(rules, actId)));
+        Map<Long, AmpCategoryValue> performanceAlertMap = actIds.stream()
+                .collect(Collectors.toMap(Function.identity(), actId -> matchActivity(rules, actId)));
 
         return performanceAlertMap;
     }
@@ -162,13 +162,11 @@ public class PerfomanceRuleManager {
 
         AmpCategoryValue level = null;
         
-        Map<String, PerformanceRuleMatcher> ruleMatcherMap = PerformanceRuleMatchers.RULE_TYPES.stream()
-                .collect(Collectors.toMap(r -> r.getName(), r -> r));
-        
         for (AmpPerformanceRule rule : rules) {
-            PerformanceRuleMatcher matcher = ruleMatcherMap.get(rule.getTypeClassName());
+            PerformanceRuleMatcher matcher = PerformanceRuleMatchers.RULE_TYPES_BY_NAME.get(rule.getTypeClassName());
             if (matcher != null) {
-                level = getHigherLevel(level, matcher.match(rule, a));
+                AmpCategoryValue matchedLevel = matcher.match(rule, a) ? rule.getLevel() : null;
+                level = getHigherLevel(level, matchedLevel);
             }
         }
         
@@ -176,8 +174,8 @@ public class PerfomanceRuleManager {
     }
     
     public AmpPerformanceRuleAttribute getAttributeFromRule(AmpPerformanceRule rule, String attributeName) {
-        AmpPerformanceRuleAttribute monthAttribute = rule.getAttributes().stream().
-                filter(attr -> attr.getName().equals(attributeName))
+        AmpPerformanceRuleAttribute monthAttribute = rule.getAttributes().stream()                
+                .filter(attr -> attr.getName().equals(attributeName))
                 .findAny().orElse(null);
         
         return monthAttribute;
@@ -194,4 +192,5 @@ public class PerfomanceRuleManager {
         
         return level1;
     }
+    
 }

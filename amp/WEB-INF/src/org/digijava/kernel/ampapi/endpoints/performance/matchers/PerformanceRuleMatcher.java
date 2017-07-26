@@ -51,6 +51,6 @@ public abstract class PerformanceRuleMatcher {
         this.attributes = attributes;
     }
     
-    public abstract AmpCategoryValue match(AmpPerformanceRule rule, AmpActivityVersion a);
+    public abstract boolean match(AmpPerformanceRule rule, AmpActivityVersion a);
 
 }

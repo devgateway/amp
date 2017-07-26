@@ -1987,13 +1987,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      * @param activityDisbursements
      * @return transactions of specified type
      */
-    public static List<AmpFundingDetail> getTransactionsByType(AmpActivityVersion a, int transactionType) {
+    public static List<AmpFundingDetail> getTransactionsWithType(AmpActivityVersion a, int transactionType) {
         List<AmpFundingDetail> activityTransactions = new ArrayList<>();
         
         if (a.getFunding() != null) {
             activityTransactions = a.getFunding().stream()
                     .flatMap(f -> f.getFundingDetails().stream())
-                    .collect(Collectors.toList()).stream()
                     .filter(fd -> fd.getTransactionType() == transactionType)
                     .collect(Collectors.toList());
         }

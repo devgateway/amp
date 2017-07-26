@@ -28,13 +28,13 @@ public class NoUpdatedDisbursmentsMatcher extends PerformanceRuleMatcher {
 
         this.attributes = new ArrayList<>();
         this.attributes.add(new PerformanceRuleMatcherAttribute(ATTRIBUTE_MONTH, 
-                "No updated disbursements in the last x months",
+                "No updated disbursements in the last selected months",
                 AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.INTEGER));
     }
 
     @Override
-    public AmpCategoryValue match(AmpPerformanceRule rule, AmpActivityVersion a) {
-        List<AmpFundingDetail> activityDisbursements = ActivityUtil.getTransactionsByType(a, Constants.DISBURSEMENT);
+    public boolean match(AmpPerformanceRule rule, AmpActivityVersion a) {
+        List<AmpFundingDetail> activityDisbursements = ActivityUtil.getTransactionsWithType(a, Constants.DISBURSEMENT);
         
         PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
         AmpPerformanceRuleAttribute monthAttribute = performanceRuleManager.getAttributeFromRule(rule, ATTRIBUTE_MONTH);
@@ -43,19 +43,14 @@ public class NoUpdatedDisbursmentsMatcher extends PerformanceRuleMatcher {
             Calendar c = Calendar.getInstance();
            
             int month = Integer.parseInt(monthAttribute.getValue());
-            // in order to substract months from a specific date
-            month *= -1;
-            c.add(Calendar.MONTH, month);
+            c.add(Calendar.MONTH, -month);
             
-            List<AmpFundingDetail> disbursementsInLastMonths = activityDisbursements.stream()
-                    .filter(disb -> disb.getTransactionDate().after(c.getTime()))
-                    .collect(Collectors.toList());
+            boolean hasActivityDisbursementsAfterSignatureDate = activityDisbursements.stream()
+                    .anyMatch(disb -> disb.getTransactionDate().after(c.getTime()));
             
-            if (disbursementsInLastMonths.isEmpty()) {
-                return rule.getLevel();
-            }
+            return hasActivityDisbursementsAfterSignatureDate;
         }
 
-        return null;
+        return false;
     }
 }

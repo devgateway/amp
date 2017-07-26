@@ -29,36 +29,43 @@ public class NoDisbursmentsAfterSignatureDateMatcher extends PerformanceRuleMatc
 
         this.attributes = new ArrayList<>();
         this.attributes.add(new PerformanceRuleMatcherAttribute(ATTRIBUTE_MONTH, 
-                "No Disbursements after x months from signature date",
+                "No Disbursements after selected months from signature date",
                 AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.INTEGER));
     }
 
     @Override
-    public AmpCategoryValue match(AmpPerformanceRule rule, AmpActivityVersion a) {
-        List<AmpFundingDetail> activityDisbursements = ActivityUtil.getTransactionsByType(a, Constants.DISBURSEMENT);
+    public boolean match(AmpPerformanceRule rule, AmpActivityVersion a) {
+        List<AmpFundingDetail> activityDisbursements = ActivityUtil.getTransactionsWithType(a, Constants.DISBURSEMENT);
         
         PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
         AmpPerformanceRuleAttribute monthAttribute = performanceRuleManager.getAttributeFromRule(rule, ATTRIBUTE_MONTH);
         
         if (monthAttribute != null && a.getApprovalDate() != null) {
-            Date signatureDate = a.getApprovalDate();
+            Date deadline = getDeadline(a, monthAttribute);
             
-            Calendar c = Calendar.getInstance();
-            c.setTime(signatureDate);
-           
-            int month = Integer.parseInt(monthAttribute.getValue());
-            c.add(Calendar.MONTH, month);
+            boolean hasActivityDisbursementsAfterApprovalDate = activityDisbursements.stream()
+                    .anyMatch(disb -> disb.getTransactionDate().after(deadline));
             
-            List<AmpFundingDetail> disbursementsAfterSignatureDate = activityDisbursements.stream()
-                    .filter(disb -> disb.getTransactionDate().after(c.getTime()))
-                    .collect(Collectors.toList());
-            
-            if (!disbursementsAfterSignatureDate.isEmpty()) {
-                return rule.getLevel();
-            }
+            return hasActivityDisbursementsAfterApprovalDate;
         }
 
-        return null;
+        return false;
+    }
+
+    /**
+     * @param a
+     * @param monthAttribute
+     * @return
+     */
+    public Date getDeadline(AmpActivityVersion a, AmpPerformanceRuleAttribute monthAttribute) {
+        int month = Integer.parseInt(monthAttribute.getValue());
+        
+        Calendar c = Calendar.getInstance();
+        c.setTime(a.getApprovalDate());
+        c.add(Calendar.MONTH, month);
+        
+        Date deadline = c.getTime();
+        return deadline;
     }
 
 }

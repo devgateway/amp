@@ -510,7 +510,8 @@ public class CompareActivityVersions extends DispatchAction {
 		for (String id : activityList.keySet()) {
 
 			LinkedHashMap<String, Object> changesList = (LinkedHashMap) activityList.get(id);
-			SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activity, changesList);
+			SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activity, changesList, RequestUtils
+					.getNavigationLanguage(request).getCode());
 
 			request.setAttribute("changesTable", renderer.render());
 		}

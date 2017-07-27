@@ -2,6 +2,7 @@ package org.digijava.module.aim.helper;
 
 import clover.org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
@@ -16,11 +17,17 @@ public class SummaryChangeHtmlRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(SummaryChangeHtmlRenderer.class);
     private final AmpActivityVersion activity;
+    private final String locale;
     private final LinkedHashMap<String, Object> changesList;
 
-    public SummaryChangeHtmlRenderer(AmpActivityVersion activity, LinkedHashMap<String, Object> changesList) {
+    public SummaryChangeHtmlRenderer(AmpActivityVersion activity, LinkedHashMap<String, Object> changesList, String
+            locale) {
         this.activity = activity;
         this.changesList = changesList;
+        if (locale == null) {
+            locale = TLSUtils.getEffectiveLangCode();
+        }
+        this.locale = locale;
     }
 
     public String render() {
@@ -32,7 +39,7 @@ public class SummaryChangeHtmlRenderer {
         res.append("\n");
         renderHeaders(res);
         res.append("\n");
-        renderBody(res, activity);
+        renderBody(res);
         res.append("</table>");
         res.append("\n");
         return res.toString();
@@ -55,8 +62,8 @@ public class SummaryChangeHtmlRenderer {
     private String renderHeaderRow(String title, String value) {
         StringBuilder res = new StringBuilder();
         res.append("<tr>");
-        res.append(String.format("<td width='50%%'><span style='font-weight: bold;'>%s</span></td>", TranslatorWorker
-                .translateText(title)));
+        res.append(String.format("<td width='50%%'><span style='font-weight: bold;'>%s</span></td>", translateText
+                (title)));
         res.append(String.format("<td width='50%%'>%s</td>", (value != null ? value : "")));
         res.append("</tr>\n");
         return res.toString();
@@ -73,13 +80,13 @@ public class SummaryChangeHtmlRenderer {
             res.append(String.format("<span style='font-weight: bold;'>%s</span>",
                     summaryChange.getFundingDetailType()));
             res.append(String.format("<br><font color='" + getFontColor(summaryChange.getChangeType())
-                    + "'>%s</font>", TranslatorWorker.translateText(summaryChange.getChangeType())));
+                    + "'>%s</font>", translateText(summaryChange.getChangeType())));
             res.append("<ol>");
 
             if (summaryChange.getChangeType() == SummaryChangesService.EDITED) {
-                res.append(String.format("<li>%s: %s</li>", TranslatorWorker.translateText("Previous amount"),
+                res.append(String.format("<li>%s: %s</li>", translateText("Previous amount"),
                         FormatHelper.formatNumber(summaryChange.getPreviousValue())));
-                res.append(String.format("<li>%s: %s</li>", TranslatorWorker.translateText("Current amount"),
+                res.append(String.format("<li>%s: %s</li>", translateText("Current amount"),
                         FormatHelper.formatNumber(summaryChange.getCurrentValue())));
             } else {
                 if (summaryChange.getChangeType() == SummaryChangesService.NEW) {
@@ -99,7 +106,7 @@ public class SummaryChangeHtmlRenderer {
         return res.toString();
     }
 
-    protected StringBuilder renderBody(StringBuilder res, AmpActivityVersion activity) {
+    protected StringBuilder renderBody(StringBuilder res) {
         res.append("<tbody>\n");
 
         for (Map.Entry<String, Object> changes : changesList.entrySet()) {
@@ -122,4 +129,7 @@ public class SummaryChangeHtmlRenderer {
         return null;
     }
 
+    protected String translateText(String text) {
+        return TranslatorWorker.translateText(text, this.locale, 3L);
+    }
 }

@@ -91,6 +91,7 @@
 		setHoveredTable("dataTable", true);
 		setHoveredRow("rowHighlight");
 		monitorCheckbox();
+        checkVersions();
 	}	 
 	function setVersion(activityId)
 	{
@@ -139,7 +140,23 @@
 			document.getElementById("SubmitButton").style.color = "Black";
 		}
 	}
-	
+
+    function checkVersions(){
+        var checkboxes = document.getElementsByName("compareCheckboxes");
+        var counter = 0;
+        for(var i = 0; i < checkboxes.length; i++) {
+            counter++;
+        }
+        if (counter > 1)
+        {
+            document.getElementById("SubmitSummaryButton").disabled = false;
+            document.getElementById("SubmitSummaryButton").style.color = "Black";
+        } else {
+            document.getElementById("SubmitSummaryButton").disabled = true;
+            document.getElementById("SubmitSummaryButton").style.color = "#CECECE";
+		}
+    }
+
 	var responseFailureHistory = function(o){ 
 	// Access the response object's properties in the 
 	// same manner as listed in responseSuccess( ). 

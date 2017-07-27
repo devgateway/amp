@@ -2,6 +2,8 @@ package org.digijava.module.message.jobs;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.SummaryChangeData;
 import org.digijava.module.aim.helper.SummaryChangeHtmlRenderer;
@@ -46,6 +48,7 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
                         LinkedHashMap<String, Object> activityList = SummaryChangesService.getSummaryChanges
                                 (reminderUsers.get(receiver).stream().collect(Collectors.toList()));
 
+                        User user = UserUtils.getUserByEmail(receiver);
                         for (String activity : activityList.keySet()) {
                             Session session = PersistenceManager.getRequestDBSession();
                             AmpActivityVersion activityVersion = (AmpActivityVersion) session.load(AmpActivityVersion
@@ -54,7 +57,7 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
 
                             LinkedHashMap<String, Object> changesList = (LinkedHashMap) activityList.get(activity);
                             SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activityVersion,
-                                    changesList);
+                                    changesList, user.getRegisterLanguage().getCode());
                             body.append(renderer.render());
                         }
                         SummaryChangeData event = new SummaryChangeData();

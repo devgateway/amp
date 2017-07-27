@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper;
 
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -50,7 +51,7 @@ public class SummaryChangesService {
                     Long.parseLong(activity));
 
             LinkedHashMap<String, Object> changesList = (LinkedHashMap) activityList.get(activity);
-            SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activityVersion, changesList);
+            SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activityVersion, changesList, null);
             LOGGER.info(renderer.render());
 
         }

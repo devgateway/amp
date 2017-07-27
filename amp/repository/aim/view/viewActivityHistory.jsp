@@ -76,7 +76,7 @@
 			<logic:notEmpty name="currentMember" scope="session">
 				<input type="button" id="SubmitButton" value="<digi:trn>Compare versions</digi:trn>" onclick="submitCompare()"/>
 				<field:display name="Show Change Summary" feature="Planning">
-					<input type="button" id="SubmitButton" value="<digi:trn>Show Change Summary</digi:trn>" onclick="submitChangeSummary()"/>
+					<input type="button" id="SubmitSummaryButton" value="<digi:trn>Show Change Summary</digi:trn>" onclick="submitChangeSummary()"/>
 				</field:display>
 			</logic:notEmpty>
 		

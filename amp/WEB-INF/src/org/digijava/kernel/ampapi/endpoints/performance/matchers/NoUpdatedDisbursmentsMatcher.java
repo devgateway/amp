@@ -17,15 +17,15 @@ import org.digijava.module.aim.util.ActivityUtil;
  * @author Viorel Chihai
  *
  */
-public class NoDisbursmentsAfterSignatureDateMatcher extends PerformanceRuleMatcher {
+public class NoUpdatedDisbursmentsMatcher extends PerformanceRuleMatcher {
     
     public static final String ATTRIBUTE_MONTH = "month";
 
-    public NoDisbursmentsAfterSignatureDateMatcher() {
-        super("noDisbAfterSignatureDate", "No disbursments after signature date");
+    public NoUpdatedDisbursmentsMatcher() {
+        super("NoUpdatedDisbursments", "No updated disbursments in the last months");
 
         this.attributes.add(new PerformanceRuleMatcherAttribute(ATTRIBUTE_MONTH, 
-                "No Disbursements after selected months from signature date",
+                "No updated disbursements in the last selected months",
                 AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.INTEGER));
     }
 
@@ -39,15 +39,15 @@ public class NoDisbursmentsAfterSignatureDateMatcher extends PerformanceRuleMatc
         if (monthAttribute != null && a.getApprovalDate() != null) {
             Date deadline = getDeadline(a, monthAttribute);
             
-            boolean hasActivityDisbursementsAfterApprovalDate = activityDisbursements.stream()
+            boolean hasActivityDisbursementsAfterSignatureDate = activityDisbursements.stream()
                     .anyMatch(disb -> disb.getTransactionDate().after(deadline));
             
-            return hasActivityDisbursementsAfterApprovalDate;
+            return hasActivityDisbursementsAfterSignatureDate;
         }
 
         return false;
     }
-
+    
     /**
      * @param a
      * @param monthAttribute
@@ -58,7 +58,7 @@ public class NoDisbursmentsAfterSignatureDateMatcher extends PerformanceRuleMatc
 
         Calendar c = Calendar.getInstance();
         c.setTime(a.getApprovalDate());
-        c.add(Calendar.MONTH, month);
+        c.add(Calendar.MONTH, -month);
 
         return c.getTime();
     }

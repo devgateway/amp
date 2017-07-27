@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.performance.matchers;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,17 +41,29 @@ public class NoUpdatedDisbursmentsMatcher extends PerformanceRuleMatcher {
         AmpPerformanceRuleAttribute monthAttribute = performanceRuleManager.getAttributeFromRule(rule, ATTRIBUTE_MONTH);
         
         if (monthAttribute != null && a.getApprovalDate() != null) {
-            Calendar c = Calendar.getInstance();
-           
-            int month = Integer.parseInt(monthAttribute.getValue());
-            c.add(Calendar.MONTH, -month);
+            Date deadline = getDeadline(a, monthAttribute);
             
             boolean hasActivityDisbursementsAfterSignatureDate = activityDisbursements.stream()
-                    .anyMatch(disb -> disb.getTransactionDate().after(c.getTime()));
+                    .anyMatch(disb -> disb.getTransactionDate().after(deadline));
             
             return hasActivityDisbursementsAfterSignatureDate;
         }
 
         return false;
+    }
+    
+    /**
+     * @param a
+     * @param monthAttribute
+     * @return deadline
+     */
+    public Date getDeadline(AmpActivityVersion a, AmpPerformanceRuleAttribute monthAttribute) {
+        int month = Integer.parseInt(monthAttribute.getValue());
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(a.getApprovalDate());
+        c.add(Calendar.MONTH, -month);
+
+        return c.getTime();
     }
 }

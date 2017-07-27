@@ -37,24 +37,33 @@ public class NoUpdatedStatusAfterSignatureDatesMatcher extends PerformanceRuleMa
         AmpPerformanceRuleAttribute monthAttribute = performanceRuleManager.getAttributeFromRule(rule, ATTRIBUTE_MONTH);
         
         if (monthAttribute != null && a.getActualApprovalDate() != null) {
-            Date signatureDate = a.getActualApprovalDate();
             Date currentDate = new Date();
-            
-            Calendar c = Calendar.getInstance();
-            c.setTime(signatureDate);
-           
-            int month = Integer.parseInt(monthAttribute.getValue());
-            c.add(Calendar.MONTH, month);
+            Date deadline = getDeadline(a, monthAttribute);
             
             AmpCategoryValue activityStatus = CategoryManagerUtil
                     .getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, a.getCategories());
             
-            boolean statusIsNotUpdatedToOngoing = currentDate.after(c.getTime()) 
+            boolean statusIsNotUpdatedToOngoing = currentDate.after(deadline) 
                     && activityStatus != null && !Constants.ACTIVITY_STATUS_ONGOING.equals(activityStatus.getLabel());
             
             return statusIsNotUpdatedToOngoing;
         }
 
         return false;
+    }
+    
+    /**
+     * @param a
+     * @param monthAttribute
+     * @return deadline
+     */
+    public Date getDeadline(AmpActivityVersion a, AmpPerformanceRuleAttribute monthAttribute) {
+        int month = Integer.parseInt(monthAttribute.getValue());
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(a.getApprovalDate());
+        c.add(Calendar.MONTH, month);
+
+        return c.getTime();
     }
 }

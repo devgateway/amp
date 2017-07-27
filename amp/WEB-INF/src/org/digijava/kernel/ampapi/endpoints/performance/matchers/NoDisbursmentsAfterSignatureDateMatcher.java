@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.digijava.kernel.ampapi.endpoints.performance.PerfomanceRuleManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -13,7 +12,6 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * 
@@ -55,17 +53,15 @@ public class NoDisbursmentsAfterSignatureDateMatcher extends PerformanceRuleMatc
     /**
      * @param a
      * @param monthAttribute
-     * @return
+     * @return deadline
      */
     public Date getDeadline(AmpActivityVersion a, AmpPerformanceRuleAttribute monthAttribute) {
         int month = Integer.parseInt(monthAttribute.getValue());
-        
+
         Calendar c = Calendar.getInstance();
         c.setTime(a.getApprovalDate());
         c.add(Calendar.MONTH, month);
-        
-        Date deadline = c.getTime();
-        return deadline;
-    }
 
+        return c.getTime();
+    }
 }

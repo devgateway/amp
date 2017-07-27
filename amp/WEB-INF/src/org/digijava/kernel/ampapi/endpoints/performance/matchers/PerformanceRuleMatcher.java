@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matchers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * 
@@ -19,7 +19,7 @@ public abstract class PerformanceRuleMatcher {
     protected String description;
     
     @JsonIgnore
-    protected List<PerformanceRuleMatcherAttribute> attributes;
+    protected List<PerformanceRuleMatcherAttribute> attributes = new ArrayList<>();
     
     public PerformanceRuleMatcher(String name, String description) {
         super();

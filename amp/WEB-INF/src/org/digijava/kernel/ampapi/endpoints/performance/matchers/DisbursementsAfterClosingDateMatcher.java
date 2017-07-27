@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matchers;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,8 +18,6 @@ public class DisbursementsAfterClosingDateMatcher extends PerformanceRuleMatcher
     
     public DisbursementsAfterClosingDateMatcher() {
         super("disbursementsAfterClosingDate", "Disbursements after closing date");
-
-        this.attributes = new ArrayList<>();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matchers;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,7 +24,6 @@ public class NoUpdatedStatusAfterSignatureDatesMatcher extends PerformanceRuleMa
     public NoUpdatedStatusAfterSignatureDatesMatcher() {
         super("noUpdatedStatusAfterSignatureDate", "No updated status after signature date");
 
-        this.attributes = new ArrayList<>();
         this.attributes.add(new PerformanceRuleMatcherAttribute(ATTRIBUTE_MONTH, "No updated status after x months",
                 AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.INTEGER));
     }

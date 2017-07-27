@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matchers;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +24,6 @@ public class NoDisbursmentsAfterSignatureDateMatcher extends PerformanceRuleMatc
     public NoDisbursmentsAfterSignatureDateMatcher() {
         super("noDisbAfterSignatureDate", "No disbursments after signature date");
 
-        this.attributes = new ArrayList<>();
         this.attributes.add(new PerformanceRuleMatcherAttribute(ATTRIBUTE_MONTH, 
                 "No Disbursements after selected months from signature date",
                 AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.INTEGER));

@@ -1,10 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matchers;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.digijava.kernel.ampapi.endpoints.performance.PerfomanceRuleManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -13,7 +11,6 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * 
@@ -27,7 +24,6 @@ public class NoUpdatedDisbursmentsMatcher extends PerformanceRuleMatcher {
     public NoUpdatedDisbursmentsMatcher() {
         super("NoUpdatedDisbursments", "No updated disbursments in the last months");
 
-        this.attributes = new ArrayList<>();
         this.attributes.add(new PerformanceRuleMatcherAttribute(ATTRIBUTE_MONTH, 
                 "No updated disbursements in the last selected months",
                 AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.INTEGER));

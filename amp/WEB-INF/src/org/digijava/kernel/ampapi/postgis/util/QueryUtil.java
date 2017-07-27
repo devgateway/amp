@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationSkeleton;
@@ -283,8 +284,35 @@ public class QueryUtil {
 						" SELECT DISTINCT o.amp_org_id orgId, o.name, o.acronym, o.org_grp_id grpId, af.source_role_id roleId " +
 						" FROM amp_funding af JOIN amp_organisation o ON o.amp_org_id = af.amp_donor_org_id " +
 						" WHERE (o.deleted IS NULL OR o.deleted = false)" +
-						" AND af.source_role_id IN (SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" + Util.toCSStringForIN(roleCodes) + ")) " +
-						" ORDER BY orgId"; 
+						" AND af.source_role_id IN (SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" +
+						Util.toCSStringForIN(roleCodes) + ")) ";
+
+				if (roleCodes.contains(Constants.COMPONENT_FUNDING_ORGANIZATION)) {
+					query += " UNION " +
+							" SELECT DISTINCT org.amp_org_id orgId, org.name, org.acronym, org.org_grp_id " +
+							" grpId, (select amp_role_id from amp_role where role_code = '" +
+							Constants.COMPONENT_FUNDING_ORGANIZATION + "') roleId " +
+							" FROM amp_activity_components aac " +
+							" JOIN amp_component_funding f ON (f.activity_id = aac.amp_activity_id) AND " +
+							" (f.amp_component_id = aac.amp_component_id) " +
+							" JOIN amp_components c ON (f.amp_component_id = c.amp_component_id) " +
+							" JOIN amp_activity_version activ ON activ.amp_activity_id = aac.amp_activity_id " +
+							" JOIN amp_organisation org ON org.amp_org_id = f.second_rep_organisation_id ";
+				}
+				if (roleCodes.contains(Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION)) {
+					query += " UNION " +
+							" SELECT DISTINCT org.amp_org_id orgId, org.name, org.acronym, org.org_grp_id grpId, " +
+							" (select amp_role_id from amp_role where role_code = '" +
+							Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION + "') roleId " +
+							" FROM amp_activity_components aac " +
+							" JOIN amp_component_funding f " +
+							" ON (f.activity_id = aac.amp_activity_id) AND (f.amp_component_id = aac"
+							+ ".amp_component_id)" +
+							" JOIN amp_components c ON (f.amp_component_id = c.amp_component_id) " +
+							" JOIN amp_organisation org ON org.amp_org_id = f.rep_organization_id ";
+				}
+				query += " ORDER BY orgId";
+
 				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 					ResultSet rs = rsi.rs;
 					Long lastOrgId = 0L;

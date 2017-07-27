@@ -298,6 +298,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Component Name", ColumnConstants.COMPONENT_NAME);
 		put("Component description", ColumnConstants.COMPONENT_DESCRIPTION);
 		put("Component Funding Organization", ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
+		put("Component Second Responsible Organization", ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
 		put("Component Type", ColumnConstants.COMPONENT_TYPE);
 		put("Costing Total Contribution", ColumnConstants.COSTING_DONOR);
 		put("Credit/Donation", ColumnConstants.CREDIT_DONATION);

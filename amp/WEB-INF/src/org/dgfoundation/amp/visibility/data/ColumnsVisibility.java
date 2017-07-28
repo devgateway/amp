@@ -165,6 +165,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("/Activity Form/Funding/Overview Section/Type of Cooperation", ColumnConstants.TYPE_OF_COOPERATION);
 		put("/Activity Form/Funding/Overview Section/Type of Implementation", ColumnConstants.TYPE_OF_IMPLEMENTATION);
 		put("/Activity Form/Issues Section", ColumnConstants.ISSUES);
+		put("/Activity Form/Issues Section/Issue/Date", ColumnConstants.ISSUE_DATE);
 		put("/Activity Form/Issues Section/Issue/Measure/Actor", ColumnConstants.ISSUES___MEASURES___ACTORS);
 		put("/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Expenditure Class", ColumnConstants.EXPENDITURE_CLASS);
 		put("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", ColumnConstants.AGREEMENT_CODE);

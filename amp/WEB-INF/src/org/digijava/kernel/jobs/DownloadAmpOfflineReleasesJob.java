@@ -42,8 +42,6 @@ import org.slf4j.LoggerFactory;
  */
 public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
 
-    private static final String AMP_RELEASES_URL = "https://amp-registry.ampsite.net/amp-offline-release";
-
     private final Logger logger = LoggerFactory.getLogger(DownloadAmpOfflineReleasesJob.class);
 
     private Client client;

@@ -287,11 +287,11 @@ public class QueryUtil {
 						" AND af.source_role_id IN (SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" +
 						Util.toCSStringForIN(roleCodes) + ")) ";
 
-				if (roleCodes.contains(Constants.COMPONENT_FUNDING_ORGANIZATION)) {
+				if (roleCodes.contains(Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION)) {
 					query += " UNION " +
 							" SELECT DISTINCT org.amp_org_id orgId, org.name, org.acronym, org.org_grp_id " +
 							" grpId, (select amp_role_id from amp_role where role_code = '" +
-							Constants.COMPONENT_FUNDING_ORGANIZATION + "') roleId " +
+							Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION + "') roleId " +
 							" FROM amp_activity_components aac " +
 							" JOIN amp_component_funding f ON (f.activity_id = aac.amp_activity_id) AND " +
 							" (f.amp_component_id = aac.amp_component_id) " +
@@ -299,11 +299,11 @@ public class QueryUtil {
 							" JOIN amp_activity_version activ ON activ.amp_activity_id = aac.amp_activity_id " +
 							" JOIN amp_organisation org ON org.amp_org_id = f.second_rep_organisation_id ";
 				}
-				if (roleCodes.contains(Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION)) {
+				if (roleCodes.contains(Constants.COMPONENT_FUNDING_ORGANIZATION)) {
 					query += " UNION " +
 							" SELECT DISTINCT org.amp_org_id orgId, org.name, org.acronym, org.org_grp_id grpId, " +
 							" (select amp_role_id from amp_role where role_code = '" +
-							Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION + "') roleId " +
+							Constants.COMPONENT_FUNDING_ORGANIZATION + "') roleId " +
 							" FROM amp_activity_components aac " +
 							" JOIN amp_component_funding f " +
 							" ON (f.activity_id = aac.amp_activity_id) AND (f.amp_component_id = aac"

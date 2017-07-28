@@ -20,26 +20,27 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.AmpOfflineService;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.util.SpringUtil;
 import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.QuartzJobForm;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.QuartzJobClassUtils;
 import org.digijava.module.aim.util.QuartzJobUtils;
+import org.digijava.module.message.jobs.ConnectionCleaningJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SchedulerException;
-import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class DownloadAmpOfflineReleasesJob implements StatefulJob {
+public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
 
     private static final String AMP_RELEASES_URL = "https://amp-registry.ampsite.net/amp-offline-release";
 
@@ -53,12 +54,14 @@ public class DownloadAmpOfflineReleasesJob implements StatefulJob {
     private AmpOfflineService ampOfflineService;
 
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         try {
             initialize(context);
 
+            String url = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_OFFLINE_RELEASES_URL);
+
             List<AmpOfflineRelease> releases = client
-                    .resource(AMP_RELEASES_URL)
+                    .resource(url)
                     .accept(MediaType.APPLICATION_JSON_TYPE)
                     .get(releasesType());
 
@@ -69,8 +72,6 @@ public class DownloadAmpOfflineReleasesJob implements StatefulJob {
                     .forEach(r -> ampOfflineService.deleteRelease(r));
         } finally {
             client.destroy();
-
-            PersistenceManager.endSessionLifecycle();
         }
     }
 

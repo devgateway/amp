@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matchers;
 
+import java.util.List;
+
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
 
@@ -15,11 +17,14 @@ public class PerformanceRuleMatcherAttribute {
     private String description;
     
     private AmpPerformanceRuleAttribute.PerformanceRuleAttributeType type;
+    
+    private List<String> possibleValues;
 
     public PerformanceRuleMatcherAttribute(String name, String description, PerformanceRuleAttributeType type) {
         this.name = name;
         this.description = description;
         this.type = type;
+        this.possibleValues = PerformanceRuleMatchers.getPerformanceRuleAttributePossibleValues(type);
     }
 
     public String getName() {
@@ -45,4 +50,13 @@ public class PerformanceRuleMatcherAttribute {
     public void setType(AmpPerformanceRuleAttribute.PerformanceRuleAttributeType type) {
         this.type = type;
     }
+
+    public List<String> getPossibleValues() {
+        return possibleValues;
+    }
+
+    public void setPossibleValues(List<String> possibleValues) {
+        this.possibleValues = possibleValues;
+    }
+    
 }

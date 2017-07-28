@@ -1,10 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matchers;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 
 /**
@@ -52,5 +56,24 @@ public abstract class PerformanceRuleMatcher {
     }
     
     public abstract boolean match(AmpPerformanceRule rule, AmpActivityVersion a);
+    
+    public Date getFundingDate(AmpFunding f, String selectedFundingDate) {
+        switch (selectedFundingDate) {
+            case PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE :
+                return f.getFundingClassificationDate();
+            case PerformanceRuleConstants.FUNDING_EFFECTIVE_DATE :
+                return f.getEffectiveFundingDate();
+            default :
+                return null;
+        }
+    }
+
+    public Date getDeadline(Date selectedDate, int timeUnit, int timeAmount) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(selectedDate);
+        c.add(timeUnit, timeAmount);
+
+        return c.getTime();
+    }
 
 }

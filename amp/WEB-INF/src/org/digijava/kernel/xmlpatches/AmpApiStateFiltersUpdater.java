@@ -48,6 +48,7 @@ public class AmpApiStateFiltersUpdater extends AbstractAmpApiStateUpdater {
         put("Executing Agency Id", "executing-agency");
         put("Expenditure Class", "expenditure-class");
         put("Final Date for Contracting", "final-date-for-contracting");
+        put("Issue Date", "issue-date");
         put("Financing Instrument", "financing-instrument");
         put("Funding Closing Date", "funding-closing-date");
         put("Funding Status", "funding-status");

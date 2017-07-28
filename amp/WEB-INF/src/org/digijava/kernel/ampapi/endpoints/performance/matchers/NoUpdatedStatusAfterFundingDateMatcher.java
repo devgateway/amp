@@ -59,7 +59,7 @@ public class NoUpdatedStatusAfterFundingDateMatcher extends PerformanceRuleMatch
 
         boolean statusIsNotUpdatedToOngoing = false;
         
-        for(AmpFunding f : a.getFunding()) {
+        for (AmpFunding f : a.getFunding()) {
             Date fundingSelectedDate = getFundingDate(f, selectedDate);
             if (fundingSelectedDate != null && StringUtils.isNotBlank(selectedStatus)) {
                 Date deadline = getDeadline(fundingSelectedDate, timeUnit, timeAmount);

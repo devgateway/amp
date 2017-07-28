@@ -74,10 +74,11 @@ public class AmpPerformanceRuleAttribute {
     public enum PerformanceRuleAttributeType {
         AMOUNT("AMOUNT"),
         TIME_UNIT("TIME_UNIT"),
-        FUNDING_DATE("FUNDING_DATE"),
-        ACTIVITY_STATUS("ACTIVITY_STATUS");
+        ACTIVITY_STATUS("ACTIVITY_STATUS"),
+        ACTIVITY_DATE("ACTIVITY_DATE"),
+        FUNDING_DATE("FUNDING_DATE");
 
-        private static Map<String, PerformanceRuleAttributeType> FORMAT_MAP = Stream
+        private static final Map<String, PerformanceRuleAttributeType> FORMAT_MAP = Stream
                 .of(PerformanceRuleAttributeType.values())
                 .collect(Collectors.toMap(s -> s.formatted, Function.identity()));
 

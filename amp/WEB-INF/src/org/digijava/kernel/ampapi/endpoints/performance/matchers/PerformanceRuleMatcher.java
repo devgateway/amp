@@ -61,8 +61,15 @@ public abstract class PerformanceRuleMatcher {
         switch (selectedFundingDate) {
             case PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE :
                 return f.getFundingClassificationDate();
-            case PerformanceRuleConstants.FUNDING_EFFECTIVE_DATE :
-                return f.getEffectiveFundingDate();
+            default :
+                return null;
+        }
+    }
+    
+    public Date getActivityDate(AmpActivityVersion a, String selectedActivityDate) {
+        switch (selectedActivityDate) {
+            case PerformanceRuleConstants.ACTIVITY_CLOSING_DATE :
+                return a.getActualCompletionDate();
             default :
                 return null;
         }

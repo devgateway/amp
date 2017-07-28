@@ -24,7 +24,7 @@ public final class PerformanceRuleMatchers {
         {
             add(new NoUpdatedStatusAfterFundingDateMatcher());
             add(new NoDisbursmentsAfterFundingDateMatcher());
-            add(new DisbursementsAfterFundingDateMatcher());
+            add(new DisbursementsAfterActivityDateMatcher());
             add(new NoUpdatedDisbursmentsAfterTimePeriodMatcher());
         }
     };
@@ -39,10 +39,12 @@ public final class PerformanceRuleMatchers {
     
     public static List<String> getPerformanceRuleAttributePossibleValues(PerformanceRuleAttributeType type) {
         switch (type) {
-            case ACTIVITY_STATUS :
-                return getActivityStatusPossibleValues();
             case TIME_UNIT :
                 return getPeriodPossibleValues();
+            case ACTIVITY_STATUS :
+                return getActivityStatusPossibleValues();
+            case ACTIVITY_DATE :
+                return getActivityDatePossibleValue();
             case FUNDING_DATE:
                 return getFundingDatePossibleValue();
             default:
@@ -62,9 +64,12 @@ public final class PerformanceRuleMatchers {
                 PerformanceRuleConstants.TIME_UNIT_YEAR);
     }
     
+    public static List<String> getActivityDatePossibleValue() {
+        return Arrays.asList(PerformanceRuleConstants.ACTIVITY_CLOSING_DATE);
+    }
+    
     public static List<String> getFundingDatePossibleValue() {
-        return Arrays.asList(PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, 
-                PerformanceRuleConstants.FUNDING_EFFECTIVE_DATE);
+        return Arrays.asList(PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE);
     }
     
 }

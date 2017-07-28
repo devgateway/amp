@@ -37,7 +37,7 @@ public class NoUpdatedDisbursmentsAfterTimePeriodMatcher extends PerformanceRule
                 PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT));
         
         Date deadline = getDeadline(new Date(), timeUnit, timeAmount);
-        for(AmpFunding f : a.getFunding()) {
+        for (AmpFunding f : a.getFunding()) {
             boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()
                     .filter(t -> t.getTransactionType() == Constants.DISBURSEMENT)
                     .anyMatch(t -> t.getTransactionDate().after(deadline));

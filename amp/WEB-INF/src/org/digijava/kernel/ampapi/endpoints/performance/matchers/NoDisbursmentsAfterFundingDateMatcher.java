@@ -40,7 +40,7 @@ public class NoDisbursmentsAfterFundingDateMatcher extends PerformanceRuleMatche
         String selectedFundingDate = performanceRuleManager.getAttributeValue(rule,
                 PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE);
         
-        for(AmpFunding f : a.getFunding()) {
+        for (AmpFunding f : a.getFunding()) {
             Date fundingSelectedDate = getFundingDate(f, selectedFundingDate);
             if (fundingSelectedDate != null) {
                 Date deadline = getDeadline(fundingSelectedDate, timeUnit, timeAmount);

@@ -10,6 +10,7 @@ import {
 } from 'redux';
 require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
+import PerformanceRuleList from '../components/PerformanceRuleList.jsx';
 export default class App extends Component {
     constructor(props, context) {
         super(props, context);        
@@ -19,8 +20,9 @@ export default class App extends Component {
 
     render() {
         return (
-            <div>
-             <h1>Hello World!</h1>
+            <div className="container">
+              <h2>Performance Rules</h2>
+               <PerformanceRuleList/>
             </div>
 
         );

@@ -1,7 +1,7 @@
 import { postJson, delay, fetchJson, deleteJson } from 'amp/tools';
-class PerformanceAlertRuleApi {
-    static getPerformanceAlertRuleList( data ) {
-        const url = '/rest/performance/rules/list?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;
+class PerformanceRuleApi {
+    static getPerformanceRuleList( data ) {
+        const url = '/rest/performance/admin/?page=' + data.paging.currentPageNumber + '&size=' + data.paging.recordsPerPage;
         return new Promise(( resolve, reject ) => {
             fetchJson( url ).then(( response ) => {
                 resolve( response )
@@ -22,7 +22,7 @@ class PerformanceAlertRuleApi {
         });
     }
 
-    static deletePerformanceAlertRule( data ) {
+    static deletePerformanceRule( data ) {
         var url = '/rest/performance/rules/' + data.id;
         return new Promise(( resolve, reject ) => {
             deleteJson( url, {}).then( response => {
@@ -36,4 +36,4 @@ class PerformanceAlertRuleApi {
 
 }
 
-export default PerformanceAlertRuleApi;
+export default PerformanceRuleApi;

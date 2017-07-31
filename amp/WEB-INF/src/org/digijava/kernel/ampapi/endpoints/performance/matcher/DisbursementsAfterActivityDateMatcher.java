@@ -1,12 +1,13 @@
-package org.digijava.kernel.ampapi.endpoints.performance.matchers;
+package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
 import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.performance.PerfomanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
-import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
+import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
 
@@ -18,18 +19,15 @@ import org.digijava.module.aim.util.ActivityUtil;
  */
 public class DisbursementsAfterActivityDateMatcher extends PerformanceRuleMatcher {
     
-    public DisbursementsAfterActivityDateMatcher() {
-        super("disbursementsAfterActivityDate", "Disbursements after selected activity date");
-
-        attributes.add(new PerformanceRuleMatcherAttribute(PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_DATE, 
-                "Funding Date", PerformanceRuleAttributeType.ACTIVITY_DATE));
+    public DisbursementsAfterActivityDateMatcher(PerformanceRuleMatcherDefinition definition, AmpPerformanceRule rule) {
+        super(definition, rule);
     }
 
     @Override
-    public boolean match(AmpPerformanceRule rule, AmpActivityVersion a) {
+    public boolean match(AmpActivityVersion a) {
         PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
         
-        String selectedActivityDate = performanceRuleManager.getAttributeValue(rule,
+        String selectedActivityDate = performanceRuleManager.getAttributeValue(rule, 
                 PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_DATE);
         
         
@@ -45,6 +43,19 @@ public class DisbursementsAfterActivityDateMatcher extends PerformanceRuleMatche
         }
 
         return false;
+    }
+
+    @Override
+    public boolean validate() {
+        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+        AmpPerformanceRuleAttribute attribute = performanceRuleManager
+                .getAttributeFromRule(rule, PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_DATE);
+        
+        if (attribute == null) {
+            throw new IllegalArgumentException();
+        }
+            
+        return true;
     }
     
 }

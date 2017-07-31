@@ -1,13 +1,14 @@
-package org.digijava.kernel.ampapi.endpoints.performance.matchers;
+package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
 import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.performance.PerfomanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
-import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
+import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -18,19 +19,12 @@ import org.digijava.module.aim.helper.Constants;
  */
 public class NoDisbursmentsAfterFundingDateMatcher extends PerformanceRuleMatcher {
     
-    public NoDisbursmentsAfterFundingDateMatcher() {
-        super("noDisbursementsAfterFundingDate", "No disbursments after selected funding date");
-
-        attributes.add(new PerformanceRuleMatcherAttribute(PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT, 
-                "Time Unit", PerformanceRuleAttributeType.TIME_UNIT));
-        attributes.add(new PerformanceRuleMatcherAttribute(PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT, 
-                "Time Amount", PerformanceRuleAttributeType.AMOUNT));
-        attributes.add(new PerformanceRuleMatcherAttribute(PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE, 
-                "Funding Date", PerformanceRuleAttributeType.FUNDING_DATE));
+    public NoDisbursmentsAfterFundingDateMatcher(PerformanceRuleMatcherDefinition definition, AmpPerformanceRule rule) {
+        super(definition, rule);
     }
 
     @Override
-    public boolean match(AmpPerformanceRule rule, AmpActivityVersion a) {
+    public boolean match(AmpActivityVersion a) {
         PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
 
         int timeUnit = performanceRuleManager.getCalendarTimeUnit(performanceRuleManager.getAttributeValue(rule, 
@@ -56,6 +50,28 @@ public class NoDisbursmentsAfterFundingDateMatcher extends PerformanceRuleMatche
         }
         
         return false;
+    }
+
+    @Override
+    public boolean validate() {
+        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+        
+        if (rule.getAttributes() == null) {
+            return false;
+        }
+        
+        AmpPerformanceRuleAttribute attr1 = performanceRuleManager
+                .getAttributeFromRule(rule, PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT);
+        AmpPerformanceRuleAttribute attr2 = performanceRuleManager
+                .getAttributeFromRule(rule, PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT);
+        AmpPerformanceRuleAttribute attr3 = performanceRuleManager
+                .getAttributeFromRule(rule, PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE);
+
+        if (attr1 == null || attr2 == null || attr3 == null) {
+            throw new IllegalArgumentException();
+        }
+        
+        return true;
     }
     
 }

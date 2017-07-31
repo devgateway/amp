@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.performance.matchers;
+package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,9 +7,13 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherAttribute;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
+import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
 
 /**
  * 
@@ -17,34 +21,19 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRule;
  *
  */
 public abstract class PerformanceRuleMatcher {
+    
+    protected PerformanceRuleMatcherDefinition definition;
 
-    protected String name;
-
-    protected String description;
+    protected AmpPerformanceRule rule;
     
     @JsonIgnore
     protected List<PerformanceRuleMatcherAttribute> attributes = new ArrayList<>();
     
-    public PerformanceRuleMatcher(String name, String description) {
+    public PerformanceRuleMatcher(PerformanceRuleMatcherDefinition definition, AmpPerformanceRule rule) {
         super();
-        this.name = name;
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+        this.definition = definition;
+        this.rule = rule;
+        validate();
     }
 
     public List<PerformanceRuleMatcherAttribute> getAttributes() {
@@ -55,7 +44,13 @@ public abstract class PerformanceRuleMatcher {
         this.attributes = attributes;
     }
     
-    public abstract boolean match(AmpPerformanceRule rule, AmpActivityVersion a);
+    public abstract boolean match(AmpActivityVersion a);
+    
+    public abstract boolean validate();
+    
+    public List<String> getPossibleValue(PerformanceRuleAttributeType type) {
+        return PerformanceRuleMatcherPossibleValuesSupplier.getDefaultPerformanceRuleAttributePossibleValues(type);
+    }
     
     public Date getFundingDate(AmpFunding f, String selectedFundingDate) {
         switch (selectedFundingDate) {

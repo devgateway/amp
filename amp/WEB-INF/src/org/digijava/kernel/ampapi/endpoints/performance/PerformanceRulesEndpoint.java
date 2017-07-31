@@ -13,8 +13,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
-import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatcher;
-import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatcherAttribute;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherAttribute;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -121,8 +121,8 @@ public class PerformanceRulesEndpoint {
     @Path("/types")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "getTypes", authTypes = { AuthRule.IN_ADMIN })
-    public List<PerformanceRuleMatcher> getTypes() {
-        return performanceRuleManager.getTypes();
+    public List<PerformanceRuleMatcherDefinition> getTypes() {
+        return performanceRuleManager.getPerformanceRuleDefinitions();
     }
     
     @GET
@@ -130,7 +130,7 @@ public class PerformanceRulesEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "getAttributes", authTypes = { AuthRule.IN_ADMIN })
     public List<PerformanceRuleMatcherAttribute> getAttributes(@QueryParam("ruleType") String ruleType) {
-        return performanceRuleManager.getAttributes(ruleType);
+        return performanceRuleManager.getMatcherDefinition(ruleType).getAttributes();
     }
 
 }

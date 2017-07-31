@@ -3,22 +3,15 @@ package org.digijava.kernel.ampapi.endpoints.performance;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.DisbursementsAfterActivityDateMatcherDefinition;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoDisbursmentsAfterFundingDateMatcherDefinition;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedDisbursmentsAfterTimePeriodMatcherDefinition;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedStatusAfterFundingDateMatcherDefinition;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.*;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
-import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -33,7 +26,7 @@ public class PerfomanceRuleManager {
 
     private static PerfomanceRuleManager performanceRuleManager;
     
-    List<PerformanceRuleMatcherDefinition> definitions;
+    private List<PerformanceRuleMatcherDefinition> definitions;
     
     private static final Logger logger = Logger.getLogger(PerfomanceRuleManager.class);
     

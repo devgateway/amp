@@ -9,73 +9,71 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
- * Utility class for creating activities for testing
- * Please add more methods if it is needed
+ * Utility class for creating activities for testing Please add more methods if
+ * it is needed
  * 
  * @author Viorel Chihai
  *
  */
 public class ActivityBuilder {
-	
-	AmpActivityVersion activity;
-	
-	public ActivityBuilder() {
-		activity = new AmpActivityVersion();
-	}
-	
-	public ActivityBuilder withId(Long id) {
-		activity.setAmpActivityId(id);
-		
-		return this;
+
+    AmpActivityVersion activity;
+
+    public ActivityBuilder() {
+        activity = new AmpActivityVersion();
     }
-	
-	public ActivityBuilder withTitle(String title) {
-		activity.setName(title);
-		
-		return this;
+
+    public ActivityBuilder withId(Long id) {
+        activity.setAmpActivityId(id);
+
+        return this;
     }
-	
-	public ActivityBuilder withCategories(Set<AmpCategoryValue> ampActivityCategories) {
-		activity.setCategories(ampActivityCategories);
-		
-		return this;
+
+    public ActivityBuilder withTitle(String title) {
+        activity.setName(title);
+
+        return this;
     }
-	
-	public ActivityBuilder withFundings(Set<AmpFunding> ampFundings) {
+
+    public ActivityBuilder withCategories(Set<AmpCategoryValue> ampActivityCategories) {
+        activity.setCategories(ampActivityCategories);
+
+        return this;
+    }
+
+    public ActivityBuilder withFundings(Set<AmpFunding> ampFundings) {
         activity.setFunding(ampFundings);
-        
+
         return this;
     }
-	
-	public ActivityBuilder addFunding(AmpFunding funding) {
-	    if (activity.getFunding() == null) {
-	        activity.setFunding(new HashSet<>());
-	    }
-	    
-	    activity.getFunding().add(funding);
-        
+
+    public ActivityBuilder addFunding(AmpFunding funding) {
+        if (activity.getFunding() == null) {
+            activity.setFunding(new HashSet<>());
+        }
+
+        activity.getFunding().add(funding);
+
         return this;
     }
-	
-	public ActivityBuilder addCategoryValue(AmpCategoryValue acv) {
+
+    public ActivityBuilder addCategoryValue(AmpCategoryValue acv) {
         if (activity.getCategories() == null) {
             activity.setCategories(new HashSet<>());
         }
-        
+
         activity.getCategories().add(acv);
-        
+
         return this;
     }
-	
-	public ActivityBuilder withActualCompletionDate(Date completionDate) {
-	    activity.setActualCompletionDate(completionDate);
-	    
-	    return this;
-	}
-	
-	public AmpActivityVersion getActivity() {
-		return activity;
-	}
+
+    public ActivityBuilder withActualCompletionDate(Date completionDate) {
+        activity.setActualCompletionDate(completionDate);
+
+        return this;
+    }
+
+    public AmpActivityVersion getActivity() {
+        return activity;
+    }
 }
-
-

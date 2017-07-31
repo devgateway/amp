@@ -70,7 +70,7 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
         }
         AbstractEntityPersister entityPersister = (AbstractEntityPersister) meta;
         String[] propertyNames = entityPersister.getPropertyNames();
-        final String tableName = entityPersister.getTableName();
+        final String tableName = entityPersister.getTableName().toLowerCase();
         Map<String, Field> interchangeableFields = getInterchangeableFields(clazz);
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {

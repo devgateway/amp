@@ -1188,62 +1188,28 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				&& newActivity.getDraft() != null && !newActivity.getDraft()) {
 			new ActivitySaveTrigger(newActivity);
 		}
-    	String additionalDetails="approved";
 		//if validation is off in team setup no messages should be generated
 
 		String validation = DbUtil.getValidationFromTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
 		
 		if (activity.getDraft() != null&& !activity.getDraft()&&!("validationOff".equals(validation))) {
-        	String approvalStatus = newActivity.getApprovalStatus();
-			if(approvalStatus != null && (approvalStatus.equals(Constants.APPROVED_STATUS)||approvalStatus.equals(Constants.STARTED_APPROVED_STATUS))){
-        		if(modifiedBy!=null){
-        			AmpTeamMemberRoles role=modifiedBy.getAmpMemberRole();
-            		boolean isTeamHead=false;
-            		if(role.getTeamHead()!=null&&role.getTeamHead()){
-            			isTeamHead=true;
-            		}
+			if (isApproved(newActivity)) {
+				if (modifiedBy != null) {
+					AmpTeamMemberRoles role=modifiedBy.getAmpMemberRole();
             		if(!role.isApprover()){
             			if(oldId==null||("allEdits".equals(validation))){
             				new ApprovedActivityTrigger(newActivity,modifiedBy); //if TL or approver created activity, then no Trigger is needed
             			}
             		}
         		}
-        		
         	}else{
         		if("allEdits".equals(validation)||oldId==null){
         			new NotApprovedActivityTrigger(newActivity);
-            		additionalDetails="pending approval";
         		}
         	}
         }
-		else{
-			if (newActivity.getDraft() != null&& newActivity.getDraft()){
-				additionalDetails="draft";
-			}
-		}
-		
-		HttpServletRequest hsRequest = (HttpServletRequest) getRequest().getContainerRequest();
-
-		if (oldId != null) {
-			List<String> details=new ArrayList<String>();
-			details.add(additionalDetails);
-			AuditLoggerUtil.logActivityUpdate(hsRequest, newActivity,details);
-		} else {
-			try {
-				AuditLoggerUtil.logObject(hsRequest, newActivity, "add",additionalDetails);
-			} catch (DgException e) {
-				e.printStackTrace();
-			}
-		}
 
         Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();
-        String replaceStr;
-        if (oldId == null) {
-            replaceStr = "new";
-        }
-        else {
-            replaceStr = String.valueOf(oldId);
-        }
         if(draft && redirected.getObject().equals(STAY_ON_PAGE)){
 
 				AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
@@ -1269,6 +1235,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             target.add(feedbackPanel);
         }
 	}
+
+	private boolean isApproved(AmpActivityVersion activity) {
+		String approvalStatus = activity.getApprovalStatus();
+    	return Constants.APPROVED_STATUS.equals(approvalStatus)
+				|| Constants.STARTED_APPROVED_STATUS.equals(approvalStatus);
+    }
 
 	private void quickMenu(IModel<AmpActivityVersion> am, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) {
 		ListView<AmpComponentPanel> list = new ListView<AmpComponentPanel>("quickList", listModel) {

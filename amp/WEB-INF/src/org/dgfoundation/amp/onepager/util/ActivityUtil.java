@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -38,6 +39,7 @@ import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
 import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -67,7 +69,9 @@ import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
@@ -321,7 +325,49 @@ public class ActivityUtil {
             a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
             session.update(a);
         }
+
+        logAudit(ampCurrentMember, a, newActivity);
+
         return a;
+	}
+
+	private static void logAudit(AmpTeamMember teamMember, AmpActivityVersion activity, boolean newActivity) {
+		String additionalDetails = determineDetails(teamMember, activity, newActivity);
+		TeamMember tm = teamMember.toTeamMember();
+		if (!newActivity) {
+			AuditLoggerUtil.logActivityUpdate(tm, activity, Arrays.asList(additionalDetails));
+		} else {
+			try {
+				AuditLoggerUtil.logObject(tm, activity, "add", additionalDetails);
+			} catch (DgException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static String determineDetails(AmpTeamMember teamMember, AmpActivityVersion activity, boolean newActivity) {
+		String additionalDetails = "approved";
+
+		Long teamId = teamMember.getAmpTeam().getAmpTeamId();
+		String validation = org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamId);
+
+		if (activity.getDraft() != null) {
+			if (!activity.getDraft() && !("validationOff".equals(validation))) {
+				if (!isApproved(activity) && ("allEdits".equals(validation) || newActivity)) {
+					additionalDetails = "pending approval";
+				}
+			} else if (activity.getDraft()) {
+				additionalDetails = "draft";
+			}
+		}
+
+		return additionalDetails;
+	}
+
+	private static boolean isApproved(AmpActivityVersion activity) {
+		String approvalStatus = activity.getApprovalStatus();
+		return Constants.APPROVED_STATUS.equals(approvalStatus)
+				|| Constants.STARTED_APPROVED_STATUS.equals(approvalStatus);
 	}
 
 	/**

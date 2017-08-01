@@ -23,25 +23,29 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  */
 public class NoUpdatedStatusAfterFundingDateMatcher extends PerformanceRuleMatcher {
     
+    int timeUnit;
+    int timeAmount;
+    String selectedDate;
+    String selectedStatus;
+    
     public NoUpdatedStatusAfterFundingDateMatcher(PerformanceRuleMatcherDefinition definition,
             AmpPerformanceRule rule) {
-
         super(definition, rule);
+        
+        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+        
+        timeUnit = performanceRuleManager.getCalendarTimeUnit(
+                performanceRuleManager.getAttributeValue(rule, PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT));
+        timeAmount = Integer.parseInt(performanceRuleManager.getAttributeValue(rule, 
+                PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT));
+        selectedDate = performanceRuleManager.getAttributeValue(rule,
+                PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE);
+        selectedStatus = performanceRuleManager.getAttributeValue(rule, 
+                PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_STATUS);
     }
 
     @Override
     public boolean match(AmpActivityVersion a) {
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
-        
-        int timeUnit = performanceRuleManager.getCalendarTimeUnit(
-                performanceRuleManager.getAttributeValue(rule, PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT));
-        int timeAmount = Integer.parseInt(performanceRuleManager.getAttributeValue(rule, 
-                PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT));
-        String selectedDate = performanceRuleManager.getAttributeValue(rule,
-                PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE);
-        String selectedStatus = performanceRuleManager.getAttributeValue(rule, 
-                PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_STATUS);
-        
         AmpCategoryValue activityStatus = CategoryManagerUtil
                 .getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, a.getCategories());
         

@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,7 +22,7 @@ public class PerformanceRuleMatcherPossibleValuesSupplierTest {
             case FUNDING_DATE:
                 return PerformanceRuleMatcherPossibleValuesSupplier.getFundingDatePossibleValue();
             default:
-                return null;
+                return new ArrayList<String>();
         }
     }
 

@@ -1,13 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherAttribute;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -26,27 +23,20 @@ public abstract class PerformanceRuleMatcher {
 
     protected AmpPerformanceRule rule;
     
-    @JsonIgnore
-    protected List<PerformanceRuleMatcherAttribute> attributes = new ArrayList<>();
-    
     public PerformanceRuleMatcher(PerformanceRuleMatcherDefinition definition, AmpPerformanceRule rule) {
         super();
         this.definition = definition;
         this.rule = rule;
         validate();
     }
-
-    public List<PerformanceRuleMatcherAttribute> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(List<PerformanceRuleMatcherAttribute> attributes) {
-        this.attributes = attributes;
-    }
     
+    public AmpPerformanceRule getRule() {
+        return rule;
+    }
+
     public abstract boolean match(AmpActivityVersion a);
     
-    public abstract boolean validate();
+    protected abstract boolean validate();
     
     public List<String> getPossibleValue(PerformanceRuleAttributeType type) {
         return PerformanceRuleMatcherPossibleValuesSupplier.getDefaultPerformanceRuleAttributePossibleValues(type);
@@ -54,19 +44,19 @@ public abstract class PerformanceRuleMatcher {
     
     public Date getFundingDate(AmpFunding f, String selectedFundingDate) {
         switch (selectedFundingDate) {
-            case PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE :
+            case PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE:
                 return f.getFundingClassificationDate();
-            default :
-                return null;
+            default:
+                throw new IllegalArgumentException();
         }
     }
     
     public Date getActivityDate(AmpActivityVersion a, String selectedActivityDate) {
         switch (selectedActivityDate) {
-            case PerformanceRuleConstants.ACTIVITY_CLOSING_DATE :
+            case PerformanceRuleConstants.ACTIVITY_CLOSING_DATE:
                 return a.getActualCompletionDate();
-            default :
-                return null;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 

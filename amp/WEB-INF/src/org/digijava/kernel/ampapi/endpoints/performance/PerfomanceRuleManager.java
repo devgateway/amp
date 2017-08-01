@@ -146,26 +146,41 @@ public class PerfomanceRuleManager {
         return matcherDefiniton;
     }
 
-    public AmpCategoryValue matchActivity(AmpActivityVersion a) {
+    public List<PerformanceRuleMatcher> getPerformanceRuleMatchers() {
         List<AmpPerformanceRule> rules = getPerformanceRules().stream()
                 .filter(rule -> rule.getEnabled())
                 .collect(Collectors.toList());
-
-        return matchActivity(rules, a);
+        
+        List<PerformanceRuleMatcher> matchers = new ArrayList<>();
+        for (AmpPerformanceRule rule : rules) {
+            matchers.add(getMatcherDefinition(rule.getTypeClassName()).createMatcher(rule));
+        }
+        
+        return matchers;
     }
     
-    public AmpCategoryValue matchActivity(List<AmpPerformanceRule> rules, AmpActivityVersion a) {
+    /**
+     * This method should only when the the user wants to match one activity.
+     * In order to match a list of activities, get the matcher list once and match the items one by one
+     * @param a activity
+     * @return performance alert level (null if activity does not have performance issues)
+     */
+    public AmpCategoryValue matchActivity(AmpActivityVersion a) {
+        List<PerformanceRuleMatcher> matchers = getPerformanceRuleMatchers();
+
+        return matchActivity(matchers, a);
+    }
+
+    public AmpCategoryValue matchActivity(List<PerformanceRuleMatcher> matchers, AmpActivityVersion a) {
 
         AmpCategoryValue level = null;
         
-        for (AmpPerformanceRule rule : rules) {
+        for (PerformanceRuleMatcher matcher : matchers) {
             try {
-                PerformanceRuleMatcherDefinition matcherDefinition = getMatcherDefinition(rule.getTypeClassName());
-                PerformanceRuleMatcher matcher = matcherDefinition.createMatcher(rule);
-                AmpCategoryValue matchedLevel = matcher.match(a) ? rule.getLevel() : null;
+                AmpCategoryValue matchedLevel = matcher.match(a) ? matcher.getRule().getLevel() : null;
                 level = getHigherLevel(level, matchedLevel);
             } catch (IllegalArgumentException e) {
-                logger.error("Rule [" + rule.getName() + "] is not valid");
+                logger.error("Rule [" + matcher.getRule().getName() + "] is not valid");
             }
         }
         

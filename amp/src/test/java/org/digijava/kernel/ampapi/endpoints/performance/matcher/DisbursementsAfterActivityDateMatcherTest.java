@@ -1,10 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
@@ -19,6 +17,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * A disbursement happened after (transaction date itself) the project closing date 
@@ -38,17 +38,13 @@ public class DisbursementsAfterActivityDateMatcherTest extends PerformanceRuleMa
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
         
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
-        
-        assertTrue(matcher.validate());
+        assertNotNull(definition.createMatcher(rule));
     }
     
     @Test
     public void testTwoDisbursementsAfterSelectedDate() {
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
-        
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
@@ -65,7 +61,7 @@ public class DisbursementsAfterActivityDateMatcherTest extends PerformanceRuleMa
                 .withActualCompletionDate(new LocalDate(2015, 11, 12).toDate())
                 .getActivity();
         
-        assertFalse(matcher.match(a));
+        assertFalse(assertRuleMatches(rule, a));
     }
     
     @Test
@@ -73,9 +69,7 @@ public class DisbursementsAfterActivityDateMatcherTest extends PerformanceRuleMa
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "1", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
         
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
-        
-        AmpActivityVersion act2 = new ActivityBuilder()
+        AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
                                 .addTransaction(new TransactionBuilder()
@@ -94,7 +88,7 @@ public class DisbursementsAfterActivityDateMatcherTest extends PerformanceRuleMa
                 .withActualCompletionDate(new LocalDate(2016, 11, 12).toDate())
                 .getActivity();
         
-        assertTrue(matcher.match(act2));
+        assertTrue(assertRuleMatches(rule, a));
     }
     
     @Test
@@ -102,9 +96,7 @@ public class DisbursementsAfterActivityDateMatcherTest extends PerformanceRuleMa
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_YEAR, "1", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
         
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
-        
-        AmpActivityVersion act3 = new ActivityBuilder()
+        AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
                                 .addTransaction(new TransactionBuilder()
@@ -123,7 +115,7 @@ public class DisbursementsAfterActivityDateMatcherTest extends PerformanceRuleMa
                 .withActualCompletionDate(new LocalDate(2017, 11, 12).toDate())
                 .getActivity();
         
-        assertFalse(matcher.match(act3));
+        assertFalse(assertRuleMatches(rule, a));
     }
         
     public AmpPerformanceRule createRule(String timeUnit, String timeAmount, String fundingDate, 
@@ -144,7 +136,7 @@ public class DisbursementsAfterActivityDateMatcherTest extends PerformanceRuleMa
         attr3.setType(AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.FUNDING_DATE);
         attr3.setValue(fundingDate);
 
-        rule.setAttributes(Stream.of(attr1, attr2, attr3).collect(Collectors.toSet()));
+        rule.setAttributes(ImmutableSet.of(attr1, attr2, attr3));
         rule.setLevel(level);
 
         return rule;

@@ -19,18 +19,19 @@ import org.digijava.module.aim.util.ActivityUtil;
  */
 public class DisbursementsAfterActivityDateMatcher extends PerformanceRuleMatcher {
     
+    String selectedActivityDate;
+    
     public DisbursementsAfterActivityDateMatcher(PerformanceRuleMatcherDefinition definition, AmpPerformanceRule rule) {
         super(definition, rule);
+        
+        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+        
+        selectedActivityDate = performanceRuleManager.getAttributeValue(rule, 
+                PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_DATE);
     }
 
     @Override
     public boolean match(AmpActivityVersion a) {
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
-        
-        String selectedActivityDate = performanceRuleManager.getAttributeValue(rule, 
-                PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_DATE);
-        
-        
         Date deadline = getActivityDate(a, selectedActivityDate);
         if (deadline != null) {
             boolean hasDisbursmentsAfterDeadline = ActivityUtil.getTransactionsWithType(a, Constants.DISBURSEMENT)

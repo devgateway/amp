@@ -1,10 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
@@ -19,6 +17,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * A period have passed since the project signature date and still no disbursement from donor
@@ -38,9 +38,7 @@ public class NoDisbursmentsAfterFundingDateMatcherTest extends PerformanceRuleMa
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
         
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
-
-        assertTrue(matcher.validate());
+        assertNotNull(definition.createMatcher(rule));
     }
 
     @Test
@@ -48,8 +46,6 @@ public class NoDisbursmentsAfterFundingDateMatcherTest extends PerformanceRuleMa
        
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
-        
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
@@ -62,7 +58,7 @@ public class NoDisbursmentsAfterFundingDateMatcherTest extends PerformanceRuleMa
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(matcher.match(a));
+        assertFalse(assertRuleMatches(rule, a));
     }
     
     @Test
@@ -70,8 +66,6 @@ public class NoDisbursmentsAfterFundingDateMatcherTest extends PerformanceRuleMa
        
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
-        
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
@@ -88,7 +82,7 @@ public class NoDisbursmentsAfterFundingDateMatcherTest extends PerformanceRuleMa
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(matcher.match(a));
+        assertTrue(assertRuleMatches(rule, a));
     }
     
     @Test
@@ -96,8 +90,6 @@ public class NoDisbursmentsAfterFundingDateMatcherTest extends PerformanceRuleMa
        
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
-        
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
@@ -126,7 +118,7 @@ public class NoDisbursmentsAfterFundingDateMatcherTest extends PerformanceRuleMa
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(matcher.match(a));
+        assertTrue(assertRuleMatches(rule, a));
     }
 
     /**
@@ -150,7 +142,7 @@ public class NoDisbursmentsAfterFundingDateMatcherTest extends PerformanceRuleMa
         attr3.setType(AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.FUNDING_DATE);
         attr3.setValue(fundingDate);
         
-        rule.setAttributes(Stream.of(attr1, attr2, attr3).collect(Collectors.toSet()));
+        rule.setAttributes(ImmutableSet.of(attr1, attr2, attr3));
         rule.setLevel(level);
 
         return rule;

@@ -19,21 +19,25 @@ import org.digijava.module.aim.helper.Constants;
  */
 public class NoDisbursmentsAfterFundingDateMatcher extends PerformanceRuleMatcher {
     
+    int timeUnit;
+    int timeAmount;
+    String selectedFundingDate;
+    
     public NoDisbursmentsAfterFundingDateMatcher(PerformanceRuleMatcherDefinition definition, AmpPerformanceRule rule) {
         super(definition, rule);
+        
+        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+
+        timeUnit = performanceRuleManager.getCalendarTimeUnit(performanceRuleManager.getAttributeValue(rule, 
+                PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT));
+        timeAmount = Integer.parseInt(performanceRuleManager.getAttributeValue(rule, 
+                PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT));
+        selectedFundingDate = performanceRuleManager.getAttributeValue(rule,
+                PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE);
     }
 
     @Override
     public boolean match(AmpActivityVersion a) {
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
-
-        int timeUnit = performanceRuleManager.getCalendarTimeUnit(performanceRuleManager.getAttributeValue(rule, 
-                PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT));
-        int timeAmount = Integer.parseInt(performanceRuleManager.getAttributeValue(rule, 
-                PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT));
-        String selectedFundingDate = performanceRuleManager.getAttributeValue(rule,
-                PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE);
-        
         for (AmpFunding f : a.getFunding()) {
             Date fundingSelectedDate = getFundingDate(f, selectedFundingDate);
             if (fundingSelectedDate != null) {

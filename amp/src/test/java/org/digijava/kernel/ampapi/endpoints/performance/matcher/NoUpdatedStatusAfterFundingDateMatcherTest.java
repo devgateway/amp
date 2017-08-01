@@ -1,10 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.CategoryClassBuilder;
@@ -21,6 +19,8 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * 3 months went by after the contract signature date and the project status was not modified from planned to ongoing
@@ -41,9 +41,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING, 
                 getCriticalLevel());
         
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
-
-        assertTrue(matcher.validate());
+        assertNotNull(definition.createMatcher(rule));
     }
 
     @Test
@@ -51,8 +49,6 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING, 
                 getCriticalLevel());
-        
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
@@ -73,7 +69,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
                                 .getCategoryValue())
                 .getActivity();
         
-        assertFalse(matcher.match(a));
+        assertFalse(assertRuleMatches(rule, a));
     }
     
     @Test
@@ -81,8 +77,6 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING, 
                 getCriticalLevel());
-        
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
@@ -99,7 +93,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
                                 .getCategoryValue())
                 .getActivity();
         
-        assertFalse(matcher.match(a));
+        assertFalse(assertRuleMatches(rule, a));
     }
     
     @Test
@@ -107,8 +101,6 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING, 
                 getCriticalLevel());
-        
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
@@ -125,7 +117,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
                                 .getCategoryValue())
                 .getActivity();
         
-        assertTrue(matcher.match(a));
+        assertTrue(assertRuleMatches(rule, a));
     }
     
     @Test
@@ -133,8 +125,6 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING, 
                 getCriticalLevel());
-        
-        PerformanceRuleMatcher matcher = definition.createMatcher(rule);
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
@@ -151,7 +141,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
                                 .getCategoryValue())
                 .getActivity();
         
-        assertFalse(matcher.match(a));
+        assertFalse(assertRuleMatches(rule, a));
     }
 
     /**
@@ -179,7 +169,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
         attr4.setType(AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.ACTIVITY_STATUS);
         attr4.setValue(activityStatus);
 
-        rule.setAttributes(Stream.of(attr1, attr2, attr3, attr4).collect(Collectors.toSet()));
+        rule.setAttributes(ImmutableSet.of(attr1, attr2, attr3, attr4));
         rule.setLevel(level);
 
         return rule;

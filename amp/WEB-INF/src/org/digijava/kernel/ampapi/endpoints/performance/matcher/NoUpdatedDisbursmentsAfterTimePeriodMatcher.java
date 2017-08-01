@@ -19,21 +19,23 @@ import org.digijava.module.aim.helper.Constants;
  */
 public class NoUpdatedDisbursmentsAfterTimePeriodMatcher extends PerformanceRuleMatcher {
     
+    int timeUnit;
+    int timeAmount;
+    
     public NoUpdatedDisbursmentsAfterTimePeriodMatcher(PerformanceRuleMatcherDefinition definition, 
             AmpPerformanceRule rule) {
-        
         super(definition, rule);
+        
+        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+        
+        timeUnit = performanceRuleManager.getCalendarTimeUnit(
+                performanceRuleManager.getAttributeValue(rule, PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT));
+        timeAmount = Integer.parseInt(performanceRuleManager.getAttributeValue(rule, 
+                PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT));
     }
 
     @Override
     public boolean match(AmpActivityVersion a) {
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
-        
-        int timeUnit = performanceRuleManager.getCalendarTimeUnit(
-                performanceRuleManager.getAttributeValue(rule, PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT));
-        int timeAmount = Integer.parseInt(performanceRuleManager.getAttributeValue(rule, 
-                PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT));
-        
         Date deadline = getDeadline(new Date(), timeUnit, timeAmount);
         for (AmpFunding f : a.getFunding()) {
             boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()

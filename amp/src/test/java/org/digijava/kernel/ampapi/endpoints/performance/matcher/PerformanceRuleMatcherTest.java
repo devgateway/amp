@@ -3,6 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 import org.dgfoundation.amp.activity.builder.CategoryValueBuilder;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.junit.Before;
 
@@ -21,7 +23,11 @@ public class PerformanceRuleMatcherTest {
         supplierInstance.setSupplier(
                 PerformanceRuleMatcherPossibleValuesSupplierTest::getDefaultPerformanceRuleAttributePossibleValues);
     }
-
+    
+    protected boolean assertRuleMatches(AmpPerformanceRule rule, AmpActivityVersion a) {
+        return definition.createMatcher(rule).match(a);
+    }
+    
     protected AmpCategoryValue getCriticalLevel() {
         return new CategoryValueBuilder().withLabel("Critical").withIndex(0).getCategoryValue();
     }

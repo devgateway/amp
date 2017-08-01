@@ -179,6 +179,13 @@ public class FilterUtil {
 		form.getDynamicActivityStartFilter().setAmount(filter.getDynActivityStartFilterAmount());
 		form.getDynamicActivityStartFilter().setOperator(filter.getDynActivityStartFilterOperator());
 		form.getDynamicActivityStartFilter().setxPeriod(filter.getDynActivityStartFilterXPeriod());
+
+		form.setToIssueDate(convertArFilterToUiDate(filter.getToIssueDate()));
+		form.setFromIssueDate(convertArFilterToUiDate(filter.getFromIssueDate()));
+		form.getDynamicIssueFilter().setCurrentPeriod(filter.getDynIssueFilterCurrentPeriod());
+		form.getDynamicIssueFilter().setAmount(filter.getDynIssueFilterAmount());
+		form.getDynamicIssueFilter().setOperator(filter.getDynIssueFilterOperator());
+		form.getDynamicIssueFilter().setxPeriod(filter.getDynIssueFilterXPeriod());
 		
 		form.setToActivityActualCompletionDate(convertArFilterToUiDate(filter.getToActivityActualCompletionDate()));
 		form.setFromActivityActualCompletionDate(convertArFilterToUiDate(filter.getFromActivityActualCompletionDate()));

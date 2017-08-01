@@ -7,6 +7,8 @@ export const LOAD_ATTRIBUTE_LIST_SUCCESS = 'LOAD_ATTRIBUTE_LIST_SUCCESS';
 export const ADD_PERFORMANCE_RULE = 'ADD_PERFORMANCE_RULE';
 export const CLOSE_PERFORMANCE_RULE = 'CLOSE_PERFORMANCE_RULE';
 export const EDIT_PERFORMANCE_RULE = 'EDIT_PERFORMANCE_RULE';
+export const SAVE_PERFORMANCE_RULE_SUCCESS = 'SAVE_PERFORMANCE_RULE_SUCCESS';
+export const DELETE_PERFORMANCE_RULE_SUCCESS = 'DELETE_PERFORMANCE_RULE_SUCCESS';
 
 export function loadPerformanceRuleList(data) {
     return function(dispatch) {
@@ -75,6 +77,34 @@ export function editPerformanceRule(performanceRule){
     return function(dispatch) {
         dispatch({type: EDIT_PERFORMANCE_RULE, data: performanceRule });
     }; 
+}
+
+export function savePerformanceRule(data){
+    return function(dispatch) {
+        return performanceRuleApi.save(data).then(response => { 
+            let result = {};
+            if(response.status == 400) {                
+                result.errors = [{messageKey: 'amp.performance-rule:save-error'}];
+            } else {
+                result.infoMessages = [{messageKey: 'amp.performance-rule:save-successful'}];
+            }            
+            dispatch({type: SAVE_PERFORMANCE_RULE_SUCCESS, data:result });
+        }).catch(error => {
+            console.log(error);
+            throw(error);
+        });
+    };
+}
+
+export function deletePerformanceRule(data) {
+    return function(dispatch) {
+        return performanceRuleApi.deletePerformanceRule(data).then(response => {            
+            dispatch({type: DELETE_PERFORMANCE_RULE_SUCCESS, data: response });
+        }).catch(error => {
+            console.log(error);
+            throw(error);
+        });
+    };
 }
 
 

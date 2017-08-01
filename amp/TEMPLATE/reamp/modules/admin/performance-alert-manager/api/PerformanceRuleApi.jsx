@@ -1,4 +1,4 @@
-import { postJson, delay, fetchJson, deleteJson } from 'amp/tools';
+import { postJson, delay, fetchJson, deleteJson, putJson } from 'amp/tools';
 class PerformanceRuleApi {
     static getPerformanceRuleList( data ) {
         const url = '/rest/performance/admin/?page=' + data.paging.currentPageNumber + '&size=' + data.paging.recordsPerPage;
@@ -12,11 +12,12 @@ class PerformanceRuleApi {
     }
 
     static save( data ) {
-        delete data.isEditing
+        const saveFunc = data.id ? putJson : postJson;
+        const url = data.id ? '/rest/performance/rules/' + data.id : '/rest/performance/rules';
         return new Promise(( resolve, reject ) => {
-            postJson( '/rest/performance/rules', data ).then( response => {
-                resolve( response.json() );
-            }).catch( error => {
+            saveFunc(url, data ).then((response) => {
+                resolve({status: response.status} );
+            }).catch((error) => {               
                 reject( error );
             });
         });

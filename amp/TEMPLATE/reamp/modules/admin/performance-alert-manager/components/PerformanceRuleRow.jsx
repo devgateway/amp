@@ -28,7 +28,9 @@ export default class PerformanceRuleRow extends Component {
     }
     
     deletePerformanceRule() {
-        
+        if (confirm(this.props.translations['amp.performance-rule:delete-prompt'])) {
+           this.props.actions.deletePerformanceRule(this.props.performanceRule); 
+        }        
     }
     
     render() {
@@ -38,7 +40,7 @@ export default class PerformanceRuleRow extends Component {
                 <td>{this.props.performanceRule.typeClassName}</td>
                 <td>{this.props.performanceRule.level.value}</td>
                 <td>
-                <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash"></span>
+                <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deletePerformanceRule}></span>
                 </td>
             </tr>
         );

@@ -15,6 +15,8 @@ import * as performanceRuleActions from '../actions/PerformanceRuleActions';;
 import * as Constants from '../common/Constants';
 import ToolBar from './ToolBar';
 import PagingSection from './PagingSection';
+import PerformanceRuleForm from './PerformanceRuleForm';
+import PerformanceRuleRow from './PerformanceRuleRow'
 
 export default class PerformanceRuleList extends Component {
     constructor(props, context) {
@@ -25,6 +27,8 @@ export default class PerformanceRuleList extends Component {
     }
 
     componentWillMount() {  
+        this.props.actions.getTypeList();
+        this.props.actions.getLevelList();        
         this.props.actions.loadPerformanceRuleList({paging: this.props.paging});
     }  
     
@@ -40,35 +44,31 @@ export default class PerformanceRuleList extends Component {
         this.props.actions.loadPerformanceRuleList({paging: paging});
     }
     
-    render() {
+    render() {          
         return (
-            <div>
-                <ToolBar/>                
+                <div>
+                <ToolBar/> 
+                {this.props.currentPerformanceRule &&
+                    <PerformanceRuleForm {...this.props}/>
+                }                
                 <div className="panel">
-                <table className="table data-table">
-                <thead>
-                <tr>                
-                <th >{this.props.translations['amp.performance-rule:name']}</th>
-                <th >{this.props.translations['amp.performance-rule:type']}</th>
-                <th >{this.props.translations['amp.performance-rule:level']}</th>
-                <th className="actions-column">{this.props.translations['amp.performance-rule:action']}</th>
-                </tr>
-                </thead>
-                <tbody>               
-                {this.props.performanceRuleList.map((performanceRule, i) => 
-                <tr key={i}>
-                   <td>{performanceRule.name}</td>
-                   <td>{performanceRule.typeClassName}</td>
-                   <td>{performanceRule.level.value}</td>
-                   <td></td>
-                 </tr>
-                )}                
-                </tbody>
-                </table> 
+                    <table className="table data-table">
+                        <thead>
+                            <tr>                
+                                <th >{this.props.translations['amp.performance-rule:name']}</th>
+                                <th >{this.props.translations['amp.performance-rule:type']}</th>
+                                <th >{this.props.translations['amp.performance-rule:level']}</th>
+                                <th className="actions-column">{this.props.translations['amp.performance-rule:action']}</th>
+                            </tr>
+                        </thead>
+                        <tbody>               
+                            {this.props.performanceRuleList.map((performanceRule, i) => 
+                               <PerformanceRuleRow performanceRule={performanceRule} key={i}/>
+                            )}                
+                        </tbody>
+                    </table> 
                 </div>
-                
                 <PagingSection page={this.props.paging} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
-                
             </div>
         );
     }
@@ -80,10 +80,13 @@ function mapStateToProps(state, ownProps) {
         translate: state.startUp.translate,
         paging: state.performanceRule.paging,
         sorting: state.performanceRule.sorting,
+        typeList: state.performanceRule.typeList,
+        levelList: state.performanceRule.levelList,
         errors: state.performanceRule.errors || [],
         infoMessages: state.performanceRule.infoMessages || [],
         settings: state.commonLists.settings || {},
-        performanceRuleList: state.performanceRule.performanceRuleList
+        performanceRuleList: state.performanceRule.performanceRuleList,
+        currentPerformanceRule: state.performanceRule.currentPerformanceRule
     }
 }
 

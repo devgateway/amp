@@ -153,7 +153,11 @@ public class PerfomanceRuleManager {
         
         List<PerformanceRuleMatcher> matchers = new ArrayList<>();
         for (AmpPerformanceRule rule : rules) {
-            matchers.add(getMatcherDefinition(rule.getTypeClassName()).createMatcher(rule));
+            try {
+                matchers.add(getMatcherDefinition(rule.getTypeClassName()).createMatcher(rule));
+            } catch (IllegalArgumentException e) {
+                logger.error("Rule [" + rule.getName() + "] is not valid. Please check the attributes");
+            }
         }
         
         return matchers;
@@ -176,12 +180,8 @@ public class PerfomanceRuleManager {
         AmpCategoryValue level = null;
         
         for (PerformanceRuleMatcher matcher : matchers) {
-            try {
-                AmpCategoryValue matchedLevel = matcher.match(a) ? matcher.getRule().getLevel() : null;
-                level = getHigherLevel(level, matchedLevel);
-            } catch (IllegalArgumentException e) {
-                logger.error("Rule [" + matcher.getRule().getName() + "] is not valid");
-            }
+            AmpCategoryValue matchedLevel = matcher.match(a) ? matcher.getRule().getLevel() : null;
+            level = getHigherLevel(level, matchedLevel);
         }
         
         return level;

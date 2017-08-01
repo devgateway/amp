@@ -24,7 +24,7 @@ public class PerformanceRuleMatcherTest {
                 PerformanceRuleMatcherPossibleValuesSupplierTest::getDefaultPerformanceRuleAttributePossibleValues);
     }
     
-    protected boolean assertRuleMatches(AmpPerformanceRule rule, AmpActivityVersion a) {
+    protected boolean match(AmpPerformanceRule rule, AmpActivityVersion a) {
         return definition.createMatcher(rule).match(a);
     }
     

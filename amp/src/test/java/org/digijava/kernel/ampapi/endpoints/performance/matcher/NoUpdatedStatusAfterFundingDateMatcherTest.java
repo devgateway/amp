@@ -69,7 +69,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
                                 .getCategoryValue())
                 .getActivity();
         
-        assertFalse(assertRuleMatches(rule, a));
+        assertFalse(match(rule, a));
     }
     
     @Test
@@ -93,7 +93,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
                                 .getCategoryValue())
                 .getActivity();
         
-        assertFalse(assertRuleMatches(rule, a));
+        assertFalse(match(rule, a));
     }
     
     @Test
@@ -117,7 +117,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
                                 .getCategoryValue())
                 .getActivity();
         
-        assertTrue(assertRuleMatches(rule, a));
+        assertTrue(match(rule, a));
     }
     
     @Test
@@ -141,7 +141,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
                                 .getCategoryValue())
                 .getActivity();
         
-        assertFalse(assertRuleMatches(rule, a));
+        assertFalse(match(rule, a));
     }
 
     /**

@@ -58,7 +58,7 @@ public class NoDisbursmentsAfterFundingDateMatcherTest extends PerformanceRuleMa
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(assertRuleMatches(rule, a));
+        assertFalse(match(rule, a));
     }
     
     @Test
@@ -82,7 +82,7 @@ public class NoDisbursmentsAfterFundingDateMatcherTest extends PerformanceRuleMa
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(assertRuleMatches(rule, a));
+        assertTrue(match(rule, a));
     }
     
     @Test
@@ -118,7 +118,7 @@ public class NoDisbursmentsAfterFundingDateMatcherTest extends PerformanceRuleMa
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(assertRuleMatches(rule, a));
+        assertTrue(match(rule, a));
     }
 
     /**

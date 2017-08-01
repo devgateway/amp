@@ -19,9 +19,9 @@ import org.digijava.module.aim.helper.Constants;
  */
 public class NoDisbursmentsAfterFundingDateMatcher extends PerformanceRuleMatcher {
     
-    int timeUnit;
-    int timeAmount;
-    String selectedFundingDate;
+    private int timeUnit;
+    private int timeAmount;
+    private String selectedFundingDate;
     
     public NoDisbursmentsAfterFundingDateMatcher(PerformanceRuleMatcherDefinition definition, AmpPerformanceRule rule) {
         super(definition, rule);
@@ -57,7 +57,7 @@ public class NoDisbursmentsAfterFundingDateMatcher extends PerformanceRuleMatche
     }
 
     @Override
-    public boolean validate() {
+    protected boolean validate() {
         PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
         
         if (rule.getAttributes() == null) {

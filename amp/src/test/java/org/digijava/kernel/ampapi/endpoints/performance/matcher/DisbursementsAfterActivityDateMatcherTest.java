@@ -61,7 +61,7 @@ public class DisbursementsAfterActivityDateMatcherTest extends PerformanceRuleMa
                 .withActualCompletionDate(new LocalDate(2015, 11, 12).toDate())
                 .getActivity();
         
-        assertFalse(assertRuleMatches(rule, a));
+        assertFalse(match(rule, a));
     }
     
     @Test
@@ -88,7 +88,7 @@ public class DisbursementsAfterActivityDateMatcherTest extends PerformanceRuleMa
                 .withActualCompletionDate(new LocalDate(2016, 11, 12).toDate())
                 .getActivity();
         
-        assertTrue(assertRuleMatches(rule, a));
+        assertTrue(match(rule, a));
     }
     
     @Test
@@ -115,7 +115,7 @@ public class DisbursementsAfterActivityDateMatcherTest extends PerformanceRuleMa
                 .withActualCompletionDate(new LocalDate(2017, 11, 12).toDate())
                 .getActivity();
         
-        assertFalse(assertRuleMatches(rule, a));
+        assertFalse(match(rule, a));
     }
         
     public AmpPerformanceRule createRule(String timeUnit, String timeAmount, String fundingDate, 

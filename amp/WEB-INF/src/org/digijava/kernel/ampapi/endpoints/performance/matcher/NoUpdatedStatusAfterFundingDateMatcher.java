@@ -23,10 +23,10 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  */
 public class NoUpdatedStatusAfterFundingDateMatcher extends PerformanceRuleMatcher {
     
-    int timeUnit;
-    int timeAmount;
-    String selectedDate;
-    String selectedStatus;
+    private int timeUnit;
+    private int timeAmount;
+    private String selectedDate;
+    private String selectedStatus;
     
     public NoUpdatedStatusAfterFundingDateMatcher(PerformanceRuleMatcherDefinition definition,
             AmpPerformanceRule rule) {
@@ -75,7 +75,7 @@ public class NoUpdatedStatusAfterFundingDateMatcher extends PerformanceRuleMatch
     }
     
     @Override
-    public boolean validate() {
+    protected boolean validate() {
         PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
         AmpPerformanceRuleAttribute attr1 = performanceRuleManager
                 .getAttributeFromRule(rule, PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT);

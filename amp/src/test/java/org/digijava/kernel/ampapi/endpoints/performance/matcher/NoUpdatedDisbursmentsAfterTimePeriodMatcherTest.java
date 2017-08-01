@@ -54,7 +54,7 @@ public class NoUpdatedDisbursmentsAfterTimePeriodMatcherTest extends Performance
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(assertRuleMatches(rule, a));
+        assertTrue(match(rule, a));
     }
     
     @Test
@@ -72,7 +72,7 @@ public class NoUpdatedDisbursmentsAfterTimePeriodMatcherTest extends Performance
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(assertRuleMatches(rule, a));
+        assertTrue(match(rule, a));
     }
     
     @Test
@@ -94,7 +94,7 @@ public class NoUpdatedDisbursmentsAfterTimePeriodMatcherTest extends Performance
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(assertRuleMatches(rule, a));
+        assertTrue(match(rule, a));
     }
     
     @Test
@@ -127,7 +127,7 @@ public class NoUpdatedDisbursmentsAfterTimePeriodMatcherTest extends Performance
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(assertRuleMatches(rule, a));
+        assertTrue(match(rule, a));
     }
 
     /**

@@ -19,8 +19,8 @@ import org.digijava.module.aim.helper.Constants;
  */
 public class NoUpdatedDisbursmentsAfterTimePeriodMatcher extends PerformanceRuleMatcher {
     
-    int timeUnit;
-    int timeAmount;
+    private int timeUnit;
+    private int timeAmount;
     
     public NoUpdatedDisbursmentsAfterTimePeriodMatcher(PerformanceRuleMatcherDefinition definition, 
             AmpPerformanceRule rule) {
@@ -51,7 +51,7 @@ public class NoUpdatedDisbursmentsAfterTimePeriodMatcher extends PerformanceRule
     }
     
     @Override
-    public boolean validate() {
+    protected boolean validate() {
         PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
         AmpPerformanceRuleAttribute attr1 = performanceRuleManager
                 .getAttributeFromRule(rule, PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT);

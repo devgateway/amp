@@ -19,7 +19,7 @@ import org.digijava.module.aim.util.ActivityUtil;
  */
 public class DisbursementsAfterActivityDateMatcher extends PerformanceRuleMatcher {
     
-    String selectedActivityDate;
+    private String selectedActivityDate;
     
     public DisbursementsAfterActivityDateMatcher(PerformanceRuleMatcherDefinition definition, AmpPerformanceRule rule) {
         super(definition, rule);
@@ -47,7 +47,7 @@ public class DisbursementsAfterActivityDateMatcher extends PerformanceRuleMatche
     }
 
     @Override
-    public boolean validate() {
+    protected boolean validate() {
         PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
         AmpPerformanceRuleAttribute attribute = performanceRuleManager
                 .getAttributeFromRule(rule, PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_DATE);
@@ -55,7 +55,7 @@ public class DisbursementsAfterActivityDateMatcher extends PerformanceRuleMatche
         if (attribute == null) {
             throw new IllegalArgumentException();
         }
-            
+        
         return true;
     }
     

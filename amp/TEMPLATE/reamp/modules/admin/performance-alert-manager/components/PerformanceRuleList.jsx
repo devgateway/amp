@@ -44,10 +44,34 @@ export default class PerformanceRuleList extends Component {
         this.props.actions.loadPerformanceRuleList({paging: paging});
     }
     
+    showErrors() {           
+        const messages = [];    
+        this.props.errors.forEach((error, index) =>{
+            messages.push(<span key={index}>{this.props.translations[error.messageKey]} <br/></span>  )
+        });
+        
+        return (this.props.errors.length > 0 && <div className="alert alert-danger" role="alert">
+                {messages}
+        </div>) 
+    }
+    
+    showInfoMessages() {
+        return (this.props.infoMessages.length > 0 &&
+                <div className="alert alert-info" role="alert">
+                {this.props.infoMessages.map((info, index) =>
+                <span  key={index} >{this.props.translate(info.messageKey, info.params)} <br/></span>
+                )}
+        </div>) 
+    }
+    
     render() {          
         return (
                 <div>
                 <ToolBar/> 
+                <div>
+                 {this.showInfoMessages()}
+                 {this.showErrors()}
+                </div>
                 {this.props.currentPerformanceRule &&
                     <PerformanceRuleForm {...this.props}/>
                 }                

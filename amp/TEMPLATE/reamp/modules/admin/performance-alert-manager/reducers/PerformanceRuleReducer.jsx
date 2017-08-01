@@ -5,7 +5,8 @@ import {
   LOAD_ATTRIBUTE_LIST_SUCCESS,
   ADD_PERFORMANCE_RULE,
   CLOSE_PERFORMANCE_RULE,
-  EDIT_PERFORMANCE_RULE  
+  EDIT_PERFORMANCE_RULE,
+  SAVE_PERFORMANCE_RULE_SUCCESS
 } from '../actions/PerformanceRuleActions';
 
 const defaultState = {
@@ -58,6 +59,11 @@ export default function performanceRuleReducer(state: Object = defaultState.data
         var newState = Object.assign({}, state);
         newState.attributeList = action.data;                              
         return newState;
+    case SAVE_PERFORMANCE_RULE_SUCCESS:
+        var newState = Object.assign({}, state);
+        newState.errors = action.data.errors; 
+        newState.infoMessages = action.data.infoMessages;
+        return newState;    
     default:            
         return state;
     }

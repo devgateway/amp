@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingDetailComparator;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
@@ -61,7 +62,8 @@ public class AmpReleaseOfFundsFormTableFeature extends
 			}
 		};		
 		
-		list = new ListEditor<AmpFundingDetail>("listDisbursements", setModel, new AmpFundingDetail.FundingDetailComparator()) {
+		list = new ListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
+				.getFundingDetailComparator()) {
 
 			@Override
 			protected void onPopulateItem(

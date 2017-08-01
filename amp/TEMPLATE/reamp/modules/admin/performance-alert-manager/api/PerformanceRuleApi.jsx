@@ -33,6 +33,38 @@ class PerformanceRuleApi {
         });
     }
 
+    static getTypeList() {
+        const url = '/rest/performance/types';
+        return new Promise(( resolve, reject ) => {
+            fetchJson( url ).then(( response ) => {
+                resolve( response )
+            }).catch(( error ) => {
+                reject( error );
+            });
+        });
+    }
+    
+    static getLevelList() {
+        const url = '/rest/performance/levels';
+        return new Promise(( resolve, reject ) => {
+            fetchJson( url ).then(( response ) => {
+                resolve( response )
+            }).catch(( error ) => {
+                reject( error );
+            });
+        });
+    }
+    
+    static getAttributeList(ruleType){
+        const url = '/rest/performance/attributes?ruleType=' + ruleType;
+        return new Promise(( resolve, reject ) => {
+            fetchJson( url ).then(( response ) => {
+                resolve( response )
+            }).catch(( error ) => {
+                reject( error );
+            });
+        }); 
+    }
 
 }
 

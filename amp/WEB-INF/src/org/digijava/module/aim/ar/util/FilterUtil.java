@@ -276,6 +276,8 @@ public class FilterUtil {
 		form.setSelectedImplementingAgency( FilterUtil.getObjectsIds(filter.getImplementingAgency()) );
 		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
 		form.setSelectedresponsibleorg(FilterUtil.getObjectsIds(filter.getResponsibleorg()) );
+		form.setSelectedComponentFundingOrg(FilterUtil.getObjectsIds(filter.getComponentFunding()) );
+		form.setSelectedComponentSecondResponsibleOrg(FilterUtil.getObjectsIds(filter.getComponentSecondResponsible()) );
 		form.setSelectedContractingAgency( FilterUtil.getObjectsIds(filter.getContractingAgency()) );
 		
 		form.setAmountinthousands(filter.computeEffectiveAmountInThousand());			

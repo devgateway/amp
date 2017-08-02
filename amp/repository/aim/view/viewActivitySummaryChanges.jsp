@@ -34,6 +34,8 @@
 </style>
 
 <digi:errors/>
+<digi:form action="/compareActivityVersions.do" method="post" styleId="compareForm">
+	<html:hidden property="method" styleId="method"/>
 	<c:set var="changesTable" scope="request" value="${requestScope.changesTable}"/>
 	<div id="content"  class="yui-skin-sam" style="padding: 5px;"> 
 		<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
@@ -56,5 +58,11 @@
 			<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />
 		</div>
 	</div>
+</digi:form>
 
-		
+<script language="Javascript">
+    function back() {
+        document.getElementById("method").value = "cancel";
+        document.getElementById('compareForm').submit();
+    }
+</script>

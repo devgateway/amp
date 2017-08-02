@@ -25,15 +25,15 @@ export default class RemarksPopup extends Component {
                      
                     {this.props.remarks.map((remark, i ) =>
                     <div className="row remark-row" key={i}> 
-                       <div >
+                       <div>
                         <span className="glyphicon glyphicon-comment comment-icon"> </span>
-                        <span className="remark-date"> {remark.date}</span>
+                        <span className="remark-date">{remark.date}</span>
                         </div>
                         <div className="remark-donor">                        
-                         <span > {remark.donorAgency}</span>                         
+                         <span>{remark.donorAgency}</span>                         
                          <br/>
                         </div>
-                       <div className="remark"> {remark.remark}</div>
+                       <div className="remark">{remark.remark}</div>
                         <div className="row-divider"></div>
                      </div>
                      

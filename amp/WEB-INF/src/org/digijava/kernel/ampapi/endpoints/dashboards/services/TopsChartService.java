@@ -172,6 +172,11 @@ public class TopsChartService {
                 }
 
                 break;
+            case "PP":
+            	spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1));
+            	title = TranslatorWorker.translateText(DashboardConstants.TOP_PRIMARY_PROGRAMS);
+            	name = DashboardConstants.TOP_PRIMARY_PROGRAMS;
+            	break;
             default:
                 setColumn(MoConstants.DONOR_AGENCY);
                 applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.DONOR_AGENCY));

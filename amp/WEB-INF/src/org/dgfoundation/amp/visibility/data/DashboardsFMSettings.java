@@ -42,6 +42,7 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 				add("Sector Fragmentation");
 				add("Location Fragmentation");
 				add("Program Fragmentation");
+				add("Top Primary Programs");
 			}});
 	}};
 	
@@ -61,6 +62,7 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		add("Sector Fragmentation");
 		add("Location Fragmentation");
 		add("Program Fragmentation");
+		add("Top Primary Programs");
 	}};
 	
 	@SuppressWarnings("serial")
@@ -87,6 +89,7 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		put("Sector Fragmentation", "Sector Fragmentation");
 		put("Location Fragmentation", "Location Fragmentation");
 		put("Program Fragmentation", "Program Fragmentation");
+		put("Top Primary Programs", "Top Primary Programs");
 	}};
 	
 	protected Collection<String> getAllPrecursors() {
@@ -152,6 +155,7 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		currentlyVisible.add("Sector Fragmentation");
 		currentlyVisible.add("Location Fragmentation");
 		currentlyVisible.add("Program Fragmentation");
+		currentlyVisible.add("Top Primary Programs");
 		
 		return currentlyVisible;
 	}

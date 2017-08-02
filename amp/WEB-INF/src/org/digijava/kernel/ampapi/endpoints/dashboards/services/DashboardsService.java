@@ -95,6 +95,7 @@ public class DashboardsService {
 		tops.add(getTopsListBean("do", "Donor Agency"));
 		tops.add(getTopsListBean("re", "Region"));
 		tops.add(getTopsListBean("ps", "Primary Sector"));
+		tops.add(getTopsListBean("pp", "Primary Program"));
 		return tops;
 	}
 

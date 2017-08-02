@@ -60,6 +60,7 @@
 <feature:display name="Sector Fragmentation" module="/Dashboards"/>
 <feature:display name="Location Fragmentation" module="/Dashboards"/>
 <feature:display name="Program Fragmentation" module="/Dashboards"/>
+<feature:display name="Top Primary Programs" module="/Dashboards"/>
 
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 

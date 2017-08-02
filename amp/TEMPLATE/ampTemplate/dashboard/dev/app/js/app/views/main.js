@@ -114,6 +114,11 @@ module.exports = BackboneDash.View.extend({
   	          { name: 'HeatMap by Program and Donor Group', title: 'Program Fragmentation', big: true, view: 'heatmap', heatmap_config: heatmapsConfigs, heatmap_type: 'program' },
   	          { app: this.app, url: '/rest/dashboard/heat-map/prg' }));
     }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Primary Programs'})) {
+    	col.push(new TopsChart(
+    	{ name: 'Top Primary Programs', big: false, view: 'bar' },
+    	{ app: this.app, url: '/rest/dashboard/tops-primary-programs' }));
+    }
        
     var chartsCollection = new Charts(col, { app: this.app });
     this.charts = new ChartsView({

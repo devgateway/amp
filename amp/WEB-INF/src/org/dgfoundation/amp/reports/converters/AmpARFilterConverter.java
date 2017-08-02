@@ -178,6 +178,8 @@ public class AmpARFilterConverter {
 		addFilter(arFilter.getExecutingAgency(), ColumnConstants.EXECUTING_AGENCY);
 		addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY);
 		addFilter(arFilter.getResponsibleorg(), ColumnConstants.RESPONSIBLE_ORGANIZATION);
+		addFilter(arFilter.getComponentFunding(), ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
+		addFilter(arFilter.getComponentSecondResponsible(), ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
 		addFilter(arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY);
 		//related agencies groups
 		addFilter(arFilter.getContractingAgencyGroups(), ColumnConstants.CONTRACTING_AGENCY_GROUPS);

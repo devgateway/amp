@@ -15,7 +15,7 @@ public class DataFreezeEvent {
     private String filters;
     private Integer count; // number of affected activities
     private Integer notificationDays;
-  
+    private Boolean executed = Boolean.FALSE;
 
     public Integer getCount() {
         return count;
@@ -114,5 +114,13 @@ public class DataFreezeEvent {
 
     public void setNotificationDays(Integer notificationDays) {
         this.notificationDays = notificationDays;
+    }
+
+    public Boolean getExecuted() {
+        return executed;
+    }
+
+    public void setExecuted(Boolean executed) {
+        this.executed = executed;
     }
 }

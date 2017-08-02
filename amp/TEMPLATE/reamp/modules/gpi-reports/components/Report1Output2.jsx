@@ -21,6 +21,7 @@ export default class Report1Output2 extends Component {
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );     
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
         this.downloadPdfFile = this.downloadPdfFile.bind(this);
+        this.getYears = this.getYears.bind(this);
       }
 
     componentDidMount() {
@@ -29,8 +30,8 @@ export default class Report1Output2 extends Component {
 
     initializeFiltersAndSettings() {
         this.filter = Utils.initializeFilterWidget();
-        this.settingsWidget = Utils.initializeSettingsWidget()
-        this.props.actions.getYears()
+        this.settingsWidget = Utils.initializeSettingsWidget();
+        this.props.actions.getYears();
         this.props.actions.getOrgList(false);        
         this.fetchReportData();
         
@@ -103,15 +104,16 @@ export default class Report1Output2 extends Component {
 
     onYearClick( selectedYear ) {
         this.setState( { selectedYear: selectedYear }, function() {                      
-            let requestData = this.getRequestData();
-            requestData.filters['actual-approval-date'] = {};
+            const filters = this.filter.serialize().filters;            
+            filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                requestData.filters['actual-approval-date']= {
+                filters['actual-approval-date'] = {
                         'start': this.state.selectedYear + '-01-01',
                         'end': this.state.selectedYear + '-12-31'
-                    };  
-            } 
-            this.fetchReportData(requestData);
+                    };
+            }
+            this.filter.deserialize({filters: filters}, {silent : true});
+            this.fetchReportData();            
         }.bind( this ) );
 
     }
@@ -161,10 +163,10 @@ export default class Report1Output2 extends Component {
    createRows() {
        var rows = [];
        this.props.output2 && this.props.output2.page && this.props.output2.page.contents.forEach(( dataRow, i ) => {
-          rows.push(<tr><td rowSpan="4">{dataRow[Constants.YEAR]}</td><td>{this.props.translations['amp.gpi-reports:indicator1-q1']}</td><td>{dataRow[Constants.Q1]}</td></tr>);
-          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q2']}</td><td>{dataRow[Constants.Q2]}</td></tr>);
-          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q3']}</td><td>{dataRow[Constants.Q3]}</td></tr>);
-          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q4']}</td><td>{dataRow[Constants.Q4]}</td></tr>);
+          rows.push(<tr><td rowSpan="4">{dataRow[Constants.YEAR]}</td><td>{this.props.translations['amp.gpi-reports:indicator1-q1']}</td><td className='number-column'>{dataRow[Constants.Q1]}</td></tr>);
+          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q2']}</td><td className='number-column'>{dataRow[Constants.Q2]}</td></tr>);
+          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q3']}</td><td className='number-column'>{dataRow[Constants.Q3]}</td></tr>);
+          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q4']}</td><td className='number-column'>{dataRow[Constants.Q4]}</td></tr>);
        })       
        return rows;
    }
@@ -177,10 +179,17 @@ export default class Report1Output2 extends Component {
        this.props.actions.downloadPdfFile(this.getRequestData(), '1');
    }
    
+   getYears() {
+       let settings  = this.settingsWidget.toAPIFormat()
+       let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+       let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
+       return calendar.years.slice();     
+    }
+   
    render() {
-        if ( this.props.output2 && this.props.output2.page ) {           
+        if ( this.props.output2 && this.props.output2.page && this.settingsWidget && this.settingsWidget.definitions ) {           
             let addedGroups = [];
-            let years = this.props.years.slice();
+            var years = this.getYears();
             return (
                 <div>
                     <div id="filter-popup" ref="filterPopup"> </div>
@@ -188,7 +197,7 @@ export default class Report1Output2 extends Component {
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}  downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile}/>
                     <div className="section-divider"></div>
                    
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={this.props.years} selectedYear={this.state.selectedYear} mainReport={this.props.output2} filter={this.filter} dateField="actual-approval-date"/>
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={years} selectedYear={this.state.selectedYear} mainReport={this.props.output2} filter={this.filter} dateField="actual-approval-date"/>
                     
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
@@ -212,7 +221,7 @@ export default class Report1Output2 extends Component {
                         <tr>
                           <th className="col-md-1">{this.getLocalizedColumnName(Constants.YEAR)}</th>
                           <th className="col-md-1">{this.props.translations['amp-gpi-reports:question']}</th>
-                          <th className="col-md-1">{this.props.translations['amp-gpi-reports:value']}</th>                         
+                          <th className="col-md-1 number-column" >{this.props.translations['amp-gpi-reports:value']}</th>                         
                         </tr>
                       </thead>
                       <tbody>

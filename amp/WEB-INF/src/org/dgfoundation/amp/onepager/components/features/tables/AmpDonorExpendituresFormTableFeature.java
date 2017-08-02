@@ -27,6 +27,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingDetailComparator;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -91,7 +92,8 @@ public class AmpDonorExpendituresFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.EXPENDITURE, 6);
 		
-		list = new FundingListEditor<AmpFundingDetail>("listExp", setModel, new AmpFundingDetail.FundingDetailComparator()) {
+		list = new FundingListEditor<AmpFundingDetail>("listExp", setModel, FundingDetailComparator
+				.getFundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
@@ -99,7 +101,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 				
 				final AmpCategorySelectFieldPanel expenditureClass = getExpenditureClassTypeComponent(item.getModel());
-				
+				expenditureClass.setAffectedByFreezing(false);
 	            item.add(new AmpComponentPanel("expenditureClassRequired", "Required Validator for Expenditure Class") {
 	                @Override
 	                protected void onConfigure() {
@@ -122,6 +124,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 
 				classification.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
 				classification.setTextContainerDefaultMaxSize();
+				classification.setAffectedByFreezing(false);
 				item.add(classification);
 				item.add(new ListEditorRemoveButton("delExp", "Delete Expenditure"){
 					protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {

@@ -36,7 +36,7 @@ public class FundingValidator {
 			throw new ClassCastException();
 		}
 	};
-	
+
 	private static void makeCumulativeAmounts() {
 		double value = 0;
 		for (int i = 0;i < list1.size();i ++) {

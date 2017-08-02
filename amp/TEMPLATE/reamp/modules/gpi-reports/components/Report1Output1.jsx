@@ -22,6 +22,7 @@ export default class Report1Output1 extends Component {
         this.closeRemarksModal = this.closeRemarksModal.bind(this);
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
         this.downloadPdfFile = this.downloadPdfFile.bind(this);
+        this.getYears = this.getYears.bind(this);
     }
 
     componentDidMount() {
@@ -105,15 +106,16 @@ export default class Report1Output1 extends Component {
 
     onYearClick( selectedYear ) {
         this.setState( { selectedYear: selectedYear }, function() {
-            let requestData = this.getRequestData();
-            requestData.filters['actual-approval-date'] = {};
+            const filters = this.filter.serialize().filters;            
+            filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                requestData.filters['actual-approval-date']= {
+                filters['actual-approval-date'] = {
                         'start': this.state.selectedYear + '-01-01',
                         'end': this.state.selectedYear + '-12-31'
                     };
             }
-            this.fetchReportData(requestData);
+            this.filter.deserialize({filters: filters}, {silent : true});
+            this.fetchReportData();
         }.bind( this ) );
 
     }
@@ -181,10 +183,17 @@ export default class Report1Output1 extends Component {
         this.props.actions.downloadPdfFile(this.getRequestData(), '1');
     }
 
+    getYears() {
+       let settings  = this.settingsWidget.toAPIFormat()
+       let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+       let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
+       return calendar.years.slice();        
+    }
+
     render() {
-        if ( this.props.mainReport && this.props.mainReport.page ) {
-            let addedGroups = [];
-            let years = this.props.years.slice();
+        if ( this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions) {
+            let addedGroups = [];                       
+            var years = this.getYears();            
             return (
                 <div>
                     <div id="filter-popup" ref="filterPopup"> </div>
@@ -220,7 +229,7 @@ export default class Report1Output1 extends Component {
                             </div>
 
                     }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={this.props.years} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="actual-approval-date" />
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={years} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="actual-approval-date" /> 
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
@@ -230,7 +239,11 @@ export default class Report1Output1 extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}</h4></div>
+                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
+                        {(this.props.settings['number-divider'] != 1) &&
+                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
+                        }
+                        </h4></div>
                     </div>
                     <div className="section-divider"></div>
 

@@ -16,6 +16,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpGPINiOrgRoleItemFeaturePanel;
 import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
+import org.dgfoundation.amp.onepager.events.GPINiSurveyListUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -57,7 +58,9 @@ public class AmpGPINiFormSectionFeature extends AmpFormSectionFeaturePanel {
 		list.setOutputMarkupId(true);
 		setOutputMarkupId(true);
 		add(list);
+		
 		add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
+		add(UpdateEventBehavior.of(GPINiSurveyListUpdateEvent.class));
 	}
 	
 	private static boolean hasDonorFundings(AmpOrgRole donor) {

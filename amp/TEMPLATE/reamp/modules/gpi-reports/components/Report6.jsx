@@ -31,12 +31,13 @@ export default class Report6 extends Component {
     initializeFiltersAndSettings() {
         this.filter = new ampFilter( {
             draggable: true,
-            caller: 'REPORTS'
+            caller: 'GPI_REPORTS'
         });
         this.settingsWidget = Utils.initializeSettingsWidget();
         this.props.actions.getYears()
         this.props.actions.getOrgList(false);
         this.fetchReportData();
+        this.props.actions.getSettings();
         
     }
 
@@ -261,10 +262,17 @@ export default class Report6 extends Component {
         this.props.actions.downloadPdfFile(this.getRequestData(), '6');
     } 
     
+    getYears() {
+        let settings  = this.settingsWidget.toAPIFormat()
+        let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+        let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
+        return calendar.years.slice();       
+    }
+    
     render() {
-        if ( this.props.mainReport && this.props.mainReport.page ) {
+        if ( this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions) {
             var addedGroups = [];
-            var years = this.props.years.slice();
+            var years = this.getYears();
             return (
                 <div>
                     <div id="filter-popup" ref="filterPopup"> </div>
@@ -325,7 +333,7 @@ export default class Report6 extends Component {
                                         {this.props.translations['amp.gpi-reports:other-years']}
                                         <span className="caret"></span></a>
                                     <ul className="dropdown-menu dropdown-years" role="menu">
-                                        {years.length > 3 && years.reverse().map( year =>
+                                        {years.reverse().map( year =>
                                             <li role="presentation" className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
                                         )}
 
@@ -346,7 +354,11 @@ export default class Report6 extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}</h4></div>
+                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']} 
+                        {(this.props.settings['number-divider'] != 1) &&
+                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
+                        }
+                        </h4></div>
 
                     </div>
 
@@ -424,7 +436,8 @@ function mapStateToProps( state, ownProps ) {
         orgList: state.commonLists.orgList,
         years: state.commonLists.years,
         translations: state.startUp.translations,
-        translate: state.startUp.translate
+        translate: state.startUp.translate,
+        settings: state.commonLists.settings
     }
 }
 

@@ -16,6 +16,7 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
@@ -28,6 +29,7 @@ import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingDetailComparator;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
@@ -39,6 +41,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 		AmpDonorFormTableFeaturePanel {
 
 	private boolean alertIfDisbursmentBiggerCommitments = false;
+
 	/**
 	 * @param id
 	 * @param model
@@ -50,10 +53,12 @@ public class AmpDonorCommitmentsFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.COMMITMENT, 7);
 
-		list = new ListEditor<AmpFundingDetail>("listCommitments", setModel, new AmpFundingDetail.FundingDetailComparator()) {
+		list = new FundingListEditor<AmpFundingDetail>("listCommitments", setModel, FundingDetailComparator
+				.getFundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
 					ListItem<AmpFundingDetail> item) {
+				super.onPopulateItem(item);
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
@@ -68,8 +73,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 				};
 
 				appendFixedExchangeRateToItem(item);
-
-				item.add(new AmpSelectFieldPanel<FundingPledges>("pledge",
+				AmpSelectFieldPanel pledgeAmpSelectFieldPanel=new AmpSelectFieldPanel<FundingPledges>("pledge",
 						new PropertyModel<FundingPledges>(item.getModel(),
 								"pledgeid"), pledgesModel,
 								"Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
@@ -77,7 +81,10 @@ public class AmpDonorCommitmentsFormTableFeature extends
 					public Object getDisplayValue(FundingPledges arg0) {
 						return arg0.getEffectiveName();
 					}
-				}, false));
+				}, false);
+				// we need to find a generic way of doing this
+				pledgeAmpSelectFieldPanel.setAffectedByFreezing(false);
+				item.add(pledgeAmpSelectFieldPanel);
 				item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"){
 					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);

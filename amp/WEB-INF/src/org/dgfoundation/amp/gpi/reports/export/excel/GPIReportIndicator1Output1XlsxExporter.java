@@ -32,17 +32,19 @@ import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
 import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
+import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Viorel Chihai
  *
  */
 public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporter {
-  
-  protected String remarkSheetName = "Donor Remarks";
+
+	protected String remarkSheetName = "Donor Remarks";
 
 	public static final int NUM_OF_REMARK_HEADERS = 3;
 	
@@ -363,13 +365,7 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 		}
 		
 		if (column.originalColumnName.equals(GPIReportConstants.GPI_1_Q2)) {
-			if (!StringUtils.isBlank(value)) {
-				try {
-					value = new SimpleDateFormat("MM/yyyy").format(new SimpleDateFormat("dd/MM/yyyy").parse(value));
-				} catch (ParseException e) {
-					throw new RuntimeException("Error in parsing the approval date", e);
-				}
-			}
+			value = GPIReportUtils.getApprovalDateForExports(rowData.get(column), calendarConverter);
 		}
 		
 		createCell(report, sheet, row, colPos, column.originalColumnName, value);

@@ -17,6 +17,7 @@ public class ViewEditUserForm extends ActionForm {
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 	    this.pledger = false;
 	    this.nationalCoordinator = false;
+	    this.exemptFromDataFreezing = false;
 	    }
 	
 	private static final long serialVersionUID = 1L;

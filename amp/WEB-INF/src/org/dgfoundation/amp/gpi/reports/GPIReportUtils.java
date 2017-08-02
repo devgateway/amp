@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.gpi.reports;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +42,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.joda.time.DateTime;
 
@@ -644,5 +647,36 @@ public class GPIReportUtils {
 		List<GPIRemark> remarks = GPIDataService.getGPIRemarks(GPIReportConstants.REPORT_1, ids, donorType, min, max);
 		
 		return remarks;
+	}
+	
+	/**
+	 * Get the approval date in format MM/yyyy. If the date is in ethiopian calendar, 
+	 * it is in the format dd/MM/yyyy (see @NiReportDateFormatter.getEthiopianFormattedDate())
+	 * 
+	 * @param dateAsString
+	 * @param calendarConverter
+	 * @return approvalDate in format MM/yyyy
+	 */
+	public static String getApprovalDateForExports(String dateAsString, CalendarConverter calendarConverter) {
+		String approvalDate = dateAsString;
+		
+		if (!StringUtils.isBlank(dateAsString)) {
+			if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
+				AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
+				if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())) {
+					approvalDate = dateAsString.substring(GPIReportConstants.ETHIOPIAN_FORMATTED_DATE_DAYS_OFFSET);
+				} else {
+					try {
+						String dateFormat = DateTimeUtil.getGlobalPattern();
+						approvalDate = new SimpleDateFormat(GPIReportConstants.INDICATOR1_EXPORT_APPROVAL_DATE_FORMAT)
+								.format(new SimpleDateFormat(dateFormat).parse(dateAsString));
+					} catch (ParseException e) {
+						throw new RuntimeException("Error in parsing the approval date", e);
+					}
+				}
+			}
+		}
+		
+		return approvalDate;
 	}
 }

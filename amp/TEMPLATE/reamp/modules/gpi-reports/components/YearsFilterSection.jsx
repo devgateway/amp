@@ -18,7 +18,7 @@ export default class YearsFilterSection extends Component {
     
     showSelectedDates() {
         var displayDates = '';
-        if(this.props.filter){
+        if(this.props.filter){           
             var filters = this.props.filter.serialize().filters;            
             if (filters[this.props.dateField]) {
                 filters[this.props.dateField].start = filters[this.props.dateField].start || '';
@@ -42,7 +42,7 @@ export default class YearsFilterSection extends Component {
 
     render() {
         if ( this.props.mainReport && this.props.mainReport.page ) {
-                var years = this.props.years.slice();
+                var years = this.props.years.slice();               
                 return (
                            <div>
                            <div className="container-fluid no-padding">
@@ -59,7 +59,7 @@ export default class YearsFilterSection extends Component {
                                            {this.props.translations['amp.gpi-reports:other-years']}
                                            <span className="caret"></span></a>
                                        <ul className="dropdown-menu dropdown-years" role="menu">
-                                           {years.length > 3 && years.reverse().map( year =>
+                                           {years.reverse().map( year =>
                                                <li role="presentation" className={this.props.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
                                            )}
 

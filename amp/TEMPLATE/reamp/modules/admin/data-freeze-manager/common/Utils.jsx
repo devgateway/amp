@@ -44,7 +44,7 @@ class Utils {
         if ( message ) {
             errors.push( message );
         }
-        errors.push( ...this.validateFreezingDate( dataFreezeEvent ) );
+        //errors.push( ...this.validateFreezingDate( dataFreezeEvent ) );
         errors.push( ...this.validateStartAndEndDate( dataFreezeEvent ) );
         errors.push( ...this.validateGracePeriod( dataFreezeEvent ) );
         return errors
@@ -62,16 +62,23 @@ class Utils {
 
     static validateStartAndEndDate( dataFreezeEvent ) {
         let errors = [];
-        let openPeriodStart = moment( dataFreezeEvent.openPeriodStart, Constants.EP_DATE_FORMAT );
-        let openPeriodEnd = moment( dataFreezeEvent.openPeriodEnd, Constants.EP_DATE_FORMAT );
-        let freezingDate = moment( dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT );
-        if ( openPeriodStart.isAfter( freezingDate ) === false ) {
-            errors.push( { messageKey: 'amp.data-freezing:start-date-should-be-after-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'freezingDate'] });
+        
+        if((dataFreezeEvent.openPeriodStart && !dataFreezeEvent.openPeriodEnd) || (!dataFreezeEvent.openPeriodStart && dataFreezeEvent.openPeriodEnd)) {
+            errors.push( { messageKey: 'amp.data-freezing:invalid-open-period', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'openPeriodEnd'] });
         }
+            
+        if (dataFreezeEvent.openPeriodStart && dataFreezeEvent.openPeriodEnd) {
+            let openPeriodStart = moment( dataFreezeEvent.openPeriodStart, Constants.EP_DATE_FORMAT );
+            let openPeriodEnd = moment( dataFreezeEvent.openPeriodEnd, Constants.EP_DATE_FORMAT );
+            let freezingDate = moment( dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT );
+            if ( openPeriodStart.isAfter( freezingDate ) === false ) {
+                errors.push( { messageKey: 'amp.data-freezing:start-date-should-be-after-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'freezingDate'] });
+            }
 
-        if ( openPeriodStart.isAfter( openPeriodEnd ) ) {
-            errors.push( { messageKey: 'amp.data-freezing:start-date-should-not-be-greater-than-end-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'openPeriodEnd'] });
-        }
+            if ( openPeriodStart.isAfter( openPeriodEnd ) ) {
+                errors.push( { messageKey: 'amp.data-freezing:start-date-should-not-be-greater-than-end-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'openPeriodEnd'] });
+            } 
+        }        
         return errors;
 
     }

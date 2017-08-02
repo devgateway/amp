@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,9 +53,8 @@ public class ActivityManager extends Action {
 		if ((action != null) && (action.equals("search")) && (actForm.getKeyword() != null) && (actForm.getLastKeyword() != null) && (!actForm.getKeyword().equals(actForm.getLastKeyword())) && ("".equals(actForm.getKeyword().replaceAll(" ", "")))){
 			action="reset";
 		}
+		actForm.setFrozenActivityIds(DataFreezeService.getFronzeActivities());
 
-		Map<Long, Set<Long>>freezeEventIdActivityIdsMap = DataFreezeService.getFreezeActivityIdEventIdsMap();		
-		actForm.setActivityIdFreezeEventsIdMap(freezeEventIdActivityIdsMap);       
 		if (action == null) {
 			reset(actForm, request);
 		} else if (action.equals("delete")) {
@@ -340,22 +340,12 @@ public class ActivityManager extends Action {
 	}
 	
 	
- private void unfreezeActivities(ActivityForm actForm, HttpServletRequest request) {
-     HttpSession session = request.getSession();
-     String activityIdsParam = request.getParameter("activityIds");
-     List<Long> activityIds = getActsIds(activityIdsParam.trim());
-     Map<Long,Set<Long>> activityIdEventsIdsMap = new HashMap<>();
-     for (Long activityId : activityIds) {
-         activityIdEventsIdsMap.put(activityId, actForm.getActivityIdFreezeEventsIdMap().get(activityId));         
-     }
-         
-     DataFreezeService.unfreezeActivities(activityIdEventsIdsMap);
-     
-     Map<Long, Set<Long>>freezeEventIdActivityIdsMap = DataFreezeService.getFreezeActivityIdEventIdsMap();      
-     actForm.setActivityIdFreezeEventsIdMap(freezeEventIdActivityIdsMap);     
-     actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));
-     
- }
+	private void unfreezeActivities(ActivityForm actForm, HttpServletRequest request) {
+		String activityIdsParam = request.getParameter("activityIds");
+		Set<Long> activityIds = new LinkedHashSet<>(getActsIds(activityIdsParam.trim()));
+		DataFreezeService.unfreezeActivities(activityIds);
+		actForm.setFrozenActivityIds(DataFreezeService.getFronzeActivities());
+	}
 	
 }
 

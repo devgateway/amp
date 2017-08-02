@@ -19,6 +19,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpGPINiFormSectionFeature;
@@ -45,28 +46,28 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 	private static final long serialVersionUID = -1230689136852083970L;
 	private static final String INDICATOR_9B_CODE = "9b";
 
-	public AmpGPINiOrgRoleItemFeaturePanel(String id, String fmName, final IModel<AmpOrgRole> donor, 
-						IModel<AmpActivityVersion> am, final AmpGPINiFormSectionFeature parent) throws Exception {
+	public AmpGPINiOrgRoleItemFeaturePanel(String id, String fmName, final IModel<AmpOrgRole> donor,
+			IModel<AmpActivityVersion> am, final AmpGPINiFormSectionFeature parent) throws Exception {
 		super(id, donor, fmName, true);
-		
+
 		PropertyModel<String> orgName = new PropertyModel<String>(donor, "organisation.name");
-		
+
 		Label indicatorNameURLLabel = new Label("organisationNameURL", orgName) {
 			@Override
 			public boolean isVisible() {
-				return donor.getObject().getGpiNiSurvey() != null;
+				return donor.getObject().hasGpiNiSurvey();
 			}
 		};
 		add(indicatorNameURLLabel);
-		
+
 		Label indicatorNameLabel = new Label("organisationName", orgName) {
 			@Override
 			public boolean isVisible() {
-				return donor.getObject().getGpiNiSurvey() == null;
+				return !donor.getObject().hasGpiNiSurvey();
 			}
 		};
 		add(indicatorNameLabel);
-		
+
 		final AmpLinkField newItem = new AmpAddLinkField("addNewItem", "Add new item") {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
@@ -74,16 +75,19 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 				as.setAmpOrgRole(donor.getObject());
 				as.setSurveyDate(new Date());
 				as.setResponses(new HashSet<>());
-				donor.getObject().setGpiNiSurvey(as);
-
+				if (donor.getObject().getGpiNiSurveys() == null) {
+					donor.getObject().setGpiNiSurveys(new HashSet<>());
+				}
+				donor.getObject().getGpiNiSurveys().clear();
+				donor.getObject().getGpiNiSurveys().add(as);
 				target.add(parent);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
-				target.appendJavaScript("$('#" + getDonorToggleId(donor.getObject().getAmpOrgRoleId())  + "').show();");
+				target.appendJavaScript("$('#" + getDonorToggleId(donor.getObject().getAmpOrgRoleId()) + "').show();");
 			}
 
 			@Override
 			public boolean isVisible() {
-				return super.isVisible() && donor.getObject().getGpiNiSurvey() == null;
+				return super.isVisible() && !donor.getObject().hasGpiNiSurvey();
 			}
 		};
 		add(newItem);
@@ -91,23 +95,27 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 		AmpLinkField deleteItem = new AmpDeleteLinkField("deleteItem", "Delete Item") {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
-				donor.getObject().setGpiNiSurvey(null);
-				
+
+				donor.getObject().getGpiNiSurveys().clear();
+				// after we clear the set we flush the session if not
+				// if we add another survey in the same session the delete is not triggered
+				// first and we get a constrain exception
+				//org.dgfoundation.amp.onepager.models.AmpActivityModel.getHibernateSession().flush();
 				target.add(parent);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
 			}
 
 			@Override
 			public boolean isVisible() {
-				return super.isVisible() && donor.getObject().getGpiNiSurvey() != null;
+				return super.isVisible() && donor.getObject().hasGpiNiSurvey();
 			}
 		};
 		add(deleteItem);
-		
+
 		Label noSurveyLabel = new TrnLabel("noSurvey", "No survey available") {
 			@Override
 			public boolean isVisible() {
-				return donor.getObject().getGpiNiSurvey() == null;
+				return !donor.getObject().hasGpiNiSurvey();
 			}
 		};
 		add(noSurveyLabel);
@@ -118,53 +126,56 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 			@Override
 			public List<AmpGPINiIndicator> getObject() {
 				ArrayList<AmpGPINiIndicator> list = new ArrayList<AmpGPINiIndicator>();
-				if (donor.getObject().getGpiNiSurvey() != null) {
+				if (donor.getObject().hasGpiNiSurvey()) {
 					list.addAll(GPIUtils.getActivityFormGPINiIndicators());
 				}
 				return list;
 			}
 		};
-		
-		FilteredListModel<AmpGPINiIndicator> filteredListModel = new FilteredListModel<AmpGPINiIndicator>(listModel.getObject()) {
+
+		FilteredListModel<AmpGPINiIndicator> filteredListModel = new FilteredListModel<AmpGPINiIndicator>(
+				listModel.getObject()) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected boolean accept(AmpGPINiIndicator indicator) {
-				
+
 				/**
-				 * the indicator 9B should be always visible 
-				 
-				if (indicator.getCode().equals(INDICATOR_9B_CODE)) {
-					return hasDonorConcessionalityLevelFundings(am, donor);
-				}
-				*/
-				
+				 * the indicator 9B should be always visible
+				 * 
+				 * if (indicator.getCode().equals(INDICATOR_9B_CODE)) { return
+				 * hasDonorConcessionalityLevelFundings(am, donor); }
+				 */
+
 				return true;
 			}
 		};
 
 		PropertyModel<AmpGPINiSurvey> surveyModel = new PropertyModel<AmpGPINiSurvey>(donor, "gpiNiSurvey");
-		
-		final ListView<AmpGPINiIndicator> indicatorList = new ListView<AmpGPINiIndicator>("listIndicators", filteredListModel) {
+
+		final ListView<AmpGPINiIndicator> indicatorList = new ListView<AmpGPINiIndicator>("listIndicators",
+				filteredListModel) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<AmpGPINiIndicator> item) {
 				AmpGPINiIndicator indicator = item.getModelObject();
-				AmpGPINiIndicatorItemFeaturePanel ig = new AmpGPINiIndicatorItemFeaturePanel("indicatorItem", indicator.getName(), item.getModel(), surveyModel);
+				AmpGPINiIndicatorItemFeaturePanel ig = new AmpGPINiIndicatorItemFeaturePanel("indicatorItem",
+						indicator.getName(), item.getModel(), surveyModel);
 				item.add(ig);
 			}
 		};
-		
+
 		WebMarkupContainer indicatorPanel = new WebMarkupContainer("indicatorPanel");
 		indicatorPanel.add(new AttributeModifier("id", getDonorToggleId(donor.getObject().getAmpOrgRoleId())));
 		indicatorPanel.add(indicatorList);
-		
+
 		add(indicatorPanel);
 	}
-	
+
 	/**
 	 * Checks if the donor's fundings has concessionality field populated
+	 * 
 	 * @param am
 	 * @param donorModel
 	 * @return
@@ -172,15 +183,15 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 	private boolean hasDonorConcessionalityLevelFundings(IModel<AmpActivityVersion> am, IModel<AmpOrgRole> donorModel) {
 		AmpActivityVersion activity = am.getObject();
 		AmpOrgRole donor = donorModel.getObject();
-		
+
 		Optional<AmpFunding> fundingWithConcessionalityLevel = activity.getFunding().stream()
-			.filter(f -> f.getAmpDonorOrgId().equals(donor.getOrganisation()) && f.getSourceRole().equals(donor.getRole()))
-			.filter(f -> f.getConcessionalityLevel() != null)
-			.findAny();
-		
+				.filter(f -> f.getAmpDonorOrgId().equals(donor.getOrganisation())
+						&& f.getSourceRole().equals(donor.getRole()))
+				.filter(f -> f.getConcessionalityLevel() != null).findAny();
+
 		return fundingWithConcessionalityLevel.isPresent();
 	}
-	
+
 	private String getDonorToggleId(Long ampOrgRoleId) {
 		return "indicatorPanel_" + ampOrgRoleId;
 	}

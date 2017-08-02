@@ -16,12 +16,15 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.export.GPIReportExporter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportFilters;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.reports.saiku.export.ExportFilterUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -53,6 +56,8 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 	private static final Logger logger = Logger.getLogger(GPIReportXlsxExporter.class);
 
 	protected AmountsUnits amountUnits = null;
+	
+	protected CalendarConverter calendarConverter;
 
 	/**
 	 * generates a workbook containing data about GPI report
@@ -67,6 +72,10 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 		SXSSFWorkbook wb = new SXSSFWorkbook(-1);
 
 		template = new GPIReportExcelTemplate(wb);
+		
+		ReportSettings reportSettings = report.getSpec().getSettings();
+		calendarConverter = (reportSettings != null && reportSettings.getCalendar() != null) 
+				? reportSettings.getCalendar() : AmpARFilter.getDefaultCalendar();
 
 		addAllSheetsToWorkbook(report, wb);
 

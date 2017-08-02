@@ -209,6 +209,16 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpSector> selectedTertiarySectors = null;
     @PropertyListableIgnore
     private Set<AmpSector> tertiarySectorsAndAncestors = null;
+	@PropertyListableIgnore
+	private Set<AmpSector> quaternarySectors = null;
+	private Set<AmpSector> selectedQuaternarySectors = null;
+	@PropertyListableIgnore
+	private Set<AmpSector> quaternarySectorsAndAncestors = null;
+	@PropertyListableIgnore
+	private Set<AmpSector> quinarySectors = null;
+	private Set<AmpSector> selectedQuinarySectors = null;
+	@PropertyListableIgnore
+	private Set<AmpSector> quinarySectorsAndAncestors = null;
     
     @PropertyListableIgnore
 	private Set<AmpSector> tagSectors = null;
@@ -1283,6 +1293,8 @@ public class AmpARFilter extends PropertyListable {
 		pledgeQueryAppend(generatePledgesSectorFilterSubquery(sectors, "Primary"));
 		pledgeQueryAppend(generatePledgesSectorFilterSubquery(secondarySectors, "Secondary"));
 		pledgeQueryAppend(generatePledgesSectorFilterSubquery(tertiarySectors, "Tertiary"));
+		pledgeQueryAppend(generatePledgesSectorFilterSubquery(quaternarySectors, "Quaternary"));
+		pledgeQueryAppend(generatePledgesSectorFilterSubquery(quinarySectors, "Quinary"));
 		pledgeQueryAppend(generatePledgesSectorFilterSubquery(tagSectors, "Tag"));
 		
 		pledgeQueryAppend(generatePledgesProgramFilterSubquery(nationalPlanningObjectives, "National Plan Objective"));
@@ -1357,7 +1369,11 @@ public class AmpARFilter extends PropertyListable {
 		String SECONDARY_SECTOR_FILTER = generateSectorFilterSubquery(secondarySectors, "Secondary");
 
        String TERTIARY_SECTOR_FILTER = generateSectorFilterSubquery(tertiarySectors, "Tertiary");
-       
+
+       String quinarySectorFilter = generateSectorFilterSubquery(quinarySectors, "Quinary");
+
+       String quaternarySectorFilter = generateSectorFilterSubquery(quaternarySectors, "Quaternary");
+
        String TAG_SECTOR_FILTER = generateSectorFilterSubquery(tagSectors, "Tag");
 
 		String REGION_FILTER = "SELECT amp_activity_id FROM v_regions WHERE name IN ("
@@ -1587,6 +1603,8 @@ public class AmpARFilter extends PropertyListable {
 		queryAppend(SECTOR_FILTER);
 		queryAppend(SECONDARY_SECTOR_FILTER);
 		queryAppend(TERTIARY_SECTOR_FILTER);
+		queryAppend(quaternarySectorFilter);
+		queryAppend(quinarySectorFilter);
 		queryAppend(TAG_SECTOR_FILTER);
 
 		queryAppend(generateProgramFilterSubquery(nationalPlanningObjectives, "National Plan Objective"));
@@ -2536,6 +2554,58 @@ public class AmpARFilter extends PropertyListable {
     public void setTertiarySectorsAndAncestors(Set<AmpSector> tertiarySectorsAndAncestors) {
         this.tertiarySectorsAndAncestors = tertiarySectorsAndAncestors;
     }
+
+	public Set<AmpSector> getSelectedQuaternarySectors() {
+		return selectedQuaternarySectors;
+	}
+
+	public void setSelectedQuaternarySectors(final Set<AmpSector> selectedQuaternarySectors) {
+		this.selectedQuaternarySectors = selectedQuaternarySectors;
+	}
+
+	@PropertyListableIgnore
+	public Set<AmpSector> getQuaternarySectors() {
+		return quaternarySectors;
+	}
+
+	public void setQuaternarySectors(final Set<AmpSector> quaternarySectors) {
+		this.quaternarySectors = quaternarySectors;
+	}
+
+	@PropertyListableIgnore
+	public Set<AmpSector> getQuaternarySectorsAndAncestors() {
+		return quaternarySectorsAndAncestors;
+	}
+
+	public void setQuaternarySectorsAndAncestors(final Set<AmpSector> quaternarySectorsAndAncestors) {
+		this.quaternarySectorsAndAncestors = quaternarySectorsAndAncestors;
+	}
+
+	public Set<AmpSector> getSelectedQuinarySectors() {
+		return selectedQuinarySectors;
+	}
+
+	public void setSelectedQuinarySectors(final Set<AmpSector> selectedQuinarySectors) {
+		this.selectedQuinarySectors = selectedQuinarySectors;
+	}
+
+	@PropertyListableIgnore
+	public Set<AmpSector> getQuinarySectors() {
+		return quinarySectors;
+	}
+
+	public void setQuinarySectors(final Set<AmpSector> quinarySectors) {
+		this.quinarySectors = quinarySectors;
+	}
+
+	@PropertyListableIgnore
+	public Set<AmpSector> getQuinarySectorsAndAncestors() {
+		return quinarySectorsAndAncestors;
+	}
+
+	public void setQuinarySectorsAndAncestors(final Set<AmpSector> quinarySectorsAndAncestors) {
+		this.quinarySectorsAndAncestors = quinarySectorsAndAncestors;
+	}
 
 	public Set<AmpCategoryValue> getTypeOfAssistance() {
 		return typeOfAssistance;

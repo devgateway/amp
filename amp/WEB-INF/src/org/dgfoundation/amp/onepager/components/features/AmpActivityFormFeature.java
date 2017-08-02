@@ -1195,7 +1195,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		if (activity.getDraft() != null&& !activity.getDraft()&&!("validationOff".equals(validation))) {
 			if (isApproved(newActivity)) {
 				if (modifiedBy != null) {
-					AmpTeamMemberRoles role=modifiedBy.getAmpMemberRole();
+					AmpTeamMemberRoles role = modifiedBy.getAmpMemberRole();
             		if(!role.isApprover()){
             			if(oldId==null||("allEdits".equals(validation))){
             				new ApprovedActivityTrigger(newActivity,modifiedBy); //if TL or approver created activity, then no Trigger is needed

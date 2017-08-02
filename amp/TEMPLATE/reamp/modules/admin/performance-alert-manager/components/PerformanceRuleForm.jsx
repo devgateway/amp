@@ -115,7 +115,7 @@ export default class PerformanceRuleForm extends Component {
                         <tr>
                             <td className={this.getErrorsForField('typeClassName').length > 0 ? 'col-md-6 has-error': 'col-md-6'} >                        
                                 <span className="required">*</span>{this.props.translations['amp.performance-rule:type']}
-                                <select className="form-control" name="typeClassName" value={this.state.currentPerformanceRule.typeClassName} onChange={this.onInputChange}>
+                                <select className="form-control performance-input" name="typeClassName" value={this.state.currentPerformanceRule.typeClassName} onChange={this.onInputChange}>
                                     <option>{this.props.translations['amp.performance-rule:select-type']} </option>
                                     {this.props.typeList && this.props.typeList.map(ruleType => 
                                     <option value={ruleType.name} key={ruleType.name} >{ruleType.description}</option>
@@ -125,18 +125,19 @@ export default class PerformanceRuleForm extends Component {
                             <td className="col-md-6 rule-parameters-cell" rowSpan="4">
                            <div className="row"><label>{this.props.translations['amp.performance-rule:rule-parameters']}</label></div>                             
                             {this.props.attributeList && this.props.attributeList.map((attribute, i) =>
-                                <div className="row" key={i}>
+                                <div className={this.getErrorsForField(attribute.name).length > 0 ? 'row has-error' : 'row'} key={i}>
                                   <span>{attribute.description}</span>  
-                                  {attribute.possibleValues && 
-                                      <select name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name} value={this.getAttributeValue(attribute.name)} onChange={this.onInputChange}>
+                                  {attribute.possibleValues && attribute.possibleValues.length > 0 && 
+                                      <select className="form-control performance-input" name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name} value={this.getAttributeValue(attribute.name)} onChange={this.onInputChange}>
                                       {attribute.possibleValues.map((possibleValue) =>
                                        <option name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name}   >{possibleValue}</option>     
                                       )}
                                       </select>                                         
                                   }  
-                                  {attribute.possibleValues == null &&
-                                      <input type="text" className="form-control" name={"attribute_" + attribute.name}  value={this.getAttributeValue(attribute.name)}  onChange={this.onInputChange} data-type={attribute.type} data-name={attribute.name}/>
+                                  {attribute.possibleValues == null || attribute.possibleValues.length == 0 &&
+                                      <input type="text" className="form-control performance-input" name={"attribute_" + attribute.name}  value={this.getAttributeValue(attribute.name)}  onChange={this.onInputChange} data-type={attribute.type} data-name={attribute.name}/>
                                   }
+                                  <br/>
                                 </div>
                             )}                           
                             </td>
@@ -144,13 +145,13 @@ export default class PerformanceRuleForm extends Component {
                         <tr>
                             <td className={this.getErrorsForField('name').length > 0 ? 'col-md-6 has-error': 'col-md-6'}>                        
                                 <span className="required">*</span>{this.props.translations['amp.performance-rule:name']}
-                                <input type="text" className="form-control" value={this.state.currentPerformanceRule.name} name="name" onChange={this.onInputChange}/>                        
+                                <input type="text" className="form-control performance-input" value={this.state.currentPerformanceRule.name} name="name" onChange={this.onInputChange}/>                        
                             </td>                           
                         </tr>
                         <tr>
                             <td className={this.getErrorsForField('id').length > 0 ? 'col-md-6 has-error': 'col-md-6'}>                       
                                 <span className="required">*</span>{this.props.translations['amp.performance-rule:level']}
-                                <select className="form-control" name="level" value={this.state.currentPerformanceRule.level ? this.state.currentPerformanceRule.level.id : ''} onChange={this.onInputChange}>
+                                <select className="form-control performance-input" name="level" value={this.state.currentPerformanceRule.level ? this.state.currentPerformanceRule.level.id : ''} onChange={this.onInputChange}>
                                     <option>{this.props.translations['amp.performance-rule:select-level']}</option>
                                     {this.props.levelList && this.props.levelList.map(level => 
                                     <option value={level.id} key={level.id} >{level.name}</option>

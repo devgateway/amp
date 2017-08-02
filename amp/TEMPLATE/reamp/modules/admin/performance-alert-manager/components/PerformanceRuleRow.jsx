@@ -37,7 +37,8 @@ export default class PerformanceRuleRow extends Component {
     }
     
     getTypeDescription(name){
-        return this.props.typeList.filter(ruleType => ruleType.name === name)[0].description
+        const ruleType = this.props.typeList.filter(ruleType => ruleType.name === name)[0];
+        return ruleType ? ruleType.description : ''; 
     }
     
     render() {

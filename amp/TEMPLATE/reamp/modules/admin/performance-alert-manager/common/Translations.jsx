@@ -23,5 +23,6 @@ export const initialTranslations = {
   'amp.performance-rule:save-error':'A server side error occured while saving the record',
   'amp.performance-rule:delete-error':'A server side error occured while deleting the record',
   'amp.performance-rule:delete-successful': 'Record deleted successfully',
-  'amp.performance-rule:required-fields-message': 'Type, Name and Level are required fields.'
+  'amp.performance-rule:required-fields-message': 'Type, Name and Level are required fields.',
+  'amp.performance-rule:invalid-input': 'Invalid input in Rule Parameters'
 }

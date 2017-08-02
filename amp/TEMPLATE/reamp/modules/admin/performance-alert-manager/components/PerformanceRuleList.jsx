@@ -10,7 +10,6 @@ import {
 } from 'redux';
 require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
-import * as commonListsActions from '../actions/CommonListsActions'
 import * as performanceRuleActions from '../actions/PerformanceRuleActions';;
 import * as Constants from '../common/Constants';
 import ToolBar from './ToolBar';
@@ -107,8 +106,7 @@ function mapStateToProps(state, ownProps) {
         typeList: state.performanceRule.typeList,
         levelList: state.performanceRule.levelList,
         errors: state.performanceRule.errors || [],
-        infoMessages: state.performanceRule.infoMessages || [],
-        settings: state.commonLists.settings || {},
+        infoMessages: state.performanceRule.infoMessages || [],       
         performanceRuleList: state.performanceRule.performanceRuleList,
         currentPerformanceRule: state.performanceRule.currentPerformanceRule
     }
@@ -116,7 +114,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(Object.assign({}, performanceRuleActions, commonListsActions), dispatch)
+        actions: bindActionCreators(Object.assign({}, performanceRuleActions), dispatch)
     }
 }
 

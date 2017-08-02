@@ -10,8 +10,7 @@ import {
 } from 'redux';
 require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
-import * as commonListsActions from '../actions/CommonListsActions'
-import * as performanceRuleActions from '../actions/PerformanceRuleActions';;
+import * as performanceRuleActions from '../actions/PerformanceRuleActions';
 export default class PerformanceRuleRow extends Component {
     constructor(props, context) {
         super(props, context);
@@ -66,7 +65,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(Object.assign({}, performanceRuleActions, commonListsActions), dispatch)
+        actions: bindActionCreators(Object.assign({}, performanceRuleActions), dispatch)
     }
 }
 

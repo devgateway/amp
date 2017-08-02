@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as startUp from '../actions/StartUpAction';
-import * as commonListsActions from '../actions/CommonListsActions';
 export default class PagingSection extends Component {
     constructor( props, context ) {
         super( props, context );     
@@ -110,7 +109,7 @@ function mapStateToProps( state, ownProps ) {
 }
 
 function mapDispatchToProps( dispatch ) {
-    return { actions: bindActionCreators( Object.assign( {}, commonListsActions ), dispatch ) }
+    return { actions: bindActionCreators({}, dispatch ) }
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( PagingSection );

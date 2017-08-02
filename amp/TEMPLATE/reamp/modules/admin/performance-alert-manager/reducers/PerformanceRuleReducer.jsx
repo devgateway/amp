@@ -6,7 +6,10 @@ import {
   ADD_PERFORMANCE_RULE,
   CLOSE_PERFORMANCE_RULE,
   EDIT_PERFORMANCE_RULE,
-  SAVE_PERFORMANCE_RULE_SUCCESS
+  SAVE_PERFORMANCE_RULE_SUCCESS,
+  DELETE_PERFORMANCE_RULE_SUCCESS,
+  VALIDATE_PERFORMANCE_RULE,
+  CLEAR_MESSAGES
 } from '../actions/PerformanceRuleActions';
 
 const defaultState = {
@@ -16,7 +19,7 @@ const defaultState = {
             infoMessages: [],
             cid: 1,
             paging:  {
-                recordsPerPage: 5,
+                recordsPerPage: 10,
                 currentPageNumber: 1,
                 totalPageCount : 1,
                 totalRecords:0
@@ -62,8 +65,18 @@ export default function performanceRuleReducer(state: Object = defaultState.data
     case SAVE_PERFORMANCE_RULE_SUCCESS:
         var newState = Object.assign({}, state);
         newState.errors = action.data.errors; 
-        newState.infoMessages = action.data.infoMessages;
-        return newState;    
+        newState.infoMessages = action.data.infoMessages;  
+        if(action.data.infoMessages.length > 0){
+            newState.currentPerformanceRule = null
+        }
+        return newState;  
+    case DELETE_PERFORMANCE_RULE_SUCCESS:
+    case CLEAR_MESSAGES: 
+    case VALIDATE_PERFORMANCE_RULE:
+        var newState = Object.assign({}, state);
+        newState.errors = action.data.errors; 
+        newState.infoMessages = action.data.infoMessages;    
+        return newState; 
     default:            
         return state;
     }

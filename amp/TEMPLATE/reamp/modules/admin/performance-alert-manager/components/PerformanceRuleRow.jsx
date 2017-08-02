@@ -24,20 +24,28 @@ export default class PerformanceRuleRow extends Component {
     }
     
     edit() {
+        this.props.actions.clearMessages();
         this.props.actions.editPerformanceRule(this.props.performanceRule);
     }
     
     deletePerformanceRule() {
+        this.props.actions.clearMessages();
         if (confirm(this.props.translations['amp.performance-rule:delete-prompt'])) {
-           this.props.actions.deletePerformanceRule(this.props.performanceRule); 
+           this.props.actions.deletePerformanceRule(this.props.performanceRule).then(function(){
+               this.props.actions.loadPerformanceRuleList({paging: this.props.paging});
+           }.bind(this));
         }        
+    }
+    
+    getTypeDescription(name){
+        return this.props.typeList.filter(ruleType => ruleType.name === name)[0].description
     }
     
     render() {
         return (
             <tr>
                 <td>{this.props.performanceRule.name}</td>
-                <td>{this.props.performanceRule.typeClassName}</td>
+                <td>{this.getTypeDescription(this.props.performanceRule.typeClassName)}</td>
                 <td>{this.props.performanceRule.level.value}</td>
                 <td>
                 <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deletePerformanceRule}></span>
@@ -50,7 +58,9 @@ export default class PerformanceRuleRow extends Component {
 function mapStateToProps(state, ownProps) {
     return {
         translations: state.startUp.translations,
-        translate: state.startUp.translate       
+        translate: state.startUp.translate,
+        typeList: state.performanceRule.typeList,
+        paging: state.performanceRule.paging
     }
 }
 

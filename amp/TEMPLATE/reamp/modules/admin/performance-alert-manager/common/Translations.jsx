@@ -21,5 +21,7 @@ export const initialTranslations = {
   'amp.performance-rule:delete-prompt': 'Are you sure you want to delete?',
   'amp.performance-rule:save-successful':'Record was saved successfully',
   'amp.performance-rule:save-error':'A server side error occured while saving the record',
-  'amp.performance-rule:delete-successful': 'Record deleted successfully'
+  'amp.performance-rule:delete-error':'A server side error occured while deleting the record',
+  'amp.performance-rule:delete-successful': 'Record deleted successfully',
+  'amp.performance-rule:required-fields-message': 'Type, Name and Level are required fields.'
 }

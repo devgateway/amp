@@ -25,6 +25,7 @@ export default class ToolBar extends Component {
     }  
     
     addNew() {
+        this.props.actions.clearMessages();
         this.props.actions.addNewPerformanceRule();
     }
     

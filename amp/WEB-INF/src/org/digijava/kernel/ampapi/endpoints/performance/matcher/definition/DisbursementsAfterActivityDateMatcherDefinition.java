@@ -24,7 +24,7 @@ public class DisbursementsAfterActivityDateMatcherDefinition extends Performance
                 PerformanceRuleMatcherPossibleValuesSupplier.getInstance().getSupplier();
 
         attributes.add(new PerformanceRuleMatcherAttribute(PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_DATE, 
-                "Funding Date", PerformanceRuleAttributeType.ACTIVITY_DATE, possibleValuesSupplier));
+                "Activity Date", PerformanceRuleAttributeType.ACTIVITY_DATE, possibleValuesSupplier));
     }
 
     @Override

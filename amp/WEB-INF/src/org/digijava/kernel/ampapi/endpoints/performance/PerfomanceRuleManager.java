@@ -157,6 +157,8 @@ public class PerfomanceRuleManager {
                 matchers.add(getMatcherDefinition(rule.getTypeClassName()).createMatcher(rule));
             } catch (IllegalArgumentException e) {
                 logger.error("Rule [" + rule.getName() + "] is not valid. Please check the attributes");
+            } catch (PerformanceRuleException e) {
+                logger.error("Type [" + rule.getTypeClassName() + "] for rule [" + rule.getName() + "] is invalid.");
             }
         }
         

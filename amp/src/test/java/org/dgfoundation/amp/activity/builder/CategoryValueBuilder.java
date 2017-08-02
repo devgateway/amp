@@ -10,37 +10,44 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  */
 public class CategoryValueBuilder {
 
-    AmpCategoryValue caetgoryValue;
+    AmpCategoryValue categoryValue;
 
     public CategoryValueBuilder() {
-        caetgoryValue = new AmpCategoryValue();
+        categoryValue = new AmpCategoryValue();
+    }
+    
+    public CategoryValueBuilder withId(Long id) {
+        categoryValue.setId(id);
+        
+        return this;
     }
 
     public CategoryValueBuilder withLabel(String label) {
-        caetgoryValue.setValue(label);
+        categoryValue.setValue(label);
 
         return this;
     }
 
     public CategoryValueBuilder withValue(String value) {
-        caetgoryValue.setValue(value);
+        categoryValue.setValue(value);
 
         return this;
     }
 
     public CategoryValueBuilder withIndex(int index) {
-        caetgoryValue.setIndex(index);
+        categoryValue.setIndex(index);
 
         return this;
     }
 
     public CategoryValueBuilder withCategoryClass(AmpCategoryClass categoryClass) {
-        caetgoryValue.setAmpCategoryClass(categoryClass);
+        categoryValue.setAmpCategoryClass(categoryClass);
 
         return this;
     }
 
     public AmpCategoryValue getCategoryValue() {
-        return caetgoryValue;
+        return categoryValue;
     }
+
 }

@@ -9,6 +9,8 @@ export const CLOSE_PERFORMANCE_RULE = 'CLOSE_PERFORMANCE_RULE';
 export const EDIT_PERFORMANCE_RULE = 'EDIT_PERFORMANCE_RULE';
 export const SAVE_PERFORMANCE_RULE_SUCCESS = 'SAVE_PERFORMANCE_RULE_SUCCESS';
 export const DELETE_PERFORMANCE_RULE_SUCCESS = 'DELETE_PERFORMANCE_RULE_SUCCESS';
+export const VALIDATE_PERFORMANCE_RULE = 'VALIDATE_PERFORMANCE_RULE';
+export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
 
 export function loadPerformanceRuleList(data) {
     return function(dispatch) {
@@ -81,29 +83,45 @@ export function editPerformanceRule(performanceRule){
 
 export function savePerformanceRule(data){
     return function(dispatch) {
+        var errors = Utils.validatePerformanceRule(data);
+        if(errors.length > 0) {
+            dispatch({type: VALIDATE_PERFORMANCE_RULE, data:{errors: errors, infoMessages:[]} });
+            return;
+        }
+        
         return performanceRuleApi.save(data).then(response => { 
             let result = {};
             if(response.status == 400) {                
                 result.errors = [{messageKey: 'amp.performance-rule:save-error'}];
             } else {
-                result.infoMessages = [{messageKey: 'amp.performance-rule:save-successful'}];
+                result.infoMessages = [{messageKey: 'amp.performance-rule:save-successful'}];                                
             }            
-            dispatch({type: SAVE_PERFORMANCE_RULE_SUCCESS, data:result });
+            dispatch({type: SAVE_PERFORMANCE_RULE_SUCCESS, data:result });           
         }).catch(error => {
-            console.log(error);
             throw(error);
         });
     };
 }
 
 export function deletePerformanceRule(data) {
-    return function(dispatch) {
-        return performanceRuleApi.deletePerformanceRule(data).then(response => {            
-            dispatch({type: DELETE_PERFORMANCE_RULE_SUCCESS, data: response });
+    return function(dispatch) {        
+        return performanceRuleApi.deletePerformanceRule(data).then(response => {    
+            let result = {};
+            if(response.status == 400) {                
+                result.errors = [{messageKey: 'amp.performance-rule:delete-error'}];
+            } else {
+                result.infoMessages = [{messageKey: 'amp.performance-rule:delete-successful'}];
+            }  
+            dispatch({type: DELETE_PERFORMANCE_RULE_SUCCESS, data: result });
         }).catch(error => {
-            console.log(error);
             throw(error);
         });
+    };
+}
+
+export function clearMessages(){
+    return function(dispatch) {   
+       dispatch({type: CLEAR_MESSAGES, data: {errors:[], infoMessages:[]}});
     };
 }
 

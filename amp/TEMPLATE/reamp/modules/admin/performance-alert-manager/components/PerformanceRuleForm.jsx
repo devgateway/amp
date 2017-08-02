@@ -10,8 +10,9 @@ import {
 } from 'redux';
 require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
-import * as commonListsActions from '../actions/CommonListsActions'
-import * as performanceRuleActions from '../actions/PerformanceRuleActions';;
+import * as commonListsActions from '../actions/CommonListsActions';
+import * as performanceRuleActions from '../actions/PerformanceRuleActions';
+import * as Constants from '../common/Constants';
 export default class PerformanceRuleForm extends Component {
     constructor(props, context) {
         super(props, context);
@@ -32,24 +33,20 @@ export default class PerformanceRuleForm extends Component {
         }
     }
     
-    close() {
-        this.props.actions.closePerformanceRule();
-    }
-    
     onInputChange(event) {
        const field = event.target.name;
        const currentPerformanceRule = this.state.currentPerformanceRule;
        if(event.target.name.indexOf('attribute_') !== -1){
            this.updateAttribute(event, currentPerformanceRule);
        } else {
-           if(field === 'level'){
+           if(field === Constants.FIELD_LEVEL){
                currentPerformanceRule[field] = {};
                currentPerformanceRule[field].id = event.target.value;
            }else{
                currentPerformanceRule[field] = event.target.value;
            }                      
-           if(field === 'typeClassName') {
-               currentPerformanceRule['attributes'] = [];
+           if(field === Constants.FIELD_TYPE) {
+               currentPerformanceRule[Constants.FIELD_ATTRIBUTES] = [];
                this.props.actions.getAttributeList(event.target.value);
            } 
            this.setState({currentPerformanceRule: currentPerformanceRule});
@@ -57,7 +54,7 @@ export default class PerformanceRuleForm extends Component {
     }
     
     updateAttribute(event, currentPerformanceRule) {
-        let attributes = currentPerformanceRule['attributes'] || [];    
+        let attributes = currentPerformanceRule[Constants.FIELD_ATTRIBUTES] || [];    
         let attribute = attributes.filter(attr => attr.name === event.target.getAttribute('data-name'))[0] || {};
         attribute.name = event.target.getAttribute('data-name');
         attribute.type = event.target.getAttribute('data-type');
@@ -80,9 +77,17 @@ export default class PerformanceRuleForm extends Component {
     }
     
     onSave() {
-        this.props.actions.savePerformanceRule(this.state.currentPerformanceRule);  
+        this.props.actions.clearMessages();
+        this.props.actions.savePerformanceRule(this.state.currentPerformanceRule).then(function(){
+            this.props.actions.loadPerformanceRuleList({paging: this.props.paging});
+        }.bind(this));  
     }
     
+    close() {
+        this.props.actions.clearMessages();
+        this.props.actions.closePerformanceRule();
+    }
+        
     getAttributeValue(name) {
         const currentPerformanceRule = this.state.currentPerformanceRule;
         let result = '';
@@ -93,9 +98,15 @@ export default class PerformanceRuleForm extends Component {
         return result;      
     }
     
+    getErrorsForField(field) {
+        var errors = this.props.errors.filter(error => {
+            return (error.affectedFields && error.affectedFields.includes(field))
+        })
+        return errors;
+    }
+    
     render() {         
-       console.log(this.state.currentPerformanceRule);
-        return (
+       return (
                 <div className="panel panel-default">
                 <div className="panel-heading">{this.state.currentPerformanceRule.id ? this.props.translations['amp.performance-rule:heading-edit'] : this.props.translations['amp.performance-rule:heading-new']}</div>
                 <div className="panel-body custom-panel">
@@ -103,7 +114,7 @@ export default class PerformanceRuleForm extends Component {
                     <table className="container-fluid data-selection-fields">  
                       <tbody>
                         <tr>
-                            <td className="col-md-6">                        
+                            <td className={this.getErrorsForField('typeClassName').length > 0 ? 'col-md-6 has-error': 'col-md-6'} >                        
                                 <span className="required">*</span>{this.props.translations['amp.performance-rule:type']}
                                 <select className="form-control" name="typeClassName" value={this.state.currentPerformanceRule.typeClassName} onChange={this.onInputChange}>
                                     <option>{this.props.translations['amp.performance-rule:select-type']} </option>
@@ -132,13 +143,13 @@ export default class PerformanceRuleForm extends Component {
                             </td>
                         </tr>
                         <tr>
-                            <td className="col-md-6">                        
+                            <td className={this.getErrorsForField('name').length > 0 ? 'col-md-6 has-error': 'col-md-6'}>                        
                                 <span className="required">*</span>{this.props.translations['amp.performance-rule:name']}
                                 <input type="text" className="form-control" value={this.state.currentPerformanceRule.name} name="name" onChange={this.onInputChange}/>                        
                             </td>                           
                         </tr>
                         <tr>
-                            <td className="col-md-6">                       
+                            <td className={this.getErrorsForField('id').length > 0 ? 'col-md-6 has-error': 'col-md-6'}>                       
                                 <span className="required">*</span>{this.props.translations['amp.performance-rule:level']}
                                 <select className="form-control" name="level" value={this.state.currentPerformanceRule.level ? this.state.currentPerformanceRule.level.id : ''} onChange={this.onInputChange}>
                                     <option>{this.props.translations['amp.performance-rule:select-level']}</option>
@@ -169,7 +180,8 @@ function mapStateToProps(state, ownProps) {
     return {
         translations: state.startUp.translations,
         translate: state.startUp.translate,
-        attributeList: state.performanceRule.attributeList
+        attributeList: state.performanceRule.attributeList,
+        paging: state.performanceRule.paging
     }
 }
 

@@ -1,9 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
-import java.util.List;
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.digijava.kernel.ampapi.endpoints.performance.AmpCategoryValueSerializer;

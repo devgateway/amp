@@ -34,6 +34,8 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     public Response toResponse(Exception e) {
         String mediaType = Optional.ofNullable(httpRequest.getContentType()).orElse(MediaType.APPLICATION_JSON);
         
+        logger.error(e.getMessage(), e);
+        
         if (e instanceof ApiRuntimeException) {
     		ApiRuntimeException apiException = (ApiRuntimeException) e;
     		

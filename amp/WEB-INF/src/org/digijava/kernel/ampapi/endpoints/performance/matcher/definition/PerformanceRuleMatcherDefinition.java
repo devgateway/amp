@@ -1,10 +1,10 @@
-package org.digijava.kernel.ampapi.endpoints.performance.matchers;
+package org.digijava.kernel.ampapi.endpoints.performance.matcher.definition;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 
 /**
@@ -12,16 +12,16 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRule;
  * @author Viorel Chihai
  *
  */
-public abstract class PerformanceRuleMatcher {
+public abstract class PerformanceRuleMatcherDefinition {
 
     protected String name;
 
     protected String description;
     
-    @JsonIgnore
+    @JsonIgnore 
     protected List<PerformanceRuleMatcherAttribute> attributes = new ArrayList<>();
     
-    public PerformanceRuleMatcher(String name, String description) {
+    public PerformanceRuleMatcherDefinition(String name, String description) {
         super();
         this.name = name;
         this.description = description;
@@ -51,6 +51,6 @@ public abstract class PerformanceRuleMatcher {
         this.attributes = attributes;
     }
     
-    public abstract boolean match(AmpPerformanceRule rule, AmpActivityVersion a);
+    public abstract PerformanceRuleMatcher createMatcher(AmpPerformanceRule rule);
 
 }

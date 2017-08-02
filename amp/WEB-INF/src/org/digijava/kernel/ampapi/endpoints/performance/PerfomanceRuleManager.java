@@ -1,13 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.performance;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatcher;
-import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatcherAttribute;
-import org.digijava.kernel.ampapi.endpoints.performance.matchers.PerformanceRuleMatchers;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.*;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
@@ -25,6 +25,14 @@ import org.hibernate.criterion.Projections;
 public class PerfomanceRuleManager {
 
     private static PerfomanceRuleManager performanceRuleManager;
+    
+    private List<PerformanceRuleMatcherDefinition> definitions;
+    
+    private static final Logger logger = Logger.getLogger(PerfomanceRuleManager.class);
+    
+    private PerfomanceRuleManager() {
+        initPerformanceRuleDefinitions();
+    }
 
     /**
      * 
@@ -34,8 +42,20 @@ public class PerfomanceRuleManager {
         if (performanceRuleManager == null) {
             performanceRuleManager = new PerfomanceRuleManager();
         }
-
+        
         return performanceRuleManager;
+    }
+    
+    private void initPerformanceRuleDefinitions() {
+        definitions = new ArrayList<>();
+        definitions.add(new NoUpdatedStatusAfterFundingDateMatcherDefinition());
+        definitions.add(new NoDisbursmentsAfterFundingDateMatcherDefinition());
+        definitions.add(new DisbursementsAfterActivityDateMatcherDefinition());
+        definitions.add(new NoUpdatedDisbursmentsAfterTimePeriodMatcherDefinition());
+    }
+    
+    public List<PerformanceRuleMatcherDefinition> getPerformanceRuleDefinitions() {
+        return definitions;
     }
 
     public AmpPerformanceRule getPerformanceRuleById(Long id) {
@@ -118,67 +138,70 @@ public class PerfomanceRuleManager {
         return resultPage;
     }
 
-    public List<PerformanceRuleMatcherAttribute> getAttributes(String type) {
-        PerformanceRuleMatcher matcher = PerformanceRuleMatchers.RULE_TYPES.stream()
+    public PerformanceRuleMatcherDefinition getMatcherDefinition(String type) {
+        PerformanceRuleMatcherDefinition matcherDefiniton = getPerformanceRuleDefinitions().stream()
                 .filter(m -> m.getName().equals(type)).findAny()
                 .orElseThrow(() -> new PerformanceRuleException(PerformanceRulesErrors.RULE_TYPE_INVALID, type));
 
-        return matcher.getAttributes();
+        return matcherDefiniton;
     }
 
-    public List<PerformanceRuleMatcher> getTypes() {
-        return PerformanceRuleMatchers.RULE_TYPES;
-    }
-
-    public Map<Long, AmpCategoryValue> matchActivities(List<Long> actIds) {
-
+    public List<PerformanceRuleMatcher> getPerformanceRuleMatchers() {
         List<AmpPerformanceRule> rules = getPerformanceRules().stream()
-                .filter(AmpPerformanceRule::getEnabled)
+                .filter(rule -> rule.getEnabled())
                 .collect(Collectors.toList());
-
-        Map<Long, AmpCategoryValue> performanceAlertMap = actIds.stream()
-                .collect(Collectors.toMap(Function.identity(), actId -> matchActivity(rules, actId)));
-
-        return performanceAlertMap;
-    }
-
-    public AmpCategoryValue matchActivity(AmpActivityVersion a) {
-        List<AmpPerformanceRule> rules = getPerformanceRules().stream()
-                .filter(AmpPerformanceRule::getEnabled)
-                .collect(Collectors.toList());
-
-        return matchActivity(rules, a);
-    }
-    
-    public AmpCategoryValue matchActivity(List<AmpPerformanceRule> rules, Long actId) {
-        AmpActivityVersion a = (AmpActivityVersion) PersistenceManager.getSession()
-                .get(AmpActivityVersion.class, actId);
         
-        return matchActivity(rules, a);
+        List<PerformanceRuleMatcher> matchers = new ArrayList<>();
+        for (AmpPerformanceRule rule : rules) {
+            try {
+                matchers.add(getMatcherDefinition(rule.getTypeClassName()).createMatcher(rule));
+            } catch (IllegalArgumentException e) {
+                logger.error("Rule [" + rule.getName() + "] is not valid. Please check the attributes");
+            } catch (PerformanceRuleException e) {
+                logger.error("Type [" + rule.getTypeClassName() + "] for rule [" + rule.getName() + "] is invalid.");
+            }
+        }
+        
+        return matchers;
     }
     
+    /**
+     * This method should only when the the user wants to match one activity.
+     * In order to match a list of activities, get the matcher list once and match the items one by one
+     * @param a activity
+     * @return performance alert level (null if activity does not have performance issues)
+     */
+    public AmpCategoryValue matchActivity(AmpActivityVersion a) {
+        List<PerformanceRuleMatcher> matchers = getPerformanceRuleMatchers();
 
-    public AmpCategoryValue matchActivity(List<AmpPerformanceRule> rules, AmpActivityVersion a) {
+        return matchActivity(matchers, a);
+    }
+
+    public AmpCategoryValue matchActivity(List<PerformanceRuleMatcher> matchers, AmpActivityVersion a) {
 
         AmpCategoryValue level = null;
         
-        for (AmpPerformanceRule rule : rules) {
-            PerformanceRuleMatcher matcher = PerformanceRuleMatchers.RULE_TYPES_BY_NAME.get(rule.getTypeClassName());
-            if (matcher != null) {
-                AmpCategoryValue matchedLevel = matcher.match(rule, a) ? rule.getLevel() : null;
-                level = getHigherLevel(level, matchedLevel);
-            }
+        for (PerformanceRuleMatcher matcher : matchers) {
+            AmpCategoryValue matchedLevel = matcher.match(a) ? matcher.getRule().getLevel() : null;
+            level = getHigherLevel(level, matchedLevel);
         }
         
         return level;
     }
     
+
     public AmpPerformanceRuleAttribute getAttributeFromRule(AmpPerformanceRule rule, String attributeName) {
-        AmpPerformanceRuleAttribute monthAttribute = rule.getAttributes().stream()                
+        AmpPerformanceRuleAttribute attribute = rule.getAttributes().stream()                
                 .filter(attr -> attr.getName().equals(attributeName))
                 .findAny().orElse(null);
         
-        return monthAttribute;
+        return attribute;
+    }
+    
+    public String getAttributeValue(AmpPerformanceRule rule, String attributeName) {
+        AmpPerformanceRuleAttribute attribute = getAttributeFromRule(rule, attributeName);
+        
+        return attribute.getValue();
     }
     
     public AmpCategoryValue getHigherLevel(AmpCategoryValue level1, AmpCategoryValue level2) {
@@ -191,6 +214,18 @@ public class PerfomanceRuleManager {
         }
         
         return level1;
+    }
+    
+    public int getCalendarTimeUnit(String timeUnit) {
+        switch(timeUnit) {
+            case PerformanceRuleConstants.TIME_UNIT_DAY :
+                return Calendar.DAY_OF_YEAR;
+            case PerformanceRuleConstants.TIME_UNIT_MONTH :
+                return Calendar.MONTH;
+            case PerformanceRuleConstants.TIME_UNIT_YEAR :
+            default :
+                return Calendar.YEAR;
+        }
     }
     
 }

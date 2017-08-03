@@ -83,7 +83,7 @@ public class AmpMessageWorker {
 
 	private static Logger logger = Logger.getLogger(AmpMessageWorker.class);
 	
-	public final static String SYSTEM_DEFAULT_SENDER_MAIL = "system@digijava.org";
+	public static final String SYSTEM_DEFAULT_SENDER_MAIL = "system@digijava.org";
 
 	public static void processEvent(Event e) throws Exception {
 		String triggerClassName = e.getTrigger().getName();
@@ -235,7 +235,7 @@ public class AmpMessageWorker {
 					defineReceiversForUserAddedToWorkspace(newMsg, e);
 				} else if (e.getTrigger().equals(PerformanceRuleAlertTrigger.class)) {
 				    defineReceiversForPerformanceRuleAlert(newMsg, e, template);
-                }else { // <-- currently for else is left user registration
+                } else { // <-- currently for else is left user registration
 							// or activity disbursement date triggers
 					List<String> emailReceivers = new ArrayList<String>();
 					List<AmpMessageState> statesRelatedToTemplate = null;

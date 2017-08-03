@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
-import org.digijava.kernel.ampapi.endpoints.performance.PerfomanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -35,7 +35,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
     
     private static Logger logger = Logger.getLogger(PerformanceRulesAlertJob.class);
     
-    public final static String PERFORMANCE_RULE_FM_PATH = "Project Performance Alerts Manager";
+    public static final String PERFORMANCE_RULE_FM_PATH = "Project Performance Alerts Manager";
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -89,10 +89,10 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
      */
     private List<AmpActivityVersion> processActivitiesWithPerformanceRules(List<Long> actIds) {
         List<AmpActivityVersion> activitiesWithPerformanceIssues = new ArrayList<>();
-        PerfomanceRuleManager ruleManager = PerfomanceRuleManager.getInstance();
+        PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
         List<PerformanceRuleMatcher> matchers = ruleManager.getPerformanceRuleMatchers();
         
-        for(Long actId : actIds) {
+        for (Long actId : actIds) {
             try {
                 AmpActivityVersion a = org.digijava.module.aim.util.ActivityUtil.loadActivity(actId);
                 AmpCategoryValue matchedLevel = ruleManager.matchActivity(matchers, a);

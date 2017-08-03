@@ -24,15 +24,15 @@ import org.hibernate.criterion.Projections;
  * @author Viorel Chihai
  *
  */
-public class PerfomanceRuleManager {
+public class PerformanceRuleManager {
 
-    private static PerfomanceRuleManager performanceRuleManager;
+    private static PerformanceRuleManager performanceRuleManager;
     
     private List<PerformanceRuleMatcherDefinition> definitions;
     
-    private static final Logger logger = Logger.getLogger(PerfomanceRuleManager.class);
+    private static final Logger logger = Logger.getLogger(PerformanceRuleManager.class);
     
-    private PerfomanceRuleManager() {
+    private PerformanceRuleManager() {
         initPerformanceRuleDefinitions();
     }
 
@@ -40,9 +40,9 @@ public class PerfomanceRuleManager {
      * 
      * @return PerfomanceRuleManager instance
      */
-    public static PerfomanceRuleManager getInstance() {
+    public static PerformanceRuleManager getInstance() {
         if (performanceRuleManager == null) {
-            performanceRuleManager = new PerfomanceRuleManager();
+            performanceRuleManager = new PerformanceRuleManager();
         }
         
         return performanceRuleManager;

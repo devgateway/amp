@@ -1,20 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.CategoryClassBuilder;
 import org.dgfoundation.amp.activity.builder.CategoryValueBuilder;
-import org.dgfoundation.amp.activity.builder.FundingBuilder;
-import org.dgfoundation.amp.activity.builder.TransactionBuilder;
-import org.digijava.kernel.ampapi.endpoints.performance.PerfomanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +33,7 @@ public class PerformanceRuleManagerTest {
     @Test
     public void testTwoLevels() {
         
-        PerfomanceRuleManager manager = PerfomanceRuleManager.getInstance();
+        PerformanceRuleManager manager = PerformanceRuleManager.getInstance();
         
         AmpCategoryValue level1 = new CategoryValueBuilder()
                 .withId(1L)
@@ -57,7 +53,7 @@ public class PerformanceRuleManagerTest {
     @Test
     public void testNullLevel() {
         
-        PerfomanceRuleManager manager = PerfomanceRuleManager.getInstance();
+        PerformanceRuleManager manager = PerformanceRuleManager.getInstance();
         
         AmpCategoryValue level1 = new CategoryValueBuilder()
                 .withId(1L)
@@ -71,7 +67,7 @@ public class PerformanceRuleManagerTest {
     @Test
     public void testNotificationBody() {
         
-        PerfomanceRuleManager manager = PerfomanceRuleManager.getInstance();
+        PerformanceRuleManager manager = PerformanceRuleManager.getInstance();
         
         AmpCategoryClass levelClass = new CategoryClassBuilder()
                 .withKey(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY)

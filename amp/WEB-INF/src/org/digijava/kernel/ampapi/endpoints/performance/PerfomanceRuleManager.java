@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.performance;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -13,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -226,6 +228,35 @@ public class PerfomanceRuleManager {
             default :
                 return Calendar.YEAR;
         }
+    }
+
+    public String buildPerformanceIssuesMessage(List<AmpActivityVersion> activities) {
+        StringBuilder sb = new StringBuilder();
+        
+        Map<AmpCategoryValue, List<AmpActivityVersion>> activitiesByPerformanceLevel = activities.stream()
+                .filter(a -> getPerformanceLevel(a) != null)
+                .collect(Collectors.groupingBy(a -> getPerformanceLevel(a)));
+        
+        activitiesByPerformanceLevel.entrySet().forEach(e -> {
+            sb.append("\n\n");
+            sb.append(e.getKey().getLabel());
+            sb.append("\n");
+            
+            e.getValue().forEach(a -> {
+                sb.append(String.format("%d\t%s\t%s\n", a.getAmpActivityId(), a.getAmpId(), a.getName()));
+            });
+        });
+        
+        return sb.toString();
+    }
+    
+    private AmpCategoryValue getPerformanceLevel(AmpActivityVersion a) {
+        AmpCategoryValue performanceLevel = a.getCategories().stream()
+                .filter(acv -> acv.getAmpCategoryClass().getKeyName()
+                        .equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
+                .findAny().orElse(null);
+        
+        return performanceLevel;
     }
     
 }

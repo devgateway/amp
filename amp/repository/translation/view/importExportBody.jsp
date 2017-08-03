@@ -309,6 +309,16 @@ div.fakefile2 input{
  								</td>
 	 						</tr>
 						 </c:forEach>
+						<tr>
+							<td align="center">
+								<div class="checkbox">
+									<label for="exportAmpOfflineTranslationsOnly">
+										<input type="checkbox" name="exportAmpOfflineTranslationsOnly" id="exportAmpOfflineTranslationsOnly">
+										<digi:trn>Export only AMP Offline translations</digi:trn>
+									</label>
+								</div>
+							</td>
+						</tr>
 						 <tr>
 								<td align="center">
 									<digi:trn>Select export format</digi:trn>:

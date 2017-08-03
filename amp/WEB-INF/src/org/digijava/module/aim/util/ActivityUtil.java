@@ -2014,10 +2014,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 	public static AmpActivityVersion getPreviousVersion(AmpActivityVersion activity) {
 		Session session = PersistenceManager.getRequestDBSession();
 		Query qry = session.createQuery(String.format("SELECT act FROM " + AmpActivityVersion.class.getName()
-				+ " act WHERE approval_status = '%s' and act.ampActivityGroup.ampActivityGroupId = ? ORDER BY act"
-				+ ".ampActivityId DESC", Constants.APPROVED_STATUS))
+				+ " act WHERE approval_status = '%s' and act.ampActivityGroup.ampActivityGroupId = ? "
+				+ " and act.ampActivityId <> ? "
+				+ " ORDER BY act.ampActivityId DESC", Constants.APPROVED_STATUS))
 				.setMaxResults(1);
 		qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
+		qry.setParameter(1, activity.getAmpActivityId());
 		return (AmpActivityVersion) qry.list().get(0);
 	}
 

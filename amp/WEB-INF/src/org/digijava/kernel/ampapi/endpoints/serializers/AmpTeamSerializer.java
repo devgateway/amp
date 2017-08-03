@@ -17,6 +17,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.util.Identifiable;
 
 
 /**
@@ -98,6 +99,9 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
             }
             if (String.class.equals(clazz)) {
             	return filter.getValue();
+            }
+            if (Identifiable.class.isAssignableFrom(clazz)) {
+                return Long.parseLong(filter.getValue());
             }
             return mapper.readValue(filter.getValue(), clazz);
         } catch (Exception e) {

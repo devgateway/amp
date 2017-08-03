@@ -163,8 +163,18 @@ public class SummaryChangesService {
 
     private static boolean isSameFundingDetail(AmpFundingDetail currentFundingDetail, AmpFundingDetail
             previousFundingDetail) {
-        return currentFundingDetail.getReportingDate() != null && currentFundingDetail
-                .getReportingDate().equals(previousFundingDetail.getReportingDate());
+        return ((currentFundingDetail.getReportingDate() != null &&
+                currentFundingDetail.getReportingDate().equals(previousFundingDetail.getReportingDate()))
+                ||
+                (currentFundingDetail.getReportingDate() == null &&
+                        previousFundingDetail.getReportingDate() == null &&
+                        currentFundingDetail.getTransactionType().equals(previousFundingDetail.getTransactionType()) &&
+                        currentFundingDetail.getTransactionDate().equals(previousFundingDetail.getTransactionDate()) &&
+                        currentFundingDetail.getTransactionType().equals(previousFundingDetail.getTransactionType()) &&
+                        currentFundingDetail.getAmpCurrencyId().equals(previousFundingDetail.getAmpCurrencyId()) &&
+                        currentFundingDetail.getTransactionAmount().equals(previousFundingDetail.getTransactionAmount())
+                )
+        );
     }
 
     private static boolean isAmountChanged(AmpFundingDetail current, AmpFundingDetail previous) {
@@ -180,8 +190,9 @@ public class SummaryChangesService {
     private static void setNewChange(Map<String, Collection<SummaryChange>> objDiff, AmpFundingDetail fundingDetail) {
 
         SummaryChange summaryChange = new SummaryChange(fundingDetail.getTransactionType(),
-                fundingDetail.getAdjustmentType(), NEW, null, fundingDetail.getTransactionAmount(), fundingDetail
-                .getTransactionDate());
+                fundingDetail.getAdjustmentType(), NEW, null, null,
+                fundingDetail.getTransactionAmount(), fundingDetail.getAmpCurrencyId(),
+                fundingDetail.getTransactionDate());
 
         addChange(objDiff, summaryChange);
     }
@@ -200,8 +211,8 @@ public class SummaryChangesService {
             fundingDetail) {
 
         SummaryChange summaryChange = new SummaryChange(fundingDetail.getTransactionType(),
-                fundingDetail.getAdjustmentType(), DELETED, fundingDetail.getTransactionAmount(), null, fundingDetail
-                .getTransactionDate());
+                fundingDetail.getAdjustmentType(), DELETED, fundingDetail.getTransactionAmount(),
+                fundingDetail.getAmpCurrencyId(),  null, null, fundingDetail.getTransactionDate());
 
         addChange(objDiff, summaryChange);
     }
@@ -210,8 +221,8 @@ public class SummaryChangesService {
             curr, AmpFundingDetail previus) {
 
         SummaryChange summaryChange = new SummaryChange(curr.getTransactionType(),
-                curr.getAdjustmentType(), EDITED, previus.getTransactionAmount(), curr.getTransactionAmount(), curr
-                .getTransactionDate());
+                curr.getAdjustmentType(), EDITED, previus.getTransactionAmount(), previus.getAmpCurrencyId(),
+                curr.getTransactionAmount(), curr.getAmpCurrencyId(), curr.getTransactionDate());
 
         addChange(objDiff, summaryChange);
     }

@@ -84,17 +84,20 @@ public class SummaryChangeHtmlRenderer {
             res.append("<ol>");
 
             if (summaryChange.getChangeType() == SummaryChangesService.EDITED) {
-                res.append(String.format("<li>%s: %s</li>", translateText("Previous amount"),
-                        FormatHelper.formatNumber(summaryChange.getPreviousValue())));
-                res.append(String.format("<li>%s: %s</li>", translateText("Current amount"),
-                        FormatHelper.formatNumber(summaryChange.getCurrentValue())));
+                res.append(String.format("<li>%s: %s %s</li>", translateText("Previous amount"),
+                        FormatHelper.formatNumber(summaryChange.getPreviousValue()), summaryChange.getPreviousCurrency()
+                                .getCurrencyCode()));
+                res.append(String.format("<li>%s: %s %s</li>", translateText("Current amount"),
+                        FormatHelper.formatNumber(summaryChange.getCurrentValue()), summaryChange.getCurrentCurrency()
+                                .getCurrencyCode()));
             } else {
                 if (summaryChange.getChangeType() == SummaryChangesService.NEW) {
-                    res.append(String.format("<li>%s</li>", FormatHelper.formatNumber(summaryChange.getCurrentValue()
-                    )));
+                    res.append(String.format("<li>%s %s</li>", FormatHelper.formatNumber(summaryChange
+                                    .getCurrentValue())
+                            , summaryChange.getCurrentCurrency().getCurrencyCode()));
                 } else {
-                    res.append(String.format("<li>%s</li>", FormatHelper.formatNumber(
-                            summaryChange.getPreviousValue())));
+                    res.append(String.format("<li>%s %s</li>", FormatHelper.formatNumber(
+                            summaryChange.getPreviousValue()), summaryChange.getPreviousCurrency().getCurrencyCode()));
                 }
             }
             res.append("</ol>");

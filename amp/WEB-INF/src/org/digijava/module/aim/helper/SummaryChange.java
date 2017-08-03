@@ -3,6 +3,7 @@ package org.digijava.module.aim.helper;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
@@ -19,17 +20,22 @@ public class SummaryChange {
     private AmpCategoryValue adjustmentType;
     private String changeType;
     private Double previousValue;
+    private AmpCurrency previousCurrency;
     private Double currentValue;
+    private AmpCurrency currentCurrency;
     private Date transactionDate;
     private Quarter quarter;
 
     public SummaryChange(Integer transactionType, AmpCategoryValue adjustmentType, String changeType, Double
-            previousValue, Double currentValue, Date transactionDate) {
+            previousValue, AmpCurrency previousCurrency, Double currentValue, AmpCurrency currentCurrency, Date
+            transactionDate) {
         this.transactionType = transactionType;
         this.adjustmentType = adjustmentType;
         this.changeType = changeType;
         this.previousValue = previousValue;
+        this.previousCurrency = previousCurrency;
         this.currentValue = currentValue;
+        this.currentCurrency = currentCurrency;
         this.transactionDate = transactionDate;
         this.quarter = generateQuarter();
 
@@ -102,5 +108,19 @@ public class SummaryChange {
         this.quarter = quarter;
     }
 
+    public AmpCurrency getPreviousCurrency() {
+        return previousCurrency;
+    }
 
+    public void setPreviousCurrency(AmpCurrency previousCurrency) {
+        this.previousCurrency = previousCurrency;
+    }
+
+    public AmpCurrency getCurrentCurrency() {
+        return currentCurrency;
+    }
+
+    public void setCurrentCurrency(AmpCurrency currentCurrency) {
+        this.currentCurrency = currentCurrency;
+    }
 }

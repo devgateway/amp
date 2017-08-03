@@ -256,7 +256,7 @@ export default class Report1Output1 extends Component {
                                 <RemarksPopup showRemarks={this.state.showRemarks} closeRemarksModal={this.closeRemarksModal.bind(this)} remarksUrl={this.state.remarksUrl} code="1" settings={this.props.settings} />
                           }
                         <div className="section-divider"></div>
-                        <span className="pull-left">{this.getOrgName(this.state.selectedDonor) || this.props.translations['amp.gpi-reports:all-donors']}</span><span className="remarks pull-left"><img className="table-icon popup-icon" src="images/icon-bubble.svg"/><a onClick={this.showRemarksModal} > Remarks</a></span>
+                        <span className="pull-left">{this.getOrgName(this.state.selectedDonor) || this.props.translations['amp.gpi-reports:all-donors']}</span><span className="remarks pull-left"><img className="table-icon popup-icon" src="images/icon-bubble.svg" onClick={this.showRemarksModal}/><a onClick={this.showRemarksModal} > Remarks</a></span>
                         <div className="spacer30"></div>
                         <table className="table table-bordered table-striped indicator-table complex-table">
                         <thead>

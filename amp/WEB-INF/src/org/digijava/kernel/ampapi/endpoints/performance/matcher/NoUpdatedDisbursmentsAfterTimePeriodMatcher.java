@@ -2,7 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
 import java.util.Date;
 
-import org.digijava.kernel.ampapi.endpoints.performance.PerfomanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -26,7 +26,7 @@ public class NoUpdatedDisbursmentsAfterTimePeriodMatcher extends PerformanceRule
             AmpPerformanceRule rule) {
         super(definition, rule);
         
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+        PerformanceRuleManager performanceRuleManager = PerformanceRuleManager.getInstance();
         
         timeUnit = performanceRuleManager.getCalendarTimeUnit(
                 performanceRuleManager.getAttributeValue(rule, PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT));
@@ -52,7 +52,7 @@ public class NoUpdatedDisbursmentsAfterTimePeriodMatcher extends PerformanceRule
     
     @Override
     protected boolean validate() {
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+        PerformanceRuleManager performanceRuleManager = PerformanceRuleManager.getInstance();
         AmpPerformanceRuleAttribute attr1 = performanceRuleManager
                 .getAttributeFromRule(rule, PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT);
         AmpPerformanceRuleAttribute attr2 = performanceRuleManager

@@ -136,10 +136,7 @@ export default class Report6 extends Component {
             var filters = this.filter.serialize().filters;
             filters.date = {};
             if (this.state.selectedYear) {
-                filters.date = {
-                        'start': this.state.selectedYear + '-01-01',
-                        'end': this.state.selectedYear + '-12-31'
-                    };  
+                filters.date = Utils.getStartEndDates(this.settingsWidget.toAPIFormat(), this.props.calendars, this.state.selectedYear);
             }           
             this.filter.deserialize({filters: filters}, {silent : true});           
             this.fetchReportData();
@@ -436,7 +433,8 @@ function mapStateToProps( state, ownProps ) {
         years: state.commonLists.years,
         translations: state.startUp.translations,
         translate: state.startUp.translate,
-        settings: state.commonLists.settings
+        settings: state.commonLists.settings,
+        calendars: state.commonLists.calendars
     }
 }
 

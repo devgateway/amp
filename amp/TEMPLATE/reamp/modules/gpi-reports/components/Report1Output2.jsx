@@ -51,7 +51,7 @@ export default class Report1Output2 extends Component {
         $( this.refs.filterPopup ).hide(); 
     }
 
-    showSettings() {
+    showSettings() {      
        Utils.showSettings(this.refs.settingsPopup, this.settingsWidget, this.onSettingsApply.bind(this), this.onSettingsCancel.bind(this));       
     }
     
@@ -105,15 +105,12 @@ export default class Report1Output2 extends Component {
         }.bind( this ) );
     }
 
-    onYearClick( selectedYear ) {
-        this.setState( { selectedYear: selectedYear }, function() {                      
+    onYearClick( selectedYear ) {        
+        this.setState( { selectedYear: selectedYear}, function() {                      
             const filters = this.filter.serialize().filters;            
             filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                filters['actual-approval-date'] = {
-                        'start': this.state.selectedYear + '-01-01',
-                        'end': this.state.selectedYear + '-12-31'
-                    };
+                filters['actual-approval-date'] = Utils.getStartEndDates(this.settingsWidget.toAPIFormat(), this.props.calendars, this.state.selectedYear);                
             }
             this.filter.deserialize({filters: filters}, {silent : true});
             this.fetchReportData();            
@@ -245,7 +242,8 @@ function mapStateToProps( state, ownProps ) {
         orgList: state.commonLists.orgList,
         years: state.commonLists.years,        
         translations: state.startUp.translations,
-        translate: state.startUp.translate
+        translate: state.startUp.translate,
+        calendars: state.commonLists.calendars
     }
 }
 

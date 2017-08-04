@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as startUp from '../actions/StartUpAction.jsx';
+import * as startUp from '../actions/StartUpAction';
+import * as commonListsActions from '../actions/CommonListsActions';
 export default class YearsFilterSection extends Component {
     constructor( props, context ) {
         super( props, context );        
@@ -84,12 +85,12 @@ export default class YearsFilterSection extends Component {
 function mapStateToProps( state, ownProps ) {
     return {
         translations: state.startUp.translations,
-        translate: state.startUp.translate
+        translate: state.startUp.translate        
     }
 }
 
 function mapDispatchToProps( dispatch ) {
-    return {actions: bindActionCreators({}, dispatch)}
+    return {actions: bindActionCreators(Object.assign( {}, commonListsActions ), dispatch)}
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( YearsFilterSection );

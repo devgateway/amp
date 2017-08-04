@@ -82,14 +82,7 @@ export default class Report5b extends Component {
         };
 
         requestData.filters = this.filter.serialize().filters;        
-        requestData.settings = this.settingsWidget.toAPIFormat();      
-        if ( this.state.selectedYear ) {
-            requestData.filters.date = {
-                'start': this.state.selectedYear + '-01-01',
-                'end': this.state.selectedYear + '-12-31'
-            }
-        }
-        
+        requestData.settings = this.settingsWidget.toAPIFormat();                
         if(this.state.hierarchy === 'donor-agency'){
             requestData.filters[this.state.hierarchy] = requestData.filters[this.state.hierarchy] || [];
             if (this.state.selectedDonor && requestData.filters[this.state.hierarchy].indexOf(this.state.selectedDonor) == -1) {
@@ -143,10 +136,7 @@ export default class Report5b extends Component {
             var filters = this.filter.serialize().filters;
             filters.date = {};
             if (this.state.selectedYear) {
-                filters.date = {
-                        'start': this.state.selectedYear + '-01-01',
-                        'end': this.state.selectedYear + '-12-31'
-                    };  
+                filters.date = Utils.getStartEndDates(this.settingsWidget.toAPIFormat(), this.props.calendars, this.state.selectedYear);
             }           
             this.filter.deserialize({filters: filters}, {silent : true});           
             this.fetchReportData();
@@ -226,8 +216,8 @@ export default class Report5b extends Component {
         if ( this.filter ) {
             var filters = this.filter.serialize().filters;
             filters.date = filters.date || {};
-            filters.date.start = filters.date.start || this.state.selectedYear + '-01-01'  || '';
-            filters.date.end = filters.date.end ||  this.state.selectedYear + '-12-31' || '';
+            filters.date.start = filters.date.start ||  '';
+            filters.date.end = filters.date.end || '';
             var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
             var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
             if ( filters.date.start.length > 0 ) {
@@ -433,7 +423,8 @@ function mapStateToProps( state, ownProps ) {
         years: state.commonLists.years,
         translations: state.startUp.translations,
         settings: state.commonLists.settings,
-        translate: state.startUp.translate
+        translate: state.startUp.translate,
+        calendars: state.commonLists.calendars
     }
 }
 

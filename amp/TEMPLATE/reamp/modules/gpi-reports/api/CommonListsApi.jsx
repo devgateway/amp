@@ -32,6 +32,16 @@ class CommonListsApi {
        });
    }
    
+   static getCalendars(){
+       return new Promise((resolve, reject) => {
+           fetchJson('/rest/gpi/report/calendars/').then((response) => {                            
+               resolve(response);
+           }).catch((error) => {
+               reject(error);
+           });
+       });
+   }
+   
    static getSettings() {          
        return new Promise((resolve, reject) => {
           fetchJson('/rest/amp/settings').then((response) => {

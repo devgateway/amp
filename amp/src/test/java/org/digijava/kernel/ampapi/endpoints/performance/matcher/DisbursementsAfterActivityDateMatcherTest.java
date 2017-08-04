@@ -8,7 +8,7 @@ import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
 import org.dgfoundation.amp.activity.builder.TransactionBuilder;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoDisbursmentsAfterFundingDateMatcherDefinition;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoDisbursementsAfterFundingDateMatcherDefinition;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
@@ -30,7 +30,7 @@ public class DisbursementsAfterActivityDateMatcherTest extends PerformanceRuleMa
     @Before
     public void setUp() {
         super.setUp();
-        definition = new NoDisbursmentsAfterFundingDateMatcherDefinition();
+        definition = new NoDisbursementsAfterFundingDateMatcherDefinition();
     }
 
     @Test

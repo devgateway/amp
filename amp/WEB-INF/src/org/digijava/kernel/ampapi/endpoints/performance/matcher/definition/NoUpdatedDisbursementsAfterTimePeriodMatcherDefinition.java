@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.NoUpdatedDisbursmentsAfterTimePeriodMatcher;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.NoUpdatedDisbursementsAfterTimePeriodMatcher;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
@@ -15,11 +15,15 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceR
  * @author Viorel Chihai
  *
  */
-public class NoUpdatedDisbursmentsAfterTimePeriodMatcherDefinition extends PerformanceRuleMatcherDefinition {
+public class NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition extends PerformanceRuleMatcherDefinition {
     
-    public NoUpdatedDisbursmentsAfterTimePeriodMatcherDefinition() {
+    public NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition() {
         
-        super("noUpdatedDisbursments", "No updated disbursments");
+        super("noUpdatedDisbursements", "No updated disbursements", 
+                String.format("Disbursements (actual or planned) from one or more donor "
+                        + "have not been updated in the last {%s} {%s}", 
+                        PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT, 
+                        PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT));
         
         Function<PerformanceRuleAttributeType, List<String>> possibleValuesSupplier = 
                 PerformanceRuleMatcherPossibleValuesSupplier.getInstance().getSupplier();
@@ -32,7 +36,7 @@ public class NoUpdatedDisbursmentsAfterTimePeriodMatcherDefinition extends Perfo
 
     @Override
     public PerformanceRuleMatcher createMatcher(AmpPerformanceRule rule) {
-        return new NoUpdatedDisbursmentsAfterTimePeriodMatcher(this, rule);
+        return new NoUpdatedDisbursementsAfterTimePeriodMatcher(this, rule);
     }
     
 }

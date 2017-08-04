@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.NoDisbursmentsAfterFundingDateMatcher;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.NoDisbursementsAfterFundingDateMatcher;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
@@ -15,11 +15,15 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceR
  * @author Viorel Chihai
  *
  */
-public class NoDisbursmentsAfterFundingDateMatcherDefinition extends PerformanceRuleMatcherDefinition {
+public class NoDisbursementsAfterFundingDateMatcherDefinition extends PerformanceRuleMatcherDefinition {
     
-    public NoDisbursmentsAfterFundingDateMatcherDefinition() {
+    public NoDisbursementsAfterFundingDateMatcherDefinition() {
         
-        super("noDisbursementsAfterFundingDate", "No disbursments after selected funding date");
+        super("noDisbursementsAfterFundingDate", "No disbursements after selected funding date", 
+                String.format("{%s} {%s} have passed since the '{%s}' and still no disbursement from donor", 
+                        PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT, 
+                        PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT, 
+                        PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE));
         
         Function<PerformanceRuleAttributeType, List<String>> possibleValuesSupplier = 
                 PerformanceRuleMatcherPossibleValuesSupplier.getInstance().getSupplier();
@@ -34,7 +38,7 @@ public class NoDisbursmentsAfterFundingDateMatcherDefinition extends Performance
 
     @Override
     public PerformanceRuleMatcher createMatcher(AmpPerformanceRule rule) {
-        return new NoDisbursmentsAfterFundingDateMatcher(this, rule);
+        return new NoDisbursementsAfterFundingDateMatcher(this, rule);
     }
     
 }

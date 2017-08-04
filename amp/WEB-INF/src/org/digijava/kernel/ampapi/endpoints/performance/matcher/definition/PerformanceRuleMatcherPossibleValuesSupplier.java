@@ -54,11 +54,19 @@ public final class PerformanceRuleMatcherPossibleValuesSupplier {
     }
 
     public static List<String> getActivityDatePossibleValue() {
-        return Arrays.asList(PerformanceRuleConstants.ACTIVITY_CLOSING_DATE);
+        return Arrays.asList(PerformanceRuleConstants.ACTIVITY_CLOSING_DATE, 
+                PerformanceRuleConstants.ACTIVITY_ACTUAL_APPROVAL_DATE,
+                PerformanceRuleConstants.ACTIVITY_PROPOSED_START_DATE,
+                PerformanceRuleConstants.ACTIVITY_ORIGINAL_COMPLETING_DATE,
+                PerformanceRuleConstants.ACTIVITY_ACTUAL_START_DATE,
+                PerformanceRuleConstants.ACTIVITY_CONTRACTING_DATE,
+                PerformanceRuleConstants.ACTIVITY_DISBURSEMENTS_DATE);
     }
 
     public static List<String> getFundingDatePossibleValue() {
-        return Arrays.asList(PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE);
+        return Arrays.asList(PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE,
+                PerformanceRuleConstants.FUNDING_EFFECTIVE_DATE,
+                PerformanceRuleConstants.FUNDING_CLOSING_DATE);
     }
 
     public static PerformanceRuleMatcherPossibleValuesSupplier getInstance() {

@@ -54,6 +54,9 @@ export default class Report1Output1 extends Component {
     }
 
     showSettings() {
+       const settings  = this.settingsWidget.toAPIFormat();
+       const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+       this.setState( { calendarId: calendarId });
        Utils.showSettings(this.refs.settingsPopup, this.settingsWidget, this.onSettingsApply.bind(this), this.onSettingsCancel.bind(this));
     }
 
@@ -61,8 +64,15 @@ export default class Report1Output1 extends Component {
         $( this.refs.settingsPopup ).hide();
     }
 
-    onSettingsApply(){
-        this.fetchReportData();
+    onSettingsApply(){        
+        const settings  = this.settingsWidget.toAPIFormat();
+        const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
+        //if calendar has changed reset year filter
+        if (currentCalendarId !== this.state.calendarId) {            
+            this.onYearClick(null);            
+        } else {
+            this.fetchReportData(); 
+        }       
         $( this.refs.settingsPopup ).hide();
     }
 

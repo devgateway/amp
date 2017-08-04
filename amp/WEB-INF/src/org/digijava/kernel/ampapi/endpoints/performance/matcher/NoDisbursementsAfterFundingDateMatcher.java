@@ -23,7 +23,8 @@ public class NoDisbursementsAfterFundingDateMatcher extends PerformanceRuleMatch
     private int timeAmount;
     private String selectedFundingDate;
     
-    public NoDisbursementsAfterFundingDateMatcher(PerformanceRuleMatcherDefinition definition, AmpPerformanceRule rule) {
+    public NoDisbursementsAfterFundingDateMatcher(PerformanceRuleMatcherDefinition definition, 
+            AmpPerformanceRule rule) {
         super(definition, rule);
         
         PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();

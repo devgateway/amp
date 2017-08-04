@@ -82,7 +82,14 @@ export default class Report5b extends Component {
         };
 
         requestData.filters = this.filter.serialize().filters;        
-        requestData.settings = this.settingsWidget.toAPIFormat();                
+        requestData.settings = this.settingsWidget.toAPIFormat();      
+        if ( this.state.selectedYear ) {
+            requestData.filters.date = {
+                'start': this.state.selectedYear + '-01-01',
+                'end': this.state.selectedYear + '-12-31'
+            }
+        }
+        
         if(this.state.hierarchy === 'donor-agency'){
             requestData.filters[this.state.hierarchy] = requestData.filters[this.state.hierarchy] || [];
             if (this.state.selectedDonor && requestData.filters[this.state.hierarchy].indexOf(this.state.selectedDonor) == -1) {
@@ -136,7 +143,10 @@ export default class Report5b extends Component {
             var filters = this.filter.serialize().filters;
             filters.date = {};
             if (this.state.selectedYear) {
-                filters.date = Utils.getStartEndDates(this.settingsWidget.toAPIFormat(), this.props.calendars, this.state.selectedYear);
+                filters.date = {
+                        'start': this.state.selectedYear + '-01-01',
+                        'end': this.state.selectedYear + '-12-31'
+                    };  
             }           
             this.filter.deserialize({filters: filters}, {silent : true});           
             this.fetchReportData();
@@ -213,24 +223,24 @@ export default class Report5b extends Component {
 
     showSelectedDates() {
         var displayDates = '';
-        if ( this.filter ) {
-            var filters = this.filter.serialize().filters;
-            filters.date = filters.date || {};
-            filters.date.start = filters.date.start ||  '';
-            filters.date.end = filters.date.end || '';
-            var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
-            var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
-            if ( filters.date.start.length > 0 ) {
-                displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
-            }
-
-            if ( filters.date.end.length > 0 ) {
+        if(this.filter){
+            var filters = this.filter.serialize().filters;            
+            if ( filters.date ) {
+                filters.date.start = filters.date.start || '';
+                filters.date.end = filters.date.end || '';
+                var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
+                var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
                 if ( filters.date.start.length > 0 ) {
-                    displayDates += " - ";
+                    displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
                 }
-                displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
-            }
 
+                if ( filters.date.end.length > 0 ) {
+                    if ( filters.date.start.length > 0 ) {
+                        displayDates += " - ";
+                    }
+                    displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
+                }
+            } 
         }
         return displayDates;
     }
@@ -269,7 +279,13 @@ export default class Report5b extends Component {
     downloadPdfFile(){
         this.props.actions.downloadPdfFile(this.getRequestData(), '5b');
     } 
-       
+    
+    getYears() {
+        let settings  = this.settingsWidget.toAPIFormat()
+        let calendar = this.props.years.filter(calendar => calendar.calendarId == this.settingsWidget.definitions.getDefaultCalendarId())[0];
+        return calendar.years.slice();      
+    }
+    
     render() {         
         var years = Utils.getYears(this.settingsWidget, this.props.years);                   
         var MTEFYears =  this.getMTEFYears();
@@ -423,8 +439,7 @@ function mapStateToProps( state, ownProps ) {
         years: state.commonLists.years,
         translations: state.startUp.translations,
         settings: state.commonLists.settings,
-        translate: state.startUp.translate,
-        calendars: state.commonLists.calendars
+        translate: state.startUp.translate
     }
 }
 

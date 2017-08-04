@@ -694,7 +694,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 						+ "(SELECT object_id FROM amp_content_translation WHERE object_class = 'org.digijava.module.aim.dbentity.AmpActivityVersion' AND field_name='name' "
 						+ groupClause
 						+ " AND object_id IN (SELECT amp_activity_last_version_id FROM amp_activity_group) "
-						+ " AND translation = ?) ";
+						+ " AND translation = ?) "
+						+ " or aav.name =? ";
 				List<FilterParam> params = new ArrayList<FilterParam>();
 				if (groupId != null)
 					params.add(new FilterParam(groupId, java.sql.Types.BIGINT));

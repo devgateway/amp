@@ -36,6 +36,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
     private static Logger logger = Logger.getLogger(PerformanceRulesAlertJob.class);
     
     public static final String PERFORMANCE_RULE_FM_PATH = "Project Performance Alerts Manager";
+    public static final String DEFAULT_LOCALE_LANGUAGE = "en";
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -154,7 +155,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         updatedActivity = ActivityUtil.saveActivityNewVersion(oldActivity, null, modifyingMember,
                 oldActivity.getDraft(), session, false, false);
             
-        Locale javaLocale = new Locale(TLSUtils.getEffectiveLangCode());
+        Locale javaLocale = new Locale(DEFAULT_LANGUAGE);
         
         LuceneUtil.addUpdateActivity(AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, true, 
                 SiteUtils.getDefaultSite(), javaLocale, 

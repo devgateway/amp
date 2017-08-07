@@ -7,6 +7,7 @@ var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js')
 
 var MapHeaderView = require('../views/map-header-view');
 var MapHeaderGapAnalysisView = require('../views/map-header-gap-analysis-view');
+var MapHeaderPerformanceToggle = require('../views/map-header-performance-view');
 var BasemapGalleryView = require('../views/basemap-gallery-view');
 var LegendView = require('../legend/legend-view');
 var DataSourcesView = require('../datasources/datasources-view');
@@ -51,7 +52,9 @@ module.exports = Backbone.View.extend({
 
     this.headerView = new MapHeaderView({app: this.app});
     this.GapViewModel = Backbone.Model.extend({defaults: {isGapAnalysisAvailable: false, isGapAnalysisSelected: false}});
+    
     this.headerGapAnalysisView = new MapHeaderGapAnalysisView({app: this.app, model: new this.GapViewModel()});
+    this.headerPerformanceToggle = new MapHeaderPerformanceToggle({app: this.app, model: this.app.data.performanceToggleModel});
     this.legendView = new LegendView({app: this.app});
     this.datasourcesView = new DataSourcesView({app: this.app});
     this.basemapView = new BasemapGalleryView({
@@ -71,6 +74,7 @@ module.exports = Backbone.View.extend({
     var headerContainer = this.$('#map-header > div');
     headerContainer.append(this.headerView.render().el);
     headerContainer.append(this.headerGapAnalysisView.render().el);
+    headerContainer.append(this.headerPerformanceToggle.render().el);
     headerContainer.append(this.basemapView.render().el);
 
     this.$el.append(this.legendView.render().el);

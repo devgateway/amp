@@ -61,6 +61,8 @@ _.extend(GISData.prototype, Backbone.Events, {
 	    
 	    this.indicatorTypes = new IndicatorTypes();
 	    this.user = new User();
+	    var PerformanceToggleModel = Backbone.Model.extend({defaults: {isPerformanceToggleAvailable: true, isPerformanceToggleSelected: false}});
+	    this.performanceToggleModel = new PerformanceToggleModel();
 	    this.activities = new Activities([], {
 	      settingsWidget: this.settingsWidget,
 	      filter: this.filter,
@@ -83,12 +85,13 @@ _.extend(GISData.prototype, Backbone.Events, {
 	    });
 
 
-	    this.indicators = new Indicators([], { boundaries: this.boundaries, settingsWidget: this.settingsWidget, generalSettings: this.generalSettings});
+	    this.indicators = new Indicators([], { boundaries: this.boundaries, settingsWidget: this.settingsWidget, generalSettings: this.generalSettings, performanceToggleModel: this.performanceToggleModel});
 
 	    this.admClusters = new ADMClusters([], {
 	      boundaries: this.boundaries,
 	      filter: this.filter,
-	      settingsWidget: this.settingsWidget
+	      settingsWidget: this.settingsWidget,
+	      performanceToggleModel: this.performanceToggleModel
 	    });
 
 	    // TODO get these from the api
@@ -101,6 +104,8 @@ _.extend(GISData.prototype, Backbone.Events, {
 	    this.listenTo(this.structuresMenu, 'all', this.bubbleLayerEvents('structure'));
 	    this.listenTo(this.structures, 'all', this.bubbleLayerEvents('structure'));
 	    this.listenTo(this.admClusters, 'all', this.bubbleLayerEvents('adm-cluster'));
+	    
+	    
   },
   addState: function(state) {
     this.state = state;

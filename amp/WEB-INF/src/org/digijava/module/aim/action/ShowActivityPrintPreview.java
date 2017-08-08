@@ -158,6 +158,10 @@ public class ShowActivityPrintPreview
                 if(activity.getProjectImpact()!=null){
                 	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact().trim());
                 }
+
+                if (activity.getOtherInfo() != null) {
+                    eaForm.getIdentification().setOtherInfo(activity.getOtherInfo().trim());
+                }
                 
                 // fferreyra: Added null checking for field activity_summary
                 if(activity.getActivitySummary()!=null){

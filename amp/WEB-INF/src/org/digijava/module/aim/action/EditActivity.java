@@ -955,6 +955,10 @@ public class EditActivity extends Action {
 
       	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact());
 
+            if (activity.getOtherInfo() != null) {
+                eaForm.getIdentification().setOtherInfo(activity.getOtherInfo());
+            }
+
     	eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());
 
     	eaForm.getIdentification().setConditionality(activity.getConditionality());

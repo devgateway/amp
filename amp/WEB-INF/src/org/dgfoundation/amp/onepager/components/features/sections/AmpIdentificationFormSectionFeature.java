@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import javax.servlet.ServletContext;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -66,8 +68,10 @@ implements AmpRequiredComponentContainer{
 	private AmpWarningComponentPanel<String> titleSimilarityWarning;
 	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 	private List<FormComponent<?>> requiredRichTextFormComponents = new ArrayList<FormComponent<?>>();
+	private static final String OTHER_INFO_KEY = "other";
+	private static final List<String> OTHER_INFO_CATEGORY_KEY = Arrays.asList(CategoryConstants
+			.PROJECT_CATEGORY_KEY, CategoryConstants.ACTIVITY_STATUS_KEY, CategoryConstants.MODALITIES_KEY);
 
-	
 	/**
 	 * @param id
 	 * @param fmName
@@ -170,7 +174,7 @@ implements AmpRequiredComponentContainer{
             titleSimilarityWarning.getWarning().setVisible(true);
             titleSimilarityWarning.setVisible(true);
 			add(titleSimilarityWarning);
-			
+
 			 AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
 					"status", CategoryConstants.ACTIVITY_STATUS_KEY,
 					new AmpCategoryValueByKeyModel(
@@ -178,6 +182,49 @@ implements AmpRequiredComponentContainer{
 							CategoryConstants.ACTIVITY_STATUS_KEY),
 							CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null, AmpFMTypes.MODULE);
 			status.getChoiceContainer().setRequired(true);
+
+			AmpTextAreaFieldPanel otherInfo = new AmpTextAreaFieldPanel("otherInfo",
+				new PropertyModel<String>(am, "otherInfo"), "Other Info", false, AmpFMTypes.MODULE);
+
+
+			otherInfo.getTextAreaContainer().add(StringValidator.maximumLength(255));
+			otherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
+			otherInfo.setOutputMarkupPlaceholderTag(true);
+			otherInfo.setOutputMarkupId(true);
+			otherInfo.setIgnoreFmVisibility(true);
+			otherInfo.setIgnorePermissions(true);
+			otherInfo.setVisible(false);
+
+			status.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+				private static final long serialVersionUID = 1L;
+
+				{
+					updateOtherInfo();
+				}
+
+				private void toggleOtherInfo(boolean b) {
+					otherInfo.setVisible(b);
+					if (otherInfo.isVisible()) {
+						otherInfo.getTextAreaContainer().setRequired(true);
+					}
+				}
+
+				private void updateFields(AjaxRequestTarget target){
+					target.add(otherInfo);
+					target.add(otherInfo.getParent());
+				}
+
+				private void updateOtherInfo() {
+					toggleOtherInfo(isOtherInfoVisible(am));
+				}
+
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					updateOtherInfo();
+					updateFields(target);
+				}
+			});
+
 			add(status);
 			
 			add(new AmpTextAreaFieldPanel("statusReason",
@@ -349,6 +396,35 @@ implements AmpRequiredComponentContainer{
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.PROJECT_CATEGORY_KEY),
 							CategoryConstants.PROJECT_CATEGORY_NAME, true, true, null, AmpFMTypes.MODULE);
+
+			projectCategory.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+				private static final long serialVersionUID = 1L;
+
+				{
+					updateOtherInfo();
+				}
+
+				private void toggleOtherInfo(boolean b){
+					otherInfo.setVisible(b);
+					otherInfo.getTextAreaContainer().setRequired(b);
+				}
+
+				private void updateFields(AjaxRequestTarget target){
+					target.add(otherInfo);
+					target.add(otherInfo.getParent());
+				}
+
+				private void updateOtherInfo() {
+					toggleOtherInfo(isOtherInfoVisible(am));
+				}
+
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					updateOtherInfo();
+					updateFields(target);
+				}
+			});
+
 			add(projectCategory);
 			AmpCategorySelectFieldPanel projectImplementingUnit = new AmpCategorySelectFieldPanel(
 					"projectImplementingUnit",
@@ -468,12 +544,35 @@ implements AmpRequiredComponentContainer{
 					new PropertyModel<String>(am, "lessonsLearned"), "Lessons Learned", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel("projectImpact",
 					new PropertyModel<String>(am, "projectImpact"), "Project Impact", true, AmpFMTypes.MODULE));
+
 			add(new AmpTextAreaFieldPanel("activitySummary",
 					new PropertyModel<String>(am, "activitySummary"), "Activity Summary", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel("conditionalities",
 					new PropertyModel<String>(am, "conditionality"), "Conditionalities", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel("projectManagement",
 					new PropertyModel<String>(am, "projectManagement"), "Project Management", true, AmpFMTypes.MODULE));
+
+		    add(otherInfo);
+	}
+
+	public static boolean isOtherInfoVisible(IModel<AmpActivityVersion> am) {
+		boolean isOtherInfoVisible = false;
+		AmpAuthWebSession session = (AmpAuthWebSession) Session.get();
+		String prefix = "";
+		if (session.getCurrentMember().getWorkspacePrefix() != null) {
+			prefix = session.getCurrentMember().getWorkspacePrefix().getValue();
+		}
+		for (AmpCategoryValue ampCategoryValue : am.getObject().getCategories()) {
+			String categoryKey = ampCategoryValue.getAmpCategoryClass().getKeyName();
+			categoryKey = categoryKey.replaceFirst(prefix, "");
+			if (OTHER_INFO_CATEGORY_KEY.contains(categoryKey)) {
+				if (ampCategoryValue != null && OTHER_INFO_KEY.equalsIgnoreCase(ampCategoryValue.getValue()
+				)) {
+					isOtherInfoVisible = true;
+				}
+			}
+		}
+		return isOtherInfoVisible;
 	}
 
 	public List<FormComponent<?>> getRequiredFormComponents() {
@@ -483,6 +582,6 @@ implements AmpRequiredComponentContainer{
     public List<FormComponent<?>> getRequiredRichTextFormComponents() {
         return requiredRichTextFormComponents;
     }
-	
+
 
 }

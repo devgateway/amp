@@ -751,6 +751,17 @@ function collapseAll() {
 				</c:if>
 					<hr />
 			</module:display>
+
+			<module:display name="/Activity Form/Identification/Other Info" parentModule="/Activity Form/Identification">
+				<digi:trn>Other Info</digi:trn>:&nbsp;<br />
+				<c:if test="${not empty aimEditActivityForm.identification.otherInfo}">
+					<bean:define id="otherInfoKey">
+						<c:out value="${aimEditActivityForm.identification.otherInfo}"/>
+					</bean:define>
+					<span class="word_break bold"><digi:edit key="${otherInfoKey}"></digi:edit></span>
+				</c:if>
+					<hr />
+			</module:display>
 					
 			<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
 			<logic:present name="aimEditActivityForm" property="identification.projectImpact">

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -13,10 +15,13 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpOverallFundingTotalsTable;
 import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
@@ -109,7 +114,54 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
 				new AmpCategoryValueByKeyModel(new PropertyModel<Set<AmpCategoryValue>>(am, "categories"),
 						CategoryConstants.MODALITIES_KEY),
 				CategoryConstants.MODALITIES_NAME, true, false, null, AmpFMTypes.MODULE);
-		wmc.add(modalities);					
+
+		modalities.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+			private static final long serialVersionUID = 1L;
+
+			{
+				updateOtherInfo();
+			}
+
+			private void toggleOtherInfo(boolean b) {
+				if (this.getFormComponent() != null) {
+				this.getFormComponent().getParent().getParent().getParent().getParent().getParent().getParent()
+						.visitChildren(AmpIdentificationFormSectionFeature.class,
+						new IVisitor<AmpIdentificationFormSectionFeature, Void>() {
+							@Override
+							public void component(AmpIdentificationFormSectionFeature component,
+												  IVisit<Void> visit) {
+								component.get("otherInfo").setVisible(b);
+								visit.dontGoDeeper();
+							}
+						});
+				}
+			}
+
+			private void updateFields(AjaxRequestTarget target) {
+				this.getFormComponent().getParent().getParent().getParent().getParent().getParent().getParent()
+						.visitChildren(AmpIdentificationFormSectionFeature.class,
+								new IVisitor<AmpIdentificationFormSectionFeature, Void>() {
+									@Override
+									public void component(AmpIdentificationFormSectionFeature component,
+														  IVisit<Void> visit) {
+										target.add(component.get("otherInfo"));
+										target.add(component.get("otherInfo").getParent());
+										visit.dontGoDeeper();
+									}
+								});
+			}
+
+			private void updateOtherInfo() {
+				toggleOtherInfo(AmpIdentificationFormSectionFeature.isOtherInfoVisible(am));
+			}
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				updateOtherInfo();
+				updateFields(target);
+			}
+		});
+		wmc.add(modalities);
 		
 		AmpOverallFundingTotalsTable overallFunding = new AmpOverallFundingTotalsTable(
 				"overallFunding", "Overall Funding Totals", new PropertyModel<Set<AmpFunding>>(am, "funding"));

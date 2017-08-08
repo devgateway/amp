@@ -384,6 +384,11 @@ public class ExportActivityToPDF extends Action {
                 columnName=TranslatorWorker.translateText("Lessons Learned");
                 createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getLessonsLearned()));
             }
+            //Other Info
+            if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Other Info")){
+                columnName=TranslatorWorker.translateText("Other Info");
+                createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getOtherInfo()));
+            }
             //Project Impact
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Impact")){
                 columnName=TranslatorWorker.translateText("Project Impact");

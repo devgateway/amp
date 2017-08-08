@@ -3240,6 +3240,12 @@ public class ExportActivityToWord extends Action {
             generateOverAllTableRows(identificationSubTable1, columnName, processEditTagValue(request, identification.getLessonsLearned()), null);
         }
 
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Other Info")) {
+            columnName = TranslatorWorker.translateText("Other Info");
+            generateOverAllTableRows(identificationSubTable1, columnName, processEditTagValue(request, identification
+                    .getOtherInfo()), null);
+        }
+
         if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Impact")){
             columnName=TranslatorWorker.translateText("Project Impact");
             generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getProjectImpact()),null);

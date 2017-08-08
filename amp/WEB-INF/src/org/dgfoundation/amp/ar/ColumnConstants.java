@@ -260,6 +260,7 @@ public class ColumnConstants {
 	public static final String PROJECT_COORDINATOR_CONTACT_TITLE = "Project Coordinator Contact Title";
 	public static final String PROJECT_DESCRIPTION = "Project Description";
 	public static final String PROJECT_IMPACT = "Project Impact";
+	public static final String OTHER_INFO = "Other Info";
 	public static final String PROJECT_IMPLEMENTING_UNIT = "Project Implementing Unit";
 	public static final String PROJECT_PERIOD = "Project Period";
 	public static final String PROJECT_TITLE = "Project Title";

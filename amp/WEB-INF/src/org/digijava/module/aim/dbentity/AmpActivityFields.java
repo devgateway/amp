@@ -40,6 +40,10 @@ LoggerIdentifiable, Cloneable {
 	
 	protected static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
+	@Interchangeable(fieldTitle = "Other Info", importable = true, fmPath="/Activity Form/Identification/Other Info")
+	@VersionableFieldTextEditor(fieldTitle = "Other Info")
+	protected String otherInfo;
+
 	@Interchangeable(fieldTitle = "Project Impact", importable = true, fmPath="/Activity Form/Identification/Project Impact")
 	@VersionableFieldTextEditor(fieldTitle = "Project Impact")
 	protected String projectImpact;
@@ -1649,6 +1653,14 @@ LoggerIdentifiable, Cloneable {
 
 		public void setProjectImpact(String projectImpact) {
 			this.projectImpact = projectImpact;
+		}
+
+		public String getOtherInfo() {
+			return otherInfo;
+		}
+
+		public void setOtherInfo(String otherInfo) {
+			this.otherInfo = otherInfo;
 		}
 
 		public String getActivitySummary() {

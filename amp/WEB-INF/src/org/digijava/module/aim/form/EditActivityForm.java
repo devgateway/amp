@@ -663,6 +663,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String results = null;
 		private String lessonsLearned = null;
 		private String projectImpact = null;
+		private String otherInfo = null;
 		private String activitySummary = null;
 		
 		private String conditionality = null;
@@ -812,12 +813,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public String getActivitySummary() {
 			return this.activitySummary;
 		}
-		
-		
 
-		
+		public String getOtherInfo() {
+			return otherInfo;
+		}
 
-		
+		public void setOtherInfo(String otherInfo) {
+			this.otherInfo = otherInfo;
+		}
+
 		@java.lang.SuppressWarnings("all")
 		public String getConditionality() {
 			return this.conditionality;

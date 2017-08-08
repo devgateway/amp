@@ -305,6 +305,23 @@ body {background:none;}
 											</td>
 										</tr>
 									</module:display>
+									<module:display name="/Activity Form/Identification/Other Info" parentModule="/Activity Form/Identification">
+                                    <tr>
+										<td class="field_name">
+											<b><digi:trn>Other Info</digi:trn></b>
+											</td>
+											<td bgcolor="#ffffff">
+												<c:if test="${not empty aimEditActivityForm.identification.otherInfo}">
+													<bean:define id="otherInfoKey">
+														<c:out value="${aimEditActivityForm.identification.otherInfo}"/>
+													</bean:define>
+													<span class="word_break bold">
+														<digi:edit key="${otherInfoKey}"></digi:edit>
+													</span>
+												</c:if>
+											</td>
+										</tr>
+									</module:display>
 									
 									<module:display name="/Activity Form/Identification/Project Impact" parentModule="/Activity Form/Identification">
 									<tr>

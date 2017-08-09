@@ -104,15 +104,16 @@ export default class Report1Output2 extends Component {
 
     onYearClick( selectedYear ) {
         this.setState( { selectedYear: selectedYear }, function() {                      
-            let requestData = this.getRequestData();
-            requestData.filters['actual-approval-date'] = {};
+            const filters = this.filter.serialize().filters;            
+            filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                requestData.filters['actual-approval-date']= {
+                filters['actual-approval-date'] = {
                         'start': this.state.selectedYear + '-01-01',
                         'end': this.state.selectedYear + '-12-31'
-                    };  
-            } 
-            this.fetchReportData(requestData);
+                    };
+            }
+            this.filter.deserialize({filters: filters}, {silent : true});
+            this.fetchReportData();            
         }.bind( this ) );
 
     }

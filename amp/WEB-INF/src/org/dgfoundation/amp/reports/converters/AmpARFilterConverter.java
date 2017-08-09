@@ -189,7 +189,10 @@ public class AmpARFilterConverter {
 		addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PRIMARY_SECTOR);
 		addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", ColumnConstants.SECONDARY_SECTOR);
 		addSectorSchemeFilters(arFilter.getSelectedTertiarySectors(), "Tertiary", ColumnConstants.TERTIARY_SECTOR);
-		
+		addSectorSchemeFilters(arFilter.getSelectedQuaternarySectors(), "Quaternary",
+				ColumnConstants.QUATERNARY_SECTOR);
+		addSectorSchemeFilters(arFilter.getSelectedQuinarySectors(), "Quinary", ColumnConstants.QUINARY_SECTOR);
+
 		if (!arFilter.isPledgeFilter())
 			addSectorSchemeFilters(arFilter.getSelectedTagSectors(), "Tag", ColumnConstants.SECTOR_TAG);
 	}

@@ -60,6 +60,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedSectors;
 	private Object[] selectedSecondarySectors;
 	private Object[] selectedTertiarySectors;
+	private Object[] selectedQuaternarySectors;
+	private Object[] selectedQuinarySectors;
 	private Object[] selectedTagSectors;
 	private Object[] selectedStatuses;
 	private Object[] selectedWorkspaces;
@@ -1415,7 +1417,6 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setToFundingClosingDate(String toFundingClosingDate) {
 		this.toFundingClosingDate = toFundingClosingDate;
 	}
-
 	public DynamicDateFilter getDynamicIssueFilter() {
 		return dynamicIssueFilter;
 	}
@@ -1439,12 +1440,27 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setToIssueDate(String toIssueDate) {
 		this.toIssueDate = toIssueDate;
 	}
-
 	public Long[] getSelectedConcensionalityLevel() {
 		return selectedConcensionalityLevel;
 	}
 
 	public void setSelectedConcensionalityLevel(Long[] selectedConcensionalityLevel) {
 		this.selectedConcensionalityLevel = selectedConcensionalityLevel;
+	}
+
+	public Object[] getSelectedQuaternarySectors() {
+		return selectedQuaternarySectors;
+	}
+
+	public void setSelectedQuaternarySectors(final Object[] selectedQuaternarySectors) {
+		this.selectedQuaternarySectors = selectedQuaternarySectors;
+	}
+
+	public Object[] getSelectedQuinarySectors() {
+		return selectedQuinarySectors;
+	}
+
+	public void setSelectedQuinarySectors(final Object[] selectedQuinarySectors) {
+		this.selectedQuinarySectors = selectedQuinarySectors;
 	}
 }

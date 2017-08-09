@@ -18,7 +18,7 @@ export default class YearsFilterSection extends Component {
     
     showSelectedDates() {
         var displayDates = '';
-        if(this.props.filter){
+        if(this.props.filter){           
             var filters = this.props.filter.serialize().filters;            
             if (filters[this.props.dateField]) {
                 filters[this.props.dateField].start = filters[this.props.dateField].start || '';
@@ -42,8 +42,7 @@ export default class YearsFilterSection extends Component {
 
     render() {
         if ( this.props.mainReport && this.props.mainReport.page ) {
-                var years = this.props.years.slice();
-                console.log(years);
+                var years = this.props.years.slice();               
                 return (
                            <div>
                            <div className="container-fluid no-padding">

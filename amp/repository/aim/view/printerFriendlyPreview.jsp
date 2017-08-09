@@ -3031,7 +3031,7 @@ body {background:none;}
 
 
                                  <logic:present name="currentMember" scope="session">
-									<feature:display name="Costing" module="Activity Costing">
+									 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT">
 										<tr>
 										<td class="field_name" >
 												<b>
@@ -3048,7 +3048,7 @@ body {background:none;}
                                             </table>
                                             </td>
                                       </tr>
-									</feature:display>
+									</module:display>
 								  </logic:present>
 
 									<!-- GPI -->

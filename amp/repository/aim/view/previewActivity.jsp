@@ -2781,7 +2781,7 @@ function collapseAll() {
 <!-- END CONTACT INFORMATION -->
 
 <!-- COSTING -->
-<feature:display name="Costing" module="Activity Costing">
+<module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT">
 <fieldset>
 	<legend>
 		<span class=legend_label id="costinglink" style="cursor: pointer;">
@@ -2798,7 +2798,7 @@ function collapseAll() {
 		</table>
 	</div>
 </fieldset>
-</feature:display>
+</module:display>
 <!-- END COSTING -->
 <!-- IPA Contracting -->
 <feature:display name="Contracting" module="Contracting">

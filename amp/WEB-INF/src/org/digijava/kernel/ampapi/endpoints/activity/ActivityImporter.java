@@ -207,7 +207,7 @@ public class ActivityImporter {
 		// get existing activity if this is an update request
 		Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
 
-		AmpTeamMember teamMember = getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
+		AmpTeamMember teamMember = getModifiedBy(newJson);
 		if (teamMember == null) {
 			return Collections.singletonList(
 					SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
@@ -338,14 +338,17 @@ public class ActivityImporter {
 		return Collections.emptyList();
 	}
 
-	public AmpTeamMember getAmpTeamMember(Long modifiedBy) {
-		AmpTeamMember teamMember = null;
-		if (modifiedBy != null) {
-			teamMember = TeamMemberUtil.getAmpTeamMember(modifiedBy);
-		} else if (TeamMemberUtil.getLoggedInTeamMember() != null) {
-			teamMember = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+	/**
+	 * Determine team member responsible for modification.
+	 * For AMP Offline clients this is the value retrieved from modified_by field of the activity. For other clients
+	 * it is the session user.
+	 */
+	public AmpTeamMember getModifiedBy(JsonBean newJson) {
+		if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+			return TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
+		} else {
+			return TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
 		}
-		return teamMember;
 	}
 
 	/**

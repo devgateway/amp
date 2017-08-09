@@ -99,9 +99,12 @@ import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -356,16 +359,38 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			protected void onError() {
 				super.onError();
 			}
+
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				if (SiteUtils.isEffectiveLangRTL()) {
+					add(new AttributeModifier("style", "direction:rtl;"));
+				}
+			}
 		};
 		activityForm.setOutputMarkupId(true);
-		
+
+		WebMarkupContainer stepHeadCont = new WebMarkupContainer ("stepHeadCont") {
+
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				if (SiteUtils.isEffectiveLangRTL()) {
+					add(new AttributeModifier("style", "direction:rtl;"));
+				}
+			}
+		};
+
+
 		String actNameStr = am.getObject().getName();
         if (actNameStr != null && !actNameStr.trim().isEmpty()) {
             actNameStr = "(" + actNameStr + ")";
         }
         Label activityName = new Label("activityName", actNameStr);
-        add(activityName);
-		
+		stepHeadCont.add(activityName);
+
+		add(stepHeadCont);
+
 		final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
 		feedbackPanel.setOutputMarkupPlaceholderTag(true);
 		feedbackPanel.setOutputMarkupId(true);
@@ -1481,4 +1506,5 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 		});
 	}
+
 }

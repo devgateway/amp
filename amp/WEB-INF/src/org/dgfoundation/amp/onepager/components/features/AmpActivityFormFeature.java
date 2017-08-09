@@ -91,10 +91,10 @@ import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.util.ChangeType;
-import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
@@ -103,6 +103,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -1012,19 +1013,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         }
 
         //Components Funding
-        Set componentSet = activity.getComponentFundings();
-        if (componentSet != null){
-            HashSet<String> verifiedComponents = new HashSet<String>();
-            for (Iterator<AmpComponentFunding> iterator = componentSet.iterator(); iterator.hasNext();){
-                AmpComponentFunding funding = iterator.next();
-                if (funding.getComponent() == null || verifiedComponents.contains(funding.getComponent().getTitle()))
-                    continue;
-                verifiedComponents.add(funding.getComponent().getTitle());
-                verifySet(new PropertyModel<Set>(am, "componentFundings"), alertIfDisbursementBiggerCommitments,
+        Set<AmpComponent> componentSet = activity.getComponents();
+        if (componentSet != null) {
+            for (AmpComponent component : componentSet) {
+            	for (AmpComponentFunding funding : component.getFundings()) {
+            		verifySet(new PropertyModel<Set>(component, "fundings"), alertIfDisbursementBiggerCommitments,
                         alertIfExpenditureBiggerDisbursement, commitmentErrors, expenditureErrors, funding.getComponent(),
                         TranslatorUtil.getTranslatedText(OnePager.COMPONENTS_SECTION_NAME) + ": " +
                         funding.getComponent().getTitle());
-            }
+            	}
+        	}
         }
     }
 

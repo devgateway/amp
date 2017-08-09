@@ -39,9 +39,6 @@ public class AmpComponentsFormSectionFeature extends
 			setModel.setObject(new TreeSet<AmpComponent>());
 		final ListEditor<AmpComponent> list;
 
-		final PropertyModel<Set<AmpComponentFunding>> componentsFundingsSetModel=new 
-			PropertyModel<Set<AmpComponentFunding>>(am, "componentFundings");
-		
 		IModel<List<AmpComponent>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel); 
 
 		list = new ListEditor<AmpComponent>("list", setModel, new AmpComponent.AmpComponentComparator()) {
@@ -52,25 +49,7 @@ public class AmpComponentsFormSectionFeature extends
 					final org.dgfoundation.amp.onepager.components.ListItem<AmpComponent> comp) {
 				AmpComponentField acf = new AmpComponentField("component", am, PersistentObjectModel.getModel(comp.getModelObject()), "Component");
 				comp.add(acf);
-				ListEditorRemoveButton delButton = new ListEditorRemoveButton("deleteComponent", "Delete Component"){
-					@Override
-					protected void onClick(AjaxRequestTarget target) {
-						AmpComponent c = comp.getModelObject();
-						//Remove all fundings from fundings set
-						if (componentsFundingsSetModel.getObject() != null){
-							Iterator<AmpComponentFunding> it = componentsFundingsSetModel.getObject().iterator();
-							while (it.hasNext()) {
-								AmpComponentFunding cf = (AmpComponentFunding) it
-										.next();
-								if (cf.getComponent().equals(c))
-									it.remove();
-							}
-						}
-						target.add(this.findParent(AmpComponentsFormSectionFeature.class));
-						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.findParent(AmpComponentsFormSectionFeature.class)));
-						super.onClick(target);
-					}
-				};
+				ListEditorRemoveButton delButton = new ListEditorRemoveButton("deleteComponent", "Delete Component");
 				comp.add(delButton);
 			}
 		};

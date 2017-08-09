@@ -2,7 +2,7 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../doc/xmlpatcher.xsd ">
-	<jira>AMP-26382</jira>
+	<jira>AMP-26459</jira>
 	<keyword>Views</keyword>
 	<author>Octavian Ciubotaru</author>
 	<description>recreate view, this will always be the last version of the view</description>
@@ -18,21 +18,17 @@
 	</trigger> 
 	<apply>
 		<script>
-			<lang delimiter=";" type="postgres"><![CDATA[
-				DROP VIEW IF EXISTS v_component_second_responsible_organization_name;
-				CREATE OR REPLACE VIEW v_component_second_responsible_organization_name AS
-				  SELECT
-					aac.amp_activity_id,
-					org.name                     AS org_name,
-					f.second_rep_organisation_id AS org_id,
-					aac.amp_component_id,
-					c.type                       AS component_type_id,
-					f.rep_organization_id        AS component_rep_org_id
-				  FROM amp_activity_components aac
-					JOIN amp_components c ON c.amp_component_id = aac.amp_component_id
-					JOIN amp_component_funding f ON f.amp_component_id = aac.amp_component_id
-					JOIN amp_organisation org ON org.amp_org_id = f.second_rep_organisation_id;
-			]]></lang>
+			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_quinary_sub_sub_sectors CASCADE;
+			    CREATE OR REPLACE VIEW v_quinary_sub_sub_sectors AS
+					SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, asl.id2 AS amp_sector_id, SUM(a.sector_percentage) as percentage, COUNT(*) - COUNT(a.sector_percentage) AS cnt_nulls
+						FROM amp_activity_sector a	
+							JOIN ni_all_sectors_with_levels asl ON a.amp_sector_id = asl.amp_sector_id
+							LEFT JOIN amp_sector level ON level.amp_sector_id = asl.id2
+							JOIN amp_classification_config acc ON acc.id = a.classification_config_id
+   						WHERE acc.name = 'Quinary'
+					GROUP BY a.amp_activity_id, asl.id2, level.amp_sector_id;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

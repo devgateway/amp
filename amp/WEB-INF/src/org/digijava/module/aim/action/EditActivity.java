@@ -1889,8 +1889,8 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 			tempComp.setDisbursements(new ArrayList<FundingDetail>());
 			tempComp.setExpenditures(new ArrayList<FundingDetail>());
 
-			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
-			Iterator cItr = fundingComponentActivity.iterator();
+			Collection<AmpComponentFunding> fundingComponentActivity = temp.getFundings();
+			Iterator<AmpComponentFunding> cItr = fundingComponentActivity.iterator();
 
 			while (cItr.hasNext()) {
 				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr.next();

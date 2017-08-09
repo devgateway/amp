@@ -30,7 +30,7 @@
 				  FROM amp_activity_components aac
 					JOIN amp_components c ON aac.amp_component_id = c.amp_component_id
 					JOIN amp_component_type ct ON c.type = ct.type_id
-					LEFT JOIN amp_component_funding f ON c.amp_component_id=f.amp_component_id AND aac.amp_activity_id=f.activity_id;
+					LEFT JOIN amp_component_funding f ON c.amp_component_id=f.amp_component_id;
 			]]></lang>
 		</script>
 	</apply>

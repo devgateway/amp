@@ -53,7 +53,7 @@ extends Entity implements Serializable {
 	private Set groups;
 	private Locale defaultLanguage;
 	private Set siteDomains;
-	private java.util.Set userLanguages;
+	private java.util.Set<Locale> userLanguages;
 	private java.util.Set countries;
 	private java.util.Set translationLanguages;
 	private Set moduleInstances;
@@ -276,5 +276,12 @@ extends Entity implements Serializable {
 			 return 0L;
 		 return site.getId();
 	 }
+
+	public Locale getLocale(String locale) {
+		return this.userLanguages.stream()
+				.filter(x -> locale.equalsIgnoreCase(x.getCode()))
+				.findAny()
+				.orElse(null);
+	}
 	
 }

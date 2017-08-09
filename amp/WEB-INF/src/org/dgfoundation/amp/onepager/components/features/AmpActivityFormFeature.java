@@ -104,6 +104,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -362,7 +363,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			@Override
 			protected void onConfigure() {
 				super.onConfigure();
-				if (isRTL()) {
+				if (SiteUtils.isEffectiveLangRTL()) {
 					add(new AttributeModifier("style", "direction:rtl;"));
 				}
 			}
@@ -374,7 +375,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			@Override
 			protected void onConfigure() {
 				super.onConfigure();
-				if (isRTL()) {
+				if (SiteUtils.isEffectiveLangRTL()) {
 					add(new AttributeModifier("style", "direction:rtl;"));
 				}
 			}
@@ -1500,10 +1501,4 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		});
 	}
 
-	private boolean isRTL() {
-		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-		Site site = wicketSession.getSite();
-		Locale locale = site.getLocale(wicketSession.getLocale().getLanguage());
-		return locale.getLeftToRight() == false;
-	}
 }

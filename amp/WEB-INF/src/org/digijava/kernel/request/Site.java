@@ -277,11 +277,16 @@ extends Entity implements Serializable {
 		 return site.getId();
 	 }
 
+	/**
+	 * returns the Locale from userLanguages set or default language
+	 * @param locale The locale code to search.
+	 * @return
+	 */
 	public Locale getLocale(String locale) {
 		return this.userLanguages.stream()
 				.filter(x -> locale.equalsIgnoreCase(x.getCode()))
 				.findAny()
-				.orElse(null);
+				.orElse(this.defaultLanguage);
 	}
 	
 }

@@ -81,6 +81,7 @@ export default class PerformanceRuleList extends Component {
                                 <th >{this.props.translations['amp.performance-rule:name']}</th>
                                 <th >{this.props.translations['amp.performance-rule:type']}</th>
                                 <th >{this.props.translations['amp.performance-rule:level']}</th>
+                                <th >{this.props.translations['amp.performance-rule:enabled']}</th>
                                 <th className="actions-column">{this.props.translations['amp.performance-rule:action']}</th>
                             </tr>
                         </thead>

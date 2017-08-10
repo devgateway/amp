@@ -94,7 +94,7 @@ export function savePerformanceRule(data){
             } else {
                 result.infoMessages = [{messageKey: 'amp.performance-rule:save-successful'}];                                
             }            
-            dispatch({type: SAVE_PERFORMANCE_RULE_SUCCESS, data:result });           
+            return dispatch({type: SAVE_PERFORMANCE_RULE_SUCCESS, data:result });           
         }).catch(error => {
             throw(error);
         });
@@ -110,7 +110,7 @@ export function deletePerformanceRule(data) {
             } else {
                 result.infoMessages = [{messageKey: 'amp.performance-rule:delete-successful'}];
             }  
-            dispatch({type: DELETE_PERFORMANCE_RULE_SUCCESS, data: result });
+            return dispatch({type: DELETE_PERFORMANCE_RULE_SUCCESS, data: result });
         }).catch(error => {
             throw(error);
         });
@@ -119,7 +119,7 @@ export function deletePerformanceRule(data) {
 
 export function clearMessages(){
     return function(dispatch) {   
-       dispatch({type: CLEAR_MESSAGES, data: {errors:[], infoMessages:[]}});
+       return dispatch({type: CLEAR_MESSAGES, data: {errors:[], infoMessages:[]}});
     };
 }
 

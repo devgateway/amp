@@ -47,6 +47,7 @@ export default class PerformanceRuleRow extends Component {
                 <td>{this.props.performanceRule.name}</td>
                 <td>{this.getTypeDescription(this.props.performanceRule.typeClassName)}</td>
                 <td>{this.props.performanceRule.level.value}</td>
+                <td>{this.props.performanceRule.enabled ? this.props.translations['amp.performance-rule:enabled-yes'] : this.props.translations['amp.performance-rule:enabled-no']}</td>
                 <td>
                 <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deletePerformanceRule}></span>
                 </td>

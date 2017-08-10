@@ -193,6 +193,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
 	 */
 	@GET
 	@Path("/amp-offline-release/{id}")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response getAmpOfflineReleaseFile(@PathParam("id") Long id) {
 		File file = ampOfflineService.getReleaseFile(id);
 

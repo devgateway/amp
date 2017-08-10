@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,15 +15,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.common.net.HttpHeaders;
+import com.sun.jersey.core.header.ContentDisposition;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.filetype.MimeUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.AmpOfflineService;
 import org.digijava.kernel.util.SpringUtil;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
@@ -39,7 +45,9 @@ import org.digijava.module.aim.util.FeaturesUtil;
 public class AmpConfiguration implements ErrorReportingEndpoint {
 
 	private AmpVersionService ampVersionService = SpringUtil.getBean(AmpVersionService.class);
-	
+
+	private AmpOfflineService ampOfflineService = SpringUtil.getBean(AmpOfflineService.class);
+
 	/**
 	 * Provides available settings and their possible values.
 	 * <br>
@@ -99,34 +107,106 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
 
 	/**
 	 * Check if AMP Offline App is compatible with AMP.
-	 * <p>This method will check if AMP Offline App is compatible with AMP. AMP Offline version is read from
-	 * User-Agent header. Also returns AMP version and whenever AMP Offline is enabled or not.</p>
+	 * <p>This method will return:
+	 * <ul>
+	 * <li>if AMP Offline App is compatible with AMP
+	 * <li>AMP version
+	 * <li>whenever AMP Offline is enabled or not
+	 * <li>latest AMP Offline release
+	 * </p>
+	 * </ul>
+	 * <p>AMP Offline version is read from User-Agent header. Header must have the following form:
+	 * AMPOffline/{version} ({os}; {arch}). Example: AMPOffline/1.0.0 (windows; 32).</p>
 	 */
 	@GET
 	@Path("/amp-offline-version-check")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "version-check")
 	public VersionCheckResponse ampOfflineVersionCheck() {
+
+		AmpOfflineRelease clientRelease = detectClientRelease();
+
 		VersionCheckResponse response = new VersionCheckResponse();
-		response.setAmpOfflineCompatible(isAmpOfflineCompatible());
+		response.setAmpOfflineCompatible(isAmpOfflineCompatible(clientRelease));
 		response.setAmpOfflineEnabled(true);
 		response.setAmpVersion(ampVersionService.getVersionInfo().getAmpVersion());
+		response.setLatestAmpOffline(ampOfflineService.findLastRelease(clientRelease));
+
 		return response;
 	}
 
-	private boolean isAmpOfflineCompatible() {
-		String userAgent = TLSUtils.getRequest().getHeader("User-Agent");
-		boolean compatible = false;
+	private AmpOfflineRelease detectClientRelease() {
+		AmpOfflineRelease release = null;
 		if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-			String version;
-			if (userAgent.indexOf(' ') > 0) {
-				version = userAgent.substring(userAgent.indexOf('/') + 1, userAgent.indexOf(' '));
-			} else {
-				version = userAgent.substring(userAgent.indexOf('/') + 1);
+			try {
+				String userAgent = TLSUtils.getRequest().getHeader("User-Agent");
+				release = AmpOfflineRelease.fromUserAgent(userAgent);
+			} catch (IllegalArgumentException e) {
+				JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails(e.getMessage()));
+				throw new ApiRuntimeException(Response.Status.BAD_REQUEST, error);
 			}
-			compatible = ampVersionService.isAmpOfflineCompatible(version);
 		}
-		return compatible;
+		return release;
+	}
+
+	private boolean isAmpOfflineCompatible(AmpOfflineRelease release) {
+		return release != null && ampVersionService.isAmpOfflineCompatible(release.getVersion());
+	}
+
+	/**
+	 * List latest AMP Offline releases for each OS/Arch.
+	 * <h3>Sample Output:</h3>
+	 * <pre>
+	 * [
+	 *   {
+	 *     "id": 13,
+	 *     "version": "1.0.1",
+	 *     "os": "windows",
+	 *     "arch": "32",
+	 *     "critical": false,
+	 *     "date": "2017-07-24"
+	 *   },
+	 *   {
+	 *     "id": 14,
+	 *     "version": "1.0.1",
+	 *     "os": "windows",
+	 *     "arch": "64",
+	 *     "critical": false,
+	 *     "date": "2017-07-24"
+	 *   }
+	 * ]
+	 * </pre>
+	 * @return latest AMP Offline releases
+	 */
+	@GET
+	@Path("/amp-offline-release")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public List<AmpOfflineRelease> getAmpOfflineReleases() {
+		return ampOfflineService.getLatestCompatibleReleases();
+	}
+
+	/**
+	 * Returns the AMP Offline release binary.
+	 *
+	 * @param id of the binary
+	 * @return the binary
+	 */
+	@GET
+	@Path("/amp-offline-release/{id}")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response getAmpOfflineReleaseFile(@PathParam("id") Long id) {
+		File file = ampOfflineService.getReleaseFile(id);
+
+		ContentDisposition contentDisposition = ContentDisposition.type("attachment")
+				.fileName(file.getName())
+				.size(file.length())
+				.build();
+
+		String mimeType = MimeUtil.detectMimeType(file, MediaType.APPLICATION_OCTET_STREAM);
+
+		return Response.ok(file, mimeType)
+				.header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+				.build();
 	}
 
 	/**

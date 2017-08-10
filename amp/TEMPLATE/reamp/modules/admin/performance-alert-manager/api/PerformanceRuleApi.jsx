@@ -24,7 +24,7 @@ class PerformanceRuleApi {
     }
 
     static deletePerformanceRule( data ) {
-        var url = '/rest/performance/rules/' + data.id;
+        const url = '/rest/performance/rules/' + data.id;
         return new Promise(( resolve, reject ) => {
             deleteJson( url, {}).then( response => {
                 resolve( {});

@@ -32,12 +32,10 @@ export default class PagingSection extends Component {
         this.props.goToPage( this.props.page.totalPageCount );
     }
     
-    
-    
     generatePaginationLinks() {
-        var paginationLinks = [];
-        for ( var i = 1; i <= this.props.page.totalPageCount; i++ ) {
-            var classes = ( i === this.props.page.currentPageNumber ) ? 'active page-item' : 'page-item';
+        const paginationLinks = [];
+        for ( let i = 1; i <= this.props.page.totalPageCount; i++ ) {
+            const classes = ( i === this.props.page.currentPageNumber ) ? 'active page-item' : 'page-item';
             paginationLinks.push( <li className={classes} key={i}><a data-page={i} className="page-link" onClick={this.goToClickedPage}>{i}</a></li> );
         }
         return paginationLinks;
@@ -52,7 +50,7 @@ export default class PagingSection extends Component {
     }
     
     displayPagingInfo() {
-        var transParams = {};
+        const transParams = {};
         if (this.props.translate) {
             transParams.fromRecord = ( ( this.props.page.currentPageNumber - 1 ) * this.props.page.recordsPerPage ) + 1;
             transParams.toRecord = Math.min(( this.props.page.currentPageNumber * this.props.page.recordsPerPage ), this.props.page.totalRecords );

@@ -55,8 +55,6 @@ public class ActivityEPConstants {
 
 	public static final String IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME = "project_code";
 	
-	public static final String IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME = "project_code";
-	
 	// field types
 	public static final String FIELD_TYPE_LIST = "list";
 	public static final String FIELD_TYPE_STRING = "string";

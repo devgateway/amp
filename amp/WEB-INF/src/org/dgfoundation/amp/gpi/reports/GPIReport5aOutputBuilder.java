@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -332,8 +331,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	}
 
 	/**
-	 * Calculate % disbursed as scheduled (Actual Disbursements/Planned
-	 * Disbursements * 100)
+	 * Calculate % disbursed as scheduled (Actual Disbursements/Planned * Disbursements * 100)
 	 * 
 	 * @param actual
 	 * @param planned
@@ -351,12 +349,11 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 			result = actual.divide(planned, NiFormula.DIVISION_MC);
 		}
 
-		return result.multiply(new BigDecimal(100)).setScale(0, RoundingMode.HALF_UP);
+		return result.multiply(new BigDecimal(PERCENTAGE_MULTIPLIER)).setScale(0, RoundingMode.HALF_UP);
 	}
 
 	/**
-	 * Calculate % over disbursed ((Actual Disbursements - Planned
-	 * Disbursements)/Actual Disbursements * 100)
+	 * Calculate % over disbursed ((Actual Disbursements - Planned * Disbursements)/Actual Disbursements * 100)
 	 * 
 	 * @param actual
 	 * @param planned
@@ -368,8 +365,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 			return BigDecimal.ZERO;
 		}
 
-		return actual.subtract(planned).divide(actual, NiFormula.DIVISION_MC).multiply(new BigDecimal(100)).setScale(0,
-				RoundingMode.HALF_UP);
+		return actual.subtract(planned).divide(actual, NiFormula.DIVISION_MC)
+				.multiply(new BigDecimal(PERCENTAGE_MULTIPLIER)).setScale(0, RoundingMode.HALF_UP);
 	}
 
 }

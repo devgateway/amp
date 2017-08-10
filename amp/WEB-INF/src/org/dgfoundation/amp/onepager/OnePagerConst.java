@@ -18,6 +18,7 @@ import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.digijava.kernel.startup.AmpSessionListener;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
@@ -53,7 +54,7 @@ public final class OnePagerConst {
 	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};
 	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_DELETED_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};
 	
-	public static final MetaDataKey<HashMap<Date, Boolean>> FUNDING_FREEZING_CONFIGURATION = new MetaDataKey<HashMap<Date, Boolean>>(){};
+	public static final MetaDataKey<AmpActivityFrozen> FUNDING_FREEZING_CONFIGURATION = new MetaDataKey<AmpActivityFrozen>(){};
 	public static final MetaDataKey<Boolean> ACTIVITY_FREEZING_CONFIGURATION = new MetaDataKey<Boolean>(){};
 
     /**

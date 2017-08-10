@@ -98,7 +98,7 @@ export default class PerformanceRuleForm extends Component {
     }
     
     getErrorsForField(field) {
-        var errors = this.props.errors.filter(error => {
+        const errors = this.props.errors.filter(error => {
             return (error.affectedFields && error.affectedFields.includes(field))
         })
         return errors;

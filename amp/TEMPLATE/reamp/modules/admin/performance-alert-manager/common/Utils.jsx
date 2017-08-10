@@ -22,7 +22,7 @@ class Utils {
     }
     
     static isUndefinedOrBlank( obj, field ) {
-        var result = false;
+        let result = false;
         if ( obj[field] === '' || obj[field] === undefined || obj[field] === null ) {
             result = true;
         }

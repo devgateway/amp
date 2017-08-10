@@ -32,38 +32,31 @@ const defaultState = {
 };
 
 export default function performanceRuleReducer(state: Object = defaultState.data, action: Object) {    
+    const newState = Object.assign({}, state);
     switch (action.type) {
-    case LOAD_PERFORMANCE_RULE_LIST_SUCCESS:
-        var newState = Object.assign({}, state);
+    case LOAD_PERFORMANCE_RULE_LIST_SUCCESS:        
         newState.paging = action.data.paging;
         newState.performanceRuleList = action.data.performanceRuleList;                       
         return newState;
     case LOAD_TYPE_LIST_SUCCESS:
-        var newState = Object.assign({}, state);
         newState.typeList = action.data;                              
         return newState;
-    case LOAD_LEVEL_LIST_SUCCESS:
-        var newState = Object.assign({}, state);
+    case LOAD_LEVEL_LIST_SUCCESS:        
         newState.levelList = action.data;                              
         return newState;
-    case ADD_PERFORMANCE_RULE:
-        var newState = Object.assign({}, state);
+    case ADD_PERFORMANCE_RULE:        
         newState.currentPerformanceRule = action.data;                              
         return newState;
-    case CLOSE_PERFORMANCE_RULE:
-        var newState = Object.assign({}, state);
+    case CLOSE_PERFORMANCE_RULE:        
         newState.currentPerformanceRule = action.data;                              
         return newState;
-    case EDIT_PERFORMANCE_RULE:
-        var newState = Object.assign({}, state);
+    case EDIT_PERFORMANCE_RULE:        
         newState.currentPerformanceRule = Object.assign({}, action.data);                              
         return newState;
-    case LOAD_ATTRIBUTE_LIST_SUCCESS:
-        var newState = Object.assign({}, state);
+    case LOAD_ATTRIBUTE_LIST_SUCCESS:        
         newState.attributeList = action.data;                              
         return newState;
-    case SAVE_PERFORMANCE_RULE_SUCCESS:
-        var newState = Object.assign({}, state);
+    case SAVE_PERFORMANCE_RULE_SUCCESS:        
         newState.errors = action.data.errors; 
         newState.infoMessages = action.data.infoMessages;  
         if(action.data.infoMessages.length > 0){
@@ -72,8 +65,7 @@ export default function performanceRuleReducer(state: Object = defaultState.data
         return newState;  
     case DELETE_PERFORMANCE_RULE_SUCCESS:
     case CLEAR_MESSAGES: 
-    case VALIDATE_PERFORMANCE_RULE:
-        var newState = Object.assign({}, state);
+    case VALIDATE_PERFORMANCE_RULE:        
         newState.errors = action.data.errors; 
         newState.infoMessages = action.data.infoMessages;    
         return newState; 

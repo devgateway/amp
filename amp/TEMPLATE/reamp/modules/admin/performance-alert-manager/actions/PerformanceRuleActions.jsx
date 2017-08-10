@@ -14,9 +14,8 @@ export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
 
 export function loadPerformanceRuleList(data) {
     return function(dispatch) {
-        return performanceRuleApi.getPerformanceRuleList(data).then(response => {
-            
-            var results = {
+        return performanceRuleApi.getPerformanceRuleList(data).then(response => {            
+            const results = {
                     performanceRuleList: [],                    
                     errors: [],
                     infoMessages: []                    
@@ -26,7 +25,7 @@ export function loadPerformanceRuleList(data) {
             results.performanceRuleList = response.data;
             results.paging.totalRecords = response.totalRecords;
             results.paging.totalPageCount = Math.ceil(results.paging.totalRecords / results.paging.recordsPerPage);           
-            dispatch({type: LOAD_PERFORMANCE_RULE_LIST_SUCCESS, data: results });
+            return dispatch({type: LOAD_PERFORMANCE_RULE_LIST_SUCCESS, data: results });
         }).catch(error => {
             throw(error);
         });
@@ -36,7 +35,7 @@ export function loadPerformanceRuleList(data) {
 export function getTypeList() {
     return function(dispatch) {
         return performanceRuleApi.getTypeList().then(response => {           
-            dispatch({type: LOAD_TYPE_LIST_SUCCESS, data: response });
+            return dispatch({type: LOAD_TYPE_LIST_SUCCESS, data: response });
         }).catch(error => {
             throw(error);
         });
@@ -46,7 +45,7 @@ export function getTypeList() {
 export function getLevelList() {
     return function(dispatch) {
         return performanceRuleApi.getLevelList().then(response => {           
-            dispatch({type: LOAD_LEVEL_LIST_SUCCESS, data: response });
+            return dispatch({type: LOAD_LEVEL_LIST_SUCCESS, data: response });
         }).catch(error => {
             throw(error);
         });
@@ -56,7 +55,7 @@ export function getLevelList() {
 export function getAttributeList(ruleType) {    
     return function(dispatch) {
         return performanceRuleApi.getAttributeList(ruleType).then(response => {           
-            dispatch({type: LOAD_ATTRIBUTE_LIST_SUCCESS, data: response });
+            return dispatch({type: LOAD_ATTRIBUTE_LIST_SUCCESS, data: response });
         }).catch(error => {
             throw(error);
         });
@@ -65,32 +64,31 @@ export function getAttributeList(ruleType) {
 
 export function addNewPerformanceRule(){
     return function(dispatch) {
-        dispatch({type: ADD_PERFORMANCE_RULE, data: {} });
+        return dispatch({type: ADD_PERFORMANCE_RULE, data: {} });
     };    
 }
 
 export function closePerformanceRule(){
     return function(dispatch) {
-        dispatch({type: CLOSE_PERFORMANCE_RULE, data: null });
+        return dispatch({type: CLOSE_PERFORMANCE_RULE, data: null });
     };    
 }
 
 export function editPerformanceRule(performanceRule){
     return function(dispatch) {
-        dispatch({type: EDIT_PERFORMANCE_RULE, data: performanceRule });
+        return dispatch({type: EDIT_PERFORMANCE_RULE, data: performanceRule });
     }; 
 }
 
 export function savePerformanceRule(data){
     return function(dispatch) {
-        var errors = Utils.validatePerformanceRule(data);
+        const errors = Utils.validatePerformanceRule(data);
         if(errors.length > 0) {
-            dispatch({type: VALIDATE_PERFORMANCE_RULE, data:{errors: errors, infoMessages:[]} });
-            return;
+            return dispatch({type: VALIDATE_PERFORMANCE_RULE, data:{errors: errors, infoMessages:[]} });            
         }
         
         return performanceRuleApi.save(data).then(response => { 
-            let result = {};
+            const result = {};
             if(response.status == 400) {                
                 result.errors = [{messageKey: 'amp.performance-rule:save-error'}];
             } else {
@@ -106,7 +104,7 @@ export function savePerformanceRule(data){
 export function deletePerformanceRule(data) {
     return function(dispatch) {        
         return performanceRuleApi.deletePerformanceRule(data).then(response => {    
-            let result = {};
+            const result = {};
             if(response.status == 400) {                
                 result.errors = [{messageKey: 'amp.performance-rule:delete-error'}];
             } else {

@@ -3,10 +3,9 @@ import { loadTranslations } from 'amp/modules/translate';
 import { initialTranslations } from '../common/Translations.jsx';
 export const STATE_TRANSLATIONS_LOADED = 'STATE_TRANSLATIONS_LOADED';
 
-export function startUp( store ) {
-    return new Promise(( resolve, reject ) => {
+export function startUp( store ) {    
         let toTranslate = new AMP.Model().toJS();
-        loadTranslations( initialTranslations ).then( trns => {
+        return loadTranslations( initialTranslations ).then( trns => {
             toTranslate = trns;
             return store.dispatch( {
                 type: STATE_TRANSLATIONS_LOADED,
@@ -21,6 +20,5 @@ export function startUp( store ) {
                     }
                 }
             });
-        });
-    });
+        });       
 }

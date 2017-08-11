@@ -32,7 +32,7 @@ stage('Build') {
         def imageIds = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\"").trim()
         sh(returnStatus: true, script: "docker rmi localhost:5000/amp-webapp:${tag} > /dev/null")
 
-        if (imageIds.isEmpty()) {
+        if (imageIds.equals("")) {
             withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
 
                 // Build AMP

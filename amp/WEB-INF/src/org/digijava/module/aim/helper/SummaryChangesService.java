@@ -1,13 +1,19 @@
 package org.digijava.module.aim.helper;
 
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -16,8 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.categorymanager.action.CategoryManager;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 
 /**
  * @author Aldo Picca
@@ -28,6 +39,14 @@ public class SummaryChangesService {
     public static final String NEW = "New";
     public static final String EDITED = "Edited";
     public static final String DELETED = "Deleted";
+    public static final String ALL_DIFF_DETAIL = "allDiffDetail";
+    public static final String AMP_CURRENCY_ID = "amp_currency_id";
+    public static final String ADJUSTMENT_TYPE = "adjustment_type";
+    public static final String AMP_ACTIVITY_ID = "amp_activity_id";
+    public static final String TRANSACTION_TYPE = "transaction_type";
+    public static final String TRANSACTION_AMOUNT = "transaction_amount";
+    public static final String TRANSACTION_DATE = "transaction_date";
+    public static final String REPORTING_DATE = "reporting_date";
 
     /**
      * Return a list of activities that were modified in the 24 hours prior to the date.
@@ -98,103 +117,148 @@ public class SummaryChangesService {
         return activitiesChanges;
     }
 
+    /**
+     * Return a list of changes for the activity.
+     *
+     * @param currentActivity The newest version of the activity.
+     * @return list of changes for this activity.
+     */
     public static LinkedHashMap<String, Object> processActivity(AmpActivityVersion currentActivity) {
-
-        LinkedHashMap<String, Object> activitiesChanges = new LinkedHashMap<>();
 
         AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(currentActivity);
 
+        LinkedHashMap<String, Object> activitiesChanges = new LinkedHashMap<>();
         Map<String, Collection<SummaryChange>> differences = new LinkedHashMap<String, Collection<SummaryChange>>();
+        Map<String, SummaryChange> editedFunding = new LinkedHashMap<String, SummaryChange>();
 
-        if ((currentActivity.getFunding() == null && previousActivity.getFunding() == null)
-                || (currentActivity.getFunding() == null && previousActivity.getFunding().size() == 0)
-                || (currentActivity.getFunding().size() == 0 && previousActivity.getFunding() == null)
-                || (currentActivity.getFunding().size() == 0 && previousActivity.getFunding().size() == 0)) {
-            // Collections are equal.
-            return null;
-        }
+        String ids = currentActivity.getAmpActivityId() + ", " + previousActivity.getAmpActivityId();
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(Connection conn) throws SQLException {
+                String fundingQuery = " (SELECT amp_funding_id FROM amp_funding WHERE amp_activity_id IN (" + ids +
+                        "))";
 
-        for (AmpFunding currentFunding : currentActivity.getFunding()) {
-            for (AmpFunding previousFunding : previousActivity.getFunding()) {
-                if (currentFunding.equalsForVersioning(previousFunding)) {
-                    Object auxValue1 = currentFunding.getValue() != null ? currentFunding.getValue() : "";
-                    Object auxValue2 = previousFunding.getValue() != null ? previousFunding.getValue() : "";
-                    if (!auxValue1.equals(auxValue2)) {
+                String fundingDetailQuery = "a.reporting_date, a.amp_funding_id, fd.amp_activity_id, transaction_date, "
+                        + " transaction_amount, amp_currency_id, adjustment_type, transaction_type "
+                        + " FROM amp_funding_detail a "
+                        + " INNER JOIN amp_funding fd ON a.amp_funding_id = fd.amp_funding_id "
+                        + " WHERE a.amp_funding_id IN " + fundingQuery;
 
-                        for (AmpFundingDetail currentFundingDetail : currentFunding.getFundingDetails()) {
-                            boolean fundingDetailFound = checkChanges(differences, previousFunding,
-                                    currentFundingDetail);
-                            if (!fundingDetailFound) {
-                                setNewChange(differences, currentFundingDetail);
+                String fundingMtefQuery = "a.reporting_date, a.amp_funding_id, fd.amp_activity_id, projection_date, "
+                        + " amount, amp_currency_id, amp_projected_categoryvalue_id, " + Constants.MTEFPROJECTION
+                        + " FROM amp_funding_mtef_projection a "
+                        + " INNER JOIN amp_funding fd ON a.amp_funding_id = fd.amp_funding_id "
+                        + " WHERE a.amp_funding_id IN " + fundingQuery;
+
+                String queryString = "SELECT true AS allDiffDetail, " + fundingDetailQuery
+                        + "  AND NOT EXISTS "
+                        + "    (SELECT b.amp_fund_detail_id "
+                        + "     FROM amp_funding_detail b "
+                        + "     WHERE ( a.reporting_date = b.reporting_date "
+                        + "       AND a.amp_fund_detail_id <> b.amp_fund_detail_id ) or "
+                        + "( a.reporting_date is null AND b.reporting_date is null "
+                        + "       AND a.amp_fund_detail_id <> b.amp_fund_detail_id  "
+                        + "       AND (a.adjustment_type = b.adjustment_type  "
+                        + "       AND a.transaction_date = b.transaction_date  "
+                        + "       AND a.transaction_amount = b.transaction_amount  "
+                        + "       AND a.amp_currency_id = b.amp_currency_id) ) "
+                        + "  ) "
+                        + "UNION "
+                        + " SELECT false AS allDiffDetail, " + fundingDetailQuery
+                        + "  AND EXISTS "
+                        + "    (SELECT b.amp_fund_detail_id "
+                        + "     FROM amp_funding_detail b "
+                        + "     WHERE a.reporting_date = b.reporting_date "
+                        + "       AND a.amp_fund_detail_id <> b.amp_fund_detail_id "
+                        + "       AND (a.adjustment_type <> b.adjustment_type "
+                        + "            OR a.transaction_date <> b.transaction_date "
+                        + "            OR a.transaction_amount <> b.transaction_amount "
+                        + "            OR a.amp_currency_id <> b.amp_currency_id)) "
+                        + "UNION "
+                        + " SELECT true AS allDiffDetail, " + fundingMtefQuery
+                        + "  AND NOT EXISTS "
+                        + "    (SELECT b.amp_funding_id "
+                        + "     FROM amp_funding_mtef_projection b "
+                        + "     WHERE ( a.reporting_date = b.reporting_date "
+                        + "       AND a.amp_fund_mtef_projection_id <> b.amp_fund_mtef_projection_id ) or "
+                        + "         ( a.reporting_date is null AND b.reporting_date is null "
+                        + "       AND a.amp_fund_mtef_projection_id <> b.amp_fund_mtef_projection_id "
+                        + "       AND a.projection_date = b.projection_date "
+                        + "       AND a.amount = b.amount "
+                        + "       AND a.amp_currency_id = b.amp_currency_id "
+                        + "       AND a.amp_projected_categoryvalue_id = b.amp_projected_categoryvalue_id "
+                        + ") ) "
+                        + "UNION "
+                        + " SELECT false AS allDiffDetail, " + fundingMtefQuery
+                        + "  AND EXISTS "
+                        + "    (SELECT b.amp_funding_id "
+                        + "     FROM amp_funding_mtef_projection b "
+                        + "     WHERE a.reporting_date = b.reporting_date "
+                        + "       AND a.amp_fund_mtef_projection_id <> b.amp_fund_mtef_projection_id "
+                        + "       AND (a.projection_date <> b.projection_date "
+                        + "            OR a.amount <> b.amount "
+                        + "            OR a.amp_currency_id <> b.amp_currency_id "
+                        + "            OR a.amp_projected_categoryvalue_id <> b.amp_projected_categoryvalue_id) ) "
+                        + " ORDER BY transaction_date,reporting_date,amp_funding_id";
+
+                try (RsInfo rsi = SQLUtils.rawRunQuery(conn, queryString, null)) {
+                    ResultSet rs = rsi.rs;
+                    while (rs.next()) {
+                        AmpCurrency currency = CurrencyUtil.getAmpcurrency(rs.getLong(AMP_CURRENCY_ID));
+                        AmpCategoryValue categoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(
+                                rs.getLong(ADJUSTMENT_TYPE));
+
+                        if (rs.getBoolean(ALL_DIFF_DETAIL)) {
+                            SummaryChange summaryChange;
+                            if (rs.getLong(AMP_ACTIVITY_ID) == currentActivity.getAmpActivityId()) {
+                                summaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE),
+                                        categoryValue, NEW, null, null,
+                                        rs.getDouble(TRANSACTION_AMOUNT), currency,
+                                        rs.getDate(TRANSACTION_DATE));
+                            } else {
+                                summaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE),
+                                        categoryValue, DELETED, rs.getDouble(TRANSACTION_AMOUNT),
+                                        currency, null, null, rs.getDate(TRANSACTION_DATE));
+                            }
+                            addChange(differences, summaryChange);
+                        } else {
+                            if (editedFunding.get(rs.getString(REPORTING_DATE)) == null) {
+                                SummaryChange summaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE),
+                                        categoryValue, EDITED, rs.getDouble(TRANSACTION_AMOUNT), currency,
+                                        rs.getDouble(TRANSACTION_AMOUNT), currency, rs.getDate(TRANSACTION_DATE));
+                                editedFunding.put(rs.getString(REPORTING_DATE), summaryChange);
+                            } else {
+                                SummaryChange originalSummaryChange = editedFunding.get(rs.getString(REPORTING_DATE));
+
+                                originalSummaryChange.setCurrentValue(rs.getDouble(TRANSACTION_AMOUNT));
+                                originalSummaryChange.setCurrentCurrency(currency);
+
+                                SummaryChange newSummaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE),
+                                        categoryValue, EDITED, originalSummaryChange.getPreviousValue(),
+                                        originalSummaryChange.getPreviousCurrency(),
+                                        rs.getDouble(TRANSACTION_AMOUNT), currency, rs.getDate(TRANSACTION_DATE));
+
+                                boolean addOriginalSummary = false;
+                                if (!originalSummaryChange.getTransactionDate().equals(newSummaryChange
+                                        .getTransactionDate()) || !originalSummaryChange.getAdjustmentType().equals(
+                                        newSummaryChange.getAdjustmentType())) {
+                                    originalSummaryChange.setChangeType(DELETED);
+                                    newSummaryChange.setChangeType(NEW);
+                                    addOriginalSummary = true;
+                                }
+                                if (addOriginalSummary) {
+                                    addChange(differences, originalSummaryChange);
+                                }
+                                addChange(differences, newSummaryChange);
                             }
                         }
-
-                        for (AmpFundingDetail previousFundingDetail : previousFunding.getFundingDetails()) {
-                            boolean fundingDetailFound = checkChanges(differences, currentFunding,
-                                    previousFundingDetail);
-                            if (!fundingDetailFound) {
-                                setDeletedChange(differences, previousFundingDetail);
-                            }
-                        }
-
                     }
                 }
             }
+        });
 
-            activitiesChanges.put(currentActivity.getAmpActivityId().toString(), differences);
-        }
+        activitiesChanges.put(currentActivity.getAmpActivityId().toString(), differences);
+
         return activitiesChanges;
-    }
-
-    private static boolean checkChanges(Map<String, Collection<SummaryChange>> differences, AmpFunding funding,
-                                        AmpFundingDetail ampFundingDetail) {
-        boolean fundingDetailFound = false;
-        for (AmpFundingDetail previousFundingDetail : funding.getFundingDetails()) {
-            if (isSameFundingDetail(ampFundingDetail, previousFundingDetail)) {
-                fundingDetailFound = true;
-                if (isAmountChanged(ampFundingDetail, previousFundingDetail)) {
-                    setEditedChange(differences, ampFundingDetail, previousFundingDetail);
-                }
-                break;
-            }
-        }
-        return fundingDetailFound;
-    }
-
-    private static boolean isSameFundingDetail(AmpFundingDetail currentFundingDetail, AmpFundingDetail
-            previousFundingDetail) {
-        return ((currentFundingDetail.getReportingDate() != null &&
-                currentFundingDetail.getReportingDate().equals(previousFundingDetail.getReportingDate()))
-                ||
-                (currentFundingDetail.getReportingDate() == null &&
-                        previousFundingDetail.getReportingDate() == null &&
-                        currentFundingDetail.getTransactionType().equals(previousFundingDetail.getTransactionType()) &&
-                        currentFundingDetail.getTransactionDate().equals(previousFundingDetail.getTransactionDate()) &&
-                        currentFundingDetail.getTransactionType().equals(previousFundingDetail.getTransactionType()) &&
-                        currentFundingDetail.getAmpCurrencyId().equals(previousFundingDetail.getAmpCurrencyId()) &&
-                        currentFundingDetail.getTransactionAmount().equals(previousFundingDetail.getTransactionAmount())
-                )
-        );
-    }
-
-    private static boolean isAmountChanged(AmpFundingDetail current, AmpFundingDetail previous) {
-        return current.getTransactionAmount().compareTo(previous.getTransactionAmount()) != 0
-                || current.getAmpCurrencyId() != previous.getAmpCurrencyId();
-    }
-
-    private static boolean isDateChanged(AmpFundingDetail current, AmpFundingDetail previous) {
-        return current.getTransactionDate() != previous.getTransactionDate()
-                || current.getAdjustmentType() != previous.getAdjustmentType();
-    }
-
-    private static void setNewChange(Map<String, Collection<SummaryChange>> objDiff, AmpFundingDetail fundingDetail) {
-
-        SummaryChange summaryChange = new SummaryChange(fundingDetail.getTransactionType(),
-                fundingDetail.getAdjustmentType(), NEW, null, null,
-                fundingDetail.getTransactionAmount(), fundingDetail.getAmpCurrencyId(),
-                fundingDetail.getTransactionDate());
-
-        addChange(objDiff, summaryChange);
     }
 
     private static void addChange(Map<String, Collection<SummaryChange>> objDiff, SummaryChange summaryChange) {
@@ -207,23 +271,4 @@ public class SummaryChangesService {
         objDiff.get(key).add(summaryChange);
     }
 
-    private static void setDeletedChange(Map<String, Collection<SummaryChange>> objDiff, AmpFundingDetail
-            fundingDetail) {
-
-        SummaryChange summaryChange = new SummaryChange(fundingDetail.getTransactionType(),
-                fundingDetail.getAdjustmentType(), DELETED, fundingDetail.getTransactionAmount(),
-                fundingDetail.getAmpCurrencyId(),  null, null, fundingDetail.getTransactionDate());
-
-        addChange(objDiff, summaryChange);
-    }
-
-    private static void setEditedChange(Map<String, Collection<SummaryChange>> objDiff, AmpFundingDetail
-            curr, AmpFundingDetail previus) {
-
-        SummaryChange summaryChange = new SummaryChange(curr.getTransactionType(),
-                curr.getAdjustmentType(), EDITED, previus.getTransactionAmount(), previus.getAmpCurrencyId(),
-                curr.getTransactionAmount(), curr.getAmpCurrencyId(), curr.getTransactionDate());
-
-        addChange(objDiff, summaryChange);
-    }
 }

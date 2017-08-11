@@ -28,7 +28,9 @@ stage('Build') {
 
         def format = branch != null ? "%H" : "%P"
         def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()
+        sh returnStatus: true, script: "docker pull localhost:5000/amp-webapp:${tag} > /dev/null"
         def count = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\" | wc -l").trim()
+        sh returnStatus: true, script: "docker rmi localhost:5000/amp-webapp:${tag} > /dev/null"
 
         if (count.equals("0")) {
             withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {

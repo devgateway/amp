@@ -23,6 +23,8 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  *
  */
 public abstract class GPIReportOutputBuilder  {
+	
+	protected static final int PERCENTAGE_MULTIPLIER = 100;
 
 	protected Map<String, GPIReportOutputColumn> columns = new HashMap<>();
 	

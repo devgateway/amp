@@ -52,14 +52,14 @@ public class FieldsEnumerator {
 
 	private boolean internalUse = false;
 
-	private FieldInfoProvider fieldInfoProvider;
+    private FieldInfoProvider fieldInfoProvider;
 
 	private FMService fmService;
 
 	private TranslatorService translatorService;
 
 	private String iatiIdentifierField;
-
+	
 	/**
 	 * Fields Enumerator
 	 * 
@@ -89,7 +89,7 @@ public class FieldsEnumerator {
 		else
 			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), intchStack);
 	}
-	
+
 	/**
 	 * describes a field in a complex JSON structure
 	 * see the wiki for details, too many options to be listed here
@@ -116,7 +116,7 @@ public class FieldsEnumerator {
 			apiField.setFieldType(InterchangeableClassMapper.containsSimpleClass(fieldType)
 					? InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);
 		}
-		
+
 		apiField.setFieldLabel(InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
 		apiField.setRequired(getRequiredValue(intchStack, fmService));
 		apiField.setImportable(interchangeable.importable());
@@ -489,10 +489,10 @@ public class FieldsEnumerator {
 
 		return isEnabled;
 	}
-	
+
 	/**
 	 * Decides whether a field stores iati-identifier value
-	 *  
+	 *
 	 * @param fieldName
 	 * @return true if is iati-identifier
 	 */

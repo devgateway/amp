@@ -221,6 +221,7 @@ public final class OnePagerUtil {
 			IModel itemModel) {
 		AmpFundingFlowsOrgRoleSelector orgRoleSelector=
 		new AmpFundingFlowsOrgRoleSelector("orgRoleSelector",model, itemModel,"Funding Flows OrgRole Selector");
+		orgRoleSelector.setAffectedByFreezing(false);
 		return orgRoleSelector;
 	}
 	

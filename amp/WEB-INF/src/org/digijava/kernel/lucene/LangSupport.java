@@ -23,7 +23,8 @@ public enum LangSupport {
 	SPANISH ("es"),
 	ROMANIAN ("ro"),
 	RUSSIAN ("ru"),
-	ALBANIAN ("sq");
+	ALBANIAN ("sq"),
+	ARABIC ("ar");
 	
 	private String languageCode;
 	

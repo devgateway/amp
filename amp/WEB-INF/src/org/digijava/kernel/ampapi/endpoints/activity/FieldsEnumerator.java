@@ -116,8 +116,9 @@ public class FieldsEnumerator {
 			apiField.setFieldType(InterchangeableClassMapper.containsSimpleClass(fieldType)
 					? InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);
 		}
-		
-		apiField.setFieldLabel(InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
+
+		String label = getLabelOf(interchangeable);
+		apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
 		apiField.setRequired(getRequiredValue(intchStack, fmService));
 		apiField.setImportable(interchangeable.importable());
 		if (AmpOfflineModeHolder.isAmpOfflineMode() && OFFLINE_REQUIRED_FIELDS.contains(interchangeable.fieldTitle())) {
@@ -194,6 +195,16 @@ public class FieldsEnumerator {
 		return apiField;
 	}
 
+	private String getLabelOf(Interchangeable interchangeable) {
+		String label;
+		if (interchangeable.label().equals(ActivityEPConstants.FIELD_TITLE)) {
+			label = interchangeable.fieldTitle();
+		} else {
+			label = interchangeable.label();
+		}
+		return label;
+	}
+
 	public List<APIField> getAllAvailableFields() {
 		return getAllAvailableFields(AmpActivityFields.class);
 	}
@@ -246,20 +257,20 @@ public class FieldsEnumerator {
 	}
 
 	/**
-	 * Picks available translations for a string (supposedly field name)
+	 * Picks available translations for a label.
 	 * 
-	 * @param fieldName the field name to be translated
+	 * @param label the label to be translated
 	 * @return a map from the ISO2 code -> translation in said text
 	 */
-	private Map<String, String> getLabelsForField(String fieldName) {
-		Map<String, String> translations = new HashMap<String, String>();
+	private Map<String, String> getTranslationsForLabel(String label) {
+		Map<String, String> translations = new HashMap<>();
 		try {
-			Collection<Message> messages = translatorService.getAllTranslationOfBody(fieldName, DEFAULT_SITE_ID);
+			Collection<Message> messages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
 			for (Message m : messages) {
 				translations.put(m.getLocale(), m.getMessage());
 			}
 			if (translations.isEmpty()) {
-				translations.put("EN", fieldName);
+				translations.put("EN", label);
 			}
 		} catch (WorkerException e) {
 			LOGGER.error(e.getMessage());

@@ -3,6 +3,8 @@ package org.digijava.module.aim.annotations.interchange;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Interchangeable {
 	/**
@@ -11,7 +13,12 @@ public @interface Interchangeable {
 	 * example: "Sectors"; "AMP Internal ID"
 	 */
 	String fieldTitle();
-	
+
+	/**
+	 * Field label that will be used in UI. If not specified defaults to {@link #fieldTitle()}.
+	 */
+	String label() default ActivityEPConstants.FIELD_TITLE;
+
 	/**
 	 * <pre>
 	 * Path in the Feature Manager, corresponding to enabling / disabling said field in AF
@@ -39,7 +46,7 @@ public @interface Interchangeable {
 	/**
 	 *Whether the field is always required, required for non-draft saves, or not required. 
 	 */
-	String required () default "_NONE_";
+	String required () default ActivityEPConstants.REQUIRED_NONE;
 	
 	/**
 	 * Set to true if underlying field value can be obtained from the 

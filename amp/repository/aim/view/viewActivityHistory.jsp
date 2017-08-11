@@ -31,7 +31,9 @@
 					<logic:notEmpty name="currentMember" scope="session">
 						<input name="compareCheckboxes" type="checkbox" value="${item.activityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
 					</logic:notEmpty>
-					<input type="hidden" name="summaryChangesIds" id="summaryChangesIds" value="${item.activityId}" />
+						<logic:equal name="aimViewActivityHistoryForm" property="enableSummaryChange" value="true">
+							<input type="hidden" name="summaryChangesIds" id="summaryChangesIds" value="${item.activityId}" />
+						</logic:equal>
 					</td>
 					<td>
 						${item.modifiedBy}

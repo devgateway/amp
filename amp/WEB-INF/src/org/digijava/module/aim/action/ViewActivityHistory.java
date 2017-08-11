@@ -53,7 +53,10 @@ public class ViewActivityHistory extends DispatchAction {
 		List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>(qry.list());
 		
 		hForm.setActivities(getActivitiesHistory(activities));
-			
+
+		AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(currentActivity);
+		hForm.setEnableSummaryChange(previousActivity != null);
+
 		TeamMember currentMember = (TeamMember)request.getSession().getAttribute("currentMember");
 
 		//it also can be accessed anonymously

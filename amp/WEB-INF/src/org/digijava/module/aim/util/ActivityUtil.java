@@ -2020,7 +2020,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 				.setMaxResults(1);
 		qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
 		qry.setParameter(1, activity.getAmpActivityId());
-		return (AmpActivityVersion) qry.list().get(0);
+		return (qry.list().size() > 0 ? (AmpActivityVersion) qry.list().get(0) : null);
 	}
 
 	/**

@@ -26,21 +26,27 @@ stage('Build') {
     node {
         checkout scm
 
-        withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+        def format = branch != null ? "%H" : "%P"
+        def hash = sh returnStdout: true, script: "git log --pretty=${format} -n 1"
+        def count = sh returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\" | wc -l"
 
-            // Build AMP
-            sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -DbuildSource=${tag} -e"
+        if (count.equals("0")) {
+            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
 
-            // Find AMP version
-            codeVersion = (readFile('amp/TEMPLATE/ampTemplate/site-config.xml') =~ /(?s).*<\!ENTITY ampVersion "([\d\.]+)">.*/)[0][1]
+                // Build AMP
+                sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -DbuildSource=${tag} -e"
 
-            // Build Docker images & push it
-            sh "docker build -q -t localhost:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' amp"
-            sh "docker push localhost:5000/amp-webapp:${tag} > /dev/null"
+                // Find AMP version
+                codeVersion = (readFile('amp/TEMPLATE/ampTemplate/site-config.xml') =~ /(?s).*<\!ENTITY ampVersion "([\d\.]+)">.*/)[0][1]
 
-            // Cleanup after Docker & Maven
-            sh "docker rmi localhost:5000/amp-webapp:${tag}"
-            sh "cd amp && mvn clean -Djdbc.db=dummy"
+                // Build Docker images & push it
+                sh "docker build -q -t localhost:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --label git-hash='${hash}' amp"
+                sh "docker push localhost:5000/amp-webapp:${tag} > /dev/null"
+
+                // Cleanup after Docker & Maven
+                sh "docker rmi localhost:5000/amp-webapp:${tag}"
+                sh "cd amp && mvn clean -Djdbc.db=dummy"
+            }
         }
     }
 }

@@ -279,7 +279,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Program Description")
 	protected String programDescription;
 
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.TEAM, pickIdOnly = true)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.TEAM, pickIdOnly = true, label = "Created in workspace")
 	@VersionableFieldSimple(fieldTitle = "Team")
 	protected AmpTeam team;
 	//@VersionableCollection(fieldTitle = "Members")

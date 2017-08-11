@@ -11,6 +11,7 @@ public class ViewActivityHistoryForm extends ActionForm implements Serializable 
 	private Long activityId;
 	private Boolean enableadvanceoptions;
 	private List<ActivityHistory> activities;
+	private String actionMethod;
 
 	public Long getActivityId() {
 		return activityId;
@@ -36,4 +37,11 @@ public class ViewActivityHistoryForm extends ActionForm implements Serializable 
 		this.enableadvanceoptions = enableadvanceoptions;
 	}
 
+	public String getActionMethod() {
+		return actionMethod;
+	}
+
+	public void setActionMethod(String actionMethod) {
+		this.actionMethod = actionMethod;
+	}
 }

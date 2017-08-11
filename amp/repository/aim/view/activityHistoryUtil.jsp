@@ -118,9 +118,8 @@
 	}
 
 	function submitChangeSummary() {
-		document.getElementById("action").value = "compare";
-		document.getElementById("method").value = "changesSummary";
-		document.aimCompareActivityVersionsForm.submit();
+        document.aimViewActivityHistoryForm.actionMethod.value = "changesSummary";
+		document.aimViewActivityHistoryForm.submit();
 	}
 
 	function monitorCheckbox(){
@@ -131,29 +130,37 @@
 		}
 		if (counter != 2)
 		{
-			document.getElementById("SubmitButton").disabled = true;
-			document.getElementById("SubmitButton").style.color = "#CECECE";
+		    if (document.getElementById("SubmitButton")) {
+				document.getElementById("SubmitButton").disabled = true;
+				document.getElementById("SubmitButton").style.color = "#CECECE";
+            }
 		}
 		else
 		{
-			document.getElementById("SubmitButton").disabled = false;
-			document.getElementById("SubmitButton").style.color = "Black";
+            if (document.getElementById("SubmitButton")) {
+                document.getElementById("SubmitButton").disabled = false;
+                document.getElementById("SubmitButton").style.color = "Black";
+            }
 		}
 	}
 
     function checkVersions(){
-        var checkboxes = document.getElementsByName("compareCheckboxes");
+        var ids = document.getElementsByName("summaryChangesIds");
         var counter = 0;
-        for(var i = 0; i < checkboxes.length; i++) {
+        for(var i = 0; i < ids.length; i++) {
             counter++;
         }
         if (counter > 1)
         {
-            document.getElementById("SubmitSummaryButton").disabled = false;
-            document.getElementById("SubmitSummaryButton").style.color = "Black";
+            if (document.getElementById("SubmitSummaryButton")) {
+                document.getElementById("SubmitSummaryButton").disabled = false;
+                document.getElementById("SubmitSummaryButton").style.color = "Black";
+			}
         } else {
-            document.getElementById("SubmitSummaryButton").disabled = true;
-            document.getElementById("SubmitSummaryButton").style.color = "#CECECE";
+            if (document.getElementById("SubmitSummaryButton")) {
+                document.getElementById("SubmitSummaryButton").disabled = true;
+                document.getElementById("SubmitSummaryButton").style.color = "#CECECE";
+            }
 		}
     }
 

@@ -34,8 +34,9 @@
 </style>
 
 <digi:errors/>
-<digi:form action="/compareActivityVersions.do" method="post" styleId="compareForm">
-	<html:hidden property="method" styleId="method"/>
+<digi:form action="/viewActivityHistory.do" method="post" styleId="compareForm">
+	<html:hidden property="actionMethod" styleId="actionMethod"/>
+	<input type="hidden" name="ampActivityId" id="ampActivityId" value="${aimViewActivityHistoryForm.activityId}" />
 	<c:set var="changesTable" scope="request" value="${requestScope.changesTable}"/>
 	<div id="content"  class="yui-skin-sam" style="padding: 5px;"> 
 		<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
@@ -62,7 +63,7 @@
 
 <script language="Javascript">
     function back() {
-        document.getElementById("method").value = "cancel";
+        document.getElementById("actionMethod").value = "cancel";
         document.getElementById('compareForm').submit();
     }
 </script>

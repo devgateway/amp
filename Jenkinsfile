@@ -27,8 +27,8 @@ stage('Build') {
         checkout scm
 
         def format = branch != null ? "%H" : "%P"
-        def hash = sh returnStdout: true, script: "git log --pretty=${format} -n 1"
-        def count = sh returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\" | wc -l"
+        def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()
+        def count = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\" | wc -l").trim()
 
         if (count.equals("0")) {
             withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {

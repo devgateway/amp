@@ -62,9 +62,9 @@ public class SummaryChangeHtmlRenderer {
     private String renderHeaderRow(String title, String value) {
         StringBuilder res = new StringBuilder();
         res.append("<tr>");
-        res.append(String.format("<td width='50%%'><span style='font-weight: bold;'>%s</span></td>", translateText
-                (title)));
-        res.append(String.format("<td width='50%%'>%s</td>", (value != null ? value : "")));
+        res.append(String.format("<td width='50%%' style='padding-left: 5px;'><span style='font-weight: bold;"
+                + "'>%s</span></td>", translateText(title)));
+        res.append(String.format("<td width='50%%' style='padding-left: 5px;'>%s</td>", (value != null ? value : "")));
         res.append("</tr>\n");
         return res.toString();
     }
@@ -72,9 +72,9 @@ public class SummaryChangeHtmlRenderer {
     private String renderChangeRow(String quarter, Collection<SummaryChange> changes) {
         StringBuilder res = new StringBuilder();
         res.append("<tr>");
-        res.append(String.format("<td width='50%%' valign='top'>%s</td>", quarter));
+        res.append(String.format("<td width='50%%' valign='top' style='padding-left: 5px;'>%s</td>", quarter));
 
-        res.append("<td width='50%%' valign='top'>");
+        res.append("<td width='50%%' valign='top' style='padding-left: 5px;'>");
         for (SummaryChange summaryChange : changes) {
 
             res.append(String.format("<span style='font-weight: bold;'>%s</span>",
@@ -84,19 +84,21 @@ public class SummaryChangeHtmlRenderer {
             res.append("<ol>");
 
             if (summaryChange.getChangeType() == SummaryChangesService.EDITED) {
-                res.append(String.format("<li>%s: %s %s</li>", translateText("Previous amount"),
+                res.append(String.format("<li style='list-style-type: disc;'>%s: %s %s</li>", translateText("Previous"
+                                + " amount"),
                         FormatHelper.formatNumber(summaryChange.getPreviousValue()), summaryChange.getPreviousCurrency()
                                 .getCurrencyCode()));
-                res.append(String.format("<li>%s: %s %s</li>", translateText("Current amount"),
+                res.append(String.format("<li style='list-style-type: disc;'>%s: %s %s</li>", translateText("Current "
+                                + "amount"),
                         FormatHelper.formatNumber(summaryChange.getCurrentValue()), summaryChange.getCurrentCurrency()
                                 .getCurrencyCode()));
             } else {
                 if (summaryChange.getChangeType() == SummaryChangesService.NEW) {
-                    res.append(String.format("<li>%s %s</li>", FormatHelper.formatNumber(summaryChange
-                                    .getCurrentValue())
-                            , summaryChange.getCurrentCurrency().getCurrencyCode()));
+                    res.append(String.format("<li style='list-style-type: disc;'>%s %s</li>", FormatHelper
+                                    .formatNumber(summaryChange.getCurrentValue()),
+                            summaryChange.getCurrentCurrency().getCurrencyCode()));
                 } else {
-                    res.append(String.format("<li>%s %s</li>", FormatHelper.formatNumber(
+                    res.append(String.format("<li style='list-style-type: disc;'>%s %s</li>", FormatHelper.formatNumber(
                             summaryChange.getPreviousValue()), summaryChange.getPreviousCurrency().getCurrencyCode()));
                 }
             }

@@ -262,7 +262,7 @@ public class SummaryChangesService {
     }
 
     private static void addChange(Map<String, Collection<SummaryChange>> objDiff, SummaryChange summaryChange) {
-        String key = summaryChange.getQuarter().getQuarterNumber().toString();
+        String key = getKey(summaryChange);
 
         if (objDiff.get(key) == null) {
             objDiff.put(key, new ArrayList<SummaryChange>());
@@ -271,4 +271,12 @@ public class SummaryChangesService {
         objDiff.get(key).add(summaryChange);
     }
 
+    private static String getKey(SummaryChange summaryChange) {
+        String key = "Q " + summaryChange.getQuarter().getQuarterNumber() + " " + summaryChange.getQuarter()
+                .getYearCode();
+        if (summaryChange.getTransactionType() == Constants.MTEFPROJECTION) {
+            key = "FY " + summaryChange.getQuarter().getYearCode();
+        }
+        return key;
+    }
 }

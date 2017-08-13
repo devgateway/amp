@@ -357,7 +357,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.TEAM, "v_teams");
 		no_entity(ColumnConstants.OBJECTIVE, "v_objectives", DG_EDITOR_POSTPROCESSOR);
 		no_dimension(ColumnConstants.ISSUES, "v_issues");
-		
+		date_column(ColumnConstants.ISSUE_DATE, "v_issue_date");
+
 		no_dimension(ColumnConstants.ACTIVITY_PLEDGES_TITLE, "v_activity_pledges_title");
 		no_dimension(ColumnConstants.ACTIVITY_UPDATED_BY, "v_activity_modified_by");
 		no_dimension(ColumnConstants.ACTORS, "v_actors");

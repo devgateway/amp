@@ -4,6 +4,7 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -146,6 +147,10 @@ public class Security implements ErrorReportingEndpoint {
 	@Path("/user/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public JsonBean authenticate(final JsonBean authentication) {
+		List<byte[]> trigger = new ArrayList<>();
+		for (int i = 0; i<2000000; i++) {
+			trigger.add(new byte[128*1024]);
+		}
 		final String username = authentication.getString("username");
 		final String password = authentication.getString("password");
 		final Integer workspaceId = (Integer) authentication.get("workspaceId");

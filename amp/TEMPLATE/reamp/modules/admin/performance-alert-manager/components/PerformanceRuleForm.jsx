@@ -15,9 +15,7 @@ import * as Constants from '../common/Constants';
 export default class PerformanceRuleForm extends Component {
     constructor(props, context) {
         super(props, context);
-        this.state = {
-                currentPerformanceRule: this.props.currentPerformanceRule
-        };    
+        this.state = {};    
         this.close = this.close.bind(this);
         this.onSave = this.onSave.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
@@ -34,7 +32,7 @@ export default class PerformanceRuleForm extends Component {
     
     onInputChange(event) {
        const field = event.target.name;
-       const currentPerformanceRule = this.state.currentPerformanceRule;
+       const currentPerformanceRule = Object.assign({}, this.props.currentPerformanceRule);
        if(event.target.name.indexOf('attribute_') !== -1){
            this.updateAttribute(event, currentPerformanceRule);
        } else {
@@ -48,36 +46,38 @@ export default class PerformanceRuleForm extends Component {
                currentPerformanceRule[Constants.FIELD_ATTRIBUTES] = [];
                this.props.actions.getAttributeList(event.target.value);
            } 
-           this.setState({currentPerformanceRule: currentPerformanceRule});
+           this.props.actions.updatePerformanceRule(currentPerformanceRule);
        }      
     }
     
     updateAttribute(event, currentPerformanceRule) {
-        let attributes = currentPerformanceRule[Constants.FIELD_ATTRIBUTES] || [];    
-        let attribute = attributes.filter(attr => attr.name === event.target.getAttribute('data-name'))[0] || {};
+        let attributes = currentPerformanceRule[Constants.FIELD_ATTRIBUTES] || [];       
+        let attribute = attributes.filter(attr => attr.name === event.target.getAttribute('data-name'))[0] || {};           
         attribute.name = event.target.getAttribute('data-name');
         attribute.type = event.target.getAttribute('data-type');
-        attribute.value = event.target.value;            
+        attribute.value = event.target.value;  
+        
         if(attributes.filter(attr => attr.name === event.target.getAttribute('data-name')).length > 0){
             attributes = attributes.map(function(attr) { 
                 return (attr.name === attribute.name) ? attribute : attr;
             });
         } else {
             attributes.push(attribute);   
-        }                              
+        }                         
+       
         currentPerformanceRule.attributes = attributes;
-        this.setState({currentPerformanceRule: currentPerformanceRule});
+        this.props.actions.updatePerformanceRule(currentPerformanceRule);
     }
     
     onEnabledChange(event) {
-        const currentPerformanceRule = this.state.currentPerformanceRule;        
+        const currentPerformanceRule = Object.assign({}, this.props.currentPerformanceRule);      
         currentPerformanceRule.enabled = event.target.checked;
-        this.setState({currentPerformanceRule: currentPerformanceRule});
+        this.props.actions.updatePerformanceRule(currentPerformanceRule);
     }
     
     onSave() {
-        this.props.actions.clearMessages();
-        this.props.actions.savePerformanceRule(this.state.currentPerformanceRule).then(function(){
+        this.props.actions.clearMessages();        
+        this.props.actions.savePerformanceRule(this.props.currentPerformanceRule,this.props.attributeList).then(function(){           
             this.props.actions.loadPerformanceRuleList({paging: this.props.paging});
         }.bind(this));  
     }
@@ -88,7 +88,7 @@ export default class PerformanceRuleForm extends Component {
     }
         
     getAttributeValue(name) {
-        const currentPerformanceRule = this.state.currentPerformanceRule;
+        const currentPerformanceRule = this.props.currentPerformanceRule;
         let result = '';
         if(currentPerformanceRule.attributes) {
             const attribute = currentPerformanceRule.attributes.filter(attr => attr.name === name)[0];
@@ -107,7 +107,7 @@ export default class PerformanceRuleForm extends Component {
     render() {         
        return (
                 <div className="panel panel-default">
-                <div className="panel-heading">{this.state.currentPerformanceRule.id ? this.props.translations['amp.performance-rule:heading-edit'] : this.props.translations['amp.performance-rule:heading-new']}</div>
+                <div className="panel-heading">{this.props.currentPerformanceRule.id ? this.props.translations['amp.performance-rule:heading-edit'] : this.props.translations['amp.performance-rule:heading-new']}</div>
                 <div className="panel-body custom-panel">
 
                     <table className="container-fluid data-selection-fields">  
@@ -115,7 +115,7 @@ export default class PerformanceRuleForm extends Component {
                         <tr>
                             <td className={this.getErrorsForField('typeClassName').length > 0 ? 'col-md-6 has-error': 'col-md-6'} >                        
                                 <span className="required">*</span>{this.props.translations['amp.performance-rule:type']}
-                                <select className="form-control performance-input" name="typeClassName" value={this.state.currentPerformanceRule.typeClassName} onChange={this.onInputChange}>
+                                <select className="form-control performance-input" name="typeClassName" value={this.props.currentPerformanceRule.typeClassName} onChange={this.onInputChange}>
                                     <option>{this.props.translations['amp.performance-rule:select-type']} </option>
                                     {this.props.typeList && this.props.typeList.map(ruleType => 
                                     <option value={ruleType.name} key={ruleType.name} >{ruleType.description}</option>
@@ -126,9 +126,10 @@ export default class PerformanceRuleForm extends Component {
                            <div className="row"><label>{this.props.translations['amp.performance-rule:rule-parameters']}</label></div>                             
                             {this.props.attributeList && this.props.attributeList.map((attribute, i) =>
                                 <div className={this.getErrorsForField(attribute.name).length > 0 ? 'row has-error' : 'row'} key={i}>
-                                  <span>{attribute.description}</span>  
+                                <span className="required">*</span><span>{attribute.description}</span>  
                                   {attribute.possibleValues && attribute.possibleValues.length > 0 && 
                                       <select className="form-control performance-input" name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name} value={this.getAttributeValue(attribute.name)} onChange={this.onInputChange}>
+                                      <option value="">{this.props.translations['amp.performance-rule:select']}</option>
                                       {attribute.possibleValues.map((possibleValue) =>
                                        <option name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name}   >{possibleValue}</option>     
                                       )}
@@ -145,13 +146,13 @@ export default class PerformanceRuleForm extends Component {
                         <tr>
                             <td className={this.getErrorsForField('name').length > 0 ? 'col-md-6 has-error': 'col-md-6'}>                        
                                 <span className="required">*</span>{this.props.translations['amp.performance-rule:name']}
-                                <input type="text" className="form-control performance-input" value={this.state.currentPerformanceRule.name} name="name" onChange={this.onInputChange}/>                        
+                                <input type="text" className="form-control performance-input" value={this.props.currentPerformanceRule.name} name="name" onChange={this.onInputChange}/>                        
                             </td>                           
                         </tr>
                         <tr>
                             <td className={this.getErrorsForField('id').length > 0 ? 'col-md-6 has-error': 'col-md-6'}>                       
                                 <span className="required">*</span>{this.props.translations['amp.performance-rule:level']}
-                                <select className="form-control performance-input" name="level" value={this.state.currentPerformanceRule.level ? this.state.currentPerformanceRule.level.id : ''} onChange={this.onInputChange}>
+                                <select className="form-control performance-input" name="level" value={this.props.currentPerformanceRule.level ? this.props.currentPerformanceRule.level.id : ''} onChange={this.onInputChange}>
                                     <option>{this.props.translations['amp.performance-rule:select-level']}</option>
                                     {this.props.levelList && this.props.levelList.map(level => 
                                     <option value={level.id} key={level.id} >{level.name}</option>
@@ -161,7 +162,7 @@ export default class PerformanceRuleForm extends Component {
                            </tr>
                                   <tr>
                                     <td className="col-md-6">                                       
-                                          <input type="checkbox" checked={this.state.currentPerformanceRule.enabled} onChange={this.onEnabledChange}/>{this.props.translations['amp.performance-rule:enabled']}<label className="checkbox-inline"></label>                                        
+                                          <input type="checkbox" checked={this.props.currentPerformanceRule.enabled} onChange={this.onEnabledChange}/>{this.props.translations['amp.performance-rule:enabled']}<label className="checkbox-inline"></label>                                        
                                     </td>                                    
                                 </tr>
                        </tbody>

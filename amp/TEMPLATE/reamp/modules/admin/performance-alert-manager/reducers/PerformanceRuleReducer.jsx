@@ -9,7 +9,8 @@ import {
   SAVE_PERFORMANCE_RULE_SUCCESS,
   DELETE_PERFORMANCE_RULE_SUCCESS,
   VALIDATE_PERFORMANCE_RULE,
-  CLEAR_MESSAGES
+  CLEAR_MESSAGES,
+  UPDATE_PERFORMANCE_RULE
 } from '../actions/PerformanceRuleActions';
 
 const defaultState = {
@@ -32,7 +33,7 @@ const defaultState = {
 };
 
 export default function performanceRuleReducer(state: Object = defaultState.data, action: Object) {    
-    const newState = Object.assign({}, state);
+    const newState = Object.assign({}, state);    
     switch (action.type) {
     case LOAD_PERFORMANCE_RULE_LIST_SUCCESS:        
         newState.paging = action.data.paging;
@@ -69,6 +70,11 @@ export default function performanceRuleReducer(state: Object = defaultState.data
         newState.errors = action.data.errors; 
         newState.infoMessages = action.data.infoMessages;    
         return newState; 
+    case UPDATE_PERFORMANCE_RULE:
+        newState.errors = []; 
+        newState.infoMessages = [];  
+        newState.currentPerformanceRule = Object.assign({}, action.data);        
+        return newState;  
     default:            
         return state;
     }

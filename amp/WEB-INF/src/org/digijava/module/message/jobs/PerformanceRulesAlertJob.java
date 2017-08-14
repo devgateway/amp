@@ -14,7 +14,6 @@ import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -155,7 +154,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         updatedActivity = ActivityUtil.saveActivityNewVersion(oldActivity, null, modifyingMember,
                 oldActivity.getDraft(), session, false, false);
             
-        Locale javaLocale = new Locale(DEFAULT_LANGUAGE);
+        Locale javaLocale = new Locale(DEFAULT_LOCALE_LANGUAGE);
         
         LuceneUtil.addUpdateActivity(AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, true, 
                 SiteUtils.getDefaultSite(), javaLocale, 

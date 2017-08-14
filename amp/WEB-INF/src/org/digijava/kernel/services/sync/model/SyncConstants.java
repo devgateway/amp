@@ -15,6 +15,7 @@ public class SyncConstants {
         public static final String WORKSPACES = "workspaces";
         public static final String WORKSPACE_SETTINGS = "workspace settings";
         public static final String WORKSPACE_MEMBER = "workspace member";
+        public static final String WORKSPACE_FILTER_DATA = "workspace filter data";
         public static final String USER = "user";
         public static final String TRANSLATION = "translation";
         public static final String CATEGORY_CLASS = "category class";

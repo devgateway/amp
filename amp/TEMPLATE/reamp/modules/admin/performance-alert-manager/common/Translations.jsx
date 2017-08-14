@@ -11,6 +11,7 @@ export const initialTranslations = {
   'amp.performance-rule:enabled-yes': 'Yes',
   'amp.performance-rule:enabled-no': 'No',
   'amp.performance-rule:select-level': 'select level',
+  'amp.performance-rule:select': 'select value',
   'amp.performance-rule:of': 'of',
   'amp.performance-rule:records': 'records',
   'amp.performance-rule:records-displayed': '__fromRecord__ - __toRecord__ of __totalRecords__ records',      
@@ -26,5 +27,6 @@ export const initialTranslations = {
   'amp.performance-rule:delete-error':'A server side error occured while deleting the record',
   'amp.performance-rule:delete-successful': 'Record deleted successfully',
   'amp.performance-rule:required-fields-message': 'Type, Name and Level are required fields.',
-  'amp.performance-rule:invalid-input': 'Invalid input in Rule Parameters'
+  'amp.performance-rule:invalid-input': 'Invalid input in Rule Parameters',
+  'amp.performance-rule:parameters-required': 'All rule parameters are required.'
 }

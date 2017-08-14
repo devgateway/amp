@@ -11,6 +11,7 @@ export const SAVE_PERFORMANCE_RULE_SUCCESS = 'SAVE_PERFORMANCE_RULE_SUCCESS';
 export const DELETE_PERFORMANCE_RULE_SUCCESS = 'DELETE_PERFORMANCE_RULE_SUCCESS';
 export const VALIDATE_PERFORMANCE_RULE = 'VALIDATE_PERFORMANCE_RULE';
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
+export const UPDATE_PERFORMANCE_RULE = 'UPDATE_PERFORMANCE_RULE';
 
 export function loadPerformanceRuleList(data) {
     return function(dispatch) {
@@ -68,6 +69,12 @@ export function addNewPerformanceRule(){
     };    
 }
 
+export function updatePerformanceRule(data){
+    return function(dispatch) {
+        return dispatch({type: UPDATE_PERFORMANCE_RULE, data: data });
+    };
+}
+
 export function closePerformanceRule(){
     return function(dispatch) {
         return dispatch({type: CLOSE_PERFORMANCE_RULE, data: null });
@@ -80,25 +87,27 @@ export function editPerformanceRule(performanceRule){
     }; 
 }
 
-export function savePerformanceRule(data){
-    return function(dispatch) {
-        const errors = Utils.validatePerformanceRule(data);
+export function savePerformanceRule(data, attributeList){    
+    return dispatch => new Promise((resolve, reject) => {
+        const errors = Utils.validatePerformanceRule(data, attributeList);
         if(errors.length > 0) {
-            return dispatch({type: VALIDATE_PERFORMANCE_RULE, data:{errors: errors, infoMessages:[]} });            
-        }
-        
-        return performanceRuleApi.save(data).then(response => { 
-            const result = {};
-            if(response.status == 400) {                
-                result.errors = [{messageKey: 'amp.performance-rule:save-error'}];
-            } else {
-                result.infoMessages = [{messageKey: 'amp.performance-rule:save-successful'}];                                
-            }            
-            return dispatch({type: SAVE_PERFORMANCE_RULE_SUCCESS, data:result });           
-        }).catch(error => {
-            throw(error);
-        });
-    };
+            dispatch({type: VALIDATE_PERFORMANCE_RULE, data:{errors: errors, infoMessages:[]} }); 
+            resolve({errors: errors, infoMessages:[]});
+        }else {
+            return performanceRuleApi.save(data).then(response => { 
+                const result = {errors:[], infoMessages:[]};
+                if(response.status == 400) {                
+                    result.errors = [{messageKey: 'amp.performance-rule:save-error'}];
+                } else {
+                    result.infoMessages = [{messageKey: 'amp.performance-rule:save-successful'}];                                
+                }            
+                dispatch({type: SAVE_PERFORMANCE_RULE_SUCCESS, data:result });
+                resolve(result);
+            }).catch(error => {
+                throw(error);
+            });  
+        }        
+    });
 }
 
 export function deletePerformanceRule(data) {

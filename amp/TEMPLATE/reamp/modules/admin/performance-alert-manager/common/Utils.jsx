@@ -8,7 +8,7 @@ class Utils {
         return str;        
     }
     
-    static validatePerformanceRule(rule){
+    static validatePerformanceRule(rule, attributeList){
         const errors = [];
         let message;
         message = this.checkRequiredField( rule, Constants.FIELD_NAME, message );
@@ -17,16 +17,20 @@ class Utils {
         if ( message ) {
             errors.push( message );
         }
-        errors.push(...this.validateAttributes(rule));
+        errors.push(...this.validateAttributes(rule, attributeList));
         return errors;        
     }
     
-    static isUndefinedOrBlank( obj, field ) {
+    static isUndefinedOrBlank(obj, field ) {
+        return this.valueIsUndefinedOrBlank(obj[field]);        
+    }
+    
+    static valueIsUndefinedOrBlank(value) {
         let result = false;
-        if ( obj[field] === '' || obj[field] === undefined || obj[field] === null ) {
+        if ( value === '' || value === undefined || value === null ) {
             result = true;
         }
-        return result;
+        return result;  
     }
     
     static checkRequiredField( obj, field, message ) {
@@ -40,13 +44,23 @@ class Utils {
         return message;
     }
     
-    static validateAttributes(rule){
+    static validateAttributes(rule, attributeList){        
         const errors = [];
-        const attributes = rule[Constants.FIELD_ATTRIBUTES] || [];
-        for (let attribute of attributes) {
-           if(attribute.type === Constants.FIELD_TYPE_AMOUNT) {
+        const attributes = rule[Constants.FIELD_ATTRIBUTES] || [];               
+        for (let attr of attributeList) {
+            let attribute = attributes.filter(obj => obj.name === attr.name)[0] || {};
+            if(this.valueIsUndefinedOrBlank(attribute.value)) {
+               const error = errors.filter(error => error.messageKey === 'amp.performance-rule:parameters-required')[0];            
+               if (error) {
+                   error.affectedFields.push(attr.name);
+               } else {
+                   errors.push({ messageKey: 'amp.performance-rule:parameters-required', id: rule.id, affectedFields: [attr.name] });
+               }            
+           }
+            
+           if(attr.type === Constants.FIELD_TYPE_AMOUNT) {
                if(!this.isNumber(attribute.value)){
-                   errors.push({ messageKey: 'amp.performance-rule:invalid-input', id: rule.id, affectedFields: [attribute.name] }); 
+                   errors.push({ messageKey: 'amp.performance-rule:invalid-input', id: rule.id, affectedFields: [attr.name] }); 
                }
            }
         }

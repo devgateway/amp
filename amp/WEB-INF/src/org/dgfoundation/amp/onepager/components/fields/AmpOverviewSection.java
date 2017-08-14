@@ -18,6 +18,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.apache.wicket.validation.validator.RangeValidator;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
@@ -29,6 +30,7 @@ import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
+import org.dgfoundation.amp.onepager.util.OtherInfoBehavior;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
@@ -115,54 +117,22 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
 						CategoryConstants.MODALITIES_KEY),
 				CategoryConstants.MODALITIES_NAME, true, false, null, AmpFMTypes.MODULE);
 
-		modalities.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-			private static final long serialVersionUID = 1L;
+		AmpTextAreaFieldPanel modalitiesOtherInfo = new AmpTextAreaFieldPanel("modalitiesOtherInfo",
+				new PropertyModel<String>(am, "modalitiesOtherInfo"), "Modalities Other Info",
+				false, AmpFMTypes.MODULE);
 
-			{
-				updateOtherInfo();
-			}
-
-			private void toggleOtherInfo(boolean b) {
-				if (this.getFormComponent() != null) {
-				this.getFormComponent().getParent().getParent().getParent().getParent().getParent().getParent()
-						.visitChildren(AmpIdentificationFormSectionFeature.class,
-						new IVisitor<AmpIdentificationFormSectionFeature, Void>() {
-							@Override
-							public void component(AmpIdentificationFormSectionFeature component,
-												  IVisit<Void> visit) {
-								component.get("otherInfo").setVisible(b);
-								visit.dontGoDeeper();
-							}
-						});
-				}
-			}
-
-			private void updateFields(AjaxRequestTarget target) {
-				this.getFormComponent().getParent().getParent().getParent().getParent().getParent().getParent()
-						.visitChildren(AmpIdentificationFormSectionFeature.class,
-								new IVisitor<AmpIdentificationFormSectionFeature, Void>() {
-									@Override
-									public void component(AmpIdentificationFormSectionFeature component,
-														  IVisit<Void> visit) {
-										target.add(component.get("otherInfo"));
-										target.add(component.get("otherInfo").getParent());
-										visit.dontGoDeeper();
-									}
-								});
-			}
-
-			private void updateOtherInfo() {
-				toggleOtherInfo(AmpIdentificationFormSectionFeature.isOtherInfoVisible(am));
-			}
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				updateOtherInfo();
-				updateFields(target);
-			}
-		});
+		modalitiesOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(255));
+		modalitiesOtherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
+		modalitiesOtherInfo.setOutputMarkupPlaceholderTag(true);
+		modalitiesOtherInfo.setOutputMarkupId(true);
+		modalitiesOtherInfo.setIgnoreFmVisibility(true);
+		modalitiesOtherInfo.setIgnorePermissions(true);
+		modalitiesOtherInfo.setVisible(false);
 		wmc.add(modalities);
-		
+		wmc.add(modalitiesOtherInfo);
+
+		modalities.getChoiceContainer().add(new OtherInfoBehavior("onchange", modalitiesOtherInfo));
+
 		AmpOverallFundingTotalsTable overallFunding = new AmpOverallFundingTotalsTable(
 				"overallFunding", "Overall Funding Totals", new PropertyModel<Set<AmpFunding>>(am, "funding"));
 		overallFunding.add(UpdateEventBehavior.of(OverallFundingTotalsEvents.class));

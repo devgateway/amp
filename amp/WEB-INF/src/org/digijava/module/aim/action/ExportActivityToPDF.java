@@ -268,6 +268,11 @@ public class ExportActivityToPDF extends Action {
                     createGeneralInfoRow(mainLayout, columnName, columnVal);
                 }
             }
+            //Status Other Info
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Other Info")) {
+                columnName = TranslatorWorker.translateText("Status Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getStatusOtherInfo());
+            }
 
             if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")) {
                 columnName = TranslatorWorker.translateText("Status Reason");
@@ -307,6 +312,12 @@ public class ExportActivityToPDF extends Action {
                 columnName = TranslatorWorker.translateText("Modalities");
                 columnVal = identification.getSscModalitiesAsString("\n");
                 createGeneralInfoRow(mainLayout, columnName, columnVal);
+            }
+            //Modalities Other Info
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/" + sscPrefix + "Modalities "
+                    + "Other Info")) {
+                columnName = TranslatorWorker.translateText("Modalities Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getModalitiesOtherInfo());
             }
 
             //objective
@@ -374,19 +385,15 @@ public class ExportActivityToPDF extends Action {
             }
 
             //project comments
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments")){
-                columnName=TranslatorWorker.translateText("Project Comments");
-                createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectComments()));
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments")) {
+                columnName = TranslatorWorker.translateText("Project Comments");
+                createGeneralInfoRow(mainLayout, columnName, processEditTagValue(request, activity.
+                        getProjectComments()));
             }
             //Lessons learned
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned")){
                 columnName=TranslatorWorker.translateText("Lessons Learned");
                 createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getLessonsLearned()));
-            }
-            //Other Info
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Other Info")){
-                columnName=TranslatorWorker.translateText("Other Info");
-                createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getOtherInfo()));
             }
             //Project Impact
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Impact")){
@@ -624,6 +631,11 @@ public class ExportActivityToPDF extends Action {
                     }
                     createGeneralInfoRow(mainLayout,columnName,columnVal);
                 }
+            }
+            //Project Category Other Info
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Category Other Info")) {
+                columnName = TranslatorWorker.translateText("Project Category Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getProjectCategoryOtherInfo());
             }
 
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Agreement Number")){

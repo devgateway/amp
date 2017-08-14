@@ -159,8 +159,16 @@ public class ShowActivityPrintPreview
                 	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact().trim());
                 }
 
-                if (activity.getOtherInfo() != null) {
-                    eaForm.getIdentification().setOtherInfo(activity.getOtherInfo().trim());
+                if (activity.getStatusOtherInfo() != null) {
+                    eaForm.getIdentification().setStatusOtherInfo(activity.getStatusOtherInfo().trim());
+                }
+
+                if (activity.getProjectCategoryOtherInfo() != null) {
+                    eaForm.getIdentification().setProjectCategoryOtherInfo(activity.getProjectCategoryOtherInfo().trim());
+                }
+
+                if (activity.getModalitiesOtherInfo() != null) {
+                    eaForm.getIdentification().setModalitiesOtherInfo(activity.getModalitiesOtherInfo().trim());
                 }
                 
                 // fferreyra: Added null checking for field activity_summary

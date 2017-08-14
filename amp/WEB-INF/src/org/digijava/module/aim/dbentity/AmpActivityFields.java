@@ -40,9 +40,20 @@ LoggerIdentifiable, Cloneable {
 	
 	protected static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
-	@Interchangeable(fieldTitle = "Other Info", importable = true, fmPath="/Activity Form/Identification/Other Info")
-	@VersionableFieldTextEditor(fieldTitle = "Other Info")
-	protected String otherInfo;
+	@Interchangeable(fieldTitle = "Status Other Info", importable = true, fmPath = "/Activity "
+			+ "Form/Identification/Status Other Info")
+	@VersionableFieldTextEditor(fieldTitle = "Status Other Info")
+	protected String statusOtherInfo;
+
+	@Interchangeable(fieldTitle = "Project Category Other Info", importable = true, fmPath = "/Activity "
+			+ "Form/Identification/Project Category Other Info")
+	@VersionableFieldTextEditor(fieldTitle = "Project Category Other Info")
+	protected String projectCategoryOtherInfo;
+
+	@Interchangeable(fieldTitle = "Modalities Other Info", importable = true, fmPath = "/Activity "
+			+ "Form/Funding/Overview Section/ModalitiesModalities Other Info")
+	@VersionableFieldTextEditor(fieldTitle = "Modalities Other Info")
+	protected String modalitiesOtherInfo;
 
 	@Interchangeable(fieldTitle = "Project Impact", importable = true, fmPath="/Activity Form/Identification/Project Impact")
 	@VersionableFieldTextEditor(fieldTitle = "Project Impact")
@@ -1655,15 +1666,31 @@ LoggerIdentifiable, Cloneable {
 			this.projectImpact = projectImpact;
 		}
 
-		public String getOtherInfo() {
-			return otherInfo;
-		}
+	public String getStatusOtherInfo() {
+		return statusOtherInfo;
+	}
 
-		public void setOtherInfo(String otherInfo) {
-			this.otherInfo = otherInfo;
-		}
+	public void setStatusOtherInfo(String statusOtherInfo) {
+		this.statusOtherInfo = statusOtherInfo;
+	}
 
-		public String getActivitySummary() {
+	public String getProjectCategoryOtherInfo() {
+		return projectCategoryOtherInfo;
+	}
+
+	public void setProjectCategoryOtherInfo(String projectCategoryOtherInfo) {
+		this.projectCategoryOtherInfo = projectCategoryOtherInfo;
+	}
+
+	public String getModalitiesOtherInfo() {
+		return modalitiesOtherInfo;
+	}
+
+	public void setModalitiesOtherInfo(String modalitiesOtherInfo) {
+		this.modalitiesOtherInfo = modalitiesOtherInfo;
+	}
+
+	public String getActivitySummary() {
 			return activitySummary;
 		}
 

@@ -29,7 +29,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 @Path("performance")
 public class PerformanceRulesEndpoint {
 
-    private PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+    private PerformanceRuleManager performanceRuleManager = PerformanceRuleManager.getInstance();
 
     @GET
     @Path("rules")

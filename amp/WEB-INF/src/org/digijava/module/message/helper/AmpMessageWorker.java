@@ -23,9 +23,12 @@ import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -68,6 +71,7 @@ import org.digijava.module.message.triggers.CalendarEventTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
+import org.digijava.module.message.triggers.PerformanceRuleAlertTrigger;
 import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger;
@@ -78,6 +82,8 @@ import org.hibernate.jdbc.Work;
 public class AmpMessageWorker {
 
 	private static Logger logger = Logger.getLogger(AmpMessageWorker.class);
+	
+	public static final String SYSTEM_DEFAULT_SENDER_MAIL = "system@digijava.org";
 
 	public static void processEvent(Event e) throws Exception {
 		String triggerClassName = e.getTrigger().getName();
@@ -162,7 +168,10 @@ public class AmpMessageWorker {
 						createEmailsAndReceivers(ampMessage, receivers, false);
 					}
 
+				} else if (e.getTrigger().equals(PerformanceRuleAlertTrigger.class)) {
+				    newMsg = proccessPerformanceRuleAlertEvent(e, newAlert, template);
 				}
+				
 				if (newMsg != null) {
 					AmpMessageUtil.saveOrUpdateMessage(newMsg);
 				} else {
@@ -224,7 +233,9 @@ public class AmpMessageWorker {
 
 				} else if (e.getTrigger().equals(UserAddedToFirstWorkspaceTrigger.class)) {
 					defineReceiversForUserAddedToWorkspace(newMsg, e);
-				} else { // <-- currently for else is left user registration
+				} else if (e.getTrigger().equals(PerformanceRuleAlertTrigger.class)) {
+				    defineReceiversForPerformanceRuleAlert(newMsg, e, template);
+                } else { // <-- currently for else is left user registration
 							// or activity disbursement date triggers
 					List<String> emailReceivers = new ArrayList<String>();
 					List<AmpMessageState> statesRelatedToTemplate = null;
@@ -805,6 +816,58 @@ public class AmpMessageWorker {
 
 		return alerts;
 	}
+	
+	/**
+	 * Performance Rule Alert template
+	 */
+    private static AmpAlert proccessPerformanceRuleAlertEvent(Event e, AmpAlert alert, TemplateAlert template) {        
+        alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);   
+        alert.setName(template.getName());
+        alert.setDescription(template.getDescription());
+        alert.setReceivers(template.getReceivers());
+        alert.setDraft(false);
+        
+        Calendar cal = Calendar.getInstance();
+        alert.setCreationDate(cal.getTime());
+        
+        return alert;
+    }
+    
+    private static void defineReceiversForPerformanceRuleAlert(AmpMessage newMsg, Event e, TemplateAlert template)
+            throws Exception {
+        
+        AmpTeamMember msgSender = TeamMemberUtil.getAmpTeamMember(newMsg.getSenderId());
+        
+        HashMap<String, String> params = new HashMap<String, String>();
+        
+        params.put(PerformanceRuleAlertTrigger.PARAM_DATA_PERFORMANCE_ISSUES, 
+                e.getParameters().get(PerformanceRuleAlertTrigger.PARAM_DATA_PERFORMANCE_ISSUES).toString());
+        
+        List<String> receiversAddresses = new ArrayList<>();
+        if (template.getReceivers() != null) {
+            String[] receivers = template.getReceivers().split(",");
+            for (String receiver : receivers) {
+                receiversAddresses.add(getEmailFromReceiver(receiver));
+            }
+        }
+        
+        if (receiversAddresses.size() > 0) {
+            for (String emailAddr : receiversAddresses) {
+                String senderEmail = (msgSender == null) ? SYSTEM_DEFAULT_SENDER_MAIL : msgSender.getUser().getEmail();
+                String translatedName = TranslatorWorker.translateText(newMsg.getName());
+                String translatedDescription = TranslatorWorker.translateText(newMsg.getDescription());
+                
+                AmpEmail ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params),
+                        DgUtil.fillPattern(translatedDescription, params));
+                DbUtil.saveOrUpdateObject(ampEmail);
+                
+                AmpEmailReceiver emailReceiver = new AmpEmailReceiver(emailAddr, ampEmail,
+                        MessageConstants.UNSENT_STATUS);
+                DbUtil.saveOrUpdateObject(emailReceiver);
+            }
+        }
+    }
+	
 	/**
 	 * 
 	 * @param string
@@ -817,6 +880,17 @@ public class AmpMessageWorker {
 		String team = string.substring(string.indexOf(";") + 1, string.lastIndexOf(";"));
 		return TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(email, team);
 	}
+	
+	/**
+     * 
+     * @param string
+     * @return
+     */
+    private static String getEmailFromReceiver(String receiver) {
+        String email = receiver.substring(receiver.indexOf("<") + 1, receiver.indexOf(">"));
+        
+        return email;
+    }
 
 	private static void createMsgState(TemplateAlert template, AmpMessage alert,AmpTeamMember receiver) throws Exception {
 		createMsgState(receiver, alert, false);

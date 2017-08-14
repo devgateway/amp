@@ -2,7 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
 import java.util.Date;
 
-import org.digijava.kernel.ampapi.endpoints.performance.PerfomanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -27,7 +27,7 @@ public class NoDisbursementsAfterFundingDateMatcher extends PerformanceRuleMatch
             AmpPerformanceRule rule) {
         super(definition, rule);
         
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+        PerformanceRuleManager performanceRuleManager = PerformanceRuleManager.getInstance();
 
         timeUnit = performanceRuleManager.getCalendarTimeUnit(performanceRuleManager.getAttributeValue(rule, 
                 PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT));
@@ -59,7 +59,7 @@ public class NoDisbursementsAfterFundingDateMatcher extends PerformanceRuleMatch
 
     @Override
     protected boolean validate() {
-        PerfomanceRuleManager performanceRuleManager = PerfomanceRuleManager.getInstance();
+        PerformanceRuleManager performanceRuleManager = PerformanceRuleManager.getInstance();
         
         if (rule.getAttributes() == null) {
             return false;

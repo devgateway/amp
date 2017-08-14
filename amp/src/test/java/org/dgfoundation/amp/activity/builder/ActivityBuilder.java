@@ -72,6 +72,12 @@ public class ActivityBuilder {
 
         return this;
     }
+    
+    public ActivityBuilder withAmpId(String ampId) {
+        activity.setAmpId(ampId);
+        
+        return this;
+    }
 
     public AmpActivityVersion getActivity() {
         return activity;

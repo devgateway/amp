@@ -638,7 +638,7 @@ public class ReportWizardAction extends MultiAction {
     	}
     	reportsList.put(reportToken, ampReport);
     	request.getSession().setAttribute("reportStack", reportsList);
-        callSaikuReport(reportToken, response, "runReportToken", ampReport.hasAvailableMeasures());
+        callSaikuReport(reportToken, response, "runReportToken", true);
 		return null;
 		
 	}
@@ -705,7 +705,7 @@ public class ReportWizardAction extends MultiAction {
         MultilingualInputFieldValues.serialize(ampReport, "name", null, null, request);
 
         if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true")) {
-            boolean saiku = ampReport.hasAvailableMeasures() && ampReport.getType().intValue() != ArConstants.REGIONAL_TYPE;
+            boolean saiku = ampReport.getType().intValue() != ArConstants.REGIONAL_TYPE;
             callSaikuReport (ampReport.getAmpReportId().intValue(), response,"openReportId", saiku);
         }
         return null;

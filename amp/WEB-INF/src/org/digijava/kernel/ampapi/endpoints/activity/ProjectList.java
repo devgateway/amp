@@ -167,7 +167,7 @@ public class ProjectList {
 		String query = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
 		return getEditableActivityIds(tm, query);
 	}
-	
+
 	/**
 	 * Get the activities ids for the current workspace
 	 * 
@@ -227,7 +227,7 @@ public class ProjectList {
 		final List<JsonBean> activitiesList = new ArrayList<JsonBean>();
 		
 		String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
-		
+
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 				String ids = StringUtils.join(activityIds, ",");
@@ -237,13 +237,13 @@ public class ProjectList {
 						+ "act.%s as %s, act.date_updated as date_updated, at.name as team_name "
 						+ "FROM amp_activity act "
 						+ "JOIN amp_team at ON act.amp_team_id = at.amp_team_id ";
-				
+
 				if (activityIds.size() > 0) {
 					query += " WHERE act.amp_activity_id " + negate + " in (" + ids + ")";
 				}
-				
+
 				String allActivitiesQuery = String.format(query, iatiIdAmpField, iatiIdAmpField);
-				
+
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allActivitiesQuery, null)) {
 					ResultSet rs = rsi.rs;
 					while (rs.next()) {

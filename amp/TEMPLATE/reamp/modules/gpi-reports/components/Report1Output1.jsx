@@ -106,15 +106,16 @@ export default class Report1Output1 extends Component {
 
     onYearClick( selectedYear ) {
         this.setState( { selectedYear: selectedYear }, function() {
-            let requestData = this.getRequestData();
-            requestData.filters['actual-approval-date'] = {};
+            const filters = this.filter.serialize().filters;            
+            filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                requestData.filters['actual-approval-date']= {
+                filters['actual-approval-date'] = {
                         'start': this.state.selectedYear + '-01-01',
                         'end': this.state.selectedYear + '-12-31'
                     };
             }
-            this.fetchReportData(requestData);
+            this.filter.deserialize({filters: filters}, {silent : true});
+            this.fetchReportData();
         }.bind( this ) );
 
     }
@@ -238,7 +239,11 @@ export default class Report1Output1 extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}</h4></div>
+                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
+                        {(this.props.settings['number-divider'] != 1) &&
+                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
+                        }
+                        </h4></div>
                     </div>
                     <div className="section-divider"></div>
 
@@ -251,7 +256,7 @@ export default class Report1Output1 extends Component {
                                 <RemarksPopup showRemarks={this.state.showRemarks} closeRemarksModal={this.closeRemarksModal.bind(this)} remarksUrl={this.state.remarksUrl} code="1" settings={this.props.settings} />
                           }
                         <div className="section-divider"></div>
-                        <span className="pull-left">{this.getOrgName(this.state.selectedDonor) || this.props.translations['amp.gpi-reports:all-donors']}</span><span className="remarks pull-left"><img className="table-icon popup-icon" src="images/icon-bubble.svg"/><a onClick={this.showRemarksModal} > Remarks</a></span>
+                        <span className="pull-left">{this.getOrgName(this.state.selectedDonor) || this.props.translations['amp.gpi-reports:all-donors']}</span><span className="remarks pull-left"><img className="table-icon popup-icon" src="images/icon-bubble.svg" onClick={this.showRemarksModal}/><a onClick={this.showRemarksModal} > Remarks</a></span>
                         <div className="spacer30"></div>
                         <table className="table table-bordered table-striped indicator-table complex-table">
                         <thead>

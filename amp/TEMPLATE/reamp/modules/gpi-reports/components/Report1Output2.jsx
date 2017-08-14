@@ -104,15 +104,16 @@ export default class Report1Output2 extends Component {
 
     onYearClick( selectedYear ) {
         this.setState( { selectedYear: selectedYear }, function() {                      
-            let requestData = this.getRequestData();
-            requestData.filters['actual-approval-date'] = {};
+            const filters = this.filter.serialize().filters;            
+            filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                requestData.filters['actual-approval-date']= {
+                filters['actual-approval-date'] = {
                         'start': this.state.selectedYear + '-01-01',
                         'end': this.state.selectedYear + '-12-31'
-                    };  
-            } 
-            this.fetchReportData(requestData);
+                    };
+            }
+            this.filter.deserialize({filters: filters}, {silent : true});
+            this.fetchReportData();            
         }.bind( this ) );
 
     }
@@ -162,10 +163,10 @@ export default class Report1Output2 extends Component {
    createRows() {
        var rows = [];
        this.props.output2 && this.props.output2.page && this.props.output2.page.contents.forEach(( dataRow, i ) => {
-          rows.push(<tr><td rowSpan="4">{dataRow[Constants.YEAR]}</td><td>{this.props.translations['amp.gpi-reports:indicator1-q1']}</td><td>{dataRow[Constants.Q1]}</td></tr>);
-          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q2']}</td><td>{dataRow[Constants.Q2]}</td></tr>);
-          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q3']}</td><td>{dataRow[Constants.Q3]}</td></tr>);
-          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q4']}</td><td>{dataRow[Constants.Q4]}</td></tr>);
+          rows.push(<tr><td rowSpan="4">{dataRow[Constants.YEAR]}</td><td>{this.props.translations['amp.gpi-reports:indicator1-q1']}</td><td className='number-column'>{dataRow[Constants.Q1]}</td></tr>);
+          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q2']}</td><td className='number-column'>{dataRow[Constants.Q2]}</td></tr>);
+          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q3']}</td><td className='number-column'>{dataRow[Constants.Q3]}</td></tr>);
+          rows.push(<tr><td>{this.props.translations['amp.gpi-reports:indicator1-q4']}</td><td className='number-column'>{dataRow[Constants.Q4]}</td></tr>);
        })       
        return rows;
    }
@@ -220,7 +221,7 @@ export default class Report1Output2 extends Component {
                         <tr>
                           <th className="col-md-1">{this.getLocalizedColumnName(Constants.YEAR)}</th>
                           <th className="col-md-1">{this.props.translations['amp-gpi-reports:question']}</th>
-                          <th className="col-md-1">{this.props.translations['amp-gpi-reports:value']}</th>                         
+                          <th className="col-md-1 number-column" >{this.props.translations['amp-gpi-reports:value']}</th>                         
                         </tr>
                       </thead>
                       <tbody>

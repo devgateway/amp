@@ -314,11 +314,12 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
 		}
 
 		if (a.compareTo(b) <= 0) {
-			return a.divide(b, NiFormula.DIVISION_MC).multiply(new BigDecimal(100)).setScale(0, RoundingMode.HALF_UP);
+			return a.divide(b, NiFormula.DIVISION_MC).multiply(new BigDecimal(PERCENTAGE_MULTIPLIER))
+					.setScale(0, RoundingMode.HALF_UP);
 		}
 
-		return a.subtract(b).divide(a, NiFormula.DIVISION_MC).multiply(new BigDecimal(100)).setScale(0,
-				RoundingMode.HALF_UP);
+		return a.subtract(b).divide(a, NiFormula.DIVISION_MC).multiply(new BigDecimal(PERCENTAGE_MULTIPLIER))
+				.setScale(0, RoundingMode.HALF_UP);
 	}
 
 	protected boolean isAcceptableDate(GeneratedReport generatedReport, LocalDate date) {

@@ -30,12 +30,13 @@ export default class Report5b extends Component {
     initializeFiltersAndSettings() {
         this.filter = new ampFilter({
              draggable: true,
-             caller: 'REPORTS'
+             caller: 'GPI_REPORTS'
         });
         this.settingsWidget = Utils.initializeSettingsWidget();
         this.props.actions.getYears();
         this.props.actions.getOrgList(false);
         this.fetchReportData();
+        this.props.actions.getSettings();
 
    }
 
@@ -353,7 +354,11 @@ export default class Report5b extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}</h4></div>
+                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
+                        {(this.props.settings['number-divider'] != 1) &&
+                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
+                        }
+                        </h4></div>
                     </div>
                     <div className="section-divider"></div>
                         { this.props.mainReport.empty == false  &&
@@ -376,7 +381,7 @@ export default class Report5b extends Component {
                                   {MTEFYears.map(( year, i ) =>
                                   <td className="number-column">{row[year]}</td>
                                   )}
-                                  <td>{row[Constants.INDICATOR_5B]}</td>                                    
+                                  <td className="number-column">{row[Constants.INDICATOR_5B]}</td>                                    
                               </tr>
                           )}                     
                           </tbody>
@@ -432,6 +437,7 @@ function mapStateToProps( state, ownProps ) {
         orgList: state.commonLists.orgList,
         years: state.commonLists.years,
         translations: state.startUp.translations,
+        settings: state.commonLists.settings,
         translate: state.startUp.translate
     }
 }

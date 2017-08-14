@@ -1,11 +1,9 @@
 package org.digijava.module.message.jobs;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
@@ -17,10 +15,8 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.startup.AmpBackgroundActivitiesCloser;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -42,7 +38,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         logger.info("Running the performance rule alert job...");
         
         if (isPerformanceAlertIssuesEnabled()) {
-            List<Long> actIds = getValidatedActivitiesIds();
+            List<Long> actIds = org.digijava.module.aim.util.ActivityUtil.getValidatedActivityIds();
             
             List<AmpActivityVersion> activitiesWithPerformanceIssues = processActivitiesWithPerformanceRules(actIds);
             if (activitiesWithPerformanceIssues != null) {
@@ -57,28 +53,6 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
     
     private boolean isPerformanceAlertIssuesEnabled() {
         return FMUtil.isFmVisible(PERFORMANCE_RULE_FM_PATH, AmpFMTypes.MODULE);
-    }
-
-    private List<Long> getValidatedActivitiesIds() {
-        
-        Long closedCatValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
-        
-        String filterQuery = "SELECT amp_activity_id FROM amp_activity "
-                + "WHERE (draft IS NULL or draft = false) "
-                + "AND (amp_team_id IS NOT NULL)"
-                + "AND (deleted IS NULL OR deleted = false) "
-                + "AND approval_status IN ('approved', 'startedapproved') "
-                + "AND amp_activity_id IN (SELECT amp_activity_id FROM v_status WHERE amp_status_id != "
-                + closedCatValue + ") ";
-        
-        Session session = PersistenceManager.getRequestDBSession();
-
-        List<Long> validatedActivityIds = (List<Long>) session.createSQLQuery(filterQuery)
-                .list().stream()
-                .map(id -> new Long(((BigInteger) id).longValue()))
-                .collect(Collectors.toList());
-
-        return validatedActivityIds;
     }
 
     /**

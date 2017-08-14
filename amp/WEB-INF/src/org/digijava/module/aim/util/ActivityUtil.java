@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -79,6 +80,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -1999,5 +2001,34 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         
         return activityTransactions;
     }
+    
+    public static List<Long> getActivityIdsByApprovalStatus(Set<String> statuses) {
+        Long closedCatValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
 
-} // End
+        String filterQuery = "SELECT amp_activity_id FROM amp_activity " 
+                + "WHERE (draft IS NULL or draft = false) "
+                + "AND (amp_team_id IS NOT NULL)" 
+                + "AND (deleted IS NULL OR deleted = false) "
+                + "AND approval_status IN (" + Util.toCSString(statuses) + ") "
+                + "AND amp_activity_id IN (SELECT amp_activity_id FROM v_status WHERE amp_status_id != "
+                + closedCatValue + ") ";
+
+        Session session = PersistenceManager.getRequestDBSession();
+
+        List<Long> validatedActivityIds = (List<Long>) session.createSQLQuery(filterQuery)
+                .list().stream()
+                .map(id -> new Long(((BigInteger) id).longValue()))
+                .collect(Collectors.toList());
+
+        return validatedActivityIds;
+    }
+
+    public static List<Long> getValidatedActivityIds() {
+        return getActivityIdsByApprovalStatus(AmpARFilter.validatedActivityStatus);
+    }
+    
+    public static List<Long> getUnvalidatedActivityIds() {
+        return getActivityIdsByApprovalStatus(AmpARFilter.unvalidatedActivityStatus);
+    }
+
+}

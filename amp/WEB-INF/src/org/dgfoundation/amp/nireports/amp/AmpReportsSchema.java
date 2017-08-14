@@ -1154,7 +1154,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			Integer trTypeId = pair.getValue();
 			for (AmpCategoryValue adj : sscAdjTypes) {
 				String measureName = adj.getValue() + " " + transactionType;
-				addMeasure(new AmpTrivialMeasure(measureName, trTypeId, adj.getValue(), false));
+				addMeasure(new AmpTrivialMeasure(measureName, trTypeId, adj.getValue(), false, true));
 			}
 		}
 		

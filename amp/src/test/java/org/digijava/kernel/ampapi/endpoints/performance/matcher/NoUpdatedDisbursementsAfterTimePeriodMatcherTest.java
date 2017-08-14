@@ -7,7 +7,7 @@ import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
 import org.dgfoundation.amp.activity.builder.TransactionBuilder;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedDisbursmentsAfterTimePeriodMatcherDefinition;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
@@ -24,12 +24,12 @@ import com.google.common.collect.ImmutableSet;
  * 
  * @author Viorel Chihai
  */
-public class NoUpdatedDisbursmentsAfterTimePeriodMatcherTest extends PerformanceRuleMatcherTest {
+public class NoUpdatedDisbursementsAfterTimePeriodMatcherTest extends PerformanceRuleMatcherTest {
     
     @Before
     public void setUp() {
         super.setUp();
-        definition = new NoUpdatedDisbursmentsAfterTimePeriodMatcherDefinition();
+        definition = new NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition();
     }
     
     @Test

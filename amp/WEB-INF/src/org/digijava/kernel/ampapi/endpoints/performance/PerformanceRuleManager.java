@@ -51,9 +51,9 @@ public class PerformanceRuleManager {
     private void initPerformanceRuleDefinitions() {
         definitions = new ArrayList<>();
         definitions.add(new NoUpdatedStatusAfterFundingDateMatcherDefinition());
-        definitions.add(new NoDisbursmentsAfterFundingDateMatcherDefinition());
+        definitions.add(new NoDisbursementsAfterFundingDateMatcherDefinition());
         definitions.add(new DisbursementsAfterActivityDateMatcherDefinition());
-        definitions.add(new NoUpdatedDisbursmentsAfterTimePeriodMatcherDefinition());
+        definitions.add(new NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition());
     }
     
     public List<PerformanceRuleMatcherDefinition> getPerformanceRuleDefinitions() {

@@ -18,13 +18,15 @@ public abstract class PerformanceRuleMatcherDefinition {
 
     protected String description;
     
+    protected String message;
+    
     @JsonIgnore 
     protected List<PerformanceRuleMatcherAttribute> attributes = new ArrayList<>();
     
-    public PerformanceRuleMatcherDefinition(String name, String description) {
-        super();
+    public PerformanceRuleMatcherDefinition(String name, String description, String message) {
         this.name = name;
         this.description = description;
+        this.message = message;
     }
 
     public String getName() {
@@ -41,6 +43,14 @@ public abstract class PerformanceRuleMatcherDefinition {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public List<PerformanceRuleMatcherAttribute> getAttributes() {

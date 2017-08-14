@@ -46,6 +46,10 @@ public abstract class PerformanceRuleMatcher {
         switch (selectedFundingDate) {
             case PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE:
                 return f.getFundingClassificationDate();
+            case PerformanceRuleConstants.FUNDING_EFFECTIVE_DATE:
+                return f.getEffectiveFundingDate();
+            case PerformanceRuleConstants.FUNDING_CLOSING_DATE:
+                return f.getFundingClosingDate();
             default:
                 throw new IllegalArgumentException();
         }
@@ -55,6 +59,18 @@ public abstract class PerformanceRuleMatcher {
         switch (selectedActivityDate) {
             case PerformanceRuleConstants.ACTIVITY_CLOSING_DATE:
                 return a.getActualCompletionDate();
+            case PerformanceRuleConstants.ACTIVITY_ACTUAL_APPROVAL_DATE:
+                return a.getActualApprovalDate();
+            case PerformanceRuleConstants.ACTIVITY_ACTUAL_START_DATE:
+                return a.getActualStartDate();
+            case PerformanceRuleConstants.ACTIVITY_CONTRACTING_DATE:
+                return a.getContractingDate();
+            case PerformanceRuleConstants.ACTIVITY_DISBURSEMENTS_DATE:
+                return a.getDisbursmentsDate();
+            case PerformanceRuleConstants.ACTIVITY_ORIGINAL_COMPLETING_DATE:
+                return a.getOriginalCompDate();
+            case PerformanceRuleConstants.ACTIVITY_PROPOSED_START_DATE:
+                return a.getProposedStartDate();
             default:
                 throw new IllegalArgumentException();
         }

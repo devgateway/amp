@@ -10,8 +10,16 @@ public final class PerformanceRuleConstants {
     public static final String TIME_UNIT_YEAR = "year";
     
     public static final String ACTIVITY_CLOSING_DATE = "activityClosingDate";
+    public static final String ACTIVITY_ACTUAL_APPROVAL_DATE = "activityActualApprovalDate";
+    public static final String ACTIVITY_PROPOSED_START_DATE = "activityProposedStartDate";
+    public static final String ACTIVITY_ORIGINAL_COMPLETING_DATE = "activityOriginalCompletingDate";
+    public static final String ACTIVITY_ACTUAL_START_DATE = "activityActualStartDate";
+    public static final String ACTIVITY_CONTRACTING_DATE = "activityContractingDate";
+    public static final String ACTIVITY_DISBURSEMENTS_DATE = "activityDisbursementsDate";
 
     public static final String FUNDING_CLASSIFICATION_DATE = "fundingClassificationDate";
+    public static final String FUNDING_EFFECTIVE_DATE = "fundingEffectiveDate";
+    public static final String FUNDING_CLOSING_DATE = "fundingClosingDate";
     
     public static final String ATTRIBUTE_TIME_AMOUNT = "timeAmount";
     public static final String ATTRIBUTE_TIME_UNIT = "timeUnit";

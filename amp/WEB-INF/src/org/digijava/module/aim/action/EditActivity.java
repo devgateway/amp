@@ -955,8 +955,16 @@ public class EditActivity extends Action {
 
       	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact());
 
-            if (activity.getOtherInfo() != null) {
-                eaForm.getIdentification().setOtherInfo(activity.getOtherInfo());
+            if (activity.getStatusOtherInfo() != null) {
+                eaForm.getIdentification().setStatusOtherInfo(activity.getStatusOtherInfo());
+            }
+
+            if (activity.getProjectCategoryOtherInfo() != null) {
+                eaForm.getIdentification().setProjectCategoryOtherInfo(activity.getProjectCategoryOtherInfo());
+            }
+
+            if (activity.getModalitiesOtherInfo() != null) {
+                eaForm.getIdentification().setModalitiesOtherInfo(activity.getModalitiesOtherInfo());
             }
 
     	eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());

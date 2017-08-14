@@ -43,6 +43,7 @@ import org.dgfoundation.amp.onepager.components.fields.TranslationDecorator;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.util.OtherInfoBehavior;
 import org.dgfoundation.amp.onepager.validators.AmpUniqueActivityTitleValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.request.Site;
@@ -68,9 +69,6 @@ implements AmpRequiredComponentContainer{
 	private AmpWarningComponentPanel<String> titleSimilarityWarning;
 	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 	private List<FormComponent<?>> requiredRichTextFormComponents = new ArrayList<FormComponent<?>>();
-	private static final String OTHER_INFO_KEY = "other";
-	private static final List<String> OTHER_INFO_CATEGORY_KEY = Arrays.asList(CategoryConstants
-			.PROJECT_CATEGORY_KEY, CategoryConstants.ACTIVITY_STATUS_KEY, CategoryConstants.MODALITIES_KEY);
 
 	/**
 	 * @param id
@@ -183,50 +181,22 @@ implements AmpRequiredComponentContainer{
 							CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null, AmpFMTypes.MODULE);
 			status.getChoiceContainer().setRequired(true);
 
-			AmpTextAreaFieldPanel otherInfo = new AmpTextAreaFieldPanel("otherInfo",
-				new PropertyModel<String>(am, "otherInfo"), "Other Info", false, AmpFMTypes.MODULE);
+			AmpTextAreaFieldPanel statusOtherInfo = new AmpTextAreaFieldPanel("statusOtherInfo",
+				new PropertyModel<String>(am, "statusOtherInfo"), "Status Other Info", false, AmpFMTypes.MODULE);
 
+			statusOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(255));
+			statusOtherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
+			statusOtherInfo.setOutputMarkupPlaceholderTag(true);
+			statusOtherInfo.setOutputMarkupId(true);
+			statusOtherInfo.setIgnoreFmVisibility(true);
+			statusOtherInfo.setIgnorePermissions(true);
+			statusOtherInfo.setVisible(false);
 
-			otherInfo.getTextAreaContainer().add(StringValidator.maximumLength(255));
-			otherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
-			otherInfo.setOutputMarkupPlaceholderTag(true);
-			otherInfo.setOutputMarkupId(true);
-			otherInfo.setIgnoreFmVisibility(true);
-			otherInfo.setIgnorePermissions(true);
-			otherInfo.setVisible(false);
-
-			status.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-				private static final long serialVersionUID = 1L;
-
-				{
-					updateOtherInfo();
-				}
-
-				private void toggleOtherInfo(boolean b) {
-					otherInfo.setVisible(b);
-					if (otherInfo.isVisible()) {
-						otherInfo.getTextAreaContainer().setRequired(true);
-					}
-				}
-
-				private void updateFields(AjaxRequestTarget target){
-					target.add(otherInfo);
-					target.add(otherInfo.getParent());
-				}
-
-				private void updateOtherInfo() {
-					toggleOtherInfo(isOtherInfoVisible(am));
-				}
-
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					updateOtherInfo();
-					updateFields(target);
-				}
-			});
+			status.getChoiceContainer().add(new OtherInfoBehavior("onchange", statusOtherInfo));
 
 			add(status);
-			
+			add(statusOtherInfo);
+
 			add(new AmpTextAreaFieldPanel("statusReason",
 					new PropertyModel<String>(am, "statusReason"), "Status Reason", true, AmpFMTypes.MODULE));
 			
@@ -397,35 +367,24 @@ implements AmpRequiredComponentContainer{
 							CategoryConstants.PROJECT_CATEGORY_KEY),
 							CategoryConstants.PROJECT_CATEGORY_NAME, true, true, null, AmpFMTypes.MODULE);
 
-			projectCategory.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-				private static final long serialVersionUID = 1L;
+			AmpTextAreaFieldPanel projectCategoryOtherInfo = new AmpTextAreaFieldPanel("projectCategoryOtherInfo",
+					new PropertyModel<String>(am, "projectCategoryOtherInfo"), "Project Category Other Info",
+					false, AmpFMTypes.MODULE);
 
-				{
-					updateOtherInfo();
-				}
 
-				private void toggleOtherInfo(boolean b){
-					otherInfo.setVisible(b);
-					otherInfo.getTextAreaContainer().setRequired(b);
-				}
+			projectCategoryOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(255));
+			projectCategoryOtherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
+			projectCategoryOtherInfo.setOutputMarkupPlaceholderTag(true);
+			projectCategoryOtherInfo.setOutputMarkupId(true);
+			projectCategoryOtherInfo.setIgnoreFmVisibility(true);
+			projectCategoryOtherInfo.setIgnorePermissions(true);
+			projectCategoryOtherInfo.setVisible(false);
 
-				private void updateFields(AjaxRequestTarget target){
-					target.add(otherInfo);
-					target.add(otherInfo.getParent());
-				}
-
-				private void updateOtherInfo() {
-					toggleOtherInfo(isOtherInfoVisible(am));
-				}
-
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					updateOtherInfo();
-					updateFields(target);
-				}
-			});
+			projectCategory.getChoiceContainer().add(new OtherInfoBehavior("onchange", projectCategoryOtherInfo));
 
 			add(projectCategory);
+			add(projectCategoryOtherInfo);
+
 			AmpCategorySelectFieldPanel projectImplementingUnit = new AmpCategorySelectFieldPanel(
 					"projectImplementingUnit",
 					CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY,
@@ -440,8 +399,8 @@ implements AmpRequiredComponentContainer{
 
 			add(new AmpBooleanChoiceField("jointCriteria", 
 					new PropertyModel<Boolean>(am, "jointCriteria"), "Joint Criteria"));
-			
-			final AmpBooleanChoiceField humanitarianAid= new AmpBooleanChoiceField("humanitarianAid", 
+
+			final AmpBooleanChoiceField humanitarianAid = new AmpBooleanChoiceField("humanitarianAid",
 					new PropertyModel<Boolean>(am, "humanitarianAid"), "Humanitarian Aid");
 			
 
@@ -449,7 +408,7 @@ implements AmpRequiredComponentContainer{
                 @Override
                 protected void onConfigure() {
                     super.onConfigure();
-                    if (this.isVisible()){
+                    if (this.isVisible()) {
                     	humanitarianAid.getChoiceContainer().setRequired(true);
                     	requiredFormComponents.add(humanitarianAid.getChoiceContainer());
             			
@@ -460,7 +419,7 @@ implements AmpRequiredComponentContainer{
 			add(new AmpTextAreaFieldPanel("projectComments",
 					new PropertyModel<String>(am, "projectComments"),
 					"Project Comments", true, AmpFMTypes.MODULE));
-			final AmpTextAreaFieldPanel description=
+			final AmpTextAreaFieldPanel description =
 			new AmpTextAreaFieldPanel("description",
 					new PropertyModel<String>(am, "description"), "Description",
 					true, AmpFMTypes.MODULE);
@@ -552,27 +511,6 @@ implements AmpRequiredComponentContainer{
 			add(new AmpTextAreaFieldPanel("projectManagement",
 					new PropertyModel<String>(am, "projectManagement"), "Project Management", true, AmpFMTypes.MODULE));
 
-		    add(otherInfo);
-	}
-
-	public static boolean isOtherInfoVisible(IModel<AmpActivityVersion> am) {
-		boolean isOtherInfoVisible = false;
-		AmpAuthWebSession session = (AmpAuthWebSession) Session.get();
-		String prefix = "";
-		if (session.getCurrentMember().getWorkspacePrefix() != null) {
-			prefix = session.getCurrentMember().getWorkspacePrefix().getValue();
-		}
-		for (AmpCategoryValue ampCategoryValue : am.getObject().getCategories()) {
-			String categoryKey = ampCategoryValue.getAmpCategoryClass().getKeyName();
-			categoryKey = categoryKey.replaceFirst(prefix, "");
-			if (OTHER_INFO_CATEGORY_KEY.contains(categoryKey)) {
-				if (ampCategoryValue != null && OTHER_INFO_KEY.equalsIgnoreCase(ampCategoryValue.getValue()
-				)) {
-					isOtherInfoVisible = true;
-				}
-			}
-		}
-		return isOtherInfoVisible;
 	}
 
 	public List<FormComponent<?>> getRequiredFormComponents() {

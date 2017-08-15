@@ -34,9 +34,9 @@ public final class PerformanceRuleMatcherPossibleValuesSupplier {
             case ACTIVITY_STATUS:
                 return getActivityStatusPossibleValues();
             case ACTIVITY_DATE:
-                return getActivityDatePossibleValue();
+                return getActivityDatePossibleValues();
             case FUNDING_DATE:
-                return getFundingDatePossibleValue();
+                return getFundingDatePossibleValues();
             default:
                 return Collections.emptyList();
         }
@@ -55,7 +55,7 @@ public final class PerformanceRuleMatcherPossibleValuesSupplier {
                 new PerformanceRuleAttributeOption(PerformanceRuleConstants.TIME_UNIT_YEAR));
     }
 
-    public static List<PerformanceRuleAttributeOption> getActivityDatePossibleValue() {
+    public static List<PerformanceRuleAttributeOption> getActivityDatePossibleValues() {
         return Arrays.asList(
                 new PerformanceRuleAttributeOption(PerformanceRuleConstants.ACTIVITY_COMPLETION_DATE, 
                         "Actual Completion Date", "/Activity Form/Planning/Actual Completion Date"),
@@ -73,7 +73,7 @@ public final class PerformanceRuleMatcherPossibleValuesSupplier {
                         "Disbursement Date", "/Activity Form/Planning/Final Date for Disbursements"));
     }
 
-    public static List<PerformanceRuleAttributeOption> getFundingDatePossibleValue() {
+    public static List<PerformanceRuleAttributeOption> getFundingDatePossibleValues() {
         return Arrays.asList(
                 new PerformanceRuleAttributeOption(PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, 
                 "Funding Classification Date", 

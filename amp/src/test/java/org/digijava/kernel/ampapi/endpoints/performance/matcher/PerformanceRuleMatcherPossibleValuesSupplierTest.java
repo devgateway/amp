@@ -22,9 +22,9 @@ public class PerformanceRuleMatcherPossibleValuesSupplierTest {
             case ACTIVITY_STATUS:
                 return getActivityStatusPossibleValues();
             case ACTIVITY_DATE:
-                return getActivityDatePossibleValue();
+                return PerformanceRuleMatcherPossibleValuesSupplier.getActivityDatePossibleValues();
             case FUNDING_DATE:
-                return getFundingDatePossibleValue();
+                return PerformanceRuleMatcherPossibleValuesSupplier.getFundingDatePossibleValues();
             default:
                 return Collections.emptyList();
         }
@@ -39,22 +39,4 @@ public class PerformanceRuleMatcherPossibleValuesSupplierTest {
                 .collect(Collectors.toList());
     }
     
-    public static List<PerformanceRuleAttributeOption> getActivityDatePossibleValue() {
-        return Arrays.asList(
-                new PerformanceRuleAttributeOption(PerformanceRuleConstants.ACTIVITY_COMPLETION_DATE),
-                new PerformanceRuleAttributeOption(PerformanceRuleConstants.ACTIVITY_ACTUAL_APPROVAL_DATE),
-                new PerformanceRuleAttributeOption(PerformanceRuleConstants.ACTIVITY_PROPOSED_START_DATE),
-                new PerformanceRuleAttributeOption(PerformanceRuleConstants.ACTIVITY_ORIGINAL_COMPLETING_DATE),
-                new PerformanceRuleAttributeOption(PerformanceRuleConstants.ACTIVITY_ACTUAL_START_DATE),
-                new PerformanceRuleAttributeOption(PerformanceRuleConstants.ACTIVITY_CONTRACTING_DATE),
-                new PerformanceRuleAttributeOption(PerformanceRuleConstants.ACTIVITY_DISBURSEMENTS_DATE));
-    }
-
-    public static List<PerformanceRuleAttributeOption> getFundingDatePossibleValue() {
-        return Arrays.asList(
-                new PerformanceRuleAttributeOption(PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE),
-                new PerformanceRuleAttributeOption(PerformanceRuleConstants.FUNDING_EFFECTIVE_DATE),
-                new PerformanceRuleAttributeOption(PerformanceRuleConstants.FUNDING_CLOSING_DATE));
-    }
-
 }

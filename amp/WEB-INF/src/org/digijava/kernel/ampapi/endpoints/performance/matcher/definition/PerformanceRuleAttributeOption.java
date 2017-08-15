@@ -17,13 +17,11 @@ public class PerformanceRuleAttributeOption {
     private String fmPath;
 
     public PerformanceRuleAttributeOption(String name) {
-        this.name = name;
-        this.label = name;
+        this(name, name);
     }
 
     public PerformanceRuleAttributeOption(String name, String label) {
-        this.name = name;
-        this.label = label;
+        this(name, label, null);
     }
     
     public PerformanceRuleAttributeOption(String name, String label, String fmPath) {

@@ -43,7 +43,7 @@ def updateGitHubCommitStatus(context, state) {
     contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
     statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${BUILD_URL}"],
     errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
-    statusResultSource: [$class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+    statusResultSource: [$class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: 'msg', state: state]] ]
   ])
 }
 

@@ -24,10 +24,20 @@ def dbVersion
 
 stage('Checkstyle') {
     node {
-        checkout scm
+        try {
+            setGitHubPullRequestStatus context: 'jenkins/checkstyle', state: 'PENDING'
 
-        withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-            sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET} -e -X"
+            checkout scm
+
+            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+                sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
+            }
+
+            setGitHubPullRequestStatus context: 'jenkins/checkstyle', state: 'SUCCESS'
+        } catch(e) {
+            setGitHubPullRequestStatus context: 'jenkins/checkstyle', state: 'ERROR'
+
+            throw e
         }
     }
 }

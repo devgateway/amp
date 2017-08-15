@@ -27,7 +27,7 @@ stage('Checkstyle') {
         checkout scm
 
         withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-            sh "cd amp && mvn inccheckstyle:check -DbaseBranch=${CHANGE_TARGET}"
+            sh "cd amp && mvn inccheckstyle:check -DbaseBranch=${CHANGE_TARGET} -e -X"
         }
     }
 }

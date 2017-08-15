@@ -22,6 +22,12 @@ println "Tag: ${tag}"
 def codeVersion
 def dbVersion
 
+stage('Checkstyle') {
+    node {
+        echo sh(returnStdout: true, script: 'env')
+    }
+}
+
 stage('Build') {
     node {
         checkout scm

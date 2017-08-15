@@ -23,7 +23,7 @@ public class AmpPerformanceRule {
 
     private String description;
 
-    @JsonProperty(PerformanceRuleConstants.FIELD_TYPE_CLASS_NAME)
+    @JsonProperty(PerformanceRuleConstants.JSON_ATTRIBUTE_TYPE_CLASS_NAME)
     private String typeClassName;
 
     private Boolean enabled;

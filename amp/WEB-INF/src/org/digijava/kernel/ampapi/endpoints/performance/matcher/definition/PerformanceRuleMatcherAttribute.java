@@ -21,7 +21,7 @@ public class PerformanceRuleMatcherAttribute {
 
     private AmpPerformanceRuleAttribute.PerformanceRuleAttributeType type;
 
-    @JsonProperty(PerformanceRuleConstants.FIELD_POSSIBLE_VALUES)
+    @JsonProperty(PerformanceRuleConstants.JSON_ATTRIBUTE_POSSIBLE_VALUES)
     private List<PerformanceRuleAttributeOption> possibleValues;
 
     public PerformanceRuleMatcherAttribute(String name, String description, PerformanceRuleAttributeType type,

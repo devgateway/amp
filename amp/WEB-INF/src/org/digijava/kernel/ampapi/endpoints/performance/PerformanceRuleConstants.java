@@ -27,8 +27,9 @@ public final class PerformanceRuleConstants {
     public static final String ATTRIBUTE_ACTIVITY_DATE = "activityDate";
     public static final String ATTRIBUTE_FUNDING_DATE = "fundingDate";
     
-    public static final String FIELD_TYPE_CLASS_NAME = "type-class-name";
-    public static final String FIELD_POSSIBLE_VALUES = "possible-values";
+    public static final String JSON_ATTRIBUTE_TYPE_CLASS_NAME = "type-class-name";
+    public static final String JSON_ATTRIBUTE_POSSIBLE_VALUES = "possible-values";
+    public static final String JSON_ATTRIBUTE_TRANSLATED_LABEL = "translated-label";
 
     private PerformanceRuleConstants() { }
 

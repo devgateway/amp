@@ -50,7 +50,7 @@ def updateGitHubCommitStatus(context, state) {
 stage('Checkstyle') {
     node {
         try {
-            updateGitHubCommitStatus context: 'jenkins/checkstyle', state: 'PENDING'
+            updateGitHubCommitStatus('jenkins/checkstyle', 'PENDING')
 
             checkout scm
 
@@ -58,9 +58,9 @@ stage('Checkstyle') {
                 sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
             }
 
-            updateGitHubCommitStatus context: 'jenkins/checkstyle', state: 'SUCCESS'
+            updateGitHubCommitStatus('jenkins/checkstyle', 'SUCCESS')
         } catch(e) {
-            updateGitHubCommitStatus context: 'jenkins/checkstyle', state: 'ERROR'
+            updateGitHubCommitStatus('jenkins/checkstyle', 'ERROR')
 
             throw e
         }

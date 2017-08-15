@@ -76,6 +76,8 @@ public class ActivityEPConstants {
 	// floating comparison constant
 	public static final Double EPSILON = 0.0001;
 
+	public static final String FIELD_TITLE = "_FIELD_TITLE_";
+
 	private static final String FUNDING_ITEM_FM_PATH = "/Activity Form/Funding/Funding Group/Funding Item";
 
 	// some FM paths

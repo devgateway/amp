@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleAttributeOption;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -38,7 +39,7 @@ public abstract class PerformanceRuleMatcher {
     
     protected abstract boolean validate();
     
-    public List<String> getPossibleValue(PerformanceRuleAttributeType type) {
+    public List<PerformanceRuleAttributeOption> getPossibleValue(PerformanceRuleAttributeType type) {
         return PerformanceRuleMatcherPossibleValuesSupplier.getDefaultPerformanceRuleAttributePossibleValues(type);
     }
     
@@ -57,7 +58,7 @@ public abstract class PerformanceRuleMatcher {
     
     public Date getActivityDate(AmpActivityVersion a, String selectedActivityDate) {
         switch (selectedActivityDate) {
-            case PerformanceRuleConstants.ACTIVITY_CLOSING_DATE:
+            case PerformanceRuleConstants.ACTIVITY_COMPLETION_DATE:
                 return a.getActualCompletionDate();
             case PerformanceRuleConstants.ACTIVITY_ACTUAL_APPROVAL_DATE:
                 return a.getActualApprovalDate();

@@ -25,7 +25,7 @@ public class NoDisbursementsAfterFundingDateMatcherDefinition extends Performanc
                         PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT, 
                         PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE));
         
-        Function<PerformanceRuleAttributeType, List<String>> possibleValuesSupplier = 
+        Function<PerformanceRuleAttributeType, List<PerformanceRuleAttributeOption>> possibleValuesSupplier = 
                 PerformanceRuleMatcherPossibleValuesSupplier.getInstance().getSupplier();
 
         attributes.add(new PerformanceRuleMatcherAttribute(PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT, 

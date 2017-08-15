@@ -22,7 +22,7 @@ public class DisbursementsAfterActivityDateMatcherDefinition extends Performance
                 String.format("A disbursement happened after the '%s'", 
                         PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_DATE));
         
-        Function<PerformanceRuleAttributeType, List<String>> possibleValuesSupplier = 
+        Function<PerformanceRuleAttributeType, List<PerformanceRuleAttributeOption>> possibleValuesSupplier = 
                 PerformanceRuleMatcherPossibleValuesSupplier.getInstance().getSupplier();
 
         attributes.add(new PerformanceRuleMatcherAttribute(PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_DATE, 

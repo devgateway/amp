@@ -129,7 +129,7 @@ public class PerformanceRulesEndpoint {
     @Path("/attributes")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "getAttributes", authTypes = { AuthRule.IN_ADMIN })
-    public List<PerformanceRuleMatcherAttribute> getAttributes(@QueryParam("ruleType") String ruleType) {
+    public List<PerformanceRuleMatcherAttribute> getAttributes(@QueryParam("rule-type") String ruleType) {
         return performanceRuleManager.getMatcherDefinition(ruleType).getAttributes();
     }
 

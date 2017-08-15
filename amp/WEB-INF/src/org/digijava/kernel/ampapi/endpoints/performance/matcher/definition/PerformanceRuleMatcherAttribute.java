@@ -3,6 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.performance.matcher.definition;
 import java.util.List;
 import java.util.function.Function;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
 
@@ -19,6 +21,7 @@ public class PerformanceRuleMatcherAttribute {
 
     private AmpPerformanceRuleAttribute.PerformanceRuleAttributeType type;
 
+    @JsonProperty(PerformanceRuleConstants.JSON_ATTRIBUTE_POSSIBLE_VALUES)
     private List<PerformanceRuleAttributeOption> possibleValues;
 
     public PerformanceRuleMatcherAttribute(String name, String description, PerformanceRuleAttributeType type,

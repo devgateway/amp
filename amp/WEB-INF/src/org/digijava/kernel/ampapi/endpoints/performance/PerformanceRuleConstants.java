@@ -9,7 +9,7 @@ public final class PerformanceRuleConstants {
     public static final String TIME_UNIT_MONTH = "month";
     public static final String TIME_UNIT_YEAR = "year";
     
-    public static final String ACTIVITY_CLOSING_DATE = "activityClosingDate";
+    public static final String ACTIVITY_COMPLETION_DATE = "activityCompletionDate";
     public static final String ACTIVITY_ACTUAL_APPROVAL_DATE = "activityActualApprovalDate";
     public static final String ACTIVITY_PROPOSED_START_DATE = "activityProposedStartDate";
     public static final String ACTIVITY_ORIGINAL_COMPLETING_DATE = "activityOriginalCompletingDate";

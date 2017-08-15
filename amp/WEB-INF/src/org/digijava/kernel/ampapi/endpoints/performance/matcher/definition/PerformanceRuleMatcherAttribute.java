@@ -19,10 +19,10 @@ public class PerformanceRuleMatcherAttribute {
 
     private AmpPerformanceRuleAttribute.PerformanceRuleAttributeType type;
 
-    private List<String> possibleValues;
+    private List<PerformanceRuleAttributeOption> possibleValues;
 
     public PerformanceRuleMatcherAttribute(String name, String description, PerformanceRuleAttributeType type,
-            Function<PerformanceRuleAttributeType, List<String>> possibleValuesSupplier) {
+            Function<PerformanceRuleAttributeType, List<PerformanceRuleAttributeOption>> possibleValuesSupplier) {
         this.name = name;
         this.description = description;
         this.type = type;
@@ -53,11 +53,11 @@ public class PerformanceRuleMatcherAttribute {
         this.type = type;
     }
 
-    public List<String> getPossibleValues() {
+    public List<PerformanceRuleAttributeOption> getPossibleValues() {
         return possibleValues;
     }
 
-    public void setPossibleValues(List<String> possibleValues) {
+    public void setPossibleValues(List<PerformanceRuleAttributeOption> possibleValues) {
         this.possibleValues = possibleValues;
     }
 

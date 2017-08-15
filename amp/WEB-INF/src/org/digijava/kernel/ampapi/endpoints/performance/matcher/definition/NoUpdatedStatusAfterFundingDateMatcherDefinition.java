@@ -27,7 +27,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherDefinition extends Performanc
                         PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE,
                         PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_STATUS));
 
-        Function<PerformanceRuleAttributeType, List<String>> possibleValuesSupplier = 
+        Function<PerformanceRuleAttributeType, List<PerformanceRuleAttributeOption>> possibleValuesSupplier = 
                 PerformanceRuleMatcherPossibleValuesSupplier.getInstance().getSupplier();
 
         attributes.add(new PerformanceRuleMatcherAttribute(PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT, "Time Unit",

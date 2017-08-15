@@ -25,7 +25,7 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition extends Perf
                         PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT, 
                         PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT));
         
-        Function<PerformanceRuleAttributeType, List<String>> possibleValuesSupplier = 
+        Function<PerformanceRuleAttributeType, List<PerformanceRuleAttributeOption>> possibleValuesSupplier = 
                 PerformanceRuleMatcherPossibleValuesSupplier.getInstance().getSupplier();
 
         attributes.add(new PerformanceRuleMatcherAttribute(PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT, 

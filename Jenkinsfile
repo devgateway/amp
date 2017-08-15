@@ -24,7 +24,11 @@ def dbVersion
 
 stage('Checkstyle') {
     node {
-        echo sh(returnStdout: true, script: 'env')
+        checkout scm
+
+        withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+            sh "cd amp && mvn inccheckstyle:check -DbaseBranch=${CHANGE_TARGET}"
+        }
     }
 }
 

@@ -27,7 +27,7 @@ stage('Checkstyle') {
         checkout scm
 
         withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-            sh "cd amp && mvn inccheckstyle:check -DbaseBranch=${CHANGE_TARGET} -e -X"
+            sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET} -e -X"
         }
     }
 }

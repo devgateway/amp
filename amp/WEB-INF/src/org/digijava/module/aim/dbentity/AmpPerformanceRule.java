@@ -3,8 +3,10 @@ package org.digijava.module.aim.dbentity;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonManagedReference;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.digijava.kernel.ampapi.endpoints.performance.AmpCategoryValueSerializer;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -21,6 +23,7 @@ public class AmpPerformanceRule {
 
     private String description;
 
+    @JsonProperty(PerformanceRuleConstants.FIELD_TYPE_CLASS_NAME)
     private String typeClassName;
 
     private Boolean enabled;

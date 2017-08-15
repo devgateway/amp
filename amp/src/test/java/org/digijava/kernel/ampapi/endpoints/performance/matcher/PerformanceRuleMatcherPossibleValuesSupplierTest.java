@@ -31,12 +31,11 @@ public class PerformanceRuleMatcherPossibleValuesSupplierTest {
     }
 
     public static List<PerformanceRuleAttributeOption> getActivityStatusPossibleValues() {
-        return Stream.of(
+        return Arrays.asList(
                 new PerformanceRuleAttributeOption(Constants.ACTIVITY_STATUS_ONGOING), 
                 new PerformanceRuleAttributeOption(Constants.ACTIVITY_STATUS_COMPLETED),
                 new PerformanceRuleAttributeOption(Constants.ACTIVITY_STATUS_PLANNED), 
-                new PerformanceRuleAttributeOption(Constants.ACTIVITY_STATUS_CANCELLED))
-                .collect(Collectors.toList());
+                new PerformanceRuleAttributeOption(Constants.ACTIVITY_STATUS_CANCELLED));
     }
     
 }

@@ -1050,6 +1050,10 @@ public class ActivityImporter {
         newActivity.setLastImportedAt(new Date());
         newActivity.setLastImportedBy(currentUser);
 
+        if (!update) {
+        	newActivity.setAmpActivityGroup(null);
+		}
+
 		newActivity.setChangeType(determineChangeType().toString());
 		if (requestedSaveMode != null) {
 			newActivity.setDraft(requestedSaveMode == DRAFT);

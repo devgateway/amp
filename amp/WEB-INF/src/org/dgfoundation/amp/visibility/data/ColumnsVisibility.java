@@ -210,6 +210,8 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("/Activity Form/Sectors/Primary Sectors", ColumnConstants.PRIMARY_SECTOR);
 		put("/Activity Form/Sectors/Secondary Sectors", ColumnConstants.SECONDARY_SECTOR);
 		put("/Activity Form/Sectors/Tertiary Sectors", ColumnConstants.TERTIARY_SECTOR);
+		put("/Activity Form/Sectors/Quaternary Sectors", ColumnConstants.QUATERNARY_SECTOR);
+		put("/Activity Form/Sectors/Quinary Sectors", ColumnConstants.QUINARY_SECTOR);
 		put("/Activity Form/Structures", ColumnConstants.STRUCTURES_COLUMN);
 	}};
 	

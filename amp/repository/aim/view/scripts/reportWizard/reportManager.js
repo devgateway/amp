@@ -286,6 +286,7 @@ NormalReportManager.prototype.disableToolbarButton	= function (btn) {
 
 NormalReportManager.prototype.checkSteps	= function () {
 	createPreview();
+	toggleSplitByFundingCheckbox();
 	if ( this.checkReportDetails() )
 		if ( this.checkColumns() )
 			if ( this.checkHierarchies() )
@@ -298,6 +299,13 @@ NormalReportManager.prototype.checkSteps	= function () {
 	this.disableSave();
 };
 
+function toggleSplitByFundingCheckbox() {
+    if (getReportType() === 'donor') {
+        $("#splitByFundingDiv").show();
+    } else {
+        $("#splitByFundingDiv").hide();
+    }
+}
 
 NormalReportManager.prototype.callbackRepType = function (type) {
 	this.callbackRepTypeCall.success =$.proxy(this.callbackRepTypeCall.success,this);

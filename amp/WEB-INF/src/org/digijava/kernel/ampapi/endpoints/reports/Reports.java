@@ -113,7 +113,7 @@ public class Reports implements ErrorReportingEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JSONResult getReport(@PathParam("report_id") Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
-		if (ampReport==null) {
+		if (ampReport == null) {
 			ApiErrorResponse.reportError(BAD_REQUEST, ReportErrors.REPORT_NOT_FOUND);
 		}
 		JSONResult report = getReport(ampReport);

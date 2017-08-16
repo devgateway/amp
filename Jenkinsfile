@@ -22,27 +22,27 @@ println "Tag: ${tag}"
 def codeVersion
 def dbVersion
 
+def updateGitHubCommitStatus(context, message, state) {
+    repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
+    commitSha = sh(returnStdout: true, script: "git rev-parse HEAD~1").trim()
+
+    step([
+    $class: 'GitHubCommitStatusSetter',
+    reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
+    commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
+    contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
+    statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${BUILD_URL}"],
+    errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+    statusResultSource: [
+        $class: "ConditionalStatusResultSource",
+        results: [[$class: "AnyBuildResult", message: message, state: state]]
+    ]
+    ])
+}
+
 // Run checkstyle only for PR builds
 stage('Checkstyle') {
     if (branch == null) {
-        def updateGitHubCommitStatus(context, message, state) {
-            repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
-            commitSha = sh(returnStdout: true, script: "git rev-parse HEAD~1").trim()
-
-            step([
-            $class: 'GitHubCommitStatusSetter',
-            reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
-            commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
-            contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
-            statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${BUILD_URL}"],
-            errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
-            statusResultSource: [
-                $class: "ConditionalStatusResultSource",
-                results: [[$class: "AnyBuildResult", message: message, state: state]]
-            ]
-            ])
-        }
-
         node {
             try {
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')

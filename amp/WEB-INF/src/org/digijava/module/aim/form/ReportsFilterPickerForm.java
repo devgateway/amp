@@ -60,6 +60,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedSectors;
 	private Object[] selectedSecondarySectors;
 	private Object[] selectedTertiarySectors;
+	private Object[] selectedQuaternarySectors;
+	private Object[] selectedQuinarySectors;
 	private Object[] selectedTagSectors;
 	private Object[] selectedStatuses;
 	private Object[] selectedWorkspaces;
@@ -81,6 +83,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedDonnorAgency;
 	private Object[] selectedProjectCategory;
 	private Object[] selectedresponsibleorg;
+	private Object[] selectedComponentSecondResponsibleOrg;
+	private Object[] selectedComponentFundingOrg;
 	private Object[] selectedArchivedStatus = new Object[]{"1"};
 	private Object[] selectedHumanitarianAid;
 	private Object[] selectedDisasterResponse;
@@ -97,7 +101,10 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private DynamicDateFilter dynamicDateFilter = new DynamicDateFilter();
 	private String fromActivityStartDate;
 	private String toActivityStartDate;
+	private String fromIssueDate;
+	private String toIssueDate;
 	private DynamicDateFilter dynamicActivityStartFilter = new DynamicDateFilter();
+	private DynamicDateFilter dynamicIssueFilter = new DynamicDateFilter();
 	private String fromProposedApprovalDate;
 	private String toProposedApprovalDate;
 	private DynamicDateFilter dynamicProposedApprovalFilter = new DynamicDateFilter();
@@ -1412,12 +1419,67 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setToFundingClosingDate(String toFundingClosingDate) {
 		this.toFundingClosingDate = toFundingClosingDate;
 	}
-	
+
+	public DynamicDateFilter getDynamicIssueFilter() {
+		return dynamicIssueFilter;
+	}
+
+	public void setDynamicIssueFilter(DynamicDateFilter dynamicIssueFilter) {
+		this.dynamicIssueFilter = dynamicIssueFilter;
+	}
+
+	public String getFromIssueDate() {
+		return fromIssueDate;
+	}
+
+	public void setFromIssueDate(String fromIssueDate) {
+		this.fromIssueDate = fromIssueDate;
+	}
+
+	public String getToIssueDate() {
+		return toIssueDate;
+	}
+
+	public void setToIssueDate(String toIssueDate) {
+		this.toIssueDate = toIssueDate;
+	}
 	public Long[] getSelectedConcensionalityLevel() {
 		return selectedConcensionalityLevel;
 	}
-	
+
 	public void setSelectedConcensionalityLevel(Long[] selectedConcensionalityLevel) {
 		this.selectedConcensionalityLevel = selectedConcensionalityLevel;
+	}
+
+	public Object[] getSelectedComponentSecondResponsibleOrg() {
+		return selectedComponentSecondResponsibleOrg;
+	}
+
+	public void setSelectedComponentSecondResponsibleOrg(Object[] selectedComponentSecondResponsibleOrg) {
+		this.selectedComponentSecondResponsibleOrg = selectedComponentSecondResponsibleOrg;
+	}
+
+	public Object[] getSelectedComponentFundingOrg() {
+		return selectedComponentFundingOrg;
+	}
+
+	public void setSelectedComponentFundingOrg(Object[] selectedComponentFundingOrg) {
+		this.selectedComponentFundingOrg = selectedComponentFundingOrg;
+	}
+
+	public Object[] getSelectedQuaternarySectors() {
+		return selectedQuaternarySectors;
+	}
+
+	public void setSelectedQuaternarySectors(final Object[] selectedQuaternarySectors) {
+		this.selectedQuaternarySectors = selectedQuaternarySectors;
+	}
+
+	public Object[] getSelectedQuinarySectors() {
+		return selectedQuinarySectors;
+	}
+
+	public void setSelectedQuinarySectors(final Object[] selectedQuinarySectors) {
+		this.selectedQuinarySectors = selectedQuinarySectors;
 	}
 }

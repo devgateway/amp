@@ -195,17 +195,19 @@ public class LocationService {
 		final Double countryLatitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE);
 		final Double countryLongitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE);
 		final ValueWrapper<String> qry = new ValueWrapper<String>(null);
-		if(adminLevel.equals("Country")){
-					qry.value = " SELECT al.amp_activity_id, acvl.id root_location_id,acvl.location_name root_location_description,acvl.gs_lat, acvl.gs_long "+  
-					" FROM amp_activity_location al   "+
-					" join amp_location loc on al.amp_location_id = loc.amp_location_id  "+
-					" join amp_category_value_location acvl on loc.location_id = acvl.id  "+
-					" join amp_category_value amcv on acvl.parent_category_value =amcv.id "+  
-					" where amcv.category_value ='Country'"
-					+ " and (acvl.deleted is null or acvl.deleted = false) "+
-					" and al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) " +
-					" and location_name=(select country_name "
-					+ " from DG_COUNTRIES where iso='"+ FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) +"')";
+		if (adminLevel.equals("Country")) {
+			qry.value = " SELECT al.amp_activity_id, acvl.id root_location_id,acvl.location_name "
+					+ "root_location_description,acvl.gs_lat, acvl.gs_long "
+					+ " FROM amp_activity_location al   "
+					+ " join amp_location loc on al.amp_location_id = loc.amp_location_id  "
+					+ " join amp_category_value_location acvl on loc.location_id = acvl.id  "
+					+ " join amp_category_value amcv on acvl.parent_category_value =amcv.id "
+					+ " where amcv.category_value ='Country'"
+					+ " and (acvl.deleted is null or acvl.deleted = false) "
+					+ " and al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
+					+ " and location_name=(select country_name "
+					+ " from DG_COUNTRIES where iso='" + FeaturesUtil
+					.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) + "')";
 
 			
 		}else{
@@ -279,11 +281,13 @@ public class LocationService {
 		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
 		// AMP-20903 - In order to not have inconsistency with data used in gis map, DONOR_ID was added 
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+
+		OutputSettings outSettings = new OutputSettings(new HashSet<String>() {{
+			add(ColumnConstants.AMP_ID);
+		}});
 		
-		OutputSettings outSettings = new OutputSettings(new HashSet<String>() {{add(ColumnConstants.AMP_ID);}});
-		
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+		SettingsUtils.configureMeasures(spec, config);
+
 		ReportColumn implementationLevelColumn = null;
 		if (adminLevel != null) {
 			switch (adminLevel) {

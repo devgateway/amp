@@ -70,8 +70,16 @@ module.exports = Backbone.View.extend({
   // otherwise show actual values.
   updatePlannedActualUI: function() {
 	  var self = this;
-	  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();		
-	  if (selected.toLowerCase().indexOf('planned') >= 0) {
+	  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
+      self.$('.setting-scc').hide();
+      self.$('.setting-executings').hide();
+	  if (selected.toLowerCase().indexOf('ssc') >= 0) {
+          self.$('.setting-actual').hide();
+          self.$('.setting-planned').hide();
+          self.$('.setting-donors').hide();
+          self.$('.setting-scc').show();
+          self.$('.setting-executings').show();
+      } else if (selected.toLowerCase().indexOf('planned') >= 0) {
 		  self.$('.setting-actual').hide();
 		  self.$('.setting-planned').show();
 	  } else {

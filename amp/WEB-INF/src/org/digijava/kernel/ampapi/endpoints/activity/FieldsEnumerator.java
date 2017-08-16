@@ -118,7 +118,7 @@ public class FieldsEnumerator {
 		}
 		String label = getLabelOf(interchangeable);
 		apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
-		apiField.setRequired(getRequiredValue(intchStack, fmService));
+		apiField.setRequired(getRequiredValue(intchStack, fieldTitle));
 		apiField.setImportable(interchangeable.importable());
 		if (AmpOfflineModeHolder.isAmpOfflineMode() && OFFLINE_REQUIRED_FIELDS.contains(interchangeable.fieldTitle())) {
 			apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
@@ -398,7 +398,7 @@ public class FieldsEnumerator {
 	 * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false,
 	 * N (no) = not required. .
 	 */
-	private String getRequiredValue(Deque<Interchangeable> intchStack, FMService fmService) {
+	private String getRequiredValue(Deque<Interchangeable> intchStack, String fieldTitle) {
 		Interchangeable fieldIntch = intchStack.peek();
 		String requiredValue = ActivityEPConstants.FIELD_NOT_REQUIRED;
 		String required = fieldIntch.required();
@@ -408,7 +408,11 @@ public class FieldsEnumerator {
 		} else if (required.equals(ActivityEPConstants.REQUIRED_ND)
 				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && isVisible(required, intchStack))
 				|| (hasRequiredValidatorEnabled(intchStack))) {
-			requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
+			if (fieldTitle.equals("location_percentage")) {
+				requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+			} else {
+				requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
+			}
 		}
 		return requiredValue;
 	}

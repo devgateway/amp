@@ -19,7 +19,7 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 	private AmpSector sectorId;
 	
 	@Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true, 
-			fmPath = FMVisibility.PARENT_FM + "/sectorPercentage")
+			fmPath = FMVisibility.PARENT_FM + "/sectorPercentage", required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private Float sectorPercentage;
 
     private AmpClassificationConfiguration classificationConfig;

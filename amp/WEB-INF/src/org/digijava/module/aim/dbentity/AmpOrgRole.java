@@ -23,7 +23,8 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	@Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private AmpOrganisation organisation;
 	private AmpRole role;
-	@Interchangeable(fieldTitle="Percentage", importable=true, percentageConstraint = true, fmPath = FMVisibility.PARENT_FM + "/percentage")
+	@Interchangeable(fieldTitle = "Percentage", importable = true, percentageConstraint = true,
+			fmPath = FMVisibility.PARENT_FM + "/percentage", required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private Float 	percentage;
 	@Interchangeable(fieldTitle="Budgets", importable=true)
 	private Set <AmpOrgRoleBudget> budgets;

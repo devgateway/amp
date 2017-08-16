@@ -28,5 +28,8 @@ export const initialTranslations = {
   'amp.performance-rule:delete-successful': 'Record deleted successfully',
   'amp.performance-rule:required-fields-message': 'Type, Name and Level are required fields.',
   'amp.performance-rule:invalid-input': 'Invalid input in Rule Parameters',
-  'amp.performance-rule:parameters-required': 'All rule parameters are required.'
+  'amp.performance-rule:parameters-required': 'All rule parameters are required.',
+  'amp.performance-rule:time-unit-day': 'day(s)',
+  'amp.performance-rule:time-unit-month': 'month(s)',
+  'amp.performance-rule:time-unit-year': 'year(s)'
 }

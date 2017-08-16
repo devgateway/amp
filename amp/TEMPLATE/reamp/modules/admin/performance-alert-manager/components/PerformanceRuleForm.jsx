@@ -22,6 +22,7 @@ export default class PerformanceRuleForm extends Component {
         this.updateAttribute = this.updateAttribute.bind(this);
         this.onEnabledChange = this.onEnabledChange.bind(this);
         this.getAttributeValue = this.getAttributeValue.bind(this);
+        this.getMessage = this.getMessage.bind(this);
     }
 
     componentWillMount() {        
@@ -104,8 +105,43 @@ export default class PerformanceRuleForm extends Component {
         return errors;
     }
     
+    getMessage(){
+        let message;
+        const currentRuleType = this.props.typeList.filter(ruleType => ruleType.name === this.props.currentPerformanceRule['type-class-name'])[0];
+        if (currentRuleType) {
+            message = currentRuleType.message || '';
+            for (let attr of this.props.attributeList) {
+                const attribute = this.props.currentPerformanceRule.attributes.filter(a => a.name === attr.name)[0] || {};
+                let value = attribute.value;
+                if (attr['possible-values'].length > 0) {                       
+                    value = this.getTranslatedValue(attr, attribute.value);
+                }                 
+                message = value ? this.replaceAttrPlaceHolder(message, attr.name, value) : message;                         
+            }                
+        }
+    
+        return message;
+    }
+    
+    getTranslatedValue(attr, name) {
+        let value;
+        const possibleValue = attr['possible-values'].filter(possibleValue => possibleValue.name === name)[0];                    
+        if (attr.name == Constants.ATTRIBUTE_TIME_UNIT) {
+            value = possibleValue ? this.props.translations['amp.performance-rule:time-unit-' + possibleValue.name] : possibleValue;   
+        } else {
+            value = possibleValue ? possibleValue['translated-label'] : possibleValue;  
+        }  
+        
+        return value;
+    }
+    
+    replaceAttrPlaceHolder(message, attrName, value) {
+        return message.replace(Constants.PLACEHOLDER_START + attrName + Constants.PLACEHOLDER_END, value);
+    }  
+    
     render() {         
-       return (
+       const message = this.getMessage() 
+        return (
                 <div className="panel panel-default">
                 <div className="panel-heading">{this.props.currentPerformanceRule.id ? this.props.translations['amp.performance-rule:heading-edit'] : this.props.translations['amp.performance-rule:heading-new']}</div>
                 <div className="panel-body custom-panel">
@@ -122,8 +158,8 @@ export default class PerformanceRuleForm extends Component {
                                     )}
                                 </select>
                             </td>
-                            <td className="col-md-6 rule-parameters-cell" rowSpan="4">
-                           <div className="row"><label>{this.props.translations['amp.performance-rule:rule-parameters']}</label></div>                             
+                            <td className="col-md-6 rule-parameters-cell" rowSpan="4">                                                       
+                            <div className="row"><label>{this.props.translations['amp.performance-rule:rule-parameters']}</label></div>
                             {this.props.attributeList && this.props.attributeList.map((attribute, i) =>
                                 <div className={this.getErrorsForField(attribute.name).length > 0 ? 'row has-error' : 'row'} key={i}>
                                 <span className="required">*</span><span>{attribute.description}</span>  
@@ -138,10 +174,13 @@ export default class PerformanceRuleForm extends Component {
                                   {attribute['possible-values'] == null || attribute['possible-values'].length == 0 &&
                                       <input type="text" className="form-control performance-input" name={"attribute_" + attribute.name}  value={this.getAttributeValue(attribute.name)}  onChange={this.onInputChange} data-type={attribute.type} data-name={attribute.name}/>
                                   }
-                                  <br/>
+                                  <br/>                                 
                                 </div>
-                            )}                           
-                            </td>
+                            )}     
+                           {message &&
+                             <div className="alert alert-info" role="alert">{message}</div>
+                           }
+                           </td>
                         </tr>
                         <tr>
                             <td className={this.getErrorsForField('name').length > 0 ? 'col-md-6 has-error': 'col-md-6'}>                        

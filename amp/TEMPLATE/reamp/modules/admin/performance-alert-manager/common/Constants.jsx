@@ -5,3 +5,6 @@ export const FIELD_ATTRIBUTE = 'attribute';
 export const FIELD_NAME = 'name';
 export const FIELD_ID = 'id';
 export const FIELD_TYPE_AMOUNT = 'AMOUNT';
+export const ATTRIBUTE_TIME_UNIT = 'timeUnit';
+export const PLACEHOLDER_START = '{';
+export const PLACEHOLDER_END = '}';

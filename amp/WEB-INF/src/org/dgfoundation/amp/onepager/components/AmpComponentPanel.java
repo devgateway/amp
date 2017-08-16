@@ -8,10 +8,10 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -19,16 +19,13 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
-import org.dgfoundation.amp.onepager.models.AmpActivityModel;
-import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.OnepagerSection;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMFormCache;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
 
@@ -359,7 +356,19 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		super.onConfigure();
 	}
 
-    private void searchForEnabledChild(final Model<Boolean> foundEnabledChild) {
+	protected String getDirection() {
+		String direction = "right";
+		if (SiteUtils.isEffectiveLangRTL()) {
+			direction = "left";
+		}
+		return direction;
+	}
+
+	protected AttributeAppender setDirection() {
+		return new AttributeAppender("style", "float:" + getDirection());
+	}
+
+	private void searchForEnabledChild(final Model<Boolean> foundEnabledChild) {
         //Check if any child is enabled
         this.visitChildren(AmpComponentPanel.class, new IVisitor<Component, Object>() {
             @Override

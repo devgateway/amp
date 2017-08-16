@@ -370,7 +370,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		activityForm.setOutputMarkupId(true);
 
-		WebMarkupContainer stepHeadCont = new WebMarkupContainer ("stepHeadCont") {
+		WebMarkupContainer stepHeadCont = new WebMarkupContainer("stepHeadCont") {
 
 			@Override
 			protected void onConfigure() {
@@ -1299,8 +1299,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					String itemId = Hex.encodeHexString(item.getModelObject().getFMName().getBytes());
 					label.add(new AttributeModifier("id", "qItem"+itemId));
 					label.add(new AttributeModifier("onclick", "showSection('"+itemId +"'); return false;"));
-					if (!item.getModelObject().isVisible())
+					if (!item.getModelObject().isVisible()) {
 						item.setVisible(false);
+					}
 					item.add(label);
 				}
 				else{
@@ -1309,6 +1310,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					item.setVisible(false);
 					item.add(tmp);
 					//item.add(new AttributeModifier("style", "display: none"));
+				}
+				if (SiteUtils.isEffectiveLangRTL()) {
+					item.add(new AttributeModifier("class", "tri tri_rtl"));
 				}
 			}
 		};

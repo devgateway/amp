@@ -1,7 +1,8 @@
 <wicket:extend>
-	<div style="position: relative; top: -30px; float: right;">
-		<a href="#" wicket:id="expandDonorItems" id="expandDonorItems" onclick="$(this).parents('div:eq(2)').find('.collapsable').show();$('#expandDonorItems').hide();$('#collapseDonorItems').show();"><wicket:trn>Expand all</wicket:trn></a>
-		<a href="#" wicket:id="collapseDonorItems" id="collapseDonorItems"  style="display: none;"  onclick="$(this).parents('div:eq(2)').find('.collapsable').hide();$('#expandDonorItems').show();$('#collapseDonorItems').hide();"><wicket:trn>Collapse all</wicket:trn></a>
+	<div style="position: relative; top: -30px; float: auto;">
+		<a href="#" wicket:id="expandDonorItems" id="expandDonorItems" style="" onclick="$(this).parents('div:eq(2)').find('.collapsable').show();$('#expandDonorItems').hide();$('#collapseDonorItems').show();"><wicket:trn>Expand all</wicket:trn></a>
+		<a href="#" wicket:id="collapseDonorItems" id="collapseDonorItems"  style="display: none;"
+		   onclick="$(this).parents('div:eq(2)').find('.collapsable').hide();$('#expandDonorItems').show();$('#collapseDonorItems').hide();"><wicket:trn>Collapse all</wicket:trn></a>
 	</div>
 	<tr><td colspan="2">
 	<div wicket:id="overviewSection" />

@@ -24,7 +24,7 @@ def dbVersion
 
 def updateGitHubCommitStatus(context, message, state) {
   repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
-  commitSha = sh(returnStdout: true, script: "git rev-parse HEAD~1 > .git/current-commit").trim()
+  commitSha = sh(returnStdout: true, script: "git rev-parse HEAD~1").trim()
 
   step([
     $class: 'GitHubCommitStatusSetter',

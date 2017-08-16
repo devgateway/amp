@@ -44,8 +44,6 @@ public class ActivityForm extends ActionForm implements Serializable {
     private DataFreezeFilter dataFreezeFilter = DataFreezeFilter.ALL;
     
     private Set<Long> frozenActivityIds;
-    private Map<Long, Set<Long>> activityIdFreezeEventsIdMap;
-    
 	/**
 	 * @return Returns the activityList.
 	 */
@@ -216,28 +214,12 @@ public class ActivityForm extends ActionForm implements Serializable {
     }
 
     public Set<Long> getFrozenActivityIds() {
-        Set<Long> frozenActivityIds = new HashSet<>();        
-        for (Map.Entry<Long, Set<Long>> event : activityIdFreezeEventsIdMap.entrySet()) {
-            frozenActivityIds.add(event.getKey());
-        }
         return frozenActivityIds;
     }
 
     public void setFrozenActivityIds(Set<Long> frozenActivityIds) {
         this.frozenActivityIds = frozenActivityIds;
     }
-
-   
-
-    public Map<Long, Set<Long>> getActivityIdFreezeEventsIdMap() {
-        return activityIdFreezeEventsIdMap;
-    }
-
-    public void setActivityIdFreezeEventsIdMap(Map<Long, Set<Long>> activityIdFreezeEventsIdMap) {
-        this.activityIdFreezeEventsIdMap = activityIdFreezeEventsIdMap;
-    }
-
-
 
     public enum DataFreezeFilter {
 	      ALL, FROZEN, UNFROZEN

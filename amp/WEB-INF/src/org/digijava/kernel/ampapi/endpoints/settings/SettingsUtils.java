@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.menu.AmpView;
 import org.dgfoundation.amp.menu.MenuUtils;
@@ -147,7 +148,7 @@ public class SettingsUtils {
 		}
 		if (!found) {
 			if (options.size() > 0) {
-				defaultId = options.get(0).name;
+				defaultId = options.get(0).id;
 			}
 		}
 
@@ -156,7 +157,7 @@ public class SettingsUtils {
 
 	/**
 	 * Provides current report settings
-	 * 
+	 *
 	 * @param spec
 	 *            report specification
 	 * @return settings in a structure to be used in UI, with all options
@@ -485,6 +486,37 @@ public class SettingsUtils {
 	}
 
 	/**
+	 * Adds measures to the report specification based on AMP-18874:
+	 * a) needs to have 'planned commitments' and  'planned disbursements'  if any planned setting is selected.
+	 * b) needs to have 'actual commitments' and  'actual disbursements'  if any actual setting is selected.
+	 * c) needs to have 'Bilateral SSC Commitments' and  'Triangular SSC Commitments' if any SSC setting is selected.
+	 *
+	 * @param spec
+	 * @param config
+	 */
+	public static void configureMeasures(final ReportSpecificationImpl spec, final  JsonBean config) {
+		if (spec != null && config != null) {
+			Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
+			String fundingType = (String) (settings == null ? null : settings.get(SettingsConstants.FUNDING_TYPE_ID));
+			if (fundingType == null) {
+				fundingType = SettingsUtils.getDefaultFundingType();
+			}
+			if (fundingType.startsWith("Actual")) {
+				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+			}
+			if (fundingType.startsWith("Planned")) {
+				spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_COMMITMENTS));
+				spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+			}
+			if (fundingType.contains("SSC")) {
+				spec.addMeasure(new ReportMeasure(MeasureConstants.BILATERAL_SSC_COMMITMENTS));
+				spec.addMeasure(new ReportMeasure(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS));
+			}
+		}
+	}
+
+	/**
 	 * Applies common settings and other custom settings (e.g. funding type)
 	 *
 	 * @param spec
@@ -515,8 +547,23 @@ public class SettingsUtils {
 			for (String measure : measureOptions)
 				spec.addMeasure(new ReportMeasure(measure));
 		} else {
-			spec.addMeasure(new ReportMeasure(SettingsConstants.DEFAULT_FUNDING_TYPE_ID));
+			spec.addMeasure(new ReportMeasure(SettingsUtils.getDefaultFundingType()));
 		}
+	}
+
+	/**
+	 * Return the default Funding Type
+	 *
+	 * @return default Funding Type
+	 */
+	public static String getDefaultFundingType() {
+		String fundingType = SettingsConstants.DEFAULT_FUNDING_TYPE_ID;
+		Set<String> measures = new LinkedHashSet<>(GisConstants.FUNDING_TYPES);
+		measures.retainAll(MeasuresVisibility.getConfigurableMeasures());
+		if (measures.size() > 0) {
+			fundingType = measures.iterator().next();
+		}
+		return fundingType;
 	}
 
 	/**

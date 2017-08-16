@@ -341,6 +341,9 @@ public class SyncService implements InitializingBean {
                 if (changelog.getEntityName().equals(WORKSPACES)) {
                     systemDiff.setWorkspaces(true);
                 }
+                if (changelog.getEntityName().equals(WORKSPACE_FILTER_DATA)) {
+                    systemDiff.setWorkspaces(true);
+                }
                 if (changelog.getEntityName().equals(WORKSPACE_SETTINGS)) {
                     systemDiff.setWorkspaceSettings(true);
                 }
@@ -354,7 +357,8 @@ public class SyncService implements InitializingBean {
     }
 
     private List<AmpOfflineChangelog> findChangedWsAndGs(Date lastSyncTime) {
-        return loadChangeLog(lastSyncTime, Arrays.asList(GLOBAL_SETTINGS, WORKSPACES, WORKSPACE_SETTINGS));
+        return loadChangeLog(lastSyncTime,
+                Arrays.asList(GLOBAL_SETTINGS, WORKSPACES, WORKSPACE_SETTINGS, WORKSPACE_FILTER_DATA));
     }
 
     private void updateDiffForWorkspaceMembers(SystemDiff systemDiff, Date lastSyncTime) {

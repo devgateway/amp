@@ -226,7 +226,9 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 }
 
 class GPIIndicator5bItem {
-
+	
+	protected static final int YEAR_DIVIDER = 3;
+	
 	private String donorAgency;
 	private int year;
 	private boolean year1 = false;
@@ -326,7 +328,8 @@ class GPIIndicator5bItem {
 
 	public BigDecimal getPercentage() {
 		BigDecimal percentageDisb = new BigDecimal(getMtefYearsWithYes())
-				.divide(new BigDecimal(3), NiFormula.DIVISION_MC).scaleByPowerOfTen(2)
+				.divide(new BigDecimal(YEAR_DIVIDER), NiFormula.DIVISION_MC)
+				.multiply(new BigDecimal(GPIReportOutputBuilder.PERCENTAGE_MULTIPLIER))
 				.setScale(0, RoundingMode.HALF_UP);
 
 		return percentageDisb;

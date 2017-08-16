@@ -58,41 +58,21 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 	@Override
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 
-		if (TLSUtils.getRequest() == null) {
-			TLSUtils.populateMockTlsUtils();
-		}
-		
+		AmpJobsUtil.populateRequest();
 		Long ampTeamId = FeaturesUtil
 				.getGlobalSettingValueLong(GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FUNDING_GAP_NOTIFICATION);
-		final ValueWrapper<Long> ampTeamMemberId = new ValueWrapper<Long>(null);
 		// default percentage is 1
 		String measureA = MeasureConstants.ACTUAL_DISBURSEMENTS;
 		String measureB = MeasureConstants.PLANNED_DISBURSEMENTS;
 		// we set the team to run the report
 
-		// we need to fetch one team member of the configured team
-		final String query = "select min(tm.amp_team_mem_id) from amp_team_member tm ,amp_team  t "
-				+ " where tm.amp_member_role_id in(1,3) " + " and tm.amp_team_id=t.amp_team_id "
-				+ " and t.amp_team_id= " + ampTeamId + " group by tm.amp_team_id";
-
-		PersistenceManager.getSession().doWork(new Work() {
-			public void execute(Connection conn) throws SQLException {
-				RsInfo ampTeamMemberIdQry = SQLUtils.rawRunQuery(conn, query, null);
-				while (ampTeamMemberIdQry.rs.next()) {
-					ampTeamMemberId.value = ampTeamMemberIdQry.rs.getLong(1);
-				}
-				ampTeamMemberIdQry.close();
-			}
-
-		});
-
-		if (ampTeamMemberId.value != null) {
-			TeamUtil.setupFiltersForLoggedInUser(TLSUtils.getRequest(), TeamUtil.getAmpTeamMember(ampTeamMemberId.value));
+		if (AmpJobsUtil.setTeamForNonRequestReport(ampTeamId)) {
 			// we first set the current member since its needed by features util
 
 			Date lowerDateReport = null;
 			Date upperDateReport = null;
-			// we first need to check if we are DAYS_AFTER_QUARTER days after the last quarter
+			// we first need to check if we are DAYS_AFTER_QUARTER days after
+			// the last quarter
 			// ended
 			Quarter previousQuarter = checkIfShouldRunReport();
 			if (previousQuarter != null) {
@@ -140,7 +120,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 									? FeaturesUtil.getGlobalSettingDouble(
 											GlobalSettingsConstants.FUNDING_GAP_NOTIFICATION_THRESHOLD)
 									: DEFAULT_PERCENTAGE);
-					
+
 					spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
 					spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 					spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
@@ -153,15 +133,15 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 						logger.debug(this.getClass() + " start date " + lowerDateReport);
 						logger.debug(this.getClass() + " end date " + upperDateReport);
 					} catch (AmpApiException e1) {
-						
+
 						logger.error(e1);
 					}
-					 spec.setFilters(filterRules);
-					
+					spec.setFilters(filterRules);
+
 					try {
-						GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null); 
+						GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 						List<ReportArea> ll = report.reportContents.getChildren();
-						
+
 						for (ReportArea reportArea : ll) {
 							AmpActivityVersion activityToNotify = new AmpActivityVersion();
 							BigDecimal dblMeasureA = new BigDecimal(0);
@@ -197,15 +177,16 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
 								}
 							}
-							if (dblMeasureA.compareTo(BigDecimal.ZERO) != 0 
-							        && dblMeasureB.compareTo(BigDecimal.ZERO) != 0
-									&& (100 - dblMeasureA.multiply(HUNDRED).divide(dblMeasureB, 6, RoundingMode.HALF_EVEN)
-									        .compareTo(percentage)) >= 0) {
+							if (dblMeasureA.compareTo(BigDecimal.ZERO) != 0
+									&& dblMeasureB.compareTo(BigDecimal.ZERO) != 0
+									&& (100 - dblMeasureA.multiply(HUNDRED)
+											.divide(dblMeasureB, 6, RoundingMode.HALF_EVEN)
+											.compareTo(percentage)) >= 0) {
 
 								activitiesToNofity.add(activityToNotify);
 							} else {
 								if (dblMeasureA.compareTo(BigDecimal.ZERO) == 0
-								        && dblMeasureB.compareTo(BigDecimal.ZERO) != 0) {
+										&& dblMeasureB.compareTo(BigDecimal.ZERO) != 0) {
 									activitiesToNofity.add(activityToNotify);
 								}
 							}
@@ -220,18 +201,21 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 					} catch (Exception e) {
 						logger.error("Cannot execute JOB", e);
 					}
-				//after the job was run we store an event in global event log
+					// after the job was run we store an event in global event
+					// log
 
-					final String eventName=MeasureAMeasureBRatioCalculationJob.class.getName();
-					final String quarter=previousQuarter.toString();
-					PersistenceManager.getSession().doWork(new Work(){
+					final String eventName = MeasureAMeasureBRatioCalculationJob.class.getName();
+					final String quarter = previousQuarter.toString();
+					PersistenceManager.getSession().doWork(new Work() {
 						@Override
 						public void execute(Connection conn) throws SQLException {
-							
-							SQLUtils.executeQuery(conn, String.format("insert into amp_global_event_log "+ 
-							" select  nextval('amp_global_event_log_id_seq') ,now(),'%s','%s',amp_version,amp_version_encoded  "+
-							" from amp_global_event_log where id =(select max(id) from amp_global_event_log where event_name='AMP startup') "
-								, eventName, quarter));
+
+							SQLUtils.executeQuery(conn,
+									String.format(
+											"insert into amp_global_event_log "
+													+ " select  nextval('amp_global_event_log_id_seq') ,now(),'%s','%s',amp_version,amp_version_encoded  "
+													+ " from amp_global_event_log where id =(select max(id) from amp_global_event_log where event_name='AMP startup') ",
+											eventName, quarter));
 						}
 					});
 
@@ -246,7 +230,8 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 				}
 			} else {
 				// should run report
-				logger.error(this.getClass() + " Should not run since its not DAYS_AFTER_QUARTER days after the last quarter ended or it has already run for this quarter");
+				logger.error(this.getClass()
+						+ " Should not run since its not DAYS_AFTER_QUARTER days after the last quarter ended or it has already run for this quarter");
 			}
 		} else {
 			logger.error(this.getClass() + " could not run because the team is not correctly configured for setting "
@@ -261,10 +246,13 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
 		Quarter currentQuarter = new Quarter(fiscalCalendar, new Date());
 
-		DateTime lastQuarterStartDayPlusDAYS_AFTER_QUARTER = new DateTime(currentQuarter.getPreviousQuarter().getQuarterEndDate());
-		lastQuarterStartDayPlusDAYS_AFTER_QUARTER = lastQuarterStartDayPlusDAYS_AFTER_QUARTER.plusDays(DAYS_AFTER_QUARTER);
+		DateTime lastQuarterStartDayPlusDAYS_AFTER_QUARTER = new DateTime(
+				currentQuarter.getPreviousQuarter().getQuarterEndDate());
+		lastQuarterStartDayPlusDAYS_AFTER_QUARTER = lastQuarterStartDayPlusDAYS_AFTER_QUARTER
+				.plusDays(DAYS_AFTER_QUARTER);
 
-		//we check if we are DAYS_AFTER_QUARTER days after the quarter has ended and that it has not run for that quarter
+		// we check if we are DAYS_AFTER_QUARTER days after the quarter has
+		// ended and that it has not run for that quarter
 		final ValueWrapper<Boolean> shouldRunJob = new ValueWrapper<Boolean>(true);
 		try {
 			final String previousQuarterName = currentQuarter.getPreviousQuarter().toString();
@@ -286,7 +274,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 			logger.error("could get last job run for this quarter", e);
 		}
 
-		if (shouldRunJob.value && today.isAfter((lastQuarterStartDayPlusDAYS_AFTER_QUARTER) ) ) {
+		if (shouldRunJob.value && today.isAfter((lastQuarterStartDayPlusDAYS_AFTER_QUARTER))) {
 
 			return currentQuarter.getPreviousQuarter();
 		} else {

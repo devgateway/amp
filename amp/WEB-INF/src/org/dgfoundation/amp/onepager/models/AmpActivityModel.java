@@ -20,6 +20,7 @@ import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.startup.AmpSessionListener;
+import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -138,24 +139,12 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		s.setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, null);
 		s.setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, null);
 		// we get activity freezing configuration
-		Boolean isActivityEditable = DataFreezeService.isEditable(a.getAmpActivityId(),
-				s.getAmpCurrentMember());
+		AmpActivityFrozen ampActivityFrozen = DataFreezeService.getActivityFrozenForActivity(a.getAmpActivityId());
+		// even tough we can compute this further since its done once per field we store it already computed 
+		Boolean isActivityEditable = DataFreezeService.isEditable(ampActivityFrozen,s.getAmpCurrentMember());
 		org.apache.wicket.Session.get().setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, isActivityEditable);
 
-		// we get funding freezing configuration
-
-		List<Date> dates = new ArrayList<Date>();
-		for (AmpFunding f : a.getFunding()) {
-			for (AmpFundingMTEFProjection mfp : f.getMtefProjections()) {
-				dates.add(mfp.getTransactionDate());
-			}
-			for (AmpFundingDetail fd : f.getFundingDetails()) {
-				dates.add(fd.getTransactionDate());
-			}
-		}
-		HashMap<Date, Boolean> transactionEditable = DataFreezeService.isEditable(a.getAmpActivityId(),
-				dates, s.getAmpCurrentMember());
-		org.apache.wicket.Session.get().setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, transactionEditable);
+		org.apache.wicket.Session.get().setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, ampActivityFrozen);
 	}
     
 	@Override   

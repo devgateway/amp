@@ -97,6 +97,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpScorecardOrganisation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpDataFreezeSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpDataFreezeExclusion</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityFrozen</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFieldsVisibility</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFundingDetail</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFundingMTEFProjection</hibernate-class>
@@ -249,6 +250,8 @@
         <hibernate-class>org.digijava.module.aim.dbentity.AmpFileType</hibernate-class>
 
         <hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange</hibernate-class>
+
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineRelease</hibernate-class>
 
 	</hibernate-classes>
 	<!-- AIM classes End-->

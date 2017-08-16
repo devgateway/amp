@@ -279,7 +279,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Program Description")
 	protected String programDescription;
 
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.TEAM, pickIdOnly = true)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.TEAM, pickIdOnly = true, label = "Created in workspace")
 	@VersionableFieldSimple(fieldTitle = "Team")
 	protected AmpTeam team;
 	//@VersionableCollection(fieldTitle = "Members")
@@ -444,15 +444,16 @@ LoggerIdentifiable, Cloneable {
 
 
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY, pickIdOnly=true)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY, pickIdOnly = true, label = "Activity created by")
 	@VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.CREATED_BY, blockSingleChange = true)
 	protected AmpTeamMember activityCreator;
 	
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_DATE, importable = false)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_DATE, label = "Activity created on")
 	@VersionableFieldSimple(fieldTitle = "Creation Date", blockSingleChange = true)
 	protected Date createdDate;
 	
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.UPDATE_DATE)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.UPDATE_DATE,
+			label = "Activity updated on")
 	@VersionableFieldSimple(fieldTitle = "Update Date", blockSingleChange = true)
 	protected Date updatedDate;
 
@@ -667,7 +668,8 @@ LoggerIdentifiable, Cloneable {
 	
 	protected Date modifiedDate;
 
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly = true)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly = true,
+            label = "Activity last updated by")
 	@VersionableFieldSimple(fieldTitle = "Modified By")
 	protected AmpTeamMember modifiedBy;
 	

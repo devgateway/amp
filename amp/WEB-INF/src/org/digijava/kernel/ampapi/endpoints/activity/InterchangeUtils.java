@@ -54,6 +54,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
+import org.hibernate.proxy.HibernateProxyHelper;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 
@@ -107,12 +108,12 @@ public class InterchangeUtils {
 		}
 		return false;
 	}
-	
+
 	public static String getAmpIatiIdentifierFieldName() {
 		String iatiIdGsField = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.IATI_IDENTIFIER_AMP_FIELD);
-		String iatiIdAmpField = StringUtils.isEmpty(iatiIdGsField) 
+		String iatiIdAmpField = StringUtils.isEmpty(iatiIdGsField)
 				? ActivityEPConstants.IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME : iatiIdGsField;
-		
+
 		return iatiIdAmpField;
 	}
 
@@ -311,7 +312,7 @@ public class InterchangeUtils {
 		Long activityId = ActivityUtil.findActivityIdByAmpId(ampId);
 		return getActivity(activityId);
 	}
-	
+
 	/**
 	 * Activity Export as JSON
 	 * 

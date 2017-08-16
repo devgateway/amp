@@ -273,11 +273,11 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 
 		Phrase cellPhrase = new Phrase("", font);
 		if (documentsMap.containsKey(columnName)) {
-			
 			for (GPIDocument document : documentsMap.get(columnName)) {
 				Chunk chunk = new Chunk(document.getTitle());
 				chunk.setAnchor(document.getUrl());
 				cellPhrase.add(chunk);
+				cellPhrase.add(Chunk.NEWLINE);
 			}
 		}
 		

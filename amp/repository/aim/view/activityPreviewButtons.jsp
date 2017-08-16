@@ -21,7 +21,7 @@
    		<%  if ("true".equals(request.getParameter("messages_on"))) {%>
    		<td colspan="2" style="color:red;text-align: center">
 				<c:forEach var="element" items="${aimEditActivityForm.warningMessges}">
- 					<digi:trn>${element}</digi:trn>
+ 					${element}
  				</c:forEach>
 			</td>
    		<%}%>

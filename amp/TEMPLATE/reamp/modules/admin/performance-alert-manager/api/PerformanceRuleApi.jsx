@@ -57,7 +57,7 @@ class PerformanceRuleApi {
     }
     
     static getAttributeList(ruleType){
-        const url = '/rest/performance/attributes?ruleType=' + ruleType;
+        const url = '/rest/performance/attributes?rule-type=' + ruleType;
         return new Promise(( resolve, reject ) => {
             fetchJson( url ).then(( response ) => {
                 resolve( response )

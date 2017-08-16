@@ -45,7 +45,7 @@ export default class PerformanceRuleRow extends Component {
         return (
             <tr>
                 <td>{this.props.performanceRule.name}</td>
-                <td>{this.getTypeDescription(this.props.performanceRule.typeClassName)}</td>
+                <td>{this.getTypeDescription(this.props.performanceRule['type-class-name'])}</td>
                 <td>{this.props.performanceRule.level.value}</td>
                 <td>{this.props.performanceRule.enabled ? this.props.translations['amp.performance-rule:enabled-yes'] : this.props.translations['amp.performance-rule:enabled-no']}</td>
                 <td>

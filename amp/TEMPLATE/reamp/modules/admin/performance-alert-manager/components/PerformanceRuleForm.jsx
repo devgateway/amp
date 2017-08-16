@@ -25,8 +25,8 @@ export default class PerformanceRuleForm extends Component {
     }
 
     componentWillMount() {        
-        if(this.props.currentPerformanceRule.typeClassName) {
-            this.props.actions.getAttributeList(this.props.currentPerformanceRule.typeClassName);
+        if(this.props.currentPerformanceRule['type-class-name']) {
+            this.props.actions.getAttributeList(this.props.currentPerformanceRule['type-class-name']);
         }
     }
     
@@ -113,9 +113,9 @@ export default class PerformanceRuleForm extends Component {
                     <table className="container-fluid data-selection-fields">  
                       <tbody>
                         <tr>
-                            <td className={this.getErrorsForField('typeClassName').length > 0 ? 'col-md-6 has-error': 'col-md-6'} >                        
+                            <td className={this.getErrorsForField('type-class-name').length > 0 ? 'col-md-6 has-error': 'col-md-6'} >                        
                                 <span className="required">*</span>{this.props.translations['amp.performance-rule:type']}
-                                <select className="form-control performance-input" name="typeClassName" value={this.props.currentPerformanceRule.typeClassName} onChange={this.onInputChange}>
+                                <select className="form-control performance-input" name="type-class-name" value={this.props.currentPerformanceRule['type-class-name']} onChange={this.onInputChange}>
                                     <option>{this.props.translations['amp.performance-rule:select-type']} </option>
                                     {this.props.typeList && this.props.typeList.map(ruleType => 
                                     <option value={ruleType.name} key={ruleType.name} >{ruleType.description}</option>
@@ -127,15 +127,15 @@ export default class PerformanceRuleForm extends Component {
                             {this.props.attributeList && this.props.attributeList.map((attribute, i) =>
                                 <div className={this.getErrorsForField(attribute.name).length > 0 ? 'row has-error' : 'row'} key={i}>
                                 <span className="required">*</span><span>{attribute.description}</span>  
-                                  {attribute.possibleValues && attribute.possibleValues.length > 0 && 
+                                  {attribute['possible-values'] && attribute['possible-values'].length > 0 && 
                                       <select className="form-control performance-input" name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name} value={this.getAttributeValue(attribute.name)} onChange={this.onInputChange}>
                                       <option value="">{this.props.translations['amp.performance-rule:select']}</option>
-                                      {attribute.possibleValues.map((possibleValue) =>
-                                       <option name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name}   >{possibleValue}</option>     
+                                      {attribute['possible-values'].map((possibleValue) =>
+                                       <option name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name}  value={possibleValue.name} >{possibleValue['name']}</option>     
                                       )}
                                       </select>                                         
                                   }  
-                                  {attribute.possibleValues == null || attribute.possibleValues.length == 0 &&
+                                  {attribute['possible-values'] == null || attribute['possible-values'].length == 0 &&
                                       <input type="text" className="form-control performance-input" name={"attribute_" + attribute.name}  value={this.getAttributeValue(attribute.name)}  onChange={this.onInputChange} data-type={attribute.type} data-name={attribute.name}/>
                                   }
                                   <br/>

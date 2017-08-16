@@ -22,19 +22,9 @@ println "Tag: ${tag}"
 def codeVersion
 def dbVersion
 
-def getRepoURL() {
-  sh "git config --get remote.origin.url > .git/remote-url"
-  return readFile(".git/remote-url").trim()
-}
-
-def getCommitSha() {
-  sh "git rev-parse HEAD > .git/current-commit"
-  return readFile(".git/current-commit").trim()
-}
-
 def updateGitHubCommitStatus(context, state) {
-  repoUrl = getRepoURL()
-  commitSha = getCommitSha()
+  repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
+  commitSha = sh(returnStdout: true, script: "git rev-parse HEAD~1 > .git/current-commit").trim()
 
   step([
     $class: 'GitHubCommitStatusSetter',
@@ -43,14 +33,17 @@ def updateGitHubCommitStatus(context, state) {
     contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
     statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${BUILD_URL}"],
     errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
-    statusResultSource: [$class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: 'msg', state: state]] ]
+    statusResultSource: [
+        $class: "ConditionalStatusResultSource",
+        results: [[$class: "AnyBuildResult", message: 'msg', state: state]]
+    ]
   ])
 }
 
 stage('Checkstyle') {
     node {
         try {
-            updateGitHubCommitStatus('jenkins/checkstyle', 'PENDING')
+            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
             checkout scm
 
@@ -58,9 +51,9 @@ stage('Checkstyle') {
                 sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
             }
 
-            updateGitHubCommitStatus('jenkins/checkstyle', 'SUCCESS')
+            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
         } catch(e) {
-            updateGitHubCommitStatus('jenkins/checkstyle', 'ERROR')
+            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
 
             throw e
         }

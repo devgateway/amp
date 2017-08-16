@@ -120,55 +120,49 @@ public class ReportsUtil {
 
     }
 
-	public static Collection<AmpOrganisation> getComponentFundingOrgs(String roleCode) {
-		if (AmpCaching.getInstance().allOrgByRoleOfPortfolio.containsKey(roleCode))
+	public static Collection<AmpOrganisation> getComponentFundingOrgs(final String roleCode) {
+		if (AmpCaching.getInstance().allOrgByRoleOfPortfolio.containsKey(roleCode)) {
 			return new ArrayList<AmpOrganisation>(AmpCaching.getInstance().allOrgByRoleOfPortfolio.get(roleCode));
-
+		}
 		Session session = null;
 		List<AmpOrganisation> col = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
 
 			String rewrittenColumns = SQLUtils.rewriteQuery("amp_organisation", "ao",
-					new HashMap<String, String>(){{
-						put("name", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall("ao.amp_org_id"));
-						put("description", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "description").getSQLFunctionCall("ao.amp_org_id"));
-					}});
+					new HashMap<String, String>() {
+						{
+							put("name", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name")
+									.getSQLFunctionCall("ao.amp_org_id"));
+							put("description", InternationalizedModelDescription.getForProperty(AmpOrganisation.class,
+									"description").getSQLFunctionCall("ao.amp_org_id"));
+						}
+					});
 
 			String orgIdsSource;
 
 			if (Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION.equalsIgnoreCase(roleCode)) {
-				orgIdsSource = "SELECT DISTINCT org.amp_org_id orgId " +
-						" FROM amp_activity_components aac " +
-						" JOIN amp_component_funding f ON (f.activity_id = aac.amp_activity_id) AND " +
-						" (f.amp_component_id = aac.amp_component_id) " +
-						" JOIN amp_components c ON (f.amp_component_id = c.amp_component_id) " +
-						" JOIN amp_activity_version activ ON activ.amp_activity_id = aac.amp_activity_id " +
-						" JOIN amp_organisation org ON org.amp_org_id = f.second_rep_organisation_id ";
+				orgIdsSource = "SELECT DISTINCT org.amp_org_id orgId "
+						+ " FROM amp_activity_components aac "
+						+ " JOIN amp_components c ON (c.amp_component_id = aac.amp_component_id) "
+						+ " JOIN amp_component_funding f ON (f.amp_component_id = aac.amp_component_id) "
+						+ " JOIN amp_organisation org ON org.amp_org_id = f.second_rep_organisation_id ";
 			} else {
-				orgIdsSource = "SELECT DISTINCT org.amp_org_id orgId " +
-						" FROM amp_activity_components aac " +
-						" JOIN amp_component_funding f " +
-						" ON (f.activity_id = aac.amp_activity_id) AND (f.amp_component_id = aac"
-						+ ".amp_component_id)" +
-						" JOIN amp_components c ON (f.amp_component_id = c.amp_component_id) " +
-						" JOIN amp_organisation org ON org.amp_org_id = f.rep_organization_id ";
+				orgIdsSource = "SELECT DISTINCT org.amp_org_id orgId "
+						+ " FROM amp_activity_components aac "
+						+ " JOIN amp_components c ON (c.amp_component_id = aac.amp_component_id) "
+						+ " JOIN amp_component_funding f ON (f.amp_component_id = c.amp_component_id) "
+						+ " JOIN amp_organisation org ON org.amp_org_id = f.rep_organization_id ";
 			}
 
-			String queryString = "select distinct " + rewrittenColumns + " from amp_organisation ao " +
-					"WHERE ao.amp_org_id IN (" + orgIdsSource + ") AND " +
-					"(ao.deleted is null or ao.deleted = false) ";
+			String queryString = "select distinct " + rewrittenColumns + " from amp_organisation ao "
+					+ "WHERE ao.amp_org_id IN (" + orgIdsSource + ") AND "
+					+ "(ao.deleted is null or ao.deleted = false) order by name ";
 
 			Query qry = session.createSQLQuery(queryString).addEntity(AmpOrganisation.class);
 			qry.setCacheable(true);
 
 			col = qry.list();
-
-			Collections.sort(col, new Comparator<AmpOrganisation>() {
-				public int compare(AmpOrganisation o1, AmpOrganisation o2) {
-					return o1.getName().trim().compareTo(o2.getName().trim());
-				}
-			});
 
 		} catch (Exception e) {
 			logger.debug("Exception from getComponentFundingOrgs()");
@@ -180,8 +174,7 @@ public class ReportsUtil {
 
 	}
 
-	public static Set<AmpOrganisation> processSelectedFilters(Object[] src)
-	{
+	public static Set<AmpOrganisation> processSelectedFilters(final Object[] src) {
 		return (Set<AmpOrganisation>) processSelectedFilters(src, AmpOrganisation.class);
 	}
 	

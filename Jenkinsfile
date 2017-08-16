@@ -22,41 +22,48 @@ println "Tag: ${tag}"
 def codeVersion
 def dbVersion
 
-def updateGitHubCommitStatus(context, message, state) {
-  repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
-  commitSha = sh(returnStdout: true, script: "git rev-parse HEAD~1").trim()
-
-  step([
-    $class: 'GitHubCommitStatusSetter',
-    reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
-    commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
-    contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
-    statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${BUILD_URL}"],
-    errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
-    statusResultSource: [
-        $class: "ConditionalStatusResultSource",
-        results: [[$class: "AnyBuildResult", message: message, state: state]]
-    ]
-  ])
-}
-
+// Run checkstyle only for PR builds
 stage('Checkstyle') {
-    node {
-        try {
-            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
+    if (branch == null) {
+        def updateGitHubCommitStatus(context, message, state) {
+            repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
+            commitSha = sh(returnStdout: true, script: "git rev-parse HEAD~1").trim()
 
-            checkout scm
-
-            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-                sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
-            }
-
-            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
-        } catch(e) {
-            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
-
-            throw e
+            step([
+            $class: 'GitHubCommitStatusSetter',
+            reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
+            commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
+            contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
+            statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${BUILD_URL}"],
+            errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+            statusResultSource: [
+                $class: "ConditionalStatusResultSource",
+                results: [[$class: "AnyBuildResult", message: message, state: state]]
+            ]
+            ])
         }
+
+        node {
+            try {
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
+
+                checkout scm
+
+                withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+                    sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
+                }
+
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
+            } catch(e) {
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
+
+                throw e
+            }
+        }
+    }
+
+    timeout(time: 3, unit: 'DAYS') {
+        input "Proceed with build?"
     }
 }
 

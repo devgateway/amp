@@ -61,13 +61,13 @@ stage('Checkstyle') {
             }
         }
     }
-
-    timeout(time: 3, unit: 'DAYS') {
-        input "Proceed with build?"
-    }
 }
 
 stage('Build') {
+    timeout(time: 3, unit: 'DAYS') {
+        input "Proceed with build?"
+    }
+
     node {
         checkout scm
 

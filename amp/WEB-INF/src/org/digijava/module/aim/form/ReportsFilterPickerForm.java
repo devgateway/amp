@@ -1430,7 +1430,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedComponentFundingOrg(Object[] selectedComponentFundingOrg) {
 		this.selectedComponentFundingOrg = selectedComponentFundingOrg;
-
+	}
+	
 	public Object[] getSelectedQuaternarySectors() {
 		return selectedQuaternarySectors;
 	}

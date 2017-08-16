@@ -22,7 +22,7 @@ println "Tag: ${tag}"
 def codeVersion
 def dbVersion
 
-def updateGitHubCommitStatus(context, state) {
+def updateGitHubCommitStatus(context, message, state) {
   repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
   commitSha = sh(returnStdout: true, script: "git rev-parse HEAD~1 > .git/current-commit").trim()
 
@@ -35,7 +35,7 @@ def updateGitHubCommitStatus(context, state) {
     errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
     statusResultSource: [
         $class: "ConditionalStatusResultSource",
-        results: [[$class: "AnyBuildResult", message: 'msg', state: state]]
+        results: [[$class: "AnyBuildResult", message: message, state: state]]
     ]
   ])
 }

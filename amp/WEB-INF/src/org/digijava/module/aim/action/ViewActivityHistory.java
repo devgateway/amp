@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import org.digijava.module.aim.form.ViewActivityHistoryForm;
 import org.digijava.module.aim.helper.ActivityHistory;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.SummaryChange;
 import org.digijava.module.aim.helper.SummaryChangeHtmlRenderer;
 import org.digijava.module.aim.helper.SummaryChangesService;
 import org.digijava.module.aim.helper.TeamMember;
@@ -100,12 +102,18 @@ public class ViewActivityHistory extends DispatchAction {
 		Session session = PersistenceManager.getRequestDBSession();
 		Long activityId = Long.parseLong(request.getParameter("activityId"));
 		AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
+		AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(activity);
 
-		LinkedHashMap<String, Object> activityList = SummaryChangesService.processActivity(activity);
+		LinkedHashMap<Long, Long> activitiesIds = new LinkedHashMap<>();
+		activitiesIds.put(activity.getAmpActivityId(), activity.getAmpActivityId());
+		activitiesIds.put(previousActivity.getAmpActivityId(), activity.getAmpActivityId());
 
-		for (String id : activityList.keySet()) {
+		LinkedHashMap<Long, Collection<SummaryChange>> activityList = SummaryChangesService
+				.processActivity(activitiesIds);
 
-			LinkedHashMap<String, Object> changesList = (LinkedHashMap) activityList.get(id);
+		for (Long id : activityList.keySet()) {
+
+			Collection<SummaryChange> changesList = activityList.get(id);
 			SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activity, changesList, RequestUtils
 					.getNavigationLanguage(request).getCode());
 

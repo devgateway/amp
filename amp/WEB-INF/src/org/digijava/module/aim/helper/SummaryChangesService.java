@@ -1,33 +1,37 @@
 package org.digijava.module.aim.helper;
 
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.VivificatingMap;
+import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.categorymanager.action.CategoryManager;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 
 /**
@@ -47,35 +51,12 @@ public class SummaryChangesService {
     public static final String TRANSACTION_AMOUNT = "transaction_amount";
     public static final String TRANSACTION_DATE = "transaction_date";
     public static final String REPORTING_DATE = "reporting_date";
+    public static final String CURRENT_VERSION = "current_version";
 
-    /**
-     * Return a list of activities that were modified in the 24 hours prior to the date.
-     *
-     * @param fromDate filter by date
-     * @return list of activities.
-     */
-    public static List<AmpActivityVersion> getActivitiesChanged(Date fromDate) {
-        return ActivityUtil.getActivitiesChanged(fromDate);
-    }
-
-    public static String buildActivitiesChanged(Date fromDate) {
-        StringBuffer results = new StringBuffer();
-
-        LinkedHashMap<String, Object> activityList = SummaryChangesService.getSummaryChanges(SummaryChangesService
-                .getActivitiesChanged(fromDate));
-
-        for (String activity : activityList.keySet()) {
-            Session session = PersistenceManager.getRequestDBSession();
-            AmpActivityVersion activityVersion = (AmpActivityVersion) session.load(AmpActivityVersion.class,
-                    Long.parseLong(activity));
-
-            LinkedHashMap<String, Object> changesList = (LinkedHashMap) activityList.get(activity);
-            SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activityVersion, changesList, null);
-            LOGGER.info(renderer.render());
-
-        }
-        return results.toString();
-    }
+    private static VivificatingMap<Long, AmpCurrency> currencyCache = new VivificatingMap<Long, AmpCurrency>(new
+            HashMap<>(), CurrencyUtil::getAmpcurrency);
+    private static VivificatingMap<Long, AmpCategoryValue> categoryValueCache = new VivificatingMap<Long,
+            AmpCategoryValue>(new HashMap<>(), CategoryManagerUtil::getAmpCategoryValueFromDb);
 
     /**
      * Return a list of approvers whit the activities that changed.
@@ -83,11 +64,13 @@ public class SummaryChangesService {
      * @param activities activities list.
      * @return list of approvers and activities.
      */
-    public static Map<String, Collection<AmpActivityVersion>> getValidators(List<AmpActivityVersion> activities) {
+    public static Map<String, Collection<AmpActivityVersion>> getValidators(LinkedHashMap<Long, Long> activities) {
 
         Map<String, Collection<AmpActivityVersion>> results = new LinkedHashMap<>();
 
-        for (AmpActivityVersion currentActivity : activities) {
+        for (Long activityId : new HashSet<Long>(activities.values())) {
+            AmpActivityVersion currentActivity = ActivityUtil.loadAmpActivity(activityId);
+
             List<AmpTeamMember> teamHeadAndAndApprovers = TeamMemberUtil.getTeamHeadAndApprovers(currentActivity
                     .getTeam().getAmpTeamId());
 
@@ -103,39 +86,74 @@ public class SummaryChangesService {
     }
 
     /**
-     * Return a list of activities whit every funding change.
-     *
-     * @param activities activities list.
-     * @return list of activities and changes.
+     * Return a list of activities that were modified in the 24 hours prior to the date.
+     * @param fromDate filter by date
+     * @return list of activities.
      */
-    public static LinkedHashMap<String, Object> getSummaryChanges(List<AmpActivityVersion> activities) {
+    public static LinkedHashMap<Long, Long> getActivities(Date fromDate) {
+        List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>();
+        StringBuffer ids = new StringBuffer();
+        LinkedHashMap<Long, Long> activitiesIds = new LinkedHashMap<>();
 
-        LinkedHashMap<String, Object> activitiesChanges = new LinkedHashMap<>();
-        for (AmpActivityVersion currentActivity : activities) {
-            activitiesChanges.putAll(processActivity(currentActivity));
-        }
-        return activitiesChanges;
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(Connection conn) throws SQLException {
+                String queryString = String.format(
+                        "SELECT ampAct.amp_activity_id current_version, lv.amp_activity_id amp_activity_id "
+                                + "FROM amp_activity_version ampAct "
+                                + "INNER JOIN v_activity_latest_and_validated_grouped lv ON lv.amp_activity_group_id "
+                                + "= ampAct.amp_activity_group_id "
+                                + "WHERE ampAct.amp_activity_id IN "
+                                + "    (SELECT act.amp_activity_id "
+                                + "     FROM amp_activity act "
+                                + "     WHERE draft = FALSE "
+                                + "       AND NOT amp_team_id IS NULL "
+                                + "       AND date_updated >= ? "
+                                + "       AND approval_status IN ( %s ) "
+                                + "       AND EXISTS "
+                                + "         (SELECT actappr.amp_activity_id "
+                                + "          FROM amp_activity_version actappr "
+                                + "          WHERE approval_status = '%s' "
+                                + "            AND act.amp_activity_group_id = actappr.amp_activity_group_id ) ) "
+                                + "  AND ampAct.amp_team_id IN "
+                                + "    (SELECT amp_team_id "
+                                + "     FROM amp_team "
+                                + "     WHERE isolated = FALSE "
+                                + "       OR isolated IS NULL ) ",
+                        Constants.ACTIVITY_NEEDS_APPROVAL_STATUS,
+                        Constants.APPROVED_STATUS);
+
+                ArrayList<FilterParam> params = new ArrayList<FilterParam>();
+                params.add(new FilterParam(fromDate, Types.DATE));
+
+                try (RsInfo rsi = SQLUtils.rawRunQuery(conn, queryString, params)) {
+                    ResultSet rs = rsi.rs;
+                    while (rs.next()) {
+                        activitiesIds.put(rs.getLong(AMP_ACTIVITY_ID), rs.getLong(CURRENT_VERSION));
+                    }
+                }
+            }
+        });
+
+        return activitiesIds;
+
     }
 
     /**
      * Return a list of changes for the activity.
      *
-     * @param currentActivity The newest version of the activity.
+     * @param activitiesIds list of activities ids of current version and previuos version.
      * @return list of changes for this activity.
      */
-    public static LinkedHashMap<String, Object> processActivity(AmpActivityVersion currentActivity) {
+    public static LinkedHashMap<Long, Collection<SummaryChange>> processActivity(LinkedHashMap<Long, Long>
+                                                                                         activitiesIds) {
 
-        AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(currentActivity);
-
-        LinkedHashMap<String, Object> activitiesChanges = new LinkedHashMap<>();
-        Map<String, Collection<SummaryChange>> differences = new LinkedHashMap<String, Collection<SummaryChange>>();
+        LinkedHashMap<Long, Collection<SummaryChange>> activitiesChanges = new LinkedHashMap<>();
         Map<String, SummaryChange> editedFunding = new LinkedHashMap<String, SummaryChange>();
 
-        String ids = currentActivity.getAmpActivityId() + ", " + previousActivity.getAmpActivityId();
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
-                String fundingQuery = " (SELECT amp_funding_id FROM amp_funding WHERE amp_activity_id IN (" + ids +
-                        "))";
+                String fundingQuery = " (SELECT amp_funding_id FROM amp_funding WHERE amp_activity_id IN ("
+                        + Util.toCSString(activitiesIds.keySet().stream().collect(Collectors.toList())) + "))";
 
                 String fundingDetailQuery = "a.reporting_date, a.amp_funding_id, fd.amp_activity_id, transaction_date, "
                         + " transaction_amount, amp_currency_id, adjustment_type, transaction_type "
@@ -203,23 +221,25 @@ public class SummaryChangesService {
                 try (RsInfo rsi = SQLUtils.rawRunQuery(conn, queryString, null)) {
                     ResultSet rs = rsi.rs;
                     while (rs.next()) {
-                        AmpCurrency currency = CurrencyUtil.getAmpcurrency(rs.getLong(AMP_CURRENCY_ID));
-                        AmpCategoryValue categoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(
-                                rs.getLong(ADJUSTMENT_TYPE));
+                        AmpCurrency currency = currencyCache.getOrCreate(rs.getLong(AMP_CURRENCY_ID));
+                        AmpCategoryValue categoryValue = categoryValueCache.getOrCreate(rs.getLong(ADJUSTMENT_TYPE));
 
                         if (rs.getBoolean(ALL_DIFF_DETAIL)) {
                             SummaryChange summaryChange;
-                            if (rs.getLong(AMP_ACTIVITY_ID) == currentActivity.getAmpActivityId()) {
+                            if (activitiesIds.get(rs.getLong(AMP_ACTIVITY_ID)) == rs.getLong(AMP_ACTIVITY_ID)) {
                                 summaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE),
                                         categoryValue, NEW, null, null,
                                         rs.getDouble(TRANSACTION_AMOUNT), currency,
                                         rs.getDate(TRANSACTION_DATE));
+                                addChange(rs.getLong(AMP_ACTIVITY_ID), summaryChange, activitiesChanges);
                             } else {
                                 summaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE),
                                         categoryValue, DELETED, rs.getDouble(TRANSACTION_AMOUNT),
                                         currency, null, null, rs.getDate(TRANSACTION_DATE));
+                                addChange(activitiesIds.get(rs.getLong(AMP_ACTIVITY_ID)), summaryChange,
+                                        activitiesChanges);
                             }
-                            addChange(differences, summaryChange);
+
                         } else {
                             if (editedFunding.get(rs.getString(REPORTING_DATE)) == null) {
                                 SummaryChange summaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE),
@@ -246,37 +266,26 @@ public class SummaryChangesService {
                                     addOriginalSummary = true;
                                 }
                                 if (addOriginalSummary) {
-                                    addChange(differences, originalSummaryChange);
+                                    addChange(rs.getLong(AMP_ACTIVITY_ID), originalSummaryChange, activitiesChanges);
                                 }
-                                addChange(differences, newSummaryChange);
+                                addChange(rs.getLong(AMP_ACTIVITY_ID), newSummaryChange, activitiesChanges);
                             }
                         }
+
                     }
                 }
             }
         });
 
-        activitiesChanges.put(currentActivity.getAmpActivityId().toString(), differences);
-
         return activitiesChanges;
     }
 
-    private static void addChange(Map<String, Collection<SummaryChange>> objDiff, SummaryChange summaryChange) {
-        String key = getKey(summaryChange);
-
-        if (objDiff.get(key) == null) {
-            objDiff.put(key, new ArrayList<SummaryChange>());
+    private static void addChange(Long id, SummaryChange newSummaryChange, LinkedHashMap<Long,
+            Collection<SummaryChange>> activitiesChanges) throws SQLException {
+        if (activitiesChanges.get(id) == null) {
+            activitiesChanges.put(id, new LinkedHashSet<SummaryChange>());
         }
-
-        objDiff.get(key).add(summaryChange);
+        activitiesChanges.get(id).add(newSummaryChange);
     }
 
-    private static String getKey(SummaryChange summaryChange) {
-        String key = "Q " + summaryChange.getQuarter().getQuarterNumber() + " " + summaryChange.getQuarter()
-                .getYearCode();
-        if (summaryChange.getTransactionType() == Constants.MTEFPROJECTION) {
-            key = "FY " + summaryChange.getQuarter().getYearCode();
-        }
-        return key;
-    }
 }

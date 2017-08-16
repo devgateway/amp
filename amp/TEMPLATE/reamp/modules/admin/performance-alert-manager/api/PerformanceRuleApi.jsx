@@ -3,7 +3,7 @@ class PerformanceRuleApi {
     static getPerformanceRuleList( data ) {
         const url = '/rest/performance/admin/?page=' + data.paging.currentPageNumber + '&size=' + data.paging.recordsPerPage;
         return new Promise(( resolve, reject ) => {
-            fetchJson( url ).then(( response ) => {
+            return fetchJson( url ).then(( response ) => {
                 resolve( response )
             }).catch(( error ) => {
                 reject( error );
@@ -15,7 +15,7 @@ class PerformanceRuleApi {
         const saveFunc = data.id ? putJson : postJson;
         const url = data.id ? '/rest/performance/rules/' + data.id : '/rest/performance/rules';
         return new Promise(( resolve, reject ) => {
-            saveFunc(url, data ).then((response) => {
+            return saveFunc(url, data ).then((response) => {
                 resolve({status: response.status} );
             }).catch((error) => {               
                 reject( error );
@@ -26,7 +26,7 @@ class PerformanceRuleApi {
     static deletePerformanceRule( data ) {
         const url = '/rest/performance/rules/' + data.id;
         return new Promise(( resolve, reject ) => {
-            deleteJson( url, {}).then( response => {
+            return deleteJson( url, {}).then( response => {
                 resolve( {});
             }).catch( error => {
                 reject( error );
@@ -37,7 +37,7 @@ class PerformanceRuleApi {
     static getTypeList() {
         const url = '/rest/performance/types';
         return new Promise(( resolve, reject ) => {
-            fetchJson( url ).then(( response ) => {
+            return fetchJson( url ).then(( response ) => {
                 resolve( response )
             }).catch(( error ) => {
                 reject( error );
@@ -48,7 +48,7 @@ class PerformanceRuleApi {
     static getLevelList() {
         const url = '/rest/performance/levels';
         return new Promise(( resolve, reject ) => {
-            fetchJson( url ).then(( response ) => {
+            return fetchJson( url ).then(( response ) => {
                 resolve( response )
             }).catch(( error ) => {
                 reject( error );
@@ -59,7 +59,7 @@ class PerformanceRuleApi {
     static getAttributeList(ruleType){
         const url = '/rest/performance/attributes?rule-type=' + ruleType;
         return new Promise(( resolve, reject ) => {
-            fetchJson( url ).then(( response ) => {
+            return fetchJson( url ).then(( response ) => {
                 resolve( response )
             }).catch(( error ) => {
                 reject( error );

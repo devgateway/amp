@@ -130,8 +130,8 @@ export default class PerformanceRuleForm extends Component {
                                   {attribute['possible-values'] && attribute['possible-values'].length > 0 && 
                                       <select className="form-control performance-input" name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name} value={this.getAttributeValue(attribute.name)} onChange={this.onInputChange}>
                                       <option value="">{this.props.translations['amp.performance-rule:select']}</option>
-                                      {attribute['possible-values'].map((possibleValue) =>
-                                       <option name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name}  value={possibleValue.name} >{possibleValue['name']}</option>     
+                                      {attribute['possible-values'].filter(possibleValue => possibleValue.visible == true).map((possibleValue) =>                                      
+                                            <option name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name}  value={possibleValue.name} >{possibleValue['translated-label']}</option>                                                                                    
                                       )}
                                       </select>                                         
                                   }  

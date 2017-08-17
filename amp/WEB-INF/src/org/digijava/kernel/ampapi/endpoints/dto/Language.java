@@ -17,7 +17,6 @@ public class Language {
     private boolean ltrDirection;
     
     public Language(String id, String name, boolean ltrDirection) {
-        super();
         this.id = id;
         this.name = name;
         this.ltrDirection = ltrDirection;

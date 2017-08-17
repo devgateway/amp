@@ -662,6 +662,12 @@ public class ReportsFilterPicker extends Action {
  	 	addSectorElement(filterForm, "Sector", AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME, "Primary Sectors", "filter_sectors_div", "selectedSectors");
  	 	addSectorElement(filterForm, "Secondary Sector", AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, "Secondary Sectors", "filter_secondary_sectors_div", "selectedSecondarySectors");
  	 	addSectorElement(filterForm, "Tertiary Sector",  AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,  "Tertiary Sectors",  "filter_tertiary_sectors_div",  "selectedTertiarySectors");
+ 	 	addSectorElement(filterForm, "Quaternary Sector",
+				AmpClassificationConfiguration.QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME, "Quaternary Sectors",
+				"filter_quaternary_sectors_div", "selectedQuaternarySectors");
+ 	 	addSectorElement(filterForm, "Quinary Sector",
+				AmpClassificationConfiguration.QUINARY_CLASSIFICATION_CONFIGURATION_NAME, "Quinary Sectors",
+				"filter_quinary_sectors_div", "selectedQuinarySectors");
  	 	addSectorElement(filterForm, "Sector Tag",      AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,  "Tag Sector",              "filter_tag_sectors_div",       "selectedTagSectors");
  	 	 	 	        
  	 	
@@ -1021,7 +1027,11 @@ public class ReportsFilterPicker extends Action {
 		
 		addDateFilter("Actual Start Date", "ActivityStart", "Actual Start Date",
 				filterForm.getDynamicActivityStartFilter(), "filter_activity_start_date_div", filterForm.getOtherCriteriaElements());
-		
+
+		addDateFilter("Issue Date", "Issue", "Issue Date",
+				filterForm.getDynamicIssueFilter(), "filter_issue_date_div", filterForm
+						.getOtherCriteriaElements());
+
 		addDateFilter("Current Completion Date", "ActivityActualCompletion",
 				"Current Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), "filter_activity_actual_completion_date_div", filterForm.getOtherCriteriaElements());
 		
@@ -1330,11 +1340,17 @@ public class ReportsFilterPicker extends Action {
 		Set<AmpSector> selectedSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedSectors());
 		Set<AmpSector> selectedSecondarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedSecondarySectors());
         Set<AmpSector> selectedTertiarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTertiarySectors());
+		Set<AmpSector> selectedQuaternarySectors =
+				Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedQuaternarySectors());
+		Set<AmpSector> selectedQuinarySectors =
+				Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedQuinarySectors());
         Set<AmpSector> selectedTagSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTagSectors() );
 
 		arf.setSelectedSectors(nullOrCopy(selectedSectors));
 		arf.setSelectedSecondarySectors(nullOrCopy(selectedSecondarySectors));
 		arf.setSelectedTertiarySectors(nullOrCopy(selectedTertiarySectors));
+		arf.setSelectedQuaternarySectors(nullOrCopy(selectedQuaternarySectors));
+		arf.setSelectedQuinarySectors(nullOrCopy(selectedQuinarySectors));
 		arf.setSelectedTagSectors(nullOrCopy(selectedTagSectors));
 		
 
@@ -1375,8 +1391,14 @@ public class ReportsFilterPicker extends Action {
 		arf.setDynActivityStartFilterAmount(filterForm.getDynamicActivityStartFilter().getAmount());
 		arf.setDynActivityStartFilterOperator(filterForm.getDynamicActivityStartFilter().getOperator());
 		arf.setDynActivityStartFilterXPeriod(filterForm.getDynamicActivityStartFilter().getxPeriod());
-		
-		
+
+		arf.setToIssueDate(FilterUtil.convertUiToArFilterDate(filterForm.getToIssueDate()));
+		arf.setFromIssueDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromIssueDate()));
+		arf.setDynIssueFilterCurrentPeriod(filterForm.getDynamicIssueFilter().getCurrentPeriod());
+		arf.setDynIssueFilterAmount(filterForm.getDynamicIssueFilter().getAmount());
+		arf.setDynIssueFilterOperator(filterForm.getDynamicIssueFilter().getOperator());
+		arf.setDynIssueFilterXPeriod(filterForm.getDynamicIssueFilter().getxPeriod());
+
 		arf.setFromProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedApprovalDate()));
 		arf.setToProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToProposedApprovalDate()));
 		arf.setDynProposedApprovalFilterCurrentPeriod(filterForm.getDynamicProposedApprovalFilter().getCurrentPeriod());

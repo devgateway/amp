@@ -148,6 +148,7 @@ public class AmpReportFiltersConverter {
 		addFilter(ColumnConstants.HUMANITARIAN_AID, Integer.class, "humanitarianAid", true);
 		addFilter(ColumnConstants.DISASTER_RESPONSE_MARKER, Integer.class, "disasterResponse", true);
 		addDateRangeFilter(ColumnConstants.ACTUAL_START_DATE, "fromActivityStartDate", "toActivityStartDate");
+		addDateRangeFilter(ColumnConstants.ISSUE_DATE, "fromIssueDate", "toIssueDate");
 		addDateRangeFilter(ColumnConstants.PROPOSED_APPROVAL_DATE, "fromProposedApprovalDate", "toProposedApprovalDate");
 		addDateRangeFilter(ColumnConstants.PROPOSED_START_DATE, "fromProposedStartDate", "toProposedStartDate");
 		addDateRangeFilter(ColumnConstants.ACTUAL_COMPLETION_DATE, "fromActivityActualCompletionDate", "toActivityActualCompletionDate");

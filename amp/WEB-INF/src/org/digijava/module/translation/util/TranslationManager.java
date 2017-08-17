@@ -37,11 +37,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.dto.Language;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -670,4 +672,24 @@ public class TranslationManager {
 		
 		return res;
 	}
+	
+	public static List<Language> getAmpLanguages() {
+	    Session session = PersistenceManager.getSession();
+        
+	    String rightPart = getRightPart(RequestUtils.getSite(TLSUtils.getRequest()),
+                DgUtil.isLocalTranslatorForSite(TLSUtils.getRequest()));
+        
+        String localeQuery = "FROM " + Locale.class.getName() + " l WHERE l.available = true" + rightPart;
+        
+        Query query = session.createQuery(localeQuery);
+        query.setCacheable(true);
+        List<Locale> locales = query.list();
+        
+        List<Language> languages = locales.stream()
+                .map(l -> new Language(l.getCode(), l.getName(), l.getLeftToRight()))
+                .collect(Collectors.toList());
+        
+        return languages;
+    }
+	
 }

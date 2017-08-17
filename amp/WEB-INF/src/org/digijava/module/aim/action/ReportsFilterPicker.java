@@ -27,6 +27,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.InvalidReportContextException;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
@@ -363,7 +364,21 @@ public class ReportsFilterPicker extends Action {
  	 	 		}
  	 	 	}
 		}	
-	}	
+	}
+
+	private static void addComponentOrganisations(ReportsFilterPickerForm filterForm, String name, String
+			roleCode, String filterDivId, String selectId) {
+		if (FeaturesUtil.isVisibleField(name)) {
+			Collection<AmpOrganisation> relevantAgencies = (ReportsUtil.getComponentFundingOrgs(roleCode));
+			HierarchyListableUtil.changeTranslateable(relevantAgencies, false);
+			HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation("All " + name,
+					"0", relevantAgencies);
+			GroupingElement<HierarchyListableImplementation> relevantAgenciesElement = new
+					GroupingElement<HierarchyListableImplementation>(name, filterDivId, rootRelevantAgencies,
+					selectId);
+			filterForm.getRelatedAgenciesElements().add(relevantAgenciesElement);
+		}
+	}
 	
 	private static void addAgencyFilterFaster(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId, boolean includeParent)
 	{		
@@ -762,6 +777,13 @@ public class ReportsFilterPicker extends Action {
  	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Beneficiary Agency")){
 			addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY, false);
  	 	}
+
+		addComponentOrganisations(filterForm, ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, Constants
+						.COMPONENT_FUNDING_ORGANIZATION,
+				"filter_component_funding_div", "selectedComponentFundingOrg");
+		addComponentOrganisations(filterForm, ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, Constants
+						.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, "filter_component_second_responsible_div",
+				"selectedComponentSecondResponsibleOrg");
 
 		// Contracting Agency Groups, based off Donor Groups
 		// stimate domnule GARTNER, ce face filterDonorGroups in afara de a exclude grupurile cu "guv" si "gouv" in nume din lista? E nevoie de ei aici? 
@@ -1573,7 +1595,9 @@ public class ReportsFilterPicker extends Action {
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency()));
 		arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency()));
 		arf.setResponsibleorg(ReportsUtil.processSelectedFilters(filterForm.getSelectedresponsibleorg()));
-		
+		arf.setComponentFunding(ReportsUtil.processSelectedFilters(filterForm.getSelectedComponentFundingOrg()));
+		arf.setComponentSecondResponsible(ReportsUtil.processSelectedFilters(filterForm.getSelectedComponentSecondResponsibleOrg()));
+
 		arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency()));
 		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency()));
 		arf.setContractingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedContractingAgency()));

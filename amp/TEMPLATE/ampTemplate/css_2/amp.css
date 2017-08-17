@@ -170,7 +170,7 @@ html.chrome .bd_drop{margin-top:15px;}
 .tab_cont_sel {padding-top:7px; padding-bottom:7px; padding-left:7px; font-size:14px; color:#FF6000; font-weight:bold;}
 .step_head {background-image:url(/TEMPLATE/ampTemplate/img_2/step_head.gif);}
 .step_head_lng {background-image:url(/TEMPLATE/ampTemplate/img_2/step_head_lng.gif);}
-.step_head_cont {padding-left:10px; padding-top:5px; padding-bottom:5px;color:#FFFFFF; font-size:12px; font-weight:bold;}
+.step_head_cont {padding-left:10px; padding-right:10px; padding-top:5px; padding-bottom:5px;color:#FFFFFF; font-size:12px; font-weight:bold;}
 .cont_search {background-color:#F7F7F7; border:1px solid #E0E0DC; min-height:320px;}
 .cont_search_cont {padding:10px;}
 .right_menu {margin-bottom:20px;}
@@ -193,7 +193,13 @@ html.chrome .bd_drop{margin-top:15px;}
     font-size:11px;
     padding-bottom:1px;
     padding-left:11px;
-
+}
+.tri_rtl {
+    -webkit-transform:scale(-1,1);
+}
+.tri_rtl div {
+    text-align: right;
+    -webkit-transform:scale(-1,1);
 }
 #quickfloat .tri { border-top: 1px solid white; border-bottom: 1px solid white; padding-left: 12px; background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:1px;}
 html.ie #quickfloat ul{margin:0px 0px 0px -5px;}

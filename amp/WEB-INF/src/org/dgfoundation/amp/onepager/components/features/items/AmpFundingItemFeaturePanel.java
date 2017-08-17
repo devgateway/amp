@@ -29,7 +29,6 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorDis
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorExpendituresSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpEstimatedDonorDisbursementsSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpLoanDetailsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpMTEFProjectionSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpReleaseOfFundsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -135,6 +134,13 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				}
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
 			}
+
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				add(setDirection());
+			}
+
 		});
 		
 		

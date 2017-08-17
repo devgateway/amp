@@ -48,6 +48,7 @@ import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -246,6 +247,7 @@ public class AmpDonorFundingFormSectionFeature extends
                 protected void onConfigure() {
                         super.onConfigure();
                         configureTranslationMode(this,expandAllKey, javascript);
+						add(setDirection());
             }
         };
         add(expandAllLink);
@@ -262,6 +264,7 @@ public class AmpDonorFundingFormSectionFeature extends
                protected void onConfigure() {
                        super.onConfigure();
                        configureTranslationMode(this,collapseAllKey, javascript);
+			           add(setDirection());
            }
        };
        add(collapseAllLink);
@@ -551,7 +554,7 @@ public class AmpDonorFundingFormSectionFeature extends
         
     }
 }
-	 
+
 	 public void setOriginalSearchOrganizationSelector(AmpSearchOrganizationComponent<String> selector) {
 		 this.originalSearchOrganizationSelector = selector;
 	 }

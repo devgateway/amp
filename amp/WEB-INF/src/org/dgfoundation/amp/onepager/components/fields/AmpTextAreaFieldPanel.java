@@ -14,7 +14,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.models.EditorWrapperModel;
-import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
@@ -74,8 +73,17 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 		
 		final Label preview = (Label) new Label("previewText", model).setEscapeModelStrings(false);
 
-        closeLink = new WebMarkupContainer("closeLink");
-        
+        closeLink = new WebMarkupContainer("closeLink") {
+
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				String direction = getDirection();
+				add(new AttributeModifier("style", "text-align:" + direction + ";float:" + direction +
+						";margin-" + direction + ": " + "28px;display: none;"));
+			}
+		};
+
         closeLink.add(new AttributePrepender("data-is_close", new Model<String>("true"), ""));
         
 		closeLink.setOutputMarkupId(true);

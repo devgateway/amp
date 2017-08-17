@@ -168,7 +168,6 @@ public class PerformanceRulesEndpoint {
      *     "type-class-name" : "noDisbursementsAfterFundingDate",
      *     "level" : {
      *              "id": 2309
-     *              "value" : "Minor"
      *     },
      *     "enabled" : true,
      *     "attributes": [
@@ -180,6 +179,8 @@ public class PerformanceRulesEndpoint {
      *     ]
      *  }
      * </pre>
+     * 
+     * @param performanceRule the performance rule object in JSON format that will be inserted into the database
      */
     @POST
     @Path("rules")
@@ -225,6 +226,7 @@ public class PerformanceRulesEndpoint {
      * </pre>
      * 
      * @param id the ID that will be used to query the database
+     * @param performanceRule the performance rule object in JSON format that will be used for updating
      */
     @PUT
     @Path("rules/{id}")
@@ -420,7 +422,7 @@ public class PerformanceRulesEndpoint {
      * ]
      * </pre>
      *
-     * @param rule-type the name of the type that will be used to query the database
+     * @param ruleType the name of the type that will be used to query the database
      * @return available performance rule parameters(attributes) of the specified type
      */
     @GET

@@ -25,6 +25,7 @@
      document.aimAddSectorForm.submit();
  }
 </script>
+<div class="admin-content">
 <h1 class="admintitle"><digi:trn>Sector manager</digi:trn></h1>
 <digi:instance property="aimAddSectorForm" />
 <digi:form action="/getSectorSchemes.do" method="post">
@@ -222,5 +223,5 @@
 	</tr>
 </table>
 </digi:form>
-
+</div>
 

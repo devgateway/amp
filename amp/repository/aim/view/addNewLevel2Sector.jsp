@@ -42,8 +42,7 @@
 	}
 
 </script>
-
-
+<div class="admin-content">
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
@@ -331,7 +330,7 @@
 		</tr>
 	</table>
 </digi:form>
-
+</div>
 
 
 

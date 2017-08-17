@@ -49,6 +49,7 @@
 	
 	
 </script>
+<div class="admin-content">
 <digi:errors/>
 <digi:instance property="aimAddSectorForm" />
 <digi:form action="/addSector.do" method="post">
@@ -303,7 +304,7 @@ value="key" label="value" />
 	</tr>
 </table>
 </digi:form>
-
+</div>
 
 
 

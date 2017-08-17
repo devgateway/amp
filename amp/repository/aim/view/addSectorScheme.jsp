@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<div class="admin-content">
 <script langauage="JavaScript">
 	function onDelete() {
 		var flag = confirm("Delete this Scheme?");
@@ -171,6 +171,5 @@
 	</tr>
 </table>
 </digi:form>
-
-
+</div>
 

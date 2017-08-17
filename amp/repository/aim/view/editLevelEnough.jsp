@@ -37,7 +37,7 @@
 	}
 
 </script>
-
+<div class="admin-content">
 <digi:instance property="aimAddSectorForm" />
 <digi:context name="digiContext" property="context" />
 <digi:form action="/addSector.do" method="post">
@@ -287,7 +287,7 @@
 	</tr>
 </table>
 </digi:form>
-
+</div>
 
 
 

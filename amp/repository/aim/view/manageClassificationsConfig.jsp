@@ -25,6 +25,7 @@
 
     
 </script>
+<div class="admin-content">
 <digi:instance property="aimSectorClassConfigForm" />
 <digi:context name="digiContext" property="context" />
 <!--  AMP Admin Logo -->
@@ -175,5 +176,5 @@
         </td>
     </tr>
 </table>
-
+</div>
 

@@ -74,7 +74,7 @@
 	}
 
 </script>
-
+<div class="admin-content">
 <digi:errors/>
 
 <digi:instance property="aimAddSectorForm" />
@@ -410,7 +410,7 @@
 </table>
 
 </digi:form>
-
+</div>
 
 
 

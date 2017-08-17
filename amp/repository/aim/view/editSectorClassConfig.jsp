@@ -37,7 +37,7 @@
     
     var enterBinder	= new EnterHitBinder('addSectConfBtn');
     </script>
-
+<div class="admin-content">
 <digi:instance property="aimSectorClassConfigForm" />
 <digi:context name="digiContext" property="context" />
 
@@ -233,4 +233,4 @@
         </tr>
     </table>
     </digi:form>
-    
+ </div>

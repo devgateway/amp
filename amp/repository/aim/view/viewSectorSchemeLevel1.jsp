@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-
+<div class="admin-content">
 <script langauage="JavaScript">
 	function onDelete() {
 	<c:set var="translation">
@@ -310,5 +310,4 @@
 		</tr>
 	</table>
 </digi:form>
-
-
+</div>

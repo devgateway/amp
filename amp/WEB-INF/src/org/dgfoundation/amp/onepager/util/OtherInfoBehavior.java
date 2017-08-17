@@ -15,12 +15,12 @@ public class OtherInfoBehavior extends AjaxFormComponentUpdatingBehavior {
     private AmpTextAreaFieldPanel otherInfo;
     private static final String OTHER_INFO_KEY = "other";
 
-    public OtherInfoBehavior(String event, AmpTextAreaFieldPanel otherInfo) {
+    public OtherInfoBehavior(final String event, final AmpTextAreaFieldPanel otherInfo) {
         super(event);
         this.otherInfo = otherInfo;
     }
 
-    private void toggleotherInfo(boolean b) {
+    private void toggleotherInfo(final boolean b) {
         if (this.otherInfo != null) {
             this.otherInfo.setVisible(b);
             if (this.otherInfo.isVisible()) {
@@ -29,7 +29,7 @@ public class OtherInfoBehavior extends AjaxFormComponentUpdatingBehavior {
         }
     }
 
-    private void updateFields(AjaxRequestTarget target) {
+    private void updateFields(final AjaxRequestTarget target) {
         target.add(this.otherInfo.getParent());
     }
 
@@ -38,13 +38,13 @@ public class OtherInfoBehavior extends AjaxFormComponentUpdatingBehavior {
     }
 
     @Override
-    protected void onUpdate(AjaxRequestTarget target) {
+    protected void onUpdate(final AjaxRequestTarget target) {
         updateOtherInfo();
         updateFields(target);
     }
 
     private boolean isOtherInfoVisible() {
-        if (this.getFormComponent() != null && this.getFormComponent().getModelObject() != null ) {
+        if (this.getFormComponent() != null && this.getFormComponent().getModelObject() != null) {
             if (this.getFormComponent().getModelObject() instanceof AmpCategoryValue) {
                 AmpCategoryValue value = (AmpCategoryValue) this.getFormComponent().getModelObject();
                 return isOtherSelected(value.getValue());
@@ -60,11 +60,11 @@ public class OtherInfoBehavior extends AjaxFormComponentUpdatingBehavior {
         return false;
     }
 
-    private boolean isOtherSelected(String value) {
+    private boolean isOtherSelected(final String value) {
         return OTHER_INFO_KEY.equalsIgnoreCase(value);
     }
 
-    protected void onBind(){
+    protected void onBind() {
         super.onBind();
         updateOtherInfo();
     }

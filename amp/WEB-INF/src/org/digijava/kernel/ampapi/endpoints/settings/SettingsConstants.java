@@ -44,7 +44,7 @@ public class SettingsConstants {
 	public static final String LIMIT_FILE_TO_UPLOAD = "limit-file-to-upload";
 	public static final String SORT_COLUMN_VIEW="v_g_settings_resource_columns";
 	
-	public static final String PERFORMANCE_ISSUES = "performance-issues";
+	public static final String PERFORMANCE_ISSUES = "performanceIssues";
 	
 	public static final String NO_LIMIT = "noLimit";
 	public static final String CUSTOM = "custom";

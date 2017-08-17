@@ -49,21 +49,25 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Modalities Other Info")
 	protected String modalitiesOtherInfo;
 
-	@Interchangeable(fieldTitle = "Project Impact", importable = true, fmPath="/Activity Form/Identification/Project Impact")
-	@VersionableFieldTextEditor(fieldTitle = "Project Impact")
+    @Interchangeable(fieldTitle = "Project Impact", importable = true, fmPath = "/Activity "
+            + "Form/Identification/Project Impact")
+    @VersionableFieldTextEditor(fieldTitle = "Project Impact")
 	protected String projectImpact;
-	
-	@Interchangeable(fieldTitle = "Activity Summary", importable = true, fmPath = "/Activity Form/Identification/Activity Summary")
-	@VersionableFieldTextEditor(fieldTitle = "Activity Summary")
+
+    @Interchangeable(fieldTitle = "Activity Summary", importable = true, fmPath = "/Activity "
+            + "Form/Identification/Activity Summary")
+    @VersionableFieldTextEditor(fieldTitle = "Activity Summary")
 	protected String activitySummary;
-	
-	@Interchangeable(fieldTitle = "Conditionalities", importable = true, fmPath = "/Activity Form/Identification/Conditionalities")
-	@VersionableFieldTextEditor(fieldTitle = "Conditionality")
-	protected String conditionality;
-	
-	@Interchangeable(fieldTitle = "Project Management", importable = true, fmPath = "/Activity Form/Identification/Project Management")
-	@VersionableFieldTextEditor(fieldTitle = "Project Management")
-	protected String projectManagement;
+
+    @Interchangeable(fieldTitle = "Conditionalities", importable = true, fmPath = "/Activity "
+            + "Form/Identification/Conditionalities")
+    @VersionableFieldTextEditor(fieldTitle = "Conditionality")
+    protected String conditionality;
+
+    @Interchangeable(fieldTitle = "Project Management", importable = true, fmPath = "/Activity "
+            + "Form/Identification/Project Management")
+    @VersionableFieldTextEditor(fieldTitle = "Project Management")
+    protected String projectManagement;
 
 	//getter and setter never used
 //	@Interchangeable(fieldTitle = "Activity Budget",fmPath="/Activity Form/Identification/Activity Budget", required="/Activity Form/Identification/Required Validator for Activity Budget")
@@ -1656,7 +1660,7 @@ LoggerIdentifiable, Cloneable {
 			return projectImpact;
 		}
 
-		public void setProjectImpact(String projectImpact) {
+		public void setProjectImpact(final String projectImpact) {
 			this.projectImpact = projectImpact;
 		}
 
@@ -1664,7 +1668,7 @@ LoggerIdentifiable, Cloneable {
 		return statusOtherInfo;
 	}
 
-	public void setStatusOtherInfo(String statusOtherInfo) {
+	public void setStatusOtherInfo(final String statusOtherInfo) {
 		this.statusOtherInfo = statusOtherInfo;
 	}
 
@@ -1672,7 +1676,7 @@ LoggerIdentifiable, Cloneable {
 		return projectCategoryOtherInfo;
 	}
 
-	public void setProjectCategoryOtherInfo(String projectCategoryOtherInfo) {
+	public void setProjectCategoryOtherInfo(final String projectCategoryOtherInfo) {
 		this.projectCategoryOtherInfo = projectCategoryOtherInfo;
 	}
 
@@ -1680,7 +1684,7 @@ LoggerIdentifiable, Cloneable {
 		return modalitiesOtherInfo;
 	}
 
-	public void setModalitiesOtherInfo(String modalitiesOtherInfo) {
+	public void setModalitiesOtherInfo(final String modalitiesOtherInfo) {
 		this.modalitiesOtherInfo = modalitiesOtherInfo;
 	}
 

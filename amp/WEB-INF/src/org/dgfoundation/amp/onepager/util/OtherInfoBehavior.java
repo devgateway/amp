@@ -44,7 +44,7 @@ public class OtherInfoBehavior extends AjaxFormComponentUpdatingBehavior {
     }
 
     private boolean isOtherInfoVisible() {
-        if (this.getFormComponent() != null) {
+        if (this.getFormComponent() != null && this.getFormComponent().getModelObject() != null ) {
             if (this.getFormComponent().getModelObject() instanceof AmpCategoryValue) {
                 AmpCategoryValue value = (AmpCategoryValue) this.getFormComponent().getModelObject();
                 return isOtherSelected(value.getValue());

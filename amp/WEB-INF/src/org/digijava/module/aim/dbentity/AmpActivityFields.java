@@ -40,18 +40,12 @@ LoggerIdentifiable, Cloneable {
 	
 	protected static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
-	@Interchangeable(fieldTitle = "Status Other Info", importable = true, fmPath = "/Activity "
-			+ "Form/Identification/Status Other Info")
 	@VersionableFieldTextEditor(fieldTitle = "Status Other Info")
 	protected String statusOtherInfo;
 
-	@Interchangeable(fieldTitle = "Project Category Other Info", importable = true, fmPath = "/Activity "
-			+ "Form/Identification/Project Category Other Info")
 	@VersionableFieldTextEditor(fieldTitle = "Project Category Other Info")
 	protected String projectCategoryOtherInfo;
 
-	@Interchangeable(fieldTitle = "Modalities Other Info", importable = true, fmPath = "/Activity "
-			+ "Form/Funding/Overview Section/ModalitiesModalities Other Info")
 	@VersionableFieldTextEditor(fieldTitle = "Modalities Other Info")
 	protected String modalitiesOtherInfo;
 

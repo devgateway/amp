@@ -643,3 +643,7 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 input[disabled], select[disabled]{
 	color: #D3D3D3;
 }
+
+.resourceButtonPosition {
+	float: left;
+}

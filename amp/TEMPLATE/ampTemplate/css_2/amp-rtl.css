@@ -1,4 +1,39 @@
 .admin-content {
-  direction:rtl;
- }
-  
+	direction: rtl;
+}
+
+#mainBodyContent {
+	direction: rtl;
+}
+
+div.trnpanel div.trn-row a {
+	background: none repeat scroll 0 0 #F3F3F3;
+	border: 1px solid #CCCCCC;
+	float: right;
+	font-size: 11px;
+	line-height: 12px;
+	padding: 2px 4px;
+	text-decoration: none;
+	margin-top: 1px;
+}
+
+div.trnpanel div.trn-row ul {
+    -webkit-padding-start: 3px;
+    padding-right: 0;
+}
+
+.resourceButtonPosition {
+    float: right;
+}
+
+.custom-file-label {
+    display: inline;
+    position: relative;
+    top: -25px;
+    right: 110px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 60px;
+}

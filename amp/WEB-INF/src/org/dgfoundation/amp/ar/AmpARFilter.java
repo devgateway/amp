@@ -62,6 +62,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
+import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -1567,7 +1568,8 @@ public class AmpARFilter extends PropertyListable {
             String LUCENE_ID_LIST = "";
             searchMode = params.getLuceneSearchModeParam();
 
-            Document[] docs = LuceneUtil.search(params.getLuceneRealPath() + LuceneUtil.ACTIVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
+			String index = AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH + LuceneUtil.ACTIVITY_INDEX_DIRECTORY;
+			Document[] docs = LuceneUtil.search(index, "all", indexText, searchMode);
             logger.info("New lucene search !");
 
             for (Document doc : docs) {

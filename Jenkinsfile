@@ -45,9 +45,9 @@ stage('Checkstyle') {
     if (branch == null) {
         node {
             try {
-                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
-
                 checkout scm
+
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
                 withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
                     sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"

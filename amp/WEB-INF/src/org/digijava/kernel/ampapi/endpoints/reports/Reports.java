@@ -93,7 +93,7 @@ import mondrian.util.Pair;
 @Path("data")
 public class Reports implements ErrorReportingEndpoint {
 	
-	private static final String DEFAULT_CATALOG_NAME = "AMP";
+	private final static String DEFAULT_CATALOG_NAME = "AMP";
 	private static final String DEFAULT_CUBE_NAME = "Donor Funding";
 	private static final String DEFAULT_UNIQUE_NAME = "[amp].[AMP].[AMP].[Donor Funding]";
 	private static final String DEFAULT_QUERY_NAME = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";

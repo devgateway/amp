@@ -657,3 +657,9 @@ input[disabled], select[disabled]{
 .inside-header {
     text-align: left;
 }
+
+.del-funding {
+    float: right;
+    position: relative;
+    top: -15px;
+}

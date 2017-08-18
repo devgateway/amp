@@ -65,3 +65,9 @@ div.trnpanel div.trn-row ul {
     -webkit-transform:scale(-1,1);
     width: inherit;
 }
+
+.del-funding {
+    float: left;
+    position: relative;
+    top: -15px;
+}

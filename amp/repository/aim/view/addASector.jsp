@@ -161,7 +161,7 @@ width="100%">
 	<tr>
 																
 
-		<td width="30%" align="right">
+		<td width="30%" >
 																
 
 		<digi:trn key="aim:sectorName">Sector Name</digi:trn><font color="red">*</font>	
@@ -185,7 +185,7 @@ width="100%">
 	<tr>
 																
 
-		<td width="30%" align="right">
+		<td width="30%" >
 																
 
 	        <digi:trn key="aim:sectorCode">Sector Code</digi:trn><font color="red">*</font>
@@ -209,7 +209,7 @@ width="100%">
 	<tr>
 																
 
-		<td width="30%" align="right">
+		<td width="30%" >
 																
 
 	        <digi:trn key="aim:sectorDescription">Description</digi:trn>	
@@ -255,16 +255,12 @@ value="key" label="value" />
 		<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">
 				<tr>
-					<td width="45%" align="right">
+					<td  align="center">
 							<input  type="button" name="addBtn" value='<digi:trn jsFriendly="true" key="btn:save">Save</digi:trn>' 
 								onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />','<bean:write name="aimAddSectorForm" property="levelType" />')" class="dr-menu"/>
-					</td>
 					
-					<td width="10%" align="center">
 						<html:reset  styleClass="dr-menu"><digi:trn key="btn:reset">Reset</digi:trn></html:reset>
-					</td>
 					
-					<td width="45%" align="left">
 						<input type="button" value='<digi:trn jsFriendly="true" key="btn:cancel">Cancel</digi:trn>' class="dr-menu" onclick="cancel('<%= session.getAttribute("Id") %>','<bean:write name="aimAddSectorForm" property="levelType" />')"/>
 					</td>
 				</tr>

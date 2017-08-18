@@ -95,6 +95,14 @@ stage('Build') {
                 // Cleanup after Docker & Maven
                 sh "docker rmi localhost:5000/amp-webapp:${tag}"
                 sh "cd amp && mvn clean -Djdbc.db=dummy"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules"
+                sh "rm -r amp/TEMPLATE/ampTemplate/gisModule/dev/node"
+                sh "rm -r amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules"
             }
         }
     }

@@ -617,7 +617,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
 	 * ]
 	 * </pre>
 	 * 
-	 * @param activitydonors - list of donors with activities
+	 * @param activityDonors - list of donors with activities
 	 * 
 	 * @return list of activity donors with documents
 	 */

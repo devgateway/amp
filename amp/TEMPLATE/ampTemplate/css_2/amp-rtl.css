@@ -2,6 +2,14 @@
 	direction: rtl;
 }
 
+.header-corner{
+	background: url(../images/corner-l.gif) no-repeat !important;
+}
+
+.list-item-image {
+  transform: rotate(180deg);
+}
+
 #mainBodyContent {
 	direction: rtl;
 }

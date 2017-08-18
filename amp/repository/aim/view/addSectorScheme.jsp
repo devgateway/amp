@@ -125,7 +125,7 @@
 													<digi:trn key="aim:otherLinks">Other links</digi:trn>
 												</b>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
+											<td class="header-corner" height="17" width=17></td>
 										</tr>
 									</table>
 								</td>
@@ -135,7 +135,7 @@
 									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" styleClass="list-item-image"/>
 												<c:set var="translation">
 					                            	<digi:trn key="aim:clickToViewSectorManager">Click here to view Sector Manager</digi:trn>
 					                            </c:set>
@@ -146,7 +146,7 @@
 										</tr>
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10" styleClass="list-item-image"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>

@@ -30,7 +30,7 @@
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
-<h1 class="admintitle" style="text-align:left;">Add scheme</h1>
+<h1 class="admintitle">Add scheme</h1>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>

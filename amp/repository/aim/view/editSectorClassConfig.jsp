@@ -47,7 +47,7 @@
     <!-- End of Logo -->
     <html:hidden name="aimSectorClassConfigForm" property="id" styleId="id"/>
     <html:hidden name="aimSectorClassConfigForm" property="sectorClassId" styleId="originalSectorId"/>
-    <h1 class="admintitle" style="text-align:left;"><digi:trn key="aim:scheme:sector">Sector Manager</digi:trn></h1>
+    <h1 class="admintitle"><digi:trn key="aim:scheme:sector">Sector Manager</digi:trn></h1>
     
     <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
         <tr>

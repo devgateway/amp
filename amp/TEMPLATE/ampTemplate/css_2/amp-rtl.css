@@ -47,3 +47,11 @@ div.trnpanel div.trn-row ul {
     float: left;
     margin-left: 28px;
 }
+
+.step_head_cont {
+    padding-right: 10px;
+}
+
+.inside-header {
+    text-align: right;
+}

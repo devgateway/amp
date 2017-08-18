@@ -653,3 +653,7 @@ input[disabled], select[disabled]{
     float: right;
     margin-right: 28px;
 }
+
+.inside-header {
+    text-align: left;
+}

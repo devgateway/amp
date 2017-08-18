@@ -225,7 +225,7 @@
 
 															<td width="100%">	
 
-																<table width="100%" border="0"	 bgColor=#f4f4f2>
+																<table width="100%" border="0" class="form-layout" bgColor=#f4f4f2>
 
 																	<tr>
 

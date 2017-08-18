@@ -70,4 +70,12 @@ div.trnpanel div.trn-row ul {
     float: left;
     position: relative;
     top: -15px;
+
+.yui-skin-sam ul {
+    direction: rtl;
+}
+
+.yui-skin-sam li {
+    text-align: right
+
 }

@@ -647,3 +647,9 @@ input[disabled], select[disabled]{
 .resourceButtonPosition {
 	float: left;
 }
+
+.close-link {
+    text-align: right;
+    float: right;
+    margin-right: 28px;
+}

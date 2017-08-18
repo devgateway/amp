@@ -41,3 +41,9 @@ div.trnpanel div.trn-row ul {
 .dropdwn_sm {
     margin: 0px 0px 0px 0px;
 }
+
+.close-link {
+    text-align: left;
+    float: left;
+    margin-left: 28px;
+}

@@ -55,3 +55,13 @@ div.trnpanel div.trn-row ul {
 .inside-header {
     text-align: right;
 }
+
+.tri {
+    -webkit-transform:scale(-1,1);
+}
+.tri b {
+    text-align: right;
+    display: table-cell;
+    -webkit-transform:scale(-1,1);
+    width: inherit;
+}

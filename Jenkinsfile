@@ -58,8 +58,6 @@ stage('Checkstyle') {
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
             } catch(e) {
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
-
-                throw e
             }
         }
     }

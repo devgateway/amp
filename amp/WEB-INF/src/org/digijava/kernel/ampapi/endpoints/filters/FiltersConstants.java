@@ -23,6 +23,7 @@ public class FiltersConstants {
     public static final String ACTUAL_START_DATE = "actual-start-date";
     public static final String EFFECTIVE_FUNDING_DATE = "effective-funding-date";
     public static final String FINAL_DATE_FOR_CONTRACTING = "final-date-for-contracting";
+    public static final String ISSUE_DATE = "issue-date";
     public static final String FUNDING_CLOSING_DATE = "funding-closing-date";
     public static final String PROPOSED_APPROVAL_DATE = "proposed-approval-date";
     public static final String PROPOSED_COMPLETION_DATE = "proposed-completion-date";

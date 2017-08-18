@@ -38,10 +38,44 @@ div.trnpanel div.trn-row ul {
     width: 60px;
 }
 
+.dropdwn_sm {
+    margin: 0px 0px 0px 0px;
+}
+
+.close-link {
+    text-align: left;
+    float: left;
+    margin-left: 28px;
+}
+
+.step_head_cont {
+    padding-right: 10px;
+}
+
+.inside-header {
+    text-align: right;
+}
+
+.tri {
+    -webkit-transform:scale(-1,1);
+}
+.tri b {
+    text-align: right;
+    display: table-cell;
+    -webkit-transform:scale(-1,1);
+    width: inherit;
+}
+
+.del-funding {
+    float: left;
+    position: relative;
+    top: -15px;
+
 .yui-skin-sam ul {
     direction: rtl;
 }
 
 .yui-skin-sam li {
     text-align: right
+
 }

@@ -697,7 +697,7 @@ div.adminicon{float:right;}
 .admin_landing_page_tbl {margin-top:10px;}
 .yui-panel {
     border-collapse: separate;
-	font-size:12px !important;
+    font-family:arial;	
 	table-layout:fixed;
 }
 /**-----IE FIXES-----**/
@@ -1203,3 +1203,16 @@ div.footer {
 .button-section-padding {
 	padding-top: 10px;
 }
+
+.org-type-fieldset {
+ padding-left:200px;
+ border:1px solid #CCCCCC; 
+ background-color:#FFFFFF; 
+ text-align: left;
+}
+
+.org-type-fieldset>input{
+	margin: 4px;
+}
+
+

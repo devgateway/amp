@@ -74,7 +74,7 @@
 
 <digi:instance property="aimAddOrgTypeForm" />
 <digi:context name="digiContext" property="context"/>
-
+<div class="admin-content">
 <digi:form action="/editOrgType.do" method="post">
 <html:hidden property="action" />
 <html:hidden property="ampOrgTypeId" />
@@ -139,13 +139,13 @@
 															<td  bgColor=#f4f4f2 style="border:1px solid #ccc;">
 																<table width="500px" cellPadding=3 cellSpacing=3 border="0" style="margin-top:15px;" align="center">
 															  		<tr>
-																		<td width="100" align="left">
+																		<td width="100" >
 																		<digi:trn key="aim:orgTypeName">Name</digi:trn><font size="2" color="#FF0000">*</font></td>																
 																	    <td width="400" >
 																	          <html:text property="orgType" size="60" style="border:1px solid #CCCCCC;" />																	    </td>
 																	</tr>
 																	<tr>
-																		<td width="100" align="let">
+																		<td width="100" >
 																        <digi:trn key="aim:orgTypeCode">Type Code</digi:trn><font size="2" color="#FF0000">*</font></td>
 																		<td width="400">
 																           <html:text property="orgTypeCode" size="60" style="border:1px solid #CCCCCC;" />																		</td>
@@ -153,7 +153,7 @@
 																	<tr>
                                                                         <td colspan="2" align="center">                                   
                                                                          <feature:display name="Organization Manager Type" module="Organization Manager" >                                      	
-                                                                            <fieldset style="padding-left:200px; border:1px solid #CCCCCC; background-color:#FFFFFF; text-align: left;">
+                                                                            <fieldset class="org-type-fieldset">
                                                                             <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio><br>
@@ -213,3 +213,4 @@
 	</td>
 	</tr>
 </digi:form>
+</div>

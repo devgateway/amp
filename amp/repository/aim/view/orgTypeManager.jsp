@@ -9,7 +9,7 @@
 <digi:errors/>
 <digi:instance property="aimOrgTypeManagerForm" />
 <digi:context name="digiContext" property="context" />
-
+<div class="admin-content">
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
@@ -229,3 +229,4 @@
 	</td>
 	</tr>
 </table>
+</div>

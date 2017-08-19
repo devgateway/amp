@@ -20,14 +20,11 @@
 <%@page import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<div class="admin-content">
 <script language="JavaScript" type="text/javascript">
     <jsp:include page="scripts/calendar.js.jsp"  />
 </script>
 <jsp:include page="scripts/newCalendar.jsp"  />
-
- 
-
-
 
 <style type="text/css">
     .selectStyle {
@@ -78,6 +75,7 @@
         font-size: 13px;
         font-weight:bold;
         color:#ffffff;
+        float: left;
     }
     div.charcounter-progress-container {
 	width:50%; 
@@ -95,6 +93,10 @@ div.charcounter-progress-bar {
 	background-color:#5E8AD1;
 }
     
+.exportContactIcon{
+ float: right;
+}
+
 </style>
 
 <jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp"  />
@@ -1176,7 +1178,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                             <td width="100%" colspan="2">
                                                
                                                         <fieldset style="margin-left:10px; margin-right:10px;"><legend class="legendClass"><digi:trn>General Information</digi:trn></legend>
-														 <div style="float:right">
+														 <div class="exportContactIcon">
                                                     <a href="javascript:exportGeneralInfo();" >
                                                         <digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
                                                     </a>                        
@@ -1652,8 +1654,8 @@ border-right: 1px solid rgb(208, 208, 208);
                     <td colspan="2">
                       
                         <fieldset style="margin-left:10px; margin-right:10px;">
-                            <legend align="left" class="legendClass"><digi:trn>Budget Information</digi:trn></legend>
-							  <div style="float:right">
+                            <legend class="legendClass"><digi:trn>Budget Information</digi:trn></legend>
+							  <div class="exportContactIcon">
                             <a href="javascript:exportInfo('exportBudgetInfo')" >
                                 <digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
                             </a>
@@ -1974,8 +1976,8 @@ border-right: 1px solid rgb(208, 208, 208);
 	    <td colspan="2">
 	        
 	        <fieldset style="margin-left:10px; margin-right:10px; margin-bottom:15px;">
-	            <legend align="left" class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
-				<div style="float:right">
+	            <legend class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
+				<div class="exportContactIcon">
                                      <a href="javascript:exportInfo('exportContactInfo')" >
                                          <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
                                      </a>
@@ -2266,3 +2268,4 @@ border-right: 1px solid rgb(208, 208, 208);
     
     var enterBinder	= new EnterHitBinder('addOrgBtn');
 </script>
+</div>

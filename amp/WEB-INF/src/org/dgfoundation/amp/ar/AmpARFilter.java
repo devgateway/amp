@@ -428,7 +428,14 @@ public class AmpARFilter extends PropertyListable {
 	private Integer dynActivityStartFilterAmount;
 	private String dynActivityStartFilterOperator;
 	private String dynActivityStartFilterXPeriod;
-	
+
+	private String fromIssueDate;
+	private String toIssueDate;
+	private String dynIssueFilterCurrentPeriod;
+	private Integer dynIssueFilterAmount;
+	private String dynIssueFilterOperator;
+	private String dynIssueFilterXPeriod;
+
 	private String fromActivityActualCompletionDate; // view: v_actual_completion_date, column name: Current Completion Date
 	private String toActivityActualCompletionDate;  // view: v_actual_completion_date, column name: Current Completion Date
 	private String dynActivityActualCompletionFilterCurrentPeriod;
@@ -1802,6 +1809,18 @@ public class AmpARFilter extends PropertyListable {
 			ACTIVITY_START_DATE_FILTER = "SELECT asd.amp_activity_id from v_actual_start_date asd WHERE " + ACTIVITY_START_DATE_FILTER;
 			queryAppend(ACTIVITY_START_DATE_FILTER);
 		}
+
+		// build issue date filtering statements
+		dates = this.calculateDateFilters(fromIssueDate, toIssueDate, dynIssueFilterCurrentPeriod,
+				dynIssueFilterAmount, dynIssueFilterOperator, dynIssueFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+
+		String ISSUE_DATE_FILTER = this.createDateCriteria(toDate, fromDate, "asd.issuedate");
+		if ( ISSUE_DATE_FILTER.length() > 0 ) {
+			ISSUE_DATE_FILTER = "SELECT asd.amp_activity_id from v_issue_date asd WHERE " + ISSUE_DATE_FILTER;
+			queryAppend(ISSUE_DATE_FILTER);
+		}
 		
 		dates = this.calculateDateFilters(fromActivityActualCompletionDate, toActivityActualCompletionDate, dynActivityActualCompletionFilterCurrentPeriod, dynActivityActualCompletionFilterAmount, dynActivityActualCompletionFilterOperator, dynActivityActualCompletionFilterXPeriod);
 		fromDate = dates[0];
@@ -2763,6 +2782,32 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	public void setFromActivityStartDate(String fromActivityStartDate) {
 		this.fromActivityStartDate = fromActivityStartDate;
+	}
+
+	/**
+	 * @return the fromIssueDate
+	 */
+	public String getFromIssueDate() {
+		return fromIssueDate;
+	}
+
+	/**
+	 * @return a ['from', 'to'] pair for IssueDate range or [null, null] if none is configured
+	 */
+	public Date[] buildFromAndToIssueDateAsDate() {
+		Date[] dateRange = buildFromAndTo(fromIssueDate, toIssueDate);
+		if (dateRange != null) {
+			return dateRange;
+		} else {
+			return calculateDateFiltersAsDate(this.dynIssueFilterCurrentPeriod, this.dynIssueFilterAmount, this.dynIssueFilterOperator, this.dynIssueFilterXPeriod);
+		}
+	}
+
+	/**
+	 * @param fromIssueDate the fromIssueDate to set
+	 */
+	public void setFromIssueDate(String fromIssueDate) {
+		this.fromIssueDate = fromIssueDate;
 	}
 
 	public String getFromProposedApprovalDate() {
@@ -3828,5 +3873,45 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setDynFundingClosingFilterXPeriod(String dynFundingClosingFilterXPeriod) {
 		this.dynFundingClosingFilterXPeriod = dynFundingClosingFilterXPeriod;
+	}
+
+	public String getToIssueDate() {
+		return toIssueDate;
+	}
+
+	public void setToIssueDate(String toIssueDate) {
+		this.toIssueDate = toIssueDate;
+	}
+
+	public String getDynIssueFilterCurrentPeriod() {
+		return dynIssueFilterCurrentPeriod;
+	}
+
+	public void setDynIssueFilterCurrentPeriod(String dynIssueFilterCurrentPeriod) {
+		this.dynIssueFilterCurrentPeriod = dynIssueFilterCurrentPeriod;
+	}
+
+	public Integer getDynIssueFilterAmount() {
+		return dynIssueFilterAmount;
+	}
+
+	public void setDynIssueFilterAmount(Integer dynIssueFilterAmount) {
+		this.dynIssueFilterAmount = dynIssueFilterAmount;
+	}
+
+	public String getDynIssueFilterOperator() {
+		return dynIssueFilterOperator;
+	}
+
+	public void setDynIssueFilterOperator(String dynIssueFilterOperator) {
+		this.dynIssueFilterOperator = dynIssueFilterOperator;
+	}
+
+	public String getDynIssueFilterXPeriod() {
+		return dynIssueFilterXPeriod;
+	}
+
+	public void setDynIssueFilterXPeriod(String dynIssueFilterXPeriod) {
+		this.dynIssueFilterXPeriod = dynIssueFilterXPeriod;
 	}
 }

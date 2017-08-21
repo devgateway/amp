@@ -46,6 +46,7 @@ public class FilterUtils {
 		mapDateColumn(FiltersConstants.ACTUAL_START_DATE, ColumnConstants.ACTUAL_START_DATE);
 		mapDateColumn(FiltersConstants.EFFECTIVE_FUNDING_DATE, ColumnConstants.EFFECTIVE_FUNDING_DATE);
 		mapDateColumn(FiltersConstants.FINAL_DATE_FOR_CONTRACTING, ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
+		mapDateColumn(FiltersConstants.ISSUE_DATE, ColumnConstants.ISSUE_DATE);
 		mapDateColumn(FiltersConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
 		mapDateColumn(FiltersConstants.PROPOSED_APPROVAL_DATE, ColumnConstants.PROPOSED_APPROVAL_DATE);
 		mapDateColumn(FiltersConstants.PROPOSED_COMPLETION_DATE, ColumnConstants.PROPOSED_COMPLETION_DATE);

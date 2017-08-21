@@ -292,6 +292,16 @@ public class FiltersEndpoint {
 	public JsonBean getDateForContracting() {
 		return new JsonBean();
 	}
+
+	@GET
+	@Path("/issueDate/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, name = ColumnConstants.ISSUE_DATE, columns = ColumnConstants.ISSUE_DATE,
+			id = FiltersConstants.ISSUE_DATE, filterType = {
+			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+	public JsonBean getIssueDate() {
+		return new JsonBean();
+	}
 	
 	@GET
 	@Path("/proposedApprovalDate/")

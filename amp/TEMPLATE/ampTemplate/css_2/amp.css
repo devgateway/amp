@@ -1181,9 +1181,6 @@ div.footer {
     padding-right: 5px;
 }
 
-.header-corner {
-	background: url(../images/corner-r.gif) no-repeat;
-}
 
 .label-column{
    text-align: right;
@@ -1214,5 +1211,7 @@ div.footer {
 .org-type-fieldset>input{
 	margin: 4px;
 }
-
-
+ 
+.header-corner {
+  background: url(../images/corner-r.gif) no-repeat;
+}

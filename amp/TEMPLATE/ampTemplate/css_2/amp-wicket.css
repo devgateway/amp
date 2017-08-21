@@ -647,3 +647,19 @@ input[disabled], select[disabled]{
 .resourceButtonPosition {
 	float: left;
 }
+
+.close-link {
+    text-align: right;
+    float: right;
+    margin-right: 28px;
+}
+
+.inside-header {
+    text-align: left;
+}
+
+.del-funding {
+    float: right;
+    position: relative;
+    top: -15px;
+}

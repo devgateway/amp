@@ -15,7 +15,6 @@ import java.util.Map;
 
 import javax.jcr.RepositoryException;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -46,7 +45,6 @@ import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.proxy.HibernateProxyHelper;
@@ -262,16 +260,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		textField = new TextField<String>("text", new Model<String>());
 		textField.setOutputMarkupId(true);
 		add(textField);
-		container = new WebMarkupContainer("container") {
-
-			@Override
-			protected void onConfigure() {
-				super.onConfigure();
-				if (SiteUtils.isEffectiveLangRTL()) {
-					add(new AttributeModifier("class", "yui-skin-sam-rtl"));
-				}
-			}
-		};
+		container = new WebMarkupContainer("container");
 		container.setOutputMarkupId(true);
 		add(container);    
 		add(new YuiAutoCompleteBehavior(){

@@ -1181,3 +1181,7 @@ div.footer {
 .img-padding {
     padding-right: 5px;
 }
+
+.header-corner {
+	background: url(../images/corner-r.gif) no-repeat;
+}

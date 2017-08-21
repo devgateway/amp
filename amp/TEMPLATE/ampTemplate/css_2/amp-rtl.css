@@ -41,3 +41,7 @@ div.trnpanel div.trn-row ul {
 .ot-content {
     direction: rtl;
 }
+
+.wicketFloatLeft {
+    float: inherit;
+}

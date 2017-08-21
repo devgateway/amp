@@ -1,6 +1,4 @@
-.admin-content {
-	direction: rtl;
-}
+@import url("./amp-admin-rtl.css");
 
 #mainBodyContent {
 	direction: rtl;

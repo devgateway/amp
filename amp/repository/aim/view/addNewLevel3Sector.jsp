@@ -38,7 +38,7 @@
 
 </script>
 
-
+<div class="admin-content">
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
@@ -257,7 +257,7 @@
 																	key="aim:otherLinks">Other
 																		links</digi:trn></b>
 															</td>
-															<td background="module/aim/images/corner-r.gif"
+															<td class="header-corner"
 																height="17" width=17></td>
 														</tr>
 													</table></td>
@@ -280,7 +280,7 @@
 																			value="sector3" /> <c:set target="${urlParams5}"
 																			property="level" value="three" /> <digi:img
 																			src="module/aim/images/arrow-014E86.gif" width="15"
-																			height="10" /> <c:set var="translation">
+																			height="10" styleClass="list-item-image" /> <c:set var="translation">
 																			<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
 																		</c:set> <digi:link href="/addSector.do" name="urlParams5"
 																			title="${translation}">
@@ -296,7 +296,7 @@
 															<tr>
 																<td class="inside"><digi:img
 																		src="module/aim/images/arrow-014E86.gif" width="15"
-																		height="10" /> <c:set var="translation">
+																		height="10" styleClass="list-item-image" /> <c:set var="translation">
 																		<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
 																	</c:set> <digi:link href="/getSectorSchemes.do"
 																		title="${translation}">
@@ -310,7 +310,7 @@
 														<tr>
 															<td class="inside"><digi:img
 																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <c:set var="translation">
+																	height="10" styleClass="list-item-image" /> <c:set var="translation">
 																	<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 																</c:set> <digi:link href="/admin.do" title="${translation}">
 																	<digi:trn key="aim:AmpAdminHome">
@@ -330,7 +330,7 @@
 		</tr>
 	</table>
 </digi:form>
-
+</div>
 
 
 

@@ -37,7 +37,7 @@
     
     var enterBinder	= new EnterHitBinder('addSectConfBtn');
     </script>
-
+<div class="admin-content">
 <digi:instance property="aimSectorClassConfigForm" />
 <digi:context name="digiContext" property="context" />
 
@@ -47,7 +47,7 @@
     <!-- End of Logo -->
     <html:hidden name="aimSectorClassConfigForm" property="id" styleId="id"/>
     <html:hidden name="aimSectorClassConfigForm" property="sectorClassId" styleId="originalSectorId"/>
-    <h1 class="admintitle" style="text-align:left;"><digi:trn key="aim:scheme:sector">Sector Manager</digi:trn></h1>
+    <h1 class="admintitle"><digi:trn key="aim:scheme:sector">Sector Manager</digi:trn></h1>
     
     <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
         <tr>
@@ -183,7 +183,7 @@
                                                                     Other links
                                                                 </digi:trn>
                                                             </td>
-                                                            <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+                                                            <td class="header-corner" height="17" width=17>&nbsp;
                                                                 
                                                             </td>
                                                         </tr>
@@ -195,7 +195,7 @@
                                                     <table cellPadding=5 cellspacing="1" width="100%" class="inside">
                                                         <tr>
                                                             <td class="inside">
-                                                                <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                                                <digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
                                                                 <c:set var="translation">
                                                                     <digi:trn key="aim:clickToAddScheme">Click here to Add a Scheme</digi:trn>
                                                                 </c:set>
@@ -208,7 +208,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="inside">
-                                                                <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                                                <digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" width="15" height="10"/>
                                                                 <c:set var="translation">
                                                                     <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                                                                 </c:set>
@@ -233,4 +233,4 @@
         </tr>
     </table>
     </digi:form>
-    
+ </div>

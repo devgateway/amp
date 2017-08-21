@@ -14,6 +14,7 @@
 	padding: 5px;
 }
 
+
 .label-column{
    text-align: left !important;
    width: 30%;   
@@ -27,4 +28,20 @@
 
 span.geostyle{
 	display: inline-block !important;
+}
+
+.org-type-fieldset {
+ padding-left:0 !important;
+ padding-right:200px !important;
+ border:1px solid #CCCCCC; 
+ background-color:#FFFFFF; 
+ text-align: right !important;
+}
+
+.legendClass{
+	float: right !important;
+}
+
+.exportContactIcon{
+ float: left !important;
 }
